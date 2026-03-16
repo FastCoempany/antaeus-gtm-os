@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">ANTAEUS</div>
+            <p class="auth-subtitle">Sign in to your GTM workspace</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="you@company.com" required autocomplete="email">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                
+                <div id="errorMessage" class="callout callout-danger mb-md hidden">
+                    <span id="errorText"></span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitBtn">
+                    <span id="btnText">Sign In</span>
+                    <div class="spinner hidden" id="btnSpinner"></div>
+                </button>
+                
+                <div style="text-align: right; margin-top: var(--space-md);">
+                    <a href="forgot-password.html" style="font-size: 0.85rem;">Forgot password?</a>
+                </div>
+            </form>
+            
+            <div class="auth-footer">
+                Don't have an account? <a href="signup.html">Create one</a>
+            </div>
+            <div style="margin-top: 10px; text-align: center;">
+                <button type="button" class="btn btn-ghost btn-sm btn-block" onclick="enterInteractiveDemo()">
+                    Launch Interactive Demo
+                </button>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
+                    Uses isolated demo data and starts from onboarding.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/analytics.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/onboarding.js"></script>
+    <script>
+        function routeAfterAuth() {
+            if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
+                window.location.href = '/app/onboarding/';
+            } else {
+                window.location.href = '/app/dashboard/';
+            }
+        }
+
+        function enterInteractiveDemo() {
+            try { sessionStorage.setItem('gtmos_env_mode', 'demo'); } catch (e) {}
+            window.location.href = '/app/onboarding/?demo=1&noauth=1&noauth_email=demo@antaeus.local';
+        }
+
+        function withTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise(function(_, reject) {
+                    setTimeout(function() { reject(new Error('Request timed out. Please check your internet connection and try again.')); }, ms);
+                })
+            ]);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                var modeParams = new URLSearchParams(window.location.search || '');
+                var demoParam = (modeParams.get('demo') || '').toLowerCase();
+                if (demoParam === '1' || demoParam === 'true') {
+                    sessionStorage.setItem('gtmos_env_mode', 'demo');
+                } else {
+                    sessionStorage.setItem('gtmos_env_mode', 'prod');
+                }
+            } catch (e) {}
+
+            var noAuth = false;
+            try {
+                var params = new URLSearchParams(window.location.search || '');
+                noAuth =
+                    (typeof window.isAuthBypassEnabled === 'function' && window.isAuthBypassEnabled()) ||
+                    params.get('noauth') === '1' ||
+                    params.get('noauth') === 'true' ||
+                    params.get('offline') === '1' ||
+                    params.get('offline') === 'true';
+            } catch (e) {}
+
+            if (!noAuth && (!window.supabase || !window.supabase.createClient)) {
+                document.getElementById('errorText').textContent = 'Unable to connect. Check your internet and try again.';
+                document.getElementById('errorMessage').classList.remove('hidden');
+                document.getElementById('submitBtn').disabled = true;
+                return;
+            }
+
+            initSupabase();
+            try {
+                const session = await auth.getSession();
+                if (session) { routeAfterAuth(); }
+            } catch (e) {}
+        });
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            errorMessage.classList.add('hidden');
+            submitBtn.disabled = true;
+            btnText.textContent = 'Signing in...';
+            btnSpinner.classList.remove('hidden');
+            
+            try {
+                const { data, error } = await withTimeout(auth.signIn(email, password), 10000);
+                if (error) throw error;
+                routeAfterAuth();
+            } catch (error) {
+                var msg = (error && error.message) ? error.message : '';
+                var isConnectivityError = /timed out|network|failed to fetch|connect/i.test(msg);
+                errorText.textContent = isConnectivityError ? 'Unable to connect. Check your internet and try again.' : (msg || 'Invalid email or password');
+                errorMessage.classList.remove('hidden');
+                submitBtn.disabled = false;
+                btnText.textContent = 'Sign In';
+                btnSpinner.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

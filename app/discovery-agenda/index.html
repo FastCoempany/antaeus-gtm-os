@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Planner | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .cp-search{display:flex;gap:12px;margin-bottom:var(--space-xl);align-items:flex-end;}
+        .cp-search-field{flex:1;}
+        .cp-search-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:6px;}
+        .cp-search-field input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:1rem;font-family:inherit;}
+        .cp-search-field input:focus{outline:none;border-color:var(--brand-gold);}
+        .cp-persona-pick{display:flex;gap:6px;flex-wrap:wrap;}
+        .cp-persona-btn{padding:8px 14px;border-radius:var(--radius-full);font-size:0.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.2s;}
+        .cp-persona-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+        .cp-persona-btn.active{border-color:var(--brand-gold);color:var(--brand-gold);background:rgba(212,165,116,0.08);}
+        .cp-agenda{display:none;animation:fadeUp 0.3s ease;}
+        .cp-agenda.visible{display:block;}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        .cp-context{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-md);}
+        .cp-context-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:10px;}
+        .cp-context-row{display:flex;gap:16px;flex-wrap:wrap;}
+        .cp-context-item{font-size:0.82rem;color:var(--text-tertiary);}
+        .cp-context-item strong{color:var(--text-secondary);}
+        .cp-signal-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:var(--radius-full);font-size:0.7rem;font-weight:600;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2);margin-top:8px;}
+        .cp-section{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-md);}
+        .cp-section-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+        .cp-section-title .num{width:20px;height:20px;border-radius:50%;background:rgba(212,165,116,0.15);color:var(--brand-gold);display:inline-flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;}
+        .cp-question{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.88rem;color:var(--text-secondary);line-height:1.5;}
+        .cp-question:last-child{border-bottom:none;}
+        .cp-question em{color:var(--text-muted);font-size:0.78rem;}
+        .cp-opener{font-size:0.9rem;color:var(--text-primary);line-height:1.5;padding:12px 16px;background:rgba(212,165,116,0.06);border:1px solid rgba(212,165,116,0.15);border-radius:var(--radius-md);}
+        .cp-outcome{display:flex;gap:10px;margin-top:var(--space-lg);}
+        .cp-outcome-btn{flex:1;padding:14px;border-radius:var(--radius-lg);font-weight:700;font-size:0.85rem;border:none;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+        .cp-outcome-btn.advance{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.3);}
+        .cp-outcome-btn.advance:hover{background:rgba(34,197,94,0.2);}
+        .cp-outcome-btn.noadvance{background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2);}
+        .cp-outcome-btn.noshow{background:rgba(100,116,139,0.1);color:#94a3b8;border:1px solid rgba(100,116,139,0.2);}
+        .cp-customize summary{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);cursor:pointer;font-weight:700;padding:12px 0;}
+        .cp-customize .cp-field{margin-bottom:12px;}
+        .cp-customize .cp-field label{display:block;font-size:0.72rem;font-weight:600;color:var(--text-secondary);margin-bottom:4px;}
+        .cp-customize .cp-field input,.cp-customize .cp-field textarea{width:100%;padding:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;}
+        .cp-customize .cp-field textarea{min-height:60px;resize:vertical;}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Call Planner</h1>
+                <p class="module-subtitle">Paste a name or LinkedIn URL. Get your agenda in 3 seconds.</p>
+            </header>
+            <div class="app-content" style="max-width:720px;">
+                <div class="cp-search">
+                    <div class="cp-search-field">
+                        <label>Who are you calling?</label>
+                        <input type="text" id="searchInput" placeholder="Jane Smith or paste LinkedIn URL..." oninput="onSearch(this.value)">
+                    </div>
+                </div>
+                <div style="margin-bottom:var(--space-md);">
+                    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:8px;">Persona</div>
+                    <div class="cp-persona-pick" id="personaPick">
+                        <button class="cp-persona-btn active" data-p="cxo" onclick="setPer(this)">C-Suite</button>
+                        <button class="cp-persona-btn" data-p="vp" onclick="setPer(this)">VP / Director</button>
+                        <button class="cp-persona-btn" data-p="ops" onclick="setPer(this)">Ops / Support</button>
+                        <button class="cp-persona-btn" data-p="it" onclick="setPer(this)">IT / Engineering</button>
+                        <button class="cp-persona-btn" data-p="finance" onclick="setPer(this)">Finance</button>
+                        <button class="cp-persona-btn" data-p="revops" onclick="setPer(this)">RevOps</button>
+                    </div>
+                </div>
+
+                <div class="cp-agenda" id="agenda">
+                    <div class="cp-context" id="contextBlock"></div>
+                    <div class="cp-section">
+                        <div class="cp-section-title"><span class="num">1</span> Suggested Opening</div>
+                        <div class="cp-opener" id="openerBlock"></div>
+                    </div>
+                    <div class="cp-section">
+                        <div class="cp-section-title"><span class="num">2</span> Discovery Questions</div>
+                        <div id="questionsBlock"></div>
+                    </div>
+                    <div class="cp-section">
+                        <div class="cp-section-title"><span class="num">3</span> Why Now Angle</div>
+                        <div id="whyNowBlock"></div>
+                    </div>
+                    <div class="cp-outcome">
+                        <button class="cp-outcome-btn advance" onclick="logOutcome('advanced')">&#10003; Advanced</button>
+                        <button class="cp-outcome-btn noadvance" onclick="logOutcome('no-advance')">&#10007; No Advance</button>
+                        <button class="cp-outcome-btn noshow" onclick="logOutcome('no-show')">&#8709; No Show</button>
+                    </div>
+                    <details class="cp-customize">
+                        <summary>Customize this agenda</summary>
+                        <div class="cp-field"><label>Custom notes</label><textarea id="customNotes" placeholder="Add anything specific to this call..."></textarea></div>
+                        <div class="cp-field"><label>LinkedIn URL</label><input type="text" id="linkedinUrl" placeholder="https://linkedin.com/in/..."></div>
+                        <div class="cp-field"><label>Link to deal</label>
+                            <select id="linkDeal"><option value="">-- No deal linked --</option></select>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    (function(){
+        function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+        function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+        var persona='cxo';
+        var contactName='';
+        var matchedAccount=null;
+
+        // Persona question banks
+        var questionBank={
+            cxo:[
+                '"From where you sit, what\'s the biggest operational bottleneck right now?"',
+                '"How are you thinking about the build vs. buy decision for [area]?"',
+                '"What would need to be true for this to become a priority this quarter?"'
+            ],
+            vp:[
+                '"Walk me through how your team handles [process] today."',
+                '"Where are you losing the most time or quality in that workflow?"',
+                '"If you could fix one thing about your current stack, what would it be?"'
+            ],
+            ops:[
+                '"What does a typical day look like for your team?"',
+                '"How much manual work is involved in [process]?"',
+                '"What have you tried before to fix this?"'
+            ],
+            it:[
+                '"What does your current architecture look like for [area]?"',
+                '"What are the integration requirements that would make or break this?"',
+                '"How does your team evaluate new tools from a security standpoint?"'
+            ],
+            finance:[
+                '"How are you currently tracking the ROI on your [area] investments?"',
+                '"What does the approval process look like for a purchase at this level?"',
+                '"What would make this a clear yes from a financial perspective?"'
+            ],
+            revops:[
+                '"What does your current tech stack look like end-to-end?"',
+                '"Where are the biggest gaps in data flow between teams?"',
+                '"How are you measuring pipeline efficiency today?"'
+            ]
+        };
+
+        var personaLabels={cxo:'C-Suite Executive',vp:'VP / Director',ops:'Operations Leader',it:'IT / Engineering Leader',finance:'Finance Leader',revops:'RevOps Leader'};
+
+        // Populate deal dropdown
+        var deals=readLS('gtmos_deal_workspaces',[]);
+        if(!Array.isArray(deals))deals=Object.values(deals||{});
+        var dealSelect=document.getElementById('linkDeal');
+        deals.forEach(function(d){
+            var opt=document.createElement('option');
+            opt.value=d.id;
+            opt.textContent=(d.accountName||'Unnamed')+' - $'+Number(d.value||0).toLocaleString();
+            dealSelect.appendChild(opt);
+        });
+
+        window.setPer=function(btn){
+            document.querySelectorAll('.cp-persona-btn').forEach(function(b){b.classList.remove('active');});
+            btn.classList.add('active');
+            persona=btn.dataset.p;
+            if(contactName)buildAgenda();
+        };
+
+        window.onSearch=function(val){
+            contactName=val.trim();
+            if(contactName.length>=2){
+                // Check Signal Console for matching account
+                var scData=readLS('gtmos_sc_v4',{accounts:[]});
+                matchedAccount=null;
+                (scData.accounts||[]).forEach(function(a){
+                    if(contactName.toLowerCase().indexOf(a.name.toLowerCase())!==-1 || a.name.toLowerCase().indexOf(contactName.toLowerCase())!==-1){
+                        matchedAccount=a;
+                    }
+                });
+                buildAgenda();
+            } else {
+                document.getElementById('agenda').classList.remove('visible');
+            }
+        };
+
+        function buildAgenda(){
+            document.getElementById('agenda').classList.add('visible');
+
+            // Context block
+            var ctx='<div class="cp-context-title">Account Context</div><div class="cp-context-row">';
+            ctx+='<div class="cp-context-item"><strong>Contact:</strong> '+escH(contactName)+'</div>';
+            ctx+='<div class="cp-context-item"><strong>Persona:</strong> '+personaLabels[persona]+'</div>';
+            if(matchedAccount){
+                ctx+='<div class="cp-context-item"><strong>Company:</strong> '+escH(matchedAccount.name)+'</div>';
+                if(matchedAccount.industry)ctx+='<div class="cp-context-item"><strong>Industry:</strong> '+escH(matchedAccount.industry)+'</div>';
+                ctx+='</div>';
+                if(matchedAccount._heat){
+                    var heatClass=matchedAccount._heat>=91?'hot':matchedAccount._heat>=75?'warm':'med';
+                    ctx+='<div class="cp-signal-badge" style="background:rgba('+(heatClass==='hot'?'239,68,68':heatClass==='warm'?'245,158,11':'59,130,246')+',0.1);color:'+(heatClass==='hot'?'#ef4444':heatClass==='warm'?'#f59e0b':'#3b82f6')+';">Heat: '+matchedAccount._heat+'</div>';
+                }
+                if(matchedAccount.signals&&matchedAccount.signals.length>0){
+                    ctx+='<div style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);">Top signal: '+escH(matchedAccount.signals[0].headline)+'</div>';
+                }
+            } else {
+                ctx+='</div><div style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);font-style:italic;">Not found in Signal Console. <a href="/app/signal-console/" style="color:var(--brand-gold);">Add account &rarr;</a></div>';
+            }
+            document.getElementById('contextBlock').innerHTML=ctx;
+
+            // Opener
+            var opener='';
+            if(matchedAccount&&matchedAccount.signals&&matchedAccount.signals.length>0){
+                opener='"I noticed '+escH(matchedAccount.signals[0].headline.toLowerCase())+' \u2014 I\'m curious how that\'s impacting your team\'s priorities right now."';
+            } else {
+                opener='"Thanks for making time. I\'ve been doing some research on [company] and had a few questions about how your team is thinking about [area]. Mind if I jump in?"';
+            }
+            document.getElementById('openerBlock').innerHTML=opener;
+
+            // Questions
+            var qs=questionBank[persona]||questionBank.cxo;
+            document.getElementById('questionsBlock').innerHTML=qs.map(function(q){
+                return '<div class="cp-question">'+q+'</div>';
+            }).join('');
+
+            // Why now
+            var whyNow='';
+            if(matchedAccount&&matchedAccount.signals&&matchedAccount.signals.length>0){
+                whyNow='<div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.5;padding:12px 16px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;">"Based on '+escH(matchedAccount.signals[0].headline)+', it seems like timing could be critical. What\'s driving the urgency on your end?"</div>';
+            } else {
+                whyNow='<div style="font-size:0.88rem;color:var(--text-tertiary);font-style:italic;">Add this account to Signal Console to auto-generate a "why now" angle from real signals.</div>';
+            }
+            document.getElementById('whyNowBlock').innerHTML=whyNow;
+        }
+
+        window.logOutcome=function(type){
+            var stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+            stats.totalCalls=(stats.totalCalls||0)+1;
+            if(type==='advanced')stats.advancedCalls=(stats.advancedCalls||0)+1;
+            localStorage.setItem('gtmos_discovery_stats',JSON.stringify(stats));
+
+            var agenda={contact:contactName,company:matchedAccount?matchedAccount.name:'',persona:persona,linkedDeal:document.getElementById('linkDeal').value,gates:[true,true,false,false]};
+            localStorage.setItem('gtmos_discovery_agenda',JSON.stringify(agenda));
+            localStorage.setItem('gtmos_call_handoff',JSON.stringify({contact:contactName,outcome:type,timestamp:new Date().toISOString()}));
+
+            alert('Call logged: '+type.replace('-',' ')+'. Discovery stats updated.');
+        };
+    })();
+    </script>
+</body>
+</html>

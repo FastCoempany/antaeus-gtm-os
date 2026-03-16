@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Signal Console | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+
+.sc-root *,.sc-root *::before,.sc-root *::after{box-sizing:border-box;margin:0;padding:0}
+.sc-root{
+--bg:#06080c;--bg2:#0a0d14;--surf:#0f131c;--surf2:#141924;--surf3:#1a2030;--surf4:#212838;
+--bdr:rgba(255,255,255,.05);--bdr2:rgba(255,255,255,.09);--bdr3:rgba(255,255,255,.14);
+--tx:#cdd1da;--tx2:#8a90a0;--tx3:#555b6e;--tx4:#3a3f4e;
+--gold:#cfa33a;--gold2:rgba(207,163,58,.14);--gold3:rgba(207,163,58,.06);
+--blue:#4d9cf0;--blue2:rgba(77,156,240,.12);
+--green:#38c97a;--green2:rgba(56,201,122,.12);
+--red:#e85454;--red2:rgba(232,84,84,.12);
+--amber:#e0a030;--amber2:rgba(224,160,48,.12);
+--purple:#9b7cf0;--purple2:rgba(155,124,240,.12);
+--cyan:#40c8d0;--cyan2:rgba(64,200,208,.12);
+--brig:'Bricolage Grotesque',system-ui,sans-serif;
+--mono:'IBM Plex Mono','Courier New',monospace;
+--r:5px;--r2:8px;--r3:12px;
+}
+.sc-root{font-size:13.5px;scroll-behavior:smooth}
+.sc-root{font-family:var(--brig);background:var(--bg);color:var(--tx);min-height:100%;line-height:1.5;-webkit-font-smoothing:antialiased}
+.sc-root a{color:var(--blue);text-decoration:none}.sc-root a:hover{text-decoration:underline}
+.sc-root ::-webkit-scrollbar{width:4px;height:4px}.sc-root ::-webkit-scrollbar-track{background:transparent}.sc-root ::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+.sc-root input,.sc-root select,.sc-root textarea,.sc-root button{font-family:inherit}
+
+/* ── TOP BAR ── */
+.sc-root .top{position:sticky;top:0;z-index:100;background:rgba(6,8,12,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;padding:0 20px;height:48px}
+.sc-root .top-brand{font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);flex-shrink:0}
+.sc-root .top-sep{width:1px;height:18px;background:var(--bdr2)}
+.sc-root .top-search{flex:1;max-width:340px;position:relative}
+.sc-root .top-search input{width:100%;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:6px 10px 6px 28px;font-size:.8rem;color:var(--tx);outline:none;transition:border .15s}
+.sc-root .top-search input:focus{border-color:var(--gold)}
+.sc-root .top-search::before{content:'⌕';position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:.85rem;color:var(--tx3)}
+.sc-root .top-stats{display:flex;gap:14px;font-family:var(--mono);font-size:.65rem;color:var(--tx3);margin-left:auto;flex-shrink:0}
+.sc-root .top-stats b{color:var(--tx2);font-weight:500}
+.sc-root .top-credits{font-family:var(--mono);font-size:.6rem;padding:3px 8px;border-radius:20px;background:var(--surf2);border:1px solid var(--bdr);color:var(--tx3)}
+.sc-root .top-actions{display:flex;gap:6px;flex-shrink:0}
+
+.sc-root .btn{font-family:var(--brig);font-size:.74rem;font-weight:500;padding:5px 12px;border-radius:var(--r);border:1px solid var(--bdr2);background:var(--surf2);color:var(--tx2);cursor:pointer;transition:all .12s;white-space:nowrap}
+.sc-root .btn:hover{background:var(--surf3);color:var(--tx);border-color:var(--bdr3)}
+.sc-root .btn-gold{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:600}.sc-root .btn-gold:hover{filter:brightness(1.1)}
+.sc-root .btn-sm{padding:3px 8px;font-size:.68rem}
+.sc-root .btn-red{border-color:rgba(232,84,84,.3);color:var(--red)}.sc-root .btn-red:hover{background:var(--red2)}
+.sc-root .btn-icon{width:28px;height:28px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;border-radius:50%}
+
+/* ── MORNING BRIEF ── */
+.sc-root .morning{background:linear-gradient(135deg,rgba(207,163,58,.06),rgba(77,156,240,.04));border:1px solid var(--gold2);border-radius:var(--r2);margin:14px 20px 0;padding:16px 20px;display:none}
+.sc-root .morning.show{display:block;animation:fadeIn .4s ease}
+.sc-root .morning-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sc-root .morning-title{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.sc-root .morning-dismiss{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:.85rem;padding:2px 6px;border-radius:var(--r)}
+.sc-root .morning-dismiss:hover{color:var(--tx2);background:var(--surf2)}
+.sc-root .morning-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.sc-root .morning-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;display:flex;gap:10px;align-items:flex-start}
+.sc-root .morning-heat{font-family:var(--mono);font-size:.75rem;font-weight:600;min-width:28px;height:28px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sc-root .morning-info{flex:1;min-width:0}
+.sc-root .morning-name{font-weight:600;font-size:.82rem}
+.sc-root .morning-sig{font-size:.72rem;color:var(--tx2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-root .morning-prep{font-size:.68rem;margin-top:4px}
+
+/* ── CONTROLS BAR ── */
+.sc-root .controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid var(--bdr)}
+.sc-root .mode-group{display:flex;gap:0;border:1px solid var(--bdr2);border-radius:var(--r);overflow:hidden}
+.sc-root .mode-btn{font-size:.7rem;font-weight:500;padding:5px 14px;background:var(--surf);color:var(--tx3);cursor:pointer;border:none;border-right:1px solid var(--bdr);transition:all .12s}
+.sc-root .mode-btn:last-child{border-right:none}
+.sc-root .mode-btn:hover{color:var(--tx2);background:var(--surf2)}
+.sc-root .mode-btn.active{background:var(--gold2);color:var(--gold);font-weight:600}
+.sc-root .filter-sep{width:1px;height:20px;background:var(--bdr);margin:0 4px}
+.sc-root .chip{font-family:var(--mono);font-size:.62rem;padding:4px 10px;border-radius:16px;border:1px solid var(--bdr);background:transparent;color:var(--tx3);cursor:pointer;transition:all .12s;white-space:nowrap}
+.sc-root .chip:hover{border-color:var(--tx3);color:var(--tx2)}
+.sc-root .chip.on{background:var(--gold2);border-color:rgba(207,163,58,.3);color:var(--gold)}
+.sc-root .chip b{font-weight:600;margin-left:3px}
+
+/* ── SCORE LEGEND ── */
+.sc-root .legend{display:flex;gap:16px;padding:8px 20px;border-bottom:1px solid var(--bdr);font-family:var(--mono);font-size:.6rem;color:var(--tx3);flex-wrap:wrap;align-items:center}
+.sc-root .legend-label{font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tx4)}
+.sc-root .legend span{display:flex;align-items:center;gap:4px}
+.sc-root .legend .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── MAIN ── */
+.sc-root .main{padding:14px 20px 60px;position:relative;z-index:1}
+.sc-root .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:10px}
+
+/* ── ACCOUNT CARDS ── */
+.sc-root .card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;transition:all .18s;cursor:pointer;animation:cardUp .35s ease both}
+.sc-root .card:hover{border-color:var(--bdr2);box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.sc-root .card.open{grid-column:1/-1;cursor:default;border-color:rgba(207,163,58,.15)}
+@keyframes cardUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.sc-root .card-head{display:flex;gap:12px;padding:14px 16px;align-items:flex-start}
+.sc-root .heat{width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.8rem;font-weight:600;flex-shrink:0}
+.sc-root .h-hot{background:var(--red2);color:var(--red);border:1px solid rgba(232,84,84,.2)}
+.sc-root .h-warm{background:var(--amber2);color:var(--amber);border:1px solid rgba(224,160,48,.2)}
+.sc-root .h-med{background:var(--blue2);color:var(--blue);border:1px solid rgba(77,156,240,.2)}
+.sc-root .h-cool{background:rgba(255,255,255,.03);color:var(--tx3);border:1px solid var(--bdr)}
+.sc-root .card-info{flex:1;min-width:0}
+.sc-root .card-name{font-size:.95rem;font-weight:600;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.sc-root .card-ticker{font-family:var(--mono);font-size:.65rem;color:var(--tx3);font-weight:500}
+.sc-root .fortune-badge{font-family:var(--mono);font-size:.55rem;padding:1px 5px;border-radius:3px;background:var(--gold2);color:var(--gold);border:1px solid rgba(207,163,58,.2)}
+.sc-root .card-meta{font-size:.72rem;color:var(--tx3);margin-top:1px}
+.sc-root .card-pills{display:flex;gap:4px;flex-wrap:wrap;padding:0 16px 12px}
+.sc-root .pill{font-family:var(--mono);font-size:.58rem;padding:2px 7px;border-radius:10px}
+.sc-root .p-ai{background:var(--purple2);color:var(--purple)}.sc-root .p-trig{background:var(--amber2);color:var(--amber)}
+.sc-root .p-pain{background:var(--red2);color:var(--red)}.sc-root .p-intel{background:var(--blue2);color:var(--blue)}
+.sc-root .p-mkt{background:var(--green2);color:var(--green)}
+
+/* ── EXPANDED DETAIL ── */
+.sc-root .detail{display:none;border-top:1px solid var(--bdr)}
+.sc-root .card.open .detail{display:block}
+.sc-root .detail-actions{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--bdr);flex-wrap:wrap;align-items:center}
+.sc-root .detail-research{display:flex;flex-wrap:wrap;gap:5px;padding:10px 16px;border-bottom:1px solid var(--bdr)}
+.sc-root .rlink{font-family:var(--mono);font-size:.6rem;padding:3px 8px;border-radius:var(--r);background:var(--surf2);border:1px solid var(--bdr);color:var(--tx3);text-decoration:none;transition:all .12s;display:inline-flex;align-items:center;gap:3px}
+.sc-root .rlink:hover{border-color:rgba(207,163,58,.2);color:var(--gold);background:var(--gold3);text-decoration:none}
+.sc-root .detail-tabs{display:flex;border-bottom:1px solid var(--bdr);padding:0 16px;overflow-x:auto}
+.sc-root .dtab{font-size:.72rem;font-weight:500;padding:8px 14px;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:all .12s;white-space:nowrap}
+.sc-root .dtab:hover{color:var(--tx2)}.sc-root .dtab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.sc-root .dtab small{font-family:var(--mono);font-size:.6rem;margin-left:4px;opacity:.6}
+.sc-root .detail-score{padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--bdr);font-family:var(--mono);font-size:.65rem;color:var(--tx3);line-height:1.8}
+.detail-.sc-root{padding:14px 16px}
+
+/* ── SIGNAL ITEMS ── */
+.sc-root .sig{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;transition:border .12s;position:relative}
+.sc-root .sig:hover{border-color:var(--bdr2)}
+.sc-root .sig.stale{opacity:.45}
+.sc-root .sig.flagged{opacity:.35;border-color:rgba(232,84,84,.15)}
+.sc-root .sig-top{display:flex;gap:8px;align-items:flex-start}
+.sc-root .sig-dot{width:5px;height:5px;border-radius:50%;margin-top:7px;flex-shrink:0}
+.sc-root .d-ai{background:var(--purple)}.sc-root .d-trig{background:var(--amber)}.sc-root .d-pain{background:var(--red)}.sc-root .d-intel{background:var(--blue)}.sc-root .d-mkt{background:var(--green)}
+.sig-.sc-root{flex:1;min-width:0}
+.sc-root .sig-hl{font-size:.84rem;font-weight:500;line-height:1.4}
+.sc-root .sig-ai{font-family:var(--mono);font-size:.52rem;background:var(--purple2);color:var(--purple);padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:middle;letter-spacing:.04em}
+.sc-root .sig-detail{font-size:.76rem;color:var(--tx2);margin-top:4px;line-height:1.5}
+.sc-root .sig-why{font-size:.74rem;color:var(--tx3);margin-top:5px;padding-top:5px;border-top:1px solid var(--bdr);line-height:1.5;font-style:italic}
+.sc-root .sig-foot{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.sc-root .sig-src{font-family:var(--mono);font-size:.6rem;color:var(--tx3)}
+.sc-root .sig-src a{color:var(--blue);font-size:.6rem}
+.sc-root .sig-conf{font-family:var(--mono);font-size:.56rem;padding:1px 5px;border-radius:3px;background:var(--surf3);color:var(--tx3)}
+.sc-root .sig-age{font-family:var(--mono);font-size:.56rem;padding:1px 5px;border-radius:3px;background:var(--surf2);color:var(--tx4)}
+.sc-root .sig-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.sc-root .sig-tag{font-family:var(--mono);font-size:.52rem;padding:1px 5px;border-radius:3px;background:var(--cyan2);color:var(--cyan)}
+.sc-root .sig-actions{position:absolute;top:10px;right:10px;display:flex;gap:4px}
+.sc-root .sig-vbtn{font-size:.65rem;padding:2px 6px;border-radius:3px;border:1px solid var(--bdr);background:var(--surf2);color:var(--tx3);cursor:pointer;transition:all .1s}
+.sc-root .sig-vbtn:hover{border-color:var(--bdr3);color:var(--tx2)}
+.sc-root .sig-vbtn.verified{background:var(--green2);border-color:rgba(56,201,122,.2);color:var(--green)}
+.sc-root .sig-vbtn.flag{background:var(--red2);border-color:rgba(232,84,84,.2);color:var(--red)}
+
+.sc-root .brief-bar{display:flex;gap:6px;padding:12px 16px;border-top:1px solid var(--bdr);background:var(--surf2)}
+
+/* ── MODAL ── */
+.sc-root .overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px}
+.sc-root .overlay.on{display:flex}
+.sc-root .modal{background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r3);width:100%;max-width:560px;max-height:82vh;overflow-y:auto;padding:20px}
+.sc-root .modal h3{font-size:.95rem;font-weight:700;margin-bottom:14px}
+.sc-root .modal label{display:block;font-size:.72rem;font-weight:500;color:var(--tx2);margin:10px 0 3px}
+.sc-root .modal input,.sc-root .modal select,.sc-root .modal textarea{width:100%;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:7px 10px;font-size:.82rem;color:var(--tx);outline:none}
+.sc-root .modal input:focus,.sc-root .modal textarea:focus{border-color:var(--gold)}
+.sc-root .modal textarea{min-height:70px;resize:vertical;font-family:var(--mono);font-size:.75rem}
+.sc-root .modal-foot{display:flex;gap:6px;margin-top:16px;justify-content:flex-end}
+.sc-root .modal .preview-table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.72rem}
+.sc-root .modal .preview-table th{text-align:left;padding:4px 6px;background:var(--surf2);color:var(--tx2);font-family:var(--mono);font-size:.62rem;border:1px solid var(--bdr)}
+.sc-root .modal .preview-table td{padding:4px 6px;border:1px solid var(--bdr);color:var(--tx3);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── LOADING ── */
+.sc-root .shimmer{background:linear-gradient(90deg,var(--surf) 25%,var(--surf3) 50%,var(--surf) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.sc-root .empty{text-align:center;padding:60px 20px;color:var(--tx3)}
+.sc-root .empty h3{font-size:1rem;color:var(--tx2);margin-bottom:6px}
+
+.sc-root .enriching-badge{font-family:var(--mono);font-size:.6rem;color:var(--amber);display:inline-flex;align-items:center;gap:4px}
+.sc-root .enriching-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+@media(max-width:768px){
+.sc-root .grid{grid-template-columns:1fr}
+.sc-root .top-stats,.sc-root .legend{display:none}
+.sc-root .controls{padding:8px 12px}
+.sc-root .main{padding:10px 12px 60px}
+}
+
+
+/* ── Signal Console integration overrides ── */
+.app-main.sc-host {
+    padding: 0 !important;
+    overflow-y: auto;
+    background: #06080c;
+}
+.sc-root {
+    min-height: 100%;
+    position: relative;
+}
+.sc-root .top {
+    position: sticky;
+    top: 0;
+}
+@media (max-width: 768px) {
+    .app-main.sc-host { padding: 0 !important; }
+}
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        
+        <main class="app-main sc-host">
+            <div class="sc-root">
+<div class="top">
+<div class="top-brand">Signal Console</div>
+<div class="top-sep"></div>
+<div class="top-search"><input type="text" id="searchIn" placeholder="Search accounts, signals..." /></div>
+<div class="top-stats" id="topStats"></div>
+<div class="top-credits" id="topCredits"></div>
+<div class="top-actions">
+<button class="btn" id="btnUploadCSV">📎 CSV</button>
+<button class="btn" id="btnAddAcct">+ Account</button>
+<button class="btn" id="btnAddSig">+ Signal</button>
+<button class="btn" id="btnExport">Export ▾</button>
+<button class="btn btn-gold" id="btnEnrichAll">🔍 Enrich All</button>
+</div>
+</div>
+
+<div class="morning" id="morningBrief"></div>
+
+<div class="controls" id="controlsBar"></div>
+
+<div class="legend" id="legendBar">
+<span class="legend-label">Score Legend</span>
+<span><span class="dot" style="background:var(--red)"></span>91-99 Hot</span>
+<span><span class="dot" style="background:var(--amber)"></span>75-90 Active</span>
+<span><span class="dot" style="background:var(--blue)"></span>50-74 Watch</span>
+<span><span class="dot" style="background:var(--tx3)"></span>0-49 Low</span>
+<span style="margin-left:auto;color:var(--tx4)">Score = signal count × type weight × source credibility × recency decay</span>
+</div>
+
+<div class="main"><div class="grid" id="grid"></div></div>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+
+// ═══════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════
+
+const CATS={
+ai_transformation:{l:'AI & Transformation',p:'p-ai',d:'d-ai'},
+trigger_event:{l:'Trigger Events',p:'p-trig',d:'d-trig'},
+pain_point:{l:'Pains SaaS Can Solve',p:'p-pain',d:'d-pain'},
+internal_intel:{l:'Internal Intel',p:'p-intel',d:'d-intel'},
+market_position:{l:'Market Position',p:'p-mkt',d:'d-mkt'}
+};
+
+const PAIN_LIB={
+customer_data:{l:'Customer Data & CDP',kw:['customer data','cdp','first-party data','customer 360']},
+hr_tech:{l:'HR Tech & Workforce',kw:['hiring','onboarding','workforce','employee','hris','payroll']},
+marketing_tech:{l:'Marketing Tech',kw:['marketing automation','campaign','abm','demand gen','lead gen']},
+ai_transformation:{l:'AI Transformation & MLOps',kw:['ai deployment','machine learning','llm','mlops','ai governance','ai infrastructure']},
+ai_assistants:{l:'AI Assistants & Bots',kw:['chatbot','virtual assistant','conversational ai','copilot']},
+legal_ai:{l:'Legal AI & Compliance',kw:['legal ai','contract analysis','litigation','privacy','gdpr','compliance automation']},
+procurement:{l:'Procurement & Supply Chain',kw:['procurement','supply chain','vendor management','sourcing','spend management','supplier']},
+cybersecurity:{l:'Cybersecurity & Risk',kw:['cybersecurity','breach','vulnerability','zero trust','incident response','siem']},
+manufacturing:{l:'Manufacturing Tech',kw:['manufacturing','mes','quality management','digital twin','industrial iot']},
+programmatic_ad:{l:'Programmatic & Ad Tech',kw:['programmatic','advertising','ad tech','dsp','retail media']},
+hiring_intel:{l:'Hiring Intelligence',kw:['talent acquisition','recruiting','hiring surge','headcount','job postings']},
+data_infra:{l:'Data Infrastructure',kw:['data warehouse','data lake','etl','analytics','snowflake','databricks']},
+dev_tools:{l:'Dev Tools & Platform',kw:['developer productivity','ci/cd','devops','platform engineering','observability']},
+fintech:{l:'Fintech & Compliance',kw:['fintech','aml','kyc','fraud detection','payment processing','banking compliance']}
+};
+
+const SRC_CONF={'sec filing':.95,'sec edgar':.95,'company press release':.90,'earnings':.92,'federal register':.92,'wall street journal':.88,'reuters':.87,'bloomberg':.87,'techcrunch':.78,'industry':.72,'analyst':.75,'conference':.70,'g2':.68,'glassdoor':.65,'hacker news':.58,'reddit':.52,'blog':.55,'manual':.70,'news':.75,'press':.80};
+
+function srcConf(name){const n=(name||'').toLowerCase();for(const[k,v]of Object.entries(SRC_CONF)){if(n.includes(k))return v}return .65}
+
+function gNews(c,t){return`https://news.google.com/search?q=%22${encodeURIComponent(c)}%22+${encodeURIComponent(t||'')}&hl=en-US`}
+function secUrl(c){return`https://efts.sec.gov/LATEST/search-index?q=%22${encodeURIComponent(c)}%22&dateRange=custom&startdt=2024-01-01`}
+
+// ── SEED ACCOUNTS ──
+const SEEDS=[
+{id:'cat',name:'Caterpillar',ticker:'CAT',industry:'Industrial',sector:'Heavy Equipment',revenue:'$67B',employees:'~113,000',hq:'Irving, TX',linkedin:'caterpillar',domain:'caterpillar.com',fortune_rank:22,signals:[
+{cat:'ai_transformation',headline:'Caterpillar investing in AI-powered autonomous mining and construction',detail:'1.5M+ connected assets, CES 2025 AI exhibit, 2.5x more autonomy experience than any auto manufacturer.',why:'If you sell AI infrastructure, MLOps, or edge computing — their engineering teams need vendor support for scaling autonomous systems.',url:gNews('Caterpillar','AI autonomous CES 2025'),source_name:'CES 2025 / Cat Innovation',published_date:'2025-01',confidence:.90,is_ai:true},
+{cat:'pain_point',headline:'Supply chain parts constraints across product lines',detail:'Publicly reported parts constraints, extended availability windows, semiconductor shortages. Dealer inventories near historical lows.',why:'Procurement optimization software has direct, quantifiable impact. SVP Pam Heminger stated priority: "adopting new technologies" for supplier management.',url:secUrl('Caterpillar'),source_name:'SEC Filings / Earnings',published_date:'2024-12',confidence:.92},
+{cat:'pain_point',headline:'Retiring workforce creating tribal knowledge loss',detail:'Engineers with 20-30 years of undocumented expertise on part tolerances, supplier performance, design decisions are retiring at accelerating rates.',why:'Knowledge management, documentation automation, and AI-assisted onboarding tools address this directly. Pain is urgent and worsening.',url:gNews('Caterpillar','workforce retirement manufacturing'),source_name:'Industry Analysis',published_date:'2025-01',confidence:.85},
+{cat:'internal_intel',headline:'Pam Heminger (SVP Strategic Procurement) publicly prioritizing tech adoption',detail:'Public statements about strengthening supplier relationships and adopting new technologies. Signals top-down procurement modernization.',why:'When the SVP says "we need new technology," the budget conversation is already happening. Reference her quotes in outreach.',url:'https://www.caterpillar.com/en/company/strategy.html',source_name:'CAT Annual Report',published_date:'2024-03',confidence:.95},
+{cat:'trigger_event',headline:'Tariff exposure forcing procurement re-evaluation',detail:'Trade tensions affecting critical materials including semiconductors. Every tariff change forces re-sourcing decisions.',why:'Tariff changes create urgency for supplier identification and supply chain risk visualization tools.',url:gNews('Caterpillar','tariff supply chain'),source_name:'Trade Policy / News',published_date:'2025-02',confidence:.88},
+{cat:'market_position',headline:'Record $67.1B revenue (2023) followed by cost discipline phase',detail:'Best year in 98-year history. Now entering optimization phase — maintaining margins while investing in technology.',why:'Companies post-record-revenue with an "optimize" mandate have budget AND urgency for efficiency tools.',url:secUrl('Caterpillar'),source_name:'10-K Annual Filing',published_date:'2024-02',confidence:.95}
+]},
+{id:'jpm',name:'JPMorgan Chase',ticker:'JPM',industry:'Financial Services',sector:'Banking',revenue:'$178B',employees:'~313,000',hq:'New York, NY',linkedin:'jpmorgan',domain:'jpmorganchase.com',fortune_rank:6,signals:[
+{cat:'ai_transformation',headline:'JPM spending $17B+ on tech annually with 2,000+ AI/ML use cases in production',detail:'LLM Suite deployed to 60,000+ employees. AI for fraud detection, trading, contract analysis, research.',why:'$17B tech spend = enormous vendor ecosystem. AI tooling, data infrastructure, compliance tech, developer tools all actively procured.',url:gNews('JPMorgan','AI artificial intelligence technology'),source_name:'Earnings / Press',published_date:'2025-01',confidence:.92,is_ai:true},
+{cat:'pain_point',headline:'SEC cybersecurity disclosure rules expanding compliance burden',detail:'4-day disclosure requirement. Multi-jurisdiction compliance (US, EU, UK, APAC) with overlapping requirements.',why:'Compliance automation, GRC platforms, cybersecurity incident response tools in active procurement cycles.',url:gNews('JPMorgan','cybersecurity compliance SEC'),source_name:'Regulatory',published_date:'2025-01',confidence:.88},
+{cat:'trigger_event',headline:'First Republic Bank integration creating systems consolidation challenges',detail:'$10.6B acquisition (May 2023). Multi-year integration of banking systems, client data, technology stacks.',why:'Post-acquisition = 18-24 months of heavy tech buying. Data migration, identity consolidation, compliance harmonization.',url:gNews('JPMorgan','First Republic integration'),source_name:'News',published_date:'2024-06',confidence:.85},
+{cat:'internal_intel',headline:'Lori Beer (Global CTO) driving enterprise-wide modernization',detail:'Oversees $17B+ annual tech budget. Mandate: modernize infrastructure, expand cloud, scale AI across all business lines.',why:'Knowing the CTO\'s public priorities lets you frame your product in their language. Beer champions cloud migration and API-first.',url:gNews('JPMorgan','Lori Beer CTO'),source_name:'Press / Conferences',published_date:'2024-10',confidence:.90}
+]},
+{id:'unh',name:'UnitedHealth Group',ticker:'UNH',industry:'Healthcare',sector:'Health Insurance',revenue:'$372B',employees:'~440,000',hq:'Minnetonka, MN',linkedin:'unitedhealthgroup',domain:'unitedhealthgroup.com',fortune_rank:4,signals:[
+{cat:'pain_point',headline:'Change Healthcare breach: $1.6B+ remediation driving security overhaul',detail:'Feb 2024 ransomware attack disrupted healthcare payments nationwide. $22M ransom paid. Complete cybersecurity infrastructure rebuild underway.',why:'Post-breach companies spend 3-5x normal security budget for 2-3 years. Cybersecurity, identity management, zero-trust all in active buying cycle.',url:gNews('UnitedHealth','Change Healthcare breach'),source_name:'News / SEC',published_date:'2024-10',confidence:.95},
+{cat:'trigger_event',headline:'CEO transition amid DOJ investigation and political pressure',detail:'Multiple leadership transitions plus DOJ antitrust investigation into vertical integration of insurance + healthcare delivery.',why:'Leadership transitions reopen vendor evaluations. 60-90 days after C-suite change = highest-probability windows for new vendor conversations.',url:gNews('UnitedHealth','CEO leadership DOJ'),source_name:'News',published_date:'2025-01',confidence:.90},
+{cat:'ai_transformation',headline:'Optum using AI for claims processing under regulatory scrutiny',detail:'Billions of healthcare transactions processed with AI. Under political scrutiny for AI-driven claims denials.',why:'AI scrutiny creates buying urgency for AI governance, explainability, and compliance tools. Scale of deployment means infrastructure vendor demand.',url:gNews('UnitedHealth','AI claims Optum'),source_name:'Congressional / News',published_date:'2025-01',confidence:.92,is_ai:true}
+]},
+{id:'ba',name:'Boeing',ticker:'BA',industry:'Aerospace & Defense',sector:'Aviation',revenue:'$78B',employees:'~170,000',hq:'Arlington, VA',linkedin:'boeing',domain:'boeing.com',fortune_rank:35,signals:[
+{cat:'pain_point',headline:'Quality control crisis: 737 MAX door plug incident forcing safety overhaul',detail:'Jan 2024 Alaska Airlines incident. FAA production caps, DOJ investigations. Fundamental rethinking of quality management.',why:'Quality management software, compliance tracking, supply chain visibility in urgent demand. Multi-year buying cycle.',url:gNews('Boeing','quality 737 MAX safety FAA'),source_name:'FAA / News',published_date:'2025-01',confidence:.95},
+{cat:'trigger_event',headline:'New CEO Kelly Ortberg (Aug 2024) driving cultural transformation',detail:'Mandate: fix manufacturing quality, rebuild regulator trust, stabilize supply chain. Major restructuring underway.',why:'New CEO with transformation mandate = highest-probability buying window. Every vendor evaluation reopened.',url:gNews('Boeing','Kelly Ortberg CEO'),source_name:'Press',published_date:'2024-10',confidence:.92},
+{cat:'internal_intel',headline:'17,000 employee layoffs (10% reduction) as part of restructuring',detail:'Largest reduction in years. Across commercial, defense, corporate. Restructuring into leaner operating model.',why:'Massive layoffs + restructuring = demand for change management, workforce analytics, productivity tools, automation.',url:gNews('Boeing','layoffs 17000 restructuring'),source_name:'News / SEC',published_date:'2024-10',confidence:.95}
+]},
+{id:'hon',name:'Honeywell',ticker:'HON',industry:'Industrial',sector:'Diversified Industrial',revenue:'$37B',employees:'~95,000',hq:'Charlotte, NC',linkedin:'honeywell',domain:'honeywell.com',fortune_rank:88,signals:[
+{cat:'trigger_event',headline:'Historic 3-way breakup: Automation, Aerospace, Advanced Materials',detail:'Each independent company needs its own technology infrastructure, corporate systems, and vendor relationships.',why:'Corporate breakups are among the highest-signal events. Three new companies = three greenfield technology stacks.',url:gNews('Honeywell','breakup split three companies'),source_name:'SEC / Press',published_date:'2025-02',confidence:.95},
+{cat:'ai_transformation',headline:'Honeywell Forge IoT platform and Quantinuum quantum computing',detail:'Enterprise performance management using AI/IoT. Quantinuum quantum computing spin-off. Industrial AI core to strategy.',why:'Post-split, each entity decides which shared platforms to keep, rebuild, or replace. Vendor evaluations across the board.',url:gNews('Honeywell','Forge IoT AI Quantinuum'),source_name:'Press / Product',published_date:'2024-08',confidence:.85,is_ai:true}
+]},
+{id:'crm',name:'Salesforce',ticker:'CRM',industry:'Technology',sector:'CRM / Enterprise SaaS',revenue:'$35B',employees:'~73,000',hq:'San Francisco, CA',linkedin:'salesforce',domain:'salesforce.com',fortune_rank:136,signals:[
+{cat:'ai_transformation',headline:'Agentforce: autonomous AI agents as the next platform play',detail:'Benioff calling it "third wave of AI" after Copilots. Autonomous agents for customer service, sales tasks, business processes.',why:'If you build on Salesforce ecosystem: Agentforce changes competitive landscape. If you compete: position against complexity.',url:gNews('Salesforce','Agentforce autonomous AI agents'),source_name:'Dreamforce / Press',published_date:'2025-01',confidence:.90,is_ai:true},
+{cat:'pain_point',headline:'Customer complaints about pricing complexity and "Salesforce tax"',detail:'Enterprise customers vocal about TCO. Multiple add-ons, per-user pricing, implementation costs creating pushback.',why:'Salesforce pricing frustration = opening for competitive CRM tools, optimization consultants, alternative solutions.',url:gNews('Salesforce','pricing expensive'),source_name:'G2 / Community',published_date:'2025-01',confidence:.78}
+]},
+{id:'wmt',name:'Walmart',ticker:'WMT',industry:'Retail',sector:'Mass Retail',revenue:'$648B',employees:'~2,100,000',hq:'Bentonville, AR',linkedin:'walmart',domain:'walmart.com',fortune_rank:1,signals:[
+{cat:'ai_transformation',headline:'Deploying generative AI across supply chain, ecommerce, and 2.1M associates',detail:'AI-powered product search, automated inventory, generative AI for descriptions. Internal AI platform at massive scale.',why:'2.1M employee AI rollout is one of the largest in history. Every stack layer needs vendor support.',url:gNews('Walmart','AI generative artificial intelligence'),source_name:'Earnings / Press',published_date:'2025-01',confidence:.90,is_ai:true},
+{cat:'trigger_event',headline:'Walmart Connect ad business growing 20%+ YoY',detail:'Walmart+ competing with Prime. Both are new business lines requiring new technology stacks.',why:'New business lines = new tech stack. Ad platforms, membership management, customer data platforms all in procurement.',url:gNews('Walmart','Walmart+ advertising growth'),source_name:'Earnings',published_date:'2024-11',confidence:.88}
+]},
+{id:'gs',name:'Goldman Sachs',ticker:'GS',industry:'Financial Services',sector:'Investment Banking',revenue:'$51B',employees:'~46,000',hq:'New York, NY',linkedin:'goldman-sachs',domain:'goldmansachs.com',fortune_rank:55,signals:[
+{cat:'ai_transformation',headline:'1,000+ engineers on AI/ML: proprietary LLM platform for code gen and research',detail:'GS AI assistant for code generation, research summarization, client communications. Built proprietary AI platform.',why:'1,000+ AI engineers = massive demand for ML infrastructure, model monitoring, data labeling, experiment tracking, AI governance.',url:gNews('Goldman Sachs','AI artificial intelligence platform'),source_name:'Press / Conferences',published_date:'2025-01',confidence:.90,is_ai:true},
+{cat:'trigger_event',headline:'Transaction banking (TxB) greenfield build creating new tech demand',detail:'Building TxB from scratch to compete with JPM/Citi. Requires entirely new payment infrastructure, treasury systems, client portals.',why:'Greenfield business units are best prospects — no incumbents, no legacy, urgency to build fast.',url:gNews('Goldman Sachs','transaction banking technology'),source_name:'News / Analysts',published_date:'2024-09',confidence:.85}
+]},
+{id:'de',name:'Deere & Company',ticker:'DE',industry:'Industrial',sector:'Agriculture Equipment',revenue:'$61B',employees:'~83,000',hq:'Moline, IL',linkedin:'john-deere',domain:'deere.com',fortune_rank:63,signals:[
+{cat:'ai_transformation',headline:'$2B+ in precision agriculture: autonomous tractors and See & Spray AI',detail:'Computer vision reducing herbicide use 77%. Fully autonomous tractors in production. Most advanced ag AI in industry.',why:'Edge computing, computer vision infrastructure, satellite data processing, rural connectivity solutions all needed.',url:gNews('Deere','autonomous AI precision agriculture'),source_name:'CES / Press',published_date:'2025-01',confidence:.92,is_ai:true},
+{cat:'pain_point',headline:'Dealer network (~2,000) needs technology modernization',detail:'Parts ordering, service scheduling, equipment monitoring across independent dealerships creates fragmentation.',why:'Dealer enablement platforms, parts marketplace, service management, dealer analytics all in active procurement.',url:gNews('Deere','dealer network technology'),source_name:'Industry',published_date:'2024-08',confidence:.82}
+]},
+{id:'ge',name:'GE Aerospace',ticker:'GE',industry:'Industrial',sector:'Aviation/Power',revenue:'$68B',employees:'~125,000',hq:'Evendale, OH',linkedin:'ge-aerospace',domain:'geaerospace.com',fortune_rank:18,signals:[
+{cat:'trigger_event',headline:'Historic trisection complete: GE Aerospace, GE Vernova, GE HealthCare now independent',detail:'April 2024. Three new Fortune 500 companies rebuilding independent tech infrastructure simultaneously.',why:'Once-in-a-generation prospecting event. Every shared service being re-evaluated across three companies.',url:gNews('GE Aerospace','split Vernova HealthCare'),source_name:'SEC / Press',published_date:'2024-04',confidence:.95},
+{cat:'ai_transformation',headline:'Digital twin and predictive maintenance for 44,000+ jet engine fleet',detail:'Real-time engine health monitoring, predictive maintenance, fuel optimization via digital twin technology.',why:'44,000 engines = massive IoT/analytics platform needs. Edge computing, streaming data, predictive ML at scale.',url:gNews('GE Aerospace','digital twin predictive maintenance'),source_name:'Press / Product',published_date:'2024-08',confidence:.88,is_ai:true}
+]},
+{id:'dal',name:'Delta Air Lines',ticker:'DAL',industry:'Transportation',sector:'Airlines',revenue:'$58B',employees:'~100,000',hq:'Atlanta, GA',linkedin:'delta-air-lines',domain:'delta.com',fortune_rank:69,signals:[
+{cat:'trigger_event',headline:'CrowdStrike outage: $500M+ losses driving IT resilience overhaul',detail:'July 2024. 7,000+ flight cancellations. Public feud with CrowdStrike/Microsoft. Now overhauling IT resilience.',why:'Post-outage = aggressive investment in redundancy, disaster recovery, observability, vendor diversification.',url:gNews('Delta','CrowdStrike outage IT resilience'),source_name:'News / SEC',published_date:'2024-10',confidence:.95},
+{cat:'ai_transformation',headline:'AI for dynamic pricing, crew scheduling, and predictive maintenance',detail:'Revenue management, crew optimization, fleet maintenance — all deploying AI-assisted decision systems.',why:'Airline operations AI is specialized but large. Revenue management, crew optimization, fleet maintenance each have dedicated ecosystems.',url:gNews('Delta','AI dynamic pricing crew'),source_name:'Press / Conferences',published_date:'2024-08',confidence:.82,is_ai:true}
+]},
+{id:'pfe',name:'Pfizer',ticker:'PFE',industry:'Pharma',sector:'Pharmaceuticals',revenue:'$58B',employees:'~88,000',hq:'New York, NY',linkedin:'pfizer',domain:'pfizer.com',fortune_rank:42,signals:[
+{cat:'trigger_event',headline:'$43B Seagen acquisition: oncology pipeline integration underway',detail:'Largest pharma acquisition of 2023. Integrating ADC technology and pipeline. Massive R&D/IT integration workstream.',why:'Mega-acquisition = 2-3 years of heavy tech procurement. Data migration, clinical trial management, regulatory submission tools.',url:gNews('Pfizer','Seagen acquisition integration'),source_name:'SEC / News',published_date:'2024-06',confidence:.90},
+{cat:'pain_point',headline:'Post-COVID revenue cliff: $58B from $100B peak creating cost pressure',detail:'Revenue dropped ~42%. Forces cost optimization across all operations while maintaining R&D investment.',why:'Revenue decline + cost pressure = active procurement of efficiency tools. Any SaaS with demonstrable cost reduction gets CFO attention.',url:secUrl('Pfizer'),source_name:'10-K Filing',published_date:'2024-02',confidence:.95}
+]},
+{id:'fdx',name:'FedEx',ticker:'FDX',industry:'Logistics',sector:'Package Delivery',revenue:'$88B',employees:'~500,000',hq:'Memphis, TN',linkedin:'fedex',domain:'fedex.com',fortune_rank:38,signals:[
+{cat:'trigger_event',headline:'DRIVE transformation: merging Express and Ground into single network',detail:'Largest operational transformation in FedEx history. $4B+ savings target driving massive technology investment.',why:'Network consolidation at this scale requires: route optimization, fleet management, workforce scheduling, enterprise integration.',url:gNews('FedEx','DRIVE transformation Express Ground'),source_name:'Earnings / Press',published_date:'2025-01',confidence:.92},
+{cat:'ai_transformation',headline:'FedEx Dataworks: AI-powered logistics optimization',detail:'AI for package routing, predictive delivery, automated warehouse operations. 15M+ packages/day with AI-assisted decisions.',why:'Logistics AI at FedEx scale needs specialized ML infrastructure, real-time inference, edge computing, computer vision.',url:gNews('FedEx','AI Dataworks optimization'),source_name:'Press / Product',published_date:'2024-08',confidence:.85,is_ai:true}
+]},
+{id:'lmt',name:'Lockheed Martin',ticker:'LMT',industry:'Aerospace & Defense',sector:'Defense',revenue:'$68B',employees:'~122,000',hq:'Bethesda, MD',linkedin:'lockheed-martin',domain:'lockheedmartin.com',fortune_rank:50,signals:[
+{cat:'pain_point',headline:'F-35 supply chain: 1,700+ suppliers causing recurring production delays',detail:'Supply chain spans 10+ countries. Single points of failure, long lead times, inadequate visibility.',why:'Supply chain visibility, supplier risk management, production planning tools in critical demand. DoD mandating better management.',url:gNews('Lockheed Martin','supply chain F-35 delays'),source_name:'GAO Reports',published_date:'2024-08',confidence:.88},
+{cat:'trigger_event',headline:'F-35 sustainment costs: $1.7 trillion driving modernization',detail:'Largest maintenance program in history. Pentagon pressuring Lockheed to reduce through predictive maintenance and digital twin.',why:'Any tool that demonstrably reduces sustainment costs has a massive TAM within this single program.',url:gNews('Lockheed Martin','F-35 sustainment cost'),source_name:'DOD / GAO',published_date:'2024-06',confidence:.90}
+]}
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+const LS='gtmos_sc_v4';
+const LS_USAGE='gtmos_sc_usage_v4';
+const LS_MORNING='gtmos_sc_morning_v4';
+const LS_BATCHES='gtmos_sc_batches_v4';
+const MAX_DAILY=50;
+
+function load(){try{const s=JSON.parse(localStorage.getItem(LS)||'{}');return{accounts:s.accounts||SEEDS.map(a=>({...a,origin:'seed',signals:(a.signals||[]).map(sg=>({...sg,id:sg.id||rid(),status:'unverified',pain_tags:autoTag(sg),fetched_at:sg.fetched_at||new Date().toISOString()}))})),mode:'complex',tab:{},search:'',industry:'all',catFilter:'all',painFilter:'all',aiOnly:false,expanded:null,activeBatch:null}}catch{return{accounts:SEEDS,mode:'complex',tab:{},search:'',industry:'all',catFilter:'all',painFilter:'all',aiOnly:false,expanded:null,activeBatch:null}}}
+function save(st){try{localStorage.setItem(LS,JSON.stringify({accounts:st.accounts}))}catch{}}
+function rid(){return Math.random().toString(36).slice(2,10)}
+function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function getUsage(){try{const u=JSON.parse(localStorage.getItem(LS_USAGE)||'{}');if(u.date!==today())return{date:today(),calls:0};return u}catch{return{date:today(),calls:0}}}
+function addUsage(n){const u=getUsage();u.calls+=n;u.date=today();localStorage.setItem(LS_USAGE,JSON.stringify(u))}
+function remaining(){return Math.max(0,MAX_DAILY-getUsage().calls)}
+function today(){return new Date().toISOString().slice(0,10)}
+
+let S=load();
+
+// ═══════════════════════════════════════════
+// SCORING ENGINE
+// ═══════════════════════════════════════════
+function recency(sig){
+  const d=new Date(sig.published_date||sig.fetched_at||'2024-01-01');
+  const days=(Date.now()-d.getTime())/864e5;
+  if(days<=14)return 1;if(days<=30)return .9;if(days<=60)return .75;if(days<=90)return .55;if(days<=180)return .3;return .1;
+}
+function heat(a){
+  const sigs=(a.signals||[]).filter(s=>s.status!=='flagged');
+  let sc=0;
+  for(const s of sigs){
+    const base=(s.is_ai||s.ai)?18:12;
+    const conf=(s.confidence||.65)>=.9?5:0;
+    sc+=(base+conf)*recency(s);
+  }
+  return Math.min(99,Math.round(sc));
+}
+function heatCls(h){if(h>=91)return'h-hot';if(h>=75)return'h-warm';if(h>=50)return'h-med';return'h-cool'}
+function scoreExplain(a){
+  const sigs=(a.signals||[]).filter(s=>s.status!=='flagged');
+  const ai=sigs.filter(s=>s.is_ai||s.ai).length;
+  const hi=sigs.filter(s=>(s.confidence||0)>=.9).length;
+  const avgR=sigs.length?sigs.reduce((s,x)=>s+recency(x),0)/sigs.length:0;
+  return`${sigs.length} signals (${ai} AI) · ${hi} high-conf · avg recency ${(avgR*100).toFixed(0)}% · heat ${heat(a)}`;
+}
+function scoreDetail(a){
+  const sigs=(a.signals||[]).filter(s=>s.status!=='flagged');
+  let lines=[`Score Breakdown — ${a.name} (${heat(a)})`,''];
+  for(const s of sigs.slice(0,8)){
+    const base=(s.is_ai||s.ai)?18:12;
+    const conf=(s.confidence||.65)>=.9?5:0;
+    const r=recency(s);
+    const val=((base+conf)*r).toFixed(1);
+    lines.push(`+${val}  ${s.headline.slice(0,60)}${s.is_ai?' [AI]':''} (${(r*100).toFixed(0)}% fresh, ${((s.confidence||.65)*100).toFixed(0)}% conf)`);
+  }
+  lines.push('','Total: '+heat(a)+' / 99');
+  return lines.join('\n');
+}
+
+// ═══════════════════════════════════════════
+// PAIN AUTO-TAGGING
+// ═══════════════════════════════════════════
+function autoTag(sig){
+  const blob=[sig.headline,sig.detail,sig.why_it_matters||sig.why].join(' ').toLowerCase();
+  const tags=[];
+  for(const[id,p]of Object.entries(PAIN_LIB)){
+    if(p.kw.some(k=>blob.includes(k)))tags.push(id);
+  }
+  return tags.slice(0,4);
+}
+
+// ═══════════════════════════════════════════
+// ANTHROPIC API ENRICHMENT
+// ═══════════════════════════════════════════
+async function enrichAccount(acct){
+  const prompt=`Research "${acct.name}" (ticker: ${acct.ticker||'N/A'}, industry: ${acct.industry||'unknown'}, domain: ${acct.domain||'N/A'}).
+
+Return ONLY a JSON array of 4-6 sales-relevant signals a SaaS salesperson would use to prepare for a cold call. No preamble, no markdown fences — just the JSON array.
+
+Each signal object must have these exact fields:
+- "category": one of "ai_transformation", "trigger_event", "pain_point", "internal_intel", "market_position"
+- "headline": concise signal title (under 100 chars)
+- "detail": 1-2 sentence detail with specifics
+- "why_it_matters": why a SaaS seller cares (1-2 sentences, specific to selling)
+- "source_url": a REAL verifiable URL (company website, news article, SEC filing). NEVER invent URLs.
+- "source_name": short source label (e.g. "SEC Filing", "Reuters", "Company IR")
+- "published_date": approximate date as "YYYY-MM" format
+- "confidence": 0.0 to 1.0 based on source reliability
+- "is_ai": true if signal relates to AI/ML/automation, false otherwise
+
+PRIORITIZE: AI initiatives, leadership changes, acquisitions, compliance issues, earnings signals, restructurings.
+Focus on events from the last 6 months. If you can't find verifiable current info, return fewer signals rather than fabricating.`;
+
+  const resp=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",
+      max_tokens:1000,
+      tools:[{type:"web_search_20250305",name:"web_search"}],
+      messages:[{role:"user",content:prompt}]
+    })
+  });
+  const data=await resp.json();
+  // Extract text from response blocks
+  const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+  // Try to parse JSON from the text
+  const jsonMatch=text.match(/\[[\s\S]*\]/);
+  if(!jsonMatch)throw new Error('No JSON array in response');
+  const clean=jsonMatch[0].replace(/```json|```/g,'').trim();
+  const signals=JSON.parse(clean);
+  if(!Array.isArray(signals))throw new Error('Response is not an array');
+  // Validate and normalize
+  return signals.filter(s=>s.headline&&s.source_url&&s.source_url.startsWith('http')).map(s=>({
+    id:rid(),
+    cat:s.category||'market_position',
+    headline:s.headline.slice(0,120),
+    detail:s.detail||'',
+    why:s.why_it_matters||'',
+    url:s.source_url,
+    source_name:s.source_name||'Research',
+    published_date:s.published_date||today().slice(0,7),
+    confidence:Math.max(Math.min(s.confidence||.7,1),0),
+    is_ai:!!s.is_ai,
+    fetched_at:new Date().toISOString(),
+    origin:'researched',
+    status:'unverified',
+    pain_tags:autoTag(s)
+  }));
+}
+
+async function doEnrich(acctId,btn){
+  if(remaining()<=0){alert('Daily research limit reached ('+MAX_DAILY+'). Resets at midnight.');return}
+  const acct=S.accounts.find(a=>a.id===acctId);if(!acct)return;
+  const orig=btn?btn.innerHTML:'';
+  if(btn)btn.innerHTML='<span class="enriching-badge">Researching...</span>';
+  try{
+    const sigs=await enrichAccount(acct);
+    addUsage(1);
+    // Dedupe by headline similarity
+    const existing=new Set((acct.signals||[]).map(s=>s.headline.toLowerCase().slice(0,50)));
+    const fresh=sigs.filter(s=>!existing.has(s.headline.toLowerCase().slice(0,50)));
+    acct.signals=[...fresh,...(acct.signals||[])];
+    acct.lastEnrichedAt=new Date().toISOString();
+    save(S);render();
+  }catch(e){
+    console.error('Enrich failed:',e);
+    if(btn)btn.textContent='⚠ Failed — retry';
+    setTimeout(()=>{if(btn)btn.innerHTML=orig},2000);
+  }
+}
+
+async function enrichAll(){
+  const visible=getVisible();
+  const todo=visible.filter(a=>{
+    if(!a.lastEnrichedAt)return true;
+    return(Date.now()-new Date(a.lastEnrichedAt).getTime())>864e5;
+  }).slice(0,20);
+  if(!todo.length){alert('All visible accounts were enriched within 24h.');return}
+  if(!confirm(`Research ${todo.length} accounts (~${todo.length} API calls). Continue?`))return;
+  const btn=document.getElementById('btnEnrichAll');
+  for(let i=0;i<todo.length;i++){
+    btn.textContent=`🔍 ${i+1}/${todo.length}...`;
+    if(remaining()<=0){btn.textContent='🔍 Enrich All';alert('Daily limit reached after '+(i)+' accounts.');return}
+    try{await doEnrich(todo[i].id,null)}catch{}
+    if(i<todo.length-1)await new Promise(r=>setTimeout(r,2000));
+  }
+  btn.textContent='🔍 Enrich All';
+  render();
+}
+
+// ═══════════════════════════════════════════
+// CSV UPLOAD
+// ═══════════════════════════════════════════
+function showCSVModal(){
+  showModal(`
+<h3>📎 Upload Account List (CSV)</h3>
+<p style="font-size:.76rem;color:var(--tx2);margin-bottom:10px">Upload a CSV with your target accounts. We'll map columns and optionally enrich them with live research.</p>
+<input type="file" id="csvFile" accept=".csv" style="margin-bottom:10px" />
+<div id="csvPreview"></div>
+<div id="csvMapping" style="display:none">
+<label>Company Name column *</label><select id="csvColName" class="csvSel"></select>
+<label>Website/Domain column</label><select id="csvColDomain" class="csvSel"></select>
+<label>Industry column</label><select id="csvColInd" class="csvSel"></select>
+</div>
+<div class="modal-foot">
+<button class="btn" onclick="hideModal()">Cancel</button>
+<button class="btn btn-gold" id="csvImportBtn" style="display:none">Import Accounts</button>
+</div>`);
+  document.getElementById('csvFile').onchange=handleCSVFile;
+}
+
+let csvData=null;
+function handleCSVFile(e){
+  const file=e.target.files[0];if(!file)return;
+  if(file.size>2*1024*1024){alert('File too large (max 2MB)');return}
+  Papa.parse(file,{header:true,skipEmptyLines:true,complete:r=>{
+    csvData=r.data.slice(0,500);
+    const cols=Object.keys(csvData[0]||{});
+    if(!cols.length){alert('No columns found');return}
+    // Preview
+    const prev=document.getElementById('csvPreview');
+    let html='<table class="preview-table"><tr>'+cols.slice(0,5).map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr>';
+    csvData.slice(0,3).forEach(row=>{html+='<tr>'+cols.slice(0,5).map(c=>'<td>'+esc((row[c]||'').slice(0,40))+'</td>').join('')+'</tr>'});
+    html+='</table><p style="font-size:.7rem;color:var(--tx3)">'+csvData.length+' rows found</p>';
+    prev.innerHTML=html;
+    // Mapping
+    const nameCol=cols.find(c=>/company|name|account|firm|org/i.test(c))||cols[0];
+    const domCol=cols.find(c=>/website|url|domain|web/i.test(c))||'';
+    const indCol=cols.find(c=>/industry|vertical|sector/i.test(c))||'';
+    const mapDiv=document.getElementById('csvMapping');mapDiv.style.display='block';
+    const opts=c=>'<option value="">— skip —</option>'+cols.map(col=>`<option value="${esc(col)}" ${col===c?'selected':''}>${esc(col)}</option>`).join('');
+    document.getElementById('csvColName').innerHTML=opts(nameCol);
+    document.getElementById('csvColDomain').innerHTML=opts(domCol);
+    document.getElementById('csvColInd').innerHTML=opts(indCol);
+    const impBtn=document.getElementById('csvImportBtn');impBtn.style.display='block';
+    impBtn.onclick=importCSV;
+  }});
+}
+
+function importCSV(){
+  if(!csvData||!csvData.length)return;
+  const nameCol=document.getElementById('csvColName').value;
+  if(!nameCol){alert('Company Name column required');return}
+  const domCol=document.getElementById('csvColDomain').value;
+  const indCol=document.getElementById('csvColInd').value;
+  const batchId='batch_'+rid();
+  const existingNames=new Set(S.accounts.map(a=>a.name.toLowerCase()));
+  const existingDoms=new Set(S.accounts.map(a=>(a.domain||'').toLowerCase().replace(/^www\./,'')).filter(Boolean));
+  let added=0,skipped=0;
+  csvData.forEach(row=>{
+    const name=(row[nameCol]||'').trim();if(!name)return;
+    let domain=domCol?(row[domCol]||'').trim().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/.*$/,''):'';
+    if(existingNames.has(name.toLowerCase())||(domain&&existingDoms.has(domain.toLowerCase()))){skipped++;return}
+    S.accounts.push({
+      id:rid(),name,domain,
+      industry:indCol?(row[indCol]||'').trim():'',
+      ticker:'',sector:'',revenue:'',employees:'',hq:'',linkedin:'',
+      fortune_rank:null,origin:'uploaded',batch_id:batchId,
+      signals:[],created_at:new Date().toISOString()
+    });
+    existingNames.add(name.toLowerCase());
+    if(domain)existingDoms.add(domain.toLowerCase());
+    added++;
+  });
+  // Save batch
+  const batches=JSON.parse(localStorage.getItem(LS_BATCHES)||'[]');
+  batches.push({id:batchId,name:`Upload ${new Date().toLocaleDateString()}`,uploadedAt:new Date().toISOString(),count:added});
+  localStorage.setItem(LS_BATCHES,JSON.stringify(batches));
+  S.activeBatch=batchId;
+  save(S);hideModal();render();
+  if(added>0&&confirm(`Imported ${added} accounts (${skipped} duplicates skipped). Enrich them now with live research?`)){
+    S.mode='surgical';render();enrichAll();
+  }
+}
+
+// ═══════════════════════════════════════════
+// EXPORTS
+// ═══════════════════════════════════════════
+function showExportModal(){
+  showModal(`
+<h3>Export Accounts + Signals</h3>
+<p style="font-size:.76rem;color:var(--tx2);margin-bottom:12px">Exports current filtered view (${getVisible().length} accounts).</p>
+<label>Format</label>
+<select id="exportFmt">
+<option value="sf">Salesforce CSV (Account import)</option>
+<option value="hs">HubSpot CSV (Company import)</option>
+<option value="csv">Generic CSV</option>
+<option value="brief">Pre-Call Briefs (Markdown)</option>
+<option value="json">Full JSON</option>
+<option value="outreach">Outreach/Salesloft CSV</option>
+</select>
+<div class="modal-foot">
+<button class="btn" onclick="hideModal()">Cancel</button>
+<button class="btn btn-gold" id="exportBtn">Download</button>
+</div>`);
+  document.getElementById('exportBtn').onclick=doExport;
+}
+
+function doExport(){
+  const fmt=document.getElementById('exportFmt').value;
+  const accts=getVisible();
+  let content='',filename='',type='text/csv';
+  if(fmt==='sf'){
+    const rows=[['Account Name','Website','Industry','Rating','Description','Account Source']];
+    accts.forEach(a=>{
+      const h=heat(a);const rating=h>=75?'Hot':h>=50?'Warm':'Cold';
+      const desc=(a.signals||[]).slice(0,3).map(s=>`[${(s.is_ai?'AI: ':'')}${s.headline}] (${s.source_name})`).join(' | ');
+      rows.push([a.name,a.domain||'',a.industry||'',rating,desc.slice(0,500),'Signal Console']);
+    });
+    content=Papa.unparse(rows);filename='signal-console-salesforce-'+today()+'.csv';
+  }else if(fmt==='hs'){
+    const rows=[['Name','Company Domain Name','Industry','Lifecycle Stage','Notes']];
+    accts.forEach(a=>{
+      const h=heat(a);const stage=h>=75?'opportunity':'lead';
+      const notes=(a.signals||[]).slice(0,3).map(s=>s.headline).join('; ');
+      rows.push([a.name,a.domain||'',a.industry||'',stage,notes.slice(0,400)]);
+    });
+    content=Papa.unparse(rows);filename='signal-console-hubspot-'+today()+'.csv';
+  }else if(fmt==='csv'){
+    const rows=[['Company','Ticker','Industry','Domain','Heat Score','AI Signals','Total Signals','Top Signal']];
+    accts.forEach(a=>{
+      rows.push([a.name,a.ticker||'',a.industry||'',a.domain||'',heat(a),(a.signals||[]).filter(s=>s.is_ai).length,(a.signals||[]).length,(a.signals||[])[0]?.headline||'']);
+    });
+    content=Papa.unparse(rows);filename='signal-console-export-'+today()+'.csv';
+  }else if(fmt==='outreach'){
+    const rows=[['Account Name','Custom Field 1 (Signal)','Custom Field 2 (Why It Matters)','Custom Field 3 (Source URL)']];
+    accts.forEach(a=>{const s=(a.signals||[])[0];if(s)rows.push([a.name,s.headline,s.why||s.why_it_matters||'',s.url||''])});
+    content=Papa.unparse(rows);filename='signal-console-outreach-'+today()+'.csv';
+  }else if(fmt==='brief'){
+    content=accts.map(a=>genBrief(a)).join('\n\n'+'═'.repeat(60)+'\n\n');
+    filename='signal-console-briefs-'+today()+'.md';type='text/markdown';
+  }else{
+    content=JSON.stringify(accts,null,2);filename='signal-console-'+today()+'.json';type='application/json';
+  }
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const el=document.createElement('a');el.href=url;el.download=filename;el.click();URL.revokeObjectURL(url);
+  hideModal();
+}
+
+function genBrief(a){
+  const h=heat(a);
+  const sigs=(a.signals||[]).filter(s=>s.status!=='flagged');
+  const top3=sigs.sort((x,y)=>(y.confidence||0)*recency(y)-(x.confidence||0)*recency(x)).slice(0,3);
+  let t=`PRE-CALL INTEL BRIEF — ${a.name}${a.ticker?' ('+a.ticker+')':''}\n${'═'.repeat(50)}\n`;
+  t+=`Industry: ${a.industry||'—'} · ${a.sector||''}\nRevenue: ${a.revenue||'—'} | Employees: ${a.employees||'—'} | HQ: ${a.hq||'—'}\nHeat: ${h}/99 — ${h>=91?'HOT':h>=75?'ACTIVE':h>=50?'WATCH':'LOW'}\n\n`;
+  t+=`▸ TOP SIGNALS\n${'─'.repeat(40)}\n`;
+  top3.forEach((s,i)=>{
+    t+=`${i+1}. ${s.is_ai?'[AI] ':''}${s.headline}\n   ${s.detail||''}\n   💡 ${s.why||s.why_it_matters||''}\n   📎 ${s.source_name||''} | ${s.published_date||''} | ${Math.round((s.confidence||0)*100)}% conf\n   ${s.url||''}\n\n`;
+  });
+  t+=`▸ DISCOVERY QUESTIONS\n${'─'.repeat(40)}\n`;
+  top3.forEach(s=>{
+    if(s.cat==='pain_point')t+=`- "How are you currently handling ${s.headline.toLowerCase().includes('supply')?'the supply chain constraints':'this challenge'}?"\n`;
+    else if(s.cat==='trigger_event')t+=`- "I saw the ${s.headline.split(':')[0].toLowerCase()} — how is that affecting your team\'s priorities?"\n`;
+    else if(s.cat==='ai_transformation')t+=`- "With your AI initiatives, what\'s the biggest infrastructure challenge right now?"\n`;
+    else t+=`- "What\'s driving the biggest urgency in your org right now?"\n`;
+  });
+  t+=`\nGenerated: ${new Date().toISOString().slice(0,16)} | Signal Console v4`;
+  return t;
+}
+
+// ═══════════════════════════════════════════
+// FILTERING
+// ═══════════════════════════════════════════
+function getVisible(){
+  let a=S.accounts;
+  if(S.mode==='active')a=a.filter(x=>heat(x)>=75);
+  if(S.mode==='surgical')a=a.filter(x=>x.batch_id===S.activeBatch);
+  if(S.mode==='ai_trends')a=a.filter(x=>x.fortune_rank&&x.fortune_rank<=100&&(x.signals||[]).some(s=>s.is_ai));
+  if(S.industry!=='all')a=a.filter(x=>x.industry===S.industry);
+  if(S.catFilter!=='all')a=a.filter(x=>(x.signals||[]).some(s=>s.cat===S.catFilter));
+  if(S.painFilter!=='all')a=a.filter(x=>(x.signals||[]).some(s=>(s.pain_tags||[]).includes(S.painFilter)));
+  if(S.aiOnly)a=a.filter(x=>(x.signals||[]).some(s=>s.is_ai));
+  if(S.search){const q=S.search.toLowerCase();a=a.filter(x=>[x.name,x.ticker,x.industry,x.sector,...(x.signals||[]).map(s=>s.headline+' '+s.detail)].join(' ').toLowerCase().includes(q))}
+  return a.sort((x,y)=>heat(y)-heat(x));
+}
+
+// ═══════════════════════════════════════════
+// RENDERING
+// ═══════════════════════════════════════════
+function render(){
+  renderStats();renderCredits();renderControls();renderMorning();renderGrid();
+}
+
+function renderStats(){
+  const all=S.accounts;const sigs=all.reduce((s,a)=>s+(a.signals||[]).length,0);
+  const ai=all.reduce((s,a)=>s+(a.signals||[]).filter(x=>x.is_ai).length,0);
+  document.getElementById('topStats').innerHTML=`<div>Accts <b>${all.length}</b></div><div>Signals <b>${sigs}</b></div><div>AI <b style="color:var(--purple)">${ai}</b></div>`;
+}
+function renderCredits(){
+  document.getElementById('topCredits').textContent=`🔍 ${remaining()}/${MAX_DAILY} today`;
+}
+
+function renderControls(){
+  const bar=document.getElementById('controlsBar');
+  const batches=JSON.parse(localStorage.getItem(LS_BATCHES)||'[]');
+  const industries=[...new Set(S.accounts.map(a=>a.industry).filter(Boolean))].sort();
+  const pains=Object.entries(PAIN_LIB);
+  let h='<div class="mode-group">';
+  ['complex','active','surgical','ai_trends'].forEach(m=>{
+    const labels={complex:'Complex',active:'Active 75+',surgical:'Surgical',ai_trends:'AI Trends'};
+    h+=`<button class="mode-btn ${S.mode===m?'active':''}" data-mode="${m}">${labels[m]}</button>`;
+  });
+  h+='</div><div class="filter-sep"></div>';
+  // Industry
+  h+=`<button class="chip ${S.industry==='all'?'on':''}" data-ind="all">All Industries</button>`;
+  industries.forEach(i=>{const ct=S.accounts.filter(a=>a.industry===i).length;h+=`<button class="chip ${S.industry===i?'on':''}" data-ind="${esc(i)}">${esc(i)}<b>${ct}</b></button>`});
+  // AI toggle
+  h+=`<div class="filter-sep"></div><button class="chip ${S.aiOnly?'on':''}" data-aitoggle>🤖 AI Only</button>`;
+  // Batch selector (if batches exist)
+  if(batches.length){
+    h+=`<div class="filter-sep"></div><select id="batchSel" style="font-size:.7rem;background:var(--surf);border:1px solid var(--bdr);color:var(--tx2);border-radius:var(--r);padding:4px 8px">`;
+    h+=`<option value="">All batches</option>`;
+    batches.forEach(b=>{h+=`<option value="${b.id}" ${S.activeBatch===b.id?'selected':''}>${esc(b.name)} (${b.count})</option>`});
+    h+=`</select>`;
+  }
+  bar.innerHTML=h;
+  // Events
+  bar.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;render()});
+  bar.querySelectorAll('[data-ind]').forEach(b=>b.onclick=()=>{S.industry=b.dataset.ind;render()});
+  bar.querySelector('[data-aitoggle]').onclick=()=>{S.aiOnly=!S.aiOnly;render()};
+  const bsel=bar.querySelector('#batchSel');
+  if(bsel)bsel.onchange=()=>{S.activeBatch=bsel.value||null;render()};
+}
+
+function renderMorning(){
+  const mb=document.getElementById('morningBrief');
+  const dismissed=localStorage.getItem(LS_MORNING)===today();
+  if(dismissed){mb.classList.remove('show');return}
+  const top3=S.accounts.sort((a,b)=>heat(b)-heat(a)).slice(0,3);
+  if(!top3.length){mb.classList.remove('show');return}
+  mb.classList.add('show');
+  mb.innerHTML=`
+<div class="morning-head">
+  <div class="morning-title">Morning Brief — ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}</div>
+  <button class="morning-dismiss" id="dismissMorning">✕</button>
+</div>
+<div class="morning-items">
+  ${top3.map(a=>{const h=heat(a);return`
+  <div class="morning-card">
+    <div class="morning-heat ${heatCls(h)}">${h}</div>
+    <div class="morning-info">
+      <div class="morning-name">${esc(a.name)}</div>
+      <div class="morning-sig">${esc((a.signals||[])[0]?.headline||'No signals yet')}</div>
+      <div class="morning-prep"><button class="btn btn-sm btn-gold" data-prep="${a.id}">Prep Call</button></div>
+    </div>
+  </div>`}).join('')}
+</div>`;
+  document.getElementById('dismissMorning').onclick=()=>{localStorage.setItem(LS_MORNING,today());mb.classList.remove('show')};
+  mb.querySelectorAll('[data-prep]').forEach(b=>b.onclick=()=>{
+    const acct=S.accounts.find(a=>a.id===b.dataset.prep);
+    if(acct)navigator.clipboard.writeText(genBrief(acct)).then(()=>{b.textContent='✓ Copied!';setTimeout(()=>b.textContent='Prep Call',1500)});
+  });
+}
+
+function renderGrid(){
+  const grid=document.getElementById('grid');
+  const accts=getVisible();
+  if(!accts.length){grid.innerHTML='<div class="empty"><h3>No accounts match</h3><p>Adjust filters, upload a CSV, or add accounts manually.</p></div>';return}
+  grid.innerHTML=accts.map((a,i)=>{
+    const h=heat(a);const isOpen=S.expanded===a.id;
+    const cats={};(a.signals||[]).forEach(s=>{cats[s.cat]=(cats[s.cat]||0)+1});
+    const pills=Object.entries(cats).map(([c,n])=>CATS[c]?`<span class="pill ${CATS[c].p}">${CATS[c].l} ${n}</span>`:'').join('');
+    return`
+<div class="card ${isOpen?'open':''}" data-id="${a.id}" style="animation-delay:${i*30}ms">
+  <div class="card-head" data-toggle="${a.id}">
+    <div class="heat ${heatCls(h)}">${h}</div>
+    <div class="card-info">
+      <div class="card-name">${esc(a.name)} <span class="card-ticker">${esc(a.ticker||'')}</span>
+        ${a.fortune_rank?`<span class="fortune-badge">F#${a.fortune_rank}</span>`:''}
+        ${a.origin==='uploaded'?'<span style="font-size:.55rem;color:var(--cyan);font-family:var(--mono)">CSV</span>':''}
+      </div>
+      <div class="card-meta">${[a.industry,a.sector,a.revenue,a.employees,a.hq].filter(Boolean).map(esc).join(' · ')}</div>
+    </div>
+  </div>
+  <div class="card-pills">${pills}</div>
+  ${isOpen?renderDetail(a):''}
+</div>`;
+  }).join('');
+  // Toggle events
+  grid.querySelectorAll('[data-toggle]').forEach(el=>el.onclick=()=>{S.expanded=S.expanded===el.dataset.toggle?null:el.dataset.toggle;renderGrid()});
+  // Tab events
+  grid.querySelectorAll('[data-dtab]').forEach(el=>el.onclick=e=>{e.stopPropagation();const[aid,tab]=el.dataset.dtab.split('|');S.tab[aid]=tab;renderGrid()});
+  // Enrich buttons
+  grid.querySelectorAll('[data-enrich]').forEach(b=>b.onclick=e=>{e.stopPropagation();doEnrich(b.dataset.enrich,b)});
+  // Copy brief
+  grid.querySelectorAll('[data-brief]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.brief);if(acct){navigator.clipboard.writeText(genBrief(acct));b.textContent='✓ Copied!';setTimeout(()=>b.textContent='📋 Copy Brief',1500)}});
+  // Copy signals
+  grid.querySelectorAll('[data-copysigs]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.copysigs);if(acct){const t=(acct.signals||[]).map(s=>`• ${s.headline}\n  ${s.why||''}\n  ${s.url||''}`).join('\n\n');navigator.clipboard.writeText(t);b.textContent='✓';setTimeout(()=>b.textContent='Signals',1500)}});
+  // Verify/flag
+  grid.querySelectorAll('[data-verify]').forEach(b=>b.onclick=e=>{e.stopPropagation();const[aid,sid]=b.dataset.verify.split('|');const acct=S.accounts.find(a=>a.id===aid);if(!acct)return;const sig=(acct.signals||[]).find(s=>s.id===sid);if(sig){sig.status=sig.status==='verified'?'unverified':'verified';if(sig.status==='verified')sig.confidence=Math.min(1,(sig.confidence||.7)+.05);save(S);renderGrid()}});
+  grid.querySelectorAll('[data-flag]').forEach(b=>b.onclick=e=>{e.stopPropagation();const[aid,sid]=b.dataset.flag.split('|');const acct=S.accounts.find(a=>a.id===aid);if(!acct)return;const sig=(acct.signals||[]).find(s=>s.id===sid);if(sig){sig.status=sig.status==='flagged'?'unverified':'flagged';save(S);renderGrid()}});
+  // Score detail
+  grid.querySelectorAll('[data-scoredetail]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.scoredetail);if(acct)alert(scoreDetail(acct))});
+
+  // ⚡ DEEP RESEARCH — Browserbase enrichment
+  grid.querySelectorAll('[data-deepresearch]').forEach(b=>b.onclick=e=>{
+    e.stopPropagation();
+    const acctId=b.dataset.deepresearch;
+    const acct=S.accounts.find(a=>a.id===acctId);
+    if(!acct)return;
+    const statusEl=document.getElementById('deep-status-'+acctId);
+    if(!statusEl)return;
+
+    // Show loading
+    b.disabled=true;
+    b.innerHTML='<span class="enriching-badge">Researching...</span>';
+    statusEl.style.display='block';
+    statusEl.innerHTML='⚡ Connecting to Browserbase... Launching 3 parallel research sessions for <b>'+esc(acct.name)+'</b>';
+
+    const phases=['⚡ Searching Google News...','⚡ Scanning company website + careers...','⚡ Extracting strategic intelligence...','⚡ Processing signals...'];
+    let phaseIdx=0;
+    const phaseTimer=setInterval(()=>{phaseIdx++;if(phaseIdx<phases.length)statusEl.innerHTML=phases[phaseIdx]},8000);
+
+    fetch('http://localhost:3001/enrich',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:acct.name,domain:acct.domain||null,industry:acct.industry||null})
+    })
+    .then(r=>{if(!r.ok)throw new Error('Server returned '+r.status);return r.json()})
+    .then(data=>{
+      clearInterval(phaseTimer);
+      if(data.error)throw new Error(data.error);
+
+      // Merge new signals (avoid duplicates by headline)
+      const existingHeadlines=new Set((acct.signals||[]).map(s=>(s.headline||'').toLowerCase().slice(0,40)));
+      const newSignals=(data.signals||[]).filter(s=>!existingHeadlines.has((s.headline||'').toLowerCase().slice(0,40)));
+      acct.signals=[...newSignals,...(acct.signals||[])]; // New signals first
+
+      // Update heat score
+      if(data.heat&&data.heat>=(acct._heat||0))acct._heat=data.heat;
+
+      // Update company info if we got it
+      if(data.info){
+        if(data.info.industry&&data.info.industry!=='Unknown')acct.industry=data.info.industry;
+        if(data.info.revenue&&data.info.revenue!=='Unknown')acct.revenue=data.info.revenue;
+        if(data.info.employees&&data.info.employees!=='Unknown')acct.employees=data.info.employees;
+        if(data.info.hq&&data.info.hq!=='Unknown')acct.hq=data.info.hq;
+        if(data.info.sector&&data.info.sector!=='Unknown')acct.sector=data.info.sector;
+      }
+
+      acct._lastEnriched=data.enrichedAt;
+      save(S);
+
+      statusEl.innerHTML='✓ <b>'+newSignals.length+' new signals</b> added from live web research ('+data.elapsed+')';
+      statusEl.style.color='#4a9e6e';
+      setTimeout(()=>{statusEl.style.display='none';statusEl.style.color='#a855f7'},4000);
+      b.disabled=false;
+      b.innerHTML='⚡ Deep Research';
+      renderGrid();
+    })
+    .catch(err=>{
+      clearInterval(phaseTimer);
+      statusEl.innerHTML='✗ '+esc(err.message)+(err.message.includes('Failed to fetch')?' — is the enrichment server running on port 3001?':'');
+      statusEl.style.color='#c05a52';
+      b.disabled=false;
+      b.innerHTML='⚡ Deep Research';
+      setTimeout(()=>{statusEl.style.display='none';statusEl.style.color='#a855f7'},6000);
+    });
+  });
+}
+
+// E7: Recommended Play card — temperature auto-detection + channel/CTA recommendation
+function renderRecPlay(a){
+  const name=(a.name||'').toLowerCase();
+  // Check deal workspace for active deal
+  const deals=JSON.parse(localStorage.getItem('gtmos_deal_workspaces')||'[]');
+  const activeDeal=Array.isArray(deals)?deals.find(d=>d&&(d.accountName||d.account_name||'').toLowerCase()===name&&d.stage!=='closed-won'&&d.stage!=='closed-lost'):null;
+  // Check outbound touches
+  const touches=JSON.parse(localStorage.getItem('gtmos_outbound_touches')||'{"touches":[]}');
+  const acctTouches=(touches.touches||[]).filter(t=>(t.account||'').toLowerCase()===name);
+  const replied=acctTouches.some(t=>t.outcome==='replied'||t.outcome==='meeting_booked');
+  // Determine temperature
+  let temp='ice_cold',tempLabel='Ice Cold',tempColor='var(--tx3)';
+  if(activeDeal&&activeDeal.stage!=='prospect'){temp='hot';tempLabel='Hot';tempColor='#ef4444';}
+  else if(replied||activeDeal){temp='warm';tempLabel='Warm';tempColor='#f59e0b';}
+  else if(acctTouches.length>0){temp='cool';tempLabel='Cool';tempColor='#3b82f6';}
+  else{temp='ice_cold';tempLabel='Ice Cold';tempColor='var(--tx3)';}
+  // Channel + CTA recommendation by temperature
+  const recs={
+    ice_cold:{channel:'Email',cta:'Give-to-Get (no ask)',asset:'Industry brief or benchmark'},
+    cool:{channel:'Email + LinkedIn',cta:'Insight share',asset:'Case study or one-pager'},
+    warm:{channel:'Phone + Email',cta:'Meeting request',asset:'Custom PoC proposal'},
+    hot:{channel:'Phone (direct)',cta:'Next step confirmation',asset:'Business case or ROI model'}
+  };
+  const rec=recs[temp]||recs.ice_cold;
+  const h=heat(a);
+  const encName=encodeURIComponent(a.name||'');
+  return`<div style="padding:10px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:rgba(212,165,116,0.03);">
+    <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);white-space:nowrap;">Recommended Play</div>
+    <span style="font-size:.68rem;padding:2px 8px;border-radius:20px;font-weight:600;color:${tempColor};background:rgba(255,255,255,0.04);border:1px solid ${tempColor}33;">${tempLabel}</span>
+    <span style="font-size:.7rem;color:var(--tx2);">${esc(rec.channel)} · ${esc(rec.cta)}</span>
+    <span style="font-size:.65rem;color:var(--tx3);">Asset: ${esc(rec.asset)}</span>
+    <div style="margin-left:auto;display:flex;gap:4px;">
+      <a href="/app/outbound-studio/?account=${encName}&temperature=${temp}" class="btn btn-sm" style="font-size:.6rem;padding:3px 8px;text-decoration:none;">Generate Touch →</a>
+      <a href="/app/cold-call-studio/?account=${encName}" class="btn btn-sm" style="font-size:.6rem;padding:3px 8px;text-decoration:none;">Prep Call →</a>
+    </div>
+  </div>`;
+}
+
+function renderDetail(a){
+  const tab=S.tab[a.id]||'all';
+  const allSigs=(a.signals||[]);
+  const tabList=[['all','All',allSigs.length],...Object.entries(CATS).map(([k,v])=>[k,v.l,allSigs.filter(s=>s.cat===k).length]).filter(([,,n])=>n>0)];
+  const sigs=tab==='all'?allSigs:allSigs.filter(s=>s.cat===tab);
+  const sorted=[...sigs].sort((x,y)=>{
+    if(x.status==='flagged'&&y.status!=='flagged')return 1;
+    if(x.status!=='flagged'&&y.status==='flagged')return -1;
+    return((y.confidence||0)*recency(y))-((x.confidence||0)*recency(x));
+  });
+
+  const researchLinks=[
+    a.ticker?[secUrl(a.name),'SEC Filings']:null,
+    [gNews(a.name,''),'Google News'],
+    [gNews(a.name,'AI'),'AI News'],
+    a.linkedin?[`https://www.linkedin.com/company/${a.linkedin}/`,'LinkedIn']:null,
+    [`https://www.google.com/search?q=%22${encodeURIComponent(a.name)}%22+earnings+2025`,'Earnings'],
+    a.domain?[`https://crt.sh/?q=%25.${a.domain}&output=json`,'SSL Certs']:null,
+  ].filter(Boolean);
+
+  return`
+<div class="detail">
+  <div class="detail-actions">
+    <button class="btn btn-gold btn-sm" data-enrich="${a.id}">🔍 AI Research</button>
+    <button class="btn btn-sm" data-deepresearch="${a.id}" style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.3);color:#a855f7;">⚡ Deep Research</button>
+    <button class="btn btn-sm" data-brief="${a.id}">📋 Copy Brief</button>
+    <button class="btn btn-sm" data-copysigs="${a.id}">Signals</button>
+    <button class="btn btn-sm" data-scoredetail="${a.id}">Why ${heat(a)}?</button>
+    <span style="margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--tx3)">${scoreExplain(a)}</span>
+  </div>
+  <div id="deep-status-${a.id}" style="display:none;padding:8px 16px;border-bottom:1px solid var(--bdr);font-size:.72rem;font-family:var(--mono);color:#a855f7;background:rgba(168,85,247,0.03);"></div>
+  ${renderRecPlay(a)}
+  <div class="detail-research">
+    <span style="font-size:.6rem;color:var(--tx4);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 0">Research:</span>
+    ${researchLinks.map(([u,l])=>`<a class="rlink" href="${esc(u)}" target="_blank" rel="noopener">↗ ${l}</a>`).join('')}
+  </div>
+  <div class="detail-tabs">
+    ${tabList.map(([k,l,n])=>`<div class="dtab ${tab===k?'on':''}" data-dtab="${a.id}|${k}">${l}<small>${n}</small></div>`).join('')}
+  </div>
+  <div class="detail-body">
+    ${sorted.length?sorted.map(s=>{
+      const ci=CATS[s.cat]||{};const r=recency(s);const stale=r<.3;const flagged=s.status==='flagged';
+      const ageDays=Math.round((Date.now()-new Date(s.published_date||s.fetched_at||'2024-01-01').getTime())/864e5);
+      const ageLabel=ageDays<=30?'':ageDays<=90?'aging':'stale';
+      return`
+      <div class="sig ${stale&&!flagged?'stale':''} ${flagged?'flagged':''}">
+        <div class="sig-actions">
+          <button class="sig-vbtn ${s.status==='verified'?'verified':''}" data-verify="${a.id}|${s.id}" title="Verify">✓</button>
+          <button class="sig-vbtn ${s.status==='flagged'?'flag':''}" data-flag="${a.id}|${s.id}" title="Flag">⚑</button>
+        </div>
+        <div class="sig-top">
+          <div class="sig-dot ${ci.d||''}"></div>
+          <div class="sig-body">
+            <div class="sig-hl">${esc(s.headline)}${s.is_ai?'<span class="sig-ai">AI</span>':''}</div>
+            <div class="sig-detail">${esc(s.detail)}</div>
+            ${(s.why||s.why_it_matters)?`<details style="margin-top:4px;"><summary style="font-size:.68rem;color:var(--tx3);cursor:pointer;opacity:.6;">Why it matters</summary><div class="sig-why">💡 ${esc(s.why||s.why_it_matters||'')}</div></details>`:''}
+            <div class="sig-foot">
+              <span class="sig-src">📎 ${esc(s.source_name||'')} ${s.url?`· <a href="${esc(s.url)}" target="_blank" rel="noopener">Source →</a>`:''}</span>
+              <span class="sig-conf">${Math.round((s.confidence||0)*100)}% conf</span>
+              ${ageLabel?`<span class="sig-age">${ageLabel}</span>`:''}
+              <span class="sig-src">${esc(s.published_date||'')}</span>
+              ${s.status==='verified'?'<span style="color:var(--green);font-size:.6rem">✓ verified</span>':''}
+            </div>
+            ${(s.pain_tags||[]).length?`<div class="sig-tags">${s.pain_tags.map(t=>PAIN_LIB[t]?`<span class="sig-tag">${PAIN_LIB[t].l}</span>`:'').join('')}</div>`:''}
+          </div>
+        </div>
+      </div>`;
+    }).join(''):'<div style="color:var(--tx3);padding:16px">No signals in this category.</div>'}
+  </div>
+  <div class="brief-bar">
+    <button class="btn btn-gold btn-sm" data-brief="${a.id}">📋 Copy Pre-Call Brief</button>
+    <button class="btn btn-sm" data-copysigs="${a.id}">Copy Signals Only</button>
+  </div>
+</div>`;
+}
+
+// ═══════════════════════════════════════════
+// MODALS
+// ═══════════════════════════════════════════
+function showModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('overlay').classList.add('on')}
+function hideModal(){document.getElementById('overlay').classList.remove('on')}
+document.getElementById('overlay').onclick=e=>{if(e.target===e.currentTarget)hideModal()};
+
+// Add Account modal
+document.getElementById('btnAddAcct').onclick=()=>{
+  const inds=['Technology','Financial Services','Healthcare','Retail','Industrial','Aerospace & Defense','Energy','Pharma','Logistics','Consumer','Transportation','Media'];
+  showModal(`
+<h3>Add Account</h3>
+<label>Company Name *</label><input id="ma_name" placeholder="e.g. Snowflake" />
+<label>Ticker</label><input id="ma_ticker" placeholder="e.g. SNOW" />
+<label>Industry</label><select id="ma_ind">${inds.map(i=>`<option>${i}</option>`).join('')}</select>
+<label>Sector</label><input id="ma_sector" placeholder="e.g. Cloud Data Platform" />
+<label>Revenue</label><input id="ma_rev" placeholder="e.g. $2.8B" />
+<label>Employees</label><input id="ma_emp" placeholder="e.g. ~6,000" />
+<label>HQ</label><input id="ma_hq" placeholder="e.g. Bozeman, MT" />
+<label>Domain</label><input id="ma_dom" placeholder="e.g. snowflake.com" />
+<label>LinkedIn slug</label><input id="ma_li" placeholder="e.g. snowflake-computing" />
+<label>Fortune Rank (if applicable)</label><input id="ma_fr" type="number" placeholder="" />
+<div class="modal-foot">
+<button class="btn" onclick="hideModal()">Cancel</button>
+<button class="btn btn-gold" id="ma_save">Save & Research</button>
+</div>`);
+  document.getElementById('ma_save').onclick=()=>{
+    const name=document.getElementById('ma_name').value.trim();if(!name)return;
+    const acct={id:rid(),name,ticker:document.getElementById('ma_ticker').value.trim(),industry:document.getElementById('ma_ind').value,sector:document.getElementById('ma_sector').value.trim(),revenue:document.getElementById('ma_rev').value.trim(),employees:document.getElementById('ma_emp').value.trim(),hq:document.getElementById('ma_hq').value.trim(),domain:document.getElementById('ma_dom').value.trim(),linkedin:document.getElementById('ma_li').value.trim(),fortune_rank:parseInt(document.getElementById('ma_fr').value)||null,origin:'manual',signals:[],created_at:new Date().toISOString()};
+    S.accounts.push(acct);save(S);hideModal();S.expanded=acct.id;render();
+    doEnrich(acct.id,null);
+  };
+};
+
+// Add Signal modal
+document.getElementById('btnAddSig').onclick=()=>{
+  const acctOpts=S.accounts.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');
+  const catOpts=Object.entries(CATS).map(([k,v])=>`<option value="${k}">${v.l}</option>`).join('');
+  showModal(`
+<h3>Add Signal Manually</h3>
+<label>Account *</label><select id="ms_acct">${acctOpts}</select>
+<label>Category *</label><select id="ms_cat">${catOpts}</select>
+<label>Headline *</label><input id="ms_hl" placeholder="What happened?" />
+<label>Detail</label><textarea id="ms_det" placeholder="Context..."></textarea>
+<label>Why It Matters for Selling</label><textarea id="ms_why" placeholder="How does a seller use this?"></textarea>
+<label>Source URL</label><input id="ms_url" placeholder="https://..." />
+<label>Source Name</label><input id="ms_src" placeholder="e.g. SEC Filing, Reuters" />
+<label style="display:flex;align-items:center;gap:6px;margin-top:10px"><input type="checkbox" id="ms_ai" /> AI-related signal</label>
+<div class="modal-foot">
+<button class="btn" onclick="hideModal()">Cancel</button>
+<button class="btn btn-gold" id="ms_save">Save Signal</button>
+</div>`);
+  document.getElementById('ms_save').onclick=()=>{
+    const hl=document.getElementById('ms_hl').value.trim();if(!hl)return;
+    const acctId=document.getElementById('ms_acct').value;
+    const acct=S.accounts.find(a=>a.id===acctId);if(!acct)return;
+    const sig={id:rid(),cat:document.getElementById('ms_cat').value,headline:hl,detail:document.getElementById('ms_det').value.trim(),why:document.getElementById('ms_why').value.trim(),url:document.getElementById('ms_url').value.trim(),source_name:document.getElementById('ms_src').value.trim()||'Manual',published_date:today().slice(0,7),confidence:.75,is_ai:document.getElementById('ms_ai').checked,fetched_at:new Date().toISOString(),origin:'manual',status:'unverified'};
+    sig.pain_tags=autoTag(sig);
+    acct.signals=[sig,...(acct.signals||[])];
+    save(S);hideModal();render();
+  };
+};
+
+// ═══════════════════════════════════════════
+// EVENT WIRING
+// ═══════════════════════════════════════════
+document.getElementById('searchIn').oninput=e=>{S.search=e.target.value;renderGrid()};
+document.getElementById('btnUploadCSV').onclick=showCSVModal;
+document.getElementById('btnExport').onclick=showExportModal;
+document.getElementById('btnEnrichAll').onclick=enrichAll;
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+render();
+
+    </script>
+</body>
+</html>

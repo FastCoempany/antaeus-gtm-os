@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourcing Workbench | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+/* ==================== SOURCING WORKBENCH ==================== */
+/* View Tabs */
+.sw-tabs{display:flex;gap:2px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:3px;margin-bottom:var(--space-lg);width:fit-content;}
+.sw-tab{padding:8px 18px;border-radius:var(--radius-sm);font-size:0.78rem;font-weight:700;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:inherit;transition:all 0.2s;letter-spacing:0.3px;text-transform:uppercase;}
+.sw-tab.active{background:var(--brand-gold);color:var(--bg-primary);}
+.sw-tab:hover:not(.active){color:var(--text-secondary);background:rgba(255,255,255,0.04);}
+.sw-view{display:none;}.sw-view.active{display:block;}
+
+/* Capacity bar */
+.sw-capacity{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);margin-bottom:var(--space-lg);font-size:0.82rem;}
+.sw-capacity-bar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden;}
+.sw-capacity-fill{height:100%;border-radius:3px;transition:width 0.4s;}
+.sw-capacity-fill.green{background:var(--accent-green);}.sw-capacity-fill.amber{background:var(--accent-amber);}.sw-capacity-fill.red{background:var(--accent-red);}
+.sw-capacity-text{font-family:var(--font-serif);color:var(--text-primary);min-width:70px;text-align:right;}
+.sw-capacity-label{color:var(--text-muted);font-size:0.75rem;}
+
+/* ==================== QUERY BUILDER ==================== */
+.sw-qb-empty{text-align:center;padding:48px 24px;color:var(--text-muted);}
+.sw-qb-empty .icon{font-size:2rem;margin-bottom:12px;}
+.sw-qb-thesis-group{margin-bottom:var(--space-xl);}
+.sw-qb-thesis-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-md);}
+.sw-qb-thesis-name{font-family:var(--font-serif);font-size:1.1rem;color:var(--brand-gold);}
+.sw-qb-add-card{padding:6px 14px;border-radius:8px;font-size:0.75rem;font-weight:700;border:1px solid rgba(212,165,116,0.3);background:rgba(212,165,116,0.08);color:var(--brand-gold);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.sw-qb-add-card:hover{background:rgba(212,165,116,0.15);}
+.sw-qb-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:var(--space-md);}
+.sw-qb-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px;position:relative;transition:all 0.2s;}
+.sw-qb-card:hover{border-color:var(--border-hover);}
+.sw-qb-card.exhausted{opacity:0.5;}
+.sw-qb-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.sw-qb-platform{font-size:0.7rem;padding:3px 10px;border-radius:var(--radius-full);font-weight:700;text-transform:uppercase;letter-spacing:0.3px;}
+.sw-qb-platform.sales-nav{background:rgba(59,130,246,0.12);color:var(--accent-blue);}
+.sw-qb-platform.zoominfo,.sw-qb-platform.apollo{background:rgba(168,85,247,0.12);color:var(--accent-purple);}
+.sw-qb-platform.google-boolean{background:rgba(34,197,94,0.12);color:var(--accent-green);}
+.sw-qb-platform.conference{background:rgba(245,158,11,0.12);color:var(--accent-amber);}
+.sw-qb-platform.crm{background:rgba(6,182,212,0.12);color:var(--accent-cyan);}
+.sw-qb-platform.custom{background:rgba(100,116,139,0.12);color:var(--text-tertiary);}
+.sw-qb-sourced{font-size:0.72rem;color:var(--text-muted);}
+.sw-qb-sourced span{color:var(--brand-gold);font-weight:700;}
+.sw-qb-filters{margin-top:8px;}
+.sw-qb-filter-row{display:flex;justify-content:space-between;padding:3px 0;font-size:0.78rem;border-bottom:1px solid rgba(255,255,255,0.03);}
+.sw-qb-filter-row .label{color:var(--text-muted);}
+.sw-qb-filter-row .val{color:var(--text-secondary);text-align:right;max-width:60%;}
+.sw-qb-card-actions{display:flex;gap:6px;margin-top:10px;}
+.sw-qb-card-btn{font-size:0.7rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.sw-qb-card-btn:hover{border-color:var(--brand-gold);color:var(--brand-gold);}
+.sw-qb-card-btn.exhaust{color:var(--accent-amber);border-color:rgba(245,158,11,0.3);}
+.sw-qb-card-btn.exhaust:hover{background:rgba(245,158,11,0.08);}
+/* Persona search suggestion */
+.sw-qb-persona-hint{margin-top:8px;padding:8px 10px;background:rgba(45,212,191,0.05);border:1px solid rgba(45,212,191,0.15);border-radius:var(--radius-sm);font-size:0.72rem;color:var(--brand-teal);}
+
+/* ==================== PROSPECT PIPELINE ==================== */
+.sw-pp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-md);}
+.sw-pp-stats{display:flex;gap:var(--space-md);}
+.sw-pp-stat{text-align:center;}
+.sw-pp-stat-val{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);}
+.sw-pp-stat-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.3px;}
+.sw-pp-add{padding:8px 18px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.82rem;background:var(--brand-gold);color:var(--bg-primary);transition:all 0.2s;}
+.sw-pp-add:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,165,116,0.3);}
+.sw-pp-filters{display:flex;gap:6px;margin-bottom:var(--space-md);flex-wrap:wrap;}
+.sw-pp-filter{padding:5px 12px;border-radius:var(--radius-full);font-size:0.72rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.sw-pp-filter.active{background:rgba(212,165,116,0.1);color:var(--brand-gold);border-color:rgba(212,165,116,0.3);}
+/* Prospect cards */
+.sw-pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--space-sm);}
+.sw-pp-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px 18px;transition:all 0.2s;position:relative;}
+.sw-pp-card:hover{border-color:var(--border-hover);}
+.sw-pp-card.stale{border-left:3px solid var(--accent-amber);}
+.sw-pp-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.sw-pp-card-name{font-weight:700;font-size:0.9rem;color:var(--text-primary);}
+.sw-pp-card-stage{font-size:0.62rem;padding:2px 8px;border-radius:var(--radius-full);font-weight:700;}
+.sw-pp-card-stage.captured{background:rgba(100,116,139,0.15);color:var(--text-tertiary);}
+.sw-pp-card-stage.researched{background:rgba(59,130,246,0.15);color:var(--accent-blue);}
+.sw-pp-card-stage.ready{background:rgba(34,197,94,0.15);color:var(--accent-green);}
+.sw-pp-card-stage.parked{background:rgba(245,158,11,0.1);color:var(--accent-amber);}
+.sw-pp-card-stage.rejected{background:rgba(239,68,68,0.1);color:var(--accent-red);}
+.sw-pp-card-stage.pushed{background:rgba(212,165,116,0.15);color:var(--brand-gold);}
+.sw-pp-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.sw-pp-card-tag{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:600;}
+.sw-pp-card-tag.thesis{background:rgba(212,165,116,0.08);color:var(--brand-gold);border:1px solid rgba(212,165,116,0.15);}
+.sw-pp-card-tag.source{background:rgba(45,212,191,0.08);color:var(--brand-teal);border:1px solid rgba(45,212,191,0.15);}
+.sw-pp-card-impression{font-size:0.78rem;color:var(--text-tertiary);margin-bottom:6px;font-style:italic;}
+.sw-pp-card-research{font-size:0.75rem;color:var(--text-secondary);padding:8px 0;border-top:1px solid rgba(255,255,255,0.05);}
+.sw-pp-card-research .entry{color:var(--brand-teal);font-weight:600;}
+.sw-pp-card-research .angle{color:var(--accent-purple);}
+.sw-pp-card-days{font-size:0.65rem;color:var(--text-muted);}
+.sw-pp-card-actions{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;}
+.sw-pp-card-btn{font-size:0.68rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border-default);background:transparent;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.sw-pp-card-btn.research{color:var(--accent-blue);border-color:rgba(59,130,246,0.3);}
+.sw-pp-card-btn.research:hover{background:rgba(59,130,246,0.08);}
+.sw-pp-card-btn.ready{color:var(--accent-green);border-color:rgba(34,197,94,0.3);}
+.sw-pp-card-btn.ready:hover{background:rgba(34,197,94,0.08);}
+.sw-pp-card-btn.push{color:var(--brand-gold);border-color:rgba(212,165,116,0.3);font-weight:700;}
+.sw-pp-card-btn.push:hover{background:rgba(212,165,116,0.1);}
+.sw-pp-card-btn.park{color:var(--accent-amber);border-color:rgba(245,158,11,0.3);}
+.sw-pp-card-btn.park:hover{background:rgba(245,158,11,0.08);}
+.sw-pp-card-btn.reject{color:var(--accent-red);border-color:rgba(239,68,68,0.3);}
+.sw-pp-card-btn.reject:hover{background:rgba(239,68,68,0.08);}
+.sw-pp-empty{text-align:center;padding:48px 24px;color:var(--text-muted);}
+
+/* ==================== PERSONA MAPS ==================== */
+.sw-pm-thesis-select{margin-bottom:var(--space-lg);}
+.sw-pm-thesis-select select{padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.88rem;font-family:inherit;min-width:250px;}
+.sw-pm-thesis-select select:focus{outline:none;border-color:var(--brand-gold);}
+.sw-pm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--space-md);}
+.sw-pm-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px;position:relative;}
+.sw-pm-card-title{font-weight:700;font-size:0.95rem;color:var(--text-primary);margin-bottom:2px;}
+.sw-pm-card-alts{font-size:0.72rem;color:var(--text-muted);margin-bottom:8px;font-style:italic;}
+.sw-pm-card-role{font-size:0.65rem;padding:3px 8px;border-radius:var(--radius-full);font-weight:700;display:inline-block;margin-bottom:8px;}
+.sw-pm-card-role.decision-maker{background:rgba(212,165,116,0.15);color:var(--brand-gold);}
+.sw-pm-card-role.influencer{background:rgba(59,130,246,0.15);color:var(--accent-blue);}
+.sw-pm-card-role.champion{background:rgba(34,197,94,0.15);color:var(--accent-green);}
+.sw-pm-card-role.blocker{background:rgba(239,68,68,0.15);color:var(--accent-red);}
+.sw-pm-card-role.economic-buyer{background:rgba(168,85,247,0.15);color:var(--accent-purple);}
+.sw-pm-card-role.end-user{background:rgba(100,116,139,0.15);color:var(--text-tertiary);}
+.sw-pm-card-priority{font-size:0.62rem;padding:2px 6px;border-radius:var(--radius-full);font-weight:700;display:inline-block;margin-left:4px;}
+.sw-pm-card-priority.primary-target{background:rgba(34,197,94,0.1);color:var(--accent-green);}
+.sw-pm-card-priority.secondary{background:rgba(245,158,11,0.1);color:var(--accent-amber);}
+.sw-pm-card-priority.situational{background:rgba(100,116,139,0.1);color:var(--text-muted);}
+.sw-pm-card-concern{font-size:0.82rem;color:var(--text-secondary);margin-top:6px;line-height:1.5;}
+.sw-pm-card-approach{font-size:0.72rem;color:var(--brand-teal);margin-top:6px;}
+.sw-pm-card .remove{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--accent-red);cursor:pointer;font-size:0.85rem;opacity:0.5;}
+.sw-pm-card .remove:hover{opacity:1;}
+.sw-pm-empty{text-align:center;padding:40px 24px;color:var(--text-muted);}
+.sw-pm-add{margin-bottom:var(--space-lg);}
+
+/* ==================== SOURCE INTELLIGENCE ==================== */
+.sw-si-ranking{margin-bottom:var(--space-xl);}
+.sw-si-row{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);margin-bottom:8px;}
+.sw-si-rank{font-family:var(--font-serif);font-size:1.2rem;color:var(--text-muted);min-width:28px;text-align:center;}
+.sw-si-info{flex:1;}
+.sw-si-name{font-weight:700;font-size:0.88rem;color:var(--text-primary);}
+.sw-si-detail{font-size:0.75rem;color:var(--text-tertiary);margin-top:2px;}
+.sw-si-metrics{display:flex;gap:16px;}
+.sw-si-metric{text-align:center;}
+.sw-si-metric-val{font-family:var(--font-serif);font-size:1rem;color:var(--text-primary);}
+.sw-si-metric-label{font-size:0.6rem;color:var(--text-muted);text-transform:uppercase;}
+.sw-si-warn{font-size:0.7rem;color:var(--accent-amber);margin-left:8px;}
+.sw-si-section{margin-bottom:var(--space-xl);}
+.sw-si-section-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:var(--space-md);}
+.sw-si-dist{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--space-sm);}
+.sw-si-dist-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;text-align:center;}
+.sw-si-dist-val{font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);}
+.sw-si-dist-label{font-size:0.68rem;color:var(--text-muted);margin-top:2px;}
+.sw-si-dist-bar{height:4px;border-radius:2px;background:rgba(255,255,255,0.06);margin-top:6px;overflow:hidden;}
+.sw-si-dist-fill{height:100%;border-radius:2px;background:var(--brand-gold);}
+.sw-si-empty{text-align:center;padding:40px 24px;color:var(--text-muted);}
+.sw-si-rec{padding:14px;background:rgba(212,165,116,0.05);border:1px solid rgba(212,165,116,0.2);border-radius:var(--radius-md);margin-top:var(--space-md);font-size:0.82rem;color:var(--text-secondary);line-height:1.6;}
+
+/* ==================== MODALS ==================== */
+.sw-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;}
+.sw-modal-overlay.active{display:flex;}
+.sw-modal{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);padding:28px;max-width:560px;width:92%;max-height:88vh;overflow-y:auto;}
+.sw-modal-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:20px;}
+.sw-modal-field{margin-bottom:14px;}
+.sw-modal-field label{display:block;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:5px;}
+.sw-modal-field input,.sw-modal-field select,.sw-modal-field textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.88rem;font-family:inherit;}
+.sw-modal-field input:focus,.sw-modal-field select:focus,.sw-modal-field textarea:focus{outline:none;border-color:var(--brand-gold);}
+.sw-modal-field textarea{min-height:50px;resize:vertical;}
+.sw-modal-field .hint{font-size:0.7rem;color:var(--text-muted);margin-top:4px;font-style:italic;}
+.sw-modal-actions{display:flex;justify-content:space-between;margin-top:24px;}
+.sw-modal-btn{padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.85rem;transition:all 0.2s;}
+.sw-modal-btn.primary{background:var(--brand-gold);color:var(--bg-primary);}
+.sw-modal-btn.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border-default);}
+.sw-qselect{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.sw-qselect-opt{padding:6px 12px;border-radius:var(--radius-full);font-size:0.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.sw-qselect-opt:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+.sw-qselect-opt.selected{border-color:var(--brand-gold);background:rgba(212,165,116,0.1);color:var(--brand-gold);}
+@media(max-width:768px){
+    .sw-qb-cards,.sw-pp-grid,.sw-pm-grid,.sw-si-dist{grid-template-columns:1fr;}
+    .sw-pp-stats{gap:var(--space-sm);}
+    .sw-si-metrics{gap:8px;}
+}
+</style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Sourcing Workbench</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="exportWorkbench()">Export</button>
+                </div>
+            </header>
+            <div class="app-content" style="max-width:1100px;">
+
+    <!-- Capacity indicator -->
+    <div class="sw-capacity" id="swCapacity"></div>
+
+    <!-- Tabs -->
+    <div class="sw-tabs">
+        <button class="sw-tab active" data-tab="queryBuilder" onclick="swTab('queryBuilder')">Query Builder</button>
+        <button class="sw-tab" data-tab="pipeline" onclick="swTab('pipeline')">Prospect Pipeline</button>
+        <button class="sw-tab" data-tab="personas" onclick="swTab('personas')">Persona Maps</button>
+        <button class="sw-tab" data-tab="sourceIntel" onclick="swTab('sourceIntel')">Source Intelligence</button>
+    </div>
+
+    <!-- QUERY BUILDER -->
+    <div class="sw-view active" id="queryBuilder">
+        <div id="qbContent"></div>
+    </div>
+
+    <!-- PROSPECT PIPELINE -->
+    <div class="sw-view" id="pipeline">
+        <div class="sw-pp-header">
+            <div class="sw-pp-stats" id="ppStats"></div>
+            <button class="sw-pp-add" onclick="openAddProspect()">+ Add Prospect</button>
+        </div>
+        <div class="sw-pp-filters" id="ppFilters"></div>
+        <div class="sw-pp-grid" id="ppGrid"></div>
+    </div>
+
+    <!-- PERSONA MAPS -->
+    <div class="sw-view" id="personas">
+        <div id="pmContent"></div>
+    </div>
+
+    <!-- SOURCE INTELLIGENCE -->
+    <div class="sw-view" id="sourceIntel">
+        <div id="siContent"></div>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Query Card Modal -->
+    <div class="sw-modal-overlay" id="queryCardModal">
+        <div class="sw-modal">
+            <div class="sw-modal-title">Query Card</div>
+            <input type="hidden" id="qcThesisId">
+            <input type="hidden" id="qcEditId">
+            <div class="sw-modal-field"><label>Platform</label>
+                <select id="qcPlatform" onchange="onQCPlatformChange(this)">
+                    <option value="sales-nav">LinkedIn Sales Navigator</option>
+                    <option value="zoominfo">ZoomInfo</option>
+                    <option value="apollo">Apollo</option>
+                    <option value="google-boolean">Google / Boolean Search</option>
+                    <option value="conference">Conference / Event Lists</option>
+                    <option value="crm">CRM / Existing Database</option>
+                    <option value="custom">Custom Source</option>
+                </select>
+            </div>
+            <div class="sw-modal-field" id="qcCustomLabel" style="display:none;"><label>Custom Source Name</label><input type="text" placeholder="e.g., VC Portfolio Lists"></div>
+            <div class="sw-modal-field"><label>Industry / Vertical *</label><input type="text" id="qcIndustry" placeholder="e.g., Logistics, freight, supply chain"><div class="hint">Pre-filled from your thesis segment. Refine for this platform.</div></div>
+            <div class="sw-modal-field"><label>Company Size</label><input type="text" id="qcSize" placeholder="e.g., 50-2,000 employees / $10M-$500M revenue"></div>
+            <div class="sw-modal-field"><label>Geography</label><input type="text" id="qcGeo" placeholder="e.g., Central US HQ, EU operations"></div>
+            <div class="sw-modal-field"><label>Behavioral Signal</label><input type="text" id="qcSignal" placeholder="e.g., International expansion in last 24 months"><div class="hint">What recent behavior indicates fit?</div></div>
+            <div class="sw-modal-field"><label>Technology Signal</label><input type="text" id="qcTech" placeholder="e.g., Legacy ERP, no compliance software"></div>
+            <div class="sw-modal-field"><label>Persona / Title Keywords</label><input type="text" id="qcPersonas" placeholder="e.g., VP Operations, Director Compliance, Head of Supply Chain"></div>
+            <div class="sw-modal-field"><label>Boolean / Search String</label><textarea id="qcBoolean" placeholder='e.g., "logistics" AND "EU expansion" AND ("compliance" OR "regulatory")' style="font-family:var(--font-mono);font-size:0.78rem;"></textarea></div>
+            <div class="sw-modal-field"><label>Exclusions</label><input type="text" id="qcExclusions" placeholder="e.g., Companies using [competitor], < 2 years old"></div>
+            <div class="sw-modal-field"><label>Notes</label><textarea id="qcNotes" placeholder="Any additional search guidance or tips for this platform"></textarea></div>
+            <div class="sw-modal-actions">
+                <button class="sw-modal-btn ghost" onclick="document.getElementById('queryCardModal').classList.remove('active')">Cancel</button>
+                <button class="sw-modal-btn primary" onclick="saveQueryCard()">Save Query Card</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Prospect Modal -->
+    <div class="sw-modal-overlay" id="addProspectModal">
+        <div class="sw-modal">
+            <div class="sw-modal-title">Add Prospect</div>
+            <div class="sw-modal-field"><label>Company Name *</label><input type="text" id="prospName" placeholder="e.g., Acme Logistics"></div>
+            <div class="sw-modal-field"><label>Thesis *</label><select id="prospThesis"></select></div>
+            <div class="sw-modal-field"><label>Source *</label><select id="prospSource"></select><div class="hint">Where did you find this prospect?</div></div>
+            <div class="sw-modal-field"><label>Initial Impression (optional)</label><input type="text" id="prospImpression" placeholder="e.g., New CTO from competitor, just raised Series C"></div>
+            <div class="sw-modal-actions">
+                <button class="sw-modal-btn ghost" onclick="document.getElementById('addProspectModal').classList.remove('active')">Cancel</button>
+                <button class="sw-modal-btn primary" onclick="saveProspect()">Add to Pipeline</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Modal -->
+    <div class="sw-modal-overlay" id="researchModal">
+        <div class="sw-modal">
+            <div class="sw-modal-title">Research — <span id="researchName"></span></div>
+            <input type="hidden" id="researchProspId">
+            <div class="sw-modal-field"><label>Does this account match your thesis?</label>
+                <div class="sw-qselect" id="researchMatch">
+                    <button class="sw-qselect-opt" data-value="strong" onclick="swSelectOpt('researchMatch','strong',this)">Yes (Strong)</button>
+                    <button class="sw-qselect-opt" data-value="moderate" onclick="swSelectOpt('researchMatch','moderate',this)">Yes (Moderate)</button>
+                    <button class="sw-qselect-opt" data-value="uncertain" onclick="swSelectOpt('researchMatch','uncertain',this)">Uncertain</button>
+                    <button class="sw-qselect-opt" data-value="no" onclick="swSelectOpt('researchMatch','no',this)" style="color:var(--accent-red);">No → Reject</button>
+                </div>
+            </div>
+            <div class="sw-modal-field"><label>Entry Point — who would you reach out to first? *</label><input type="text" id="researchEntry" placeholder="e.g., Sarah Chen, VP of Operations"><div class="hint">Name and title of the person you'd contact first.</div></div>
+            <div class="sw-modal-field"><label>What approach would you use?</label><select id="researchApproach"></select></div>
+            <div class="sw-modal-field"><label>Leverage Assessment</label>
+                <div class="sw-qselect" id="researchLeverage">
+                    <button class="sw-qselect-opt" data-value="network-connection" onclick="swSelectOpt('researchLeverage','network-connection',this)">Network</button>
+                    <button class="sw-qselect-opt" data-value="existing-proof-point" onclick="swSelectOpt('researchLeverage','existing-proof-point',this)">Proof Point</button>
+                    <button class="sw-qselect-opt" data-value="market-signal" onclick="swSelectOpt('researchLeverage','market-signal',this)">Signal</button>
+                    <button class="sw-qselect-opt" data-value="geographic-advantage" onclick="swSelectOpt('researchLeverage','geographic-advantage',this)">Geographic</button>
+                    <button class="sw-qselect-opt" data-value="cold" onclick="swSelectOpt('researchLeverage','cold',this)">Cold</button>
+                </div>
+            </div>
+            <div class="sw-modal-field"><label>Research Note (optional)</label><textarea id="researchNote" placeholder="e.g., 200 employees, expanded to Germany last year. VP Ops is ex-competitor customer."></textarea></div>
+            <div class="sw-modal-actions">
+                <button class="sw-modal-btn ghost" onclick="document.getElementById('researchModal').classList.remove('active')">Cancel</button>
+                <button class="sw-modal-btn primary" onclick="saveResearch()">Save Research</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Persona Modal -->
+    <div class="sw-modal-overlay" id="personaModal">
+        <div class="sw-modal">
+            <div class="sw-modal-title">Add Persona</div>
+            <div class="sw-modal-field"><label>Title *</label><input type="text" id="pmTitle" placeholder="e.g., VP of Operations"></div>
+            <div class="sw-modal-field"><label>Also Known As</label><input type="text" id="pmAlts" placeholder="e.g., SVP Ops, Head of Operations, COO at smaller companies"></div>
+            <div class="sw-modal-field"><label>Role in Decision *</label>
+                <div class="sw-qselect" id="pmRole">
+                    <button class="sw-qselect-opt" data-value="decision-maker" onclick="swSelectOpt('pmRole','decision-maker',this)">Decision Maker</button>
+                    <button class="sw-qselect-opt" data-value="influencer" onclick="swSelectOpt('pmRole','influencer',this)">Influencer</button>
+                    <button class="sw-qselect-opt" data-value="champion" onclick="swSelectOpt('pmRole','champion',this)">Champion</button>
+                    <button class="sw-qselect-opt" data-value="blocker" onclick="swSelectOpt('pmRole','blocker',this)">Blocker</button>
+                    <button class="sw-qselect-opt" data-value="economic-buyer" onclick="swSelectOpt('pmRole','economic-buyer',this)">Economic Buyer</button>
+                    <button class="sw-qselect-opt" data-value="end-user" onclick="swSelectOpt('pmRole','end-user',this)">End User</button>
+                </div>
+            </div>
+            <div class="sw-modal-field"><label>Priority *</label>
+                <div class="sw-qselect" id="pmPriority">
+                    <button class="sw-qselect-opt" data-value="primary-target" onclick="swSelectOpt('pmPriority','primary-target',this)">Primary Target</button>
+                    <button class="sw-qselect-opt" data-value="secondary" onclick="swSelectOpt('pmPriority','secondary',this)">Secondary</button>
+                    <button class="sw-qselect-opt" data-value="situational" onclick="swSelectOpt('pmPriority','situational',this)">Situational</button>
+                </div>
+            </div>
+            <div class="sw-modal-field"><label>What do they care about? *</label><input type="text" id="pmConcerns" placeholder="e.g., Reducing operational risk, vendor consolidation, ROI proof"></div>
+            <div class="sw-modal-field"><label>Best Approach</label><select id="pmApproach"></select></div>
+            <div class="sw-modal-field"><label>Notes</label><textarea id="pmNotes" placeholder="Patterns you've observed about this persona type"></textarea></div>
+            <div class="sw-modal-actions">
+                <button class="sw-modal-btn ghost" onclick="document.getElementById('personaModal').classList.remove('active')">Cancel</button>
+                <button class="sw-modal-btn primary" onclick="savePersona()">Save Persona</button>
+            </div>
+        </div>
+    </div>
+
+            </div>
+        </main>
+    </div>
+    <script src="/js/deal-health.js"></script>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    window.exportWorkbench=function(){
+        var data={};
+        ['gtmos_sw_query_cards','gtmos_sw_prospects','gtmos_sw_persona_maps'].forEach(function(k){
+            var v=localStorage.getItem(k);if(v)data[k]=JSON.parse(v);
+        });
+        var json=JSON.stringify(data,null,2);
+        var blob=new Blob([json],{type:'application/json'});
+        var a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download='sourcing-workbench-'+new Date().toISOString().slice(0,10)+'.json';
+        document.body.appendChild(a);a.click();document.body.removeChild(a);
+    };
+    </script>
+    <script>
+(function(){
+'use strict';
+var KEYS = {
+    queryCards:'gtmos_sw_query_cards',
+    prospects:'gtmos_sw_prospects',
+    personaMaps:'gtmos_sw_persona_maps'
+};
+function readLS(k,fb){try{var v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch(e){return fb;}}
+function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));}
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function daysSince(iso){return iso?Math.floor((Date.now()-new Date(iso).getTime())/86400000):999;}
+function esc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+// Read Territory Architect data
+function getTheses(){return readLS('gtmos_ta_theses',[]).filter(function(t){return t.status==='active';});}
+function getApproaches(){return readLS('gtmos_ta_approaches',[]).filter(function(a){return a.status==='active';});}
+function getTAAccounts(){return readLS('gtmos_ta_accounts',[]).filter(function(a){return a.status==='active';});}
+function getTACapacity(){var accts=getTAAccounts();return{current:accts.length,max:300,available:300-accts.length};}
+
+function getQueryCards(){return readLS(KEYS.queryCards,[]);}
+function saveQueryCards(c){writeLS(KEYS.queryCards,c);}
+function getProspects(){return readLS(KEYS.prospects,[]);}
+function saveProspects(p){writeLS(KEYS.prospects,p);}
+function getPersonas(){return readLS(KEYS.personaMaps,[]);}
+function savePersonas(p){writeLS(KEYS.personaMaps,p);}
+
+// ============ STATE ============
+var currentTab = 'queryBuilder';
+var ppFilter = 'all';
+
+// ============ RENDER ============
+function render(){
+    renderCapacity();
+    document.querySelectorAll('.sw-tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===currentTab);});
+    document.querySelectorAll('.sw-view').forEach(function(v){v.classList.toggle('active',v.id===currentTab);});
+    if(currentTab==='queryBuilder') renderQueryBuilder();
+    else if(currentTab==='pipeline') renderPipeline();
+    else if(currentTab==='personas') renderPersonas();
+    else if(currentTab==='sourceIntel') renderSourceIntel();
+}
+
+function renderCapacity(){
+    var cap=getTACapacity();
+    var pct=Math.round(cap.current/cap.max*100);
+    var color=pct<70?'green':pct<90?'amber':'red';
+    document.getElementById('swCapacity').innerHTML=
+        '<span class="sw-capacity-label">Territory Architect</span>'+
+        '<div class="sw-capacity-bar"><div class="sw-capacity-fill '+color+'" style="width:'+pct+'%"></div></div>'+
+        '<span class="sw-capacity-text">'+cap.current+' / '+cap.max+'</span>'+
+        '<span class="sw-capacity-label">'+cap.available+' slots open</span>';
+}
+
+window.swTab=function(tab){currentTab=tab;render();};
+
+// ============ QUERY BUILDER ============
+function renderQueryBuilder(){
+    var theses=getTheses();
+    var cards=getQueryCards();
+    if(!theses.length){
+        document.getElementById('qbContent').innerHTML='<div class="sw-qb-empty"><div class="icon">🗺️</div>No active theses found. Complete Territory Architect onboarding first to build your sourcing queries.</div>';
+        return;
+    }
+    var personas=getPersonas();
+    var html='';
+    theses.forEach(function(thesis){
+        var thesisCards=cards.filter(function(c){return c.thesisId===thesis.id;});
+        var thesisPersonas=personas.filter(function(p){return p.thesisId===thesis.id&&p.priority==='primary-target';});
+        html+='<div class="sw-qb-thesis-group">';
+        html+='<div class="sw-qb-thesis-header"><div class="sw-qb-thesis-name">'+esc(thesis.name)+'</div><button class="sw-qb-add-card" onclick="openQueryCardModal(\''+thesis.id+'\')">+ Add Query Card</button></div>';
+        if(!thesisCards.length){
+            html+='<div style="padding:20px;color:var(--text-muted);font-size:0.82rem;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);text-align:center;">No query cards yet. Create your first sourcing query for this thesis.</div>';
+        } else {
+            html+='<div class="sw-qb-cards">';
+            thesisCards.forEach(function(card){
+                var prospectCount=getProspects().filter(function(p){return p.sourceQueryCardId===card.id;}).length;
+                var platformLabels={'sales-nav':'Sales Nav','zoominfo':'ZoomInfo','apollo':'Apollo','google-boolean':'Boolean Search','conference':'Conference/Event','crm':'CRM/Database','custom':card.platformLabel||'Custom'};
+                html+='<div class="sw-qb-card '+(card.status==='exhausted'?'exhausted':'')+'">';
+                html+='<div class="sw-qb-card-head"><span class="sw-qb-platform '+card.platform+'">'+esc(platformLabels[card.platform]||card.platform)+'</span><span class="sw-qb-sourced"><span>'+prospectCount+'</span> sourced</span></div>';
+                html+='<div class="sw-qb-filters">';
+                var filters=card.filters||{};
+                if(filters.industry) html+='<div class="sw-qb-filter-row"><span class="label">Industry</span><span class="val">'+esc(filters.industry)+'</span></div>';
+                if(filters.companySize) html+='<div class="sw-qb-filter-row"><span class="label">Size</span><span class="val">'+esc(filters.companySize)+'</span></div>';
+                if(filters.geography) html+='<div class="sw-qb-filter-row"><span class="label">Geo</span><span class="val">'+esc(filters.geography)+'</span></div>';
+                if(filters.behavioralSignal) html+='<div class="sw-qb-filter-row"><span class="label">Signal</span><span class="val">'+esc(filters.behavioralSignal)+'</span></div>';
+                if(filters.techSignal) html+='<div class="sw-qb-filter-row"><span class="label">Tech</span><span class="val">'+esc(filters.techSignal)+'</span></div>';
+                if(filters.personaTitles) html+='<div class="sw-qb-filter-row"><span class="label">Personas</span><span class="val">'+esc(filters.personaTitles)+'</span></div>';
+                if(filters.booleanString) html+='<div class="sw-qb-filter-row"><span class="label">Boolean</span><span class="val" style="font-family:var(--font-mono);font-size:0.72rem;">'+esc(filters.booleanString)+'</span></div>';
+                if(filters.exclusions) html+='<div class="sw-qb-filter-row"><span class="label">Exclude</span><span class="val">'+esc(filters.exclusions)+'</span></div>';
+                if(filters.customNotes) html+='<div class="sw-qb-filter-row"><span class="label">Notes</span><span class="val">'+esc(filters.customNotes)+'</span></div>';
+                html+='</div>';
+                // Persona hint
+                if(thesisPersonas.length && (card.platform==='sales-nav'||card.platform==='zoominfo'||card.platform==='apollo')){
+                    html+='<div class="sw-qb-persona-hint">💡 Persona map suggests targeting: '+thesisPersonas.map(function(p){return esc(p.title);}).join(', ')+'</div>';
+                }
+                html+='<div class="sw-qb-card-actions">';
+                html+='<button class="sw-qb-card-btn" onclick="editQueryCard(\''+card.id+'\')">Edit</button>';
+                if(card.status!=='exhausted') html+='<button class="sw-qb-card-btn exhaust" onclick="exhaustCard(\''+card.id+'\')">Mark Exhausted</button>';
+                else html+='<button class="sw-qb-card-btn" onclick="reactivateCard(\''+card.id+'\')">Reactivate</button>';
+                html+='<button class="sw-qb-card-btn" onclick="deleteQueryCard(\''+card.id+'\')">Delete</button>';
+                html+='</div></div>';
+            });
+            html+='</div>';
+        }
+        html+='</div>';
+    });
+    document.getElementById('qbContent').innerHTML=html;
+}
+
+window.openQueryCardModal=function(thesisId){
+    document.getElementById('qcThesisId').value=thesisId;
+    document.getElementById('qcEditId').value='';
+    document.getElementById('qcPlatform').value='sales-nav';
+    document.getElementById('qcCustomLabel').style.display='none';
+    document.getElementById('qcCustomLabel').querySelector('input').value='';
+    ['qcIndustry','qcSize','qcGeo','qcSignal','qcTech','qcExclusions','qcPersonas','qcBoolean','qcNotes'].forEach(function(id){document.getElementById(id).value='';});
+    // Pre-fill from thesis
+    var theses=getTheses();
+    var thesis=theses.find(function(t){return t.id===thesisId;});
+    if(thesis){
+        document.getElementById('qcIndustry').value=thesis.segment||'';
+        document.getElementById('qcGeo').value='';
+    }
+    document.getElementById('queryCardModal').classList.add('active');
+};
+
+window.editQueryCard=function(id){
+    var cards=getQueryCards();
+    var card=cards.find(function(c){return c.id===id;});
+    if(!card)return;
+    document.getElementById('qcThesisId').value=card.thesisId;
+    document.getElementById('qcEditId').value=card.id;
+    document.getElementById('qcPlatform').value=card.platform;
+    document.getElementById('qcCustomLabel').style.display=card.platform==='custom'?'block':'none';
+    if(card.platformLabel)document.getElementById('qcCustomLabel').querySelector('input').value=card.platformLabel;
+    var f=card.filters||{};
+    document.getElementById('qcIndustry').value=f.industry||'';
+    document.getElementById('qcSize').value=f.companySize||'';
+    document.getElementById('qcGeo').value=f.geography||'';
+    document.getElementById('qcSignal').value=f.behavioralSignal||'';
+    document.getElementById('qcTech').value=f.techSignal||'';
+    document.getElementById('qcExclusions').value=f.exclusions||'';
+    document.getElementById('qcPersonas').value=f.personaTitles||'';
+    document.getElementById('qcBoolean').value=f.booleanString||'';
+    document.getElementById('qcNotes').value=f.customNotes||'';
+    document.getElementById('queryCardModal').classList.add('active');
+};
+
+window.saveQueryCard=function(){
+    var thesisId=document.getElementById('qcThesisId').value;
+    var editId=document.getElementById('qcEditId').value;
+    var platform=document.getElementById('qcPlatform').value;
+    var industry=document.getElementById('qcIndustry').value.trim();
+    if(!industry){alert('Industry/Vertical is required.');return;}
+    var card={
+        thesisId:thesisId, platform:platform,
+        platformLabel:platform==='custom'?document.getElementById('qcCustomLabel').querySelector('input').value.trim():'',
+        filters:{
+            industry:industry,
+            companySize:document.getElementById('qcSize').value.trim(),
+            geography:document.getElementById('qcGeo').value.trim(),
+            behavioralSignal:document.getElementById('qcSignal').value.trim(),
+            techSignal:document.getElementById('qcTech').value.trim(),
+            exclusions:document.getElementById('qcExclusions').value.trim(),
+            personaTitles:document.getElementById('qcPersonas').value.trim(),
+            booleanString:document.getElementById('qcBoolean').value.trim(),
+            customNotes:document.getElementById('qcNotes').value.trim()
+        },
+        status:'active', updatedAt:new Date().toISOString()
+    };
+    var cards=getQueryCards();
+    if(editId){
+        var idx=cards.findIndex(function(c){return c.id===editId;});
+        if(idx>=0){card.id=editId;card.createdAt=cards[idx].createdAt;cards[idx]=card;}
+    } else {
+        card.id=genId();card.createdAt=new Date().toISOString();cards.push(card);
+    }
+    saveQueryCards(cards);
+    document.getElementById('queryCardModal').classList.remove('active');
+    render();
+};
+
+window.exhaustCard=function(id){var c=getQueryCards();var card=c.find(function(x){return x.id===id;});if(card){card.status='exhausted';saveQueryCards(c);render();}};
+window.reactivateCard=function(id){var c=getQueryCards();var card=c.find(function(x){return x.id===id;});if(card){card.status='active';saveQueryCards(c);render();}};
+window.deleteQueryCard=function(id){if(!confirm('Delete this query card?'))return;var c=getQueryCards().filter(function(x){return x.id!==id;});saveQueryCards(c);render();};
+window.onQCPlatformChange=function(el){document.getElementById('qcCustomLabel').style.display=el.value==='custom'?'block':'none';};
+
+// ============ PROSPECT PIPELINE ============
+function renderPipeline(){
+    var prospects=getProspects();
+    var theses=getTheses();
+    // Stats
+    var captured=prospects.filter(function(p){return p.stage==='captured';}).length;
+    var researched=prospects.filter(function(p){return p.stage==='researched';}).length;
+    var ready=prospects.filter(function(p){return p.stage==='ready';}).length;
+    var pushed=prospects.filter(function(p){return p.stage==='pushed';}).length;
+    var parked=prospects.filter(function(p){return p.stage==='parked';}).length;
+    document.getElementById('ppStats').innerHTML=
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val">'+captured+'</div><div class="sw-pp-stat-label">Captured</div></div>'+
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val">'+researched+'</div><div class="sw-pp-stat-label">Researched</div></div>'+
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val">'+ready+'</div><div class="sw-pp-stat-label">Ready</div></div>'+
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val" style="color:var(--brand-gold);">'+pushed+'</div><div class="sw-pp-stat-label">Pushed</div></div>'+
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val">'+parked+'</div><div class="sw-pp-stat-label">Parked</div></div>';
+    // Filters
+    var filters=['all','captured','researched','ready','parked','pushed','rejected'];
+    document.getElementById('ppFilters').innerHTML=filters.map(function(f){
+        return '<button class="sw-pp-filter '+(ppFilter===f?'active':'')+'" onclick="setPPFilter(\''+f+'\')">'+f.charAt(0).toUpperCase()+f.slice(1)+'</button>';
+    }).join('');
+    // Filter
+    var filtered=prospects;
+    if(ppFilter!=='all') filtered=prospects.filter(function(p){return p.stage===ppFilter;});
+    filtered.sort(function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
+    if(!filtered.length){
+        document.getElementById('ppGrid').innerHTML='<div class="sw-pp-empty">No prospects '+(ppFilter!=='all'?'in "'+ppFilter+'"':'yet')+'. '+(ppFilter==='all'?'Add your first prospect as you source.':'')+'</div>';
+        return;
+    }
+    var approaches=getApproaches();
+    var cards=getQueryCards();
+    document.getElementById('ppGrid').innerHTML=filtered.map(function(p){
+        var thesis=theses.find(function(t){return t.id===p.thesisId;});
+        var sourceLabel=p.sourceType;
+        if(p.sourceQueryCardId){
+            var qc=cards.find(function(c){return c.id===p.sourceQueryCardId;});
+            if(qc) sourceLabel=(qc.platformLabel||qc.platform);
+        }
+        var stale=p.stage==='captured'&&daysSince(p.createdAt)>7;
+        var html='<div class="sw-pp-card '+(stale?'stale':'')+'">';
+        html+='<div class="sw-pp-card-head"><span class="sw-pp-card-name">'+esc(p.name)+'</span><span class="sw-pp-card-stage '+p.stage+'">'+p.stage+'</span></div>';
+        html+='<div class="sw-pp-card-meta"><span class="sw-pp-card-tag thesis">'+(thesis?esc(thesis.name):'?')+'</span><span class="sw-pp-card-tag source">'+esc(sourceLabel)+'</span></div>';
+        if(p.initialImpression) html+='<div class="sw-pp-card-impression">'+esc(p.initialImpression)+'</div>';
+        if(p.research&&p.research.entryPoint){
+            html+='<div class="sw-pp-card-research">';
+            html+='Entry: <span class="entry">'+esc(p.research.entryPoint)+'</span>';
+            if(p.research.suggestedApproach){var ap=approaches.find(function(a){return a.id===p.research.suggestedApproach;});if(ap) html+=' · Angle: <span class="angle">'+esc(ap.name)+'</span>';}
+            if(p.research.note) html+='<br>'+esc(p.research.note);
+            html+='</div>';
+        }
+        html+='<div class="sw-pp-card-days">'+daysSince(p.createdAt)+'d ago'+(stale?' · ⚠ Stale — research or reject':'')+'</div>';
+        html+='<div class="sw-pp-card-actions">';
+        if(p.stage==='captured') html+='<button class="sw-pp-card-btn research" onclick="openResearchModal(\''+p.id+'\')">Research</button><button class="sw-pp-card-btn park" onclick="setPPStage(\''+p.id+'\',\'parked\')">Park</button><button class="sw-pp-card-btn reject" onclick="rejectProspect(\''+p.id+'\')">Reject</button>';
+        if(p.stage==='researched') html+='<button class="sw-pp-card-btn ready" onclick="setPPStage(\''+p.id+'\',\'ready\')">Mark Ready</button><button class="sw-pp-card-btn park" onclick="setPPStage(\''+p.id+'\',\'parked\')">Park</button><button class="sw-pp-card-btn reject" onclick="rejectProspect(\''+p.id+'\')">Reject</button>';
+        if(p.stage==='ready') html+='<button class="sw-pp-card-btn push" onclick="pushToTA(\''+p.id+'\')">Push to Territory →</button><button class="sw-pp-card-btn park" onclick="setPPStage(\''+p.id+'\',\'parked\')">Park</button>';
+        if(p.stage==='parked') html+='<button class="sw-pp-card-btn research" onclick="openResearchModal(\''+p.id+'\')">Research</button><button class="sw-pp-card-btn reject" onclick="rejectProspect(\''+p.id+'\')">Reject</button>';
+        html+='</div></div>';
+        return html;
+    }).join('');
+}
+
+window.setPPFilter=function(f){ppFilter=f;renderPipeline();};
+
+window.openAddProspect=function(){
+    document.getElementById('prospName').value='';
+    document.getElementById('prospThesis').value='';
+    document.getElementById('prospImpression').value='';
+    // Populate thesis dropdown
+    var theses=getTheses();
+    document.getElementById('prospThesis').innerHTML='<option value="">Select thesis...</option>'+theses.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+    // Source options
+    var cards=getQueryCards();
+    var sourceHtml='<option value="">Select source...</option>';
+    sourceHtml+='<optgroup label="Query Cards">';
+    cards.filter(function(c){return c.status==='active';}).forEach(function(c){
+        var labels={'sales-nav':'Sales Nav','zoominfo':'ZoomInfo','apollo':'Apollo','google-boolean':'Boolean','conference':'Conference','crm':'CRM','custom':c.platformLabel||'Custom'};
+        sourceHtml+='<option value="qc:'+c.id+'">'+(labels[c.platform]||c.platform)+' — '+esc((c.filters||{}).industry||'').slice(0,30)+'</option>';
+    });
+    sourceHtml+='</optgroup><optgroup label="Other Sources">';
+    ['Referral','Inbound','News/Article','Social Media','Event','Other'].forEach(function(s){sourceHtml+='<option value="src:'+s.toLowerCase().replace(/[\/ ]/g,'-')+'">'+s+'</option>';});
+    sourceHtml+='</optgroup>';
+    document.getElementById('prospSource').innerHTML=sourceHtml;
+    document.getElementById('addProspectModal').classList.add('active');
+};
+
+window.saveProspect=function(){
+    var name=document.getElementById('prospName').value.trim();
+    var thesisId=document.getElementById('prospThesis').value;
+    var sourceVal=document.getElementById('prospSource').value;
+    if(!name||!thesisId||!sourceVal){alert('Company name, thesis, and source are required.');return;}
+    var prospect={
+        id:genId(), name:name, thesisId:thesisId,
+        sourceType:sourceVal.indexOf('qc:')===0?'query-card':sourceVal.replace('src:',''),
+        sourceQueryCardId:sourceVal.indexOf('qc:')===0?sourceVal.replace('qc:',''):null,
+        initialImpression:document.getElementById('prospImpression').value.trim(),
+        stage:'captured', research:null, rejectionReason:null,
+        tier:null, pushedToTA:false, pushedAt:null,
+        createdAt:new Date().toISOString(), updatedAt:new Date().toISOString()
+    };
+    // Duplicate check
+    var existing=getTAAccounts();
+    var dup=existing.find(function(a){return a.name.toLowerCase()===name.toLowerCase();});
+    if(dup){alert(name+' already exists in your Territory Architect.');return;}
+    var prospects=getProspects();
+    var dupP=prospects.find(function(p){return p.name.toLowerCase()===name.toLowerCase()&&p.stage!=='rejected';});
+    if(dupP){alert(name+' already exists in your prospect pipeline.');return;}
+    prospects.push(prospect);
+    saveProspects(prospects);
+    document.getElementById('addProspectModal').classList.remove('active');
+    render();
+};
+
+window.openResearchModal=function(id){
+    var prospect=getProspects().find(function(p){return p.id===id;});
+    if(!prospect)return;
+    document.getElementById('researchProspId').value=id;
+    document.getElementById('researchName').textContent=prospect.name;
+    // Thesis match
+    document.querySelectorAll('#researchMatch .sw-qselect-opt').forEach(function(o){o.classList.remove('selected');});
+    // Leverage
+    document.querySelectorAll('#researchLeverage .sw-qselect-opt').forEach(function(o){o.classList.remove('selected');});
+    document.getElementById('researchEntry').value=(prospect.research&&prospect.research.entryPoint)||'';
+    document.getElementById('researchNote').value=(prospect.research&&prospect.research.note)||'';
+    // Approach dropdown
+    var approaches=getApproaches().filter(function(a){return a.thesisId===prospect.thesisId;});
+    document.getElementById('researchApproach').innerHTML='<option value="">Select approach...</option>'+approaches.map(function(a){return '<option value="'+a.id+'">'+esc(a.name)+' ('+esc(a.category)+')</option>';}).join('');
+    document.getElementById('researchModal').classList.add('active');
+};
+
+window.swSelectOpt=function(groupId,val,el){
+    document.querySelectorAll('#'+groupId+' .sw-qselect-opt').forEach(function(o){o.classList.remove('selected');});
+    el.classList.add('selected');
+};
+
+window.saveResearch=function(){
+    var id=document.getElementById('researchProspId').value;
+    var matchEl=document.querySelector('#researchMatch .sw-qselect-opt.selected');
+    var leverageEl=document.querySelector('#researchLeverage .sw-qselect-opt.selected');
+    var entry=document.getElementById('researchEntry').value.trim();
+    if(!matchEl||!entry){alert('Thesis match and entry point are required.');return;}
+    // If match is 'no', reject
+    if(matchEl.dataset.value==='no'){
+        var prospects=getProspects();
+        var p=prospects.find(function(x){return x.id===id;});
+        if(p){p.stage='rejected';p.rejectionReason='wrong-segment';p.updatedAt=new Date().toISOString();}
+        saveProspects(prospects);
+        document.getElementById('researchModal').classList.remove('active');
+        render();return;
+    }
+    var prospects=getProspects();
+    var p=prospects.find(function(x){return x.id===id;});
+    if(!p)return;
+    p.research={
+        thesisMatch:matchEl.dataset.value,
+        entryPoint:entry,
+        suggestedApproach:document.getElementById('researchApproach').value||null,
+        leverageType:leverageEl?leverageEl.dataset.value:'cold',
+        note:document.getElementById('researchNote').value.trim()
+    };
+    p.stage='researched';
+    p.updatedAt=new Date().toISOString();
+    saveProspects(prospects);
+    document.getElementById('researchModal').classList.remove('active');
+    render();
+};
+
+window.setPPStage=function(id,stage){
+    var prospects=getProspects();
+    var p=prospects.find(function(x){return x.id===id;});
+    if(p){p.stage=stage;p.updatedAt=new Date().toISOString();saveProspects(prospects);render();}
+};
+
+window.rejectProspect=function(id){
+    var reason=prompt('Rejection reason? (wrong segment / too small / competitor / no entry / other)');
+    if(!reason)return;
+    var prospects=getProspects();
+    var p=prospects.find(function(x){return x.id===id;});
+    if(p){p.stage='rejected';p.rejectionReason=reason;p.updatedAt=new Date().toISOString();saveProspects(prospects);render();}
+};
+
+window.pushToTA=function(id){
+    var cap=getTACapacity();
+    if(cap.available<=0){alert('Territory Architect is at capacity (300/300). Swap an account in Territory Architect first.');return;}
+    var prospects=getProspects();
+    var p=prospects.find(function(x){return x.id===id;});
+    if(!p)return;
+    // Duplicate check
+    var existing=getTAAccounts();
+    if(existing.find(function(a){return a.name.toLowerCase()===p.name.toLowerCase();})){alert(p.name+' already exists in Territory Architect.');return;}
+    // Tier selection
+    var tier=prompt('Assign tier (1, 2, or 3):');
+    if(!tier||![1,2,3].includes(parseInt(tier)))return;
+    // Push to TA
+    var taAccounts=readLS('gtmos_ta_accounts',[]);
+    var triggerMap={'query-card':'thesis-fit','referral':'network-opportunity','inbound':'inbound-interest','news-article':'signal-event','social-media':'signal-event','event':'signal-event','other':'strategic-bet'};
+    taAccounts.push({
+        id:genId(), name:p.name, tier:parseInt(tier),
+        thesisId:p.thesisId,
+        leverageType:(p.research&&p.research.leverageType)||'cold',
+        additionTrigger:triggerMap[p.sourceType]||'thesis-fit',
+        status:'active', addedAt:new Date().toISOString(),
+        overrideCount:0,
+        _sourcedFrom:'workbench',
+        _sourceType:p.sourceType,
+        _sourceQueryCardId:p.sourceQueryCardId,
+        _researchNote:(p.research&&p.research.note)||p.initialImpression||''
+    });
+    writeLS('gtmos_ta_accounts',taAccounts);
+    // Update prospect
+    p.stage='pushed';p.pushedToTA=true;p.pushedAt=new Date().toISOString();p.tier=parseInt(tier);
+    saveProspects(prospects);
+    render();
+};
+
+// ============ PERSONA MAPS ============
+var pmThesisId=null;
+
+function renderPersonas(){
+    var theses=getTheses();
+    if(!theses.length){
+        document.getElementById('pmContent').innerHTML='<div class="sw-pm-empty">No active theses. Complete Territory Architect onboarding first.</div>';
+        return;
+    }
+    if(!pmThesisId) pmThesisId=theses[0].id;
+    var personas=getPersonas().filter(function(p){return p.thesisId===pmThesisId;});
+    var approaches=getApproaches();
+    var selectHtml='<select onchange="setPMThesis(this.value)">';
+    theses.forEach(function(t){selectHtml+='<option value="'+t.id+'" '+(t.id===pmThesisId?'selected':'')+'>'+esc(t.name)+'</option>';});
+    selectHtml+='</select>';
+    var html='<div class="sw-pm-thesis-select">'+selectHtml+' <button class="sw-qb-add-card" style="margin-left:12px;" onclick="openPersonaModal()">+ Add Persona</button></div>';
+    if(!personas.length){
+        html+='<div class="sw-pm-empty">No personas mapped for this thesis yet. As you research accounts, capture the buying committee patterns you discover.</div>';
+    } else {
+        // Group by priority
+        var groups=[{key:'primary-target',label:'Primary Targets'},{key:'secondary',label:'Secondary'},{key:'situational',label:'Situational'}];
+        groups.forEach(function(g){
+            var group=personas.filter(function(p){return p.priority===g.key;});
+            if(!group.length)return;
+            html+='<div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin:var(--space-md) 0 var(--space-sm);">'+g.label+'</div>';
+            html+='<div class="sw-pm-grid">';
+            group.forEach(function(p){
+                var roleLabels={'decision-maker':'Decision Maker','influencer':'Influencer','champion':'Champion','blocker':'Blocker','economic-buyer':'Economic Buyer','end-user':'End User'};
+                var approach=p.bestApproach?approaches.find(function(a){return a.id===p.bestApproach;}):null;
+                html+='<div class="sw-pm-card"><button class="remove" onclick="removePersona(\''+p.id+'\')">&times;</button>';
+                html+='<div class="sw-pm-card-title">'+esc(p.title)+'</div>';
+                if(p.alternativeTitles) html+='<div class="sw-pm-card-alts">Also: '+esc(p.alternativeTitles)+'</div>';
+                html+='<span class="sw-pm-card-role '+p.role+'">'+esc(roleLabels[p.role]||p.role)+'</span>';
+                html+='<span class="sw-pm-card-priority '+p.priority+'">'+esc(p.priority.replace('-',' '))+'</span>';
+                html+='<div class="sw-pm-card-concern">'+esc(p.typicalConcerns)+'</div>';
+                if(approach) html+='<div class="sw-pm-card-approach">Best angle: '+esc(approach.name)+'</div>';
+                html+='</div>';
+            });
+            html+='</div>';
+        });
+    }
+    document.getElementById('pmContent').innerHTML=html;
+}
+
+window.setPMThesis=function(id){pmThesisId=id;renderPersonas();};
+
+window.openPersonaModal=function(){
+    document.getElementById('pmTitle').value='';
+    document.getElementById('pmAlts').value='';
+    document.getElementById('pmConcerns').value='';
+    document.getElementById('pmNotes').value='';
+    document.querySelectorAll('#pmRole .sw-qselect-opt').forEach(function(o){o.classList.remove('selected');});
+    document.querySelectorAll('#pmPriority .sw-qselect-opt').forEach(function(o){o.classList.remove('selected');});
+    // Approach dropdown
+    var approaches=getApproaches().filter(function(a){return a.thesisId===pmThesisId;});
+    document.getElementById('pmApproach').innerHTML='<option value="">(optional)</option>'+approaches.map(function(a){return '<option value="'+a.id+'">'+esc(a.name)+'</option>';}).join('');
+    document.getElementById('personaModal').classList.add('active');
+};
+
+window.savePersona=function(){
+    var title=document.getElementById('pmTitle').value.trim();
+    var roleEl=document.querySelector('#pmRole .sw-qselect-opt.selected');
+    var prioEl=document.querySelector('#pmPriority .sw-qselect-opt.selected');
+    var concerns=document.getElementById('pmConcerns').value.trim();
+    if(!title||!roleEl||!prioEl||!concerns){alert('Title, role, priority, and concerns are required.');return;}
+    var personas=getPersonas();
+    personas.push({
+        id:genId(), thesisId:pmThesisId, title:title,
+        alternativeTitles:document.getElementById('pmAlts').value.trim(),
+        role:roleEl.dataset.value, priority:prioEl.dataset.value,
+        typicalConcerns:concerns,
+        bestApproach:document.getElementById('pmApproach').value||null,
+        notes:document.getElementById('pmNotes').value.trim(),
+        createdAt:new Date().toISOString()
+    });
+    savePersonas(personas);
+    document.getElementById('personaModal').classList.remove('active');
+    render();
+};
+
+window.removePersona=function(id){
+    if(!confirm('Remove this persona?'))return;
+    var personas=getPersonas().filter(function(p){return p.id!==id;});
+    savePersonas(personas);render();
+};
+
+// ============ SOURCE INTELLIGENCE ============
+function renderSourceIntel(){
+    var prospects=getProspects();
+    var cards=getQueryCards();
+    if(!prospects.length){
+        document.getElementById('siContent').innerHTML='<div class="sw-si-empty">Source intelligence builds as you capture and push prospects. Start sourcing to see which channels perform best.</div>';
+        return;
+    }
+    // Build source stats
+    var sourceMap={};
+    prospects.forEach(function(p){
+        var key=p.sourceQueryCardId||p.sourceType;
+        if(!sourceMap[key]) sourceMap[key]={name:'',total:0,researched:0,pushed:0,rejected:0,parked:0,progression:0};
+        sourceMap[key].total++;
+        if(['researched','ready','pushed'].indexOf(p.stage)>=0) sourceMap[key].researched++;
+        if(p.stage==='pushed') sourceMap[key].pushed++;
+        if(p.stage==='rejected') sourceMap[key].rejected++;
+        if(p.stage==='parked') sourceMap[key].parked++;
+        // Name
+        if(p.sourceQueryCardId){
+            var qc=cards.find(function(c){return c.id===p.sourceQueryCardId;});
+            sourceMap[key].name=qc?((qc.platformLabel||qc.platform)+' — '+(qc.filters||{}).industry||'').slice(0,40):'Query Card';
+        } else {
+            sourceMap[key].name=p.sourceType.charAt(0).toUpperCase()+p.sourceType.slice(1).replace(/-/g,' ');
+        }
+    });
+    // Check TA dispositions for pushed accounts
+    var taDisps=readLS('gtmos_ta_dispositions',[]);
+    var taAccounts=readLS('gtmos_ta_accounts',[]);
+    prospects.filter(function(p){return p.stage==='pushed';}).forEach(function(p){
+        var taAcct=taAccounts.find(function(a){return a.name.toLowerCase()===p.name.toLowerCase();});
+        if(!taAcct)return;
+        var progs=taDisps.filter(function(d){return d.accountId===taAcct.id&&d.type==='progressing';}).length;
+        var key=p.sourceQueryCardId||p.sourceType;
+        if(sourceMap[key]) sourceMap[key].progression+=progs;
+    });
+    // Sort by quality (push rate * progression)
+    var sources=Object.keys(sourceMap).map(function(k){
+        var s=sourceMap[k];
+        s.pushRate=s.total?Math.round(s.pushed/s.total*100):0;
+        s.qualityScore=s.pushRate+(s.progression*5);
+        return s;
+    });
+    sources.sort(function(a,b){return b.qualityScore-a.qualityScore;});
+    var html='<div class="sw-si-section"><div class="sw-si-section-title">Source Ranking by Quality</div><div class="sw-si-ranking">';
+    sources.forEach(function(s,i){
+        var warn=s.pushRate>50&&s.progression===0&&s.pushed>=3;
+        html+='<div class="sw-si-row">';
+        html+='<div class="sw-si-rank">'+(i+1)+'</div>';
+        html+='<div class="sw-si-info"><div class="sw-si-name">'+esc(s.name)+(warn?'<span class="sw-si-warn">⚠ High push, low conversion</span>':'')+'</div>';
+        html+='<div class="sw-si-detail">'+s.total+' captured · '+s.rejected+' rejected · '+s.pushed+' pushed</div></div>';
+        html+='<div class="sw-si-metrics">';
+        html+='<div class="sw-si-metric"><div class="sw-si-metric-val">'+s.pushRate+'%</div><div class="sw-si-metric-label">Push Rate</div></div>';
+        html+='<div class="sw-si-metric"><div class="sw-si-metric-val">'+(s.progression||0)+'</div><div class="sw-si-metric-label">TA Progressions</div></div>';
+        html+='</div></div>';
+    });
+    html+='</div></div>';
+    // Source distribution
+    var totalPushed=prospects.filter(function(p){return p.stage==='pushed';}).length;
+    if(totalPushed>0){
+        html+='<div class="sw-si-section"><div class="sw-si-section-title">Source Distribution of Territory</div><div class="sw-si-dist">';
+        sources.filter(function(s){return s.pushed>0;}).forEach(function(s){
+            var pct=Math.round(s.pushed/totalPushed*100);
+            html+='<div class="sw-si-dist-card"><div class="sw-si-dist-val">'+pct+'%</div><div class="sw-si-dist-label">'+esc(s.name.slice(0,20))+'</div><div class="sw-si-dist-bar"><div class="sw-si-dist-fill" style="width:'+pct+'%"></div></div></div>';
+        });
+        html+='</div>';
+        // Concentration warning
+        var topPct=sources.length&&sources[0].pushed>0?Math.round(sources[0].pushed/totalPushed*100):0;
+        if(topPct>75){
+            html+='<div class="sw-si-rec">'+topPct+'% of your territory was sourced from <strong>'+esc(sources[0].name)+'</strong>. Diversifying your sources may uncover segments you\'re missing.</div>';
+        }
+        html+='</div>';
+    }
+    // Exhaustion status
+    var activeCards=cards.filter(function(c){return c.status==='active';});
+    if(activeCards.length){
+        html+='<div class="sw-si-section"><div class="sw-si-section-title">Query Card Health</div>';
+        activeCards.forEach(function(c){
+            var sourced=prospects.filter(function(p){return p.sourceQueryCardId===c.id;}).length;
+            var recentSourced=prospects.filter(function(p){return p.sourceQueryCardId===c.id&&daysSince(p.createdAt)<=14;}).length;
+            var labels={'sales-nav':'Sales Nav','zoominfo':'ZoomInfo','apollo':'Apollo','google-boolean':'Boolean','conference':'Conference','crm':'CRM','custom':c.platformLabel||'Custom'};
+            var status=recentSourced===0&&sourced>=5?'⚠ Diminishing returns — consider refining or marking exhausted':sourced===0?'No prospects sourced yet':'Active — '+recentSourced+' sourced in last 14 days';
+            html+='<div class="sw-si-row"><div class="sw-si-rank" style="font-size:0.8rem;">'+esc(labels[c.platform]||c.platform)+'</div><div class="sw-si-info"><div class="sw-si-name">'+esc((c.filters||{}).industry||'')+'</div><div class="sw-si-detail">'+status+'</div></div><div class="sw-si-metrics"><div class="sw-si-metric"><div class="sw-si-metric-val">'+sourced+'</div><div class="sw-si-metric-label">Total Sourced</div></div></div></div>';
+        });
+        html+='</div>';
+    }
+    document.getElementById('siContent').innerHTML=html;
+}
+
+// ============ MODALS ============
+document.querySelectorAll('.sw-modal-overlay').forEach(function(o){
+    o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('active');});
+});
+
+// ============ INIT ============
+// Check TA onboarding
+var taSetup=readLS('gtmos_ta_setup',null);
+if(!taSetup){
+    document.querySelector('.app-content').innerHTML='<div style="text-align:center;padding:60px 24px;"><div style="font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);margin-bottom:12px;">Territory Architect Required</div><div style="color:var(--text-muted);margin-bottom:24px;">Complete Territory Architect onboarding first to define your theses. The Sourcing Workbench uses your theses to drive sourcing queries.</div><a href="/app/territory-architect/" class="sw-modal-btn primary" style="text-decoration:none;display:inline-block;">Go to Territory Architect →</a></div>';
+} else {
+    render();
+}
+})();
+</script>
+</body>
+</html>

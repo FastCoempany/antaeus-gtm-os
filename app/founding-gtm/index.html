@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playbook | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .pb-hero{text-align:center;padding:32px 0 24px;margin-bottom:var(--space-xl);}
+        .pb-hero-title{font-family:var(--font-serif);font-size:2rem;color:var(--text-primary);margin-bottom:4px;}
+        .pb-hero-sub{font-size:0.88rem;color:var(--text-muted);}
+        .pb-section{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:24px;margin-bottom:var(--space-md);transition:border-color 0.2s;}
+        .pb-section:hover{border-color:var(--border-hover);}
+        .pb-section-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;cursor:pointer;}
+        .pb-section-icon{font-size:1.2rem;margin-right:10px;}
+        .pb-section-title{font-family:var(--font-serif);font-size:1.1rem;color:var(--text-primary);}
+        .pb-section-source{font-size:0.68rem;color:var(--text-muted);margin-top:2px;}
+        .pb-section-status{font-size:0.7rem;padding:4px 10px;border-radius:var(--radius-full);font-weight:600;white-space:nowrap;}
+        .pb-section-status.live{background:rgba(34,197,94,0.12);color:#22c55e;}
+        .pb-section-status.partial{background:rgba(245,158,11,0.12);color:#f59e0b;}
+        .pb-section-status.empty{background:rgba(100,116,139,0.12);color:#64748b;}
+        .pb-content{font-size:0.88rem;color:var(--text-tertiary);line-height:1.6;}
+        .pb-content .pb-item{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+        .pb-content .pb-item:last-child{border-bottom:none;}
+        .pb-content .pb-item-label{font-weight:600;color:var(--text-secondary);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px;}
+        .pb-content .pb-item-value{color:var(--text-primary);}
+        .pb-content .pb-empty{color:var(--text-muted);font-style:italic;padding:12px 0;}
+        .pb-content .pb-empty a{color:var(--brand-gold);text-decoration:none;font-weight:600;font-style:normal;}
+        .pb-notes{margin-top:16px;}
+        .pb-notes summary{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);cursor:pointer;font-weight:700;padding:6px 0;}
+        .pb-notes textarea{width:100%;min-height:80px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;resize:vertical;margin-top:8px;}
+        .pb-notes textarea:focus{outline:none;border-color:var(--brand-gold);}
+        .pb-export-bar{position:sticky;bottom:0;background:var(--bg-primary);border-top:1px solid var(--border-default);padding:16px 0;display:flex;justify-content:center;gap:16px;align-items:center;z-index:10;}
+        .pb-export-btn{padding:14px 32px;border-radius:var(--radius-lg);font-size:0.95rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;background:var(--brand-gold);color:var(--bg-primary);transition:all 0.2s;}
+        .pb-export-btn:hover{opacity:0.9;transform:translateY(-1px);}
+        .pb-export-fmt{font-size:0.8rem;color:var(--text-muted);display:flex;gap:12px;align-items:center;}
+        .pb-export-fmt label{cursor:pointer;display:flex;align-items:center;gap:4px;}
+        .pb-last-update{font-size:0.68rem;color:var(--text-muted);text-align:center;margin-top:8px;}
+        /* Export modal */
+        .pb-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;}
+        .pb-modal-overlay.active{display:flex;}
+        .pb-modal{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);padding:32px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;}
+        .pb-modal-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:8px;}
+        .pb-modal-sub{font-size:0.85rem;color:var(--text-muted);margin-bottom:24px;}
+        .pb-modal-field{margin-bottom:16px;}
+        .pb-modal-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:6px;display:block;}
+        .pb-modal-checks{display:flex;flex-direction:column;gap:8px;}
+        .pb-modal-check{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text-secondary);cursor:pointer;}
+        .pb-modal-check input{accent-color:var(--brand-gold);}
+        .pb-modal textarea{width:100%;min-height:80px;padding:12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;resize:vertical;}
+        .pb-modal textarea:focus{outline:none;border-color:var(--brand-gold);}
+        .pb-modal-actions{display:flex;justify-content:space-between;margin-top:24px;}
+        .pb-modal-btn{padding:12px 24px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.88rem;}
+        .pb-modal-btn.primary{background:var(--brand-gold);color:var(--bg-primary);}
+        .pb-modal-btn.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border-default);}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Playbook</h1>
+                <p class="module-subtitle">Auto-assembled from your modules. The playbook your next hire will run from.</p>
+            </header>
+            <div class="app-content" style="max-width:740px;">
+                <div id="sections"></div>
+                <div class="pb-export-bar">
+                    <button class="pb-export-btn" onclick="openExportModal()">&#128230; Share Handoff Kit</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="pb-modal-overlay" id="exportModal">
+        <div class="pb-modal">
+            <div class="pb-modal-title">&#128230; Share Handoff Kit</div>
+            <div class="pb-modal-sub">Generate a complete onboarding document for your next hire.</div>
+            <div class="pb-modal-field">
+                <div class="pb-modal-label">Include sections</div>
+                <div class="pb-modal-checks" id="exportChecks"></div>
+            </div>
+            <div class="pb-modal-field">
+                <div class="pb-modal-label">Welcome note (optional)</div>
+                <textarea id="exportNote" placeholder="Welcome to the team! Here's how we sell..."></textarea>
+            </div>
+            <div class="pb-modal-field">
+                <div class="pb-modal-label">Format</div>
+                <div style="display:flex;gap:12px;">
+                    <label class="pb-modal-check"><input type="radio" name="exportFmt" value="md" checked> Markdown</label>
+                    <label class="pb-modal-check"><input type="radio" name="exportFmt" value="txt"> Plain Text</label>
+                </div>
+            </div>
+            <div class="pb-modal-actions">
+                <button class="pb-modal-btn ghost" onclick="closeExportModal()">Cancel</button>
+                <button class="pb-modal-btn primary" onclick="generateExport()">Generate &amp; Download</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/deal-health.js"></script>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    (function(){
+        function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+        function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+        function fmtN(n){return '$'+Number(n||0).toLocaleString();}
+
+        var playbook=readLS('gtmos_playbook',{});
+        var icps=readLS('gtmos_icp_analytics',{icps:[],totalWorked:0});
+        var scData=readLS('gtmos_sc_v4',{accounts:[]});
+        var seed=readLS('gtmos_outbound_seed',{});
+        var angles=readLS('gtmos_angles',[]);
+        var disco=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+        var deals=readLS('gtmos_deal_workspaces',[]);
+        if(!Array.isArray(deals))deals=Object.values(deals||{});
+        var outcomes=readLS('gtmos_deal_outcomes',{});
+        // E3/E4: New module data reads
+        var outboundTouches=readLS('gtmos_outbound_touches',{touches:[]});
+        var coldCallLog=readLS('gtmos_cold_call_log',{calls:[]});
+        var linkedinLog=readLS('gtmos_linkedin_log',{actions:[]});
+        var advisorDeps=readLS('gtmos_advisor_deployments',{deployments:[]});
+        var advisorRegistry=readLS('gtmos_advisor_registry',{advisors:[]});
+
+        var sections=[
+            {icon:'\ud83c\udfaf',title:'1. Who We Sell To',source:'ICP Studio + Signal Console',render:function(){
+                var items=[];
+                var icpList=icps.icps||[];
+                if(icpList.length>0){
+                    icpList.forEach(function(p){items.push({label:'ICP Profile',value:escH(p.name||p.industry||'Unnamed')+(p.revenue?' \u2014 '+escH(p.revenue):'')});});
+                }
+                if(playbook.acv)items.push({label:'Average Deal Size',value:fmtN(playbook.acv)});
+                if(playbook.stage)items.push({label:'Company Stage',value:escH(playbook.stage)});
+                var scAccounts=(scData.accounts||[]).slice(0,5);
+                if(scAccounts.length>0){
+                    items.push({label:'Top Signal Accounts',value:scAccounts.map(function(a){return escH(a.name)+' (heat: '+(a._heat||0)+')';}).join(', ')});
+                }
+                return items;
+            }},
+            {icon:'\ud83d\udd0d',title:'2. How We Find Them',source:'Signal Console + Outbound Studio + Cold Call + LinkedIn',render:function(){
+                var items=[];
+                if(seed.annual_quota)items.push({label:'Annual Quota',value:fmtN(seed.annual_quota)});
+                if(angles.length>0)items.push({label:'Outbound Angles Saved',value:angles.length+' angles'});
+                var topAngle=angles.length>0?angles[angles.length-1]:null;
+                if(topAngle&&topAngle.payload){
+                    items.push({label:'Latest Angle',value:escH((topAngle.payload.trigger||'')+' \u2192 '+(topAngle.payload.persona||''))});
+                }
+                var scCount=(scData.accounts||[]).length;
+                if(scCount>0)items.push({label:'Accounts in Signal Console',value:scCount+' accounts, '+(scData.accounts||[]).filter(function(a){return(a._heat||0)>=75}).length+' hot'});
+                // E3: Outbound touch stats
+                var touches=outboundTouches.touches||[];
+                if(touches.length>0){
+                    var replied=touches.filter(function(t){return t.outcome==='replied'||t.outcome==='meeting_booked'}).length;
+                    var rate=Math.round(replied/touches.length*100);
+                    items.push({label:'Outbound Touches',value:touches.length+' sent, '+replied+' replied ('+rate+'%)'});
+                    var channels={};touches.forEach(function(t){if(t.channel)channels[t.channel]=(channels[t.channel]||0)+1});
+                    var topCh=Object.entries(channels).sort(function(a,b){return b[1]-a[1]});
+                    if(topCh.length>0)items.push({label:'Top Channel',value:escH(topCh[0][0])+' ('+topCh[0][1]+' touches)'});
+                }
+                // E3: Cold call stats
+                var calls=coldCallLog.calls||[];
+                if(calls.length>0){
+                    var booked=calls.filter(function(c){return c.outcome==='meeting_booked'}).length;
+                    items.push({label:'Cold Calls',value:calls.length+' calls, '+booked+' meetings booked'});
+                }
+                // E3: LinkedIn stats
+                var liActions=linkedinLog.actions||[];
+                if(liActions.length>0){
+                    var connections=liActions.filter(function(a){return a.type==='connection'||a.action==='connection'}).length;
+                    var accepted=liActions.filter(function(a){return a.outcome==='accepted'}).length;
+                    items.push({label:'LinkedIn Activity',value:liActions.length+' actions'+(connections>0?', '+connections+' connection requests'+(accepted>0?' ('+accepted+' accepted)':'')':'')});
+                }
+                return items;
+            }},
+            {icon:'\ud83c\udfa7',title:'3. How We Run Discovery',source:'Discovery Studio',render:function(){
+                var items=[];
+                if(disco.totalCalls>0){
+                    items.push({label:'Calls Logged',value:disco.totalCalls});
+                    var rate=disco.totalCalls>0?Math.round((disco.advancedCalls||0)/disco.totalCalls*100):0;
+                    items.push({label:'Advance Rate',value:rate+'%'});
+                }
+                var cat=readLS('gtmos_product_category','');
+                if(cat)items.push({label:'Framework Category',value:escH(cat)});
+                return items;
+            }},
+            {icon:'\ud83e\udd1d',title:'4. How We Close',source:'Deal Workspace + Quota Workback + Advisor Deploy',render:function(){
+                var items=[];
+                var active=deals.filter(function(d){return d&&d.stage!=='closed-won'&&d.stage!=='closed-lost';});
+                items.push({label:'Active Deals',value:active.length});
+                var wins=0,losses=0;
+                Object.values(outcomes||{}).forEach(function(o){if(o.type==='won')wins++;if(o.type==='lost')losses++;});
+                if(wins+losses>0){
+                    items.push({label:'Win/Loss Record',value:wins+'W / '+losses+'L ('+Math.round(wins/(wins+losses)*100)+'% win rate)'});
+                }
+                if(seed.win_rate)items.push({label:'Target Win Rate',value:seed.win_rate+'%'});
+                // E4: Advisor deployment stats
+                var deps=advisorDeps.deployments||[];
+                var advs=advisorRegistry.advisors||[];
+                if(deps.length>0){
+                    var successful=deps.filter(function(d){return d.outcome==='successful'}).length;
+                    var impactRate=Math.round(successful/deps.length*100);
+                    items.push({label:'Advisor Deployments',value:deps.length+' total, '+successful+' successful ('+impactRate+'% impact rate)'});
+                    // Top deployment moment
+                    var momentCounts={};
+                    deps.forEach(function(d){if(d.momentId)momentCounts[d.momentId]=(momentCounts[d.momentId]||0)+1});
+                    var topMoment=Object.entries(momentCounts).sort(function(a,b){return b[1]-a[1]})[0];
+                    if(topMoment){
+                        var MOMENT_NAMES={intro:'Introduction',eb_bridge:'EB Bridge',poc_stall:'Post-PoC Stall',procurement:'Procurement',competitor:'Competitor Threat',champion_left:'Champion Departure',budget_kill:'Budget Kill',board_decision:'Board Decision',reference:'Reference Validation',renewal:'Renewal/Expansion'};
+                        items.push({label:'Top Deployment Moment',value:escH(MOMENT_NAMES[topMoment[0]]||topMoment[0])+' ('+topMoment[1]+'×)'});
+                    }
+                }
+                if(advs.length>0&&deps.length===0){
+                    items.push({label:'Advisors Registered',value:advs.length+' (no deployments yet)'});
+                }
+                return items;
+            }},
+            {icon:'\u26a0\ufe0f',title:'5. What to Avoid',source:'Auto-generated from closed deals + manual lessons',render:function(){
+                if(!window.dealHealth)return 'manual';
+                var vitals=window.dealHealth.loadAllVitals();
+                var patterns=window.dealHealth.lossPatterns(vitals);
+                var items=[];
+                if(patterns&&patterns.total>=2){
+                    items.push({label:'Loss Pattern ('+patterns.total+' closed-lost deals)',value:'<div style="padding:10px 14px;background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.15);border-radius:8px;margin:4px 0;">'+escH(patterns.summary)+'</div>'});
+                    if(patterns.allReasons.length>1){
+                        var otherText=patterns.allReasons.slice(1).map(function(r){return r.label+' ('+r.count+')';}).join(', ');
+                        items.push({label:'Other Reasons',value:escH(otherText)});
+                    }
+                }
+                if(items.length===0)return 'manual';
+                items.push({label:'_manual',value:'manual'});
+                return items;
+            }},
+            {icon:'\ud83d\udcca',title:'6. Scoreboard',source:'Deal Workspace + Quota Workback (live)',render:function(){
+                var items=[];
+                if(window.dealHealth){
+                    var vitals=window.dealHealth.loadAllVitals();
+                    var perf=window.dealHealth.performanceMetrics(vitals);
+                    var cov=window.dealHealth.computeCoverage(deals,Number(seed.annual_quota)||0);
+                    if(seed.annual_quota)items.push({label:'Annual Target',value:fmtN(seed.annual_quota)});
+                    if(cov.raw>0)items.push({label:'Pipeline (raw / weighted)',value:fmtN(cov.raw)+' / '+fmtN(cov.weighted)});
+                    if(cov.ratio>0&&seed.annual_quota)items.push({label:'Coverage Ratio',value:cov.ratio+'\u00d7'+(cov.ratio>=(Number(seed.coverage_target)||4.5)?' \u2714':' (target: '+(Number(seed.coverage_target)||4.5)+'\u00d7)')});
+                    if(perf.winRate!==null)items.push({label:'Win Rate',value:perf.winRate+'% ('+perf.won+'W / '+perf.lost+'L)'});
+                    if(perf.avgDealSize!==null)items.push({label:'Avg Deal Size (closed won)',value:fmtN(perf.avgDealSize)});
+                    if(perf.avgCycleDays!==null)items.push({label:'Avg Sales Cycle',value:perf.avgCycleDays+' days'});
+                    var lp=window.dealHealth.lossPatterns(vitals);
+                    if(lp)items.push({label:'Top Loss Reason',value:escH(lp.topReason.label)+' ('+lp.topReason.count+'/'+lp.total+')'});
+                } else {
+                    if(seed.annual_quota)items.push({label:'Annual Target',value:fmtN(seed.annual_quota)});
+                }
+                return items;
+            }}
+        ];
+
+        var savedNotes=readLS('gtmos_playbook_notes',{});
+
+        function renderSections(){
+            document.getElementById('sections').innerHTML=sections.map(function(sec,idx){
+                var result=sec.render();
+                var isManual=result==='manual';
+                var items=isManual?[]:result;
+                var status=isManual?'partial':(items.length>0?'live':'empty');
+                var statusText=isManual?'Editable':(items.length>0?items.length+' data points':'Needs data');
+
+                var contentHtml='';
+                if(isManual){
+                    var noteVal=savedNotes['sec_'+idx]||playbook.notes||'';
+                    contentHtml='<textarea class="pb-notes textarea" style="width:100%;min-height:100px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;resize:vertical;" placeholder="Document lessons learned, anti-patterns, deals lost and why..." oninput="saveNote('+idx+',this.value)">'+escH(noteVal)+'</textarea>';
+                } else if(items.length>0){
+                    var hasManualFlag=items.some(function(i){return i.label==='_manual';});
+                    var dataItems=items.filter(function(i){return i.label!=='_manual';});
+                    contentHtml=dataItems.map(function(i){
+                        return '<div class="pb-item"><div class="pb-item-label">'+i.label+'</div><div class="pb-item-value">'+i.value+'</div></div>';
+                    }).join('');
+                    if(hasManualFlag){
+                        var noteVal=savedNotes['sec_'+idx]||playbook.notes||'';
+                        contentHtml+='<textarea class="pb-notes textarea" style="width:100%;min-height:80px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;resize:vertical;margin-top:12px;" placeholder="Add your own lessons learned..." oninput="saveNote('+idx+',this.value)">'+escH(noteVal)+'</textarea>';
+                    }
+                } else {
+                    var links={'ICP Studio':'/app/icp-studio/','Signal Console':'/app/signal-console/','Outbound Studio':'/app/outbound-studio/','Discovery Studio':'/app/discovery-studio/','Deal Workspace':'/app/deal-workspace/','Quota Workback':'/app/quota-workback/'};
+                    var linkHtml='';
+                    Object.keys(links).forEach(function(name){
+                        if(sec.source.indexOf(name.split(' ')[0])!==-1){
+                            linkHtml+='<a href="'+links[name]+'">'+name+'</a> ';
+                        }
+                    });
+                    contentHtml='<div class="pb-empty">Start using '+linkHtml+' to auto-populate this section.</div>';
+                }
+
+                var noteKey='note_'+idx;
+                var existingNote=savedNotes[noteKey]||'';
+                var notesHtml='';
+                if(!isManual){
+                    notesHtml='<details class="pb-notes"><summary>Add manual notes</summary><textarea placeholder="Override or add context..." oninput="saveNote(\''+noteKey+'\',this.value)">'+escH(existingNote)+'</textarea></details>';
+                }
+
+                return '<div class="pb-section"><div class="pb-section-head"><div style="display:flex;align-items:flex-start;"><span class="pb-section-icon">'+sec.icon+'</span><div><div class="pb-section-title">'+sec.title+' <span title="Auto-pulls from '+sec.source+'" style="cursor:help;font-size:0.62rem;color:var(--text-muted);opacity:0.5;font-weight:700;background:rgba(255,255,255,0.05);width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">?</span></div></div></div><span class="pb-section-status '+status+'">'+statusText+'</span></div><div class="pb-content">'+contentHtml+'</div>'+notesHtml+'</div>';
+            }).join('');
+        }
+
+        renderSections();
+
+        window.saveNote=function(key,val){
+            savedNotes[typeof key==='number'?'sec_'+key:key]=val;
+            localStorage.setItem('gtmos_playbook_notes',JSON.stringify(savedNotes));
+        };
+
+        // Export modal
+        window.openExportModal=function(){
+            document.getElementById('exportModal').classList.add('active');
+            document.getElementById('exportChecks').innerHTML=sections.map(function(sec,idx){
+                return '<label class="pb-modal-check"><input type="checkbox" checked data-sec="'+idx+'"> '+sec.icon+' '+sec.title+'</label>';
+            }).join('');
+        };
+        window.closeExportModal=function(){document.getElementById('exportModal').classList.remove('active');};
+        document.getElementById('exportModal').addEventListener('click',function(e){if(e.target===this)closeExportModal();});
+
+        window.generateExport=function(){
+            var checks=document.querySelectorAll('#exportChecks input:checked');
+            var selectedIdxs=[];
+            checks.forEach(function(c){selectedIdxs.push(parseInt(c.dataset.sec));});
+            var note=document.getElementById('exportNote').value.trim();
+            var fmt=document.querySelector('input[name="exportFmt"]:checked').value;
+
+            var text='';
+            if(fmt==='md'){
+                text='# '+escH(playbook.company||'Company')+' \u2014 GTM Handoff Kit\n\n';
+                if(note)text+='> '+note+'\n\n---\n\n';
+                selectedIdxs.forEach(function(idx){
+                    var sec=sections[idx];
+                    text+='## '+sec.icon+' '+sec.title+'\n';
+                    text+='*Source: '+sec.source+'*\n\n';
+                    var result=sec.render();
+                    if(result==='manual'){
+                        text+=(savedNotes['sec_'+idx]||'No notes yet.')+'\n';
+                    } else if(result.length>0){
+                        result.forEach(function(i){text+='**'+i.label+':** '+i.value+'\n';});
+                    } else {
+                        text+='*No data yet.*\n';
+                    }
+                    var noteVal=savedNotes['note_'+idx];
+                    if(noteVal)text+='\n**Notes:** '+noteVal+'\n';
+                    text+='\n---\n\n';
+                });
+            } else {
+                text=(playbook.company||'Company')+' - GTM HANDOFF KIT\n'+('=').repeat(40)+'\n\n';
+                if(note)text+='Welcome Note: '+note+'\n\n';
+                selectedIdxs.forEach(function(idx){
+                    var sec=sections[idx];
+                    text+=sec.title.toUpperCase()+'\n'+('-').repeat(30)+'\n';
+                    var result=sec.render();
+                    if(result==='manual'){
+                        text+=(savedNotes['sec_'+idx]||'No notes yet.')+'\n';
+                    } else if(result.length>0){
+                        result.forEach(function(i){text+=i.label+': '+i.value+'\n';});
+                    } else {
+                        text+='No data yet.\n';
+                    }
+                    text+='\n';
+                });
+            }
+
+            var blob=new Blob([text],{type:'text/plain'});
+
+            // F1: Append Readiness Assessment
+            var readinessAppend='';
+            try{
+                var rSeed=readLS('gtmos_outbound_seed',{});
+                var rDeals=readLS('gtmos_deal_workspaces',[]);
+                if(!Array.isArray(rDeals))rDeals=[];
+                var rIcps=readLS('gtmos_icp_analytics',{icps:[]});
+                var rDisco=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+                var rAngles=readLS('gtmos_angles',[]);
+                var rTouches=readLS('gtmos_outbound_touches',{touches:[]});
+                var rCalls=readLS('gtmos_cold_call_log',{calls:[]});
+                var rLinkedin=readLS('gtmos_linkedin_log',{actions:[]});
+                var rAdvisors=readLS('gtmos_advisor_registry',{advisors:[]});
+                var rAdvisorDeps=readLS('gtmos_advisor_deployments',{deployments:[]});
+                var rHandoff=readLS('gtmos_handoff_exported',null);
+                var rAutopsy=readLS('gtmos_autopsy_log_v1',[]);
+
+                // Compute a simplified readiness score
+                var rScore=0;
+                if((rIcps.icps||[]).length>=1)rScore+=5;if((rIcps.icps||[]).length>=3)rScore+=3;
+                if(rDisco.totalCalls>=1)rScore+=3;if(rDisco.totalCalls>=5)rScore+=2;
+                if(rSeed.annual_quota)rScore+=3;
+                if(rAngles.length>=1)rScore+=2;
+                var rActive=rDeals.filter(function(d){return d&&d.stage!=='closed-won'&&d.stage!=='closed-lost'});
+                var rWins=rDeals.filter(function(d){return d&&d.stage==='closed-won'}).length;
+                var rLosses=rDeals.filter(function(d){return d&&d.stage==='closed-lost'}).length;
+                if(rActive.length>=1)rScore+=2;if(rActive.length>=3)rScore+=2;
+                if(rWins>=1)rScore+=2;if(rWins>=2)rScore+=2;
+                if(rLosses>=1&&rWins>=1)rScore+=1;
+                if(playbook.company)rScore+=2;if(playbook.acv)rScore+=2;
+                var rPbFields=0;Object.values(playbook.fields||{}).forEach(function(v){if(typeof v==='string'&&v.trim())rPbFields++});
+                if(rPbFields>=3)rScore+=3;if(rPbFields>=6)rScore+=2;
+                if((rTouches.touches||[]).length>=10)rScore+=2;
+                if((rCalls.calls||[]).length>=5)rScore+=2;
+                var rChannels=0;if((rTouches.touches||[]).length>0)rChannels++;if((rCalls.calls||[]).length>0)rChannels++;if((rLinkedin.actions||[]).length>0)rChannels++;
+                if(rChannels>=2)rScore+=2;
+                rScore=Math.min(100,rScore);
+
+                var rVerdict=rScore>=80?'Ready to hand off':rScore>=50?'Hire-ready with guardrails':rScore>=25?'Building, not ready':'Too early';
+
+                // Build the readiness checklist
+                var rChecks=[];
+                rChecks.push((rWins>=2?'✓':'○')+' 2+ closed-won deals (have '+rWins+')');
+                rChecks.push((rLosses>=3?'✓':'○')+' 3+ documented loss patterns');
+                rChecks.push(((rIcps.icps||[]).length>=3?'✓':'○')+' 3+ ICP profiles (have '+(rIcps.icps||[]).length+')');
+                rChecks.push((rDisco.totalCalls>=3?'✓':'○')+' 3+ discovery calls (have '+rDisco.totalCalls+')');
+                rChecks.push((rChannels>=2&&(rTouches.touches||[]).length>=5?'✓':'○')+' Multi-channel outbound with data');
+                rChecks.push(((rAdvisors.advisors||[]).length>=1&&(rAdvisorDeps.deployments||[]).length>=1?'✓':'○')+' Advisor relationships deployed');
+                rChecks.push((rHandoff?'✓':'○')+' Handoff Kit exported');
+
+                if(fmt==='md'){
+                    readinessAppend='\n## 📊 Readiness Assessment\n\n';
+                    readinessAppend+='**Readiness Score:** '+rScore+'/100 — '+rVerdict+'\n\n';
+                    rChecks.forEach(function(c){readinessAppend+=c+'\n';});
+                    readinessAppend+='\n---\n\n';
+                } else {
+                    readinessAppend='\nREADINESS ASSESSMENT\n'+('-').repeat(30)+'\n';
+                    readinessAppend+='Readiness Score: '+rScore+'/100 - '+rVerdict+'\n\n';
+                    rChecks.forEach(function(c){readinessAppend+=c+'\n';});
+                    readinessAppend+='\n';
+                }
+            }catch(e){readinessAppend='';}
+
+            // F2: Append Pipeline Summary
+            var pipeAppend='';
+            try{
+                if(window.dealHealth){
+                    var pVitals=window.dealHealth.loadAllVitals();
+                    var pQuota=window.dealHealth.loadQuota();
+                    var pSeed2=window.dealHealth.loadSeed();
+                    var pActive=pVitals.filter(function(v){return!v.isClosed});
+                    var pCov=window.dealHealth.computeCoverage(rDeals,Number(rSeed.annual_quota)||0);
+                    var pPerf=window.dealHealth.performanceMetrics(pVitals);
+                    var pRisk=pVitals.filter(function(v){return!v.isClosed&&v.riskScore>=60}).sort(function(a,b){return b.riskScore-a.riskScore});
+
+                    if(fmt==='md'){
+                        pipeAppend='## 📈 Pipeline Summary (Live)\n\n';
+                        pipeAppend+='**Active Deals:** '+pActive.length+'\n';
+                        pipeAppend+='**Total Pipeline:** '+escH(window.dealHealth.money(pCov.raw))+'\n';
+                        pipeAppend+='**Weighted Pipeline:** '+escH(window.dealHealth.money(pCov.weighted))+'\n';
+                        if(rSeed.annual_quota)pipeAppend+='**Coverage Ratio:** '+pCov.ratio+'× (target: '+(Number(rSeed.coverage_target)||4.5)+'×)\n';
+                        if(pPerf.winRate!==null)pipeAppend+='**Win Rate:** '+pPerf.winRate+'%\n';
+                        if(pRisk.length>0){
+                            pipeAppend+='\n**Top At-Risk Deals:**\n';
+                            pRisk.slice(0,3).forEach(function(v){
+                                pipeAppend+='- '+escH(v.name)+' ('+escH(window.dealHealth.money(v.value))+', risk '+v.riskScore+', '+v.staleDays+'d stale)\n';
+                            });
+                        }
+                        pipeAppend+='\n---\n\n';
+                    } else {
+                        pipeAppend='PIPELINE SUMMARY (LIVE)\n'+('-').repeat(30)+'\n';
+                        pipeAppend+='Active Deals: '+pActive.length+'\n';
+                        pipeAppend+='Total Pipeline: '+window.dealHealth.money(pCov.raw)+'\n';
+                        pipeAppend+='Weighted Pipeline: '+window.dealHealth.money(pCov.weighted)+'\n';
+                        if(rSeed.annual_quota)pipeAppend+='Coverage Ratio: '+pCov.ratio+'x (target: '+(Number(rSeed.coverage_target)||4.5)+'x)\n';
+                        if(pPerf.winRate!==null)pipeAppend+='Win Rate: '+pPerf.winRate+'%\n';
+                        if(pRisk.length>0){
+                            pipeAppend+='\nTop At-Risk Deals:\n';
+                            pRisk.slice(0,3).forEach(function(v){
+                                pipeAppend+='- '+v.name+' ('+window.dealHealth.money(v.value)+', risk '+v.riskScore+', '+v.staleDays+'d stale)\n';
+                            });
+                        }
+                        pipeAppend+='\n';
+                    }
+                }
+            }catch(e){pipeAppend='';}
+
+            // Rebuild blob with appendices
+            text+=readinessAppend+pipeAppend;
+            var blob=new Blob([text],{type:'text/plain'});
+            var a=document.createElement('a');
+            a.href=URL.createObjectURL(blob);
+            a.download='handoff-kit.'+(fmt==='md'?'md':'txt');
+            a.click();
+            // A7: Track handoff export for Readiness Score
+            var prevExport=JSON.parse(localStorage.getItem('gtmos_handoff_exported')||'null');
+            var exportCount=prevExport&&prevExport.count?prevExport.count+1:1;
+            localStorage.setItem('gtmos_handoff_exported',JSON.stringify({date:new Date().toISOString(),count:exportCount}));
+            closeExportModal();
+        };
+    })();
+    </script>
+</body>
+</html>

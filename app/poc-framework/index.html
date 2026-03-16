@@ -1,0 +1,494 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoC Framework - Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .studio-layout { display: grid; grid-template-columns: 1fr 320px; gap: var(--space-lg); min-height: calc(100vh - 140px); }
+        @media (max-width: 1200px) { .studio-layout { grid-template-columns: 1fr; } .side-panel { display: none; } }
+        
+        .builder-section { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-lg); }
+        .section-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); }
+        .section-icon { font-size: 1.5rem; }
+        .section-title { font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary); }
+        .section-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+        
+        .callout { padding: var(--space-md); border-radius: var(--radius-md); margin-bottom: var(--space-md); }
+        .callout-green { background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--accent-green); }
+        .callout-amber { background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--accent-amber); }
+        .callout-red { background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red); }
+        .callout-title { font-size: 0.8rem; font-weight: 700; margin-bottom: var(--space-xs); }
+        .callout-green .callout-title { color: var(--accent-green); }
+        .callout-amber .callout-title { color: var(--accent-amber); }
+        .callout-red .callout-title { color: var(--accent-red); }
+        .callout ul { margin-left: 18px; margin-top: var(--space-xs); }
+        .callout li { font-size: 0.85rem; color: var(--text-tertiary); margin-bottom: 4px; }
+        
+        .callout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg); }
+        @media (max-width: 900px) { .callout-grid { grid-template-columns: 1fr; } }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
+        @media (max-width: 900px) { .input-grid { grid-template-columns: 1fr; } }
+        
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-xs); }
+        .input-group select, .input-group input, .input-group textarea { width: 100%; padding: var(--space-sm) var(--space-md); background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; }
+        .input-group textarea { min-height: 100px; resize: vertical; font-family: var(--font-mono); }
+        .input-group select:focus, .input-group input:focus, .input-group textarea:focus { outline: none; border-color: var(--brand-gold); }
+        
+        .output-box { background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-md); }
+        .output-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--brand-gold); margin-bottom: var(--space-sm); display: flex; align-items: center; justify-content: space-between; }
+        .output-text { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap; }
+        
+        .output-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
+        @media (max-width: 900px) { .output-grid { grid-template-columns: 1fr; } }
+        
+        .copy-btn { background: transparent; border: 1px solid var(--border-default); border-radius: var(--radius-sm); padding: var(--space-xs) var(--space-sm); font-size: 0.7rem; color: var(--text-muted); cursor: pointer; }
+        .copy-btn:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
+        
+        .duration-btns { display: flex; gap: var(--space-sm); }
+        .dur-btn { padding: var(--space-xs) var(--space-sm); border: 1px solid var(--border-default); border-radius: var(--radius-md); background: transparent; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; }
+        .dur-btn:hover { border-color: var(--brand-gold); }
+        .dur-btn.active { background: rgba(212, 175, 55, 0.15); border-color: var(--brand-gold); color: var(--brand-gold); }
+        
+        .side-panel { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); position: sticky; top: 20px; height: fit-content; }
+        .panel-title { font-family: var(--font-serif); font-size: 1rem; color: var(--text-primary); margin-bottom: var(--space-md); }
+        .stat-row { display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: 1px solid var(--border-default); }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); }
+        .stat-value { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-primary); }
+        .stat-value.good { color: var(--accent-green); }
+        
+        .worked-toggle { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-md); padding: var(--space-sm); background: rgba(34, 197, 94, 0.1); border-radius: var(--radius-md); cursor: pointer; }
+        .worked-toggle input { width: 18px; height: 18px; accent-color: var(--accent-green); }
+        .worked-toggle label { font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+        
+        .action-bar { display: flex; gap: var(--space-md); padding: var(--space-lg); background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); margin-top: var(--space-lg); }
+        .action-bar .btn { flex: 1; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        
+        <main class="app-main">
+            <header class="app-header">
+                <div>
+                    <h1 class="page-title">PoC Framework</h1>
+                    <p class="page-subtitle pop-subtitle">No clear success criteria, no pilot. Scope tightly and force a decision.</p>
+                </div>
+            </header>
+            
+            <div class="app-content">
+                <div class="studio-layout">
+                    <div class="builder-content">
+                        <!-- What This Produces / Rules / What Breaks -->
+                        <div class="builder-section">
+                            <div class="callout-grid">
+                                <div class="callout callout-green">
+                                    <div class="callout-title">What this produces</div>
+                                    <ul>
+                                        <li><strong>Scoped hypothesis</strong> to test</li>
+                                        <li><strong>Success criteria</strong> defined upfront</li>
+                                        <li><strong>Boundaries</strong> that prevent scope creep</li>
+                                    </ul>
+                                </div>
+                                <div class="callout callout-amber">
+                                    <div class="callout-title">The rules</div>
+                                    <ul>
+                                        <li><strong>7-14 days max</strong> - no endless trials</li>
+                                        <li><strong>Written success criteria</strong> before kickoff</li>
+                                        <li><strong>Executive sponsor</strong> at readout</li>
+                                    </ul>
+                                </div>
+                                <div class="callout callout-red">
+                                    <div class="callout-title">What breaks PoCs</div>
+                                    <ul>
+                                        <li>No hypothesis - just "try it"</li>
+                                        <li>Success criteria written after</li>
+                                        <li>No decision maker at readout</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Inputs -->
+                        <div class="builder-section">
+                            <div class="section-header">
+                                <span class="section-icon">⚙️</span>
+                                <div>
+                                    <div class="section-title">PoC Inputs</div>
+                                    <div class="section-subtitle">Define the test parameters.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Your Company / Product</label>
+                                    <input type="text" id="in_vendor" placeholder="e.g., Acme Analytics" oninput="generatePoC()">
+                                </div>
+                                <div class="input-group">
+                                    <label>Prospect Company</label>
+                                    <input type="text" id="in_account" placeholder="e.g., Globex" oninput="generatePoC()">
+                                </div>
+                                <div class="input-group">
+                                    <label>PoC Duration</label>
+                                    <div class="duration-btns">
+                                        <button class="dur-btn active" id="dur7" onclick="setDuration(7)">7 days</button>
+                                        <button class="dur-btn" id="dur14" onclick="setDuration(14)">14 days</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="output-grid" style="margin-top: var(--space-md);">
+                                <div class="input-group">
+                                    <label>Success Criteria (edit)</label>
+                                    <textarea id="in_success" oninput="generatePoC()">1) Customer can validate the output in <2 minutes
+2) We reduce manual steps by ~30% for the selected workflow
+3) Security/IT agrees the approach is acceptable for production</textarea>
+                                </div>
+                                <div class="input-group">
+                                    <label>Scope Boundaries (what we won't do)</label>
+                                    <textarea id="in_boundaries" oninput="generatePoC()">- No custom integration build during PoC
+- No full production deployment
+- No expansion to additional business units without a signed plan</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- PoC Outputs -->
+                        <div class="builder-section">
+                            <div class="section-header">
+                                <span class="section-icon">🧪</span>
+                                <div>
+                                    <div class="section-title">PoC Documents</div>
+                                    <div class="section-subtitle">Everything you need to run a tight proof of concept.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="output-grid">
+                                <div class="output-box">
+                                    <div class="output-title">PoC Scope Doc <button class="copy-btn" onclick="copyOut('out_scope')">Copy</button></div>
+                                    <div class="output-text" id="out_scope">Fill inputs to generate.</div>
+                                </div>
+                                <div class="output-box">
+                                    <div class="output-title">PoC Kickoff Agenda <button class="copy-btn" onclick="copyOut('out_kickoff')">Copy</button></div>
+                                    <div class="output-text" id="out_kickoff">Fill inputs to generate.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="output-grid">
+                                <div class="output-box">
+                                    <div class="output-title">PoC Readout Agenda <button class="copy-btn" onclick="copyOut('out_readout')">Copy</button></div>
+                                    <div class="output-text" id="out_readout">Fill inputs to generate.</div>
+                                </div>
+                                <div class="output-box">
+                                    <div class="output-title">PoC Proposal Email <button class="copy-btn" onclick="copyOut('out_email')">Copy</button></div>
+                                    <div class="output-text" id="out_email">Fill inputs to generate.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- PoC Outcome Tracking (D2) -->
+                        <div class="builder-section" style="padding:16px;">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;">PoC Outcome</div>
+                                <select id="pocOutcome" style="flex:1;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:0.85rem;">
+                                    <option value="in_progress">In Progress</option>
+                                    <option value="converted">Converted to Deal</option>
+                                    <option value="not_converted">Did Not Convert</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        
+                        <div class="data-guide" id="pocDataGuide" style="margin-top:16px;">
+                            <div class="data-guide-header" onclick="document.getElementById('pocDataGuide').classList.toggle('open')" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:10px;">
+                                <span>💡</span>
+                                <span style="font-weight:700;font-size:0.85rem;color:var(--text-secondary);flex:1;">Where Does Your Data Go?</span>
+                                <span class="dg-chev" style="font-size:0.7rem;color:var(--text-muted);transition:transform 0.2s;">▼</span>
+                            </div>
+                            <div class="dg-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s;">
+                                <div style="padding:12px 16px;font-size:0.72rem;color:var(--text-tertiary);line-height:1.6;border:1px solid var(--border-default);border-top:none;border-radius:0 0 10px 10px;">
+                                    <span style="font-weight:600;color:var(--text-tertiary);">Save to Deal</span> stores this PoC in your browser and updates the stats panel.
+                                    <span style="font-weight:600;color:var(--text-tertiary);">Download All</span> exports the complete PoC plan in the selected format.
+                                    <span style="font-weight:600;color:var(--text-tertiary);">Reset</span> clears all fields — previously saved PoCs remain intact.
+                                </div>
+                            </div>
+                        </div>
+                        <style>.data-guide.open .dg-body{max-height:300px!important;}.data-guide.open .dg-chev{transform:rotate(180deg)!important;}</style>
+                        
+                        <div class="action-bar" style="margin-top:16px;flex-wrap:wrap;">
+                            <button class="btn btn-ghost" onclick="resetForm()">🔄 Reset</button>
+                            <div style="display:flex;gap:6px;align-items:center;">
+                                <span style="font-size:0.62rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;white-space:nowrap;">Choose format:</span>
+                                <select id="pocDownloadFmt" style="padding:6px 10px;background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.8rem;">
+                                    <option value="pdf">PDF</option>
+                                    <option value="docx">DOCX</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+                                <button class="btn btn-secondary" onclick="downloadAll()">📥 Download All</button>
+                            </div>
+                            <button class="btn btn-primary" onclick="savePoC()">💾 Save to Deal</button>
+                        </div>
+                        <div style="text-align:center;font-size:0.63rem;color:var(--text-muted);line-height:1.5;margin-top:6px;">
+                            <span style="font-weight:600;color:var(--text-tertiary);">Reset</span> clears all fields — previously saved PoCs remain intact.
+                            <span style="font-weight:600;color:var(--text-tertiary);">Download All</span> exports the complete PoC plan in your chosen format (PDF, DOCX, or CSV).
+                            <span style="font-weight:600;color:var(--text-tertiary);">Save to Deal</span> stores this PoC in your browser and updates the stats panel.
+                        </div>
+                    </div>
+                    
+                    <!-- Side Panel -->
+                    <div class="side-panel">
+                        <div class="panel-title">PoC Stats</div>
+                        <div class="stat-row">
+                            <span class="stat-label">PoCs run</span>
+                            <span class="stat-value" id="stat_total">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Converted</span>
+                            <span class="stat-value good" id="stat_converted">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Conversion rate</span>
+                            <span class="stat-value" id="stat_rate">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/migration.js"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/tour-guide.js"></script>
+    <script src="/js/module-tooltips.js"></script>
+    <script src="/js/guided-rail.js"></script>
+    <script src="/js/data-flow.js"></script>
+    <script src="/js/collapsible-sections.js"></script>
+    <script src="/js/save-indicator.js"></script>
+    <script src="/js/unsaved-guard.js"></script>
+    <script src="/js/artifact-store.js"></script>
+    <script>
+        (async function() {
+            initSupabase();
+            if (localStorage.getItem('gtmos_noauth_mode')) return;
+            const session = await auth.getSession();
+            if (!session) { window.location.href = '/login.html'; return; }
+            const user = await auth.getUser();
+            if (user) {
+                var email = user.email || 'User';
+                document.getElementById('userName').textContent = email.split('@')[0];
+                document.getElementById('userAvatar').textContent = email.charAt(0).toUpperCase();
+            }
+        })();
+
+        window.handleSignOut = async function() {
+            await auth.signOut();
+            window.location.href = '/login.html';
+        };
+    </script>
+    
+    <script>
+        let durationDays = 7;
+        
+        function byId(id) { return document.getElementById(id); }
+        function val(id) { return (byId(id)?.value || '').trim(); }
+        function safe(v, fallback) { return v && v.trim().length ? v.trim() : fallback; }
+        
+        window.setDuration = function(n) {
+            durationDays = n;
+            byId('dur7').classList.toggle('active', n === 7);
+            byId('dur14').classList.toggle('active', n === 14);
+            generatePoC();
+        };
+        
+        window.generatePoC = function() {
+            const vendor = safe(val('in_vendor'), '[Your Company]');
+            const account = safe(val('in_account'), '[Prospect]');
+            const success = val('in_success') || 'Define success criteria';
+            const boundaries = val('in_boundaries') || 'Define boundaries';
+            
+            byId('out_scope').textContent = `POC SCOPE DOCUMENT
+${account} x ${vendor}
+
+DURATION: ${durationDays} days
+
+HYPOTHESIS:
+We believe ${vendor} can [specific outcome] for ${account} by [specific mechanism].
+
+SUCCESS CRITERIA:
+${success}
+
+BOUNDARIES (Out of Scope):
+${boundaries}
+
+REQUIRED PARTICIPANTS:
+- ${account}: Champion + 1 technical resource
+- ${vendor}: AE + SE
+
+NEXT STEP IF SUCCESSFUL:
+Commercial discussion with economic buyer within 5 business days of readout.`;
+
+            byId('out_kickoff').textContent = `POC KICKOFF AGENDA (30 min)
+
+1. [5 min] Confirm hypothesis and success criteria
+   - Read them aloud. Get verbal confirmation.
+
+2. [10 min] Technical walkthrough
+   - What we're testing, how we're testing it
+
+3. [10 min] Logistics
+   - Data/access requirements
+   - Communication cadence (daily async or 2x check-ins)
+   - Escalation path if blocked
+
+4. [5 min] Schedule readout
+   - Date: Day ${durationDays}
+   - Required attendees: Champion + Economic Buyer
+   - Decision expected at readout: Go/No-Go`;
+
+            byId('out_readout').textContent = `POC READOUT AGENDA (30 min)
+
+1. [5 min] Recap hypothesis and success criteria
+
+2. [15 min] Results walkthrough
+   - Criterion 1: Pass/Fail + evidence
+   - Criterion 2: Pass/Fail + evidence
+   - Criterion 3: Pass/Fail + evidence
+
+3. [5 min] ${account} feedback
+   - What worked? What didn't?
+
+4. [5 min] Recommendation + Next Steps
+   - If pass: "Based on results, we recommend moving to commercial terms. Can we schedule that discussion for [date]?"
+   - If partial: "Here's what we'd adjust for a production rollout..."`;
+
+            byId('out_email').textContent = `Subject: ${account} x ${vendor} - PoC Proposal (${durationDays} days)
+
+Hi [Name],
+
+Following our conversation, I wanted to formalize the proof of concept structure:
+
+WHAT WE'RE TESTING:
+[Specific hypothesis]
+
+SUCCESS CRITERIA:
+${success}
+
+TIMELINE:
+- Kickoff: [Date]
+- Duration: ${durationDays} days
+- Readout: [Date] with you + [economic buyer]
+
+WHAT WE NEED FROM YOU:
+- 30 min for kickoff
+- [Specific data/access]
+- Decision maker at readout
+
+WHAT WE WON'T DO:
+${boundaries}
+
+Does this structure work? Happy to adjust based on your constraints.
+
+Best,
+[Your name]`;
+        };
+        
+        window.copyOut = function(id) {
+            const text = byId(id).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 1500);
+            });
+        };
+        
+        window.resetForm = function() {
+            byId('in_vendor').value = '';
+            byId('in_account').value = '';
+            setDuration(7);
+            byId('in_success').value = `1) Customer can validate the output in <2 minutes
+2) We reduce manual steps by ~30% for the selected workflow
+3) Security/IT agrees the approach is acceptable for production`;
+            byId('in_boundaries').value = `- No custom integration build during PoC
+- No full production deployment
+- No expansion to additional business units without a signed plan`;
+            byId('pocOutcome').value = 'in_progress';
+            generatePoC();
+        };
+        
+        window.downloadAll = function() {
+            let content = byId('out_scope').textContent + '\n\n---\n\n';
+            content += byId('out_kickoff').textContent + '\n\n---\n\n';
+            content += byId('out_readout').textContent + '\n\n---\n\n';
+            content += byId('out_email').textContent;
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'poc-framework.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+        
+        window.savePoC = function() {
+            var pocList = JSON.parse(localStorage.getItem('gtmos_poc_data') || '{"pocs":[]}');
+            var pocEntry = {
+                id: 'poc_' + Date.now(),
+                vendor: val('in_vendor'),
+                account: val('in_account'),
+                duration: durationDays,
+                success: val('in_success'),
+                boundaries: val('in_boundaries'),
+                outcome: byId('pocOutcome').value,
+                created: new Date().toISOString()
+            };
+            // Check if updating existing PoC for same account
+            var existingIdx = pocList.pocs.findIndex(function(p){ return p.account === pocEntry.account && pocEntry.account; });
+            if (existingIdx >= 0) {
+                pocList.pocs[existingIdx] = pocEntry;
+            } else {
+                pocList.pocs.push(pocEntry);
+            }
+            localStorage.setItem('gtmos_poc_data', JSON.stringify(pocList));
+            updatePocStats();
+            alert('PoC saved!');
+            if (window.saveIndicator) saveIndicator.saved();
+        };
+        
+        function updatePocStats() {
+            var pocList = JSON.parse(localStorage.getItem('gtmos_poc_data') || '{"pocs":[]}');
+            var pocs = pocList.pocs || [];
+            var total = pocs.length;
+            var converted = pocs.filter(function(p){ return p.outcome === 'converted'; }).length;
+            var rate = total > 0 ? Math.round(converted / total * 100) + '%' : '-';
+            byId('stat_total').textContent = total;
+            byId('stat_converted').textContent = converted;
+            byId('stat_rate').textContent = rate;
+        }
+        
+        // Initialize
+        generatePoC();
+        updatePocStats();
+            if (window.saveIndicator) saveIndicator.mountAfter('.page-title');
+
+        function startTour() {
+            if (typeof TourGuide !== 'undefined') TourGuide.start();
+        }
+    </script>
+</body>
+</html>
+

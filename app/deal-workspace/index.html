@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deal Workspace | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .dw-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-sm);margin-bottom:var(--space-md);}
+        .dw-stat{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;text-align:center;}
+        .dw-stat-val{font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);}
+        .dw-stat-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+        .dw-filter{margin-bottom:var(--space-md);display:flex;gap:8px;align-items:center;}
+        .dw-filter select{padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.82rem;font-family:inherit;}
+        .dw-filter select:focus{outline:none;border-color:var(--brand-gold);}
+        .dw-filter-count{font-size:0.72rem;color:var(--text-muted);}
+        .dw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:var(--space-md);}
+        /* Card */
+        .dw-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;transition:all 0.2s;cursor:pointer;position:relative;}
+        .dw-card:hover{border-color:var(--border-hover);transform:translateY(-2px);}
+        .dw-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+        .dw-card-name-row{display:flex;align-items:center;gap:8px;}
+        .dw-momentum{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+        .dw-momentum.strong{background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,0.4);}
+        .dw-momentum.neutral{background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,0.3);}
+        .dw-momentum.stalling{background:#ef4444;box-shadow:0 0 6px rgba(239,68,68,0.4);}
+        .dw-card-name{font-weight:700;font-size:1rem;color:var(--text-primary);}
+        .dw-card-value{font-family:var(--font-serif);font-size:1.1rem;color:var(--accent-green);flex-shrink:0;}
+        .dw-card-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+        .dw-card-stage{font-size:0.68rem;padding:3px 8px;border-radius:var(--radius-full);font-weight:600;display:inline-block;}
+        .dw-card-stage.prospect{background:rgba(100,116,139,0.15);color:#94a3b8;}
+        .dw-card-stage.discovery{background:rgba(59,130,246,0.15);color:#3b82f6;}
+        .dw-card-stage.evaluation{background:rgba(168,85,247,0.15);color:#a855f7;}
+        .dw-card-stage.poc{background:rgba(245,158,11,0.15);color:#f59e0b;}
+        .dw-card-stage.negotiation{background:rgba(212,165,116,0.15);color:#d4a574;}
+        .dw-card-stage.verbal{background:rgba(6,182,212,0.15);color:#06b6d4;}
+        .dw-card-stage.closed-won{background:rgba(34,197,94,0.15);color:#22c55e;}
+        .dw-card-stage.closed-lost{background:rgba(239,68,68,0.15);color:#ef4444;}
+        .dw-card-days{font-size:0.65rem;color:var(--text-muted);}
+        .dw-card-days.warn{color:#f59e0b;}
+        .dw-card-days.crit{color:#ef4444;}
+        .dw-card-close{font-size:0.65rem;color:var(--text-muted);}
+        .dw-card-close.overdue{color:#ef4444;font-weight:600;}
+        .dw-card-forecast{font-size:0.6rem;padding:2px 6px;border-radius:var(--radius-full);font-weight:600;border:1px solid;}
+        .dw-card-forecast.commit{background:rgba(34,197,94,0.08);color:#22c55e;border-color:rgba(34,197,94,0.2);}
+        .dw-card-forecast.bestCase{background:rgba(59,130,246,0.08);color:#3b82f6;border-color:rgba(59,130,246,0.2);}
+        .dw-card-forecast.upside{background:rgba(168,85,247,0.08);color:#a855f7;border-color:rgba(168,85,247,0.2);}
+        .dw-card-forecast.pipeline{background:rgba(100,116,139,0.08);color:#94a3b8;border-color:rgba(100,116,139,0.2);}
+        .dw-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+        .dw-chip{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:600;}
+        .dw-chip.filled{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2);}
+        .dw-chip.empty{background:rgba(255,255,255,0.03);color:var(--text-muted);border:1px solid var(--border-default);cursor:pointer;}
+        .dw-chip.empty:hover{border-color:var(--border-hover);}
+        .dw-chip.thread{background:rgba(59,130,246,0.08);color:#3b82f6;border:1px solid rgba(59,130,246,0.2);}
+        .dw-chip.thread.warn{background:rgba(239,68,68,0.08);color:#ef4444;border-color:rgba(239,68,68,0.2);}
+        .dw-next{font-size:0.8rem;color:var(--text-tertiary);border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;margin-top:6px;}
+        .dw-next strong{color:var(--text-secondary);}
+        .dw-next-date{font-size:0.7rem;margin-left:6px;padding:1px 6px;border-radius:var(--radius-full);font-weight:600;}
+        .dw-next-date.future{background:rgba(34,197,94,0.08);color:#22c55e;}
+        .dw-next-date.overdue{background:rgba(239,68,68,0.1);color:#ef4444;}
+        .dw-linked{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+        .dw-link-badge{font-size:0.6rem;padding:2px 6px;border-radius:var(--radius-full);text-decoration:none;border:1px solid;}
+        .dw-link-badge.signal{background:rgba(59,130,246,0.08);color:#3b82f6;border-color:rgba(59,130,246,0.2);}
+        .dw-link-badge.autopsy{background:rgba(168,85,247,0.08);color:#a855f7;border-color:rgba(168,85,247,0.2);}
+        .dw-link-badge:hover{opacity:0.8;}
+        /* Intel expand */
+        .dw-intel{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
+        .dw-card.expanded .dw-intel{display:block;}
+        .dw-intel-section{margin-bottom:10px;}
+        .dw-intel-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:3px;}
+        .dw-intel-value{font-size:0.8rem;color:var(--text-secondary);line-height:1.4;}
+        .dw-intel-edit{font-size:0.7rem;color:var(--brand-gold);cursor:pointer;text-decoration:none;float:right;}
+        .dw-intel-edit:hover{text-decoration:underline;}
+        .dw-empty{text-align:center;padding:60px 24px;color:var(--text-muted);}
+        .dw-empty a{color:var(--brand-gold);}
+        /* Modal */
+        .dw-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;}
+        .dw-modal-overlay.active{display:flex;}
+        .dw-modal{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);padding:32px;max-width:540px;width:92%;max-height:88vh;overflow-y:auto;}
+        .dw-modal-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:20px;}
+        .dw-modal-field{margin-bottom:14px;}
+        .dw-modal-field label{display:block;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:5px;}
+        .dw-modal-field input,.dw-modal-field select,.dw-modal-field textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.88rem;font-family:inherit;}
+        .dw-modal-field input:focus,.dw-modal-field select:focus,.dw-modal-field textarea:focus{outline:none;border-color:var(--brand-gold);}
+        .dw-modal-field textarea{min-height:50px;resize:vertical;}
+        .dw-modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+        .dw-modal-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+        .dw-modal-actions{display:flex;justify-content:space-between;margin-top:24px;}
+        .dw-modal-btn{padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.85rem;}
+        .dw-modal-btn.primary{background:var(--brand-gold);color:var(--bg-primary);}
+        .dw-modal-btn.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border-default);}
+        .dw-modal-btn.danger{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);}
+        .dw-accordion summary{font-size:0.7rem;color:var(--text-muted);cursor:pointer;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 0;}
+        .dw-accordion[open] summary{color:var(--text-secondary);}
+        /* Stakeholder rows */
+        .dw-sh-row{display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;align-items:center;margin-bottom:8px;}
+        .dw-sh-row input,.dw-sh-row select{padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:6px;color:var(--text-primary);font-size:0.82rem;font-family:inherit;}
+        .dw-sh-row input:focus,.dw-sh-row select:focus{outline:none;border-color:var(--brand-gold);}
+        .dw-sh-engaged{display:flex;align-items:center;gap:4px;font-size:0.7rem;color:var(--text-muted);}
+        .dw-sh-engaged input{width:16px;height:16px;accent-color:var(--brand-gold);}
+        .dw-sh-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:4px;}
+        .dw-sh-remove:hover{color:#ef4444;}
+        .dw-sh-add{font-size:0.75rem;color:var(--brand-gold);cursor:pointer;background:none;border:1px dashed rgba(212,165,116,0.3);padding:8px 14px;border-radius:8px;font-weight:600;font-family:inherit;width:100%;margin-top:4px;}
+        .dw-sh-add:hover{background:rgba(212,165,116,0.05);}
+        /* Close-lost overlay */
+        .dw-loss-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1100;align-items:center;justify-content:center;}
+        .dw-loss-overlay.active{display:flex;}
+        .dw-loss-modal{background:var(--bg-secondary);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-xl);padding:32px;max-width:420px;width:90%;}
+        .dw-loss-title{font-family:var(--font-serif);font-size:1.2rem;color:var(--text-primary);margin-bottom:6px;}
+        .dw-loss-sub{font-size:0.82rem;color:var(--text-muted);margin-bottom:20px;}
+        .dw-loss-option{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border-default);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:all 0.15s;}
+        .dw-loss-option:hover{border-color:var(--border-hover);background:rgba(255,255,255,0.02);}
+        .dw-loss-option.selected{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.05);}
+        .dw-loss-option input[type=radio]{accent-color:#ef4444;width:16px;height:16px;}
+        .dw-loss-option span{font-size:0.88rem;color:var(--text-secondary);}
+        .dw-loss-notes{margin-top:12px;}
+        .dw-loss-notes textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;min-height:60px;resize:vertical;}
+        .dw-loss-notes textarea:focus{outline:none;border-color:var(--brand-gold);}
+        .dw-loss-actions{display:flex;justify-content:space-between;margin-top:20px;}
+        @media(max-width:700px){.dw-stats{grid-template-columns:repeat(2,1fr);}.dw-grid{grid-template-columns:1fr;}.dw-modal-row,.dw-modal-row3{grid-template-columns:1fr;}.dw-sh-row{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Deal Workspace</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary btn-sm" onclick="openModal()">+ New Deal</button>
+                </div>
+            </header>
+            <div class="app-content">
+                <div class="dw-stats" id="dealStats"></div>
+                <div class="dw-filter">
+                    <select id="viewFilter" onchange="render()">
+                        <option value="all">All Deals</option>
+                        <option value="active">Active Only</option>
+                        <option value="at-risk">At Risk</option>
+                        <option value="stalled">Stalled (7+ days quiet)</option>
+                        <option value="this-quarter">Close This Quarter</option>
+                        <option value="closed">Closed (Won + Lost)</option>
+                    </select>
+                    <span class="dw-filter-count" id="filterCount"></span>
+                </div>
+                <div class="dw-grid" id="dealGrid"></div>
+                <div id="dealEmpty"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div class="dw-modal-overlay" id="dealModal">
+        <div class="dw-modal">
+            <div class="dw-modal-title" id="modalTitle">New Deal</div>
+            <input type="hidden" id="editId">
+            <input type="hidden" id="editPrevStage">
+            <div class="dw-modal-field"><label>Account Name *</label><input type="text" id="mAccount" placeholder="e.g. Globex Corp"></div>
+            <div class="dw-modal-row">
+                <div class="dw-modal-field"><label>Deal Value ($)</label><input type="text" id="mValue" placeholder="50,000" oninput="fmtC(this)"></div>
+                <div class="dw-modal-field"><label>Stage</label>
+                    <select id="mStage">
+                        <option value="prospect">Prospect</option>
+                        <option value="discovery">Discovery</option>
+                        <option value="evaluation">Solution Fit</option>
+                        <option value="poc">PoC / Pilot</option>
+                        <option value="negotiation">Negotiation</option>
+                        <option value="verbal">Verbal Commit</option>
+                        <option value="closed-won">Closed Won</option>
+                        <option value="closed-lost">Closed Lost</option>
+                    </select>
+                </div>
+            </div>
+            <div class="dw-modal-row">
+                <div class="dw-modal-field"><label>Next Step</label><input type="text" id="mNext" placeholder="e.g. Demo with VP Ops"></div>
+                <div class="dw-modal-field"><label>Next Step Date</label><input type="date" id="mNextDate"></div>
+            </div>
+            <div class="dw-modal-row3">
+                <div class="dw-modal-field"><label>Close Date</label><input type="date" id="mClose"></div>
+                <div class="dw-modal-field"><label>Forecast</label>
+                    <select id="mForecast">
+                        <option value="pipeline">Pipeline</option>
+                        <option value="upside">Upside</option>
+                        <option value="bestCase">Best Case</option>
+                        <option value="commit">Commit</option>
+                    </select>
+                </div>
+                <div class="dw-modal-field"><label>Momentum</label>
+                    <select id="mMomentum">
+                        <option value="">Auto</option>
+                        <option value="strong">Strong</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="stalling">Stalling</option>
+                    </select>
+                </div>
+            </div>
+
+            <details class="dw-accordion" style="margin-top:8px;">
+                <summary>Intel fields</summary>
+                <div style="padding-top:12px;">
+                    <div class="dw-modal-row">
+                        <div class="dw-modal-field"><label>Champion</label><input type="text" id="mChamp" placeholder="Name + title"></div>
+                        <div class="dw-modal-field"><label>Economic Buyer</label><input type="text" id="mEB" placeholder="Name + title"></div>
+                    </div>
+                    <div class="dw-modal-field"><label>Use Case</label><input type="text" id="mUseCase" placeholder="Primary use case"></div>
+                    <div class="dw-modal-field"><label>Pain Points</label><textarea id="mPain" placeholder="Key pain points identified"></textarea></div>
+                    <div class="dw-modal-field"><label>Competition</label><input type="text" id="mComp" placeholder="Who else are they evaluating?"></div>
+                    <div class="dw-modal-field"><label>Decision Process</label><textarea id="mProcess" placeholder="Steps from here to approval + who owns each step"></textarea></div>
+                    <div class="dw-modal-field"><label>Notes</label><textarea id="mNotes" placeholder="Anything else..."></textarea></div>
+                </div>
+            </details>
+
+            <details class="dw-accordion">
+                <summary id="shSummary">Stakeholders (0/6 roles)</summary>
+                <div style="padding-top:8px;" id="shContainer"></div>
+                <button class="dw-sh-add" onclick="addStakeholder()">+ Add Stakeholder</button>
+            </details>
+
+            <div class="dw-modal-actions">
+                <button class="dw-modal-btn ghost" onclick="closeModal()">Cancel</button>
+                <div style="display:flex;gap:8px;">
+                    <button class="dw-modal-btn danger" id="deleteBtn" style="display:none;" onclick="deleteDeal()">Delete</button>
+                    <button class="dw-modal-btn primary" onclick="saveDeal()">Save Deal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLOSE-LOST REASON MODAL -->
+    <div class="dw-loss-overlay" id="lossModal">
+        <div class="dw-loss-modal">
+            <div class="dw-loss-title">Why did this deal close-lost?</div>
+            <div class="dw-loss-sub">This feeds into your Playbook's loss pattern analysis.</div>
+            <div id="lossOptions">
+                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                    <input type="radio" name="lossReason" value="competitor"><span>Lost to Competitor</span>
+                </label>
+                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                    <input type="radio" name="lossReason" value="no_decision"><span>No Decision / Status Quo</span>
+                </label>
+                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                    <input type="radio" name="lossReason" value="budget"><span>Budget Killed</span>
+                </label>
+                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                    <input type="radio" name="lossReason" value="champion_left"><span>Champion Left / Reorg</span>
+                </label>
+                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                    <input type="radio" name="lossReason" value="timing"><span>Timing / Not Now</span>
+                </label>
+            </div>
+            <div class="dw-loss-notes">
+                <textarea id="lossNotes" placeholder="What would you do differently? (optional)"></textarea>
+            </div>
+            <div class="dw-loss-actions">
+                <button class="dw-modal-btn ghost" onclick="skipLossReason()">Skip</button>
+                <button class="dw-modal-btn primary" onclick="saveLossReason()">Save &amp; Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    (function(){
+        function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+        function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));}
+        function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+        function fmtN(n){return'$'+Number(n||0).toLocaleString();}
+        window.fmtC=function(el){var v=el.value.replace(/[^0-9]/g,'');el.value=v?Number(v).toLocaleString():''};
+        function uid(){return'deal_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);}
+        function daysBetween(a,b){var x=new Date(a),y=b?new Date(b):new Date();if(isNaN(x)||isNaN(y))return 0;return Math.floor((y-x)/86400000);}
+        function fmtDate(d){if(!d)return'';try{return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return d;}}
+        function isOverdue(d){if(!d)return false;try{return new Date(d+'T23:59:59')<new Date();}catch(e){return false;}}
+        function isThisQuarter(d){if(!d)return false;var now=new Date(),qStart=new Date(now.getFullYear(),Math.floor(now.getMonth()/3)*3,1),qEnd=new Date(qStart);qEnd.setMonth(qEnd.getMonth()+3);var dt=new Date(d+'T00:00:00');return dt>=qStart&&dt<qEnd;}
+
+        var KEY='gtmos_deal_workspaces';
+        var STAGE_LABELS={prospect:'Prospect',discovery:'Discovery',evaluation:'Solution Fit',poc:'PoC / Pilot',negotiation:'Negotiation',verbal:'Verbal Commit','closed-won':'Closed Won','closed-lost':'Closed Lost'};
+        var STAGE_ORDER={prospect:0,discovery:1,evaluation:2,poc:3,negotiation:4,verbal:5,'closed-won':6,'closed-lost':7};
+        var STAGE_PROB={prospect:0,discovery:0.10,evaluation:0.25,poc:0.50,negotiation:0.75,verbal:0.90,'closed-won':1,'closed-lost':0};
+        var LOSS_LABELS={competitor:'Lost to Competitor',no_decision:'No Decision / Status Quo',budget:'Budget Killed',champion_left:'Champion Left / Reorg',timing:'Timing / Not Now'};
+        var ROLES=['champion','eb','technical','legal','exec_sponsor','end_user'];
+        var ROLE_LABELS={champion:'Champion',eb:'Economic Buyer',technical:'Technical Eval',legal:'Legal / Procurement',exec_sponsor:'Exec Sponsor',end_user:'End User'};
+
+        // --- Stage history ---
+        function getStageHistory(){return readLS('gtmos_deal_stage_history',{});}
+        function logStageChange(dealId,fromStage,toStage){
+            var hist=getStageHistory();
+            if(!hist[dealId])hist[dealId]=[];
+            hist[dealId].push({from:fromStage,to:toStage,at:new Date().toISOString()});
+            writeLS('gtmos_deal_stage_history',hist);
+        }
+        function daysInCurrentStage(deal){
+            var hist=getStageHistory();
+            var entries=hist[deal.id]||[];
+            var lastEntry=null;
+            for(var i=entries.length-1;i>=0;i--){if(entries[i].to===deal.stage){lastEntry=entries[i];break;}}
+            if(lastEntry)return daysBetween(lastEntry.at);
+            return daysBetween(deal.created_at||deal.updated_at);
+        }
+
+        // --- Momentum auto-compute ---
+        function computeMomentum(deal){
+            if(deal.momentum)return deal.momentum;
+            var stale=daysBetween(deal.updated_at||deal.created_at);
+            if(stale<=3)return'strong';
+            if(stale<=7)return'neutral';
+            return'stalling';
+        }
+
+        // --- Threading depth ---
+        function threadingDepth(deal){
+            var sh=deal.stakeholders||[];
+            var engaged=sh.filter(function(s){return s.engaged;}).length;
+            var roles=new Set();sh.forEach(function(s){if(s.role)roles.add(s.role);});
+            // Also count champion/EB from intel fields
+            if(deal.champion&&!roles.has('champion')){roles.add('champion');engaged++;}
+            if(deal.economicBuyer&&!roles.has('eb')){roles.add('eb');engaged++;}
+            return{engaged:engaged,total:6,roles:roles.size};
+        }
+
+        // --- Load/save ---
+        function loadDeals(){
+            var raw=readLS(KEY,[]);
+            if(!Array.isArray(raw)){raw=Object.keys(raw||{}).map(function(id){var d=raw[id];if(!d.id)d.id=id;return d;});}
+            return raw.filter(Boolean);
+        }
+        function saveDeals(deals){writeLS(KEY,deals);}
+
+        // --- Filter ---
+        function filterDeals(deals){
+            var f=document.getElementById('viewFilter').value;
+            var now=new Date();
+            return deals.filter(function(d){
+                var isClosed=d.stage==='closed-won'||d.stage==='closed-lost';
+                if(f==='active')return !isClosed;
+                if(f==='closed')return isClosed;
+                if(f==='at-risk'){
+                    if(isClosed)return false;
+                    var stale=daysBetween(d.updated_at||d.created_at)>=7;
+                    var noNext=!d.nextStepDate;
+                    var overdueClose=d.closeDate&&isOverdue(d.closeDate);
+                    return stale||noNext||overdueClose;
+                }
+                if(f==='stalled'){
+                    if(isClosed)return false;
+                    return daysBetween(d.updated_at||d.created_at)>=7;
+                }
+                if(f==='this-quarter'){
+                    return !isClosed&&isThisQuarter(d.closeDate);
+                }
+                return true;
+            });
+        }
+
+        // --- Render ---
+        function render(){
+            var allDeals=loadDeals();
+            var active=allDeals.filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost';});
+            var won=allDeals.filter(function(d){return d.stage==='closed-won';});
+            var lost=allDeals.filter(function(d){return d.stage==='closed-lost';});
+            var pipeline=active.reduce(function(s,d){return s+Number(d.value||0);},0);
+            var weighted=active.reduce(function(s,d){return s+Number(d.value||0)*(STAGE_PROB[d.stage]||0);},0);
+
+            document.getElementById('dealStats').innerHTML=
+                '<div class="dw-stat"><div class="dw-stat-val">'+active.length+'</div><div class="dw-stat-label">Active</div></div>'+
+                '<div class="dw-stat"><div class="dw-stat-val">'+fmtN(pipeline)+'</div><div class="dw-stat-label">Pipeline</div></div>'+
+                '<div class="dw-stat"><div class="dw-stat-val">'+fmtN(weighted)+'</div><div class="dw-stat-label">Weighted</div></div>'+
+                '<div class="dw-stat"><div class="dw-stat-val" style="color:'+(won.length>0?'#22c55e':'var(--text-primary)')+'">'+won.length+'<span style="color:var(--text-muted);font-size:0.7rem;"> / </span><span style="color:#ef4444;font-size:1rem;">'+lost.length+'</span></div><div class="dw-stat-label">Won / Lost</div></div>';
+
+            var deals=filterDeals(allDeals);
+            document.getElementById('filterCount').textContent=deals.length+' of '+allDeals.length+' deals';
+
+            if(allDeals.length===0){
+                document.getElementById('dealGrid').innerHTML='';
+                document.getElementById('dealEmpty').innerHTML='<div class="dw-empty"><div style="font-size:2rem;margin-bottom:12px;">&#128188;</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No deals yet</div><div>Click <strong>+ New Deal</strong> to add your first deal, or <a href="/app/signal-console/">find a signal</a> to start from.</div></div>';
+                return;
+            }
+            document.getElementById('dealEmpty').innerHTML='';
+
+            deals.sort(function(a,b){return(STAGE_ORDER[a.stage]||0)-(STAGE_ORDER[b.stage]||0);});
+
+            document.getElementById('dealGrid').innerHTML=deals.map(function(d){
+                var isClosed=d.stage==='closed-won'||d.stage==='closed-lost';
+                var mom=isClosed?'':computeMomentum(d);
+                var dis=isClosed?0:daysInCurrentStage(d);
+                var disClass=dis>35?'crit':dis>21?'warn':'';
+                var td=threadingDepth(d);
+
+                // Chips: intel fields + threading
+                var chips=[];
+                if(d.champion)chips.push({label:'Champ',cls:'filled'});else chips.push({label:'+ Champ',cls:'empty'});
+                if(d.economicBuyer)chips.push({label:'EB',cls:'filled'});else chips.push({label:'+ EB',cls:'empty'});
+                if(d.useCase)chips.push({label:'Use Case',cls:'filled'});else chips.push({label:'+ Use Case',cls:'empty'});
+                if(d.pain)chips.push({label:'Pain',cls:'filled'});else chips.push({label:'+ Pain',cls:'empty'});
+                if(d.decisionProcess)chips.push({label:'Process',cls:'filled'});else if(!isClosed&&(STAGE_ORDER[d.stage]||0)>=3)chips.push({label:'+ Process',cls:'empty'});
+                // Threading depth chip
+                var threadCls=td.engaged>=3?'thread':'thread warn';
+                if(d.stakeholders&&d.stakeholders.length>0||d.champion||d.economicBuyer){
+                    chips.push({label:td.engaged+'/6',cls:threadCls});
+                }
+
+                var chipsHtml=chips.map(function(c){
+                    return '<span class="dw-chip '+c.cls+'" onclick="event.stopPropagation();openModal(\''+d.id+'\')">'+escH(c.label)+'</span>';
+                }).join('');
+
+                // Next step with date
+                var nextHtml='';
+                if(d.nextStep){
+                    nextHtml='<div class="dw-next"><strong>Next:</strong> '+escH(d.nextStep);
+                    if(d.nextStepDate){
+                        var od=isOverdue(d.nextStepDate);
+                        nextHtml+=' <span class="dw-next-date '+(od?'overdue':'future')+'">'+fmtDate(d.nextStepDate)+(od?' \u2022 overdue':'')+'</span>';
+                    }
+                    nextHtml+='</div>';
+                }
+
+                // Linked badges
+                var badges='';
+                var scData=readLS('gtmos_sc_v4',{accounts:[]});
+                var matched=(scData.accounts||[]).find(function(a){return a.name&&d.accountName&&a.name.toLowerCase()===d.accountName.toLowerCase();});
+                if(matched)badges+='<a href="/app/signal-console/" class="dw-link-badge signal" onclick="event.stopPropagation()">Signal: heat '+(matched._heat||0)+'</a>';
+                badges+='<a href="/app/future-autopsy/?deal='+encodeURIComponent(d.id)+'" class="dw-link-badge autopsy" onclick="event.stopPropagation()">\ud83d\udd2c Autopsy</a>';
+
+                // Intel expand section
+                var intelHtml='<div class="dw-intel">';
+                if(d.champion)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Champion</div><div class="dw-intel-value">'+escH(d.champion)+'</div></div>';
+                if(d.economicBuyer)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Economic Buyer</div><div class="dw-intel-value">'+escH(d.economicBuyer)+'</div></div>';
+                if(d.useCase)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Use Case</div><div class="dw-intel-value">'+escH(d.useCase)+'</div></div>';
+                if(d.pain)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Pain Points</div><div class="dw-intel-value">'+escH(d.pain)+'</div></div>';
+                if(d.competition)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Competition</div><div class="dw-intel-value">'+escH(d.competition)+'</div></div>';
+                if(d.decisionProcess)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Decision Process</div><div class="dw-intel-value">'+escH(d.decisionProcess)+'</div></div>';
+                if(d.notes)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Notes</div><div class="dw-intel-value">'+escH(d.notes)+'</div></div>';
+                if(d.stakeholders&&d.stakeholders.length>0){
+                    intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Stakeholders</div>';
+                    d.stakeholders.forEach(function(s){
+                        intelHtml+='<div style="font-size:0.78rem;color:var(--text-secondary);padding:3px 0;">'+(s.engaged?'\u2713':'\u25cb')+' '+escH(s.name||'')+' <span style="color:var(--text-muted);">'+escH(ROLE_LABELS[s.role]||s.role||'')+(s.title?' \u2022 '+escH(s.title):'')+'</span></div>';
+                    });
+                    intelHtml+='</div>';
+                }
+                if(d.lossReason)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Loss Reason</div><div class="dw-intel-value" style="color:#ef4444;">'+escH(LOSS_LABELS[d.lossReason]||d.lossReason)+'</div></div>';
+                if(d.lossNotes)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Loss Notes</div><div class="dw-intel-value">'+escH(d.lossNotes)+'</div></div>';
+                intelHtml+='<a class="dw-intel-edit" onclick="event.stopPropagation();openModal(\''+d.id+'\')">Edit deal &rarr;</a></div>';
+
+                // Card meta row: stage + risk indicator (simplified for card face)
+                var metaHtml='<div class="dw-card-meta">';
+                metaHtml+='<span class="dw-card-stage '+(d.stage||'prospect')+'">'+escH(STAGE_LABELS[d.stage]||d.stage||'Prospect')+'</span>';
+                if(!isClosed&&dis>21)metaHtml+='<span class="dw-card-days '+disClass+'">'+dis+'d in stage</span>';
+                metaHtml+='</div>';
+
+                // Detail row — visible only when card is expanded (moved from card face)
+                var detailHtml='<div class="dw-card-detail" style="display:none;">';
+                if(!isClosed&&dis>0&&dis<=21)detailHtml+='<div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:6px;">'+dis+' days in current stage</div>';
+                if(d.closeDate){
+                    var cod=isOverdue(d.closeDate)&&!isClosed;
+                    detailHtml+='<div style="font-size:0.72rem;color:'+(cod?'#ef4444':'var(--text-muted)')+';margin-bottom:6px;">Close: '+fmtDate(d.closeDate)+(cod?' \u2022 past due':'')+'</div>';
+                }
+                if(!isClosed&&d.forecastCategory&&d.forecastCategory!=='pipeline'){
+                    detailHtml+='<div style="font-size:0.72rem;margin-bottom:6px;"><span class="dw-card-forecast '+d.forecastCategory+'">'+escH(d.forecastCategory==='bestCase'?'Best Case':d.forecastCategory.charAt(0).toUpperCase()+d.forecastCategory.slice(1))+'</span></div>';
+                }
+                detailHtml+='<div class="dw-chips">'+chipsHtml+'</div>';
+                detailHtml+='<div class="dw-linked">'+badges+'</div>';
+                detailHtml+='</div>';
+
+                return '<div class="dw-card'+(isClosed?' closed':'')+'" data-id="'+d.id+'" onclick="toggleCard(this)">'+
+                    '<div class="dw-card-head"><div class="dw-card-name-row">'+(mom?'<span class="dw-momentum '+mom+'"></span>':'')+
+                    '<div class="dw-card-name">'+escH(d.accountName||'Unnamed')+'</div></div>'+
+                    '<div class="dw-card-value">'+fmtN(d.value||0)+'</div></div>'+
+                    metaHtml+
+                    nextHtml+
+                    detailHtml+
+                    intelHtml+
+                '</div>';
+            }).join('');
+        }
+
+        window.toggleCard=function(el){el.classList.toggle('expanded');var det=el.querySelector('.dw-card-detail');if(det)det.style.display=det.style.display==='none'?'block':'none';};
+
+        // --- Stakeholder UI in modal ---
+        var tempStakeholders=[];
+
+        function renderStakeholders(){
+            var c=document.getElementById('shContainer');
+            var engaged=tempStakeholders.filter(function(s){return s.engaged;}).length;
+            document.getElementById('shSummary').textContent='Stakeholders ('+engaged+'/6 roles)';
+            c.innerHTML=tempStakeholders.map(function(s,i){
+                return '<div class="dw-sh-row">'+
+                    '<input type="text" value="'+escH(s.name||'')+'" placeholder="Name" onchange="updateSH('+i+',\'name\',this.value)">'+
+                    '<select onchange="updateSH('+i+',\'role\',this.value)">'+
+                        ROLES.map(function(r){return '<option value="'+r+'"'+(s.role===r?' selected':'')+'>'+ROLE_LABELS[r]+'</option>';}).join('')+
+                    '</select>'+
+                    '<label class="dw-sh-engaged"><input type="checkbox" '+(s.engaged?'checked':'')+' onchange="updateSH('+i+',\'engaged\',this.checked)"> Engaged</label>'+
+                    '<button class="dw-sh-remove" onclick="removeSH('+i+')">&times;</button>'+
+                '</div>';
+            }).join('');
+        }
+
+        window.addStakeholder=function(){
+            var usedRoles=new Set(tempStakeholders.map(function(s){return s.role;}));
+            var nextRole=ROLES.find(function(r){return !usedRoles.has(r);})||'champion';
+            tempStakeholders.push({name:'',title:'',role:nextRole,engaged:false});
+            renderStakeholders();
+        };
+        window.updateSH=function(i,field,val){if(tempStakeholders[i])tempStakeholders[i][field]=val;renderStakeholders();};
+        window.removeSH=function(i){tempStakeholders.splice(i,1);renderStakeholders();};
+
+        // --- Open modal ---
+        window.openModal=function(dealId){
+            document.getElementById('dealModal').classList.add('active');
+            var d=dealId?loadDeals().find(function(x){return x.id===dealId;}):null;
+            document.getElementById('modalTitle').textContent=d?'Edit Deal':'New Deal';
+            document.getElementById('editId').value=d?d.id:'';
+            document.getElementById('editPrevStage').value=d?d.stage||'prospect':'';
+            document.getElementById('mAccount').value=d?d.accountName||'':'';
+            document.getElementById('mValue').value=d?Number(d.value||0).toLocaleString():'';
+            document.getElementById('mStage').value=d?d.stage||'prospect':'prospect';
+            document.getElementById('mNext').value=d?d.nextStep||'':'';
+            document.getElementById('mNextDate').value=d?d.nextStepDate||'':'';
+            document.getElementById('mClose').value=d?d.closeDate||'':'';
+            document.getElementById('mForecast').value=d?d.forecastCategory||'pipeline':'pipeline';
+            document.getElementById('mMomentum').value=d?d.momentum||'':'';
+            document.getElementById('mChamp').value=d?d.champion||'':'';
+            document.getElementById('mEB').value=d?d.economicBuyer||'':'';
+            document.getElementById('mUseCase').value=d?d.useCase||'':'';
+            document.getElementById('mPain').value=d?d.pain||'':'';
+            document.getElementById('mComp').value=d?d.competition||'':'';
+            document.getElementById('mProcess').value=d?d.decisionProcess||'':'';
+            document.getElementById('mNotes').value=d?d.notes||'':'';
+            document.getElementById('deleteBtn').style.display=d?'inline-block':'none';
+            tempStakeholders=d&&d.stakeholders?JSON.parse(JSON.stringify(d.stakeholders)):[];
+            renderStakeholders();
+        };
+
+        window.closeModal=function(){document.getElementById('dealModal').classList.remove('active');};
+        document.getElementById('dealModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+        // --- Pending loss reason state ---
+        var pendingLossDealId=null;
+
+        window.saveDeal=function(){
+            var account=document.getElementById('mAccount').value.trim();
+            if(!account){alert('Account name is required.');return;}
+            var deals=loadDeals();
+            var editId=document.getElementById('editId').value;
+            var prevStage=document.getElementById('editPrevStage').value;
+            var deal=editId?deals.find(function(d){return d.id===editId;}):null;
+            var isNew=!deal;
+            if(isNew){deal={id:uid(),created_at:new Date().toISOString()};deals.push(deal);}
+
+            deal.accountName=account;
+            deal.value=Number((document.getElementById('mValue').value||'0').replace(/[^0-9]/g,''));
+            var newStage=document.getElementById('mStage').value;
+            deal.nextStep=document.getElementById('mNext').value.trim();
+            deal.nextStepDate=document.getElementById('mNextDate').value;
+            deal.closeDate=document.getElementById('mClose').value;
+            deal.forecastCategory=document.getElementById('mForecast').value;
+            deal.momentum=document.getElementById('mMomentum').value;
+            deal.champion=document.getElementById('mChamp').value.trim();
+            deal.economicBuyer=document.getElementById('mEB').value.trim();
+            deal.useCase=document.getElementById('mUseCase').value.trim();
+            deal.pain=document.getElementById('mPain').value.trim();
+            deal.competition=document.getElementById('mComp').value.trim();
+            deal.decisionProcess=document.getElementById('mProcess').value.trim();
+            deal.notes=document.getElementById('mNotes').value.trim();
+            deal.stakeholders=tempStakeholders.filter(function(s){return s.name||s.role;});
+            deal.updated_at=new Date().toISOString();
+
+            // Stage change tracking
+            if(prevStage&&prevStage!==newStage){
+                logStageChange(deal.id,prevStage,newStage);
+            } else if(isNew&&newStage!=='prospect'){
+                logStageChange(deal.id,'',newStage);
+            }
+            deal.stage=newStage;
+
+            saveDeals(deals);
+            closeModal();
+
+            // If closed-lost and no loss reason yet, show loss modal
+            if(newStage==='closed-lost'&&prevStage!=='closed-lost'&&!deal.lossReason){
+                pendingLossDealId=deal.id;
+                document.getElementById('lossModal').classList.add('active');
+                document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected');});
+                document.querySelectorAll('input[name="lossReason"]').forEach(function(r){r.checked=false;});
+                document.getElementById('lossNotes').value='';
+            }
+
+            render();
+        };
+
+        window.saveLossReason=function(){
+            var selected=document.querySelector('input[name="lossReason"]:checked');
+            if(!selected){alert('Please select a reason.');return;}
+            var deals=loadDeals();
+            var deal=deals.find(function(d){return d.id===pendingLossDealId;});
+            if(deal){
+                deal.lossReason=selected.value;
+                deal.lossNotes=document.getElementById('lossNotes').value.trim();
+                saveDeals(deals);
+            }
+            document.getElementById('lossModal').classList.remove('active');
+            pendingLossDealId=null;
+            render();
+        };
+
+        window.skipLossReason=function(){
+            document.getElementById('lossModal').classList.remove('active');
+            pendingLossDealId=null;
+        };
+
+        window.deleteDeal=function(){
+            if(!confirm('Delete this deal?'))return;
+            var editId=document.getElementById('editId').value;
+            var deals=loadDeals().filter(function(d){return d.id!==editId;});
+            saveDeals(deals);
+            closeModal();
+            render();
+        };
+
+        // URL param: pre-open a deal
+        var urlDeal=new URLSearchParams(window.location.search).get('deal');
+        render();
+        if(urlDeal){openModal(urlDeal);}
+    })();
+    </script>
+</body>
+</html>

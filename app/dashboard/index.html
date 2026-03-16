@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .np-ribbon{display:flex;gap:0;border-bottom:1px solid rgba(212,165,116,0.2);margin-bottom:var(--space-xl);padding-bottom:var(--space-md);}
+        .np-ribbon-item{flex:1;text-align:center;padding:0 12px;border-right:1px solid rgba(255,255,255,0.06);}
+        .np-ribbon-item:last-child{border-right:none;}
+        .np-ribbon-val{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-primary);line-height:1.2;}
+        .np-ribbon-val.green{color:#22c55e;}
+        .np-ribbon-val.amber{color:#f59e0b;}
+        .np-ribbon-val.red{color:#ef4444;}
+        .np-ribbon-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-muted);font-weight:600;margin-top:2px;}
+        .np-briefing{background:linear-gradient(135deg,rgba(212,165,116,0.07),rgba(212,165,116,0.02));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-lg);padding:28px 32px;margin-bottom:var(--space-xl);position:relative;}
+        .np-headline{font-family:var(--font-serif);font-size:1.15rem;color:var(--text-primary);line-height:1.5;margin-bottom:16px;}
+        .np-week-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:6px;}
+        .np-week-summary{font-size:0.88rem;color:var(--text-tertiary);line-height:1.6;}
+        .np-copy-btn{position:absolute;top:16px;right:16px;padding:6px 12px;border-radius:var(--radius-full);font-size:0.7rem;font-weight:700;border:1px solid rgba(212,165,116,0.25);background:rgba(212,165,116,0.08);color:var(--brand-gold);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+        .np-copy-btn:hover{background:rgba(212,165,116,0.15);}
+        .np-columns{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-lg);margin-bottom:var(--space-xl);}
+        .np-col-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-muted);font-weight:700;margin-bottom:var(--space-md);display:flex;align-items:center;gap:8px;}
+        .np-col-title .dot{width:8px;height:8px;border-radius:50%;}
+        .np-col-title .dot.red{background:#ef4444;}
+        .np-col-title .dot.gold{background:var(--brand-gold);}
+        .np-risk-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px;margin-bottom:var(--space-sm);border-left:3px solid rgba(239,68,68,0.4);transition:border-color 0.2s;}
+        .np-risk-card:hover{border-color:rgba(239,68,68,0.6);}
+        .np-risk-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+        .np-risk-name{font-weight:700;font-size:0.92rem;color:var(--text-primary);}
+        .np-risk-meta{font-size:0.72rem;color:var(--text-muted);}
+        .np-risk-score{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;background:rgba(239,68,68,0.12);color:#ef4444;}
+        .np-risk-narrative{font-size:0.82rem;color:var(--text-tertiary);line-height:1.5;margin-bottom:10px;}
+        .np-risk-links{display:flex;gap:8px;}
+        .np-risk-link{font-size:0.68rem;color:var(--brand-gold);text-decoration:none;font-weight:600;}
+        .np-risk-link:hover{text-decoration:underline;}
+        .np-move{padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+        .np-move:last-child{border-bottom:none;}
+        .np-move-num{font-family:var(--font-serif);font-size:1rem;color:var(--brand-gold);float:left;margin-right:10px;line-height:1.3;}
+        .np-move-action{font-size:0.88rem;color:var(--text-secondary);line-height:1.5;}
+        .np-move-reason{font-size:0.75rem;color:var(--text-muted);margin-top:3px;font-style:italic;}
+        .np-move-link{font-size:0.68rem;color:var(--brand-gold);text-decoration:none;font-weight:600;margin-top:4px;display:inline-block;}
+        .np-move-link:hover{text-decoration:underline;}
+        .np-tools{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+        .np-tools-left,.np-tools-right{display:flex;gap:8px;flex-wrap:wrap;}
+        .np-tool-btn{padding:10px 18px;border-radius:var(--radius-md);font-size:0.82rem;font-weight:700;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;text-decoration:none;display:inline-block;}
+        .np-tool-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+        .np-tool-btn.primary{border-color:rgba(212,165,116,0.3);color:var(--brand-gold);background:rgba(212,165,116,0.06);}
+        .np-tool-btn.primary:hover{background:rgba(212,165,116,0.12);}
+        .np-tool-btn.danger{color:#ef4444;border-color:rgba(239,68,68,0.2);}
+        .np-tool-btn.danger:hover{background:rgba(239,68,68,0.06);}
+        .np-empty{text-align:center;padding:80px 24px;}
+        .np-empty-icon{font-size:2.5rem;margin-bottom:16px;}
+        .np-empty-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:8px;}
+        .np-empty-sub{font-size:0.9rem;color:var(--text-muted);line-height:1.5;max-width:420px;margin:0 auto 24px;}
+        .np-empty-link{color:var(--brand-gold);text-decoration:none;font-weight:700;font-size:0.9rem;padding:10px 20px;border:1px solid rgba(212,165,116,0.3);border-radius:var(--radius-md);display:inline-block;margin:0 6px;transition:all 0.2s;}
+        .np-empty-link:hover{background:rgba(212,165,116,0.08);}
+        .np-no-items{font-size:0.85rem;color:var(--text-muted);padding:20px 0;font-style:italic;}
+        @media(max-width:800px){.np-columns{grid-template-columns:1fr;}.np-ribbon{flex-wrap:wrap;gap:8px;}.np-ribbon-item{flex:none;width:calc(50% - 4px);border-right:none;}.np-tools{flex-direction:column;align-items:stretch;}.np-tools-left,.np-tools-right{justify-content:center;}}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Dashboard</h1>
+            </header>
+            <div class="app-content" style="max-width:860px;">
+                <div id="dashContent"></div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/deal-health.js"></script>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    (function(){
+        var dh = window.dealHealth;
+        if (!dh) { document.getElementById('dashContent').innerHTML = '<p style="color:var(--text-muted);">deal-health.js not loaded.</p>'; return; }
+
+        function escH(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+        function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+
+        function render() {
+            var vitals = dh.loadAllVitals();
+            var quota = dh.loadQuota();
+            var seed = dh.loadSeed();
+            var active = vitals.filter(function(v) { return !v.isClosed; });
+
+            if (vitals.length === 0) {
+                document.getElementById('dashContent').innerHTML =
+                    '<div class="np-empty">' +
+                    '<div class="np-empty-icon">&#128220;</div>' +
+                    '<div class="np-empty-title">No deals yet. The briefing writes itself once you start selling.</div>' +
+                    '<div class="np-empty-sub">Create your first deal or find a signal to start from. The Dashboard will generate your Monday pipeline review automatically.</div>' +
+                    '<a href="/app/deal-workspace/" class="np-empty-link">Create first deal &rarr;</a>' +
+                    '<a href="/app/signal-console/" class="np-empty-link">Find a signal &rarr;</a>' +
+                    '</div>';
+                return;
+            }
+
+            var briefing = dh.generateBriefing(vitals, quota, seed);
+            var cov = briefing.coverage;
+            var target = Number(seed.coverage_target) || dh.DEFAULTS.coverageTarget;
+            var covColor = !quota ? '' : cov.ratio >= target ? 'green' : cov.ratio >= target * 0.6 ? 'amber' : 'red';
+
+            var html = '';
+
+            // STAT RIBBON
+            html += '<div class="np-ribbon">';
+            html += '<div class="np-ribbon-item"><div class="np-ribbon-val ' + covColor + '">' + (quota ? cov.ratio + '&times;' : '\u2014') + '</div><div class="np-ribbon-label">Coverage</div></div>';
+            html += '<div class="np-ribbon-item"><div class="np-ribbon-val">' + dh.money(cov.weighted) + '</div><div class="np-ribbon-label">Weighted</div></div>';
+            html += '<div class="np-ribbon-item"><div class="np-ribbon-val">' + active.length + '</div><div class="np-ribbon-label">Active</div></div>';
+            html += '<div class="np-ribbon-item"><div class="np-ribbon-val' + (briefing.atRisk.length > 0 ? ' red' : '') + '">' + briefing.atRisk.length + '</div><div class="np-ribbon-label">At Risk</div></div>';
+            html += '</div>';
+
+            // THE BRIEFING
+            html += '<div class="np-briefing">';
+            html += '<button class="np-copy-btn" onclick="copyMonday()">&#128203; Copy Monday Review</button>';
+            html += '<div class="np-headline">' + escH(briefing.headline) + '</div>';
+            html += '<div class="np-week-label">Week of ' + escH(briefing.weekLabel) + '</div>';
+            html += '<div class="np-week-summary">' + escH(briefing.weekSummary) + '</div>';
+            html += '</div>';
+
+            // TWO COLUMNS
+            html += '<div class="np-columns">';
+
+            // LEFT: AT RISK
+            html += '<div>';
+            html += '<div class="np-col-title"><span class="dot red"></span> What\u2019s At Risk</div>';
+            if (briefing.atRisk.length === 0) {
+                html += '<div class="np-no-items">No deals at risk. Keep executing.</div>';
+            } else {
+                briefing.atRisk.slice(0, 3).forEach(function(v) {
+                    var narrative = dh.dealNarrative(v);
+                    var stageLabel = dh.STAGE_LABELS[v.stage] || v.stage;
+                    html += '<div class="np-risk-card">';
+                    html += '<div class="np-risk-head"><div><div class="np-risk-name">' + escH(v.name) + '</div>';
+                    html += '<div class="np-risk-meta">' + dh.money(v.value) + ' &middot; ' + escH(stageLabel) + ' &middot; ' + v.staleDays + 'd since touch</div>';
+                    html += '</div><span class="np-risk-score">Risk ' + v.riskScore + '</span></div>';
+                    html += '<div class="np-risk-narrative">' + escH(narrative) + '</div>';
+                    html += '<div class="np-risk-links">';
+                    html += '<a href="/app/deal-workspace/?deal=' + encodeURIComponent(v.id) + '" class="np-risk-link">&rarr; Open Deal</a>';
+                    html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(v.id) + '" class="np-risk-link">&rarr; Run Autopsy</a>';
+                    html += '</div></div>';
+                });
+            }
+            html += '</div>';
+
+            // RIGHT: YOUR MOVES
+            html += '<div>';
+            html += '<div class="np-col-title"><span class="dot gold"></span> Your Moves</div>';
+            if (briefing.topMoves.length === 0) {
+                html += '<div class="np-no-items">No urgent moves. Pipeline is clean.</div>';
+            } else {
+                briefing.topMoves.forEach(function(m, i) {
+                    html += '<div class="np-move">';
+                    html += '<div class="np-move-num">' + (i + 1) + '.</div>';
+                    html += '<div style="overflow:hidden;"><div class="np-move-action">' + escH(m.action) + '</div>';
+                    html += '<div class="np-move-reason">' + escH(m.reason) + '</div>';
+                    if (m.dealId) {
+                        html += '<a href="/app/deal-workspace/?deal=' + encodeURIComponent(m.dealId) + '" class="np-move-link">&rarr; ' + escH(m.dealName || 'Open Deal') + '</a>';
+                    } else if (m.causeId === 'coverage_gap') {
+                        html += '<a href="/app/signal-console/" class="np-move-link">&rarr; Signal Console</a> ';
+                        html += '<a href="/app/deal-workspace/" class="np-move-link">&rarr; New Deal</a>';
+                    }
+                    html += '</div></div>';
+                });
+            }
+
+            // E5: Outbound recommendation — hot accounts without deals
+            var scData=readLS('gtmos_sc_v4',{accounts:[]});
+            var allDealsLS=readLS('gtmos_deal_workspaces',[]);
+            if(!Array.isArray(allDealsLS))allDealsLS=[];
+            var dealNames=allDealsLS.map(function(d){return(d.accountName||d.account_name||'').toLowerCase()});
+            var hotUnworked=(scData.accounts||[]).filter(function(a){
+                return(a._heat||0)>=75&&dealNames.indexOf((a.name||'').toLowerCase())===-1;
+            });
+            if(hotUnworked.length>0&&quota&&cov.ratio<target){
+                var topHot=hotUnworked.sort(function(a,b){return(b._heat||0)-(a._heat||0)})[0];
+                html+='<div class="np-move" style="border-left:2px solid rgba(168,85,247,0.4);padding-left:12px;margin-top:8px;"><div class="np-move-num" style="color:#a855f7;">\u2605</div><div style="overflow:hidden;"><div class="np-move-action">Start outbound on '+escH(topHot.name)+'</div><div class="np-move-reason">'+hotUnworked.length+' hot account'+(hotUnworked.length>1?'s':'')+' without deals. Coverage below target.</div><a href="/app/outbound-studio/" class="np-move-link">\u2192 Outbound Studio</a> <a href="/app/cold-call-studio/" class="np-move-link">\u2192 Cold Call</a></div></div>';
+            }
+
+            // E6: Advisor deployment recommendation
+            var advReg=readLS('gtmos_advisor_registry',{advisors:[]});
+            var advDep=readLS('gtmos_advisor_deployments',{deployments:[]});
+            if((advReg.advisors||[]).length>0&&briefing.atRisk.length>0){
+                var advs2=advReg.advisors||[];var deps2=advDep.deployments||[];
+                for(var ri=0;ri<Math.min(briefing.atRisk.length,3);ri++){
+                    var rd=briefing.atRisk[ri];var rn=(rd.name||'').toLowerCase();
+                    var matched=advs2.filter(function(a){return(a.companies||[]).some(function(c){return c.toLowerCase()===rn})});
+                    var avail=matched.filter(function(a){var cd={t1:90,t2:30,t3:14,t4:30}[a.tier]||30;var ld=deps2.filter(function(d){return d.advisorId===a.id}).sort(function(x,y){return new Date(y.createdAt)-new Date(x.createdAt)})[0];if(!ld)return true;return Math.floor((Date.now()-new Date(ld.createdAt).getTime())/86400000)>=cd});
+                    if(avail.length>0){
+                        html+='<div class="np-move" style="border-left:2px solid rgba(212,165,116,0.4);padding-left:12px;margin-top:8px;"><div class="np-move-num" style="color:var(--brand-gold);">\ud83e\udd1d</div><div style="overflow:hidden;"><div class="np-move-action">Deploy '+escH(avail[0].name)+' on '+escH(rd.name)+'</div><div class="np-move-reason">'+rd.staleDays+'d dark, risk '+rd.riskScore+'. Advisor available.</div><a href="/app/advisor-deploy/" class="np-move-link">\u2192 Advisor Deploy</a></div></div>';
+                        break;
+                    }
+                }
+            }
+
+            html += '</div>';
+            html += '</div>';
+
+            // TOOLS BAR
+            var riskiest = briefing.atRisk.length > 0 ? briefing.atRisk[0] : null;
+            html += '<div class="np-tools">';
+            html += '<div class="np-tools-left">';
+            if (riskiest) {
+                html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(riskiest.id) + '" class="np-tool-btn primary">&#128300; Autopsy Riskiest Deal</a>';
+            }
+            html += '<button class="np-tool-btn primary" onclick="copyMonday()">&#128203; Copy Monday Review</button>';
+            html += '</div>';
+            html += '<div class="np-tools-right">';
+            html += '<a href="/app/settings/" class="np-tool-btn" style="font-size:0.75rem;">&#9881; Settings</a>';
+            html += '</div>';
+            html += '</div>';
+
+            document.getElementById('dashContent').innerHTML = html;
+        }
+
+        window.copyMonday = function() {
+            var vitals = dh.loadAllVitals();
+            var quota = dh.loadQuota();
+            var seed = dh.loadSeed();
+            var briefing = dh.generateBriefing(vitals, quota, seed);
+            var txt = briefing.mondayReview;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(txt).then(function() { alert('Monday Review copied!'); });
+            } else {
+                var ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+                document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Monday Review copied!');
+            }
+        };
+
+        window.runDataAction = function(action) {
+            if (typeof window.dataManager !== 'undefined' && window.dataManager[action]) {
+                window.dataManager[action]();
+                if (action === 'delete') setTimeout(render, 500);
+                return;
+            }
+            if (action === 'export') {
+                var allKeys = [];
+                for (var i = 0; i < localStorage.length; i++) {
+                    var k = localStorage.key(i);
+                    if (k && k.indexOf('gtmos_') === 0) {
+                        try { allKeys.push({ key: k, value: JSON.parse(localStorage.getItem(k)) }); }
+                        catch(e) { allKeys.push({ key: k, value: localStorage.getItem(k) }); }
+                    }
+                }
+                var blob = new Blob([JSON.stringify(allKeys, null, 2)], { type: 'application/json' });
+                var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+                a.download = 'gtmos-backup-' + new Date().toISOString().slice(0, 10) + '.json'; a.click();
+            } else if (action === 'import') {
+                var input = document.createElement('input'); input.type = 'file'; input.accept = '.json';
+                input.onchange = function(e) {
+                    var file = e.target.files[0]; if (!file) return;
+                    var reader = new FileReader();
+                    reader.onload = function(ev) {
+                        try {
+                            var data = JSON.parse(ev.target.result);
+                            if (Array.isArray(data)) {
+                                data.forEach(function(item) { localStorage.setItem(item.key, typeof item.value === 'string' ? item.value : JSON.stringify(item.value)); });
+                                alert('Imported ' + data.length + ' keys. Refreshing...'); setTimeout(function() { location.reload(); }, 300);
+                            }
+                        } catch(err) { alert('Import failed: ' + err.message); }
+                    };
+                    reader.readAsText(file);
+                };
+                input.click();
+            } else if (action === 'delete') {
+                if (!confirm('Delete ALL GTM OS data? This cannot be undone.')) return;
+                var keys = [];
+                for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf('gtmos_') === 0) keys.push(k); }
+                keys.forEach(function(k) { localStorage.removeItem(k); });
+                alert('Deleted ' + keys.length + ' keys.'); setTimeout(function() { location.reload(); }, 300);
+            }
+        };
+
+        render();
+    })();
+    </script>
+</body>
+</html>

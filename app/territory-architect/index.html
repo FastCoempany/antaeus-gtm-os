@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Territory Architect | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+/* ==================== TERRITORY ARCHITECT ==================== */
+/* View Switching */
+.ta-view{display:none;}.ta-view.active{display:block;}
+.ta-view-tabs{display:flex;gap:2px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:3px;margin-bottom:var(--space-lg);width:fit-content;}
+.ta-view-tab{padding:8px 20px;border-radius:var(--radius-sm);font-size:0.78rem;font-weight:700;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:inherit;transition:all 0.2s;letter-spacing:0.3px;text-transform:uppercase;}
+.ta-view-tab.active{background:var(--brand-gold);color:var(--bg-primary);}
+.ta-view-tab:hover:not(.active){color:var(--text-secondary);background:rgba(255,255,255,0.04);}
+
+/* Onboarding Wizard */
+.ta-onboard{max-width:640px;margin:0 auto;}
+.ta-onboard-phase{display:none;}.ta-onboard-phase.active{display:block;}
+.ta-ob-progress{display:flex;gap:4px;margin-bottom:var(--space-xl);}
+.ta-ob-pip{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.08);transition:background 0.3s;}
+.ta-ob-pip.done{background:var(--brand-gold);}.ta-ob-pip.current{background:var(--brand-teal);}
+.ta-ob-title{font-family:var(--font-serif);font-size:1.6rem;color:var(--text-primary);margin-bottom:8px;}
+.ta-ob-desc{font-size:0.88rem;color:var(--text-tertiary);margin-bottom:var(--space-xl);line-height:1.6;}
+.ta-ob-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:24px;margin-bottom:var(--space-md);}
+.ta-ob-card-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:var(--space-md);}
+.ta-ob-field{margin-bottom:14px;}
+.ta-ob-field label{display:block;font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:6px;}
+.ta-ob-field input,.ta-ob-field textarea,.ta-ob-field select{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.88rem;font-family:inherit;}
+.ta-ob-field input:focus,.ta-ob-field textarea:focus,.ta-ob-field select:focus{outline:none;border-color:var(--brand-gold);}
+.ta-ob-field textarea{min-height:60px;resize:vertical;}
+.ta-ob-field .hint{font-size:0.72rem;color:var(--text-muted);margin-top:4px;font-style:italic;}
+.ta-ob-options{display:grid;grid-template-columns:1fr;gap:8px;}
+.ta-ob-option{padding:14px 18px;background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);cursor:pointer;transition:all 0.2s;font-size:0.85rem;color:var(--text-secondary);}
+.ta-ob-option:hover{border-color:var(--border-hover);background:rgba(212,165,116,0.05);}
+.ta-ob-option.selected{border-color:var(--brand-gold);background:rgba(212,165,116,0.1);color:var(--text-primary);}
+.ta-ob-nudges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:var(--space-md);}
+.ta-ob-nudge{font-size:0.72rem;padding:4px 10px;border-radius:var(--radius-full);background:rgba(255,255,255,0.04);color:var(--text-muted);border:1px solid var(--border-default);cursor:pointer;}
+.ta-ob-nudge:hover{color:var(--brand-gold);border-color:rgba(212,165,116,0.3);}
+.ta-ob-actions{display:flex;justify-content:space-between;margin-top:var(--space-xl);}
+.ta-ob-btn{padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.85rem;transition:all 0.2s;}
+.ta-ob-btn.primary{background:var(--brand-gold);color:var(--bg-primary);}
+.ta-ob-btn.primary:disabled{opacity:0.4;cursor:not-allowed;}
+.ta-ob-btn.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border-default);}
+.ta-ob-thesis-list{margin-top:var(--space-md);}
+.ta-ob-thesis-item{background:rgba(212,165,116,0.05);border:1px solid rgba(212,165,116,0.2);border-radius:var(--radius-md);padding:14px;margin-bottom:8px;position:relative;}
+.ta-ob-thesis-item .name{font-weight:700;color:var(--brand-gold);font-size:0.85rem;margin-bottom:4px;}
+.ta-ob-thesis-item .statement{font-size:0.78rem;color:var(--text-tertiary);line-height:1.5;}
+.ta-ob-thesis-item .remove{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--accent-red);cursor:pointer;font-size:0.9rem;opacity:0.6;}
+.ta-ob-thesis-item .remove:hover{opacity:1;}
+.ta-ob-approach-item{background:rgba(45,212,191,0.05);border:1px solid rgba(45,212,191,0.2);border-radius:var(--radius-md);padding:12px;margin-bottom:8px;position:relative;}
+.ta-ob-approach-item .cat{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-teal);font-weight:700;}
+.ta-ob-approach-item .name{font-weight:600;color:var(--text-primary);font-size:0.82rem;margin-top:2px;}
+.ta-ob-approach-item .desc{font-size:0.75rem;color:var(--text-muted);margin-top:2px;}
+.ta-ob-approach-item .remove{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--accent-red);cursor:pointer;font-size:0.9rem;opacity:0.6;}
+.ta-ob-approach-item .remove:hover{opacity:1;}
+/* Tier calibration table */
+.ta-ob-tier-table{width:100%;border-collapse:separate;border-spacing:0 6px;}
+.ta-ob-tier-table th{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;text-align:left;padding:0 10px 8px;}
+.ta-ob-tier-table td{padding:12px;background:rgba(255,255,255,0.03);font-size:0.8rem;color:var(--text-secondary);}
+.ta-ob-tier-table td:first-child{border-radius:var(--radius-sm) 0 0 var(--radius-sm);font-weight:700;color:var(--text-primary);}
+.ta-ob-tier-table td:last-child{border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.ta-ob-tier-table .tier-badge{display:inline-block;padding:2px 8px;border-radius:var(--radius-full);font-size:0.7rem;font-weight:700;}
+.tier-1-bg{background:rgba(212,165,116,0.15);color:var(--brand-gold);}
+.tier-2-bg{background:rgba(59,130,246,0.15);color:var(--accent-blue);}
+.tier-3-bg{background:rgba(100,116,139,0.15);color:var(--text-tertiary);}
+
+/* ==================== TERRITORY VIEW ==================== */
+.ta-header-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-md);}
+.ta-count{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);}
+.ta-count span{color:var(--brand-gold);}
+.ta-add-btn{padding:8px 18px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.82rem;background:var(--brand-gold);color:var(--bg-primary);transition:all 0.2s;}
+.ta-add-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,165,116,0.3);}
+.ta-filters{display:flex;gap:8px;align-items:center;margin-bottom:var(--space-md);flex-wrap:wrap;}
+.ta-filter{padding:6px 12px;border-radius:var(--radius-full);font-size:0.72rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.ta-filter.active{background:rgba(212,165,116,0.1);color:var(--brand-gold);border-color:rgba(212,165,116,0.3);}
+.ta-filter:hover:not(.active){border-color:var(--border-hover);color:var(--text-secondary);}
+/* Account cards */
+.ta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--space-md);}
+.ta-acct{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px;transition:all 0.2s;cursor:pointer;position:relative;}
+.ta-acct:hover{border-color:var(--border-hover);transform:translateY(-1px);}
+.ta-acct-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.ta-acct-name{font-weight:700;font-size:0.95rem;color:var(--text-primary);}
+.ta-acct-tier{font-size:0.65rem;padding:3px 8px;border-radius:var(--radius-full);font-weight:700;}
+.ta-acct-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.ta-acct-tag{font-size:0.65rem;padding:2px 8px;border-radius:var(--radius-full);font-weight:600;background:rgba(212,165,116,0.08);color:var(--brand-gold);border:1px solid rgba(212,165,116,0.15);}
+.ta-acct-leverage{font-size:0.65rem;padding:2px 8px;border-radius:var(--radius-full);font-weight:600;background:rgba(45,212,191,0.08);color:var(--brand-teal);border:1px solid rgba(45,212,191,0.15);}
+.ta-acct-trigger{font-size:0.65rem;padding:2px 8px;border-radius:var(--radius-full);font-weight:600;background:rgba(100,116,139,0.1);color:var(--text-tertiary);border:1px solid rgba(100,116,139,0.15);}
+.ta-acct-stats{display:flex;gap:12px;font-size:0.72rem;color:var(--text-muted);border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;margin-top:6px;}
+.ta-acct-stats .progressing{color:var(--accent-green);}
+.ta-acct-stats .stalled{color:var(--accent-amber);}
+.ta-acct-stats .no-traction{color:var(--accent-red);}
+.ta-acct-actions{display:flex;gap:6px;margin-top:8px;}
+.ta-acct-action{font-size:0.7rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;}
+.ta-acct-action:hover{border-color:var(--brand-gold);color:var(--brand-gold);}
+.ta-acct-action.graduate{border-color:rgba(34,197,94,0.3);color:var(--accent-green);}
+.ta-acct-action.graduate:hover{background:rgba(34,197,94,0.08);}
+.ta-empty{text-align:center;padding:60px 24px;color:var(--text-muted);}
+.ta-empty .icon{font-size:2rem;margin-bottom:12px;}
+
+/* ==================== DAILY COCKPIT ==================== */
+.dc-health{display:flex;align-items:center;gap:16px;margin-bottom:var(--space-lg);padding:16px 20px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);}
+.dc-health-score{font-family:var(--font-serif);font-size:2.5rem;line-height:1;min-width:70px;text-align:center;}
+.dc-health-score.green{color:var(--accent-green);}
+.dc-health-score.yellow{color:var(--accent-amber);}
+.dc-health-score.red{color:var(--accent-red);}
+.dc-health-label{font-size:0.78rem;color:var(--text-tertiary);}
+.dc-health-label.warn{color:var(--accent-amber);font-weight:600;}
+.dc-health-label.crit{color:var(--accent-red);font-weight:700;}
+.dc-section{margin-bottom:var(--space-xl);}
+.dc-section-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:var(--space-md);display:flex;align-items:center;gap:8px;}
+.dc-section-title .count{background:rgba(212,165,116,0.15);color:var(--brand-gold);padding:2px 8px;border-radius:var(--radius-full);font-size:0.65rem;}
+/* Priority account cards */
+.dc-priority{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;gap:14px;transition:all 0.2s;}
+.dc-priority:hover{border-color:var(--border-hover);}
+.dc-priority-rank{font-family:var(--font-serif);font-size:1.1rem;color:var(--text-muted);min-width:24px;text-align:center;}
+.dc-priority-info{flex:1;}
+.dc-priority-name{font-weight:700;font-size:0.88rem;color:var(--text-primary);margin-bottom:2px;}
+.dc-priority-reason{font-size:0.75rem;color:var(--text-tertiary);}
+.dc-priority-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;}
+.dc-priority-tag{font-size:0.62rem;padding:2px 6px;border-radius:var(--radius-full);font-weight:600;}
+.dc-priority-actions{display:flex;gap:6px;}
+.dc-priority-action{padding:6px 12px;border-radius:6px;font-size:0.72rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.dc-priority-action:hover{border-color:var(--brand-gold);color:var(--brand-gold);}
+/* Vital signs */
+.dc-vitals{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-sm);}
+.dc-vital{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;text-align:center;}
+.dc-vital-val{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);}
+.dc-vital-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.3px;margin-top:2px;}
+/* Signal feed */
+.dc-signal{padding:10px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--border-default);border-radius:var(--radius-sm);margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+.dc-signal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dc-signal-dot.leadership{background:var(--accent-purple);}
+.dc-signal-dot.funding{background:var(--accent-green);}
+.dc-signal-dot.expansion{background:var(--accent-blue);}
+.dc-signal-dot.tech{background:var(--accent-cyan);}
+.dc-signal-dot.competitive{background:var(--accent-amber);}
+.dc-signal-dot.other{background:var(--text-muted);}
+.dc-signal-text{flex:1;font-size:0.8rem;color:var(--text-secondary);}
+.dc-signal-acct{font-size:0.7rem;color:var(--brand-gold);font-weight:600;}
+.dc-signal-time{font-size:0.65rem;color:var(--text-muted);}
+.dc-signal-input{display:flex;gap:8px;margin-bottom:var(--space-md);}
+.dc-signal-input input{flex:1;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.82rem;font-family:inherit;}
+.dc-signal-input input:focus{outline:none;border-color:var(--brand-gold);}
+.dc-signal-input select{padding:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.78rem;font-family:inherit;max-width:140px;}
+.dc-signal-input button{padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.78rem;background:var(--brand-gold);color:var(--bg-primary);}
+/* Friday Pulse */
+.dc-pulse{background:linear-gradient(135deg,rgba(239,68,68,0.06),rgba(245,158,11,0.04));border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-lg);}
+.dc-pulse-title{font-family:var(--font-serif);font-size:1.1rem;color:var(--accent-amber);margin-bottom:4px;}
+.dc-pulse-desc{font-size:0.8rem;color:var(--text-tertiary);margin-bottom:var(--space-md);}
+.dc-pulse-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-sm);margin-bottom:6px;}
+.dc-pulse-item .name{flex:1;font-weight:600;font-size:0.85rem;color:var(--text-primary);}
+.dc-pulse-item .days{font-size:0.72rem;color:var(--accent-amber);}
+.dc-pulse-item .actions{display:flex;gap:4px;}
+.dc-pulse-btn{padding:4px 10px;border-radius:6px;font-size:0.7rem;font-weight:600;border:1px solid var(--border-default);background:transparent;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.dc-pulse-btn.confirm{color:var(--accent-green);border-color:rgba(34,197,94,0.3);}
+.dc-pulse-btn.confirm:hover{background:rgba(34,197,94,0.08);}
+.dc-pulse-btn.retier{color:var(--accent-blue);border-color:rgba(59,130,246,0.3);}
+.dc-pulse-btn.retier:hover{background:rgba(59,130,246,0.08);}
+.dc-pulse-btn.swap{color:var(--accent-red);border-color:rgba(239,68,68,0.3);}
+.dc-pulse-btn.swap:hover{background:rgba(239,68,68,0.08);}
+
+/* ==================== MODALS ==================== */
+.ta-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;}
+.ta-modal-overlay.active{display:flex;}
+.ta-modal{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);padding:28px;max-width:560px;width:92%;max-height:88vh;overflow-y:auto;}
+.ta-modal-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:20px;}
+.ta-modal-field{margin-bottom:14px;}
+.ta-modal-field label{display:block;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:5px;}
+.ta-modal-field input,.ta-modal-field select,.ta-modal-field textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.88rem;font-family:inherit;}
+.ta-modal-field input:focus,.ta-modal-field select:focus,.ta-modal-field textarea:focus{outline:none;border-color:var(--brand-gold);}
+.ta-modal-actions{display:flex;justify-content:space-between;margin-top:24px;}
+.ta-modal-btn{padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.85rem;transition:all 0.2s;}
+.ta-modal-btn.primary{background:var(--brand-gold);color:var(--bg-primary);}
+.ta-modal-btn.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border-default);}
+.ta-modal-btn.danger{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);}
+/* Quick-select chips in modals */
+.ta-qselect{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.ta-qselect-opt{padding:6px 12px;border-radius:var(--radius-full);font-size:0.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.ta-qselect-opt:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+.ta-qselect-opt.selected{border-color:var(--brand-gold);background:rgba(212,165,116,0.1);color:var(--brand-gold);}
+/* Disposition modal specifics */
+.ta-disp-type{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:var(--space-md);}
+.ta-disp-opt{padding:12px;border-radius:var(--radius-md);border:1px solid var(--border-default);background:rgba(255,255,255,0.02);cursor:pointer;text-align:center;transition:all 0.2s;}
+.ta-disp-opt:hover{border-color:var(--border-hover);}
+.ta-disp-opt.selected{border-color:var(--brand-gold);background:rgba(212,165,116,0.08);}
+.ta-disp-opt .label{font-weight:700;font-size:0.82rem;color:var(--text-primary);}
+.ta-disp-opt .desc{font-size:0.68rem;color:var(--text-muted);margin-top:2px;}
+/* Swap recommendation */
+.ta-swap-rec{background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-md);padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.ta-swap-rec .info{flex:1;}
+.ta-swap-rec .name{font-weight:700;font-size:0.88rem;color:var(--text-primary);}
+.ta-swap-rec .reason{font-size:0.75rem;color:var(--text-tertiary);margin-top:2px;}
+.ta-swap-rec .accept{padding:6px 14px;border-radius:6px;font-size:0.75rem;font-weight:700;border:none;background:var(--accent-amber);color:var(--bg-primary);cursor:pointer;font-family:inherit;}
+/* Approach Intelligence */
+.ta-intel{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--space-md);margin-top:var(--space-md);}
+.ta-intel-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:16px;}
+.ta-intel-card-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:10px;}
+.ta-intel-row{display:flex;justify-content:space-between;padding:4px 0;font-size:0.8rem;}
+.ta-intel-row .label{color:var(--text-tertiary);}
+.ta-intel-row .val{font-weight:600;color:var(--text-primary);}
+.ta-intel-row .val.good{color:var(--accent-green);}
+.ta-intel-row .val.warn{color:var(--accent-amber);}
+.ta-intel-row .val.bad{color:var(--accent-red);}
+/* Re-tier review */
+.ta-retier{max-width:700px;}
+.ta-retier-section{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-lg);}
+.ta-retier-title{font-family:var(--font-serif);font-size:1.1rem;color:var(--text-primary);margin-bottom:var(--space-md);}
+.ta-retier-thesis{padding:14px;background:rgba(212,165,116,0.05);border:1px solid rgba(212,165,116,0.15);border-radius:var(--radius-md);margin-bottom:10px;}
+.ta-retier-thesis .name{font-weight:700;color:var(--brand-gold);font-size:0.85rem;}
+.ta-retier-thesis .perf{font-size:0.78rem;color:var(--text-tertiary);margin-top:4px;}
+.ta-retier-thesis .actions{display:flex;gap:6px;margin-top:8px;}
+/* Thesis/Approach manage panels */
+.ta-manage{max-width:640px;margin:0 auto;}
+.ta-manage-title{font-family:var(--font-serif);font-size:1.2rem;color:var(--text-primary);margin-bottom:var(--space-md);}
+@media(max-width:768px){
+    .dc-vitals{grid-template-columns:repeat(2,1fr);}
+    .ta-disp-type{grid-template-columns:1fr;}
+    .ta-grid{grid-template-columns:1fr;}
+    .ta-filters{overflow-x:auto;flex-wrap:nowrap;}
+}
+/* Calibration one-time callout */
+.ta-calibration{background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius-md);padding:16px;margin-bottom:var(--space-md);font-size:0.82rem;color:var(--text-secondary);line-height:1.6;}
+.ta-calibration strong{color:var(--accent-blue);}
+.ta-calibration .dismiss{float:right;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.8rem;}
+</style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Territory Architect</h1>
+                <div class="header-actions">
+                    <button class="btn btn-ghost btn-sm" onclick="switchView('manage')">Manage Theses</button>
+                    <button class="btn btn-secondary btn-sm" onclick="exportTerritory()">Export</button>
+                </div>
+            </header>
+            <div class="app-content" style="max-width:1100px;">
+
+<!-- ==================== ONBOARDING WIZARD ==================== -->
+<div id="onboardView" style="display:none;">
+    <div class="ta-onboard">
+        <div class="ta-ob-progress">
+            <div class="ta-ob-pip"></div>
+            <div class="ta-ob-pip"></div>
+            <div class="ta-ob-pip"></div>
+            <div class="ta-ob-pip"></div>
+            <div class="ta-ob-pip"></div>
+        </div>
+
+        <!-- Phase 0: Sales Cycle -->
+        <div class="ta-onboard-phase">
+            <div class="ta-ob-title">Sales Cycle Calibration</div>
+            <div class="ta-ob-desc">This calibrates your territory rhythm — re-tiering cadence, staleness thresholds, and daily cockpit recommendations all adjust based on your deal velocity.</div>
+            <div class="ta-ob-card">
+                <div class="ta-ob-card-title">What's your typical sales cycle from first meeting to closed deal?</div>
+                <div class="ta-ob-options" id="cycleOptions">
+                    <div class="ta-ob-option" data-value="<30" onclick="obSelectCycle(this)">Less than 30 days</div>
+                    <div class="ta-ob-option" data-value="1-3m" onclick="obSelectCycle(this)">1–3 months</div>
+                    <div class="ta-ob-option" data-value="3-6m" onclick="obSelectCycle(this)">3–6 months</div>
+                    <div class="ta-ob-option" data-value="6-12m" onclick="obSelectCycle(this)">6–12 months</div>
+                    <div class="ta-ob-option" data-value="12+" onclick="obSelectCycle(this)">12+ months</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 1: Thesis Builder -->
+        <div class="ta-onboard-phase">
+            <div class="ta-ob-title">Build Your Theses</div>
+            <div class="ta-ob-desc">A thesis is your strategic bet — where you believe you can win and why. Every account in your territory will be tagged to a thesis. Most successful territories are built on 2–4 distinct hypotheses.</div>
+            <div class="ta-ob-card">
+                <div class="ta-ob-card-title">1. What pressure is creating urgency?</div>
+                <div class="ta-ob-nudges">
+                    <span class="ta-ob-nudge" onclick="obUsePressureNudge('Regulatory shifts')">Regulatory shifts</span>
+                    <span class="ta-ob-nudge" onclick="obUsePressureNudge('Market compression')">Market compression</span>
+                    <span class="ta-ob-nudge" onclick="obUsePressureNudge('Leadership turnover')">Leadership turnover</span>
+                    <span class="ta-ob-nudge" onclick="obUsePressureNudge('Tech debt reaching critical mass')">Tech debt</span>
+                    <span class="ta-ob-nudge" onclick="obUsePressureNudge('Expansion outpacing infrastructure')">Expansion outpacing infrastructure</span>
+                    <span class="ta-ob-nudge" onclick="obUsePressureNudge('International compliance gaps')">International compliance</span>
+                    <span class="ta-ob-nudge" onclick="obUsePressureNudge('Competitive disruption')">Competitive disruption</span>
+                    <span class="ta-ob-nudge" onclick="obUsePressureNudge('Budget cycle pressure')">Budget cycle pressure</span>
+                </div>
+                <div class="ta-ob-field"><label>Pressure Statement</label><textarea id="thesisPressure" placeholder="e.g., Compliance audit costs doubled after EU expansion"></textarea><div class="hint">What environmental pressure are you targeting?</div></div>
+                <div class="ta-ob-field"><label>2. Who feels it most acutely?</label><textarea id="thesisSegment" placeholder="e.g., Mid-market logistics companies that expanded into the EU in the last two years"></textarea><div class="hint">Describe the segment naturally — don't worry about firmographic fields.</div></div>
+                <div class="ta-ob-field"><label>3. Why are YOU the right seller to win here?</label><textarea id="thesisLeverage" placeholder="e.g., Our CEO spoke at LogiTech Europe, we have 3 case studies in freight compliance"></textarea><div class="hint">What proof points, relationships, or credibility do you have?</div></div>
+                <div class="ta-ob-field"><label>Thesis Name (short label)</label><input type="text" id="thesisName" placeholder="e.g., EU compliance pain"></div>
+                <button class="ta-ob-btn primary" style="margin-top:8px;" onclick="saveThesis()">+ Add Thesis</button>
+                <div id="thesisEncourage" style="display:none;margin-top:10px;font-size:0.78rem;color:var(--brand-gold);"></div>
+            </div>
+            <div class="ta-ob-thesis-list" id="thesisList"></div>
+        </div>
+
+        <!-- Phase 2: Approach Builder -->
+        <div class="ta-onboard-phase">
+            <div class="ta-ob-title">Define Your Approaches</div>
+            <div class="ta-ob-desc">For each thesis, what angles could open a conversation? These become the vocabulary for tracking what works. You need at least 2 approaches total.</div>
+            <div class="ta-ob-card">
+                <div class="ta-ob-field"><label>Thesis</label><select id="approachThesis"></select></div>
+                <div class="ta-ob-field"><label>Approach Category</label>
+                    <select id="approachCategory">
+                        <option value="">Select category...</option>
+                        <option value="pain-led">Pain-led — Leading with a specific problem</option>
+                        <option value="trigger-led">Trigger-led — Referencing a recent event</option>
+                        <option value="insight-led">Insight-led — Sharing a new perspective</option>
+                        <option value="relationship-led">Relationship-led — Leveraging a connection</option>
+                        <option value="competitive-displacement">Competitive displacement — Positioning vs. incumbent</option>
+                        <option value="provocation-led">Provocation-led — Challenging an assumption</option>
+                    </select>
+                </div>
+                <div class="ta-ob-field"><label>Approach Name</label><input type="text" id="approachName" placeholder="e.g., new CTO trigger"></div>
+                <div class="ta-ob-field"><label>One-line Description</label><input type="text" id="approachDesc" placeholder="e.g., Reference their new CTO's background at a competitor"></div>
+                <button class="ta-ob-btn primary" style="margin-top:8px;" onclick="saveApproach()">+ Add Approach</button>
+            </div>
+            <div id="approachList" style="margin-top:var(--space-md);"></div>
+        </div>
+
+        <!-- Phase 3: Tier Calibration -->
+        <div class="ta-onboard-phase">
+            <div class="ta-ob-title">Understand Your Tiers</div>
+            <div class="ta-ob-desc">Tiers define how much of your selling time an account receives. This isn't a ranking — it's a resource allocation commitment. Choose carefully.</div>
+            <div class="ta-ob-card">
+                <table class="ta-ob-tier-table">
+                    <tr><th>Tier</th><th>Investment</th><th>Capacity</th><th>What It Means</th></tr>
+                    <tr>
+                        <td><span class="tier-badge tier-1-bg">Tier 1</span></td>
+                        <td>Maximum intensity</td>
+                        <td>30–50 accounts</td>
+                        <td>Multi-channel, multi-threaded. Custom angles. Highest conviction bets.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-badge tier-2-bg">Tier 2</span></td>
+                        <td>Structured cadence</td>
+                        <td>75–100 accounts</td>
+                        <td>Consistent but lighter. Room for escalation when signals fire.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-badge tier-3-bg">Tier 3</span></td>
+                        <td>Signal-triggered</td>
+                        <td>Remainder (up to 300)</td>
+                        <td>Efficient, systematic. Watch for triggers that warrant escalation.</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Phase 4: Leverage Calibration + Complete -->
+        <div class="ta-onboard-phase">
+            <div class="ta-ob-title">Leverage Definitions</div>
+            <div class="ta-ob-desc">When you add accounts, you'll assess your leverage. Here's what each type means — be honest with yourself.</div>
+            <div class="ta-ob-card">
+                <table class="ta-ob-tier-table">
+                    <tr><th>Type</th><th>Qualifies</th><th>Does NOT Qualify</th></tr>
+                    <tr><td style="color:var(--brand-teal);">Network</td><td>Active relationship → warm intro to decision-maker</td><td>LinkedIn connection you haven't spoken to in 2+ years</td></tr>
+                    <tr><td style="color:var(--brand-teal);">Proof Point</td><td>Case study, testimonial, or win in this segment</td><td>Your product theoretically solves their problem</td></tr>
+                    <tr><td style="color:var(--brand-teal);">Market Signal</td><td>Specific, recent event creating a timely opening</td><td>General industry trends</td></tr>
+                    <tr><td style="color:var(--brand-teal);">Geographic</td><td>Physical proximity, local presence, regional reputation</td><td>Same time zone</td></tr>
+                    <tr><td style="color:var(--brand-teal);">Cold</td><td colspan="2">No specific advantage — honest and helpful for calibration</td></tr>
+                </table>
+            </div>
+            <div style="margin-top:var(--space-lg);padding:20px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:var(--radius-lg);text-align:center;">
+                <div style="font-family:var(--font-serif);font-size:1.2rem;color:var(--accent-green);margin-bottom:6px;">You're ready to build.</div>
+                <div style="font-size:0.82rem;color:var(--text-tertiary);">Your theses, approaches, and calibrations are set. Time to add accounts.</div>
+            </div>
+        </div>
+
+        <div class="ta-ob-actions">
+            <button class="ta-ob-btn ghost" onclick="obBack()" id="obBack">← Back</button>
+            <button class="ta-ob-btn primary" onclick="obNext()" id="obNext">Next →</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MAIN APPLICATION ==================== -->
+<div id="mainApp" style="display:none;">
+    <!-- View Tabs -->
+    <div class="ta-view-tabs">
+        <button class="ta-view-tab active" data-view="cockpit" onclick="switchView('cockpit')">Daily Cockpit</button>
+        <button class="ta-view-tab" data-view="territory" onclick="switchView('territory')">Territory</button>
+        <button class="ta-view-tab" data-view="intelligence" onclick="switchView('intelligence')">Intelligence</button>
+        <button class="ta-view-tab" data-view="manage" onclick="switchView('manage')">Manage</button>
+    </div>
+
+    <!-- COCKPIT VIEW -->
+    <div class="ta-view active" id="cockpitView">
+        <div class="dc-health">
+            <div class="dc-health-score green" id="dcHealthScore">100</div>
+            <div>
+                <div class="dc-health-label" id="dcHealthLabel">Territory Intelligence: Strong</div>
+            </div>
+        </div>
+        <!-- Friday Pulse -->
+        <div id="dcPulse" style="display:none;">
+            <div class="dc-pulse">
+                <div class="dc-pulse-title">🔍 Weekly Pulse — Friday Review</div>
+                <div class="dc-pulse-desc">Before today's priorities, quick check on these accounts that need a status judgment.</div>
+                <div id="dcPulseItems"></div>
+                <button class="ta-ob-btn primary" style="margin-top:12px;" onclick="completePulse()">✓ Pulse Complete</button>
+            </div>
+        </div>
+        <!-- Priority Accounts -->
+        <div class="dc-section">
+            <div class="dc-section-title">Today's Priority Accounts <span class="count">Top 12</span></div>
+            <div id="dcPriorities"></div>
+        </div>
+        <!-- Vital Signs -->
+        <div class="dc-section">
+            <div class="dc-section-title">Territory Vital Signs</div>
+            <div class="dc-vitals" id="dcVitals"></div>
+        </div>
+        <!-- Signal Feed -->
+        <div class="dc-section">
+            <div class="dc-section-title">Signal Feed</div>
+            <div class="dc-signal-input">
+                <input type="text" id="signalInput" placeholder="Drop a signal... e.g., Acme hired new VP Sales from competitor">
+                <select id="signalAcct"><option value="">Account...</option></select>
+                <select id="signalType">
+                    <option value="other">Type (optional)</option>
+                    <option value="leadership">Leadership Change</option>
+                    <option value="funding">Funding Event</option>
+                    <option value="expansion">Expansion</option>
+                    <option value="tech">Tech Change</option>
+                    <option value="competitive">Competitive</option>
+                </select>
+                <button onclick="addSignal()">+ Signal</button>
+            </div>
+            <div id="dcSignals"></div>
+        </div>
+    </div>
+
+    <!-- TERRITORY VIEW -->
+    <div class="ta-view" id="territoryView">
+        <div class="ta-header-bar">
+            <div class="ta-count" id="taCount"><span>0</span> / 300</div>
+            <button class="ta-add-btn" onclick="openAddAccount()">+ Add Account</button>
+        </div>
+        <div class="ta-filters" id="taFilters"></div>
+        <div class="ta-grid" id="taGrid"></div>
+    </div>
+
+    <!-- INTELLIGENCE VIEW -->
+    <div class="ta-view" id="intelligenceView">
+        <div id="intelligenceContent"></div>
+    </div>
+
+    <!-- MANAGE VIEW -->
+    <div class="ta-view" id="manageView">
+        <div id="manageContent"></div>
+    </div>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Add Account Modal -->
+<div class="ta-modal-overlay" id="addAcctModal">
+    <div class="ta-modal">
+        <div class="ta-modal-title">Add Account</div>
+        <div id="leverageCalibration" class="ta-calibration" style="display:none;">
+            <button class="dismiss" onclick="dismissCalibration('leverage')">Got it</button>
+            <strong>Leverage calibration:</strong> Be honest about your leverage. A LinkedIn connection you haven't spoken to in 2+ years is not "Network Connection" — it's "Cold." Honest assessment makes your territory intelligence more precise.
+        </div>
+        <div class="ta-modal-field"><label>Company Name</label><input type="text" id="addAcctName" placeholder="e.g., Acme Corp"></div>
+        <div class="ta-modal-field"><label>Thesis</label><select id="addAcctThesis"></select></div>
+        <div class="ta-modal-field"><label>Tier</label>
+            <div class="ta-qselect" id="addAcctTier">
+                <button class="ta-qselect-opt" data-value="1" onclick="selectQOpt('addAcctTier','1',this)">Tier 1</button>
+                <button class="ta-qselect-opt" data-value="2" onclick="selectQOpt('addAcctTier','2',this)">Tier 2</button>
+                <button class="ta-qselect-opt" data-value="3" onclick="selectQOpt('addAcctTier','3',this)">Tier 3</button>
+            </div>
+        </div>
+        <div class="ta-modal-field"><label>Leverage Type</label>
+            <div class="ta-qselect" id="addAcctLeverage">
+                <button class="ta-qselect-opt" data-value="network-connection" onclick="selectQOpt('addAcctLeverage','network-connection',this)">Network</button>
+                <button class="ta-qselect-opt" data-value="existing-proof-point" onclick="selectQOpt('addAcctLeverage','existing-proof-point',this)">Proof Point</button>
+                <button class="ta-qselect-opt" data-value="market-signal" onclick="selectQOpt('addAcctLeverage','market-signal',this)">Signal</button>
+                <button class="ta-qselect-opt" data-value="geographic-advantage" onclick="selectQOpt('addAcctLeverage','geographic-advantage',this)">Geographic</button>
+                <button class="ta-qselect-opt" data-value="cold" onclick="selectQOpt('addAcctLeverage','cold',this)">Cold</button>
+            </div>
+        </div>
+        <div class="ta-modal-field"><label>What triggered this addition?</label>
+            <div class="ta-qselect" id="addAcctTrigger">
+                <button class="ta-qselect-opt" data-value="thesis-fit" onclick="selectQOpt('addAcctTrigger','thesis-fit',this)">Thesis Fit</button>
+                <button class="ta-qselect-opt" data-value="signal-event" onclick="selectQOpt('addAcctTrigger','signal-event',this)">Signal Event</button>
+                <button class="ta-qselect-opt" data-value="network-opportunity" onclick="selectQOpt('addAcctTrigger','network-opportunity',this)">Network</button>
+                <button class="ta-qselect-opt" data-value="inbound-interest" onclick="selectQOpt('addAcctTrigger','inbound-interest',this)">Inbound</button>
+                <button class="ta-qselect-opt" data-value="strategic-bet" onclick="selectQOpt('addAcctTrigger','strategic-bet',this)">Strategic Bet</button>
+            </div>
+        </div>
+        <div class="ta-modal-actions">
+            <button class="ta-modal-btn ghost" onclick="document.getElementById('addAcctModal').classList.remove('active')">Cancel</button>
+            <button class="ta-modal-btn primary" onclick="saveNewAccount()">Add to Territory</button>
+        </div>
+    </div>
+</div>
+
+<!-- Disposition Modal -->
+<div class="ta-modal-overlay" id="dispModal">
+    <div class="ta-modal">
+        <div class="ta-modal-title">Log Disposition — <span id="dispAcctName"></span></div>
+        <div id="progressionCalibration" class="ta-calibration" style="display:none;">
+            <button class="dismiss" onclick="dismissCalibration('progression')">Got it</button>
+            <strong>Progression = buyer-initiated forward motion.</strong><br>
+            ✓ Agreed to meeting · Asked for info · Introduced you to colleague · Requested pricing · Shared pain unprompted<br>
+            ✗ Opened email · Accepted LinkedIn · Said "let me think about it" · Was polite but committed to nothing
+        </div>
+        <div class="ta-disp-type">
+            <div class="ta-disp-opt" data-value="progressing" onclick="selectDispType('progressing',this)"><div class="label" style="color:var(--accent-green);">✓ Progressing</div><div class="desc">Buyer took forward action</div></div>
+            <div class="ta-disp-opt" data-value="engaged-stalled" onclick="selectDispType('engaged-stalled',this)"><div class="label" style="color:var(--accent-amber);">⏸ Engaged, Stalled</div><div class="desc">Responding but not advancing</div></div>
+            <div class="ta-disp-opt" data-value="no-traction" onclick="selectDispType('no-traction',this)"><div class="label" style="color:var(--accent-red);">✗ No Traction</div><div class="desc">Outreach isn't landing</div></div>
+            <div class="ta-disp-opt" data-value="signal-detected" onclick="selectDispType('signal-detected',this)"><div class="label" style="color:var(--accent-blue);">📡 Signal Detected</div><div class="desc">Something changed</div></div>
+            <div class="ta-disp-opt" data-value="disqualified" onclick="selectDispType('disqualified',this)"><div class="label" style="color:var(--text-muted);">🚫 Disqualified</div><div class="desc">Remove from territory</div></div>
+        </div>
+        <div id="dispApproachGroup" style="display:none;">
+            <div class="ta-modal-field"><label>Which approach did you use?</label><div class="ta-qselect" id="dispApproach"></div></div>
+        </div>
+        <div id="dispAngleGroup" style="display:none;">
+            <div class="ta-modal-field"><label>What angle actually worked? <span style="font-weight:400;color:var(--text-muted);">(may differ from approach used)</span></label><div class="ta-qselect" id="dispAngle"></div></div>
+        </div>
+        <div id="dispBlockerGroup" style="display:none;">
+            <div class="ta-modal-field"><label>Blocker (optional)</label><input type="text" id="dispBlocker" placeholder="What's preventing forward motion?"></div>
+        </div>
+        <div id="dispSignalGroup" style="display:none;">
+            <div class="ta-modal-field"><label>Signal Description</label><input type="text" id="dispSignalDesc" placeholder="e.g., New VP of Ops hired from competitor"></div>
+            <div class="ta-modal-field"><label>Signal Type (optional)</label>
+                <select id="dispSignalType"><option value="other">Other</option><option value="leadership">Leadership Change</option><option value="funding">Funding Event</option><option value="expansion">Expansion</option><option value="tech">Tech Change</option><option value="competitive">Competitive</option></select>
+            </div>
+        </div>
+        <div id="dispDisqualGroup" style="display:none;">
+            <div class="ta-modal-field"><label>Reason</label>
+                <div class="ta-qselect" id="dispDisqual">
+                    <button class="ta-qselect-opt" data-value="bad-fit" onclick="selectQOpt('dispDisqual','bad-fit',this)">Bad Fit</button>
+                    <button class="ta-qselect-opt" data-value="no-budget" onclick="selectQOpt('dispDisqual','no-budget',this)">No Budget Cycle</button>
+                    <button class="ta-qselect-opt" data-value="wrong-timing" onclick="selectQOpt('dispDisqual','wrong-timing',this)">Wrong Timing</button>
+                    <button class="ta-qselect-opt" data-value="acquired" onclick="selectQOpt('dispDisqual','acquired',this)">Acquired/Merged</button>
+                    <button class="ta-qselect-opt" data-value="went-dark" onclick="selectQOpt('dispDisqual','went-dark',this)">Went Dark</button>
+                    <button class="ta-qselect-opt" data-value="other" onclick="selectQOpt('dispDisqual','other',this)">Other</button>
+                </div>
+            </div>
+        </div>
+        <div class="ta-modal-actions">
+            <button class="ta-modal-btn ghost" onclick="document.getElementById('dispModal').classList.remove('active')">Cancel</button>
+            <button class="ta-modal-btn primary" onclick="saveDisposition()">Save Disposition</button>
+        </div>
+    </div>
+</div>
+
+<!-- Swap Modal -->
+<div class="ta-modal-overlay" id="swapModal">
+    <div class="ta-modal">
+        <div class="ta-modal-title">Territory at Capacity — Swap Recommendation</div>
+        <div id="swapContent"></div>
+    </div>
+</div>
+
+            </div>
+        </main>
+    </div>
+    <script src="/js/deal-health.js"></script>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    window.exportTerritory = function() {
+        var data = {};
+        ['gtmos_territory','gtmos_ta_theses','gtmos_ta_approaches','gtmos_ta_accounts','gtmos_ta_dispositions','gtmos_ta_signals','gtmos_ta_swap_history','gtmos_ta_retier_history','gtmos_ta_calibrations','gtmos_ta_setup'].forEach(function(k) {
+            var v = localStorage.getItem(k);
+            if (v) data[k] = JSON.parse(v);
+        });
+        var json = JSON.stringify(data, null, 2);
+        var blob = new Blob([json], {type:'application/json'});
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'territory-architect-' + new Date().toISOString().slice(0,10) + '.json';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    };
+    </script>
+    <script>
+(function(){
+'use strict';
+
+// ============ DATA LAYER ============
+var KEYS = {
+    territory: 'gtmos_territory',
+    theses: 'gtmos_ta_theses',
+    approaches: 'gtmos_ta_approaches',
+    accounts: 'gtmos_ta_accounts',
+    dispositions: 'gtmos_ta_dispositions',
+    signals: 'gtmos_ta_signals',
+    swapHistory: 'gtmos_ta_swap_history',
+    retierHistory: 'gtmos_ta_retier_history',
+    calibrations: 'gtmos_ta_calibrations',
+    setup: 'gtmos_ta_setup'
+};
+
+function readLS(key, fallback) {
+    try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+    catch(e) { return fallback; }
+}
+function writeLS(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function daysSince(iso) { return iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : 999; }
+function today() { return new Date().toISOString().slice(0,10); }
+function dayOfWeek() { return new Date().getDay(); } // 0=Sun, 5=Fri
+
+// Data accessors
+function getSetup() { return readLS(KEYS.setup, null); }
+function saveSetup(s) { writeLS(KEYS.setup, s); }
+function getTerritory() { return readLS(KEYS.territory, {healthScore:100,lastPulse:null,pulseSkips:0,salesCycle:'',createdAt:null}); }
+function saveTerritory(t) { writeLS(KEYS.territory, t); }
+function getTheses() { return readLS(KEYS.theses, []); }
+function saveTheses(t) { writeLS(KEYS.theses, t); }
+function getApproaches() { return readLS(KEYS.approaches, []); }
+function saveApproaches(a) { writeLS(KEYS.approaches, a); }
+function getAccounts() { return readLS(KEYS.accounts, []); }
+function saveAccounts(a) { writeLS(KEYS.accounts, a); }
+function getDispositions() { return readLS(KEYS.dispositions, []); }
+function saveDispositions(d) { writeLS(KEYS.dispositions, d); }
+function getSignals() { return readLS(KEYS.signals, []); }
+function saveSignals(s) { writeLS(KEYS.signals, s); }
+function getSwapHistory() { return readLS(KEYS.swapHistory, []); }
+function saveSwapHistory(s) { writeLS(KEYS.swapHistory, s); }
+function getCalibrations() { return readLS(KEYS.calibrations, {progression:false,leverage:false,swapLogic:false}); }
+function saveCalibrations(c) { writeLS(KEYS.calibrations, c); }
+
+var MAX_ACCOUNTS = 300;
+
+// ============ DERIVED METRICS ============
+function getAccountDispositions(acctId) {
+    return getDispositions().filter(function(d) { return d.accountId === acctId; });
+}
+function getAccountSignals(acctId) {
+    return getSignals().filter(function(s) { return s.accountId === acctId; });
+}
+function countByType(disps, type) {
+    return disps.filter(function(d) { return d.type === type; }).length;
+}
+function lastDispositionDate(acctId) {
+    var disps = getAccountDispositions(acctId);
+    if (!disps.length) return null;
+    return disps.sort(function(a,b) { return b.timestamp.localeCompare(a.timestamp); })[0].timestamp;
+}
+function lastProgressionDate(acctId) {
+    var disps = getAccountDispositions(acctId).filter(function(d) { return d.type === 'progressing'; });
+    if (!disps.length) return null;
+    return disps.sort(function(a,b) { return b.timestamp.localeCompare(a.timestamp); })[0].timestamp;
+}
+function approachConversionByThesis(approachId, thesisId) {
+    var disps = getDispositions().filter(function(d) { return d.approachUsed === approachId; });
+    var accounts = getAccounts().filter(function(a) { return a.thesisId === thesisId; });
+    var acctIds = accounts.map(function(a) { return a.id; });
+    var relevant = disps.filter(function(d) { return acctIds.indexOf(d.accountId) !== -1; });
+    if (!relevant.length) return null;
+    var prog = relevant.filter(function(d) { return d.type === 'progressing'; }).length;
+    return Math.round(prog / relevant.length * 100);
+}
+function thesisProgressionRate(thesisId) {
+    var accounts = getAccounts().filter(function(a) { return a.thesisId === thesisId && a.status === 'active'; });
+    var acctIds = accounts.map(function(a) { return a.id; });
+    var disps = getDispositions().filter(function(d) { return acctIds.indexOf(d.accountId) !== -1; });
+    if (!disps.length) return 0;
+    var prog = disps.filter(function(d) { return d.type === 'progressing'; }).length;
+    return Math.round(prog / disps.length * 100);
+}
+function approachUsesOnAccount(approachId, acctId) {
+    return getDispositions().filter(function(d) { return d.accountId === acctId && d.approachUsed === approachId; }).length;
+}
+
+// Health score calculation
+function computeHealthScore() {
+    var accounts = getAccounts().filter(function(a) { return a.status === 'active'; });
+    if (!accounts.length) return 100;
+    var territory = getTerritory();
+    var staleCutoff = territory.salesCycle === '<30' ? 7 : territory.salesCycle === '1-3m' ? 14 : territory.salesCycle === '3-6m' ? 21 : 30;
+    var fresh = 0;
+    accounts.forEach(function(a) {
+        var last = lastDispositionDate(a.id);
+        if (last && daysSince(last) <= staleCutoff) fresh++;
+    });
+    var freshPct = Math.round(fresh / accounts.length * 100);
+    // Pulse skip penalty
+    var skipPenalty = Math.min(30, (territory.pulseSkips || 0) * 12);
+    return Math.max(0, Math.min(100, freshPct - skipPenalty));
+}
+
+// Swap score for an account (higher = more likely to be swapped)
+function computeSwapScore(acct) {
+    var score = 0;
+    var disps = getAccountDispositions(acct.id);
+    var lastProg = lastProgressionDate(acct.id);
+    var lastDisp = lastDispositionDate(acct.id);
+    // Staleness
+    var daysSinceProg = lastProg ? daysSince(lastProg) : daysSince(acct.addedAt);
+    score += Math.min(40, daysSinceProg);
+    // Hypothesis failure
+    var thesisRate = thesisProgressionRate(acct.thesisId);
+    if (thesisRate < 5) score += 15;
+    else if (thesisRate < 10) score += 8;
+    // Signal silence
+    var signals = getAccountSignals(acct.id);
+    if (!signals.length && daysSince(acct.addedAt) > 30) score += 10;
+    // Effort-to-access
+    var totalDisps = disps.filter(function(d) { return d.type !== 'signal-detected'; }).length;
+    var progs = countByType(disps, 'progressing');
+    if (totalDisps >= 5 && progs === 0) score += 20;
+    else if (totalDisps < 2) score -= 15; // Don't swap untested accounts
+    // Tier displacement
+    if (acct.tier === 3) score += 5;
+    else if (acct.tier === 1) score -= 10;
+    return Math.max(0, score);
+}
+
+// Daily priority scoring
+function computePriorityScore(acct) {
+    var score = 0;
+    // Tier weight
+    if (acct.tier === 1) score += 30;
+    else if (acct.tier === 2) score += 15;
+    else score += 5;
+    // Signal recency
+    var signals = getAccountSignals(acct.id);
+    var recentSignal = signals.length && daysSince(signals[signals.length-1].timestamp) <= 7;
+    if (recentSignal) score += 25;
+    // Cadence gap
+    var lastDisp = lastDispositionDate(acct.id);
+    var gap = lastDisp ? daysSince(lastDisp) : daysSince(acct.addedAt);
+    if (gap > 14) score += 20;
+    else if (gap > 7) score += 10;
+    // Untested approaches bonus
+    var approaches = getApproaches().filter(function(ap) { return ap.thesisId === acct.thesisId && ap.status === 'active'; });
+    var disps = getAccountDispositions(acct.id);
+    var usedApproaches = {};
+    disps.forEach(function(d) { if (d.approachUsed) usedApproaches[d.approachUsed] = true; });
+    var untested = approaches.filter(function(ap) { return !usedApproaches[ap.id]; }).length;
+    if (untested > 0) score += 8;
+    return score;
+}
+
+function getPriorityReason(acct) {
+    var signals = getAccountSignals(acct.id);
+    var recentSignal = signals.length && daysSince(signals[signals.length-1].timestamp) <= 7;
+    if (recentSignal) return 'Signal fired: ' + signals[signals.length-1].description.slice(0, 40);
+    var lastDisp = lastDispositionDate(acct.id);
+    var gap = lastDisp ? daysSince(lastDisp) : daysSince(acct.addedAt);
+    if (gap > 14) return 'Cadence gap: ' + gap + ' days since last touch';
+    if (acct.tier === 1) return 'Tier 1 rotation';
+    var approaches = getApproaches().filter(function(ap) { return ap.thesisId === acct.thesisId && ap.status === 'active'; });
+    var disps = getAccountDispositions(acct.id);
+    var usedApproaches = {};
+    disps.forEach(function(d) { if (d.approachUsed) usedApproaches[d.approachUsed] = true; });
+    var untested = approaches.filter(function(ap) { return !usedApproaches[ap.id]; });
+    if (untested.length) return 'Approach pivot recommended — try ' + untested[0].name;
+    return 'Scheduled touch';
+}
+
+function getSuggestedApproach(acct) {
+    var approaches = getApproaches().filter(function(ap) { return ap.thesisId === acct.thesisId && ap.status === 'active'; });
+    if (!approaches.length) return null;
+    // Find best performing or least tested
+    var disps = getDispositions();
+    var best = null, bestRate = -1;
+    approaches.forEach(function(ap) {
+        var apDisps = disps.filter(function(d) { return d.approachUsed === ap.id; });
+        if (apDisps.length < 2) { if (!best) best = ap; return; }
+        var rate = apDisps.filter(function(d) { return d.type === 'progressing'; }).length / apDisps.length;
+        if (rate > bestRate) { bestRate = rate; best = ap; }
+    });
+    return best;
+}
+
+// ============ ONBOARDING ============
+var onboardPhase = 0;
+var tempThesis = {};
+var tempApproach = {};
+
+function isOnboarded() { return !!getSetup(); }
+
+function renderOnboarding() {
+    var phases = document.querySelectorAll('.ta-onboard-phase');
+    phases.forEach(function(p, i) {
+        p.classList.toggle('active', i === onboardPhase);
+    });
+    // Progress pips
+    var pips = document.querySelectorAll('.ta-ob-pip');
+    pips.forEach(function(p, i) {
+        p.classList.remove('done', 'current');
+        if (i < onboardPhase) p.classList.add('done');
+        else if (i === onboardPhase) p.classList.add('current');
+    });
+    // Render thesis list
+    renderThesisList();
+    renderApproachList();
+    updateOnboardButtons();
+}
+
+function renderThesisList() {
+    var el = document.getElementById('thesisList');
+    if (!el) return;
+    var theses = getTheses();
+    if (!theses.length) { el.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;">No theses created yet. Build your first one above.</div>'; return; }
+    el.innerHTML = theses.map(function(t) {
+        return '<div class="ta-ob-thesis-item"><button class="remove" onclick="removeThesis(\'' + t.id + '\')">&times;</button><div class="name">' + esc(t.name) + '</div><div class="statement">' + esc(t.fullStatement) + '</div></div>';
+    }).join('');
+}
+
+function renderApproachList() {
+    var el = document.getElementById('approachList');
+    if (!el) return;
+    var approaches = getApproaches();
+    if (!approaches.length) { el.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;">No approaches created yet. Build your first one above.</div>'; return; }
+    var theses = getTheses();
+    el.innerHTML = approaches.map(function(a) {
+        var thesis = theses.find(function(t) { return t.id === a.thesisId; });
+        return '<div class="ta-ob-approach-item"><button class="remove" onclick="removeApproach(\'' + a.id + '\')">&times;</button><div class="cat">' + esc(a.category) + ' — ' + (thesis ? esc(thesis.name) : '?') + '</div><div class="name">' + esc(a.name) + '</div><div class="desc">' + esc(a.description) + '</div></div>';
+    }).join('');
+}
+
+function updateOnboardButtons() {
+    var nextBtn = document.getElementById('obNext');
+    if (!nextBtn) return;
+    if (onboardPhase === 0) {
+        nextBtn.disabled = !document.querySelector('.ta-ob-option.selected');
+    } else if (onboardPhase === 1) {
+        nextBtn.disabled = getTheses().length < 1;
+    } else if (onboardPhase === 2) {
+        nextBtn.disabled = getApproaches().length < 2;
+    } else {
+        nextBtn.disabled = false;
+    }
+}
+
+window.obSelectCycle = function(el) {
+    document.querySelectorAll('#cycleOptions .ta-ob-option').forEach(function(o) { o.classList.remove('selected'); });
+    el.classList.add('selected');
+    updateOnboardButtons();
+};
+
+window.obUsePressureNudge = function(text) {
+    var field = document.getElementById('thesisPressure');
+    if (field) field.value = text;
+};
+
+window.saveThesis = function() {
+    var name = document.getElementById('thesisName').value.trim();
+    var pressure = document.getElementById('thesisPressure').value.trim();
+    var segment = document.getElementById('thesisSegment').value.trim();
+    var leverage = document.getElementById('thesisLeverage').value.trim();
+    if (!name || !pressure || !segment || !leverage) { alert('All fields are required.'); return; }
+    var fullStatement = pressure + ' is creating urgency for ' + segment + ', and I have the right to win because ' + leverage + '.';
+    var theses = getTheses();
+    theses.push({ id: genId(), name: name, pressure: pressure, segment: segment, leverage: leverage, fullStatement: fullStatement, version: 1, status: 'active', createdAt: new Date().toISOString(), versions: [{ v: 1, statement: fullStatement, date: new Date().toISOString() }] });
+    saveTheses(theses);
+    document.getElementById('thesisName').value = '';
+    document.getElementById('thesisPressure').value = '';
+    document.getElementById('thesisSegment').value = '';
+    document.getElementById('thesisLeverage').value = '';
+    renderThesisList();
+    updateOnboardButtons();
+    if (theses.length < 4) {
+        document.getElementById('thesisEncourage').textContent = 'Most successful territories are built on 2-4 distinct hypotheses. You have ' + theses.length + '.';
+        document.getElementById('thesisEncourage').style.display = 'block';
+    } else {
+        document.getElementById('thesisEncourage').style.display = 'none';
+    }
+};
+
+window.removeThesis = function(id) {
+    var theses = getTheses().filter(function(t) { return t.id !== id; });
+    saveTheses(theses);
+    // Also remove related approaches
+    var approaches = getApproaches().filter(function(a) { return a.thesisId !== id; });
+    saveApproaches(approaches);
+    renderThesisList();
+    renderApproachList();
+    updateOnboardButtons();
+};
+
+window.saveApproach = function() {
+    var thesisId = document.getElementById('approachThesis').value;
+    var category = document.getElementById('approachCategory').value;
+    var name = document.getElementById('approachName').value.trim();
+    var desc = document.getElementById('approachDesc').value.trim();
+    if (!thesisId || !category || !name || !desc) { alert('All fields are required.'); return; }
+    var approaches = getApproaches();
+    approaches.push({ id: genId(), thesisId: thesisId, category: category, name: name, description: desc, status: 'active', createdAt: new Date().toISOString(), retiredAt: null });
+    saveApproaches(approaches);
+    document.getElementById('approachName').value = '';
+    document.getElementById('approachDesc').value = '';
+    renderApproachList();
+    updateOnboardButtons();
+};
+
+window.removeApproach = function(id) {
+    var approaches = getApproaches().filter(function(a) { return a.id !== id; });
+    saveApproaches(approaches);
+    renderApproachList();
+    updateOnboardButtons();
+};
+
+window.obNext = function() {
+    if (onboardPhase === 0) {
+        var sel = document.querySelector('#cycleOptions .ta-ob-option.selected');
+        if (!sel) return;
+        var territory = getTerritory();
+        territory.salesCycle = sel.dataset.value;
+        territory.createdAt = new Date().toISOString();
+        saveTerritory(territory);
+    }
+    if (onboardPhase === 4) {
+        // Complete onboarding
+        saveSetup({ completedAt: new Date().toISOString(), version: 1 });
+        document.getElementById('onboardView').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        renderApp();
+        return;
+    }
+    onboardPhase++;
+    renderOnboarding();
+    // Populate thesis dropdown in approach builder
+    if (onboardPhase === 2) populateThesisDropdowns();
+};
+
+window.obBack = function() {
+    if (onboardPhase > 0) { onboardPhase--; renderOnboarding(); }
+};
+
+function populateThesisDropdowns() {
+    var theses = getTheses();
+    var opts = theses.map(function(t) { return '<option value="' + t.id + '">' + esc(t.name) + '</option>'; }).join('');
+    var el = document.getElementById('approachThesis');
+    if (el) el.innerHTML = '<option value="">Select thesis...</option>' + opts;
+    // Also populate account modal thesis dropdown
+    var el2 = document.getElementById('addAcctThesis');
+    if (el2) el2.innerHTML = '<option value="">Select thesis...</option>' + opts;
+}
+
+// ============ MAIN APP ============
+var currentView = 'cockpit';
+var currentFilter = 'all';
+
+function renderApp() {
+    populateThesisDropdowns();
+    populateAccountDropdowns();
+    if (currentView === 'territory') renderTerritoryView();
+    else if (currentView === 'cockpit') renderCockpitView();
+    else if (currentView === 'intelligence') renderIntelligenceView();
+    else if (currentView === 'manage') renderManageView();
+    // Update tab active states
+    document.querySelectorAll('.ta-view-tab').forEach(function(t) {
+        t.classList.toggle('active', t.dataset.view === currentView);
+    });
+    document.querySelectorAll('.ta-view').forEach(function(v) {
+        v.classList.toggle('active', v.id === currentView + 'View');
+    });
+}
+
+window.switchView = function(view) {
+    currentView = view;
+    renderApp();
+};
+
+// ============ TERRITORY VIEW ============
+function renderTerritoryView() {
+    var accounts = getAccounts().filter(function(a) { return a.status === 'active'; });
+    var theses = getTheses();
+    // Count
+    document.getElementById('taCount').innerHTML = '<span>' + accounts.length + '</span> / ' + MAX_ACCOUNTS;
+    // Filters
+    var filterHtml = '<button class="ta-filter ' + (currentFilter === 'all' ? 'active' : '') + '" onclick="setFilter(\'all\')">All</button>';
+    filterHtml += '<button class="ta-filter ' + (currentFilter === '1' ? 'active' : '') + '" onclick="setFilter(\'1\')">Tier 1</button>';
+    filterHtml += '<button class="ta-filter ' + (currentFilter === '2' ? 'active' : '') + '" onclick="setFilter(\'2\')">Tier 2</button>';
+    filterHtml += '<button class="ta-filter ' + (currentFilter === '3' ? 'active' : '') + '" onclick="setFilter(\'3\')">Tier 3</button>';
+    theses.forEach(function(t) {
+        if (t.status === 'active') {
+            filterHtml += '<button class="ta-filter ' + (currentFilter === 'thesis-' + t.id ? 'active' : '') + '" onclick="setFilter(\'thesis-' + t.id + '\')">' + esc(t.name) + '</button>';
+        }
+    });
+    document.getElementById('taFilters').innerHTML = filterHtml;
+    // Filter accounts
+    var filtered = accounts;
+    if (currentFilter === '1' || currentFilter === '2' || currentFilter === '3') {
+        filtered = accounts.filter(function(a) { return a.tier === parseInt(currentFilter); });
+    } else if (currentFilter.indexOf('thesis-') === 0) {
+        var tid = currentFilter.replace('thesis-', '');
+        filtered = accounts.filter(function(a) { return a.thesisId === tid; });
+    }
+    // Sort by tier then name
+    filtered.sort(function(a, b) { return a.tier - b.tier || a.name.localeCompare(b.name); });
+    if (!filtered.length) {
+        document.getElementById('taGrid').innerHTML = '<div class="ta-empty"><div class="icon">🗺️</div>No accounts yet. Add your first account to start building your territory.</div>';
+        return;
+    }
+    document.getElementById('taGrid').innerHTML = filtered.map(function(acct) {
+        var thesis = theses.find(function(t) { return t.id === acct.thesisId; });
+        var disps = getAccountDispositions(acct.id);
+        var prog = countByType(disps, 'progressing');
+        var stalled = countByType(disps, 'engaged-stalled');
+        var noTrac = countByType(disps, 'no-traction');
+        var tierClass = 'tier-' + acct.tier + '-bg';
+        var leverageLabels = {'network-connection':'Network','existing-proof-point':'Proof Point','market-signal':'Signal','geographic-advantage':'Geo','cold':'Cold'};
+        var triggerLabels = {'thesis-fit':'Thesis Fit','signal-event':'Signal','network-opportunity':'Network','inbound-interest':'Inbound','strategic-bet':'Strategic Bet'};
+        return '<div class="ta-acct" onclick="openDispositionModal(\'' + acct.id + '\')">' +
+            '<div class="ta-acct-head"><div class="ta-acct-name">' + esc(acct.name) + '</div><div class="ta-acct-tier ' + tierClass + '">T' + acct.tier + '</div></div>' +
+            '<div class="ta-acct-meta">' +
+                (thesis ? '<span class="ta-acct-tag">' + esc(thesis.name) + '</span>' : '') +
+                '<span class="ta-acct-leverage">' + (leverageLabels[acct.leverageType] || acct.leverageType) + '</span>' +
+                '<span class="ta-acct-trigger">' + (triggerLabels[acct.additionTrigger] || acct.additionTrigger) + '</span>' +
+            '</div>' +
+            '<div class="ta-acct-stats">' +
+                (prog ? '<span class="progressing">✓ ' + prog + ' progressing</span>' : '') +
+                (stalled ? '<span class="stalled">⏸ ' + stalled + ' stalled</span>' : '') +
+                (noTrac ? '<span class="no-traction">✗ ' + noTrac + ' no traction</span>' : '') +
+                (!disps.length ? '<span>No activity yet</span>' : '') +
+            '</div>' +
+            '<div class="ta-acct-actions">' +
+                '<button class="ta-acct-action" onclick="event.stopPropagation();openDispositionModal(\'' + acct.id + '\')">Log Disposition</button>' +
+                '<button class="ta-acct-action" onclick="event.stopPropagation();openRetierAcct(\'' + acct.id + '\')">Re-tier</button>' +
+                '<button class="ta-acct-action graduate" onclick="event.stopPropagation();graduateAccount(\'' + acct.id + '\')">Graduate →</button>' +
+            '</div>' +
+        '</div>';
+    }).join('');
+}
+
+window.setFilter = function(f) { currentFilter = f; renderTerritoryView(); };
+
+// ============ DAILY COCKPIT VIEW ============
+function renderCockpitView() {
+    var accounts = getAccounts().filter(function(a) { return a.status === 'active'; });
+    var theses = getTheses();
+    // Health score
+    var health = computeHealthScore();
+    var territory = getTerritory();
+    territory.healthScore = health;
+    saveTerritory(territory);
+    var hClass = health >= 70 ? 'green' : health >= 40 ? 'yellow' : 'red';
+    var hLabel = health >= 70 ? 'Territory Intelligence: Strong' : health >= 40 ? 'Territory Intelligence: Degrading — some accounts need your input' : 'Territory Intelligence Decaying — ' + accounts.filter(function(a) { return !lastDispositionDate(a.id) || daysSince(lastDispositionDate(a.id)) > 14; }).length + ' accounts need your input. Your recommendations are less precise.';
+    var hLabelClass = health >= 70 ? '' : health >= 40 ? 'warn' : 'crit';
+    document.getElementById('dcHealthScore').className = 'dc-health-score ' + hClass;
+    document.getElementById('dcHealthScore').textContent = health;
+    document.getElementById('dcHealthLabel').className = 'dc-health-label ' + hLabelClass;
+    document.getElementById('dcHealthLabel').textContent = hLabel;
+
+    // Friday pulse check
+    var isFriday = dayOfWeek() === 5;
+    var pulseEl = document.getElementById('dcPulse');
+    if (isFriday && territory.lastPulse !== today()) {
+        renderFridayPulse(accounts);
+        pulseEl.style.display = 'block';
+    } else {
+        pulseEl.style.display = 'none';
+    }
+
+    // Priority accounts (top 12)
+    var scored = accounts.map(function(a) { return { acct: a, score: computePriorityScore(a) }; });
+    scored.sort(function(a, b) { return b.score - a.score; });
+    var top = scored.slice(0, 12);
+    var priorityHtml = top.map(function(item, i) {
+        var a = item.acct;
+        var thesis = theses.find(function(t) { return t.id === a.thesisId; });
+        var reason = getPriorityReason(a);
+        var suggested = getSuggestedApproach(a);
+        var tierClass = 'tier-' + a.tier + '-bg';
+        return '<div class="dc-priority">' +
+            '<div class="dc-priority-rank">' + (i + 1) + '</div>' +
+            '<div class="dc-priority-info">' +
+                '<div class="dc-priority-name">' + esc(a.name) + '</div>' +
+                '<div class="dc-priority-reason">' + esc(reason) + '</div>' +
+                '<div class="dc-priority-tags">' +
+                    '<span class="dc-priority-tag ' + tierClass + '">T' + a.tier + '</span>' +
+                    (thesis ? '<span class="dc-priority-tag" style="background:rgba(212,165,116,0.08);color:var(--brand-gold);">' + esc(thesis.name) + '</span>' : '') +
+                    (suggested ? '<span class="dc-priority-tag" style="background:rgba(45,212,191,0.08);color:var(--brand-teal);">' + esc(suggested.name) + '</span>' : '') +
+                '</div>' +
+            '</div>' +
+            '<div class="dc-priority-actions">' +
+                '<button class="dc-priority-action" onclick="openDispositionModal(\'' + a.id + '\')">Log</button>' +
+            '</div>' +
+        '</div>';
+    }).join('');
+    document.getElementById('dcPriorities').innerHTML = priorityHtml || '<div style="padding:20px;color:var(--text-muted);text-align:center;">Add accounts to your territory to see daily priorities.</div>';
+
+    // Vital signs
+    var thisWeek = accounts.filter(function(a) {
+        var last = lastDispositionDate(a.id);
+        return last && daysSince(last) <= 7;
+    }).length;
+    var allDisps = getDispositions();
+    var monthDisps = allDisps.filter(function(d) { return daysSince(d.timestamp) <= 30; });
+    var monthProg = monthDisps.filter(function(d) { return d.type === 'progressing'; }).length;
+    var progRate = monthDisps.length ? Math.round(monthProg / monthDisps.length * 100) : 0;
+    // Best thesis
+    var bestThesis = '-';
+    var bestRate = 0;
+    theses.filter(function(t) { return t.status === 'active'; }).forEach(function(t) {
+        var r = thesisProgressionRate(t.id);
+        if (r > bestRate) { bestRate = r; bestThesis = t.name; }
+    });
+    // Retier days
+    var territory2 = getTerritory();
+    var cadenceMap = {'<30':14,'1-3m':30,'3-6m':45,'6-12m':60,'12+':90};
+    var cadence = cadenceMap[territory2.salesCycle] || 30;
+    var lastRetier = readLS(KEYS.retierHistory, []);
+    var lastRetierDate = lastRetier.length ? lastRetier[lastRetier.length - 1].date : territory2.createdAt;
+    var daysToRetier = Math.max(0, cadence - daysSince(lastRetierDate));
+    // Swap candidates
+    var swapCandidates = accounts.filter(function(a) { return computeSwapScore(a) >= 35; }).length;
+
+    document.getElementById('dcVitals').innerHTML =
+        '<div class="dc-vital"><div class="dc-vital-val">' + thisWeek + '/' + accounts.length + '</div><div class="dc-vital-label">Touched This Week</div></div>' +
+        '<div class="dc-vital"><div class="dc-vital-val" style="color:' + (progRate >= 10 ? 'var(--accent-green)' : progRate >= 5 ? 'var(--accent-amber)' : 'var(--accent-red)') + ';">' + progRate + '%</div><div class="dc-vital-label">Progression Rate</div></div>' +
+        '<div class="dc-vital"><div class="dc-vital-val" style="font-size:0.9rem;">' + esc(bestThesis.slice(0,12)) + '</div><div class="dc-vital-label">Top Thesis (' + bestRate + '%)</div></div>' +
+        '<div class="dc-vital"><div class="dc-vital-val" style="color:' + (daysToRetier > 14 ? 'var(--accent-green)' : daysToRetier > 7 ? 'var(--accent-amber)' : 'var(--accent-red)') + ';">' + daysToRetier + 'd</div><div class="dc-vital-label">Next Re-tier</div></div>' +
+        '<div class="dc-vital"><div class="dc-vital-val" style="color:' + (swapCandidates > 5 ? 'var(--accent-red)' : swapCandidates > 0 ? 'var(--accent-amber)' : 'var(--text-muted)') + ';">' + swapCandidates + '</div><div class="dc-vital-label">Swap Candidates</div></div>';
+
+    // Signal feed
+    var signals = getSignals().sort(function(a, b) { return b.timestamp.localeCompare(a.timestamp); }).slice(0, 10);
+    document.getElementById('dcSignals').innerHTML = signals.length ? signals.map(function(s) {
+        var acct = getAccounts().find(function(a) { return a.id === s.accountId; });
+        var dotClass = (s.type || 'other').replace(/\s+/g, '-');
+        return '<div class="dc-signal"><div class="dc-signal-dot ' + dotClass + '"></div><div class="dc-signal-text">' + esc(s.description) + '</div><div class="dc-signal-acct">' + (acct ? esc(acct.name) : '?') + '</div><div class="dc-signal-time">' + daysSince(s.timestamp) + 'd ago</div></div>';
+    }).join('') : '<div style="padding:12px;color:var(--text-muted);font-size:0.82rem;">No signals logged yet. Drop a signal using the input above.</div>';
+}
+
+function renderFridayPulse(accounts) {
+    var territory = getTerritory();
+    var staleCutoff = territory.salesCycle === '<30' ? 7 : territory.salesCycle === '1-3m' ? 10 : 14;
+    var stale = accounts.filter(function(a) {
+        var last = lastDispositionDate(a.id);
+        return !last || daysSince(last) > staleCutoff;
+    }).slice(0, 15);
+    var html = stale.map(function(a) {
+        var last = lastDispositionDate(a.id);
+        var gap = last ? daysSince(last) + ' days ago' : 'Never contacted';
+        return '<div class="dc-pulse-item"><span class="ta-acct-tier tier-' + a.tier + '-bg" style="font-size:0.6rem;">T' + a.tier + '</span><span class="name">' + esc(a.name) + '</span><span class="days">' + gap + '</span><span class="actions">' +
+            '<button class="dc-pulse-btn confirm" onclick="pulseConfirm(\'' + a.id + '\',this)">✓ Active</button>' +
+            '<button class="dc-pulse-btn retier" onclick="openRetierAcct(\'' + a.id + '\')">Re-tier</button>' +
+            '<button class="dc-pulse-btn swap" onclick="pulseSwap(\'' + a.id + '\')">Swap</button>' +
+        '</span></div>';
+    }).join('');
+    document.getElementById('dcPulseItems').innerHTML = html || '<div style="padding:12px;color:var(--accent-green);">All accounts are fresh! No review needed.</div>';
+}
+
+window.completePulse = function() {
+    var territory = getTerritory();
+    territory.lastPulse = today();
+    territory.pulseSkips = 0;
+    saveTerritory(territory);
+    document.getElementById('dcPulse').style.display = 'none';
+    renderCockpitView();
+};
+
+window.pulseConfirm = function(id, btn) {
+    btn.closest('.dc-pulse-item').style.opacity = '0.4';
+    btn.closest('.dc-pulse-item').style.pointerEvents = 'none';
+};
+
+window.pulseSwap = function(id) {
+    if (!confirm('Remove this account from your territory?')) return;
+    var accounts = getAccounts();
+    var acct = accounts.find(function(a) { return a.id === id; });
+    if (acct) { acct.status = 'swapped-out'; saveAccounts(accounts); }
+    var sh = getSwapHistory();
+    sh.push({ id: genId(), accountRemoved: id, accountAdded: null, reason: 'pulse-review', timestamp: new Date().toISOString() });
+    saveSwapHistory(sh);
+    renderCockpitView();
+};
+
+window.addSignal = function() {
+    var desc = document.getElementById('signalInput').value.trim();
+    var acctId = document.getElementById('signalAcct').value;
+    var type = document.getElementById('signalType').value || 'other';
+    if (!desc || !acctId) { alert('Enter a signal description and select an account.'); return; }
+    var signals = getSignals();
+    signals.push({ id: genId(), accountId: acctId, description: desc, type: type, timestamp: new Date().toISOString() });
+    saveSignals(signals);
+    // Also log as disposition
+    var disps = getDispositions();
+    disps.push({ id: genId(), accountId: acctId, type: 'signal-detected', description: desc, signalType: type, timestamp: new Date().toISOString() });
+    saveDispositions(disps);
+    document.getElementById('signalInput').value = '';
+    renderCockpitView();
+};
+
+// ============ INTELLIGENCE VIEW ============
+function renderIntelligenceView() {
+    var theses = getTheses().filter(function(t) { return t.status === 'active'; });
+    var approaches = getApproaches().filter(function(a) { return a.status === 'active'; });
+    var disps = getDispositions();
+    var html = '<div class="dc-section-title">Approach Intelligence</div>';
+    if (!disps.length) {
+        html += '<div style="padding:20px;color:var(--text-muted);text-align:center;">Log dispositions to start seeing approach intelligence.</div>';
+        document.getElementById('intelligenceContent').innerHTML = html;
+        return;
+    }
+    html += '<div class="ta-intel">';
+    // Per thesis card
+    theses.forEach(function(t) {
+        var thesisApproaches = approaches.filter(function(a) { return a.thesisId === t.id; });
+        var rate = thesisProgressionRate(t.id);
+        html += '<div class="ta-intel-card"><div class="ta-intel-card-title">' + esc(t.name) + ' — ' + rate + '% progression</div>';
+        thesisApproaches.forEach(function(ap) {
+            var apDisps = disps.filter(function(d) { return d.approachUsed === ap.id; });
+            var total = apDisps.length;
+            var prog = apDisps.filter(function(d) { return d.type === 'progressing'; }).length;
+            var stalls = apDisps.filter(function(d) { return d.type === 'engaged-stalled'; }).length;
+            var convRate = total ? Math.round(prog / total * 100) : 0;
+            var stallRate = total ? Math.round(stalls / total * 100) : 0;
+            var rClass = convRate >= 10 ? 'good' : convRate >= 5 ? 'warn' : 'bad';
+            html += '<div class="ta-intel-row"><span class="label">' + esc(ap.name) + ' (' + esc(ap.category) + ')</span><span class="val ' + (total < 3 ? '' : rClass) + '">' + (total < 3 ? total + ' uses' : convRate + '% conv / ' + stallRate + '% stall') + '</span></div>';
+        });
+        html += '</div>';
+    });
+    // Pivot patterns
+    var pivots = disps.filter(function(d) { return d.type === 'progressing' && d.angleWorked && d.approachUsed && d.angleWorked !== d.approachUsed; });
+    if (pivots.length >= 2) {
+        html += '<div class="ta-intel-card"><div class="ta-intel-card-title">Pivot Patterns</div>';
+        var pivotMap = {};
+        pivots.forEach(function(d) {
+            var key = d.approachUsed + '→' + d.angleWorked;
+            pivotMap[key] = (pivotMap[key] || 0) + 1;
+        });
+        Object.keys(pivotMap).forEach(function(key) {
+            var parts = key.split('→');
+            var from = approaches.find(function(a) { return a.id === parts[0]; });
+            var to = approaches.find(function(a) { return a.id === parts[1]; });
+            html += '<div class="ta-intel-row"><span class="label">' + (from ? esc(from.name) : '?') + ' → ' + (to ? esc(to.name) : '?') + '</span><span class="val good">' + pivotMap[key] + 'x</span></div>';
+        });
+        html += '</div>';
+    }
+    html += '</div>';
+    document.getElementById('intelligenceContent').innerHTML = html;
+}
+
+// ============ MANAGE VIEW ============
+function renderManageView() {
+    var theses = getTheses();
+    var approaches = getApproaches();
+    var html = '<div class="ta-manage">';
+    html += '<div class="ta-manage-title">Theses</div>';
+    theses.forEach(function(t) {
+        var rate = thesisProgressionRate(t.id);
+        var statusBadge = t.status === 'retired' ? '<span style="color:var(--accent-red);font-size:0.7rem;"> (Retired v' + t.version + ')</span>' : '<span style="color:var(--accent-green);font-size:0.7rem;"> (Active v' + t.version + ')</span>';
+        html += '<div class="ta-ob-thesis-item"><div class="name">' + esc(t.name) + statusBadge + '</div><div class="statement">' + esc(t.fullStatement) + '</div><div style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;">Progression: ' + rate + '% | ' + (t.versions ? t.versions.length : 1) + ' version(s)</div></div>';
+    });
+    html += '<div style="margin-top:var(--space-lg);"><div class="ta-manage-title">Approaches</div>';
+    approaches.forEach(function(a) {
+        var thesis = theses.find(function(t) { return t.id === a.thesisId; });
+        var statusBadge = a.status === 'retired' ? '<span style="color:var(--accent-red);"> (Retired)</span>' : '';
+        html += '<div class="ta-ob-approach-item"><div class="cat">' + esc(a.category) + ' — ' + (thesis ? esc(thesis.name) : '?') + statusBadge + '</div><div class="name">' + esc(a.name) + '</div><div class="desc">' + esc(a.description) + '</div></div>';
+    });
+    html += '</div></div>';
+    document.getElementById('manageContent').innerHTML = html;
+}
+
+// ============ ACCOUNT MANAGEMENT ============
+function populateAccountDropdowns() {
+    var accounts = getAccounts().filter(function(a) { return a.status === 'active'; });
+    var opts = accounts.sort(function(a,b) { return a.name.localeCompare(b.name); }).map(function(a) {
+        return '<option value="' + a.id + '">' + esc(a.name) + '</option>';
+    }).join('');
+    var el = document.getElementById('signalAcct');
+    if (el) el.innerHTML = '<option value="">Account...</option>' + opts;
+    var el2 = document.getElementById('dispAcct');
+    if (el2) el2.innerHTML = opts;
+}
+
+window.openAddAccount = function() {
+    var accounts = getAccounts().filter(function(a) { return a.status === 'active'; });
+    if (accounts.length >= MAX_ACCOUNTS) {
+        openSwapModal();
+        return;
+    }
+    document.getElementById('addAcctName').value = '';
+    document.getElementById('addAcctThesis').value = '';
+    document.querySelectorAll('#addAcctTier .ta-qselect-opt').forEach(function(o) { o.classList.remove('selected'); });
+    document.querySelectorAll('#addAcctLeverage .ta-qselect-opt').forEach(function(o) { o.classList.remove('selected'); });
+    document.querySelectorAll('#addAcctTrigger .ta-qselect-opt').forEach(function(o) { o.classList.remove('selected'); });
+    // Show leverage calibration if first time
+    var cal = getCalibrations();
+    document.getElementById('leverageCalibration').style.display = cal.leverage ? 'none' : 'block';
+    populateThesisDropdowns();
+    document.getElementById('addAcctModal').classList.add('active');
+};
+
+window.dismissCalibration = function(type) {
+    var cal = getCalibrations();
+    cal[type] = true;
+    saveCalibrations(cal);
+    var el = document.getElementById(type + 'Calibration');
+    if (el) el.style.display = 'none';
+};
+
+window.selectQOpt = function(groupId, value, el) {
+    document.querySelectorAll('#' + groupId + ' .ta-qselect-opt').forEach(function(o) { o.classList.remove('selected'); });
+    el.classList.add('selected');
+};
+
+window.saveNewAccount = function() {
+    var name = document.getElementById('addAcctName').value.trim();
+    var thesisId = document.getElementById('addAcctThesis').value;
+    var tierEl = document.querySelector('#addAcctTier .ta-qselect-opt.selected');
+    var leverageEl = document.querySelector('#addAcctLeverage .ta-qselect-opt.selected');
+    var triggerEl = document.querySelector('#addAcctTrigger .ta-qselect-opt.selected');
+    if (!name || !thesisId || !tierEl || !leverageEl || !triggerEl) { alert('All fields are required.'); return; }
+    var accounts = getAccounts();
+    accounts.push({
+        id: genId(), name: name, tier: parseInt(tierEl.dataset.value),
+        thesisId: thesisId, leverageType: leverageEl.dataset.value,
+        additionTrigger: triggerEl.dataset.value, status: 'active',
+        addedAt: new Date().toISOString(), overrideCount: 0
+    });
+    saveAccounts(accounts);
+    document.getElementById('addAcctModal').classList.remove('active');
+    renderApp();
+};
+
+window.graduateAccount = function(id) {
+    if (!confirm('Move this account to Deal Workspace as an active opportunity? This frees a slot in your territory.')) return;
+    var accounts = getAccounts();
+    var acct = accounts.find(function(a) { return a.id === id; });
+    if (!acct) return;
+    acct.status = 'graduated';
+    acct.graduatedAt = new Date().toISOString();
+    saveAccounts(accounts);
+    // Create deal in deal workspace
+    var deals = readLS('gtmos_deal_workspaces', []);
+    deals.push({
+        id: genId(), name: acct.name, value: '', stage: 'prospect',
+        closeDate: '', forecastCategory: 'pipeline', momentum: 'neutral',
+        champion: '', economicBuyer: '', useCase: '', pain: '',
+        competition: '', decisionProcess: '', notes: 'Graduated from Territory Architect. Thesis: ' + (getTheses().find(function(t) { return t.id === acct.thesisId; }) || {}).name,
+        stakeholders: [], created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+    });
+    writeLS('gtmos_deal_workspaces', deals);
+    renderApp();
+};
+
+window.openRetierAcct = function(id) {
+    var accounts = getAccounts();
+    var acct = accounts.find(function(a) { return a.id === id; });
+    if (!acct) return;
+    var newTier = prompt('Current tier: ' + acct.tier + '. Enter new tier (1, 2, or 3):');
+    if (!newTier || ![1,2,3].includes(parseInt(newTier))) return;
+    acct.tier = parseInt(newTier);
+    saveAccounts(accounts);
+    renderApp();
+};
+
+// ============ DISPOSITION MODAL ============
+var dispAccountId = null;
+
+window.openDispositionModal = function(id) {
+    dispAccountId = id;
+    var acct = getAccounts().find(function(a) { return a.id === id; });
+    if (!acct) return;
+    document.getElementById('dispAcctName').textContent = acct.name;
+    // Reset
+    document.querySelectorAll('.ta-disp-opt').forEach(function(o) { o.classList.remove('selected'); });
+    document.getElementById('dispApproachGroup').style.display = 'none';
+    document.getElementById('dispAngleGroup').style.display = 'none';
+    document.getElementById('dispBlockerGroup').style.display = 'none';
+    document.getElementById('dispSignalGroup').style.display = 'none';
+    document.getElementById('dispDisqualGroup').style.display = 'none';
+    document.getElementById('dispBlocker').value = '';
+    document.getElementById('dispSignalDesc').value = '';
+    // Populate approach quick-select
+    var approaches = getApproaches().filter(function(a) { return a.thesisId === acct.thesisId && a.status === 'active'; });
+    var apHtml = approaches.map(function(a) {
+        var uses = approachUsesOnAccount(a.id, id);
+        var saturated = uses >= 3 ? ' (⚠ ' + uses + 'x used)' : '';
+        return '<button class="ta-qselect-opt" data-value="' + a.id + '" onclick="selectQOpt(\'dispApproach\',\'' + a.id + '\',this)">' + esc(a.name) + saturated + '</button>';
+    }).join('');
+    document.getElementById('dispApproach').innerHTML = apHtml || '<span style="color:var(--text-muted);font-size:0.78rem;">No approaches for this thesis.</span>';
+    document.getElementById('dispAngle').innerHTML = apHtml || '';
+    // Show progression calibration if first time
+    var cal = getCalibrations();
+    document.getElementById('progressionCalibration').style.display = cal.progression ? 'none' : 'block';
+    document.getElementById('dispModal').classList.add('active');
+};
+
+window.selectDispType = function(type, el) {
+    document.querySelectorAll('.ta-disp-opt').forEach(function(o) { o.classList.remove('selected'); });
+    el.classList.add('selected');
+    var showApproach = ['progressing', 'engaged-stalled', 'no-traction'].includes(type);
+    document.getElementById('dispApproachGroup').style.display = showApproach ? 'block' : 'none';
+    document.getElementById('dispAngleGroup').style.display = type === 'progressing' ? 'block' : 'none';
+    document.getElementById('dispBlockerGroup').style.display = type === 'engaged-stalled' ? 'block' : 'none';
+    document.getElementById('dispSignalGroup').style.display = type === 'signal-detected' ? 'block' : 'none';
+    document.getElementById('dispDisqualGroup').style.display = type === 'disqualified' ? 'block' : 'none';
+    // Show calibration
+    if (type === 'progressing') {
+        var cal = getCalibrations();
+        document.getElementById('progressionCalibration').style.display = cal.progression ? 'none' : 'block';
+    }
+};
+
+window.saveDisposition = function() {
+    var typeEl = document.querySelector('.ta-disp-opt.selected');
+    if (!typeEl) { alert('Select a disposition type.'); return; }
+    var type = typeEl.dataset.value;
+    var disp = { id: genId(), accountId: dispAccountId, type: type, timestamp: new Date().toISOString() };
+    var needsApproach = ['progressing', 'engaged-stalled', 'no-traction'].includes(type);
+    if (needsApproach) {
+        var apEl = document.querySelector('#dispApproach .ta-qselect-opt.selected');
+        if (!apEl) { alert('Select which approach you used.'); return; }
+        disp.approachUsed = apEl.dataset.value;
+    }
+    if (type === 'progressing') {
+        var angleEl = document.querySelector('#dispAngle .ta-qselect-opt.selected');
+        disp.angleWorked = angleEl ? angleEl.dataset.value : disp.approachUsed;
+        // Dismiss calibration
+        var cal = getCalibrations(); cal.progression = true; saveCalibrations(cal);
+    }
+    if (type === 'engaged-stalled') disp.blocker = document.getElementById('dispBlocker').value.trim();
+    if (type === 'signal-detected') {
+        disp.description = document.getElementById('dispSignalDesc').value.trim();
+        disp.signalType = document.getElementById('dispSignalType').value || 'other';
+        if (!disp.description) { alert('Enter a signal description.'); return; }
+        // Also add to signals
+        var signals = getSignals();
+        signals.push({ id: genId(), accountId: dispAccountId, description: disp.description, type: disp.signalType, timestamp: disp.timestamp });
+        saveSignals(signals);
+    }
+    if (type === 'disqualified') {
+        var dqEl = document.querySelector('#dispDisqual .ta-qselect-opt.selected');
+        if (!dqEl) { alert('Select a disqualification reason.'); return; }
+        disp.disqualReason = dqEl.dataset.value;
+        // Remove from territory
+        var accounts = getAccounts();
+        var acct = accounts.find(function(a) { return a.id === dispAccountId; });
+        if (acct) { acct.status = 'disqualified'; saveAccounts(accounts); }
+    }
+    var disps = getDispositions(); disps.push(disp); saveDispositions(disps);
+    document.getElementById('dispModal').classList.remove('active');
+    // Check approach saturation
+    if (needsApproach) {
+        var uses = approachUsesOnAccount(disp.approachUsed, dispAccountId);
+        if (uses >= 3) {
+            var ap = getApproaches().find(function(a) { return a.id === disp.approachUsed; });
+            var acctName = (getAccounts().find(function(a) { return a.id === dispAccountId; }) || {}).name || '?';
+            alert((ap ? ap.name : 'This approach') + ' has been used ' + uses + ' times on ' + acctName + ' with no progression. Consider trying a different angle.');
+        }
+    }
+    renderApp();
+};
+
+// ============ SWAP MODAL ============
+function openSwapModal() {
+    var accounts = getAccounts().filter(function(a) { return a.status === 'active'; });
+    var scored = accounts.map(function(a) { return { acct: a, score: computeSwapScore(a) }; });
+    scored.sort(function(a, b) { return b.score - a.score; });
+    var top3 = scored.slice(0, 3);
+    var theses = getTheses();
+    // First time transparency
+    var cal = getCalibrations();
+    var showLogic = !cal.swapLogic;
+    var html = '';
+    if (showLogic) {
+        html += '<div class="ta-calibration"><button class="dismiss" onclick="dismissCalibration(\'swapLogic\')">Got it</button><strong>How swap recommendations work:</strong> This recommendation is based on time without progression, thesis performance across similar accounts, signal activity, effort invested, and tier priority. Accounts you haven\'t genuinely worked yet are protected from swap recommendations.</div>';
+    }
+    html += '<p style="font-size:0.85rem;color:var(--text-tertiary);margin-bottom:var(--space-md);">Your territory is at capacity (' + accounts.length + '/' + MAX_ACCOUNTS + '). Select an account to swap out:</p>';
+    top3.forEach(function(item) {
+        var a = item.acct;
+        var thesis = theses.find(function(t) { return t.id === a.thesisId; });
+        var lastProg = lastProgressionDate(a.id);
+        var daysProg = lastProg ? daysSince(lastProg) : daysSince(a.addedAt);
+        var reason = daysProg + ' days without progression';
+        var tRate = thesisProgressionRate(a.thesisId);
+        if (tRate < 5) reason += ', thesis underperforming at ' + tRate + '%';
+        html += '<div class="ta-swap-rec"><div class="info"><div class="name">' + esc(a.name) + ' (T' + a.tier + ')</div><div class="reason">' + esc(reason) + '</div></div><button class="accept" onclick="executeSwap(\'' + a.id + '\')">Swap Out</button></div>';
+    });
+    html += '<div style="margin-top:var(--space-md);"><button class="ta-modal-btn ghost" onclick="closeSwapModal()">Cancel</button></div>';
+    document.getElementById('swapContent').innerHTML = html;
+    document.getElementById('swapModal').classList.add('active');
+}
+
+window.executeSwap = function(id) {
+    var accounts = getAccounts();
+    var acct = accounts.find(function(a) { return a.id === id; });
+    if (acct) { acct.status = 'swapped-out'; saveAccounts(accounts); }
+    var sh = getSwapHistory();
+    sh.push({ id: genId(), accountRemoved: id, reason: 'swap-recommendation', score: computeSwapScore(acct), timestamp: new Date().toISOString() });
+    saveSwapHistory(sh);
+    document.getElementById('swapModal').classList.remove('active');
+    openAddAccount();
+};
+
+window.closeSwapModal = function() { document.getElementById('swapModal').classList.remove('active'); };
+
+// ============ UTILS ============
+function esc(str) { if (!str) return ''; var d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+
+// Close modals on overlay click
+document.querySelectorAll('.ta-modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.classList.remove('active');
+    });
+});
+
+// ============ INIT ============
+if (isOnboarded()) {
+    document.getElementById('onboardView').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    renderApp();
+    // Check for skipped Friday pulse
+    var territory = getTerritory();
+    if (dayOfWeek() >= 6 && territory.lastPulse !== today()) {
+        var lastPulseDay = territory.lastPulse ? new Date(territory.lastPulse).getDay() : -1;
+        if (lastPulseDay !== 5) {
+            territory.pulseSkips = (territory.pulseSkips || 0) + 1;
+            saveTerritory(territory);
+        }
+    }
+} else {
+    document.getElementById('onboardView').style.display = 'block';
+    document.getElementById('mainApp').style.display = 'none';
+    renderOnboarding();
+}
+
+})();
+</script>
+</body>
+</html>

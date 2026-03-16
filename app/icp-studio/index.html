@@ -1,0 +1,1352 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICP Studio - Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .studio-layout { display: grid; grid-template-columns: 1fr 340px; gap: var(--space-lg); min-height: calc(100vh - 140px); }
+        @media (max-width: 1200px) { .studio-layout { grid-template-columns: 1fr; } .analytics-panel { display: none; } }
+        
+        .builder-content { overflow-y: auto; padding-right: var(--space-md); }
+        .analytics-panel { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); overflow-y: auto; position: sticky; top: 0; height: fit-content; max-height: calc(100vh - 160px); }
+        
+        .builder-section { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-lg); }
+        .section-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); }
+        .section-icon { font-size: 1.5rem; }
+        .section-title { font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary); }
+        .section-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+        
+        .role-toggle { display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+        .role-btn { flex: 1; padding: var(--space-sm) var(--space-md); border: 1px solid var(--border-default); border-radius: var(--radius-md); background: transparent; color: var(--text-tertiary); font-weight: 600; cursor: pointer; transition: all var(--transition-fast); }
+        .role-btn:hover { border-color: var(--brand-gold); color: var(--text-secondary); }
+        .role-btn.active { background: rgba(212, 175, 55, 0.15); border-color: var(--brand-gold); color: var(--brand-gold); }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
+        @media (max-width: 900px) { .input-grid { grid-template-columns: 1fr; } }
+        .input-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
+        @media (max-width: 900px) { .input-grid-2 { grid-template-columns: 1fr; } }
+        
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: var(--space-xs); }
+        .input-group select, .input-group input { width: 100%; padding: var(--space-sm) var(--space-md); background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; }
+        .input-group select:focus, .input-group input:focus { outline: none; border-color: var(--brand-gold); }
+        .input-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-xs); }
+        
+        .custom-input { display: none; margin-top: var(--space-xs); }
+        .custom-input.visible { display: block; }
+        
+        .callout { padding: var(--space-md); border-radius: var(--radius-md); margin-top: var(--space-md); }
+        .callout-amber { background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--accent-amber); }
+        .callout-red { background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red); }
+        .callout-green { background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--accent-green); }
+        .callout-blue { background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--accent-blue); }
+        .callout-title { font-size: 0.8rem; font-weight: 700; color: inherit; margin-bottom: var(--space-xs); }
+        .callout-amber .callout-title { color: var(--accent-amber); }
+        .callout-red .callout-title { color: var(--accent-red); }
+        .callout-green .callout-title { color: var(--accent-green); }
+        .callout-blue .callout-title { color: var(--accent-blue); }
+        .callout-text { font-size: 0.85rem; color: var(--text-tertiary); }
+        
+        .output-box { background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-md); }
+        .output-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--brand-gold); margin-bottom: var(--space-sm); }
+        .output-statement { font-family: var(--font-serif); font-size: 1.1rem; color: var(--text-primary); line-height: 1.6; }
+        .output-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: var(--space-sm); border-top: 1px solid var(--border-default); padding-top: var(--space-sm); }
+        .hints-hidden .input-hint, .hints-hidden .output-hint { display:none; }
+        .hint-toggle { font-size:0.68rem; color:var(--text-muted); cursor:pointer; opacity:0.6; padding:2px 8px; border:1px solid var(--border-default); border-radius:var(--radius-full); background:transparent; font-family:inherit; margin-left:8px; }
+        .hint-toggle:hover { opacity:1; color:var(--brand-gold); border-color:rgba(212,165,116,0.3); }
+        .output-list { list-style: none; padding: 0; margin: 0; }
+        .output-list li { padding: var(--space-xs) 0; color: var(--text-secondary); font-size: 0.9rem; display: flex; align-items: flex-start; gap: var(--space-sm); }
+        .output-list li::before { content: "•"; color: var(--accent-blue); font-weight: bold; }
+        
+        .output-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
+        @media (max-width: 900px) { .output-grid { grid-template-columns: 1fr; } }
+        
+        .scoring-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: var(--space-md); }
+        .scoring-table th { background: var(--bg-tertiary); padding: var(--space-sm); text-align: left; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-default); }
+        .scoring-table td { padding: var(--space-sm); border-bottom: 1px solid var(--border-default); color: var(--text-tertiary); }
+        .scoring-table tr:hover { background: rgba(59, 130, 246, 0.05); }
+        .score-0 { color: var(--accent-red); }
+        .score-1 { color: var(--accent-amber); }
+        .score-2 { color: var(--accent-green); }
+        
+        .action-bar { display: flex; gap: var(--space-md); padding: var(--space-lg); background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); margin-top: var(--space-lg); position: sticky; bottom: var(--space-md); }
+        .action-bar .btn { flex: 1; }
+        
+        .lib-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 10px 12px; cursor: pointer; transition: all var(--transition-fast); }
+        .lib-card:hover { border-color: var(--brand-gold); background: rgba(212,165,116,0.05); }
+        .lib-card.active-card { border-color: var(--brand-gold); box-shadow: 0 0 0 1px var(--brand-gold); }
+        .lib-card-name { font-family: var(--font-serif); font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lib-card-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 6px; }
+        .lib-card-statement { font-size: 0.75rem; color: var(--text-tertiary); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .lib-card-actions { display: flex; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-default); }
+        .lib-card-actions button { flex: 1; padding: 4px 8px; font-size: 0.65rem; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--border-default); background: transparent; color: var(--text-tertiary); transition: all 0.15s; }
+        .lib-card-actions button:hover { border-color: var(--brand-gold); color: var(--text-primary); }
+        .lib-card-actions button.delete-btn:hover { border-color: var(--accent-red); color: var(--accent-red); }
+        .lib-card-worked { display: inline-block; font-size: 0.6rem; padding: 2px 6px; border-radius: var(--radius-full); background: rgba(34,197,94,0.12); color: var(--accent-green); font-weight: 600; }
+        .lib-card-best { display: inline-block; font-size: 0.6rem; padding: 2px 6px; border-radius: var(--radius-full); background: rgba(245,158,11,0.15); color: var(--accent-amber); font-weight: 700; margin-left: 4px; }
+        .lib-card-completeness { display: inline-block; font-size: 0.62rem; padding: 2px 7px; border-radius: var(--radius-full); background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); font-weight: 700; margin-top: 4px; }
+        .lib-card-draft { display: inline-block; font-size: 0.62rem; padding: 2px 7px; border-radius: var(--radius-full); background: rgba(245,158,11,0.14); color: #f59e0b; border: 1px solid rgba(245,158,11,0.34); font-weight: 700; margin-left: 4px; margin-top: 4px; }
+        .lib-card-outcomes { margin-top: 6px; font-size: 0.7rem; color: #cbd5e1; line-height: 1.35; }
+        .lib-card-perf { margin-top: 4px; font-size: 0.68rem; color: var(--text-muted); line-height: 1.35; }
+        .lib-card-perf.good { color: #22c55e; }
+        .lib-card-perf.warn { color: #f59e0b; }
+        .lib-card-perf.bad { color: #ef4444; }
+        
+        .analytics-title { font-family: var(--font-serif); font-size: 1.1rem; color: var(--text-primary); margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-sm); }
+        .analytics-section { margin-bottom: var(--space-lg); }
+        .analytics-section-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: var(--space-sm); }
+        
+        .stat-row { display: flex; justify-content: space-between; align-items: center; padding: var(--space-sm) 0; border-bottom: 1px solid var(--border-default); }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { font-size: 0.85rem; color: var(--text-tertiary); }
+        .stat-value { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-primary); }
+        .stat-value.good { color: var(--accent-green); }
+        
+        .top-items { margin-top: var(--space-md); }
+        .top-item { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: rgba(255, 255, 255, 0.02); border-radius: var(--radius-sm); margin-bottom: var(--space-xs); }
+        .top-item-name { font-size: 0.8rem; color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .top-item-count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-blue); }
+        
+        .worked-toggle { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-md); padding: var(--space-sm); background: rgba(34, 197, 94, 0.1); border-radius: var(--radius-md); cursor: pointer; }
+        .worked-toggle input { width: 18px; height: 18px; accent-color: var(--accent-green); }
+        .worked-toggle label { font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+        .worked-toggle:hover { background: rgba(34, 197, 94, 0.15); }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">ICP Studio</h1>
+                <p class="page-subtitle pop-subtitle">Define a winnable 30-day slice, then run it hard. Stop selling to everyone.</p>
+            </header>
+            
+            <div class="app-content">
+                <div class="studio-layout">
+                    <div class="builder-content">
+                        <!-- Inputs Section -->
+                        <div class="builder-section">
+                            <div class="section-header">
+                                <span class="section-icon">⚙️</span>
+                                <div>
+                                    <div class="section-title">Inputs</div>
+                                    <div class="section-subtitle">Pick your slice. These inputs drive the statement and buying-group minimum.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="role-toggle">
+                                <button class="role-btn active" id="role_founder" onclick="setRole('founder')">Founder-led</button>
+                                <button class="role-btn" id="role_firstae" onclick="setRole('firstae')">First AE</button>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); align-self: center;">Only affects recommended account focus</span>
+                            </div>
+                            
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Industry</label>
+                                    <select id="in_industry" onchange="handleIndustryChange(); update();">
+                                        <option value="">Select</option>
+                                        <option value="Software (B2B SaaS)">Software (B2B SaaS)</option>
+                                        <option value="Fintech">Fintech</option>
+                                        <option value="Healthcare">Healthcare</option>
+                                        <option value="Manufacturing">Manufacturing</option>
+                                        <option value="Logistics & Supply Chain">Logistics & Supply Chain</option>
+                                        <option value="Retail & E-commerce">Retail & E-commerce</option>
+                                        <option value="Professional Services">Professional Services</option>
+                                        <option value="Public Sector">Public Sector</option>
+                                        <option value="custom">Other (type)</option>
+                                    </select>
+                                    <input type="text" id="in_industry_custom" class="custom-input" placeholder="Type industry" oninput="update()">
+                                    <div class="input-hint">Be specific enough that a list exists.</div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label>Company Size</label>
+                                    <select id="in_size" onchange="update()">
+                                        <option value="">Select</option>
+                                        <option value="50-200 employees">50-200 employees</option>
+                                        <option value="200-1,000 employees">200-1,000 employees</option>
+                                        <option value="1,000-5,000 employees">1,000-5,000 employees</option>
+                                        <option value="5,000+ employees">5,000+ employees</option>
+                                    </select>
+                                    <div class="input-hint">A proxy for process complexity and buying friction.</div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label>Geography</label>
+                                    <select id="in_geo" onchange="update()">
+                                        <option value="">Select</option>
+                                        <option value="US">US</option>
+                                        <option value="North America">North America</option>
+                                        <option value="EMEA">EMEA</option>
+                                        <option value="APAC">APAC</option>
+                                        <option value="Global">Global</option>
+                                    </select>
+                                    <div class="input-hint">Pick a region you can actually cover.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Primary Buyer (Owner)</label>
+                                    <select id="in_buyer" onchange="handleBuyerChange(); update();">
+                                        <option value="">Select</option>
+                                        <option value="CFO">CFO</option>
+                                        <option value="COO">COO</option>
+                                        <option value="VP Operations">VP Operations</option>
+                                        <option value="Head of Procurement">Head of Procurement</option>
+                                        <option value="CHRO / Head of People">CHRO / Head of People</option>
+                                        <option value="VP Revenue Operations">VP Revenue Operations</option>
+                                        <option value="CISO / Security">CISO / Security</option>
+                                        <option value="custom">Other (type)</option>
+                                    </select>
+                                    <input type="text" id="in_buyer_custom" class="custom-input" placeholder="Type buyer/owner role" oninput="update()">
+                                    <div class="input-hint">Choose the person who owns the pain and can say yes.</div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label>Primary Pain <span class="ihelp">ℹ<span class="ihelp-tip">The problem the buyer lives with daily that your product solves. Must be felt pain, not theoretical.</span></span></label>
+                                    <select id="in_pain" onchange="update()">
+                                        <option value="">Select</option>
+                                        <option value="Cost control / spend leakage">Cost control / spend leakage</option>
+                                        <option value="Risk & compliance exposure">Risk & compliance exposure</option>
+                                        <option value="Time-to-launch / slow ops">Time-to-launch / slow ops</option>
+                                        <option value="Revenue leakage / billing ops">Revenue leakage / billing ops</option>
+                                        <option value="Fragmented vendors / consolidation">Fragmented vendors / consolidation</option>
+                                        <option value="Visibility / reporting gaps">Visibility / reporting gaps</option>
+                                    </select>
+                                    <div class="input-hint">One pain. Not a buffet.</div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label>Trigger (Evidence) <span class="ihelp">ℹ<span class="ihelp-tip">The event that makes the pain urgent enough to act on now. Without a trigger, pain stays tolerable. Examples: budget cycle, re-org, new exec, compliance deadline.</span></span></label>
+                                    <select id="in_trigger" onchange="update()">
+                                        <option value="">Select</option>
+                                        <option value="Recent expansion (new regions, entities, acquisitions)">Recent expansion (new regions, entities, acquisitions)</option>
+                                        <option value="Hiring spike / org change">Hiring spike / org change</option>
+                                        <option value="Vendor consolidation initiative">Vendor consolidation initiative</option>
+                                        <option value="Audit / compliance pressure">Audit / compliance pressure</option>
+                                        <option value="Cost reduction mandate">Cost reduction mandate</option>
+                                        <option value="New product or market launch">New product or market launch</option>
+                                    </select>
+                                    <div class="input-hint">A trigger is the difference between interest and urgency.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="input-grid-2">
+                                <div class="input-group">
+                                    <label>Proof Window</label>
+                                    <select id="in_proof_window" onchange="update()">
+                                        <option value="">Select</option>
+                                        <option value="7 days">7 days</option>
+                                        <option value="14 days">14 days</option>
+                                        <option value="30 days">30 days</option>
+                                    </select>
+                                    <div class="input-hint">How fast you can demonstrate value (matters a lot early stage).</div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label>Engine Active Accounts (optional)</label>
+                                    <input type="number" id="in_engine_active" min="0" placeholder="Paste from Engine" oninput="update()">
+                                    <div class="input-hint">If you enter this, the recommended focus becomes precise.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="callout callout-amber">
+                                <div class="callout-title">Thin means: fewer assumptions, fewer personas, fewer use cases</div>
+                                <div class="callout-text">Your first 30 days are not a brand campaign. They're a controlled experiment with a scoreboard.</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Outputs Section -->
+                        <div class="builder-section">
+                            <div class="section-header">
+                                <span class="section-icon">📤</span>
+                                <div>
+                                    <div class="section-title">Outputs</div>
+                                    <div class="section-subtitle">Your Thin ICP statement, focus recommendation, and buying group minimum.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="output-grid">
+                                <div class="output-box">
+                                    <div class="output-title">1) Your Thin ICP Statement</div>
+                                    <div class="output-statement" id="out_statement">Fill the inputs above to generate a Thin ICP statement.</div>
+                                    <div class="output-hint" id="out_statement_hint">Tip: choose one owner, one pain, one trigger, one proof window.</div>
+                                </div>
+                                
+                                <div class="output-box">
+                                    <div class="output-title">2) Recommended 30-Day Focus</div>
+                                    <div class="output-statement" id="out_focus" style="font-size: 0.95rem;">Pick a role and optionally paste Engine active accounts.</div>
+                                    <div class="output-hint">This is not your total TAM. It's your current battlefield.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="output-grid">
+                                <div class="output-box">
+                                    <div class="output-title">3) Buying-Group Minimum</div>
+                                    <div class="output-hint" style="border: none; padding: 0; margin-bottom: var(--space-sm);">If you cannot identify these roles, the deal is not real (yet).</div>
+                                    <ul class="output-list" id="out_buying_group">
+                                        <li>Select a Primary Buyer to populate buying-group minimum.</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="output-box">
+                                    <div class="output-title">4) "Evidence to Look For" Checklist</div>
+                                    <div class="output-hint" style="border: none; padding: 0; margin-bottom: var(--space-sm);">These are the signals you should be able to find in 10 minutes during research.</div>
+                                    <ul class="output-list" id="out_evidence">
+                                        <li>Choose a Trigger and Pain to generate evidence signals.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="worked-toggle">
+                                <input type="checkbox" id="workedCheckbox">
+                                <label for="workedCheckbox">✓ This ICP definition led to qualified conversations</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Scoring Rubric Section -->
+                        <div class="builder-section">
+                            <div class="section-header">
+                                <span class="section-icon">📊</span>
+                                <div>
+                                    <div class="section-title">Account Scoring Rubric</div>
+                                    <div class="section-subtitle">Score accounts quickly so you spend time on the right 20%.</div>
+                                </div>
+                            </div>
+                            
+                            <table class="scoring-table">
+                                <thead>
+                                    <tr>
+                                        <th>Dimension <span class="ihelp">ℹ<span class="ihelp-tip">Weighted rubric example: Pain (25%), Trigger (20%), Budget evidence (15%), Champion access (20%), Timing (20%). Two ICPs within 5 points are effectively equivalent — use tiers, not false precision.</span></span></th>
+                                        <th class="score-0">0 pts</th>
+                                        <th class="score-1">1 pt</th>
+                                        <th class="score-2">2 pts</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Trigger present</strong> <span style="font-size:0.65rem;color:var(--text-muted);">20%</span></td>
+                                        <td class="score-0">No visible trigger</td>
+                                        <td class="score-1">Possible trigger (weak signal)</td>
+                                        <td class="score-2">Clear trigger (press release, job post)</td>
+                                        <td>Use this to rank the working list.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Owner reachable</strong> <span style="font-size:0.65rem;color:var(--text-muted);">20%</span></td>
+                                        <td class="score-0">Cannot find the owner</td>
+                                        <td class="score-1">Owner exists, but hard to reach</td>
+                                        <td class="score-2">Owner found + contactable</td>
+                                        <td>If you can't find them, move on.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Pain confirmed</strong> <span style="font-size:0.65rem;color:var(--text-muted);">25%</span></td>
+                                        <td class="score-0">No evidence of pain</td>
+                                        <td class="score-1">Implied pain (industry norm)</td>
+                                        <td class="score-2">Pain visible (complaints, job posts)</td>
+                                        <td>This is not about your pitch.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Budget evidence</strong> <span style="font-size:0.65rem;color:var(--text-muted);">15%</span></td>
+                                        <td class="score-0">No budget signal found</td>
+                                        <td class="score-1">Possible budget signal</td>
+                                        <td class="score-2">Confirmed budget/timeline signal</td>
+                                        <td>Budget reality prevents fake pipeline.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Timing fit</strong> <span style="font-size:0.65rem;color:var(--text-muted);">20%</span></td>
+                                        <td class="score-0">Bad timing (freeze, layoffs)</td>
+                                        <td class="score-1">Neutral timing</td>
+                                        <td class="score-2">Good timing (budget cycle, event)</td>
+                                        <td>Timing beats everything.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="callout callout-blue" style="margin-top: var(--space-lg);">
+                                <div class="callout-title">Scoring Guide</div>
+                                <div class="callout-text">
+                                    <span style="color:#22c55e;">●</span> <strong>70-100 — Strong:</strong> Tier 1 — prioritize and sequence first<br>
+                                    <span style="color:#3b82f6;">●</span> <strong>40-69 — Moderate:</strong> Tier 2 — work if capacity allows<br>
+                                    <span style="color:#ef4444;">●</span> <strong>0-39 — Weak:</strong> Tier 3 — park or disqualify<br>
+                                    <span style="font-size:0.75rem;color:var(--text-tertiary);margin-top:6px;display:block;">Examples: 73 — Strong, 52 — Moderate, 31 — Weak.</span>
+                                    <span style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;display:block;">This score reflects weighted criteria. Two ICPs within 5 points are effectively equivalent.</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Diagnostics Section -->
+                        <div class="builder-section">
+                            <div class="section-header">
+                                <span class="section-icon">⚠️</span>
+                                <div>
+                                    <div class="section-title">Diagnostics</div>
+                                    <div class="section-subtitle">Quick checks to avoid common mistakes.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="output-grid">
+                                <div class="output-box">
+                                    <div class="output-title" style="color: var(--accent-green);">Thin ICP is right when:</div>
+                                    <ul class="output-list">
+                                        <li>You can name 50 accounts that match</li>
+                                        <li>You can find a trigger in &lt;10 minutes</li>
+                                        <li>Your statement fits in one sentence</li>
+                                        <li>A rep can repeat it without reading</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="output-box">
+                                    <div class="output-title" style="color: var(--accent-red);">Thin ICP is wrong when:</div>
+                                    <ul class="output-list">
+                                        <li>Your statement includes 3+ industries</li>
+                                        <li>Your buyer is "anyone"</li>
+                                        <li>Your use case list is longer than your pipeline</li>
+                                        <li>Your trigger is "they should care"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="callout callout-red">
+                                <div class="callout-title">Failure modes (common)</div>
+                                <div class="callout-text">Broad ICP → generic messaging → low reply rate → you blame activity. Don't. Fix targeting first.</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="data-guide" id="icpDataGuide" style="margin-top:16px;margin-bottom:16px;">
+                            <div class="data-guide-header" onclick="document.getElementById('icpDataGuide').classList.toggle('open')" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:10px;">
+                                <span>💡</span>
+                                <span style="font-weight:700;font-size:0.85rem;color:var(--text-secondary);flex:1;">Where Does Your Data Go?</span>
+                                <span class="dg-chev" style="font-size:0.7rem;color:var(--text-muted);transition:transform 0.2s;">▼</span>
+                            </div>
+                            <div class="dg-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s;">
+                                <div style="padding:12px 16px;font-size:0.72rem;color:var(--text-tertiary);line-height:1.6;border:1px solid var(--border-default);border-top:none;border-radius:0 0 10px 10px;">
+                                    <span style="font-weight:600;color:var(--text-tertiary);">Save to ICP Library</span> stores this ICP and updates analytics.
+                                    <span style="font-weight:600;color:var(--text-tertiary);">Copy Statement</span> copies the targeting statement to clipboard.
+                                    <span style="font-weight:600;color:var(--text-tertiary);">Reset</span> clears current inputs — saved ICPs remain intact.
+                                </div>
+                            </div>
+                        </div>
+                        <style>.data-guide.open .dg-body{max-height:300px!important;}.data-guide.open .dg-chev{transform:rotate(180deg)!important;}</style>
+                        
+                        <div class="action-bar" style="flex-wrap:wrap;">
+                            <button class="btn btn-ghost" onclick="toggleTemplatePanel()">🧩 Start from template</button>
+                            <button class="btn btn-ghost" onclick="resetForm()">🔄 Reset</button>
+                            <button class="btn btn-secondary" onclick="copyStatement()">📋 Copy Statement</button>
+                            <span style="display:inline-flex;align-items:center;gap:4px;">
+                                <span style="font-size:0.62rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;white-space:nowrap;">Choose format:</span>
+                                <select id="icpExportFmt" style="padding:4px 8px;background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:var(--radius-sm);color:var(--text-secondary);font-size:0.75rem;">
+                                    <option value="pdf">PDF</option>
+                                    <option value="docx">DOCX</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+                            </span>
+                            <button class="btn btn-secondary" onclick="exportICP()">📥 Export</button>
+                            <button class="btn btn-primary" onclick="saveICP()">💾 Save ICP</button>
+                        </div>
+                        <div id="templatePanel" class="hidden" style="margin-top:10px;padding:12px;background:rgba(15,23,42,0.55);border:1px solid rgba(59,130,246,0.22);border-radius:10px;">
+                            <div style="font-size:0.72rem;font-weight:700;color:#93c5fd;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Starter templates</div>
+                            <div id="templateButtons" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+                            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:8px;">Each template pre-fills 6-8 fields. Edit to fit your market before saving.</div>
+                        </div>
+                        <div style="text-align:center;font-size:0.63rem;color:var(--text-muted);line-height:1.5;margin-top:6px;">
+                            <span style="font-weight:600;color:var(--text-tertiary);">Reset</span> clears current inputs — saved ICPs remain intact.
+                            <span style="font-weight:600;color:var(--text-tertiary);">Copy Statement</span> copies the targeting statement to clipboard.
+                            <span style="font-weight:600;color:var(--text-tertiary);">Export</span> downloads this ICP in your chosen format (PDF, DOCX, or CSV).
+                            <span style="font-weight:600;color:var(--text-tertiary);">Save to ICP Library</span> stores this ICP and updates analytics.
+                        </div>
+                    </div>
+                    
+                    <!-- ICP Library Panel -->
+                    <div class="analytics-panel" id="libraryPanel">
+                        <div class="analytics-title" style="display:flex;justify-content:space-between;align-items:center;">
+                            <span>📚 ICP Library</span>
+                            <span style="font-size:0.7rem;color:var(--text-muted);font-family:var(--font-mono);" id="libraryCount">0 saved</span>
+                        </div>
+                        
+                        <div id="libraryCards" style="display:flex;flex-direction:column;gap:var(--space-sm);">
+                            <div class="skeleton skeleton-card"></div>
+                            <div class="skeleton skeleton-card"></div>
+                        </div>
+                        <div id="icpNextHint" class="hidden" style="margin-top:12px;padding:12px 16px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius-lg);font-size:0.83rem;color:var(--text-secondary);display:flex;align-items:center;gap:10px;"></div>
+
+                        <div class="analytics-section" style="margin-top:var(--space-lg);border-top:1px solid var(--border-default);padding-top:var(--space-md);">
+                            <div class="analytics-section-title" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="document.getElementById('analyticsBody').classList.toggle('open')">
+                                <span>📈 Analytics</span>
+                                <span style="font-size:0.65rem;color:var(--text-muted);">▼</span>
+                            </div>
+                            <div id="analyticsBody" class="collapsible-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s;">
+                                <div style="padding-top:var(--space-sm);">
+                                    <div class="stat-row">
+                                        <span class="stat-label">Session created</span>
+                                        <span class="stat-value" id="stat_session_created">0</span>
+                                    </div>
+                                    <div class="stat-row">
+                                        <span class="stat-label">Session worked</span>
+                                        <span class="stat-value" id="stat_session_worked">0</span>
+                                    </div>
+                                    <div class="stat-row">
+                                        <span class="stat-label">Total saved</span>
+                                        <span class="stat-value" id="stat_total_icps">0</span>
+                                    </div>
+                                    <div class="stat-row">
+                                        <span class="stat-label">Success rate</span>
+                                        <span class="stat-value good" id="stat_success_rate">-</span>
+                                    </div>
+                                    <div style="margin-top:var(--space-sm);">
+                                        <div class="analytics-section-title">Top Industries</div>
+                                        <div class="top-items" id="top_industries"><div style="color:var(--text-muted);font-size:0.85rem;">No data yet</div></div>
+                                    </div>
+                                    <div style="margin-top:var(--space-sm);">
+                                        <div class="analytics-section-title">Top Buyers</div>
+                                        <div class="top-items" id="top_buyers"><div style="color:var(--text-muted);font-size:0.85rem;">No data yet</div></div>
+                                    </div>
+                                    <div style="margin-top:var(--space-sm);">
+                                        <div class="analytics-section-title">Top Triggers</div>
+                                        <div class="top-items" id="top_triggers"><div style="color:var(--text-muted);font-size:0.85rem;">No data yet</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <style>#analyticsBody.open{max-height:600px!important;}</style>
+                        </div>
+
+                        <!-- Signal Console Scoring -->
+                        <div style="margin-top:var(--space-lg);border-top:1px solid var(--border-default);padding-top:var(--space-md);">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                                <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);">Score Signal Console Accounts</div>
+                                <button onclick="scoreAccounts()" style="padding:6px 14px;border-radius:8px;font-size:0.75rem;font-weight:700;border:1px solid rgba(212,165,116,0.3);background:rgba(212,165,116,0.08);color:var(--brand-gold);cursor:pointer;font-family:inherit;">Score Accounts →</button>
+                            </div>
+                            <div id="scScoreResults" style="font-size:0.82rem;color:var(--text-muted);">Click to score your Signal Console accounts against your ICP rubric.</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="/js/migration.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script>
+        (async function() {
+            initSupabase();
+            if (localStorage.getItem('gtmos_noauth_mode')) return;
+            const session = await auth.getSession();
+            if (!session) { window.location.href = '/login.html'; return; }
+            const user = await auth.getUser();
+            if (user) {
+                var email = user.email || 'User';
+                document.getElementById('userName').textContent = email.split('@')[0];
+                document.getElementById('userAvatar').textContent = email.charAt(0).toUpperCase();
+            }
+        })();
+
+        window.handleSignOut = async function() {
+            await auth.signOut();
+            window.location.href = '/login.html';
+        };
+    </script>
+    <script src="/js/tour-guide.js"></script>
+    <script src="/js/module-tooltips.js"></script>
+    <script src="/js/guided-rail.js"></script>
+    <script src="/js/data-flow.js"></script>
+    <script src="/js/empty-states.js"></script>
+    <script src="/js/collapsible-sections.js"></script>
+    <script src="/js/save-indicator.js"></script>
+    <script src="/js/unsaved-guard.js"></script>
+    
+    <script>
+        // ============================================
+        // THIN ICP FRAMEWORK DATA (Full IP)
+        // ============================================
+        
+        let currentRole = 'founder';
+        let sessionCreated = 0;
+        let sessionWorked = 0;
+        
+        // Buying Group Mappings
+        const buyingGroupMap = {
+            'CFO': ['CFO (economic buyer)', 'Procurement', 'Controller/FP&A', 'Security/IT (if applicable)', 'Business owner (Ops or function lead)'],
+            'COO': ['COO (economic/owner)', 'VP/Director Operations', 'Procurement', 'Security/IT', 'Finance'],
+            'VP Operations': ['VP Operations (owner)', 'COO (economic cover)', 'Procurement', 'Security/IT', 'Finance'],
+            'Head of Procurement': ['Head of Procurement (process owner)', 'Economic sponsor (CFO/COO)', 'Business owner (function lead)', 'Security/IT', 'Legal'],
+            'CHRO / Head of People': ['CHRO (owner)', 'CFO (economic cover)', 'Procurement', 'Security/IT', 'Legal'],
+            'VP Revenue Operations': ['RevOps (owner)', 'CFO (economic cover)', 'Sales leadership', 'Procurement', 'Security/IT'],
+            'CISO / Security': ['CISO (owner)', 'CIO/IT', 'Procurement', 'Economic sponsor (CFO/COO)', 'Legal']
+        };
+        
+        const defaultBuyingGroup = ['Economic buyer (budget owner)', 'Primary owner (your selected buyer)', 'Champion (day-to-day operator)', 'Procurement (vendor process)', 'Security/IT (risk review)', 'Finance (pricing + terms)'];
+        
+        // Trigger Evidence Mappings
+        const triggerEvidenceMap = {
+            'Recent expansion (new regions, entities, acquisitions)': ['Press release: expansion/acquisition', 'New entities in filings', 'New offices/regions on site', 'Integration job postings'],
+            'Hiring spike / org change': ['10+ relevant job posts', 'New leader announced', 'Reorg signals in LinkedIn changes', 'Hiring manager chatter'],
+            'Vendor consolidation initiative': ['RFP language', 'Procurement posts about consolidation', 'Public vendor ecosystem changes', 'Tech stack cleanup signals'],
+            'Audit / compliance pressure': ['Compliance job posts', 'SOC2/ISO mentions', 'Regulatory deadlines', 'Security questionnaire requirements'],
+            'Cost reduction mandate': ['Earnings call language', 'Layoffs/reductions', 'Budget freeze chatter', 'Spend optimization initiatives'],
+            'New product or market launch': ['Launch page', 'Partner announcements', 'New SKU/product lines', 'GTM hiring (marketing/ops)']
+        };
+        
+        // Pain Evidence Mappings
+        const painEvidenceMap = {
+            'Cost control / spend leakage': ['Duplicate tools/vendors', 'Manual processes in job posts', 'Procurement backlog', 'Margin pressure language'],
+            'Risk & compliance exposure': ['Audit mentions', 'Vendor risk language', 'Security review bottlenecks', 'Regulatory compliance requirements'],
+            'Time-to-launch / slow ops': ['Long cycle time complaints', 'Operational hiring', 'Migration projects', 'Backlogs or implementation delays'],
+            'Revenue leakage / billing ops': ['Billing ops job posts', 'Pricing changes', 'Subscription complexity', 'RevRec compliance language'],
+            'Fragmented vendors / consolidation': ['Too many vendors list', 'Standardization initiatives', 'RFP activity', 'Platform consolidation language'],
+            'Visibility / reporting gaps': ['BI/reporting rebuild posts', 'Data quality issues', 'Spreadsheet-based workflows', 'Lack of single source of truth language']
+        };
+
+        const icpTemplates = [
+            {
+                id: 'mid-market-saas',
+                name: 'Mid-Market SaaS (B2B)',
+                industry: 'SaaS / Software',
+                size: '200-2000 employees',
+                geo: 'North America',
+                buyer: 'VP Engineering',
+                pain: 'Integration complexity across tools',
+                trigger: 'Hiring spike / org change',
+                proofWindow: '60-90 days',
+                activeAccounts: 80
+            },
+            {
+                id: 'enterprise-finserv',
+                name: 'Enterprise Financial Services',
+                industry: 'Financial Services',
+                size: '5000+ employees',
+                geo: 'North America + EMEA',
+                buyer: 'CTO / CISO',
+                pain: 'Compliance and security exposure',
+                trigger: 'Audit / compliance pressure',
+                proofWindow: '90-120 days',
+                activeAccounts: 40
+            },
+            {
+                id: 'smb-ecommerce',
+                name: 'SMB E-Commerce',
+                industry: 'E-Commerce / Retail',
+                size: '10-100 employees',
+                geo: 'US',
+                buyer: 'Founder / CEO',
+                pain: 'Growth ops bottlenecks',
+                trigger: 'New product or market launch',
+                proofWindow: '30-60 days',
+                activeAccounts: 120
+            },
+            {
+                id: 'healthtech',
+                name: 'Healthcare / HealthTech',
+                industry: 'Healthcare / HealthTech',
+                size: '250-5000 employees',
+                geo: 'US',
+                buyer: 'Director of IT',
+                pain: 'Interoperability and data fragmentation',
+                trigger: 'Vendor consolidation initiative',
+                proofWindow: '60-120 days',
+                activeAccounts: 55
+            },
+            {
+                id: 'startup-pre-rev',
+                name: 'Startup / Pre-Revenue',
+                industry: 'Startup / SaaS',
+                size: '<50 employees',
+                geo: 'US + remote',
+                buyer: 'Founder / CEO',
+                pain: 'Need speed-to-market with lean team',
+                trigger: 'Recent expansion (new regions, entities, acquisitions)',
+                proofWindow: '14-45 days',
+                activeAccounts: 140
+            }
+        ];
+        
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        
+        function byId(id) { return document.getElementById(id); }
+        function val(id) { return (byId(id)?.value || '').trim(); }
+        function sanitizeField(fieldName, value) {
+            var raw = String(value == null ? '' : value);
+            if (window.gtmInputSanitizer && typeof window.gtmInputSanitizer.sanitizeField === 'function') {
+                return window.gtmInputSanitizer.sanitizeField(fieldName, raw);
+            }
+            return raw.replace(/<[^>]*>/g, '').trim();
+        }
+        function countIcpCompleteness(icp) {
+            var fields = ['industry', 'size', 'geo', 'buyer', 'pain', 'trigger', 'proofWindow', 'statement'];
+            return fields.reduce(function(total, field) {
+                var value = String((icp && icp[field]) || '').trim();
+                return total + (value ? 1 : 0);
+            }, 0);
+        }
+
+        function renderTemplateButtons() {
+            var container = byId('templateButtons');
+            if (!container) return;
+            container.innerHTML = icpTemplates.map(function(t) {
+                return '<button class="btn btn-secondary" style="font-size:0.72rem;padding:6px 10px;" onclick="applyTemplate(\'' + t.id + '\')">' + t.name + '</button>';
+            }).join('');
+        }
+
+        window.toggleTemplatePanel = function(forceOpen) {
+            var panel = byId('templatePanel');
+            if (!panel) return;
+            if (forceOpen === true) panel.classList.remove('hidden');
+            else panel.classList.toggle('hidden');
+        };
+
+        window.openTemplateFromEmpty = function() {
+            var builder = document.querySelector('.builder-section');
+            if (builder) builder.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            toggleTemplatePanel(true);
+        };
+
+        window.applyTemplate = function(templateId) {
+            var t = icpTemplates.find(function(x) { return x.id === templateId; });
+            if (!t) return;
+            setSelectOrCustom('in_industry', 'in_industry_custom', t.industry);
+            setSelectOrCustom('in_buyer', 'in_buyer_custom', t.buyer);
+            byId('in_size').value = t.size || '';
+            byId('in_geo').value = t.geo || '';
+            byId('in_pain').value = t.pain || '';
+            byId('in_trigger').value = t.trigger || '';
+            byId('in_proof_window').value = t.proofWindow || '';
+            byId('in_engine_active').value = t.activeAccounts || '';
+            update();
+            toggleTemplatePanel(true);
+            byId('templatePanel').classList.remove('hidden');
+        };
+        
+        function safePick(selectValue, customInputId) {
+            if (selectValue === 'custom') return val(customInputId);
+            return selectValue;
+        }
+        
+        window.setRole = function(role) {
+            currentRole = role;
+            byId('role_founder').classList.toggle('active', role === 'founder');
+            byId('role_firstae').classList.toggle('active', role === 'firstae');
+            update();
+        };
+        
+        window.handleIndustryChange = function() {
+            const sel = byId('in_industry');
+            const custom = byId('in_industry_custom');
+            custom.classList.toggle('visible', sel.value === 'custom');
+        };
+        
+        window.handleBuyerChange = function() {
+            const sel = byId('in_buyer');
+            const custom = byId('in_buyer_custom');
+            custom.classList.toggle('visible', sel.value === 'custom');
+        };
+        
+        // ============================================
+        // BUILD FUNCTIONS
+        // ============================================
+        
+        function buildStatement(industry, size, geo, buyer, pain, trigger, proof) {
+            if (!industry || !size || !geo || !buyer || !pain || !trigger || !proof) {
+                return {
+                    text: 'Fill the inputs above to generate a Thin ICP statement.',
+                    hint: 'Tip: choose one owner, one pain, one trigger, one proof window.'
+                };
+            }
+            
+            const proofPhrase = 'prove value in ' + proof;
+            const sentence = `We win with ${industry} companies (${size}, ${geo}) where the ${buyer} owns ${pain}, triggered by ${trigger.toLowerCase()}, and we can ${proofPhrase}.`;
+            
+            return {
+                text: sentence,
+                hint: 'If you cannot list 50 accounts that match this, thin it again.'
+            };
+        }
+        
+        function buildFocus(activeAccounts) {
+            if (activeAccounts && activeAccounts > 0) {
+                return `Work ${activeAccounts} active accounts in a 30-day window (from Engine). Maintain a ranked top-20 and rotate weekly.`;
+            }
+            if (currentRole === 'founder') {
+                return 'Founder-led default: focus 60-120 active accounts for the next 30 days. If personalization is heavy, start at 60.';
+            }
+            return 'First AE default: focus 120-220 active accounts for the next 30 days. Start lower if research depth is high.';
+        }
+        
+        function buildBuyingGroup(buyer) {
+            if (!buyer) return ['Select a Primary Buyer to populate buying-group minimum.'];
+            return buyingGroupMap[buyer] || defaultBuyingGroup;
+        }
+        
+        function buildEvidence(pain, trigger) {
+            if (!pain || !trigger) return ['Choose a Trigger and Pain to generate evidence signals.'];
+            
+            const evidence = [];
+            const triggerEvidence = triggerEvidenceMap[trigger] || [];
+            const painEvidence = painEvidenceMap[pain] || [];
+            
+            triggerEvidence.forEach(e => evidence.push(e));
+            painEvidence.forEach(e => evidence.push(e));
+            
+            // Deduplicate
+            const unique = [...new Set(evidence)];
+            return unique.length ? unique : ['No evidence map found for this combo (pick a different pain/trigger).'];
+        }
+        
+        function renderList(el, items) {
+            el.innerHTML = '';
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                el.appendChild(li);
+            });
+        }
+        
+        // ============================================
+        // MAIN UPDATE FUNCTION
+        // ============================================
+        
+        function update() {
+            const industryRaw = val('in_industry');
+            const buyerRaw = val('in_buyer');
+            
+            const industry = safePick(industryRaw, 'in_industry_custom');
+            const size = val('in_size');
+            const geo = val('in_geo');
+            const buyer = safePick(buyerRaw, 'in_buyer_custom');
+            const pain = val('in_pain');
+            const trigger = val('in_trigger');
+            const proof = val('in_proof_window');
+            const activeAccounts = parseInt(val('in_engine_active') || '0', 10);
+            
+            // Update outputs
+            const statement = buildStatement(industry, size, geo, buyer, pain, trigger, proof);
+            byId('out_statement').textContent = statement.text;
+            byId('out_statement_hint').textContent = statement.hint;
+            
+            byId('out_focus').textContent = buildFocus(activeAccounts);
+            
+            renderList(byId('out_buying_group'), buildBuyingGroup(buyer));
+            renderList(byId('out_evidence'), buildEvidence(pain, trigger));
+        }
+        
+        // ============================================
+        // ACTIONS
+        // ============================================
+        
+        window.resetForm = function() {
+            byId('in_industry').value = '';
+            byId('in_industry_custom').value = '';
+            byId('in_industry_custom').classList.remove('visible');
+            byId('in_size').value = '';
+            byId('in_geo').value = '';
+            byId('in_buyer').value = '';
+            byId('in_buyer_custom').value = '';
+            byId('in_buyer_custom').classList.remove('visible');
+            byId('in_pain').value = '';
+            byId('in_trigger').value = '';
+            byId('in_proof_window').value = '';
+            byId('in_engine_active').value = '';
+            byId('workedCheckbox').checked = false;
+            update();
+        };
+        
+        window.copyStatement = function() {
+            const statement = byId('out_statement').textContent;
+            navigator.clipboard.writeText(statement).then(() => {
+                alert('Statement copied to clipboard!');
+            });
+        };
+        
+        window.exportICP = function() {
+            var fmt = document.getElementById('icpExportFmt').value;
+            var statement = byId('out_statement').textContent;
+            var content = 'ICP Profile\n\nTargeting Statement:\n' + statement + '\n\nIndustry: ' + val('in_industry') + '\nCompany Size: ' + val('in_size') + '\nGeo: ' + val('in_geo') + '\nBuyer Persona: ' + val('in_buyer') + '\nCore Pain: ' + val('in_pain') + '\nTrigger: ' + val('in_trigger');
+            if (fmt === 'csv') {
+                var blob = new Blob([content], {type:'text/csv'});
+                var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'icp-profile.csv'; a.click();
+            } else if (fmt === 'docx') {
+                var html = '<html><body><h1>ICP Profile</h1><p>' + content.replace(/\n/g,'<br>') + '</p></body></html>';
+                var blob = new Blob([html], {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+                var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'icp-profile.docx'; a.click();
+            } else {
+                var html = '<html><body><h1>ICP Profile</h1><pre>' + content + '</pre></body></html>';
+                var w = window.open('','_blank'); w.document.write(html); w.document.close(); w.print();
+            }
+        };
+        
+        window.saveICP = function() {
+            const industryRaw = val('in_industry');
+            const buyerRaw = val('in_buyer');
+            
+            const icpData = {
+                timestamp: new Date().toISOString(),
+                role: currentRole,
+                industry: sanitizeField('industry', safePick(industryRaw, 'in_industry_custom')),
+                size: sanitizeField('size', val('in_size')),
+                geo: sanitizeField('geo', val('in_geo')),
+                buyer: sanitizeField('buyer', safePick(buyerRaw, 'in_buyer_custom')),
+                pain: sanitizeField('pain', val('in_pain')),
+                trigger: sanitizeField('trigger', val('in_trigger')),
+                proofWindow: sanitizeField('proofWindow', val('in_proof_window')),
+                activeAccounts: parseInt(val('in_engine_active') || '0', 10),
+                statement: sanitizeField('statement', byId('out_statement').textContent),
+                worked: byId('workedCheckbox').checked
+            };
+            
+            if (!icpData.industry || !icpData.size || !icpData.buyer) {
+                alert('Please fill in at least Industry, Size, and Buyer to save.');
+                return;
+            }
+            
+            // Load existing analytics
+            let analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+            analytics.icps.push(icpData);
+            if (icpData.worked) analytics.totalWorked++;
+            localStorage.setItem('gtmos_icp_analytics', JSON.stringify(analytics));
+            
+            // Update session stats
+            sessionCreated++;
+            if (icpData.worked) sessionWorked++;
+            
+            updateAnalyticsPanel();
+            alert('ICP saved!');
+            if (window.saveIndicator) saveIndicator.saved('ICP saved ✓');
+            if (typeof dataFlow !== 'undefined') {
+                dataFlow.notify('ICP Studio', 'GTM Playbook', 'market-who, market-segment, market-wedge', '/app/founding-gtm/');
+            }
+            renderLibrary();
+            if (window.unsavedGuard) unsavedGuard.markClean();
+            if (window.gtmAnalytics) gtmAnalytics.track('module_save', { module: 'icp-studio', worked: icpData.worked });
+        };
+        
+        // ============================================
+        // ANALYTICS
+        // ============================================
+        
+        function updateAnalyticsPanel() {
+            const analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+            
+            byId('stat_session_created').textContent = sessionCreated;
+            byId('stat_session_worked').textContent = sessionWorked;
+            byId('stat_total_icps').textContent = analytics.icps.length;
+            
+            if (analytics.icps.length > 0) {
+                const successRate = Math.round((analytics.totalWorked / analytics.icps.length) * 100);
+                byId('stat_success_rate').textContent = successRate + '%';
+            }
+            
+            // Calculate top performers
+            const industryCounts = {};
+            const buyerCounts = {};
+            const triggerCounts = {};
+            
+            analytics.icps.filter(i => i.worked).forEach(icp => {
+                if (icp.industry) industryCounts[icp.industry] = (industryCounts[icp.industry] || 0) + 1;
+                if (icp.buyer) buyerCounts[icp.buyer] = (buyerCounts[icp.buyer] || 0) + 1;
+                if (icp.trigger) triggerCounts[icp.trigger] = (triggerCounts[icp.trigger] || 0) + 1;
+            });
+            
+            renderTopItems('top_industries', industryCounts);
+            renderTopItems('top_buyers', buyerCounts);
+            renderTopItems('top_triggers', triggerCounts);
+        }
+        
+        function renderTopItems(containerId, counts) {
+            const container = byId(containerId);
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            
+            if (sorted.length === 0) {
+                container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">No data yet</div>';
+                return;
+            }
+            
+            container.innerHTML = sorted.map(([name, count]) => `
+                <div class="top-item">
+                    <span class="top-item-name">${name}</span>
+                    <span class="top-item-count">${count}</span>
+                </div>
+            `).join('');
+        }
+        
+        // ============================================
+        // LIBRARY PANEL
+        // ============================================
+
+        function libIcpName(icp) {
+            var industry = String((icp && icp.industry) || '').trim();
+            var buyer = String((icp && icp.buyer) || '').trim();
+            if (buyer && industry) return buyer + ' @ ' + industry;
+            return buyer || industry || String((icp && icp.statement) || '').trim() || 'Untitled';
+        }
+
+        function normalizeKey(val) {
+            return String(val || '').trim().toLowerCase();
+        }
+
+        function getDealWorkspaceList() {
+            var deals = [];
+            try { deals = JSON.parse(localStorage.getItem('gtmos_deal_workspaces') || '[]'); }
+            catch (e) { deals = []; }
+            if (Array.isArray(deals)) return deals;
+            if (deals && typeof deals === 'object') {
+                return Object.keys(deals).map(function(id) {
+                    var d = deals[id] || {};
+                    if (!d.id) d.id = id;
+                    return d;
+                });
+            }
+            return [];
+        }
+
+        function computeIcpOutcomeAttribution(icps) {
+            var links = {};
+            try { links = JSON.parse(localStorage.getItem('gtmos_deal_links') || '{}'); }
+            catch (e) { links = {}; }
+            var outcomes = (window.gtmStore && gtmStore.outcomes && gtmStore.outcomes.getAll)
+                ? gtmStore.outcomes.getAll()
+                : {};
+            var deals = getDealWorkspaceList();
+            var dealsById = {};
+            deals.forEach(function(d) { dealsById[String(d.id)] = d; });
+            var rows = icps.map(function(icp) {
+                return { worked: 0, won: 0, lost: 0, open: 0, revenue: 0, closed: 0, winRate: 0, label: libIcpName(icp) };
+            });
+            var labelToIndex = {};
+            rows.forEach(function(r, idx) {
+                var key = normalizeKey(r.label);
+                if (key && labelToIndex[key] === undefined) labelToIndex[key] = idx;
+            });
+
+            function resolveIndex(link) {
+                if (!link) return -1;
+                var ref = String(link.icpRef || '');
+                if (ref.indexOf('icp:') === 0) {
+                    var fromRef = parseInt(ref.slice(4), 10);
+                    if (!isNaN(fromRef) && icps[fromRef]) {
+                        var refLabel = normalizeKey(rows[fromRef].label);
+                        var linkLabel = normalizeKey(link.icp || '');
+                        if (!linkLabel || refLabel === linkLabel) return fromRef;
+                    }
+                }
+                var byLabel = normalizeKey(link.icp || '');
+                if (byLabel && labelToIndex[byLabel] !== undefined) return labelToIndex[byLabel];
+                return -1;
+            }
+
+            Object.keys(links || {}).forEach(function(dealId) {
+                var idx = resolveIndex(links[dealId]);
+                if (idx < 0 || !rows[idx]) return;
+                var row = rows[idx];
+                row.worked += 1;
+                var outcome = outcomes[String(dealId)] || null;
+                if (outcome && outcome.type === 'won') {
+                    row.won += 1;
+                    row.closed += 1;
+                    row.revenue += Number(outcome.dealValue || (dealsById[String(dealId)] && dealsById[String(dealId)].deal_value) || 0);
+                    return;
+                }
+                if (outcome && outcome.type === 'lost') {
+                    row.lost += 1;
+                    row.closed += 1;
+                    return;
+                }
+                var deal = dealsById[String(dealId)];
+                if (!deal) {
+                    row.open += 1;
+                    return;
+                }
+                if (deal.stage === 'closed-won') {
+                    row.won += 1;
+                    row.closed += 1;
+                    row.revenue += Number(deal.deal_value || 0);
+                } else if (deal.stage === 'closed-lost') {
+                    row.lost += 1;
+                    row.closed += 1;
+                } else {
+                    row.open += 1;
+                }
+            });
+
+            rows.forEach(function(r) {
+                r.winRate = r.closed > 0 ? Math.round((r.won / r.closed) * 100) : 0;
+            });
+
+            var overallWon = 0;
+            var overallClosed = 0;
+            Object.keys(outcomes || {}).forEach(function(id) {
+                var o = outcomes[id] || {};
+                if (o.type === 'won') { overallWon += 1; overallClosed += 1; }
+                else if (o.type === 'lost') overallClosed += 1;
+            });
+            var overallWinRate = overallClosed > 0 ? Math.round((overallWon / overallClosed) * 100) : 0;
+
+            var bestIndex = -1;
+            var bestScore = -1;
+            rows.forEach(function(r, idx) {
+                if (r.closed < 2) return;
+                var score = r.winRate * 1000 + r.won * 10 + r.worked;
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestIndex = idx;
+                }
+            });
+
+            return {
+                rows: rows,
+                overallWinRate: overallWinRate,
+                overallClosed: overallClosed,
+                bestIndex: bestIndex
+            };
+        }
+        
+        function renderLibrary() {
+            const analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+            const container = byId('libraryCards');
+            const countEl = byId('libraryCount');
+            
+            countEl.textContent = analytics.icps.length + ' saved';
+
+            // Show next-step hint for 1-2 ICPs
+            var hint = byId('icpNextHint');
+            if (hint) {
+                if (analytics.icps.length >= 1 && analytics.icps.length <= 2 && !localStorage.getItem('gtmos_icp_hint_dismissed')) {
+                    hint.innerHTML = '<span>💡 ' + (analytics.icps.length === 1 ? 'Good start. Build 2 more ICPs to compare segments and unlock your market map.' : 'One more ICP and you can compare all three segments side by side.') + '</span><button onclick="this.parentElement.classList.add(\'hidden\');localStorage.setItem(\'gtmos_icp_hint_dismissed\',\'1\');" style="margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">✕</button>';
+                    hint.classList.remove('hidden');
+                } else {
+                    hint.classList.add('hidden');
+                }
+            }
+            
+            if (analytics.icps.length === 0) {
+                container.innerHTML = '<div id="icpEmptyCard"></div><div style="margin-top:10px;padding:10px;border:1px solid rgba(59,130,246,0.25);border-radius:10px;background:rgba(59,130,246,0.08);"><div style="font-size:0.74rem;color:var(--text-tertiary);margin-bottom:8px;">Need a fast start?</div><button class="btn btn-secondary" style="width:100%;" onclick="openTemplateFromEmpty()">🧩 Start from template</button></div>'; if (typeof emptyState !== 'undefined') { emptyState.render('icpEmptyCard', { icon: '🎯', pitch: 'No ICPs saved yet.', why: 'Build your first ideal customer profile — it drives outbound targeting, discovery questions, and deal qualification.', cta: 'Build One Above ↑', ctaOnClick: "document.querySelector('.builder-section')&&document.querySelector('.builder-section').scrollIntoView({behavior:'smooth'})" }); }
+                return;
+            }
+            var attribution = computeIcpOutcomeAttribution(analytics.icps);
+            var money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+            
+            container.innerHTML = analytics.icps.map(function(icp, idx) {
+                var name = libIcpName(icp);
+                var workedBadge = icp.worked ? '<span class="lib-card-worked">✓ Worked</span>' : '';
+                var bestBadge = attribution.bestIndex === idx ? '<span class="lib-card-best">🏆 Best-performing ICP</span>' : '';
+                var completeness = countIcpCompleteness(icp);
+                var completenessBadge = '<span class="lib-card-completeness">' + completeness + '/8 fields filled</span>';
+                var draftBadge = completeness < 3 ? '<span class="lib-card-draft">Draft</span>' : '';
+                var date = icp.timestamp ? new Date(icp.timestamp).toLocaleDateString() : '';
+                var stat = attribution.rows[idx] || { worked: 0, won: 0, lost: 0, open: 0, revenue: 0, closed: 0, winRate: 0 };
+                var outcomeLine = '';
+                var perfLine = '';
+                if (stat.worked > 0) {
+                    outcomeLine = '<div class="lib-card-outcomes">' +
+                        stat.worked + ' deals worked | ' +
+                        stat.won + ' won (' + money.format(stat.revenue || 0) + ') | ' +
+                        stat.lost + ' lost | ' +
+                        stat.open + ' open' +
+                        '</div>';
+                    if (stat.closed > 0 && attribution.overallClosed > 0) {
+                        var delta = stat.winRate - attribution.overallWinRate;
+                        var perfCls = delta >= 10 ? 'good' : (delta <= -10 ? 'bad' : 'warn');
+                        var deltaText = delta >= 0 ? ('+' + delta) : String(delta);
+                        perfLine = '<div class="lib-card-perf ' + perfCls + '">Win rate: ' + stat.winRate + '% vs overall ' + attribution.overallWinRate + '% (' + deltaText + ' pts)</div>';
+                    } else if (stat.closed > 0) {
+                        perfLine = '<div class="lib-card-perf">Win rate: ' + stat.winRate + '%</div>';
+                    }
+                }
+                return '<div class="lib-card" onclick="loadICP(' + idx + ')">' +
+                    '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+                        '<div class="lib-card-name">' + escHtml(name) + '</div>' +
+                        (workedBadge + bestBadge) +
+                    '</div>' +
+                    '<div class="lib-card-meta">' + escHtml(icp.size || '') + ' · ' + escHtml(icp.geo || '') + (date ? ' · ' + date : '') + '</div>' +
+                    '<div>' + completenessBadge + draftBadge + '</div>' +
+                    '<div class="lib-card-statement">' + escHtml(icp.statement || '') + '</div>' +
+                    outcomeLine +
+                    perfLine +
+                    '<div class="lib-card-actions">' +
+                        '<button onclick="event.stopPropagation();copyLibStatement(' + idx + ')">📋 Copy</button>' +
+                        '<button class="delete-btn" onclick="event.stopPropagation();deleteICP(' + idx + ')">🗑 Delete</button>' +
+                    '</div>' +
+                '</div>';
+            }).reverse().join('');
+        }
+        
+        function escHtml(t) {
+            if (!t) return '';
+            var d = document.createElement('div');
+            d.textContent = t;
+            return d.innerHTML;
+        }
+        
+        window.loadICP = function(idx) {
+            var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[]}');
+            var icp = analytics.icps[idx];
+            if (!icp) return;
+            
+            // Populate form fields
+            setSelectOrCustom('in_industry', 'in_industry_custom', icp.industry);
+            byId('in_size').value = icp.size || '';
+            byId('in_geo').value = icp.geo || '';
+            setSelectOrCustom('in_buyer', 'in_buyer_custom', icp.buyer);
+            byId('in_pain').value = icp.pain || '';
+            byId('in_trigger').value = icp.trigger || '';
+            byId('in_proof_window').value = icp.proofWindow || '';
+            byId('in_engine_active').value = icp.activeAccounts || '';
+            byId('workedCheckbox').checked = !!icp.worked;
+            if (icp.role) setRole(icp.role);
+            
+            update();
+            
+            // Highlight active card
+            document.querySelectorAll('.lib-card').forEach(function(c, i) {
+                var reverseIdx = analytics.icps.length - 1 - i;
+                c.classList.toggle('active-card', reverseIdx === idx);
+            });
+            
+            // Scroll to top of builder
+            document.querySelector('.builder-content').scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        
+        function setSelectOrCustom(selectId, customId, value) {
+            var sel = byId(selectId);
+            var custom = byId(customId);
+            // Check if value matches a select option
+            var found = false;
+            for (var i = 0; i < sel.options.length; i++) {
+                if (sel.options[i].value === value) { sel.value = value; found = true; break; }
+            }
+            if (!found && value) {
+                sel.value = 'custom';
+                custom.value = value;
+                custom.classList.add('visible');
+            } else {
+                custom.classList.remove('visible');
+                custom.value = '';
+            }
+        }
+        
+        window.deleteICP = function(idx) {
+            if (!confirm('Delete this ICP?')) return;
+            var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+            var removed = analytics.icps.splice(idx, 1)[0];
+            if (removed && removed.worked) analytics.totalWorked = Math.max(0, analytics.totalWorked - 1);
+            localStorage.setItem('gtmos_icp_analytics', JSON.stringify(analytics));
+            renderLibrary();
+            updateAnalyticsPanel();
+        };
+        
+        window.copyLibStatement = function(idx) {
+            var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[]}');
+            var icp = analytics.icps[idx];
+            if (icp && icp.statement) {
+                navigator.clipboard.writeText(icp.statement).then(function() {
+                    alert('Statement copied!');
+                });
+            }
+        };
+        
+        // ============================================
+        // INIT
+        // ============================================
+        
+        update();
+        updateAnalyticsPanel();
+        renderTemplateButtons();
+        renderLibrary();
+        // B3: Auto-hide hints after first ICP profile created
+        (function(){
+            var icpData=JSON.parse(localStorage.getItem('gtmos_icp_analytics')||'{"icps":[]}');
+            var container=document.querySelector('.app-content');
+            if(icpData.icps&&icpData.icps.length>=1&&container){
+                container.classList.add('hints-hidden');
+                var header=document.querySelector('.page-title');
+                if(header){
+                    var btn=document.createElement('button');
+                    btn.className='hint-toggle';
+                    btn.textContent='Show field hints';
+                    btn.onclick=function(){container.classList.toggle('hints-hidden');btn.textContent=container.classList.contains('hints-hidden')?'Show field hints':'Hide hints';};
+                    header.parentNode.insertBefore(btn,header.nextSibling);
+                }
+            }
+        })();
+        if (window.saveIndicator) saveIndicator.mountAfter('.page-title');
+        if (window.unsavedGuard) unsavedGuard.track('.app-main');
+        
+        // Track "worked" checkbox changes
+        byId('workedCheckbox').addEventListener('change', function() {
+            // This will be saved when saveICP is called
+        });
+    
+        function startTour() { if (typeof TourGuide !== "undefined") TourGuide.start(); }
+
+        // Signal Console scoring
+        window.scoreAccounts = function() {
+            var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[]}');
+            var icps = analytics.icps || [];
+            if (icps.length === 0) {
+                document.getElementById('scScoreResults').innerHTML = '<div style="padding:12px;color:var(--text-muted);font-style:italic;">Save at least one ICP profile first.</div>';
+                return;
+            }
+            var scData;
+            try { scData = JSON.parse(localStorage.getItem('gtmos_sc_v4') || '{"accounts":[]}'); } catch(e) { scData = {accounts:[]}; }
+            var accounts = scData.accounts || [];
+            if (accounts.length === 0) {
+                document.getElementById('scScoreResults').innerHTML = '<div style="padding:12px;color:var(--text-muted);font-style:italic;">No accounts in Signal Console. <a href="/app/signal-console/" style="color:var(--brand-gold);">Add accounts →</a></div>';
+                return;
+            }
+            // Score each account against first ICP
+            var icp = icps[0];
+            var scored = accounts.map(function(acct) {
+                var score = 0;
+                var max = 100;
+                // Industry match
+                if (icp.industry && acct.industry && acct.industry.toLowerCase().indexOf(icp.industry.toLowerCase()) !== -1) score += 25;
+                // Size match (if available)
+                if (icp.companySize && acct.employees) score += 15;
+                // Has signals
+                if (acct.signals && acct.signals.length > 0) score += 20;
+                // Heat score correlation
+                if ((acct._heat || 0) >= 75) score += 20;
+                else if ((acct._heat || 0) >= 50) score += 10;
+                // Has buyer persona match
+                if (icp.buyer && acct.signals) {
+                    var buyerLower = (icp.buyer || '').toLowerCase();
+                    acct.signals.forEach(function(s) {
+                        if ((s.headline || '').toLowerCase().indexOf(buyerLower) !== -1) score += 10;
+                    });
+                }
+                // Base score for being enriched
+                if (acct.name && acct.industry) score += 10;
+                return { name: acct.name, score: Math.min(100, score), heat: acct._heat || 0 };
+            });
+            scored.sort(function(a, b) { return b.score - a.score; });
+
+            var html = '<div style="margin-top:8px;">';
+            scored.slice(0, 10).forEach(function(s) {
+                var color = s.score >= 70 ? '#22c55e' : s.score >= 40 ? '#f59e0b' : '#64748b';
+                var label = s.score >= 70 ? 'Strong Fit' : s.score >= 40 ? 'Moderate' : 'Weak';
+                html += '<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);">';
+                html += '<div style="width:40px;height:40px;border-radius:8px;background:rgba(' + (s.score >= 70 ? '34,197,94' : s.score >= 40 ? '245,158,11' : '100,116,139') + ',0.1);display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;color:' + color + ';">' + s.score + '</div>';
+                html += '<div style="flex:1;"><div style="font-weight:600;font-size:0.85rem;color:var(--text-primary);">' + (s.name || 'Unknown') + '</div>';
+                html += '<div style="font-size:0.7rem;color:' + color + ';">' + label + ' · Heat: ' + s.heat + '</div></div></div>';
+            });
+            html += '</div>';
+            document.getElementById('scScoreResults').innerHTML = html;
+        };
+    </script>
+</body>
+</html>
+

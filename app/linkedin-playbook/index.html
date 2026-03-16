@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Playbook | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .module-inner { max-width:820px; padding:0 0 80px; }
+
+:root{--bg:#0a0e1a;--bg2:#10152a;--bg3:#161c34;--text:#e0ddd8;--text2:#b0ada6;--text3:#78756e;--muted:#4e4c47;--gold:#d4a574;--border:rgba(255,255,255,0.06);--green:#22c55e;--amber:#f59e0b;--blue:#5b8def;--red:#ef4444;--r-md:8px;--r-lg:12px;--r-full:999px;--serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',-apple-system,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text2);line-height:1.55;min-height:100vh;-webkit-font-smoothing:antialiased;}
+.shell{max-width:820px;margin:0 auto;padding:32px 24px 80px;}
+h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px;}
+.sub{font-size:0.82rem;color:var(--text3);margin-bottom:28px;}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:24px;}
+.tab{padding:10px 16px;font-size:0.78rem;font-weight:600;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:inherit;transition:all 0.15s;}
+.tab:hover{color:var(--text3);}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold);}
+.panel{display:none;}.panel.on{display:block;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;margin-bottom:16px;}
+.card-t{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:700;margin-bottom:12px;}
+.card-t.gold{color:var(--gold);}
+.tpl{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--r-md);padding:16px 18px;margin-bottom:12px;font-size:0.88rem;color:var(--text);line-height:1.7;white-space:pre-wrap;position:relative;}
+.tpl em{color:var(--gold);font-style:normal;font-weight:500;}
+.tpl-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);opacity:0.6;font-weight:700;margin-bottom:8px;display:block;}
+.copy-btn{position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:var(--r-full);font-size:0.65rem;font-weight:700;border:1px solid rgba(212,165,116,0.2);background:rgba(212,165,116,0.06);color:var(--gold);cursor:pointer;font-family:inherit;}
+.copy-btn:hover{background:rgba(212,165,116,0.12);}
+.rule{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:0.82rem;color:var(--text3);line-height:1.6;}
+.rule:last-child{border-bottom:none;}
+.rule strong{color:var(--text);font-weight:600;}
+.rule .tag{display:inline-block;font-size:0.6rem;padding:2px 7px;border-radius:var(--r-full);font-weight:700;margin-right:6px;}
+.tag.do{background:rgba(34,197,94,0.1);color:var(--green);}
+.tag.dont{background:rgba(239,68,68,0.08);color:var(--red);}
+.tag.tip{background:rgba(245,158,11,0.1);color:var(--amber);}
+.timing{display:grid;grid-template-columns:80px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:0.82rem;}
+.timing:last-child{border-bottom:none;}
+.timing-day{font-weight:700;color:var(--text);}
+.timing-act{color:var(--text3);}
+/* Log */
+.stats{display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 0;margin-bottom:20px;}
+.stat{flex:1;text-align:center;border-right:1px solid var(--border);}
+.stat:last-child{border-right:none;}
+.stat-v{font-family:var(--serif);font-size:1.2rem;color:var(--text);}
+.stat-v.gold{color:var(--gold);}
+.stat-v.green{color:var(--green);}
+.stat-l{font-size:0.56rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:600;margin-top:2px;}
+.log-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:16px;align-items:end;}
+.log-form label{display:block;font-size:0.68rem;font-weight:600;color:var(--text3);margin-bottom:4px;}
+.log-form select,.log-form input{padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--r-md);color:var(--text);font-size:0.82rem;font-family:inherit;width:100%;}
+.log-form select:focus,.log-form input:focus{outline:none;border-color:var(--gold);}
+.log-btn{padding:8px 16px;border-radius:var(--r-md);font-size:0.78rem;font-weight:700;border:1px solid rgba(212,165,116,0.3);background:rgba(212,165,116,0.06);color:var(--gold);cursor:pointer;font-family:inherit;height:38px;}
+.log-btn:hover{background:rgba(212,165,116,0.12);}
+.log-table{width:100%;border-collapse:collapse;font-size:0.75rem;}
+.log-table th{text-align:left;padding:7px 8px;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);}
+.log-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text2);}
+.log-empty{text-align:center;padding:32px;color:var(--muted);font-size:0.82rem;}
+.outcome-sel{padding:3px 6px;font-size:0.68rem;border-radius:var(--r-md);background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text2);font-family:inherit;}
+.toast{position:fixed;right:16px;bottom:16px;background:#1f1a14;color:#fff;padding:10px 16px;border-radius:var(--r-md);font-size:0.82rem;font-weight:600;opacity:0;transform:translateY(6px);transition:0.25s;pointer-events:none;z-index:99;}
+.toast.show{opacity:1;transform:none;}
+@media(max-width:700px){.log-form{grid-template-columns:1fr;}.stats{flex-wrap:wrap;}.stat{flex:1 1 50%;border-right:none;padding:4px 0;}}
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <div class="app-content">
+<div class="module-inner">
+    <h1>LinkedIn Playbook</h1>
+    <p class="sub">Methodology reference + tracking. Not automation — intelligence for how to show up on LinkedIn as a seller worth responding to.</p>
+
+    <div class="tabs">
+        <button class="tab on" onclick="showTab('connect')">Connections</button>
+        <button class="tab" onclick="showTab('dm')">DM Sequence</button>
+        <button class="tab" onclick="showTab('content')">Content Strategy</button>
+        <button class="tab" onclick="showTab('inmail')">InMail</button>
+        <button class="tab" onclick="showTab('log')">Activity Log</button>
+    </div>
+
+    <!-- ===== CONNECTIONS ===== -->
+    <div class="panel on" id="tab-connect">
+        <div class="card">
+            <div class="card-t gold">The Golden Rule</div>
+            <div class="rule"><strong>Engage with their content for 1-2 weeks BEFORE you ever send a connection request or DM.</strong> Like, comment, share. Make your name familiar. When you eventually message them, you're not a stranger — you're "that person who always has smart comments on my posts."</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">Connection Request Templates (300 char max)</div>
+
+            <div class="tpl" id="tpl1">
+                <span class="tpl-label">After engaging with their content</span>
+                <button class="copy-btn" onclick="cp('tpl1')">Copy</button>
+Hi <em>[Name]</em>, I've been following your posts on <em>[topic]</em> — your take on <em>[specific point]</em> really resonated. Would love to connect and keep the conversation going.</div>
+
+            <div class="tpl" id="tpl2">
+                <span class="tpl-label">Mutual connection</span>
+                <button class="copy-btn" onclick="cp('tpl2')">Copy</button>
+Hi <em>[Name]</em>, <em>[Mutual]</em> and I were discussing <em>[topic]</em> and your name came up as someone with real expertise here. Would love to connect.</div>
+
+            <div class="tpl" id="tpl3">
+                <span class="tpl-label">Signal-driven (after Signal Console trigger)</span>
+                <button class="copy-btn" onclick="cp('tpl3')">Copy</button>
+Hi <em>[Name]</em>, noticed <em>[Company]</em> is <em>[signal — hiring, expanding, etc.]</em>. I work in this space and thought there might be some relevant overlap. Happy to connect.</div>
+
+            <div class="tpl" id="tpl4">
+                <span class="tpl-label">Industry peer</span>
+                <button class="copy-btn" onclick="cp('tpl4')">Copy</button>
+Hi <em>[Name]</em>, I'm in the <em>[industry/category]</em> space and your background at <em>[Company]</em> caught my eye. Always good to connect with people doing interesting work in this area.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">What Makes a Good vs. Bad Request</div>
+            <div class="rule"><span class="tag do">DO</span> <strong>Reference something specific</strong> — their content, a mutual connection, a shared interest.</div>
+            <div class="rule"><span class="tag do">DO</span> <strong>Keep it under 200 characters</strong> if possible. Shorter requests have higher acceptance rates.</div>
+            <div class="rule"><span class="tag do">DO</span> <strong>Sound like a human</strong>, not a template. One genuine sentence beats three polished ones.</div>
+            <div class="rule"><span class="tag dont">DON'T</span> <strong>Pitch in the connection request.</strong> "I help companies like yours..." is a vendor flag. Instant decline.</div>
+            <div class="rule"><span class="tag dont">DON'T</span> <strong>Use "I'd love to pick your brain"</strong> — it's extractive. You're asking for their expertise without offering anything.</div>
+            <div class="rule"><span class="tag dont">DON'T</span> <strong>Send blank requests.</strong> No note = "I'm mass-connecting and you don't matter enough for a sentence."</div>
+        </div>
+    </div>
+
+    <!-- ===== DM SEQUENCE ===== -->
+    <div class="panel" id="tab-dm">
+        <div class="card">
+            <div class="card-t gold">The 3-Message Pattern</div>
+            <div class="rule"><strong>Rapport → Give-First → Ask.</strong> Never skip a step. Never send all three in the same week.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">Message 1: Rapport (24-48 hours after acceptance)</div>
+            <div class="tpl" id="dm1">
+                <button class="copy-btn" onclick="cp('dm1')">Copy</button>
+Thanks for connecting, <em>[Name]</em>. Your post about <em>[topic]</em> was one of the better takes I've seen on that — especially <em>[specific point]</em>. Looking forward to following your work.</div>
+            <div class="rule"><span class="tag tip">TIMING</span> Wait 24-48 hours after they accept. Immediate DM feels transactional.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">Message 2: Give-First (Day 3-5)</div>
+            <div class="tpl" id="dm2">
+                <button class="copy-btn" onclick="cp('dm2')">Copy</button>
+<em>[Name]</em> — saw this and thought of your work at <em>[Company]</em>: <em>[link to article/benchmark/insight]</em>. Specifically relevant to <em>[what they care about]</em>. No ask — just thought it was useful.</div>
+            <div class="rule"><span class="tag tip">KEY</span> The give must be genuinely valuable. Not your blog post. Not your product page. An external resource that helps them regardless of whether they buy from you.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">Message 3: The Ask (Day 7-10)</div>
+            <div class="tpl" id="dm3">
+                <button class="copy-btn" onclick="cp('dm3')">Copy</button>
+<em>[Name]</em>, based on what you've shared about <em>[topic/challenge]</em> — I think there's a conversation worth having. We've helped companies like <em>[comparable]</em> with <em>[specific result]</em> and the pattern matches what <em>[their company]</em> seems to be navigating.
+
+Would 15 minutes work to see if it's relevant? Happy to do <em>[specific day]</em> or <em>[specific day]</em>.</div>
+            <div class="rule"><span class="tag tip">KEY</span> By now you've built 2 touchpoints of rapport. This ask feels earned, not cold. The specific day choice forces scheduling, not an interest decision.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">DM Cadence Rules</div>
+            <div class="timing"><div class="timing-day">Day 0</div><div class="timing-act">Connection accepted. Do NOT message immediately.</div></div>
+            <div class="timing"><div class="timing-day">Day 1-2</div><div class="timing-act">Message 1: Rapport. Comment on their content first.</div></div>
+            <div class="timing"><div class="timing-day">Day 3-5</div><div class="timing-act">Message 2: Give-first. Share an external resource. Zero ask.</div></div>
+            <div class="timing"><div class="timing-day">Day 7-10</div><div class="timing-act">Message 3: The ask. Specific meeting request with day options.</div></div>
+            <div class="timing"><div class="timing-day">Day 14+</div><div class="timing-act">If no response: one final touch. "No worries if the timing isn't right. I'll keep sharing relevant stuff as I come across it."</div></div>
+        </div>
+    </div>
+
+    <!-- ===== CONTENT STRATEGY ===== -->
+    <div class="panel" id="tab-content">
+        <div class="card">
+            <div class="card-t gold">Content Engagement as Outbound</div>
+            <div class="rule"><strong>Your comments on their posts are outbound touches.</strong> Every thoughtful comment puts your name in front of them — and their network — without the stigma of a cold message.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">How to Comment (Not Like a Bot)</div>
+            <div class="rule"><span class="tag do">DO</span> <strong>Add a perspective they didn't mention.</strong> "Great point about X. I'd add that Y is becoming equally important because Z." This positions you as a peer, not a cheerleader.</div>
+            <div class="rule"><span class="tag do">DO</span> <strong>Ask a genuine question.</strong> "Curious how this plays out for [specific segment]? We've seen [different pattern] in [your space]." Shows expertise while creating dialogue.</div>
+            <div class="rule"><span class="tag do">DO</span> <strong>Share a relevant data point.</strong> "This matches what [research firm] found — [stat]. The trend is accelerating." Adds value to their post.</div>
+            <div class="rule"><span class="tag dont">DON'T</span> <strong>"Great post!" / "Love this!" / "🔥🔥🔥"</strong> — empty validation from a stranger is invisible. Worse: it's what bots do.</div>
+            <div class="rule"><span class="tag dont">DON'T</span> <strong>Pitch in comments.</strong> "We actually solve this at [Company]!" is the fastest way to get muted.</div>
+            <div class="rule"><span class="tag dont">DON'T</span> <strong>Comment on every post.</strong> 2-3 comments per week per prospect is the ceiling. More than that and you're a stalker.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">When to Share Their Content</div>
+            <div class="rule">Share their post to your feed with a 2-3 sentence take that adds your perspective. Tag them. This does three things: puts your name in their notifications, exposes their content to your network (they appreciate this), and positions you as someone in their orbit — not a cold stranger.</div>
+            <div class="rule"><span class="tag tip">BEST FOR</span> C-Suite and VP personas who actively post. They notice who amplifies their content. When you eventually DM or email them, you're already a known name.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">Your Own Content as Outbound</div>
+            <div class="rule">Post 1-2× per week about topics relevant to your buyer's world. Not product announcements. Not "we're hiring." Industry insights, benchmark data, provocative takes on common problems. When prospects visit your profile after receiving your outreach, your content should confirm: "This person knows my world."</div>
+            <div class="rule"><span class="tag tip">FORMAT</span> Short posts (under 200 words) with a hook in the first line outperform long-form. Start with a number, a contrarian take, or a question.</div>
+        </div>
+    </div>
+
+    <!-- ===== INMAIL ===== -->
+    <div class="panel" id="tab-inmail">
+        <div class="card">
+            <div class="card-t gold">When InMail Is Appropriate</div>
+            <div class="rule">InMail has lower response rates than connection requests because it feels like an ad. Use sparingly. The only scenarios where InMail is the right channel:</div>
+            <div class="rule">1. <strong>They don't accept connections</strong> — some executives have closed networks. InMail is the only path.</div>
+            <div class="rule">2. <strong>Time-sensitive trigger</strong> — a leadership change or funding event where waiting 1-2 weeks for a connection accept would miss the window.</div>
+            <div class="rule">3. <strong>You have something ultra-specific</strong> — not a generic pitch but a reference to something only they would care about.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">InMail Templates</div>
+
+            <div class="tpl" id="im1">
+                <span class="tpl-label">Signal-driven (C-Suite)</span>
+                <button class="copy-btn" onclick="cp('im1')">Copy</button>
+<em>[Name]</em> — I noticed <em>[signal]</em> at <em>[Company]</em>. For companies navigating this, the pattern we've seen is <em>[1-sentence insight]</em>.
+
+Not pitching — just thought the data point was relevant to your current priorities. If it is, happy to share more context.
+
+— [Your Name]</div>
+
+            <div class="tpl" id="im2">
+                <span class="tpl-label">Mutual connection reference</span>
+                <button class="copy-btn" onclick="cp('im2')">Copy</button>
+<em>[Name]</em>, <em>[Mutual Connection]</em> mentioned you're the person to talk to about <em>[topic]</em> at <em>[Company]</em>. We've been working with companies in your space on <em>[specific challenge]</em> and the results have been surprising.
+
+Worth 10 minutes? I'll make it count.
+
+— [Your Name]</div>
+        </div>
+
+        <div class="card">
+            <div class="card-t">InMail Rules</div>
+            <div class="rule"><span class="tag do">DO</span> Keep it under 100 words. InMails are read on mobile.</div>
+            <div class="rule"><span class="tag do">DO</span> Make the first sentence hyper-specific to them. Generic first lines get deleted.</div>
+            <div class="rule"><span class="tag dont">DON'T</span> Use InMail for follow-ups. If they didn't respond to your InMail, they won't respond to another one.</div>
+            <div class="rule"><span class="tag dont">DON'T</span> Use InMail when a connection request would work. InMails cost credits. Connection requests are free.</div>
+        </div>
+    </div>
+
+    <!-- ===== ACTIVITY LOG ===== -->
+    <div class="panel" id="tab-log">
+        <div class="stats" id="liStats"></div>
+        <div class="card">
+            <div class="card-t">Log an Action</div>
+            <div class="log-form">
+                <div><label>Account</label><input type="text" id="liAccount" placeholder="Company name"></div>
+                <div><label>Contact</label><input type="text" id="liContact" placeholder="Person name"></div>
+                <div><label>Action</label><select id="liAction">
+                    <option value="connection_request">Connection Request</option>
+                    <option value="dm">Direct Message</option>
+                    <option value="inmail">InMail</option>
+                    <option value="content_engage">Content Engagement (comment/like)</option>
+                    <option value="content_share">Content Share</option>
+                </select></div>
+                <button class="log-btn" onclick="logAction()">Log</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-t">All Activity</div>
+            <div id="liTable"></div>
+        </div>
+    </div>
+</div>
+<div class="toast" id="toast"></div>
+            </div>
+        </main>
+    </div>
+    <script>
+
+(function(){
+function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
+
+window.showTab=function(id){
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on')});
+    document.getElementById('tab-'+id).classList.add('on');
+    var labels={connect:'Connections',dm:'DM Sequence',content:'Content Strategy',inmail:'InMail',log:'Activity Log'};
+    document.querySelectorAll('.tab').forEach(function(t){if(t.textContent===labels[id])t.classList.add('on')});
+    if(id==='log')renderLog();
+};
+
+window.cp=function(id){
+    var el=document.getElementById(id);
+    if(!el)return;
+    var text=el.textContent.replace(/Copy$/,'').trim();
+    if(navigator.clipboard)navigator.clipboard.writeText(text).then(function(){toast('Copied')});
+};
+
+window.logAction=function(){
+    var data=readLS('gtmos_linkedin_log',{actions:[]});
+    var account=document.getElementById('liAccount').value.trim();
+    var contact=document.getElementById('liContact').value.trim();
+    var action=document.getElementById('liAction').value;
+    if(!account&&!contact){toast('Enter account or contact');return}
+    data.actions.push({
+        id:'li_'+Date.now(),
+        accountName:account,
+        contactName:contact,
+        actionType:action,
+        temperature:'ice_cold',
+        content:'',
+        outcome:null,
+        outcomeDate:null,
+        createdAt:new Date().toISOString()
+    });
+    writeLS('gtmos_linkedin_log',data);
+    document.getElementById('liAccount').value='';
+    document.getElementById('liContact').value='';
+    toast('Action logged');
+    renderLog();
+};
+
+function renderLog(){
+    var data=readLS('gtmos_linkedin_log',{actions:[]});
+    var actions=data.actions||[];
+    var total=actions.length;
+    var conn=actions.filter(function(a){return a.actionType==='connection_request'}).length;
+    var accepted=actions.filter(function(a){return a.actionType==='connection_request'&&a.outcome==='accepted'}).length;
+    var dms=actions.filter(function(a){return a.actionType==='dm'}).length;
+    var replied=actions.filter(function(a){return a.outcome==='replied'}).length;
+    var accRate=conn>0?Math.round(accepted/conn*100):0;
+    var respRate=dms>0?Math.round(replied/dms*100):0;
+
+    document.getElementById('liStats').innerHTML=
+        '<div class="stat"><div class="stat-v">'+total+'</div><div class="stat-l">Total Actions</div></div>'+
+        '<div class="stat"><div class="stat-v">'+conn+'</div><div class="stat-l">Connections</div></div>'+
+        '<div class="stat"><div class="stat-v'+(accRate>=50?' green':'')+'">'+accRate+'%</div><div class="stat-l">Accept Rate</div></div>'+
+        '<div class="stat"><div class="stat-v">'+dms+'</div><div class="stat-l">DMs Sent</div></div>'+
+        '<div class="stat"><div class="stat-v gold">'+respRate+'%</div><div class="stat-l">DM Response</div></div>';
+
+    if(actions.length===0){
+        document.getElementById('liTable').innerHTML='<div class="log-empty">No LinkedIn activity logged yet.</div>';
+        return;
+    }
+    var html='<table class="log-table"><tr><th>Date</th><th>Account</th><th>Contact</th><th>Action</th><th>Outcome</th></tr>';
+    actions.slice().reverse().forEach(function(a,i){
+        var idx=actions.length-1-i;
+        var labels={connection_request:'Connect',dm:'DM',inmail:'InMail',content_engage:'Engage',content_share:'Share'};
+        html+='<tr><td>'+(a.createdAt?new Date(a.createdAt).toLocaleDateString():'')+'</td><td>'+escH(a.accountName)+'</td><td>'+escH(a.contactName)+'</td><td>'+(labels[a.actionType]||a.actionType)+'</td>';
+        html+='<td><select class="outcome-sel" onchange="updateLiOutcome('+idx+',this.value)"><option value="">—</option>';
+        ['accepted','replied','no_response','declined'].forEach(function(o){
+            html+='<option value="'+o+'"'+(a.outcome===o?' selected':'')+'>'+o.replace(/_/g,' ')+'</option>';
+        });
+        html+='</select></td></tr>';
+    });
+    html+='</table>';
+    document.getElementById('liTable').innerHTML=html;
+}
+
+window.updateLiOutcome=function(idx,val){
+    var data=readLS('gtmos_linkedin_log',{actions:[]});
+    if(data.actions[idx]){
+        data.actions[idx].outcome=val||null;
+        data.actions[idx].outcomeDate=val?new Date().toISOString():null;
+        writeLS('gtmos_linkedin_log',data);
+        renderLog();
+        toast('Updated');
+    }
+};
+
+renderLog();
+})();
+
+    </script>
+</body>
+</html>

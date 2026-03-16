@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readiness Score | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .hero-score-wrap { text-align:center; padding:40px 0 32px; }
+        .hero-ring { width:140px; height:140px; margin:0 auto 16px; position:relative; }
+        .hero-ring svg { transform:rotate(-90deg); }
+        .hero-ring-val { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--font-serif); font-size:2.8rem; color:var(--text-primary); }
+        .hero-verdict { font-size:1rem; color:var(--text-tertiary); margin-bottom:8px; }
+        .hero-sub { font-size:0.8rem; color:var(--text-muted); max-width:500px; margin:0 auto; }
+        .actions-title { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--brand-gold); font-weight:700; margin:32px 0 16px; display:flex; align-items:center; gap:8px; }
+        .action-card { display:flex; gap:16px; align-items:flex-start; padding:16px 20px; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:var(--radius-lg); margin-bottom:10px; transition:all 0.2s; }
+        .action-card:hover { border-color:var(--border-hover); }
+        .action-card.done { opacity:0.5; border-color:rgba(34,197,94,0.3); }
+        .action-card.done .action-check { background:rgba(34,197,94,0.2); color:#22c55e; }
+        .action-check { width:32px; height:32px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.85rem; background:rgba(255,255,255,0.04); color:var(--text-muted); }
+        .action-body { flex:1; }
+        .action-label { font-weight:600; font-size:0.9rem; color:var(--text-primary); margin-bottom:2px; }
+        .action-desc { font-size:0.8rem; color:var(--text-muted); line-height:1.4; }
+        .action-link { display:inline-block; margin-top:6px; font-size:0.78rem; color:var(--brand-gold); text-decoration:none; font-weight:600; }
+        .action-link:hover { text-decoration:underline; }
+        .action-pts { font-family:var(--font-serif); font-size:0.85rem; color:var(--brand-gold); font-weight:700; white-space:nowrap; }
+        .dim-section { margin-top:32px; }
+        .dim-section-title { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); font-weight:700; padding:8px 0; margin-bottom:4px; }
+        .dim-bar-wrap { border-bottom:1px solid rgba(255,255,255,0.04); padding:8px 0; }
+        .dim-bar { display:flex; align-items:center; gap:12px; cursor:pointer; }
+        .dim-label { font-size:0.82rem; color:var(--text-secondary); width:120px; flex-shrink:0; font-weight:600; display:flex; align-items:center; gap:4px; }
+        .dim-track { flex:1; height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
+        .dim-fill { height:100%; border-radius:3px; transition:width 0.4s ease; }
+        .dim-score { font-size:0.78rem; color:var(--text-muted); width:50px; text-align:right; }
+        .dim-help { color:var(--text-muted); font-size:0.62rem; opacity:0.5; font-weight:700; background:rgba(255,255,255,0.05); width:14px; height:14px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; }
+        .dim-bar:hover .dim-help { opacity:1; color:var(--brand-gold); background:rgba(212,165,116,0.1); }
+        .dim-breakdown { display:none; padding:6px 0 6px 132px; }
+        .dim-breakdown.open { display:block; }
+        .dim-crit { display:flex; justify-content:space-between; padding:2px 0; font-size:0.7rem; }
+        .dim-crit-label { color:var(--text-muted); display:flex; align-items:center; gap:4px; }
+        .dim-crit-check { font-size:0.65rem; }
+        .dim-crit-check.met { color:#22c55e; }
+        .dim-crit-check.unmet { color:var(--text-muted); opacity:0.4; }
+        .dim-crit-pts { font-weight:600; font-size:0.65rem; }
+        .dim-crit-pts.met { color:#22c55e; }
+        .dim-crit-pts.unmet { color:var(--text-muted); opacity:0.4; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Readiness Score</h1>
+                <p class="module-subtitle">How close you are to hiring your first sales rep.</p>
+            </header>
+            <div class="app-content" style="max-width:680px;">
+                <div class="hero-score-wrap" id="heroWrap"></div>
+                <div class="actions-title">Highest-impact moves to improve your score</div>
+                <div id="actionsList"></div>
+                <div class="dim-section">
+                    <div class="dim-section-title">Score breakdown — click any dimension to see criteria</div>
+                    <div id="dimBreakdown"></div>
+                </div>
+                <div id="hireReadiness"></div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/deal-health.js"></script>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    (function(){
+        function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+
+        // ══════════════════════════════════════════════════════
+        // DATA READS
+        // ══════════════════════════════════════════════════════
+        var playbook=readLS('gtmos_playbook',{});
+        var thinIcp=readLS('gtmos_icp_analytics',{icps:[],totalWorked:0});
+        var seed=readLS('gtmos_outbound_seed',{});
+        var disco=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+        var agenda=readLS('gtmos_discovery_agenda',{});
+        var angles=readLS('gtmos_angles',[]);
+        var allDeals=readLS('gtmos_deal_workspaces',[]);
+        if(!Array.isArray(allDeals))allDeals=Object.values(allDeals||{});
+        var scData=readLS('gtmos_sc_v4',{accounts:[]});
+        var scAccounts=(scData.accounts||[]).length;
+        // NEW reads — Phase A
+        var autopsyLog=readLS('gtmos_autopsy_log_v1',[]);
+        var discoveryWorked=readLS('gtmos_discovery_worked',{});
+        var stageHistory=readLS('gtmos_deal_stage_history',{});
+        var outboundTouches=readLS('gtmos_outbound_touches',{touches:[]});
+        var coldCallLog=readLS('gtmos_cold_call_log',{calls:[]});
+        var linkedinLog=readLS('gtmos_linkedin_log',{actions:[]});
+        var advisorRegistry=readLS('gtmos_advisor_registry',{advisors:[]});
+        var advisorDeps=readLS('gtmos_advisor_deployments',{deployments:[]});
+        var handoffExport=readLS('gtmos_handoff_exported',null);
+        var pocData=readLS('gtmos_poc_data',{pocs:[]});             // D3: PoC Framework
+
+        // ══════════════════════════════════════════════════════
+        // COMPUTED VALUES
+        // ══════════════════════════════════════════════════════
+        var icpCount=(thinIcp.icps||[]).length;
+        var activeDeals=allDeals.filter(function(d){return d&&d.stage!=='closed-won'&&d.stage!=='closed-lost'});
+        var wins=0,losses=0,hasLossReasons=false;
+        allDeals.forEach(function(d){if(d&&d.stage==='closed-won')wins++;if(d&&d.stage==='closed-lost'){losses++;if(d.lossReason)hasLossReasons=true;}});
+
+        // A2: Discovery worked moves
+        var workedMoveCount=0,workedTerritorySet={};
+        if(typeof discoveryWorked==='object'&&discoveryWorked!==null){
+            Object.keys(discoveryWorked).forEach(function(k){
+                var v=discoveryWorked[k];
+                if(v===true||v==='true'){workedMoveCount++;var parts=k.split('_');if(parts.length>1)workedTerritorySet[parts[0]]=true;}
+                else if(typeof v==='object'&&v!==null){Object.keys(v).forEach(function(mk){if(v[mk]){workedMoveCount++;var parts=mk.split('_');if(parts.length>1)workedTerritorySet[parts[0]]=true;}})}
+            });
+        }
+        var workedTerritoryCount=Object.keys(workedTerritorySet).length;
+
+        // A3: Avg cycle time
+        var hasStageVelocity=false,avgCycleDays=null;
+        var closedWonDeals=allDeals.filter(function(d){return d&&d.stage==='closed-won'});
+        if(closedWonDeals.length>0){
+            var cycleTimes=[];
+            closedWonDeals.forEach(function(d){
+                var h=stageHistory[d.id]||[];
+                if(Array.isArray(h)&&h.length>=2){
+                    var f=new Date(h[0].date||h[0].ts||h[0].timestamp);
+                    var l=new Date(h[h.length-1].date||h[h.length-1].ts||h[h.length-1].timestamp);
+                    if(!isNaN(f)&&!isNaN(l)){var dd=Math.round((l-f)/86400000);if(dd>0)cycleTimes.push(dd);}
+                }
+                if(cycleTimes.length===0&&d.created_at){
+                    var c=new Date(d.created_at),u=new Date(d.updated_at||d.closedDate||Date.now());
+                    if(!isNaN(c)&&!isNaN(u)){var dd2=Math.round((u-c)/86400000);if(dd2>0)cycleTimes.push(dd2);}
+                }
+            });
+            if(cycleTimes.length>0){hasStageVelocity=true;avgCycleDays=Math.round(cycleTimes.reduce(function(a,b){return a+b},0)/cycleTimes.length);}
+        }
+
+        // A4: Avg stakeholder threading
+        var avgThreading=0;
+        if(activeDeals.length>0){
+            var totalEng=0;
+            activeDeals.forEach(function(d){var s=d.stakeholders||[];totalEng+=s.filter(function(x){return x&&(x.engaged||x.status==='engaged')}).length});
+            avgThreading=Math.round(totalEng/activeDeals.length*10)/10;
+        }
+
+        // A5: Outbound aggregates
+        var touchCount=(outboundTouches.touches||[]).length;
+        var touchReplied=(outboundTouches.touches||[]).filter(function(t){return t.outcome==='replied'||t.outcome==='meeting_booked'}).length;
+        var touchResponseRate=touchCount>0?Math.round(touchReplied/touchCount*100):0;
+        var coldCallCount=(coldCallLog.calls||[]).length;
+        var linkedinCount=(linkedinLog.actions||[]).length;
+        var channelsUsed=0;
+        if(touchCount>0)channelsUsed++;if(coldCallCount>0)channelsUsed++;if(linkedinCount>0)channelsUsed++;
+        var angleReplies=angles.filter(function(a){return a&&a.payload&&a.payload.got_reply}).length;
+
+        // A6: Advisor aggregates
+        var advisorCount=(advisorRegistry.advisors||[]).length;
+        var depCount=(advisorDeps.deployments||[]).length;
+
+        // A1: Autopsy count
+        var autopsyRuns=Array.isArray(autopsyLog)?autopsyLog.length:typeof autopsyLog==='object'&&autopsyLog!==null?Object.keys(autopsyLog).length:0;
+
+        // D3: PoC aggregates
+        var pocPocs=(pocData.pocs||[]);
+        var pocCount=pocPocs.length;
+        var pocConverted=pocPocs.filter(function(p){return p.outcome==='converted'}).length;
+        var pocHasOutcomes=pocPocs.some(function(p){return p.outcome==='converted'||p.outcome==='not_converted'});
+
+        // Playbook fields/checks
+        var pbFields=0;
+        Object.values(playbook.fields||{}).forEach(function(v){if(typeof v==='string'&&v.trim())pbFields++});
+        var pbChecks=playbook.checks?Object.values(playbook.checks).filter(Boolean).length:0;
+
+        // Coverage
+        var covRatio=0;
+        if(window.dealHealth&&seed.annual_quota){covRatio=window.dealHealth.computeCoverage(allDeals,Number(seed.annual_quota)).ratio||0;}
+
+        // ══════════════════════════════════════════════════════
+        // DIMENSION SCORING — REBALANCED WITH CRITERIA TRACKING
+        // ══════════════════════════════════════════════════════
+        var dims=[
+            {name:'ICP',score:0,max:20,color:'#06b6d4',criteria:[]},
+            {name:'Discovery',score:0,max:20,color:'#3b82f6',criteria:[]},
+            {name:'Outreach',score:0,max:20,color:'#a855f7',criteria:[]},
+            {name:'Deals',score:0,max:20,color:'#22c55e',criteria:[]},
+            {name:'Playbook',score:0,max:20,color:'#f59e0b',criteria:[]}
+        ];
+        function aw(dim,pts,label,met){if(met)dims[dim].score+=pts;dims[dim].criteria.push({label:label,pts:pts,met:met})}
+
+        // ICP (20)
+        aw(0,5,'1+ ICP profile created',icpCount>=1);
+        aw(0,3,'3+ ICP profiles',icpCount>=3);
+        aw(0,3,'ICP profiles worked in live calls',(thinIcp.totalWorked||0)>0);
+        aw(0,3,'Company + ACV set in Playbook',!!(playbook.company&&playbook.acv));
+        aw(0,3,'5+ Signal Console accounts',scAccounts>=5);
+        aw(0,3,'10+ Signal Console accounts',scAccounts>=10);
+        dims[0].score=Math.min(20,dims[0].score);
+
+        // Discovery (20) — A2 added
+        aw(1,3,'1+ discovery call logged',disco.totalCalls>=1);
+        aw(1,2,'5+ discovery calls',disco.totalCalls>=5);
+        aw(1,2,'10+ discovery calls',disco.totalCalls>=10);
+        var advRate=disco.totalCalls>0?Math.round((disco.advancedCalls||0)/disco.totalCalls*100):0;
+        aw(1,3,'Advance rate \u226530%',advRate>=30);
+        var gates=(agenda.gates||[]).filter(Boolean).length;
+        aw(1,2,'2+ qualification gates checked',gates>=2);
+        aw(1,2,'All 4 gates checked',gates===4);
+        aw(1,2,'5+ discovery moves worked',workedMoveCount>=5);
+        aw(1,2,'Moves across 2+ territories',workedTerritoryCount>=2);
+        dims[1].score=Math.min(20,dims[1].score);
+
+        // Outreach (20) — A5 added
+        aw(2,3,'Quota set',!!seed.annual_quota);
+        aw(2,2,'1+ outbound angle saved',angles.length>=1);
+        aw(2,1,'5+ angles',angles.length>=5);
+        aw(2,2,'Replies tracked',angleReplies>0||touchReplied>0);
+        aw(2,2,'Signal Console accounts 3+',scAccounts>=3);
+        aw(2,2,'10+ outbound touches logged',touchCount>=10);
+        aw(2,2,'Response rate \u226510%',touchResponseRate>=10);
+        aw(2,2,'2+ outbound channels used',channelsUsed>=2);
+        aw(2,2,'5+ cold calls logged',coldCallCount>=5);
+        dims[2].score=Math.min(20,dims[2].score);
+
+        // Deals (20) — A1, A3, A4, A6 added
+        aw(3,2,'1+ active deal',activeDeals.length>=1);
+        aw(3,2,'3+ active deals',activeDeals.length>=3);
+        aw(3,2,'1+ closed deal',(wins+losses)>=1);
+        aw(3,1,'3+ closed deals',(wins+losses)>=3);
+        aw(3,1,'Both wins and losses',wins>0&&losses>0);
+        aw(3,1,'Loss reasons captured',hasLossReasons);
+        aw(3,2,'Coverage \u22653\u00d7',covRatio>=3);
+        aw(3,1,'Coverage \u22654\u00d7',covRatio>=4);
+        aw(3,2,'Stage velocity documented',hasStageVelocity);
+        aw(3,2,'Avg \u22652 engaged stakeholders/deal',avgThreading>=2);
+        aw(3,1,'1+ Future Autopsy run',autopsyRuns>=1);
+        aw(3,1,'3+ autopsies',autopsyRuns>=3);
+        // D3: PoC outcomes
+        aw(3,1,'PoC with outcome tracked',pocHasOutcomes);
+        dims[3].score=Math.min(20,dims[3].score);
+
+        // Playbook (20) — A7, A8
+        aw(4,2,'Company name set',!!playbook.company);
+        aw(4,2,'ACV set',!!playbook.acv);
+        aw(4,1,'Stage set',!!playbook.stage);
+        aw(4,3,'3+ fields populated',pbFields>=3);
+        aw(4,2,'6+ fields',pbFields>=6);
+        aw(4,2,'10+ fields',pbFields>=10);
+        aw(4,2,'2+ checks completed',pbChecks>=2);
+        aw(4,2,'Notes substantive (100+ chars)',!!(playbook.notes&&String(playbook.notes).trim().length>100));
+        aw(4,2,'Handoff Kit exported',!!handoffExport);
+        dims[4].score=Math.min(20,dims[4].score);
+
+        // ══════════════════════════════════════════════════════
+        // TOTAL
+        // ══════════════════════════════════════════════════════
+        var total=dims.reduce(function(s,d){return s+d.score},0);
+        total=Math.min(100,total);
+
+        // Hero ring
+        var circ=2*Math.PI*58;
+        var offset=circ-(total/100)*circ;
+        var color=total>=80?'#22c55e':total>=50?'#3b82f6':total>=25?'#2dd4bf':'#64748b';
+        var verdict=total>=80?'Ready to hand off':total>=50?'Hire-ready with guardrails':total>=25?'Building, not ready':'You are the sales system';
+        document.getElementById('heroWrap').innerHTML='<div class="hero-ring"><svg width="140" height="140" viewBox="0 0 140 140"><circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/><circle cx="70" cy="70" r="58" fill="none" stroke="'+color+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'"/></svg><div class="hero-ring-val">'+total+'</div></div><div class="hero-verdict">'+verdict+'</div><div class="hero-sub">Computed live from every module. Sell, document, and iterate — the score rises with you.</div>';
+
+        // ══════════════════════════════════════════════════════
+        // ACTIONS — all unmet criteria + linked module actions, sorted by pts
+        // ══════════════════════════════════════════════════════
+        var actions=[];
+        // Module-linked actions (with deep links)
+        if(icpCount===0)actions.push({pts:5,label:'Add your first ICP profile',desc:'Define who you sell to.',link:'/app/icp-studio/',lt:'ICP Studio'});
+        else if(icpCount<3)actions.push({pts:3,label:'Add '+(3-icpCount)+' more ICP profiles',desc:'Multiple ICPs unlock comparison.',link:'/app/icp-studio/',lt:'ICP Studio'});
+        if(!seed.annual_quota)actions.push({pts:3,label:'Set your quota and deal size',desc:'Powers all pipeline math.',link:'/app/quota-workback/',lt:'Quota Workback'});
+        if(scAccounts<5)actions.push({pts:3,label:'Add '+(5-scAccounts)+' Signal Console accounts',desc:'Account intelligence layer.',link:'/app/signal-console/',lt:'Signal Console'});
+        if(disco.totalCalls===0)actions.push({pts:3,label:'Log a discovery call',desc:'Patterns emerge after 5+.',link:'/app/discovery-studio/',lt:'Discovery Studio'});
+        if(activeDeals.length===0)actions.push({pts:2,label:'Create your first deal',desc:'Pipeline tracking starts here.',link:'/app/deal-workspace/',lt:'Deal Workspace'});
+        if(touchCount===0)actions.push({pts:2,label:'Log outbound touches',desc:'Track volume and response rates.',link:'/app/outbound-studio/',lt:'Outbound Studio'});
+        if(coldCallCount===0)actions.push({pts:2,label:'Log cold calls',desc:'Make call activity visible.',link:'/app/cold-call-studio/',lt:'Cold Call Studio'});
+        if(autopsyRuns===0)actions.push({pts:1,label:'Run a Future Autopsy',desc:'Pipeline rigor earns Deals points.',link:'/app/future-autopsy/',lt:'Future Autopsy'});
+        if(advisorCount===0)actions.push({pts:1,label:'Register an advisor',desc:'Track advisory relationships.',link:'/app/advisor-deploy/',lt:'Advisor Deploy'});
+        if(!handoffExport)actions.push({pts:2,label:'Export the Handoff Kit',desc:'Strongest hire-readiness signal.',link:'/app/founding-gtm/',lt:'Playbook'});
+        if(workedMoveCount<5)actions.push({pts:2,label:'Work '+(5-workedMoveCount)+' more discovery moves',desc:'Practice techniques in live calls.',link:'/app/discovery-studio/',lt:'Discovery Studio'});
+        if(channelsUsed<2)actions.push({pts:2,label:'Use a 2nd outbound channel',desc:'Email + call or LinkedIn.',link:'/app/outbound-studio/',lt:'Outbound Studio'});
+        // Hire readiness big-ticket items
+        if(wins<2)actions.push({pts:12,label:'Close '+(2-wins)+' more deal'+(wins===1?'':'s'),desc:'+12 to Hire Readiness. Referenceable logos.',link:'/app/deal-workspace/',lt:'Deal Workspace'});
+        if(channelsUsed<2||touchCount<5)actions.push({pts:10,label:'Build multi-channel outbound',desc:'+10 to Hire Readiness. 2+ channels, 5+ touches.',link:'/app/outbound-studio/',lt:'Outbound Studio'});
+
+        actions.sort(function(a,b){return b.pts-a.pts});
+        // Dedupe
+        var seen={};actions=actions.filter(function(a){if(seen[a.label])return false;seen[a.label]=true;return true});
+
+        if(actions.length>0){
+            document.getElementById('actionsList').innerHTML=actions.slice(0,7).map(function(a){
+                return '<div class="action-card"><div class="action-check">\u25CB</div><div class="action-body"><div class="action-label">'+a.label+'</div><div class="action-desc">'+a.desc+'</div>'+(a.link?'<a class="action-link" href="'+a.link+'">'+a.lt+' \u2192</a>':'')+'</div><div class="action-pts">+'+a.pts+'</div></div>';
+            }).join('');
+        } else {
+            document.getElementById('actionsList').innerHTML='<div class="action-card done"><div class="action-check">\u2713</div><div class="action-body"><div class="action-label" style="color:#22c55e;">All core actions complete</div><div class="action-desc">Keep selling and refining.</div></div></div>';
+        }
+
+        // ══════════════════════════════════════════════════════
+        // DIMENSION BARS WITH BREAKDOWN (A9)
+        // ══════════════════════════════════════════════════════
+        var dh='';
+        dims.forEach(function(d,i){
+            var pct=Math.round(d.score/d.max*100);
+            dh+='<div class="dim-bar-wrap"><div class="dim-bar" onclick="toggleDB('+i+')"><div class="dim-label">'+d.name+' <span class="dim-help">?</span></div><div class="dim-track"><div class="dim-fill" style="width:'+pct+'%;background:'+d.color+'"></div></div><div class="dim-score">'+d.score+'/'+d.max+'</div></div>';
+            dh+='<div class="dim-breakdown" id="db'+i+'">';
+            d.criteria.forEach(function(c){
+                dh+='<div class="dim-crit"><span class="dim-crit-label"><span class="dim-crit-check '+(c.met?'met':'unmet')+'">'+(c.met?'\u2713':'\u25cb')+'</span> '+c.label+'</span><span class="dim-crit-pts '+(c.met?'met':'unmet')+'">'+(c.met?'+'+c.pts:'0')+'/'+c.pts+'</span></div>';
+            });
+            dh+='</div></div>';
+        });
+        document.getElementById('dimBreakdown').innerHTML=dh;
+        window.toggleDB=function(i){var e=document.getElementById('db'+i);if(e)e.classList.toggle('open')};
+
+        // ══════════════════════════════════════════════════════
+        // HIRE READINESS — REBALANCED + NEW CRITERIA
+        // ══════════════════════════════════════════════════════
+        if(window.dealHealth){
+            var hs=0,hc=[];
+            function ha(pts,label,met){if(met)hs+=pts;hc.push({text:label+(met?'':' (+'+pts+')'),done:met,pts:pts})}
+
+            ha(12,'2+ closed-won deals (referenceable logos)',wins>=2);
+            var lp=window.dealHealth.lossPatterns(window.dealHealth.loadAllVitals());
+            ha(10,'Documented loss patterns (3+ analyzed)',!!(lp&&lp.total>=3));
+            ha(10,'Pipeline coverage \u22653\u00d7',covRatio>=3);
+            var pbSec=0;if(playbook.company)pbSec++;if(playbook.acv)pbSec++;if(pbFields>=3)pbSec++;if(pbChecks>=2)pbSec++;
+            ha(8,'Playbook 3+ populated sections',pbSec>=3);
+            ha(8,'3+ ICP profiles',icpCount>=3);
+            ha(5,'3+ discovery calls logged',disco.totalCalls>=3);
+            var perf=window.dealHealth.performanceMetrics(window.dealHealth.loadAllVitals());
+            ha(5,'Win rate data exists'+(perf.winRate!==null?' ('+perf.winRate+'%)':''),perf.winRate!==null);
+            ha(10,'Multi-channel outbound with data',channelsUsed>=2&&touchCount>=5);
+            ha(5,'Quota + ACV benchmarks set',!!(seed.annual_quota&&seed.acv_band));
+            ha(5,'Playbook notes substantive',!!(playbook.notes&&String(playbook.notes).trim().length>100));
+            ha(5,'Avg deal cycle documented'+(avgCycleDays!==null?' ('+avgCycleDays+'d)':''),hasStageVelocity);
+            ha(5,'Stakeholder threading \u22653/deal',avgThreading>=3);
+            ha(5,'Handoff Kit exported',!!handoffExport);
+            ha(5,'Advisor relationships deployed',advisorCount>=1&&depCount>=1);
+            ha(2,'Future Autopsy discipline (3+ runs)',autopsyRuns>=3);
+            // D3: PoC conversion
+            ha(3,'PoC conversion documented',pocHasOutcomes&&pocConverted>=1);
+
+            hs=Math.min(100,hs);
+            var hcol=hs>=80?'#22c55e':hs>=50?'#3b82f6':hs>=25?'#f59e0b':'#64748b';
+            var hv=hs>=80?'Ready to hire. The playbook is documented, the pipeline is real, and the process is repeatable.':hs>=50?'Close, but gaps remain. A new hire would need heavy founder support in the first 90 days.':hs>=25?'Not ready. The founder is still the sales system. Document what\u2019s working before hiring.':'Too early. Close more deals and build the playbook first.';
+
+            var hh='<div style="margin-top:var(--space-xl);border-top:1px solid var(--border-default);padding-top:var(--space-lg);">';
+            hh+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><div style="font-family:var(--font-serif);font-size:1.8rem;color:'+hcol+';">'+hs+'</div><div><div style="font-weight:700;font-size:0.85rem;color:var(--text-primary);">Hire Readiness</div><div style="font-size:0.78rem;color:var(--text-muted);">Can you hand this off to a new GTM hire?</div></div></div>';
+            hh+='<div style="font-size:0.82rem;color:var(--text-tertiary);margin-bottom:16px;line-height:1.5;">'+hv+'</div>';
+            // Sort: unmet by pts desc first, then met
+            hc.sort(function(a,b){if(a.done===b.done)return b.pts-a.pts;return a.done?1:-1});
+            hc.forEach(function(c){
+                hh+='<div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:0.82rem;"><span style="color:'+(c.done?'#22c55e':'var(--text-muted)')+';flex-shrink:0;">'+(c.done?'\u2713':'\u25cb')+'</span><span style="color:'+(c.done?'var(--text-secondary)':'var(--text-muted)')+';">'+c.text+'</span></div>';
+            });
+            hh+='</div>';
+            document.getElementById('hireReadiness').innerHTML=hh;
+        }
+    })();
+    </script>
+</body>
+</html>

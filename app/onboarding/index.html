@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start - Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        body { background: var(--bg-primary, #0a0e1a); }
+        .ob-shell { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px; }
+        .ob-progress { width:100%; max-width:520px; margin-bottom:40px; }
+        .ob-bars { display:flex; gap:6px; margin-bottom:12px; }
+        .ob-bar { flex:1; height:3px; border-radius:3px; background:rgba(255,255,255,0.08); transition:background 0.4s; }
+        .ob-bar.done { background:var(--brand-gold,#d4a574); }
+        .ob-bar.active { background:rgba(212,165,116,0.5); }
+        .ob-step-label { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); }
+        .ob-card { width:100%; max-width:520px; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:16px; padding:48px 40px; position:relative; overflow:hidden; }
+        .ob-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--brand-gold),transparent); }
+        .ob-brand { font-family:var(--font-serif); font-size:1.4rem; color:var(--brand-gold); margin-bottom:32px; }
+        .ob-h { font-family:var(--font-serif); font-size:1.5rem; color:var(--text-primary); margin-bottom:8px; line-height:1.3; }
+        .ob-sub { font-size:0.88rem; color:var(--text-tertiary); margin-bottom:28px; line-height:1.5; }
+        .ob-field { margin-bottom:20px; }
+        .ob-label { display:block; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:8px; }
+        .ob-input { width:100%; padding:12px 16px; background:rgba(255,255,255,0.04); border:1px solid var(--border-default); border-radius:8px; color:var(--text-primary); font-size:0.95rem; font-family:inherit; }
+        .ob-input:focus { outline:none; border-color:var(--brand-gold); }
+        .ob-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' fill='none' stroke-width='2'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 16px center; padding-right:40px; }
+        .ob-hint { font-size:0.73rem; color:var(--text-muted); margin-top:6px; }
+        .ob-curr { position:relative; }
+        .ob-curr .ob-input { padding-left:28px; }
+        .ob-curr::before { content:'$'; position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:0.95rem; pointer-events:none; }
+        .ob-actions { display:flex; justify-content:space-between; align-items:center; margin-top:32px; }
+        .ob-btn { padding:12px 28px; border-radius:8px; font-size:0.9rem; font-weight:700; cursor:pointer; transition:all 0.2s; border:none; font-family:inherit; }
+        .ob-btn-primary { background:var(--brand-gold); color:var(--bg-primary); }
+        .ob-btn-primary:hover { opacity:0.9; }
+        .ob-btn-primary:disabled { opacity:0.3; cursor:not-allowed; }
+        .ob-btn-ghost { background:transparent; color:var(--text-muted); border:1px solid var(--border-default); }
+        .ob-btn-skip { background:none; border:none; color:var(--text-muted); font-size:0.8rem; cursor:pointer; }
+        .ob-step { display:none; animation:fadeUp 0.35s ease; }
+        .ob-step.active { display:block; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        .ob-done { text-align:center; padding:24px 0; }
+        .ob-done-icon { font-size:3rem; margin-bottom:16px; }
+        .ob-seeded { display:flex; flex-direction:column; gap:10px; margin:24px 0; text-align:left; }
+        .ob-seeded-item { display:flex; align-items:center; gap:10px; padding:12px 16px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:8px; font-size:0.85rem; color:var(--text-secondary); }
+        @media(max-width:600px){ .ob-card{padding:32px 24px;} .ob-h{font-size:1.2rem;} }
+    </style>
+</head>
+<body>
+<div class="ob-shell">
+    <div class="ob-progress">
+        <div class="ob-bars"><div class="ob-bar" id="b0"></div><div class="ob-bar" id="b1"></div><div class="ob-bar" id="b2"></div><div class="ob-bar" id="b3"></div></div>
+        <div class="ob-step-label" id="stepLabel">Step 1 of 4</div>
+    </div>
+    <div class="ob-card">
+        <div class="ob-step active" id="s0">
+            <div class="ob-brand">Antaeus</div>
+            <div class="ob-h">What does your company sell?</div>
+            <div class="ob-sub">This determines which discovery frameworks, personas, and signal categories load for you.</div>
+            <div class="ob-field">
+                <label class="ob-label">Product category</label>
+                <select class="ob-input ob-select" id="productCat" onchange="v0()">
+                    <option value="">Select category...</option>
+                    <option value="cxai">CX AI / Support Automation</option>
+                    <option value="cdp">Data Platform / CDP / Analytics</option>
+                    <option value="legal">Legal AI / Compliance</option>
+                    <option value="hrtech">HR Tech / People Ops</option>
+                    <option value="security">Security / Identity / GRC</option>
+                    <option value="devtools">Dev Tools / Infrastructure</option>
+                    <option value="fintech">Fintech / Payments / Billing</option>
+                    <option value="martech">Marketing / RevOps</option>
+                    <option value="other">Other SaaS</option>
+                </select>
+            </div>
+            <div class="ob-field">
+                <label class="ob-label">Company name</label>
+                <input type="text" class="ob-input" id="companyName" placeholder="e.g. Acme AI" oninput="v0()">
+            </div>
+            <div class="ob-actions">
+                <div></div>
+                <button class="ob-btn ob-btn-primary" id="btn0" disabled onclick="next()">Continue &rarr;</button>
+            </div>
+        </div>
+
+        <div class="ob-step" id="s1">
+            <div class="ob-h">Who is your primary buyer?</div>
+            <div class="ob-sub">This sets persona-aware discovery questions and outbound angles.</div>
+            <div class="ob-field">
+                <label class="ob-label">Buyer persona</label>
+                <select class="ob-input ob-select" id="buyerPersona" onchange="v1()">
+                    <option value="">Select buyer...</option>
+                    <option value="cxo">C-Suite (CEO, COO, CFO, CTO)</option>
+                    <option value="vp">VP / Director</option>
+                    <option value="ops">Operations / Support / CS Leader</option>
+                    <option value="it">IT / Security / Engineering</option>
+                    <option value="finance">Finance / Procurement / FP&A</option>
+                    <option value="revops">Sales / RevOps / Marketing Ops</option>
+                </select>
+            </div>
+            <div class="ob-field">
+                <label class="ob-label">Company stage</label>
+                <select class="ob-input ob-select" id="stage" onchange="v1()">
+                    <option value="">Select stage...</option>
+                    <option value="pre-seed">Pre-seed</option>
+                    <option value="seed">Seed</option>
+                    <option value="series-a">Series A</option>
+                    <option value="series-b">Series B+</option>
+                </select>
+            </div>
+            <div class="ob-actions">
+                <button class="ob-btn ob-btn-ghost" onclick="prev()">&larr; Back</button>
+                <button class="ob-btn ob-btn-primary" id="btn1" disabled onclick="next()">Continue &rarr;</button>
+            </div>
+        </div>
+
+        <div class="ob-step" id="s2">
+            <div class="ob-h">What are your targets?</div>
+            <div class="ob-sub">This powers your quota math, pipeline workback, and daily activity targets.</div>
+            <div class="ob-field">
+                <label class="ob-label">Annual quota or revenue target</label>
+                <div class="ob-curr"><input type="text" class="ob-input" id="quota" placeholder="1,200,000" oninput="fmtCurr(this);v2()"></div>
+                <div class="ob-hint">Your personal target, not company total.</div>
+            </div>
+            <div class="ob-field">
+                <label class="ob-label">Average deal size (ACV)</label>
+                <div class="ob-curr"><input type="text" class="ob-input" id="acv" placeholder="40,000" oninput="fmtCurr(this);v2()"></div>
+            </div>
+            <div class="ob-actions">
+                <button class="ob-btn ob-btn-ghost" onclick="prev()">&larr; Back</button>
+                <div><button class="ob-btn-skip" onclick="next()">Skip</button> <button class="ob-btn ob-btn-primary" id="btn2" disabled onclick="next()">Continue &rarr;</button></div>
+            </div>
+        </div>
+
+        <div class="ob-step" id="s3">
+            <div class="ob-done">
+                <div class="ob-done-icon">&#9889;</div>
+                <div class="ob-h">You're set.</div>
+                <div class="ob-sub">We've seeded your workspace with the right frameworks and targets.</div>
+                <div class="ob-seeded">
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Discovery frameworks loaded for your category</div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Quota math ready in Quota Workback</div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Benchmarks calibrated for your ACV band</div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Signal Console seeded with 14 Fortune 500 accounts</div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Playbook started with your company info</div>
+                </div>
+                <button class="ob-btn ob-btn-primary" onclick="finish()" style="width:100%;">Open Dashboard &rarr;</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+var step=0;
+function show(){
+    document.querySelectorAll('.ob-step').forEach(function(s,i){s.classList.toggle('active',i===step)});
+    for(var i=0;i<4;i++){
+        var b=document.getElementById('b'+i);
+        b.className='ob-bar'+(i<step?' done':'')+(i===step?' active':'');
+    }
+    document.getElementById('stepLabel').textContent='Step '+(step+1)+' of 4';
+}
+function next(){step++;show();}
+function prev(){step--;show();}
+function v0(){document.getElementById('btn0').disabled=!(document.getElementById('productCat').value&&document.getElementById('companyName').value.trim());}
+function v1(){document.getElementById('btn1').disabled=!(document.getElementById('buyerPersona').value&&document.getElementById('stage').value);}
+function v2(){document.getElementById('btn2').disabled=!(document.getElementById('quota').value.trim());}
+function fmtCurr(el){var v=el.value.replace(/[^0-9]/g,'');if(v)el.value=Number(v).toLocaleString();else el.value='';}
+
+function finish(){
+    var q=Number((document.getElementById('quota').value||'0').replace(/[^0-9]/g,''));
+    var a=Number((document.getElementById('acv').value||'0').replace(/[^0-9]/g,''));
+    var data={
+        completed:true,
+        completedAt:new Date().toISOString(),
+        persona:'founder',
+        answers:{
+            role:'founder',
+            companyName:document.getElementById('companyName').value.trim(),
+            stage:document.getElementById('stage').value,
+            quota:q,acv:a,
+            productCategory:document.getElementById('productCat').value,
+            buyerPersona:document.getElementById('buyerPersona').value
+        }
+    };
+    localStorage.setItem('gtmos_onboarding',JSON.stringify(data));
+    localStorage.setItem('gtmos_product_category',JSON.stringify(document.getElementById('productCat').value));
+    if(q>0){
+        var acvBands={small:{max:30000,win:25,cycle:45,cov:3.0},mid:{max:75000,win:20,cycle:90,cov:3.5},enterprise:{max:200000,win:15,cycle:180,cov:4.5},strategic:{max:Infinity,win:12,cycle:240,cov:5.0}};
+        var band=a>=200000?'strategic':a>=75000?'enterprise':a>=30000?'mid':'small';
+        var bm=acvBands[band];
+        var seed={annual_quota:q,avg_deal_size:a||50000,win_rate:bm.win,touch_to_meeting:0.7,show_rate:80,cycle_days:bm.cycle,coverage_target:bm.cov,acv_band:band};
+        localStorage.setItem('gtmos_outbound_seed',JSON.stringify(seed));
+    }
+    var pb={company:data.answers.companyName,stage:data.answers.stage,acv:a||null,fields:{},checks:{},notes:''};
+    localStorage.setItem('gtmos_playbook',JSON.stringify(pb));
+    window.location.href='/app/dashboard/';
+}
+</script>
+</body>
+</html>

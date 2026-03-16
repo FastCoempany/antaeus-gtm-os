@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery Studio | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .ds-cat-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--space-lg);align-items:center;}
+        .ds-cat-btn{padding:8px 16px;border-radius:var(--radius-full);font-size:0.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.2s;font-family:inherit;}
+        .ds-cat-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+        .ds-cat-btn.active{border-color:var(--brand-gold);color:var(--brand-gold);background:rgba(212,165,116,0.08);}
+        .ds-cat-btn.negotiation{border-color:rgba(245,158,11,0.4);color:#f59e0b;}
+        .ds-cat-btn.negotiation.active{background:rgba(245,158,11,0.08);}
+        .ds-cat-btn.ai{border-color:rgba(168,85,247,0.4);color:#a855f7;}
+        .ds-cat-btn.ai.active{background:rgba(168,85,247,0.08);}
+        .ds-header{padding:20px 0;margin-bottom:var(--space-md);}
+        .ds-header-title{font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);margin-bottom:4px;}
+        .ds-header-desc{font-size:0.85rem;color:var(--text-muted);line-height:1.5;}
+        .ds-insight{padding:12px 16px;background:rgba(212,165,116,0.06);border:1px solid rgba(212,165,116,0.15);border-radius:var(--radius-md);font-size:0.82rem;color:var(--text-tertiary);margin:12px 0 20px;line-height:1.5;}
+        .ds-insight strong{color:var(--brand-gold);}
+        .ds-meta{display:flex;gap:24px;font-size:0.78rem;color:var(--text-muted);margin-bottom:20px;flex-wrap:wrap;}
+        .ds-territory{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);margin-bottom:var(--space-md);overflow:hidden;}
+        .ds-territory-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;transition:background 0.2s;}
+        .ds-territory-head:hover{background:rgba(255,255,255,0.02);}
+        .ds-territory-name{font-weight:700;font-size:0.9rem;color:var(--text-primary);display:flex;align-items:center;gap:8px;}
+        .ds-territory-name .icon{font-size:1.1rem;}
+        .ds-territory-purpose{font-size:0.75rem;color:var(--text-muted);margin-top:2px;}
+        .ds-territory-badge{font-size:0.65rem;padding:3px 8px;border-radius:var(--radius-full);font-weight:700;background:rgba(100,116,139,0.12);color:#94a3b8;}
+        .ds-territory-badge.worked{background:rgba(34,197,94,0.12);color:#22c55e;}
+        .ds-territory-body{display:none;padding:0 20px 20px;border-top:1px solid rgba(255,255,255,0.05);}
+        .ds-territory.open .ds-territory-body{display:block;}
+        .ds-entry{margin-bottom:16px;}
+        .ds-entry-context{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:4px;}
+        .ds-entry-label{font-weight:600;font-size:0.85rem;color:var(--text-secondary);margin-bottom:4px;}
+        .ds-entry-text{font-size:0.85rem;color:var(--text-tertiary);line-height:1.5;padding:10px 14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);}
+        .ds-entry-sub{font-size:0.72rem;color:var(--text-muted);margin-top:4px;font-style:italic;}
+        .ds-response{margin-top:16px;padding:14px;border-radius:var(--radius-md);border:1px solid;}
+        .ds-response.green{background:rgba(34,197,94,0.04);border-color:rgba(34,197,94,0.2);}
+        .ds-response.yellow{background:rgba(245,158,11,0.04);border-color:rgba(245,158,11,0.2);}
+        .ds-response.red{background:rgba(239,68,68,0.04);border-color:rgba(239,68,68,0.2);}
+        .ds-response-flag{font-size:0.65rem;text-transform:uppercase;font-weight:700;letter-spacing:0.5px;margin-bottom:4px;}
+        .ds-response.green .ds-response-flag{color:#22c55e;}
+        .ds-response.yellow .ds-response-flag{color:#f59e0b;}
+        .ds-response.red .ds-response-flag{color:#ef4444;}
+        .ds-response-label{font-weight:600;font-size:0.85rem;color:var(--text-primary);margin-bottom:4px;}
+        .ds-response-text{font-size:0.82rem;color:var(--text-tertiary);line-height:1.5;}
+        .ds-move{margin-top:10px;padding:10px 14px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:var(--radius-md);}
+        .ds-move-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:#3b82f6;font-weight:700;margin-bottom:4px;}
+        .ds-move-text{font-size:0.82rem;color:var(--text-secondary);line-height:1.5;}
+        .ds-worked-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--radius-full);font-size:0.68rem;font-weight:600;cursor:pointer;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);margin-top:8px;transition:all 0.2s;font-family:inherit;}
+        .ds-worked-btn:hover{border-color:rgba(34,197,94,0.3);}
+        .ds-worked-btn.checked{background:rgba(34,197,94,0.1);color:#22c55e;border-color:rgba(34,197,94,0.3);}
+        .ds-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm);margin-bottom:var(--space-lg);}
+        .ds-stat{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;text-align:center;}
+        .ds-stat-val{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);}
+        .ds-stat-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+        .ds-negot-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius-md);font-size:0.78rem;font-weight:600;background:rgba(245,158,11,0.08);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);margin-bottom:var(--space-md);}
+        /* CFO segments */
+        .ds-seg{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);margin-bottom:var(--space-md);overflow:hidden;}
+        .ds-seg-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;}
+        .ds-seg-head:hover{background:rgba(255,255,255,0.02);}
+        .ds-seg-title{font-weight:700;font-size:0.9rem;color:var(--text-primary);display:flex;align-items:center;gap:8px;}
+        .ds-seg-body{display:none;padding:0 20px 20px;border-top:1px solid rgba(255,255,255,0.05);}
+        .ds-seg.open .ds-seg-body{display:block;}
+        .ds-seg-card{padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);margin-bottom:8px;}
+        .ds-seg-card.alt{border-left:3px solid rgba(212,165,116,0.4);}
+        .ds-seg-card.warn{border-left:3px solid rgba(239,68,68,0.4);background:rgba(239,68,68,0.03);}
+        .ds-seg-card-label{font-weight:600;font-size:0.82rem;color:var(--text-secondary);margin-bottom:4px;}
+        .ds-seg-card-text{font-size:0.8rem;color:var(--text-tertiary);line-height:1.5;white-space:pre-line;}
+        .ds-watch{margin-top:10px;padding:8px 12px;background:rgba(245,158,11,0.04);border:1px solid rgba(245,158,11,0.12);border-radius:var(--radius-sm);font-size:0.75rem;color:var(--text-muted);}
+        .ds-watch strong{color:#f59e0b;}
+        @media(max-width:700px){.ds-stats{grid-template-columns:1fr;}.ds-cat-bar{gap:4px;}}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Discovery Studio</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="copyWorked()">&#128203; Copy Worked</button>
+                </div>
+            </header>
+            <div class="app-content" style="max-width:800px;">
+                <div class="ds-stats" id="statsBar"></div>
+                <div class="ds-cat-bar" id="catBar"></div>
+                <div id="mainContent"></div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/discovery-frameworks.js"></script>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    (function(){
+        function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+        function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+        var discoveryFrameworks=window.DISCOVERY_FRAMEWORKS||{};
+        var currentCat=localStorage.getItem('gtmos_product_category')||'cxai';
+        var workedSet=new Set(readLS('gtmos_discovery_worked',[]));
+        var stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+
+        // CFO Negotiation segments data (merged from cfo-negotiation-studio)
+        var CFO_SEGMENTS=[
+            {id:"roi",icon:"\ud83d\udcca",title:"0. ROI Case Builder",sub:"Make the math undeniable.",items:[
+                {label:"Time Saved",text:"Time saved per person/day: [X] hours\nWeekly time saved (team): [X] hours\nAnnual hours recovered: [X] hours\nValue @ $[X]/hr loaded cost: $[X]/year",cls:"card"},
+                {label:"Revenue Uplift",text:"1 extra [outcome]/quarter \u00d7 $[X] value \u00d7 [Y] people = $[Z] incremental revenue",cls:"alt"},
+                {label:"Accuracy/Quality",text:"[X]% improvement in [metric] = fewer errors, better outcomes, reduced risk",cls:"alt"},
+                {label:"Speed to Value",text:"Faster [outcome] = [X] weeks/months of value captured earlier",cls:"alt"}
+            ]},
+            {id:"reconfirm",icon:"\ud83c\udfaf",title:"1. Value Reconfirmation",sub:"Re-anchor the CFO in the business case. First 3\u20135 minutes.",items:[
+                {label:"Bridge from Discovery",text:"Before we dive into the commercial discussion, I want to make sure we\u2019re aligned on the problem we\u2019re solving. Based on my conversations with your team, you\u2019re losing about [X] hours a week to [problem]. That\u2019s roughly $[Y] annually. Is that consistent with what you\u2019re seeing?",cls:"card"},
+                {label:"Confirms \u2192 Lock in Value Anchor",text:"Good \u2014 so we agree the problem is real and worth solving. At $[X]/year, you\u2019re investing about [Y]% of the productivity value you\u2019d recover. Most CFOs see that as favorable math.",cls:"alt"},
+                {label:"Challenges Numbers \u2192 Defer to Their Number",text:"Fair challenge. What would YOU estimate the burden is? Even if it\u2019s half what we discussed, we\u2019re still talking about significant impact. I\u2019d rather work with your numbers than mine.",cls:"card"},
+                {label:"Dismissive \u2192 Redirect to Proof",text:"I\u2019d rather prove it than promise it. What would you need to see to believe this actually works? A pilot? Specific metrics? References from similar companies?",cls:"card"}
+            ]},
+            {id:"objections",icon:"\ud83d\udee1\ufe0f",title:"2. Objection Handling",sub:"CFOs have predictable objections. Each has a specific counter.",items:[
+                {label:"\"Your price is too high\" \u2192 Clarify",text:"Help me understand \u2014 too high compared to what? Budget constraints, competing priorities, or the ROI we discussed? If the ROI math works, what\u2019s the real blocker?",cls:"card"},
+                {label:"\"Your price is too high\" \u2192 Reframe",text:"At $[X]/user/month, you\u2019re paying about $[Y] per hour of value delivered. Your people cost you $[Z]+ per hour. Is the concern the absolute number, or that you\u2019re not convinced on the value?",cls:"alt"},
+                {label:"\"Match competitor pricing\" \u2192 Flip",text:"Rather than race to the bottom \u2014 if the price were identical, which would you choose and why? That tells me what you actually value.",cls:"card"},
+                {label:"\"We need a pilot first\" \u2192 Structure It",text:"Absolutely. What would \u2018success\u2019 look like in a pilot? How many users, how long, what metrics? If the pilot hits your criteria, are we ready to move forward?",cls:"alt"},
+                {label:"\"Push to next quarter\" \u2192 Quantify Delay",text:"Every quarter you wait is another $[X] in [value metric] lost. I\u2019m not pressuring \u2014 I want to make sure delay is a conscious choice, not inertia.",cls:"card"},
+                {label:"\"What's your best price?\" \u2192 Hold the Line",text:"The pricing I\u2019ve shared is standard. What I CAN be flexible on is structure \u2014 annual vs. monthly, seat count, implementation timing.",cls:"alt"},
+                {label:"\"Send me more info\" \u2192 Better Path",text:"A 15-minute call to walk through materials together is usually more efficient. That way I can answer questions in real-time.",cls:"card"}
+            ],watch:["\u26a0\ufe0f Price: Don\u2019t immediately offer a discount","\u26a0\ufe0f Competitor: Don\u2019t trash them","\u26a0\ufe0f Pilot: Always get commitment to next step IF pilot succeeds","\u26a0\ufe0f Best Price: NEVER answer with a lower number"]},
+            {id:"trading",icon:"\ud83e\udd1d",title:"3. Trading Value",sub:"Never give without getting. Every concession must be traded.",items:[
+                {label:"Core Principle",text:"If you give something away for free, you\u2019ve established that\u2019s how you negotiate. Every concession must be traded for something of equal or greater value.",cls:"warn"},
+                {label:"Give: Discount \u2192 Get: Term/Seats/Upfront/Reference",text:"I can look at the pricing, but I\u2019d need something in return. If we went to $[X], could you commit to a [Y]-year term?",cls:"alt"},
+                {label:"Give: Extended Pilot \u2192 Get: Exec Sponsor/Decision Date",text:"We can extend the pilot, but I need to know this is going somewhere. 60 days instead of 30, but you\u2019ll have a decision by [date]?",cls:"alt"},
+                {label:"Give: Flexible Payment \u2192 Get: Longer Commit",text:"We can do quarterly billing. What I\u2019d need is a 2-year commitment instead of 1.",cls:"alt"}
+            ]},
+            {id:"closing",icon:"\ud83c\udfaf",title:"4. Closing Moves",sub:"Know when and how to ask for the close.",items:[
+                {label:"The Summary Close",text:"So to summarize: we\u2019ve agreed the problem is costing you $[X]/year, the solution addresses your requirements, and the investment is $[Y]. What\u2019s left to get this done?",cls:"alt"},
+                {label:"The Next Step Close",text:"Let\u2019s schedule the follow-up now. What day works to reconvene with [decision maker]?",cls:"alt"},
+                {label:"The Assumptive Close",text:"It sounds like we\u2019re aligned. Should I send over the agreement today?",cls:"alt"},
+                {label:"The Choice Close",text:"Would you prefer the annual plan or multi-year? Both get you [benefit], the multi-year locks in better pricing.",cls:"alt"}
+            ]},
+            {id:"postclose",icon:"\u2705",title:"5. Post-Agreement",sub:"Don\u2019t let the deal unravel after verbal agreement.",items:[
+                {label:"1. Confirm Terms",text:"Great! Just to confirm: [X] users, [Y] term, $[Z] annual investment, starting [date]. I\u2019ll send the agreement today.",cls:"alt"},
+                {label:"2. Establish Timeline",text:"What\u2019s your process for reviewing and signing? Who else needs to see it?",cls:"alt"},
+                {label:"3. Remove Friction",text:"Is there anything that might slow this down? Legal review, budget approval, other signatures?",cls:"alt"},
+                {label:"4. Mutual Accountability",text:"I\u2019ll send the agreement by EOD. Can we plan to have it signed by [date]?",cls:"alt"}
+            ]}
+        ];
+
+        function renderStats(){
+            var advRate=stats.totalCalls>0?Math.round((stats.advancedCalls||0)/stats.totalCalls*100):0;
+            document.getElementById('statsBar').innerHTML=
+                '<div class="ds-stat"><div class="ds-stat-val">'+stats.totalCalls+'</div><div class="ds-stat-label">Calls Logged</div></div>'+
+                '<div class="ds-stat"><div class="ds-stat-val">'+advRate+'%</div><div class="ds-stat-label">Advance Rate</div></div>'+
+                '<div class="ds-stat"><div class="ds-stat-val">'+workedSet.size+'</div><div class="ds-stat-label">Moves Worked</div></div>';
+        }
+
+        function renderCatBar(){
+            var cats={'cxai':'\ud83e\udd16 CX AI','cdp':'\ud83d\udcca Data Platform','legal':'\u2696\ufe0f Legal AI','revenue':'\ud83d\udcb0 Revenue Intel'};
+            var html='';
+            Object.keys(cats).forEach(function(key){
+                html+='<button class="ds-cat-btn'+(currentCat===key?' active':'')+'" onclick="switchCat(\''+key+'\')">'+cats[key]+'</button>';
+            });
+            html+='<button class="ds-cat-btn negotiation'+(currentCat==='negotiation'?' active':'')+'" onclick="switchCat(\'negotiation\')">\ud83e\udd1d Negotiation</button>';
+            if(discoveryFrameworks['ai-objections']){
+                html+='<button class="ds-cat-btn ai'+(currentCat==='ai-objections'?' active':'')+'" onclick="switchCat(\'ai-objections\')">\ud83e\udde0 AI Objections</button>';
+            }
+            document.getElementById('catBar').innerHTML=html;
+        }
+
+        window.switchCat=function(cat){
+            currentCat=cat;
+            localStorage.setItem('gtmos_product_category',cat);
+            renderCatBar();
+            renderContent();
+        };
+
+        function renderContent(){
+            if(currentCat==='negotiation'){
+                renderNegotiation();
+                return;
+            }
+            var fw=discoveryFrameworks[currentCat];
+            if(!fw){document.getElementById('mainContent').innerHTML='<div style="text-align:center;color:var(--text-muted);padding:40px;">Framework not found.</div>';return;}
+
+            var html='<div class="ds-header"><div class="ds-header-title">'+escH(fw.label)+'</div><div class="ds-header-desc">'+escH(fw.description)+'</div></div>';
+            html+='<div class="ds-insight"><strong>\ud83d\udca1 Core Insight:</strong> '+escH(fw.coreInsight)+'</div>';
+            html+='<div class="ds-meta"><div><strong>Buyers:</strong> '+fw.typicalBuyers.join(', ')+'</div><div><strong>Metrics:</strong> '+fw.keyMetrics.join(', ')+'</div></div>';
+
+            fw.territories.forEach(function(t,ti){
+                var entryCount=(t.entries||[]).length;
+                var responseCount=(t.responses||[]).length;
+                var workedInTerritory=0;
+                (t.responses||[]).forEach(function(r){if(workedSet.has(r.id))workedInTerritory++;});
+                var badge=workedInTerritory>0?'<span class="ds-territory-badge worked">'+workedInTerritory+' worked</span>':'<span class="ds-territory-badge">'+entryCount+' entries, '+responseCount+' responses</span>';
+
+                html+='<div class="ds-territory" data-idx="'+ti+'"><div class="ds-territory-head" onclick="toggleTerritory(this)">';
+                html+='<div><div class="ds-territory-name"><span class="icon">'+(t.icon||'\ud83d\udccd')+'</span>'+escH(t.name)+'</div>';
+                html+='<div class="ds-territory-purpose">'+escH(t.purpose||'')+'</div></div>';
+                html+=badge+'</div>';
+                html+='<div class="ds-territory-body">';
+
+                // Gate criteria
+                if(t.gateCriteria&&t.gateCriteria.length>0){
+                    html+='<div style="margin-bottom:16px;padding:10px 14px;background:rgba(59,130,246,0.04);border:1px solid rgba(59,130,246,0.12);border-radius:8px;font-size:0.78rem;color:var(--text-muted);"><strong style="color:#3b82f6;">Gate Criteria:</strong> '+t.gateCriteria.join(' \u2022 ')+'</div>';
+                }
+
+                // Entries
+                if(t.entries&&t.entries.length>0){
+                    html+='<div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;">Discovery Entries</div>';
+                    t.entries.forEach(function(e){
+                        html+='<div class="ds-entry">';
+                        if(e.context)html+='<div class="ds-entry-context">'+escH(e.context)+'</div>';
+                        html+='<div class="ds-entry-label">'+escH(e.label)+'</div>';
+                        html+='<div class="ds-entry-text">'+escH(e.text)+'</div>';
+                        if(e.subtext)html+='<div class="ds-entry-sub">'+escH(e.subtext)+'</div>';
+                        html+='</div>';
+                    });
+                }
+
+                // Responses
+                if(t.responses&&t.responses.length>0){
+                    html+='<div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin:20px 0 8px;">Response Patterns</div>';
+                    t.responses.forEach(function(r){
+                        html+='<div class="ds-response '+(r.flag||'green')+'">';
+                        html+='<div class="ds-response-flag">'+escH(r.type||'')+'</div>';
+                        html+='<div class="ds-response-label">'+escH(r.label)+'</div>';
+                        html+='<div class="ds-response-text">'+escH(r.text)+'</div>';
+                        if(r.meaning)html+='<div style="margin-top:6px;font-size:0.75rem;color:var(--text-muted);"><em>'+escH(r.meaning)+'</em></div>';
+                        if(r.move){
+                            html+='<div class="ds-move"><div class="ds-move-label">\u279c '+escH(r.move.label||'Next Move')+'</div><div class="ds-move-text">'+escH(r.move.text)+'</div></div>';
+                        }
+                        if(r.listenFor&&r.listenFor.length>0){
+                            r.listenFor.forEach(function(lf){
+                                html+='<div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;">'+escH(lf.signal)+' \u2192 '+escH(lf.action)+'</div>';
+                            });
+                        }
+                        html+='<button class="ds-worked-btn'+(workedSet.has(r.id)?' checked':'')+'" onclick="toggleWorked(\''+r.id+'\',this)">'+(workedSet.has(r.id)?'\u2713 Worked':'Mark worked')+'</button>';
+                        html+='</div>';
+                    });
+                }
+
+                html+='</div></div>';
+            });
+
+            document.getElementById('mainContent').innerHTML=html;
+        }
+
+        function renderNegotiation(){
+            // Check for active negotiation deals
+            var deals=readLS('gtmos_deal_workspaces',[]);
+            if(!Array.isArray(deals))deals=Object.values(deals||{});
+            var negDeals=deals.filter(function(d){return d&&d.stage==='negotiation';});
+
+            var html='<div class="ds-header"><div class="ds-header-title">Negotiation & Procurement</div><div class="ds-header-desc">Structured playbook for CFO conversations, objection handling, and closing. Same territory-based approach as discovery.</div></div>';
+
+            if(negDeals.length>0){
+                html+='<div class="ds-negot-badge">\ud83d\udcbc '+negDeals.length+' deal'+(negDeals.length>1?'s':'')+' in negotiation stage</div>';
+            }
+
+            CFO_SEGMENTS.forEach(function(seg){
+                html+='<div class="ds-seg" data-seg="'+seg.id+'"><div class="ds-seg-head" onclick="toggleSeg(this)">';
+                html+='<div class="ds-seg-title"><span>'+seg.icon+'</span> '+escH(seg.title)+'</div>';
+                html+='<span style="font-size:0.72rem;color:var(--text-muted);">'+seg.items.length+' moves</span>';
+                html+='</div><div class="ds-seg-body">';
+                html+='<div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">'+escH(seg.sub)+'</div>';
+
+                seg.items.forEach(function(item){
+                    var cls=item.cls==='warn'?'warn':item.cls==='alt'?'alt':'';
+                    html+='<div class="ds-seg-card '+cls+'"><div class="ds-seg-card-label">'+escH(item.label)+'</div><div class="ds-seg-card-text">'+escH(item.text)+'</div>';
+                    html+='<button class="ds-worked-btn'+(workedSet.has(seg.id+'_'+item.label)?' checked':'')+'" onclick="toggleWorked(\''+escH(seg.id+'_'+item.label)+'\',this)">'+(workedSet.has(seg.id+'_'+item.label)?'\u2713 Worked':'Mark worked')+'</button>';
+                    html+='</div>';
+                });
+
+                if(seg.watch&&seg.watch.length>0){
+                    html+='<div style="margin-top:12px;">';
+                    seg.watch.forEach(function(w){
+                        html+='<div class="ds-watch"><strong>'+escH(w.split(':')[0])+':</strong> '+escH(w.split(':').slice(1).join(':'))+'</div>';
+                    });
+                    html+='</div>';
+                }
+                html+='</div></div>';
+            });
+
+            document.getElementById('mainContent').innerHTML=html;
+        }
+
+        window.toggleTerritory=function(head){head.parentElement.classList.toggle('open');};
+        window.toggleSeg=function(head){head.parentElement.classList.toggle('open');};
+
+        window.toggleWorked=function(id,btn){
+            if(workedSet.has(id)){workedSet.delete(id);btn.classList.remove('checked');btn.textContent='Mark worked';}
+            else{workedSet.add(id);btn.classList.add('checked');btn.textContent='\u2713 Worked';}
+            localStorage.setItem('gtmos_discovery_worked',JSON.stringify(Array.from(workedSet)));
+            renderStats();
+        };
+
+        window.copyWorked=function(){
+            if(workedSet.size===0){alert('No moves marked as worked yet.');return;}
+            var txt='DISCOVERY \u2014 WORKED MOVES\n\n';
+            workedSet.forEach(function(id){txt+='\u2713 '+id+'\n';});
+            navigator.clipboard.writeText(txt).then(function(){alert('Copied '+workedSet.size+' worked moves!');});
+        };
+
+        renderStats();
+        renderCatBar();
+        renderContent();
+    })();
+    </script>
+</body>
+</html>

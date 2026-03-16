@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outbound Studio | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .module-inner { max-width:860px; padding:0 0 80px; }
+
+:root{--bg:#0a0e1a;--bg-secondary:#10152a;--bg-tertiary:#161c34;--text-primary:#e0ddd8;--text-secondary:#b0ada6;--text-tertiary:#78756e;--text-muted:#4e4c47;--brand-gold:#d4a574;--border-default:rgba(255,255,255,0.06);--border-hover:rgba(255,255,255,0.12);--radius-md:8px;--radius-lg:12px;--radius-full:999px;--space-xs:4px;--space-sm:8px;--space-md:16px;--space-lg:24px;--space-xl:32px;--font-serif:'DM Serif Display',Georgia,serif;--font-sans:'Public Sans',-apple-system,system-ui,sans-serif;--green:#22c55e;--green-bg:rgba(34,197,94,0.08);--amber:#f59e0b;--amber-bg:rgba(245,158,11,0.08);--red:#ef4444;--red-bg:rgba(239,68,68,0.06);--blue:#5b8def;--blue-bg:rgba(91,141,239,0.08);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondary);line-height:1.55;min-height:100vh;-webkit-font-smoothing:antialiased;}
+.shell{max-width:860px;margin:0 auto;padding:32px 24px 80px;}
+.page-title{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-primary);margin-bottom:6px;}
+.page-sub{font-size:0.82rem;color:var(--text-tertiary);margin-bottom:var(--space-xl);}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:var(--space-lg);border-bottom:1px solid var(--border-default);padding-bottom:0;}
+.tab{padding:10px 18px;font-size:0.78rem;font-weight:600;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;}
+.tab:hover{color:var(--text-tertiary);}
+.tab.active{color:var(--brand-gold);border-bottom-color:var(--brand-gold);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* Cards */
+.card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-md);}
+.card-title{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;margin-bottom:12px;}
+
+/* Form elements */
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:0.72rem;font-weight:600;color:var(--text-tertiary);margin-bottom:5px;}
+.field select,.field input[type=text],.field textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:0.88rem;font-family:inherit;}
+.field select:focus,.field input:focus,.field textarea:focus{outline:none;border-color:var(--brand-gold);}
+.field textarea{min-height:80px;resize:vertical;line-height:1.6;}
+.field .hint{font-size:0.68rem;color:var(--text-muted);margin-top:3px;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+
+/* Recommendation badges */
+.rec-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.rec-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--radius-full);font-size:0.68rem;font-weight:700;border:1px solid var(--border-default);}
+.rec-badge.gold{background:rgba(212,165,116,0.08);border-color:rgba(212,165,116,0.2);color:var(--brand-gold);}
+.rec-badge.green{background:var(--green-bg);border-color:rgba(34,197,94,0.2);color:var(--green);}
+.rec-badge.blue{background:var(--blue-bg);border-color:rgba(91,141,239,0.2);color:var(--blue);}
+.rec-badge.amber{background:var(--amber-bg);border-color:rgba(245,158,11,0.2);color:var(--amber);}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.toggle{width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,0.1);position:relative;cursor:pointer;transition:background 0.2s;border:none;}
+.toggle.on{background:rgba(212,165,116,0.3);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--text-muted);transition:all 0.2s;}
+.toggle.on::after{left:21px;background:var(--brand-gold);}
+.toggle-label{font-size:0.78rem;color:var(--text-tertiary);font-weight:600;}
+
+/* Buttons */
+.btn{padding:10px 20px;border-radius:var(--radius-md);font-size:0.8rem;font-weight:700;border:1px solid var(--border-default);background:transparent;color:var(--text-tertiary);cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+.btn.gold{border-color:rgba(212,165,116,0.3);color:var(--brand-gold);background:rgba(212,165,116,0.06);}
+.btn.gold:hover{background:rgba(212,165,116,0.12);}
+.btn.primary{background:var(--brand-gold);color:var(--bg);border-color:var(--brand-gold);}
+.btn.sm{padding:6px 14px;font-size:0.72rem;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+
+/* Output area */
+.output-box{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-left:3px solid var(--brand-gold);border-radius:var(--radius-md);padding:18px 20px;font-size:0.88rem;color:var(--text-primary);line-height:1.7;white-space:pre-wrap;min-height:60px;margin-bottom:12px;}
+.output-empty{color:var(--text-muted);font-style:italic;font-size:0.82rem;}
+
+/* Accordion */
+.accord{border:1px solid var(--border-default);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:10px;}
+.accord-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;transition:background 0.15s;background:var(--bg-secondary);}
+.accord-head:hover{background:var(--bg-tertiary);}
+.accord-title{font-weight:700;font-size:0.85rem;color:var(--text-primary);}
+.accord-badge{font-size:0.62rem;padding:3px 8px;border-radius:var(--radius-full);font-weight:700;}
+.accord-body{display:none;padding:16px 18px;background:var(--bg-secondary);border-top:1px solid var(--border-default);font-size:0.82rem;color:var(--text-tertiary);line-height:1.6;}
+.accord.open .accord-body{display:block;}
+.accord-arrow{color:var(--text-muted);transition:transform 0.2s;font-size:0.7rem;}
+.accord.open .accord-arrow{transform:rotate(90deg);}
+
+/* Lists inside accordions */
+.method-list{margin:8px 0;padding-left:0;list-style:none;}
+.method-list li{padding:4px 0 4px 14px;position:relative;}
+.method-list li::before{content:'→';position:absolute;left:0;color:var(--brand-gold);font-size:0.75rem;}
+.method-list.bad li::before{content:'✗';color:var(--red);}
+.touch-pattern{margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);font-size:0.78rem;}
+.touch-pattern strong{color:var(--text-secondary);}
+
+/* Touch log table */
+.log-table{width:100%;border-collapse:collapse;font-size:0.78rem;}
+.log-table th{text-align:left;padding:8px 10px;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;border-bottom:1px solid var(--border-default);}
+.log-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text-secondary);}
+.log-table tr:hover td{background:rgba(255,255,255,0.02);}
+.log-empty{text-align:center;padding:40px;color:var(--text-muted);font-size:0.82rem;}
+
+/* Stats ribbon */
+.stats{display:flex;gap:0;margin-bottom:var(--space-lg);background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:16px 0;}
+.stat-item{flex:1;text-align:center;border-right:1px solid var(--border-default);}
+.stat-item:last-child{border-right:none;}
+.stat-val{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);}
+.stat-val.gold{color:var(--brand-gold);}
+.stat-val.green{color:var(--green);}
+.stat-label{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:600;margin-top:3px;}
+
+/* Content type cards */
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ct-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:16px;transition:border-color 0.15s;}
+.ct-card:hover{border-color:var(--border-hover);}
+.ct-num{font-family:var(--font-serif);font-size:0.9rem;color:var(--brand-gold);margin-bottom:4px;}
+.ct-name{font-weight:700;font-size:0.82rem;color:var(--text-primary);margin-bottom:4px;}
+.ct-temp{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;display:inline-block;margin-bottom:6px;}
+.ct-desc{font-size:0.75rem;color:var(--text-tertiary);line-height:1.5;}
+.ct-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-default);font-size:0.78rem;color:var(--text-tertiary);line-height:1.6;}
+.ct-card.expanded .ct-detail{display:block;}
+.ct-copy{margin-top:8px;}
+
+/* Outcome select */
+.outcome-sel{padding:4px 8px;font-size:0.7rem;border-radius:var(--radius-md);background:rgba(255,255,255,0.04);border:1px solid var(--border-default);color:var(--text-secondary);font-family:inherit;}
+
+/* Toast */
+.toast{position:fixed;right:16px;bottom:16px;background:#1f1a14;color:#fff;padding:10px 16px;border-radius:var(--radius-md);font-size:0.82rem;font-weight:600;opacity:0;transform:translateY(6px);transition:0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:none;}
+
+@media(max-width:700px){.row,.row3,.ct-grid{grid-template-columns:1fr;}.stats{flex-wrap:wrap;}.stat-item{flex:1 1 50%;border-right:none;padding:6px 0;}}
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <div class="app-content">
+<div class="module-inner">
+    <h1 class="page-title">Outbound Studio</h1>
+    <p class="page-sub">Intelligence-driven outbound. Temperature, channel, and CTA — calibrated to where you are with each person.</p>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('generator')">Generator</button>
+        <button class="tab" onclick="showTab('methodology')">Methodology</button>
+        <button class="tab" onclick="showTab('log')">Touch Log</button>
+        <button class="tab" onclick="showTab('library')">Content Library</button>
+    </div>
+
+    <!-- ==================== TAB 1: GENERATOR ==================== -->
+    <div class="tab-panel active" id="tab-generator">
+
+        <div class="card">
+            <div class="card-title">Target</div>
+            <div class="row">
+                <div class="field">
+                    <label>Account</label>
+                    <select id="gAccount"><option value="">Select account...</option></select>
+                    <div class="hint" id="gAccountHint"></div>
+                </div>
+                <div class="field">
+                    <label>Contact Name</label>
+                    <input type="text" id="gContact" placeholder="e.g. Sarah Chen">
+                </div>
+            </div>
+            <div class="row3">
+                <div class="field">
+                    <label>Persona</label>
+                    <select id="gPersona">
+                        <option value="csuite">C-Suite (CEO/CRO/CFO/CTO)</option>
+                        <option value="vp" selected>VP / Director</option>
+                        <option value="ic">Manager / IC</option>
+                        <option value="procurement">Procurement / Legal</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Temperature</label>
+                    <select id="gTemp" onchange="onTempChange()">
+                        <option value="ice_cold">Ice Cold — never heard of you</option>
+                        <option value="cool">Cool — aware, not engaged</option>
+                        <option value="warm">Warm — replied or engaged</option>
+                        <option value="hot">Hot — active deal</option>
+                        <option value="closing">Closing — verbal / signature</option>
+                    </select>
+                    <div class="hint" id="gTempHint"></div>
+                </div>
+                <div class="field">
+                    <label>Trigger</label>
+                    <select id="gTrigger">
+                        <option value="funding">Funding / Board Mandate</option>
+                        <option value="expansion">Expansion / Acquisition</option>
+                        <option value="hiring">Hiring Spike / Reorg</option>
+                        <option value="vendor">Vendor Consolidation</option>
+                        <option value="cost">Cost Reduction Mandate</option>
+                        <option value="product">New Product Launch</option>
+                        <option value="churn">Customer Churn Issue</option>
+                        <option value="leadership">Leadership Change</option>
+                        <option value="tech">Tech Stack Change</option>
+                        <option value="compliance">Compliance / Audit Pressure</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECOMMENDATIONS -->
+        <div class="card">
+            <div class="card-title">System Recommendations</div>
+            <div class="rec-bar" id="recBar"></div>
+            <div class="toggle-row">
+                <button class="toggle" id="noAskToggle" onclick="toggleNoAsk()"></button>
+                <span class="toggle-label">No-ask mode — generate value-only touch, zero CTA</span>
+            </div>
+        </div>
+
+        <!-- GENERATED OUTPUT -->
+        <div class="card">
+            <div class="card-title">Generated Touch</div>
+            <div class="output-box" id="outputBox"><span class="output-empty">Configure target above, then click Generate.</span></div>
+            <div class="btn-row">
+                <button class="btn primary" onclick="generate()">Generate</button>
+                <button class="btn gold" onclick="copyOutput()">Copy</button>
+                <button class="btn" onclick="saveToAngles()">Save to Angles</button>
+                <button class="btn" onclick="logTouch()">Log Touch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TAB 2: METHODOLOGY ==================== -->
+    <div class="tab-panel" id="tab-methodology">
+
+        <div style="margin-bottom:var(--space-lg);">
+            <div class="card-title" style="margin-bottom:12px;">The CTA Escalation Ladder</div>
+            <p style="font-size:0.82rem;color:var(--text-tertiary);margin-bottom:16px;">The ladder only moves up. Never skip a rung. Match the ask to the trust level.</p>
+        </div>
+
+        <div id="tempAccordions"></div>
+
+        <div class="card" style="margin-top:var(--space-lg);">
+            <div class="card-title">Give-to-Get-to-Give Loop</div>
+            <div style="font-size:0.82rem;color:var(--text-tertiary);line-height:1.7;">
+                <strong style="color:var(--text-secondary);">GIVE</strong> (value with no ask) → <strong style="color:var(--brand-gold);">GET</strong> (small commitment) → <strong style="color:var(--text-secondary);">GIVE</strong> (over-deliver) → <strong style="color:var(--brand-gold);">GET</strong> (bigger commitment) → repeat.<br><br>
+                <strong>Ice Cold:</strong> Give insight → Get a reply<br>
+                <strong>Cool:</strong> Give one-pager/framework → Get 15 min call<br>
+                <strong>Warm:</strong> Give account-specific analysis → Get 30 min meeting<br>
+                <strong>Hot:</strong> Give business case → Get champion commitment<br>
+                <strong>Closing:</strong> Give implementation plan → Get signature<br><br>
+                <em style="color:var(--text-muted);">The test: "Would I still send this if they never buy from me?" If yes, it's a real give. If no, it's a pitch.</em>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Three Laws of Outbound</div>
+            <div style="font-size:0.82rem;color:var(--text-tertiary);line-height:1.7;">
+                <strong style="color:var(--text-primary);">1. Every touch must earn the next one.</strong> Before pressing send: "Does this give the recipient a reason to want to hear from me again?"<br><br>
+                <strong style="color:var(--text-primary);">2. The CTA must match the temperature.</strong> A cold prospect should never get "book a demo." A warm prospect should never get "just checking in."<br><br>
+                <strong style="color:var(--text-primary);">3. Give before you ask. Then give again.</strong> Lead with value. Earn a commitment. Deliver more than expected. Repeat.
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TAB 3: TOUCH LOG ==================== -->
+    <div class="tab-panel" id="tab-log">
+        <div class="stats" id="logStats"></div>
+        <div class="card">
+            <div class="card-title">All Touches</div>
+            <div id="logTable"></div>
+        </div>
+    </div>
+
+    <!-- ==================== TAB 4: CONTENT LIBRARY ==================== -->
+    <div class="tab-panel" id="tab-library">
+        <p style="font-size:0.82rem;color:var(--text-tertiary);margin-bottom:var(--space-lg);">10 content types. Each has a purpose, a structure, and a temperature range. Click to expand.</p>
+        <div class="ct-grid" id="ctGrid"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/deal-health.js"></script>
+    <script>
+
+(function(){
+
+// ── UTILITIES ──
+function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function uid(){return 'touch_'+Date.now()+'_'+Math.random().toString(36).substr(2,5)}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
+function cp(txt){if(navigator.clipboard)return navigator.clipboard.writeText(txt);var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();return Promise.resolve()}
+
+// ── DATA CONSTANTS ──
+
+var TRIGGERS = {
+    funding:{label:'Funding / Board Mandate',meaning:'Capital deployed under board pressure.',angles:['ROI acceleration','Time-to-value']},
+    expansion:{label:'Expansion / Acquisition',meaning:'Complexity growth, integration needs.',angles:['Scalability','Integration']},
+    hiring:{label:'Hiring Spike / Reorg',meaning:'Scaling fast, process gaps emerging.',angles:['Efficiency','Onboarding']},
+    vendor:{label:'Vendor Consolidation',meaning:'Evaluating alternatives, open to change.',angles:['Consolidation','TCO']},
+    cost:{label:'Cost Reduction',meaning:'CFO pressure, receptive to ROI stories.',angles:['Savings','Efficiency']},
+    product:{label:'New Product Launch',meaning:'New revenue line needs support.',angles:['Speed','Market capture']},
+    churn:{label:'Customer Churn',meaning:'Trust damaged, need control.',angles:['Retention','Visibility']},
+    leadership:{label:'Leadership Change',meaning:'New leader, new priorities, 90-day window.',angles:['Fresh perspective','Quick wins']},
+    tech:{label:'Tech Stack Change',meaning:'Migration underway, integration opportunity.',angles:['Integration','Migration support']},
+    compliance:{label:'Compliance / Audit',meaning:'Deadline-driven urgency.',angles:['Compliance','Risk reduction']}
+};
+
+var TEMPS = {
+    ice_cold:{
+        label:'Ice Cold',color:'#5b8def',
+        ctas:['No ask (value touch)','Micro-ask ("Does this resonate?")','Provocative question ("How does your team handle X?")'],
+        badCtas:['"Book a demo"','"Let\'s schedule 30 minutes"','"Are you the right person?"'],
+        channels:['Email (primary)','LinkedIn (secondary)','Call (tertiary — after email/LinkedIn)'],
+        assets:'Nothing attached to first touch. Link, don\'t attach.',
+        pattern:'Day 1: Signal-driven email, no ask · Day 3-4: LinkedIn connection · Day 7: Follow-up email, new angle/asset · Day 10: Call (reference emails) · Day 14-21: Break-up or value touch'
+    },
+    cool:{
+        label:'Cool',color:'#5b8def',
+        ctas:['Give-to-get ("I built X for your team — worth 15 min?")','Binary time ("Tuesday or Thursday?")','Opinion ask ("Am I off base?")'],
+        badCtas:['"Just checking in"','"Following up on my last email"','"Bumping this"'],
+        channels:['Email (new angle)','Call (reference prior touches)','LinkedIn (engage their content first)'],
+        assets:'Give-to-get asset: one-pager, benchmark, ROI framework, competitive analysis.',
+        pattern:'Every follow-up must add NEW value. No repeating the same message.'
+    },
+    warm:{
+        label:'Warm',color:'#f59e0b',
+        ctas:['Specific meeting ("20 min to show how [Company X] solved this")','Multi-stakeholder ("Who else should be in the room?")','On-site request ("I\'d rather see your operation")'],
+        badCtas:['"Let me know if you want to chat"','Open-ended "when are you free?"','Anything without a specific next step'],
+        channels:['Email (scheduling)','Call (confirm and lock details)','LinkedIn (engage between conversations)'],
+        assets:'Account-specific: customized one-pager, competitive comparison, situation brief.',
+        pattern:'Quality of scheduling communication determines show rate. Clear agenda, specific value promise, easy logistics.'
+    },
+    hot:{
+        label:'Hot (Active Deal)',color:'#22c55e',
+        ctas:['Champion arming ("Here\'s the business case for your VP")','Mutual action plan ("Path from here to decision")','Executive alignment ("Would a CEO-to-VP call help?")'],
+        badCtas:['Generic follow-ups','Marketing content','Anything not deal-specific'],
+        channels:['Email (direct, personal)','Call (live alignment)','Shared docs (MAP, ROI model, security responses)'],
+        assets:'Everything customized. Company name, pain, timeline, stakeholders by name. One-pager becomes business case.',
+        pattern:'Arm the champion with forwardable materials. Every email designed to be screenshot-able.'
+    },
+    closing:{
+        label:'Closing',color:'#22c55e',
+        ctas:['Process facilitation ("What does legal need from us?")','Timeline compression ("Finalize by X → live by Y")','Preemptive documentation ("Security package ahead of their questions")'],
+        badCtas:['Pressure tactics','Discounts without reason','Going silent and hoping'],
+        channels:['Email (documentation)','Call (problem-solving when delays appear)'],
+        assets:'Security docs, compliance certs, implementation timeline, onboarding plan, reference contacts.',
+        pattern:'If 48 hours pass without a touchpoint during active closing, something is happening you can\'t see. Maintain helpful presence.'
+    }
+};
+
+var PERSONAS = {
+    csuite:{label:'C-Suite',sentenceRange:[2,3],guidance:'3 sentences max. No attachments. Connect to their strategic priorities. Ask for their perspective, not a meeting.'},
+    vp:{label:'VP / Director',sentenceRange:[4,6],guidance:'4-6 sentences. Can include proof point. Reference comparable company. Design assets for forwarding.'},
+    ic:{label:'Manager / IC',sentenceRange:[6,10],guidance:'6-10 sentences. Technical detail welcome. Describe specific workflows. They forward to managers.'},
+    procurement:{label:'Procurement / Legal',sentenceRange:[3,5],guidance:'Process-driven. Documentation over storytelling. Preemptive answers to their checklist.'}
+};
+
+var CHANNEL_MATRIX = {
+    ice_cold:{csuite:'email',vp:'email',ic:'linkedin',procurement:'email'},
+    cool:{csuite:'email',vp:'email',ic:'linkedin',procurement:'email'},
+    warm:{csuite:'email',vp:'email',ic:'email',procurement:'email'},
+    hot:{csuite:'call',vp:'email',ic:'email',procurement:'email'},
+    closing:{csuite:'call',vp:'email',ic:'email',procurement:'email'}
+};
+
+var CHANNEL_ORDER = {
+    ice_cold:{csuite:['email','linkedin'],vp:['email','linkedin','call'],ic:['linkedin','email'],procurement:['email']},
+    cool:{csuite:['email','call'],vp:['email','call','linkedin'],ic:['linkedin','email','call'],procurement:['email']},
+    warm:{csuite:['email','call'],vp:['email','call','linkedin'],ic:['email','linkedin','call'],procurement:['email']},
+    hot:{csuite:['call','email'],vp:['email','call'],ic:['email','call'],procurement:['email']},
+    closing:{csuite:['call','email'],vp:['email','call'],ic:['email','call'],procurement:['email']}
+};
+
+var ASSET_MATRIX = {
+    ice_cold:{csuite:'none',vp:'none',ic:'none',procurement:'none'},
+    cool:{csuite:'article',vp:'one_pager',ic:'framework',procurement:'none'},
+    warm:{csuite:'one_pager',vp:'case_study',ic:'case_study',procurement:'none'},
+    hot:{csuite:'roi_model',vp:'case_study',ic:'framework',procurement:'security_docs'},
+    closing:{csuite:'implementation_plan',vp:'mutual_action_plan',ic:'onboarding_doc',procurement:'security_docs'}
+};
+
+var ASSET_LABELS = {none:'No attachment',article:'Relevant article',one_pager:'One-pager',case_study:'Case study',framework:'Framework/template',roi_model:'ROI model',security_docs:'Security package',mutual_action_plan:'Mutual action plan',implementation_plan:'Implementation plan',onboarding_doc:'Onboarding document'};
+
+var CTA_BY_TEMP = {
+    ice_cold:{normal:'micro_ask',noask:'no_ask'},
+    cool:{normal:'give_to_get',noask:'no_ask'},
+    warm:{normal:'meeting_request',noask:'no_ask'},
+    hot:{normal:'champion_arm',noask:'no_ask'},
+    closing:{normal:'process_facilitation',noask:'no_ask'}
+};
+
+var CTA_LABELS = {no_ask:'No ask (value only)',micro_ask:'Micro-ask',give_to_get:'Give-to-get',meeting_request:'Meeting request',champion_arm:'Champion arming',process_facilitation:'Process facilitation'};
+
+var CONTENT_TYPES = [
+    {num:1,name:'The Signal-Driven Email',temp:'Ice Cold',tempClass:'background:rgba(91,141,239,0.12);color:#5b8def;',purpose:'First touch. Demonstrates research. Creates curiosity.',structure:'Line 1: The trigger — what you noticed.\nLine 2: The implication — what it means for them.\nLine 3: The bridge — how it connects to what you do (1 sentence).\nLine 4: Micro-ask or no-ask close.',ctas:'No ask / Micro-ask / Soft ask'},
+    {num:2,name:'The Give-First Email',temp:'Cool',tempClass:'background:rgba(91,141,239,0.12);color:#5b8def;',purpose:'Follow-up that adds new value. Not a "just checking in."',structure:'Line 1: Reference prior touch briefly.\nLines 2-3: New value — benchmark, framework, data point.\nLine 4: Asset offer.\nLine 5: Give-to-get ask.',ctas:'Give-to-get'},
+    {num:3,name:'The Provocative Question',temp:'Cool / Warm',tempClass:'background:rgba(245,158,11,0.12);color:#f59e0b;',purpose:'Pattern interrupt. Ask something they can\'t ignore.',structure:'Single question. No preamble. Brief context sentence.\n\nExamples:\n• "How many hours/week does your team spend [thing your product eliminates]?"\n• "Your competitor just [trigger]. Does that change your Q2 priorities?"',ctas:'The question IS the CTA'},
+    {num:4,name:'The Personalized Video',temp:'Cool / Warm',tempClass:'background:rgba(245,158,11,0.12);color:#f59e0b;',purpose:'Pattern interrupt via format. 97% of outbound is text.',structure:'0-10s: "Hey [Name], quick 60-second video."\n10-30s: The insight about their company.\n30-50s: Proof point from a similar company.\n50-60s: The ask.',ctas:'Direct meeting request (after value delivered in video)'},
+    {num:5,name:'The One-Pager',temp:'Warm',tempClass:'background:rgba(245,158,11,0.12);color:#f59e0b;',purpose:'Give-to-get asset. Designed to be forwarded internally.',structure:'Top: Their problem in their language.\nMiddle: How you solve it + 1-2 proof metrics.\nBottom: What a first conversation looks like.',ctas:'Give-to-get'},
+    {num:6,name:'The Case Study',temp:'Warm / Hot',tempClass:'background:rgba(34,197,94,0.12);color:#22c55e;',purpose:'Proof. Not marketing — "here\'s exactly what happened."',structure:'Page 1: Situation (pain, not setup) + What they did (timeline, effort).\nPage 2: Results (specific metrics, timeframe) + Quote from named person.',ctas:'Build conviction after first meeting'},
+    {num:7,name:'The ROI Model',temp:'Hot',tempClass:'background:rgba(34,197,94,0.12);color:#22c55e;',purpose:'Makes the business case quantifiable.',structure:'Interactive model: their inputs → projected impact.\nAssumptions cited, methodology transparent.\nPopulate with THEIR numbers before sharing.',ctas:'Champion arming'},
+    {num:8,name:'The Mutual Action Plan',temp:'Hot / Closing',tempClass:'background:rgba(34,197,94,0.12);color:#22c55e;',purpose:'Shared path from "we like this" to "it\'s live."',structure:'Steps | Owner | Due Date | Status\n(Tech eval → Security → Legal → Procurement → Signature → Kickoff)',ctas:'Co-create with champion'},
+    {num:9,name:'The Break-Up Email',temp:'Cool (final)',tempClass:'background:rgba(239,68,68,0.12);color:#ef4444;',purpose:'Last touch. Loss aversion drives highest response rate.',structure:'Line 1: Acknowledge silence without passive aggression.\nLine 2: What you were offering, one final time.\nLine 3: Easy out: "No hard feelings."\nLine 4: Open door: "If [trigger] makes this relevant, I\'m at [email]."',ctas:'"If I don\'t hear back, I\'ll assume timing isn\'t right."'},
+    {num:10,name:'The Nurture Touch',temp:'Post-sequence',tempClass:'background:rgba(78,76,71,0.3);color:var(--text-tertiary);',purpose:'Maintain mindshare. Monthly. Pure value. Zero ask.',structure:'Relevant article, benchmark, or insight.\n2 lines of context about why it\'s relevant to them.\nNo CTA. That\'s the point.',ctas:'None. Investment in the relationship.'}
+];
+
+// ── STATE ──
+var noAskMode = false;
+var currentOutput = '';
+
+// ── INIT ──
+function init(){
+    populateAccounts();
+    updateRecommendations();
+    renderTempAccordions();
+    renderLog();
+    renderContentLibrary();
+    // URL param pre-fill
+    var params = new URLSearchParams(window.location.search);
+    if(params.get('account')){
+        document.getElementById('gAccount').value = params.get('account');
+    }
+    if(params.get('trigger')){
+        document.getElementById('gTrigger').value = params.get('trigger');
+    }
+    if(params.get('temperature')){
+        document.getElementById('gTemp').value = params.get('temperature');
+    }
+    if(params.get('persona')){
+        document.getElementById('gPersona').value = params.get('persona');
+    }
+    updateRecommendations();
+}
+
+function populateAccounts(){
+    var sc = readLS('gtmos_sc_v4',{accounts:[]});
+    var sel = document.getElementById('gAccount');
+    (sc.accounts||[]).sort(function(a,b){return(b._heat||0)-(a._heat||0)}).forEach(function(a){
+        var opt = document.createElement('option');
+        opt.value = a.name;
+        opt.textContent = a.name + (a._heat ? ' (heat '+a._heat+')' : '');
+        sel.appendChild(opt);
+    });
+    sel.onchange = function(){
+        var acct = (sc.accounts||[]).find(function(a){return a.name===sel.value});
+        if(acct&&acct.signals&&acct.signals.length){
+            document.getElementById('gAccountHint').textContent = 'Top signal: '+acct.signals[0].headline;
+        } else {
+            document.getElementById('gAccountHint').textContent = '';
+        }
+        autoDetectTemperature(sel.value);
+        updateRecommendations();
+    };
+}
+
+function autoDetectTemperature(accountName){
+    if(!accountName)return;
+    var deals = readLS('gtmos_deal_workspaces',[]);
+    var match = deals.find(function(d){return(d.accountName||d.account_name||'').toLowerCase()===accountName.toLowerCase()&&d.stage!=='closed-won'&&d.stage!=='closed-lost'});
+    var touches = readLS('gtmos_outbound_touches',{touches:[]});
+    var hasTouches = touches.touches.some(function(t){return t.accountName===accountName});
+    var tempSel = document.getElementById('gTemp');
+    var hint = document.getElementById('gTempHint');
+    if(match){
+        if(match.stage==='verbal'||match.stage==='negotiation'){tempSel.value='closing';hint.textContent='Auto-detected: deal in '+match.stage;}
+        else{tempSel.value='hot';hint.textContent='Auto-detected: active deal ('+match.stage+')';}
+    } else if(hasTouches){
+        tempSel.value='cool';hint.textContent='Auto-detected: prior touches logged.';
+    } else {
+        hint.textContent='';
+    }
+    onTempChange();
+}
+
+window.onTempChange = function(){updateRecommendations()};
+
+function updateRecommendations(){
+    var temp = document.getElementById('gTemp').value;
+    var persona = document.getElementById('gPersona').value;
+    var trigger = document.getElementById('gTrigger').value;
+    var bar = document.getElementById('recBar');
+
+    var channelOrder = (CHANNEL_ORDER[temp]||{})[persona]||['email'];
+    var primaryChannel = channelOrder[0];
+    var asset = (ASSET_MATRIX[temp]||{})[persona]||'none';
+    var ctaKey = noAskMode ? 'no_ask' : (CTA_BY_TEMP[temp]||{}).normal||'micro_ask';
+
+    bar.innerHTML =
+        '<span class="rec-badge gold">Channel: '+primaryChannel+(channelOrder.length>1?' → '+channelOrder.slice(1).join(' → '):'')+'</span>'+
+        '<span class="rec-badge blue">CTA: '+(CTA_LABELS[ctaKey]||ctaKey)+'</span>'+
+        '<span class="rec-badge '+(asset==='none'?'':'amber')+'">Asset: '+(ASSET_LABELS[asset]||asset)+'</span>'+
+        '<span class="rec-badge">Persona length: '+PERSONAS[persona].sentenceRange.join('-')+' sentences</span>';
+}
+
+window.toggleNoAsk = function(){
+    noAskMode = !noAskMode;
+    document.getElementById('noAskToggle').classList.toggle('on',noAskMode);
+    updateRecommendations();
+};
+
+// ── GENERATE ──
+
+window.generate = function(){
+    var account = document.getElementById('gAccount').value||'[Company]';
+    var contact = document.getElementById('gContact').value||'[Name]';
+    var persona = document.getElementById('gPersona').value;
+    var temp = document.getElementById('gTemp').value;
+    var trigger = document.getElementById('gTrigger').value;
+    var triggerData = TRIGGERS[trigger]||{meaning:'',angles:['Value']};
+    var personaData = PERSONAS[persona];
+    var tempData = TEMPS[temp];
+    var ctaKey = noAskMode ? 'no_ask' : (CTA_BY_TEMP[temp]||{}).normal;
+    var asset = (ASSET_MATRIX[temp]||{})[persona]||'none';
+
+    var sc = readLS('gtmos_sc_v4',{accounts:[]});
+    var acct = (sc.accounts||[]).find(function(a){return a.name===account});
+    var signalText = acct&&acct.signals&&acct.signals[0] ? acct.signals[0].headline : triggerData.meaning;
+    var angle = triggerData.angles[0]||'value';
+    var playbook = readLS('gtmos_playbook',{});
+    var companyName = playbook.company||'[Your Company]';
+
+    var lines = [];
+
+    // Build per temperature + persona
+    if(temp==='ice_cold'){
+        lines.push('Hi '+contact+',');
+        lines.push('');
+        lines.push('I noticed '+signalText.charAt(0).toLowerCase()+signalText.slice(1)+(signalText.endsWith('.')?'':'.'));
+        lines.push('');
+        if(persona==='csuite'){
+            lines.push('For '+account+', that likely puts '+angle.toLowerCase()+' near the top of your priority stack this quarter.');
+            if(!noAskMode) lines.push('');
+            if(!noAskMode) lines.push('Does that track with how you\'re thinking about it?');
+        } else if(persona==='vp'){
+            lines.push('For teams at '+account+'\'s scale, that typically means '+angle.toLowerCase()+' becomes urgent before the systems are ready for it.');
+            lines.push('');
+            lines.push('We\'ve helped companies in a similar position — happy to share what we\'ve seen if it\'s relevant.');
+            if(!noAskMode){lines.push('');lines.push('Worth a look?');}
+        } else if(persona==='ic'){
+            lines.push('For teams at '+account+', that usually means '+angle.toLowerCase()+' work accelerates while the tooling stays the same.');
+            lines.push('');
+            lines.push('We\'ve built something that addresses exactly this — specifically for teams dealing with '+triggerData.meaning.toLowerCase());
+            lines.push('');
+            lines.push('The short version: '+companyName+' helps '+account+' '+triggerData.angles.join(' and ').toLowerCase()+' without adding complexity to what you\'re already using.');
+            if(!noAskMode){lines.push('');lines.push('Curious if this matches what you\'re seeing day-to-day?');}
+        } else {
+            lines.push('For '+account+', that likely creates new requirements on the procurement side.');
+            if(!noAskMode){lines.push('');lines.push('Does this resonate?');}
+        }
+        lines.push('');
+        lines.push('Best,');
+        lines.push('[Your Name]');
+    } else if(temp==='cool'){
+        lines.push('Hi '+contact+',');
+        lines.push('');
+        lines.push('Quick follow-up to the note I sent about '+triggerData.label.toLowerCase()+' at '+account+'.');
+        lines.push('');
+        lines.push('I put together a '+(ASSET_LABELS[asset]||'brief')+' that\'s specific to how companies at '+account+'\'s scale are approaching '+angle.toLowerCase()+'. It\'s based on what we\'ve seen work across similar organizations — not a product pitch.');
+        if(!noAskMode){
+            lines.push('');
+            lines.push('Worth 15 minutes for me to walk you through it? I can do '+(function(){var d=new Date();var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];d.setDate(d.getDate()+2);var d1=days[d.getDay()];d.setDate(d.getDate()+2);return d1+' or '+days[d.getDay()]})()+'.');
+        }
+        lines.push('');
+        lines.push('[Your Name]');
+    } else if(temp==='warm'){
+        lines.push('Hi '+contact+',');
+        lines.push('');
+        lines.push('Following up on our conversation. I\'ve been thinking about the '+angle.toLowerCase()+' challenge you mentioned and wanted to share something specific.');
+        lines.push('');
+        if(persona==='csuite'){
+            lines.push('I\'d like to show you how a company in your space solved this in 20 minutes. No slides unless you want them.');
+            if(!noAskMode) lines.push('Does '+(function(){var d=new Date();var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];d.setDate(d.getDate()+3);return days[d.getDay()]})() +' work?');
+        } else {
+            lines.push('Attached is a '+(ASSET_LABELS[asset]||'brief')+' customized for '+account+' — it shows the opportunity range based on what we\'ve seen at comparable organizations.');
+            lines.push('');
+            if(!noAskMode) lines.push('Worth 20 minutes to walk through it together? I\'d also want to understand who else on your team should be in the conversation.');
+        }
+        lines.push('');
+        lines.push('[Your Name]');
+    } else if(temp==='hot'){
+        lines.push('Hi '+contact+',');
+        lines.push('');
+        lines.push('Wanted to send this ahead of our next conversation.');
+        lines.push('');
+        if(persona==='csuite'){
+            lines.push('Attached is the business case for '+account+' — the ROI model populated with the numbers your team shared. The payback period comes in at [X months]. Happy to walk through the assumptions on a quick call if useful.');
+        } else if(persona==='procurement'){
+            lines.push('Attached: our security documentation, standard terms, and compliance certifications. Let me know what else you need from us to move forward — happy to pre-fill your vendor evaluation questionnaire if that saves time.');
+        } else {
+            lines.push('Here\'s the '+(ASSET_LABELS[asset]||'summary')+' we discussed. I\'ve included the proof points most relevant to '+account+'\'s situation and a suggested mutual action plan for the path from here to decision.');
+            lines.push('');
+            lines.push('Let me know what questions come up — and whether it would be useful to include [stakeholder role] in the next conversation.');
+        }
+        lines.push('');
+        lines.push('[Your Name]');
+    } else if(temp==='closing'){
+        lines.push('Hi '+contact+',');
+        lines.push('');
+        lines.push('Checking in on the contract status. On our end, we\'re ready to move.');
+        lines.push('');
+        if(persona==='procurement'){
+            lines.push('Attached is the complete security and compliance package in case your team needs it for review. Let me know if there are specific sections legal wants to discuss — happy to set up a call with our legal team to accelerate.');
+        } else {
+            lines.push('If your team has any open questions for legal or procurement, I\'ve preemptively attached our security documentation and standard terms. Anything I can do to reduce friction on your side?');
+            lines.push('');
+            lines.push('If we finalize by [date], we can kick off implementation by [date] and you\'ll see initial results by [date].');
+        }
+        lines.push('');
+        lines.push('[Your Name]');
+    }
+
+    if(noAskMode && temp !== 'ice_cold'){
+        // Strip any question marks from the last substantive line for no-ask mode
+        // Already handled above per temperature block
+    }
+
+    currentOutput = lines.join('\n');
+    document.getElementById('outputBox').textContent = currentOutput;
+};
+
+window.copyOutput = function(){
+    if(!currentOutput){toast('Nothing to copy');return}
+    cp(currentOutput).then(function(){toast('Copied')});
+};
+
+window.saveToAngles = function(){
+    if(!currentOutput){toast('Generate first');return}
+    var angles = readLS('gtmos_angles',[]);
+    angles.push({
+        company:document.getElementById('gAccount').value||'',
+        trigger:TRIGGERS[document.getElementById('gTrigger').value].label,
+        persona:PERSONAS[document.getElementById('gPersona').value].label,
+        email:currentOutput,
+        temperature:document.getElementById('gTemp').value,
+        channel:CHANNEL_MATRIX[document.getElementById('gTemp').value][document.getElementById('gPersona').value]||'email',
+        ctaType:noAskMode?'no_ask':(CTA_BY_TEMP[document.getElementById('gTemp').value]||{}).normal,
+        savedAt:new Date().toISOString()
+    });
+    writeLS('gtmos_angles',angles);
+    toast('Saved to angles ('+angles.length+' total)');
+};
+
+window.logTouch = function(){
+    if(!currentOutput){toast('Generate first');return}
+    var data = readLS('gtmos_outbound_touches',{touches:[]});
+    data.touches.push({
+        id:uid(),
+        accountName:document.getElementById('gAccount').value||'',
+        contactName:document.getElementById('gContact').value||'',
+        contactTitle:'',
+        persona:document.getElementById('gPersona').value,
+        temperature:document.getElementById('gTemp').value,
+        channel:CHANNEL_MATRIX[document.getElementById('gTemp').value][document.getElementById('gPersona').value]||'email',
+        trigger:document.getElementById('gTrigger').value,
+        ctaType:noAskMode?'no_ask':(CTA_BY_TEMP[document.getElementById('gTemp').value]||{}).normal,
+        assetUsed:(ASSET_MATRIX[document.getElementById('gTemp').value]||{})[document.getElementById('gPersona').value]||'none',
+        content:currentOutput,
+        outcome:null,
+        outcomeDate:null,
+        dealId:null,
+        createdAt:new Date().toISOString()
+    });
+    writeLS('gtmos_outbound_touches',data);
+    toast('Touch logged');
+    renderLog();
+};
+
+// ── TABS ──
+window.showTab = function(id){
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+    document.getElementById('tab-'+id).classList.add('active');
+    // Find matching tab button
+    document.querySelectorAll('.tab').forEach(function(t){
+        if(t.textContent.toLowerCase().replace(/\s/g,'').indexOf(id.replace('log','touchlog').replace('library','contentlibrary').replace('generator','generator').replace('methodology','methodology'))>=0 || 
+           (id==='generator'&&t.textContent==='Generator') ||
+           (id==='methodology'&&t.textContent==='Methodology') ||
+           (id==='log'&&t.textContent==='Touch Log') ||
+           (id==='library'&&t.textContent==='Content Library')
+        ) t.classList.add('active');
+    });
+    if(id==='log') renderLog();
+};
+
+// ── TEMPERATURE ACCORDIONS ──
+function renderTempAccordions(){
+    var container = document.getElementById('tempAccordions');
+    var html = '';
+    Object.keys(TEMPS).forEach(function(key){
+        var t = TEMPS[key];
+        html += '<div class="accord" onclick="toggleAccord(this)">';
+        html += '<div class="accord-head"><div class="accord-title">'+t.label+'</div><div><span class="accord-badge" style="background:'+t.color+'22;color:'+t.color+';">'+t.ctas.length+' CTAs</span> <span class="accord-arrow">▸</span></div></div>';
+        html += '<div class="accord-body">';
+        html += '<strong style="color:var(--text-secondary);">Acceptable CTAs:</strong><ul class="method-list">'+t.ctas.map(function(c){return '<li>'+c+'</li>'}).join('')+'</ul>';
+        html += '<strong style="color:var(--red);">Never say:</strong><ul class="method-list bad">'+t.badCtas.map(function(c){return '<li>'+c+'</li>'}).join('')+'</ul>';
+        html += '<strong style="color:var(--text-secondary);">Channels:</strong><ul class="method-list">'+t.channels.map(function(c){return '<li>'+c+'</li>'}).join('')+'</ul>';
+        html += '<strong style="color:var(--text-secondary);">Asset strategy:</strong><div style="margin:4px 0 8px;padding-left:14px;">'+t.assets+'</div>';
+        html += '<div class="touch-pattern"><strong>Touch pattern:</strong> '+t.pattern+'</div>';
+        html += '</div></div>';
+    });
+    container.innerHTML = html;
+}
+
+window.toggleAccord = function(el){el.classList.toggle('open')};
+
+// ── TOUCH LOG ──
+function renderLog(){
+    var data = readLS('gtmos_outbound_touches',{touches:[]});
+    var touches = data.touches||[];
+
+    // Stats
+    var total = touches.length;
+    var replied = touches.filter(function(t){return t.outcome==='replied'||t.outcome==='meeting_booked'}).length;
+    var meetings = touches.filter(function(t){return t.outcome==='meeting_booked'}).length;
+    var responseRate = total>0?Math.round(replied/total*100):0;
+    var topChannel = '';
+    if(total>0){
+        var channels={};
+        touches.forEach(function(t){channels[t.channel]=(channels[t.channel]||0)+1});
+        topChannel = Object.keys(channels).sort(function(a,b){return channels[b]-channels[a]})[0]||'';
+    }
+
+    document.getElementById('logStats').innerHTML =
+        '<div class="stat-item"><div class="stat-val">'+total+'</div><div class="stat-label">Total Touches</div></div>'+
+        '<div class="stat-item"><div class="stat-val'+(responseRate>=20?' green':'')+'">'+responseRate+'%</div><div class="stat-label">Response Rate</div></div>'+
+        '<div class="stat-item"><div class="stat-val gold">'+meetings+'</div><div class="stat-label">Meetings Booked</div></div>'+
+        '<div class="stat-item"><div class="stat-val">'+topChannel+'</div><div class="stat-label">Top Channel</div></div>';
+
+    if(touches.length===0){
+        document.getElementById('logTable').innerHTML = '<div class="log-empty">No touches logged yet. Generate a touch and click "Log Touch" to start tracking.</div>';
+        return;
+    }
+
+    var html = '<table class="log-table"><tr><th>Date</th><th>Account</th><th>Contact</th><th>Temp</th><th>Channel</th><th>Outcome</th></tr>';
+    touches.slice().reverse().forEach(function(t,i){
+        var idx = touches.length-1-i;
+        var date = t.createdAt ? new Date(t.createdAt).toLocaleDateString() : '';
+        html += '<tr>';
+        html += '<td>'+date+'</td>';
+        html += '<td>'+escH(t.accountName)+'</td>';
+        html += '<td>'+escH(t.contactName)+'</td>';
+        html += '<td>'+escH((TEMPS[t.temperature]||{}).label||t.temperature)+'</td>';
+        html += '<td>'+escH(t.channel)+'</td>';
+        html += '<td><select class="outcome-sel" onchange="updateOutcome('+idx+',this.value)">';
+        html += '<option value="">—</option>';
+        ['replied','no_response','meeting_booked','referred','unsubscribed'].forEach(function(o){
+            html += '<option value="'+o+'"'+(t.outcome===o?' selected':'')+'>'+o.replace(/_/g,' ')+'</option>';
+        });
+        html += '</select></td>';
+        html += '</tr>';
+    });
+    html += '</table>';
+    document.getElementById('logTable').innerHTML = html;
+}
+
+window.updateOutcome = function(idx,val){
+    var data = readLS('gtmos_outbound_touches',{touches:[]});
+    if(data.touches[idx]){
+        data.touches[idx].outcome = val||null;
+        data.touches[idx].outcomeDate = val ? new Date().toISOString() : null;
+        writeLS('gtmos_outbound_touches',data);
+        renderLog();
+        toast('Outcome updated');
+    }
+};
+
+// ── CONTENT LIBRARY ──
+function renderContentLibrary(){
+    var html = '';
+    CONTENT_TYPES.forEach(function(ct){
+        html += '<div class="ct-card" onclick="this.classList.toggle(\'expanded\')">';
+        html += '<div class="ct-num">'+ct.num+'.</div>';
+        html += '<div class="ct-name">'+ct.name+'</div>';
+        html += '<span class="ct-temp" style="'+ct.tempClass+'">'+ct.temp+'</span>';
+        html += '<div class="ct-desc">'+ct.purpose+'</div>';
+        html += '<div class="ct-detail">';
+        html += '<strong style="color:var(--text-secondary);">Structure:</strong><pre style="margin:6px 0 10px;white-space:pre-wrap;font-family:inherit;font-size:0.78rem;color:var(--text-tertiary);">'+escH(ct.structure)+'</pre>';
+        html += '<strong style="color:var(--text-secondary);">CTA:</strong> '+escH(ct.ctas);
+        html += '<div class="ct-copy"><button class="btn sm" onclick="event.stopPropagation();cp(\''+escH(ct.structure.replace(/'/g,"\\'").replace(/\n/g,"\\n"))+'\').then(function(){toast(\'Structure copied\')})">Copy Structure</button></div>';
+        html += '</div></div>';
+    });
+    document.getElementById('ctGrid').innerHTML = html;
+}
+
+// ── BOOT ──
+init();
+
+})();
+
+    </script>
+</body>
+</html>

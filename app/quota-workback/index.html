@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quota Workback | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .qw-hero{text-align:center;padding:32px 0 20px;background:linear-gradient(135deg,rgba(212,165,116,0.08),rgba(212,165,116,0.02));border:1px solid rgba(212,165,116,0.2);border-radius:var(--radius-lg);margin-bottom:var(--space-md);}
+        .qw-hero-val{font-family:var(--font-serif);font-size:3.5rem;color:var(--brand-gold);}
+        .qw-hero-label{font-size:0.9rem;color:var(--text-tertiary);max-width:500px;margin:4px auto 0;}
+        .qw-coverage{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px 24px;margin-bottom:var(--space-xl);}
+        .qw-cov-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+        .qw-cov-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;}
+        .qw-cov-ratio{font-family:var(--font-serif);font-size:1.1rem;}
+        .qw-cov-ratio.green{color:#22c55e;}.qw-cov-ratio.amber{color:#f59e0b;}.qw-cov-ratio.red{color:#ef4444;}
+        .qw-cov-bar{height:8px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden;margin-bottom:8px;}
+        .qw-cov-fill{height:100%;border-radius:4px;transition:width 0.4s;}
+        .qw-cov-fill.green{background:#22c55e;}.qw-cov-fill.amber{background:#f59e0b;}.qw-cov-fill.red{background:#ef4444;}
+        .qw-cov-meta{display:flex;gap:16px;font-size:0.75rem;color:var(--text-muted);}
+        .qw-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:24px;margin-bottom:var(--space-lg);}
+        .qw-card-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:16px;}
+        .qw-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+        .qw-field label{display:block;font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:6px;}
+        .qw-field input{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.95rem;font-family:inherit;}
+        .qw-field input:focus{outline:none;border-color:var(--brand-gold);}
+        .qw-field .unit{font-size:0.7rem;color:var(--text-muted);margin-top:4px;}
+        .qw-bench-hint{margin-top:12px;padding:10px 14px;background:rgba(212,165,116,0.05);border:1px solid rgba(212,165,116,0.15);border-radius:var(--radius-md);font-size:0.78rem;color:var(--text-tertiary);display:none;}
+        .qw-bench-hint.visible{display:block;}
+        .qw-bench-hint strong{color:var(--brand-gold);}
+        .qw-bench-hint button{margin-left:8px;padding:4px 10px;border-radius:6px;font-size:0.72rem;font-weight:700;border:1px solid rgba(212,165,116,0.3);background:rgba(212,165,116,0.08);color:var(--brand-gold);cursor:pointer;font-family:inherit;}
+        .qw-math{margin-top:20px;}
+        .qw-math-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:12px;}
+        .qw-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.88rem;}
+        .qw-row-label{color:var(--text-tertiary);}
+        .qw-row-value{color:var(--text-primary);font-weight:600;}
+        .qw-row-value.gold{color:var(--brand-gold);}
+        .qw-adv summary{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);cursor:pointer;font-weight:700;padding:12px 0;}
+        .qw-adv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-bottom:16px;}
+        .qw-bench{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:var(--space-lg);}
+        .qw-bench-card{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;text-align:center;}
+        .qw-bench-card .val{font-family:var(--font-serif);font-size:1.1rem;color:var(--text-primary);}
+        .qw-bench-card .yours{font-size:0.78rem;color:var(--text-secondary);margin-top:2px;}
+        .qw-bench-card .range{font-size:0.68rem;color:var(--text-muted);margin-top:2px;}
+        .qw-bench-card .verdict{font-size:0.62rem;font-weight:700;margin-top:4px;padding:2px 6px;border-radius:var(--radius-full);display:inline-block;}
+        .qw-bench-card .verdict.good{background:rgba(34,197,94,0.1);color:#22c55e;}
+        .qw-bench-card .verdict.warn{background:rgba(245,158,11,0.1);color:#f59e0b;}
+        .qw-bench-card .verdict.bad{background:rgba(239,68,68,0.1);color:#ef4444;}
+        @media(max-width:700px){.qw-inputs,.qw-adv-grid,.qw-bench{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Quota Workback</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="copyMath()">📋 Copy Math</button>
+                </div>
+            </header>
+            <div class="app-content" style="max-width:780px;">
+                <div class="qw-hero">
+                    <div class="qw-hero-val" id="heroTouches">0</div>
+                    <div class="qw-hero-label" id="heroLabel">touches per day to hit target</div>
+                </div>
+
+                <div class="qw-coverage" id="coverageBar"></div>
+
+                <div class="qw-card">
+                    <div class="qw-card-title">Your Targets</div>
+                    <div class="qw-inputs">
+                        <div class="qw-field"><label>Annual Quota ($)</label><input type="text" id="inQuota" oninput="fmtC(this);calc()"><div class="unit">Your personal target</div></div>
+                        <div class="qw-field"><label>Avg Deal Size ($)</label><input type="text" id="inACV" oninput="fmtC(this);calc();checkBenchmarks()"><div class="unit">ACV</div></div>
+                        <div class="qw-field"><label>Win Rate (%)</label><input type="number" id="inWin" oninput="calc()"><div class="unit">Opp → Closed-Won</div></div>
+                    </div>
+                    <div class="qw-bench-hint" id="benchHint"></div>
+                    <div class="qw-math" id="mathBlock"></div>
+                    <details class="qw-adv">
+                        <summary>Advanced conversion settings</summary>
+                        <div class="qw-adv-grid">
+                            <div class="qw-field"><label>Meeting → Opp (%)</label><input type="number" id="inM2O" oninput="calc()"></div>
+                            <div class="qw-field"><label>Touch → Meeting (%)</label><input type="number" id="inT2M" step="0.1" oninput="calc()"></div>
+                            <div class="qw-field"><label>Show Rate (%)</label><input type="number" id="inShow" oninput="calc()"></div>
+                            <div class="qw-field"><label>Working Days/Mo</label><input type="number" id="inDays" oninput="calc()"></div>
+                            <div class="qw-field"><label>Touches/Account</label><input type="number" id="inTPA" oninput="calc()"></div>
+                            <div class="qw-field"><label>Avg Cycle (days)</label><input type="number" id="inCycle" oninput="calc()"></div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="qw-bench" id="benchCards" style="display:none;"></div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/deal-health.js"></script>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    (function(){
+        var dh = window.dealHealth;
+        function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+        function fmtN(n){return Number(n||0).toLocaleString()}
+        function fmtM(n){return'$'+Number(n||0).toLocaleString();}
+
+        var ACV_BENCHMARKS={
+            small:{maxAcv:30000,winRate:25,cycle:45,m2o:40,coverage:3.0,label:'SMB',winRange:'20\u201330%',cycleRange:'30\u201360 days'},
+            mid:{maxAcv:75000,winRate:20,cycle:90,m2o:35,coverage:3.5,label:'Mid-Market',winRange:'15\u201325%',cycleRange:'60\u2013120 days'},
+            enterprise:{maxAcv:200000,winRate:15,cycle:180,m2o:30,coverage:4.5,label:'Enterprise',winRange:'10\u201318%',cycleRange:'120\u2013270 days'},
+            strategic:{maxAcv:Infinity,winRate:12,cycle:240,m2o:25,coverage:5.0,label:'Strategic',winRange:'8\u201315%',cycleRange:'180\u2013360 days'}
+        };
+
+        function getBand(acv){
+            acv=Number(acv)||0;
+            if(acv>=200000)return'strategic';if(acv>=75000)return'enterprise';if(acv>=30000)return'mid';return'small';
+        }
+
+        var saved=readLS('gtmos_qw_inputs',{});
+        var seed=readLS('gtmos_outbound_seed',{});
+
+        document.getElementById('inQuota').value=fmtN(saved.quota||seed.annual_quota||0);
+        document.getElementById('inACV').value=fmtN(saved.acv||seed.avg_deal_size||50000);
+        document.getElementById('inWin').value=saved.win||seed.win_rate||20;
+        document.getElementById('inM2O').value=saved.m2o||35;
+        document.getElementById('inT2M').value=saved.t2m||seed.touch_to_meeting||0.7;
+        document.getElementById('inShow').value=saved.show||seed.show_rate||80;
+        document.getElementById('inDays').value=saved.days||20;
+        document.getElementById('inTPA').value=saved.tpa||8;
+        document.getElementById('inCycle').value=saved.cycle||seed.cycle_days||45;
+
+        window.fmtC=function(el){var v=el.value.replace(/[^0-9]/g,'');el.value=v?Number(v).toLocaleString():''};
+        function num(id){return Number((document.getElementById(id).value||'0').toString().replace(/[^0-9.]/g,''));}
+
+        window.checkBenchmarks=function(){
+            var acv=num('inACV');
+            if(acv<10000){document.getElementById('benchHint').classList.remove('visible');return;}
+            var band=getBand(acv);
+            var b=ACV_BENCHMARKS[band];
+            var hint=document.getElementById('benchHint');
+            hint.innerHTML='<strong>'+b.label+' benchmarks</strong> for '+fmtM(acv)+' ACV: '+b.winRate+'% win rate, '+b.cycle+'-day cycle, '+b.coverage+'\u00d7 coverage. <button onclick="applyBenchmarks()">Apply</button>';
+            hint.classList.add('visible');
+        };
+
+        window.applyBenchmarks=function(){
+            var acv=num('inACV');
+            var band=getBand(acv);
+            var b=ACV_BENCHMARKS[band];
+            document.getElementById('inWin').value=b.winRate;
+            document.getElementById('inM2O').value=b.m2o;
+            document.getElementById('inCycle').value=b.cycle;
+            document.getElementById('benchHint').classList.remove('visible');
+            calc();
+        };
+
+        window.calc=function(){
+            var quota=num('inQuota'),acv=num('inACV'),win=num('inWin')/100;
+            var m2o=num('inM2O')/100,t2m=num('inT2M')/100,show=num('inShow')/100;
+            var days=num('inDays'),tpa=num('inTPA'),cycle=num('inCycle');
+
+            var monthly=Math.round(quota/12);
+            var dealsNeeded=acv>0?Math.ceil(monthly/acv):0;
+            var oppsNeeded=win>0?Math.ceil(dealsNeeded/win):0;
+            var meetingsSched=m2o>0?Math.ceil(oppsNeeded/m2o):0;
+            var meetingsHeld=show>0?Math.ceil(meetingsSched/show):0;
+            var totalTouches=t2m>0?Math.ceil(meetingsHeld/t2m):0;
+            var activeAccounts=tpa>0?Math.ceil(totalTouches/tpa):0;
+            var touchesDay=days>0?Math.ceil(totalTouches/days):0;
+            var pipelineNeeded=win>0?Math.round(monthly/win):0;
+
+            document.getElementById('heroTouches').textContent=touchesDay;
+            document.getElementById('heroLabel').textContent='touches per day across '+activeAccounts+' accounts to hit '+fmtM(monthly)+'/month';
+
+            document.getElementById('mathBlock').innerHTML=
+                '<div class="qw-math-title">The Math</div>'+
+                '<div class="qw-row"><span class="qw-row-label">Monthly Target</span><span class="qw-row-value">'+fmtM(monthly)+'</span></div>'+
+                '<div class="qw-row"><span class="qw-row-label">Deals needed/month</span><span class="qw-row-value">'+dealsNeeded+'</span></div>'+
+                '<div class="qw-row"><span class="qw-row-label">Pipeline coverage needed</span><span class="qw-row-value">'+fmtM(pipelineNeeded)+'</span></div>'+
+                '<div class="qw-row"><span class="qw-row-label">Opportunities needed</span><span class="qw-row-value">'+oppsNeeded+'</span></div>'+
+                '<div class="qw-row"><span class="qw-row-label">Meetings to schedule</span><span class="qw-row-value">'+meetingsSched+'</span></div>'+
+                '<div class="qw-row"><span class="qw-row-label">Total touches/month</span><span class="qw-row-value">'+fmtN(totalTouches)+'</span></div>'+
+                '<div class="qw-row"><span class="qw-row-label">Active accounts to work</span><span class="qw-row-value gold">'+activeAccounts+'</span></div>';
+
+            // Save
+            var inputs={quota:quota,acv:acv,win:num('inWin'),m2o:num('inM2O'),t2m:num('inT2M'),show:num('inShow'),days:days,tpa:tpa,cycle:cycle};
+            localStorage.setItem('gtmos_qw_inputs',JSON.stringify(inputs));
+            localStorage.setItem('gtmos_outbound_seed',JSON.stringify({annual_quota:quota,avg_deal_size:acv,win_rate:num('inWin'),touch_to_meeting:num('inT2M'),show_rate:num('inShow'),cycle_days:cycle,coverage_target:ACV_BENCHMARKS[getBand(acv)].coverage,acv_band:getBand(acv)}));
+
+            // Coverage bar
+            if(dh&&quota>0){
+                var cov=dh.computeCoverage(dh.loadAllDeals(),quota);
+                var target=ACV_BENCHMARKS[getBand(acv)].coverage;
+                var pct=Math.min(100,Math.round(cov.ratio/target*100));
+                var color=cov.ratio>=target?'green':cov.ratio>=target*0.6?'amber':'red';
+                document.getElementById('coverageBar').innerHTML=
+                    '<div class="qw-cov-head"><div class="qw-cov-title">Pipeline Coverage</div><div class="qw-cov-ratio '+color+'">'+cov.ratio+'\u00d7 / '+target+'\u00d7 needed</div></div>'+
+                    '<div class="qw-cov-bar"><div class="qw-cov-fill '+color+'" style="width:'+pct+'%"></div></div>'+
+                    '<div class="qw-cov-meta"><span>'+fmtM(cov.weighted)+' weighted</span><span>'+fmtM(cov.raw)+' raw</span>'+(cov.needed>0?'<span>Gap: '+fmtM(cov.needed)+'</span>':'<span style="color:#22c55e;">On target</span>')+'</div>';
+            } else {
+                document.getElementById('coverageBar').innerHTML=
+                    '<div class="qw-cov-head"><div class="qw-cov-title">Pipeline Coverage</div><div class="qw-cov-ratio" style="color:var(--text-muted);">'+(quota?'No deals yet':'Set quota to see coverage')+'</div></div>';
+            }
+
+            // Dynamic benchmark cards
+            var band=getBand(acv);
+            var b=ACV_BENCHMARKS[band];
+            var userWin=num('inWin');
+            var userCycle=cycle;
+            var covRatio=dh?dh.computeCoverage(dh.loadAllDeals(),quota).ratio:0;
+
+            function verdict(val,lo,hi){return val>=lo&&val<=hi?'good':val<lo?'bad':'warn';}
+            var winV=verdict(userWin,b.winRate*0.7,b.winRate*1.5);
+            var cycleV=verdict(userCycle,b.cycle*0.5,b.cycle*1.5);
+            var covV=covRatio>=b.coverage?'good':covRatio>=b.coverage*0.6?'warn':'bad';
+
+            document.getElementById('benchCards').innerHTML=
+                '<div class="qw-bench-card"><div class="val">'+userWin+'%</div><div class="yours">Your Win Rate</div><div class="range">Benchmark: '+b.winRange+'</div><div class="verdict '+winV+'">'+(winV==='good'?'In range':winV==='warn'?'Above range':'Below range')+'</div></div>'+
+                '<div class="qw-bench-card"><div class="val">'+userCycle+'d</div><div class="yours">Your Cycle</div><div class="range">Benchmark: '+b.cycleRange+'</div><div class="verdict '+cycleV+'">'+(cycleV==='good'?'In range':cycleV==='warn'?'Above range':'Below range')+'</div></div>'+
+                '<div class="qw-bench-card"><div class="val">'+covRatio+'\u00d7</div><div class="yours">Your Coverage</div><div class="range">Benchmark: '+b.coverage+'\u00d7</div><div class="verdict '+covV+'">'+(covV==='good'?'On target':covV==='warn'?'Below target':'Pipeline gap')+'</div></div>';
+            document.getElementById('benchCards').style.display='grid';
+        };
+
+        calc();
+        checkBenchmarks();
+
+        window.copyMath=function(){
+            var txt='QUOTA WORKBACK\n'+document.getElementById('heroTouches').textContent+' '+document.getElementById('heroLabel').textContent+'\n\n';
+            document.querySelectorAll('.qw-row').forEach(function(r){
+                var l=r.querySelector('.qw-row-label'),v=r.querySelector('.qw-row-value');
+                if(l&&v)txt+=l.textContent+': '+v.textContent+'\n';
+            });
+            navigator.clipboard.writeText(txt).then(function(){alert('Copied!')});
+        };
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Autopsy | Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .fa-hero{text-align:center;padding:28px 0 20px;margin-bottom:var(--space-lg);}
+        .fa-hero-tag{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);font-weight:700;}
+        .fa-hero-tag span{color:var(--brand-gold);}
+        .fa-hero-title{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-primary);margin:6px 0 4px;}
+        .fa-hero-sub{font-size:0.85rem;color:var(--text-tertiary);}
+        .fa-picker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--space-lg);align-items:center;}
+        .fa-picker input,.fa-picker select{padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:0.88rem;font-family:inherit;min-width:180px;}
+        .fa-picker input:focus,.fa-picker select:focus{outline:none;border-color:var(--brand-gold);}
+        .fa-picker select{flex:1;}
+        .fa-btn{padding:10px 18px;border-radius:var(--radius-md);font-size:0.82rem;font-weight:700;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+        .fa-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+        .fa-btn.gold{border-color:rgba(212,165,116,0.3);color:var(--brand-gold);background:rgba(212,165,116,0.06);}
+        .fa-btn.gold:hover{background:rgba(212,165,116,0.12);}
+        .fa-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-bottom:var(--space-md);}
+        .fa-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;}
+        .fa-card h3{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-primary);margin-bottom:10px;}
+        .fa-card-headline{font-weight:700;font-size:0.88rem;color:var(--text-secondary);margin-bottom:10px;}
+        .fa-cause{display:inline-block;font-size:0.65rem;padding:3px 8px;border-radius:var(--radius-full);font-weight:600;margin:2px 4px 2px 0;background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.25);}
+        .fa-win-item{padding:6px 0;font-size:0.82rem;color:var(--text-tertiary);border-bottom:1px solid rgba(255,255,255,0.04);display:flex;gap:8px;}
+        .fa-win-item:last-child{border-bottom:none;}
+        .fa-win-check{color:#22c55e;flex-shrink:0;}
+        .fa-story{font-size:0.82rem;color:var(--text-tertiary);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05);}
+        .fa-tasks{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-md);}
+        .fa-tasks h3{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-primary);margin-bottom:14px;}
+        .fa-task{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:12px 0;border-top:1px dashed rgba(255,255,255,0.06);}
+        .fa-task:first-of-type{border-top:none;}
+        .fa-task.done{opacity:0.5;}
+        .fa-task input[type=checkbox]{width:18px;height:18px;accent-color:var(--brand-gold);margin-top:2px;cursor:pointer;}
+        .fa-task-label{font-weight:700;font-size:0.88rem;color:var(--text-primary);}
+        .fa-task-why{font-size:0.78rem;color:var(--text-muted);margin-top:2px;}
+        .fa-task-evi{font-size:0.72rem;color:var(--text-muted);margin-top:4px;font-style:italic;}
+        .fa-task-btns{display:flex;gap:6px;flex-wrap:wrap;}
+        .fa-task-btn{padding:5px 10px;border-radius:6px;font-size:0.7rem;font-weight:700;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.15s;}
+        .fa-task-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+        .fa-kill{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-md);}
+        .fa-kill.recommended{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.03);}
+        .fa-kill h3{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-primary);margin-bottom:10px;}
+        .fa-kill-state{font-size:0.7rem;border-radius:var(--radius-full);padding:3px 10px;font-weight:700;display:inline-block;margin-right:8px;}
+        .fa-kill-state.yes{background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.25);}
+        .fa-kill-state.no{background:rgba(100,116,139,0.12);color:#94a3b8;border:1px solid rgba(100,116,139,0.2);}
+        .fa-kill-reason{font-size:0.82rem;color:var(--text-tertiary);display:inline;}
+        .fa-kill-btns{display:flex;gap:8px;margin-top:12px;}
+        .fa-empty{text-align:center;padding:60px 24px;color:var(--text-muted);}
+        .fa-empty a{color:var(--brand-gold);}
+        .fa-toast{position:fixed;right:16px;bottom:16px;background:#1f1a14;color:#fff;padding:10px 14px;border-radius:var(--radius-md);font-size:0.82rem;font-weight:600;opacity:0;transform:translateY(6px);transition:0.25s;pointer-events:none;z-index:9999;}
+        .fa-toast.show{opacity:1;transform:none;}
+        @media(max-width:800px){.fa-grid{grid-template-columns:1fr;}.fa-picker{flex-direction:column;}}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <script src="/js/analytics.js"></script>
+            <script src="/js/data-manager.js"></script>
+            <script src="/js/nav.js"></script>
+        </aside>
+        <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">Future Autopsy</h1>
+            </header>
+            <div class="app-content" style="max-width:860px;">
+                <div class="fa-hero">
+                    <div class="fa-hero-tag">Future Autopsy &mdash; <span id="horizonDays">45</span> days out</div>
+                    <div class="fa-hero-title">How you lose is already visible.</div>
+                    <div class="fa-hero-sub" id="dealSub">Select a deal to run the autopsy.</div>
+                </div>
+                <div class="fa-picker">
+                    <input type="text" id="searchInput" placeholder="Search deal..." oninput="onSearch()">
+                    <select id="dealSelect"></select>
+                    <button class="fa-btn gold" onclick="runSelected()">Run</button>
+                    <button class="fa-btn" onclick="autopsyOfDay()">Autopsy of the Day</button>
+                    <button class="fa-btn" onclick="copyAutopsy()">&#128203; Copy</button>
+                </div>
+                <div id="autopsyContent"></div>
+            </div>
+        </main>
+    </div>
+    <div class="fa-toast" id="faToast"></div>
+    <script src="/js/deal-health.js"></script>
+    <script src="/js/proof-layer.js"></script>
+    <script>
+    (function(){
+        var dh = window.dealHealth;
+        if (!dh) { document.getElementById('autopsyContent').innerHTML = '<p style="color:var(--text-muted);">deal-health.js not loaded.</p>'; return; }
+
+        function escH(s){ var d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
+        function tx(v){ return String(v||'').trim(); }
+        function toast(m){ var t=document.getElementById('faToast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1800); }
+        function cp(txt){ if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(txt);var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();return Promise.resolve(); }
+
+        var PREFS = Object.assign({}, dh.DEFAULTS, { autopsyHorizonDays: 45 });
+        document.getElementById('horizonDays').textContent = PREFS.autopsyHorizonDays;
+
+        // ── AUTOPSY-SPECIFIC DATA (beyond deal-health.js) ──
+
+        var WMAP = {
+            no_nextstep:'dated_nextstep_set', no_eb:'eb_engaged', no_process:'process_mapped',
+            stage_stuck:'momentum_restored', no_champion:'champion_confirmed', impact_not_real:'impact_quantified',
+            usecase_blurry:'usecase_clarified', timeline_fantasy:'timeline_committed',
+            late_stage_fragility:'exec_alignment_locked', poc_no_criteria:'poc_success_criteria_locked',
+            competition_unknown:'competition_named', close_date_impossible:'close_plan_reset',
+            stale_thread:'thread_reactivated', champion_weak:'champion_strengthened',
+            single_threaded:'multi_threaded', next_step_overdue:'nextstep_refreshed'
+        };
+
+        var WTEXT = {
+            dated_nextstep_set:'Dated next step is set and accepted by both sides.',
+            eb_engaged:'Economic buyer joined and confirmed budget owner.',
+            process_mapped:'Decision process is mapped with owner and steps.',
+            momentum_restored:'Thread was touched and calendar momentum restored.',
+            champion_confirmed:'Champion role and accountability are explicit.',
+            impact_quantified:'Impact is quantified in business terms.',
+            usecase_clarified:'Use case is clear and scoped.',
+            timeline_committed:'Timeline and forcing function are explicit.',
+            exec_alignment_locked:'Executive alignment removed late-stage fragility.',
+            poc_success_criteria_locked:'PoC success criteria and readout owner are defined.',
+            competition_named:'Competitor/status quo and wedge are explicit.',
+            close_plan_reset:'Close plan was reset to realistic dates.',
+            thread_reactivated:'Silence ended with a concrete exchange.',
+            champion_strengthened:'Champion gained authority and internal pull.',
+            multi_threaded:'Three or more stakeholders are engaged and driving internally.',
+            nextstep_refreshed:'Overdue next step was resolved with a new commitment.'
+        };
+
+        function biz(n){var d=new Date();while(n>0){d.setDate(d.getDate()+1);if([0,6].indexOf(d.getDay())===-1)n--;}return new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric'}).format(d);}
+
+        var TASKS = [
+            {taskId:'get_dated_nextstep',label:'Put a date on the next step',why:'No calendar anchor means no deal.',evidence:'Calendar invite accepted with date/time.',tab:'overview',script:function(){return 'Quick pulse \u2014 if this is still a priority, can we lock '+biz(1)+' or '+biz(2)+'?';},match:['no_nextstep','stale_thread','stage_stuck','next_step_overdue']},
+            {taskId:'map_decision_process',label:'Map decision process + owner',why:'Unknown process causes slippage.',evidence:'Named steps and owner in notes.',tab:'qualification',script:function(){return 'Before we invest more cycles: what are the steps from here to approval, and who owns each step?';},match:['no_process','late_stage_fragility','close_date_impossible']},
+            {taskId:'bring_eb_in',label:'Bring economic buyer into thread',why:'No budget owner means weak control.',evidence:'EB attends call and confirms budget path.',tab:'qualification',script:function(){return 'To make this real, we need the budget owner involved. Who owns approval, and can we invite them to the next call?';},match:['no_eb','late_stage_fragility']},
+            {taskId:'confirm_champion',label:'Confirm champion',why:'No internal driver, no motion.',evidence:'Champion named with explicit internal actions.',tab:'qualification',script:function(){return 'Who is driving this internally day-to-day, and can we align on their actions before next step?';},match:['no_champion','champion_weak']},
+            {taskId:'quantify_impact',label:'Quantify impact',why:'Weak impact kills urgency.',evidence:'Numeric impact metric documented.',tab:'qualification',script:function(){return 'Can we align on one concrete impact metric we will use to judge success?';},match:['impact_not_real','poc_no_criteria']},
+            {taskId:'clarify_use_case',label:'Clarify use case',why:'Blur creates stakeholder drift.',evidence:'Use case and scope agreed in writing.',tab:'qualification',script:function(){return 'Can we lock the primary use case and scope so teams evaluate the same outcome?';},match:['usecase_blurry']},
+            {taskId:'confirm_timeline',label:'Confirm timeline',why:'No forcing function leads to drift.',evidence:'Decision date and trigger captured.',tab:'overview',script:function(){return 'What is the target decision date and forcing event driving it?';},match:['timeline_fantasy','close_date_impossible']},
+            {taskId:'name_competition',label:'Name competition/status quo',why:'Unknown alternative hides risk.',evidence:'Status quo and competitor documented.',tab:'qualification',script:function(){return 'Are we replacing a competitor or the status quo? We should name that now.';},match:['competition_unknown']},
+            {taskId:'surface_risks',label:'Surface risks early',why:'Hidden blockers emerge too late.',evidence:'Top blockers and mitigation plan logged.',tab:'overview',script:function(){return 'What could block approval from here so we can de-risk now?';},match:['stage_stuck','late_stage_fragility']},
+            {taskId:'set_exec_readout',label:'Set executive readout',why:'Late-stage deals need executive compression.',evidence:'Exec readout call booked with clear agenda.',tab:'overview',script:function(){return "Let's set a 20-minute exec readout to align decision owner, timing, and approval path.";},match:['late_stage_fragility','poc_no_criteria','stage_stuck']},
+            {taskId:'write_mutual_plan',label:'Write mutual action plan',why:'Shared plan reduces ambiguity.',evidence:'Mutual plan doc with owners and dates.',tab:'overview',script:function(){return 'I will draft a mutual action plan with owners and dates; can we review it together?';},match:['no_nextstep','no_process','close_date_impossible']},
+            {taskId:'multi_thread',label:'Engage 3+ stakeholders',why:'Single-threaded deals die when your one contact gets busy.',evidence:'3+ contacts with defined roles and recent engagement.',tab:'stakeholders',script:function(){return 'Can you introduce me to the technical evaluator and the person who would sign off on budget?';},match:['single_threaded','no_champion','no_eb']}
+        ];
+
+        // ── NARRATIVE VARIATION ──
+
+        var STAGE_LEADS = {
+            discovery: '45 days later, you lost because use case and impact were never concrete enough to force executive urgency. Stakeholders stayed polite, but no one took ownership of timing.',
+            evaluation: '45 days later, you lost because use case and impact were never concrete enough to force executive urgency. Stakeholders stayed polite, but no one took ownership of timing.',
+            poc: '45 days later, the PoC ended with activity but no decision because success criteria were never locked. Teams debated interpretation, and without a clear owner, procurement had no reason to accelerate.',
+            negotiation: '45 days later, legal and procurement widened the blast radius because the decision path and budget owner were never tightly controlled. Each unanswered dependency created a new delay.',
+            verbal: '45 days later, the verbal commit dissolved because paper process wasn\'t pre-cleared. Legal found new issues, procurement re-scoped, and the urgency that closed the deal evaporated.',
+            _default: '45 days later, momentum faded because critical proof never materialized early enough to force a committed buying process.'
+        };
+
+        var CAUSE_LEADS = {
+            no_champion: {
+                discovery: '45 days later, you lost because no one inside the building carried your deal forward. Without an internal champion, your emails went from "interesting" to "low priority" to silence.',
+                negotiation: '45 days later, the deal died in procurement because your champion couldn\'t defend the business case when pushback came. Without someone with authority fighting for you internally, the committee defaulted to no.'
+            },
+            no_eb: {
+                negotiation: '45 days later, legal sent the contract back with questions nobody could answer because the budget owner was never in the room. The person who could say yes never heard the pitch.',
+                poc: '45 days later, the pilot results sat in an email chain because the person who controlled the budget never saw them. Activity without authority is just theater.'
+            },
+            single_threaded: {
+                discovery: '45 days later, your one contact went on PTO, got reassigned, or simply got busy. The deal had no backup path through the organization, so it went dark permanently.',
+                negotiation: '45 days later, your single contact couldn\'t push the deal through a multi-stakeholder approval process alone. Every new reviewer was a cold start.'
+            },
+            late_stage_fragility: {
+                negotiation: '45 days later, the deal unraveled in legal review because neither the decision process nor the budget owner were locked before you entered the end-game. Every unknown became a delay.',
+                poc: '45 days later, the PoC produced data but no decision because the evaluation criteria and approval path were never defined upfront. The pilot became an experiment with no exit criteria.'
+            },
+            stale_thread: {
+                discovery: '45 days later, the silence that started as "they\'re busy" became permanent. Without regular cadence, your deal lost its slot in their priority stack and never recovered.',
+                _default: '45 days later, the thread went cold because no one on either side forced the next conversation. Silence became the decision.'
+            }
+        };
+
+        var STAGE_WIN_LEADS = {
+            discovery: '45 days later, you won because you forced a concrete use case, quantifiable impact, and a real next step cadence before enthusiasm decayed.',
+            evaluation: '45 days later, you won because you forced a concrete use case, quantifiable impact, and a real next step cadence before enthusiasm decayed.',
+            poc: '45 days later, you won because the PoC had explicit success criteria, an owner, and an executive readout that translated evidence into approval momentum.',
+            negotiation: '45 days later, you won because decision process and budget authority were mapped early, reducing legal/procurement drag and preserving end-game momentum.',
+            verbal: '45 days later, you won because the paper process was pre-cleared before verbal commit, compressing legal review to days instead of weeks.',
+            _default: '45 days later, you won because proof tasks were completed early and decision risk was surfaced before it became terminal.'
+        };
+
+        function stageLead(st, topCauseId) {
+            var causeVar = CAUSE_LEADS[topCauseId];
+            if (causeVar) {
+                if (causeVar[st]) return causeVar[st];
+                if (causeVar._default) return causeVar._default;
+            }
+            return STAGE_LEADS[st] || STAGE_LEADS._default;
+        }
+
+        function stageWinLead(st) {
+            return STAGE_WIN_LEADS[st] || STAGE_WIN_LEADS._default;
+        }
+
+        // ── AUTOPSY ENGINE ──
+
+        function chooseTasks(v, causes) {
+            var sevByCause = {};
+            causes.forEach(function(c) { sevByCause[c.id] = c.severity; });
+            var stageBoost = function(t) {
+                if (v.stage === 'poc' && ['set_exec_readout','quantify_impact','map_decision_process'].indexOf(t.taskId) >= 0) return 4;
+                if ((v.stage === 'negotiation' || v.stage === 'verbal') && ['bring_eb_in','map_decision_process','set_exec_readout'].indexOf(t.taskId) >= 0) return 4;
+                if ((v.stage === 'discovery' || v.stage === 'evaluation') && ['clarify_use_case','quantify_impact','confirm_champion'].indexOf(t.taskId) >= 0) return 3;
+                return 0;
+            };
+            var valueBoost = v.value >= PREFS.highValueUSD ? 2 : 0;
+            return TASKS.map(function(t) {
+                var score = t.match.reduce(function(a, id) { return a + (sevByCause[id] || 0); }, 0) + stageBoost(t) + valueBoost;
+                return { task: t, score: score };
+            }).filter(function(x) { return x.score > 0; })
+              .sort(function(a, b) { return b.score - a.score; })
+              .slice(0, 5)
+              .map(function(x) { return x.task; });
+        }
+
+        function killSwitch(v) {
+            var ok = v.value <= PREFS.killValueUSD && v.staleDays >= PREFS.staleCriticalDays && v.qualScore <= 6 && v.riskScore >= 70;
+            return {
+                recommended: ok,
+                reason: ok ? 'Low value + stale + weak qualification + high risk.' : 'Criteria not fully met for kill switch.',
+                script: "I'm going to close this out on my side unless priorities changed. If it's still live, reply with the next step + date."
+            };
+        }
+
+        function generateAutopsy(v) {
+            var causes = dh.topCauses(v, PREFS, 5);
+            // Add chapter text from original CAUSES
+            var CHAPTERS = {
+                no_nextstep:'Calendar ambiguity turned every follow-up into a maybe.',
+                stale_thread:'Silence signaled low priority internally.',
+                no_champion:'Without a champion, you got parked in committee.',
+                champion_weak:'Your internal contact could not force the room.',
+                no_eb:'Budget authority stayed invisible until it was too late.',
+                no_process:'Unknown steps multiplied slippage and rework.',
+                timeline_fantasy:'No forcing function meant no decision pressure.',
+                impact_not_real:'Without quantified impact, urgency never materialized.',
+                usecase_blurry:'Stakeholders did not align on what success meant.',
+                competition_unknown:'You fought an invisible opponent and lost narrative control.',
+                late_stage_fragility:'Legal and procurement widened the blast radius instantly.',
+                stage_stuck:'Elapsed time became a proxy for hidden no.',
+                poc_no_criteria:'The pilot produced activity, not decision-ready proof.',
+                close_date_impossible:'Target date drifted away from commercial reality.',
+                single_threaded:'One contact got busy and the entire deal went dark.',
+                next_step_overdue:'The overdue step signaled the deal had already slipped.'
+            };
+            causes.forEach(function(c) { c.chapter = CHAPTERS[c.id] || ''; });
+
+            // Win conditions (mirror of causes)
+            var wins = [], seen = {};
+            causes.forEach(function(c) {
+                var wid = WMAP[c.id] || 'momentum_restored';
+                if (!seen[wid]) { wins.push({ id: wid, text: WTEXT[wid] || 'Critical win condition satisfied.' }); seen[wid] = 1; }
+            });
+            while (wins.length < 5) wins.push({ id: 'momentum_' + wins.length, text: 'Momentum restored with named owner and date.' });
+
+            // Stories with variation
+            var topCauseId = causes.length > 0 ? causes[0].id : '';
+            var loseLead = stageLead(v.stage, topCauseId);
+            var winLead = stageWinLead(v.stage);
+            var loseTail = causes.length > 0 ? ' Key failure pattern: ' + causes.slice(0, 3).map(function(c) { return c.text.toLowerCase(); }).join(' ') + ' The loss was not dramatic; it was procedural, then inevitable.' : '';
+            var winTail = ' Key win pattern: ' + wins.slice(0, 3).map(function(c) { return c.text; }).join(' ') + ' You forced proof early, so the close became an execution step, not a hope exercise.';
+
+            // Tasks
+            var tasks = chooseTasks(v, causes).map(function(t) {
+                return {
+                    taskId: t.taskId, label: t.label, why: t.why,
+                    successEvidence: t.evidence, tab: t.tab,
+                    script: t.script(v)
+                };
+            });
+
+            var k = killSwitch(v);
+
+            return {
+                horizonDays: PREFS.autopsyHorizonDays,
+                deal: { id: v.id, name: v.name, stage: v.stageRaw, value: v.value, qualScore: v.qualScore, riskScore: v.riskScore },
+                lose: { headline: 'You lost quietly in committee.', causes: causes, story: (loseLead + loseTail).substring(0, 700) },
+                win: { headline: 'You win because you forced proof, early.', conditions: wins, story: (winLead + winTail).substring(0, 700) },
+                countermeasures: tasks,
+                killSwitch: k
+            };
+        }
+
+        // ── STATE ──
+
+        var allVitals = [];
+        var filtered = [];
+        var currentVitals = null;
+        var currentAutopsy = null;
+
+        // Task completion log
+        function getLog() { try { return JSON.parse(localStorage.getItem('gtmos_autopsy_log_v1')) || {}; } catch(e) { return {}; } }
+        function setLog(v) { localStorage.setItem('gtmos_autopsy_log_v1', JSON.stringify(v || {})); }
+        function taskState(dealId, taskId) { var log = getLog(); return !!(log[String(dealId)] && log[String(dealId)].tasks && log[String(dealId)].tasks[taskId] && log[String(dealId)].tasks[taskId].done); }
+        function toggleTask(dealId, taskId) {
+            var log = getLog(), id = String(dealId);
+            if (!log[id]) log[id] = { lastRunAt: new Date().toISOString(), tasks: {} };
+            if (!log[id].tasks) log[id].tasks = {};
+            var was = log[id].tasks[taskId] && log[id].tasks[taskId].done;
+            log[id].tasks[taskId] = was ? { done: false } : { done: true, doneAt: new Date().toISOString() };
+            log[id].lastRunAt = new Date().toISOString();
+            setLog(log);
+            return !was;
+        }
+
+        // ── INIT ──
+
+        function loadVitals() {
+            allVitals = dh.loadAllVitals(PREFS).filter(function(v) { return !v.isClosed; });
+        }
+
+        function populateDropdown() {
+            var q = tx(document.getElementById('searchInput').value).toLowerCase();
+            filtered = allVitals.filter(function(v) { return !q || v.name.toLowerCase().indexOf(q) >= 0; });
+            var sel = document.getElementById('dealSelect');
+            sel.innerHTML = filtered.map(function(v) {
+                return '<option value="' + escH(v.id) + '">' + escH(v.name) + ' \u2014 ' + dh.money(v.value) + ' \u2014 ' + escH(v.stageRaw) + '</option>';
+            }).join('');
+            if (!filtered.length) sel.innerHTML = '<option value="">No deals found</option>';
+        }
+
+        window.onSearch = function() { populateDropdown(); };
+
+        window.runSelected = function() {
+            var id = document.getElementById('dealSelect').value;
+            if (id) run(id);
+        };
+
+        window.autopsyOfDay = function() {
+            var cand = allVitals.filter(function(v) { return v.value >= PREFS.highValueUSD && v.staleDays >= PREFS.staleWarnDays; })
+                .sort(function(a, b) { return b.riskScore - a.riskScore; })[0]
+                || allVitals.sort(function(a, b) { return b.riskScore - a.riskScore; })[0];
+            if (!cand) { toast('No deals available'); return; }
+            document.getElementById('dealSelect').value = cand.id;
+            run(cand.id);
+        };
+
+        function run(id) {
+            var v = allVitals.find(function(x) { return x.id === id; });
+            if (!v) { document.getElementById('dealSub').textContent = 'Deal not found.'; return; }
+            currentVitals = v;
+            currentAutopsy = generateAutopsy(v);
+            // Log
+            var log = getLog();
+            if (!log[String(id)]) { log[String(id)] = { lastRunAt: new Date().toISOString(), tasks: {} }; setLog(log); }
+            renderAutopsy(currentAutopsy, v);
+        }
+
+        function renderAutopsy(a, v) {
+            document.getElementById('dealSub').textContent = 'Deal: ' + v.name + ' \u2014 ' + dh.money(v.value) + ' \u2014 ' + v.stageRaw + ' \u2014 Qual ' + v.qualScore + '/18 \u2014 Risk ' + v.riskScore + '/100';
+
+            var html = '';
+
+            // Lose / Win grid
+            html += '<div class="fa-grid">';
+
+            // IF WE LOSE
+            html += '<div class="fa-card"><h3>If We Lose</h3>';
+            html += '<div class="fa-card-headline">' + escH(a.lose.headline) + '</div>';
+            html += '<div>';
+            a.lose.causes.forEach(function(c) {
+                html += '<span class="fa-cause">' + escH(c.id.replace(/_/g, ' ')) + ' (sev ' + c.severity + ')</span>';
+            });
+            html += '</div>';
+            html += '<div class="fa-story">' + escH(a.lose.story) + '</div>';
+            html += '</div>';
+
+            // IF WE WIN
+            html += '<div class="fa-card"><h3>If We Win</h3>';
+            html += '<div class="fa-card-headline">' + escH(a.win.headline) + '</div>';
+            a.win.conditions.slice(0, 5).forEach(function(c) {
+                html += '<div class="fa-win-item"><span class="fa-win-check">\u2713</span><span>' + escH(c.text) + '</span></div>';
+            });
+            html += '<div class="fa-story">' + escH(a.win.story) + '</div>';
+            html += '</div>';
+
+            html += '</div>'; // close grid
+
+            // COUNTERMEASURES
+            html += '<div class="fa-tasks"><h3>Countermeasures (Top 5 proof tasks)</h3>';
+            a.countermeasures.forEach(function(t, i) {
+                var done = taskState(v.id, t.taskId);
+                html += '<div class="fa-task' + (done ? ' done' : '') + '" data-task="' + t.taskId + '">';
+                html += '<input type="checkbox" ' + (done ? 'checked' : '') + ' onchange="onTaskToggle(\'' + escH(v.id) + '\',\'' + t.taskId + '\',this)">';
+                html += '<div><div class="fa-task-label">' + escH(t.label) + '</div>';
+                html += '<details style="margin-top:2px;"><summary style="font-size:0.7rem;color:var(--text-muted);cursor:pointer;opacity:0.6;">Why this works</summary><div class="fa-task-why">' + escH(t.why) + '</div></details>';
+                html += '<div class="fa-task-evi">Proof: ' + escH(t.successEvidence) + '</div></div>';
+                html += '<div class="fa-task-btns">';
+                html += '<button class="fa-task-btn" onclick="window.open(\'/app/deal-workspace/?deal=' + encodeURIComponent(v.id) + '\',\'_blank\')">Open Deal</button>';
+                html += '<button class="fa-task-btn" onclick="copyScript(\'' + i + '\')">Copy Script</button>';
+                html += '</div></div>';
+            });
+            html += '</div>';
+
+            // KILL SWITCH
+            var k = a.killSwitch;
+            html += '<div class="fa-kill' + (k.recommended ? ' recommended' : '') + '">';
+            html += '<h3>Kill Switch</h3>';
+            html += '<span class="fa-kill-state ' + (k.recommended ? 'yes' : 'no') + '">' + (k.recommended ? 'Recommended' : 'Not recommended') + '</span>';
+            html += '<span class="fa-kill-reason">' + escH(k.reason) + '</span>';
+            html += '<div class="fa-kill-btns">';
+            html += '<button class="fa-btn" onclick="copyKill()">Copy close-clean script</button>';
+            html += '<button class="fa-btn" onclick="window.open(\'/app/deal-workspace/?deal=' + encodeURIComponent(v.id) + '\',\'_blank\')">Open Deal</button>';
+            html += '</div></div>';
+
+            document.getElementById('autopsyContent').innerHTML = html;
+        }
+
+        window.onTaskToggle = function(dealId, taskId, el) {
+            var now = toggleTask(dealId, taskId);
+            el.closest('.fa-task').classList.toggle('done', now);
+        };
+
+        window.copyScript = function(idx) {
+            if (!currentAutopsy || !currentAutopsy.countermeasures[idx]) return;
+            cp(currentAutopsy.countermeasures[idx].script).then(function() { toast('Script copied'); });
+        };
+
+        window.copyKill = function() {
+            if (!currentAutopsy) return;
+            cp(currentAutopsy.killSwitch.script).then(function() { toast('Close-clean script copied'); });
+        };
+
+        window.copyAutopsy = function() {
+            if (!currentAutopsy || !currentVitals) return;
+            var a = currentAutopsy, v = currentVitals;
+            var lines = [
+                'FUTURE AUTOPSY \u2014 ' + a.horizonDays + ' DAYS OUT',
+                'Deal: ' + v.name + ' \u2014 ' + dh.money(v.value) + ' \u2014 ' + v.stageRaw + ' \u2014 Qual ' + v.qualScore + '/18 \u2014 Risk ' + v.riskScore + '/100',
+                '', 'IF WE LOSE'
+            ];
+            a.lose.causes.forEach(function(c) { lines.push('- ' + c.text + ' (sev ' + c.severity + ')'); });
+            lines.push('Story: ' + a.lose.story, '', 'IF WE WIN');
+            a.win.conditions.forEach(function(c) { lines.push('- ' + c.text); });
+            lines.push('Story: ' + a.win.story, '', 'PROOF TASKS (TOP 5)');
+            a.countermeasures.forEach(function(t) { lines.push('[' + (taskState(v.id, t.taskId) ? 'x' : ' ') + '] ' + t.label); });
+            lines.push('', 'KILL SWITCH: ' + (a.killSwitch.recommended ? 'Recommended' : 'Not recommended'));
+            cp(lines.join('\n')).then(function() { toast('Autopsy copied'); });
+        };
+
+        // ── BOOT ──
+
+        loadVitals();
+        populateDropdown();
+
+        if (allVitals.length === 0) {
+            document.getElementById('dealSub').textContent = 'No deals to autopsy yet.';
+            document.getElementById('autopsyContent').innerHTML = '<div class="fa-empty"><div style="font-size:2rem;margin-bottom:12px;">\ud83d\udd2c</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No active deals</div><div>Create your first deal in <a href="/app/deal-workspace/">Deal Workspace</a>, then come back to stress-test it.</div></div>';
+        } else {
+            // URL param support
+            var urlDeal = new URLSearchParams(window.location.search).get('deal');
+            if (urlDeal && allVitals.find(function(v) { return v.id === urlDeal; })) {
+                document.getElementById('dealSelect').value = urlDeal;
+                run(urlDeal);
+            } else {
+                autopsyOfDay();
+            }
+        }
+    })();
+    </script>
+</body>
+</html>
