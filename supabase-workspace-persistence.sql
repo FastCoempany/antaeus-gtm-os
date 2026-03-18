@@ -119,6 +119,36 @@ alter table public.sequences add column if not exists updated_at timestamptz not
 alter table public.sequences alter column user_id set default auth.uid();
 create unique index if not exists sequences_user_key_idx on public.sequences (user_id, sequence_key);
 
+create table if not exists public.signal_console_accounts (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+    account_key text not null,
+    account_name text,
+    domain text,
+    ticker text,
+    industry text,
+    sector text,
+    heat integer not null default 0,
+    last_enriched_at timestamptz,
+    data jsonb not null default '{}'::jsonb,
+    created_at timestamptz not null default now(),
+    updated_at timestamptz not null default now()
+);
+
+alter table public.signal_console_accounts add column if not exists account_key text;
+alter table public.signal_console_accounts add column if not exists account_name text;
+alter table public.signal_console_accounts add column if not exists domain text;
+alter table public.signal_console_accounts add column if not exists ticker text;
+alter table public.signal_console_accounts add column if not exists industry text;
+alter table public.signal_console_accounts add column if not exists sector text;
+alter table public.signal_console_accounts add column if not exists heat integer not null default 0;
+alter table public.signal_console_accounts add column if not exists last_enriched_at timestamptz;
+alter table public.signal_console_accounts add column if not exists data jsonb not null default '{}'::jsonb;
+alter table public.signal_console_accounts add column if not exists created_at timestamptz not null default now();
+alter table public.signal_console_accounts add column if not exists updated_at timestamptz not null default now();
+alter table public.signal_console_accounts alter column user_id set default auth.uid();
+create unique index if not exists signal_console_accounts_user_key_idx on public.signal_console_accounts (user_id, account_key);
+
 create table if not exists public.discovery_frameworks (
     id uuid primary key default gen_random_uuid(),
     user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
@@ -171,6 +201,11 @@ create trigger sequences_set_updated_at
 before update on public.sequences
 for each row execute function public.update_updated_at_column();
 
+drop trigger if exists signal_console_accounts_set_updated_at on public.signal_console_accounts;
+create trigger signal_console_accounts_set_updated_at
+before update on public.signal_console_accounts
+for each row execute function public.update_updated_at_column();
+
 drop trigger if exists discovery_frameworks_set_updated_at on public.discovery_frameworks;
 create trigger discovery_frameworks_set_updated_at
 before update on public.discovery_frameworks
@@ -184,6 +219,7 @@ for each row execute function public.update_updated_at_column();
 alter table public.icps enable row level security;
 alter table public.deals enable row level security;
 alter table public.sequences enable row level security;
+alter table public.signal_console_accounts enable row level security;
 alter table public.discovery_frameworks enable row level security;
 alter table public.discovery_call_logs enable row level security;
 
@@ -217,6 +253,16 @@ create policy "sequences_insert_own" on public.sequences for insert with check (
 create policy "sequences_update_own" on public.sequences for update using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 create policy "sequences_delete_own" on public.sequences for delete using ((select auth.uid()) = user_id);
 
+drop policy if exists "signal_console_accounts_select_own" on public.signal_console_accounts;
+drop policy if exists "signal_console_accounts_insert_own" on public.signal_console_accounts;
+drop policy if exists "signal_console_accounts_update_own" on public.signal_console_accounts;
+drop policy if exists "signal_console_accounts_delete_own" on public.signal_console_accounts;
+
+create policy "signal_console_accounts_select_own" on public.signal_console_accounts for select using ((select auth.uid()) = user_id);
+create policy "signal_console_accounts_insert_own" on public.signal_console_accounts for insert with check ((select auth.uid()) = user_id);
+create policy "signal_console_accounts_update_own" on public.signal_console_accounts for update using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy "signal_console_accounts_delete_own" on public.signal_console_accounts for delete using ((select auth.uid()) = user_id);
+
 drop policy if exists "discovery_frameworks_select_own" on public.discovery_frameworks;
 drop policy if exists "discovery_frameworks_insert_own" on public.discovery_frameworks;
 drop policy if exists "discovery_frameworks_update_own" on public.discovery_frameworks;
@@ -240,5 +286,6 @@ create policy "discovery_call_logs_delete_own" on public.discovery_call_logs for
 grant select, insert, update, delete on public.icps to authenticated;
 grant select, insert, update, delete on public.deals to authenticated;
 grant select, insert, update, delete on public.sequences to authenticated;
+grant select, insert, update, delete on public.signal_console_accounts to authenticated;
 grant select, insert, update, delete on public.discovery_frameworks to authenticated;
 grant select, insert, update, delete on public.discovery_call_logs to authenticated;

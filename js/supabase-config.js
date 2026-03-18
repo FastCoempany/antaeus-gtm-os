@@ -157,6 +157,7 @@ var OFFLINE_DEFAULT_STATE = {
     icps: [],
     sequences: [],
     deals: [],
+    signal_console_accounts: [],
     discovery_frameworks: [],
     discovery_call_logs: []
 };
@@ -549,7 +550,7 @@ function ensureOfflineDbShape(state) {
         next.pipeline_settings = state.pipeline_settings;
     }
 
-    ['icps', 'sequences', 'deals', 'discovery_frameworks', 'discovery_call_logs'].forEach(function(tableName) {
+    ['icps', 'sequences', 'deals', 'signal_console_accounts', 'discovery_frameworks', 'discovery_call_logs'].forEach(function(tableName) {
         if (Array.isArray(state[tableName])) next[tableName] = state[tableName];
     });
 
@@ -1353,6 +1354,211 @@ async function deleteDealFromCloud(id, sessionOverride) {
     return await loadDealsFromCloud(sessionOverride, { skipBootstrap: true });
 }
 
+function signalConsoleAccountKey(account) {
+    var item = cloneValue(account || {});
+    var explicit = cleanText(item && item.id);
+    if (explicit) return explicit;
+
+    var domain = cleanText(item && item.domain).toLowerCase().replace(/^www\./, '');
+    if (domain) return 'domain:' + domain;
+
+    var ticker = cleanText(item && item.ticker).toUpperCase();
+    var name = cleanText(item && item.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+    if (name && ticker) return 'acct:' + name + ':' + ticker;
+    if (name) return 'acct:' + name;
+    return 'acct:' + createOfflineId('signal_console');
+}
+
+function normalizeSignalConsoleAccount(account) {
+    var next = cloneValue(account || {});
+    if (!next || typeof next !== 'object') next = {};
+
+    if (!next.id) next.id = signalConsoleAccountKey(next);
+    if (!Array.isArray(next.signals)) next.signals = [];
+    if (next._heat == null && next.heat != null) next._heat = Number(next.heat) || 0;
+    if (!next._lastEnriched && next.lastEnrichedAt) next._lastEnriched = next.lastEnrichedAt;
+    if (!next.created_at) next.created_at = next.updated_at || new Date().toISOString();
+    if (!next.updated_at) next.updated_at = next.created_at;
+
+    return next;
+}
+
+function readLocalSignalConsoleState() {
+    var raw = readStorageJson('gtmos_sc_v4', { accounts: [] });
+    var accounts = toArray(raw && raw.accounts).map(normalizeSignalConsoleAccount);
+    return sortByRecent(accounts, ['_lastEnriched', 'updated_at', 'created_at']);
+}
+
+function writeLocalSignalConsoleState(accounts) {
+    var normalized = sortByRecent(toArray(accounts).map(normalizeSignalConsoleAccount), ['_lastEnriched', 'updated_at', 'created_at']);
+    writeStorageJson('gtmos_sc_v4', { accounts: normalized });
+    return normalized;
+}
+
+function mapSignalConsoleRowToAccount(row) {
+    var account = cloneValue((row && row.data && typeof row.data === 'object') ? row.data : row || {});
+    if (!account || typeof account !== 'object') account = {};
+
+    if (!account.id) account.id = cleanText(row && row.account_key) || signalConsoleAccountKey(account);
+    if (row && row.id) account.cloud_id = row.id;
+    if (row && row.account_name && !account.name) account.name = row.account_name;
+    if (row && row.domain && !account.domain) account.domain = row.domain;
+    if (row && row.ticker && !account.ticker) account.ticker = row.ticker;
+    if (row && row.industry && !account.industry) account.industry = row.industry;
+    if (row && row.sector && !account.sector) account.sector = row.sector;
+    if (row && row.heat != null) account._heat = Number(row.heat) || 0;
+    if (row && row.last_enriched_at) account._lastEnriched = row.last_enriched_at;
+    if (row && row.created_at && !account.created_at) account.created_at = row.created_at;
+    if (row && row.updated_at) account.updated_at = row.updated_at;
+
+    return normalizeSignalConsoleAccount(account);
+}
+
+function serializeSignalConsoleAccountRow(account) {
+    var item = normalizeSignalConsoleAccount(account);
+    var data = cloneValue(item);
+    delete data._researchNotice;
+    delete data.cloud_id;
+    var payload = {
+        account_key: signalConsoleAccountKey(item),
+        account_name: cleanText(item.name),
+        domain: cleanText(item.domain).toLowerCase().replace(/^www\./, ''),
+        ticker: cleanText(item.ticker).toUpperCase(),
+        industry: cleanText(item.industry),
+        sector: cleanText(item.sector),
+        heat: Number(item._heat != null ? item._heat : item.heat || 0) || 0,
+        last_enriched_at: item._lastEnriched || item.lastEnrichedAt || null,
+        data: data,
+        created_at: item.created_at || new Date().toISOString(),
+        updated_at: new Date().toISOString()
+    };
+
+    if (item.cloud_id && isUuidLike(item.cloud_id)) payload.id = item.cloud_id;
+    return payload;
+}
+
+async function replaceCloudSignalConsoleAccountsFromLocalState(accounts, sessionOverride) {
+    var localAccounts = writeLocalSignalConsoleState(accounts || readLocalSignalConsoleState());
+    if (AUTH_BYPASS || isDemoEnvironment()) {
+        return { data: localAccounts, error: null };
+    }
+
+    var user = await resolveCurrentUser(sessionOverride);
+    if (!user || !user.id) return { data: localAccounts, error: new Error('Auth session missing') };
+
+    var current = await db.signalConsoleAccounts.list(user.id);
+    if (current.error) return { data: localAccounts, error: current.error };
+
+    var existingRows = toArray(current.data);
+    var existingByKey = {};
+    existingRows.forEach(function(row) {
+        if (row && row.account_key) existingByKey[String(row.account_key)] = row;
+    });
+
+    var keptRowIds = {};
+    for (var i = 0; i < localAccounts.length; i++) {
+        var item = normalizeSignalConsoleAccount(localAccounts[i]);
+        var payload = serializeSignalConsoleAccountRow(item);
+        var existing = existingByKey[String(payload.account_key)] || null;
+        if (existing && existing.id && !payload.id) payload.id = existing.id;
+
+        var result = await db.signalConsoleAccounts.upsert(user.id, payload);
+        if (result.error) return { data: localAccounts, error: result.error };
+        if (result.data && result.data.id) keptRowIds[String(result.data.id)] = true;
+    }
+
+    for (var rowIndex = 0; rowIndex < existingRows.length; rowIndex++) {
+        var row = existingRows[rowIndex];
+        if (row && row.id && !keptRowIds[String(row.id)]) {
+            var deleted = await db.signalConsoleAccounts.delete(row.id);
+            if (deleted.error) return { data: localAccounts, error: deleted.error };
+        }
+    }
+
+    return await loadSignalConsoleAccountsFromCloud(sessionOverride, { skipBootstrap: true });
+}
+
+async function loadSignalConsoleAccountsFromCloud(sessionOverride, options) {
+    options = options || {};
+
+    var localAccounts = readLocalSignalConsoleState();
+    if (AUTH_BYPASS || isDemoEnvironment()) {
+        return { data: localAccounts, error: null };
+    }
+
+    var user = await resolveCurrentUser(sessionOverride);
+    if (!user || !user.id) return { data: localAccounts, error: new Error('Auth session missing') };
+
+    var result = await db.signalConsoleAccounts.list(user.id);
+    if (result.error) return { data: localAccounts, error: result.error };
+
+    var rows = toArray(result.data);
+    if (!rows.length && localAccounts.length && !options.skipBootstrap) {
+        return await replaceCloudSignalConsoleAccountsFromLocalState(localAccounts, sessionOverride);
+    }
+
+    var accounts = writeLocalSignalConsoleState(rows.map(mapSignalConsoleRowToAccount));
+    return { data: accounts, error: null };
+}
+
+async function saveSignalConsoleAccountToCloud(account, sessionOverride) {
+    var item = normalizeSignalConsoleAccount(account);
+    var localAccounts = readLocalSignalConsoleState();
+    var existingLocalIndex = localAccounts.findIndex(function(existing) {
+        return signalConsoleAccountKey(existing) === signalConsoleAccountKey(item);
+    });
+    if (existingLocalIndex >= 0) localAccounts[existingLocalIndex] = item;
+    else localAccounts.unshift(item);
+    writeLocalSignalConsoleState(localAccounts);
+
+    if (AUTH_BYPASS || isDemoEnvironment()) {
+        return { data: localAccounts, error: null };
+    }
+
+    var user = await resolveCurrentUser(sessionOverride);
+    if (!user || !user.id) return { data: localAccounts, error: new Error('Auth session missing') };
+
+    var payload = serializeSignalConsoleAccountRow(item);
+    var result = await db.signalConsoleAccounts.upsert(user.id, payload);
+    if (result.error) return { data: localAccounts, error: result.error };
+
+    return await loadSignalConsoleAccountsFromCloud(sessionOverride, { skipBootstrap: true });
+}
+
+async function deleteSignalConsoleAccountFromCloud(idOrKey, sessionOverride) {
+    var localAccounts = readLocalSignalConsoleState();
+    if (!idOrKey) return { data: localAccounts, error: null };
+
+    var targetKey = String(idOrKey);
+    var nextLocal = localAccounts.filter(function(item) {
+        return String(item.id) !== targetKey && signalConsoleAccountKey(item) !== targetKey && String(item.cloud_id || '') !== targetKey;
+    });
+    writeLocalSignalConsoleState(nextLocal);
+
+    if (AUTH_BYPASS || isDemoEnvironment()) {
+        return { data: nextLocal, error: null };
+    }
+
+    var user = await resolveCurrentUser(sessionOverride);
+    if (!user || !user.id) return { data: nextLocal, error: new Error('Auth session missing') };
+
+    var current = await db.signalConsoleAccounts.list(user.id);
+    if (current.error) return { data: nextLocal, error: current.error };
+
+    var row = toArray(current.data).find(function(item) {
+        return item && (
+            String(item.id) === targetKey ||
+            String(item.account_key) === targetKey
+        );
+    });
+    if (!row || !row.id) return { data: nextLocal, error: null };
+
+    var result = await db.signalConsoleAccounts.delete(row.id);
+    if (result.error) return { data: nextLocal, error: result.error };
+    return await loadSignalConsoleAccountsFromCloud(sessionOverride, { skipBootstrap: true });
+}
+
 function readLocalDiscoveryState() {
     var stats = Object.assign({ totalCalls: 0, advancedCalls: 0 }, cloneValue(readStorageJson('gtmos_discovery_stats', {})) || {});
     return {
@@ -1982,6 +2188,49 @@ const db = {
             return await client.from('deals').delete().eq('id', id);
         }
     },
+    signalConsoleAccounts: {
+        async list(userId) {
+            if (AUTH_BYPASS) return offlineTableList('signal_console_accounts', userId, 'updated_at', false);
+            const client = requireSupabaseClient();
+            return await client.from('signal_console_accounts').select('*').eq('user_id', userId).order('updated_at', { ascending: false });
+        },
+        async upsert(userId, account) {
+            if (AUTH_BYPASS) {
+                var state = readOfflineDb();
+                state.signal_console_accounts = state.signal_console_accounts || [];
+                var payload = Object.assign({ user_id: userId }, account || {});
+                var idx = state.signal_console_accounts.findIndex(function(row) {
+                    return row && row.user_id === userId && row.account_key === payload.account_key;
+                });
+
+                if (idx >= 0) {
+                    state.signal_console_accounts[idx] = Object.assign({}, state.signal_console_accounts[idx], payload, { updated_at: offlineNowIso() });
+                } else {
+                    state.signal_console_accounts.push(Object.assign({
+                        id: createOfflineId('signal_console_accounts'),
+                        user_id: userId,
+                        created_at: offlineNowIso(),
+                        updated_at: offlineNowIso()
+                    }, payload));
+                }
+
+                writeOfflineDb(state);
+                var row = state.signal_console_accounts.find(function(item) {
+                    return item && item.user_id === userId && item.account_key === payload.account_key;
+                }) || null;
+                return { data: cloneValue(row), error: null };
+            }
+            const client = requireSupabaseClient();
+            return await client.from('signal_console_accounts').upsert({
+                user_id: userId, ...account, updated_at: new Date().toISOString()
+            }, { onConflict: 'user_id,account_key' }).select().single();
+        },
+        async delete(id) {
+            if (AUTH_BYPASS) return offlineTableDelete('signal_console_accounts', id);
+            const client = requireSupabaseClient();
+            return await client.from('signal_console_accounts').delete().eq('id', id);
+        }
+    },
     discoveryFrameworks: {
         async list(userId) {
             if (AUTH_BYPASS) return offlineTableList('discovery_frameworks', userId, 'created_at', false);
@@ -2048,6 +2297,7 @@ window.handleSignOut = async function () {
             'gtmos_icp_analytics',
             'gtmos_deal_workspaces',
             'gtmos_deal_stage_history',
+            'gtmos_sc_v4',
             'gtmos_discovery_worked',
             'gtmos_discovery_stats',
             'gtmos_discovery_agenda',
@@ -2099,5 +2349,11 @@ window.gtmPersistence = {
         load: loadSequenceStateFromCloud,
         saveAll: syncSequenceStateToCloud,
         saveDocument: upsertSequenceDocument
+    },
+    signalConsole: {
+        load: loadSignalConsoleAccountsFromCloud,
+        save: saveSignalConsoleAccountToCloud,
+        replaceAll: replaceCloudSignalConsoleAccountsFromLocalState,
+        remove: deleteSignalConsoleAccountFromCloud
     }
 };

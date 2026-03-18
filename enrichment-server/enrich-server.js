@@ -5,15 +5,26 @@ import { Stagehand } from "@browserbasehq/stagehand";
 import { z } from "zod";
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.set("trust proxy", 1);
 
+const HOST = process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.PORT || 3001);
 const DEFAULT_STAGEHAND_MODEL = "anthropic/claude-sonnet-4";
 const STAGEHAND_MODEL = normalizeStagehandModelName(
   process.env.MODEL_NAME || DEFAULT_STAGEHAND_MODEL,
 );
 const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514";
+const REQUIRE_SUPABASE_AUTH = String(process.env.REQUIRE_SUPABASE_AUTH || "").toLowerCase() === "true";
+const RATE_LIMIT_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS || 60000);
+const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || 12);
+const DEFAULT_ALLOWED_ORIGINS = [
+  "http://localhost:8000",
+  "http://127.0.0.1:8000",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://antaeus.app",
+  "https://www.antaeus.app",
+];
 const SIGNAL_CATEGORIES = [
   "ai_transformation",
   "trigger_event",
@@ -39,6 +50,20 @@ const COMMON_COMPANY_WORDS = new Set([
   "holdings",
   "the",
 ]);
+const requestBuckets = new Map();
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || isOriginAllowed(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+  }),
+);
+app.use(express.json({ limit: "32kb" }));
 
 const SignalItemSchema = z.object({
   category: z.enum(SIGNAL_CATEGORIES),
@@ -77,6 +102,81 @@ function assertServerConfig() {
   if (missing.length) {
     throw new Error(`Missing required environment variables: ${missing.join(", ")}`);
   }
+}
+
+function getMissingAuthEnvKeys() {
+  return ["SUPABASE_URL", "SUPABASE_ANON_KEY"].filter((key) => !process.env[key]);
+}
+
+function parseAllowedOrigins() {
+  const configured = String(process.env.CORS_ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return configured.length ? configured : DEFAULT_ALLOWED_ORIGINS;
+}
+
+function isOriginAllowed(origin) {
+  if (!origin) return true;
+  const allowed = parseAllowedOrigins();
+  return allowed.includes(origin);
+}
+
+function pruneRequestBuckets(now) {
+  for (const [key, bucket] of requestBuckets.entries()) {
+    if (!bucket || bucket.resetAt <= now) requestBuckets.delete(key);
+  }
+}
+
+function takeRateLimitToken(key) {
+  const now = Date.now();
+  pruneRequestBuckets(now);
+
+  const safeKey = key || "anonymous";
+  const bucket = requestBuckets.get(safeKey);
+  if (!bucket || bucket.resetAt <= now) {
+    requestBuckets.set(safeKey, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, remaining: RATE_LIMIT_MAX - 1, resetAt: now + RATE_LIMIT_WINDOW_MS };
+  }
+
+  if (bucket.count >= RATE_LIMIT_MAX) {
+    return { allowed: false, remaining: 0, resetAt: bucket.resetAt };
+  }
+
+  bucket.count += 1;
+  requestBuckets.set(safeKey, bucket);
+  return { allowed: true, remaining: Math.max(0, RATE_LIMIT_MAX - bucket.count), resetAt: bucket.resetAt };
+}
+
+async function authenticateRequest(req) {
+  if (!REQUIRE_SUPABASE_AUTH) return { user: null, error: null };
+
+  const missing = getMissingAuthEnvKeys();
+  if (missing.length) {
+    return {
+      user: null,
+      error: { status: 500, message: `Missing auth environment variables: ${missing.join(", ")}` },
+    };
+  }
+
+  const authHeader = String(req.get("authorization") || "");
+  const match = authHeader.match(/^Bearer\s+(.+)$/i);
+  if (!match || !match[1]) {
+    return { user: null, error: { status: 401, message: "Missing bearer token" } };
+  }
+
+  const response = await fetch(`${process.env.SUPABASE_URL}/auth/v1/user`, {
+    headers: {
+      Authorization: `Bearer ${match[1]}`,
+      apikey: process.env.SUPABASE_ANON_KEY,
+    },
+  });
+
+  if (!response.ok) {
+    return { user: null, error: { status: 401, message: "Invalid Supabase session" } };
+  }
+
+  return { user: await response.json(), error: null };
 }
 
 function normalizeStagehandModelName(modelName) {
@@ -849,6 +949,24 @@ app.post("/enrich", async (req, res) => {
     return res.status(400).json({ error: "name is required" });
   }
 
+  const authResult = await authenticateRequest(req);
+  if (authResult.error) {
+    return res.status(authResult.error.status).json({ error: authResult.error.message });
+  }
+
+  const clientKey =
+    (authResult.user && authResult.user.id) ||
+    req.get("cf-connecting-ip") ||
+    req.ip ||
+    "anonymous";
+  const rateLimit = takeRateLimitToken(clientKey);
+  res.setHeader("X-RateLimit-Limit", String(RATE_LIMIT_MAX));
+  res.setHeader("X-RateLimit-Remaining", String(rateLimit.remaining));
+  res.setHeader("X-RateLimit-Reset", String(rateLimit.resetAt));
+  if (!rateLimit.allowed) {
+    return res.status(429).json({ error: "Rate limit exceeded for enrichment requests" });
+  }
+
   console.log(`\n=== Enriching: ${context.name} (${context.domain || "no domain"}) ===`);
   const start = Date.now();
 
@@ -911,20 +1029,29 @@ app.post("/enrich", async (req, res) => {
 
 app.get("/health", (_req, res) => {
   const missing = getMissingEnvKeys();
+  const authMissing = getMissingAuthEnvKeys();
   res.json({
     status: "ok",
+    host: HOST,
+    port: PORT,
     stagehandModel: STAGEHAND_MODEL,
     anthropicModel: ANTHROPIC_MODEL,
     browserbase: !!process.env.BROWSERBASE_API_KEY,
     projectId: !!process.env.BROWSERBASE_PROJECT_ID,
     modelKey: !!process.env.MODEL_API_KEY,
+    requireSupabaseAuth: REQUIRE_SUPABASE_AUTH,
+    authEnvReady: authMissing.length === 0,
+    authMissing,
+    rateLimit: { windowMs: RATE_LIMIT_WINDOW_MS, max: RATE_LIMIT_MAX },
+    allowedOrigins: parseAllowedOrigins(),
     missing,
   });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
   const missing = getMissingEnvKeys();
   const browserbaseReady = !!process.env.BROWSERBASE_API_KEY && !!process.env.BROWSERBASE_PROJECT_ID;
+  const authMissing = getMissingAuthEnvKeys();
 
   console.log(`
 +-------------------------------------------------------+
@@ -933,10 +1060,14 @@ app.listen(PORT, () => {
 |  Stagehand: ${STAGEHAND_MODEL.padEnd(39)}|
 |  Claude: ${ANTHROPIC_MODEL.padEnd(42)}|
 |  Browserbase: ${(browserbaseReady ? "Connected" : "Missing config").padEnd(31)}|
+|  Supabase auth: ${(REQUIRE_SUPABASE_AUTH ? (authMissing.length ? "Config missing" : "Required") : "Optional").padEnd(28)}|
 +-------------------------------------------------------+
 `);
 
   if (missing.length) {
     console.log(`Missing env vars: ${missing.join(", ")}`);
+  }
+  if (REQUIRE_SUPABASE_AUTH && authMissing.length) {
+    console.log(`Missing auth env vars: ${authMissing.join(", ")}`);
   }
 });

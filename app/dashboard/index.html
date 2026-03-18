@@ -96,6 +96,7 @@
         async function render() {
             var icpState = { icps: [] };
             var deals = dh.loadAllDeals();
+            var signalConsoleState = { accounts: [] };
 
             if (window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.load === 'function') {
                 var icpLoaded = await window.gtmPersistence.icps.load();
@@ -105,6 +106,15 @@
             if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.load === 'function') {
                 var dealLoaded = await window.gtmPersistence.deals.load();
                 if (dealLoaded && Array.isArray(dealLoaded.data)) deals = dealLoaded.data;
+            }
+
+            if (window.gtmPersistence && window.gtmPersistence.signalConsole && typeof window.gtmPersistence.signalConsole.load === 'function') {
+                var signalLoaded = await window.gtmPersistence.signalConsole.load();
+                if (signalLoaded && Array.isArray(signalLoaded.data)) {
+                    signalConsoleState.accounts = signalLoaded.data;
+                }
+            } else {
+                signalConsoleState = readLS('gtmos_sc_v4', { accounts: [] });
             }
 
             var vitals = deals.map(function(deal) { return dh.computeVitals(deal); }).filter(Boolean);
@@ -209,10 +219,9 @@
             }
 
             // E5: Outbound recommendation — hot accounts without deals
-            var scData=readLS('gtmos_sc_v4',{accounts:[]});
             var allDealsLS=Array.isArray(deals)?deals.slice():[];
             var dealNames=allDealsLS.map(function(d){return(d.accountName||d.account_name||'').toLowerCase()});
-            var hotUnworked=(scData.accounts||[]).filter(function(a){
+            var hotUnworked=(signalConsoleState.accounts||[]).filter(function(a){
                 return(a._heat||0)>=75&&dealNames.indexOf((a.name||'').toLowerCase())===-1;
             });
             if(hotUnworked.length>0&&quota&&cov.ratio<target){

@@ -376,11 +376,179 @@ const LS_USAGE='gtmos_sc_usage_v4';
 const LS_MORNING='gtmos_sc_morning_v4';
 const LS_BATCHES='gtmos_sc_batches_v4';
 const MAX_DAILY=50;
+const DEFAULT_ENRICHMENT_BASE_URL='https://enrich.antaeus.app';
+const SC_SYNC={cloudEnabled:!!(window.gtmPersistence&&window.gtmPersistence.signalConsole),hydrated:false,loading:false,saving:false,lastSyncedAt:null,error:null};
 
-function load(){try{const s=JSON.parse(localStorage.getItem(LS)||'{}');return{accounts:s.accounts||SEEDS.map(a=>({...a,origin:'seed',signals:(a.signals||[]).map(sg=>({...sg,id:sg.id||rid(),status:'unverified',pain_tags:autoTag(sg),fetched_at:sg.fetched_at||new Date().toISOString()}))})),mode:'complex',tab:{},search:'',industry:'all',catFilter:'all',painFilter:'all',aiOnly:false,expanded:null,activeBatch:null}}catch{return{accounts:SEEDS,mode:'complex',tab:{},search:'',industry:'all',catFilter:'all',painFilter:'all',aiOnly:false,expanded:null,activeBatch:null}}}
-function save(st){try{localStorage.setItem(LS,JSON.stringify({accounts:st.accounts}))}catch{}}
+function normalizeSignalItem(sg){
+  return {...(sg||{}),id:(sg&&sg.id)||rid(),status:(sg&&sg.status)||'unverified',pain_tags:Array.isArray(sg&&sg.pain_tags)&&(sg.pain_tags||[]).length?(sg.pain_tags||[]):autoTag(sg||{}),fetched_at:(sg&&sg.fetched_at)||new Date().toISOString()};
+}
+
+function normalizeAccountItem(acct, fallbackOrigin){
+  const next={...(acct||{})};
+  next.id=(next.id||next.account_key||rid()).toString();
+  next.origin=next.origin||fallbackOrigin||'seed';
+  next.signals=Array.isArray(next.signals)?next.signals.map(normalizeSignalItem):[];
+  next._heat=Number(next._heat!=null?next._heat:next.heat||0)||0;
+  next._lastEnriched=next._lastEnriched||next.lastEnrichedAt||null;
+  next.created_at=next.created_at||next.updated_at||new Date().toISOString();
+  next.updated_at=next.updated_at||next.created_at;
+  return next;
+}
+
+function buildDefaultAccounts(){
+  return SEEDS.map(a=>normalizeAccountItem({...a},'seed'));
+}
+
+function loadLocalAccounts(){
+  try{
+    const s=JSON.parse(localStorage.getItem(LS)||'{}');
+    const raw=Array.isArray(s.accounts)&&s.accounts.length?s.accounts:buildDefaultAccounts();
+    return raw.map(a=>normalizeAccountItem(a,a&&a.origin||'seed'));
+  }catch{
+    return buildDefaultAccounts();
+  }
+}
+
+function load(){return{accounts:loadLocalAccounts(),mode:'complex',tab:{},search:'',industry:'all',catFilter:'all',painFilter:'all',aiOnly:false,expanded:null,activeBatch:null}}
+function save(st){try{localStorage.setItem(LS,JSON.stringify({accounts:(st.accounts||[]).map(a=>normalizeAccountItem(a,a&&a.origin||'seed'))}))}catch{}}
 function rid(){return Math.random().toString(36).slice(2,10)}
 function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function resolveEnrichmentBaseUrl(){
+  const explicit=(window.__ANTAEUS_ENRICHMENT_BASE_URL__||localStorage.getItem('gtmos_enrichment_base_url')||'').toString().trim();
+  if(explicit)return explicit.replace(/\/+$/,'');
+  const host=(window.location.hostname||'').toLowerCase();
+  if(host==='localhost'||host==='127.0.0.1')return 'http://localhost:3001';
+  return DEFAULT_ENRICHMENT_BASE_URL;
+}
+
+function formatRelativeTime(value){
+  if(!value)return'';
+  const dt=new Date(value);
+  if(Number.isNaN(dt.getTime()))return'';
+  const diff=Math.max(0,Date.now()-dt.getTime());
+  const mins=Math.round(diff/60000);
+  if(mins<1)return'just now';
+  if(mins<60)return mins+'m ago';
+  const hrs=Math.round(mins/60);
+  if(hrs<24)return hrs+'h ago';
+  const days=Math.round(hrs/24);
+  return days+'d ago';
+}
+
+function setSyncState(patch){
+  Object.assign(SC_SYNC,patch||{});
+  if(typeof renderCredits==='function')renderCredits();
+}
+
+async function hydrateSignalConsoleFromCloud(){
+  if(!(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'))return;
+  setSyncState({loading:true,error:null});
+  try{
+    const loaded=await window.gtmPersistence.signalConsole.load();
+    if(loaded&&loaded.error)throw loaded.error;
+    if(loaded&&Array.isArray(loaded.data)&&loaded.data.length){
+      S.accounts=loaded.data.map(a=>normalizeAccountItem(a,a&&a.origin||'cloud'));
+      setSyncState({hydrated:true,lastSyncedAt:new Date().toISOString(),error:null});
+      render();
+      return;
+    }
+    setSyncState({hydrated:true,lastSyncedAt:new Date().toISOString(),error:null});
+  }catch(err){
+    console.error('Signal Console cloud hydrate failed:',err);
+    setSyncState({error:err||new Error('Cloud hydrate failed')});
+  }finally{
+    setSyncState({loading:false});
+  }
+}
+
+async function persistSignalConsoleAccount(account){
+  if(!(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.save==='function'))return{data:S.accounts,error:null};
+  setSyncState({saving:true,error:null});
+  try{
+    const saved=await window.gtmPersistence.signalConsole.save(normalizeAccountItem(account,account&&account.origin||'manual'));
+    if(saved&&saved.error)throw saved.error;
+    if(saved&&Array.isArray(saved.data)&&saved.data.length){
+      S.accounts=saved.data.map(a=>normalizeAccountItem(a,a&&a.origin||'cloud'));
+      render();
+    }
+    setSyncState({lastSyncedAt:new Date().toISOString(),hydrated:true,error:null});
+    return saved||{data:S.accounts,error:null};
+  }catch(err){
+    console.error('Signal Console cloud save failed:',err);
+    setSyncState({error:err||new Error('Cloud save failed')});
+    return{data:S.accounts,error:err};
+  }finally{
+    setSyncState({saving:false});
+  }
+}
+
+async function persistSignalConsoleAccounts(accounts){
+  if(!(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.replaceAll==='function'))return{data:S.accounts,error:null};
+  setSyncState({saving:true,error:null});
+  try{
+    const saved=await window.gtmPersistence.signalConsole.replaceAll((accounts||S.accounts).map(a=>normalizeAccountItem(a,a&&a.origin||'manual')));
+    if(saved&&saved.error)throw saved.error;
+    if(saved&&Array.isArray(saved.data)&&saved.data.length){
+      S.accounts=saved.data.map(a=>normalizeAccountItem(a,a&&a.origin||'cloud'));
+      render();
+    }
+    setSyncState({lastSyncedAt:new Date().toISOString(),hydrated:true,error:null});
+    return saved||{data:S.accounts,error:null};
+  }catch(err){
+    console.error('Signal Console cloud batch sync failed:',err);
+    setSyncState({error:err||new Error('Cloud sync failed')});
+    return{data:S.accounts,error:err};
+  }finally{
+    setSyncState({saving:false});
+  }
+}
+
+async function getEnrichmentHeaders(){
+  const headers={'Content-Type':'application/json'};
+  try{
+    if(window.auth&&typeof window.auth.getSession==='function'){
+      const session=await window.auth.getSession();
+      if(session&&session.access_token)headers.Authorization='Bearer '+session.access_token;
+    }
+  }catch(err){
+    console.warn('Unable to attach auth token to enrichment request:',err);
+  }
+  return headers;
+}
+
+function summarizeLaneActivity(debug){
+  const lanes=((debug&&debug.lanes)||[]).filter(Boolean);
+  const active=lanes.filter(l=>(Number(l.evidenceCount)||0)>0).length;
+  const candidates=lanes.reduce((sum,l)=>sum+(Number(l.candidateCount)||0),0);
+  const evidence=lanes.reduce((sum,l)=>sum+(Number(l.evidenceCount)||0),0);
+  const laneLabel=active?active+' lane'+(active===1?'':'s'):'no active lanes';
+  return laneLabel+' • '+candidates+' source candidates • '+evidence+' evidence pages';
+}
+
+function buildDeepResearchPhases(){
+  return[
+    'Connecting to live enrichment service...',
+    'Scanning press, IR, and news sources...',
+    'Reviewing filings, earnings, and transcript evidence...',
+    'Checking hiring, org, and risk signals...',
+    'Scoring seller-relevant signals...'
+  ];
+}
+
+function applyResearchNotice(acct,kind,message,timeoutMs){
+  if(!acct)return;
+  acct._researchNotice={kind,message};
+  renderGrid();
+  if(timeoutMs){
+    setTimeout(()=>{
+      if(acct._researchNotice&&acct._researchNotice.message===message){
+        delete acct._researchNotice;
+        renderGrid();
+      }
+    },timeoutMs);
+  }
+}
 
 function getUsage(){try{const u=JSON.parse(localStorage.getItem(LS_USAGE)||'{}');if(u.date!==today())return{date:today(),calls:0};return u}catch{return{date:today(),calls:0}}}
 function addUsage(n){const u=getUsage();u.calls+=n;u.date=today();localStorage.setItem(LS_USAGE,JSON.stringify(u))}
@@ -514,7 +682,11 @@ async function doEnrich(acctId,btn){
     const fresh=sigs.filter(s=>!existing.has(s.headline.toLowerCase().slice(0,50)));
     acct.signals=[...fresh,...(acct.signals||[])];
     acct.lastEnrichedAt=new Date().toISOString();
-    save(S);render();
+    acct._lastEnriched=acct.lastEnrichedAt;
+    acct.updated_at=new Date().toISOString();
+    save(S);
+    await persistSignalConsoleAccount(acct);
+    render();
   }catch(e){
     console.error('Enrich failed:',e);
     if(btn)btn.textContent='⚠ Failed — retry';
@@ -621,6 +793,7 @@ function importCSV(){
   localStorage.setItem(LS_BATCHES,JSON.stringify(batches));
   S.activeBatch=batchId;
   save(S);hideModal();render();
+  if(added>0)persistSignalConsoleAccounts(S.accounts);
   if(added>0&&confirm(`Imported ${added} accounts (${skipped} duplicates skipped). Enrich them now with live research?`)){
     S.mode='surgical';render();enrichAll();
   }
@@ -741,7 +914,13 @@ function renderStats(){
   document.getElementById('topStats').innerHTML=`<div>Accts <b>${all.length}</b></div><div>Signals <b>${sigs}</b></div><div>AI <b style="color:var(--purple)">${ai}</b></div>`;
 }
 function renderCredits(){
-  document.getElementById('topCredits').textContent=`🔍 ${remaining()}/${MAX_DAILY} today`;
+  const parts=[`🔍 ${remaining()}/${MAX_DAILY} today`];
+  if(SC_SYNC.loading)parts.push('loading cloud');
+  else if(SC_SYNC.saving)parts.push('syncing');
+  else if(SC_SYNC.lastSyncedAt)parts.push('cloud '+formatRelativeTime(SC_SYNC.lastSyncedAt));
+  else if(SC_SYNC.cloudEnabled)parts.push('cloud ready');
+  if(SC_SYNC.error)parts.push('local cache');
+  document.getElementById('topCredits').textContent=parts.join(' • ');
 }
 
 function renderControls(){
@@ -806,6 +985,91 @@ function renderMorning(){
   });
 }
 
+async function runDeepResearch(acctId,button){
+  const acct=S.accounts.find(a=>a.id===acctId);
+  if(!acct)return;
+  const statusEl=document.getElementById('deep-status-'+acctId);
+  if(!statusEl)return;
+
+  const originalHtml=button?button.innerHTML:'';
+  const baseUrl=resolveEnrichmentBaseUrl();
+  const endpoint=baseUrl+'/enrich';
+  const phases=buildDeepResearchPhases();
+  let phaseIdx=0;
+  const updatePhase=()=>{
+    statusEl.style.display='block';
+    statusEl.style.color='#a855f7';
+    statusEl.innerHTML='⚡ '+phases[Math.min(phaseIdx,phases.length-1)]+' <b>'+esc(acct.name)+'</b>';
+  };
+
+  if(button){
+    button.disabled=true;
+    button.innerHTML='<span class="enriching-badge">Researching...</span>';
+  }
+
+  updatePhase();
+  const phaseTimer=setInterval(()=>{
+    phaseIdx++;
+    if(phaseIdx<phases.length)updatePhase();
+  },6000);
+
+  try{
+    const headers=await getEnrichmentHeaders();
+    const response=await fetch(endpoint,{
+      method:'POST',
+      headers,
+      body:JSON.stringify({
+        name:acct.name,
+        domain:acct.domain||null,
+        industry:acct.industry||null,
+        sector:acct.sector||null,
+        ticker:acct.ticker||null
+      })
+    });
+
+    let data=null;
+    try{data=await response.json()}catch(_err){data=null}
+    if(!response.ok)throw new Error((data&&data.error)||('Server returned '+response.status));
+    if(data&&data.error)throw new Error(data.error);
+
+    const existingHeadlines=new Set((acct.signals||[]).map(s=>(s.headline||'').toLowerCase().slice(0,40)));
+    const newSignals=(data&&Array.isArray(data.signals)?data.signals:[]).filter(s=>!existingHeadlines.has((s.headline||'').toLowerCase().slice(0,40))).map(normalizeSignalItem);
+    acct.signals=[...newSignals,...(acct.signals||[])];
+    acct._heat=Math.max(Number(data&&data.heat||0)||0,Number(acct._heat||0)||0);
+
+    if(data&&data.info){
+      if(data.info.industry&&data.info.industry!=='Unknown')acct.industry=data.info.industry;
+      if(data.info.revenue&&data.info.revenue!=='Unknown')acct.revenue=data.info.revenue;
+      if(data.info.employees&&data.info.employees!=='Unknown')acct.employees=data.info.employees;
+      if(data.info.hq&&data.info.hq!=='Unknown')acct.hq=data.info.hq;
+      if(data.info.sector&&data.info.sector!=='Unknown')acct.sector=data.info.sector;
+    }
+
+    acct._lastEnriched=(data&&data.enrichedAt)||new Date().toISOString();
+    acct.updated_at=new Date().toISOString();
+    save(S);
+    await persistSignalConsoleAccount(acct);
+
+    const laneSummary=summarizeLaneActivity(data&&data.debug);
+    if(newSignals.length){
+      applyResearchNotice(acct,'success','✓ '+newSignals.length+' new signals • '+laneSummary+' • '+((data&&data.elapsed)||'done'),5000);
+    }else{
+      applyResearchNotice(acct,'success','✓ Research complete • no net-new signals • '+laneSummary+' • '+((data&&data.elapsed)||'done'),5000);
+    }
+  }catch(err){
+    const msg=String((err&&err.message)||'Enrichment failed');
+    const lower=msg.toLowerCase();
+    const hint=lower.indexOf('failed to fetch')>=0?' — service unreachable at '+baseUrl:lower.indexOf('401')>=0?' — sign in again or verify hosted auth config':'';
+    applyResearchNotice(acct,'error','✗ '+msg+hint,7000);
+  }finally{
+    clearInterval(phaseTimer);
+    if(button){
+      button.disabled=false;
+      button.innerHTML=originalHtml||'⚡ Deep Research';
+    }
+  }
+}
+
 function renderGrid(){
   const grid=document.getElementById('grid');
   const accts=getVisible();
@@ -841,14 +1105,16 @@ function renderGrid(){
   // Copy signals
   grid.querySelectorAll('[data-copysigs]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.copysigs);if(acct){const t=(acct.signals||[]).map(s=>`• ${s.headline}\n  ${s.why||''}\n  ${s.url||''}`).join('\n\n');navigator.clipboard.writeText(t);b.textContent='✓';setTimeout(()=>b.textContent='Signals',1500)}});
   // Verify/flag
-  grid.querySelectorAll('[data-verify]').forEach(b=>b.onclick=e=>{e.stopPropagation();const[aid,sid]=b.dataset.verify.split('|');const acct=S.accounts.find(a=>a.id===aid);if(!acct)return;const sig=(acct.signals||[]).find(s=>s.id===sid);if(sig){sig.status=sig.status==='verified'?'unverified':'verified';if(sig.status==='verified')sig.confidence=Math.min(1,(sig.confidence||.7)+.05);save(S);renderGrid()}});
-  grid.querySelectorAll('[data-flag]').forEach(b=>b.onclick=e=>{e.stopPropagation();const[aid,sid]=b.dataset.flag.split('|');const acct=S.accounts.find(a=>a.id===aid);if(!acct)return;const sig=(acct.signals||[]).find(s=>s.id===sid);if(sig){sig.status=sig.status==='flagged'?'unverified':'flagged';save(S);renderGrid()}});
+  grid.querySelectorAll('[data-verify]').forEach(b=>b.onclick=e=>{e.stopPropagation();const[aid,sid]=b.dataset.verify.split('|');const acct=S.accounts.find(a=>a.id===aid);if(!acct)return;const sig=(acct.signals||[]).find(s=>s.id===sid);if(sig){sig.status=sig.status==='verified'?'unverified':'verified';if(sig.status==='verified')sig.confidence=Math.min(1,(sig.confidence||.7)+.05);acct.updated_at=new Date().toISOString();save(S);renderGrid();persistSignalConsoleAccount(acct)}});
+  grid.querySelectorAll('[data-flag]').forEach(b=>b.onclick=e=>{e.stopPropagation();const[aid,sid]=b.dataset.flag.split('|');const acct=S.accounts.find(a=>a.id===aid);if(!acct)return;const sig=(acct.signals||[]).find(s=>s.id===sid);if(sig){sig.status=sig.status==='flagged'?'unverified':'flagged';acct.updated_at=new Date().toISOString();save(S);renderGrid();persistSignalConsoleAccount(acct)}});
   // Score detail
   grid.querySelectorAll('[data-scoredetail]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.scoredetail);if(acct)alert(scoreDetail(acct))});
 
   // ⚡ DEEP RESEARCH — Browserbase enrichment
   grid.querySelectorAll('[data-deepresearch]').forEach(b=>b.onclick=e=>{
     e.stopPropagation();
+    runDeepResearch(b.dataset.deepresearch,b);
+    return;
     const acctId=b.dataset.deepresearch;
     const acct=S.accounts.find(a=>a.id===acctId);
     if(!acct)return;
@@ -865,7 +1131,7 @@ function renderGrid(){
     let phaseIdx=0;
     const phaseTimer=setInterval(()=>{phaseIdx++;if(phaseIdx<phases.length)statusEl.innerHTML=phases[phaseIdx]},8000);
 
-    fetch('http://localhost:3001/enrich',{
+    fetch(resolveEnrichmentBaseUrl()+'/enrich',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -910,7 +1176,7 @@ function renderGrid(){
     })
     .catch(err=>{
       clearInterval(phaseTimer);
-      statusEl.innerHTML='✗ '+esc(err.message)+(err.message.includes('Failed to fetch')?' — is the enrichment server running on port 3001?':'');
+      statusEl.innerHTML='✗ '+esc(err.message)+(err.message.includes('Failed to fetch')?' — is the enrichment service reachable?':'');
       statusEl.style.color='#c05a52';
       b.disabled=false;
       b.innerHTML='⚡ Deep Research';
@@ -920,6 +1186,14 @@ function renderGrid(){
 }
 
 // E7: Recommended Play card — temperature auto-detection + channel/CTA recommendation
+function renderResearchStatus(a){
+  const notice=a&&a._researchNotice;
+  const color=notice&&notice.kind==='success'?'#4a9e6e':notice&&notice.kind==='error'?'#c05a52':'#a855f7';
+  const message=notice&&notice.message?notice.message:(a&&a._lastEnriched?'Last live research '+formatRelativeTime(a._lastEnriched):'');
+  const display=message?'block':'none';
+  return `<div id="deep-status-${a.id}" style="display:${display};padding:8px 16px;border-bottom:1px solid var(--bdr);font-size:.72rem;font-family:var(--mono);color:${color};background:rgba(168,85,247,0.03);">${esc(message)}</div>`;
+}
+
 function renderRecPlay(a){
   const name=(a.name||'').toLowerCase();
   // Check deal workspace for active deal
@@ -985,9 +1259,9 @@ function renderDetail(a){
     <button class="btn btn-sm" data-brief="${a.id}">📋 Copy Brief</button>
     <button class="btn btn-sm" data-copysigs="${a.id}">Signals</button>
     <button class="btn btn-sm" data-scoredetail="${a.id}">Why ${heat(a)}?</button>
-    <span style="margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--tx3)">${scoreExplain(a)}</span>
+    <span style="margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--tx3)">${a._lastEnriched?`live ${esc(formatRelativeTime(a._lastEnriched))} • `:''}${scoreExplain(a)}</span>
   </div>
-  <div id="deep-status-${a.id}" style="display:none;padding:8px 16px;border-bottom:1px solid var(--bdr);font-size:.72rem;font-family:var(--mono);color:#a855f7;background:rgba(168,85,247,0.03);"></div>
+  ${renderResearchStatus(a)}
   ${renderRecPlay(a)}
   <div class="detail-research">
     <span style="font-size:.6rem;color:var(--tx4);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 0">Research:</span>
@@ -1062,7 +1336,7 @@ document.getElementById('btnAddAcct').onclick=()=>{
   document.getElementById('ma_save').onclick=()=>{
     const name=document.getElementById('ma_name').value.trim();if(!name)return;
     const acct={id:rid(),name,ticker:document.getElementById('ma_ticker').value.trim(),industry:document.getElementById('ma_ind').value,sector:document.getElementById('ma_sector').value.trim(),revenue:document.getElementById('ma_rev').value.trim(),employees:document.getElementById('ma_emp').value.trim(),hq:document.getElementById('ma_hq').value.trim(),domain:document.getElementById('ma_dom').value.trim(),linkedin:document.getElementById('ma_li').value.trim(),fortune_rank:parseInt(document.getElementById('ma_fr').value)||null,origin:'manual',signals:[],created_at:new Date().toISOString()};
-    S.accounts.push(acct);save(S);hideModal();S.expanded=acct.id;render();
+    S.accounts.push(acct);save(S);hideModal();S.expanded=acct.id;render();persistSignalConsoleAccount(acct);
     doEnrich(acct.id,null);
   };
 };
@@ -1092,7 +1366,8 @@ document.getElementById('btnAddSig').onclick=()=>{
     const sig={id:rid(),cat:document.getElementById('ms_cat').value,headline:hl,detail:document.getElementById('ms_det').value.trim(),why:document.getElementById('ms_why').value.trim(),url:document.getElementById('ms_url').value.trim(),source_name:document.getElementById('ms_src').value.trim()||'Manual',published_date:today().slice(0,7),confidence:.75,is_ai:document.getElementById('ms_ai').checked,fetched_at:new Date().toISOString(),origin:'manual',status:'unverified'};
     sig.pain_tags=autoTag(sig);
     acct.signals=[sig,...(acct.signals||[])];
-    save(S);hideModal();render();
+    acct.updated_at=new Date().toISOString();
+    save(S);hideModal();render();persistSignalConsoleAccount(acct);
   };
 };
 
@@ -1108,6 +1383,7 @@ document.getElementById('btnEnrichAll').onclick=enrichAll;
 // INIT
 // ═══════════════════════════════════════════
 render();
+hydrateSignalConsoleFromCloud();
 
     </script>
 </body>
