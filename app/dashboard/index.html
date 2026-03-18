@@ -64,7 +64,8 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -81,7 +82,10 @@
     </div>
     <script src="/js/deal-health.js"></script>
     <script src="/js/proof-layer.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
     (function(){
         var dh = window.dealHealth;
         if (!dh) { document.getElementById('dashContent').innerHTML = '<p style="color:var(--text-muted);">deal-health.js not loaded.</p>'; return; }
@@ -89,21 +93,41 @@
         function escH(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
 
-        function render() {
-            var vitals = dh.loadAllVitals();
+        async function render() {
+            var icpState = { icps: [] };
+            var deals = dh.loadAllDeals();
+
+            if (window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.load === 'function') {
+                var icpLoaded = await window.gtmPersistence.icps.load();
+                if (icpLoaded && icpLoaded.data) icpState = icpLoaded.data;
+            }
+
+            if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.load === 'function') {
+                var dealLoaded = await window.gtmPersistence.deals.load();
+                if (dealLoaded && Array.isArray(dealLoaded.data)) deals = dealLoaded.data;
+            }
+
+            var vitals = deals.map(function(deal) { return dh.computeVitals(deal); }).filter(Boolean);
             var quota = dh.loadQuota();
             var seed = dh.loadSeed();
             var active = vitals.filter(function(v) { return !v.isClosed; });
+            var icpCount = (icpState && Array.isArray(icpState.icps)) ? icpState.icps.length : 0;
 
             if (vitals.length === 0) {
-                document.getElementById('dashContent').innerHTML =
-                    '<div class="np-empty">' +
+                var emptyHtml = '<div class="np-empty">' +
                     '<div class="np-empty-icon">&#128220;</div>' +
-                    '<div class="np-empty-title">No deals yet. The briefing writes itself once you start selling.</div>' +
-                    '<div class="np-empty-sub">Create your first deal or find a signal to start from. The Dashboard will generate your Monday pipeline review automatically.</div>' +
-                    '<a href="/app/deal-workspace/" class="np-empty-link">Create first deal &rarr;</a>' +
+                    '<div class="np-empty-title">Your workspace is live, but the dashboard has nothing to brief yet.</div>' +
+                    '<div class="np-empty-sub">Create the first records that make this app feel like yours. ICPs shape targeting, deals power the weekly briefing.</div>';
+
+                if (icpCount === 0) {
+                    emptyHtml += '<a href="/app/icp-studio/" class="np-empty-link">Create first ICP &rarr;</a>';
+                }
+
+                emptyHtml += '<a href="/app/deal-workspace/" class="np-empty-link">Create first deal &rarr;</a>' +
                     '<a href="/app/signal-console/" class="np-empty-link">Find a signal &rarr;</a>' +
                     '</div>';
+                document.getElementById('dashContent').innerHTML =
+                    emptyHtml;
                 return;
             }
 
@@ -121,6 +145,14 @@
             html += '<div class="np-ribbon-item"><div class="np-ribbon-val">' + active.length + '</div><div class="np-ribbon-label">Active</div></div>';
             html += '<div class="np-ribbon-item"><div class="np-ribbon-val' + (briefing.atRisk.length > 0 ? ' red' : '') + '">' + briefing.atRisk.length + '</div><div class="np-ribbon-label">At Risk</div></div>';
             html += '</div>';
+
+            if (icpCount === 0) {
+                html += '<div class="np-briefing" style="margin-bottom:16px;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.02));border-color:rgba(59,130,246,0.2);">';
+                html += '<div class="np-week-label" style="color:#93c5fd;">Missing Targeting Layer</div>';
+                html += '<div class="np-week-summary">You have deal activity, but no saved ICPs yet. Create at least one ICP so targeting, discovery, and dashboard guidance stop operating blind.</div>';
+                html += '<div style="margin-top:14px;"><a href="/app/icp-studio/" class="np-empty-link" style="margin:0;">Create first ICP &rarr;</a></div>';
+                html += '</div>';
+            }
 
             // THE BRIEFING
             html += '<div class="np-briefing">';
@@ -178,8 +210,7 @@
 
             // E5: Outbound recommendation — hot accounts without deals
             var scData=readLS('gtmos_sc_v4',{accounts:[]});
-            var allDealsLS=readLS('gtmos_deal_workspaces',[]);
-            if(!Array.isArray(allDealsLS))allDealsLS=[];
+            var allDealsLS=Array.isArray(deals)?deals.slice():[];
             var dealNames=allDealsLS.map(function(d){return(d.accountName||d.account_name||'').toLowerCase()});
             var hotUnworked=(scData.accounts||[]).filter(function(a){
                 return(a._heat||0)>=75&&dealNames.indexOf((a.name||'').toLowerCase())===-1;
@@ -283,7 +314,20 @@
             }
         };
 
-        render();
+        function renderWhenReady() {
+            render().catch(function(err) {
+                console.error('Dashboard render failed:', err);
+                document.getElementById('dashContent').innerHTML = '<div class="np-empty"><div class="np-empty-title">Dashboard unavailable</div><div class="np-empty-sub">Cloud sync failed. Refresh and try again.</div></div>';
+            });
+        }
+
+        if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+            window.requireAuthReady.then(renderWhenReady).catch(function() {});
+        } else if (window.__gtmosAuthGatePending) {
+            window.addEventListener('gtmos:auth-ready', renderWhenReady, { once: true });
+        } else {
+            renderWhenReady();
+        }
     })();
     </script>
 </body>

@@ -229,7 +229,8 @@
 </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -564,7 +565,10 @@
     </div>
     <script src="/js/deal-health.js"></script>
     <script src="/js/proof-layer.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
     window.exportTerritory = function() {
         var data = {};
         ['gtmos_territory','gtmos_ta_theses','gtmos_ta_approaches','gtmos_ta_accounts','gtmos_ta_dispositions','gtmos_ta_signals','gtmos_ta_swap_history','gtmos_ta_retier_history','gtmos_ta_calibrations','gtmos_ta_setup'].forEach(function(k) {

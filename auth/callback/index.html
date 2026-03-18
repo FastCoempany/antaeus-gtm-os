@@ -65,10 +65,12 @@
 
           // 3) Route: session → onboarding check → command center
           if (session) {
-            if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
+            if (typeof window.resolvePostAuthRoute === 'function') {
+              window.location.replace(await window.resolvePostAuthRoute(session, { force: true }));
+            } else if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
               window.location.replace("/app/onboarding/");
             } else {
-              window.location.replace("/app/command-center/");
+              window.location.replace("/app/dashboard/");
             }
           } else {
             document.querySelector('.muted').textContent = 'Something went wrong - return to login.';

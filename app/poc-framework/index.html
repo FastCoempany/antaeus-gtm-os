@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -73,7 +73,8 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -272,6 +273,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/migration.js"></script>
     <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
     <script src="/js/tour-guide.js"></script>
     <script src="/js/module-tooltips.js"></script>
     <script src="/js/guided-rail.js"></script>
@@ -280,25 +282,6 @@
     <script src="/js/save-indicator.js"></script>
     <script src="/js/unsaved-guard.js"></script>
     <script src="/js/artifact-store.js"></script>
-    <script>
-        (async function() {
-            initSupabase();
-            if (localStorage.getItem('gtmos_noauth_mode')) return;
-            const session = await auth.getSession();
-            if (!session) { window.location.href = '/login.html'; return; }
-            const user = await auth.getUser();
-            if (user) {
-                var email = user.email || 'User';
-                document.getElementById('userName').textContent = email.split('@')[0];
-                document.getElementById('userAvatar').textContent = email.charAt(0).toUpperCase();
-            }
-        })();
-
-        window.handleSignOut = async function() {
-            await auth.signOut();
-            window.location.href = '/login.html';
-        };
-    </script>
     
     <script>
         let durationDays = 7;
@@ -491,4 +474,3 @@ Best,
     </script>
 </body>
 </html>
-

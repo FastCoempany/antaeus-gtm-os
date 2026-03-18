@@ -67,7 +67,8 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -271,13 +272,24 @@ Worth 10 minutes? I'll make it count.
             </div>
         </main>
     </div>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
 
 (function(){
 function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
 function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
+async function syncLinkedInLog(data){
+    if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.saveDocument==='function'){
+        var saved=await window.gtmPersistence.sequences.saveDocument('linkedin_log','LinkedIn Activity Log',data);
+        if(saved&&saved.error)console.error('LinkedIn log sync failed:',saved.error);
+        return saved;
+    }
+    return {data:null,error:null};
+}
 
 window.showTab=function(id){
     document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
@@ -295,7 +307,7 @@ window.cp=function(id){
     if(navigator.clipboard)navigator.clipboard.writeText(text).then(function(){toast('Copied')});
 };
 
-window.logAction=function(){
+window.logAction=async function(){
     var data=readLS('gtmos_linkedin_log',{actions:[]});
     var account=document.getElementById('liAccount').value.trim();
     var contact=document.getElementById('liContact').value.trim();
@@ -313,6 +325,7 @@ window.logAction=function(){
         createdAt:new Date().toISOString()
     });
     writeLS('gtmos_linkedin_log',data);
+    await syncLinkedInLog(data);
     document.getElementById('liAccount').value='';
     document.getElementById('liContact').value='';
     toast('Action logged');
@@ -356,18 +369,33 @@ function renderLog(){
     document.getElementById('liTable').innerHTML=html;
 }
 
-window.updateLiOutcome=function(idx,val){
+window.updateLiOutcome=async function(idx,val){
     var data=readLS('gtmos_linkedin_log',{actions:[]});
     if(data.actions[idx]){
         data.actions[idx].outcome=val||null;
         data.actions[idx].outcomeDate=val?new Date().toISOString():null;
         writeLS('gtmos_linkedin_log',data);
+        await syncLinkedInLog(data);
         renderLog();
         toast('Updated');
     }
 };
 
-renderLog();
+async function bootLinkedInPlaybook(){
+    if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.load==='function'){
+        var loaded=await window.gtmPersistence.sequences.load();
+        if(loaded&&loaded.error)console.error('Sequence load failed:',loaded.error);
+    }
+    renderLog();
+}
+
+if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+    window.requireAuthReady.then(bootLinkedInPlaybook).catch(function(){});
+}else if(window.__gtmosAuthGatePending){
+    window.addEventListener('gtmos:auth-ready',function(){bootLinkedInPlaybook().catch(function(){});},{once:true});
+}else{
+    bootLinkedInPlaybook().catch(function(){});
+}
 })();
 
     </script>

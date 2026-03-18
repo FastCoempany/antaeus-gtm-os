@@ -49,6 +49,7 @@
     </style>
 </head>
 <body>
+    <script src="/js/app-auth-preflight.js"></script>
 <div class="ob-shell">
     <div class="ob-progress">
         <div class="ob-bars"><div class="ob-bar" id="b0"></div><div class="ob-bar" id="b1"></div><div class="ob-bar" id="b2"></div><div class="ob-bar" id="b3"></div></div>
@@ -145,11 +146,14 @@
                     <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Signal Console seeded with 14 Fortune 500 accounts</div>
                     <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Playbook started with your company info</div>
                 </div>
-                <button class="ob-btn ob-btn-primary" onclick="finish()" style="width:100%;">Open Dashboard &rarr;</button>
+                <button class="ob-btn ob-btn-primary" id="finishBtn" onclick="finish()" style="width:100%;">Open Dashboard &rarr;</button>
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/require-auth.js"></script>
 <script>
 var step=0;
 function show(){
@@ -166,16 +170,51 @@ function v0(){document.getElementById('btn0').disabled=!(document.getElementById
 function v1(){document.getElementById('btn1').disabled=!(document.getElementById('buyerPersona').value&&document.getElementById('stage').value);}
 function v2(){document.getElementById('btn2').disabled=!(document.getElementById('quota').value.trim());}
 function fmtCurr(el){var v=el.value.replace(/[^0-9]/g,'');if(v)el.value=Number(v).toLocaleString();else el.value='';}
+function readJson(key, fallback){
+    try {
+        var raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+        return fallback;
+    }
+}
 
-function finish(){
+function getStoredRole(){
+    var profile = readJson('gtmos_profile_cache', null) || window.__gtmosCurrentProfile || null;
+    if (profile && profile.role) return String(profile.role).trim();
+    var onboarding = readJson('gtmos_onboarding', null);
+    if (onboarding && onboarding.answers && onboarding.answers.role) return String(onboarding.answers.role).trim();
+    return 'founder';
+}
+
+function prefillFromStoredState() {
+    var state = readJson('gtmos_onboarding', null);
+    var answers = state && state.answers ? state.answers : {};
+
+    if (answers.productCategory) document.getElementById('productCat').value = answers.productCategory;
+    if (answers.companyName) document.getElementById('companyName').value = answers.companyName;
+    if (answers.buyerPersona) document.getElementById('buyerPersona').value = answers.buyerPersona;
+    if (answers.stage) document.getElementById('stage').value = answers.stage;
+    if (answers.quota) document.getElementById('quota').value = Number(answers.quota).toLocaleString();
+    if (answers.acv) document.getElementById('acv').value = Number(answers.acv).toLocaleString();
+
+    v0();
+    v1();
+    v2();
+}
+
+async function finish(){
+    var finishBtn = document.getElementById('finishBtn');
+    var originalLabel = finishBtn ? finishBtn.textContent : '';
     var q=Number((document.getElementById('quota').value||'0').replace(/[^0-9]/g,''));
     var a=Number((document.getElementById('acv').value||'0').replace(/[^0-9]/g,''));
+    var role = getStoredRole();
     var data={
         completed:true,
         completedAt:new Date().toISOString(),
-        persona:'founder',
+        persona:role,
         answers:{
-            role:'founder',
+            role:role,
             companyName:document.getElementById('companyName').value.trim(),
             stage:document.getElementById('stage').value,
             quota:q,acv:a,
@@ -183,18 +222,54 @@ function finish(){
             buyerPersona:document.getElementById('buyerPersona').value
         }
     };
-    localStorage.setItem('gtmos_onboarding',JSON.stringify(data));
-    localStorage.setItem('gtmos_product_category',JSON.stringify(document.getElementById('productCat').value));
-    if(q>0){
-        var acvBands={small:{max:30000,win:25,cycle:45,cov:3.0},mid:{max:75000,win:20,cycle:90,cov:3.5},enterprise:{max:200000,win:15,cycle:180,cov:4.5},strategic:{max:Infinity,win:12,cycle:240,cov:5.0}};
-        var band=a>=200000?'strategic':a>=75000?'enterprise':a>=30000?'mid':'small';
-        var bm=acvBands[band];
-        var seed={annual_quota:q,avg_deal_size:a||50000,win_rate:bm.win,touch_to_meeting:0.7,show_rate:80,cycle_days:bm.cycle,coverage_target:bm.cov,acv_band:band};
-        localStorage.setItem('gtmos_outbound_seed',JSON.stringify(seed));
+
+    if (finishBtn) {
+        finishBtn.disabled = true;
+        finishBtn.textContent = 'Saving...';
     }
-    var pb={company:data.answers.companyName,stage:data.answers.stage,acv:a||null,fields:{},checks:{},notes:''};
-    localStorage.setItem('gtmos_playbook',JSON.stringify(pb));
-    window.location.href='/app/dashboard/';
+
+    try {
+        localStorage.setItem('gtmos_onboarding',JSON.stringify(data));
+        localStorage.setItem('gtmos_product_category',JSON.stringify(document.getElementById('productCat').value));
+        if(q>0){
+            var acvBands={small:{max:30000,win:25,cycle:45,cov:3.0},mid:{max:75000,win:20,cycle:90,cov:3.5},enterprise:{max:200000,win:15,cycle:180,cov:4.5},strategic:{max:Infinity,win:12,cycle:240,cov:5.0}};
+            var band=a>=200000?'strategic':a>=75000?'enterprise':a>=30000?'mid':'small';
+            var bm=acvBands[band];
+            var seed={annual_quota:q,avg_deal_size:a||50000,win_rate:bm.win,touch_to_meeting:0.7,show_rate:80,cycle_days:bm.cycle,coverage_target:bm.cov,acv_band:band};
+            localStorage.setItem('gtmos_outbound_seed',JSON.stringify(seed));
+        }
+        var pb={company:data.answers.companyName,stage:data.answers.stage,acv:a||null,fields:{},checks:{},notes:''};
+        localStorage.setItem('gtmos_playbook',JSON.stringify(pb));
+
+        if (typeof window.saveUserOnboardingState === 'function') {
+            var saveResult = await window.saveUserOnboardingState(data);
+            if (saveResult && saveResult.error) throw saveResult.error;
+        }
+
+        window.location.href='/app/dashboard/';
+    } catch (error) {
+        console.error('Onboarding save failed:', error);
+        alert((error && error.message) ? error.message : 'Unable to save onboarding right now. Please try again.');
+        if (finishBtn) {
+            finishBtn.disabled = false;
+            finishBtn.textContent = originalLabel || 'Open Dashboard ->';
+        }
+    }
+}
+
+function initializeOnboardingPage() {
+    prefillFromStoredState();
+    show();
+}
+
+if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+    window.requireAuthReady.then(initializeOnboardingPage).catch(function() {
+        initializeOnboardingPage();
+    });
+} else if (window.__gtmosAuthGatePending) {
+    window.addEventListener('gtmos:auth-ready', initializeOnboardingPage, { once: true });
+} else {
+    initializeOnboardingPage();
 }
 </script>
 </body>

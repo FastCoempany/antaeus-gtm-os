@@ -53,7 +53,8 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -102,7 +103,10 @@
     </div>
     <script src="/js/deal-health.js"></script>
     <script src="/js/proof-layer.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
     (function(){
         var dh = window.dealHealth;
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
@@ -119,6 +123,22 @@
         function getBand(acv){
             acv=Number(acv)||0;
             if(acv>=200000)return'strategic';if(acv>=75000)return'enterprise';if(acv>=30000)return'mid';return'small';
+        }
+
+        var profileSyncTimer = null;
+        function scheduleProfileSync(quota, acv, band) {
+            if (typeof window.updateWorkspaceProfile !== 'function') return;
+            if (profileSyncTimer) clearTimeout(profileSyncTimer);
+            profileSyncTimer = setTimeout(async function() {
+                var result = await window.updateWorkspaceProfile({
+                    quota: quota || null,
+                    average_deal_size: acv || null,
+                    acv_band: band || null
+                });
+                if (result && result.error) {
+                    console.error('Quota workback sync failed:', result.error);
+                }
+            }, 500);
         }
 
         var saved=readLS('gtmos_qw_inputs',{});
@@ -189,7 +209,9 @@
             // Save
             var inputs={quota:quota,acv:acv,win:num('inWin'),m2o:num('inM2O'),t2m:num('inT2M'),show:num('inShow'),days:days,tpa:tpa,cycle:cycle};
             localStorage.setItem('gtmos_qw_inputs',JSON.stringify(inputs));
-            localStorage.setItem('gtmos_outbound_seed',JSON.stringify({annual_quota:quota,avg_deal_size:acv,win_rate:num('inWin'),touch_to_meeting:num('inT2M'),show_rate:num('inShow'),cycle_days:cycle,coverage_target:ACV_BENCHMARKS[getBand(acv)].coverage,acv_band:getBand(acv)}));
+            var currentBand = getBand(acv);
+            localStorage.setItem('gtmos_outbound_seed',JSON.stringify({annual_quota:quota,avg_deal_size:acv,win_rate:num('inWin'),touch_to_meeting:num('inT2M'),show_rate:num('inShow'),cycle_days:cycle,coverage_target:ACV_BENCHMARKS[currentBand].coverage,acv_band:currentBand}));
+            scheduleProfileSync(quota, acv, currentBand);
 
             // Coverage bar
             if(dh&&quota>0){
@@ -207,7 +229,7 @@
             }
 
             // Dynamic benchmark cards
-            var band=getBand(acv);
+            var band=currentBand;
             var b=ACV_BENCHMARKS[band];
             var userWin=num('inWin');
             var userCycle=cycle;

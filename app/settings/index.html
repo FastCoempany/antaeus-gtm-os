@@ -44,7 +44,8 @@
     </style>
 </head>
 <body class="app-layout">
-    <aside class="app-sidebar"></aside>
+        <script src="/js/app-auth-preflight.js"></script>
+<aside class="app-sidebar"></aside>
     <main class="app-main">
         <div class="page-container">
             <div class="page-header">
@@ -103,7 +104,9 @@
     <div class="settings-toast" id="settingsToast"></div>
 
     <script src="/js/migration.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
     <script src="/js/gtmos-store.js"></script>
     <script src="/js/nav.js"></script>
     <script src="/js/tour-guide.js"></script>
@@ -118,12 +121,32 @@
             setTimeout(function() { el.classList.remove('show'); }, 2500);
         }
 
-        // Load current product category
-        var cat = localStorage.getItem('gtmos_product_category') || 'cxai';
-        document.getElementById('productCategory').value = cat;
+        function readJson(key, fallback) {
+            try {
+                var raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
 
-        function setProductCategory(val) {
-            localStorage.setItem('gtmos_product_category', val);
+        function initializeSettingsState() {
+            var cat = readJson('gtmos_product_category', null) || 'cxai';
+            document.getElementById('productCategory').value = cat;
+        }
+
+        async function setProductCategory(val) {
+            localStorage.setItem('gtmos_product_category', JSON.stringify(val));
+
+            if (typeof window.updateWorkspaceProfile === 'function') {
+                var result = await window.updateWorkspaceProfile({ product_category: val });
+                if (result && result.error) {
+                    console.error('Product category sync failed:', result.error);
+                    toast('Saved locally. Supabase sync failed.');
+                    return;
+                }
+            }
+
             toast('Product category updated');
         }
 
@@ -178,10 +201,19 @@
             setTimeout(function() { window.location.href = '/app/onboarding/'; }, 1500);
         }
 
-        function resetOnboarding() {
+        async function resetOnboarding() {
             if (confirm('Start a new role setup? Your existing data stays safe.')) {
-                localStorage.removeItem('gtmos_onboarding');
-                localStorage.removeItem('gtmos_discovery_pledged');
+                if (typeof window.resetUserOnboardingState === 'function') {
+                    var result = await window.resetUserOnboardingState();
+                    if (result && result.error) {
+                        console.error('Onboarding reset failed:', result.error);
+                        alert((result.error && result.error.message) ? result.error.message : 'Unable to reset setup right now.');
+                        return;
+                    }
+                } else {
+                    localStorage.removeItem('gtmos_onboarding');
+                    localStorage.removeItem('gtmos_discovery_pledged');
+                }
                 window.location.href = '/app/onboarding/';
             }
         }
@@ -193,7 +225,7 @@
 
         function enterDemo() {
             sessionStorage.setItem('gtmos_env_mode', 'demo');
-            window.location.href = '/app/dashboard/?demo=1';
+            window.location.href = '/demo-seed.html?demo=1';
         }
 
         function exitDemo() {
@@ -201,8 +233,17 @@
             window.location.href = '/app/dashboard/';
         }
 
-        function handleSignOut() { window.location.href = '/login.html'; }
         function startTour() { if (typeof TourGuide !== 'undefined') TourGuide.start(); }
+
+        if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+            window.requireAuthReady.then(initializeSettingsState).catch(function() {
+                initializeSettingsState();
+            });
+        } else if (window.__gtmosAuthGatePending) {
+            window.addEventListener('gtmos:auth-ready', initializeSettingsState, { once: true });
+        } else {
+            initializeSettingsState();
+        }
     </script>
 </body>
 </html>

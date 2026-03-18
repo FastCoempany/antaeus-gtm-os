@@ -1,0 +1,17 @@
+{
+  "name": "gtmos-enrichment-server",
+  "version": "1.0.0",
+  "description": "Browserbase-powered account enrichment for Antaeus GTM OS Signal Console",
+  "type": "module",
+  "scripts": {
+    "start": "node enrich-server.js",
+    "test": "node test-enrich.js"
+  },
+  "dependencies": {
+    "@browserbasehq/stagehand": "^3.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.0",
+    "zod": "^3.24.0"
+  }
+}

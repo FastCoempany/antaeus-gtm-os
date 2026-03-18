@@ -212,7 +212,8 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -256,7 +257,12 @@
         </main>
     </div>
 
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="/js/supabase-config.js"></script>
+
+    <script src="/js/require-auth.js"></script>
+<script>
 
 // ═══════════════════════════════════════════
 // CONSTANTS
@@ -862,7 +868,13 @@ function renderGrid(){
     fetch('http://localhost:3001/enrich',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:acct.name,domain:acct.domain||null,industry:acct.industry||null})
+      body:JSON.stringify({
+        name:acct.name,
+        domain:acct.domain||null,
+        industry:acct.industry||null,
+        sector:acct.sector||null,
+        ticker:acct.ticker||null
+      })
     })
     .then(r=>{if(!r.ok)throw new Error('Server returned '+r.status);return r.json()})
     .then(data=>{

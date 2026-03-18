@@ -43,6 +43,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* ═══ NAV ═══ */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,8,13,0.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.04)}
 .nav-brand{font-family:var(--serif);font-size:1.15rem;color:var(--tx);text-decoration:none}.nav-brand em{font-style:normal;color:var(--accent)}
+.nav-actions{display:flex;align-items:center;gap:12px}
+.nav-login{font-family:var(--sans);font-size:0.78rem;font-weight:700;padding:9px 18px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);color:var(--tx2);text-decoration:none;transition:all 0.2s}
+.nav-login:hover{border-color:var(--accent-line);color:var(--tx);background:rgba(255,255,255,0.03)}
 .nav-cta{font-family:var(--sans);font-size:0.78rem;font-weight:700;padding:9px 22px;border-radius:999px;background:var(--accent);color:#fff;border:none;cursor:pointer;text-decoration:none;transition:background 0.2s}.nav-cta:hover{background:#a86540}
 
 /* ═══ HERO ═══ */
@@ -167,6 +170,22 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* ═══ DIVIDER ═══ */
 .divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:0 auto}
 </style>
+<script>
+(function(){
+  try{
+    var raw=window.localStorage.getItem('antaeus-auth-token');
+    if(!raw)return;
+    var parsed=JSON.parse(raw);
+    var hasSession=!!(
+      (parsed&&parsed.access_token)||
+      (parsed&&parsed.refresh_token)||
+      (parsed&&parsed.currentSession&&(parsed.currentSession.access_token||parsed.currentSession.refresh_token))||
+      (parsed&&parsed.session&&(parsed.session.access_token||parsed.session.refresh_token))
+    );
+    if(hasSession)window.location.replace('/app/dashboard/');
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <div class="page">
@@ -174,7 +193,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <!-- NAV -->
 <nav class="nav">
   <a href="#" class="nav-brand">antaeus<em>.</em></a>
-  <a href="#pricing" class="nav-cta">Get Started — $299/yr</a>
+  <div class="nav-actions">
+    <a href="/login.html" class="nav-login">Sign In</a>
+    <a href="#pricing" class="nav-cta">Get Started — $299/yr</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -473,6 +495,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   <div class="container">
     <div class="footer-brand">antaeus<em>.</em></div>
     <div class="footer-links">
+      <a href="/login.html">Sign In</a>
       <a href="/terms.html">Terms</a>
       <a href="/privacy.html">Privacy</a>
       <a href="mailto:hello@antaeus.app">Contact</a>

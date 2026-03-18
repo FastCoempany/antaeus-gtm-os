@@ -59,17 +59,27 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/onboarding.js"></script>
     <script>
-        function routeAfterAuth() {
+        async function routeAfterAuth(session) {
+            try {
+                if (typeof window.resolvePostAuthRoute === 'function') {
+                    window.location.href = await window.resolvePostAuthRoute(session, { force: true });
+                    return;
+                }
+            } catch (e) {
+                console.error('Post-auth routing failed:', e);
+            }
+
             if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
                 window.location.href = '/app/onboarding/';
-            } else {
-                window.location.href = '/app/dashboard/';
+                return;
             }
+
+            window.location.href = '/app/dashboard/';
         }
 
         function enterInteractiveDemo() {
             try { sessionStorage.setItem('gtmos_env_mode', 'demo'); } catch (e) {}
-            window.location.href = '/app/onboarding/?demo=1&noauth=1&noauth_email=demo@antaeus.local';
+            window.location.href = '/demo-seed.html';
         }
 
         function withTimeout(promise, ms) {
@@ -94,13 +104,7 @@
 
             var noAuth = false;
             try {
-                var params = new URLSearchParams(window.location.search || '');
-                noAuth =
-                    (typeof window.isAuthBypassEnabled === 'function' && window.isAuthBypassEnabled()) ||
-                    params.get('noauth') === '1' ||
-                    params.get('noauth') === 'true' ||
-                    params.get('offline') === '1' ||
-                    params.get('offline') === 'true';
+                noAuth = typeof window.isAuthBypassEnabled === 'function' && window.isAuthBypassEnabled();
             } catch (e) {}
 
             if (!noAuth && (!window.supabase || !window.supabase.createClient)) {
@@ -113,7 +117,7 @@
             initSupabase();
             try {
                 const session = await auth.getSession();
-                if (session) { routeAfterAuth(); }
+                if (session) { await routeAfterAuth(session); }
             } catch (e) {}
         });
         
@@ -135,7 +139,7 @@
             try {
                 const { data, error } = await withTimeout(auth.signIn(email, password), 10000);
                 if (error) throw error;
-                routeAfterAuth();
+                await routeAfterAuth(data && data.session ? data.session : null);
             } catch (error) {
                 var msg = (error && error.message) ? error.message : '';
                 var isConnectivityError = /timed out|network|failed to fetch|connect/i.test(msg);

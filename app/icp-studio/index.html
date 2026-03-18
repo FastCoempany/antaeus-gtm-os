@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -119,7 +119,8 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -541,25 +542,7 @@
     <script src="/js/migration.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
-    <script>
-        (async function() {
-            initSupabase();
-            if (localStorage.getItem('gtmos_noauth_mode')) return;
-            const session = await auth.getSession();
-            if (!session) { window.location.href = '/login.html'; return; }
-            const user = await auth.getUser();
-            if (user) {
-                var email = user.email || 'User';
-                document.getElementById('userName').textContent = email.split('@')[0];
-                document.getElementById('userAvatar').textContent = email.charAt(0).toUpperCase();
-            }
-        })();
-
-        window.handleSignOut = async function() {
-            await auth.signOut();
-            window.location.href = '/login.html';
-        };
-    </script>
+    <script src="/js/require-auth.js"></script>
     <script src="/js/tour-guide.js"></script>
     <script src="/js/module-tooltips.js"></script>
     <script src="/js/guided-rail.js"></script>
@@ -889,7 +872,7 @@
             }
         };
         
-        window.saveICP = function() {
+        window.saveICP = async function() {
             const industryRaw = val('in_industry');
             const buyerRaw = val('in_buyer');
             
@@ -912,12 +895,22 @@
                 alert('Please fill in at least Industry, Size, and Buyer to save.');
                 return;
             }
-            
-            // Load existing analytics
-            let analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
-            analytics.icps.push(icpData);
-            if (icpData.worked) analytics.totalWorked++;
-            localStorage.setItem('gtmos_icp_analytics', JSON.stringify(analytics));
+
+            if (window.saveIndicator) saveIndicator.saving();
+
+            if (window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.save === 'function') {
+                var persisted = await window.gtmPersistence.icps.save(icpData);
+                if (persisted && persisted.error) {
+                    if (window.saveIndicator) saveIndicator.error('Cloud sync failed');
+                    alert('Cloud save failed: ' + ((persisted.error && persisted.error.message) || 'Unknown error'));
+                    return;
+                }
+            } else {
+                let analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+                analytics.icps.push(icpData);
+                if (icpData.worked) analytics.totalWorked++;
+                localStorage.setItem('gtmos_icp_analytics', JSON.stringify(analytics));
+            }
             
             // Update session stats
             sessionCreated++;
@@ -1238,14 +1231,28 @@
             }
         }
         
-        window.deleteICP = function(idx) {
+        window.deleteICP = async function(idx) {
             if (!confirm('Delete this ICP?')) return;
             var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
-            var removed = analytics.icps.splice(idx, 1)[0];
-            if (removed && removed.worked) analytics.totalWorked = Math.max(0, analytics.totalWorked - 1);
-            localStorage.setItem('gtmos_icp_analytics', JSON.stringify(analytics));
+            var removed = analytics.icps[idx] || null;
+
+            if (removed && removed.id && window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.remove === 'function') {
+                if (window.saveIndicator) saveIndicator.saving();
+                var deleted = await window.gtmPersistence.icps.remove(removed.id);
+                if (deleted && deleted.error) {
+                    if (window.saveIndicator) saveIndicator.error('Delete failed');
+                    alert('Delete failed: ' + ((deleted.error && deleted.error.message) || 'Unknown error'));
+                    return;
+                }
+            } else {
+                analytics.icps.splice(idx, 1);
+                if (removed && removed.worked) analytics.totalWorked = Math.max(0, analytics.totalWorked - 1);
+                localStorage.setItem('gtmos_icp_analytics', JSON.stringify(analytics));
+            }
+
             renderLibrary();
             updateAnalyticsPanel();
+            if (window.saveIndicator) saveIndicator.saved('Deleted');
         };
         
         window.copyLibStatement = function(idx) {
@@ -1262,26 +1269,6 @@
         // INIT
         // ============================================
         
-        update();
-        updateAnalyticsPanel();
-        renderTemplateButtons();
-        renderLibrary();
-        // B3: Auto-hide hints after first ICP profile created
-        (function(){
-            var icpData=JSON.parse(localStorage.getItem('gtmos_icp_analytics')||'{"icps":[]}');
-            var container=document.querySelector('.app-content');
-            if(icpData.icps&&icpData.icps.length>=1&&container){
-                container.classList.add('hints-hidden');
-                var header=document.querySelector('.page-title');
-                if(header){
-                    var btn=document.createElement('button');
-                    btn.className='hint-toggle';
-                    btn.textContent='Show field hints';
-                    btn.onclick=function(){container.classList.toggle('hints-hidden');btn.textContent=container.classList.contains('hints-hidden')?'Show field hints':'Hide hints';};
-                    header.parentNode.insertBefore(btn,header.nextSibling);
-                }
-            }
-        })();
         if (window.saveIndicator) saveIndicator.mountAfter('.page-title');
         if (window.unsavedGuard) unsavedGuard.track('.app-main');
         
@@ -1291,6 +1278,42 @@
         });
     
         function startTour() { if (typeof TourGuide !== "undefined") TourGuide.start(); }
+
+        async function bootIcpStudio() {
+            if (window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.load === 'function') {
+                var loaded = await window.gtmPersistence.icps.load();
+                if (loaded && loaded.error && window.saveIndicator) saveIndicator.error('Using local cache');
+            }
+
+            update();
+            updateAnalyticsPanel();
+            renderTemplateButtons();
+            renderLibrary();
+
+            (function(){
+                var icpData=JSON.parse(localStorage.getItem('gtmos_icp_analytics')||'{"icps":[]}');
+                var container=document.querySelector('.app-content');
+                if(icpData.icps&&icpData.icps.length>=1&&container){
+                    container.classList.add('hints-hidden');
+                    var header=document.querySelector('.page-title');
+                    if(header && !document.querySelector('.hint-toggle')){
+                        var btn=document.createElement('button');
+                        btn.className='hint-toggle';
+                        btn.textContent='Show field hints';
+                        btn.onclick=function(){container.classList.toggle('hints-hidden');btn.textContent=container.classList.contains('hints-hidden')?'Show field hints':'Hide hints';};
+                        header.parentNode.insertBefore(btn,header.nextSibling);
+                    }
+                }
+            })();
+        }
+
+        if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+            window.requireAuthReady.then(bootIcpStudio).catch(function() {});
+        } else if (window.__gtmosAuthGatePending) {
+            window.addEventListener('gtmos:auth-ready', function() { bootIcpStudio().catch(function() {}); }, { once: true });
+        } else {
+            bootIcpStudio().catch(function() {});
+        }
 
         // Signal Console scoring
         window.scoreAccounts = function() {
@@ -1349,4 +1372,3 @@
     </script>
 </body>
 </html>
-

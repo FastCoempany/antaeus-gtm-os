@@ -59,7 +59,8 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -107,7 +108,10 @@
 
     <script src="/js/deal-health.js"></script>
     <script src="/js/proof-layer.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
     (function(){
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}

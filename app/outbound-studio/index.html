@@ -128,7 +128,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -280,7 +281,10 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
         </main>
     </div>
     <script src="/js/deal-health.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
 
 (function(){
 
@@ -291,6 +295,14 @@ function escH(s){var d=document.createElement('div');d.textContent=s||'';return 
 function uid(){return 'touch_'+Date.now()+'_'+Math.random().toString(36).substr(2,5)}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
 function cp(txt){if(navigator.clipboard)return navigator.clipboard.writeText(txt);var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();return Promise.resolve()}
+async function syncSequenceDoc(key,title,data){
+    if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.saveDocument==='function'){
+        var saved=await window.gtmPersistence.sequences.saveDocument(key,title,data);
+        if(saved&&saved.error)console.error('Sequence sync failed:',saved.error);
+        return saved;
+    }
+    return {data:null,error:null};
+}
 
 // ── DATA CONSTANTS ──
 
@@ -625,7 +637,7 @@ window.copyOutput = function(){
     cp(currentOutput).then(function(){toast('Copied')});
 };
 
-window.saveToAngles = function(){
+window.saveToAngles = async function(){
     if(!currentOutput){toast('Generate first');return}
     var angles = readLS('gtmos_angles',[]);
     angles.push({
@@ -639,10 +651,11 @@ window.saveToAngles = function(){
         savedAt:new Date().toISOString()
     });
     writeLS('gtmos_angles',angles);
+    await syncSequenceDoc('outbound_angles','Outbound Angles',angles);
     toast('Saved to angles ('+angles.length+' total)');
 };
 
-window.logTouch = function(){
+window.logTouch = async function(){
     if(!currentOutput){toast('Generate first');return}
     var data = readLS('gtmos_outbound_touches',{touches:[]});
     data.touches.push({
@@ -663,6 +676,7 @@ window.logTouch = function(){
         createdAt:new Date().toISOString()
     });
     writeLS('gtmos_outbound_touches',data);
+    await syncSequenceDoc('outbound_touches','Outbound Touch Log',data);
     toast('Touch logged');
     renderLog();
 };
@@ -755,12 +769,13 @@ function renderLog(){
     document.getElementById('logTable').innerHTML = html;
 }
 
-window.updateOutcome = function(idx,val){
+window.updateOutcome = async function(idx,val){
     var data = readLS('gtmos_outbound_touches',{touches:[]});
     if(data.touches[idx]){
         data.touches[idx].outcome = val||null;
         data.touches[idx].outcomeDate = val ? new Date().toISOString() : null;
         writeLS('gtmos_outbound_touches',data);
+        await syncSequenceDoc('outbound_touches','Outbound Touch Log',data);
         renderLog();
         toast('Outcome updated');
     }
@@ -785,7 +800,21 @@ function renderContentLibrary(){
 }
 
 // ── BOOT ──
-init();
+async function bootOutboundStudio(){
+    if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.load==='function'){
+        var loaded=await window.gtmPersistence.sequences.load();
+        if(loaded&&loaded.error)console.error('Sequence load failed:',loaded.error);
+    }
+    init();
+}
+
+if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+    window.requireAuthReady.then(bootOutboundStudio).catch(function(){});
+}else if(window.__gtmosAuthGatePending){
+    window.addEventListener('gtmos:auth-ready',function(){bootOutboundStudio().catch(function(){});},{once:true});
+}else{
+    bootOutboundStudio().catch(function(){});
+}
 
 })();
 

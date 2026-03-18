@@ -77,7 +77,8 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -99,13 +100,47 @@
     </div>
     <script src="/js/discovery-frameworks.js"></script>
     <script src="/js/proof-layer.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
     (function(){
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+        function readTextLS(k,fb){
+            try{
+                var raw=localStorage.getItem(k);
+                if(!raw)return fb;
+                try{
+                    var parsed=JSON.parse(raw);
+                    if(typeof parsed==='string')return parsed||fb;
+                }catch(e){}
+                return raw||fb;
+            }catch(e){return fb}
+        }
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+        function refreshDiscoveryState(){
+            currentCat=readTextLS('gtmos_product_category','cxai');
+            workedSet=new Set(readLS('gtmos_discovery_worked',[]));
+            stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+        }
+        async function syncDiscoveryState(){
+            if(window.gtmPersistence&&window.gtmPersistence.discovery&&typeof window.gtmPersistence.discovery.save==='function'){
+                var saved=await window.gtmPersistence.discovery.save({
+                    currentCategory:currentCat,
+                    workedIds:Array.from(workedSet),
+                    stats:stats,
+                    agenda:readLS('gtmos_discovery_agenda',null),
+                    handoff:readLS('gtmos_call_handoff',null)
+                });
+                if(saved&&saved.error)console.error('Discovery sync failed:',saved.error);
+                refreshDiscoveryState();
+                return saved;
+            }
+            return {data:null,error:null};
+        }
 
         var discoveryFrameworks=window.DISCOVERY_FRAMEWORKS||{};
-        var currentCat=localStorage.getItem('gtmos_product_category')||'cxai';
+        var currentCat=readTextLS('gtmos_product_category','cxai');
         var workedSet=new Set(readLS('gtmos_discovery_worked',[]));
         var stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
 
@@ -173,9 +208,10 @@
             document.getElementById('catBar').innerHTML=html;
         }
 
-        window.switchCat=function(cat){
+        window.switchCat=async function(cat){
             currentCat=cat;
-            localStorage.setItem('gtmos_product_category',cat);
+            localStorage.setItem('gtmos_product_category',JSON.stringify(cat));
+            await syncDiscoveryState();
             renderCatBar();
             renderContent();
         };
@@ -293,10 +329,11 @@
         window.toggleTerritory=function(head){head.parentElement.classList.toggle('open');};
         window.toggleSeg=function(head){head.parentElement.classList.toggle('open');};
 
-        window.toggleWorked=function(id,btn){
+        window.toggleWorked=async function(id,btn){
             if(workedSet.has(id)){workedSet.delete(id);btn.classList.remove('checked');btn.textContent='Mark worked';}
             else{workedSet.add(id);btn.classList.add('checked');btn.textContent='\u2713 Worked';}
             localStorage.setItem('gtmos_discovery_worked',JSON.stringify(Array.from(workedSet)));
+            await syncDiscoveryState();
             renderStats();
         };
 
@@ -307,9 +344,24 @@
             navigator.clipboard.writeText(txt).then(function(){alert('Copied '+workedSet.size+' worked moves!');});
         };
 
-        renderStats();
-        renderCatBar();
-        renderContent();
+        async function bootDiscoveryStudio(){
+            if(window.gtmPersistence&&window.gtmPersistence.discovery&&typeof window.gtmPersistence.discovery.load==='function'){
+                var loaded=await window.gtmPersistence.discovery.load();
+                if(loaded&&loaded.error)console.error('Discovery load failed:',loaded.error);
+            }
+            refreshDiscoveryState();
+            renderStats();
+            renderCatBar();
+            renderContent();
+        }
+
+        if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+            window.requireAuthReady.then(bootDiscoveryStudio).catch(function(){});
+        }else if(window.__gtmosAuthGatePending){
+            window.addEventListener('gtmos:auth-ready',function(){bootDiscoveryStudio().catch(function(){});},{once:true});
+        }else{
+            bootDiscoveryStudio().catch(function(){});
+        }
     })();
     </script>
 </body>

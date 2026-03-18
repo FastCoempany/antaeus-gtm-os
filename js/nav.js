@@ -128,17 +128,28 @@
 
     // Redirect to onboarding whenever onboarding is not completed.
     var currentPath = window.location.pathname;
-    if (currentPath.indexOf('/app/onboarding') === -1) {
+
+    function redirectToOnboardingIfNeeded() {
+        if (currentPath.indexOf('/app/onboarding') !== -1) return false;
         try {
             var onboardingState = JSON.parse(localStorage.getItem('gtmos_onboarding') || 'null');
             if (!onboardingState || onboardingState.completed !== true) {
                 window.location.replace('/app/onboarding/');
-                return;
+                return true;
             }
         } catch (e) {
             window.location.replace('/app/onboarding/');
-            return;
+            return true;
         }
+        return false;
+    }
+
+    if (window.__gtmosAuthGatePending) {
+        window.addEventListener('gtmos:auth-ready', function() {
+            redirectToOnboardingIfNeeded();
+        }, { once: true });
+    } else if (redirectToOnboardingIfNeeded()) {
+        return;
     }
 
 
@@ -289,11 +300,12 @@
     }
 
     function fallbackSidebarIdentity() {
+        var profileCache = readLS('gtmos_profile_cache', null) || {};
         var onboarding = readLS('gtmos_onboarding', null) || {};
         var answers = onboarding.answers || {};
         var playbook = readLS('gtmos_playbook', {});
-        var company = (answers.companyName || playbook.company || '').trim();
-        var persona = answers.role || onboarding.persona || '';
+        var company = (profileCache.company_name || answers.companyName || playbook.company || '').trim();
+        var persona = profileCache.role || answers.role || onboarding.persona || '';
         var email = '';
         try { email = String(localStorage.getItem('gtmos_noauth_email') || '').trim(); }
         catch (e) { email = ''; }
@@ -319,6 +331,7 @@
     }
 
     hydrateSidebarIdentity();
+    window.addEventListener('gtmos:auth-ready', hydrateSidebarIdentity, { once: true });
 
     function countFilledFields(obj) {
         if (!obj || typeof obj !== 'object') return 0;
@@ -554,10 +567,19 @@
         }
         var roleResetBtn = document.getElementById('roleResetBtn');
         if (roleResetBtn) {
-            roleResetBtn.onclick = function() {
+            roleResetBtn.onclick = async function() {
                 if (confirm('Start a new role setup? This will take you through onboarding again. Your existing data stays safe.')) {
-                    localStorage.removeItem('gtmos_onboarding');
-                    localStorage.removeItem('gtmos_discovery_pledged');
+                    if (typeof window.resetUserOnboardingState === 'function') {
+                        var result = await window.resetUserOnboardingState();
+                        if (result && result.error) {
+                            console.error('Role reset failed:', result.error);
+                            alert((result.error && result.error.message) ? result.error.message : 'Unable to reset setup right now.');
+                            return;
+                        }
+                    } else {
+                        localStorage.removeItem('gtmos_onboarding');
+                        localStorage.removeItem('gtmos_discovery_pledged');
+                    }
                     window.location.href = '/app/onboarding/';
                 }
             };

@@ -79,6 +79,23 @@
                 })
             ]);
         }
+        async function routeAfterAuth(session) {
+            try {
+                if (typeof window.resolvePostAuthRoute === 'function') {
+                    window.location.href = await window.resolvePostAuthRoute(session, { force: true });
+                    return;
+                }
+            } catch (e) {
+                console.error('Post-auth routing failed:', e);
+            }
+
+            if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
+                window.location.href = '/app/onboarding/';
+                return;
+            }
+
+            window.location.href = '/app/dashboard/';
+        }
 
         document.addEventListener('DOMContentLoaded', async () => {
             if (!window.supabase || !window.supabase.createClient) {
@@ -90,13 +107,7 @@
             initSupabase();
             try {
                 const session = await withTimeout(auth.getSession(), 8000);
-                if (session) {
-                    if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
-                        window.location.href = '/app/onboarding/';
-                    } else {
-                        window.location.href = '/app/command-center/';
-                    }
-                }
+                if (session) await routeAfterAuth(session);
             } catch(e) { /* ignore — just show signup form */ }
         });
         
@@ -120,7 +131,7 @@
             btnSpinner.classList.remove('hidden');
             
             try {
-                const redirectUrl = window.location.origin + "/auth/callback.html";
+                const redirectUrl = window.location.origin + "/auth/callback/";
 
                 const { data, error } = await withTimeout(auth.signUp(
                 email,
@@ -133,6 +144,11 @@
 
                 if (data.user && data.user.identities && data.user.identities.length === 0) {
                 throw new Error("An account with this email already exists.");
+                }
+
+                if (data.session) {
+                    await routeAfterAuth(data.session);
+                    return;
                 }
 
                 successMessage.classList.remove("hidden");

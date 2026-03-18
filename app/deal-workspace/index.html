@@ -124,7 +124,8 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -266,14 +267,21 @@
     </div>
 
     <script src="/js/proof-layer.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
     (function(){
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
         function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));}
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
         function fmtN(n){return'$'+Number(n||0).toLocaleString();}
         window.fmtC=function(el){var v=el.value.replace(/[^0-9]/g,'');el.value=v?Number(v).toLocaleString():''};
-        function uid(){return'deal_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);}
+        function uid(){
+            if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();
+            var tail=('000000000000'+Date.now().toString(16)).slice(-12);
+            return'00000000-0000-4000-8000-'.replace(/0/g,function(){return Math.floor(Math.random()*16).toString(16);})+tail;
+        }
         function daysBetween(a,b){var x=new Date(a),y=b?new Date(b):new Date();if(isNaN(x)||isNaN(y))return 0;return Math.floor((y-x)/86400000);}
         function fmtDate(d){if(!d)return'';try{return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return d;}}
         function isOverdue(d){if(!d)return false;try{return new Date(d+'T23:59:59')<new Date();}catch(e){return false;}}
@@ -331,6 +339,14 @@
             return raw.filter(Boolean);
         }
         function saveDeals(deals){writeLS(KEY,deals);}
+        async function syncDealsFromCloud(){
+            if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.load==='function'){
+                var loaded=await window.gtmPersistence.deals.load();
+                if(loaded&&loaded.error)console.error('Deal sync failed:',loaded.error);
+                return loaded;
+            }
+            return {data:loadDeals(),error:null};
+        }
 
         // --- Filter ---
         function filterDeals(deals){
@@ -542,7 +558,7 @@
         // --- Pending loss reason state ---
         var pendingLossDealId=null;
 
-        window.saveDeal=function(){
+        window.saveDeal=async function(){
             var account=document.getElementById('mAccount').value.trim();
             if(!account){alert('Account name is required.');return;}
             var deals=loadDeals();
@@ -577,8 +593,19 @@
                 logStageChange(deal.id,'',newStage);
             }
             deal.stage=newStage;
+            deal.stageHistory=(getStageHistory()[deal.id]||[]).slice();
 
             saveDeals(deals);
+
+            if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.save==='function'){
+                var saved=await window.gtmPersistence.deals.save(deal);
+                if(saved&&saved.error){
+                    console.error('Deal cloud save failed:',saved.error);
+                    alert('Cloud save failed: '+((saved.error&&saved.error.message)||'Unknown error'));
+                    return;
+                }
+            }
+
             closeModal();
 
             // If closed-lost and no loss reason yet, show loss modal
@@ -593,7 +620,7 @@
             render();
         };
 
-        window.saveLossReason=function(){
+        window.saveLossReason=async function(){
             var selected=document.querySelector('input[name="lossReason"]:checked');
             if(!selected){alert('Please select a reason.');return;}
             var deals=loadDeals();
@@ -602,6 +629,15 @@
                 deal.lossReason=selected.value;
                 deal.lossNotes=document.getElementById('lossNotes').value.trim();
                 saveDeals(deals);
+                if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.save==='function'){
+                    deal.stageHistory=(getStageHistory()[deal.id]||[]).slice();
+                    var saved=await window.gtmPersistence.deals.save(deal);
+                    if(saved&&saved.error){
+                        console.error('Loss reason sync failed:',saved.error);
+                        alert('Cloud save failed: '+((saved.error&&saved.error.message)||'Unknown error'));
+                        return;
+                    }
+                }
             }
             document.getElementById('lossModal').classList.remove('active');
             pendingLossDealId=null;
@@ -613,19 +649,38 @@
             pendingLossDealId=null;
         };
 
-        window.deleteDeal=function(){
+        window.deleteDeal=async function(){
             if(!confirm('Delete this deal?'))return;
             var editId=document.getElementById('editId').value;
             var deals=loadDeals().filter(function(d){return d.id!==editId;});
             saveDeals(deals);
+            if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.remove==='function'){
+                var removed=await window.gtmPersistence.deals.remove(editId);
+                if(removed&&removed.error){
+                    console.error('Deal delete failed:',removed.error);
+                    alert('Delete failed: '+((removed.error&&removed.error.message)||'Unknown error'));
+                    return;
+                }
+            }
             closeModal();
             render();
         };
 
         // URL param: pre-open a deal
         var urlDeal=new URLSearchParams(window.location.search).get('deal');
-        render();
-        if(urlDeal){openModal(urlDeal);}
+        async function bootDealWorkspace(){
+            await syncDealsFromCloud();
+            render();
+            if(urlDeal){openModal(urlDeal);}
+        }
+
+        if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+            window.requireAuthReady.then(bootDealWorkspace).catch(function(){});
+        }else if(window.__gtmosAuthGatePending){
+            window.addEventListener('gtmos:auth-ready',function(){bootDealWorkspace().catch(function(){});},{once:true});
+        }else{
+            bootDealWorkspace().catch(function(){});
+        }
     })();
     </script>
 </body>

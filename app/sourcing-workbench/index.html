@@ -183,7 +183,8 @@
 </style>
 </head>
 <body>
-    <div class="app-container">
+        <script src="/js/app-auth-preflight.js"></script>
+<div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
@@ -355,7 +356,10 @@
     </div>
     <script src="/js/deal-health.js"></script>
     <script src="/js/proof-layer.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/require-auth.js"></script>
+<script>
     window.exportWorkbench=function(){
         var data={};
         ['gtmos_sw_query_cards','gtmos_sw_prospects','gtmos_sw_persona_maps'].forEach(function(k){
