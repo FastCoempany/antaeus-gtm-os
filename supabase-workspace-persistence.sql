@@ -169,6 +169,28 @@ alter table public.discovery_frameworks add column if not exists updated_at time
 alter table public.discovery_frameworks alter column user_id set default auth.uid();
 create unique index if not exists discovery_frameworks_user_key_idx on public.discovery_frameworks (user_id, framework_key);
 
+do $$
+begin
+    if exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'public'
+          and table_name = 'discovery_frameworks'
+          and column_name = 'framework_data'
+    ) then
+        execute '
+            update public.discovery_frameworks
+            set data = coalesce(nullif(data, ''{}''::jsonb), framework_data, ''{}''::jsonb)
+            where framework_data is not null
+        ';
+        execute '
+            alter table public.discovery_frameworks
+            alter column framework_data drop not null
+        ';
+    end if;
+end;
+$$;
+
 create table if not exists public.discovery_call_logs (
     id uuid primary key default gen_random_uuid(),
     user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,

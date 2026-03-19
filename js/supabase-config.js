@@ -1617,7 +1617,11 @@ function findDiscoveryStateRow(rows) {
 }
 
 function mapDiscoveryStateFromRow(row) {
-    var data = cloneValue((row && row.data && typeof row.data === 'object') ? row.data : {});
+    var data = cloneValue(
+        (row && row.data && typeof row.data === 'object')
+            ? row.data
+            : ((row && row.framework_data && typeof row.framework_data === 'object') ? row.framework_data : {})
+    );
     return {
         currentCategory: cleanText(data.currentCategory || (row && row.category)) || 'cxai',
         workedIds: toArray(data.workedIds).map(function(id) { return String(id); }),
@@ -1625,6 +1629,22 @@ function mapDiscoveryStateFromRow(row) {
         agenda: data.agenda || null,
         handoff: data.handoff || null
     };
+}
+
+function isLegacyDiscoveryFrameworkSchemaError(error) {
+    if (!error) return false;
+    var msg = String(error.message || '').toLowerCase();
+    return msg.indexOf('framework_data') >= 0 && (
+        msg.indexOf('violates not-null constraint') >= 0 ||
+        msg.indexOf('null value in column') >= 0
+    );
+}
+
+function buildLegacyDiscoveryFrameworkPayload(payload) {
+    var next = Object.assign({}, cloneValue(payload || {}));
+    next.framework_data = cloneValue(next.data || {});
+    if (!next.framework_name && next.name) next.framework_name = next.name;
+    return next;
 }
 
 async function saveDiscoveryStateToCloud(state, sessionOverride) {
@@ -1651,6 +1671,12 @@ async function saveDiscoveryStateToCloud(state, sessionOverride) {
     var result = existing
         ? await db.discoveryFrameworks.update(existing.id, payload)
         : await db.discoveryFrameworks.create(user.id, payload);
+    if (result.error && isLegacyDiscoveryFrameworkSchemaError(result.error)) {
+        var legacyPayload = buildLegacyDiscoveryFrameworkPayload(payload);
+        result = existing
+            ? await db.discoveryFrameworks.update(existing.id, legacyPayload)
+            : await db.discoveryFrameworks.create(user.id, legacyPayload);
+    }
     if (result.error) return { data: next, error: result.error };
 
     return await loadDiscoveryStateFromCloud(sessionOverride, { skipBootstrap: true });
