@@ -1027,6 +1027,17 @@ app.post("/enrich", async (req, res) => {
   }
 });
 
+app.get("/", (_req, res) => {
+  res.json({
+    service: "Antaeus Enrichment Server",
+    status: "ok",
+    endpoints: {
+      health: "/health",
+      enrich: "POST /enrich",
+    },
+  });
+});
+
 app.get("/health", (_req, res) => {
   const missing = getMissingEnvKeys();
   const authMissing = getMissingAuthEnvKeys();
