@@ -80,8 +80,20 @@
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
 <script>
-    (function(){
+    (async function(){
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+        async function syncSignalConsoleState(){
+            if(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'){
+                var loaded=await window.gtmPersistence.signalConsole.load();
+                if(loaded&&loaded.error)console.error('Signal Console load failed:',loaded.error);
+                if(loaded&&loaded.data)return loaded.data;
+            }
+            return readLS('gtmos_sc_v4',{accounts:[]});
+        }
+
+        if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+            try{await window.requireAuthReady;}catch(e){}
+        }
 
         // ══════════════════════════════════════════════════════
         // DATA READS
@@ -94,7 +106,7 @@
         var angles=readLS('gtmos_angles',[]);
         var allDeals=readLS('gtmos_deal_workspaces',[]);
         if(!Array.isArray(allDeals))allDeals=Object.values(allDeals||{});
-        var scData=readLS('gtmos_sc_v4',{accounts:[]});
+        var scData=await syncSignalConsoleState();
         var scAccounts=(scData.accounts||[]).length;
         // NEW reads — Phase A
         var autopsyLog=readLS('gtmos_autopsy_log_v1',[]);

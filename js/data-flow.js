@@ -19,6 +19,21 @@
     var BADGE_KEY = 'gtmos_flow_badges';
     var TOAST_DURATION = 4500;
 
+    function getBadgeState() {
+        if (window.gtmLocalState && typeof window.gtmLocalState.getSession === 'function') {
+            return window.gtmLocalState.getSession(BADGE_KEY, {}, { scope: 'user', json: true }) || {};
+        }
+        try { return JSON.parse(sessionStorage.getItem(BADGE_KEY) || '{}'); } catch (e) { return {}; }
+    }
+
+    function setBadgeState(state) {
+        if (window.gtmLocalState && typeof window.gtmLocalState.setSession === 'function') {
+            window.gtmLocalState.setSession(BADGE_KEY, state || {}, { scope: 'user' });
+            return;
+        }
+        sessionStorage.setItem(BADGE_KEY, JSON.stringify(state || {}));
+    }
+
     // ── Toast Container ─────────────────────────────────────────────
     function ensureContainer() {
         var c = document.getElementById('dataFlowToasts');
@@ -63,17 +78,14 @@
     // Badges are session-scoped and clear when user visits the target page.
 
     function addNavBadge(targetPath) {
-        // Store badges in sessionStorage
-        var badges = {};
-        try { badges = JSON.parse(sessionStorage.getItem(BADGE_KEY) || '{}'); } catch(e) {}
+        var badges = getBadgeState();
         badges[targetPath] = true;
-        sessionStorage.setItem(BADGE_KEY, JSON.stringify(badges));
+        setBadgeState(badges);
         renderBadges();
     }
 
     function renderBadges() {
-        var badges = {};
-        try { badges = JSON.parse(sessionStorage.getItem(BADGE_KEY) || '{}'); } catch(e) {}
+        var badges = getBadgeState();
 
         // Remove existing badges
         document.querySelectorAll('.data-flow-badge').forEach(function(b) { b.remove(); });
@@ -85,7 +97,7 @@
             // Don't badge the current page
             if (window.location.pathname.indexOf(path) >= 0) {
                 delete badges[path];
-                sessionStorage.setItem(BADGE_KEY, JSON.stringify(badges));
+                setBadgeState(badges);
                 return;
             }
             var dot = document.createElement('span');
@@ -100,13 +112,12 @@
     // Clear badge for current page on load
     function clearCurrentPageBadge() {
         var path = window.location.pathname;
-        var badges = {};
-        try { badges = JSON.parse(sessionStorage.getItem(BADGE_KEY) || '{}'); } catch(e) {}
+        var badges = getBadgeState();
         var changed = false;
         Object.keys(badges).forEach(function(p) {
             if (path.indexOf(p) >= 0) { delete badges[p]; changed = true; }
         });
-        if (changed) sessionStorage.setItem(BADGE_KEY, JSON.stringify(badges));
+        if (changed) setBadgeState(badges);
     }
 
     // ── Inject Keyframes ────────────────────────────────────────────

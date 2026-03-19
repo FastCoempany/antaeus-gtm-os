@@ -421,6 +421,21 @@ var CONTENT_TYPES = [
 // ── STATE ──
 var noAskMode = false;
 var currentOutput = '';
+var signalConsoleAccounts = [];
+
+async function syncSignalConsoleAccounts(){
+    if(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'){
+        var loaded=await window.gtmPersistence.signalConsole.load();
+        if(loaded&&loaded.error)console.error('Signal Console load failed:',loaded.error);
+        if(loaded&&loaded.data&&Array.isArray(loaded.data.accounts)){
+            signalConsoleAccounts=loaded.data.accounts.slice();
+            return loaded;
+        }
+    }
+    var fallback=readLS('gtmos_sc_v4',{accounts:[]});
+    signalConsoleAccounts=(fallback.accounts||[]).slice();
+    return {data:{accounts:signalConsoleAccounts},error:null};
+}
 
 // ── INIT ──
 function init(){
@@ -447,16 +462,16 @@ function init(){
 }
 
 function populateAccounts(){
-    var sc = readLS('gtmos_sc_v4',{accounts:[]});
     var sel = document.getElementById('gAccount');
-    (sc.accounts||[]).sort(function(a,b){return(b._heat||0)-(a._heat||0)}).forEach(function(a){
+    sel.innerHTML = '<option value="">Select account...</option>';
+    signalConsoleAccounts.slice().sort(function(a,b){return(b._heat||0)-(a._heat||0)}).forEach(function(a){
         var opt = document.createElement('option');
         opt.value = a.name;
         opt.textContent = a.name + (a._heat ? ' (heat '+a._heat+')' : '');
         sel.appendChild(opt);
     });
     sel.onchange = function(){
-        var acct = (sc.accounts||[]).find(function(a){return a.name===sel.value});
+        var acct = signalConsoleAccounts.find(function(a){return a.name===sel.value});
         if(acct&&acct.signals&&acct.signals.length){
             document.getElementById('gAccountHint').textContent = 'Top signal: '+acct.signals[0].headline;
         } else {
@@ -526,8 +541,7 @@ window.generate = function(){
     var ctaKey = noAskMode ? 'no_ask' : (CTA_BY_TEMP[temp]||{}).normal;
     var asset = (ASSET_MATRIX[temp]||{})[persona]||'none';
 
-    var sc = readLS('gtmos_sc_v4',{accounts:[]});
-    var acct = (sc.accounts||[]).find(function(a){return a.name===account});
+    var acct = signalConsoleAccounts.find(function(a){return a.name===account});
     var signalText = acct&&acct.signals&&acct.signals[0] ? acct.signals[0].headline : triggerData.meaning;
     var angle = triggerData.angles[0]||'value';
     var playbook = readLS('gtmos_playbook',{});
@@ -805,6 +819,7 @@ async function bootOutboundStudio(){
         var loaded=await window.gtmPersistence.sequences.load();
         if(loaded&&loaded.error)console.error('Sequence load failed:',loaded.error);
     }
+    await syncSignalConsoleAccounts();
     init();
 }
 

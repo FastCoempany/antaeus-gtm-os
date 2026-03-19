@@ -382,7 +382,12 @@ var KEYS = {
     personaMaps:'gtmos_sw_persona_maps'
 };
 function readLS(k,fb){try{var v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch(e){return fb;}}
-function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));}
+function syncDocToCloud(key,data){
+    if(!(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'))return;
+    if(!window.gtmPersistence.docs.has(key))return;
+    window.gtmPersistence.docs.save(key,data).catch(function(error){console.error('Sourcing Workbench sync failed for',key,error);});
+}
+function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));syncDocToCloud(k,v);}
 function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
 function daysSince(iso){return iso?Math.floor((Date.now()-new Date(iso).getTime())/86400000):999;}
 function esc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
@@ -956,11 +961,27 @@ document.querySelectorAll('.sw-modal-overlay').forEach(function(o){
 
 // ============ INIT ============
 // Check TA onboarding
-var taSetup=readLS('gtmos_ta_setup',null);
-if(!taSetup){
+async function bootSourcingWorkbench(){
+    if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
+        await window.gtmPersistence.docs.load({keys:[
+            'gtmos_sw_query_cards','gtmos_sw_prospects','gtmos_sw_persona_maps',
+            'gtmos_ta_theses','gtmos_ta_approaches','gtmos_ta_accounts','gtmos_ta_dispositions','gtmos_ta_setup'
+        ]}).catch(function(error){console.error('Sourcing Workbench docs preload failed:',error);});
+    }
+    var taSetup=readLS('gtmos_ta_setup',null);
+    if(!taSetup){
     document.querySelector('.app-content').innerHTML='<div style="text-align:center;padding:60px 24px;"><div style="font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);margin-bottom:12px;">Territory Architect Required</div><div style="color:var(--text-muted);margin-bottom:24px;">Complete Territory Architect onboarding first to define your theses. The Sourcing Workbench uses your theses to drive sourcing queries.</div><a href="/app/territory-architect/" class="sw-modal-btn primary" style="text-decoration:none;display:inline-block;">Go to Territory Architect →</a></div>';
 } else {
-    render();
+        render();
+    }
+}
+
+if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+    window.requireAuthReady.then(bootSourcingWorkbench).catch(function(){});
+}else if(window.__gtmosAuthGatePending){
+    window.addEventListener('gtmos:auth-ready',function(){bootSourcingWorkbench().catch(function(){});},{once:true});
+}else{
+    bootSourcingWorkbench().catch(function(){});
 }
 })();
 </script>

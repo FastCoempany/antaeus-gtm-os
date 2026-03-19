@@ -18,13 +18,66 @@
 
     var THRESHOLD = 80;
     var DISMISS_KEY = 'gtmos_rail_dismissed';
+    function isDismissed() {
+        if (window.gtmLocalState && typeof window.gtmLocalState.getSession === 'function') {
+            return window.gtmLocalState.getSession(DISMISS_KEY, null, { scope: 'user' }) === '1';
+        }
+        return sessionStorage.getItem(DISMISS_KEY) === '1';
+    }
+    function setDismissed() {
+        if (window.gtmLocalState && typeof window.gtmLocalState.setSession === 'function') {
+            window.gtmLocalState.setSession(DISMISS_KEY, '1', { scope: 'user' });
+            return;
+        }
+        sessionStorage.setItem(DISMISS_KEY, '1');
+    }
 
     function readLS(key, fallback) {
         try { return JSON.parse(localStorage.getItem(key)) || fallback; }
         catch(e) { return fallback; }
     }
 
-    function readDealsLocal() {
+    var workspaceSummary = null;
+    var workspaceSummaryPromise = null;
+
+    function currentWorkspaceSummary() {
+        return workspaceSummary || window.__gtmosWorkspaceSummary || {
+            onboarding: readLS('gtmos_onboarding', null),
+            playbook: readLS('gtmos_playbook', {}),
+            icpAnalytics: readLS('gtmos_icp_analytics', { icps: [], totalWorked: 0 }),
+            discovery: {
+                stats: readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 }),
+                agenda: readLS('gtmos_discovery_agenda', {})
+            },
+            outboundSeed: readLS('gtmos_outbound_seed', {}),
+            sequences: { angles: readLS('gtmos_angles', []) },
+            deals: readDealsLocal(true)
+        };
+    }
+
+    async function loadWorkspaceSummary(force) {
+        if (force) workspaceSummaryPromise = null;
+        if (workspaceSummaryPromise) return workspaceSummaryPromise;
+        if (!(window.gtmPersistence && window.gtmPersistence.workspace && typeof window.gtmPersistence.workspace.loadSummary === 'function')) {
+            return Promise.resolve(currentWorkspaceSummary());
+        }
+        workspaceSummaryPromise = window.gtmPersistence.workspace.loadSummary({ force: !!force }).then(function(loaded) {
+            if (loaded && loaded.error) console.error('Workspace summary load failed for guided rail:', loaded.error);
+            if (loaded && loaded.data) workspaceSummary = loaded.data;
+            return currentWorkspaceSummary();
+        }).catch(function(error) {
+            console.error('Workspace summary load failed for guided rail:', error);
+            workspaceSummaryPromise = null;
+            return currentWorkspaceSummary();
+        });
+        return workspaceSummaryPromise;
+    }
+
+    function readDealsLocal(skipWorkspace) {
+        if (!skipWorkspace) {
+            var workspace = workspaceSummary || window.__gtmosWorkspaceSummary;
+            if (workspace && Array.isArray(workspace.deals)) return workspace.deals;
+        }
         var raw = readLS('gtmos_deal_workspaces', []);
         if (Array.isArray(raw)) return raw;
         if (raw && typeof raw === 'object') {
@@ -51,7 +104,7 @@
 
     // ── Persona Detection ──────────────────────────────────────────
     function getPersona() {
-        var ob = readLS('gtmos_onboarding', null);
+        var ob = currentWorkspaceSummary().onboarding || readLS('gtmos_onboarding', null);
         return (ob && ob.persona) ? ob.persona : 'founder';
     }
 
@@ -101,14 +154,15 @@
 
     // ── Gap Analysis ────────────────────────────────────────────────
     function findGaps() {
+        var workspace = currentWorkspaceSummary();
         var gaps = [];
-        var playbook = readLS('gtmos_playbook', {});
+        var playbook = workspace.playbook || readLS('gtmos_playbook', {});
         var fields = playbook.fields || {};
-        var thinIcp = readLS('gtmos_icp_analytics', { icps: [], totalWorked: 0 });
-        var agenda = readLS('gtmos_discovery_agenda', {});
-        var discoStats = readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
-        var seed = readLS('gtmos_outbound_seed', {});
-        var angles = readLS('gtmos_angles', []);
+        var thinIcp = workspace.icpAnalytics || readLS('gtmos_icp_analytics', { icps: [], totalWorked: 0 });
+        var agenda = (workspace.discovery && workspace.discovery.agenda) || readLS('gtmos_discovery_agenda', {});
+        var discoStats = (workspace.discovery && workspace.discovery.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
+        var seed = workspace.outboundSeed || readLS('gtmos_outbound_seed', {});
+        var angles = (workspace.sequences && workspace.sequences.angles) || readLS('gtmos_angles', []);
         var reviews = readLS('gtmos_deal_reviews', []);
         var quals = (typeof gtmStore !== 'undefined' && gtmStore.quals) ? gtmStore.quals.getAll() : {};
         var outcomes = (typeof gtmStore !== 'undefined' && gtmStore.outcomes) ? gtmStore.outcomes.count() : { total: 0, wins: 0, losses: 0 };
@@ -205,8 +259,9 @@
     }
 
     // ── Render Banner ───────────────────────────────────────────────
-    function render() {
-        if (sessionStorage.getItem(DISMISS_KEY)) return;
+    async function render() {
+        await loadWorkspaceSummary();
+        if (isDismissed()) return;
         
         var path = window.location.pathname;
         if (path.indexOf('/login') >= 0) return;
@@ -215,10 +270,11 @@
         if (typeof computeReadinessTotal === 'function') {
             total = computeReadinessTotal();
         } else {
-            var playbook = readLS('gtmos_playbook', {});
-            var thinIcp = readLS('gtmos_icp_analytics', { icps: [] });
-            var disco = readLS('gtmos_discovery_stats', { totalCalls: 0 });
-            var angles = readLS('gtmos_angles', []);
+            var workspace = currentWorkspaceSummary();
+            var playbook = workspace.playbook || readLS('gtmos_playbook', {});
+            var thinIcp = workspace.icpAnalytics || readLS('gtmos_icp_analytics', { icps: [] });
+            var disco = (workspace.discovery && workspace.discovery.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0 });
+            var angles = (workspace.sequences && workspace.sequences.angles) || readLS('gtmos_angles', []);
             var quals = (typeof gtmStore !== 'undefined' && gtmStore.quals) ? gtmStore.quals.getAll() : {};
             total = Math.min(100,
                 (thinIcp.icps.length > 0 ? 10 : 0) +
@@ -263,7 +319,7 @@
         actionHtml += '</div>';
 
         var ctaHtml = '<a href="' + topGap.link + '" style="padding:8px 18px;background:linear-gradient(135deg,rgba(212,165,116,0.2),rgba(168,85,247,0.12));border:1px solid rgba(212,165,116,0.4);border-radius:10px;color:var(--brand-gold,#d4a574);font-weight:800;font-size:0.8rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,165,116,0.15);" onmouseenter="this.style.background=\'linear-gradient(135deg,rgba(212,165,116,0.35),rgba(168,85,247,0.2))\';this.style.transform=\'translateY(-1px)\'" onmouseleave="this.style.background=\'linear-gradient(135deg,rgba(212,165,116,0.2),rgba(168,85,247,0.12))\';this.style.transform=\'none\'">Go →</a>';
-        var dismissHtml = '<button onclick="document.getElementById(\'guidedRail\').remove();sessionStorage.setItem(\'' + DISMISS_KEY + '\',\'1\');" style="background:none;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:1.1rem;padding:4px 8px;line-height:1;opacity:0.5;transition:opacity 0.2s;" onmouseenter="this.style.opacity=\'1\'" onmouseleave="this.style.opacity=\'0.5\'" title="Dismiss">×</button>';
+        var dismissHtml = '<button onclick="document.getElementById(\'guidedRail\').remove();if(window.gtmGuidedRail&&typeof window.gtmGuidedRail.dismiss===\'function\'){window.gtmGuidedRail.dismiss();}" style="background:none;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:1.1rem;padding:4px 8px;line-height:1;opacity:0.5;transition:opacity 0.2s;" onmouseenter="this.style.opacity=\'1\'" onmouseleave="this.style.opacity=\'0.5\'" title="Dismiss">×</button>';
 
         banner.innerHTML = progressHtml + actionHtml + ctaHtml + dismissHtml;
 
@@ -290,15 +346,18 @@
             '<span style="font-weight:700;color:#22c55e;">Readiness: ' + total + '/100</span>' +
             '<span style="color:var(--text-secondary,#cbd5e1);flex:1;">Your Handoff Kit is ready to generate.</span>' +
             '<a href="/app/founding-gtm/" style="padding:5px 14px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:6px;color:#22c55e;font-weight:700;font-size:0.75rem;text-decoration:none;">Open Handoff Kit →</a>' +
-            '<button onclick="document.getElementById(\'guidedRail\').remove();sessionStorage.setItem(\'' + DISMISS_KEY + '\',\'1\');" style="background:none;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:1rem;padding:2px 6px;">×</button>';
+            '<button onclick="document.getElementById(\'guidedRail\').remove();if(window.gtmGuidedRail&&typeof window.gtmGuidedRail.dismiss===\'function\'){window.gtmGuidedRail.dismiss();}" style="background:none;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:1rem;padding:2px 6px;">×</button>';
 
         var main = document.querySelector('.app-main');
         if (main) main.insertBefore(banner, main.firstChild);
     }
 
     // ── Init ────────────────────────────────────────────────────────
-    function init() {
-        setTimeout(render, 300);
+    async function init() {
+        await loadWorkspaceSummary();
+        setTimeout(function() {
+            render().catch(function() {});
+        }, 300);
     }
 
     if (document.readyState === 'loading') {
@@ -307,7 +366,16 @@
         init();
     }
 
-    window.guidedRail = { render: render, findGaps: findGaps };
+    window.gtmGuidedRail = { dismiss: setDismissed };
+    window.guidedRail = { render: render, findGaps: findGaps, preload: loadWorkspaceSummary, dismiss: setDismissed };
+
+    window.addEventListener('gtmos:workspace-summary-ready', function(event) {
+        if (event && event.detail) workspaceSummary = event.detail;
+        workspaceSummaryPromise = Promise.resolve(workspaceSummary || currentWorkspaceSummary());
+        var existing = document.getElementById('guidedRail');
+        if (existing) existing.remove();
+        render().catch(function() {});
+    });
 
     // Inject guided rail glow animation
     var grAnimStyle = document.createElement('style');

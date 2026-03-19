@@ -126,6 +126,12 @@
         }
 
         var profileSyncTimer = null;
+        function syncDocToCloud(key, data) {
+            if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function')) return;
+            window.gtmPersistence.docs.save(key, data).catch(function(error) {
+                console.error('Quota workback doc sync failed for', key, error);
+            });
+        }
         function scheduleProfileSync(quota, acv, band) {
             if (typeof window.updateWorkspaceProfile !== 'function') return;
             if (profileSyncTimer) clearTimeout(profileSyncTimer);
@@ -141,18 +147,8 @@
             }, 500);
         }
 
-        var saved=readLS('gtmos_qw_inputs',{});
-        var seed=readLS('gtmos_outbound_seed',{});
-
-        document.getElementById('inQuota').value=fmtN(saved.quota||seed.annual_quota||0);
-        document.getElementById('inACV').value=fmtN(saved.acv||seed.avg_deal_size||50000);
-        document.getElementById('inWin').value=saved.win||seed.win_rate||20;
-        document.getElementById('inM2O').value=saved.m2o||35;
-        document.getElementById('inT2M').value=saved.t2m||seed.touch_to_meeting||0.7;
-        document.getElementById('inShow').value=saved.show||seed.show_rate||80;
-        document.getElementById('inDays').value=saved.days||20;
-        document.getElementById('inTPA').value=saved.tpa||8;
-        document.getElementById('inCycle').value=saved.cycle||seed.cycle_days||45;
+        var saved={};
+        var seed={};
 
         window.fmtC=function(el){var v=el.value.replace(/[^0-9]/g,'');el.value=v?Number(v).toLocaleString():''};
         function num(id){return Number((document.getElementById(id).value||'0').toString().replace(/[^0-9.]/g,''));}
@@ -209,8 +205,11 @@
             // Save
             var inputs={quota:quota,acv:acv,win:num('inWin'),m2o:num('inM2O'),t2m:num('inT2M'),show:num('inShow'),days:days,tpa:tpa,cycle:cycle};
             localStorage.setItem('gtmos_qw_inputs',JSON.stringify(inputs));
+            syncDocToCloud('gtmos_qw_inputs', inputs);
             var currentBand = getBand(acv);
-            localStorage.setItem('gtmos_outbound_seed',JSON.stringify({annual_quota:quota,avg_deal_size:acv,win_rate:num('inWin'),touch_to_meeting:num('inT2M'),show_rate:num('inShow'),cycle_days:cycle,coverage_target:ACV_BENCHMARKS[currentBand].coverage,acv_band:currentBand}));
+            var outboundSeed={annual_quota:quota,avg_deal_size:acv,win_rate:num('inWin'),touch_to_meeting:num('inT2M'),show_rate:num('inShow'),cycle_days:cycle,coverage_target:ACV_BENCHMARKS[currentBand].coverage,acv_band:currentBand};
+            localStorage.setItem('gtmos_outbound_seed',JSON.stringify(outboundSeed));
+            syncDocToCloud('gtmos_outbound_seed', outboundSeed);
             scheduleProfileSync(quota, acv, currentBand);
 
             // Coverage bar
@@ -247,8 +246,48 @@
             document.getElementById('benchCards').style.display='grid';
         };
 
-        calc();
-        checkBenchmarks();
+        async function initQuotaWorkback(){
+            if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+                try{await window.requireAuthReady;}catch(e){}
+            }
+            if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
+                var docsLoaded=await window.gtmPersistence.docs.load({keys:['gtmos_qw_inputs','gtmos_outbound_seed']});
+                if(docsLoaded&&docsLoaded.error)console.error('Quota Workback docs preload failed:',docsLoaded.error);
+            }
+
+            saved=readLS('gtmos_qw_inputs',{});
+            seed=readLS('gtmos_outbound_seed',{});
+
+            document.getElementById('inQuota').value=fmtN(saved.quota||seed.annual_quota||0);
+            document.getElementById('inACV').value=fmtN(saved.acv||seed.avg_deal_size||50000);
+            document.getElementById('inWin').value=saved.win||seed.win_rate||20;
+            document.getElementById('inM2O').value=saved.m2o||35;
+            document.getElementById('inT2M').value=saved.t2m||seed.touch_to_meeting||0.7;
+            document.getElementById('inShow').value=saved.show||seed.show_rate||80;
+            document.getElementById('inDays').value=saved.days||20;
+            document.getElementById('inTPA').value=saved.tpa||8;
+            document.getElementById('inCycle').value=saved.cycle||seed.cycle_days||45;
+
+            calc();
+            checkBenchmarks();
+        }
+
+        initQuotaWorkback().catch(function(error){
+            console.error('Quota Workback init failed:',error);
+            saved=readLS('gtmos_qw_inputs',{});
+            seed=readLS('gtmos_outbound_seed',{});
+            document.getElementById('inQuota').value=fmtN(saved.quota||seed.annual_quota||0);
+            document.getElementById('inACV').value=fmtN(saved.acv||seed.avg_deal_size||50000);
+            document.getElementById('inWin').value=saved.win||seed.win_rate||20;
+            document.getElementById('inM2O').value=saved.m2o||35;
+            document.getElementById('inT2M').value=saved.t2m||seed.touch_to_meeting||0.7;
+            document.getElementById('inShow').value=saved.show||seed.show_rate||80;
+            document.getElementById('inDays').value=saved.days||20;
+            document.getElementById('inTPA').value=saved.tpa||8;
+            document.getElementById('inCycle').value=saved.cycle||seed.cycle_days||45;
+            calc();
+            checkBenchmarks();
+        });
 
         window.copyMath=function(){
             var txt='QUOTA WORKBACK\n'+document.getElementById('heroTouches').textContent+' '+document.getElementById('heroLabel').textContent+'\n\n';

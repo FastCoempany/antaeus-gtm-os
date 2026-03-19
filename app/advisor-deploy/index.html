@@ -215,7 +215,12 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
 (function(){
 // ── UTILS ──
 function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
-function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function syncDocToCloud(key,data){
+    if(!(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'))return;
+    if(!window.gtmPersistence.docs.has(key))return;
+    window.gtmPersistence.docs.save(key,data).catch(function(error){console.error('Advisor Deploy sync failed for',key,error);});
+}
+function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));syncDocToCloud(k,v)}
 function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 function uid(){return 'dep_'+Date.now()+'_'+Math.random().toString(36).substr(2,5)}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
@@ -650,8 +655,24 @@ function renderImpact(){
 }
 
 // ── INIT ──
-renderPlaybook();
-renderDashboard();
+async function bootAdvisorDeploy(){
+    if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
+        await window.gtmPersistence.docs.load({keys:['gtmos_advisor_registry','gtmos_advisor_deployments']}).catch(function(error){console.error('Advisor Deploy docs preload failed:',error);});
+    }
+    if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.load==='function'){
+        await window.gtmPersistence.deals.load().catch(function(error){console.error('Advisor Deploy deals preload failed:',error);});
+    }
+    renderPlaybook();
+    renderDashboard();
+}
+
+if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+    window.requireAuthReady.then(bootAdvisorDeploy).catch(function(){});
+}else if(window.__gtmosAuthGatePending){
+    window.addEventListener('gtmos:auth-ready',function(){bootAdvisorDeploy().catch(function(){});},{once:true});
+}else{
+    bootAdvisorDeploy().catch(function(){});
+}
 
 })();
 

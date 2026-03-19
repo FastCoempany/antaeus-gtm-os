@@ -379,6 +379,34 @@ const MAX_DAILY=50;
 const DEFAULT_ENRICHMENT_BASE_URL='https://enrich.antaeus.app';
 const SC_SYNC={cloudEnabled:!!(window.gtmPersistence&&window.gtmPersistence.signalConsole),hydrated:false,loading:false,saving:false,lastSyncedAt:null,error:null};
 
+function readScopedUiJson(key,fallback){
+  if(window.gtmLocalState&&typeof window.gtmLocalState.get==='function'){
+    return window.gtmLocalState.get(key,fallback,{scope:'user',json:true});
+  }
+  try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch{return fallback}
+}
+function writeScopedUiJson(key,value){
+  if(window.gtmLocalState&&typeof window.gtmLocalState.set==='function'){
+    window.gtmLocalState.set(key,value,{scope:'user'});
+    return;
+  }
+  try{localStorage.setItem(key,JSON.stringify(value))}catch{}
+}
+function readScopedUiText(key,fallback){
+  if(window.gtmLocalState&&typeof window.gtmLocalState.get==='function'){
+    return window.gtmLocalState.get(key,fallback,{scope:'user'});
+  }
+  const raw=localStorage.getItem(key);
+  return raw==null?fallback:raw;
+}
+function writeScopedUiText(key,value){
+  if(window.gtmLocalState&&typeof window.gtmLocalState.set==='function'){
+    window.gtmLocalState.set(key,String(value),{scope:'user'});
+    return;
+  }
+  try{localStorage.setItem(key,String(value))}catch{}
+}
+
 function normalizeSignalItem(sg){
   return {...(sg||{}),id:(sg&&sg.id)||rid(),status:(sg&&sg.status)||'unverified',pain_tags:Array.isArray(sg&&sg.pain_tags)&&(sg.pain_tags||[]).length?(sg.pain_tags||[]):autoTag(sg||{}),fetched_at:(sg&&sg.fetched_at)||new Date().toISOString()};
 }
@@ -550,8 +578,8 @@ function applyResearchNotice(acct,kind,message,timeoutMs){
   }
 }
 
-function getUsage(){try{const u=JSON.parse(localStorage.getItem(LS_USAGE)||'{}');if(u.date!==today())return{date:today(),calls:0};return u}catch{return{date:today(),calls:0}}}
-function addUsage(n){const u=getUsage();u.calls+=n;u.date=today();localStorage.setItem(LS_USAGE,JSON.stringify(u))}
+function getUsage(){try{const u=readScopedUiJson(LS_USAGE,{})||{};if(u.date!==today())return{date:today(),calls:0};return u}catch{return{date:today(),calls:0}}}
+function addUsage(n){const u=getUsage();u.calls+=n;u.date=today();writeScopedUiJson(LS_USAGE,u)}
 function remaining(){return Math.max(0,MAX_DAILY-getUsage().calls)}
 function today(){return new Date().toISOString().slice(0,10)}
 
@@ -788,9 +816,9 @@ function importCSV(){
     added++;
   });
   // Save batch
-  const batches=JSON.parse(localStorage.getItem(LS_BATCHES)||'[]');
+  const batches=readScopedUiJson(LS_BATCHES,[]);
   batches.push({id:batchId,name:`Upload ${new Date().toLocaleDateString()}`,uploadedAt:new Date().toISOString(),count:added});
-  localStorage.setItem(LS_BATCHES,JSON.stringify(batches));
+  writeScopedUiJson(LS_BATCHES,batches);
   S.activeBatch=batchId;
   save(S);hideModal();render();
   if(added>0)persistSignalConsoleAccounts(S.accounts);
@@ -925,7 +953,7 @@ function renderCredits(){
 
 function renderControls(){
   const bar=document.getElementById('controlsBar');
-  const batches=JSON.parse(localStorage.getItem(LS_BATCHES)||'[]');
+  const batches=readScopedUiJson(LS_BATCHES,[]);
   const industries=[...new Set(S.accounts.map(a=>a.industry).filter(Boolean))].sort();
   const pains=Object.entries(PAIN_LIB);
   let h='<div class="mode-group">';
@@ -957,7 +985,7 @@ function renderControls(){
 
 function renderMorning(){
   const mb=document.getElementById('morningBrief');
-  const dismissed=localStorage.getItem(LS_MORNING)===today();
+  const dismissed=readScopedUiText(LS_MORNING,'')===today();
   if(dismissed){mb.classList.remove('show');return}
   const top3=S.accounts.sort((a,b)=>heat(b)-heat(a)).slice(0,3);
   if(!top3.length){mb.classList.remove('show');return}
@@ -978,7 +1006,7 @@ function renderMorning(){
     </div>
   </div>`}).join('')}
 </div>`;
-  document.getElementById('dismissMorning').onclick=()=>{localStorage.setItem(LS_MORNING,today());mb.classList.remove('show')};
+  document.getElementById('dismissMorning').onclick=()=>{writeScopedUiText(LS_MORNING,today());mb.classList.remove('show')};
   mb.querySelectorAll('[data-prep]').forEach(b=>b.onclick=()=>{
     const acct=S.accounts.find(a=>a.id===b.dataset.prep);
     if(acct)navigator.clipboard.writeText(genBrief(acct)).then(()=>{b.textContent='✓ Copied!';setTimeout(()=>b.textContent='Prep Call',1500)});

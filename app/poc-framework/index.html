@@ -427,8 +427,22 @@ Best,
             URL.revokeObjectURL(url);
         };
         
+        function readPocList() {
+            try { return JSON.parse(localStorage.getItem('gtmos_poc_data') || '{"pocs":[]}'); }
+            catch (e) { return { pocs: [] }; }
+        }
+
+        function writePocList(pocList) {
+            localStorage.setItem('gtmos_poc_data', JSON.stringify(pocList));
+            if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function') {
+                window.gtmPersistence.docs.save('gtmos_poc_data', pocList).catch(function(error) {
+                    console.error('PoC Framework sync failed:', error);
+                });
+            }
+        }
+
         window.savePoC = function() {
-            var pocList = JSON.parse(localStorage.getItem('gtmos_poc_data') || '{"pocs":[]}');
+            var pocList = readPocList();
             var pocEntry = {
                 id: 'poc_' + Date.now(),
                 vendor: val('in_vendor'),
@@ -446,14 +460,14 @@ Best,
             } else {
                 pocList.pocs.push(pocEntry);
             }
-            localStorage.setItem('gtmos_poc_data', JSON.stringify(pocList));
+            writePocList(pocList);
             updatePocStats();
             alert('PoC saved!');
             if (window.saveIndicator) saveIndicator.saved();
         };
         
         function updatePocStats() {
-            var pocList = JSON.parse(localStorage.getItem('gtmos_poc_data') || '{"pocs":[]}');
+            var pocList = readPocList();
             var pocs = pocList.pocs || [];
             var total = pocs.length;
             var converted = pocs.filter(function(p){ return p.outcome === 'converted'; }).length;
@@ -464,9 +478,26 @@ Best,
         }
         
         // Initialize
-        generatePoC();
-        updatePocStats();
+        async function bootPocFramework() {
+            if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function') {
+                await window.gtmPersistence.docs.load({ keys: ['gtmos_poc_data'] }).catch(function(error) {
+                    console.error('PoC Framework docs preload failed:', error);
+                });
+            }
+            generatePoC();
+            updatePocStats();
             if (window.saveIndicator) saveIndicator.mountAfter('.page-title');
+        }
+
+        if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+            window.requireAuthReady.then(bootPocFramework).catch(function() {});
+        } else if (window.__gtmosAuthGatePending) {
+            window.addEventListener('gtmos:auth-ready', function() {
+                bootPocFramework().catch(function() {});
+            }, { once: true });
+        } else {
+            bootPocFramework().catch(function() {});
+        }
 
         function startTour() {
             if (typeof TourGuide !== 'undefined') TourGuide.start();

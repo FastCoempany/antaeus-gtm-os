@@ -277,6 +277,40 @@
         catch (e) { return fallback; }
     }
 
+    var workspaceSummaryPreloadPromise = null;
+
+    function currentWorkspaceSummary() {
+        return window.__gtmosWorkspaceSummary || null;
+    }
+
+    function currentWorkspaceOrFallback() {
+        return currentWorkspaceSummary() || {
+            profile: readLS('gtmos_profile_cache', null) || {},
+            onboarding: readLS('gtmos_onboarding', null) || {},
+            playbook: readLS('gtmos_playbook', {}),
+            outboundSeed: readLS('gtmos_outbound_seed', {}),
+            icpAnalytics: readLS('gtmos_icp_analytics', { icps: [], totalWorked: 0 }),
+            discovery: {
+                stats: readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 }),
+                agenda: readLS('gtmos_discovery_agenda', {})
+            },
+            sequences: { angles: readLS('gtmos_angles', []) },
+            deals: readDealList(true)
+        };
+    }
+
+    function preloadWorkspaceSummary() {
+        if (workspaceSummaryPreloadPromise) return workspaceSummaryPreloadPromise;
+        if (!(window.gtmPersistence && window.gtmPersistence.workspace && typeof window.gtmPersistence.workspace.loadSummary === 'function')) {
+            return Promise.resolve({ data: currentWorkspaceOrFallback(), error: null });
+        }
+        workspaceSummaryPreloadPromise = window.gtmPersistence.workspace.loadSummary().catch(function(error) {
+            console.error('Workspace summary preload failed for nav:', error);
+            return { data: currentWorkspaceOrFallback(), error: error };
+        });
+        return workspaceSummaryPreloadPromise;
+    }
+
     function roleLabel(role) {
         var value = String(role || '').toLowerCase();
         if (value === 'first-ae') return 'First AE';
@@ -300,10 +334,11 @@
     }
 
     function fallbackSidebarIdentity() {
-        var profileCache = readLS('gtmos_profile_cache', null) || {};
-        var onboarding = readLS('gtmos_onboarding', null) || {};
+        var workspace = currentWorkspaceOrFallback();
+        var profileCache = workspace.profile || {};
+        var onboarding = workspace.onboarding || {};
         var answers = onboarding.answers || {};
-        var playbook = readLS('gtmos_playbook', {});
+        var playbook = workspace.playbook || {};
         var company = (profileCache.company_name || answers.companyName || playbook.company || '').trim();
         var persona = profileCache.role || answers.role || onboarding.persona || '';
         var email = '';
@@ -344,7 +379,13 @@
         return count;
     }
 
-    function readDealList() {
+    function readDealList(skipWorkspace) {
+        if (!skipWorkspace) {
+            var workspace = currentWorkspaceSummary();
+            if (workspace && Array.isArray(workspace.deals)) {
+                return workspace.deals.filter(Boolean);
+            }
+        }
         var raw = readLS('gtmos_deal_workspaces', []);
         if (Array.isArray(raw)) return raw;
         if (raw && typeof raw === 'object') {
@@ -357,9 +398,10 @@
         return [];
     }
 
-    function computeReadinessEstimate() {
-        var playbook = readLS('gtmos_playbook', {});
-        var thinIcp = readLS('gtmos_icp_analytics', { icps: [], totalWorked: 0 });
+    function computeReadinessEstimate(workspaceOverride) {
+        var workspace = workspaceOverride || currentWorkspaceOrFallback();
+        var playbook = workspace.playbook || readLS('gtmos_playbook', {});
+        var thinIcp = workspace.icpAnalytics || readLS('gtmos_icp_analytics', { icps: [], totalWorked: 0 });
         var accountPlan = readLS('gtmos_account_planning', {});
         var accountPlanFields = countFilledFields((accountPlan && accountPlan.fields) || {});
         var hasBasics = !!(playbook.company && playbook.acv);
@@ -374,8 +416,8 @@
         if (hasBasics) icpScore += 3;
         icpScore = Math.min(20, icpScore);
 
-        var discoveryStats = readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
-        var agenda = readLS('gtmos_discovery_agenda', {});
+        var discoveryStats = (workspace.discovery && workspace.discovery.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
+        var agenda = (workspace.discovery && workspace.discovery.agenda) || readLS('gtmos_discovery_agenda', {});
         var gatesChecked = (agenda.gates || []).filter(function(g) { return g; }).length;
         var advRate = discoveryStats.totalCalls > 0
             ? Math.round(((discoveryStats.advancedCalls || 0) / discoveryStats.totalCalls) * 100) : 0;
@@ -390,8 +432,8 @@
         if (agenda.linkedDeal) discoveryScore += 2;
         discoveryScore = Math.min(20, discoveryScore);
 
-        var outboundSeed = readLS('gtmos_outbound_seed', {});
-        var angles = readLS('gtmos_angles', []);
+        var outboundSeed = workspace.outboundSeed || readLS('gtmos_outbound_seed', {});
+        var angles = (workspace.sequences && workspace.sequences.angles) || readLS('gtmos_angles', []);
         var replies = angles.filter(function(a) { return a && a.payload && a.payload.got_reply; }).length;
         var outreachScore = 0;
         if (outboundSeed.annual_quota) outreachScore += 4;
@@ -453,11 +495,120 @@
         return Math.min(100, icpScore + discoveryScore + outreachScore + dealsScore + playbookScore);
     }
 
-    var icps = readLS('gtmos_icp_analytics', { icps: [] });
-    var seed = readLS('gtmos_outbound_seed', {});
-    var discovery = readLS('gtmos_discovery_stats', { totalCalls: 0 });
-    var anglesData = readLS('gtmos_angles', []);
-    var playbookData = readLS('gtmos_playbook', {});
+    async function refreshNavState() {
+        await preloadWorkspaceSummary();
+        var workspace = currentWorkspaceOrFallback();
+        var icps = workspace.icpAnalytics || readLS('gtmos_icp_analytics', { icps: [] });
+        var seed = workspace.outboundSeed || readLS('gtmos_outbound_seed', {});
+        var discovery = (workspace.discovery && workspace.discovery.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0 });
+        var agendaState = (workspace.discovery && workspace.discovery.agenda) || readLS('gtmos_discovery_agenda', {});
+        var anglesData = (workspace.sequences && workspace.sequences.angles) || readLS('gtmos_angles', []);
+        var playbookData = workspace.playbook || readLS('gtmos_playbook', {});
+        var deals = Array.isArray(workspace.deals) ? workspace.deals.filter(Boolean) : readDealList(true);
+        var qualsData = readLS('gtmos_deal_quals', {});
+
+        var modulesCompleted = 0;
+        if ((icps.icps || []).length > 0) modulesCompleted++;
+        if (seed.annual_quota) modulesCompleted++;
+        if (anglesData.length > 0) modulesCompleted++;
+        if (discovery.totalCalls > 0) modulesCompleted++;
+        if (playbookData.company) modulesCompleted++;
+        if (deals.length > 0) modulesCompleted++;
+        if (Object.keys(qualsData).length > 0) modulesCompleted++;
+
+        var readinessTotal = computeReadinessEstimate(workspace);
+        var dealCount = deals.length;
+
+        if (dealCount === 0 && sidebar) {
+            var pocLink = sidebar.querySelector('[data-nav="poc-framework"]');
+            if (pocLink) {
+                pocLink.style.opacity = '0.35';
+                pocLink.style.pointerEvents = 'none';
+                pocLink.title = 'Unlocks when you add your first deal';
+            }
+        }
+
+        if (sidebar) {
+            var dotStates = {};
+            dotStates['icp-studio'] = (icps.icps || []).length > 0 ? ((icps.icps || []).length >= 3 ? 'complete' : 'started') : '';
+            dotStates['signal-console'] = '';
+            dotStates['quota-workback'] = seed.annual_quota ? 'complete' : '';
+            dotStates['outbound-studio'] = anglesData.length > 0 ? (anglesData.length >= 5 ? 'complete' : 'started') : (function() {
+                var t = readLS('gtmos_outbound_touches', { touches: [] });
+                return (t.touches || []).length > 0 ? ((t.touches || []).length >= 20 ? 'complete' : 'started') : '';
+            })();
+            dotStates['cold-call-studio'] = (function() {
+                var c = readLS('gtmos_cold_call_log', { calls: [] });
+                var count = (c.calls || []).length;
+                return count > 0 ? (count >= 10 ? 'complete' : 'started') : '';
+            })();
+            dotStates['linkedin-playbook'] = (function() {
+                var l = readLS('gtmos_linkedin_log', { actions: [] });
+                var count = (l.actions || []).length;
+                return count > 0 ? (count >= 10 ? 'complete' : 'started') : '';
+            })();
+            dotStates['advisor-deploy'] = (function() {
+                var d = readLS('gtmos_advisor_deployments', { deployments: [] });
+                var count = (d.deployments || []).length;
+                return count > 0 ? (count >= 3 ? 'complete' : 'started') : '';
+            })();
+            dotStates['discovery-agenda'] = (agendaState.contact || agendaState.company) ? 'started' : '';
+            dotStates['discovery-studio'] = discovery.totalCalls > 0 ? (discovery.totalCalls >= 5 ? 'complete' : 'started') : '';
+            dotStates['deal-workspace'] = deals.length > 0 ? (deals.length >= 3 ? 'complete' : 'started') : '';
+            dotStates['future-autopsy'] = (function() {
+                var log = readLS('gtmos_autopsy_log_v1', {});
+                var runs = Object.keys(log).length;
+                return runs > 0 ? (runs >= 3 ? 'complete' : 'started') : '';
+            })();
+            dotStates['poc-framework'] = (function() {
+                var p = readLS('gtmos_poc_data', null);
+                return p ? 'started' : '';
+            })();
+            dotStates['founding-gtm'] = playbookData.company ? (Object.keys(playbookData.fields || {}).filter(function(k) { return playbookData.fields[k]; }).length >= 5 ? 'complete' : 'started') : '';
+            dotStates['readiness'] = readinessTotal >= 80 ? 'complete' : (readinessTotal >= 25 ? 'started' : '');
+            dotStates['dashboard'] = modulesCompleted >= 3 ? 'complete' : (modulesCompleted >= 1 ? 'started' : '');
+            dotStates['territory-architect'] = (function() {
+                var ta = readLS('gtmos_ta_accounts', []);
+                var active = ta.filter(function(a) { return a.status === 'active'; }).length;
+                return active > 0 ? (active >= 20 ? 'complete' : 'started') : '';
+            })();
+            dotStates['sourcing-workbench'] = (function() {
+                var sw = readLS('gtmos_sw_prospects', []);
+                return sw.length > 0 ? (sw.length >= 15 ? 'complete' : 'started') : '';
+            })();
+
+            Object.keys(dotStates).forEach(function(slug) {
+                var link = sidebar.querySelector('[data-nav="' + slug + '"]');
+                if (!link) return;
+                var dot = link.querySelector('.nav-dot');
+                if (!dot) return;
+                dot.classList.remove('complete', 'started');
+                var state = dotStates[slug];
+                if (state === 'complete') dot.classList.add('complete');
+                else if (state === 'started') dot.classList.add('started');
+            });
+        }
+
+        window.gtmNavState = {
+            modulesCompleted: modulesCompleted,
+            readinessTotal: readinessTotal
+        };
+
+        if (sidebarDataNotice && !(window.gtmEnvironment && window.gtmEnvironment.isDemo)) {
+            sidebarDataNotice.textContent = (workspace.source && String(workspace.source).indexOf('supabase') === 0)
+                ? 'Workspace syncs to your account.'
+                : 'Data is saved in this browser on this device.';
+        }
+
+        return window.gtmNavState;
+    }
+
+    var workspaceSeed = currentWorkspaceOrFallback();
+    var icps = workspaceSeed.icpAnalytics || readLS('gtmos_icp_analytics', { icps: [] });
+    var seed = workspaceSeed.outboundSeed || readLS('gtmos_outbound_seed', {});
+    var discovery = (workspaceSeed.discovery && workspaceSeed.discovery.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0 });
+    var anglesData = (workspaceSeed.sequences && workspaceSeed.sequences.angles) || readLS('gtmos_angles', []);
+    var playbookData = workspaceSeed.playbook || readLS('gtmos_playbook', {});
     var deals = readDealList();
     var qualsData = readLS('gtmos_deal_quals', {});
 
@@ -507,7 +658,7 @@
             return count > 0 ? (count >= 3 ? 'complete' : 'started') : '';
         })();
         dotStates['discovery-agenda'] = (function() {
-            var a = readLS('gtmos_discovery_agenda', {});
+            var a = (workspaceSeed.discovery && workspaceSeed.discovery.agenda) || readLS('gtmos_discovery_agenda', {});
             return (a.contact || a.company) ? 'started' : '';
         })();
         dotStates['discovery-studio'] = discovery.totalCalls > 0 ? (discovery.totalCalls >= 5 ? 'complete' : 'started') : '';
@@ -549,6 +700,33 @@
         modulesCompleted: modulesCompleted,
         readinessTotal: readinessTotal
     };
+
+    function queueWorkspaceNavRefresh() {
+        preloadWorkspaceSummary().then(function() {
+            hydrateSidebarIdentity();
+            return refreshNavState();
+        }).catch(function(error) {
+            console.error('Nav workspace refresh failed:', error);
+        });
+    }
+
+    if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+        window.requireAuthReady.then(function() {
+            queueWorkspaceNavRefresh();
+        }).catch(function() {});
+    } else if (window.__gtmosAuthGatePending) {
+        window.addEventListener('gtmos:auth-ready', function() {
+            queueWorkspaceNavRefresh();
+        }, { once: true });
+    } else {
+        queueWorkspaceNavRefresh();
+    }
+
+    window.addEventListener('gtmos:workspace-summary-ready', function() {
+        workspaceSummaryPreloadPromise = Promise.resolve({ data: currentWorkspaceSummary(), error: null });
+        hydrateSidebarIdentity();
+        refreshNavState().catch(function() {});
+    });
 
     if (sidebar) {
         var footer = sidebar.querySelector('.sidebar-footer');

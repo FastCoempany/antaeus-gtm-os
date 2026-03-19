@@ -58,6 +58,24 @@ function readLS(k, fb) {
     catch(e) { return fb; }
 }
 
+var workspaceSummaryPreloadPromise = null;
+
+function currentWorkspaceSummary() {
+    return window.__gtmosWorkspaceSummary || null;
+}
+
+function preloadWorkspaceSummary() {
+    if (workspaceSummaryPreloadPromise) return workspaceSummaryPreloadPromise;
+    if (!(window.gtmPersistence && window.gtmPersistence.workspace && typeof window.gtmPersistence.workspace.loadSummary === 'function')) {
+        return Promise.resolve({ data: currentWorkspaceSummary(), error: null });
+    }
+    workspaceSummaryPreloadPromise = window.gtmPersistence.workspace.loadSummary().catch(function(error) {
+        console.error('Workspace summary preload failed for deal-health:', error);
+        return { data: currentWorkspaceSummary(), error: error };
+    });
+    return workspaceSummaryPreloadPromise;
+}
+
 function tx(v) { return String(v || '').trim(); }
 
 function daysBetween(a, b) {
@@ -705,6 +723,10 @@ function performanceMetrics(allVitals) {
 // ============================================================
 
 function loadAllDeals() {
+    var workspace = currentWorkspaceSummary();
+    if (workspace && Array.isArray(workspace.deals)) {
+        return workspace.deals.filter(Boolean);
+    }
     var raw = readLS('gtmos_deal_workspaces', []);
     if (!Array.isArray(raw)) {
         raw = Object.keys(raw || {}).map(function(id) { var d = raw[id]; if (!d.id) d.id = id; return d; });
@@ -717,11 +739,19 @@ function loadAllVitals(prefs) {
 }
 
 function loadQuota() {
+    var workspace = currentWorkspaceSummary();
+    if (workspace && workspace.outboundSeed) {
+        return Number(workspace.outboundSeed.annual_quota) || 0;
+    }
     var seed = readLS('gtmos_outbound_seed', {});
     return Number(seed.annual_quota) || 0;
 }
 
 function loadSeed() {
+    var workspace = currentWorkspaceSummary();
+    if (workspace && workspace.outboundSeed) {
+        return workspace.outboundSeed;
+    }
     return readLS('gtmos_outbound_seed', {});
 }
 
@@ -758,6 +788,7 @@ window.dealHealth = {
     loadFullBriefing: loadFullBriefing,
 
     // Loaders
+    preload: preloadWorkspaceSummary,
     loadAllDeals: loadAllDeals,
     loadAllVitals: loadAllVitals,
     loadQuota: loadQuota,
@@ -777,5 +808,15 @@ window.dealHealth = {
     CAUSES: CAUSES,
     DEFAULTS: DEFAULTS
 };
+
+if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+    window.requireAuthReady.then(function() { return preloadWorkspaceSummary(); }).catch(function() {});
+} else if (window.__gtmosAuthGatePending) {
+    window.addEventListener('gtmos:auth-ready', function() {
+        preloadWorkspaceSummary().catch(function() {});
+    }, { once: true });
+} else {
+    preloadWorkspaceSummary().catch(function() {});
+}
 
 })();

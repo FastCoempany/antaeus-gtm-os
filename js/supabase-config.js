@@ -423,6 +423,9 @@ function clearWorkspaceBootstrapCache() {
     window.__gtmosCurrentProfile = null;
     window.__gtmosWorkspaceBootstrap = null;
     window.__gtmosWorkspaceBootstrapPromise = null;
+    window.__gtmosWorkspaceSummary = null;
+    window.__gtmosWorkspaceSummaryPromise = null;
+    window.__gtmosDurableDocsState = null;
 }
 
 function buildProfileSeedFromUser(user) {
@@ -908,6 +911,8 @@ async function updateWorkspaceProfile(fields, sessionOverride, options) {
         syncWorkspaceCacheFromProfile(updated.data);
         window.__gtmosWorkspaceBootstrap = null;
         window.__gtmosWorkspaceBootstrapPromise = null;
+        window.__gtmosWorkspaceSummary = null;
+        window.__gtmosWorkspaceSummaryPromise = null;
     }
 
     return updated;
@@ -1738,6 +1743,98 @@ function hasSequenceState(state) {
     );
 }
 
+var DURABLE_SEQUENCE_DOCUMENTS = {
+    gtmos_playbook: { sequenceKey: 'playbook', title: 'GTM Playbook', defaultValue: {} },
+    gtmos_qw_inputs: { sequenceKey: 'quota_workback_inputs', title: 'Quota Workback Inputs', defaultValue: {} },
+    gtmos_outbound_seed: { sequenceKey: 'outbound_seed', title: 'Outbound Seed', defaultValue: {} },
+    gtmos_deal_quals: { sequenceKey: 'deal_quals', title: 'Deal Qualification Scores', defaultValue: {} },
+    gtmos_deal_outcomes: { sequenceKey: 'deal_outcomes', title: 'Deal Outcomes', defaultValue: {} },
+    gtmos_discovery_links: { sequenceKey: 'discovery_links', title: 'Discovery Agenda Links', defaultValue: {} },
+    gtmos_deal_reviews: { sequenceKey: 'deal_reviews', title: 'Deal Reviews', defaultValue: [] },
+    gtmos_account_planning: { sequenceKey: 'account_planning', title: 'Account Planning', defaultValue: {} },
+    gtmos_playbook_notes: { sequenceKey: 'playbook_notes', title: 'Playbook Notes', defaultValue: {} },
+    gtmos_handoff_exported: { sequenceKey: 'handoff_exported', title: 'Handoff Export History', defaultValue: null },
+    gtmos_asset_builder_analytics: { sequenceKey: 'asset_builder_analytics', title: 'Asset Builder Analytics', defaultValue: { assets: [], totalWorked: 0 } },
+    gtmos_qual_texts: { sequenceKey: 'qual_texts', title: 'Qualification Text Blocks', defaultValue: {} },
+    gtmos_demo_seed_meta: { sequenceKey: 'demo_seed_meta', title: 'Demo Seed Metadata', defaultValue: null },
+    gtmos_advisor_registry: { sequenceKey: 'advisor_registry', title: 'Advisor Registry', defaultValue: { advisors: [] } },
+    gtmos_advisor_deployments: { sequenceKey: 'advisor_deployments', title: 'Advisor Deployments', defaultValue: { deployments: [] } },
+    gtmos_autopsy_log_v1: { sequenceKey: 'autopsy_log_v1', title: 'Future Autopsy Log', defaultValue: {} },
+    gtmos_poc_data: { sequenceKey: 'poc_data', title: 'POC Framework Data', defaultValue: { pocs: [] } },
+    gtmos_cold_call_log: { sequenceKey: 'cold_call_log', title: 'Cold Call Log', defaultValue: { calls: [] } },
+    gtmos_territory: { sequenceKey: 'territory_state', title: 'Territory State', defaultValue: { healthScore: 100, lastPulse: null, pulseSkips: 0, salesCycle: '', createdAt: null } },
+    gtmos_ta_theses: { sequenceKey: 'ta_theses', title: 'Territory Theses', defaultValue: [] },
+    gtmos_ta_approaches: { sequenceKey: 'ta_approaches', title: 'Territory Approaches', defaultValue: [] },
+    gtmos_ta_accounts: { sequenceKey: 'ta_accounts', title: 'Territory Accounts', defaultValue: [] },
+    gtmos_ta_dispositions: { sequenceKey: 'ta_dispositions', title: 'Territory Dispositions', defaultValue: [] },
+    gtmos_ta_signals: { sequenceKey: 'ta_signals', title: 'Territory Signals', defaultValue: [] },
+    gtmos_ta_swap_history: { sequenceKey: 'ta_swap_history', title: 'Territory Swap History', defaultValue: [] },
+    gtmos_ta_retier_history: { sequenceKey: 'ta_retier_history', title: 'Territory Retier History', defaultValue: [] },
+    gtmos_ta_calibrations: { sequenceKey: 'ta_calibrations', title: 'Territory Calibrations', defaultValue: { progression: false, leverage: false, swapLogic: false } },
+    gtmos_ta_setup: { sequenceKey: 'ta_setup', title: 'Territory Setup', defaultValue: null },
+    gtmos_sw_query_cards: { sequenceKey: 'sw_query_cards', title: 'Sourcing Query Cards', defaultValue: [] },
+    gtmos_sw_prospects: { sequenceKey: 'sw_prospects', title: 'Sourcing Prospects', defaultValue: [] },
+    gtmos_sw_persona_maps: { sequenceKey: 'sw_persona_maps', title: 'Sourcing Persona Maps', defaultValue: [] }
+};
+
+function durableDocKeys(keys) {
+    var all = Object.keys(DURABLE_SEQUENCE_DOCUMENTS);
+    if (!Array.isArray(keys) || !keys.length) return all;
+    return keys.filter(function(key) { return !!DURABLE_SEQUENCE_DOCUMENTS[key]; });
+}
+
+function normalizeDurableDocValue(localKey, value) {
+    var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
+    if (!mapping) return cloneValue(value);
+    if (value === undefined) return cloneValue(mapping.defaultValue);
+    return cloneValue(value);
+}
+
+function readLocalDurableDocsState(keys) {
+    var state = {};
+    durableDocKeys(keys).forEach(function(localKey) {
+        var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
+        state[localKey] = normalizeDurableDocValue(localKey, readStorageJson(localKey, cloneValue(mapping.defaultValue)));
+    });
+    return state;
+}
+
+function writeLocalDurableDocsState(state, keys) {
+    var next = {};
+    durableDocKeys(keys).forEach(function(localKey) {
+        var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
+        var value = Object.prototype.hasOwnProperty.call(state || {}, localKey)
+            ? state[localKey]
+            : readStorageJson(localKey, cloneValue(mapping.defaultValue));
+        value = normalizeDurableDocValue(localKey, value);
+        writeStorageJson(localKey, value);
+        next[localKey] = cloneValue(value);
+    });
+    window.__gtmosDurableDocsState = Object.assign({}, window.__gtmosDurableDocsState || {}, cloneValue(next));
+    if (window.__gtmosWorkspaceSummary) {
+        if (Object.prototype.hasOwnProperty.call(next, 'gtmos_playbook')) {
+            window.__gtmosWorkspaceSummary.playbook = cloneValue(next.gtmos_playbook);
+        }
+        if (Object.prototype.hasOwnProperty.call(next, 'gtmos_outbound_seed')) {
+            window.__gtmosWorkspaceSummary.outboundSeed = cloneValue(next.gtmos_outbound_seed);
+        }
+        window.__gtmosWorkspaceSummary.docs = cloneValue(window.__gtmosDurableDocsState);
+        window.__gtmosWorkspaceSummary.lastLoadedAt = new Date().toISOString();
+        if (typeof window.dispatchEvent === 'function' && typeof window.CustomEvent === 'function') {
+            window.dispatchEvent(new window.CustomEvent('gtmos:workspace-summary-ready', { detail: cloneValue(window.__gtmosWorkspaceSummary) }));
+        }
+    }
+    return next;
+}
+
+function durableDocsHaveContent(state, keys) {
+    return durableDocKeys(keys).some(function(localKey) {
+        var value = normalizeDurableDocValue(localKey, state ? state[localKey] : undefined);
+        var fallback = normalizeDurableDocValue(localKey, DURABLE_SEQUENCE_DOCUMENTS[localKey].defaultValue);
+        return JSON.stringify(value) !== JSON.stringify(fallback);
+    });
+}
+
 function findSequenceRow(rows, key) {
     return toArray(rows).find(function(row) {
         return row && (
@@ -1746,6 +1843,34 @@ function findSequenceRow(rows, key) {
             row.title === key
         );
     }) || null;
+}
+
+async function upsertSequenceRecord(sequenceKey, title, data, sessionOverride) {
+    if (AUTH_BYPASS || isDemoEnvironment()) {
+        return { data: cloneValue(data), error: null };
+    }
+
+    var user = await resolveCurrentUser(sessionOverride);
+    if (!user || !user.id) return { data: cloneValue(data), error: new Error('Auth session missing') };
+
+    var current = await db.sequences.list(user.id);
+    if (current.error) return { data: cloneValue(data), error: current.error };
+
+    var existing = findSequenceRow(current.data, sequenceKey);
+    var payload = {
+        sequence_key: sequenceKey,
+        name: sequenceKey,
+        title: title || sequenceKey,
+        data: cloneValue(data),
+        updated_at: new Date().toISOString()
+    };
+
+    var result = existing
+        ? await db.sequences.update(existing.id, payload)
+        : await db.sequences.create(user.id, payload);
+    if (result.error) return { data: cloneValue(data), error: result.error };
+
+    return { data: cloneValue(data), error: null };
 }
 
 async function upsertSequenceDocument(sequenceKey, title, data, sessionOverride) {
@@ -1760,27 +1885,85 @@ async function upsertSequenceDocument(sequenceKey, title, data, sessionOverride)
         return { data: localState, error: null };
     }
 
-    var user = await resolveCurrentUser(sessionOverride);
-    if (!user || !user.id) return { data: localState, error: new Error('Auth session missing') };
-
-    var current = await db.sequences.list(user.id);
-    if (current.error) return { data: localState, error: current.error };
-
-    var existing = findSequenceRow(current.data, sequenceKey);
-    var payload = {
-        sequence_key: sequenceKey,
-        name: sequenceKey,
-        title: title || sequenceKey,
-        data: cloneValue(data),
-        updated_at: new Date().toISOString()
-    };
-
-    var result = existing
-        ? await db.sequences.update(existing.id, payload)
-        : await db.sequences.create(user.id, payload);
+    var result = await upsertSequenceRecord(sequenceKey, title, data, sessionOverride);
     if (result.error) return { data: localState, error: result.error };
 
     return await loadSequenceStateFromCloud(sessionOverride, { skipBootstrap: true });
+}
+
+async function upsertDurableDoc(localKey, data, sessionOverride) {
+    var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
+    if (!mapping) {
+        return { data: cloneValue(data), error: new Error('Unsupported durable doc key: ' + localKey) };
+    }
+
+    var normalized = normalizeDurableDocValue(localKey, data);
+    writeLocalDurableDocsState((function() {
+        var next = {};
+        next[localKey] = normalized;
+        return next;
+    })(), [localKey]);
+
+    var result = await upsertSequenceRecord(mapping.sequenceKey, mapping.title, normalized, sessionOverride);
+    if (result.error) return { data: normalized, error: result.error };
+
+    return await loadDurableDocsFromCloud(sessionOverride, { skipBootstrap: true, keys: [localKey] });
+}
+
+async function syncDurableDocsToCloud(state, sessionOverride, options) {
+    options = options || {};
+    var keys = durableDocKeys(options.keys);
+    var next = Object.assign({}, readLocalDurableDocsState(keys), cloneValue(state || {}));
+    writeLocalDurableDocsState(next, keys);
+
+    if (AUTH_BYPASS || isDemoEnvironment()) {
+        return { data: cloneValue(window.__gtmosDurableDocsState || next), error: null };
+    }
+
+    for (var i = 0; i < keys.length; i++) {
+        var localKey = keys[i];
+        var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
+        var result = await upsertSequenceRecord(mapping.sequenceKey, mapping.title, next[localKey], sessionOverride);
+        if (result.error) return { data: cloneValue(window.__gtmosDurableDocsState || next), error: result.error };
+    }
+
+    return await loadDurableDocsFromCloud(sessionOverride, { skipBootstrap: true, keys: keys });
+}
+
+async function loadDurableDocsFromCloud(sessionOverride, options) {
+    options = options || {};
+    var keys = durableDocKeys(options.keys);
+    var localState = readLocalDurableDocsState(keys);
+
+    if (AUTH_BYPASS || isDemoEnvironment()) {
+        writeLocalDurableDocsState(localState, keys);
+        return { data: cloneValue(window.__gtmosDurableDocsState || localState), error: null };
+    }
+
+    var user = await resolveCurrentUser(sessionOverride);
+    if (!user || !user.id) return { data: cloneValue(window.__gtmosDurableDocsState || localState), error: new Error('Auth session missing') };
+
+    var result = await db.sequences.list(user.id);
+    if (result.error) return { data: cloneValue(window.__gtmosDurableDocsState || localState), error: result.error };
+
+    var rows = toArray(result.data);
+    var bootstrapKeys = keys.filter(function(localKey) {
+        var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
+        return !findSequenceRow(rows, mapping.sequenceKey) && durableDocsHaveContent(localState, [localKey]);
+    });
+    if (bootstrapKeys.length && !options.skipBootstrap) {
+        return await syncDurableDocsToCloud(localState, sessionOverride, { keys: bootstrapKeys });
+    }
+
+    var next = {};
+    keys.forEach(function(localKey) {
+        var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
+        var row = findSequenceRow(rows, mapping.sequenceKey);
+        next[localKey] = normalizeDurableDocValue(localKey, row && Object.prototype.hasOwnProperty.call(row, 'data') ? row.data : localState[localKey]);
+    });
+
+    writeLocalDurableDocsState(next, keys);
+    return { data: cloneValue(window.__gtmosDurableDocsState || next), error: null };
 }
 
 async function syncSequenceStateToCloud(state, sessionOverride) {
@@ -1828,6 +2011,94 @@ async function loadSequenceStateFromCloud(sessionOverride, options) {
     });
 
     return { data: next, error: null };
+}
+
+function buildLocalWorkspaceSummaryState() {
+    return {
+        profile: cloneValue(window.__gtmosCurrentProfile || readStorageJson(PROFILE_CACHE_KEY, null)),
+        onboarding: cloneValue(readStorageJson('gtmos_onboarding', null)),
+        playbook: cloneValue(readStorageJson('gtmos_playbook', {})),
+        outboundSeed: cloneValue(readStorageJson('gtmos_outbound_seed', {})),
+        icpAnalytics: cloneValue(readLocalIcpAnalyticsState()),
+        deals: cloneValue(readLocalDealState()),
+        discovery: cloneValue(readLocalDiscoveryState()),
+        sequences: cloneValue(readLocalSequenceState()),
+        docs: cloneValue(readLocalDurableDocsState()),
+        signalConsole: { accounts: cloneValue(readLocalSignalConsoleState()) },
+        source: 'local-cache',
+        lastLoadedAt: new Date().toISOString()
+    };
+}
+
+async function loadWorkspaceSummaryState(sessionOverride, options) {
+    options = options || {};
+
+    if (options.force) {
+        window.__gtmosWorkspaceSummary = null;
+        window.__gtmosWorkspaceSummaryPromise = null;
+    }
+
+    if (window.__gtmosWorkspaceSummary && !options.force) {
+        return { data: cloneValue(window.__gtmosWorkspaceSummary), error: null };
+    }
+
+    if (AUTH_BYPASS || isDemoEnvironment()) {
+        var demoSummary = buildLocalWorkspaceSummaryState();
+        window.__gtmosWorkspaceSummary = demoSummary;
+        return { data: demoSummary, error: null };
+    }
+
+    if (window.__gtmosWorkspaceSummaryPromise) {
+        return await window.__gtmosWorkspaceSummaryPromise;
+    }
+
+    window.__gtmosWorkspaceSummaryPromise = (async function() {
+        var fallback = buildLocalWorkspaceSummaryState();
+        try {
+            var workspace = await ensureUserWorkspace(sessionOverride, options);
+            var results = await Promise.all([
+                loadIcpAnalyticsFromCloud(sessionOverride).catch(function(error) { return { data: null, error: error }; }),
+                loadDealsFromCloud(sessionOverride).catch(function(error) { return { data: null, error: error }; }),
+                loadDiscoveryStateFromCloud(sessionOverride).catch(function(error) { return { data: null, error: error }; }),
+                loadSequenceStateFromCloud(sessionOverride).catch(function(error) { return { data: null, error: error }; }),
+                loadSignalConsoleAccountsFromCloud(sessionOverride).catch(function(error) { return { data: null, error: error }; }),
+                loadDurableDocsFromCloud(sessionOverride).catch(function(error) { return { data: null, error: error }; })
+            ]);
+
+            var errors = results
+                .map(function(result) { return result && result.error ? result.error : null; })
+                .filter(Boolean)
+                .map(function(error) { return error && error.message ? error.message : String(error); });
+
+            var summary = {
+                profile: cloneValue((workspace && workspace.profile) || fallback.profile),
+                onboarding: cloneValue((workspace && workspace.onboarding) || fallback.onboarding),
+                playbook: cloneValue(readStorageJson('gtmos_playbook', fallback.playbook)),
+                outboundSeed: cloneValue(readStorageJson('gtmos_outbound_seed', fallback.outboundSeed)),
+                icpAnalytics: cloneValue((results[0] && results[0].data) || fallback.icpAnalytics),
+                deals: cloneValue((results[1] && results[1].data) || fallback.deals),
+                discovery: cloneValue((results[2] && results[2].data) || fallback.discovery),
+                sequences: cloneValue((results[3] && results[3].data) || fallback.sequences),
+                signalConsole: { accounts: cloneValue((results[4] && results[4].data) || fallback.signalConsole.accounts) },
+                docs: cloneValue((results[5] && results[5].data) || fallback.docs),
+                source: errors.length ? 'supabase-partial' : 'supabase-persistence',
+                lastLoadedAt: new Date().toISOString(),
+                errors: errors
+            };
+
+            window.__gtmosWorkspaceSummary = summary;
+            if (typeof window.dispatchEvent === 'function' && typeof window.CustomEvent === 'function') {
+                window.dispatchEvent(new window.CustomEvent('gtmos:workspace-summary-ready', { detail: summary }));
+            }
+            return { data: summary, error: null };
+        } catch (e) {
+            console.error('Workspace summary preload failed:', e);
+            window.__gtmosWorkspaceSummary = fallback;
+            return { data: fallback, error: e };
+        }
+    })();
+
+    return await window.__gtmosWorkspaceSummaryPromise;
 }
 
 function initSupabase() {
@@ -2290,7 +2561,7 @@ window.handleSignOut = async function () {
     try {
         localStorage.removeItem('gtmos_noauth_mode');
         localStorage.removeItem('gtmos_noauth_email');
-        removeStorageKeys([
+        removeStorageKeys(Object.keys(DURABLE_SEQUENCE_DOCUMENTS).concat([
             'gtmos_onboarding',
             'gtmos_product_category',
             PROFILE_CACHE_KEY,
@@ -2305,13 +2576,16 @@ window.handleSignOut = async function () {
             'gtmos_angles',
             'gtmos_outbound_touches',
             'gtmos_linkedin_log'
-        ]);
+        ]));
         sessionStorage.removeItem('gtmos_env_mode');
     } catch (e) {}
 
     window.__gtmosCurrentProfile = null;
     window.__gtmosWorkspaceBootstrap = null;
     window.__gtmosWorkspaceBootstrapPromise = null;
+    window.__gtmosWorkspaceSummary = null;
+    window.__gtmosWorkspaceSummaryPromise = null;
+    window.__gtmosDurableDocsState = null;
     window.location.replace('/login.html');
 };
 
@@ -2327,7 +2601,121 @@ window.updateWorkspaceProfile = updateWorkspaceProfile;
 window.saveUserOnboardingState = saveUserOnboardingState;
 window.resetUserOnboardingState = resetUserOnboardingState;
 window.clearWorkspaceBootstrapCache = clearWorkspaceBootstrapCache;
+window.gtmLocalState = {
+    scopeId: function() {
+        var profile = window.__gtmosCurrentProfile || readStorageJson(PROFILE_CACHE_KEY, null) || null;
+        return cleanText(profile && profile.id);
+    },
+    key: function(baseKey, options) {
+        options = options || {};
+        var key = String(baseKey || '');
+        if (!key) return '';
+        if (options.scope !== 'user') return key;
+        var scopeId = this.scopeId();
+        return scopeId ? key + '__user_' + scopeId : key;
+    },
+    get: function(baseKey, fallback, options) {
+        options = options || {};
+        var storage = localStorage;
+        var scopedKey = this.key(baseKey, options);
+        var raw = null;
+        try { raw = storage.getItem(scopedKey); } catch (e) { raw = null; }
+        if (raw == null && options.scope === 'user' && scopedKey !== String(baseKey || '')) {
+            try { raw = storage.getItem(String(baseKey || '')); } catch (e) { raw = null; }
+        }
+        if (raw == null) return cloneValue(fallback);
+        if (options.json) {
+            try { return JSON.parse(raw); }
+            catch (e) { return cloneValue(fallback); }
+        }
+        return raw;
+    },
+    set: function(baseKey, value, options) {
+        options = options || {};
+        var scopedKey = this.key(baseKey, options);
+        try {
+            localStorage.setItem(scopedKey, typeof value === 'string' ? value : JSON.stringify(value));
+            if (options.scope === 'user' && scopedKey !== String(baseKey || '')) {
+                localStorage.removeItem(String(baseKey || ''));
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
+    },
+    remove: function(baseKey, options) {
+        options = options || {};
+        var scopedKey = this.key(baseKey, options);
+        try {
+            localStorage.removeItem(scopedKey);
+            if (options.scope === 'user' && scopedKey !== String(baseKey || '')) {
+                localStorage.removeItem(String(baseKey || ''));
+            }
+        } catch (e) {}
+    },
+    getSession: function(baseKey, fallback, options) {
+        options = options || {};
+        var scopedKey = this.key(baseKey, options);
+        var raw = null;
+        try { raw = sessionStorage.getItem(scopedKey); } catch (e) { raw = null; }
+        if (raw == null && options.scope === 'user' && scopedKey !== String(baseKey || '')) {
+            try { raw = sessionStorage.getItem(String(baseKey || '')); } catch (e) { raw = null; }
+        }
+        if (raw == null) return cloneValue(fallback);
+        if (options.json) {
+            try { return JSON.parse(raw); }
+            catch (e) { return cloneValue(fallback); }
+        }
+        return raw;
+    },
+    setSession: function(baseKey, value, options) {
+        options = options || {};
+        var scopedKey = this.key(baseKey, options);
+        try {
+            sessionStorage.setItem(scopedKey, typeof value === 'string' ? value : JSON.stringify(value));
+            if (options.scope === 'user' && scopedKey !== String(baseKey || '')) {
+                sessionStorage.removeItem(String(baseKey || ''));
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
+    },
+    removeSession: function(baseKey, options) {
+        options = options || {};
+        var scopedKey = this.key(baseKey, options);
+        try {
+            sessionStorage.removeItem(scopedKey);
+            if (options.scope === 'user' && scopedKey !== String(baseKey || '')) {
+                sessionStorage.removeItem(String(baseKey || ''));
+            }
+        } catch (e) {}
+    }
+};
 window.gtmPersistence = {
+    workspace: {
+        loadSummary: loadWorkspaceSummaryState
+    },
+    docs: {
+        load: loadDurableDocsFromCloud,
+        save: upsertDurableDoc,
+        syncAll: syncDurableDocsToCloud,
+        keys: Object.keys(DURABLE_SEQUENCE_DOCUMENTS),
+        has: function(localKey) {
+            return !!DURABLE_SEQUENCE_DOCUMENTS[localKey];
+        },
+        defaultFor: function(localKey) {
+            if (!DURABLE_SEQUENCE_DOCUMENTS[localKey]) return null;
+            return cloneValue(DURABLE_SEQUENCE_DOCUMENTS[localKey].defaultValue);
+        },
+        get: function(localKey) {
+            if (!DURABLE_SEQUENCE_DOCUMENTS[localKey]) return null;
+            var cached = (window.__gtmosDurableDocsState && Object.prototype.hasOwnProperty.call(window.__gtmosDurableDocsState, localKey))
+                ? window.__gtmosDurableDocsState[localKey]
+                : readStorageJson(localKey, cloneValue(DURABLE_SEQUENCE_DOCUMENTS[localKey].defaultValue));
+            return cloneValue(cached);
+        }
+    },
     icps: {
         load: loadIcpAnalyticsFromCloud,
         save: saveIcpEntryToCloud,
@@ -2357,3 +2745,17 @@ window.gtmPersistence = {
         remove: deleteSignalConsoleAccountFromCloud
     }
 };
+
+if (window.location && String(window.location.pathname || '').indexOf('/app/') === 0) {
+    if (window.__gtmosAuthGatePending) {
+        window.addEventListener('gtmos:auth-ready', function() {
+            loadDurableDocsFromCloud().catch(function(error) {
+                console.error('Durable docs preload failed:', error);
+            });
+        }, { once: true });
+    } else {
+        loadDurableDocsFromCloud().catch(function(error) {
+            console.error('Durable docs preload failed:', error);
+        });
+    }
+}

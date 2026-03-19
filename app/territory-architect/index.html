@@ -605,7 +605,14 @@ function readLS(key, fallback) {
     try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
     catch(e) { return fallback; }
 }
-function writeLS(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+function syncDocToCloud(key, data) {
+    if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function')) return;
+    if (!window.gtmPersistence.docs.has(key)) return;
+    window.gtmPersistence.docs.save(key, data).catch(function(error) {
+        console.error('Territory Architect sync failed for', key, error);
+    });
+}
+function writeLS(key, val) { localStorage.setItem(key, JSON.stringify(val)); syncDocToCloud(key, val); }
 function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 function daysSince(iso) { return iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : 999; }
 function today() { return new Date().toISOString().slice(0,10); }
@@ -1330,15 +1337,22 @@ window.graduateAccount = function(id) {
     acct.graduatedAt = new Date().toISOString();
     saveAccounts(accounts);
     // Create deal in deal workspace
-    var deals = readLS('gtmos_deal_workspaces', []);
-    deals.push({
+    var deal = {
         id: genId(), name: acct.name, value: '', stage: 'prospect',
         closeDate: '', forecastCategory: 'pipeline', momentum: 'neutral',
         champion: '', economicBuyer: '', useCase: '', pain: '',
         competition: '', decisionProcess: '', notes: 'Graduated from Territory Architect. Thesis: ' + (getTheses().find(function(t) { return t.id === acct.thesisId; }) || {}).name,
         stakeholders: [], created_at: new Date().toISOString(), updated_at: new Date().toISOString()
-    });
-    writeLS('gtmos_deal_workspaces', deals);
+    };
+    if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.save === 'function') {
+        window.gtmPersistence.deals.save(deal).catch(function(error) {
+            console.error('Territory Architect deal sync failed:', error);
+        });
+    } else {
+        var deals = readLS('gtmos_deal_workspaces', []);
+        deals.push(deal);
+        localStorage.setItem('gtmos_deal_workspaces', JSON.stringify(deals));
+    }
     renderApp();
 };
 
@@ -1505,23 +1519,40 @@ document.querySelectorAll('.ta-modal-overlay').forEach(function(overlay) {
 });
 
 // ============ INIT ============
-if (isOnboarded()) {
-    document.getElementById('onboardView').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-    renderApp();
-    // Check for skipped Friday pulse
-    var territory = getTerritory();
-    if (dayOfWeek() >= 6 && territory.lastPulse !== today()) {
-        var lastPulseDay = territory.lastPulse ? new Date(territory.lastPulse).getDay() : -1;
-        if (lastPulseDay !== 5) {
-            territory.pulseSkips = (territory.pulseSkips || 0) + 1;
-            saveTerritory(territory);
-        }
+async function bootTerritoryArchitect() {
+    if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function') {
+        await window.gtmPersistence.docs.load({ keys: Object.keys(KEYS).map(function(name) { return KEYS[name]; }) }).catch(function(error) {
+            console.error('Territory Architect docs preload failed:', error);
+        });
     }
+
+    if (isOnboarded()) {
+        document.getElementById('onboardView').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        renderApp();
+        var territory = getTerritory();
+        if (dayOfWeek() >= 6 && territory.lastPulse !== today()) {
+            var lastPulseDay = territory.lastPulse ? new Date(territory.lastPulse).getDay() : -1;
+            if (lastPulseDay !== 5) {
+                territory.pulseSkips = (territory.pulseSkips || 0) + 1;
+                saveTerritory(territory);
+            }
+        }
+    } else {
+        document.getElementById('onboardView').style.display = 'block';
+        document.getElementById('mainApp').style.display = 'none';
+        renderOnboarding();
+    }
+}
+
+if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+    window.requireAuthReady.then(bootTerritoryArchitect).catch(function() {});
+} else if (window.__gtmosAuthGatePending) {
+    window.addEventListener('gtmos:auth-ready', function() {
+        bootTerritoryArchitect().catch(function() {});
+    }, { once: true });
 } else {
-    document.getElementById('onboardView').style.display = 'block';
-    document.getElementById('mainApp').style.display = 'none';
-    renderOnboarding();
+    bootTerritoryArchitect().catch(function() {});
 }
 
 })();

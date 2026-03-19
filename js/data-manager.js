@@ -1,65 +1,334 @@
 /**
- * GTMOS Data Manager — Phase 2.2 + 2.4
+ * GTMOS Data Manager
  *
- * Export all user data as JSON backup, import from backup, and delete all data.
- *
- * API:
- *   gtmDataManager.exportAll()    — download JSON backup
- *   gtmDataManager.importAll()    — file picker → restore from JSON
- *   gtmDataManager.deleteAll()    — two-step confirmation → wipe all data
+ * Export, import, and delete workspace data while treating Supabase-backed
+ * persistence as the durable source of truth.
  */
 
 (function () {
     'use strict';
 
-    // All GTMOS localStorage keys
-    var DATA_KEYS = [
+    var BASE_DATA_KEYS = [
         'gtmos_onboarding',
+        'gtmos_product_category',
         'gtmos_playbook',
-        'gtmos_icp_analytics',
-        'gtmos_outbound_seed',
         'gtmos_qw_inputs',
-        'gtmos_angles',
+        'gtmos_outbound_seed',
+        'gtmos_icp_analytics',
         'gtmos_deal_workspaces',
+        'gtmos_deal_stage_history',
+        'gtmos_discovery_worked',
         'gtmos_discovery_stats',
-        'gtmos_qual_texts',
+        'gtmos_discovery_agenda',
         'gtmos_call_handoff',
+        'gtmos_angles',
+        'gtmos_outbound_touches',
+        'gtmos_linkedin_log',
+        'gtmos_sc_v4',
+        'gtmos_qual_texts',
         'gtmos_account_plans',
         'gtmos_asset_builder_analytics',
-        'gtmos_tour_completed',
-        'gtmos_territory',
-        'gtmos_ta_theses',
-        'gtmos_ta_approaches',
-        'gtmos_ta_accounts',
-        'gtmos_ta_dispositions',
-        'gtmos_ta_signals',
-        'gtmos_ta_swap_history',
-        'gtmos_ta_retier_history',
-        'gtmos_ta_calibrations',
-        'gtmos_ta_setup',
-        'gtmos_sw_query_cards',
-        'gtmos_sw_prospects',
-        'gtmos_sw_persona_maps'
+        'gtmos_tour_completed'
     ];
 
-    function gatherData() {
-        var data = {};
-        DATA_KEYS.forEach(function (key) {
-            var val = localStorage.getItem(key);
-            if (val !== null) {
-                try { data[key] = JSON.parse(val); }
-                catch (e) { data[key] = val; }
+    var EXCLUDED_KEYS = [
+        'gtmos_noauth_mode',
+        'gtmos_noauth_email',
+        'gtmos_env_mode',
+        'gtmos_enrichment_base_url'
+    ];
+
+    function cloneValue(value) {
+        if (value == null) return value;
+        try { return JSON.parse(JSON.stringify(value)); }
+        catch (e) { return value; }
+    }
+
+    function unique(items) {
+        var seen = {};
+        return (items || []).filter(function (item) {
+            var key = String(item || '');
+            if (!key || seen[key]) return false;
+            seen[key] = true;
+            return true;
+        });
+    }
+
+    function isExcludedKey(key) {
+        return EXCLUDED_KEYS.indexOf(String(key || '')) >= 0;
+    }
+
+    function durableDocKeys() {
+        if (!(window.gtmPersistence && window.gtmPersistence.docs && Array.isArray(window.gtmPersistence.docs.keys))) {
+            return [];
+        }
+        return window.gtmPersistence.docs.keys.slice();
+    }
+
+    function localGtmKeys() {
+        var keys = [];
+        try {
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                if (key && key.indexOf('gtmos_') === 0 && !isExcludedKey(key)) {
+                    keys.push(key);
+                }
             }
+        } catch (e) {}
+        return keys;
+    }
+
+    function allDataKeys() {
+        return unique(BASE_DATA_KEYS.concat(durableDocKeys()).concat(localGtmKeys())).filter(function (key) {
+            return !isExcludedKey(key);
+        });
+    }
+
+    function readParsed(key, fallback) {
+        var raw;
+        try { raw = localStorage.getItem(key); }
+        catch (e) { raw = null; }
+
+        if (raw === null || raw === undefined) return cloneValue(fallback);
+
+        try { return JSON.parse(raw); }
+        catch (e) { return raw; }
+    }
+
+    function setStoredValue(key, value) {
+        if (value === undefined) return;
+        if (value === null) {
+            localStorage.removeItem(key);
+            return;
+        }
+        localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+    }
+
+    function clearLocalData() {
+        allDataKeys().forEach(function (key) {
+            try { localStorage.removeItem(key); }
+            catch (e) {}
+        });
+        try { localStorage.removeItem('gtmos_profile_cache'); }
+        catch (e) {}
+    }
+
+    function gatherData(keys) {
+        var data = {};
+        (keys || allDataKeys()).forEach(function (key) {
+            var raw = null;
+            try { raw = localStorage.getItem(key); }
+            catch (e) { raw = null; }
+            if (raw === null) return;
+
+            try { data[key] = JSON.parse(raw); }
+            catch (e) { data[key] = raw; }
         });
         return data;
     }
 
+    function defaultDocState(keys) {
+        var next = {};
+        (keys || durableDocKeys()).forEach(function (key) {
+            if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.defaultFor === 'function') {
+                next[key] = cloneValue(window.gtmPersistence.docs.defaultFor(key));
+            } else {
+                next[key] = null;
+            }
+        });
+        return next;
+    }
+
+    function durableDocsFromLocal(keys) {
+        var state = defaultDocState(keys);
+        Object.keys(state).forEach(function (key) {
+            state[key] = readParsed(key, state[key]);
+        });
+        return state;
+    }
+
+    function buildSequenceStateFromLocal() {
+        return {
+            angles: readParsed('gtmos_angles', []),
+            outboundTouches: Object.assign({ touches: [] }, readParsed('gtmos_outbound_touches', {}) || {}),
+            linkedinLog: Object.assign({ actions: [] }, readParsed('gtmos_linkedin_log', {}) || {})
+        };
+    }
+
+    function buildDiscoveryStateFromLocal() {
+        return {
+            currentCategory: readParsed('gtmos_product_category', 'cxai') || 'cxai',
+            workedIds: readParsed('gtmos_discovery_worked', []),
+            stats: Object.assign({ totalCalls: 0, advancedCalls: 0 }, readParsed('gtmos_discovery_stats', {}) || {}),
+            agenda: readParsed('gtmos_discovery_agenda', null),
+            handoff: readParsed('gtmos_call_handoff', null)
+        };
+    }
+
+    function buildIcpStateFromLocal() {
+        var state = readParsed('gtmos_icp_analytics', { icps: [], totalWorked: 0 }) || {};
+        return {
+            icps: Array.isArray(state.icps) ? state.icps : [],
+            totalWorked: Number(state.totalWorked || 0) || 0
+        };
+    }
+
+    function buildSignalConsoleAccountsFromLocal() {
+        var state = readParsed('gtmos_sc_v4', { accounts: [] }) || {};
+        return Array.isArray(state.accounts) ? state.accounts : [];
+    }
+
+    async function settledCall(label, fn, errors) {
+        if (typeof fn !== 'function') return;
+        try {
+            var result = await fn();
+            if (result && result.error) {
+                errors.push(label + ': ' + (result.error.message || String(result.error)));
+            }
+        } catch (error) {
+            errors.push(label + ': ' + (error && error.message ? error.message : String(error)));
+        }
+    }
+
+    async function preloadCloudBackedState() {
+        var tasks = [];
+        if (window.gtmPersistence && window.gtmPersistence.workspace && typeof window.gtmPersistence.workspace.loadSummary === 'function') {
+            tasks.push(window.gtmPersistence.workspace.loadSummary({ force: true }));
+        }
+        if (window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.load === 'function') {
+            tasks.push(window.gtmPersistence.icps.load());
+        }
+        if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.load === 'function') {
+            tasks.push(window.gtmPersistence.deals.load());
+        }
+        if (window.gtmPersistence && window.gtmPersistence.discovery && typeof window.gtmPersistence.discovery.load === 'function') {
+            tasks.push(window.gtmPersistence.discovery.load());
+        }
+        if (window.gtmPersistence && window.gtmPersistence.sequences && typeof window.gtmPersistence.sequences.load === 'function') {
+            tasks.push(window.gtmPersistence.sequences.load());
+        }
+        if (window.gtmPersistence && window.gtmPersistence.signalConsole && typeof window.gtmPersistence.signalConsole.load === 'function') {
+            tasks.push(window.gtmPersistence.signalConsole.load());
+        }
+        if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function') {
+            tasks.push(window.gtmPersistence.docs.load());
+        }
+
+        if (tasks.length) {
+            await Promise.allSettled(tasks);
+        }
+
+        return gatherData();
+    }
+
+    async function syncCloudFromLocalState() {
+        var errors = [];
+
+        await settledCall('workspace onboarding', function () {
+            if (typeof window.saveUserOnboardingState !== 'function') return null;
+            var onboarding = readParsed('gtmos_onboarding', null);
+            if (!onboarding || typeof onboarding !== 'object') return null;
+            return window.saveUserOnboardingState(onboarding);
+        }, errors);
+
+        await settledCall('ICPs', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.replaceAll === 'function')) return null;
+            return window.gtmPersistence.icps.replaceAll(buildIcpStateFromLocal());
+        }, errors);
+
+        await settledCall('deals', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.replaceAll === 'function')) return null;
+            return window.gtmPersistence.deals.replaceAll(readParsed('gtmos_deal_workspaces', []));
+        }, errors);
+
+        await settledCall('discovery', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.discovery && typeof window.gtmPersistence.discovery.save === 'function')) return null;
+            return window.gtmPersistence.discovery.save(buildDiscoveryStateFromLocal());
+        }, errors);
+
+        await settledCall('sequences', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.sequences && typeof window.gtmPersistence.sequences.saveAll === 'function')) return null;
+            return window.gtmPersistence.sequences.saveAll(buildSequenceStateFromLocal());
+        }, errors);
+
+        await settledCall('signal console', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.signalConsole && typeof window.gtmPersistence.signalConsole.replaceAll === 'function')) return null;
+            return window.gtmPersistence.signalConsole.replaceAll(buildSignalConsoleAccountsFromLocal());
+        }, errors);
+
+        await settledCall('durable docs', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.syncAll === 'function')) return null;
+            return window.gtmPersistence.docs.syncAll(durableDocsFromLocal());
+        }, errors);
+
+        if (typeof window.clearWorkspaceBootstrapCache === 'function') {
+            window.clearWorkspaceBootstrapCache();
+        }
+        if (window.gtmPersistence && window.gtmPersistence.workspace && typeof window.gtmPersistence.workspace.loadSummary === 'function') {
+            await window.gtmPersistence.workspace.loadSummary({ force: true }).catch(function () {});
+        }
+
+        return errors;
+    }
+
+    async function resetCloudState() {
+        var errors = [];
+
+        await settledCall('workspace onboarding reset', function () {
+            if (typeof window.resetUserOnboardingState !== 'function') return null;
+            return window.resetUserOnboardingState();
+        }, errors);
+
+        await settledCall('ICP reset', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.replaceAll === 'function')) return null;
+            return window.gtmPersistence.icps.replaceAll({ icps: [], totalWorked: 0 });
+        }, errors);
+
+        await settledCall('deal reset', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.replaceAll === 'function')) return null;
+            return window.gtmPersistence.deals.replaceAll([]);
+        }, errors);
+
+        await settledCall('discovery reset', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.discovery && typeof window.gtmPersistence.discovery.save === 'function')) return null;
+            return window.gtmPersistence.discovery.save({
+                currentCategory: 'cxai',
+                workedIds: [],
+                stats: { totalCalls: 0, advancedCalls: 0 },
+                agenda: null,
+                handoff: null
+            });
+        }, errors);
+
+        await settledCall('sequence reset', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.sequences && typeof window.gtmPersistence.sequences.saveAll === 'function')) return null;
+            return window.gtmPersistence.sequences.saveAll({
+                angles: [],
+                outboundTouches: { touches: [] },
+                linkedinLog: { actions: [] }
+            });
+        }, errors);
+
+        await settledCall('signal console reset', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.signalConsole && typeof window.gtmPersistence.signalConsole.replaceAll === 'function')) return null;
+            return window.gtmPersistence.signalConsole.replaceAll([]);
+        }, errors);
+
+        await settledCall('durable docs reset', function () {
+            if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.syncAll === 'function')) return null;
+            return window.gtmPersistence.docs.syncAll(defaultDocState());
+        }, errors);
+
+        if (typeof window.clearWorkspaceBootstrapCache === 'function') {
+            window.clearWorkspaceBootstrapCache();
+        }
+
+        return errors;
+    }
+
     var manager = {
-        /**
-         * Export all data as a timestamped JSON file download.
-         */
-        exportAll: function () {
-            var data = gatherData();
+        exportAll: async function () {
+            var data = await preloadCloudBackedState();
             var keyCount = Object.keys(data).length;
             if (keyCount === 0) {
                 alert('No GTM OS data found to export.');
@@ -68,7 +337,7 @@
 
             var payload = {
                 _export: {
-                    version: 'gtmos-v27',
+                    version: 'gtmos-v28',
                     exported_at: new Date().toISOString(),
                     keys: keyCount
                 },
@@ -85,13 +354,9 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
 
-            // Track export
             if (window.gtmAnalytics) gtmAnalytics.track('data_exported', { keys: keyCount });
         },
 
-        /**
-         * Import data from a JSON backup file. Prompts with file picker.
-         */
         importAll: function () {
             var input = document.createElement('input');
             input.type = 'file';
@@ -101,14 +366,13 @@
                 if (!file) return;
 
                 var reader = new FileReader();
-                reader.onload = function (evt) {
+                reader.onload = async function (evt) {
                     try {
                         var parsed = JSON.parse(evt.target.result);
                         var data = parsed.data || parsed;
 
-                        // Validate it looks like GTMOS data
                         var validKeys = Object.keys(data).filter(function (k) {
-                            return k.indexOf('gtmos_') === 0;
+                            return k.indexOf('gtmos_') === 0 && !isExcludedKey(k);
                         });
 
                         if (validKeys.length === 0) {
@@ -117,21 +381,34 @@
                         }
 
                         var exportDate = parsed._export ? parsed._export.exported_at : 'unknown';
-                        if (!confirm('Import ' + validKeys.length + ' data stores from backup' +
+                        if (!confirm(
+                            'Import ' + validKeys.length + ' data stores from backup' +
                             (exportDate !== 'unknown' ? ' (exported ' + exportDate.slice(0, 10) + ')' : '') +
-                            '?\n\nThis will overwrite your current data. This cannot be undone.')) {
+                            '?\n\nThis will overwrite your current data and resync durable workspace state.'
+                        )) {
                             return;
                         }
 
+                        clearLocalData();
+                        allDataKeys().forEach(function (key) {
+                            var nextValue = Object.prototype.hasOwnProperty.call(data, key) ? data[key] : undefined;
+                            if (nextValue === undefined) return;
+                            setStoredValue(key, nextValue);
+                        });
                         validKeys.forEach(function (key) {
-                            var val = typeof data[key] === 'string' ? data[key] : JSON.stringify(data[key]);
-                            localStorage.setItem(key, val);
+                            if (allDataKeys().indexOf(key) >= 0) return;
+                            setStoredValue(key, data[key]);
                         });
 
-                        alert('Imported ' + validKeys.length + ' data stores. Reloading…');
-                        if (window.gtmAnalytics) gtmAnalytics.track('data_imported', { keys: validKeys.length });
-                        window.location.reload();
+                        var syncErrors = await syncCloudFromLocalState();
+                        var message = 'Imported ' + validKeys.length + ' data stores. Reloading...';
+                        if (syncErrors.length) {
+                            message += '\n\nCloud sync warnings:\n- ' + syncErrors.join('\n- ');
+                        }
 
+                        alert(message);
+                        if (window.gtmAnalytics) gtmAnalytics.track('data_imported', { keys: validKeys.length, cloud_warnings: syncErrors.length });
+                        window.location.reload();
                     } catch (err) {
                         alert('Failed to read backup file: ' + err.message);
                     }
@@ -141,11 +418,8 @@
             input.click();
         },
 
-        /**
-         * Delete all GTMOS data with two-step confirmation.
-         */
-        deleteAll: function () {
-            if (!confirm('⚠️ This will permanently delete ALL your GTM OS data from this browser.\n\nICPs, deals, playbook, quota workback, outbound angles, discovery stats — everything.\n\nThis cannot be undone. Continue?')) {
+        deleteAll: async function () {
+            if (!confirm('This will permanently delete ALL your GTM OS data for this signed-in workspace.\n\nICPs, deals, Signal Console, discovery state, territory data, cold-call log, advisor deploy, and other durable workspace records will be cleared.\n\nThis cannot be undone. Continue?')) {
                 return;
             }
 
@@ -155,32 +429,37 @@
                 return;
             }
 
-            // Track before deletion
-            if (window.gtmAnalytics) gtmAnalytics.track('data_deleted', { keys: DATA_KEYS.length });
+            var resetErrors = await resetCloudState();
+            if (resetErrors.length) {
+                alert('Unable to fully clear durable workspace truth.\n\n' + resetErrors.join('\n'));
+                return;
+            }
 
-            DATA_KEYS.forEach(function (key) {
-                localStorage.removeItem(key);
-            });
+            if (window.gtmAnalytics) gtmAnalytics.track('data_deleted', { keys: allDataKeys().length });
 
-            alert('All data deleted. Redirecting to setup…');
+            clearLocalData();
+            if (typeof window.clearWorkspaceBootstrapCache === 'function') {
+                window.clearWorkspaceBootstrapCache();
+            }
+
+            alert('All workspace data deleted. Redirecting to setup...');
             window.location.href = '/app/onboarding/';
         },
 
-        /**
-         * Get a quick summary of stored data (for debugging / admin).
-         */
         summary: function () {
             var result = {};
-            DATA_KEYS.forEach(function (key) {
-                var val = localStorage.getItem(key);
-                if (val !== null) {
-                    result[key] = { bytes: val.length, type: typeof val };
-                    try {
-                        var parsed = JSON.parse(val);
-                        if (Array.isArray(parsed)) result[key].items = parsed.length;
-                        else if (parsed && typeof parsed === 'object') result[key].keys = Object.keys(parsed).length;
-                    } catch (e) { /* not JSON */ }
-                }
+            allDataKeys().forEach(function (key) {
+                var val = null;
+                try { val = localStorage.getItem(key); }
+                catch (e) { val = null; }
+                if (val === null) return;
+
+                result[key] = { bytes: val.length, type: typeof val };
+                try {
+                    var parsed = JSON.parse(val);
+                    if (Array.isArray(parsed)) result[key].items = parsed.length;
+                    else if (parsed && typeof parsed === 'object') result[key].keys = Object.keys(parsed).length;
+                } catch (e) {}
             });
             return result;
         }

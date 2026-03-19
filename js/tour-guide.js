@@ -75,10 +75,24 @@ const TourGuide = {
     
     currentStep: 0,
     isActive: false,
+
+    hasSeenTour() {
+        if (window.gtmLocalState && typeof window.gtmLocalState.get === 'function') {
+            return window.gtmLocalState.get('gtmos_tour_completed', null, { scope: 'user' }) === 'true';
+        }
+        return localStorage.getItem('gtmos_tour_completed') === 'true';
+    },
+
+    markSeen() {
+        if (window.gtmLocalState && typeof window.gtmLocalState.set === 'function') {
+            window.gtmLocalState.set('gtmos_tour_completed', 'true', { scope: 'user' });
+            return;
+        }
+        localStorage.setItem('gtmos_tour_completed', 'true');
+    },
     
     init() {
-        const hasSeenTour = localStorage.getItem('gtmos_tour_completed');
-        if (!hasSeenTour) {
+        if (!this.hasSeenTour()) {
             setTimeout(() => this.start(), 1000);
         }
         this.addTourButton();
@@ -198,7 +212,7 @@ const TourGuide = {
     
     end() {
         this.isActive = false;
-        localStorage.setItem('gtmos_tour_completed', 'true');
+        this.markSeen();
         if (window.gtmAnalytics) gtmAnalytics.track('tour_completed', { steps_seen: this.currentStep + 1 });
         
         document.querySelectorAll('.tour-overlay, .tour-tooltip').forEach(el => el.remove());

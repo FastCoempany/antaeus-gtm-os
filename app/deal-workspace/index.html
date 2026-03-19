@@ -339,6 +339,7 @@
             return raw.filter(Boolean);
         }
         function saveDeals(deals){writeLS(KEY,deals);}
+        var signalConsoleAccounts=[];
         async function syncDealsFromCloud(){
             if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.load==='function'){
                 var loaded=await window.gtmPersistence.deals.load();
@@ -346,6 +347,19 @@
                 return loaded;
             }
             return {data:loadDeals(),error:null};
+        }
+        async function syncSignalConsoleAccounts(){
+            if(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'){
+                var loaded=await window.gtmPersistence.signalConsole.load();
+                if(loaded&&loaded.error)console.error('Signal Console load failed:',loaded.error);
+                if(loaded&&loaded.data&&Array.isArray(loaded.data.accounts)){
+                    signalConsoleAccounts=loaded.data.accounts.slice();
+                    return loaded;
+                }
+            }
+            var fallback=readLS('gtmos_sc_v4',{accounts:[]});
+            signalConsoleAccounts=(fallback.accounts||[]).slice();
+            return {data:{accounts:signalConsoleAccounts},error:null};
         }
 
         // --- Filter ---
@@ -438,8 +452,7 @@
 
                 // Linked badges
                 var badges='';
-                var scData=readLS('gtmos_sc_v4',{accounts:[]});
-                var matched=(scData.accounts||[]).find(function(a){return a.name&&d.accountName&&a.name.toLowerCase()===d.accountName.toLowerCase();});
+                var matched=signalConsoleAccounts.find(function(a){return a.name&&d.accountName&&a.name.toLowerCase()===d.accountName.toLowerCase();});
                 if(matched)badges+='<a href="/app/signal-console/" class="dw-link-badge signal" onclick="event.stopPropagation()">Signal: heat '+(matched._heat||0)+'</a>';
                 badges+='<a href="/app/future-autopsy/?deal='+encodeURIComponent(d.id)+'" class="dw-link-badge autopsy" onclick="event.stopPropagation()">\ud83d\udd2c Autopsy</a>';
 
@@ -669,6 +682,7 @@
         // URL param: pre-open a deal
         var urlDeal=new URLSearchParams(window.location.search).get('deal');
         async function bootDealWorkspace(){
+            await syncSignalConsoleAccounts();
             await syncDealsFromCloud();
             render();
             if(urlDeal){openModal(urlDeal);}

@@ -122,6 +122,21 @@
         var persona='cxo';
         var contactName='';
         var matchedAccount=null;
+        var signalConsoleAccounts=[];
+
+        async function syncSignalConsoleAccounts(){
+            if(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'){
+                var loaded=await window.gtmPersistence.signalConsole.load();
+                if(loaded&&loaded.error)console.error('Signal Console load failed:',loaded.error);
+                if(loaded&&loaded.data&&Array.isArray(loaded.data.accounts)){
+                    signalConsoleAccounts=loaded.data.accounts.slice();
+                    return loaded;
+                }
+            }
+            var fallback=readLS('gtmos_sc_v4',{accounts:[]});
+            signalConsoleAccounts=(fallback.accounts||[]).slice();
+            return {data:{accounts:signalConsoleAccounts},error:null};
+        }
 
         // Persona question banks
         var questionBank={
@@ -183,9 +198,8 @@
             contactName=val.trim();
             if(contactName.length>=2){
                 // Check Signal Console for matching account
-                var scData=readLS('gtmos_sc_v4',{accounts:[]});
                 matchedAccount=null;
-                (scData.accounts||[]).forEach(function(a){
+                signalConsoleAccounts.forEach(function(a){
                     if(contactName.toLowerCase().indexOf(a.name.toLowerCase())!==-1 || a.name.toLowerCase().indexOf(contactName.toLowerCase())!==-1){
                         matchedAccount=a;
                     }
@@ -284,6 +298,7 @@
                 var discoveryLoaded=await window.gtmPersistence.discovery.load();
                 if(discoveryLoaded&&discoveryLoaded.error)console.error('Discovery sync failed:',discoveryLoaded.error);
             }
+            await syncSignalConsoleAccounts();
             populateDealDropdown();
         }
 

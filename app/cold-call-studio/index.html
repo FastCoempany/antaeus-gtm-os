@@ -155,9 +155,29 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 (function(){
 // ── UTILS ──
 function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
-function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function syncDocToCloud(key,data){
+    if(!(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'))return;
+    if(!window.gtmPersistence.docs.has(key))return;
+    window.gtmPersistence.docs.save(key,data).catch(function(error){console.error('Cold Call Studio sync failed for',key,error);});
+}
+function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));syncDocToCloud(k,v)}
 function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 function uid(){return 'call_'+Date.now()+'_'+Math.random().toString(36).substr(2,5)}
+var signalConsoleAccounts=[];
+
+async function syncSignalConsoleAccounts(){
+    if(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'){
+        var loaded=await window.gtmPersistence.signalConsole.load();
+        if(loaded&&loaded.error)console.error('Signal Console load failed:',loaded.error);
+        if(loaded&&loaded.data&&Array.isArray(loaded.data.accounts)){
+            signalConsoleAccounts=loaded.data.accounts.slice();
+            return loaded;
+        }
+    }
+    var fallback=readLS('gtmos_sc_v4',{accounts:[]});
+    signalConsoleAccounts=(fallback.accounts||[]).slice();
+    return {data:{accounts:signalConsoleAccounts},error:null};
+}
 
 var PHASE_NAMES=['PREP','GATE','OPEN','HOOK','ENGAGE','VALUE','CLOSE','POST'];
 
@@ -292,8 +312,7 @@ var S={stage:'pre_call',timerOn:false,timerStart:null,timerInterval:null,expande
 var FLOW={};
 
 function initAccountSelector(){
-    var sc=readLS('gtmos_sc_v4',{accounts:[]});
-    var accounts=(sc.accounts||[]).sort(function(a,b){return(b._heat||0)-(a._heat||0)});
+    var accounts=signalConsoleAccounts.slice().sort(function(a,b){return(b._heat||0)-(a._heat||0)});
     // Render account selection in the pre-call brief
     return accounts;
 }
@@ -361,9 +380,8 @@ function renderBriefing(){
 }
 
 window.selectAccount=function(name){
-    var sc=readLS('gtmos_sc_v4',{accounts:[]});
     selectedAccount=name;
-    accountData=(sc.accounts||[]).find(function(a){return a.name===name})||null;
+    accountData=signalConsoleAccounts.find(function(a){return a.name===name})||null;
     document.getElementById('topCtx').innerHTML=name?'<strong>'+escH(name)+'</strong>'+(accountData&&accountData._heat?' · heat '+accountData._heat:''):'Select an account';
     FLOW=buildFlow();
     render();
@@ -401,9 +419,14 @@ window.logCall=function(outcome){
     // Prompt deal creation
     if(outcome==='meeting_booked'&&selectedAccount){
         if(confirm('Meeting booked! Create a deal for '+selectedAccount+'?')){
-            var deals=readLS('gtmos_deal_workspaces',[]);
-            deals.push({id:'deal_'+Date.now(),accountName:selectedAccount,value:0,stage:'prospect',nextStep:'First meeting',nextStepDate:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
-            writeLS('gtmos_deal_workspaces',deals);
+            var deal={id:'deal_'+Date.now(),accountName:selectedAccount,value:0,stage:'prospect',nextStep:'First meeting',nextStepDate:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+            if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.save==='function'){
+                window.gtmPersistence.deals.save(deal).catch(function(error){console.error('Cold Call Studio deal sync failed:',error);});
+            }else{
+                var deals=readLS('gtmos_deal_workspaces',[]);
+                deals.push(deal);
+                writeLS('gtmos_deal_workspaces',deals);
+            }
             alert('Deal created in Deal Workspace.');
         }
     }
@@ -464,15 +487,27 @@ function renderSidebar(){
 }
 
 // ── BOOT ──
-// Check URL params
-var params=new URLSearchParams(window.location.search);
-if(params.get('account')){
-    var sc=readLS('gtmos_sc_v4',{accounts:[]});
-    var match=(sc.accounts||[]).find(function(a){return a.name===params.get('account')});
-    if(match){selectedAccount=match.name;accountData=match;}
+async function bootColdCallStudio(){
+    if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
+        await window.gtmPersistence.docs.load({keys:['gtmos_cold_call_log']}).catch(function(error){console.error('Cold Call Studio docs preload failed:',error);});
+    }
+    await syncSignalConsoleAccounts();
+    var params=new URLSearchParams(window.location.search);
+    if(params.get('account')){
+        var match=signalConsoleAccounts.find(function(a){return a.name===params.get('account')});
+        if(match){selectedAccount=match.name;accountData=match;}
+    }
+    FLOW=buildFlow();
+    render();
 }
-FLOW=buildFlow();
-render();
+
+if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+    window.requireAuthReady.then(bootColdCallStudio).catch(function(){});
+}else if(window.__gtmosAuthGatePending){
+    window.addEventListener('gtmos:auth-ready',function(){bootColdCallStudio().catch(function(){});},{once:true});
+}else{
+    bootColdCallStudio().catch(function(){});
+}
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeObj()});
 

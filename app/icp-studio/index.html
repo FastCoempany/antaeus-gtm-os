@@ -1111,14 +1111,27 @@
             const analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
             const container = byId('libraryCards');
             const countEl = byId('libraryCount');
+            function hintDismissed() {
+                if (window.gtmLocalState && typeof window.gtmLocalState.get === 'function') {
+                    return window.gtmLocalState.get('gtmos_icp_hint_dismissed', null, { scope: 'user' }) === '1';
+                }
+                return localStorage.getItem('gtmos_icp_hint_dismissed') === '1';
+            }
+            window.dismissIcpHint = function() {
+                if (window.gtmLocalState && typeof window.gtmLocalState.set === 'function') {
+                    window.gtmLocalState.set('gtmos_icp_hint_dismissed', '1', { scope: 'user' });
+                } else {
+                    localStorage.setItem('gtmos_icp_hint_dismissed', '1');
+                }
+            };
             
             countEl.textContent = analytics.icps.length + ' saved';
 
             // Show next-step hint for 1-2 ICPs
             var hint = byId('icpNextHint');
             if (hint) {
-                if (analytics.icps.length >= 1 && analytics.icps.length <= 2 && !localStorage.getItem('gtmos_icp_hint_dismissed')) {
-                    hint.innerHTML = '<span>💡 ' + (analytics.icps.length === 1 ? 'Good start. Build 2 more ICPs to compare segments and unlock your market map.' : 'One more ICP and you can compare all three segments side by side.') + '</span><button onclick="this.parentElement.classList.add(\'hidden\');localStorage.setItem(\'gtmos_icp_hint_dismissed\',\'1\');" style="margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">✕</button>';
+                if (analytics.icps.length >= 1 && analytics.icps.length <= 2 && !hintDismissed()) {
+                    hint.innerHTML = '<span>💡 ' + (analytics.icps.length === 1 ? 'Good start. Build 2 more ICPs to compare segments and unlock your market map.' : 'One more ICP and you can compare all three segments side by side.') + '</span><button onclick="this.parentElement.classList.add(\'hidden\');window.dismissIcpHint&&window.dismissIcpHint();" style="margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">✕</button>';
                     hint.classList.remove('hidden');
                 } else {
                     hint.classList.add('hidden');
@@ -1316,15 +1329,25 @@
         }
 
         // Signal Console scoring
-        window.scoreAccounts = function() {
+        window.scoreAccounts = async function() {
             var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[]}');
             var icps = analytics.icps || [];
             if (icps.length === 0) {
                 document.getElementById('scScoreResults').innerHTML = '<div style="padding:12px;color:var(--text-muted);font-style:italic;">Save at least one ICP profile first.</div>';
                 return;
             }
-            var scData;
-            try { scData = JSON.parse(localStorage.getItem('gtmos_sc_v4') || '{"accounts":[]}'); } catch(e) { scData = {accounts:[]}; }
+            var scData = { accounts: [] };
+            if (window.gtmPersistence && window.gtmPersistence.signalConsole && typeof window.gtmPersistence.signalConsole.load === 'function') {
+                var loaded = await window.gtmPersistence.signalConsole.load();
+                if (loaded && loaded.error) console.error('Signal Console load failed:', loaded.error);
+                if (loaded && loaded.data) {
+                    scData = loaded.data;
+                } else {
+                    try { scData = JSON.parse(localStorage.getItem('gtmos_sc_v4') || '{"accounts":[]}'); } catch(e) { scData = {accounts:[]}; }
+                }
+            } else {
+                try { scData = JSON.parse(localStorage.getItem('gtmos_sc_v4') || '{"accounts":[]}'); } catch(e) { scData = {accounts:[]}; }
+            }
             var accounts = scData.accounts || [];
             if (accounts.length === 0) {
                 document.getElementById('scScoreResults').innerHTML = '<div style="padding:12px;color:var(--text-muted);font-style:italic;">No accounts in Signal Console. <a href="/app/signal-console/" style="color:var(--brand-gold);">Add accounts →</a></div>';

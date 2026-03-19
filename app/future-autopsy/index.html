@@ -308,7 +308,15 @@
 
         // Task completion log
         function getLog() { try { return JSON.parse(localStorage.getItem('gtmos_autopsy_log_v1')) || {}; } catch(e) { return {}; } }
-        function setLog(v) { localStorage.setItem('gtmos_autopsy_log_v1', JSON.stringify(v || {})); }
+        function setLog(v) {
+            var next = v || {};
+            localStorage.setItem('gtmos_autopsy_log_v1', JSON.stringify(next));
+            if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function') {
+                window.gtmPersistence.docs.save('gtmos_autopsy_log_v1', next).catch(function(error) {
+                    console.error('Future Autopsy log sync failed:', error);
+                });
+            }
+        }
         function taskState(dealId, taskId) { var log = getLog(); return !!(log[String(dealId)] && log[String(dealId)].tasks && log[String(dealId)].tasks[taskId] && log[String(dealId)].tasks[taskId].done); }
         function toggleTask(dealId, taskId) {
             var log = getLog(), id = String(dealId);
@@ -458,21 +466,41 @@
 
         // ── BOOT ──
 
-        loadVitals();
-        populateDropdown();
-
-        if (allVitals.length === 0) {
-            document.getElementById('dealSub').textContent = 'No deals to autopsy yet.';
-            document.getElementById('autopsyContent').innerHTML = '<div class="fa-empty"><div style="font-size:2rem;margin-bottom:12px;">\ud83d\udd2c</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No active deals</div><div>Create your first deal in <a href="/app/deal-workspace/">Deal Workspace</a>, then come back to stress-test it.</div></div>';
-        } else {
-            // URL param support
-            var urlDeal = new URLSearchParams(window.location.search).get('deal');
-            if (urlDeal && allVitals.find(function(v) { return v.id === urlDeal; })) {
-                document.getElementById('dealSelect').value = urlDeal;
-                run(urlDeal);
-            } else {
-                autopsyOfDay();
+        async function bootFutureAutopsy() {
+            if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function') {
+                await window.gtmPersistence.docs.load({ keys: ['gtmos_autopsy_log_v1'] }).catch(function(error) {
+                    console.error('Future Autopsy docs preload failed:', error);
+                });
             }
+            if (window.dealHealth && typeof window.dealHealth.preload === 'function') {
+                await window.dealHealth.preload().catch(function() {});
+            }
+
+            loadVitals();
+            populateDropdown();
+
+            if (allVitals.length === 0) {
+                document.getElementById('dealSub').textContent = 'No deals to autopsy yet.';
+                document.getElementById('autopsyContent').innerHTML = '<div class="fa-empty"><div style="font-size:2rem;margin-bottom:12px;">\ud83d\udd2c</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No active deals</div><div>Create your first deal in <a href="/app/deal-workspace/">Deal Workspace</a>, then come back to stress-test it.</div></div>';
+            } else {
+                var urlDeal = new URLSearchParams(window.location.search).get('deal');
+                if (urlDeal && allVitals.find(function(v) { return v.id === urlDeal; })) {
+                    document.getElementById('dealSelect').value = urlDeal;
+                    run(urlDeal);
+                } else {
+                    autopsyOfDay();
+                }
+            }
+        }
+
+        if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+            window.requireAuthReady.then(bootFutureAutopsy).catch(function() {});
+        } else if (window.__gtmosAuthGatePending) {
+            window.addEventListener('gtmos:auth-ready', function() {
+                bootFutureAutopsy().catch(function() {});
+            }, { once: true });
+        } else {
+            bootFutureAutopsy().catch(function() {});
         }
     })();
     </script>

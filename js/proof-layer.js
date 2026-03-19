@@ -22,13 +22,32 @@
         catch(e) { return fallback; }
     }
 
+    var workspaceSummaryPreloadPromise = null;
+
+    function currentWorkspaceSummary() {
+        return window.__gtmosWorkspaceSummary || null;
+    }
+
+    function preloadWorkspaceSummary() {
+        if (workspaceSummaryPreloadPromise) return workspaceSummaryPreloadPromise;
+        if (!(window.gtmPersistence && window.gtmPersistence.workspace && typeof window.gtmPersistence.workspace.loadSummary === 'function')) {
+            return Promise.resolve({ data: currentWorkspaceSummary(), error: null });
+        }
+        workspaceSummaryPreloadPromise = window.gtmPersistence.workspace.loadSummary().catch(function(error) {
+            console.error('Workspace summary preload failed for proof-layer:', error);
+            return { data: currentWorkspaceSummary(), error: error };
+        });
+        return workspaceSummaryPreloadPromise;
+    }
+
     function getSummary() {
+        var workspace = currentWorkspaceSummary() || {};
         var signals = [];
         var totalSignals = 0;
         var totalPositive = 0;
 
         // 1. ICP Builder — icps with worked flag
-        var icp = readLS('gtmos_icp_analytics', { icps: [], totalWorked: 0 });
+        var icp = workspace.icpAnalytics || readLS('gtmos_icp_analytics', { icps: [], totalWorked: 0 });
         var icpTotal = (icp.icps || []).length;
         var icpWorked = (icp.icps || []).filter(function(i) { return i.worked; }).length;
         signals.push({
@@ -42,7 +61,8 @@
         totalPositive += icpWorked;
 
         // 2. Discovery Studio — advancement rate
-        var disco = readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
+        var discoState = workspace.discovery || null;
+        var disco = (discoState && discoState.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
         signals.push({
             source: 'Discovery Frameworks',
             icon: '🔍',
@@ -54,7 +74,8 @@
         totalPositive += disco.advancedCalls;
 
         // 3. Trigger-Outreach — got_reply angles
-        var angles = readLS('gtmos_angles', []);
+        var sequences = workspace.sequences || null;
+        var angles = (sequences && sequences.angles) || readLS('gtmos_angles', []);
         var anglesTotal = angles.length;
         var anglesReplied = angles.filter(function(a) { return a.payload && a.payload.got_reply; }).length;
         signals.push({
@@ -80,7 +101,12 @@
         totalPositive += cfoCount;
 
         // 5. PoC Framework — converted PoCs
-        var poc = readLS('gtmos_poc_analytics', { total: 0, converted: 0 });
+        var pocState = readLS('gtmos_poc_data', { pocs: [] });
+        var pocList = Array.isArray(pocState && pocState.pocs) ? pocState.pocs : [];
+        var poc = {
+            total: pocList.length,
+            converted: pocList.filter(function(item) { return item && item.outcome === 'converted'; }).length
+        };
         signals.push({
             source: 'PoC Framework',
             icon: '🧪',
@@ -137,7 +163,7 @@
         }
 
         // 8. Discovery Agenda — gates checked
-        var agenda = readLS('gtmos_discovery_agenda', {});
+        var agenda = (discoState && discoState.agenda) || readLS('gtmos_discovery_agenda', {});
         var gates = (agenda.gates || []);
         var gatesChecked = gates.filter(function(g) { return g; }).length;
         signals.push({
@@ -170,17 +196,20 @@
 
     // ── Enrichment: effectiveness, consistency, coverage ──────────
     function computeEnrichment(signals, totalSignals, totalPositive) {
+        var workspace = currentWorkspaceSummary() || {};
         var effectiveness = { score: 0, details: [] };
         var consistency = { score: 0, details: [] };
         var coverage = { score: 0, details: [] };
 
         // Effectiveness: advance rate + reply rate
-        var disco = readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
+        var discoState = workspace.discovery || null;
+        var disco = (discoState && discoState.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
         var advRate = disco.totalCalls > 0 ? Math.round((disco.advancedCalls / disco.totalCalls) * 100) : 0;
         if (advRate >= 40) { effectiveness.score += 2; effectiveness.details.push('Strong advance rate (' + advRate + '%)'); }
         else if (advRate >= 25) { effectiveness.score += 1; effectiveness.details.push('Improving advance rate (' + advRate + '%)'); }
 
-        var angles = readLS('gtmos_angles', []);
+        var sequences = workspace.sequences || null;
+        var angles = (sequences && sequences.angles) || readLS('gtmos_angles', []);
         var replied = angles.filter(function(a) { return a.payload && a.payload.got_reply; }).length;
         var replyRate = angles.length > 0 ? Math.round((replied / angles.length) * 100) : 0;
         if (replyRate >= 15) { effectiveness.score += 2; effectiveness.details.push('Strong reply rate (' + replyRate + '%)'); }
@@ -223,13 +252,15 @@
     }
 
     // ── Render a plain-language selling record bar ──
-    function renderProofBar(containerId) {
+    async function renderProofBar(containerId) {
+        await preloadWorkspaceSummary();
         var container = document.getElementById(containerId);
         if (!container) return;
 
         var summary = getSummary();
-        var disco = readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
-        var angles = readLS('gtmos_angles', []);
+        var workspace = currentWorkspaceSummary() || {};
+        var disco = (workspace.discovery && workspace.discovery.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
+        var angles = (workspace.sequences && workspace.sequences.angles) || readLS('gtmos_angles', []);
         var replied = angles.filter(function(a) { return a.payload && a.payload.got_reply; }).length;
 
         // Build plain-language stats
@@ -278,8 +309,19 @@
 
     // ── Public API ───────────────────────────────────────────────────
     window.proofLayer = {
+        preload: preloadWorkspaceSummary,
         getSummary: getSummary,
         renderProofBar: renderProofBar
     };
+
+    if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+        window.requireAuthReady.then(function() { return preloadWorkspaceSummary(); }).catch(function() {});
+    } else if (window.__gtmosAuthGatePending) {
+        window.addEventListener('gtmos:auth-ready', function() {
+            preloadWorkspaceSummary().catch(function() {});
+        }, { once: true });
+    } else {
+        preloadWorkspaceSummary().catch(function() {});
+    }
 
 })();

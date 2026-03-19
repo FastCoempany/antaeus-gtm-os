@@ -231,19 +231,35 @@ async function finish(){
     try {
         localStorage.setItem('gtmos_onboarding',JSON.stringify(data));
         localStorage.setItem('gtmos_product_category',JSON.stringify(document.getElementById('productCat').value));
+        var docSyncTasks = [];
+        function queueDocSync(key, value) {
+            if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function')) return;
+            docSyncTasks.push(
+                window.gtmPersistence.docs.save(key, value).catch(function(error) {
+                    console.error('Onboarding doc sync failed for', key, error);
+                    return { error: error };
+                })
+            );
+        }
         if(q>0){
             var acvBands={small:{max:30000,win:25,cycle:45,cov:3.0},mid:{max:75000,win:20,cycle:90,cov:3.5},enterprise:{max:200000,win:15,cycle:180,cov:4.5},strategic:{max:Infinity,win:12,cycle:240,cov:5.0}};
             var band=a>=200000?'strategic':a>=75000?'enterprise':a>=30000?'mid':'small';
             var bm=acvBands[band];
             var seed={annual_quota:q,avg_deal_size:a||50000,win_rate:bm.win,touch_to_meeting:0.7,show_rate:80,cycle_days:bm.cycle,coverage_target:bm.cov,acv_band:band};
             localStorage.setItem('gtmos_outbound_seed',JSON.stringify(seed));
+            queueDocSync('gtmos_outbound_seed', seed);
         }
         var pb={company:data.answers.companyName,stage:data.answers.stage,acv:a||null,fields:{},checks:{},notes:''};
         localStorage.setItem('gtmos_playbook',JSON.stringify(pb));
+        queueDocSync('gtmos_playbook', pb);
 
         if (typeof window.saveUserOnboardingState === 'function') {
             var saveResult = await window.saveUserOnboardingState(data);
             if (saveResult && saveResult.error) throw saveResult.error;
+        }
+
+        if (docSyncTasks.length) {
+            await Promise.allSettled(docSyncTasks);
         }
 
         window.location.href='/app/dashboard/';

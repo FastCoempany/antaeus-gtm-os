@@ -15,7 +15,14 @@
     }
 
     function writeJson(key, value) {
-        try { localStorage.setItem(key, JSON.stringify(value)); }
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+            if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function' && window.gtmPersistence.docs.has(key)) {
+                window.gtmPersistence.docs.save(key, value).catch(function(error) {
+                    console.error('Onboarding durable doc sync failed for', key, error);
+                });
+            }
+        }
         catch (e) {}
     }
 

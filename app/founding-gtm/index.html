@@ -112,14 +112,42 @@
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
 <script>
-    (function(){
+    (async function(){
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
         function fmtN(n){return '$'+Number(n||0).toLocaleString();}
+        async function syncSignalConsoleState(){
+            if(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'){
+                var loaded=await window.gtmPersistence.signalConsole.load();
+                if(loaded&&loaded.error)console.error('Signal Console load failed:',loaded.error);
+                if(loaded&&loaded.data)return loaded.data;
+            }
+            return readLS('gtmos_sc_v4',{accounts:[]});
+        }
+
+        if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+            try{await window.requireAuthReady;}catch(e){}
+        }
+        if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
+            var docsLoaded=await window.gtmPersistence.docs.load({
+                keys:[
+                    'gtmos_playbook',
+                    'gtmos_outbound_seed',
+                    'gtmos_deal_outcomes',
+                    'gtmos_cold_call_log',
+                    'gtmos_advisor_registry',
+                    'gtmos_advisor_deployments',
+                    'gtmos_playbook_notes',
+                    'gtmos_handoff_exported',
+                    'gtmos_autopsy_log_v1'
+                ]
+            });
+            if(docsLoaded&&docsLoaded.error)console.error('Founding GTM docs preload failed:',docsLoaded.error);
+        }
 
         var playbook=readLS('gtmos_playbook',{});
         var icps=readLS('gtmos_icp_analytics',{icps:[],totalWorked:0});
-        var scData=readLS('gtmos_sc_v4',{accounts:[]});
+        var scData=await syncSignalConsoleState();
         var seed=readLS('gtmos_outbound_seed',{});
         var angles=readLS('gtmos_angles',[]);
         var disco=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
@@ -179,7 +207,7 @@
                 if(liActions.length>0){
                     var connections=liActions.filter(function(a){return a.type==='connection'||a.action==='connection'}).length;
                     var accepted=liActions.filter(function(a){return a.outcome==='accepted'}).length;
-                    items.push({label:'LinkedIn Activity',value:liActions.length+' actions'+(connections>0?', '+connections+' connection requests'+(accepted>0?' ('+accepted+' accepted)':'')':'')});
+                    items.push({label:'LinkedIn Activity',value:liActions.length+' actions'+(connections>0?', '+connections+' connection requests'+(accepted>0?' ('+accepted+' accepted)':''):'')});
                 }
                 return items;
             }},
@@ -313,6 +341,9 @@
         window.saveNote=function(key,val){
             savedNotes[typeof key==='number'?'sec_'+key:key]=val;
             localStorage.setItem('gtmos_playbook_notes',JSON.stringify(savedNotes));
+            if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'){
+                window.gtmPersistence.docs.save('gtmos_playbook_notes',savedNotes).catch(function(error){console.error('Playbook notes sync failed:',error);});
+            }
         };
 
         // Export modal
@@ -489,7 +520,11 @@
             // A7: Track handoff export for Readiness Score
             var prevExport=JSON.parse(localStorage.getItem('gtmos_handoff_exported')||'null');
             var exportCount=prevExport&&prevExport.count?prevExport.count+1:1;
-            localStorage.setItem('gtmos_handoff_exported',JSON.stringify({date:new Date().toISOString(),count:exportCount}));
+            var handoffMeta={date:new Date().toISOString(),count:exportCount};
+            localStorage.setItem('gtmos_handoff_exported',JSON.stringify(handoffMeta));
+            if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'){
+                window.gtmPersistence.docs.save('gtmos_handoff_exported',handoffMeta).catch(function(error){console.error('Handoff export sync failed:',error);});
+            }
             closeExportModal();
         };
     })();

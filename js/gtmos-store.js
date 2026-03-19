@@ -27,6 +27,13 @@
         discoveryLinks: 'gtmos_discovery_links'
     };
 
+    function syncDocToCloud(key, data) {
+        if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function')) return;
+        window.gtmPersistence.docs.save(key, data).catch(function(error) {
+            console.error('gtmStore sync failed for', key, error);
+        });
+    }
+
     function readKey(key) {
         try {
             return JSON.parse(localStorage.getItem(key) || '{}');
@@ -39,6 +46,7 @@
     function writeKey(key, data) {
         try {
             localStorage.setItem(key, JSON.stringify(data));
+            syncDocToCloud(key, data);
             return true;
         } catch(e) {
             console.warn('gtmStore: failed to write', key, e);
@@ -272,6 +280,15 @@
         quals: quals,
         outcomes: outcomes,
         discoveryLinks: discoveryLinks,
+        preload: function() {
+            if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function')) {
+                return Promise.resolve({ data: null, error: null });
+            }
+            return window.gtmPersistence.docs.load({ keys: [KEYS.quals, KEYS.outcomes, KEYS.discoveryLinks] }).catch(function(error) {
+                console.error('gtmStore preload failed:', error);
+                return { data: null, error: error };
+            });
+        },
         scoring: {
             FIELDS: QUAL_FIELDS,
             scoreField: scoreField,
@@ -282,5 +299,15 @@
         },
         KEYS: KEYS
     };
+
+    if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
+        window.requireAuthReady.then(function() { return window.gtmStore.preload(); }).catch(function() {});
+    } else if (window.__gtmosAuthGatePending) {
+        window.addEventListener('gtmos:auth-ready', function() {
+            window.gtmStore.preload().catch(function() {});
+        }, { once: true });
+    } else {
+        window.gtmStore.preload().catch(function() {});
+    }
 
 })();
