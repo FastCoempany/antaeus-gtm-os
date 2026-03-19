@@ -55,6 +55,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .hero h1 em{font-style:normal;color:var(--accent)}
 .hero p{font-size:clamp(0.92rem,1.5vw,1.05rem);color:var(--tx2);line-height:1.65;max-width:580px;margin:0 auto 36px}
 .hero-cta{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);font-size:1rem;font-weight:700;padding:16px 36px;border-radius:999px;background:var(--accent);color:#fff;border:none;cursor:pointer;text-decoration:none;transition:all 0.2s;box-shadow:0 0 40px rgba(192,120,80,0.2)}.hero-cta:hover{background:#a86540;transform:translateY(-1px);box-shadow:0 0 60px rgba(192,120,80,0.3)}
+.hero-links{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap}
+.hero-link-alt{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.04em;color:var(--tx2);text-decoration:none;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);transition:all 0.2s}
+.hero-link-alt:hover{color:var(--tx);border-color:var(--accent-line);background:rgba(255,255,255,0.03)}
 .hero-sub{font-family:var(--mono);font-size:0.62rem;color:var(--tx3);margin-top:16px;letter-spacing:0.04em}
 .hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.6rem;color:var(--tx4);letter-spacing:0.1em;animation:bob 2s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
@@ -194,6 +197,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <nav class="nav">
   <a href="#" class="nav-brand">antaeus<em>.</em></a>
   <div class="nav-actions">
+    <a href="/demo-seed.html" class="nav-login">Explore Demo</a>
     <a href="/login.html" class="nav-login">Sign In</a>
     <a href="#pricing" class="nav-cta">Get Started — $299/yr</a>
   </div>
@@ -496,6 +500,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div class="footer-brand">antaeus<em>.</em></div>
     <div class="footer-links">
       <a href="/login.html">Sign In</a>
+      <a href="/demo-seed.html">Explore Demo</a>
       <a href="/terms.html">Terms</a>
       <a href="/privacy.html">Privacy</a>
       <a href="mailto:hello@antaeus.app">Contact</a>

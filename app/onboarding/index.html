@@ -38,6 +38,7 @@
         .ob-btn-primary:disabled { opacity:0.3; cursor:not-allowed; }
         .ob-btn-ghost { background:transparent; color:var(--text-muted); border:1px solid var(--border-default); }
         .ob-btn-skip { background:none; border:none; color:var(--text-muted); font-size:0.8rem; cursor:pointer; }
+        .ob-btn-link { background:none; border:none; color:var(--brand-gold); font-size:0.8rem; font-weight:700; cursor:pointer; padding:0; }
         .ob-step { display:none; animation:fadeUp 0.35s ease; }
         .ob-step.active { display:block; }
         @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
@@ -80,7 +81,7 @@
                 <input type="text" class="ob-input" id="companyName" placeholder="e.g. Acme AI" oninput="v0()">
             </div>
             <div class="ob-actions">
-                <div></div>
+                <button class="ob-btn-link" type="button" onclick="restoreFromBackup()">Restore from Backup</button>
                 <button class="ob-btn ob-btn-primary" id="btn0" disabled onclick="next()">Continue &rarr;</button>
             </div>
         </div>
@@ -153,6 +154,7 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/js/supabase-config.js"></script>
+<script src="/js/data-manager.js"></script>
 <script src="/js/require-auth.js"></script>
 <script>
 var step=0;
@@ -201,6 +203,15 @@ function prefillFromStoredState() {
     v0();
     v1();
     v2();
+}
+
+function restoreFromBackup() {
+    var manager = window.gtmDataManager || window.dataManager || null;
+    if (manager && typeof manager.importAll === 'function') {
+        manager.importAll({ reloadTo: '/app/dashboard/' });
+        return;
+    }
+    alert('Backup tools are unavailable right now. Refresh and try again.');
 }
 
 async function finish(){

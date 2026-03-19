@@ -37,6 +37,9 @@
         'gtmos_env_mode',
         'gtmos_enrichment_base_url'
     ];
+    var BACKUP_META_KEY = 'gtmos_backup_meta';
+    var BACKUP_REMINDER_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000;
+    var BACKUP_REMINDER_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
     function cloneValue(value) {
         if (value == null) return value;
@@ -56,6 +59,93 @@
 
     function isExcludedKey(key) {
         return EXCLUDED_KEYS.indexOf(String(key || '')) >= 0;
+    }
+
+    function readScopedUiState(key, fallback) {
+        try {
+            if (window.gtmLocalState && typeof window.gtmLocalState.get === 'function') {
+                return window.gtmLocalState.get(key, fallback, { scope: 'user' });
+            }
+        } catch (e) {}
+
+        try {
+            var raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : cloneValue(fallback);
+        } catch (e) {
+            return cloneValue(fallback);
+        }
+    }
+
+    function writeScopedUiState(key, value) {
+        try {
+            if (window.gtmLocalState && typeof window.gtmLocalState.set === 'function') {
+                window.gtmLocalState.set(key, value, { scope: 'user' });
+                return;
+            }
+        } catch (e) {}
+
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {}
+    }
+
+    function readBackupMeta() {
+        var meta = readScopedUiState(BACKUP_META_KEY, {});
+        return meta && typeof meta === 'object' ? meta : {};
+    }
+
+    function writeBackupMeta(next) {
+        var current = readBackupMeta();
+        writeScopedUiState(BACKUP_META_KEY, Object.assign({}, current, next || {}));
+    }
+
+    function padNumber(value) {
+        return String(Number(value) || 0).padStart(2, '0');
+    }
+
+    function formatExportTimestamp(date) {
+        var dt = date instanceof Date ? date : new Date(date || Date.now());
+        return [
+            dt.getFullYear(),
+            padNumber(dt.getMonth() + 1),
+            padNumber(dt.getDate())
+        ].join('-') + '-' + [
+            padNumber(dt.getHours()),
+            padNumber(dt.getMinutes()),
+            padNumber(dt.getSeconds())
+        ].join('');
+    }
+
+    function buildExportFilename(date) {
+        return 'antaeus-backup-' + formatExportTimestamp(date) + '.json';
+    }
+
+    function buildBackupStatus() {
+        var meta = readBackupMeta();
+        var lastExportAt = meta.lastExportAt || null;
+        var lastExportMs = lastExportAt ? new Date(lastExportAt).getTime() : NaN;
+        var hasExport = Number.isFinite(lastExportMs);
+        var ageMs = hasExport ? Math.max(0, Date.now() - lastExportMs) : null;
+
+        return {
+            hasExport: hasExport,
+            lastExportAt: lastExportAt,
+            lastExportFileName: meta.lastExportFileName || null,
+            lastReminderAt: meta.lastReminderAt || null,
+            exportCount: Number(meta.exportCount || 0) || 0,
+            ageMs: ageMs,
+            ageDays: hasExport ? Math.floor(ageMs / (24 * 60 * 60 * 1000)) : null,
+            needsReminder: !hasExport || ageMs >= BACKUP_REMINDER_INTERVAL_MS
+        };
+    }
+
+    function shouldShowBackupReminder(status) {
+        var next = status || buildBackupStatus();
+        if (!next.needsReminder) return false;
+
+        var lastReminderMs = next.lastReminderAt ? new Date(next.lastReminderAt).getTime() : NaN;
+        if (!Number.isFinite(lastReminderMs)) return true;
+        return (Date.now() - lastReminderMs) >= BACKUP_REMINDER_COOLDOWN_MS;
     }
 
     function durableDocKeys() {
@@ -335,10 +425,13 @@
                 return;
             }
 
+            var exportedAt = new Date();
+            var fileName = buildExportFilename(exportedAt);
+
             var payload = {
                 _export: {
                     version: 'gtmos-v28',
-                    exported_at: new Date().toISOString(),
+                    exported_at: exportedAt.toISOString(),
                     keys: keyCount
                 },
                 data: data
@@ -348,16 +441,23 @@
             var blob = new Blob([json], { type: 'application/json' });
             var a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'antaeus-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
 
+            writeBackupMeta({
+                lastExportAt: exportedAt.toISOString(),
+                lastExportFileName: fileName,
+                exportCount: buildBackupStatus().exportCount + 1
+            });
+
             if (window.gtmAnalytics) gtmAnalytics.track('data_exported', { keys: keyCount });
         },
 
-        importAll: function () {
+        importAll: function (options) {
+            options = options || {};
             var input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
@@ -408,7 +508,11 @@
 
                         alert(message);
                         if (window.gtmAnalytics) gtmAnalytics.track('data_imported', { keys: validKeys.length, cloud_warnings: syncErrors.length });
-                        window.location.reload();
+                        if (options.reloadTo) {
+                            window.location.href = options.reloadTo;
+                        } else {
+                            window.location.reload();
+                        }
                     } catch (err) {
                         alert('Failed to read backup file: ' + err.message);
                     }
@@ -462,8 +566,25 @@
                 } catch (e) {}
             });
             return result;
+        },
+
+        getBackupStatus: function () {
+            return buildBackupStatus();
+        },
+
+        shouldShowBackupReminder: function () {
+            return shouldShowBackupReminder(buildBackupStatus());
+        },
+
+        markBackupReminderShown: function () {
+            writeBackupMeta({ lastReminderAt: new Date().toISOString() });
         }
     };
 
+    manager.export = manager.exportAll;
+    manager.import = manager.importAll;
+    manager.delete = manager.deleteAll;
+
+    window.dataManager = manager;
     window.gtmDataManager = manager;
 })();

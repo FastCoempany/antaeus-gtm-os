@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings — Antaeus GTM OS</title>
+    <title>Settings - Antaeus GTM OS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -44,51 +44,46 @@
     </style>
 </head>
 <body class="app-layout">
-        <script src="/js/app-auth-preflight.js"></script>
-<aside class="app-sidebar"></aside>
+    <script src="/js/app-auth-preflight.js"></script>
+    <aside class="app-sidebar"></aside>
     <main class="app-main">
         <div class="page-container">
             <div class="page-header">
-                <h1 class="page-title" style="font-family:var(--font-serif);">⚙️ Settings</h1>
+                <h1 class="page-title" style="font-family:var(--font-serif);">Settings</h1>
                 <p class="page-subtitle" style="color:var(--text-muted);font-size:0.9rem;">Manage your data, preferences, and workspace configuration.</p>
             </div>
 
             <div class="settings-grid">
-                <!-- Data Backup -->
                 <div class="settings-card">
-                    <div class="settings-card-title">💾 Data & Backup</div>
-                    <div class="settings-card-desc">Export your entire workspace as a JSON backup file, or import a previously saved backup. All data is stored in your browser.</div>
+                    <div class="settings-card-title">Data and Backup</div>
+                    <div class="settings-card-desc" id="backupCardDesc">Export your synced workspace as a JSON backup file, import a previous backup, or fully clear the workspace.</div>
                     <div class="settings-row">
-                        <button class="settings-btn" onclick="exportAllData()">📥 Export All Data</button>
-                        <button class="settings-btn" onclick="document.getElementById('importFile').click()">📤 Import Backup</button>
-                        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
-                        <button class="settings-btn danger" onclick="deleteAllData()">🗑️ Delete All Data</button>
+                        <button class="settings-btn" onclick="exportAllData()">Export Backup</button>
+                        <button class="settings-btn" onclick="importData()">Import Backup</button>
+                        <button class="settings-btn danger" onclick="deleteAllData()">Delete Workspace</button>
                     </div>
                 </div>
 
-                <!-- Onboarding -->
                 <div class="settings-card">
-                    <div class="settings-card-title">🔄 Role & Onboarding</div>
+                    <div class="settings-card-title">Role and Onboarding</div>
                     <div class="settings-card-desc">Changed roles or starting fresh? Re-run the onboarding flow to reconfigure your workspace. Your existing data stays safe.</div>
                     <div class="settings-row">
-                        <button class="settings-btn" onclick="resetOnboarding()">🔄 New Role Setup</button>
+                        <button class="settings-btn" onclick="resetOnboarding()">New Role Setup</button>
                         <button class="settings-btn" onclick="resetPledges()">Reset Discovery Pledges</button>
                     </div>
                 </div>
 
-                <!-- Demo Mode -->
                 <div class="settings-card">
-                    <div class="settings-card-title">🎮 Demo Mode</div>
+                    <div class="settings-card-title">Demo Mode</div>
                     <div class="settings-card-desc">Preview the app with sample data to see what a fully configured workspace looks like. Demo data is isolated from your real workspace.</div>
                     <div class="settings-row">
-                        <button class="settings-btn" onclick="enterDemo()">🎮 Enter Demo Mode</button>
+                        <button class="settings-btn" onclick="enterDemo()">Enter Demo Mode</button>
                         <button class="settings-btn" onclick="exitDemo()">Exit Demo</button>
                     </div>
                 </div>
 
-                <!-- Discovery Framework -->
                 <div class="settings-card">
-                    <div class="settings-card-title">🧭 Product Category</div>
+                    <div class="settings-card-title">Product Category</div>
                     <div class="settings-card-desc">Select which product category you're selling. This controls which discovery framework appears in your live call navigator.</div>
                     <select class="settings-select" id="productCategory" onchange="setProductCategory(this.value)">
                         <option value="cxai">CX AI / Support Automation</option>
@@ -107,6 +102,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/data-manager.js"></script>
     <script src="/js/gtmos-store.js"></script>
     <script src="/js/nav.js"></script>
     <script src="/js/tour-guide.js"></script>
@@ -130,9 +126,22 @@
             }
         }
 
+        function getDataManager() {
+            return window.gtmDataManager || window.dataManager || null;
+        }
+
         function initializeSettingsState() {
             var cat = readJson('gtmos_product_category', null) || 'cxai';
             document.getElementById('productCategory').value = cat;
+
+            var manager = getDataManager();
+            var status = manager && typeof manager.getBackupStatus === 'function' ? manager.getBackupStatus() : null;
+            var desc = document.getElementById('backupCardDesc');
+            if (desc && status) {
+                desc.textContent = status.hasExport
+                    ? 'Export your synced workspace as a JSON backup file, import a previous backup, or fully clear the workspace. Last export: ' + new Date(status.lastExportAt).toLocaleString() + '.'
+                    : 'Export your synced workspace as a JSON backup file, import a previous backup, or fully clear the workspace. No offline backup exported yet.';
+            }
         }
 
         async function setProductCategory(val) {
@@ -151,54 +160,33 @@
         }
 
         function exportAllData() {
-            var data = {};
-            for (var i = 0; i < localStorage.length; i++) {
-                var key = localStorage.key(i);
-                if (key && key.indexOf('gtmos_') === 0) {
-                    data[key] = localStorage.getItem(key);
-                }
+            var manager = getDataManager();
+            if (manager && typeof manager.exportAll === 'function') {
+                Promise.resolve(manager.exportAll()).then(function() {
+                    toast('Backup export started');
+                    initializeSettingsState();
+                });
+                return;
             }
-            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'gtmos-backup-' + new Date().toISOString().split('T')[0] + '.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            toast('Data exported successfully');
+            toast('Backup tools unavailable on this page');
         }
 
-        function importData(input) {
-            if (!input.files || !input.files[0]) return;
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    var data = JSON.parse(e.target.result);
-                    var count = 0;
-                    Object.keys(data).forEach(function(key) {
-                        localStorage.setItem(key, data[key]);
-                        count++;
-                    });
-                    toast(count + ' items imported');
-                    setTimeout(function() { location.reload(); }, 1000);
-                } catch (err) {
-                    alert('Invalid backup file');
-                }
-            };
-            reader.readAsText(input.files[0]);
+        function importData() {
+            var manager = getDataManager();
+            if (manager && typeof manager.importAll === 'function') {
+                manager.importAll();
+                return;
+            }
+            toast('Backup tools unavailable on this page');
         }
 
         function deleteAllData() {
-            if (!confirm('⚠️ This will permanently delete ALL your workspace data. This cannot be undone. Are you sure?')) return;
-            if (!confirm('Final confirmation: Delete everything?')) return;
-            var toDelete = [];
-            for (var i = 0; i < localStorage.length; i++) {
-                var key = localStorage.key(i);
-                if (key && key.indexOf('gtmos_') === 0) toDelete.push(key);
+            var manager = getDataManager();
+            if (manager && typeof manager.deleteAll === 'function') {
+                manager.deleteAll();
+                return;
             }
-            toDelete.forEach(function(key) { localStorage.removeItem(key); });
-            toast('All data deleted');
-            setTimeout(function() { window.location.href = '/app/onboarding/'; }, 1500);
+            toast('Backup tools unavailable on this page');
         }
 
         async function resetOnboarding() {
@@ -220,7 +208,7 @@
 
         function resetPledges() {
             localStorage.removeItem('gtmos_discovery_pledged');
-            toast('Discovery pledges reset — will take effect next time you visit Discovery Frameworks');
+            toast('Discovery pledges reset. This will take effect next time you visit Discovery Frameworks.');
         }
 
         function enterDemo() {
@@ -232,8 +220,6 @@
             sessionStorage.removeItem('gtmos_env_mode');
             window.location.href = '/app/dashboard/';
         }
-
-        function startTour() { if (typeof TourGuide !== 'undefined') TourGuide.start(); }
 
         if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
             window.requireAuthReady.then(initializeSettingsState).catch(function() {

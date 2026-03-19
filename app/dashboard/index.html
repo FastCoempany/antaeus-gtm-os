@@ -53,6 +53,13 @@
         .np-tool-btn.primary:hover{background:rgba(212,165,116,0.12);}
         .np-tool-btn.danger{color:#ef4444;border-color:rgba(239,68,68,0.2);}
         .np-tool-btn.danger:hover{background:rgba(239,68,68,0.06);}
+        .np-backup{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px;padding:16px 18px;border-radius:var(--radius-lg);border:1px solid rgba(59,130,246,0.22);background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.03));}
+        .np-backup.warn{border-color:rgba(245,158,11,0.28);background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.04));}
+        .np-backup-copy{flex:1;min-width:260px;}
+        .np-backup-title{font-size:0.82rem;font-weight:700;color:var(--text-primary);margin-bottom:4px;}
+        .np-backup-sub{font-size:0.76rem;color:var(--text-muted);line-height:1.5;}
+        .np-backup-toast{position:fixed;right:20px;top:20px;z-index:9999;max-width:360px;padding:12px 14px;border-radius:10px;border:1px solid rgba(245,158,11,0.35);background:rgba(245,158,11,0.14);color:#fbbf24;box-shadow:0 10px 32px rgba(0,0,0,0.35);font-size:0.82rem;line-height:1.4;opacity:0;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;pointer-events:none;}
+        .np-backup-toast.show{opacity:1;transform:translateY(0);}
         .np-empty{text-align:center;padding:80px 24px;}
         .np-empty-icon{font-size:2.5rem;margin-bottom:16px;}
         .np-empty-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:8px;}
@@ -89,9 +96,57 @@
     (function(){
         var dh = window.dealHealth;
         if (!dh) { document.getElementById('dashContent').innerHTML = '<p style="color:var(--text-muted);">deal-health.js not loaded.</p>'; return; }
+        var backupToastTimer = null;
 
         function escH(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+        function getDataManager(){ return window.gtmDataManager || window.dataManager || null; }
+        function backupStatus(){
+            var manager = getDataManager();
+            if (!manager || typeof manager.getBackupStatus !== 'function') return null;
+            return manager.getBackupStatus();
+        }
+        function formatBackupDate(iso){
+            if(!iso) return 'No backup exported yet.';
+            var date = new Date(iso);
+            if(isNaN(date.getTime())) return 'Backup export date unavailable.';
+            return 'Last offline backup: ' + date.toLocaleString([], { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+        }
+        function backupBannerHtml(){
+            var status = backupStatus();
+            if(!status) return '';
+            var title = status.needsReminder ? 'Export an offline backup for this workspace.' : 'Keep an offline backup of your synced workspace.';
+            var sub = status.needsReminder
+                ? 'Cloud sync is live, but you still want a recovery file. Export a fresh JSON backup now.'
+                : formatBackupDate(status.lastExportAt);
+            return '<div class="np-backup' + (status.needsReminder ? ' warn' : '') + '">' +
+                '<div class="np-backup-copy">' +
+                '<div class="np-backup-title">' + escH(title) + '</div>' +
+                '<div class="np-backup-sub">' + escH(sub) + '</div>' +
+                '</div>' +
+                '<button class="np-tool-btn primary" onclick="runDataAction(\'export\')">Export Backup</button>' +
+                '</div>';
+        }
+        function showBackupReminderToast(){
+            var manager = getDataManager();
+            if (!manager || typeof manager.shouldShowBackupReminder !== 'function' || !manager.shouldShowBackupReminder()) return;
+            var node = document.getElementById('backupReminderToast');
+            if (!node) {
+                node = document.createElement('div');
+                node.id = 'backupReminderToast';
+                node.className = 'np-backup-toast';
+                document.body.appendChild(node);
+            }
+            node.textContent = 'No recent offline backup detected. Export a fresh workspace backup this week.';
+            node.classList.add('show');
+            if (typeof manager.markBackupReminderShown === 'function') {
+                manager.markBackupReminderShown();
+            }
+            if (backupToastTimer) clearTimeout(backupToastTimer);
+            backupToastTimer = setTimeout(function(){
+                node.classList.remove('show');
+            }, 3600);
+        }
 
         async function render() {
             var icpState = { icps: [] };
@@ -122,9 +177,10 @@
             var seed = dh.loadSeed();
             var active = vitals.filter(function(v) { return !v.isClosed; });
             var icpCount = (icpState && Array.isArray(icpState.icps)) ? icpState.icps.length : 0;
+            var backupBanner = backupBannerHtml();
 
             if (vitals.length === 0) {
-                var emptyHtml = '<div class="np-empty">' +
+                var emptyHtml = backupBanner + '<div class="np-empty">' +
                     '<div class="np-empty-icon">&#128220;</div>' +
                     '<div class="np-empty-title">Your workspace is live, but the dashboard has nothing to brief yet.</div>' +
                     '<div class="np-empty-sub">Create the first records that make this app feel like yours. ICPs shape targeting, deals power the weekly briefing.</div>';
@@ -147,6 +203,7 @@
             var covColor = !quota ? '' : cov.ratio >= target ? 'green' : cov.ratio >= target * 0.6 ? 'amber' : 'red';
 
             var html = '';
+            html += backupBanner;
 
             // STAT RIBBON
             html += '<div class="np-ribbon">';
@@ -280,8 +337,11 @@
         };
 
         window.runDataAction = function(action) {
-            if (typeof window.dataManager !== 'undefined' && window.dataManager[action]) {
-                window.dataManager[action]();
+            var manager = getDataManager();
+            var actionMap = { export: 'exportAll', import: 'importAll', delete: 'deleteAll' };
+            var method = actionMap[action] || action;
+            if (manager && typeof manager[method] === 'function') {
+                manager[method]();
                 if (action === 'delete') setTimeout(render, 500);
                 return;
             }
@@ -328,6 +388,7 @@
                 console.error('Dashboard render failed:', err);
                 document.getElementById('dashContent').innerHTML = '<div class="np-empty"><div class="np-empty-title">Dashboard unavailable</div><div class="np-empty-sub">Cloud sync failed. Refresh and try again.</div></div>';
             });
+            showBackupReminderToast();
         }
 
         if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
