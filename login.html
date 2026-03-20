@@ -54,6 +54,7 @@
         </div>
     </div>
     
+    <script src="js/analytics-site-config.js"></script>
     <script src="js/analytics.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
@@ -78,6 +79,7 @@
         }
 
         function enterInteractiveDemo() {
+            if (window.gtmAnalytics) window.gtmAnalytics.track('demo_entry_click', { cta_zone: 'login', href: '/demo-seed.html' });
             try { sessionStorage.setItem('gtmos_env_mode', 'demo'); } catch (e) {}
             window.location.href = '/demo-seed.html';
         }
@@ -123,6 +125,7 @@
         
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (window.gtmAnalytics) window.gtmAnalytics.track('login_submit', { form: 'login' });
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const submitBtn = document.getElementById('submitBtn');
@@ -139,11 +142,13 @@
             try {
                 const { data, error } = await withTimeout(auth.signIn(email, password), 10000);
                 if (error) throw error;
+                if (window.gtmAnalytics) window.gtmAnalytics.track('login_success', { form: 'login' });
                 await routeAfterAuth(data && data.session ? data.session : null);
             } catch (error) {
                 var msg = (error && error.message) ? error.message : '';
                 var isConnectivityError = /timed out|network|failed to fetch|connect/i.test(msg);
                 errorText.textContent = isConnectivityError ? 'Unable to connect. Check your internet and try again.' : (msg || 'Invalid email or password');
+                if (window.gtmAnalytics) window.gtmAnalytics.track('login_error', { form: 'login', message: msg || 'Invalid email or password' });
                 errorMessage.classList.remove('hidden');
                 submitBtn.disabled = false;
                 btnText.textContent = 'Sign In';

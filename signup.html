@@ -66,6 +66,7 @@
         </div>
     </div>
     
+    <script src="js/analytics-site-config.js"></script>
     <script src="js/analytics.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
@@ -113,6 +114,7 @@
         
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (window.gtmAnalytics) window.gtmAnalytics.track('signup_submit', { form: 'signup' });
             const fullName = document.getElementById('fullName').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -147,10 +149,12 @@
                 }
 
                 if (data.session) {
+                    if (window.gtmAnalytics) window.gtmAnalytics.track('signup_success', { form: 'signup', immediate_session: true });
                     await routeAfterAuth(data.session);
                     return;
                 }
 
+                if (window.gtmAnalytics) window.gtmAnalytics.track('signup_confirmation_sent', { form: 'signup' });
                 successMessage.classList.remove("hidden");
                 document.getElementById("signupForm").reset();
                 submitBtn.style.display = "none";
@@ -159,6 +163,7 @@
                 var msg = (error && error.message) ? error.message : '';
                 var isConnectivityError = /timed out|network|failed to fetch|connect/i.test(msg);
                 errorText.textContent = isConnectivityError ? 'Unable to connect. Check your internet and try again.' : (msg || 'Failed to create account');
+                if (window.gtmAnalytics) window.gtmAnalytics.track('signup_error', { form: 'signup', message: msg || 'Failed to create account' });
                 errorMessage.classList.remove('hidden');
             } finally {
                 submitBtn.disabled = false;

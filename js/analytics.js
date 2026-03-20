@@ -1,10 +1,11 @@
-﻿/**
- * GTMOS Analytics - Phase 2.1
+/**
+ * GTMOS Analytics
  *
- * Local-first analytics with optional PostHog SDK integration.
+ * Local-first analytics with optional PostHog + GA4 destinations.
  * - Always persists events locally (for backups and audits)
  * - Sends events to PostHog when configured
- * - Normalizes required plan/audit event contracts
+ * - Sends events to GA4 when configured
+ * - Captures first-touch / last-touch UTM attribution
  */
 
 (function () {
@@ -12,21 +13,41 @@
 
     var STORAGE_KEY = 'gtmos_analytics_events';
     var SESSION_KEY = 'gtmos_analytics_session';
+    var ATTRIBUTION_KEY = 'gtmos_analytics_attribution';
     var MAX_EVENTS = 5000;
     var pageEnterMs = Date.now();
     var posthogBooted = false;
     var posthogLoading = false;
+    var ga4Booted = false;
+    var ga4Loading = false;
     var pageTrackedThisLoad = false;
 
     var persistedPosthogKey = '';
     var persistedPosthogHost = '';
+    var persistedGa4Id = '';
+    var persistedGa4Debug = false;
     try {
         persistedPosthogKey = localStorage.getItem('gtmos_posthog_key') || '';
         persistedPosthogHost = localStorage.getItem('gtmos_posthog_host') || '';
+        persistedGa4Id = localStorage.getItem('gtmos_ga4_measurement_id') || '';
+        persistedGa4Debug = localStorage.getItem('gtmos_ga4_debug') === '1';
     } catch (e) { /* ignore */ }
 
     var POSTHOG_KEY = (window.GTMOS_POSTHOG_KEY || persistedPosthogKey || '').trim();
     var POSTHOG_HOST = (window.GTMOS_POSTHOG_HOST || persistedPosthogHost || 'https://us.i.posthog.com').trim();
+    var GA4_ID = (window.GTMOS_GA4_ID || persistedGa4Id || '').trim();
+    var GA4_DEBUG = !!(window.GTMOS_GA4_DEBUG || persistedGa4Debug);
+    var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var UTM_PRESETS = window.GTMOS_UTM_PRESETS || {
+        twitter: { source: 'twitter', medium: 'social' },
+        newsletter: { source: 'newsletter', medium: 'email' },
+        producthunt: { source: 'producthunt', medium: 'launch' },
+        indiehackers: { source: 'indiehackers', medium: 'community' },
+        coldemail: { source: 'coldemail', medium: 'email' },
+        reddit: { source: 'reddit', medium: 'community' },
+        slack: { source: 'slack', medium: 'community' },
+        demo: { source: 'demo', medium: 'product' }
+    };
 
     function getSessionId() {
         var sid = sessionStorage.getItem(SESSION_KEY);
@@ -83,7 +104,69 @@
         return 'other';
     }
 
+    function readAttribution() {
+        try {
+            return JSON.parse(localStorage.getItem(ATTRIBUTION_KEY) || '{}') || {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function writeAttribution(next) {
+        try {
+            localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(next || {}));
+        } catch (e) { /* ignore */ }
+    }
+
+    function getUrlUtmPayload(href) {
+        var payload = {};
+        try {
+            var url = new URL(href || window.location.href, window.location.origin);
+            UTM_KEYS.forEach(function (key) {
+                var value = (url.searchParams.get(key) || '').trim();
+                if (value) payload[key] = value;
+            });
+        } catch (e) { /* ignore */ }
+        return payload;
+    }
+
+    function captureAttribution() {
+        var current = getUrlUtmPayload(window.location.href);
+        var state = readAttribution();
+        var hasCurrent = Object.keys(current).length > 0;
+
+        if (hasCurrent) {
+            var stamp = {
+                href: window.location.href,
+                path: window.location.pathname,
+                ts: new Date().toISOString()
+            };
+            if (!state.first_touch || !state.first_touch.utm_source) {
+                state.first_touch = Object.assign({}, current, stamp);
+            }
+            state.last_touch = Object.assign({}, current, stamp);
+            writeAttribution(state);
+        }
+
+        return state;
+    }
+
+    var attributionState = captureAttribution();
+
+    function getAttribution() {
+        return readAttribution() || attributionState || {};
+    }
+
+    function sanitizeGaEventName(eventName) {
+        var safe = String(eventName || 'event').toLowerCase().replace(/[^a-z0-9_]+/g, '_');
+        if (!/^[a-z]/.test(safe)) safe = 'e_' + safe;
+        return safe.slice(0, 40);
+    }
+
     function withContext(properties) {
+        var attribution = getAttribution();
+        var firstTouch = attribution.first_touch || {};
+        var lastTouch = attribution.last_touch || {};
         return Object.assign({
             persona: getPersona(),
             path: window.location.pathname,
@@ -91,7 +174,18 @@
             referrer: document.referrer || '',
             browser: detectBrowser(),
             device_type: detectDeviceType(),
-            viewport: (window.innerWidth || 0) + 'x' + (window.innerHeight || 0)
+            viewport: (window.innerWidth || 0) + 'x' + (window.innerHeight || 0),
+            page_title: document.title || '',
+            current_utm_source: lastTouch.utm_source || '',
+            current_utm_medium: lastTouch.utm_medium || '',
+            current_utm_campaign: lastTouch.utm_campaign || '',
+            current_utm_content: lastTouch.utm_content || '',
+            current_utm_term: lastTouch.utm_term || '',
+            first_touch_utm_source: firstTouch.utm_source || '',
+            first_touch_utm_medium: firstTouch.utm_medium || '',
+            first_touch_utm_campaign: firstTouch.utm_campaign || '',
+            first_touch_utm_content: firstTouch.utm_content || '',
+            first_touch_utm_term: firstTouch.utm_term || ''
         }, properties || {});
     }
 
@@ -129,12 +223,60 @@
         document.head.appendChild(script);
     }
 
+    function loadGa4Sdk() {
+        if (!GA4_ID || ga4Booted || ga4Loading) return;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+
+        if (window.gtag && ga4Booted) return;
+
+        ga4Loading = true;
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA4_ID);
+        script.onload = function () {
+            ga4Loading = false;
+            try {
+                window.gtag('js', new Date());
+                window.gtag('config', GA4_ID, {
+                    send_page_view: false,
+                    debug_mode: GA4_DEBUG
+                });
+                ga4Booted = true;
+            } catch (e) {
+                // Never break product flows on GA issues.
+            }
+        };
+        script.onerror = function () {
+            ga4Loading = false;
+        };
+        document.head.appendChild(script);
+    }
+
     function sendToPosthog(eventName, properties) {
         if (!POSTHOG_KEY) return;
         loadPosthogSdk();
         if (window.posthog && typeof window.posthog.capture === 'function') {
             try {
                 window.posthog.capture(eventName, properties);
+            } catch (e) {
+                // Never break product flows on analytics errors.
+            }
+        }
+    }
+
+    function sendToGa4(eventName, properties) {
+        if (!GA4_ID) return;
+        loadGa4Sdk();
+        if (window.gtag && typeof window.gtag === 'function') {
+            try {
+                var payload = Object.assign({}, properties || {});
+                if (sanitizeGaEventName(eventName) === 'page_view') {
+                    payload.page_location = window.location.href;
+                    payload.page_path = window.location.pathname;
+                    payload.page_title = document.title || '';
+                }
+                window.gtag('event', sanitizeGaEventName(eventName), payload);
             } catch (e) {
                 // Never break product flows on analytics errors.
             }
@@ -153,6 +295,7 @@
         };
         appendEvent(evt);
         sendToPosthog(eventName, fullProps);
+        sendToGa4(eventName, fullProps);
     }
 
     function normalizedDerivedEvents(eventName, properties) {
@@ -177,6 +320,65 @@
         }
 
         return derived;
+    }
+
+    function buildUtmUrl(baseUrl, params) {
+        var url = new URL(baseUrl, window.location.origin);
+        var input = Object.assign({}, params || {});
+        if (input.preset && UTM_PRESETS[input.preset]) {
+            input = Object.assign({}, UTM_PRESETS[input.preset], input);
+        }
+        var mapped = {
+            utm_source: input.utm_source || input.source || '',
+            utm_medium: input.utm_medium || input.medium || '',
+            utm_campaign: input.utm_campaign || input.campaign || '',
+            utm_content: input.utm_content || input.content || '',
+            utm_term: input.utm_term || input.term || ''
+        };
+        Object.keys(mapped).forEach(function (key) {
+            if (mapped[key]) url.searchParams.set(key, mapped[key]);
+        });
+        return url.toString();
+    }
+
+    function classifyClickEvent(target) {
+        var el = target && target.closest ? target.closest('a,button') : null;
+        if (!el) return null;
+
+        var href = (el.getAttribute('href') || '').trim();
+        var label = (el.getAttribute('data-analytics-label') || el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+        var className = typeof el.className === 'string' ? el.className : '';
+        var zone = el.getAttribute('data-analytics-zone') || '';
+        var explicit = el.getAttribute('data-analytics-event');
+        if (explicit) {
+            return { name: explicit, properties: { cta_label: label, href: href, cta_zone: zone || 'explicit' } };
+        }
+
+        if (el.id === 'buyBtn') {
+            return { name: 'pricing_buy_click', properties: { cta_label: label, href: href, cta_zone: 'pricing' } };
+        }
+        if (className.indexOf('hero-cta') > -1) {
+            return { name: 'landing_cta_click', properties: { cta_label: label, href: href, cta_zone: zone || 'hero' } };
+        }
+        if (className.indexOf('nav-cta') > -1) {
+            return { name: 'landing_cta_click', properties: { cta_label: label, href: href, cta_zone: zone || 'nav' } };
+        }
+        if (href.indexOf('/demo-seed.html') > -1) {
+            return { name: 'demo_entry_click', properties: { cta_label: label, href: href, cta_zone: zone || 'navigation' } };
+        }
+        if (href.indexOf('/login.html') > -1) {
+            return { name: 'auth_entry_click', properties: { cta_label: label, href: href, auth_target: 'login', cta_zone: zone || 'navigation' } };
+        }
+        if (href.indexOf('/signup.html') > -1) {
+            return { name: 'auth_entry_click', properties: { cta_label: label, href: href, auth_target: 'signup', cta_zone: zone || 'navigation' } };
+        }
+        if (href === '#pricing' || href.indexOf('/#pricing') > -1) {
+            return { name: 'pricing_anchor_click', properties: { cta_label: label, href: href, cta_zone: zone || 'pricing' } };
+        }
+        if (href.indexOf('/methodology/') > -1) {
+            return { name: 'methodology_nav_click', properties: { cta_label: label, href: href, cta_zone: zone || 'content' } };
+        }
+        return null;
     }
 
     var analytics = {
@@ -241,7 +443,8 @@
                 moduleVisits: moduleVisits,
                 firstEvent: firstEvent,
                 lastEvent: lastEvent,
-                persona: getPersona()
+                persona: getPersona(),
+                attribution: getAttribution()
             };
         },
 
@@ -293,9 +496,30 @@
             if (POSTHOG_KEY) loadPosthogSdk();
         },
 
+        configureGa4: function (measurementId, options) {
+            GA4_ID = (measurementId || '').trim();
+            GA4_DEBUG = !!(options && options.debug);
+            try {
+                if (GA4_ID) localStorage.setItem('gtmos_ga4_measurement_id', GA4_ID);
+                else localStorage.removeItem('gtmos_ga4_measurement_id');
+                if (GA4_DEBUG) localStorage.setItem('gtmos_ga4_debug', '1');
+                else localStorage.removeItem('gtmos_ga4_debug');
+            } catch (e) { /* ignore */ }
+            if (GA4_ID) loadGa4Sdk();
+        },
+
         getEvents: getEvents,
-        initPosthog: loadPosthogSdk
+        getAttribution: getAttribution,
+        buildUtmUrl: buildUtmUrl,
+        getUtmPresets: function () { return Object.assign({}, UTM_PRESETS); },
+        initPosthog: loadPosthogSdk,
+        initGa4: loadGa4Sdk
     };
+
+    document.addEventListener('click', function (evt) {
+        var info = classifyClickEvent(evt.target);
+        if (info) analytics.track(info.name, info.properties);
+    }, true);
 
     window.addEventListener('beforeunload', function () {
         var durationSec = Math.max(0, Math.round((Date.now() - pageEnterMs) / 1000));
@@ -311,5 +535,11 @@
     }
 
     loadPosthogSdk();
+    loadGa4Sdk();
     window.gtmAnalytics = analytics;
+    window.gtmAttribution = {
+        buildUrl: buildUtmUrl,
+        get: getAttribution,
+        presets: function () { return Object.assign({}, UTM_PRESETS); }
+    };
 })();
