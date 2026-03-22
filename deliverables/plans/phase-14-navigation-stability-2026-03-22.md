@@ -34,6 +34,21 @@ Make the app shell feel stable and respectful by preserving sidebar position, pr
   - before unload
 - The shell restores that scroll position on the next app page load.
 
+### 1a. Hardening pass after real-user failure
+
+- Real manual use showed that the first scroll-persistence pass was not strong enough.
+- The shell now stores:
+  - raw sidebar scroll position
+  - the clicked or visible anchor module
+  - that anchor's offset within the visible sidebar viewport
+- Restore is now replayed across multiple boot moments:
+  - initial animation frame
+  - window load
+  - font-ready pass
+  - short delayed pass
+- Goal:
+  - keep the clicked lower module near the same visible position instead of merely restoring a stale raw `scrollTop`
+
 ### 2. Last-module context persistence
 
 - Added session-scoped persistence for the last clicked module nav key.
@@ -95,10 +110,10 @@ Expected result:
 
 ## Exit Criteria Status
 
-- preserve sidebar scroll position: **done in repo**
+- preserve sidebar scroll position: **done in repo, hardening pass added after real-user failure**
 - preserve relevant shell state: **done in repo**
 - confirm active-nav behavior: **done in repo, still worth manual sanity check**
-- remove shell jumps that break orientation: **materially improved**
+- remove shell jumps that break orientation: **materially improved, reopened for real verification**
 
 ## Evidence Board Status
 
@@ -107,8 +122,9 @@ Expected result:
 Reason:
 
 - the code change is real and parse-safe
-- the shell behavior is materially improved
-- but a quick browser sanity pass is still appropriate before calling it fully validated
+- the first implementation attempt misfired in live use
+- the phase now includes an anchor-based restore hardening pass
+- browser verification is required before calling it validated
 
 ## Next Best Step
 

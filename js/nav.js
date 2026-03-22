@@ -216,6 +216,8 @@
     var sidebarNav = sidebar && sidebar.querySelector('.sidebar-nav');
     var SIDEBAR_SCROLL_KEY = 'gtmos_sidebar_nav_scroll_top';
     var SIDEBAR_ACTIVE_KEY = 'gtmos_sidebar_active_nav';
+    var SIDEBAR_ANCHOR_KEY = 'gtmos_sidebar_anchor_nav';
+    var SIDEBAR_OFFSET_KEY = 'gtmos_sidebar_anchor_offset';
 
     function readSessionStorage(key, fallback) {
         try {
@@ -230,11 +232,6 @@
         try {
             sessionStorage.setItem(key, String(value));
         } catch (e) {}
-    }
-
-    function persistSidebarScroll() {
-        if (!sidebarNav) return;
-        writeSessionStorage(SIDEBAR_SCROLL_KEY, sidebarNav.scrollTop || 0);
     }
 
     function persistSidebarActive(navValue) {
@@ -331,19 +328,90 @@
         sidebarDataNotice.textContent = 'Demo data is saved in this browser only.';
     }
 
+    function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    function getLinkContentTop(link) {
+        if (!sidebarNav || !link) return 0;
+        var navRect = sidebarNav.getBoundingClientRect();
+        var linkRect = link.getBoundingClientRect();
+        return sidebarNav.scrollTop + (linkRect.top - navRect.top);
+    }
+
+    function getVisibleSidebarAnchor(preferredLink) {
+        if (!sidebarNav) return null;
+        var navRect = sidebarNav.getBoundingClientRect();
+        var link = preferredLink || null;
+        if (!link) {
+            var visibleLinks = Array.prototype.slice.call(sidebarNav.querySelectorAll('a.nav-item'));
+            link = visibleLinks.find(function(candidate) {
+                var rect = candidate.getBoundingClientRect();
+                return rect.bottom > navRect.top + 4 && rect.top < navRect.bottom - 4;
+            }) || activeLink || contextLink || visibleLinks[0] || null;
+        }
+        if (!link) return null;
+        var offset = Math.max(0, Math.round(link.getBoundingClientRect().top - navRect.top));
+        return {
+            link: link,
+            nav: link.getAttribute('data-nav') || '',
+            offset: offset
+        };
+    }
+
+    function persistSidebarState(preferredLink) {
+        if (!sidebarNav) return;
+        writeSessionStorage(SIDEBAR_SCROLL_KEY, sidebarNav.scrollTop || 0);
+        var anchor = getVisibleSidebarAnchor(preferredLink);
+        if (!anchor) return;
+        if (anchor.nav) {
+            writeSessionStorage(SIDEBAR_ANCHOR_KEY, anchor.nav);
+            persistSidebarActive(anchor.nav);
+        }
+        writeSessionStorage(SIDEBAR_OFFSET_KEY, anchor.offset);
+    }
+
     function restoreSidebarNavPosition() {
         if (!sidebarNav) return;
-        var raw = readSessionStorage(SIDEBAR_SCROLL_KEY, '');
-        var hasStored = raw !== '';
-        var targetLink = activeLink || contextLink;
-        requestAnimationFrame(function() {
-            if (hasStored) {
-                var parsed = parseInt(raw, 10);
-                if (!isNaN(parsed)) sidebarNav.scrollTop = parsed;
-            } else if (targetLink && typeof targetLink.scrollIntoView === 'function') {
+        var rawScroll = readSessionStorage(SIDEBAR_SCROLL_KEY, '');
+        var rawAnchorNav = readSessionStorage(SIDEBAR_ANCHOR_KEY, '');
+        var rawOffset = readSessionStorage(SIDEBAR_OFFSET_KEY, '');
+        var storedScroll = rawScroll === '' ? null : parseInt(rawScroll, 10);
+        var storedOffset = rawOffset === '' ? null : parseInt(rawOffset, 10);
+
+        function applyRestore() {
+            if (!sidebarNav) return;
+            var maxScroll = Math.max(0, sidebarNav.scrollHeight - sidebarNav.clientHeight);
+            var anchorLink = rawAnchorNav
+                ? sidebar.querySelector('[data-nav="' + rawAnchorNav + '"]')
+                : null;
+            var targetLink = anchorLink || activeLink || contextLink;
+
+            if (targetLink && storedOffset !== null && !isNaN(storedOffset)) {
+                var contentTop = getLinkContentTop(targetLink);
+                var targetScroll = clamp(Math.round(contentTop - storedOffset), 0, maxScroll);
+                sidebarNav.scrollTop = targetScroll;
+                return;
+            }
+
+            if (storedScroll !== null && !isNaN(storedScroll)) {
+                sidebarNav.scrollTop = clamp(storedScroll, 0, maxScroll);
+                return;
+            }
+
+            if (targetLink && typeof targetLink.scrollIntoView === 'function') {
                 targetLink.scrollIntoView({ block: 'nearest' });
             }
-        });
+        }
+
+        requestAnimationFrame(applyRestore);
+        window.addEventListener('load', applyRestore, { once: true });
+        if (document.fonts && typeof document.fonts.ready === 'object' && typeof document.fonts.ready.then === 'function') {
+            document.fonts.ready.then(function() {
+                setTimeout(applyRestore, 0);
+            }).catch(function() {});
+        }
+        setTimeout(applyRestore, 140);
     }
 
     if (sidebarNav) {
@@ -352,16 +420,21 @@
             if (sidebarScrollTicking) return;
             sidebarScrollTicking = true;
             requestAnimationFrame(function() {
-                persistSidebarScroll();
+                writeSessionStorage(SIDEBAR_SCROLL_KEY, sidebarNav.scrollTop || 0);
                 sidebarScrollTicking = false;
             });
         }, { passive: true });
 
+        sidebarNav.addEventListener('pointerdown', function(event) {
+            var link = event.target.closest('a.nav-item');
+            if (!link) return;
+            persistSidebarState(link);
+        });
+
         sidebarNav.addEventListener('click', function(event) {
             var link = event.target.closest('a.nav-item');
             if (!link) return;
-            persistSidebarScroll();
-            persistSidebarActive(link.getAttribute('data-nav') || '');
+            persistSidebarState(link);
         });
     }
 
@@ -369,14 +442,17 @@
         var sidebarLogo = sidebar.querySelector('.sidebar-logo');
         if (sidebarLogo) {
             sidebarLogo.addEventListener('click', function() {
-                persistSidebarScroll();
-                persistSidebarActive('dashboard');
+                persistSidebarState(sidebar.querySelector('[data-nav="dashboard"]'));
             });
         }
     }
 
-    window.addEventListener('pagehide', persistSidebarScroll);
-    window.addEventListener('beforeunload', persistSidebarScroll);
+    window.addEventListener('pagehide', function() {
+        persistSidebarState();
+    });
+    window.addEventListener('beforeunload', function() {
+        persistSidebarState();
+    });
     restoreSidebarNavPosition();
 
     function readLS(key, fallback) {
@@ -851,7 +927,7 @@
                 welcomeBtn.className = 'nav-welcome-chip';
                 welcomeBtn.innerHTML = 'Back to Welcome Guide';
                 welcomeBtn.onclick = function() {
-                    persistSidebarScroll();
+                    persistSidebarState();
                     window.location.href = '/app/welcome/';
                 };
                 footer.insertBefore(welcomeBtn, tourBtn.nextSibling);
@@ -860,7 +936,7 @@
         var settingsBtn = document.getElementById('settingsBtn');
         if (settingsBtn) {
             settingsBtn.onclick = function() {
-                persistSidebarScroll();
+                persistSidebarState();
                 window.location.href = '/app/settings/';
             };
         }
@@ -868,7 +944,7 @@
         if (roleResetBtn) {
             roleResetBtn.onclick = async function() {
                 if (confirm('Start a new role setup? This will take you through onboarding again. Your existing data stays safe.')) {
-                    persistSidebarScroll();
+                    persistSidebarState();
                     if (typeof window.resetUserOnboardingState === 'function') {
                         var result = await window.resetUserOnboardingState();
                         if (result && result.error) {
