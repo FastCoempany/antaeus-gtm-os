@@ -14,6 +14,7 @@
         <div class="auth-card">
             <div class="auth-logo">ANTAEUS</div>
             <p class="auth-subtitle">Sign in to your GTM workspace</p>
+            <div id="contextMessage" class="callout mb-md hidden"></div>
             
             <form id="loginForm">
                 <div class="form-group">
@@ -94,6 +95,18 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                var params = new URLSearchParams(window.location.search || '');
+                var source = (params.get('source') || '').toLowerCase();
+                var emailPrefill = (params.get('email') || '').trim();
+                var contextMessage = document.getElementById('contextMessage');
+                if (emailPrefill) document.getElementById('email').value = emailPrefill;
+                if (source === 'checkout') {
+                    contextMessage.className = 'callout callout-info mb-md';
+                    contextMessage.innerHTML = '<strong>Already paid?</strong><br>Sign in with the same email you used at checkout and the app will route you into the workspace.';
+                }
+            } catch (e) { /* ignore */ }
+
             try {
                 var modeParams = new URLSearchParams(window.location.search || '');
                 var demoParam = (modeParams.get('demo') || '').toLowerCase();

@@ -542,5 +542,20 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 })();
 </script>
 <script src="/js/analytics-site-config.js"></script><script src="/js/analytics.js"></script>
+<script>
+(function(){
+  var mappings=[
+    {selector:'.nav-cta',href:'/purchase/?entry=nav'},
+    {selector:'.hero .hero-cta',href:'/purchase/?entry=hero'},
+    {selector:'#buyBtn',href:'/purchase/?entry=pricing'},
+    {selector:'.final .hero-cta',href:'/purchase/?entry=final'}
+  ];
+  mappings.forEach(function(item){
+    var el=document.querySelector(item.selector);
+    if(!el)return;
+    el.setAttribute('href',item.href);
+  });
+})();
+</script>
 </body>
 </html>

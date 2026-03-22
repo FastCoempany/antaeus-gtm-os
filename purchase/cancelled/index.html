@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Cancelled - Antaeus GTM OS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .cancel-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background:
+                radial-gradient(circle at top left, rgba(245, 158, 11, 0.08), transparent 30%),
+                radial-gradient(circle at right 20%, rgba(212, 165, 116, 0.08), transparent 28%),
+                var(--bg-primary);
+        }
+        .cancel-card {
+            width: min(720px, 100%);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-default);
+            background: rgba(15, 23, 42, 0.92);
+            box-shadow: var(--shadow-lg);
+        }
+        .cancel-card h1 {
+            font-size: clamp(1.9rem, 4vw, 2.8rem);
+            margin-bottom: 14px;
+        }
+        .cancel-card p {
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+            max-width: 640px;
+        }
+        .cancel-actions {
+            margin-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cancel-shell">
+        <div class="cancel-card">
+            <h1>Checkout was cancelled.</h1>
+            <p>No workspace access was created from this step. If the hesitation was around trust, price, or understanding what happens after payment, use the purchase page again, explore the demo, or sign in if you already have an account.</p>
+            <p>The goal here is to make cancellation non-destructive and obvious, not confusing.</p>
+
+            <div class="cancel-actions">
+                <a href="/purchase/" class="btn btn-primary btn-lg" data-analytics-event="purchase_cancel_retry_click" data-analytics-zone="purchase-cancelled">Return to Purchase</a>
+                <a href="/demo-seed.html" class="btn btn-secondary btn-lg" data-analytics-event="purchase_cancel_demo_click" data-analytics-zone="purchase-cancelled">Explore Demo</a>
+                <a href="/" class="btn btn-ghost btn-lg" data-analytics-event="purchase_cancel_home_click" data-analytics-zone="purchase-cancelled">Back to Landing</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/analytics-site-config.js"></script>
+    <script src="/js/analytics.js"></script>
+</body>
+</html>

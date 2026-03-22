@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Antaeus GTM OS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <style>
+        .purchase-shell {
+            min-height: 100vh;
+            padding: 40px 24px 64px;
+            background:
+                radial-gradient(circle at top left, rgba(212, 165, 116, 0.12), transparent 32%),
+                radial-gradient(circle at right 20%, rgba(45, 212, 191, 0.08), transparent 28%),
+                var(--bg-primary);
+        }
+        .purchase-nav {
+            max-width: 1120px;
+            margin: 0 auto 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-md);
+        }
+        .purchase-brand {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        .purchase-brand span { color: var(--brand-gold); }
+        .purchase-nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+        .purchase-wrap {
+            max-width: 1120px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
+            gap: 28px;
+        }
+        .purchase-panel,
+        .purchase-side {
+            background: rgba(15, 23, 42, 0.88);
+            border: 1px solid var(--border-default);
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+        }
+        .purchase-panel { padding: 40px; }
+        .purchase-side { padding: 28px; }
+        .purchase-kicker {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--brand-gold-light);
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+        .purchase-title {
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            line-height: 1.02;
+            margin-bottom: 16px;
+        }
+        .purchase-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-tertiary);
+            max-width: 720px;
+            margin-bottom: 28px;
+        }
+        .purchase-callout {
+            padding: 16px 18px;
+            border-radius: var(--radius-lg);
+            background: rgba(212, 165, 116, 0.1);
+            border: 1px solid rgba(212, 165, 116, 0.22);
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        .purchase-callout strong { color: var(--text-primary); }
+        .purchase-flow {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .flow-card {
+            display: grid;
+            grid-template-columns: 44px minmax(0, 1fr);
+            gap: 16px;
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid var(--border-default);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .flow-step {
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            background: rgba(212, 165, 116, 0.12);
+            color: var(--brand-gold-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .flow-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 6px;
+        }
+        .flow-card p {
+            margin-bottom: 10px;
+            color: var(--text-tertiary);
+        }
+        .flow-card ul {
+            margin-left: 18px;
+            color: var(--text-tertiary);
+        }
+        .flow-card li + li { margin-top: 4px; }
+        .purchase-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .purchase-actions .btn { min-height: 52px; }
+        .purchase-note {
+            margin-top: 12px;
+            font-size: 0.88rem;
+            color: var(--text-tertiary);
+        }
+        .purchase-side h2 {
+            font-size: 1.6rem;
+            margin-bottom: 18px;
+        }
+        .purchase-price {
+            font-family: var(--font-serif);
+            font-size: 2.4rem;
+            color: var(--brand-gold);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .purchase-billing {
+            color: var(--text-tertiary);
+            margin-bottom: 18px;
+        }
+        .purchase-list {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+        .purchase-list li {
+            padding-left: 18px;
+            position: relative;
+            color: var(--text-secondary);
+        }
+        .purchase-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--accent-green);
+        }
+        .purchase-meta {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+        .purchase-meta-card {
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border-default);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .purchase-meta-card strong {
+            display: block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .purchase-meta-card span { color: var(--text-secondary); }
+        .config-banner {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.24);
+            color: var(--text-secondary);
+        }
+        .config-banner.hidden { display: none; }
+        .config-banner code {
+            display: block;
+            margin-top: 8px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: rgba(10, 14, 26, 0.88);
+            color: var(--brand-gold-light);
+            font-size: 0.82rem;
+            overflow-x: auto;
+        }
+        @media (max-width: 960px) {
+            .purchase-wrap { grid-template-columns: 1fr; }
+            .purchase-panel,
+            .purchase-side { padding: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="purchase-shell">
+        <div class="purchase-nav">
+            <a href="/" class="purchase-brand">antaeus<span>.</span></a>
+            <div class="purchase-nav-links">
+                <a href="/demo-seed.html" class="btn btn-secondary btn-sm">Explore Demo</a>
+                <a href="/login.html" class="btn btn-ghost btn-sm">Sign In</a>
+            </div>
+        </div>
+
+        <div class="purchase-wrap">
+            <section class="purchase-panel">
+                <div class="purchase-kicker">Purchase Path</div>
+                <h1 class="purchase-title">Make payment the least ambiguous part of the product.</h1>
+                <p class="purchase-subtitle">
+                    This is the bridge from interest to access. Buy the annual plan, then create or sign into the workspace that will route you through onboarding, the welcome guide, and into the dashboard.
+                </p>
+
+                <div class="purchase-callout">
+                    <strong>What happens after you pay:</strong> you should land on the purchase-success page, create your workspace using the same email from checkout, then move through onboarding and the welcome guide into the durable app.
+                </div>
+
+                <div class="purchase-flow">
+                    <article class="flow-card">
+                        <div class="flow-step">1</div>
+                        <div>
+                            <h3>Pay for the annual plan</h3>
+                            <p>Start with the live checkout link. If it is not configured yet, this page will tell you directly instead of pretending the system is ready.</p>
+                            <ul>
+                                <li>No sales call required</li>
+                                <li>Annual self-serve access</li>
+                                <li>Expected next stop: purchase-success page</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="flow-card">
+                        <div class="flow-step">2</div>
+                        <div>
+                            <h3>Create your workspace or sign in</h3>
+                            <p>Use the same email from checkout. New buyers should create an account. Returning buyers should sign in.</p>
+                            <ul>
+                                <li>New user: create account</li>
+                                <li>Existing user: sign in</li>
+                                <li>Both routes land in the same product corridor</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="flow-card">
+                        <div class="flow-step">3</div>
+                        <div>
+                            <h3>Finish onboarding and start the real workspace</h3>
+                            <p>From there the app should route the user into onboarding, then the welcome guide, then the dashboard and modules with persistent workspace truth.</p>
+                            <ul>
+                                <li>Onboarding incomplete to onboarding</li>
+                                <li>Onboarding complete, welcome unseen to welcome</li>
+                                <li>Welcome seen to dashboard</li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="purchase-actions">
+                    <a id="checkoutBtn" href="#" class="btn btn-primary btn-lg" data-analytics-event="purchase_entry_click" data-analytics-zone="purchase" data-analytics-label="Continue to secure checkout">Continue to Secure Checkout</a>
+                    <a href="/signup.html?source=checkout" class="btn btn-secondary btn-lg" data-analytics-event="purchase_signup_click" data-analytics-zone="purchase">Already paid? Create Account</a>
+                    <a href="/login.html?source=checkout" class="btn btn-ghost btn-lg" data-analytics-event="purchase_login_click" data-analytics-zone="purchase">Already have an account? Sign In</a>
+                </div>
+                <p class="purchase-note" id="purchaseNote">
+                    The account-creation route should use the same email address from checkout so the commercial path remains believable.
+                </p>
+            </section>
+
+            <aside class="purchase-side">
+                <h2 id="planName">Antaeus GTM OS</h2>
+                <div class="purchase-price" id="priceLabel">$299/year</div>
+                <div class="purchase-billing" id="billingLabel">$25/mo equivalent billed annually</div>
+
+                <ul class="purchase-list">
+                    <li>19 linked GTM modules in one workspace</li>
+                    <li>Onboarding, welcome, and dashboard command flow</li>
+                    <li>Export, import, backup, and durable cloud-backed workspace truth</li>
+                    <li>Demo seed, methodology pages, and handoff-ready outputs</li>
+                </ul>
+
+                <div class="purchase-meta">
+                    <div class="purchase-meta-card">
+                        <strong>Success URL</strong>
+                        <span id="successUrl"></span>
+                    </div>
+                    <div class="purchase-meta-card">
+                        <strong>Cancel URL</strong>
+                        <span id="cancelUrl"></span>
+                    </div>
+                    <div class="purchase-meta-card">
+                        <strong>Support</strong>
+                        <span id="supportEmail"></span>
+                    </div>
+                </div>
+
+                <div id="configBanner" class="config-banner hidden">
+                    Checkout is not configured in this repo yet. Set the live payment link in <code>js/commerce-config.js</code> or store it locally with:
+                    <code>localStorage.setItem('gtmos_checkout_url', 'https://buy.stripe.com/your-link')</code>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="/js/analytics-site-config.js"></script>
+    <script src="/js/analytics.js"></script>
+    <script src="/js/commerce-config.js"></script>
+    <script src="/js/commerce.js"></script>
+    <script>
+        (function () {
+            var meta = window.gtmCommerce ? window.gtmCommerce.getMeta() : null;
+            if (!meta) return;
+
+            document.getElementById('planName').textContent = meta.planName;
+            document.getElementById('priceLabel').textContent = meta.priceLabel;
+            document.getElementById('billingLabel').textContent = meta.billingLabel;
+            document.getElementById('successUrl').textContent = meta.successUrl;
+            document.getElementById('cancelUrl').textContent = meta.cancelUrl;
+            document.getElementById('supportEmail').textContent = meta.supportEmail || 'Support email not configured';
+
+            var checkoutBtn = document.getElementById('checkoutBtn');
+            var configBanner = document.getElementById('configBanner');
+            var purchaseNote = document.getElementById('purchaseNote');
+
+            if (meta.hasCheckoutUrl) {
+                checkoutBtn.href = meta.checkoutUrl;
+                checkoutBtn.target = '_self';
+                purchaseNote.textContent = 'After payment, the buyer should land on the success URL above, then move into signup or sign-in with the same email address used at checkout.';
+                return;
+            }
+
+            checkoutBtn.setAttribute('aria-disabled', 'true');
+            checkoutBtn.setAttribute('tabindex', '-1');
+            checkoutBtn.addEventListener('click', function (event) {
+                event.preventDefault();
+            });
+            checkoutBtn.style.pointerEvents = 'none';
+            checkoutBtn.style.opacity = '0.5';
+            checkoutBtn.textContent = 'Checkout Not Configured Yet';
+            configBanner.classList.remove('hidden');
+            purchaseNote.textContent = 'The repo-side purchase path is ready. The remaining external step is adding the live Stripe Payment Link.';
+        })();
+    </script>
+</body>
+</html>

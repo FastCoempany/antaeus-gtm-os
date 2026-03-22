@@ -14,6 +14,7 @@
         <div class="auth-card">
             <div class="auth-logo">ANTAEUS</div>
             <p class="auth-subtitle">Create your GTM workspace</p>
+            <div id="contextMessage" class="callout mb-md hidden"></div>
             
             <form id="signupForm">
                 <div class="form-group">
@@ -99,6 +100,18 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                var params = new URLSearchParams(window.location.search || '');
+                var source = (params.get('source') || '').toLowerCase();
+                var emailPrefill = (params.get('email') || '').trim();
+                var contextMessage = document.getElementById('contextMessage');
+                if (emailPrefill) document.getElementById('email').value = emailPrefill;
+                if (source === 'checkout') {
+                    contextMessage.className = 'callout callout-info mb-md';
+                    contextMessage.innerHTML = '<strong>Payment complete.</strong><br>Create your workspace using the same email address you used at checkout.';
+                }
+            } catch (e) { /* ignore */ }
+
             if (!window.supabase || !window.supabase.createClient) {
                 document.getElementById('errorText').textContent = 'Unable to connect. Check your internet and try again.';
                 document.getElementById('errorMessage').classList.remove('hidden');
