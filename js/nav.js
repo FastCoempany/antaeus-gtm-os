@@ -700,16 +700,6 @@
         if (Object.keys(qualsData).length > 0) modulesCompleted++;
 
         var readinessTotal = computeReadinessEstimate(workspace);
-        var dealCount = deals.length;
-
-        if (dealCount === 0 && sidebar) {
-            var pocLink = sidebar.querySelector('[data-nav="poc-framework"]');
-            if (pocLink) {
-                pocLink.style.opacity = '0.35';
-                pocLink.style.pointerEvents = 'none';
-                pocLink.title = 'Unlocks when you add your first deal';
-            }
-        }
 
         if (sidebar) {
             var dotStates = {};
@@ -805,16 +795,6 @@
     if (Object.keys(qualsData).length > 0) modulesCompleted++;
 
     var readinessTotal = computeReadinessEstimate();
-
-    var dealCount = deals.length;
-    if (dealCount === 0 && sidebar) {
-        var pocLink = sidebar.querySelector('[data-nav="poc-framework"]');
-        if (pocLink) {
-            pocLink.style.opacity = '0.35';
-            pocLink.style.pointerEvents = 'none';
-            pocLink.title = 'Unlocks when you add your first deal';
-        }
-    }
 
     if (sidebar) {
         var dotStates = {};
