@@ -135,22 +135,22 @@
             try {
                 const redirectUrl = window.location.origin + "/auth/callback/";
 
-                const { data, error } = await withTimeout(auth.signUp(
+                const signupData = await withTimeout(auth.signUp(
                 email,
                 password,
                 { full_name: fullName, role: role },
                 redirectUrl
                 ), 10000);
 
-                if (error) throw error;
+                if (!signupData) throw new Error('Failed to create account');
 
-                if (data.user && data.user.identities && data.user.identities.length === 0) {
+                if (signupData.user && signupData.user.identities && signupData.user.identities.length === 0) {
                 throw new Error("An account with this email already exists.");
                 }
 
-                if (data.session) {
+                if (signupData.session) {
                     if (window.gtmAnalytics) window.gtmAnalytics.track('signup_success', { form: 'signup', immediate_session: true });
-                    await routeAfterAuth(data.session);
+                    await routeAfterAuth(signupData.session);
                     return;
                 }
 

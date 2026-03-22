@@ -176,6 +176,58 @@ var ACV_BAND_DEFAULTS = {
     enterprise: { winRate: 15, cycle: 180, coverage: 4.5 },
     strategic: { winRate: 12, cycle: 240, coverage: 5.0 }
 };
+var WELCOME_SEEN_KEY = 'gtmos_welcome_seen';
+
+function getScopedLocalKey(baseKey, scopeId) {
+    var key = String(baseKey || '');
+    if (!key) return '';
+    return scopeId ? key + '__user_' + scopeId : key;
+}
+
+function getWelcomeScopeId(profile, session) {
+    var directProfileId = cleanText(profile && profile.id);
+    if (directProfileId) return directProfileId;
+    var sessionUserId = cleanText(session && session.user && session.user.id);
+    if (sessionUserId) return sessionUserId;
+    return getCachedWorkspaceProfileId();
+}
+
+function hasSeenWelcome(profile, session) {
+    var scopeId = getWelcomeScopeId(profile, session);
+    var scopedKey = getScopedLocalKey(WELCOME_SEEN_KEY, scopeId);
+    try {
+        var scoped = localStorage.getItem(scopedKey);
+        if (scoped === '1' || scoped === 'true') return true;
+        if (scopeId && scopedKey !== WELCOME_SEEN_KEY) {
+            var legacy = localStorage.getItem(WELCOME_SEEN_KEY);
+            if (legacy === '1' || legacy === 'true') return true;
+        }
+    } catch (e) {}
+    return false;
+}
+
+function setWelcomeSeen(seen, profile, session) {
+    var scopeId = getWelcomeScopeId(profile, session);
+    var scopedKey = getScopedLocalKey(WELCOME_SEEN_KEY, scopeId);
+    try {
+        if (seen) {
+            localStorage.setItem(scopedKey, '1');
+            if (scopedKey !== WELCOME_SEEN_KEY) localStorage.removeItem(WELCOME_SEEN_KEY);
+        } else {
+            localStorage.removeItem(scopedKey);
+            if (scopedKey !== WELCOME_SEEN_KEY) localStorage.removeItem(WELCOME_SEEN_KEY);
+        }
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+function computeWorkspaceRoute(profile, session, onboardingState) {
+    var completed = !!(profile && profile.onboarding_completed === true) || !!(onboardingState && onboardingState.completed === true);
+    if (!completed) return '/app/onboarding/';
+    return hasSeenWelcome(profile, session) ? '/app/dashboard/' : '/app/welcome/';
+}
 var STAGE_QW_DEFAULTS = {
     'pre-seed': { winRate: 15, discoToOpp: 30, showRate: 70, emailBook: 1.5, dialBook: 1.8 },
     'seed': { winRate: 18, discoToOpp: 35, showRate: 75, emailBook: 1.8, dialBook: 2.0 },
@@ -459,7 +511,7 @@ function buildLocalWorkspaceFallback(session) {
         profile: profile,
         onboarding: onboarding,
         onboardingCompleted: completed,
-        route: completed ? '/app/dashboard/' : '/app/onboarding/',
+        route: computeWorkspaceRoute(profile, session, onboarding),
         source: 'local-cache'
     };
 }
@@ -863,7 +915,7 @@ async function ensureUserWorkspace(sessionOverride, options) {
                 profile: profile,
                 onboarding: onboarding,
                 onboardingCompleted: !!(profile && profile.onboarding_completed === true),
-                route: profile && profile.onboarding_completed === true ? '/app/dashboard/' : '/app/onboarding/',
+                route: computeWorkspaceRoute(profile, { user: user }, onboarding),
                 source: 'supabase-profile'
             };
 
@@ -926,6 +978,7 @@ async function saveUserOnboardingState(onboardingState, sessionOverride) {
 async function resetUserOnboardingState(sessionOverride) {
     if (AUTH_BYPASS || isDemoEnvironment()) {
         removeStorageKeys(['gtmos_onboarding', 'gtmos_product_category', PROFILE_CACHE_KEY, 'gtmos_discovery_pledged']);
+        setWelcomeSeen(false, null, sessionOverride || null);
         return { data: buildLocalWorkspaceFallback(sessionOverride), error: null };
     }
 
@@ -2627,6 +2680,9 @@ window.updateWorkspaceProfile = updateWorkspaceProfile;
 window.saveUserOnboardingState = saveUserOnboardingState;
 window.resetUserOnboardingState = resetUserOnboardingState;
 window.clearWorkspaceBootstrapCache = clearWorkspaceBootstrapCache;
+window.hasSeenWelcome = hasSeenWelcome;
+window.setWelcomeSeen = setWelcomeSeen;
+window.computeWorkspaceRoute = computeWorkspaceRoute;
 window.gtmLocalState = {
     scopeId: function() {
         var profile = window.__gtmosCurrentProfile || readStorageJson(PROFILE_CACHE_KEY, null) || null;

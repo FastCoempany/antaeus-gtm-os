@@ -185,7 +185,26 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       (parsed&&parsed.currentSession&&(parsed.currentSession.access_token||parsed.currentSession.refresh_token))||
       (parsed&&parsed.session&&(parsed.session.access_token||parsed.session.refresh_token))
     );
-    if(hasSession)window.location.replace('/app/dashboard/');
+    if(!hasSession)return;
+
+    var profileRaw=window.localStorage.getItem('gtmos_profile_cache');
+    var onboardingRaw=window.localStorage.getItem('gtmos_onboarding');
+    var profile=profileRaw?JSON.parse(profileRaw):null;
+    var onboarding=onboardingRaw?JSON.parse(onboardingRaw):null;
+    var profileId=profile&&profile.id?String(profile.id).trim():'';
+    var welcomeKey=profileId?('gtmos_welcome_seen__user_'+profileId):'gtmos_welcome_seen';
+    var seen=window.localStorage.getItem(welcomeKey);
+    if(profileId&&welcomeKey!=='gtmos_welcome_seen'&&(seen!=='1'&&seen!=='true')){
+      var legacySeen=window.localStorage.getItem('gtmos_welcome_seen');
+      if(legacySeen==='1'||legacySeen==='true')seen=legacySeen;
+    }
+
+    var completed=!!(
+      (profile&&profile.onboarding_completed===true)||
+      (onboarding&&onboarding.completed===true)
+    );
+    var route=!completed?'/app/onboarding/':((seen==='1'||seen==='true')?'/app/dashboard/':'/app/welcome/');
+    window.location.replace(route);
   }catch(e){}
 })();
 </script>

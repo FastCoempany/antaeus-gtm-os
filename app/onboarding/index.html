@@ -273,7 +273,16 @@ async function finish(){
             await Promise.allSettled(docSyncTasks);
         }
 
-        window.location.href='/app/dashboard/';
+        var nextRoute = '/app/dashboard/';
+        if (typeof window.resolvePostAuthRoute === 'function') {
+            try {
+                nextRoute = await window.resolvePostAuthRoute(null, { force: true });
+            } catch (routeError) {
+                console.error('Welcome routing failed after onboarding:', routeError);
+            }
+        }
+
+        window.location.href = nextRoute;
     } catch (error) {
         console.error('Onboarding save failed:', error);
         alert((error && error.message) ? error.message : 'Unable to save onboarding right now. Please try again.');
