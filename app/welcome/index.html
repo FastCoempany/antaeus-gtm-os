@@ -137,11 +137,6 @@
             if (actions.length < 4) actions.push(actionSpec('Dial in quota and targets','Put your quota math and ACV into the system so activity targets and readiness stay anchored to numbers.','/app/quota-workback/','Open Quota Workback',['system math','benchmarks']));
             return actions.slice(0,5);
         }
-        function welcomeStage(counts){
-            if (!counts.icps && !counts.deals && !counts.signals) return 'First session';
-            if (counts.deals || counts.signals) return 'Workspace taking shape';
-            return 'Setup in motion';
-        }
         function completeWelcome(nextPath){
             if (typeof window.setWelcomeSeen === 'function') {
                 try { window.setWelcomeSeen(true); } catch (e) {}
@@ -173,25 +168,20 @@
                 var summary = result && result.data ? result.data : {};
                 var counts = buildCounts(summary);
                 var actions = buildActions(summary, counts);
-                var stage = welcomeStage(counts);
                 var displayName = pickName(summary);
                 var role = getRole(summary);
                 var statCards = buildStatCards(counts);
-                var accountSyncText = (summary && summary.source && summary.source.indexOf('supabase') === 0)
-                    ? 'Workspace sync is live. Anything you add here should survive refresh, re-login, and device changes.'
-                    : 'Workspace is available, but some modules are still reading from local cache right now.';
 
                 shell.innerHTML =
                     '<section class="welcome-hero">' +
-                        '<div class="welcome-badge">First session corridor · ' + esc(stage) + '</div>' +
-                        '<h2 class="welcome-title">You are in the right place. Antaeus is ready to become the working system behind ' + esc(displayName) + '.</h2>' +
-                        '<p class="welcome-sub">This page exists to turn a completed signup into a real workspace. Start with the next few actions below, then move into the dashboard once the app has at least one ICP, one live motion, and one real deal or signal.</p>' +
+                        '<h2 class="welcome-title">Welcome to the Antaeus app</h2>' +
+                        '<p class="welcome-sub">Use this page as your guide to understanding the lay of the land and to get started building your gtm strategy in a real way, not like everyone else does who ends up scared to hire their first senior founding sales person because they don\'t know what they don\'t know.</p>' +
                         '<div class="welcome-actions">' +
                             '<a href="/app/dashboard/" class="welcome-btn primary" onclick="completeWelcome(\'/app/dashboard/\');return false;">Continue to dashboard</a>' +
                             '<a href="/app/icp-studio/" class="welcome-btn" onclick="completeWelcome(\'/app/icp-studio/\');return false;">Start with ICP Studio</a>' +
                             '<a href="/methodology/" class="welcome-btn" onclick="completeWelcome(\'/methodology/\');return false;">Open methodology</a>' +
                         '</div>' +
-                        '<div class="welcome-sync">Account sync live · ' + esc(accountSyncText) + '</div>' +
+                        '<div class="welcome-sync">You should feel good. Everything is about to change.</div>' +
                     '</section>' +
                     '<section class="welcome-grid">' +
                         '<div style="display:grid;gap:24px;">' +
@@ -205,14 +195,14 @@
                             '</div>' +
                             '<div class="welcome-panel">' +
                                 '<h3 class="welcome-panel-title">Your first 3–5 actions</h3>' +
-                                '<div class="welcome-panel-sub">Use these in order. Each one makes the rest of the app more believable across sessions, devices, and tomorrow morning.</div>' +
+                                '<div class="welcome-panel-sub">Do these in order. Each one makes the rest of the app more believable across sessions, devices, and most importantly...tomorrow morning.</div>' +
                                 '<div class="welcome-list">' + actions.map(actionCard).join('') + '</div>' +
                             '</div>' +
                         '</div>' +
                         '<div class="welcome-side-stack">' +
                             '<div class="welcome-panel">' +
                                 '<h3 class="welcome-panel-title">What happens next</h3>' +
-                                '<div class="welcome-panel-sub">This is the corridor from account creation into a durable operating system.</div>' +
+                                '<div class="welcome-panel-sub">This is the corridor where you create a real, durable operating system.</div>' +
                                 '<div class="welcome-checklist">' +
                                     '<div class="welcome-check"><div class="welcome-check-num">1</div><div class="welcome-check-copy"><strong>Capture targeting truth.</strong>Your first ICP becomes the reference layer for discovery, signals, and outbound.</div></div>' +
                                     '<div class="welcome-check"><div class="welcome-check-num">2</div><div class="welcome-check-copy"><strong>Give the dashboard live inputs.</strong>Add one deal or one enriched account so the system has something real to brief.</div></div>' +

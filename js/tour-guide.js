@@ -4,6 +4,7 @@
  */
 
 const TourGuide = {
+    AUTO_TOUR_KEY: 'gtmos_tour_autostart',
     steps: [
         {
             target: '.sidebar-logo',
@@ -92,22 +93,56 @@ const TourGuide = {
     },
     
     init() {
-        if (!this.hasSeenTour()) {
+        if (this.consumeAutoLaunch()) {
+            setTimeout(() => this.start(), 900);
+        } else if (!this.hasSeenTour()) {
             setTimeout(() => this.start(), 1000);
         }
         this.addTourButton();
+    },
+
+    consumeAutoLaunch() {
+        try {
+            const params = new URLSearchParams(window.location.search || '');
+            const fromQuery = params.get('tour') === '1';
+            const fromSession = sessionStorage.getItem(this.AUTO_TOUR_KEY) === '1';
+            if (fromQuery || fromSession) {
+                sessionStorage.removeItem(this.AUTO_TOUR_KEY);
+                return true;
+            }
+        } catch (e) {}
+        return false;
+    },
+
+    hasDemoSeed() {
+        try {
+            return !!(localStorage.getItem('gtmos_demo__gtmos_demo_seed_meta') || localStorage.getItem('gtmos_demo_seed_meta'));
+        } catch (e) {
+            return false;
+        }
+    },
+
+    launch() {
+        const inDemo = !!(window.gtmEnvironment && window.gtmEnvironment.isDemo);
+        if (inDemo && this.hasDemoSeed()) {
+            this.start();
+            return;
+        }
+        try { sessionStorage.setItem(this.AUTO_TOUR_KEY, '1'); } catch (e) {}
+        const returnUrl = '/app/dashboard/?demo=1&tour=1';
+        window.location.href = '/demo-seed.html?autoseed=mm&tour=1&return=' + encodeURIComponent(returnUrl);
     },
     
     addTourButton() {
         const footer = document.querySelector('.sidebar-footer');
         if (!footer) return;
-        if (footer.querySelector('.nav-tour-btn, [data-tour-button]')) return;
+        if (footer.querySelector('.nav-tour-btn, .nav-tour-glow, [data-tour-button]')) return;
         
         const btn = document.createElement('button');
         btn.className = 'btn btn-ghost btn-sm btn-block mt-sm';
         btn.setAttribute('data-tour-button', 'true');
         btn.textContent = 'Tour the App';
-        btn.onclick = () => this.start();
+        btn.onclick = () => this.launch();
         footer.appendChild(btn);
     },
     

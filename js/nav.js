@@ -235,16 +235,29 @@
             cursor:pointer; font-family:inherit; text-align:center;
             transition:all 0.3s; letter-spacing:0.03em;
             box-shadow:0 0 12px rgba(212,165,116,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
-            animation:tourPulse 3s ease-in-out infinite;
+            animation:tourPulse 2.2s ease-in-out infinite;
         }
         .nav-tour-glow:hover {
             background:linear-gradient(135deg,rgba(212,165,116,0.35),rgba(168,85,247,0.15),rgba(59,130,246,0.15));
             box-shadow:0 0 20px rgba(212,165,116,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
             transform:translateY(-1px);
         }
+        .nav-welcome-chip {
+            display:block; width:calc(100% - 24px); margin:0 12px 10px; padding:9px 12px;
+            border:1px solid rgba(45,212,191,0.22); border-radius:999px;
+            background:rgba(45,212,191,0.08); color:var(--brand-teal-light,#5eead4);
+            font-family:inherit; font-size:0.78rem; font-weight:700; letter-spacing:0.02em;
+            cursor:pointer; transition:all 0.2s; text-align:center;
+        }
+        .nav-welcome-chip:hover {
+            border-color:rgba(45,212,191,0.4);
+            background:rgba(45,212,191,0.14);
+            color:#d5fffa;
+            transform:translateY(-1px);
+        }
         @keyframes tourPulse {
-            0%, 100% { box-shadow:0 0 12px rgba(212,165,116,0.15), inset 0 1px 0 rgba(255,255,255,0.05); }
-            50% { box-shadow:0 0 20px rgba(212,165,116,0.3), inset 0 1px 0 rgba(255,255,255,0.08); }
+            0%, 100% { box-shadow:0 0 12px rgba(212,165,116,0.15), inset 0 1px 0 rgba(255,255,255,0.05); transform:scale(1); }
+            50% { box-shadow:0 0 24px rgba(212,165,116,0.34), inset 0 1px 0 rgba(255,255,255,0.08); transform:scale(1.025); }
         }
     `;
     document.head.appendChild(navStyle);
@@ -735,9 +748,19 @@
             tourBtn.className = 'nav-tour-glow';
             tourBtn.innerHTML = '✦ Tour the App';
             tourBtn.onclick = function() {
-                if (typeof TourGuide !== 'undefined') TourGuide.start();
+                if (typeof TourGuide !== 'undefined' && typeof TourGuide.launch === 'function') TourGuide.launch();
+                else if (typeof TourGuide !== 'undefined') TourGuide.start();
             };
             footer.insertBefore(tourBtn, footer.firstChild);
+            if (currentPath.indexOf('/app/welcome') === -1) {
+                var welcomeBtn = document.createElement('button');
+                welcomeBtn.className = 'nav-welcome-chip';
+                welcomeBtn.innerHTML = 'Back to Welcome Guide';
+                welcomeBtn.onclick = function() {
+                    window.location.href = '/app/welcome/';
+                };
+                footer.insertBefore(welcomeBtn, tourBtn.nextSibling);
+            }
         }
         var settingsBtn = document.getElementById('settingsBtn');
         if (settingsBtn) {

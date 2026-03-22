@@ -665,6 +665,15 @@ window.seed=function(mode){
   status.className='status ok';
   status.innerHTML=keys+' localStorage keys written.<br>'+data.accounts.length+' accounts · '+data.deals.length+' deals · '+data.advisors.length+' advisors · '+shared.outboundTouches.touches.length+' touches · '+shared.coldCallLog.calls.length+' calls<br><br><a href="app/dashboard/index.html?demo=1" style="color:var(--accent);font-weight:700;">Open Dashboard →</a>';
   updateCount();
+  try{
+    var params=new URLSearchParams(window.location.search||'');
+    var autoSeed=(params.get('autoseed')||'').toLowerCase();
+    var returnUrl=params.get('return')||'/app/dashboard/?demo=1&tour=1';
+    if(autoSeed&&autoSeed===String(mode||'').toLowerCase()){
+      status.innerHTML+='<br><br>Launching demo workspace...';
+      setTimeout(function(){window.location.href=returnUrl;},700);
+    }
+  }catch(e){}
 };
 
 window.clearAll=function(){
@@ -675,6 +684,15 @@ window.clearAll=function(){
   document.getElementById('status').className='status';
   document.getElementById('status').textContent=cleared+' keys cleared.';
   updateCount();
+  try{
+    var params=new URLSearchParams(window.location.search||'');
+    var autoSeed=(params.get('autoseed')||'').toLowerCase();
+    var returnUrl=params.get('return')||'/app/dashboard/?demo=1&tour=1';
+    if(autoSeed&&autoSeed===String(mode||'').toLowerCase()){
+      status.innerHTML+='<br><br>Launching demo workspace...';
+      setTimeout(function(){window.location.href=returnUrl;},700);
+    }
+  }catch(e){}
 };
 
 function updateCount(){
@@ -683,6 +701,14 @@ function updateCount(){
   document.getElementById('count').textContent=c+' gtmos_ keys in localStorage';
 }
 updateCount();
+try{
+  var autoParams=new URLSearchParams(window.location.search||'');
+  var autoMode=(autoParams.get('autoseed')||'').toLowerCase();
+  if(autoMode==='mm'||autoMode==='ent'){
+    setTimeout(function(){seed(autoMode)},120);
+  }
+}catch(e){}
 </script>
 </body>
 </html>
+
