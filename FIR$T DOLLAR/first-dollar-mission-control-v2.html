@@ -534,13 +534,37 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "You own one domain and have registrar login credentials.",
-        "preview": "Check availability: antaeus.app, antaeusgtm.com, gtmos.app, antaeus.dev, useantaeus.com | Prefer .app (enforces HTTPS, signals software product)",
+        "preview": "Check availability for antaeus.app | Check availability for antaeusgtm.com",
         "subs": [
           {
-            "id": "t1",
+            "id": "t1_1",
             "type": "action",
-            "text": "Check availability: antaeus.app, antaeusgtm.com, gtmos.app, antaeus.dev, useantaeus.com",
+            "text": "Check availability for antaeus.app",
             "xp": 8
+          },
+          {
+            "id": "t1_2",
+            "type": "action",
+            "text": "Check availability for antaeusgtm.com",
+            "xp": 5
+          },
+          {
+            "id": "t1_3",
+            "type": "action",
+            "text": "Check availability for gtmos.app",
+            "xp": 5
+          },
+          {
+            "id": "t1_4",
+            "type": "action",
+            "text": "Check availability for antaeus.dev",
+            "xp": 5
+          },
+          {
+            "id": "t1_5",
+            "type": "action",
+            "text": "Check availability for useantaeus.com",
+            "xp": 5
           },
           {
             "id": "t2",
@@ -574,7 +598,7 @@ var P=[
           "1.1"
         ],
         "doneWhen": "Cloudflare shows domain as Active. SSL set to Full (strict).",
-        "preview": "Create Cloudflare account (free) | Add your domain -> get two nameservers",
+        "preview": "Create Cloudflare account (free) | Add your domain to Cloudflare",
         "subs": [
           {
             "id": "t5",
@@ -583,10 +607,16 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t6",
+            "id": "t6_1",
             "type": "action",
-            "text": "Add your domain -> get two nameservers",
-            "xp": 3
+            "text": "Add your domain to Cloudflare",
+            "xp": 8
+          },
+          {
+            "id": "t6_2",
+            "type": "action",
+            "text": "Capture the two nameservers Cloudflare gives you",
+            "xp": 5
           },
           {
             "id": "t7",
@@ -620,13 +650,31 @@ var P=[
           "1.1"
         ],
         "doneWhen": "You have an account on one hosting platform.",
-        "preview": "Choose ONE: Cloudflare Pages (recommended), Netlify (simplest), or Vercel | Create account",
+        "preview": "Review Cloudflare Pages as an option | Review Netlify as an option",
         "subs": [
           {
-            "id": "t10",
+            "id": "t10_1",
             "type": "action",
-            "text": "Choose ONE: Cloudflare Pages (recommended), Netlify (simplest), or Vercel",
+            "text": "Review Cloudflare Pages as an option",
             "xp": 8
+          },
+          {
+            "id": "t10_2",
+            "type": "action",
+            "text": "Review Netlify as an option",
+            "xp": 5
+          },
+          {
+            "id": "t10_3",
+            "type": "action",
+            "text": "Review Vercel as an option",
+            "xp": 5
+          },
+          {
+            "id": "t10_4",
+            "type": "action",
+            "text": "Choose one hosting platform",
+            "xp": 5
           },
           {
             "id": "t11",
@@ -663,9 +711,21 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t14",
+            "id": "t14_1",
             "type": "action",
-            "text": "Decide: root URL -> landing page (Phase 3) or /app/dashboard/ for now",
+            "text": "Decide what the root URL should point to",
+            "xp": 8
+          },
+          {
+            "id": "t14_2",
+            "type": "action",
+            "text": "Choose landing page for root if Phase 3 is ready",
+            "xp": 5
+          },
+          {
+            "id": "t14_3",
+            "type": "action",
+            "text": "Otherwise choose /app/dashboard/ for now",
             "xp": 5
           },
           {
@@ -897,13 +957,19 @@ var P=[
           "2.1"
         ],
         "doneWhen": "Product exists in Stripe with a $299 price. Price ID noted.",
-        "preview": "Products -> Add product: \"Antaeus GTM OS - Annual Access\" | Add price: $299.00, One Time (not recurring for v1)",
+        "preview": "Open Products in Stripe | Add product name: Antaeus GTM OS - Annual Access",
         "subs": [
           {
-            "id": "t35",
+            "id": "t35_1",
             "type": "action",
-            "text": "Products -> Add product: \"Antaeus GTM OS  -  Annual Access\"",
+            "text": "Open Products in Stripe",
             "xp": 8
+          },
+          {
+            "id": "t35_2",
+            "type": "action",
+            "text": "Add product name: Antaeus GTM OS - Annual Access",
+            "xp": 5
           },
           {
             "id": "t36",
@@ -931,13 +997,25 @@ var P=[
           "2.2"
         ],
         "doneWhen": "Payment link URL copied and saved. Clicking it opens a checkout page showing $299.",
-        "preview": "Payment Links -> Create -> select your product/price | After payment: redirect to https://yourdomain.com/welcome.html",
+        "preview": "Open Payment Links in Stripe | Create a new payment link",
         "subs": [
           {
-            "id": "t38",
+            "id": "t38_1",
             "type": "action",
-            "text": "Payment Links -> Create -> select your product/price",
+            "text": "Open Payment Links in Stripe",
             "xp": 8
+          },
+          {
+            "id": "t38_2",
+            "type": "action",
+            "text": "Create a new payment link",
+            "xp": 5
+          },
+          {
+            "id": "t38_3",
+            "type": "action",
+            "text": "Select your product and price",
+            "xp": 5
           },
           {
             "id": "t39",
@@ -971,7 +1049,7 @@ var P=[
           "2.3"
         ],
         "doneWhen": "Test payment completes. Redirect works. Payment visible in Stripe. Receipt email received.",
-        "preview": "Stripe in TEST mode | Open payment link -> use test card 4242 4242 4242 4242",
+        "preview": "Stripe in TEST mode | Open the payment link",
         "subs": [
           {
             "id": "t42",
@@ -980,9 +1058,21 @@ var P=[
             "xp": 8
           },
           {
-            "id": "t43",
+            "id": "t43_1",
             "type": "action",
-            "text": "Open payment link -> use test card 4242 4242 4242 4242",
+            "text": "Open the payment link",
+            "xp": 8
+          },
+          {
+            "id": "t43_2",
+            "type": "action",
+            "text": "Use test card 4242 4242 4242 4242",
+            "xp": 5
+          },
+          {
+            "id": "t43_3",
+            "type": "action",
+            "text": "Submit a test payment",
             "xp": 5
           },
           {
@@ -1017,13 +1107,25 @@ var P=[
           "2.1"
         ],
         "doneWhen": "You receive an email when a test payment is made.",
-        "preview": "Settings -> Email notifications -> Enable \"Successful payments\" | You get an email every time someone pays $299",
+        "preview": "Open Stripe Settings | Open Email notifications",
         "subs": [
           {
-            "id": "t47",
+            "id": "t47_1",
             "type": "action",
-            "text": "Settings -> Email notifications -> Enable \"Successful payments\"",
+            "text": "Open Stripe Settings",
             "xp": 8
+          },
+          {
+            "id": "t47_2",
+            "type": "action",
+            "text": "Open Email notifications",
+            "xp": 5
+          },
+          {
+            "id": "t47_3",
+            "type": "action",
+            "text": "Enable Successful payments",
+            "xp": 5
           },
           {
             "id": "t48",
@@ -1045,7 +1147,7 @@ var P=[
           "2.5"
         ],
         "doneWhen": "A test payment in Stripe triggers an automatic welcome email within 2 minutes.",
-        "preview": "Create Zapier account (free tier) | Zap: Stripe \"New Payment\" -> Gmail \"Send Email\"",
+        "preview": "Create Zapier account (free tier) | Create a new Zap",
         "subs": [
           {
             "id": "t49",
@@ -1054,9 +1156,21 @@ var P=[
             "xp": 8
           },
           {
-            "id": "t50",
+            "id": "t50_1",
             "type": "action",
-            "text": "Zap: Stripe \"New Payment\" -> Gmail \"Send Email\"",
+            "text": "Create a new Zap",
+            "xp": 8
+          },
+          {
+            "id": "t50_2",
+            "type": "action",
+            "text": "Set Stripe New Payment as the trigger",
+            "xp": 5
+          },
+          {
+            "id": "t50_3",
+            "type": "action",
+            "text": "Set Gmail Send Email as the action",
             "xp": 5
           },
           {
@@ -1091,13 +1205,19 @@ var P=[
           "2.4"
         ],
         "doneWhen": "Stripe is in Live mode. Live payment link URL copied. Landing page CTA buttons updated.",
-        "preview": "Toggle Test -> Live in Stripe (ONLY when Phase 3+4 complete) | Copy NEW live Payment Link URL",
+        "preview": "Toggle Stripe from Test to Live | Only do this after Phases 3 and 4 are complete",
         "subs": [
           {
-            "id": "t54",
+            "id": "t54_1",
             "type": "action",
-            "text": "Toggle Test -> Live in Stripe (ONLY when Phase 3+4 complete)",
+            "text": "Toggle Stripe from Test to Live",
             "xp": 8
+          },
+          {
+            "id": "t54_2",
+            "type": "action",
+            "text": "Only do this after Phases 3 and 4 are complete",
+            "xp": 5
           },
           {
             "id": "t55",
@@ -1138,13 +1258,73 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Complete copy draft exists for all 11 sections. You have read it out loud.",
-        "preview": "Map 11 sections: Hero -> Problem -> Reframe -> Calibration -> System -> Modules -> Score -> Proof -> Pricing -> FAQ -> Footer | Write all copy in markdown BEFORE coding",
+        "preview": "Add Hero section | Add Problem section",
         "subs": [
           {
-            "id": "t57",
+            "id": "t57_1",
             "type": "action",
-            "text": "Map 11 sections: Hero -> Problem -> Reframe -> Calibration -> System -> Modules -> Score -> Proof -> Pricing -> FAQ -> Footer",
+            "text": "Add Hero section",
             "xp": 8
+          },
+          {
+            "id": "t57_2",
+            "type": "action",
+            "text": "Add Problem section",
+            "xp": 5
+          },
+          {
+            "id": "t57_3",
+            "type": "action",
+            "text": "Add Reframe section",
+            "xp": 5
+          },
+          {
+            "id": "t57_4",
+            "type": "action",
+            "text": "Add Calibration section",
+            "xp": 5
+          },
+          {
+            "id": "t57_5",
+            "type": "action",
+            "text": "Add System section",
+            "xp": 5
+          },
+          {
+            "id": "t57_6",
+            "type": "action",
+            "text": "Add Modules section",
+            "xp": 5
+          },
+          {
+            "id": "t57_7",
+            "type": "action",
+            "text": "Add Score section",
+            "xp": 5
+          },
+          {
+            "id": "t57_8",
+            "type": "action",
+            "text": "Add Proof section",
+            "xp": 5
+          },
+          {
+            "id": "t57_9",
+            "type": "action",
+            "text": "Add Pricing section",
+            "xp": 5
+          },
+          {
+            "id": "t57_10",
+            "type": "action",
+            "text": "Add FAQ section",
+            "xp": 5
+          },
+          {
+            "id": "t57_11",
+            "type": "action",
+            "text": "Add Footer section",
+            "xp": 5
           },
           {
             "id": "t58",
@@ -1187,9 +1367,15 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t62",
+            "id": "t62_1",
             "type": "action",
-            "text": "CTA: \"Start for $299/year\" -> Stripe link",
+            "text": "Write the CTA copy: Start for $299/year",
+            "xp": 8
+          },
+          {
+            "id": "t62_2",
+            "type": "action",
+            "text": "Wire the CTA to the Stripe link",
             "xp": 5
           }
         ]
@@ -1364,7 +1550,7 @@ var P=[
           "3.1"
         ],
         "doneWhen": "",
-        "preview": "Single card: \"Antaeus GTM OS - $299/year\" | What's included: all 19 modules, Academy, Manual, Readiness, Playbook, Deep Research",
+        "preview": "Single card: \"Antaeus GTM OS - $299/year\" | List all 19 modules in the included items section",
         "subs": [
           {
             "id": "t76",
@@ -1373,15 +1559,75 @@ var P=[
             "xp": 8
           },
           {
-            "id": "t77",
+            "id": "t77_1",
             "type": "action",
-            "text": "What's included: all 19 modules, Academy, Manual, Readiness, Playbook, Deep Research",
+            "text": "List all 19 modules in the included items section",
+            "xp": 8
+          },
+          {
+            "id": "t77_2",
+            "type": "action",
+            "text": "List Academy in the included items section",
             "xp": 5
           },
           {
-            "id": "t78",
+            "id": "t77_3",
             "type": "action",
-            "text": "Write 6 FAQ answers: CRM?, trial?, already hired?, team?, after I pay?, fractional CRO?",
+            "text": "List Manual in the included items section",
+            "xp": 5
+          },
+          {
+            "id": "t77_4",
+            "type": "action",
+            "text": "List Readiness in the included items section",
+            "xp": 5
+          },
+          {
+            "id": "t77_5",
+            "type": "action",
+            "text": "List Playbook in the included items section",
+            "xp": 5
+          },
+          {
+            "id": "t77_6",
+            "type": "action",
+            "text": "List Deep Research in the included items section",
+            "xp": 5
+          },
+          {
+            "id": "t78_1",
+            "type": "action",
+            "text": "Write FAQ answer for CRM?",
+            "xp": 8
+          },
+          {
+            "id": "t78_2",
+            "type": "action",
+            "text": "Write FAQ answer for trial?",
+            "xp": 5
+          },
+          {
+            "id": "t78_3",
+            "type": "action",
+            "text": "Write FAQ answer for already hired?",
+            "xp": 5
+          },
+          {
+            "id": "t78_4",
+            "type": "action",
+            "text": "Write FAQ answer for team?",
+            "xp": 5
+          },
+          {
+            "id": "t78_5",
+            "type": "action",
+            "text": "Write FAQ answer for after I pay?",
+            "xp": 5
+          },
+          {
+            "id": "t78_6",
+            "type": "action",
+            "text": "Write FAQ answer for fractional CRO?",
             "xp": 5
           }
         ]
@@ -1419,9 +1665,27 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t81",
+            "id": "t81_1",
             "type": "action",
-            "text": "3+ CTA buttons all -> Stripe Payment Link",
+            "text": "Add CTA button #1 to the page",
+            "xp": 8
+          },
+          {
+            "id": "t81_2",
+            "type": "action",
+            "text": "Add CTA button #2 to the page",
+            "xp": 5
+          },
+          {
+            "id": "t81_3",
+            "type": "action",
+            "text": "Add CTA button #3 to the page",
+            "xp": 5
+          },
+          {
+            "id": "t81_4",
+            "type": "action",
+            "text": "Point every CTA button to the Stripe payment link",
             "xp": 5
           },
           {
@@ -1450,13 +1714,31 @@ var P=[
           "3.9"
         ],
         "doneWhen": "",
-        "preview": "OG title, description, image (1200x630) + Twitter Card tags | Create og-image.png - app screenshot or branded graphic",
+        "preview": "Write the OG title | Write the OG description",
         "subs": [
           {
-            "id": "t84",
+            "id": "t84_1",
             "type": "action",
-            "text": "OG title, description, image (1200x630) + Twitter Card tags",
+            "text": "Write the OG title",
             "xp": 8
+          },
+          {
+            "id": "t84_2",
+            "type": "action",
+            "text": "Write the OG description",
+            "xp": 5
+          },
+          {
+            "id": "t84_3",
+            "type": "action",
+            "text": "Create the OG image at 1200x630",
+            "xp": 5
+          },
+          {
+            "id": "t84_4",
+            "type": "action",
+            "text": "Add Twitter Card tags",
+            "xp": 5
           },
           {
             "id": "t85",
@@ -1484,7 +1766,7 @@ var P=[
           "3.9"
         ],
         "doneWhen": "",
-        "preview": "Set landing.html as root index | git push -> auto-deploy",
+        "preview": "Set landing.html as root index | Push the landing page code",
         "subs": [
           {
             "id": "t87",
@@ -1493,15 +1775,27 @@ var P=[
             "xp": 8
           },
           {
-            "id": "t88",
+            "id": "t88_1",
             "type": "action",
-            "text": "git push -> auto-deploy",
+            "text": "Push the landing page code",
+            "xp": 8
+          },
+          {
+            "id": "t88_2",
+            "type": "action",
+            "text": "Verify the auto-deploy runs",
             "xp": 5
           },
           {
-            "id": "t89",
+            "id": "t89_1",
             "type": "action",
-            "text": "Verify all CTA buttons -> Stripe checkout",
+            "text": "Verify all CTA buttons work",
+            "xp": 8
+          },
+          {
+            "id": "t89_2",
+            "type": "action",
+            "text": "Verify every CTA reaches Stripe checkout",
             "xp": 5
           }
         ]
@@ -1565,13 +1859,25 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "welcome.html exists with app link, PDF downloads, Quick Start steps, and noauth bypass.",
-        "preview": "Flow: Stripe -> redirect to welcome.html -> app + PDF downloads | No login/auth for v1 (zero friction)",
+        "preview": "Route Stripe checkout to welcome.html | Route welcome.html to the app",
         "subs": [
           {
-            "id": "t93",
+            "id": "t93_1",
             "type": "action",
-            "text": "Flow: Stripe -> redirect to welcome.html -> app + PDF downloads",
+            "text": "Route Stripe checkout to welcome.html",
             "xp": 8
+          },
+          {
+            "id": "t93_2",
+            "type": "action",
+            "text": "Route welcome.html to the app",
+            "xp": 5
+          },
+          {
+            "id": "t93_3",
+            "type": "action",
+            "text": "Include PDF downloads on the welcome page",
+            "xp": 5
           },
           {
             "id": "t94",
@@ -1751,7 +2057,7 @@ var P=[
           "4.1"
         ],
         "doneWhen": "",
-        "preview": "Welcome page sets localStorage noauth_mode on load | Test: clear LS -> visit welcome -> open app -> all 19 modules load",
+        "preview": "Welcome page sets localStorage noauth_mode on load | Clear local storage",
         "subs": [
           {
             "id": "t109",
@@ -1760,9 +2066,27 @@ var P=[
             "xp": 8
           },
           {
-            "id": "t110",
+            "id": "t110_1",
             "type": "action",
-            "text": "Test: clear LS -> visit welcome -> open app -> all 19 modules load",
+            "text": "Clear local storage",
+            "xp": 8
+          },
+          {
+            "id": "t110_2",
+            "type": "action",
+            "text": "Visit the welcome page",
+            "xp": 5
+          },
+          {
+            "id": "t110_3",
+            "type": "action",
+            "text": "Open the app",
+            "xp": 5
+          },
+          {
+            "id": "t110_4",
+            "type": "action",
+            "text": "Confirm all 19 modules load",
             "xp": 5
           }
         ]
@@ -1781,13 +2105,55 @@ var P=[
           "4.7"
         ],
         "doneWhen": "",
-        "preview": "Incognito -> landing -> Stripe -> welcome -> app -> demo seed -> onboarding -> readiness | Check welcome email received",
+        "preview": "Open an incognito window | Go to the landing page",
         "subs": [
           {
-            "id": "t111",
+            "id": "t111_1",
             "type": "action",
-            "text": "Incognito -> landing -> Stripe -> welcome -> app -> demo seed -> onboarding -> readiness",
+            "text": "Open an incognito window",
             "xp": 8
+          },
+          {
+            "id": "t111_2",
+            "type": "action",
+            "text": "Go to the landing page",
+            "xp": 5
+          },
+          {
+            "id": "t111_3",
+            "type": "action",
+            "text": "Complete Stripe checkout",
+            "xp": 5
+          },
+          {
+            "id": "t111_4",
+            "type": "action",
+            "text": "Load the welcome page",
+            "xp": 5
+          },
+          {
+            "id": "t111_5",
+            "type": "action",
+            "text": "Open the app",
+            "xp": 5
+          },
+          {
+            "id": "t111_6",
+            "type": "action",
+            "text": "Load the demo seed",
+            "xp": 5
+          },
+          {
+            "id": "t111_7",
+            "type": "action",
+            "text": "Run onboarding",
+            "xp": 5
+          },
+          {
+            "id": "t111_8",
+            "type": "action",
+            "text": "Reach readiness view",
+            "xp": 5
           },
           {
             "id": "t112",
@@ -1815,13 +2181,43 @@ var P=[
           "4.8"
         ],
         "doneWhen": "",
-        "preview": "3-5 min Loom: onboarding -> ICP -> Signal Console -> Deal -> Autopsy -> Readiness | Embed/link on landing page",
+        "preview": "Cover onboarding in the walkthrough video | Cover ICP in the walkthrough video",
         "subs": [
           {
-            "id": "t114",
+            "id": "t114_1",
             "type": "action",
-            "text": "3-5 min Loom: onboarding -> ICP -> Signal Console -> Deal -> Autopsy -> Readiness",
+            "text": "Cover onboarding in the walkthrough video",
             "xp": 8
+          },
+          {
+            "id": "t114_2",
+            "type": "action",
+            "text": "Cover ICP in the walkthrough video",
+            "xp": 5
+          },
+          {
+            "id": "t114_3",
+            "type": "action",
+            "text": "Cover Signal Console in the walkthrough video",
+            "xp": 5
+          },
+          {
+            "id": "t114_4",
+            "type": "action",
+            "text": "Cover Deal view in the walkthrough video",
+            "xp": 5
+          },
+          {
+            "id": "t114_5",
+            "type": "action",
+            "text": "Cover Autopsy in the walkthrough video",
+            "xp": 5
+          },
+          {
+            "id": "t114_6",
+            "type": "action",
+            "text": "Cover Readiness in the walkthrough video",
+            "xp": 5
           },
           {
             "id": "t115",
@@ -1930,18 +2326,48 @@ var P=[
           "5.2"
         ],
         "doneWhen": "SUPABASE-MIGRATION-PLAN.md exists in the repo with auth flow, data sync plan, and effort estimate.",
-        "preview": "Seed -> Export -> Clear -> Import -> Verify all data restored | Cross-browser: export Chrome -> import Firefox",
+        "preview": "Seed the workspace | Export the data",
         "subs": [
           {
-            "id": "t123",
+            "id": "t123_1",
             "type": "action",
-            "text": "Seed -> Export -> Clear -> Import -> Verify all data restored",
+            "text": "Seed the workspace",
             "xp": 8
           },
           {
-            "id": "t124",
+            "id": "t123_2",
             "type": "action",
-            "text": "Cross-browser: export Chrome -> import Firefox",
+            "text": "Export the data",
+            "xp": 5
+          },
+          {
+            "id": "t123_3",
+            "type": "action",
+            "text": "Clear the data",
+            "xp": 5
+          },
+          {
+            "id": "t123_4",
+            "type": "action",
+            "text": "Import the data",
+            "xp": 5
+          },
+          {
+            "id": "t123_5",
+            "type": "action",
+            "text": "Verify all data restored",
+            "xp": 5
+          },
+          {
+            "id": "t124_1",
+            "type": "action",
+            "text": "Export from Chrome",
+            "xp": 8
+          },
+          {
+            "id": "t124_2",
+            "type": "action",
+            "text": "Import into Firefox",
             "xp": 5
           }
         ]
@@ -1984,13 +2410,31 @@ var P=[
           "5.4"
         ],
         "doneWhen": "",
-        "preview": "Create project, get API keys, create user_data table, enable RLS | Do NOT wire frontend yet",
+        "preview": "Create the Supabase project | Get the API keys",
         "subs": [
           {
-            "id": "t127",
+            "id": "t127_1",
             "type": "action",
-            "text": "Create project, get API keys, create user_data table, enable RLS",
+            "text": "Create the Supabase project",
             "xp": 8
+          },
+          {
+            "id": "t127_2",
+            "type": "action",
+            "text": "Get the API keys",
+            "xp": 5
+          },
+          {
+            "id": "t127_3",
+            "type": "action",
+            "text": "Create the user_data table",
+            "xp": 5
+          },
+          {
+            "id": "t127_4",
+            "type": "action",
+            "text": "Enable RLS",
+            "xp": 5
           },
           {
             "id": "t128",
@@ -2012,18 +2456,54 @@ var P=[
           "5.2"
         ],
         "doneWhen": "",
-        "preview": "Load seed -> close browser -> reopen -> data persists | Export -> clear -> import -> data restores",
+        "preview": "Load the seed data | Close the browser",
         "subs": [
           {
-            "id": "t129",
+            "id": "t129_1",
             "type": "action",
-            "text": "Load seed -> close browser -> reopen -> data persists",
+            "text": "Load the seed data",
             "xp": 8
           },
           {
-            "id": "t130",
+            "id": "t129_2",
             "type": "action",
-            "text": "Export -> clear -> import -> data restores",
+            "text": "Close the browser",
+            "xp": 5
+          },
+          {
+            "id": "t129_3",
+            "type": "action",
+            "text": "Reopen the browser",
+            "xp": 5
+          },
+          {
+            "id": "t129_4",
+            "type": "action",
+            "text": "Confirm the data persists",
+            "xp": 5
+          },
+          {
+            "id": "t130_1",
+            "type": "action",
+            "text": "Export the data",
+            "xp": 8
+          },
+          {
+            "id": "t130_2",
+            "type": "action",
+            "text": "Clear the data",
+            "xp": 5
+          },
+          {
+            "id": "t130_3",
+            "type": "action",
+            "text": "Import the data",
+            "xp": 5
+          },
+          {
+            "id": "t130_4",
+            "type": "action",
+            "text": "Confirm the data restores",
             "xp": 5
           },
           {
@@ -2059,13 +2539,19 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Twitter/X profile is complete with name, bio, photo, header, and website link.",
-        "preview": "Use personal account (recommended) - people follow people | If creating product account: @antaeusgtm or similar",
+        "preview": "Decide whether to use your personal account | If yes, commit to the people-follow-people strategy",
         "subs": [
           {
-            "id": "t132",
+            "id": "t132_1",
             "type": "action",
-            "text": "Use personal account (recommended)  -  people follow people",
+            "text": "Decide whether to use your personal account",
             "xp": 8
+          },
+          {
+            "id": "t132_2",
+            "type": "action",
+            "text": "If yes, commit to the people-follow-people strategy",
+            "xp": 5
           },
           {
             "id": "t133",
@@ -2087,12 +2573,12 @@ var P=[
           "6.1"
         ],
         "doneWhen": "Newsletter exists with name, description, and branding. Zero posts published.",
-        "preview": "Display name: your real name | Bio: what you do + who it's for + proof point (under 160 chars)",
+        "preview": "Set the display name to your real name | Bio: what you do + who it's for + proof point (under 160 chars)",
         "subs": [
           {
-            "id": "t134",
+            "id": "t134_1",
             "type": "action",
-            "text": "Display name: your real name",
+            "text": "Set the display name to your real name",
             "xp": 8
           },
           {
@@ -2102,15 +2588,21 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t136",
+            "id": "t136_1",
             "type": "action",
-            "text": "Website: landing page URL",
-            "xp": 5
+            "text": "Set the website field to the landing page URL",
+            "xp": 8
           },
           {
-            "id": "t137",
+            "id": "t137_1",
             "type": "action",
-            "text": "Header: app screenshot (1500x500). Photo: your face.",
+            "text": "Upload an app screenshot as the header",
+            "xp": 8
+          },
+          {
+            "id": "t137_2",
+            "type": "action",
+            "text": "Set your face photo as the profile image",
             "xp": 5
           }
         ]
@@ -2177,18 +2669,48 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Member of 2-3 communities. Introduced yourself. Zero product mentions.",
-        "preview": "Indie Hackers, Product Hunt, Hacker News, Reddit (r/sales, r/startups) | Submit to BetaList (takes 1-4 weeks - submit early)",
+        "preview": "Claim Indie Hackers account | Claim Product Hunt account",
         "subs": [
           {
-            "id": "t142",
+            "id": "t66_5_1",
             "type": "action",
-            "text": "Indie Hackers, Product Hunt, Hacker News, Reddit (r/sales, r/startups)",
+            "text": "Claim Indie Hackers account",
             "xp": 8
           },
           {
-            "id": "t143",
+            "id": "t66_5_2",
             "type": "action",
-            "text": "Submit to BetaList (takes 1-4 weeks  -  submit early)",
+            "text": "Claim Product Hunt account",
+            "xp": 5
+          },
+          {
+            "id": "t66_5_3",
+            "type": "action",
+            "text": "Claim Hacker News account",
+            "xp": 5
+          },
+          {
+            "id": "t66_5_4",
+            "type": "action",
+            "text": "Claim Reddit account",
+            "xp": 5
+          },
+          {
+            "id": "t66_5_5",
+            "type": "action",
+            "text": "Join r/sales",
+            "xp": 5
+          },
+          {
+            "id": "t66_5_6",
+            "type": "action",
+            "text": "Join r/startups",
+            "xp": 5
+          },
+          {
+            "id": "t66_5_7",
+            "type": "action",
+            "text": "Submit to BetaList early (1-4 week queue)",
             "xp": 5
           }
         ]
@@ -2203,18 +2725,36 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Business email works. Test email lands in Primary (not spam) on Gmail.",
-        "preview": "Pavilion, RevGenius, founder Slack groups | Introduce yourself. Do NOT mention product.",
+        "preview": "Join Pavilion | Join RevGenius",
         "subs": [
           {
-            "id": "t144",
+            "id": "t66_6_1",
             "type": "action",
-            "text": "Pavilion, RevGenius, founder Slack groups",
+            "text": "Join Pavilion",
             "xp": 8
           },
           {
-            "id": "t145",
+            "id": "t66_6_2",
             "type": "action",
-            "text": "Introduce yourself. Do NOT mention product.",
+            "text": "Join RevGenius",
+            "xp": 5
+          },
+          {
+            "id": "t66_6_3",
+            "type": "action",
+            "text": "Join at least one founder Slack group",
+            "xp": 5
+          },
+          {
+            "id": "t66_6_4",
+            "type": "action",
+            "text": "Write and post a short introduction",
+            "xp": 5
+          },
+          {
+            "id": "t66_6_5",
+            "type": "action",
+            "text": "Do not mention the product in the intro",
             "xp": 5
           }
         ]
@@ -2229,13 +2769,19 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Signature is set in your email client.",
-        "preview": "Business email: you@yourdomain.com (Google Workspace or Cloudflare routing) | SPF, DKIM, DMARC records in Cloudflare DNS",
+        "preview": "Create the business email address | Choose Google Workspace or Cloudflare routing",
         "subs": [
           {
-            "id": "t146",
+            "id": "t146_1",
             "type": "action",
-            "text": "Business email: you@yourdomain.com (Google Workspace or Cloudflare routing)",
+            "text": "Create the business email address",
             "xp": 8
+          },
+          {
+            "id": "t146_2",
+            "type": "action",
+            "text": "Choose Google Workspace or Cloudflare routing",
+            "xp": 5
           },
           {
             "id": "t147",
@@ -2244,9 +2790,15 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t148",
+            "id": "t148_1",
             "type": "action",
-            "text": "Test: send to personal Gmail -> lands in Primary not Spam",
+            "text": "Send a test email to your personal Gmail",
+            "xp": 8
+          },
+          {
+            "id": "t148_2",
+            "type": "action",
+            "text": "Confirm it lands in Primary instead of Spam",
             "xp": 5
           }
         ]
@@ -2263,13 +2815,43 @@ var P=[
           "6.7"
         ],
         "doneWhen": "30+ content ideas documented with format, buyer tag, and related module.",
-        "preview": "Name, title, domain. No phone. No LinkedIn. Minimal.",
+        "preview": "Add your name to the email signature | Add your title to the email signature",
         "subs": [
           {
-            "id": "t149",
+            "id": "t149_1",
             "type": "action",
-            "text": "Name, title, domain. No phone. No LinkedIn. Minimal.",
+            "text": "Add your name to the email signature",
             "xp": 8
+          },
+          {
+            "id": "t149_2",
+            "type": "action",
+            "text": "Add your title to the email signature",
+            "xp": 5
+          },
+          {
+            "id": "t149_3",
+            "type": "action",
+            "text": "Add your domain to the email signature",
+            "xp": 5
+          },
+          {
+            "id": "t149_4",
+            "type": "action",
+            "text": "Remove phone from the signature",
+            "xp": 5
+          },
+          {
+            "id": "t149_5",
+            "type": "action",
+            "text": "Remove LinkedIn from the signature",
+            "xp": 5
+          },
+          {
+            "id": "t149_6",
+            "type": "action",
+            "text": "Keep the signature minimal",
+            "xp": 5
           }
         ]
       },
@@ -2283,18 +2865,54 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Weekly rhythm is in your calendar. First 2 weeks have specific ideas assigned.",
-        "preview": "30+ ideas from methodology: 16 deal causes, 5 temperatures, ICP, readiness, compound effect... | Tag each: format (thread/tweet/newsletter), buyer (A/B/C), related module",
+        "preview": "Add idea: 16 deal causes | Add idea: 5 temperatures of outbound",
         "subs": [
           {
-            "id": "t150",
+            "id": "t66_9_1",
             "type": "action",
-            "text": "30+ ideas from methodology: 16 deal causes, 5 temperatures, ICP, readiness, compound effect...",
+            "text": "Add idea: 16 deal causes",
             "xp": 8
           },
           {
-            "id": "t151",
+            "id": "t66_9_2",
             "type": "action",
-            "text": "Tag each: format (thread/tweet/newsletter), buyer (A/B/C), related module",
+            "text": "Add idea: 5 temperatures of outbound",
+            "xp": 5
+          },
+          {
+            "id": "t66_9_3",
+            "type": "action",
+            "text": "Add idea: ICP definition",
+            "xp": 5
+          },
+          {
+            "id": "t66_9_4",
+            "type": "action",
+            "text": "Add idea: readiness score",
+            "xp": 5
+          },
+          {
+            "id": "t66_9_5",
+            "type": "action",
+            "text": "Add idea: compound effect",
+            "xp": 5
+          },
+          {
+            "id": "t66_9_6",
+            "type": "action",
+            "text": "Tag every idea by format (thread / tweet / newsletter)",
+            "xp": 5
+          },
+          {
+            "id": "t66_9_7",
+            "type": "action",
+            "text": "Tag every idea by buyer (A / B / C)",
+            "xp": 5
+          },
+          {
+            "id": "t66_9_8",
+            "type": "action",
+            "text": "Tag every idea by related module",
             "xp": 5
           }
         ]
@@ -2311,18 +2929,48 @@ var P=[
           "6.9"
         ],
         "doneWhen": "",
-        "preview": "Mon: thread. Wed: tweet. Fri: newsletter. Daily: 10 min community. Sat: batch prep. | Set calendar reminders. Assign first 2 weeks from idea bank.",
+        "preview": "Set Monday = thread | Set Wednesday = tweet",
         "subs": [
           {
-            "id": "t152",
+            "id": "t66_10_1",
             "type": "action",
-            "text": "Mon: thread. Wed: tweet. Fri: newsletter. Daily: 10 min community. Sat: batch prep.",
+            "text": "Set Monday = thread",
             "xp": 8
           },
           {
-            "id": "t153",
+            "id": "t66_10_2",
             "type": "action",
-            "text": "Set calendar reminders. Assign first 2 weeks from idea bank.",
+            "text": "Set Wednesday = tweet",
+            "xp": 5
+          },
+          {
+            "id": "t66_10_3",
+            "type": "action",
+            "text": "Set Friday = newsletter",
+            "xp": 5
+          },
+          {
+            "id": "t66_10_4",
+            "type": "action",
+            "text": "Set daily = 10 min community engagement",
+            "xp": 5
+          },
+          {
+            "id": "t66_10_5",
+            "type": "action",
+            "text": "Set Saturday = batch prep",
+            "xp": 5
+          },
+          {
+            "id": "t66_10_6",
+            "type": "action",
+            "text": "Add calendar reminders for the rhythm",
+            "xp": 5
+          },
+          {
+            "id": "t66_10_7",
+            "type": "action",
+            "text": "Assign the first 2 weeks from the idea bank",
             "xp": 5
           }
         ]
@@ -2352,13 +3000,55 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "8-12 tweet thread written and reviewed by 1-2 people. Read out loud, doesn't sound like marketing.",
-        "preview": "Hook -> origin -> transformation -> 70% stat -> what it is -> compound effect -> validation -> CTA | 8-12 tweets. Read out loud. If it sounds like marketing, rewrite.",
+        "preview": "Write the hook | Write the origin",
         "subs": [
           {
-            "id": "t154",
+            "id": "t154_1",
             "type": "action",
-            "text": "Hook -> origin -> transformation -> 70% stat -> what it is -> compound effect -> validation -> CTA",
+            "text": "Write the hook",
             "xp": 8
+          },
+          {
+            "id": "t154_2",
+            "type": "action",
+            "text": "Write the origin",
+            "xp": 5
+          },
+          {
+            "id": "t154_3",
+            "type": "action",
+            "text": "Write the transformation",
+            "xp": 5
+          },
+          {
+            "id": "t154_4",
+            "type": "action",
+            "text": "Add the 70% stat",
+            "xp": 5
+          },
+          {
+            "id": "t154_5",
+            "type": "action",
+            "text": "Explain what it is",
+            "xp": 5
+          },
+          {
+            "id": "t154_6",
+            "type": "action",
+            "text": "Add the compound effect point",
+            "xp": 5
+          },
+          {
+            "id": "t154_7",
+            "type": "action",
+            "text": "Add the validation point",
+            "xp": 5
+          },
+          {
+            "id": "t154_8",
+            "type": "action",
+            "text": "Add the CTA",
+            "xp": 5
           },
           {
             "id": "t155",
@@ -2440,7 +3130,7 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "IH post live in Show IH or Milestones with screenshots and landing page link.",
-        "preview": "\"I built a 19-module sales OS with AI in 6 months\" | Include: what, why, tech, numbers, biz model, screenshots, link",
+        "preview": "\"I built a 19-module sales OS with AI in 6 months\" | Include what it is",
         "subs": [
           {
             "id": "t161",
@@ -2449,9 +3139,45 @@ var P=[
             "xp": 8
           },
           {
-            "id": "t162",
+            "id": "t162_1",
             "type": "action",
-            "text": "Include: what, why, tech, numbers, biz model, screenshots, link",
+            "text": "Include what it is",
+            "xp": 8
+          },
+          {
+            "id": "t162_2",
+            "type": "action",
+            "text": "Include why it exists",
+            "xp": 5
+          },
+          {
+            "id": "t162_3",
+            "type": "action",
+            "text": "Include the tech stack",
+            "xp": 5
+          },
+          {
+            "id": "t162_4",
+            "type": "action",
+            "text": "Include the numbers",
+            "xp": 5
+          },
+          {
+            "id": "t162_5",
+            "type": "action",
+            "text": "Include the business model",
+            "xp": 5
+          },
+          {
+            "id": "t162_6",
+            "type": "action",
+            "text": "Include screenshots",
+            "xp": 5
+          },
+          {
+            "id": "t162_7",
+            "type": "action",
+            "text": "Include the link",
             "xp": 5
           },
           {
@@ -2576,13 +3302,19 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Thread posted. Soft CTA at end. Replies engaged for 2 hours.",
-        "preview": "All 16 Future Autopsy causes + one-sentence countermeasures | End: soft CTA to landing page",
+        "preview": "List all 16 Future Autopsy causes | Write one-sentence countermeasures for all 16 causes",
         "subs": [
           {
-            "id": "t168",
+            "id": "t168_1",
             "type": "action",
-            "text": "All 16 Future Autopsy causes + one-sentence countermeasures",
+            "text": "List all 16 Future Autopsy causes",
             "xp": 8
+          },
+          {
+            "id": "t168_2",
+            "type": "action",
+            "text": "Write one-sentence countermeasures for all 16 causes",
+            "xp": 5
           },
           {
             "id": "t169",
@@ -2840,13 +3572,25 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Posted Day ~28.",
-        "preview": "One edit -> five updates. Post Day 28.",
+        "preview": "Make the one edit | Propagate it into five updates",
         "subs": [
           {
-            "id": "t184",
+            "id": "t184_1",
             "type": "action",
-            "text": "One edit -> five updates. Post Day 28.",
+            "text": "Make the one edit",
             "xp": 8
+          },
+          {
+            "id": "t184_2",
+            "type": "action",
+            "text": "Propagate it into five updates",
+            "xp": 5
+          },
+          {
+            "id": "t184_3",
+            "type": "action",
+            "text": "Post it on Day 28",
+            "xp": 5
           }
         ]
       }
@@ -3037,9 +3781,27 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t10_1_10",
+            "id": "t10_1_10_1",
             "type": "action",
-            "text": "Reply formula for every platform: name the specific problem, add one operating point, end with a useful next thought or question. Never do drive-by praise.",
+            "text": "Name the specific problem",
+            "xp": 8
+          },
+          {
+            "id": "t10_1_10_2",
+            "type": "action",
+            "text": "Add one operating point",
+            "xp": 5
+          },
+          {
+            "id": "t10_1_10_3",
+            "type": "action",
+            "text": "End with a useful next thought or question",
+            "xp": 5
+          },
+          {
+            "id": "t10_1_10_4",
+            "type": "action",
+            "text": "Avoid drive-by praise",
             "xp": 5
           },
           {
@@ -3324,13 +4086,49 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Product mentioned once, in response to a direct question, in a context where it felt natural.",
-        "preview": "Work in 2-3 communities only: Pavilion, RevGenius, and one founder Slack. Track channel names like #gtm, #sales-leadership, #founders, #sales, or equivalent. | Weeks 1...",
+        "preview": "Join Pavilion | Join RevGenius",
         "subs": [
           {
-            "id": "t10_5_1",
+            "id": "t10_5_1_1",
             "type": "action",
-            "text": "Work in 2-3 communities only: Pavilion, RevGenius, and one founder Slack. Track channel names like #gtm, #sales-leadership, #founders, #sales, or equivalent.",
+            "text": "Join Pavilion",
             "xp": 8
+          },
+          {
+            "id": "t10_5_1_2",
+            "type": "action",
+            "text": "Join RevGenius",
+            "xp": 5
+          },
+          {
+            "id": "t10_5_1_3",
+            "type": "action",
+            "text": "Join one founder Slack community",
+            "xp": 5
+          },
+          {
+            "id": "t10_5_1_4",
+            "type": "action",
+            "text": "Track #gtm",
+            "xp": 5
+          },
+          {
+            "id": "t10_5_1_5",
+            "type": "action",
+            "text": "Track #sales-leadership",
+            "xp": 5
+          },
+          {
+            "id": "t10_5_1_6",
+            "type": "action",
+            "text": "Track #founders",
+            "xp": 5
+          },
+          {
+            "id": "t10_5_1_7",
+            "type": "action",
+            "text": "Track #sales",
+            "xp": 5
           },
           {
             "id": "t10_5_2",
@@ -3381,9 +4179,21 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t10_5_10",
+            "id": "t10_5_10_1",
             "type": "action",
-            "text": "Resource-share format: 1 line naming the exact problem, 1 line saying you made a free checklist for this, 1 line posting the link or PDF only if the culture supports it.",
+            "text": "Write the line naming the exact problem",
+            "xp": 8
+          },
+          {
+            "id": "t10_5_10_2",
+            "type": "action",
+            "text": "Write the line saying you made a free checklist",
+            "xp": 5
+          },
+          {
+            "id": "t10_5_10_3",
+            "type": "action",
+            "text": "Write the line posting the link or PDF only if the culture supports it",
             "xp": 5
           },
           {
@@ -3461,9 +4271,33 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t10_6_9",
+            "id": "t10_6_9_1",
             "type": "action",
-            "text": "Reply formula for X: 1 observation, 1 clear operating point, 1 implication. Keep it compact. Long replies are fine only if they genuinely add depth.",
+            "text": "Lead with one observation",
+            "xp": 8
+          },
+          {
+            "id": "t10_6_9_2",
+            "type": "action",
+            "text": "Add one clear operating point",
+            "xp": 5
+          },
+          {
+            "id": "t10_6_9_3",
+            "type": "action",
+            "text": "Add one implication",
+            "xp": 5
+          },
+          {
+            "id": "t10_6_9_4",
+            "type": "action",
+            "text": "Keep the reply compact",
+            "xp": 5
+          },
+          {
+            "id": "t10_6_9_5",
+            "type": "action",
+            "text": "Only go long when it genuinely adds depth",
             "xp": 5
           },
           {
@@ -3631,21 +4465,63 @@ var P=[
             "xp": 5
           },
           {
-            "id": "t10_8_8",
+            "id": "t10_8_8_1",
             "type": "action",
-            "text": "Green-light criteria for a mention: the question matches your product exactly, you already added value publicly, the thread tone is not anti-promo, and the mention can be factual not salesy.",
+            "text": "Confirm the question matches your product exactly",
+            "xp": 8
+          },
+          {
+            "id": "t10_8_8_2",
+            "type": "action",
+            "text": "Confirm you already added value publicly",
             "xp": 5
           },
           {
-            "id": "t10_8_9",
+            "id": "t10_8_8_3",
             "type": "action",
-            "text": "Red-light criteria for a mention: you are impatient, the thread is crowded with self-promoters, the fit is only partial, or you have not yet established credibility in that room.",
+            "text": "Confirm the thread tone is not anti-promo",
             "xp": 5
           },
           {
-            "id": "t10_8_10",
+            "id": "t10_8_8_4",
             "type": "action",
-            "text": "Default script: \"I built something for this exact problem - happy to share if useful.\" Better script when asked for detail: \"It is a founder-led sales operating system built around readiness, discovery, outbound, and deal review. Link if you want it.\"",
+            "text": "Confirm the mention can be factual and not salesy",
+            "xp": 5
+          },
+          {
+            "id": "t10_8_9_1",
+            "type": "action",
+            "text": "Check that you are not acting out of impatience",
+            "xp": 8
+          },
+          {
+            "id": "t10_8_9_2",
+            "type": "action",
+            "text": "Check that the thread is not crowded with self-promoters",
+            "xp": 5
+          },
+          {
+            "id": "t10_8_9_3",
+            "type": "action",
+            "text": "Check that the fit is not only partial",
+            "xp": 5
+          },
+          {
+            "id": "t10_8_9_4",
+            "type": "action",
+            "text": "Check that you have established credibility in the room",
+            "xp": 5
+          },
+          {
+            "id": "t10_8_10_1",
+            "type": "action",
+            "text": "Keep the default script ready",
+            "xp": 8
+          },
+          {
+            "id": "t10_8_10_2",
+            "type": "action",
+            "text": "Keep the deeper-detail script ready when asked",
             "xp": 5
           },
           {
@@ -3687,18 +4563,60 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Spreadsheet with 50 rows: name, title, email, fund, stage, sector, portfolio count.",
-        "preview": "Fund websites -> \"Platform\" or \"Portfolio Operations\" pages | For each: name, title, email, fund, stage focus, sector",
+        "preview": "Open fund websites | Look for Platform pages",
         "subs": [
           {
-            "id": "t205",
+            "id": "t205_1",
             "type": "action",
-            "text": "Fund websites -> \"Platform\" or \"Portfolio Operations\" pages",
+            "text": "Open fund websites",
             "xp": 8
           },
           {
-            "id": "t206",
+            "id": "t205_2",
             "type": "action",
-            "text": "For each: name, title, email, fund, stage focus, sector",
+            "text": "Look for Platform pages",
+            "xp": 5
+          },
+          {
+            "id": "t205_3",
+            "type": "action",
+            "text": "Look for Portfolio Operations pages",
+            "xp": 5
+          },
+          {
+            "id": "t206_1",
+            "type": "action",
+            "text": "Capture the name",
+            "xp": 8
+          },
+          {
+            "id": "t206_2",
+            "type": "action",
+            "text": "Capture the title",
+            "xp": 5
+          },
+          {
+            "id": "t206_3",
+            "type": "action",
+            "text": "Capture the email",
+            "xp": 5
+          },
+          {
+            "id": "t206_4",
+            "type": "action",
+            "text": "Capture the fund",
+            "xp": 5
+          },
+          {
+            "id": "t206_5",
+            "type": "action",
+            "text": "Capture the stage focus",
+            "xp": 5
+          },
+          {
+            "id": "t206_6",
+            "type": "action",
+            "text": "Capture the sector",
             "xp": 5
           },
           {
@@ -3893,18 +4811,36 @@ var P=[
           "11.3"
         ],
         "doneWhen": "",
-        "preview": "Positive -> landing page + dossier PDF. Ask: how many portfolio companies? | Negative -> polite close + leave the link",
+        "preview": "Send the landing page | Send the dossier PDF",
         "subs": [
           {
-            "id": "t218",
+            "id": "t218_1",
             "type": "action",
-            "text": "Positive -> landing page + dossier PDF. Ask: how many portfolio companies?",
+            "text": "Send the landing page",
             "xp": 8
           },
           {
-            "id": "t219",
+            "id": "t218_2",
             "type": "action",
-            "text": "Negative -> polite close + leave the link",
+            "text": "Send the dossier PDF",
+            "xp": 5
+          },
+          {
+            "id": "t218_3",
+            "type": "action",
+            "text": "Ask how many portfolio companies they support",
+            "xp": 5
+          },
+          {
+            "id": "t219_1",
+            "type": "action",
+            "text": "Send a polite close",
+            "xp": 8
+          },
+          {
+            "id": "t219_2",
+            "type": "action",
+            "text": "Leave the link",
             "xp": 5
           }
         ]
@@ -3934,13 +4870,91 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Master spreadsheet: 40+ contacts segmented by persona, warmth-scored, minimum targets met.",
-        "preview": "Create the master outreach sheet with name, company, persona, tier, warmth score, relationship source, use case, buying power, referral power, message angle, owner, st...",
+        "preview": "Add column: name | Add column: company",
         "subs": [
           {
-            "id": "t220",
+            "id": "t220_1",
             "type": "action",
-            "text": "Create the master outreach sheet with name, company, persona, tier, warmth score, relationship source, use case, buying power, referral power, message angle, owner, status, next step, and notes.",
+            "text": "Add column: name",
             "xp": 8
+          },
+          {
+            "id": "t220_2",
+            "type": "action",
+            "text": "Add column: company",
+            "xp": 5
+          },
+          {
+            "id": "t220_3",
+            "type": "action",
+            "text": "Add column: persona",
+            "xp": 5
+          },
+          {
+            "id": "t220_4",
+            "type": "action",
+            "text": "Add column: tier",
+            "xp": 5
+          },
+          {
+            "id": "t220_5",
+            "type": "action",
+            "text": "Add column: warmth score",
+            "xp": 5
+          },
+          {
+            "id": "t220_6",
+            "type": "action",
+            "text": "Add column: relationship source",
+            "xp": 5
+          },
+          {
+            "id": "t220_7",
+            "type": "action",
+            "text": "Add column: use case",
+            "xp": 5
+          },
+          {
+            "id": "t220_8",
+            "type": "action",
+            "text": "Add column: buying power",
+            "xp": 5
+          },
+          {
+            "id": "t220_9",
+            "type": "action",
+            "text": "Add column: referral power",
+            "xp": 5
+          },
+          {
+            "id": "t220_10",
+            "type": "action",
+            "text": "Add column: message angle",
+            "xp": 5
+          },
+          {
+            "id": "t220_11",
+            "type": "action",
+            "text": "Add column: owner",
+            "xp": 5
+          },
+          {
+            "id": "t220_12",
+            "type": "action",
+            "text": "Add column: status",
+            "xp": 5
+          },
+          {
+            "id": "t220_13",
+            "type": "action",
+            "text": "Add column: next step",
+            "xp": 5
+          },
+          {
+            "id": "t220_14",
+            "type": "action",
+            "text": "Add column: notes",
+            "xp": 5
           },
           {
             "id": "t221",
@@ -3968,13 +4982,55 @@ var P=[
           "12.1"
         ],
         "doneWhen": "Messaging matrix complete: 4 personas × positioning spine + pain + trigger + CTA.",
-        "preview": "Create a messaging matrix with persona, pain, trigger, framing, module cluster, proof point, CTA, and what to avoid saying. | Write one positioning spine each for bout...",
+        "preview": "Add matrix field: persona | Add matrix field: pain",
         "subs": [
           {
-            "id": "t223",
+            "id": "t223_1",
             "type": "action",
-            "text": "Create a messaging matrix with persona, pain, trigger, framing, module cluster, proof point, CTA, and what to avoid saying.",
+            "text": "Add matrix field: persona",
             "xp": 8
+          },
+          {
+            "id": "t223_2",
+            "type": "action",
+            "text": "Add matrix field: pain",
+            "xp": 5
+          },
+          {
+            "id": "t223_3",
+            "type": "action",
+            "text": "Add matrix field: trigger",
+            "xp": 5
+          },
+          {
+            "id": "t223_4",
+            "type": "action",
+            "text": "Add matrix field: framing",
+            "xp": 5
+          },
+          {
+            "id": "t223_5",
+            "type": "action",
+            "text": "Add matrix field: module cluster",
+            "xp": 5
+          },
+          {
+            "id": "t223_6",
+            "type": "action",
+            "text": "Add matrix field: proof point",
+            "xp": 5
+          },
+          {
+            "id": "t223_7",
+            "type": "action",
+            "text": "Add matrix field: CTA",
+            "xp": 5
+          },
+          {
+            "id": "t223_8",
+            "type": "action",
+            "text": "Add matrix field: what to avoid saying",
+            "xp": 5
           },
           {
             "id": "t224",
@@ -4002,13 +5058,43 @@ var P=[
           "12.2"
         ],
         "doneWhen": "10-15 VC/platform contacts messaged with personalized outreach.",
-        "preview": "Create short message, medium email, follow-up, one-sentence description, longer explainer, and FAQs for each persona. | Create separate asset families for VC/platform,...",
+        "preview": "Create the short message | Create the medium email",
         "subs": [
           {
-            "id": "t226",
+            "id": "t226_1",
             "type": "action",
-            "text": "Create short message, medium email, follow-up, one-sentence description, longer explainer, and FAQs for each persona.",
+            "text": "Create the short message",
             "xp": 8
+          },
+          {
+            "id": "t226_2",
+            "type": "action",
+            "text": "Create the medium email",
+            "xp": 5
+          },
+          {
+            "id": "t226_3",
+            "type": "action",
+            "text": "Create the follow-up message",
+            "xp": 5
+          },
+          {
+            "id": "t226_4",
+            "type": "action",
+            "text": "Create the one-sentence description",
+            "xp": 5
+          },
+          {
+            "id": "t226_5",
+            "type": "action",
+            "text": "Create the longer explainer",
+            "xp": 5
+          },
+          {
+            "id": "t226_6",
+            "type": "action",
+            "text": "Create the FAQs",
+            "xp": 5
           },
           {
             "id": "t227",
@@ -4257,13 +5343,79 @@ var P=[
           "12.4"
         ],
         "doneWhen": "",
-        "preview": "Track date sent, channel, persona, angle, CTA, response outcome, meeting booked, interest level, pilot interest, objections, next step, and learnings. | Produce a one-...",
+        "preview": "Track date sent | Track channel",
         "subs": [
           {
-            "id": "t247",
+            "id": "t247_1",
             "type": "action",
-            "text": "Track date sent, channel, persona, angle, CTA, response outcome, meeting booked, interest level, pilot interest, objections, next step, and learnings.",
+            "text": "Track date sent",
             "xp": 8
+          },
+          {
+            "id": "t247_2",
+            "type": "action",
+            "text": "Track channel",
+            "xp": 5
+          },
+          {
+            "id": "t247_3",
+            "type": "action",
+            "text": "Track persona",
+            "xp": 5
+          },
+          {
+            "id": "t247_4",
+            "type": "action",
+            "text": "Track angle",
+            "xp": 5
+          },
+          {
+            "id": "t247_5",
+            "type": "action",
+            "text": "Track CTA",
+            "xp": 5
+          },
+          {
+            "id": "t247_6",
+            "type": "action",
+            "text": "Track response outcome",
+            "xp": 5
+          },
+          {
+            "id": "t247_7",
+            "type": "action",
+            "text": "Track meeting booked",
+            "xp": 5
+          },
+          {
+            "id": "t247_8",
+            "type": "action",
+            "text": "Track interest level",
+            "xp": 5
+          },
+          {
+            "id": "t247_9",
+            "type": "action",
+            "text": "Track pilot interest",
+            "xp": 5
+          },
+          {
+            "id": "t247_10",
+            "type": "action",
+            "text": "Track objections",
+            "xp": 5
+          },
+          {
+            "id": "t247_11",
+            "type": "action",
+            "text": "Track next step",
+            "xp": 5
+          },
+          {
+            "id": "t247_12",
+            "type": "action",
+            "text": "Track learnings",
+            "xp": 5
           },
           {
             "id": "t248",
@@ -4397,7 +5549,7 @@ var P=[
           "12.11"
         ],
         "doneWhen": "",
-        "preview": "Track reply rate, meeting-booked rate, positive-response rate, referral rate, pilot-interest rate, and quote capture rate. | Track lagging indicators: pilots started,...",
+        "preview": "Track reply rate, meeting-booked rate, positive-response rate, referral rate, pilot-interest rate, and quote capture rate. | Track pilots started",
         "subs": [
           {
             "id": "t257",
@@ -4406,9 +5558,33 @@ var P=[
             "xp": 8
           },
           {
-            "id": "t258",
+            "id": "t258_1",
             "type": "action",
-            "text": "Track lagging indicators: pilots started, paying users, portfolio introductions, repeatable conversion path, and strongest wedge identified.",
+            "text": "Track pilots started",
+            "xp": 8
+          },
+          {
+            "id": "t258_2",
+            "type": "action",
+            "text": "Track paying users",
+            "xp": 5
+          },
+          {
+            "id": "t258_3",
+            "type": "action",
+            "text": "Track portfolio introductions",
+            "xp": 5
+          },
+          {
+            "id": "t258_4",
+            "type": "action",
+            "text": "Track repeatable conversion path",
+            "xp": 5
+          },
+          {
+            "id": "t258_5",
+            "type": "action",
+            "text": "Track strongest wedge identified",
             "xp": 5
           }
         ]
@@ -4472,18 +5648,48 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "All 13 gate items green. Nothing is broken. Ready to take real money.",
-        "preview": "Landing page live, CTA -> Stripe LIVE, redirect -> welcome, welcome -> app + PDFs | Noauth, demo seed, export/import all work",
+        "preview": "Confirm the landing page is live | Confirm CTA routes to Stripe LIVE",
         "subs": [
           {
-            "id": "t229",
+            "id": "t229_1",
             "type": "action",
-            "text": "Landing page live, CTA -> Stripe LIVE, redirect -> welcome, welcome -> app + PDFs",
+            "text": "Confirm the landing page is live",
             "xp": 8
           },
           {
-            "id": "t230",
+            "id": "t229_2",
             "type": "action",
-            "text": "Noauth, demo seed, export/import all work",
+            "text": "Confirm CTA routes to Stripe LIVE",
+            "xp": 5
+          },
+          {
+            "id": "t229_3",
+            "type": "action",
+            "text": "Confirm redirect routes to welcome",
+            "xp": 5
+          },
+          {
+            "id": "t229_4",
+            "type": "action",
+            "text": "Confirm welcome routes to app plus PDFs",
+            "xp": 5
+          },
+          {
+            "id": "t230_1",
+            "type": "action",
+            "text": "Confirm noauth works",
+            "xp": 8
+          },
+          {
+            "id": "t230_2",
+            "type": "action",
+            "text": "Confirm demo seed works",
+            "xp": 5
+          },
+          {
+            "id": "t230_3",
+            "type": "action",
+            "text": "Confirm export/import works",
             "xp": 5
           },
           {
@@ -4512,18 +5718,66 @@ var P=[
           "13.1"
         ],
         "doneWhen": "PH listing drafted with name, tagline, description, screenshots, maker comment. Scheduled.",
-        "preview": "Name, tagline (60 chars), description, link, topics | 4-5 gallery screenshots: Dashboard, Autopsy, Readiness, Signal Console, Explainer",
+        "preview": "Set the Product Hunt name | Set the tagline",
         "subs": [
           {
-            "id": "t233",
+            "id": "t233_1",
             "type": "action",
-            "text": "Name, tagline (60 chars), description, link, topics",
+            "text": "Set the Product Hunt name",
             "xp": 8
           },
           {
-            "id": "t234",
+            "id": "t233_2",
             "type": "action",
-            "text": "4-5 gallery screenshots: Dashboard, Autopsy, Readiness, Signal Console, Explainer",
+            "text": "Set the tagline",
+            "xp": 5
+          },
+          {
+            "id": "t233_3",
+            "type": "action",
+            "text": "Set the description",
+            "xp": 5
+          },
+          {
+            "id": "t233_4",
+            "type": "action",
+            "text": "Set the link",
+            "xp": 5
+          },
+          {
+            "id": "t233_5",
+            "type": "action",
+            "text": "Set the topics",
+            "xp": 5
+          },
+          {
+            "id": "t234_1",
+            "type": "action",
+            "text": "Add Dashboard screenshot",
+            "xp": 8
+          },
+          {
+            "id": "t234_2",
+            "type": "action",
+            "text": "Add Autopsy screenshot",
+            "xp": 5
+          },
+          {
+            "id": "t234_3",
+            "type": "action",
+            "text": "Add Readiness screenshot",
+            "xp": 5
+          },
+          {
+            "id": "t234_4",
+            "type": "action",
+            "text": "Add Signal Console screenshot",
+            "xp": 5
+          },
+          {
+            "id": "t234_5",
+            "type": "action",
+            "text": "Add Explainer screenshot",
             "xp": 5
           },
           {
@@ -4685,13 +5939,31 @@ var P=[
           "13.3"
         ],
         "doneWhen": "",
-        "preview": "Stats: upvotes, visits, signups. Be transparent.",
+        "preview": "Capture upvote count | Capture visit count",
         "subs": [
           {
-            "id": "t243",
+            "id": "t243_1",
             "type": "action",
-            "text": "Stats: upvotes, visits, signups. Be transparent.",
+            "text": "Capture upvote count",
             "xp": 8
+          },
+          {
+            "id": "t243_2",
+            "type": "action",
+            "text": "Capture visit count",
+            "xp": 5
+          },
+          {
+            "id": "t243_3",
+            "type": "action",
+            "text": "Capture signup count",
+            "xp": 5
+          },
+          {
+            "id": "t243_4",
+            "type": "action",
+            "text": "Keep the post transparent",
+            "xp": 5
           }
         ]
       }
@@ -4748,24 +6020,42 @@ var P=[
           "14.1"
         ],
         "doneWhen": "At least one improvement made. Price raised after 10 customers. Transparency thread posted.",
-        "preview": "Bounce >70% -> rewrite hero | Checkout abandon >50% -> test flow with friend",
+        "preview": "Confirm bounce is above 70% | Rewrite the hero",
         "subs": [
           {
-            "id": "t246",
+            "id": "t246_1",
             "type": "action",
-            "text": "Bounce >70% -> rewrite hero",
+            "text": "Confirm bounce is above 70%",
             "xp": 8
           },
           {
-            "id": "t247",
+            "id": "t246_2",
             "type": "action",
-            "text": "Checkout abandon >50% -> test flow with friend",
+            "text": "Rewrite the hero",
             "xp": 5
           },
           {
-            "id": "t248",
+            "id": "t247_1",
             "type": "action",
-            "text": "Visits but no CTA clicks -> add video more prominently",
+            "text": "Confirm checkout abandonment is above 50%",
+            "xp": 8
+          },
+          {
+            "id": "t247_2",
+            "type": "action",
+            "text": "Test the flow with a friend",
+            "xp": 5
+          },
+          {
+            "id": "t248_1",
+            "type": "action",
+            "text": "Confirm visits are happening but CTA clicks are not",
+            "xp": 8
+          },
+          {
+            "id": "t248_2",
+            "type": "action",
+            "text": "Move the video more prominently",
             "xp": 5
           }
         ]
@@ -4977,13 +6267,31 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "",
-        "preview": "Reply to 2-3 posts/tweets. Add value.",
+        "preview": "Reply to post/tweet #1 | Reply to post/tweet #2",
         "subs": [
           {
-            "id": "t258",
+            "id": "t258_1",
             "type": "action",
-            "text": "Reply to 2-3 posts/tweets. Add value.",
+            "text": "Reply to post/tweet #1",
             "xp": 8
+          },
+          {
+            "id": "t258_2",
+            "type": "action",
+            "text": "Reply to post/tweet #2",
+            "xp": 5
+          },
+          {
+            "id": "t258_3",
+            "type": "action",
+            "text": "Reply to post/tweet #3",
+            "xp": 5
+          },
+          {
+            "id": "t258_4",
+            "type": "action",
+            "text": "Add value in each reply",
+            "xp": 5
           }
         ]
       },
@@ -5072,13 +6380,25 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "Spreadsheet exists with weekly columns for all key metrics.",
-        "preview": "Built-in analytics: MRR, customers, churn",
+        "preview": "Track MRR | Track customers",
         "subs": [
           {
-            "id": "t262",
+            "id": "t262_1",
             "type": "action",
-            "text": "Built-in analytics: MRR, customers, churn",
+            "text": "Track MRR",
             "xp": 8
+          },
+          {
+            "id": "t262_2",
+            "type": "action",
+            "text": "Track customers",
+            "xp": 5
+          },
+          {
+            "id": "t262_3",
+            "type": "action",
+            "text": "Track churn",
+            "xp": 5
           }
         ]
       },
@@ -5092,13 +6412,61 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "UTM link set created for each distribution channel.",
-        "preview": "Columns: visits, unique, checkouts, payments, revenue, followers, subscribers, emails sent, reply rate",
+        "preview": "Add spreadsheet column: visits | Add spreadsheet column: unique",
         "subs": [
           {
-            "id": "t263",
+            "id": "t263_1",
             "type": "action",
-            "text": "Columns: visits, unique, checkouts, payments, revenue, followers, subscribers, emails sent, reply rate",
+            "text": "Add spreadsheet column: visits",
             "xp": 8
+          },
+          {
+            "id": "t263_2",
+            "type": "action",
+            "text": "Add spreadsheet column: unique",
+            "xp": 5
+          },
+          {
+            "id": "t263_3",
+            "type": "action",
+            "text": "Add spreadsheet column: checkouts",
+            "xp": 5
+          },
+          {
+            "id": "t263_4",
+            "type": "action",
+            "text": "Add spreadsheet column: payments",
+            "xp": 5
+          },
+          {
+            "id": "t263_5",
+            "type": "action",
+            "text": "Add spreadsheet column: revenue",
+            "xp": 5
+          },
+          {
+            "id": "t263_6",
+            "type": "action",
+            "text": "Add spreadsheet column: followers",
+            "xp": 5
+          },
+          {
+            "id": "t263_7",
+            "type": "action",
+            "text": "Add spreadsheet column: subscribers",
+            "xp": 5
+          },
+          {
+            "id": "t263_8",
+            "type": "action",
+            "text": "Add spreadsheet column: emails sent",
+            "xp": 5
+          },
+          {
+            "id": "t263_9",
+            "type": "action",
+            "text": "Add spreadsheet column: reply rate",
+            "xp": 5
           }
         ]
       },
@@ -5112,13 +6480,37 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "",
-        "preview": "?utm_source=twitter, newsletter, producthunt, indiehackers, coldemail | Add to every shared link",
+        "preview": "Create utm_source=twitter | Create utm_source=newsletter",
         "subs": [
           {
-            "id": "t264",
+            "id": "t264_1",
             "type": "action",
-            "text": "?utm_source=twitter, newsletter, producthunt, indiehackers, coldemail",
+            "text": "Create utm_source=twitter",
             "xp": 8
+          },
+          {
+            "id": "t264_2",
+            "type": "action",
+            "text": "Create utm_source=newsletter",
+            "xp": 5
+          },
+          {
+            "id": "t264_3",
+            "type": "action",
+            "text": "Create utm_source=producthunt",
+            "xp": 5
+          },
+          {
+            "id": "t264_4",
+            "type": "action",
+            "text": "Create utm_source=indiehackers",
+            "xp": 5
+          },
+          {
+            "id": "t264_5",
+            "type": "action",
+            "text": "Create utm_source=coldemail",
+            "xp": 5
           },
           {
             "id": "t265",
@@ -5195,13 +6587,31 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "terms.html exists in deployment and is linked from landing page footer.",
-        "preview": "What it is, limitation of liability, no refund or 30-day refund, data disclaimer",
+        "preview": "Write what the product is | Write the limitation of liability section",
         "subs": [
           {
-            "id": "t268",
+            "id": "t268_1",
             "type": "action",
-            "text": "What it is, limitation of liability, no refund or 30-day refund, data disclaimer",
+            "text": "Write what the product is",
             "xp": 8
+          },
+          {
+            "id": "t268_2",
+            "type": "action",
+            "text": "Write the limitation of liability section",
+            "xp": 5
+          },
+          {
+            "id": "t268_3",
+            "type": "action",
+            "text": "Write the refund policy section",
+            "xp": 5
+          },
+          {
+            "id": "t268_4",
+            "type": "action",
+            "text": "Write the data disclaimer",
+            "xp": 5
           }
         ]
       },
@@ -5215,13 +6625,25 @@ var P=[
         ],
         "deps": [],
         "doneWhen": "privacy.html exists and is linked from landing page footer.",
-        "preview": "Email via Stripe, Google Analytics, no access to user data (localStorage)",
+        "preview": "State that email is collected via Stripe | State that analytics are collected via Google Analytics",
         "subs": [
           {
-            "id": "t269",
+            "id": "t269_1",
             "type": "action",
-            "text": "Email via Stripe, Google Analytics, no access to user data (localStorage)",
+            "text": "State that email is collected via Stripe",
             "xp": 8
+          },
+          {
+            "id": "t269_2",
+            "type": "action",
+            "text": "State that analytics are collected via Google Analytics",
+            "xp": 5
+          },
+          {
+            "id": "t269_3",
+            "type": "action",
+            "text": "State that you do not access user data stored in localStorage",
+            "xp": 5
           }
         ]
       },
