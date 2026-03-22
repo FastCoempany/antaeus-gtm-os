@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Antaeus — The operating system for founder-led sales</title>
+<title>Antaeus - The operating system for founder-led sales</title>
 <meta name="description" content="19 integrated modules. One shared engine. A Readiness Score that tells you when you're ready to hire your first sales person. $299/year.">
 <meta property="og:title" content="Antaeus GTM OS">
 <meta property="og:description" content="70% of first GTM hires fail. This is the system that fixes it.">
@@ -34,13 +34,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 .page{position:relative;z-index:1}
 
-/* ═══ SHARED ═══ */
+/* ===== SHARED ===== */
 .container{max-width:1100px;margin:0 auto;padding:0 32px}
 @media(max-width:700px){.container{padding:0 20px}}
 .reveal{opacity:0;transform:translateY(24px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}.reveal.show{opacity:1;transform:none}
 .reveal-d1{transition-delay:0.1s}.reveal-d2{transition-delay:0.2s}.reveal-d3{transition-delay:0.3s}.reveal-d4{transition-delay:0.4s}.reveal-d5{transition-delay:0.5s}
 
-/* ═══ NAV ═══ */
+/* ===== NAV ===== */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,8,13,0.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.04)}
 .nav-brand{font-family:var(--serif);font-size:1.15rem;color:var(--tx);text-decoration:none}.nav-brand em{font-style:normal;color:var(--accent)}
 .nav-actions{display:flex;align-items:center;gap:12px}
@@ -48,7 +48,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .nav-login:hover{border-color:var(--accent-line);color:var(--tx);background:rgba(255,255,255,0.03)}
 .nav-cta{font-family:var(--sans);font-size:0.78rem;font-weight:700;padding:9px 22px;border-radius:999px;background:var(--accent);color:#fff;border:none;cursor:pointer;text-decoration:none;transition:background 0.2s}.nav-cta:hover{background:#a86540}
 
-/* ═══ HERO ═══ */
+/* ===== HERO ===== */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 32px 80px;position:relative}
 .hero-inner{max-width:780px}
 .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.6rem);color:var(--tx);line-height:1.15;margin-bottom:20px;letter-spacing:-0.02em}
@@ -62,7 +62,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.6rem;color:var(--tx4);letter-spacing:0.1em;animation:bob 2s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 
-/* ═══ PROBLEM ═══ */
+/* ===== PROBLEM ===== */
 .problem{padding:120px 0;text-align:center}
 .problem-stat{font-family:var(--serif);font-size:clamp(2rem,4.5vw,3.2rem);color:var(--tx);line-height:1.2;max-width:800px;margin:0 auto 28px}
 .problem-stat em{font-style:normal;color:var(--accent)}
@@ -70,14 +70,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .problem-reveal{font-family:var(--serif);font-size:clamp(1rem,2vw,1.3rem);color:var(--tx);max-width:650px;margin:0 auto;line-height:1.5}
 .problem-reveal span{color:var(--accent)}
 
-/* ═══ REFRAME ═══ */
+/* ===== REFRAME ===== */
 .reframe{padding:100px 0;text-align:center}
 .reframe-q{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2.2rem);color:var(--tx);max-width:700px;margin:0 auto 36px;line-height:1.3}
 .reframe-frags{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:700px;margin:0 auto 32px}
 .reframe-frag{padding:8px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:10px;background:rgba(255,255,255,0.03);font-size:0.76rem;color:var(--tx2);font-weight:500;backdrop-filter:blur(8px)}
 .reframe-word{font-family:var(--serif);font-size:clamp(1.1rem,2.2vw,1.6rem);color:var(--accent);letter-spacing:0.02em}
 
-/* ═══ CALIBRATION ═══ */
+/* ===== CALIBRATION ===== */
 .calibration{padding:120px 0;text-align:center}
 .cal-not{font-family:var(--serif);font-size:clamp(1.8rem,4vw,3rem);color:var(--tx);margin-bottom:36px}
 .cal-cols{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;max-width:600px;margin:0 auto 48px}
@@ -88,7 +88,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .cal-is-label{font-family:var(--serif);font-size:clamp(1.1rem,2.2vw,1.5rem);color:var(--accent);margin-bottom:14px}
 .cal-is-text{font-size:0.95rem;color:var(--tx2);line-height:1.65}.cal-is-text strong{color:var(--tx);font-weight:600}
 
-/* ═══ MODULES ═══ */
+/* ===== MODULES ===== */
 .modules{padding:100px 0}
 .modules-header{text-align:center;margin-bottom:48px}
 .modules-header h2{font-family:var(--serif);font-size:clamp(1.4rem,2.5vw,2rem);color:var(--tx);margin-bottom:8px}
@@ -105,7 +105,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .mod-compound{text-align:center;margin-top:36px;padding:24px;border:1px solid var(--accent-line);border-radius:16px;background:var(--accent-dim)}
 .mod-compound p{font-family:var(--serif);font-size:1rem;color:var(--accent2);line-height:1.5}
 
-/* ═══ READINESS ═══ */
+/* ===== READINESS ===== */
 .readiness{padding:120px 0;text-align:center}
 .readiness h2{font-family:var(--serif);font-size:clamp(1.4rem,2.5vw,2rem);color:var(--tx);margin-bottom:12px}
 .readiness-sub{font-size:0.92rem;color:var(--tx2);max-width:600px;margin:0 auto 36px;line-height:1.6}
@@ -117,7 +117,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .readiness-outcome{font-family:var(--serif);font-size:1.05rem;color:var(--tx);max-width:600px;margin:0 auto;line-height:1.5}
 .readiness-outcome em{font-style:normal;color:var(--green)}
 
-/* ═══ SOCIAL PROOF ═══ */
+/* ===== SOCIAL PROOF ===== */
 .proof{padding:100px 0;overflow:hidden}
 .proof-header{text-align:center;margin-bottom:40px}
 .proof-header h2{font-family:var(--serif);font-size:clamp(1rem,2vw,1.4rem);color:var(--tx);margin-bottom:6px}
@@ -131,7 +131,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .marquee-sep{color:var(--tx4);font-size:0.6rem}
 .proof-stat{text-align:center;margin-top:32px;font-family:var(--mono);font-size:0.65rem;color:var(--tx3);letter-spacing:0.04em}
 
-/* ═══ PRICING ═══ */
+/* ===== PRICING ===== */
 .pricing{padding:120px 0;text-align:center}
 .pricing h2{font-family:var(--serif);font-size:clamp(1.4rem,2.5vw,2rem);color:var(--tx);margin-bottom:8px}
 .pricing-sub{font-size:0.88rem;color:var(--tx2);margin-bottom:48px}
@@ -142,11 +142,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .price-period{font-family:var(--mono);font-size:0.65rem;color:var(--tx3);margin-bottom:24px;letter-spacing:0.05em}
 .price-includes{list-style:none;margin-bottom:28px}
 .price-includes li{font-size:0.82rem;color:var(--tx2);padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;gap:8px}
-.price-includes li::before{content:'✓';color:var(--green);font-size:0.7rem;font-weight:700}
+.price-includes li::before{content:'+';color:var(--green);font-size:0.7rem;font-weight:700}
 .price-btn{display:block;width:100%;padding:16px;border-radius:12px;background:var(--accent);color:#fff;font-family:var(--sans);font-size:0.95rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;text-align:center;transition:all 0.2s;box-shadow:0 0 30px rgba(192,120,80,0.15)}.price-btn:hover{background:#a86540;box-shadow:0 0 50px rgba(192,120,80,0.25)}
 .price-no{text-align:center;max-width:500px;margin:0 auto;font-size:0.82rem;color:var(--tx3);line-height:1.6}
 
-/* ═══ FAQ ═══ */
+/* ===== FAQ ===== */
 .faq{padding:80px 0 120px}
 .faq h2{font-family:var(--serif);font-size:clamp(1.2rem,2vw,1.6rem);color:var(--tx);text-align:center;margin-bottom:40px}
 .faq-list{max-width:680px;margin:0 auto}
@@ -158,19 +158,19 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .faq-item.open .faq-a{max-height:200px}
 .faq-a-inner{padding-top:12px}
 
-/* ═══ FINAL CTA ═══ */
+/* ===== FINAL CTA ===== */
 .final{padding:100px 0;text-align:center;border-top:1px solid rgba(255,255,255,0.04)}
 .final h2{font-family:var(--serif);font-size:clamp(1.4rem,2.5vw,2rem);color:var(--tx);margin-bottom:12px}
 .final p{font-size:0.88rem;color:var(--tx2);max-width:500px;margin:0 auto 32px;line-height:1.6}
 
-/* ═══ FOOTER ═══ */
+/* ===== FOOTER ===== */
 .footer{padding:40px 0;border-top:1px solid rgba(255,255,255,0.04);text-align:center}
 .footer-brand{font-family:var(--serif);font-size:1rem;color:var(--tx);margin-bottom:6px}.footer-brand em{font-style:normal;color:var(--accent)}
 .footer-links{font-family:var(--mono);font-size:0.55rem;color:var(--tx4);display:flex;gap:16px;justify-content:center;margin-top:8px}
 .footer-links a{color:var(--tx4);text-decoration:none}.footer-links a:hover{color:var(--tx2)}
 .footer-copy{font-family:var(--mono);font-size:0.5rem;color:var(--tx4);margin-top:16px}
 
-/* ═══ DIVIDER ═══ */
+/* ===== DIVIDER ===== */
 .divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:0 auto}
 </style>
 <script>
@@ -218,7 +218,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   <div class="nav-actions">
     <a href="/demo-seed.html" class="nav-login">Explore Demo</a>
     <a href="/login.html" class="nav-login">Sign In</a>
-    <a href="#pricing" class="nav-cta">Get Started — $299/yr</a>
+    <a href="#pricing" class="nav-cta">Get Started - $299/yr</a>
   </div>
 </nav>
 
@@ -227,10 +227,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   <div class="hero-inner">
     <h1 class="reveal">The operating system for <em>founder-led sales.</em></h1>
     <p class="reveal reveal-d1">19 integrated modules. One shared computation engine. A Readiness Score that tells you exactly when you're ready to hire your first sales person.</p>
-    <a href="#pricing" class="hero-cta reveal reveal-d2">Start for $299/year →</a>
-    <div class="hero-sub reveal reveal-d3">$25/mo equivalent · No demo · No sales call · Fully self-serve</div>
+    <a href="#pricing" class="hero-cta reveal reveal-d2">Start for $299/year -&gt;</a>
+    <div class="hero-sub reveal reveal-d3">$25/mo equivalent | No demo | No sales call | Fully self-serve</div>
   </div>
-  <div class="hero-scroll">↓ scroll</div>
+  <div class="hero-scroll">v scroll</div>
 </section>
 
 <!-- PROBLEM -->
@@ -267,13 +267,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   <div class="container">
     <div class="cal-not reveal">This is not a CRM.</div>
     <div class="cal-cols">
-      <div class="cal-col reveal reveal-d1"><div class="cal-x">×</div><div class="cal-col-t">No contact database.</div></div>
-      <div class="cal-col reveal reveal-d2"><div class="cal-x">×</div><div class="cal-col-t">No email sending.</div></div>
-      <div class="cal-col reveal reveal-d3"><div class="cal-x">×</div><div class="cal-col-t">No calendar sync.</div></div>
+      <div class="cal-col reveal reveal-d1"><div class="cal-x">x</div><div class="cal-col-t">No contact database.</div></div>
+      <div class="cal-col reveal reveal-d2"><div class="cal-x">x</div><div class="cal-col-t">No email sending.</div></div>
+      <div class="cal-col reveal reveal-d3"><div class="cal-x">x</div><div class="cal-col-t">No calendar sync.</div></div>
     </div>
     <div class="cal-is reveal">
       <div class="cal-is-label">This is the intelligence layer.</div>
-      <div class="cal-is-text">The <strong>methodology layer</strong>. The <strong>knowledge capture layer</strong>. The layer that makes a $2M GTM hire <strong>investable</strong> instead of disposable. CRMs are mirrors — they reflect what happened. This is a lens — it tells you what to do next and captures why it worked.</div>
+      <div class="cal-is-text">The <strong>methodology layer</strong>. The <strong>knowledge capture layer</strong>. The layer that makes a $2M GTM hire <strong>investable</strong> instead of disposable. CRMs are mirrors - they reflect what happened. This is a lens - it tells you what to do next and captures why it worked.</div>
     </div>
   </div>
 </section>
@@ -342,7 +342,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     </div>
 
     <div class="mod-compound reveal">
-      <p>One field edit updates narratives, scores risk, refreshes the playbook, and recomputes readiness — automatically.</p>
+      <p>One field edit updates narratives, scores risk, refreshes the playbook, and recomputes readiness - automatically.</p>
     </div>
   </div>
 </section>
@@ -355,19 +355,19 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
     <div class="readiness-grid">
       <div class="r-card reveal reveal-d1">
-        <div class="r-card-val">0–100</div>
+        <div class="r-card-val">0-100</div>
         <div class="r-card-label">Module Readiness</div>
-        <div class="r-card-desc">44 criteria across 5 dimensions: ICP, Discovery, Outreach, Deals, and Playbook. Each dimension scores 0–20.</div>
+        <div class="r-card-desc">44 criteria across 5 dimensions: ICP, Discovery, Outreach, Deals, and Playbook. Each dimension scores 0-20.</div>
       </div>
       <div class="r-card reveal reveal-d2">
-        <div class="r-card-val">0–100</div>
+        <div class="r-card-val">0-100</div>
         <div class="r-card-label">Hire Readiness</div>
         <div class="r-card-desc">15 criteria a VC would check: referenceable logos, documented loss patterns, pipeline coverage, win rate data, stakeholder threading.</div>
       </div>
       <div class="r-card reveal reveal-d3">
         <div class="r-card-val">80+</div>
         <div class="r-card-label">Ready to Hand Off</div>
-        <div class="r-card-desc">The playbook is documented. The pipeline is real. The process is repeatable. You export the Handoff Kit — the new hire reads it on day one.</div>
+        <div class="r-card-desc">The playbook is documented. The pipeline is real. The process is repeatable. You export the Handoff Kit - the new hire reads it on day one.</div>
       </div>
     </div>
 
@@ -385,56 +385,56 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   </div>
 
   <div class="marquee">
-    <div class="marquee-item"><span class="marquee-name">Harvey</span><span class="marquee-val">$8B</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Pendo</span><span class="marquee-val">$2.6B</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Job&Talent</span><span class="marquee-val">$2.35B</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">OpenGov</span><span class="marquee-val">$1.8B acq.</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Scribe</span><span class="marquee-val">$1.3B</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Superhuman</span><span class="marquee-val">acq. by Grammarly</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">CADDi</span><span class="marquee-val">$470M</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Filevine</span><span class="marquee-val">$400M raised</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Aisera</span><span class="marquee-val">acq. by Automation Anywhere</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">k-ID</span><span class="marquee-val">$51M · a16z</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Lorikeet</span><span class="marquee-val">$51M raised</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Craft</span><span class="marquee-val">$42M raised</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Smokeball</span><span class="marquee-val">$30M</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Rally UXR</span><span class="marquee-val">$20M raised</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Parable</span><span class="marquee-val">$16.5M seed</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Shapr3D</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Sybill</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">HeyMilo</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Clearbrief</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Moonhub</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">harpin AI</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Newscatcher</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Duckie</span></div><span class="marquee-sep">·</span>
+    <div class="marquee-item"><span class="marquee-name">Harvey</span><span class="marquee-val">$8B</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Pendo</span><span class="marquee-val">$2.6B</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Job&Talent</span><span class="marquee-val">$2.35B</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">OpenGov</span><span class="marquee-val">$1.8B acq.</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Scribe</span><span class="marquee-val">$1.3B</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Superhuman</span><span class="marquee-val">acq. by Grammarly</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">CADDi</span><span class="marquee-val">$470M</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Filevine</span><span class="marquee-val">$400M raised</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Aisera</span><span class="marquee-val">acq. by Automation Anywhere</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">k-ID</span><span class="marquee-val">$51M | a16z</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Lorikeet</span><span class="marquee-val">$51M raised</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Craft</span><span class="marquee-val">$42M raised</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Smokeball</span><span class="marquee-val">$30M</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Rally UXR</span><span class="marquee-val">$20M raised</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Parable</span><span class="marquee-val">$16.5M seed</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Shapr3D</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Sybill</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">HeyMilo</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Clearbrief</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Moonhub</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">harpin AI</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Newscatcher</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Duckie</span></div><span class="marquee-sep">|</span>
     <!-- duplicate for seamless loop -->
-    <div class="marquee-item"><span class="marquee-name">Harvey</span><span class="marquee-val">$8B</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Pendo</span><span class="marquee-val">$2.6B</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Job&Talent</span><span class="marquee-val">$2.35B</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">OpenGov</span><span class="marquee-val">$1.8B acq.</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Scribe</span><span class="marquee-val">$1.3B</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Superhuman</span><span class="marquee-val">acq. by Grammarly</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">CADDi</span><span class="marquee-val">$470M</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Filevine</span><span class="marquee-val">$400M raised</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Aisera</span><span class="marquee-val">acq. by Automation Anywhere</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">k-ID</span><span class="marquee-val">$51M · a16z</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Lorikeet</span><span class="marquee-val">$51M raised</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Craft</span><span class="marquee-val">$42M raised</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Smokeball</span><span class="marquee-val">$30M</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Rally UXR</span><span class="marquee-val">$20M raised</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Parable</span><span class="marquee-val">$16.5M seed</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Shapr3D</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Sybill</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">HeyMilo</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Clearbrief</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Moonhub</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">harpin AI</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Newscatcher</span></div><span class="marquee-sep">·</span>
-    <div class="marquee-item"><span class="marquee-name">Duckie</span></div><span class="marquee-sep">·</span>
+    <div class="marquee-item"><span class="marquee-name">Harvey</span><span class="marquee-val">$8B</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Pendo</span><span class="marquee-val">$2.6B</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Job&Talent</span><span class="marquee-val">$2.35B</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">OpenGov</span><span class="marquee-val">$1.8B acq.</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Scribe</span><span class="marquee-val">$1.3B</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Superhuman</span><span class="marquee-val">acq. by Grammarly</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">CADDi</span><span class="marquee-val">$470M</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Filevine</span><span class="marquee-val">$400M raised</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Aisera</span><span class="marquee-val">acq. by Automation Anywhere</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">k-ID</span><span class="marquee-val">$51M | a16z</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Lorikeet</span><span class="marquee-val">$51M raised</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Craft</span><span class="marquee-val">$42M raised</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Smokeball</span><span class="marquee-val">$30M</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Rally UXR</span><span class="marquee-val">$20M raised</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Parable</span><span class="marquee-val">$16.5M seed</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Shapr3D</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Sybill</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">HeyMilo</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Clearbrief</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Moonhub</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">harpin AI</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Newscatcher</span></div><span class="marquee-sep">|</span>
+    <div class="marquee-item"><span class="marquee-name">Duckie</span></div><span class="marquee-sep">|</span>
   </div>
 
-  <div class="proof-stat reveal">Seed to Series E · Legal AI · SaaS · HealthTech · Fintech · Staffing · Manufacturing · DevTools</div>
+  <div class="proof-stat reveal">Seed to Series E | Legal AI | SaaS | HealthTech | Fintech | Staffing | Manufacturing | DevTools</div>
 </section>
 
 <!-- PRICING -->
@@ -446,18 +446,18 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div class="price-card reveal reveal-d2">
       <div class="price-name">Antaeus GTM OS</div>
       <div class="price-amount">$299</div>
-      <div class="price-period">per year · $25/month equivalent</div>
+      <div class="price-period">per year | $25/month equivalent</div>
       <ul class="price-includes">
         <li>Full access to all 19 modules</li>
-        <li>App Academy — guided 5-level progression to 80+ readiness</li>
-        <li>Module Reference Manual — every field, every flow</li>
-        <li>Readiness Score — 44 scored criteria across 5 dimensions</li>
+        <li>App Academy - guided 5-level progression to 80+ readiness</li>
+        <li>Module Reference Manual - every field, every flow</li>
+        <li>Readiness Score - 44 scored criteria across 5 dimensions</li>
         <li>Auto-assembled Playbook + Handoff Kit export</li>
         <li>Signal Console with AI-powered account enrichment</li>
-        <li>Future Autopsy — 45-day deal death simulation</li>
-        <li>Advisory Stakeholder Framework — 10 deployment moments</li>
+        <li>Future Autopsy - 45-day deal death simulation</li>
+        <li>Advisory Stakeholder Framework - 10 deployment moments</li>
       </ul>
-      <a href="#buy" class="price-btn" id="buyBtn">Start Now →</a>
+      <a href="#buy" class="price-btn" id="buyBtn">Start Now -&gt;</a>
     </div>
 
     <div class="price-no reveal">No demo required. No sales call. No free trial.<br>The Academy walks you through everything. The Readiness Score tells you when you're done.</div>
@@ -472,7 +472,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
       <div class="faq-item reveal">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is this a CRM?</div>
-        <div class="faq-a"><div class="faq-a-inner">No. It's the intelligence and methodology layer that sits above your CRM. It captures what the CRM can't: your sales knowledge, your process, your loss patterns, your discovery frameworks. It tells you what to do — the CRM records that you did it.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">No. It's the intelligence and methodology layer that sits above your CRM. It captures what the CRM can't: your sales knowledge, your process, your loss patterns, your discovery frameworks. It tells you what to do - the CRM records that you did it.</div></div>
       </div>
 
       <div class="faq-item reveal">
@@ -482,7 +482,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
       <div class="faq-item reveal">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">I already hired my first AE. Is it too late?</div>
-        <div class="faq-a"><div class="faq-a-inner">No. Give them the app. The Academy works for new hires too — the Readiness Score reframes from "are you ready to hire" to "how systematized is your GTM motion." It's the playbook they wish existed on day one.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">No. Give them the app. The Academy works for new hires too - the Readiness Score reframes from "are you ready to hire" to "how systematized is your GTM motion." It's the playbook they wish existed on day one.</div></div>
       </div>
 
       <div class="faq-item reveal">
@@ -492,12 +492,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
       <div class="faq-item reveal">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens after I pay?</div>
-        <div class="faq-a"><div class="faq-a-inner">Immediate access to the full app, the Academy guide, and the Reference Manual. You start at Readiness Score 0. The Academy walks you through 5 levels — from setting your ICP to exporting the Handoff Kit. Most founders reach Level 1 (score 25+) in the first 30 minutes.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Immediate access to the full app, the Academy guide, and the Reference Manual. You start at Readiness Score 0. The Academy walks you through 5 levels - from setting your ICP to exporting the Handoff Kit. Most founders reach Level 1 (score 25+) in the first 30 minutes.</div></div>
       </div>
 
       <div class="faq-item reveal">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">I'm a fractional CRO / advisor. Can I use this with clients?</div>
-        <div class="faq-a"><div class="faq-a-inner">Yes. One purchase per client engagement. The Readiness Score becomes your diagnostic tool. The Handoff Kit is your deliverable. The system makes you look like you have a proprietary methodology — because now you do.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Yes. One purchase per client engagement. The Readiness Score becomes your diagnostic tool. The Handoff Kit is your deliverable. The system makes you look like you have a proprietary methodology - because now you do.</div></div>
       </div>
 
     </div>
@@ -509,7 +509,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   <div class="container">
     <h2 class="reveal">The system builds itself as you sell.</h2>
     <p class="reveal reveal-d1">Every module's output is another module's input. The Playbook writes itself. The only thing you do is sell.</p>
-    <a href="#pricing" class="hero-cta reveal reveal-d2">Start for $299/year →</a>
+    <a href="#pricing" class="hero-cta reveal reveal-d2">Start for $299/year -&gt;</a>
   </div>
 </section>
 
@@ -525,7 +525,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       <a href="/privacy.html">Privacy</a>
       <a href="mailto:hello@antaeus.app">Contact</a>
     </div>
-    <div class="footer-copy">© 2026 Antaeus. All rights reserved.</div>
+    <div class="footer-copy">Copyright 2026 Antaeus. All rights reserved.</div>
   </div>
 </footer>
 
@@ -559,3 +559,4 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 </script>
 </body>
 </html>
+

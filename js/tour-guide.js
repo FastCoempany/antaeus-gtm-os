@@ -1,6 +1,6 @@
 /**
- * Tour Guide System — Antaeus GTM OS v27 Phase 1
- * Updated for consolidated module navigation
+ * Tour Guide System - Antaeus GTM OS v27 Phase 1
+ * Updated for consolidated module navigation.
  */
 
 const TourGuide = {
@@ -15,19 +15,19 @@ const TourGuide = {
         {
             target: '[data-nav="dashboard"]',
             title: 'Command Center',
-            text: 'Start every session here. Pipeline health, win/loss patterns, and whether you\'re on track to hit your number.',
+            text: 'Start every session here. Pipeline health, win/loss patterns, and whether you are on track to hit your number.',
             position: 'right'
         },
         {
             target: '[data-nav="readiness"]',
             title: 'Readiness Score',
-            text: 'The question you\'re building toward: is your GTM foundationally sound? This score tracks your progress across every module.',
+            text: 'The question you are building toward: is your GTM foundationally sound? This score tracks your progress across every module.',
             position: 'right'
         },
         {
             target: '[data-nav="icp-studio"]',
             title: 'ICP Studio',
-            text: 'Define who you sell to. Build ICPs, browse your saved profiles, and track what\'s converting. Every outbound angle starts here.',
+            text: 'Define who you sell to. Build ICPs, browse your saved profiles, and track what is converting. Every outbound angle starts here.',
             position: 'right'
         },
         {
@@ -44,20 +44,20 @@ const TourGuide = {
         },
         {
             target: '[data-nav="discovery-agenda"]',
-            title: 'Call Planner → Discovery Frameworks',
+            title: 'Call Planner -> Discovery Frameworks',
             text: 'Two modes: plan the call beforehand with the Call Planner, then hit Start Call to run it live with guided discovery.',
             position: 'right'
         },
         {
             target: '[data-nav="deal-workspace"]',
             title: 'Deal Workspace',
-            text: 'Your deals, qualification reviews, and account plans — all in one place. Score deals, map stakeholders, and capture outcomes.',
+            text: 'Your deals, qualification reviews, and account plans - all in one place. Score deals, map stakeholders, and capture outcomes.',
             position: 'right'
         },
         {
             target: '[data-nav="discovery-studio"]',
             title: 'CFO Negotiation',
-            text: 'When you\'re in the room with finance. Tested scripts for every procurement objection territory.',
+            text: 'When you are in the room with finance. Tested scripts for every procurement objection territory.',
             position: 'right'
         },
         {
@@ -68,12 +68,12 @@ const TourGuide = {
         },
         {
             target: '.user-menu',
-            title: 'You\'re Set',
+            title: 'You are set',
             text: 'Click the tour button anytime to see this again. Start at the Command Center and work your way down.',
             position: 'top'
         }
     ],
-    
+
     currentStep: 0,
     isActive: false,
 
@@ -91,7 +91,7 @@ const TourGuide = {
         }
         localStorage.setItem('gtmos_tour_completed', 'true');
     },
-    
+
     init() {
         if (this.consumeAutoLaunch()) {
             setTimeout(() => this.start(), 900);
@@ -132,12 +132,12 @@ const TourGuide = {
         const returnUrl = '/app/dashboard/?demo=1&tour=1';
         window.location.href = '/demo-seed.html?autoseed=mm&tour=1&return=' + encodeURIComponent(returnUrl);
     },
-    
+
     addTourButton() {
         const footer = document.querySelector('.sidebar-footer');
         if (!footer) return;
         if (footer.querySelector('.nav-tour-btn, .nav-tour-glow, [data-tour-button]')) return;
-        
+
         const btn = document.createElement('button');
         btn.className = 'btn btn-ghost btn-sm btn-block mt-sm';
         btn.setAttribute('data-tour-button', 'true');
@@ -145,7 +145,7 @@ const TourGuide = {
         btn.onclick = () => this.launch();
         footer.appendChild(btn);
     },
-    
+
     start() {
         this.currentStep = 0;
         this.isActive = true;
@@ -153,40 +153,40 @@ const TourGuide = {
         this.showStep();
         if (window.gtmAnalytics) gtmAnalytics.track('tour_started');
     },
-    
+
     createOverlay() {
         document.querySelectorAll('.tour-overlay, .tour-tooltip').forEach(el => el.remove());
-        
+
         const overlay = document.createElement('div');
         overlay.className = 'tour-overlay active';
         overlay.onclick = (e) => {
             if (e.target === overlay) this.end();
         };
         document.body.appendChild(overlay);
-        
+
         const tooltip = document.createElement('div');
         tooltip.className = 'tour-tooltip';
         tooltip.id = 'tourTooltip';
         document.body.appendChild(tooltip);
     },
-    
+
     showStep() {
         const step = this.steps[this.currentStep];
         if (!step) {
             this.end();
             return;
         }
-        
+
         const target = document.querySelector(step.target);
         const tooltip = document.getElementById('tourTooltip');
-        
+
         document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
-        
+
         if (target) {
             target.classList.add('tour-highlight');
             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-        
+
         tooltip.innerHTML = `
             <div class="tour-tooltip-title">${step.title}</div>
             <div class="tour-tooltip-text">${step.text}</div>
@@ -198,12 +198,13 @@ const TourGuide = {
                 </div>
             </div>
         `;
-        
+
         if (target) {
             const rect = target.getBoundingClientRect();
-            let top, left;
-            
-            switch(step.position) {
+            let top;
+            let left;
+
+            switch (step.position) {
                 case 'right':
                     top = rect.top + window.scrollY;
                     left = rect.right + 20;
@@ -220,10 +221,10 @@ const TourGuide = {
                     top = rect.top + window.scrollY;
                     left = rect.right + 20;
             }
-            
+
             if (left + 360 > window.innerWidth) left = window.innerWidth - 380;
             if (left < 280) left = 280;
-            
+
             tooltip.style.top = Math.max(20, top) + 'px';
             tooltip.style.left = left + 'px';
             tooltip.style.transform = '';
@@ -232,10 +233,10 @@ const TourGuide = {
             tooltip.style.left = '50%';
             tooltip.style.transform = 'translate(-50%, -50%)';
         }
-        
+
         tooltip.classList.add('active');
     },
-    
+
     next() {
         this.currentStep++;
         if (this.currentStep >= this.steps.length) {
@@ -244,12 +245,12 @@ const TourGuide = {
             this.showStep();
         }
     },
-    
+
     end() {
         this.isActive = false;
         this.markSeen();
         if (window.gtmAnalytics) gtmAnalytics.track('tour_completed', { steps_seen: this.currentStep + 1 });
-        
+
         document.querySelectorAll('.tour-overlay, .tour-tooltip').forEach(el => el.remove());
         document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
     }

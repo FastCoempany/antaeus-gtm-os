@@ -72,9 +72,9 @@ Recommended rule:
 ### B. Trust Blockers
 | ID | Finding | Why It Matters | Proof | Owner | Target Phase | Priority | Status |
 |---|---|---|---|---|---|---|---|
-| EB-T01 | Terms page is not publish-ready. | Cold buyers cannot trust the product if legal identity and usage rights look broken. | [terms.html](c:/AppDev/v1AntaeusApp/Appv2_290126/terms.html) still contains placeholders, malformed HTML, and draft artifacts. | Trust, Policy & Workspace Ops | Phase 9 | P0 | open |
-| EB-T02 | Privacy page is not publish-ready. | Privacy is a direct trust and procurement issue. | [privacy.html](c:/AppDev/v1AntaeusApp/Appv2_290126/privacy.html) still contains placeholders, malformed HTML, and draft artifacts. | Trust, Policy & Workspace Ops | Phase 9 | P0 | open |
-| EB-T03 | Public-facing mojibake / encoding regressions still exist. | Encoding defects make the product feel careless and unsafe. | Audit called out visible mojibake in [index.html](c:/AppDev/v1AntaeusApp/Appv2_290126/index.html), [terms.html](c:/AppDev/v1AntaeusApp/Appv2_290126/terms.html), [privacy.html](c:/AppDev/v1AntaeusApp/Appv2_290126/privacy.html), [js/tour-guide.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/tour-guide.js), [js/guided-rail.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/guided-rail.js), and [app/poc-framework/index.html](c:/AppDev/v1AntaeusApp/Appv2_290126/app/poc-framework/index.html). | Trust, Policy & Workspace Ops | Phase 13 | P1 | open |
+| EB-T01 | Terms page was not publish-ready. | Cold buyers cannot trust the product if legal identity and usage rights look broken. | Phase 9 rewrote [terms.html](c:/AppDev/v1AntaeusApp/Appv2_290126/terms.html) into a publishable version with real product/storage/commercial truth. | Trust, Policy & Workspace Ops | Phase 9 | P0 | validated |
+| EB-T02 | Privacy page was not publish-ready. | Privacy is a direct trust and procurement issue. | Phase 9 rewrote [privacy.html](c:/AppDev/v1AntaeusApp/Appv2_290126/privacy.html) into a publishable version with accurate data-flow/provider truth. | Trust, Policy & Workspace Ops | Phase 9 | P0 | validated |
+| EB-T03 | Public-facing mojibake / encoding regressions existed across public and core app surfaces. | Encoding defects make the product feel careless and unsafe. | Phase 13 normalized [index.html](c:/AppDev/v1AntaeusApp/Appv2_290126/index.html), [js/tour-guide.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/tour-guide.js), [js/guided-rail.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/guided-rail.js), [app/poc-framework/index.html](c:/AppDev/v1AntaeusApp/Appv2_290126/app/poc-framework/index.html), and [methodology/sales-champion-framework.html](c:/AppDev/v1AntaeusApp/Appv2_290126/methodology/sales-champion-framework.html). Targeted mojibake scan now returns no matches on public/core app surfaces. | Trust, Policy & Workspace Ops | Phase 13 | P1 | validated |
 | EB-T04 | Billing/support/refund truth is still not legible to a stranger. | Even with checkout fixed, users need to know what happens after payment. | Audit explicitly called out trust/legal/billing truth as weak. | Growth Site & Conversion | Phase 7 | P1 | open |
 
 ### C. Reliability / Bug Findings
@@ -156,4 +156,3 @@ After Phase 4:
 - no major issue has to live only in memory
 - no major issue has to live only in chat
 - every major problem now points to an owner and a downstream program phase
-

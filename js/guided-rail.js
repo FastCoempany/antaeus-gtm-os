@@ -1,16 +1,16 @@
 /**
- * GTMOS Guided Rail System — v27 Phase 2
- * 
+ * GTMOS Guided Rail System - v27 Phase 2
+ *
  * Updated module paths for consolidation:
- *   /app/icp-builder/ → /app/icp-studio/
- *   /app/signal-play-studio/ → /app/outbound-studio/
- *   /app/deal-workspaces/ → /app/deal-workspace/
- *   /app/deal-review/ → /app/deal-workspace/ (qualification tab)
- * 
+ *   /app/icp-builder/ -> /app/icp-studio/
+ *   /app/signal-play-studio/ -> /app/outbound-studio/
+ *   /app/deal-workspaces/ -> /app/deal-workspace/
+ *   /app/deal-review/ -> /app/deal-workspace/ (qualification tab)
+ *
  * Phase 2: Persona-specific guided rail paths.
- *   Founder:  ICP → Quota → Outbound → Playbook → Handoff
- *   CRO:     Founding GTM → Readiness → ICP → Deal Workspace
- *   First AE: ICP → Outbound → Call Planner → Discovery → Deal Workspace
+ *   Founder:  ICP -> Quota -> Outbound -> Playbook -> Handoff
+ *   CRO:      Founding GTM -> Readiness -> ICP -> Deal Workspace
+ *   First AE: ICP -> Outbound -> Call Planner -> Discovery -> Deal Workspace
  */
 
 (function() {
@@ -18,12 +18,14 @@
 
     var THRESHOLD = 80;
     var DISMISS_KEY = 'gtmos_rail_dismissed';
+
     function isDismissed() {
         if (window.gtmLocalState && typeof window.gtmLocalState.getSession === 'function') {
             return window.gtmLocalState.getSession(DISMISS_KEY, null, { scope: 'user' }) === '1';
         }
         return sessionStorage.getItem(DISMISS_KEY) === '1';
     }
+
     function setDismissed() {
         if (window.gtmLocalState && typeof window.gtmLocalState.setSession === 'function') {
             window.gtmLocalState.setSession(DISMISS_KEY, '1', { scope: 'user' });
@@ -34,7 +36,7 @@
 
     function readLS(key, fallback) {
         try { return JSON.parse(localStorage.getItem(key)) || fallback; }
-        catch(e) { return fallback; }
+        catch (e) { return fallback; }
     }
 
     var workspaceSummary = null;
@@ -102,15 +104,12 @@
         }).length;
     }
 
-    // ── Persona Detection ──────────────────────────────────────────
     function getPersona() {
         var ob = currentWorkspaceSummary().onboarding || readLS('gtmos_onboarding', null);
         return (ob && ob.persona) ? ob.persona : 'founder';
     }
 
-    // ── Persona Priority Maps ──────────────────────────────────────
-    // Lower number = higher priority. Gaps matching higher-priority
-    // categories surface first in the "Next →" rail.
+    // Lower number means higher priority.
     var PERSONA_PRIORITIES = {
         'founder': {
             'icp-first': 1, 'icp-more': 2,
@@ -144,15 +143,12 @@
         }
     };
 
-    // ── Persona-specific "first step" labels ───────────────────────
-    // Shown as the guided rail intro text on the very first gap.
     var PERSONA_RAIL_INTRO = {
         'founder': 'Build the system',
         'cro': 'Audit the foundation',
         'first-ae': 'Build your daily workflow'
     };
 
-    // ── Gap Analysis ────────────────────────────────────────────────
     function findGaps() {
         var workspace = currentWorkspaceSummary();
         var gaps = [];
@@ -163,13 +159,10 @@
         var discoStats = (workspace.discovery && workspace.discovery.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0, advancedCalls: 0 });
         var seed = workspace.outboundSeed || readLS('gtmos_outbound_seed', {});
         var angles = (workspace.sequences && workspace.sequences.angles) || readLS('gtmos_angles', []);
-        var reviews = readLS('gtmos_deal_reviews', []);
         var quals = (typeof gtmStore !== 'undefined' && gtmStore.quals) ? gtmStore.quals.getAll() : {};
         var outcomes = (typeof gtmStore !== 'undefined' && gtmStore.outcomes) ? gtmStore.outcomes.count() : { total: 0, wins: 0, losses: 0 };
 
-        // ICP gaps
         var icpCount = (thinIcp.icps || []).length;
-        // If only onboarding stub exists, treat as needing refinement
         var hasOnlyStub = icpCount === 1 && thinIcp.icps[0] && thinIcp.icps[0].source === 'onboarding';
         if (icpCount === 0 || hasOnlyStub) {
             var icpAction = hasOnlyStub
@@ -177,10 +170,9 @@
                 : 'Build your first ideal customer profile';
             gaps.push({ id: 'icp-first', label: 'Define your first ICP', action: icpAction, link: '/app/icp-studio/', potentialPoints: 8 });
         } else if (icpCount < 3) {
-            gaps.push({ id: 'icp-more', label: 'Add more ICPs', action: 'You have ' + icpCount + ' ICP — add ' + (3 - icpCount) + ' more for +3 pts', link: '/app/icp-studio/', potentialPoints: 3 });
+            gaps.push({ id: 'icp-more', label: 'Add more ICPs', action: 'You have ' + icpCount + ' ICP - add ' + (3 - icpCount) + ' more for +3 pts', link: '/app/icp-studio/', potentialPoints: 3 });
         }
 
-        // Playbook gaps
         if (!playbook.company || !playbook.acv) {
             gaps.push({ id: 'playbook-basics', label: 'Set company basics', action: 'Add your company name and ACV to the GTM Playbook', link: '/app/founding-gtm/', potentialPoints: 4 });
         }
@@ -190,38 +182,32 @@
             gaps.push({ id: 'playbook-fields', label: 'Fill playbook fields', action: 'Fill ' + Math.max(0, 6 - pbFieldCount) + ' more playbook fields for +' + (pbFieldCount < 3 ? 7 : 3) + ' pts', link: '/app/founding-gtm/', potentialPoints: pbFieldCount < 3 ? 7 : 3 });
         }
 
-        // Quota gap
         if (!seed.annual_quota) {
-            gaps.push({ id: 'quota', label: 'Set quota targets', action: 'Enter your quota in Quota Workback — unlocks outbound planning', link: '/app/quota-workback/', potentialPoints: 4 });
+            gaps.push({ id: 'quota', label: 'Set quota targets', action: 'Enter your quota in Quota Workback - unlocks outbound planning', link: '/app/quota-workback/', potentialPoints: 4 });
         }
 
-        // Discovery gaps
         if (discoStats.totalCalls === 0) {
             gaps.push({ id: 'disco-first', label: 'Log a discovery call', action: 'Run your first tracked discovery session', link: '/app/discovery-studio/', potentialPoints: 5 });
         } else if (discoStats.totalCalls < 5) {
-            gaps.push({ id: 'disco-more', label: 'Run more discovery', action: discoStats.totalCalls + ' calls logged — hit 5 for +3 pts', link: '/app/discovery-studio/', potentialPoints: 3 });
+            gaps.push({ id: 'disco-more', label: 'Run more discovery', action: discoStats.totalCalls + ' calls logged - hit 5 for +3 pts', link: '/app/discovery-studio/', potentialPoints: 3 });
         }
 
-        // Agenda gates
         var gatesChecked = (agenda.gates || []).filter(function(g) { return g; }).length;
         if (gatesChecked < 2 && agenda.contact) {
             gaps.push({ id: 'gates', label: 'Confirm qualification gates', action: 'Check 2+ gates in your Call Planner for +3 pts', link: '/app/discovery-agenda/', potentialPoints: 3 });
         }
 
-        // Outbound angles
         if (angles.length === 0) {
             gaps.push({ id: 'angles-first', label: 'Create outreach angles', action: 'Build your first signal-based outreach angle', link: '/app/outbound-studio/', potentialPoints: 5 });
         } else if (angles.length < 5) {
-            gaps.push({ id: 'angles-more', label: 'Add outreach angles', action: angles.length + ' angles built — hit 5 for +2 pts', link: '/app/outbound-studio/', potentialPoints: 2 });
+            gaps.push({ id: 'angles-more', label: 'Add outreach angles', action: angles.length + ' angles built - hit 5 for +2 pts', link: '/app/outbound-studio/', potentialPoints: 2 });
         }
 
-        // Deal review / qualification
         var qualCount = Object.keys(quals).length;
         if (qualCount === 0) {
             gaps.push({ id: 'qual-first', label: 'Score a deal', action: 'Qualify your first deal in Deal Workspace for +5 pts', link: '/app/deal-workspace/', potentialPoints: 5 });
         }
 
-        // Stale deals
         var stale10 = countStaleDeals(10);
         if (stale10 > 0) {
             var staleVerb = stale10 === 1 ? 'hasn\'t' : 'haven\'t';
@@ -234,7 +220,6 @@
             });
         }
 
-        // Win/Loss capture
         if (outcomes.total === 0) {
             gaps.push({ id: 'outcome-first', label: 'Close a deal', action: 'Record your first win or loss in Deal Workspace', link: '/app/deal-workspace/', potentialPoints: 4 });
         } else if (!(outcomes.wins > 0 && outcomes.losses > 0)) {
@@ -242,27 +227,23 @@
             gaps.push({ id: 'outcome-both', label: 'Record a ' + need, action: 'Having both wins and losses reveals patterns (+2 pts)', link: '/app/deal-workspace/', potentialPoints: 2 });
         }
 
-        // ── Persona-aware sort ──────────────────────────────────────
         var persona = getPersona();
-        var priorities = PERSONA_PRIORITIES[persona] || PERSONA_PRIORITIES['founder'];
+        var priorities = PERSONA_PRIORITIES[persona] || PERSONA_PRIORITIES.founder;
 
         gaps.sort(function(a, b) {
             var pa = priorities[a.id] !== undefined ? priorities[a.id] : 99;
             var pb = priorities[b.id] !== undefined ? priorities[b.id] : 99;
-            // Primary: persona priority (lower = first)
             if (pa !== pb) return pa - pb;
-            // Tiebreak: potential points (higher = first)
             return b.potentialPoints - a.potentialPoints;
         });
 
         return gaps;
     }
 
-    // ── Render Banner ───────────────────────────────────────────────
     async function render() {
         await loadWorkspaceSummary();
         if (isDismissed()) return;
-        
+
         var path = window.location.pathname;
         if (path.indexOf('/login') >= 0) return;
 
@@ -274,14 +255,14 @@
             var playbook = workspace.playbook || readLS('gtmos_playbook', {});
             var thinIcp = workspace.icpAnalytics || readLS('gtmos_icp_analytics', { icps: [] });
             var disco = (workspace.discovery && workspace.discovery.stats) || readLS('gtmos_discovery_stats', { totalCalls: 0 });
-            var angles = (workspace.sequences && workspace.sequences.angles) || readLS('gtmos_angles', []);
-            var quals = (typeof gtmStore !== 'undefined' && gtmStore.quals) ? gtmStore.quals.getAll() : {};
+            var anglesNow = (workspace.sequences && workspace.sequences.angles) || readLS('gtmos_angles', []);
+            var qualsNow = (typeof gtmStore !== 'undefined' && gtmStore.quals) ? gtmStore.quals.getAll() : {};
             total = Math.min(100,
                 (thinIcp.icps.length > 0 ? 10 : 0) +
                 (playbook.company ? 8 : 0) +
                 (disco.totalCalls > 0 ? 10 : 0) +
-                (angles.length > 0 ? 8 : 0) +
-                (Object.keys(quals).length > 0 ? 8 : 0)
+                (anglesNow.length > 0 ? 8 : 0) +
+                (Object.keys(qualsNow).length > 0 ? 8 : 0)
             );
         }
 
@@ -314,19 +295,18 @@
         progressHtml += '</div>';
 
         var actionHtml = '<div style="flex:1;color:var(--text-primary,#e2e8f0);">';
-        actionHtml += '<div style="font-size:0.65rem;color:var(--brand-gold,#d4a574);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;margin-bottom:2px;">✦ ' + pathLabel + '</div>';
-        actionHtml += '<div style="font-size:0.88rem;"><span style="font-weight:800;color:#e2e8f0;">Next → </span><span style="color:var(--text-secondary,#cbd5e1);">' + topGap.action + '</span></div>';
+        actionHtml += '<div style="font-size:0.65rem;color:var(--brand-gold,#d4a574);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;margin-bottom:2px;">Path: ' + pathLabel + '</div>';
+        actionHtml += '<div style="font-size:0.88rem;"><span style="font-weight:800;color:#e2e8f0;">Next -> </span><span style="color:var(--text-secondary,#cbd5e1);">' + topGap.action + '</span></div>';
         actionHtml += '</div>';
 
-        var ctaHtml = '<a href="' + topGap.link + '" style="padding:8px 18px;background:linear-gradient(135deg,rgba(212,165,116,0.2),rgba(168,85,247,0.12));border:1px solid rgba(212,165,116,0.4);border-radius:10px;color:var(--brand-gold,#d4a574);font-weight:800;font-size:0.8rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,165,116,0.15);" onmouseenter="this.style.background=\'linear-gradient(135deg,rgba(212,165,116,0.35),rgba(168,85,247,0.2))\';this.style.transform=\'translateY(-1px)\'" onmouseleave="this.style.background=\'linear-gradient(135deg,rgba(212,165,116,0.2),rgba(168,85,247,0.12))\';this.style.transform=\'none\'">Go →</a>';
-        var dismissHtml = '<button onclick="document.getElementById(\'guidedRail\').remove();if(window.gtmGuidedRail&&typeof window.gtmGuidedRail.dismiss===\'function\'){window.gtmGuidedRail.dismiss();}" style="background:none;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:1.1rem;padding:4px 8px;line-height:1;opacity:0.5;transition:opacity 0.2s;" onmouseenter="this.style.opacity=\'1\'" onmouseleave="this.style.opacity=\'0.5\'" title="Dismiss">×</button>';
+        var ctaHtml = '<a href="' + topGap.link + '" style="padding:8px 18px;background:linear-gradient(135deg,rgba(212,165,116,0.2),rgba(168,85,247,0.12));border:1px solid rgba(212,165,116,0.4);border-radius:10px;color:var(--brand-gold,#d4a574);font-weight:800;font-size:0.8rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,165,116,0.15);" onmouseenter="this.style.background=\'linear-gradient(135deg,rgba(212,165,116,0.35),rgba(168,85,247,0.2))\';this.style.transform=\'translateY(-1px)\'" onmouseleave="this.style.background=\'linear-gradient(135deg,rgba(212,165,116,0.2),rgba(168,85,247,0.12))\';this.style.transform=\'none\'">Go -></a>';
+        var dismissHtml = '<button onclick="document.getElementById(\'guidedRail\').remove();if(window.gtmGuidedRail&&typeof window.gtmGuidedRail.dismiss===\'function\'){window.gtmGuidedRail.dismiss();}" style="background:none;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:1.1rem;padding:4px 8px;line-height:1;opacity:0.5;transition:opacity 0.2s;" onmouseenter="this.style.opacity=\'1\'" onmouseleave="this.style.opacity=\'0.5\'" title="Dismiss">x</button>';
 
         banner.innerHTML = progressHtml + actionHtml + ctaHtml + dismissHtml;
 
         var main = document.querySelector('.app-main');
         if (main) {
             main.insertBefore(banner, main.firstChild);
-            // Track guided rail interactions
             banner.querySelector('a').addEventListener('click', function() {
                 if (window.gtmAnalytics) gtmAnalytics.track('guided_rail_clicked', { action: topGap.action, link: topGap.link });
             });
@@ -342,17 +322,16 @@
         banner.style.cssText = 'position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:12px;padding:10px 16px;background:linear-gradient(90deg,rgba(34,197,94,0.08),rgba(59,130,246,0.08));border-bottom:1px solid rgba(34,197,94,0.2);font-size:0.8rem;';
 
         banner.innerHTML = '' +
-            '<span style="font-size:1rem;">✅</span>' +
+            '<span style="font-size:1rem;">Ready</span>' +
             '<span style="font-weight:700;color:#22c55e;">Readiness: ' + total + '/100</span>' +
             '<span style="color:var(--text-secondary,#cbd5e1);flex:1;">Your Handoff Kit is ready to generate.</span>' +
-            '<a href="/app/founding-gtm/" style="padding:5px 14px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:6px;color:#22c55e;font-weight:700;font-size:0.75rem;text-decoration:none;">Open Handoff Kit →</a>' +
-            '<button onclick="document.getElementById(\'guidedRail\').remove();if(window.gtmGuidedRail&&typeof window.gtmGuidedRail.dismiss===\'function\'){window.gtmGuidedRail.dismiss();}" style="background:none;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:1rem;padding:2px 6px;">×</button>';
+            '<a href="/app/founding-gtm/" style="padding:5px 14px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:6px;color:#22c55e;font-weight:700;font-size:0.75rem;text-decoration:none;">Open Handoff Kit -></a>' +
+            '<button onclick="document.getElementById(\'guidedRail\').remove();if(window.gtmGuidedRail&&typeof window.gtmGuidedRail.dismiss===\'function\'){window.gtmGuidedRail.dismiss();}" style="background:none;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:1rem;padding:2px 6px;">x</button>';
 
         var main = document.querySelector('.app-main');
         if (main) main.insertBefore(banner, main.firstChild);
     }
 
-    // ── Init ────────────────────────────────────────────────────────
     async function init() {
         await loadWorkspaceSummary();
         setTimeout(function() {
@@ -377,9 +356,7 @@
         render().catch(function() {});
     });
 
-    // Inject guided rail glow animation
     var grAnimStyle = document.createElement('style');
     grAnimStyle.textContent = '@keyframes grGlow { 0%,100%{border-color:rgba(212,165,116,0.5);box-shadow:0 6px 28px rgba(212,165,116,0.15),0 0 0 1px rgba(212,165,116,0.12),inset 0 1px 0 rgba(255,255,255,0.06);} 50%{border-color:rgba(168,85,247,0.5);box-shadow:0 6px 32px rgba(168,85,247,0.2),0 0 0 1px rgba(168,85,247,0.15),inset 0 1px 0 rgba(255,255,255,0.1);} }';
     document.head.appendChild(grAnimStyle);
-
 })();
