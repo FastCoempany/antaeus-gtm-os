@@ -195,8 +195,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opac
 .step.s-done{border-left:3px solid var(--green);opacity:0.6}.step.s-done:hover{opacity:1}
 .step.s-active{border-left:3px solid var(--pc)}
 .step.expanded{border-color:var(--pc-line);background:var(--bg4)}
-.step-top{display:flex;align-items:flex-start;padding:12px 16px;cursor:pointer;gap:10px}
-.step-check{width:26px;height:26px;min-width:26px;border:2px solid var(--bdr2);border-radius:var(--r-xs);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;margin-top:0;position:relative;z-index:3;flex-shrink:0}
+.step-top{display:flex;align-items:flex-start;padding:12px 16px;cursor:pointer;gap:10px;position:relative}
+.step-check{width:28px;height:28px;min-width:28px;border:2px solid var(--bdr2);border-radius:var(--r-xs);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;margin-top:0;position:relative;z-index:20;flex-shrink:0;background:transparent;appearance:none;-webkit-appearance:none;touch-action:manipulation;user-select:none;-webkit-user-select:none;padding:0}
 .step-check:hover{border-color:var(--pc)}
 .step-check.checked{background:var(--green);border-color:var(--green);animation:checkPop 0.25s var(--ease-bounce)}
 .step-check.checked::after{content:'✓';font-size:0.55rem;color:#fff;font-weight:700}
@@ -235,7 +235,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opac
 /* Subtask types */
 .sub-action{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.02)}
 .sub-action:last-child{border-bottom:none}
-.sub-check{width:20px;height:20px;min-width:20px;border:1.5px solid var(--bdr2);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;margin-top:0;position:relative;z-index:2;flex-shrink:0}
+.sub-check{width:22px;height:22px;min-width:22px;border:1.5px solid var(--bdr2);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;margin-top:0;position:relative;z-index:20;flex-shrink:0;background:transparent;appearance:none;-webkit-appearance:none;touch-action:manipulation;user-select:none;-webkit-user-select:none;padding:0}
 .sub-check:hover{border-color:var(--pc)}
 .sub-check.checked{background:var(--green);border-color:var(--green);animation:checkPop 0.25s var(--ease-bounce)}
 .sub-check.checked::after{content:'✓';font-size:0.4rem;color:#fff;font-weight:700}
@@ -7058,7 +7058,7 @@ function renderPhaseView(){
     h+='<div class="'+cls+'" data-step="'+s.id+'" style="'+(active?'border-left-color:'+p.color:'')+(sd?'border-left-color:var(--green)':'')+'">';
     // Top
     h+='<div class="step-top" onclick="toggleExpand(\''+s.id+'\',event)">';
-    h+='<div class="step-check'+(sd?' checked':'')+'" onclick="toggleAllStep(\''+s.id+'\',event);return false;" title="Toggle all action items for this step"></div>';
+    h+='<button type="button" class="step-check'+(sd?' checked':'')+'" onclick="toggleAllStep(\''+s.id+'\',event);return false;" title="Toggle all action items for this step" aria-label="Toggle all action items for this step"></button>';
     h+='<div class="step-info">';
     h+='<div class="step-row1"><span class="step-num">'+s.n+'</span><span class="step-title">'+esc(s.title)+'</span>';
     if(s.doneWhen&&sd)h+='<span class="step-done-when">✓ Done</span>';
@@ -7083,7 +7083,7 @@ function renderPhaseView(){
       if(t.type==='action'){
         var td=isDone(t.id);
         h+='<div class="sub-action'+(td?' done':'')+'">';
-        h+='<div class="sub-check'+(td?' checked':'')+'" onclick="toggle(\''+t.id+'\',event);return false;" title="Toggle this action"></div>';
+        h+='<button type="button" class="sub-check'+(td?' checked':'')+'" onclick="toggle(\''+t.id+'\',event);return false;" title="Toggle this action" aria-label="Toggle this action"></button>';
         h+='<div class="sub-text">'+escSmart(t.t||t.text);
         if(t.link)h+=' <a href="'+esc(t.link)+'" target="_blank" class="sub-link" onclick="event.stopPropagation()">↗ Open</a>';
         h+='</div>';
@@ -7344,8 +7344,11 @@ function renderP15Rhythm(p){
 function goOverview(){S.view='overview';S.phase=null;S.expanded=null;save();render();document.getElementById('main').scrollTop=0}
 function goPhase(id){S.view='phase';S.phase=id;S.expanded=null;save();render();document.getElementById('main').scrollTop=0}
 function toggleExpand(id,evt){
-  if(evt&&evt.target&&evt.target.closest&&evt.target.closest('.step-check,.sub-check,.sub-link,textarea,button,a,input,select,option'))return;
-  S.expanded=S.expanded===id?null:id;save();render()
+  if(evt){
+    if(evt.defaultPrevented) return;
+    if(evt.target&&evt.target.closest&&evt.target.closest('.step-check,.sub-check,.sub-link,textarea,button,a,input,select,option')) return;
+  }
+  S.expanded=S.expanded===id?null:id;save();render();
 }
 function toggleAllStep(id,evt){
   if(evt){evt.stopPropagation();if(evt.preventDefault)evt.preventDefault();}
