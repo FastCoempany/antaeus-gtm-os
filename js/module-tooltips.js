@@ -138,6 +138,7 @@
     function inject() {
         var title = document.querySelector('.page-title, h1.app-title, header h1');
         if (!title) return;
+        if (title.querySelector('.module-tooltip-trigger')) return;
 
         var btn = document.createElement('button');
         btn.className = 'module-tooltip-trigger';

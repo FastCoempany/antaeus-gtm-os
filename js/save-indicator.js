@@ -50,6 +50,18 @@
         document.head.appendChild(style);
     }
 
+    function bindGuardOnce() {
+        if (!window.unsavedGuard || window.unsavedGuard.__gtmosSaveIndicatorBound) return;
+        var origDirty = unsavedGuard.markDirty;
+        window.unsavedGuard.__gtmosSaveIndicatorBound = true;
+        if (origDirty) {
+            unsavedGuard.markDirty = function () {
+                origDirty.call(unsavedGuard);
+                indicator.unsaved();
+            };
+        }
+    }
+
     var indicator = {
         /**
          * Mount the indicator chip into a container element.
@@ -62,10 +74,18 @@
             var container = typeof target === 'string' ? document.querySelector(target) : target;
             if (!container) return;
 
+            var existing = container.querySelector('.si-chip[data-save-indicator="true"]');
+            if (existing) {
+                chipEl = existing;
+                bindGuardOnce();
+                return this;
+            }
+
             chipEl = document.createElement('span');
             chipEl.className = 'si-chip si-idle';
             chipEl.setAttribute('role', 'status');
             chipEl.setAttribute('aria-live', 'polite');
+            chipEl.setAttribute('data-save-indicator', 'true');
 
             if (opts.position === 'prepend') {
                 container.insertBefore(chipEl, container.firstChild);
@@ -73,8 +93,7 @@
                 container.appendChild(chipEl);
             }
 
-            // Auto-bind to unsaved-guard if available
-            this._bindGuard();
+            bindGuardOnce();
             return this;
         },
 
@@ -84,13 +103,28 @@
             var el = typeof target === 'string' ? document.querySelector(target) : target;
             if (!el || !el.parentNode) return this;
 
+            var sibling = el.nextElementSibling;
+            if (sibling && sibling.matches('.si-chip[data-save-indicator="true"]')) {
+                chipEl = sibling;
+                bindGuardOnce();
+                return this;
+            }
+
+            var existing = el.parentNode.querySelector('.si-chip[data-save-indicator="true"]');
+            if (existing) {
+                chipEl = existing;
+                bindGuardOnce();
+                return this;
+            }
+
             chipEl = document.createElement('span');
             chipEl.className = 'si-chip si-idle';
             chipEl.setAttribute('role', 'status');
             chipEl.setAttribute('aria-live', 'polite');
+            chipEl.setAttribute('data-save-indicator', 'true');
             el.parentNode.insertBefore(chipEl, el.nextSibling);
 
-            this._bindGuard();
+            bindGuardOnce();
             return this;
         },
 
@@ -128,24 +162,6 @@
                 chipEl.title = 'Last saved: ' + new Date().toLocaleTimeString();
             } else {
                 chipEl.title = '';
-            }
-        },
-
-        _bindGuard: function () {
-            // If unsaved-guard is present, auto-show unsaved state
-            if (window.unsavedGuard) {
-                var self = this;
-                // Monkey-patch markDirty/markClean to update indicator
-                var origDirty = unsavedGuard.markDirty;
-                var origClean = unsavedGuard.markClean;
-                if (origDirty) {
-                    unsavedGuard.markDirty = function () {
-                        origDirty.call(unsavedGuard);
-                        self.unsaved();
-                    };
-                }
-                // Don't patch markClean — module should call saved() explicitly
-                // so it can distinguish auto-save vs manual-save labels
             }
         },
 

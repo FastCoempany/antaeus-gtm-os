@@ -92,7 +92,14 @@
 
         // Add badges to matching nav links
         Object.keys(badges).forEach(function(path) {
-            var link = document.querySelector('a.sidebar-link[href*="' + path + '"]');
+            var slug = String(path || '')
+                .replace(/^https?:\/\/[^/]+/i, '')
+                .replace(/\/+$/, '')
+                .split('/')
+                .filter(Boolean)
+                .pop() || '';
+            var link = document.querySelector('a.nav-item[href*="' + path + '"]') ||
+                (slug ? document.querySelector('a.nav-item[data-nav="' + slug + '"]') : null);
             if (!link) return;
             // Don't badge the current page
             if (window.location.pathname.indexOf(path) >= 0) {
@@ -103,9 +110,15 @@
             var dot = document.createElement('span');
             dot.className = 'data-flow-badge';
             dot.style.cssText = 'display:inline-block;width:6px;height:6px;background:#d4a574;border-radius:50%;margin-left:6px;animation:dfPulse 2s infinite;flex-shrink:0;';
-            link.style.display = 'flex';
-            link.style.alignItems = 'center';
-            link.appendChild(dot);
+            var navDot = link.querySelector('.nav-dot');
+            var navLabel = link.querySelector('.nav-label');
+            if (navDot && navDot.parentNode === link) {
+                link.insertBefore(dot, navDot);
+            } else if (navLabel && navLabel.parentNode === link) {
+                navLabel.insertAdjacentElement('afterend', dot);
+            } else {
+                link.appendChild(dot);
+            }
         });
     }
 

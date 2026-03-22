@@ -34,6 +34,11 @@
         sessionStorage.setItem(DISMISS_KEY, '1');
     }
 
+    function removeExistingRail() {
+        var existing = document.getElementById('guidedRail');
+        if (existing) existing.remove();
+    }
+
     function readLS(key, fallback) {
         try { return JSON.parse(localStorage.getItem(key)) || fallback; }
         catch (e) { return fallback; }
@@ -247,6 +252,8 @@
         var path = window.location.pathname;
         if (path.indexOf('/login') >= 0) return;
 
+        removeExistingRail();
+
         var total = 0;
         if (typeof computeReadinessTotal === 'function') {
             total = computeReadinessTotal();
@@ -317,6 +324,7 @@
     }
 
     function renderComplete(total) {
+        removeExistingRail();
         var banner = document.createElement('div');
         banner.id = 'guidedRail';
         banner.style.cssText = 'position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:12px;padding:10px 16px;background:linear-gradient(90deg,rgba(34,197,94,0.08),rgba(59,130,246,0.08));border-bottom:1px solid rgba(34,197,94,0.2);font-size:0.8rem;';
@@ -351,8 +359,6 @@
     window.addEventListener('gtmos:workspace-summary-ready', function(event) {
         if (event && event.detail) workspaceSummary = event.detail;
         workspaceSummaryPromise = Promise.resolve(workspaceSummary || currentWorkspaceSummary());
-        var existing = document.getElementById('guidedRail');
-        if (existing) existing.remove();
         render().catch(function() {});
     });
 
