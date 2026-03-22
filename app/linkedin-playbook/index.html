@@ -78,6 +78,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
         <main class="app-main">
             <div class="app-content">
 <div class="module-inner">
+    <div id="linkedinBootState"></div>
     <h1>LinkedIn Playbook</h1>
     <p class="sub">Methodology reference + tracking. Not automation — intelligence for how to show up on LinkedIn as a seller worth responding to.</p>
 
@@ -276,6 +277,7 @@ Worth 10 minutes? I'll make it count.
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
 <script>
 
 (function(){
@@ -382,20 +384,65 @@ window.updateLiOutcome=async function(idx,val){
     }
 };
 
+function showLinkedInBootState(kind, title, text){
+    if(!window.gtmModuleBootState)return;
+    window.gtmModuleBootState.show('#linkedinBootState',{
+        kind:kind,
+        title:title,
+        text:text,
+        retryLabel:'Retry LinkedIn Playbook',
+        retryAction:'retryLinkedInPlaybookBoot'
+    });
+}
+
+function clearLinkedInBootState(){
+    if(!window.gtmModuleBootState)return;
+    window.gtmModuleBootState.clear('#linkedinBootState');
+}
+
+function onLinkedInPlaybookBootFailure(error){
+    console.error('LinkedIn Playbook boot failed:',error);
+    showLinkedInBootState(
+        'error',
+        'LinkedIn Playbook could not finish loading.',
+        'Antaeus hit a startup failure while rebuilding your LinkedIn activity log and channel guidance. Retry once. If it fails again, refresh the page and check whether the current auth session or synced sequence data is unhealthy.'
+    );
+}
+
+window.retryLinkedInPlaybookBoot=function(){
+    bootLinkedInPlaybook().catch(onLinkedInPlaybookBootFailure);
+};
+
 async function bootLinkedInPlaybook(){
+    showLinkedInBootState(
+        'loading',
+        'Loading LinkedIn Playbook...',
+        'Antaeus is rebuilding your LinkedIn activity log and channel guidance.'
+    );
     if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.load==='function'){
         var loaded=await window.gtmPersistence.sequences.load();
         if(loaded&&loaded.error)console.error('Sequence load failed:',loaded.error);
     }
     renderLog();
+    clearLinkedInBootState();
 }
 
 if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-    window.requireAuthReady.then(bootLinkedInPlaybook).catch(function(){});
+    showLinkedInBootState(
+        'loading',
+        'Waiting for auth',
+        'LinkedIn Playbook is waiting for your authenticated workspace before it rebuilds your activity log.'
+    );
+    window.requireAuthReady.then(bootLinkedInPlaybook).catch(onLinkedInPlaybookBootFailure);
 }else if(window.__gtmosAuthGatePending){
-    window.addEventListener('gtmos:auth-ready',function(){bootLinkedInPlaybook().catch(function(){});},{once:true});
+    showLinkedInBootState(
+        'loading',
+        'Waiting for auth',
+        'LinkedIn Playbook is waiting for your authenticated workspace before it rebuilds your activity log.'
+    );
+    window.addEventListener('gtmos:auth-ready',function(){bootLinkedInPlaybook().catch(onLinkedInPlaybookBootFailure);},{once:true});
 }else{
-    bootLinkedInPlaybook().catch(function(){});
+    bootLinkedInPlaybook().catch(onLinkedInPlaybookBootFailure);
 }
 })();
 

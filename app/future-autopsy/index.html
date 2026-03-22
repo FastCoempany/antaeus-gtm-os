@@ -72,6 +72,7 @@
                 <h1 class="page-title">Future Autopsy</h1>
             </header>
             <div class="app-content" style="max-width:860px;">
+                <div id="futureAutopsyBootState"></div>
                 <div class="fa-hero">
                     <div class="fa-hero-tag">Future Autopsy &mdash; <span id="horizonDays">45</span> days out</div>
                     <div class="fa-hero-title">How you lose is already visible.</div>
@@ -94,6 +95,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
 <script>
     (function(){
         var dh = window.dealHealth;
@@ -467,18 +469,53 @@
 
         // ── BOOT ──
 
+        function showFutureAutopsyBootState(kind,title,text){
+            if(!window.gtmModuleBootState)return;
+            window.gtmModuleBootState.show('#futureAutopsyBootState',{
+                kind:kind,
+                title:title,
+                text:text,
+                retryLabel:'Retry Future Autopsy',
+                retryAction:'retryFutureAutopsyBoot'
+            });
+        }
+        function clearFutureAutopsyBootState(){
+            if(window.gtmModuleBootState)window.gtmModuleBootState.clear('#futureAutopsyBootState');
+        }
+        function onFutureAutopsyBootFailure(error){
+            console.error('Future Autopsy boot failed:',error);
+            document.getElementById('autopsyContent').innerHTML='';
+            document.getElementById('dealSub').textContent='Future Autopsy failed to load.';
+            showFutureAutopsyBootState(
+                'error',
+                'Future Autopsy could not load.',
+                'Antaeus failed while rebuilding your deal vitals or autopsy context. Retry once. If it fails again, refresh the page and verify that deal data and workspace sync are still healthy.'
+            );
+        }
+        window.retryFutureAutopsyBoot=function(){
+            bootFutureAutopsy().catch(onFutureAutopsyBootFailure);
+        };
+
         async function bootFutureAutopsy() {
+            showFutureAutopsyBootState(
+                'loading',
+                'Loading Future Autopsy',
+                'Pulling deal vitals and autopsy history before the stress-test view comes online.'
+            );
             if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function') {
                 await window.gtmPersistence.docs.load({ keys: ['gtmos_autopsy_log_v1'] }).catch(function(error) {
                     console.error('Future Autopsy docs preload failed:', error);
                 });
             }
             if (window.dealHealth && typeof window.dealHealth.preload === 'function') {
-                await window.dealHealth.preload().catch(function() {});
+                await window.dealHealth.preload().catch(function(error) {
+                    console.error('Future Autopsy workspace preload failed:', error);
+                });
             }
 
             loadVitals();
             populateDropdown();
+            clearFutureAutopsyBootState();
 
             if (allVitals.length === 0) {
                 document.getElementById('dealSub').textContent = 'No deals to autopsy yet.';
@@ -495,13 +532,18 @@
         }
 
         if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
-            window.requireAuthReady.then(bootFutureAutopsy).catch(function() {});
+            window.requireAuthReady.then(bootFutureAutopsy).catch(onFutureAutopsyBootFailure);
         } else if (window.__gtmosAuthGatePending) {
+            showFutureAutopsyBootState(
+                'loading',
+                'Waiting for auth',
+                'Future Autopsy is waiting for your authenticated workspace before it rebuilds deal vitals.'
+            );
             window.addEventListener('gtmos:auth-ready', function() {
-                bootFutureAutopsy().catch(function() {});
+                bootFutureAutopsy().catch(onFutureAutopsyBootFailure);
             }, { once: true });
         } else {
-            bootFutureAutopsy().catch(function() {});
+            bootFutureAutopsy().catch(onFutureAutopsyBootFailure);
         }
     })();
     </script>

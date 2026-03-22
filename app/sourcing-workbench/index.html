@@ -199,6 +199,7 @@
                 </div>
             </header>
             <div class="app-content" style="max-width:1100px;">
+    <div id="swBootState"></div>
 
     <!-- Capacity indicator -->
     <div class="sw-capacity" id="swCapacity"></div>
@@ -356,10 +357,11 @@
         </main>
     </div>
     <script src="/js/deal-health.js"></script>
-    <script src="/js/proof-layer.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/js/require-auth.js"></script>
+<script src="/js/proof-layer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/require-auth.js"></script>
+<script src="/js/module-boot-state.js"></script>
 <script>
     window.exportWorkbench=function(){
         var data={};
@@ -962,7 +964,36 @@ document.querySelectorAll('.sw-modal-overlay').forEach(function(o){
 
 // ============ INIT ============
 // Check TA onboarding
+function showSourcingBootState(kind,title,text){
+    if(!window.gtmModuleBootState)return;
+    window.gtmModuleBootState.show('#swBootState',{
+        kind:kind,
+        title:title,
+        text:text,
+        retryLabel:'Retry Sourcing Workbench',
+        retryAction:'retrySourcingWorkbenchBoot'
+    });
+}
+function clearSourcingBootState(){
+    if(window.gtmModuleBootState)window.gtmModuleBootState.clear('#swBootState');
+}
+function onSourcingWorkbenchBootFailure(error){
+    console.error('Sourcing Workbench boot failed:',error);
+    showSourcingBootState(
+        'error',
+        'Sourcing Workbench could not load.',
+        'Antaeus failed while rebuilding your theses, query cards, prospects, or sourcing intelligence. Retry once. If it fails again, refresh the page and check whether synced docs or auth are in a bad state.'
+    );
+}
+window.retrySourcingWorkbenchBoot=function(){
+    bootSourcingWorkbench().catch(onSourcingWorkbenchBootFailure);
+};
 async function bootSourcingWorkbench(){
+    showSourcingBootState(
+        'loading',
+        'Loading Sourcing Workbench',
+        'Pulling theses, query cards, prospects, and territory context before the sourcing views come online.'
+    );
     if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
         await window.gtmPersistence.docs.load({keys:[
             'gtmos_sw_query_cards','gtmos_sw_prospects','gtmos_sw_persona_maps',
@@ -973,16 +1004,22 @@ async function bootSourcingWorkbench(){
     if(!taSetup){
     document.querySelector('.app-content').innerHTML='<div style="text-align:center;padding:60px 24px;"><div style="font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);margin-bottom:12px;">Territory Architect Required</div><div style="color:var(--text-muted);margin-bottom:24px;">Complete Territory Architect onboarding first to define your theses. The Sourcing Workbench uses your theses to drive sourcing queries.</div><a href="/app/territory-architect/" class="sw-modal-btn primary" style="text-decoration:none;display:inline-block;">Go to Territory Architect →</a></div>';
 } else {
+        clearSourcingBootState();
         render();
     }
 }
 
 if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-    window.requireAuthReady.then(bootSourcingWorkbench).catch(function(){});
+    window.requireAuthReady.then(bootSourcingWorkbench).catch(onSourcingWorkbenchBootFailure);
 }else if(window.__gtmosAuthGatePending){
-    window.addEventListener('gtmos:auth-ready',function(){bootSourcingWorkbench().catch(function(){});},{once:true});
+    showSourcingBootState(
+        'loading',
+        'Waiting for auth',
+        'Sourcing Workbench is waiting for your authenticated workspace before it rebuilds thesis and prospect data.'
+    );
+    window.addEventListener('gtmos:auth-ready',function(){bootSourcingWorkbench().catch(onSourcingWorkbenchBootFailure);},{once:true});
 }else{
-    bootSourcingWorkbench().catch(function(){});
+    bootSourcingWorkbench().catch(onSourcingWorkbenchBootFailure);
 }
 })();
 </script>

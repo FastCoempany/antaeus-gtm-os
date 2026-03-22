@@ -139,6 +139,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
         <main class="app-main">
             <div class="app-content">
 <div class="module-inner">
+    <div id="outboundBootState"></div>
     <h1 class="page-title">Outbound Studio</h1>
     <p class="page-sub">Intelligence-driven outbound. Temperature, channel, and CTA — calibrated to where you are with each person.</p>
 
@@ -285,6 +286,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
 <script>
 
 (function(){
@@ -814,22 +816,67 @@ function renderContentLibrary(){
     document.getElementById('ctGrid').innerHTML = html;
 }
 
+function showOutboundBootState(kind,title,text){
+    if(!window.gtmModuleBootState)return;
+    window.gtmModuleBootState.show('#outboundBootState',{
+        kind:kind,
+        title:title,
+        text:text,
+        retryLabel:'Retry Outbound Studio',
+        retryAction:'retryOutboundStudioBoot'
+    });
+}
+
+function clearOutboundBootState(){
+    if(!window.gtmModuleBootState)return;
+    window.gtmModuleBootState.clear('#outboundBootState');
+}
+
+function onOutboundStudioBootFailure(error){
+    console.error('Outbound Studio boot failed:',error);
+    showOutboundBootState(
+        'error',
+        'Outbound Studio could not finish loading.',
+        'Antaeus hit a startup failure while rebuilding your sequence data, signal-linked accounts, and outbound workbench. Retry once. If it fails again, refresh the page and check whether the current auth session or synced sequence data is unhealthy.'
+    );
+}
+
+window.retryOutboundStudioBoot=function(){
+    bootOutboundStudio().catch(onOutboundStudioBootFailure);
+};
+
 // ── BOOT ──
 async function bootOutboundStudio(){
+    showOutboundBootState(
+        'loading',
+        'Loading Outbound Studio...',
+        'Antaeus is rebuilding your sequence data, linked accounts, and outbound workbench.'
+    );
     if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.load==='function'){
         var loaded=await window.gtmPersistence.sequences.load();
         if(loaded&&loaded.error)console.error('Sequence load failed:',loaded.error);
     }
     await syncSignalConsoleAccounts();
     init();
+    clearOutboundBootState();
 }
 
 if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-    window.requireAuthReady.then(bootOutboundStudio).catch(function(){});
+    showOutboundBootState(
+        'loading',
+        'Waiting for auth',
+        'Outbound Studio is waiting for your authenticated workspace before it rebuilds your sequences.'
+    );
+    window.requireAuthReady.then(bootOutboundStudio).catch(onOutboundStudioBootFailure);
 }else if(window.__gtmosAuthGatePending){
-    window.addEventListener('gtmos:auth-ready',function(){bootOutboundStudio().catch(function(){});},{once:true});
+    showOutboundBootState(
+        'loading',
+        'Waiting for auth',
+        'Outbound Studio is waiting for your authenticated workspace before it rebuilds your sequences.'
+    );
+    window.addEventListener('gtmos:auth-ready',function(){bootOutboundStudio().catch(onOutboundStudioBootFailure);},{once:true});
 }else{
-    bootOutboundStudio().catch(function(){});
+    bootOutboundStudio().catch(onOutboundStudioBootFailure);
 }
 
 })();

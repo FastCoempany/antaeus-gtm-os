@@ -151,6 +151,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
 <script>
 
 (function(){
@@ -488,7 +489,35 @@ function renderSidebar(){
 }
 
 // ── BOOT ──
+function showColdCallBootState(kind,title,text){
+    if(!window.gtmModuleBootState)return;
+    window.gtmModuleBootState.show('#mainArea',{
+        kind:kind,
+        title:title,
+        text:text,
+        retryLabel:'Retry Cold Call Studio',
+        retryAction:'retryColdCallBoot'
+    });
+}
+function onColdCallBootFailure(error){
+    console.error('Cold Call Studio boot failed:',error);
+    document.getElementById('topCtx').textContent='Cold Call Studio failed to load';
+    document.getElementById('sideArea').innerHTML='';
+    showColdCallBootState(
+        'error',
+        'Cold Call Studio could not load.',
+        'The call workflow failed during startup, so Antaeus is showing the failure instead of a dead dial screen. Retry once. If it fails again, refresh the page and verify your workspace session is still healthy.'
+    );
+}
+window.retryColdCallBoot=function(){
+    bootColdCallStudio().catch(onColdCallBootFailure);
+};
 async function bootColdCallStudio(){
+    showColdCallBootState(
+        'loading',
+        'Loading Cold Call Studio',
+        'Pulling your current accounts, rebuilding the call flow, and preparing the live objection paths.'
+    );
     if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
         await window.gtmPersistence.docs.load({keys:['gtmos_cold_call_log']}).catch(function(error){console.error('Cold Call Studio docs preload failed:',error);});
     }
@@ -503,11 +532,16 @@ async function bootColdCallStudio(){
 }
 
 if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-    window.requireAuthReady.then(bootColdCallStudio).catch(function(){});
+    window.requireAuthReady.then(bootColdCallStudio).catch(onColdCallBootFailure);
 }else if(window.__gtmosAuthGatePending){
-    window.addEventListener('gtmos:auth-ready',function(){bootColdCallStudio().catch(function(){});},{once:true});
+    showColdCallBootState(
+        'loading',
+        'Waiting for auth',
+        'Cold Call Studio is waiting for your authenticated workspace before it builds the call flow.'
+    );
+    window.addEventListener('gtmos:auth-ready',function(){bootColdCallStudio().catch(onColdCallBootFailure);},{once:true});
 }else{
-    bootColdCallStudio().catch(function(){});
+    bootColdCallStudio().catch(onColdCallBootFailure);
 }
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeObj()});

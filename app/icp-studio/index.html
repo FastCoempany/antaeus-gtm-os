@@ -135,6 +135,7 @@
             </header>
             
             <div class="app-content">
+                <div id="icpBootState"></div>
                 <div class="studio-layout">
                     <div class="builder-content">
                         <!-- Inputs Section -->
@@ -544,6 +545,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
     <script src="/js/tour-guide.js"></script>
     <script src="/js/module-tooltips.js"></script>
     <script src="/js/guided-rail.js"></script>
@@ -1293,7 +1295,41 @@
     
         function startTour() { if (typeof TourGuide !== "undefined") TourGuide.start(); }
 
+        function showIcpBootState(kind, title, text) {
+            if (!window.gtmModuleBootState) return;
+            window.gtmModuleBootState.show('#icpBootState', {
+                kind: kind,
+                title: title,
+                text: text,
+                retryLabel: 'Retry ICP Studio',
+                retryAction: 'retryIcpStudioBoot'
+            });
+        }
+
+        function clearIcpBootState() {
+            if (!window.gtmModuleBootState) return;
+            window.gtmModuleBootState.clear('#icpBootState');
+        }
+
+        function onIcpStudioBootFailure(error) {
+            console.error('ICP Studio boot failed:', error);
+            showIcpBootState(
+                'error',
+                'ICP Studio could not finish loading.',
+                'Antaeus hit a startup failure while rebuilding your ICP profiles and scoring outputs. Retry once. If it fails again, refresh the page and check whether the current auth session or synced ICP data is unhealthy.'
+            );
+        }
+
+        window.retryIcpStudioBoot = function() {
+            bootIcpStudio().catch(onIcpStudioBootFailure);
+        };
+
         async function bootIcpStudio() {
+            showIcpBootState(
+                'loading',
+                'Loading ICP Studio...',
+                'Antaeus is rebuilding your ICP profiles, scoring outputs, and reusable templates.'
+            );
             if (window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.load === 'function') {
                 var loaded = await window.gtmPersistence.icps.load();
                 if (loaded && loaded.error && window.saveIndicator) saveIndicator.error('Using local cache');
@@ -1319,14 +1355,25 @@
                     }
                 }
             })();
+            clearIcpBootState();
         }
 
         if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
-            window.requireAuthReady.then(bootIcpStudio).catch(function() {});
+            showIcpBootState(
+                'loading',
+                'Waiting for auth',
+                'ICP Studio is waiting for your authenticated workspace before it rebuilds your ICP profiles.'
+            );
+            window.requireAuthReady.then(bootIcpStudio).catch(onIcpStudioBootFailure);
         } else if (window.__gtmosAuthGatePending) {
-            window.addEventListener('gtmos:auth-ready', function() { bootIcpStudio().catch(function() {}); }, { once: true });
+            showIcpBootState(
+                'loading',
+                'Waiting for auth',
+                'ICP Studio is waiting for your authenticated workspace before it rebuilds your ICP profiles.'
+            );
+            window.addEventListener('gtmos:auth-ready', function() { bootIcpStudio().catch(onIcpStudioBootFailure); }, { once: true });
         } else {
-            bootIcpStudio().catch(function() {});
+            bootIcpStudio().catch(onIcpStudioBootFailure);
         }
 
         // Signal Console scoring

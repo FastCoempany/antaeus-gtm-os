@@ -84,6 +84,7 @@
                 <h1 class="page-title">Dashboard</h1>
             </header>
             <div class="app-content" style="max-width:860px;">
+                <div id="dashboardBootState"></div>
                 <div id="dashContent"></div>
             </div>
         </main>
@@ -93,6 +94,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
 <script>
     (function(){
         var dh = window.dealHealth;
@@ -102,6 +104,31 @@
         function escH(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
         function getDataManager(){ return window.gtmDataManager || window.dataManager || null; }
+        function showDashboardBootState(kind, title, text) {
+            if (!window.gtmModuleBootState) return;
+            window.gtmModuleBootState.show('#dashboardBootState', {
+                kind: kind,
+                title: title,
+                text: text,
+                retryLabel: 'Retry Dashboard',
+                retryAction: 'retryDashboardBoot'
+            });
+        }
+        function clearDashboardBootState() {
+            if (window.gtmModuleBootState) window.gtmModuleBootState.clear('#dashboardBootState');
+        }
+        function onDashboardBootFailure(error) {
+            console.error('Dashboard boot failed:', error);
+            document.getElementById('dashContent').innerHTML = '';
+            showDashboardBootState(
+                'error',
+                'Dashboard could not finish loading.',
+                'Antaeus hit a startup failure while rebuilding your workspace summary and Monday command view. Retry once. If it fails again, refresh the page and check whether the current auth session or synced workspace data is unhealthy.'
+            );
+        }
+        window.retryDashboardBoot = function() {
+            renderWhenReady();
+        };
         function backupStatus(){
             var manager = getDataManager();
             if (!manager || typeof manager.getBackupStatus !== 'function') return null;
@@ -385,16 +412,25 @@
         };
 
         function renderWhenReady() {
-            render().catch(function(err) {
-                console.error('Dashboard render failed:', err);
-                document.getElementById('dashContent').innerHTML = '<div class="np-empty"><div class="np-empty-title">Dashboard unavailable</div><div class="np-empty-sub">Cloud sync failed. Refresh and try again.</div></div>';
-            });
+            showDashboardBootState(
+                'loading',
+                'Loading Dashboard',
+                'Rebuilding your workspace summary, command view, and current Monday operating picture.'
+            );
+            Promise.resolve(render()).then(function() {
+                clearDashboardBootState();
+            }).catch(onDashboardBootFailure);
             showBackupReminderToast();
         }
 
         if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
-            window.requireAuthReady.then(renderWhenReady).catch(function() {});
+            window.requireAuthReady.then(renderWhenReady).catch(onDashboardBootFailure);
         } else if (window.__gtmosAuthGatePending) {
+            showDashboardBootState(
+                'loading',
+                'Waiting for auth',
+                'Dashboard is waiting for your authenticated workspace before it rebuilds the current command view.'
+            );
             window.addEventListener('gtmos:auth-ready', renderWhenReady, { once: true });
         } else {
             renderWhenReady();

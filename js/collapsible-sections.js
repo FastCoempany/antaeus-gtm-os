@@ -172,7 +172,9 @@
     function init() {
         initCollapsible();
         setTimeout(function() {
-            updateNavStates().catch(function() {});
+            updateNavStates().catch(function(error) {
+                console.error('Collapsible sections initial nav-state refresh failed:', error);
+            });
         }, 600);
     }
 
@@ -191,22 +193,30 @@
     if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
         window.requireAuthReady.then(function() { return preloadWorkspaceSummary(); }).then(function() {
             return updateNavStates();
-        }).catch(function() {});
+        }).catch(function(error) {
+            console.error('Collapsible sections auth-gated preload failed:', error);
+        });
     } else if (window.__gtmosAuthGatePending) {
         window.addEventListener('gtmos:auth-ready', function() {
             preloadWorkspaceSummary().then(function() {
                 return updateNavStates();
-            }).catch(function() {});
+            }).catch(function(error) {
+                console.error('Collapsible sections auth-ready preload failed:', error);
+            });
         }, { once: true });
     } else {
         preloadWorkspaceSummary().then(function() {
             return updateNavStates();
-        }).catch(function() {});
+        }).catch(function(error) {
+            console.error('Collapsible sections preload failed:', error);
+        });
     }
 
     window.addEventListener('gtmos:workspace-summary-ready', function() {
         workspaceSummaryPreloadPromise = Promise.resolve({ data: currentWorkspaceSummary(), error: null });
-        updateNavStates().catch(function() {});
+        updateNavStates().catch(function(error) {
+            console.error('Collapsible sections workspace-summary refresh failed:', error);
+        });
     });
 
 })();

@@ -140,6 +140,7 @@
                 </div>
             </header>
             <div class="app-content">
+                <div id="dwBootState"></div>
                 <div class="dw-stats" id="dealStats"></div>
                 <div class="dw-filter">
                     <select id="viewFilter" onchange="render()">
@@ -271,6 +272,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
 <script>
     (function(){
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
@@ -682,19 +684,57 @@
 
         // URL param: pre-open a deal
         var urlDeal=new URLSearchParams(window.location.search).get('deal');
+        function showDealWorkspaceBootState(kind,title,text){
+            if(!window.gtmModuleBootState)return;
+            window.gtmModuleBootState.show('#dwBootState',{
+                kind:kind,
+                title:title,
+                text:text,
+                retryLabel:'Retry Deal Workspace',
+                retryAction:'retryDealWorkspaceBoot'
+            });
+        }
+        function clearDealWorkspaceBootState(){
+            if(window.gtmModuleBootState)window.gtmModuleBootState.clear('#dwBootState');
+        }
+        function onDealWorkspaceBootFailure(error){
+            console.error('Deal Workspace boot failed:',error);
+            document.getElementById('dealStats').innerHTML='';
+            document.getElementById('dealGrid').innerHTML='';
+            document.getElementById('dealEmpty').innerHTML='';
+            showDealWorkspaceBootState(
+                'error',
+                'Deal Workspace could not load.',
+                'Antaeus failed while rebuilding your deals or syncing account context. Retry once. If it fails again, refresh the page and check whether your synced deal data or current auth session is unhealthy.'
+            );
+        }
+        window.retryDealWorkspaceBoot=function(){
+            bootDealWorkspace().catch(onDealWorkspaceBootFailure);
+        };
         async function bootDealWorkspace(){
+            showDealWorkspaceBootState(
+                'loading',
+                'Loading Deal Workspace',
+                'Pulling deals and connected account context before the board comes online.'
+            );
             await syncSignalConsoleAccounts();
             await syncDealsFromCloud();
+            clearDealWorkspaceBootState();
             render();
             if(urlDeal){openModal(urlDeal);}
         }
 
         if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-            window.requireAuthReady.then(bootDealWorkspace).catch(function(){});
+            window.requireAuthReady.then(bootDealWorkspace).catch(onDealWorkspaceBootFailure);
         }else if(window.__gtmosAuthGatePending){
-            window.addEventListener('gtmos:auth-ready',function(){bootDealWorkspace().catch(function(){});},{once:true});
+            showDealWorkspaceBootState(
+                'loading',
+                'Waiting for auth',
+                'Deal Workspace is waiting for your authenticated workspace before it rebuilds the current board.'
+            );
+            window.addEventListener('gtmos:auth-ready',function(){bootDealWorkspace().catch(onDealWorkspaceBootFailure);},{once:true});
         }else{
-            bootDealWorkspace().catch(function(){});
+            bootDealWorkspace().catch(onDealWorkspaceBootFailure);
         }
     })();
     </script>

@@ -343,7 +343,9 @@
     async function init() {
         await loadWorkspaceSummary();
         setTimeout(function() {
-            render().catch(function() {});
+            render().catch(function(error) {
+                console.error('Guided rail initial render failed:', error);
+            });
         }, 300);
     }
 
@@ -359,7 +361,9 @@
     window.addEventListener('gtmos:workspace-summary-ready', function(event) {
         if (event && event.detail) workspaceSummary = event.detail;
         workspaceSummaryPromise = Promise.resolve(workspaceSummary || currentWorkspaceSummary());
-        render().catch(function() {});
+        render().catch(function(error) {
+            console.error('Guided rail workspace-summary refresh failed:', error);
+        });
     });
 
     var grAnimStyle = document.createElement('style');

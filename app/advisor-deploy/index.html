@@ -118,6 +118,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
         <main class="app-main">
             <div class="app-content">
 <div class="module-inner">
+    <div id="advisorBootState"></div>
     <h1>Advisor Deploy</h1>
     <p class="sub">Deploy equity-invested relationships at the exact deal moments where their influence changes the outcome.</p>
 
@@ -211,6 +212,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
 <script>
 
 (function(){
@@ -656,7 +658,38 @@ function renderImpact(){
 }
 
 // ── INIT ──
+function showAdvisorBootState(kind,title,text){
+    if(!window.gtmModuleBootState)return;
+    window.gtmModuleBootState.show('#advisorBootState',{
+        kind:kind,
+        title:title,
+        text:text,
+        retryLabel:'Retry Advisor Deploy',
+        retryAction:'retryAdvisorDeployBoot'
+    });
+}
+function clearAdvisorBootState(){
+    if(window.gtmModuleBootState)window.gtmModuleBootState.clear('#advisorBootState');
+}
+function onAdvisorDeployBootFailure(error){
+    console.error('Advisor Deploy boot failed:',error);
+    document.getElementById('dashStats').innerHTML='';
+    document.getElementById('dashContent').innerHTML='';
+    showAdvisorBootState(
+        'error',
+        'Advisor Deploy could not load.',
+        'Antaeus failed while rebuilding advisor registry, deployment history, or deal context. Retry once. If it fails again, refresh the page and verify your synced docs are still healthy.'
+    );
+}
+window.retryAdvisorDeployBoot=function(){
+    bootAdvisorDeploy().catch(onAdvisorDeployBootFailure);
+};
 async function bootAdvisorDeploy(){
+    showAdvisorBootState(
+        'loading',
+        'Loading Advisor Deploy',
+        'Pulling advisor registry, deployment history, and deal context before the module comes online.'
+    );
     if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
         await window.gtmPersistence.docs.load({keys:['gtmos_advisor_registry','gtmos_advisor_deployments']}).catch(function(error){console.error('Advisor Deploy docs preload failed:',error);});
     }
@@ -665,14 +698,20 @@ async function bootAdvisorDeploy(){
     }
     renderPlaybook();
     renderDashboard();
+    clearAdvisorBootState();
 }
 
 if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-    window.requireAuthReady.then(bootAdvisorDeploy).catch(function(){});
+    window.requireAuthReady.then(bootAdvisorDeploy).catch(onAdvisorDeployBootFailure);
 }else if(window.__gtmosAuthGatePending){
-    window.addEventListener('gtmos:auth-ready',function(){bootAdvisorDeploy().catch(function(){});},{once:true});
+    showAdvisorBootState(
+        'loading',
+        'Waiting for auth',
+        'Advisor Deploy is waiting for your authenticated workspace before it rebuilds registry and deal context.'
+    );
+    window.addEventListener('gtmos:auth-ready',function(){bootAdvisorDeploy().catch(onAdvisorDeployBootFailure);},{once:true});
 }else{
-    bootAdvisorDeploy().catch(function(){});
+    bootAdvisorDeploy().catch(onAdvisorDeployBootFailure);
 }
 
 })();

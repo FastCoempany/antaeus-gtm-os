@@ -301,13 +301,19 @@
     };
 
     if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
-        window.requireAuthReady.then(function() { return window.gtmStore.preload(); }).catch(function() {});
+        window.requireAuthReady.then(function() { return window.gtmStore.preload(); }).catch(function(error) {
+            console.error('gtmStore auth-gated preload failed:', error);
+        });
     } else if (window.__gtmosAuthGatePending) {
         window.addEventListener('gtmos:auth-ready', function() {
-            window.gtmStore.preload().catch(function() {});
+            window.gtmStore.preload().catch(function(error) {
+                console.error('gtmStore auth-ready preload failed:', error);
+            });
         }, { once: true });
     } else {
-        window.gtmStore.preload().catch(function() {});
+        window.gtmStore.preload().catch(function(error) {
+            console.error('gtmStore preload failed:', error);
+        });
     }
 
 })();

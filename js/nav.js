@@ -409,7 +409,9 @@
         if (document.fonts && typeof document.fonts.ready === 'object' && typeof document.fonts.ready.then === 'function') {
             document.fonts.ready.then(function() {
                 setTimeout(applyRestore, 0);
-            }).catch(function() {});
+            }).catch(function(error) {
+                console.error('Sidebar font-ready restore pass failed:', error);
+            });
         }
         setTimeout(applyRestore, 140);
     }
@@ -545,7 +547,9 @@
             var emailName = user.email ? String(user.email).split('@')[0] : '';
             var resolved = String(fullName || emailName || '').trim();
             if (resolved) applySidebarIdentity(resolved, fallback.plan);
-        }).catch(function() {});
+        }).catch(function(error) {
+            console.error('Sidebar identity hydration failed:', error);
+        });
     }
 
     hydrateSidebarIdentity();
@@ -876,7 +880,9 @@
     if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
         window.requireAuthReady.then(function() {
             queueWorkspaceNavRefresh();
-        }).catch(function() {});
+        }).catch(function(error) {
+            console.error('Nav auth-gated refresh failed:', error);
+        });
     } else if (window.__gtmosAuthGatePending) {
         window.addEventListener('gtmos:auth-ready', function() {
             queueWorkspaceNavRefresh();
@@ -888,7 +894,9 @@
     window.addEventListener('gtmos:workspace-summary-ready', function() {
         workspaceSummaryPreloadPromise = Promise.resolve({ data: currentWorkspaceSummary(), error: null });
         hydrateSidebarIdentity();
-        refreshNavState().catch(function() {});
+        refreshNavState().catch(function(error) {
+            console.error('Nav workspace-summary refresh failed:', error);
+        });
     });
 
     if (sidebar) {

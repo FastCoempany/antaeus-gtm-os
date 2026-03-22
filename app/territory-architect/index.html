@@ -246,6 +246,7 @@
                 </div>
             </header>
             <div class="app-content" style="max-width:1100px;">
+<div id="territoryBootState"></div>
 
 <!-- ==================== ONBOARDING WIZARD ==================== -->
 <div id="onboardView" style="display:none;">
@@ -569,6 +570,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
 <script>
     window.exportTerritory = function() {
         var data = {};
@@ -1520,7 +1522,45 @@ document.querySelectorAll('.ta-modal-overlay').forEach(function(overlay) {
 });
 
 // ============ INIT ============
+function showTerritoryBootState(kind, title, text) {
+    if (!window.gtmModuleBootState) return;
+    window.gtmModuleBootState.show('#territoryBootState', {
+        kind: kind,
+        title: title,
+        text: text,
+        retryLabel: 'Retry Territory Architect',
+        retryAction: 'retryTerritoryArchitectBoot'
+    });
+}
+
+function clearTerritoryBootState() {
+    if (!window.gtmModuleBootState) return;
+    window.gtmModuleBootState.clear('#territoryBootState');
+}
+
+function onTerritoryArchitectBootFailure(error) {
+    console.error('Territory Architect boot failed:', error);
+    var onboardView = document.getElementById('onboardView');
+    var mainApp = document.getElementById('mainApp');
+    if (onboardView) onboardView.style.display = 'none';
+    if (mainApp) mainApp.style.display = 'none';
+    showTerritoryBootState(
+        'error',
+        'Territory Architect could not finish loading.',
+        'Antaeus hit a startup failure while rebuilding your territory setup, thesis stack, and account coverage. Retry once. If it fails again, refresh the page and check whether the current auth session or synced territory data is unhealthy.'
+    );
+}
+
+window.retryTerritoryArchitectBoot = function() {
+    bootTerritoryArchitect().catch(onTerritoryArchitectBootFailure);
+};
+
 async function bootTerritoryArchitect() {
+    showTerritoryBootState(
+        'loading',
+        'Loading Territory Architect...',
+        'Antaeus is rebuilding your territory setup, thesis stack, and account coverage.'
+    );
     if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function') {
         await window.gtmPersistence.docs.load({ keys: Object.keys(KEYS).map(function(name) { return KEYS[name]; }) }).catch(function(error) {
             console.error('Territory Architect docs preload failed:', error);
@@ -1544,16 +1584,27 @@ async function bootTerritoryArchitect() {
         document.getElementById('mainApp').style.display = 'none';
         renderOnboarding();
     }
+    clearTerritoryBootState();
 }
 
 if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
-    window.requireAuthReady.then(bootTerritoryArchitect).catch(function() {});
+    showTerritoryBootState(
+        'loading',
+        'Waiting for auth',
+        'Territory Architect is waiting for your authenticated workspace before it rebuilds your territory setup.'
+    );
+    window.requireAuthReady.then(bootTerritoryArchitect).catch(onTerritoryArchitectBootFailure);
 } else if (window.__gtmosAuthGatePending) {
+    showTerritoryBootState(
+        'loading',
+        'Waiting for auth',
+        'Territory Architect is waiting for your authenticated workspace before it rebuilds your territory setup.'
+    );
     window.addEventListener('gtmos:auth-ready', function() {
-        bootTerritoryArchitect().catch(function() {});
+        bootTerritoryArchitect().catch(onTerritoryArchitectBootFailure);
     }, { once: true });
 } else {
-    bootTerritoryArchitect().catch(function() {});
+    bootTerritoryArchitect().catch(onTerritoryArchitectBootFailure);
 }
 
 })();

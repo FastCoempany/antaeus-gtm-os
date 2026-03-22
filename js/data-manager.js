@@ -355,7 +355,9 @@
             window.clearWorkspaceBootstrapCache();
         }
         if (window.gtmPersistence && window.gtmPersistence.workspace && typeof window.gtmPersistence.workspace.loadSummary === 'function') {
-            await window.gtmPersistence.workspace.loadSummary({ force: true }).catch(function () {});
+            await window.gtmPersistence.workspace.loadSummary({ force: true }).catch(function (error) {
+                console.error('Data manager workspace summary refresh failed:', error);
+            });
         }
 
         return errors;

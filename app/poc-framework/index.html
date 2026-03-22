@@ -91,6 +91,7 @@
             </header>
             
             <div class="app-content">
+                <div id="pocBootState"></div>
                 <div class="studio-layout">
                     <div class="builder-content">
                         <!-- What This Produces / Rules / What Breaks -->
@@ -275,6 +276,7 @@
     <script src="/js/migration.js"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
+    <script src="/js/module-boot-state.js"></script>
     <script src="/js/tour-guide.js"></script>
     <script src="/js/module-tooltips.js"></script>
     <script src="/js/guided-rail.js"></script>
@@ -477,9 +479,43 @@ Best,
             byId('stat_converted').textContent = converted;
             byId('stat_rate').textContent = rate;
         }
+
+        function showPocBootState(kind, title, text) {
+            if (!window.gtmModuleBootState) return;
+            window.gtmModuleBootState.show('#pocBootState', {
+                kind: kind,
+                title: title,
+                text: text,
+                retryLabel: 'Retry PoC Framework',
+                retryAction: 'retryPocFrameworkBoot'
+            });
+        }
+
+        function clearPocBootState() {
+            if (!window.gtmModuleBootState) return;
+            window.gtmModuleBootState.clear('#pocBootState');
+        }
+
+        function onPocFrameworkBootFailure(error) {
+            console.error('PoC Framework boot failed:', error);
+            showPocBootState(
+                'error',
+                'PoC Framework could not finish loading.',
+                'Antaeus hit a startup failure while rebuilding your PoC generator and proof metrics. Retry once. If it fails again, refresh the page and check whether the current auth session or synced proof data is unhealthy.'
+            );
+        }
+
+        window.retryPocFrameworkBoot = function() {
+            bootPocFramework().catch(onPocFrameworkBootFailure);
+        };
         
         // Initialize
         async function bootPocFramework() {
+            showPocBootState(
+                'loading',
+                'Loading PoC Framework...',
+                'Antaeus is rebuilding your PoC generator and proof metrics.'
+            );
             if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function') {
                 await window.gtmPersistence.docs.load({ keys: ['gtmos_poc_data'] }).catch(function(error) {
                     console.error('PoC Framework docs preload failed:', error);
@@ -488,16 +524,27 @@ Best,
             generatePoC();
             updatePocStats();
             if (window.saveIndicator) saveIndicator.mountAfter('.page-title');
+            clearPocBootState();
         }
 
         if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
-            window.requireAuthReady.then(bootPocFramework).catch(function() {});
+            showPocBootState(
+                'loading',
+                'Waiting for auth',
+                'PoC Framework is waiting for your authenticated workspace before it rebuilds your proof generator.'
+            );
+            window.requireAuthReady.then(bootPocFramework).catch(onPocFrameworkBootFailure);
         } else if (window.__gtmosAuthGatePending) {
+            showPocBootState(
+                'loading',
+                'Waiting for auth',
+                'PoC Framework is waiting for your authenticated workspace before it rebuilds your proof generator.'
+            );
             window.addEventListener('gtmos:auth-ready', function() {
-                bootPocFramework().catch(function() {});
+                bootPocFramework().catch(onPocFrameworkBootFailure);
             }, { once: true });
         } else {
-            bootPocFramework().catch(function() {});
+            bootPocFramework().catch(onPocFrameworkBootFailure);
         }
 
         function startTour() {

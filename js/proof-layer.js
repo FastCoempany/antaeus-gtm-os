@@ -315,13 +315,19 @@
     };
 
     if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
-        window.requireAuthReady.then(function() { return preloadWorkspaceSummary(); }).catch(function() {});
+        window.requireAuthReady.then(function() { return preloadWorkspaceSummary(); }).catch(function(error) {
+            console.error('Proof layer auth-gated preload failed:', error);
+        });
     } else if (window.__gtmosAuthGatePending) {
         window.addEventListener('gtmos:auth-ready', function() {
-            preloadWorkspaceSummary().catch(function() {});
+            preloadWorkspaceSummary().catch(function(error) {
+                console.error('Proof layer auth-ready preload failed:', error);
+            });
         }, { once: true });
     } else {
-        preloadWorkspaceSummary().catch(function() {});
+        preloadWorkspaceSummary().catch(function(error) {
+            console.error('Proof layer preload failed:', error);
+        });
     }
 
 })();
