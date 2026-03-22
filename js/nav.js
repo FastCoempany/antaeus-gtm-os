@@ -213,6 +213,34 @@
 
     var sidebar = document.querySelector('.app-sidebar');
     if (sidebar) sidebar.innerHTML = NAV_HTML;
+    var sidebarNav = sidebar && sidebar.querySelector('.sidebar-nav');
+    var SIDEBAR_SCROLL_KEY = 'gtmos_sidebar_nav_scroll_top';
+    var SIDEBAR_ACTIVE_KEY = 'gtmos_sidebar_active_nav';
+
+    function readSessionStorage(key, fallback) {
+        try {
+            var value = sessionStorage.getItem(key);
+            return value === null ? fallback : value;
+        } catch (e) {
+            return fallback;
+        }
+    }
+
+    function writeSessionStorage(key, value) {
+        try {
+            sessionStorage.setItem(key, String(value));
+        } catch (e) {}
+    }
+
+    function persistSidebarScroll() {
+        if (!sidebarNav) return;
+        writeSessionStorage(SIDEBAR_SCROLL_KEY, sidebarNav.scrollTop || 0);
+    }
+
+    function persistSidebarActive(navValue) {
+        if (!navValue) return;
+        writeSessionStorage(SIDEBAR_ACTIVE_KEY, navValue);
+    }
 
 
     var navStyle = document.createElement('style');
@@ -221,9 +249,18 @@
         .nav-item.active .nav-icon, .nav-item:hover .nav-icon { opacity:1; }
         .nav-label { flex:1; }
         .nav-item { display:flex !important; align-items:center; position:relative; }
+        .nav-item.context-active {
+            background:rgba(212,165,116,0.06);
+            border-color:rgba(212,165,116,0.18);
+            color:var(--text-primary,#e2e8f0);
+        }
         .nav-dot { width:8px; height:8px; border-radius:50%; margin-left:auto; flex-shrink:0; background:rgba(100,116,139,0.3); transition:all 0.3s; }
         .nav-dot.started { background:rgba(45,212,191,0.6); box-shadow:0 0 6px rgba(45,212,191,0.4); }
         .nav-dot.complete { background:rgba(34,197,94,0.8); box-shadow:0 0 8px rgba(34,197,94,0.5); }
+        .nav-item.context-active .nav-dot {
+            background:rgba(212,165,116,0.6);
+            box-shadow:0 0 6px rgba(212,165,116,0.25);
+        }
         .sidebar-footer-actions { display:flex; align-items:center; gap:6px; margin-top:8px; padding:0 12px; }
         .sidebar-action-btn { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; border:1px solid var(--border-default,#2d3748); background:transparent; color:var(--text-muted,#64748b); cursor:pointer; transition:all 0.2s; }
         .sidebar-action-btn:hover { background:rgba(212,165,116,0.1); color:var(--brand-gold,#d4a574); border-color:rgba(212,165,116,0.3); }
@@ -279,11 +316,68 @@
     };
     var navKey = slugMap[appSlug] || appSlug;
     var activeLink = sidebar && sidebar.querySelector('[data-nav="' + navKey + '"]');
-    if (activeLink) activeLink.classList.add('active');
+    var contextNavKey = readSessionStorage(SIDEBAR_ACTIVE_KEY, '');
+    var contextLink = (!activeLink && contextNavKey)
+        ? (sidebar && sidebar.querySelector('[data-nav="' + contextNavKey + '"]'))
+        : null;
+    if (activeLink) {
+        activeLink.classList.add('active');
+        persistSidebarActive(navKey);
+    } else if (contextLink) {
+        contextLink.classList.add('context-active');
+    }
     var sidebarDataNotice = sidebar && sidebar.querySelector('#sidebarDataNotice');
     if (sidebarDataNotice && window.gtmEnvironment && window.gtmEnvironment.isDemo) {
         sidebarDataNotice.textContent = 'Demo data is saved in this browser only.';
     }
+
+    function restoreSidebarNavPosition() {
+        if (!sidebarNav) return;
+        var raw = readSessionStorage(SIDEBAR_SCROLL_KEY, '');
+        var hasStored = raw !== '';
+        var targetLink = activeLink || contextLink;
+        requestAnimationFrame(function() {
+            if (hasStored) {
+                var parsed = parseInt(raw, 10);
+                if (!isNaN(parsed)) sidebarNav.scrollTop = parsed;
+            } else if (targetLink && typeof targetLink.scrollIntoView === 'function') {
+                targetLink.scrollIntoView({ block: 'nearest' });
+            }
+        });
+    }
+
+    if (sidebarNav) {
+        var sidebarScrollTicking = false;
+        sidebarNav.addEventListener('scroll', function() {
+            if (sidebarScrollTicking) return;
+            sidebarScrollTicking = true;
+            requestAnimationFrame(function() {
+                persistSidebarScroll();
+                sidebarScrollTicking = false;
+            });
+        }, { passive: true });
+
+        sidebarNav.addEventListener('click', function(event) {
+            var link = event.target.closest('a.nav-item');
+            if (!link) return;
+            persistSidebarScroll();
+            persistSidebarActive(link.getAttribute('data-nav') || '');
+        });
+    }
+
+    if (sidebar) {
+        var sidebarLogo = sidebar.querySelector('.sidebar-logo');
+        if (sidebarLogo) {
+            sidebarLogo.addEventListener('click', function() {
+                persistSidebarScroll();
+                persistSidebarActive('dashboard');
+            });
+        }
+    }
+
+    window.addEventListener('pagehide', persistSidebarScroll);
+    window.addEventListener('beforeunload', persistSidebarScroll);
+    restoreSidebarNavPosition();
 
     function readLS(key, fallback) {
         try { return JSON.parse(localStorage.getItem(key)) || fallback; }
@@ -746,17 +840,18 @@
         if (footer) {
             var tourBtn = document.createElement('button');
             tourBtn.className = 'nav-tour-glow';
-            tourBtn.innerHTML = '✦ Tour the App';
             tourBtn.onclick = function() {
                 if (typeof TourGuide !== 'undefined' && typeof TourGuide.launch === 'function') TourGuide.launch();
                 else if (typeof TourGuide !== 'undefined') TourGuide.start();
             };
+            tourBtn.textContent = 'Tour the App';
             footer.insertBefore(tourBtn, footer.firstChild);
             if (currentPath.indexOf('/app/welcome') === -1) {
                 var welcomeBtn = document.createElement('button');
                 welcomeBtn.className = 'nav-welcome-chip';
                 welcomeBtn.innerHTML = 'Back to Welcome Guide';
                 welcomeBtn.onclick = function() {
+                    persistSidebarScroll();
                     window.location.href = '/app/welcome/';
                 };
                 footer.insertBefore(welcomeBtn, tourBtn.nextSibling);
@@ -764,12 +859,16 @@
         }
         var settingsBtn = document.getElementById('settingsBtn');
         if (settingsBtn) {
-            settingsBtn.onclick = function() { window.location.href = '/app/settings/'; };
+            settingsBtn.onclick = function() {
+                persistSidebarScroll();
+                window.location.href = '/app/settings/';
+            };
         }
         var roleResetBtn = document.getElementById('roleResetBtn');
         if (roleResetBtn) {
             roleResetBtn.onclick = async function() {
                 if (confirm('Start a new role setup? This will take you through onboarding again. Your existing data stays safe.')) {
+                    persistSidebarScroll();
                     if (typeof window.resetUserOnboardingState === 'function') {
                         var result = await window.resetUserOnboardingState();
                         if (result && result.error) {
