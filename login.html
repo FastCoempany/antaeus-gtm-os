@@ -28,7 +28,8 @@
                 </div>
                 
                 <div id="errorMessage" class="callout callout-danger mb-md hidden">
-                    <span id="errorText"></span>
+                    <div id="errorText"></div>
+                    <div id="errorAction" class="hidden"></div>
                 </div>
                 
                 <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitBtn">
@@ -57,6 +58,7 @@
     
     <script src="js/analytics-site-config.js"></script>
     <script src="js/analytics.js"></script>
+    <script src="js/auth-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/onboarding.js"></script>
@@ -146,8 +148,11 @@
             const btnSpinner = document.getElementById('btnSpinner');
             const errorMessage = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
+            const errorAction = document.getElementById('errorAction');
             
             errorMessage.classList.add('hidden');
+            errorAction.classList.add('hidden');
+            errorAction.innerHTML = '';
             submitBtn.disabled = true;
             btnText.textContent = 'Signing in...';
             btnSpinner.classList.remove('hidden');
@@ -159,8 +164,9 @@
                 await routeAfterAuth(data && data.session ? data.session : null);
             } catch (error) {
                 var msg = (error && error.message) ? error.message : '';
-                var isConnectivityError = /timed out|network|failed to fetch|connect/i.test(msg);
-                errorText.textContent = isConnectivityError ? 'Unable to connect. Check your internet and try again.' : (msg || 'Invalid email or password');
+                var normalized = window.gtmAuthUi ? window.gtmAuthUi.normalizeError(error, 'login') : { message: msg || 'Invalid email or password' };
+                errorText.textContent = normalized.message;
+                if (window.gtmAuthUi) window.gtmAuthUi.renderAction(errorAction, normalized);
                 if (window.gtmAnalytics) window.gtmAnalytics.track('login_error', { form: 'login', message: msg || 'Invalid email or password' });
                 errorMessage.classList.remove('hidden');
                 submitBtn.disabled = false;

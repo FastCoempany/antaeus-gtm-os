@@ -3,15 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signing you in…</title>
+    <title>Signing you in...</title>
 
-    <!-- Supabase JS (same major version you're already using) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Your config (NOTE: callback is nested two levels deep) -->
     <script src="../../js/supabase-config.js"></script>
     <script src="../../js/analytics-site-config.js"></script>
     <script src="../../js/analytics.js"></script>
+    <script src="../../js/auth-ui.js"></script>
 
     <style>
       body {
@@ -31,56 +29,54 @@
 
   <body>
     <div class="box">
-      <h1>Finishing sign-in…</h1>
+      <h1>Finishing sign-in...</h1>
       <p class="muted">
-        If this takes more than a couple seconds, we'll bounce you to login.
+        If this takes more than a couple seconds, we will bounce you to login.
       </p>
     </div>
 
-    <!-- Onboarding state check -->
     <script src="../../js/onboarding.js"></script>
     <script>
       (async function () {
         try {
-          // CDN failure guard
           if (!window.supabase || !window.supabase.createClient || !window.initSupabase) {
             document.querySelector('.muted').textContent = 'Unable to connect. Check your internet and try again.';
-            setTimeout(function() { window.location.replace('/login.html'); }, 2000);
+            setTimeout(function () { window.location.replace('/login.html'); }, 2000);
             return;
           }
 
-          // 1) Init your client
           window.initSupabase();
 
-          // 2) Poll briefly for session (supabase-js auto-parses URL)
           const timeoutMs = 8000;
           const start = Date.now();
           let session = null;
 
           while (!session && Date.now() - start < timeoutMs) {
             session = await window.auth.getSession();
-            if (!session) {
-              await new Promise(r => setTimeout(r, 200));
-            }
+            if (!session) await new Promise(function (r) { setTimeout(r, 200); });
           }
 
-          // 3) Route: session → onboarding check → command center
           if (session) {
             if (typeof window.resolvePostAuthRoute === 'function') {
               window.location.replace(await window.resolvePostAuthRoute(session, { force: true }));
             } else if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
-              window.location.replace("/app/onboarding/");
+              window.location.replace('/app/onboarding/');
             } else {
-              window.location.replace("/app/dashboard/");
+              window.location.replace('/app/dashboard/');
             }
-          } else {
-            document.querySelector('.muted').textContent = 'Something went wrong - return to login.';
-            setTimeout(function() { window.location.replace("/login.html"); }, 1500);
+            return;
           }
+
+          var params = new URLSearchParams(window.location.search || '');
+          var rawError = params.get('error_description') || params.get('error') || '';
+          var normalized = window.gtmAuthUi ? window.gtmAuthUi.normalizeError(rawError, 'callback') : { message: 'Something went wrong. Return to login.' };
+          document.querySelector('.muted').textContent = normalized.message;
+          setTimeout(function () { window.location.replace('/login.html'); }, 1500);
         } catch (e) {
-          console.error("Auth callback error:", e);
-          document.querySelector('.muted').textContent = 'Something went wrong - return to login.';
-          setTimeout(function() { window.location.replace("/login.html"); }, 1500);
+          console.error('Auth callback error:', e);
+          var normalized = window.gtmAuthUi ? window.gtmAuthUi.normalizeError(e, 'callback') : { message: 'Something went wrong. Return to login.' };
+          document.querySelector('.muted').textContent = normalized.message;
+          setTimeout(function () { window.location.replace('/login.html'); }, 1500);
         }
       })();
     </script>
