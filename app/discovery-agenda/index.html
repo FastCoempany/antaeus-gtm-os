@@ -45,6 +45,18 @@
         .cp-customize .cp-field label{display:block;font-size:0.72rem;font-weight:600;color:var(--text-secondary);margin-bottom:4px;}
         .cp-customize .cp-field input,.cp-customize .cp-field textarea{width:100%;padding:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;}
         .cp-customize .cp-field textarea{min-height:60px;resize:vertical;}
+        .cp-boot-state{display:none;margin-bottom:var(--space-md);padding:16px 18px;border-radius:var(--radius-lg);border:1px solid var(--border-default);background:var(--bg-secondary);}
+        .cp-boot-state.visible{display:block;}
+        .cp-boot-state.loading{border-color:rgba(59,130,246,0.25);background:rgba(59,130,246,0.05);}
+        .cp-boot-state.error{border-color:rgba(239,68,68,0.28);background:rgba(239,68,68,0.05);}
+        .cp-boot-eyebrow{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;color:var(--text-muted);margin-bottom:8px;}
+        .cp-boot-state.loading .cp-boot-eyebrow{color:#60a5fa;}
+        .cp-boot-state.error .cp-boot-eyebrow{color:#f87171;}
+        .cp-boot-title{font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+        .cp-boot-text{font-size:0.84rem;color:var(--text-tertiary);line-height:1.6;}
+        .cp-boot-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+        .cp-boot-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.76rem;font-weight:700;cursor:pointer;}
+        .cp-boot-btn:hover{border-color:var(--border-hover);}
     </style>
 </head>
 <body>
@@ -62,6 +74,7 @@
                 <p class="module-subtitle">Paste a name or LinkedIn URL. Get your agenda in 3 seconds.</p>
             </header>
             <div class="app-content" style="max-width:720px;">
+                <div class="cp-boot-state" id="bootState"></div>
                 <div class="cp-search">
                     <div class="cp-search-field">
                         <label>Who are you calling?</label>
@@ -119,6 +132,26 @@
     (function(){
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+        function renderBootState(kind,title,text){
+            var node=document.getElementById('bootState');
+            if(!node)return;
+            node.className='cp-boot-state visible '+kind;
+            var html='<div class="cp-boot-eyebrow">'+(kind==='loading'?'Loading module':'Load failed')+'</div>';
+            html+='<div class="cp-boot-title">'+escH(title)+'</div>';
+            html+='<div class="cp-boot-text">'+escH(text)+'</div>';
+            if(kind==='error'){
+                html+='<div class="cp-boot-actions">';
+                html+='<button class="cp-boot-btn" type="button" onclick="retryDiscoveryAgendaBoot()">Retry Call Planner</button>';
+                html+='</div>';
+            }
+            node.innerHTML=html;
+        }
+        function clearBootState(){
+            var node=document.getElementById('bootState');
+            if(!node)return;
+            node.className='cp-boot-state';
+            node.innerHTML='';
+        }
 
         var persona='cxo';
         var contactName='';
@@ -291,6 +324,11 @@
         };
 
         async function bootDiscoveryAgenda(){
+            renderBootState(
+                'loading',
+                'Loading Call Planner',
+                'Pulling saved deals, discovery context, and Signal Console accounts before the agenda tools come online.'
+            );
             if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.load==='function'){
                 var dealsLoaded=await window.gtmPersistence.deals.load();
                 if(dealsLoaded&&dealsLoaded.error)console.error('Deal sync failed:',dealsLoaded.error);
@@ -301,14 +339,33 @@
             }
             await syncSignalConsoleAccounts();
             populateDealDropdown();
+            clearBootState();
         }
 
+        function onDiscoveryAgendaBootFailure(error){
+            console.error('Discovery agenda boot failed:',error);
+            renderBootState(
+                'error',
+                'Call Planner could not finish loading.',
+                'Antaeus hit a startup failure while rebuilding your deals or discovery context. Retry once. If this keeps happening, refresh the page and verify your workspace auth session is still healthy.'
+            );
+        }
+
+        window.retryDiscoveryAgendaBoot=function(){
+            bootDiscoveryAgenda().catch(onDiscoveryAgendaBootFailure);
+        };
+
         if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-            window.requireAuthReady.then(bootDiscoveryAgenda).catch(function(){});
+            window.requireAuthReady.then(bootDiscoveryAgenda).catch(onDiscoveryAgendaBootFailure);
         }else if(window.__gtmosAuthGatePending){
-            window.addEventListener('gtmos:auth-ready',function(){bootDiscoveryAgenda().catch(function(){});},{once:true});
+            renderBootState(
+                'loading',
+                'Waiting for auth',
+                'Call Planner is waiting for your authenticated workspace before it rebuilds deal and signal context.'
+            );
+            window.addEventListener('gtmos:auth-ready',function(){bootDiscoveryAgenda().catch(onDiscoveryAgendaBootFailure);},{once:true});
         }else{
-            bootDiscoveryAgenda().catch(function(){});
+            bootDiscoveryAgenda().catch(onDiscoveryAgendaBootFailure);
         }
     })();
     </script>

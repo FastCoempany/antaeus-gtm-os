@@ -59,6 +59,17 @@
         .ds-stat-val{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);}
         .ds-stat-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
         .ds-negot-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius-md);font-size:0.78rem;font-weight:600;background:rgba(245,158,11,0.08);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);margin-bottom:var(--space-md);}
+        .ds-boot-card{padding:18px 20px;border-radius:var(--radius-lg);border:1px solid var(--border-default);background:var(--bg-secondary);margin-bottom:var(--space-lg);}
+        .ds-boot-card.loading{border-color:rgba(59,130,246,0.25);background:rgba(59,130,246,0.05);}
+        .ds-boot-card.error{border-color:rgba(239,68,68,0.28);background:rgba(239,68,68,0.05);}
+        .ds-boot-eyebrow{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;color:var(--text-muted);margin-bottom:8px;}
+        .ds-boot-card.loading .ds-boot-eyebrow{color:#60a5fa;}
+        .ds-boot-card.error .ds-boot-eyebrow{color:#f87171;}
+        .ds-boot-title{font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+        .ds-boot-text{font-size:0.84rem;color:var(--text-tertiary);line-height:1.6;}
+        .ds-boot-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+        .ds-boot-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.76rem;font-weight:700;cursor:pointer;}
+        .ds-boot-btn:hover{border-color:var(--border-hover);}
         /* CFO segments */
         .ds-seg{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);margin-bottom:var(--space-md);overflow:hidden;}
         .ds-seg-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;}
@@ -123,6 +134,21 @@
             currentCat=readTextLS('gtmos_product_category','cxai');
             workedSet=new Set(readLS('gtmos_discovery_worked',[]));
             stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+        }
+        function renderBootState(kind,title,text){
+            document.getElementById('statsBar').innerHTML='';
+            document.getElementById('catBar').innerHTML='';
+            var html='<div class="ds-boot-card '+kind+'">';
+            html+='<div class="ds-boot-eyebrow">'+(kind==='loading'?'Loading module':'Load failed')+'</div>';
+            html+='<div class="ds-boot-title">'+escH(title)+'</div>';
+            html+='<div class="ds-boot-text">'+escH(text)+'</div>';
+            if(kind==='error'){
+                html+='<div class="ds-boot-actions">';
+                html+='<button class="ds-boot-btn" type="button" onclick="retryDiscoveryStudioBoot()">Retry Discovery Studio</button>';
+                html+='</div>';
+            }
+            html+='</div>';
+            document.getElementById('mainContent').innerHTML=html;
         }
         async function syncDiscoveryState(){
             if(window.gtmPersistence&&window.gtmPersistence.discovery&&typeof window.gtmPersistence.discovery.save==='function'){
@@ -345,7 +371,21 @@
             navigator.clipboard.writeText(txt).then(function(){alert('Copied '+workedSet.size+' worked moves!');});
         };
 
+        function onDiscoveryStudioBootFailure(error){
+            console.error('Discovery Studio boot failed:',error);
+            renderBootState(
+                'error',
+                'Discovery Studio could not load.',
+                'The module failed during startup, so Antaeus is showing the failure instead of a blank screen. Retry once. If it fails again, refresh the page and check whether auth or saved workspace data is in a bad state.'
+            );
+        }
+
         async function bootDiscoveryStudio(){
+            renderBootState(
+                'loading',
+                'Loading Discovery Studio',
+                'Pulling your saved discovery state and rebuilding the current move library.'
+            );
             if(window.gtmPersistence&&window.gtmPersistence.discovery&&typeof window.gtmPersistence.discovery.load==='function'){
                 var loaded=await window.gtmPersistence.discovery.load();
                 if(loaded&&loaded.error)console.error('Discovery load failed:',loaded.error);
@@ -356,12 +396,21 @@
             renderContent();
         }
 
+        window.retryDiscoveryStudioBoot=function(){
+            bootDiscoveryStudio().catch(onDiscoveryStudioBootFailure);
+        };
+
         if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-            window.requireAuthReady.then(bootDiscoveryStudio).catch(function(){});
+            window.requireAuthReady.then(bootDiscoveryStudio).catch(onDiscoveryStudioBootFailure);
         }else if(window.__gtmosAuthGatePending){
-            window.addEventListener('gtmos:auth-ready',function(){bootDiscoveryStudio().catch(function(){});},{once:true});
+            renderBootState(
+                'loading',
+                'Waiting for auth',
+                'Discovery Studio is waiting for your authenticated workspace before it rebuilds the current call system.'
+            );
+            window.addEventListener('gtmos:auth-ready',function(){bootDiscoveryStudio().catch(onDiscoveryStudioBootFailure);},{once:true});
         }else{
-            bootDiscoveryStudio().catch(function(){});
+            bootDiscoveryStudio().catch(onDiscoveryStudioBootFailure);
         }
     })();
     </script>
