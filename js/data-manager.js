@@ -37,6 +37,11 @@
         'gtmos_env_mode',
         'gtmos_enrichment_base_url'
     ];
+    var CONTROL_KEYS = [
+        'gtmos_noauth_mode',
+        'gtmos_noauth_email'
+    ];
+    var DEMO_PREFIX = 'gtmos_demo__';
     var BACKUP_META_KEY = 'gtmos_backup_meta';
     var BACKUP_REMINDER_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000;
     var BACKUP_REMINDER_COOLDOWN_MS = 24 * 60 * 60 * 1000;
@@ -59,6 +64,61 @@
 
     function isExcludedKey(key) {
         return EXCLUDED_KEYS.indexOf(String(key || '')) >= 0;
+    }
+
+    function isDemoModeActive() {
+        try {
+            return sessionStorage.getItem('gtmos_env_mode') === 'demo';
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function removeStorageKeyVariants(key) {
+        [String(key || ''), DEMO_PREFIX + String(key || '')].forEach(function (candidate) {
+            if (!candidate) return;
+            try { localStorage.removeItem(candidate); }
+            catch (e) {}
+        });
+    }
+
+    function purgeDemoNamespace() {
+        var removed = 0;
+        try {
+            for (var i = localStorage.length - 1; i >= 0; i--) {
+                var key = localStorage.key(i);
+                if (!key || key.indexOf(DEMO_PREFIX) !== 0) continue;
+                localStorage.removeItem(key);
+                removed++;
+            }
+        } catch (e) {}
+        return removed;
+    }
+
+    function clearPersistenceControlState(options) {
+        options = options || {};
+        var demoWasActive = isDemoModeActive();
+
+        try { sessionStorage.removeItem('gtmos_env_mode'); }
+        catch (e) {}
+
+        CONTROL_KEYS.forEach(removeStorageKeyVariants);
+
+        if (typeof window.setAuthBypass === 'function') {
+            try { window.setAuthBypass(false); }
+            catch (e) {}
+        }
+
+        var removedDemoKeys = options.purgeDemoNamespace ? purgeDemoNamespace() : 0;
+
+        if (typeof window.clearWorkspaceBootstrapCache === 'function') {
+            window.clearWorkspaceBootstrapCache();
+        }
+
+        return {
+            demoWasActive: demoWasActive,
+            removedDemoKeys: removedDemoKeys
+        };
     }
 
     function readScopedUiState(key, fallback) {
@@ -491,6 +551,7 @@
                             return;
                         }
 
+                        var importCleanup = clearPersistenceControlState({ purgeDemoNamespace: true });
                         clearLocalData();
                         allDataKeys().forEach(function (key) {
                             var nextValue = Object.prototype.hasOwnProperty.call(data, key) ? data[key] : undefined;
@@ -504,6 +565,9 @@
 
                         var syncErrors = await syncCloudFromLocalState();
                         var message = 'Imported ' + validKeys.length + ' data stores. Reloading...';
+                        if (importCleanup.demoWasActive || importCleanup.removedDemoKeys) {
+                            message += '\n\nExited demo mode and cleared ' + importCleanup.removedDemoKeys + ' demo keys before restoring your workspace.';
+                        }
                         if (syncErrors.length) {
                             message += '\n\nCloud sync warnings:\n- ' + syncErrors.join('\n- ');
                         }
@@ -535,6 +599,13 @@
                 return;
             }
 
+            var persistenceCleanup = clearPersistenceControlState({ purgeDemoNamespace: true });
+            if (persistenceCleanup.demoWasActive) {
+                alert('Demo workspace data cleared. Redirecting to dashboard...');
+                window.location.href = '/app/dashboard/';
+                return;
+            }
+
             var resetErrors = await resetCloudState();
             if (resetErrors.length) {
                 alert('Unable to fully clear durable workspace truth.\n\n' + resetErrors.join('\n'));
@@ -544,9 +615,7 @@
             if (window.gtmAnalytics) gtmAnalytics.track('data_deleted', { keys: allDataKeys().length });
 
             clearLocalData();
-            if (typeof window.clearWorkspaceBootstrapCache === 'function') {
-                window.clearWorkspaceBootstrapCache();
-            }
+            clearPersistenceControlState({ purgeDemoNamespace: true });
 
             alert('All workspace data deleted. Redirecting to setup...');
             window.location.href = '/app/onboarding/';
@@ -586,6 +655,10 @@
     manager.export = manager.exportAll;
     manager.import = manager.importAll;
     manager.delete = manager.deleteAll;
+    manager.isDemoWorkspaceActive = isDemoModeActive;
+    manager.clearDemoWorkspace = function () {
+        return clearPersistenceControlState({ purgeDemoNamespace: true });
+    };
 
     window.dataManager = manager;
     window.gtmDataManager = manager;

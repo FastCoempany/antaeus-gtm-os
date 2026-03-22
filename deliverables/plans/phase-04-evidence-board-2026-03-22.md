@@ -85,6 +85,7 @@ Recommended rule:
 | EB-R03 | PoC Framework can show duplicate progress/banner chrome. | Duplicate injected UI makes the product feel buggy and stacked. | Phase 15 hardened [js/guided-rail.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/guided-rail.js) so each render pass first removes any existing rail before inserting a new one. This addresses the stacked banner path reported on [app/poc-framework/index.html](c:/AppDev/v1AntaeusApp/Appv2_290126/app/poc-framework/index.html). Manual browser verification is still required before closure. | Discovery, Deal & Proof Execution | Phase 37 / Phase 15 | P1 | local-patch |
 | EB-R04 | Shared chrome injection rules are uneven. | Repeated injection patterns can create duplicate or conflicting UI across modules. | Phase 15 added idempotency guards in [js/save-indicator.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/save-indicator.js), [js/guided-rail.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/guided-rail.js), and [js/module-tooltips.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/module-tooltips.js). Manual browser verification is still required before closure. | Product Shell & Navigation | Phase 15 | P1 | local-patch |
 | EB-R05 | Silent failure paths required a classified full sweep. | Silent failure destroys trust and makes debugging impossible for real users. | Phase 16 now patches visible boot-state handling across the scanned boot-critical modules and replaces empty catches in shared helpers with explicit logging. The swallowed-catch scan over `app`, `js`, `auth`, public auth pages, methodology, purchase, and root surfaces now returns zero matches for empty catch handlers. Manual browser verification is still required before closure. | Product Shell & Navigation | Phase 16 | P0 | local-patch |
+| EB-R09 | Persistence control state could leak between demo and real workspace flows. | Durable workspace truth stops being believable if demo, no-auth, import, delete, and cache states can bleed into each other. | Phase 17 hardened [demo-seed.html](c:/AppDev/v1AntaeusApp/Appv2_290126/demo-seed.html), [app/settings/index.html](c:/AppDev/v1AntaeusApp/Appv2_290126/app/settings/index.html), and [js/data-manager.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/data-manager.js) so demo cleanup is deterministic, demo exit clears real control flags, and import/delete flows normalize persistence state before acting on durable workspace truth. Manual matrix verification is still required before closure. | Trust, Policy & Workspace Ops | Phase 17 | P0 | local-patch |
 | EB-R06 | Observability is not yet strong enough for real launch conditions. | Without diagnostics, the product will fail in ways that are hard to reproduce. | Master plan reserves observability/diagnostics work; current debugging still depends heavily on console/manual inspection. | Product Shell & Navigation | Phase 18 | P1 | open |
 | EB-R07 | Data-flow nav badge logic is likely broken against the current nav implementation. | Surface-level progress signals may not actually appear where intended. | Phase 15 updated [js/data-flow.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/data-flow.js) to target the live `.nav-item` shell and resolve target modules from either `href` or `data-nav`. Manual browser verification is still required before closure. | Product Shell & Navigation | Phase 15 | P2 | local-patch |
 | EB-R08 | Welcome and tour patches exist locally but may not be deployment-safe until committed and verified. | Local-only fixes do not count as app truth. | Recent welcome/tour patches were discussed and edited locally; git status shows many local-only artifacts and uncommitted changes. | Auth, Onboarding & Activation | Phase 22 / Phase 23 | P1 | local-patch |
@@ -146,10 +147,11 @@ If the program had to work a short queue first, it should be:
 4. `EB-R01` Discovery Studio reliability  
 5. `EB-R02` nav scroll stability  
 6. `EB-R03` PoC duplicate banner / shared chrome cleanup  
-7. `EB-A02` tour rebuild  
-8. `EB-L03` demo lane productization  
-9. `EB-M07` handoff-kit integrity via upstream compounding  
-10. `EB-P03` commit discipline for program artifacts
+7. `EB-R09` persistence control-state cleanup  
+8. `EB-A02` tour rebuild  
+9. `EB-L03` demo lane productization  
+10. `EB-M07` handoff-kit integrity via upstream compounding  
+11. `EB-P03` commit discipline for program artifacts
 
 ## What This Board Makes True
 After Phase 4:

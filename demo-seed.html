@@ -677,27 +677,26 @@ window.seed=function(mode){
 };
 
 window.clearAll=function(){
-  var cleared=0;
-  Object.keys(localStorage).forEach(function(k){
-    if(k.indexOf('gtmos_')===0){localStorage.removeItem(k);cleared++}
-  });
+  var cleared=countGtmKeys();
+  try{localStorage.clear();}catch(e){}
   document.getElementById('status').className='status';
-  document.getElementById('status').textContent=cleared+' keys cleared.';
+  document.getElementById('status').textContent=cleared+' demo keys cleared.';
   updateCount();
-  try{
-    var params=new URLSearchParams(window.location.search||'');
-    var autoSeed=(params.get('autoseed')||'').toLowerCase();
-    var returnUrl=params.get('return')||'/app/dashboard/?demo=1&tour=1';
-    if(autoSeed&&autoSeed===String(mode||'').toLowerCase()){
-      status.innerHTML+='<br><br>Launching demo workspace...';
-      setTimeout(function(){window.location.href=returnUrl;},700);
-    }
-  }catch(e){}
 };
 
-function updateCount(){
+function countGtmKeys(){
   var c=0;
-  Object.keys(localStorage).forEach(function(k){if(k.indexOf('gtmos_')===0)c++});
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var key=localStorage.key(i);
+      if(key&&key.indexOf('gtmos_')===0)c++;
+    }
+  }catch(e){}
+  return c;
+}
+
+function updateCount(){
+  var c=countGtmKeys();
   document.getElementById('count').textContent=c+' gtmos_ keys in localStorage';
 }
 updateCount();

@@ -213,12 +213,38 @@
         }
 
         function enterDemo() {
+            if (typeof window.clearWorkspaceBootstrapCache === 'function') {
+                window.clearWorkspaceBootstrapCache();
+            }
             sessionStorage.setItem('gtmos_env_mode', 'demo');
             window.location.href = '/demo-seed.html?demo=1';
         }
 
         function exitDemo() {
-            sessionStorage.removeItem('gtmos_env_mode');
+            var manager = getDataManager();
+            if (manager && typeof manager.clearDemoWorkspace === 'function') {
+                manager.clearDemoWorkspace();
+            } else {
+                try { sessionStorage.removeItem('gtmos_env_mode'); } catch (e) {}
+                try { localStorage.removeItem('gtmos_noauth_mode'); } catch (e) {}
+                try { localStorage.removeItem('gtmos_noauth_email'); } catch (e) {}
+                try { localStorage.removeItem('gtmos_demo__gtmos_noauth_mode'); } catch (e) {}
+                try { localStorage.removeItem('gtmos_demo__gtmos_noauth_email'); } catch (e) {}
+                try {
+                    for (var i = localStorage.length - 1; i >= 0; i--) {
+                        var key = localStorage.key(i);
+                        if (key && key.indexOf('gtmos_demo__') === 0) {
+                            localStorage.removeItem(key);
+                        }
+                    }
+                } catch (e) {}
+                if (typeof window.setAuthBypass === 'function') {
+                    try { window.setAuthBypass(false); } catch (e) {}
+                }
+                if (typeof window.clearWorkspaceBootstrapCache === 'function') {
+                    window.clearWorkspaceBootstrapCache();
+                }
+            }
             window.location.href = '/app/dashboard/';
         }
 
