@@ -330,13 +330,17 @@
 
             if (target) {
                 var rect = target.getBoundingClientRect();
-                var top = rect.top + window.scrollY;
+                var tooltipWidth = tooltip.offsetWidth || 360;
+                var tooltipHeight = tooltip.offsetHeight || 220;
+                var top = rect.top;
                 var left = rect.right + 20;
-                if (step.position === 'top') { top = rect.top + window.scrollY - 220; left = rect.left; }
-                if (step.position === 'bottom') { top = rect.bottom + window.scrollY + 20; left = rect.left; }
-                if (left + 420 > window.innerWidth) left = window.innerWidth - 440;
-                if (left < 280) left = 280;
-                tooltip.style.top = Math.max(20, top) + 'px';
+                if (step.position === 'top') { top = rect.top - tooltipHeight - 20; left = rect.left; }
+                if (step.position === 'bottom') { top = rect.bottom + 20; left = rect.left; }
+                left = Math.min(left, window.innerWidth - tooltipWidth - 16);
+                left = Math.max(16, left);
+                top = Math.min(top, window.innerHeight - tooltipHeight - 16);
+                top = Math.max(16, top);
+                tooltip.style.top = top + 'px';
                 tooltip.style.left = left + 'px';
                 tooltip.style.transform = '';
             } else {
