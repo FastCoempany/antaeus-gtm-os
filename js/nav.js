@@ -126,6 +126,14 @@
         document.head.appendChild(moduleHeaderScript);
     }
 
+    if (!document.querySelector('script[data-gtmos-tour-guide]')) {
+        var tourGuideScript = document.createElement('script');
+        tourGuideScript.src = '/js/tour-guide.js';
+        tourGuideScript.async = false;
+        tourGuideScript.setAttribute('data-gtmos-tour-guide', 'true');
+        document.head.appendChild(tourGuideScript);
+    }
+
     // Redirect to onboarding whenever onboarding is not completed.
     var currentPath = window.location.pathname;
 
