@@ -134,6 +134,15 @@
         document.head.appendChild(tourGuideScript);
     }
 
+    var weekOneScript = null;
+    if (!document.querySelector('script[data-gtmos-week-one]')) {
+        weekOneScript = document.createElement('script');
+        weekOneScript.src = '/js/week-one-lifecycle.js';
+        weekOneScript.async = false;
+        weekOneScript.setAttribute('data-gtmos-week-one', 'true');
+        document.head.appendChild(weekOneScript);
+    }
+
     // Redirect to onboarding whenever onboarding is not completed.
     var currentPath = window.location.pathname;
 
@@ -319,6 +328,19 @@
             border-color:rgba(239,68,68,0.4);
             background:rgba(239,68,68,0.12);
             color:#ffd1cc;
+        }
+        .nav-weekone-chip {
+            display:block; width:calc(100% - 24px); margin:0 12px 10px; padding:9px 12px;
+            border:1px solid rgba(96,165,250,0.24); border-radius:999px;
+            background:rgba(59,130,246,0.08); color:#bfdbfe;
+            font-family:inherit; font-size:0.78rem; font-weight:700; letter-spacing:0.02em;
+            cursor:pointer; transition:all 0.2s; text-align:center;
+        }
+        .nav-weekone-chip:hover {
+            border-color:rgba(96,165,250,0.42);
+            background:rgba(59,130,246,0.14);
+            color:#eff6ff;
+            transform:translateY(-1px);
         }
         @keyframes tourPulse {
             0%, 100% { box-shadow:0 0 12px rgba(212,165,116,0.15), inset 0 1px 0 rgba(255,255,255,0.05); transform:scale(1); }
@@ -928,10 +950,15 @@
         refreshNavState().catch(function(error) {
             console.error('Nav workspace-summary refresh failed:', error);
         });
+        if (typeof window.gtmWeekOneLifecycle !== 'undefined' && footerEl) {
+            window.gtmWeekOneLifecycle.renderNavNudge({ footer: footerEl, currentPath: currentPath });
+        }
     });
 
+    var footerEl = null;
     if (sidebar) {
         var footer = sidebar.querySelector('.sidebar-footer');
+        footerEl = footer;
         if (footer) {
             var tourBtn = document.createElement('button');
             tourBtn.className = 'nav-tour-glow';
@@ -980,6 +1007,15 @@
                     window.location.href = '/app/welcome/';
                 };
                 footer.insertBefore(welcomeBtn, tourBtn.nextSibling);
+            }
+            if (typeof window.gtmWeekOneLifecycle !== 'undefined') {
+                window.gtmWeekOneLifecycle.renderNavNudge({ footer: footer, currentPath: currentPath });
+            } else if (weekOneScript) {
+                weekOneScript.addEventListener('load', function() {
+                    if (window.gtmWeekOneLifecycle) {
+                        window.gtmWeekOneLifecycle.renderNavNudge({ footer: footer, currentPath: currentPath });
+                    }
+                }, { once: true });
             }
         }
         var settingsBtn = document.getElementById('settingsBtn');

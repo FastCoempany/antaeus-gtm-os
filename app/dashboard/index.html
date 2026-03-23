@@ -60,6 +60,19 @@
         .np-backup-sub{font-size:0.76rem;color:var(--text-muted);line-height:1.5;}
         .np-backup-toast{position:fixed;right:20px;top:20px;z-index:9999;max-width:360px;padding:12px 14px;border-radius:10px;border:1px solid rgba(245,158,11,0.35);background:rgba(245,158,11,0.14);color:#fbbf24;box-shadow:0 10px 32px rgba(0,0,0,0.35);font-size:0.82rem;line-height:1.4;opacity:0;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;pointer-events:none;}
         .np-backup-toast.show{opacity:1;transform:translateY(0);}
+        .np-lifecycle{margin-bottom:16px;padding:20px 22px;border-radius:var(--radius-lg);border:1px solid rgba(96,165,250,0.22);background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(59,130,246,0.04));}
+        .np-lifecycle-top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:12px;flex-wrap:wrap;}
+        .np-lifecycle-kicker{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#93c5fd;font-weight:700;margin-bottom:6px;}
+        .np-lifecycle-title{font-family:var(--font-serif);font-size:1.1rem;color:var(--text-primary);margin-bottom:6px;}
+        .np-lifecycle-copy{font-size:0.84rem;color:var(--text-secondary);line-height:1.6;max-width:620px;}
+        .np-lifecycle-score{min-width:120px;padding:12px 14px;border-radius:14px;background:rgba(15,23,42,0.28);border:1px solid rgba(255,255,255,0.06);text-align:center;}
+        .np-lifecycle-score span{display:block;font-family:var(--font-serif);font-size:1.6rem;color:#eff6ff;line-height:1;}
+        .np-lifecycle-score small{display:block;margin-top:6px;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#93c5fd;font-weight:700;}
+        .np-lifecycle-rhythm{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:0.8rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:14px;}
+        .np-lifecycle-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+        .np-lifecycle-milestones{display:flex;flex-wrap:wrap;gap:8px;}
+        .np-lifecycle-pill{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid rgba(148,163,184,0.22);background:rgba(148,163,184,0.08);color:var(--text-muted);font-size:0.72rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;}
+        .np-lifecycle-pill.done{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.12);color:#bbf7d0;}
         .np-empty{text-align:center;padding:80px 24px;}
         .np-empty-icon{font-size:2.5rem;margin-bottom:16px;}
         .np-empty-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:8px;}
@@ -91,6 +104,7 @@
     </div>
     <script src="/js/deal-health.js"></script>
     <script src="/js/proof-layer.js"></script>
+    <script src="/js/week-one-lifecycle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
@@ -101,6 +115,7 @@
         if (!dh) { document.getElementById('dashContent').innerHTML = '<p style="color:var(--text-muted);">deal-health.js not loaded.</p>'; return; }
         var backupToastTimer = null;
         var dashboardSummaryTracked = false;
+        var dashboardWeekOneTracked = false;
 
         function escH(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
@@ -189,6 +204,22 @@
             var icpState = { icps: [] };
             var deals = dh.loadAllDeals();
             var signalConsoleState = { accounts: [] };
+            var weekOneState = null;
+
+            if (window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.load === 'function') {
+                weekOneState = await window.gtmWeekOneLifecycle.load(false);
+                if (window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.markDashboardVisit === 'function') {
+                    window.gtmWeekOneLifecycle.markDashboardVisit(weekOneState);
+                }
+                if (weekOneState && weekOneState.active && !dashboardWeekOneTracked) {
+                    dashboardWeekOneTracked = true;
+                    trackDashboard('dashboard_week_one_panel_rendered', {
+                        day_number: weekOneState.dayNumber,
+                        milestones_complete: weekOneState.completed,
+                        milestones_total: weekOneState.total
+                    });
+                }
+            }
 
             if (window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.load === 'function') {
                 var icpLoaded = await window.gtmPersistence.icps.load();
@@ -215,6 +246,9 @@
             var active = vitals.filter(function(v) { return !v.isClosed; });
             var icpCount = (icpState && Array.isArray(icpState.icps)) ? icpState.icps.length : 0;
             var backupBanner = backupBannerHtml();
+            var weekOneBanner = (weekOneState && weekOneState.active && window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.renderDashboardPanel === 'function')
+                ? window.gtmWeekOneLifecycle.renderDashboardPanel(weekOneState)
+                : '';
 
             if (vitals.length === 0) {
                 if (!dashboardSummaryTracked) {
@@ -222,10 +256,11 @@
                     trackDashboard('dashboard_empty', {
                         icps: icpCount,
                         deals: vitals.length,
-                        signals: (signalConsoleState.accounts || []).length
+                        signals: (signalConsoleState.accounts || []).length,
+                        week_one_active: !!(weekOneState && weekOneState.active)
                     });
                 }
-                var emptyHtml = backupBanner + '<div class="np-empty">' +
+                var emptyHtml = weekOneBanner + backupBanner + '<div class="np-empty">' +
                     '<div class="np-empty-icon">&#128220;</div>' +
                     '<div class="np-empty-title">Your workspace is live, but the dashboard has nothing to brief yet.</div>' +
                     '<div class="np-empty-sub">Create the first records that make this app feel like yours. ICPs shape targeting, deals power the weekly briefing.</div>';
@@ -246,17 +281,19 @@
             var cov = briefing.coverage;
             var target = Number(seed.coverage_target) || dh.DEFAULTS.coverageTarget;
             var covColor = !quota ? '' : cov.ratio >= target ? 'green' : cov.ratio >= target * 0.6 ? 'amber' : 'red';
-            if (!dashboardSummaryTracked) {
-                dashboardSummaryTracked = true;
-                trackDashboard('dashboard_brief_ready', {
-                    active_deals: active.length,
-                    total_deals: vitals.length,
-                    at_risk: briefing.atRisk.length,
-                    coverage_ratio: quota ? cov.ratio : null
-                });
-            }
+                if (!dashboardSummaryTracked) {
+                    dashboardSummaryTracked = true;
+                    trackDashboard('dashboard_brief_ready', {
+                        active_deals: active.length,
+                        total_deals: vitals.length,
+                        at_risk: briefing.atRisk.length,
+                        coverage_ratio: quota ? cov.ratio : null,
+                        week_one_active: !!(weekOneState && weekOneState.active)
+                    });
+                }
 
             var html = '';
+            html += weekOneBanner;
             html += backupBanner;
 
             // STAT RIBBON
