@@ -1869,6 +1869,24 @@ function normalizeDurableDocValue(localKey, value) {
     return cloneValue(value);
 }
 
+function serializeDurableDocValueForCloud(localKey, value) {
+    var normalized = normalizeDurableDocValue(localKey, value);
+    if (normalized === null) return {};
+    return cloneValue(normalized);
+}
+
+function deserializeDurableDocValueFromCloud(localKey, value) {
+    var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
+    if (!mapping) return cloneValue(value);
+    if (mapping.defaultValue === null) {
+        if (value === null || value === undefined) return null;
+        if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) {
+            return null;
+        }
+    }
+    return normalizeDurableDocValue(localKey, value);
+}
+
 function readLocalDurableDocsState(keys) {
     var state = {};
     durableDocKeys(keys).forEach(function(localKey) {
@@ -1983,7 +2001,12 @@ async function upsertDurableDoc(localKey, data, sessionOverride) {
         return next;
     })(), [localKey]);
 
-    var result = await upsertSequenceRecord(mapping.sequenceKey, mapping.title, normalized, sessionOverride);
+    var result = await upsertSequenceRecord(
+        mapping.sequenceKey,
+        mapping.title,
+        serializeDurableDocValueForCloud(localKey, normalized),
+        sessionOverride
+    );
     if (result.error) return { data: normalized, error: result.error };
 
     return await loadDurableDocsFromCloud(sessionOverride, { skipBootstrap: true, keys: [localKey] });
@@ -2002,7 +2025,12 @@ async function syncDurableDocsToCloud(state, sessionOverride, options) {
     for (var i = 0; i < keys.length; i++) {
         var localKey = keys[i];
         var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
-        var result = await upsertSequenceRecord(mapping.sequenceKey, mapping.title, next[localKey], sessionOverride);
+        var result = await upsertSequenceRecord(
+            mapping.sequenceKey,
+            mapping.title,
+            serializeDurableDocValueForCloud(localKey, next[localKey]),
+            sessionOverride
+        );
         if (result.error) return { data: cloneValue(window.__gtmosDurableDocsState || next), error: result.error };
     }
 
@@ -2038,7 +2066,10 @@ async function loadDurableDocsFromCloud(sessionOverride, options) {
     keys.forEach(function(localKey) {
         var mapping = DURABLE_SEQUENCE_DOCUMENTS[localKey];
         var row = findSequenceRow(rows, mapping.sequenceKey);
-        next[localKey] = normalizeDurableDocValue(localKey, row && Object.prototype.hasOwnProperty.call(row, 'data') ? row.data : localState[localKey]);
+        next[localKey] = deserializeDurableDocValueFromCloud(
+            localKey,
+            row && Object.prototype.hasOwnProperty.call(row, 'data') ? row.data : localState[localKey]
+        );
     });
 
     writeLocalDurableDocsState(next, keys);

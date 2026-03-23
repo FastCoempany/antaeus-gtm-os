@@ -51,6 +51,11 @@ That created a real stale-state risk between demo and real workspace use.
 
 from ordinary data cleanup. That was reasonable for generic export/import data handling, but it left a gap: real workspace operations could run while demo or no-auth flags were still lingering.
 
+### 4. Durable docs had a real null/schema mismatch
+Some durable docs intentionally used `defaultValue: null` in [js/supabase-config.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/supabase-config.js), while the cloud `public.sequences.data` column is `jsonb not null` in [supabase-workspace-persistence.sql](c:/AppDev/v1AntaeusApp/Appv2_290126/supabase-workspace-persistence.sql).
+
+That meant import/delete could still fail even after the control-state hardening, because syncing durable docs could attempt to write `null` into a non-null JSONB column.
+
 ## Implemented Hardening
 ### A. Demo seed cleanup is now deterministic
 Updated [demo-seed.html](c:/AppDev/v1AntaeusApp/Appv2_290126/demo-seed.html):
@@ -85,6 +90,12 @@ Updated [js/data-manager.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/data-manager
 - data manager now exposes:
   - `isDemoWorkspaceActive()`
   - `clearDemoWorkspace()`
+
+### D. Durable docs now serialize `null` safely for cloud storage
+Updated [js/supabase-config.js](c:/AppDev/v1AntaeusApp/Appv2_290126/js/supabase-config.js):
+- durable docs with local `null` meaning now serialize to `{}` for cloud storage
+- those same docs deserialize back to local `null` when the cloud row contains an empty object
+- this preserves local app semantics while respecting `public.sequences.data jsonb not null`
 
 ## What This Fixes
 This pass closes the highest-confidence persistence trust gaps:
