@@ -110,6 +110,20 @@
 .sc-root .card-ticker{font-family:var(--mono);font-size:.65rem;color:var(--tx3);font-weight:500}
 .sc-root .fortune-badge{font-family:var(--mono);font-size:.55rem;padding:1px 5px;border-radius:3px;background:var(--gold2);color:var(--gold);border:1px solid rgba(207,163,58,.2)}
 .sc-root .card-meta{font-size:.72rem;color:var(--tx3);margin-top:1px}
+.sc-root .card-guidance{padding:0 16px 12px;display:grid;gap:8px}
+.sc-root .card-guidance-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sc-root .card-status{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:999px;border:1px solid var(--bdr2)}
+.sc-root .card-status.ok{color:var(--green);background:var(--green2);border-color:rgba(56,201,122,.22)}
+.sc-root .card-status.warn{color:var(--amber);background:var(--amber2);border-color:rgba(224,160,48,.22)}
+.sc-root .card-status.error{color:var(--red);background:var(--red2);border-color:rgba(232,84,84,.22)}
+.sc-root .card-status.progress{color:var(--purple);background:var(--purple2);border-color:rgba(155,124,240,.22)}
+.sc-root .card-scoreline{font-family:var(--mono);font-size:.62rem;color:var(--tx3)}
+.sc-root .card-guidance-note{font-size:.7rem;color:var(--tx2);line-height:1.45}
+.sc-root .card-next{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px}
+.sc-root .card-next-copy{flex:1;min-width:200px}
+.sc-root .card-next-label{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.sc-root .card-next-title{font-size:.78rem;font-weight:600;color:var(--tx);line-height:1.35}
+.sc-root .card-next-reason{font-size:.68rem;color:var(--tx3);margin-top:4px;line-height:1.45}
 .sc-root .card-pills{display:flex;gap:4px;flex-wrap:wrap;padding:0 16px 12px}
 .sc-root .pill{font-family:var(--mono);font-size:.58rem;padding:2px 7px;border-radius:10px}
 .sc-root .p-ai{background:var(--purple2);color:var(--purple)}.sc-root .p-trig{background:var(--amber2);color:var(--amber)}
@@ -128,6 +142,10 @@
 .sc-root .dtab:hover{color:var(--tx2)}.sc-root .dtab.on{color:var(--gold);border-bottom-color:var(--gold)}
 .sc-root .dtab small{font-family:var(--mono);font-size:.6rem;margin-left:4px;opacity:.6}
 .sc-root .detail-score{padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--bdr);font-family:var(--mono);font-size:.65rem;color:var(--tx3);line-height:1.8}
+.sc-root .detail-score-summary{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sc-root .detail-score-chip{padding:2px 7px;border-radius:999px;border:1px solid var(--bdr2);background:var(--surf2);color:var(--tx2)}
+.sc-root .detail-score-copy{margin-top:8px;font-size:.68rem;line-height:1.5;color:var(--tx2);font-family:var(--brig)}
+.sc-root .detail-score-copy strong{color:var(--tx)}
 .detail-.sc-root{padding:14px 16px}
 
 /* ── SIGNAL ITEMS ── */
@@ -610,7 +628,7 @@ function scoreExplain(a){
   const ai=sigs.filter(s=>s.is_ai||s.ai).length;
   const hi=sigs.filter(s=>(s.confidence||0)>=.9).length;
   const avgR=sigs.length?sigs.reduce((s,x)=>s+recency(x),0)/sigs.length:0;
-  return`${sigs.length} signals (${ai} AI) · ${hi} high-conf · avg recency ${(avgR*100).toFixed(0)}% · heat ${heat(a)}`;
+  return`${sigs.length} signals (${ai} AI) | ${hi} high-conf | avg recency ${(avgR*100).toFixed(0)}% | heat ${heat(a)}`;
 }
 function scoreDetail(a){
   const sigs=(a.signals||[]).filter(s=>s.status!=='flagged');
@@ -624,6 +642,148 @@ function scoreDetail(a){
   }
   lines.push('','Total: '+heat(a)+' / 99');
   return lines.join('\n');
+}
+
+function heatBand(h){
+  if(h>=91)return'Hot';
+  if(h>=75)return'Active';
+  if(h>=50)return'Watch';
+  return'Low';
+}
+
+function getHeatMetrics(a){
+  const sigs=(a.signals||[]).filter(s=>s.status!=='flagged');
+  const recent=sigs.filter(s=>recency(s)>=.75).length;
+  const highConfidence=sigs.filter(s=>(s.confidence||0)>=.9).length;
+  const ai=sigs.filter(s=>s.is_ai||s.ai).length;
+  const triggers=sigs.filter(s=>s.cat==='trigger_event').length;
+  const avgRecency=sigs.length?sigs.reduce((sum,s)=>sum+recency(s),0)/sigs.length:0;
+  const h=heat(a);
+  return{
+    heat:h,
+    signalCount:sigs.length,
+    recentCount:recent,
+    highConfidenceCount:highConfidence,
+    aiCount:ai,
+    triggerCount:triggers,
+    avgRecency:Math.round(avgRecency*100),
+    band:heatBand(h)
+  };
+}
+
+function getAccountExecutionContext(a){
+  const name=(a.name||'').toLowerCase();
+  const deals=JSON.parse(localStorage.getItem('gtmos_deal_workspaces')||'[]');
+  const activeDeal=Array.isArray(deals)?deals.find(d=>d&&(d.accountName||d.account_name||'').toLowerCase()===name&&d.stage!=='closed-won'&&d.stage!=='closed-lost'):null;
+  const touches=JSON.parse(localStorage.getItem('gtmos_outbound_touches')||'{"touches":[]}');
+  const acctTouches=(touches.touches||[]).filter(t=>(t.account||'').toLowerCase()===name);
+  const replied=acctTouches.some(t=>t.outcome==='replied'||t.outcome==='meeting_booked');
+  let temp='ice_cold',tempLabel='Ice Cold',tempColor='var(--tx3)';
+  if(activeDeal&&activeDeal.stage!=='prospect'){temp='hot';tempLabel='Hot';tempColor='#ef4444';}
+  else if(replied||activeDeal){temp='warm';tempLabel='Warm';tempColor='#f59e0b';}
+  else if(acctTouches.length>0){temp='cool';tempLabel='Cool';tempColor='#3b82f6';}
+  return{activeDeal,acctTouches,replied,temp,tempLabel,tempColor};
+}
+
+function getResearchState(a){
+  const signalCount=(a.signals||[]).filter(s=>s.status!=='flagged').length;
+  if(a&&a._researching==='deep'){
+    return{tone:'progress',label:'Deep research running',copy:'Live enrichment is scanning external sources for seller-relevant evidence.'};
+  }
+  if(a&&a._researching==='ai'){
+    return{tone:'progress',label:'AI research running',copy:'Signal Console is generating and scoring fresh signals for this account.'};
+  }
+  if(a&&a._researchNotice&&a._researchNotice.kind==='error'){
+    return{tone:'error',label:'Research failed',copy:a._researchNotice.message};
+  }
+  if(a&&a._researchNotice&&a._researchNotice.kind==='success'){
+    return{tone:'ok',label:'Research updated',copy:a._researchNotice.message};
+  }
+  if(a&&a._lastEnriched){
+    return{tone:'ok',label:'Live research exists',copy:'Last refreshed '+formatRelativeTime(a._lastEnriched)+'.'};
+  }
+  if(signalCount){
+    return{tone:'warn',label:'Signals saved, not refreshed',copy:'This account has saved signals, but no confirmed live refresh in the current workspace.'};
+  }
+  return{tone:'warn',label:'No live research yet',copy:'Run research once so this account has real seller-ready context.'};
+}
+
+function getNextMove(a){
+  const metrics=getHeatMetrics(a);
+  const ctx=getAccountExecutionContext(a);
+  const encName=encodeURIComponent(a.name||'');
+  if(!metrics.signalCount){
+    return{kind:'research',title:'Run the first research pass',reason:'No seller-ready evidence exists yet for this account.',cta:'Run AI Research'};
+  }
+  if(ctx.activeDeal&&ctx.activeDeal.stage&&ctx.activeDeal.stage!=='prospect'){
+    return{kind:'link',title:'Advance the live deal',reason:'A real deal already exists, so use the latest signals to tighten next-step control.',cta:'Open Deal Workspace',href:'/app/deal-workspace/'};
+  }
+  if(ctx.replied){
+    return{kind:'link',title:'Prep the next live conversation',reason:'This account has already replied, so turn the new context into a sharper agenda.',cta:'Open Call Planner',href:'/app/discovery-agenda/?account='+encName};
+  }
+  if(ctx.acctTouches.length&&metrics.heat>=50){
+    return{kind:'link',title:'Tighten and send the follow-up',reason:'Touch history already exists. Use the new signals to sharpen the next message.',cta:'Generate Follow-Up',href:'/app/outbound-studio/?account='+encName+'&temperature='+ctx.temp};
+  }
+  if(metrics.heat>=75){
+    return{kind:'link',title:'Write the first signal-led touch',reason:'Heat is high enough to justify outbound now.',cta:'Generate First Touch',href:'/app/outbound-studio/?account='+encName+'&temperature='+ctx.temp};
+  }
+  if(metrics.heat>=50){
+    return{kind:'link',title:'Build the angle before outreach',reason:'The account is promising, but the message still needs to be tightened before you reach out.',cta:'Build Message',href:'/app/outbound-studio/?account='+encName+'&temperature='+ctx.temp};
+  }
+  return{kind:'deepresearch',title:'Run deeper research first',reason:'Current evidence is still too thin or too old to justify outreach with confidence.',cta:'Run Deep Research'};
+}
+
+function renderNextMoveButton(a,move){
+  const disabled=a&&a._researching?'disabled':'';
+  if(move.kind==='research'){
+    const label=a&&a._researching==='ai'?'Researching...':move.cta;
+    return`<button class="btn btn-gold btn-sm" data-enrich="${a.id}" ${disabled}>${esc(label)}</button>`;
+  }
+  if(move.kind==='deepresearch'){
+    const label=a&&a._researching==='deep'?'Researching...':move.cta;
+    return`<button class="btn btn-sm" data-deepresearch="${a.id}" ${disabled} style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.3);color:#a855f7;">${esc(label)}</button>`;
+  }
+  return`<a href="${move.href}" class="btn btn-sm btn-gold" style="text-decoration:none;">${esc(move.cta)}</a>`;
+}
+
+function renderCardGuidance(a){
+  const research=getResearchState(a);
+  const metrics=getHeatMetrics(a);
+  const move=getNextMove(a);
+  return`
+  <div class="card-guidance">
+    <div class="card-guidance-row">
+      <span class="card-status ${research.tone}">${esc(research.label)}</span>
+      <span class="card-scoreline">Heat ${metrics.heat} | ${metrics.signalCount} signals | ${metrics.recentCount} recent | ${metrics.highConfidenceCount} high-conf</span>
+    </div>
+    <div class="card-guidance-note">${esc(research.copy)}</div>
+    <div class="card-next">
+      <div class="card-next-copy">
+        <span class="card-next-label">Next move</span>
+        <div class="card-next-title">${esc(move.title)}</div>
+        <div class="card-next-reason">${esc(move.reason)}</div>
+      </div>
+      ${renderNextMoveButton(a,move)}
+    </div>
+  </div>`;
+}
+
+function renderHeatExplainability(a){
+  const metrics=getHeatMetrics(a);
+  return`
+  <div class="detail-score">
+    <div class="detail-score-summary">
+      <span class="detail-score-chip">Heat ${metrics.heat}/99</span>
+      <span class="detail-score-chip">${metrics.band}</span>
+      <span class="detail-score-chip">${metrics.signalCount} live signals</span>
+      <span class="detail-score-chip">${metrics.recentCount} recent</span>
+      <span class="detail-score-chip">${metrics.highConfidenceCount} high-confidence</span>
+      <span class="detail-score-chip">${metrics.aiCount} AI-related</span>
+      <span class="detail-score-chip">${metrics.triggerCount} trigger events</span>
+      <span class="detail-score-chip">${metrics.avgRecency}% fresh</span>
+    </div>
+    <div class="detail-score-copy"><strong>Why this account is scored this way:</strong> heat rises when more seller-relevant signals are recent, credible, and unflagged. Flagged signals do not count, and old evidence drags the score down.</div>
+  </div>`;
 }
 
 // ═══════════════════════════════════════════
@@ -701,8 +861,8 @@ Focus on events from the last 6 months. If you can't find verifiable current inf
 async function doEnrich(acctId,btn){
   if(remaining()<=0){alert('Daily research limit reached ('+MAX_DAILY+'). Resets at midnight.');return}
   const acct=S.accounts.find(a=>a.id===acctId);if(!acct)return;
-  const orig=btn?btn.innerHTML:'';
-  if(btn)btn.innerHTML='<span class="enriching-badge">Researching...</span>';
+  acct._researching='ai';
+  applyResearchNotice(acct,'progress','AI research is generating seller-ready signals for this account.');
   try{
     const sigs=await enrichAccount(acct);
     addUsage(1);
@@ -715,11 +875,17 @@ async function doEnrich(acctId,btn){
     acct.updated_at=new Date().toISOString();
     save(S);
     await persistSignalConsoleAccount(acct);
-    render();
+    if(fresh.length){
+      applyResearchNotice(acct,'success',fresh.length+' new signals added | heat '+heat(acct)+' | researched just now',5000);
+    }else{
+      applyResearchNotice(acct,'success','Research complete | no net-new signals | heat '+heat(acct),5000);
+    }
   }catch(e){
     console.error('Enrich failed:',e);
-    if(btn)btn.textContent='⚠ Failed — retry';
-    setTimeout(()=>{if(btn)btn.innerHTML=orig},2000);
+    applyResearchNotice(acct,'error','AI research failed | '+String((e&&e.message)||'Try again'),7000);
+  }finally{
+    delete acct._researching;
+    renderGrid();
   }
 }
 
@@ -732,14 +898,16 @@ async function enrichAll(){
   if(!todo.length){alert('All visible accounts were enriched within 24h.');return}
   if(!confirm(`Research ${todo.length} accounts (~${todo.length} API calls). Continue?`))return;
   const btn=document.getElementById('btnEnrichAll');
+  let refreshed=0,failures=0;
   for(let i=0;i<todo.length;i++){
-    btn.textContent=`🔍 ${i+1}/${todo.length}...`;
-    if(remaining()<=0){btn.textContent='🔍 Enrich All';alert('Daily limit reached after '+(i)+' accounts.');return}
-    try{await doEnrich(todo[i].id,null)}catch{}
+    btn.textContent=`${i+1}/${todo.length}...`;
+    if(remaining()<=0){btn.textContent='Enrich All';alert('Daily limit reached after '+(i)+' accounts.');return}
+    try{await doEnrich(todo[i].id,null);refreshed+=1}catch{failures+=1}
     if(i<todo.length-1)await new Promise(r=>setTimeout(r,2000));
   }
-  btn.textContent='🔍 Enrich All';
+  btn.textContent='Enrich All';
   render();
+  alert('Research complete. Refreshed '+refreshed+' account'+(refreshed===1?'':'s')+(failures?'; '+failures+' failed.':'')+'.');
 }
 
 // ═══════════════════════════════════════════
@@ -943,13 +1111,13 @@ function renderStats(){
   document.getElementById('topStats').innerHTML=`<div>Accts <b>${all.length}</b></div><div>Signals <b>${sigs}</b></div><div>AI <b style="color:var(--purple)">${ai}</b></div>`;
 }
 function renderCredits(){
-  const parts=[`🔍 ${remaining()}/${MAX_DAILY} today`];
+  const parts=[`Research ${remaining()}/${MAX_DAILY} today`];
   if(SC_SYNC.loading)parts.push('loading cloud');
   else if(SC_SYNC.saving)parts.push('syncing');
   else if(SC_SYNC.lastSyncedAt)parts.push('cloud '+formatRelativeTime(SC_SYNC.lastSyncedAt));
   else if(SC_SYNC.cloudEnabled)parts.push('cloud ready');
   if(SC_SYNC.error)parts.push('local cache');
-  document.getElementById('topCredits').textContent=parts.join(' • ');
+  document.getElementById('topCredits').textContent=parts.join(' | ');
 }
 
 function renderControls(){
@@ -1017,15 +1185,15 @@ function renderMorning(){
 async function runDeepResearch(acctId,button){
   const acct=S.accounts.find(a=>a.id===acctId);
   if(!acct)return;
+  acct._researching='deep';
   const statusEl=document.getElementById('deep-status-'+acctId);
-  if(!statusEl)return;
 
-  const originalHtml=button?button.innerHTML:'';
   const baseUrl=resolveEnrichmentBaseUrl();
   const endpoint=baseUrl+'/enrich';
   const phases=buildDeepResearchPhases();
   let phaseIdx=0;
   const updatePhase=()=>{
+    if(!statusEl)return;
     statusEl.style.display='block';
     statusEl.style.color='#a855f7';
     statusEl.innerHTML='⚡ '+phases[Math.min(phaseIdx,phases.length-1)]+' <b>'+esc(acct.name)+'</b>';
@@ -1081,21 +1249,19 @@ async function runDeepResearch(acctId,button){
 
     const laneSummary=summarizeLaneActivity(data&&data.debug);
     if(newSignals.length){
-      applyResearchNotice(acct,'success','✓ '+newSignals.length+' new signals • '+laneSummary+' • '+((data&&data.elapsed)||'done'),5000);
+      applyResearchNotice(acct,'success',newSignals.length+' new signals added | '+laneSummary+' | '+((data&&data.elapsed)||'done'),5000);
     }else{
-      applyResearchNotice(acct,'success','✓ Research complete • no net-new signals • '+laneSummary+' • '+((data&&data.elapsed)||'done'),5000);
+      applyResearchNotice(acct,'success','Research complete | no net-new signals | '+laneSummary+' | '+((data&&data.elapsed)||'done'),5000);
     }
   }catch(err){
     const msg=String((err&&err.message)||'Enrichment failed');
     const lower=msg.toLowerCase();
-    const hint=lower.indexOf('failed to fetch')>=0?' — service unreachable at '+baseUrl:lower.indexOf('401')>=0?' — sign in again or verify hosted auth config':'';
-    applyResearchNotice(acct,'error','✗ '+msg+hint,7000);
+    const hint=lower.indexOf('failed to fetch')>=0?' | service unreachable at '+baseUrl:lower.indexOf('401')>=0?' | sign in again or verify hosted auth config':'';
+    applyResearchNotice(acct,'error','Deep research failed | '+msg+hint,7000);
   }finally{
     clearInterval(phaseTimer);
-    if(button){
-      button.disabled=false;
-      button.innerHTML=originalHtml||'⚡ Deep Research';
-    }
+    delete acct._researching;
+    renderGrid();
   }
 }
 
@@ -1120,6 +1286,7 @@ function renderGrid(){
     </div>
   </div>
   <div class="card-pills">${pills}</div>
+  ${renderCardGuidance(a)}
   ${isOpen?renderDetail(a):''}
 </div>`;
   }).join('');
@@ -1216,46 +1383,31 @@ function renderGrid(){
 
 // E7: Recommended Play card — temperature auto-detection + channel/CTA recommendation
 function renderResearchStatus(a){
-  const notice=a&&a._researchNotice;
-  const color=notice&&notice.kind==='success'?'#4a9e6e':notice&&notice.kind==='error'?'#c05a52':'#a855f7';
-  const message=notice&&notice.message?notice.message:(a&&a._lastEnriched?'Last live research '+formatRelativeTime(a._lastEnriched):'');
-  const display=message?'block':'none';
-  return `<div id="deep-status-${a.id}" style="display:${display};padding:8px 16px;border-bottom:1px solid var(--bdr);font-size:.72rem;font-family:var(--mono);color:${color};background:rgba(168,85,247,0.03);">${esc(message)}</div>`;
+  const state=getResearchState(a);
+  const color=state.tone==='ok'?'#4a9e6e':state.tone==='error'?'#c05a52':state.tone==='progress'?'#a855f7':'#e0a030';
+  return `<div id="deep-status-${a.id}" style="display:block;padding:8px 16px;border-bottom:1px solid var(--bdr);font-size:.72rem;font-family:var(--mono);color:${color};background:rgba(168,85,247,0.03);">${esc(state.label)} | ${esc(state.copy)}</div>`;
 }
 
 function renderRecPlay(a){
-  const name=(a.name||'').toLowerCase();
-  // Check deal workspace for active deal
-  const deals=JSON.parse(localStorage.getItem('gtmos_deal_workspaces')||'[]');
-  const activeDeal=Array.isArray(deals)?deals.find(d=>d&&(d.accountName||d.account_name||'').toLowerCase()===name&&d.stage!=='closed-won'&&d.stage!=='closed-lost'):null;
-  // Check outbound touches
-  const touches=JSON.parse(localStorage.getItem('gtmos_outbound_touches')||'{"touches":[]}');
-  const acctTouches=(touches.touches||[]).filter(t=>(t.account||'').toLowerCase()===name);
-  const replied=acctTouches.some(t=>t.outcome==='replied'||t.outcome==='meeting_booked');
-  // Determine temperature
-  let temp='ice_cold',tempLabel='Ice Cold',tempColor='var(--tx3)';
-  if(activeDeal&&activeDeal.stage!=='prospect'){temp='hot';tempLabel='Hot';tempColor='#ef4444';}
-  else if(replied||activeDeal){temp='warm';tempLabel='Warm';tempColor='#f59e0b';}
-  else if(acctTouches.length>0){temp='cool';tempLabel='Cool';tempColor='#3b82f6';}
-  else{temp='ice_cold';tempLabel='Ice Cold';tempColor='var(--tx3)';}
-  // Channel + CTA recommendation by temperature
+  const ctx=getAccountExecutionContext(a);
   const recs={
     ice_cold:{channel:'Email',cta:'Give-to-Get (no ask)',asset:'Industry brief or benchmark'},
     cool:{channel:'Email + LinkedIn',cta:'Insight share',asset:'Case study or one-pager'},
     warm:{channel:'Phone + Email',cta:'Meeting request',asset:'Custom PoC proposal'},
     hot:{channel:'Phone (direct)',cta:'Next step confirmation',asset:'Business case or ROI model'}
   };
-  const rec=recs[temp]||recs.ice_cold;
-  const h=heat(a);
+  const rec=recs[ctx.temp]||recs.ice_cold;
+  const move=getNextMove(a);
   const encName=encodeURIComponent(a.name||'');
   return`<div style="padding:10px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:rgba(212,165,116,0.03);">
     <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);white-space:nowrap;">Recommended Play</div>
-    <span style="font-size:.68rem;padding:2px 8px;border-radius:20px;font-weight:600;color:${tempColor};background:rgba(255,255,255,0.04);border:1px solid ${tempColor}33;">${tempLabel}</span>
-    <span style="font-size:.7rem;color:var(--tx2);">${esc(rec.channel)} · ${esc(rec.cta)}</span>
+    <span style="font-size:.68rem;padding:2px 8px;border-radius:20px;font-weight:600;color:${ctx.tempColor};background:rgba(255,255,255,0.04);border:1px solid ${ctx.tempColor}33;">${ctx.tempLabel}</span>
+    <span style="font-size:.7rem;color:var(--tx2);">${esc(rec.channel)} | ${esc(rec.cta)}</span>
     <span style="font-size:.65rem;color:var(--tx3);">Asset: ${esc(rec.asset)}</span>
+    <div style="flex-basis:100%;font-size:.72rem;color:var(--tx2);line-height:1.45;">${esc(move.title)} | ${esc(move.reason)}</div>
     <div style="margin-left:auto;display:flex;gap:4px;">
-      <a href="/app/outbound-studio/?account=${encName}&temperature=${temp}" class="btn btn-sm" style="font-size:.6rem;padding:3px 8px;text-decoration:none;">Generate Touch →</a>
-      <a href="/app/cold-call-studio/?account=${encName}" class="btn btn-sm" style="font-size:.6rem;padding:3px 8px;text-decoration:none;">Prep Call →</a>
+      ${renderNextMoveButton(a,move)}
+      <a href="/app/cold-call-studio/?account=${encName}" class="btn btn-sm" style="font-size:.6rem;padding:3px 8px;text-decoration:none;">Prep Call</a>
     </div>
   </div>`;
 }
@@ -1283,12 +1435,12 @@ function renderDetail(a){
   return`
 <div class="detail">
   <div class="detail-actions">
-    <button class="btn btn-gold btn-sm" data-enrich="${a.id}">🔍 AI Research</button>
-    <button class="btn btn-sm" data-deepresearch="${a.id}" style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.3);color:#a855f7;">⚡ Deep Research</button>
-    <button class="btn btn-sm" data-brief="${a.id}">📋 Copy Brief</button>
+    <button class="btn btn-gold btn-sm" data-enrich="${a.id}" ${a._researching?'disabled':''}>${a._researching==='ai'?'Researching...':'AI Research'}</button>
+    <button class="btn btn-sm" data-deepresearch="${a.id}" ${a._researching?'disabled':''} style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.3);color:#a855f7;">${a._researching==='deep'?'Researching...':'Deep Research'}</button>
+    <button class="btn btn-sm" data-brief="${a.id}">Copy Brief</button>
     <button class="btn btn-sm" data-copysigs="${a.id}">Signals</button>
     <button class="btn btn-sm" data-scoredetail="${a.id}">Why ${heat(a)}?</button>
-    <span style="margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--tx3)">${a._lastEnriched?`live ${esc(formatRelativeTime(a._lastEnriched))} • `:''}${scoreExplain(a)}</span>
+    <span style="margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--tx3)">${a._lastEnriched?`live ${esc(formatRelativeTime(a._lastEnriched))} | `:''}${scoreExplain(a)}</span>
   </div>
   ${renderResearchStatus(a)}
   ${renderRecPlay(a)}
@@ -1296,6 +1448,7 @@ function renderDetail(a){
     <span style="font-size:.6rem;color:var(--tx4);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 0">Research:</span>
     ${researchLinks.map(([u,l])=>`<a class="rlink" href="${esc(u)}" target="_blank" rel="noopener">↗ ${l}</a>`).join('')}
   </div>
+  ${renderHeatExplainability(a)}
   <div class="detail-tabs">
     ${tabList.map(([k,l,n])=>`<div class="dtab ${tab===k?'on':''}" data-dtab="${a.id}|${k}">${l}<small>${n}</small></div>`).join('')}
   </div>
