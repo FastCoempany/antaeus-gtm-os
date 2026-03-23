@@ -9,7 +9,7 @@
         billingLabel: '$25/mo equivalent billed annually',
         checkoutUrl: '',
         checkoutStorageKey: 'gtmos_checkout_url',
-        supportEmail: 'antaeus.coe@gmail.com',
+        supportEmail: 'hello@antaeus.app',
         successPath: '/purchase/success/',
         cancelPath: '/purchase/cancelled/'
     }, existing);

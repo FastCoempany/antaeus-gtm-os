@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Antaeus - The operating system for founder-led sales</title>
-<meta name="description" content="19 integrated modules. One shared engine. A Readiness Score that tells you when you're ready to hire your first sales person. $299/year.">
+<title>Antaeus - GTM OS for founder-led B2B teams before the first serious sales hire</title>
+<meta name="description" content="Turn founder-led sales into a scored operating system your first AE can inherit. Explore the demo workspace or move into the annual plan.">
 <meta property="og:title" content="Antaeus GTM OS">
 <meta property="og:description" content="70% of first GTM hires fail. This is the system that fixes it.">
 <meta property="og:url" content="https://antaeus.app">
@@ -51,6 +51,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* ===== HERO ===== */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 32px 80px;position:relative}
 .hero-inner{max-width:780px}
+.hero-kicker{font-family:var(--mono);font-size:0.62rem;color:var(--accent2);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:18px}
 .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.6rem);color:var(--tx);line-height:1.15;margin-bottom:20px;letter-spacing:-0.02em}
 .hero h1 em{font-style:normal;color:var(--accent)}
 .hero p{font-size:clamp(0.92rem,1.5vw,1.05rem);color:var(--tx2);line-height:1.65;max-width:580px;margin:0 auto 36px}
@@ -58,6 +59,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .hero-links{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap}
 .hero-link-alt{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.04em;color:var(--tx2);text-decoration:none;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);transition:all 0.2s}
 .hero-link-alt:hover{color:var(--tx);border-color:var(--accent-line);background:rgba(255,255,255,0.03)}
+.buyer-strip{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 auto 28px;max-width:720px}
+.buyer-chip{padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);font-family:var(--mono);font-size:0.62rem;letter-spacing:0.05em;color:var(--tx2)}
 .hero-sub{font-family:var(--mono);font-size:0.62rem;color:var(--tx3);margin-top:16px;letter-spacing:0.04em}
 .hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.6rem;color:var(--tx4);letter-spacing:0.1em;animation:bob 2s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
@@ -145,6 +148,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .price-includes li::before{content:'+';color:var(--green);font-size:0.7rem;font-weight:700}
 .price-btn{display:block;width:100%;padding:16px;border-radius:12px;background:var(--accent);color:#fff;font-family:var(--sans);font-size:0.95rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;text-align:center;transition:all 0.2s;box-shadow:0 0 30px rgba(192,120,80,0.15)}.price-btn:hover{background:#a86540;box-shadow:0 0 50px rgba(192,120,80,0.25)}
 .price-no{text-align:center;max-width:500px;margin:0 auto;font-size:0.82rem;color:var(--tx3);line-height:1.6}
+.reassure-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;max-width:860px;margin:28px auto 0;text-align:left}
+.reassure-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px}
+.reassure-card h3{font-size:0.88rem;color:var(--tx);margin-bottom:8px}
+.reassure-card p{font-size:0.8rem;color:var(--tx2);line-height:1.6}
 
 /* ===== FAQ ===== */
 .faq{padding:80px 0 120px}
@@ -216,19 +223,29 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <nav class="nav">
   <a href="#" class="nav-brand">antaeus<em>.</em></a>
   <div class="nav-actions">
-    <a href="/demo-seed.html" class="nav-login">Explore Demo</a>
+    <a href="/demo-seed.html?entry=nav" class="nav-login">Explore Demo</a>
     <a href="/login.html" class="nav-login">Sign In</a>
-    <a href="#pricing" class="nav-cta">Get Started - $299/yr</a>
+    <a href="/purchase/?entry=nav" class="nav-cta">See Annual Plan</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <h1 class="reveal">The operating system for <em>founder-led sales.</em></h1>
-    <p class="reveal reveal-d1">19 integrated modules. One shared computation engine. A Readiness Score that tells you exactly when you're ready to hire your first sales person.</p>
-    <a href="#pricing" class="hero-cta reveal reveal-d2">Start for $299/year -&gt;</a>
-    <div class="hero-sub reveal reveal-d3">$25/mo equivalent | No demo | No sales call | Fully self-serve</div>
+    <div class="hero-kicker reveal">For founder-led B2B teams before or just after the first serious sales hire</div>
+    <h1 class="reveal">Turn founder-led sales into a system your <em>next hire can actually inherit.</em></h1>
+    <p class="reveal reveal-d1">If you are the founder or the first GTM operator and the motion still lives in your head, Antaeus turns that motion into scored, reusable operating infrastructure instead of a blank CRM and vibes.</p>
+    <div class="buyer-strip reveal reveal-d2">
+      <span class="buyer-chip">Founder-led B2B</span>
+      <span class="buyer-chip">First GTM operator</span>
+      <span class="buyer-chip">Pre-handoff system build</span>
+    </div>
+    <div class="hero-links reveal reveal-d3">
+      <a href="/demo-seed.html?entry=hero" class="hero-cta hero-cta-demo">Open Demo Workspace -&gt;</a>
+      <a href="/purchase/?entry=hero-plan" class="hero-link-alt">See annual plan</a>
+      <a href="/methodology/" class="hero-link-alt">Read the methodology</a>
+    </div>
+    <div class="hero-sub reveal reveal-d4">Demo first if you want to feel the system. Buy when you want the real workspace, onboarding corridor, and durable handoff build.</div>
   </div>
   <div class="hero-scroll">v scroll</div>
 </section>
@@ -440,8 +457,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <!-- PRICING -->
 <section class="pricing" id="pricing">
   <div class="container">
-    <h2 class="reveal">One product. One price.</h2>
-    <p class="pricing-sub reveal reveal-d1">No tiers. No feature gates. No "contact us."</p>
+    <h2 class="reveal">One annual plan for the founder or first GTM operator building the motion.</h2>
+    <p class="pricing-sub reveal reveal-d1">Use the demo workspace first. Use the annual plan when you want the real system, real persistence, and the handoff kit output.</p>
 
     <div class="price-card reveal reveal-d2">
       <div class="price-name">Antaeus GTM OS</div>
@@ -457,10 +474,25 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <li>Future Autopsy - 45-day deal death simulation</li>
         <li>Advisory Stakeholder Framework - 10 deployment moments</li>
       </ul>
-      <a href="#buy" class="price-btn" id="buyBtn">Start Now -&gt;</a>
+      <a href="/purchase/?entry=pricing" class="price-btn" id="buyBtn">Go to Purchase Flow -&gt;</a>
     </div>
 
-    <div class="price-no reveal">No demo required. No sales call. No free trial.<br>The Academy walks you through everything. The Readiness Score tells you when you're done.</div>
+    <div class="price-no reveal">No sales call. No fake enterprise dance. Start in the demo if you want to see the system think. Move into the annual plan when you are ready to build your real GTM operating system.</div>
+
+    <div class="reassure-grid reveal reveal-d3">
+      <article class="reassure-card">
+        <h3>Best fit</h3>
+        <p>Founder-led B2B teams with early traction, live deals, and a motion that still lives in people's heads instead of a durable system.</p>
+      </article>
+      <article class="reassure-card">
+        <h3>What happens after purchase</h3>
+        <p>Purchase flow -&gt; success page -&gt; create account or sign in with the same email -&gt; onboarding -&gt; welcome guide -&gt; real workspace.</p>
+      </article>
+      <article class="reassure-card">
+        <h3>What should happen in the first session</h3>
+        <p>You should leave with at least one ICP, one live motion, and one real deal or signal feeding the system instead of a blank app.</p>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -471,33 +503,33 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div class="faq-list">
 
       <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Who is this actually for?</div>
+        <div class="faq-a"><div class="faq-a-inner">The primary buyer is the founder or first GTM operator at a founder-led B2B company who knows the motion is still trapped in people's heads. It also works just after the first senior AE or founding seller joins, when you need the system they should have inherited on day one.</div></div>
+      </div>
+
+      <div class="faq-item reveal">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is this a CRM?</div>
-        <div class="faq-a"><div class="faq-a-inner">No. It's the intelligence and methodology layer that sits above your CRM. It captures what the CRM can't: your sales knowledge, your process, your loss patterns, your discovery frameworks. It tells you what to do - the CRM records that you did it.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">No. It's the intelligence and methodology layer that sits above your CRM. It captures what the CRM can't: your sales knowledge, your process, your loss patterns, your discovery frameworks. It tells you what to do next. Your CRM records that you did it.</div></div>
       </div>
 
       <div class="faq-item reveal">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is there a free trial?</div>
-        <div class="faq-a"><div class="faq-a-inner">No. $299 buys a full year of access. The App Academy walks you from Readiness Score 0 to 80+ with step-by-step instructions. If the 70% failure rate doesn't convince you this matters, a free trial won't either.</div></div>
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Should I buy before or after hiring the first AE?</div>
+        <div class="faq-a"><div class="faq-a-inner">Preferably before, because the whole point is to build the handoff kit and operating system before you make an expensive hire. But if you already hired them, use Antaeus to stop forcing them to reverse-engineer the motion from scraps.</div></div>
       </div>
 
       <div class="faq-item reveal">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">I already hired my first AE. Is it too late?</div>
-        <div class="faq-a"><div class="faq-a-inner">No. Give them the app. The Academy works for new hires too - the Readiness Score reframes from "are you ready to hire" to "how systematized is your GTM motion." It's the playbook they wish existed on day one.</div></div>
-      </div>
-
-      <div class="faq-item reveal">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can my whole team use it?</div>
-        <div class="faq-a"><div class="faq-a-inner">One purchase = one user. The system is designed for the founder or the first GTM hire working solo. If you need multiple seats, reach out and we'll set up a team arrangement.</div></div>
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is there a free trial or demo?</div>
+        <div class="faq-a"><div class="faq-a-inner">There is a demo workspace. Use that first if you want to see the system think with seeded data. The paid plan is annual because this is operating infrastructure, not a toy you poke for three days and forget.</div></div>
       </div>
 
       <div class="faq-item reveal">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens after I pay?</div>
-        <div class="faq-a"><div class="faq-a-inner">Immediate access to the full app, the Academy guide, and the Reference Manual. You start at Readiness Score 0. The Academy walks you through 5 levels - from setting your ICP to exporting the Handoff Kit. Most founders reach Level 1 (score 25+) in the first 30 minutes.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">You land on the purchase-success page, then create an account or sign in with the same email from checkout. From there the app routes you through onboarding, the welcome guide, and into the real workspace. In the first session you should be able to create your first ICP and start feeding real GTM truth into the system.</div></div>
       </div>
 
       <div class="faq-item reveal">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">I'm a fractional CRO / advisor. Can I use this with clients?</div>
-        <div class="faq-a"><div class="faq-a-inner">Yes. One purchase per client engagement. The Readiness Score becomes your diagnostic tool. The Handoff Kit is your deliverable. The system makes you look like you have a proprietary methodology - because now you do.</div></div>
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can my whole team use it?</div>
+        <div class="faq-a"><div class="faq-a-inner">One purchase is currently one user. The cleanest use case is the founder or first GTM operator building the motion. If you need multi-seat or advisor/client usage, email hello@antaeus.app and handle it intentionally instead of pretending this is generic team software.</div></div>
       </div>
 
     </div>
@@ -507,9 +539,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <!-- FINAL CTA -->
 <section class="final">
   <div class="container">
-    <h2 class="reveal">The system builds itself as you sell.</h2>
-    <p class="reveal reveal-d1">Every module's output is another module's input. The Playbook writes itself. The only thing you do is sell.</p>
-    <a href="#pricing" class="hero-cta reveal reveal-d2">Start for $299/year -&gt;</a>
+    <h2 class="reveal">Start in the demo. Move into the real workspace when it clicks.</h2>
+    <p class="reveal reveal-d1">Use the demo if you need to feel the system think. Use the annual plan when you are ready to capture your own motion, persist it, and build the handoff kit your next hire should inherit.</p>
+    <div class="hero-links reveal reveal-d2">
+      <a href="/demo-seed.html?entry=final" class="hero-cta hero-cta-demo">Open Demo Workspace -&gt;</a>
+      <a href="/purchase/?entry=final" class="hero-link-alt">See annual plan</a>
+    </div>
   </div>
 </section>
 
@@ -542,21 +577,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 })();
 </script>
 <script src="/js/analytics-site-config.js"></script><script src="/js/analytics.js"></script>
-<script>
-(function(){
-  var mappings=[
-    {selector:'.nav-cta',href:'/purchase/?entry=nav'},
-    {selector:'.hero .hero-cta',href:'/purchase/?entry=hero'},
-    {selector:'#buyBtn',href:'/purchase/?entry=pricing'},
-    {selector:'.final .hero-cta',href:'/purchase/?entry=final'}
-  ];
-  mappings.forEach(function(item){
-    var el=document.querySelector(item.selector);
-    if(!el)return;
-    el.setAttribute('href',item.href);
-  });
-})();
-</script>
 </body>
 </html>
 
