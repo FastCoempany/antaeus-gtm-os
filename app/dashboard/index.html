@@ -73,6 +73,24 @@
         .np-lifecycle-milestones{display:flex;flex-wrap:wrap;gap:8px;}
         .np-lifecycle-pill{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid rgba(148,163,184,0.22);background:rgba(148,163,184,0.08);color:var(--text-muted);font-size:0.72rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;}
         .np-lifecycle-pill.done{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.12);color:#bbf7d0;}
+        .np-source-map{margin-bottom:16px;padding:18px 20px;border-radius:var(--radius-lg);border:1px solid rgba(212,165,116,0.18);background:linear-gradient(135deg,rgba(212,165,116,0.08),rgba(15,23,42,0.38));}
+        .np-source-header{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:14px;}
+        .np-source-kicker{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-gold);font-weight:700;margin-bottom:6px;}
+        .np-source-title{font-family:var(--font-serif);font-size:1.08rem;color:var(--text-primary);margin-bottom:5px;}
+        .np-source-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.6;max-width:620px;}
+        .np-source-score{min-width:120px;padding:12px 14px;border-radius:14px;background:rgba(15,23,42,0.32);border:1px solid rgba(255,255,255,0.06);text-align:center;}
+        .np-source-score span{display:block;font-family:var(--font-serif);font-size:1.45rem;line-height:1;color:var(--text-primary);}
+        .np-source-score small{display:block;margin-top:6px;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;}
+        .np-source-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+        .np-source-card{padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);}
+        .np-source-card strong{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:5px;}
+        .np-source-card span{display:block;font-size:0.92rem;color:var(--text-secondary);line-height:1.5;}
+        .np-source-card.live{border-color:rgba(34,197,94,0.18);}
+        .np-source-card.next{border-color:rgba(245,158,11,0.2);}
+        .np-source-card.pending{border-color:rgba(148,163,184,0.16);}
+        .np-source-stage{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
+        .np-source-stage-copy{font-size:0.8rem;color:var(--text-tertiary);line-height:1.6;max-width:700px;}
+        .np-source-stage-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(212,165,116,0.22);background:rgba(212,165,116,0.08);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-gold);font-weight:700;}
         .np-empty{text-align:center;padding:80px 24px;}
         .np-empty-icon{font-size:2.5rem;margin-bottom:16px;}
         .np-empty-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:8px;}
@@ -80,7 +98,7 @@
         .np-empty-link{color:var(--brand-gold);text-decoration:none;font-weight:700;font-size:0.9rem;padding:10px 20px;border:1px solid rgba(212,165,116,0.3);border-radius:var(--radius-md);display:inline-block;margin:0 6px;transition:all 0.2s;}
         .np-empty-link:hover{background:rgba(212,165,116,0.08);}
         .np-no-items{font-size:0.85rem;color:var(--text-muted);padding:20px 0;font-style:italic;}
-        @media(max-width:800px){.np-columns{grid-template-columns:1fr;}.np-ribbon{flex-wrap:wrap;gap:8px;}.np-ribbon-item{flex:none;width:calc(50% - 4px);border-right:none;}.np-tools{flex-direction:column;align-items:stretch;}.np-tools-left,.np-tools-right{justify-content:center;}}
+        @media(max-width:800px){.np-columns,.np-source-grid{grid-template-columns:1fr;}.np-ribbon{flex-wrap:wrap;gap:8px;}.np-ribbon-item{flex:none;width:calc(50% - 4px);border-right:none;}.np-tools{flex-direction:column;align-items:stretch;}.np-tools-left,.np-tools-right{justify-content:center;}}
     </style>
 </head>
 <body>
@@ -211,6 +229,118 @@
                 '</div>';
         }
 
+        function buildSignalCounts(accounts) {
+            var list = Array.isArray(accounts) ? accounts : [];
+            return list.reduce(function(total, account) {
+                var next = account && Array.isArray(account.signals) ? account.signals.length : 0;
+                return total + next;
+            }, 0);
+        }
+
+        function buildMotionCounts(summary) {
+            var discovery = summary && summary.discovery && summary.discovery.stats ? summary.discovery.stats : {};
+            var sequences = summary && summary.sequences ? summary.sequences : {};
+            var outboundTouches = sequences.outboundTouches && Array.isArray(sequences.outboundTouches.touches) ? sequences.outboundTouches.touches.length : 0;
+            var linkedinActions = sequences.linkedinLog && Array.isArray(sequences.linkedinLog.actions) ? sequences.linkedinLog.actions.length : 0;
+            var calls = Number(discovery.totalCalls || 0) || 0;
+            return {
+                touches: outboundTouches + linkedinActions,
+                calls: calls,
+                total: outboundTouches + linkedinActions + calls
+            };
+        }
+
+        function getDashboardStage(context) {
+            if (!context.icps && !context.accounts && !context.deals) {
+                return {
+                    key: 'setup',
+                    score: 0,
+                    title: 'This dashboard becomes useful once the first operating objects exist.',
+                    copy: 'Start with one ICP, then one live account or signal, then one real deal. After that, the dashboard stops being theoretical and starts behaving like a command surface.',
+                    stageBadge: 'Setup stage',
+                    emptyTitle: 'You have a live workspace, but no command surface yet.',
+                    emptyCopy: 'The dashboard needs at least one operating object to brief. Build the first ICP, save one account or signal, then create the first real deal.',
+                    actions: [
+                        { href: '/app/icp-studio/', label: 'Create first ICP' },
+                        { href: '/app/signal-console/', label: 'Find a signal' },
+                        { href: '/app/welcome/', label: 'Open Welcome Guide' }
+                    ]
+                };
+            }
+            if (context.icps && !context.accounts && !context.deals) {
+                return {
+                    key: 'targeting',
+                    score: 1,
+                    title: 'You have targeting truth, but the market is still quiet.',
+                    copy: 'The dashboard has ICP context now, but it still needs a live account or signal before it can start behaving like an operating brief.',
+                    stageBadge: 'Targeting stage',
+                    emptyTitle: 'Your ICP exists. Now give the dashboard live market context.',
+                    emptyCopy: 'Save one real account or signal so the command layer can stop looking inward and start reacting to the market.',
+                    actions: [
+                        { href: '/app/signal-console/', label: 'Save first account' },
+                        { href: '/app/territory-architect/', label: 'Shape territory' },
+                        { href: '/app/dashboard/', label: 'Retry dashboard' }
+                    ]
+                };
+            }
+            if (context.accounts && !context.deals) {
+                return {
+                    key: 'market',
+                    score: 2,
+                    title: 'The dashboard can see the market, but it still needs a live deal to reason about.',
+                    copy: 'Signals and accounts are useful, but the command layer becomes believable when one real deal object exists with next steps, proof, and risk.',
+                    stageBadge: 'Market stage',
+                    emptyTitle: 'You have signals. Turn one into a deal.',
+                    emptyCopy: 'Create the first live deal so the dashboard can brief risk, coverage, and next moves instead of just setup progress.',
+                    actions: [
+                        { href: '/app/deal-workspace/', label: 'Create first deal' },
+                        { href: '/app/outbound-studio/', label: 'Log first motion' },
+                        { href: '/app/signal-console/', label: 'Review accounts' }
+                    ]
+                };
+            }
+            return {
+                key: 'operating',
+                score: 3,
+                title: 'The dashboard is now reading a real operating system.',
+                copy: 'From here, the job is to keep the upstream modules honest so the morning brief remains useful instead of decorative.',
+                stageBadge: 'Operating stage',
+                emptyTitle: 'The dashboard has some history, but nothing active to brief right now.',
+                emptyCopy: 'Your existing records are real, but there is no current motion to summarize. Add a live deal or fresh motion so the command view has something active to manage.',
+                actions: [
+                    { href: '/app/deal-workspace/', label: 'Open deal workspace' },
+                    { href: '/app/outbound-studio/', label: 'Log first motion' },
+                    { href: '/app/settings/', label: 'Backup and settings' }
+                ]
+            };
+        }
+
+        function renderSourceMap(stage, context) {
+            var useful = context.icps > 0 ? 1 : 0;
+            useful += (context.accounts > 0 || context.signals > 0) ? 1 : 0;
+            useful += context.deals > 0 ? 1 : 0;
+            useful += context.motions > 0 ? 1 : 0;
+            return '<div class="np-source-map">' +
+                '<div class="np-source-header">' +
+                    '<div><div class="np-source-kicker">Dashboard source logic</div><div class="np-source-title">' + escH(stage.title) + '</div><div class="np-source-copy">' + escH(stage.copy) + '</div></div>' +
+                    '<div class="np-source-score"><span>' + useful + '/4</span><small>live input layers</small></div>' +
+                '</div>' +
+                '<div class="np-source-grid">' +
+                    '<div class="np-source-card ' + (context.icps > 0 ? 'live' : 'pending') + '"><strong>ICP Studio</strong><span>' + escH(context.icps > 0 ? context.icps + ' ICP' + (context.icps === 1 ? '' : 's') + ' saved' : 'No ICP truth saved yet') + '</span></div>' +
+                    '<div class="np-source-card ' + ((context.accounts > 0 || context.signals > 0) ? 'live' : 'next') + '"><strong>Signals</strong><span>' + escH((context.accounts > 0 || context.signals > 0) ? context.accounts + ' account' + (context.accounts === 1 ? '' : 's') + ' · ' + context.signals + ' signal' + (context.signals === 1 ? '' : 's') : 'No live accounts or signals yet') + '</span></div>' +
+                    '<div class="np-source-card ' + (context.deals > 0 ? 'live' : 'next') + '"><strong>Deals</strong><span>' + escH(context.deals > 0 ? context.activeDeals + ' active · ' + context.deals + ' total deal' + (context.deals === 1 ? '' : 's') : 'No live deals yet') + '</span></div>' +
+                    '<div class="np-source-card ' + (context.motions > 0 ? 'live' : 'pending') + '"><strong>Motion</strong><span>' + escH(context.motions > 0 ? context.motions + ' motion' + (context.motions === 1 ? '' : 's') + ' logged' : 'No calls or outbound activity logged yet') + '</span></div>' +
+                '</div>' +
+                '<div class="np-source-stage"><div class="np-source-stage-copy">This dashboard becomes useful when there is at least one ICP, one live account or signal, one real deal, and one logged motion. Until then it should behave like an honest setup coach, not pretend to be a fully informed command room.</div><div class="np-source-stage-badge">' + escH(stage.stageBadge) + '</div></div>' +
+            '</div>';
+        }
+
+        function renderStageActions(actions) {
+            return (actions || []).map(function(action) {
+                return '<a href="' + escH(action.href) + '" class="np-empty-link">' + escH(action.label) + ' &rarr;</a>';
+            }).join('');
+        }
+
         async function render() {
             var icpState = { icps: [] };
             var deals = dh.loadAllDeals();
@@ -289,6 +419,17 @@
             var seed = dh.loadSeed();
             var active = vitals.filter(function(v) { return !v.isClosed; });
             var icpCount = (icpState && Array.isArray(icpState.icps)) ? icpState.icps.length : 0;
+            var workspaceSummary = (weekOneState && weekOneState.summary) ? weekOneState.summary : (window.__gtmosWorkspaceSummary || null);
+            var signalCount = buildSignalCounts(signalConsoleState.accounts);
+            var motionCounts = buildMotionCounts(workspaceSummary);
+            var stage = getDashboardStage({
+                icps: icpCount,
+                accounts: signalConsoleState.accounts.length,
+                signals: signalCount,
+                deals: vitals.length,
+                activeDeals: active.length,
+                motions: motionCounts.total
+            });
             var backupBanner = backupBannerHtml();
             var warningBanner = dependencyWarningHtml(dependencyWarnings);
             var weekOneBanner = '';
@@ -301,6 +442,14 @@
                     warningBanner = dependencyWarningHtml(dependencyWarnings);
                 }
             }
+            var sourceMap = renderSourceMap(stage, {
+                icps: icpCount,
+                accounts: signalConsoleState.accounts.length,
+                signals: signalCount,
+                deals: vitals.length,
+                activeDeals: active.length,
+                motions: motionCounts.total
+            });
 
             if (vitals.length === 0) {
                 if (!dashboardSummaryTracked) {
@@ -312,17 +461,11 @@
                         week_one_active: !!(weekOneState && weekOneState.active)
                     });
                 }
-                var emptyHtml = weekOneBanner + warningBanner + backupBanner + '<div class="np-empty">' +
+                var emptyHtml = weekOneBanner + warningBanner + sourceMap + backupBanner + '<div class="np-empty">' +
                     '<div class="np-empty-icon">&#128220;</div>' +
-                    '<div class="np-empty-title">Your workspace is live, but the dashboard has nothing to brief yet.</div>' +
-                    '<div class="np-empty-sub">Create the first records that make this app feel like yours. ICPs shape targeting, deals power the weekly briefing.</div>';
-
-                if (icpCount === 0) {
-                    emptyHtml += '<a href="/app/icp-studio/" class="np-empty-link">Create first ICP &rarr;</a>';
-                }
-
-                emptyHtml += '<a href="/app/deal-workspace/" class="np-empty-link">Create first deal &rarr;</a>' +
-                    '<a href="/app/signal-console/" class="np-empty-link">Find a signal &rarr;</a>' +
+                    '<div class="np-empty-title">' + escH(stage.emptyTitle) + '</div>' +
+                    '<div class="np-empty-sub">' + escH(stage.emptyCopy) + '</div>' +
+                    renderStageActions(stage.actions) +
                     '</div>';
                 document.getElementById('dashContent').innerHTML =
                     emptyHtml;
@@ -347,6 +490,7 @@
             var html = '';
             html += weekOneBanner;
             html += warningBanner;
+            html += sourceMap;
             html += backupBanner;
 
             // STAT RIBBON

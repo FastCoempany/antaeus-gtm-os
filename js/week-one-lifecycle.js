@@ -232,8 +232,11 @@
             var footer = options.footer;
             if (!footer) return;
             var currentPath = String(options.currentPath || '');
-            var existing = footer.querySelector('.nav-weekone-chip');
             this.load(false).then(function(state) {
+                Array.prototype.slice.call(footer.querySelectorAll('.nav-weekone-chip')).slice(1).forEach(function(node) {
+                    node.remove();
+                });
+                var existing = footer.querySelector('.nav-weekone-chip');
                 if (!state || !state.active || currentPath.indexOf('/app/dashboard') !== -1 || currentPath.indexOf('/app/welcome') !== -1 || (window.gtmEnvironment && window.gtmEnvironment.isDemo)) {
                     if (existing) existing.remove();
                     return;
