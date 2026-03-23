@@ -8,21 +8,52 @@
 <style>
 :root{--bg:#06080d;--accent:#c07850;--text:#e8e4df;--text2:#a09a92;--text3:#605c56;--serif:'DM Serif Display',Georgia,serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;}
-.card{max-width:620px;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:48px;text-align:center;backdrop-filter:blur(16px);}
+body{font-family:var(--sans);background:radial-gradient(circle at top,rgba(192,120,80,0.12),transparent 30%),var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;}
+.card{max-width:1080px;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:48px;backdrop-filter:blur(16px);}
+.eyebrow{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--accent);font-weight:700;margin-bottom:18px;}
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,0.9fr);gap:28px;align-items:start;}
+.hero-copy{text-align:left;}
+.hero-side{padding:22px;border-radius:18px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.06);}
 .logo{font-family:var(--serif);font-size:1.8rem;margin-bottom:4px;}
 .logo span{color:var(--accent);}
-.sub{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--text3);font-weight:600;margin-bottom:32px;}
-h1{font-family:var(--serif);font-size:1.6rem;margin-bottom:8px;}
-p{font-size:0.88rem;color:var(--text2);line-height:1.6;margin-bottom:28px;}
-.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
-.btn{padding:16px 32px;border-radius:14px;font-size:0.92rem;font-weight:700;border:none;cursor:pointer;font-family:var(--sans);transition:all 0.2s;}
-.btn-mm{background:var(--accent);color:#fff;}.btn-mm:hover{background:#a86540;}
-.btn-ent{background:rgba(90,143,192,0.15);color:#5a8fc0;border:1px solid rgba(90,143,192,0.3);}.btn-ent:hover{background:rgba(90,143,192,0.25);}
-.btn-clear{padding:10px 20px;border-radius:10px;font-size:0.75rem;font-weight:600;border:1px solid rgba(239,68,68,0.2);background:transparent;color:#c05a52;cursor:pointer;font-family:var(--sans);}.btn-clear:hover{background:rgba(239,68,68,0.06);}
-.status{margin-top:20px;font-family:var(--mono);font-size:0.72rem;color:var(--text3);min-height:40px;line-height:1.6;}
+.sub{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--text3);font-weight:600;margin-bottom:18px;}
+h1{font-family:var(--serif);font-size:2.45rem;line-height:1.05;margin-bottom:12px;max-width:720px;}
+p{font-size:1rem;color:var(--text2);line-height:1.7;margin-bottom:24px;max-width:760px;}
+.note-list{display:grid;gap:12px;margin:24px 0 28px;}
+.note{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.06);font-size:0.88rem;color:var(--text2);line-height:1.55;}
+.note strong{display:block;color:var(--text);margin-bottom:4px;font-size:0.8rem;letter-spacing:0.03em;text-transform:uppercase;}
+.hero-side h2{font-family:var(--serif);font-size:1.35rem;margin-bottom:10px;}
+.hero-side p{font-size:0.9rem;margin-bottom:14px;}
+.proof-list{list-style:none;display:grid;gap:10px;margin-top:14px;}
+.proof-list li{font-size:0.86rem;color:var(--text2);line-height:1.5;padding-left:18px;position:relative;}
+.proof-list li::before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;border-radius:50%;background:rgba(192,120,80,0.9);}
+.quick-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
+.link-chip{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.035);color:var(--text);text-decoration:none;font-size:0.82rem;font-weight:700;letter-spacing:0.02em;transition:all 0.2s;}
+.link-chip:hover{border-color:rgba(192,120,80,0.35);background:rgba(192,120,80,0.08);}
+.scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:34px 0 18px;}
+.btn{padding:22px 20px;border-radius:20px;font-size:0.96rem;font-weight:700;border:none;cursor:pointer;font-family:var(--sans);transition:all 0.2s;text-align:left;min-height:214px;}
+.btn .scenario-type{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;opacity:0.72;margin-bottom:10px;}
+.btn .scenario-title{display:block;font-size:1.2rem;margin-bottom:10px;}
+.btn .scenario-meta{display:block;font-size:0.78rem;font-weight:600;opacity:0.86;margin-bottom:12px;}
+.btn .scenario-body{display:block;font-size:0.88rem;font-weight:500;line-height:1.6;opacity:0.96;}
+.btn-mm{background:linear-gradient(145deg,rgba(192,120,80,0.18),rgba(192,120,80,0.06));color:#fff;border:1px solid rgba(192,120,80,0.28);}
+.btn-mm:hover{background:linear-gradient(145deg,rgba(192,120,80,0.24),rgba(192,120,80,0.1));transform:translateY(-2px);}
+.btn-ent{background:linear-gradient(145deg,rgba(90,143,192,0.15),rgba(90,143,192,0.06));color:#dbeafe;border:1px solid rgba(90,143,192,0.26);}
+.btn-ent:hover{background:linear-gradient(145deg,rgba(90,143,192,0.24),rgba(90,143,192,0.1));transform:translateY(-2px);}
+.toolbar{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
+.btn-clear{padding:10px 20px;border-radius:999px;font-size:0.78rem;font-weight:700;border:1px solid rgba(239,68,68,0.22);background:transparent;color:#ff8b82;cursor:pointer;font-family:var(--sans);}
+.btn-clear:hover{background:rgba(239,68,68,0.06);}
+.toolbar-copy{font-size:0.82rem;color:var(--text3);}
+.status{margin-top:20px;font-family:var(--mono);font-size:0.76rem;color:var(--text3);min-height:54px;line-height:1.7;padding:16px;border-radius:14px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);}
 .status.ok{color:#4a9e6e;}
-.count{font-family:var(--mono);font-size:0.62rem;color:var(--text3);margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);}
+.count{font-family:var(--mono);font-size:0.68rem;color:var(--text3);margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);}
+@media (max-width:900px){
+body{padding:20px;}
+.card{padding:28px;}
+.hero{grid-template-columns:1fr;}
+.scenario-grid{grid-template-columns:1fr;}
+h1{font-size:2rem;}
+}
 </style>
 </head>
 <body>
@@ -117,6 +148,75 @@ function bootstrapDemoStorageMode(){
 }
 
 bootstrapDemoStorageMode();
+
+function ensureDemoAnalytics(){
+  if(document.querySelector('script[data-gtmos-analytics-config]')) return;
+  var configScript=document.createElement('script');
+  configScript.src='/js/analytics-site-config.js';
+  configScript.setAttribute('data-gtmos-analytics-config','true');
+  document.head.appendChild(configScript);
+
+  var analyticsScript=document.createElement('script');
+  analyticsScript.src='/js/analytics.js';
+  analyticsScript.setAttribute('data-gtmos-analytics-runtime','true');
+  document.head.appendChild(analyticsScript);
+}
+
+function trackDemo(name,props){
+  try{
+    if(window.gtmAnalytics&&typeof window.gtmAnalytics.track==='function'){
+      window.gtmAnalytics.track(name,Object.assign({stage:'demo_lane'},props||{}));
+    }
+  }catch(e){}
+}
+
+function renderDemoLane(){
+  var card=document.querySelector('.card');
+  if(!card) return;
+  card.innerHTML='' +
+    '<div class="eyebrow">Self-Serve Demo Lane</div>' +
+    '<div class="hero">' +
+      '<div class="hero-copy">' +
+        '<div class="logo">antaeus<span>.</span></div>' +
+        '<div class="sub">Sample workspace, real system flow</div>' +
+        '<h1>Pick the demo that makes Antaeus believable in one session.</h1>' +
+        '<p>This is the guided sample workspace for seeing how signal, territory, outbound, discovery, deal motion, proof, and handoff all stack inside one operating system.</p>' +
+        '<div class="note-list">' +
+          '<div class="note"><strong>What is sample</strong>Accounts, deals, touches, advisor moves, PoC motion, and handoff evidence are seeded so the product never feels empty.</div>' +
+          '<div class="note"><strong>What is real</strong>The module logic, module handshakes, saved state, tour path, and shell behavior are the real app. Demo data just makes the story legible.</div>' +
+        '</div>' +
+        '<div class="quick-links">' +
+          '<a class="link-chip" href="/purchase/?entry=demo-lane">See Annual Plan</a>' +
+          '<a class="link-chip" href="/login.html">Sign In to Real Workspace</a>' +
+          '<a class="link-chip" href="/methodology/">Open Methodology</a>' +
+        '</div>' +
+      '</div>' +
+      '<div class="hero-side">' +
+        '<h2>What this demo should prove</h2>' +
+        '<p>By the time you hit dashboard, the path should feel coherent enough to explain in a Loom, a live demo, or a founder handoff conversation.</p>' +
+        '<ul class="proof-list">' +
+          '<li>Signal Console feeds territory, deal, and outbound context instead of living in isolation.</li>' +
+          '<li>Discovery, autopsy, and PoC work look like one system, not separate templates.</li>' +
+          '<li>The handoff path is visible, not theoretical.</li>' +
+          '<li>Sample data is clearly marked as sample, and real workspace return is easy.</li>' +
+        '</ul>' +
+      '</div>' +
+    '</div>' +
+    '<div class="scenario-grid">' +
+      '<button class="btn btn-mm" onclick="seed(\'mm\')"><span class="scenario-type">Scenario One</span><span class="scenario-title">Mid-Market Demo</span><span class="scenario-meta">$80K ACV - $500K quota - 6 deals</span><span class="scenario-body">Founder-to-first-AE motion. Expansion signals, a real champion path, one win, one loss, and enough pipeline detail to show how Antaeus sharpens execution before the first serious sales hire.</span></button>' +
+      '<button class="btn btn-ent" onclick="seed(\'ent\')"><span class="scenario-type">Scenario Two</span><span class="scenario-title">Enterprise Demo</span><span class="scenario-meta">$180K ACV - $1.2M quota - 7 deals</span><span class="scenario-body">Operator-scale motion. Complex proof, heavier stakeholders, longer cycles, advisor leverage, and clearer downstream handoff pressure for a team already running a real enterprise sale.</span></button>' +
+    '</div>' +
+    '<div class="toolbar">' +
+      '<div class="toolbar-copy">Pick a narrative, let the workspace seed, then move directly into the dashboard.</div>' +
+      '<button class="btn-clear" onclick="clearAll()">Reset Demo Workspace</button>' +
+    '</div>' +
+    '<div class="status" id="status"></div>' +
+    '<div class="count" id="count"></div>';
+}
+
+document.title='Antaeus GTM OS - Demo Workspace';
+ensureDemoAnalytics();
+renderDemoLane();
 
 function d(n){return new Date(Date.now()-n*86400000).toISOString()}
 function uid(pre){return(pre||'id')+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,6)}
@@ -699,7 +799,111 @@ function updateCount(){
   var c=countGtmKeys();
   document.getElementById('count').textContent=c+' gtmos_ keys in localStorage';
 }
+function getScenarioMeta(mode){
+  return mode==='ent'
+    ? {name:'Enterprise Demo',label:'enterprise',description:'Operator-scale deal motion with heavier proof, stakeholders, and handoff pressure.',redirect:'/app/dashboard/?demo=1'}
+    : {name:'Mid-Market Demo',label:'mid_market',description:'Founder-to-first-AE motion with expansion triggers, one win, one loss, and believable daily execution.',redirect:'/app/dashboard/?demo=1'};
+}
+
+function buildStatusMarkup(meta,data,shared,keys,returnUrl){
+  return keys+' demo keys written.<br>'
+    +data.accounts.length+' accounts - '
+    +data.deals.length+' deals - '
+    +data.advisors.length+' advisors - '
+    +shared.outboundTouches.touches.length+' touches - '
+    +shared.coldCallLog.calls.length+' calls<br><br>'
+    +'Loaded: '+meta.name+'<br>'
+    +meta.description+'<br><br>'
+    +'<a href="'+returnUrl+'" style="color:var(--accent);font-weight:700;">Open demo dashboard</a>';
+}
+
+window.seed=function(mode){
+  var data=mode==='ent'?enterprise():midMarket();
+  var shared=generateShared(data);
+  var meta=getScenarioMeta(mode);
+  var status=document.getElementById('status');
+  var keys=0;
+  var params;
+  var autoSeed='';
+  var returnUrl=meta.redirect;
+
+  function w(k,v){localStorage.setItem(k,JSON.stringify(v));keys++}
+  function wRaw(k,v){localStorage.setItem(k,String(v));keys++}
+
+  try{
+    params=new URLSearchParams(window.location.search||'');
+    autoSeed=(params.get('autoseed')||'').toLowerCase();
+    returnUrl=params.get('return')||meta.redirect;
+  }catch(e){}
+
+  try{localStorage.clear();}catch(e){}
+
+  wRaw('gtmos_noauth_mode','1');
+  wRaw('gtmos_noauth_email','demo@vectyr.ai');
+  w('gtmos_profile_cache',{id:'demo-workspace',full_name:'Demo Workspace',company_name:COMPANY,email:'demo@vectyr.ai',role:'founder',onboarding_completed:true});
+  w('gtmos_onboarding',{completed:true,answers:{companyName:COMPANY,stage:'Seed / Pre-Series A',quota:data.seed.annual_quota,acv:data.seed.avg_deal_size,productCategory:PRODUCT_CATEGORY,buyerPersona:'VP Operations'}});
+  w('gtmos_outbound_seed',data.seed);
+  w('gtmos_playbook',data.playbook);
+  w('gtmos_product_category',PRODUCT_CATEGORY);
+  w('gtmos_icp_analytics',{icps:data.icps,totalWorked:data.icps.filter(function(i){return i.worked}).length});
+  w('gtmos_sc_v4',{accounts:data.accounts,mode:'complex'});
+  w('gtmos_deal_workspaces',data.deals);
+  w('gtmos_deal_stage_history',data.stageHistory);
+
+  var outcomes={};
+  data.deals.forEach(function(dd){
+    if(dd.stage==='closed-won') outcomes[dd.id]={type:'won',date:dd.closeDate};
+    if(dd.stage==='closed-lost') outcomes[dd.id]={type:'lost',date:dd.closeDate,reason:dd.lossReason};
+  });
+  w('gtmos_deal_outcomes',outcomes);
+  w('gtmos_advisor_registry',{advisors:data.advisors});
+  w('gtmos_advisor_deployments',{deployments:data.deployments});
+  w('gtmos_outbound_touches',shared.outboundTouches);
+  w('gtmos_cold_call_log',shared.coldCallLog);
+  w('gtmos_linkedin_log',shared.linkedinLog);
+  w('gtmos_angles',shared.angles);
+  w('gtmos_discovery_stats',shared.discoveryStats);
+  w('gtmos_discovery_worked',shared.discoveryWorked);
+  w('gtmos_discovery_agenda',shared.discoveryAgenda);
+  w('gtmos_autopsy_log_v1',shared.autopsyLog);
+  w('gtmos_poc_data',shared.pocData);
+  w('gtmos_playbook_notes',shared.playbookNotes);
+  w('gtmos_qw_inputs',{quota:data.seed.annual_quota,acv:data.seed.avg_deal_size,winRate:data.seed.win_rate,cycle:data.seed.cycle_days});
+  w('gtmos_demo_seed_meta',{mode:mode,scenario:meta.label,seededAt:new Date().toISOString(),version:'v2',entry:'demo_lane'});
+
+  status.className='status ok';
+  status.innerHTML=buildStatusMarkup(meta,data,shared,keys,returnUrl);
+  updateCount();
+  trackDemo('demo_seed_complete',{demo_mode:mode,scenario:meta.label,accounts:data.accounts.length,deals:data.deals.length,touches:shared.outboundTouches.touches.length,return_path:returnUrl});
+
+  try{
+    if(autoSeed&&autoSeed===String(mode||'').toLowerCase()){
+      trackDemo('demo_autoseed_requested',{demo_mode:mode,scenario:meta.label,return_path:returnUrl});
+      status.innerHTML+='<br><br>Launching demo workspace...';
+      setTimeout(function(){window.location.href=returnUrl;},700);
+      return;
+    }
+  }catch(e){}
+
+  status.innerHTML+='<br><br>Opening demo workspace...';
+  setTimeout(function(){window.location.href=returnUrl;},900);
+};
+
+window.clearAll=function(){
+  var cleared=countGtmKeys();
+  try{localStorage.clear();}catch(e){}
+  document.getElementById('status').className='status';
+  document.getElementById('status').textContent=cleared+' demo keys cleared. You can now seed a fresh narrative.';
+  updateCount();
+  trackDemo('demo_reset_click',{cleared_keys:cleared});
+};
+
+function updateCount(){
+  var c=countGtmKeys();
+  document.getElementById('count').textContent=c+' demo keys currently live in this browser';
+}
 updateCount();
+trackDemo('demo_lane_loaded',{path:window.location.pathname});
 try{
   var autoParams=new URLSearchParams(window.location.search||'');
   var autoMode=(autoParams.get('autoseed')||'').toLowerCase();

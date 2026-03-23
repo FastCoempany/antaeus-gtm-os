@@ -289,6 +289,29 @@
             color:#d5fffa;
             transform:translateY(-1px);
         }
+        .nav-demo-chip {
+            display:block; width:calc(100% - 24px); margin:0 12px 10px; padding:9px 12px;
+            border:1px solid rgba(212,165,116,0.24); border-radius:999px;
+            background:rgba(212,165,116,0.08); color:var(--brand-gold,#d4a574);
+            font-family:inherit; font-size:0.78rem; font-weight:700; letter-spacing:0.02em;
+            cursor:pointer; transition:all 0.2s; text-align:center;
+        }
+        .nav-demo-chip:hover {
+            border-color:rgba(212,165,116,0.4);
+            background:rgba(212,165,116,0.14);
+            color:#ffe3c4;
+            transform:translateY(-1px);
+        }
+        .nav-demo-chip.nav-demo-chip-secondary {
+            border-color:rgba(239,68,68,0.24);
+            background:rgba(239,68,68,0.06);
+            color:#ff9a92;
+        }
+        .nav-demo-chip.nav-demo-chip-secondary:hover {
+            border-color:rgba(239,68,68,0.4);
+            background:rgba(239,68,68,0.12);
+            color:#ffd1cc;
+        }
         @keyframes tourPulse {
             0%, 100% { box-shadow:0 0 12px rgba(212,165,116,0.15), inset 0 1px 0 rgba(255,255,255,0.05); transform:scale(1); }
             50% { box-shadow:0 0 24px rgba(212,165,116,0.34), inset 0 1px 0 rgba(255,255,255,0.08); transform:scale(1.025); }
@@ -325,7 +348,7 @@
     }
     var sidebarDataNotice = sidebar && sidebar.querySelector('#sidebarDataNotice');
     if (sidebarDataNotice && window.gtmEnvironment && window.gtmEnvironment.isDemo) {
-        sidebarDataNotice.textContent = 'Demo data is saved in this browser only.';
+        sidebarDataNotice.textContent = 'You are in a sample workspace. Changes stay in this browser until you exit demo.';
     }
 
     function clamp(value, min, max) {
@@ -910,7 +933,37 @@
             };
             tourBtn.textContent = 'Tour the App';
             footer.insertBefore(tourBtn, footer.firstChild);
-            if (currentPath.indexOf('/app/welcome') === -1) {
+            if (window.gtmEnvironment && window.gtmEnvironment.isDemo) {
+                var pricingBtn = document.createElement('button');
+                pricingBtn.className = 'nav-demo-chip';
+                pricingBtn.textContent = 'See Annual Plan';
+                pricingBtn.onclick = function() {
+                    persistSidebarState();
+                    window.location.href = '/purchase/?entry=demo-sidebar';
+                };
+                footer.insertBefore(pricingBtn, tourBtn.nextSibling);
+
+                var exitDemoBtn = document.createElement('button');
+                exitDemoBtn.className = 'nav-demo-chip nav-demo-chip-secondary';
+                exitDemoBtn.textContent = 'Exit Demo';
+                exitDemoBtn.onclick = async function() {
+                    persistSidebarState();
+                    try {
+                        if (window.gtmDataManager && typeof window.gtmDataManager.clearDemoWorkspace === 'function') {
+                            await window.gtmDataManager.clearDemoWorkspace({
+                                redirect: true,
+                                redirectUrl: '/app/dashboard/'
+                            });
+                            return;
+                        }
+                    } catch (error) {
+                        console.error('Demo exit from nav failed:', error);
+                    }
+                    try { sessionStorage.setItem('gtmos_env_mode', 'prod'); } catch (e) {}
+                    window.location.href = '/app/dashboard/';
+                };
+                footer.insertBefore(exitDemoBtn, pricingBtn.nextSibling);
+            } else if (currentPath.indexOf('/app/welcome') === -1) {
                 var welcomeBtn = document.createElement('button');
                 welcomeBtn.className = 'nav-welcome-chip';
                 welcomeBtn.innerHTML = 'Back to Welcome Guide';
