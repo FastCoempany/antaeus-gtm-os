@@ -200,39 +200,83 @@
             }, 3600);
         }
 
+        function dependencyWarningHtml(warnings){
+            if (!warnings || !warnings.length) return '';
+            return '<div class="np-backup warn">' +
+                '<div class="np-backup-copy">' +
+                '<div class="np-backup-title">Dashboard is using the best available local view.</div>' +
+                '<div class="np-backup-sub">Some synced inputs failed to refresh: ' + escH(warnings.join(', ')) + '. You can keep working, then retry the page when you want a fresh cloud-backed summary.</div>' +
+                '</div>' +
+                '<button class="np-tool-btn primary" onclick="location.reload()">Retry Sync</button>' +
+                '</div>';
+        }
+
         async function render() {
             var icpState = { icps: [] };
             var deals = dh.loadAllDeals();
             var signalConsoleState = { accounts: [] };
             var weekOneState = null;
+            var dependencyWarnings = [];
+
+            async function loadWithFallback(label, fallback, loader) {
+                try {
+                    return await loader();
+                } catch (error) {
+                    console.error('Dashboard dependency load failed for ' + label + ':', error);
+                    dependencyWarnings.push(label);
+                    trackDashboard('dashboard_dependency_load_failed', {
+                        dependency: label,
+                        message: (error && error.message) ? error.message : 'Dependency load failed'
+                    });
+                    return fallback;
+                }
+            }
 
             if (window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.load === 'function') {
-                weekOneState = await window.gtmWeekOneLifecycle.load(false);
-                if (window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.markDashboardVisit === 'function') {
-                    window.gtmWeekOneLifecycle.markDashboardVisit(weekOneState);
-                }
-                if (weekOneState && weekOneState.active && !dashboardWeekOneTracked) {
-                    dashboardWeekOneTracked = true;
-                    trackDashboard('dashboard_week_one_panel_rendered', {
-                        day_number: weekOneState.dayNumber,
-                        milestones_complete: weekOneState.completed,
-                        milestones_total: weekOneState.total
+                weekOneState = await loadWithFallback('week one lifecycle', null, function() {
+                    return window.gtmWeekOneLifecycle.load(false);
+                });
+                try {
+                    if (window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.markDashboardVisit === 'function') {
+                        window.gtmWeekOneLifecycle.markDashboardVisit(weekOneState);
+                    }
+                    if (weekOneState && weekOneState.active && !dashboardWeekOneTracked) {
+                        dashboardWeekOneTracked = true;
+                        trackDashboard('dashboard_week_one_panel_rendered', {
+                            day_number: weekOneState.dayNumber,
+                            milestones_complete: weekOneState.completed,
+                            milestones_total: weekOneState.total
+                        });
+                    }
+                } catch (error) {
+                    console.error('Dashboard week-one lifecycle processing failed:', error);
+                    dependencyWarnings.push('week one lifecycle');
+                    trackDashboard('dashboard_dependency_load_failed', {
+                        dependency: 'week one lifecycle',
+                        message: (error && error.message) ? error.message : 'Week one lifecycle processing failed'
                     });
                 }
             }
 
             if (window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.load === 'function') {
-                var icpLoaded = await window.gtmPersistence.icps.load();
+                var icpLoaded = await loadWithFallback('ICPs', { data: readLS('gtmos_icp_analytics', { icps: [] }) }, function() {
+                    return window.gtmPersistence.icps.load();
+                });
                 if (icpLoaded && icpLoaded.data) icpState = icpLoaded.data;
             }
 
             if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.load === 'function') {
-                var dealLoaded = await window.gtmPersistence.deals.load();
+                var dealLoaded = await loadWithFallback('deals', { data: deals }, function() {
+                    return window.gtmPersistence.deals.load();
+                });
                 if (dealLoaded && Array.isArray(dealLoaded.data)) deals = dealLoaded.data;
             }
 
             if (window.gtmPersistence && window.gtmPersistence.signalConsole && typeof window.gtmPersistence.signalConsole.load === 'function') {
-                var signalLoaded = await window.gtmPersistence.signalConsole.load();
+                var localSignals = readLS('gtmos_sc_v4', { accounts: [] });
+                var signalLoaded = await loadWithFallback('signals', { data: Array.isArray(localSignals.accounts) ? localSignals.accounts : [] }, function() {
+                    return window.gtmPersistence.signalConsole.load();
+                });
                 if (signalLoaded && Array.isArray(signalLoaded.data)) {
                     signalConsoleState.accounts = signalLoaded.data;
                 }
@@ -246,9 +290,17 @@
             var active = vitals.filter(function(v) { return !v.isClosed; });
             var icpCount = (icpState && Array.isArray(icpState.icps)) ? icpState.icps.length : 0;
             var backupBanner = backupBannerHtml();
-            var weekOneBanner = (weekOneState && weekOneState.active && window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.renderDashboardPanel === 'function')
-                ? window.gtmWeekOneLifecycle.renderDashboardPanel(weekOneState)
-                : '';
+            var warningBanner = dependencyWarningHtml(dependencyWarnings);
+            var weekOneBanner = '';
+            if (weekOneState && weekOneState.active && window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.renderDashboardPanel === 'function') {
+                try {
+                    weekOneBanner = window.gtmWeekOneLifecycle.renderDashboardPanel(weekOneState);
+                } catch (error) {
+                    console.error('Dashboard week-one panel render failed:', error);
+                    dependencyWarnings.push('week one panel');
+                    warningBanner = dependencyWarningHtml(dependencyWarnings);
+                }
+            }
 
             if (vitals.length === 0) {
                 if (!dashboardSummaryTracked) {
@@ -260,7 +312,7 @@
                         week_one_active: !!(weekOneState && weekOneState.active)
                     });
                 }
-                var emptyHtml = weekOneBanner + backupBanner + '<div class="np-empty">' +
+                var emptyHtml = weekOneBanner + warningBanner + backupBanner + '<div class="np-empty">' +
                     '<div class="np-empty-icon">&#128220;</div>' +
                     '<div class="np-empty-title">Your workspace is live, but the dashboard has nothing to brief yet.</div>' +
                     '<div class="np-empty-sub">Create the first records that make this app feel like yours. ICPs shape targeting, deals power the weekly briefing.</div>';
@@ -294,6 +346,7 @@
 
             var html = '';
             html += weekOneBanner;
+            html += warningBanner;
             html += backupBanner;
 
             // STAT RIBBON
