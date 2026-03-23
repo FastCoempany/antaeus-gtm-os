@@ -14,13 +14,18 @@
     var STORAGE_KEY = 'gtmos_analytics_events';
     var SESSION_KEY = 'gtmos_analytics_session';
     var ATTRIBUTION_KEY = 'gtmos_analytics_attribution';
+    var DIAGNOSTICS_KEY = 'gtmos_diagnostics_state';
     var MAX_EVENTS = 5000;
     var pageEnterMs = Date.now();
+    var pageLeaveTracked = false;
+    var interactionCount = 0;
+    var maxScrollPct = 0;
     var posthogBooted = false;
     var posthogLoading = false;
     var ga4Booted = false;
     var ga4Loading = false;
     var pageTrackedThisLoad = false;
+    var errorFingerprints = {};
 
     var persistedPosthogKey = '';
     var persistedPosthogHost = '';
@@ -64,6 +69,40 @@
         } catch (e) {
             return [];
         }
+    }
+
+    function getDiagnosticsState() {
+        try {
+            var parsed = JSON.parse(localStorage.getItem(DIAGNOSTICS_KEY) || '{}');
+            if (!parsed || typeof parsed !== 'object') return { counters: {}, recent: [] };
+            if (!parsed.counters || typeof parsed.counters !== 'object') parsed.counters = {};
+            if (!Array.isArray(parsed.recent)) parsed.recent = [];
+            return parsed;
+        } catch (e) {
+            return { counters: {}, recent: [] };
+        }
+    }
+
+    function writeDiagnosticsState(next) {
+        try {
+            localStorage.setItem(DIAGNOSTICS_KEY, JSON.stringify(next || { counters: {}, recent: [] }));
+        } catch (e) {
+            // localStorage can fail in private mode or when full
+        }
+    }
+
+    function recordDiagnosticCounter(counterKey, payload) {
+        if (!counterKey) return;
+        var next = getDiagnosticsState();
+        next.counters[counterKey] = (Number(next.counters[counterKey] || 0) || 0) + 1;
+        next.recent.unshift({
+            counter: counterKey,
+            ts: new Date().toISOString(),
+            path: window.location.pathname,
+            payload: payload || {}
+        });
+        if (next.recent.length > 50) next.recent = next.recent.slice(0, 50);
+        writeDiagnosticsState(next);
     }
 
     function appendEvent(evt) {
@@ -298,6 +337,55 @@
         sendToGa4(eventName, fullProps);
     }
 
+    function deriveModuleName(explicitModule) {
+        if (explicitModule) return String(explicitModule);
+        var path = window.location.pathname || '/';
+        var parts = path.split('/').filter(Boolean);
+        if (!parts.length) return 'landing';
+        if (parts[0] === 'app' && parts[1]) return parts[1];
+        if (parts[0] === 'purchase' && parts[1]) return 'purchase-' + parts[1];
+        if (parts[0] === 'purchase') return 'purchase';
+        return parts.join('/');
+    }
+
+    function classifyUsageDepth(durationSec, interactions, scrollPct) {
+        if (durationSec >= 180 || interactions >= 8 || scrollPct >= 75) return 'deep';
+        if (durationSec >= 60 || interactions >= 3 || scrollPct >= 35) return 'engaged';
+        return 'light';
+    }
+
+    function trackPageLeave() {
+        if (pageLeaveTracked) return;
+        pageLeaveTracked = true;
+        var durationSec = Math.max(0, Math.round((Date.now() - pageEnterMs) / 1000));
+        var usageDepth = classifyUsageDepth(durationSec, interactionCount, maxScrollPct);
+        emitEvent('page_leave', {
+            duration_sec: durationSec,
+            interaction_count: interactionCount,
+            max_scroll_pct: maxScrollPct,
+            usage_depth: usageDepth
+        });
+    }
+
+    function trackGlobalError(kind, payload) {
+        var nextPayload = Object.assign({ error_kind: kind }, payload || {});
+        var fingerprint = [
+            nextPayload.error_kind || '',
+            nextPayload.message || '',
+            nextPayload.source || '',
+            nextPayload.module || '',
+            nextPayload.path || window.location.pathname
+        ].join('|');
+
+        if (errorFingerprints[fingerprint]) {
+            recordDiagnosticCounter('js_error_duplicate', nextPayload);
+            return;
+        }
+        errorFingerprints[fingerprint] = true;
+        recordDiagnosticCounter(kind === 'unhandledrejection' ? 'js_unhandledrejection' : 'js_error', nextPayload);
+        emitEvent('js_error', nextPayload);
+    }
+
     function normalizedDerivedEvents(eventName, properties) {
         var derived = [];
         var props = properties || {};
@@ -396,6 +484,33 @@
             this.track('page_view', { module: module });
         },
 
+        trackModuleBoot: function (status, properties) {
+            var nextStatus = String(status || '').toLowerCase();
+            var nextProps = Object.assign({}, properties || {});
+            nextProps.module = deriveModuleName(nextProps.module);
+            if (nextStatus === 'start' || nextStatus === 'loading') {
+                recordDiagnosticCounter('module_boot_started', nextProps);
+                emitEvent('module_boot_started', nextProps);
+                return;
+            }
+            if (nextStatus === 'success' || nextStatus === 'loaded') {
+                recordDiagnosticCounter('module_boot_succeeded', nextProps);
+                emitEvent('module_boot_succeeded', nextProps);
+                return;
+            }
+            if (nextStatus === 'failure' || nextStatus === 'error') {
+                recordDiagnosticCounter('module_boot_failed', nextProps);
+                emitEvent('module_boot_failed', nextProps);
+            }
+        },
+
+        trackError: function (kind, properties) {
+            var nextKind = String(kind || 'js_error');
+            var nextProps = Object.assign({}, properties || {});
+            nextProps.module = deriveModuleName(nextProps.module);
+            trackGlobalError(nextKind, nextProps);
+        },
+
         getSummary: function () {
             var events = getEvents();
             var eventCounts = {};
@@ -444,7 +559,8 @@
                 firstEvent: firstEvent,
                 lastEvent: lastEvent,
                 persona: getPersona(),
-                attribution: getAttribution()
+                attribution: getAttribution(),
+                diagnostics: getDiagnosticsState()
             };
         },
 
@@ -483,6 +599,7 @@
 
         clear: function () {
             localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(DIAGNOSTICS_KEY);
         },
 
         configurePosthog: function (key, host) {
@@ -509,6 +626,7 @@
         },
 
         getEvents: getEvents,
+        getDiagnostics: getDiagnosticsState,
         getAttribution: getAttribution,
         buildUtmUrl: buildUtmUrl,
         getUtmPresets: function () { return Object.assign({}, UTM_PRESETS); },
@@ -517,14 +635,56 @@
     };
 
     document.addEventListener('click', function (evt) {
+        interactionCount += 1;
         var info = classifyClickEvent(evt.target);
         if (info) analytics.track(info.name, info.properties);
     }, true);
 
-    window.addEventListener('beforeunload', function () {
-        var durationSec = Math.max(0, Math.round((Date.now() - pageEnterMs) / 1000));
-        emitEvent('page_leave', { duration_sec: durationSec });
+    window.addEventListener('scroll', function () {
+        try {
+            var doc = document.documentElement || document.body;
+            var height = Math.max((doc && doc.scrollHeight) || 0, document.body ? document.body.scrollHeight : 0);
+            var viewport = window.innerHeight || 0;
+            if (!height || height <= viewport) {
+                maxScrollPct = Math.max(maxScrollPct, 100);
+                return;
+            }
+            var top = window.scrollY || window.pageYOffset || (doc && doc.scrollTop) || 0;
+            var pct = Math.max(0, Math.min(100, Math.round((top / Math.max(1, height - viewport)) * 100)));
+            if (pct > maxScrollPct) maxScrollPct = pct;
+        } catch (e) {
+            // Never break product flows on telemetry issues.
+        }
+    }, { passive: true });
+
+    window.addEventListener('error', function (evt) {
+        try {
+            trackGlobalError('error', {
+                module: deriveModuleName(),
+                message: evt && evt.message ? String(evt.message) : 'Script error',
+                source: evt && evt.filename ? String(evt.filename) : '',
+                line: evt && evt.lineno ? Number(evt.lineno) || 0 : 0,
+                column: evt && evt.colno ? Number(evt.colno) || 0 : 0
+            });
+        } catch (e) {
+            // Never break product flows on telemetry issues.
+        }
     });
+
+    window.addEventListener('unhandledrejection', function (evt) {
+        try {
+            var reason = evt && evt.reason;
+            trackGlobalError('unhandledrejection', {
+                module: deriveModuleName(),
+                message: reason && reason.message ? String(reason.message) : String(reason || 'Unhandled promise rejection')
+            });
+        } catch (e) {
+            // Never break product flows on telemetry issues.
+        }
+    });
+
+    window.addEventListener('pagehide', trackPageLeave, { capture: true });
+    window.addEventListener('beforeunload', trackPageLeave);
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function () {

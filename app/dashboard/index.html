@@ -100,10 +100,16 @@
         var dh = window.dealHealth;
         if (!dh) { document.getElementById('dashContent').innerHTML = '<p style="color:var(--text-muted);">deal-health.js not loaded.</p>'; return; }
         var backupToastTimer = null;
+        var dashboardSummaryTracked = false;
 
         function escH(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
         function getDataManager(){ return window.gtmDataManager || window.dataManager || null; }
+        function trackDashboard(name, props){
+            if(window.gtmAnalytics && typeof window.gtmAnalytics.track === 'function'){
+                window.gtmAnalytics.track(name, Object.assign({ module: 'dashboard' }, props || {}));
+            }
+        }
         function showDashboardBootState(kind, title, text) {
             if (!window.gtmModuleBootState) return;
             window.gtmModuleBootState.show('#dashboardBootState', {
@@ -119,6 +125,9 @@
         }
         function onDashboardBootFailure(error) {
             console.error('Dashboard boot failed:', error);
+            trackDashboard('dashboard_boot_failed', {
+                message: (error && error.message) ? error.message : 'Dashboard boot failed'
+            });
             document.getElementById('dashContent').innerHTML = '';
             showDashboardBootState(
                 'error',
@@ -208,6 +217,14 @@
             var backupBanner = backupBannerHtml();
 
             if (vitals.length === 0) {
+                if (!dashboardSummaryTracked) {
+                    dashboardSummaryTracked = true;
+                    trackDashboard('dashboard_empty', {
+                        icps: icpCount,
+                        deals: vitals.length,
+                        signals: (signalConsoleState.accounts || []).length
+                    });
+                }
                 var emptyHtml = backupBanner + '<div class="np-empty">' +
                     '<div class="np-empty-icon">&#128220;</div>' +
                     '<div class="np-empty-title">Your workspace is live, but the dashboard has nothing to brief yet.</div>' +
@@ -229,6 +246,15 @@
             var cov = briefing.coverage;
             var target = Number(seed.coverage_target) || dh.DEFAULTS.coverageTarget;
             var covColor = !quota ? '' : cov.ratio >= target ? 'green' : cov.ratio >= target * 0.6 ? 'amber' : 'red';
+            if (!dashboardSummaryTracked) {
+                dashboardSummaryTracked = true;
+                trackDashboard('dashboard_brief_ready', {
+                    active_deals: active.length,
+                    total_deals: vitals.length,
+                    at_risk: briefing.atRisk.length,
+                    coverage_ratio: quota ? cov.ratio : null
+                });
+            }
 
             var html = '';
             html += backupBanner;
@@ -356,6 +382,7 @@
             var seed = dh.loadSeed();
             var briefing = dh.generateBriefing(vitals, quota, seed);
             var txt = briefing.mondayReview;
+            trackDashboard('dashboard_monday_review_copy', { total_deals: vitals.length });
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(txt).then(function() { alert('Monday Review copied!'); });
             } else {
@@ -368,6 +395,7 @@
             var manager = getDataManager();
             var actionMap = { export: 'exportAll', import: 'importAll', delete: 'deleteAll' };
             var method = actionMap[action] || action;
+            trackDashboard('dashboard_data_action_click', { action: action });
             if (manager && typeof manager[method] === 'function') {
                 manager[method]();
                 if (action === 'delete') setTimeout(render, 500);
@@ -412,6 +440,7 @@
         };
 
         function renderWhenReady() {
+            dashboardSummaryTracked = false;
             showDashboardBootState(
                 'loading',
                 'Loading Dashboard',

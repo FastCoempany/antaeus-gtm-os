@@ -41,20 +41,49 @@
         return html;
     }
 
+    function deriveModuleName(options) {
+        if (options && options.module) return String(options.module);
+        var path = window.location.pathname || '/';
+        var parts = path.split('/').filter(Boolean);
+        if (!parts.length) return 'landing';
+        if (parts[0] === 'app' && parts[1]) return parts[1];
+        if (parts[0] === 'purchase' && parts[1]) return 'purchase-' + parts[1];
+        if (parts[0] === 'purchase') return 'purchase';
+        return parts.join('/');
+    }
+
     window.gtmModuleBootState = {
         show: function(target, options) {
             var node = resolveTarget(target);
             if (!node) return;
             options = options || {};
-            node.innerHTML = buildHtml(options.kind === 'error' ? 'error' : 'loading', options);
+            var nextKind = options.kind === 'error' ? 'error' : 'loading';
+            var previousKind = node.getAttribute('data-gtmos-boot-kind') || '';
+            node.innerHTML = buildHtml(nextKind, options);
             node.setAttribute('data-gtmos-boot-state-mounted', 'true');
+            node.setAttribute('data-gtmos-boot-kind', nextKind);
+            if (window.gtmAnalytics && typeof window.gtmAnalytics.trackModuleBoot === 'function' && previousKind !== nextKind) {
+                window.gtmAnalytics.trackModuleBoot(nextKind === 'error' ? 'error' : 'loading', {
+                    module: deriveModuleName(options),
+                    title: options.title || '',
+                    target: typeof target === 'string' ? target : ''
+                });
+            }
         },
         clear: function(target) {
             var node = resolveTarget(target);
             if (!node) return;
             if (node.getAttribute('data-gtmos-boot-state-mounted') === 'true') {
+                var previousKind = node.getAttribute('data-gtmos-boot-kind') || '';
                 node.innerHTML = '';
                 node.removeAttribute('data-gtmos-boot-state-mounted');
+                node.removeAttribute('data-gtmos-boot-kind');
+                if (window.gtmAnalytics && typeof window.gtmAnalytics.trackModuleBoot === 'function' && previousKind) {
+                    window.gtmAnalytics.trackModuleBoot('success', {
+                        module: deriveModuleName(),
+                        recovered_from: previousKind
+                    });
+                }
             }
         }
     };

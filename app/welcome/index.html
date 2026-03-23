@@ -83,6 +83,11 @@
     <script>
     (function(){
         var shell = document.getElementById('welcomeShell');
+        function trackWelcome(name, props){
+            if(window.gtmAnalytics && typeof window.gtmAnalytics.track === 'function'){
+                window.gtmAnalytics.track(name, Object.assign({ stage:'welcome' }, props || {}));
+            }
+        }
 
         function arr(value){ return Array.isArray(value) ? value : []; }
         function esc(value){ var node = document.createElement('div'); node.textContent = value == null ? '' : String(value); return node.innerHTML; }
@@ -138,6 +143,7 @@
             return actions.slice(0,5);
         }
         function completeWelcome(nextPath){
+            trackWelcome('welcome_exit_click', { next_path: nextPath || '/app/dashboard/' });
             if (typeof window.setWelcomeSeen === 'function') {
                 try { window.setWelcomeSeen(true); } catch (e) {}
             }
@@ -168,6 +174,14 @@
                 var summary = result && result.data ? result.data : {};
                 var counts = buildCounts(summary);
                 var actions = buildActions(summary, counts);
+                trackWelcome('welcome_loaded', {
+                    source: summary && summary.source ? summary.source : 'unknown',
+                    icps: counts.icps,
+                    deals: counts.deals,
+                    signals: counts.signals,
+                    motions: counts.touches + counts.calls,
+                    suggested_actions: actions.length
+                });
                 var displayName = pickName(summary);
                 var role = getRole(summary);
                 var statCards = buildStatCards(counts);
@@ -223,6 +237,9 @@
                     '</section>';
             } catch (error) {
                 console.error('Welcome page failed to load workspace summary:', error);
+                trackWelcome('welcome_load_error', {
+                    message: (error && error.message) ? error.message : 'Welcome failed to load'
+                });
                 shell.innerHTML = '<div class="welcome-error">Welcome could not load workspace context. <a href="/app/dashboard/" onclick="completeWelcome(\'/app/dashboard/\');return false;">Go straight to dashboard</a>.</div>';
             }
         }

@@ -156,8 +156,16 @@
 <script src="/js/supabase-config.js"></script>
 <script src="/js/data-manager.js"></script>
 <script src="/js/require-auth.js"></script>
+<script src="/js/analytics-site-config.js"></script>
+<script src="/js/analytics.js"></script>
 <script>
 var step=0;
+var lastTrackedStep=null;
+function trackOnboarding(name, props){
+    if(window.gtmAnalytics && typeof window.gtmAnalytics.track === 'function'){
+        window.gtmAnalytics.track(name, Object.assign({ stage:'onboarding' }, props || {}));
+    }
+}
 function show(){
     document.querySelectorAll('.ob-step').forEach(function(s,i){s.classList.toggle('active',i===step)});
     for(var i=0;i<4;i++){
@@ -165,6 +173,10 @@ function show(){
         b.className='ob-bar'+(i<step?' done':'')+(i===step?' active':'');
     }
     document.getElementById('stepLabel').textContent='Step '+(step+1)+' of 4';
+    if(lastTrackedStep !== step){
+        lastTrackedStep = step;
+        trackOnboarding('onboarding_step', { step: step + 1 });
+    }
 }
 function next(){step++;show();}
 function prev(){step--;show();}
@@ -206,6 +218,7 @@ function prefillFromStoredState() {
 }
 
 function restoreFromBackup() {
+    trackOnboarding('onboarding_restore_backup_click', { step: step + 1 });
     var manager = window.gtmDataManager || window.dataManager || null;
     if (manager && typeof manager.importAll === 'function') {
         manager.importAll({ reloadTo: '/app/dashboard/' });
@@ -240,6 +253,12 @@ async function finish(){
     }
 
     try {
+        trackOnboarding('onboarding_finish_submit', {
+            step: step + 1,
+            has_quota: q > 0,
+            has_acv: a > 0,
+            role: role
+        });
         localStorage.setItem('gtmos_onboarding',JSON.stringify(data));
         localStorage.setItem('gtmos_product_category',JSON.stringify(document.getElementById('productCat').value));
         var docSyncTasks = [];
@@ -282,9 +301,18 @@ async function finish(){
             }
         }
 
+        trackOnboarding('onboarding_finish_success', {
+            next_route: nextRoute,
+            role: role,
+            product_category: data.answers.productCategory || ''
+        });
         window.location.href = nextRoute;
     } catch (error) {
         console.error('Onboarding save failed:', error);
+        trackOnboarding('onboarding_finish_error', {
+            step: step + 1,
+            message: (error && error.message) ? error.message : 'Unable to save onboarding'
+        });
         alert((error && error.message) ? error.message : 'Unable to save onboarding right now. Please try again.');
         if (finishBtn) {
             finishBtn.disabled = false;
@@ -295,6 +323,11 @@ async function finish(){
 
 function initializeOnboardingPage() {
     prefillFromStoredState();
+    trackOnboarding('onboarding_loaded', {
+        restored_company: !!document.getElementById('companyName').value.trim(),
+        restored_buyer: !!document.getElementById('buyerPersona').value,
+        restored_quota: !!document.getElementById('quota').value.trim()
+    });
     show();
 }
 
