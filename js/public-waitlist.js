@@ -11,6 +11,7 @@
     var button = form ? form.querySelector('.capture-button') : null;
     var pending = false;
     var client = null;
+    var defaultButtonLabel = button.textContent;
 
     if (!form || !input || !note || !button) return;
 
@@ -41,7 +42,7 @@
         pending = !!next;
         input.disabled = pending;
         button.disabled = pending;
-        button.textContent = pending ? '...' : 'nervous?';
+        button.textContent = pending ? 'Submitting...' : defaultButtonLabel;
     }
 
     function setNote(message) {
