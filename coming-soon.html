@@ -38,7 +38,8 @@
       background: var(--paper);
       color: var(--ink);
       font-family: var(--sans);
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     body::before,
@@ -114,11 +115,42 @@
     }
 
     .brand {
-      font-family: var(--sans);
-      font-size: 0.92rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      font-size: 0.84rem;
       font-weight: 700;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
+      color: rgba(18, 16, 16, 0.84);
+    }
+
+    .brand-mark {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 34% 34%, rgba(255,255,255,0.92) 0 9%, transparent 10%),
+        conic-gradient(from 210deg, var(--scar), var(--ember), var(--ember-hot), var(--electric), var(--violet), var(--scar));
+      box-shadow:
+        0 0 26px rgba(255, 124, 65, 0.18),
+        inset 0 0 16px rgba(255,255,255,0.22);
+      animation: brandSpin 10s linear infinite;
+    }
+
+    .brand-mark::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      background: rgba(245, 236, 223, 0.88);
+      box-shadow: inset 0 0 18px rgba(18, 16, 16, 0.08);
+    }
+
+    .brand-word {
+      font-family: var(--sans);
     }
 
     .stage {
@@ -126,30 +158,37 @@
       display: grid;
       place-items: center;
       text-align: center;
-      padding: 4vh 4vw 12vh;
+      padding: 4vh 4vw 8vh;
     }
 
     .stack {
-      width: min(1260px, 100%);
+      width: min(980px, 100%);
     }
 
     h1 {
       margin: 0;
       font-family: var(--serif);
-      font-size: clamp(4.2rem, 8.5vw, 9.8rem);
-      line-height: 0.86;
-      letter-spacing: -0.065em;
+      font-size: clamp(3.25rem, 7.2vw, 7.4rem);
+      line-height: 0.9;
+      letter-spacing: -0.055em;
       text-transform: lowercase;
       text-wrap: balance;
     }
 
     .line-1,
-    .line-2 {
+    .line-2,
+    .line-3,
+    .line-4 {
       display: block;
     }
 
-    .line-2 {
-      margin-top: 0.1em;
+    .line-2,
+    .line-4 {
+      margin-top: 0.08em;
+    }
+
+    .line-3,
+    .line-4 {
       color: var(--scar);
       text-shadow:
         0 0 18px rgba(206, 63, 47, 0.18),
@@ -159,7 +198,7 @@
 
     .capture {
       width: min(500px, 100%);
-      margin: 64px auto 0;
+      margin: 42px auto 0;
     }
 
     .capture-label {
@@ -256,17 +295,23 @@
       50% { opacity: 1; }
     }
 
+    @keyframes brandSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     @media (max-width: 760px) {
       .page {
         padding: 20px 18px 24px;
       }
 
       h1 {
-        font-size: clamp(3.2rem, 12vw, 5.8rem);
+        font-size: clamp(2.8rem, 11vw, 5rem);
+        line-height: 0.92;
       }
 
       .capture {
-        margin-top: 42px;
+        margin-top: 34px;
       }
 
       .capture-row {
@@ -277,6 +322,15 @@
       .capture-button {
         justify-self: start;
       }
+
+      .brand {
+        gap: 10px;
+      }
+
+      .brand-mark {
+        width: 24px;
+        height: 24px;
+      }
     }
   </style>
 </head>
@@ -286,13 +340,18 @@
   <div class="wash" aria-hidden="true"></div>
 
   <main class="page">
-    <div class="brand">ANTAEUS</div>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-word">antaeus</span>
+    </div>
 
     <section class="stage" aria-label="Antaeus coming soon">
       <div class="stack">
         <h1>
-          <span class="line-1">your first sales go to market hire is going to fail.</span>
-          <span class="line-2">because you have not the slightest clue what prepared means.</span>
+          <span class="line-1">your first sales</span>
+          <span class="line-2">go to market hire</span>
+          <span class="line-3">is going to fail.</span>
+          <span class="line-4">because you haven't the slightest clue what prepared means.</span>
         </h1>
 
         <form class="capture" id="captureForm" autocomplete="on">
