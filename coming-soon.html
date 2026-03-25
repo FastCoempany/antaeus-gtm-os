@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Antaeus is not publicly open yet. Existing users can still sign in." />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Antaeus - Coming Soon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <script>
+    (function () {
+      try {
+        var raw = window.localStorage.getItem('antaeus-auth-token');
+        if (!raw) return;
+        var parsed = JSON.parse(raw);
+        var hasSession = !!(
+          (parsed && parsed.access_token) ||
+          (parsed && parsed.refresh_token) ||
+          (parsed &&
+            parsed.currentSession &&
+            (parsed.currentSession.access_token || parsed.currentSession.refresh_token)) ||
+          (parsed &&
+            parsed.session &&
+            (parsed.session.access_token || parsed.session.refresh_token))
+        );
+        if (!hasSession) return;
+
+        var profileRaw = window.localStorage.getItem('gtmos_profile_cache');
+        var onboardingRaw = window.localStorage.getItem('gtmos_onboarding');
+        var profile = profileRaw ? JSON.parse(profileRaw) : null;
+        var onboarding = onboardingRaw ? JSON.parse(onboardingRaw) : null;
+        var profileId = profile && profile.id ? String(profile.id).trim() : '';
+        var welcomeKey = profileId ? ('gtmos_welcome_seen__user_' + profileId) : 'gtmos_welcome_seen';
+        var seen = window.localStorage.getItem(welcomeKey);
+        if (profileId && welcomeKey !== 'gtmos_welcome_seen' && (seen !== '1' && seen !== 'true')) {
+          var legacySeen = window.localStorage.getItem('gtmos_welcome_seen');
+          if (legacySeen === '1' || legacySeen === 'true') seen = legacySeen;
+        }
+
+        var completed = !!(
+          (profile && profile.onboarding_completed === true) ||
+          (onboarding && onboarding.completed === true)
+        );
+        var route = !completed ? '/app/onboarding/' : ((seen === '1' || seen === 'true') ? '/app/dashboard/' : '/app/welcome/');
+        window.location.replace(route);
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #06080d;
+      --bg2: #0a0e15;
+      --bg3: #0f1319;
+      --panel: rgba(15, 19, 25, 0.84);
+      --panel-strong: rgba(10, 14, 21, 0.94);
+      --accent: #c07850;
+      --accent2: #d4a574;
+      --accent-dim: rgba(192, 120, 80, 0.08);
+      --accent-line: rgba(192, 120, 80, 0.16);
+      --accent-glow: rgba(192, 120, 80, 0.24);
+      --tx: #e8e4df;
+      --tx2: #a09a92;
+      --tx3: #605c56;
+      --serif: 'DM Serif Display', Georgia, serif;
+      --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+      --radius: 28px;
+      --shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(192, 120, 80, 0.08), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(90, 143, 192, 0.08), transparent 30%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 56%, #04060a 100%);
+      color: var(--tx);
+      font-family: var(--sans);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 50% 40% at 30% 25%, rgba(192, 120, 80, 0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 75% 70%, rgba(90, 143, 192, 0.03) 0%, transparent 60%);
+      z-index: 0;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(6, 8, 13, 0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-brand {
+      color: var(--tx);
+      text-decoration: none;
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-brand em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-link,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .nav-link {
+      color: var(--tx2);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .button {
+      color: #1b120d;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      box-shadow: 0 16px 40px rgba(192, 120, 80, 0.18);
+    }
+
+    .nav-link:hover,
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 112px 24px 48px;
+    }
+
+    .hero-shell {
+      width: min(1080px, 100%);
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .side-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: linear-gradient(180deg, rgba(15, 19, 25, 0.96), rgba(10, 14, 21, 0.9));
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 40px 42px 38px;
+    }
+
+    .side-card {
+      padding: 30px 28px;
+      background:
+        linear-gradient(180deg, rgba(12, 16, 23, 0.98), rgba(8, 11, 17, 0.94)),
+        radial-gradient(circle at top, rgba(192, 120, 80, 0.08), transparent 45%);
+    }
+
+    .eyebrow,
+    .micro {
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .eyebrow {
+      color: var(--accent2);
+      margin: 0 0 18px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 14ch;
+      font-family: var(--serif);
+      font-size: clamp(3rem, 5vw, 5.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .lede {
+      margin: 24px 0 0;
+      max-width: 38rem;
+      color: var(--tx2);
+      font-size: 1.06rem;
+      line-height: 1.72;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 28px 0 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-line);
+      background: var(--accent-dim);
+      color: var(--tx);
+      font-size: 0.92rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .ghost {
+      color: var(--tx);
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: none;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      margin: 34px 0 26px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02));
+    }
+
+    .footnote {
+      color: var(--tx3);
+      font-size: 0.94rem;
+      line-height: 1.7;
+    }
+
+    .side-card h2 {
+      margin: 12px 0 8px;
+      font-family: var(--serif);
+      font-size: 2rem;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .side-copy {
+      margin: 0 0 24px;
+      color: var(--tx2);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+
+    .points {
+      display: grid;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .points li {
+      padding: 14px 14px 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .points strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--tx);
+      font-size: 0.95rem;
+    }
+
+    .points span {
+      color: var(--tx2);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 960px) {
+      .hero-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card,
+      .side-card {
+        padding: 30px 24px;
+      }
+
+      .nav {
+        padding: 14px 18px;
+      }
+
+      .nav-actions {
+        gap: 8px;
+      }
+
+      .nav-link,
+      .button {
+        min-height: 42px;
+        padding: 0 14px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      h1 {
+        max-width: none;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .nav-actions {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-brand" href="/">antaeus<em>.</em></a>
+    <div class="nav-actions">
+      <a class="nav-link" href="/login">Sign In</a>
+      <a class="button" href="mailto:hello@antaeus.app">Email</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero-shell" aria-label="Antaeus coming soon">
+      <div class="hero-card">
+        <p class="eyebrow">Coming soon</p>
+        <h1>Your first sales go-to-market hire is going to fail.</h1>
+        <p class="lede">
+          Because you have not the slightest clue what prepared means.
+        </p>
+        <div class="chips" aria-label="status">
+          <span class="chip">Not public yet</span>
+          <span class="chip">Existing users can still sign in</span>
+        </div>
+        <div class="cta-row">
+          <a class="button" href="/login">Sign In</a>
+          <a class="button ghost" href="mailto:hello@antaeus.app">hello@antaeus.app</a>
+        </div>
+        <div class="divider" aria-hidden="true"></div>
+        <p class="footnote">
+          The front door is staying quiet until the product, demo lane, and handoff logic are tighter.
+          The current public marketing page is intentionally offline.
+        </p>
+      </div>
+
+      <aside class="side-card">
+        <p class="micro">Status</p>
+        <h2>Not open for public traffic.</h2>
+        <p class="side-copy">
+          Antaeus is still being tightened behind the scenes. If you already have access,
+          sign in. If not, wait until the product is ready to explain itself without leaking the whole playbook.
+        </p>
+        <ul class="points">
+          <li>
+            <strong>Existing users</strong>
+            <span>Go straight to sign-in. Root traffic will still route authenticated sessions into the app.</span>
+          </li>
+          <li>
+            <strong>Public visitors</strong>
+            <span>This page is the new front door until the full landing page is ready to carry the product honestly.</span>
+          </li>
+          <li>
+            <strong>Questions</strong>
+            <span>Email <a href="mailto:hello@antaeus.app" style="color: var(--accent2); text-decoration: none;">hello@antaeus.app</a>.</span>
+          </li>
+        </ul>
+      </aside>
+    </section>
+  </main>
+
+  <script src="/js/analytics-site-config.js"></script>
+  <script src="/js/analytics.js"></script>
+</body>
+</html>
