@@ -117,32 +117,40 @@
     }
 
     .stack {
-      width: min(980px, 100%);
+      width: min(1220px, 100%);
     }
 
     .statement-1,
     .statement-2 {
       margin: 0;
       font-family: var(--font-serif);
-      line-height: 0.92;
-      letter-spacing: -0.045em;
-      text-wrap: balance;
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
     }
 
     .statement-1 {
-      font-size: clamp(3.2rem, 7vw, 7rem);
+      font-size: clamp(2.6rem, 5.6vw, 6rem);
       color: var(--text-primary);
       text-shadow: 0 0 28px rgba(255, 255, 255, 0.05);
     }
 
     .statement-2 {
       margin-top: 20px;
-      font-size: clamp(2.8rem, 6vw, 5.9rem);
+      font-size: clamp(2.3rem, 5vw, 5.3rem);
       color: var(--brand-gold);
       text-shadow:
         0 0 26px rgba(212, 165, 116, 0.12),
         0 0 58px rgba(212, 165, 116, 0.08);
-      animation: pulseText 4.2s ease-in-out infinite;
+    }
+
+    .prepared {
+      display: inline-block;
+      color: var(--brand-gold-light);
+      text-shadow:
+        0 0 18px rgba(212, 165, 116, 0.28),
+        0 0 40px rgba(212, 165, 116, 0.14);
+      animation: pulsePrepared 2.6s ease-in-out infinite;
     }
 
     .capture {
@@ -234,18 +242,29 @@
       50% { opacity: 1; }
     }
 
+    @keyframes pulsePrepared {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.86;
+      }
+      50% {
+        transform: scale(1.035);
+        opacity: 1;
+      }
+    }
+
     @media (max-width: 760px) {
       .page {
         padding: 20px 18px 26px;
       }
 
       .statement-1 {
-        font-size: clamp(2.5rem, 11vw, 4.6rem);
+        font-size: clamp(1.95rem, 6vw, 3.2rem);
       }
 
       .statement-2 {
         margin-top: 16px;
-        font-size: clamp(2.2rem, 9.4vw, 4rem);
+        font-size: clamp(1.7rem, 5.2vw, 2.8rem);
       }
 
       .capture {
@@ -271,7 +290,7 @@
     <section class="stage" aria-label="Antaeus coming soon">
       <div class="stack">
         <h1 class="statement-1">Your first sales go to market hire is going to fail.</h1>
-        <p class="statement-2">Because you haven't the slightest clue what prepared means.</p>
+        <p class="statement-2">Because you haven't the slightest clue what <span class="prepared">prepared</span> means.</p>
 
         <form class="capture" id="captureForm" autocomplete="on">
           <label class="capture-label" for="curiousEmail">Nervous?</label>
