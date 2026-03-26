@@ -160,6 +160,7 @@
         function normalizeDiscoveryCategory(raw){
             var value=(typeof raw==='string'?raw.trim().toLowerCase():'')||'';
             if(!value)return 'cxai';
+            if(value==='cx_ai'||value==='cx-ai'||value==='cx/support ai')return 'cxai';
             if(value==='revintel')return 'revenue';
             if(value==='revenue intelligence ai'||value==='revenue intelligence'||value==='revenue intel')return 'revenue';
             if(value==='customer data platform'||value==='data platform'||value==='data platform / cdp / analytics')return 'cdp';

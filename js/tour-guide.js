@@ -86,6 +86,8 @@
         AUTO_TOUR_KEY: 'gtmos_tour_autostart',
         STATE_KEY: 'gtmos_tour_state',
         DONE_KEY: 'gtmos_tour_completed',
+        PROMPTED_KEY: 'gtmos_tour_prompted',
+        PENDING_KEY: 'gtmos_tour_pending',
         currentPathKey: null,
         currentStep: 0,
         currentSteps: [],
@@ -112,6 +114,11 @@
         clearState: function() { removeScoped(this.STATE_KEY); this.syncButtons(); },
         hasSeenTour: function() { return getScoped(this.DONE_KEY, 'false') === 'true'; },
         markSeen: function() { setScoped(this.DONE_KEY, 'true'); },
+        hasPromptedTour: function() { return getScoped(this.PROMPTED_KEY, 'false') === 'true'; },
+        markPromptedTour: function() { setScoped(this.PROMPTED_KEY, 'true'); },
+        readPending: function() { return getScoped(this.PENDING_KEY, null); },
+        writePending: function(next) { setScoped(this.PENDING_KEY, next); },
+        clearPending: function() { removeScoped(this.PENDING_KEY); },
 
         syncButtons: function() {
             var state = this.readState();
@@ -137,6 +144,25 @@
         hasDemoSeed: function() {
             try { return !!(localStorage.getItem('gtmos_demo__gtmos_demo_seed_meta') || localStorage.getItem('gtmos_demo_seed_meta')); }
             catch (e) { return false; }
+        },
+
+        resumePendingOrState: function() {
+            var pending = this.readPending();
+            if (pending && pending.pathKey) {
+                this.clearPending();
+                return this.beginPath(pending.pathKey, {
+                    startStep: Number(pending.currentStep || 0) || 0,
+                    resume: true
+                });
+            }
+            var state = this.readState();
+            if (state && state.pathKey) {
+                return this.beginPath(state.pathKey, {
+                    startStep: Number(state.currentStep || 0) || 0,
+                    resume: !!state.paused
+                });
+            }
+            return this.launch({ auto: true, resumePreferred: true });
         },
 
         inferPath: function(summary) {
@@ -206,8 +232,9 @@
             this.ensureButton();
             this.syncButtons();
             if (this.consumeAutoLaunch()) {
-                setTimeout(() => this.launch({ auto: true, resumePreferred: true }), 900);
-            } else if (!this.hasSeenTour()) {
+                setTimeout(() => this.resumePendingOrState(), 900);
+            } else if (!this.hasSeenTour() && !this.hasPromptedTour()) {
+                this.markPromptedTour();
                 setTimeout(() => this.launch({ auto: true }), 1000);
             }
         },
@@ -216,7 +243,7 @@
             options = options || {};
             if (this.isActive) return this.pause();
             var state = this.readState();
-            if ((options.resumePreferred || !options.auto) && state && state.paused && state.pathKey) return this.resume();
+            if ((options.resumePreferred || !options.auto) && state && state.pathKey) return this.resume();
             var summary = await this.loadSummary(false);
             this.createFrame();
             this.renderChooser(summary, options.auto === true);
@@ -239,6 +266,7 @@
 
             if (!(window.gtmEnvironment && window.gtmEnvironment.isDemo && this.hasDemoSeed())) {
                 var scenario = pathKey === 'operator' ? 'ent' : ((pathKey === 'next' && counts.deals > 0) ? 'ent' : 'mm');
+                this.writePending({ pathKey: pathKey, currentStep: this.currentStep, createdAt: new Date().toISOString() });
                 try { sessionStorage.setItem(this.AUTO_TOUR_KEY, '1'); } catch (e) {}
                 if (window.gtmAnalytics) gtmAnalytics.track('tour_branch_selected', { path: pathKey, demo_redirect: true, scenario: scenario, role: roleLabel(roleValue(summary)) });
                 window.location.href = '/demo-seed.html?autoseed=' + encodeURIComponent(scenario) + '&tour=1&return=' + encodeURIComponent('/app/dashboard/?demo=1&tour=1');
@@ -246,6 +274,7 @@
             }
 
             this.isActive = true;
+            this.clearPending();
             this.createFrame();
             this.syncButtons();
             this.showStep();
@@ -368,6 +397,7 @@
             this.currentPathKey = null;
             this.currentSteps = [];
             this.currentStep = 0;
+            this.clearPending();
             this.clearState();
             this.removeFrame();
             if (window.gtmAnalytics) gtmAnalytics.track(options.reason === 'finished' ? 'tour_completed' : 'tour_closed', { path: pathKey, reason: options.reason || 'ended', steps_seen: stepsSeen });
