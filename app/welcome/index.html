@@ -211,6 +211,20 @@
         }
         function buildLifecycleAction(nextAction, roleLabel){
             if (!nextAction || !nextAction.href) return null;
+            var isTourAction = nextAction.href === '/app/dashboard/' && /tour/i.test(String(nextAction.label || ''));
+            if (isTourAction) {
+                return {
+                    key:'tour',
+                    href:'/app/dashboard/',
+                    title:'Run the tour',
+                    body:'Use the seeded walkthrough to see how the modules compound before you improvise your own route.',
+                    cta:'Open Dashboard Tour',
+                    meta:['orientation', roleLabel],
+                    why:nextAction.why || 'The first-week story should be legible without needing human explanation.',
+                    unlocks:'A faster understanding of the dashboard, core module handoffs, and what should happen next.',
+                    state:'ready'
+                };
+            }
             var map = {
                 '/app/welcome/': {
                     key:'welcome',
@@ -366,7 +380,8 @@
                 actions.push(action);
             }
 
-            push(buildLifecycleAction(lifecycle && lifecycle.active ? lifecycle.nextAction : null, roleLabel));
+            var lifecycleAction = buildLifecycleAction(lifecycle && lifecycle.active ? lifecycle.nextAction : null, roleLabel);
+            if (lifecycleAction && lifecycleAction.href !== '/app/welcome/') push(lifecycleAction);
 
             if (!counts.icps) push(actionSpec('icp','Create your first ICP','Start with one sharp wedge. Once one ICP exists, Signal Console, outbound, and discovery stop operating on memory.','/app/icp-studio/','Open ICP Studio',['highest leverage', roleLabel],'The rest of the app compounds off targeting truth before it compounds off activity.','Sharper signal research, better sourcing, cleaner outbound, and a more credible dashboard brief.'));
             if (!(counts.accounts || counts.signals)) push(actionSpec('signal','Research one live account','Add or enrich one real company so the workspace starts reflecting external evidence instead of setup answers.','/app/signal-console/','Open Signal Console',['real account','deep research'],'You need one live account before the signal layer can behave like a real intelligence system.','Heat logic, next-move guidance, and better context for sourcing and outbound.'));

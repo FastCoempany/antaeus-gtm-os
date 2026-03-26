@@ -436,7 +436,7 @@ async function finish(){
             await Promise.allSettled(docSyncTasks);
         }
 
-        var nextRoute = '/app/dashboard/';
+        var nextRoute = '/app/welcome/';
         if (typeof window.resolvePostAuthRoute === 'function') {
             try {
                 nextRoute = await window.resolvePostAuthRoute(null, { force: true });
