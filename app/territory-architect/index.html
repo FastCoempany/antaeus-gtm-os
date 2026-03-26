@@ -226,6 +226,29 @@
 .ta-calibration{background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius-md);padding:16px;margin-bottom:var(--space-md);font-size:0.82rem;color:var(--text-secondary);line-height:1.6;}
 .ta-calibration strong{color:var(--accent-blue);}
 .ta-calibration .dismiss{float:right;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.8rem;}
+
+/* Territory bridge */
+.ta-bridge{background:linear-gradient(135deg,rgba(212,165,116,0.07),rgba(45,212,191,0.05));border:1px solid rgba(212,165,116,0.16);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-lg);}
+.ta-bridge-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;flex-wrap:wrap;}
+.ta-bridge-kicker{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-gold);font-weight:700;margin-bottom:6px;}
+.ta-bridge-title{font-family:var(--font-serif);font-size:1.22rem;color:var(--text-primary);margin-bottom:4px;}
+.ta-bridge-desc{font-size:0.86rem;color:var(--text-tertiary);line-height:1.65;max-width:780px;}
+.ta-bridge-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.ta-bridge-actions .btn{white-space:nowrap;}
+.ta-bridge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.ta-bridge-card{background:rgba(15,23,42,0.52);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;}
+.ta-bridge-card-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;margin-bottom:8px;}
+.ta-bridge-card-copy{font-size:0.83rem;color:var(--text-secondary);line-height:1.6;}
+.ta-bridge-list{list-style:none;padding:0;margin:0;}
+.ta-bridge-list li{display:flex;gap:8px;padding:4px 0;font-size:0.82rem;color:var(--text-secondary);line-height:1.5;}
+.ta-bridge-list li::before{content:"->";color:var(--brand-gold);font-weight:700;}
+.ta-summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;}
+.ta-summary-pill{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:12px;}
+.ta-summary-pill .label{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;margin-bottom:5px;}
+.ta-summary-pill .value{font-size:0.88rem;color:var(--text-primary);font-weight:700;line-height:1.4;}
+@media(max-width:900px){
+    .ta-bridge-grid,.ta-summary-row{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -383,6 +406,43 @@
 
 <!-- ==================== MAIN APPLICATION ==================== -->
 <div id="mainApp" style="display:none;">
+    <div class="ta-bridge" id="taBridge">
+        <div class="ta-bridge-top">
+            <div>
+                <div class="ta-bridge-kicker">Territory logic</div>
+                <div class="ta-bridge-title" id="taBridgeTitle">Turn one wedge into a controlled battlefield.</div>
+                <div class="ta-bridge-desc" id="taBridgeDesc">Territory Architect is where ICP truth becomes a ranked 30-day account set. Do this before sourcing more names so the rest of the app works on a bounded battlefield instead of a vague TAM.</div>
+            </div>
+            <div class="ta-bridge-actions">
+                <button class="btn btn-secondary btn-sm" onclick="switchView('territory')">Open Territory</button>
+                <button class="btn btn-ghost btn-sm" onclick="switchView('intelligence')">See Intelligence</button>
+            </div>
+        </div>
+        <div class="ta-bridge-grid">
+            <div class="ta-bridge-card">
+                <div class="ta-bridge-card-title">Object model</div>
+                <ul class="ta-bridge-list" id="taObjectModel">
+                    <li>ICP -> thesis -> account set -> dispositions.</li>
+                </ul>
+            </div>
+            <div class="ta-bridge-card">
+                <div class="ta-bridge-card-title">Why before sourcing</div>
+                <div class="ta-bridge-card-copy" id="taBeforeSourcing">Without territory design, sourcing becomes logo collection. The point here is to decide what deserves list slots, what gets Tier 1 intensity, and what evidence or leverage makes an account worth working.</div>
+            </div>
+            <div class="ta-bridge-card">
+                <div class="ta-bridge-card-title">Output to use next</div>
+                <ul class="ta-bridge-list" id="taNextOutputs">
+                    <li>Finish setup to see the first territory outputs.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="ta-summary-row" id="taSummaryRow">
+            <div class="ta-summary-pill"><div class="label">ICP Wedge</div><div class="value" id="taSummaryIcp">No saved ICP yet.</div></div>
+            <div class="ta-summary-pill"><div class="label">Active Theses</div><div class="value" id="taSummaryTheses">0 active theses.</div></div>
+            <div class="ta-summary-pill"><div class="label">Active Territory</div><div class="value" id="taSummaryAccounts">0 / 300 accounts.</div></div>
+            <div class="ta-summary-pill"><div class="label">Next Move</div><div class="value" id="taSummaryNext">Start by defining the first strategic bet.</div></div>
+        </div>
+    </div>
     <!-- View Tabs -->
     <div class="ta-view-tabs">
         <button class="ta-view-tab active" data-view="cockpit" onclick="switchView('cockpit')">Daily Cockpit</button>
@@ -640,6 +700,95 @@ function getSwapHistory() { return readLS(KEYS.swapHistory, []); }
 function saveSwapHistory(s) { writeLS(KEYS.swapHistory, s); }
 function getCalibrations() { return readLS(KEYS.calibrations, {progression:false,leverage:false,swapLogic:false}); }
 function saveCalibrations(c) { writeLS(KEYS.calibrations, c); }
+
+function getBestIcpSummary() {
+    var analytics = readLS('gtmos_icp_analytics', { icps: [] }) || { icps: [] };
+    var icps = Array.isArray(analytics.icps) ? analytics.icps.slice() : [];
+    if (!icps.length) return null;
+    icps.sort(function(a, b) {
+        var aScore = Number(a.qualityScore || 0);
+        var bScore = Number(b.qualityScore || 0);
+        if (bScore !== aScore) return bScore - aScore;
+        return String(b.timestamp || '').localeCompare(String(a.timestamp || ''));
+    });
+    return icps[0] || null;
+}
+
+function renderSimpleList(id, items) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = (items || []).map(function(item) {
+        return '<li>' + esc(item) + '</li>';
+    }).join('');
+}
+
+function renderTerritoryBridge() {
+    var theses = getTheses().filter(function(t) { return t.status === 'active'; });
+    var approaches = getApproaches().filter(function(a) { return a.status === 'active'; });
+    var accounts = getAccounts().filter(function(a) { return a.status === 'active'; });
+    var territory = getTerritory();
+    var icp = getBestIcpSummary();
+    var topThesis = null;
+    var bestRate = -1;
+
+    theses.forEach(function(t) {
+        var rate = thesisProgressionRate(t.id);
+        if (rate > bestRate) {
+            bestRate = rate;
+            topThesis = t;
+        }
+    });
+
+    var title = 'Turn one wedge into a controlled battlefield.';
+    var desc = 'Territory Architect is where ICP truth becomes a ranked 30-day account set. Do this before sourcing more names so the rest of the app works on a bounded battlefield instead of a vague TAM.';
+    if (icp && icp.statement) {
+        title = 'Translate your ICP into a territory you can actually work.';
+        desc = 'Your best current ICP should become a finite set of thesis-tagged accounts, ranked by leverage, signal, and tier. That is the bridge from strategic wedge to daily selling.';
+    }
+
+    var objectModel = [
+        'ICP -> theses that express where you believe you can win.',
+        'Theses -> tiered accounts that earn real territory slots.',
+        'Accounts -> approaches, dispositions, and weekly re-tiering.'
+    ];
+
+    var beforeSourcing = 'Without territory design, sourcing becomes logo collection. The point here is to decide what deserves list slots, what gets Tier 1 intensity, and what evidence or leverage makes an account worth working.';
+    if (accounts.length >= 1) {
+        beforeSourcing = 'Your sourcing should now serve this territory, not invent it. Add accounts that strengthen an existing thesis or expose a new thesis worth formalizing.';
+    } else if (theses.length >= 1) {
+        beforeSourcing = 'You already have the first strategic bet. Now convert it into a bounded account set before you open Sourcing Workbench and widen the list.';
+    }
+
+    var outputs = [];
+    if (!icp) outputs.push('Pick one saved ICP first so the territory is anchored to a real wedge.');
+    else outputs.push('Use "' + (icp.industry || 'your wedge') + '" as the market constraint, not the whole TAM.');
+    if (!theses.length) outputs.push('Create 2-4 theses so accounts can be ranked by a real hypothesis, not gut feel.');
+    else outputs.push(theses.length + ' active theses are now available to absorb accounts and approach testing.');
+    if (!accounts.length) outputs.push('Build the first 25-50 accounts, then move the strongest into Sourcing Workbench and Signal Console.');
+    else outputs.push(accounts.length + ' active accounts are now ready for prioritization, signal logging, and graduation into deals.');
+
+    var nextMove = 'Start by defining the first strategic bet.';
+    if (!icp) nextMove = 'Finish one sharp ICP, then come back here to build the first territory slice.';
+    else if (!theses.length) nextMove = 'Turn the ICP into 2-4 theses. One wedge without hypotheses is still too abstract.';
+    else if (!approaches.length) nextMove = 'Add approaches next so the territory has opening angles, not just account names.';
+    else if (!accounts.length) nextMove = 'Add the first accounts. A territory with no accounts is still just strategy.';
+    else if (!territory.salesCycle) nextMove = 'Calibrate the sales cycle so pulse cadence and stale-account logic become trustworthy.';
+    else nextMove = 'Open Daily Cockpit and work the top-ranked accounts first.';
+
+    document.getElementById('taBridgeTitle').textContent = title;
+    document.getElementById('taBridgeDesc').textContent = desc;
+    document.getElementById('taBeforeSourcing').textContent = beforeSourcing;
+    document.getElementById('taSummaryIcp').textContent = icp
+        ? ((icp.buyer || 'Owner') + ' | ' + (icp.industry || 'Market') + (icp.qualityScore ? ' | ' + icp.qualityScore + '/100 quality' : ''))
+        : 'No saved ICP yet.';
+    document.getElementById('taSummaryTheses').textContent = theses.length
+        ? theses.length + ' active theses' + (topThesis ? ' | Top: ' + topThesis.name + (bestRate >= 0 ? ' (' + bestRate + '%)' : '') : '.')
+        : '0 active theses.';
+    document.getElementById('taSummaryAccounts').textContent = accounts.length + ' / ' + MAX_ACCOUNTS + ' active accounts' + (territory.salesCycle ? ' | cycle ' + territory.salesCycle : '');
+    document.getElementById('taSummaryNext').textContent = nextMove;
+    renderSimpleList('taObjectModel', objectModel);
+    renderSimpleList('taNextOutputs', outputs);
+}
 
 var MAX_ACCOUNTS = 300;
 
@@ -959,6 +1108,7 @@ var currentFilter = 'all';
 function renderApp() {
     populateThesisDropdowns();
     populateAccountDropdowns();
+    renderTerritoryBridge();
     if (currentView === 'territory') renderTerritoryView();
     else if (currentView === 'cockpit') renderCockpitView();
     else if (currentView === 'intelligence') renderIntelligenceView();
