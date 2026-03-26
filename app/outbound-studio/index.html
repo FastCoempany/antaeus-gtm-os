@@ -83,8 +83,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
 /* Lists inside accordions */
 .method-list{margin:8px 0;padding-left:0;list-style:none;}
 .method-list li{padding:4px 0 4px 14px;position:relative;}
-.method-list li::before{content:'→';position:absolute;left:0;color:var(--brand-gold);font-size:0.75rem;}
-.method-list.bad li::before{content:'✗';color:var(--red);}
+.method-list li::before{content:'->';position:absolute;left:0;color:var(--brand-gold);font-size:0.72rem;}
+.method-list.bad li::before{content:'x';color:var(--red);}
 .touch-pattern{margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);font-size:0.78rem;}
 .touch-pattern strong{color:var(--text-secondary);}
 
@@ -123,7 +123,31 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
 .toast{position:fixed;right:16px;bottom:16px;background:#1f1a14;color:#fff;padding:10px 16px;border-radius:var(--radius-md);font-size:0.82rem;font-weight:600;opacity:0;transform:translateY(6px);transition:0.25s;pointer-events:none;z-index:999;}
 .toast.show{opacity:1;transform:none;}
 
-@media(max-width:700px){.row,.row3,.ct-grid{grid-template-columns:1fr;}.stats{flex-wrap:wrap;}.stat-item{flex:1 1 50%;border-right:none;padding:6px 0;}}
+.bridge-card{padding:22px 22px 18px;}
+.bridge-kicker{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
+.bridge-title{font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);margin-bottom:8px;line-height:1.1;}
+.bridge-copy{font-size:0.84rem;color:var(--text-tertiary);line-height:1.6;max-width:720px;}
+.bridge-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px;}
+.bridge-block{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:12px 14px;}
+.bridge-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
+.bridge-value{font-size:0.82rem;color:var(--text-secondary);line-height:1.55;}
+.bridge-value strong{color:var(--text-primary);font-weight:700;}
+.motion-brief{display:grid;grid-template-columns:1.1fr 0.9fr;gap:14px;}
+.motion-main,.motion-meta{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px 16px;}
+.motion-title{font-size:0.9rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;}
+.motion-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.65;}
+.motion-list{list-style:none;padding-left:0;margin:10px 0 0;}
+.motion-list li{position:relative;padding:4px 0 4px 14px;font-size:0.8rem;color:var(--text-secondary);}
+.motion-list li::before{content:'+';position:absolute;left:0;color:var(--brand-gold);font-weight:700;}
+.motion-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.motion-pill{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;border:1px solid var(--border-default);font-size:0.7rem;font-weight:700;color:var(--text-secondary);}
+.motion-pill.score-strong{background:var(--green-bg);border-color:rgba(34,197,94,0.22);color:var(--green);}
+.motion-pill.score-workable{background:var(--blue-bg);border-color:rgba(91,141,239,0.22);color:var(--blue);}
+.motion-pill.score-forming{background:var(--amber-bg);border-color:rgba(245,158,11,0.22);color:var(--amber);}
+.motion-pill.score-brittle{background:var(--red-bg);border-color:rgba(239,68,68,0.22);color:var(--red);}
+.motion-empty{font-size:0.82rem;color:var(--text-muted);font-style:italic;}
+.action-note{margin-top:10px;font-size:0.72rem;color:var(--text-muted);}
+@media(max-width:700px){.row,.row3,.ct-grid,.bridge-grid,.motion-brief{grid-template-columns:1fr;}.stats{flex-wrap:wrap;}.stat-item{flex:1 1 50%;border-right:none;padding:6px 0;}}
 
     </style>
 </head>
@@ -141,7 +165,31 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
 <div class="module-inner">
     <div id="outboundBootState"></div>
     <h1 class="page-title">Outbound Studio</h1>
-    <p class="page-sub">Intelligence-driven outbound. Temperature, channel, and CTA — calibrated to where you are with each person.</p>
+    <p class="page-sub">Intelligence-driven outbound. Temperature, channel, and CTA - calibrated to where you are with each person.</p>
+
+    <div class="card bridge-card">
+        <div class="bridge-kicker">Outbound Operating Bridge</div>
+        <div class="bridge-title">Turn GTM truth into one believable first move.</div>
+        <div class="bridge-copy" id="outboundBridgeCopy">Choose one real account, match the ask to the trust level, and leave with a touch that is good enough to send, save, and learn from.</div>
+        <div class="bridge-grid">
+            <div class="bridge-block">
+                <div class="bridge-label">Input Stack</div>
+                <div class="bridge-value" id="bridgeInputStack">No ICP or signal-linked account context yet.</div>
+            </div>
+            <div class="bridge-block">
+                <div class="bridge-label">Standard</div>
+                <div class="bridge-value" id="bridgeStandard">Good outbound has a real trigger, the right channel, and an ask that fits the temperature.</div>
+            </div>
+            <div class="bridge-block">
+                <div class="bridge-label">One-Session Win</div>
+                <div class="bridge-value" id="bridgeSessionWin">Generate one outbound angle, save it, and log the touch so the rest of the app can react to it.</div>
+            </div>
+            <div class="bridge-block">
+                <div class="bridge-label">Next Machine</div>
+                <div class="bridge-value" id="bridgeNextMachine">Signal Console for account context, then LinkedIn Playbook or Cold Call Studio when the motion needs a different lane.</div>
+            </div>
+        </div>
+    </div>
 
     <!-- TABS -->
     <div class="tabs">
@@ -180,11 +228,11 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
                 <div class="field">
                     <label>Temperature</label>
                     <select id="gTemp" onchange="onTempChange()">
-                        <option value="ice_cold">Ice Cold — never heard of you</option>
-                        <option value="cool">Cool — aware, not engaged</option>
-                        <option value="warm">Warm — replied or engaged</option>
-                        <option value="hot">Hot — active deal</option>
-                        <option value="closing">Closing — verbal / signature</option>
+                        <option value="ice_cold">Ice Cold - never heard of you</option>
+                        <option value="cool">Cool - aware, not engaged</option>
+                        <option value="warm">Warm - replied or engaged</option>
+                        <option value="hot">Hot - active deal</option>
+                        <option value="closing">Closing - verbal / signature</option>
                     </select>
                     <div class="hint" id="gTempHint"></div>
                 </div>
@@ -212,8 +260,13 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
             <div class="rec-bar" id="recBar"></div>
             <div class="toggle-row">
                 <button class="toggle" id="noAskToggle" onclick="toggleNoAsk()"></button>
-                <span class="toggle-label">No-ask mode — generate value-only touch, zero CTA</span>
+                <span class="toggle-label">No-ask mode - generate value-only touch, zero CTA</span>
             </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Motion Brief</div>
+            <div id="motionBrief" class="motion-empty">Select an account, persona, temperature, and trigger to see the exact outbound motion Antaeus would run first.</div>
         </div>
 
         <!-- GENERATED OUTPUT -->
@@ -223,9 +276,11 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
             <div class="btn-row">
                 <button class="btn primary" onclick="generate()">Generate</button>
                 <button class="btn gold" onclick="copyOutput()">Copy</button>
+                <button class="btn gold" onclick="saveAndLogTouch()">Save + Log</button>
                 <button class="btn" onclick="saveToAngles()">Save to Angles</button>
                 <button class="btn" onclick="logTouch()">Log Touch</button>
             </div>
+            <div class="action-note">Good enough means the trigger is real, the ask matches the temperature, and the touch creates an obvious next learning step.</div>
         </div>
     </div>
 
@@ -424,7 +479,175 @@ var CONTENT_TYPES = [
 // ── STATE ──
 var noAskMode = false;
 var currentOutput = '';
+var currentMotion = null;
 var signalConsoleAccounts = [];
+
+function getBestIcp(){
+    var analytics = readLS('gtmos_icp_analytics',{icps:[]}) || {icps:[]};
+    var icps = Array.isArray(analytics.icps) ? analytics.icps.slice() : [];
+    if(!icps.length)return null;
+    icps.sort(function(a,b){
+        return Number(b.qualityScore||0) - Number(a.qualityScore||0);
+    });
+    return icps[0] || null;
+}
+
+function getSelectedAccount(){
+    var accountName = document.getElementById('gAccount').value || '';
+    return signalConsoleAccounts.find(function(a){return a.name===accountName;}) || null;
+}
+
+function getSignalHeadline(account){
+    if(account && account.signals && account.signals.length && account.signals[0].headline){
+        return account.signals[0].headline;
+    }
+    return '';
+}
+
+function getCurrentMotionState(){
+    var accountName = document.getElementById('gAccount').value || '';
+    var contactName = document.getElementById('gContact').value || '';
+    var persona = document.getElementById('gPersona').value;
+    var temp = document.getElementById('gTemp').value;
+    var trigger = document.getElementById('gTrigger').value;
+    var triggerData = TRIGGERS[trigger] || {label:'Trigger',meaning:'',angles:['Value']};
+    var personaData = PERSONAS[persona] || PERSONAS.vp;
+    var tempData = TEMPS[temp] || TEMPS.cool;
+    var account = getSelectedAccount();
+    var signalHeadline = getSignalHeadline(account);
+    var channelOrder = (CHANNEL_ORDER[temp]||{})[persona]||['email'];
+    var primaryChannel = channelOrder[0] || 'email';
+    var asset = (ASSET_MATRIX[temp]||{})[persona]||'none';
+    var ctaKey = noAskMode ? 'no_ask' : ((CTA_BY_TEMP[temp]||{}).normal || 'micro_ask');
+    var angles = readLS('gtmos_angles',[]);
+    var touchesData = readLS('gtmos_outbound_touches',{touches:[]}) || {touches:[]};
+    var existingTouches = (touchesData.touches||[]).filter(function(t){return t.accountName===accountName;});
+    var score = 38;
+    if(accountName)score += 12;
+    if(contactName)score += 10;
+    if(signalHeadline)score += 10;
+    if(triggerData.meaning)score += 7;
+    if(primaryChannel)score += 6;
+    if(asset !== 'none')score += 6;
+    if(noAskMode)score += 3;
+    if(existingTouches.length > 0)score += 5;
+    if(account && Number(account._heat||0) >= 70)score += 4;
+    score = Math.min(100, score);
+
+    var band = 'forming';
+    var bandLabel = 'Forming';
+    var standard = 'Needs one more layer of specificity before it feels like a real operating move.';
+    var nextMove = 'Tighten the contact, then generate the first touch.';
+    if(score >= 86){
+        band = 'strong';
+        bandLabel = 'Ready now';
+        standard = 'This is specific enough to send, log, and learn from immediately.';
+        nextMove = existingTouches.length ? 'Generate the follow-up angle and log the next touch.' : 'Generate, save, and send the first touch.';
+    } else if(score >= 72){
+        band = 'workable';
+        bandLabel = 'Workable';
+        standard = 'Good enough for a real first touch, but still worth checking the ask and contact fit.';
+        nextMove = 'Generate the touch, then save and log it so the rest of the app can compound it.';
+    } else if(score < 56){
+        band = 'brittle';
+        bandLabel = 'Too thin';
+        standard = 'You are still missing enough context that the motion may feel generic.';
+        nextMove = accountName ? 'Add a named contact and keep the trigger specific.' : 'Pick one real account before trying to write motion.';
+    }
+
+    var why = [];
+    if(signalHeadline)why.push('Signal evidence exists for this account.');
+    else why.push('The trigger is carrying the motion more than live account evidence.');
+    why.push('Primary channel is '+primaryChannel+' because '+tempData.label.toLowerCase()+' trust should be worked there first.');
+    why.push('The CTA is '+(CTA_LABELS[ctaKey]||ctaKey).toLowerCase()+' because the current temperature is '+tempData.label.toLowerCase()+'.');
+    if(asset !== 'none')why.push('The recommended asset is '+(ASSET_LABELS[asset]||asset).toLowerCase()+' so the motion gives before it asks.');
+    else why.push('No asset is recommended yet because the trust level is still too early for an attachment.');
+
+    var good = [];
+    good.push('The first sentence proves why this account is in motion now.');
+    good.push('The ask matches '+tempData.label.toLowerCase()+' temperature instead of skipping trust.');
+    good.push('The saved angle can be reused in Signal Console, LinkedIn Playbook, and the handoff kit.');
+
+    return {
+        accountName:accountName,
+        contactName:contactName,
+        persona:persona,
+        personaLabel:personaData.label,
+        temp:temp,
+        tempLabel:tempData.label,
+        trigger:trigger,
+        triggerLabel:triggerData.label,
+        triggerMeaning:triggerData.meaning,
+        primaryChannel:primaryChannel,
+        channelOrder:channelOrder,
+        asset:asset,
+        assetLabel:ASSET_LABELS[asset]||asset,
+        ctaKey:ctaKey,
+        ctaLabel:CTA_LABELS[ctaKey]||ctaKey,
+        signalHeadline:signalHeadline,
+        score:score,
+        band:band,
+        bandLabel:bandLabel,
+        standard:standard,
+        nextMove:nextMove,
+        why:why,
+        good:good,
+        existingTouches:existingTouches.length,
+        savedAngles:angles.length
+    };
+}
+
+function renderBridge(){
+    var icp = getBestIcp();
+    var motion = getCurrentMotionState();
+    var bridgeCopy = document.getElementById('outboundBridgeCopy');
+    var inputStack = document.getElementById('bridgeInputStack');
+    var standard = document.getElementById('bridgeStandard');
+    var sessionWin = document.getElementById('bridgeSessionWin');
+    var nextMachine = document.getElementById('bridgeNextMachine');
+    var icpText = icp ? ((icp.industry||'Market')+' | '+(icp.buyer||'Buyer')+(icp.qualityScore?' | '+icp.qualityScore+'/100 quality':'')) : 'No saved ICP yet.';
+    var signalText = motion.accountName ? ('Working account: <strong>'+escH(motion.accountName)+'</strong>'+(motion.signalHeadline?' | '+escH(motion.signalHeadline):'')) : 'No account selected yet.';
+    bridgeCopy.innerHTML = 'Outbound Studio should turn one account, one trigger, and one buyer into a believable motion you can send now and learn from later.';
+    inputStack.innerHTML = '<strong>ICP:</strong> '+escH(icpText)+'<br><strong>Signals:</strong> '+signalText;
+    standard.innerHTML = '<strong>'+motion.bandLabel+'</strong> - '+escH(motion.standard);
+    sessionWin.innerHTML = 'Leave with <strong>1 saved angle</strong>, <strong>1 logged touch</strong>, and a clear next move for follow-up or channel shift.';
+    nextMachine.innerHTML = motion.primaryChannel==='linkedin'
+        ? 'If this motion works, take the same angle into <strong>LinkedIn Playbook</strong> next.'
+        : (motion.temp==='hot' || motion.temp==='closing'
+            ? 'If this motion is live, take it into <strong>Deal Workspace</strong> or <strong>Cold Call Studio</strong> next.'
+            : 'If this motion lands, feed the account back into <strong>Signal Console</strong> and then channel-shift only if needed.');
+}
+
+function renderMotionBrief(){
+    var motion = getCurrentMotionState();
+    currentMotion = motion;
+    var el = document.getElementById('motionBrief');
+    if(!motion.accountName && !motion.contactName){
+        el.className = 'motion-empty';
+        el.textContent = 'Select an account, persona, temperature, and trigger to see the exact outbound motion Antaeus would run first.';
+        return;
+    }
+    var whyItems = motion.why.map(function(item){return '<li>'+escH(item)+'</li>';}).join('');
+    var goodItems = motion.good.map(function(item){return '<li>'+escH(item)+'</li>';}).join('');
+    el.className = 'motion-brief';
+    el.innerHTML =
+        '<div class="motion-main">'+
+            '<div class="motion-title">This is the motion.</div>'+
+            '<div class="motion-copy">Lead with <strong>'+escH(motion.triggerLabel)+'</strong> for <strong>'+escH(motion.personaLabel)+'</strong> through <strong>'+escH(motion.primaryChannel)+'</strong>. The ask should stay <strong>'+escH(motion.ctaLabel.toLowerCase())+'</strong>'+(motion.asset !== 'none' ? ' and the give should be <strong>'+escH(motion.assetLabel.toLowerCase())+'</strong>.' : '.')+'</div>'+
+            '<ul class="motion-list">'+whyItems+'</ul>'+
+        '</div>'+
+        '<div class="motion-meta">'+
+            '<div class="motion-pills">'+
+                '<span class="motion-pill score-'+motion.band+'">'+motion.score+'/100 '+escH(motion.bandLabel)+'</span>'+
+                '<span class="motion-pill">'+escH(motion.primaryChannel)+'</span>'+
+                '<span class="motion-pill">'+escH(motion.ctaLabel)+'</span>'+
+            '</div>'+
+            '<div class="motion-title">What good looks like</div>'+
+            '<ul class="motion-list">'+goodItems+'</ul>'+
+            '<div class="action-note"><strong>Next move:</strong> '+escH(motion.nextMove)+'</div>'+
+            '<div class="action-note"><strong>Persistence:</strong> Save creates an outbound angle. Log creates a touch record. Save + Log does both so Dashboard, Readiness, and the handoff kit can use the same motion.</div>'+
+        '</div>';
+}
 
 async function syncSignalConsoleAccounts(){
     if(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'){
@@ -442,11 +665,22 @@ async function syncSignalConsoleAccounts(){
 
 // ── INIT ──
 function init(){
+    document.querySelector('.page-sub').textContent = 'Intelligence-driven outbound. Temperature, channel, and CTA - calibrated to where you are with each person.';
+    document.querySelector('.toggle-label').textContent = 'No-ask mode - generate value-only touch, zero CTA';
+    var tempOptions = document.getElementById('gTemp').options;
+    if(tempOptions.length >= 5){
+        tempOptions[0].text = 'Ice Cold - never heard of you';
+        tempOptions[1].text = 'Cool - aware, not engaged';
+        tempOptions[2].text = 'Warm - replied or engaged';
+        tempOptions[3].text = 'Hot - active deal';
+        tempOptions[4].text = 'Closing - verbal / signature';
+    }
     populateAccounts();
     updateRecommendations();
     renderTempAccordions();
     renderLog();
     renderContentLibrary();
+    renderBridge();
     // URL param pre-fill
     var params = new URLSearchParams(window.location.search);
     if(params.get('account')){
@@ -461,6 +695,12 @@ function init(){
     if(params.get('persona')){
         document.getElementById('gPersona').value = params.get('persona');
     }
+    ['gPersona','gTrigger','gContact'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(!el)return;
+        el.addEventListener('change', updateRecommendations);
+        el.addEventListener('input', updateRecommendations);
+    });
     updateRecommendations();
 }
 
@@ -522,6 +762,13 @@ function updateRecommendations(){
         '<span class="rec-badge blue">CTA: '+(CTA_LABELS[ctaKey]||ctaKey)+'</span>'+
         '<span class="rec-badge '+(asset==='none'?'':'amber')+'">Asset: '+(ASSET_LABELS[asset]||asset)+'</span>'+
         '<span class="rec-badge">Persona length: '+PERSONAS[persona].sentenceRange.join('-')+' sentences</span>';
+    bar.innerHTML =
+        '<span class="rec-badge gold">Channel: '+primaryChannel+(channelOrder.length>1?' -> '+channelOrder.slice(1).join(' -> '):'')+'</span>'+
+        '<span class="rec-badge blue">CTA: '+(CTA_LABELS[ctaKey]||ctaKey)+'</span>'+
+        '<span class="rec-badge '+(asset==='none'?'':'amber')+'">Asset: '+(ASSET_LABELS[asset]||asset)+'</span>'+
+        '<span class="rec-badge">Persona length: '+PERSONAS[persona].sentenceRange.join('-')+' sentences</span>';
+    renderBridge();
+    renderMotionBrief();
 }
 
 window.toggleNoAsk = function(){
@@ -647,6 +894,8 @@ window.generate = function(){
 
     currentOutput = lines.join('\n');
     document.getElementById('outputBox').textContent = currentOutput;
+    renderBridge();
+    renderMotionBrief();
 };
 
 window.copyOutput = function(){
@@ -654,48 +903,85 @@ window.copyOutput = function(){
     cp(currentOutput).then(function(){toast('Copied')});
 };
 
-window.saveToAngles = async function(){
-    if(!currentOutput){toast('Generate first');return}
+function persistCurrentAngle(){
+    if(!currentOutput){return {saved:false,count:readLS('gtmos_angles',[]).length};}
     var angles = readLS('gtmos_angles',[]);
+    var motion = currentMotion || getCurrentMotionState();
+    var existing = angles.find(function(a){
+        return a &&
+            a.company === (motion.accountName||'') &&
+            a.email === currentOutput &&
+            a.temperature === motion.temp &&
+            a.persona === motion.personaLabel &&
+            a.trigger === motion.triggerLabel;
+    });
+    if(existing){
+        return {saved:false,count:angles.length,existing:true};
+    }
     angles.push({
-        company:document.getElementById('gAccount').value||'',
-        trigger:TRIGGERS[document.getElementById('gTrigger').value].label,
-        persona:PERSONAS[document.getElementById('gPersona').value].label,
+        company:motion.accountName||'',
+        trigger:motion.triggerLabel,
+        persona:motion.personaLabel,
         email:currentOutput,
-        temperature:document.getElementById('gTemp').value,
-        channel:CHANNEL_MATRIX[document.getElementById('gTemp').value][document.getElementById('gPersona').value]||'email',
-        ctaType:noAskMode?'no_ask':(CTA_BY_TEMP[document.getElementById('gTemp').value]||{}).normal,
+        temperature:motion.temp,
+        channel:motion.primaryChannel,
+        ctaType:motion.ctaKey,
+        assetUsed:motion.asset,
+        qualityScore:motion.score,
+        motionBand:motion.band,
+        nextMove:motion.nextMove,
         savedAt:new Date().toISOString()
     });
     writeLS('gtmos_angles',angles);
-    await syncSequenceDoc('outbound_angles','Outbound Angles',angles);
-    toast('Saved to angles ('+angles.length+' total)');
+    return {saved:true,count:angles.length};
+}
+
+window.saveToAngles = async function(){
+    if(!currentOutput){toast('Generate first');return}
+    var result = persistCurrentAngle();
+    await syncSequenceDoc('outbound_angles','Outbound Angles',readLS('gtmos_angles',[]));
+    renderBridge();
+    renderMotionBrief();
+    toast(result.existing ? 'Angle already saved' : 'Saved to angles ('+result.count+' total)');
 };
 
 window.logTouch = async function(){
     if(!currentOutput){toast('Generate first');return}
+    var angleResult = persistCurrentAngle();
+    if(angleResult.saved || angleResult.existing){
+        await syncSequenceDoc('outbound_angles','Outbound Angles',readLS('gtmos_angles',[]));
+    }
     var data = readLS('gtmos_outbound_touches',{touches:[]});
+    var motion = currentMotion || getCurrentMotionState();
     data.touches.push({
         id:uid(),
-        accountName:document.getElementById('gAccount').value||'',
-        contactName:document.getElementById('gContact').value||'',
+        accountName:motion.accountName||'',
+        contactName:motion.contactName||'',
         contactTitle:'',
-        persona:document.getElementById('gPersona').value,
-        temperature:document.getElementById('gTemp').value,
-        channel:CHANNEL_MATRIX[document.getElementById('gTemp').value][document.getElementById('gPersona').value]||'email',
-        trigger:document.getElementById('gTrigger').value,
-        ctaType:noAskMode?'no_ask':(CTA_BY_TEMP[document.getElementById('gTemp').value]||{}).normal,
-        assetUsed:(ASSET_MATRIX[document.getElementById('gTemp').value]||{})[document.getElementById('gPersona').value]||'none',
+        persona:motion.persona,
+        temperature:motion.temp,
+        channel:motion.primaryChannel,
+        trigger:motion.trigger,
+        ctaType:motion.ctaKey,
+        assetUsed:motion.asset,
         content:currentOutput,
         outcome:null,
         outcomeDate:null,
         dealId:null,
+        qualityScore:motion.score,
+        motionBand:motion.band,
         createdAt:new Date().toISOString()
     });
     writeLS('gtmos_outbound_touches',data);
     await syncSequenceDoc('outbound_touches','Outbound Touch Log',data);
-    toast('Touch logged');
+    renderBridge();
+    renderMotionBrief();
+    toast(angleResult.saved ? 'Saved angle and logged touch' : 'Touch logged');
     renderLog();
+};
+
+window.saveAndLogTouch = async function(){
+    await logTouch();
 };
 
 // ── TABS ──
