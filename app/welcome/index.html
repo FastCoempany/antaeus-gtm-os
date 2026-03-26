@@ -18,6 +18,8 @@
         .welcome-progress{max-width:760px;padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);margin-bottom:20px}
         .welcome-progress-title{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-gold);font-weight:700;margin-bottom:8px}
         .welcome-progress-copy{color:var(--text-secondary);font-size:.9rem;line-height:1.65}
+        .welcome-hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin:-4px 0 18px}
+        .welcome-hero-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);color:var(--text-secondary);font-size:.74rem;font-weight:700;letter-spacing:.04em}
         .welcome-actions{display:flex;flex-wrap:wrap;gap:12px}
         .welcome-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;border:1px solid var(--border-default);background:rgba(255,255,255,0.02);color:var(--text-secondary);font-size:0.92rem;font-weight:700;text-decoration:none;cursor:pointer;transition:all .2s}
         .welcome-btn:hover{transform:translateY(-1px);border-color:rgba(212,165,116,0.36);background:rgba(212,165,116,0.08)}
@@ -39,6 +41,9 @@
         .welcome-card-title{font-size:1.02rem;font-weight:700;color:var(--text-primary);line-height:1.35}
         .welcome-card-state{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;border:1px solid rgba(45,212,191,0.2);background:rgba(45,212,191,0.08);color:var(--brand-teal-light);font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
         .welcome-card-body{font-size:.86rem;color:var(--text-tertiary);line-height:1.65;margin-bottom:14px}
+        .welcome-card-why{padding:12px 14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);font-size:.8rem;color:var(--text-secondary);line-height:1.6;margin-bottom:12px}
+        .welcome-card-why strong,.welcome-card-unlocks strong{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-gold);margin-bottom:5px}
+        .welcome-card-unlocks{font-size:.8rem;color:var(--text-muted);line-height:1.6;margin-bottom:12px}
         .welcome-card-meta{display:flex;flex-wrap:wrap;gap:8px 10px;font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:12px}
         .welcome-link-row{display:flex;flex-wrap:wrap;gap:10px}
         .welcome-mini-link{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;border:1px solid rgba(212,165,116,0.22);background:rgba(212,165,116,0.06);color:var(--brand-gold);text-decoration:none;font-size:.8rem;font-weight:700}
@@ -67,9 +72,22 @@
         .welcome-resource a{white-space:nowrap}
         .welcome-state-note{margin-top:10px;font-size:.78rem;color:var(--text-muted)}
         .welcome-sync{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#86efac;margin-top:18px}
+        .welcome-lifecycle{display:grid;gap:14px}
+        .welcome-lifecycle-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+        .welcome-lifecycle-kicker{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-gold);margin-bottom:6px}
+        .welcome-lifecycle-title{font-size:1.04rem;font-weight:700;color:var(--text-primary);line-height:1.35}
+        .welcome-lifecycle-copy{margin-top:6px;font-size:.84rem;color:var(--text-tertiary);line-height:1.62}
+        .welcome-lifecycle-score{display:grid;place-items:center;min-width:82px;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03)}
+        .welcome-lifecycle-score span{font-family:var(--font-serif);font-size:1.45rem;color:var(--text-primary);line-height:1}
+        .welcome-lifecycle-score small{margin-top:5px;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:700;text-align:center}
+        .welcome-lifecycle-rhythm{padding:14px 16px;border-radius:14px;border:1px solid rgba(45,212,191,0.16);background:rgba(45,212,191,0.06);font-size:.82rem;color:var(--text-secondary);line-height:1.65}
+        .welcome-lifecycle-rhythm strong{color:var(--brand-teal-light)}
+        .welcome-lifecycle-pills{display:flex;flex-wrap:wrap;gap:8px}
+        .welcome-lifecycle-pill{display:inline-flex;align-items:center;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);font-size:.74rem;color:var(--text-muted);font-weight:700}
+        .welcome-lifecycle-pill.done{border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.08);color:#86efac}
         .welcome-loading,.welcome-error{padding:32px;text-align:center;color:var(--text-muted)}
         @media(max-width:1100px){.welcome-grid{grid-template-columns:1fr}.welcome-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media(max-width:720px){.welcome-hero{padding:24px}.welcome-title{font-size:1.85rem}.welcome-stats{grid-template-columns:1fr}.welcome-actions{flex-direction:column}.welcome-btn{width:100%}}
+        @media(max-width:720px){.welcome-hero{padding:24px}.welcome-title{font-size:1.85rem}.welcome-stats{grid-template-columns:1fr}.welcome-actions{flex-direction:column}.welcome-btn{width:100%}.welcome-lifecycle-top{flex-direction:column}.welcome-lifecycle-score{width:100%}}
     </style>
 </head>
 <body>
@@ -105,7 +123,17 @@
         }
 
         function arr(value){ return Array.isArray(value) ? value : []; }
+        function parseJSON(raw, fallback){
+            if (raw == null || raw === '') return fallback;
+            try { return JSON.parse(raw); } catch (e) { return fallback; }
+        }
         function esc(value){ var node = document.createElement('div'); node.textContent = value == null ? '' : String(value); return node.innerHTML; }
+        function scopedGet(key, fallback){
+            if (window.gtmLocalState && typeof window.gtmLocalState.get === 'function') {
+                return window.gtmLocalState.get(key, fallback, { scope: 'user' });
+            }
+            try { return parseJSON(localStorage.getItem(key), fallback); } catch (e) { return fallback; }
+        }
         function pickName(summary){
             var profile = summary && summary.profile ? summary.profile : {};
             var onboarding = summary && summary.onboarding && summary.onboarding.answers ? summary.onboarding.answers : {};
@@ -122,6 +150,16 @@
             return next.split(/\s+/).map(function(part){
                 return part.charAt(0).toUpperCase() + part.slice(1);
             }).join(' ');
+        }
+        function getActivationContext(){
+            var local = scopedGet('gtmos_activation_context', null);
+            if (local) return local;
+            try { return parseJSON(localStorage.getItem('gtmos_activation_context'), null); } catch (e) { return null; }
+        }
+        function getBackupStatus(){
+            var manager = window.gtmDataManager || window.dataManager || null;
+            if (!manager || typeof manager.getBackupStatus !== 'function') return null;
+            try { return manager.getBackupStatus(); } catch (e) { return null; }
         }
         function buildCounts(summary){
             var icps = arr(summary && summary.icpAnalytics && summary.icpAnalytics.icps);
@@ -160,6 +198,131 @@
                 { label:'First motion logged', done:motionCount > 0, copy:'Calls, touches, or LinkedIn actions are being captured instead of living in memory.' }
             ];
         }
+        function buildHeroChips(activationContext, roleLabel, counts, lifecycle){
+            var chips = [];
+            if (activationContext && activationContext.categoryLabel) chips.push(activationContext.categoryLabel);
+            if (activationContext && activationContext.buyerLabel) chips.push(activationContext.buyerLabel);
+            if (activationContext && activationContext.stageLabel) chips.push(activationContext.stageLabel);
+            if (activationContext && activationContext.acvBandLabel) chips.push(activationContext.acvBandLabel);
+            if (!chips.length) chips.push(roleLabel + ' activation');
+            chips.push(counts.icps + ' ICPs live');
+            if (lifecycle && lifecycle.active) chips.push('Week 1 · Day ' + lifecycle.dayNumber);
+            return chips.slice(0, 5);
+        }
+        function buildLifecycleAction(nextAction, roleLabel){
+            if (!nextAction || !nextAction.href) return null;
+            var map = {
+                '/app/welcome/': {
+                    key:'welcome',
+                    title:'Finish the welcome guide',
+                    body:'Lock the first-session path before you scatter into modules.',
+                    cta:'Open Welcome Guide',
+                    meta:['activation', roleLabel],
+                    why:'The first week works best when the app explains itself before you improvise your own route.',
+                    unlocks:'A cleaner first-session handoff into dashboard, tour, and next actions.'
+                },
+                '/app/icp-studio/': {
+                    key:'icp',
+                    title:'Create your first ICP',
+                    body:'Define one sharp wedge so the rest of the system stops operating on guesswork.',
+                    cta:'Open ICP Studio',
+                    meta:['targeting truth', roleLabel],
+                    why:'Without one credible ICP, Signal Console, outbound, and discovery all stay too broad.',
+                    unlocks:'Sharper signal research, cleaner outbound, and a dashboard that can brief something real.'
+                },
+                '/app/signal-console/': {
+                    key:'signal',
+                    title:'Research one live account',
+                    body:'Put one real company into the system so the product starts working from external evidence.',
+                    cta:'Open Signal Console',
+                    meta:['real account', 'live research'],
+                    why:'The app becomes dramatically more believable after the first real account or signal exists.',
+                    unlocks:'Heat scoring, next-move logic, and better input for sourcing and outbound.'
+                },
+                '/app/deal-workspace/': {
+                    key:'deal',
+                    title:'Create the first live deal',
+                    body:'A real opportunity gives the dashboard, autopsy, PoC, and handoff surfaces something honest to reason about.',
+                    cta:'Open Deal Workspace',
+                    meta:['pipeline truth', 'dashboard unlock'],
+                    why:'You do not yet have a real object for deal review, risk logic, or proof planning.',
+                    unlocks:'Pipeline review, future autopsy, PoC planning, and a more believable command view.'
+                },
+                '/app/outbound-studio/': {
+                    key:'motion',
+                    title:'Log the first live motion',
+                    body:'Capture one outbound move or one real call so the workspace starts storing operating memory.',
+                    cta:'Open Outbound Studio',
+                    meta:['activity trail', 'week one'],
+                    why:'The system still needs one real touch or call before it can act like a living motion layer.',
+                    unlocks:'Lifecycle credibility, dashboard motion truth, and a clearer operating rhythm.'
+                },
+                '/app/settings/': {
+                    key:'backup',
+                    title:'Export the first backup',
+                    body:'Make the workspace durable outside this one browser before week one gets messy.',
+                    cta:'Open Settings',
+                    meta:['durability', 'week one'],
+                    why:'The first week is not complete until your workspace can survive refresh, re-login, and bad luck.',
+                    unlocks:'Safer experimentation, restore confidence, and a more believable operating system.'
+                },
+                '/app/dashboard/': {
+                    key:'dashboard',
+                    title:'Return to the dashboard',
+                    body:'Use the command view as the place where the system tells you what matters next.',
+                    cta:'Open Dashboard',
+                    meta:['operating rhythm', 'daily command view'],
+                    why:'By this point the app should start behaving like a morning operating room, not a collection of tools.',
+                    unlocks:'Faster daily resets, clearer next moves, and stronger week-one rhythm.'
+                },
+                '/app/discovery-agenda/': {
+                    key:'planner',
+                    title:'Prep the next discovery call',
+                    body:'Turn an active deal into a credible conversation plan before the call happens.',
+                    cta:'Open Call Planner',
+                    meta:['call quality', 'active deal'],
+                    why:'You already have enough deal truth now that the next call should be structured, not improvised.',
+                    unlocks:'A stronger discovery agenda and a cleaner handoff into Discovery Studio.'
+                },
+                '/app/quota-workback/': {
+                    key:'quota',
+                    title:'Calibrate quota and targets',
+                    body:'Set the system math so your activity expectations match the revenue plan.',
+                    cta:'Open Quota Workback',
+                    meta:['system math', 'benchmarks'],
+                    why:'The workspace still needs numeric pressure so “good” does not stay subjective.',
+                    unlocks:'Better readiness context, clearer operating targets, and stronger weekly motion planning.'
+                }
+            };
+            var base = map[nextAction.href];
+            if (!base) return null;
+            return Object.assign({ href: nextAction.href }, base);
+        }
+        function actionSpec(key, title, body, href, cta, meta, why, unlocks){
+            return {
+                key:key,
+                title:title,
+                body:body,
+                href:href,
+                cta:cta,
+                meta:meta || [],
+                why:why || '',
+                unlocks:unlocks || '',
+                state:'ready'
+            };
+        }
+        function buildWorkspaceFocus(summary, activationContext, roleLabel, counts){
+            var lines = [];
+            if (activationContext && activationContext.company) lines.push('Workspace tuned for ' + activationContext.company + '.');
+            lines.push('Role lens: ' + roleLabel + '.');
+            if (activationContext && activationContext.stageLabel) lines.push('Current motion: ' + activationContext.stageLabel + '.');
+            if (counts.icps || counts.deals || counts.signals || counts.touches || counts.calls) {
+                lines.push('The job now is to turn that setup truth into live operating evidence.');
+            } else {
+                lines.push('The job now is to add the first operating evidence so the app stops feeling theoretical.');
+            }
+            return lines.join(' ');
+        }
         function buildActivationModel(summary, counts){
             var milestones = buildMilestones(counts);
             var completed = milestones.filter(function(item){ return item.done; }).length;
@@ -191,20 +354,33 @@
                 body: body
             };
         }
-        function buildActions(summary, counts){
+        function buildActions(summary, counts, lifecycle){
             var actions = [];
-            if (!counts.icps) actions.push(actionSpec('Create your first ICP','Start with targeting truth. Once one ICP exists, Signal Console, outbound, and the dashboard stop operating on memory.','/app/icp-studio/','Open ICP Studio',['highest leverage','5 min']));
-            if (!(counts.accounts || counts.signals)) actions.push(actionSpec('Research one live account','Add or enrich one account in Signal Console so the workspace starts reflecting real external intelligence.','/app/signal-console/','Open Signal Console',['deep research','real signals']));
-            if (!counts.deals) actions.push(actionSpec('Create the first live deal','One real opportunity activates the weekly briefing, risk logic, and next-step coaching across the app.','/app/deal-workspace/','Open Deal Workspace',['pipeline truth','dashboard unlock']));
-            if (!(counts.touches + counts.calls)) actions.push(actionSpec('Log the first live motion','Capture one outbound touch or one discovery call so the system begins storing operating memory instead of setup answers.','/app/outbound-studio/','Open Outbound Studio',['activity trail','cross-device']));
+            var seen = {};
+            var roleLabel = prettyRole(getRole(summary));
+            function push(action){
+                if (!action || !action.href) return;
+                var key = action.key || action.href;
+                if (seen[key]) return;
+                seen[key] = true;
+                actions.push(action);
+            }
 
-            if (actions.length < 4 && counts.deals) actions.push(actionSpec('Prep the next discovery call','Use the call planner or Discovery Studio to turn an active deal into a structured next conversation.','/app/discovery-agenda/','Open Call Planner',['call quality','active deal']));
-            if (actions.length < 4 && counts.icps) actions.push(actionSpec('Tighten your targeting layer','Your ICP base exists. Refine it now so the rest of the workflow compounds off sharper segmentation.','/app/icp-studio/','Refine ICPs',['recommended','signal quality']));
-            if (actions.length < 4 && counts.deals) actions.push(actionSpec('Review what the dashboard sees','Use the dashboard as command center once at least one live deal exists. Confirm the brief matches reality.','/app/dashboard/','Open Dashboard',['weekly brief','risk review']));
-            if (actions.length < 4) actions.push(actionSpec('Dial in quota and targets','Put your quota math and ACV into the system so activity targets and readiness stay anchored to numbers.','/app/quota-workback/','Open Quota Workback',['system math','benchmarks']));
+            push(buildLifecycleAction(lifecycle && lifecycle.active ? lifecycle.nextAction : null, roleLabel));
+
+            if (!counts.icps) push(actionSpec('icp','Create your first ICP','Start with one sharp wedge. Once one ICP exists, Signal Console, outbound, and discovery stop operating on memory.','/app/icp-studio/','Open ICP Studio',['highest leverage', roleLabel],'The rest of the app compounds off targeting truth before it compounds off activity.','Sharper signal research, better sourcing, cleaner outbound, and a more credible dashboard brief.'));
+            if (!(counts.accounts || counts.signals)) push(actionSpec('signal','Research one live account','Add or enrich one real company so the workspace starts reflecting external evidence instead of setup answers.','/app/signal-console/','Open Signal Console',['real account','deep research'],'You need one live account before the signal layer can behave like a real intelligence system.','Heat logic, next-move guidance, and better context for sourcing and outbound.'));
+            if (!counts.deals) push(actionSpec('deal','Create the first live deal','One real opportunity activates pipeline review, proof planning, and the Monday command view.','/app/deal-workspace/','Open Deal Workspace',['pipeline truth','dashboard unlock'],'Without a real deal, too many later modules are still briefing hypothetical work.','Future autopsy, PoC framework, advisor deployment, and a more honest dashboard.'));
+            if (!(counts.touches + counts.calls)) push(actionSpec('motion','Log the first live motion','Capture one outbound touch or one real call so the system starts storing operating memory.','/app/outbound-studio/','Open Outbound Studio',['activity trail','week one'],'Week one should include at least one motion so the workspace stops being only configuration plus objects.','Readiness evidence, better dashboard state, and a clearer operating rhythm.'));
+
+            if (actions.length < 4 && counts.deals) push(actionSpec('planner','Prep the next discovery call','Use Call Planner to turn an active deal into a structured conversation, not a loose note.','/app/discovery-agenda/','Open Call Planner',['call quality','active deal'],'You already have enough deal truth to make the next call more deliberate.','A stronger discovery agenda and a cleaner handoff into Discovery Studio.'));
+            if (actions.length < 4 && counts.icps) push(actionSpec('refine-icp','Tighten your targeting layer','Your first ICP exists. Refine it now so the rest of the workflow compounds off a sharper buying pattern.','/app/icp-studio/','Refine ICPs',['recommended','signal quality'],'Second-pass targeting work usually pays for itself faster than adding random new records.','Higher-quality sourcing, clearer signals, and better outbound motion.'));
+            if (actions.length < 4 && counts.deals) push(actionSpec('dashboard','Review what the dashboard sees','Use the command surface to check whether the brief matches reality before the week gets noisy.','/app/dashboard/','Open Dashboard',['weekly brief','risk review'],'Once at least one deal exists, the dashboard should become part of the real operating loop.','A more believable command view and better next-step discipline.'));
+            if (actions.length < 5) push(actionSpec('quota','Dial in quota and targets','Put your quota math and ACV into the system so “good” stops staying subjective.','/app/quota-workback/','Open Quota Workback',['system math','benchmarks'],'The app becomes more credible when activity and readiness are anchored to actual revenue pressure.','Better weekly targets, clearer benchmarks, and stronger readiness logic.'));
+            if (actions.length < 5 && lifecycle && lifecycle.active) push(actionSpec('backup','Export the first backup','Make the workspace durable outside this one browser before the first week gets messy.','/app/settings/','Open Settings',['durability','week one'],'Week one is not complete until the workspace can survive refresh, re-login, and a bad decision.','Safer experimentation and a system that feels durable instead of lucky.'));
 
             return actions.slice(0,5).map(function(action, index){
-                action.state = index === 0 ? 'Next' : 'Ready';
+                action.state = index === 0 ? 'Now' : (index === 1 ? 'Next' : 'Ready');
                 return action;
             });
         }
@@ -229,6 +405,8 @@
                     '</div><div class="welcome-card-state">' + esc(action.state || 'Ready') + '</div>' +
                 '</div>' +
                 '<div class="welcome-card-body">' + esc(action.body) + '</div>' +
+                (action.why ? '<div class="welcome-card-why"><strong>Why this is next</strong>' + esc(action.why) + '</div>' : '') +
+                (action.unlocks ? '<div class="welcome-card-unlocks"><strong>This unlocks</strong>' + esc(action.unlocks) + '</div>' : '') +
                 '<div class="welcome-card-meta">' + action.meta.map(function(item){ return '<span>' + esc(item) + '</span>'; }).join('') + '</div>' +
                 '<div class="welcome-link-row"><a class="welcome-mini-link" href="' + esc(action.href) + '" onclick="completeWelcome(\'' + esc(action.href).replace(/&#39;/g, "'") + '\');return false;">' + esc(action.cta) + ' -></a></div>' +
             '</div>';
@@ -247,13 +425,49 @@
                 '</div>' +
             '</div>';
         }
+        function lifecyclePanel(lifecycle, primaryAction){
+            if (!lifecycle || !lifecycle.active) {
+                return '<div class="welcome-panel">' +
+                    '<h3 class="welcome-panel-title">Reopen this page when the app feels thin</h3>' +
+                    '<div class="welcome-panel-sub">Welcome is not a one-time page. Use it again when the next move feels muddy, the workspace feels hollow, or you want the operating story in one place.</div>' +
+                    '<div class="welcome-checklist">' +
+                        '<div class="welcome-check"><div class="welcome-check-num">1</div><div class="welcome-check-copy"><strong>Use it as a reset.</strong> Come back here whenever you want the shortest path to the next useful action.</div></div>' +
+                        '<div class="welcome-check"><div class="welcome-check-num">2</div><div class="welcome-check-copy"><strong>Use the sidebar return path.</strong> The welcome guide stays available from the shell even after you move into the rest of the app.</div></div>' +
+                        '<div class="welcome-check"><div class="welcome-check-num">3</div><div class="welcome-check-copy"><strong>Use support surfaces deliberately.</strong> Methodology, demo lane, and settings are here to orient or recover you, not to replace real work.</div></div>' +
+                    '</div>' +
+                '</div>';
+            }
+            return '<div class="welcome-panel">' +
+                '<h3 class="welcome-panel-title">First-week operating rhythm</h3>' +
+                '<div class="welcome-panel-sub">This is the handoff from signup into actual usage. The app should start teaching you a repeatable rhythm before the first week ends.</div>' +
+                '<div class="welcome-lifecycle">' +
+                    '<div class="welcome-lifecycle-top">' +
+                        '<div><div class="welcome-lifecycle-kicker">Week 1 · Day ' + esc(lifecycle.dayNumber) + '</div><div class="welcome-lifecycle-title">' + esc(lifecycle.guidance.headline) + '</div><div class="welcome-lifecycle-copy">' + esc(lifecycle.guidance.body) + '</div></div>' +
+                        '<div class="welcome-lifecycle-score"><span>' + esc(lifecycle.completed) + '/' + esc(lifecycle.total) + '</span><small>milestones live</small></div>' +
+                    '</div>' +
+                    '<div class="welcome-lifecycle-rhythm"><strong>Return rhythm</strong> ' + esc(lifecycle.guidance.rhythm) + '</div>' +
+                    (primaryAction ? '<div class="welcome-card-why"><strong>Primary next move</strong>' + esc(primaryAction.title) + '. ' + esc(primaryAction.why || primaryAction.body) + '</div>' : '') +
+                    '<div class="welcome-lifecycle-pills">' + lifecycle.milestones.map(function(item){
+                        return '<div class="welcome-lifecycle-pill' + (item.done ? ' done' : '') + '">' + esc(item.label) + '</div>';
+                    }).join('') + '</div>' +
+                '</div>' +
+            '</div>';
+        }
 
         async function loadWelcome(){
             try {
                 var result = await window.gtmPersistence.workspace.loadSummary(null, { force: true });
                 var summary = result && result.data ? result.data : {};
+                var lifecycle = (window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.load === 'function')
+                    ? await window.gtmWeekOneLifecycle.load(false).catch(function(error){
+                        console.error('Welcome week-one lifecycle load failed:', error);
+                        return null;
+                    })
+                    : null;
                 var counts = buildCounts(summary);
-                var actions = buildActions(summary, counts);
+                var activationContext = getActivationContext();
+                var backup = getBackupStatus();
+                var actions = buildActions(summary, counts, lifecycle);
                 var activation = buildActivationModel(summary, counts);
                 trackWelcome('welcome_loaded', {
                     source: summary && summary.source ? summary.source : 'unknown',
@@ -269,19 +483,27 @@
                 var displayName = pickName(summary);
                 var role = prettyRole(getRole(summary));
                 var statCards = buildStatCards(counts);
+                var heroChips = buildHeroChips(activationContext, role, counts, lifecycle);
+                var focusSummary = buildWorkspaceFocus(summary, activationContext, role, counts);
+                var primaryAction = actions[0] || actionSpec('dashboard', 'Continue into the dashboard', 'The workspace is already anchored enough to use the command view.', '/app/dashboard/', 'Continue to dashboard', ['command view'], '', '');
+                var heroPrimaryHref = primaryAction.href || '/app/dashboard/';
+                var heroPrimaryLabel = primaryAction.cta || 'Continue to dashboard';
+                var backupNote = backup && backup.hasExport ? 'Offline backup exists.' : 'No offline backup exported yet.';
 
                 shell.innerHTML =
                     '<section class="welcome-hero">' +
-                        '<div class="welcome-badge">Activation ' + esc(activation.completed) + ' of ' + esc(activation.total) + ' live</div>' +
+                        '<div class="welcome-badge">Activation ' + esc(activation.completed) + ' of ' + esc(activation.total) + ' live' + ((lifecycle && lifecycle.active) ? ' · Week 1 Day ' + esc(lifecycle.dayNumber) : '') + '</div>' +
                         '<h2 class="welcome-title">Welcome to the Antaeus app</h2>' +
-                        '<p class="welcome-sub">Use this page as your guide to understanding the lay of the land and to get started building your gtm strategy in a real way, not like everyone else does who ends up scared to hire their first senior founding sales person because they don\'t know what they don\'t know.</p>' +
+                        '<p class="welcome-sub">This page should turn a completed signup into a believable operating system. Add one real thread of truth, then let the rest of the app compound from it.</p>' +
+                        '<div class="welcome-hero-meta">' + heroChips.map(function(item){ return '<div class="welcome-hero-chip">' + esc(item) + '</div>'; }).join('') + '</div>' +
                         '<div class="welcome-progress"><div class="welcome-progress-title">' + esc(activation.headline) + '</div><div class="welcome-progress-copy">' + esc(activation.body) + '</div></div>' +
+                        '<div class="welcome-progress"><div class="welcome-progress-title">Workspace focus</div><div class="welcome-progress-copy">' + esc(focusSummary) + '</div></div>' +
                         '<div class="welcome-actions">' +
-                            '<a href="/app/dashboard/" class="welcome-btn primary" onclick="completeWelcome(\'/app/dashboard/\');return false;">Continue to dashboard</a>' +
-                            '<a href="/app/icp-studio/" class="welcome-btn" onclick="completeWelcome(\'/app/icp-studio/\');return false;">Start with ICP Studio</a>' +
+                            '<a href="' + esc(heroPrimaryHref) + '" class="welcome-btn primary" onclick="completeWelcome(\'' + esc(heroPrimaryHref).replace(/&#39;/g, "'") + '\');return false;">' + esc(heroPrimaryLabel) + '</a>' +
+                            '<a href="/app/dashboard/" class="welcome-btn" onclick="completeWelcome(\'/app/dashboard/\');return false;">Continue to dashboard</a>' +
                             '<a href="/methodology/" class="welcome-btn" onclick="completeWelcome(\'/methodology/\');return false;">Open methodology</a>' +
                         '</div>' +
-                        '<div class="welcome-sync">You should feel good. Everything is about to change.</div>' +
+                        '<div class="welcome-sync">Back to Welcome Guide stays live in the sidebar. ' + esc(backupNote) + '</div>' +
                     '</section>' +
                     '<section class="welcome-grid">' +
                         '<div style="display:grid;gap:24px;">' +
@@ -300,19 +522,21 @@
                             '</div>' +
                         '</div>' +
                         '<div class="welcome-side-stack">' +
+                            lifecyclePanel(lifecycle, primaryAction) +
                             '<div class="welcome-panel">' +
                                 '<h3 class="welcome-panel-title">Activation map</h3>' +
                                 '<div class="welcome-panel-sub">This is how the workspace becomes real. The states below are computed from what your app has actually saved so far.</div>' +
                                 '<div class="welcome-milestones">' + activation.milestones.map(function(item, index){ return milestoneCard(item, index, activation); }).join('') + '</div>' +
                             '</div>' +
                             '<div class="welcome-panel">' +
-                                '<h3 class="welcome-panel-title">Use only if you need orientation</h3>' +
-                                '<div class="welcome-panel-sub">These are support surfaces. They help with context, but they do not replace entering real operating truth into the workspace.</div>' +
+                                '<h3 class="welcome-panel-title">If you need help or a reset</h3>' +
+                                '<div class="welcome-panel-sub">Use these when you want the product story, a safe sample workspace, or a recovery path. They support the operating loop without replacing it.</div>' +
                                 '<div class="welcome-resource-list">' +
                                     '<div class="welcome-resource"><div><h4>Methodology hub</h4><p>Public pages that explain the system in plain English.</p></div><a class="welcome-mini-link" href="/methodology/" onclick="completeWelcome(\'/methodology/\');return false;">Open</a></div>' +
                                     '<div class="welcome-resource"><div><h4>Demo lane</h4><p>Load sample data if you want to see a fully populated workspace before building yours.</p></div><a class="welcome-mini-link" href="/demo-seed.html" onclick="completeWelcome(\'/demo-seed.html\');return false;">Explore</a></div>' +
                                     '<div class="welcome-resource"><div><h4>Settings and backup</h4><p>Export an offline copy of your workspace or restore a prior backup.</p></div><a class="welcome-mini-link" href="/app/settings/" onclick="completeWelcome(\'/app/settings/\');return false;">Open</a></div>' +
                                 '</div>' +
+                                '<div class="welcome-state-note">Use this page again whenever the next move feels unclear. The return path stays available from the sidebar.</div>' +
                             '</div>' +
                         '</div>' +
                     '</section>';
