@@ -25,6 +25,26 @@
 .sw-capacity-text{font-family:var(--font-serif);color:var(--text-primary);min-width:70px;text-align:right;}
 .sw-capacity-label{color:var(--text-muted);font-size:0.75rem;}
 
+/* Sourcing bridge */
+.sw-bridge{background:linear-gradient(135deg,rgba(212,165,116,0.07),rgba(45,212,191,0.05));border:1px solid rgba(212,165,116,0.16);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-lg);}
+.sw-bridge-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;flex-wrap:wrap;}
+.sw-bridge-kicker{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-gold);font-weight:700;margin-bottom:6px;}
+.sw-bridge-title{font-family:var(--font-serif);font-size:1.22rem;color:var(--text-primary);margin-bottom:4px;}
+.sw-bridge-desc{font-size:0.86rem;color:var(--text-tertiary);line-height:1.65;max-width:780px;}
+.sw-bridge-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.sw-bridge-actions .btn{white-space:nowrap;}
+.sw-bridge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.sw-bridge-card{background:rgba(15,23,42,0.52);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;}
+.sw-bridge-card-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;margin-bottom:8px;}
+.sw-bridge-card-copy{font-size:0.83rem;color:var(--text-secondary);line-height:1.6;}
+.sw-bridge-list{list-style:none;padding:0;margin:0;}
+.sw-bridge-list li{display:flex;gap:8px;padding:4px 0;font-size:0.82rem;color:var(--text-secondary);line-height:1.5;}
+.sw-bridge-list li::before{content:"->";color:var(--brand-gold);font-weight:700;}
+.sw-summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;}
+.sw-summary-pill{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:12px;}
+.sw-summary-pill .label{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;margin-bottom:5px;}
+.sw-summary-pill .value{font-size:0.88rem;color:var(--text-primary);font-weight:700;line-height:1.4;}
+
 /* ==================== QUERY BUILDER ==================== */
 .sw-qb-empty{text-align:center;padding:48px 24px;color:var(--text-muted);}
 .sw-qb-empty .icon{font-size:2rem;margin-bottom:12px;}
@@ -88,17 +108,30 @@
 .sw-pp-card-tag{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:600;}
 .sw-pp-card-tag.thesis{background:rgba(212,165,116,0.08);color:var(--brand-gold);border:1px solid rgba(212,165,116,0.15);}
 .sw-pp-card-tag.source{background:rgba(45,212,191,0.08);color:var(--brand-teal);border:1px solid rgba(45,212,191,0.15);}
+.sw-pp-scoreline{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.sw-pp-score-pill{font-size:0.64rem;padding:3px 9px;border-radius:var(--radius-full);font-weight:700;font-family:var(--font-mono);letter-spacing:0.02em;}
+.sw-pp-score-pill.strong{background:rgba(34,197,94,0.15);color:var(--accent-green);}
+.sw-pp-score-pill.workable{background:rgba(59,130,246,0.15);color:var(--accent-blue);}
+.sw-pp-score-pill.thin{background:rgba(245,158,11,0.12);color:var(--accent-amber);}
+.sw-pp-score-pill.brittle{background:rgba(239,68,68,0.12);color:var(--accent-red);}
+.sw-pp-standard{font-size:0.68rem;color:var(--text-muted);}
 .sw-pp-card-impression{font-size:0.78rem;color:var(--text-tertiary);margin-bottom:6px;font-style:italic;}
 .sw-pp-card-research{font-size:0.75rem;color:var(--text-secondary);padding:8px 0;border-top:1px solid rgba(255,255,255,0.05);}
 .sw-pp-card-research .entry{color:var(--brand-teal);font-weight:600;}
 .sw-pp-card-research .angle{color:var(--accent-purple);}
 .sw-pp-card-days{font-size:0.65rem;color:var(--text-muted);}
+.sw-pp-card-next{margin-top:8px;padding:10px 12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);}
+.sw-pp-card-next .label{display:block;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-gold);font-weight:700;margin-bottom:4px;}
+.sw-pp-card-next .title{font-size:0.8rem;color:var(--text-primary);font-weight:700;line-height:1.4;}
+.sw-pp-card-next .reason{font-size:0.72rem;color:var(--text-muted);margin-top:4px;line-height:1.5;}
 .sw-pp-card-actions{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;}
 .sw-pp-card-btn{font-size:0.68rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border-default);background:transparent;cursor:pointer;font-family:inherit;transition:all 0.2s;}
 .sw-pp-card-btn.research{color:var(--accent-blue);border-color:rgba(59,130,246,0.3);}
 .sw-pp-card-btn.research:hover{background:rgba(59,130,246,0.08);}
 .sw-pp-card-btn.ready{color:var(--accent-green);border-color:rgba(34,197,94,0.3);}
 .sw-pp-card-btn.ready:hover{background:rgba(34,197,94,0.08);}
+.sw-pp-card-btn.signal{color:var(--brand-teal);border-color:rgba(45,212,191,0.3);}
+.sw-pp-card-btn.signal:hover{background:rgba(45,212,191,0.08);}
 .sw-pp-card-btn.push{color:var(--brand-gold);border-color:rgba(212,165,116,0.3);font-weight:700;}
 .sw-pp-card-btn.push:hover{background:rgba(212,165,116,0.1);}
 .sw-pp-card-btn.park{color:var(--accent-amber);border-color:rgba(245,158,11,0.3);}
@@ -180,6 +213,9 @@
     .sw-pp-stats{gap:var(--space-sm);}
     .sw-si-metrics{gap:8px;}
 }
+@media(max-width:900px){
+    .sw-bridge-grid,.sw-summary-row{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -200,6 +236,8 @@
             </header>
             <div class="app-content" style="max-width:1100px;">
     <div id="swBootState"></div>
+
+    <div class="sw-bridge" id="swBridge"></div>
 
     <!-- Capacity indicator -->
     <div class="sw-capacity" id="swCapacity"></div>
@@ -407,6 +445,246 @@ function getProspects(){return readLS(KEYS.prospects,[]);}
 function saveProspects(p){writeLS(KEYS.prospects,p);}
 function getPersonas(){return readLS(KEYS.personaMaps,[]);}
 function savePersonas(p){writeLS(KEYS.personaMaps,p);}
+function getBestIcpSummary(){
+    var analytics=readLS('gtmos_icp_analytics',{icps:[]})||{icps:[]};
+    var icps=Array.isArray(analytics.icps)?analytics.icps.slice():[];
+    if(!icps.length)return null;
+    icps.sort(function(a,b){
+        var aScore=Number(a.qualityScore||0);
+        var bScore=Number(b.qualityScore||0);
+        if(bScore!==aScore)return bScore-aScore;
+        return String(b.timestamp||'').localeCompare(String(a.timestamp||''));
+    });
+    return icps[0]||null;
+}
+
+function getProspectQuality(prospect){
+    var score=18;
+    var reasons=[];
+    var gaps=[];
+    var leverageLabels={
+        'network-connection':'network leverage',
+        'existing-proof-point':'proof leverage',
+        'market-signal':'live signal leverage',
+        'geographic-advantage':'geographic leverage',
+        'cold':'cold entry only'
+    };
+    var leveragePoints={
+        'network-connection':12,
+        'existing-proof-point':12,
+        'market-signal':10,
+        'geographic-advantage':8,
+        'cold':2
+    };
+
+    if(prospect.sourceQueryCardId){
+        score+=8;
+        reasons.push('captured from a deliberate query card');
+    }else if(['referral','inbound','news-article','event'].indexOf(prospect.sourceType)>=0){
+        score+=10;
+        reasons.push('arrived with a higher-context source');
+    }else{
+        gaps.push('source context is still thin');
+    }
+
+    if(prospect.initialImpression) score+=4;
+
+    if(prospect.research){
+        if(prospect.research.thesisMatch==='strong'){
+            score+=24;
+            reasons.push('strong thesis match');
+        }else if(prospect.research.thesisMatch==='moderate'){
+            score+=16;
+            reasons.push('moderate thesis match');
+        }else if(prospect.research.thesisMatch==='uncertain'){
+            score+=6;
+            gaps.push('thesis fit is still uncertain');
+        }else{
+            gaps.push('thesis fit is not proven');
+        }
+
+        if(prospect.research.entryPoint){
+            score+=16;
+            reasons.push('named first contact');
+        }else{
+            gaps.push('no named entry point');
+        }
+
+        if(prospect.research.suggestedApproach){
+            score+=10;
+            reasons.push('first approach selected');
+        }else{
+            gaps.push('no first approach selected');
+        }
+
+        var leverageType=prospect.research.leverageType||'cold';
+        score+=(leveragePoints[leverageType]||0);
+        if(leverageType!=='cold')reasons.push(leverageLabels[leverageType]);
+        else gaps.push('still a cold entry');
+
+        if(prospect.research.note)score+=6;
+    }else{
+        gaps.push('research has not been done yet');
+        gaps.push('no named entry point');
+    }
+
+    if(prospect.stage==='captured'&&daysSince(prospect.createdAt)>7){
+        score-=10;
+        gaps.push('it is sitting stale in captured');
+    }
+    if(prospect.stage==='parked')score-=4;
+    if(prospect.stage==='rejected')score=0;
+
+    score=Math.max(0,Math.min(100,score));
+
+    var tier='brittle';
+    var label='not ready';
+    var standard='Do not push this yet.';
+    if(score>=82){
+        tier='strong';
+        label='ready now';
+        standard='Push this into live account work.';
+    }else if(score>=68){
+        tier='workable';
+        label='workable';
+        standard='One more judgment call before push.';
+    }else if(score>=50){
+        tier='thin';
+        label='thin';
+        standard='Research first, then decide.';
+    }
+
+    var recommendedStage='captured';
+    if(prospect.research)recommendedStage='researched';
+    if(score>=72&&prospect.research&&prospect.research.entryPoint&&prospect.research.suggestedApproach)recommendedStage='ready';
+    if(prospect.stage==='pushed')recommendedStage='pushed';
+    if(prospect.stage==='rejected')recommendedStage='rejected';
+
+    var nextTitle='Research this account';
+    var nextReason='Name the first reachable person and decide whether the thesis fit is real.';
+    if(prospect.stage==='pushed'){
+        nextTitle='Open Signal Console for live temperature';
+        nextReason='This account is in territory now. Add timing and account heat before outreach.';
+    }else if(!prospect.research){
+        nextTitle='Run the first research pass';
+        nextReason='Do not push accounts that only have a company name and a hunch.';
+    }else if(prospect.research.thesisMatch==='uncertain'){
+        nextTitle='Tighten thesis fit';
+        nextReason='If the wedge is still fuzzy, the account will create downstream noise.';
+    }else if(!prospect.research.entryPoint){
+        nextTitle='Name the first reachable person';
+        nextReason='Without an entry point, this is still logo collection.';
+    }else if(!prospect.research.suggestedApproach){
+        nextTitle='Choose the first angle';
+        nextReason='Signal Console and outbound work better when the initial approach is already chosen.';
+    }else if(score>=72){
+        nextTitle='Push into live account work';
+        nextReason='This account is good enough to earn a Territory slot and signal research.';
+    }else{
+        nextTitle='Refine or park';
+        nextReason='This is still too ambiguous to deserve a real working slot.';
+    }
+
+    return{
+        score:score,
+        tier:tier,
+        label:label,
+        standard:standard,
+        reasons:reasons,
+        gaps:gaps,
+        recommendedStage:recommendedStage,
+        suggestedTier:score>=88?1:score>=72?2:3,
+        nextTitle:nextTitle,
+        nextReason:nextReason
+    };
+}
+
+function renderSimpleList(id,items){
+    var el=document.getElementById(id);
+    if(!el)return;
+    el.innerHTML=(items||[]).map(function(item){return '<li>'+esc(item)+'</li>';}).join('');
+}
+
+function renderBridge(){
+    var el=document.getElementById('swBridge');
+    if(!el)return;
+    var icp=getBestIcpSummary();
+    var theses=getTheses();
+    var cards=getQueryCards();
+    var prospects=getProspects();
+    var ready=prospects.filter(function(p){return getProspectQuality(p).recommendedStage==='ready'&&p.stage!=='pushed';}).length;
+    var pushed=prospects.filter(function(p){return p.stage==='pushed';}).length;
+    var researched=prospects.filter(function(p){return p.stage==='researched'||p.stage==='ready'||p.stage==='pushed';}).length;
+    var title='Turn territory logic into a working account queue.';
+    var desc='Sourcing Workbench exists to convert a thesis into accounts worth researching, then only move the ones with a believable entry point into live account work.';
+    var nextOutputs=[
+        'Build one query card per active thesis before adding more channels.',
+        'Research until each account has a named entry point and first approach.',
+        'Only push accounts that are ready for Signal Console, not just interesting.'
+    ];
+    if(ready){
+        title='You already have accounts ready for live work.';
+        desc='The workbench is doing its job when sourcing produces a bounded queue with a named entry point, a first angle, and a believable reason to keep the account.';
+        nextOutputs=[
+            'Push the best ready accounts into Territory Architect.',
+            'Open Signal Console to add timing and account temperature.',
+            'Park or reject thin accounts so the queue stays honest.'
+        ];
+    }else if(pushed){
+        title='Do not stop at pushed. Add live temperature next.';
+        desc='Once an account leaves the workbench, the next system is Signal Console. That is where a sourced name becomes a real account worth touching now.';
+        nextOutputs=[
+            'Open Signal Console and research the pushed accounts first.',
+            'Use source quality to double down on channels that create progression.',
+            'Keep the pushed queue smaller than the captured queue on purpose.'
+        ];
+    }else if(cards.length&&!prospects.length){
+        title='You have sourcing logic. Now prove it produces accounts.';
+        desc='Query cards are only useful when they generate a small queue of accounts you can actually research, reject, or push.';
+        nextOutputs=[
+            'Capture the first five accounts from your best query card.',
+            'Research each one immediately instead of batching endlessly.',
+            'Reject the wrong fits fast so Territory stays bounded.'
+        ];
+    }
+
+    var icpSummary='No saved ICP yet.';
+    if(icp){
+        icpSummary=(icp.buyer||'Buyer')+' | '+(icp.industry||'Market');
+        if(icp.qualityScore)icpSummary+=' | '+icp.qualityScore+'/100 quality';
+    }
+
+    el.innerHTML=
+        '<div class="sw-bridge-top">'+
+            '<div>'+
+                '<div class="sw-bridge-kicker">Sourcing standard</div>'+
+                '<div class="sw-bridge-title">'+esc(title)+'</div>'+
+                '<div class="sw-bridge-desc">'+esc(desc)+'</div>'+
+            '</div>'+
+            '<div class="sw-bridge-actions">'+
+                '<button class="btn btn-secondary btn-sm" onclick="swTab(\'queryBuilder\')">Open Query Builder</button>'+
+                '<button class="btn btn-ghost btn-sm" onclick="window.location.href=\'/app/signal-console/\'">Open Signal Console</button>'+
+            '</div>'+
+        '</div>'+
+        '<div class="sw-bridge-grid">'+
+            '<div class="sw-bridge-card"><div class="sw-bridge-card-title">Object model</div><ul class="sw-bridge-list" id="swObjectModel"></ul></div>'+
+            '<div class="sw-bridge-card"><div class="sw-bridge-card-title">Quality threshold</div><div class="sw-bridge-card-copy">Below 68 means the account is still thin. At 68-81 it is workable but should finish research first. At 82+ it is ready to leave sourcing and earn live account attention.</div></div>'+
+            '<div class="sw-bridge-card"><div class="sw-bridge-card-title">Output to use next</div><ul class="sw-bridge-list" id="swNextOutputs"></ul></div>'+
+        '</div>'+
+        '<div class="sw-summary-row">'+
+            '<div class="sw-summary-pill"><div class="label">ICP Wedge</div><div class="value">'+esc(icpSummary)+'</div></div>'+
+            '<div class="sw-summary-pill"><div class="label">Query Cards</div><div class="value">'+cards.length+' active cards across '+theses.length+' theses.</div></div>'+
+            '<div class="sw-summary-pill"><div class="label">Research State</div><div class="value">'+researched+' researched, '+ready+' ready to push.</div></div>'+
+            '<div class="sw-summary-pill"><div class="label">Signal Handoff</div><div class="value">'+pushed+' pushed accounts ready for live temperature.</div></div>'+
+        '</div>';
+
+    renderSimpleList('swObjectModel',[
+        'Thesis -> query card -> captured account -> researched account.',
+        'A sourced account is only ready when it has a named entry point and first angle.',
+        'Pushed accounts should go straight into Signal Console, not sit idle.'
+    ]);
+    renderSimpleList('swNextOutputs',nextOutputs);
+}
 
 // ============ STATE ============
 var currentTab = 'queryBuilder';
@@ -414,6 +692,7 @@ var ppFilter = 'all';
 
 // ============ RENDER ============
 function render(){
+    renderBridge();
     renderCapacity();
     document.querySelectorAll('.sw-tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===currentTab);});
     document.querySelectorAll('.sw-view').forEach(function(v){v.classList.toggle('active',v.id===currentTab);});
@@ -629,6 +908,77 @@ function renderPipeline(){
     }).join('');
 }
 
+function renderPipeline(){
+    var prospects=getProspects();
+    var theses=getTheses();
+    var captured=prospects.filter(function(p){return p.stage==='captured';}).length;
+    var researched=prospects.filter(function(p){return p.stage==='researched';}).length;
+    var ready=prospects.filter(function(p){return p.stage==='ready';}).length;
+    var pushed=prospects.filter(function(p){return p.stage==='pushed';}).length;
+    var parked=prospects.filter(function(p){return p.stage==='parked';}).length;
+    document.getElementById('ppStats').innerHTML=
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val">'+captured+'</div><div class="sw-pp-stat-label">Captured</div></div>'+
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val">'+researched+'</div><div class="sw-pp-stat-label">Researched</div></div>'+
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val">'+ready+'</div><div class="sw-pp-stat-label">Ready</div></div>'+
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val" style="color:var(--brand-gold);">'+pushed+'</div><div class="sw-pp-stat-label">Pushed</div></div>'+
+        '<div class="sw-pp-stat"><div class="sw-pp-stat-val">'+parked+'</div><div class="sw-pp-stat-label">Parked</div></div>';
+
+    var filters=['all','captured','researched','ready','parked','pushed','rejected'];
+    document.getElementById('ppFilters').innerHTML=filters.map(function(f){
+        return '<button class="sw-pp-filter '+(ppFilter===f?'active':'')+'" onclick="setPPFilter(\''+f+'\')">'+f.charAt(0).toUpperCase()+f.slice(1)+'</button>';
+    }).join('');
+
+    var filtered=prospects;
+    if(ppFilter!=='all') filtered=prospects.filter(function(p){return p.stage===ppFilter;});
+    filtered.sort(function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
+    if(!filtered.length){
+        document.getElementById('ppGrid').innerHTML='<div class="sw-pp-empty">No prospects '+(ppFilter!=='all'?'in "'+ppFilter+'"':'yet')+'. '+(ppFilter==='all'?'Add your first prospect as you source.':'')+'</div>';
+        return;
+    }
+
+    var approaches=getApproaches();
+    var cards=getQueryCards();
+    document.getElementById('ppGrid').innerHTML=filtered.map(function(p){
+        var guidance=getProspectQuality(p);
+        var thesis=theses.find(function(t){return t.id===p.thesisId;});
+        var sourceLabel=p.sourceType;
+        if(p.sourceQueryCardId){
+            var qc=cards.find(function(c){return c.id===p.sourceQueryCardId;});
+            if(qc) sourceLabel=(qc.platformLabel||qc.platform);
+        }
+        var stale=p.stage==='captured'&&daysSince(p.createdAt)>7;
+        var html='<div class="sw-pp-card '+(stale?'stale':'')+'">';
+        html+='<div class="sw-pp-card-head"><span class="sw-pp-card-name">'+esc(p.name)+'</span><span class="sw-pp-card-stage '+p.stage+'">'+p.stage+'</span></div>';
+        html+='<div class="sw-pp-card-meta"><span class="sw-pp-card-tag thesis">'+(thesis?esc(thesis.name):'?')+'</span><span class="sw-pp-card-tag source">'+esc(sourceLabel)+'</span></div>';
+        html+='<div class="sw-pp-scoreline"><span class="sw-pp-score-pill '+guidance.tier+'">'+guidance.score+'/100 '+esc(guidance.label)+'</span><span class="sw-pp-standard">'+esc(guidance.standard)+'</span></div>';
+        if(p.initialImpression) html+='<div class="sw-pp-card-impression">'+esc(p.initialImpression)+'</div>';
+        if(p.research&&p.research.entryPoint){
+            html+='<div class="sw-pp-card-research">';
+            html+='Entry: <span class="entry">'+esc(p.research.entryPoint)+'</span>';
+            if(p.research.suggestedApproach){
+                var ap=approaches.find(function(a){return a.id===p.research.suggestedApproach;});
+                if(ap) html+=' | Angle: <span class="angle">'+esc(ap.name)+'</span>';
+            }
+            if(p.research.note) html+='<br>'+esc(p.research.note);
+            html+='</div>';
+        }
+        html+='<div class="sw-pp-card-days">'+daysSince(p.createdAt)+'d ago'+(stale?' | Stale - research or reject':'')+'</div>';
+        html+='<div class="sw-pp-card-next"><span class="label">Next move</span><div class="title">'+esc(guidance.nextTitle)+'</div><div class="reason">'+esc(guidance.nextReason)+'</div></div>';
+        html+='<div class="sw-pp-card-actions">';
+        if(p.stage==='captured') html+='<button class="sw-pp-card-btn research" onclick="openResearchModal(\''+p.id+'\')">Research</button><button class="sw-pp-card-btn park" onclick="setPPStage(\''+p.id+'\',\'parked\')">Park</button><button class="sw-pp-card-btn reject" onclick="rejectProspect(\''+p.id+'\')">Reject</button>';
+        if(p.stage==='researched'){
+            if(guidance.recommendedStage==='ready') html+='<button class="sw-pp-card-btn ready" onclick="setPPStage(\''+p.id+'\',\'ready\')">Mark Ready ('+guidance.score+'/100)</button>';
+            else html+='<button class="sw-pp-card-btn research" onclick="openResearchModal(\''+p.id+'\')">Tighten Research</button>';
+            html+='<button class="sw-pp-card-btn park" onclick="setPPStage(\''+p.id+'\',\'parked\')">Park</button><button class="sw-pp-card-btn reject" onclick="rejectProspect(\''+p.id+'\')">Reject</button>';
+        }
+        if(p.stage==='ready') html+='<button class="sw-pp-card-btn push" onclick="pushToTA(\''+p.id+'\')">Push to Territory (T'+guidance.suggestedTier+') -></button><button class="sw-pp-card-btn park" onclick="setPPStage(\''+p.id+'\',\'parked\')">Park</button>';
+        if(p.stage==='parked') html+='<button class="sw-pp-card-btn research" onclick="openResearchModal(\''+p.id+'\')">Research</button><button class="sw-pp-card-btn reject" onclick="rejectProspect(\''+p.id+'\')">Reject</button>';
+        if(p.stage==='pushed') html+='<button class="sw-pp-card-btn signal" onclick="window.location.href=\'/app/signal-console/\'">Open Signal Console -></button>';
+        html+='</div></div>';
+        return html;
+    }).join('');
+}
+
 window.setPPFilter=function(f){ppFilter=f;renderPipeline();};
 
 window.openAddProspect=function(){
@@ -734,6 +1084,39 @@ window.saveResearch=function(){
     render();
 };
 
+window.saveResearch=function(){
+    var id=document.getElementById('researchProspId').value;
+    var matchEl=document.querySelector('#researchMatch .sw-qselect-opt.selected');
+    var leverageEl=document.querySelector('#researchLeverage .sw-qselect-opt.selected');
+    var entry=document.getElementById('researchEntry').value.trim();
+    if(!matchEl||!entry){alert('Thesis match and entry point are required.');return;}
+    if(matchEl.dataset.value==='no'){
+        var rejectedProspects=getProspects();
+        var rejectedProspect=rejectedProspects.find(function(x){return x.id===id;});
+        if(rejectedProspect){rejectedProspect.stage='rejected';rejectedProspect.rejectionReason='wrong-segment';rejectedProspect.updatedAt=new Date().toISOString();}
+        saveProspects(rejectedProspects);
+        document.getElementById('researchModal').classList.remove('active');
+        render();
+        return;
+    }
+    var prospects=getProspects();
+    var p=prospects.find(function(x){return x.id===id;});
+    if(!p)return;
+    p.research={
+        thesisMatch:matchEl.dataset.value,
+        entryPoint:entry,
+        suggestedApproach:document.getElementById('researchApproach').value||null,
+        leverageType:leverageEl?leverageEl.dataset.value:'cold',
+        note:document.getElementById('researchNote').value.trim()
+    };
+    var guidance=getProspectQuality(p);
+    p.stage=guidance.recommendedStage==='ready'?'ready':'researched';
+    p.updatedAt=new Date().toISOString();
+    saveProspects(prospects);
+    document.getElementById('researchModal').classList.remove('active');
+    render();
+};
+
 window.setPPStage=function(id,stage){
     var prospects=getProspects();
     var p=prospects.find(function(x){return x.id===id;});
@@ -779,6 +1162,47 @@ window.pushToTA=function(id){
     // Update prospect
     p.stage='pushed';p.pushedToTA=true;p.pushedAt=new Date().toISOString();p.tier=parseInt(tier);
     saveProspects(prospects);
+    render();
+};
+
+window.pushToTA=function(id){
+    var cap=getTACapacity();
+    if(cap.available<=0){alert('Territory Architect is at capacity (300/300). Swap an account in Territory Architect first.');return;}
+    var prospects=getProspects();
+    var p=prospects.find(function(x){return x.id===id;});
+    if(!p)return;
+    var guidance=getProspectQuality(p);
+    var existing=getTAAccounts();
+    if(existing.find(function(a){return a.name.toLowerCase()===p.name.toLowerCase();})){alert(p.name+' already exists in Territory Architect.');return;}
+    var tier=guidance.suggestedTier;
+    var proceed=confirm(
+        'Push '+p.name+' into Territory Architect as Tier '+tier+'?\n\n'+
+        guidance.score+'/100 '+guidance.label+'.\n'+
+        guidance.standard+'\n\n'+
+        'This will make the account available for Signal Console next.'
+    );
+    if(!proceed)return;
+    var taAccounts=readLS('gtmos_ta_accounts',[]);
+    var triggerMap={'query-card':'thesis-fit','referral':'network-opportunity','inbound':'inbound-interest','news-article':'signal-event','social-media':'signal-event','event':'signal-event','other':'strategic-bet'};
+    taAccounts.push({
+        id:genId(), name:p.name, tier:parseInt(tier),
+        thesisId:p.thesisId,
+        leverageType:(p.research&&p.research.leverageType)||'cold',
+        additionTrigger:triggerMap[p.sourceType]||'thesis-fit',
+        status:'active', addedAt:new Date().toISOString(),
+        overrideCount:0,
+        _sourcedFrom:'workbench',
+        _sourceType:p.sourceType,
+        _sourceQueryCardId:p.sourceQueryCardId,
+        _researchNote:(p.research&&p.research.note)||p.initialImpression||''
+    });
+    writeLS('gtmos_ta_accounts',taAccounts);
+    p.stage='pushed';p.pushedToTA=true;p.pushedAt=new Date().toISOString();p.tier=parseInt(tier);
+    saveProspects(prospects);
+    if(confirm(p.name+' is now in Territory Architect as Tier '+tier+'. Open Signal Console next?')){
+        window.location.href='/app/signal-console/';
+        return;
+    }
     render();
 };
 
