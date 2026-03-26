@@ -9,6 +9,65 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
+        .settings-bridge {
+            margin-top: var(--space-lg);
+            padding: var(--space-lg);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(212,165,116,0.16);
+            background: linear-gradient(135deg, rgba(212,165,116,0.08), rgba(59,130,246,0.06) 55%, rgba(255,255,255,0.02));
+            box-shadow: 0 18px 40px rgba(0,0,0,0.24);
+        }
+        .settings-bridge-kicker {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--brand-gold);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .settings-bridge-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        .settings-bridge-copy {
+            max-width: 780px;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+        }
+        .settings-trust-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+        .settings-trust-card {
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.03);
+        }
+        .settings-trust-kicker {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .settings-trust-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .settings-trust-copy {
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: var(--text-tertiary);
+        }
         .settings-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:var(--space-lg); margin-top:var(--space-lg); }
         .settings-card {
             background:var(--bg-secondary); border:1px solid var(--border-default);
@@ -20,6 +79,15 @@
         }
         .settings-card-title { font-family:var(--font-serif); font-size:1.1rem; color:var(--text-primary); margin-bottom:var(--space-sm); }
         .settings-card-desc { font-size:0.82rem; color:var(--text-muted); margin-bottom:var(--space-md); line-height:1.5; }
+        .settings-scope {
+            display: inline-flex; align-items: center; gap: 8px; margin-bottom: 10px;
+            padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03); color: var(--text-secondary);
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+        }
+        .settings-scope.account { color: #93c5fd; border-color: rgba(147,197,253,0.18); background: rgba(59,130,246,0.08); }
+        .settings-scope.workspace { color: var(--brand-gold); border-color: rgba(212,165,116,0.2); background: rgba(212,165,116,0.08); }
+        .settings-scope.browser { color: var(--brand-teal-light); border-color: rgba(45,212,191,0.18); background: rgba(45,212,191,0.08); }
         .settings-btn {
             display:inline-flex; align-items:center; gap:8px; padding:8px 16px;
             background:rgba(212,165,116,0.1); border:1px solid rgba(212,165,116,0.3);
@@ -30,6 +98,25 @@
         .settings-btn.danger { background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.3); color:#ef4444; }
         .settings-btn.danger:hover { background:rgba(239,68,68,0.2); }
         .settings-row { display:flex; gap:8px; flex-wrap:wrap; }
+        .settings-status-list { display: grid; gap: 10px; margin-bottom: 16px; }
+        .settings-status {
+            padding: 12px 14px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.03);
+        }
+        .settings-status-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px; }
+        .settings-status-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+        .settings-status-badge {
+            display:inline-flex; align-items:center; gap:6px; padding:5px 9px; border-radius:999px;
+            border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03);
+            font-size:0.66rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-secondary);
+        }
+        .settings-status-badge.good { color:#86efac; border-color:rgba(34,197,94,0.18); background:rgba(34,197,94,0.08); }
+        .settings-status-badge.warn { color:var(--brand-gold); border-color:rgba(212,165,116,0.18); background:rgba(212,165,116,0.08); }
+        .settings-status-badge.info { color:#93c5fd; border-color:rgba(147,197,253,0.18); background:rgba(59,130,246,0.08); }
+        .settings-status-copy { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+        .settings-help {
+            margin-top: 12px; font-size: 0.76rem; line-height: 1.55; color: var(--text-muted);
+        }
         .settings-select {
             padding:8px 12px; background:var(--bg-tertiary); border:1px solid var(--border-default);
             border-radius:8px; color:var(--text-primary); font-size:0.85rem; font-family:inherit;
@@ -41,6 +128,12 @@
             opacity:0; transition:opacity 0.3s; z-index:999;
         }
         .settings-toast.show { opacity:1; }
+        @media (max-width: 1100px) {
+            .settings-trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 720px) {
+            .settings-trust-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body class="app-layout">
@@ -53,44 +146,69 @@
                 <p class="page-subtitle" style="color:var(--text-muted);font-size:0.9rem;">Manage your data, preferences, and workspace configuration.</p>
             </div>
 
+            <section class="settings-bridge">
+                <div class="settings-bridge-kicker">Trust and control</div>
+                <div class="settings-bridge-title">This is where you decide what is durable, what is recoverable, and what only lives in this browser.</div>
+                <div class="settings-bridge-copy">Settings should make the workspace feel safer, not scarier. Use this page to understand what belongs to your account, what belongs to the workspace, and what is only a local aid like demo mode or an exported backup file on your machine.</div>
+                <div class="settings-trust-grid" id="settingsTrustGrid">
+                    <div class="settings-trust-card">
+                        <div class="settings-trust-kicker">Workspace truth</div>
+                        <div class="settings-trust-title">Loading...</div>
+                        <div class="settings-trust-copy">Checking sync state.</div>
+                    </div>
+                </div>
+            </section>
+
             <div class="settings-grid">
                 <div class="settings-card">
-                    <div class="settings-card-title">Data and Backup</div>
+                    <div class="settings-scope workspace">Workspace-level</div>
+                    <div class="settings-card-title">Backup and restore</div>
                     <div class="settings-card-desc" id="backupCardDesc">Export your synced workspace as a JSON backup file, import a previous backup, or fully clear the workspace.</div>
+                    <div class="settings-status-list" id="backupStatusList"></div>
                     <div class="settings-row">
                         <button class="settings-btn" onclick="exportAllData()">Export Backup</button>
                         <button class="settings-btn" onclick="importData()">Import Backup</button>
                         <button class="settings-btn danger" onclick="deleteAllData()">Delete Workspace</button>
                     </div>
+                    <div class="settings-help">Export creates an offline recovery file on this device. Import overwrites the current workspace with the selected backup, then resyncs durable workspace truth. Delete clears the signed-in workspace and sends you back to onboarding.</div>
                 </div>
 
                 <div class="settings-card">
+                    <div class="settings-scope account">Account-level</div>
                     <div class="settings-card-title">Role and Onboarding</div>
                     <div class="settings-card-desc">Changed roles or starting fresh? Re-run the onboarding flow to reconfigure your workspace. Your existing data stays safe.</div>
+                    <div class="settings-status-list" id="accountStatusList"></div>
                     <div class="settings-row">
                         <button class="settings-btn" onclick="resetOnboarding()">New Role Setup</button>
                         <button class="settings-btn" onclick="resetPledges()">Reset Discovery Pledges</button>
                     </div>
+                    <div class="settings-help">Role setup belongs to your signed-in account and activation path. Resetting onboarding should retune the workspace without deleting ICPs, deals, or signals.</div>
                 </div>
 
                 <div class="settings-card">
+                    <div class="settings-scope browser">Browser-only</div>
                     <div class="settings-card-title">Demo Mode</div>
                     <div class="settings-card-desc">Preview the app with sample data to see what a fully configured workspace looks like. Demo data is isolated from your real workspace.</div>
+                    <div class="settings-status-list" id="demoStatusList"></div>
                     <div class="settings-row">
                         <button class="settings-btn" onclick="enterDemo()">Enter Demo Mode</button>
                         <button class="settings-btn" onclick="exitDemo()">Exit Demo</button>
                     </div>
+                    <div class="settings-help">Demo mode is a local sample workspace. It should never overwrite your signed-in cloud workspace, and exiting demo should return you to real workspace truth.</div>
                 </div>
 
                 <div class="settings-card">
+                    <div class="settings-scope workspace">Workspace-level</div>
                     <div class="settings-card-title">Product Category</div>
                     <div class="settings-card-desc">Select which product category you're selling. This controls which discovery framework appears in your live call navigator.</div>
+                    <div class="settings-status-list" id="categoryStatusList"></div>
                     <select class="settings-select" id="productCategory" onchange="setProductCategory(this.value)">
                         <option value="cxai">CX AI / Support Automation</option>
                         <option value="cdp">Customer Data Platform</option>
                         <option value="legal">Legal AI</option>
                         <option value="revenue">Revenue Intelligence AI</option>
                     </select>
+                    <div class="settings-help">Category is stored with the workspace because it affects downstream discovery, call guidance, and GTM framing across modules.</div>
                 </div>
             </div>
         </div>
@@ -131,7 +249,171 @@
             return window.gtmDataManager || window.dataManager || null;
         }
 
-        function initializeSettingsState() {
+        function formatTime(value) {
+            if (!value) return 'not yet';
+            try { return new Date(value).toLocaleString(); }
+            catch (e) { return String(value); }
+        }
+
+        function badge(label, tone) {
+            return '<span class="settings-status-badge ' + (tone || '') + '">' + label + '</span>';
+        }
+        function categoryLabel(value) {
+            var map = {
+                cxai: 'CX AI / Support Automation',
+                cdp: 'Customer Data Platform',
+                legal: 'Legal AI',
+                revenue: 'Revenue Intelligence AI'
+            };
+            return map[value] || value || 'Unknown';
+        }
+
+        function renderStatusList(id, items) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            el.innerHTML = (items || []).map(function(item) {
+                return '<div class="settings-status">' +
+                    '<div class="settings-status-top">' +
+                        '<div class="settings-status-label">' + item.label + '</div>' +
+                        (item.badge || '') +
+                    '</div>' +
+                    '<div class="settings-status-copy">' + item.copy + '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function renderTrustGrid(model) {
+            var el = document.getElementById('settingsTrustGrid');
+            if (!el) return;
+            el.innerHTML = [
+                {
+                    kicker: 'Workspace truth',
+                    title: model.sourceTitle,
+                    copy: model.sourceCopy
+                },
+                {
+                    kicker: 'Offline backup',
+                    title: model.backupTitle,
+                    copy: model.backupCopy
+                },
+                {
+                    kicker: 'Current mode',
+                    title: model.modeTitle,
+                    copy: model.modeCopy
+                },
+                {
+                    kicker: 'Scope map',
+                    title: 'Account · Workspace · Browser',
+                    copy: 'Role setup belongs to the account. ICPs, deals, signals, motions, and category belong to the workspace. Demo mode and exported backup files are local aids, not cloud truth.'
+                }
+            ].map(function(card) {
+                return '<div class="settings-trust-card">' +
+                    '<div class="settings-trust-kicker">' + card.kicker + '</div>' +
+                    '<div class="settings-trust-title">' + card.title + '</div>' +
+                    '<div class="settings-trust-copy">' + card.copy + '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function buildTruthModel(summary, status, category) {
+            var source = summary && summary.source ? summary.source : 'unknown';
+            var errors = summary && summary.errors && summary.errors.length ? summary.errors : [];
+            var counts = {
+                icps: (summary && summary.icpAnalytics && summary.icpAnalytics.icps ? summary.icpAnalytics.icps.length : 0),
+                deals: (summary && summary.deals ? summary.deals.length : 0),
+                accounts: (summary && summary.signalConsole && summary.signalConsole.accounts ? summary.signalConsole.accounts.length : 0)
+            };
+            var sourceTitle = source === 'supabase-persistence'
+                ? 'Cloud truth is live'
+                : (source === 'supabase-partial' ? 'Cloud truth is partial' : 'Best available local view');
+            var sourceCopy = source === 'supabase-persistence'
+                ? 'Workspace summary loaded from durable cloud state. ' + counts.icps + ' ICPs, ' + counts.deals + ' deals, and ' + counts.accounts + ' accounts are available right now.'
+                : (source === 'supabase-partial'
+                    ? 'Some durable workspace sources loaded, but one or more modules fell back. Current warnings: ' + errors.join(' · ')
+                    : 'Settings is reading the best local workspace view it can find right now. Use backup/export before making risky changes if the app feels off.');
+            var backupTitle = status && status.hasExport
+                ? 'Offline recovery file exists'
+                : 'No offline backup exported yet';
+            var backupCopy = status && status.hasExport
+                ? 'Last export: ' + formatTime(status.lastExportAt) + '. Export again after major changes or before destructive cleanup.'
+                : 'Your cloud workspace can sync, but there is no file on this device yet. Export one before treating the setup as durable.';
+            var modeTitle = (getDataManager() && typeof getDataManager().isDemoWorkspaceActive === 'function' && getDataManager().isDemoWorkspaceActive())
+                ? 'Demo mode is active'
+                : 'Real workspace mode';
+            var modeCopy = modeTitle === 'Demo mode is active'
+                ? 'You are inside a browser-local sample workspace. Exit demo before judging whether import, delete, or new records affect real cloud truth.'
+                : 'Changes here should apply to the signed-in workspace. Demo mode can still be entered safely without overwriting durable state.';
+
+            renderStatusList('backupStatusList', [
+                {
+                    label: 'Cloud sync source',
+                    badge: badge(source === 'supabase-persistence' ? 'Cloud live' : (source === 'supabase-partial' ? 'Partial' : 'Local fallback'), source === 'supabase-persistence' ? 'good' : (source === 'supabase-partial' ? 'warn' : 'info')),
+                    copy: sourceCopy
+                },
+                {
+                    label: 'Offline backup',
+                    badge: badge(status && status.hasExport ? 'Exported' : 'Missing', status && status.hasExport ? 'good' : 'warn'),
+                    copy: backupCopy
+                },
+                {
+                    label: 'Import and delete',
+                    badge: badge('High consequence', 'warn'),
+                    copy: 'Import replaces the current workspace with the selected backup and then resyncs durable records. Delete clears the signed-in workspace and returns you to onboarding.'
+                }
+            ]);
+
+            renderStatusList('accountStatusList', [
+                {
+                    label: 'Role setup',
+                    badge: badge(summary && summary.profile && summary.profile.role ? 'Active' : 'Needs review', summary && summary.profile && summary.profile.role ? 'good' : 'warn'),
+                    copy: 'Current role lens: ' + ((summary && summary.profile && summary.profile.role) ? String(summary.profile.role).replace(/[_-]+/g, ' ') : 'not set') + '. Changing this retunes onboarding and first-session guidance without deleting workspace records.'
+                },
+                {
+                    label: 'Activation state',
+                    badge: badge(summary && summary.onboarding && summary.onboarding.completedAt ? 'Completed' : 'Incomplete', summary && summary.onboarding && summary.onboarding.completedAt ? 'good' : 'warn'),
+                    copy: summary && summary.onboarding && summary.onboarding.completedAt
+                        ? 'Onboarding completed at ' + formatTime(summary.onboarding.completedAt) + '.'
+                        : 'Onboarding truth is incomplete. Re-running setup is safer than guessing which activation path the workspace should use.'
+                }
+            ]);
+
+            renderStatusList('demoStatusList', [
+                {
+                    label: 'Sample workspace',
+                    badge: badge(modeTitle === 'Demo mode is active' ? 'Demo live' : 'Off', modeTitle === 'Demo mode is active' ? 'info' : 'good'),
+                    copy: modeCopy
+                },
+                {
+                    label: 'Isolation rule',
+                    badge: badge('Browser-only', 'info'),
+                    copy: 'Demo state lives locally until you exit. It should not overwrite your signed-in cloud workspace or import/delete flows.'
+                }
+            ]);
+
+            renderStatusList('categoryStatusList', [
+                {
+                    label: 'Current category',
+                    badge: badge('Workspace', 'good'),
+                    copy: 'Current category: ' + categoryLabel(category || 'cxai') + '. This is stored with the workspace because it changes discovery guidance and downstream GTM framing.'
+                },
+                {
+                    label: 'Downstream effect',
+                    badge: badge('Discovery impact', 'info'),
+                    copy: 'Category changes should alter which discovery framework and GTM language appears elsewhere in the app. This is not just a cosmetic preference.'
+                }
+            ]);
+
+            return {
+                sourceTitle: sourceTitle,
+                sourceCopy: sourceCopy,
+                backupTitle: backupTitle,
+                backupCopy: backupCopy,
+                modeTitle: modeTitle,
+                modeCopy: modeCopy
+            };
+        }
+
+        async function initializeSettingsState() {
             var cat = readJson('gtmos_product_category', null) || 'cxai';
             document.getElementById('productCategory').value = cat;
 
@@ -143,6 +425,18 @@
                     ? 'Export your synced workspace as a JSON backup file, import a previous backup, or fully clear the workspace. Last export: ' + new Date(status.lastExportAt).toLocaleString() + '.'
                     : 'Export your synced workspace as a JSON backup file, import a previous backup, or fully clear the workspace. No offline backup exported yet.';
             }
+
+            var summaryResult = null;
+            if (window.gtmPersistence && window.gtmPersistence.workspace && typeof window.gtmPersistence.workspace.loadSummary === 'function') {
+                try {
+                    summaryResult = await window.gtmPersistence.workspace.loadSummary(null, { force: true });
+                } catch (error) {
+                    console.error('Settings workspace summary load failed:', error);
+                }
+            }
+            var summary = summaryResult && summaryResult.data ? summaryResult.data : (window.__gtmosWorkspaceSummary || {});
+            var truthModel = buildTruthModel(summary, status || { hasExport: false }, cat);
+            renderTrustGrid(truthModel);
         }
 
         async function setProductCategory(val) {
@@ -153,11 +447,13 @@
                 if (result && result.error) {
                     console.error('Product category sync failed:', result.error);
                     toast('Saved locally. Supabase sync failed.');
+                    initializeSettingsState();
                     return;
                 }
             }
 
             toast('Product category updated');
+            initializeSettingsState();
         }
 
         function exportAllData() {
