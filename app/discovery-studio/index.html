@@ -90,6 +90,8 @@
         .ds-boot-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
         .ds-boot-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.76rem;font-weight:700;cursor:pointer;}
         .ds-boot-btn:hover{border-color:var(--border-hover);}
+        .ds-boot-state{display:none;margin-bottom:var(--space-md);}
+        .ds-boot-state.visible{display:block;}
         /* CFO segments */
         .ds-seg{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);margin-bottom:var(--space-md);overflow:hidden;}
         .ds-seg-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;}
@@ -125,6 +127,7 @@
                 </div>
             </header>
             <div class="app-content" style="max-width:800px;">
+                <div class="ds-boot-state" id="bootState"></div>
                 <div class="ds-stats" id="statsBar"></div>
                 <div id="bridgePanel"></div>
                 <div class="ds-cat-bar" id="catBar"></div>
@@ -154,12 +157,27 @@
             }catch(e){return fb}
         }
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+        function normalizeDiscoveryCategory(raw){
+            var value=(typeof raw==='string'?raw.trim().toLowerCase():'')||'';
+            if(!value)return 'cxai';
+            if(value==='revintel')return 'revenue';
+            if(value==='revenue intelligence ai'||value==='revenue intelligence'||value==='revenue intel')return 'revenue';
+            if(value==='customer data platform'||value==='data platform'||value==='data platform / cdp / analytics')return 'cdp';
+            if(value==='legal ai / compliance'||value==='legal ai'||value==='compliance')return 'legal';
+            if(value==='cx ai / support automation'||value==='cx ai'||value==='support automation')return 'cxai';
+            if(value==='ai objections'||value==='ai-objections')return 'ai-objections';
+            return value;
+        }
         function refreshDiscoveryState(){
-            currentCat=readTextLS('gtmos_product_category','cxai');
+            currentCat=normalizeDiscoveryCategory(readTextLS('gtmos_product_category','cxai'));
             workedSet=new Set(readLS('gtmos_discovery_worked',[]));
             stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
         }
         function renderBootState(kind,title,text){
+            var boot=document.getElementById('bootState');
+            if(boot){
+                boot.className='ds-boot-state visible';
+            }
             document.getElementById('statsBar').innerHTML='';
             document.getElementById('bridgePanel').innerHTML='';
             document.getElementById('catBar').innerHTML='';
@@ -175,7 +193,18 @@
                 html+='</div>';
             }
             html+='</div>';
+            if(boot){
+                boot.innerHTML=html;
+                document.getElementById('mainContent').innerHTML='';
+                return;
+            }
             document.getElementById('mainContent').innerHTML=html;
+        }
+        function clearBootState(){
+            var boot=document.getElementById('bootState');
+            if(!boot)return;
+            boot.className='ds-boot-state';
+            boot.innerHTML='';
         }
         async function syncDiscoveryState(){
             if(window.gtmPersistence&&window.gtmPersistence.discovery&&typeof window.gtmPersistence.discovery.save==='function'){
@@ -194,7 +223,9 @@
         }
 
         var discoveryFrameworks=window.DISCOVERY_FRAMEWORKS||{};
-        var currentCat=readTextLS('gtmos_product_category','cxai');
+        if(discoveryFrameworks.revintel&&!discoveryFrameworks.revenue)discoveryFrameworks.revenue=discoveryFrameworks.revintel;
+        if(discoveryFrameworks.revenue&&!discoveryFrameworks.revintel)discoveryFrameworks.revintel=discoveryFrameworks.revenue;
+        var currentCat=normalizeDiscoveryCategory(readTextLS('gtmos_product_category','cxai'));
         var workedSet=new Set(readLS('gtmos_discovery_worked',[]));
         var stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
 
@@ -444,7 +475,7 @@
         }
 
         window.switchCat=async function(cat){
-            currentCat=cat;
+            currentCat=normalizeDiscoveryCategory(cat);
             localStorage.setItem('gtmos_product_category',JSON.stringify(cat));
             await syncDiscoveryState();
             renderCatBar();
@@ -460,17 +491,34 @@
                 return;
             }
             var fw=discoveryFrameworks[currentCat];
-            if(!fw){document.getElementById('mainContent').innerHTML='<div style="text-align:center;color:var(--text-muted);padding:40px;">Framework not found.</div>';return;}
+            if(!fw&&currentCat==='revenue'&&discoveryFrameworks.revintel){
+                fw=discoveryFrameworks.revintel;
+            }
+            if(!fw){
+                document.getElementById('mainContent').innerHTML=
+                    '<div class="ds-boot-card error">'+
+                        '<div class="ds-boot-eyebrow">Framework missing</div>'+
+                        '<div class="ds-boot-title">Discovery framework could not be matched.</div>'+
+                        '<div class="ds-boot-text">Antaeus could not match the current product category to a discovery framework. Resetting to CX AI will get the module back on-screen.</div>'+
+                        '<div class="ds-boot-actions"><button class="ds-boot-btn" type="button" onclick="switchCat(\'cxai\')">Reset to CX AI</button></div>'+
+                    '</div>';
+                return;
+            }
+            var buyers=Array.isArray(fw.typicalBuyers)?fw.typicalBuyers:[];
+            var metrics=Array.isArray(fw.keyMetrics)?fw.keyMetrics:[];
+            var territories=Array.isArray(fw.territories)?fw.territories:[];
 
             var html='<div class="ds-header"><div class="ds-header-title">'+escH(fw.label)+'</div><div class="ds-header-desc">'+escH(fw.description)+'</div></div>';
             html+='<div class="ds-insight"><strong>\ud83d\udca1 Core Insight:</strong> '+escH(fw.coreInsight)+'</div>';
-            html+='<div class="ds-meta"><div><strong>Buyers:</strong> '+fw.typicalBuyers.join(', ')+'</div><div><strong>Metrics:</strong> '+fw.keyMetrics.join(', ')+'</div></div>';
+            html+='<div class="ds-meta"><div><strong>Buyers:</strong> '+escH(buyers.join(', ')||'No buyer list yet')+'</div><div><strong>Metrics:</strong> '+escH(metrics.join(', ')||'No metric list yet')+'</div></div>';
 
-            fw.territories.forEach(function(t,ti){
-                var entryCount=(t.entries||[]).length;
-                var responseCount=(t.responses||[]).length;
+            territories.forEach(function(t,ti){
+                var entries=Array.isArray(t&&t.entries)?t.entries:[];
+                var responses=Array.isArray(t&&t.responses)?t.responses:[];
+                var entryCount=entries.length;
+                var responseCount=responses.length;
                 var workedInTerritory=0;
-                (t.responses||[]).forEach(function(r){if(workedSet.has(r.id))workedInTerritory++;});
+                responses.forEach(function(r){if(r&&workedSet.has(r.id))workedInTerritory++;});
                 var badge=workedInTerritory>0?'<span class="ds-territory-badge worked">'+workedInTerritory+' worked</span>':'<span class="ds-territory-badge">'+entryCount+' entries, '+responseCount+' responses</span>';
                 var openCls=ti===0?' open':'';
 
@@ -486,9 +534,9 @@
                 }
 
                 // Entries
-                if(t.entries&&t.entries.length>0){
+                if(entries.length>0){
                     html+='<div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;">Discovery Entries</div>';
-                    t.entries.forEach(function(e){
+                    entries.forEach(function(e){
                         html+='<div class="ds-entry">';
                         if(e.context)html+='<div class="ds-entry-context">'+escH(e.context)+'</div>';
                         html+='<div class="ds-entry-label">'+escH(e.label)+'</div>';
@@ -499,9 +547,9 @@
                 }
 
                 // Responses
-                if(t.responses&&t.responses.length>0){
+                if(responses.length>0){
                     html+='<div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin:20px 0 8px;">Response Patterns</div>';
-                    t.responses.forEach(function(r){
+                    responses.forEach(function(r){
                         html+='<div class="ds-response '+(r.flag||'green')+'">';
                         html+='<div class="ds-response-flag">'+escH(r.type||'')+'</div>';
                         html+='<div class="ds-response-label">'+escH(r.label)+'</div>';
@@ -612,6 +660,7 @@
             renderFrameworkGuide();
             renderWorkedLoop();
             renderContent();
+            clearBootState();
         }
 
         window.retryDiscoveryStudioBoot=function(){

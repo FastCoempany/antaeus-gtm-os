@@ -1191,6 +1191,14 @@ const DISCOVERY_FRAMEWORKS = {
     }
 };
 
+// Support both historical and current category keys.
+if (!DISCOVERY_FRAMEWORKS.revenue && DISCOVERY_FRAMEWORKS.revintel) {
+    DISCOVERY_FRAMEWORKS.revenue = DISCOVERY_FRAMEWORKS.revintel;
+}
+if (!DISCOVERY_FRAMEWORKS.revintel && DISCOVERY_FRAMEWORKS.revenue) {
+    DISCOVERY_FRAMEWORKS.revintel = DISCOVERY_FRAMEWORKS.revenue;
+}
+
 // Make it available globally
 if (typeof window !== 'undefined') {
     window.DISCOVERY_FRAMEWORKS = DISCOVERY_FRAMEWORKS;
