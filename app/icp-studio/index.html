@@ -56,15 +56,36 @@
         .output-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--brand-gold); margin-bottom: var(--space-sm); }
         .output-statement { font-family: var(--font-serif); font-size: 1.1rem; color: var(--text-primary); line-height: 1.6; }
         .output-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: var(--space-sm); border-top: 1px solid var(--border-default); padding-top: var(--space-sm); }
+        .output-copy { font-size: 0.94rem; color: var(--text-secondary); line-height: 1.65; }
         .hints-hidden .input-hint, .hints-hidden .output-hint { display:none; }
         .hint-toggle { font-size:0.68rem; color:var(--text-muted); cursor:pointer; opacity:0.6; padding:2px 8px; border:1px solid var(--border-default); border-radius:var(--radius-full); background:transparent; font-family:inherit; margin-left:8px; }
         .hint-toggle:hover { opacity:1; color:var(--brand-gold); border-color:rgba(212,165,116,0.3); }
         .output-list { list-style: none; padding: 0; margin: 0; }
         .output-list li { padding: var(--space-xs) 0; color: var(--text-secondary); font-size: 0.9rem; display: flex; align-items: flex-start; gap: var(--space-sm); }
         .output-list li::before { content: "•"; color: var(--accent-blue); font-weight: bold; }
+        .output-list li.good::before { content: "+"; color: var(--accent-green); }
+        .output-list li.warn::before { content: "!"; color: var(--accent-amber); }
+        .output-list li.risk::before { content: "x"; color: var(--accent-red); }
+        .impact-list li::before { content: "->"; color: var(--brand-gold); }
         
         .output-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
         @media (max-width: 900px) { .output-grid { grid-template-columns: 1fr; } }
+
+        .quality-summary { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); }
+        .quality-score-wrap { min-width: 110px; text-align: right; }
+        .quality-score { font-family: var(--font-mono); font-size: 1.4rem; color: var(--text-primary); }
+        .quality-tier { display: inline-flex; align-items: center; justify-content: center; margin-top: 6px; padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border: 1px solid var(--border-default); }
+        .quality-tier.tier-sharp { color: var(--accent-green); border-color: rgba(34, 197, 94, 0.45); background: rgba(34, 197, 94, 0.12); }
+        .quality-tier.tier-workable { color: var(--accent-blue); border-color: rgba(59, 130, 246, 0.45); background: rgba(59, 130, 246, 0.12); }
+        .quality-tier.tier-forming { color: var(--accent-amber); border-color: rgba(245, 158, 11, 0.45); background: rgba(245, 158, 11, 0.12); }
+        .quality-tier.tier-broad { color: var(--accent-red); border-color: rgba(239, 68, 68, 0.45); background: rgba(239, 68, 68, 0.12); }
+        .quality-bar { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.06); border-radius: var(--radius-full); overflow: hidden; margin: var(--space-sm) 0 var(--space-md); border: 1px solid var(--border-default); }
+        .quality-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-red), var(--accent-amber), var(--accent-green)); transition: width var(--transition-base); }
+        .quality-fill.fill-sharp { background: linear-gradient(90deg, rgba(34, 197, 94, 0.75), rgba(34, 197, 94, 1)); }
+        .quality-fill.fill-workable { background: linear-gradient(90deg, rgba(59, 130, 246, 0.75), rgba(34, 197, 94, 0.95)); }
+        .quality-fill.fill-forming { background: linear-gradient(90deg, rgba(245, 158, 11, 0.75), rgba(234, 179, 8, 0.95)); }
+        .quality-fill.fill-broad { background: linear-gradient(90deg, rgba(239, 68, 68, 0.75), rgba(245, 158, 11, 0.9)); }
+        .output-copy strong { color: var(--text-primary); }
         
         .scoring-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: var(--space-md); }
         .scoring-table th { background: var(--bg-tertiary); padding: var(--space-sm); text-align: left; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-default); }
@@ -312,6 +333,36 @@
                                     </ul>
                                 </div>
                             </div>
+
+                            <div class="output-grid">
+                                <div class="output-box">
+                                    <div class="output-title">5) ICP Quality Read</div>
+                                    <div class="quality-summary">
+                                        <div>
+                                            <div class="output-statement" id="out_quality_label" style="font-size: 1rem;">Still forming.</div>
+                                            <div class="output-hint" id="out_quality_summary" style="border:none;padding:0;margin-top:6px;">Fill all seven required fields to move this from idea to operating wedge.</div>
+                                        </div>
+                                        <div class="quality-score-wrap">
+                                            <div class="quality-score" id="out_quality_score">0/100</div>
+                                            <div class="quality-tier tier-forming" id="out_quality_tier">forming</div>
+                                        </div>
+                                    </div>
+                                    <div class="quality-bar">
+                                        <div class="quality-fill fill-forming" id="out_quality_fill"></div>
+                                    </div>
+                                    <ul class="output-list" id="out_quality_checks">
+                                        <li class="warn">Choose one buyer, one pain, one trigger, and one proof window.</li>
+                                    </ul>
+                                </div>
+
+                                <div class="output-box">
+                                    <div class="output-title">6) Downstream Impact</div>
+                                    <div class="output-hint" style="border: none; padding: 0; margin-bottom: var(--space-sm);">These are the exact modules this ICP sharpens next.</div>
+                                    <ul class="output-list impact-list" id="out_downstream">
+                                        <li>Finish the inputs above to see how this ICP changes Territory Architect, Sourcing Workbench, Outbound Studio, and Discovery Studio.</li>
+                                    </ul>
+                                </div>
+                            </div>
                             
                             <div class="worked-toggle">
                                 <input type="checkbox" id="workedCheckbox">
@@ -419,6 +470,20 @@
                                         <li>Your use case list is longer than your pipeline</li>
                                         <li>Your trigger is "they should care"</li>
                                     </ul>
+                                </div>
+                            </div>
+
+                            <div class="output-grid">
+                                <div class="output-box">
+                                    <div class="output-title" style="color: var(--accent-green);">Sharp version</div>
+                                    <div class="output-copy" id="out_example">Complete the required inputs to see the sharp version of this ICP.</div>
+                                    <div class="output-hint" id="out_example_hint">A rep should be able to source, research, and write the first touch from this without asking you what you meant.</div>
+                                </div>
+
+                                <div class="output-box">
+                                    <div class="output-title" style="color: var(--accent-red);">Broad version to avoid</div>
+                                    <div class="output-copy" id="out_anti_example">If your ICP sounds like a category and a hope, every downstream module becomes generic.</div>
+                                    <div class="output-hint" id="out_anti_example_hint">Use this as a smell test. If it sounds safe, it is probably too broad.</div>
                                 </div>
                             </div>
                             
@@ -792,12 +857,170 @@
             const unique = [...new Set(evidence)];
             return unique.length ? unique : ['No evidence map found for this combo (pick a different pain/trigger).'];
         }
-        
+
+        function containsBroadLanguage(value) {
+            var text = String(value || '').trim().toLowerCase();
+            if (!text) return false;
+            return /(anyone|everyone|multiple|various|several|committee|leadership team|all buyers|all teams|whoever|general)/.test(text);
+        }
+
+        function buildIcpQuality(role, industry, size, geo, buyer, pain, trigger, proof, activeAccounts) {
+            var score = 0;
+            var checks = [];
+
+            function good(points, text) {
+                score += points;
+                checks.push({ tone: 'good', text: text });
+            }
+
+            function warn(points, text) {
+                score += points;
+                checks.push({ tone: 'warn', text: text });
+            }
+
+            function risk(text) {
+                checks.push({ tone: 'risk', text: text });
+            }
+
+            if (industry) good(15, 'Industry wedge is defined. A real target list can exist.');
+            else risk('Choose one industry wedge. If a list does not exist, the ICP is not real yet.');
+
+            if (size) {
+                if (size === '5,000+ employees') warn(7, 'Size band is valid, but enterprise breadth raises process complexity fast.');
+                else good(10, 'Company-size band is defined. Complexity is bounded.');
+            } else {
+                risk('Choose one company-size band so downstream qualification stays believable.');
+            }
+
+            if (geo) {
+                if (geo === 'Global') warn(4, 'Global is usually too wide for the first 30-day slice.');
+                else if (geo === 'North America' || geo === 'EMEA' || geo === 'APAC') warn(8, 'Region is workable, but coverage discipline still matters.');
+                else good(10, 'Geography is tight enough to route territory cleanly.');
+            } else {
+                risk('Pick one geography you can actually cover right now.');
+            }
+
+            if (buyer) {
+                if (containsBroadLanguage(buyer)) warn(8, 'Primary buyer still sounds broad. Name one owner, not a committee.');
+                else good(15, 'Primary buyer is explicit. Messaging can stay owner-led.');
+            } else {
+                risk('Pick one primary buyer. "Team" language will break outbound and discovery.');
+            }
+
+            if (pain) good(15, 'Primary pain is explicit. Copy and discovery can stay centered on one problem.');
+            else risk('Choose one felt pain. Multiple pains will blur the wedge.');
+
+            if (trigger) good(15, 'Trigger is explicit. Research can look for urgency instead of vague interest.');
+            else risk('Choose one trigger. Without urgency, the list becomes fake pipeline.');
+
+            if (proof) {
+                if (proof === '7 days' || proof === '14 days') good(10, 'Proof window is aggressive enough to create fast first value.');
+                else good(8, 'Proof window is defined. Qualification now has a real bar.');
+            } else {
+                risk('Pick one proof window so the deal can be pressure-tested early.');
+            }
+
+            if (!activeAccounts) {
+                warn(0, 'No working-list size entered yet. Territory and sourcing will stay generic until you size the first 30-day slice.');
+            } else if (activeAccounts < 20) {
+                warn(4, 'Working list may be too thin unless personalization is extremely high-touch.');
+            } else if (activeAccounts <= 160) {
+                good(10, 'Working-list size is believable for a focused 30-day operating window.');
+            } else if (activeAccounts <= 220) {
+                warn(7, 'Coverage is getting wide. Keep ranking ruthless.');
+            } else {
+                warn(2, 'Working-list size is too wide for a first focused 30-day slice.');
+            }
+
+            if (role === 'founder' && activeAccounts > 120) {
+                checks.push({ tone: 'warn', text: 'Founder-led motion usually performs better under roughly 120 active accounts at a time.' });
+            }
+            if (role === 'firstae' && activeAccounts > 220) {
+                checks.push({ tone: 'risk', text: 'First AE motion is probably too wide above roughly 220 active accounts without strong prioritization.' });
+            }
+
+            score = Math.max(0, Math.min(100, score));
+
+            var tier = 'broad';
+            var label = 'Too broad to trust yet.';
+            var summary = 'This still needs too much founder interpretation before the rest of the app can use it cleanly.';
+
+            if (score >= 85) {
+                tier = 'sharp';
+                label = 'Sharp enough to run.';
+                summary = 'This is specific enough to drive territory, sourcing, outbound, and discovery without translation.';
+            } else if (score >= 70) {
+                tier = 'workable';
+                label = 'Workable, but tighten one more thing.';
+                summary = 'The wedge is real. Tighten the remaining pressure point before scaling the list or message.';
+            } else if (score >= 50) {
+                tier = 'forming';
+                label = 'Borderline. Tighten before you trust it.';
+                summary = 'You have the outline of a wedge, but the user still has to infer too much downstream.';
+            }
+
+            return {
+                score: score,
+                tier: tier,
+                label: label,
+                summary: summary,
+                checks: checks.slice(0, 6)
+            };
+        }
+
+        function buildDownstreamImpact(industry, size, geo, buyer, pain, trigger, proof, activeAccounts) {
+            if (!industry || !size || !geo || !buyer || !pain || !trigger || !proof) {
+                return ['Finish all required inputs first. This ICP should eventually tell Territory Architect, Sourcing Workbench, Outbound Studio, and Discovery Studio exactly what to do.'];
+            }
+
+            return [
+                'Territory Architect: build a ' + geo + ' list of ' + size + ' ' + industry + ' accounts instead of a generic TAM.',
+                'Sourcing Workbench: prioritize accounts where the ' + buyer + ' will actually feel ' + pain.toLowerCase() + ' and where ' + trigger.toLowerCase() + ' is visible.',
+                'Outbound Studio and LinkedIn Playbook: lead with ' + pain.toLowerCase() + ' plus ' + trigger.toLowerCase() + ', not a broad value prop.',
+                'Discovery Studio and Deal Workspace: confirm the ' + buyer + ' owns the pain and that you can prove value in ' + proof + '.',
+                activeAccounts
+                    ? '30-day operating plan: work ' + activeAccounts + ' active accounts against this wedge and compare conversion before widening.'
+                    : '30-day operating plan: size the first working list next so the wedge becomes operational instead of theoretical.'
+            ];
+        }
+
+        function buildExamples(industry, size, geo, buyer, pain, trigger, proof) {
+            if (!industry || !size || !geo || !buyer || !pain || !trigger || !proof) {
+                return {
+                    strong: 'Complete the required inputs to see the sharp version of this ICP.',
+                    strongHint: 'The sharp version should tell a rep what list to build, what evidence to look for, and what angle to use.',
+                    broad: 'Go after companies that want to improve something important, talk to whoever will take the meeting, and work out the real pain later.',
+                    broadHint: 'If it sounds harmless, every downstream module will become generic.'
+                };
+            }
+
+            return {
+                strong: 'Start with ' + size + ' ' + industry + ' accounts in ' + geo + '. Talk first to the ' + buyer + '. Only prioritize accounts showing ' + trigger.toLowerCase() + '. If you cannot prove value in ' + proof + ', they are out.',
+                strongHint: 'A rep should be able to build a list, inspect evidence, and write the first touch from this without asking for translation.',
+                broad: 'Go after ' + industry + ' companies of any shape in any reachable region, talk to sales leadership or whoever responds, and lead with general ROI around ' + pain.toLowerCase() + '.',
+                broadHint: 'If the ICP sounds like a category plus a hope, you will blame activity for a targeting problem.'
+            };
+        }
+
         function renderList(el, items) {
             el.innerHTML = '';
             items.forEach(item => {
                 const li = document.createElement('li');
                 li.textContent = item;
+                el.appendChild(li);
+            });
+        }
+
+        function renderTaggedList(el, items) {
+            el.innerHTML = '';
+            items.forEach(item => {
+                const li = document.createElement('li');
+                if (item && typeof item === 'object') {
+                    li.textContent = item.text || '';
+                    if (item.tone) li.classList.add(item.tone);
+                } else {
+                    li.textContent = String(item || '');
+                }
                 el.appendChild(li);
             });
         }
@@ -828,6 +1051,24 @@
             
             renderList(byId('out_buying_group'), buildBuyingGroup(buyer));
             renderList(byId('out_evidence'), buildEvidence(pain, trigger));
+
+            var quality = buildIcpQuality(currentRole, industry, size, geo, buyer, pain, trigger, proof, activeAccounts);
+            byId('out_quality_label').textContent = quality.label;
+            byId('out_quality_summary').textContent = quality.summary;
+            byId('out_quality_score').textContent = quality.score + '/100';
+            byId('out_quality_tier').textContent = quality.tier;
+            byId('out_quality_tier').className = 'quality-tier tier-' + quality.tier;
+            byId('out_quality_fill').style.width = quality.score + '%';
+            byId('out_quality_fill').className = 'quality-fill fill-' + quality.tier;
+            renderTaggedList(byId('out_quality_checks'), quality.checks);
+
+            renderList(byId('out_downstream'), buildDownstreamImpact(industry, size, geo, buyer, pain, trigger, proof, activeAccounts));
+
+            var examples = buildExamples(industry, size, geo, buyer, pain, trigger, proof);
+            byId('out_example').textContent = examples.strong;
+            byId('out_example_hint').textContent = examples.strongHint;
+            byId('out_anti_example').textContent = examples.broad;
+            byId('out_anti_example_hint').textContent = examples.broadHint;
         }
         
         // ============================================
@@ -878,6 +1119,17 @@
         window.saveICP = async function() {
             const industryRaw = val('in_industry');
             const buyerRaw = val('in_buyer');
+            const quality = buildIcpQuality(
+                currentRole,
+                sanitizeField('industry', safePick(industryRaw, 'in_industry_custom')),
+                sanitizeField('size', val('in_size')),
+                sanitizeField('geo', val('in_geo')),
+                sanitizeField('buyer', safePick(buyerRaw, 'in_buyer_custom')),
+                sanitizeField('pain', val('in_pain')),
+                sanitizeField('trigger', val('in_trigger')),
+                sanitizeField('proofWindow', val('in_proof_window')),
+                parseInt(val('in_engine_active') || '0', 10)
+            );
             
             const icpData = {
                 timestamp: new Date().toISOString(),
@@ -891,6 +1143,8 @@
                 proofWindow: sanitizeField('proofWindow', val('in_proof_window')),
                 activeAccounts: parseInt(val('in_engine_active') || '0', 10),
                 statement: sanitizeField('statement', byId('out_statement').textContent),
+                qualityScore: quality.score,
+                qualityTier: quality.tier,
                 worked: byId('workedCheckbox').checked
             };
             
@@ -1154,6 +1408,7 @@
                 var bestBadge = attribution.bestIndex === idx ? '<span class="lib-card-best">🏆 Best-performing ICP</span>' : '';
                 var completeness = countIcpCompleteness(icp);
                 var completenessBadge = '<span class="lib-card-completeness">' + completeness + '/8 fields filled</span>';
+                var qualityBadge = icp.qualityScore ? '<span class="lib-card-completeness">' + icp.qualityScore + '/100 quality</span>' : '';
                 var draftBadge = completeness < 3 ? '<span class="lib-card-draft">Draft</span>' : '';
                 var date = icp.timestamp ? new Date(icp.timestamp).toLocaleDateString() : '';
                 var stat = attribution.rows[idx] || { worked: 0, won: 0, lost: 0, open: 0, revenue: 0, closed: 0, winRate: 0 };
@@ -1181,7 +1436,7 @@
                         (workedBadge + bestBadge) +
                     '</div>' +
                     '<div class="lib-card-meta">' + escHtml(icp.size || '') + ' · ' + escHtml(icp.geo || '') + (date ? ' · ' + date : '') + '</div>' +
-                    '<div>' + completenessBadge + draftBadge + '</div>' +
+                    '<div>' + completenessBadge + qualityBadge + draftBadge + '</div>' +
                     '<div class="lib-card-statement">' + escHtml(icp.statement || '') + '</div>' +
                     outcomeLine +
                     perfLine +
