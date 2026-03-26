@@ -32,8 +32,27 @@
         .callout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg); }
         @media (max-width: 900px) { .callout-grid { grid-template-columns: 1fr; } }
         
+        .poc-bridge{background:linear-gradient(180deg,rgba(212,165,116,0.08),rgba(212,165,116,0.02));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-lg);}
+        .poc-bridge-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
+        .poc-bridge-k{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.9px;color:var(--brand-gold);font-weight:700;}
+        .poc-bridge-state{font-size:0.72rem;font-weight:700;padding:5px 10px;border-radius:var(--radius-full);border:1px solid transparent;}
+        .poc-bridge-state.now{color:#22c55e;background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.22);}
+        .poc-bridge-state.later{color:#f59e0b;background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.22);}
+        .poc-bridge-state.risky{color:#ef4444;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.22);}
+        .poc-bridge-title{font-family:var(--font-serif);font-size:1.18rem;color:var(--text-primary);margin-bottom:8px;}
+        .poc-bridge-copy{font-size:0.85rem;color:var(--text-tertiary);line-height:1.65;margin-bottom:14px;}
+        .poc-bridge-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px;}
+        .poc-bridge-block{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);padding:12px;}
+        .poc-bridge-label{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
+        .poc-bridge-value{font-size:0.82rem;color:var(--text-secondary);line-height:1.55;}
+        .poc-bridge-actions{display:flex;gap:10px;flex-wrap:wrap;}
+        .poc-bridge-btn{padding:9px 14px;border-radius:var(--radius-md);font-size:0.78rem;font-weight:700;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+        .poc-bridge-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
+        .poc-bridge-btn.primary{border-color:rgba(212,165,116,0.3);background:rgba(212,165,116,0.06);color:var(--brand-gold);}
+        .poc-bridge-btn.primary:hover{background:rgba(212,165,116,0.12);}
         .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
-        @media (max-width: 900px) { .input-grid { grid-template-columns: 1fr; } }
+        .input-grid.input-grid-2 { grid-template-columns: repeat(2, 1fr); }
+        @media (max-width: 900px) { .input-grid, .input-grid.input-grid-2, .poc-bridge-grid { grid-template-columns: 1fr; } }
         
         .input-group { display: flex; flex-direction: column; }
         .input-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-xs); }
@@ -70,6 +89,25 @@
         
         .action-bar { display: flex; gap: var(--space-md); padding: var(--space-lg); background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); margin-top: var(--space-lg); }
         .action-bar .btn { flex: 1; }
+        .poc-proof-guide{margin-top:12px;padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);font-size:0.75rem;color:var(--text-muted);line-height:1.6;}
+        .poc-proof-guide strong{color:var(--text-secondary);}
+        .poc-quality{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:var(--space-md);}
+        .poc-quality-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);padding:12px;}
+        .poc-quality-label{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
+        .poc-quality-value{font-size:0.9rem;color:var(--text-primary);font-weight:700;}
+        .poc-quality-value.ready{color:#22c55e;}
+        .poc-quality-value.workable{color:#f59e0b;}
+        .poc-quality-value.thin{color:#ef4444;}
+        .poc-quality-copy{margin-top:4px;font-size:0.76rem;color:var(--text-muted);line-height:1.5;}
+        .proof-list{margin-top:var(--space-md);}
+        .proof-item{padding:10px 0;border-top:1px solid var(--border-default);}
+        .proof-item:first-child{border-top:none;padding-top:0;}
+        .proof-item-title{font-size:0.82rem;font-weight:700;color:var(--text-primary);}
+        .proof-item-copy{font-size:0.74rem;color:var(--text-muted);line-height:1.5;margin-top:4px;}
+        .proof-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:var(--radius-full);font-size:0.68rem;font-weight:700;margin-top:6px;border:1px solid transparent;}
+        .proof-chip.ready{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);color:#22c55e;}
+        .proof-chip.workable{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.2);color:#f59e0b;}
+        .proof-chip.thin{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2);color:#ef4444;}
     </style>
 </head>
 <body>
@@ -92,6 +130,7 @@
             
             <div class="app-content">
                 <div id="pocBootState"></div>
+                <div id="pocBridge"></div>
                 <div class="studio-layout">
                     <div class="builder-content">
                         <!-- What This Produces / Rules / What Breaks -->
@@ -151,6 +190,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="input-grid input-grid-2">
+                                <div class="input-group">
+                                    <label>Linked Deal (optional)</label>
+                                    <select id="in_linked_deal" onchange="onLinkedDealChange()">
+                                        <option value="">No linked deal</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Readout Owner</label>
+                                    <input type="text" id="in_readout_owner" placeholder="e.g., VP Sales + Economic Buyer" oninput="generatePoC()">
+                                </div>
+                            </div>
                             
                             <div class="output-grid" style="margin-top: var(--space-md);">
                                 <div class="input-group">
@@ -166,6 +217,7 @@
 - No expansion to additional business units without a signed plan</textarea>
                                 </div>
                             </div>
+                            <div id="pocQuality" class="poc-quality"></div>
                         </div>
                         
                         <!-- PoC Outputs -->
@@ -215,40 +267,20 @@
                         
                         <!-- Actions -->
                         
-                        <div class="data-guide" id="pocDataGuide" style="margin-top:16px;">
-                            <div class="data-guide-header" onclick="document.getElementById('pocDataGuide').classList.toggle('open')" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:10px;">
-                                <span>Note</span>
-                                <span style="font-weight:700;font-size:0.85rem;color:var(--text-secondary);flex:1;">Where Does Your Data Go?</span>
-                                <span class="dg-chev" style="font-size:0.7rem;color:var(--text-muted);transition:transform 0.2s;">v</span>
-                            </div>
-                            <div class="dg-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s;">
-                                <div style="padding:12px 16px;font-size:0.72rem;color:var(--text-tertiary);line-height:1.6;border:1px solid var(--border-default);border-top:none;border-radius:0 0 10px 10px;">
-                                    <span style="font-weight:600;color:var(--text-tertiary);">Save to Deal</span> stores this PoC in your browser and updates the stats panel.
-                                    <span style="font-weight:600;color:var(--text-tertiary);">Download All</span> exports the complete PoC plan in the selected format.
-                                    <span style="font-weight:600;color:var(--text-tertiary);">Reset</span> clears all fields - previously saved PoCs remain intact.
-                                </div>
-                            </div>
-                        </div>
-                        <style>.data-guide.open .dg-body{max-height:300px!important;}.data-guide.open .dg-chev{transform:rotate(180deg)!important;}</style>
-                        
                         <div class="action-bar" style="margin-top:16px;flex-wrap:wrap;">
                             <button class="btn btn-ghost" onclick="resetForm()">Reset</button>
                             <div style="display:flex;gap:6px;align-items:center;">
                                 <span style="font-size:0.62rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;white-space:nowrap;">Choose format:</span>
                                 <select id="pocDownloadFmt" style="padding:6px 10px;background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.8rem;">
-                                    <option value="pdf">PDF</option>
-                                    <option value="docx">DOCX</option>
+                                    <option value="txt">TXT</option>
                                     <option value="csv">CSV</option>
+                                    <option value="json">JSON</option>
                                 </select>
                                 <button class="btn btn-secondary" onclick="downloadAll()">Download All</button>
                             </div>
                             <button class="btn btn-primary" onclick="savePoC()">Save to Deal</button>
                         </div>
-                        <div style="text-align:center;font-size:0.63rem;color:var(--text-muted);line-height:1.5;margin-top:6px;">
-                            <span style="font-weight:600;color:var(--text-tertiary);">Reset</span> clears all fields - previously saved PoCs remain intact.
-                            <span style="font-weight:600;color:var(--text-tertiary);">Download All</span> exports the complete PoC plan in your chosen format (PDF, DOCX, or CSV).
-                            <span style="font-weight:600;color:var(--text-tertiary);">Save to Deal</span> stores this PoC in your browser and updates the stats panel.
-                        </div>
+                        <div class="poc-proof-guide"><strong>Save to Deal</strong> writes the proof plan into your PoC tracker and, when a live deal is linked, pushes the current proof shape back into that deal. <strong>Download All</strong> exports the same proof package in the format you actually selected. <strong>Reset</strong> clears the editor only.</div>
                     </div>
                     
                     <!-- Side Panel -->
@@ -265,6 +297,22 @@
                         <div class="stat-row">
                             <span class="stat-label">Conversion rate</span>
                             <span class="stat-value" id="stat_rate">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">In progress</span>
+                            <span class="stat-value" id="stat_progress">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Linked to deals</span>
+                            <span class="stat-value" id="stat_linked">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Current standard</span>
+                            <span class="stat-value" id="stat_quality">-</span>
+                        </div>
+                        <div class="proof-list">
+                            <div class="panel-title" style="font-size:0.95rem;margin-bottom:10px;">Recent proofs</div>
+                            <div id="pocRecentList"></div>
                         </div>
                     </div>
                 </div>
@@ -292,6 +340,184 @@
         function byId(id) { return document.getElementById(id); }
         function val(id) { return (byId(id)?.value || '').trim(); }
         function safe(v, fallback) { return v && v.trim().length ? v.trim() : fallback; }
+        function readLS(key, fallback) { try { var raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch (e) { return fallback; } }
+        function escH(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+        function slugify(v){ return String(v||'poc-framework').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,64) || 'poc-framework'; }
+        function countBulletLines(v){ return String(v||'').split('\n').map(function(line){ return line.trim(); }).filter(function(line){ return line.length >= 6; }).length; }
+        function fmtDate(iso){ if(!iso) return 'No date'; var d=new Date(iso); return isNaN(d.getTime()) ? 'No date' : new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric'}).format(d); }
+        function fmtMoney(n){ return '$' + Number(n || 0).toLocaleString(); }
+
+        var STAGE_LABELS = { prospect:'Prospect', discovery:'Discovery', evaluation:'Solution Fit', poc:'PoC / Pilot', negotiation:'Negotiation', verbal:'Verbal Commit', 'closed-won':'Closed Won', 'closed-lost':'Closed Lost' };
+        var urlDealId = new URLSearchParams(window.location.search).get('deal');
+
+        function getDeals() {
+            var deals = readLS('gtmos_deal_workspaces', []);
+            if (!Array.isArray(deals)) deals = Object.values(deals || {});
+            return deals;
+        }
+
+        function getLinkedDeal() {
+            var id = val('in_linked_deal');
+            if (!id) return null;
+            return getDeals().find(function(d){ return d && d.id === id; }) || null;
+        }
+
+        function populateDealDropdown() {
+            var sel = byId('in_linked_deal');
+            if (!sel) return;
+            var deals = getDeals().filter(function(d){ return d && d.stage !== 'closed-won' && d.stage !== 'closed-lost'; });
+            sel.innerHTML = '<option value="">No linked deal</option>' + deals.map(function(d){
+                return '<option value="' + escH(d.id) + '">' + escH(d.accountName || 'Unnamed') + ' - ' + escH(STAGE_LABELS[d.stage] || d.stage || 'Prospect') + ' - ' + fmtMoney(d.value || 0) + '</option>';
+            }).join('');
+            if (urlDealId && deals.some(function(d){ return d.id === urlDealId; })) {
+                sel.value = urlDealId;
+            }
+        }
+
+        function applyLinkedDealDefaults(deal) {
+            if (!deal) return;
+            if (!val('in_account')) byId('in_account').value = deal.accountName || '';
+            if (!val('in_readout_owner')) {
+                byId('in_readout_owner').value = deal.economicBuyer || deal.champion || '';
+            }
+        }
+
+        function getPoCQuality() {
+            var linkedDeal = getLinkedDeal();
+            var successCount = countBulletLines(val('in_success'));
+            var boundaryCount = countBulletLines(val('in_boundaries'));
+            var readoutOwner = val('in_readout_owner');
+            var vendorReady = val('in_vendor').length >= 2;
+            var accountReady = val('in_account').length >= 2;
+            var score = 0;
+            if (vendorReady) score += 10;
+            if (accountReady) score += 10;
+            if (successCount >= 3) score += 25; else if (successCount >= 2) score += 15; else if (successCount >= 1) score += 8;
+            if (boundaryCount >= 2) score += 15; else if (boundaryCount >= 1) score += 8;
+            if (readoutOwner.length >= 3) score += 15;
+            if (linkedDeal) score += 15;
+            if (linkedDeal && (linkedDeal.stage === 'evaluation' || linkedDeal.stage === 'poc')) score += 10;
+
+            var band = score >= 80 ? 'ready' : score >= 60 ? 'workable' : 'thin';
+            var bandLabel = band === 'ready' ? 'Ready now' : band === 'workable' ? 'Workable' : 'Thin';
+            var timingCls = linkedDeal
+                ? (linkedDeal.stage === 'evaluation' || linkedDeal.stage === 'poc' ? 'now' : (linkedDeal.stage === 'negotiation' || linkedDeal.stage === 'verbal' ? 'risky' : 'later'))
+                : 'later';
+            var timingLabel = timingCls === 'now' ? 'Best run now' : timingCls === 'risky' ? 'Use carefully now' : 'Set this up before the stage advances';
+            var timingTitle = timingCls === 'now'
+                ? 'This is the right moment to force proof.'
+                : timingCls === 'risky'
+                    ? 'This deal is already late to be inventing proof.'
+                    : 'This proof should be designed before the deal claims pilot momentum.';
+            var timingCopy = !linkedDeal
+                ? 'Link a real deal so the proof plan belongs to a stage, a next step, and an actual account thread.'
+                : linkedDeal.stage === 'evaluation' || linkedDeal.stage === 'poc'
+                    ? 'The deal is at the point where explicit success criteria, readout ownership, and scope boundaries should force the decision path.'
+                    : linkedDeal.stage === 'negotiation' || linkedDeal.stage === 'verbal'
+                        ? 'At this stage, a new PoC can become a stall tactic unless it is tied to a concrete commercial decision and owner.'
+                        : 'This proof plan is useful, but the deal still needs stronger qualification and ownership before the pilot becomes the center of gravity.';
+            var next = !linkedDeal
+                ? 'Link the proof to a live deal first.'
+                : !readoutOwner
+                    ? 'Name the readout owner before kickoff.'
+                    : successCount < 3
+                        ? 'Tighten success criteria so the readout can end in a decision.'
+                        : boundaryCount < 2
+                            ? 'Tighten scope boundaries so this does not sprawl into services.'
+                            : band === 'ready'
+                                ? 'This proof plan is strong enough to run and should hand into Deal Workspace immediately.'
+                                : 'Tighten the weak areas before you call this a real PoC.';
+            return {
+                score: score,
+                band: band,
+                bandLabel: bandLabel,
+                successCount: successCount,
+                boundaryCount: boundaryCount,
+                readoutOwner: readoutOwner,
+                linkedDeal: linkedDeal,
+                timingCls: timingCls,
+                timingLabel: timingLabel,
+                timingTitle: timingTitle,
+                timingCopy: timingCopy,
+                next: next
+            };
+        }
+
+        function renderPoCBridge() {
+            var node = byId('pocBridge');
+            if (!node) return;
+            var quality = getPoCQuality();
+            var linkedDeal = quality.linkedDeal;
+            var stageValue = linkedDeal ? (STAGE_LABELS[linkedDeal.stage] || linkedDeal.stage || 'Prospect') : 'No live deal linked';
+            var pressure = linkedDeal
+                ? (linkedDeal.nextStepDate ? 'Next step due ' + fmtDate(linkedDeal.nextStepDate) : 'No dated next step on linked deal')
+                : 'Proof plan is still detached from the pipeline';
+            var oneSession = linkedDeal
+                ? 'Leave with a proof scope that can survive kickoff, readout, and the commercial conversation after it.'
+                : 'Leave with a real proof design and a linked deal so the pilot belongs to the pipeline.';
+            node.innerHTML =
+                '<div class="poc-bridge">' +
+                    '<div class="poc-bridge-head">' +
+                        '<div class="poc-bridge-k">PoC bridge</div>' +
+                        '<div class="poc-bridge-state ' + quality.timingCls + '">' + escH(quality.timingLabel) + '</div>' +
+                    '</div>' +
+                    '<div class="poc-bridge-title">' + escH(quality.timingTitle) + '</div>' +
+                    '<div class="poc-bridge-copy">' + escH(quality.timingCopy) + '</div>' +
+                    '<div class="poc-bridge-grid">' +
+                        '<div class="poc-bridge-block"><div class="poc-bridge-label">Deal stage</div><div class="poc-bridge-value">' + escH(stageValue) + '</div></div>' +
+                        '<div class="poc-bridge-block"><div class="poc-bridge-label">Current proof standard</div><div class="poc-bridge-value">' + escH(quality.bandLabel) + ' (' + quality.score + '/100)</div></div>' +
+                        '<div class="poc-bridge-block"><div class="poc-bridge-label">Pressure point</div><div class="poc-bridge-value">' + escH(pressure) + '</div></div>' +
+                        '<div class="poc-bridge-block"><div class="poc-bridge-label">One-session win</div><div class="poc-bridge-value">' + escH(oneSession) + '</div></div>' +
+                    '</div>' +
+                    '<div class="poc-bridge-actions">' +
+                        '<button class="poc-bridge-btn primary" type="button" onclick="savePoC()">Save to Deal</button>' +
+                        '<button class="poc-bridge-btn" type="button" onclick="openLinkedDealWorkspace()">' + (linkedDeal ? 'Open Linked Deal' : 'Open Deal Workspace') + '</button>' +
+                        '<button class="poc-bridge-btn" type="button" onclick="openFutureAutopsy()">' + (linkedDeal ? 'Stress-test this deal' : 'Open Future Autopsy') + '</button>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        function renderPoCQuality() {
+            var node = byId('pocQuality');
+            if (!node) return;
+            var quality = getPoCQuality();
+            node.innerHTML =
+                '<div class="poc-quality-card">' +
+                    '<div class="poc-quality-label">Proof standard</div>' +
+                    '<div class="poc-quality-value ' + quality.band + '">' + escH(quality.bandLabel) + ' · ' + quality.score + '/100</div>' +
+                    '<div class="poc-quality-copy">' + escH(quality.next) + '</div>' +
+                '</div>' +
+                '<div class="poc-quality-card">' +
+                    '<div class="poc-quality-label">Success criteria</div>' +
+                    '<div class="poc-quality-value">' + quality.successCount + ' defined</div>' +
+                    '<div class="poc-quality-copy">A real PoC should have explicit pass/fail criteria before kickoff.</div>' +
+                '</div>' +
+                '<div class="poc-quality-card">' +
+                    '<div class="poc-quality-label">Readout ownership</div>' +
+                    '<div class="poc-quality-value">' + escH(quality.readoutOwner || 'Not set') + '</div>' +
+                    '<div class="poc-quality-copy">If nobody owns the readout, the pilot risks becoming activity without a decision.</div>' +
+                '</div>';
+        }
+
+        function renderRecentProofs() {
+            var node = byId('pocRecentList');
+            if (!node) return;
+            var pocs = (readPocList().pocs || []).slice().sort(function(a,b){ return new Date(b.updated || b.created || 0) - new Date(a.updated || a.created || 0); }).slice(0,4);
+            if (!pocs.length) {
+                node.innerHTML = '<div class="proof-item"><div class="proof-item-copy">No proofs saved yet. Save one strong PoC and it will start compounding here.</div></div>';
+                return;
+            }
+            node.innerHTML = pocs.map(function(poc){
+                var stage = poc.linkedStage ? (STAGE_LABELS[poc.linkedStage] || poc.linkedStage) : 'Detached';
+                var band = poc.qualityBand || 'thin';
+                var bandLabel = band === 'ready' ? 'Ready now' : band === 'workable' ? 'Workable' : 'Thin';
+                return '<div class="proof-item">' +
+                    '<div class="proof-item-title">' + escH(poc.account || 'Unnamed account') + '</div>' +
+                    '<div class="proof-item-copy">' + escH(stage) + ' · ' + escH(poc.outcome || 'in_progress') + ' · ' + escH(fmtDate(poc.updated || poc.created)) + '</div>' +
+                    '<div class="proof-chip ' + band + '">' + escH(bandLabel) + ' · ' + Number(poc.qualityScore || 0) + '/100</div>' +
+                '</div>';
+            }).join('');
+        }
         
         window.setDuration = function(n) {
             durationDays = n;
@@ -305,11 +531,16 @@
             const account = safe(val('in_account'), '[Prospect]');
             const success = val('in_success') || 'Define success criteria';
             const boundaries = val('in_boundaries') || 'Define boundaries';
+            const quality = getPoCQuality();
+            const linkedDeal = quality.linkedDeal;
+            const readoutOwner = safe(val('in_readout_owner'), linkedDeal ? (linkedDeal.economicBuyer || linkedDeal.champion || '[Decision owner]') : '[Decision owner]');
+            const stageLabel = linkedDeal ? (STAGE_LABELS[linkedDeal.stage] || linkedDeal.stage || 'Prospect') : 'No linked deal';
             
             byId('out_scope').textContent = `POC SCOPE DOCUMENT
 ${account} x ${vendor}
 
 DURATION: ${durationDays} days
+LINKED DEAL STAGE: ${stageLabel}
 
 HYPOTHESIS:
 We believe ${vendor} can [specific outcome] for ${account} by [specific mechanism].
@@ -323,6 +554,7 @@ ${boundaries}
 REQUIRED PARTICIPANTS:
 - ${account}: Champion + 1 technical resource
 - ${vendor}: AE + SE
+- Readout owner: ${readoutOwner}
 
 NEXT STEP IF SUCCESSFUL:
 Commercial discussion with economic buyer within 5 business days of readout.`;
@@ -342,7 +574,7 @@ Commercial discussion with economic buyer within 5 business days of readout.`;
 
 4. [5 min] Schedule readout
    - Date: Day ${durationDays}
-   - Required attendees: Champion + Economic Buyer
+   - Required attendees: Champion + ${readoutOwner}
    - Decision expected at readout: Go/No-Go`;
 
             byId('out_readout').textContent = `POC READOUT AGENDA (30 min)
@@ -370,6 +602,9 @@ Following our conversation, I wanted to formalize the proof of concept structure
 WHAT WE'RE TESTING:
 [Specific hypothesis]
 
+WHY NOW:
+${quality.next}
+
 SUCCESS CRITERIA:
 ${success}
 
@@ -381,7 +616,7 @@ TIMELINE:
 WHAT WE NEED FROM YOU:
 - 30 min for kickoff
 - [Specific data/access]
-- Decision maker at readout
+- ${readoutOwner} at readout
 
 WHAT WE WON'T DO:
 ${boundaries}
@@ -390,6 +625,9 @@ Does this structure work? Happy to adjust based on your constraints.
 
 Best,
 [Your name]`;
+            renderPoCBridge();
+            renderPoCQuality();
+            byId('stat_quality').textContent = quality.bandLabel;
         };
         
         window.copyOut = function(id) {
@@ -404,6 +642,8 @@ Best,
         window.resetForm = function() {
             byId('in_vendor').value = '';
             byId('in_account').value = '';
+            byId('in_linked_deal').value = '';
+            byId('in_readout_owner').value = '';
             setDuration(7);
             byId('in_success').value = `1) Customer can validate the output in <2 minutes
 2) We reduce manual steps by ~30% for the selected workflow
@@ -414,18 +654,65 @@ Best,
             byId('pocOutcome').value = 'in_progress';
             generatePoC();
         };
+
+        window.onLinkedDealChange = function() {
+            var linkedDeal = getLinkedDeal();
+            applyLinkedDealDefaults(linkedDeal);
+            generatePoC();
+        };
+
+        function buildDownloadPayload() {
+            var quality = getPoCQuality();
+            return {
+                vendor: val('in_vendor'),
+                account: val('in_account'),
+                linkedDealId: quality.linkedDeal ? quality.linkedDeal.id : '',
+                linkedDealStage: quality.linkedDeal ? (quality.linkedDeal.stage || '') : '',
+                readoutOwner: val('in_readout_owner'),
+                durationDays: durationDays,
+                outcome: byId('pocOutcome').value,
+                qualityScore: quality.score,
+                qualityBand: quality.band,
+                outputs: {
+                    scope: byId('out_scope').textContent,
+                    kickoff: byId('out_kickoff').textContent,
+                    readout: byId('out_readout').textContent,
+                    email: byId('out_email').textContent
+                },
+                exportedAt: new Date().toISOString()
+            };
+        }
         
         window.downloadAll = function() {
-            let content = byId('out_scope').textContent + '\n\n---\n\n';
-            content += byId('out_kickoff').textContent + '\n\n---\n\n';
-            content += byId('out_readout').textContent + '\n\n---\n\n';
-            content += byId('out_email').textContent;
-            
-            const blob = new Blob([content], { type: 'text/plain' });
+            var format = byId('pocDownloadFmt').value;
+            var payload = buildDownloadPayload();
+            var filenameBase = slugify((payload.account || 'poc-framework') + '-' + (payload.linkedDealStage || 'proof'));
+            var content = '';
+            var type = 'text/plain';
+            var ext = 'txt';
+            if (format === 'csv') {
+                ext = 'csv';
+                type = 'text/csv';
+                content = [
+                    'section,content',
+                    '"scope","' + payload.outputs.scope.replace(/"/g, '""').replace(/\n/g, ' | ') + '"',
+                    '"kickoff","' + payload.outputs.kickoff.replace(/"/g, '""').replace(/\n/g, ' | ') + '"',
+                    '"readout","' + payload.outputs.readout.replace(/"/g, '""').replace(/\n/g, ' | ') + '"',
+                    '"email","' + payload.outputs.email.replace(/"/g, '""').replace(/\n/g, ' | ') + '"'
+                ].join('\n');
+            } else if (format === 'json') {
+                ext = 'json';
+                type = 'application/json';
+                content = JSON.stringify(payload, null, 2);
+            } else {
+                content = payload.outputs.scope + '\n\n---\n\n' + payload.outputs.kickoff + '\n\n---\n\n' + payload.outputs.readout + '\n\n---\n\n' + payload.outputs.email;
+            }
+
+            const blob = new Blob([content], { type: type });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'poc-framework.txt';
+            a.download = filenameBase + '.' + ext;
             a.click();
             URL.revokeObjectURL(url);
         };
@@ -444,28 +731,81 @@ Best,
             }
         }
 
-        window.savePoC = function() {
+        async function syncPocIntoDeal(pocEntry) {
+            if (!pocEntry.linkedDeal) return;
+            var deals = getDeals();
+            var deal = deals.find(function(d){ return d && d.id === pocEntry.linkedDeal; });
+            if (!deal) return;
+            deal.poc = {
+                duration: pocEntry.duration,
+                success: pocEntry.success,
+                boundaries: pocEntry.boundaries,
+                outcome: pocEntry.outcome,
+                readoutOwner: pocEntry.readoutOwner,
+                qualityScore: pocEntry.qualityScore,
+                qualityBand: pocEntry.qualityBand,
+                updatedAt: pocEntry.updated || pocEntry.created
+            };
+            if (!deal.nextStep && deal.stage === 'evaluation') {
+                deal.nextStep = 'PoC kickoff and success criteria';
+            }
+            deal.updated_at = new Date().toISOString();
+            localStorage.setItem('gtmos_deal_workspaces', JSON.stringify(deals));
+            if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.save === 'function') {
+                await window.gtmPersistence.deals.save(deal).catch(function(error){
+                    console.error('PoC Framework deal sync failed:', error);
+                });
+            }
+        }
+
+        window.savePoC = async function() {
             var pocList = readPocList();
+            var quality = getPoCQuality();
             var pocEntry = {
                 id: 'poc_' + Date.now(),
                 vendor: val('in_vendor'),
                 account: val('in_account'),
+                linkedDeal: quality.linkedDeal ? quality.linkedDeal.id : '',
+                linkedStage: quality.linkedDeal ? quality.linkedDeal.stage : '',
+                readoutOwner: val('in_readout_owner'),
                 duration: durationDays,
                 success: val('in_success'),
                 boundaries: val('in_boundaries'),
                 outcome: byId('pocOutcome').value,
-                created: new Date().toISOString()
+                qualityScore: quality.score,
+                qualityBand: quality.band,
+                created: new Date().toISOString(),
+                updated: new Date().toISOString()
             };
             // Check if updating existing PoC for same account
-            var existingIdx = pocList.pocs.findIndex(function(p){ return p.account === pocEntry.account && pocEntry.account; });
+            var existingIdx = pocList.pocs.findIndex(function(p){
+                return (p.linkedDeal && pocEntry.linkedDeal && p.linkedDeal === pocEntry.linkedDeal)
+                    || (p.account === pocEntry.account && p.vendor === pocEntry.vendor && pocEntry.account);
+            });
             if (existingIdx >= 0) {
+                pocEntry.id = pocList.pocs[existingIdx].id || pocEntry.id;
+                pocEntry.created = pocList.pocs[existingIdx].created || pocEntry.created;
                 pocList.pocs[existingIdx] = pocEntry;
             } else {
                 pocList.pocs.push(pocEntry);
             }
             writePocList(pocList);
+            await syncPocIntoDeal(pocEntry);
+            if (window.ArtifactStore && typeof window.ArtifactStore.save === 'function') {
+                window.ArtifactStore.save({
+                    studio: 'poc_framework',
+                    artifact_type: 'proof_plan',
+                    title: (pocEntry.account || 'PoC Framework') + ' proof plan',
+                    tags: ['poc', pocEntry.linkedStage || 'unlinked', pocEntry.outcome || 'in_progress'],
+                    payload: buildDownloadPayload(),
+                    meta: { qualityScore: pocEntry.qualityScore, qualityBand: pocEntry.qualityBand },
+                    outcome: pocEntry.outcome
+                }).catch(function(error){
+                    console.error('PoC Framework artifact save failed:', error);
+                });
+            }
             updatePocStats();
-            alert('PoC saved!');
+            alert('PoC saved.');
             if (window.saveIndicator) saveIndicator.saved();
         };
         
@@ -474,11 +814,27 @@ Best,
             var pocs = pocList.pocs || [];
             var total = pocs.length;
             var converted = pocs.filter(function(p){ return p.outcome === 'converted'; }).length;
+            var inProgress = pocs.filter(function(p){ return p.outcome === 'in_progress'; }).length;
+            var linked = pocs.filter(function(p){ return !!p.linkedDeal; }).length;
             var rate = total > 0 ? Math.round(converted / total * 100) + '%' : '-';
             byId('stat_total').textContent = total;
             byId('stat_converted').textContent = converted;
             byId('stat_rate').textContent = rate;
+            byId('stat_progress').textContent = inProgress;
+            byId('stat_linked').textContent = linked;
+            byId('stat_quality').textContent = getPoCQuality().bandLabel;
+            renderRecentProofs();
         }
+
+        window.openLinkedDealWorkspace = function() {
+            var linkedDeal = getLinkedDeal();
+            location.href = linkedDeal ? ('/app/deal-workspace/?deal=' + encodeURIComponent(linkedDeal.id)) : '/app/deal-workspace/';
+        };
+
+        window.openFutureAutopsy = function() {
+            var linkedDeal = getLinkedDeal();
+            location.href = linkedDeal ? ('/app/future-autopsy/?deal=' + encodeURIComponent(linkedDeal.id)) : '/app/future-autopsy/';
+        };
 
         function showPocBootState(kind, title, text) {
             if (!window.gtmModuleBootState) return;
@@ -520,6 +876,15 @@ Best,
                 await window.gtmPersistence.docs.load({ keys: ['gtmos_poc_data'] }).catch(function(error) {
                     console.error('PoC Framework docs preload failed:', error);
                 });
+            }
+            if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.load === 'function') {
+                await window.gtmPersistence.deals.load().catch(function(error) {
+                    console.error('PoC Framework deals preload failed:', error);
+                });
+            }
+            populateDealDropdown();
+            if (urlDealId) {
+                applyLinkedDealDefaults(getLinkedDeal());
             }
             generatePoC();
             updatePocStats();

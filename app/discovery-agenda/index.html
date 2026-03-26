@@ -18,6 +18,31 @@
         .cp-persona-btn{padding:8px 14px;border-radius:var(--radius-full);font-size:0.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.2s;}
         .cp-persona-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
         .cp-persona-btn.active{border-color:var(--brand-gold);color:var(--brand-gold);background:rgba(212,165,116,0.08);}
+        .cp-bridge{background:linear-gradient(135deg, rgba(212,165,116,0.12), rgba(59,130,246,0.05));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-xl);padding:22px;margin-bottom:var(--space-lg);}
+        .cp-bridge-k{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
+        .cp-bridge-title{font-size:1.12rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+        .cp-bridge-copy{font-size:0.88rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:16px;}
+        .cp-bridge-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+        .cp-bridge-block{padding:14px 16px;border-radius:var(--radius-lg);background:rgba(6,10,18,0.28);border:1px solid rgba(255,255,255,0.06);}
+        .cp-bridge-label{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.45px;color:var(--text-muted);font-weight:700;margin-bottom:7px;}
+        .cp-bridge-value{font-size:0.82rem;color:var(--text-secondary);line-height:1.55;}
+        .cp-quality{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:var(--space-md);}
+        .cp-quality-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px;}
+        .cp-quality-head{display:flex;flex-direction:column;gap:4px;}
+        .cp-quality-k{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;}
+        .cp-quality-title{font-size:1rem;font-weight:700;color:var(--text-primary);}
+        .cp-quality-copy{font-size:0.84rem;color:var(--text-tertiary);line-height:1.55;max-width:520px;}
+        .cp-band{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-full);font-size:0.76rem;font-weight:700;border:1px solid rgba(255,255,255,0.08);}
+        .cp-band.credible{background:rgba(34,197,94,0.1);color:#4ade80;border-color:rgba(34,197,94,0.24);}
+        .cp-band.workable{background:rgba(245,158,11,0.1);color:#fbbf24;border-color:rgba(245,158,11,0.24);}
+        .cp-band.thin{background:rgba(239,68,68,0.1);color:#f87171;border-color:rgba(239,68,68,0.24);}
+        .cp-gates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+        .cp-gate{padding:12px 14px;border-radius:var(--radius-md);border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);}
+        .cp-gate.met{border-color:rgba(34,197,94,0.22);background:rgba(34,197,94,0.07);}
+        .cp-gate-miss{border-color:rgba(239,68,68,0.18);background:rgba(239,68,68,0.05);}
+        .cp-gate-title{font-size:0.8rem;font-weight:700;color:var(--text-secondary);margin-bottom:4px;}
+        .cp-gate-copy{font-size:0.77rem;color:var(--text-muted);line-height:1.5;}
+        .cp-next{font-size:0.82rem;color:var(--brand-gold);font-weight:600;}
         .cp-agenda{display:none;animation:fadeUp 0.3s ease;}
         .cp-agenda.visible{display:block;}
         @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -45,6 +70,14 @@
         .cp-customize .cp-field label{display:block;font-size:0.72rem;font-weight:600;color:var(--text-secondary);margin-bottom:4px;}
         .cp-customize .cp-field input,.cp-customize .cp-field textarea{width:100%;padding:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;}
         .cp-customize .cp-field textarea{min-height:60px;resize:vertical;}
+        .cp-handoff{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:var(--space-md);}
+        .cp-handoff-head{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
+        .cp-handoff-title{font-size:0.96rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+        .cp-handoff-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.55;margin-bottom:14px;}
+        .cp-handoff-actions{display:flex;gap:10px;flex-wrap:wrap;}
+        .cp-handoff-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+        .cp-handoff-btn:hover{border-color:var(--border-hover);}
+        .cp-handoff-btn.primary{background:rgba(212,165,116,0.12);border-color:rgba(212,165,116,0.24);color:var(--brand-gold);}
         .cp-boot-state{display:none;margin-bottom:var(--space-md);padding:16px 18px;border-radius:var(--radius-lg);border:1px solid var(--border-default);background:var(--bg-secondary);}
         .cp-boot-state.visible{display:block;}
         .cp-boot-state.loading{border-color:rgba(59,130,246,0.25);background:rgba(59,130,246,0.05);}
@@ -57,6 +90,14 @@
         .cp-boot-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
         .cp-boot-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.76rem;font-weight:700;cursor:pointer;}
         .cp-boot-btn:hover{border-color:var(--border-hover);}
+        @media (max-width: 1024px){
+            .cp-bridge-grid,.cp-gates{grid-template-columns:1fr 1fr;}
+        }
+        @media (max-width: 720px){
+            .cp-bridge-grid,.cp-gates{grid-template-columns:1fr;}
+            .cp-search,.cp-outcome{flex-direction:column;}
+            .cp-outcome-btn{width:100%;}
+        }
     </style>
 </head>
 <body>
@@ -71,10 +112,11 @@
         <main class="app-main">
             <header class="app-header">
                 <h1 class="page-title">Call Planner</h1>
-                <p class="module-subtitle">Paste a name or LinkedIn URL. Get your agenda in 3 seconds.</p>
+                <p class="module-subtitle">Turn one contact, one reason now, and one path to advancement into a call that can actually move.</p>
             </header>
             <div class="app-content" style="max-width:720px;">
                 <div class="cp-boot-state" id="bootState"></div>
+                <div class="cp-bridge" id="plannerBridge"></div>
                 <div class="cp-search">
                     <div class="cp-search-field">
                         <label>Who are you calling?</label>
@@ -94,6 +136,7 @@
                 </div>
 
                 <div class="cp-agenda" id="agenda">
+                    <div class="cp-quality" id="qualityBlock"></div>
                     <div class="cp-context" id="contextBlock"></div>
                     <div class="cp-section">
                         <div class="cp-section-title"><span class="num">1</span> Suggested Opening</div>
@@ -107,6 +150,7 @@
                         <div class="cp-section-title"><span class="num">3</span> Why Now Angle</div>
                         <div id="whyNowBlock"></div>
                     </div>
+                    <div class="cp-handoff" id="handoffBlock"></div>
                     <div class="cp-outcome">
                         <button class="cp-outcome-btn advance" onclick="logOutcome('advanced')">&#10003; Advanced</button>
                         <button class="cp-outcome-btn noadvance" onclick="logOutcome('no-advance')">&#10007; No Advance</button>
@@ -114,10 +158,10 @@
                     </div>
                     <details class="cp-customize">
                         <summary>Customize this agenda</summary>
-                        <div class="cp-field"><label>Custom notes</label><textarea id="customNotes" placeholder="Add anything specific to this call..."></textarea></div>
-                        <div class="cp-field"><label>LinkedIn URL</label><input type="text" id="linkedinUrl" placeholder="https://linkedin.com/in/..."></div>
+                        <div class="cp-field"><label>Custom notes</label><textarea id="customNotes" placeholder="Add anything specific to this call..." oninput="if(window.refreshCallPlanner)window.refreshCallPlanner()"></textarea></div>
+                        <div class="cp-field"><label>LinkedIn URL</label><input type="text" id="linkedinUrl" placeholder="https://linkedin.com/in/..." oninput="if(window.refreshCallPlanner)window.refreshCallPlanner()"></div>
                         <div class="cp-field"><label>Link to deal</label>
-                            <select id="linkDeal"><option value="">-- No deal linked --</option></select>
+                            <select id="linkDeal" onchange="if(window.refreshCallPlanner)window.refreshCallPlanner()"><option value="">-- No deal linked --</option></select>
                         </div>
                     </details>
                 </div>
@@ -209,9 +253,13 @@
         var personaLabels={cxo:'C-Suite Executive',vp:'VP / Director',ops:'Operations Leader',it:'IT / Engineering Leader',finance:'Finance Leader',revops:'RevOps Leader'};
 
         var dealSelect=document.getElementById('linkDeal');
-        function populateDealDropdown(){
+        function getDeals(){
             var deals=readLS('gtmos_deal_workspaces',[]);
             if(!Array.isArray(deals))deals=Object.values(deals||{});
+            return deals;
+        }
+        function populateDealDropdown(){
+            var deals=getDeals();
             dealSelect.innerHTML='<option value="">-- No deal linked --</option>';
             deals.forEach(function(d){
                 var opt=document.createElement('option');
@@ -221,11 +269,171 @@
             });
         }
 
+        function getLinkedDeal(){
+            var id=dealSelect&&dealSelect.value?dealSelect.value:'';
+            if(!id)return null;
+            return getDeals().find(function(d){return d&&d.id===id;})||null;
+        }
+
+        function getAgendaQuality(){
+            var notes=((document.getElementById('customNotes')||{}).value||'').trim();
+            var linkedin=((document.getElementById('linkedinUrl')||{}).value||'').trim();
+            var linkedDeal=getLinkedDeal();
+            var hasSignal=!!(matchedAccount&&matchedAccount.signals&&matchedAccount.signals.length);
+            var hasContext=!!matchedAccount||!!linkedin;
+            var gates=[
+                {label:'Real person selected',met:contactName.length>=2,copy:'There is a named human or LinkedIn profile behind the plan.',weight:20},
+                {label:'Persona is chosen',met:!!persona,copy:'The questions are tuned to a concrete buyer lens.',weight:10},
+                {label:'Account context is present',met:hasContext,copy:'Signal Console match or LinkedIn profile gives the call a real target.',weight:20},
+                {label:'Why-now angle exists',met:hasSignal||notes.length>=20,copy:'There is either a live signal or enough custom context to justify the meeting.',weight:25},
+                {label:'Advancement path is linked',met:!!linkedDeal,copy:'A deal is attached so the call can move into pipeline truth instead of dying as notes.',weight:25}
+            ];
+            var score=gates.reduce(function(sum,gate){return sum+(gate.met?gate.weight:0);},0);
+            if(matchedAccount&&matchedAccount._heat>=85)score=Math.min(100,score+5);
+            var band=score>=85?'credible':score>=65?'workable':'thin';
+            var bandLabel=band==='credible'?'Credible':'workable'===band?'Workable':'Thin';
+            var next='Link a real deal before the call so advancement can land somewhere durable.';
+            if(!contactName.length)next='Choose the actual human first. A vague target gives you a vague call.';
+            else if(!hasContext)next='Add the LinkedIn profile or match the account in Signal Console so the agenda has real context.';
+            else if(!(hasSignal||notes.length>=20))next='Capture a real why-now angle before the meeting starts.';
+            else if(!linkedDeal)next='Link the call to the in-flight deal before you run it.';
+            else next='You have a credible agenda. Run the call, then move straight into Discovery Studio and Deal Workspace.';
+            return {
+                score:score,
+                band:band,
+                bandLabel:bandLabel,
+                gates:gates,
+                next:next,
+                linkedDeal:linkedDeal,
+                notes:notes,
+                linkedin:linkedin,
+                hasSignal:hasSignal
+            };
+        }
+
+        function renderPlannerBridge(){
+            var node=document.getElementById('plannerBridge');
+            if(!node)return;
+            var quality=getAgendaQuality();
+            var company=(matchedAccount&&matchedAccount.name)||'No signal-backed account matched yet';
+            var oneSessionWin=contactName.length>=2?'Leave this page with a real opener, 3 buyer-tuned questions, a why-now angle, and a next module to move into.':'Pick the person, set the persona, and link the call to a real deal before it happens.';
+            var downstream=quality.linkedDeal?'This agenda is attached to '+escH(quality.linkedDeal.accountName||'the linked deal')+' and can hand straight into Discovery Studio or Deal Workspace.':'This planner becomes truly durable once the call is linked to a live deal record.';
+            node.innerHTML=
+                '<div class="cp-bridge-k">Call planner bridge</div>'+
+                '<div class="cp-bridge-title">A good agenda changes the next call, not just this page.</div>'+
+                '<div class="cp-bridge-copy">Use Call Planner to tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.</div>'+
+                '<div class="cp-bridge-grid">'+
+                    '<div class="cp-bridge-block"><div class="cp-bridge-label">Current context</div><div class="cp-bridge-value">'+escH(company)+'</div></div>'+
+                    '<div class="cp-bridge-block"><div class="cp-bridge-label">One-session win</div><div class="cp-bridge-value">'+escH(oneSessionWin)+'</div></div>'+
+                    '<div class="cp-bridge-block"><div class="cp-bridge-label">Good agenda means</div><div class="cp-bridge-value">Real person. Real why now. Real path to advancement. No generic buyer theater.</div></div>'+
+                    '<div class="cp-bridge-block"><div class="cp-bridge-label">Downstream handshake</div><div class="cp-bridge-value">'+escH(downstream)+'</div></div>'+
+                '</div>';
+        }
+
+        function renderAgendaQuality(){
+            var node=document.getElementById('qualityBlock');
+            if(!node)return;
+            var quality=getAgendaQuality();
+            var gateHtml=quality.gates.map(function(gate){
+                return '<div class="cp-gate '+(gate.met?'met':'cp-gate-miss')+'">'+
+                    '<div class="cp-gate-title">'+escH(gate.label)+'</div>'+
+                    '<div class="cp-gate-copy">'+escH(gate.copy)+'</div>'+
+                '</div>';
+            }).join('');
+            node.innerHTML=
+                '<div class="cp-quality-top">'+
+                    '<div class="cp-quality-head">'+
+                        '<div class="cp-quality-k">Agenda quality</div>'+
+                        '<div class="cp-quality-title">'+quality.score+'/100 · '+escH(quality.bandLabel)+'</div>'+
+                        '<div class="cp-quality-copy">Good agenda means the meeting can actually advance: the person is clear, the why-now is credible, and the result has somewhere durable to land.</div>'+
+                    '</div>'+
+                    '<div class="cp-band '+quality.band+'">'+quality.bandLabel+'</div>'+
+                '</div>'+
+                '<div class="cp-gates">'+gateHtml+'</div>'+
+                '<div class="cp-next">Next move: '+escH(quality.next)+'</div>';
+        }
+
+        function renderAgendaHandoff(){
+            var node=document.getElementById('handoffBlock');
+            if(!node)return;
+            var quality=getAgendaQuality();
+            var dealCopy=quality.linkedDeal
+                ? 'This agenda is linked to '+(quality.linkedDeal.accountName||'the selected deal')+'. Run the call, then use Discovery Studio to manage the live conversation and Deal Workspace to record what changed.'
+                : 'You can run this call from here, but linking a deal will make the next step durable. Discovery Studio can still pick up the agenda state immediately.';
+            var dealLabel=quality.linkedDeal?'Open Linked Deal':'Open Deal Workspace';
+            node.innerHTML=
+                '<div class="cp-handoff-head">Next module handshake</div>'+
+                '<div class="cp-handoff-title">Do not let the agenda die here.</div>'+
+                '<div class="cp-handoff-copy">'+escH(dealCopy)+'</div>'+
+                '<div class="cp-handoff-actions">'+
+                    '<button class="cp-handoff-btn primary" type="button" onclick="openDiscoveryRun()">Open Discovery Studio</button>'+
+                    '<button class="cp-handoff-btn" type="button" onclick="openLinkedDealWorkspace()">'+escH(dealLabel)+'</button>'+
+                '</div>';
+        }
+
+        function getAgendaSnapshot(){
+            var quality=getAgendaQuality();
+            return {
+                contact:contactName,
+                company:matchedAccount?matchedAccount.name:(quality.linkedDeal?quality.linkedDeal.accountName:''),
+                persona:persona,
+                linkedDeal:quality.linkedDeal?quality.linkedDeal.id:'',
+                gates:quality.gates.map(function(g){return !!g.met;}),
+                gateDetails:quality.gates.map(function(g){return {label:g.label,met:!!g.met,copy:g.copy};}),
+                score:quality.score,
+                band:quality.bandLabel,
+                nextMove:quality.next,
+                signalHeadline:(quality.hasSignal&&matchedAccount&&matchedAccount.signals[0])?matchedAccount.signals[0].headline:'',
+                customNotes:quality.notes,
+                linkedinUrl:quality.linkedin,
+                preparedAt:new Date().toISOString()
+            };
+        }
+
+        async function persistAgendaState(outcomeType){
+            var stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+            var agenda=getAgendaSnapshot();
+            localStorage.setItem('gtmos_discovery_agenda',JSON.stringify(agenda));
+            var handoff={
+                contact:agenda.contact,
+                outcome:outcomeType||'planned',
+                timestamp:new Date().toISOString(),
+                linkedDeal:agenda.linkedDeal||null,
+                company:agenda.company||'',
+                persona:agenda.persona,
+                logType:outcomeType?'call_outcome':'call_plan',
+                summary:outcomeType?('Discovery call - '+outcomeType):'Discovery plan ready',
+                agendaScore:agenda.score,
+                agendaBand:agenda.band,
+                nextMove:agenda.nextMove
+            };
+            localStorage.setItem('gtmos_call_handoff',JSON.stringify(handoff));
+
+            if(window.gtmPersistence&&window.gtmPersistence.discovery){
+                if(typeof window.gtmPersistence.discovery.save==='function'){
+                    var synced=await window.gtmPersistence.discovery.save({
+                        currentCategory:(function(){try{return JSON.parse(localStorage.getItem('gtmos_product_category'))||'cxai'}catch(e){return localStorage.getItem('gtmos_product_category')||'cxai'}})(),
+                        workedIds:readLS('gtmos_discovery_worked',[]),
+                        stats:stats,
+                        agenda:agenda,
+                        handoff:handoff
+                    });
+                    if(synced&&synced.error)console.error('Discovery agenda sync failed:',synced.error);
+                }
+                if(outcomeType&&typeof window.gtmPersistence.discovery.logCall==='function'){
+                    var logged=await window.gtmPersistence.discovery.logCall(handoff);
+                    if(logged&&logged.error)console.error('Discovery call log failed:',logged.error);
+                }
+            }
+            return {agenda:agenda,handoff:handoff};
+        }
+
         window.setPer=function(btn){
             document.querySelectorAll('.cp-persona-btn').forEach(function(b){b.classList.remove('active');});
             btn.classList.add('active');
             persona=btn.dataset.p;
             if(contactName)buildAgenda();
+            else renderPlannerBridge();
         };
 
         window.onSearch=function(val){
@@ -241,11 +449,20 @@
                 buildAgenda();
             } else {
                 document.getElementById('agenda').classList.remove('visible');
+                renderPlannerBridge();
             }
+        };
+
+        window.refreshCallPlanner=function(){
+            if(contactName)buildAgenda();
+            else renderPlannerBridge();
         };
 
         function buildAgenda(){
             document.getElementById('agenda').classList.add('visible');
+            renderPlannerBridge();
+            renderAgendaQuality();
+            var linkedDeal=getLinkedDeal();
 
             // Context block
             var ctx='<div class="cp-context-title">Account Context</div><div class="cp-context-row">';
@@ -254,6 +471,7 @@
             if(matchedAccount){
                 ctx+='<div class="cp-context-item"><strong>Company:</strong> '+escH(matchedAccount.name)+'</div>';
                 if(matchedAccount.industry)ctx+='<div class="cp-context-item"><strong>Industry:</strong> '+escH(matchedAccount.industry)+'</div>';
+                if(linkedDeal)ctx+='<div class="cp-context-item"><strong>Linked Deal:</strong> '+escH(linkedDeal.accountName||'Selected deal')+' · '+escH((linkedDeal.stage||'prospect').replace('-',' '))+'</div>';
                 ctx+='</div>';
                 if(matchedAccount._heat){
                     var heatClass=matchedAccount._heat>=91?'hot':matchedAccount._heat>=75?'warm':'med';
@@ -263,6 +481,7 @@
                     ctx+='<div style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);">Top signal: '+escH(matchedAccount.signals[0].headline)+'</div>';
                 }
             } else {
+                if(linkedDeal)ctx+='<div class="cp-context-item"><strong>Linked Deal:</strong> '+escH(linkedDeal.accountName||'Selected deal')+' · '+escH((linkedDeal.stage||'prospect').replace('-',' '))+'</div>';
                 ctx+='</div><div style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);font-style:italic;">Not found in Signal Console. <a href="/app/signal-console/" style="color:var(--brand-gold);">Add account &rarr;</a></div>';
             }
             document.getElementById('contextBlock').innerHTML=ctx;
@@ -290,6 +509,7 @@
                 whyNow='<div style="font-size:0.88rem;color:var(--text-tertiary);font-style:italic;">Add this account to Signal Console to auto-generate a "why now" angle from real signals.</div>';
             }
             document.getElementById('whyNowBlock').innerHTML=whyNow;
+            renderAgendaHandoff();
         }
 
         window.logOutcome=async function(type){
@@ -297,30 +517,19 @@
             stats.totalCalls=(stats.totalCalls||0)+1;
             if(type==='advanced')stats.advancedCalls=(stats.advancedCalls||0)+1;
             localStorage.setItem('gtmos_discovery_stats',JSON.stringify(stats));
-
-            var agenda={contact:contactName,company:matchedAccount?matchedAccount.name:'',persona:persona,linkedDeal:document.getElementById('linkDeal').value,gates:[true,true,false,false]};
-            localStorage.setItem('gtmos_discovery_agenda',JSON.stringify(agenda));
-            var handoff={contact:contactName,outcome:type,timestamp:new Date().toISOString(),linkedDeal:agenda.linkedDeal||null,company:agenda.company||'',persona:persona,logType:'call_outcome',summary:'Discovery call - '+type};
-            localStorage.setItem('gtmos_call_handoff',JSON.stringify(handoff));
-
-            if(window.gtmPersistence&&window.gtmPersistence.discovery){
-                if(typeof window.gtmPersistence.discovery.save==='function'){
-                    var synced=await window.gtmPersistence.discovery.save({
-                        currentCategory:(function(){try{return JSON.parse(localStorage.getItem('gtmos_product_category'))||'cxai'}catch(e){return localStorage.getItem('gtmos_product_category')||'cxai'}})(),
-                        workedIds:readLS('gtmos_discovery_worked',[]),
-                        stats:stats,
-                        agenda:agenda,
-                        handoff:handoff
-                    });
-                    if(synced&&synced.error)console.error('Discovery agenda sync failed:',synced.error);
-                }
-                if(typeof window.gtmPersistence.discovery.logCall==='function'){
-                    var logged=await window.gtmPersistence.discovery.logCall(handoff);
-                    if(logged&&logged.error)console.error('Discovery call log failed:',logged.error);
-                }
-            }
-
+            await persistAgendaState(type);
             alert('Call logged: '+type.replace('-',' ')+'. Discovery stats updated.');
+        };
+
+        window.openDiscoveryRun=async function(){
+            await persistAgendaState(null);
+            location.href='/app/discovery-studio/';
+        };
+
+        window.openLinkedDealWorkspace=async function(){
+            var saved=await persistAgendaState(null);
+            var dealId=saved&&saved.agenda?saved.agenda.linkedDeal:'';
+            location.href=dealId?('/app/deal-workspace/?deal='+encodeURIComponent(dealId)):'/app/deal-workspace/';
         };
 
         async function bootDiscoveryAgenda(){
@@ -339,6 +548,7 @@
             }
             await syncSignalConsoleAccounts();
             populateDealDropdown();
+            renderPlannerBridge();
             clearBootState();
         }
 

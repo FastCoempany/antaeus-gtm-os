@@ -17,6 +17,26 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text2);line-height
 .shell{max-width:820px;margin:0 auto;padding:32px 24px 80px;}
 h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px;}
 .sub{font-size:0.82rem;color:var(--text3);margin-bottom:28px;}
+.bridge{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;margin-bottom:20px;}
+.bridge-k{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);font-weight:700;margin-bottom:8px;}
+.bridge-title{font-family:var(--serif);font-size:1.15rem;color:var(--text);margin-bottom:6px;line-height:1.15;}
+.bridge-copy{font-size:0.82rem;color:var(--text2);line-height:1.65;margin-bottom:14px;}
+.bridge-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+.bridge-block{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;}
+.bridge-label{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:700;margin-bottom:6px;}
+.bridge-value{font-size:0.77rem;color:var(--text2);line-height:1.55;}
+.context-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.context-chip{display:inline-flex;align-items:center;padding:5px 9px;border-radius:var(--r-full);border:1px solid var(--border);background:rgba(255,255,255,0.03);font-size:0.68rem;color:var(--text2);}
+.motion-card{background:rgba(212,165,116,0.06);border:1px solid rgba(212,165,116,0.16);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:16px;}
+.motion-k{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);font-weight:700;margin-bottom:6px;}
+.motion-title{font-size:1rem;color:var(--text);font-weight:700;margin-bottom:6px;}
+.motion-copy{font-size:0.8rem;color:var(--text2);line-height:1.6;margin-bottom:12px;}
+.motion-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.motion-point{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;}
+.motion-point-label{font-size:0.56rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:700;margin-bottom:5px;}
+.motion-point-copy{font-size:0.74rem;color:var(--text2);line-height:1.5;}
+.metric-note{font-size:0.72rem;color:var(--text3);margin-top:10px;line-height:1.55;}
+.log-sub{display:block;font-size:0.66rem;color:var(--text3);margin-top:2px;line-height:1.45;}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:24px;}
 .tab{padding:10px 16px;font-size:0.78rem;font-weight:600;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:inherit;transition:all 0.15s;}
 .tab:hover{color:var(--text3);}
@@ -62,7 +82,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
 .outcome-sel{padding:3px 6px;font-size:0.68rem;border-radius:var(--r-md);background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text2);font-family:inherit;}
 .toast{position:fixed;right:16px;bottom:16px;background:#1f1a14;color:#fff;padding:10px 16px;border-radius:var(--r-md);font-size:0.82rem;font-weight:600;opacity:0;transform:translateY(6px);transition:0.25s;pointer-events:none;z-index:99;}
 .toast.show{opacity:1;transform:none;}
-@media(max-width:700px){.log-form{grid-template-columns:1fr;}.stats{flex-wrap:wrap;}.stat{flex:1 1 50%;border-right:none;padding:4px 0;}}
+@media(max-width:700px){.bridge-grid,.motion-list{grid-template-columns:1fr;}.log-form{grid-template-columns:1fr;}.stats{flex-wrap:wrap;}.stat{flex:1 1 50%;border-right:none;padding:4px 0;}}
 
     </style>
 </head>
@@ -80,6 +100,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
 <div class="module-inner">
     <div id="linkedinBootState"></div>
     <h1>LinkedIn Playbook</h1>
+    <div id="liBridge"></div>
     <p class="sub">Methodology reference + tracking. Not automation — intelligence for how to show up on LinkedIn as a seller worth responding to.</p>
 
     <div class="tabs">
@@ -248,6 +269,7 @@ Worth 10 minutes? I'll make it count.
 
     <!-- ===== ACTIVITY LOG ===== -->
     <div class="panel" id="tab-log">
+        <div id="liMotion"></div>
         <div class="stats" id="liStats"></div>
         <div class="card">
             <div class="card-t">Log an Action</div>
@@ -293,6 +315,145 @@ async function syncLinkedInLog(data){
     }
     return {data:null,error:null};
 }
+
+function getLinkedInActions(){
+    var data=readLS('gtmos_linkedin_log',{actions:[]})||{actions:[]};
+    return Array.isArray(data.actions)?data.actions:[];
+}
+
+function getBestIcp(){
+    var analytics=readLS('gtmos_icp_analytics',{icps:[]})||{icps:[]};
+    var icps=Array.isArray(analytics.icps)?analytics.icps.slice():[];
+    icps.sort(function(a,b){return Number(b.qualityScore||0)-Number(a.qualityScore||0);});
+    return icps[0]||null;
+}
+
+function getHottestSignalAccount(){
+    var sc=readLS('gtmos_sc_v4',{accounts:[]})||{accounts:[]};
+    var accounts=Array.isArray(sc.accounts)?sc.accounts.slice():[];
+    accounts.sort(function(a,b){return Number(b._heat||0)-Number(a._heat||0);});
+    return accounts[0]||null;
+}
+
+function getLatestOutboundTouch(){
+    var touches=readLS('gtmos_outbound_touches',{touches:[]})||{touches:[]};
+    var rows=Array.isArray(touches.touches)?touches.touches.slice():[];
+    rows.sort(function(a,b){
+        return new Date(b.createdAt||b.savedAt||0).getTime()-new Date(a.createdAt||a.savedAt||0).getTime();
+    });
+    return rows[0]||null;
+}
+
+function getLinkedInStats(){
+    var actions=getLinkedInActions();
+    var conn=actions.filter(function(a){return a.actionType==='connection_request';}).length;
+    var accepted=actions.filter(function(a){return a.actionType==='connection_request'&&a.outcome==='accepted';}).length;
+    var dms=actions.filter(function(a){return a.actionType==='dm';}).length;
+    var replied=actions.filter(function(a){return a.actionType==='dm'&&a.outcome==='replied';}).length;
+    var byAccount={};
+    actions.forEach(function(a){
+        var key=String(a.accountName||'').trim().toLowerCase();
+        if(!key)return;
+        if(!byAccount[key])byAccount[key]={connection_request:0,dm:0};
+        if(a.actionType==='connection_request')byAccount[key].connection_request+=1;
+        if(a.actionType==='dm')byAccount[key].dm+=1;
+    });
+    return {
+        actions:actions,
+        total:actions.length,
+        connections:conn,
+        accepted:accepted,
+        dms:dms,
+        replies:replied,
+        acceptRate:conn>0?Math.round(accepted/conn*100):0,
+        replyRate:dms>0?Math.round(replied/dms*100):0,
+        byAccount:byAccount
+    };
+}
+
+function getLinkedInMotion(ctx){
+    var hottest=ctx.hottestAccount;
+    var touch=ctx.latestTouch;
+    var stats=ctx.stats;
+    var byAccountKey=hottest&&hottest.name?String(hottest.name).toLowerCase():'';
+    var byAccount=byAccountKey?(stats.byAccount[byAccountKey]||{connection_request:0,dm:0}):{connection_request:0,dm:0};
+    var motion={
+        key:'credibility',
+        label:'Build name familiarity before you ask for anything.',
+        actionType:'content_engage',
+        whyNow:'LinkedIn is strongest when it warms the name and gives your outbound touches more credibility instead of trying to replace every other channel.',
+        oneSession:'Leave two thoughtful comments on one target account and log the touch so the rest of the system knows LinkedIn is now part of the motion.',
+        nextMove:'After two meaningful engagements, send one specific connection request.',
+        thresholds:'Good enough means roughly 35%+ connection acceptance and 15%+ DM reply once the relationship has been warmed.',
+        accountName:hottest&&hottest.name?hottest.name:(touch&&touch.accountName?touch.accountName:''),
+        context:'No live signal is being worked yet, so use LinkedIn to create air cover and familiarity.'
+    };
+
+    if(hottest&&byAccount.connection_request===0){
+        motion.key='warm_signal_account';
+        motion.label='Warm the live signal account before the request.';
+        motion.actionType='content_engage';
+        motion.whyNow='A real signal already exists on '+hottest.name+', but LinkedIn trust is still cold. Use the channel to make the account recognize your name before you ask for access.';
+        motion.oneSession='Engage with one post, leave one smart comment, then queue a signal-led connection request for the same account.';
+        motion.nextMove='After 1-2 visible engagements, send one connection request tied to the active signal.';
+        motion.context='Signal Console says '+hottest.name+' is hot right now'+(hottest._heat?' (heat '+hottest._heat+')':'')+'.';
+    }else if(hottest&&byAccount.connection_request>0&&byAccount.dm===0){
+        motion.key='convert_connection';
+        motion.label='Convert the accepted connection into a conversation.';
+        motion.actionType='dm';
+        motion.whyNow='The connection motion has already started on '+hottest.name+'. The next useful move is not more liking - it is a rapport DM or give-first follow-up.';
+        motion.oneSession='Send one rapport DM or give-first note that references their world, not your product.';
+        motion.nextMove='If there is no reply after 3-5 days, send one give-first resource before asking for time.';
+        motion.context='LinkedIn already has an opening on '+hottest.name+'. Use it.';
+    }else if(touch&&touch.accountName){
+        motion.key='add_air_cover';
+        motion.label='Add LinkedIn air cover to the outbound motion already in flight.';
+        motion.actionType='content_share';
+        motion.whyNow='Outbound is already working '+touch.accountName+'. LinkedIn should reinforce that motion so the prospect sees your name in more than one place.';
+        motion.oneSession='Engage with their content or share one relevant insight, then log the action so the channel becomes part of the same motion.';
+        motion.nextMove='Return to the next outbound touch after the LinkedIn air-cover action is logged.';
+        motion.accountName=touch.accountName||motion.accountName;
+        motion.context='Latest outbound motion exists for '+touch.accountName+'.';
+    }
+    return motion;
+}
+
+function renderLinkedInBridge(){
+    var el=document.getElementById('liBridge');
+    if(!el)return;
+    var icp=getBestIcp();
+    var hottest=getHottestSignalAccount();
+    var touch=getLatestOutboundTouch();
+    var stats=getLinkedInStats();
+    var motion=getLinkedInMotion({icp:icp,hottestAccount:hottest,latestTouch:touch,stats:stats});
+    var chips=[];
+    if(icp)chips.push('<span class="context-chip">ICP: '+escH((icp.industry||'Market')+' | '+(icp.buyer||'Buyer')+(icp.qualityScore?' | '+icp.qualityScore+'/100':''))+'</span>');
+    if(hottest&&hottest.name)chips.push('<span class="context-chip">Signal: '+escH(hottest.name)+(hottest._heat?' | heat '+hottest._heat:'')+'</span>');
+    if(touch&&touch.accountName)chips.push('<span class="context-chip">Latest outbound touch: '+escH(touch.accountName)+'</span>');
+    if(!chips.length)chips.push('<span class="context-chip">No saved ICP, live signal, or outbound touch yet.</span>');
+    el.innerHTML='<div class="bridge"><div class="bridge-k">Channel bridge</div><div class="bridge-title">'+motion.label+'</div><div class="bridge-copy">'+motion.whyNow+'</div><div class="bridge-grid"><div class="bridge-block"><div class="bridge-label">Use case</div><div class="bridge-value">'+motion.context+'</div></div><div class="bridge-block"><div class="bridge-label">One-session win</div><div class="bridge-value">'+motion.oneSession+'</div></div><div class="bridge-block"><div class="bridge-label">Success thresholds</div><div class="bridge-value">'+motion.thresholds+'</div></div><div class="bridge-block"><div class="bridge-label">Downstream handshake</div><div class="bridge-value">Signal Console tells you where to point LinkedIn. Outbound Studio tells you what to reinforce. The log proves whether the channel is compounding.</div></div></div><div class="context-row">'+chips.join('')+'</div></div>';
+}
+
+function renderLinkedInMotion(){
+    var el=document.getElementById('liMotion');
+    if(!el)return;
+    var icp=getBestIcp();
+    var hottest=getHottestSignalAccount();
+    var touch=getLatestOutboundTouch();
+    var stats=getLinkedInStats();
+    var motion=getLinkedInMotion({icp:icp,hottestAccount:hottest,latestTouch:touch,stats:stats});
+    el.innerHTML='<div class="motion-card"><div class="motion-k">Recommended play</div><div class="motion-title">'+motion.label+'</div><div class="motion-copy">'+motion.whyNow+'</div><div class="motion-list"><div class="motion-point"><div class="motion-point-label">Action now</div><div class="motion-point-copy">'+motion.actionType.replace(/_/g,' ')+'</div></div><div class="motion-point"><div class="motion-point-label">One-session win</div><div class="motion-point-copy">'+motion.oneSession+'</div></div><div class="motion-point"><div class="motion-point-label">Next move</div><div class="motion-point-copy">'+motion.nextMove+'</div></div></div><button class="log-btn" onclick="useLinkedInRecommendedPlay()">Use Recommended Play</button><div class="metric-note">'+motion.thresholds+'</div></div>';
+}
+
+window.useLinkedInRecommendedPlay=function(){
+    var motion=getLinkedInMotion({icp:getBestIcp(),hottestAccount:getHottestSignalAccount(),latestTouch:getLatestOutboundTouch(),stats:getLinkedInStats()});
+    var accountInput=document.getElementById('liAccount');
+    var actionInput=document.getElementById('liAction');
+    if(accountInput&&!accountInput.value&&motion.accountName)accountInput.value=motion.accountName;
+    if(actionInput)actionInput.value=motion.actionType;
+    showTab('log');
+    toast('Recommended play loaded');
+};
 
 window.showTab=function(id){
     document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
@@ -426,6 +587,106 @@ async function bootLinkedInPlaybook(){
     renderLog();
     clearLinkedInBootState();
 }
+
+window.logAction=async function(){
+    var data=readLS('gtmos_linkedin_log',{actions:[]});
+    var motion=getLinkedInMotion({icp:getBestIcp(),hottestAccount:getHottestSignalAccount(),latestTouch:getLatestOutboundTouch(),stats:getLinkedInStats()});
+    var account=document.getElementById('liAccount').value.trim();
+    var contact=document.getElementById('liContact').value.trim();
+    var action=document.getElementById('liAction').value;
+    if(!account&&!contact){toast('Enter account or contact');return;}
+    data.actions.push({
+        id:'li_'+Date.now(),
+        accountName:account,
+        contactName:contact,
+        actionType:action,
+        temperature:'ice_cold',
+        content:'',
+        motionKey:motion.key,
+        motionLabel:motion.label,
+        whyNow:motion.whyNow,
+        recommendedNext:motion.nextMove,
+        outcome:null,
+        outcomeDate:null,
+        createdAt:new Date().toISOString()
+    });
+    writeLS('gtmos_linkedin_log',data);
+    await syncLinkedInLog(data);
+    document.getElementById('liAccount').value='';
+    document.getElementById('liContact').value='';
+    renderLinkedInBridge();
+    renderLog();
+    toast('Action logged');
+};
+
+renderLog=function(){
+    var stats=getLinkedInStats();
+    var actions=stats.actions||[];
+    var total=stats.total;
+    var conn=stats.connections;
+    var accRate=stats.acceptRate;
+    var dms=stats.dms;
+    var respRate=stats.replyRate;
+    renderLinkedInMotion();
+
+    document.getElementById('liStats').innerHTML=
+        '<div class="stat"><div class="stat-v">'+total+'</div><div class="stat-l">Total Actions</div></div>'+
+        '<div class="stat"><div class="stat-v">'+conn+'</div><div class="stat-l">Connections</div></div>'+
+        '<div class="stat"><div class="stat-v'+(accRate>=35?' green':'')+'">'+accRate+'%</div><div class="stat-l">Accept Rate</div></div>'+
+        '<div class="stat"><div class="stat-v">'+dms+'</div><div class="stat-l">DMs Sent</div></div>'+
+        '<div class="stat"><div class="stat-v gold">'+respRate+'%</div><div class="stat-l">DM Response</div></div>';
+
+    if(actions.length===0){
+        document.getElementById('liTable').innerHTML='<div class="log-empty">No LinkedIn activity logged yet.</div>';
+        return;
+    }
+
+    var html='<table class="log-table"><tr><th>Date</th><th>Account</th><th>Contact</th><th>Action</th><th>Play</th><th>Outcome</th></tr>';
+    actions.slice().reverse().forEach(function(a,i){
+        var idx=actions.length-1-i;
+        var labels={connection_request:'Connect',dm:'DM',inmail:'InMail',content_engage:'Engage',content_share:'Share'};
+        html+='<tr><td>'+(a.createdAt?new Date(a.createdAt).toLocaleDateString():'')+'</td><td>'+escH(a.accountName)+'</td><td>'+escH(a.contactName)+'</td><td>'+(labels[a.actionType]||a.actionType)+'</td><td>'+escH(a.motionLabel||'Tracked motion')+(a.recommendedNext?'<span class="log-sub">'+escH(a.recommendedNext)+'</span>':'')+'</td>';
+        html+='<td><select class="outcome-sel" onchange="updateLiOutcome('+idx+',this.value)"><option value="">-</option>';
+        ['accepted','replied','no_response','declined'].forEach(function(o){
+            html+='<option value="'+o+'"'+(a.outcome===o?' selected':'')+'>'+o.replace(/_/g,' ')+'</option>';
+        });
+        html+='</select></td></tr>';
+    });
+    html+='</table><div class="metric-note">Good enough means roughly 35%+ connection acceptance and 15%+ DM reply once the channel has been warmed. If you are below that, the requests are too cold or the asks are arriving too early.</div>';
+    document.getElementById('liTable').innerHTML=html;
+};
+
+window.updateLiOutcome=async function(idx,val){
+    var data=readLS('gtmos_linkedin_log',{actions:[]});
+    if(data.actions[idx]){
+        data.actions[idx].outcome=val||null;
+        data.actions[idx].outcomeDate=val?new Date().toISOString():null;
+        writeLS('gtmos_linkedin_log',data);
+        await syncLinkedInLog(data);
+        renderLinkedInBridge();
+        renderLog();
+        toast('Updated');
+    }
+};
+
+bootLinkedInPlaybook=async function(){
+    showLinkedInBootState(
+        'loading',
+        'Loading LinkedIn Playbook...',
+        'Antaeus is rebuilding your LinkedIn activity log and channel guidance.'
+    );
+    if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.load==='function'){
+        var loaded=await window.gtmPersistence.sequences.load();
+        if(loaded&&loaded.error)console.error('Sequence load failed:',loaded.error);
+    }
+    var sub=document.querySelector('.sub');
+    if(sub)sub.textContent='Operationalize LinkedIn as a real GTM channel: when to engage, when to connect, when to DM, and what good looks like.';
+    var bridge=document.getElementById('liBridge');
+    if(sub&&bridge&&sub.nextElementSibling!==bridge)sub.insertAdjacentElement('afterend',bridge);
+    renderLinkedInBridge();
+    renderLog();
+    clearLinkedInBootState();
+};
 
 if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
     showLinkedInBootState(

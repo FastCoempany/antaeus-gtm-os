@@ -9,10 +9,30 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
+        .dw-bridge{background:linear-gradient(135deg, rgba(212,165,116,0.1), rgba(59,130,246,0.04));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-xl);padding:22px;margin-bottom:var(--space-md);}
+        .dw-bridge-k{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
+        .dw-bridge-title{font-size:1.08rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+        .dw-bridge-copy{font-size:0.84rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:14px;}
+        .dw-bridge-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+        .dw-bridge-block{padding:14px 16px;border-radius:var(--radius-lg);background:rgba(6,10,18,0.28);border:1px solid rgba(255,255,255,0.06);}
+        .dw-bridge-label{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.45px;color:var(--text-muted);font-weight:700;margin-bottom:7px;}
+        .dw-bridge-value{font-size:0.8rem;color:var(--text-secondary);line-height:1.55;}
+        .dw-bridge-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+        .dw-bridge-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.75rem;font-weight:700;cursor:pointer;}
+        .dw-bridge-btn:hover{border-color:var(--border-hover);}
+        .dw-bridge-btn.primary{background:rgba(212,165,116,0.1);border-color:rgba(212,165,116,0.24);color:var(--brand-gold);}
         .dw-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-sm);margin-bottom:var(--space-md);}
         .dw-stat{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;text-align:center;}
         .dw-stat-val{font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);}
         .dw-stat-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+        .dw-recovery{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:var(--space-md);}
+        .dw-recovery-head{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
+        .dw-recovery-title{font-size:0.96rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+        .dw-recovery-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.55;margin-bottom:12px;}
+        .dw-recovery-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+        .dw-recovery-item{padding:12px 14px;border-radius:var(--radius-md);background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);}
+        .dw-recovery-item-title{font-size:0.8rem;font-weight:700;color:var(--text-secondary);margin-bottom:4px;}
+        .dw-recovery-item-copy{font-size:0.75rem;color:var(--text-muted);line-height:1.5;}
         .dw-filter{margin-bottom:var(--space-md);display:flex;gap:8px;align-items:center;}
         .dw-filter select{padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.82rem;font-family:inherit;}
         .dw-filter select:focus{outline:none;border-color:var(--brand-gold);}
@@ -49,6 +69,10 @@
         .dw-card-forecast.bestCase{background:rgba(59,130,246,0.08);color:#3b82f6;border-color:rgba(59,130,246,0.2);}
         .dw-card-forecast.upside{background:rgba(168,85,247,0.08);color:#a855f7;border-color:rgba(168,85,247,0.2);}
         .dw-card-forecast.pipeline{background:rgba(100,116,139,0.08);color:#94a3b8;border-color:rgba(100,116,139,0.2);}
+        .dw-card-qual{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;border:1px solid;}
+        .dw-card-qual.strong{background:rgba(34,197,94,0.08);color:#22c55e;border-color:rgba(34,197,94,0.2);}
+        .dw-card-qual.workable{background:rgba(245,158,11,0.08);color:#f59e0b;border-color:rgba(245,158,11,0.2);}
+        .dw-card-qual.thin{background:rgba(239,68,68,0.08);color:#ef4444;border-color:rgba(239,68,68,0.2);}
         .dw-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
         .dw-chip{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:600;}
         .dw-chip.filled{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2);}
@@ -56,6 +80,7 @@
         .dw-chip.empty:hover{border-color:var(--border-hover);}
         .dw-chip.thread{background:rgba(59,130,246,0.08);color:#3b82f6;border:1px solid rgba(59,130,246,0.2);}
         .dw-chip.thread.warn{background:rgba(239,68,68,0.08);color:#ef4444;border-color:rgba(239,68,68,0.2);}
+        .dw-recovery-tag{font-size:0.65rem;color:#f59e0b;margin-top:8px;font-weight:600;}
         .dw-next{font-size:0.8rem;color:var(--text-tertiary);border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;margin-top:6px;}
         .dw-next strong{color:var(--text-secondary);}
         .dw-next-date{font-size:0.7rem;margin-left:6px;padding:1px 6px;border-radius:var(--radius-full);font-weight:600;}
@@ -93,6 +118,8 @@
         .dw-modal-btn.primary{background:var(--brand-gold);color:var(--bg-primary);}
         .dw-modal-btn.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border-default);}
         .dw-modal-btn.danger{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);}
+        .dw-create-guide{padding:12px 14px;border-radius:var(--radius-md);background:rgba(212,165,116,0.06);border:1px solid rgba(212,165,116,0.16);font-size:0.78rem;color:var(--text-tertiary);line-height:1.55;margin-bottom:14px;}
+        .dw-create-guide strong{color:var(--brand-gold);}
         .dw-accordion summary{font-size:0.7rem;color:var(--text-muted);cursor:pointer;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 0;}
         .dw-accordion[open] summary{color:var(--text-secondary);}
         /* Stakeholder rows */
@@ -120,7 +147,8 @@
         .dw-loss-notes textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;min-height:60px;resize:vertical;}
         .dw-loss-notes textarea:focus{outline:none;border-color:var(--brand-gold);}
         .dw-loss-actions{display:flex;justify-content:space-between;margin-top:20px;}
-        @media(max-width:700px){.dw-stats{grid-template-columns:repeat(2,1fr);}.dw-grid{grid-template-columns:1fr;}.dw-modal-row,.dw-modal-row3{grid-template-columns:1fr;}.dw-sh-row{grid-template-columns:1fr;}}
+        @media(max-width:1024px){.dw-bridge-grid,.dw-recovery-list{grid-template-columns:1fr 1fr;}}
+        @media(max-width:700px){.dw-stats,.dw-bridge-grid,.dw-recovery-list{grid-template-columns:1fr;}.dw-grid{grid-template-columns:1fr;}.dw-modal-row,.dw-modal-row3{grid-template-columns:1fr;}.dw-sh-row{grid-template-columns:1fr;}}
     </style>
 </head>
 <body>
@@ -141,6 +169,7 @@
             </header>
             <div class="app-content">
                 <div id="dwBootState"></div>
+                <div id="dwBridge"></div>
                 <div class="dw-stats" id="dealStats"></div>
                 <div class="dw-filter">
                     <select id="viewFilter" onchange="render()">
@@ -153,6 +182,7 @@
                     </select>
                     <span class="dw-filter-count" id="filterCount"></span>
                 </div>
+                <div id="recoveryPanel"></div>
                 <div class="dw-grid" id="dealGrid"></div>
                 <div id="dealEmpty"></div>
             </div>
@@ -163,6 +193,7 @@
     <div class="dw-modal-overlay" id="dealModal">
         <div class="dw-modal">
             <div class="dw-modal-title" id="modalTitle">New Deal</div>
+            <div class="dw-create-guide" id="createGuide"><strong>Good deal record means:</strong> account, value, stage, next step, and the first qualification truth. Do not leave this as a name-only shell.</div>
             <input type="hidden" id="editId">
             <input type="hidden" id="editPrevStage">
             <div class="dw-modal-field"><label>Account Name *</label><input type="text" id="mAccount" placeholder="e.g. Globex Corp"></div>
@@ -365,6 +396,136 @@
             return {data:{accounts:signalConsoleAccounts},error:null};
         }
 
+        function getQualification(deal){
+            var threading=threadingDepth(deal);
+            var checks=[
+                {label:'Champion',met:!!deal.champion,copy:'Someone internal is carrying the deal.'},
+                {label:'Economic buyer',met:!!deal.economicBuyer,copy:'The owner of the money is named.'},
+                {label:'Use case',met:!!deal.useCase,copy:'The buying event is concrete, not abstract.'},
+                {label:'Pain',met:!!deal.pain,copy:'The cost of doing nothing is written down.'},
+                {label:'Process',met:!!deal.decisionProcess,copy:'The approval path is visible.'},
+                {label:'Next step',met:!!deal.nextStep&&!!deal.nextStepDate,copy:'A dated next move exists.'},
+                {label:'Threading',met:threading.engaged>=2,copy:'At least 2 engaged stakeholders are in play.'}
+            ];
+            var score=checks.reduce(function(sum,c){return sum+(c.met?Math.floor(100/checks.length):0);},0);
+            if(score>100)score=100;
+            var band=score>=82?'strong':score>=58?'workable':'thin';
+            var bandLabel=band==='strong'?'Strong':'workable'===band?'Workable':'Thin';
+            var next='Name the champion and date the next step first.';
+            if(!deal.champion)next='Name the champion before calling this deal healthy.';
+            else if(!deal.economicBuyer)next='Identify the economic buyer before the deal graduates.';
+            else if(!(deal.nextStep&&deal.nextStepDate))next='Put a dated next step on the deal immediately.';
+            else if(!deal.decisionProcess&&(STAGE_ORDER[deal.stage]||0)>=2)next='Document the decision process before evaluation turns into drift.';
+            else if(threading.engaged<2)next='Thread at least one more stakeholder into the deal.';
+            else next='Qualification is credible enough to run a real pipeline review.';
+            return {score:score,band:band,bandLabel:bandLabel,checks:checks,next:next,threading:threading};
+        }
+
+        function getRecoveryReason(deal){
+            if(deal.stage==='closed-won'||deal.stage==='closed-lost')return '';
+            if(!deal.nextStep||!deal.nextStepDate)return 'No dated next step';
+            if(isOverdue(deal.nextStepDate))return 'Next step overdue';
+            if(daysBetween(deal.updated_at||deal.created_at)>=14)return 'No movement in 14+ days';
+            if(getQualification(deal).band==='thin'&&(STAGE_ORDER[deal.stage]||0)>=2)return 'Qualification too thin for stage';
+            return '';
+        }
+
+        function getRecoveryMoves(deals){
+            return deals.filter(function(d){return !!getRecoveryReason(d);}).slice(0,3).map(function(d){
+                return {
+                    id:d.id,
+                    account:d.accountName||'Unnamed deal',
+                    reason:getRecoveryReason(d),
+                    move:!d.nextStep?'Add a dated next step now.'
+                        : isOverdue(d.nextStepDate)?'Reset the thread and get the next step re-anchored.'
+                        : getQualification(d).band==='thin'?'Fill champion / EB / process before pushing the stage.'
+                        :'Re-open the account and force a real status check.'
+                };
+            });
+        }
+
+        function renderWorkspaceBridge(allDeals,active,pipeline,weighted){
+            var node=document.getElementById('dwBridge');
+            if(!node)return;
+            var recovery=getRecoveryMoves(allDeals);
+            var topDeal=active.slice().sort(function(a,b){return Number(b.value||0)-Number(a.value||0);})[0];
+            var topDealLabel=topDeal?(topDeal.accountName+' · '+fmtN(topDeal.value||0)):'No active deal yet';
+            var oneSession=active.length===0
+                ? 'Create one real deal with account, value, stage, next step, and the first qualification truth.'
+                : 'Leave this page knowing which deal is healthiest, which deal is rotting, and what the next dated move is on both.';
+            var nodeHtml=
+                '<div class="dw-bridge">'+
+                    '<div class="dw-bridge-k">Pipeline truth</div>'+
+                    '<div class="dw-bridge-title">Deal Workspace should be the place pipeline review gets sharper, not fuzzier.</div>'+
+                    '<div class="dw-bridge-copy">Use this board as the operating truth for live opportunities. A real deal record has qualification, threading, momentum, and a dated next step. If any of those are missing, the deal is weaker than the stage says.</div>'+
+                    '<div class="dw-bridge-grid">'+
+                        '<div class="dw-bridge-block"><div class="dw-bridge-label">One-session win</div><div class="dw-bridge-value">'+escH(oneSession)+'</div></div>'+
+                        '<div class="dw-bridge-block"><div class="dw-bridge-label">Current review target</div><div class="dw-bridge-value">'+escH(topDealLabel)+'</div></div>'+
+                        '<div class="dw-bridge-block"><div class="dw-bridge-label">Weighted truth</div><div class="dw-bridge-value">'+escH(fmtN(weighted))+' across '+active.length+' active deal'+(active.length===1?'':'s')+'.</div></div>'+
+                        '<div class="dw-bridge-block"><div class="dw-bridge-label">Recovery pressure</div><div class="dw-bridge-value">'+(recovery.length?escH(recovery.length+' deal'+(recovery.length===1?' needs':'s need')+' intervention now.'):'No urgent recovery items right now.')+'</div></div>'+
+                    '</div>'+
+                    '<div class="dw-bridge-actions">'+
+                        '<button class="dw-bridge-btn primary" type="button" onclick="openModal()">New Deal</button>'+
+                        '<button class="dw-bridge-btn" type="button" onclick="document.getElementById(\'viewFilter\').value=\'at-risk\';render();">Show At-Risk</button>'+
+                    '</div>'+
+                '</div>';
+            node.innerHTML=nodeHtml;
+        }
+
+        function renderRecoveryPanel(allDeals){
+            var node=document.getElementById('recoveryPanel');
+            if(!node)return;
+            var recovery=getRecoveryMoves(allDeals);
+            if(!recovery.length){
+                node.innerHTML='';
+                return;
+            }
+            node.innerHTML=
+                '<div class="dw-recovery">'+
+                    '<div class="dw-recovery-head">Recovery queue</div>'+
+                    '<div class="dw-recovery-title">These deals need intervention before you call the board healthy.</div>'+
+                    '<div class="dw-recovery-copy">Pipeline drift usually comes from one of four things: no dated next step, overdue next step, thin qualification, or silence. Fix the cause, not just the stage label.</div>'+
+                    '<div class="dw-recovery-list">'+
+                        recovery.map(function(item){
+                            return '<div class="dw-recovery-item">'+
+                                '<div class="dw-recovery-item-title">'+escH(item.account)+'</div>'+
+                                '<div class="dw-recovery-item-copy">'+escH(item.reason)+' — '+escH(item.move)+'</div>'+
+                            '</div>';
+                        }).join('')+
+                    '</div>'+
+                '</div>';
+        }
+
+        function suggestNextStepByStage(stage){
+            var map={
+                prospect:'Initial qualification call',
+                discovery:'Discovery call with champion',
+                evaluation:'Technical / solution fit review',
+                poc:'PoC kickoff and success criteria',
+                negotiation:'Commercial / close plan review',
+                verbal:'Agreement review and signature path'
+            };
+            return map[stage]||'Next deal move';
+        }
+
+        function applyStageDefaults(force){
+            var stage=document.getElementById('mStage').value;
+            var nextField=document.getElementById('mNext');
+            var closeField=document.getElementById('mClose');
+            var nextDateField=document.getElementById('mNextDate');
+            if(force||!nextField.value.trim())nextField.value=suggestNextStepByStage(stage);
+            if(force||!nextDateField.value){
+                var suggested=new Date();
+                suggested.setDate(suggested.getDate()+(stage==='prospect'?3:stage==='discovery'?4:stage==='evaluation'?5:stage==='poc'?7:5));
+                nextDateField.value=suggested.toISOString().slice(0,10);
+            }
+            if(force||!closeField.value){
+                var close=new Date();
+                close.setDate(close.getDate()+(stage==='prospect'?45:stage==='discovery'?35:stage==='evaluation'?28:stage==='poc'?21:stage==='negotiation'?14:7));
+                closeField.value=close.toISOString().slice(0,10);
+            }
+        }
+
         // --- Filter ---
         function filterDeals(deals){
             var f=document.getElementById('viewFilter').value;
@@ -400,6 +561,7 @@
             var pipeline=active.reduce(function(s,d){return s+Number(d.value||0);},0);
             var weighted=active.reduce(function(s,d){return s+Number(d.value||0)*(STAGE_PROB[d.stage]||0);},0);
 
+            renderWorkspaceBridge(allDeals,active,pipeline,weighted);
             document.getElementById('dealStats').innerHTML=
                 '<div class="dw-stat"><div class="dw-stat-val">'+active.length+'</div><div class="dw-stat-label">Active</div></div>'+
                 '<div class="dw-stat"><div class="dw-stat-val">'+fmtN(pipeline)+'</div><div class="dw-stat-label">Pipeline</div></div>'+
@@ -410,11 +572,13 @@
             document.getElementById('filterCount').textContent=deals.length+' of '+allDeals.length+' deals';
 
             if(allDeals.length===0){
+                renderRecoveryPanel(allDeals);
                 document.getElementById('dealGrid').innerHTML='';
                 document.getElementById('dealEmpty').innerHTML='<div class="dw-empty"><div style="font-size:2rem;margin-bottom:12px;">&#128188;</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No deals yet</div><div>Click <strong>+ New Deal</strong> to add your first deal, or <a href="/app/signal-console/">find a signal</a> to start from.</div></div>';
                 return;
             }
             document.getElementById('dealEmpty').innerHTML='';
+            renderRecoveryPanel(allDeals);
 
             deals.sort(function(a,b){return(STAGE_ORDER[a.stage]||0)-(STAGE_ORDER[b.stage]||0);});
 
@@ -424,6 +588,8 @@
                 var dis=isClosed?0:daysInCurrentStage(d);
                 var disClass=dis>35?'crit':dis>21?'warn':'';
                 var td=threadingDepth(d);
+                var qual=getQualification(d);
+                var recoveryReason=getRecoveryReason(d);
 
                 // Chips: intel fields + threading
                 var chips=[];
@@ -482,6 +648,7 @@
                 // Card meta row: stage + risk indicator (simplified for card face)
                 var metaHtml='<div class="dw-card-meta">';
                 metaHtml+='<span class="dw-card-stage '+(d.stage||'prospect')+'">'+escH(STAGE_LABELS[d.stage]||d.stage||'Prospect')+'</span>';
+                metaHtml+='<span class="dw-card-qual '+qual.band+'">'+qual.score+'/100 '+qual.bandLabel+'</span>';
                 if(!isClosed&&dis>21)metaHtml+='<span class="dw-card-days '+disClass+'">'+dis+'d in stage</span>';
                 metaHtml+='</div>';
 
@@ -497,6 +664,7 @@
                 }
                 detailHtml+='<div class="dw-chips">'+chipsHtml+'</div>';
                 detailHtml+='<div class="dw-linked">'+badges+'</div>';
+                detailHtml+='<div style="font-size:0.76rem;color:var(--text-muted);margin-top:8px;">Qualification next move: '+escH(qual.next)+'</div>';
                 detailHtml+='</div>';
 
                 return '<div class="dw-card'+(isClosed?' closed':'')+'" data-id="'+d.id+'" onclick="toggleCard(this)">'+
@@ -505,6 +673,7 @@
                     '<div class="dw-card-value">'+fmtN(d.value||0)+'</div></div>'+
                     metaHtml+
                     nextHtml+
+                    (recoveryReason?'<div class="dw-recovery-tag">'+escH(recoveryReason)+'</div>':'')+
                     detailHtml+
                     intelHtml+
                 '</div>';
@@ -546,6 +715,9 @@
             document.getElementById('dealModal').classList.add('active');
             var d=dealId?loadDeals().find(function(x){return x.id===dealId;}):null;
             document.getElementById('modalTitle').textContent=d?'Edit Deal':'New Deal';
+            document.getElementById('createGuide').innerHTML=d
+                ? '<strong>Good review means:</strong> keep the stage honest, keep the next step dated, and keep qualification stronger than the forecast category.'
+                : '<strong>Good deal record means:</strong> account, value, stage, next step, and the first qualification truth. Do not leave this as a name-only shell.';
             document.getElementById('editId').value=d?d.id:'';
             document.getElementById('editPrevStage').value=d?d.stage||'prospect':'';
             document.getElementById('mAccount').value=d?d.accountName||'':'';
@@ -566,6 +738,9 @@
             document.getElementById('deleteBtn').style.display=d?'inline-block':'none';
             tempStakeholders=d&&d.stakeholders?JSON.parse(JSON.stringify(d.stakeholders)):[];
             renderStakeholders();
+            if(!d){
+                applyStageDefaults(true);
+            }
         };
 
         window.closeModal=function(){document.getElementById('dealModal').classList.remove('active');};
@@ -601,6 +776,17 @@
             deal.notes=document.getElementById('mNotes').value.trim();
             deal.stakeholders=tempStakeholders.filter(function(s){return s.name||s.role;});
             deal.updated_at=new Date().toISOString();
+            if(!deal.nextStep)deal.nextStep=suggestNextStepByStage(newStage);
+            if(!deal.nextStepDate&&newStage!=='closed-won'&&newStage!=='closed-lost'){
+                var suggested=new Date();
+                suggested.setDate(suggested.getDate()+(newStage==='prospect'?3:newStage==='discovery'?4:newStage==='evaluation'?5:newStage==='poc'?7:5));
+                deal.nextStepDate=suggested.toISOString().slice(0,10);
+            }
+            if(!deal.closeDate&&newStage!=='closed-won'&&newStage!=='closed-lost'){
+                var close=new Date();
+                close.setDate(close.getDate()+(newStage==='prospect'?45:newStage==='discovery'?35:newStage==='evaluation'?28:newStage==='poc'?21:newStage==='negotiation'?14:7));
+                deal.closeDate=close.toISOString().slice(0,10);
+            }
 
             // Stage change tracking
             if(prevStage&&prevStage!==newStage){
@@ -699,7 +885,9 @@
         }
         function onDealWorkspaceBootFailure(error){
             console.error('Deal Workspace boot failed:',error);
+            document.getElementById('dwBridge').innerHTML='';
             document.getElementById('dealStats').innerHTML='';
+            document.getElementById('recoveryPanel').innerHTML='';
             document.getElementById('dealGrid').innerHTML='';
             document.getElementById('dealEmpty').innerHTML='';
             showDealWorkspaceBootState(
@@ -717,12 +905,18 @@
                 'Loading Deal Workspace',
                 'Pulling deals and connected account context before the board comes online.'
             );
+            document.getElementById('dwBridge').innerHTML='';
+            document.getElementById('recoveryPanel').innerHTML='';
             await syncSignalConsoleAccounts();
             await syncDealsFromCloud();
             clearDealWorkspaceBootState();
             render();
             if(urlDeal){openModal(urlDeal);}
         }
+
+        document.getElementById('mStage').addEventListener('change',function(){
+            if(!document.getElementById('editId').value)applyStageDefaults(false);
+        });
 
         if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
             window.requireAuthReady.then(bootDealWorkspace).catch(onDealWorkspaceBootFailure);

@@ -22,6 +22,30 @@
         .fa-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
         .fa-btn.gold{border-color:rgba(212,165,116,0.3);color:var(--brand-gold);background:rgba(212,165,116,0.06);}
         .fa-btn.gold:hover{background:rgba(212,165,116,0.12);}
+        .fa-bridge{background:linear-gradient(180deg,rgba(212,165,116,0.08),rgba(212,165,116,0.02));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-md);}
+        .fa-bridge-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
+        .fa-bridge-k{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.9px;color:var(--brand-gold);font-weight:700;}
+        .fa-bridge-state{font-size:0.7rem;font-weight:700;padding:5px 10px;border-radius:var(--radius-full);border:1px solid transparent;}
+        .fa-bridge-state.now{color:#ef4444;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.22);}
+        .fa-bridge-state.week{color:#f59e0b;background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.22);}
+        .fa-bridge-state.check{color:#94a3b8;background:rgba(148,163,184,0.1);border-color:rgba(148,163,184,0.18);}
+        .fa-bridge-title{font-family:var(--font-serif);font-size:1.18rem;color:var(--text-primary);margin-bottom:8px;}
+        .fa-bridge-copy{font-size:0.84rem;color:var(--text-tertiary);line-height:1.65;margin-bottom:14px;}
+        .fa-bridge-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px;}
+        .fa-bridge-block{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);padding:12px;}
+        .fa-bridge-label{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
+        .fa-bridge-value{font-size:0.82rem;color:var(--text-secondary);line-height:1.55;}
+        .fa-example-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px;}
+        .fa-example{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);padding:14px;}
+        .fa-example.active{border-color:rgba(212,165,116,0.28);background:rgba(212,165,116,0.06);}
+        .fa-example-stage{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--brand-gold);font-weight:700;margin-bottom:6px;}
+        .fa-example-title{font-weight:700;font-size:0.84rem;color:var(--text-primary);margin-bottom:6px;}
+        .fa-example-copy{font-size:0.78rem;color:var(--text-muted);line-height:1.55;}
+        .fa-action-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+        .fa-action-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);padding:14px;display:flex;flex-direction:column;gap:10px;}
+        .fa-action-title{font-weight:700;font-size:0.86rem;color:var(--text-primary);}
+        .fa-action-copy{font-size:0.78rem;color:var(--text-muted);line-height:1.55;min-height:52px;}
+        .fa-action-card .fa-btn{align-self:flex-start;padding:8px 12px;font-size:0.74rem;}
         .fa-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-bottom:var(--space-md);}
         .fa-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;}
         .fa-card h3{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-primary);margin-bottom:10px;}
@@ -55,7 +79,8 @@
         .fa-empty a{color:var(--brand-gold);}
         .fa-toast{position:fixed;right:16px;bottom:16px;background:#1f1a14;color:#fff;padding:10px 14px;border-radius:var(--radius-md);font-size:0.82rem;font-weight:600;opacity:0;transform:translateY(6px);transition:0.25s;pointer-events:none;z-index:9999;}
         .fa-toast.show{opacity:1;transform:none;}
-        @media(max-width:800px){.fa-grid{grid-template-columns:1fr;}.fa-picker{flex-direction:column;}}
+        @media(max-width:960px){.fa-bridge-grid,.fa-example-row,.fa-action-grid{grid-template-columns:1fr 1fr;}}
+        @media(max-width:800px){.fa-grid,.fa-bridge-grid,.fa-example-row,.fa-action-grid{grid-template-columns:1fr;}.fa-picker{flex-direction:column;}}
     </style>
 </head>
 <body>
@@ -308,6 +333,7 @@
         var filtered = [];
         var currentVitals = null;
         var currentAutopsy = null;
+        var currentActionPlan = null;
 
         // Task completion log
         function getLog() { try { return JSON.parse(localStorage.getItem('gtmos_autopsy_log_v1')) || {}; } catch(e) { return {}; } }
@@ -369,16 +395,199 @@
             if (!v) { document.getElementById('dealSub').textContent = 'Deal not found.'; return; }
             currentVitals = v;
             currentAutopsy = generateAutopsy(v);
+            currentActionPlan = getActionPlan(v, currentAutopsy);
             // Log
             var log = getLog();
             if (!log[String(id)]) { log[String(id)] = { lastRunAt: new Date().toISOString(), tasks: {} }; setLog(log); }
             renderAutopsy(currentAutopsy, v);
         }
 
+        function causeLabel(id) {
+            return String(id || 'unknown').replace(/_/g, ' ');
+        }
+
+        function getStageTimingMeta(stage) {
+            if (stage === 'poc') {
+                return {
+                    title: 'Use this before the proof window turns into busywork.',
+                    copy: 'At PoC stage, run Future Autopsy when the team is doing activity but success criteria, readout ownership, or budget authority still feel loose.'
+                };
+            }
+            if (stage === 'negotiation' || stage === 'verbal') {
+                return {
+                    title: 'Use this before paper or procurement becomes the deal.',
+                    copy: 'Late-stage deals die when process, budget owner, or executive alignment are still fuzzy. This is where you expose the hidden no before it hardens.'
+                };
+            }
+            if (stage === 'evaluation') {
+                return {
+                    title: 'Use this before “we like it, but not now” takes over.',
+                    copy: 'At evaluation, the autopsy should force ownership, why-now, and proof tasks before the deal turns into polite interest with no committed process.'
+                };
+            }
+            return {
+                title: 'Use this before curiosity decays into silence.',
+                copy: 'At early stage, Future Autopsy is there to force champion truth, why-now, and a dated next step before the deal becomes a thread that only looks alive.'
+            };
+        }
+
+        function getTimingState(v, a) {
+            var top = a && a.lose && a.lose.causes && a.lose.causes[0] ? a.lose.causes[0] : null;
+            var meta = getStageTimingMeta(v.stage);
+            var urgent = v.riskScore >= 75 || v.staleDays >= PREFS.staleWarnDays || ['poc','negotiation','verbal'].indexOf(v.stage) >= 0 || (top && top.severity >= 8);
+            var soon = !urgent && (v.riskScore >= 60 || v.qualScore <= 10 || v.staleDays >= 5 || (a.lose.causes || []).length >= 4);
+            return {
+                label: urgent ? 'Run now' : soon ? 'Run this week' : 'Periodic check',
+                cls: urgent ? 'now' : soon ? 'week' : 'check',
+                title: meta.title,
+                copy: meta.copy,
+                currentTrigger: top ? top.text : 'No single dominant failure mode yet, but the stage still needs stress-testing.',
+                oneSession: urgent
+                    ? 'Leave with a ranked proof-task list and one changed move inside the live deal.'
+                    : 'Leave with the biggest hidden failure mode named before the stage label outruns the truth.',
+                topPattern: top ? causeLabel(top.id) : 'general drift'
+            };
+        }
+
+        function getExamples(stage) {
+            var examples = [
+                {
+                    key: 'discovery',
+                    stage: 'Discovery',
+                    title: 'Interest without ownership',
+                    copy: 'Run it when the account sounds warm, but nobody internal is actually carrying the deal and no dated next step exists.'
+                },
+                {
+                    key: 'poc',
+                    stage: 'PoC',
+                    title: 'Activity without decision criteria',
+                    copy: 'Run it when the pilot is moving, but no one can say what success means or who will own the readout.'
+                },
+                {
+                    key: 'negotiation',
+                    stage: 'Negotiation',
+                    title: 'Paper process before control',
+                    copy: 'Run it when legal or procurement is widening before the budget owner and decision path are truly locked.'
+                }
+            ];
+            return examples.map(function(example) {
+                var active = (stage === 'poc' && example.key === 'poc')
+                    || ((stage === 'negotiation' || stage === 'verbal') && example.key === 'negotiation')
+                    || ((stage === 'discovery' || stage === 'evaluation' || stage === 'prospect') && example.key === 'discovery');
+                return {
+                    stage: example.stage,
+                    title: example.title,
+                    copy: example.copy,
+                    active: active
+                };
+            });
+        }
+
+        function getActionPlan(v, a) {
+            var topCauseId = a && a.lose && a.lose.causes && a.lose.causes[0] ? a.lose.causes[0].id : '';
+            var primary = {
+                key: 'deal',
+                title: 'Change the live deal truth',
+                copy: 'Open Deal Workspace to change dates, stage, qualification, and ownership immediately.',
+                label: 'Open Deal Workspace',
+                href: '/app/deal-workspace/?deal=' + encodeURIComponent(v.id)
+            };
+            var secondary;
+            if (v.stage === 'poc' || topCauseId === 'poc_no_criteria' || topCauseId === 'impact_not_real') {
+                secondary = {
+                    key: 'poc',
+                    title: 'Tighten the proof design',
+                    copy: 'Use PoC Framework to turn the autopsy into success criteria, boundaries, and a real readout path.',
+                    label: 'Open PoC Framework',
+                    href: '/app/poc-framework/'
+                };
+            } else if (['no_champion','no_eb','single_threaded','usecase_blurry','competition_unknown'].indexOf(topCauseId) >= 0 || ['discovery','evaluation','prospect'].indexOf(v.stage) >= 0) {
+                secondary = {
+                    key: 'call-planner',
+                    title: 'Plan the forcing conversation',
+                    copy: 'Use Call Planner to force the missing champion, EB, use case, or status-quo truth into the next live meeting.',
+                    label: 'Open Call Planner',
+                    href: '/app/discovery-agenda/'
+                };
+            } else {
+                secondary = {
+                    key: 'discovery',
+                    title: 'Work the risk live',
+                    copy: 'Use Discovery Studio to take the risk pattern into the next conversation and force the move in real time.',
+                    label: 'Open Discovery Studio',
+                    href: '/app/discovery-studio/'
+                };
+            }
+            var tertiary = secondary.key === 'discovery'
+                ? {
+                    key: 'call-planner',
+                    title: 'Rebuild the agenda',
+                    copy: 'If the thread is still live, rebuild the next call around the exposed risk instead of repeating the same conversation.',
+                    label: 'Open Call Planner',
+                    href: '/app/discovery-agenda/'
+                }
+                : {
+                    key: 'discovery',
+                    title: 'Carry the risk into execution',
+                    copy: 'Use Discovery Studio to pressure-test the failure theme live instead of keeping it as a theory.',
+                    label: 'Open Discovery Studio',
+                    href: '/app/discovery-studio/'
+                };
+            return { primary: primary, secondary: secondary, tertiary: tertiary };
+        }
+
+        function getTaskAction(task, v, a) {
+            if (!task || !v) return { label: 'Open Deal Workspace', href: '/app/deal-workspace/' };
+            if (task.taskId === 'quantify_impact' && (v.stage === 'poc' || (a && a.lose && a.lose.causes || []).some(function(c){ return c.id === 'poc_no_criteria'; }))) {
+                return { label: 'Open PoC Framework', href: '/app/poc-framework/' };
+            }
+            if (['bring_eb_in','confirm_champion','clarify_use_case','name_competition','multi_thread','set_exec_readout'].indexOf(task.taskId) >= 0) {
+                return { label: 'Open Call Planner', href: '/app/discovery-agenda/' };
+            }
+            if (task.taskId === 'surface_risks') {
+                return { label: 'Open Discovery Studio', href: '/app/discovery-studio/' };
+            }
+            return { label: 'Open Deal Workspace', href: '/app/deal-workspace/?deal=' + encodeURIComponent(v.id) };
+        }
+
         function renderAutopsy(a, v) {
             document.getElementById('dealSub').textContent = 'Deal: ' + v.name + ' \u2014 ' + dh.money(v.value) + ' \u2014 ' + v.stageRaw + ' \u2014 Qual ' + v.qualScore + '/18 \u2014 Risk ' + v.riskScore + '/100';
 
             var html = '';
+            var timing = getTimingState(v, a);
+            var examples = getExamples(v.stage);
+            currentActionPlan = getActionPlan(v, a);
+
+            html += '<div class="fa-bridge">';
+            html += '<div class="fa-bridge-head"><div class="fa-bridge-k">When to run this</div><div class="fa-bridge-state ' + timing.cls + '">' + escH(timing.label) + '</div></div>';
+            html += '<div class="fa-bridge-title">' + escH(timing.title) + '</div>';
+            html += '<div class="fa-bridge-copy">' + escH(timing.copy) + '</div>';
+            html += '<div class="fa-bridge-grid">';
+            html += '<div class="fa-bridge-block"><div class="fa-bridge-label">Current trigger</div><div class="fa-bridge-value">' + escH(timing.currentTrigger) + '</div></div>';
+            html += '<div class="fa-bridge-block"><div class="fa-bridge-label">Primary failure pattern</div><div class="fa-bridge-value">' + escH(timing.topPattern) + '</div></div>';
+            html += '<div class="fa-bridge-block"><div class="fa-bridge-label">One-session win</div><div class="fa-bridge-value">' + escH(timing.oneSession) + '</div></div>';
+            html += '<div class="fa-bridge-block"><div class="fa-bridge-label">What this prevents</div><div class="fa-bridge-value">Stage labels drifting ahead of proof, ownership, and next-step reality.</div></div>';
+            html += '</div>';
+            html += '<div class="fa-example-row">';
+            examples.forEach(function(example){
+                html += '<div class="fa-example' + (example.active ? ' active' : '') + '">';
+                html += '<div class="fa-example-stage">' + escH(example.stage) + '</div>';
+                html += '<div class="fa-example-title">' + escH(example.title) + '</div>';
+                html += '<div class="fa-example-copy">' + escH(example.copy) + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '<div class="fa-action-grid">';
+            ['primary','secondary','tertiary'].forEach(function(key){
+                var action = currentActionPlan[key];
+                html += '<div class="fa-action-card">';
+                html += '<div class="fa-action-title">' + escH(action.title) + '</div>';
+                html += '<div class="fa-action-copy">' + escH(action.copy) + '</div>';
+                html += '<button class="fa-btn gold" type="button" onclick="openAutopsyAction(\'' + key + '\')">' + escH(action.label) + '</button>';
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
 
             // Lose / Win grid
             html += '<div class="fa-grid">';
@@ -409,13 +618,14 @@
             html += '<div class="fa-tasks"><h3>Countermeasures (Top 5 proof tasks)</h3>';
             a.countermeasures.forEach(function(t, i) {
                 var done = taskState(v.id, t.taskId);
+                var taskAction = getTaskAction(t, v, a);
                 html += '<div class="fa-task' + (done ? ' done' : '') + '" data-task="' + t.taskId + '">';
                 html += '<input type="checkbox" ' + (done ? 'checked' : '') + ' onchange="onTaskToggle(\'' + escH(v.id) + '\',\'' + t.taskId + '\',this)">';
                 html += '<div><div class="fa-task-label">' + escH(t.label) + '</div>';
                 html += '<details style="margin-top:2px;"><summary style="font-size:0.7rem;color:var(--text-muted);cursor:pointer;opacity:0.6;">Why this works</summary><div class="fa-task-why">' + escH(t.why) + '</div></details>';
                 html += '<div class="fa-task-evi">Proof: ' + escH(t.successEvidence) + '</div></div>';
                 html += '<div class="fa-task-btns">';
-                html += '<button class="fa-task-btn" onclick="window.open(\'/app/deal-workspace/?deal=' + encodeURIComponent(v.id) + '\',\'_blank\')">Open Deal</button>';
+                html += '<button class="fa-task-btn" onclick="openTaskSurface(' + i + ')">' + escH(taskAction.label) + '</button>';
                 html += '<button class="fa-task-btn" onclick="copyScript(\'' + i + '\')">Copy Script</button>';
                 html += '</div></div>';
             });
@@ -438,6 +648,17 @@
         window.onTaskToggle = function(dealId, taskId, el) {
             var now = toggleTask(dealId, taskId);
             el.closest('.fa-task').classList.toggle('done', now);
+        };
+
+        window.openAutopsyAction = function(which) {
+            if (!currentActionPlan || !currentActionPlan[which]) return;
+            location.href = currentActionPlan[which].href;
+        };
+
+        window.openTaskSurface = function(idx) {
+            if (!currentAutopsy || !currentAutopsy.countermeasures[idx] || !currentVitals) return;
+            var action = getTaskAction(currentAutopsy.countermeasures[idx], currentVitals, currentAutopsy);
+            location.href = action.href;
         };
 
         window.copyScript = function(idx) {
