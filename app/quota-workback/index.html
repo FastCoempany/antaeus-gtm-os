@@ -11,16 +11,16 @@
     <style>
         .qw-hero{text-align:center;padding:32px 0 20px;background:linear-gradient(135deg,rgba(212,165,116,0.08),rgba(212,165,116,0.02));border:1px solid rgba(212,165,116,0.2);border-radius:var(--radius-lg);margin-bottom:var(--space-md);}
         .qw-hero-val{font-family:var(--font-serif);font-size:3.5rem;color:var(--brand-gold);}
-        .qw-hero-label{font-size:0.9rem;color:var(--text-tertiary);max-width:500px;margin:4px auto 0;}
+        .qw-hero-label{font-size:0.9rem;color:var(--text-tertiary);max-width:560px;margin:4px auto 0;}
         .qw-coverage{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px 24px;margin-bottom:var(--space-xl);}
-        .qw-cov-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+        .qw-cov-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;}
         .qw-cov-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;}
         .qw-cov-ratio{font-family:var(--font-serif);font-size:1.1rem;}
         .qw-cov-ratio.green{color:#22c55e;}.qw-cov-ratio.amber{color:#f59e0b;}.qw-cov-ratio.red{color:#ef4444;}
         .qw-cov-bar{height:8px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden;margin-bottom:8px;}
         .qw-cov-fill{height:100%;border-radius:4px;transition:width 0.4s;}
         .qw-cov-fill.green{background:#22c55e;}.qw-cov-fill.amber{background:#f59e0b;}.qw-cov-fill.red{background:#ef4444;}
-        .qw-cov-meta{display:flex;gap:16px;font-size:0.75rem;color:var(--text-muted);}
+        .qw-cov-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:0.75rem;color:var(--text-muted);}
         .qw-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:24px;margin-bottom:var(--space-lg);}
         .qw-card-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:16px;}
         .qw-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
@@ -34,9 +34,9 @@
         .qw-bench-hint button{margin-left:8px;padding:4px 10px;border-radius:6px;font-size:0.72rem;font-weight:700;border:1px solid rgba(212,165,116,0.3);background:rgba(212,165,116,0.08);color:var(--brand-gold);cursor:pointer;font-family:inherit;}
         .qw-math{margin-top:20px;}
         .qw-math-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:12px;}
-        .qw-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.88rem;}
+        .qw-row{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.88rem;}
         .qw-row-label{color:var(--text-tertiary);}
-        .qw-row-value{color:var(--text-primary);font-weight:600;}
+        .qw-row-value{color:var(--text-primary);font-weight:600;text-align:right;}
         .qw-row-value.gold{color:var(--brand-gold);}
         .qw-adv summary{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);cursor:pointer;font-weight:700;padding:12px 0;}
         .qw-adv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-bottom:16px;}
@@ -49,15 +49,45 @@
         .qw-bench-card .verdict.good{background:rgba(34,197,94,0.1);color:#22c55e;}
         .qw-bench-card .verdict.warn{background:rgba(245,158,11,0.1);color:#f59e0b;}
         .qw-bench-card .verdict.bad{background:rgba(239,68,68,0.1);color:#ef4444;}
+        .qw-bridge{display:grid;grid-template-columns:1.15fr 0.85fr;gap:16px;margin-bottom:var(--space-lg);}
+        .qw-bridge-copy h2{margin:0 0 10px;font-size:1.6rem;}
+        .qw-bridge-copy p{margin:0;color:var(--text-secondary);line-height:1.6;}
+        .qw-bridge-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+        .qw-chip{padding:6px 10px;border-radius:var(--radius-full);font-size:0.72rem;font-weight:700;letter-spacing:0.02em;border:1px solid rgba(212,165,116,0.16);background:rgba(212,165,116,0.06);color:var(--brand-gold);}
+        .qw-chip.good{border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.08);color:#22c55e;}
+        .qw-chip.warn{border-color:rgba(245,158,11,0.2);background:rgba(245,158,11,0.08);color:#f59e0b;}
+        .qw-chip.bad{border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.08);color:#ef4444;}
+        .qw-bridge-card{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:16px;}
+        .qw-bridge-card h3{margin:0 0 6px;font-size:1rem;}
+        .qw-bridge-card p{margin:0;color:var(--text-tertiary);font-size:0.84rem;line-height:1.55;}
+        .qw-plan{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+        .qw-plan-card{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:16px;}
+        .qw-plan-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
+        .qw-plan-value{font-family:var(--font-serif);font-size:1.7rem;color:var(--text-primary);line-height:1;}
+        .qw-plan-note{margin-top:8px;font-size:0.78rem;color:var(--text-tertiary);line-height:1.45;}
+        .qw-handoff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+        .qw-handoff-card{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:16px;display:flex;flex-direction:column;gap:10px;}
+        .qw-handoff-card h3{margin:0;font-size:1rem;}
+        .qw-handoff-card p{margin:0;color:var(--text-tertiary);font-size:0.82rem;line-height:1.55;}
+        .qw-handoff-metric{font-family:var(--font-serif);font-size:1.25rem;color:var(--brand-gold);}
+        .qw-handoff-meta{font-size:0.76rem;color:var(--text-muted);line-height:1.45;}
+        .qw-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;}
+        .qw-action-link{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:8px;border:1px solid rgba(212,165,116,0.2);background:rgba(212,165,116,0.08);color:var(--brand-gold);font-size:0.76rem;font-weight:700;text-decoration:none;}
+        .qw-summary-block{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+        .qw-summary-box{padding:14px;border-radius:var(--radius-md);background:rgba(255,255,255,0.03);border:1px solid var(--border-default);}
+        .qw-summary-box h4{margin:0 0 6px;font-size:0.92rem;}
+        .qw-summary-box p{margin:0;color:var(--text-tertiary);font-size:0.8rem;line-height:1.55;}
+        .qw-empty-note{font-size:0.8rem;color:var(--text-muted);line-height:1.55;}
+        @media(max-width:900px){.qw-bridge,.qw-plan,.qw-handoff-grid,.qw-summary-block{grid-template-columns:1fr;}}
         @media(max-width:700px){.qw-inputs,.qw-adv-grid,.qw-bench{grid-template-columns:1fr;}}
     </style>
 </head>
 <body>
-        <script src="/js/app-auth-preflight.js"></script>
-<div class="app-container">
+    <script src="/js/app-auth-preflight.js"></script>
+    <div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics-site-config.js"></script>
-    <script src="/js/analytics.js"></script>
+            <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
             <script src="/js/nav.js"></script>
         </aside>
@@ -65,39 +95,51 @@
             <header class="app-header">
                 <h1 class="page-title">Quota Workback</h1>
                 <div class="header-actions">
-                    <button class="btn btn-secondary btn-sm" onclick="copyMath()">📋 Copy Math</button>
+                    <button class="btn btn-secondary btn-sm" onclick="copyMath()">Copy Math</button>
                 </div>
             </header>
             <div class="app-content" style="max-width:780px;">
+                <div class="qw-card qw-bridge">
+                    <div class="qw-bridge-copy">
+                        <div class="qw-card-title">Revenue to execution</div>
+                        <h2>Translate quota into the week your team actually has to run.</h2>
+                        <p>Quota Workback should not stop at math. It should tell you how much pipeline you need, how much motion has to happen each week, and where the pressure should hand off into Outbound Studio, Cold Call Studio, and the Dashboard.</p>
+                        <div class="qw-bridge-meta" id="bridgeMeta"></div>
+                    </div>
+                    <div class="qw-bridge-card" id="bridgeSummary"></div>
+                </div>
+
                 <div class="qw-hero">
                     <div class="qw-hero-val" id="heroTouches">0</div>
-                    <div class="qw-hero-label" id="heroLabel">touches per day to hit target</div>
+                    <div class="qw-hero-label" id="heroLabel">Set quota and ACV to turn revenue into weekly execution pressure.</div>
                 </div>
 
                 <div class="qw-coverage" id="coverageBar"></div>
+                <div class="qw-card" id="planCard"></div>
 
                 <div class="qw-card">
-                    <div class="qw-card-title">Your Targets</div>
+                    <div class="qw-card-title">Your targets</div>
                     <div class="qw-inputs">
-                        <div class="qw-field"><label>Annual Quota ($)</label><input type="text" id="inQuota" oninput="fmtC(this);calc()"><div class="unit">Your personal target</div></div>
-                        <div class="qw-field"><label>Avg Deal Size ($)</label><input type="text" id="inACV" oninput="fmtC(this);calc();checkBenchmarks()"><div class="unit">ACV</div></div>
-                        <div class="qw-field"><label>Win Rate (%)</label><input type="number" id="inWin" oninput="calc()"><div class="unit">Opp → Closed-Won</div></div>
+                        <div class="qw-field"><label>Annual quota ($)</label><input type="text" id="inQuota" oninput="fmtC(this);calc()"><div class="unit">Your personal target</div></div>
+                        <div class="qw-field"><label>Avg deal size ($)</label><input type="text" id="inACV" oninput="fmtC(this);calc();checkBenchmarks()"><div class="unit">ACV</div></div>
+                        <div class="qw-field"><label>Win rate (%)</label><input type="number" id="inWin" oninput="calc()"><div class="unit">Opportunity to closed won</div></div>
                     </div>
                     <div class="qw-bench-hint" id="benchHint"></div>
                     <div class="qw-math" id="mathBlock"></div>
                     <details class="qw-adv">
                         <summary>Advanced conversion settings</summary>
                         <div class="qw-adv-grid">
-                            <div class="qw-field"><label>Meeting → Opp (%)</label><input type="number" id="inM2O" oninput="calc()"></div>
-                            <div class="qw-field"><label>Touch → Meeting (%)</label><input type="number" id="inT2M" step="0.1" oninput="calc()"></div>
-                            <div class="qw-field"><label>Show Rate (%)</label><input type="number" id="inShow" oninput="calc()"></div>
-                            <div class="qw-field"><label>Working Days/Mo</label><input type="number" id="inDays" oninput="calc()"></div>
-                            <div class="qw-field"><label>Touches/Account</label><input type="number" id="inTPA" oninput="calc()"></div>
-                            <div class="qw-field"><label>Avg Cycle (days)</label><input type="number" id="inCycle" oninput="calc()"></div>
+                            <div class="qw-field"><label>Meeting to opp (%)</label><input type="number" id="inM2O" oninput="calc()"></div>
+                            <div class="qw-field"><label>Touch to meeting (%)</label><input type="number" id="inT2M" step="0.1" oninput="calc()"></div>
+                            <div class="qw-field"><label>Show rate (%)</label><input type="number" id="inShow" oninput="calc()"></div>
+                            <div class="qw-field"><label>Working days/mo</label><input type="number" id="inDays" oninput="calc()"></div>
+                            <div class="qw-field"><label>Touches/account</label><input type="number" id="inTPA" oninput="calc()"></div>
+                            <div class="qw-field"><label>Avg cycle (days)</label><input type="number" id="inCycle" oninput="calc()"></div>
                         </div>
                     </details>
                 </div>
 
+                <div class="qw-card" id="handoffCard"></div>
                 <div class="qw-bench" id="benchCards" style="display:none;"></div>
             </div>
         </main>
@@ -107,198 +149,371 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
-<script>
-    (function(){
-        var dh = window.dealHealth;
-        function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
-        function fmtN(n){return Number(n||0).toLocaleString()}
-        function fmtM(n){return'$'+Number(n||0).toLocaleString();}
+    <script>
+        (function(){
+            var dh = window.dealHealth;
+            var saved = {};
+            var seed = {};
+            var profileSyncTimer = null;
 
-        var ACV_BENCHMARKS={
-            small:{maxAcv:30000,winRate:25,cycle:45,m2o:40,coverage:3.0,label:'SMB',winRange:'20\u201330%',cycleRange:'30\u201360 days'},
-            mid:{maxAcv:75000,winRate:20,cycle:90,m2o:35,coverage:3.5,label:'Mid-Market',winRange:'15\u201325%',cycleRange:'60\u2013120 days'},
-            enterprise:{maxAcv:200000,winRate:15,cycle:180,m2o:30,coverage:4.5,label:'Enterprise',winRange:'10\u201318%',cycleRange:'120\u2013270 days'},
-            strategic:{maxAcv:Infinity,winRate:12,cycle:240,m2o:25,coverage:5.0,label:'Strategic',winRange:'8\u201315%',cycleRange:'180\u2013360 days'}
-        };
-
-        function getBand(acv){
-            acv=Number(acv)||0;
-            if(acv>=200000)return'strategic';if(acv>=75000)return'enterprise';if(acv>=30000)return'mid';return'small';
-        }
-
-        var profileSyncTimer = null;
-        function syncDocToCloud(key, data) {
-            if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function')) return;
-            window.gtmPersistence.docs.save(key, data).catch(function(error) {
-                console.error('Quota workback doc sync failed for', key, error);
-            });
-        }
-        function scheduleProfileSync(quota, acv, band) {
-            if (typeof window.updateWorkspaceProfile !== 'function') return;
-            if (profileSyncTimer) clearTimeout(profileSyncTimer);
-            profileSyncTimer = setTimeout(async function() {
-                var result = await window.updateWorkspaceProfile({
-                    quota: quota || null,
-                    average_deal_size: acv || null,
-                    acv_band: band || null
-                });
-                if (result && result.error) {
-                    console.error('Quota workback sync failed:', result.error);
+            function readLS(key, fallback){try{return JSON.parse(localStorage.getItem(key))||fallback}catch(e){return fallback}}
+            function fmtN(n){return Number(n||0).toLocaleString();}
+            function fmtM(n){return '$'+Number(n||0).toLocaleString();}
+            function fmtPct(n){return Number(n||0).toFixed(1).replace(/\.0$/,'')+'%';}
+            function ceilDiv(a,b){return b>0?Math.ceil(a/b):0;}
+            function round1(n){return Math.round(Number(n||0)*10)/10;}
+            function num(id){return Number((document.getElementById(id).value||'0').toString().replace(/[^0-9.]/g,''));}
+            function assumptionState(user, benchmark, tolerance){
+                tolerance = tolerance || 0.12;
+                if (!benchmark) return 'custom';
+                return Math.abs((user-benchmark)/benchmark) <= tolerance ? 'benchmark' : 'custom';
+            }
+            function qualityBand(score){
+                if(score>=82)return{label:'Ready now',tone:'good'};
+                if(score>=68)return{label:'Workable',tone:'warn'};
+                return{label:'Thin',tone:'bad'};
+            }
+            function verdict(value, low, high){
+                return value>=low && value<=high ? 'good' : value<low ? 'bad' : 'warn';
+            }
+            function getCoverageSnapshot(quota){
+                if(!(dh && typeof dh.computeCoverage === 'function' && typeof dh.loadAllDeals === 'function') || !quota){
+                    return {ratio:0, weighted:0, raw:0, needed:0};
                 }
-            }, 500);
-        }
-
-        var saved={};
-        var seed={};
-
-        window.fmtC=function(el){var v=el.value.replace(/[^0-9]/g,'');el.value=v?Number(v).toLocaleString():''};
-        function num(id){return Number((document.getElementById(id).value||'0').toString().replace(/[^0-9.]/g,''));}
-
-        window.checkBenchmarks=function(){
-            var acv=num('inACV');
-            if(acv<10000){document.getElementById('benchHint').classList.remove('visible');return;}
-            var band=getBand(acv);
-            var b=ACV_BENCHMARKS[band];
-            var hint=document.getElementById('benchHint');
-            hint.innerHTML='<strong>'+b.label+' benchmarks</strong> for '+fmtM(acv)+' ACV: '+b.winRate+'% win rate, '+b.cycle+'-day cycle, '+b.coverage+'\u00d7 coverage. <button onclick="applyBenchmarks()">Apply</button>';
-            hint.classList.add('visible');
-        };
-
-        window.applyBenchmarks=function(){
-            var acv=num('inACV');
-            var band=getBand(acv);
-            var b=ACV_BENCHMARKS[band];
-            document.getElementById('inWin').value=b.winRate;
-            document.getElementById('inM2O').value=b.m2o;
-            document.getElementById('inCycle').value=b.cycle;
-            document.getElementById('benchHint').classList.remove('visible');
-            calc();
-        };
-
-        window.calc=function(){
-            var quota=num('inQuota'),acv=num('inACV'),win=num('inWin')/100;
-            var m2o=num('inM2O')/100,t2m=num('inT2M')/100,show=num('inShow')/100;
-            var days=num('inDays'),tpa=num('inTPA'),cycle=num('inCycle');
-
-            var monthly=Math.round(quota/12);
-            var dealsNeeded=acv>0?Math.ceil(monthly/acv):0;
-            var oppsNeeded=win>0?Math.ceil(dealsNeeded/win):0;
-            var meetingsSched=m2o>0?Math.ceil(oppsNeeded/m2o):0;
-            var meetingsHeld=show>0?Math.ceil(meetingsSched/show):0;
-            var totalTouches=t2m>0?Math.ceil(meetingsHeld/t2m):0;
-            var activeAccounts=tpa>0?Math.ceil(totalTouches/tpa):0;
-            var touchesDay=days>0?Math.ceil(totalTouches/days):0;
-            var pipelineNeeded=win>0?Math.round(monthly/win):0;
-
-            document.getElementById('heroTouches').textContent=touchesDay;
-            document.getElementById('heroLabel').textContent='touches per day across '+activeAccounts+' accounts to hit '+fmtM(monthly)+'/month';
-
-            document.getElementById('mathBlock').innerHTML=
-                '<div class="qw-math-title">The Math</div>'+
-                '<div class="qw-row"><span class="qw-row-label">Monthly Target</span><span class="qw-row-value">'+fmtM(monthly)+'</span></div>'+
-                '<div class="qw-row"><span class="qw-row-label">Deals needed/month</span><span class="qw-row-value">'+dealsNeeded+'</span></div>'+
-                '<div class="qw-row"><span class="qw-row-label">Pipeline coverage needed</span><span class="qw-row-value">'+fmtM(pipelineNeeded)+'</span></div>'+
-                '<div class="qw-row"><span class="qw-row-label">Opportunities needed</span><span class="qw-row-value">'+oppsNeeded+'</span></div>'+
-                '<div class="qw-row"><span class="qw-row-label">Meetings to schedule</span><span class="qw-row-value">'+meetingsSched+'</span></div>'+
-                '<div class="qw-row"><span class="qw-row-label">Total touches/month</span><span class="qw-row-value">'+fmtN(totalTouches)+'</span></div>'+
-                '<div class="qw-row"><span class="qw-row-label">Active accounts to work</span><span class="qw-row-value gold">'+activeAccounts+'</span></div>';
-
-            // Save
-            var inputs={quota:quota,acv:acv,win:num('inWin'),m2o:num('inM2O'),t2m:num('inT2M'),show:num('inShow'),days:days,tpa:tpa,cycle:cycle};
-            localStorage.setItem('gtmos_qw_inputs',JSON.stringify(inputs));
-            syncDocToCloud('gtmos_qw_inputs', inputs);
-            var currentBand = getBand(acv);
-            var outboundSeed={annual_quota:quota,avg_deal_size:acv,win_rate:num('inWin'),touch_to_meeting:num('inT2M'),show_rate:num('inShow'),cycle_days:cycle,coverage_target:ACV_BENCHMARKS[currentBand].coverage,acv_band:currentBand};
-            localStorage.setItem('gtmos_outbound_seed',JSON.stringify(outboundSeed));
-            syncDocToCloud('gtmos_outbound_seed', outboundSeed);
-            scheduleProfileSync(quota, acv, currentBand);
-
-            // Coverage bar
-            if(dh&&quota>0){
-                var cov=dh.computeCoverage(dh.loadAllDeals(),quota);
-                var target=ACV_BENCHMARKS[getBand(acv)].coverage;
-                var pct=Math.min(100,Math.round(cov.ratio/target*100));
-                var color=cov.ratio>=target?'green':cov.ratio>=target*0.6?'amber':'red';
-                document.getElementById('coverageBar').innerHTML=
-                    '<div class="qw-cov-head"><div class="qw-cov-title">Pipeline Coverage</div><div class="qw-cov-ratio '+color+'">'+cov.ratio+'\u00d7 / '+target+'\u00d7 needed</div></div>'+
-                    '<div class="qw-cov-bar"><div class="qw-cov-fill '+color+'" style="width:'+pct+'%"></div></div>'+
-                    '<div class="qw-cov-meta"><span>'+fmtM(cov.weighted)+' weighted</span><span>'+fmtM(cov.raw)+' raw</span>'+(cov.needed>0?'<span>Gap: '+fmtM(cov.needed)+'</span>':'<span style="color:#22c55e;">On target</span>')+'</div>';
-            } else {
-                document.getElementById('coverageBar').innerHTML=
-                    '<div class="qw-cov-head"><div class="qw-cov-title">Pipeline Coverage</div><div class="qw-cov-ratio" style="color:var(--text-muted);">'+(quota?'No deals yet':'Set quota to see coverage')+'</div></div>';
+                return dh.computeCoverage(dh.loadAllDeals(), quota);
             }
 
-            // Dynamic benchmark cards
-            var band=currentBand;
-            var b=ACV_BENCHMARKS[band];
-            var userWin=num('inWin');
-            var userCycle=cycle;
-            var covRatio=dh?dh.computeCoverage(dh.loadAllDeals(),quota).ratio:0;
+            var ACV_BENCHMARKS = {
+                small:{maxAcv:30000,winRate:25,cycle:45,m2o:40,coverage:3.0,label:'SMB',winRange:'20-30%',cycleRange:'30-60 days'},
+                mid:{maxAcv:75000,winRate:20,cycle:90,m2o:35,coverage:3.5,label:'Mid-Market',winRange:'15-25%',cycleRange:'60-120 days'},
+                enterprise:{maxAcv:200000,winRate:15,cycle:180,m2o:30,coverage:4.5,label:'Enterprise',winRange:'10-18%',cycleRange:'120-270 days'},
+                strategic:{maxAcv:Infinity,winRate:12,cycle:240,m2o:25,coverage:5.0,label:'Strategic',winRange:'8-15%',cycleRange:'180-360 days'}
+            };
 
-            function verdict(val,lo,hi){return val>=lo&&val<=hi?'good':val<lo?'bad':'warn';}
-            var winV=verdict(userWin,b.winRate*0.7,b.winRate*1.5);
-            var cycleV=verdict(userCycle,b.cycle*0.5,b.cycle*1.5);
-            var covV=covRatio>=b.coverage?'good':covRatio>=b.coverage*0.6?'warn':'bad';
-
-            document.getElementById('benchCards').innerHTML=
-                '<div class="qw-bench-card"><div class="val">'+userWin+'%</div><div class="yours">Your Win Rate</div><div class="range">Benchmark: '+b.winRange+'</div><div class="verdict '+winV+'">'+(winV==='good'?'In range':winV==='warn'?'Above range':'Below range')+'</div></div>'+
-                '<div class="qw-bench-card"><div class="val">'+userCycle+'d</div><div class="yours">Your Cycle</div><div class="range">Benchmark: '+b.cycleRange+'</div><div class="verdict '+cycleV+'">'+(cycleV==='good'?'In range':cycleV==='warn'?'Above range':'Below range')+'</div></div>'+
-                '<div class="qw-bench-card"><div class="val">'+covRatio+'\u00d7</div><div class="yours">Your Coverage</div><div class="range">Benchmark: '+b.coverage+'\u00d7</div><div class="verdict '+covV+'">'+(covV==='good'?'On target':covV==='warn'?'Below target':'Pipeline gap')+'</div></div>';
-            document.getElementById('benchCards').style.display='grid';
-        };
-
-        async function initQuotaWorkback(){
-            if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-                try{await window.requireAuthReady;}catch(e){}
-            }
-            if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
-                var docsLoaded=await window.gtmPersistence.docs.load({keys:['gtmos_qw_inputs','gtmos_outbound_seed']});
-                if(docsLoaded&&docsLoaded.error)console.error('Quota Workback docs preload failed:',docsLoaded.error);
+            function getBand(acv){
+                acv = Number(acv)||0;
+                if(acv>=200000)return 'strategic';
+                if(acv>=75000)return 'enterprise';
+                if(acv>=30000)return 'mid';
+                return 'small';
             }
 
-            saved=readLS('gtmos_qw_inputs',{});
-            seed=readLS('gtmos_outbound_seed',{});
+            function syncDocToCloud(key, data) {
+                if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function')) return;
+                window.gtmPersistence.docs.save(key, data).catch(function(error) {
+                    console.error('Quota workback doc sync failed for', key, error);
+                });
+            }
 
-            document.getElementById('inQuota').value=fmtN(saved.quota||seed.annual_quota||0);
-            document.getElementById('inACV').value=fmtN(saved.acv||seed.avg_deal_size||50000);
-            document.getElementById('inWin').value=saved.win||seed.win_rate||20;
-            document.getElementById('inM2O').value=saved.m2o||35;
-            document.getElementById('inT2M').value=saved.t2m||seed.touch_to_meeting||0.7;
-            document.getElementById('inShow').value=saved.show||seed.show_rate||80;
-            document.getElementById('inDays').value=saved.days||20;
-            document.getElementById('inTPA').value=saved.tpa||8;
-            document.getElementById('inCycle').value=saved.cycle||seed.cycle_days||45;
+            function scheduleProfileSync(quota, acv, band) {
+                if (typeof window.updateWorkspaceProfile !== 'function') return;
+                if (profileSyncTimer) clearTimeout(profileSyncTimer);
+                profileSyncTimer = setTimeout(async function() {
+                    var result = await window.updateWorkspaceProfile({
+                        quota: quota || null,
+                        average_deal_size: acv || null,
+                        acv_band: band || null
+                    });
+                    if (result && result.error) {
+                        console.error('Quota workback sync failed:', result.error);
+                    }
+                }, 500);
+            }
 
-            calc();
-            checkBenchmarks();
-        }
+            function renderCoverage(quota, acv, coverage, benchmark){
+                var target = benchmark.coverage;
+                if(quota>0 && coverage && coverage.ratio){
+                    var pct = Math.min(100, Math.round((coverage.ratio/target)*100));
+                    var tone = coverage.ratio>=target ? 'green' : coverage.ratio>=target*0.6 ? 'amber' : 'red';
+                    document.getElementById('coverageBar').innerHTML =
+                        '<div class="qw-cov-head"><div class="qw-cov-title">Pipeline coverage</div><div class="qw-cov-ratio '+tone+'">'+coverage.ratio+'x / '+target+'x needed</div></div>'+
+                        '<div class="qw-cov-bar"><div class="qw-cov-fill '+tone+'" style="width:'+pct+'%"></div></div>'+
+                        '<div class="qw-cov-meta"><span>'+fmtM(coverage.weighted)+' weighted</span><span>'+fmtM(coverage.raw)+' raw</span>'+(coverage.needed>0?'<span>Gap: '+fmtM(coverage.needed)+'</span>':'<span style="color:#22c55e;">On target</span>')+'</div>';
+                    return;
+                }
+                document.getElementById('coverageBar').innerHTML =
+                    '<div class="qw-cov-head"><div class="qw-cov-title">Pipeline coverage</div><div class="qw-cov-ratio" style="color:var(--text-muted);">'+(quota && acv ? 'No deals yet' : 'Set quota and ACV to see coverage')+'</div></div>'+
+                    '<div class="qw-empty-note">Coverage should become the dashboard pressure layer. Right now this module is waiting for a real quota target and live deal data.</div>';
+            }
 
-        initQuotaWorkback().catch(function(error){
-            console.error('Quota Workback init failed:',error);
-            saved=readLS('gtmos_qw_inputs',{});
-            seed=readLS('gtmos_outbound_seed',{});
-            document.getElementById('inQuota').value=fmtN(saved.quota||seed.annual_quota||0);
-            document.getElementById('inACV').value=fmtN(saved.acv||seed.avg_deal_size||50000);
-            document.getElementById('inWin').value=saved.win||seed.win_rate||20;
-            document.getElementById('inM2O').value=saved.m2o||35;
-            document.getElementById('inT2M').value=saved.t2m||seed.touch_to_meeting||0.7;
-            document.getElementById('inShow').value=saved.show||seed.show_rate||80;
-            document.getElementById('inDays').value=saved.days||20;
-            document.getElementById('inTPA').value=saved.tpa||8;
-            document.getElementById('inCycle').value=saved.cycle||seed.cycle_days||45;
-            calc();
-            checkBenchmarks();
-        });
+            function renderBridge(metrics, benchmark, quality){
+                document.getElementById('bridgeMeta').innerHTML =
+                    '<span class="qw-chip">'+benchmark.label+' assumptions</span>'+
+                    '<span class="qw-chip '+quality.tone+'">'+quality.label+'</span>'+
+                    '<span class="qw-chip">'+fmtM(metrics.monthlyTarget)+'/month target</span>'+
+                    '<span class="qw-chip">'+fmtN(metrics.touchesMonth)+' touches/month</span>';
 
-        window.copyMath=function(){
-            var txt='QUOTA WORKBACK\n'+document.getElementById('heroTouches').textContent+' '+document.getElementById('heroLabel').textContent+'\n\n';
-            document.querySelectorAll('.qw-row').forEach(function(r){
-                var l=r.querySelector('.qw-row-label'),v=r.querySelector('.qw-row-value');
-                if(l&&v)txt+=l.textContent+': '+v.textContent+'\n';
+                document.getElementById('bridgeSummary').innerHTML =
+                    '<h3>What this should do</h3>'+
+                    '<p>Within one sitting, this module should tell you whether your target is believable, what the weekly motion target is, and where the pressure now belongs across Outbound Studio, Cold Call Studio, and the Dashboard.</p>'+
+                    '<div class="qw-summary-block">'+
+                        '<div class="qw-summary-box"><h4>Assumption posture</h4><p>'+benchmark.label+' band. Win rate is '+metrics.winState+'. Meeting conversion is '+metrics.m2oState+'. Cycle is '+metrics.cycleState+'.</p></div>'+
+                        '<div class="qw-summary-box"><h4>One-session win</h4><p>Leave with a weekly activity target, a believable coverage goal, and explicit downstream handoffs instead of keeping quota as abstract math.</p></div>'+
+                    '</div>';
+            }
+
+            function renderPlan(metrics, benchmark, quality){
+                document.getElementById('planCard').innerHTML =
+                    '<div class="qw-card-title">Operating plan</div>'+
+                    '<div class="qw-plan">'+
+                        '<div class="qw-plan-card"><div class="qw-plan-label">Touches per week</div><div class="qw-plan-value">'+fmtN(metrics.touchesWeek)+'</div><div class="qw-plan-note">Run '+metrics.touchesDay+' touches/day so the outbound machine stays on pace.</div></div>'+
+                        '<div class="qw-plan-card"><div class="qw-plan-label">Meetings per week</div><div class="qw-plan-value">'+metrics.meetingsWeek+'</div><div class="qw-plan-note">This is the meeting creation floor your channels need to support.</div></div>'+
+                        '<div class="qw-plan-card"><div class="qw-plan-label">Opps per quarter</div><div class="qw-plan-value">'+fmtN(metrics.oppsQuarter)+'</div><div class="qw-plan-note">Use this as pipeline creation pressure, not a passive report.</div></div>'+
+                        '<div class="qw-plan-card"><div class="qw-plan-label">Deals per quarter</div><div class="qw-plan-value">'+fmtN(metrics.dealsQuarter)+'</div><div class="qw-plan-note">This is the close rate your weekly work is trying to make inevitable.</div></div>'+
+                    '</div>'+
+                    '<div class="qw-summary-block">'+
+                        '<div class="qw-summary-box"><h4>Planning read</h4><p>'+benchmark.label+' quota math currently scores <strong>'+metrics.qualityScore+'/100</strong> ('+quality.label+'). Weekly revenue target is '+fmtM(metrics.weeklyRevenue)+'. Daily account pressure is '+metrics.accountPressure+' accounts touched per day equivalent.</p></div>'+
+                        '<div class="qw-summary-box"><h4>What to pressure test</h4><p>'+(metrics.qualityScore>=82?'The math is believable. Now make sure Dashboard coverage and Outbound execution stay in sync with it.':metrics.qualityScore>=68?'The math is workable, but one weak conversion assumption can break the quarter. Tighten the weakest assumption before trusting the plan.':'The math is too thin to trust yet. Improve conversion assumptions or reduce target ambition before using this as operating truth.')+'</p></div>'+
+                    '</div>';
+            }
+
+            function renderMath(metrics){
+                document.getElementById('mathBlock').innerHTML =
+                    '<div class="qw-math-title">The math</div>'+
+                    '<div class="qw-row"><span class="qw-row-label">Monthly target</span><span class="qw-row-value">'+fmtM(metrics.monthlyTarget)+'</span></div>'+
+                    '<div class="qw-row"><span class="qw-row-label">Deals needed/month</span><span class="qw-row-value">'+metrics.dealsMonth+'</span></div>'+
+                    '<div class="qw-row"><span class="qw-row-label">Weighted pipeline needed</span><span class="qw-row-value">'+fmtM(metrics.pipelineNeeded)+'</span></div>'+
+                    '<div class="qw-row"><span class="qw-row-label">Opportunities needed</span><span class="qw-row-value">'+metrics.oppsMonth+'</span></div>'+
+                    '<div class="qw-row"><span class="qw-row-label">Meetings to schedule</span><span class="qw-row-value">'+metrics.meetingsMonth+'</span></div>'+
+                    '<div class="qw-row"><span class="qw-row-label">Total touches/month</span><span class="qw-row-value">'+fmtN(metrics.touchesMonth)+'</span></div>'+
+                    '<div class="qw-row"><span class="qw-row-label">Active accounts to work</span><span class="qw-row-value gold">'+fmtN(metrics.activeAccounts)+'</span></div>';
+            }
+
+            function renderBenchmarks(metrics, benchmark, coverage){
+                var winV = verdict(metrics.winRateRaw, benchmark.winRate*0.7, benchmark.winRate*1.5);
+                var cycleV = verdict(metrics.cycleDays, benchmark.cycle*0.5, benchmark.cycle*1.5);
+                var covV = coverage.ratio>=benchmark.coverage ? 'good' : coverage.ratio>=benchmark.coverage*0.6 ? 'warn' : 'bad';
+                document.getElementById('benchCards').innerHTML =
+                    '<div class="qw-bench-card"><div class="val">'+metrics.winRateRaw+'%</div><div class="yours">Your win rate</div><div class="range">Benchmark: '+benchmark.winRange+'</div><div class="verdict '+winV+'">'+(winV==='good'?'In range':winV==='warn'?'Above range':'Below range')+'</div></div>'+
+                    '<div class="qw-bench-card"><div class="val">'+metrics.cycleDays+'d</div><div class="yours">Your cycle</div><div class="range">Benchmark: '+benchmark.cycleRange+'</div><div class="verdict '+cycleV+'">'+(cycleV==='good'?'In range':cycleV==='warn'?'Above range':'Below range')+'</div></div>'+
+                    '<div class="qw-bench-card"><div class="val">'+coverage.ratio+'x</div><div class="yours">Your coverage</div><div class="range">Benchmark: '+benchmark.coverage+'x</div><div class="verdict '+covV+'">'+(covV==='good'?'On target':covV==='warn'?'Below target':'Pipeline gap')+'</div></div>';
+                document.getElementById('benchCards').style.display = 'grid';
+            }
+
+            function renderHandoffs(metrics, benchmark, coverage){
+                document.getElementById('handoffCard').innerHTML =
+                    '<div class="qw-card-title">Downstream handoffs</div>'+
+                    '<div class="qw-handoff-grid">'+
+                        '<div class="qw-handoff-card"><h3>Outbound Studio</h3><div class="qw-handoff-metric">'+fmtN(metrics.touchesWeek)+'/week</div><p>Use this module to turn quota into repeatable motion. The immediate standard is enough touches, enough active accounts, and enough meetings created to keep pipeline on track.</p><div class="qw-handoff-meta">'+fmtN(metrics.activeAccounts)+' active accounts, '+fmtPct(metrics.touchToMeetingRaw)+' touch to meeting, '+fmtN(metrics.touchesMonth)+' touches/month.</div><div class="qw-actions"><a class="qw-action-link" href="/app/outbound-studio/">Open Outbound Studio</a></div></div>'+
+                        '<div class="qw-handoff-card"><h3>Cold Call Studio</h3><div class="qw-handoff-metric">'+fmtN(metrics.meetingPushesWeek)+' meeting pushes/week</div><p>Use calls when the plan needs faster conversation density. The target here is not random volume. It is enough live conversation pressure to make the meeting target believable.</p><div class="qw-handoff-meta">'+metrics.touchesDay+' touches/day floor, '+fmtPct(metrics.showRateRaw)+' show rate, '+fmtPct(metrics.meetingToOppRaw)+' meeting to opp.</div><div class="qw-actions"><a class="qw-action-link" href="/app/cold-call-studio/">Open Cold Call Studio</a></div></div>'+
+                        '<div class="qw-handoff-card"><h3>Dashboard</h3><div class="qw-handoff-metric">'+fmtM(metrics.pipelineNeeded)+'</div><p>The Dashboard should now hold you accountable to coverage, recovery pressure, and whether the current workspace can actually support quota.</p><div class="qw-handoff-meta">'+(coverage.ratio?('Current coverage: '+coverage.ratio+'x against '+benchmark.coverage+'x target.'): 'Set quota and load deals to see live coverage pressure.')+'</div><div class="qw-actions"><a class="qw-action-link" href="/app/dashboard/">Open Dashboard</a><a class="qw-action-link" href="/app/deal-workspace/">Open Deal Workspace</a></div></div>'+
+                    '</div>';
+            }
+
+            function saveOutputs(inputs, metrics, bandKey){
+                localStorage.setItem('gtmos_qw_inputs', JSON.stringify(inputs));
+                syncDocToCloud('gtmos_qw_inputs', inputs);
+
+                var outboundSeed = {
+                    annual_quota: inputs.quota,
+                    avg_deal_size: inputs.acv,
+                    win_rate: inputs.win,
+                    touch_to_meeting: inputs.t2m,
+                    show_rate: inputs.show,
+                    cycle_days: inputs.cycle,
+                    coverage_target: ACV_BENCHMARKS[bandKey].coverage,
+                    acv_band: bandKey
+                };
+                localStorage.setItem('gtmos_outbound_seed', JSON.stringify(outboundSeed));
+                syncDocToCloud('gtmos_outbound_seed', outboundSeed);
+
+                var quotaTargets = {
+                    monthly_target: metrics.monthlyTarget,
+                    weekly_target: metrics.weeklyRevenue,
+                    deals_needed_month: metrics.dealsMonth,
+                    deals_needed_quarter: metrics.dealsQuarter,
+                    opps_needed_month: metrics.oppsMonth,
+                    opps_needed_quarter: metrics.oppsQuarter,
+                    meetings_scheduled_month: metrics.meetingsMonth,
+                    meetings_scheduled_week: metrics.meetingsWeek,
+                    touches_month: metrics.touchesMonth,
+                    touches_week: metrics.touchesWeek,
+                    touches_day: metrics.touchesDay,
+                    active_accounts: metrics.activeAccounts,
+                    pipeline_needed_month: metrics.pipelineNeeded,
+                    benchmark_band: bandKey,
+                    quality_score: metrics.qualityScore,
+                    quality_band: qualityBand(metrics.qualityScore).label
+                };
+                localStorage.setItem('gtmos_quota_targets', JSON.stringify(quotaTargets));
+                syncDocToCloud('gtmos_quota_targets', quotaTargets);
+                scheduleProfileSync(inputs.quota, inputs.acv, bandKey);
+            }
+
+            window.fmtC = function(el){
+                var value = el.value.replace(/[^0-9]/g,'');
+                el.value = value ? Number(value).toLocaleString() : '';
+            };
+
+            window.checkBenchmarks = function(){
+                var acv = num('inACV');
+                var hint = document.getElementById('benchHint');
+                if(acv<10000){
+                    hint.classList.remove('visible');
+                    return;
+                }
+                var band = getBand(acv);
+                var benchmark = ACV_BENCHMARKS[band];
+                hint.innerHTML = '<strong>'+benchmark.label+' benchmarks</strong> for '+fmtM(acv)+' ACV: '+benchmark.winRate+'% win rate, '+benchmark.cycle+'-day cycle, '+benchmark.coverage+'x coverage. <button onclick="applyBenchmarks()">Apply</button>';
+                hint.classList.add('visible');
+            };
+
+            window.applyBenchmarks = function(){
+                var acv = num('inACV');
+                var band = getBand(acv);
+                var benchmark = ACV_BENCHMARKS[band];
+                document.getElementById('inWin').value = benchmark.winRate;
+                document.getElementById('inM2O').value = benchmark.m2o;
+                document.getElementById('inCycle').value = benchmark.cycle;
+                document.getElementById('benchHint').classList.remove('visible');
+                calc();
+            };
+
+            window.calc = function(){
+                var quota = num('inQuota');
+                var acv = num('inACV');
+                var win = num('inWin')/100;
+                var m2o = num('inM2O')/100;
+                var t2m = num('inT2M')/100;
+                var show = num('inShow')/100;
+                var days = num('inDays');
+                var tpa = num('inTPA');
+                var cycle = num('inCycle');
+                var bandKey = getBand(acv);
+                var benchmark = ACV_BENCHMARKS[bandKey];
+                var coverage = getCoverageSnapshot(quota);
+
+                var monthly = Math.round(quota/12);
+                var dealsNeeded = acv>0 ? Math.ceil(monthly/acv) : 0;
+                var oppsNeeded = win>0 ? Math.ceil(dealsNeeded/win) : 0;
+                var meetingsSched = m2o>0 ? Math.ceil(oppsNeeded/m2o) : 0;
+                var meetingsHeld = show>0 ? Math.ceil(meetingsSched/show) : 0;
+                var totalTouches = t2m>0 ? Math.ceil(meetingsHeld/t2m) : 0;
+                var activeAccounts = tpa>0 ? Math.ceil(totalTouches/tpa) : 0;
+                var touchesDay = days>0 ? Math.ceil(totalTouches/days) : 0;
+                var touchesWeek = ceilDiv(totalTouches, 4);
+                var meetingsWeek = round1(meetingsSched/4);
+                var meetingPushesWeek = ceilDiv(meetingsSched, 4);
+                var oppsQuarter = oppsNeeded*3;
+                var dealsQuarter = dealsNeeded*3;
+                var weeklyRevenue = ceilDiv(monthly, 4);
+                var pipelineNeeded = win>0 ? Math.round(monthly/win) : 0;
+                var accountPressure = days>0 ? round1(activeAccounts/days) : 0;
+                var qualityScore = (!quota || !acv) ? 0 : Math.max(0, Math.min(100,
+                    34 +
+                    Math.max(0, 24 - Math.min(24, Math.abs(num('inWin')-benchmark.winRate))) +
+                    Math.max(0, 18 - Math.min(18, Math.abs(num('inM2O')-benchmark.m2o))) +
+                    Math.max(0, 12 - Math.min(12, Math.abs(cycle-benchmark.cycle)/10)) +
+                    Math.max(0, 12 - Math.min(12, Math.abs((coverage.ratio||0)-benchmark.coverage)*6))
+                ));
+                var quality = qualityBand(qualityScore);
+                var metrics = {
+                    monthlyTarget: monthly,
+                    weeklyRevenue: weeklyRevenue,
+                    dealsMonth: dealsNeeded,
+                    dealsQuarter: dealsQuarter,
+                    oppsMonth: oppsNeeded,
+                    oppsQuarter: oppsQuarter,
+                    meetingsMonth: meetingsSched,
+                    meetingsWeek: meetingsWeek,
+                    meetingPushesWeek: meetingPushesWeek,
+                    touchesMonth: totalTouches,
+                    touchesWeek: touchesWeek,
+                    touchesDay: touchesDay,
+                    activeAccounts: activeAccounts,
+                    pipelineNeeded: pipelineNeeded,
+                    accountPressure: accountPressure,
+                    qualityScore: qualityScore,
+                    winRateRaw: num('inWin'),
+                    meetingToOppRaw: num('inM2O'),
+                    touchToMeetingRaw: num('inT2M'),
+                    showRateRaw: num('inShow'),
+                    cycleDays: cycle,
+                    winState: assumptionState(num('inWin'), benchmark.winRate)==='benchmark' ? 'still close to benchmark' : 'customized away from benchmark',
+                    m2oState: assumptionState(num('inM2O'), benchmark.m2o, 0.15)==='benchmark' ? 'still credible for the band' : 'customized enough to watch closely',
+                    cycleState: assumptionState(cycle, benchmark.cycle, 0.2)==='benchmark' ? 'still within expected range' : 'materially custom and worth pressure-testing'
+                };
+
+                document.getElementById('heroTouches').textContent = touchesDay;
+                document.getElementById('heroLabel').textContent = quota && acv ? 'touches per day across '+activeAccounts+' accounts to hit '+fmtM(monthly)+'/month' : 'Set quota and ACV to turn revenue into weekly execution pressure.';
+
+                renderBridge(metrics, benchmark, quality);
+                renderCoverage(quota, acv, coverage, benchmark);
+                renderPlan(metrics, benchmark, quality);
+                renderMath(metrics);
+                renderHandoffs(metrics, benchmark, coverage);
+                renderBenchmarks(metrics, benchmark, coverage);
+
+                saveOutputs({
+                    quota: quota,
+                    acv: acv,
+                    win: num('inWin'),
+                    m2o: num('inM2O'),
+                    t2m: num('inT2M'),
+                    show: num('inShow'),
+                    days: days,
+                    tpa: tpa,
+                    cycle: cycle
+                }, metrics, bandKey);
+            };
+
+            async function initQuotaWorkback(){
+                if(window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function'){
+                    try { await window.requireAuthReady; } catch (e) {}
+                }
+                if(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function'){
+                    var docsLoaded = await window.gtmPersistence.docs.load({keys:['gtmos_qw_inputs','gtmos_outbound_seed','gtmos_quota_targets']});
+                    if(docsLoaded && docsLoaded.error) console.error('Quota Workback docs preload failed:', docsLoaded.error);
+                }
+
+                saved = readLS('gtmos_qw_inputs', {});
+                seed = readLS('gtmos_outbound_seed', {});
+                document.getElementById('inQuota').value = fmtN(saved.quota || seed.annual_quota || 0);
+                document.getElementById('inACV').value = fmtN(saved.acv || seed.avg_deal_size || 50000);
+                document.getElementById('inWin').value = saved.win || seed.win_rate || 20;
+                document.getElementById('inM2O').value = saved.m2o || 35;
+                document.getElementById('inT2M').value = saved.t2m || seed.touch_to_meeting || 0.7;
+                document.getElementById('inShow').value = saved.show || seed.show_rate || 80;
+                document.getElementById('inDays').value = saved.days || 20;
+                document.getElementById('inTPA').value = saved.tpa || 8;
+                document.getElementById('inCycle').value = saved.cycle || seed.cycle_days || 45;
+                calc();
+                checkBenchmarks();
+            }
+
+            initQuotaWorkback().catch(function(error){
+                console.error('Quota Workback init failed:', error);
+                saved = readLS('gtmos_qw_inputs', {});
+                seed = readLS('gtmos_outbound_seed', {});
+                document.getElementById('inQuota').value = fmtN(saved.quota || seed.annual_quota || 0);
+                document.getElementById('inACV').value = fmtN(saved.acv || seed.avg_deal_size || 50000);
+                document.getElementById('inWin').value = saved.win || seed.win_rate || 20;
+                document.getElementById('inM2O').value = saved.m2o || 35;
+                document.getElementById('inT2M').value = saved.t2m || seed.touch_to_meeting || 0.7;
+                document.getElementById('inShow').value = saved.show || seed.show_rate || 80;
+                document.getElementById('inDays').value = saved.days || 20;
+                document.getElementById('inTPA').value = saved.tpa || 8;
+                document.getElementById('inCycle').value = saved.cycle || seed.cycle_days || 45;
+                calc();
+                checkBenchmarks();
             });
-            navigator.clipboard.writeText(txt).then(function(){alert('Copied!')});
-        };
-    })();
+
+            window.copyMath = function(){
+                var txt = 'QUOTA WORKBACK\\n'+document.getElementById('heroTouches').textContent+' '+document.getElementById('heroLabel').textContent+'\\n\\n';
+                document.querySelectorAll('.qw-row').forEach(function(row){
+                    var label = row.querySelector('.qw-row-label');
+                    var value = row.querySelector('.qw-row-value');
+                    if(label && value) txt += label.textContent+': '+value.textContent+'\\n';
+                });
+                txt += '\\nOPERATING PLAN\\n';
+                document.querySelectorAll('.qw-plan-card').forEach(function(card){
+                    var label = card.querySelector('.qw-plan-label');
+                    var value = card.querySelector('.qw-plan-value');
+                    if(label && value) txt += label.textContent+': '+value.textContent+'\\n';
+                });
+                navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
+            };
+        })();
     </script>
 </body>
 </html>
