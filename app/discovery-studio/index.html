@@ -17,6 +17,26 @@
         .ds-cat-btn.negotiation.active{background:rgba(245,158,11,0.08);}
         .ds-cat-btn.ai{border-color:rgba(168,85,247,0.4);color:#a855f7;}
         .ds-cat-btn.ai.active{background:rgba(168,85,247,0.08);}
+        .ds-bridge{padding:20px 22px;border-radius:var(--radius-xl);border:1px solid rgba(212,165,116,0.18);background:linear-gradient(135deg, rgba(212,165,116,0.1), rgba(59,130,246,0.04));margin-bottom:var(--space-md);}
+        .ds-bridge-k{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
+        .ds-bridge-title{font-size:1.08rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+        .ds-bridge-copy{font-size:0.84rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:14px;}
+        .ds-bridge-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+        .ds-bridge-block{padding:14px 16px;border-radius:var(--radius-lg);background:rgba(6,10,18,0.28);border:1px solid rgba(255,255,255,0.06);}
+        .ds-bridge-label{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.45px;color:var(--text-muted);font-weight:700;margin-bottom:7px;}
+        .ds-bridge-value{font-size:0.8rem;color:var(--text-secondary);line-height:1.55;}
+        .ds-framework-guide,.ds-worked-loop{padding:16px 18px;border-radius:var(--radius-lg);border:1px solid var(--border-default);background:var(--bg-secondary);margin-bottom:var(--space-md);}
+        .ds-framework-guide-title,.ds-worked-loop-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
+        .ds-framework-guide-copy,.ds-worked-loop-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.6;margin-bottom:12px;}
+        .ds-framework-actions{display:flex;gap:10px;flex-wrap:wrap;}
+        .ds-framework-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.75rem;font-weight:700;cursor:pointer;}
+        .ds-framework-btn:hover{border-color:var(--border-hover);}
+        .ds-framework-btn.primary{background:rgba(212,165,116,0.1);border-color:rgba(212,165,116,0.24);color:var(--brand-gold);}
+        .ds-worked-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+        .ds-worked-item{padding:12px 14px;border-radius:var(--radius-md);background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);}
+        .ds-worked-item-k{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.45px;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
+        .ds-worked-item-title{font-size:0.8rem;font-weight:700;color:var(--text-secondary);margin-bottom:4px;}
+        .ds-worked-item-copy{font-size:0.75rem;color:var(--text-muted);line-height:1.5;}
         .ds-header{padding:20px 0;margin-bottom:var(--space-md);}
         .ds-header-title{font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);margin-bottom:4px;}
         .ds-header-desc{font-size:0.85rem;color:var(--text-muted);line-height:1.5;}
@@ -84,7 +104,8 @@
         .ds-seg-card-text{font-size:0.8rem;color:var(--text-tertiary);line-height:1.5;white-space:pre-line;}
         .ds-watch{margin-top:10px;padding:8px 12px;background:rgba(245,158,11,0.04);border:1px solid rgba(245,158,11,0.12);border-radius:var(--radius-sm);font-size:0.75rem;color:var(--text-muted);}
         .ds-watch strong{color:#f59e0b;}
-        @media(max-width:700px){.ds-stats{grid-template-columns:1fr;}.ds-cat-bar{gap:4px;}}
+        @media(max-width:1024px){.ds-bridge-grid,.ds-worked-list{grid-template-columns:1fr 1fr;}}
+        @media(max-width:700px){.ds-stats,.ds-bridge-grid,.ds-worked-list{grid-template-columns:1fr;}.ds-cat-bar{gap:4px;}}
     </style>
 </head>
 <body>
@@ -105,7 +126,10 @@
             </header>
             <div class="app-content" style="max-width:800px;">
                 <div class="ds-stats" id="statsBar"></div>
+                <div id="bridgePanel"></div>
                 <div class="ds-cat-bar" id="catBar"></div>
+                <div id="frameworkGuide"></div>
+                <div id="workedLoop"></div>
                 <div id="mainContent"></div>
             </div>
         </main>
@@ -137,7 +161,10 @@
         }
         function renderBootState(kind,title,text){
             document.getElementById('statsBar').innerHTML='';
+            document.getElementById('bridgePanel').innerHTML='';
             document.getElementById('catBar').innerHTML='';
+            document.getElementById('frameworkGuide').innerHTML='';
+            document.getElementById('workedLoop').innerHTML='';
             var html='<div class="ds-boot-card '+kind+'">';
             html+='<div class="ds-boot-eyebrow">'+(kind==='loading'?'Loading module':'Load failed')+'</div>';
             html+='<div class="ds-boot-title">'+escH(title)+'</div>';
@@ -214,12 +241,193 @@
             ]}
         ];
 
+        function getDeals(){
+            var deals=readLS('gtmos_deal_workspaces',[]);
+            if(!Array.isArray(deals))deals=Object.values(deals||{});
+            return deals;
+        }
+
+        function getAgendaState(){
+            return readLS('gtmos_discovery_agenda',null)||null;
+        }
+
+        function getHandoffState(){
+            return readLS('gtmos_call_handoff',null)||null;
+        }
+
+        function getLinkedDeal(){
+            var agenda=getAgendaState();
+            var dealId=agenda&&agenda.linkedDeal?agenda.linkedDeal:'';
+            if(!dealId)return null;
+            return getDeals().find(function(d){return d&&d.id===dealId;})||null;
+        }
+
+        function getFrameworkMeta(cat){
+            if(cat==='negotiation'){
+                return {
+                    label:'Negotiation & Procurement',
+                    description:'Use this when the deal is commercial now: price pushback, pilot terms, procurement, CFO pressure, or close-plan friction.',
+                    oneSessionWin:'Leave with a cleaner commercial move, a real trade, or the next close step scheduled.',
+                    goodUse:'Only switch here when the call is already late-stage. Discovery Studio should not become pricing panic too early.'
+                };
+            }
+            if(cat==='ai-objections'){
+                return {
+                    label:'AI Objections',
+                    description:'Use this when the live blocker is trust in the model itself: hallucinations, reliability, accuracy, or human override.',
+                    oneSessionWin:'Leave with the right objection path, not a generic defense of AI.',
+                    goodUse:'This is a specialist layer. Do not hide in it if the real problem is still vague discovery.'
+                };
+            }
+            var fw=discoveryFrameworks[cat];
+            if(!fw){
+                return {
+                    label:'Discovery Studio',
+                    description:'Run better live discovery and log what actually worked.',
+                    oneSessionWin:'Surface the right entry, survive the pushback, and leave with a clearer next move.',
+                    goodUse:'Use the product framework that matches what you actually sell.'
+                };
+            }
+            return {
+                label:fw.label,
+                description:fw.description,
+                oneSessionWin:'Use the entries to open, the response patterns to survive friction, and only mark moves worked when they actually earned advancement.',
+                goodUse:'Stay inside this framework while the conversation is still about pain, workflow, urgency, and qualification.'
+            };
+        }
+
+        function renderDiscoveryBridge(){
+            var node=document.getElementById('bridgePanel');
+            if(!node)return;
+            var agenda=getAgendaState();
+            var handoff=getHandoffState();
+            var deal=getLinkedDeal();
+            var meta=getFrameworkMeta(currentCat);
+            var currentCall=agenda&&agenda.contact
+                ? (agenda.contact+(agenda.company?' @ '+agenda.company:''))
+                : 'No live call context linked yet';
+            var agendaQuality=agenda&&agenda.score
+                ? (String(agenda.score)+'/100 / '+(agenda.band||'Unknown'))
+                : 'Call Planner not linked';
+            var nextMove=handoff&&handoff.nextMove
+                ? handoff.nextMove
+                : (agenda&&agenda.nextMove?agenda.nextMove:'Use Call Planner first if you want Discovery Studio to inherit a real meeting setup.');
+            var downstream=deal
+                ? 'This run is attached to '+(deal.accountName||'the linked deal')+'. After the call, push truth back into Deal Workspace instead of leaving it trapped in notes.'
+                : 'Discovery Studio is strongest when the call has somewhere durable to land. Link a deal in Call Planner before or after the meeting.';
+            var dealHref=deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/';
+            var actions='<div class="ds-framework-actions" style="margin-top:14px;">'+
+                '<button class="ds-framework-btn primary" type="button" onclick="location.href=\'/app/discovery-agenda/\'">Open Call Planner</button>'+
+                '<button class="ds-framework-btn" type="button" onclick="location.href=\''+dealHref+'\'">'+(deal?'Open Linked Deal':'Open Deal Workspace')+'</button>'+
+            '</div>';
+            node.innerHTML=
+                '<div class="ds-bridge">'+
+                    '<div class="ds-bridge-k">Discovery bridge</div>'+
+                    '<div class="ds-bridge-title">Run the call with a live operating system, not memory.</div>'+
+                    '<div class="ds-bridge-copy">'+escH(meta.description)+'</div>'+
+                    '<div class="ds-bridge-grid">'+
+                        '<div class="ds-bridge-block"><div class="ds-bridge-label">Current call</div><div class="ds-bridge-value">'+escH(currentCall)+'</div></div>'+
+                        '<div class="ds-bridge-block"><div class="ds-bridge-label">Agenda quality</div><div class="ds-bridge-value">'+escH(agendaQuality)+'</div></div>'+
+                        '<div class="ds-bridge-block"><div class="ds-bridge-label">One-session win</div><div class="ds-bridge-value">'+escH(meta.oneSessionWin)+'</div></div>'+
+                        '<div class="ds-bridge-block"><div class="ds-bridge-label">Next move</div><div class="ds-bridge-value">'+escH(nextMove)+'</div></div>'+
+                    '</div>'+actions+
+                '</div>';
+        }
+
+        function renderFrameworkGuide(){
+            var node=document.getElementById('frameworkGuide');
+            if(!node)return;
+            var meta=getFrameworkMeta(currentCat);
+            var productCat=readTextLS('gtmos_product_category','cxai');
+            var deals=getDeals();
+            var negCount=deals.filter(function(d){return d&&d.stage==='negotiation';}).length;
+            var actions='';
+            if(currentCat!==productCat){
+                actions+='<button class="ds-framework-btn primary" type="button" onclick="switchCat(\''+productCat+'\')">Back to Product Framework</button>';
+            }
+            if(currentCat!=='negotiation'&&negCount>0){
+                actions+='<button class="ds-framework-btn" type="button" onclick="switchCat(\'negotiation\')">Open Negotiation</button>';
+            }
+            if(discoveryFrameworks['ai-objections']&&currentCat!=='ai-objections'){
+                actions+='<button class="ds-framework-btn" type="button" onclick="switchCat(\'ai-objections\')">Open AI Objections</button>';
+            }
+            if(currentCat!=='cxai'&&productCat!=='cxai'&&!actions){
+                actions+='<button class="ds-framework-btn" type="button" onclick="switchCat(\''+productCat+'\')">Use Current Product Framework</button>';
+            }
+            node.innerHTML=
+                '<div class="ds-framework-guide">'+
+                    '<div class="ds-framework-guide-title">Framework navigation</div>'+
+                    '<div class="ds-framework-guide-copy"><strong style="color:var(--text-secondary);">'+escH(meta.label)+'</strong> is active. '+escH(meta.goodUse)+'</div>'+
+                    (actions?'<div class="ds-framework-actions">'+actions+'</div>':'')+
+                '</div>';
+        }
+
+        function getWorkedMoveDetails(limit){
+            var lookup={};
+            Object.keys(discoveryFrameworks).forEach(function(key){
+                var fw=discoveryFrameworks[key];
+                (fw.territories||[]).forEach(function(t){
+                    (t.responses||[]).forEach(function(r){
+                        lookup[r.id]={
+                            id:r.id,
+                            title:r.label,
+                            territory:t.name,
+                            context:fw.label
+                        };
+                    });
+                });
+            });
+            CFO_SEGMENTS.forEach(function(seg){
+                (seg.items||[]).forEach(function(item){
+                    lookup[seg.id+'_'+item.label]={
+                        id:seg.id+'_'+item.label,
+                        title:item.label,
+                        territory:seg.title,
+                        context:'Negotiation & Procurement'
+                    };
+                });
+            });
+            var worked=Array.from(workedSet).map(function(id){
+                return lookup[id]||{id:id,title:id,territory:'Worked move',context:'Discovery Studio'};
+            });
+            return worked.slice(0,limit||6);
+        }
+
+        function renderWorkedLoop(){
+            var node=document.getElementById('workedLoop');
+            if(!node)return;
+            if(workedSet.size===0){
+                node.innerHTML=
+                    '<div class="ds-worked-loop">'+
+                        '<div class="ds-worked-loop-title">Worked-move learning loop</div>'+
+                        '<div class="ds-worked-loop-copy">Mark a move worked only after a real live call. This is how Discovery Studio becomes your private pattern library instead of a reference archive. Copy Worked should become a review ritual, not a decoration.</div>'+
+                    '</div>';
+                return;
+            }
+            var items=getWorkedMoveDetails(4).map(function(item){
+                return '<div class="ds-worked-item">'+
+                    '<div class="ds-worked-item-k">'+escH(item.context)+'</div>'+
+                    '<div class="ds-worked-item-title">'+escH(item.title)+'</div>'+
+                    '<div class="ds-worked-item-copy">'+escH(item.territory)+'</div>'+
+                '</div>';
+            }).join('');
+            node.innerHTML=
+                '<div class="ds-worked-loop">'+
+                    '<div class="ds-worked-loop-title">Worked-move learning loop</div>'+
+                    '<div class="ds-worked-loop-copy">'+workedSet.size+' move'+(workedSet.size===1?' has':'s have')+' been marked worked. Use this to sharpen the next live call, not to celebrate generic activity.</div>'+
+                    '<div class="ds-worked-list">'+items+'</div>'+
+                '</div>';
+        }
+
         function renderStats(){
             var advRate=stats.totalCalls>0?Math.round((stats.advancedCalls||0)/stats.totalCalls*100):0;
+            var agenda=getAgendaState();
+            var agendaBand=agenda&&agenda.band?agenda.band:'No agenda';
             document.getElementById('statsBar').innerHTML=
                 '<div class="ds-stat"><div class="ds-stat-val">'+stats.totalCalls+'</div><div class="ds-stat-label">Calls Logged</div></div>'+
                 '<div class="ds-stat"><div class="ds-stat-val">'+advRate+'%</div><div class="ds-stat-label">Advance Rate</div></div>'+
-                '<div class="ds-stat"><div class="ds-stat-val">'+workedSet.size+'</div><div class="ds-stat-label">Moves Worked</div></div>';
+                '<div class="ds-stat"><div class="ds-stat-val">'+workedSet.size+'</div><div class="ds-stat-label">Moves Worked</div></div>'+
+                '<div class="ds-stat"><div class="ds-stat-val">'+escH(agendaBand)+'</div><div class="ds-stat-label">Agenda State</div></div>';
         }
 
         function renderCatBar(){
@@ -240,6 +448,9 @@
             localStorage.setItem('gtmos_product_category',JSON.stringify(cat));
             await syncDiscoveryState();
             renderCatBar();
+            renderDiscoveryBridge();
+            renderFrameworkGuide();
+            renderWorkedLoop();
             renderContent();
         };
 
@@ -261,8 +472,9 @@
                 var workedInTerritory=0;
                 (t.responses||[]).forEach(function(r){if(workedSet.has(r.id))workedInTerritory++;});
                 var badge=workedInTerritory>0?'<span class="ds-territory-badge worked">'+workedInTerritory+' worked</span>':'<span class="ds-territory-badge">'+entryCount+' entries, '+responseCount+' responses</span>';
+                var openCls=ti===0?' open':'';
 
-                html+='<div class="ds-territory" data-idx="'+ti+'"><div class="ds-territory-head" onclick="toggleTerritory(this)">';
+                html+='<div class="ds-territory'+openCls+'" data-idx="'+ti+'"><div class="ds-territory-head" onclick="toggleTerritory(this)">';
                 html+='<div><div class="ds-territory-name"><span class="icon">'+(t.icon||'\ud83d\udccd')+'</span>'+escH(t.name)+'</div>';
                 html+='<div class="ds-territory-purpose">'+escH(t.purpose||'')+'</div></div>';
                 html+=badge+'</div>';
@@ -326,8 +538,8 @@
                 html+='<div class="ds-negot-badge">\ud83d\udcbc '+negDeals.length+' deal'+(negDeals.length>1?'s':'')+' in negotiation stage</div>';
             }
 
-            CFO_SEGMENTS.forEach(function(seg){
-                html+='<div class="ds-seg" data-seg="'+seg.id+'"><div class="ds-seg-head" onclick="toggleSeg(this)">';
+            CFO_SEGMENTS.forEach(function(seg,si){
+                html+='<div class="ds-seg'+(si===0?' open':'')+'" data-seg="'+seg.id+'"><div class="ds-seg-head" onclick="toggleSeg(this)">';
                 html+='<div class="ds-seg-title"><span>'+seg.icon+'</span> '+escH(seg.title)+'</div>';
                 html+='<span style="font-size:0.72rem;color:var(--text-muted);">'+seg.items.length+' moves</span>';
                 html+='</div><div class="ds-seg-body">';
@@ -362,12 +574,15 @@
             localStorage.setItem('gtmos_discovery_worked',JSON.stringify(Array.from(workedSet)));
             await syncDiscoveryState();
             renderStats();
+            renderWorkedLoop();
         };
 
         window.copyWorked=function(){
             if(workedSet.size===0){alert('No moves marked as worked yet.');return;}
             var txt='DISCOVERY \u2014 WORKED MOVES\n\n';
-            workedSet.forEach(function(id){txt+='\u2713 '+id+'\n';});
+            getWorkedMoveDetails(200).forEach(function(item){
+                txt+='\u2713 '+item.title+' ['+item.context+' / '+item.territory+']\n';
+            });
             navigator.clipboard.writeText(txt).then(function(){alert('Copied '+workedSet.size+' worked moves!');});
         };
 
@@ -392,7 +607,10 @@
             }
             refreshDiscoveryState();
             renderStats();
+            renderDiscoveryBridge();
             renderCatBar();
+            renderFrameworkGuide();
+            renderWorkedLoop();
             renderContent();
         }
 
