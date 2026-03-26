@@ -15,6 +15,21 @@
         .hero-ring-val { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--font-serif); font-size:2.8rem; color:var(--text-primary); }
         .hero-verdict { font-size:1rem; color:var(--text-tertiary); margin-bottom:8px; }
         .hero-sub { font-size:0.8rem; color:var(--text-muted); max-width:500px; margin:0 auto; }
+        .score-story { display:grid; grid-template-columns:1.05fr 0.95fr; gap:16px; margin-bottom:28px; }
+        .story-card { background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:var(--radius-lg); padding:18px 20px; }
+        .story-kicker { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--brand-gold); font-weight:700; margin-bottom:10px; }
+        .story-title { font-family:var(--font-serif); font-size:1.28rem; color:var(--text-primary); margin:0 0 8px; }
+        .story-copy { font-size:0.82rem; color:var(--text-tertiary); line-height:1.55; margin:0; }
+        .story-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+        .story-chip { display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; border:1px solid rgba(212,165,116,0.16); background:rgba(212,165,116,0.06); color:var(--brand-gold); font-size:0.72rem; font-weight:700; }
+        .story-chip.good { color:#22c55e; border-color:rgba(34,197,94,0.22); background:rgba(34,197,94,0.08); }
+        .story-chip.warn { color:#f59e0b; border-color:rgba(245,158,11,0.22); background:rgba(245,158,11,0.08); }
+        .story-chip.bad { color:#ef4444; border-color:rgba(239,68,68,0.22); background:rgba(239,68,68,0.08); }
+        .story-list { display:flex; flex-direction:column; gap:10px; margin-top:12px; }
+        .story-row { display:flex; justify-content:space-between; gap:12px; padding:10px 12px; border-radius:var(--radius-md); background:rgba(255,255,255,0.03); border:1px solid var(--border-default); }
+        .story-row strong { color:var(--text-primary); font-size:0.82rem; display:block; margin-bottom:3px; }
+        .story-row span { color:var(--text-muted); font-size:0.74rem; line-height:1.45; display:block; }
+        .story-row em { color:var(--brand-gold); font-style:normal; font-size:0.72rem; font-weight:700; white-space:nowrap; align-self:flex-start; }
         .actions-title { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--brand-gold); font-weight:700; margin:32px 0 16px; display:flex; align-items:center; gap:8px; }
         .action-card { display:flex; gap:16px; align-items:flex-start; padding:16px 20px; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:var(--radius-lg); margin-bottom:10px; transition:all 0.2s; }
         .action-card:hover { border-color:var(--border-hover); }
@@ -27,6 +42,8 @@
         .action-link { display:inline-block; margin-top:6px; font-size:0.78rem; color:var(--brand-gold); text-decoration:none; font-weight:600; }
         .action-link:hover { text-decoration:underline; }
         .action-pts { font-family:var(--font-serif); font-size:0.85rem; color:var(--brand-gold); font-weight:700; white-space:nowrap; }
+        .action-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+        .action-tag { display:inline-flex; align-items:center; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,0.04); color:var(--text-muted); font-size:0.68rem; font-weight:700; letter-spacing:0.03em; }
         .dim-section { margin-top:32px; }
         .dim-section-title { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); font-weight:700; padding:8px 0; margin-bottom:4px; }
         .dim-bar-wrap { border-bottom:1px solid rgba(255,255,255,0.04); padding:8px 0; }
@@ -47,6 +64,7 @@
         .dim-crit-pts { font-weight:600; font-size:0.65rem; }
         .dim-crit-pts.met { color:#22c55e; }
         .dim-crit-pts.unmet { color:var(--text-muted); opacity:0.4; }
+        @media(max-width:900px){ .score-story{grid-template-columns:1fr;} }
     </style>
 </head>
 <body>
@@ -65,6 +83,7 @@
             </header>
             <div class="app-content" style="max-width:680px;">
                 <div class="hero-score-wrap" id="heroWrap"></div>
+                <div class="score-story" id="scoreStory"></div>
                 <div class="actions-title">Highest-impact moves to improve your score</div>
                 <div id="actionsList"></div>
                 <div class="dim-section">
@@ -210,6 +229,13 @@
             {name:'Deals',score:0,max:20,color:'#22c55e',criteria:[]},
             {name:'Playbook',score:0,max:20,color:'#f59e0b',criteria:[]}
         ];
+        var dimMeta={
+            ICP:{module:'ICP Studio',link:'/app/icp-studio/',explain:'Your targeting wedge and who the team should actually sell to.'},
+            Discovery:{module:'Discovery Studio',link:'/app/discovery-studio/',explain:'Proof that calls are creating pattern recognition instead of founder improvisation.'},
+            Outreach:{module:'Outbound Studio',link:'/app/outbound-studio/',explain:'The volume, channels, and responses needed to make pipeline creation believable.'},
+            Deals:{module:'Deal Workspace',link:'/app/deal-workspace/',explain:'Whether pipeline, stage movement, and closed-loop learning are real yet.'},
+            Playbook:{module:'Playbook',link:'/app/founding-gtm/',explain:'How systematized the motion is for the next hire, not just the founder.'}
+        };
         function aw(dim,pts,label,met){if(met)dims[dim].score+=pts;dims[dim].criteria.push({label:label,pts:pts,met:met})}
 
         // ICP (20)
@@ -280,13 +306,45 @@
         // ══════════════════════════════════════════════════════
         var total=dims.reduce(function(s,d){return s+d.score},0);
         total=Math.min(100,total);
+        var sortedDims=dims.slice().sort(function(a,b){return b.score-a.score;});
+        var strongestDim=sortedDims[0];
+        var weakestDim=sortedDims[sortedDims.length-1];
+        var topMisses=[];
+        dims.forEach(function(d){
+            d.criteria.filter(function(c){return !c.met;}).forEach(function(c){
+                topMisses.push({dimension:d.name,module:dimMeta[d.name].module,link:dimMeta[d.name].link,label:c.label,pts:c.pts});
+            });
+        });
+        topMisses.sort(function(a,b){return b.pts-a.pts;});
+        var momentumDims=dims.filter(function(d){return d.score>=14;}).length;
+        var scoreTone=total>=80?'good':total>=55?'warn':'bad';
+        var scoreSummary='The score rises only when live evidence lands across ICP, discovery, outbound, deals, and playbook. Right now '+momentumDims+' of 5 dimensions are carrying real weight. '+weakestDim.name+' is the main drag on the system.';
 
         // Hero ring
         var circ=2*Math.PI*58;
         var offset=circ-(total/100)*circ;
         var color=total>=80?'#22c55e':total>=50?'#3b82f6':total>=25?'#2dd4bf':'#64748b';
         var verdict=total>=80?'Ready to hand off':total>=50?'Hire-ready with guardrails':total>=25?'Building, not ready':'You are the sales system';
-        document.getElementById('heroWrap').innerHTML='<div class="hero-ring"><svg width="140" height="140" viewBox="0 0 140 140"><circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/><circle cx="70" cy="70" r="58" fill="none" stroke="'+color+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'"/></svg><div class="hero-ring-val">'+total+'</div></div><div class="hero-verdict">'+verdict+'</div><div class="hero-sub">Computed live from every module. Sell, document, and iterate — the score rises with you.</div>';
+        document.getElementById('heroWrap').innerHTML='<div class="hero-ring"><svg width="140" height="140" viewBox="0 0 140 140"><circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/><circle cx="70" cy="70" r="58" fill="none" stroke="'+color+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'"/></svg><div class="hero-ring-val">'+total+'</div></div><div class="hero-verdict">'+verdict+'</div><div class="hero-sub">Computed from live module evidence only. The score rises when real ICPs, calls, touches, deals, and playbook truth exist.</div>';
+        document.getElementById('scoreStory').innerHTML=
+            '<div class="story-card">'+
+                '<div class="story-kicker">Why this number</div>'+
+                '<h2 class="story-title">'+verdict+'</h2>'+
+                '<p class="story-copy">'+scoreSummary+'</p>'+
+                '<div class="story-meta">'+
+                    '<span class="story-chip '+scoreTone+'">'+total+'/100 readiness</span>'+
+                    '<span class="story-chip good">Strongest: '+strongestDim.name+' '+strongestDim.score+'/'+strongestDim.max+'</span>'+
+                    '<span class="story-chip '+(weakestDim.score>=10?'warn':'bad')+'">Weakest: '+weakestDim.name+' '+weakestDim.score+'/'+weakestDim.max+'</span>'+
+                '</div>'+
+            '</div>'+
+            '<div class="story-card">'+
+                '<div class="story-kicker">Biggest unlocks</div>'+
+                '<div class="story-list">'+
+                    topMisses.slice(0,3).map(function(m){
+                        return '<div class="story-row"><div><strong>'+m.label+'</strong><span>'+m.dimension+' is leaving points on the table. Fix this inside '+m.module+'.</span></div><em>+'+m.pts+' pts</em></div>';
+                    }).join('')+
+                '</div>'+
+            '</div>';
 
         // ══════════════════════════════════════════════════════
         // ACTIONS — all unmet criteria + linked module actions, sorted by pts
@@ -316,7 +374,7 @@
 
         if(actions.length>0){
             document.getElementById('actionsList').innerHTML=actions.slice(0,7).map(function(a){
-                return '<div class="action-card"><div class="action-check">\u25CB</div><div class="action-body"><div class="action-label">'+a.label+'</div><div class="action-desc">'+a.desc+'</div>'+(a.link?'<a class="action-link" href="'+a.link+'">'+a.lt+' \u2192</a>':'')+'</div><div class="action-pts">+'+a.pts+'</div></div>';
+                return '<div class="action-card"><div class="action-check">\u25CB</div><div class="action-body"><div class="action-label">'+a.label+'</div><div class="action-desc">'+a.desc+'</div><div class="action-meta"><span class="action-tag">'+a.lt+'</span><span class="action-tag">Score unlock +'+a.pts+'</span></div>'+(a.link?'<a class="action-link" href="'+a.link+'">'+a.lt+' \u2192</a>':'')+'</div><div class="action-pts">+'+a.pts+'</div></div>';
             }).join('');
         } else {
             document.getElementById('actionsList').innerHTML='<div class="action-card done"><div class="action-check">\u2713</div><div class="action-body"><div class="action-label" style="color:#22c55e;">All core actions complete</div><div class="action-desc">Keep selling and refining.</div></div></div>';
@@ -380,6 +438,32 @@
             });
             hh+='</div>';
             document.getElementById('hireReadiness').innerHTML=hh;
+        }
+
+        var readinessSnapshot={
+            score:total,
+            verdict:verdict,
+            strongestDimension:strongestDim?strongestDim.name:null,
+            weakestDimension:weakestDim?weakestDim.name:null,
+            dimensions:dims.map(function(d){
+                return {
+                    name:d.name,
+                    score:d.score,
+                    max:d.max,
+                    met:d.criteria.filter(function(c){return c.met;}).length,
+                    unmet:d.criteria.filter(function(c){return !c.met;}).length
+                };
+            }),
+            topActions:actions.slice(0,5).map(function(a){
+                return {label:a.label, pts:a.pts, module:a.lt, link:a.link||''};
+            }),
+            updatedAt:new Date().toISOString()
+        };
+        localStorage.setItem('gtmos_readiness_snapshot',JSON.stringify(readinessSnapshot));
+        if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'){
+            window.gtmPersistence.docs.save('gtmos_readiness_snapshot',readinessSnapshot).catch(function(error){
+                console.error('Readiness snapshot sync failed:',error);
+            });
         }
     })();
     </script>

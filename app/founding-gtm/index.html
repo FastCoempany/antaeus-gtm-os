@@ -19,6 +19,7 @@
         .pb-section-title{font-family:var(--font-serif);font-size:1.1rem;color:var(--text-primary);}
         .pb-section-source{font-size:0.68rem;color:var(--text-muted);margin-top:2px;}
         .pb-section-status{font-size:0.7rem;padding:4px 10px;border-radius:var(--radius-full);font-weight:600;white-space:nowrap;}
+        .pb-section-status.ready{background:rgba(34,197,94,0.12);color:#22c55e;}
         .pb-section-status.live{background:rgba(34,197,94,0.12);color:#22c55e;}
         .pb-section-status.partial{background:rgba(245,158,11,0.12);color:#f59e0b;}
         .pb-section-status.empty{background:rgba(100,116,139,0.12);color:#64748b;}
@@ -56,6 +57,27 @@
         .pb-modal-btn{padding:12px 24px;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:inherit;font-size:0.88rem;}
         .pb-modal-btn.primary{background:var(--brand-gold);color:var(--bg-primary);}
         .pb-modal-btn.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border-default);}
+        .pb-summary{display:grid;grid-template-columns:1.1fr 0.9fr;gap:16px;margin-bottom:var(--space-xl);}
+        .pb-summary-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:24px;}
+        .pb-summary-card h2{margin:0 0 8px;font-family:var(--font-serif);font-size:1.5rem;color:var(--text-primary);}
+        .pb-summary-card p{margin:0;color:var(--text-tertiary);line-height:1.6;font-size:0.9rem;}
+        .pb-summary-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+        .pb-chip{display:inline-flex;align-items:center;padding:6px 10px;border-radius:var(--radius-full);font-size:0.72rem;font-weight:700;letter-spacing:0.03em;border:1px solid rgba(212,165,116,0.16);background:rgba(212,165,116,0.06);color:var(--brand-gold);}
+        .pb-chip.good{border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.08);color:#22c55e;}
+        .pb-chip.warn{border-color:rgba(245,158,11,0.2);background:rgba(245,158,11,0.08);color:#f59e0b;}
+        .pb-chip.bad{border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.08);color:#ef4444;}
+        .pb-readiness{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+        .pb-stat{background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;}
+        .pb-stat-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
+        .pb-stat-value{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-primary);}
+        .pb-state-list{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+        .pb-state-row{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:var(--radius-md);background:rgba(255,255,255,0.03);border:1px solid var(--border-default);font-size:0.82rem;color:var(--text-secondary);}
+        .pb-state-row strong{color:var(--text-primary);}
+        .pb-warning-list{margin-top:14px;display:flex;flex-direction:column;gap:10px;}
+        .pb-warning{padding:12px 14px;border-radius:var(--radius-md);border:1px solid rgba(245,158,11,0.18);background:rgba(245,158,11,0.06);color:var(--text-secondary);font-size:0.82rem;line-height:1.5;}
+        .pb-warning strong{color:var(--brand-gold);}
+        .pb-section-summary{margin-top:12px;padding:12px 14px;border-radius:var(--radius-md);background:rgba(255,255,255,0.03);border:1px solid var(--border-default);font-size:0.8rem;color:var(--text-tertiary);line-height:1.55;}
+        @media(max-width:900px){.pb-summary,.pb-readiness{grid-template-columns:1fr;}}
     </style>
 </head>
 <body>
@@ -73,6 +95,20 @@
                 <p class="module-subtitle">Auto-assembled from your modules. The playbook your next hire will run from.</p>
             </header>
             <div class="app-content" style="max-width:740px;">
+                <div class="pb-summary">
+                    <div class="pb-summary-card">
+                        <div class="pb-card-kicker">Handoff kit</div>
+                        <h2 id="kitTitle">Assemble a GTM playbook your next hire can actually run.</h2>
+                        <p id="kitSummary">This surface should tell you whether the operating system is still thin, where the weak source gaps are, and whether the exported handoff reads like a serious deliverable.</p>
+                        <div class="pb-summary-meta" id="kitMeta"></div>
+                        <div class="pb-readiness" id="kitStats"></div>
+                    </div>
+                    <div class="pb-summary-card">
+                        <div class="pb-card-kicker">What still feels weak</div>
+                        <div class="pb-state-list" id="kitStateList"></div>
+                        <div class="pb-warning-list" id="kitWarnings"></div>
+                    </div>
+                </div>
                 <div id="sections"></div>
                 <div class="pb-export-bar">
                     <button class="pb-export-btn" onclick="openExportModal()">&#128230; Share Handoff Kit</button>
@@ -292,22 +328,117 @@
         ];
 
         var savedNotes=readLS('gtmos_playbook_notes',{});
+        var sectionContext={
+            0:{why:'The next hire needs a sharp definition of who the wedge actually is before they touch territory, outbound, or discovery.',fallback:'Build one strong ICP and give Signal Console a real list to prioritize.'},
+            1:{why:'The next hire should inherit a repeatable sourcing and channel motion, not a founder-only bag of tricks.',fallback:'Log more outbound, calls, or LinkedIn actions so sourcing stops feeling anecdotal.'},
+            2:{why:'The next hire must know how discovery is supposed to work, what framework governs it, and what a good call advances into.',fallback:'Run discovery through Call Planner and Discovery Studio so this section becomes concrete.'},
+            3:{why:'The next hire needs to see how opportunities are created, progressed, rescued, and closed in the live pipeline.',fallback:'Tighten live deals, outcomes, and advisor leverage so closing logic is not hypothetical.'},
+            4:{why:'The next hire should inherit anti-patterns and failure lessons instead of relearning them by burning deals.',fallback:'Document manual lessons or close enough deals to generate real loss patterns.'},
+            5:{why:'The next hire needs scoreboard truth: target, coverage, win rate, and cycle pressure in one place.',fallback:'Set quota, run pipeline, and keep outcomes current so the scoreboard becomes believable.'}
+        };
+
+        function stripHtml(html){
+            var div=document.createElement('div');
+            div.innerHTML=html||'';
+            return (div.textContent||div.innerText||'').replace(/\s+/g,' ').trim();
+        }
+
+        function assessSection(sec,idx){
+            var result=sec.render();
+            var isManual=result==='manual';
+            var items=isManual?[]:result;
+            var dataItems=items.filter(function(i){return i.label!=='_manual';});
+            var noteVal=(savedNotes['sec_'+idx]||savedNotes['note_'+idx]||'').trim();
+            var hasManualFlag=items.some(function(i){return i.label==='_manual';});
+            var signalCount=dataItems.length+(noteVal?1:0);
+            var ready=false;
+
+            if(idx===0)ready=(icps.icps||[]).length>=2&&!!playbook.acv;
+            if(idx===1)ready=((outboundTouches.touches||[]).length>=8)&&(((coldCallLog.calls||[]).length>0)||((linkedinLog.actions||[]).length>0));
+            if(idx===2)ready=disco.totalCalls>=3&&!!readLS('gtmos_product_category','');
+            if(idx===3)ready=deals.filter(function(d){return d&&d.stage!=='closed-won'&&d.stage!=='closed-lost';}).length>=2&&Object.keys(outcomes||{}).length>=1;
+            if(idx===4)ready=signalCount>=2;
+            if(idx===5)ready=!!seed.annual_quota&&deals.length>=2;
+
+            var status='empty';
+            var statusText='Needs data';
+            if(ready){
+                status='ready';
+                statusText='Handoff-ready';
+            } else if(isManual || signalCount>0){
+                status='partial';
+                statusText=isManual?'Editable':'Partial';
+            }
+
+            return {
+                result:result,
+                items:items,
+                dataItems:dataItems,
+                hasManualFlag:hasManualFlag,
+                noteVal:noteVal,
+                status:status,
+                statusText:statusText,
+                signalCount:signalCount,
+                why:sectionContext[idx]?sectionContext[idx].why:'',
+                fallback:sectionContext[idx]?sectionContext[idx].fallback:''
+            };
+        }
+
+        function buildKitSummary(sectionStates){
+            var readyCount=sectionStates.filter(function(s){return s.status==='ready';}).length;
+            var partialCount=sectionStates.filter(function(s){return s.status==='partial';}).length;
+            var emptyCount=sectionStates.filter(function(s){return s.status==='empty';}).length;
+            var score=Math.round((readyCount*16.5)+(partialCount*7));
+            var verdict=score>=80?'Handoff-ready':score>=55?'Strong but guarded':score>=30?'Partial operating kit':'Too thin';
+            var tone=score>=80?'good':score>=55?'warn':'bad';
+            var warnings=sectionStates.filter(function(s){return s.status!=='ready';}).slice(0,3).map(function(s){
+                return '<div class="pb-warning"><strong>'+s.section.title+'</strong><br>'+s.fallback+'</div>';
+            }).join('');
+
+            document.getElementById('kitTitle').textContent=verdict+' GTM handoff';
+            document.getElementById('kitSummary').textContent='This surface should tell you whether the operating system is still thin, where the weak source gaps are, and whether the exported handoff reads like a serious deliverable.';
+            document.getElementById('kitMeta').innerHTML=
+                '<span class="pb-chip '+tone+'">'+score+'/100</span>'+
+                '<span class="pb-chip">'+readyCount+' ready</span>'+
+                '<span class="pb-chip">'+partialCount+' partial</span>'+
+                '<span class="pb-chip">'+emptyCount+' empty</span>';
+            document.getElementById('kitStats').innerHTML=
+                '<div class="pb-stat"><div class="pb-stat-label">Ready sections</div><div class="pb-stat-value">'+readyCount+'</div></div>'+
+                '<div class="pb-stat"><div class="pb-stat-label">Partial sections</div><div class="pb-stat-value">'+partialCount+'</div></div>'+
+                '<div class="pb-stat"><div class="pb-stat-label">Empty sections</div><div class="pb-stat-value">'+emptyCount+'</div></div>';
+            document.getElementById('kitStateList').innerHTML=
+                sectionStates.map(function(s){
+                    return '<div class="pb-state-row"><span><strong>'+s.section.title+'</strong></span><span>'+s.statusText+'</span></div>';
+                }).join('');
+            document.getElementById('kitWarnings').innerHTML=warnings||'<div class="pb-warning"><strong>Ready enough to export.</strong><br>The current kit has real operating shape. Use the export flow to generate a deliverable and then pressure-test it with the next hire lens.</div>';
+        }
 
         function renderSections(){
-            document.getElementById('sections').innerHTML=sections.map(function(sec,idx){
-                var result=sec.render();
+            var sectionStates=sections.map(function(sec,idx){
+                var assessment=assessSection(sec,idx);
+                assessment.section=sec;
+                assessment.index=idx;
+                return assessment;
+            });
+
+            buildKitSummary(sectionStates);
+
+            document.getElementById('sections').innerHTML=sectionStates.map(function(state){
+                var sec=state.section;
+                var idx=state.index;
+                var result=state.result;
                 var isManual=result==='manual';
-                var items=isManual?[]:result;
-                var status=isManual?'partial':(items.length>0?'live':'empty');
-                var statusText=isManual?'Editable':(items.length>0?items.length+' data points':'Needs data');
+                var items=state.items;
+                var status=state.status;
+                var statusText=state.statusText;
 
                 var contentHtml='';
                 if(isManual){
                     var noteVal=savedNotes['sec_'+idx]||playbook.notes||'';
                     contentHtml='<textarea class="pb-notes textarea" style="width:100%;min-height:100px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;resize:vertical;" placeholder="Document lessons learned, anti-patterns, deals lost and why..." oninput="saveNote('+idx+',this.value)">'+escH(noteVal)+'</textarea>';
                 } else if(items.length>0){
-                    var hasManualFlag=items.some(function(i){return i.label==='_manual';});
-                    var dataItems=items.filter(function(i){return i.label!=='_manual';});
+                    var hasManualFlag=state.hasManualFlag;
+                    var dataItems=state.dataItems;
                     contentHtml=dataItems.map(function(i){
                         return '<div class="pb-item"><div class="pb-item-label">'+i.label+'</div><div class="pb-item-value">'+i.value+'</div></div>';
                     }).join('');
@@ -333,7 +464,7 @@
                     notesHtml='<details class="pb-notes"><summary>Add manual notes</summary><textarea placeholder="Override or add context..." oninput="saveNote(\''+noteKey+'\',this.value)">'+escH(existingNote)+'</textarea></details>';
                 }
 
-                return '<div class="pb-section"><div class="pb-section-head"><div style="display:flex;align-items:flex-start;"><span class="pb-section-icon">'+sec.icon+'</span><div><div class="pb-section-title">'+sec.title+' <span title="Auto-pulls from '+sec.source+'" style="cursor:help;font-size:0.62rem;color:var(--text-muted);opacity:0.5;font-weight:700;background:rgba(255,255,255,0.05);width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">?</span></div></div></div><span class="pb-section-status '+status+'">'+statusText+'</span></div><div class="pb-content">'+contentHtml+'</div>'+notesHtml+'</div>';
+                return '<div class="pb-section"><div class="pb-section-head"><div style="display:flex;align-items:flex-start;"><span class="pb-section-icon">'+sec.icon+'</span><div><div class="pb-section-title">'+sec.title+' <span title="Auto-pulls from '+sec.source+'" style="cursor:help;font-size:0.62rem;color:var(--text-muted);opacity:0.5;font-weight:700;background:rgba(255,255,255,0.05);width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">?</span></div></div></div><span class="pb-section-status '+status+'">'+statusText+'</span></div><div class="pb-content">'+contentHtml+'</div><div class="pb-section-summary">'+state.why+'</div>'+notesHtml+'</div>';
             }).join('');
         }
 
@@ -519,6 +650,183 @@
             a.download='handoff-kit.'+(fmt==='md'?'md':'txt');
             a.click();
             // A7: Track handoff export for Readiness Score
+            var prevExport=JSON.parse(localStorage.getItem('gtmos_handoff_exported')||'null');
+            var exportCount=prevExport&&prevExport.count?prevExport.count+1:1;
+            var handoffMeta={date:new Date().toISOString(),count:exportCount};
+            localStorage.setItem('gtmos_handoff_exported',JSON.stringify(handoffMeta));
+            if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'){
+                window.gtmPersistence.docs.save('gtmos_handoff_exported',handoffMeta).catch(function(error){console.error('Handoff export sync failed:',error);});
+            }
+            closeExportModal();
+        };
+
+        window.generateExport=function(){
+            var checks=document.querySelectorAll('#exportChecks input:checked');
+            var selectedIdxs=[];
+            checks.forEach(function(c){selectedIdxs.push(parseInt(c.dataset.sec));});
+            var note=document.getElementById('exportNote').value.trim();
+            var fmt=document.querySelector('input[name="exportFmt"]:checked').value;
+            var exportedAt=new Date().toISOString().slice(0,10);
+            var exportStates=sections.map(function(sec,idx){
+                var a=assessSection(sec,idx);
+                a.section=sec;
+                a.index=idx;
+                return a;
+            });
+            var readyCount=exportStates.filter(function(s){return s.status==='ready';}).length;
+            var partialCount=exportStates.filter(function(s){return s.status==='partial';}).length;
+            var emptyCount=exportStates.filter(function(s){return s.status==='empty';}).length;
+            var handoffScore=Math.round((readyCount*16.5)+(partialCount*7));
+            var handoffVerdict=handoffScore>=80?'Handoff-ready':handoffScore>=55?'Strong but guarded':handoffScore>=30?'Partial operating kit':'Too thin';
+            var text='';
+
+            if(fmt==='md'){
+                text+='# '+escH(playbook.company||'Antaeus Workspace')+' - GTM Handoff Kit\n\n';
+                text+='**Exported:** '+exportedAt+'\n';
+                text+='**Readiness:** '+handoffScore+'/100 - '+handoffVerdict+'\n';
+                text+='**Section mix:** '+readyCount+' ready, '+partialCount+' partial, '+emptyCount+' empty\n\n';
+                text+='This handoff kit is auto-assembled from the live Antaeus workspace. It should tell the next hire who we sell to, how pipeline gets created, how calls and discovery are run, how deals move, and which operating gaps still need founder judgment.\n\n';
+                if(note)text+='> '+note+'\n\n';
+                text+='---\n\n';
+                selectedIdxs.forEach(function(idx){
+                    var state=exportStates[idx];
+                    var sec=sections[idx];
+                    text+='## '+sec.title+'\n';
+                    text+='**Status:** '+state.statusText+'\n';
+                    text+='**Source:** '+sec.source+'\n';
+                    text+='**Why this matters:** '+state.why+'\n\n';
+                    if(state.result==='manual'){
+                        text+=(savedNotes['sec_'+idx]||'No notes yet.')+'\n';
+                    } else if(state.dataItems.length>0){
+                        state.dataItems.forEach(function(i){text+='- **'+i.label+':** '+stripHtml(i.value)+'\n';});
+                    } else {
+                        text+='- No data yet.\n';
+                        text+='- Next move: '+state.fallback+'\n';
+                    }
+                    var noteVal=savedNotes['note_'+idx];
+                    if(noteVal)text+='\n**Manual notes:** '+noteVal+'\n';
+                    text+='\n---\n\n';
+                });
+            } else {
+                text+=(playbook.company||'Antaeus Workspace')+' - GTM HANDOFF KIT\n'+('=').repeat(44)+'\n\n';
+                text+='Exported: '+exportedAt+'\n';
+                text+='Readiness: '+handoffScore+'/100 - '+handoffVerdict+'\n';
+                text+='Section mix: '+readyCount+' ready, '+partialCount+' partial, '+emptyCount+' empty\n\n';
+                if(note)text+='Welcome note: '+note+'\n\n';
+                selectedIdxs.forEach(function(idx){
+                    var state=exportStates[idx];
+                    var sec=sections[idx];
+                    text+=sec.title.toUpperCase()+'\n'+('-').repeat(32)+'\n';
+                    text+='Status: '+state.statusText+'\n';
+                    text+='Source: '+sec.source+'\n';
+                    text+='Why this matters: '+state.why+'\n';
+                    if(state.result==='manual'){
+                        text+=(savedNotes['sec_'+idx]||'No notes yet.')+'\n';
+                    } else if(state.dataItems.length>0){
+                        state.dataItems.forEach(function(i){text+=i.label+': '+stripHtml(i.value)+'\n';});
+                    } else {
+                        text+='No data yet.\n';
+                        text+='Next move: '+state.fallback+'\n';
+                    }
+                    var noteVal=savedNotes['note_'+idx];
+                    if(noteVal)text+='Manual notes: '+noteVal+'\n';
+                    text+='\n';
+                });
+            }
+
+            var readinessAppend='';
+            try{
+                var rSeed=readLS('gtmos_outbound_seed',{});
+                var rDeals=readLS('gtmos_deal_workspaces',[]);
+                if(!Array.isArray(rDeals))rDeals=[];
+                var rIcps=readLS('gtmos_icp_analytics',{icps:[]});
+                var rDisco=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
+                var rTouches=readLS('gtmos_outbound_touches',{touches:[]});
+                var rCalls=readLS('gtmos_cold_call_log',{calls:[]});
+                var rLinkedin=readLS('gtmos_linkedin_log',{actions:[]});
+                var rAdvisors=readLS('gtmos_advisor_registry',{advisors:[]});
+                var rAdvisorDeps=readLS('gtmos_advisor_deployments',{deployments:[]});
+                var rHandoff=readLS('gtmos_handoff_exported',null);
+                var rScore=0;
+                if((rIcps.icps||[]).length>=1)rScore+=5;if((rIcps.icps||[]).length>=3)rScore+=3;
+                if(rDisco.totalCalls>=1)rScore+=3;if(rDisco.totalCalls>=5)rScore+=2;
+                if(rSeed.annual_quota)rScore+=3;
+                var rActive=rDeals.filter(function(d){return d&&d.stage!=='closed-won'&&d.stage!=='closed-lost';});
+                var rWins=rDeals.filter(function(d){return d&&d.stage==='closed-won';}).length;
+                var rLosses=rDeals.filter(function(d){return d&&d.stage==='closed-lost';}).length;
+                if(rActive.length>=1)rScore+=2;if(rActive.length>=3)rScore+=2;
+                if(rWins>=1)rScore+=2;if(rWins>=2)rScore+=2;
+                if(rLosses>=1&&rWins>=1)rScore+=1;
+                var rChannels=0;if((rTouches.touches||[]).length>0)rChannels++;if((rCalls.calls||[]).length>0)rChannels++;if((rLinkedin.actions||[]).length>0)rChannels++;
+                if(rChannels>=2)rScore+=2;
+                rScore=Math.min(100,rScore);
+                var rVerdict=rScore>=80?'Ready to hand off':rScore>=50?'Hire-ready with guardrails':rScore>=25?'Building, not ready':'Too early';
+                var rChecks=[];
+                rChecks.push((rWins>=2?'[x]':'[ ]')+' 2+ closed-won deals (have '+rWins+')');
+                rChecks.push((rLosses>=3?'[x]':'[ ]')+' 3+ documented loss patterns');
+                rChecks.push(((rIcps.icps||[]).length>=3?'[x]':'[ ]')+' 3+ ICP profiles (have '+(rIcps.icps||[]).length+')');
+                rChecks.push((rDisco.totalCalls>=3?'[x]':'[ ]')+' 3+ discovery calls (have '+rDisco.totalCalls+')');
+                rChecks.push((rChannels>=2&&(rTouches.touches||[]).length>=5?'[x]':'[ ]')+' Multi-channel outbound with data');
+                rChecks.push(((rAdvisors.advisors||[]).length>=1&&(rAdvisorDeps.deployments||[]).length>=1?'[x]':'[ ]')+' Advisor relationships deployed');
+                rChecks.push((rHandoff?'[x]':'[ ]')+' Handoff kit exported before');
+                if(fmt==='md'){
+                    readinessAppend='\n## Readiness Assessment\n\n';
+                    readinessAppend+='**Readiness Score:** '+rScore+'/100 - '+rVerdict+'\n\n';
+                    rChecks.forEach(function(c){readinessAppend+=c+'\n';});
+                    readinessAppend+='\n---\n\n';
+                } else {
+                    readinessAppend='\nREADINESS ASSESSMENT\n'+('-').repeat(30)+'\n';
+                    readinessAppend+='Readiness Score: '+rScore+'/100 - '+rVerdict+'\n\n';
+                    rChecks.forEach(function(c){readinessAppend+=c+'\n';});
+                    readinessAppend+='\n';
+                }
+            }catch(e){readinessAppend='';}
+
+            var pipeAppend='';
+            try{
+                if(window.dealHealth){
+                    var pVitals=window.dealHealth.loadAllVitals();
+                    var pDeals=readLS('gtmos_deal_workspaces',[]);
+                    if(!Array.isArray(pDeals))pDeals=[];
+                    var pSeed=readLS('gtmos_outbound_seed',{});
+                    var pActive=pVitals.filter(function(v){return !v.isClosed;});
+                    var pCov=window.dealHealth.computeCoverage(pDeals,Number(pSeed.annual_quota)||0);
+                    var pPerf=window.dealHealth.performanceMetrics(pVitals);
+                    var pRisk=pVitals.filter(function(v){return !v.isClosed&&v.riskScore>=60;}).sort(function(a,b){return b.riskScore-a.riskScore;});
+                    if(fmt==='md'){
+                        pipeAppend='## Pipeline Summary (Live)\n\n';
+                        pipeAppend+='**Active Deals:** '+pActive.length+'\n';
+                        pipeAppend+='**Total Pipeline:** '+window.dealHealth.money(pCov.raw)+'\n';
+                        pipeAppend+='**Weighted Pipeline:** '+window.dealHealth.money(pCov.weighted)+'\n';
+                        if(pSeed.annual_quota)pipeAppend+='**Coverage Ratio:** '+pCov.ratio+'x (target: '+(Number(pSeed.coverage_target)||4.5)+'x)\n';
+                        if(pPerf.winRate!==null)pipeAppend+='**Win Rate:** '+pPerf.winRate+'%\n';
+                        if(pRisk.length>0){
+                            pipeAppend+='\n**Top At-Risk Deals:**\n';
+                            pRisk.slice(0,3).forEach(function(v){pipeAppend+='- '+v.name+' ('+window.dealHealth.money(v.value)+', risk '+v.riskScore+', '+v.staleDays+'d stale)\n';});
+                        }
+                        pipeAppend+='\n---\n\n';
+                    } else {
+                        pipeAppend='PIPELINE SUMMARY (LIVE)\n'+('-').repeat(30)+'\n';
+                        pipeAppend+='Active Deals: '+pActive.length+'\n';
+                        pipeAppend+='Total Pipeline: '+window.dealHealth.money(pCov.raw)+'\n';
+                        pipeAppend+='Weighted Pipeline: '+window.dealHealth.money(pCov.weighted)+'\n';
+                        if(pSeed.annual_quota)pipeAppend+='Coverage Ratio: '+pCov.ratio+'x (target: '+(Number(pSeed.coverage_target)||4.5)+'x)\n';
+                        if(pPerf.winRate!==null)pipeAppend+='Win Rate: '+pPerf.winRate+'%\n';
+                        if(pRisk.length>0){
+                            pipeAppend+='\nTop At-Risk Deals:\n';
+                            pRisk.slice(0,3).forEach(function(v){pipeAppend+='- '+v.name+' ('+window.dealHealth.money(v.value)+', risk '+v.riskScore+', '+v.staleDays+'d stale)\n';});
+                        }
+                        pipeAppend+='\n';
+                    }
+                }
+            }catch(e){pipeAppend='';}
+
+            text+=readinessAppend+pipeAppend;
+            var blob=new Blob([text],{type:'text/plain'});
+            var a=document.createElement('a');
+            a.href=URL.createObjectURL(blob);
+            a.download='handoff-kit.'+(fmt==='md'?'md':'txt');
+            a.click();
             var prevExport=JSON.parse(localStorage.getItem('gtmos_handoff_exported')||'null');
             var exportCount=prevExport&&prevExport.count?prevExport.count+1:1;
             var handoffMeta={date:new Date().toISOString(),count:exportCount};
