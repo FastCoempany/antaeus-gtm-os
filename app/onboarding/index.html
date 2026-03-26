@@ -20,8 +20,15 @@
         .ob-card { width:100%; max-width:520px; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:16px; padding:48px 40px; position:relative; overflow:hidden; }
         .ob-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--brand-gold),transparent); }
         .ob-brand { font-family:var(--font-serif); font-size:1.4rem; color:var(--brand-gold); margin-bottom:32px; }
+        .ob-role { display:inline-flex; align-items:center; gap:8px; margin-bottom:16px; padding:8px 12px; border-radius:999px; border:1px solid rgba(212,165,116,0.16); background:rgba(212,165,116,0.06); color:var(--brand-gold); font-size:0.74rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
         .ob-h { font-family:var(--font-serif); font-size:1.5rem; color:var(--text-primary); margin-bottom:8px; line-height:1.3; }
         .ob-sub { font-size:0.88rem; color:var(--text-tertiary); margin-bottom:28px; line-height:1.5; }
+        .ob-preview { margin:0 0 24px; padding:14px 16px; border-radius:12px; border:1px solid rgba(212,165,116,0.14); background:rgba(255,255,255,0.03); }
+        .ob-preview-kicker { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--brand-gold); font-weight:700; margin-bottom:8px; }
+        .ob-preview-copy { font-size:0.8rem; color:var(--text-tertiary); line-height:1.5; margin-bottom:12px; }
+        .ob-preview-list { display:flex; flex-direction:column; gap:8px; }
+        .ob-preview-row { display:flex; align-items:flex-start; gap:10px; font-size:0.78rem; color:var(--text-secondary); line-height:1.45; }
+        .ob-preview-dot { color:#22c55e; font-weight:700; flex-shrink:0; }
         .ob-field { margin-bottom:20px; }
         .ob-label { display:block; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:8px; }
         .ob-input { width:100%; padding:12px 16px; background:rgba(255,255,255,0.04); border:1px solid var(--border-default); border-radius:8px; color:var(--text-primary); font-size:0.95rem; font-family:inherit; }
@@ -44,6 +51,7 @@
         @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
         .ob-done { text-align:center; padding:24px 0; }
         .ob-done-icon { font-size:3rem; margin-bottom:16px; }
+        .ob-activation-grid { display:grid; gap:10px; margin:24px 0; text-align:left; }
         .ob-seeded { display:flex; flex-direction:column; gap:10px; margin:24px 0; text-align:left; }
         .ob-seeded-item { display:flex; align-items:center; gap:10px; padding:12px 16px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:8px; font-size:0.85rem; color:var(--text-secondary); }
         @media(max-width:600px){ .ob-card{padding:32px 24px;} .ob-h{font-size:1.2rem;} }
@@ -59,8 +67,10 @@
     <div class="ob-card">
         <div class="ob-step active" id="s0">
             <div class="ob-brand">Antaeus</div>
-            <div class="ob-h">What does your company sell?</div>
-            <div class="ob-sub">This determines which discovery frameworks, personas, and signal categories load for you.</div>
+            <div class="ob-role" id="roleBadge">Founder-led activation</div>
+            <div class="ob-h" id="h0">What motion are we activating?</div>
+            <div class="ob-sub" id="sub0">This determines which discovery frameworks, personas, and signal categories load for you.</div>
+            <div class="ob-preview" id="preview0"></div>
             <div class="ob-field">
                 <label class="ob-label">Product category</label>
                 <select class="ob-input ob-select" id="productCat" onchange="v0()">
@@ -87,8 +97,9 @@
         </div>
 
         <div class="ob-step" id="s1">
-            <div class="ob-h">Who is your primary buyer?</div>
-            <div class="ob-sub">This sets persona-aware discovery questions and outbound angles.</div>
+            <div class="ob-h" id="h1">Who has to believe first?</div>
+            <div class="ob-sub" id="sub1">This sets persona-aware discovery questions and outbound angles.</div>
+            <div class="ob-preview" id="preview1"></div>
             <div class="ob-field">
                 <label class="ob-label">Buyer persona</label>
                 <select class="ob-input ob-select" id="buyerPersona" onchange="v1()">
@@ -118,8 +129,9 @@
         </div>
 
         <div class="ob-step" id="s2">
-            <div class="ob-h">What are your targets?</div>
-            <div class="ob-sub">This powers your quota math, pipeline workback, and daily activity targets.</div>
+            <div class="ob-h" id="h2">What pressure are we calibrating to?</div>
+            <div class="ob-sub" id="sub2">This powers your quota math, pipeline workback, and daily activity targets.</div>
+            <div class="ob-preview" id="preview2"></div>
             <div class="ob-field">
                 <label class="ob-label">Annual quota or revenue target</label>
                 <div class="ob-curr"><input type="text" class="ob-input" id="quota" placeholder="1,200,000" oninput="fmtCurr(this);v2()"></div>
@@ -138,16 +150,17 @@
         <div class="ob-step" id="s3">
             <div class="ob-done">
                 <div class="ob-done-icon">&#9889;</div>
-                <div class="ob-h">You're set.</div>
-                <div class="ob-sub">We've seeded your workspace with the right frameworks and targets.</div>
+                <div class="ob-h" id="h3">Activation complete.</div>
+                <div class="ob-sub" id="sub3">We have enough to tune the system around your actual motion, not generic GTM theory.</div>
+                <div class="ob-preview" id="preview3"></div>
                 <div class="ob-seeded">
-                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Discovery frameworks loaded for your category</div>
-                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Quota math ready in Quota Workback</div>
-                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Benchmarks calibrated for your ACV band</div>
-                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Signal Console seeded with 14 Fortune 500 accounts</div>
-                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span> Playbook started with your company info</div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span><span id="seed0">Discovery frameworks loaded for your category</span></div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span><span id="seed1">Buyer-aware call planning and outbound angles tuned</span></div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span><span id="seed2">Quota math ready in Quota Workback</span></div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span><span id="seed3">Signal Console seeded with starter account context</span></div>
+                    <div class="ob-seeded-item"><span style="color:#22c55e;font-weight:700">&#10003;</span><span id="seed4">Playbook started with your company and stage truth</span></div>
                 </div>
-                <button class="ob-btn ob-btn-primary" id="finishBtn" onclick="finish()" style="width:100%;">Open Dashboard &rarr;</button>
+                <button class="ob-btn ob-btn-primary" id="finishBtn" onclick="finish()" style="width:100%;">Activate Workspace &rarr;</button>
             </div>
         </div>
     </div>
@@ -173,6 +186,7 @@ function show(){
         b.className='ob-bar'+(i<step?' done':'')+(i===step?' active':'');
     }
     document.getElementById('stepLabel').textContent='Step '+(step+1)+' of 4';
+    renderOnboardingState();
     if(lastTrackedStep !== step){
         lastTrackedStep = step;
         trackOnboarding('onboarding_step', { step: step + 1 });
@@ -180,9 +194,9 @@ function show(){
 }
 function next(){step++;show();}
 function prev(){step--;show();}
-function v0(){document.getElementById('btn0').disabled=!(document.getElementById('productCat').value&&document.getElementById('companyName').value.trim());}
-function v1(){document.getElementById('btn1').disabled=!(document.getElementById('buyerPersona').value&&document.getElementById('stage').value);}
-function v2(){document.getElementById('btn2').disabled=!(document.getElementById('quota').value.trim());}
+function v0(){document.getElementById('btn0').disabled=!(document.getElementById('productCat').value&&document.getElementById('companyName').value.trim());renderOnboardingState();}
+function v1(){document.getElementById('btn1').disabled=!(document.getElementById('buyerPersona').value&&document.getElementById('stage').value);renderOnboardingState();}
+function v2(){document.getElementById('btn2').disabled=!(document.getElementById('quota').value.trim());renderOnboardingState();}
 function fmtCurr(el){var v=el.value.replace(/[^0-9]/g,'');if(v)el.value=Number(v).toLocaleString();else el.value='';}
 function readJson(key, fallback){
     try {
@@ -199,6 +213,133 @@ function getStoredRole(){
     var onboarding = readJson('gtmos_onboarding', null);
     if (onboarding && onboarding.answers && onboarding.answers.role) return String(onboarding.answers.role).trim();
     return 'founder';
+}
+
+function getSelectLabel(id){
+    var el = document.getElementById(id);
+    if (!el || !el.value) return '';
+    return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : '';
+}
+
+function parseCurrencyValue(id){
+    return Number((document.getElementById(id).value || '0').replace(/[^0-9]/g,''));
+}
+
+function getAcvBandLabel(acv){
+    if (!acv) return 'benchmark band pending';
+    if (acv >= 200000) return 'strategic benchmark band';
+    if (acv >= 75000) return 'enterprise benchmark band';
+    if (acv >= 30000) return 'mid-market benchmark band';
+    return 'velocity benchmark band';
+}
+
+function renderPreviewBlock(id, copy, items){
+    var node = document.getElementById(id);
+    if (!node) return;
+    node.innerHTML =
+        '<div class="ob-preview-kicker">System preview</div>'+
+        '<div class="ob-preview-copy">'+copy+'</div>'+
+        '<div class="ob-preview-list">'+
+            items.map(function(item){
+                return '<div class="ob-preview-row"><span class="ob-preview-dot">+</span><span>'+item+'</span></div>';
+            }).join('')+
+        '</div>';
+}
+
+function renderOnboardingState(){
+    var role = getStoredRole();
+    var founderMode = !/(^|[_-])(ae|account|executive)|founding[_-]?ae/i.test(role);
+    var roleLabel = founderMode ? 'Founder-led activation' : 'First AE activation';
+    var categoryLabel = getSelectLabel('productCat') || 'your product category';
+    var buyerLabel = getSelectLabel('buyerPersona') || 'your primary buyer';
+    var stageLabel = getSelectLabel('stage') || 'your company stage';
+    var companyName = document.getElementById('companyName').value.trim() || 'your company';
+    var quota = parseCurrencyValue('quota');
+    var acv = parseCurrencyValue('acv');
+    var acvBandLabel = getAcvBandLabel(acv);
+    var quotaLabel = quota ? ('$'+quota.toLocaleString()+' quota') : 'quota pending';
+    var acvLabel = acv ? ('$'+acv.toLocaleString()+' ACV') : 'ACV pending';
+
+    document.getElementById('roleBadge').textContent = roleLabel;
+    document.getElementById('sub0').textContent = founderMode
+        ? 'Tell Antaeus what motion you are still carrying yourself so the system loads the right operating context.'
+        : 'Tell Antaeus what motion you are stepping into so the system loads the right structure and expectations fast.';
+    document.getElementById('sub1').textContent = founderMode
+        ? 'This sets the first buyer lens your future hire has to understand and repeat.'
+        : 'This sets the buyer lens you need the system to sharpen around your actual seat.';
+    document.getElementById('sub2').textContent = founderMode
+        ? 'This calibrates the math your first serious sales hire will inherit.'
+        : 'This calibrates the pressure, benchmarks, and activity pace you are being measured against.';
+    document.getElementById('sub3').textContent = founderMode
+        ? 'You have given the app enough truth to start behaving like the system behind your first hire.'
+        : 'You have given the app enough truth to start behaving like the system behind your execution, not just a setup form.';
+
+    renderPreviewBlock('preview0',
+        founderMode
+            ? 'This first step tunes the workspace around what '+companyName+' actually sells and how you are currently carrying the motion.'
+            : 'This first step tunes the workspace around the motion you are inheriting so the app can stop acting generic.',
+        [
+            'Discovery frameworks will tune to '+categoryLabel,
+            'Signal Console will favor the account patterns most relevant to '+companyName,
+            'The welcome guide will route you into the first real operating anchor instead of generic setup'
+        ]
+    );
+
+    renderPreviewBlock('preview1',
+        'This step sharpens who has to believe and which stage assumptions should shape discovery and outbound.',
+        [
+            'Buyer lens: '+buyerLabel,
+            'Stage framing: '+stageLabel,
+            'Call planning, outbound angles, and ICP guidance will all branch from this'
+        ]
+    );
+
+    renderPreviewBlock('preview2',
+        'This step calibrates the pressure model so the app can translate strategy into weekly execution.',
+        [
+            'Math posture: '+quotaLabel,
+            'Benchmark posture: '+acvLabel+' / '+acvBandLabel,
+            'Quota Workback, coverage targets, and dashboard pressure will inherit this'
+        ]
+    );
+
+    renderPreviewBlock('preview3',
+        'After this, the workspace should stop feeling empty and start feeling tuned to your actual motion.',
+        [
+            roleLabel+' for '+companyName,
+            categoryLabel+' / '+buyerLabel+' / '+stageLabel,
+            quota ? ('Pressure model set to '+quotaLabel+' and '+acvLabel) : 'Pressure model can still be added later without blocking activation'
+        ]
+    );
+
+    document.getElementById('seed0').textContent = 'Discovery frameworks tuned to '+categoryLabel;
+    document.getElementById('seed1').textContent = 'Buyer-aware discovery and outbound logic tuned to '+buyerLabel;
+    document.getElementById('seed2').textContent = quota ? ('Quota math ready for '+quotaLabel+' and '+acvLabel) : 'Quota Workback is ready for you to add targets';
+    document.getElementById('seed3').textContent = founderMode
+        ? 'Signal Console and dashboard are ready to help you find the first believable market motion'
+        : 'Signal Console and dashboard are ready to help you structure the motion you now own';
+    document.getElementById('seed4').textContent = 'Playbook started with '+companyName+', '+stageLabel+', and '+roleLabel.toLowerCase();
+}
+
+function buildActivationContext(){
+    var role = getStoredRole();
+    var quota = parseCurrencyValue('quota');
+    var acv = parseCurrencyValue('acv');
+    return {
+        role: role,
+        roleLabel: document.getElementById('roleBadge').textContent,
+        companyName: document.getElementById('companyName').value.trim(),
+        productCategory: document.getElementById('productCat').value,
+        productCategoryLabel: getSelectLabel('productCat'),
+        buyerPersona: document.getElementById('buyerPersona').value,
+        buyerPersonaLabel: getSelectLabel('buyerPersona'),
+        stage: document.getElementById('stage').value,
+        stageLabel: getSelectLabel('stage'),
+        quota: quota,
+        acv: acv,
+        acvBandLabel: getAcvBandLabel(acv),
+        updatedAt: new Date().toISOString()
+    };
 }
 
 function prefillFromStoredState() {
@@ -233,6 +374,7 @@ async function finish(){
     var q=Number((document.getElementById('quota').value||'0').replace(/[^0-9]/g,''));
     var a=Number((document.getElementById('acv').value||'0').replace(/[^0-9]/g,''));
     var role = getStoredRole();
+    var activationContext = buildActivationContext();
     var data={
         completed:true,
         completedAt:new Date().toISOString(),
@@ -261,6 +403,7 @@ async function finish(){
         });
         localStorage.setItem('gtmos_onboarding',JSON.stringify(data));
         localStorage.setItem('gtmos_product_category',JSON.stringify(document.getElementById('productCat').value));
+        localStorage.setItem('gtmos_activation_context', JSON.stringify(activationContext));
         var docSyncTasks = [];
         function queueDocSync(key, value) {
             if (!(window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function')) return;
@@ -271,9 +414,10 @@ async function finish(){
                 })
             );
         }
+        queueDocSync('gtmos_activation_context', activationContext);
+        var band = a>=200000?'strategic':a>=75000?'enterprise':a>=30000?'mid':'small';
         if(q>0){
             var acvBands={small:{max:30000,win:25,cycle:45,cov:3.0},mid:{max:75000,win:20,cycle:90,cov:3.5},enterprise:{max:200000,win:15,cycle:180,cov:4.5},strategic:{max:Infinity,win:12,cycle:240,cov:5.0}};
-            var band=a>=200000?'strategic':a>=75000?'enterprise':a>=30000?'mid':'small';
             var bm=acvBands[band];
             var seed={annual_quota:q,avg_deal_size:a||50000,win_rate:bm.win,touch_to_meeting:0.7,show_rate:80,cycle_days:bm.cycle,coverage_target:bm.cov,acv_band:band};
             localStorage.setItem('gtmos_outbound_seed',JSON.stringify(seed));
@@ -316,7 +460,7 @@ async function finish(){
         alert((error && error.message) ? error.message : 'Unable to save onboarding right now. Please try again.');
         if (finishBtn) {
             finishBtn.disabled = false;
-            finishBtn.textContent = originalLabel || 'Open Dashboard ->';
+            finishBtn.textContent = originalLabel || 'Activate Workspace ->';
         }
     }
 }
