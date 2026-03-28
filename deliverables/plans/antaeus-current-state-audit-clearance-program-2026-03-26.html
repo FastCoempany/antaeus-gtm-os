@@ -414,7 +414,7 @@
 
         phaseCard.innerHTML = `
           <summary>
-            <div class="check-row"><input type="checkbox" data-check-id="${phase.id}" data-phase-toggle="${phase.id}"></div>
+            <div class="check-row"><input type="checkbox" data-check-id="${phase.id}" data-phase-toggle="${phase.id}" ${checkState[phase.id] ? "checked" : ""}></div>
             <div class="phase-title-wrap">
               <span class="phase-kicker">${phase.owner}</span>
               <h2 class="phase-title">${phase.label}</h2>
@@ -445,13 +445,13 @@
               ${phase.steps.map(step => `
                 <div class="step-card">
                   <div class="check-row">
-                    <input type="checkbox" data-check-id="${step.id}" data-step-toggle="${step.id}">
+                    <input type="checkbox" data-check-id="${step.id}" data-step-toggle="${step.id}" ${checkState[step.id] ? "checked" : ""}>
                     <h4>${step.label}</h4>
                   </div>
                   <div class="sub-list">
                     ${step.items.map((item, index) => `
                       <div class="check-row">
-                        <input type="checkbox" data-check-id="${step.id}-item-${index}" data-step-parent="${step.id}">
+                        <input type="checkbox" data-check-id="${step.id}-item-${index}" data-step-parent="${step.id}" ${checkState[`${step.id}-item-${index}`] ? "checked" : ""}>
                         <label>${item}</label>
                       </div>
                     `).join("")}
