@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Audit Clearance Command Center</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --line: rgba(255,255,255,.1);
+      --line-2: rgba(230,190,126,.18);
+      --text: #f4f1ea;
+      --muted: #98a3bf;
+      --gold: #dfb073;
+      --gold-2: #f0c791;
+      --green: #3cd17a;
+      --amber: #f4b14f;
+      --red: #ff6e6e;
+      --blue: #7fb6ff;
+      --chip: rgba(255,255,255,.06);
+      --mono: "SFMono-Regular", Consolas, Menlo, Monaco, monospace;
+      --sans: "Public Sans", system-ui, sans-serif;
+      --serif: "DM Serif Display", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: radial-gradient(circle at 20% 0%, rgba(223,176,115,.14), transparent 32%), linear-gradient(180deg, #0b1020 0%, #0a0f1c 100%); color: var(--text); font-family: var(--sans); }
+    a { color: var(--gold-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button, input, select { font: inherit; }
+    .shell { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: 100vh; }
+    .rail { position: sticky; top: 0; align-self: start; height: 100vh; overflow: auto; padding: 28px 22px; border-right: 1px solid var(--line); background: rgba(5,9,18,.78); backdrop-filter: blur(18px); }
+    .mark { font-family: var(--serif); font-size: 2rem; line-height: 1; letter-spacing: -.02em; margin: 0 0 10px; color: var(--gold-2); }
+    .rail p { margin: 0 0 18px; color: var(--muted); line-height: 1.55; }
+    .nav-group { display: grid; gap: 10px; margin: 26px 0 18px; }
+    .nav-btn, .repo-tab { border: 1px solid var(--line); background: var(--chip); color: var(--text); border-radius: 999px; padding: 12px 16px; cursor: pointer; transition: .2s ease; }
+    .nav-btn { width: 100%; text-align: left; }
+    .nav-btn.active, .nav-btn:hover, .repo-tab.active, .repo-tab:hover { border-color: var(--line-2); background: rgba(223,176,115,.12); color: var(--gold-2); }
+    .rail-card, .phase-card, .repo-table, .source-card, .meta-box, .step-card, .stat { border: 1px solid var(--line); background: rgba(255,255,255,.03); }
+    .rail-card, .source-card, .meta-box, .step-card, .stat { border-radius: 12px; }
+    .rail-card { margin-top: 18px; padding: 16px; }
+    .rail-card h3, .source-card h3 { margin: 0 0 10px; font-size: .95rem; color: var(--gold-2); }
+    .rail-card code, .source-card code { display: block; font-family: var(--mono); color: var(--text); font-size: .8rem; line-height: 1.5; word-break: break-word; }
+    .main { min-width: 0; padding: 34px 34px 60px; }
+    .hero { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+    .hero h1 { margin: 0 0 10px; font-family: var(--serif); font-size: clamp(2.2rem, 3vw, 3.35rem); line-height: .96; letter-spacing: -.03em; }
+    .hero p { max-width: 860px; margin: 0; color: var(--muted); line-height: 1.6; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0; }
+    .toolbar button, .toolbar input, .toolbar select { border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.04); color: var(--text); padding: 11px 14px; }
+    .toolbar button { cursor: pointer; }
+    .stats, .source-grid, .meta-grid { display: grid; gap: 14px; }
+    .stats { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 22px; }
+    .source-grid, .meta-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .stat { padding: 18px; }
+    .stat .eyebrow { display: block; font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: 8px; }
+    .stat strong { display: block; font-size: 1.6rem; line-height: 1; color: var(--gold-2); }
+    .panel { display: none; gap: 18px; }
+    .panel.active { display: grid; }
+    .phase-card { border-radius: 18px; overflow: hidden; }
+    .phase-card > summary { list-style: none; cursor: pointer; padding: 18px 20px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; border-bottom: 1px solid transparent; }
+    .phase-card > summary::-webkit-details-marker { display: none; }
+    .phase-card[open] > summary { border-bottom-color: var(--line); }
+    .phase-kicker { display: block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-2); margin-bottom: 6px; }
+    .phase-title { margin: 0; font-size: 1.12rem; line-height: 1.3; }
+    .phase-objective { margin: 8px 0 0; color: var(--muted); line-height: 1.55; font-size: .96rem; }
+    .phase-progress { min-width: 180px; text-align: right; }
+    .progress-bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden; margin: 8px 0 8px auto; width: 160px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-2)); width: 0; transition: width .2s ease; }
+    .phase-body { padding: 20px; display: grid; gap: 18px; }
+    .meta-box { padding: 14px 15px; }
+    .meta-box h4 { margin: 0 0 8px; font-size: .8rem; letter-spacing: .11em; text-transform: uppercase; color: var(--muted); }
+    .meta-box p, .meta-box ul, .source-card p { margin: 0; color: var(--text); line-height: 1.55; }
+    .meta-box ul { padding-left: 18px; }
+    .check-row { display: flex; align-items: flex-start; gap: 12px; }
+    .check-row input[type="checkbox"] { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
+    .step-list, .repo-section { display: grid; gap: 18px; }
+    .step-card { padding: 16px; }
+    .step-card h4 { margin: 0; font-size: 1rem; line-height: 1.4; }
+    .sub-list { display: grid; gap: 8px; margin-top: 12px; padding-left: 30px; }
+    .sub-list .check-row label, .phase-summary-note, .source-card p, .footer-note { color: var(--muted); line-height: 1.55; }
+    .repo-tabs { display: flex; flex-wrap: wrap; gap: 10px; }
+    .repo-table { border-radius: 18px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { background: rgba(255,255,255,.03); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    tr:last-child td { border-bottom: 0; }
+    .badge, .mini-pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; }
+    .badge { padding: 6px 10px; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border: 1px solid transparent; white-space: nowrap; }
+    .mini-pill { padding: 6px 10px; background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .empty-state { padding: 28px; border: 1px dashed var(--line); border-radius: 18px; color: var(--muted); text-align: center; }
+    .status-complete, .status-pass, .status-validated { background: rgba(60,209,122,.12); color: #73e29f; border-color: rgba(60,209,122,.22); }
+    .status-pass-caveat, .status-local-patch, .status-monitor { background: rgba(244,177,79,.12); color: #ffd18a; border-color: rgba(244,177,79,.22); }
+    .status-not-run, .status-open, .status-planned { background: rgba(127,182,255,.12); color: #a8cbff; border-color: rgba(127,182,255,.22); }
+    .status-blocked, .status-deferred, .status-external-config, .status-decision-needed { background: rgba(255,110,110,.12); color: #ff9b9b; border-color: rgba(255,110,110,.22); }
+    @media (max-width: 1080px) { .shell { grid-template-columns: 1fr; } .rail { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--line); } .hero { flex-direction: column; } }
+    @media (max-width: 760px) { .main { padding: 24px 16px 40px; } .rail { padding: 22px 16px; } th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5) { display: none; } .phase-card > summary { grid-template-columns: auto 1fr; } .phase-progress { grid-column: 1 / -1; text-align: left; min-width: 0; } .progress-bar { margin-left: 0; width: 100%; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <div class="mark">Antaeus</div>
+      <p>This file converts the audit-clearance program into a working command center, while keeping the exhaustive phase and row systems visible in a separate repository view.</p>
+      <div class="nav-group">
+        <button class="nav-btn active" data-panel-target="clearancePanel">Clearance Program</button>
+        <button class="nav-btn" data-panel-target="repositoryPanel">Repository</button>
+      </div>
+      <div class="rail-card">
+        <h3>Files You Were Looking For</h3>
+        <code>deliverables/plans/antaeus-app-9of10-phased-plan-2026-03-22.md</code>
+        <code>deliverables/plans/phase-51-full-end-to-end-qa-matrix-2026-03-26.md</code>
+        <code>deliverables/plans/phase-04-evidence-board-2026-03-22.md</code>
+        <code>deliverables/plans/antaeus-current-state-audit-clearance-program-2026-03-26.md</code>
+      </div>
+      <div class="rail-card">
+        <h3>Row Conventions</h3>
+        <p><strong>QA-*</strong> = launch-gate test rows from Phase 51.</p>
+        <p><strong>EB-*</strong> = evidence-board rows from Phase 4.</p>
+      </div>
+      <div class="rail-card">
+        <h3>Persistence</h3>
+        <p>Checklist state in this command center stores locally in your browser only.</p>
+        <p>Use the export button if you want a text snapshot of your current progress overlay.</p>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="hero">
+        <div>
+          <h1>Audit Clearance Command Center</h1>
+          <p>The clearance framework below is the operational path to retire the current-state audit. The repository section keeps the 52-phase system, QA matrix, and evidence-board row systems visible without mixing them into the checklist itself.</p>
+        </div>
+      </header>
+      <section id="clearancePanel" class="panel active">
+        <div class="stats" id="clearanceStats"></div>
+        <div class="toolbar">
+          <button id="expandAll">Expand all phases</button>
+          <button id="collapseAll">Collapse all phases</button>
+          <button id="clearChecks">Clear all local checks</button>
+          <button id="exportChecks">Copy progress snapshot</button>
+        </div>
+        <div id="clearanceMount"></div>
+      </section>
+      <section id="repositoryPanel" class="panel">
+        <div class="stats" id="repositoryStats"></div>
+        <div class="source-grid">
+          <div class="source-card">
+            <h3>52-Phase Master Plan</h3>
+            <p>The exhaustive phase map lives here.</p>
+            <code>deliverables/plans/antaeus-app-9of10-phased-plan-2026-03-22.md</code>
+            <a href="antaeus-app-9of10-phased-plan-2026-03-22.md">Open file</a>
+          </div>
+          <div class="source-card">
+            <h3>QA Matrix</h3>
+            <p>The <code>QA-*</code> rows live here.</p>
+            <code>deliverables/plans/phase-51-full-end-to-end-qa-matrix-2026-03-26.md</code>
+            <a href="phase-51-full-end-to-end-qa-matrix-2026-03-26.md">Open file</a>
+          </div>
+          <div class="source-card">
+            <h3>Evidence Board</h3>
+            <p>The <code>EB-*</code> rows live here.</p>
+            <code>deliverables/plans/phase-04-evidence-board-2026-03-22.md</code>
+            <a href="phase-04-evidence-board-2026-03-22.md">Open file</a>
+          </div>
+          <div class="source-card">
+            <h3>Clearance Program Source</h3>
+            <p>The markdown source that this command center was built from.</p>
+            <code>deliverables/plans/antaeus-current-state-audit-clearance-program-2026-03-26.md</code>
+            <a href="antaeus-current-state-audit-clearance-program-2026-03-26.md">Open file</a>
+          </div>
+        </div>
+        <div class="toolbar">
+          <input id="repoSearch" type="search" placeholder="Search phases, QA rows, or EB rows" />
+          <select id="repoStatus">
+            <option value="all">All statuses</option>
+            <option value="Completed">Completed phases</option>
+            <option value="Planned">Not started phases</option>
+            <option value="Deferred">Deferred phases</option>
+            <option value="PASS">QA PASS</option>
+            <option value="PASS-CAVEAT">QA PASS-CAVEAT</option>
+            <option value="NOT-RUN">QA NOT-RUN</option>
+            <option value="BLOCKED">QA BLOCKED</option>
+            <option value="validated">EB validated</option>
+            <option value="local-patch">EB local-patch</option>
+            <option value="open">EB open</option>
+            <option value="decision-needed">EB decision-needed</option>
+            <option value="external-config">EB external-config</option>
+            <option value="monitor">EB monitor</option>
+          </select>
+        </div>
+        <div class="repo-tabs">
+          <button class="repo-tab active" data-repo-kind="phases">52 Phases</button>
+          <button class="repo-tab" data-repo-kind="qa">QA Rows</button>
+          <button class="repo-tab" data-repo-kind="eb">Evidence Board Rows</button>
+        </div>
+        <div id="repositoryMount"></div>
+        <p class="footer-note">Phase status here is the current program-state read: a phase counts as <strong>Completed</strong> when a phase artifact exists in <code>deliverables/plans</code>. <strong>Deferred</strong> is currently Phase 7. Missing artifacts are treated as <strong>Planned</strong>.</p>
+      </section>
+    </main>
+  </div>
+  <script>
+    const STORAGE_KEY = "antaeus_audit_clearance_checks_v1";
+    const REPO_KIND_KEY = "antaeus_audit_repo_kind_v1";
+    const PANEL_KEY = "antaeus_audit_panel_v1";
+
+    const clearanceProgram = [
+      { id: "clearance-phase-1", label: "Phase 1 - Freeze Truth And Remove Deployment Ambiguity", objective: "Make sure every later test is happening against the intended deployed code, not local fantasy.", owner: "Shared", exitCriteria: ["Latest repo truth is deployed", "You know which commit is live", "There is one evidence log for all remaining closure work"], rows: [], steps: [
+        { id: "p1-s1", label: "Step 1.1 - Push all local closure-relevant repo changes", items: ["Run `git status`.", "Identify all product, audit, QA, and launch-gate files that matter to current truth.", "Stage only those files.", "Commit them with a clean message.", "Push to `main`."] },
+        { id: "p1-s2", label: "Step 1.2 - Confirm deploy truth", items: ["Open Cloudflare deployments.", "Confirm the latest commit hash is the active deployment.", "Open `antaeus.app`.", "Hard refresh.", "Confirm the deployed behavior matches the latest pushed changes."] },
+        { id: "p1-s3", label: "Step 1.3 - Create one evidence location", items: ["Create a single running results note or markdown file for QA execution.", "Record date.", "Record build hash.", "Record who tested.", "Record environment.", "Do not scatter evidence across chat memory only."] },
+        { id: "p1-s4", label: "Step 1.4 - Close local-only truth risk", items: ["Confirm no critical product file remains modified but unpushed.", "Confirm any local prototype or scratch files are clearly excluded from launch truth.", "Confirm the audit, QA matrix, and launch-gate docs are in git."] }
+      ]},
+      { id: "clearance-phase-2", label: "Phase 2 - Close P0 Activation And Auth Rows", objective: "Remove ambiguity from the highest-risk new-user and auth paths.", owner: "Shared", exitCriteria: ["No auth row remains unproven", "Onboarding and welcome are browser-confirmed, not just code-assumed"], rows: ["QA-A04","QA-A05","QA-A06","QA-A07","QA-C01","QA-C02","QA-C03","QA-C04","QA-C05","QA-F19","QA-F20"], steps: [
+        { id: "p2-s1", label: "Step 2.1 - Existing-user login confirmation", items: ["Open `login.html`.", "Sign in with a known working user.", "Confirm route lands correctly.", "Refresh once.", "Confirm the session remains clean."] },
+        { id: "p2-s2", label: "Step 2.2 - Forgot-password request flow", items: ["Open `forgot-password.html`.", "Enter a real account email.", "Submit request.", "Confirm the message is neutral and non-leaky.", "Confirm the reset email arrives."] },
+        { id: "p2-s3", label: "Step 2.3 - Reset-password completion flow", items: ["Click the reset link from the real email.", "Confirm `reset-password.html` loads cleanly.", "Set a new password.", "Sign in with the new password.", "Confirm no broken callback or stale auth state remains."] },
+        { id: "p2-s4", label: "Step 2.4 - Auth callback route", items: ["Use either signup confirm or password reset callback.", "Confirm `auth/callback/index.html` does not trap or blank.", "Confirm final route is correct."] },
+        { id: "p2-s5", label: "Step 2.5 - New-user corridor full pass", items: ["Create a fresh account from `signup.html`.", "Confirm email receipt.", "Confirm onboarding opens.", "Complete onboarding.", "Confirm welcome opens.", "Confirm activation context appears correct.", "Confirm top-ranked action is not generic filler.", "Click that action.", "Confirm it lands in the correct module.", "Use `Back to Welcome Guide`.", "Confirm welcome still feels useful on revisit."] },
+        { id: "p2-s6", label: "Step 2.6 - Week 1 / welcome lifecycle sanity", items: ["While the account is still inside week one, confirm the week-one guidance appears once.", "Open one non-dashboard module.", "Confirm there is only one week-one nudge.", "Return to dashboard.", "Confirm dashboard and welcome do not contradict each other."] },
+        { id: "p2-evidence", label: "Evidence to record", items: ["Screenshots only if failure occurs.", "Pass/fail note per row.", "Route observed after signup, onboarding, welcome, and revisit."] }
+      ]},
+      { id: "clearance-phase-3", label: "Phase 3 - Close P0 Persistence And Core Operating Rows", objective: "Prove that work survives and the most important operating surfaces are actually credible live.", owner: "Shared", exitCriteria: ["Persistence is browser-proven", "Dashboard, deals, proof, handoff, and settings are all live-credible"], rows: ["QA-E05","QA-F01","QA-F11","QA-F13","QA-F16","QA-F18"], steps: [
+        { id: "p3-s1", label: "Step 3.1 - Logout/login persistence regression", items: ["Sign in to a real workspace.", "Note product category.", "Note one real saved item.", "Note current dashboard state.", "Sign out.", "Sign back in.", "Confirm the same workspace returns.", "Confirm you do not bounce back into onboarding incorrectly."] },
+        { id: "p3-s2", label: "Step 3.2 - Dashboard final pass", items: ["Open `app/dashboard/index.html`.", "Confirm it loads without fatal boot failure.", "Confirm sparse or populated state still gives a usable next move.", "Refresh once.", "Confirm it remains stable."] },
+        { id: "p3-s3", label: "Step 3.3 - Deal Workspace final pass", items: ["Open `app/deal-workspace/index.html`.", "Create a real test deal if needed.", "Confirm qualification band appears.", "Confirm dates and next-step scaffolding feel sane.", "Refresh once.", "Confirm the deal survives and still looks credible."] },
+        { id: "p3-s4", label: "Step 3.4 - PoC Framework final pass", items: ["Open `app/poc-framework/index.html`.", "Link the live deal.", "Add success criteria and readout owner.", "Save proof.", "Confirm linked-deal truth updates.", "Export once in one format.", "Confirm export is readable."] },
+        { id: "p3-s5", label: "Step 3.5 - Handoff kit final pass", items: ["Open `app/founding-gtm/index.html`.", "Confirm the readiness summary appears.", "Confirm weak-source warnings feel honest.", "Export markdown.", "Export plain text.", "Read both files like a real handoff artifact.", "Decide if it feels like a serious operating deliverable or a stitched dump."] },
+        { id: "p3-s6", label: "Step 3.6 - Settings trust pass", items: ["Open `app/settings/index.html`.", "Confirm trust grid is correct.", "Export backup.", "Confirm status changes.", "Confirm mode and scope descriptions still align with reality."] },
+        { id: "p3-evidence", label: "Evidence to record", items: ["One exported handoff file.", "One exported backup file.", "Row-level pass/fail notes."] }
+      ]},
+      { id: "clearance-phase-4", label: "Phase 4 - Close Remaining Module-Proof Rows", objective: "Run the still-important P1 module surfaces that are upgraded in code but not yet formally proven live.", owner: "Shared", exitCriteria: ["The remaining P1 module rows are deliberately executed", "No major module remains in ambiguous `NOT-RUN` state just because nobody opened it carefully"], rows: ["QA-F02","QA-F04","QA-F05","QA-F06","QA-F07","QA-F08","QA-F09","QA-F12","QA-F14","QA-F15","QA-F17"], steps: [
+        { id: "p4-s1", label: "Step 4.1 - Signal Console", items: ["Open `app/signal-console/index.html`.", "Confirm account cards render with research state, heat summary, and next move.", "Run one AI research action.", "Confirm success or failure state is legible."] },
+        { id: "p4-s2", label: "Step 4.2 - Territory / Sourcing / Outbound trio", items: ["Open Territory Architect and confirm the bridge and next-move logic.", "Open Sourcing Workbench and confirm prospect scoring plus handoff logic.", "Open Outbound Studio and confirm motion brief, quality read, and save-plus-log path."] },
+        { id: "p4-s3", label: "Step 4.3 - Contact execution channels", items: ["Open Cold Call Studio and confirm quick-capture works.", "Open LinkedIn Playbook and confirm recommended play plus log context work."] },
+        { id: "p4-s4", label: "Step 4.4 - Discovery support surfaces", items: ["Open Call Planner / Discovery Agenda and confirm score plus handoff.", "Open Future Autopsy and confirm timing bridge plus downstream routes."] },
+        { id: "p4-s5", label: "Step 4.5 - Advisor / Quota / Readiness", items: ["Open Advisor Deploy and confirm recommendation plus linked-deal sync.", "Open Quota Workback and confirm operating-plan outputs.", "Open Readiness and confirm score logic plus explanation."] },
+        { id: "p4-evidence", label: "Evidence to record", items: ["Pass/fail notes for each module row.", "Screenshot only if one of the surfaces still feels broken, blank, or contradictory."] }
+      ]},
+      { id: "clearance-phase-5", label: "Phase 5 - Close Cross-Module Handshake Proof", objective: "Prove the system compounds in live use instead of only in design docs.", owner: "Shared", exitCriteria: ["The four highest-value handshake chains are browser-proven"], rows: ["QA-G01","QA-G02","QA-G03","QA-G04"], steps: [
+        { id: "p5-s1", label: "Step 5.1 - ICP into Territory / Sourcing / Outbound", items: ["Save one real ICP.", "Open Territory Architect and confirm the ICP context appears.", "Open Sourcing Workbench and confirm the ICP context affects sourcing reality.", "Open Outbound Studio and confirm downstream framing feels affected by that ICP."] },
+        { id: "p5-s2", label: "Step 5.2 - Call Planner into Discovery Studio", items: ["Build one real discovery agenda.", "Open Discovery Studio from that agenda.", "Confirm agenda quality or context carries through."] },
+        { id: "p5-s3", label: "Step 5.3 - Deal into Future Autopsy / PoC / Advisor", items: ["Open one real deal.", "Open Future Autopsy from that reality.", "Open PoC Framework with that deal.", "Open Advisor Deploy with that deal.", "Confirm stage and pressure context carry through."] },
+        { id: "p5-s4", label: "Step 5.4 - Upstream changes into Readiness and Handoff", items: ["Make one meaningful upstream change: save an ICP, create a deal, or save proof.", "Open Readiness and confirm score logic updates.", "Open Handoff Kit and confirm section truth updates."] }
+      ]},
+      { id: "clearance-phase-6", label: "Phase 6 - Close Public Trust And Commercial Truth", objective: "Make the public-facing layer actually proven, not just improved.", owner: "Shared", exitCriteria: ["Public front door and methodology layer are browser-confirmed", "Legal pages are treated as real public artifacts, not code-complete drafts"], rows: ["QA-A02","QA-H01","QA-H02","QA-H03","QA-H04","QA-H05"], steps: [
+        { id: "p6-s1", label: "Step 6.1 - Coming-soon desktop pass", items: ["Open `/coming-soon`.", "Confirm layout, pulse, and copy render cleanly.", "Confirm no overflow or double-labeled elements remain."] },
+        { id: "p6-s2", label: "Step 6.2 - Waitlist live insert proof", items: ["Submit one new email.", "Confirm success state.", "Confirm row appears in live waitlist table in Supabase.", "Submit the same email again.", "Confirm duplicate behavior is sane."] },
+        { id: "p6-s3", label: "Step 6.3 - Terms page browser review", items: ["Open `terms.html`.", "Read it as a stranger would.", "Check no placeholders remain.", "Check no broken formatting remains.", "Check no draft tone remains.", "Check contact information is correct.", "Decide pass/fail."] },
+        { id: "p6-s4", label: "Step 6.4 - Privacy page browser review", items: ["Open `privacy.html`.", "Repeat the same public-facing review."] },
+        { id: "p6-s5", label: "Step 6.5 - Methodology hub bridge", items: ["Open `/methodology/`.", "Confirm guide sections render.", "Click each major CTA path: demo, signup, annual plan.", "Confirm all routes are correct."] },
+        { id: "p6-s6", label: "Step 6.6 - Methodology article CTA routing", items: ["Open two representative articles.", "Confirm bridge and bottom CTA blocks render.", "Click demo.", "Click signup.", "Click annual plan.", "Confirm routing is correct and attribution does not break."] }
+      ]},
+      { id: "clearance-phase-7", label: "Phase 7 - Close Responsive And Support-Stance Ambiguity", objective: "Decide what is actually supported instead of implying broad device support accidentally.", owner: "Shared + You", exitCriteria: ["There is no accidental ambiguity about device support"], rows: ["QA-I01","QA-I02","QA-I03"], steps: [
+        { id: "p7-s1", label: "Step 7.1 - Narrow desktop sweep", items: ["Test around laptop width on dashboard, deal workspace, settings, and discovery studio.", "Verify sidebar remains usable.", "Verify top banners are not duplicated or clipped.", "Verify content remains readable."] },
+        { id: "p7-s2", label: "Step 7.2 - Mobile public-page sweep", items: ["Test mobile width on coming-soon, signup, login, methodology hub, and one methodology article.", "Verify no overflow.", "Verify no blocked CTA.", "Verify waitlist or signup interaction still works."] },
+        { id: "p7-s3", label: "Step 7.3 - Explicit mobile app-shell decision", items: ["Decide one of: supported, degraded but usable, or unsupported.", "Document that stance.", "If unsupported, make sure public language and QA records reflect that honestly."] }
+      ]},
+      { id: "clearance-phase-8", label: "Phase 8 - Close Billing And Launch-Boundary Ambiguity", objective: "Resolve the intentionally incomplete parts that the audit still calls out.", owner: "You + Codex", exitCriteria: ["Billing is no longer unclear; it is intentionally decided"], rows: [], steps: [
+        { id: "p8-s1", label: "Step 8.1 - Decide billing posture", items: ["Choose guided beta only, no billing.", "Or choose invite-only paid alpha with manual invoicing / off-platform payment.", "Or choose later live Stripe activation."] },
+        { id: "p8-s2", label: "Step 8.2 - Align public/commercial copy to that decision", items: ["If no billing, keep public copy quiet.", "If manual paid alpha, document the invite-only sales motion.", "If live Stripe later, define exact trigger for Phase 7 billing activation."] },
+        { id: "p8-s3", label: "Step 8.3 - Update launch docs", items: ["Update Phase 52 if the billing posture changes.", "Make sure launch type is not overstated."] }
+      ]},
+      { id: "clearance-phase-9", label: "Phase 9 - Run Guided Beta As Proof, Not Exposure", objective: "Clear the audit through controlled real-user proof rather than endless internal speculation.", owner: "You + Codex", exitCriteria: ["You have at least one cycle of real-user evidence supporting the launch posture"], rows: [], steps: [
+        { id: "p9-s1", label: "Step 9.1 - Define cohort", items: ["Choose 3-5 users maximum.", "Make them warm, guided, and relevant."] },
+        { id: "p9-s2", label: "Step 9.2 - Use a fixed observation template", items: ["Record where they started.", "Record where they got stuck.", "Record where trust dropped.", "Record whether the handoff logic felt believable."] },
+        { id: "p9-s3", label: "Step 9.3 - Keep patching narrow", items: ["Patch activation confusion.", "Patch compounding failure.", "Patch trust drop.", "Patch export/handoff weakness.", "Do not add broad new scope."] }
+      ]},
+      { id: "clearance-phase-10", label: "Phase 10 - Retire The Audit Formally", objective: "Convert the current-state audit from open-state guidance into a completed record.", owner: "Shared", exitCriteria: ["The audit no longer reads like an open warning document", "The QA matrix and launch gate reflect the same truth"], rows: [], steps: [
+        { id: "p10-s1", label: "Step 10.1 - Update the QA matrix", items: ["Convert tested `NOT-RUN` rows to `PASS`, `FAIL`, or accepted `BLOCKED`.", "Remove stale caveats that were fully proven."] },
+        { id: "p10-s2", label: "Step 10.2 - Update the launch gate", items: ["Revise Phase 52 if the launch type changes.", "Make launch language match actual proof level."] },
+        { id: "p10-s3", label: "Step 10.3 - Update the audit", items: ["Replace `What Is Incomplete` with `What Was Cleared`.", "Move any remaining unresolved items into a smaller follow-on risk list.", "If all meaningful items are closed, mark the audit as retired."] },
+        { id: "p10-s4", label: "Step 10.4 - Create a post-audit operating file", items: ["Choose the next active document: beta learnings log, launch-upgrade checklist, or paid alpha conversion plan."] }
+      ]}
+    ];
+
+    const masterPhases = [
+      { number: 1, title: "Promise Matrix", status: "Completed", doc: "phase-01-promise-matrix-2026-03-22.md" },
+      { number: 2, title: "Input / Output Matrix", status: "Completed", doc: "phase-02-input-output-matrix-2026-03-22.md" },
+      { number: 3, title: "9/10 Rubric Definition", status: "Completed", doc: "phase-03-9of10-rubric-definition-2026-03-22.md" },
+      { number: 4, title: "Evidence Board", status: "Completed", doc: "phase-04-evidence-board-2026-03-22.md" },
+      { number: 5, title: "Journey Inventory", status: "Completed", doc: "phase-05-journey-inventory-2026-03-22.md" },
+      { number: 6, title: "Purchase Path Wiring", status: "Completed", doc: "phase-06-purchase-path-wiring-2026-03-22.md" },
+      { number: 7, title: "Subscription and Billing Operations", status: "Deferred", doc: "" },
+      { number: 8, title: "Signup and Email Infrastructure", status: "Completed", doc: "phase-08-signup-and-email-infrastructure-2026-03-22.md" },
+      { number: 9, title: "Legal and Privacy Publish Pass", status: "Completed", doc: "phase-09-legal-and-privacy-publish-pass-2026-03-22.md" },
+      { number: 10, title: "Proof Layer for Public Buyers", status: "Planned", doc: "" },
+      { number: 11, title: "Pricing / Packaging Reframe", status: "Planned", doc: "" },
+      { number: 12, title: "Commercial Copy Consistency", status: "Planned", doc: "" },
+      { number: 13, title: "Encoding and Copy Integrity Sweep", status: "Completed", doc: "phase-13-encoding-and-copy-integrity-sweep-2026-03-22.md" },
+      { number: 14, title: "Navigation Stability", status: "Completed", doc: "phase-14-navigation-stability-2026-03-22.md" },
+      { number: 15, title: "Shared Chrome Audit", status: "Completed", doc: "phase-15-shared-chrome-audit-2026-03-22.md" },
+      { number: 16, title: "Load States and Error States", status: "Completed", doc: "phase-16-error-state-and-silent-failure-audit-2026-03-22.md" },
+      { number: 17, title: "Persistence QA Program", status: "Completed", doc: "phase-17-persistence-qa-program-2026-03-22.md" },
+      { number: 18, title: "Observability and Diagnostics", status: "Completed", doc: "phase-18-observability-and-diagnostics-2026-03-22.md" },
+      { number: 19, title: "Landing Page Conversion System", status: "Completed", doc: "phase-19-landing-page-conversion-system-2026-03-22.md" },
+      { number: 20, title: "Methodology and SEO Deepening", status: "Completed", doc: "phase-20-methodology-and-seo-deepening-2026-03-22.md" },
+      { number: 21, title: "Demo Lane Productization", status: "Completed", doc: "phase-21-demo-lane-productization-2026-03-22.md" },
+      { number: 22, title: "Welcome Corridor 2.0", status: "Completed", doc: "phase-22-welcome-corridor-2-0-2026-03-22.md" },
+      { number: 23, title: "Tour Guide 2.0 Spec and Rebuild", status: "Completed", doc: "phase-23-tour-guide-2-0-spec-and-rebuild-2026-03-22.md" },
+      { number: 24, title: "First 7 Days User Lifecycle", status: "Completed", doc: "phase-24-first-7-days-user-lifecycle-2026-03-22.md" },
+      { number: 25, title: "Dashboard", status: "Completed", doc: "phase-25-dashboard-promise-delivery-2026-03-23.md" },
+      { number: 26, title: "Signal Console", status: "Completed", doc: "phase-26-signal-console-2026-03-23.md" },
+      { number: 27, title: "ICP Studio", status: "Completed", doc: "phase-27-icp-studio-2026-03-25.md" },
+      { number: 28, title: "Territory Architect", status: "Completed", doc: "phase-28-territory-architect-2026-03-25.md" },
+      { number: 29, title: "Sourcing Workbench", status: "Completed", doc: "phase-29-sourcing-workbench-2026-03-25.md" },
+      { number: 30, title: "Outbound Studio", status: "Completed", doc: "phase-30-outbound-studio-2026-03-25.md" },
+      { number: 31, title: "Cold Call Studio", status: "Completed", doc: "phase-31-cold-call-studio-2026-03-25.md" },
+      { number: 32, title: "LinkedIn Playbook", status: "Completed", doc: "phase-32-linkedin-playbook-2026-03-26.md" },
+      { number: 33, title: "Call Planner / Discovery Agenda", status: "Completed", doc: "phase-33-call-planner-discovery-agenda-2026-03-26.md" },
+      { number: 34, title: "Discovery Studio", status: "Completed", doc: "phase-34-discovery-studio-2026-03-26.md" },
+      { number: 35, title: "Deal Workspace", status: "Completed", doc: "phase-35-deal-workspace-2026-03-26.md" },
+      { number: 36, title: "Future Autopsy", status: "Completed", doc: "phase-36-future-autopsy-2026-03-26.md" },
+      { number: 37, title: "PoC Framework", status: "Completed", doc: "phase-37-poc-framework-2026-03-26.md" },
+      { number: 38, title: "Advisor Deploy", status: "Completed", doc: "phase-38-advisor-deploy-2026-03-26.md" },
+      { number: 39, title: "Quota Workback", status: "Completed", doc: "phase-39-quota-workback-2026-03-26.md" },
+      { number: 40, title: "Playbook / Handoff Kit", status: "Completed", doc: "phase-40-playbook-handoff-kit-2026-03-26.md" },
+      { number: 41, title: "Readiness Score", status: "Completed", doc: "phase-41-readiness-score-2026-03-26.md" },
+      { number: 42, title: "Onboarding", status: "Completed", doc: "phase-42-onboarding-2026-03-26.md" },
+      { number: 43, title: "Welcome", status: "Completed", doc: "phase-43-welcome-2026-03-26.md" },
+      { number: 44, title: "Settings / Backup / Reset", status: "Completed", doc: "phase-44-settings-backup-reset-2026-03-26.md" },
+      { number: 45, title: "Automation Dial Design", status: "Completed", doc: "phase-45-automation-dial-design-2026-03-26.md" },
+      { number: 46, title: "Cross-Module Compounding Rules", status: "Completed", doc: "phase-46-cross-module-compounding-rules-2026-03-26.md" },
+      { number: 47, title: "CRM / Calendar / Email Integration Strategy", status: "Completed", doc: "phase-47-crm-calendar-email-integration-strategy-2026-03-26.md" },
+      { number: 48, title: "Launch Agent Product Strategy", status: "Completed", doc: "phase-48-launch-agent-product-strategy-2026-03-26.md" },
+      { number: 49, title: "Team / Advisor / Seat Model", status: "Completed", doc: "phase-49-team-advisor-seat-model-2026-03-26.md" },
+      { number: 50, title: "Automation Quality Controls", status: "Completed", doc: "phase-50-automation-quality-controls-2026-03-26.md" },
+      { number: 51, title: "Full End-to-End QA Matrix", status: "Completed", doc: "phase-51-full-end-to-end-qa-matrix-2026-03-26.md" },
+      { number: 52, title: "Launch Readiness Gate", status: "Completed", doc: "phase-52-launch-readiness-gate-2026-03-26.md" }
+    ];
+    const qaRows = [{"id":"QA-A01","label":"Root public route loads the intended public front door","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-A02","label":"Waitlist capture on public front door works end to end","priority":"P1","status":"NOT-RUN"},{"id":"QA-A03","label":"Sign-up path works with live SMTP","priority":"P0","status":"PASS"},{"id":"QA-A04","label":"Login path works for existing user","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-A05","label":"Forgot-password request flow works","priority":"P1","status":"NOT-RUN"},{"id":"QA-A06","label":"Reset-password completion flow works","priority":"P1","status":"NOT-RUN"},{"id":"QA-A07","label":"Auth callback route behaves correctly","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-B01","label":"Purchase entry page loads and explains the corridor honestly","priority":"P1","status":"PASS-CAVEAT"},{"id":"QA-B02","label":"Checkout link is configured with live billing","priority":"P0","status":"BLOCKED"},{"id":"QA-B03","label":"Purchase success route works end to end","priority":"P0","status":"BLOCKED"},{"id":"QA-B04","label":"Purchase cancelled route works end to end","priority":"P1","status":"BLOCKED"},{"id":"QA-C01","label":"New user routes into onboarding correctly","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-C02","label":"Onboarding completes and saves activation context","priority":"P0","status":"NOT-RUN"},{"id":"QA-C03","label":"Welcome corridor ranks next actions correctly","priority":"P1","status":"NOT-RUN"},{"id":"QA-C04","label":"Back to Welcome Guide remains useful on revisit","priority":"P1","status":"PASS-CAVEAT"},{"id":"QA-C05","label":"Week 1 lifecycle appears only when appropriate","priority":"P1","status":"PASS-CAVEAT"},{"id":"QA-D01","label":"Demo entry page loads as a product lane, not a utility screen","priority":"P1","status":"PASS-CAVEAT"},{"id":"QA-D02","label":"Demo scenarios auto-launch into dashboard","priority":"P0","status":"PASS"},{"id":"QA-D03","label":"Exit Demo returns to real workspace cleanly","priority":"P0","status":"PASS"},{"id":"QA-D04","label":"Demo isolation holds across re-entry","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-D05","label":"Tour chooser opens and paths start correctly","priority":"P1","status":"PASS"},{"id":"QA-D06","label":"Tour pause/resume works","priority":"P1","status":"NOT-RUN"},{"id":"QA-E01","label":"Demo enter / exit does not corrupt real workspace","priority":"P0","status":"PASS"},{"id":"QA-E02","label":"Export backup works","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-E03","label":"Import backup restores workspace truth","priority":"P0","status":"PASS"},{"id":"QA-E04","label":"Delete workspace clears durable truth safely","priority":"P0","status":"PASS"},{"id":"QA-E05","label":"Logout / login preserves workspace correctly","priority":"P0","status":"NOT-RUN"},{"id":"QA-E06","label":"Product category persists and propagates","priority":"P1","status":"PASS-CAVEAT"},{"id":"QA-F01","label":"Dashboard","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-F02","label":"Signal Console","priority":"P1","status":"NOT-RUN"},{"id":"QA-F03","label":"ICP Studio","priority":"P1","status":"PASS-CAVEAT"},{"id":"QA-F04","label":"Territory Architect","priority":"P1","status":"NOT-RUN"},{"id":"QA-F05","label":"Sourcing Workbench","priority":"P1","status":"NOT-RUN"},{"id":"QA-F06","label":"Outbound Studio","priority":"P1","status":"NOT-RUN"},{"id":"QA-F07","label":"Cold Call Studio","priority":"P1","status":"NOT-RUN"},{"id":"QA-F08","label":"LinkedIn Playbook","priority":"P1","status":"NOT-RUN"},{"id":"QA-F09","label":"Call Planner / Discovery Agenda","priority":"P1","status":"NOT-RUN"},{"id":"QA-F10","label":"Discovery Studio","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-F11","label":"Deal Workspace","priority":"P0","status":"NOT-RUN"},{"id":"QA-F12","label":"Future Autopsy","priority":"P1","status":"NOT-RUN"},{"id":"QA-F13","label":"PoC Framework","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-F14","label":"Advisor Deploy","priority":"P1","status":"NOT-RUN"},{"id":"QA-F15","label":"Quota Workback","priority":"P1","status":"NOT-RUN"},{"id":"QA-F16","label":"Founding GTM / Handoff Kit","priority":"P0","status":"NOT-RUN"},{"id":"QA-F17","label":"Readiness","priority":"P1","status":"NOT-RUN"},{"id":"QA-F18","label":"Settings","priority":"P0","status":"PASS-CAVEAT"},{"id":"QA-F19","label":"Onboarding","priority":"P0","status":"NOT-RUN"},{"id":"QA-F20","label":"Welcome","priority":"P1","status":"NOT-RUN"},{"id":"QA-G01","label":"ICP -> Territory / Sourcing / Outbound context flow","priority":"P1","status":"NOT-RUN"},{"id":"QA-G02","label":"Call Planner -> Discovery Studio handoff","priority":"P1","status":"NOT-RUN"},{"id":"QA-G03","label":"Deal -> Future Autopsy / PoC / Advisor context flow","priority":"P1","status":"NOT-RUN"},{"id":"QA-G04","label":"Readiness / Handoff reflect upstream changes","priority":"P1","status":"NOT-RUN"},{"id":"QA-H01","label":"Coming-soon page renders cleanly on desktop","priority":"P1","status":"PASS-CAVEAT"},{"id":"QA-H02","label":"Terms page is publishable","priority":"P0","status":"NOT-RUN"},{"id":"QA-H03","label":"Privacy page is publishable","priority":"P0","status":"NOT-RUN"},{"id":"QA-H04","label":"Methodology hub renders with bridge logic","priority":"P1","status":"NOT-RUN"},{"id":"QA-H05","label":"Representative methodology article routes correctly into demo / signup / annual plan","priority":"P1","status":"NOT-RUN"},{"id":"QA-I01","label":"Narrow desktop layout remains usable","priority":"P1","status":"NOT-RUN"},{"id":"QA-I02","label":"Mobile public pages remain usable","priority":"P1","status":"NOT-RUN"},{"id":"QA-I03","label":"Mobile app shell expectations are explicitly accepted or rejected","priority":"P2","status":"NOT-RUN"}];
+    const evidenceRows = [{"id":"EB-F01","label":"Landing pricing CTA does not resolve to a real checkout flow.","target":"Phase 6","priority":"P0","status":"open"},{"id":"EB-F02","label":"Subscription management truth is missing.","target":"Phase 7","priority":"P0","status":"open"},{"id":"EB-F03","label":"Signup can hit email send throttles.","target":"Phase 8","priority":"P1","status":"external-config"},{"id":"EB-F04","label":"Public proof layer is still weak.","target":"Phase 10","priority":"P1","status":"open"},{"id":"EB-F05","label":"Pricing / packaging truth is not fully aligned to current manual-input burden.","target":"Phase 11","priority":"P1","status":"decision-needed"},{"id":"EB-F06","label":"Commercial copy consistency still drifts between surfaces.","target":"Phase 12","priority":"P1","status":"open"},{"id":"EB-T01","label":"Terms page was not publish-ready.","target":"Phase 9","priority":"P0","status":"validated"},{"id":"EB-T02","label":"Privacy page was not publish-ready.","target":"Phase 9","priority":"P0","status":"validated"},{"id":"EB-T03","label":"Public-facing mojibake / encoding regressions existed across public and core app surfaces.","target":"Phase 13","priority":"P1","status":"validated"},{"id":"EB-T04","label":"Billing/support/refund truth is still not legible to a stranger.","target":"Phase 7","priority":"P1","status":"open"},{"id":"EB-R01","label":"Discovery Studio can appear not to load.","target":"Phase 34 / Phase 16","priority":"P0","status":"local-patch"},{"id":"EB-R02","label":"Sidebar scroll position reset instead of respecting where the user clicked.","target":"Phase 14","priority":"P1","status":"local-patch"},{"id":"EB-R03","label":"PoC Framework can show duplicate progress/banner chrome.","target":"Phase 37 / Phase 15","priority":"P1","status":"local-patch"},{"id":"EB-R04","label":"Shared chrome injection rules are uneven.","target":"Phase 15","priority":"P1","status":"local-patch"},{"id":"EB-R05","label":"Silent failure paths required a classified full sweep.","target":"Phase 16","priority":"P0","status":"local-patch"},{"id":"EB-R09","label":"Persistence control state could leak between demo and real workspace flows, and durable docs could fail cloud sync on nullable defaults.","target":"Phase 17 / Phase 44","priority":"P0","status":"local-patch"},{"id":"EB-R06","label":"Observability and diagnostics were too thin for launch conditions.","target":"Phase 18","priority":"P1","status":"local-patch"},{"id":"EB-R07","label":"Data-flow nav badge logic is likely broken against the current nav implementation.","target":"Phase 15","priority":"P2","status":"local-patch"},{"id":"EB-R08","label":"Welcome and tour patches exist locally but may not be deployment-safe until committed and verified.","target":"Phase 22 / Phase 23","priority":"P1","status":"local-patch"},{"id":"EB-R10","label":"Week 1 lifecycle nudge could duplicate in the sidebar.","target":"Phase 24 follow-up / Phase 25","priority":"P2","status":"local-patch"},{"id":"EB-A01","label":"Welcome corridor is real, but still not yet the complete first-session system.","target":"Phase 22 / Phase 43","priority":"P1","status":"local-patch"},{"id":"EB-A02","label":"Tour is present but not yet fully proven self-serve effective.","target":"Phase 23","priority":"P1","status":"local-patch"},{"id":"EB-A03","label":"Demo seed must remain synchronized with every demo-critical module.","target":"Phase 21","priority":"P1","status":"monitor"},{"id":"EB-A04","label":"First 7 days user lifecycle is now present, but still needs live validation.","target":"Phase 24","priority":"P2","status":"local-patch"},{"id":"EB-A05","label":"Onboarding existed, but it still behaved more like setup than activation.","target":"Phase 42","priority":"P1","status":"local-patch"},{"id":"EB-M01","label":"Territory Architect promise was stronger than its visible output depth.","target":"Phase 28","priority":"P1","status":"local-patch"},{"id":"EB-M02","label":"Sourcing Workbench still depends too much on user discipline.","target":"Phase 29","priority":"P1","status":"local-patch"},{"id":"EB-M03","label":"LinkedIn Playbook still read too much like advice.","target":"Phase 32","priority":"P1","status":"local-patch"},{"id":"EB-M04","label":"Discovery Studio needed a stronger live-call bridge, easier framework entry, and a clearer worked-move learning loop.","target":"Phase 34","priority":"P0","status":"local-patch"},{"id":"EB-M05","label":"PoC Framework needed stronger proof-operating depth, cleaner save/download truth, and a clearer relation to deal stage.","target":"Phase 37","priority":"P1","status":"local-patch"},{"id":"EB-M06","label":"Advisor Deploy needs more concrete deployment output.","target":"Phase 38","priority":"P2","status":"local-patch"},{"id":"EB-M07","label":"Playbook / handoff can become disconnected if upstream modules stay sparse.","target":"Phase 40","priority":"P1","status":"local-patch"},{"id":"EB-M08","label":"Readiness is meaningful, but score reasoning must get more legible and actionable.","target":"Phase 41","priority":"P2","status":"local-patch"},{"id":"EB-M09","label":"Dashboard promise is stronger than its sparse-workspace guidance and source explainability.","target":"Phase 25","priority":"P1","status":"local-patch"},{"id":"EB-M10","label":"Launch Agent is strategically strong but still separate from the core app story.","target":"Phase 48","priority":"P2","status":"local-patch"},{"id":"EB-M11","label":"Signal Console needed clearer research truth, heat explainability, and next-move logic.","target":"Phase 26","priority":"P1","status":"local-patch"},{"id":"EB-M12","label":"ICP Studio needed clearer wedge judgment, examples, and downstream handoff logic.","target":"Phase 27","priority":"P1","status":"local-patch"},{"id":"EB-M13","label":"Outbound Studio still made the user invent the motion from scratch.","target":"Phase 30","priority":"P1","status":"local-patch"},{"id":"EB-M14","label":"Cold Call Studio still behaved more like a script archive than a live operating surface.","target":"Phase 31","priority":"P1","status":"local-patch"},{"id":"EB-M15","label":"Call Planner still risked producing a generic agenda with no durable path into the rest of the system.","target":"Phase 33","priority":"P1","status":"local-patch"},{"id":"EB-M16","label":"Deal Workspace had the data fields for rigor, but not enough visible review logic to act like unquestioned pipeline truth.","target":"Phase 35","priority":"P0","status":"local-patch"},{"id":"EB-M17","label":"Future Autopsy had the methodology, but not enough timing clarity or downstream action logic.","target":"Phase 36","priority":"P1","status":"local-patch"},{"id":"EB-M18","label":"Quota Workback still behaved like isolated math instead of a planning surface that downstream modules could trust.","target":"Phase 39","priority":"P1","status":"local-patch"},{"id":"EB-AU01","label":"The product is still a high-discipline operator amplifier, not a low-discipline automation machine.","target":"Phase 45","priority":"P1","status":"local-patch"},{"id":"EB-AU02","label":"Cross-module compounding rules are not explicit enough in-product.","target":"Phase 46","priority":"P1","status":"local-patch"},{"id":"EB-AU03","label":"ICP scoring still asked for too much manual interpretation.","target":"Phase 27 / Phase 45","priority":"P2","status":"local-patch"},{"id":"EB-AU04","label":"Outbound execution is methodologically complete but operationally fragmented.","target":"Phase 30 / Phase 45","priority":"P1","status":"open"},{"id":"EB-AU05","label":"Cold call and LinkedIn surfaces need stronger automation or generated leverage.","target":"Phase 31 / Phase 32 / Phase 45","priority":"P2","status":"open"},{"id":"EB-AU06","label":"Discovery and deal/proof surfaces need stronger auto-fill from prior context.","target":"Phase 33-38 / Phase 45","priority":"P1","status":"open"},{"id":"EB-AU07","label":"The external integration roadmap was too ambiguous to trust implementation order.","target":"Phase 47","priority":"P1","status":"local-patch"},{"id":"EB-AU08","label":"Automation still needed an explicit trust-control layer.","target":"Phase 50","priority":"P1","status":"local-patch"},{"id":"EB-L01","label":"Top-of-funnel is broad but not fully closed.","target":"Phase 19 / Phase 20","priority":"P0","status":"local-patch"},{"id":"EB-L02","label":"Methodology content is now being turned into funnel infrastructure, but still needs live validation.","target":"Phase 20","priority":"P2","status":"local-patch"},{"id":"EB-L03","label":"Demo lane needs to be treated as a product lane, not just a seed page.","target":"Phase 21","priority":"P1","status":"local-patch"},{"id":"EB-L04","label":"Public launch gate should not be opened yet.","target":"Phase 52","priority":"P0","status":"validated"},{"id":"EB-P01","label":"Key findings and deliverables have been living in chat and local files instead of one board.","target":"Phase 4","priority":"P1","status":"validated"},{"id":"EB-P02","label":"Local-only changes have repeatedly been confused with deployed truth.","target":"Phase 4 / Phase 5","priority":"P1","status":"open"},{"id":"EB-P03","label":"Program artifacts are not consistently committed.","target":"Phase 4","priority":"P1","status":"open"},{"id":"EB-P04","label":"The end-to-end QA matrix is not yet formalized.","target":"Phase 51","priority":"P1","status":"local-patch"},{"id":"EB-P05","label":"Teamability direction was not explicit enough.","target":"Phase 49","priority":"P2","status":"local-patch"}];
+
+    let checkState = loadChecks();
+    let repoKind = localStorage.getItem(REPO_KIND_KEY) || "phases";
+    let activePanel = localStorage.getItem(PANEL_KEY) || "clearancePanel";
+
+    function loadChecks() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveChecks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checkState));
+    }
+
+    function slugToStatusClass(status) {
+      return "status-" + String(status).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    }
+
+    function countPhaseProgress(phase) {
+      let total = 0;
+      let complete = 0;
+      phase.steps.forEach(step => {
+        step.items.forEach((_, index) => {
+          total += 1;
+          if (checkState[`${step.id}-item-${index}`]) complete += 1;
+        });
+      });
+      return { total, complete };
+    }
+
+    function updateParentStates(phase) {
+      phase.steps.forEach(step => {
+        const itemIds = step.items.map((_, index) => `${step.id}-item-${index}`);
+        const checkedCount = itemIds.filter(id => checkState[id]).length;
+        const stepBox = document.querySelector(`input[data-check-id="${step.id}"]`);
+        if (stepBox) {
+          stepBox.checked = checkedCount === itemIds.length && itemIds.length > 0;
+          stepBox.indeterminate = checkedCount > 0 && checkedCount < itemIds.length;
+        }
+        checkState[step.id] = stepBox ? stepBox.checked : false;
+      });
+
+      const stepIds = phase.steps.map(step => step.id);
+      const checkedSteps = stepIds.filter(id => checkState[id]).length;
+      const phaseBox = document.querySelector(`input[data-check-id="${phase.id}"]`);
+      if (phaseBox) {
+        phaseBox.checked = checkedSteps === stepIds.length && stepIds.length > 0;
+        phaseBox.indeterminate = checkedSteps > 0 && checkedSteps < stepIds.length;
+      }
+      checkState[phase.id] = phaseBox ? phaseBox.checked : false;
+    }
+
+    function renderClearanceStats() {
+      const stats = document.getElementById("clearanceStats");
+      const totals = clearanceProgram.reduce((acc, phase) => {
+        const progress = countPhaseProgress(phase);
+        acc.total += progress.total;
+        acc.complete += progress.complete;
+        if (progress.total && progress.complete === progress.total) acc.phasesComplete += 1;
+        return acc;
+      }, { total: 0, complete: 0, phasesComplete: 0 });
+      const percent = totals.total ? Math.round((totals.complete / totals.total) * 100) : 0;
+      stats.innerHTML = `
+        <div class="stat"><span class="eyebrow">Clearance Progress</span><strong>${percent}%</strong></div>
+        <div class="stat"><span class="eyebrow">Substeps Complete</span><strong>${totals.complete} / ${totals.total}</strong></div>
+        <div class="stat"><span class="eyebrow">Phases Fully Checked</span><strong>${totals.phasesComplete} / ${clearanceProgram.length}</strong></div>
+        <div class="stat"><span class="eyebrow">Current Goal</span><strong>Retire Audit</strong></div>
+      `;
+    }
+
+    function renderClearance() {
+      const mount = document.getElementById("clearanceMount");
+      mount.innerHTML = "";
+
+      clearanceProgram.forEach(phase => {
+        const progress = countPhaseProgress(phase);
+        const percent = progress.total ? Math.round((progress.complete / progress.total) * 100) : 0;
+        const phaseCard = document.createElement("details");
+        phaseCard.className = "phase-card";
+        phaseCard.open = percent < 100;
+
+        phaseCard.innerHTML = `
+          <summary>
+            <div class="check-row"><input type="checkbox" data-check-id="${phase.id}" data-phase-toggle="${phase.id}"></div>
+            <div class="phase-title-wrap">
+              <span class="phase-kicker">${phase.owner}</span>
+              <h2 class="phase-title">${phase.label}</h2>
+              <p class="phase-objective">${phase.objective}</p>
+            </div>
+            <div class="phase-progress">
+              <div>${progress.complete} / ${progress.total} substeps complete</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
+              <div class="phase-summary-note">${percent}% complete</div>
+            </div>
+          </summary>
+          <div class="phase-body">
+            <div class="meta-grid">
+              <div class="meta-box">
+                <h4>Rows Closed In This Phase</h4>
+                <div class="pill-row">${phase.rows.length ? phase.rows.map(row => `<span class="mini-pill">${row}</span>`).join("") : '<span class="mini-pill">No direct QA row set</span>'}</div>
+              </div>
+              <div class="meta-box">
+                <h4>Owner Split</h4>
+                <p>${phase.owner}</p>
+              </div>
+              <div class="meta-box">
+                <h4>Exit Criteria</h4>
+                <ul>${phase.exitCriteria.map(item => `<li>${item}</li>`).join("")}</ul>
+              </div>
+            </div>
+            <div class="step-list">
+              ${phase.steps.map(step => `
+                <div class="step-card">
+                  <div class="check-row">
+                    <input type="checkbox" data-check-id="${step.id}" data-step-toggle="${step.id}">
+                    <h4>${step.label}</h4>
+                  </div>
+                  <div class="sub-list">
+                    ${step.items.map((item, index) => `
+                      <div class="check-row">
+                        <input type="checkbox" data-check-id="${step.id}-item-${index}" data-step-parent="${step.id}">
+                        <label>${item}</label>
+                      </div>
+                    `).join("")}
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+
+        mount.appendChild(phaseCard);
+        updateParentStates(phase);
+      });
+
+      renderClearanceStats();
+      bindChecklistEvents();
+    }
+
+    function bindChecklistEvents() {
+      document.querySelectorAll("[data-phase-toggle]").forEach(box => {
+        box.addEventListener("change", event => {
+          const phase = clearanceProgram.find(item => item.id === event.target.dataset.phaseToggle);
+          phase.steps.forEach(step => {
+            checkState[step.id] = event.target.checked;
+            step.items.forEach((_, index) => { checkState[`${step.id}-item-${index}`] = event.target.checked; });
+          });
+          checkState[phase.id] = event.target.checked;
+          saveChecks();
+          renderClearance();
+        });
+      });
+
+      document.querySelectorAll("[data-step-toggle]").forEach(box => {
+        box.addEventListener("change", event => {
+          const stepId = event.target.dataset.stepToggle;
+          const phase = clearanceProgram.find(item => item.steps.some(step => step.id === stepId));
+          const step = phase.steps.find(item => item.id === stepId);
+          checkState[step.id] = event.target.checked;
+          step.items.forEach((_, index) => { checkState[`${step.id}-item-${index}`] = event.target.checked; });
+          saveChecks();
+          renderClearance();
+        });
+      });
+
+      document.querySelectorAll("[data-step-parent]").forEach(box => {
+        box.addEventListener("change", event => {
+          checkState[event.target.dataset.checkId] = event.target.checked;
+          saveChecks();
+          renderClearance();
+        });
+      });
+    }
+
+    function renderRepositoryStats() {
+      const stats = document.getElementById("repositoryStats");
+      const completedPhases = masterPhases.filter(item => item.status === "Completed").length;
+      const plannedPhases = masterPhases.filter(item => item.status === "Planned").length;
+      const deferredPhases = masterPhases.filter(item => item.status === "Deferred").length;
+      const qaNotRun = qaRows.filter(item => item.status === "NOT-RUN").length;
+      const ebOpen = evidenceRows.filter(item => item.status === "open").length;
+      stats.innerHTML = `
+        <div class="stat"><span class="eyebrow">Completed Phases</span><strong>${completedPhases}</strong></div>
+        <div class="stat"><span class="eyebrow">Not Started Phases</span><strong>${plannedPhases}</strong></div>
+        <div class="stat"><span class="eyebrow">Deferred Phases</span><strong>${deferredPhases}</strong></div>
+        <div class="stat"><span class="eyebrow">QA Not-Run Rows</span><strong>${qaNotRun}</strong></div>
+        <div class="stat"><span class="eyebrow">Evidence Rows Still Open</span><strong>${ebOpen}</strong></div>
+      `;
+    }
+
+    function renderRepository() {
+      renderRepositoryStats();
+      const mount = document.getElementById("repositoryMount");
+      const search = (document.getElementById("repoSearch").value || "").trim().toLowerCase();
+      const statusFilter = document.getElementById("repoStatus").value;
+      let rows = [];
+
+      if (repoKind === "phases") {
+        rows = masterPhases.map(item => ({
+          id: `Phase ${item.number}`,
+          label: item.title,
+          priority: item.doc ? "Artifact exists" : "No artifact yet",
+          status: item.status,
+          meta: item.doc || "No phase artifact file",
+          link: item.doc || ""
+        }));
+      } else if (repoKind === "qa") {
+        rows = qaRows.map(item => ({ id: item.id, label: item.label, priority: item.priority, status: item.status, meta: "Phase 51 QA matrix", link: "phase-51-full-end-to-end-qa-matrix-2026-03-26.md" }));
+      } else {
+        rows = evidenceRows.map(item => ({ id: item.id, label: item.label, priority: item.priority, status: item.status, meta: item.target, link: "phase-04-evidence-board-2026-03-22.md" }));
+      }
+
+      rows = rows.filter(item => {
+        const matchesSearch = !search || [item.id, item.label, item.priority, item.status, item.meta].join(" ").toLowerCase().includes(search);
+        const matchesStatus = statusFilter === "all" || item.status === statusFilter;
+        return matchesSearch && matchesStatus;
+      });
+
+      if (!rows.length) {
+        mount.innerHTML = '<div class="empty-state">No rows match the current search and status filters.</div>';
+        return;
+      }
+
+      mount.innerHTML = `
+        <div class="repo-table">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Label</th>
+                <th>Priority / State</th>
+                <th>Status</th>
+                <th>Source / Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(item => `
+                <tr>
+                  <td><strong>${item.id}</strong></td>
+                  <td>${item.label}</td>
+                  <td>${item.priority}</td>
+                  <td><span class="badge ${slugToStatusClass(item.status)}">${item.status}</span></td>
+                  <td>${item.link ? `<a href="${item.link}">${item.meta}</a>` : item.meta}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function exportProgressSnapshot() {
+      const payload = ["Antaeus Audit Clearance Progress Snapshot", ""].concat(clearanceProgram.map(phase => {
+        const progress = countPhaseProgress(phase);
+        return `${phase.label}: ${progress.complete}/${progress.total}`;
+      })).join("\n");
+      navigator.clipboard.writeText(payload).then(() => {
+        alert("Progress snapshot copied to clipboard.");
+      }).catch(() => {
+        alert("Could not copy automatically. Inspect localStorage key: " + STORAGE_KEY);
+      });
+    }
+
+    function switchPanel(targetId) {
+      activePanel = targetId;
+      localStorage.setItem(PANEL_KEY, targetId);
+      document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.panelTarget === targetId));
+      document.querySelectorAll(".panel").forEach(panel => panel.classList.toggle("active", panel.id === targetId));
+    }
+
+    function switchRepoKind(kind) {
+      repoKind = kind;
+      localStorage.setItem(REPO_KIND_KEY, kind);
+      document.querySelectorAll(".repo-tab").forEach(btn => btn.classList.toggle("active", btn.dataset.repoKind === kind));
+      renderRepository();
+    }
+
+    document.getElementById("expandAll").addEventListener("click", () => document.querySelectorAll(".phase-card").forEach(card => { card.open = true; }));
+    document.getElementById("collapseAll").addEventListener("click", () => document.querySelectorAll(".phase-card").forEach(card => { card.open = false; }));
+    document.getElementById("clearChecks").addEventListener("click", () => {
+      if (!confirm("Clear all local checklist progress in this browser?")) return;
+      checkState = {};
+      saveChecks();
+      renderClearance();
+    });
+    document.getElementById("exportChecks").addEventListener("click", exportProgressSnapshot);
+    document.getElementById("repoSearch").addEventListener("input", renderRepository);
+    document.getElementById("repoStatus").addEventListener("change", renderRepository);
+    document.querySelectorAll(".nav-btn").forEach(btn => btn.addEventListener("click", () => switchPanel(btn.dataset.panelTarget)));
+    document.querySelectorAll(".repo-tab").forEach(btn => btn.addEventListener("click", () => switchRepoKind(btn.dataset.repoKind)));
+
+    switchPanel(activePanel);
+    switchRepoKind(repoKind);
+    renderClearance();
+  </script>
+</body>
+</html>
