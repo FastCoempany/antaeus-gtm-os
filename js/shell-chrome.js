@@ -10,7 +10,7 @@
         'territory-architect': { label: 'Territory', tone: 'ready' },
         'sourcing-workbench': { label: 'Territory', tone: 'ready' },
         'outbound-studio': { label: 'Outbound', tone: 'live' },
-        'cold-call-studio': { label: 'Outbound', tone: 'live' },
+        'cold-call-studio': { label: 'Calls', tone: 'live' },
         'linkedin-playbook': { label: 'Outbound', tone: 'ready' },
         'discovery-agenda': { label: 'Calls', tone: 'ready' },
         'discovery-studio': { label: 'Calls', tone: 'ready' },
