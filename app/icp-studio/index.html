@@ -736,12 +736,30 @@
         
         function byId(id) { return document.getElementById(id); }
         function val(id) { return (byId(id)?.value || '').trim(); }
+        function esc(value) {
+            var d = document.createElement('div');
+            d.textContent = value == null ? '' : String(value);
+            return d.innerHTML;
+        }
         function sanitizeField(fieldName, value) {
             var raw = String(value == null ? '' : value);
             if (window.gtmInputSanitizer && typeof window.gtmInputSanitizer.sanitizeField === 'function') {
                 return window.gtmInputSanitizer.sanitizeField(fieldName, raw);
             }
             return raw.replace(/<[^>]*>/g, '').trim();
+        }
+        function getIcpAnalyticsState() {
+            var fallback = { icps: [], totalWorked: 0 };
+            try {
+                var parsed = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+                if (!parsed || typeof parsed !== 'object') return fallback;
+                if (!Array.isArray(parsed.icps)) parsed.icps = [];
+                if (typeof parsed.totalWorked !== 'number') parsed.totalWorked = 0;
+                return parsed;
+            } catch (error) {
+                console.error('ICP analytics state was malformed:', error);
+                return fallback;
+            }
         }
         function countIcpCompleteness(icp) {
             var fields = ['industry', 'size', 'geo', 'buyer', 'pain', 'trigger', 'proofWindow', 'statement'];
@@ -1312,7 +1330,7 @@
         // ============================================
         
         function updateAnalyticsPanel() {
-            const analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+            const analytics = getIcpAnalyticsState();
             
             byId('stat_session_created').textContent = sessionCreated;
             byId('stat_session_worked').textContent = sessionWorked;
@@ -1488,7 +1506,7 @@
         }
         
         function renderLibrary() {
-            const analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+            const analytics = getIcpAnalyticsState();
             const container = byId('libraryCards');
             const countEl = byId('libraryCount');
             function hintDismissed() {
@@ -1579,7 +1597,7 @@
         }
         
         window.loadICP = function(idx) {
-            var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[]}');
+            var analytics = getIcpAnalyticsState();
             var icp = analytics.icps[idx];
             if (!icp) return;
             
@@ -1627,7 +1645,7 @@
         
         window.deleteICP = async function(idx) {
             if (!confirm('Delete this ICP?')) return;
-            var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[],"totalWorked":0}');
+            var analytics = getIcpAnalyticsState();
             var removed = analytics.icps[idx] || null;
 
             if (removed && removed.id && window.gtmPersistence && window.gtmPersistence.icps && typeof window.gtmPersistence.icps.remove === 'function') {
@@ -1650,7 +1668,7 @@
         };
         
         window.copyLibStatement = function(idx) {
-            var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[]}');
+            var analytics = getIcpAnalyticsState();
             var icp = analytics.icps[idx];
             if (icp && icp.statement) {
                 navigator.clipboard.writeText(icp.statement).then(function() {
@@ -1714,12 +1732,24 @@
             }
 
             update();
-            updateAnalyticsPanel();
-            renderTemplateButtons();
-            renderLibrary();
+            try {
+                updateAnalyticsPanel();
+            } catch (error) {
+                console.error('ICP analytics panel failed to render:', error);
+            }
+            try {
+                renderTemplateButtons();
+            } catch (error) {
+                console.error('ICP template panel failed to render:', error);
+            }
+            try {
+                renderLibrary();
+            } catch (error) {
+                console.error('ICP library failed to render:', error);
+            }
 
             (function(){
-                var icpData=JSON.parse(localStorage.getItem('gtmos_icp_analytics')||'{"icps":[]}');
+                var icpData = getIcpAnalyticsState();
                 var container=document.querySelector('.app-content');
                 if(icpData.icps&&icpData.icps.length>=1&&container){
                     container.classList.add('hints-hidden');
