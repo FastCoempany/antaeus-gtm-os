@@ -492,6 +492,113 @@ window.useLinkedInRecommendedPlay=function(){
     toast('Recommended play loaded');
 };
 
+function renderLinkedInBridge(){
+    var el=document.getElementById('liShellBand');
+    if(!el)return;
+    var icp=getBestIcp();
+    var hottest=getHottestSignalAccount();
+    var touch=getLatestOutboundTouch();
+    var stats=getLinkedInStats();
+    var motion=getLinkedInMotion({icp:icp,hottestAccount:hottest,latestTouch:touch,stats:stats});
+    var stateTone='thin';
+    var stateLabel='Needs context';
+    if(hottest&&hottest.name){
+        stateTone='live';
+        stateLabel='Signal-linked';
+    }else if(touch&&touch.accountName){
+        stateTone='ready';
+        stateLabel='Motion-linked';
+    }else if(stats.total>0){
+        stateTone='ready';
+        stateLabel='Logging live';
+    }
+    var stageHtml=
+        '<section class="shell-section anchor-stage">'+
+            '<div class="anchor-stage-grid">'+
+                '<div>'+
+                    '<div class="anchor-eyebrow">Channel operating board</div>'+
+                    '<div class="anchor-headline">'+escH(motion.label)+'</div>'+
+                    '<div class="anchor-support">'+escH(motion.whyNow)+'</div>'+
+                    '<div class="anchor-chip-row">'+
+                        '<span class="anchor-chip">'+escH(stateLabel)+'</span>'+
+                        '<span class="anchor-chip">'+stats.total+' logged action'+(stats.total===1?'':'s')+'</span>'+
+                        '<span class="anchor-chip">'+escH(motion.actionType.replace(/_/g,' '))+'</span>'+
+                    '</div>'+
+                    '<div class="anchor-primary-card">'+
+                        '<div class="anchor-primary-label">Current context</div>'+
+                        '<div class="anchor-primary-title">'+escH(motion.context)+'</div>'+
+                        '<div class="anchor-primary-copy">'+escH('Signal Console points the account. Outbound reinforces the angle. The LinkedIn log proves whether the channel is compounding or stalling.')+'</div>'+
+                        '<div class="anchor-primary-actions">'+
+                            '<button class="btn btn-primary" type="button" onclick="showTab(\'log\')">Open activity log</button>'+
+                            '<a class="btn btn-secondary" href="/app/outbound-studio/">Open Outbound Studio</a>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="anchor-mini-grid">'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">One-session win</div><div class="anchor-mini-value">'+escH(motion.oneSession)+'</div><div class="anchor-mini-copy">Leave with a concrete LinkedIn action, not channel theater.</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Success threshold</div><div class="anchor-mini-value">'+escH(motion.thresholds)+'</div><div class="anchor-mini-copy">The channel should have a visible standard, not vibes.</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Next move</div><div class="anchor-mini-value">'+escH(motion.nextMove)+'</div><div class="anchor-mini-copy">The best play should always point to the follow-through.</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Current account</div><div class="anchor-mini-value">'+escH(motion.accountName||'No live account yet')+'</div><div class="anchor-mini-copy">LinkedIn should inherit a real target whenever possible.</div></div>'+
+                '</div>'+
+            '</div>'+
+        '</section>';
+    if(window.gtmShellChrome){
+        window.gtmShellChrome.applyHeader({
+            family:'Outbound',
+            stateLabel:stateLabel,
+            stateTone:stateTone
+        });
+        window.gtmShellChrome.renderCommandBand('#liShellBand',{
+            kicker:'Channel bridge',
+            title:motion.label,
+            copy:motion.whyNow,
+            stateLabel:stateLabel,
+            stateTone:stateTone,
+            metrics:[
+                {label:'Current context',value:motion.context},
+                {label:'One-session win',value:motion.oneSession},
+                {label:'Success threshold',value:motion.thresholds},
+                {label:'Downstream handshake',value:'Signal Console points the account. Outbound reinforces the angle. The log proves the channel is compounding.'}
+            ],
+            actions:[
+                {label:'Open Activity Log',action:'showTab("log")',tone:'primary'},
+                {label:'Open Outbound Studio',href:'/app/outbound-studio/'}
+            ]
+        });
+        el.insertAdjacentHTML('beforeend',stageHtml);
+        return;
+    }
+    el.innerHTML=stageHtml;
+}
+
+function renderLinkedInMotion(){
+    var el=document.getElementById('liMotion');
+    if(!el)return;
+    var icp=getBestIcp();
+    var hottest=getHottestSignalAccount();
+    var touch=getLatestOutboundTouch();
+    var stats=getLinkedInStats();
+    var motion=getLinkedInMotion({icp:icp,hottestAccount:hottest,latestTouch:touch,stats:stats});
+    el.innerHTML=
+        '<section class="shell-section">'+
+            '<div class="shell-section-header">'+
+                '<div class="shell-section-heading">'+
+                    '<div class="shell-section-kicker">Recommended play</div>'+
+                    '<div class="shell-section-title">'+escH(motion.label)+'</div>'+
+                    '<div class="shell-section-copy">'+escH(motion.whyNow)+'</div>'+
+                '</div>'+
+                '<div class="shell-section-actions">'+
+                    '<button class="btn btn-primary" type="button" onclick="useLinkedInRecommendedPlay()">Use recommended play</button>'+
+                '</div>'+
+            '</div>'+
+            '<div class="anchor-lane-grid">'+
+                '<section class="anchor-lane"><div class="anchor-lane-state">Action now</div><div class="anchor-lane-title">'+escH(motion.actionType.replace(/_/g,' '))+'</div><div class="anchor-lane-copy">'+escH(motion.oneSession)+'</div></section>'+
+                '<section class="anchor-lane"><div class="anchor-lane-state">Success threshold</div><div class="anchor-lane-title">'+escH(motion.thresholds)+'</div><div class="anchor-lane-copy">Use this to judge whether the channel is actually moving the account.</div></section>'+
+                '<section class="anchor-lane"><div class="anchor-lane-state">Next move</div><div class="anchor-lane-title">'+escH(motion.nextMove)+'</div><div class="anchor-lane-copy">The play should hand cleanly into the next touch, not die as a one-off.</div></section>'+
+            '</div>'+
+        '</section>';
+}
+
 window.showTab=function(id){
     document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
     document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on')});

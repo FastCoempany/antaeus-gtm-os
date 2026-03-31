@@ -660,6 +660,121 @@ async function syncSignalConsoleAccounts(){
 }
 
 // ── INIT ──
+function renderBridge(){
+    var icp = getBestIcp();
+    var motion = getCurrentMotionState();
+    var icpText = icp ? ((icp.industry||'Market')+' | '+(icp.buyer||'Buyer')+(icp.qualityScore?' | '+icp.qualityScore+'/100 quality':'')) : 'No saved ICP yet.';
+    var signalText = motion.accountName ? ('Working account: '+motion.accountName+(motion.signalHeadline?' | '+motion.signalHeadline:'')) : 'No account selected yet.';
+    var nextMachine = motion.primaryChannel==='linkedin'
+        ? 'If this motion works, take the same angle into LinkedIn Playbook next.'
+        : (motion.temp==='hot' || motion.temp==='closing'
+            ? 'If this motion is live, take it into Deal Workspace or Cold Call Studio next.'
+            : 'If this motion lands, feed the account back into Signal Console before you channel-shift.');
+    var stateLabel = motion.accountName || motion.contactName ? motion.bandLabel : 'Need target';
+    var stateTone = !motion.accountName && !motion.contactName ? 'thin' : (motion.band === 'strong' ? 'live' : (motion.band === 'workable' ? 'ready' : 'thin'));
+    var node=document.getElementById('outboundShellBand');
+    if(!node)return;
+    var stageHtml=
+        '<section class="shell-section anchor-stage">'+
+            '<div class="anchor-stage-grid">'+
+                '<div>'+
+                    '<div class="anchor-eyebrow">Motion operating board</div>'+
+                    '<div class="anchor-headline">'+escH(motion.accountName?'Turn one believable angle into one live first move.':'Pick one real account, buyer, and trigger before you write anything.')+'</div>'+
+                    '<div class="anchor-support">'+escH(motion.accountName
+                        ? 'The goal is not to generate more copy. The goal is to create one motion you can send now, log, and hand forward without losing the thread.'
+                        : 'Outbound gets dramatically better once ICP, signal, and account context are all live. Until then, the system is guessing.')+'</div>'+
+                    '<div class="anchor-chip-row">'+
+                        '<span class="anchor-chip">'+escH(motion.bandLabel)+'</span>'+
+                        '<span class="anchor-chip">'+escH(motion.primaryChannel)+'</span>'+
+                        '<span class="anchor-chip">'+escH(motion.ctaLabel)+'</span>'+
+                        '<span class="anchor-chip">'+motion.savedAngles+' saved angle'+(motion.savedAngles===1?'':'s')+'</span>'+
+                    '</div>'+
+                    '<div class="anchor-primary-card">'+
+                        '<div class="anchor-primary-label">Current motion</div>'+
+                        '<div class="anchor-primary-title">'+escH(motion.accountName||'No live motion yet')+'</div>'+
+                        '<div class="anchor-primary-copy">'+escH(motion.accountName
+                            ? motion.why.join(' ')
+                            : 'Use the generator inputs to turn one account, one trigger, and one buyer into a motion that the rest of the system can trust.')+'</div>'+
+                        '<div class="anchor-primary-actions">'+
+                            '<button class="btn btn-primary" type="button" onclick="showTab(\'generator\')">Focus generator</button>'+
+                            '<a class="btn btn-secondary" href="/app/signal-console/">Open Signal Console</a>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="anchor-mini-grid">'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Input stack</div><div class="anchor-mini-value">'+escH(icpText)+'</div><div class="anchor-mini-copy">'+escH(signalText)+'</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Standard</div><div class="anchor-mini-value">'+escH(motion.bandLabel)+'</div><div class="anchor-mini-copy">'+escH(motion.standard)+'</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">One-session win</div><div class="anchor-mini-value">1 saved angle</div><div class="anchor-mini-copy">1 logged touch and a clear next move.</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Next machine</div><div class="anchor-mini-value">'+escH(nextMachine)+'</div><div class="anchor-mini-copy">The motion should hand cleanly into the next surface.</div></div>'+
+                '</div>'+
+            '</div>'+
+        '</section>';
+    if (window.gtmShellChrome) {
+        window.gtmShellChrome.applyHeader({
+            stateLabel: stateLabel,
+            stateTone: stateTone
+        });
+        window.gtmShellChrome.renderCommandBand('#outboundShellBand', {
+            kicker: 'Outbound operating bridge',
+            title: 'Turn GTM truth into one believable first move.',
+            copy: 'Outbound Studio should turn one account, one trigger, and one buyer into a believable motion you can send now and learn from later.',
+            stateLabel: stateLabel,
+            stateTone: stateTone,
+            metrics: [
+                { label: 'Input stack', value: icpText + ' | ' + signalText },
+                { label: 'Standard', value: motion.bandLabel + ' - ' + motion.standard },
+                { label: 'One-session win', value: '1 saved angle, 1 logged touch, and a clear next move.' },
+                { label: 'Next machine', value: nextMachine }
+            ],
+            actions: [
+                { label: 'Focus Generator', action: "showTab('generator')", tone: 'primary' },
+                { label: 'Open Signal Console', href: '/app/signal-console/' }
+            ]
+        });
+        node.insertAdjacentHTML('beforeend',stageHtml);
+        return;
+    }
+    node.innerHTML=stageHtml;
+}
+
+function renderMotionBrief(){
+    var motion = getCurrentMotionState();
+    currentMotion = motion;
+    var el = document.getElementById('motionBrief');
+    if(!motion.accountName && !motion.contactName){
+        el.className = '';
+        el.innerHTML=
+            '<section class="shell-section shell-section--compact">'+
+                '<div class="shell-section-header">'+
+                    '<div class="shell-section-heading">'+
+                        '<div class="shell-section-kicker">Motion brief</div>'+
+                        '<div class="shell-section-title">No live motion yet.</div>'+
+                        '<div class="shell-section-copy">Select an account, persona, temperature, and trigger to see the exact outbound motion Antaeus would run first.</div>'+
+                    '</div>'+
+                '</div>'+
+            '</section>';
+        return;
+    }
+    var whyItems = motion.why.map(function(item){return '<div class="anchor-list-item">'+escH(item)+'</div>';}).join('');
+    var goodItems = motion.good.map(function(item){return '<div class="anchor-list-item">'+escH(item)+'</div>';}).join('');
+    el.className = '';
+    el.innerHTML =
+        '<section class="shell-section">'+
+            '<div class="shell-section-header">'+
+                '<div class="shell-section-heading">'+
+                    '<div class="shell-section-kicker">Motion brief</div>'+
+                    '<div class="shell-section-title">This is the motion.</div>'+
+                    '<div class="shell-section-copy">Lead with <strong>'+escH(motion.triggerLabel)+'</strong> for <strong>'+escH(motion.personaLabel)+'</strong> through <strong>'+escH(motion.primaryChannel)+'</strong>. The ask should stay <strong>'+escH(motion.ctaLabel.toLowerCase())+'</strong>'+(motion.asset !== 'none' ? ' and the give should be <strong>'+escH(motion.assetLabel.toLowerCase())+'</strong>.' : '.')+'</div>'+
+                '</div>'+
+            '</div>'+
+            '<div class="anchor-lane-grid">'+
+                '<section class="anchor-lane"><div class="anchor-lane-state">Why now</div><div class="anchor-lane-title">'+escH(motion.accountName||'Target')+'</div><div class="anchor-list">'+whyItems+'</div></section>'+
+                '<section class="anchor-lane"><div class="anchor-lane-state">What good looks like</div><div class="anchor-lane-title">'+escH(motion.bandLabel)+'</div><div class="anchor-list">'+goodItems+'</div></section>'+
+                '<section class="anchor-lane"><div class="anchor-lane-state">Next move</div><div class="anchor-lane-title">'+escH(motion.nextMove)+'</div><div class="anchor-lane-copy">Save creates an outbound angle. Log creates a touch record. Save + Log does both so Dashboard, Readiness, and the handoff kit can use the same motion.</div></section>'+
+            '</div>'+
+        '</section>';
+}
+
 function init(){
     var subtitle = document.querySelector('.page-subtitle');
     if (subtitle) {

@@ -516,6 +516,76 @@ function closeObj(){document.getElementById('objOverlay').classList.remove('on')
 window.closeObj=closeObj;
 
 // ── RENDER ──
+function renderColdCallShellBand(){
+    var node=document.getElementById('coldCallShellBand');
+    if(!node)return;
+    var stage=FLOW[S.stage];
+    var meta=getModeMeta(S.stage);
+    var mode=getStageMode(S.stage);
+    var signal=getAccountSignal()||'No live signal linked yet.';
+    var focus=selectedAccount?selectedAccount+(accountData&&accountData._heat?' · heat '+accountData._heat:''):'No account selected';
+    var nextMove=S.stage==='pre_call'
+        ? 'Select the account, study the brief, and decide whether the first route is prospect, assistant, or voicemail.'
+        : S.stage==='post_call'
+            ? 'Log the real outcome now while the call is fresh, then turn it into the next scheduled move.'
+            : 'Keep the live call moving. Use the response tree without losing the outcome you are trying to earn.';
+    var stateTone=selectedAccount?(mode==='live'?'live':'ready'):'thin';
+    var stateLabel=selectedAccount?(meta&&meta.label?meta.label:'Call mode'):'Needs account';
+    var stageHtml=
+        '<section class="shell-section anchor-stage">'+
+            '<div class="anchor-stage-grid">'+
+                '<div>'+
+                    '<div class="anchor-eyebrow">Call operating board</div>'+
+                    '<div class="anchor-headline">'+escH(meta.title)+'</div>'+
+                    '<div class="anchor-support">'+escH(meta.copy)+'</div>'+
+                    '<div class="anchor-chip-row">'+
+                        '<span class="anchor-chip'+(mode==='pre'?' active':'')+'">Pre-call</span>'+
+                        '<span class="anchor-chip'+(mode==='live'?' active':'')+'">Live-call</span>'+
+                        '<span class="anchor-chip'+(mode==='post'?' active':'')+'">Post-call</span>'+
+                        '<span class="anchor-chip">'+escH(stateLabel)+'</span>'+
+                    '</div>'+
+                    '<div class="anchor-primary-card">'+
+                        '<div class="anchor-primary-label">Focus account</div>'+
+                        '<div class="anchor-primary-title">'+escH(focus)+'</div>'+
+                        '<div class="anchor-primary-copy">'+escH(nextMove)+'</div>'+
+                        '<div class="anchor-primary-actions">'+
+                            '<button class="btn btn-primary" type="button" onclick="goTo(\'pre_call\')">Reset to brief</button>'+
+                            '<a class="btn btn-secondary" href="/app/signal-console/">Open Signal Console</a>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="anchor-mini-grid">'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Top signal</div><div class="anchor-mini-value">'+escH(signal)+'</div><div class="anchor-mini-copy">Enter the call with a specific reason, not generic courage.</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Call state</div><div class="anchor-mini-value">'+escH((stage&&stage.sub)||'Prep the next cold call.')+'</div><div class="anchor-mini-copy">The mode should tell you what kind of behavior is needed now.</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Outcome loop</div><div class="anchor-mini-value">'+(S.log||[]).length+' calls logged</div><div class="anchor-mini-copy">Logged outcomes should be shaping the next route.</div></div>'+
+                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Next move</div><div class="anchor-mini-value">'+escH(nextMove)+'</div><div class="anchor-mini-copy">The call should always leave a concrete next action behind it.</div></div>'+
+                '</div>'+
+            '</div>'+
+        '</section>';
+    if(window.gtmShellChrome){
+        window.gtmShellChrome.renderCommandBand('#coldCallShellBand',{
+            kicker:'Live call system',
+            title:meta.title,
+            copy:meta.copy,
+            stateLabel:stateLabel,
+            stateTone:stateTone,
+            metrics:[
+                {label:'Focus account',value:focus},
+                {label:'Top signal',value:signal},
+                {label:'Call state',value:(stage&&stage.sub)||'Prep the next cold call.'},
+                {label:'Next move',value:nextMove}
+            ],
+            actions:[
+                {label:'Reset to Brief',action:'goTo("pre_call")',tone:'primary'},
+                {label:'Open Signal Console',href:'/app/signal-console/'}
+            ]
+        });
+        node.insertAdjacentHTML('beforeend',stageHtml);
+        return;
+    }
+    node.innerHTML=stageHtml;
+}
+
 function render(){
     syncColdCallShellOffset();
     renderPhases();
