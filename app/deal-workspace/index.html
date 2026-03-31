@@ -453,6 +453,8 @@
             var oneSession=active.length===0
                 ? 'Create one real deal with account, value, stage, next step, and the first qualification truth.'
                 : 'Leave this page knowing which deal is healthiest, which deal is rotting, and what the next dated move is on both.';
+            var stateLabel=active.length===0?'Needs pipeline':(recovery.length?'Recovery pressure':'Board live');
+            var stateTone=active.length===0?'thin':(recovery.length?'risk':'live');
             var nodeHtml=
                 '<div class="dw-bridge">'+
                     '<div class="dw-bridge-k">Pipeline truth</div>'+
@@ -469,6 +471,31 @@
                         '<button class="dw-bridge-btn" type="button" onclick="document.getElementById(\'viewFilter\').value=\'at-risk\';render();">Show At-Risk</button>'+
                     '</div>'+
                 '</div>';
+            if(window.gtmShellChrome){
+                window.gtmShellChrome.applyHeader({
+                    family:'Pipeline',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone
+                });
+                window.gtmShellChrome.renderCommandBand(node,{
+                    kicker:'Pipeline truth',
+                    title:'Deal Workspace should be the place pipeline review gets sharper, not fuzzier.',
+                    copy:'Use this board as the operating truth for live opportunities. A real deal record has qualification, threading, momentum, and a dated next step. If any of those are missing, the deal is weaker than the stage says.',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone,
+                    metrics:[
+                        {label:'One-session win',value:oneSession},
+                        {label:'Current review target',value:topDealLabel},
+                        {label:'Weighted truth',value:fmtN(weighted)+' across '+active.length+' active deal'+(active.length===1?'':'s')+'.'},
+                        {label:'Recovery pressure',value:recovery.length?(recovery.length+' deal'+(recovery.length===1?' needs':'s need')+' intervention now.'):'No urgent recovery items right now.'}
+                    ],
+                    actions:[
+                        {label:'New Deal',action:'openModal()',tone:'primary'},
+                        {label:'Show At-Risk',action:'document.getElementById(\"viewFilter\").value=\"at-risk\";render();',tone:'secondary'}
+                    ]
+                });
+                return;
+            }
             node.innerHTML=nodeHtml;
         }
 

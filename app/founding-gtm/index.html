@@ -95,6 +95,7 @@
                 <p class="module-subtitle">Auto-assembled from your modules. The playbook your next hire will run from.</p>
             </header>
             <div class="app-content" style="max-width:740px;">
+                <div id="playbookShellBand"></div>
                 <div class="pb-summary">
                     <div class="pb-summary-card">
                         <div class="pb-card-kicker">Handoff kit</div>
@@ -391,9 +392,34 @@
             var score=Math.round((readyCount*16.5)+(partialCount*7));
             var verdict=score>=80?'Handoff-ready':score>=55?'Strong but guarded':score>=30?'Partial operating kit':'Too thin';
             var tone=score>=80?'good':score>=55?'warn':'bad';
+            var shellTone=score>=80?'ready':score>=55?'live':'risk';
             var warnings=sectionStates.filter(function(s){return s.status!=='ready';}).slice(0,3).map(function(s){
                 return '<div class="pb-warning"><strong>'+s.section.title+'</strong><br>'+s.fallback+'</div>';
             }).join('');
+
+            if(window.gtmShellChrome){
+                window.gtmShellChrome.applyHeader({
+                    family:'System',
+                    stateLabel:verdict,
+                    stateTone:shellTone
+                });
+                window.gtmShellChrome.renderCommandBand('#playbookShellBand',{
+                    kicker:'Handoff gravity',
+                    title:verdict+' GTM handoff',
+                    copy:'This surface should tell you whether the operating system is still thin, where the weak source gaps are, and whether the exported handoff reads like a serious deliverable.',
+                    stateLabel:verdict,
+                    stateTone:shellTone,
+                    metrics:[
+                        {label:'Score',value:score+'/100'},
+                        {label:'Ready sections',value:String(readyCount)},
+                        {label:'Partial sections',value:String(partialCount)},
+                        {label:'Empty sections',value:String(emptyCount)}
+                    ],
+                    actions:[
+                        {label:'Share Handoff Kit',action:'openExportModal()',tone:'primary'}
+                    ]
+                });
+            }
 
             document.getElementById('kitTitle').textContent=verdict+' GTM handoff';
             document.getElementById('kitSummary').textContent='This surface should tell you whether the operating system is still thin, where the weak source gaps are, and whether the exported handoff reads like a serious deliverable.';

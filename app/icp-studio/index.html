@@ -14,6 +14,7 @@
         
         .builder-content { overflow-y: auto; padding-right: var(--space-md); }
         .analytics-panel { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); overflow-y: auto; position: sticky; top: 0; height: fit-content; max-height: calc(100vh - 160px); }
+        .analytics-panel.shell-context-rail { top: 118px; gap: 16px; }
         
         .builder-section { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-lg); }
         .section-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); }
@@ -157,8 +158,9 @@
             
             <div class="app-content">
                 <div id="icpBootState"></div>
-                <div class="studio-layout">
-                    <div class="builder-content">
+                <div id="icpShellBand"></div>
+                <div class="studio-layout shell-context-layout">
+                    <div class="builder-content shell-work-column">
                         <!-- Inputs Section -->
                         <div class="builder-section">
                             <div class="section-header">
@@ -539,7 +541,8 @@
                     </div>
                     
                     <!-- ICP Library Panel -->
-                    <div class="analytics-panel" id="libraryPanel">
+                    <div class="analytics-panel shell-context-rail" id="libraryPanel">
+                        <div id="icpShellRail"></div>
                         <div class="analytics-title" style="display:flex;justify-content:space-between;align-items:center;">
                             <span>📚 ICP Library</span>
                             <span style="font-size:0.7rem;color:var(--text-muted);font-family:var(--font-mono);" id="libraryCount">0 saved</span>
@@ -984,6 +987,65 @@
             ];
         }
 
+        function qualityStateLabel(quality) {
+            if (!quality) return { label: 'Needs definition', tone: 'thin' };
+            if (quality.tier === 'sharp') return { label: 'Ready now', tone: 'ready' };
+            if (quality.tier === 'workable') return { label: 'Workable', tone: 'live' };
+            if (quality.tier === 'forming') return { label: 'Forming', tone: 'thin' };
+            return { label: 'Too thin', tone: 'risk' };
+        }
+
+        function renderIcpShellChrome(quality, industry, size, geo, buyer, trigger, activeAccounts) {
+            if (!window.gtmShellChrome) return;
+
+            var qualityState = qualityStateLabel(quality);
+            var downstream = buildDownstreamImpact(industry, size, geo, buyer, val('in_pain'), trigger, val('in_proof_window'), activeAccounts);
+            var risks = (quality && quality.checks ? quality.checks : []).filter(function(check) {
+                return check.tone !== 'good';
+            }).map(function(check) {
+                return check.text;
+            }).slice(0, 3);
+
+            window.gtmShellChrome.applyHeader({
+                family: 'Intelligence',
+                stateLabel: qualityState.label,
+                stateTone: qualityState.tone
+            });
+
+            window.gtmShellChrome.renderCommandBand('#icpShellBand', {
+                kicker: 'Targeting truth',
+                title: quality ? quality.label : 'Define one narrow wedge the system can trust.',
+                copy: quality ? quality.summary : 'This page should define one credible slice so territory, sourcing, outbound, and discovery stop operating on guesswork.',
+                stateLabel: qualityState.label,
+                stateTone: qualityState.tone,
+                metrics: [
+                    { label: 'Quality', value: (quality ? quality.score : 0) + '/100' },
+                    { label: 'Primary buyer', value: buyer || 'Choose one owner' },
+                    { label: 'Trigger', value: trigger || 'Name the visible why-now event' }
+                ]
+            });
+
+            window.gtmShellChrome.renderContextRail('#icpShellRail', {
+                cards: [
+                    {
+                        kicker: 'Current wedge',
+                        title: (industry || 'Industry') + (size ? ' · ' + size : ''),
+                        copy: geo ? 'Coverage: ' + geo + '.' : 'Add geography so territory does not stay abstract.'
+                    },
+                    {
+                        kicker: 'What this changes next',
+                        title: 'Downstream operating consequences',
+                        items: downstream.slice(0, 3)
+                    },
+                    {
+                        kicker: 'Pressure points',
+                        title: risks.length ? 'Tighten these before you scale the list.' : 'The wedge is clean enough to route downstream.',
+                        items: risks.length ? risks : ['Primary buyer, pain, trigger, and proof are specific enough to drive the rest of the system.']
+                    }
+                ]
+            });
+        }
+
         function buildExamples(industry, size, geo, buyer, pain, trigger, proof) {
             if (!industry || !size || !geo || !buyer || !pain || !trigger || !proof) {
                 return {
@@ -1063,6 +1125,7 @@
             renderTaggedList(byId('out_quality_checks'), quality.checks);
 
             renderList(byId('out_downstream'), buildDownstreamImpact(industry, size, geo, buyer, pain, trigger, proof, activeAccounts));
+            renderIcpShellChrome(quality, industry, size, geo, buyer, trigger, activeAccounts);
 
             var examples = buildExamples(industry, size, geo, buyer, pain, trigger, proof);
             byId('out_example').textContent = examples.strong;

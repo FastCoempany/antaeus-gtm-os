@@ -121,9 +121,17 @@
     if (!document.querySelector('script[data-gtmos-module-header]')) {
         var moduleHeaderScript = document.createElement('script');
         moduleHeaderScript.src = '/js/module-header.js';
-        moduleHeaderScript.async = true;
+        moduleHeaderScript.async = false;
         moduleHeaderScript.setAttribute('data-gtmos-module-header', 'true');
         document.head.appendChild(moduleHeaderScript);
+    }
+
+    if (!document.querySelector('script[data-gtmos-shell-chrome]')) {
+        var shellChromeScript = document.createElement('script');
+        shellChromeScript.src = '/js/shell-chrome.js';
+        shellChromeScript.async = false;
+        shellChromeScript.setAttribute('data-gtmos-shell-chrome', 'true');
+        document.head.appendChild(shellChromeScript);
     }
 
     if (!document.querySelector('script[data-gtmos-tour-guide]')) {
@@ -171,7 +179,7 @@
 
 
     var NAV_HTML = '' +
-    '<div class="sidebar-header"><a href="/app/dashboard/" class="sidebar-logo">ANTAEUS</a></div>' +
+    '<div class="sidebar-header"><div class="sidebar-header-inner"><a href="/app/dashboard/" class="sidebar-logo">ANTAEUS</a><div class="sidebar-workspace-strip"><div class="sidebar-workspace-label" id="sidebarWorkspaceContext">Workspace</div><div class="sidebar-workspace-state" id="sidebarWorkspaceState">Activation in progress</div></div></div></div>' +
     '<nav class="sidebar-nav">' +
         '<div class="nav-section">' +
             '<div class="nav-section-title nav-section-title-lg">Home</div>' +
@@ -571,6 +579,33 @@
         if (planEl) planEl.textContent = safePlan;
     }
 
+    function hydrateWorkspaceStrip(workspace, navState) {
+        var workspaceContextEl = document.getElementById('sidebarWorkspaceContext');
+        var workspaceStateEl = document.getElementById('sidebarWorkspaceState');
+        if (!workspaceContextEl || !workspaceStateEl) return;
+
+        var source = workspace && workspace.source ? String(workspace.source) : '';
+        var isDemo = !!(window.gtmEnvironment && window.gtmEnvironment.isDemo);
+        var readiness = navState && typeof navState.readinessTotal === 'number' ? navState.readinessTotal : 0;
+        var modules = navState && typeof navState.modulesCompleted === 'number' ? navState.modulesCompleted : 0;
+
+        workspaceContextEl.textContent = isDemo
+            ? 'Sample workspace'
+            : (source.indexOf('supabase') === 0 ? 'Synced workspace' : 'Local workspace');
+
+        if (isDemo) {
+            workspaceStateEl.textContent = 'Guided product story live';
+        } else if (readiness >= 80) {
+            workspaceStateEl.textContent = 'Operating rhythm live';
+        } else if (modules >= 4) {
+            workspaceStateEl.textContent = 'System coming online';
+        } else if (modules >= 1) {
+            workspaceStateEl.textContent = 'Foundation taking shape';
+        } else {
+            workspaceStateEl.textContent = 'Activation in progress';
+        }
+    }
+
     function fallbackSidebarIdentity() {
         var workspace = currentWorkspaceOrFallback();
         var profileCache = workspace.profile || {};
@@ -590,6 +625,7 @@
     function hydrateSidebarIdentity() {
         var fallback = fallbackSidebarIdentity();
         applySidebarIdentity(fallback.name, fallback.plan);
+        hydrateWorkspaceStrip(currentWorkspaceOrFallback(), window.gtmNavState || null);
         if (!window.auth || typeof auth.getUser !== 'function') return;
         auth.getUser().then(function(user) {
             if (!user) return;
@@ -824,6 +860,8 @@
             readinessTotal: readinessTotal
         };
 
+        hydrateWorkspaceStrip(workspace, window.gtmNavState);
+
         if (sidebarDataNotice && !(window.gtmEnvironment && window.gtmEnvironment.isDemo)) {
             sidebarDataNotice.textContent = (workspace.source && String(workspace.source).indexOf('supabase') === 0)
                 ? 'Workspace syncs to your account.'
@@ -920,6 +958,8 @@
         modulesCompleted: modulesCompleted,
         readinessTotal: readinessTotal
     };
+
+    hydrateWorkspaceStrip(workspaceSeed, window.gtmNavState);
 
     function queueWorkspaceNavRefresh() {
         preloadWorkspaceSummary().then(function() {
