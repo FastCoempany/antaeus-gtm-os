@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/app.css">
     <style>
         .cp-search{display:flex;gap:12px;margin-bottom:var(--space-xl);align-items:flex-end;}
+        #plannerShellBand{margin-bottom:var(--space-lg);}
         .cp-search-field{flex:1;}
         .cp-search-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:6px;}
         .cp-search-field input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:1rem;font-family:inherit;}
@@ -116,7 +117,7 @@
             </header>
             <div class="app-content" style="max-width:720px;">
                 <div class="cp-boot-state" id="bootState"></div>
-                <div class="cp-bridge" id="plannerBridge"></div>
+                <div id="plannerShellBand"></div>
                 <div class="cp-search">
                     <div class="cp-search-field">
                         <label>Who are you calling?</label>
@@ -312,22 +313,41 @@
         }
 
         function renderPlannerBridge(){
-            var node=document.getElementById('plannerBridge');
+            var node=document.getElementById('plannerShellBand');
             if(!node)return;
             var quality=getAgendaQuality();
             var company=(matchedAccount&&matchedAccount.name)||'No signal-backed account matched yet';
-            var oneSessionWin=contactName.length>=2?'Leave this page with a real opener, 3 buyer-tuned questions, a why-now angle, and a next module to move into.':'Pick the person, set the persona, and link the call to a real deal before it happens.';
-            var downstream=quality.linkedDeal?'This agenda is attached to '+escH(quality.linkedDeal.accountName||'the linked deal')+' and can hand straight into Discovery Studio or Deal Workspace.':'This planner becomes truly durable once the call is linked to a live deal record.';
+            var oneSessionWin=contactName.length>=2?'Leave this page with a real opener, three buyer-tuned questions, a why-now angle, and a next module to move into.':'Pick the person, set the persona, and link the call to a real deal before it happens.';
+            var downstream=quality.linkedDeal?'This agenda is attached to '+(quality.linkedDeal.accountName||'the linked deal')+' and can hand straight into Discovery Studio or Deal Workspace.':'This planner becomes truly durable once the call is linked to a live deal record.';
+            var stateTone=quality.band==='credible'?'live':quality.band==='workable'?'ready':'risk';
+            var stateLabel=quality.bandLabel;
+            if(window.gtmShellChrome){
+                window.gtmShellChrome.applyHeader({
+                    family:'Calls',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone
+                });
+                window.gtmShellChrome.renderCommandBand('#plannerShellBand',{
+                    kicker:'Call planner bridge',
+                    title:'A good agenda changes the next call, not just this page.',
+                    copy:'Use Call Planner to tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone,
+                    metrics:[
+                        {label:'Current context',value:company},
+                        {label:'One-session win',value:oneSessionWin},
+                        {label:'Good agenda means',value:'Real person. Real why now. Real path to advancement. No generic buyer theater.'},
+                        {label:'Downstream handshake',value:downstream}
+                    ],
+                    actions:[
+                        {label:'Open Discovery Studio',action:'openDiscoveryRun()',tone:'primary'},
+                        {label:(quality.linkedDeal?'Open Linked Deal':'Open Deal Workspace'),action:'openLinkedDealWorkspace()'}
+                    ]
+                });
+                return;
+            }
             node.innerHTML=
-                '<div class="cp-bridge-k">Call planner bridge</div>'+
-                '<div class="cp-bridge-title">A good agenda changes the next call, not just this page.</div>'+
-                '<div class="cp-bridge-copy">Use Call Planner to tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.</div>'+
-                '<div class="cp-bridge-grid">'+
-                    '<div class="cp-bridge-block"><div class="cp-bridge-label">Current context</div><div class="cp-bridge-value">'+escH(company)+'</div></div>'+
-                    '<div class="cp-bridge-block"><div class="cp-bridge-label">One-session win</div><div class="cp-bridge-value">'+escH(oneSessionWin)+'</div></div>'+
-                    '<div class="cp-bridge-block"><div class="cp-bridge-label">Good agenda means</div><div class="cp-bridge-value">Real person. Real why now. Real path to advancement. No generic buyer theater.</div></div>'+
-                    '<div class="cp-bridge-block"><div class="cp-bridge-label">Downstream handshake</div><div class="cp-bridge-value">'+escH(downstream)+'</div></div>'+
-                '</div>';
+                '<div class="cp-bridge"><div class="cp-bridge-k">Call planner bridge</div><div class="cp-bridge-title">A good agenda changes the next call, not just this page.</div><div class="cp-bridge-copy">Use Call Planner to tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.</div><div class="cp-bridge-grid"><div class="cp-bridge-block"><div class="cp-bridge-label">Current context</div><div class="cp-bridge-value">'+escH(company)+'</div></div><div class="cp-bridge-block"><div class="cp-bridge-label">One-session win</div><div class="cp-bridge-value">'+escH(oneSessionWin)+'</div></div><div class="cp-bridge-block"><div class="cp-bridge-label">Good agenda means</div><div class="cp-bridge-value">Real person. Real why now. Real path to advancement. No generic buyer theater.</div></div><div class="cp-bridge-block"><div class="cp-bridge-label">Downstream handshake</div><div class="cp-bridge-value">'+escH(downstream)+'</div></div></div></div>';
         }
 
         function renderAgendaQuality(){

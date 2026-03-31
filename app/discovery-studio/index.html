@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/app.css">
     <style>
         .ds-cat-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--space-lg);align-items:center;}
+        #discoveryShellBand{margin-bottom:var(--space-md);}
         .ds-cat-btn{padding:8px 16px;border-radius:var(--radius-full);font-size:0.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.2s;font-family:inherit;}
         .ds-cat-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
         .ds-cat-btn.active{border-color:var(--brand-gold);color:var(--brand-gold);background:rgba(212,165,116,0.08);}
@@ -122,6 +123,7 @@
         <main class="app-main">
             <header class="app-header">
                 <h1 class="page-title">Discovery Studio</h1>
+                <p class="page-subtitle">Run live discovery with the right framework instead of memory, generic prompts, or post-call reconstruction.</p>
                 <div class="header-actions">
                     <button class="btn btn-secondary btn-sm" onclick="copyWorked()">&#128203; Copy Worked</button>
                 </div>
@@ -129,7 +131,7 @@
             <div class="app-content" style="max-width:800px;">
                 <div class="ds-boot-state" id="bootState"></div>
                 <div class="ds-stats" id="statsBar"></div>
-                <div id="bridgePanel"></div>
+                <div id="discoveryShellBand"></div>
                 <div class="ds-cat-bar" id="catBar"></div>
                 <div id="frameworkGuide"></div>
                 <div id="workedLoop"></div>
@@ -180,7 +182,7 @@
                 boot.className='ds-boot-state visible';
             }
             document.getElementById('statsBar').innerHTML='';
-            document.getElementById('bridgePanel').innerHTML='';
+            document.getElementById('discoveryShellBand').innerHTML='';
             document.getElementById('catBar').innerHTML='';
             document.getElementById('frameworkGuide').innerHTML='';
             document.getElementById('workedLoop').innerHTML='';
@@ -329,7 +331,7 @@
         }
 
         function renderDiscoveryBridge(){
-            var node=document.getElementById('bridgePanel');
+            var node=document.getElementById('discoveryShellBand');
             if(!node)return;
             var agenda=getAgendaState();
             var handoff=getHandoffState();
@@ -347,23 +349,38 @@
             var downstream=deal
                 ? 'This run is attached to '+(deal.accountName||'the linked deal')+'. After the call, push truth back into Deal Workspace instead of leaving it trapped in notes.'
                 : 'Discovery Studio is strongest when the call has somewhere durable to land. Link a deal in Call Planner before or after the meeting.';
-            var dealHref=deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/';
+            var stateTone=deal?'live':agenda&&agenda.score>=65?'ready':'thin';
+            var stateLabel=deal?'Deal-linked':agenda&&agenda.score>=65?'Agenda-linked':'Call context thin';
+            if(window.gtmShellChrome){
+                window.gtmShellChrome.applyHeader({
+                    family:'Calls',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone
+                });
+                window.gtmShellChrome.renderCommandBand('#discoveryShellBand',{
+                    kicker:'Discovery bridge',
+                    title:'Run the call with a live operating system, not memory.',
+                    copy:meta.description,
+                    stateLabel:stateLabel,
+                    stateTone:stateTone,
+                    metrics:[
+                        {label:'Current call',value:currentCall},
+                        {label:'Agenda quality',value:agendaQuality},
+                        {label:'One-session win',value:meta.oneSessionWin},
+                        {label:'Next move',value:nextMove}
+                    ],
+                    actions:[
+                        {label:'Open Call Planner',href:'/app/discovery-agenda/',tone:'primary'},
+                        {label:(deal?'Open Linked Deal':'Open Deal Workspace'),href:deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/'}
+                    ]
+                });
+                return;
+            }
             var actions='<div class="ds-framework-actions" style="margin-top:14px;">'+
                 '<button class="ds-framework-btn primary" type="button" onclick="location.href=\'/app/discovery-agenda/\'">Open Call Planner</button>'+
-                '<button class="ds-framework-btn" type="button" onclick="location.href=\''+dealHref+'\'">'+(deal?'Open Linked Deal':'Open Deal Workspace')+'</button>'+
+                '<button class="ds-framework-btn" type="button" onclick="location.href=\''+(deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/')+'\'">'+(deal?'Open Linked Deal':'Open Deal Workspace')+'</button>'+
             '</div>';
-            node.innerHTML=
-                '<div class="ds-bridge">'+
-                    '<div class="ds-bridge-k">Discovery bridge</div>'+
-                    '<div class="ds-bridge-title">Run the call with a live operating system, not memory.</div>'+
-                    '<div class="ds-bridge-copy">'+escH(meta.description)+'</div>'+
-                    '<div class="ds-bridge-grid">'+
-                        '<div class="ds-bridge-block"><div class="ds-bridge-label">Current call</div><div class="ds-bridge-value">'+escH(currentCall)+'</div></div>'+
-                        '<div class="ds-bridge-block"><div class="ds-bridge-label">Agenda quality</div><div class="ds-bridge-value">'+escH(agendaQuality)+'</div></div>'+
-                        '<div class="ds-bridge-block"><div class="ds-bridge-label">One-session win</div><div class="ds-bridge-value">'+escH(meta.oneSessionWin)+'</div></div>'+
-                        '<div class="ds-bridge-block"><div class="ds-bridge-label">Next move</div><div class="ds-bridge-value">'+escH(nextMove)+'</div></div>'+
-                    '</div>'+actions+
-                '</div>';
+            node.innerHTML='<div class="ds-bridge"><div class="ds-bridge-k">Discovery bridge</div><div class="ds-bridge-title">Run the call with a live operating system, not memory.</div><div class="ds-bridge-copy">'+escH(meta.description)+'</div><div class="ds-bridge-grid"><div class="ds-bridge-block"><div class="ds-bridge-label">Current call</div><div class="ds-bridge-value">'+escH(currentCall)+'</div></div><div class="ds-bridge-block"><div class="ds-bridge-label">Agenda quality</div><div class="ds-bridge-value">'+escH(agendaQuality)+'</div></div><div class="ds-bridge-block"><div class="ds-bridge-label">One-session win</div><div class="ds-bridge-value">'+escH(meta.oneSessionWin)+'</div></div><div class="ds-bridge-block"><div class="ds-bridge-label">Next move</div><div class="ds-bridge-value">'+escH(nextMove)+'</div></div></div>'+actions+'</div>';
         }
 
         function renderFrameworkGuide(){

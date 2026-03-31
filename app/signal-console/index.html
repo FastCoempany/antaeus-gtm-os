@@ -46,6 +46,8 @@
 .sc-root .top-stats b{color:var(--tx2);font-weight:500}
 .sc-root .top-credits{font-family:var(--mono);font-size:.6rem;padding:3px 8px;border-radius:20px;background:var(--surf2);border:1px solid var(--bdr);color:var(--tx3)}
 .sc-root .top-actions{display:flex;gap:6px;flex-shrink:0}
+.signal-shell-band{padding:14px 20px 0;background:linear-gradient(180deg,rgba(15,19,28,0.88),rgba(15,19,28,0));}
+.signal-shell-band .shell-command-band{margin:0;}
 
 .sc-root .btn{font-family:var(--brig);font-size:.74rem;font-weight:500;padding:5px 12px;border-radius:var(--r);border:1px solid var(--bdr2);background:var(--surf2);color:var(--tx2);cursor:pointer;transition:all .12s;white-space:nowrap}
 .sc-root .btn:hover{background:var(--surf3);color:var(--tx);border-color:var(--bdr3)}
@@ -255,6 +257,8 @@
 <button class="btn btn-gold" id="btnEnrichAll">🔍 Enrich All</button>
 </div>
 </div>
+
+<div class="signal-shell-band" id="signalShellBand"></div>
 
 <div class="morning" id="morningBrief"></div>
 
@@ -1101,8 +1105,63 @@ function getVisible(){
 // ═══════════════════════════════════════════
 // RENDERING
 // ═══════════════════════════════════════════
+window.focusSignalAccountById=function(id){
+  if(!id)return;
+  S.expanded=id;
+  renderGrid();
+  setTimeout(()=>{
+    const card=document.querySelector(`[data-toggle="${id}"]`);
+    if(card&&typeof card.scrollIntoView==='function'){
+      card.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+  },30);
+};
+
+function renderSignalShellBand(){
+  const node=document.getElementById('signalShellBand');
+  if(!node)return;
+  const all=S.accounts||[];
+  const hottest=all.slice().sort((a,b)=>heat(b)-heat(a))[0]||null;
+  const signalCount=all.reduce((sum,a)=>sum+(a.signals||[]).filter(s=>s.status!=='flagged').length,0);
+  const activeCount=all.filter(a=>heat(a)>=75).length;
+  const title=hottest
+    ? 'Focus the next account worth acting on, not the loudest pile of noise.'
+    : 'Get one real account into the system so Signal Console can stop briefing empty space.';
+  const copy=hottest
+    ? 'Signal Console should collapse research into a ranked next move. The point is not collecting signals, it is deciding where motion should go next.'
+    : 'Add or import one account, then run research once. The rest of the workflow gets dramatically clearer after real external evidence exists.';
+  const stateLabel=hottest?'Live research':'Needs accounts';
+  const stateTone=hottest?'live':'thin';
+  const nextMove=hottest
+    ? getNextMove(hottest).title
+    : 'Add the first account or upload a CSV so there is a real surface to score.';
+  if(window.gtmShellChrome){
+    window.gtmShellChrome.renderCommandBand('#signalShellBand',{
+      kicker:'Intelligence bridge',
+      title:title,
+      copy:copy,
+      stateLabel:stateLabel,
+      stateTone:stateTone,
+      metrics:[
+        {label:'Highest-priority account',value:hottest?(hottest.name+' · heat '+heat(hottest)):'No scored account yet'},
+        {label:'Signals in play',value:String(signalCount)},
+        {label:'Accounts ready now',value:String(activeCount)},
+        {label:'Next move',value:nextMove}
+      ],
+      actions:[
+        hottest
+          ? {label:'Open Hottest Account',action:'focusSignalAccountById("'+esc(hottest.id)+'")',tone:'primary'}
+          : {label:'Add Account',action:'document.getElementById("btnAddAcct").click()',tone:'primary'},
+        {label:'Run Enrich All',action:'document.getElementById("btnEnrichAll").click()'}
+      ]
+    });
+    return;
+  }
+  node.innerHTML=`<section class="shell-command-band"><div class="shell-band-top"><div><div class="shell-band-kicker">Intelligence bridge</div><div class="shell-band-title">${esc(title)}</div><div class="shell-band-copy">${esc(copy)}</div></div><span class="shell-state-pill state-${stateTone}">${esc(stateLabel)}</span></div></section>`;
+}
+
 function render(){
-  renderStats();renderCredits();renderControls();renderMorning();renderGrid();
+  renderStats();renderCredits();renderSignalShellBand();renderControls();renderMorning();renderGrid();
 }
 
 function renderStats(){

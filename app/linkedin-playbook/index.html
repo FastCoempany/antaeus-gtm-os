@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/css/app.css">
     <style>
         .module-inner { max-width:820px; padding:0 0 80px; }
+        #liShellBand{margin-bottom:20px;}
+        .module-inner>.sub{display:none;}
 
 :root{--bg:#0a0e1a;--bg2:#10152a;--bg3:#161c34;--text:#e0ddd8;--text2:#b0ada6;--text3:#78756e;--muted:#4e4c47;--gold:#d4a574;--border:rgba(255,255,255,0.06);--green:#22c55e;--amber:#f59e0b;--blue:#5b8def;--red:#ef4444;--r-md:8px;--r-lg:12px;--r-full:999px;--serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',-apple-system,sans-serif;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -96,11 +98,14 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
+            <header class="app-header">
+                <h1 class="page-title">LinkedIn Playbook</h1>
+                <p class="page-subtitle">Use LinkedIn as channel air cover for real account motion, not vanity activity.</p>
+            </header>
             <div class="app-content">
 <div class="module-inner">
     <div id="linkedinBootState"></div>
-    <h1>LinkedIn Playbook</h1>
-    <div id="liBridge"></div>
+    <div id="liShellBand"></div>
     <p class="sub">Methodology reference + tracking. Not automation — intelligence for how to show up on LinkedIn as a seller worth responding to.</p>
 
     <div class="tabs">
@@ -419,19 +424,51 @@ function getLinkedInMotion(ctx){
 }
 
 function renderLinkedInBridge(){
-    var el=document.getElementById('liBridge');
+    var el=document.getElementById('liShellBand');
     if(!el)return;
     var icp=getBestIcp();
     var hottest=getHottestSignalAccount();
     var touch=getLatestOutboundTouch();
     var stats=getLinkedInStats();
     var motion=getLinkedInMotion({icp:icp,hottestAccount:hottest,latestTouch:touch,stats:stats});
-    var chips=[];
-    if(icp)chips.push('<span class="context-chip">ICP: '+escH((icp.industry||'Market')+' | '+(icp.buyer||'Buyer')+(icp.qualityScore?' | '+icp.qualityScore+'/100':''))+'</span>');
-    if(hottest&&hottest.name)chips.push('<span class="context-chip">Signal: '+escH(hottest.name)+(hottest._heat?' | heat '+hottest._heat:'')+'</span>');
-    if(touch&&touch.accountName)chips.push('<span class="context-chip">Latest outbound touch: '+escH(touch.accountName)+'</span>');
-    if(!chips.length)chips.push('<span class="context-chip">No saved ICP, live signal, or outbound touch yet.</span>');
-    el.innerHTML='<div class="bridge"><div class="bridge-k">Channel bridge</div><div class="bridge-title">'+motion.label+'</div><div class="bridge-copy">'+motion.whyNow+'</div><div class="bridge-grid"><div class="bridge-block"><div class="bridge-label">Use case</div><div class="bridge-value">'+motion.context+'</div></div><div class="bridge-block"><div class="bridge-label">One-session win</div><div class="bridge-value">'+motion.oneSession+'</div></div><div class="bridge-block"><div class="bridge-label">Success thresholds</div><div class="bridge-value">'+motion.thresholds+'</div></div><div class="bridge-block"><div class="bridge-label">Downstream handshake</div><div class="bridge-value">Signal Console tells you where to point LinkedIn. Outbound Studio tells you what to reinforce. The log proves whether the channel is compounding.</div></div></div><div class="context-row">'+chips.join('')+'</div></div>';
+    var stateTone='thin';
+    var stateLabel='Needs context';
+    if(hottest&&hottest.name){
+        stateTone='live';
+        stateLabel='Signal-linked';
+    }else if(touch&&touch.accountName){
+        stateTone='ready';
+        stateLabel='Motion-linked';
+    }else if(stats.total>0){
+        stateTone='ready';
+        stateLabel='Logging live';
+    }
+    if(window.gtmShellChrome){
+        window.gtmShellChrome.applyHeader({
+            family:'Outbound',
+            stateLabel:stateLabel,
+            stateTone:stateTone
+        });
+        window.gtmShellChrome.renderCommandBand('#liShellBand',{
+            kicker:'Channel bridge',
+            title:motion.label,
+            copy:motion.whyNow,
+            stateLabel:stateLabel,
+            stateTone:stateTone,
+            metrics:[
+                {label:'Current context',value:motion.context},
+                {label:'One-session win',value:motion.oneSession},
+                {label:'Success threshold',value:motion.thresholds},
+                {label:'Downstream handshake',value:'Signal Console points the account. Outbound reinforces the angle. The log proves the channel is compounding.'}
+            ],
+            actions:[
+                {label:'Open Activity Log',action:'showTab("log")',tone:'primary'},
+                {label:'Open Outbound Studio',href:'/app/outbound-studio/'}
+            ]
+        });
+        return;
+    }
+    el.innerHTML='<div class="bridge"><div class="bridge-k">Channel bridge</div><div class="bridge-title">'+motion.label+'</div><div class="bridge-copy">'+motion.whyNow+'</div><div class="bridge-grid"><div class="bridge-block"><div class="bridge-label">Current context</div><div class="bridge-value">'+motion.context+'</div></div><div class="bridge-block"><div class="bridge-label">One-session win</div><div class="bridge-value">'+motion.oneSession+'</div></div><div class="bridge-block"><div class="bridge-label">Success threshold</div><div class="bridge-value">'+motion.thresholds+'</div></div><div class="bridge-block"><div class="bridge-label">Downstream handshake</div><div class="bridge-value">Signal Console points the account. Outbound reinforces the angle. The log proves the channel is compounding.</div></div></div></div>';
 }
 
 function renderLinkedInMotion(){
@@ -679,10 +716,6 @@ bootLinkedInPlaybook=async function(){
         var loaded=await window.gtmPersistence.sequences.load();
         if(loaded&&loaded.error)console.error('Sequence load failed:',loaded.error);
     }
-    var sub=document.querySelector('.sub');
-    if(sub)sub.textContent='Operationalize LinkedIn as a real GTM channel: when to engage, when to connect, when to DM, and what good looks like.';
-    var bridge=document.getElementById('liBridge');
-    if(sub&&bridge&&sub.nextElementSibling!==bridge)sub.insertAdjacentElement('afterend',bridge);
     renderLinkedInBridge();
     renderLog();
     clearLinkedInBootState();

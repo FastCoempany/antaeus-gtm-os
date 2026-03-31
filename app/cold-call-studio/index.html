@@ -22,6 +22,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .topbar-ctx{font-size:0.8rem;color:var(--text-dim);}
 .topbar-ctx strong{color:var(--text);font-weight:600;}
 .topbar-right{display:flex;align-items:center;gap:16px;}
+.cold-shell-band{padding:18px 24px 0;border-bottom:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(15,17,23,0.7),rgba(15,17,23,0));}
+.cold-shell-band .shell-command-band{margin:0;}
 .timer{font-family:'Space Mono',monospace;font-size:1rem;color:var(--text-muted);min-width:60px;text-align:center;transition:color 0.3s;}
 .timer.on{color:var(--green);}.timer.warn{color:var(--amber);}.timer.danger{color:var(--red);animation:pulse 1s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
@@ -155,6 +157,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div class="timer" id="timer">0:00</div>
     </div>
 </div>
+<div class="cold-shell-band" id="coldCallShellBand"></div>
 <div class="app">
     <div class="main" id="mainArea"></div>
     <div class="side" id="sideArea"></div>
@@ -420,6 +423,44 @@ function renderModeBridge(){
     return '<div class="mode-card"><div class="mode-kicker">'+meta.label+'</div><div class="mode-title">'+meta.title+'</div><div class="mode-copy">'+meta.copy+'</div><div class="mode-pills"><span class="mode-pill'+(mode==='pre'?' active':'')+'">Pre-call</span><span class="mode-pill'+(mode==='live'?' active live':'')+'">Live-call</span><span class="mode-pill'+(mode==='post'?' active':'')+'">Post-call</span></div></div>';
 }
 
+function renderColdCallShellBand(){
+    var node=document.getElementById('coldCallShellBand');
+    if(!node)return;
+    var stage=FLOW[S.stage];
+    var meta=getModeMeta(S.stage);
+    var mode=getStageMode(S.stage);
+    var signal=getAccountSignal()||'No live signal linked yet.';
+    var focus=selectedAccount?selectedAccount+(accountData&&accountData._heat?' · heat '+accountData._heat:''):'No account selected';
+    var nextMove=S.stage==='pre_call'
+        ? 'Select the account, study the brief, and decide whether the first route is prospect, assistant, or voicemail.'
+        : S.stage==='post_call'
+            ? 'Log the real outcome now while the call is fresh, then turn it into the next scheduled move.'
+            : 'Keep the live call moving. Use the response tree without losing the outcome you are trying to earn.';
+    var stateTone=selectedAccount?(mode==='live'?'live':'ready'):'thin';
+    var stateLabel=selectedAccount?(meta&&meta.label?meta.label:'Call mode'):'Needs account';
+    if(window.gtmShellChrome){
+        window.gtmShellChrome.renderCommandBand('#coldCallShellBand',{
+            kicker:'Live call system',
+            title:meta.title,
+            copy:meta.copy,
+            stateLabel:stateLabel,
+            stateTone:stateTone,
+            metrics:[
+                {label:'Focus account',value:focus},
+                {label:'Top signal',value:signal},
+                {label:'Call state',value:(stage&&stage.sub)||'Prep the next cold call.'},
+                {label:'Next move',value:nextMove}
+            ],
+            actions:[
+                {label:'Reset to Brief',action:'goTo("pre_call")',tone:'primary'},
+                {label:'Open Signal Console',href:'/app/signal-console/'}
+            ]
+        });
+        return;
+    }
+    node.innerHTML=renderModeBridge();
+}
+
 function initAccountSelector(){
     var accounts=signalConsoleAccounts.slice().sort(function(a,b){return(b._heat||0)-(a._heat||0)});
     // Render account selection in the pre-call brief
@@ -464,6 +505,7 @@ window.closeObj=closeObj;
 // ── RENDER ──
 function render(){
     renderPhases();
+    renderColdCallShellBand();
     var stage=FLOW[S.stage];if(!stage)return;
     if(stage.type==='briefing')renderBriefing();
     else if(stage.type==='voicemail')renderVoicemail();
