@@ -9,50 +9,24 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
-        .np-ribbon{display:flex;gap:0;border-bottom:1px solid rgba(212,165,116,0.2);margin-bottom:var(--space-xl);padding-bottom:var(--space-md);}
-        .np-ribbon-item{flex:1;text-align:center;padding:0 12px;border-right:1px solid rgba(255,255,255,0.06);}
-        .np-ribbon-item:last-child{border-right:none;}
-        .np-ribbon-val{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-primary);line-height:1.2;}
-        .np-ribbon-val.green{color:#22c55e;}
-        .np-ribbon-val.amber{color:#f59e0b;}
-        .np-ribbon-val.red{color:#ef4444;}
-        .np-ribbon-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-muted);font-weight:600;margin-top:2px;}
-        .np-briefing{background:linear-gradient(135deg,rgba(212,165,116,0.07),rgba(212,165,116,0.02));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-lg);padding:28px 32px;margin-bottom:var(--space-xl);position:relative;}
-        .np-headline{font-family:var(--font-serif);font-size:1.15rem;color:var(--text-primary);line-height:1.5;margin-bottom:16px;}
-        .np-week-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:6px;}
-        .np-week-summary{font-size:0.88rem;color:var(--text-tertiary);line-height:1.6;}
-        .np-copy-btn{position:absolute;top:16px;right:16px;padding:6px 12px;border-radius:var(--radius-full);font-size:0.7rem;font-weight:700;border:1px solid rgba(212,165,116,0.25);background:rgba(212,165,116,0.08);color:var(--brand-gold);cursor:pointer;font-family:inherit;transition:all 0.2s;}
-        .np-copy-btn:hover{background:rgba(212,165,116,0.15);}
-        .np-columns{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-lg);margin-bottom:var(--space-xl);}
-        .np-col-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-muted);font-weight:700;margin-bottom:var(--space-md);display:flex;align-items:center;gap:8px;}
-        .np-col-title .dot{width:8px;height:8px;border-radius:50%;}
-        .np-col-title .dot.red{background:#ef4444;}
-        .np-col-title .dot.gold{background:var(--brand-gold);}
-        .np-risk-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px;margin-bottom:var(--space-sm);border-left:3px solid rgba(239,68,68,0.4);transition:border-color 0.2s;}
+        .np-risk-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px;border-left:3px solid rgba(239,68,68,0.4);transition:border-color 0.2s;}
         .np-risk-card:hover{border-color:rgba(239,68,68,0.6);}
-        .np-risk-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+        .np-risk-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:12px;}
         .np-risk-name{font-weight:700;font-size:0.92rem;color:var(--text-primary);}
         .np-risk-meta{font-size:0.72rem;color:var(--text-muted);}
-        .np-risk-score{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;background:rgba(239,68,68,0.12);color:#ef4444;}
+        .np-risk-score{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;background:rgba(239,68,68,0.12);color:#ef4444;white-space:nowrap;}
         .np-risk-narrative{font-size:0.82rem;color:var(--text-tertiary);line-height:1.5;margin-bottom:10px;}
-        .np-risk-links{display:flex;gap:8px;}
+        .np-risk-links{display:flex;gap:8px;flex-wrap:wrap;}
         .np-risk-link{font-size:0.68rem;color:var(--brand-gold);text-decoration:none;font-weight:600;}
         .np-risk-link:hover{text-decoration:underline;}
         .np-move{padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-        .np-move:last-child{border-bottom:none;}
+        .np-move:first-child{padding-top:0;}
+        .np-move:last-child{border-bottom:none;padding-bottom:0;}
         .np-move-num{font-family:var(--font-serif);font-size:1rem;color:var(--brand-gold);float:left;margin-right:10px;line-height:1.3;}
         .np-move-action{font-size:0.88rem;color:var(--text-secondary);line-height:1.5;}
         .np-move-reason{font-size:0.75rem;color:var(--text-muted);margin-top:3px;font-style:italic;}
         .np-move-link{font-size:0.68rem;color:var(--brand-gold);text-decoration:none;font-weight:600;margin-top:4px;display:inline-block;}
         .np-move-link:hover{text-decoration:underline;}
-        .np-tools{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-        .np-tools-left,.np-tools-right{display:flex;gap:8px;flex-wrap:wrap;}
-        .np-tool-btn{padding:10px 18px;border-radius:var(--radius-md);font-size:0.82rem;font-weight:700;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;text-decoration:none;display:inline-block;}
-        .np-tool-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
-        .np-tool-btn.primary{border-color:rgba(212,165,116,0.3);color:var(--brand-gold);background:rgba(212,165,116,0.06);}
-        .np-tool-btn.primary:hover{background:rgba(212,165,116,0.12);}
-        .np-tool-btn.danger{color:#ef4444;border-color:rgba(239,68,68,0.2);}
-        .np-tool-btn.danger:hover{background:rgba(239,68,68,0.06);}
         .np-backup{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px;padding:16px 18px;border-radius:var(--radius-lg);border:1px solid rgba(59,130,246,0.22);background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.03));}
         .np-backup.warn{border-color:rgba(245,158,11,0.28);background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.04));}
         .np-backup-copy{flex:1;min-width:260px;}
@@ -73,32 +47,14 @@
         .np-lifecycle-milestones{display:flex;flex-wrap:wrap;gap:8px;}
         .np-lifecycle-pill{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid rgba(148,163,184,0.22);background:rgba(148,163,184,0.08);color:var(--text-muted);font-size:0.72rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;}
         .np-lifecycle-pill.done{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.12);color:#bbf7d0;}
-        .np-source-map{margin-bottom:16px;padding:18px 20px;border-radius:var(--radius-lg);border:1px solid rgba(212,165,116,0.18);background:linear-gradient(135deg,rgba(212,165,116,0.08),rgba(15,23,42,0.38));}
-        .np-source-header{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:14px;}
-        .np-source-kicker{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-gold);font-weight:700;margin-bottom:6px;}
-        .np-source-title{font-family:var(--font-serif);font-size:1.08rem;color:var(--text-primary);margin-bottom:5px;}
-        .np-source-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.6;max-width:620px;}
-        .np-source-score{min-width:120px;padding:12px 14px;border-radius:14px;background:rgba(15,23,42,0.32);border:1px solid rgba(255,255,255,0.06);text-align:center;}
-        .np-source-score span{display:block;font-family:var(--font-serif);font-size:1.45rem;line-height:1;color:var(--text-primary);}
-        .np-source-score small{display:block;margin-top:6px;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;}
-        .np-source-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-        .np-source-card{padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);}
-        .np-source-card strong{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:5px;}
-        .np-source-card span{display:block;font-size:0.92rem;color:var(--text-secondary);line-height:1.5;}
-        .np-source-card.live{border-color:rgba(34,197,94,0.18);}
-        .np-source-card.next{border-color:rgba(245,158,11,0.2);}
-        .np-source-card.pending{border-color:rgba(148,163,184,0.16);}
-        .np-source-stage{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
-        .np-source-stage-copy{font-size:0.8rem;color:var(--text-tertiary);line-height:1.6;max-width:700px;}
-        .np-source-stage-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(212,165,116,0.22);background:rgba(212,165,116,0.08);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-gold);font-weight:700;}
-        .np-empty{text-align:center;padding:80px 24px;}
-        .np-empty-icon{font-size:2.5rem;margin-bottom:16px;}
-        .np-empty-title{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);margin-bottom:8px;}
-        .np-empty-sub{font-size:0.9rem;color:var(--text-muted);line-height:1.5;max-width:420px;margin:0 auto 24px;}
-        .np-empty-link{color:var(--brand-gold);text-decoration:none;font-weight:700;font-size:0.9rem;padding:10px 20px;border:1px solid rgba(212,165,116,0.3);border-radius:var(--radius-md);display:inline-block;margin:0 6px;transition:all 0.2s;}
-        .np-empty-link:hover{background:rgba(212,165,116,0.08);}
-        .np-no-items{font-size:0.85rem;color:var(--text-muted);padding:20px 0;font-style:italic;}
-        @media(max-width:800px){.np-columns,.np-source-grid{grid-template-columns:1fr;}.np-ribbon{flex-wrap:wrap;gap:8px;}.np-ribbon-item{flex:none;width:calc(50% - 4px);border-right:none;}.np-tools{flex-direction:column;align-items:stretch;}.np-tools-left,.np-tools-right{justify-content:center;}}
+        .dash-panel-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;display:flex;align-items:center;gap:8px;}
+        .dash-panel-title .dot{width:8px;height:8px;border-radius:50%;}
+        .dash-panel-title .dot.red{background:#ef4444;}
+        .dash-panel-title .dot.gold{background:var(--brand-gold);}
+        .dash-list-stack{display:grid;gap:12px;}
+        .dash-tool-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+        .dash-tool-actions{display:flex;gap:8px;flex-wrap:wrap;}
+        @media(max-width:800px){.dash-tool-row,.dash-tool-actions{flex-direction:column;align-items:stretch;}}
     </style>
 </head>
 <body>
@@ -201,7 +157,7 @@
                 '<div class="np-backup-title">' + escH(title) + '</div>' +
                 '<div class="np-backup-sub">' + escH(sub) + '</div>' +
                 '</div>' +
-                '<button class="np-tool-btn primary" onclick="runDataAction(\'export\')">Export Backup</button>' +
+                '<button class="btn btn-primary" onclick="runDataAction(\'export\')">Export Backup</button>' +
                 '</div>';
         }
         function showBackupReminderToast(){
@@ -232,7 +188,7 @@
                 '<div class="np-backup-title">Dashboard is using the best available local view.</div>' +
                 '<div class="np-backup-sub">Some synced inputs failed to refresh: ' + escH(warnings.join(', ')) + '. You can keep working, then retry the page when you want a fresh cloud-backed summary.</div>' +
                 '</div>' +
-                '<button class="np-tool-btn primary" onclick="location.reload()">Retry Sync</button>' +
+                '<button class="btn btn-primary" onclick="location.reload()">Retry Sync</button>' +
                 '</div>';
         }
 
@@ -343,9 +299,10 @@
         }
 
         function renderStageActions(actions) {
-            return (actions || []).map(function(action) {
-                return '<a href="' + escH(action.href) + '" class="np-empty-link">' + escH(action.label) + ' &rarr;</a>';
+            var list = (actions || []).map(function(action, index) {
+                return '<a href="' + escH(action.href) + '" class="btn ' + (index === 0 ? 'btn-primary' : 'btn-secondary') + '">' + escH(action.label) + '</a>';
             }).join('');
+            return list ? '<div class="shell-empty-actions">' + list + '</div>' : '';
         }
 
         function getDashboardStageTone(stageKey) {
@@ -556,12 +513,12 @@
                         week_one_active: !!(weekOneState && weekOneState.active)
                     });
                 }
-                var emptyHtml = weekOneBanner + warningBanner + '<div class="np-empty">' +
-                    '<div class="np-empty-icon">&#128220;</div>' +
-                    '<div class="np-empty-title">' + escH(stage.emptyTitle) + '</div>' +
-                    '<div class="np-empty-sub">' + escH(stage.emptyCopy) + '</div>' +
+                var emptyHtml = weekOneBanner + warningBanner + '<section class="shell-section shell-empty-state">' +
+                    '<div class="shell-section-kicker">Command view</div>' +
+                    '<div class="shell-empty-title">' + escH(stage.emptyTitle) + '</div>' +
+                    '<div class="shell-empty-copy">' + escH(stage.emptyCopy) + '</div>' +
                     renderStageActions(stage.actions) +
-                    '</div>';
+                    '</section>';
                 document.getElementById('dashContent').innerHTML =
                     emptyHtml;
                 return;
@@ -586,39 +543,44 @@
             html += weekOneBanner;
             html += warningBanner;
 
-            // STAT RIBBON
-            html += '<div class="np-ribbon">';
-            html += '<div class="np-ribbon-item"><div class="np-ribbon-val ' + covColor + '">' + (quota ? cov.ratio + '&times;' : '\u2014') + '</div><div class="np-ribbon-label">Coverage</div></div>';
-            html += '<div class="np-ribbon-item"><div class="np-ribbon-val">' + dh.money(cov.weighted) + '</div><div class="np-ribbon-label">Weighted</div></div>';
-            html += '<div class="np-ribbon-item"><div class="np-ribbon-val">' + active.length + '</div><div class="np-ribbon-label">Active</div></div>';
-            html += '<div class="np-ribbon-item"><div class="np-ribbon-val' + (briefing.atRisk.length > 0 ? ' red' : '') + '">' + briefing.atRisk.length + '</div><div class="np-ribbon-label">At Risk</div></div>';
+            html += '<section class="shell-section">';
+            html += '<div class="shell-section-header">';
+            html += '<div class="shell-section-heading">';
+            html += '<div class="shell-section-kicker">Morning operating room</div>';
+            html += '<div class="shell-section-title">' + escH(briefing.headline) + '</div>';
+            html += '<div class="shell-section-copy">' + escH(briefing.weekSummary) + '</div>';
+            html += '</div>';
+            html += '<button class="btn btn-secondary btn-sm" onclick="copyMonday()">&#128203; Copy Monday Review</button>';
+            html += '</div>';
+            html += '<div class="shell-chip-row">';
+            html += '<div class="shell-chip">Week of ' + escH(briefing.weekLabel) + '</div>';
+            html += '<div class="shell-chip">' + escH(stage.stageBadge) + '</div>';
+            html += '<div class="shell-chip">' + active.length + ' active deal' + (active.length === 1 ? '' : 's') + '</div>';
+            html += '</div>';
+            html += '<div class="shell-metric-strip">';
+            html += '<div class="shell-metric"><div class="shell-metric-label">Coverage</div><div class="shell-metric-value"' + (covColor ? ' style="color:' + (covColor === 'green' ? '#22c55e' : covColor === 'amber' ? '#f59e0b' : '#ef4444') + ';"' : '') + '>' + (quota ? cov.ratio + '&times;' : '&mdash;') + '</div><div class="shell-metric-copy">Coverage against the current target.</div></div>';
+            html += '<div class="shell-metric"><div class="shell-metric-label">Weighted pipeline</div><div class="shell-metric-value">' + dh.money(cov.weighted) + '</div><div class="shell-metric-copy">Current weighted value across active deals.</div></div>';
+            html += '<div class="shell-metric"><div class="shell-metric-label">Active deals</div><div class="shell-metric-value">' + active.length + '</div><div class="shell-metric-copy">Deals still shaping the weekly brief.</div></div>';
+            html += '<div class="shell-metric"><div class="shell-metric-label">At risk</div><div class="shell-metric-value"' + (briefing.atRisk.length > 0 ? ' style="color:#ef4444;"' : '') + '>' + briefing.atRisk.length + '</div><div class="shell-metric-copy">Deals requiring intervention or recovery.</div></div>';
             html += '</div>';
 
             if (icpCount === 0) {
-                html += '<div class="np-briefing" style="margin-bottom:16px;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.02));border-color:rgba(59,130,246,0.2);">';
-                html += '<div class="np-week-label" style="color:#93c5fd;">Missing Targeting Layer</div>';
-                html += '<div class="np-week-summary">You have deal activity, but no saved ICPs yet. Create at least one ICP so targeting, discovery, and dashboard guidance stop operating blind.</div>';
-                html += '<div style="margin-top:14px;"><a href="/app/icp-studio/" class="np-empty-link" style="margin:0;">Create first ICP &rarr;</a></div>';
+                html += '<div class="shell-band-block">';
+                html += '<div class="shell-band-block-label">Missing targeting layer</div>';
+                html += '<div class="shell-band-block-value">You have deal activity, but no saved ICPs yet. Add at least one ICP so targeting, discovery, and dashboard guidance stop operating blind.</div>';
+                html += '<div class="shell-section-actions" style="margin-top:12px;"><a href="/app/icp-studio/" class="btn btn-secondary">Create first ICP</a></div>';
                 html += '</div>';
             }
+            html += '</section>';
 
-            // THE BRIEFING
-            html += '<div class="np-briefing">';
-            html += '<button class="np-copy-btn" onclick="copyMonday()">&#128203; Copy Monday Review</button>';
-            html += '<div class="np-headline">' + escH(briefing.headline) + '</div>';
-            html += '<div class="np-week-label">Week of ' + escH(briefing.weekLabel) + '</div>';
-            html += '<div class="np-week-summary">' + escH(briefing.weekSummary) + '</div>';
-            html += '</div>';
+            html += '<div class="shell-panel-grid">';
 
-            // TWO COLUMNS
-            html += '<div class="np-columns">';
-
-            // LEFT: AT RISK
-            html += '<div>';
-            html += '<div class="np-col-title"><span class="dot red"></span> What\u2019s At Risk</div>';
+            html += '<section class="shell-section shell-section--subtle">';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="dash-panel-title"><span class="dot red"></span> What\u2019s At Risk</div><div class="shell-section-copy">Use this queue to pull weak or stale work back into the operating loop before it quietly rots.</div></div></div>';
             if (briefing.atRisk.length === 0) {
-                html += '<div class="np-no-items">No deals at risk. Keep executing.</div>';
+                html += '<div class="shell-section-note">No deals at risk. Keep executing.</div>';
             } else {
+                html += '<div class="dash-list-stack">';
                 briefing.atRisk.slice(0, 3).forEach(function(v) {
                     var narrative = dh.dealNarrative(v);
                     var stageLabel = dh.STAGE_LABELS[v.stage] || v.stage;
@@ -632,14 +594,14 @@
                     html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(v.id) + '" class="np-risk-link">&rarr; Run Autopsy</a>';
                     html += '</div></div>';
                 });
+                html += '</div>';
             }
-            html += '</div>';
+            html += '</section>';
 
-            // RIGHT: YOUR MOVES
-            html += '<div>';
-            html += '<div class="np-col-title"><span class="dot gold"></span> Your Moves</div>';
+            html += '<section class="shell-section shell-section--subtle">';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="dash-panel-title"><span class="dot gold"></span> Your Moves</div><div class="shell-section-copy">The dashboard should compress the next few operating decisions into one legible queue.</div></div></div>';
             if (briefing.topMoves.length === 0) {
-                html += '<div class="np-no-items">No urgent moves. Pipeline is clean.</div>';
+                html += '<div class="shell-section-note">No urgent moves. Pipeline is clean.</div>';
             } else {
                 briefing.topMoves.forEach(function(m, i) {
                     html += '<div class="np-move">';
@@ -683,22 +645,20 @@
                 }
             }
 
-            html += '</div>';
+            html += '</section>';
             html += '</div>';
 
-            // TOOLS BAR
             var riskiest = briefing.atRisk.length > 0 ? briefing.atRisk[0] : null;
-            html += '<div class="np-tools">';
-            html += '<div class="np-tools-left">';
+            html += '<section class="shell-section shell-section--subtle shell-section--compact">';
+            html += '<div class="dash-tool-row">';
+            html += '<div class="shell-section-heading"><div class="shell-section-kicker">Quick actions</div><div class="shell-section-copy">Use these to turn the dashboard from a readout into an operating surface.</div></div>';
+            html += '<div class="dash-tool-actions">';
             if (riskiest) {
-                html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(riskiest.id) + '" class="np-tool-btn primary">&#128300; Autopsy Riskiest Deal</a>';
+                html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(riskiest.id) + '" class="btn btn-primary">&#128300; Autopsy Riskiest Deal</a>';
             }
-            html += '<button class="np-tool-btn primary" onclick="copyMonday()">&#128203; Copy Monday Review</button>';
-            html += '</div>';
-            html += '<div class="np-tools-right">';
-            html += '<a href="/app/settings/" class="np-tool-btn" style="font-size:0.75rem;">&#9881; Settings</a>';
-            html += '</div>';
-            html += '</div>';
+            html += '<button class="btn btn-secondary" onclick="copyMonday()">&#128203; Copy Monday Review</button>';
+            html += '<a href="/app/settings/" class="btn btn-ghost">&#9881; Settings</a>';
+            html += '</div></div></section>';
 
             document.getElementById('dashContent').innerHTML = html;
         }

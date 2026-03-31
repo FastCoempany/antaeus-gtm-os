@@ -9,7 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
-        .welcome-shell{display:flex;flex-direction:column;gap:24px;max-width:1180px}
+        .welcome-shell{display:grid;gap:24px;max-width:none}
+        .welcome-layout{align-items:start}
+        .welcome-context-rail{gap:18px}
         .welcome-hero{position:relative;overflow:hidden;padding:32px;border-radius:20px;border:1px solid rgba(212,165,116,0.18);background:linear-gradient(135deg,rgba(212,165,116,0.08),rgba(59,130,246,0.08) 55%,rgba(255,255,255,0.02));box-shadow:0 18px 40px rgba(0,0,0,0.28)}
         .welcome-hero::after{content:'';position:absolute;top:-80px;right:-40px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,0.18),rgba(212,165,116,0));pointer-events:none}
         .welcome-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid rgba(45,212,191,0.25);background:rgba(45,212,191,0.08);color:var(--brand-teal-light);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
@@ -71,6 +73,7 @@
         .welcome-resource p{margin:0;color:var(--text-muted);font-size:.8rem;line-height:1.55}
         .welcome-resource a{white-space:nowrap}
         .welcome-state-note{margin-top:10px;font-size:.78rem;color:var(--text-muted)}
+        .welcome-shell-note{font-size:.78rem;color:var(--text-muted);line-height:1.6}
         .welcome-sync{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#86efac;margin-top:18px}
         .welcome-lifecycle{display:grid;gap:14px}
         .welcome-lifecycle-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
@@ -444,19 +447,21 @@
         }
         function lifecyclePanel(lifecycle, primaryAction){
             if (!lifecycle || !lifecycle.active) {
-                return '<div class="welcome-panel">' +
-                    '<h3 class="welcome-panel-title">Reopen this page when the app feels thin</h3>' +
-                    '<div class="welcome-panel-sub">Welcome is not a one-time page. Use it again when the next move feels muddy, the workspace feels hollow, or you want the operating story in one place.</div>' +
+                return '<section class="shell-rail-card">' +
+                    '<div class="shell-rail-kicker">Revisit welcome</div>' +
+                    '<div class="shell-rail-title">Reopen this page when the app feels thin</div>' +
+                    '<div class="shell-rail-copy">Welcome is not a one-time page. Use it again when the next move feels muddy, the workspace feels hollow, or you want the operating story in one place.</div>' +
                     '<div class="welcome-checklist">' +
                         '<div class="welcome-check"><div class="welcome-check-num">1</div><div class="welcome-check-copy"><strong>Use it as a reset.</strong> Come back here whenever you want the shortest path to the next useful action.</div></div>' +
                         '<div class="welcome-check"><div class="welcome-check-num">2</div><div class="welcome-check-copy"><strong>Use the sidebar return path.</strong> The welcome guide stays available from the shell even after you move into the rest of the app.</div></div>' +
                         '<div class="welcome-check"><div class="welcome-check-num">3</div><div class="welcome-check-copy"><strong>Use support surfaces deliberately.</strong> Methodology, demo lane, and settings are here to orient or recover you, not to replace real work.</div></div>' +
                     '</div>' +
-                '</div>';
+                '</section>';
             }
-            return '<div class="welcome-panel">' +
-                '<h3 class="welcome-panel-title">First-week operating rhythm</h3>' +
-                '<div class="welcome-panel-sub">This is the handoff from signup into actual usage. The app should start teaching you a repeatable rhythm before the first week ends.</div>' +
+            return '<section class="shell-rail-card">' +
+                '<div class="shell-rail-kicker">Week 1</div>' +
+                '<div class="shell-rail-title">First-week operating rhythm</div>' +
+                '<div class="shell-rail-copy">This is the handoff from signup into actual usage. The app should start teaching you a repeatable rhythm before the first week ends.</div>' +
                 '<div class="welcome-lifecycle">' +
                     '<div class="welcome-lifecycle-top">' +
                         '<div><div class="welcome-lifecycle-kicker">Week 1 · Day ' + esc(lifecycle.dayNumber) + '</div><div class="welcome-lifecycle-title">' + esc(lifecycle.guidance.headline) + '</div><div class="welcome-lifecycle-copy">' + esc(lifecycle.guidance.body) + '</div></div>' +
@@ -468,7 +473,7 @@
                         return '<div class="welcome-lifecycle-pill' + (item.done ? ' done' : '') + '">' + esc(item.label) + '</div>';
                     }).join('') + '</div>' +
                 '</div>' +
-            '</div>';
+            '</section>';
         }
 
         function getWelcomeShellTone(activation, lifecycle){
@@ -550,55 +555,55 @@
                 renderWelcomeShellChrome(activation, primaryAction, lifecycle, counts, role, focusSummary);
 
                 shell.innerHTML =
-                    '<section class="welcome-hero">' +
-                        '<div class="welcome-badge">Activation ' + esc(activation.completed) + ' of ' + esc(activation.total) + ' live' + ((lifecycle && lifecycle.active) ? ' · Week 1 Day ' + esc(lifecycle.dayNumber) : '') + '</div>' +
-                        '<h2 class="welcome-title">Welcome to the Antaeus app</h2>' +
-                        '<p class="welcome-sub">This page should turn a completed signup into a believable operating system. Add one real thread of truth, then let the rest of the app compound from it.</p>' +
-                        '<div class="welcome-hero-meta">' + heroChips.map(function(item){ return '<div class="welcome-hero-chip">' + esc(item) + '</div>'; }).join('') + '</div>' +
-                        '<div class="welcome-progress"><div class="welcome-progress-title">' + esc(activation.headline) + '</div><div class="welcome-progress-copy">' + esc(activation.body) + '</div></div>' +
-                        '<div class="welcome-progress"><div class="welcome-progress-title">Workspace focus</div><div class="welcome-progress-copy">' + esc(focusSummary) + '</div></div>' +
-                        '<div class="welcome-actions">' +
-                            '<a href="' + esc(heroPrimaryHref) + '" class="welcome-btn primary" onclick="completeWelcome(\'' + esc(heroPrimaryHref).replace(/&#39;/g, "'") + '\');return false;">' + esc(heroPrimaryLabel) + '</a>' +
-                            '<a href="/app/dashboard/" class="welcome-btn" onclick="completeWelcome(\'/app/dashboard/\');return false;">Continue to dashboard</a>' +
-                            '<a href="/methodology/" class="welcome-btn" onclick="completeWelcome(\'/methodology/\');return false;">Open methodology</a>' +
-                        '</div>' +
-                        '<div class="welcome-sync">Back to Welcome Guide stays live in the sidebar. ' + esc(backupNote) + '</div>' +
-                    '</section>' +
-                    '<section class="welcome-grid">' +
-                        '<div style="display:grid;gap:24px;">' +
-                            '<div class="welcome-panel">' +
-                                '<h3 class="welcome-panel-title">What your workspace already knows</h3>' +
-                                '<div class="welcome-panel-sub">Signed in as ' + esc(role) + '. Workspace owner: ' + esc(displayName) + '. These counts update from your real persisted state.</div>' +
-                                '<div class="welcome-stats">' + statCards.map(function(card){
-                                    return '<div class="welcome-stat"><div class="welcome-stat-value">' + esc(card.value) + '</div><div class="welcome-stat-label">' + esc(card.label) + '</div><div class="welcome-stat-sub">' + esc(card.sub) + '</div></div>';
+                    '<div class="shell-context-layout welcome-layout">' +
+                        '<div class="shell-work-column shell-stack">' +
+                            '<section class="shell-section">' +
+                                '<div class="shell-section-header">' +
+                                    '<div class="shell-section-heading">' +
+                                        '<div class="shell-section-kicker">Activation ' + esc(activation.completed) + ' of ' + esc(activation.total) + ' live' + ((lifecycle && lifecycle.active) ? ' · Week 1 Day ' + esc(lifecycle.dayNumber) : '') + '</div>' +
+                                        '<div class="shell-section-title">Welcome to the live workspace</div>' +
+                                        '<div class="shell-section-copy">This page should turn a completed signup into a believable operating system. Add one real thread of truth, then let the rest of the app compound from it.</div>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="shell-chip-row">' + heroChips.map(function(item){ return '<div class="shell-chip">' + esc(item) + '</div>'; }).join('') + '</div>' +
+                                '<div class="shell-band-block"><div class="shell-band-block-label">' + esc(activation.headline) + '</div><div class="shell-band-block-value">' + esc(activation.body) + '</div></div>' +
+                                '<div class="shell-band-block"><div class="shell-band-block-label">Workspace focus</div><div class="shell-band-block-value">' + esc(focusSummary) + '</div></div>' +
+                                '<div class="shell-metric-strip">' + statCards.map(function(card){
+                                    return '<div class="shell-metric"><div class="shell-metric-label">' + esc(card.label) + '</div><div class="shell-metric-value">' + esc(card.value) + '</div><div class="shell-metric-copy">' + esc(card.sub) + '</div></div>';
                                 }).join('') + '</div>' +
-                                '<div class="welcome-state-note">Source: ' + esc(summary && summary.source ? summary.source : 'unknown') + (summary && summary.errors && summary.errors.length ? ' · some modules fell back to cache while loading.' : '') + '</div>' +
-                            '</div>' +
-                            '<div class="welcome-panel">' +
-                                '<h3 class="welcome-panel-title">Your first 3–5 actions</h3>' +
-                                '<div class="welcome-panel-sub">Do these in order. Each one makes the rest of the app more believable across sessions, devices, and most importantly...tomorrow morning.</div>' +
+                                '<div class="shell-section-actions">' +
+                                    '<a href="' + esc(heroPrimaryHref) + '" class="btn btn-primary" onclick="completeWelcome(\'' + esc(heroPrimaryHref).replace(/&#39;/g, "'") + '\');return false;">' + esc(heroPrimaryLabel) + '</a>' +
+                                    '<a href="/app/dashboard/" class="btn btn-secondary" onclick="completeWelcome(\'/app/dashboard/\');return false;">Continue to dashboard</a>' +
+                                    '<a href="/methodology/" class="btn btn-ghost" onclick="completeWelcome(\'/methodology/\');return false;">Open methodology</a>' +
+                                '</div>' +
+                                '<div class="welcome-shell-note">Signed in as ' + esc(role) + '. Workspace owner: ' + esc(displayName) + '. Source: ' + esc(summary && summary.source ? summary.source : 'unknown') + (summary && summary.errors && summary.errors.length ? ' · some modules fell back to cache while loading.' : '') + ' ' + esc(backupNote) + '</div>' +
+                            '</section>' +
+                            '<section class="shell-section shell-section--subtle">' +
+                                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Next actions</div><div class="shell-section-title">Your first 3–5 actions</div><div class="shell-section-copy">Do these in order. Each one makes the rest of the app more believable across sessions, devices, and tomorrow morning.</div></div></div>' +
                                 '<div class="welcome-list">' + actions.map(actionCard).join('') + '</div>' +
-                            '</div>' +
+                            '</section>' +
                         '</div>' +
-                        '<div class="welcome-side-stack">' +
+                        '<aside class="shell-context-rail welcome-context-rail">' +
                             lifecyclePanel(lifecycle, primaryAction) +
-                            '<div class="welcome-panel">' +
-                                '<h3 class="welcome-panel-title">Activation map</h3>' +
-                                '<div class="welcome-panel-sub">This is how the workspace becomes real. The states below are computed from what your app has actually saved so far.</div>' +
+                            '<section class="shell-rail-card">' +
+                                '<div class="shell-rail-kicker">Activation map</div>' +
+                                '<div class="shell-rail-title">How the workspace becomes real</div>' +
+                                '<div class="shell-rail-copy">These states are computed from what the app has actually saved so far.</div>' +
                                 '<div class="welcome-milestones">' + activation.milestones.map(function(item, index){ return milestoneCard(item, index, activation); }).join('') + '</div>' +
-                            '</div>' +
-                            '<div class="welcome-panel">' +
-                                '<h3 class="welcome-panel-title">If you need help or a reset</h3>' +
-                                '<div class="welcome-panel-sub">Use these when you want the product story, a safe sample workspace, or a recovery path. They support the operating loop without replacing it.</div>' +
+                            '</section>' +
+                            '<section class="shell-rail-card">' +
+                                '<div class="shell-rail-kicker">Recovery paths</div>' +
+                                '<div class="shell-rail-title">If you need help or a reset</div>' +
+                                '<div class="shell-rail-copy">Use these when you want the product story, a safe sample workspace, or a recovery path. They support the operating loop without replacing it.</div>' +
                                 '<div class="welcome-resource-list">' +
                                     '<div class="welcome-resource"><div><h4>Methodology hub</h4><p>Public pages that explain the system in plain English.</p></div><a class="welcome-mini-link" href="/methodology/" onclick="completeWelcome(\'/methodology/\');return false;">Open</a></div>' +
                                     '<div class="welcome-resource"><div><h4>Demo lane</h4><p>Load sample data if you want to see a fully populated workspace before building yours.</p></div><a class="welcome-mini-link" href="/demo-seed.html" onclick="completeWelcome(\'/demo-seed.html\');return false;">Explore</a></div>' +
                                     '<div class="welcome-resource"><div><h4>Settings and backup</h4><p>Export an offline copy of your workspace or restore a prior backup.</p></div><a class="welcome-mini-link" href="/app/settings/" onclick="completeWelcome(\'/app/settings/\');return false;">Open</a></div>' +
                                 '</div>' +
                                 '<div class="welcome-state-note">Use this page again whenever the next move feels unclear. The return path stays available from the sidebar.</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</section>';
+                            '</section>' +
+                        '</aside>' +
+                    '</div>';
         } catch (error) {
                 console.error('Welcome page failed to load workspace summary:', error);
                 trackWelcome('welcome_load_error', {
