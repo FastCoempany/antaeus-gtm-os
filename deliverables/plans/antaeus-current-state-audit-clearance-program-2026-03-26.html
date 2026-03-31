@@ -47,9 +47,10 @@
     .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0; }
     .toolbar button, .toolbar input, .toolbar select { border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.04); color: var(--text); padding: 11px 14px; }
     .toolbar button { cursor: pointer; }
-    .stats, .source-grid, .meta-grid { display: grid; gap: 14px; }
+    .stats, .source-grid, .meta-grid, .evidence-grid, .evidence-list { display: grid; gap: 14px; }
     .stats { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 22px; }
     .source-grid, .meta-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .evidence-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-bottom: 22px; }
     .stat { padding: 18px; }
     .stat .eyebrow { display: block; font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: 8px; }
     .stat strong { display: block; font-size: 1.6rem; line-height: 1; color: var(--gold-2); }
@@ -77,6 +78,24 @@
     .step-card h4 { margin: 0; font-size: 1rem; line-height: 1.4; }
     .sub-list { display: grid; gap: 8px; margin-top: 12px; padding-left: 30px; }
     .sub-list .check-row label, .phase-summary-note, .source-card p, .footer-note { color: var(--muted); line-height: 1.55; }
+    .evidence-card { border: 1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 18px; padding: 18px; }
+    .evidence-card h3 { margin: 0 0 8px; font-size: 1.05rem; color: var(--gold-2); }
+    .evidence-card p { margin: 0 0 14px; color: var(--muted); line-height: 1.55; }
+    .field-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .field { display: grid; gap: 8px; }
+    .field label { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .field input, .field select, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.04); color: var(--text); padding: 12px 14px; }
+    .field textarea { min-height: 110px; resize: vertical; }
+    .field .hint { margin: 0; font-size: .86rem; color: var(--muted); }
+    .evidence-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .evidence-actions button { border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.04); color: var(--text); padding: 11px 14px; cursor: pointer; }
+    .entry-card { border: 1px solid var(--line); border-radius: 14px; padding: 14px; background: rgba(255,255,255,.02); }
+    .entry-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+    .entry-title { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .entry-title strong { font-size: .98rem; }
+    .entry-meta { color: var(--muted); font-size: .88rem; line-height: 1.5; }
+    .entry-note { margin: 10px 0 0; line-height: 1.6; white-space: pre-wrap; }
+    .entry-card button { border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--muted); padding: 8px 12px; cursor: pointer; }
     .repo-tabs { display: flex; flex-wrap: wrap; gap: 10px; }
     .repo-table { border-radius: 18px; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
@@ -91,7 +110,7 @@
     .status-complete, .status-pass, .status-validated { background: rgba(60,209,122,.12); color: #73e29f; border-color: rgba(60,209,122,.22); }
     .status-pass-caveat, .status-local-patch, .status-monitor { background: rgba(244,177,79,.12); color: #ffd18a; border-color: rgba(244,177,79,.22); }
     .status-not-run, .status-open, .status-planned { background: rgba(127,182,255,.12); color: #a8cbff; border-color: rgba(127,182,255,.22); }
-    .status-blocked, .status-deferred, .status-external-config, .status-decision-needed { background: rgba(255,110,110,.12); color: #ff9b9b; border-color: rgba(255,110,110,.22); }
+    .status-fail, .status-blocked, .status-deferred, .status-external-config, .status-decision-needed { background: rgba(255,110,110,.12); color: #ff9b9b; border-color: rgba(255,110,110,.22); }
     @media (max-width: 1080px) { .shell { grid-template-columns: 1fr; } .rail { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--line); } .hero { flex-direction: column; } }
     @media (max-width: 760px) { .main { padding: 24px 16px 40px; } .rail { padding: 22px 16px; } th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5) { display: none; } .phase-card > summary { grid-template-columns: auto 1fr; } .phase-progress { grid-column: 1 / -1; text-align: left; min-width: 0; } .progress-bar { margin-left: 0; width: 100%; } }
   </style>
@@ -132,6 +151,67 @@
       </header>
       <section id="clearancePanel" class="panel active">
         <div class="stats" id="clearanceStats"></div>
+        <div class="evidence-grid" id="evidenceStats"></div>
+        <div class="evidence-card">
+          <h3>Evidence Log</h3>
+          <p>Use this as the single live execution record for Phase 1.3. Session metadata stays editable, row-level outcomes stay attached to the current browser, and you can copy the whole thing as one evidence snapshot.</p>
+          <div class="field-grid">
+            <div class="field">
+              <label for="evidenceTester">Who tested</label>
+              <input id="evidenceTester" type="text" />
+            </div>
+            <div class="field">
+              <label for="evidenceDate">Date</label>
+              <input id="evidenceDate" type="text" />
+            </div>
+            <div class="field">
+              <label for="evidenceBuild">Build hash</label>
+              <input id="evidenceBuild" type="text" />
+            </div>
+            <div class="field">
+              <label for="evidenceEnvironment">Environment</label>
+              <input id="evidenceEnvironment" type="text" />
+            </div>
+          </div>
+          <div class="field" style="margin-top:12px;">
+            <label for="evidenceSessionNotes">Session notes</label>
+            <textarea id="evidenceSessionNotes" placeholder="Optional session-level notes, like deployment observations, browser quirks, or the exact live URL you tested."></textarea>
+          </div>
+          <div class="evidence-actions">
+            <button id="saveEvidenceMeta">Save session metadata</button>
+            <button id="copyEvidenceSnapshot">Copy evidence snapshot</button>
+            <button id="clearEvidenceEntries">Clear saved evidence entries</button>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <h3>Row Result Recorder</h3>
+          <p>Log the real outcome against any `QA-*` or `EB-*` row. Use this instead of scattering pass/fail notes across screenshots, chat, and memory.</p>
+          <div class="field-grid">
+            <div class="field">
+              <label for="evidenceRowId">Row</label>
+              <select id="evidenceRowId"></select>
+            </div>
+            <div class="field">
+              <label for="evidenceResult">Result</label>
+              <select id="evidenceResult">
+                <option value="PASS">PASS</option>
+                <option value="PASS-CAVEAT">PASS-CAVEAT</option>
+                <option value="FAIL">FAIL</option>
+                <option value="BLOCKED">BLOCKED</option>
+                <option value="NOT-RUN">NOT-RUN</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:12px;">
+            <label for="evidenceRowNotes">Observed result</label>
+            <textarea id="evidenceRowNotes" placeholder="What you clicked, what you expected, what happened, and any URL or screenshot note."></textarea>
+            <p class="hint">Tip: include the exact page or flow, for example `signup -> onboarding -> welcome` or `/app/discovery-studio/ blank after load`.</p>
+          </div>
+          <div class="evidence-actions">
+            <button id="saveEvidenceEntry">Save row result</button>
+          </div>
+        </div>
+        <div class="evidence-list" id="evidenceEntriesMount"></div>
         <div class="toolbar">
           <button id="expandAll">Expand all phases</button>
           <button id="collapseAll">Collapse all phases</button>
@@ -201,12 +281,15 @@
     const STORAGE_KEY = "antaeus_audit_clearance_checks_v1";
     const REPO_KIND_KEY = "antaeus_audit_repo_kind_v1";
     const PANEL_KEY = "antaeus_audit_panel_v1";
+    const EVIDENCE_META_KEY = "antaeus_audit_evidence_meta_v1";
+    const EVIDENCE_ENTRIES_KEY = "antaeus_audit_evidence_entries_v1";
+    const DEFAULT_BUILD_HASH = "8d3c522";
 
     const clearanceProgram = [
       { id: "clearance-phase-1", label: "Phase 1 - Freeze Truth And Remove Deployment Ambiguity", objective: "Make sure every later test is happening against the intended deployed code, not local fantasy.", owner: "Shared", exitCriteria: ["Latest repo truth is deployed", "You know which commit is live", "There is one evidence log for all remaining closure work"], rows: [], steps: [
         { id: "p1-s1", label: "Step 1.1 - Push all local closure-relevant repo changes", items: ["Run `git status`.", "Identify all product, audit, QA, and launch-gate files that matter to current truth.", "Stage only those files.", "Commit them with a clean message.", "Push to `main`."] },
         { id: "p1-s2", label: "Step 1.2 - Confirm deploy truth", items: ["Open Cloudflare deployments.", "Confirm the latest commit hash is the active deployment.", "Open `antaeus.app`.", "Hard refresh.", "Confirm the deployed behavior matches the latest pushed changes."] },
-        { id: "p1-s3", label: "Step 1.3 - Create one evidence location", items: ["Create a single running results note or markdown file for QA execution.", "Record date.", "Record build hash.", "Record who tested.", "Record environment.", "Do not scatter evidence across chat memory only."] },
+        { id: "p1-s3", label: "Step 1.3 - Create one evidence location", items: ["Use the built-in Evidence Log in this command center as the single live execution record.", "Record date.", "Record build hash.", "Record who tested.", "Record environment.", "Do not scatter evidence across chat memory only."] },
         { id: "p1-s4", label: "Step 1.4 - Close local-only truth risk", items: ["Confirm no critical product file remains modified but unpushed.", "Confirm any local prototype or scratch files are clearly excluded from launch truth.", "Confirm the audit, QA matrix, and launch-gate docs are in git."] }
       ]},
       { id: "clearance-phase-2", label: "Phase 2 - Close P0 Activation And Auth Rows", objective: "Remove ambiguity from the highest-risk new-user and auth paths.", owner: "Shared", exitCriteria: ["No auth row remains unproven", "Onboarding and welcome are browser-confirmed, not just code-assumed"], rows: ["QA-A04","QA-A05","QA-A06","QA-A07","QA-C01","QA-C02","QA-C03","QA-C04","QA-C05","QA-F19","QA-F20"], steps: [
@@ -330,6 +413,8 @@
     const evidenceRows = [{"id":"EB-F01","label":"Landing pricing CTA does not resolve to a real checkout flow.","target":"Phase 6","priority":"P0","status":"open"},{"id":"EB-F02","label":"Subscription management truth is missing.","target":"Phase 7","priority":"P0","status":"open"},{"id":"EB-F03","label":"Signup can hit email send throttles.","target":"Phase 8","priority":"P1","status":"external-config"},{"id":"EB-F04","label":"Public proof layer is still weak.","target":"Phase 10","priority":"P1","status":"open"},{"id":"EB-F05","label":"Pricing / packaging truth is not fully aligned to current manual-input burden.","target":"Phase 11","priority":"P1","status":"decision-needed"},{"id":"EB-F06","label":"Commercial copy consistency still drifts between surfaces.","target":"Phase 12","priority":"P1","status":"open"},{"id":"EB-T01","label":"Terms page was not publish-ready.","target":"Phase 9","priority":"P0","status":"validated"},{"id":"EB-T02","label":"Privacy page was not publish-ready.","target":"Phase 9","priority":"P0","status":"validated"},{"id":"EB-T03","label":"Public-facing mojibake / encoding regressions existed across public and core app surfaces.","target":"Phase 13","priority":"P1","status":"validated"},{"id":"EB-T04","label":"Billing/support/refund truth is still not legible to a stranger.","target":"Phase 7","priority":"P1","status":"open"},{"id":"EB-R01","label":"Discovery Studio can appear not to load.","target":"Phase 34 / Phase 16","priority":"P0","status":"local-patch"},{"id":"EB-R02","label":"Sidebar scroll position reset instead of respecting where the user clicked.","target":"Phase 14","priority":"P1","status":"local-patch"},{"id":"EB-R03","label":"PoC Framework can show duplicate progress/banner chrome.","target":"Phase 37 / Phase 15","priority":"P1","status":"local-patch"},{"id":"EB-R04","label":"Shared chrome injection rules are uneven.","target":"Phase 15","priority":"P1","status":"local-patch"},{"id":"EB-R05","label":"Silent failure paths required a classified full sweep.","target":"Phase 16","priority":"P0","status":"local-patch"},{"id":"EB-R09","label":"Persistence control state could leak between demo and real workspace flows, and durable docs could fail cloud sync on nullable defaults.","target":"Phase 17 / Phase 44","priority":"P0","status":"local-patch"},{"id":"EB-R06","label":"Observability and diagnostics were too thin for launch conditions.","target":"Phase 18","priority":"P1","status":"local-patch"},{"id":"EB-R07","label":"Data-flow nav badge logic is likely broken against the current nav implementation.","target":"Phase 15","priority":"P2","status":"local-patch"},{"id":"EB-R08","label":"Welcome and tour patches exist locally but may not be deployment-safe until committed and verified.","target":"Phase 22 / Phase 23","priority":"P1","status":"local-patch"},{"id":"EB-R10","label":"Week 1 lifecycle nudge could duplicate in the sidebar.","target":"Phase 24 follow-up / Phase 25","priority":"P2","status":"local-patch"},{"id":"EB-A01","label":"Welcome corridor is real, but still not yet the complete first-session system.","target":"Phase 22 / Phase 43","priority":"P1","status":"local-patch"},{"id":"EB-A02","label":"Tour is present but not yet fully proven self-serve effective.","target":"Phase 23","priority":"P1","status":"local-patch"},{"id":"EB-A03","label":"Demo seed must remain synchronized with every demo-critical module.","target":"Phase 21","priority":"P1","status":"monitor"},{"id":"EB-A04","label":"First 7 days user lifecycle is now present, but still needs live validation.","target":"Phase 24","priority":"P2","status":"local-patch"},{"id":"EB-A05","label":"Onboarding existed, but it still behaved more like setup than activation.","target":"Phase 42","priority":"P1","status":"local-patch"},{"id":"EB-M01","label":"Territory Architect promise was stronger than its visible output depth.","target":"Phase 28","priority":"P1","status":"local-patch"},{"id":"EB-M02","label":"Sourcing Workbench still depends too much on user discipline.","target":"Phase 29","priority":"P1","status":"local-patch"},{"id":"EB-M03","label":"LinkedIn Playbook still read too much like advice.","target":"Phase 32","priority":"P1","status":"local-patch"},{"id":"EB-M04","label":"Discovery Studio needed a stronger live-call bridge, easier framework entry, and a clearer worked-move learning loop.","target":"Phase 34","priority":"P0","status":"local-patch"},{"id":"EB-M05","label":"PoC Framework needed stronger proof-operating depth, cleaner save/download truth, and a clearer relation to deal stage.","target":"Phase 37","priority":"P1","status":"local-patch"},{"id":"EB-M06","label":"Advisor Deploy needs more concrete deployment output.","target":"Phase 38","priority":"P2","status":"local-patch"},{"id":"EB-M07","label":"Playbook / handoff can become disconnected if upstream modules stay sparse.","target":"Phase 40","priority":"P1","status":"local-patch"},{"id":"EB-M08","label":"Readiness is meaningful, but score reasoning must get more legible and actionable.","target":"Phase 41","priority":"P2","status":"local-patch"},{"id":"EB-M09","label":"Dashboard promise is stronger than its sparse-workspace guidance and source explainability.","target":"Phase 25","priority":"P1","status":"local-patch"},{"id":"EB-M10","label":"Launch Agent is strategically strong but still separate from the core app story.","target":"Phase 48","priority":"P2","status":"local-patch"},{"id":"EB-M11","label":"Signal Console needed clearer research truth, heat explainability, and next-move logic.","target":"Phase 26","priority":"P1","status":"local-patch"},{"id":"EB-M12","label":"ICP Studio needed clearer wedge judgment, examples, and downstream handoff logic.","target":"Phase 27","priority":"P1","status":"local-patch"},{"id":"EB-M13","label":"Outbound Studio still made the user invent the motion from scratch.","target":"Phase 30","priority":"P1","status":"local-patch"},{"id":"EB-M14","label":"Cold Call Studio still behaved more like a script archive than a live operating surface.","target":"Phase 31","priority":"P1","status":"local-patch"},{"id":"EB-M15","label":"Call Planner still risked producing a generic agenda with no durable path into the rest of the system.","target":"Phase 33","priority":"P1","status":"local-patch"},{"id":"EB-M16","label":"Deal Workspace had the data fields for rigor, but not enough visible review logic to act like unquestioned pipeline truth.","target":"Phase 35","priority":"P0","status":"local-patch"},{"id":"EB-M17","label":"Future Autopsy had the methodology, but not enough timing clarity or downstream action logic.","target":"Phase 36","priority":"P1","status":"local-patch"},{"id":"EB-M18","label":"Quota Workback still behaved like isolated math instead of a planning surface that downstream modules could trust.","target":"Phase 39","priority":"P1","status":"local-patch"},{"id":"EB-AU01","label":"The product is still a high-discipline operator amplifier, not a low-discipline automation machine.","target":"Phase 45","priority":"P1","status":"local-patch"},{"id":"EB-AU02","label":"Cross-module compounding rules are not explicit enough in-product.","target":"Phase 46","priority":"P1","status":"local-patch"},{"id":"EB-AU03","label":"ICP scoring still asked for too much manual interpretation.","target":"Phase 27 / Phase 45","priority":"P2","status":"local-patch"},{"id":"EB-AU04","label":"Outbound execution is methodologically complete but operationally fragmented.","target":"Phase 30 / Phase 45","priority":"P1","status":"open"},{"id":"EB-AU05","label":"Cold call and LinkedIn surfaces need stronger automation or generated leverage.","target":"Phase 31 / Phase 32 / Phase 45","priority":"P2","status":"open"},{"id":"EB-AU06","label":"Discovery and deal/proof surfaces need stronger auto-fill from prior context.","target":"Phase 33-38 / Phase 45","priority":"P1","status":"open"},{"id":"EB-AU07","label":"The external integration roadmap was too ambiguous to trust implementation order.","target":"Phase 47","priority":"P1","status":"local-patch"},{"id":"EB-AU08","label":"Automation still needed an explicit trust-control layer.","target":"Phase 50","priority":"P1","status":"local-patch"},{"id":"EB-L01","label":"Top-of-funnel is broad but not fully closed.","target":"Phase 19 / Phase 20","priority":"P0","status":"local-patch"},{"id":"EB-L02","label":"Methodology content is now being turned into funnel infrastructure, but still needs live validation.","target":"Phase 20","priority":"P2","status":"local-patch"},{"id":"EB-L03","label":"Demo lane needs to be treated as a product lane, not just a seed page.","target":"Phase 21","priority":"P1","status":"local-patch"},{"id":"EB-L04","label":"Public launch gate should not be opened yet.","target":"Phase 52","priority":"P0","status":"validated"},{"id":"EB-P01","label":"Key findings and deliverables have been living in chat and local files instead of one board.","target":"Phase 4","priority":"P1","status":"validated"},{"id":"EB-P02","label":"Local-only changes have repeatedly been confused with deployed truth.","target":"Phase 4 / Phase 5","priority":"P1","status":"open"},{"id":"EB-P03","label":"Program artifacts are not consistently committed.","target":"Phase 4","priority":"P1","status":"open"},{"id":"EB-P04","label":"The end-to-end QA matrix is not yet formalized.","target":"Phase 51","priority":"P1","status":"local-patch"},{"id":"EB-P05","label":"Teamability direction was not explicit enough.","target":"Phase 49","priority":"P2","status":"local-patch"}];
 
     let checkState = loadChecks();
+    let evidenceMeta = loadEvidenceMeta();
+    let evidenceEntries = loadEvidenceEntries();
     let repoKind = localStorage.getItem(REPO_KIND_KEY) || "phases";
     let activePanel = localStorage.getItem(PANEL_KEY) || "clearancePanel";
 
@@ -341,12 +426,85 @@
       }
     }
 
+    function formatEvidenceDate() {
+      return new Date().toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+    }
+
+    function defaultEvidenceMeta() {
+      return {
+        tester: "Antaeus Coe",
+        date: formatEvidenceDate(),
+        buildHash: DEFAULT_BUILD_HASH,
+        environment: "Live / antaeus.app / Chrome / Desktop",
+        sessionNotes: ""
+      };
+    }
+
+    function loadEvidenceMeta() {
+      const defaults = defaultEvidenceMeta();
+      try {
+        const parsed = JSON.parse(localStorage.getItem(EVIDENCE_META_KEY) || "{}");
+        return {
+          tester: parsed.tester || defaults.tester,
+          date: parsed.date || defaults.date,
+          buildHash: parsed.buildHash || defaults.buildHash,
+          environment: parsed.environment || defaults.environment,
+          sessionNotes: parsed.sessionNotes || ""
+        };
+      } catch {
+        return defaults;
+      }
+    }
+
+    function saveEvidenceMeta() {
+      localStorage.setItem(EVIDENCE_META_KEY, JSON.stringify(evidenceMeta));
+    }
+
+    function loadEvidenceEntries() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(EVIDENCE_ENTRIES_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveEvidenceEntries() {
+      localStorage.setItem(EVIDENCE_ENTRIES_KEY, JSON.stringify(evidenceEntries));
+    }
+
     function saveChecks() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(checkState));
     }
 
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
     function slugToStatusClass(status) {
       return "status-" + String(status).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    }
+
+    function allEvidenceRows() {
+      return [
+        { group: "QA Rows", rows: qaRows },
+        { group: "Evidence Board Rows", rows: evidenceRows }
+      ];
+    }
+
+    function findRowById(rowId) {
+      return qaRows.find(item => item.id === rowId) || evidenceRows.find(item => item.id === rowId) || null;
     }
 
     function countPhaseProgress(phase) {
@@ -399,6 +557,157 @@
         <div class="stat"><span class="eyebrow">Phases Fully Checked</span><strong>${totals.phasesComplete} / ${clearanceProgram.length}</strong></div>
         <div class="stat"><span class="eyebrow">Current Goal</span><strong>Retire Audit</strong></div>
       `;
+    }
+
+    function renderEvidenceStats() {
+      const mount = document.getElementById("evidenceStats");
+      const passCount = evidenceEntries.filter(item => item.result === "PASS").length;
+      const failCount = evidenceEntries.filter(item => item.result === "FAIL").length;
+      mount.innerHTML = `
+        <div class="stat"><span class="eyebrow">Who Tested</span><strong>${escapeHtml(evidenceMeta.tester)}</strong></div>
+        <div class="stat"><span class="eyebrow">Build Hash</span><strong>${escapeHtml(evidenceMeta.buildHash)}</strong></div>
+        <div class="stat"><span class="eyebrow">Evidence Entries</span><strong>${evidenceEntries.length}</strong></div>
+        <div class="stat"><span class="eyebrow">Pass / Fail Logged</span><strong>${passCount} / ${failCount}</strong></div>
+      `;
+    }
+
+    function renderEvidenceMetaFields() {
+      document.getElementById("evidenceTester").value = evidenceMeta.tester;
+      document.getElementById("evidenceDate").value = evidenceMeta.date;
+      document.getElementById("evidenceBuild").value = evidenceMeta.buildHash;
+      document.getElementById("evidenceEnvironment").value = evidenceMeta.environment;
+      document.getElementById("evidenceSessionNotes").value = evidenceMeta.sessionNotes;
+    }
+
+    function renderEvidenceRowSelect() {
+      const select = document.getElementById("evidenceRowId");
+      const currentValue = select.value;
+      select.innerHTML = `<option value="">Select a row</option>` + allEvidenceRows().map(group => `
+        <optgroup label="${group.group}">
+          ${group.rows.map(row => `<option value="${row.id}">${row.id} - ${escapeHtml(row.label)}</option>`).join("")}
+        </optgroup>
+      `).join("");
+      if (currentValue && findRowById(currentValue)) {
+        select.value = currentValue;
+      }
+    }
+
+    function renderEvidenceEntries() {
+      const mount = document.getElementById("evidenceEntriesMount");
+      if (!evidenceEntries.length) {
+        mount.innerHTML = '<div class="empty-state">No evidence entries logged yet. Save row results here so Phase 1.3 becomes one real record instead of scattered memory.</div>';
+        return;
+      }
+
+      const sorted = [...evidenceEntries].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      mount.innerHTML = sorted.map(entry => {
+        const row = findRowById(entry.rowId);
+        const rowLabel = row ? row.label : "Unknown row";
+        return `
+          <div class="entry-card">
+            <div class="entry-head">
+              <div class="entry-title">
+                <strong>${escapeHtml(entry.rowId)}</strong>
+                <span class="badge ${slugToStatusClass(entry.result)}">${escapeHtml(entry.result)}</span>
+              </div>
+              <button data-entry-delete="${entry.id}">Delete</button>
+            </div>
+            <div class="entry-meta">
+              ${escapeHtml(rowLabel)}<br>
+              Tested by ${escapeHtml(entry.tester)} on ${escapeHtml(entry.date)}<br>
+              Build ${escapeHtml(entry.buildHash)} · ${escapeHtml(entry.environment)}
+            </div>
+            ${entry.notes ? `<p class="entry-note">${escapeHtml(entry.notes)}</p>` : ""}
+          </div>
+        `;
+      }).join("");
+
+      mount.querySelectorAll("[data-entry-delete]").forEach(button => {
+        button.addEventListener("click", () => {
+          evidenceEntries = evidenceEntries.filter(item => item.id !== button.dataset.entryDelete);
+          saveEvidenceEntries();
+          renderEvidenceStats();
+          renderEvidenceEntries();
+        });
+      });
+    }
+
+    function renderEvidenceSection() {
+      renderEvidenceStats();
+      renderEvidenceMetaFields();
+      renderEvidenceRowSelect();
+      renderEvidenceEntries();
+    }
+
+    function syncEvidenceMetaFromInputs() {
+      evidenceMeta = {
+        tester: document.getElementById("evidenceTester").value.trim() || "Antaeus Coe",
+        date: document.getElementById("evidenceDate").value.trim() || formatEvidenceDate(),
+        buildHash: document.getElementById("evidenceBuild").value.trim() || DEFAULT_BUILD_HASH,
+        environment: document.getElementById("evidenceEnvironment").value.trim() || "Live / antaeus.app / Chrome / Desktop",
+        sessionNotes: document.getElementById("evidenceSessionNotes").value.trim()
+      };
+      saveEvidenceMeta();
+      renderEvidenceStats();
+    }
+
+    function saveEvidenceEntry() {
+      const rowId = document.getElementById("evidenceRowId").value;
+      if (!rowId) {
+        alert("Choose a QA or evidence-board row first.");
+        return;
+      }
+
+      syncEvidenceMetaFromInputs();
+      const result = document.getElementById("evidenceResult").value;
+      const notes = document.getElementById("evidenceRowNotes").value.trim();
+      evidenceEntries.push({
+        id: `${rowId}-${Date.now()}`,
+        rowId,
+        result,
+        notes,
+        tester: evidenceMeta.tester,
+        date: evidenceMeta.date,
+        buildHash: evidenceMeta.buildHash,
+        environment: evidenceMeta.environment,
+        createdAt: new Date().toISOString()
+      });
+      saveEvidenceEntries();
+      document.getElementById("evidenceRowNotes").value = "";
+      renderEvidenceStats();
+      renderEvidenceEntries();
+    }
+
+    function copyEvidenceSnapshot() {
+      syncEvidenceMetaFromInputs();
+      const lines = [
+        "Antaeus Audit Evidence Snapshot",
+        "",
+        `Who tested: ${evidenceMeta.tester}`,
+        `Date: ${evidenceMeta.date}`,
+        `Build hash: ${evidenceMeta.buildHash}`,
+        `Environment: ${evidenceMeta.environment}`,
+        `Session notes: ${evidenceMeta.sessionNotes || "None"}`,
+        "",
+        "Logged row results:"
+      ];
+
+      if (!evidenceEntries.length) {
+        lines.push("- No evidence entries logged yet.");
+      } else {
+        [...evidenceEntries].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).forEach(entry => {
+          const row = findRowById(entry.rowId);
+          lines.push(`- ${entry.rowId} ${entry.result} | ${row ? row.label : "Unknown row"}`);
+          lines.push(`  Tested by ${entry.tester} | ${entry.date} | ${entry.buildHash} | ${entry.environment}`);
+          if (entry.notes) lines.push(`  ${entry.notes}`);
+        });
+      }
+
+      navigator.clipboard.writeText(lines.join("\n")).then(() => {
+        alert("Evidence snapshot copied to clipboard.");
+      }).catch(() => {
+        alert("Could not copy automatically. Inspect localStorage keys: " + EVIDENCE_META_KEY + " and " + EVIDENCE_ENTRIES_KEY);
+      });
     }
 
     function renderClearance() {
@@ -608,6 +917,19 @@
       renderRepository();
     }
 
+    document.getElementById("saveEvidenceMeta").addEventListener("click", () => {
+      syncEvidenceMetaFromInputs();
+      renderEvidenceMetaFields();
+    });
+    document.getElementById("copyEvidenceSnapshot").addEventListener("click", copyEvidenceSnapshot);
+    document.getElementById("saveEvidenceEntry").addEventListener("click", saveEvidenceEntry);
+    document.getElementById("clearEvidenceEntries").addEventListener("click", () => {
+      if (!confirm("Clear all saved evidence entries in this browser?")) return;
+      evidenceEntries = [];
+      saveEvidenceEntries();
+      renderEvidenceStats();
+      renderEvidenceEntries();
+    });
     document.getElementById("expandAll").addEventListener("click", () => document.querySelectorAll(".phase-card").forEach(card => { card.open = true; }));
     document.getElementById("collapseAll").addEventListener("click", () => document.querySelectorAll(".phase-card").forEach(card => { card.open = false; }));
     document.getElementById("clearChecks").addEventListener("click", () => {
@@ -624,6 +946,7 @@
 
     switchPanel(activePanel);
     switchRepoKind(repoKind);
+    renderEvidenceSection();
     renderClearance();
   </script>
 </body>
