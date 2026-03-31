@@ -3,44 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signing you in...</title>
+    <title>Finishing Sign-In - Antaeus GTM OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../../js/supabase-config.js"></script>
     <script src="../../js/analytics-site-config.js"></script>
     <script src="../../js/analytics.js"></script>
     <script src="../../js/auth-ui.js"></script>
-
-    <style>
-      body {
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        padding: 40px;
-        background: #0b1220;
-        color: #e5e7eb;
-      }
-      .box {
-        max-width: 560px;
-      }
-      .muted {
-        opacity: 0.7;
-      }
-    </style>
   </head>
 
-  <body>
-    <div class="box">
-      <h1>Finishing sign-in...</h1>
-      <p class="muted">
-        If this takes more than a couple seconds, we will bounce you to login.
-      </p>
+  <body class="auth-page">
+    <div class="auth-status-shell">
+      <section class="auth-status-card">
+        <div class="auth-kicker">Auth callback</div>
+        <h1 class="auth-status-title">Finishing sign-in.</h1>
+        <p class="auth-status-copy">
+          This handoff should be brief. If the session resolves cleanly, Antaeus routes you into the right post-auth surface. If it fails, the page should tell you plainly and return you to login.
+        </p>
+        <div class="auth-status-line" id="callbackStatusLine">
+          Verifying the current session and resolving the post-auth route now.
+        </div>
+      </section>
     </div>
 
     <script src="../../js/onboarding.js"></script>
     <script>
       (async function () {
         try {
+          var statusLine = document.getElementById('callbackStatusLine');
+
           if (!window.supabase || !window.supabase.createClient || !window.initSupabase) {
-            document.querySelector('.muted').textContent = 'Unable to connect. Check your internet and try again.';
+            statusLine.textContent = 'Unable to connect. Check your internet and try again. Returning you to login.';
             setTimeout(function () { window.location.replace('/login.html'); }, 2000);
             return;
           }
@@ -70,12 +67,12 @@
           var params = new URLSearchParams(window.location.search || '');
           var rawError = params.get('error_description') || params.get('error') || '';
           var normalized = window.gtmAuthUi ? window.gtmAuthUi.normalizeError(rawError, 'callback') : { message: 'Something went wrong. Return to login.' };
-          document.querySelector('.muted').textContent = normalized.message;
+          statusLine.textContent = normalized.message;
           setTimeout(function () { window.location.replace('/login.html'); }, 1500);
         } catch (e) {
           console.error('Auth callback error:', e);
           var normalized = window.gtmAuthUi ? window.gtmAuthUi.normalizeError(e, 'callback') : { message: 'Something went wrong. Return to login.' };
-          document.querySelector('.muted').textContent = normalized.message;
+          document.getElementById('callbackStatusLine').textContent = normalized.message;
           setTimeout(function () { window.location.replace('/login.html'); }, 1500);
         }
       })();

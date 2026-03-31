@@ -10,14 +10,14 @@
     <link rel="stylesheet" href="/css/app.css">
     <style>
         body { background: var(--bg-primary, #0a0e1a); }
-        .ob-shell { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px; }
-        .ob-progress { width:100%; max-width:520px; margin-bottom:40px; }
+        .ob-shell { min-height:100vh; padding:40px 24px 56px; }
+        .ob-progress { width:100%; max-width:520px; margin:0 auto 28px; }
         .ob-bars { display:flex; gap:6px; margin-bottom:12px; }
         .ob-bar { flex:1; height:3px; border-radius:3px; background:rgba(255,255,255,0.08); transition:background 0.4s; }
         .ob-bar.done { background:var(--brand-gold,#d4a574); }
         .ob-bar.active { background:rgba(212,165,116,0.5); }
         .ob-step-label { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); }
-        .ob-card { width:100%; max-width:520px; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:16px; padding:48px 40px; position:relative; overflow:hidden; }
+        .ob-card { width:100%; max-width:520px; margin:0 auto; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:16px; padding:48px 40px; position:relative; overflow:hidden; }
         .ob-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--brand-gold),transparent); }
         .ob-brand { font-family:var(--font-serif); font-size:1.4rem; color:var(--brand-gold); margin-bottom:32px; }
         .ob-role { display:inline-flex; align-items:center; gap:8px; margin-bottom:16px; padding:8px 12px; border-radius:999px; border:1px solid rgba(212,165,116,0.16); background:rgba(212,165,116,0.06); color:var(--brand-gold); font-size:0.74rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
@@ -60,6 +60,35 @@
 <body>
     <script src="/js/app-auth-preflight.js"></script>
 <div class="ob-shell">
+    <section class="transition-hero">
+        <div class="transition-hero-panel">
+            <div class="transition-hero-kicker">Activation corridor</div>
+            <div class="transition-hero-title">Turn setup truth into a real operating system.</div>
+            <div class="transition-hero-copy" id="obHeroCopy">This is the short activation pass that should turn a blank workspace into a role-aware system with the right buyer, pressure, and first-week direction.</div>
+            <div class="transition-hero-grid">
+                <div class="transition-hero-block">
+                    <div class="transition-hero-block-label">Role lens</div>
+                    <div class="transition-hero-block-value" id="obHeroRole">Founder-led activation</div>
+                </div>
+                <div class="transition-hero-block">
+                    <div class="transition-hero-block-label">Current focus</div>
+                    <div class="transition-hero-block-value" id="obHeroFocus">Choose the product motion and company truth first.</div>
+                </div>
+                <div class="transition-hero-block">
+                    <div class="transition-hero-block-label">What this tunes</div>
+                    <div class="transition-hero-block-value" id="obHeroTuning">Discovery frameworks, welcome routing, quota posture, and the first dashboard rhythm.</div>
+                </div>
+                <div class="transition-hero-block">
+                    <div class="transition-hero-block-label">Completion target</div>
+                    <div class="transition-hero-block-value" id="obHeroOutcome">Land in welcome with enough truth for the first real operating move.</div>
+                </div>
+            </div>
+        </div>
+        <div class="transition-hero-note">
+            <div class="auth-note"><strong>What this activates</strong><span id="obHeroNote0">Product category, buyer lens, company stage, and pressure model start shaping the rest of the app immediately.</span></div>
+            <div class="auth-note"><strong>What happens next</strong><span id="obHeroNote1">Once this is complete, Antaeus should route into welcome and show the first ranked move instead of generic setup filler.</span></div>
+        </div>
+    </section>
     <div class="ob-progress">
         <div class="ob-bars"><div class="ob-bar" id="b0"></div><div class="ob-bar" id="b1"></div><div class="ob-bar" id="b2"></div><div class="ob-bar" id="b3"></div></div>
         <div class="ob-step-label" id="stepLabel">Step 1 of 4</div>
@@ -319,6 +348,33 @@ function renderOnboardingState(){
         ? 'Signal Console and dashboard are ready to help you find the first believable market motion'
         : 'Signal Console and dashboard are ready to help you structure the motion you now own';
     document.getElementById('seed4').textContent = 'Playbook started with '+companyName+', '+stageLabel+', and '+roleLabel.toLowerCase();
+
+    var heroCopy = founderMode
+        ? 'This short activation pass should convert founder-held GTM intuition into system truth the first serious sales hire can inherit.'
+        : 'This short activation pass should convert setup inputs into a role-aware system that helps you carry the motion cleanly from day one.';
+    var heroFocus = step === 0 ? 'Choose the product motion and company truth first.' : step === 1 ? 'Tell the app who has to believe first.' : step === 2 ? 'Calibrate quota and ACV pressure.' : 'Activate the workspace and move into welcome.';
+    var heroTuning = step === 0
+        ? 'Category and company truth will reshape discovery frameworks, signal priorities, and welcome routing.'
+        : step === 1
+            ? 'Buyer lens and stage will branch discovery, outbound, and first-week guidance.'
+            : step === 2
+                ? 'Quota posture will feed dashboard pressure, workback math, and activity expectations.'
+                : 'The workspace is ready to behave like a live operating system, not a setup wizard.';
+    var heroOutcome = step < 3
+        ? 'Land in welcome with enough truth for the first real operating move.'
+        : 'Route into welcome with real context, week-one rhythm, and the first ranked action.';
+
+    document.getElementById('obHeroCopy').textContent = heroCopy;
+    document.getElementById('obHeroRole').textContent = roleLabel;
+    document.getElementById('obHeroFocus').textContent = heroFocus;
+    document.getElementById('obHeroTuning').textContent = heroTuning;
+    document.getElementById('obHeroOutcome').textContent = heroOutcome;
+    document.getElementById('obHeroNote0').textContent = founderMode
+        ? 'Product category, buyer lens, company stage, and pressure model start shaping the first hire system immediately.'
+        : 'Product category, buyer lens, company stage, and pressure model start shaping your execution system immediately.';
+    document.getElementById('obHeroNote1').textContent = step < 3
+        ? 'Once this is complete, Antaeus should route into welcome and show the first ranked move instead of generic setup filler.'
+        : 'The next screen should feel like activation continuing, not setup restarting.';
 }
 
 function buildActivationContext(){

@@ -9,53 +9,78 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
 </head>
-<body>
+<body class="auth-page">
     <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-logo">ANTAEUS</div>
-            <p class="auth-subtitle">Sign in to your GTM workspace</p>
-            <div id="contextMessage" class="callout mb-md hidden"></div>
-            
-            <form id="loginForm">
-                <div class="form-group">
-                    <label class="form-label" for="email">Email</label>
-                    <input type="email" id="email" class="form-input" placeholder="you@company.com" required autocomplete="email">
+        <section class="auth-shell">
+            <section class="auth-corridor">
+                <div class="auth-kicker">Return to workspace</div>
+                <h1 class="auth-title">Pick up the operating thread without losing context.</h1>
+                <p class="auth-copy">The point of sign-in is continuity. The user should come back to the same workspace truth, dashboard rhythm, and activation state without wondering what reset.</p>
+                <div class="auth-grid">
+                    <div class="auth-metric">
+                        <span class="auth-metric-kicker">What persists</span>
+                        <div class="auth-metric-value">Onboarding state, welcome progress, workspace records, and the current operating posture.</div>
+                    </div>
+                    <div class="auth-metric">
+                        <span class="auth-metric-kicker">Alternate path</span>
+                        <div class="auth-metric-value">The interactive demo remains available when you want to show the real system flow with sample data.</div>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                <div class="auth-notes">
+                    <div class="auth-note"><strong>Signed-in truth</strong>Good login should feel like reopening a live operating system, not re-entering a tool.</div>
+                    <div class="auth-note"><strong>Demo still exists</strong>Use the demo lane when you want narrative sample data without touching the real workspace.</div>
                 </div>
-                
-                <div id="errorMessage" class="callout callout-danger mb-md hidden">
-                    <div id="errorText"></div>
-                    <div id="errorAction" class="hidden"></div>
+            </section>
+            <section class="auth-card">
+                <div class="auth-card-header">
+                    <div class="auth-logo">ANTAEUS</div>
+                    <div class="auth-card-kicker">Workspace access</div>
+                    <p class="auth-subtitle">Sign in to continue the same operating system.</p>
+                    <p class="auth-card-copy">Use the same email that owns the workspace. If checkout already happened, the post-auth route should still land in the correct live product state.</p>
                 </div>
-                
-                <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitBtn">
-                    <span id="btnText">Sign In</span>
-                    <div class="spinner hidden" id="btnSpinner"></div>
-                </button>
-                
-                <div style="text-align: right; margin-top: var(--space-md);">
-                    <a href="forgot-password.html" style="font-size: 0.85rem;">Forgot password?</a>
+                <div id="contextMessage" class="callout mb-md hidden"></div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="you@company.com" required autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password" required autocomplete="current-password">
+                    </div>
+
+                    <div id="errorMessage" class="callout callout-danger mb-md hidden">
+                        <div id="errorText"></div>
+                        <div id="errorAction" class="hidden"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitBtn">
+                        <span id="btnText">Sign In</span>
+                        <div class="spinner hidden" id="btnSpinner"></div>
+                    </button>
+
+                    <div class="auth-aux">
+                        <a href="forgot-password.html">Forgot password?</a>
+                    </div>
+                </form>
+
+                <div class="auth-footer">
+                    Don't have an account? <a href="signup.html">Create one</a>
                 </div>
-            </form>
-            
-            <div class="auth-footer">
-                Don't have an account? <a href="signup.html">Create one</a>
-            </div>
-            <div style="margin-top: 10px; text-align: center;">
-                <button type="button" class="btn btn-ghost btn-sm btn-block" onclick="enterInteractiveDemo()">
-                    Launch Interactive Demo
-                </button>
-                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
-                    Uses isolated demo data and starts from onboarding.
+                <div class="auth-cta-stack">
+                    <button type="button" class="btn btn-ghost btn-sm btn-block" onclick="enterInteractiveDemo()">
+                        Launch Interactive Demo
+                    </button>
+                    <div class="auth-cta-copy">
+                        Uses isolated sample data and starts from the demo lane without touching the real workspace.
+                    </div>
                 </div>
-            </div>
-        </div>
+            </section>
+        </section>
     </div>
-    
+
     <script src="js/analytics-site-config.js"></script>
     <script src="js/analytics.js"></script>
     <script src="js/auth-ui.js"></script>
@@ -137,7 +162,7 @@
                 if (session) { await routeAfterAuth(session); }
             } catch (e) {}
         });
-        
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (window.gtmAnalytics) window.gtmAnalytics.track('login_submit', { form: 'login' });
@@ -149,14 +174,14 @@
             const errorMessage = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
             const errorAction = document.getElementById('errorAction');
-            
+
             errorMessage.classList.add('hidden');
             errorAction.classList.add('hidden');
             errorAction.innerHTML = '';
             submitBtn.disabled = true;
             btnText.textContent = 'Signing in...';
             btnSpinner.classList.remove('hidden');
-            
+
             try {
                 const { data, error } = await withTimeout(auth.signIn(email, password), 10000);
                 if (error) throw error;

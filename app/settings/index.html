@@ -146,19 +146,10 @@
                 <p class="page-subtitle" style="color:var(--text-muted);font-size:0.9rem;">Manage your data, preferences, and workspace configuration.</p>
             </div>
 
-            <section class="settings-bridge">
-                <div class="settings-bridge-kicker">Trust and control</div>
-                <div class="settings-bridge-title">This is where you decide what is durable, what is recoverable, and what only lives in this browser.</div>
-                <div class="settings-bridge-copy">Settings should make the workspace feel safer, not scarier. Use this page to understand what belongs to your account, what belongs to the workspace, and what is only a local aid like demo mode or an exported backup file on your machine.</div>
-                <div class="settings-trust-grid" id="settingsTrustGrid">
-                    <div class="settings-trust-card">
-                        <div class="settings-trust-kicker">Workspace truth</div>
-                        <div class="settings-trust-title">Loading...</div>
-                        <div class="settings-trust-copy">Checking sync state.</div>
-                    </div>
-                </div>
-            </section>
+            <div id="settingsShellBand"></div>
 
+            <section class="shell-context-layout">
+                <div>
             <div class="settings-grid">
                 <div class="settings-card">
                     <div class="settings-scope workspace">Workspace-level</div>
@@ -211,6 +202,9 @@
                     <div class="settings-help">Category is stored with the workspace because it affects downstream discovery, call guidance, and GTM framing across modules.</div>
                 </div>
             </div>
+                </div>
+                <aside id="settingsShellRail"></aside>
+            </section>
         </div>
     </main>
 
@@ -222,6 +216,7 @@
     <script src="/js/require-auth.js"></script>
     <script src="/js/data-manager.js"></script>
     <script src="/js/gtmos-store.js"></script>
+    <script src="/js/shell-chrome.js"></script>
     <script src="/js/nav.js"></script>
     <script src="/js/tour-guide.js"></script>
     <script src="/js/module-tooltips.js"></script>
@@ -343,6 +338,10 @@
             var modeCopy = modeTitle === 'Demo mode is active'
                 ? 'You are inside a browser-local sample workspace. Exit demo before judging whether import, delete, or new records affect real cloud truth.'
                 : 'Changes here should apply to the signed-in workspace. Demo mode can still be entered safely without overwriting durable state.';
+            var sourceTone = source === 'supabase-persistence' ? 'live' : (source === 'supabase-partial' ? 'thin' : 'risk');
+            var backupTone = status && status.hasExport ? 'ready' : 'thin';
+            var modeTone = modeTitle === 'Demo mode is active' ? 'ready' : 'live';
+            var scopeCopy = 'Role setup belongs to the account. ICPs, deals, signals, motions, and category belong to the workspace. Demo mode and exported backup files are local aids, not cloud truth.';
 
             renderStatusList('backupStatusList', [
                 {
@@ -409,7 +408,12 @@
                 backupTitle: backupTitle,
                 backupCopy: backupCopy,
                 modeTitle: modeTitle,
-                modeCopy: modeCopy
+                modeCopy: modeCopy,
+                scopeCopy: scopeCopy,
+                sourceTone: sourceTone,
+                backupTone: backupTone,
+                modeTone: modeTone,
+                counts: counts
             };
         }
 
@@ -437,6 +441,51 @@
             var summary = summaryResult && summaryResult.data ? summaryResult.data : (window.__gtmosWorkspaceSummary || {});
             var truthModel = buildTruthModel(summary, status || { hasExport: false }, cat);
             renderTrustGrid(truthModel);
+
+            if (window.gtmShellChrome) {
+                window.gtmShellChrome.renderCommandBand('#settingsShellBand', {
+                    kicker: 'Trust and control',
+                    title: 'Decide what is durable, what is recoverable, and what only lives in this browser.',
+                    copy: 'Settings should make the workspace feel safer, not scarier. Use this page to understand which truths are cloud-backed, which ones can be exported, and which ones are local aids like demo mode.',
+                    stateLabel: truthModel.sourceTitle,
+                    stateTone: truthModel.sourceTone,
+                    metrics: [
+                        { label: 'Workspace source', value: truthModel.sourceTitle },
+                        { label: 'Offline backup', value: truthModel.backupTitle },
+                        { label: 'Current mode', value: truthModel.modeTitle },
+                        { label: 'Product category', value: categoryLabel(cat) }
+                    ],
+                    actions: [
+                        { label: 'Export Backup', action: 'exportAllData()', tone: 'primary' },
+                        { label: 'Enter Demo', action: 'enterDemo()', tone: 'secondary' }
+                    ]
+                });
+
+                window.gtmShellChrome.renderContextRail('#settingsShellRail', {
+                    cards: [
+                        {
+                            kicker: 'Workspace truth',
+                            title: truthModel.sourceTitle,
+                            copy: truthModel.sourceCopy
+                        },
+                        {
+                            kicker: 'Offline recovery',
+                            title: truthModel.backupTitle,
+                            copy: truthModel.backupCopy
+                        },
+                        {
+                            kicker: 'Current mode',
+                            title: truthModel.modeTitle,
+                            copy: truthModel.modeCopy
+                        },
+                        {
+                            kicker: 'Scope map',
+                            title: 'Account, workspace, browser',
+                            copy: truthModel.scopeCopy
+                        }
+                    ]
+                });
+            }
         }
 
         async function setProductCategory(val) {
