@@ -14,8 +14,10 @@
         
         .builder-content { overflow-y: auto; padding-right: var(--space-md); }
         .builder-content .anchor-stage { margin-bottom: var(--space-lg); }
-        .analytics-panel { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); overflow-y: auto; position: sticky; top: 0; height: fit-content; max-height: calc(100vh - 160px); }
-        .analytics-panel.shell-context-rail { top: 118px; gap: 16px; }
+        .analytics-panel { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); position: relative; display: grid; gap: 16px; align-content: start; min-width: 0; overflow: visible; }
+        .analytics-panel > * { min-width: 0; }
+        #icpShellRail.shell-context-rail { position: static; top: auto; gap: 16px; }
+        #icpShellRail .shell-rail-list-item { white-space: normal; overflow-wrap: anywhere; }
         
         .builder-section { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-lg); }
         .section-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); }
@@ -543,7 +545,7 @@
                     </div>
                     
                     <!-- ICP Library Panel -->
-                    <div class="analytics-panel shell-context-rail" id="libraryPanel">
+                    <div class="analytics-panel" id="libraryPanel">
                         <div id="icpShellRail"></div>
                         <div class="analytics-title" style="display:flex;justify-content:space-between;align-items:center;">
                             <span>📚 ICP Library</span>
