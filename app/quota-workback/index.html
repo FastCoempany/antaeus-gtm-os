@@ -99,15 +99,8 @@
                 </div>
             </header>
             <div class="app-content" style="max-width:780px;">
-                <div class="qw-card qw-bridge">
-                    <div class="qw-bridge-copy">
-                        <div class="qw-card-title">Revenue to execution</div>
-                        <h2>Translate quota into the week your team actually has to run.</h2>
-                        <p>Quota Workback should not stop at math. It should tell you how much pipeline you need, how much motion has to happen each week, and where the pressure should hand off into Outbound Studio, Cold Call Studio, and the Dashboard.</p>
-                        <div class="qw-bridge-meta" id="bridgeMeta"></div>
-                    </div>
-                    <div class="qw-bridge-card" id="bridgeSummary"></div>
-                </div>
+                <div id="quotaShellBand"></div>
+                <div id="quotaTopBoard"></div>
 
                 <div class="qw-hero">
                     <div class="qw-hero-val" id="heroTouches">0</div>
@@ -237,19 +230,61 @@
             }
 
             function renderBridge(metrics, benchmark, quality){
-                document.getElementById('bridgeMeta').innerHTML =
-                    '<span class="qw-chip">'+benchmark.label+' assumptions</span>'+
-                    '<span class="qw-chip '+quality.tone+'">'+quality.label+'</span>'+
-                    '<span class="qw-chip">'+fmtM(metrics.monthlyTarget)+'/month target</span>'+
-                    '<span class="qw-chip">'+fmtN(metrics.touchesMonth)+' touches/month</span>';
+                if(window.gtmShellChrome){
+                    window.gtmShellChrome.applyHeader({
+                        family:'System',
+                        stateLabel:quality.label,
+                        stateTone:quality.tone==='good'?'live':quality.tone==='warn'?'ready':'risk'
+                    });
+                    window.gtmShellChrome.renderCommandBand('#quotaShellBand',{
+                        kicker:'Planning board',
+                        title:'Translate quota into the week the team actually has to run.',
+                        copy:'Quota Workback should not stop at abstract math. It should tell you whether the target is believable, what weekly motion is required, and where the pressure now belongs across Outbound, Calls, Deals, and the Dashboard.',
+                        stateLabel:quality.label,
+                        stateTone:quality.tone==='good'?'live':quality.tone==='warn'?'ready':'risk',
+                        metrics:[
+                            {label:'Monthly target',value:fmtM(metrics.monthlyTarget)},
+                            {label:'Touches / week',value:fmtN(metrics.touchesWeek)},
+                            {label:'Coverage goal',value:benchmark.coverage+'x'},
+                            {label:'One-session win',value:'Leave with a weekly activity target and a believable coverage posture.'}
+                        ],
+                        actions:[
+                            {label:'Open Outbound Studio',action:'location.href=\"/app/outbound-studio/\"',tone:'primary'},
+                            {label:'Open Dashboard',action:'location.href=\"/app/dashboard/\"'}
+                        ]
+                    });
+                }
 
-                document.getElementById('bridgeSummary').innerHTML =
-                    '<h3>What this should do</h3>'+
-                    '<p>Within one sitting, this module should tell you whether your target is believable, what the weekly motion target is, and where the pressure now belongs across Outbound Studio, Cold Call Studio, and the Dashboard.</p>'+
-                    '<div class="qw-summary-block">'+
-                        '<div class="qw-summary-box"><h4>Assumption posture</h4><p>'+benchmark.label+' band. Win rate is '+metrics.winState+'. Meeting conversion is '+metrics.m2oState+'. Cycle is '+metrics.cycleState+'.</p></div>'+
-                        '<div class="qw-summary-box"><h4>One-session win</h4><p>Leave with a weekly activity target, a believable coverage goal, and explicit downstream handoffs instead of keeping quota as abstract math.</p></div>'+
-                    '</div>';
+                document.getElementById('quotaTopBoard').innerHTML =
+                    '<section class="anchor-stage">'+
+                        '<div class="anchor-stage-grid">'+
+                            '<div>'+
+                                '<div class="anchor-eyebrow">Revenue to execution</div>'+
+                                '<div class="anchor-headline anchor-headline--wide">Turn quota into weekly execution pressure.</div>'+
+                                '<div class="anchor-support">This module is only useful if it converts quota into a believable activity plan, then hands that pressure into the operating surfaces that actually create pipeline.</div>'+
+                                '<div class="anchor-chip-row">'+
+                                    '<span class="anchor-chip">'+benchmark.label+' assumptions</span>'+
+                                    '<span class="anchor-chip">'+quality.label+'</span>'+
+                                    '<span class="anchor-chip">'+fmtM(metrics.monthlyTarget)+'/month</span>'+
+                                '</div>'+
+                                '<div class="anchor-primary-card">'+
+                                    '<div class="anchor-primary-label">Assumption posture</div>'+
+                                    '<div class="anchor-primary-title">'+benchmark.label+' planning model</div>'+
+                                    '<div class="anchor-primary-copy">Win rate is '+metrics.winState+'. Meeting conversion is '+metrics.m2oState+'. Cycle is '+metrics.cycleState+'.</div>'+
+                                    '<div class="anchor-primary-actions">'+
+                                        '<a class="btn btn-primary" href="/app/outbound-studio/">Open Outbound Studio</a>'+
+                                        '<a class="btn btn-secondary" href="/app/dashboard/">Open Dashboard</a>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="anchor-mini-grid">'+
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Weekly target</div><div class="anchor-mini-value">'+fmtM(metrics.weeklyRevenue)+'</div><div class="anchor-mini-copy">Revenue pressure the team has to support every week.</div></div>'+
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Touches / week</div><div class="anchor-mini-value">'+fmtN(metrics.touchesWeek)+'</div><div class="anchor-mini-copy">'+metrics.touchesDay+' touches/day equivalent across '+fmtN(metrics.activeAccounts)+' active accounts.</div></div>'+
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Opps / quarter</div><div class="anchor-mini-value">'+fmtN(metrics.oppsQuarter)+'</div><div class="anchor-mini-copy">Pipeline creation pressure required to make the quarter believable.</div></div>'+
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Planning read</div><div class="anchor-mini-value anchor-mini-value--sans">'+quality.label+'</div><div class="anchor-mini-copy">'+metrics.qualityScore+'/100 planning quality based on assumptions and coverage posture.</div></div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</section>';
             }
 
             function renderPlan(metrics, benchmark, quality){

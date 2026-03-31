@@ -96,20 +96,7 @@
             </header>
             <div class="app-content" style="max-width:740px;">
                 <div id="playbookShellBand"></div>
-                <div class="pb-summary">
-                    <div class="pb-summary-card">
-                        <div class="pb-card-kicker">Handoff kit</div>
-                        <h2 id="kitTitle">Assemble a GTM playbook your next hire can actually run.</h2>
-                        <p id="kitSummary">This surface should tell you whether the operating system is still thin, where the weak source gaps are, and whether the exported handoff reads like a serious deliverable.</p>
-                        <div class="pb-summary-meta" id="kitMeta"></div>
-                        <div class="pb-readiness" id="kitStats"></div>
-                    </div>
-                    <div class="pb-summary-card">
-                        <div class="pb-card-kicker">What still feels weak</div>
-                        <div class="pb-state-list" id="kitStateList"></div>
-                        <div class="pb-warning-list" id="kitWarnings"></div>
-                    </div>
-                </div>
+                <div id="playbookTopBoard"></div>
                 <div id="sections"></div>
                 <div class="pb-export-bar">
                     <button class="pb-export-btn" onclick="openExportModal()">&#128230; Share Handoff Kit</button>
@@ -420,23 +407,48 @@
                     ]
                 });
             }
-
-            document.getElementById('kitTitle').textContent=verdict+' GTM handoff';
-            document.getElementById('kitSummary').textContent='This surface should tell you whether the operating system is still thin, where the weak source gaps are, and whether the exported handoff reads like a serious deliverable.';
-            document.getElementById('kitMeta').innerHTML=
-                '<span class="pb-chip '+tone+'">'+score+'/100</span>'+
-                '<span class="pb-chip">'+readyCount+' ready</span>'+
-                '<span class="pb-chip">'+partialCount+' partial</span>'+
-                '<span class="pb-chip">'+emptyCount+' empty</span>';
-            document.getElementById('kitStats').innerHTML=
-                '<div class="pb-stat"><div class="pb-stat-label">Ready sections</div><div class="pb-stat-value">'+readyCount+'</div></div>'+
-                '<div class="pb-stat"><div class="pb-stat-label">Partial sections</div><div class="pb-stat-value">'+partialCount+'</div></div>'+
-                '<div class="pb-stat"><div class="pb-stat-label">Empty sections</div><div class="pb-stat-value">'+emptyCount+'</div></div>';
-            document.getElementById('kitStateList').innerHTML=
-                sectionStates.map(function(s){
-                    return '<div class="pb-state-row"><span><strong>'+s.section.title+'</strong></span><span>'+s.statusText+'</span></div>';
-                }).join('');
-            document.getElementById('kitWarnings').innerHTML=warnings||'<div class="pb-warning"><strong>Ready enough to export.</strong><br>The current kit has real operating shape. Use the export flow to generate a deliverable and then pressure-test it with the next hire lens.</div>';
+            document.getElementById('playbookTopBoard').innerHTML=
+                '<section class="anchor-stage">'+
+                    '<div class="anchor-stage-grid">'+
+                        '<div>'+
+                            '<div class="anchor-eyebrow">Handoff verdict</div>'+
+                            '<div class="anchor-headline anchor-headline--wide">'+verdict+' GTM handoff</div>'+
+                            '<div class="anchor-support">This surface should tell you whether the operating system is still thin, where the weak source gaps are, and whether the exported handoff reads like a serious deliverable.</div>'+
+                            '<div class="anchor-chip-row">'+
+                                '<span class="anchor-chip">'+score+'/100</span>'+
+                                '<span class="anchor-chip">'+readyCount+' ready</span>'+
+                                '<span class="anchor-chip">'+partialCount+' partial</span>'+
+                                '<span class="anchor-chip">'+emptyCount+' empty</span>'+
+                            '</div>'+
+                            '<div class="anchor-primary-card">'+
+                                '<div class="anchor-primary-label">What this should do</div>'+
+                                '<div class="anchor-primary-title">Make the next hire operational on day one.</div>'+
+                                '<div class="anchor-primary-copy">The handoff kit is the supreme output of the system. If the kit is thin, the rest of the operating system is still too founder-dependent.</div>'+
+                                '<div class="anchor-primary-actions">'+
+                                    '<button class="btn btn-primary" type="button" onclick="openExportModal()">Share Handoff Kit</button>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="anchor-mini-grid">'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Ready sections</div><div class="anchor-mini-value">'+readyCount+'</div><div class="anchor-mini-copy">Sections that already read like an onboarding deliverable.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Partial sections</div><div class="anchor-mini-value">'+partialCount+'</div><div class="anchor-mini-copy">These sections have shape but still need cleaner operating truth.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Empty sections</div><div class="anchor-mini-value">'+emptyCount+'</div><div class="anchor-mini-copy">These are still weak source gaps, not just unfinished writing.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Operating rule</div><div class="anchor-mini-value anchor-mini-value--sans">'+(score>=80?'Exportable now':'Pressure-test before export')+'</div><div class="anchor-mini-copy">Use this verdict to decide whether the handoff should leave the building yet.</div></div>'+
+                        '</div>'+
+                    '</div>'+
+                '</section>'+
+                '<section class="shell-section shell-section--compact">'+
+                    '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Weak source gaps</div><div class="shell-section-title">What still makes the handoff feel thin.</div><div class="shell-section-copy">A playbook is only as strong as the live evidence feeding it. Weak source sections should be treated as operating gaps, not writing gaps.</div></div></div>'+
+                    '<div class="anchor-lane-grid">'+
+                        '<div class="anchor-lane"><div class="anchor-lane-state">Section states</div><div class="anchor-lane-title">What is ready versus partial.</div><div class="anchor-lane-copy">Use this to see which parts of the operating system are truly teachable to the next hire.</div><div class="anchor-list">'+
+                            sectionStates.map(function(s){ return '<div class="anchor-list-item"><strong>'+s.section.title+':</strong> '+s.statusText+'</div>'; }).join('')+
+                        '</div></div>'+
+                        '<div class="anchor-lane"><div class="anchor-lane-state">Weakest signals</div><div class="anchor-lane-title">What still needs stronger source truth.</div><div class="anchor-lane-copy">These are the first places to tighten if the export still feels like stitched narrative instead of operating system transfer.</div><div class="anchor-stack">'+
+                            (warnings || '<div class="anchor-note"><strong>Ready enough to export.</strong> The current kit has real operating shape. Generate it, then pressure-test it with the next hire lens.</div>')+
+                        '</div></div>'+
+                        '<div class="anchor-lane"><div class="anchor-lane-state">Handoff standard</div><div class="anchor-lane-title">What good looks like.</div><div class="anchor-lane-copy">The exported kit should explain who to sell to, how to create motion, how to qualify, how to manage proof, and how to recover pressure without founder memory filling the gaps.</div><div class="anchor-lane-meta"><span>Not a CRM dump</span><span>Not stitched notes</span><span>Real transfer asset</span></div></div>'+
+                    '</div>'+
+                '</section>';
         }
 
         function renderSections(){

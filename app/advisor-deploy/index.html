@@ -121,6 +121,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
     <div id="advisorBootState"></div>
     <h1>Advisor Deploy</h1>
     <p class="sub">Deploy equity-invested relationships at the exact deal moments where their influence changes the outcome.</p>
+    <div id="advisorShellBand"></div>
 
     <div class="tabs">
         <button class="tab on" onclick="showTab('dashboard')">Dashboard</button>
@@ -746,13 +747,40 @@ function renderDashboard(){
         var order={now:0,active:1,cooldown:2,map:3,prep:4};
         return (order[a.reco.state]||9)-(order[b.reco.state]||9);
     });
+    var deployNowCount=recommended.filter(function(item){return item.reco.state==='now';}).length;
+    var mappedCount=recommended.filter(function(item){return item.reco.state==='active';}).length;
+    var stateLabel=deployNowCount>0?'Deploy now':advisors.length&&deals.length?'Map the next ask':'Registry first';
+    var stateTone=deployNowCount>0?'live':advisors.length&&deals.length?'ready':'risk';
+
+    if(window.gtmShellChrome){
+        window.gtmShellChrome.renderCommandBand('#advisorShellBand',{
+            kicker:'Relationship operating board',
+            title:'Deploy outside leverage only where it changes the deal.',
+            copy:'Advisor Deploy should tell you where the relationship matters now, what the exact ask is, and how the result feeds back into the pipeline instead of dying in side-channel memory.',
+            stateLabel:stateLabel,
+            stateTone:stateTone,
+            metrics:[
+                {label:'Deploy now',value:String(deployNowCount)},
+                {label:'Active asks',value:String(mappedCount || pending)},
+                {label:'Impact rate',value:impactRate+'%'},
+                {label:'One-session win',value:'Pick one live deal, one justified moment, and one advisor. Leave with the ask drafted.'}
+            ],
+            actions:[
+                {label:'Open Ask Builder',action:'showTab(\"builder\")',tone:'primary'},
+                {label:'View Deal × Advisor',action:'showTab(\"matrix\")'}
+            ]
+        });
+    }
 
     document.getElementById('dashStats').innerHTML=
-        '<div class="stat"><div class="stat-v">'+advisors.length+'</div><div class="stat-l">Advisors</div></div>'+
-        '<div class="stat"><div class="stat-v gold">'+total+'</div><div class="stat-l">Deployments</div></div>'+
-        '<div class="stat"><div class="stat-v green">'+successful+'</div><div class="stat-l">Successful</div></div>'+
-        '<div class="stat"><div class="stat-v'+(impactRate>=50?' green':'')+'">'+impactRate+'%</div><div class="stat-l">Impact Rate</div></div>'+
-        '<div class="stat"><div class="stat-v'+(pending>0?' amber':'')+'">'+pending+'</div><div class="stat-l">Pending</div></div>';
+        '<section class="shell-section shell-section--compact">'+
+            '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Deployment pressure</div><div class="shell-section-title">Where advisor leverage belongs right now.</div><div class="shell-section-copy">Use outside relationships at access, executive compression, proof recovery, and procurement moments. Avoid vague “keep this warm” deployment.</div></div></div>'+
+            '<div class="anchor-lane-grid">'+
+                '<div class="anchor-lane"><div class="anchor-lane-state">Registry</div><div class="anchor-lane-title">'+advisors.length+' advisors mapped</div><div class="anchor-lane-copy">These are the relationships that can become real leverage. Connection quality matters more than advisor count.</div><div class="anchor-lane-meta"><span>'+successful+' successful</span><span>'+pending+' pending</span></div></div>'+
+                '<div class="anchor-lane"><div class="anchor-lane-state">Deploy now</div><div class="anchor-lane-title">'+deployNowCount+' live deal moments</div><div class="anchor-lane-copy">These deals have the clearest reason to use outside leverage now instead of waiting for generic slippage.</div><div class="anchor-lane-meta"><span>'+mappedCount+' already active</span><span>'+deals.length+' live deals</span></div></div>'+
+                '<div class="anchor-lane"><div class="anchor-lane-state">Feedback loop</div><div class="anchor-lane-title">'+impactRate+'% impact rate</div><div class="anchor-lane-copy">The point is not advisor activity. The point is whether the relationship changed access, timing, or decision momentum in the deal.</div><div class="anchor-lane-meta"><span>'+total+' deployments</span><span>'+(pending>0?pending+' still pending':'No open loops')+'</span></div></div>'+
+            '</div>'+
+        '</section>';
 
     var html='';
     html+='<div class="card"><div class="card-t gold">Advisor deployment model</div>'+
