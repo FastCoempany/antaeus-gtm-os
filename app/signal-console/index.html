@@ -35,17 +35,15 @@
 .sc-root input,.sc-root select,.sc-root textarea,.sc-root button{font-family:inherit}
 
 /* ── TOP BAR ── */
-.sc-root .top{position:sticky;top:0;z-index:100;background:rgba(6,8,12,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;padding:0 20px;height:48px}
-.sc-root .top-brand{font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);flex-shrink:0}
-.sc-root .top-sep{width:1px;height:18px;background:var(--bdr2)}
-.sc-root .top-search{flex:1;max-width:340px;position:relative}
+.sc-root .top{position:sticky;top:var(--signal-shell-offset,0px);z-index:38;background:rgba(6,8,12,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;padding:10px 20px;min-height:52px;flex-wrap:wrap}
+.sc-root .top-search{flex:1 1 280px;max-width:360px;position:relative}
 .sc-root .top-search input{width:100%;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:6px 10px 6px 28px;font-size:.8rem;color:var(--tx);outline:none;transition:border .15s}
 .sc-root .top-search input:focus{border-color:var(--gold)}
 .sc-root .top-search::before{content:'⌕';position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:.85rem;color:var(--tx3)}
-.sc-root .top-stats{display:flex;gap:14px;font-family:var(--mono);font-size:.65rem;color:var(--tx3);margin-left:auto;flex-shrink:0}
+.sc-root .top-stats{display:flex;gap:14px;font-family:var(--mono);font-size:.65rem;color:var(--tx3);margin-left:auto;flex-shrink:0;flex-wrap:wrap}
 .sc-root .top-stats b{color:var(--tx2);font-weight:500}
 .sc-root .top-credits{font-family:var(--mono);font-size:.6rem;padding:3px 8px;border-radius:20px;background:var(--surf2);border:1px solid var(--bdr);color:var(--tx3)}
-.sc-root .top-actions{display:flex;gap:6px;flex-shrink:0}
+.sc-root .top-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
 .signal-shell-band{padding:14px 20px 0;background:linear-gradient(180deg,rgba(15,19,28,0.88),rgba(15,19,28,0));}
 .signal-shell-band .shell-command-band{margin:0;}
 
@@ -242,10 +240,18 @@
         </aside>
         
         <main class="app-main sc-host">
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">Signals family</span>
+                        <span class="shell-header-state state-live">Research console</span>
+                    </div>
+                    <h1 class="page-title">Signal Console</h1>
+                    <p class="page-subtitle">Find the accounts worth acting on, understand why they matter now, and hand that signal forward.</p>
+                </div>
+            </header>
             <div class="sc-root">
 <div class="top">
-<div class="top-brand">Signal Console</div>
-<div class="top-sep"></div>
 <div class="top-search"><input type="text" id="searchIn" placeholder="Search accounts, signals..." /></div>
 <div class="top-stats" id="topStats"></div>
 <div class="top-credits" id="topCredits"></div>
@@ -1160,8 +1166,15 @@ function renderSignalShellBand(){
   node.innerHTML=`<section class="shell-command-band"><div class="shell-band-top"><div><div class="shell-band-kicker">Intelligence bridge</div><div class="shell-band-title">${esc(title)}</div><div class="shell-band-copy">${esc(copy)}</div></div><span class="shell-state-pill state-${stateTone}">${esc(stateLabel)}</span></div></section>`;
 }
 
+function syncSignalShellOffset(){
+  const host=document.querySelector('.sc-host');
+  const header=host&&host.querySelector('.app-header');
+  if(!host)return;
+  host.style.setProperty('--signal-shell-offset',header?`${header.offsetHeight}px`:'0px');
+}
+
 function render(){
-  renderStats();renderCredits();renderSignalShellBand();renderControls();renderMorning();renderGrid();
+  syncSignalShellOffset();renderStats();renderCredits();renderSignalShellBand();renderControls();renderMorning();renderGrid();
 }
 
 function renderStats(){
@@ -1625,6 +1638,8 @@ document.getElementById('btnEnrichAll').onclick=enrichAll;
 // ═══════════════════════════════════════════
 render();
 hydrateSignalConsoleFromCloud();
+window.addEventListener('resize',syncSignalShellOffset);
+syncSignalShellOffset();
 
     </script>
 </body>
