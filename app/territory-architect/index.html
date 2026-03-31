@@ -263,6 +263,7 @@
         <main class="app-main">
             <header class="app-header">
                 <h1 class="page-title">Territory Architect</h1>
+                <p class="page-subtitle">Shape one bounded battlefield before you widen the list.</p>
                 <div class="header-actions">
                     <button class="btn btn-ghost btn-sm" onclick="switchView('manage')">Manage Theses</button>
                     <button class="btn btn-secondary btn-sm" onclick="exportTerritory()">Export</button>
@@ -406,43 +407,7 @@
 
 <!-- ==================== MAIN APPLICATION ==================== -->
 <div id="mainApp" style="display:none;">
-    <div class="ta-bridge" id="taBridge">
-        <div class="ta-bridge-top">
-            <div>
-                <div class="ta-bridge-kicker">Territory logic</div>
-                <div class="ta-bridge-title" id="taBridgeTitle">Turn one wedge into a controlled battlefield.</div>
-                <div class="ta-bridge-desc" id="taBridgeDesc">Territory Architect is where ICP truth becomes a ranked 30-day account set. Do this before sourcing more names so the rest of the app works on a bounded battlefield instead of a vague TAM.</div>
-            </div>
-            <div class="ta-bridge-actions">
-                <button class="btn btn-secondary btn-sm" onclick="switchView('territory')">Open Territory</button>
-                <button class="btn btn-ghost btn-sm" onclick="switchView('intelligence')">See Intelligence</button>
-            </div>
-        </div>
-        <div class="ta-bridge-grid">
-            <div class="ta-bridge-card">
-                <div class="ta-bridge-card-title">Object model</div>
-                <ul class="ta-bridge-list" id="taObjectModel">
-                    <li>ICP -> thesis -> account set -> dispositions.</li>
-                </ul>
-            </div>
-            <div class="ta-bridge-card">
-                <div class="ta-bridge-card-title">Why before sourcing</div>
-                <div class="ta-bridge-card-copy" id="taBeforeSourcing">Without territory design, sourcing becomes logo collection. The point here is to decide what deserves list slots, what gets Tier 1 intensity, and what evidence or leverage makes an account worth working.</div>
-            </div>
-            <div class="ta-bridge-card">
-                <div class="ta-bridge-card-title">Output to use next</div>
-                <ul class="ta-bridge-list" id="taNextOutputs">
-                    <li>Finish setup to see the first territory outputs.</li>
-                </ul>
-            </div>
-        </div>
-        <div class="ta-summary-row" id="taSummaryRow">
-            <div class="ta-summary-pill"><div class="label">ICP Wedge</div><div class="value" id="taSummaryIcp">No saved ICP yet.</div></div>
-            <div class="ta-summary-pill"><div class="label">Active Theses</div><div class="value" id="taSummaryTheses">0 active theses.</div></div>
-            <div class="ta-summary-pill"><div class="label">Active Territory</div><div class="value" id="taSummaryAccounts">0 / 300 accounts.</div></div>
-            <div class="ta-summary-pill"><div class="label">Next Move</div><div class="value" id="taSummaryNext">Start by defining the first strategic bet.</div></div>
-        </div>
-    </div>
+    <div id="taShellBand"></div>
     <!-- View Tabs -->
     <div class="ta-view-tabs">
         <button class="ta-view-tab active" data-view="cockpit" onclick="switchView('cockpit')">Daily Cockpit</button>
@@ -774,20 +739,45 @@ function renderTerritoryBridge() {
     else if (!accounts.length) nextMove = 'Add the first accounts. A territory with no accounts is still just strategy.';
     else if (!territory.salesCycle) nextMove = 'Calibrate the sales cycle so pulse cadence and stale-account logic become trustworthy.';
     else nextMove = 'Open Daily Cockpit and work the top-ranked accounts first.';
-
-    document.getElementById('taBridgeTitle').textContent = title;
-    document.getElementById('taBridgeDesc').textContent = desc;
-    document.getElementById('taBeforeSourcing').textContent = beforeSourcing;
-    document.getElementById('taSummaryIcp').textContent = icp
+    var icpSummary = icp
         ? ((icp.buyer || 'Owner') + ' | ' + (icp.industry || 'Market') + (icp.qualityScore ? ' | ' + icp.qualityScore + '/100 quality' : ''))
         : 'No saved ICP yet.';
-    document.getElementById('taSummaryTheses').textContent = theses.length
+    var thesisSummary = theses.length
         ? theses.length + ' active theses' + (topThesis ? ' | Top: ' + topThesis.name + (bestRate >= 0 ? ' (' + bestRate + '%)' : '') : '.')
         : '0 active theses.';
-    document.getElementById('taSummaryAccounts').textContent = accounts.length + ' / ' + MAX_ACCOUNTS + ' active accounts' + (territory.salesCycle ? ' | cycle ' + territory.salesCycle : '');
-    document.getElementById('taSummaryNext').textContent = nextMove;
-    renderSimpleList('taObjectModel', objectModel);
-    renderSimpleList('taNextOutputs', outputs);
+    var accountSummary = accounts.length + ' / ' + MAX_ACCOUNTS + ' active accounts' + (territory.salesCycle ? ' | cycle ' + territory.salesCycle : '');
+    var stateLabel = !icp ? 'Need wedge' : (!accounts.length ? 'Shape battlefield' : 'Battlefield live');
+    var stateTone = !icp ? 'thin' : (accounts.length ? 'live' : 'ready');
+    var bandCopy = desc + ' ' + beforeSourcing + ' ' + outputs[0];
+
+    if (window.gtmShellChrome) {
+        window.gtmShellChrome.applyHeader({
+            stateLabel: stateLabel,
+            stateTone: stateTone
+        });
+        window.gtmShellChrome.renderCommandBand('#taShellBand', {
+            kicker: 'Territory logic',
+            title: title,
+            copy: bandCopy,
+            stateLabel: stateLabel,
+            stateTone: stateTone,
+            metrics: [
+                { label: 'ICP wedge', value: icpSummary },
+                { label: 'Active theses', value: thesisSummary },
+                { label: 'Active territory', value: accountSummary },
+                { label: 'Next move', value: nextMove }
+            ],
+            actions: [
+                { label: 'Open Territory', action: "switchView('territory')", tone: 'primary' },
+                { label: 'See Intelligence', action: "switchView('intelligence')" }
+            ]
+        });
+    } else {
+        var fallback = document.getElementById('taShellBand');
+        if (fallback) {
+            fallback.innerHTML = '<div class="ta-calibration"><strong>' + esc(title) + '</strong> ' + esc(desc) + '</div>';
+        }
+    }
 }
 
 var MAX_ACCOUNTS = 300;

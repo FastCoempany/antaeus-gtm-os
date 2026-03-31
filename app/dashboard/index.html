@@ -113,10 +113,17 @@
         <main class="app-main">
             <header class="app-header">
                 <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Morning operating room for the current workspace.</p>
             </header>
-            <div class="app-content" style="max-width:860px;">
-                <div id="dashboardBootState"></div>
-                <div id="dashContent"></div>
+            <div class="app-content" style="max-width:1180px;">
+                <div id="dashboardShellBand"></div>
+                <div class="shell-context-layout">
+                    <div class="shell-work-column">
+                        <div id="dashboardBootState"></div>
+                        <div id="dashContent"></div>
+                    </div>
+                    <aside id="dashboardShellRail"></aside>
+                </div>
             </div>
         </main>
     </div>
@@ -341,6 +348,94 @@
             }).join('');
         }
 
+        function getDashboardStageTone(stageKey) {
+            if (stageKey === 'setup') return 'thin';
+            if (stageKey === 'targeting' || stageKey === 'market') return 'ready';
+            return 'live';
+        }
+
+        function renderDashboardShell(stage, context, weekOneState, dependencyWarnings) {
+            if (!window.gtmShellChrome) return;
+            var tone = getDashboardStageTone(stage.key);
+            var backup = backupStatus();
+            var nextAction = (stage.actions || [])[0] || null;
+            var marketLabel = (context.accounts > 0 || context.signals > 0)
+                ? context.accounts + ' account' + (context.accounts === 1 ? '' : 's') + ' · ' + context.signals + ' signal' + (context.signals === 1 ? '' : 's')
+                : 'Missing live market input';
+            var motionLabel = context.motions
+                ? context.motions + ' logged motion' + (context.motions === 1 ? '' : 's')
+                : 'No motion history yet';
+
+            window.gtmShellChrome.applyHeader({
+                stateLabel: stage.stageBadge,
+                stateTone: tone
+            });
+
+            window.gtmShellChrome.renderCommandBand('#dashboardShellBand', {
+                kicker: 'Command view',
+                title: stage.title,
+                copy: stage.copy,
+                stateLabel: stage.stageBadge,
+                stateTone: tone,
+                metrics: [
+                    { label: 'ICP layer', value: context.icps ? context.icps + ' ICP' + (context.icps === 1 ? '' : 's') + ' saved' : 'Missing targeting layer' },
+                    { label: 'Market layer', value: marketLabel },
+                    { label: 'Deal layer', value: context.deals ? context.activeDeals + ' active · ' + context.deals + ' total' : 'No live deal objects yet' },
+                    { label: 'Motion layer', value: motionLabel }
+                ],
+                actions: (stage.actions || []).slice(0, 2).map(function(action, index) {
+                    return {
+                        href: action.href,
+                        label: action.label,
+                        tone: index === 0 ? 'primary' : 'ghost'
+                    };
+                })
+            });
+
+            window.gtmShellChrome.renderContextRail('#dashboardShellRail', {
+                cards: [
+                    {
+                        kicker: 'Current posture',
+                        title: context.deals ? 'The dashboard is reading real work.' : 'The dashboard is still teaching setup.',
+                        copy: context.deals
+                            ? 'Keep upstream modules honest so the command view stays useful instead of decorative.'
+                            : 'The first useful dashboard needs one ICP, one live account or signal, one real deal, and one logged motion.',
+                        items: [
+                            context.icps ? 'Targeting truth exists.' : 'Targeting truth missing.',
+                            (context.accounts > 0 || context.signals > 0) ? 'Market context exists.' : 'Market context missing.',
+                            context.deals ? context.activeDeals + ' active deal' + (context.activeDeals === 1 ? '' : 's') + ' are shaping the brief.' : 'No live deals yet.',
+                            dependencyWarnings.length ? dependencyWarnings.length + ' synced input layer' + (dependencyWarnings.length === 1 ? '' : 's') + ' fell back to local state.' : 'No sync warnings in the latest rebuild.'
+                        ]
+                    },
+                    {
+                        kicker: 'Trust + recovery',
+                        title: backup && backup.hasExport ? 'Offline backup exists.' : 'Export a recovery file this week.',
+                        copy: backup && backup.hasExport
+                            ? formatBackupDate(backup.lastExportAt)
+                            : 'Cloud sync is live, but you still want one portable JSON backup outside this browser.',
+                        actions: [
+                            { label: 'Export Backup', action: "runDataAction('export')", tone: backup && backup.hasExport ? 'ghost' : 'primary' },
+                            { href: '/app/settings/', label: 'Open Settings' }
+                        ]
+                    },
+                    {
+                        kicker: weekOneState && weekOneState.active ? 'Week 1' : 'Next move',
+                        title: weekOneState && weekOneState.active
+                            ? 'Day ' + weekOneState.dayNumber + ' operating rhythm'
+                            : (nextAction ? nextAction.label : 'Keep the command loop honest'),
+                        copy: weekOneState && weekOneState.active
+                            ? weekOneState.guidance.headline + ' ' + weekOneState.guidance.body
+                            : (nextAction ? stage.emptyCopy : 'Use the dashboard as the place where the system tells you what matters next.'),
+                        actions: nextAction ? [{
+                            href: nextAction.href,
+                            label: nextAction.label,
+                            tone: 'primary'
+                        }] : []
+                    }
+                ]
+            });
+        }
+
         async function render() {
             var icpState = { icps: [] };
             var deals = dh.loadAllDeals();
@@ -430,7 +525,6 @@
                 activeDeals: active.length,
                 motions: motionCounts.total
             });
-            var backupBanner = backupBannerHtml();
             var warningBanner = dependencyWarningHtml(dependencyWarnings);
             var weekOneBanner = '';
             if (weekOneState && weekOneState.active && window.gtmWeekOneLifecycle && typeof window.gtmWeekOneLifecycle.renderDashboardPanel === 'function') {
@@ -442,14 +536,15 @@
                     warningBanner = dependencyWarningHtml(dependencyWarnings);
                 }
             }
-            var sourceMap = renderSourceMap(stage, {
+            var shellContext = {
                 icps: icpCount,
                 accounts: signalConsoleState.accounts.length,
                 signals: signalCount,
                 deals: vitals.length,
                 activeDeals: active.length,
                 motions: motionCounts.total
-            });
+            };
+            renderDashboardShell(stage, shellContext, weekOneState, dependencyWarnings);
 
             if (vitals.length === 0) {
                 if (!dashboardSummaryTracked) {
@@ -461,7 +556,7 @@
                         week_one_active: !!(weekOneState && weekOneState.active)
                     });
                 }
-                var emptyHtml = weekOneBanner + warningBanner + sourceMap + backupBanner + '<div class="np-empty">' +
+                var emptyHtml = weekOneBanner + warningBanner + '<div class="np-empty">' +
                     '<div class="np-empty-icon">&#128220;</div>' +
                     '<div class="np-empty-title">' + escH(stage.emptyTitle) + '</div>' +
                     '<div class="np-empty-sub">' + escH(stage.emptyCopy) + '</div>' +
@@ -490,8 +585,6 @@
             var html = '';
             html += weekOneBanner;
             html += warningBanner;
-            html += sourceMap;
-            html += backupBanner;
 
             // STAT RIBBON
             html += '<div class="np-ribbon">';
@@ -675,6 +768,12 @@
 
         function renderWhenReady() {
             dashboardSummaryTracked = false;
+            if (window.gtmShellChrome) {
+                window.gtmShellChrome.applyHeader({
+                    stateLabel: 'Rebuilding',
+                    stateTone: 'ready'
+                });
+            }
             showDashboardBootState(
                 'loading',
                 'Loading Dashboard',

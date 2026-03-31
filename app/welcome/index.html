@@ -102,8 +102,10 @@
         <main class="app-main">
             <header class="app-header">
                 <h1 class="page-title">Welcome</h1>
+                <p class="page-subtitle">Activation corridor for the first real week inside the workspace.</p>
             </header>
             <div class="app-content">
+                <div id="welcomeShellBand"></div>
                 <div class="welcome-shell" id="welcomeShell">
                     <div class="welcome-loading">Loading your first-session workspace...</div>
                 </div>
@@ -469,6 +471,47 @@
             '</div>';
         }
 
+        function getWelcomeShellTone(activation, lifecycle){
+            if (lifecycle && lifecycle.active) return 'live';
+            if (!activation.completed) return 'thin';
+            if (activation.completed >= activation.total) return 'ready';
+            return 'ready';
+        }
+
+        function renderWelcomeShellChrome(activation, primaryAction, lifecycle, counts, roleLabel, focusSummary){
+            if (!window.gtmShellChrome) return;
+            var tone = getWelcomeShellTone(activation, lifecycle);
+            var stateLabel = lifecycle && lifecycle.active
+                ? 'Week 1 · Day ' + lifecycle.dayNumber
+                : activation.completed + '/' + activation.total + ' anchors live';
+            var motionCount = counts.touches + counts.calls;
+            window.gtmShellChrome.applyHeader({
+                stateLabel: stateLabel,
+                stateTone: tone
+            });
+            window.gtmShellChrome.renderCommandBand('#welcomeShellBand', {
+                kicker: 'Activation corridor',
+                title: activation.headline,
+                copy: focusSummary,
+                stateLabel: stateLabel,
+                stateTone: tone,
+                metrics: [
+                    { label: 'Role lens', value: roleLabel },
+                    { label: 'Targeting', value: counts.icps ? counts.icps + ' ICP' + (counts.icps === 1 ? '' : 's') + ' live' : 'Need first ICP' },
+                    { label: 'Pipeline', value: counts.deals ? counts.deals + ' deal' + (counts.deals === 1 ? '' : 's') + ' live' : 'Need first deal' },
+                    { label: 'Motion', value: motionCount ? motionCount + ' logged motion' + (motionCount === 1 ? '' : 's') : 'No motions logged yet' }
+                ],
+                actions: [
+                    {
+                        href: primaryAction.href || '/app/dashboard/',
+                        label: primaryAction.cta || primaryAction.title || 'Continue to dashboard',
+                        tone: 'primary'
+                    },
+                    { href: '/app/dashboard/', label: 'Open Dashboard' }
+                ]
+            });
+        }
+
         async function loadWelcome(){
             try {
                 var result = await window.gtmPersistence.workspace.loadSummary(null, { force: true });
@@ -504,6 +547,7 @@
                 var heroPrimaryHref = primaryAction.href || '/app/dashboard/';
                 var heroPrimaryLabel = primaryAction.cta || 'Continue to dashboard';
                 var backupNote = backup && backup.hasExport ? 'Offline backup exists.' : 'No offline backup exported yet.';
+                renderWelcomeShellChrome(activation, primaryAction, lifecycle, counts, role, focusSummary);
 
                 shell.innerHTML =
                     '<section class="welcome-hero">' +
@@ -555,11 +599,17 @@
                             '</div>' +
                         '</div>' +
                     '</section>';
-            } catch (error) {
+        } catch (error) {
                 console.error('Welcome page failed to load workspace summary:', error);
                 trackWelcome('welcome_load_error', {
                     message: (error && error.message) ? error.message : 'Welcome failed to load'
                 });
+                if (window.gtmShellChrome) {
+                    window.gtmShellChrome.applyHeader({
+                        stateLabel: 'Load issue',
+                        stateTone: 'risk'
+                    });
+                }
                 shell.innerHTML = '<div class="welcome-error">Welcome could not load workspace context. <a href="/app/dashboard/" onclick="completeWelcome(\'/app/dashboard/\');return false;">Go straight to dashboard</a>.</div>';
             }
         }

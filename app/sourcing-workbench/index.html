@@ -230,6 +230,7 @@
         <main class="app-main">
             <header class="app-header">
                 <h1 class="page-title">Sourcing Workbench</h1>
+                <p class="page-subtitle">Turn territory logic into a queue that is worth researching and pushing forward.</p>
                 <div class="header-actions">
                     <button class="btn btn-secondary btn-sm" onclick="exportWorkbench()">Export</button>
                 </div>
@@ -237,7 +238,7 @@
             <div class="app-content" style="max-width:1100px;">
     <div id="swBootState"></div>
 
-    <div class="sw-bridge" id="swBridge"></div>
+    <div id="swShellBand"></div>
 
     <!-- Capacity indicator -->
     <div class="sw-capacity" id="swCapacity"></div>
@@ -606,7 +607,7 @@ function renderSimpleList(id,items){
 }
 
 function renderBridge(){
-    var el=document.getElementById('swBridge');
+    var el=document.getElementById('swShellBand');
     if(!el)return;
     var icp=getBestIcpSummary();
     var theses=getTheses();
@@ -653,37 +654,35 @@ function renderBridge(){
         icpSummary=(icp.buyer||'Buyer')+' | '+(icp.industry||'Market');
         if(icp.qualityScore)icpSummary+=' | '+icp.qualityScore+'/100 quality';
     }
+    var stateLabel = !theses.length ? 'Need thesis' : (ready ? 'Ready accounts live' : (pushed ? 'Signal handoff ready' : 'Build queue'));
+    var stateTone = !theses.length ? 'thin' : ((ready || pushed) ? 'live' : 'ready');
+    var bandCopy = desc + ' ' + nextOutputs[0];
 
-    el.innerHTML=
-        '<div class="sw-bridge-top">'+
-            '<div>'+
-                '<div class="sw-bridge-kicker">Sourcing standard</div>'+
-                '<div class="sw-bridge-title">'+esc(title)+'</div>'+
-                '<div class="sw-bridge-desc">'+esc(desc)+'</div>'+
-            '</div>'+
-            '<div class="sw-bridge-actions">'+
-                '<button class="btn btn-secondary btn-sm" onclick="swTab(\'queryBuilder\')">Open Query Builder</button>'+
-                '<button class="btn btn-ghost btn-sm" onclick="window.location.href=\'/app/signal-console/\'">Open Signal Console</button>'+
-            '</div>'+
-        '</div>'+
-        '<div class="sw-bridge-grid">'+
-            '<div class="sw-bridge-card"><div class="sw-bridge-card-title">Object model</div><ul class="sw-bridge-list" id="swObjectModel"></ul></div>'+
-            '<div class="sw-bridge-card"><div class="sw-bridge-card-title">Quality threshold</div><div class="sw-bridge-card-copy">Below 68 means the account is still thin. At 68-81 it is workable but should finish research first. At 82+ it is ready to leave sourcing and earn live account attention.</div></div>'+
-            '<div class="sw-bridge-card"><div class="sw-bridge-card-title">Output to use next</div><ul class="sw-bridge-list" id="swNextOutputs"></ul></div>'+
-        '</div>'+
-        '<div class="sw-summary-row">'+
-            '<div class="sw-summary-pill"><div class="label">ICP Wedge</div><div class="value">'+esc(icpSummary)+'</div></div>'+
-            '<div class="sw-summary-pill"><div class="label">Query Cards</div><div class="value">'+cards.length+' active cards across '+theses.length+' theses.</div></div>'+
-            '<div class="sw-summary-pill"><div class="label">Research State</div><div class="value">'+researched+' researched, '+ready+' ready to push.</div></div>'+
-            '<div class="sw-summary-pill"><div class="label">Signal Handoff</div><div class="value">'+pushed+' pushed accounts ready for live temperature.</div></div>'+
-        '</div>';
-
-    renderSimpleList('swObjectModel',[
-        'Thesis -> query card -> captured account -> researched account.',
-        'A sourced account is only ready when it has a named entry point and first angle.',
-        'Pushed accounts should go straight into Signal Console, not sit idle.'
-    ]);
-    renderSimpleList('swNextOutputs',nextOutputs);
+    if (window.gtmShellChrome) {
+        window.gtmShellChrome.applyHeader({
+            stateLabel: stateLabel,
+            stateTone: stateTone
+        });
+        window.gtmShellChrome.renderCommandBand('#swShellBand', {
+            kicker: 'Sourcing standard',
+            title: title,
+            copy: bandCopy,
+            stateLabel: stateLabel,
+            stateTone: stateTone,
+            metrics: [
+                { label: 'ICP wedge', value: icpSummary },
+                { label: 'Query cards', value: cards.length + ' active cards across ' + theses.length + ' theses.' },
+                { label: 'Research state', value: researched + ' researched, ' + ready + ' ready to push.' },
+                { label: 'Signal handoff', value: pushed + ' pushed accounts ready for live temperature.' }
+            ],
+            actions: [
+                { label: 'Open Query Builder', action: "swTab('queryBuilder')", tone: 'primary' },
+                { label: 'Open Signal Console', href: '/app/signal-console/' }
+            ]
+        });
+    } else {
+        el.innerHTML = '<div class="sw-capacity"><span class="sw-capacity-label">' + esc(title) + '</span></div>';
+    }
 }
 
 // ============ STATE ============
