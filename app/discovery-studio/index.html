@@ -492,6 +492,182 @@
             document.getElementById('catBar').innerHTML=html;
         }
 
+        function renderDiscoveryBridge(){
+            var node=document.getElementById('discoveryShellBand');
+            if(!node)return;
+            var agenda=getAgendaState();
+            var handoff=getHandoffState();
+            var deal=getLinkedDeal();
+            var meta=getFrameworkMeta(currentCat);
+            var currentCall=agenda&&agenda.contact
+                ? (agenda.contact+(agenda.company?' @ '+agenda.company:''))
+                : 'No live call context linked yet';
+            var agendaQuality=agenda&&agenda.score
+                ? (String(agenda.score)+'/100 / '+(agenda.band||'Unknown'))
+                : 'Call Planner not linked';
+            var nextMove=handoff&&handoff.nextMove
+                ? handoff.nextMove
+                : (agenda&&agenda.nextMove?agenda.nextMove:'Use Call Planner first if you want Discovery Studio to inherit a real meeting setup.');
+            var downstream=deal
+                ? 'This run is attached to '+(deal.accountName||'the linked deal')+'. After the call, push truth back into Deal Workspace instead of leaving it trapped in notes.'
+                : 'Discovery Studio is strongest when the call has somewhere durable to land. Link a deal in Call Planner before or after the meeting.';
+            var stateTone=deal?'live':agenda&&agenda.score>=65?'ready':'thin';
+            var stateLabel=deal?'Deal-linked':agenda&&agenda.score>=65?'Agenda-linked':'Call context thin';
+            var stageHtml=
+                '<section class="shell-section anchor-stage">'+
+                    '<div class="anchor-stage-grid">'+
+                        '<div>'+
+                            '<div class="anchor-eyebrow">Discovery operating board</div>'+
+                            '<div class="anchor-headline">'+escH('Run the call with a live operating system, not memory.')+'</div>'+
+                            '<div class="anchor-support">'+escH(meta.description)+'</div>'+
+                            '<div class="anchor-chip-row">'+
+                                '<span class="anchor-chip">'+escH(stateLabel)+'</span>'+
+                                '<span class="anchor-chip">'+escH(meta.label)+'</span>'+
+                                '<span class="anchor-chip">'+workedSet.size+' worked move'+(workedSet.size===1?'':'s')+'</span>'+
+                                '<span class="anchor-chip">'+stats.totalCalls+' calls logged</span>'+
+                            '</div>'+
+                            '<div class="anchor-primary-card">'+
+                                '<div class="anchor-primary-label">Current call</div>'+
+                                '<div class="anchor-primary-title">'+escH(currentCall)+'</div>'+
+                                '<div class="anchor-primary-copy">'+escH(downstream)+'</div>'+
+                                '<div class="anchor-primary-actions">'+
+                                    '<a class="btn btn-primary" href="/app/discovery-agenda/">Open Call Planner</a>'+
+                                    '<a class="btn btn-secondary" href="'+(deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/')+'">'+(deal?'Open linked deal':'Open Deal Workspace')+'</a>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="anchor-mini-grid">'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Agenda quality</div><div class="anchor-mini-value">'+escH(agendaQuality)+'</div><div class="anchor-mini-copy">Discovery inherits from Call Planner when live setup exists.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">One-session win</div><div class="anchor-mini-value">'+escH(meta.oneSessionWin)+'</div><div class="anchor-mini-copy">The call should produce a clearer next move, not more notes.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Framework in play</div><div class="anchor-mini-value">'+escH(meta.label)+'</div><div class="anchor-mini-copy">Stay inside the right product frame while the conversation is still open.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Next move</div><div class="anchor-mini-value">'+escH(nextMove)+'</div><div class="anchor-mini-copy">The handoff after the call should already be legible now.</div></div>'+
+                        '</div>'+
+                    '</div>'+
+                '</section>';
+            if(window.gtmShellChrome){
+                window.gtmShellChrome.applyHeader({
+                    family:'Calls',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone
+                });
+                window.gtmShellChrome.renderCommandBand('#discoveryShellBand',{
+                    kicker:'Discovery bridge',
+                    title:'Run the call with a live operating system, not memory.',
+                    copy:meta.description,
+                    stateLabel:stateLabel,
+                    stateTone:stateTone,
+                    metrics:[
+                        {label:'Current call',value:currentCall},
+                        {label:'Agenda quality',value:agendaQuality},
+                        {label:'One-session win',value:meta.oneSessionWin},
+                        {label:'Next move',value:nextMove}
+                    ],
+                    actions:[
+                        {label:'Open Call Planner',href:'/app/discovery-agenda/',tone:'primary'},
+                        {label:(deal?'Open Linked Deal':'Open Deal Workspace'),href:deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/'}
+                    ]
+                });
+                node.insertAdjacentHTML('beforeend',stageHtml);
+                return;
+            }
+            node.innerHTML=stageHtml;
+        }
+
+        function renderFrameworkGuide(){
+            var node=document.getElementById('frameworkGuide');
+            if(!node)return;
+            var meta=getFrameworkMeta(currentCat);
+            var productCat=readTextLS('gtmos_product_category','cxai');
+            var deals=getDeals();
+            var negCount=deals.filter(function(d){return d&&d.stage==='negotiation';}).length;
+            var actions=[];
+            if(currentCat!==productCat){
+                actions.push('<button class="btn btn-primary" type="button" onclick="switchCat(\''+productCat+'\')">Back to product framework</button>');
+            }
+            if(currentCat!=='negotiation'&&negCount>0){
+                actions.push('<button class="btn btn-secondary" type="button" onclick="switchCat(\'negotiation\')">Open negotiation</button>');
+            }
+            if(discoveryFrameworks['ai-objections']&&currentCat!=='ai-objections'){
+                actions.push('<button class="btn btn-secondary" type="button" onclick="switchCat(\'ai-objections\')">Open AI objections</button>');
+            }
+            if(currentCat!=='cxai'&&productCat!=='cxai'&&!actions.length){
+                actions.push('<button class="btn btn-secondary" type="button" onclick="switchCat(\''+productCat+'\')">Use current product framework</button>');
+            }
+            node.innerHTML=
+                '<section class="shell-section shell-section--compact">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Framework guide</div>'+
+                            '<div class="shell-section-title">'+escH(meta.label)+' is active.</div>'+
+                            '<div class="shell-section-copy">'+escH(meta.goodUse)+'</div>'+
+                        '</div>'+
+                        (actions.length?'<div class="shell-section-actions">'+actions.join('')+'</div>':'')+
+                    '</div>'+
+                '</section>';
+        }
+
+        function renderWorkedLoop(){
+            var node=document.getElementById('workedLoop');
+            if(!node)return;
+            if(workedSet.size===0){
+                node.innerHTML=
+                    '<section class="shell-section shell-section--compact">'+
+                        '<div class="shell-section-header">'+
+                            '<div class="shell-section-heading">'+
+                                '<div class="shell-section-kicker">Worked-move loop</div>'+
+                                '<div class="shell-section-title">Nothing has been marked worked yet.</div>'+
+                                '<div class="shell-section-copy">Mark a move worked only after a real live call. This is how Discovery Studio becomes your private pattern library instead of a reference archive.</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</section>';
+                return;
+            }
+            var items=getWorkedMoveDetails(4).map(function(item,index){
+                return '<div class="anchor-queue-card">'+
+                    '<div class="anchor-queue-top">'+
+                        '<div style="display:flex;gap:12px;align-items:flex-start;">'+
+                            '<div class="anchor-queue-rank">'+String(index+1)+'</div>'+
+                            '<div><div class="anchor-queue-title">'+escH(item.title)+'</div></div>'+
+                        '</div>'+
+                        '<span class="shell-state-pill state-live">'+escH(item.context)+'</span>'+
+                    '</div>'+
+                    '<div class="anchor-queue-copy">'+escH(item.territory)+'</div>'+
+                '</div>';
+            }).join('');
+            node.innerHTML=
+                '<section class="shell-section">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Worked-move loop</div>'+
+                            '<div class="shell-section-title">'+workedSet.size+' move'+(workedSet.size===1?' has':'s have')+' been marked worked.</div>'+
+                            '<div class="shell-section-copy">Use this loop to sharpen the next live call, not to celebrate generic activity.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="anchor-queue">'+items+'</div>'+
+                '</section>';
+        }
+
+        function renderStats(){
+            var advRate=stats.totalCalls>0?Math.round((stats.advancedCalls||0)/stats.totalCalls*100):0;
+            var agenda=getAgendaState();
+            var agendaBand=agenda&&agenda.band?agenda.band:'No agenda';
+            document.getElementById('statsBar').innerHTML=
+                '<section class="shell-section shell-section--compact">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Call truth</div>'+
+                            '<div class="shell-section-title">Keep the discovery system reading live calls, not generic templates.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="anchor-mini-grid">'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Calls logged</div><div class="anchor-mini-value">'+stats.totalCalls+'</div><div class="anchor-mini-copy">Real discovery reps captured by the system.</div></div>'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Advance rate</div><div class="anchor-mini-value">'+advRate+'%</div><div class="anchor-mini-copy">How often the current calls are earning a next step.</div></div>'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Moves worked</div><div class="anchor-mini-value">'+workedSet.size+'</div><div class="anchor-mini-copy">Patterns worth carrying into the next live conversation.</div></div>'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Agenda state</div><div class="anchor-mini-value">'+escH(agendaBand)+'</div><div class="anchor-mini-copy">Call Planner quality should travel into Discovery, not restart here.</div></div>'+
+                    '</div>'+
+                '</section>';
+        }
+
         window.switchCat=async function(cat){
             currentCat=normalizeDiscoveryCategory(cat);
             localStorage.setItem('gtmos_product_category',JSON.stringify(cat));

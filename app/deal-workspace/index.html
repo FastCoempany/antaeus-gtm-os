@@ -444,6 +444,86 @@
             });
         }
 
+        function renderDealQueueCard(card,index){
+            return '<div class="anchor-queue-card">'+
+                '<div class="anchor-queue-top">'+
+                    '<div style="display:flex;gap:12px;align-items:flex-start;">'+
+                        '<div class="anchor-queue-rank">'+String(index+1)+'</div>'+
+                        '<div><div class="anchor-queue-title">'+escH(card.title||'')+'</div></div>'+
+                    '</div>'+
+                    (card.badge?'<span class="shell-state-pill '+escH(card.badgeTone||'state-ready')+'">'+escH(card.badge)+'</span>':'')+
+                '</div>'+
+                '<div class="anchor-queue-copy">'+escH(card.copy||'')+'</div>'+
+                (card.meta&&card.meta.length?'<div class="anchor-queue-meta">'+card.meta.map(function(item){return '<span>'+escH(item)+'</span>';}).join('')+'</div>':'')+
+                (card.actions&&card.actions.length?'<div class="anchor-queue-actions">'+card.actions.join('')+'</div>':'')+
+            '</div>';
+        }
+
+        function buildDealLanes(allDeals,active,recovery,topDeal){
+            var stalled=active.filter(function(deal){return daysBetween(deal.updated_at||deal.created_at)>=7;}).length;
+            var healthy=Math.max(0,active.length-recovery.length);
+            var nextDatePressure=active.filter(function(deal){return !deal.nextStepDate||isOverdue(deal.nextStepDate);}).length;
+            return [
+                {
+                    state:'Now',
+                    title:recovery.length?'Recover the weakest live thread':'Make one healthy deal heavier',
+                    copy:recovery.length
+                        ? 'The board is only as honest as the deals with no dated next step, overdue motion, or thin qualification.'
+                        : 'You do not need more deal count first. You need one live deal with cleaner threading, pressure, and a dated move.',
+                    meta:[recovery.length+' recovery item'+(recovery.length===1?'':'s'),healthy+' healthy'],
+                    actions:[
+                        recovery.length
+                            ? '<button class="btn btn-primary" type="button" onclick="document.getElementById(\'viewFilter\').value=\'at-risk\';render();">Open recovery queue</button>'
+                            : '<button class="btn btn-primary" type="button" onclick="openModal()">Add deal</button>'
+                    ]
+                },
+                {
+                    state:'Next',
+                    title:topDeal?'Tighten the best live opportunity':'Create the first review target',
+                    copy:topDeal
+                        ? 'Use the top-valued live deal as the forcing function. If it cannot survive qualification pressure, the rest of the board is decorative.'
+                        : 'Once one real deal exists, the board can teach you where qualification and momentum are falling apart.',
+                    meta:[topDeal?(topDeal.accountName||'Unnamed deal'):'No active deal',topDeal?fmtN(topDeal.value||0):'No value yet'],
+                    actions:[
+                        topDeal
+                            ? '<a class="btn btn-secondary" href="/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id)+'">Autopsy top deal</a>'
+                            : '<a class="btn btn-secondary" href="/app/signal-console/">Find a signal</a>'
+                    ]
+                },
+                {
+                    state:'Keep honest',
+                    title:nextDatePressure?'Stage labels are outrunning next-step truth':'The board is reading real motion',
+                    copy:nextDatePressure
+                        ? 'A stage without a dated move is just optimism. Keep the close path, stakeholder map, and momentum in sync with reality.'
+                        : 'Keep watching stale days, threading depth, and qualification pressure so the board stays believable instead of becoming a forecast costume.',
+                    meta:[stalled+' stalled 7d+',nextDatePressure+' next-step gaps'],
+                    actions:[
+                        '<button class="btn btn-ghost" type="button" onclick="document.getElementById(\'viewFilter\').value=\'stalled\';render();">Show stalled</button>'
+                    ]
+                }
+            ];
+        }
+
+        function renderDealTopMetrics(active,pipeline,weighted,won,lost){
+            var node=document.getElementById('dealStats');
+            if(!node)return;
+            node.innerHTML=
+                '<section class="shell-section shell-section--compact">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Board totals</div>'+
+                            '<div class="shell-section-title">Keep the top-line numbers honest.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="anchor-mini-grid">'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Active deals</div><div class="anchor-mini-value">'+active.length+'</div><div class="anchor-mini-copy">Live opportunities still under pressure.</div></div>'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Pipeline</div><div class="anchor-mini-value">'+fmtN(pipeline)+'</div><div class="anchor-mini-copy">Raw live value before stage probability.</div></div>'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Weighted</div><div class="anchor-mini-value">'+fmtN(weighted)+'</div><div class="anchor-mini-copy">What the current board is honestly worth.</div></div>'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Won vs lost</div><div class="anchor-mini-value">'+won.length+' / '+lost.length+'</div><div class="anchor-mini-copy">Closed truth keeps forecast language grounded.</div></div>'+
+                    '</div>'+
+                '</section>';
+        }
+
         function renderWorkspaceBridge(allDeals,active,pipeline,weighted){
             var node=document.getElementById('dwBridge');
             if(!node)return;
@@ -523,6 +603,139 @@
                 '</div>';
         }
 
+        function renderWorkspaceBridge(allDeals,active,pipeline,weighted){
+            var node=document.getElementById('dwBridge');
+            if(!node)return;
+            var recovery=getRecoveryMoves(allDeals);
+            var topDeal=active.slice().sort(function(a,b){return Number(b.value||0)-Number(a.value||0);})[0];
+            var topDealLabel=topDeal?(topDeal.accountName+' · '+fmtN(topDeal.value||0)):'No active deal yet';
+            var oneSession=active.length===0
+                ? 'Create one real deal with account, value, stage, next step, and the first qualification truth.'
+                : 'Leave this page knowing which deal is healthiest, which deal is rotting, and what the next dated move is on both.';
+            var stateLabel=active.length===0?'Needs pipeline':(recovery.length?'Recovery pressure':'Board live');
+            var stateTone=active.length===0?'thin':(recovery.length?'risk':'live');
+            var lanes=buildDealLanes(allDeals,active,recovery,topDeal);
+            var stageHtml=
+                '<section class="shell-section anchor-stage">'+
+                    '<div class="anchor-stage-grid">'+
+                        '<div>'+
+                            '<div class="anchor-eyebrow">Pipeline operating view</div>'+
+                            '<div class="anchor-headline">'+escH(recovery.length?'Recover the deals that are lying about stage.':'Make one healthy deal heavier than the rest of the board.')+'</div>'+
+                            '<div class="anchor-support">'+escH(recovery.length
+                                ? 'When the board starts drifting, fix the no-date, overdue, or thin-thread deals before you trust forecast language.'
+                                : 'The job here is not to add decorative volume. It is to keep one live opportunity honest enough that the rest of the pipeline can learn from it.')+'</div>'+
+                            '<div class="anchor-chip-row">'+
+                                '<span class="anchor-chip">'+active.length+' active</span>'+
+                                '<span class="anchor-chip">'+fmtN(pipeline)+' pipeline</span>'+
+                                '<span class="anchor-chip">'+fmtN(weighted)+' weighted</span>'+
+                                '<span class="anchor-chip">'+recovery.length+' recovery item'+(recovery.length===1?'':'s')+'</span>'+
+                            '</div>'+
+                            '<div class="anchor-primary-card">'+
+                                '<div class="anchor-primary-label">Current review target</div>'+
+                                '<div class="anchor-primary-title">'+escH(topDeal?topDeal.accountName:'No active deal yet')+'</div>'+
+                                '<div class="anchor-primary-copy">'+escH(topDeal
+                                    ? 'Use the strongest live opportunity as the forcing function. If it cannot survive qualification and next-step pressure, the rest of the board is decorative.'
+                                    : 'Create one deal with real stage, value, next step, and qualification truth so the board can start reading reality.')+'</div>'+
+                                '<div class="anchor-primary-actions">'+
+                                    (topDeal
+                                        ? '<a class="btn btn-primary" href="/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id)+'">Stress-test top deal</a>'
+                                        : '<button class="btn btn-primary" type="button" onclick="openModal()">Create first deal</button>')+
+                                    '<button class="btn btn-secondary" type="button" onclick="document.getElementById(\'viewFilter\').value=\'at-risk\';render();">Open recovery queue</button>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="anchor-mini-grid">'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">One-session win</div><div class="anchor-mini-value">'+escH(oneSession)+'</div><div class="anchor-mini-copy">Leave this page with one honest intervention path.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Board posture</div><div class="anchor-mini-value">'+escH(stateLabel)+'</div><div class="anchor-mini-copy">'+escH(recovery.length?'The weakest live deals need intervention now.':'The live board is reading believable pipeline truth.')+'</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Highest-value deal</div><div class="anchor-mini-value">'+escH(topDealLabel)+'</div><div class="anchor-mini-copy">Use value plus qualification pressure together, not in isolation.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Recovery pressure</div><div class="anchor-mini-value">'+escH(recovery.length?String(recovery.length):'0')+'</div><div class="anchor-mini-copy">'+escH(recovery.length?'The board is only as honest as the weakest next step.':'No urgent recovery queue is crowding the board right now.')+'</div></div>'+
+                        '</div>'+
+                    '</div>'+
+                '</section>'+
+                '<section class="shell-section shell-section--compact">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Operating lanes</div>'+
+                            '<div class="shell-section-title">Use one ranked intervention path instead of scanning the whole board at once.</div>'+
+                            '<div class="shell-section-copy">These lanes tell you what to do now, what to tighten next, and what must stay honest so the board keeps teaching instead of flattering.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="anchor-lane-grid">'+
+                        lanes.map(function(lane){
+                            return '<section class="anchor-lane">'+
+                                '<div class="anchor-lane-state">'+escH(lane.state)+'</div>'+
+                                '<div class="anchor-lane-title">'+escH(lane.title)+'</div>'+
+                                '<div class="anchor-lane-copy">'+escH(lane.copy)+'</div>'+
+                                (lane.meta&&lane.meta.length?'<div class="anchor-lane-meta">'+lane.meta.map(function(item){return '<span>'+escH(item)+'</span>';}).join('')+'</div>':'')+
+                                (lane.actions&&lane.actions.length?'<div class="anchor-lane-actions">'+lane.actions.join('')+'</div>':'')+
+                            '</section>';
+                        }).join('')+
+                    '</div>'+
+                '</section>';
+            if(window.gtmShellChrome){
+                window.gtmShellChrome.applyHeader({
+                    family:'Pipeline',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone
+                });
+                window.gtmShellChrome.renderCommandBand(node,{
+                    kicker:'Pipeline truth',
+                    title:'Deal Workspace should be the place pipeline review gets sharper, not fuzzier.',
+                    copy:'Use this board as the operating truth for live opportunities. A real deal record has qualification, threading, momentum, and a dated next step. If any of those are missing, the deal is weaker than the stage says.',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone,
+                    metrics:[
+                        {label:'One-session win',value:oneSession},
+                        {label:'Current review target',value:topDealLabel},
+                        {label:'Weighted truth',value:fmtN(weighted)+' across '+active.length+' active deal'+(active.length===1?'':'s')+'.'},
+                        {label:'Recovery pressure',value:recovery.length?(recovery.length+' deal'+(recovery.length===1?' needs':'s need')+' intervention now.'):'No urgent recovery items right now.'}
+                    ],
+                    actions:[
+                        {label:'New Deal',action:'openModal()',tone:'primary'},
+                        {label:'Show At-Risk',action:'document.getElementById(\"viewFilter\").value=\"at-risk\";render();',tone:'secondary'}
+                    ]
+                });
+                node.insertAdjacentHTML('beforeend',stageHtml);
+                return;
+            }
+            node.innerHTML=stageHtml;
+        }
+
+        function renderRecoveryPanel(allDeals){
+            var node=document.getElementById('recoveryPanel');
+            if(!node)return;
+            var recovery=getRecoveryMoves(allDeals);
+            if(!recovery.length){
+                node.innerHTML='';
+                return;
+            }
+            node.innerHTML=
+                '<section class="shell-section">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Recovery queue</div>'+
+                            '<div class="shell-section-title">These are the deals making the board less believable.</div>'+
+                            '<div class="shell-section-copy">Pipeline drift usually comes from one of four things: no dated next step, overdue next step, thin qualification, or silence. Fix the cause, not the label.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="anchor-queue">'+
+                        recovery.map(function(item,index){
+                            return renderDealQueueCard({
+                                title:item.account,
+                                copy:item.move,
+                                badge:item.reason,
+                                badgeTone:'state-risk',
+                                meta:['Recovery item','Deal intervention'],
+                                actions:[
+                                    '<a class="btn btn-secondary" href="/app/future-autopsy/?deal='+encodeURIComponent(item.id)+'">Open autopsy</a>',
+                                    '<button class="btn btn-ghost" type="button" onclick="openModal(\''+item.id+'\')">Edit deal</button>'
+                                ]
+                            },index);
+                        }).join('')+
+                    '</div>'+
+                '</section>';
+        }
+
         function suggestNextStepByStage(stage){
             var map={
                 prospect:'Initial qualification call',
@@ -589,11 +802,7 @@
             var weighted=active.reduce(function(s,d){return s+Number(d.value||0)*(STAGE_PROB[d.stage]||0);},0);
 
             renderWorkspaceBridge(allDeals,active,pipeline,weighted);
-            document.getElementById('dealStats').innerHTML=
-                '<div class="dw-stat"><div class="dw-stat-val">'+active.length+'</div><div class="dw-stat-label">Active</div></div>'+
-                '<div class="dw-stat"><div class="dw-stat-val">'+fmtN(pipeline)+'</div><div class="dw-stat-label">Pipeline</div></div>'+
-                '<div class="dw-stat"><div class="dw-stat-val">'+fmtN(weighted)+'</div><div class="dw-stat-label">Weighted</div></div>'+
-                '<div class="dw-stat"><div class="dw-stat-val" style="color:'+(won.length>0?'#22c55e':'var(--text-primary)')+'">'+won.length+'<span style="color:var(--text-muted);font-size:0.7rem;"> / </span><span style="color:#ef4444;font-size:1rem;">'+lost.length+'</span></div><div class="dw-stat-label">Won / Lost</div></div>';
+            renderDealTopMetrics(active,pipeline,weighted,won,lost);
 
             var deals=filterDeals(allDeals);
             document.getElementById('filterCount').textContent=deals.length+' of '+allDeals.length+' deals';

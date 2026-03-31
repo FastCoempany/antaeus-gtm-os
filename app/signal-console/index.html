@@ -1254,6 +1254,176 @@ function renderMorning(){
   });
 }
 
+function renderSignalShellBand(){
+  const node=document.getElementById('signalShellBand');
+  if(!node)return;
+  const all=S.accounts||[];
+  const hottest=all.slice().sort((a,b)=>heat(b)-heat(a))[0]||null;
+  const signalCount=all.reduce((sum,a)=>sum+(a.signals||[]).filter(s=>s.status!=='flagged').length,0);
+  const activeCount=all.filter(a=>heat(a)>=75).length;
+  const stateLabel=hottest?'Live research':'Needs accounts';
+  const stateTone=hottest?'live':'thin';
+  const nextMove=hottest
+    ? getNextMove(hottest).title
+    : 'Add the first account or upload a CSV so there is a real surface to score.';
+  const title=hottest
+    ? 'Focus the next account worth acting on, not the loudest pile of noise.'
+    : 'Get one real account into the system so Signal Console can stop briefing empty space.';
+  const copy=hottest
+    ? 'Signal Console should collapse research into a ranked next move. The point is not collecting signals, it is deciding where motion should go next.'
+    : 'Add or import one account, then run research once. The rest of the workflow gets dramatically clearer after real external evidence exists.';
+  const stageHtml=
+    `<section class="shell-section anchor-stage">
+      <div class="anchor-stage-grid">
+        <div>
+          <div class="anchor-eyebrow">Market intelligence board</div>
+          <div class="anchor-headline">${esc(hottest?'Turn research into the next motion, not more noise.':'Seed one real account so the console can start ranking reality.')}</div>
+          <div class="anchor-support">${esc(hottest
+            ? 'The console should tell you which account deserves motion now, why it matters, and what to do before you reach out.'
+            : 'This surface becomes useful the moment one real account and one real signal exist. Until then, it is only scaffolding.')}</div>
+          <div class="anchor-chip-row">
+            <span class="anchor-chip">${all.length} accounts</span>
+            <span class="anchor-chip">${signalCount} signals</span>
+            <span class="anchor-chip">${activeCount} ready now</span>
+            <span class="anchor-chip">${esc(stateLabel)}</span>
+          </div>
+          <div class="anchor-primary-card">
+            <div class="anchor-primary-label">Priority account</div>
+            <div class="anchor-primary-title">${esc(hottest?hottest.name:'No scored account yet')}</div>
+            <div class="anchor-primary-copy">${esc(hottest
+              ? getAccountExecutionContext(hottest).brief
+              : 'Use Add Account or CSV import, then run one enrichment pass so the console can stop briefing empty space.')}</div>
+            <div class="anchor-primary-actions">
+              ${hottest
+                ? `<button class="btn btn-primary" type="button" onclick="focusSignalAccountById('${hottest.id}')">Open hottest account</button>`
+                : '<button class="btn btn-primary" type="button" onclick="document.getElementById(\'btnAddAcct\').click()">Add account</button>'}
+              <button class="btn btn-secondary" type="button" onclick="document.getElementById('btnEnrichAll').click()">Run enrich all</button>
+            </div>
+          </div>
+        </div>
+        <div class="anchor-mini-grid">
+          <div class="anchor-mini-card"><div class="anchor-mini-label">Signals in play</div><div class="anchor-mini-value">${signalCount}</div><div class="anchor-mini-copy">Live and saved research currently shaping the field.</div></div>
+          <div class="anchor-mini-card"><div class="anchor-mini-label">Accounts ready now</div><div class="anchor-mini-value">${activeCount}</div><div class="anchor-mini-copy">Heat 75+ with enough evidence to justify motion.</div></div>
+          <div class="anchor-mini-card"><div class="anchor-mini-label">Next move</div><div class="anchor-mini-value">${esc(nextMove)}</div><div class="anchor-mini-copy">The console should always hand motion forward.</div></div>
+          <div class="anchor-mini-card"><div class="anchor-mini-label">Research posture</div><div class="anchor-mini-value">${esc(stateLabel)}</div><div class="anchor-mini-copy">${esc(hottest?'The board has enough evidence to rank a real next move.':'The board still needs one account with live research behind it.')}</div></div>
+        </div>
+      </div>
+    </section>`;
+  if(window.gtmShellChrome){
+    window.gtmShellChrome.renderCommandBand('#signalShellBand',{
+      kicker:'Intelligence bridge',
+      title:title,
+      copy:copy,
+      stateLabel:stateLabel,
+      stateTone:stateTone,
+      metrics:[
+        {label:'Highest-priority account',value:hottest?(hottest.name+' · heat '+heat(hottest)):'No scored account yet'},
+        {label:'Signals in play',value:String(signalCount)},
+        {label:'Accounts ready now',value:String(activeCount)},
+        {label:'Next move',value:nextMove}
+      ],
+      actions:[
+        hottest
+          ? {label:'Open Hottest Account',action:'focusSignalAccountById("'+hottest.id+'")',tone:'primary'}
+          : {label:'Add Account',action:'document.getElementById("btnAddAcct").click()',tone:'primary'},
+        {label:'Run Enrich All',action:'document.getElementById("btnEnrichAll").click()'}
+      ]
+    });
+    node.insertAdjacentHTML('beforeend',stageHtml);
+    return;
+  }
+  node.innerHTML=stageHtml;
+}
+
+function renderControls(){
+  const bar=document.getElementById('controlsBar');
+  const batches=readScopedUiJson(LS_BATCHES,[]);
+  const industries=[...new Set(S.accounts.map(a=>a.industry).filter(Boolean))].sort();
+  let filters='<div class="mode-group">';
+  ['complex','active','surgical','ai_trends'].forEach(m=>{
+    const labels={complex:'Complex',active:'Active 75+',surgical:'Surgical',ai_trends:'AI Trends'};
+    filters+=`<button class="mode-btn ${S.mode===m?'active':''}" data-mode="${m}">${labels[m]}</button>`;
+  });
+  filters+='</div><div class="filter-sep"></div>';
+  filters+=`<button class="chip ${S.industry==='all'?'on':''}" data-ind="all">All Industries</button>`;
+  industries.forEach(i=>{const ct=S.accounts.filter(a=>a.industry===i).length;filters+=`<button class="chip ${S.industry===i?'on':''}" data-ind="${esc(i)}">${esc(i)}<b>${ct}</b></button>`});
+  filters+=`<div class="filter-sep"></div><button class="chip ${S.aiOnly?'on':''}" data-aitoggle>AI Only</button>`;
+  if(batches.length){
+    filters+=`<div class="filter-sep"></div><select id="batchSel" style="font-size:.7rem;background:var(--surf);border:1px solid var(--bdr);color:var(--tx2);border-radius:var(--r);padding:4px 8px">`;
+    filters+=`<option value="">All batches</option>`;
+    batches.forEach(b=>{filters+=`<option value="${b.id}" ${S.activeBatch===b.id?'selected':''}>${esc(b.name)} (${b.count})</option>`});
+    filters+='</select>';
+  }
+  bar.innerHTML=
+    `<section class="shell-section shell-section--compact">
+      <div class="shell-section-header">
+        <div class="shell-section-heading">
+          <div class="shell-section-kicker">Refine the field</div>
+          <div class="shell-section-title">Use one narrow view of the market, not the whole pile at once.</div>
+          <div class="shell-section-copy">Modes, industries, and AI-only filtering should sharpen the next action, not add decorative controls.</div>
+        </div>
+      </div>
+      <div>${filters}</div>
+    </section>`;
+  bar.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;render()});
+  bar.querySelectorAll('[data-ind]').forEach(b=>b.onclick=()=>{S.industry=b.dataset.ind;render()});
+  bar.querySelector('[data-aitoggle]').onclick=()=>{S.aiOnly=!S.aiOnly;render()};
+  const bsel=bar.querySelector('#batchSel');
+  if(bsel)bsel.onchange=()=>{S.activeBatch=bsel.value||null;render()};
+}
+
+function renderMorning(){
+  const mb=document.getElementById('morningBrief');
+  const dismissed=readScopedUiText(LS_MORNING,'')===today();
+  if(dismissed){mb.classList.remove('show');mb.innerHTML='';return}
+  const top3=S.accounts.slice().sort((a,b)=>heat(b)-heat(a)).slice(0,3);
+  if(!top3.length){mb.classList.remove('show');mb.innerHTML='';return}
+  mb.classList.add('show');
+  mb.innerHTML=
+    `<section class="shell-section">
+      <div class="shell-section-header">
+        <div class="shell-section-heading">
+          <div class="shell-section-kicker">Morning brief</div>
+          <div class="shell-section-title">${esc(new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}))}</div>
+          <div class="shell-section-copy">Start with one account worth acting on, then hand that signal into motion without reopening the whole market.</div>
+        </div>
+        <div class="shell-section-actions">
+          <button class="btn btn-ghost" type="button" id="dismissMorning">Dismiss for today</button>
+        </div>
+      </div>
+      <div class="anchor-queue">
+        ${top3.map((a,index)=>{
+          const summary=getAccountExecutionContext(a);
+          const move=getNextMove(a);
+          return `<div class="anchor-queue-card">
+            <div class="anchor-queue-top">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div class="anchor-queue-rank">${index+1}</div>
+                <div><div class="anchor-queue-title">${esc(a.name)}</div></div>
+              </div>
+              <span class="shell-state-pill state-${heat(a)>=75?'ready':heat(a)>=50?'live':'thin'}">Heat ${heat(a)}</span>
+            </div>
+            <div class="anchor-queue-copy">${esc(summary.brief)}</div>
+            <div class="anchor-queue-meta">
+              <span>${esc((a.signals||[])[0]?.headline||'No live signal yet')}</span>
+              <span>${esc(move.title)}</span>
+            </div>
+            <div class="anchor-queue-actions">
+              <button class="btn btn-primary" type="button" data-prep="${a.id}">Prep call</button>
+              <button class="btn btn-secondary" type="button" data-open="${a.id}">Open account</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </section>`;
+  document.getElementById('dismissMorning').onclick=()=>{writeScopedUiText(LS_MORNING,today());mb.classList.remove('show');mb.innerHTML=''};
+  mb.querySelectorAll('[data-prep]').forEach(b=>b.onclick=()=>{
+    const acct=S.accounts.find(a=>a.id===b.dataset.prep);
+    if(acct)navigator.clipboard.writeText(genBrief(acct)).then(()=>{b.textContent='Copied brief';setTimeout(()=>b.textContent='Prep call',1500)});
+  });
+  mb.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>focusSignalAccountById(b.dataset.open));
+}
+
 async function runDeepResearch(acctId,button){
   const acct=S.accounts.find(a=>a.id===acctId);
   if(!acct)return;
