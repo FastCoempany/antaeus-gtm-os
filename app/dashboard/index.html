@@ -311,6 +311,176 @@
             return 'live';
         }
 
+        function createDashboardAction(action, tone) {
+            if (!action || !action.href) return '';
+            return '<a href="' + escH(action.href) + '" class="btn ' + (tone || 'btn-secondary') + '">' + escH(action.label) + '</a>';
+        }
+
+        function buildDashboardPrimary(stage, briefing, hotSuggestion) {
+            var firstStageAction = (stage.actions || [])[0] || null;
+            if (!briefing) {
+                return {
+                    label: 'First unlock',
+                    title: firstStageAction ? firstStageAction.label : 'Build the first operating object',
+                    copy: stage.emptyCopy,
+                    actions: [
+                        firstStageAction ? { href: firstStageAction.href, label: firstStageAction.label } : null,
+                        (stage.actions || [])[1] ? { href: stage.actions[1].href, label: stage.actions[1].label } : null
+                    ].filter(Boolean),
+                    tags: [stage.stageBadge, 'setup truth']
+                };
+            }
+
+            if (briefing.atRisk && briefing.atRisk.length) {
+                var riskDeal = briefing.atRisk[0];
+                return {
+                    label: 'Now',
+                    title: 'Recover ' + riskDeal.name + ' before the week drifts.',
+                    copy: dh.dealNarrative(riskDeal),
+                    actions: [
+                        { href: '/app/future-autopsy/?deal=' + encodeURIComponent(riskDeal.id), label: 'Run Autopsy' },
+                        { href: '/app/deal-workspace/?deal=' + encodeURIComponent(riskDeal.id), label: 'Open Deal', tone: 'btn-secondary' }
+                    ],
+                    tags: ['risk ' + riskDeal.riskScore, (dh.STAGE_LABELS[riskDeal.stage] || riskDeal.stage), riskDeal.staleDays + 'd stale']
+                };
+            }
+
+            if (hotSuggestion) {
+                return {
+                    label: 'Now',
+                    title: 'Turn ' + hotSuggestion.name + ' into a live motion.',
+                    copy: hotSuggestion.reason,
+                    actions: [
+                        { href: '/app/outbound-studio/', label: 'Build Message' },
+                        { href: '/app/signal-console/', label: 'Open Signal Console', tone: 'btn-secondary' }
+                    ],
+                    tags: ['heat ' + hotSuggestion.heat, hotSuggestion.count + ' hot accounts']
+                };
+            }
+
+            if (briefing.topMoves && briefing.topMoves.length) {
+                var move = briefing.topMoves[0];
+                return {
+                    label: 'Now',
+                    title: move.action,
+                    copy: move.reason,
+                    actions: [
+                        move.dealId
+                            ? { href: '/app/deal-workspace/?deal=' + encodeURIComponent(move.dealId), label: move.dealName || 'Open Deal' }
+                            : (firstStageAction ? { href: firstStageAction.href, label: firstStageAction.label } : null),
+                        { href: '/app/dashboard/', label: 'Stay in Command View', tone: 'btn-secondary' }
+                    ].filter(Boolean),
+                    tags: [stage.stageBadge, 'command move']
+                };
+            }
+
+            return {
+                label: 'Now',
+                title: stage.title,
+                copy: stage.copy,
+                actions: [firstStageAction ? { href: firstStageAction.href, label: firstStageAction.label } : null].filter(Boolean),
+                tags: [stage.stageBadge]
+            };
+        }
+
+        function buildDashboardLanes(stage, primary, briefing, advisorSuggestion, dependencyWarnings) {
+            var nextLane = null;
+            if (advisorSuggestion) {
+                nextLane = {
+                    state: 'Next',
+                    title: 'Deploy ' + advisorSuggestion.advisor + ' with a precise ask.',
+                    copy: advisorSuggestion.deal + ' is dark and risky. Use Advisor Deploy only after the ask is sharp enough to accelerate a real next step.',
+                    meta: ['advisor ready', 'risk ' + advisorSuggestion.riskScore],
+                    actions: [{ href: '/app/advisor-deploy/', label: 'Build advisor ask', tone: 'btn-secondary' }]
+                };
+            } else if (briefing && briefing.topMoves && briefing.topMoves[1]) {
+                var move = briefing.topMoves[1];
+                nextLane = {
+                    state: 'Next',
+                    title: move.action,
+                    copy: move.reason,
+                    meta: ['next move', stage.stageBadge],
+                    actions: [
+                        move.dealId
+                            ? { href: '/app/deal-workspace/?deal=' + encodeURIComponent(move.dealId), label: move.dealName || 'Open Deal', tone: 'btn-secondary' }
+                            : (((stage.actions || [])[1]) ? { href: stage.actions[1].href, label: stage.actions[1].label, tone: 'btn-secondary' } : null)
+                    ].filter(Boolean)
+                };
+            } else {
+                var stageAction = (stage.actions || [])[1] || (stage.actions || [])[0] || null;
+                nextLane = {
+                    state: 'Next',
+                    title: stageAction ? stageAction.label : 'Keep the system moving',
+                    copy: stage.emptyCopy,
+                    meta: ['stage follow-through'],
+                    actions: stageAction ? [{ href: stageAction.href, label: stageAction.label, tone: 'btn-secondary' }] : []
+                };
+            }
+
+            var maintainTitle = dependencyWarnings.length
+                ? 'Repair trust in the command surface.'
+                : (stage.key === 'operating' ? 'Keep the command view honest.' : 'Finish the missing operating layers.');
+            var maintainCopy = dependencyWarnings.length
+                ? 'Some synced inputs fell back to local state. Retry after confirming the latest workspace truth and exporting a backup.'
+                : (stage.key === 'operating'
+                    ? 'This page stays believable only when targeting, signals, deals, proof, and motion continue to tell the truth.'
+                    : 'This is still an activation-stage dashboard. Add the missing layers so it stops coaching setup and starts briefing real work.');
+
+            return [
+                {
+                    state: primary.label || 'Now',
+                    title: primary.title,
+                    copy: primary.copy,
+                    meta: primary.tags || [],
+                    actions: primary.actions || []
+                },
+                nextLane,
+                {
+                    state: dependencyWarnings.length ? 'Risk' : 'Keep honest',
+                    title: maintainTitle,
+                    copy: maintainCopy,
+                    meta: dependencyWarnings.length ? ['local fallback', dependencyWarnings.length + ' sync warning' + (dependencyWarnings.length === 1 ? '' : 's')] : ['backup', 'settings'],
+                    actions: [
+                        { href: '/app/settings/', label: 'Open Settings', tone: 'btn-secondary' },
+                        { href: '/app/dashboard/', label: 'Refresh view', tone: 'btn-secondary' }
+                    ]
+                }
+            ];
+        }
+
+        function renderDashboardLane(lane) {
+            return '<div class="anchor-lane">' +
+                '<div class="anchor-lane-state">' + escH(lane.state || 'Ready') + '</div>' +
+                '<div class="anchor-lane-title">' + escH(lane.title || '') + '</div>' +
+                '<div class="anchor-lane-copy">' + escH(lane.copy || '') + '</div>' +
+                (lane.meta && lane.meta.length ? '<div class="anchor-lane-meta">' + lane.meta.map(function(item) {
+                    return '<span>' + escH(item) + '</span>';
+                }).join('') + '</div>' : '') +
+                (lane.actions && lane.actions.length ? '<div class="anchor-lane-actions">' + lane.actions.map(function(action) {
+                    return createDashboardAction(action, action.tone);
+                }).join('') + '</div>' : '') +
+            '</div>';
+        }
+
+        function renderDashboardQueueCard(card, index, label) {
+            return '<div class="anchor-queue-card">' +
+                '<div class="anchor-queue-top">' +
+                    '<div style="display:flex;gap:12px;align-items:flex-start;">' +
+                        '<div class="anchor-queue-rank">' + escH(label || String(index + 1)) + '</div>' +
+                        '<div><div class="anchor-queue-title">' + escH(card.title || '') + '</div></div>' +
+                    '</div>' +
+                    (card.badge ? '<span class="shell-state-pill ' + escH(card.badgeTone || 'state-ready') + '">' + escH(card.badge) + '</span>' : '') +
+                '</div>' +
+                '<div class="anchor-queue-copy">' + escH(card.copy || '') + '</div>' +
+                (card.meta && card.meta.length ? '<div class="anchor-queue-meta">' + card.meta.map(function(item) {
+                    return '<span>' + escH(item) + '</span>';
+                }).join('') + '</div>' : '') +
+                (card.actions && card.actions.length ? '<div class="anchor-queue-actions">' + card.actions.map(function(action) {
+                    return createDashboardAction(action, action.tone);
+                }).join('') + '</div>' : '') +
+            '</div>';
+        }
+
         function renderDashboardShell(stage, context, weekOneState, dependencyWarnings) {
             if (!window.gtmShellChrome) return;
             var tone = getDashboardStageTone(stage.key);
@@ -513,11 +683,41 @@
                         week_one_active: !!(weekOneState && weekOneState.active)
                     });
                 }
-                var emptyHtml = weekOneBanner + warningBanner + '<section class="shell-section shell-empty-state">' +
-                    '<div class="shell-section-kicker">Command view</div>' +
-                    '<div class="shell-empty-title">' + escH(stage.emptyTitle) + '</div>' +
-                    '<div class="shell-empty-copy">' + escH(stage.emptyCopy) + '</div>' +
-                    renderStageActions(stage.actions) +
+                var emptyPrimary = buildDashboardPrimary(stage, null, null);
+                var emptyLanes = buildDashboardLanes(stage, emptyPrimary, null, null, dependencyWarnings);
+                var emptyHtml = weekOneBanner + warningBanner +
+                    '<section class="anchor-stage">' +
+                        '<div class="anchor-stage-grid">' +
+                            '<div>' +
+                                '<div class="anchor-eyebrow">Command view</div>' +
+                                '<div class="anchor-headline anchor-headline--wide">' + escH(stage.emptyTitle) + '</div>' +
+                                '<div class="anchor-support">' + escH(stage.emptyCopy) + '</div>' +
+                                '<div class="anchor-chip-row">' +
+                                    '<span class="anchor-chip">' + escH(stage.stageBadge) + '</span>' +
+                                    '<span class="anchor-chip">' + shellContext.icps + ' ICPs</span>' +
+                                    '<span class="anchor-chip">' + shellContext.signals + ' signals</span>' +
+                                    '<span class="anchor-chip">' + shellContext.deals + ' deals</span>' +
+                                '</div>' +
+                                '<div class="anchor-primary-card">' +
+                                    '<div class="anchor-primary-label">' + escH(emptyPrimary.label) + '</div>' +
+                                    '<div class="anchor-primary-title">' + escH(emptyPrimary.title) + '</div>' +
+                                    '<div class="anchor-primary-copy">' + escH(emptyPrimary.copy) + '</div>' +
+                                    '<div class="anchor-primary-actions">' + (emptyPrimary.actions || []).map(function(action) {
+                                        return createDashboardAction(action, action.tone);
+                                    }).join('') + '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="anchor-mini-grid">' +
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Targeting</div><div class="anchor-mini-value">' + shellContext.icps + '</div><div class="anchor-mini-copy">One saved ICP is the first ingredient for a believable command surface.</div></div>' +
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Market</div><div class="anchor-mini-value">' + shellContext.accounts + '</div><div class="anchor-mini-copy">The dashboard only wakes up when one real account or signal exists.</div></div>' +
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Deals</div><div class="anchor-mini-value">' + shellContext.deals + '</div><div class="anchor-mini-copy">Without a deal object, the brief is still coaching setup.</div></div>' +
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Motion</div><div class="anchor-mini-value">' + shellContext.motions + '</div><div class="anchor-mini-copy">At least one real touch or call should exist before the dashboard pretends to operate.</div></div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</section>' +
+                    '<section class="shell-section shell-section--subtle">' +
+                        '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">What this page wants from you first</div><div class="shell-section-copy">Do not ask the dashboard to improvise. Give it the minimum truth stack, then let it compound.</div></div></div>' +
+                        '<div class="anchor-lane-grid">' + emptyLanes.map(renderDashboardLane).join('') + '</div>' +
                     '</section>';
                 document.getElementById('dashContent').innerHTML =
                     emptyHtml;
@@ -528,52 +728,194 @@
             var cov = briefing.coverage;
             var target = Number(seed.coverage_target) || dh.DEFAULTS.coverageTarget;
             var covColor = !quota ? '' : cov.ratio >= target ? 'green' : cov.ratio >= target * 0.6 ? 'amber' : 'red';
-                if (!dashboardSummaryTracked) {
-                    dashboardSummaryTracked = true;
-                    trackDashboard('dashboard_brief_ready', {
-                        active_deals: active.length,
-                        total_deals: vitals.length,
-                        at_risk: briefing.atRisk.length,
-                        coverage_ratio: quota ? cov.ratio : null,
-                        week_one_active: !!(weekOneState && weekOneState.active)
-                    });
+            if (!dashboardSummaryTracked) {
+                dashboardSummaryTracked = true;
+                trackDashboard('dashboard_brief_ready', {
+                    active_deals: active.length,
+                    total_deals: vitals.length,
+                    at_risk: briefing.atRisk.length,
+                    coverage_ratio: quota ? cov.ratio : null,
+                    week_one_active: !!(weekOneState && weekOneState.active)
+                });
+            }
+
+            var dealNames = Array.isArray(deals) ? deals.map(function(deal) {
+                return (deal.accountName || deal.account_name || '').toLowerCase();
+            }) : [];
+            var hotSuggestion = null;
+            if (quota && cov.ratio < target) {
+                var hotUnworked = (signalConsoleState.accounts || []).filter(function(account) {
+                    return (account._heat || 0) >= 75 && dealNames.indexOf((account.name || '').toLowerCase()) === -1;
+                }).sort(function(a, b) {
+                    return (b._heat || 0) - (a._heat || 0);
+                });
+                if (hotUnworked.length) {
+                    hotSuggestion = {
+                        name: hotUnworked[0].name,
+                        heat: hotUnworked[0]._heat || 0,
+                        count: hotUnworked.length,
+                        reason: hotUnworked.length + ' hot account' + (hotUnworked.length === 1 ? '' : 's') + ' are still not live deals. Build the angle before outreach so the next motion is anchored to a real signal.'
+                    };
                 }
+            }
+
+            var advisorSuggestion = null;
+            var advisorRegistry = readLS('gtmos_advisor_registry', { advisors: [] });
+            var advisorDeployments = readLS('gtmos_advisor_deployments', { deployments: [] });
+            if ((advisorRegistry.advisors || []).length > 0 && briefing.atRisk.length > 0) {
+                for (var riskIndex = 0; riskIndex < Math.min(briefing.atRisk.length, 3); riskIndex++) {
+                    var riskDeal = briefing.atRisk[riskIndex];
+                    var riskName = (riskDeal.name || '').toLowerCase();
+                    var matchedAdvisors = (advisorRegistry.advisors || []).filter(function(advisor) {
+                        return (advisor.companies || []).some(function(company) {
+                            return company.toLowerCase() === riskName;
+                        });
+                    });
+                    var availableAdvisors = matchedAdvisors.filter(function(advisor) {
+                        var cooldown = { t1: 90, t2: 30, t3: 14, t4: 30 }[advisor.tier] || 30;
+                        var lastDeployment = (advisorDeployments.deployments || []).filter(function(deployment) {
+                            return deployment.advisorId === advisor.id;
+                        }).sort(function(left, right) {
+                            return new Date(right.createdAt) - new Date(left.createdAt);
+                        })[0];
+                        if (!lastDeployment) return true;
+                        return Math.floor((Date.now() - new Date(lastDeployment.createdAt).getTime()) / 86400000) >= cooldown;
+                    });
+                    if (availableAdvisors.length) {
+                        advisorSuggestion = {
+                            advisor: availableAdvisors[0].name,
+                            deal: riskDeal.name,
+                            riskScore: riskDeal.riskScore,
+                            staleDays: riskDeal.staleDays
+                        };
+                        break;
+                    }
+                }
+            }
 
             var html = '';
             html += weekOneBanner;
             html += warningBanner;
+            var primary = buildDashboardPrimary(stage, briefing, hotSuggestion);
+            var lanes = buildDashboardLanes(stage, primary, briefing, advisorSuggestion, dependencyWarnings);
+            html += '<section class="anchor-stage">';
+            html += '<div class="anchor-stage-grid">';
+            html += '<div>';
+            html += '<div class="anchor-eyebrow">Morning operating room</div>';
+            html += '<div class="anchor-headline anchor-headline--wide">' + escH(briefing.headline) + '</div>';
+            html += '<div class="anchor-support">' + escH(briefing.weekSummary) + '</div>';
+            html += '<div class="anchor-chip-row">';
+            html += '<span class="anchor-chip">Week of ' + escH(briefing.weekLabel) + '</span>';
+            html += '<span class="anchor-chip">' + escH(stage.stageBadge) + '</span>';
+            html += '<span class="anchor-chip">' + active.length + ' active deal' + (active.length === 1 ? '' : 's') + '</span>';
+            html += '<span class="anchor-chip">' + briefing.atRisk.length + ' at risk</span>';
+            html += '</div>';
+            html += '<div class="anchor-primary-card">';
+            html += '<div class="anchor-primary-label">' + escH(primary.label) + '</div>';
+            html += '<div class="anchor-primary-title">' + escH(primary.title) + '</div>';
+            html += '<div class="anchor-primary-copy">' + escH(primary.copy) + '</div>';
+            if (primary.tags && primary.tags.length) {
+                html += '<div class="anchor-lane-meta">' + primary.tags.map(function(tag) { return '<span>' + escH(tag) + '</span>'; }).join('') + '</div>';
+            }
+            html += '<div class="anchor-primary-actions">' + (primary.actions || []).map(function(action) {
+                return createDashboardAction(action, action.tone);
+            }).join('') + '<button class="btn btn-secondary" onclick="copyMonday()">Copy Monday Review</button></div>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="anchor-mini-grid">';
+            html += '<div class="anchor-mini-card"><div class="anchor-mini-label">Coverage</div><div class="anchor-mini-value"' + (covColor ? ' style="color:' + (covColor === 'green' ? '#22c55e' : covColor === 'amber' ? '#f59e0b' : '#ef4444') + ';"' : '') + '>' + (quota ? cov.ratio + '&times;' : '--') + '</div><div class="anchor-mini-copy">Coverage against the current target.</div></div>';
+            html += '<div class="anchor-mini-card"><div class="anchor-mini-label">Weighted pipeline</div><div class="anchor-mini-value">' + dh.money(cov.weighted) + '</div><div class="anchor-mini-copy">Weighted value across active deals right now.</div></div>';
+            html += '<div class="anchor-mini-card"><div class="anchor-mini-label">Command pressure</div><div class="anchor-mini-value anchor-mini-value--sans">' + (briefing.atRisk.length ? 'Recovery required' : 'Under control') + '</div><div class="anchor-mini-copy">' + (briefing.atRisk.length ? briefing.atRisk.length + ' deals need intervention before they quietly decay.' : 'No immediate risk queue is forcing the week off course.') + '</div></div>';
+            html += '<div class="anchor-mini-card"><div class="anchor-mini-label">Source truth</div><div class="anchor-mini-value anchor-mini-value--sans">' + (icpCount ? 'Targeted' : 'Missing ICP') + '</div><div class="anchor-mini-copy">' + (icpCount ? 'Targeting exists, so the dashboard is briefing against real positioning.' : 'No ICP is saved yet, so some guidance is compensating for missing targeting truth.') + '</div></div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</section>';
 
-            html += '<section class="shell-section">';
-            html += '<div class="shell-section-header">';
-            html += '<div class="shell-section-heading">';
-            html += '<div class="shell-section-kicker">Morning operating room</div>';
-            html += '<div class="shell-section-title">' + escH(briefing.headline) + '</div>';
-            html += '<div class="shell-section-copy">' + escH(briefing.weekSummary) + '</div>';
-            html += '</div>';
-            html += '<button class="btn btn-secondary btn-sm" onclick="copyMonday()">&#128203; Copy Monday Review</button>';
-            html += '</div>';
-            html += '<div class="shell-chip-row">';
-            html += '<div class="shell-chip">Week of ' + escH(briefing.weekLabel) + '</div>';
-            html += '<div class="shell-chip">' + escH(stage.stageBadge) + '</div>';
-            html += '<div class="shell-chip">' + active.length + ' active deal' + (active.length === 1 ? '' : 's') + '</div>';
-            html += '</div>';
-            html += '<div class="shell-metric-strip">';
-            html += '<div class="shell-metric"><div class="shell-metric-label">Coverage</div><div class="shell-metric-value"' + (covColor ? ' style="color:' + (covColor === 'green' ? '#22c55e' : covColor === 'amber' ? '#f59e0b' : '#ef4444') + ';"' : '') + '>' + (quota ? cov.ratio + '&times;' : '&mdash;') + '</div><div class="shell-metric-copy">Coverage against the current target.</div></div>';
-            html += '<div class="shell-metric"><div class="shell-metric-label">Weighted pipeline</div><div class="shell-metric-value">' + dh.money(cov.weighted) + '</div><div class="shell-metric-copy">Current weighted value across active deals.</div></div>';
-            html += '<div class="shell-metric"><div class="shell-metric-label">Active deals</div><div class="shell-metric-value">' + active.length + '</div><div class="shell-metric-copy">Deals still shaping the weekly brief.</div></div>';
-            html += '<div class="shell-metric"><div class="shell-metric-label">At risk</div><div class="shell-metric-value"' + (briefing.atRisk.length > 0 ? ' style="color:#ef4444;"' : '') + '>' + briefing.atRisk.length + '</div><div class="shell-metric-copy">Deals requiring intervention or recovery.</div></div>';
-            html += '</div>';
+            html += '<section class="shell-section shell-section--subtle">';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">Run the week in this order</div><div class="shell-section-copy">The dashboard should reduce the week to one immediate intervention, one follow-through move, and one thing to keep honest.</div></div></div>';
+            html += '<div class="anchor-lane-grid">' + lanes.map(renderDashboardLane).join('') + '</div>';
+            html += '</section>';
 
-            if (icpCount === 0) {
-                html += '<div class="shell-band-block">';
-                html += '<div class="shell-band-block-label">Missing targeting layer</div>';
-                html += '<div class="shell-band-block-value">You have deal activity, but no saved ICPs yet. Add at least one ICP so targeting, discovery, and dashboard guidance stop operating blind.</div>';
-                html += '<div class="shell-section-actions" style="margin-top:12px;"><a href="/app/icp-studio/" class="btn btn-secondary">Create first ICP</a></div>';
-                html += '</div>';
+            var riskCards = briefing.atRisk.slice(0, 3).map(function(v) {
+                var stageLabel = dh.STAGE_LABELS[v.stage] || v.stage;
+                return {
+                    title: v.name,
+                    copy: dh.dealNarrative(v),
+                    badge: 'Risk ' + v.riskScore,
+                    badgeTone: 'state-risk',
+                    meta: [dh.money(v.value), stageLabel, v.staleDays + 'd stale'],
+                    actions: [
+                        { href: '/app/future-autopsy/?deal=' + encodeURIComponent(v.id), label: 'Run Autopsy' },
+                        { href: '/app/deal-workspace/?deal=' + encodeURIComponent(v.id), label: 'Open Deal', tone: 'btn-secondary' }
+                    ]
+                };
+            });
+            var moveCards = (briefing.topMoves || []).slice(0, 3).map(function(m, index) {
+                return {
+                    title: m.action,
+                    copy: m.reason,
+                    badge: index === 0 ? 'Now' : 'Next',
+                    badgeTone: index === 0 ? 'state-ready' : 'state-live',
+                    meta: [m.dealName || stage.stageBadge, m.causeId ? m.causeId.replace(/_/g, ' ') : 'command move'],
+                    actions: m.dealId
+                        ? [{ href: '/app/deal-workspace/?deal=' + encodeURIComponent(m.dealId), label: m.dealName || 'Open Deal' }]
+                        : (m.causeId === 'coverage_gap'
+                            ? [
+                                { href: '/app/signal-console/', label: 'Open Signal Console' },
+                                { href: '/app/deal-workspace/', label: 'Create deal', tone: 'btn-secondary' }
+                            ]
+                            : [])
+                };
+            });
+            if (hotSuggestion && !moveCards.some(function(card) { return /outbound/i.test(card.title || ''); })) {
+                moveCards.push({
+                    title: 'Turn ' + hotSuggestion.name + ' into a live outbound motion.',
+                    copy: hotSuggestion.reason,
+                    badge: 'Opportunity',
+                    badgeTone: 'state-live',
+                    meta: ['heat ' + hotSuggestion.heat, hotSuggestion.count + ' hot accounts'],
+                    actions: [
+                        { href: '/app/outbound-studio/', label: 'Build message' },
+                        { href: '/app/cold-call-studio/', label: 'Prep call', tone: 'btn-secondary' }
+                    ]
+                });
+            }
+            if (advisorSuggestion) {
+                moveCards.push({
+                    title: 'Deploy ' + advisorSuggestion.advisor + ' on ' + advisorSuggestion.deal + '.',
+                    copy: advisorSuggestion.staleDays + 'd dark, risk ' + advisorSuggestion.riskScore + '. Use advisor leverage only after the ask is specific.',
+                    badge: 'Leverage',
+                    badgeTone: 'state-ready',
+                    meta: ['advisor ready', 'risk ' + advisorSuggestion.riskScore],
+                    actions: [
+                        { href: '/app/advisor-deploy/', label: 'Build advisor ask' }
+                    ]
+                });
+            }
+
+            html += '<section class="shell-section shell-section--subtle">';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Risk queue</div><div class="shell-section-title">The threads that will quietly decay first</div><div class="shell-section-copy">Treat this as the recovery board. If a deal is dark, vague, or stage-false, fix it before you add more surface area.</div></div></div>';
+            if (!riskCards.length) {
+                html += '<div class="anchor-note"><strong>No immediate recovery queue.</strong> The active deals are not throwing dark-thread risk right now. Keep the system moving, but stay honest about freshness.</div>';
+            } else {
+                html += '<div class="anchor-queue">' + riskCards.map(function(card, index) {
+                    return renderDashboardQueueCard(card, index, String(index + 1));
+                }).join('') + '</div>';
             }
             html += '</section>';
 
-            html += '<div class="shell-panel-grid">';
+            html += '<section class="shell-section shell-section--subtle">';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Next moves</div><div class="shell-section-title">What the system wants you to do next</div><div class="shell-section-copy">These are ranked to keep the week legible. The goal is fewer choices, stronger follow-through, and less drift.</div></div></div>';
+            if (!moveCards.length) {
+                html += '<div class="anchor-note"><strong>No urgent command move.</strong> The workspace is not throwing a forced next step right now, which usually means the current system pressure is under control.</div>';
+            } else {
+                html += '<div class="anchor-queue">' + moveCards.slice(0, 4).map(function(card, index) {
+                    return renderDashboardQueueCard(card, index, String(index + 1));
+                }).join('') + '</div>';
+            }
+            html += '</section>';
+
+            html += '<div class="shell-panel-grid" style="display:none;">';
 
             html += '<section class="shell-section shell-section--subtle">';
             html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="dash-panel-title"><span class="dot red"></span> What\u2019s At Risk</div><div class="shell-section-copy">Use this queue to pull weak or stale work back into the operating loop before it quietly rots.</div></div></div>';
@@ -650,6 +992,17 @@
 
             var riskiest = briefing.atRisk.length > 0 ? briefing.atRisk[0] : null;
             html += '<section class="shell-section shell-section--subtle shell-section--compact">';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Command tools</div><div class="shell-section-title">Turn the brief into action fast</div><div class="shell-section-copy">Use these when you need to move from reading to intervention without changing context.</div></div></div>';
+            html += '<div class="anchor-primary-actions">';
+            if (riskiest) {
+                html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(riskiest.id) + '" class="btn btn-primary">Autopsy riskiest deal</a>';
+            }
+            html += '<button class="btn btn-secondary" onclick="copyMonday()">Copy Monday Review</button>';
+            html += '<a href="/app/settings/" class="btn btn-ghost">Open Settings</a>';
+            html += '</div>';
+            html += '</section>';
+
+            html += '<section class="shell-section shell-section--subtle shell-section--compact" style="display:none;">';
             html += '<div class="dash-tool-row">';
             html += '<div class="shell-section-heading"><div class="shell-section-kicker">Quick actions</div><div class="shell-section-copy">Use these to turn the dashboard from a readout into an operating surface.</div></div>';
             html += '<div class="dash-tool-actions">';

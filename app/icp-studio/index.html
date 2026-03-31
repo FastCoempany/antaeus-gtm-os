@@ -13,6 +13,7 @@
         @media (max-width: 1200px) { .studio-layout { grid-template-columns: 1fr; } .analytics-panel { display: none; } }
         
         .builder-content { overflow-y: auto; padding-right: var(--space-md); }
+        .builder-content .anchor-stage { margin-bottom: var(--space-lg); }
         .analytics-panel { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); overflow-y: auto; position: sticky; top: 0; height: fit-content; max-height: calc(100vh - 160px); }
         .analytics-panel.shell-context-rail { top: 118px; gap: 16px; }
         
@@ -161,6 +162,7 @@
                 <div id="icpShellBand"></div>
                 <div class="studio-layout shell-context-layout">
                     <div class="builder-content shell-work-column">
+                        <div id="icpOperatingBoard"></div>
                         <!-- Inputs Section -->
                         <div class="builder-section">
                             <div class="section-header">
@@ -1046,6 +1048,57 @@
             });
         }
 
+        function renderIcpOperatingBoard(quality, statement, focus, examples, fields) {
+            var board = byId('icpOperatingBoard');
+            if (!board) return;
+            var qualityState = qualityStateLabel(quality);
+            var pressurePoints = (quality && quality.checks ? quality.checks : []).filter(function(check) {
+                return check.tone !== 'good';
+            }).map(function(check) {
+                return check.text;
+            }).slice(0, 3);
+            var chips = [
+                currentRole === 'firstae' ? 'First AE lens' : 'Founder-led lens',
+                fields.industry || 'Choose industry',
+                fields.buyer || 'Choose buyer',
+                fields.trigger || 'Name the trigger'
+            ];
+            board.innerHTML =
+                '<section class="anchor-stage">' +
+                    '<div class="anchor-stage-grid">' +
+                        '<div>' +
+                            '<div class="anchor-eyebrow">Decision surface</div>' +
+                            '<div class="anchor-headline anchor-headline--wide">' + esc(statement.text) + '</div>' +
+                            '<div class="anchor-support">' + esc(quality.summary) + ' ' + esc(focus) + '</div>' +
+                            '<div class="anchor-chip-row">' + chips.filter(Boolean).map(function(item) {
+                                return '<div class="anchor-chip">' + esc(item) + '</div>';
+                            }).join('') + '</div>' +
+                            '<div class="anchor-primary-card">' +
+                                '<div class="anchor-primary-label">' + esc(qualityState.label) + '</div>' +
+                                '<div class="anchor-primary-title">' + esc(quality.label) + '</div>' +
+                                '<div class="anchor-primary-copy">' + esc(examples.strongHint) + '</div>' +
+                                '<div class="anchor-lane-meta">' +
+                                    '<span>' + esc((quality ? quality.score : 0) + '/100') + '</span>' +
+                                    '<span>' + esc(fields.proof || 'Proof window missing') + '</span>' +
+                                    '<span>' + esc(fields.activeAccounts ? fields.activeAccounts + ' active accounts' : 'No account count yet') + '</span>' +
+                                '</div>' +
+                                '<div class="anchor-primary-actions">' +
+                                    '<button class="btn btn-primary" onclick="saveICP()">Save ICP</button>' +
+                                    '<button class="btn btn-secondary" onclick="copyStatement()">Copy Statement</button>' +
+                                    '<button class="btn btn-ghost" onclick="exportICP()">Export</button>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="anchor-mini-grid">' +
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Quality</div><div class="anchor-mini-value">' + esc((quality ? quality.score : 0) + '/100') + '</div><div class="anchor-mini-copy">' + esc(quality.label) + '</div></div>' +
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Next consequence</div><div class="anchor-mini-value anchor-mini-value--sans">' + esc(qualityState.label) + '</div><div class="anchor-mini-copy">' + esc((pressurePoints[0] || 'The wedge is specific enough to route downstream.')) + '</div></div>' +
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Sharp version</div><div class="anchor-mini-copy">' + esc(examples.strong) + '</div></div>' +
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Broad version to avoid</div><div class="anchor-mini-copy">' + esc(examples.broad) + '</div></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</section>';
+        }
+
         function buildExamples(industry, size, geo, buyer, pain, trigger, proof) {
             if (!industry || !size || !geo || !buyer || !pain || !trigger || !proof) {
                 return {
@@ -1132,6 +1185,13 @@
             byId('out_example_hint').textContent = examples.strongHint;
             byId('out_anti_example').textContent = examples.broad;
             byId('out_anti_example_hint').textContent = examples.broadHint;
+            renderIcpOperatingBoard(quality, statement, buildFocus(activeAccounts), examples, {
+                industry: industry,
+                buyer: buyer,
+                trigger: trigger,
+                proof: proof,
+                activeAccounts: activeAccounts
+            });
         }
         
         // ============================================

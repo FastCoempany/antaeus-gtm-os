@@ -432,6 +432,67 @@
             '</div>';
         }
 
+        function renderWelcomePrimaryCard(primaryAction, activation, focusSummary){
+            return '<div class="anchor-primary-card">' +
+                '<div class="anchor-primary-label">Now</div>' +
+                '<div class="anchor-primary-title">' + esc(primaryAction.title || 'Continue into the workspace') + '</div>' +
+                '<div class="anchor-primary-copy">' + esc(primaryAction.why || primaryAction.body || activation.body) + ' ' + esc(focusSummary) + '</div>' +
+                (primaryAction.meta && primaryAction.meta.length ? '<div class="anchor-lane-meta">' + primaryAction.meta.map(function(item){ return '<span>' + esc(item) + '</span>'; }).join('') + '</div>' : '') +
+                '<div class="anchor-primary-actions">' +
+                    '<a href="' + esc(primaryAction.href || '/app/dashboard/') + '" class="btn btn-primary" onclick="completeWelcome(\'' + esc(primaryAction.href || '/app/dashboard/').replace(/&#39;/g, "'") + '\');return false;">' + esc(primaryAction.cta || 'Continue to workspace') + '</a>' +
+                    '<a href="/app/dashboard/" class="btn btn-secondary" onclick="completeWelcome(\'/app/dashboard/\');return false;">Open Dashboard</a>' +
+                '</div>' +
+            '</div>';
+        }
+
+        function buildWelcomeLanes(activation, lifecycle, actions){
+            var nowAction = actions[0] || null;
+            var nextAction = actions[1] || null;
+            return [
+                {
+                    state: 'Now',
+                    title: nowAction ? nowAction.title : 'Create the first real operating object.',
+                    copy: nowAction ? (nowAction.why || nowAction.body) : activation.body,
+                    meta: nowAction && nowAction.meta ? nowAction.meta : ['activation'],
+                    actions: nowAction ? [{ href: nowAction.href, label: nowAction.cta || nowAction.title }] : []
+                },
+                {
+                    state: 'Next',
+                    title: nextAction ? nextAction.title : 'Make the next downstream layer believable.',
+                    copy: nextAction ? (nextAction.why || nextAction.body) : 'After the first move is live, use the next module to add enough truth that the dashboard, deals, and handoff stop sounding theoretical.',
+                    meta: nextAction && nextAction.meta ? nextAction.meta : ['compounding'],
+                    actions: nextAction ? [{ href: nextAction.href, label: nextAction.cta || nextAction.title, tone: 'btn-secondary' }] : []
+                },
+                {
+                    state: lifecycle && lifecycle.active ? 'Week 1' : 'Keep honest',
+                    title: lifecycle && lifecycle.active ? lifecycle.guidance.headline : 'Come back here whenever the next move gets muddy.',
+                    copy: lifecycle && lifecycle.active ? lifecycle.guidance.body : 'Welcome should stay useful as a reset surface, not disappear after the first click.',
+                    meta: lifecycle && lifecycle.active ? ['day ' + lifecycle.dayNumber, lifecycle.completed + '/' + lifecycle.total + ' live'] : ['reset path', 'revisit welcome'],
+                    actions: [
+                        { href: '/app/settings/', label: 'Backup + settings', tone: 'btn-secondary' },
+                        { href: '/demo-seed.html', label: 'Open demo lane', tone: 'btn-secondary' }
+                    ]
+                }
+            ];
+        }
+
+        function renderWelcomeQueueCard(action, index){
+            return '<div class="anchor-queue-card">' +
+                '<div class="anchor-queue-top">' +
+                    '<div style="display:flex;gap:12px;align-items:flex-start;">' +
+                        '<div class="anchor-queue-rank">' + esc(String(index + 1)) + '</div>' +
+                        '<div><div class="anchor-queue-title">' + esc(action.title) + '</div></div>' +
+                    '</div>' +
+                    '<span class="shell-state-pill ' + ((action.state || '').toLowerCase() === 'now' ? 'state-ready' : ((action.state || '').toLowerCase() === 'next' ? 'state-live' : 'state-thin')) + '">' + esc(action.state || 'Ready') + '</span>' +
+                '</div>' +
+                '<div class="anchor-queue-copy">' + esc(action.body) + '</div>' +
+                (action.why ? '<div class="anchor-note"><strong>Why this is next.</strong> ' + esc(action.why) + '</div>' : '') +
+                (action.unlocks ? '<div class="anchor-note"><strong>This unlocks.</strong> ' + esc(action.unlocks) + '</div>' : '') +
+                '<div class="anchor-queue-meta">' + (action.meta || []).map(function(item){ return '<span>' + esc(item) + '</span>'; }).join('') + '</div>' +
+                '<div class="anchor-queue-actions"><a href="' + esc(action.href) + '" class="btn btn-secondary" onclick="completeWelcome(\'' + esc(action.href).replace(/&#39;/g, "'") + '\');return false;">' + esc(action.cta) + '</a></div>' +
+            '</div>';
+        }
+
         function milestoneCard(item, index, activation){
             var stateClass = item.done ? ' done' : (activation.completed === index ? ' next' : '');
             var stateLabel = item.done ? 'Live' : (activation.completed === index ? 'Next' : 'Pending');
@@ -554,33 +615,34 @@
                 var backupNote = backup && backup.hasExport ? 'Offline backup exists.' : 'No offline backup exported yet.';
                 renderWelcomeShellChrome(activation, primaryAction, lifecycle, counts, role, focusSummary);
 
+                var activationLanes = buildWelcomeLanes(activation, lifecycle, actions);
                 shell.innerHTML =
                     '<div class="shell-context-layout welcome-layout">' +
                         '<div class="shell-work-column shell-stack">' +
-                            '<section class="shell-section">' +
-                                '<div class="shell-section-header">' +
-                                    '<div class="shell-section-heading">' +
-                                        '<div class="shell-section-kicker">Activation ' + esc(activation.completed) + ' of ' + esc(activation.total) + ' live' + ((lifecycle && lifecycle.active) ? ' · Week 1 Day ' + esc(lifecycle.dayNumber) : '') + '</div>' +
-                                        '<div class="shell-section-title">Welcome to the live workspace</div>' +
-                                        '<div class="shell-section-copy">This page should turn a completed signup into a believable operating system. Add one real thread of truth, then let the rest of the app compound from it.</div>' +
+                            '<section class="anchor-stage">' +
+                                '<div class="anchor-stage-grid">' +
+                                    '<div>' +
+                                        '<div class="anchor-eyebrow">Activation corridor ' + esc(activation.completed) + ' of ' + esc(activation.total) + ' live' + ((lifecycle && lifecycle.active) ? ' · Week 1 Day ' + esc(lifecycle.dayNumber) : '') + '</div>' +
+                                        '<div class="anchor-headline anchor-headline--wide">' + esc(activation.headline) + '</div>' +
+                                        '<div class="anchor-support">' + esc(activation.body) + ' ' + esc(focusSummary) + '</div>' +
+                                        '<div class="anchor-chip-row">' + heroChips.map(function(item){ return '<div class="anchor-chip">' + esc(item) + '</div>'; }).join('') + '</div>' +
+                                        renderWelcomePrimaryCard(primaryAction, activation, focusSummary) +
+                                        '<div class="welcome-shell-note">Signed in as ' + esc(role) + '. Workspace owner: ' + esc(displayName) + '. Source: ' + esc(summary && summary.source ? summary.source : 'unknown') + (summary && summary.errors && summary.errors.length ? ' · some modules fell back to cache while loading.' : '') + ' ' + esc(backupNote) + '</div>' +
                                     '</div>' +
+                                    '<div class="anchor-mini-grid">' + statCards.map(function(card){
+                                        return '<div class="anchor-mini-card"><div class="anchor-mini-label">' + esc(card.label) + '</div><div class="anchor-mini-value">' + esc(card.value) + '</div><div class="anchor-mini-copy">' + esc(card.sub) + '</div></div>';
+                                    }).join('') + '</div>' +
                                 '</div>' +
-                                '<div class="shell-chip-row">' + heroChips.map(function(item){ return '<div class="shell-chip">' + esc(item) + '</div>'; }).join('') + '</div>' +
-                                '<div class="shell-band-block"><div class="shell-band-block-label">' + esc(activation.headline) + '</div><div class="shell-band-block-value">' + esc(activation.body) + '</div></div>' +
-                                '<div class="shell-band-block"><div class="shell-band-block-label">Workspace focus</div><div class="shell-band-block-value">' + esc(focusSummary) + '</div></div>' +
-                                '<div class="shell-metric-strip">' + statCards.map(function(card){
-                                    return '<div class="shell-metric"><div class="shell-metric-label">' + esc(card.label) + '</div><div class="shell-metric-value">' + esc(card.value) + '</div><div class="shell-metric-copy">' + esc(card.sub) + '</div></div>';
-                                }).join('') + '</div>' +
-                                '<div class="shell-section-actions">' +
-                                    '<a href="' + esc(heroPrimaryHref) + '" class="btn btn-primary" onclick="completeWelcome(\'' + esc(heroPrimaryHref).replace(/&#39;/g, "'") + '\');return false;">' + esc(heroPrimaryLabel) + '</a>' +
-                                    '<a href="/app/dashboard/" class="btn btn-secondary" onclick="completeWelcome(\'/app/dashboard/\');return false;">Continue to dashboard</a>' +
-                                    '<a href="/methodology/" class="btn btn-ghost" onclick="completeWelcome(\'/methodology/\');return false;">Open methodology</a>' +
-                                '</div>' +
-                                '<div class="welcome-shell-note">Signed in as ' + esc(role) + '. Workspace owner: ' + esc(displayName) + '. Source: ' + esc(summary && summary.source ? summary.source : 'unknown') + (summary && summary.errors && summary.errors.length ? ' · some modules fell back to cache while loading.' : '') + ' ' + esc(backupNote) + '</div>' +
                             '</section>' +
                             '<section class="shell-section shell-section--subtle">' +
-                                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Next actions</div><div class="shell-section-title">Your first 3–5 actions</div><div class="shell-section-copy">Do these in order. Each one makes the rest of the app more believable across sessions, devices, and tomorrow morning.</div></div></div>' +
-                                '<div class="welcome-list">' + actions.map(actionCard).join('') + '</div>' +
+                                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">How to make the workspace real now</div><div class="shell-section-copy">Welcome should collapse the first week into one immediate move, one follow-through move, and one thing to keep honest.</div></div></div>' +
+                                '<div class="anchor-lane-grid">' + activationLanes.map(function(lane){
+                                    return '<div class="anchor-lane"><div class="anchor-lane-state">' + esc(lane.state) + '</div><div class="anchor-lane-title">' + esc(lane.title) + '</div><div class="anchor-lane-copy">' + esc(lane.copy) + '</div><div class="anchor-lane-meta">' + (lane.meta || []).map(function(item){ return '<span>' + esc(item) + '</span>'; }).join('') + '</div><div class="anchor-lane-actions">' + (lane.actions || []).map(function(action){ return '<a href="' + esc(action.href) + '" class="btn ' + (action.tone || 'btn-secondary') + '" onclick="completeWelcome(\'' + esc(action.href).replace(/&#39;/g, "'") + '\');return false;">' + esc(action.label) + '</a>'; }).join('') + '</div></div>';
+                                }).join('') + '</div>' +
+                            '</section>' +
+                            '<section class="shell-section shell-section--subtle">' +
+                                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Action queue</div><div class="shell-section-title">Do these in order</div><div class="shell-section-copy">Each action should reduce ambiguity for the next module instead of generating more setup work.</div></div></div>' +
+                                '<div class="anchor-queue">' + actions.map(renderWelcomeQueueCard).join('') + '</div>' +
                             '</section>' +
                         '</div>' +
                         '<aside class="shell-context-rail welcome-context-rail">' +
