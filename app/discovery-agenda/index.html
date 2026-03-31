@@ -391,6 +391,131 @@
                 '</div>';
         }
 
+        function renderPlannerBridge(){
+            var node=document.getElementById('plannerShellBand');
+            if(!node)return;
+            var quality=getAgendaQuality();
+            var company=(matchedAccount&&matchedAccount.name)||'No signal-backed account matched yet';
+            var oneSessionWin=contactName.length>=2?'Leave this page with a real opener, three buyer-tuned questions, a why-now angle, and a next module to move into.':'Pick the person, set the persona, and link the call to a real deal before it happens.';
+            var downstream=quality.linkedDeal?'This agenda is attached to '+(quality.linkedDeal.accountName||'the linked deal')+' and can hand straight into Discovery Studio or Deal Workspace.':'This planner becomes truly durable once the call is linked to a live deal record.';
+            var stateTone=quality.band==='credible'?'live':quality.band==='workable'?'ready':'risk';
+            var stateLabel=quality.bandLabel;
+            var stageHtml=
+                '<section class="shell-section anchor-stage">'+
+                    '<div class="anchor-stage-grid">'+
+                        '<div>'+
+                            '<div class="anchor-eyebrow">Meeting prep board</div>'+
+                            '<div class="anchor-headline">'+escH(contactName.length>=2?'Build the meeting so the call can actually advance.':'Pick the real person before you build the call.')+'</div>'+
+                            '<div class="anchor-support">Call Planner should tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.</div>'+
+                            '<div class="anchor-chip-row">'+
+                                '<span class="anchor-chip">'+escH(stateLabel)+'</span>'+
+                                '<span class="anchor-chip">'+escH(persona||'No persona yet')+'</span>'+
+                                '<span class="anchor-chip">'+(quality.linkedDeal?'Deal-linked':'No deal linked')+'</span>'+
+                            '</div>'+
+                            '<div class="anchor-primary-card">'+
+                                '<div class="anchor-primary-label">Current context</div>'+
+                                '<div class="anchor-primary-title">'+escH(company)+'</div>'+
+                                '<div class="anchor-primary-copy">'+escH(downstream)+'</div>'+
+                                '<div class="anchor-primary-actions">'+
+                                    '<button class="btn btn-primary" type="button" onclick="openDiscoveryRun()">Open Discovery Studio</button>'+
+                                    '<button class="btn btn-secondary" type="button" onclick="openLinkedDealWorkspace()">'+escH(quality.linkedDeal?'Open linked deal':'Open Deal Workspace')+'</button>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="anchor-mini-grid">'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">One-session win</div><div class="anchor-mini-value">'+escH(oneSessionWin)+'</div><div class="anchor-mini-copy">A good agenda earns the right next conversation.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Agenda score</div><div class="anchor-mini-value">'+quality.score+'/100</div><div class="anchor-mini-copy">'+escH(quality.bandLabel)+' agenda quality.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Good agenda means</div><div class="anchor-mini-value">Real person</div><div class="anchor-mini-copy">Real why now. Real path to advancement. No generic buyer theater.</div></div>'+
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Downstream handshake</div><div class="anchor-mini-value">'+escH(quality.next)+'</div><div class="anchor-mini-copy">The agenda should already point to the next module.</div></div>'+
+                        '</div>'+
+                    '</div>'+
+                '</section>';
+            if(window.gtmShellChrome){
+                window.gtmShellChrome.applyHeader({
+                    family:'Calls',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone
+                });
+                window.gtmShellChrome.renderCommandBand('#plannerShellBand',{
+                    kicker:'Call planner bridge',
+                    title:'A good agenda changes the next call, not just this page.',
+                    copy:'Use Call Planner to tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.',
+                    stateLabel:stateLabel,
+                    stateTone:stateTone,
+                    metrics:[
+                        {label:'Current context',value:company},
+                        {label:'One-session win',value:oneSessionWin},
+                        {label:'Good agenda means',value:'Real person. Real why now. Real path to advancement. No generic buyer theater.'},
+                        {label:'Downstream handshake',value:downstream}
+                    ],
+                    actions:[
+                        {label:'Open Discovery Studio',action:'openDiscoveryRun()',tone:'primary'},
+                        {label:(quality.linkedDeal?'Open Linked Deal':'Open Deal Workspace'),action:'openLinkedDealWorkspace()'}
+                    ]
+                });
+                node.insertAdjacentHTML('beforeend',stageHtml);
+                return;
+            }
+            node.innerHTML=stageHtml;
+        }
+
+        function renderAgendaQuality(){
+            var node=document.getElementById('qualityBlock');
+            if(!node)return;
+            var quality=getAgendaQuality();
+            var gateHtml=quality.gates.map(function(gate,index){
+                return '<div class="anchor-queue-card">'+
+                    '<div class="anchor-queue-top">'+
+                        '<div style="display:flex;gap:12px;align-items:flex-start;">'+
+                            '<div class="anchor-queue-rank">'+String(index+1)+'</div>'+
+                            '<div><div class="anchor-queue-title">'+escH(gate.label)+'</div></div>'+
+                        '</div>'+
+                        '<span class="shell-state-pill '+(gate.met?'state-live':'state-risk')+'">'+(gate.met?'Met':'Missing')+'</span>'+
+                    '</div>'+
+                    '<div class="anchor-queue-copy">'+escH(gate.copy)+'</div>'+
+                '</div>';
+            }).join('');
+            node.innerHTML=
+                '<section class="shell-section">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Agenda quality</div>'+
+                            '<div class="shell-section-title">'+quality.score+'/100 · '+escH(quality.bandLabel)+'</div>'+
+                            '<div class="shell-section-copy">A good agenda means the meeting can actually advance: the person is clear, the why-now is credible, and the result has somewhere durable to land.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="anchor-mini-grid" style="margin-bottom:16px;">'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Band</div><div class="anchor-mini-value">'+escH(quality.bandLabel)+'</div><div class="anchor-mini-copy">The agenda should earn the next module, not hope for it.</div></div>'+
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Next move</div><div class="anchor-mini-value">'+escH(quality.next)+'</div><div class="anchor-mini-copy">The score should always point to what to tighten.</div></div>'+
+                    '</div>'+
+                    '<div class="anchor-queue">'+gateHtml+'</div>'+
+                '</section>';
+        }
+
+        function renderAgendaHandoff(){
+            var node=document.getElementById('handoffBlock');
+            if(!node)return;
+            var quality=getAgendaQuality();
+            var dealCopy=quality.linkedDeal
+                ? 'This agenda is linked to '+(quality.linkedDeal.accountName||'the selected deal')+'. Run the call, then use Discovery Studio to manage the live conversation and Deal Workspace to record what changed.'
+                : 'You can run this call from here, but linking a deal will make the next step durable. Discovery Studio can still pick up the agenda state immediately.';
+            var dealLabel=quality.linkedDeal?'Open linked deal':'Open Deal Workspace';
+            node.innerHTML=
+                '<section class="shell-section shell-section--compact">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Next module handshake</div>'+
+                            '<div class="shell-section-title">Do not let the agenda die here.</div>'+
+                            '<div class="shell-section-copy">'+escH(dealCopy)+'</div>'+
+                        '</div>'+
+                        '<div class="shell-section-actions">'+
+                            '<button class="btn btn-primary" type="button" onclick="openDiscoveryRun()">Open Discovery Studio</button>'+
+                            '<button class="btn btn-secondary" type="button" onclick="openLinkedDealWorkspace()">'+escH(dealLabel)+'</button>'+
+                        '</div>'+
+                    '</div>'+
+                '</section>';
+        }
+
         function getAgendaSnapshot(){
             var quality=getAgendaQuality();
             return {

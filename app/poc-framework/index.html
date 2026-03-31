@@ -455,26 +455,82 @@
             var oneSession = linkedDeal
                 ? 'Leave with a proof scope that can survive kickoff, readout, and the commercial conversation after it.'
                 : 'Leave with a real proof design and a linked deal so the pilot belongs to the pipeline.';
+            var stateTone = quality.band === 'ready' ? 'live' : quality.band === 'workable' ? 'ready' : 'risk';
+            if (window.gtmShellChrome) {
+                window.gtmShellChrome.applyHeader({
+                    family: 'Pipeline',
+                    stateLabel: quality.bandLabel,
+                    stateTone: stateTone
+                });
+                window.gtmShellChrome.renderCommandBand('#pocBridge', {
+                    kicker: 'Proof operating board',
+                    title: quality.timingTitle,
+                    copy: 'PoC Framework should force a scoped hypothesis, hard success criteria, and a readout path that survives the commercial conversation after the pilot ends.',
+                    stateLabel: quality.timingLabel,
+                    stateTone: stateTone,
+                    metrics: [
+                        { label: 'Linked deal', value: linkedDeal ? (linkedDeal.accountName || linkedDeal.name || 'Linked deal') : 'No live deal linked' },
+                        { label: 'Proof standard', value: quality.bandLabel + ' / ' + quality.score + '/100' },
+                        { label: 'Pressure point', value: pressure },
+                        { label: 'One-session win', value: oneSession }
+                    ],
+                    actions: [
+                        { label: 'Save to Deal', action: 'savePoC()', tone: 'primary' },
+                        { label: linkedDeal ? 'Open Linked Deal' : 'Open Deal Workspace', action: 'openLinkedDealWorkspace()' },
+                        { label: linkedDeal ? 'Stress-test this deal' : 'Open Future Autopsy', action: 'openFutureAutopsy()' }
+                    ]
+                });
+                node.innerHTML +=
+                    '<section class="anchor-stage">' +
+                        '<div class="anchor-stage-grid">' +
+                            '<div>' +
+                                '<div class="anchor-eyebrow">Proof operating board</div>' +
+                                '<div class="anchor-headline anchor-headline--wide">' + escH(quality.timingTitle) + '</div>' +
+                                '<div class="anchor-support">' + escH(quality.timingCopy) + '</div>' +
+                                '<div class="anchor-chip-row">' +
+                                    '<span class="anchor-chip">' + escH(quality.bandLabel) + '</span>' +
+                                    '<span class="anchor-chip">' + escH(stageValue) + '</span>' +
+                                    '<span class="anchor-chip">' + (linkedDeal ? 'Deal-linked' : 'Detached from pipeline') + '</span>' +
+                                '</div>' +
+                                '<div class="anchor-primary-card">' +
+                                    '<div class="anchor-primary-label">Pressure read</div>' +
+                                    '<div class="anchor-primary-title">' + escH(pressure) + '</div>' +
+                                    '<div class="anchor-primary-copy">' + escH(oneSession) + '</div>' +
+                                    '<div class="anchor-primary-actions">' +
+                                        '<button class="btn btn-primary" type="button" onclick="savePoC()">Save to Deal</button>' +
+                                        '<button class="btn btn-secondary" type="button" onclick="openFutureAutopsy()">' + (linkedDeal ? 'Stress-test this deal' : 'Open Future Autopsy') + '</button>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="anchor-mini-grid">' +
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Proof timing</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.timingLabel) + '</div><div class="anchor-mini-copy">Run the PoC when the deal needs proof, not when the team is out of ideas.</div></div>' +
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Current standard</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.bandLabel) + '</div><div class="anchor-mini-copy">' + quality.score + '/100 quality based on success criteria, scope boundaries, and readout ownership.</div></div>' +
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Readout owner</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.readoutOwner || 'Not set') + '</div><div class="anchor-mini-copy">No owner means the pilot can generate activity without a real decision.</div></div>' +
+                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Handshake</div><div class="anchor-mini-value anchor-mini-value--sans">' + (linkedDeal ? 'Proof syncs back into the deal' : 'Link a deal so the proof belongs to the pipeline') + '</div><div class="anchor-mini-copy">The commercial thread should stay visible before, during, and after the pilot.</div></div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</section>';
+                return;
+            }
             node.innerHTML =
-                '<div class="poc-bridge">' +
-                    '<div class="poc-bridge-head">' +
-                        '<div class="poc-bridge-k">PoC bridge</div>' +
-                        '<div class="poc-bridge-state ' + quality.timingCls + '">' + escH(quality.timingLabel) + '</div>' +
+                '<section class="anchor-stage">' +
+                    '<div class="anchor-stage-grid">' +
+                        '<div>' +
+                            '<div class="anchor-eyebrow">Proof operating board</div>' +
+                            '<div class="anchor-headline anchor-headline--wide">' + escH(quality.timingTitle) + '</div>' +
+                            '<div class="anchor-support">' + escH(quality.timingCopy) + '</div>' +
+                            '<div class="anchor-chip-row">' +
+                                '<span class="anchor-chip">' + escH(quality.bandLabel) + '</span>' +
+                                '<span class="anchor-chip">' + escH(stageValue) + '</span>' +
+                                '<span class="anchor-chip">' + (linkedDeal ? 'Deal-linked' : 'Detached from pipeline') + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="anchor-mini-grid">' +
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Pressure point</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(pressure) + '</div><div class="anchor-mini-copy">' + escH(oneSession) + '</div></div>' +
+                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Current standard</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.bandLabel) + '</div><div class="anchor-mini-copy">' + quality.score + '/100 quality.</div></div>' +
+                        '</div>' +
                     '</div>' +
-                    '<div class="poc-bridge-title">' + escH(quality.timingTitle) + '</div>' +
-                    '<div class="poc-bridge-copy">' + escH(quality.timingCopy) + '</div>' +
-                    '<div class="poc-bridge-grid">' +
-                        '<div class="poc-bridge-block"><div class="poc-bridge-label">Deal stage</div><div class="poc-bridge-value">' + escH(stageValue) + '</div></div>' +
-                        '<div class="poc-bridge-block"><div class="poc-bridge-label">Current proof standard</div><div class="poc-bridge-value">' + escH(quality.bandLabel) + ' (' + quality.score + '/100)</div></div>' +
-                        '<div class="poc-bridge-block"><div class="poc-bridge-label">Pressure point</div><div class="poc-bridge-value">' + escH(pressure) + '</div></div>' +
-                        '<div class="poc-bridge-block"><div class="poc-bridge-label">One-session win</div><div class="poc-bridge-value">' + escH(oneSession) + '</div></div>' +
-                    '</div>' +
-                    '<div class="poc-bridge-actions">' +
-                        '<button class="poc-bridge-btn primary" type="button" onclick="savePoC()">Save to Deal</button>' +
-                        '<button class="poc-bridge-btn" type="button" onclick="openLinkedDealWorkspace()">' + (linkedDeal ? 'Open Linked Deal' : 'Open Deal Workspace') + '</button>' +
-                        '<button class="poc-bridge-btn" type="button" onclick="openFutureAutopsy()">' + (linkedDeal ? 'Stress-test this deal' : 'Open Future Autopsy') + '</button>' +
-                    '</div>' +
-                '</div>';
+                '</section>';
         }
 
         function renderPoCQuality() {
@@ -482,21 +538,22 @@
             if (!node) return;
             var quality = getPoCQuality();
             node.innerHTML =
-                '<div class="poc-quality-card">' +
-                    '<div class="poc-quality-label">Proof standard</div>' +
-                    '<div class="poc-quality-value ' + quality.band + '">' + escH(quality.bandLabel) + ' · ' + quality.score + '/100</div>' +
-                    '<div class="poc-quality-copy">' + escH(quality.next) + '</div>' +
-                '</div>' +
-                '<div class="poc-quality-card">' +
-                    '<div class="poc-quality-label">Success criteria</div>' +
-                    '<div class="poc-quality-value">' + quality.successCount + ' defined</div>' +
-                    '<div class="poc-quality-copy">A real PoC should have explicit pass/fail criteria before kickoff.</div>' +
-                '</div>' +
-                '<div class="poc-quality-card">' +
-                    '<div class="poc-quality-label">Readout ownership</div>' +
-                    '<div class="poc-quality-value">' + escH(quality.readoutOwner || 'Not set') + '</div>' +
-                    '<div class="poc-quality-copy">If nobody owns the readout, the pilot risks becoming activity without a decision.</div>' +
-                '</div>';
+                '<section class="shell-section shell-section--compact">' +
+                    '<div class="shell-section-header">' +
+                        '<div class="shell-section-heading">' +
+                            '<div class="shell-section-kicker">Proof standard</div>' +
+                            '<div class="shell-section-title">How credible is this pilot right now?</div>' +
+                            '<div class="shell-section-copy">The framework is only valuable if the proof can survive kickoff, readout, and the commercial decision afterward.</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="anchor-mini-grid">' +
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Current standard</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.bandLabel) + '</div><div class="anchor-mini-copy">' + quality.score + '/100 quality based on linked deal, criteria, boundaries, and readout ownership.</div></div>' +
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Success criteria</div><div class="anchor-mini-value anchor-mini-value--sans">' + quality.successCount + ' defined</div><div class="anchor-mini-copy">A real PoC needs explicit pass-fail criteria before kickoff.</div></div>' +
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Scope boundaries</div><div class="anchor-mini-value anchor-mini-value--sans">' + quality.boundaryCount + ' set</div><div class="anchor-mini-copy">Boundaries stop the pilot from becoming an endless free implementation.</div></div>' +
+                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Readout ownership</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.readoutOwner || 'Not set') + '</div><div class="anchor-mini-copy">If nobody owns the readout, activity can happen without a real decision.</div></div>' +
+                    '</div>' +
+                    '<div class="shell-section-note"><strong>Next move:</strong> ' + escH(quality.next) + '</div>' +
+                '</section>';
         }
 
         function renderRecentProofs() {
