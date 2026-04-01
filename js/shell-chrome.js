@@ -132,9 +132,10 @@
 
         var metrics = Array.isArray(config && config.metrics) ? config.metrics : [];
         var actions = Array.isArray(config && config.actions) ? config.actions : [];
+        var variant = config && config.variant ? ' shell-command-band--' + escapeHtml(config.variant) : '';
 
         node.innerHTML =
-            '<section class="shell-command-band">' +
+            '<section class="shell-command-band' + variant + '">' +
                 '<div class="shell-band-top">' +
                     '<div>' +
                         (config && config.kicker ? '<div class="shell-band-kicker">' + escapeHtml(config.kicker) + '</div>' : '') +
@@ -158,12 +159,14 @@
         if (!node) return;
 
         var cards = Array.isArray(config && config.cards) ? config.cards : [];
-        node.classList.add('shell-context-rail');
+        var railVariant = config && config.variant ? 'shell-context-rail--' + String(config.variant).trim().toLowerCase() : '';
+        node.className = 'shell-context-rail' + (railVariant ? ' ' + railVariant : '');
 
         node.innerHTML = cards.map(function (card) {
             var list = Array.isArray(card.items) ? card.items : [];
             var actions = Array.isArray(card.actions) ? card.actions : [];
-            return '<section class="shell-rail-card">' +
+            var cardVariant = card && card.variant ? ' shell-rail-card--' + escapeHtml(card.variant) : '';
+            return '<section class="shell-rail-card' + cardVariant + '">' +
                 (card.kicker ? '<div class="shell-rail-kicker">' + escapeHtml(card.kicker) + '</div>' : '') +
                 (card.title ? '<div class="shell-rail-title">' + escapeHtml(card.title) + '</div>' : '') +
                 (card.copy ? '<div class="shell-rail-copy">' + escapeHtml(card.copy) + '</div>' : '') +

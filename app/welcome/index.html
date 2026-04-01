@@ -6,7 +6,7 @@
     <title>Welcome | Antaeus GTM OS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
         .welcome-shell{display:grid;gap:24px;max-width:none}
@@ -93,7 +93,7 @@
         @media(max-width:720px){.welcome-hero{padding:24px}.welcome-title{font-size:1.85rem}.welcome-stats{grid-template-columns:1fr}.welcome-actions{flex-direction:column}.welcome-btn{width:100%}.welcome-lifecycle-top{flex-direction:column}.welcome-lifecycle-score{width:100%}}
     </style>
 </head>
-<body>
+<body class="command-surface-page command-welcome-page">
     <script src="/js/app-auth-preflight.js"></script>
     <div class="app-container">
         <aside class="app-sidebar">
@@ -561,6 +561,7 @@
                 copy: focusSummary,
                 stateLabel: stateLabel,
                 stateTone: tone,
+                variant: 'open',
                 metrics: [
                     { label: 'Role lens', value: roleLabel },
                     { label: 'Targeting', value: counts.icps ? counts.icps + ' ICP' + (counts.icps === 1 ? '' : 's') + ' live' : 'Need first ICP' },
@@ -645,7 +646,7 @@
                                 '<div class="anchor-queue">' + actions.map(renderWelcomeQueueCard).join('') + '</div>' +
                             '</section>' +
                         '</div>' +
-                        '<aside class="shell-context-rail welcome-context-rail">' +
+                        '<aside class="shell-context-rail shell-context-rail--quiet welcome-context-rail">' +
                             lifecyclePanel(lifecycle, primaryAction) +
                             '<section class="shell-rail-card">' +
                                 '<div class="shell-rail-kicker">Activation map</div>' +
