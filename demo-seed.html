@@ -3,70 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Antaeus GTM OS — Demo Seed</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex, nofollow">
+<title>Antaeus Demo Workspace</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06080d;--accent:#c07850;--text:#e8e4df;--text2:#a09a92;--text3:#605c56;--serif:'DM Serif Display',Georgia,serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
+:root{--bg:#06080d;--bg2:#0d1321;--accent:#c07850;--accent2:#d4a574;--teal:#2dd4bf;--text:#e8e4df;--text2:#a09a92;--text3:#605c56;--serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);background:radial-gradient(circle at top,rgba(192,120,80,0.12),transparent 30%),var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;}
-.card{max-width:1080px;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:48px;backdrop-filter:blur(16px);}
+body{font-family:var(--sans);background:radial-gradient(circle at 16% 18%,rgba(212,165,116,0.14),transparent 24%),radial-gradient(circle at 82% 76%,rgba(45,212,191,0.1),transparent 20%),linear-gradient(180deg,var(--bg2) 0%,var(--bg) 42%,#050812 100%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;}
+.card{max-width:1120px;width:100%;background:rgba(15,23,42,0.88);border:1px solid rgba(255,255,255,0.06);border-radius:28px;padding:44px;backdrop-filter:blur(18px);box-shadow:0 24px 80px rgba(0,0,0,0.28);}
 .eyebrow{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--accent);font-weight:700;margin-bottom:18px;}
 .hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,0.9fr);gap:28px;align-items:start;}
 .hero-copy{text-align:left;}
-.hero-side{padding:22px;border-radius:18px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.06);}
-.logo{font-family:var(--serif);font-size:1.8rem;margin-bottom:4px;}
+.hero-side{padding:24px;border-radius:22px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.06);}
+.logo{font-family:var(--serif);font-size:1.95rem;margin-bottom:4px;}
 .logo span{color:var(--accent);}
 .sub{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--text3);font-weight:600;margin-bottom:18px;}
-h1{font-family:var(--serif);font-size:2.45rem;line-height:1.05;margin-bottom:12px;max-width:720px;}
+h1{font-family:var(--serif);font-size:2.7rem;line-height:1.03;margin-bottom:12px;max-width:760px;}
 p{font-size:1rem;color:var(--text2);line-height:1.7;margin-bottom:24px;max-width:760px;}
 .note-list{display:grid;gap:12px;margin:24px 0 28px;}
-.note{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.06);font-size:0.88rem;color:var(--text2);line-height:1.55;}
+.note{padding:16px 18px;border-radius:18px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:0.88rem;color:var(--text2);line-height:1.55;}
 .note strong{display:block;color:var(--text);margin-bottom:4px;font-size:0.8rem;letter-spacing:0.03em;text-transform:uppercase;}
 .hero-side h2{font-family:var(--serif);font-size:1.35rem;margin-bottom:10px;}
 .hero-side p{font-size:0.9rem;margin-bottom:14px;}
 .proof-list{list-style:none;display:grid;gap:10px;margin-top:14px;}
 .proof-list li{font-size:0.86rem;color:var(--text2);line-height:1.5;padding-left:18px;position:relative;}
-.proof-list li::before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;border-radius:50%;background:rgba(192,120,80,0.9);}
+.proof-list li::before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;border-radius:50%;background:rgba(212,165,116,0.9);}
 .quick-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
-.link-chip{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.035);color:var(--text);text-decoration:none;font-size:0.82rem;font-weight:700;letter-spacing:0.02em;transition:all 0.2s;}
-.link-chip:hover{border-color:rgba(192,120,80,0.35);background:rgba(192,120,80,0.08);}
+.link-chip{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.035);color:var(--text);text-decoration:none;font-size:0.82rem;font-weight:700;letter-spacing:0.02em;transition:all 0.2s;}
+.link-chip:hover{border-color:rgba(212,165,116,0.35);background:rgba(212,165,116,0.08);}
 .scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:34px 0 18px;}
-.btn{padding:22px 20px;border-radius:20px;font-size:0.96rem;font-weight:700;border:none;cursor:pointer;font-family:var(--sans);transition:all 0.2s;text-align:left;min-height:214px;}
+.btn{padding:22px 20px;border-radius:22px;font-size:0.96rem;font-weight:700;border:none;cursor:pointer;font-family:var(--sans);transition:all 0.2s;text-align:left;min-height:214px;}
 .btn .scenario-type{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;opacity:0.72;margin-bottom:10px;}
 .btn .scenario-title{display:block;font-size:1.2rem;margin-bottom:10px;}
 .btn .scenario-meta{display:block;font-size:0.78rem;font-weight:600;opacity:0.86;margin-bottom:12px;}
 .btn .scenario-body{display:block;font-size:0.88rem;font-weight:500;line-height:1.6;opacity:0.96;}
 .btn-mm{background:linear-gradient(145deg,rgba(192,120,80,0.18),rgba(192,120,80,0.06));color:#fff;border:1px solid rgba(192,120,80,0.28);}
 .btn-mm:hover{background:linear-gradient(145deg,rgba(192,120,80,0.24),rgba(192,120,80,0.1));transform:translateY(-2px);}
-.btn-ent{background:linear-gradient(145deg,rgba(90,143,192,0.15),rgba(90,143,192,0.06));color:#dbeafe;border:1px solid rgba(90,143,192,0.26);}
-.btn-ent:hover{background:linear-gradient(145deg,rgba(90,143,192,0.24),rgba(90,143,192,0.1));transform:translateY(-2px);}
+.btn-ent{background:linear-gradient(145deg,rgba(45,212,191,0.14),rgba(45,212,191,0.05));color:#dffcf7;border:1px solid rgba(45,212,191,0.22);}
+.btn-ent:hover{background:linear-gradient(145deg,rgba(45,212,191,0.2),rgba(45,212,191,0.08));transform:translateY(-2px);}
 .toolbar{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
 .btn-clear{padding:10px 20px;border-radius:999px;font-size:0.78rem;font-weight:700;border:1px solid rgba(239,68,68,0.22);background:transparent;color:#ff8b82;cursor:pointer;font-family:var(--sans);}
 .btn-clear:hover{background:rgba(239,68,68,0.06);}
-.toolbar-copy{font-size:0.82rem;color:var(--text3);}
-.status{margin-top:20px;font-family:var(--mono);font-size:0.76rem;color:var(--text3);min-height:54px;line-height:1.7;padding:16px;border-radius:14px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);}
+.toolbar-copy{font-size:0.82rem;color:var(--text2);}
+.status{margin-top:20px;font-family:var(--mono);font-size:0.76rem;color:var(--text3);min-height:54px;line-height:1.7;padding:16px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);}
 .status.ok{color:#4a9e6e;}
 .count{font-family:var(--mono);font-size:0.68rem;color:var(--text3);margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);}
+.btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:34px 0 18px;}
 @media (max-width:900px){
 body{padding:20px;}
 .card{padding:28px;}
 .hero{grid-template-columns:1fr;}
-.scenario-grid{grid-template-columns:1fr;}
+.scenario-grid,.btns{grid-template-columns:1fr;}
 h1{font-size:2rem;}
 }
 </style>
 </head>
 <body>
 <div class="card">
+    <div class="eyebrow">Self-Serve Demo Lane</div>
     <div class="logo">antaeus<span>.</span></div>
-    <div class="sub">Demo Seed Loader</div>
-    <h1>Load Demo Data</h1>
-    <p>Populates every module with coherent, cross-referenced data. Pick a scenario. Every account in Signal Console maps to deals, outbound touches, advisor connections, and autopsy runs.</p>
+    <div class="sub">Sample workspace, real system flow</div>
+    <h1>Pick the demo that makes Antaeus believable in one session.</h1>
+    <p>This is the guided sample workspace for seeing how signal, territory, outbound, discovery, deal motion, proof, and handoff all stack inside one operating system.</p>
     <div class="btns">
-        <button class="btn btn-mm" onclick="seed('mm')">Mid-Market Demo<br><span style="font-size:0.65rem;font-weight:500;opacity:0.8;">$80K ACV · $500K quota · 6 deals</span></button>
-        <button class="btn btn-ent" onclick="seed('ent')">Enterprise Demo<br><span style="font-size:0.65rem;font-weight:500;opacity:0.8;">$180K ACV · $1.2M quota · 7 deals</span></button>
+        <button class="btn btn-mm" onclick="seed('mm')">Mid-Market Demo<br><span style="font-size:0.65rem;font-weight:500;opacity:0.8;">$80K ACV - $500K quota - 6 deals</span></button>
+        <button class="btn btn-ent" onclick="seed('ent')">Enterprise Demo<br><span style="font-size:0.65rem;font-weight:500;opacity:0.8;">$180K ACV - $1.2M quota - 7 deals</span></button>
     </div>
-    <button class="btn-clear" onclick="clearAll()">Clear All Demo Data</button>
+    <div class="toolbar">
+        <div class="toolbar-copy">Choose one narrative, seed the workspace, and move straight into dashboard.</div>
+        <button class="btn-clear" onclick="clearAll()">Reset Demo Workspace</button>
+    </div>
     <div class="status" id="status"></div>
     <div class="count" id="count"></div>
 </div>
@@ -187,8 +193,8 @@ function renderDemoLane(){
         '</div>' +
         '<div class="quick-links">' +
           '<a class="link-chip" href="/purchase/?entry=demo-lane">See Annual Plan</a>' +
-          '<a class="link-chip" href="/login.html">Sign In to Real Workspace</a>' +
-          '<a class="link-chip" href="/methodology/">Open Methodology</a>' +
+          '<a class="link-chip" href="/login.html">Sign In</a>' +
+          '<a class="link-chip" href="/methodology/">Read Methodology</a>' +
         '</div>' +
       '</div>' +
       '<div class="hero-side">' +
@@ -207,14 +213,14 @@ function renderDemoLane(){
       '<button class="btn btn-ent" onclick="seed(\'ent\')"><span class="scenario-type">Scenario Two</span><span class="scenario-title">Enterprise Demo</span><span class="scenario-meta">$180K ACV - $1.2M quota - 7 deals</span><span class="scenario-body">Operator-scale motion. Complex proof, heavier stakeholders, longer cycles, advisor leverage, and clearer downstream handoff pressure for a team already running a real enterprise sale.</span></button>' +
     '</div>' +
     '<div class="toolbar">' +
-      '<div class="toolbar-copy">Pick a narrative, let the workspace seed, then move directly into the dashboard.</div>' +
+      '<div class="toolbar-copy">Choose one narrative, seed the workspace, and move straight into dashboard.</div>' +
       '<button class="btn-clear" onclick="clearAll()">Reset Demo Workspace</button>' +
     '</div>' +
     '<div class="status" id="status"></div>' +
     '<div class="count" id="count"></div>';
 }
 
-document.title='Antaeus GTM OS - Demo Workspace';
+document.title='Antaeus Demo Workspace';
 ensureDemoAnalytics();
 renderDemoLane();
 
