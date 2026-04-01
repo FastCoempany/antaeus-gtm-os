@@ -10,291 +10,242 @@ function alpha(hex, opacity) {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
-const T = {
-  color: {
-    bg: "#070B14",
-    shell: "#0B1020",
-    panel: "#131A28",
-    panel2: "#172033",
-    border: alpha("#FFFFFF", 0.1),
-    text: "#F8FAFC",
-    text2: "#CBD5E1",
-    text3: "#94A3B8",
-    gold: "#D4A574",
-    goldDark: "#B9864D",
-    teal: "#2DD4BF",
-    blue: "#60A5FA",
-    green: "#22C55E",
-    amber: "#F59E0B",
-    red: "#EF4444",
+const C = {
+  neutral: {
+    0: "#FFFFFF",
+    25: "#FBFCFE",
+    50: "#F6F8FC",
+    100: "#EDF2F9",
+    200: "#DDE6F2",
+    300: "#C6D3E3",
+    400: "#9BB0C8",
+    500: "#7A8DA8",
+    600: "#5D7290",
+    700: "#46607F",
+    800: "#253B5D",
+    900: "#0A1C40",
   },
-  radius: { sm: 10, md: 16, lg: 22, full: 999 },
-  shadow: {
-    sm: `0 10px 30px ${alpha("#020617", 0.18)}`,
-    md: `0 24px 60px ${alpha("#020617", 0.28)}`,
+  orange: {
+    50: "#FFF6EF",
+    100: "#FFE9D8",
+    200: "#FFD3B0",
+    500: "#E6701E",
+    600: "#D26417",
+    700: "#C55C12",
+    800: "#9F470A",
+  },
+  blue: {
+    50: "#F3F7FF",
+    100: "#E7F0FF",
+    200: "#D1E2FF",
+    500: "#2471E7",
+    600: "#1E64D1",
+    700: "#1858BA",
+    800: "#12428B",
+  },
+  green: {
+    50: "#F1FBF7",
+    100: "#E3F6EE",
+    200: "#CBECDC",
+    500: "#129266",
+    700: "#0C6A49",
+  },
+  red: {
+    50: "#FFF3F3",
+    100: "#FFE4E4",
+    200: "#FFCACA",
+    500: "#C84141",
+    700: "#982B2B",
   },
 };
 
-const STATUS = {
-  empty: { label: "Not live", color: T.color.text3, bg: alpha("#94A3B8", 0.1), border: alpha("#94A3B8", 0.22) },
-  live: { label: "Live", color: T.color.teal, bg: alpha("#2DD4BF", 0.1), border: alpha("#2DD4BF", 0.28) },
-  risk: { label: "At risk", color: T.color.amber, bg: alpha("#F59E0B", 0.1), border: alpha("#F59E0B", 0.28) },
-  blocked: { label: "Blocked", color: T.color.red, bg: alpha("#EF4444", 0.1), border: alpha("#EF4444", 0.28) },
-  complete: { label: "Complete", color: T.color.green, bg: alpha("#22C55E", 0.1), border: alpha("#22C55E", 0.28) },
+const ROLE = {
+  page: C.neutral[50],
+  surface: C.neutral[0],
+  surfaceAlt: C.blue[50],
+  surfaceSoft: C.orange[50],
+  surfaceStrong: C.neutral[100],
+  border: C.neutral[200],
+  borderStrong: C.neutral[300],
+  borderSelected: C.blue[500],
+  textPrimary: C.neutral[900],
+  textSecondary: C.neutral[700],
+  textMuted: C.neutral[500],
+  textInverse: C.neutral[0],
+  info: C.blue[500],
+  link: C.blue[700],
+  actionPrimary: C.orange[500],
+  actionPrimaryHover: C.orange[600],
+  actionPrimaryPressed: C.orange[700],
+  actionPrimaryText: C.neutral[0],
+  actionSecondary: C.neutral[0],
+  actionSecondaryText: C.neutral[900],
+  actionSecondaryBorder: C.neutral[300],
+  urgentText: C.orange[700],
+  urgentSurface: C.orange[50],
+  urgentBorder: C.orange[200],
+  activeText: C.blue[700],
+  activeSurface: C.blue[50],
+  activeBorder: C.blue[200],
+  healthyText: C.green[700],
+  healthySurface: C.green[50],
+  healthyBorder: C.green[200],
+  blockedText: C.red[700],
+  blockedSurface: C.red[50],
+  blockedBorder: C.red[200],
+  overlay: alpha(C.neutral[900], 0.16),
+  focusGlow: alpha(C.blue[500], 0.16),
+  graphLine: alpha(C.blue[500], 0.35),
 };
 
-const FAMILY = {
-  activation: { label: "Activation", accent: T.color.teal },
-  targeting: { label: "Targeting", accent: T.color.gold },
-  signal: { label: "Signal + Motion", accent: T.color.blue },
-  execution: { label: "Execution + Proof", accent: T.color.red },
-  synthesis: { label: "Synthesis + Handoff", accent: T.color.green },
+const SPACE = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24, 7: 32, 8: 40, 9: 48, 10: 64 };
+const RADIUS = { control: 6, button: 6, surfaceSm: 16, surfaceMd: 18, surfaceLg: 24, sheet: 28, full: 999 };
+const HEIGHT = { sm: 32, md: 36, lg: 40, xl: 48 };
+const SHADOW = {
+  none: "none",
+  sm: `0 8px 24px ${alpha(C.neutral[900], 0.06)}`,
+  md: `0 18px 44px ${alpha(C.neutral[900], 0.08)}`,
+  lg: `0 30px 80px ${alpha(C.neutral[900], 0.12)}`,
 };
 
-const COMMAND_MODES = [
-  { id: "brief", label: "Brief" },
-  { id: "grid", label: "Grid" },
-  { id: "queue", label: "Queue" },
-];
+const TYPE = {
+  display: '"Plus Jakarta Sans", "Inter", "Segoe UI", sans-serif',
+  body: '"Outfit", "Inter", "Segoe UI", sans-serif',
+  system: '"Space Mono", Monaco, Consolas, monospace',
+};
 
-const LAYERS = [
-  { id: "command", label: "Command" },
-  { id: "sheet", label: "Sheet" },
-  { id: "workspace", label: "Workspace" },
-  { id: "graph", label: "Graph" },
+const STATES = {
+  urgent: { label: "Urgent", text: ROLE.urgentText, surface: ROLE.urgentSurface, border: ROLE.urgentBorder },
+  active: { label: "Active", text: ROLE.activeText, surface: ROLE.activeSurface, border: ROLE.activeBorder },
+  healthy: { label: "Healthy", text: ROLE.healthyText, surface: ROLE.healthySurface, border: ROLE.healthyBorder },
+  blocked: { label: "Blocked", text: ROLE.blockedText, surface: ROLE.blockedSurface, border: ROLE.blockedBorder },
+};
+
+const MODES = [
+  { id: "brief", label: "Brief", copy: "Narrative density for orientation and reasoning." },
+  { id: "grid", label: "Grid", copy: "Spatial density for scanning and comparison." },
+  { id: "queue", label: "Queue", copy: "Action density for sequential execution." },
 ];
 
 const OBJECTS = [
   {
-    id: "activation-01",
-    family: "activation",
-    short: "Workspace",
-    title: "Founder week-one workspace",
-    status: "live",
-    pressure: "The workspace is real enough to teach, but motion logging is still missing.",
-    nextMove: "Log the first live motion so the dashboard can stop inferring activity.",
-    downstream: "This changes Welcome, Dashboard, Readiness, and the handoff kit.",
-    queueScore: 72,
-    historicalEntry: "Welcome",
-    commandSummary: "Week-one state is live. The system knows the targeting and deal layers, but motion proof is still thin.",
-    sheetNarrative: "Activation truth belongs to one workspace object. Onboarding, Welcome, and Dashboard become lenses over the same activation object instead of separate setup pages.",
-    graphNodes: ["Workspace", "ICP", "Signals", "Deals", "Motion log"],
+    id: "deal-vantive",
+    family: "Execution + Proof",
+    type: "Deal",
+    state: "urgent",
+    metric: "11",
+    metricLabel: "days in stage 2",
+    title: "Vantive expansion",
+    brief: "Discovery has not been run, the champion is still assumed, and the deal is reading healthier than it actually is.",
+    primary: "Run Future Autopsy",
+    fallback: "Plan discovery call",
+    gaps: ["No discovery logged", "Champion unproven", "Proof owner not assigned"],
+    next: "Once Future Autopsy sharpens the failure mode, the next loop becomes one corrective move instead of generic deal anxiety.",
+    connections: ["Account: Vantive", "Signal Console: 3 active threads", "Proof: credibility still thin", "Advisor: available"],
+    compounding: "The moment this deal becomes honest, Discovery Studio, PoC Framework, Advisor Deploy, and Handoff all get sharper together.",
     lenses: [
-      { id: "welcome", label: "Welcome", purpose: "Orient the operator and rank the first real work.", preservedEntry: true, writesBack: "Workspace activation context" },
-      { id: "dashboard", label: "Dashboard", purpose: "Translate all upstream truth into a ranked morning brief.", preservedEntry: true, writesBack: "Command snapshot and delta memory" },
-      { id: "onboarding", label: "Onboarding", purpose: "Capture the first truth, then get out of the way.", preservedEntry: true, writesBack: "Activation baseline" },
+      { id: "overview", label: "Overview", module: "Deal Workspace", cue: "Pressure map, stage honesty, and next move." },
+      { id: "discovery", label: "Discovery", module: "Discovery Studio", cue: "Run the actual conversation method, not a generic note form." },
+      { id: "call-plan", label: "Call Plan", module: "Call Planner", cue: "Meeting prep inherits the same object truth." },
+      { id: "autopsy", label: "Future Autopsy", cue: "Pressure-test the deal before it lies to you again." },
+      { id: "proof", label: "Proof", module: "PoC Framework", cue: "Translate risk into a credible proof structure." },
+      { id: "advisor", label: "Advisor", module: "Advisor Deploy", cue: "Deploy signal and leverage only when the moment earns it." },
     ],
   },
   {
-    id: "icp-01",
-    family: "targeting",
-    short: "ICP",
-    title: "Mid-market healthcare IT wedge",
-    status: "risk",
-    pressure: "The wedge exists, but company size and trigger specificity are still thin.",
-    nextMove: "Tighten the wedge before sourcing more accounts into it.",
-    downstream: "This should sharpen Territory, Sourcing, Outbound, and Discovery.",
-    queueScore: 88,
-    historicalEntry: "ICP Studio",
-    commandSummary: "One viable ICP exists. It is useful, but still too founder-dependent to scale cleanly.",
-    sheetNarrative: "Targeting truth should not live inside one form page. The ICP object becomes durable system truth that downstream lenses read and challenge.",
-    graphNodes: ["ICP", "Industry", "Company size", "Primary buyer", "Trigger"],
-    lenses: [
-      { id: "icp-studio", label: "ICP Studio", purpose: "Define the wedge and score its sharpness.", preservedEntry: true, writesBack: "Targeting truth" },
-      { id: "territory-architect", label: "Territory Architect", purpose: "Turn the ICP into theses and market slices.", preservedEntry: true, writesBack: "Territory theses" },
-      { id: "sourcing-workbench", label: "Sourcing Workbench", purpose: "Pressure-test whether real accounts fit the wedge.", preservedEntry: true, writesBack: "Account fit evidence" },
-    ],
-  },
-  {
-    id: "account-01",
-    family: "signal",
-    short: "Account",
+    id: "account-cascadia",
+    family: "Signal + Motion",
+    type: "Account",
+    state: "active",
+    metric: "62",
+    metricLabel: "signal heat",
     title: "Cascadia Health Network",
-    status: "live",
-    pressure: "The account is hot, but the angle still needs sharpening before outreach.",
-    nextMove: "Use Signal Console, then carry the same account into Outbound or Cold Call without restating context.",
-    downstream: "This should steer Signal Console, Outbound Studio, LinkedIn Playbook, and Cold Call Studio.",
-    queueScore: 96,
-    historicalEntry: "Signal Console",
-    commandSummary: "Multiple live signals are converging on one account. The system should rank this account, not leave the user inside a pile of signals.",
-    sheetNarrative: "Signals, owner fit, research freshness, and messaging should belong to the account object. Modules become lenses over that object, not separate silos.",
-    graphNodes: ["Account", "Signals", "Motion", "Contact", "Call"],
+    brief: "The signal cluster is strong enough to act on now, but the angle still needs tightening before the first motion is worth sending.",
+    primary: "Open Signal Console",
+    fallback: "Draft first motion",
+    gaps: ["Angle not locked", "Primary owner unclear", "Channel not chosen"],
+    next: "Once the angle tightens, the next loop becomes channel choice across outbound, LinkedIn, or cold call.",
+    connections: ["ICP: Healthcare IT wedge", "Motion: unsent", "Call path: undefined", "Territory: strong fit"],
+    compounding: "A stronger account angle sharpens Outbound Studio, Cold Call Studio, LinkedIn Playbook, and downstream deal creation at once.",
     lenses: [
-      { id: "signal-console", label: "Signal Console", purpose: "Collapse noise into one ranked account read.", preservedEntry: true, writesBack: "Account heat and evidence" },
-      { id: "outbound-studio", label: "Outbound Studio", purpose: "Turn account pressure into a credible first motion.", preservedEntry: true, writesBack: "Message angle and touch plan" },
-      { id: "linkedin-playbook", label: "LinkedIn Playbook", purpose: "Choose the right social motion for this account now.", preservedEntry: true, writesBack: "Channel motion" },
-      { id: "cold-call-studio", label: "Cold Call Studio", purpose: "Move from signal to call execution without losing the thread.", preservedEntry: true, writesBack: "Call notes and outcome" },
+      { id: "signal-console", label: "Signal Console", cue: "Collapse noise into one account worth acting on." },
+      { id: "outbound", label: "Outbound", module: "Outbound Studio", cue: "Choose the right motion once the angle is real." },
+      { id: "linkedin", label: "LinkedIn", module: "LinkedIn Playbook", cue: "Channel-specific motion still inherits the same object." },
+      { id: "cold-call", label: "Cold Call", module: "Cold Call Studio", cue: "The call lens should never lose the signal context." },
     ],
   },
   {
-    id: "deal-01",
-    family: "execution",
-    short: "Deal",
-    title: "Vantive platform expansion",
-    status: "risk",
-    pressure: "The deal is active, but the proof path and champion pressure are unstable.",
-    nextMove: "Run Future Autopsy now, then move into the exact corrective lens.",
-    downstream: "This should coordinate Deal Workspace, Discovery Studio, Future Autopsy, PoC Framework, and Advisor Deploy.",
-    queueScore: 92,
-    historicalEntry: "Deal Workspace",
-    commandSummary: "The deal is not dying yet, but its stage label is more optimistic than the underlying proof.",
-    sheetNarrative: "The deal object should carry discovery truth, pressure, proof state, advisor history, and next-step ownership. Execution lenses should stop duplicating that truth.",
-    graphNodes: ["Deal", "Champion", "Proof", "Advisor", "Next step"],
+    id: "icp-healthcare",
+    family: "Targeting",
+    type: "ICP",
+    state: "healthy",
+    metric: "84",
+    metricLabel: "quality score",
+    title: "Healthcare IT wedge",
+    brief: "The wedge is real enough to drive sourcing and territory, but geography and trigger language can still sharpen before scale.",
+    primary: "Refine ICP",
+    fallback: "Map accounts",
+    gaps: ["Geography still broad", "Trigger phrasing still generic"],
+    next: "A tighter wedge raises the credibility of every downstream account, motion, and discovery conversation.",
+    connections: ["Territory: seeded", "Sourcing: live", "Accounts mapped: 16", "Readiness: benefiting"],
+    compounding: "A stronger ICP compounds across Territory Architect, Sourcing Workbench, Signal Console, and Discovery before a user ever notices the chain.",
     lenses: [
-      { id: "deal-workspace", label: "Deal Workspace", purpose: "Hold stage, pressure, and recovery truth.", preservedEntry: true, writesBack: "Pipeline truth" },
-      { id: "future-autopsy", label: "Future Autopsy", purpose: "Pressure-test the deal and name the likely death pattern.", preservedEntry: true, writesBack: "Primary failure hypothesis" },
-      { id: "discovery-studio", label: "Discovery Studio", purpose: "Run the live call and advance the deal honestly.", preservedEntry: true, writesBack: "Call truth and worked moves" },
-      { id: "advisor-deploy", label: "Advisor Deploy", purpose: "Use the right relationship at the right moment.", preservedEntry: true, writesBack: "Advisor deployment history" },
+      { id: "definition", label: "Definition", module: "ICP Studio", cue: "Keep the full wedge logic and buyer method intact." },
+      { id: "territory", label: "Territory", module: "Territory Architect", cue: "Territory is a lens on the same target truth, not a new room." },
+      { id: "sourcing", label: "Sourcing", module: "Sourcing Workbench", cue: "Source from the live wedge instead of a disconnected list." },
     ],
   },
   {
-    id: "proof-01",
-    family: "execution",
-    short: "Proof",
-    title: "PoC proof motion",
-    status: "live",
-    pressure: "The proof plan exists, but readout ownership is still fragile.",
-    nextMove: "Lock the readout owner and boundary conditions before the PoC creates fake momentum.",
-    downstream: "This changes PoC Framework, Deal Workspace, Readiness, and the final handoff.",
-    queueScore: 81,
-    historicalEntry: "PoC Framework",
-    commandSummary: "Proof is underway. The system should make the readout and commercial tie-back obvious before activity gets mistaken for evidence.",
-    sheetNarrative: "Proof is its own object, tightly linked to the deal but not buried inside it. That lets Antaeus preserve proof standards as first-class truth.",
-    graphNodes: ["Proof", "Success criteria", "Readout owner", "Deal", "Readiness"],
+    id: "handoff-first-dollar",
+    family: "Synthesis + Handoff",
+    type: "Handoff",
+    state: "active",
+    metric: "3",
+    metricLabel: "source gaps",
+    title: "First-dollar handoff kit",
+    brief: "The handoff is starting to read like a system, but proof and motion evidence still need to compound into it before it becomes transfer-ready.",
+    primary: "Open Handoff Kit",
+    fallback: "Check readiness",
+    gaps: ["Proof still soft", "Motion history thin", "Advisor thread missing"],
+    next: "Once the handoff starts inheriting the full system truth, the app finally proves that work compounds automatically.",
+    connections: ["Readiness: 71", "Playbook: seeded", "Quota Workback: linked", "Deal proof: incomplete"],
+    compounding: "This is the supreme output of the system. Every upstream object should strengthen it without restating context.",
     lenses: [
-      { id: "poc-framework", label: "PoC Framework", purpose: "Define the proof standard and run the proof plan.", preservedEntry: true, writesBack: "Proof state" },
-      { id: "readiness", label: "Readiness", purpose: "Translate proof truth into operating confidence.", preservedEntry: true, writesBack: "System verdict" },
-      { id: "deal-workspace-proof", label: "Deal Workspace", purpose: "Carry proof state back into the live deal.", preservedEntry: false, writesBack: "Pipeline recovery truth" },
-    ],
-  },
-  {
-    id: "handoff-01",
-    family: "synthesis",
-    short: "Handoff",
-    title: "Founder handoff kit",
-    status: "complete",
-    pressure: "The handoff is almost ready, but weak-source areas are still visible.",
-    nextMove: "Close the remaining weak-source gaps before calling the handoff kit founder-proof.",
-    downstream: "This changes Playbook, Readiness, Quota Workback, and the operator's trust in the system.",
-    queueScore: 63,
-    historicalEntry: "Founding GTM Playbook",
-    commandSummary: "The system can synthesize a believable handoff, but only because the upstream objects are now rich enough to support it.",
-    sheetNarrative: "Handoff should be the synthesis object at the top of the system. It is the output of all upstream truth, not a manually stitched document.",
-    graphNodes: ["Handoff", "Readiness", "Quota", "Deal motion", "ICP"],
-    lenses: [
-      { id: "playbook", label: "Playbook / Handoff Kit", purpose: "Assemble the founder-to-operator transfer in one exportable object.", preservedEntry: true, writesBack: "Handoff readiness" },
-      { id: "quota-workback", label: "Quota Workback", purpose: "Translate the strategy into operating pressure.", preservedEntry: true, writesBack: "Execution targets" },
-      { id: "readiness-handoff", label: "Readiness", purpose: "Expose the weakest truth before handoff goes out.", preservedEntry: false, writesBack: "System confidence" },
+      { id: "handoff", label: "Handoff", module: "Playbook / Handoff Kit", cue: "The export should inherit real operating evidence, not a section dump." },
+      { id: "readiness", label: "Readiness", module: "Readiness", cue: "Verdict logic should feed the handoff instead of living alone." },
+      { id: "quota", label: "Quota", module: "Quota Workback", cue: "Quota pressure stays system-level but still informs transfer readiness." },
     ],
   },
 ];
 
-const ARCHITECTURE_TRUTHS = [
-  "Modules stay as preserved named entry points, but they become lenses over shared objects.",
-  "The command layer ranks work first. Users should not have to decide which module before they know which object is under pressure.",
-  "Signal Console stays the signal engine. Future Autopsy stays a preserved premium asset.",
-  "The four layers are Command, Sheet, Workspace, and Graph. Graph stays rare and diagnostic.",
-];
-
-const ARCHITECTURE_REJECTIONS = [
-  "Do not collapse beta into one giant CRM-style record page.",
-  "Do not dissolve every module before beta evidence exists.",
-  "Do not let graph views become the daily operating surface.",
-  "Do not organize the product around furniture instead of object pressure.",
-];
-
-function serif(color, size, extra) {
-  return { fontFamily: '"DM Serif Display", Georgia, serif', color, fontSize: size, letterSpacing: "-0.03em", ...extra };
+function textStyle(size, color = ROLE.textSecondary, weight = 500, extra = {}) {
+  return { fontFamily: TYPE.body, fontSize: size, lineHeight: `${Math.round(size * 1.6)}px`, fontWeight: weight, color, margin: 0, ...extra };
 }
 
-function body(color, size, extra) {
-  return { fontFamily: '"Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', color, fontSize: size, ...extra };
+function displayStyle(size, color = ROLE.textPrimary, weight = 800, extra = {}) {
+  return { fontFamily: TYPE.display, fontSize: size, lineHeight: `${Math.round(size * 1.08)}px`, fontWeight: weight, letterSpacing: "-0.04em", color, margin: 0, ...extra };
 }
 
-function mono(color, size, extra) {
-  return { fontFamily: 'Monaco, Consolas, "Liberation Mono", monospace', color, fontSize: size, ...extra };
+function monoStyle(size, color = ROLE.textMuted, extra = {}) {
+  return { fontFamily: TYPE.system, fontSize: size, lineHeight: `${Math.round(size * 1.45)}px`, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color, margin: 0, ...extra };
 }
 
-function Pill({ children, tone = "neutral" }) {
-  const toneMap = {
-    neutral: { bg: alpha("#FFFFFF", 0.06), border: T.color.border, color: T.color.text2 },
-    gold: { bg: alpha(T.color.gold, 0.12), border: alpha(T.color.gold, 0.28), color: T.color.gold },
-    blue: { bg: alpha(T.color.blue, 0.12), border: alpha(T.color.blue, 0.28), color: T.color.blue },
-    green: { bg: alpha(T.color.green, 0.12), border: alpha(T.color.green, 0.28), color: T.color.green },
-    red: { bg: alpha(T.color.red, 0.12), border: alpha(T.color.red, 0.28), color: T.color.red },
-  }[tone];
+function Surface({ children, tint = "base", padding = SPACE[6], radius = RADIUS.surfaceMd, shadow = SHADOW.sm, style = {} }) {
+  const backgrounds = {
+    base: ROLE.surface,
+    info: ROLE.surfaceAlt,
+    pressure: ROLE.surfaceSoft,
+    structure: ROLE.surfaceStrong,
+  };
 
-  return (
-    <span
-      style={{
-        ...mono(toneMap.color, 11, { textTransform: "uppercase", letterSpacing: "0.08em" }),
-        display: "inline-flex",
-        alignItems: "center",
-        padding: "6px 10px",
-        borderRadius: T.radius.full,
-        border: `1px solid ${toneMap.border}`,
-        background: toneMap.bg,
-      }}
-    >
-      {children}
-    </span>
-  );
-}
-
-function ActionButton({ children, kind = "primary", onClick }) {
-  const config = kind === "primary"
-    ? { bg: T.color.gold, color: T.color.bg, border: alpha(T.color.gold, 0.35) }
-    : { bg: alpha("#FFFFFF", 0.06), color: T.color.text2, border: T.color.border };
-
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        ...body(config.color, 14, { fontWeight: 700, cursor: "pointer" }),
-        padding: "11px 14px",
-        borderRadius: T.radius.sm,
-        border: `1px solid ${config.border}`,
-        background: config.bg,
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-function Segmented({ items, value, onChange }) {
-  return (
-    <div style={{ display: "inline-flex", padding: 4, gap: 4, borderRadius: T.radius.full, background: alpha("#FFFFFF", 0.05), border: `1px solid ${T.color.border}` }}>
-      {items.map((item) => {
-        const active = item.id === value;
-        return (
-          <button
-            key={item.id}
-            onClick={() => onChange(item.id)}
-            style={{
-              ...mono(active ? T.color.gold : T.color.text3, 11, { textTransform: "uppercase", letterSpacing: "0.08em", cursor: "pointer" }),
-              padding: "8px 12px",
-              borderRadius: T.radius.full,
-              border: "none",
-              background: active ? alpha(T.color.gold, 0.14) : "transparent",
-            }}
-          >
-            {item.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function Surface({ children, accent, style }) {
   return (
     <div
       style={{
-        background: `linear-gradient(180deg, ${alpha("#FFFFFF", 0.035)}, ${alpha("#FFFFFF", 0.02)})`,
-        border: `1px solid ${accent ? alpha(accent, 0.24) : T.color.border}`,
-        borderRadius: T.radius.lg,
-        boxShadow: T.shadow.sm,
+        background: backgrounds[tint] || ROLE.surface,
+        border: `1px solid ${ROLE.border}`,
+        borderRadius: radius,
+        padding,
+        boxShadow: shadow,
         ...style,
       }}
     >
@@ -303,299 +254,529 @@ function Surface({ children, accent, style }) {
   );
 }
 
-function Metric({ label, value }) {
+function Chip({ label, tone = "neutral" }) {
+  const toneMap = {
+    neutral: { bg: ROLE.surfaceStrong, text: ROLE.textSecondary, border: ROLE.borderStrong },
+    urgent: { bg: ROLE.urgentSurface, text: ROLE.urgentText, border: ROLE.urgentBorder },
+    active: { bg: ROLE.activeSurface, text: ROLE.activeText, border: ROLE.activeBorder },
+    healthy: { bg: ROLE.healthySurface, text: ROLE.healthyText, border: ROLE.healthyBorder },
+    blocked: { bg: ROLE.blockedSurface, text: ROLE.blockedText, border: ROLE.blockedBorder },
+    info: { bg: ROLE.surfaceAlt, text: ROLE.link, border: ROLE.activeBorder },
+  };
+  const value = toneMap[tone] || toneMap.neutral;
+
   return (
-    <div style={{ padding: 14, borderRadius: T.radius.md, border: `1px solid ${T.color.border}`, background: alpha("#FFFFFF", 0.03) }}>
-      <div style={mono(T.color.text3, 11, { textTransform: "uppercase", letterSpacing: "0.08em" })}>{label}</div>
-      <div style={body(T.color.text, 15, { marginTop: 10, lineHeight: 1.6, fontWeight: 700 })}>{value}</div>
+    <span
+      style={{
+        ...monoStyle(11, value.text),
+        display: "inline-flex",
+        alignItems: "center",
+        height: HEIGHT.sm,
+        padding: `0 ${SPACE[3]}px`,
+        borderRadius: RADIUS.full,
+        border: `1px solid ${value.border}`,
+        background: value.bg,
+      }}
+    >
+      {label}
+    </span>
+  );
+}
+
+function GapBadge({ count }) {
+  return <Chip label={`⊘ ${count} gaps`} tone="urgent" />;
+}
+
+function Button({ label, variant = "primary", onClick, minWidth = 132 }) {
+  const variants = {
+    primary: { background: ROLE.actionPrimary, color: ROLE.actionPrimaryText, border: ROLE.actionPrimary, shadow: SHADOW.sm },
+    secondary: { background: ROLE.actionSecondary, color: ROLE.actionSecondaryText, border: ROLE.actionSecondaryBorder, shadow: SHADOW.none },
+    tertiary: { background: "transparent", color: ROLE.link, border: "transparent", shadow: SHADOW.none },
+  };
+  const resolved = variants[variant];
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        ...textStyle(13, resolved.color, 700, { cursor: "pointer" }),
+        height: HEIGHT.lg,
+        minWidth,
+        padding: `0 ${SPACE[4]}px`,
+        borderRadius: RADIUS.button,
+        border: `1px solid ${resolved.border}`,
+        background: resolved.background,
+        boxShadow: resolved.shadow,
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
+function ModeToggle({ value, onChange }) {
+  return (
+    <div style={{ display: "inline-flex", gap: SPACE[2], padding: SPACE[1], borderRadius: RADIUS.full, background: ROLE.surfaceAlt, border: `1px solid ${ROLE.border}` }}>
+      {MODES.map((mode) => {
+        const active = mode.id === value;
+        return (
+          <button
+            key={mode.id}
+            onClick={() => onChange(mode.id)}
+            style={{
+              ...textStyle(13, active ? ROLE.textInverse : ROLE.textSecondary, 700, { cursor: "pointer" }),
+              height: HEIGHT.md,
+              padding: `0 ${SPACE[3]}px`,
+              borderRadius: RADIUS.full,
+              border: "none",
+              background: active ? ROLE.info : "transparent",
+            }}
+          >
+            {mode.label}
+          </button>
+        );
+      })}
     </div>
   );
 }
 
-function QueueList({ items, selectedId, onSelect }) {
+function MetricAnchor({ value, label, tone = "neutral" }) {
+  const map = { neutral: ROLE.textPrimary, urgent: ROLE.urgentText, active: ROLE.activeText, healthy: ROLE.healthyText, blocked: ROLE.blockedText };
   return (
-    <Surface style={{ padding: 18 }}>
-      <div style={mono(T.color.gold, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 12 })}>Ranked work queue</div>
-      <div style={{ display: "grid", gap: 10 }}>
-        {items.map((item, index) => {
-          const family = FAMILY[item.family];
-          const status = STATUS[item.status];
-          const active = item.id === selectedId;
-          return (
-            <button
-              key={item.id}
-              onClick={() => onSelect(item.id)}
-              style={{
-                textAlign: "left",
-                cursor: "pointer",
-                borderRadius: T.radius.md,
-                border: `1px solid ${active ? alpha(family.accent, 0.45) : T.color.border}`,
-                background: active ? alpha(family.accent, 0.1) : alpha("#FFFFFF", 0.03),
-                padding: 14,
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
-                <div style={mono(T.color.text3, 11, { textTransform: "uppercase", letterSpacing: "0.08em" })}>{String(index + 1).padStart(2, "0")} {item.short}</div>
-                <Pill tone={item.status === "blocked" ? "red" : item.status === "complete" ? "green" : item.status === "live" ? "blue" : "gold"}>{status.label}</Pill>
-              </div>
-              <div style={serif(T.color.text, 26, { marginTop: 8 })}>{item.title}</div>
-              <div style={body(T.color.text2, 14, { marginTop: 8, lineHeight: 1.6 })}>{item.pressure}</div>
-              <div style={body(T.color.gold, 14, { marginTop: 10, fontWeight: 700 })}>{item.nextMove}</div>
-            </button>
-          );
-        })}
-      </div>
-    </Surface>
+    <div style={{ display: "grid", gap: SPACE[1] }}>
+      <p style={displayStyle(42, map[tone])}>{value}</p>
+      <p style={monoStyle(11, ROLE.textMuted)}>{label}</p>
+    </div>
   );
 }
 
-function BriefMode({ selected, queue }) {
+function QuietFrame({ onGraph }) {
   return (
-    <div style={{ display: "grid", gap: 18 }}>
-      <Surface accent={FAMILY[selected.family].accent} style={{ padding: 24 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
-          <div>
-            <div style={mono(T.color.gold, 11, { textTransform: "uppercase", letterSpacing: "0.12em" })}>Command brief</div>
-            <div style={serif(T.color.text, 44, { marginTop: 10, maxWidth: 780 })}>{selected.title}</div>
-            <div style={body(T.color.text2, 17, { marginTop: 12, maxWidth: 780, lineHeight: 1.7 })}>{selected.commandSummary}</div>
-          </div>
-          <Pill tone="gold">{FAMILY[selected.family].label}</Pill>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginTop: 22 }}>
-          <Metric label="Pressure" value={selected.pressure} />
-          <Metric label="Best next move" value={selected.nextMove} />
-          <Metric label="Historical entry" value={selected.historicalEntry} />
-          <Metric label="Downstream" value={selected.downstream} />
+    <div style={{ display: "grid", gap: SPACE[4], alignContent: "start" }}>
+      <Surface radius={RADIUS.surfaceLg} shadow={SHADOW.md} padding={SPACE[5]}>
+        <div style={{ display: "grid", gap: SPACE[3] }}>
+          <Chip label="Command layer" tone="info" />
+          <h2 style={displayStyle(28, ROLE.textPrimary)}>The app opens as a decision surface, not a hallway.</h2>
+          <p style={textStyle(14, ROLE.textSecondary, 500)}>
+            The left frame is not navigation. It is the quiet structure that makes pressure, compounding, and one dominant move legible before the user does anything.
+          </p>
         </div>
       </Surface>
-      <Surface style={{ padding: 18 }}>
-        <div style={mono(T.color.blue, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 12 })}>Why this is different from the old app</div>
-        <div style={{ display: "grid", gap: 12 }}>
+
+      <Surface padding={SPACE[5]}>
+        <p style={monoStyle(11, ROLE.urgentText)}>Behavioral locks</p>
+        <div style={{ display: "grid", gap: SPACE[3], marginTop: SPACE[4] }}>
           {[
-            "Old: pick a module, then look for the object inside it.",
-            "New: rank the object first, then choose the right lens.",
-            "Old: duplicate context across modules.",
-            "New: carry one object through Signal Console, Future Autopsy, Discovery Studio, PoC, and Handoff without restating it.",
+            "Urgent, Active, Healthy describe object condition, not abstract rank.",
+            "Open loops migrate forward. They do not vanish when work gets done.",
+            "The metric should hit before the explanation does.",
+            "The user should always feel one best move, not menu anxiety.",
           ].map((line) => (
-            <div key={line} style={body(T.color.text2, 15, { lineHeight: 1.6 })}>{line}</div>
+            <p key={line} style={textStyle(13, ROLE.textSecondary, 600)}>{line}</p>
           ))}
         </div>
       </Surface>
-      <Surface style={{ padding: 18 }}>
-        <div style={mono(T.color.text3, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 12 })}>Rest of the queue</div>
-        <div style={{ display: "grid", gap: 12 }}>
-          {queue.filter((item) => item.id !== selected.id).slice(0, 3).map((item) => (
-            <div key={item.id} style={{ display: "grid", gap: 6, padding: 14, borderRadius: T.radius.md, border: `1px solid ${T.color.border}`, background: alpha("#FFFFFF", 0.03) }}>
-              <div style={body(T.color.text, 16, { fontWeight: 700 })}>{item.title}</div>
-              <div style={body(T.color.text2, 14, { lineHeight: 1.6 })}>{item.nextMove}</div>
-            </div>
-          ))}
+
+      <Surface padding={SPACE[5]} tint="pressure">
+        <p style={monoStyle(11, ROLE.urgentText)}>Hidden reward</p>
+        <h3 style={displayStyle(24, ROLE.textPrimary, 800, { marginTop: SPACE[3] })}>Touch here to see something super cool you did that you didn't know you did.</h3>
+        <p style={textStyle(13, ROLE.textSecondary, 500, { marginTop: SPACE[3] })}>
+          The graph stays out of the way until it becomes a reward moment. It should feel discovered, not assigned.
+        </p>
+        <div style={{ marginTop: SPACE[4] }}>
+          <Button label="Open graph reward" onClick={onGraph} minWidth={164} />
         </div>
       </Surface>
     </div>
   );
 }
 
-function GridMode({ items }) {
+function BriefBlock({ item, featured, onInspect }) {
+  const tone = STATES[item.state];
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 16 }}>
-      {items.map((item) => (
-        <Surface key={item.id} accent={FAMILY[item.family].accent} style={{ padding: 18 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
-            <Pill tone="gold">{FAMILY[item.family].label}</Pill>
-            <Pill tone={item.status === "complete" ? "green" : item.status === "live" ? "blue" : item.status === "blocked" ? "red" : "gold"}>{STATUS[item.status].label}</Pill>
+    <button
+      onClick={() => onInspect(item.id)}
+      style={{
+        width: "100%",
+        textAlign: "left",
+        cursor: "pointer",
+        border: `1px solid ${featured ? ROLE.borderSelected : ROLE.border}`,
+        borderLeft: `8px solid ${tone.text}`,
+        borderRadius: RADIUS.surfaceMd,
+        background: ROLE.surface,
+        boxShadow: featured ? SHADOW.md : SHADOW.sm,
+        padding: SPACE[5],
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[4], alignItems: "start" }}>
+        <div style={{ display: "grid", gap: SPACE[4], flex: 1 }}>
+          <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
+            <Chip label={tone.label} tone={item.state} />
+            <GapBadge count={item.gaps.length} />
+            {featured ? <Chip label="Next move" tone="info" /> : null}
           </div>
-          <div style={serif(T.color.text, 28, { marginTop: 12 })}>{item.title}</div>
-          <div style={body(T.color.text2, 14, { marginTop: 10, lineHeight: 1.7 })}>{item.pressure}</div>
-          <div style={body(T.color.gold, 14, { marginTop: 12, fontWeight: 700 })}>{item.nextMove}</div>
-        </Surface>
-      ))}
-    </div>
+          <div style={{ display: "grid", gridTemplateColumns: "136px 1fr", gap: SPACE[4], alignItems: "start" }}>
+            <MetricAnchor value={item.metric} label={item.metricLabel} tone={item.state} />
+            <div style={{ display: "grid", gap: SPACE[2] }}>
+              <h3 style={displayStyle(28)}>{item.title}</h3>
+              <p style={textStyle(14, ROLE.textSecondary, 500)}>{item.brief}</p>
+            </div>
+          </div>
+        </div>
+        <div style={{ display: "grid", gap: SPACE[2], minWidth: 150, justifyItems: "end" }}>
+          <p style={textStyle(13, ROLE.urgentText, 700, { textAlign: "right" })}>{item.primary}</p>
+          <p style={textStyle(12, ROLE.textMuted, 500, { textAlign: "right", maxWidth: 140 })}>{item.next}</p>
+        </div>
+      </div>
+    </button>
   );
 }
 
-function QueueMode({ items }) {
+function GridCard({ item, featured, onInspect }) {
+  const tone = STATES[item.state];
   return (
-    <Surface style={{ padding: 18 }}>
-      <div style={mono(T.color.red, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 12 })}>Queue mode proves execution order</div>
-      <div style={{ display: "grid", gap: 12 }}>
-        {items.map((item, index) => (
-          <div key={item.id} style={{ display: "grid", gridTemplateColumns: "64px 1.2fr 1fr", gap: 16, alignItems: "center", padding: 14, borderRadius: T.radius.md, border: `1px solid ${T.color.border}`, background: alpha("#FFFFFF", 0.03) }}>
-            <div style={serif(T.color.text, 30)}>{index + 1}</div>
-            <div>
-              <div style={body(T.color.text, 17, { fontWeight: 700 })}>{item.title}</div>
-              <div style={body(T.color.text3, 13, { marginTop: 4 })}>{item.historicalEntry}</div>
-            </div>
-            <div style={body(T.color.text2, 14, { lineHeight: 1.6 })}>{item.nextMove}</div>
-          </div>
+    <button
+      onClick={() => onInspect(item.id)}
+      style={{
+        position: "relative",
+        textAlign: "left",
+        cursor: "pointer",
+        border: `1px solid ${featured ? ROLE.borderSelected : ROLE.border}`,
+        borderRadius: RADIUS.surfaceMd,
+        background: ROLE.surface,
+        boxShadow: featured ? SHADOW.md : SHADOW.sm,
+        padding: SPACE[5],
+      }}
+    >
+      {featured ? <div style={{ position: "absolute", inset: "0 0 auto 0", height: 6, background: ROLE.info, borderTopLeftRadius: RADIUS.surfaceMd, borderTopRightRadius: RADIUS.surfaceMd }} /> : null}
+      <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[2], marginTop: featured ? SPACE[2] : 0 }}>
+        <Chip label={tone.label} tone={item.state} />
+        <GapBadge count={item.gaps.length} />
+      </div>
+      <div style={{ display: "flex", gap: SPACE[3], alignItems: "end", marginTop: SPACE[4] }}>
+        <p style={displayStyle(40, tone.text)}>{item.metric}</p>
+        <p style={monoStyle(11, ROLE.textMuted, { marginBottom: 10 })}>{item.metricLabel}</p>
+      </div>
+      <h3 style={displayStyle(24, ROLE.textPrimary, 800, { marginTop: SPACE[3] })}>{item.title}</h3>
+      <p style={textStyle(13, ROLE.textSecondary, 500, { marginTop: SPACE[2] })}>{item.brief}</p>
+    </button>
+  );
+}
+
+function QueueRow({ item, rank, selected, onSelect }) {
+  return (
+    <button
+      onClick={() => onSelect(item.id)}
+      style={{
+        width: "100%",
+        textAlign: "left",
+        cursor: "pointer",
+        border: `1px solid ${selected ? ROLE.borderSelected : ROLE.border}`,
+        borderRadius: RADIUS.surfaceSm,
+        background: ROLE.surface,
+        boxShadow: SHADOW.sm,
+        padding: SPACE[4],
+      }}
+    >
+      <div style={{ display: "grid", gridTemplateColumns: "48px 1fr auto", gap: SPACE[3], alignItems: "center" }}>
+        <p style={displayStyle(24, STATES[item.state].text)}>{rank}</p>
+        <div>
+          <p style={textStyle(14, ROLE.textPrimary, 700)}>{item.title}</p>
+          <p style={textStyle(12, ROLE.textSecondary, 500, { marginTop: 4 })}>{item.primary}</p>
+        </div>
+        <p style={displayStyle(24, ROLE.textPrimary, 800)}>{item.metric}</p>
+      </div>
+    </button>
+  );
+}
+
+function CommandSurface({ mode, selected, selectObject, openSheet }) {
+  if (mode === "brief") {
+    return (
+      <div style={{ display: "grid", gap: SPACE[4] }}>
+        {OBJECTS.map((item, index) => (
+          <BriefBlock key={item.id} item={item} featured={index === 0} onInspect={openSheet} />
         ))}
       </div>
-    </Surface>
-  );
-}
+    );
+  }
 
-function SheetLayer({ selected }) {
-  return (
-    <div style={{ display: "grid", gap: 16 }}>
-      <Surface accent={FAMILY[selected.family].accent} style={{ padding: 22 }}>
-        <div style={mono(T.color.gold, 11, { textTransform: "uppercase", letterSpacing: "0.12em" })}>Object sheet</div>
-        <div style={serif(T.color.text, 42, { marginTop: 10 })}>{selected.title}</div>
-        <div style={body(T.color.text2, 16, { marginTop: 12, lineHeight: 1.75, maxWidth: 820 })}>{selected.sheetNarrative}</div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, marginTop: 20 }}>
-          <Metric label="Current pressure" value={selected.pressure} />
-          <Metric label="Next move" value={selected.nextMove} />
-          <Metric label="Writes into" value={selected.downstream} />
-        </div>
-      </Surface>
-      <Surface style={{ padding: 18 }}>
-        <div style={mono(T.color.blue, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 12 })}>Preserved named lenses</div>
-        <div style={{ display: "grid", gap: 10 }}>
-          {selected.lenses.map((lens) => (
-            <div key={lens.id} style={{ padding: 14, borderRadius: T.radius.md, border: `1px solid ${T.color.border}`, background: alpha("#FFFFFF", 0.03) }}>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
-                <div style={body(T.color.text, 16, { fontWeight: 700 })}>{lens.label}</div>
-                <Pill tone={lens.preservedEntry ? "green" : "neutral"}>{lens.preservedEntry ? "Preserved entry" : "Shared lens"}</Pill>
-              </div>
-              <div style={body(T.color.text2, 14, { marginTop: 8, lineHeight: 1.6 })}>{lens.purpose}</div>
-              <div style={body(T.color.text3, 13, { marginTop: 8 })}>Writes back to: {lens.writesBack}</div>
-            </div>
-          ))}
-        </div>
-      </Surface>
-    </div>
-  );
-}
-
-function WorkspaceLayer({ selected, lens, onPickLens }) {
-  return (
-    <div style={{ display: "grid", gap: 16 }}>
-      <Surface accent={FAMILY[selected.family].accent} style={{ padding: 20 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-          <div>
-            <div style={mono(T.color.gold, 11, { textTransform: "uppercase", letterSpacing: "0.12em" })}>Workspace layer</div>
-            <div style={serif(T.color.text, 40, { marginTop: 10 })}>{selected.title}</div>
-          </div>
-          <Pill tone="blue">{lens.label}</Pill>
-        </div>
-        <div style={body(T.color.text2, 16, { marginTop: 12, lineHeight: 1.7, maxWidth: 760 })}>
-          {lens.label} is not the architecture. It is the active lens on this object. The object keeps the truth. The lens exposes the right work.
-        </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 18 }}>
-          {selected.lenses.map((item) => (
-            <ActionButton key={item.id} kind={item.id === lens.id ? "primary" : "secondary"} onClick={() => onPickLens(item.id)}>
-              {item.label}
-            </ActionButton>
-          ))}
-        </div>
-      </Surface>
-      <div style={{ display: "grid", gridTemplateColumns: "1.4fr 0.9fr", gap: 16 }}>
-        <Surface style={{ padding: 18 }}>
-          <div style={mono(T.color.text3, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 10 })}>What this lens does now</div>
-          <div style={serif(T.color.text, 30)}>{lens.label}</div>
-          <div style={body(T.color.text2, 15, { marginTop: 10, lineHeight: 1.75 })}>{lens.purpose}</div>
-          <div style={{ display: "grid", gap: 10, marginTop: 18 }}>
-            {[
-              `Focus object: ${selected.title}`,
-              `Preserved product noun: ${lens.label}`,
-              `Best next move: ${selected.nextMove}`,
-              `Writes back to: ${lens.writesBack}`,
-            ].map((line) => (
-              <div key={line} style={{ padding: 12, borderRadius: T.radius.md, border: `1px solid ${T.color.border}`, background: alpha("#FFFFFF", 0.03), ...body(T.color.text2, 14, { lineHeight: 1.6 }) }}>
-                {line}
-              </div>
-            ))}
-          </div>
-        </Surface>
-        <Surface style={{ padding: 18 }}>
-          <div style={mono(T.color.teal, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 10 })}>Why this matters</div>
-          <div style={body(T.color.text2, 15, { lineHeight: 1.75 })}>
-            The user should not bounce across modules asking where context lives. Once the object is selected, each lens should inherit its pressure, next move, and downstream consequence.
-          </div>
-          <div style={{ display: "grid", gap: 10, marginTop: 16 }}>
-            <div style={{ padding: 12, borderRadius: T.radius.md, border: `1px solid ${T.color.border}`, background: alpha(T.color.gold, 0.08), ...body(T.color.text, 14, { fontWeight: 700 }) }}>
-              Historical entry preserved: {selected.historicalEntry}
-            </div>
-            <div style={{ padding: 12, borderRadius: T.radius.md, border: `1px solid ${T.color.border}`, background: alpha(T.color.blue, 0.08), ...body(T.color.text2, 14, { lineHeight: 1.6 }) }}>
-              Signal Console stays the signal engine. Future Autopsy stays a premium deal lens. The architecture changes around them.
-            </div>
-          </div>
-        </Surface>
-      </div>
-    </div>
-  );
-}
-
-function GraphLayer({ selected }) {
-  return (
-    <Surface style={{ padding: 22 }}>
-      <div style={mono(T.color.blue, 11, { textTransform: "uppercase", letterSpacing: "0.12em" })}>Diagnostic graph layer</div>
-      <div style={serif(T.color.text, 36, { marginTop: 10 })}>{selected.title}</div>
-      <div style={body(T.color.text2, 15, { marginTop: 12, lineHeight: 1.7, maxWidth: 760 })}>
-        This layer exists to diagnose relationships, not to become the daily operating surface. It should appear rarely, when the operator needs to inspect how truth is connecting.
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 14, marginTop: 22 }}>
-        {selected.graphNodes.map((node, index) => (
-          <div key={node} style={{ padding: 16, borderRadius: T.radius.full, border: `1px solid ${T.color.border}`, background: alpha(index === 0 ? FAMILY[selected.family].accent : "#FFFFFF", index === 0 ? 0.14 : 0.04), textAlign: "center" }}>
-            <div style={body(index === 0 ? T.color.text : T.color.text2, 14, { fontWeight: 700 })}>{node}</div>
-          </div>
+  if (mode === "grid") {
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: SPACE[4] }}>
+        {OBJECTS.map((item, index) => (
+          <GridCard key={item.id} item={item} featured={index === 0} onInspect={openSheet} />
         ))}
       </div>
-      <div style={{ display: "grid", gap: 10, marginTop: 20 }}>
-        <div style={body(T.color.text3, 13, { lineHeight: 1.7 })}>Use this layer to see how the object writes into other truths, not to replace the command layer.</div>
-        <div style={body(T.color.text3, 13, { lineHeight: 1.7 })}>If this becomes the default UX, the reset has gone too far toward system theater.</div>
+    );
+  }
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "340px minmax(0,1fr)", gap: SPACE[4] }}>
+      <div style={{ display: "grid", gap: SPACE[3] }}>
+        {OBJECTS.map((item, index) => (
+          <QueueRow key={item.id} item={item} rank={index + 1} selected={item.id === selected.id} onSelect={selectObject} />
+        ))}
       </div>
-    </Surface>
+      <Surface radius={RADIUS.surfaceLg} shadow={SHADOW.md} padding={SPACE[6]}>
+        <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
+          <Chip label={STATES[selected.state].label} tone={selected.state} />
+          <GapBadge count={selected.gaps.length} />
+        </div>
+        <h3 style={displayStyle(32, ROLE.textPrimary, 800, { marginTop: SPACE[4] })}>{selected.title}</h3>
+        <p style={textStyle(15, ROLE.textSecondary, 500, { marginTop: SPACE[3], maxWidth: 720 })}>{selected.brief}</p>
+        <div style={{ display: "flex", gap: SPACE[3], flexWrap: "wrap", marginTop: SPACE[5] }}>
+          <Button label={selected.primary} onClick={() => openSheet(selected.id)} />
+          <Button label={selected.fallback} variant="secondary" />
+        </div>
+        <Surface tint="pressure" shadow={SHADOW.none} style={{ marginTop: SPACE[5], padding: SPACE[5] }}>
+          <p style={monoStyle(11, ROLE.urgentText)}>Tension migration</p>
+          <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>{selected.next}</p>
+        </Surface>
+      </Surface>
+    </div>
   );
 }
 
-function ObjectRail({ selected, lensId, onPickLens }) {
+function SheetOverlay({ item, closeSheet, openWorkspace }) {
+  const tone = STATES[item.state];
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-      <Surface style={{ padding: 18 }}>
-        <div style={mono(T.color.gold, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 10 })}>Selected object</div>
-        <div style={serif(T.color.text, 34)}>{selected.title}</div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
-          <Pill tone="gold">{FAMILY[selected.family].label}</Pill>
-          <Pill tone={selected.status === "complete" ? "green" : selected.status === "live" ? "blue" : selected.status === "blocked" ? "red" : "gold"}>{STATUS[selected.status].label}</Pill>
+    <div style={{ position: "fixed", inset: 0, background: ROLE.overlay, display: "grid", alignItems: "end", zIndex: 40 }}>
+      <div style={{ background: ROLE.surface, borderTopLeftRadius: RADIUS.sheet, borderTopRightRadius: RADIUS.sheet, boxShadow: SHADOW.lg, padding: SPACE[6], maxHeight: "88vh", overflow: "auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[4], alignItems: "start" }}>
+          <div style={{ display: "grid", gap: SPACE[3] }}>
+            <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
+              <Chip label={tone.label} tone={item.state} />
+              <GapBadge count={item.gaps.length} />
+              <Chip label="Dense sheet" tone="info" />
+            </div>
+            <h2 style={displayStyle(40, ROLE.textPrimary, 800)}>{item.title}</h2>
+          </div>
+          <Button label="Close" variant="tertiary" onClick={closeSheet} minWidth={88} />
         </div>
-        <div style={body(T.color.text2, 14, { marginTop: 14, lineHeight: 1.7 })}>{selected.pressure}</div>
-      </Surface>
-      <Surface style={{ padding: 18 }}>
-        <div style={mono(T.color.text3, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 10 })}>Lens rail</div>
-        <div style={{ display: "grid", gap: 8 }}>
-          {selected.lenses.map((lens) => (
-            <button
-              key={lens.id}
-              onClick={() => onPickLens(lens.id)}
-              style={{
-                textAlign: "left",
-                padding: 12,
-                cursor: "pointer",
-                borderRadius: T.radius.md,
-                border: `1px solid ${lens.id === lensId ? alpha(T.color.gold, 0.35) : T.color.border}`,
-                background: lens.id === lensId ? alpha(T.color.gold, 0.1) : alpha("#FFFFFF", 0.03),
-              }}
-            >
-              <div style={body(T.color.text, 14, { fontWeight: 700 })}>{lens.label}</div>
-              <div style={body(T.color.text3, 12, { marginTop: 4, lineHeight: 1.6 })}>{lens.purpose}</div>
-            </button>
-          ))}
+
+        <div style={{ display: "grid", gridTemplateColumns: "176px 1fr", gap: SPACE[4], marginTop: SPACE[5] }}>
+          <Surface tint="info" shadow={SHADOW.none} padding={SPACE[5]}>
+            <MetricAnchor value={item.metric} label={item.metricLabel} tone={item.state} />
+          </Surface>
+          <div style={{ background: tone.surface, border: `1px solid ${tone.border}`, borderLeft: `8px solid ${tone.text}`, borderRadius: RADIUS.surfaceMd, padding: SPACE[5] }}>
+            <p style={textStyle(16, ROLE.textPrimary, 600)}>{item.brief}</p>
+          </div>
         </div>
-      </Surface>
-      <Surface style={{ padding: 18 }}>
-        <div style={mono(T.color.blue, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 10 })}>Truth locks</div>
-        <div style={{ display: "grid", gap: 8 }}>
-          {ARCHITECTURE_TRUTHS.map((line) => (
-            <div key={line} style={body(T.color.text2, 13, { lineHeight: 1.65 })}>{line}</div>
-          ))}
+
+        <div style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: SPACE[4], marginTop: SPACE[4] }}>
+          <Surface shadow={SHADOW.none} padding={SPACE[5]}>
+            <p style={monoStyle(11, ROLE.urgentText)}>⊘ explicit gaps</p>
+            <div style={{ display: "grid", gap: SPACE[3], marginTop: SPACE[4] }}>
+              {item.gaps.map((gap) => (
+                <p key={gap} style={textStyle(14, ROLE.textPrimary, 600)}>{gap}</p>
+              ))}
+            </div>
+            <p style={monoStyle(11, ROLE.link, { marginTop: SPACE[5] })}>connections</p>
+            <div style={{ display: "grid", gap: SPACE[2], marginTop: SPACE[4] }}>
+              {item.connections.map((line) => (
+                <p key={line} style={textStyle(13, ROLE.textSecondary, 500)}>{line}</p>
+              ))}
+            </div>
+          </Surface>
+
+          <div style={{ display: "grid", gap: SPACE[4] }}>
+            <Surface shadow={SHADOW.none} padding={SPACE[5]}>
+              <p style={monoStyle(11, ROLE.link)}>one dominant next move</p>
+              <h3 style={displayStyle(28, ROLE.textPrimary, 800, { marginTop: SPACE[3] })}>{item.primary}</h3>
+              <p style={textStyle(13, ROLE.textSecondary, 500, { marginTop: SPACE[3] })}>{item.next}</p>
+              <div style={{ display: "flex", gap: SPACE[3], flexWrap: "wrap", marginTop: SPACE[5] }}>
+                <Button label="Go deeper ->" onClick={openWorkspace} minWidth={144} />
+                <Button label={item.fallback} variant="secondary" />
+              </div>
+            </Surface>
+            <Surface tint="pressure" shadow={SHADOW.none} padding={SPACE[5]}>
+              <p style={monoStyle(11, ROLE.urgentText)}>what compounds automatically</p>
+              <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>{item.compounding}</p>
+            </Surface>
+          </div>
         </div>
-      </Surface>
-      <Surface style={{ padding: 18 }}>
-        <div style={mono(T.color.red, 11, { textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 10 })}>What we reject</div>
-        <div style={{ display: "grid", gap: 8 }}>
-          {ARCHITECTURE_REJECTIONS.map((line) => (
-            <div key={line} style={body(T.color.text2, 13, { lineHeight: 1.65 })}>{line}</div>
-          ))}
+      </div>
+    </div>
+  );
+}
+
+function WorkspaceView({ item, activeLens, onLensChange, onBack }) {
+  const lens = item.lenses.find((entry) => entry.id === activeLens) || item.lenses[0];
+
+  return (
+    <div style={{ display: "grid", gap: SPACE[5] }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[4], flexWrap: "wrap", alignItems: "center" }}>
+        <Button label="Back to command" variant="tertiary" onClick={onBack} minWidth={146} />
+        <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
+          <Chip label="Workspace layer" tone="info" />
+          <Chip label={item.family} tone="neutral" />
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "290px minmax(0,1fr) 320px", gap: SPACE[4] }}>
+        <div style={{ display: "grid", gap: SPACE[4], alignContent: "start" }}>
+          <Surface padding={SPACE[5]}>
+            <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
+              <Chip label={STATES[item.state].label} tone={item.state} />
+              <GapBadge count={item.gaps.length} />
+            </div>
+            <h2 style={displayStyle(28, ROLE.textPrimary, 800, { marginTop: SPACE[4] })}>{item.title}</h2>
+            <p style={textStyle(13, ROLE.textSecondary, 500, { marginTop: SPACE[3] })}>{item.brief}</p>
+          </Surface>
+
+          <Surface padding={SPACE[5]}>
+            <p style={monoStyle(11, ROLE.urgentText)}>context rail</p>
+            <div style={{ display: "grid", gap: SPACE[3], marginTop: SPACE[4] }}>
+              {item.gaps.map((gap) => (
+                <p key={gap} style={textStyle(13, ROLE.textPrimary, 600)}>{gap}</p>
+              ))}
+            </div>
+            <div style={{ display: "grid", gap: SPACE[2], marginTop: SPACE[5] }}>
+              {item.connections.map((line) => (
+                <p key={line} style={textStyle(12, ROLE.textSecondary, 500)}>{line}</p>
+              ))}
+            </div>
+          </Surface>
+        </div>
+
+        <div style={{ display: "grid", gap: SPACE[4] }}>
+          <Surface padding={SPACE[4]}>
+            <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
+              {item.lenses.map((entry) => {
+                const active = entry.id === lens.id;
+                return (
+                  <button
+                    key={entry.id}
+                    onClick={() => onLensChange(entry.id)}
+                    style={{
+                      ...textStyle(13, active ? ROLE.textInverse : ROLE.textPrimary, 700, { cursor: "pointer" }),
+                      height: HEIGHT.md,
+                      padding: `0 ${SPACE[3]}px`,
+                      borderRadius: RADIUS.full,
+                      border: active ? "none" : `1px solid ${ROLE.borderStrong}`,
+                      background: active ? ROLE.info : ROLE.surfaceAlt,
+                    }}
+                  >
+                    {entry.label}
+                  </button>
+                );
+              })}
+            </div>
+          </Surface>
+
+          <Surface radius={RADIUS.surfaceLg} shadow={SHADOW.lg} padding={SPACE[6]}>
+            <p style={monoStyle(11, ROLE.link)}>preserved deep room</p>
+            <h2 style={displayStyle(40, ROLE.textPrimary, 800, { marginTop: SPACE[4] })}>{lens.label}</h2>
+            <p style={textStyle(15, ROLE.textSecondary, 500, { marginTop: SPACE[3], maxWidth: 760 })}>
+              {lens.cue}
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: SPACE[4], marginTop: SPACE[5] }}>
+              <Surface tint="info" shadow={SHADOW.none} padding={SPACE[4]}>
+                <p style={monoStyle(11, ROLE.link)}>module</p>
+                <p style={textStyle(14, ROLE.textPrimary, 700, { marginTop: SPACE[2] })}>{lens.module || lens.label}</p>
+              </Surface>
+              <Surface tint="pressure" shadow={SHADOW.none} padding={SPACE[4]}>
+                <p style={monoStyle(11, ROLE.urgentText)}>next move</p>
+                <p style={textStyle(14, ROLE.textPrimary, 700, { marginTop: SPACE[2] })}>{item.primary}</p>
+              </Surface>
+              <Surface padding={SPACE[4]} shadow={SHADOW.none} style={{ border: `1px dashed ${ROLE.borderStrong}` }}>
+                <p style={monoStyle(11, ROLE.textMuted)}>why this is different</p>
+                <p style={textStyle(14, ROLE.textPrimary, 700, { marginTop: SPACE[2] })}>The room stays deep. The hallway disappears.</p>
+              </Surface>
+            </div>
+
+            <Surface tint="structure" shadow={SHADOW.none} style={{ marginTop: SPACE[5], padding: SPACE[5] }}>
+              <p style={monoStyle(11, ROLE.textMuted)}>surface text burden</p>
+              <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>
+                The workspace header stays shorter than the old module shell. Context sits in the rails so the center can behave like an instrument instead of a brochure.
+              </p>
+            </Surface>
+          </Surface>
+        </div>
+
+        <div style={{ display: "grid", gap: SPACE[4], alignContent: "start" }}>
+          <Surface padding={SPACE[5]} tint="pressure">
+            <p style={monoStyle(11, ROLE.urgentText)}>downstream loop</p>
+            <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>{item.next}</p>
+          </Surface>
+
+          <Surface padding={SPACE[5]}>
+            <p style={monoStyle(11, ROLE.link)}>what compounds automatically</p>
+            <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>{item.compounding}</p>
+          </Surface>
+
+          <Surface padding={SPACE[5]}>
+            <p style={monoStyle(11, ROLE.textMuted)}>sacred asset protection</p>
+            <div style={{ display: "grid", gap: SPACE[2], marginTop: SPACE[3] }}>
+              <p style={textStyle(12, ROLE.textSecondary, 600)}>Signal Console stays a named asset, not a generic tab.</p>
+              <p style={textStyle(12, ROLE.textSecondary, 600)}>Future Autopsy stays a named asset, not a fear label.</p>
+              <p style={textStyle(12, ROLE.textSecondary, 600)}>Module depth is preserved. Only the access logic changes.</p>
+            </div>
+          </Surface>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GraphReward({ onBack }) {
+  return (
+    <div style={{ display: "grid", gap: SPACE[5] }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[4], flexWrap: "wrap", alignItems: "center" }}>
+        <Button label="Back to command" variant="tertiary" onClick={onBack} minWidth={146} />
+        <Chip label="Graph reward" tone="info" />
+      </div>
+
+      <Surface
+        radius={RADIUS.sheet}
+        shadow={SHADOW.lg}
+        padding={SPACE[7]}
+        style={{ background: `linear-gradient(180deg, ${ROLE.surface} 0%, ${C.blue[50]} 100%)` }}
+      >
+        <div style={{ display: "grid", gap: SPACE[4] }}>
+          <h2 style={displayStyle(48, ROLE.textPrimary, 800, { maxWidth: 900 })}>Something super cool you did that you didn't know you did.</h2>
+          <p style={textStyle(16, ROLE.textSecondary, 500, { maxWidth: 860 })}>
+            This view is deliberately not the primary interaction model. It is the moment the product reveals compounding structure the user built indirectly through normal work.
+          </p>
+
+          <div style={{ position: "relative", height: 320, marginTop: SPACE[4] }}>
+            <svg viewBox="0 0 920 320" width="100%" height="100%" preserveAspectRatio="none">
+              <path d="M120 170 C250 80 360 90 450 150" stroke={ROLE.graphLine} strokeWidth="2" strokeDasharray="8 8" fill="none" />
+              <path d="M450 150 C560 228 674 234 800 174" stroke={ROLE.graphLine} strokeWidth="2" strokeDasharray="8 8" fill="none" />
+              <path d="M450 150 C530 88 640 72 756 96" stroke={ROLE.graphLine} strokeWidth="2" strokeDasharray="8 8" fill="none" />
+            </svg>
+            <div style={{ position: "absolute", inset: 0 }}>
+              {OBJECTS.map((item, index) => {
+                const positions = [
+                  { left: "4%", top: "42%" },
+                  { left: "30%", top: "10%" },
+                  { left: "42%", top: "48%" },
+                  { left: "71%", top: "18%" },
+                ];
+                const background = item.state === "urgent" ? ROLE.urgentSurface : item.state === "active" ? ROLE.activeSurface : ROLE.healthySurface;
+                return (
+                  <div
+                    key={item.id}
+                    style={{
+                      position: "absolute",
+                      ...positions[index],
+                      width: 176,
+                      padding: SPACE[4],
+                      borderRadius: RADIUS.full,
+                      background,
+                      border: `1px dashed ${ROLE.borderStrong}`,
+                      boxShadow: SHADOW.sm,
+                      textAlign: "center",
+                    }}
+                  >
+                    <p style={monoStyle(11, ROLE.textMuted)}>{item.type}</p>
+                    <p style={textStyle(13, ROLE.textPrimary, 700, { marginTop: SPACE[2] })}>{item.title}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </Surface>
     </div>
@@ -603,73 +784,103 @@ function ObjectRail({ selected, lensId, onPickLens }) {
 }
 
 export default function ArchitectureResetPrototype() {
-  const [selectedId, setSelectedId] = useState(OBJECTS[2].id);
-  const [commandMode, setCommandMode] = useState("brief");
+  const [mode, setMode] = useState("brief");
   const [layer, setLayer] = useState("command");
+  const [selectedId, setSelectedId] = useState(OBJECTS[0].id);
+  const [activeLens, setActiveLens] = useState(OBJECTS[0].lenses[0].id);
+  const [sheetOpen, setSheetOpen] = useState(false);
+
   const selected = useMemo(() => OBJECTS.find((item) => item.id === selectedId) || OBJECTS[0], [selectedId]);
-  const queue = useMemo(() => [...OBJECTS].sort((a, b) => b.queueScore - a.queueScore), []);
-  const [lensId, setLensId] = useState(OBJECTS[2].lenses[0].id);
 
   useEffect(() => {
-    if (selected && selected.lenses && selected.lenses[0]) {
-      setLensId(selected.lenses[0].id);
+    const firstLens = selected.lenses[0]?.id;
+    if (!selected.lenses.some((lens) => lens.id === activeLens) && firstLens) {
+      setActiveLens(firstLens);
     }
-  }, [selected]);
+  }, [selected, activeLens]);
 
-  if (!selected) {
-    return null;
-  }
+  const selectObject = (id) => {
+    const next = OBJECTS.find((item) => item.id === id) || OBJECTS[0];
+    setSelectedId(next.id);
+    setActiveLens(next.lenses[0].id);
+  };
 
-  const selectedLens = selected.lenses.find((item) => item.id === lensId) || selected.lenses[0];
-  const center = layer === "command"
-    ? commandMode === "brief"
-      ? <BriefMode selected={selected} queue={queue} />
-      : commandMode === "grid"
-        ? <GridMode items={queue} />
-        : <QueueMode items={queue} />
-    : layer === "sheet"
-      ? <SheetLayer selected={selected} />
-      : layer === "workspace"
-        ? <WorkspaceLayer selected={selected} lens={selectedLens} onPickLens={setLensId} />
-        : <GraphLayer selected={selected} />;
+  const openSheet = (id) => {
+    selectObject(id);
+    setSheetOpen(true);
+  };
+
+  const openWorkspace = () => {
+    setSheetOpen(false);
+    setLayer("workspace");
+  };
 
   return (
-    <div style={{ minHeight: "100vh", background: `linear-gradient(180deg, ${T.color.bg}, #060912 65%)`, padding: 24 }}>
-      <div style={{ maxWidth: 1600, margin: "0 auto", display: "grid", gap: 18 }}>
-        <Surface accent={T.color.gold} style={{ padding: 24, background: `radial-gradient(circle at top right, ${alpha(T.color.gold, 0.08)}, transparent 36%), ${T.color.shell}` }}>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
-            <div style={{ maxWidth: 900 }}>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <Pill tone="gold">Architecture reset prototype</Pill>
-                <Pill tone="blue">{"Command -> object -> lens -> handoff"}</Pill>
+    <div style={{ minHeight: "100vh", background: `linear-gradient(180deg, ${ROLE.page} 0%, ${C.blue[50]} 100%)`, padding: SPACE[6] }}>
+      <style>{'@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap");'}</style>
+      <div style={{ maxWidth: 1600, margin: "0 auto", display: "grid", gap: SPACE[5] }}>
+        <Surface radius={RADIUS.surfaceLg} shadow={SHADOW.lg} style={{ padding: SPACE[7], background: `linear-gradient(160deg, ${ROLE.surface} 0%, ${C.orange[50]} 18%, ${C.blue[50]} 100%)` }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[5], flexWrap: "wrap", alignItems: "start" }}>
+            <div style={{ display: "grid", gap: SPACE[4], maxWidth: 980 }}>
+              <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
+                <Chip label="Modules preserved" tone="neutral" />
+                <Chip label="Hallway removed" tone="urgent" />
+                <Chip label="Bright system language" tone="info" />
               </div>
-              <div style={serif(T.color.text, 56, { marginTop: 14 })}>Get there, not closer.</div>
-              <div style={body(T.color.text2, 18, { marginTop: 12, lineHeight: 1.75, maxWidth: 860 })}>
-                This prototype is not a component gallery. It is the structure the app should evolve into before beta: ranked objects first, preserved lenses second, handoff truth always visible.
-              </div>
+              <h1 style={displayStyle(56, ROLE.textPrimary, 800, { maxWidth: 980 })}>
+                The command surface is the product. The modules are the deep rooms behind it.
+              </h1>
+              <p style={textStyle(18, ROLE.textSecondary, 500, { maxWidth: 900 })}>
+                This prototype proves the real architecture reset in the locked brand language: Brief, Grid, and Queue for ranked work; a dense sheet for inspection; an object-anchored workspace for preserved depth; and a hidden graph reward for compounding.
+              </p>
             </div>
-            <div style={{ display: "grid", gap: 10 }}>
-              <div style={mono(T.color.text3, 11, { textTransform: "uppercase", letterSpacing: "0.12em" })}>Preserved named assets</div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <Pill tone="blue">Signal Console</Pill>
-                <Pill tone="gold">Future Autopsy</Pill>
-                <Pill tone="green">Playbook / Handoff Kit</Pill>
-              </div>
+
+            <div style={{ display: "grid", gap: SPACE[3], minWidth: 240 }}>
+              <Surface tint="info" shadow={SHADOW.none} padding={SPACE[4]}>
+                <MetricAnchor value="4" label="architecture layers" tone="active" />
+              </Surface>
+              <Surface tint="pressure" shadow={SHADOW.none} padding={SPACE[4]}>
+                <MetricAnchor value="1" label="dominant next move" tone="urgent" />
+              </Surface>
+              <Surface shadow={SHADOW.none} padding={SPACE[4]}>
+                <MetricAnchor value="0" label="tolerance for old hallway logic" />
+              </Surface>
             </div>
           </div>
         </Surface>
 
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
-          <Segmented items={COMMAND_MODES} value={commandMode} onChange={setCommandMode} />
-          <Segmented items={LAYERS} value={layer} onChange={setLayer} />
-        </div>
+        {layer === "command" ? (
+          <div style={{ display: "grid", gridTemplateColumns: mode === "queue" ? "1fr" : "300px minmax(0,1fr)", gap: SPACE[5] }}>
+            {mode === "queue" ? null : <QuietFrame onGraph={() => setLayer("graph")} />}
 
-        <div style={{ display: "grid", gridTemplateColumns: "320px minmax(0, 1fr) 320px", gap: 16, alignItems: "start" }}>
-          <QueueList items={queue} selectedId={selectedId} onSelect={(id) => { setSelectedId(id); setLayer("command"); }} />
-          {center}
-          <ObjectRail selected={selected} lensId={lensId} onPickLens={(id) => { setLensId(id); setLayer("workspace"); }} />
-        </div>
+            <div style={{ display: "grid", gap: SPACE[4] }}>
+              <Surface padding={SPACE[5]}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[4], flexWrap: "wrap", alignItems: "center" }}>
+                  <div style={{ display: "grid", gap: SPACE[2] }}>
+                    <Chip label="Command surface" tone="info" />
+                    <h2 style={displayStyle(32, ROLE.textPrimary, 800)}>One urgency engine. Three render densities.</h2>
+                    <p style={textStyle(13, ROLE.textSecondary, 500)}>{MODES.find((entry) => entry.id === mode)?.copy}</p>
+                  </div>
+                  <div style={{ display: "flex", gap: SPACE[3], flexWrap: "wrap", alignItems: "center" }}>
+                    <ModeToggle value={mode} onChange={setMode} />
+                    {mode === "queue" ? <Button label="Open graph reward" variant="secondary" onClick={() => setLayer("graph")} minWidth={156} /> : null}
+                  </div>
+                </div>
+              </Surface>
+
+              <CommandSurface mode={mode} selected={selected} selectObject={selectObject} openSheet={openSheet} />
+            </div>
+          </div>
+        ) : null}
+
+        {layer === "workspace" ? (
+          <WorkspaceView item={selected} activeLens={activeLens} onLensChange={setActiveLens} onBack={() => setLayer("command")} />
+        ) : null}
+
+        {layer === "graph" ? <GraphReward onBack={() => setLayer("command")} /> : null}
       </div>
+
+      {sheetOpen ? <SheetOverlay item={selected} closeSheet={() => setSheetOpen(false)} openWorkspace={openWorkspace} /> : null}
     </div>
   );
 }
