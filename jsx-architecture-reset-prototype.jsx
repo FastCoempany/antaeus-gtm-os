@@ -352,41 +352,41 @@ function MetricAnchor({ value, label, tone = "neutral" }) {
 
 function QuietFrame({ onGraph }) {
   return (
-    <div style={{ display: "grid", gap: SPACE[4], alignContent: "start" }}>
-      <Surface radius={RADIUS.surfaceLg} shadow={SHADOW.md} padding={SPACE[5]}>
-        <div style={{ display: "grid", gap: SPACE[3] }}>
-          <Chip label="Command layer" tone="info" />
-          <h2 style={displayStyle(28, ROLE.textPrimary)}>The app opens as a decision surface, not a hallway.</h2>
-          <p style={textStyle(14, ROLE.textSecondary, 500)}>
-            The left frame is not navigation. It is the quiet structure that makes pressure, compounding, and one dominant move legible before the user does anything.
-          </p>
-        </div>
-      </Surface>
-
-      <Surface padding={SPACE[5]}>
-        <p style={monoStyle(11, ROLE.urgentText)}>Behavioral locks</p>
-        <div style={{ display: "grid", gap: SPACE[3], marginTop: SPACE[4] }}>
-          {[
-            "Urgent, Active, Healthy describe object condition, not abstract rank.",
-            "Open loops migrate forward. They do not vanish when work gets done.",
-            "The metric should hit before the explanation does.",
-            "The user should always feel one best move, not menu anxiety.",
-          ].map((line) => (
-            <p key={line} style={textStyle(13, ROLE.textSecondary, 600)}>{line}</p>
-          ))}
-        </div>
-      </Surface>
-
-      <Surface padding={SPACE[5]} tint="pressure">
-        <p style={monoStyle(11, ROLE.urgentText)}>Hidden reward</p>
-        <h3 style={displayStyle(24, ROLE.textPrimary, 800, { marginTop: SPACE[3] })}>Touch here to see something super cool you did that you didn't know you did.</h3>
-        <p style={textStyle(13, ROLE.textSecondary, 500, { marginTop: SPACE[3] })}>
-          The graph stays out of the way until it becomes a reward moment. It should feel discovered, not assigned.
+    <div
+      style={{
+        alignContent: "start",
+        paddingRight: SPACE[5],
+        borderRight: `1px solid ${ROLE.border}`,
+        display: "grid",
+        gap: SPACE[5],
+      }}
+    >
+      <div style={{ display: "grid", gap: SPACE[3] }}>
+        <p style={monoStyle(11, ROLE.link)}>quiet frame</p>
+        <h2 style={displayStyle(28, ROLE.textPrimary, 800)}>Open on pressure, not on places.</h2>
+        <p style={textStyle(14, ROLE.textSecondary, 500)}>
+          This column exists to settle the eye and hold the operating thesis. It should feel like a calm frame around the ranked work, not a stack of side widgets.
         </p>
-        <div style={{ marginTop: SPACE[4] }}>
+      </div>
+
+      <div style={{ display: "grid", gap: SPACE[3], paddingTop: SPACE[4], borderTop: `1px solid ${ROLE.border}` }}>
+        {[
+          "Urgent, Active, Healthy describe object condition.",
+          "Open loops migrate. They do not disappear.",
+          "Metrics hit before explanation.",
+          "One best move beats menu anxiety.",
+        ].map((line) => (
+          <p key={line} style={textStyle(13, ROLE.textSecondary, 600)}>{line}</p>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gap: SPACE[3], paddingTop: SPACE[4], borderTop: `1px solid ${ROLE.border}` }}>
+        <p style={monoStyle(11, ROLE.urgentText)}>hidden reward</p>
+        <p style={textStyle(13, ROLE.textPrimary, 700)}>Touch here to see something super cool you did that you didn't know you did.</p>
+        <div>
           <Button label="Open graph reward" onClick={onGraph} minWidth={164} />
         </div>
-      </Surface>
+      </div>
     </div>
   );
 }
@@ -614,34 +614,33 @@ function WorkspaceView({ item, activeLens, onLensChange, onBack }) {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "290px minmax(0,1fr) 320px", gap: SPACE[4] }}>
-        <div style={{ display: "grid", gap: SPACE[4], alignContent: "start" }}>
-          <Surface padding={SPACE[5]}>
+      <div style={{ display: "grid", gridTemplateColumns: "252px minmax(0,1fr)", gap: SPACE[6] }}>
+        <div style={{ display: "grid", gap: SPACE[4], alignContent: "start", paddingRight: SPACE[5], borderRight: `1px solid ${ROLE.border}` }}>
+          <div style={{ display: "grid", gap: SPACE[3] }}>
             <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
               <Chip label={STATES[item.state].label} tone={item.state} />
               <GapBadge count={item.gaps.length} />
             </div>
-            <h2 style={displayStyle(28, ROLE.textPrimary, 800, { marginTop: SPACE[4] })}>{item.title}</h2>
-            <p style={textStyle(13, ROLE.textSecondary, 500, { marginTop: SPACE[3] })}>{item.brief}</p>
-          </Surface>
+            <h2 style={displayStyle(28, ROLE.textPrimary, 800)}>{item.title}</h2>
+            <p style={textStyle(13, ROLE.textSecondary, 500)}>{item.brief}</p>
+          </div>
 
-          <Surface padding={SPACE[5]}>
+          <div style={{ display: "grid", gap: SPACE[3], paddingTop: SPACE[4], borderTop: `1px solid ${ROLE.border}` }}>
             <p style={monoStyle(11, ROLE.urgentText)}>context rail</p>
-            <div style={{ display: "grid", gap: SPACE[3], marginTop: SPACE[4] }}>
-              {item.gaps.map((gap) => (
-                <p key={gap} style={textStyle(13, ROLE.textPrimary, 600)}>{gap}</p>
-              ))}
-            </div>
-            <div style={{ display: "grid", gap: SPACE[2], marginTop: SPACE[5] }}>
-              {item.connections.map((line) => (
-                <p key={line} style={textStyle(12, ROLE.textSecondary, 500)}>{line}</p>
-              ))}
-            </div>
-          </Surface>
+            {item.gaps.map((gap) => (
+              <p key={gap} style={textStyle(13, ROLE.textPrimary, 600)}>{gap}</p>
+            ))}
+          </div>
+
+          <div style={{ display: "grid", gap: SPACE[2], paddingTop: SPACE[4], borderTop: `1px solid ${ROLE.border}` }}>
+            {item.connections.map((line) => (
+              <p key={line} style={textStyle(12, ROLE.textSecondary, 500)}>{line}</p>
+            ))}
+          </div>
         </div>
 
-        <div style={{ display: "grid", gap: SPACE[4] }}>
-          <Surface padding={SPACE[4]}>
+        <Surface radius={RADIUS.surfaceLg} shadow={SHADOW.lg} padding={0} style={{ overflow: "hidden" }}>
+          <div style={{ padding: `${SPACE[4]}px ${SPACE[6]}px`, borderBottom: `1px solid ${ROLE.border}` }}>
             <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
               {item.lenses.map((entry) => {
                 const active = entry.id === lens.id;
@@ -650,12 +649,12 @@ function WorkspaceView({ item, activeLens, onLensChange, onBack }) {
                     key={entry.id}
                     onClick={() => onLensChange(entry.id)}
                     style={{
-                      ...textStyle(13, active ? ROLE.textInverse : ROLE.textPrimary, 700, { cursor: "pointer" }),
+                      ...textStyle(13, active ? ROLE.textPrimary : ROLE.textSecondary, 700, { cursor: "pointer" }),
                       height: HEIGHT.md,
                       padding: `0 ${SPACE[3]}px`,
                       borderRadius: RADIUS.full,
-                      border: active ? "none" : `1px solid ${ROLE.borderStrong}`,
-                      background: active ? ROLE.info : ROLE.surfaceAlt,
+                      border: active ? `1px solid ${ROLE.borderSelected}` : `1px solid transparent`,
+                      background: active ? ROLE.surfaceAlt : "transparent",
                     }}
                   >
                     {entry.label}
@@ -663,58 +662,47 @@ function WorkspaceView({ item, activeLens, onLensChange, onBack }) {
                 );
               })}
             </div>
-          </Surface>
+          </div>
 
-          <Surface radius={RADIUS.surfaceLg} shadow={SHADOW.lg} padding={SPACE[6]}>
-            <p style={monoStyle(11, ROLE.link)}>preserved deep room</p>
-            <h2 style={displayStyle(40, ROLE.textPrimary, 800, { marginTop: SPACE[4] })}>{lens.label}</h2>
-            <p style={textStyle(15, ROLE.textSecondary, 500, { marginTop: SPACE[3], maxWidth: 760 })}>
-              {lens.cue}
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: SPACE[4], marginTop: SPACE[5] }}>
-              <Surface tint="info" shadow={SHADOW.none} padding={SPACE[4]}>
+          <div style={{ padding: `${SPACE[6]}px`, display: "grid", gap: SPACE[5] }}>
+            <div style={{ display: "grid", gap: SPACE[3] }}>
+              <p style={monoStyle(11, ROLE.link)}>{lens.module || lens.label}</p>
+              <h2 style={displayStyle(44, ROLE.textPrimary, 800)}>{lens.label}</h2>
+              <p style={textStyle(15, ROLE.textSecondary, 500, { maxWidth: 760 })}>{lens.cue}</p>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: SPACE[4] }}>
+              <div style={{ paddingRight: SPACE[4], borderRight: `1px solid ${ROLE.border}` }}>
                 <p style={monoStyle(11, ROLE.link)}>module</p>
                 <p style={textStyle(14, ROLE.textPrimary, 700, { marginTop: SPACE[2] })}>{lens.module || lens.label}</p>
-              </Surface>
-              <Surface tint="pressure" shadow={SHADOW.none} padding={SPACE[4]}>
+              </div>
+              <div style={{ paddingRight: SPACE[4], borderRight: `1px solid ${ROLE.border}` }}>
                 <p style={monoStyle(11, ROLE.urgentText)}>next move</p>
                 <p style={textStyle(14, ROLE.textPrimary, 700, { marginTop: SPACE[2] })}>{item.primary}</p>
-              </Surface>
-              <Surface padding={SPACE[4]} shadow={SHADOW.none} style={{ border: `1px dashed ${ROLE.borderStrong}` }}>
+              </div>
+              <div>
                 <p style={monoStyle(11, ROLE.textMuted)}>why this is different</p>
                 <p style={textStyle(14, ROLE.textPrimary, 700, { marginTop: SPACE[2] })}>The room stays deep. The hallway disappears.</p>
-              </Surface>
+              </div>
             </div>
 
-            <Surface tint="structure" shadow={SHADOW.none} style={{ marginTop: SPACE[5], padding: SPACE[5] }}>
-              <p style={monoStyle(11, ROLE.textMuted)}>surface text burden</p>
-              <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>
-                The workspace header stays shorter than the old module shell. Context sits in the rails so the center can behave like an instrument instead of a brochure.
+            <div style={{ display: "grid", gap: SPACE[4], paddingTop: SPACE[5], borderTop: `1px solid ${ROLE.border}` }}>
+              <p style={textStyle(14, ROLE.textPrimary, 600)}>
+                The workspace header stays shorter than the old module shell. Context lives in the rail so the center can behave like an instrument instead of a brochure.
               </p>
-            </Surface>
-          </Surface>
-        </div>
-
-        <div style={{ display: "grid", gap: SPACE[4], alignContent: "start" }}>
-          <Surface padding={SPACE[5]} tint="pressure">
-            <p style={monoStyle(11, ROLE.urgentText)}>downstream loop</p>
-            <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>{item.next}</p>
-          </Surface>
-
-          <Surface padding={SPACE[5]}>
-            <p style={monoStyle(11, ROLE.link)}>what compounds automatically</p>
-            <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>{item.compounding}</p>
-          </Surface>
-
-          <Surface padding={SPACE[5]}>
-            <p style={monoStyle(11, ROLE.textMuted)}>sacred asset protection</p>
-            <div style={{ display: "grid", gap: SPACE[2], marginTop: SPACE[3] }}>
-              <p style={textStyle(12, ROLE.textSecondary, 600)}>Signal Console stays a named asset, not a generic tab.</p>
-              <p style={textStyle(12, ROLE.textSecondary, 600)}>Future Autopsy stays a named asset, not a fear label.</p>
-              <p style={textStyle(12, ROLE.textSecondary, 600)}>Module depth is preserved. Only the access logic changes.</p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: SPACE[5] }}>
+                <div>
+                  <p style={monoStyle(11, ROLE.urgentText)}>downstream loop</p>
+                  <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>{item.next}</p>
+                </div>
+                <div>
+                  <p style={monoStyle(11, ROLE.link)}>what compounds automatically</p>
+                  <p style={textStyle(13, ROLE.textPrimary, 600, { marginTop: SPACE[3] })}>{item.compounding}</p>
+                </div>
+              </div>
             </div>
-          </Surface>
-        </div>
+          </div>
+        </Surface>
       </div>
     </div>
   );
@@ -819,54 +807,50 @@ export default function ArchitectureResetPrototype() {
     <div style={{ minHeight: "100vh", background: `linear-gradient(180deg, ${ROLE.page} 0%, ${C.blue[50]} 100%)`, padding: SPACE[6] }}>
       <style>{'@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap");'}</style>
       <div style={{ maxWidth: 1600, margin: "0 auto", display: "grid", gap: SPACE[5] }}>
-        <Surface radius={RADIUS.surfaceLg} shadow={SHADOW.lg} style={{ padding: SPACE[7], background: `linear-gradient(160deg, ${ROLE.surface} 0%, ${C.orange[50]} 18%, ${C.blue[50]} 100%)` }}>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[5], flexWrap: "wrap", alignItems: "start" }}>
-            <div style={{ display: "grid", gap: SPACE[4], maxWidth: 980 }}>
-              <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
-                <Chip label="Modules preserved" tone="neutral" />
-                <Chip label="Hallway removed" tone="urgent" />
-                <Chip label="Bright system language" tone="info" />
-              </div>
-              <h1 style={displayStyle(56, ROLE.textPrimary, 800, { maxWidth: 980 })}>
-                The command surface is the product. The modules are the deep rooms behind it.
-              </h1>
-              <p style={textStyle(18, ROLE.textSecondary, 500, { maxWidth: 900 })}>
-                This prototype proves the real architecture reset in the locked brand language: Brief, Grid, and Queue for ranked work; a dense sheet for inspection; an object-anchored workspace for preserved depth; and a hidden graph reward for compounding.
-              </p>
+        <div style={{ display: "grid", gap: SPACE[4], padding: `${SPACE[5]}px 0 ${SPACE[6]}px`, borderBottom: `1px solid ${ROLE.border}` }}>
+          <div style={{ display: "flex", gap: SPACE[2], flexWrap: "wrap" }}>
+            <Chip label="Modules preserved" tone="neutral" />
+            <Chip label="Hallway removed" tone="urgent" />
+            <Chip label="Bright system language" tone="info" />
+          </div>
+          <h1 style={displayStyle(68, ROLE.textPrimary, 800, { maxWidth: 1120 })}>
+            The command surface is the product. The modules are the deep rooms behind it.
+          </h1>
+          <p style={textStyle(19, ROLE.textSecondary, 500, { maxWidth: 980 })}>
+            Brief, Grid, and Queue rank the work. The sheet sharpens it. The workspace preserves depth. The graph reward reveals the compounding you built without having to think about it.
+          </p>
+          <div style={{ display: "flex", gap: SPACE[5], flexWrap: "wrap", paddingTop: SPACE[2] }}>
+            <div>
+              <p style={monoStyle(11, ROLE.link)}>architecture layers</p>
+              <p style={displayStyle(32, ROLE.activeText, 800, { marginTop: SPACE[1] })}>4</p>
             </div>
-
-            <div style={{ display: "grid", gap: SPACE[3], minWidth: 240 }}>
-              <Surface tint="info" shadow={SHADOW.none} padding={SPACE[4]}>
-                <MetricAnchor value="4" label="architecture layers" tone="active" />
-              </Surface>
-              <Surface tint="pressure" shadow={SHADOW.none} padding={SPACE[4]}>
-                <MetricAnchor value="1" label="dominant next move" tone="urgent" />
-              </Surface>
-              <Surface shadow={SHADOW.none} padding={SPACE[4]}>
-                <MetricAnchor value="0" label="tolerance for old hallway logic" />
-              </Surface>
+            <div>
+              <p style={monoStyle(11, ROLE.urgentText)}>dominant next move</p>
+              <p style={displayStyle(32, ROLE.urgentText, 800, { marginTop: SPACE[1] })}>1</p>
+            </div>
+            <div>
+              <p style={monoStyle(11, ROLE.textMuted)}>old hallway tolerance</p>
+              <p style={displayStyle(32, ROLE.textPrimary, 800, { marginTop: SPACE[1] })}>0</p>
             </div>
           </div>
-        </Surface>
+        </div>
 
         {layer === "command" ? (
           <div style={{ display: "grid", gridTemplateColumns: mode === "queue" ? "1fr" : "300px minmax(0,1fr)", gap: SPACE[5] }}>
             {mode === "queue" ? null : <QuietFrame onGraph={() => setLayer("graph")} />}
 
             <div style={{ display: "grid", gap: SPACE[4] }}>
-              <Surface padding={SPACE[5]}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[4], flexWrap: "wrap", alignItems: "center" }}>
-                  <div style={{ display: "grid", gap: SPACE[2] }}>
-                    <Chip label="Command surface" tone="info" />
-                    <h2 style={displayStyle(32, ROLE.textPrimary, 800)}>One urgency engine. Three render densities.</h2>
-                    <p style={textStyle(13, ROLE.textSecondary, 500)}>{MODES.find((entry) => entry.id === mode)?.copy}</p>
-                  </div>
-                  <div style={{ display: "flex", gap: SPACE[3], flexWrap: "wrap", alignItems: "center" }}>
-                    <ModeToggle value={mode} onChange={setMode} />
-                    {mode === "queue" ? <Button label="Open graph reward" variant="secondary" onClick={() => setLayer("graph")} minWidth={156} /> : null}
-                  </div>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: SPACE[4], flexWrap: "wrap", alignItems: "end", paddingBottom: SPACE[3], borderBottom: `1px solid ${ROLE.border}` }}>
+                <div style={{ display: "grid", gap: SPACE[2] }}>
+                  <p style={monoStyle(11, ROLE.link)}>command surface</p>
+                  <h2 style={displayStyle(32, ROLE.textPrimary, 800)}>One urgency engine. Three render densities.</h2>
+                  <p style={textStyle(13, ROLE.textSecondary, 500)}>{MODES.find((entry) => entry.id === mode)?.copy}</p>
                 </div>
-              </Surface>
+                <div style={{ display: "flex", gap: SPACE[3], flexWrap: "wrap", alignItems: "center" }}>
+                  <ModeToggle value={mode} onChange={setMode} />
+                  {mode === "queue" ? <Button label="Open graph reward" variant="secondary" onClick={() => setLayer("graph")} minWidth={156} /> : null}
+                </div>
+              </div>
 
               <CommandSurface mode={mode} selected={selected} selectObject={selectObject} openSheet={openSheet} />
             </div>
