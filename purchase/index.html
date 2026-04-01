@@ -12,27 +12,32 @@
     <style>
         .purchase-shell {
             min-height: 100vh;
-            padding: 40px 24px 64px;
+            padding: 28px 24px 72px;
             background:
-                radial-gradient(circle at top left, rgba(212, 165, 116, 0.12), transparent 32%),
-                radial-gradient(circle at right 20%, rgba(45, 212, 191, 0.08), transparent 28%),
-                var(--bg-primary);
+                radial-gradient(circle at 16% 18%, rgba(212, 165, 116, 0.14), transparent 26%),
+                radial-gradient(circle at 82% 76%, rgba(45, 212, 191, 0.1), transparent 22%),
+                linear-gradient(180deg, #0d1321 0%, var(--bg-primary) 42%, #050812 100%);
         }
         .purchase-nav {
             max-width: 1120px;
-            margin: 0 auto 32px;
+            margin: 0 auto 26px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: var(--space-md);
+            padding: 14px 18px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(10, 14, 26, 0.72);
+            backdrop-filter: blur(18px);
         }
         .purchase-brand {
             font-family: var(--font-serif);
             font-size: 1.6rem;
-            color: var(--text-primary);
+            color: var(--brand-gold-light);
             text-decoration: none;
         }
-        .purchase-brand span { color: var(--brand-gold); }
+        .purchase-brand span { color: var(--text-primary); }
         .purchase-nav-links {
             display: flex;
             flex-wrap: wrap;
@@ -44,16 +49,21 @@
             display: grid;
             grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
             gap: 28px;
+            align-items: start;
         }
         .purchase-panel,
         .purchase-side {
-            background: rgba(15, 23, 42, 0.88);
+            background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--border-default);
-            border-radius: 24px;
+            border-radius: 28px;
             box-shadow: var(--shadow-lg);
         }
         .purchase-panel { padding: 40px; }
-        .purchase-side { padding: 28px; }
+        .purchase-side {
+            padding: 28px;
+            position: sticky;
+            top: 28px;
+        }
         .purchase-kicker {
             font-size: 0.78rem;
             text-transform: uppercase;
@@ -74,14 +84,39 @@
             margin-bottom: 28px;
         }
         .purchase-callout {
-            padding: 16px 18px;
-            border-radius: var(--radius-lg);
-            background: rgba(212, 165, 116, 0.1);
-            border: 1px solid rgba(212, 165, 116, 0.22);
+            padding: 18px 20px;
+            border-radius: 20px;
+            background: rgba(212, 165, 116, 0.08);
+            border: 1px solid rgba(212, 165, 116, 0.18);
             color: var(--text-secondary);
             margin-bottom: 24px;
         }
         .purchase-callout strong { color: var(--text-primary); }
+        .purchase-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .purchase-summary-card {
+            padding: 18px;
+            border-radius: 20px;
+            border: 1px solid var(--border-default);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .purchase-summary-card strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+        .purchase-summary-card span {
+            display: block;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
         .purchase-flow {
             display: grid;
             gap: 16px;
@@ -92,9 +127,9 @@
             grid-template-columns: 44px minmax(0, 1fr);
             gap: 16px;
             padding: 18px;
-            border-radius: 18px;
-            border: 1px solid var(--border-default);
-            background: rgba(255, 255, 255, 0.02);
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.014));
         }
         .flow-step {
             width: 44px;
@@ -188,6 +223,14 @@
             margin-bottom: 6px;
         }
         .purchase-meta-card span { color: var(--text-secondary); }
+        .purchase-side-note {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+            line-height: 1.65;
+        }
         .config-banner {
             margin-top: 16px;
             padding: 16px;
@@ -211,6 +254,8 @@
             .purchase-wrap { grid-template-columns: 1fr; }
             .purchase-panel,
             .purchase-side { padding: 28px; }
+            .purchase-side { position: static; }
+            .purchase-summary-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -229,22 +274,37 @@
                 <div class="purchase-kicker">Purchase Path</div>
                 <h1 class="purchase-title">Make payment the least ambiguous part of the product.</h1>
                 <p class="purchase-subtitle">
-                    This is the bridge from interest to access. Buy the annual plan, then create or sign into the workspace that will route you through onboarding, the welcome guide, and into the dashboard.
+                    This is the commercial corridor from belief into workspace truth. Pay once, then move through access, activation, and into the real operating system.
                 </p>
 
                 <div class="purchase-callout">
-                    <strong>What happens after you pay:</strong> you should land on the purchase-success page, create your workspace using the same email from checkout, then move through onboarding and the welcome guide into the durable app.
+                    <strong>What should happen after payment:</strong> purchase success, account access with the same email, onboarding, welcome, then the dashboard and linked modules with durable workspace truth.
+                </div>
+
+                <div class="purchase-summary-grid">
+                    <div class="purchase-summary-card">
+                        <strong>Buyer fit</strong>
+                        <span>Founder-led B2B teams or the first serious GTM operator turning motion into a real system.</span>
+                    </div>
+                    <div class="purchase-summary-card">
+                        <strong>Product truth</strong>
+                        <span>You are buying the real workspace, not the sample lane. Onboarding, welcome, persistence, and export come with it.</span>
+                    </div>
+                    <div class="purchase-summary-card">
+                        <strong>Session outcome</strong>
+                        <span>In the first session, the buyer should be able to activate the workspace and start feeding real GTM truth into it.</span>
+                    </div>
                 </div>
 
                 <div class="purchase-flow">
                     <article class="flow-card">
                         <div class="flow-step">1</div>
                         <div>
-                            <h3>Pay for the annual plan</h3>
-                            <p>Start with the live checkout link. If it is not configured yet, this page will tell you directly instead of pretending the system is ready.</p>
+                            <h3>Commit to the annual workspace</h3>
+                            <p>Start with the live checkout link. If checkout is not configured yet, this page should tell you directly instead of pretending the system is live.</p>
                             <ul>
-                                <li>No sales call required</li>
                                 <li>Annual self-serve access</li>
+                                <li>No fake “book a demo first” loop</li>
                                 <li>Expected next stop: purchase-success page</li>
                             </ul>
                         </div>
@@ -252,8 +312,8 @@
                     <article class="flow-card">
                         <div class="flow-step">2</div>
                         <div>
-                            <h3>Create your workspace or sign in</h3>
-                            <p>Use the same email from checkout. New buyers should create an account. Returning buyers should sign in.</p>
+                            <h3>Open or create the real workspace</h3>
+                            <p>Use the same email from checkout. New buyers create the account. Returning buyers sign in and continue the same system.</p>
                             <ul>
                                 <li>New user: create account</li>
                                 <li>Existing user: sign in</li>
@@ -264,8 +324,8 @@
                     <article class="flow-card">
                         <div class="flow-step">3</div>
                         <div>
-                            <h3>Finish onboarding and start the real workspace</h3>
-                            <p>From there the app should route the user into onboarding, then the welcome guide, then the dashboard and modules with persistent workspace truth.</p>
+                            <h3>Activate the workspace, then operate</h3>
+                            <p>From there the app should route into onboarding, then welcome, then the dashboard and linked modules with persistent workspace truth.</p>
                             <ul>
                                 <li>Onboarding incomplete to onboarding</li>
                                 <li>Onboarding complete, welcome unseen to welcome</li>
@@ -281,7 +341,7 @@
                     <a href="/login.html?source=checkout" class="btn btn-ghost btn-lg" data-analytics-event="purchase_login_click" data-analytics-zone="purchase">Already have an account? Sign In</a>
                 </div>
                 <p class="purchase-note" id="purchaseNote">
-                    The account-creation route should use the same email address from checkout so the commercial path remains believable.
+                    The account route should use the same email from checkout so the commercial path stays believable end to end.
                 </p>
             </section>
 
@@ -294,7 +354,7 @@
                     <li>19 linked GTM modules in one workspace</li>
                     <li>Onboarding, welcome, and dashboard command flow</li>
                     <li>Export, import, backup, and durable cloud-backed workspace truth</li>
-                    <li>Demo seed, methodology pages, and handoff-ready outputs</li>
+                    <li>Proof, readiness, handoff, and operating outputs that compound together</li>
                 </ul>
 
                 <div class="purchase-meta">
@@ -315,6 +375,9 @@
                 <div id="configBanner" class="config-banner hidden">
                     Checkout is not configured in this repo yet. Set the live payment link in <code>js/commerce-config.js</code> or store it locally with:
                     <code>localStorage.setItem('gtmos_checkout_url', 'https://buy.stripe.com/your-link')</code>
+                </div>
+                <div class="purchase-side-note">
+                    This corridor should feel simple: belief into payment, payment into access, access into activation, activation into a workspace that carries the work.
                 </div>
             </aside>
         </div>

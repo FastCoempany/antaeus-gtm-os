@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
     'use strict';
 
     if (window.gtmMethodologyBridge) return;
@@ -344,14 +344,14 @@
             guide.className = 'method-hub-guide';
             guide.innerHTML =
                 '<div class="hub-guide-header">' +
-                    '<div class="hub-guide-kicker">Methodology as funnel infrastructure</div>' +
-                    '<h2>Use these pages to move from agreement into product truth.</h2>' +
-                    '<p>Read the page that matches the bottleneck, then move immediately into the demo, signup, or annual-plan path that proves the topic can become operating output.</p>' +
+                    '<div class="hub-guide-kicker">Methodology as system entry</div>' +
+                    '<h2>Read for the bottleneck, then move straight into the operating system.</h2>' +
+                    '<p>These pages should create belief, then route that belief into demo, signup, or the annual-plan corridor that makes the topic real.</p>' +
                 '</div>' +
                 '<div class="hub-guide-grid">' +
-                    '<div class="hub-guide-card"><strong>1. Read for the bottleneck</strong><p>Choose the page that matches the current friction: founder-led motion, discovery, outbound, deal discipline, or platform support.</p></div>' +
-                    '<div class="hub-guide-card"><strong>2. See it in the sample workspace</strong><p>Use demo mode to inspect how signals, deals, proof, and handoff fit together with live sample data.</p></div>' +
-                    '<div class="hub-guide-card"><strong>3. Start your own workspace</strong><p>Move from agreement into real execution: build the ICP, log signals, create a deal, and make the dashboard honest.</p></div>' +
+                    '<div class="hub-guide-card"><strong>1. Pick the real friction</strong><p>Choose the page that matches the current break: targeting, discovery, outbound, pipeline pressure, or handoff readiness.</p></div>' +
+                    '<div class="hub-guide-card"><strong>2. Prove it in the sample lane</strong><p>Use the demo workspace to inspect how signals, deals, proof, and handoff compound together instead of living in isolation.</p></div>' +
+                    '<div class="hub-guide-card"><strong>3. Move into workspace truth</strong><p>Start a real workspace when you want the topic to become durable operating behavior rather than another saved insight.</p></div>' +
                 '</div>';
             hero.insertBefore(guide, indexGrid);
         }
@@ -361,9 +361,9 @@
             cadence.className = 'methodology-cadence';
             cadence.innerHTML =
                 '<div class="hub-guide-header">' +
-                    '<div class="hub-guide-kicker">Publishing cadence beyond the first 10 pages</div>' +
+                    '<div class="hub-guide-kicker">Publishing cadence</div>' +
                     '<h2>Keep the methodology layer compounding.</h2>' +
-                    '<p>This library should keep shipping on a visible rhythm so the content layer continues to feed demo, signup, and the annual-plan story.</p>' +
+                    '<p>The library should keep shipping on a visible rhythm so the public layer continues to feed the demo, the workspace, and the commercial story.</p>' +
                 '</div>' +
                 '<div class="cadence-grid">' + HUB_CADENCE.map(function (lane) {
                     return '<div class="cadence-card">' +
@@ -379,10 +379,10 @@
 
         if (ctaBlock) {
             ctaBlock.innerHTML =
-                '<h3>Methodology should lead into the product, not stop at agreement.</h3>' +
-                '<p>These pages exist to create belief, then route that belief into a sample workspace, a real signup path, or the annual plan for the full operating system.</p>' +
+                '<h3>Methodology should route into live product behavior, not stop at agreement.</h3>' +
+                '<p>Read here. Prove it in the sample lane. Move into a real workspace when you want the system to start carrying the work for you.</p>' +
                 '<div class="cta-actions">' + renderActions(buildStandardActions('hub_bottom')) + '</div>' +
-                '<div class="bridge-note">Ten pages are live now. The next wave keeps compounding founder-led sales, discovery, deal discipline, and portfolio support.</div>';
+                '<div class="bridge-note">Ten pages are live now. The goal is not content volume for its own sake; it is a cleaner bridge from public belief into operating truth.</div>';
         }
 
         track('methodology_hub_rendered', { page_type: 'index', page_count: 10 });
@@ -412,7 +412,7 @@
             bridgeSection.className = 'bridge-section';
             bridgeSection.innerHTML =
                 '<h2>Turn this methodology into a live operating move</h2>' +
-                '<p>This topic should not stop at agreement. In Antaeus it should become a visible operating action, a saved artifact, and a more believable dashboard or handoff story.</p>' +
+                '<p>This topic should not stop at agreement. In Antaeus it should become a visible operating action, a saved artifact, and a more believable dashboard, deal, or handoff story.</p>' +
                 '<div class="bridge-grid">' +
                     '<div class="bridge-card"><h3>Open these modules</h3><ul class="bridge-list">' + meta.modules.map(function (item) {
                         return '<li><a href="' + esc(item.href) + '">' + esc(item.label) + '</a><span>' + esc(item.reason) + '</span></li>';
@@ -429,10 +429,10 @@
         var ctaBlock = document.querySelector('.cta-block');
         if (ctaBlock) {
             ctaBlock.innerHTML =
-                '<h3>Use this in the product, not just in theory.</h3>' +
-                '<p>' + esc(meta.audience) + ' The next move is to turn the idea into live module output, not another saved tab.</p>' +
+                '<h3>Use this in the operating system, not just in theory.</h3>' +
+                '<p>' + esc(meta.audience) + ' The next move is to turn the idea into live module output, not another saved tab or nodding note.</p>' +
                 '<div class="cta-actions">' + renderActions(buildStandardActions('article_bottom')) + '</div>' +
-                '<div class="bridge-note">If you want to inspect the operating system before you trust it, start in demo. If you want your own workspace, start with signup.</div>';
+                '<div class="bridge-note">If you want to inspect the system before you trust it, start in demo. If you want to make the workflow durable, start your own workspace.</div>';
         }
 
         track('methodology_article_bridge_rendered', {
@@ -469,3 +469,4 @@
     window.gtmMethodologyBridge = { boot: boot };
     boot();
 })();
+

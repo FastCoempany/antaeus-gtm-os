@@ -17,17 +17,31 @@
             justify-content: center;
             padding: 24px;
             background:
-                radial-gradient(circle at top left, rgba(245, 158, 11, 0.08), transparent 30%),
-                radial-gradient(circle at right 20%, rgba(212, 165, 116, 0.08), transparent 28%),
-                var(--bg-primary);
+                radial-gradient(circle at 16% 18%, rgba(245, 158, 11, 0.1), transparent 28%),
+                radial-gradient(circle at 80% 72%, rgba(212, 165, 116, 0.08), transparent 26%),
+                linear-gradient(180deg, #0d1321 0%, var(--bg-primary) 42%, #050812 100%);
         }
         .cancel-card {
-            width: min(720px, 100%);
+            width: min(900px, 100%);
             padding: 40px;
-            border-radius: 24px;
+            border-radius: 28px;
             border: 1px solid var(--border-default);
             background: rgba(15, 23, 42, 0.92);
             box-shadow: var(--shadow-lg);
+        }
+        .cancel-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(245, 158, 11, 0.12);
+            color: #f7c87a;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 18px;
         }
         .cancel-card h1 {
             font-size: clamp(1.9rem, 4vw, 2.8rem);
@@ -38,20 +52,65 @@
             margin-bottom: 16px;
             max-width: 640px;
         }
+        .cancel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin: 26px 0 10px;
+        }
+        .cancel-item {
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid var(--border-default);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .cancel-item strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+        .cancel-item span {
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
         .cancel-actions {
             margin-top: 24px;
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
         }
+        @media (max-width: 820px) {
+            .cancel-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="cancel-shell">
         <div class="cancel-card">
+            <div class="cancel-kicker">Checkout cancelled</div>
             <h1>Checkout was cancelled.</h1>
-            <p>No workspace access was created from this step. If the hesitation was around trust, price, or understanding what happens after payment, use the purchase page again, explore the demo, or sign in if you already have an account.</p>
-            <p>The goal here is to make cancellation non-destructive and obvious, not confusing.</p>
+            <p>No workspace access was created from this step. If the hesitation was trust, timing, or understanding what happens after payment, the next move should be obvious instead of awkward.</p>
+            <p>The goal here is to make cancellation non-destructive and honest, not confusing.</p>
+
+            <div class="cancel-grid">
+                <div class="cancel-item">
+                    <strong>Need more proof</strong>
+                    <span>Use the sample lane if you want to feel the system before paying for a real workspace.</span>
+                </div>
+                <div class="cancel-item">
+                    <strong>Need commercial clarity</strong>
+                    <span>Return to the purchase corridor if you want the annual plan and the post-payment path explained again.</span>
+                </div>
+                <div class="cancel-item">
+                    <strong>Already have access</strong>
+                    <span>Sign in if the hesitation was really about account state, not payment.</span>
+                </div>
+            </div>
 
             <div class="cancel-actions">
                 <a href="/purchase/" class="btn btn-primary btn-lg" data-analytics-event="purchase_cancel_retry_click" data-analytics-zone="purchase-cancelled">Return to Purchase</a>
