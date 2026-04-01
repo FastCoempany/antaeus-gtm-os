@@ -294,7 +294,7 @@
         var demoLink = topnav.querySelector('a[href="/demo-seed.html"]');
         if (demoLink) {
             demoLink.href = trackedUrl('/demo-seed.html', 'topnav_demo');
-            demoLink.textContent = 'Explore Demo';
+            demoLink.textContent = 'Explore Demo Lane';
             markCta(demoLink, 'topnav_demo');
         }
 
@@ -322,7 +322,7 @@
 
     function buildStandardActions(prefix) {
         return [
-            { href: trackedUrl('/demo-seed.html', prefix + '_demo'), label: 'Explore Demo', className: 'cta-pill', labelKey: prefix + '_demo' },
+            { href: trackedUrl('/demo-seed.html', prefix + '_demo'), label: 'Explore Demo Lane', className: 'cta-pill', labelKey: prefix + '_demo' },
             { href: trackedUrl('/signup.html', prefix + '_signup'), label: 'Start Workspace', className: 'link-pill', labelKey: prefix + '_signup' },
             { href: trackedUrl('/purchase/', prefix + '_purchase'), label: 'See Annual Plan', className: 'ghost-pill', labelKey: prefix + '_purchase' }
         ];
