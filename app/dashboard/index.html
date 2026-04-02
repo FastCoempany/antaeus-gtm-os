@@ -112,6 +112,7 @@
                     </div>
                     <aside id="dashboardShellRail"></aside>
                 </div>
+                <div id="dashboardSheetMount"></div>
             </div>
         </main>
     </div>
@@ -131,6 +132,20 @@
         var dashboardWeekOneTracked = false;
         var DASHBOARD_MODE_KEY = 'gtmos_dashboard_command_mode';
         var DASHBOARD_SNAPSHOT_KEY = 'gtmos_dashboard_command_snapshot';
+        var dashboardSheetRegistry = {};
+        var dashboardSheetCounter = 0;
+        var dashboardSheetActiveKey = null;
+        var DASHBOARD_GATE_LABELS = {
+            champion: 'Champion',
+            eb: 'Economic buyer',
+            usecase: 'Use case',
+            impact: 'Business impact',
+            process: 'Decision process',
+            timeline: 'Timeline',
+            competition: 'Competition',
+            risks: 'Risks',
+            nextstep: 'Next step'
+        };
 
         function escH(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
@@ -154,6 +169,16 @@
         }
         function saveDashboardSnapshot(snapshot) {
             writeLS(DASHBOARD_SNAPSHOT_KEY, snapshot);
+        }
+        function resetDashboardSheetRegistry() {
+            dashboardSheetRegistry = {};
+            dashboardSheetCounter = 0;
+        }
+        function registerDashboardSheet(sheet) {
+            if (!sheet) return '';
+            var key = 'dashboard-sheet-' + (++dashboardSheetCounter);
+            dashboardSheetRegistry[key] = sheet;
+            return key;
         }
         function formatDashboardVisit(iso) {
             if (!iso) return 'earlier';
@@ -251,6 +276,209 @@
                 '</div>' +
                 '<button class="btn btn-primary" onclick="location.reload()">Retry Sync</button>' +
                 '</div>';
+        }
+        function formatSheetCauseLabel(value) {
+            return String(value || '')
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, function(letter) { return letter.toUpperCase(); });
+        }
+        function mapSheetState(badge, tone) {
+            var raw = String(badge || '').toLowerCase();
+            var normalizedTone = String(tone || '').toLowerCase();
+            if (raw.indexOf('risk') >= 0 || raw.indexOf('urgent') >= 0 || normalizedTone.indexOf('risk') >= 0 || normalizedTone.indexOf('thin') >= 0) return 'Urgent';
+            if (raw.indexOf('healthy') >= 0) return 'Healthy';
+            return 'Active';
+        }
+        function buildGateGapList(vitals) {
+            if (!vitals || !vitals.missing) return [];
+            return Object.keys(vitals.missing).filter(function(key) {
+                return vitals.missing[key];
+            }).map(function(key) {
+                return (DASHBOARD_GATE_LABELS[key] || formatSheetCauseLabel(key)) + ' is still unresolved.';
+            });
+        }
+        function buildCauseGapList(vitals) {
+            if (!vitals || !dh || typeof dh.topCauses !== 'function') return [];
+            return dh.topCauses(vitals, dh.DEFAULTS, 4).map(function(cause) {
+                return cause.text;
+            });
+        }
+        function buildRiskSheet(vitals) {
+            var stageLabel = dh.STAGE_LABELS[vitals.stage] || vitals.stageRaw || vitals.stage;
+            var gateGaps = buildGateGapList(vitals);
+            var causeGaps = buildCauseGapList(vitals);
+            return {
+                family: 'Deal object',
+                state: 'Urgent',
+                title: vitals.name,
+                metricLabel: 'Risk score',
+                metricValue: String(vitals.riskScore),
+                summary: dh.dealNarrative(vitals),
+                whyNow: 'This surfaced because the deal is carrying visible decay: stage ' + stageLabel + ', ' + vitals.staleDays + ' days since the last meaningful touch, and a qualification score of ' + vitals.qualScore + '/18.',
+                gaps: gateGaps.concat(causeGaps).slice(0, 5),
+                evidence: [
+                    'Value: ' + dh.money(vitals.value),
+                    'Stage: ' + stageLabel,
+                    'Stage age: ' + vitals.stageAgeDays + 'd',
+                    vitals.nextStepText ? 'Next step: ' + vitals.nextStepText : 'No dated next step exists.',
+                    vitals.threadingDepth && typeof vitals.threadingDepth.engaged !== 'undefined'
+                        ? vitals.threadingDepth.engaged + ' engaged stakeholder' + (vitals.threadingDepth.engaged === 1 ? '' : 's')
+                        : 'Threading depth is still unclear.'
+                ].slice(0, 4),
+                downstream: 'If this deal becomes honest, Future Autopsy, Deal Workspace, and downstream proof planning all get sharper immediately.',
+                actions: [
+                    { href: '/app/future-autopsy/?deal=' + encodeURIComponent(vitals.id), label: 'Go deeper: Future Autopsy', tone: 'primary' },
+                    { href: '/app/deal-workspace/?deal=' + encodeURIComponent(vitals.id), label: 'Open Deal Workspace', tone: 'secondary' }
+                ]
+            };
+        }
+        function buildPrimarySheet(primary, stage, context) {
+            return {
+                family: 'Command object',
+                state: mapSheetState(primary.label, 'state-ready'),
+                title: primary.title,
+                metricLabel: 'Current stage',
+                metricValue: stage.stageBadge,
+                summary: primary.copy,
+                whyNow: 'The command layer picked this as the dominant move because it currently carries the strongest downstream consequence across targeting, market context, deals, and motion.',
+                gaps: [
+                    context.icps ? null : 'Targeting truth is still too thin.',
+                    (context.accounts > 0 || context.signals > 0) ? null : 'Live market context is still missing.',
+                    context.deals ? null : 'No live deal is giving the command view a real execution object.',
+                    context.motions ? null : 'No logged motion is proving follow-through yet.'
+                ].filter(Boolean),
+                evidence: (primary.tags || []).slice(0, 4),
+                downstream: 'Completing the dominant move should change queue order, reduce ambiguity, and make the next morning brief more precise instead of more decorative.',
+                actions: ((primary.actions || []).slice(0, 2)).map(function(action, index) {
+                    return {
+                        href: action.href,
+                        label: index === 0 ? 'Go deeper: ' + action.label : action.label,
+                        tone: index === 0 ? 'primary' : 'secondary'
+                    };
+                })
+            };
+        }
+        function buildGenericCommandSheet(card, config) {
+            var options = config || {};
+            return {
+                family: options.family || 'Command object',
+                state: options.state || mapSheetState(card.badge, card.badgeTone),
+                title: card.title,
+                metricLabel: options.metricLabel || 'Surface state',
+                metricValue: options.metricValue || (card.badge || 'Live'),
+                summary: card.copy || '',
+                whyNow: options.whyNow || 'This surfaced because the command engine thinks it has a stronger downstream consequence than generic browsing.',
+                gaps: (options.gaps || []).slice(0, 5),
+                evidence: ((options.evidence || []).concat(card.meta || [])).filter(Boolean).slice(0, 4),
+                downstream: options.downstream || 'Acting here should change what the command surface ranks next instead of just creating more surface activity.',
+                actions: ((card.actions || []).slice(0, 2)).map(function(action, index) {
+                    return {
+                        href: action.href,
+                        label: index === 0 ? 'Go deeper: ' + action.label : action.label,
+                        tone: index === 0 ? 'primary' : 'secondary'
+                    };
+                })
+            };
+        }
+        function buildMoveSheet(move, stage) {
+            var objectLabel = move.dealName || stage.stageBadge;
+            return buildGenericCommandSheet({
+                title: move.action,
+                copy: move.reason,
+                badge: move.dealId ? 'Next move' : 'System move',
+                badgeTone: 'state-live',
+                meta: [objectLabel, move.causeId ? formatSheetCauseLabel(move.causeId) : 'Command move'],
+                actions: move.dealId
+                    ? [{ href: '/app/deal-workspace/?deal=' + encodeURIComponent(move.dealId), label: move.dealName || 'Open Deal Workspace' }]
+                    : move.causeId === 'coverage_gap'
+                        ? [
+                            { href: '/app/signal-console/', label: 'Open Signal Console' },
+                            { href: '/app/deal-workspace/', label: 'Create Deal' }
+                        ]
+                        : []
+            }, {
+                family: move.dealId ? 'Deal intervention' : 'System intervention',
+                state: 'Active',
+                metricLabel: 'Driver',
+                metricValue: move.causeId ? formatSheetCauseLabel(move.causeId) : 'Command',
+                gaps: [
+                    move.causeId ? 'This move exists because ' + formatSheetCauseLabel(move.causeId).toLowerCase() + ' is still unresolved.' : null,
+                    move.dealId ? 'The command layer is asking for one decisive intervention instead of another scan pass.' : 'The system is asking for structure before more execution.'
+                ].filter(Boolean),
+                downstream: move.dealId
+                    ? 'Once this move is completed, the queue should demote generic follow-up and promote the next real decision on ' + objectLabel + '.'
+                    : 'Once this system move is completed, the dashboard should stop compensating for missing structure and start briefing from real evidence.'
+            });
+        }
+        function renderDashboardSheetActions(actions) {
+            return (actions || []).slice(0, 2).map(function(action, index) {
+                return createDashboardAction({
+                    href: action.href,
+                    label: action.label
+                }, index === 0
+                    ? (action.tone === 'secondary' ? 'btn-secondary' : 'btn-primary')
+                    : 'btn-secondary');
+            }).join('');
+        }
+        function renderDashboardSheet() {
+            var mount = document.getElementById('dashboardSheetMount');
+            if (!mount) return;
+            if (!dashboardSheetActiveKey || !dashboardSheetRegistry[dashboardSheetActiveKey]) {
+                mount.innerHTML = '';
+                document.body.classList.remove('dashboard-sheet-open');
+                return;
+            }
+            var sheet = dashboardSheetRegistry[dashboardSheetActiveKey];
+            mount.innerHTML =
+                '<div class="cmd-sheet-backdrop" onclick="dashboardCloseSheet()">' +
+                    '<section class="cmd-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="dashboardSheetTitle" onclick="event.stopPropagation()">' +
+                        '<div class="cmd-sheet-header">' +
+                            '<div>' +
+                                '<div class="cmd-sheet-kicker">' + escH(sheet.family || 'Inspection sheet') + '</div>' +
+                                '<h2 class="cmd-sheet-title" id="dashboardSheetTitle">' + escH(sheet.title || '') + '</h2>' +
+                            '</div>' +
+                            '<div class="cmd-sheet-header-side">' +
+                                '<div class="cmd-sheet-metric"><span>' + escH(sheet.metricLabel || 'State') + '</span><strong>' + escH(sheet.metricValue || '') + '</strong></div>' +
+                                '<button type="button" class="cmd-sheet-close" aria-label="Close sheet" onclick="dashboardCloseSheet()">Close</button>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="cmd-sheet-summary">' +
+                            '<div class="cmd-sheet-state">' + escH(sheet.state || 'Active') + '</div>' +
+                            '<div class="cmd-sheet-summary-copy">' + escH(sheet.summary || '') + '</div>' +
+                        '</div>' +
+                        '<div class="cmd-sheet-body">' +
+                            '<div class="cmd-sheet-column">' +
+                                '<section class="cmd-sheet-section">' +
+                                    '<div class="cmd-sheet-section-label">Why now</div>' +
+                                    '<div class="cmd-sheet-section-copy">' + escH(sheet.whyNow || '') + '</div>' +
+                                '</section>' +
+                                '<section class="cmd-sheet-section">' +
+                                    '<div class="cmd-sheet-section-label">Unresolved gaps</div>' +
+                                    '<div class="cmd-sheet-list">' + ((sheet.gaps && sheet.gaps.length ? sheet.gaps : ['The command object is live, but still needs a sharper next move.']).map(function(item) {
+                                        return '<div class="cmd-sheet-list-item">' + escH(item) + '</div>';
+                                    }).join('')) + '</div>' +
+                                '</section>' +
+                            '</div>' +
+                            '<div class="cmd-sheet-column">' +
+                                '<section class="cmd-sheet-section">' +
+                                    '<div class="cmd-sheet-section-label">Evidence on the object</div>' +
+                                    '<div class="cmd-sheet-list">' + ((sheet.evidence && sheet.evidence.length ? sheet.evidence : ['No additional evidence recorded yet.']).map(function(item) {
+                                        return '<div class="cmd-sheet-list-item">' + escH(item) + '</div>';
+                                    }).join('')) + '</div>' +
+                                '</section>' +
+                                '<section class="cmd-sheet-section">' +
+                                    '<div class="cmd-sheet-section-label">What compounds next</div>' +
+                                    '<div class="cmd-sheet-section-copy">' + escH(sheet.downstream || '') + '</div>' +
+                                '</section>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="cmd-sheet-footer">' +
+                            '<div class="cmd-sheet-footer-copy">The sheet is the inspection layer. The real work still happens in the preserved room.</div>' +
+                            '<div class="cmd-sheet-actions">' + renderDashboardSheetActions(sheet.actions) + '</div>' +
+                        '</div>' +
+                    '</section>' +
+                '</div>';
+            document.body.classList.add('dashboard-sheet-open');
         }
 
         function buildSignalCounts(accounts) {
@@ -375,6 +603,10 @@
         function createDashboardAction(action, tone) {
             if (!action || !action.href) return '';
             return '<a href="' + escH(action.href) + '" class="btn ' + (tone || 'btn-secondary') + '">' + escH(action.label) + '</a>';
+        }
+        function createDashboardInspectAction(sheetKey) {
+            if (!sheetKey) return '';
+            return '<button type="button" class="btn btn-ghost btn-sm cmd-sheet-trigger" onclick="dashboardOpenSheet(\'' + sheetKey + '\')">Inspect</button>';
         }
 
         function buildDashboardPrimary(stage, briefing, hotSuggestion) {
@@ -536,7 +768,7 @@
                 (card.meta && card.meta.length ? '<div class="anchor-queue-meta">' + card.meta.map(function(item) {
                     return '<span>' + escH(item) + '</span>';
                 }).join('') + '</div>' : '') +
-                (card.actions && card.actions.length ? '<div class="anchor-queue-actions">' + card.actions.map(function(action) {
+                ((card.sheetKey || (card.actions && card.actions.length)) ? '<div class="anchor-queue-actions">' + createDashboardInspectAction(card.sheetKey) + (card.actions || []).map(function(action) {
                     return createDashboardAction(action, action.tone);
                 }).join('') + '</div>' : '') +
             '</div>';
@@ -669,6 +901,19 @@
                     actions: [{ href: '/app/deal-workspace/', label: 'Open Deal Workspace' }]
                 });
             }
+            cards.forEach(function(card) {
+                card.sheetKey = registerDashboardSheet(buildGenericCommandSheet(card, {
+                    family: 'Activation layer',
+                    state: mapSheetState(card.badge, card.badgeTone),
+                    metricLabel: 'Missing layer',
+                    metricValue: card.meta && card.meta[0] ? card.meta[0] : (card.badge || 'Setup'),
+                    gaps: [
+                        'This command surface is still compensating for missing upstream truth.',
+                        'Until this layer is real, the dashboard should coach honestly instead of pretending to brief live execution.'
+                    ],
+                    downstream: 'Once this layer is real, the command surface will stop teaching setup and start ranking live work.'
+                }));
+            });
             return cards;
         }
         function renderDashboardEmptyQueue(stage, shellContext) {
@@ -691,7 +936,18 @@
                     badge: label || card.badge,
                     badgeTone: tone || card.badgeTone,
                     meta: card.meta || [],
-                    actions: card.actions || []
+                    actions: card.actions || [],
+                    sheetKey: card.sheetKey || registerDashboardSheet(buildGenericCommandSheet(card, {
+                        family: 'Command object',
+                        state: mapSheetState(label || card.badge, tone || card.badgeTone),
+                        metricLabel: 'Queue state',
+                        metricValue: label || card.badge || 'Now',
+                        gaps: [
+                            'This item is still open, which is why the queue is carrying it instead of retiring it.',
+                            'The command layer should only keep this visible until a deeper room changes the truth.'
+                        ],
+                        downstream: 'Resolving this should reorder the queue instead of merely adding more visible activity.'
+                    }))
                 });
             }
             addCard({
@@ -729,7 +985,7 @@
                         '<div class="cmd-primary-title">' + escH((config.primary && config.primary.title) || '') + '</div>' +
                         '<div class="cmd-primary-text">' + escH((config.primary && config.primary.copy) || '') + '</div>' +
                     '</div>' +
-                    '<div class="cmd-primary-actions">' + ((config.primary && config.primary.actions) || []).slice(0, 2).map(function(action) {
+                    '<div class="cmd-primary-actions">' + createDashboardInspectAction(config.primary && config.primary.sheetKey) + ((config.primary && config.primary.actions) || []).slice(0, 2).map(function(action) {
                         return createDashboardAction(action, action.tone);
                     }).join('') + '<button class="btn btn-secondary" onclick="copyMonday()">Copy Monday Review</button></div>' +
                 '</div>' +
@@ -754,7 +1010,7 @@
                 '<div class="cmd-row-action">' +
                     '<div class="cmd-row-action-title">' + escH(nextMove) + '</div>' +
                     '<div class="cmd-row-action-copy">' + escH(actionCopy) + '</div>' +
-                    (actions.length ? '<div class="cmd-row-actions">' + actions.map(function(action) {
+                    ((actions.length || card.sheetKey) ? '<div class="cmd-row-actions">' + createDashboardInspectAction(card.sheetKey) + actions.map(function(action) {
                         return createDashboardAction(action, action.tone);
                     }).join('') + '</div>' : '') +
                 '</div>' +
@@ -771,7 +1027,7 @@
                     return '<span>' + escH(item) + '</span>';
                 }).join('') + '</div>' : '') +
                 '<div class="cmd-card-footer">' +
-                    (actions.length ? '<div class="cmd-row-actions">' + actions.map(function(action) {
+                    ((actions.length || card.sheetKey) ? '<div class="cmd-row-actions">' + createDashboardInspectAction(card.sheetKey) + actions.map(function(action) {
                         return createDashboardAction(action, action.tone);
                     }).join('') + '</div>' : '') +
                 '</div>' +
@@ -970,6 +1226,7 @@
                 activeDeals: active.length,
                 motions: motionCounts.total
             };
+            resetDashboardSheetRegistry();
             var commandMode = getDashboardCommandMode();
             var previousSnapshot = readDashboardSnapshot();
             renderDashboardShell(stage, shellContext, weekOneState, dependencyWarnings);
@@ -985,6 +1242,7 @@
                     });
                 }
                 var emptyPrimary = buildDashboardPrimary(stage, null, null);
+                emptyPrimary.sheetKey = registerDashboardSheet(buildPrimarySheet(emptyPrimary, stage, shellContext));
                 var emptyLanes = buildDashboardLanes(stage, emptyPrimary, null, null, dependencyWarnings);
                 var emptyHtml =
                     '<section class="anchor-stage">' +
@@ -1003,7 +1261,7 @@
                                     '<div class="anchor-primary-label">' + escH(emptyPrimary.label) + '</div>' +
                                     '<div class="anchor-primary-title">' + escH(emptyPrimary.title) + '</div>' +
                                     '<div class="anchor-primary-copy">' + escH(emptyPrimary.copy) + '</div>' +
-                                    '<div class="anchor-primary-actions">' + (emptyPrimary.actions || []).map(function(action) {
+                                    '<div class="anchor-primary-actions">' + createDashboardInspectAction(emptyPrimary.sheetKey) + (emptyPrimary.actions || []).map(function(action) {
                                         return createDashboardAction(action, action.tone);
                                     }).join('') + '</div>' +
                                 '</div>' +
@@ -1049,6 +1307,7 @@
                 );
                 document.getElementById('dashContent').innerHTML =
                     emptyHtml;
+                renderDashboardSheet();
                 saveDashboardSnapshot(emptySnapshot);
                 return;
             }
@@ -1126,6 +1385,7 @@
             html += weekOneBanner;
             html += warningBanner;
             var primary = buildDashboardPrimary(stage, briefing, hotSuggestion);
+            primary.sheetKey = registerDashboardSheet(buildDashboardPrimarySheet(primary, stage, shellContext));
             var lanes = buildDashboardLanes(stage, primary, briefing, advisorSuggestion, dependencyWarnings);
             var commandSnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, briefing, dependencyWarnings, weekOneState);
             var commandDelta = buildDashboardDelta(previousSnapshot, commandSnapshot);
@@ -1150,7 +1410,7 @@
             if (primary.tags && primary.tags.length) {
                 html += '<div class="anchor-lane-meta">' + primary.tags.map(function(tag) { return '<span>' + escH(tag) + '</span>'; }).join('') + '</div>';
             }
-            html += '<div class="anchor-primary-actions">' + (primary.actions || []).map(function(action) {
+            html += '<div class="anchor-primary-actions">' + createDashboardInspectAction(primary.sheetKey) + (primary.actions || []).map(function(action) {
                 return createDashboardAction(action, action.tone);
             }).join('') + '<button class="btn btn-secondary" onclick="copyMonday()">Copy Monday Review</button></div>';
             html += '</div>';
@@ -1178,6 +1438,7 @@
                     badge: 'Risk ' + v.riskScore,
                     badgeTone: 'state-risk',
                     meta: [dh.money(v.value), stageLabel, v.staleDays + 'd stale'],
+                    sheetKey: registerDashboardSheet(buildRiskSheet(v)),
                     actions: [
                         { href: '/app/future-autopsy/?deal=' + encodeURIComponent(v.id), label: 'Run Autopsy' },
                         { href: '/app/deal-workspace/?deal=' + encodeURIComponent(v.id), label: 'Open Deal', tone: 'btn-secondary' }
@@ -1191,6 +1452,7 @@
                     badge: index === 0 ? 'Now' : 'Next',
                     badgeTone: index === 0 ? 'state-ready' : 'state-live',
                     meta: [m.dealName || stage.stageBadge, m.causeId ? m.causeId.replace(/_/g, ' ') : 'command move'],
+                    sheetKey: registerDashboardSheet(buildMoveSheet(m, stage)),
                     actions: m.dealId
                         ? [{ href: '/app/deal-workspace/?deal=' + encodeURIComponent(m.dealId), label: m.dealName || 'Open Deal' }]
                         : (m.causeId === 'coverage_gap'
@@ -1208,6 +1470,27 @@
                     badge: 'Opportunity',
                     badgeTone: 'state-live',
                     meta: ['heat ' + hotSuggestion.heat, hotSuggestion.count + ' hot accounts'],
+                    sheetKey: registerDashboardSheet(buildGenericCommandSheet({
+                        title: 'Turn ' + hotSuggestion.name + ' into a live outbound motion.',
+                        copy: hotSuggestion.reason,
+                        badge: 'Opportunity',
+                        badgeTone: 'state-live',
+                        meta: ['heat ' + hotSuggestion.heat, hotSuggestion.count + ' hot accounts'],
+                        actions: [
+                            { href: '/app/outbound-studio/', label: 'Build message' },
+                            { href: '/app/cold-call-studio/', label: 'Prep call' }
+                        ]
+                    }, {
+                        family: 'Signal-to-motion bridge',
+                        state: 'Active',
+                        metricLabel: 'Heat',
+                        metricValue: String(hotSuggestion.heat),
+                        gaps: [
+                            'A hot account still has no live deal object.',
+                            'The system is asking for an angle before another generic outbound touch.'
+                        ],
+                        downstream: 'Once the motion is real, the account can move from ambient heat into the actual operating queue.'
+                    })),
                     actions: [
                         { href: '/app/outbound-studio/', label: 'Build message' },
                         { href: '/app/cold-call-studio/', label: 'Prep call', tone: 'btn-secondary' }
@@ -1221,6 +1504,26 @@
                     badge: 'Leverage',
                     badgeTone: 'state-ready',
                     meta: ['advisor ready', 'risk ' + advisorSuggestion.riskScore],
+                    sheetKey: registerDashboardSheet(buildGenericCommandSheet({
+                        title: 'Deploy ' + advisorSuggestion.advisor + ' on ' + advisorSuggestion.deal + '.',
+                        copy: advisorSuggestion.staleDays + 'd dark, risk ' + advisorSuggestion.riskScore + '. Use advisor leverage only after the ask is specific.',
+                        badge: 'Leverage',
+                        badgeTone: 'state-ready',
+                        meta: ['advisor ready', 'risk ' + advisorSuggestion.riskScore],
+                        actions: [
+                            { href: '/app/advisor-deploy/', label: 'Build advisor ask' }
+                        ]
+                    }, {
+                        family: 'Advisor object',
+                        state: 'Active',
+                        metricLabel: 'Leverage',
+                        metricValue: advisorSuggestion.advisor,
+                        gaps: [
+                            'Advisor leverage only works once the ask is specific enough to move the room.',
+                            'The deal is still dark enough that external leverage would otherwise amplify confusion.'
+                        ],
+                        downstream: 'If the ask sharpens first, Advisor Deploy can accelerate a real next step instead of becoming ornamental.'
+                    })),
                     actions: [
                         { href: '/app/advisor-deploy/', label: 'Build advisor ask' }
                     ]
@@ -1257,7 +1560,7 @@
                 html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Grid view</div><div class="shell-section-title">Scan the operating field fast</div><div class="shell-section-copy">Grid mode compresses the same truth into a denser map so you can see pressure, coverage, and the next intervention without reading the full brief first.</div></div></div>';
                 html += renderSourceMap(stage, shellContext);
                 html += '<div class="command-grid-panels">';
-                html += '<div class="command-grid-card command-grid-card--accent"><div class="shell-section-kicker">Primary pressure</div><div class="command-grid-card-title">' + escH(primary.title) + '</div><div class="command-grid-card-copy">' + escH(primary.copy) + '</div>' + (primary.tags && primary.tags.length ? '<div class="anchor-lane-meta">' + primary.tags.map(function(tag) { return '<span>' + escH(tag) + '</span>'; }).join('') + '</div>' : '') + '<div class="anchor-primary-actions">' + (primary.actions || []).map(function(action) { return createDashboardAction(action, action.tone); }).join('') + '</div></div>';
+                html += '<div class="command-grid-card command-grid-card--accent"><div class="shell-section-kicker">Primary pressure</div><div class="command-grid-card-title">' + escH(primary.title) + '</div><div class="command-grid-card-copy">' + escH(primary.copy) + '</div>' + (primary.tags && primary.tags.length ? '<div class="anchor-lane-meta">' + primary.tags.map(function(tag) { return '<span>' + escH(tag) + '</span>'; }).join('') + '</div>' : '') + '<div class="anchor-primary-actions">' + createDashboardInspectAction(primary.sheetKey) + (primary.actions || []).map(function(action) { return createDashboardAction(action, action.tone); }).join('') + '</div></div>';
                 html += '<div class="command-grid-stats">';
                 html += '<div class="command-grid-stat"><div class="command-grid-stat-label">Coverage</div><div class="command-grid-stat-value"' + (covColor ? ' style="color:' + (covColor === 'green' ? '#22c55e' : covColor === 'amber' ? '#f59e0b' : '#ef4444') + ';"' : '') + '>' + (quota ? cov.ratio + '&times;' : '--') + '</div><div class="command-grid-stat-copy">Against the current target.</div></div>';
                 html += '<div class="command-grid-stat"><div class="command-grid-stat-label">Weighted pipeline</div><div class="command-grid-stat-value">' + dh.money(cov.weighted) + '</div><div class="command-grid-stat-copy">Weighted active value.</div></div>';
@@ -1392,8 +1695,27 @@
             html += '</div></div></section>';
 
             document.getElementById('dashContent').innerHTML = html;
+            renderDashboardSheet();
             saveDashboardSnapshot(commandSnapshot);
         }
+
+        window.dashboardOpenSheet = function(key) {
+            if (!key || !dashboardSheetRegistry[key]) return;
+            dashboardSheetActiveKey = key;
+            renderDashboardSheet();
+            trackDashboard('dashboard_sheet_opened', { key: key });
+        };
+        window.dashboardCloseSheet = function() {
+            if (!dashboardSheetActiveKey) return;
+            dashboardSheetActiveKey = null;
+            renderDashboardSheet();
+        };
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && dashboardSheetActiveKey) {
+                dashboardSheetActiveKey = null;
+                renderDashboardSheet();
+            }
+        });
 
         window.copyMonday = function() {
             var vitals = dh.loadAllVitals();
@@ -1459,6 +1781,7 @@
         };
         window.setDashboardCommandMode = function(mode) {
             if (mode !== 'brief' && mode !== 'grid' && mode !== 'queue') return;
+            dashboardSheetActiveKey = null;
             setDashboardCommandMode(mode);
             trackDashboard('dashboard_command_mode_changed', { mode: mode });
             Promise.resolve(render()).catch(onDashboardBootFailure);

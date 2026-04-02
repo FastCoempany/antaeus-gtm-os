@@ -1724,6 +1724,212 @@ body.command-surface-page .shell-context-rail--quiet .shell-rail-list-item {
     line-height: 1.6;
 }
 
+body.dashboard-sheet-open {
+    overflow: hidden;
+}
+
+.cmd-sheet-trigger {
+    color: var(--text-secondary);
+}
+
+.cmd-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 220;
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    background: rgba(10, 28, 64, 0.18);
+    backdrop-filter: blur(10px);
+}
+
+.cmd-sheet-panel {
+    width: min(760px, calc(100vw - 40px));
+    height: calc(100vh - 40px);
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    overflow: hidden;
+    border-radius: 26px;
+    border: 1px solid rgba(10, 28, 64, 0.12);
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248, 244, 237, 0.98) 100%);
+    box-shadow: 0 28px 64px rgba(10, 28, 64, 0.22);
+}
+
+.cmd-sheet-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 26px 28px 18px;
+    border-bottom: 1px solid rgba(10, 28, 64, 0.09);
+}
+
+.cmd-sheet-kicker {
+    margin-bottom: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-blue);
+}
+
+.cmd-sheet-title {
+    font-family: var(--font-sans);
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 800;
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+}
+
+.cmd-sheet-header-side {
+    display: grid;
+    gap: 12px;
+    justify-items: end;
+}
+
+.cmd-sheet-metric {
+    display: grid;
+    justify-items: end;
+    gap: 4px;
+}
+
+.cmd-sheet-metric span,
+.cmd-sheet-section-label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+}
+
+.cmd-sheet-metric strong {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    line-height: 0.95;
+    color: var(--accent-blue);
+}
+
+.cmd-sheet-close {
+    appearance: none;
+    border: 1px solid rgba(10, 28, 64, 0.12);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.72);
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.cmd-sheet-close:hover {
+    background: rgba(255,255,255,0.98);
+    border-color: rgba(36, 113, 231, 0.22);
+    color: var(--text-primary);
+}
+
+.cmd-sheet-summary {
+    display: grid;
+    gap: 8px;
+    padding: 20px 28px;
+    border-bottom: 1px solid rgba(10, 28, 64, 0.08);
+    background: rgba(36, 113, 231, 0.03);
+}
+
+.cmd-sheet-state {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brand-gold-dark);
+}
+
+.cmd-sheet-summary-copy {
+    font-size: 0.96rem;
+    line-height: 1.72;
+    color: var(--text-secondary);
+}
+
+.cmd-sheet-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+    gap: 28px;
+    padding: 10px 28px 24px;
+    overflow: auto;
+}
+
+.cmd-sheet-column {
+    display: grid;
+    gap: 22px;
+    align-content: start;
+}
+
+.cmd-sheet-section {
+    display: grid;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(10, 28, 64, 0.08);
+}
+
+.cmd-sheet-section-copy {
+    font-size: 0.86rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+.cmd-sheet-list {
+    display: grid;
+    gap: 10px;
+}
+
+.cmd-sheet-list-item {
+    position: relative;
+    padding-left: 16px;
+    font-size: 0.84rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+}
+
+.cmd-sheet-list-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(196, 90, 18, 0.9);
+}
+
+.cmd-sheet-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 18px 28px 24px;
+    border-top: 1px solid rgba(10, 28, 64, 0.09);
+    background: rgba(255,255,255,0.75);
+}
+
+.cmd-sheet-footer-copy {
+    max-width: 38ch;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+.cmd-sheet-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 body.command-surface-page .command-mode-shell {
     display: grid;
     gap: 14px;
@@ -1888,6 +2094,10 @@ body.command-surface-page .command-queue-stack {
     .cmd-stage-title {
         max-width: 16ch;
     }
+
+    .cmd-sheet-body {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 720px) {
@@ -1911,6 +2121,41 @@ body.command-surface-page .command-queue-stack {
 
     .cmd-row-action {
         grid-column: auto;
+    }
+
+    .cmd-sheet-backdrop {
+        padding: 10px;
+    }
+
+    .cmd-sheet-panel {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 20px);
+        border-radius: 18px;
+    }
+
+    .cmd-sheet-header,
+    .cmd-sheet-summary,
+    .cmd-sheet-body,
+    .cmd-sheet-footer {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .cmd-sheet-header {
+        grid-template-columns: 1fr;
+    }
+
+    .cmd-sheet-header-side {
+        justify-items: start;
+    }
+
+    .cmd-sheet-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cmd-sheet-actions {
+        width: 100%;
     }
 }
 
