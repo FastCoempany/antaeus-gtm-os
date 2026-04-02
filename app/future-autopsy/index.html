@@ -82,6 +82,7 @@
         .fa-first-fold{margin-bottom:var(--space-lg);padding:18px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
         .fa-first-fold #futureAutopsyBootState{margin-bottom:14px;}
         .fa-first-fold #futureAutopsyReturnBridge{margin-bottom:14px;}
+        .fa-first-fold #futureAutopsyReturnBridge .shell-handoff-bridge{margin-bottom:0;}
         .fa-first-fold .fa-hero{margin-bottom:14px;}
         .fa-first-fold .fa-picker{margin-bottom:0;}
         @media(max-width:960px){.fa-bridge-grid,.fa-example-row,.fa-action-grid{grid-template-columns:1fr 1fr;}}
@@ -169,33 +170,11 @@
                 node.innerHTML='';
                 return;
             }
-            var modeLabel=ctx.fromMode?ctx.fromMode.charAt(0).toUpperCase()+ctx.fromMode.slice(1):'Command';
-            var spotlightHref='/app/dashboard/?mode=spotlight';
-            var welcomeHref='/app/welcome/';
-            var returnIsSpotlight=ctx.returnTo.indexOf('/app/dashboard/')===0;
-            var copy=returnIsSpotlight
-                ? 'Use Spotlight as the default way back into the system. The left rail should stay secondary to this command re-entry.'
-                : 'When this autopsy is done, re-enter through Spotlight or Week One before using the left rail. The room should stay a deep room, not the front door.';
-            node.innerHTML=
-                '<div class="fa-bridge">'+
-                    '<div class="fa-bridge-head">'+
-                        '<div class="fa-bridge-k">Room entry</div>'+
-                        '<span class="fa-bridge-state check">Back path live</span>'+
-                    '</div>'+
-                    '<div class="fa-bridge-title">'+(ctx.focusObject?escH(ctx.focusObject)+' carried forward into Future Autopsy.':'Future Autopsy opened from the command layer.')+'</div>'+
-                    '<div class="fa-bridge-copy">You entered from '+escH(modeLabel)+'. The object should stay pinned here so the autopsy feels like continuation, not a reset. '+escH(copy)+'</div>'+
-                    '<div class="fa-bridge-grid">'+
-                        '<div class="fa-bridge-block"><div class="fa-bridge-label">Command mode</div><div class="fa-bridge-value">'+escH(modeLabel)+'</div></div>'+
-                        '<div class="fa-bridge-block"><div class="fa-bridge-label">Object</div><div class="fa-bridge-value">'+escH(ctx.focusObject||'Deal in focus')+'</div></div>'+
-                        '<div class="fa-bridge-block"><div class="fa-bridge-label">Room</div><div class="fa-bridge-value">'+escH(ctx.focusRoom||'Future Autopsy')+'</div></div>'+
-                        '<div class="fa-bridge-block"><div class="fa-bridge-label">Return</div><div class="fa-bridge-value">'+escH(ctx.returnLabel||'Back')+'</div></div>'+
-                    '</div>'+
-                    '<div class="fa-kill-btns">'+
-                        (returnIsSpotlight?'':'<a class="fa-btn" href="'+escH(ctx.returnTo)+'">'+escH(ctx.returnLabel||'Back')+'</a>')+
-                        '<a class="fa-btn gold" href="'+spotlightHref+'">Open Spotlight</a>'+
-                        '<a class="fa-btn" href="'+welcomeHref+'">Week One</a>'+
-                    '</div>'+
-                '</div>';
+            if(window.gtmShellChrome && typeof window.gtmShellChrome.renderHandoffBridge === 'function'){
+                node.innerHTML = window.gtmShellChrome.renderHandoffBridge(ctx);
+                return;
+            }
+            node.innerHTML = '';
         }
 
         var PREFS = Object.assign({}, dh.DEFAULTS, { autopsyHorizonDays: 45 });

@@ -251,6 +251,7 @@
 
     window.gtmShellChrome = {
         applyHeader: applyHeader,
+        renderHandoffBridge: renderHandoffBridge,
         renderCommandBand: renderCommandBand,
         renderContextRail: renderContextRail
     };

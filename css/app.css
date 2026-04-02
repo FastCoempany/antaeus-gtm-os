@@ -1385,6 +1385,17 @@ body.command-surface-page .app-content {
     background: transparent;
 }
 
+body.command-surface-page .shell-context-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(248px, 0.31fr);
+    gap: 28px;
+    align-items: start;
+}
+
+body.command-surface-page .shell-work-column,
+body.command-surface-page .shell-stack {
+    gap: 18px;
+}
+
 body.command-surface-page .app-header {
     background: rgba(248, 250, 253, 0.9);
     border-bottom: 1px solid rgba(10, 28, 64, 0.08);
@@ -1474,8 +1485,8 @@ body.command-surface-page .shell-state-pill {
 }
 
 body.command-surface-page .shell-command-band--open {
-    margin-bottom: 20px;
-    padding: 0 0 20px;
+    margin-bottom: 18px;
+    padding: 0 0 18px;
     border: 0;
     border-bottom: 1px solid rgba(10, 28, 64, 0.1);
     border-radius: 0;
@@ -1533,9 +1544,9 @@ body.command-surface-page .shell-context-rail--quiet .shell-rail-list-item {
 
 .cmd-mode-strip {
     display: grid;
-    gap: 14px;
-    margin-bottom: 22px;
-    padding-bottom: 18px;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
     border-bottom: 1px solid rgba(10, 28, 64, 0.1);
 }
 
@@ -1591,7 +1602,8 @@ body.command-surface-page .shell-context-rail--quiet .shell-rail-list-item {
 .cmd-delta {
     display: grid;
     gap: 8px;
-    padding-left: 16px;
+    max-width: 72ch;
+    padding-left: 14px;
     border-left: 2px solid rgba(36, 113, 231, 0.16);
 }
 
@@ -1637,8 +1649,8 @@ body.command-surface-page .shell-context-rail--quiet .shell-rail-list-item {
 .cmd-stage {
     display: grid;
     gap: 18px;
-    margin-bottom: 22px;
-    padding-bottom: 24px;
+    margin-bottom: 18px;
+    padding-bottom: 18px;
     border-bottom: 1px solid rgba(10, 28, 64, 0.1);
 }
 
@@ -1905,7 +1917,7 @@ body.dashboard-sheet-open {
 }
 
 .cmd-sheet-panel {
-    width: min(760px, calc(100vw - 40px));
+    width: min(720px, calc(100vw - 40px));
     height: calc(100vh - 40px);
     display: grid;
     grid-template-rows: auto auto 1fr auto;
@@ -1922,7 +1934,7 @@ body.dashboard-sheet-open {
     align-items: flex-start;
     justify-content: space-between;
     gap: 18px;
-    padding: 26px 28px 18px;
+    padding: 22px 24px 16px;
     border-bottom: 1px solid rgba(10, 28, 64, 0.09);
 }
 
@@ -1995,7 +2007,7 @@ body.dashboard-sheet-open {
 .cmd-sheet-summary {
     display: grid;
     gap: 8px;
-    padding: 20px 28px;
+    padding: 18px 24px;
     border-bottom: 1px solid rgba(10, 28, 64, 0.08);
     background: rgba(36, 113, 231, 0.03);
 }
@@ -2018,8 +2030,8 @@ body.dashboard-sheet-open {
 .cmd-sheet-body {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
-    gap: 28px;
-    padding: 10px 28px 24px;
+    gap: 24px;
+    padding: 8px 24px 22px;
     overflow: auto;
 }
 
@@ -2069,7 +2081,7 @@ body.dashboard-sheet-open {
 .cmd-sheet-room-strip {
     display: grid;
     gap: 8px;
-    padding: 18px 28px 0;
+    padding: 16px 24px 0;
 }
 
 .cmd-sheet-room-kicker {
@@ -2096,7 +2108,7 @@ body.dashboard-sheet-open {
     justify-content: space-between;
     gap: 18px;
     flex-wrap: wrap;
-    padding: 18px 28px 24px;
+    padding: 16px 24px 20px;
     border-top: 1px solid rgba(10, 28, 64, 0.09);
     background: rgba(255,255,255,0.75);
 }
@@ -2151,7 +2163,7 @@ body.command-surface-page .command-queue-summary {
 
 body.command-surface-page .anchor-stage,
 body.command-surface-page .shell-section--subtle {
-    padding: 0 0 22px;
+    padding: 0 0 18px;
     border: 0;
     border-bottom: 1px solid rgba(10, 28, 64, 0.1);
     border-radius: 0;

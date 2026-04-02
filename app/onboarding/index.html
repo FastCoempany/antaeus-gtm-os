@@ -6,46 +6,52 @@
     <title>Quick Start - Antaeus GTM OS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
-        body { background: var(--bg-primary, #0a0e1a); }
-        .ob-shell { min-height:100vh; padding:40px 24px 56px; }
-        .ob-progress { width:100%; max-width:520px; margin:0 auto 28px; }
+        body.command-surface-page.onboarding-entry-page { min-height:100vh; background:radial-gradient(circle at top left, rgba(36,113,231,0.06), transparent 26%), linear-gradient(180deg, #fbfcfe 0%, #f4f7fb 100%); }
+        .onboarding-entry-page .transition-hero-panel{border:1px solid rgba(10,28,64,0.08);background:radial-gradient(circle at top right, rgba(36,113,231,0.08), transparent 30%),linear-gradient(135deg, rgba(255,255,255,0.96), rgba(248,251,255,0.92));box-shadow:0 18px 36px rgba(10,28,64,0.08)}
+        .onboarding-entry-page .transition-hero-block{border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.74)}
+        .onboarding-entry-page .transition-hero-note .auth-note{border-color:rgba(10,28,64,0.08);background:rgba(255,255,255,0.78);box-shadow:0 10px 24px rgba(10,28,64,0.06)}
+        .ob-shell { min-height:100vh; max-width:1180px; margin:0 auto; padding:32px 24px 64px; }
+        .ob-progress { width:100%; max-width:620px; margin:0 auto 24px; }
         .ob-bars { display:flex; gap:6px; margin-bottom:12px; }
-        .ob-bar { flex:1; height:3px; border-radius:3px; background:rgba(255,255,255,0.08); transition:background 0.4s; }
+        .ob-bar { flex:1; height:4px; border-radius:999px; background:rgba(10,28,64,0.08); transition:background 0.4s; }
         .ob-bar.done { background:var(--brand-gold,#d4a574); }
-        .ob-bar.active { background:rgba(212,165,116,0.5); }
+        .ob-bar.active { background:rgba(230,112,30,0.5); }
         .ob-step-label { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); }
-        .ob-card { width:100%; max-width:520px; margin:0 auto; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:16px; padding:48px 40px; position:relative; overflow:hidden; }
-        .ob-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--brand-gold),transparent); }
-        .ob-brand { font-family:var(--font-serif); font-size:1.4rem; color:var(--brand-gold); margin-bottom:32px; }
-        .ob-role { display:inline-flex; align-items:center; gap:8px; margin-bottom:16px; padding:8px 12px; border-radius:999px; border:1px solid rgba(212,165,116,0.16); background:rgba(212,165,116,0.06); color:var(--brand-gold); font-size:0.74rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
+        .ob-return-links{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 auto 24px;}
+        .ob-return-link{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(10,28,64,0.1);background:rgba(255,255,255,0.82);color:var(--text-secondary);text-decoration:none;font-size:0.78rem;font-weight:700;letter-spacing:0.04em;}
+        .ob-return-link:hover{border-color:rgba(36,113,231,0.24);background:rgba(243,247,255,1);color:var(--text-primary);}
+        .ob-card { width:100%; max-width:620px; margin:0 auto; background:rgba(255,255,255,0.92); border:1px solid rgba(10,28,64,0.08); border-radius:22px; padding:40px 36px; position:relative; overflow:hidden; box-shadow:0 18px 36px rgba(10,28,64,0.08); }
+        .ob-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,rgba(230,112,30,0.9),rgba(36,113,231,0.55),transparent); }
+        .ob-brand { font-family:var(--font-serif); font-size:1.25rem; font-weight:800; color:var(--text-primary); margin-bottom:28px; }
+        .ob-role { display:inline-flex; align-items:center; gap:8px; margin-bottom:16px; padding:8px 12px; border-radius:999px; border:1px solid rgba(36,113,231,0.14); background:rgba(36,113,231,0.06); color:var(--accent-blue); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; }
         .ob-h { font-family:var(--font-serif); font-size:1.5rem; color:var(--text-primary); margin-bottom:8px; line-height:1.3; }
         .ob-sub { font-size:0.88rem; color:var(--text-tertiary); margin-bottom:28px; line-height:1.5; }
-        .ob-preview { margin:0 0 24px; padding:14px 16px; border-radius:12px; border:1px solid rgba(212,165,116,0.14); background:rgba(255,255,255,0.03); }
+        .ob-preview { margin:0 0 24px; padding:14px 16px; border-radius:14px; border:1px solid rgba(36,113,231,0.1); background:rgba(36,113,231,0.04); }
         .ob-preview-kicker { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--brand-gold); font-weight:700; margin-bottom:8px; }
         .ob-preview-copy { font-size:0.8rem; color:var(--text-tertiary); line-height:1.5; margin-bottom:12px; }
         .ob-preview-list { display:flex; flex-direction:column; gap:8px; }
         .ob-preview-row { display:flex; align-items:flex-start; gap:10px; font-size:0.78rem; color:var(--text-secondary); line-height:1.45; }
-        .ob-preview-dot { color:#22c55e; font-weight:700; flex-shrink:0; }
+        .ob-preview-dot { color:var(--accent-blue); font-weight:700; flex-shrink:0; }
         .ob-field { margin-bottom:20px; }
         .ob-label { display:block; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:8px; }
-        .ob-input { width:100%; padding:12px 16px; background:rgba(255,255,255,0.04); border:1px solid var(--border-default); border-radius:8px; color:var(--text-primary); font-size:0.95rem; font-family:inherit; }
-        .ob-input:focus { outline:none; border-color:var(--brand-gold); }
+        .ob-input { width:100%; min-height:44px; padding:12px 16px; background:rgba(255,255,255,0.88); border:1px solid rgba(10,28,64,0.12); border-radius:12px; color:var(--text-primary); font-size:0.95rem; font-family:inherit; }
+        .ob-input:focus { outline:none; border-color:var(--accent-blue); box-shadow:0 0 0 4px rgba(36,113,231,0.08); }
         .ob-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' fill='none' stroke-width='2'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 16px center; padding-right:40px; }
         .ob-hint { font-size:0.73rem; color:var(--text-muted); margin-top:6px; }
         .ob-curr { position:relative; }
         .ob-curr .ob-input { padding-left:28px; }
         .ob-curr::before { content:'$'; position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:0.95rem; pointer-events:none; }
         .ob-actions { display:flex; justify-content:space-between; align-items:center; margin-top:32px; }
-        .ob-btn { padding:12px 28px; border-radius:8px; font-size:0.9rem; font-weight:700; cursor:pointer; transition:all 0.2s; border:none; font-family:inherit; }
-        .ob-btn-primary { background:var(--brand-gold); color:var(--bg-primary); }
-        .ob-btn-primary:hover { opacity:0.9; }
+        .ob-btn { min-height:40px; padding:12px 22px; border-radius:12px; font-size:0.9rem; font-weight:700; cursor:pointer; transition:all 0.2s; border:1px solid transparent; font-family:inherit; }
+        .ob-btn-primary { background:var(--brand-gold); color:var(--text-primary); border-color:rgba(230,112,30,0.18); }
+        .ob-btn-primary:hover { background:var(--brand-gold-light); box-shadow:0 10px 22px rgba(230,112,30,0.16); }
         .ob-btn-primary:disabled { opacity:0.3; cursor:not-allowed; }
-        .ob-btn-ghost { background:transparent; color:var(--text-muted); border:1px solid var(--border-default); }
+        .ob-btn-ghost { background:rgba(255,255,255,0.88); color:var(--text-secondary); border-color:rgba(10,28,64,0.12); }
         .ob-btn-skip { background:none; border:none; color:var(--text-muted); font-size:0.8rem; cursor:pointer; }
-        .ob-btn-link { background:none; border:none; color:var(--brand-gold); font-size:0.8rem; font-weight:700; cursor:pointer; padding:0; }
+        .ob-btn-link { background:none; border:none; color:var(--accent-blue); font-size:0.8rem; font-weight:700; cursor:pointer; padding:0; }
         .ob-step { display:none; animation:fadeUp 0.35s ease; }
         .ob-step.active { display:block; }
         @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
@@ -53,11 +59,11 @@
         .ob-done-icon { font-size:3rem; margin-bottom:16px; }
         .ob-activation-grid { display:grid; gap:10px; margin:24px 0; text-align:left; }
         .ob-seeded { display:flex; flex-direction:column; gap:10px; margin:24px 0; text-align:left; }
-        .ob-seeded-item { display:flex; align-items:center; gap:10px; padding:12px 16px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:8px; font-size:0.85rem; color:var(--text-secondary); }
+        .ob-seeded-item { display:flex; align-items:center; gap:10px; padding:12px 16px; background:rgba(31,157,85,0.06); border:1px solid rgba(31,157,85,0.12); border-radius:12px; font-size:0.85rem; color:var(--text-secondary); }
         @media(max-width:600px){ .ob-card{padding:32px 24px;} .ob-h{font-size:1.2rem;} }
     </style>
 </head>
-<body>
+<body class="command-surface-page onboarding-entry-page">
     <script src="/js/app-auth-preflight.js"></script>
 <div class="ob-shell">
     <section class="transition-hero">
@@ -89,6 +95,10 @@
             <div class="auth-note"><strong>What happens next</strong><span id="obHeroNote1">Once this is complete, Antaeus should route into welcome and show the first ranked move instead of generic setup filler.</span></div>
         </div>
     </section>
+    <div class="ob-return-links">
+        <a class="ob-return-link" href="/app/welcome/">Open Week One</a>
+        <a class="ob-return-link" href="/app/dashboard/?mode=spotlight">Open Spotlight</a>
+    </div>
     <div class="ob-progress">
         <div class="ob-bars"><div class="ob-bar" id="b0"></div><div class="ob-bar" id="b1"></div><div class="ob-bar" id="b2"></div><div class="ob-bar" id="b3"></div></div>
         <div class="ob-step-label" id="stepLabel">Step 1 of 4</div>
@@ -418,10 +428,24 @@ function restoreFromBackup() {
     trackOnboarding('onboarding_restore_backup_click', { step: step + 1 });
     var manager = window.gtmDataManager || window.dataManager || null;
     if (manager && typeof manager.importAll === 'function') {
-        manager.importAll({ reloadTo: '/app/dashboard/' });
+        manager.importAll({ reloadTo: '/app/dashboard/?mode=spotlight' });
         return;
     }
     alert('Backup tools are unavailable right now. Refresh and try again.');
+}
+
+function normalizePostOnboardingRoute(route){
+    var next = String(route || '/app/welcome/').trim() || '/app/welcome/';
+    if (next.indexOf('/app/dashboard/') === 0) {
+        try {
+            var url = new URL(next, window.location.origin);
+            if (!url.searchParams.get('mode')) url.searchParams.set('mode', 'spotlight');
+            return url.pathname + url.search + url.hash;
+        } catch (error) {
+            return '/app/dashboard/?mode=spotlight';
+        }
+    }
+    return next;
 }
 
 async function finish(){
@@ -500,6 +524,7 @@ async function finish(){
                 console.error('Welcome routing failed after onboarding:', routeError);
             }
         }
+        nextRoute = normalizePostOnboardingRoute(nextRoute);
 
         trackOnboarding('onboarding_finish_success', {
             next_route: nextRoute,
