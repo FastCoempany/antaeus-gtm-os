@@ -187,7 +187,11 @@
                 return;
             }
             if(window.gtmShellChrome && typeof window.gtmShellChrome.renderHandoffBridge === 'function'){
-                node.innerHTML = window.gtmShellChrome.renderHandoffBridge(ctx);
+                var bridge = window.gtmShellChrome.renderHandoffBridge(ctx);
+                var pinned = typeof window.gtmShellChrome.renderPinnedObject === 'function'
+                    ? window.gtmShellChrome.renderPinnedObject(ctx)
+                    : '';
+                node.innerHTML = bridge + pinned;
                 return;
             }
             node.innerHTML = '';

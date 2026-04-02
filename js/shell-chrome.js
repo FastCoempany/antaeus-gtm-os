@@ -152,6 +152,27 @@
         );
     }
 
+    function renderPinnedObject(context) {
+        if (!context || !context.focusObject) return '';
+        var roomLabel = context.focusRoom || 'This room';
+        var sourceCopy = context.fromMode
+            ? 'Pinned from ' + formatModeLabel(context.fromMode) + '.'
+            : 'Pinned from the command stack.';
+        return (
+            '<div class="shell-pinned-object">' +
+                '<div class="shell-pinned-object-copy">' +
+                    '<div class="shell-pinned-object-kicker">Pinned object</div>' +
+                    '<div class="shell-pinned-object-title">' + escapeHtml(context.focusObject) + '</div>' +
+                    '<div class="shell-pinned-object-subcopy">' + escapeHtml(roomLabel) + ' is still operating on this object. ' + escapeHtml(sourceCopy) + '</div>' +
+                '</div>' +
+                '<div class="shell-pinned-object-meta">' +
+                    (context.focusRoom ? '<span class="shell-pinned-object-pill">' + escapeHtml(context.focusRoom) + '</span>' : '') +
+                    (context.fromMode ? '<span class="shell-pinned-object-pill">From ' + escapeHtml(formatModeLabel(context.fromMode)) + '</span>' : '') +
+                '</div>' +
+            '</div>'
+        );
+    }
+
     function applyHeader(config) {
         var header = getHeader();
         if (!header) return;
@@ -198,10 +219,13 @@
         var metrics = Array.isArray(config && config.metrics) ? config.metrics : [];
         var actions = Array.isArray(config && config.actions) ? config.actions : [];
         var variant = config && config.variant ? ' shell-command-band--' + escapeHtml(config.variant) : '';
-        var bridge = renderHandoffBridge(readHandoffContext());
+        var context = readHandoffContext();
+        var bridge = renderHandoffBridge(context);
+        var pinnedObject = renderPinnedObject(context);
 
         node.innerHTML =
             bridge +
+            pinnedObject +
             '<section class="shell-command-band' + variant + '">' +
                 '<div class="shell-band-top">' +
                     '<div>' +
@@ -252,6 +276,7 @@
     window.gtmShellChrome = {
         applyHeader: applyHeader,
         renderHandoffBridge: renderHandoffBridge,
+        renderPinnedObject: renderPinnedObject,
         renderCommandBand: renderCommandBand,
         renderContextRail: renderContextRail
     };
