@@ -74,6 +74,11 @@
         .command-spotlight-title{font-family:var(--font-serif);font-size:2rem;line-height:1.02;color:var(--text-primary);max-width:13ch;}
         .command-spotlight-copy{font-size:0.94rem;color:var(--text-secondary);line-height:1.75;max-width:62ch;}
         .command-spotlight-stack{display:grid;gap:10px;}
+        .command-spotlight-reward{display:flex;justify-content:flex-start;margin-top:2px;}
+        .command-spotlight-reward-btn{appearance:none;display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;border:1px solid rgba(36,113,231,0.16);background:linear-gradient(135deg,rgba(36,113,231,0.08),rgba(255,255,255,0.92));color:var(--text-primary);font-size:0.76rem;font-weight:700;letter-spacing:0.02em;cursor:pointer;transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease;}
+        .command-spotlight-reward-btn:hover{transform:translateY(-1px);border-color:rgba(36,113,231,0.28);box-shadow:0 10px 24px rgba(10,28,64,0.08);}
+        .command-spotlight-reward-btn .reward-kicker{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-blue);}
+        .command-spotlight-reward-btn .reward-copy{font-size:0.78rem;font-weight:700;color:var(--text-primary);}
         .command-spotlight-item{appearance:none;display:grid;gap:8px;width:100%;padding:12px 14px;text-align:left;border-radius:16px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.78);cursor:pointer;transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease;}
         .command-spotlight-item:hover{transform:translateY(-1px);border-color:rgba(36,113,231,0.22);}
         .command-spotlight-item.is-active{border-color:rgba(36,113,231,0.3);background:#fff;box-shadow:0 10px 24px rgba(10,28,64,0.06);}
@@ -92,7 +97,28 @@
         .command-queue-detail{display:grid;gap:16px;padding:20px 22px;border-radius:22px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.92);box-shadow:0 14px 30px rgba(10,28,64,0.06);}
         .command-queue-detail-title{font-family:var(--font-serif);font-size:2rem;line-height:1.02;color:var(--text-primary);max-width:14ch;}
         .command-queue-detail-copy{font-size:0.94rem;color:var(--text-secondary);line-height:1.75;max-width:54ch;}
+        .dashboard-graph-backdrop{position:fixed;inset:0;display:grid;place-items:center;padding:22px;background:rgba(10,28,64,0.48);backdrop-filter:blur(8px);z-index:1800;}
+        .dashboard-graph-panel{width:min(1020px,calc(100vw - 44px));max-height:calc(100vh - 44px);overflow:auto;display:grid;gap:18px;padding:24px;border-radius:24px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.98);box-shadow:0 24px 80px rgba(10,28,64,0.24);}
+        .dashboard-graph-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap;}
+        .dashboard-graph-kicker{font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-blue);}
+        .dashboard-graph-title{font-family:var(--font-serif);font-size:clamp(2rem,3vw,2.8rem);line-height:0.98;color:var(--text-primary);max-width:14ch;margin-top:8px;}
+        .dashboard-graph-copy{font-size:0.92rem;line-height:1.75;color:var(--text-secondary);max-width:70ch;margin-top:8px;}
+        .dashboard-graph-stage{position:relative;min-height:340px;border-radius:22px;border:1px dashed rgba(36,113,231,0.22);background:linear-gradient(180deg,rgba(36,113,231,0.05),rgba(255,255,255,0.92));overflow:hidden;}
+        .dashboard-graph-svg{position:absolute;inset:0;width:100%;height:100%;}
+        .dashboard-graph-node{position:absolute;display:grid;gap:8px;width:min(240px,28vw);padding:14px 16px;border-radius:18px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.96);box-shadow:0 12px 30px rgba(10,28,64,0.08);}
+        .dashboard-graph-node.state-ready{border-color:rgba(36,113,231,0.18);}
+        .dashboard-graph-node.state-live{border-color:rgba(34,197,94,0.18);}
+        .dashboard-graph-node.state-risk{border-color:rgba(230,112,30,0.22);}
+        .dashboard-graph-node-type{font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);}
+        .dashboard-graph-node-title{font-size:1rem;font-weight:700;line-height:1.2;color:var(--text-primary);}
+        .dashboard-graph-node-copy{font-size:0.8rem;line-height:1.55;color:var(--text-secondary);}
+        .dashboard-graph-node-metric{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent-blue);text-transform:uppercase;letter-spacing:0.05em;}
+        .dashboard-graph-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+        .dashboard-graph-summary-card{display:grid;gap:6px;padding:14px 16px;border-radius:18px;border:1px solid rgba(10,28,64,0.08);background:rgba(248,250,252,0.96);}
+        .dashboard-graph-summary-card strong{font-size:0.92rem;color:var(--text-primary);}
+        .dashboard-graph-summary-card p{font-size:0.8rem;line-height:1.6;color:var(--text-secondary);}
         @media(max-width:980px){.command-spotlight-shell,.command-queue-shell{grid-template-columns:1fr;}}
+        @media(max-width:900px){.dashboard-graph-node{position:static;width:auto}.dashboard-graph-stage{display:grid;gap:12px;padding:14px;min-height:auto}.dashboard-graph-svg{display:none;}}
         @media(max-width:800px){.dash-tool-row,.dash-tool-actions{flex-direction:column;align-items:stretch;}}
     </style>
 </head>
@@ -116,10 +142,11 @@
                     <div class="shell-work-column">
                         <div id="dashboardBootState"></div>
                         <div id="dashContent"></div>
-                    </div>
+                </div>
                     <aside id="dashboardShellRail"></aside>
                 </div>
                 <div id="dashboardSheetMount"></div>
+                <div id="dashboardGraphMount"></div>
             </div>
         </main>
     </div>
@@ -143,6 +170,8 @@
         var dashboardSheetRegistry = {};
         var dashboardSheetCounter = 0;
         var dashboardSheetActiveKey = null;
+        var dashboardGraphPayload = null;
+        var dashboardGraphOpen = false;
         var dashboardActiveCommandId = '';
         var DASHBOARD_GATE_LABELS = {
             champion: 'Champion',
@@ -525,6 +554,142 @@
                 calls: calls,
                 total: outboundTouches + linkedinActions + calls
             };
+        }
+        function graphToneFromScore(score, goodFloor, warnFloor) {
+            if (score >= goodFloor) return 'state-live';
+            if (score >= warnFloor) return 'state-ready';
+            return 'state-risk';
+        }
+        function buildDashboardGraphPayload(input) {
+            var payload = input || {};
+            var nodes = [];
+            var icps = payload.icps && Array.isArray(payload.icps.icps) ? payload.icps.icps.slice() : [];
+            if (icps.length) {
+                icps.sort(function(left, right) { return Number(right.qualityScore || 0) - Number(left.qualityScore || 0); });
+                var bestIcp = icps[0];
+                var icpName = bestIcp.name || bestIcp.title || bestIcp.industry || 'Targeting truth';
+                var icpScore = Number(bestIcp.qualityScore || 0);
+                nodes.push({
+                    type: 'ICP',
+                    title: icpName,
+                    metric: icpScore ? (icpScore + '/100 quality') : (icps.length + ' targeting object' + (icps.length === 1 ? '' : 's')),
+                    copy: 'Targeting is no longer abstract. The wedge is feeding territory, sourcing, and outbound.',
+                    tone: graphToneFromScore(icpScore || 72, 82, 68)
+                });
+            }
+            var accounts = Array.isArray(payload.accounts) ? payload.accounts.slice() : [];
+            if (accounts.length) {
+                accounts.sort(function(left, right) { return Number(right._heat || 0) - Number(left._heat || 0); });
+                var hottest = accounts[0];
+                var signalCount = Array.isArray(hottest.signals) ? hottest.signals.length : 0;
+                var heat = Number(hottest._heat || 0);
+                nodes.push({
+                    type: 'Signal',
+                    title: hottest.name || 'Signal console live',
+                    metric: heat ? ('heat ' + heat) : (accounts.length + ' live account' + (accounts.length === 1 ? '' : 's')),
+                    copy: signalCount ? (signalCount + ' signal' + (signalCount === 1 ? '' : 's') + ' are now feeding the operating loop.') : 'The market layer is live enough to change what the command stack sees.',
+                    tone: graphToneFromScore(heat || 70, 80, 60)
+                });
+            }
+            var topDeal = null;
+            if (payload.briefing && Array.isArray(payload.briefing.atRisk) && payload.briefing.atRisk.length) {
+                topDeal = payload.briefing.atRisk[0];
+            } else if (payload.activeDeals && payload.activeDeals.length) {
+                topDeal = payload.activeDeals[0];
+            }
+            if (topDeal) {
+                var dealStage = dh.STAGE_LABELS[topDeal.stage] || topDeal.stage || 'Live';
+                nodes.push({
+                    type: 'Deal',
+                    title: topDeal.name || topDeal.accountName || 'Live deal',
+                    metric: topDeal.riskScore ? ('risk ' + topDeal.riskScore) : dealStage,
+                    copy: 'Pipeline pressure is now attached to a real object instead of a founder memory.',
+                    tone: topDeal.riskScore ? graphToneFromScore(100 - Number(topDeal.riskScore || 0), 45, 25) : 'state-ready'
+                });
+            }
+            var readinessSnapshot = readLS('gtmos_readiness_snapshot', null);
+            if (readinessSnapshot && typeof readinessSnapshot.score === 'number') {
+                nodes.push({
+                    type: 'Readiness',
+                    title: 'System readiness',
+                    metric: readinessSnapshot.score + '/100',
+                    copy: 'The hiring question is now being answered by live evidence, not founder confidence alone.',
+                    tone: graphToneFromScore(Number(readinessSnapshot.score || 0), 80, 55)
+                });
+            } else if (payload.motionCounts && payload.motionCounts.total) {
+                nodes.push({
+                    type: 'Motion',
+                    title: 'Execution layer',
+                    metric: payload.motionCounts.total + ' live touch' + (payload.motionCounts.total === 1 ? '' : 'es'),
+                    copy: 'Calls, outbound, and follow-through are now feeding back into the system instead of disappearing in side notes.',
+                    tone: graphToneFromScore(Number(payload.motionCounts.total || 0), 5, 2)
+                });
+            }
+            if (nodes.length < 2) return null;
+            var headline = 'Something super cool you did that you did not know you did.';
+            var copy = 'Normal work across command, rooms, and handoffs built a denser operating structure without asking you to think in graph terms every day.';
+            return {
+                headline: headline,
+                copy: copy,
+                nodes: nodes.slice(0, 4)
+            };
+        }
+        function renderDashboardGraph() {
+            var mount = document.getElementById('dashboardGraphMount');
+            if (!mount) return;
+            if (!dashboardGraphOpen || !dashboardGraphPayload || !dashboardGraphPayload.nodes || dashboardGraphPayload.nodes.length < 2) {
+                mount.innerHTML = '';
+                document.body.classList.remove('dashboard-graph-open');
+                return;
+            }
+            var positions = [
+                { left: '6%', top: '50%' },
+                { left: '29%', top: '12%' },
+                { left: '45%', top: '56%' },
+                { left: '70%', top: '18%' }
+            ];
+            var paths = [
+                'M138 212 C230 96 320 86 408 132',
+                'M408 132 C492 220 606 238 716 190',
+                'M408 132 C510 82 628 72 784 112'
+            ];
+            var nodes = dashboardGraphPayload.nodes.map(function(node, index) {
+                return Object.assign({}, node, positions[index] || positions[positions.length - 1]);
+            });
+            var visiblePaths = [];
+            if (nodes.length >= 2) visiblePaths.push(paths[0]);
+            if (nodes.length >= 3) visiblePaths.push(paths[1]);
+            if (nodes.length >= 4) visiblePaths.push(paths[2]);
+            mount.innerHTML =
+                '<div class="dashboard-graph-backdrop" onclick="dashboardCloseGraph()">' +
+                    '<section class="dashboard-graph-panel" role="dialog" aria-modal="true" aria-labelledby="dashboardGraphTitle" onclick="event.stopPropagation()">' +
+                        '<div class="dashboard-graph-head">' +
+                            '<div>' +
+                                '<div class="dashboard-graph-kicker">Graph reward</div>' +
+                                '<h2 class="dashboard-graph-title" id="dashboardGraphTitle">' + escH(dashboardGraphPayload.headline) + '</h2>' +
+                                '<div class="dashboard-graph-copy">' + escH(dashboardGraphPayload.copy) + '</div>' +
+                            '</div>' +
+                            '<div class="anchor-primary-actions"><button type="button" class="btn btn-secondary" onclick="dashboardCloseGraph()">Back to command</button></div>' +
+                        '</div>' +
+                        '<div class="dashboard-graph-stage">' +
+                            '<svg class="dashboard-graph-svg" viewBox="0 0 920 360" preserveAspectRatio="none">' + visiblePaths.map(function(path) {
+                                return '<path d="' + path + '" stroke="rgba(36,113,231,0.3)" stroke-width="2" stroke-dasharray="8 8" fill="none"></path>';
+                            }).join('') + '</svg>' +
+                            nodes.map(function(node) {
+                                return '<article class="dashboard-graph-node ' + escH(node.tone || 'state-ready') + '" style="left:' + escH(node.left) + ';top:' + escH(node.top) + ';">' +
+                                    '<div class="dashboard-graph-node-type">' + escH(node.type) + '</div>' +
+                                    '<div class="dashboard-graph-node-title">' + escH(node.title) + '</div>' +
+                                    '<div class="dashboard-graph-node-copy">' + escH(node.copy) + '</div>' +
+                                    '<div class="dashboard-graph-node-metric">' + escH(node.metric) + '</div>' +
+                                '</article>';
+                            }).join('') +
+                        '</div>' +
+                        '<div class="dashboard-graph-summary">' + nodes.map(function(node) {
+                            return '<div class="dashboard-graph-summary-card"><strong>' + escH(node.type + ' · ' + node.title) + '</strong><p>' + escH(node.copy) + '</p></div>';
+                        }).join('') + '</div>' +
+                    '</section>' +
+                '</div>';
+            document.body.classList.add('dashboard-graph-open');
         }
 
         function getDashboardStage(context) {
@@ -1193,6 +1358,7 @@
                         '<div class="command-spotlight-copy">' + escH(selected.copy || '') + '</div>' +
                         (selected.meta && selected.meta.length ? '<div class="anchor-lane-meta">' + selected.meta.map(function(item) { return '<span>' + escH(item) + '</span>'; }).join('') + '</div>' : '') +
                         '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
+                        (dashboardGraphPayload ? '<div class="command-spotlight-reward"><button type="button" class="command-spotlight-reward-btn" onclick="dashboardOpenGraph()"><span class="reward-kicker">Hidden reward</span><span class="reward-copy">See what compounded</span></button></div>' : '') +
                     '</div>' +
                     '<aside class="command-spotlight-stack">' + list.map(renderDashboardSpotlightStackItem).join('') + '</aside>' +
                 '</div>' +
@@ -1426,6 +1592,12 @@
             renderDashboardShell(stage, shellContext, weekOneState, dependencyWarnings);
 
             if (vitals.length === 0) {
+                dashboardGraphPayload = buildDashboardGraphPayload({
+                    icps: icpState,
+                    accounts: signalConsoleState.accounts,
+                    activeDeals: active,
+                    motionCounts: motionCounts
+                });
                 if (!dashboardSummaryTracked) {
                     dashboardSummaryTracked = true;
                     trackDashboard('dashboard_empty', {
@@ -1485,6 +1657,7 @@
                 document.getElementById('dashContent').innerHTML =
                     emptyHtml;
                 renderDashboardSheet();
+                renderDashboardGraph();
                 saveDashboardSnapshot(emptySnapshot);
                 return;
             }
@@ -1566,6 +1739,13 @@
             var lanes = buildDashboardLanes(stage, primary, briefing, advisorSuggestion, dependencyWarnings);
             var commandSnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, briefing, dependencyWarnings, weekOneState);
             var commandDelta = buildDashboardDelta(previousSnapshot, commandSnapshot);
+            dashboardGraphPayload = buildDashboardGraphPayload({
+                icps: icpState,
+                accounts: signalConsoleState.accounts,
+                activeDeals: active,
+                motionCounts: motionCounts,
+                briefing: briefing
+            });
             html += renderDashboardCommandMode(commandMode, commandDelta);
             if (commandMode === 'brief') {
             html += '<section class="anchor-stage">';
@@ -1846,13 +2026,16 @@
 
             document.getElementById('dashContent').innerHTML = html;
             renderDashboardSheet();
+            renderDashboardGraph();
             saveDashboardSnapshot(commandSnapshot);
         }
 
         window.dashboardOpenSheet = function(key) {
             if (!key || !dashboardSheetRegistry[key]) return;
+            dashboardGraphOpen = false;
             dashboardSheetActiveKey = key;
             renderDashboardSheet();
+            renderDashboardGraph();
             trackDashboard('dashboard_sheet_opened', { key: key });
         };
         window.dashboardCloseSheet = function() {
@@ -1860,7 +2043,25 @@
             dashboardSheetActiveKey = null;
             renderDashboardSheet();
         };
+        window.dashboardOpenGraph = function() {
+            if (!dashboardGraphPayload) return;
+            dashboardSheetActiveKey = null;
+            dashboardGraphOpen = true;
+            renderDashboardSheet();
+            renderDashboardGraph();
+            trackDashboard('dashboard_graph_opened', { nodes: dashboardGraphPayload.nodes.length });
+        };
+        window.dashboardCloseGraph = function() {
+            if (!dashboardGraphOpen) return;
+            dashboardGraphOpen = false;
+            renderDashboardGraph();
+        };
         document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && dashboardGraphOpen) {
+                dashboardGraphOpen = false;
+                renderDashboardGraph();
+                return;
+            }
             if (event.key === 'Escape' && dashboardSheetActiveKey) {
                 dashboardSheetActiveKey = null;
                 renderDashboardSheet();
@@ -1933,6 +2134,7 @@
             mode = normalizeDashboardCommandMode(mode);
             if (mode !== 'brief' && mode !== 'spotlight' && mode !== 'queue') return;
             dashboardSheetActiveKey = null;
+            dashboardGraphOpen = false;
             setDashboardCommandMode(mode);
             trackDashboard('dashboard_command_mode_changed', { mode: mode });
             Promise.resolve(render()).catch(onDashboardBootFailure);
@@ -1942,6 +2144,7 @@
             dashboardActiveCommandId = commandId;
             localStorage.setItem(DASHBOARD_ACTIVE_COMMAND_KEY, commandId);
             dashboardSheetActiveKey = null;
+            dashboardGraphOpen = false;
             Promise.resolve(render()).catch(onDashboardBootFailure);
         };
 
