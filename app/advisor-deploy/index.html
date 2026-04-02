@@ -10,6 +10,12 @@
     <link rel="stylesheet" href="/css/app.css">
     <style>
         .module-inner { max-width:880px; padding:0 0 80px; }
+        .module-header .page-title{font-family:var(--sans);font-size:clamp(1.55rem,1.9vw,1.9rem);margin-bottom:0;color:var(--text);}
+        .module-header .page-subtitle{max-width:72ch;color:var(--text3);}
+        .advisor-first-fold{margin-bottom:24px;padding:18px 18px 8px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg,rgba(15,19,28,0.94) 0%,rgba(10,13,20,0.98) 100%);box-shadow:0 22px 48px rgba(0,0,0,0.18);}
+        .advisor-first-fold #advisorBootState{margin-bottom:14px;}
+        .advisor-first-fold #advisorShellBand{margin-bottom:16px;}
+        .advisor-first-fold .tabs{margin-bottom:0;border-bottom-color:rgba(255,255,255,0.06);}
 
 :root{--bg:#0a0e1a;--bg2:#10152a;--bg3:#161c34;--text:#e0ddd8;--text2:#b0ada6;--text3:#78756e;--muted:#4e4c47;--gold:#d4a574;--gold-bg:rgba(212,165,116,0.06);--gold-border:rgba(212,165,116,0.2);--border:rgba(255,255,255,0.06);--green:#22c55e;--green-bg:rgba(34,197,94,0.08);--amber:#f59e0b;--amber-bg:rgba(245,158,11,0.08);--red:#ef4444;--red-bg:rgba(239,68,68,0.06);--blue:#5b8def;--blue-bg:rgba(91,141,239,0.08);--r:8px;--rl:12px;--rf:999px;--serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',-apple-system,sans-serif;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -106,7 +112,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
 
     </style>
 </head>
-<body>
+<body class="room-wave2 room-advisor-deploy">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -118,9 +124,18 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
         <main class="app-main">
             <div class="app-content">
 <div class="module-inner">
+    <header class="app-header module-header">
+        <div class="module-header-title">
+            <div class="shell-header-meta">
+                <span class="shell-header-kicker">Advisor family</span>
+                <span class="shell-header-state state-live">Influence deploy</span>
+            </div>
+            <h1 class="page-title">Advisor Deploy</h1>
+            <p class="page-subtitle">Deploy equity-invested relationships at the exact deal moments where their influence changes the outcome.</p>
+        </div>
+    </header>
+    <section class="advisor-first-fold">
     <div id="advisorBootState"></div>
-    <h1>Advisor Deploy</h1>
-    <p class="sub">Deploy equity-invested relationships at the exact deal moments where their influence changes the outcome.</p>
     <div id="advisorShellBand"></div>
 
     <div class="tabs">
@@ -131,6 +146,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
         <button class="tab" onclick="showTab('builder')">Ask Builder</button>
         <button class="tab" onclick="showTab('impact')">Impact</button>
     </div>
+    </section>
 
     <!-- ===== DASHBOARD ===== -->
     <div class="panel on" id="tab-dashboard">

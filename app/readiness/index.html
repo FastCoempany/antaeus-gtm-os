@@ -64,10 +64,15 @@
         .dim-crit-pts { font-weight:600; font-size:0.65rem; }
         .dim-crit-pts.met { color:#22c55e; }
         .dim-crit-pts.unmet { color:var(--text-muted); opacity:0.4; }
+        .readiness-first-fold{margin-bottom:var(--space-lg);padding:18px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
+        .readiness-first-fold #readinessShellBand{margin-bottom:16px;}
+        .readiness-first-fold .hero-score-wrap{padding:28px 0 24px;}
+        .readiness-first-fold .score-story{margin-bottom:0;}
         @media(max-width:900px){ .score-story{grid-template-columns:1fr;} }
+        @media(max-width:700px){ .readiness-first-fold{padding:14px;} }
     </style>
 </head>
-<body>
+<body class="room-wave2 room-readiness">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -77,14 +82,22 @@
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">Readiness Score</h1>
-                <p class="module-subtitle">How close you are to hiring your first sales rep.</p>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">System family</span>
+                        <span class="shell-header-state state-ready">Hiring readiness</span>
+                    </div>
+                    <h1 class="page-title">Readiness Score</h1>
+                    <p class="page-subtitle">Measure whether the system is really ready for the first sales hire instead of relying on founder confidence or isolated wins.</p>
+                </div>
             </header>
             <div class="app-content" style="max-width:680px;">
+                <section class="readiness-first-fold">
                 <div id="readinessShellBand"></div>
                 <div class="hero-score-wrap" id="heroWrap"></div>
                 <div class="score-story" id="scoreStory"></div>
+                </section>
                 <div class="actions-title">Highest-impact moves to improve your score</div>
                 <div id="actionsList"></div>
                 <div class="dim-section">

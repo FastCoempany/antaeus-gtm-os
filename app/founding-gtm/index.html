@@ -77,10 +77,14 @@
         .pb-warning{padding:12px 14px;border-radius:var(--radius-md);border:1px solid rgba(245,158,11,0.18);background:rgba(245,158,11,0.06);color:var(--text-secondary);font-size:0.82rem;line-height:1.5;}
         .pb-warning strong{color:var(--brand-gold);}
         .pb-section-summary{margin-top:12px;padding:12px 14px;border-radius:var(--radius-md);background:rgba(255,255,255,0.03);border:1px solid var(--border-default);font-size:0.8rem;color:var(--text-tertiary);line-height:1.55;}
+        .playbook-first-fold{margin-bottom:var(--space-lg);padding:18px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
+        .playbook-first-fold #playbookShellBand{margin-bottom:16px;}
+        .playbook-first-fold #playbookTopBoard{margin-bottom:0;}
         @media(max-width:900px){.pb-summary,.pb-readiness{grid-template-columns:1fr;}}
+        @media(max-width:700px){.playbook-first-fold{padding:14px;}}
     </style>
 </head>
-<body>
+<body class="room-wave2 room-founding-gtm">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -90,13 +94,21 @@
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">Playbook</h1>
-                <p class="module-subtitle">Auto-assembled from your modules. The playbook your next hire will run from.</p>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">Handoff family</span>
+                        <span class="shell-header-state state-ready">Transfer ready</span>
+                    </div>
+                    <h1 class="page-title">Playbook</h1>
+                    <p class="page-subtitle">Auto-assembled from your modules so the next hire inherits operating truth, not founder memory and scattered notes.</p>
+                </div>
             </header>
             <div class="app-content" style="max-width:740px;">
+                <section class="playbook-first-fold">
                 <div id="playbookShellBand"></div>
                 <div id="playbookTopBoard"></div>
+                </section>
                 <div id="sections"></div>
                 <div class="pb-export-bar">
                     <button class="pb-export-btn" onclick="openExportModal()">&#128230; Share Handoff Kit</button>

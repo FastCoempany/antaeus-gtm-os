@@ -78,11 +78,16 @@
         .qw-summary-box h4{margin:0 0 6px;font-size:0.92rem;}
         .qw-summary-box p{margin:0;color:var(--text-tertiary);font-size:0.8rem;line-height:1.55;}
         .qw-empty-note{font-size:0.8rem;color:var(--text-muted);line-height:1.55;}
+        .qw-first-fold{margin-bottom:var(--space-lg);padding:18px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
+        .qw-first-fold #quotaShellBand{margin-bottom:16px;}
+        .qw-first-fold #quotaTopBoard{margin-bottom:16px;}
+        .qw-first-fold .qw-hero{margin-bottom:14px;}
+        .qw-first-fold .qw-coverage{margin-bottom:0;}
         @media(max-width:900px){.qw-bridge,.qw-plan,.qw-handoff-grid,.qw-summary-block{grid-template-columns:1fr;}}
-        @media(max-width:700px){.qw-inputs,.qw-adv-grid,.qw-bench{grid-template-columns:1fr;}}
+        @media(max-width:700px){.qw-inputs,.qw-adv-grid,.qw-bench{grid-template-columns:1fr;}.qw-first-fold{padding:14px;}}
     </style>
 </head>
-<body>
+<body class="room-wave2 room-quota-workback">
     <script src="/js/app-auth-preflight.js"></script>
     <div class="app-container">
         <aside class="app-sidebar">
@@ -92,13 +97,21 @@
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">Quota Workback</h1>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">System family</span>
+                        <span class="shell-header-state state-ready">Execution math</span>
+                    </div>
+                    <h1 class="page-title">Quota Workback</h1>
+                    <p class="page-subtitle">Turn revenue targets into believable weekly pressure so pipeline, activity, and coverage all read like one operating plan.</p>
+                </div>
                 <div class="header-actions">
                     <button class="btn btn-secondary btn-sm" onclick="copyMath()">Copy Math</button>
                 </div>
             </header>
             <div class="app-content" style="max-width:780px;">
+                <section class="qw-first-fold">
                 <div id="quotaShellBand"></div>
                 <div id="quotaTopBoard"></div>
 
@@ -108,6 +121,7 @@
                 </div>
 
                 <div class="qw-coverage" id="coverageBar"></div>
+                </section>
                 <div class="qw-card" id="planCard"></div>
 
                 <div class="qw-card">
