@@ -141,9 +141,13 @@
         .worked-toggle input { width: 18px; height: 18px; accent-color: var(--accent-green); }
         .worked-toggle label { font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
         .worked-toggle:hover { background: rgba(34, 197, 94, 0.15); }
+        .icp-first-fold { margin-bottom: var(--space-lg); padding: 18px; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; background: linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%); box-shadow: 0 22px 44px rgba(0,0,0,0.14); }
+        .icp-first-fold #icpBootState { margin-bottom: 14px; }
+        .icp-first-fold #icpShellBand { margin-bottom: 0; }
+        @media (max-width: 900px) { .icp-first-fold { padding: 14px; } }
     </style>
 </head>
-<body>
+<body class="room-wave2 room-icp-studio">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -154,14 +158,22 @@
         </aside>
         
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">ICP Studio</h1>
-                <p class="page-subtitle pop-subtitle">Define a winnable 30-day slice, then run it hard. Stop selling to everyone.</p>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">ICP family</span>
+                        <span class="shell-header-state state-ready">Decisive targeting</span>
+                    </div>
+                    <h1 class="page-title">ICP Studio</h1>
+                    <p class="page-subtitle">Define a winnable 30-day slice, then run it hard. Stop selling to everyone.</p>
+                </div>
             </header>
             
             <div class="app-content">
+                <section class="icp-first-fold">
                 <div id="icpBootState"></div>
                 <div id="icpShellBand"></div>
+                </section>
                 <div class="studio-layout shell-context-layout">
                     <div class="builder-content shell-work-column">
                         <div id="icpOperatingBoard"></div>
