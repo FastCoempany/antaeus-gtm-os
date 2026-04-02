@@ -447,6 +447,22 @@ function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));syncDocToCloud(k
 function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
 function daysSince(iso){return iso?Math.floor((Date.now()-new Date(iso).getTime())/86400000):999;}
 function esc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function buildWorkbenchRoomHref(href, focusObject, roomLabel){
+    try{
+        var url=new URL(href, window.location.origin);
+        if(!url.searchParams.get('returnTo')){
+            url.searchParams.set('returnTo','/app/sourcing-workbench/');
+            url.searchParams.set('returnLabel','Back to Sourcing Workbench');
+            if(focusObject) url.searchParams.set('focusObject', focusObject);
+            if(roomLabel) url.searchParams.set('focusRoom', roomLabel);
+            url.searchParams.set('fromMode','room');
+            url.searchParams.set('fromSurface','sourcing-workbench');
+        }
+        return url.pathname + url.search + url.hash;
+    }catch(error){
+        return href;
+    }
+}
 
 // Read Territory Architect data
 function getTheses(){return readLS('gtmos_ta_theses',[]).filter(function(t){return t.status==='active';});}
@@ -691,7 +707,7 @@ function renderBridge(){
             ],
             actions: [
                 { label: 'Open Query Builder', action: "swTab('queryBuilder')", tone: 'primary' },
-                { label: 'Open Signal Console', href: '/app/signal-console/' }
+                { label: 'Open Signal Console', href: buildWorkbenchRoomHref('/app/signal-console/', 'Research handoff', 'Signal Console') }
             ]
         });
     } else {
@@ -986,7 +1002,7 @@ function renderPipeline(){
         }
         if(p.stage==='ready') html+='<button class="sw-pp-card-btn push" onclick="pushToTA(\''+p.id+'\')">Push to Territory (T'+guidance.suggestedTier+') -></button><button class="sw-pp-card-btn park" onclick="setPPStage(\''+p.id+'\',\'parked\')">Park</button>';
         if(p.stage==='parked') html+='<button class="sw-pp-card-btn research" onclick="openResearchModal(\''+p.id+'\')">Research</button><button class="sw-pp-card-btn reject" onclick="rejectProspect(\''+p.id+'\')">Reject</button>';
-        if(p.stage==='pushed') html+='<button class="sw-pp-card-btn signal" onclick="window.location.href=\'/app/signal-console/\'">Open Signal Console -></button>';
+        if(p.stage==='pushed') html+='<button class="sw-pp-card-btn signal" onclick="window.location.href=\''+buildWorkbenchRoomHref('/app/signal-console/', p.name, 'Signal Console')+'\'">Open Signal Console -></button>';
         html+='</div></div>';
         return html;
     }).join('');
@@ -1213,7 +1229,7 @@ window.pushToTA=function(id){
     p.stage='pushed';p.pushedToTA=true;p.pushedAt=new Date().toISOString();p.tier=parseInt(tier);
     saveProspects(prospects);
     if(confirm(p.name+' is now in Territory Architect as Tier '+tier+'. Open Signal Console next?')){
-        window.location.href='/app/signal-console/';
+        window.location.href=buildWorkbenchRoomHref('/app/signal-console/', p.name, 'Signal Console');
         return;
     }
     render();

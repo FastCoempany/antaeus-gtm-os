@@ -189,6 +189,22 @@
                 }
                 return dh.computeCoverage(dh.loadAllDeals(), quota);
             }
+            function buildQuotaRoomHref(href, focusObject, roomLabel){
+                try{
+                    var url = new URL(href, window.location.origin);
+                    if(!url.searchParams.get('returnTo')){
+                        url.searchParams.set('returnTo', '/app/quota-workback/');
+                        url.searchParams.set('returnLabel', 'Back to Quota Workback');
+                        if(focusObject) url.searchParams.set('focusObject', focusObject);
+                        if(roomLabel) url.searchParams.set('focusRoom', roomLabel);
+                        url.searchParams.set('fromMode', 'room');
+                        url.searchParams.set('fromSurface', 'quota-workback');
+                    }
+                    return url.pathname + url.search + url.hash;
+                }catch(error){
+                    return href;
+                }
+            }
 
             var ACV_BENCHMARKS = {
                 small:{maxAcv:30000,winRate:25,cycle:45,m2o:40,coverage:3.0,label:'SMB',winRange:'20-30%',cycleRange:'30-60 days'},
@@ -263,8 +279,8 @@
                             {label:'One-session win',value:'Leave with a weekly activity target and a believable coverage posture.'}
                         ],
                         actions:[
-                            {label:'Open Outbound Studio',action:'location.href=\"/app/outbound-studio/\"',tone:'primary'},
-                            {label:'Open Dashboard',action:'location.href=\"/app/dashboard/\"'}
+                            {label:'Open Outbound Studio',action:'location.href=\"'+buildQuotaRoomHref('/app/outbound-studio/','Quota pressure plan','Outbound Studio')+'\"',tone:'primary'},
+                            {label:'Open Dashboard',action:'location.href=\"'+buildQuotaRoomHref('/app/dashboard/?mode=spotlight','Quota pressure plan','Spotlight')+'\"'}
                         ]
                     });
                 }
@@ -286,8 +302,8 @@
                                     '<div class="anchor-primary-title">'+benchmark.label+' planning model</div>'+
                                     '<div class="anchor-primary-copy">Win rate is '+metrics.winState+'. Meeting conversion is '+metrics.m2oState+'. Cycle is '+metrics.cycleState+'.</div>'+
                                     '<div class="anchor-primary-actions">'+
-                                        '<a class="btn btn-primary" href="/app/outbound-studio/">Open Outbound Studio</a>'+
-                                        '<a class="btn btn-secondary" href="/app/dashboard/">Open Dashboard</a>'+
+                                        '<a class="btn btn-primary" href="'+buildQuotaRoomHref('/app/outbound-studio/','Quota pressure plan','Outbound Studio')+'">Open Outbound Studio</a>'+
+                                        '<a class="btn btn-secondary" href="'+buildQuotaRoomHref('/app/dashboard/?mode=spotlight','Quota pressure plan','Spotlight')+'">Open Dashboard</a>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
@@ -343,9 +359,9 @@
                 document.getElementById('handoffCard').innerHTML =
                     '<div class="qw-card-title">Downstream handoffs</div>'+
                     '<div class="qw-handoff-grid">'+
-                        '<div class="qw-handoff-card"><h3>Outbound Studio</h3><div class="qw-handoff-metric">'+fmtN(metrics.touchesWeek)+'/week</div><p>Use this module to turn quota into repeatable motion. The immediate standard is enough touches, enough active accounts, and enough meetings created to keep pipeline on track.</p><div class="qw-handoff-meta">'+fmtN(metrics.activeAccounts)+' active accounts, '+fmtPct(metrics.touchToMeetingRaw)+' touch to meeting, '+fmtN(metrics.touchesMonth)+' touches/month.</div><div class="qw-actions"><a class="qw-action-link" href="/app/outbound-studio/">Open Outbound Studio</a></div></div>'+
-                        '<div class="qw-handoff-card"><h3>Cold Call Studio</h3><div class="qw-handoff-metric">'+fmtN(metrics.meetingPushesWeek)+' meeting pushes/week</div><p>Use calls when the plan needs faster conversation density. The target here is not random volume. It is enough live conversation pressure to make the meeting target believable.</p><div class="qw-handoff-meta">'+metrics.touchesDay+' touches/day floor, '+fmtPct(metrics.showRateRaw)+' show rate, '+fmtPct(metrics.meetingToOppRaw)+' meeting to opp.</div><div class="qw-actions"><a class="qw-action-link" href="/app/cold-call-studio/">Open Cold Call Studio</a></div></div>'+
-                        '<div class="qw-handoff-card"><h3>Dashboard</h3><div class="qw-handoff-metric">'+fmtM(metrics.pipelineNeeded)+'</div><p>The Dashboard should now hold you accountable to coverage, recovery pressure, and whether the current workspace can actually support quota.</p><div class="qw-handoff-meta">'+(coverage.ratio?('Current coverage: '+coverage.ratio+'x against '+benchmark.coverage+'x target.'): 'Set quota and load deals to see live coverage pressure.')+'</div><div class="qw-actions"><a class="qw-action-link" href="/app/dashboard/">Open Dashboard</a><a class="qw-action-link" href="/app/deal-workspace/">Open Deal Workspace</a></div></div>'+
+                        '<div class="qw-handoff-card"><h3>Outbound Studio</h3><div class="qw-handoff-metric">'+fmtN(metrics.touchesWeek)+'/week</div><p>Use this module to turn quota into repeatable motion. The immediate standard is enough touches, enough active accounts, and enough meetings created to keep pipeline on track.</p><div class="qw-handoff-meta">'+fmtN(metrics.activeAccounts)+' active accounts, '+fmtPct(metrics.touchToMeetingRaw)+' touch to meeting, '+fmtN(metrics.touchesMonth)+' touches/month.</div><div class="qw-actions"><a class="qw-action-link" href="'+buildQuotaRoomHref('/app/outbound-studio/','Quota pressure plan','Outbound Studio')+'">Open Outbound Studio</a></div></div>'+
+                        '<div class="qw-handoff-card"><h3>Cold Call Studio</h3><div class="qw-handoff-metric">'+fmtN(metrics.meetingPushesWeek)+' meeting pushes/week</div><p>Use calls when the plan needs faster conversation density. The target here is not random volume. It is enough live conversation pressure to make the meeting target believable.</p><div class="qw-handoff-meta">'+metrics.touchesDay+' touches/day floor, '+fmtPct(metrics.showRateRaw)+' show rate, '+fmtPct(metrics.meetingToOppRaw)+' meeting to opp.</div><div class="qw-actions"><a class="qw-action-link" href="'+buildQuotaRoomHref('/app/cold-call-studio/','Quota pressure plan','Cold Call Studio')+'">Open Cold Call Studio</a></div></div>'+
+                        '<div class="qw-handoff-card"><h3>Dashboard</h3><div class="qw-handoff-metric">'+fmtM(metrics.pipelineNeeded)+'</div><p>The Dashboard should now hold you accountable to coverage, recovery pressure, and whether the current workspace can actually support quota.</p><div class="qw-handoff-meta">'+(coverage.ratio?('Current coverage: '+coverage.ratio+'x against '+benchmark.coverage+'x target.'): 'Set quota and load deals to see live coverage pressure.')+'</div><div class="qw-actions"><a class="qw-action-link" href="'+buildQuotaRoomHref('/app/dashboard/?mode=spotlight','Quota pressure plan','Spotlight')+'">Open Dashboard</a><a class="qw-action-link" href="'+buildQuotaRoomHref('/app/deal-workspace/','Quota pressure plan','Deal Workspace')+'">Open Deal Workspace</a></div></div>'+
                     '</div>';
             }
 

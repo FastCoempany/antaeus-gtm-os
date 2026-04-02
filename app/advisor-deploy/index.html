@@ -246,6 +246,22 @@ function uid(){return 'dep_'+Date.now()+'_'+Math.random().toString(36).substr(2,
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
 function cp(txt){if(navigator.clipboard)return navigator.clipboard.writeText(txt);var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();return Promise.resolve()}
 function daysSince(iso){if(!iso)return 999;return Math.floor((Date.now()-new Date(iso).getTime())/(86400000))}
+function buildAdvisorRoomHref(href, focusObject, roomLabel){
+    try{
+        var url=new URL(href, window.location.origin);
+        if(!url.searchParams.get('returnTo')){
+            url.searchParams.set('returnTo','/app/advisor-deploy/');
+            url.searchParams.set('returnLabel','Back to Advisor Deploy');
+            if(focusObject) url.searchParams.set('focusObject', focusObject);
+            if(roomLabel) url.searchParams.set('focusRoom', roomLabel);
+            url.searchParams.set('fromMode','room');
+            url.searchParams.set('fromSurface','advisor-deploy');
+        }
+        return url.pathname + url.search + url.hash;
+    }catch(error){
+        return href;
+    }
+}
 
 // ── TIER LABELS & COOLDOWN ──
 var TIERS={t1:{label:'Board / Investor',badge:'t1',perDeal:'quarter',maxActive:3,cooldownDays:90},t2:{label:'Strategic Advisor',badge:'t2',perDeal:'month',maxActive:5,cooldownDays:30},t3:{label:'Angel / Portfolio',badge:'t3',perDeal:'biweekly',maxActive:99,cooldownDays:14},t4:{label:'Customer Reference',badge:'t4',perDeal:'month',maxActive:99,cooldownDays:30}};
@@ -748,7 +764,8 @@ window.openDealFromDeployment=function(depId){
     var dep=getDeployments().find(function(item){return item.id===depId});
     if(!dep)return;
     var deal=dep.dealId?getDealById(dep.dealId):findDealByName(dep.dealName);
-    location.href=deal&&deal.id?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/';
+    var dealHref=deal&&deal.id?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/';
+    location.href=buildAdvisorRoomHref(dealHref, dep.dealName||'Advisor deployment', 'Deal Workspace');
 };
 
 function renderDashboard(){
@@ -819,7 +836,7 @@ function renderDashboard(){
                 '<div style="font-size:0.72rem;color:var(--text3);margin-top:8px;">Recommended moment: <strong style="color:var(--text);">'+escH(reco.moment?reco.moment.name:'Map relationship first')+'</strong>'+(reco.advisor?' - Suggested advisor: <strong style="color:var(--text);">'+escH(reco.advisor.name)+'</strong>':'')+'</div>'+
                 '<div class="btn-row" style="margin-top:10px;">'+
                     '<button class="btn sm" onclick="showTab(\'builder\');prefillDeal(\''+escH(deal.id||'')+'\',\''+escH(reco.momentId||'')+'\',\''+escH(reco.advisor?reco.advisor.id:'')+'\')">'+(reco.state==='map'?'Map in Builder':'Build Ask')+'</button>'+
-                    '<button class="btn sm" onclick="location.href=\'/app/deal-workspace/?deal='+encodeURIComponent(deal.id||'')+'\'">Open Deal</button>'+
+                    '<button class="btn sm" onclick="location.href=\''+buildAdvisorRoomHref('/app/deal-workspace/?deal='+encodeURIComponent(deal.id||''), dealName(deal), 'Deal Workspace')+'\'">Open Deal</button>'+
                 '</div></div>';
         });
         html+='</div>';

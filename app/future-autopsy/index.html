@@ -162,6 +162,22 @@
                 return null;
             }
         }
+        function buildFutureAutopsyRoomHref(href, focusObject, roomLabel){
+            try{
+                var url=new URL(href, window.location.origin);
+                if(!url.searchParams.get('returnTo')){
+                    url.searchParams.set('returnTo', window.location.pathname + window.location.search);
+                    url.searchParams.set('returnLabel', 'Back to Future Autopsy');
+                    if(focusObject) url.searchParams.set('focusObject', focusObject);
+                    if(roomLabel) url.searchParams.set('focusRoom', roomLabel);
+                    url.searchParams.set('fromMode', 'room');
+                    url.searchParams.set('fromSurface', 'future-autopsy');
+                }
+                return url.pathname + url.search + url.hash;
+            }catch(error){
+                return href;
+            }
+        }
         function renderFutureAutopsyReturnBridge(){
             var node=document.getElementById('futureAutopsyReturnBridge');
             if(!node) return;
@@ -537,7 +553,7 @@
                 title: 'Change the live deal truth',
                 copy: 'Open Deal Workspace to change dates, stage, qualification, and ownership immediately.',
                 label: 'Open Deal Workspace',
-                href: '/app/deal-workspace/?deal=' + encodeURIComponent(v.id)
+                href: buildFutureAutopsyRoomHref('/app/deal-workspace/?deal=' + encodeURIComponent(v.id), v.name, 'Deal Workspace')
             };
             var secondary;
             if (v.stage === 'poc' || topCauseId === 'poc_no_criteria' || topCauseId === 'impact_not_real') {
@@ -546,7 +562,7 @@
                     title: 'Tighten the proof design',
                     copy: 'Use PoC Framework to turn the autopsy into success criteria, boundaries, and a real readout path.',
                     label: 'Open PoC Framework',
-                    href: '/app/poc-framework/'
+                    href: buildFutureAutopsyRoomHref('/app/poc-framework/', v.name, 'PoC Framework')
                 };
             } else if (['no_champion','no_eb','single_threaded','usecase_blurry','competition_unknown'].indexOf(topCauseId) >= 0 || ['discovery','evaluation','prospect'].indexOf(v.stage) >= 0) {
                 secondary = {
@@ -554,7 +570,7 @@
                     title: 'Plan the forcing conversation',
                     copy: 'Use Call Planner to force the missing champion, EB, use case, or status-quo truth into the next live meeting.',
                     label: 'Open Call Planner',
-                    href: '/app/discovery-agenda/'
+                    href: buildFutureAutopsyRoomHref('/app/discovery-agenda/', v.name, 'Call Planner')
                 };
             } else {
                 secondary = {
@@ -562,7 +578,7 @@
                     title: 'Work the risk live',
                     copy: 'Use Discovery Studio to take the risk pattern into the next conversation and force the move in real time.',
                     label: 'Open Discovery Studio',
-                    href: '/app/discovery-studio/'
+                    href: buildFutureAutopsyRoomHref('/app/discovery-studio/', v.name, 'Discovery Studio')
                 };
             }
             var tertiary = secondary.key === 'discovery'
@@ -571,30 +587,30 @@
                     title: 'Rebuild the agenda',
                     copy: 'If the thread is still live, rebuild the next call around the exposed risk instead of repeating the same conversation.',
                     label: 'Open Call Planner',
-                    href: '/app/discovery-agenda/'
+                    href: buildFutureAutopsyRoomHref('/app/discovery-agenda/', v.name, 'Call Planner')
                 }
                 : {
                     key: 'discovery',
                     title: 'Carry the risk into execution',
                     copy: 'Use Discovery Studio to pressure-test the failure theme live instead of keeping it as a theory.',
                     label: 'Open Discovery Studio',
-                    href: '/app/discovery-studio/'
+                    href: buildFutureAutopsyRoomHref('/app/discovery-studio/', v.name, 'Discovery Studio')
                 };
             return { primary: primary, secondary: secondary, tertiary: tertiary };
         }
 
         function getTaskAction(task, v, a) {
-            if (!task || !v) return { label: 'Open Deal Workspace', href: '/app/deal-workspace/' };
+            if (!task || !v) return { label: 'Open Deal Workspace', href: buildFutureAutopsyRoomHref('/app/deal-workspace/', 'Future Autopsy', 'Deal Workspace') };
             if (task.taskId === 'quantify_impact' && (v.stage === 'poc' || (a && a.lose && a.lose.causes || []).some(function(c){ return c.id === 'poc_no_criteria'; }))) {
-                return { label: 'Open PoC Framework', href: '/app/poc-framework/' };
+                return { label: 'Open PoC Framework', href: buildFutureAutopsyRoomHref('/app/poc-framework/', v.name, 'PoC Framework') };
             }
             if (['bring_eb_in','confirm_champion','clarify_use_case','name_competition','multi_thread','set_exec_readout'].indexOf(task.taskId) >= 0) {
-                return { label: 'Open Call Planner', href: '/app/discovery-agenda/' };
+                return { label: 'Open Call Planner', href: buildFutureAutopsyRoomHref('/app/discovery-agenda/', v.name, 'Call Planner') };
             }
             if (task.taskId === 'surface_risks') {
-                return { label: 'Open Discovery Studio', href: '/app/discovery-studio/' };
+                return { label: 'Open Discovery Studio', href: buildFutureAutopsyRoomHref('/app/discovery-studio/', v.name, 'Discovery Studio') };
             }
-            return { label: 'Open Deal Workspace', href: '/app/deal-workspace/?deal=' + encodeURIComponent(v.id) };
+            return { label: 'Open Deal Workspace', href: buildFutureAutopsyRoomHref('/app/deal-workspace/?deal=' + encodeURIComponent(v.id), v.name, 'Deal Workspace') };
         }
 
         function renderAutopsy(a, v) {
@@ -621,7 +637,7 @@
             html += '<div class="anchor-primary-copy">' + escH(currentActionPlan.primary.copy) + '</div>';
             html += '<div class="anchor-primary-actions">';
             html += '<button class="btn btn-primary" type="button" onclick="openAutopsyAction(\'primary\')">' + escH(currentActionPlan.primary.label) + '</button>';
-            html += '<button class="btn btn-secondary" type="button" onclick="window.open(\'/app/deal-workspace/?deal=' + encodeURIComponent(v.id) + '\',\'_blank\')">Open Deal Workspace</button>';
+            html += '<button class="btn btn-secondary" type="button" onclick="location.href=\'' + buildFutureAutopsyRoomHref('/app/deal-workspace/?deal=' + encodeURIComponent(v.id), v.name, 'Deal Workspace') + '\'">Open Deal Workspace</button>';
             html += '</div>';
             html += '</div>';
             html += '</div>';
@@ -727,7 +743,7 @@
             html += '<span class="fa-kill-reason">' + escH(k.reason) + '</span>';
             html += '<div class="fa-kill-btns">';
             html += '<button class="fa-btn" onclick="copyKill()">Copy close-clean script</button>';
-            html += '<button class="fa-btn" onclick="window.open(\'/app/deal-workspace/?deal=' + encodeURIComponent(v.id) + '\',\'_blank\')">Open Deal</button>';
+            html += '<button class="fa-btn" onclick="location.href=\'' + buildFutureAutopsyRoomHref('/app/deal-workspace/?deal=' + encodeURIComponent(v.id), v.name, 'Deal Workspace') + '\'">Open Deal</button>';
             html += '</div></div>';
 
             document.getElementById('autopsyContent').innerHTML = html;

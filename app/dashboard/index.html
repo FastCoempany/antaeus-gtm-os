@@ -432,14 +432,15 @@
                     : 'Once this system move is completed, the dashboard should stop compensating for missing structure and start briefing from real evidence.'
             });
         }
-        function renderDashboardSheetActions(actions) {
+        function renderDashboardSheetActions(actions, focusObject) {
             return (actions || []).slice(0, 2).map(function(action, index) {
                 return createDashboardAction({
                     href: action.href,
-                    label: action.label
+                    label: action.label,
+                    roomLabel: action.roomLabel
                 }, index === 0
                     ? (action.tone === 'secondary' ? 'btn-secondary' : 'btn-primary')
-                    : 'btn-secondary');
+                    : 'btn-secondary', focusObject);
             }).join('');
         }
         function renderDashboardSheet() {
@@ -498,7 +499,7 @@
                         '</div>' +
                         '<div class="cmd-sheet-footer">' +
                             '<div class="cmd-sheet-footer-copy">' + escH(entryRoom ? ('The sheet is the inspection layer. Enter ' + entryRoom + ' without resetting the object context.') : 'The sheet is the inspection layer. The real work still happens in the preserved room.') + '</div>' +
-                            '<div class="cmd-sheet-actions">' + renderDashboardSheetActions(sheet.actions) + '</div>' +
+                            '<div class="cmd-sheet-actions">' + renderDashboardSheetActions(sheet.actions, sheet.title) + '</div>' +
                         '</div>' +
                     '</section>' +
                 '</div>';
@@ -624,9 +625,28 @@
             return 'live';
         }
 
-        function createDashboardAction(action, tone) {
+        function buildDashboardActionHref(action, focusObject) {
             if (!action || !action.href) return '';
-            return '<a href="' + escH(action.href) + '" class="btn ' + (tone || 'btn-secondary') + '">' + escH(action.label) + '</a>';
+            var href = String(action.href || '');
+            if (href.indexOf('/app/') !== 0) return href;
+            if (href.indexOf('/app/dashboard/') === 0 || href.indexOf('/app/welcome/') === 0 || href.indexOf('/app/onboarding/') === 0) return href;
+            try {
+                var url = new URL(href, window.location.origin);
+                if (url.searchParams.get('returnTo')) return href;
+            } catch (error) {}
+            var currentMode = getDashboardCommandMode();
+            return appendDashboardHrefParams(href, {
+                returnTo: '/app/dashboard/?mode=' + encodeURIComponent(currentMode),
+                returnLabel: 'Back to ' + getDashboardCommandModeLabel(currentMode),
+                focusObject: focusObject || '',
+                focusRoom: inferDashboardRoomLabel(href, action.roomLabel),
+                fromMode: currentMode,
+                fromSurface: 'dashboard-command'
+            });
+        }
+        function createDashboardAction(action, tone, focusObject) {
+            if (!action || !action.href) return '';
+            return '<a href="' + escH(buildDashboardActionHref(action, focusObject)) + '" class="btn ' + (tone || 'btn-secondary') + '">' + escH(action.label) + '</a>';
         }
         function createDashboardInspectAction(sheetKey) {
             if (!sheetKey) return '';
@@ -1090,7 +1110,7 @@
                         '<div class="cmd-primary-text">' + escH((config.primary && config.primary.copy) || '') + '</div>' +
                     '</div>' +
                     '<div class="cmd-primary-actions">' + createDashboardInspectAction(config.primary && config.primary.sheetKey) + ((config.primary && config.primary.actions) || []).slice(0, 2).map(function(action) {
-                        return createDashboardAction(action, action.tone);
+                        return createDashboardAction(action, action.tone, config.primary && config.primary.title);
                     }).join('') + '<button class="btn btn-secondary" onclick="copyMonday()">Copy Monday Review</button></div>' +
                 '</div>' +
             '</section>';
@@ -1115,7 +1135,7 @@
                     '<div class="cmd-row-action-title">' + escH(nextMove) + '</div>' +
                     '<div class="cmd-row-action-copy">' + escH(actionCopy) + '</div>' +
                     ((actions.length || card.sheetKey) ? '<div class="cmd-row-actions">' + createDashboardInspectAction(card.sheetKey) + actions.map(function(action) {
-                        return createDashboardAction(action, action.tone);
+                        return createDashboardAction(action, action.tone, card.title);
                     }).join('') + '</div>' : '') +
                 '</div>' +
             '</div>';
@@ -1132,7 +1152,7 @@
                 }).join('') + '</div>' : '') +
                 '<div class="cmd-card-footer">' +
                     ((actions.length || card.sheetKey) ? '<div class="cmd-row-actions">' + createDashboardInspectAction(card.sheetKey) + actions.map(function(action) {
-                        return createDashboardAction(action, action.tone);
+                        return createDashboardAction(action, action.tone, card.title);
                     }).join('') + '</div>' : '') +
                 '</div>' +
             '</div>';
@@ -1172,7 +1192,7 @@
                         '<div class="command-spotlight-title">' + escH(selected.title || '') + '</div>' +
                         '<div class="command-spotlight-copy">' + escH(selected.copy || '') + '</div>' +
                         (selected.meta && selected.meta.length ? '<div class="anchor-lane-meta">' + selected.meta.map(function(item) { return '<span>' + escH(item) + '</span>'; }).join('') + '</div>' : '') +
-                        '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone); }).join('') + '</div>' +
+                        '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
                     '</div>' +
                     '<aside class="command-spotlight-stack">' + list.map(renderDashboardSpotlightStackItem).join('') + '</aside>' +
                 '</div>' +
@@ -1202,7 +1222,7 @@
                         '<div class="command-queue-detail-copy">' + escH(selected.copy || '') + '</div>' +
                         (selected.meta && selected.meta.length ? '<div class="anchor-lane-meta">' + selected.meta.map(function(item) { return '<span>' + escH(item) + '</span>'; }).join('') + '</div>' : '') +
                         '<div class="anchor-note"><strong>Run in this order.</strong> Clear this object before you promote lower-pressure work back into the front of the week.</div>' +
-                        '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone); }).join('') + '</div>' +
+                        '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
                     '</div>' +
                 '</div>' +
             '</section>';
@@ -1436,7 +1456,7 @@
                                     '<div class="anchor-primary-title">' + escH(emptyPrimary.title) + '</div>' +
                                     '<div class="anchor-primary-copy">' + escH(emptyPrimary.copy) + '</div>' +
                                     '<div class="anchor-primary-actions">' + createDashboardInspectAction(emptyPrimary.sheetKey) + (emptyPrimary.actions || []).map(function(action) {
-                                        return createDashboardAction(action, action.tone);
+                                        return createDashboardAction(action, action.tone, emptyPrimary.title);
                                     }).join('') + '</div>' +
                                 '</div>' +
                             '</div>' +
@@ -1568,7 +1588,7 @@
                 html += '<div class="anchor-lane-meta">' + primary.tags.map(function(tag) { return '<span>' + escH(tag) + '</span>'; }).join('') + '</div>';
             }
             html += '<div class="anchor-primary-actions">' + createDashboardInspectAction(primary.sheetKey) + (primary.actions || []).map(function(action) {
-                return createDashboardAction(action, action.tone);
+                return createDashboardAction(action, action.tone, primary.title);
             }).join('') + '<button class="btn btn-secondary" onclick="copyMonday()">Copy Monday Review</button></div>';
             html += '</div>';
             html += '</div>';
