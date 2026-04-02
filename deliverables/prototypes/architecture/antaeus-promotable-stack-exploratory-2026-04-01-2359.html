@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Promotable Stack Exploratory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --surface: #ffffff;
+      --surface-soft: #edf2f9;
+      --border: #dde6f2;
+      --text: #0a1c40;
+      --text-soft: #46607f;
+      --text-muted: #7a8da8;
+      --blue: #2471e7;
+      --blue-soft: #f3f7ff;
+      --orange: #e6701e;
+      --orange-soft: #fff6ef;
+      --green: #129266;
+      --green-soft: #f1fbf7;
+      --shadow-sm: 0 8px 24px rgba(10, 28, 64, 0.06);
+      --shadow-md: 0 18px 44px rgba(10, 28, 64, 0.08);
+      --shadow-lg: 0 30px 80px rgba(10, 28, 64, 0.12);
+      --radius-md: 18px;
+      --radius-lg: 24px;
+      --radius-full: 999px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background: linear-gradient(180deg, var(--bg) 0%, #f3f7ff 100%);
+      color: var(--text);
+      font-family: "Outfit", "Segoe UI", sans-serif;
+    }
+
+    .shell {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 28px 28px 56px;
+      display: grid;
+      gap: 28px;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow, .mono {
+      font-family: "Space Mono", monospace;
+      font-size: 11px;
+      line-height: 1.45;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .eyebrow { color: var(--orange); }
+    .mono { color: var(--text-muted); }
+
+    h1, h2, h3, .metric, .spotlight-metric {
+      font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+      margin: 0;
+      letter-spacing: -0.05em;
+      line-height: 0.96;
+      color: var(--text);
+    }
+
+    .topline h1 {
+      font-size: clamp(44px, 5vw, 68px);
+      max-width: 12ch;
+      margin-top: 8px;
+    }
+
+    .lede {
+      max-width: 40ch;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-soft);
+      margin: 0;
+    }
+
+    .frame {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .rail {
+      position: sticky;
+      top: 24px;
+      display: grid;
+      gap: 22px;
+      align-content: start;
+      padding-right: 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    .rail-block {
+      display: grid;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .rail-title {
+      font-size: 28px;
+      max-width: 10ch;
+    }
+
+    .rail-copy, .stack-summary, .spotlight-summary, .spotlight-copy, .spotlight-list li {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-soft);
+    }
+
+    .surface {
+      display: grid;
+      gap: 22px;
+    }
+
+    .surface-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .surface-title {
+      display: grid;
+      gap: 6px;
+    }
+
+    .surface-title h2 {
+      font-size: 36px;
+    }
+
+    .surface-copy {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      font-family: "Space Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--surface);
+      color: var(--text-soft);
+    }
+
+    .chip.urgent { background: var(--orange-soft); color: var(--orange); border-color: #ffd3b0; }
+    .chip.active { background: var(--blue-soft); color: var(--blue); border-color: #d1e2ff; }
+    .chip.healthy { background: var(--green-soft); color: var(--green); border-color: #cbecdc; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.6fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .spotlight {
+      position: relative;
+      display: grid;
+      gap: 22px;
+      padding: 24px;
+      min-height: 520px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff 0%, #fdfefe 100%);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .spotlight::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 6px;
+      background: var(--blue);
+    }
+
+    .spotlight-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+      margin-top: 8px;
+    }
+
+    .spotlight-metric {
+      font-size: 86px;
+      line-height: 0.88;
+    }
+
+    .spotlight-title {
+      font-size: clamp(40px, 3vw, 54px);
+      max-width: 12ch;
+    }
+
+    .spotlight-summary {
+      font-size: 18px;
+      max-width: 58ch;
+    }
+
+    .spotlight-grid {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .spotlight-panel {
+      display: grid;
+      gap: 12px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .spotlight-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .spotlight-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      color: var(--text);
+      font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: var(--orange);
+      border-color: rgba(230,112,30,0.22);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stack-item {
+      width: 100%;
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      text-align: left;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.82);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+    }
+
+    .stack-item:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stack-item.active {
+      border-color: var(--blue);
+      background: var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stack-top, .stack-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .stack-title {
+      font-size: 28px;
+      max-width: 12ch;
+    }
+
+    .metric {
+      font-size: 54px;
+    }
+
+    .stack-bottom {
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      align-items: center;
+    }
+
+    .stack-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stack-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 0 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid #ffd3b0;
+      background: var(--orange-soft);
+      font-family: "Space Mono", monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .stack-label {
+      font-size: 12px;
+      color: var(--orange);
+      font-weight: 700;
+      font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 1180px) {
+      .frame, .layout, .spotlight-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: static;
+        padding-right: 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topline">
+      <div>
+        <p class="eyebrow">Exploratory Surface</p>
+        <h1>Rendered into the light.</h1>
+      </div>
+      <p class="lede">This is the user’s promotable-stack idea run in-browser as a side experiment. It is not Grid, not Queue, and not a new baseline.</p>
+    </div>
+
+    <div class="frame">
+      <aside class="rail">
+        <div class="rail-block" style="border-top:0;padding-top:0;">
+          <p class="mono">Why this exists</p>
+          <h2 class="rail-title">A fourth surface, if it ever existed.</h2>
+          <p class="rail-copy">The stack on the right is deliberately simpler than the spotlight. Clicking a row promotes it into the light. That is why this cannot quietly masquerade as Grid.</p>
+        </div>
+        <div class="rail-block">
+          <p class="mono">What is preserved</p>
+          <p class="rail-copy">State badge, signal heat or quality metric, and gap count all stay visible in the stack.</p>
+        </div>
+        <div class="rail-block">
+          <p class="mono">What this proves</p>
+          <p class="rail-copy">If you ever wanted a promotable surface, this is the honest way to do it: make the promotion behavior explicit instead of hiding it inside Grid semantics.</p>
+        </div>
+      </aside>
+
+      <main class="surface">
+        <div class="surface-head">
+          <div class="surface-title">
+            <p class="mono">Exploratory promotion model</p>
+            <h2>One spotlight. One promotable stack.</h2>
+            <p class="surface-copy">The right column is intentionally simpler. Click any row and it becomes the spotlight object on the left.</p>
+          </div>
+          <div class="chip-row">
+            <span class="chip">Not Grid</span>
+            <span class="chip">Not Queue</span>
+            <span class="chip active">Exploratory Only</span>
+          </div>
+        </div>
+
+        <div class="layout">
+          <section class="spotlight" id="spotlight"></section>
+          <aside class="stack" id="stack"></aside>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const objects = [
+      {
+        id: "deal-vantive",
+        family: "Execution + Proof",
+        type: "Deal",
+        state: "urgent",
+        metric: "11",
+        metricLabel: "days in stage 2",
+        title: "Vantive expansion",
+        summary: "Discovery has not been run, the champion is still assumed, and the deal is reading healthier than it actually is.",
+        primary: "Run Future Autopsy",
+        fallback: "Plan discovery call",
+        gaps: ["No discovery logged", "Champion unproven", "Proof owner not assigned"],
+        connections: ["Account: Vantive", "Signal Console: 3 active threads", "Advisor: available"]
+      },
+      {
+        id: "account-cascadia",
+        family: "Signal + Motion",
+        type: "Account",
+        state: "active",
+        metric: "62",
+        metricLabel: "signal heat",
+        title: "Cascadia Health Network",
+        summary: "The signal cluster is strong enough to act on now, but the angle still needs tightening before the first motion is worth sending.",
+        primary: "Open Signal Console",
+        fallback: "Draft first motion",
+        gaps: ["Angle not locked", "Primary owner unclear", "Channel not chosen"],
+        connections: ["ICP: Healthcare IT wedge", "Territory: strong fit", "Motion: unsent"]
+      },
+      {
+        id: "icp-healthcare",
+        family: "Targeting",
+        type: "ICP",
+        state: "healthy",
+        metric: "84",
+        metricLabel: "quality score",
+        title: "Healthcare IT wedge",
+        summary: "The wedge is real enough to drive sourcing and territory, but geography and trigger language can still sharpen before scale.",
+        primary: "Refine ICP",
+        fallback: "Map accounts",
+        gaps: ["Geography still broad", "Trigger phrasing still generic"],
+        connections: ["Accounts mapped: 16", "Territory: seeded", "Sourcing: live"]
+      },
+      {
+        id: "handoff-first-dollar",
+        family: "Synthesis + Handoff",
+        type: "Handoff",
+        state: "active",
+        metric: "3",
+        metricLabel: "source gaps",
+        title: "First-dollar handoff kit",
+        summary: "The handoff is starting to read like a system, but proof and motion evidence still need to compound into it before it becomes transfer-ready.",
+        primary: "Open Handoff Kit",
+        fallback: "Check readiness",
+        gaps: ["Proof still soft", "Motion history thin", "Advisor thread missing"],
+        connections: ["Readiness: 71", "Playbook: seeded", "Quota Workback: linked"]
+      }
+    ];
+
+    const tones = {
+      urgent: { label: "Urgent", className: "urgent" },
+      active: { label: "Active", className: "active" },
+      healthy: { label: "Healthy", className: "healthy" }
+    };
+
+    let activeId = objects[0].id;
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function renderSpotlight(object) {
+      const tone = tones[object.state];
+      document.getElementById("spotlight").innerHTML =
+        '<div class="spotlight-head">' +
+          '<div class="chip-row">' +
+            '<span class="chip ' + tone.className + '">' + tone.label + '</span>' +
+            '<span class="chip">Promoted object</span>' +
+          '</div>' +
+          '<p class="mono">' + escapeHtml(object.family) + '</p>' +
+        '</div>' +
+        '<div class="spotlight-grid">' +
+          '<div>' +
+            '<div class="spotlight-metric">' + escapeHtml(object.metric) + '</div>' +
+            '<p class="mono" style="margin-top:10px;">' + escapeHtml(object.metricLabel) + '</p>' +
+          '</div>' +
+          '<div style="display:grid;gap:16px;">' +
+            '<h3 class="spotlight-title">' + escapeHtml(object.title) + '</h3>' +
+            '<p class="spotlight-summary">' + escapeHtml(object.summary) + '</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="spotlight-panel">' +
+          '<p class="mono">Visible gaps</p>' +
+          '<ul class="spotlight-list">' +
+            object.gaps.map(function (gap) { return '<li>' + escapeHtml(gap) + '</li>'; }).join('') +
+          '</ul>' +
+        '</div>' +
+        '<div class="spotlight-panel">' +
+          '<p class="mono">Context carry-forward</p>' +
+          '<div style="display:grid;gap:10px;">' +
+            object.connections.map(function (line) { return '<p class="spotlight-copy">' + escapeHtml(line) + '</p>'; }).join('') +
+          '</div>' +
+        '</div>' +
+        '<div class="spotlight-actions">' +
+          '<button class="btn primary">' + escapeHtml(object.primary) + '</button>' +
+          '<button class="btn">' + escapeHtml(object.fallback) + '</button>' +
+        '</div>';
+    }
+
+    function renderStack() {
+      document.getElementById("stack").innerHTML = objects.map(function (object) {
+        const tone = tones[object.state];
+        const active = object.id === activeId;
+        return '<button class="stack-item' + (active ? ' active' : '') + '" data-id="' + escapeHtml(object.id) + '">' +
+          '<div class="stack-top">' +
+            '<div style="display:grid;gap:10px;">' +
+              '<span class="chip ' + tone.className + '">' + tone.label + '</span>' +
+              '<h3 class="stack-title">' + escapeHtml(object.title) + '</h3>' +
+            '</div>' +
+            '<div style="display:grid;justify-items:end;gap:6px;">' +
+              '<div class="metric">' + escapeHtml(object.metric) + '</div>' +
+              '<p class="mono">' + escapeHtml(object.metricLabel) + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<p class="stack-summary">' + escapeHtml(object.summary) + '</p>' +
+          '<div class="stack-bottom">' +
+            '<div class="stack-badges">' +
+              '<span class="stack-badge">⊘ ' + object.gaps.length + ' gaps</span>' +
+            '</div>' +
+            '<div class="stack-label">' + escapeHtml(object.primary) + '</div>' +
+          '</div>' +
+        '</button>';
+      }).join('');
+
+      Array.from(document.querySelectorAll('.stack-item')).forEach(function (button) {
+        button.addEventListener('click', function () {
+          activeId = button.getAttribute('data-id');
+          render();
+        });
+      });
+    }
+
+    function render() {
+      const active = objects.find(function (object) { return object.id === activeId; }) || objects[0];
+      renderSpotlight(active);
+      renderStack();
+    }
+
+    render();
+  </script>
+</body>
+</html>

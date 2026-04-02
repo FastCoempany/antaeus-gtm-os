@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antaeus Command Layer Ground Truth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f2ec;
+            --line: rgba(10, 28, 64, 0.12);
+            --line-soft: rgba(10, 28, 64, 0.08);
+            --text: #0a1c40;
+            --text-soft: #415472;
+            --text-muted: #6b7b93;
+            --blue: #2471e7;
+            --orange: #e6701e;
+            --danger: #c45a12;
+            --shadow: 0 28px 70px rgba(10, 28, 64, 0.12);
+            --radius: 24px;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; min-height: 100%; }
+        body {
+            font-family: "Outfit", sans-serif;
+            background:
+                radial-gradient(circle at top right, rgba(36, 113, 231, 0.07), transparent 28%),
+                radial-gradient(circle at top left, rgba(230, 112, 30, 0.08), transparent 32%),
+                var(--bg);
+            color: var(--text);
+        }
+        .app { max-width: 1500px; margin: 0 auto; padding: 32px 32px 56px; }
+        .topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--line);
+        }
+        .eyebrow, .hero-kicker, .quiet-label, .proof-strip, .sheet-kicker, .sheet-section h3, .sheet-metric label, .sheet-state, .object-metric-label, .object-state, .action-label, .queue-proof {
+            font-family: "Space Mono", monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+        .eyebrow { color: var(--orange); letter-spacing: 0.16em; }
+        .topline-title {
+            margin-top: 6px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .topline-copy {
+            max-width: 40ch;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: right;
+        }
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.56fr);
+            gap: 36px;
+            align-items: start;
+            margin-bottom: 34px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--line);
+        }
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            color: var(--text-muted);
+        }
+        .hero-kicker::before {
+            content: "";
+            width: 44px;
+            height: 1px;
+            background: rgba(10, 28, 64, 0.28);
+        }
+        .hero h1 {
+            margin: 0 0 18px;
+            max-width: 11ch;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: clamp(58px, 6.1vw, 92px);
+            line-height: 0.9;
+            letter-spacing: -0.06em;
+            font-weight: 800;
+        }
+        .hero p {
+            margin: 0;
+            max-width: 52ch;
+            color: var(--text-soft);
+            font-size: 22px;
+            line-height: 1.52;
+        }
+        .hero-side { display: grid; gap: 22px; }
+        .hero-metric { display: grid; gap: 6px; }
+        .hero-metric-label, .quiet-label, .proof-strip, .sheet-section h3, .sheet-metric label { color: var(--text-muted); }
+        .hero-metric-value, .queue-index {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 52px;
+            line-height: 0.92;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            color: var(--blue);
+        }
+        .hero-metric-copy, .quiet-copy, .quiet-list li, .mode-copy p, .grid-copy, .action-copy, .sheet-summary p, .sheet-section p {
+            color: var(--text-soft);
+            line-height: 1.58;
+        }
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(230px, 0.28fr) minmax(0, 1fr);
+            gap: 34px;
+            align-items: start;
+        }
+        .quiet-rail { position: sticky; top: 26px; display: grid; gap: 24px; }
+        .quiet-block { padding-top: 16px; border-top: 1px solid var(--line); }
+        .quiet-title {
+            margin-bottom: 8px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            font-weight: 800;
+        }
+        .quiet-list { display: grid; gap: 8px; margin: 0; padding-left: 18px; }
+        .main { min-width: 0; }
+        .mode-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 24px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--line);
+        }
+        .mode-copy { max-width: 52ch; }
+        .mode-copy h2 {
+            margin: 0 0 8px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 36px;
+            line-height: 0.96;
+            letter-spacing: -0.05em;
+            font-weight: 800;
+        }
+        .mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.66);
+        }
+        .mode-button {
+            appearance: none;
+            border: 0;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--text-muted);
+            padding: 10px 16px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .mode-button.active { background: var(--blue); color: white; }
+        .proof-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+            margin-bottom: 24px;
+        }
+        .proof-strip strong { color: var(--text); }
+        .surface { min-height: 620px; }
+        .brief-surface, .queue-surface { display: grid; gap: 0; }
+        .brief-row, .queue-row {
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1fr) minmax(220px, 0.34fr);
+            gap: 26px;
+            align-items: start;
+            padding: 22px 0;
+            border-top: 1px solid var(--line-soft);
+        }
+        .brief-row:first-child, .queue-row:first-child { border-top: 1px solid var(--line); }
+        .object-metric { display: grid; gap: 6px; }
+        .object-metric-value {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 52px;
+            line-height: 0.88;
+            letter-spacing: -0.06em;
+            font-weight: 800;
+            color: var(--orange);
+        }
+        .object-title, .queue-title, .grid-title {
+            margin: 0 0 8px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            line-height: 0.96;
+            letter-spacing: -0.05em;
+            font-weight: 800;
+        }
+        .object-title, .queue-title { font-size: 33px; }
+        .grid-title { font-size: 28px; }
+        .object-summary {
+            margin: 0 0 14px;
+            max-width: 42ch;
+            font-size: 18px;
+            line-height: 1.58;
+        }
+        .object-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+            color: var(--text-muted);
+            font-family: "Space Mono", monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .object-action { display: grid; gap: 10px; justify-items: start; }
+        .action-title {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 23px;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            font-weight: 800;
+        }
+        .action-buttons, .sheet-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            border-radius: 999px;
+            padding: 0 16px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.72);
+            color: var(--text);
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn.primary { border-color: rgba(230, 112, 30, 0.2); background: var(--orange); color: white; }
+        .btn.secondary { background: rgba(36, 113, 231, 0.06); border-color: rgba(36, 113, 231, 0.14); color: var(--blue); }
+        .grid-surface {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+        .grid-tile {
+            display: grid;
+            align-content: start;
+            gap: 14px;
+            min-height: 240px;
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.72);
+            box-shadow: 0 10px 28px rgba(10, 28, 64, 0.05);
+        }
+        .grid-tile.primary {
+            background: linear-gradient(180deg, rgba(255,255,255,0.84) 0%, rgba(238, 244, 255, 0.9) 100%);
+            border-color: rgba(36, 113, 231, 0.16);
+        }
+        .grid-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+        }
+        .grid-metric {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 46px;
+            line-height: 0.88;
+            letter-spacing: -0.05em;
+            font-weight: 800;
+            color: var(--blue);
+        }
+        .grid-footer { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
+        .queue-row { grid-template-columns: 88px minmax(0, 1fr) minmax(250px, 0.36fr); }
+        .queue-index {
+            font-size: 60px;
+            line-height: 0.86;
+            letter-spacing: -0.06em;
+        }
+        .sheet-backdrop {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: stretch;
+            justify-content: flex-end;
+            padding: 20px;
+            background: rgba(10, 28, 64, 0.22);
+            backdrop-filter: blur(10px);
+        }
+        .sheet-backdrop.open { display: flex; }
+        .sheet {
+            width: min(760px, calc(100vw - 40px));
+            height: calc(100vh - 40px);
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(250, 247, 242, 0.98) 100%);
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .sheet-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 24px 26px 16px;
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .sheet-kicker { margin-bottom: 6px; color: var(--blue); }
+        .sheet-title {
+            margin: 0;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 42px;
+            line-height: 0.94;
+            letter-spacing: -0.06em;
+            font-weight: 800;
+        }
+        .sheet-metric {
+            display: grid;
+            gap: 6px;
+            justify-items: end;
+            text-align: right;
+        }
+        .sheet-metric strong {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 44px;
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+            font-weight: 800;
+            color: var(--orange);
+        }
+        .sheet-close {
+            appearance: none;
+            margin-top: 12px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.84);
+            color: var(--text);
+            padding: 8px 12px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .sheet-summary {
+            padding: 18px 26px;
+            border-bottom: 1px solid var(--line-soft);
+            background: rgba(36, 113, 231, 0.04);
+        }
+        .sheet-state { margin-bottom: 8px; color: var(--danger); }
+        .sheet-body {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 28px;
+            padding: 18px 26px 26px;
+            overflow: auto;
+        }
+        .sheet-section {
+            padding-top: 14px;
+            border-top: 1px solid var(--line-soft);
+        }
+        .sheet-list {
+            display: grid;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .sheet-list li {
+            position: relative;
+            padding-left: 14px;
+            color: var(--text-soft);
+            font-size: 15px;
+            line-height: 1.58;
+        }
+        .sheet-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 11px;
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--orange);
+        }
+        .sheet-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 18px 26px 24px;
+            border-top: 1px solid var(--line-soft);
+        }
+        .sheet-footer-copy {
+            max-width: 38ch;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        @media (max-width: 1120px) {
+            .workspace, .hero { grid-template-columns: 1fr; }
+            .quiet-rail { position: static; }
+            .hero h1 { max-width: 10ch; }
+        }
+        @media (max-width: 900px) {
+            .brief-row, .queue-row { grid-template-columns: 1fr; gap: 16px; }
+            .grid-surface, .sheet-body { grid-template-columns: 1fr; }
+            .mode-bar { flex-direction: column; align-items: start; }
+        }
+        @media (max-width: 720px) {
+            .app { padding: 22px 18px 40px; }
+            .hero h1 { font-size: 54px; }
+            .sheet-backdrop { padding: 10px; }
+            .sheet {
+                width: calc(100vw - 20px);
+                height: calc(100vh - 20px);
+                border-radius: 18px;
+            }
+            .sheet-header, .sheet-footer { flex-direction: column; align-items: start; }
+            .sheet-metric { justify-items: start; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="topline">
+            <div>
+                <div class="eyebrow">Command Layer Ground Truth</div>
+                <div class="topline-title">Isolated proof artifact before further production changes</div>
+            </div>
+            <div class="topline-copy">This file exists to prove mode semantics rigorously in-browser before more app implementation happens.</div>
+        </div>
+        <section class="hero">
+            <div>
+                <div class="hero-kicker">Command first. Deep rooms preserved.</div>
+                <h1>Three modes. One registry. No semantic drift.</h1>
+                <p>This visual is intentionally isolated from Dashboard so the command layer can be judged on structure alone: one object registry, one urgency engine, three distinct renders, and one dense inspection sheet.</p>
+            </div>
+            <div class="hero-side">
+                <div class="hero-metric">
+                    <div class="hero-metric-label">Command rule</div>
+                    <div class="hero-metric-value">1</div>
+                    <div class="hero-metric-copy">Every surfaced object gets one dominant next move. Everything else stays quieter.</div>
+                </div>
+                <div class="hero-metric">
+                    <div class="hero-metric-label">Visual planes</div>
+                    <div class="hero-metric-value">3</div>
+                    <div class="hero-metric-copy">Quiet rail, command surface, and optional dense sheet. No extra dashboard furniture.</div>
+                </div>
+            </div>
+        </section>
+        <div class="workspace">
+            <aside class="quiet-rail">
+                <section class="quiet-block">
+                    <div class="quiet-label">What this must prove</div>
+                    <div class="quiet-title">Grid has to be a grid.</div>
+                    <div class="quiet-copy">If a mode cannot be recognized in under a second, it is not a real mode. Brief reads. Grid scans. Queue executes.</div>
+                </section>
+                <section class="quiet-block">
+                    <div class="quiet-label">Locked laws</div>
+                    <ul class="quiet-list">
+                        <li>The same objects drive all three modes.</li>
+                        <li>Open loops migrate forward instead of disappearing.</li>
+                        <li>The sheet inspects pressure. The room resolves it.</li>
+                        <li>Cards are allowed only when they express a real spatial difference.</li>
+                    </ul>
+                </section>
+                <section class="quiet-block">
+                    <div class="quiet-label">Current object focus</div>
+                    <div class="quiet-title" id="focusTitle">Vantive expansion</div>
+                    <div class="quiet-copy" id="focusCopy">Urgent deal pressure is leading the command surface right now.</div>
+                </section>
+            </aside>
+            <main class="main">
+                <div class="mode-bar">
+                    <div class="mode-copy">
+                        <h2 id="modeHeading">Brief is narrative density.</h2>
+                        <p id="modeExplanation">The same urgency registry becomes an operating read so the user can understand pressure before choosing a move.</p>
+                    </div>
+                    <div class="mode-toggle" role="tablist" aria-label="Command mode">
+                        <button class="mode-button active" data-mode="brief">Brief</button>
+                        <button class="mode-button" data-mode="grid">Grid</button>
+                        <button class="mode-button" data-mode="queue">Queue</button>
+                    </div>
+                </div>
+                <div class="proof-strip">
+                    <span>registry ids: <strong>deal-vantive</strong>, <strong>signal-cascadia</strong>, <strong>motion-northstar</strong>, <strong>proof-pilot</strong></span>
+                </div>
+                <div class="surface" id="surface"></div>
+            </main>
+        </div>
+    </div>
+    <div class="sheet-backdrop" id="sheetBackdrop" aria-hidden="true">
+        <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+            <div class="sheet-header">
+                <div>
+                    <div class="sheet-kicker" id="sheetKicker">Deal object</div>
+                    <h2 class="sheet-title" id="sheetTitle">Vantive expansion</h2>
+                </div>
+                <div class="sheet-metric">
+                    <label id="sheetMetricLabel">Risk score</label>
+                    <strong id="sheetMetricValue">72</strong>
+                    <button class="sheet-close" type="button" id="sheetClose">Close</button>
+                </div>
+            </div>
+            <div class="sheet-summary">
+                <div class="sheet-state" id="sheetState">Urgent</div>
+                <p id="sheetSummary">Discovery has not been run, the champion is still assumed, and the deal is reading healthier than it actually is.</p>
+            </div>
+            <div class="sheet-body">
+                <section class="sheet-section">
+                    <h3>Why now</h3>
+                    <p id="sheetWhyNow"></p>
+                </section>
+                <section class="sheet-section">
+                    <h3>What compounds next</h3>
+                    <p id="sheetDownstream"></p>
+                </section>
+                <section class="sheet-section">
+                    <h3>Unresolved gaps</h3>
+                    <ul class="sheet-list" id="sheetGaps"></ul>
+                </section>
+                <section class="sheet-section">
+                    <h3>Evidence on the object</h3>
+                    <ul class="sheet-list" id="sheetEvidence"></ul>
+                </section>
+            </div>
+            <div class="sheet-footer">
+                <div class="sheet-footer-copy">This is the dense inspection layer. It should sharpen the next move without becoming the deep room itself.</div>
+                <div class="sheet-actions" id="sheetActions"></div>
+            </div>
+        </section>
+    </div>
+    <script>
+        (function () {
+            var objects = [
+                {
+                    id: "deal-vantive",
+                    family: "Deal object",
+                    state: "Urgent",
+                    metricValue: "11",
+                    metricLabel: "days in stage 2",
+                    title: "Vantive expansion",
+                    summary: "Discovery has not been run, the champion is still assumed, and the deal is reading healthier than it actually is.",
+                    whyNow: "This is first because the deal is carrying real downstream blast radius: no discovery truth, a stale stage, and weak internal ownership.",
+                    gaps: ["No discovery session logged.", "Champion is assumed rather than evidenced.", "Proof owner is still missing."],
+                    evidence: ["$120k value.", "Risk score 72.", "1 engaged stakeholder.", "No dated next step."],
+                    downstream: "Once this deal becomes honest, Future Autopsy, Deal Workspace, PoC planning, and Handoff all get sharper immediately.",
+                    primaryLabel: "Run Future Autopsy",
+                    primaryHref: "/app/future-autopsy/",
+                    secondaryLabel: "Open Deal Workspace",
+                    secondaryHref: "/app/deal-workspace/"
+                },
+                {
+                    id: "signal-cascadia",
+                    family: "Signal object",
+                    state: "Active",
+                    metricValue: "62",
+                    metricLabel: "signal heat",
+                    title: "Cascadia Health Network",
+                    summary: "Signals are live, but the angle is still too generic. The system should route into motion, not just admire activity.",
+                    whyNow: "This surfaced because signal density is real enough to justify a motion, but the message still lacks a sharp reason to move.",
+                    gaps: ["No anchored outreach angle yet.", "No linked deal object exists.", "No proof wedge is attached to the signal."],
+                    evidence: ["3 live buying signals.", "Research updated this week.", "No outbound motion logged.", "No owner on the next touch."],
+                    downstream: "If the angle gets specific, this shifts from ambient market noise into a real motion and then into the command queue.",
+                    primaryLabel: "Build message",
+                    primaryHref: "/app/outbound-studio/",
+                    secondaryLabel: "Open Signal Console",
+                    secondaryHref: "/app/signal-console/"
+                },
+                {
+                    id: "motion-northstar",
+                    family: "Motion object",
+                    state: "Active",
+                    metricValue: "4",
+                    metricLabel: "touches this week",
+                    title: "Northstar reimbursement motion",
+                    summary: "The motion exists, but the sequence is still too broad. It needs a narrower wedge before more touches pile up.",
+                    whyNow: "This is in the command layer because activity without sharper targeting can create false momentum and make the dashboard lie.",
+                    gaps: ["ICP wedge is too broad for this motion.", "No call-plan branch exists yet.", "The next message is not pressure-ranked."],
+                    evidence: ["4 touches this week.", "No reply yet.", "Linked to one account cluster.", "Sequence draft exists."],
+                    downstream: "If this motion tightens now, future touches, call prep, and signal follow-through all become cleaner instead of noisier.",
+                    primaryLabel: "Tighten motion",
+                    primaryHref: "/app/outbound-studio/",
+                    secondaryLabel: "Prep call",
+                    secondaryHref: "/app/cold-call-studio/"
+                },
+                {
+                    id: "proof-pilot",
+                    family: "Proof object",
+                    state: "Healthy",
+                    metricValue: "84",
+                    metricLabel: "readiness signal",
+                    title: "Pilot proof frame",
+                    summary: "This object is comparatively healthy. Success criteria are clearer here than in the rest of the workspace, so it should stay visible as a strong reference point.",
+                    whyNow: "Healthy objects should still surface occasionally so the user can see what good looks like, not just what is broken.",
+                    gaps: ["Executive readout owner is not final.", "One downstream handoff dependency is still open."],
+                    evidence: ["Success criteria defined.", "Scope boundaries exist.", "Owner named on the pilot.", "Linked to a live deal."],
+                    downstream: "Keeping healthy proof visible turns the command layer into a strategic operating room instead of a permanent failure monitor.",
+                    primaryLabel: "Open PoC Framework",
+                    primaryHref: "/app/poc-framework/",
+                    secondaryLabel: "Open Handoff Kit",
+                    secondaryHref: "/app/playbook/"
+                }
+            ];
+
+            var modeMeta = {
+                brief: {
+                    heading: "Brief is narrative density.",
+                    copy: "The same urgency registry becomes an operating read so the user can understand pressure before choosing a move."
+                },
+                grid: {
+                    heading: "Grid is spatial scan.",
+                    copy: "The same objects become a real grid so the eye can read pattern, position, and pressure without turning every mode into a list."
+                },
+                queue: {
+                    heading: "Queue is action order.",
+                    copy: "The same registry becomes a ranked execution path so the user can stop browsing and start moving the exact next object."
+                }
+            };
+
+            var currentMode = "brief";
+            var surface = document.getElementById("surface");
+            var buttons = Array.prototype.slice.call(document.querySelectorAll(".mode-button"));
+            var backdrop = document.getElementById("sheetBackdrop");
+
+            function escapeHtml(value) {
+                var node = document.createElement("div");
+                node.textContent = value == null ? "" : String(value);
+                return node.innerHTML;
+            }
+
+            function objectById(id) {
+                return objects.find(function (item) { return item.id === id; }) || objects[0];
+            }
+
+            function setFocus(object) {
+                document.getElementById("focusTitle").textContent = object.title;
+                document.getElementById("focusCopy").textContent = object.summary;
+            }
+
+            function actionButtons(object) {
+                return [
+                    '<button class="btn secondary" type="button" data-inspect="' + escapeHtml(object.id) + '">Inspect</button>',
+                    '<a class="btn primary" href="' + escapeHtml(object.primaryHref) + '">' + escapeHtml(object.primaryLabel) + "</a>",
+                    '<a class="btn" href="' + escapeHtml(object.secondaryHref) + '">' + escapeHtml(object.secondaryLabel) + "</a>"
+                ].join("");
+            }
+
+            function renderBrief() {
+                surface.innerHTML = '<div class="brief-surface">' + objects.map(function (object) {
+                    return '<article class="brief-row">' +
+                        '<div class="object-metric">' +
+                            '<div class="object-metric-value">' + escapeHtml(object.metricValue) + '</div>' +
+                            '<div class="object-metric-label">' + escapeHtml(object.metricLabel) + '</div>' +
+                        '</div>' +
+                        '<div>' +
+                            '<div class="object-state">' + escapeHtml(object.state) + '</div>' +
+                            '<h3 class="object-title">' + escapeHtml(object.title) + '</h3>' +
+                            '<p class="object-summary">' + escapeHtml(object.summary) + '</p>' +
+                            '<div class="object-meta">' + object.evidence.slice(0, 3).map(function (item) { return '<span>' + escapeHtml(item) + '</span>'; }).join("") + '</div>' +
+                        '</div>' +
+                        '<div class="object-action">' +
+                            '<div class="action-label">Dominant next move</div>' +
+                            '<div class="action-title">' + escapeHtml(object.primaryLabel) + '</div>' +
+                            '<div class="action-copy">' + escapeHtml(object.downstream) + '</div>' +
+                            '<div class="action-buttons">' + actionButtons(object) + '</div>' +
+                        '</div>' +
+                    '</article>';
+                }).join("") + '</div>';
+            }
+
+            function renderGrid() {
+                surface.innerHTML = '<div class="grid-surface">' + objects.map(function (object, index) {
+                    return '<article class="grid-tile' + (index === 0 ? ' primary' : '') + '">' +
+                        '<div class="grid-top">' +
+                            '<div><div class="object-state">' + escapeHtml(object.state) + '</div><div class="grid-title">' + escapeHtml(object.title) + '</div></div>' +
+                            '<div class="grid-metric">' + escapeHtml(object.metricValue) + '</div>' +
+                        '</div>' +
+                        '<div class="grid-copy">' + escapeHtml(object.summary) + '</div>' +
+                        '<div class="object-meta">' + object.evidence.slice(0, 3).map(function (item) { return '<span>' + escapeHtml(item) + '</span>'; }).join("") + '</div>' +
+                        '<div class="grid-footer">' + actionButtons(object) + '</div>' +
+                    '</article>';
+                }).join("") + '</div>';
+            }
+
+            function renderQueue() {
+                surface.innerHTML = '<div class="queue-surface">' + objects.map(function (object, index) {
+                    return '<article class="queue-row">' +
+                        '<div class="queue-index">' + escapeHtml(String(index + 1).padStart(2, "0")) + '</div>' +
+                        '<div>' +
+                            '<div class="queue-proof">' + escapeHtml(object.state) + ' object</div>' +
+                            '<h3 class="queue-title">' + escapeHtml(object.title) + '</h3>' +
+                            '<p class="object-summary">' + escapeHtml(object.summary) + '</p>' +
+                            '<div class="object-meta">' + object.gaps.slice(0, 2).map(function (item) { return '<span>' + escapeHtml(item) + '</span>'; }).join("") + '</div>' +
+                        '</div>' +
+                        '<div class="object-action">' +
+                            '<div class="action-label">Run in this order</div>' +
+                            '<div class="action-title">' + escapeHtml(object.primaryLabel) + '</div>' +
+                            '<div class="action-copy">' + escapeHtml(object.whyNow) + '</div>' +
+                            '<div class="action-buttons">' + actionButtons(object) + '</div>' +
+                        '</div>' +
+                    '</article>';
+                }).join("") + '</div>';
+            }
+
+            function bindSurfaceEvents() {
+                Array.prototype.slice.call(surface.querySelectorAll("[data-inspect]")).forEach(function (button) {
+                    button.addEventListener("click", function () {
+                        openSheet(button.getAttribute("data-inspect"));
+                    });
+                });
+            }
+
+            function renderMode() {
+                var meta = modeMeta[currentMode];
+                document.getElementById("modeHeading").textContent = meta.heading;
+                document.getElementById("modeExplanation").textContent = meta.copy;
+                buttons.forEach(function (button) {
+                    button.classList.toggle("active", button.getAttribute("data-mode") === currentMode);
+                });
+                if (currentMode === "brief") renderBrief();
+                if (currentMode === "grid") renderGrid();
+                if (currentMode === "queue") renderQueue();
+                bindSurfaceEvents();
+            }
+
+            function openSheet(id) {
+                var object = objectById(id);
+                setFocus(object);
+                document.getElementById("sheetKicker").textContent = object.family;
+                document.getElementById("sheetTitle").textContent = object.title;
+                document.getElementById("sheetMetricLabel").textContent = object.metricLabel;
+                document.getElementById("sheetMetricValue").textContent = object.metricValue;
+                document.getElementById("sheetState").textContent = object.state;
+                document.getElementById("sheetSummary").textContent = object.summary;
+                document.getElementById("sheetWhyNow").textContent = object.whyNow;
+                document.getElementById("sheetDownstream").textContent = object.downstream;
+                document.getElementById("sheetGaps").innerHTML = object.gaps.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("");
+                document.getElementById("sheetEvidence").innerHTML = object.evidence.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("");
+                document.getElementById("sheetActions").innerHTML =
+                    '<a class="btn primary" href="' + escapeHtml(object.primaryHref) + '">' + escapeHtml(object.primaryLabel) + '</a>' +
+                    '<a class="btn secondary" href="' + escapeHtml(object.secondaryHref) + '">' + escapeHtml(object.secondaryLabel) + '</a>';
+                backdrop.classList.add("open");
+                backdrop.setAttribute("aria-hidden", "false");
+            }
+
+            function closeSheet() {
+                backdrop.classList.remove("open");
+                backdrop.setAttribute("aria-hidden", "true");
+            }
+
+            buttons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    currentMode = button.getAttribute("data-mode");
+                    renderMode();
+                });
+            });
+
+            document.getElementById("sheetClose").addEventListener("click", closeSheet);
+            backdrop.addEventListener("click", function (event) {
+                if (event.target === backdrop) closeSheet();
+            });
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") closeSheet();
+            });
+
+            setFocus(objects[0]);
+            renderMode();
+        })();
+    </script>
+</body>
+</html>

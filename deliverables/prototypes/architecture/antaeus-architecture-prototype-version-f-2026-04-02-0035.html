@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Architecture Prototype Version F</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f6f8fc;--surface:#fff;--panel:#f3f7ff;--soft:#fff6ef;--ok:#f1fbf7;--border:#dde6f2;--text:#0a1c40;--softText:#46607f;--muted:#7a8da8;--blue:#2471e7;--orange:#e6701e;--green:#129266;--shadow:0 18px 44px rgba(10,28,64,.08);--shadowLg:0 30px 80px rgba(10,28,64,.12);--overlay:rgba(10,28,64,.16);--r:18px;--r2:24px;--pill:999px}
+    *{box-sizing:border-box} html,body{margin:0;min-height:100%}
+    body{background:linear-gradient(180deg,var(--bg) 0%,var(--panel) 100%);color:var(--text);font-family:"Outfit","Segoe UI",sans-serif}
+    .shell{max-width:1500px;margin:0 auto;padding:28px;display:grid;gap:26px}
+    .top,.head{display:flex;justify-content:space-between;gap:18px;align-items:end;padding-bottom:16px;border-bottom:1px solid var(--border)}
+    .eyebrow,.mono{margin:0;font:700 11px/1.45 "Space Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+    .eyebrow{color:var(--orange)} .mono{color:var(--muted)}
+    h1,h2,h3,.metric,.rank{margin:0;font-family:"Plus Jakarta Sans","Segoe UI",sans-serif;line-height:.96;letter-spacing:-.05em;color:var(--text)}
+    h1{font-size:clamp(44px,5vw,66px);max-width:11ch;margin-top:8px} h2{font-size:38px}
+    .copy{margin:0;font-size:14px;line-height:1.6;color:var(--softText)}
+    .frame{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px}
+    .rail{position:sticky;top:24px;display:grid;gap:18px;padding-right:24px;border-right:1px solid var(--border);align-content:start}
+    .rail-block{display:grid;gap:10px;padding-top:14px;border-top:1px solid var(--border)} .rail h3{font-size:28px;max-width:10ch}
+    .surface{display:grid;gap:18px}
+    .modes{display:inline-flex;gap:6px;padding:6px;border:1px solid var(--border);border-radius:var(--pill);background:rgba(255,255,255,.8)}
+    .btn,.mode,.lens{appearance:none;cursor:pointer;font:700 14px "Plus Jakarta Sans","Segoe UI",sans-serif}
+    .btn,.lens{min-height:40px;padding:0 16px;border:1px solid var(--border);border-radius:var(--pill);background:var(--surface);color:var(--text)}
+    .btn.primary{background:var(--orange);color:#fff;border-color:rgba(230,112,30,.24);box-shadow:var(--shadow)}
+    .btn.secondary{background:rgba(36,113,231,.06);border-color:rgba(36,113,231,.14);color:var(--blue)}
+    .mode{min-height:36px;padding:0 16px;border:0;border-radius:var(--pill);background:transparent;color:var(--softText)}
+    .mode.active{background:var(--blue);color:#fff}
+    .chipRow{display:flex;flex-wrap:wrap;gap:8px}
+    .chip,.gapBadge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:0 12px;border-radius:var(--pill);border:1px solid var(--border);background:var(--surface);font:700 11px "Space Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+    .chip{color:var(--softText)} .chip.urgent{background:var(--soft);border-color:#ffd3b0;color:var(--orange)} .chip.active{background:var(--panel);border-color:#d1e2ff;color:var(--blue)} .chip.healthy{background:var(--ok);border-color:#cbecdc;color:var(--green)}
+    .gapBadge{min-height:24px;padding:0 10px;font-size:9px;background:var(--soft);border-color:#ffd3b0;color:var(--orange)}
+    .command{display:grid;gap:18px} .command.brief{gap:0}
+    .briefRow{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(220px,.34fr);gap:22px;align-items:start;padding:22px 0;border-top:1px solid rgba(10,28,64,.08)}
+    .briefRow:first-child{border-top:1px solid var(--border)}
+    .metric{font-size:54px;line-height:.88} .title{font-size:34px;max-width:14ch} .actionTitle{font-size:24px}
+    .spot{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(300px,.56fr);gap:18px}
+    .spotlight,.detail,.graphPanel,.workMain{display:grid;gap:18px;padding:24px;border:1px solid var(--border);border-radius:var(--r2);background:var(--surface);box-shadow:var(--shadow)}
+    .spotlight{position:relative;min-height:500px;overflow:hidden;box-shadow:var(--shadowLg)}
+    .spotlight:before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--blue)}
+    .spotHead{display:flex;justify-content:space-between;gap:16px;align-items:start;margin-top:8px}
+    .spotGrid{display:grid;grid-template-columns:180px minmax(0,1fr);gap:20px}
+    .spotMetric{font:800 84px/.88 "Plus Jakarta Sans","Segoe UI",sans-serif;letter-spacing:-.05em}
+    .spotTitle{font-size:clamp(40px,3vw,52px);max-width:12ch}
+    .spotSummary{margin:0;font-size:18px;line-height:1.55;color:var(--softText);max-width:56ch}
+    .ruleBlock{display:grid;gap:12px;padding-top:18px;border-top:1px solid var(--border)} .ruleBlock ul{margin:0;padding-left:18px;display:grid;gap:10px;color:var(--softText)}
+    .stack{display:grid;gap:10px}
+    .stackItem{width:100%;display:grid;gap:10px;padding:14px 16px;text-align:left;border:1px solid var(--border);border-radius:var(--r);background:rgba(255,255,255,.78);cursor:pointer}
+    .stackItem.active{border-color:var(--blue);background:var(--surface);box-shadow:0 8px 24px rgba(10,28,64,.06)}
+    .stackTop,.stackBottom{display:flex;justify-content:space-between;gap:10px;align-items:start}
+    .stackTitle{font-size:22px;max-width:12ch}
+    .stackMetric{font:800 38px/.9 "Plus Jakarta Sans","Segoe UI",sans-serif;letter-spacing:-.05em}
+    .stackBottom{padding-top:10px;border-top:1px solid var(--border);align-items:center}
+    .stackPrimary{font:700 11px "Plus Jakarta Sans","Segoe UI",sans-serif;color:var(--orange)}
+    .queue{display:grid;grid-template-columns:minmax(280px,320px) minmax(560px,1fr);gap:22px;align-items:start}
+    .queueList{display:grid;gap:8px}
+    .queueItem{width:100%;display:grid;grid-template-columns:34px minmax(0,1fr) 56px;gap:14px;align-items:center;padding:14px 16px;text-align:left;border:1px solid var(--border);border-radius:14px;background:var(--surface);cursor:pointer;box-shadow:none}
+    .queueItem.active{border-color:var(--blue);box-shadow:0 10px 24px rgba(10,28,64,.06)} .rank{font-size:24px;color:var(--blue)}
+    .queueRowTitle{margin:0;font:700 22px/1.02 "Plus Jakarta Sans","Segoe UI",sans-serif;letter-spacing:-.04em;color:var(--text);max-width:11ch}
+    .queuePrimary{margin:0;font-size:12px;line-height:1.4;color:var(--softText)}
+    .detail{align-content:start;min-height:100%;padding:22px 26px}
+    .detailTitle{margin:0;font:800 48px/.92 "Plus Jakarta Sans","Segoe UI",sans-serif;letter-spacing:-.05em;color:var(--text);max-width:none}
+    .detailSummary{margin:0;font-size:15px;line-height:1.65;color:var(--softText);max-width:42ch}
+    .sheetBackdrop{position:fixed;inset:0;display:none;align-items:end;background:var(--overlay);z-index:30} .sheetBackdrop.open{display:grid}
+    .sheet{max-height:86vh;overflow:auto;padding:24px;border-top-left-radius:28px;border-top-right-radius:28px;background:var(--surface);box-shadow:var(--shadowLg)}
+    .sheetGrid{display:grid;grid-template-columns:176px 1fr;gap:18px;margin-top:20px}
+    .sheetSplit{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:18px}
+    .section{display:grid;gap:12px;padding:18px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface)}
+    .section.tint{background:var(--soft);border-color:#ffd3b0}
+    .workspace,.graph{display:grid;gap:22px}
+    .workLayout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px}
+    .workRail{display:grid;gap:16px;padding-right:20px;border-right:1px solid var(--border)}
+    .lenses{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+    .lens{min-height:36px;padding:0 14px;border-color:transparent;background:transparent;color:var(--softText);font-size:13px}
+    .lens.active{border-color:var(--blue);background:var(--panel);color:var(--text)}
+    .graphStage{position:relative;height:320px;margin-top:20px}
+    .node{position:absolute;width:176px;padding:16px;text-align:center;border:1px dashed var(--border-strong);border-radius:var(--pill);box-shadow:0 8px 24px rgba(10,28,64,.06)}
+    [hidden]{display:none!important}
+    @media (max-width:1180px){.frame,.spot,.queue,.sheetGrid,.sheetSplit,.workLayout,.spotGrid{grid-template-columns:1fr}.rail{position:static;padding-right:0;padding-bottom:18px;border-right:0;border-bottom:1px solid var(--border)}.briefRow{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top">
+      <div><p class="eyebrow">Version F</p><h1>Spotlight command prototype.</h1></div>
+      <p class="copy" style="max-width:42ch">This prototype absorbs the spotlight-plus-selector restraint into a real command surface. It tests whether Spotlight should join Brief and Queue as the command stack before production changes.</p>
+    </div>
+    <div class="frame">
+      <aside class="rail">
+        <div class="rail-block" style="border-top:0;padding-top:0">
+          <p class="mono">Directional lock</p><h3>One object in the light.</h3>
+          <p class="copy">Selector surfaces exist to move the right object into the light, not to compete with it.</p>
+        </div>
+        <div class="rail-block">
+          <p class="mono">Mode roles</p>
+          <p class="copy">Brief explains. Spotlight focuses. Queue orders. If these three blur together, the command layer is drifting again.</p>
+        </div>
+        <div class="rail-block">
+          <p class="mono">Hidden reward</p>
+          <button class="btn primary" id="graphButton">Open graph reward</button>
+        </div>
+      </aside>
+      <main class="surface">
+        <div class="head">
+          <div>
+            <p class="mono">Command layer</p>
+            <h2 id="surfaceHeading">Spotlight is one object rendered into the light.</h2>
+            <p class="surface-copy" id="surfaceCopy">The right stack stays lean. It chooses what gets the user's full attention.</p>
+          </div>
+          <div class="modes" role="tablist" aria-label="Command modes">
+            <button class="mode" data-mode="brief">Brief</button>
+            <button class="mode active" data-mode="spotlight">Spotlight</button>
+            <button class="mode" data-mode="queue">Queue</button>
+          </div>
+        </div>
+        <section id="commandRoot" class="command"></section>
+        <section id="workspaceRoot" class="workspace" hidden></section>
+        <section id="graphRoot" class="graph" hidden></section>
+      </main>
+    </div>
+  </div>
+  <div id="sheetBackdrop" class="sheetBackdrop"><div class="sheet"><div id="sheetRoot"></div></div></div>
+  <script>
+    const OBJECTS=[
+      {id:"deal-vantive",family:"Execution + Proof",type:"Deal",state:"urgent",metric:"11",metricLabel:"days in stage 2",title:"Vantive expansion",summary:"Discovery has not been run, the champion is still assumed, and the deal is reading healthier than it actually is.",primary:"Run Future Autopsy",fallback:"Plan discovery call",gaps:["No discovery logged","Champion unproven","Proof owner not assigned"],connections:["Account: Vantive","Signal Console: 3 active threads","Proof: credibility still thin","Advisor: available"],next:"Once Future Autopsy sharpens the failure mode, the next loop becomes one corrective move instead of generic deal anxiety.",compounding:"The moment this deal becomes honest, Discovery Studio, PoC Framework, Advisor Deploy, and Handoff all get sharper together.",lenses:[{id:"overview",label:"Overview",module:"Deal Workspace",cue:"Pressure map, stage honesty, and next move."},{id:"discovery",label:"Discovery",module:"Discovery Studio",cue:"Run the actual conversation method, not a generic note form."},{id:"proof",label:"Proof",module:"PoC Framework",cue:"Translate risk into a credible proof structure."},{id:"advisor",label:"Advisor",module:"Advisor Deploy",cue:"Deploy signal and leverage only when the moment earns it."}]},
+      {id:"account-cascadia",family:"Signal + Motion",type:"Account",state:"active",metric:"62",metricLabel:"signal heat",title:"Cascadia Health Network",summary:"The signal cluster is strong enough to act on now, but the angle still needs tightening before the first motion is worth sending.",primary:"Open Signal Console",fallback:"Draft first motion",gaps:["Angle not locked","Primary owner unclear","Channel not chosen"],connections:["ICP: Healthcare IT wedge","Territory: strong fit","Motion: unsent","Call path: undefined"],next:"Once the angle tightens, the next loop becomes channel choice across outbound, LinkedIn, or cold call.",compounding:"A stronger account angle sharpens Outbound Studio, Cold Call Studio, LinkedIn Playbook, and downstream deal creation at once.",lenses:[{id:"signal",label:"Signal Console",module:"Signal Console",cue:"Collapse noise into one account worth acting on."},{id:"outbound",label:"Outbound",module:"Outbound Studio",cue:"Choose the right motion once the angle is real."},{id:"cold-call",label:"Cold Call",module:"Cold Call Studio",cue:"The call lens should never lose the signal context."}]},
+      {id:"icp-healthcare",family:"Targeting",type:"ICP",state:"healthy",metric:"84",metricLabel:"quality score",title:"Healthcare IT wedge",summary:"The wedge is real enough to drive sourcing and territory, but geography and trigger language can still sharpen before scale.",primary:"Refine ICP",fallback:"Map accounts",gaps:["Geography still broad","Trigger phrasing still generic"],connections:["Accounts mapped: 16","Territory: seeded","Sourcing: live","Readiness: benefiting"],next:"A tighter wedge raises the credibility of every downstream account, motion, and discovery conversation.",compounding:"A stronger ICP compounds across Territory Architect, Sourcing Workbench, Signal Console, and Discovery before a user ever notices the chain.",lenses:[{id:"definition",label:"Definition",module:"ICP Studio",cue:"Keep the full wedge logic and buyer method intact."},{id:"territory",label:"Territory",module:"Territory Architect",cue:"Territory is a lens on the same target truth."},{id:"sourcing",label:"Sourcing",module:"Sourcing Workbench",cue:"Source from the live wedge instead of a disconnected list."}]},
+      {id:"handoff-first-dollar",family:"Synthesis + Handoff",type:"Handoff",state:"active",metric:"3",metricLabel:"source gaps",title:"First-dollar handoff kit",summary:"The handoff is starting to read like a system, but proof and motion evidence still need to compound into it before it becomes transfer-ready.",primary:"Open Handoff Kit",fallback:"Check readiness",gaps:["Proof still soft","Motion history thin","Advisor thread missing"],connections:["Readiness: 71","Playbook: seeded","Quota Workback: linked","Deal proof: incomplete"],next:"Once the handoff starts inheriting the full system truth, the app finally proves that work compounds automatically.",compounding:"This is the supreme output of the system. Every upstream object should strengthen it without restating context.",lenses:[{id:"handoff",label:"Handoff",module:"Playbook / Handoff Kit",cue:"The export should inherit real operating evidence, not a section dump."},{id:"readiness",label:"Readiness",module:"Readiness",cue:"Verdict logic should feed the handoff instead of living alone."}]}
+    ];
+    const META={brief:{heading:"Brief explains why the pressure matters.",copy:"Narrative density. The system writes the read so the user can reason before acting."},spotlight:{heading:"Spotlight is one object rendered into the light.",copy:"The right stack stays lean. It chooses what gets the user's full attention."},queue:{heading:"Queue is the ordered execution spine.",copy:"Sequential density. This is the only mode that should feel explicitly ranked and ordered."}};
+    const TONE={urgent:{label:"Urgent",cls:"urgent",color:"var(--orange)"},active:{label:"Active",cls:"active",color:"var(--blue)"},healthy:{label:"Healthy",cls:"healthy",color:"var(--green)"}};
+    const STATE={mode:"spotlight",layer:"command",activeId:OBJECTS[0].id,activeLens:OBJECTS[0].lenses[0].id,sheet:false};
+    const esc=v=>String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+    const current=()=>OBJECTS.find(o=>o.id===STATE.activeId)||OBJECTS[0];
+    const currentLens=()=>current().lenses.find(l=>l.id===STATE.activeLens)||current().lenses[0];
+    function briefMarkup(){return OBJECTS.map(o=>{const t=TONE[o.state];return `<article class="briefRow"><div><div class="metric" style="color:${t.color}">${esc(o.metric)}</div><p class="mono">${esc(o.metricLabel)}</p></div><div style="display:grid;gap:10px"><div class="chipRow"><span class="chip ${t.cls}">${t.label}</span><span class="chip">&#8856; ${o.gaps.length} gaps</span></div><h3 class="title">${esc(o.title)}</h3><p class="copy">${esc(o.summary)}</p></div><div style="display:grid;gap:12px"><div class="actionTitle">${esc(o.primary)}</div><p class="copy">${esc(o.next)}</p><div class="chipRow"><button class="btn primary" data-action="inspect" data-id="${esc(o.id)}">Inspect</button><button class="btn" data-action="deeper" data-id="${esc(o.id)}">Go deeper</button></div></div></article>`}).join("")}
+    function spotlightMarkup(){const o=current(),t=TONE[o.state];return `<div class="spot"><section class="spotlight"><div class="spotHead"><div class="chipRow"><span class="chip ${t.cls}">${t.label}</span><span class="chip">In the light</span></div><p class="mono">${esc(o.family)}</p></div><div class="spotGrid"><div><div class="spotMetric" style="color:${t.color}">${esc(o.metric)}</div><p class="mono" style="margin-top:10px">${esc(o.metricLabel)}</p></div><div style="display:grid;gap:16px"><h3 class="spotTitle">${esc(o.title)}</h3><p class="spotSummary">${esc(o.summary)}</p></div></div><div class="ruleBlock"><p class="mono">Visible gaps</p><ul>${o.gaps.map(g=>`<li>${esc(g)}</li>`).join("")}</ul></div><div class="ruleBlock"><p class="mono">Context carry-forward</p>${o.connections.map(c=>`<p class="copy">${esc(c)}</p>`).join("")}</div><div class="chipRow"><button class="btn primary" data-action="inspect" data-id="${esc(o.id)}">Inspect</button><button class="btn secondary" data-action="deeper" data-id="${esc(o.id)}">Go deeper</button><button class="btn" data-action="graph">Open graph reward</button></div></section><aside class="stack">${OBJECTS.map(e=>{const tt=TONE[e.state],a=e.id===STATE.activeId?" active":"";return `<button class="stackItem${a}" data-action="promote" data-id="${esc(e.id)}"><div class="stackTop"><div style="display:grid;gap:8px"><span class="chip ${tt.cls}">${tt.label}</span><h3 class="stackTitle">${esc(e.title)}</h3></div><div style="display:grid;justify-items:end;gap:4px"><div class="stackMetric" style="color:${tt.color}">${esc(e.metric)}</div><p class="mono">${esc(e.metricLabel)}</p></div></div><div class="stackBottom"><span class="gapBadge">&#8856; ${e.gaps.length} gaps</span><div class="stackPrimary">${esc(e.primary)}</div></div></button>`}).join("")}</aside></div>`}
+    function queueMarkup(){const o=current(),t=TONE[o.state],rank=String(OBJECTS.findIndex(e=>e.id===o.id)+1).padStart(2,"0");return `<div class="queue"><div class="queueList">${OBJECTS.map((e,i)=>{const tt=TONE[e.state],a=e.id===STATE.activeId?" active":"";return `<button class="queueItem${a}" data-action="select" data-id="${esc(e.id)}"><div class="rank">${i+1}</div><div style="display:grid;gap:4px"><p class="queueRowTitle">${esc(e.title)}</p><p class="queuePrimary">${esc(e.primary)}</p></div><div class="metric" style="font-size:24px;color:${tt.color}">${esc(e.metric)}</div></button>`}).join("")}</div><section class="detail"><div class="chipRow"><span class="chip">Rank ${rank}</span><span class="chip ${t.cls}">${t.label}</span><span class="chip">&#8856; ${o.gaps.length} gaps</span></div><h3 class="detailTitle">${esc(o.title)}</h3><p class="detailSummary">${esc(o.summary)}</p><div class="ruleBlock"><p class="mono">Run in this order</p><p class="copy">${esc(o.next)}</p></div><div class="chipRow"><button class="btn primary" data-action="inspect" data-id="${esc(o.id)}">Inspect</button><button class="btn secondary" data-action="deeper" data-id="${esc(o.id)}">Go deeper</button></div></section></div>`}
+    function renderSheet(){const o=current(),t=TONE[o.state];document.getElementById("sheetRoot").innerHTML=`<div style="display:flex;justify-content:space-between;gap:16px;align-items:start"><div style="display:grid;gap:10px"><div class="chipRow"><span class="chip ${t.cls}">${t.label}</span><span class="chip">&#8856; ${o.gaps.length} gaps</span><span class="chip active">Dense sheet</span></div><h2 style="font-size:42px">${esc(o.title)}</h2></div><button class="btn" data-action="close-sheet">Close</button></div><div class="sheetGrid"><div class="section" style="background:var(--panel)"><div class="metric" style="font-size:48px;color:${t.color}">${esc(o.metric)}</div><p class="mono">${esc(o.metricLabel)}</p></div><div class="section tint"><p class="copy">${esc(o.summary)}</p></div></div><div class="sheetSplit"><div class="section"><p class="mono">&#8856; explicit gaps</p>${o.gaps.map(g=>`<p class="copy">${esc(g)}</p>`).join("")}<p class="mono" style="margin-top:8px">connections</p>${o.connections.map(c=>`<p class="copy">${esc(c)}</p>`).join("")}</div><div style="display:grid;gap:18px"><div class="section"><p class="mono">one dominant next move</p><h3 style="font-size:30px">${esc(o.primary)}</h3><p class="copy">${esc(o.next)}</p><div class="chipRow"><button class="btn primary" data-action="deeper" data-id="${esc(o.id)}">Go deeper</button><button class="btn" data-action="close-sheet">Close</button></div></div><div class="section tint"><p class="mono">what compounds automatically</p><p class="copy">${esc(o.compounding)}</p></div></div></div>`;document.getElementById("sheetBackdrop").classList.add("open")}
+    function renderWorkspace(){const o=current(),l=currentLens(),t=TONE[o.state];document.getElementById("workspaceRoot").innerHTML=`<div class="head"><div><p class="mono">Workspace layer</p><h2>Deep room, preserved context.</h2><p class="surface-copy">The spotlight selected the object. The workspace now keeps that object in context while the room stays deep.</p></div><div><button class="btn" data-action="back-command">Back to command</button></div></div><div class="workLayout"><aside class="workRail"><div class="chipRow"><span class="chip ${t.cls}">${t.label}</span><span class="chip">&#8856; ${o.gaps.length} gaps</span></div><h3 style="font-size:30px">${esc(o.title)}</h3><p class="copy">${esc(o.summary)}</p><div class="rail-block"><p class="mono">Context rail</p>${o.gaps.map(g=>`<p class="copy">${esc(g)}</p>`).join("")}</div><div class="rail-block">${o.connections.map(c=>`<p class="copy">${esc(c)}</p>`).join("")}</div></aside><section class="workMain"><div class="lenses">${o.lenses.map(e=>`<button class="lens${e.id===STATE.activeLens?" active":""}" data-action="lens" data-lens="${esc(e.id)}">${esc(e.label)}</button>`).join("")}</div><div style="display:grid;gap:12px"><p class="mono">${esc(l.module||l.label)}</p><h2 style="font-size:46px">${esc(l.label)}</h2><p class="copy" style="font-size:15px">${esc(l.cue)}</p></div><div class="sheetSplit" style="margin-top:0"><div class="section"><p class="mono">module</p><p class="copy">${esc(l.module||l.label)}</p></div><div class="section"><p class="mono">next move</p><p class="copy">${esc(o.primary)}</p></div></div><div class="section"><p class="copy">The room stays deep. The hallway disappears. The header stays short because context now lives in the rail instead of sprawling across the canvas.</p></div></section></div>`}
+    function renderGraph(){document.getElementById("graphRoot").innerHTML=`<div class="head"><div><p class="mono">Graph reward</p><h2>Something super cool you did that you did not know you did.</h2><p class="surface-copy">This is still not the primary interaction. It is the reveal moment.</p></div><div><button class="btn" data-action="back-command">Back to command</button></div></div><div class="graphPanel"><p class="copy">Normal work across spotlight, brief, queue, and deep rooms made this structure denser without asking the user to think in graph terms every day.</p><div class="graphStage"><svg viewBox="0 0 920 320" width="100%" height="100%" preserveAspectRatio="none"><path d="M120 170 C250 80 360 90 450 150" stroke="rgba(36,113,231,.35)" stroke-width="2" stroke-dasharray="8 8" fill="none" /><path d="M450 150 C560 228 674 234 800 174" stroke="rgba(36,113,231,.35)" stroke-width="2" stroke-dasharray="8 8" fill="none" /><path d="M450 150 C530 88 640 72 756 96" stroke="rgba(36,113,231,.35)" stroke-width="2" stroke-dasharray="8 8" fill="none" /></svg>${OBJECTS.map((o,i)=>{const pos=[{left:"4%",top:"42%"},{left:"30%",top:"10%"},{left:"42%",top:"48%"},{left:"71%",top:"18%"}],bg=o.state==="urgent"?"var(--soft)":o.state==="active"?"var(--panel)":"var(--ok)";return `<div class="node" style="left:${pos[i].left};top:${pos[i].top};background:${bg}"><p class="mono">${esc(o.type)}</p><p class="copy" style="margin-top:8px;font-weight:700;color:var(--text)">${esc(o.title)}</p></div>`}).join("")}</div></div>`}
+    function renderCommand(){const root=document.getElementById("commandRoot");root.className="command "+STATE.mode;root.innerHTML=STATE.mode==="brief"?briefMarkup():STATE.mode==="spotlight"?spotlightMarkup():queueMarkup()}
+    function bind(){document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{STATE.mode=b.dataset.mode;STATE.layer="command";render()});const graphButton=document.getElementById("graphButton");if(graphButton)graphButton.onclick=()=>{STATE.layer="graph";render()};document.querySelectorAll("[data-action='promote'],[data-action='select']").forEach(b=>b.onclick=()=>{STATE.activeId=b.dataset.id;STATE.activeLens=current().lenses[0].id;render()});document.querySelectorAll("[data-action='inspect']").forEach(b=>b.onclick=()=>{STATE.activeId=b.dataset.id;STATE.activeLens=current().lenses[0].id;STATE.sheet=true;renderSheet();bind()});document.querySelectorAll("[data-action='deeper']").forEach(b=>b.onclick=()=>{STATE.activeId=b.dataset.id;STATE.activeLens=current().lenses[0].id;STATE.sheet=false;STATE.layer="workspace";render()});document.querySelectorAll("[data-action='lens']").forEach(b=>b.onclick=()=>{STATE.activeLens=b.dataset.lens;render()});document.querySelectorAll("[data-action='back-command']").forEach(b=>b.onclick=()=>{STATE.layer="command";render()});document.querySelectorAll("[data-action='graph']").forEach(b=>b.onclick=()=>{STATE.layer="graph";render()});document.querySelectorAll("[data-action='close-sheet']").forEach(b=>b.onclick=()=>{STATE.sheet=false;document.getElementById("sheetBackdrop").classList.remove("open")});const bd=document.getElementById("sheetBackdrop");bd.onclick=e=>{if(e.target===bd){STATE.sheet=false;bd.classList.remove("open")}}}
+    function render(){document.getElementById("surfaceHeading").textContent=META[STATE.mode].heading;document.getElementById("surfaceCopy").textContent=META[STATE.mode].copy;document.querySelectorAll(".mode").forEach(b=>b.classList.toggle("active",b.dataset.mode===STATE.mode));const c=document.getElementById("commandRoot"),w=document.getElementById("workspaceRoot"),g=document.getElementById("graphRoot");c.hidden=STATE.layer!=="command";w.hidden=STATE.layer!=="workspace";g.hidden=STATE.layer!=="graph";if(STATE.layer==="command")renderCommand();else if(STATE.layer==="workspace")renderWorkspace();else renderGraph();if(!STATE.sheet)document.getElementById("sheetBackdrop").classList.remove("open");bind()}
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"){STATE.sheet=false;document.getElementById("sheetBackdrop").classList.remove("open")}});
+    render();
+  </script>
+</body>
+</html>
