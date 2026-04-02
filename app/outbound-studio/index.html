@@ -161,9 +161,15 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">Outbound Studio</h1>
-                <p class="page-subtitle">Turn one account, one trigger, and one buyer into a believable first move.</p>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">Motion family</span>
+                        <span class="shell-header-state state-live">Execution builder</span>
+                    </div>
+                    <h1 class="page-title">Outbound Studio</h1>
+                    <p class="page-subtitle">Turn one account, one trigger, and one buyer into a believable first move.</p>
+                </div>
             </header>
             <div class="app-content">
 <div class="module-inner">
@@ -329,6 +335,20 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
 function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
 function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function buildOutboundRoomHref(href, focusObject, roomLabel){
+    try{
+        var url=new URL(href, window.location.origin);
+        url.searchParams.set('returnTo','/app/outbound-studio/');
+        url.searchParams.set('returnLabel','Back to Outbound Studio');
+        if(focusObject)url.searchParams.set('focusObject',focusObject);
+        if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
+        url.searchParams.set('fromMode','room');
+        url.searchParams.set('fromSurface','outbound-studio');
+        return url.pathname+url.search+url.hash;
+    }catch(error){
+        return href;
+    }
+}
 function uid(){return 'touch_'+Date.now()+'_'+Math.random().toString(36).substr(2,5)}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
 function cp(txt){if(navigator.clipboard)return navigator.clipboard.writeText(txt);var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();return Promise.resolve()}
@@ -608,7 +628,7 @@ function renderBridge(){
             ],
             actions: [
                 { label: 'Focus Generator', action: "showTab('generator')", tone: 'primary' },
-                { label: 'Open Signal Console', href: '/app/signal-console/' }
+                { label: 'Open Signal Console', href: buildOutboundRoomHref('/app/signal-console/', motion.accountName || motion.contactName || 'Motion gap', 'Signal Console') }
             ]
         });
     }
@@ -697,7 +717,7 @@ function renderBridge(){
                             : 'Use the generator inputs to turn one account, one trigger, and one buyer into a motion that the rest of the system can trust.')+'</div>'+
                         '<div class="anchor-primary-actions">'+
                             '<button class="btn btn-primary" type="button" onclick="showTab(\'generator\')">Focus generator</button>'+
-                            '<a class="btn btn-secondary" href="/app/signal-console/">Open Signal Console</a>'+
+                            '<a class="btn btn-secondary" href="'+buildOutboundRoomHref('/app/signal-console/', motion.accountName || motion.contactName || 'Motion gap', 'Signal Console')+'">Open Signal Console</a>'+
                         '</div>'+
                     '</div>'+
                 '</div>'+
@@ -728,7 +748,7 @@ function renderBridge(){
             ],
             actions: [
                 { label: 'Focus Generator', action: "showTab('generator')", tone: 'primary' },
-                { label: 'Open Signal Console', href: '/app/signal-console/' }
+                { label: 'Open Signal Console', href: buildOutboundRoomHref('/app/signal-console/', motion.accountName || motion.contactName || 'Motion gap', 'Signal Console') }
             ]
         });
         node.insertAdjacentHTML('beforeend',stageHtml);

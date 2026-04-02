@@ -98,6 +98,7 @@
             </header>
             <div class="app-content" style="max-width:860px;">
                 <div id="futureAutopsyBootState"></div>
+                <div id="futureAutopsyReturnBridge"></div>
                 <div class="fa-hero">
                     <div class="fa-hero-tag">Future Autopsy &mdash; <span id="horizonDays">45</span> days out</div>
                     <div class="fa-hero-title">How you lose is already visible.</div>
@@ -130,9 +131,62 @@
         function tx(v){ return String(v||'').trim(); }
         function toast(m){ var t=document.getElementById('faToast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1800); }
         function cp(txt){ if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(txt);var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();return Promise.resolve(); }
+        function readFutureAutopsyReturnContext(){
+            try{
+                var params=new URLSearchParams(window.location.search||'');
+                var returnTo=String(params.get('returnTo')||'').trim();
+                if(!returnTo||returnTo.charAt(0)!=='/') return null;
+                return {
+                    returnTo:returnTo,
+                    returnLabel:params.get('returnLabel')||'Back',
+                    focusObject:params.get('focusObject')||'',
+                    focusRoom:params.get('focusRoom')||'',
+                    fromMode:params.get('fromMode')||''
+                };
+            }catch(error){
+                return null;
+            }
+        }
+        function renderFutureAutopsyReturnBridge(){
+            var node=document.getElementById('futureAutopsyReturnBridge');
+            if(!node) return;
+            var ctx=readFutureAutopsyReturnContext();
+            if(!ctx){
+                node.innerHTML='';
+                return;
+            }
+            var modeLabel=ctx.fromMode?ctx.fromMode.charAt(0).toUpperCase()+ctx.fromMode.slice(1):'Command';
+            var spotlightHref='/app/dashboard/?mode=spotlight';
+            var welcomeHref='/app/welcome/';
+            var returnIsSpotlight=ctx.returnTo.indexOf('/app/dashboard/')===0;
+            var copy=returnIsSpotlight
+                ? 'Use Spotlight as the default way back into the system. The left rail should stay secondary to this command re-entry.'
+                : 'When this autopsy is done, re-enter through Spotlight or Week One before using the left rail. The room should stay a deep room, not the front door.';
+            node.innerHTML=
+                '<div class="fa-bridge">'+
+                    '<div class="fa-bridge-head">'+
+                        '<div class="fa-bridge-k">Room entry</div>'+
+                        '<span class="fa-bridge-state check">Back path live</span>'+
+                    '</div>'+
+                    '<div class="fa-bridge-title">'+(ctx.focusObject?escH(ctx.focusObject)+' carried forward into Future Autopsy.':'Future Autopsy opened from the command layer.')+'</div>'+
+                    '<div class="fa-bridge-copy">You entered from '+escH(modeLabel)+'. The object should stay pinned here so the autopsy feels like continuation, not a reset. '+escH(copy)+'</div>'+
+                    '<div class="fa-bridge-grid">'+
+                        '<div class="fa-bridge-block"><div class="fa-bridge-label">Command mode</div><div class="fa-bridge-value">'+escH(modeLabel)+'</div></div>'+
+                        '<div class="fa-bridge-block"><div class="fa-bridge-label">Object</div><div class="fa-bridge-value">'+escH(ctx.focusObject||'Deal in focus')+'</div></div>'+
+                        '<div class="fa-bridge-block"><div class="fa-bridge-label">Room</div><div class="fa-bridge-value">'+escH(ctx.focusRoom||'Future Autopsy')+'</div></div>'+
+                        '<div class="fa-bridge-block"><div class="fa-bridge-label">Return</div><div class="fa-bridge-value">'+escH(ctx.returnLabel||'Back')+'</div></div>'+
+                    '</div>'+
+                    '<div class="fa-kill-btns">'+
+                        (returnIsSpotlight?'':'<a class="fa-btn" href="'+escH(ctx.returnTo)+'">'+escH(ctx.returnLabel||'Back')+'</a>')+
+                        '<a class="fa-btn gold" href="'+spotlightHref+'">Open Spotlight</a>'+
+                        '<a class="fa-btn" href="'+welcomeHref+'">Week One</a>'+
+                    '</div>'+
+                '</div>';
+        }
 
         var PREFS = Object.assign({}, dh.DEFAULTS, { autopsyHorizonDays: 45 });
         document.getElementById('horizonDays').textContent = PREFS.autopsyHorizonDays;
+        renderFutureAutopsyReturnBridge();
 
         // ── AUTOPSY-SPECIFIC DATA (beyond deal-health.js) ──
 

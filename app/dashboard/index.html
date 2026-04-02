@@ -67,25 +67,32 @@
         .command-delta-list{display:grid;gap:8px;margin:0;padding:0;list-style:none;}
         .command-delta-list li{font-size:0.78rem;color:var(--text-tertiary);line-height:1.55;padding-left:14px;position:relative;}
         .command-delta-list li::before{content:'';position:absolute;left:0;top:0.58rem;width:6px;height:6px;border-radius:50%;background:rgba(212,165,116,0.85);}
-        .command-grid{display:grid;gap:16px;}
-        .command-grid-panels{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr);gap:16px;}
-        .command-grid-card{display:grid;gap:12px;padding:18px;border-radius:var(--radius-lg);border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);}
-        .command-grid-card--accent{background:linear-gradient(135deg,rgba(32,25,57,0.92),rgba(14,26,48,0.88));border-color:rgba(212,165,116,0.18);}
-        .command-grid-card-title{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-primary);line-height:1.2;}
-        .command-grid-card-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.6;}
-        .command-grid-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
-        .command-grid-stat{display:grid;gap:8px;padding:14px 16px;border-radius:var(--radius-lg);border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);}
-        .command-grid-stat-label{font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);}
-        .command-grid-stat-value{font-family:var(--font-serif);font-size:1.4rem;line-height:1;color:var(--text-primary);}
-        .command-grid-stat-copy{font-size:0.76rem;color:var(--text-muted);line-height:1.5;}
-        .command-grid-list{display:grid;gap:12px;}
-        .command-queue-summary{display:grid;gap:10px;padding:18px 20px;border-radius:var(--radius-lg);border:1px solid rgba(212,165,116,0.16);background:linear-gradient(135deg,rgba(36,29,62,0.92),rgba(17,27,46,0.88));margin-bottom:16px;}
-        .command-queue-summary strong{font-family:var(--font-serif);font-size:1.1rem;color:var(--text-primary);}
-        .command-queue-summary span{font-size:0.82rem;color:var(--text-tertiary);line-height:1.6;max-width:72ch;}
-        .command-queue-stack{display:grid;gap:14px;}
-        .command-empty-queue{display:grid;gap:14px;}
-        .command-empty-queue .anchor-queue-card{background:rgba(255,255,255,0.02);}
-        @media(max-width:980px){.command-grid-panels{grid-template-columns:1fr;}}
+        .command-spotlight-shell{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.54fr);gap:18px;align-items:start;}
+        .command-spotlight-main{display:grid;gap:16px;padding:24px;border-radius:var(--radius-xl);border:1px solid rgba(36,113,231,0.12);background:rgba(255,255,255,0.9);box-shadow:0 18px 36px rgba(10,28,64,0.08);}
+        .command-spotlight-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;}
+        .command-spotlight-metric{font-family:var(--font-serif);font-size:2.3rem;line-height:1;color:var(--accent-blue);}
+        .command-spotlight-title{font-family:var(--font-serif);font-size:2rem;line-height:1.02;color:var(--text-primary);max-width:13ch;}
+        .command-spotlight-copy{font-size:0.94rem;color:var(--text-secondary);line-height:1.75;max-width:62ch;}
+        .command-spotlight-stack{display:grid;gap:10px;}
+        .command-spotlight-item{appearance:none;display:grid;gap:10px;width:100%;padding:14px 16px;text-align:left;border-radius:var(--radius-lg);border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.78);cursor:pointer;transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease;}
+        .command-spotlight-item:hover{transform:translateY(-1px);border-color:rgba(36,113,231,0.22);}
+        .command-spotlight-item.is-active{border-color:rgba(36,113,231,0.3);background:#fff;box-shadow:0 10px 24px rgba(10,28,64,0.06);}
+        .command-spotlight-item-top,.command-spotlight-item-footer{display:flex;justify-content:space-between;gap:10px;align-items:center;}
+        .command-spotlight-item-title{font-size:1.05rem;font-weight:700;color:var(--text-primary);line-height:1.25;}
+        .command-spotlight-item-rank{font-family:var(--font-serif);font-size:1.15rem;color:var(--accent-blue);line-height:1;}
+        .command-spotlight-item-footer{padding-top:10px;border-top:1px solid rgba(10,28,64,0.08);font-size:0.7rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);}
+        .command-queue-shell{display:grid;grid-template-columns:minmax(320px,.52fr) minmax(0,.78fr);gap:18px;align-items:start;}
+        .command-queue-list{display:grid;gap:10px;}
+        .command-queue-item{appearance:none;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.88);text-align:left;cursor:pointer;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;}
+        .command-queue-item.is-active{border-color:rgba(36,113,231,0.3);background:#fff;box-shadow:0 10px 24px rgba(10,28,64,0.06);}
+        .command-queue-rank{font-family:var(--font-serif);font-size:1.55rem;color:var(--accent-blue);line-height:1;}
+        .command-queue-body{display:grid;gap:4px;}
+        .command-queue-title{font-size:1.18rem;font-weight:700;color:var(--text-primary);line-height:1.12;}
+        .command-queue-next{font-size:0.8rem;color:var(--text-muted);line-height:1.45;}
+        .command-queue-detail{display:grid;gap:16px;padding:22px 24px;border-radius:var(--radius-xl);border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.92);box-shadow:0 18px 36px rgba(10,28,64,0.08);}
+        .command-queue-detail-title{font-family:var(--font-serif);font-size:2rem;line-height:1.02;color:var(--text-primary);max-width:14ch;}
+        .command-queue-detail-copy{font-size:0.94rem;color:var(--text-secondary);line-height:1.75;max-width:54ch;}
+        @media(max-width:980px){.command-spotlight-shell,.command-queue-shell{grid-template-columns:1fr;}}
         @media(max-width:800px){.dash-tool-row,.dash-tool-actions{flex-direction:column;align-items:stretch;}}
     </style>
 </head>
@@ -131,10 +138,12 @@
         var dashboardSummaryTracked = false;
         var dashboardWeekOneTracked = false;
         var DASHBOARD_MODE_KEY = 'gtmos_dashboard_command_mode';
+        var DASHBOARD_ACTIVE_COMMAND_KEY = 'gtmos_dashboard_active_command';
         var DASHBOARD_SNAPSHOT_KEY = 'gtmos_dashboard_command_snapshot';
         var dashboardSheetRegistry = {};
         var dashboardSheetCounter = 0;
         var dashboardSheetActiveKey = null;
+        var dashboardActiveCommandId = '';
         var DASHBOARD_GATE_LABELS = {
             champion: 'Champion',
             eb: 'Economic buyer',
@@ -156,13 +165,32 @@
                 window.gtmAnalytics.track(name, Object.assign({ module: 'dashboard' }, props || {}));
             }
         }
+        function normalizeDashboardCommandMode(mode) {
+            if (mode === 'grid') return 'spotlight';
+            return mode === 'spotlight' || mode === 'queue' ? mode : 'brief';
+        }
+        function getDashboardCommandModeLabel(mode) {
+            var normalized = normalizeDashboardCommandMode(mode);
+            return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+        }
+        function syncDashboardCommandModeUrl(mode) {
+            try {
+                var url = new URL(window.location.href);
+                url.searchParams.set('mode', normalizeDashboardCommandMode(mode));
+                window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+            } catch (error) {}
+        }
         function getDashboardCommandMode() {
-            var mode = localStorage.getItem(DASHBOARD_MODE_KEY);
-            return mode === 'grid' || mode === 'queue' ? mode : 'brief';
+            try {
+                var queryMode = new URLSearchParams(window.location.search).get('mode');
+                if (queryMode === 'brief' || queryMode === 'grid' || queryMode === 'spotlight' || queryMode === 'queue') return normalizeDashboardCommandMode(queryMode);
+            } catch (error) {}
+            return normalizeDashboardCommandMode(localStorage.getItem(DASHBOARD_MODE_KEY));
         }
         function setDashboardCommandMode(mode) {
-            if (mode !== 'brief' && mode !== 'grid' && mode !== 'queue') return;
-            localStorage.setItem(DASHBOARD_MODE_KEY, mode);
+            var normalized = normalizeDashboardCommandMode(mode);
+            localStorage.setItem(DASHBOARD_MODE_KEY, normalized);
+            syncDashboardCommandModeUrl(normalized);
         }
         function readDashboardSnapshot() {
             return readLS(DASHBOARD_SNAPSHOT_KEY, null);
@@ -214,7 +242,7 @@
             showDashboardBootState(
                 'error',
                 'Dashboard could not finish loading.',
-                'Antaeus hit a startup failure while rebuilding your workspace summary and Monday command view. Retry once. If it fails again, refresh the page and check whether the current auth session or synced workspace data is unhealthy.'
+                'Antaeus hit a startup failure while rebuilding your workspace summary and Monday command stack. Retry once. If it fails again, refresh the page and check whether the current auth session or synced workspace data is unhealthy.'
             );
         }
         window.retryDashboardBoot = function() {
@@ -307,6 +335,10 @@
             var stageLabel = dh.STAGE_LABELS[vitals.stage] || vitals.stageRaw || vitals.stage;
             var gateGaps = buildGateGapList(vitals);
             var causeGaps = buildCauseGapList(vitals);
+            var actions = buildDashboardSheetActions([
+                { href: '/app/future-autopsy/?deal=' + encodeURIComponent(vitals.id), label: 'Future Autopsy', roomLabel: 'Future Autopsy' },
+                { href: '/app/deal-workspace/?deal=' + encodeURIComponent(vitals.id), label: 'Open Deal Workspace', roomLabel: 'Deal Workspace' }
+            ], vitals.name, 'Future Autopsy');
             return {
                 family: 'Deal object',
                 state: 'Urgent',
@@ -326,13 +358,12 @@
                         : 'Threading depth is still unclear.'
                 ].slice(0, 4),
                 downstream: 'If this deal becomes honest, Future Autopsy, Deal Workspace, and downstream proof planning all get sharper immediately.',
-                actions: [
-                    { href: '/app/future-autopsy/?deal=' + encodeURIComponent(vitals.id), label: 'Go deeper: Future Autopsy', tone: 'primary' },
-                    { href: '/app/deal-workspace/?deal=' + encodeURIComponent(vitals.id), label: 'Open Deal Workspace', tone: 'secondary' }
-                ]
+                entryRoom: actions.length ? actions[0].roomLabel : 'Future Autopsy',
+                actions: actions
             };
         }
         function buildPrimarySheet(primary, stage, context) {
+            var actions = buildDashboardSheetActions((primary.actions || []).slice(0, 2), primary.title);
             return {
                 family: 'Command object',
                 state: mapSheetState(primary.label, 'state-ready'),
@@ -344,22 +375,18 @@
                 gaps: [
                     context.icps ? null : 'Targeting truth is still too thin.',
                     (context.accounts > 0 || context.signals > 0) ? null : 'Live market context is still missing.',
-                    context.deals ? null : 'No live deal is giving the command view a real execution object.',
+                    context.deals ? null : 'No live deal is giving the command stack a real execution object.',
                     context.motions ? null : 'No logged motion is proving follow-through yet.'
                 ].filter(Boolean),
                 evidence: (primary.tags || []).slice(0, 4),
                 downstream: 'Completing the dominant move should change queue order, reduce ambiguity, and make the next morning brief more precise instead of more decorative.',
-                actions: ((primary.actions || []).slice(0, 2)).map(function(action, index) {
-                    return {
-                        href: action.href,
-                        label: index === 0 ? 'Go deeper: ' + action.label : action.label,
-                        tone: index === 0 ? 'primary' : 'secondary'
-                    };
-                })
+                entryRoom: actions.length ? actions[0].roomLabel : '',
+                actions: actions
             };
         }
         function buildGenericCommandSheet(card, config) {
             var options = config || {};
+            var actions = buildDashboardSheetActions((card.actions || []).slice(0, 2), card.title, options.entryRoom);
             return {
                 family: options.family || 'Command object',
                 state: options.state || mapSheetState(card.badge, card.badgeTone),
@@ -371,13 +398,8 @@
                 gaps: (options.gaps || []).slice(0, 5),
                 evidence: ((options.evidence || []).concat(card.meta || [])).filter(Boolean).slice(0, 4),
                 downstream: options.downstream || 'Acting here should change what the command surface ranks next instead of just creating more surface activity.',
-                actions: ((card.actions || []).slice(0, 2)).map(function(action, index) {
-                    return {
-                        href: action.href,
-                        label: index === 0 ? 'Go deeper: ' + action.label : action.label,
-                        tone: index === 0 ? 'primary' : 'secondary'
-                    };
-                })
+                entryRoom: actions.length ? actions[0].roomLabel : '',
+                actions: actions
             };
         }
         function buildMoveSheet(move, stage) {
@@ -429,6 +451,7 @@
                 return;
             }
             var sheet = dashboardSheetRegistry[dashboardSheetActiveKey];
+            var entryRoom = sheet.entryRoom || (((sheet.actions || [])[0] || {}).roomLabel) || '';
             mount.innerHTML =
                 '<div class="cmd-sheet-backdrop" onclick="dashboardCloseSheet()">' +
                     '<section class="cmd-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="dashboardSheetTitle" onclick="event.stopPropagation()">' +
@@ -446,6 +469,7 @@
                             '<div class="cmd-sheet-state">' + escH(sheet.state || 'Active') + '</div>' +
                             '<div class="cmd-sheet-summary-copy">' + escH(sheet.summary || '') + '</div>' +
                         '</div>' +
+                        (entryRoom ? '<div class="cmd-sheet-room-strip"><div class="cmd-sheet-room-kicker">Next room</div><div class="cmd-sheet-room-copy">Carry <strong>' + escH(sheet.title || '') + '</strong> directly into <strong>' + escH(entryRoom) + '</strong> without restating context.</div></div>' : '') +
                         '<div class="cmd-sheet-body">' +
                             '<div class="cmd-sheet-column">' +
                                 '<section class="cmd-sheet-section">' +
@@ -473,7 +497,7 @@
                             '</div>' +
                         '</div>' +
                         '<div class="cmd-sheet-footer">' +
-                            '<div class="cmd-sheet-footer-copy">The sheet is the inspection layer. The real work still happens in the preserved room.</div>' +
+                            '<div class="cmd-sheet-footer-copy">' + escH(entryRoom ? ('The sheet is the inspection layer. Enter ' + entryRoom + ' without resetting the object context.') : 'The sheet is the inspection layer. The real work still happens in the preserved room.') + '</div>' +
                             '<div class="cmd-sheet-actions">' + renderDashboardSheetActions(sheet.actions) + '</div>' +
                         '</div>' +
                     '</section>' +
@@ -558,7 +582,7 @@
                 copy: 'From here, the job is to keep the upstream modules honest so the morning brief remains useful instead of decorative.',
                 stageBadge: 'Operating stage',
                 emptyTitle: 'The dashboard has some history, but nothing active to brief right now.',
-                emptyCopy: 'Your existing records are real, but there is no current motion to summarize. Add a live deal or fresh motion so the command view has something active to manage.',
+                emptyCopy: 'Your existing records are real, but there is no current motion to summarize. Add a live deal or fresh motion so the command stack has something active to manage.',
                 actions: [
                     { href: '/app/deal-workspace/', label: 'Open deal workspace' },
                     { href: '/app/outbound-studio/', label: 'Log first motion' },
@@ -607,6 +631,86 @@
         function createDashboardInspectAction(sheetKey) {
             if (!sheetKey) return '';
             return '<button type="button" class="btn btn-ghost btn-sm cmd-sheet-trigger" onclick="dashboardOpenSheet(\'' + sheetKey + '\')">Inspect</button>';
+        }
+        function appendDashboardHrefParams(href, params) {
+            if (!href) return '';
+            try {
+                var url = new URL(href, window.location.origin);
+                Object.keys(params || {}).forEach(function(key) {
+                    if (params[key] == null || params[key] === '') return;
+                    url.searchParams.set(key, params[key]);
+                });
+                return url.pathname + url.search + url.hash;
+            } catch (error) {
+                return href;
+            }
+        }
+        function inferDashboardRoomLabel(href, fallbackLabel) {
+            if (fallbackLabel) return fallbackLabel;
+            var cleanHref = String(href || '').toLowerCase();
+            if (cleanHref.indexOf('/future-autopsy/') >= 0) return 'Future Autopsy';
+            if (cleanHref.indexOf('/deal-workspace/') >= 0) return 'Deal Workspace';
+            if (cleanHref.indexOf('/signal-console/') >= 0) return 'Signal Console';
+            if (cleanHref.indexOf('/icp-studio/') >= 0) return 'ICP Studio';
+            if (cleanHref.indexOf('/sourcing-workbench/') >= 0) return 'Sourcing Workbench';
+            if (cleanHref.indexOf('/territory-architect/') >= 0) return 'Territory Architect';
+            if (cleanHref.indexOf('/outbound-studio/') >= 0) return 'Outbound Studio';
+            if (cleanHref.indexOf('/cold-call-studio/') >= 0) return 'Cold Call Studio';
+            if (cleanHref.indexOf('/discovery-agenda/') >= 0) return 'Call Planner';
+            if (cleanHref.indexOf('/discovery-studio/') >= 0) return 'Discovery Studio';
+            if (cleanHref.indexOf('/poc-framework/') >= 0) return 'PoC Framework';
+            if (cleanHref.indexOf('/advisor-deploy/') >= 0) return 'Advisor Deploy';
+            if (cleanHref.indexOf('/readiness/') >= 0) return 'Readiness';
+            return 'Deep room';
+        }
+        function buildDashboardRoomEntryAction(action, sheetTitle, preferredRoomLabel, index) {
+            if (!action || !action.href) return null;
+            var currentMode = getDashboardCommandMode();
+            var roomLabel = inferDashboardRoomLabel(action.href, preferredRoomLabel || action.roomLabel);
+            return {
+                href: appendDashboardHrefParams(action.href, {
+                    returnTo: '/app/dashboard/?mode=' + encodeURIComponent(currentMode),
+                    returnLabel: 'Back to ' + getDashboardCommandModeLabel(currentMode),
+                    focusObject: sheetTitle || '',
+                    focusRoom: roomLabel,
+                    fromMode: currentMode,
+                    fromSurface: 'dashboard-sheet'
+                }),
+                label: index === 0 ? 'Enter ' + roomLabel : (action.label || ('Open ' + roomLabel)),
+                tone: index === 0 ? 'primary' : (action.tone || 'secondary'),
+                roomLabel: roomLabel
+            };
+        }
+        function buildDashboardSheetActions(actions, sheetTitle, preferredRoomLabel) {
+            return ((actions || []).slice(0, 2)).map(function(action, index) {
+                return buildDashboardRoomEntryAction(action, sheetTitle, preferredRoomLabel, index);
+            }).filter(Boolean);
+        }
+        function slugDashboardCommandTitle(value) {
+            return String(value || 'item')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '') || 'item';
+        }
+        function primeDashboardCommandCards(cards) {
+            var list = (cards || []).map(function(card, index) {
+                var next = Object.assign({}, card);
+                next.commandId = next.commandId || ('dashboard-command-' + index + '-' + slugDashboardCommandTitle(next.title || next.badge || 'item'));
+                return next;
+            });
+            dashboardActiveCommandId = localStorage.getItem(DASHBOARD_ACTIVE_COMMAND_KEY) || dashboardActiveCommandId || '';
+            if (!list.length) {
+                dashboardActiveCommandId = '';
+                return list;
+            }
+            var hasActive = list.some(function(card) { return card.commandId === dashboardActiveCommandId; });
+            if (!hasActive) dashboardActiveCommandId = list[0].commandId;
+            localStorage.setItem(DASHBOARD_ACTIVE_COMMAND_KEY, dashboardActiveCommandId);
+            return list;
+        }
+        function getDashboardActiveCommandCard(cards) {
+            var list = cards || [];
+            return list.find(function(card) { return card.commandId === dashboardActiveCommandId; }) || list[0] || null;
         }
 
         function buildDashboardPrimary(stage, briefing, hotSuggestion) {
@@ -712,7 +816,7 @@
 
             var maintainTitle = dependencyWarnings.length
                 ? 'Repair trust in the command surface.'
-                : (stage.key === 'operating' ? 'Keep the command view honest.' : 'Finish the missing operating layers.');
+                : (stage.key === 'operating' ? 'Keep the command stack honest.' : 'Finish the missing operating layers.');
             var maintainCopy = dependencyWarnings.length
                 ? 'Some synced inputs fell back to local state. Retry after confirming the latest workspace truth and exporting a backup.'
                 : (stage.key === 'operating'
@@ -836,7 +940,7 @@
         function renderDashboardCommandMode(mode, delta) {
             var copyMap = {
                 brief: 'Brief turns the system into a narrative morning read. Use it when you need the operating story before you choose a move.',
-                grid: 'Grid compresses the same truth into a scannable map. Use it when you want density and fast pattern recognition.',
+                spotlight: 'Spotlight renders one command object into the light while a lean selector stack chooses what gets promoted.',
                 queue: 'Queue forces order. Use it when you want the dashboard to rank the exact work sequence instead of showing the whole board at once.'
             };
             return '<section class="cmd-mode-strip">' +
@@ -848,7 +952,7 @@
                     '</div>' +
                     '<div class="cmd-mode-controls">' +
                         '<button class="cmd-mode-btn' + (mode === 'brief' ? ' is-active' : '') + '" onclick="setDashboardCommandMode(\'brief\')">Brief</button>' +
-                        '<button class="cmd-mode-btn' + (mode === 'grid' ? ' is-active' : '') + '" onclick="setDashboardCommandMode(\'grid\')">Grid</button>' +
+                        '<button class="cmd-mode-btn' + (mode === 'spotlight' ? ' is-active' : '') + '" onclick="setDashboardCommandMode(\'spotlight\')">Spotlight</button>' +
                         '<button class="cmd-mode-btn' + (mode === 'queue' ? ' is-active' : '') + '" onclick="setDashboardCommandMode(\'queue\')">Queue</button>' +
                     '</div>' +
                 '</div>' +
@@ -1033,6 +1137,76 @@
                 '</div>' +
             '</div>';
         }
+        function renderDashboardSpotlightStackItem(card) {
+            return '<button type="button" class="command-spotlight-item' + (card.commandId === dashboardActiveCommandId ? ' is-active' : '') + '" onclick="setDashboardActiveCommandCard(\'' + escH(card.commandId) + '\')">' +
+                '<div class="command-spotlight-item-top">' +
+                    '<span class="shell-state-pill ' + escH(card.badgeTone || 'state-ready') + '">' + escH(card.badge || 'Ready') + '</span>' +
+                    '<span class="command-spotlight-item-rank">' + escH(String((card.order || 1)).padStart(2, '0')) + '</span>' +
+                '</div>' +
+                '<div class="command-spotlight-item-title">' + escH(card.title || '') + '</div>' +
+                '<div class="command-spotlight-item-footer">' +
+                    ((card.meta && card.meta[0]) ? '<span>' + escH(card.meta[0]) + '</span>' : '<span>Command object</span>') +
+                    ((card.actions && card.actions[0]) ? '<span>' + escH(card.actions[0].label || 'Enter room') + '</span>' : '<span>Inspect</span>') +
+                '</div>' +
+            '</button>';
+        }
+        function renderDashboardSpotlight(cards) {
+            var list = primeDashboardCommandCards(cards).map(function(card, index) {
+                card.order = index + 1;
+                return card;
+            });
+            var selected = getDashboardActiveCommandCard(list);
+            if (!selected) return '';
+            var actions = (selected.actions || []).slice(0, 2);
+            return '<section class="shell-section shell-section--subtle">' +
+                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Spotlight</div><div class="shell-section-title">Put one object in the light.</div><div class="shell-section-copy">The selector stack chooses what gets the full operating focus. It should not compete with the spotlight.</div></div></div>' +
+                '<div class="command-spotlight-shell">' +
+                    '<div class="command-spotlight-main">' +
+                        '<div class="command-spotlight-head">' +
+                            '<div class="chipRow">' +
+                                '<span class="shell-state-pill ' + escH(selected.badgeTone || 'state-ready') + '">' + escH(selected.badge || 'Ready') + '</span>' +
+                                '<span class="cmd-mode-btn is-active" style="pointer-events:none">In the light</span>' +
+                            '</div>' +
+                            '<div class="command-spotlight-metric">' + escH(String(selected.order).padStart(2, '0')) + '</div>' +
+                        '</div>' +
+                        '<div class="command-spotlight-title">' + escH(selected.title || '') + '</div>' +
+                        '<div class="command-spotlight-copy">' + escH(selected.copy || '') + '</div>' +
+                        (selected.meta && selected.meta.length ? '<div class="anchor-lane-meta">' + selected.meta.map(function(item) { return '<span>' + escH(item) + '</span>'; }).join('') + '</div>' : '') +
+                        '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone); }).join('') + '</div>' +
+                    '</div>' +
+                    '<aside class="command-spotlight-stack">' + list.map(renderDashboardSpotlightStackItem).join('') + '</aside>' +
+                '</div>' +
+            '</section>';
+        }
+        function renderDashboardQueueMode(cards) {
+            var list = primeDashboardCommandCards(cards).map(function(card, index) {
+                card.order = index + 1;
+                return card;
+            });
+            var selected = getDashboardActiveCommandCard(list);
+            if (!selected) return '';
+            var actions = (selected.actions || []).slice(0, 2);
+            return '<section class="shell-section shell-section--subtle">' +
+                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Queue view</div><div class="shell-section-title">Run the work in one ranked order</div><div class="shell-section-copy">Queue mode removes choice overload. It is the clearest answer to what matters now, then what comes immediately after.</div></div></div>' +
+                '<div class="command-queue-shell">' +
+                    '<div class="command-queue-list">' + list.map(function(card, index) {
+                        return '<button type="button" class="command-queue-item' + (card.commandId === dashboardActiveCommandId ? ' is-active' : '') + '" onclick="setDashboardActiveCommandCard(\'' + escH(card.commandId) + '\')">' +
+                            '<div class="command-queue-rank">' + escH(String(index + 1)) + '</div>' +
+                            '<div class="command-queue-body"><div class="command-queue-title">' + escH(card.title || '') + '</div><div class="command-queue-next">' + escH((card.actions && card.actions[0] ? card.actions[0].label : 'Keep this honest')) + '</div></div>' +
+                            '<span class="shell-state-pill ' + escH(card.badgeTone || 'state-ready') + '">' + escH(card.badge || 'Ready') + '</span>' +
+                        '</button>';
+                    }).join('') + '</div>' +
+                    '<div class="command-queue-detail">' +
+                        '<div class="chipRow"><span class="cmd-mode-btn is-active" style="pointer-events:none">Rank ' + escH(String(selected.order).padStart(2, '0')) + '</span><span class="shell-state-pill ' + escH(selected.badgeTone || 'state-ready') + '">' + escH(selected.badge || 'Ready') + '</span></div>' +
+                        '<div class="command-queue-detail-title">' + escH(selected.title || '') + '</div>' +
+                        '<div class="command-queue-detail-copy">' + escH(selected.copy || '') + '</div>' +
+                        (selected.meta && selected.meta.length ? '<div class="anchor-lane-meta">' + selected.meta.map(function(item) { return '<span>' + escH(item) + '</span>'; }).join('') + '</div>' : '') +
+                        '<div class="anchor-note"><strong>Run in this order.</strong> Clear this object before you promote lower-pressure work back into the front of the week.</div>' +
+                        '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone); }).join('') + '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</section>';
+        }
 
         function renderDashboardShell(stage, context, weekOneState, dependencyWarnings) {
             if (!window.gtmShellChrome) return;
@@ -1052,7 +1226,7 @@
             });
 
             window.gtmShellChrome.renderCommandBand('#dashboardShellBand', {
-                kicker: 'Command view',
+                kicker: 'Command stack',
                 title: stage.title,
                 copy: stage.copy,
                 stateLabel: stage.stageBadge,
@@ -1080,7 +1254,7 @@
                         kicker: 'Current posture',
                         title: context.deals ? 'The dashboard is reading real work.' : 'The dashboard is still teaching setup.',
                         copy: context.deals
-                            ? 'Keep upstream modules honest so the command view stays useful instead of decorative.'
+                            ? 'Keep upstream modules honest so the command stack stays useful instead of decorative.'
                             : 'The first useful dashboard needs one ICP, one live account or signal, one real deal, and one logged motion.',
                         items: [
                             context.icps ? 'Targeting truth exists.' : 'Targeting truth missing.',
@@ -1248,7 +1422,7 @@
                     '<section class="anchor-stage">' +
                         '<div class="anchor-stage-grid">' +
                             '<div>' +
-                                '<div class="anchor-eyebrow">Command view</div>' +
+                                '<div class="anchor-eyebrow">Command stack</div>' +
                                 '<div class="anchor-headline anchor-headline--wide">' + escH(stage.emptyTitle) + '</div>' +
                                 '<div class="anchor-support">' + escH(stage.emptyCopy) + '</div>' +
                                 '<div class="anchor-chip-row">' +
@@ -1280,29 +1454,12 @@
                     '</section>';
                 var emptySnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, null, dependencyWarnings, weekOneState);
                 var emptyDelta = buildDashboardDelta(previousSnapshot, emptySnapshot);
+                var emptyCards = buildDashboardEmptyCards(stage, shellContext);
                 emptyHtml = weekOneBanner + warningBanner + renderDashboardCommandMode(commandMode, emptyDelta) + (
-                    commandMode === 'grid'
-                        ? ('<section class="shell-section shell-section--subtle">' +
-                            '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Grid view</div><div class="shell-section-title">See the missing operating layers at a glance</div><div class="shell-section-copy">Grid mode should keep setup honest by showing exactly which inputs are still missing.</div></div></div>' +
-                            renderSourceMap(stage, shellContext) +
-                            '<div class="command-grid-panels">' +
-                                '<div class="command-grid-card command-grid-card--accent">' +
-                                    '<div class="shell-section-kicker">First unlock</div>' +
-                                    '<div class="command-grid-card-title">' + escH(emptyPrimary.title) + '</div>' +
-                                    '<div class="command-grid-card-copy">' + escH(emptyPrimary.copy) + '</div>' +
-                                    '<div class="anchor-primary-actions">' + (emptyPrimary.actions || []).map(function(action) { return createDashboardAction(action, action.tone); }).join('') + '</div>' +
-                                '</div>' +
-                                '<div class="command-grid-stats">' +
-                                    '<div class="command-grid-stat"><div class="command-grid-stat-label">ICP layer</div><div class="command-grid-stat-value">' + shellContext.icps + '</div><div class="command-grid-stat-copy">Saved ICP objects.</div></div>' +
-                                    '<div class="command-grid-stat"><div class="command-grid-stat-label">Market layer</div><div class="command-grid-stat-value">' + shellContext.signals + '</div><div class="command-grid-stat-copy">Signals saved so far.</div></div>' +
-                                    '<div class="command-grid-stat"><div class="command-grid-stat-label">Deal layer</div><div class="command-grid-stat-value">' + shellContext.deals + '</div><div class="command-grid-stat-copy">Live deal objects.</div></div>' +
-                                    '<div class="command-grid-stat"><div class="command-grid-stat-label">Motion layer</div><div class="command-grid-stat-value">' + shellContext.motions + '</div><div class="command-grid-stat-copy">Calls or touches logged.</div></div>' +
-                                '</div>' +
-                            '</div>' +
-                        '</section>' +
-                        '<section class="shell-section shell-section--subtle"><div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">What this page wants from you first</div><div class="shell-section-copy">Do not ask the dashboard to improvise. Give it the minimum truth stack, then let it compound.</div></div></div><div class="anchor-lane-grid">' + emptyLanes.map(renderDashboardLane).join('') + '</div></section>')
+                    commandMode === 'spotlight'
+                        ? renderDashboardSpotlight(emptyCards)
                         : commandMode === 'queue'
-                            ? renderDashboardEmptyQueue(stage, shellContext)
+                            ? renderDashboardQueueMode(emptyCards)
                             : emptyHtml
                 );
                 document.getElementById('dashContent').innerHTML =
@@ -1385,7 +1542,7 @@
             html += weekOneBanner;
             html += warningBanner;
             var primary = buildDashboardPrimary(stage, briefing, hotSuggestion);
-            primary.sheetKey = registerDashboardSheet(buildDashboardPrimarySheet(primary, stage, shellContext));
+            primary.sheetKey = registerDashboardSheet(buildPrimarySheet(primary, stage, shellContext));
             var lanes = buildDashboardLanes(stage, primary, briefing, advisorSuggestion, dependencyWarnings);
             var commandSnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, briefing, dependencyWarnings, weekOneState);
             var commandDelta = buildDashboardDelta(previousSnapshot, commandSnapshot);
@@ -1555,41 +1712,14 @@
             html += '</section>';
             }
 
-            if (commandMode === 'grid') {
+            if (commandMode === 'spotlight') {
+                html += renderDashboardSpotlight(queueCards);
                 html += '<section class="shell-section shell-section--subtle">';
-                html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Grid view</div><div class="shell-section-title">Scan the operating field fast</div><div class="shell-section-copy">Grid mode compresses the same truth into a denser map so you can see pressure, coverage, and the next intervention without reading the full brief first.</div></div></div>';
-                html += renderSourceMap(stage, shellContext);
-                html += '<div class="command-grid-panels">';
-                html += '<div class="command-grid-card command-grid-card--accent"><div class="shell-section-kicker">Primary pressure</div><div class="command-grid-card-title">' + escH(primary.title) + '</div><div class="command-grid-card-copy">' + escH(primary.copy) + '</div>' + (primary.tags && primary.tags.length ? '<div class="anchor-lane-meta">' + primary.tags.map(function(tag) { return '<span>' + escH(tag) + '</span>'; }).join('') + '</div>' : '') + '<div class="anchor-primary-actions">' + createDashboardInspectAction(primary.sheetKey) + (primary.actions || []).map(function(action) { return createDashboardAction(action, action.tone); }).join('') + '</div></div>';
-                html += '<div class="command-grid-stats">';
-                html += '<div class="command-grid-stat"><div class="command-grid-stat-label">Coverage</div><div class="command-grid-stat-value"' + (covColor ? ' style="color:' + (covColor === 'green' ? '#22c55e' : covColor === 'amber' ? '#f59e0b' : '#ef4444') + ';"' : '') + '>' + (quota ? cov.ratio + '&times;' : '--') + '</div><div class="command-grid-stat-copy">Against the current target.</div></div>';
-                html += '<div class="command-grid-stat"><div class="command-grid-stat-label">Weighted pipeline</div><div class="command-grid-stat-value">' + dh.money(cov.weighted) + '</div><div class="command-grid-stat-copy">Weighted active value.</div></div>';
-                html += '<div class="command-grid-stat"><div class="command-grid-stat-label">At risk</div><div class="command-grid-stat-value">' + briefing.atRisk.length + '</div><div class="command-grid-stat-copy">Deals currently drifting or stage-false.</div></div>';
-                html += '<div class="command-grid-stat"><div class="command-grid-stat-label">Next moves</div><div class="command-grid-stat-value">' + (briefing.topMoves || []).length + '</div><div class="command-grid-stat-copy">Ranked decisions ready now.</div></div>';
-                html += '</div></div>';
-                html += '</section>';
-
-                html += '<section class="shell-section shell-section--subtle">';
-                html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Grid lanes</div><div class="shell-section-title">Run the week by lane</div><div class="shell-section-copy">The same command truth, arranged for scan speed instead of narrative reading.</div></div></div>';
+                html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Why this object is in the light</div><div class="shell-section-title">Command logic behind the spotlight</div><div class="shell-section-copy">Spotlight should make one object legible before the user splinters attention across the whole field.</div></div></div>';
                 html += '<div class="anchor-lane-grid">' + lanes.map(renderDashboardLane).join('') + '</div>';
                 html += '</section>';
-
-                html += '<section class="shell-section shell-section--subtle">';
-                html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Recovery field</div><div class="shell-section-title">Pressure points at a glance</div><div class="shell-section-copy">See the risk field without leaving the grid.</div></div></div>';
-                html += !riskCards.length ? '<div class="anchor-note"><strong>No immediate recovery queue.</strong> The current deal field is not throwing dark-thread pressure.</div>' : '<div class="command-grid-list">' + riskCards.map(function(card, index) { return renderDashboardQueueCard(card, index, 'R' + (index + 1)); }).join('') + '</div>';
-                html += '</section>';
-
-                html += '<section class="shell-section shell-section--subtle">';
-                html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Move field</div><div class="shell-section-title">Ranked interventions</div><div class="shell-section-copy">The actions the system currently thinks should happen next.</div></div></div>';
-                html += !moveCards.length ? '<div class="anchor-note"><strong>No forced move right now.</strong> The command field is comparatively stable.</div>' : '<div class="command-grid-list">' + moveCards.slice(0, 4).map(function(card, index) { return renderDashboardQueueCard(card, index, 'M' + (index + 1)); }).join('') + '</div>';
-                html += '</section>';
             } else if (commandMode === 'queue') {
-                html += '<section class="shell-section shell-section--subtle">';
-                html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Queue view</div><div class="shell-section-title">Run the work in one ranked order</div><div class="shell-section-copy">Queue mode removes choice overload. It is the clearest answer to what matters now, then what comes immediately after.</div></div></div>';
-                html += '<div class="command-queue-summary"><strong>' + escH(primary.title) + '</strong><span>' + escH(primary.copy) + '</span></div>';
-                html += '<div class="command-queue-stack">' + queueCards.map(function(card, index) { return renderDashboardQueueCard(card, index, String(index + 1)); }).join('') + '</div>';
-                html += '</section>';
-
+                html += renderDashboardQueueMode(queueCards);
                 html += '<section class="shell-section shell-section--subtle">';
                 html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Why this order</div><div class="shell-section-title">Command logic behind the queue</div><div class="shell-section-copy">The queue prioritizes recovery first, then the next move with the biggest downstream consequence, then whatever keeps the system honest.</div></div></div>';
                 html += '<div class="anchor-lane-grid">' + lanes.map(renderDashboardLane).join('') + '</div>';
@@ -1780,10 +1910,18 @@
             }
         };
         window.setDashboardCommandMode = function(mode) {
-            if (mode !== 'brief' && mode !== 'grid' && mode !== 'queue') return;
+            mode = normalizeDashboardCommandMode(mode);
+            if (mode !== 'brief' && mode !== 'spotlight' && mode !== 'queue') return;
             dashboardSheetActiveKey = null;
             setDashboardCommandMode(mode);
             trackDashboard('dashboard_command_mode_changed', { mode: mode });
+            Promise.resolve(render()).catch(onDashboardBootFailure);
+        };
+        window.setDashboardActiveCommandCard = function(commandId) {
+            if (!commandId) return;
+            dashboardActiveCommandId = commandId;
+            localStorage.setItem(DASHBOARD_ACTIVE_COMMAND_KEY, commandId);
+            dashboardSheetActiveKey = null;
             Promise.resolve(render()).catch(onDashboardBootFailure);
         };
 
@@ -1798,7 +1936,7 @@
             showDashboardBootState(
                 'loading',
                 'Loading Dashboard',
-                'Rebuilding your workspace summary, command view, and current Monday operating picture.'
+                'Rebuilding your workspace summary, command stack, and current Monday operating picture.'
             );
             Promise.resolve(render()).then(function() {
                 clearDashboardBootState();
@@ -1812,7 +1950,7 @@
             showDashboardBootState(
                 'loading',
                 'Waiting for auth',
-                'Dashboard is waiting for your authenticated workspace before it rebuilds the current command view.'
+                'Dashboard is waiting for your authenticated workspace before it rebuilds the current command stack.'
             );
             window.addEventListener('gtmos:auth-ready', renderWhenReady, { once: true });
         } else {

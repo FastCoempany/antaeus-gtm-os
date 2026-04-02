@@ -87,6 +87,71 @@
         return escapeHtml(value).replace(/"/g, '&quot;');
     }
 
+    function readHandoffContext() {
+        try {
+            var params = new URLSearchParams(window.location.search || '');
+            var returnTo = String(params.get('returnTo') || '').trim();
+            if (!returnTo || returnTo.charAt(0) !== '/') return null;
+            return {
+                returnTo: returnTo,
+                returnLabel: params.get('returnLabel') || 'Back',
+                focusObject: params.get('focusObject') || '',
+                focusRoom: params.get('focusRoom') || '',
+                fromMode: params.get('fromMode') || '',
+                fromSurface: params.get('fromSurface') || ''
+            };
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function formatModeLabel(mode) {
+        var normalized = String(mode || '').trim().toLowerCase();
+        if (!normalized) return '';
+        return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+    }
+
+    function renderHandoffBridge(context) {
+        if (!context || !context.returnTo) return '';
+        var spotlightHref = '/app/dashboard/?mode=spotlight';
+        var welcomeHref = '/app/welcome/';
+        var returnIsSpotlight = context.returnTo.indexOf('/app/dashboard/') === 0;
+        var returnIsWelcome = context.returnTo.indexOf('/app/welcome/') === 0;
+        var title = context.focusObject && context.focusRoom
+            ? '<strong>' + escapeHtml(context.focusObject) + '</strong> stayed in context as you moved into <strong>' + escapeHtml(context.focusRoom) + '</strong>.'
+            : 'You entered this room from the command layer with context intact.';
+        var copy = returnIsSpotlight
+            ? 'Use Spotlight as the default way back into the system. The room rail is still here, but it should not be your main re-entry path.'
+            : 'When this room work is done, re-enter through Spotlight or Week One before using the left rail. Rooms should stay secondary to the command stack.';
+        var meta = [
+            context.fromMode ? '<span class="shell-handoff-pill">From ' + escapeHtml(formatModeLabel(context.fromMode)) + '</span>' : '',
+            context.focusRoom ? '<span class="shell-handoff-pill">' + escapeHtml(context.focusRoom) + '</span>' : '',
+            context.fromSurface ? '<span class="shell-handoff-pill">Via sheet</span>' : ''
+        ].filter(Boolean).join('');
+        var actions = [
+            '<a class="btn btn-primary btn-sm" href="' + escapeAttr(spotlightHref) + '">Open Spotlight</a>',
+            '<a class="btn btn-ghost btn-sm" href="' + escapeAttr(welcomeHref) + '">Week One</a>'
+        ];
+        if (!returnIsSpotlight && !returnIsWelcome) {
+            actions.unshift('<a class="btn btn-secondary btn-sm" href="' + escapeAttr(context.returnTo) + '">' + escapeHtml(context.returnLabel || 'Back') + '</a>');
+        } else if (returnIsWelcome) {
+            actions.unshift('<a class="btn btn-secondary btn-sm" href="' + escapeAttr(context.returnTo) + '">' + escapeHtml(context.returnLabel || 'Back') + '</a>');
+        }
+        return (
+            '<div class="shell-handoff-bridge">' +
+                '<div class="shell-handoff-copy">' +
+                    '<div class="shell-handoff-kicker">Room entry</div>' +
+                    '<div class="shell-handoff-title">' + title + '</div>' +
+                    '<div class="shell-handoff-subcopy">' + copy + '</div>' +
+                    (meta ? '<div class="shell-handoff-meta">' + meta + '</div>' : '') +
+                '</div>' +
+                '<div class="shell-handoff-actions">' +
+                    actions.join('') +
+                '</div>' +
+            '</div>'
+        );
+    }
+
     function applyHeader(config) {
         var header = getHeader();
         if (!header) return;
@@ -133,8 +198,10 @@
         var metrics = Array.isArray(config && config.metrics) ? config.metrics : [];
         var actions = Array.isArray(config && config.actions) ? config.actions : [];
         var variant = config && config.variant ? ' shell-command-band--' + escapeHtml(config.variant) : '';
+        var bridge = renderHandoffBridge(readHandoffContext());
 
         node.innerHTML =
+            bridge +
             '<section class="shell-command-band' + variant + '">' +
                 '<div class="shell-band-top">' +
                     '<div>' +

@@ -121,8 +121,12 @@
         </aside>
         
         <main class="app-main">
-            <header class="app-header">
-                <div>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">Proof family</span>
+                        <span class="shell-header-state state-ready">Pilot scope</span>
+                    </div>
                     <h1 class="page-title">PoC Framework</h1>
                     <p class="page-subtitle pop-subtitle">No clear success criteria, no pilot. Scope tightly and force a decision.</p>
                 </div>
@@ -342,6 +346,20 @@
         function safe(v, fallback) { return v && v.trim().length ? v.trim() : fallback; }
         function readLS(key, fallback) { try { var raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch (e) { return fallback; } }
         function escH(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+        function buildPocRoomHref(href, focusObject, roomLabel){
+            try{
+                var url=new URL(href, window.location.origin);
+                url.searchParams.set('returnTo','/app/poc-framework/');
+                url.searchParams.set('returnLabel','Back to PoC Framework');
+                if(focusObject)url.searchParams.set('focusObject',focusObject);
+                if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
+                url.searchParams.set('fromMode','room');
+                url.searchParams.set('fromSurface','poc-framework');
+                return url.pathname+url.search+url.hash;
+            }catch(error){
+                return href;
+            }
+        }
         function slugify(v){ return String(v||'poc-framework').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,64) || 'poc-framework'; }
         function countBulletLines(v){ return String(v||'').split('\n').map(function(line){ return line.trim(); }).filter(function(line){ return line.length >= 6; }).length; }
         function fmtDate(iso){ if(!iso) return 'No date'; var d=new Date(iso); return isNaN(d.getTime()) ? 'No date' : new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric'}).format(d); }
@@ -885,12 +903,16 @@ Best,
 
         window.openLinkedDealWorkspace = function() {
             var linkedDeal = getLinkedDeal();
-            location.href = linkedDeal ? ('/app/deal-workspace/?deal=' + encodeURIComponent(linkedDeal.id)) : '/app/deal-workspace/';
+            var focusObject = linkedDeal ? (linkedDeal.accountName || linkedDeal.name || val('in_account') || 'Proof-linked deal') : (val('in_account') || 'Proof-linked deal');
+            var href = linkedDeal ? ('/app/deal-workspace/?deal=' + encodeURIComponent(linkedDeal.id)) : '/app/deal-workspace/';
+            location.href = buildPocRoomHref(href, focusObject, 'Deal Workspace');
         };
 
         window.openFutureAutopsy = function() {
             var linkedDeal = getLinkedDeal();
-            location.href = linkedDeal ? ('/app/future-autopsy/?deal=' + encodeURIComponent(linkedDeal.id)) : '/app/future-autopsy/';
+            var focusObject = linkedDeal ? (linkedDeal.accountName || linkedDeal.name || val('in_account') || 'Proof-linked deal') : (val('in_account') || 'Proof-linked deal');
+            var href = linkedDeal ? ('/app/future-autopsy/?deal=' + encodeURIComponent(linkedDeal.id)) : '/app/future-autopsy/';
+            location.href = buildPocRoomHref(href, focusObject, 'Future Autopsy');
         };
 
         function showPocBootState(kind, title, text) {

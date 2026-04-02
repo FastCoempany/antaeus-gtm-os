@@ -121,9 +121,15 @@
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">Discovery Studio</h1>
-                <p class="page-subtitle">Run live discovery with the right framework instead of memory, generic prompts, or post-call reconstruction.</p>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">Calls family</span>
+                        <span class="shell-header-state state-live">Live discovery</span>
+                    </div>
+                    <h1 class="page-title">Discovery Studio</h1>
+                    <p class="page-subtitle">Run live discovery with the right framework instead of memory, generic prompts, or post-call reconstruction.</p>
+                </div>
                 <div class="header-actions">
                     <button class="btn btn-secondary btn-sm" onclick="copyWorked()">&#128203; Copy Worked</button>
                 </div>
@@ -159,6 +165,20 @@
             }catch(e){return fb}
         }
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+        function buildDiscoveryRoomHref(href, focusObject, roomLabel){
+            try{
+                var url=new URL(href, window.location.origin);
+                url.searchParams.set('returnTo','/app/discovery-studio/');
+                url.searchParams.set('returnLabel','Back to Discovery Studio');
+                if(focusObject)url.searchParams.set('focusObject',focusObject);
+                if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
+                url.searchParams.set('fromMode','room');
+                url.searchParams.set('fromSurface','discovery-studio');
+                return url.pathname+url.search+url.hash;
+            }catch(error){
+                return href;
+            }
+        }
         function normalizeDiscoveryCategory(raw){
             var value=(typeof raw==='string'?raw.trim().toLowerCase():'')||'';
             if(!value)return 'cxai';
@@ -349,6 +369,9 @@
             var downstream=deal
                 ? 'This run is attached to '+(deal.accountName||'the linked deal')+'. After the call, push truth back into Deal Workspace instead of leaving it trapped in notes.'
                 : 'Discovery Studio is strongest when the call has somewhere durable to land. Link a deal in Call Planner before or after the meeting.';
+            var focusObject=deal?(deal.accountName||deal.name||currentCall):currentCall;
+            var plannerHref=buildDiscoveryRoomHref('/app/discovery-agenda/',focusObject,'Call Planner');
+            var workspaceHref=buildDiscoveryRoomHref(deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/',focusObject,'Deal Workspace');
             var stateTone=deal?'live':agenda&&agenda.score>=65?'ready':'thin';
             var stateLabel=deal?'Deal-linked':agenda&&agenda.score>=65?'Agenda-linked':'Call context thin';
             if(window.gtmShellChrome){
@@ -370,15 +393,15 @@
                         {label:'Next move',value:nextMove}
                     ],
                     actions:[
-                        {label:'Open Call Planner',href:'/app/discovery-agenda/',tone:'primary'},
-                        {label:(deal?'Open Linked Deal':'Open Deal Workspace'),href:deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/'}
+                        {label:'Open Call Planner',href:plannerHref,tone:'primary'},
+                        {label:(deal?'Open Linked Deal':'Open Deal Workspace'),href:workspaceHref}
                     ]
                 });
                 return;
             }
             var actions='<div class="ds-framework-actions" style="margin-top:14px;">'+
-                '<button class="ds-framework-btn primary" type="button" onclick="location.href=\'/app/discovery-agenda/\'">Open Call Planner</button>'+
-                '<button class="ds-framework-btn" type="button" onclick="location.href=\''+(deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/')+'\'">'+(deal?'Open Linked Deal':'Open Deal Workspace')+'</button>'+
+                '<button class="ds-framework-btn primary" type="button" onclick="location.href=\''+plannerHref+'\'">Open Call Planner</button>'+
+                '<button class="ds-framework-btn" type="button" onclick="location.href=\''+workspaceHref+'\'">'+(deal?'Open Linked Deal':'Open Deal Workspace')+'</button>'+
             '</div>';
             node.innerHTML='<div class="ds-bridge"><div class="ds-bridge-k">Discovery bridge</div><div class="ds-bridge-title">Run the call with a live operating system, not memory.</div><div class="ds-bridge-copy">'+escH(meta.description)+'</div><div class="ds-bridge-grid"><div class="ds-bridge-block"><div class="ds-bridge-label">Current call</div><div class="ds-bridge-value">'+escH(currentCall)+'</div></div><div class="ds-bridge-block"><div class="ds-bridge-label">Agenda quality</div><div class="ds-bridge-value">'+escH(agendaQuality)+'</div></div><div class="ds-bridge-block"><div class="ds-bridge-label">One-session win</div><div class="ds-bridge-value">'+escH(meta.oneSessionWin)+'</div></div><div class="ds-bridge-block"><div class="ds-bridge-label">Next move</div><div class="ds-bridge-value">'+escH(nextMove)+'</div></div></div>'+actions+'</div>';
         }
@@ -511,6 +534,9 @@
             var downstream=deal
                 ? 'This run is attached to '+(deal.accountName||'the linked deal')+'. After the call, push truth back into Deal Workspace instead of leaving it trapped in notes.'
                 : 'Discovery Studio is strongest when the call has somewhere durable to land. Link a deal in Call Planner before or after the meeting.';
+            var focusObject=deal?(deal.accountName||deal.name||currentCall):currentCall;
+            var plannerHref=buildDiscoveryRoomHref('/app/discovery-agenda/',focusObject,'Call Planner');
+            var workspaceHref=buildDiscoveryRoomHref(deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/',focusObject,'Deal Workspace');
             var stateTone=deal?'live':agenda&&agenda.score>=65?'ready':'thin';
             var stateLabel=deal?'Deal-linked':agenda&&agenda.score>=65?'Agenda-linked':'Call context thin';
             var stageHtml=
@@ -531,8 +557,8 @@
                                 '<div class="anchor-primary-title">'+escH(currentCall)+'</div>'+
                                 '<div class="anchor-primary-copy">'+escH(downstream)+'</div>'+
                                 '<div class="anchor-primary-actions">'+
-                                    '<a class="btn btn-primary" href="/app/discovery-agenda/">Open Call Planner</a>'+
-                                    '<a class="btn btn-secondary" href="'+(deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/')+'">'+(deal?'Open linked deal':'Open Deal Workspace')+'</a>'+
+                                    '<a class="btn btn-primary" href="'+plannerHref+'">Open Call Planner</a>'+
+                                    '<a class="btn btn-secondary" href="'+workspaceHref+'">'+(deal?'Open linked deal':'Open Deal Workspace')+'</a>'+
                                 '</div>'+
                             '</div>'+
                         '</div>'+
@@ -563,8 +589,8 @@
                         {label:'Next move',value:nextMove}
                     ],
                     actions:[
-                        {label:'Open Call Planner',href:'/app/discovery-agenda/',tone:'primary'},
-                        {label:(deal?'Open Linked Deal':'Open Deal Workspace'),href:deal?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/'}
+                        {label:'Open Call Planner',href:plannerHref,tone:'primary'},
+                        {label:(deal?'Open Linked Deal':'Open Deal Workspace'),href:workspaceHref}
                     ]
                 });
                 node.insertAdjacentHTML('beforeend',stageHtml);

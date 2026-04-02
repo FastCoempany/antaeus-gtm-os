@@ -111,9 +111,15 @@
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">Call Planner</h1>
-                <p class="module-subtitle">Turn one contact, one reason now, and one path to advancement into a call that can actually move.</p>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">Calls family</span>
+                        <span class="shell-header-state state-live">Meeting prep</span>
+                    </div>
+                    <h1 class="page-title">Call Planner</h1>
+                    <p class="module-subtitle">Turn one contact, one reason now, and one path to advancement into a call that can actually move.</p>
+                </div>
             </header>
             <div class="app-content" style="max-width:720px;">
                 <div class="cp-boot-state" id="bootState"></div>
@@ -177,6 +183,20 @@
     (function(){
         function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+        function buildPlannerRoomHref(href, focusObject, roomLabel){
+            try{
+                var url=new URL(href, window.location.origin);
+                url.searchParams.set('returnTo','/app/discovery-agenda/');
+                url.searchParams.set('returnLabel','Back to Call Planner');
+                if(focusObject)url.searchParams.set('focusObject',focusObject);
+                if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
+                url.searchParams.set('fromMode','room');
+                url.searchParams.set('fromSurface','call-planner');
+                return url.pathname+url.search+url.hash;
+            }catch(error){
+                return href;
+            }
+        }
         function renderBootState(kind,title,text){
             var node=document.getElementById('bootState');
             if(!node)return;
@@ -627,7 +647,7 @@
                 }
             } else {
                 if(linkedDeal)ctx+='<div class="cp-context-item"><strong>Linked Deal:</strong> '+escH(linkedDeal.accountName||'Selected deal')+' · '+escH((linkedDeal.stage||'prospect').replace('-',' '))+'</div>';
-                ctx+='</div><div style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);font-style:italic;">Not found in Signal Console. <a href="/app/signal-console/" style="color:var(--brand-gold);">Add account &rarr;</a></div>';
+                ctx+='</div><div style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);font-style:italic;">Not found in Signal Console. <a href="'+buildPlannerRoomHref('/app/signal-console/',contactName||'Call prep gap','Signal Console')+'" style="color:var(--brand-gold);">Add account &rarr;</a></div>';
             }
             document.getElementById('contextBlock').innerHTML=ctx;
 
@@ -668,13 +688,15 @@
 
         window.openDiscoveryRun=async function(){
             await persistAgendaState(null);
-            location.href='/app/discovery-studio/';
+            location.href=buildPlannerRoomHref('/app/discovery-studio/',contactName||(matchedAccount&&matchedAccount.name)||'Call Planner','Discovery Studio');
         };
 
         window.openLinkedDealWorkspace=async function(){
             var saved=await persistAgendaState(null);
             var dealId=saved&&saved.agenda?saved.agenda.linkedDeal:'';
-            location.href=dealId?('/app/deal-workspace/?deal='+encodeURIComponent(dealId)):'/app/deal-workspace/';
+            location.href=dealId
+                ? buildPlannerRoomHref('/app/deal-workspace/?deal='+encodeURIComponent(dealId),(saved&&saved.agenda&&(saved.agenda.company||saved.agenda.contact))||'Linked deal','Deal Workspace')
+                : buildPlannerRoomHref('/app/deal-workspace/',contactName||(matchedAccount&&matchedAccount.name)||'Call Planner','Deal Workspace');
         };
 
         async function bootDiscoveryAgenda(){

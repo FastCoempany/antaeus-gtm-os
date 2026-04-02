@@ -121,6 +121,7 @@
     <script>
     (function(){
         var shell = document.getElementById('welcomeShell');
+        var DASHBOARD_ENTRY_HREF = '/app/dashboard/?mode=spotlight';
         function trackWelcome(name, props){
             if(window.gtmAnalytics && typeof window.gtmAnalytics.track === 'function'){
                 window.gtmAnalytics.track(name, Object.assign({ stage:'welcome' }, props || {}));
@@ -216,14 +217,14 @@
         }
         function buildLifecycleAction(nextAction, roleLabel){
             if (!nextAction || !nextAction.href) return null;
-            var isTourAction = nextAction.href === '/app/dashboard/' && /tour/i.test(String(nextAction.label || ''));
+            var isTourAction = nextAction.href === DASHBOARD_ENTRY_HREF && /tour/i.test(String(nextAction.label || ''));
             if (isTourAction) {
                 return {
                     key:'tour',
-                    href:'/app/dashboard/',
+                    href:DASHBOARD_ENTRY_HREF,
                     title:'Run the tour',
                     body:'Use the seeded walkthrough to see how the modules compound before you improvise your own route.',
-                    cta:'Open Dashboard Tour',
+                    cta:'Open Spotlight Tour',
                     meta:['orientation', roleLabel],
                     why:nextAction.why || 'The first-week story should be legible without needing human explanation.',
                     unlocks:'A faster understanding of the dashboard, core module handoffs, and what should happen next.',
@@ -265,7 +266,7 @@
                     cta:'Open Deal Workspace',
                     meta:['pipeline truth', 'dashboard unlock'],
                     why:'You do not yet have a real object for deal review, risk logic, or proof planning.',
-                    unlocks:'Pipeline review, future autopsy, PoC planning, and a more believable command view.'
+                    unlocks:'Pipeline review, future autopsy, PoC planning, and a more believable command stack.'
                 },
                 '/app/outbound-studio/': {
                     key:'motion',
@@ -287,10 +288,10 @@
                 },
                 '/app/dashboard/': {
                     key:'dashboard',
-                    title:'Return to the dashboard',
-                    body:'Use the command view as the place where the system tells you what matters next.',
-                    cta:'Open Dashboard',
-                    meta:['operating rhythm', 'daily command view'],
+                    title:'Return to Spotlight',
+                    body:'Use the command stack as the place where the system tells you what matters next.',
+                    cta:'Open Spotlight',
+                    meta:['operating rhythm', 'daily command stack'],
                     why:'By this point the app should start behaving like a morning operating room, not a collection of tools.',
                     unlocks:'Faster daily resets, clearer next moves, and stronger week-one rhythm.'
                 },
@@ -313,7 +314,7 @@
                     unlocks:'Better readiness context, clearer operating targets, and stronger weekly motion planning.'
                 }
             };
-            var base = map[nextAction.href];
+            var base = map[nextAction.href] || (nextAction.href === DASHBOARD_ENTRY_HREF ? map['/app/dashboard/'] : null);
             if (!base) return null;
             return Object.assign({ href: nextAction.href }, base);
         }
@@ -390,12 +391,12 @@
 
             if (!counts.icps) push(actionSpec('icp','Create your first ICP','Start with one sharp wedge. Once one ICP exists, Signal Console, outbound, and discovery stop operating on memory.','/app/icp-studio/','Open ICP Studio',['highest leverage', roleLabel],'The rest of the app compounds off targeting truth before it compounds off activity.','Sharper signal research, better sourcing, cleaner outbound, and a more credible dashboard brief.'));
             if (!(counts.accounts || counts.signals)) push(actionSpec('signal','Research one live account','Add or enrich one real company so the workspace starts reflecting external evidence instead of setup answers.','/app/signal-console/','Open Signal Console',['real account','deep research'],'You need one live account before the signal layer can behave like a real intelligence system.','Heat logic, next-move guidance, and better context for sourcing and outbound.'));
-            if (!counts.deals) push(actionSpec('deal','Create the first live deal','One real opportunity activates pipeline review, proof planning, and the Monday command view.','/app/deal-workspace/','Open Deal Workspace',['pipeline truth','dashboard unlock'],'Without a real deal, too many later modules are still briefing hypothetical work.','Future autopsy, PoC framework, advisor deployment, and a more honest dashboard.'));
+            if (!counts.deals) push(actionSpec('deal','Create the first live deal','One real opportunity activates pipeline review, proof planning, and the Monday command stack.','/app/deal-workspace/','Open Deal Workspace',['pipeline truth','dashboard unlock'],'Without a real deal, too many later modules are still briefing hypothetical work.','Future autopsy, PoC framework, advisor deployment, and a more honest dashboard.'));
             if (!(counts.touches + counts.calls)) push(actionSpec('motion','Log the first live motion','Capture one outbound touch or one real call so the system starts storing operating memory.','/app/outbound-studio/','Open Outbound Studio',['activity trail','week one'],'Week one should include at least one motion so the workspace stops being only configuration plus objects.','Readiness evidence, better dashboard state, and a clearer operating rhythm.'));
 
             if (actions.length < 4 && counts.deals) push(actionSpec('planner','Prep the next discovery call','Use Call Planner to turn an active deal into a structured conversation, not a loose note.','/app/discovery-agenda/','Open Call Planner',['call quality','active deal'],'You already have enough deal truth to make the next call more deliberate.','A stronger discovery agenda and a cleaner handoff into Discovery Studio.'));
             if (actions.length < 4 && counts.icps) push(actionSpec('refine-icp','Tighten your targeting layer','Your first ICP exists. Refine it now so the rest of the workflow compounds off a sharper buying pattern.','/app/icp-studio/','Refine ICPs',['recommended','signal quality'],'Second-pass targeting work usually pays for itself faster than adding random new records.','Higher-quality sourcing, clearer signals, and better outbound motion.'));
-            if (actions.length < 4 && counts.deals) push(actionSpec('dashboard','Review what the dashboard sees','Use the command surface to check whether the brief matches reality before the week gets noisy.','/app/dashboard/','Open Dashboard',['weekly brief','risk review'],'Once at least one deal exists, the dashboard should become part of the real operating loop.','A more believable command view and better next-step discipline.'));
+            if (actions.length < 4 && counts.deals) push(actionSpec('dashboard','Review what Spotlight sees','Use the command stack to check whether the brief matches reality before the week gets noisy.',DASHBOARD_ENTRY_HREF,'Open Spotlight',['weekly brief','risk review'],'Once at least one deal exists, the dashboard should become part of the real operating loop.','A more believable command stack and better next-step discipline.'));
             if (actions.length < 5) push(actionSpec('quota','Dial in quota and targets','Put your quota math and ACV into the system so “good” stops staying subjective.','/app/quota-workback/','Open Quota Workback',['system math','benchmarks'],'The app becomes more credible when activity and readiness are anchored to actual revenue pressure.','Better weekly targets, clearer benchmarks, and stronger readiness logic.'));
             if (actions.length < 5 && lifecycle && lifecycle.active) push(actionSpec('backup','Export the first backup','Make the workspace durable outside this one browser before the first week gets messy.','/app/settings/','Open Settings',['durability','week one'],'Week one is not complete until the workspace can survive refresh, re-login, and a bad decision.','Safer experimentation and a system that feels durable instead of lucky.'));
 
@@ -405,14 +406,14 @@
             });
         }
         function completeWelcome(nextPath){
-            trackWelcome('welcome_exit_click', { next_path: nextPath || '/app/dashboard/' });
+            trackWelcome('welcome_exit_click', { next_path: nextPath || DASHBOARD_ENTRY_HREF });
             if (typeof window.setWelcomeSeen === 'function') {
                 try { window.setWelcomeSeen(true); } catch (e) {}
             }
             if (typeof window.clearWorkspaceBootstrapCache === 'function') {
                 try { window.clearWorkspaceBootstrapCache(); } catch (e) {}
             }
-            window.location.href = nextPath || '/app/dashboard/';
+            window.location.href = nextPath || DASHBOARD_ENTRY_HREF;
         }
         window.completeWelcome = completeWelcome;
 
@@ -439,8 +440,8 @@
                 '<div class="anchor-primary-copy">' + esc(primaryAction.why || primaryAction.body || activation.body) + ' ' + esc(focusSummary) + '</div>' +
                 (primaryAction.meta && primaryAction.meta.length ? '<div class="anchor-lane-meta">' + primaryAction.meta.map(function(item){ return '<span>' + esc(item) + '</span>'; }).join('') + '</div>' : '') +
                 '<div class="anchor-primary-actions">' +
-                    '<a href="' + esc(primaryAction.href || '/app/dashboard/') + '" class="btn btn-primary" onclick="completeWelcome(\'' + esc(primaryAction.href || '/app/dashboard/').replace(/&#39;/g, "'") + '\');return false;">' + esc(primaryAction.cta || 'Continue to workspace') + '</a>' +
-                    '<a href="/app/dashboard/" class="btn btn-secondary" onclick="completeWelcome(\'/app/dashboard/\');return false;">Open Dashboard</a>' +
+                    '<a href="' + esc(primaryAction.href || DASHBOARD_ENTRY_HREF) + '" class="btn btn-primary" onclick="completeWelcome(\'' + esc(primaryAction.href || DASHBOARD_ENTRY_HREF).replace(/&#39;/g, "'") + '\');return false;">' + esc(primaryAction.cta || 'Continue to workspace') + '</a>' +
+                    '<a href="' + esc(DASHBOARD_ENTRY_HREF) + '" class="btn btn-secondary" onclick="completeWelcome(\'' + esc(DASHBOARD_ENTRY_HREF).replace(/&#39;/g, "'") + '\');return false;">Open Spotlight</a>' +
                 '</div>' +
             '</div>';
         }
@@ -570,11 +571,11 @@
                 ],
                 actions: [
                     {
-                        href: primaryAction.href || '/app/dashboard/',
-                        label: primaryAction.cta || primaryAction.title || 'Continue to dashboard',
+                        href: primaryAction.href || DASHBOARD_ENTRY_HREF,
+                        label: primaryAction.cta || primaryAction.title || 'Continue to Spotlight',
                         tone: 'primary'
                     },
-                    { href: '/app/dashboard/', label: 'Open Dashboard' }
+                    { href: DASHBOARD_ENTRY_HREF, label: 'Open Spotlight' }
                 ]
             });
         }
@@ -610,9 +611,9 @@
                 var statCards = buildStatCards(counts);
                 var heroChips = buildHeroChips(activationContext, role, counts, lifecycle);
                 var focusSummary = buildWorkspaceFocus(summary, activationContext, role, counts);
-                var primaryAction = actions[0] || actionSpec('dashboard', 'Continue into the dashboard', 'The workspace is already anchored enough to use the command view.', '/app/dashboard/', 'Continue to dashboard', ['command view'], '', '');
-                var heroPrimaryHref = primaryAction.href || '/app/dashboard/';
-                var heroPrimaryLabel = primaryAction.cta || 'Continue to dashboard';
+                var primaryAction = actions[0] || actionSpec('dashboard', 'Continue into Spotlight', 'The workspace is already anchored enough to use the command stack.', DASHBOARD_ENTRY_HREF, 'Continue to Spotlight', ['command stack'], '', '');
+                var heroPrimaryHref = primaryAction.href || DASHBOARD_ENTRY_HREF;
+                var heroPrimaryLabel = primaryAction.cta || 'Continue to Spotlight';
                 var backupNote = backup && backup.hasExport ? 'Offline backup exists.' : 'No offline backup exported yet.';
                 renderWelcomeShellChrome(activation, primaryAction, lifecycle, counts, role, focusSummary);
 
@@ -678,7 +679,7 @@
                         stateTone: 'risk'
                     });
                 }
-                shell.innerHTML = '<div class="welcome-error">Welcome could not load workspace context. <a href="/app/dashboard/" onclick="completeWelcome(\'/app/dashboard/\');return false;">Go straight to dashboard</a>.</div>';
+                shell.innerHTML = '<div class="welcome-error">Welcome could not load workspace context. <a href="' + esc(DASHBOARD_ENTRY_HREF) + '" onclick="completeWelcome(\'' + esc(DASHBOARD_ENTRY_HREF).replace(/&#39;/g, "'") + '\');return false;">Go straight to Spotlight</a>.</div>';
             }
         }
 

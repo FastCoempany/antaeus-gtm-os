@@ -179,7 +179,8 @@
 
 
     var NAV_HTML = '' +
-    '<div class="sidebar-header"><div class="sidebar-header-inner"><a href="/app/dashboard/" class="sidebar-logo">ANTAEUS</a><div class="sidebar-workspace-strip"><div class="sidebar-workspace-label" id="sidebarWorkspaceContext">Workspace</div><div class="sidebar-workspace-state" id="sidebarWorkspaceState">Activation in progress</div></div></div></div>' +
+    '<div class="sidebar-header"><div class="sidebar-header-inner"><a href="/app/dashboard/" class="sidebar-logo">ANTAEUS</a><div class="sidebar-workspace-strip"><div class="sidebar-workspace-label" id="sidebarWorkspaceContext">Workspace</div><div class="sidebar-workspace-state" id="sidebarWorkspaceState">Activation in progress</div></div><div class="sidebar-command-primer"><div class="sidebar-command-primer-kicker">Command stack</div><div class="sidebar-command-primer-copy">Start in Spotlight. Use rooms only when you know the next room.</div><div class="sidebar-command-primer-actions"><a href="/app/dashboard/?mode=spotlight" class="sidebar-command-link" data-nav-command="spotlight">Open Spotlight</a><a href="/app/welcome/" class="sidebar-command-link" data-nav-command="welcome">Week One</a></div></div></div></div>' +
+    '<div class="sidebar-nav-role">Room rail</div>' +
     '<nav class="sidebar-nav">' +
         '<div class="nav-section">' +
             '<div class="nav-section-title nav-section-title-lg">Home</div>' +
@@ -267,70 +268,71 @@
 
     var navStyle = document.createElement('style');
     navStyle.textContent = `
-        .nav-icon { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; margin-right:8px; opacity:0.7; flex-shrink:0; }
-        .nav-item.active .nav-icon, .nav-item:hover .nav-icon { opacity:1; }
+        .nav-icon { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; margin-right:6px; opacity:0.48; flex-shrink:0; }
+        .nav-item.active .nav-icon, .nav-item:hover .nav-icon { opacity:0.82; }
         .nav-label { flex:1; }
         .nav-item { display:flex !important; align-items:center; position:relative; }
         .nav-item.context-active {
-            background:rgba(212,165,116,0.06);
-            border-color:rgba(212,165,116,0.18);
+            background:rgba(255,255,255,0.02);
+            border-color:rgba(255,255,255,0.05);
             color:var(--text-primary,#e2e8f0);
         }
-        .nav-dot { width:8px; height:8px; border-radius:50%; margin-left:auto; flex-shrink:0; background:rgba(100,116,139,0.3); transition:all 0.3s; }
-        .nav-dot.started { background:rgba(45,212,191,0.6); box-shadow:0 0 6px rgba(45,212,191,0.4); }
-        .nav-dot.complete { background:rgba(34,197,94,0.8); box-shadow:0 0 8px rgba(34,197,94,0.5); }
+        .nav-dot { width:6px; height:6px; border-radius:50%; margin-left:auto; flex-shrink:0; background:rgba(100,116,139,0.22); transition:all 0.3s; }
+        .nav-dot.started { background:rgba(45,212,191,0.48); box-shadow:none; }
+        .nav-dot.complete { background:rgba(34,197,94,0.56); box-shadow:none; }
         .nav-item.context-active .nav-dot {
-            background:rgba(212,165,116,0.6);
-            box-shadow:0 0 6px rgba(212,165,116,0.25);
+            background:rgba(212,165,116,0.4);
+            box-shadow:none;
         }
         .sidebar-footer-actions { display:flex; align-items:center; gap:6px; margin-top:8px; padding:0 12px; }
         .sidebar-action-btn { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; border:1px solid var(--border-default,#2d3748); background:transparent; color:var(--text-muted,#64748b); cursor:pointer; transition:all 0.2s; }
         .sidebar-action-btn:hover { background:rgba(212,165,116,0.1); color:var(--brand-gold,#d4a574); border-color:rgba(212,165,116,0.3); }
         .nav-tour-glow {
-            display:block; width:calc(100% - 24px); margin:12px 12px 8px; padding:12px 16px;
-            background:linear-gradient(135deg,rgba(212,165,116,0.2),rgba(168,85,247,0.1),rgba(59,130,246,0.1));
-            border:1px solid rgba(212,165,116,0.4); border-radius:12px;
-            color:var(--brand-gold,#d4a574); font-weight:700; font-size:0.85rem;
+            display:block; width:calc(100% - 24px); margin:12px 12px 8px; padding:10px 14px;
+            background:rgba(255,255,255,0.02);
+            border:1px solid rgba(255,255,255,0.08); border-radius:12px;
+            color:var(--text-secondary,#e2e8f0); font-weight:700; font-size:0.8rem;
             cursor:pointer; font-family:inherit; text-align:center;
             transition:all 0.3s; letter-spacing:0.03em;
-            box-shadow:0 0 12px rgba(212,165,116,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
-            animation:tourPulse 2.2s ease-in-out infinite;
+            box-shadow:none;
+            animation:none;
         }
         .nav-tour-glow:hover {
-            background:linear-gradient(135deg,rgba(212,165,116,0.35),rgba(168,85,247,0.15),rgba(59,130,246,0.15));
-            box-shadow:0 0 20px rgba(212,165,116,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+            background:rgba(255,255,255,0.04);
+            border-color:rgba(212,165,116,0.22);
+            color:var(--brand-gold,#d4a574);
             transform:translateY(-1px);
         }
         .nav-welcome-chip {
             display:block; width:calc(100% - 24px); margin:0 12px 10px; padding:9px 12px;
-            border:1px solid rgba(45,212,191,0.22); border-radius:999px;
-            background:rgba(45,212,191,0.08); color:var(--brand-teal-light,#5eead4);
+            border:1px solid rgba(255,255,255,0.08); border-radius:999px;
+            background:rgba(255,255,255,0.02); color:var(--text-secondary,#e2e8f0);
             font-family:inherit; font-size:0.78rem; font-weight:700; letter-spacing:0.02em;
             cursor:pointer; transition:all 0.2s; text-align:center;
         }
         .nav-welcome-chip:hover {
-            border-color:rgba(45,212,191,0.4);
-            background:rgba(45,212,191,0.14);
-            color:#d5fffa;
+            border-color:rgba(45,212,191,0.22);
+            background:rgba(45,212,191,0.08);
+            color:var(--brand-teal-light,#5eead4);
             transform:translateY(-1px);
         }
         .nav-demo-chip {
             display:block; width:calc(100% - 24px); margin:0 12px 10px; padding:9px 12px;
-            border:1px solid rgba(212,165,116,0.24); border-radius:999px;
-            background:rgba(212,165,116,0.08); color:var(--brand-gold,#d4a574);
+            border:1px solid rgba(255,255,255,0.08); border-radius:999px;
+            background:rgba(255,255,255,0.02); color:var(--text-secondary,#e2e8f0);
             font-family:inherit; font-size:0.78rem; font-weight:700; letter-spacing:0.02em;
             cursor:pointer; transition:all 0.2s; text-align:center;
         }
         .nav-demo-chip:hover {
-            border-color:rgba(212,165,116,0.4);
-            background:rgba(212,165,116,0.14);
-            color:#ffe3c4;
+            border-color:rgba(212,165,116,0.22);
+            background:rgba(212,165,116,0.08);
+            color:var(--brand-gold,#d4a574);
             transform:translateY(-1px);
         }
         .nav-demo-chip.nav-demo-chip-secondary {
-            border-color:rgba(239,68,68,0.24);
-            background:rgba(239,68,68,0.06);
-            color:#ff9a92;
+            border-color:rgba(255,255,255,0.08);
+            background:rgba(255,255,255,0.02);
+            color:var(--text-secondary,#e2e8f0);
         }
         .nav-demo-chip.nav-demo-chip-secondary:hover {
             border-color:rgba(239,68,68,0.4);
@@ -339,20 +341,21 @@
         }
         .nav-weekone-chip {
             display:block; width:calc(100% - 24px); margin:0 12px 10px; padding:9px 12px;
-            border:1px solid rgba(96,165,250,0.24); border-radius:999px;
-            background:rgba(59,130,246,0.08); color:#bfdbfe;
+            border:1px solid rgba(255,255,255,0.08); border-radius:999px;
+            background:rgba(255,255,255,0.02); color:var(--text-secondary,#e2e8f0);
             font-family:inherit; font-size:0.78rem; font-weight:700; letter-spacing:0.02em;
             cursor:pointer; transition:all 0.2s; text-align:center;
         }
         .nav-weekone-chip:hover {
-            border-color:rgba(96,165,250,0.42);
-            background:rgba(59,130,246,0.14);
-            color:#eff6ff;
+            border-color:rgba(96,165,250,0.24);
+            background:rgba(59,130,246,0.08);
+            color:#bfdbfe;
             transform:translateY(-1px);
         }
-        @keyframes tourPulse {
-            0%, 100% { box-shadow:0 0 12px rgba(212,165,116,0.15), inset 0 1px 0 rgba(255,255,255,0.05); transform:scale(1); }
-            50% { box-shadow:0 0 24px rgba(212,165,116,0.34), inset 0 1px 0 rgba(255,255,255,0.08); transform:scale(1.025); }
+        .sidebar-command-link.is-active {
+            border-color:rgba(212,165,116,0.26);
+            background:rgba(212,165,116,0.08);
+            color:var(--brand-gold,#d4a574);
         }
     `;
     document.head.appendChild(navStyle);
@@ -383,6 +386,12 @@
         persistSidebarActive(navKey);
     } else if (contextLink) {
         contextLink.classList.add('context-active');
+    }
+    if (sidebar) {
+        var spotlightLink = sidebar.querySelector('[data-nav-command="spotlight"]');
+        var welcomeLink = sidebar.querySelector('[data-nav-command="welcome"]');
+        if (spotlightLink && navKey === 'dashboard') spotlightLink.classList.add('is-active');
+        if (welcomeLink && navKey === 'welcome') welcomeLink.classList.add('is-active');
     }
     var sidebarDataNotice = sidebar && sidebar.querySelector('#sidebarDataNotice');
     if (sidebarDataNotice && window.gtmEnvironment && window.gtmEnvironment.isDemo) {
@@ -508,6 +517,11 @@
                 persistSidebarState(sidebar.querySelector('[data-nav="dashboard"]'));
             });
         }
+        Array.prototype.slice.call(sidebar.querySelectorAll('.sidebar-command-link')).forEach(function(link){
+            link.addEventListener('click', function(){
+                persistSidebarState(sidebar.querySelector('[data-nav="dashboard"]'));
+            });
+        });
     }
 
     window.addEventListener('pagehide', function() {

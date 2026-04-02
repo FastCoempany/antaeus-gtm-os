@@ -190,6 +190,20 @@ function syncDocToCloud(key,data){
 }
 function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));syncDocToCloud(k,v)}
 function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function buildColdCallRoomHref(href, focusObject, roomLabel){
+    try{
+        var url=new URL(href, window.location.origin);
+        url.searchParams.set('returnTo','/app/cold-call-studio/');
+        url.searchParams.set('returnLabel','Back to Cold Call Studio');
+        if(focusObject)url.searchParams.set('focusObject',focusObject);
+        if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
+        url.searchParams.set('fromMode','room');
+        url.searchParams.set('fromSurface','cold-call-studio');
+        return url.pathname+url.search+url.hash;
+    }catch(error){
+        return href;
+    }
+}
 function uid(){return 'call_'+Date.now()+'_'+Math.random().toString(36).substr(2,5)}
 var signalConsoleAccounts=[];
 
@@ -459,7 +473,7 @@ function renderColdCallShellBand(){
             ],
             actions:[
                 {label:'Reset to Brief',action:'goTo("pre_call")',tone:'primary'},
-                {label:'Open Signal Console',href:'/app/signal-console/'}
+                {label:'Open Signal Console',href:buildColdCallRoomHref('/app/signal-console/',selectedAccount||'Cold call prep','Signal Console')}
             ]
         });
         return;
@@ -550,7 +564,7 @@ function renderColdCallShellBand(){
                         '<div class="anchor-primary-copy">'+escH(nextMove)+'</div>'+
                         '<div class="anchor-primary-actions">'+
                             '<button class="btn btn-primary" type="button" onclick="goTo(\'pre_call\')">Reset to brief</button>'+
-                            '<a class="btn btn-secondary" href="/app/signal-console/">Open Signal Console</a>'+
+                            '<a class="btn btn-secondary" href="'+buildColdCallRoomHref('/app/signal-console/',selectedAccount||'Cold call prep','Signal Console')+'">Open Signal Console</a>'+
                         '</div>'+
                     '</div>'+
                 '</div>'+
@@ -577,7 +591,7 @@ function renderColdCallShellBand(){
             ],
             actions:[
                 {label:'Reset to Brief',action:'goTo("pre_call")',tone:'primary'},
-                {label:'Open Signal Console',href:'/app/signal-console/'}
+                {label:'Open Signal Console',href:buildColdCallRoomHref('/app/signal-console/',selectedAccount||'Cold call prep','Signal Console')}
             ]
         });
         node.insertAdjacentHTML('beforeend',stageHtml);

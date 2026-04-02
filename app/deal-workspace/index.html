@@ -21,19 +21,22 @@
         .dw-bridge-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.75rem;font-weight:700;cursor:pointer;}
         .dw-bridge-btn:hover{border-color:var(--border-hover);}
         .dw-bridge-btn.primary{background:rgba(212,165,116,0.1);border-color:rgba(212,165,116,0.24);color:var(--brand-gold);}
+        .dw-surface-top{display:grid;gap:16px;margin-bottom:var(--space-lg);}
         .dw-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-sm);margin-bottom:var(--space-md);}
-        .dw-stat{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;text-align:center;}
+        .dw-stat{background:none;border:0;border-right:1px solid rgba(255,255,255,0.06);border-radius:0;padding:12px 14px;text-align:left;}
+        .dw-stat:last-child{border-right:0;}
         .dw-stat-val{font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);}
         .dw-stat-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
-        .dw-recovery{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:var(--space-md);}
+        .dw-recovery{background:linear-gradient(135deg, rgba(212,165,116,0.06), rgba(59,130,246,0.03));border:1px solid rgba(212,165,116,0.14);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:0;}
         .dw-recovery-head{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
         .dw-recovery-title{font-size:0.96rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
         .dw-recovery-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.55;margin-bottom:12px;}
-        .dw-recovery-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-        .dw-recovery-item{padding:12px 14px;border-radius:var(--radius-md);background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);}
+        .dw-recovery-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid rgba(255,255,255,0.06);}
+        .dw-recovery-item{padding:14px 16px;border-radius:0;background:none;border:0;border-right:1px solid rgba(255,255,255,0.06);}
+        .dw-recovery-item:last-child{border-right:0;}
         .dw-recovery-item-title{font-size:0.8rem;font-weight:700;color:var(--text-secondary);margin-bottom:4px;}
         .dw-recovery-item-copy{font-size:0.75rem;color:var(--text-muted);line-height:1.5;}
-        .dw-filter{margin-bottom:var(--space-md);display:flex;gap:8px;align-items:center;}
+        .dw-filter{margin-bottom:0;display:flex;gap:8px;align-items:center;justify-content:space-between;padding:0 4px 14px;border-bottom:1px solid rgba(255,255,255,0.06);}
         .dw-filter select{padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.82rem;font-family:inherit;}
         .dw-filter select:focus{outline:none;border-color:var(--brand-gold);}
         .dw-filter-count{font-size:0.72rem;color:var(--text-muted);}
@@ -147,11 +150,11 @@
         .dw-loss-notes textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;min-height:60px;resize:vertical;}
         .dw-loss-notes textarea:focus{outline:none;border-color:var(--brand-gold);}
         .dw-loss-actions{display:flex;justify-content:space-between;margin-top:20px;}
-        @media(max-width:1024px){.dw-bridge-grid,.dw-recovery-list{grid-template-columns:1fr 1fr;}}
-        @media(max-width:700px){.dw-stats,.dw-bridge-grid,.dw-recovery-list{grid-template-columns:1fr;}.dw-grid{grid-template-columns:1fr;}.dw-modal-row,.dw-modal-row3{grid-template-columns:1fr;}.dw-sh-row{grid-template-columns:1fr;}}
+        @media(max-width:1024px){.dw-bridge-grid,.dw-recovery-list{grid-template-columns:1fr 1fr;}.dw-stats{grid-template-columns:1fr 1fr;gap:0;}}
+        @media(max-width:700px){.dw-stats,.dw-bridge-grid,.dw-recovery-list{grid-template-columns:1fr;}.dw-grid{grid-template-columns:1fr;}.dw-modal-row,.dw-modal-row3{grid-template-columns:1fr;}.dw-sh-row{grid-template-columns:1fr;}.dw-stat,.dw-recovery-item{border-right:0;border-bottom:1px solid rgba(255,255,255,0.06);}.dw-stat:last-child,.dw-recovery-item:last-child{border-bottom:0;}.dw-filter{align-items:flex-start;flex-direction:column;}}
     </style>
 </head>
-<body>
+<body class="room-wave2 room-deal-workspace">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -161,8 +164,15 @@
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">Deal Workspace</h1>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">Pipeline family</span>
+                        <span class="shell-header-state state-live">Execution board</span>
+                    </div>
+                    <h1 class="page-title">Deal Workspace</h1>
+                    <p class="page-subtitle">Keep live opportunities honest, route pressure into the right room, and carry context forward without rebuilding it.</p>
+                </div>
                 <div class="header-actions">
                     <button class="btn btn-primary btn-sm" onclick="openModal()">+ New Deal</button>
                 </div>
@@ -170,19 +180,21 @@
             <div class="app-content">
                 <div id="dwBootState"></div>
                 <div id="dwBridge"></div>
-                <div class="dw-stats" id="dealStats"></div>
-                <div class="dw-filter">
-                    <select id="viewFilter" onchange="render()">
-                        <option value="all">All Deals</option>
-                        <option value="active">Active Only</option>
-                        <option value="at-risk">At Risk</option>
-                        <option value="stalled">Stalled (7+ days quiet)</option>
-                        <option value="this-quarter">Close This Quarter</option>
-                        <option value="closed">Closed (Won + Lost)</option>
-                    </select>
-                    <span class="dw-filter-count" id="filterCount"></span>
-                </div>
-                <div id="recoveryPanel"></div>
+                <section class="dw-surface-top">
+                    <div class="dw-stats" id="dealStats"></div>
+                    <div class="dw-filter">
+                        <select id="viewFilter" onchange="render()">
+                            <option value="all">All Deals</option>
+                            <option value="active">Active Only</option>
+                            <option value="at-risk">At Risk</option>
+                            <option value="stalled">Stalled (7+ days quiet)</option>
+                            <option value="this-quarter">Close This Quarter</option>
+                            <option value="closed">Closed (Won + Lost)</option>
+                        </select>
+                        <span class="dw-filter-count" id="filterCount"></span>
+                    </div>
+                    <div id="recoveryPanel"></div>
+                </section>
                 <div class="dw-grid" id="dealGrid"></div>
                 <div id="dealEmpty"></div>
             </div>
@@ -310,6 +322,20 @@
         function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));}
         function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
         function fmtN(n){return'$'+Number(n||0).toLocaleString();}
+        function buildDealRoomHref(href, focusObject, roomLabel){
+            try{
+                var url=new URL(href, window.location.origin);
+                url.searchParams.set('returnTo','/app/deal-workspace/');
+                url.searchParams.set('returnLabel','Back to Deal Workspace');
+                if(focusObject)url.searchParams.set('focusObject',focusObject);
+                if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
+                url.searchParams.set('fromMode','room');
+                url.searchParams.set('fromSurface','deal-workspace');
+                return url.pathname+url.search+url.hash;
+            }catch(error){
+                return href;
+            }
+        }
         window.fmtC=function(el){var v=el.value.replace(/[^0-9]/g,'');el.value=v?Number(v).toLocaleString():''};
         function uid(){
             if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();
@@ -486,8 +512,8 @@
                     meta:[topDeal?(topDeal.accountName||'Unnamed deal'):'No active deal',topDeal?fmtN(topDeal.value||0):'No value yet'],
                     actions:[
                         topDeal
-                            ? '<a class="btn btn-secondary" href="/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id)+'">Autopsy top deal</a>'
-                            : '<a class="btn btn-secondary" href="/app/signal-console/">Find a signal</a>'
+                            ? '<a class="btn btn-secondary" href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id), topDeal.accountName, 'Future Autopsy')+'">Autopsy top deal</a>'
+                            : '<a class="btn btn-secondary" href="'+buildDealRoomHref('/app/signal-console/','Pipeline gap','Signal Console')+'">Find a signal</a>'
                     ]
                 },
                 {
@@ -638,7 +664,7 @@
                                     : 'Create one deal with real stage, value, next step, and qualification truth so the board can start reading reality.')+'</div>'+
                                 '<div class="anchor-primary-actions">'+
                                     (topDeal
-                                        ? '<a class="btn btn-primary" href="/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id)+'">Stress-test top deal</a>'
+                                        ? '<a class="btn btn-primary" href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id), topDeal.accountName, 'Future Autopsy')+'">Stress-test top deal</a>'
                                         : '<button class="btn btn-primary" type="button" onclick="openModal()">Create first deal</button>')+
                                     '<button class="btn btn-secondary" type="button" onclick="document.getElementById(\'viewFilter\').value=\'at-risk\';render();">Open recovery queue</button>'+
                                 '</div>'+
@@ -727,7 +753,7 @@
                                 badgeTone:'state-risk',
                                 meta:['Recovery item','Deal intervention'],
                                 actions:[
-                                    '<a class="btn btn-secondary" href="/app/future-autopsy/?deal='+encodeURIComponent(item.id)+'">Open autopsy</a>',
+                                    '<a class="btn btn-secondary" href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(item.id), item.account, 'Future Autopsy')+'">Open autopsy</a>',
                                     '<button class="btn btn-ghost" type="button" onclick="openModal(\''+item.id+'\')">Edit deal</button>'
                                 ]
                             },index);
@@ -810,7 +836,7 @@
             if(allDeals.length===0){
                 renderRecoveryPanel(allDeals);
                 document.getElementById('dealGrid').innerHTML='';
-                document.getElementById('dealEmpty').innerHTML='<div class="dw-empty"><div style="font-size:2rem;margin-bottom:12px;">&#128188;</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No deals yet</div><div>Click <strong>+ New Deal</strong> to add your first deal, or <a href="/app/signal-console/">find a signal</a> to start from.</div></div>';
+                document.getElementById('dealEmpty').innerHTML='<div class="dw-empty"><div style="font-size:2rem;margin-bottom:12px;">&#128188;</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No deals yet</div><div>Click <strong>+ New Deal</strong> to add your first deal, or <a href="'+buildDealRoomHref('/app/signal-console/','Pipeline gap','Signal Console')+'">find a signal</a> to start from.</div></div>';
                 return;
             }
             document.getElementById('dealEmpty').innerHTML='';
@@ -858,8 +884,8 @@
                 // Linked badges
                 var badges='';
                 var matched=signalConsoleAccounts.find(function(a){return a.name&&d.accountName&&a.name.toLowerCase()===d.accountName.toLowerCase();});
-                if(matched)badges+='<a href="/app/signal-console/" class="dw-link-badge signal" onclick="event.stopPropagation()">Signal: heat '+(matched._heat||0)+'</a>';
-                badges+='<a href="/app/future-autopsy/?deal='+encodeURIComponent(d.id)+'" class="dw-link-badge autopsy" onclick="event.stopPropagation()">\ud83d\udd2c Autopsy</a>';
+                if(matched)badges+='<a href="'+buildDealRoomHref('/app/signal-console/',d.accountName,'Signal Console')+'" class="dw-link-badge signal" onclick="event.stopPropagation()">Signal: heat '+(matched._heat||0)+'</a>';
+                badges+='<a href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(d.id),d.accountName,'Future Autopsy')+'" class="dw-link-badge autopsy" onclick="event.stopPropagation()">\ud83d\udd2c Autopsy</a>';
 
                 // Intel expand section
                 var intelHtml='<div class="dw-intel">';
