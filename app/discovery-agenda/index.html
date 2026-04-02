@@ -91,17 +91,22 @@
         .cp-boot-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
         .cp-boot-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.76rem;font-weight:700;cursor:pointer;}
         .cp-boot-btn:hover{border-color:var(--border-hover);}
+        .cp-first-fold{margin-bottom:var(--space-lg);padding:18px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
+        .cp-first-fold #plannerShellBand{margin-bottom:16px;}
+        .cp-agenda-top{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,0.92fr);gap:12px;margin-bottom:var(--space-md);}
+        .cp-agenda-top .cp-quality,.cp-agenda-top .cp-context{margin-bottom:0;}
         @media (max-width: 1024px){
-            .cp-bridge-grid,.cp-gates{grid-template-columns:1fr 1fr;}
+            .cp-bridge-grid,.cp-gates,.cp-agenda-top{grid-template-columns:1fr 1fr;}
         }
         @media (max-width: 720px){
-            .cp-bridge-grid,.cp-gates{grid-template-columns:1fr;}
+            .cp-bridge-grid,.cp-gates,.cp-agenda-top{grid-template-columns:1fr;}
             .cp-search,.cp-outcome{flex-direction:column;}
             .cp-outcome-btn{width:100%;}
+            .cp-first-fold{padding:14px;}
         }
     </style>
 </head>
-<body>
+<body class="room-wave2 room-call-planner">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -122,29 +127,33 @@
                 </div>
             </header>
             <div class="app-content" style="max-width:720px;">
-                <div class="cp-boot-state" id="bootState"></div>
-                <div id="plannerShellBand"></div>
-                <div class="cp-search">
-                    <div class="cp-search-field">
-                        <label>Who are you calling?</label>
-                        <input type="text" id="searchInput" placeholder="Jane Smith or paste LinkedIn URL..." oninput="onSearch(this.value)">
+                <section class="cp-first-fold">
+                    <div class="cp-boot-state" id="bootState"></div>
+                    <div id="plannerShellBand"></div>
+                    <div class="cp-search">
+                        <div class="cp-search-field">
+                            <label>Who are you calling?</label>
+                            <input type="text" id="searchInput" placeholder="Jane Smith or paste LinkedIn URL..." oninput="onSearch(this.value)">
+                        </div>
                     </div>
-                </div>
-                <div style="margin-bottom:var(--space-md);">
-                    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:8px;">Persona</div>
-                    <div class="cp-persona-pick" id="personaPick">
-                        <button class="cp-persona-btn active" data-p="cxo" onclick="setPer(this)">C-Suite</button>
-                        <button class="cp-persona-btn" data-p="vp" onclick="setPer(this)">VP / Director</button>
-                        <button class="cp-persona-btn" data-p="ops" onclick="setPer(this)">Ops / Support</button>
-                        <button class="cp-persona-btn" data-p="it" onclick="setPer(this)">IT / Engineering</button>
-                        <button class="cp-persona-btn" data-p="finance" onclick="setPer(this)">Finance</button>
-                        <button class="cp-persona-btn" data-p="revops" onclick="setPer(this)">RevOps</button>
+                    <div style="margin-bottom:var(--space-md);">
+                        <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:8px;">Persona</div>
+                        <div class="cp-persona-pick" id="personaPick">
+                            <button class="cp-persona-btn active" data-p="cxo" onclick="setPer(this)">C-Suite</button>
+                            <button class="cp-persona-btn" data-p="vp" onclick="setPer(this)">VP / Director</button>
+                            <button class="cp-persona-btn" data-p="ops" onclick="setPer(this)">Ops / Support</button>
+                            <button class="cp-persona-btn" data-p="it" onclick="setPer(this)">IT / Engineering</button>
+                            <button class="cp-persona-btn" data-p="finance" onclick="setPer(this)">Finance</button>
+                            <button class="cp-persona-btn" data-p="revops" onclick="setPer(this)">RevOps</button>
+                        </div>
                     </div>
-                </div>
+                </section>
 
                 <div class="cp-agenda" id="agenda">
-                    <div class="cp-quality" id="qualityBlock"></div>
-                    <div class="cp-context" id="contextBlock"></div>
+                    <section class="cp-agenda-top">
+                        <div class="cp-quality" id="qualityBlock"></div>
+                        <div class="cp-context" id="contextBlock"></div>
+                    </section>
                     <div class="cp-section">
                         <div class="cp-section-title"><span class="num">1</span> Suggested Opening</div>
                         <div class="cp-opener" id="openerBlock"></div>

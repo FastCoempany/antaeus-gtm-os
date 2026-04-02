@@ -1443,6 +1443,30 @@ body.command-surface-page .btn-ghost:hover:not(:disabled) {
     color: var(--text-primary);
 }
 
+body.room-wave2 .app-content {
+    padding-top: 22px;
+}
+
+body.room-wave2 .module-header {
+    min-height: 84px;
+}
+
+body.room-wave2 .module-header .page-title {
+    font-size: clamp(1.55rem, 1.9vw, 1.9rem);
+}
+
+body.room-wave2 .module-header .page-subtitle,
+body.room-wave2 .module-header .module-subtitle {
+    max-width: 72ch;
+}
+
+body.room-wave2 .module-header .header-actions .btn,
+body.room-wave2 .module-header .module-header-actions .btn,
+body.room-wave2 .module-header .header-actions .action-btn,
+body.room-wave2 .module-header .module-header-actions .action-btn {
+    min-height: 36px;
+}
+
 body.command-surface-page .shell-state-pill {
     background: rgba(255, 255, 255, 0.72);
     border-color: rgba(10, 28, 64, 0.08);

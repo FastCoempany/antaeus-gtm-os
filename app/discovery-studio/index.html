@@ -79,6 +79,12 @@
         .ds-stat{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;text-align:center;}
         .ds-stat-val{font-family:var(--font-serif);font-size:1.3rem;color:var(--text-primary);}
         .ds-stat-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+        .ds-first-fold{margin-bottom:var(--space-lg);padding:18px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
+        .ds-first-fold #discoveryShellBand{margin-bottom:14px;}
+        .ds-first-fold .ds-stats{margin-bottom:var(--space-md);}
+        .ds-first-fold .ds-stat{background:none;border:0;border-right:1px solid rgba(255,255,255,0.06);border-radius:0;text-align:left;padding:12px 14px;}
+        .ds-first-fold .ds-stat:last-child{border-right:0;}
+        .ds-first-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
         .ds-negot-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius-md);font-size:0.78rem;font-weight:600;background:rgba(245,158,11,0.08);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);margin-bottom:var(--space-md);}
         .ds-boot-card{padding:18px 20px;border-radius:var(--radius-lg);border:1px solid var(--border-default);background:var(--bg-secondary);margin-bottom:var(--space-lg);}
         .ds-boot-card.loading{border-color:rgba(59,130,246,0.25);background:rgba(59,130,246,0.05);}
@@ -107,11 +113,11 @@
         .ds-seg-card-text{font-size:0.8rem;color:var(--text-tertiary);line-height:1.5;white-space:pre-line;}
         .ds-watch{margin-top:10px;padding:8px 12px;background:rgba(245,158,11,0.04);border:1px solid rgba(245,158,11,0.12);border-radius:var(--radius-sm);font-size:0.75rem;color:var(--text-muted);}
         .ds-watch strong{color:#f59e0b;}
-        @media(max-width:1024px){.ds-bridge-grid,.ds-worked-list{grid-template-columns:1fr 1fr;}}
-        @media(max-width:700px){.ds-stats,.ds-bridge-grid,.ds-worked-list{grid-template-columns:1fr;}.ds-cat-bar{gap:4px;}}
+        @media(max-width:1024px){.ds-bridge-grid,.ds-worked-list,.ds-first-meta{grid-template-columns:1fr 1fr;}}
+        @media(max-width:700px){.ds-stats,.ds-bridge-grid,.ds-worked-list,.ds-first-meta{grid-template-columns:1fr;}.ds-cat-bar{gap:4px;}.ds-first-fold{padding:14px;}.ds-first-fold .ds-stat{border-right:0;border-bottom:1px solid rgba(255,255,255,0.06);}.ds-first-fold .ds-stat:last-child{border-bottom:0;}}
     </style>
 </head>
-<body>
+<body class="room-wave2 room-discovery-studio">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -135,12 +141,16 @@
                 </div>
             </header>
             <div class="app-content" style="max-width:800px;">
-                <div class="ds-boot-state" id="bootState"></div>
-                <div class="ds-stats" id="statsBar"></div>
-                <div id="discoveryShellBand"></div>
-                <div class="ds-cat-bar" id="catBar"></div>
-                <div id="frameworkGuide"></div>
-                <div id="workedLoop"></div>
+                <section class="ds-first-fold">
+                    <div class="ds-boot-state" id="bootState"></div>
+                    <div class="ds-stats" id="statsBar"></div>
+                    <div id="discoveryShellBand"></div>
+                    <div class="ds-cat-bar" id="catBar"></div>
+                    <div class="ds-first-meta">
+                        <div id="frameworkGuide"></div>
+                        <div id="workedLoop"></div>
+                    </div>
+                </section>
                 <div id="mainContent"></div>
             </div>
         </main>

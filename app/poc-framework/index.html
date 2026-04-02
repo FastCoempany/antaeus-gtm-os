@@ -31,7 +31,7 @@
         
         .callout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg); }
         @media (max-width: 900px) { .callout-grid { grid-template-columns: 1fr; } }
-        
+
         .poc-bridge{background:linear-gradient(180deg,rgba(212,165,116,0.08),rgba(212,165,116,0.02));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-lg);}
         .poc-bridge-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
         .poc-bridge-k{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.9px;color:var(--brand-gold);font-weight:700;}
@@ -108,9 +108,14 @@
         .proof-chip.ready{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);color:#22c55e;}
         .proof-chip.workable{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.2);color:#f59e0b;}
         .proof-chip.thin{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2);color:#ef4444;}
+        .poc-first-fold{margin-bottom:var(--space-lg);}
+        .poc-builder-top{display:grid;gap:var(--space-md);margin-bottom:var(--space-lg);}
+        .poc-builder-top .builder-section{margin-bottom:0;}
+        .poc-builder-top .builder-section:first-child{background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);border-color:rgba(255,255,255,0.06);}
+        .poc-builder-top .builder-section:last-child{background:linear-gradient(180deg, rgba(17,22,38,0.98) 0%, rgba(14,20,35,1) 100%);border-color:rgba(255,255,255,0.06);}
     </style>
 </head>
-<body>
+<body class="room-wave2 room-poc-framework">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -133,96 +138,100 @@
             </header>
             
             <div class="app-content">
-                <div id="pocBootState"></div>
-                <div id="pocBridge"></div>
+                <section class="poc-first-fold">
+                    <div id="pocBootState"></div>
+                    <div id="pocBridge"></div>
+                </section>
                 <div class="studio-layout">
                     <div class="builder-content">
-                        <!-- What This Produces / Rules / What Breaks -->
-                        <div class="builder-section">
-                            <div class="callout-grid">
-                                <div class="callout callout-green">
-                                    <div class="callout-title">What this produces</div>
-                                    <ul>
-                                        <li><strong>Scoped hypothesis</strong> to test</li>
-                                        <li><strong>Success criteria</strong> defined upfront</li>
-                                        <li><strong>Boundaries</strong> that prevent scope creep</li>
-                                    </ul>
-                                </div>
-                                <div class="callout callout-amber">
-                                    <div class="callout-title">The rules</div>
-                                    <ul>
-                                        <li><strong>7-14 days max</strong> - no endless trials</li>
-                                        <li><strong>Written success criteria</strong> before kickoff</li>
-                                        <li><strong>Executive sponsor</strong> at readout</li>
-                                    </ul>
-                                </div>
-                                <div class="callout callout-red">
-                                    <div class="callout-title">What breaks PoCs</div>
-                                    <ul>
-                                        <li>No hypothesis - just "try it"</li>
-                                        <li>Success criteria written after</li>
-                                        <li>No decision maker at readout</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Inputs -->
-                        <div class="builder-section">
-                            <div class="section-header">
-                                <span class="section-icon">Inputs</span>
-                                <div>
-                                    <div class="section-title">PoC Inputs</div>
-                                    <div class="section-subtitle">Define the test parameters.</div>
-                                </div>
-                            </div>
-                            
-                            <div class="input-grid">
-                                <div class="input-group">
-                                    <label>Your Company / Product</label>
-                                    <input type="text" id="in_vendor" placeholder="e.g., Acme Analytics" oninput="generatePoC()">
-                                </div>
-                                <div class="input-group">
-                                    <label>Prospect Company</label>
-                                    <input type="text" id="in_account" placeholder="e.g., Globex" oninput="generatePoC()">
-                                </div>
-                                <div class="input-group">
-                                    <label>PoC Duration</label>
-                                    <div class="duration-btns">
-                                        <button class="dur-btn active" id="dur7" onclick="setDuration(7)">7 days</button>
-                                        <button class="dur-btn" id="dur14" onclick="setDuration(14)">14 days</button>
+                        <section class="poc-builder-top">
+                            <!-- What This Produces / Rules / What Breaks -->
+                            <div class="builder-section">
+                                <div class="callout-grid">
+                                    <div class="callout callout-green">
+                                        <div class="callout-title">What this produces</div>
+                                        <ul>
+                                            <li><strong>Scoped hypothesis</strong> to test</li>
+                                            <li><strong>Success criteria</strong> defined upfront</li>
+                                            <li><strong>Boundaries</strong> that prevent scope creep</li>
+                                        </ul>
+                                    </div>
+                                    <div class="callout callout-amber">
+                                        <div class="callout-title">The rules</div>
+                                        <ul>
+                                            <li><strong>7-14 days max</strong> - no endless trials</li>
+                                            <li><strong>Written success criteria</strong> before kickoff</li>
+                                            <li><strong>Executive sponsor</strong> at readout</li>
+                                        </ul>
+                                    </div>
+                                    <div class="callout callout-red">
+                                        <div class="callout-title">What breaks PoCs</div>
+                                        <ul>
+                                            <li>No hypothesis - just "try it"</li>
+                                            <li>Success criteria written after</li>
+                                            <li>No decision maker at readout</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                            <div class="input-grid input-grid-2">
-                                <div class="input-group">
-                                    <label>Linked Deal (optional)</label>
-                                    <select id="in_linked_deal" onchange="onLinkedDealChange()">
-                                        <option value="">No linked deal</option>
-                                    </select>
-                                </div>
-                                <div class="input-group">
-                                    <label>Readout Owner</label>
-                                    <input type="text" id="in_readout_owner" placeholder="e.g., VP Sales + Economic Buyer" oninput="generatePoC()">
-                                </div>
-                            </div>
                             
-                            <div class="output-grid" style="margin-top: var(--space-md);">
-                                <div class="input-group">
-                                    <label>Success Criteria (edit)</label>
-                                    <textarea id="in_success" oninput="generatePoC()">1) Customer can validate the output in <2 minutes
+                            <!-- Inputs -->
+                            <div class="builder-section">
+                                <div class="section-header">
+                                    <span class="section-icon">Inputs</span>
+                                    <div>
+                                        <div class="section-title">PoC Inputs</div>
+                                        <div class="section-subtitle">Define the test parameters.</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="input-grid">
+                                    <div class="input-group">
+                                        <label>Your Company / Product</label>
+                                        <input type="text" id="in_vendor" placeholder="e.g., Acme Analytics" oninput="generatePoC()">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Prospect Company</label>
+                                        <input type="text" id="in_account" placeholder="e.g., Globex" oninput="generatePoC()">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>PoC Duration</label>
+                                        <div class="duration-btns">
+                                            <button class="dur-btn active" id="dur7" onclick="setDuration(7)">7 days</button>
+                                            <button class="dur-btn" id="dur14" onclick="setDuration(14)">14 days</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-grid input-grid-2">
+                                    <div class="input-group">
+                                        <label>Linked Deal (optional)</label>
+                                        <select id="in_linked_deal" onchange="onLinkedDealChange()">
+                                            <option value="">No linked deal</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Readout Owner</label>
+                                        <input type="text" id="in_readout_owner" placeholder="e.g., VP Sales + Economic Buyer" oninput="generatePoC()">
+                                    </div>
+                                </div>
+                                
+                                <div class="output-grid" style="margin-top: var(--space-md);">
+                                    <div class="input-group">
+                                        <label>Success Criteria (edit)</label>
+                                        <textarea id="in_success" oninput="generatePoC()">1) Customer can validate the output in <2 minutes
 2) We reduce manual steps by ~30% for the selected workflow
 3) Security/IT agrees the approach is acceptable for production</textarea>
-                                </div>
-                                <div class="input-group">
-                                    <label>Scope Boundaries (what we won't do)</label>
-                                    <textarea id="in_boundaries" oninput="generatePoC()">- No custom integration build during PoC
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Scope Boundaries (what we won't do)</label>
+                                        <textarea id="in_boundaries" oninput="generatePoC()">- No custom integration build during PoC
 - No full production deployment
 - No expansion to additional business units without a signed plan</textarea>
+                                    </div>
                                 </div>
+                                <div id="pocQuality" class="poc-quality"></div>
                             </div>
-                            <div id="pocQuality" class="poc-quality"></div>
-                        </div>
+                        </section>
                         
                         <!-- PoC Outputs -->
                         <div class="builder-section">
