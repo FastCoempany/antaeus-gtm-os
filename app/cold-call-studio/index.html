@@ -101,6 +101,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .dial-btn:hover{background:#daa830;transform:translateY(-1px);box-shadow:0 4px 16px rgba(201,154,46,0.25);}
 .dial-btn.sec{background:var(--surface3);color:var(--text);border:1px solid var(--border-light);}
 .dial-btn.sec:hover{background:var(--border);box-shadow:none;}
+.cold-first-fold{padding:0 0 16px;border-bottom:1px solid rgba(255,255,255,0.05);background:linear-gradient(180deg,rgba(15,19,28,0.72) 0%,rgba(10,13,20,0.24) 100%);}
+.cold-first-fold .topbar{position:sticky;top:var(--cold-call-shell-offset,0px);border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(7,8,10,0.88);}
+.cold-first-fold .cold-shell-band{padding-top:16px;border-bottom:none;}
 /* VM */
 .vm-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px;}
 /* Postcard */
@@ -134,7 +137,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
     </style>
 </head>
-<body>
+<body class="room-wave2 room-cold-call-studio">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -154,6 +157,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <p class="page-subtitle">Move from pre-call prep to live-call execution and post-call logging without losing the thread.</p>
     </div>
 </header>
+<section class="cold-first-fold">
 <div class="topbar">
     <div class="topbar-left">
         <div class="topbar-ctx" id="topCtx">Select an account to begin</div>
@@ -164,6 +168,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
 </div>
 <div class="cold-shell-band" id="coldCallShellBand"></div>
+</section>
 <div class="app">
     <div class="main" id="mainArea"></div>
     <div class="side" id="sideArea"></div>

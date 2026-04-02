@@ -79,11 +79,16 @@
         .fa-empty a{color:var(--brand-gold);}
         .fa-toast{position:fixed;right:16px;bottom:16px;background:#1f1a14;color:#fff;padding:10px 14px;border-radius:var(--radius-md);font-size:0.82rem;font-weight:600;opacity:0;transform:translateY(6px);transition:0.25s;pointer-events:none;z-index:9999;}
         .fa-toast.show{opacity:1;transform:none;}
+        .fa-first-fold{margin-bottom:var(--space-lg);padding:18px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
+        .fa-first-fold #futureAutopsyBootState{margin-bottom:14px;}
+        .fa-first-fold #futureAutopsyReturnBridge{margin-bottom:14px;}
+        .fa-first-fold .fa-hero{margin-bottom:14px;}
+        .fa-first-fold .fa-picker{margin-bottom:0;}
         @media(max-width:960px){.fa-bridge-grid,.fa-example-row,.fa-action-grid{grid-template-columns:1fr 1fr;}}
-        @media(max-width:800px){.fa-grid,.fa-bridge-grid,.fa-example-row,.fa-action-grid{grid-template-columns:1fr;}.fa-picker{flex-direction:column;}}
+        @media(max-width:800px){.fa-grid,.fa-bridge-grid,.fa-example-row,.fa-action-grid{grid-template-columns:1fr;}.fa-picker{flex-direction:column;}.fa-first-fold{padding:14px;}}
     </style>
 </head>
-<body>
+<body class="room-wave2 room-future-autopsy">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
@@ -93,10 +98,18 @@
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header">
-                <h1 class="page-title">Future Autopsy</h1>
+            <header class="app-header module-header">
+                <div class="module-header-title">
+                    <div class="shell-header-meta">
+                        <span class="shell-header-kicker">Deal family</span>
+                        <span class="shell-header-state state-risk">Honest failure mode</span>
+                    </div>
+                    <h1 class="page-title">Future Autopsy</h1>
+                    <p class="page-subtitle">Find the failure pattern that is already visible in the deal before optimism turns into avoidable slippage.</p>
+                </div>
             </header>
             <div class="app-content" style="max-width:860px;">
+                <section class="fa-first-fold">
                 <div id="futureAutopsyBootState"></div>
                 <div id="futureAutopsyReturnBridge"></div>
                 <div class="fa-hero">
@@ -111,6 +124,7 @@
                     <button class="fa-btn" onclick="autopsyOfDay()">Autopsy of the Day</button>
                     <button class="fa-btn" onclick="copyAutopsy()">&#128203; Copy</button>
                 </div>
+                </section>
                 <div id="autopsyContent"></div>
             </div>
         </main>
