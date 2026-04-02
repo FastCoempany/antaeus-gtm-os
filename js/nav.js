@@ -179,12 +179,12 @@
 
 
     var NAV_HTML = '' +
-    '<div class="sidebar-header"><div class="sidebar-header-inner"><a href="/app/dashboard/" class="sidebar-logo">ANTAEUS</a><div class="sidebar-workspace-strip"><div class="sidebar-workspace-label" id="sidebarWorkspaceContext">Workspace</div><div class="sidebar-workspace-state" id="sidebarWorkspaceState">Activation in progress</div></div><div class="sidebar-command-primer"><div class="sidebar-command-primer-kicker">Command stack</div><div class="sidebar-command-primer-copy">Start in Spotlight. Use rooms only when you know the next room.</div><div class="sidebar-command-primer-actions"><a href="/app/dashboard/?mode=spotlight" class="sidebar-command-link" data-nav-command="spotlight">Open Spotlight</a><a href="/app/welcome/" class="sidebar-command-link" data-nav-command="welcome">Week One</a></div></div></div></div>' +
+    '<div class="sidebar-header"><div class="sidebar-header-inner"><a href="/app/dashboard/?mode=spotlight" class="sidebar-logo">ANTAEUS</a><div class="sidebar-workspace-strip"><div class="sidebar-workspace-label" id="sidebarWorkspaceContext">Workspace</div><div class="sidebar-workspace-state" id="sidebarWorkspaceState">Activation in progress</div></div><div class="sidebar-command-primer"><div class="sidebar-command-primer-kicker">Command stack</div><div class="sidebar-command-primer-copy">Start in Spotlight. Use rooms only when you know the next room.</div><div class="sidebar-command-primer-actions"><a href="/app/dashboard/?mode=spotlight" class="sidebar-command-link" data-nav-command="spotlight">Open Spotlight</a><a href="/app/welcome/" class="sidebar-command-link" data-nav-command="welcome">Week One</a></div></div></div></div>' +
     '<div class="sidebar-nav-role">Room rail</div>' +
     '<nav class="sidebar-nav">' +
         '<div class="nav-section">' +
             '<div class="nav-section-title nav-section-title-lg">Home</div>' +
-            '<a href="/app/dashboard/" class="nav-item" data-nav="dashboard"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z\"/></svg></span><span class="nav-label">Dashboard</span><span class="nav-dot"></span></a>' +
+            '<a href="/app/dashboard/?mode=spotlight" class="nav-item" data-nav="dashboard"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z\"/></svg></span><span class="nav-label">Dashboard</span><span class="nav-dot"></span></a>' +
         '</div>' +
         '<div class="nav-section">' +
             '<div class="nav-section-title nav-section-title-lg">Intelligence</div>' +
@@ -1041,7 +1041,7 @@
                         if (window.gtmDataManager && typeof window.gtmDataManager.clearDemoWorkspace === 'function') {
                             await window.gtmDataManager.clearDemoWorkspace({
                                 redirect: true,
-                                redirectUrl: '/app/dashboard/'
+                                redirectUrl: '/app/dashboard/?mode=spotlight'
                             });
                             return;
                         }
@@ -1049,7 +1049,7 @@
                         console.error('Demo exit from nav failed:', error);
                     }
                     try { sessionStorage.setItem('gtmos_env_mode', 'prod'); } catch (e) {}
-                    window.location.href = '/app/dashboard/';
+                    window.location.href = '/app/dashboard/?mode=spotlight';
                 };
                 footer.insertBefore(exitDemoBtn, pricingBtn.nextSibling);
             } else if (currentPath.indexOf('/app/welcome') === -1) {

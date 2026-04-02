@@ -556,7 +556,7 @@
                     actions: [
                         { href: '/app/signal-console/', label: 'Save first account' },
                         { href: '/app/territory-architect/', label: 'Shape territory' },
-                        { href: '/app/dashboard/', label: 'Retry dashboard' }
+                        { href: '/app/dashboard/?mode=spotlight', label: 'Retry dashboard' }
                     ]
                 };
             }
@@ -785,7 +785,7 @@
                         move.dealId
                             ? { href: '/app/deal-workspace/?deal=' + encodeURIComponent(move.dealId), label: move.dealName || 'Open Deal' }
                             : (firstStageAction ? { href: firstStageAction.href, label: firstStageAction.label } : null),
-                        { href: '/app/dashboard/', label: 'Stay in Command View', tone: 'btn-secondary' }
+                        { href: '/app/dashboard/?mode=spotlight', label: 'Stay in Command View', tone: 'btn-secondary' }
                     ].filter(Boolean),
                     tags: [stage.stageBadge, 'command move']
                 };
@@ -859,7 +859,7 @@
                     meta: dependencyWarnings.length ? ['local fallback', dependencyWarnings.length + ' sync warning' + (dependencyWarnings.length === 1 ? '' : 's')] : ['backup', 'settings'],
                     actions: [
                         { href: '/app/settings/', label: 'Open Settings', tone: 'btn-secondary' },
-                        { href: '/app/dashboard/', label: 'Refresh view', tone: 'btn-secondary' }
+                        { href: '/app/dashboard/?mode=spotlight', label: 'Refresh view', tone: 'btn-secondary' }
                     ]
                 }
             ];
