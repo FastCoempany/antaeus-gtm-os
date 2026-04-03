@@ -152,22 +152,66 @@
         );
     }
 
+    function buildPinnedContinuationCopy(slug, context) {
+        var focus = context && context.focusObject ? context.focusObject : 'this object';
+        switch (slug) {
+            case 'future-autopsy':
+                return 'This room is the right continuation because it turns the visible risk around ' + focus + ' into a named failure pattern and a corrective move.';
+            case 'deal-workspace':
+                return 'This room is the right continuation because live deal truth, recovery, and the next step all stay attached to ' + focus + ' here.';
+            case 'signal-console':
+                return 'This room is the right continuation because the next move depends on live signal evidence around ' + focus + ', not memory.';
+            case 'outbound-studio':
+                return 'This room is the right continuation because ' + focus + ' now needs a concrete outbound move, not another abstract note.';
+            case 'cold-call-studio':
+                return 'This room is the right continuation because the fastest next move for ' + focus + ' is a real call path with live objections and callbacks.';
+            case 'discovery-agenda':
+            case 'discovery-studio':
+                return 'This room is the right continuation because ' + focus + ' needs sharper discovery and call structure before the next step is believable.';
+            case 'poc-framework':
+                return 'This room is the right continuation because ' + focus + ' needs explicit proof criteria and a readout owner before the work can compound.';
+            case 'advisor-deploy':
+                return 'This room is the right continuation because advisor leverage should only be used where ' + focus + ' has truly earned it.';
+            case 'icp-studio':
+                return 'This room is the right continuation because targeting truth is still upstream of how ' + focus + ' gets worked elsewhere.';
+            case 'territory-architect':
+            case 'sourcing-workbench':
+            case 'linkedin-playbook':
+                return 'This room is the right continuation because ' + focus + ' needs market selection and prospecting structure before the next move scales.';
+            case 'quota-workback':
+            case 'readiness':
+            case 'founding-gtm':
+            case 'settings':
+                return 'This room is the right continuation because the system state around ' + focus + ' needs a clearer operating frame before more execution.';
+            default:
+                return 'This room is the right continuation because the command stack chose it as the next place where ' + focus + ' can move forward without losing context.';
+        }
+    }
+
     function renderPinnedObject(context) {
         if (!context || !context.focusObject) return '';
+        var currentSlug = slugFromPath();
+        var mapped = FAMILY_MAP[currentSlug] || {};
         var roomLabel = context.focusRoom || 'This room';
         var sourceCopy = context.fromMode
             ? 'Pinned from ' + formatModeLabel(context.fromMode) + '.'
             : 'Pinned from the command stack.';
+        var continuationCopy = buildPinnedContinuationCopy(currentSlug, context);
         return (
             '<div class="shell-pinned-object">' +
                 '<div class="shell-pinned-object-copy">' +
                     '<div class="shell-pinned-object-kicker">Pinned object</div>' +
                     '<div class="shell-pinned-object-title">' + escapeHtml(context.focusObject) + '</div>' +
                     '<div class="shell-pinned-object-subcopy">' + escapeHtml(roomLabel) + ' is still operating on this object. ' + escapeHtml(sourceCopy) + '</div>' +
+                    '<div class="shell-pinned-object-why">' +
+                        '<div class="shell-pinned-object-why-label">Why this room</div>' +
+                        '<div class="shell-pinned-object-why-copy">' + escapeHtml(continuationCopy) + '</div>' +
+                    '</div>' +
                 '</div>' +
                 '<div class="shell-pinned-object-meta">' +
                     (context.focusRoom ? '<span class="shell-pinned-object-pill">' + escapeHtml(context.focusRoom) + '</span>' : '') +
                     (context.fromMode ? '<span class="shell-pinned-object-pill">From ' + escapeHtml(formatModeLabel(context.fromMode)) + '</span>' : '') +
+                    (mapped.label ? '<span class="shell-pinned-object-pill">In ' + escapeHtml(mapped.label) + '</span>' : '') +
                 '</div>' +
             '</div>'
         );
