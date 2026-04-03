@@ -67,11 +67,6 @@
         .welcome-check-num{width:28px;height:28px;border-radius:50%;background:rgba(45,212,191,0.1);color:var(--brand-teal-light);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;flex-shrink:0}
         .welcome-check-copy{font-size:.84rem;color:var(--text-tertiary);line-height:1.6}
         .welcome-check-copy strong{display:block;color:var(--text-primary);font-size:.9rem;margin-bottom:2px}
-        .welcome-resource-list{display:grid;gap:10px}
-        .welcome-resource{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px;border-radius:14px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.72)}
-        .welcome-resource h4{font-family:var(--font-sans);font-size:.92rem;font-weight:700;margin-bottom:4px}
-        .welcome-resource p{margin:0;color:var(--text-muted);font-size:.8rem;line-height:1.55}
-        .welcome-resource a{white-space:nowrap}
         .welcome-state-note{margin-top:10px;font-size:.78rem;color:var(--text-muted)}
         .welcome-shell-note{font-size:.78rem;color:var(--text-muted);line-height:1.6}
         .welcome-sync{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#86efac;margin-top:18px}
@@ -437,7 +432,7 @@
             return '<div class="anchor-primary-card">' +
                 '<div class="anchor-primary-label">Now</div>' +
                 '<div class="anchor-primary-title">' + esc(primaryAction.title || 'Continue into the workspace') + '</div>' +
-                '<div class="anchor-primary-copy">' + esc(primaryAction.why || primaryAction.body || activation.body) + ' ' + esc(focusSummary) + '</div>' +
+                '<div class="anchor-primary-copy">' + esc(primaryAction.why || primaryAction.body || activation.body) + '</div>' +
                 (primaryAction.meta && primaryAction.meta.length ? '<div class="anchor-lane-meta">' + primaryAction.meta.map(function(item){ return '<span>' + esc(item) + '</span>'; }).join('') + '</div>' : '') +
                 '<div class="anchor-primary-actions">' +
                     '<a href="' + esc(primaryAction.href || DASHBOARD_ENTRY_HREF) + '" class="btn btn-primary" onclick="completeWelcome(\'' + esc(primaryAction.href || DASHBOARD_ENTRY_HREF).replace(/&#39;/g, "'") + '\');return false;">' + esc(primaryAction.cta || 'Continue to workspace') + '</a>' +
@@ -466,12 +461,13 @@
                 },
                 {
                     state: lifecycle && lifecycle.active ? 'Week 1' : 'Keep honest',
-                    title: lifecycle && lifecycle.active ? lifecycle.guidance.headline : 'Come back here whenever the next move gets muddy.',
-                    copy: lifecycle && lifecycle.active ? lifecycle.guidance.body : 'Welcome should stay useful as a reset surface, not disappear after the first click.',
-                    meta: lifecycle && lifecycle.active ? ['day ' + lifecycle.dayNumber, lifecycle.completed + '/' + lifecycle.total + ' live'] : ['reset path', 'revisit welcome'],
+                    title: lifecycle && lifecycle.active ? 'Return through Spotlight after each real move.' : 'Use Welcome as a reset, then re-enter through Spotlight.',
+                    copy: lifecycle && lifecycle.active
+                        ? 'Week 1 stays useful only if you keep returning through command instead of browsing rooms from memory.'
+                        : 'Welcome should stay useful as a reset surface, but the fastest way back into work is still Spotlight.',
+                    meta: lifecycle && lifecycle.active ? ['day ' + lifecycle.dayNumber, lifecycle.completed + '/' + lifecycle.total + ' live'] : ['command re-entry', 'reset path'],
                     actions: [
-                        { href: '/app/settings/', label: 'Backup + settings', tone: 'btn-secondary' },
-                        { href: '/demo-seed.html', label: 'Open demo lane', tone: 'btn-secondary' }
+                        { href: DASHBOARD_ENTRY_HREF, label: 'Open Spotlight', tone: 'btn-secondary' }
                     ]
                 }
             ];
@@ -512,18 +508,18 @@
                 return '<section class="shell-rail-card">' +
                     '<div class="shell-rail-kicker">Revisit welcome</div>' +
                     '<div class="shell-rail-title">Reopen this page when the app feels thin</div>' +
-                    '<div class="shell-rail-copy">Welcome is not a one-time page. Use it again when the next move feels muddy, the workspace feels hollow, or you want the operating story in one place.</div>' +
+                    '<div class="shell-rail-copy">Use Welcome again when the next move feels muddy or the workspace feels hollow.</div>' +
                     '<div class="welcome-checklist">' +
                         '<div class="welcome-check"><div class="welcome-check-num">1</div><div class="welcome-check-copy"><strong>Use it as a reset.</strong> Come back here whenever you want the shortest path to the next useful action.</div></div>' +
-                        '<div class="welcome-check"><div class="welcome-check-num">2</div><div class="welcome-check-copy"><strong>Use the sidebar return path.</strong> The welcome guide stays available from the shell even after you move into the rest of the app.</div></div>' +
-                        '<div class="welcome-check"><div class="welcome-check-num">3</div><div class="welcome-check-copy"><strong>Use support surfaces deliberately.</strong> Methodology, demo lane, and settings are here to orient or recover you, not to replace real work.</div></div>' +
+                        '<div class="welcome-check"><div class="welcome-check-num">2</div><div class="welcome-check-copy"><strong>Re-enter through command.</strong> Use Spotlight or Week One before opening the room rail.</div></div>' +
+                        '<div class="welcome-check"><div class="welcome-check-num">3</div><div class="welcome-check-copy"><strong>Use support surfaces deliberately.</strong> Utilities are for recovery, not for replacing real work.</div></div>' +
                     '</div>' +
                 '</section>';
             }
             return '<section class="shell-rail-card">' +
                 '<div class="shell-rail-kicker">Week 1</div>' +
                 '<div class="shell-rail-title">First-week operating rhythm</div>' +
-                '<div class="shell-rail-copy">This is the handoff from signup into actual usage. The app should start teaching you a repeatable rhythm before the first week ends.</div>' +
+                '<div class="shell-rail-copy">Use Week One to turn setup into a repeatable rhythm before the first week ends.</div>' +
                 '<div class="welcome-lifecycle">' +
                     '<div class="welcome-lifecycle-top">' +
                         '<div><div class="welcome-lifecycle-kicker">Week 1 · Day ' + esc(lifecycle.dayNumber) + '</div><div class="welcome-lifecycle-title">' + esc(lifecycle.guidance.headline) + '</div><div class="welcome-lifecycle-copy">' + esc(lifecycle.guidance.body) + '</div></div>' +
@@ -612,8 +608,6 @@
                 var heroChips = buildHeroChips(activationContext, role, counts, lifecycle);
                 var focusSummary = buildWorkspaceFocus(summary, activationContext, role, counts);
                 var primaryAction = actions[0] || actionSpec('dashboard', 'Continue into Spotlight', 'The workspace is already anchored enough to use the command stack.', DASHBOARD_ENTRY_HREF, 'Continue to Spotlight', ['command stack'], '', '');
-                var heroPrimaryHref = primaryAction.href || DASHBOARD_ENTRY_HREF;
-                var heroPrimaryLabel = primaryAction.cta || 'Continue to Spotlight';
                 var backupNote = backup && backup.hasExport ? 'Offline backup exists.' : 'No offline backup exported yet.';
                 renderWelcomeShellChrome(activation, primaryAction, lifecycle, counts, role, focusSummary);
 
@@ -629,7 +623,7 @@
                                         '<div class="anchor-support">' + esc(activation.body) + ' ' + esc(focusSummary) + '</div>' +
                                         '<div class="anchor-chip-row">' + heroChips.map(function(item){ return '<div class="anchor-chip">' + esc(item) + '</div>'; }).join('') + '</div>' +
                                         renderWelcomePrimaryCard(primaryAction, activation, focusSummary) +
-                                        '<div class="welcome-shell-note">Signed in as ' + esc(role) + '. Workspace owner: ' + esc(displayName) + '. Source: ' + esc(summary && summary.source ? summary.source : 'unknown') + (summary && summary.errors && summary.errors.length ? ' · some modules fell back to cache while loading.' : '') + ' ' + esc(backupNote) + '</div>' +
+                                        '<div class="welcome-shell-note">Signed in as ' + esc(role) + '. Workspace owner: ' + esc(displayName) + '. ' + (summary && summary.errors && summary.errors.length ? 'Some modules fell back to cache while loading. ' : '') + esc(backupNote) + '</div>' +
                                     '</div>' +
                                     '<div class="anchor-mini-grid">' + statCards.map(function(card){
                                         return '<div class="anchor-mini-card"><div class="anchor-mini-label">' + esc(card.label) + '</div><div class="anchor-mini-value">' + esc(card.value) + '</div><div class="anchor-mini-copy">' + esc(card.sub) + '</div></div>';
@@ -637,13 +631,13 @@
                                 '</div>' +
                             '</section>' +
                             '<section class="shell-section shell-section--subtle">' +
-                                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">How to make the workspace real now</div><div class="shell-section-copy">Welcome should collapse the first week into one immediate move, one follow-through move, and one thing to keep honest.</div></div></div>' +
+                                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">How to make the workspace real now</div><div class="shell-section-copy">One immediate move, one follow-through move, one thing to keep honest.</div></div></div>' +
                                 '<div class="anchor-lane-grid">' + activationLanes.map(function(lane){
                                     return '<div class="anchor-lane"><div class="anchor-lane-state">' + esc(lane.state) + '</div><div class="anchor-lane-title">' + esc(lane.title) + '</div><div class="anchor-lane-copy">' + esc(lane.copy) + '</div><div class="anchor-lane-meta">' + (lane.meta || []).map(function(item){ return '<span>' + esc(item) + '</span>'; }).join('') + '</div><div class="anchor-lane-actions">' + (lane.actions || []).map(function(action){ return '<a href="' + esc(action.href) + '" class="btn ' + (action.tone || 'btn-secondary') + '" onclick="completeWelcome(\'' + esc(action.href).replace(/&#39;/g, "'") + '\');return false;">' + esc(action.label) + '</a>'; }).join('') + '</div></div>';
                                 }).join('') + '</div>' +
                             '</section>' +
                             '<section class="shell-section shell-section--subtle">' +
-                                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Action queue</div><div class="shell-section-title">Do these in order</div><div class="shell-section-copy">Each action should reduce ambiguity for the next module instead of generating more setup work.</div></div></div>' +
+                                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Action queue</div><div class="shell-section-title">Do these in order</div><div class="shell-section-copy">Each action should reduce ambiguity for the next layer.</div></div></div>' +
                                 '<div class="anchor-queue">' + actions.map(renderWelcomeQueueCard).join('') + '</div>' +
                             '</section>' +
                         '</div>' +
@@ -652,19 +646,8 @@
                             '<section class="shell-rail-card">' +
                                 '<div class="shell-rail-kicker">Activation map</div>' +
                                 '<div class="shell-rail-title">How the workspace becomes real</div>' +
-                                '<div class="shell-rail-copy">These states are computed from what the app has actually saved so far.</div>' +
+                                '<div class="shell-rail-copy">These states come from what the app has actually saved so far.</div>' +
                                 '<div class="welcome-milestones">' + activation.milestones.map(function(item, index){ return milestoneCard(item, index, activation); }).join('') + '</div>' +
-                            '</section>' +
-                            '<section class="shell-rail-card">' +
-                                '<div class="shell-rail-kicker">Recovery paths</div>' +
-                                '<div class="shell-rail-title">If you need help or a reset</div>' +
-                                '<div class="shell-rail-copy">Use these when you want the product story, a safe sample workspace, or a recovery path. They support the operating loop without replacing it.</div>' +
-                                '<div class="welcome-resource-list">' +
-                                    '<div class="welcome-resource"><div><h4>Methodology hub</h4><p>Public pages that explain the system in plain English.</p></div><a class="welcome-mini-link" href="/methodology/" onclick="completeWelcome(\'/methodology/\');return false;">Open</a></div>' +
-                                    '<div class="welcome-resource"><div><h4>Demo lane</h4><p>Load sample data if you want to see a fully populated workspace before building yours.</p></div><a class="welcome-mini-link" href="/demo-seed.html" onclick="completeWelcome(\'/demo-seed.html\');return false;">Explore</a></div>' +
-                                    '<div class="welcome-resource"><div><h4>Settings and backup</h4><p>Export an offline copy of your workspace or restore a prior backup.</p></div><a class="welcome-mini-link" href="/app/settings/" onclick="completeWelcome(\'/app/settings/\');return false;">Open</a></div>' +
-                                '</div>' +
-                                '<div class="welcome-state-note">Use this page again whenever the next move feels unclear. The return path stays available from the sidebar.</div>' +
                             '</section>' +
                         '</aside>' +
                     '</div>';

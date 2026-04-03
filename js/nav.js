@@ -179,48 +179,53 @@
 
 
     var NAV_HTML = '' +
-    '<div class="sidebar-header"><div class="sidebar-header-inner"><a href="/app/dashboard/?mode=spotlight" class="sidebar-logo">ANTAEUS</a><div class="sidebar-workspace-strip"><div class="sidebar-workspace-label" id="sidebarWorkspaceContext">Workspace</div><div class="sidebar-workspace-state" id="sidebarWorkspaceState">Activation in progress</div></div><div class="sidebar-command-primer"><div class="sidebar-command-primer-kicker">Command stack</div><div class="sidebar-command-primer-copy">Start in Spotlight. Use rooms only when you know the next room.</div><div class="sidebar-command-primer-actions"><a href="/app/dashboard/?mode=spotlight" class="sidebar-command-link" data-nav-command="spotlight">Open Spotlight</a><a href="/app/welcome/" class="sidebar-command-link" data-nav-command="welcome">Week One</a></div></div></div></div>' +
+    '<div class="sidebar-header"><div class="sidebar-header-inner"><a href="/app/dashboard/?mode=spotlight" class="sidebar-logo">ANTAEUS</a><div class="sidebar-workspace-strip"><div class="sidebar-workspace-label" id="sidebarWorkspaceContext">Workspace</div><div class="sidebar-workspace-state" id="sidebarWorkspaceState">Activation in progress</div></div><div class="sidebar-command-primer"><div class="sidebar-command-primer-kicker">Command stack</div><div class="sidebar-command-primer-copy">Start in Spotlight. Use rooms only after command or the sheet earns the next room.</div><div class="sidebar-command-primer-actions"><a href="/app/dashboard/?mode=spotlight" class="sidebar-command-link" data-nav-command="spotlight">Open Spotlight</a><a href="/app/welcome/" class="sidebar-command-link" data-nav-command="welcome">Week One</a></div></div></div></div>' +
     '<div class="sidebar-nav-role">Room rail</div>' +
     '<nav class="sidebar-nav">' +
-        '<div class="nav-section">' +
-            '<div class="nav-section-title nav-section-title-lg">Home</div>' +
-            '<a href="/app/dashboard/?mode=spotlight" class="nav-item" data-nav="dashboard"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z\"/></svg></span><span class="nav-label">Dashboard</span><span class="nav-dot"></span></a>' +
-        '</div>' +
-        '<div class="nav-section">' +
-            '<div class="nav-section-title nav-section-title-lg">Intelligence</div>' +
+        '<div class="nav-family" data-nav-family="intelligence">' +
+            '<button class="nav-family-toggle" type="button" data-family-toggle="intelligence"><span class="nav-family-label">Intelligence</span><span class="nav-family-meta">4 rooms</span></button>' +
+            '<div class="nav-family-panel">' +
             '<a href="/app/signal-console/" class="nav-item" data-nav="signal-console"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 12h4l3-9 6 18 3-9h4\"/></svg></span><span class="nav-label">Signal Console</span><span class="nav-dot"></span></a>' +
             '<a href="/app/icp-studio/" class="nav-item" data-nav="icp-studio"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"6\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/></svg></span><span class="nav-label">ICP Studio</span><span class="nav-dot"></span></a>' +
-        '</div>' +
-        '<div class="nav-section">' +
-            '<div class="nav-section-title nav-section-title-lg">Territory</div>' +
             '<a href="/app/territory-architect/" class="nav-item" data-nav="territory-architect"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polygon points=\"12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2\"/><line x1=\"12\" y1=\"22\" x2=\"12\" y2=\"15.5\"/><polyline points=\"22 8.5 12 15.5 2 8.5\"/><polyline points=\"2 15.5 12 8.5 22 15.5\"/><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"8.5\"/></svg></span><span class="nav-label">Territory Architect</span><span class="nav-dot"></span></a>' +
             '<a href="/app/sourcing-workbench/" class="nav-item" data-nav="sourcing-workbench"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><line x1=\"21\" y1=\"21\" x2=\"16.65\" y2=\"16.65\"/><line x1=\"11\" y1=\"8\" x2=\"11\" y2=\"14\"/><line x1=\"8\" y1=\"11\" x2=\"14\" y2=\"11\"/></svg></span><span class="nav-label">Sourcing Workbench</span><span class="nav-dot"></span></a>' +
+            '</div>' +
         '</div>' +
-        '<div class="nav-section">' +
-            '<div class="nav-section-title nav-section-title-lg">Outbound</div>' +
+        '<div class="nav-family" data-nav-family="motion">' +
+            '<button class="nav-family-toggle" type="button" data-family-toggle="motion"><span class="nav-family-label">Motion</span><span class="nav-family-meta">3 rooms</span></button>' +
+            '<div class="nav-family-panel">' +
             '<a href="/app/outbound-studio/" class="nav-item" data-nav="outbound-studio"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"22\" y1=\"2\" x2=\"11\" y2=\"13\"/><polygon points=\"22 2 15 22 11 13 2 9 22 2\"/></svg></span><span class="nav-label">Outbound Studio</span><span class="nav-dot"></span></a>' +
             '<a href="/app/linkedin-playbook/" class="nav-item" data-nav="linkedin-playbook"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z\"/><rect x=\"2\" y=\"9\" width=\"4\" height=\"12\"/><circle cx=\"4\" cy=\"4\" r=\"2\"/></svg></span><span class="nav-label">LinkedIn Playbook</span><span class="nav-dot"></span></a>' +
-        '</div>' +
-        '<div class="nav-section">' +
-            '<div class="nav-section-title nav-section-title-lg">Calls</div>' +
             '<a href="/app/cold-call-studio/" class="nav-item" data-nav="cold-call-studio"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72\"/><path d=\"M15 7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z\"/></svg></span><span class="nav-label">Cold Call Studio</span><span class="nav-dot"></span></a>' +
+            '</div>' +
+        '</div>' +
+        '<div class="nav-family" data-nav-family="calls">' +
+            '<button class="nav-family-toggle" type="button" data-family-toggle="calls"><span class="nav-family-label">Calls + Discovery</span><span class="nav-family-meta">2 rooms</span></button>' +
+            '<div class="nav-family-panel">' +
             '<a href="/app/discovery-agenda/" class="nav-item" data-nav="discovery-agenda"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z\"/></svg></span><span class="nav-label">Call Planner</span><span class="nav-dot"></span></a>' +
             '<a href="/app/discovery-studio/" class="nav-item" data-nav="discovery-studio"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><polygon points=\"16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76\"/></svg></span><span class="nav-label">Discovery Studio</span><span class="nav-dot"></span></a>' +
+            '</div>' +
         '</div>' +
-        '<div class="nav-section">' +
-            '<div class="nav-section-title nav-section-title-lg">Pipeline</div>' +
+        '<div class="nav-family" data-nav-family="pipeline">' +
+            '<button class="nav-family-toggle" type="button" data-family-toggle="pipeline"><span class="nav-family-label">Pipeline</span><span class="nav-family-meta">4 rooms</span></button>' +
+            '<div class="nav-family-panel">' +
             '<a href="/app/deal-workspace/" class="nav-item" data-nav="deal-workspace"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"7\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2\"/></svg></span><span class="nav-label">Deal Workspace</span><span class="nav-dot"></span></a>' +
             '<a href="/app/future-autopsy/" class="nav-item" data-nav="future-autopsy"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"8\" r=\"3\"/><line x1=\"11\" y1=\"11\" x2=\"11\" y2=\"17\"/><line x1=\"8\" y1=\"20\" x2=\"14\" y2=\"20\"/><line x1=\"11\" y1=\"17\" x2=\"11\" y2=\"20\"/><line x1=\"8\" y1=\"14\" x2=\"14\" y2=\"14\"/></svg></span><span class="nav-label">Future Autopsy</span><span class="nav-dot"></span></a>' +
             '<a href="/app/poc-framework/" class="nav-item" data-nav="poc-framework"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2\"/><path d=\"M8.5 2h7\"/></svg></span><span class="nav-label">PoC Framework</span><span class="nav-dot"></span></a>' +
             '<a href="/app/advisor-deploy/" class="nav-item" data-nav="advisor-deploy"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><path d=\"M23 21v-2a4 4 0 0 0-3-3.87\"/><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"/></svg></span><span class="nav-label">Advisor Deploy</span><span class="nav-dot"></span></a>' +
+            '</div>' +
         '</div>' +
-        '<div class="nav-section">' +
-            '<div class="nav-section-title nav-section-title-lg">System</div>' +
+        '<div class="nav-family" data-nav-family="system">' +
+            '<button class="nav-family-toggle" type="button" data-family-toggle="system"><span class="nav-family-label">System</span><span class="nav-family-meta">3 rooms</span></button>' +
+            '<div class="nav-family-panel">' +
             '<a href="/app/quota-workback/" class="nav-item" data-nav="quota-workback"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"/><line x1=\"8\" y1=\"6\" x2=\"16\" y2=\"6\"/><line x1=\"8\" y1=\"10\" x2=\"16\" y2=\"10\"/><line x1=\"8\" y1=\"14\" x2=\"16\" y2=\"14\"/><line x1=\"8\" y1=\"18\" x2=\"16\" y2=\"18\"/></svg></span><span class="nav-label">Quota Workback</span><span class="nav-dot"></span></a>' +
             '<a href="/app/founding-gtm/" class="nav-item" data-nav="founding-gtm"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z\"/><path d=\"M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z\"/></svg></span><span class="nav-label">Playbook</span><span class="nav-dot"></span></a>' +
             '<a href="/app/readiness/" class="nav-item" data-nav="readiness"><span class="nav-icon"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 12h-4l-3 9L9 3l-3 9H2\"/></svg></span><span class="nav-label">Readiness Score</span><span class="nav-dot"></span></a>' +
+            '</div>' +
         '</div>' +
     '</nav>' +
+    '<div class="sidebar-nav-role sidebar-nav-role--utility">Utilities</div>' +
+    '<div class="sidebar-utility-shell"><div class="sidebar-utility-list" id="sidebarUtilityList"><a href="/app/settings/" class="sidebar-utility-link" data-nav-utility="settings">Settings + Backup</a><a href="/methodology/" class="sidebar-utility-link" data-nav-utility="methodology">Methodology + Help</a></div></div>' +
     '<div class="sidebar-footer">' +
         '<div class="user-menu">' +
             '<div class="user-avatar" id="userAvatar">?</div>' +
@@ -231,7 +236,6 @@
         '</div>' +
         '<div class="sidebar-data-notice" id="sidebarDataNotice">Data is saved in this browser on this device.</div>' +
         '<div class="sidebar-footer-actions">' +
-            '<button class="sidebar-action-btn" id="settingsBtn" title="Settings"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"/></svg></button>' +
             '<button class="sidebar-action-btn" id="roleResetBtn" title="New Role Setup"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"23 4 23 10 17 10\"/><polyline points=\"1 20 1 14 7 14\"/><path d=\"M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15\"/></svg></button>' +
             '<button class="btn btn-ghost btn-sm" style="flex:1;" onclick="handleSignOut()">Sign Out</button>' +
         '</div>' +
@@ -361,6 +365,26 @@
     document.head.appendChild(navStyle);
 
 
+    var FAMILY_BY_NAV_KEY = {
+        'signal-console': 'intelligence',
+        'icp-studio': 'intelligence',
+        'territory-architect': 'intelligence',
+        'sourcing-workbench': 'intelligence',
+        'outbound-studio': 'motion',
+        'linkedin-playbook': 'motion',
+        'cold-call-studio': 'motion',
+        'discovery-agenda': 'calls',
+        'discovery-studio': 'calls',
+        'deal-workspace': 'pipeline',
+        'future-autopsy': 'pipeline',
+        'poc-framework': 'pipeline',
+        'advisor-deploy': 'pipeline',
+        'quota-workback': 'system',
+        'founding-gtm': 'system',
+        'readiness': 'system',
+        'settings': 'system'
+    };
+    var SIDEBAR_OPEN_FAMILY_KEY = 'gtmos_sidebar_open_family';
     var path = window.location.pathname.replace(/\/+$/, '');
     var segments = path.split('/').filter(Boolean);
     var appSlug = segments.length >= 2 ? segments[segments.length - 1] : '';
@@ -392,6 +416,8 @@
         var welcomeLink = sidebar.querySelector('[data-nav-command="welcome"]');
         if (spotlightLink && navKey === 'dashboard') spotlightLink.classList.add('is-active');
         if (welcomeLink && navKey === 'welcome') welcomeLink.classList.add('is-active');
+        var utilityActive = sidebar.querySelector('[data-nav-utility="' + navKey + '"]');
+        if (utilityActive) utilityActive.classList.add('is-active');
     }
     var sidebarDataNotice = sidebar && sidebar.querySelector('#sidebarDataNotice');
     if (sidebarDataNotice && window.gtmEnvironment && window.gtmEnvironment.isDemo) {
@@ -514,12 +540,12 @@
         var sidebarLogo = sidebar.querySelector('.sidebar-logo');
         if (sidebarLogo) {
             sidebarLogo.addEventListener('click', function() {
-                persistSidebarState(sidebar.querySelector('[data-nav="dashboard"]'));
+                persistSidebarState(sidebar.querySelector('[data-nav="' + navKey + '"]') || activeLink || contextLink || null);
             });
         }
         Array.prototype.slice.call(sidebar.querySelectorAll('.sidebar-command-link')).forEach(function(link){
             link.addEventListener('click', function(){
-                persistSidebarState(sidebar.querySelector('[data-nav="dashboard"]'));
+                persistSidebarState(activeLink || contextLink || null);
             });
         });
     }
@@ -1012,28 +1038,29 @@
     var footerEl = null;
     if (sidebar) {
         var footer = sidebar.querySelector('.sidebar-footer');
+        var utilityList = sidebar.querySelector('#sidebarUtilityList');
         footerEl = footer;
-        if (footer) {
+        if (utilityList) {
             var tourBtn = document.createElement('button');
-            tourBtn.className = 'nav-tour-glow';
+            tourBtn.className = 'sidebar-utility-link sidebar-utility-link--button';
             tourBtn.onclick = function() {
                 if (typeof TourGuide !== 'undefined' && typeof TourGuide.launch === 'function') TourGuide.launch();
                 else if (typeof TourGuide !== 'undefined') TourGuide.start();
             };
             tourBtn.textContent = 'Tour the App';
-            footer.insertBefore(tourBtn, footer.firstChild);
+            utilityList.appendChild(tourBtn);
             if (window.gtmEnvironment && window.gtmEnvironment.isDemo) {
                 var pricingBtn = document.createElement('button');
-                pricingBtn.className = 'nav-demo-chip';
+                pricingBtn.className = 'sidebar-utility-link sidebar-utility-link--button';
                 pricingBtn.textContent = 'See Annual Plan';
                 pricingBtn.onclick = function() {
                     persistSidebarState();
                     window.location.href = '/purchase/?entry=demo-sidebar';
                 };
-                footer.insertBefore(pricingBtn, tourBtn.nextSibling);
+                utilityList.appendChild(pricingBtn);
 
                 var exitDemoBtn = document.createElement('button');
-                exitDemoBtn.className = 'nav-demo-chip nav-demo-chip-secondary';
+                exitDemoBtn.className = 'sidebar-utility-link sidebar-utility-link--button sidebar-utility-link--danger';
                 exitDemoBtn.textContent = 'Exit Demo';
                 exitDemoBtn.onclick = async function() {
                     persistSidebarState();
@@ -1051,17 +1078,19 @@
                     try { sessionStorage.setItem('gtmos_env_mode', 'prod'); } catch (e) {}
                     window.location.href = '/app/dashboard/?mode=spotlight';
                 };
-                footer.insertBefore(exitDemoBtn, pricingBtn.nextSibling);
+                utilityList.appendChild(exitDemoBtn);
             } else if (currentPath.indexOf('/app/welcome') === -1) {
                 var welcomeBtn = document.createElement('button');
-                welcomeBtn.className = 'nav-welcome-chip';
-                welcomeBtn.innerHTML = 'Back to Welcome Guide';
+                welcomeBtn.className = 'sidebar-utility-link sidebar-utility-link--button';
+                welcomeBtn.textContent = 'Back to Week One';
                 welcomeBtn.onclick = function() {
                     persistSidebarState();
                     window.location.href = '/app/welcome/';
                 };
-                footer.insertBefore(welcomeBtn, tourBtn.nextSibling);
+                utilityList.appendChild(welcomeBtn);
             }
+        }
+        if (footer) {
             if (typeof window.gtmWeekOneLifecycle !== 'undefined') {
                 window.gtmWeekOneLifecycle.renderNavNudge({ footer: footer, currentPath: currentPath });
             } else if (weekOneScript) {
@@ -1105,3 +1134,32 @@
         gtmAnalytics.page(appSlug || window.location.pathname);
     }
 })();
+    function setOpenFamily(familyKey, persist) {
+        if (!sidebar) return;
+        var next = familyKey ? String(familyKey) : '';
+        Array.prototype.slice.call(sidebar.querySelectorAll('.nav-family')).forEach(function(family) {
+            var isOpen = family.getAttribute('data-nav-family') === next;
+            family.classList.toggle('is-open', isOpen);
+        });
+        if (persist) writeSessionStorage(SIDEBAR_OPEN_FAMILY_KEY, next);
+    }
+
+    function inferDefaultOpenFamily() {
+        if (navKey === 'dashboard' || navKey === 'welcome' || navKey === 'onboarding') return '';
+        if (FAMILY_BY_NAV_KEY[navKey]) return FAMILY_BY_NAV_KEY[navKey];
+        return '';
+    }
+
+    if (sidebar) {
+        var storedOpenFamily = readSessionStorage(SIDEBAR_OPEN_FAMILY_KEY, '');
+        var defaultFamily = inferDefaultOpenFamily();
+        setOpenFamily(defaultFamily || storedOpenFamily, false);
+        Array.prototype.slice.call(sidebar.querySelectorAll('[data-family-toggle]')).forEach(function(toggle) {
+            toggle.addEventListener('click', function() {
+                var familyKey = toggle.getAttribute('data-family-toggle') || '';
+                var wrapper = toggle.closest('.nav-family');
+                var isOpen = !!(wrapper && wrapper.classList.contains('is-open'));
+                setOpenFamily(isOpen ? '' : familyKey, true);
+            });
+        });
+    }

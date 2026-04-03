@@ -538,7 +538,7 @@
                             '<div class="cmd-sheet-state">' + escH(sheet.state || 'Active') + '</div>' +
                             '<div class="cmd-sheet-summary-copy">' + escH(sheet.summary || '') + '</div>' +
                         '</div>' +
-                        (entryRoom ? '<div class="cmd-sheet-room-strip"><div class="cmd-sheet-room-kicker">Next room</div><div class="cmd-sheet-room-copy">Carry <strong>' + escH(sheet.title || '') + '</strong> directly into <strong>' + escH(entryRoom) + '</strong> without restating context.</div></div>' : '') +
+                        (entryRoom ? '<div class="cmd-sheet-room-strip"><div class="cmd-sheet-room-kicker">Next room</div><div class="cmd-sheet-room-copy">Carry <strong>' + escH(sheet.title || '') + '</strong> into <strong>' + escH(entryRoom) + '</strong> with context intact.</div></div>' : '') +
                         '<div class="cmd-sheet-body">' +
                             '<div class="cmd-sheet-column">' +
                                 '<section class="cmd-sheet-section">' +
@@ -554,19 +554,19 @@
                             '</div>' +
                             '<div class="cmd-sheet-column">' +
                                 '<section class="cmd-sheet-section">' +
-                                    '<div class="cmd-sheet-section-label">Evidence on the object</div>' +
+                                    '<div class="cmd-sheet-section-label">Evidence</div>' +
                                     '<div class="cmd-sheet-list">' + ((sheet.evidence && sheet.evidence.length ? sheet.evidence : ['No additional evidence recorded yet.']).map(function(item) {
                                         return '<div class="cmd-sheet-list-item">' + escH(item) + '</div>';
                                     }).join('')) + '</div>' +
                                 '</section>' +
                                 '<section class="cmd-sheet-section">' +
-                                    '<div class="cmd-sheet-section-label">What compounds next</div>' +
+                                    '<div class="cmd-sheet-section-label">What compounds</div>' +
                                     '<div class="cmd-sheet-section-copy">' + escH(sheet.downstream || '') + '</div>' +
                                 '</section>' +
                             '</div>' +
                         '</div>' +
                         '<div class="cmd-sheet-footer">' +
-                            '<div class="cmd-sheet-footer-copy">' + escH(entryRoom ? ('The sheet is the inspection layer. Enter ' + entryRoom + ' without resetting the object context.') : 'The sheet is the inspection layer. The real work still happens in the preserved room.') + '</div>' +
+                            '<div class="cmd-sheet-footer-copy">' + escH(entryRoom ? ('Inspect here. Resolve in ' + entryRoom + '.') : 'Inspect here. Resolve in the preserved room.') + '</div>' +
                             '<div class="cmd-sheet-actions">' + renderDashboardSheetActions(sheet.actions, sheet.title) + '</div>' +
                         '</div>' +
                     '</section>' +
@@ -1276,9 +1276,9 @@
         }
         function renderDashboardCommandMode(mode, delta) {
             var copyMap = {
-                brief: 'Brief turns the system into a narrative morning read. Use it when you need the operating story before you choose a move.',
-                spotlight: 'Spotlight renders one command object into the light while a lean selector stack chooses what gets promoted.',
-                queue: 'Queue forces order. Use it when you want the dashboard to rank the exact work sequence instead of showing the whole board at once.'
+                brief: 'Read the operating story before you choose the next move.',
+                spotlight: 'Put one object in the light and keep the rest secondary.',
+                queue: 'Run the work in order when the next sequence matters more than the whole board.'
             };
             return '<section class="cmd-mode-strip">' +
                 '<div class="cmd-mode-top">' +
@@ -1295,7 +1295,7 @@
                 '</div>' +
                 '<div class="cmd-delta">' +
                     '<div class="cmd-delta-title">' + escH(delta.title) + '</div>' +
-                    '<div class="cmd-delta-copy">' + escH(delta.copy) + '</div>' +
+                    '<div class="cmd-delta-copy">Use this before choosing the next move.</div>' +
                     '<ul class="cmd-delta-list">' + (delta.items || []).map(function(item) {
                         return '<li>' + escH(item) + '</li>';
                     }).join('') + '</ul>' +
@@ -1534,7 +1534,7 @@
             if (!selected) return '';
             var actions = (selected.actions || []).slice(0, 2);
             return '<section class="shell-section shell-section--subtle">' +
-                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Spotlight</div><div class="shell-section-title">Put one object in the light.</div><div class="shell-section-copy">The selector stack chooses what gets the full operating focus. It should not compete with the spotlight.</div></div></div>' +
+                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Spotlight</div><div class="shell-section-title">Put one object in the light.</div><div class="shell-section-copy">Use the selector stack only to choose what gets the full focus.</div></div></div>' +
                 '<div class="command-spotlight-shell">' +
                     '<div class="command-spotlight-main">' +
                         '<div class="command-spotlight-head">' +
@@ -1564,7 +1564,7 @@
             if (!selected) return '';
             var actions = (selected.actions || []).slice(0, 2);
             return '<section class="shell-section shell-section--subtle">' +
-                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Queue view</div><div class="shell-section-title">Run the work in one ranked order</div><div class="shell-section-copy">Queue mode removes choice overload. It is the clearest answer to what matters now, then what comes immediately after.</div></div></div>' +
+                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Queue</div><div class="shell-section-title">Run the work in one ranked order.</div><div class="shell-section-copy">Use Queue when execution order matters more than broad scan.</div></div></div>' +
                 '<div class="command-queue-shell">' +
                     '<div class="command-queue-list">' + list.map(function(card, index) {
                         return '<button type="button" class="command-queue-item' + (card.commandId === dashboardActiveCommandId ? ' is-active' : '') + '" onclick="setDashboardActiveCommandCard(\'' + escH(card.commandId) + '\')">' +
@@ -1589,7 +1589,6 @@
             if (!window.gtmShellChrome) return;
             var tone = getDashboardStageTone(stage.key);
             var backup = backupStatus();
-            var nextAction = (stage.actions || [])[0] || null;
             var marketLabel = (context.accounts > 0 || context.signals > 0)
                 ? context.accounts + ' account' + (context.accounts === 1 ? '' : 's') + ' · ' + context.signals + ' signal' + (context.signals === 1 ? '' : 's')
                 : 'Missing live market input';
@@ -1631,8 +1630,8 @@
                         kicker: 'Current posture',
                         title: context.deals ? 'The dashboard is reading real work.' : 'The dashboard is still teaching setup.',
                         copy: context.deals
-                            ? 'Keep upstream modules honest so the command stack stays useful instead of decorative.'
-                            : 'The first useful dashboard needs one ICP, one live account or signal, one real deal, and one logged motion.',
+                            ? 'Keep upstream modules honest so command stays believable.'
+                            : 'Get one ICP, one live account or signal, one real deal, and one logged motion.',
                         items: [
                             context.icps ? 'Targeting truth exists.' : 'Targeting truth missing.',
                             (context.accounts > 0 || context.signals > 0) ? 'Market context exists.' : 'Market context missing.',
@@ -1650,20 +1649,6 @@
                             { label: 'Export Backup', action: "runDataAction('export')", tone: backup && backup.hasExport ? 'ghost' : 'primary' },
                             { href: '/app/settings/', label: 'Open Settings' }
                         ]
-                    },
-                    {
-                        kicker: weekOneState && weekOneState.active ? 'Week 1' : 'Next move',
-                        title: weekOneState && weekOneState.active
-                            ? 'Day ' + weekOneState.dayNumber + ' operating rhythm'
-                            : (nextAction ? nextAction.label : 'Keep the command loop honest'),
-                        copy: weekOneState && weekOneState.active
-                            ? weekOneState.guidance.headline + ' ' + weekOneState.guidance.body
-                            : (nextAction ? stage.emptyCopy : 'Use the dashboard as the place where the system tells you what matters next.'),
-                        actions: nextAction ? [{
-                            href: nextAction.href,
-                            label: nextAction.label,
-                            tone: 'primary'
-                        }] : []
                     }
                 ]
             });
@@ -1833,7 +1818,7 @@
                         '</div>' +
                     '</section>' +
                     '<section class="shell-section shell-section--subtle">' +
-                        '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">What this page wants from you first</div><div class="shell-section-copy">Do not ask the dashboard to improvise. Give it the minimum truth stack, then let it compound.</div></div></div>' +
+                        '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">What this page wants from you first</div><div class="shell-section-copy">Give it the minimum truth stack, then let it compound.</div></div></div>' +
                         '<div class="anchor-lane-grid">' + emptyLanes.map(renderDashboardLane).join('') + '</div>' +
                     '</section>';
                 var emptySnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, null, dependencyWarnings, weekOneState);
@@ -1975,7 +1960,7 @@
             html += '</section>';
 
             html += '<section class="shell-section shell-section--subtle">';
-            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">Run the week in this order</div><div class="shell-section-copy">The dashboard should reduce the week to one immediate intervention, one follow-through move, and one thing to keep honest.</div></div></div>';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">Run the week in this order</div><div class="shell-section-copy">One immediate intervention, one follow-through move, one thing to keep honest.</div></div></div>';
             html += '<div class="anchor-lane-grid">' + lanes.map(renderDashboardLane).join('') + '</div>';
             html += '</section>';
             }
@@ -2110,7 +2095,7 @@
 
             if (commandMode === 'brief') {
             html += '<section class="shell-section shell-section--subtle">';
-            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Risk queue</div><div class="shell-section-title">The threads that will quietly decay first</div><div class="shell-section-copy">Treat this as the recovery board. If a deal is dark, vague, or stage-false, fix it before you add more surface area.</div></div></div>';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Risk queue</div><div class="shell-section-title">The threads that will quietly decay first</div><div class="shell-section-copy">Fix these before adding more surface area.</div></div></div>';
             if (!riskCards.length) {
                 html += '<div class="anchor-note"><strong>No immediate recovery queue.</strong> The active deals are not throwing dark-thread risk right now. Keep the system moving, but stay honest about freshness.</div>';
             } else {
@@ -2121,7 +2106,7 @@
             html += '</section>';
             
             html += '<section class="shell-section shell-section--subtle">';
-            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Next moves</div><div class="shell-section-title">What the system wants you to do next</div><div class="shell-section-copy">These are ranked to keep the week legible. The goal is fewer choices, stronger follow-through, and less drift.</div></div></div>';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Next moves</div><div class="shell-section-title">What the system wants you to do next</div><div class="shell-section-copy">Fewer choices. Stronger follow-through. Less drift.</div></div></div>';
             if (!moveCards.length) {
                 html += '<div class="anchor-note"><strong>No urgent command move.</strong> The workspace is not throwing a forced next step right now, which usually means the current system pressure is under control.</div>';
             } else {
@@ -2134,16 +2119,8 @@
 
             if (commandMode === 'spotlight') {
                 html += renderDashboardSpotlight(queueCards);
-                html += '<section class="shell-section shell-section--subtle">';
-                html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Why this object is in the light</div><div class="shell-section-title">Command logic behind the spotlight</div><div class="shell-section-copy">Spotlight should make one object legible before the user splinters attention across the whole field.</div></div></div>';
-                html += '<div class="anchor-lane-grid">' + lanes.map(renderDashboardLane).join('') + '</div>';
-                html += '</section>';
             } else if (commandMode === 'queue') {
                 html += renderDashboardQueueMode(queueCards);
-                html += '<section class="shell-section shell-section--subtle">';
-                html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Why this order</div><div class="shell-section-title">Command logic behind the queue</div><div class="shell-section-copy">The queue prioritizes recovery first, then the next move with the biggest downstream consequence, then whatever keeps the system honest.</div></div></div>';
-                html += '<div class="anchor-lane-grid">' + lanes.map(renderDashboardLane).join('') + '</div>';
-                html += '</section>';
             }
 
             
@@ -2151,13 +2128,12 @@
             // E5: Outbound recommendation — hot accounts without deals
             var riskiest = briefing.atRisk.length > 0 ? briefing.atRisk[0] : null;
             html += '<section class="shell-section shell-section--subtle shell-section--compact">';
-            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Command tools</div><div class="shell-section-title">Turn the brief into action fast</div><div class="shell-section-copy">Use these when you need to move from reading to intervention without changing context.</div></div></div>';
+            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Command tools</div><div class="shell-section-title">Move from reading to intervention fast</div><div class="shell-section-copy">Use these when you need action without leaving command context.</div></div></div>';
             html += '<div class="anchor-primary-actions">';
             if (riskiest) {
                 html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(riskiest.id) + '" class="btn btn-primary">Autopsy riskiest deal</a>';
             }
             html += '<button class="btn btn-secondary" onclick="copyMonday()">Copy Monday Review</button>';
-            html += '<a href="/app/settings/" class="btn btn-ghost">Open Settings</a>';
             html += '</div>';
             html += '</section>';
 

@@ -118,11 +118,11 @@
         var returnIsSpotlight = context.returnTo.indexOf('/app/dashboard/') === 0;
         var returnIsWelcome = context.returnTo.indexOf('/app/welcome/') === 0;
         var title = context.focusObject && context.focusRoom
-            ? '<strong>' + escapeHtml(context.focusObject) + '</strong> stayed in context as you moved into <strong>' + escapeHtml(context.focusRoom) + '</strong>.'
-            : 'You entered this room from the command layer with context intact.';
+            ? '<strong>' + escapeHtml(context.focusObject) + '</strong> stayed pinned as you entered <strong>' + escapeHtml(context.focusRoom) + '</strong>.'
+            : 'You entered this room from command with context intact.';
         var copy = returnIsSpotlight
-            ? 'Use Spotlight as the default way back into the system. The room rail is still here, but it should not be your main re-entry path.'
-            : 'When this room work is done, re-enter through Spotlight or Week One before using the left rail. Rooms should stay secondary to the command stack.';
+            ? 'Use Spotlight as the default way back.'
+            : 'When this room work is done, re-enter through Spotlight or Week One.';
         var meta = [
             context.fromMode ? '<span class="shell-handoff-pill">From ' + escapeHtml(formatModeLabel(context.fromMode)) + '</span>' : '',
             context.focusRoom ? '<span class="shell-handoff-pill">' + escapeHtml(context.focusRoom) + '</span>' : '',
@@ -193,23 +193,19 @@
         var currentSlug = slugFromPath();
         var mapped = FAMILY_MAP[currentSlug] || {};
         var roomLabel = context.focusRoom || 'This room';
-        var sourceCopy = context.fromMode
-            ? 'Pinned from ' + formatModeLabel(context.fromMode) + '.'
-            : 'Pinned from the command stack.';
         var continuationCopy = buildPinnedContinuationCopy(currentSlug, context);
         return (
             '<div class="shell-pinned-object">' +
                 '<div class="shell-pinned-object-copy">' +
                     '<div class="shell-pinned-object-kicker">Pinned object</div>' +
                     '<div class="shell-pinned-object-title">' + escapeHtml(context.focusObject) + '</div>' +
-                    '<div class="shell-pinned-object-subcopy">' + escapeHtml(roomLabel) + ' is still operating on this object. ' + escapeHtml(sourceCopy) + '</div>' +
+                    '<div class="shell-pinned-object-subcopy">' + escapeHtml(roomLabel) + ' is still operating on this object.</div>' +
                     '<div class="shell-pinned-object-why">' +
                         '<div class="shell-pinned-object-why-label">Why this room</div>' +
                         '<div class="shell-pinned-object-why-copy">' + escapeHtml(continuationCopy) + '</div>' +
                     '</div>' +
                 '</div>' +
                 '<div class="shell-pinned-object-meta">' +
-                    (context.focusRoom ? '<span class="shell-pinned-object-pill">' + escapeHtml(context.focusRoom) + '</span>' : '') +
                     (context.fromMode ? '<span class="shell-pinned-object-pill">From ' + escapeHtml(formatModeLabel(context.fromMode)) + '</span>' : '') +
                     (mapped.label ? '<span class="shell-pinned-object-pill">In ' + escapeHtml(mapped.label) + '</span>' : '') +
                 '</div>' +
@@ -263,6 +259,9 @@
         var metrics = Array.isArray(config && config.metrics) ? config.metrics : [];
         var actions = Array.isArray(config && config.actions) ? config.actions : [];
         var variant = config && config.variant ? ' shell-command-band--' + escapeHtml(config.variant) : '';
+        if (document.body && document.body.classList.contains('room-wave2') && !(config && config.variant)) {
+            variant += ' shell-command-band--room';
+        }
         var context = readHandoffContext();
         var bridge = renderHandoffBridge(context);
         var pinnedObject = renderPinnedObject(context);
