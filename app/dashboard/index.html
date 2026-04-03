@@ -195,8 +195,7 @@
             }
         }
         function normalizeDashboardCommandMode(mode) {
-            if (mode === 'grid') return 'spotlight';
-            return mode === 'spotlight' || mode === 'queue' ? mode : 'brief';
+            return mode === 'brief' || mode === 'spotlight' || mode === 'queue' ? mode : 'spotlight';
         }
         function getDashboardCommandModeLabel(mode) {
             var normalized = normalizeDashboardCommandMode(mode);
@@ -212,7 +211,7 @@
         function getDashboardCommandMode() {
             try {
                 var queryMode = new URLSearchParams(window.location.search).get('mode');
-                if (queryMode === 'brief' || queryMode === 'grid' || queryMode === 'spotlight' || queryMode === 'queue') return normalizeDashboardCommandMode(queryMode);
+                if (queryMode === 'brief' || queryMode === 'spotlight' || queryMode === 'queue') return normalizeDashboardCommandMode(queryMode);
             } catch (error) {}
             return normalizeDashboardCommandMode(localStorage.getItem(DASHBOARD_MODE_KEY));
         }
@@ -1305,23 +1304,6 @@
                 '</div>' +
             '</div>';
         }
-        function renderDashboardGridCard(card, index) {
-            var actions = (card.actions || []).slice(0, 2);
-            return '<div class="cmd-card">' +
-                '<div class="cmd-row-state">' + escH(card.badge || ('Card ' + (index + 1))) + '</div>' +
-                '<div class="cmd-card-metric">' + escH(String(index + 1).padStart(2, '0')) + '</div>' +
-                '<div class="cmd-card-title">' + escH(card.title || '') + '</div>' +
-                '<div class="cmd-card-copy">' + escH(card.copy || '') + '</div>' +
-                (card.meta && card.meta.length ? '<div class="cmd-row-meta">' + card.meta.map(function(item) {
-                    return '<span>' + escH(item) + '</span>';
-                }).join('') + '</div>' : '') +
-                '<div class="cmd-card-footer">' +
-                    ((actions.length || card.sheetKey) ? '<div class="cmd-row-actions">' + createDashboardInspectAction(card.sheetKey) + actions.map(function(action) {
-                        return createDashboardAction(action, action.tone, card.title);
-                    }).join('') + '</div>' : '') +
-                '</div>' +
-            '</div>';
-        }
         function renderDashboardSpotlightStackItem(card) {
             return '<button type="button" class="command-spotlight-item' + (card.commandId === dashboardActiveCommandId ? ' is-active' : '') + '" onclick="setDashboardActiveCommandCard(\'' + escH(card.commandId) + '\')">' +
                 '<div class="command-spotlight-item-top">' +
@@ -1926,81 +1908,9 @@
                 html += '</section>';
             }
 
-            html += '<div class="shell-panel-grid" style="display:none;">';
-
-            html += '<section class="shell-section shell-section--subtle">';
-            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="dash-panel-title"><span class="dot red"></span> What\u2019s At Risk</div><div class="shell-section-copy">Use this queue to pull weak or stale work back into the operating loop before it quietly rots.</div></div></div>';
-            if (briefing.atRisk.length === 0) {
-                html += '<div class="shell-section-note">No deals at risk. Keep executing.</div>';
-            } else {
-                html += '<div class="dash-list-stack">';
-                briefing.atRisk.slice(0, 3).forEach(function(v) {
-                    var narrative = dh.dealNarrative(v);
-                    var stageLabel = dh.STAGE_LABELS[v.stage] || v.stage;
-                    html += '<div class="np-risk-card">';
-                    html += '<div class="np-risk-head"><div><div class="np-risk-name">' + escH(v.name) + '</div>';
-                    html += '<div class="np-risk-meta">' + dh.money(v.value) + ' &middot; ' + escH(stageLabel) + ' &middot; ' + v.staleDays + 'd since touch</div>';
-                    html += '</div><span class="np-risk-score">Risk ' + v.riskScore + '</span></div>';
-                    html += '<div class="np-risk-narrative">' + escH(narrative) + '</div>';
-                    html += '<div class="np-risk-links">';
-                    html += '<a href="/app/deal-workspace/?deal=' + encodeURIComponent(v.id) + '" class="np-risk-link">&rarr; Open Deal</a>';
-                    html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(v.id) + '" class="np-risk-link">&rarr; Run Autopsy</a>';
-                    html += '</div></div>';
-                });
-                html += '</div>';
-            }
-            html += '</section>';
-
-            html += '<section class="shell-section shell-section--subtle">';
-            html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="dash-panel-title"><span class="dot gold"></span> Your Moves</div><div class="shell-section-copy">The dashboard should compress the next few operating decisions into one legible queue.</div></div></div>';
-            if (briefing.topMoves.length === 0) {
-                html += '<div class="shell-section-note">No urgent moves. Pipeline is clean.</div>';
-            } else {
-                briefing.topMoves.forEach(function(m, i) {
-                    html += '<div class="np-move">';
-                    html += '<div class="np-move-num">' + (i + 1) + '.</div>';
-                    html += '<div style="overflow:hidden;"><div class="np-move-action">' + escH(m.action) + '</div>';
-                    html += '<div class="np-move-reason">' + escH(m.reason) + '</div>';
-                    if (m.dealId) {
-                        html += '<a href="/app/deal-workspace/?deal=' + encodeURIComponent(m.dealId) + '" class="np-move-link">&rarr; ' + escH(m.dealName || 'Open Deal') + '</a>';
-                    } else if (m.causeId === 'coverage_gap') {
-                        html += '<a href="/app/signal-console/" class="np-move-link">&rarr; Signal Console</a> ';
-                        html += '<a href="/app/deal-workspace/" class="np-move-link">&rarr; New Deal</a>';
-                    }
-                    html += '</div></div>';
-                });
-            }
+            
 
             // E5: Outbound recommendation — hot accounts without deals
-            var allDealsLS=Array.isArray(deals)?deals.slice():[];
-            var dealNames=allDealsLS.map(function(d){return(d.accountName||d.account_name||'').toLowerCase()});
-            var hotUnworked=(signalConsoleState.accounts||[]).filter(function(a){
-                return(a._heat||0)>=75&&dealNames.indexOf((a.name||'').toLowerCase())===-1;
-            });
-            if(hotUnworked.length>0&&quota&&cov.ratio<target){
-                var topHot=hotUnworked.sort(function(a,b){return(b._heat||0)-(a._heat||0)})[0];
-                html+='<div class="np-move" style="border-left:2px solid rgba(168,85,247,0.4);padding-left:12px;margin-top:8px;"><div class="np-move-num" style="color:#a855f7;">\u2605</div><div style="overflow:hidden;"><div class="np-move-action">Start outbound on '+escH(topHot.name)+'</div><div class="np-move-reason">'+hotUnworked.length+' hot account'+(hotUnworked.length>1?'s':'')+' without deals. Coverage below target.</div><a href="/app/outbound-studio/" class="np-move-link">\u2192 Outbound Studio</a> <a href="/app/cold-call-studio/" class="np-move-link">\u2192 Cold Call</a></div></div>';
-            }
-
-            // E6: Advisor deployment recommendation
-            var advReg=readLS('gtmos_advisor_registry',{advisors:[]});
-            var advDep=readLS('gtmos_advisor_deployments',{deployments:[]});
-            if((advReg.advisors||[]).length>0&&briefing.atRisk.length>0){
-                var advs2=advReg.advisors||[];var deps2=advDep.deployments||[];
-                for(var ri=0;ri<Math.min(briefing.atRisk.length,3);ri++){
-                    var rd=briefing.atRisk[ri];var rn=(rd.name||'').toLowerCase();
-                    var matched=advs2.filter(function(a){return(a.companies||[]).some(function(c){return c.toLowerCase()===rn})});
-                    var avail=matched.filter(function(a){var cd={t1:90,t2:30,t3:14,t4:30}[a.tier]||30;var ld=deps2.filter(function(d){return d.advisorId===a.id}).sort(function(x,y){return new Date(y.createdAt)-new Date(x.createdAt)})[0];if(!ld)return true;return Math.floor((Date.now()-new Date(ld.createdAt).getTime())/86400000)>=cd});
-                    if(avail.length>0){
-                        html+='<div class="np-move" style="border-left:2px solid rgba(212,165,116,0.4);padding-left:12px;margin-top:8px;"><div class="np-move-num" style="color:var(--brand-gold);">\ud83e\udd1d</div><div style="overflow:hidden;"><div class="np-move-action">Deploy '+escH(avail[0].name)+' on '+escH(rd.name)+'</div><div class="np-move-reason">'+rd.staleDays+'d dark, risk '+rd.riskScore+'. Advisor available.</div><a href="/app/advisor-deploy/" class="np-move-link">\u2192 Advisor Deploy</a></div></div>';
-                        break;
-                    }
-                }
-            }
-
-            html += '</section>';
-            html += '</div>';
-
             var riskiest = briefing.atRisk.length > 0 ? briefing.atRisk[0] : null;
             html += '<section class="shell-section shell-section--subtle shell-section--compact">';
             html += '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Command tools</div><div class="shell-section-title">Turn the brief into action fast</div><div class="shell-section-copy">Use these when you need to move from reading to intervention without changing context.</div></div></div>';
@@ -2012,17 +1922,6 @@
             html += '<a href="/app/settings/" class="btn btn-ghost">Open Settings</a>';
             html += '</div>';
             html += '</section>';
-
-            html += '<section class="shell-section shell-section--subtle shell-section--compact" style="display:none;">';
-            html += '<div class="dash-tool-row">';
-            html += '<div class="shell-section-heading"><div class="shell-section-kicker">Quick actions</div><div class="shell-section-copy">Use these to turn the dashboard from a readout into an operating surface.</div></div>';
-            html += '<div class="dash-tool-actions">';
-            if (riskiest) {
-                html += '<a href="/app/future-autopsy/?deal=' + encodeURIComponent(riskiest.id) + '" class="btn btn-primary">&#128300; Autopsy Riskiest Deal</a>';
-            }
-            html += '<button class="btn btn-secondary" onclick="copyMonday()">&#128203; Copy Monday Review</button>';
-            html += '<a href="/app/settings/" class="btn btn-ghost">&#9881; Settings</a>';
-            html += '</div></div></section>';
 
             document.getElementById('dashContent').innerHTML = html;
             renderDashboardSheet();
