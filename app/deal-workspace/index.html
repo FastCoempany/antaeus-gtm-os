@@ -348,6 +348,7 @@
         function isThisQuarter(d){if(!d)return false;var now=new Date(),qStart=new Date(now.getFullYear(),Math.floor(now.getMonth()/3)*3,1),qEnd=new Date(qStart);qEnd.setMonth(qEnd.getMonth()+3);var dt=new Date(d+'T00:00:00');return dt>=qStart&&dt<qEnd;}
 
         var KEY='gtmos_deal_workspaces';
+        var DEAL_ROOM_HEALTH_KEY='gtmos_deal_room_health';
         var STAGE_LABELS={prospect:'Prospect',discovery:'Discovery',evaluation:'Solution Fit',poc:'PoC / Pilot',negotiation:'Negotiation',verbal:'Verbal Commit','closed-won':'Closed Won','closed-lost':'Closed Lost'};
         var STAGE_ORDER={prospect:0,discovery:1,evaluation:2,poc:3,negotiation:4,verbal:5,'closed-won':6,'closed-lost':7};
         var STAGE_PROB={prospect:0,discovery:0.10,evaluation:0.25,poc:0.50,negotiation:0.75,verbal:0.90,'closed-won':1,'closed-lost':0};
@@ -468,6 +469,52 @@
                         :'Re-open the account and force a real status check.'
                 };
             });
+        }
+
+        function getDealRecoveryCauseId(reason){
+            if(reason==='No dated next step')return'no_nextstep';
+            if(reason==='Next step overdue')return'next_step_overdue';
+            if(reason==='No movement in 14+ days')return'stage_stuck';
+            if(reason==='Qualification too thin for stage')return'truth_debt';
+            return'';
+        }
+
+        function buildDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted){
+            var recovery=getRecoveryMoves(allDeals);
+            var topDeal=active.slice().sort(function(a,b){return Number(b.value||0)-Number(a.value||0);})[0]||null;
+            var qualification=topDeal?getQualification(topDeal):null;
+            var threading=topDeal?threadingDepth(topDeal):{engaged:0,total:6,roles:0};
+            var recoveryReason=topDeal?getRecoveryReason(topDeal):'';
+            return {
+                capturedAt:new Date().toISOString(),
+                totalDeals:allDeals.length,
+                activeDeals:active.length,
+                pipeline:Number(pipeline||0),
+                weightedPipeline:Number(weighted||0),
+                recoveryCount:recovery.length,
+                topRecoveryIds:recovery.map(function(item){return String(item.id);}),
+                topDealId:topDeal?String(topDeal.id):'',
+                topDealName:topDeal?String(topDeal.accountName||''):'',
+                topDealValue:topDeal?Number(topDeal.value||0):0,
+                topDealStage:topDeal?String(topDeal.stage||''):'',
+                topDealStageAgeDays:topDeal?Number(daysInCurrentStage(topDeal)||0):0,
+                topDealQualificationScore:qualification?Number(qualification.score||0):0,
+                topDealQualificationBand:qualification?String(qualification.band||''):'',
+                topDealTruthDebtCount:qualification&&Array.isArray(qualification.checks)
+                    ? qualification.checks.filter(function(check){return !check.met;}).length
+                    : 0,
+                topDealThreading:threading.engaged||0,
+                topDealMissingChampion:topDeal?!topDeal.champion:false,
+                topDealNeedsNextStep:topDeal?(!topDeal.nextStep||!topDeal.nextStepDate):false,
+                topDealNextStepOverdue:topDeal?!!(topDeal.nextStepDate&&isOverdue(topDeal.nextStepDate)):false,
+                topDealProofThin:qualification?qualification.band==='thin':false,
+                topDealRecoveryReason:recoveryReason,
+                topDealCauseId:getDealRecoveryCauseId(recoveryReason)
+            };
+        }
+
+        function publishDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted){
+            writeLS(DEAL_ROOM_HEALTH_KEY,buildDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted));
         }
 
         function renderDealQueueCard(card,index){
@@ -826,6 +873,7 @@
             var lost=allDeals.filter(function(d){return d.stage==='closed-lost';});
             var pipeline=active.reduce(function(s,d){return s+Number(d.value||0);},0);
             var weighted=active.reduce(function(s,d){return s+Number(d.value||0)*(STAGE_PROB[d.stage]||0);},0);
+            publishDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted);
 
             renderWorkspaceBridge(allDeals,active,pipeline,weighted);
             renderDealTopMetrics(active,pipeline,weighted,won,lost);

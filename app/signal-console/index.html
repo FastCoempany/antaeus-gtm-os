@@ -409,6 +409,7 @@ const SEEDS=[
 // STATE
 // ═══════════════════════════════════════════
 const LS='gtmos_sc_v4';
+const SIGNAL_ROOM_HEALTH_KEY='gtmos_signal_room_health';
 const LS_USAGE='gtmos_sc_usage_v4';
 const LS_MORNING='gtmos_sc_morning_v4';
 const LS_BATCHES='gtmos_sc_batches_v4';
@@ -763,6 +764,57 @@ function getNextMove(a){
     return{kind:'link',title:'Build the angle before outreach',reason:'The account is promising, but the message still needs to be tightened before you reach out.',cta:'Build Message',href:'/app/outbound-studio/?account='+encName+'&temperature='+ctx.temp};
   }
   return{kind:'deepresearch',title:'Run deeper research first',reason:'Current evidence is still too thin or too old to justify outreach with confidence.',cta:'Run Deep Research'};
+}
+
+function buildSignalConsoleHealthSnapshot(){
+  const accounts=Array.isArray(S.accounts)?S.accounts.slice():[];
+  const ranked=accounts.slice().sort((a,b)=>heat(b)-heat(a));
+  const hottest=ranked[0]||null;
+  const signalCount=accounts.reduce((sum,a)=>sum+((a.signals||[]).filter(s=>s.status!=='flagged').length),0);
+  const readyCount=accounts.filter(a=>heat(a)>=75).length;
+  const topMetrics=hottest?getHeatMetrics(hottest):null;
+  const topCtx=hottest?getAccountExecutionContext(hottest):null;
+  const topMove=hottest?getNextMove(hottest):null;
+  return {
+    capturedAt:new Date().toISOString(),
+    accountCount:accounts.length,
+    signalCount:signalCount,
+    readyCount:readyCount,
+    topAccountId:hottest?String(hottest.id||''):'',
+    topAccountName:hottest?String(hottest.name||''):'',
+    topHeat:topMetrics?Number(topMetrics.heat||0):0,
+    topBand:topMetrics?String(topMetrics.band||''):'',
+    topSignalCount:topMetrics?Number(topMetrics.signalCount||0):0,
+    topHighConfidenceCount:topMetrics?Number(topMetrics.highConfidenceCount||0):0,
+    topRecentCount:topMetrics?Number(topMetrics.recentCount||0):0,
+    topHasActiveDeal:!!(topCtx&&topCtx.activeDeal),
+    topHasReplies:!!(topCtx&&topCtx.replied),
+    topNextMoveKind:topMove?String(topMove.kind||''):'',
+    topNextMoveTitle:topMove?String(topMove.title||''):'',
+    topNextMoveCta:topMove?String(topMove.cta||''):'',
+    top3Accounts:ranked.slice(0,3).map(a=>{
+      const metrics=getHeatMetrics(a);
+      const ctx=getAccountExecutionContext(a);
+      const move=getNextMove(a);
+      return {
+        id:String(a.id||''),
+        name:String(a.name||''),
+        heat:Number(metrics.heat||0),
+        signalCount:Number(metrics.signalCount||0),
+        highConfidenceCount:Number(metrics.highConfidenceCount||0),
+        recentCount:Number(metrics.recentCount||0),
+        hasActiveDeal:!!ctx.activeDeal,
+        hasReplies:!!ctx.replied,
+        nextMoveKind:String(move.kind||'')
+      };
+    })
+  };
+}
+
+function publishSignalConsoleHealthSnapshot(){
+  try{
+    localStorage.setItem(SIGNAL_ROOM_HEALTH_KEY,JSON.stringify(buildSignalConsoleHealthSnapshot()));
+  }catch(e){}
 }
 
 function renderNextMoveButton(a,move){
@@ -1203,6 +1255,7 @@ function syncSignalShellOffset(){
 }
 
 function render(){
+  publishSignalConsoleHealthSnapshot();
   syncSignalShellOffset();renderStats();renderCredits();renderSignalShellBand();renderControls();renderMorning();renderGrid();
 }
 

@@ -1742,6 +1742,9 @@
                 signalConsoleState = readLS('gtmos_sc_v4', { accounts: [] });
             }
 
+            var dealRoomHealth = readLS('gtmos_deal_room_health', null);
+            var signalRoomHealth = readLS('gtmos_signal_room_health', null);
+
             var vitals = deals.map(function(deal) { return dh.computeVitals(deal); }).filter(Boolean);
             var quota = dh.loadQuota();
             var seed = dh.loadSeed();
@@ -1917,6 +1920,7 @@
                     if (availableAdvisors.length) {
                         advisorSuggestion = {
                             advisor: availableAdvisors[0].name,
+                            dealId: riskDeal.id,
                             deal: riskDeal.name,
                             riskScore: riskDeal.riskScore,
                             staleDays: riskDeal.staleDays
@@ -2021,6 +2025,56 @@
                     pressureType: truthDebtCount >= 2 ? 'truth-debt' : (nextStepOverdue || Number(vital.staleDays || 0) >= Number((dh.DEFAULTS && dh.DEFAULTS.staleWarnDays) || 7) ? 'execution-drift' : 'recovery')
                 };
             }
+            function mergeRankingSignals(baseSignals, extraSignals) {
+                var merged = {};
+                [baseSignals, extraSignals].forEach(function(source) {
+                    Object.keys(source || {}).forEach(function(key) {
+                        var value = source[key];
+                        if (value === undefined || value === null || value === '') return;
+                        if (typeof value === 'number') {
+                            var current = merged[key];
+                            merged[key] = typeof current === 'number' ? Math.max(current, value) : Number(value);
+                            return;
+                        }
+                        if (typeof value === 'boolean') {
+                            merged[key] = !!merged[key] || value;
+                            return;
+                        }
+                        merged[key] = value;
+                    });
+                });
+                return merged;
+            }
+            function buildDealRoomBoostSignals(vital, baseSignals) {
+                if (!dealRoomHealth || !vital) return baseSignals;
+                var vitalId = String(vital.id || '');
+                var isTopDeal = vitalId && vitalId === String(dealRoomHealth.topDealId || '');
+                var recoveryIds = Array.isArray(dealRoomHealth.topRecoveryIds) ? dealRoomHealth.topRecoveryIds : [];
+                var inRecoveryQueue = vitalId && recoveryIds.indexOf(vitalId) >= 0;
+                if (!isTopDeal && !inRecoveryQueue) return baseSignals;
+                var roomQualScore = Number(dealRoomHealth.topDealQualificationScore || 0);
+                return mergeRankingSignals(baseSignals, {
+                    amount: Number(dealRoomHealth.topDealValue || 0),
+                    stageAgeDays: Number(dealRoomHealth.topDealStageAgeDays || 0),
+                    qualScore: roomQualScore ? Math.round((roomQualScore / 100) * 18) : 0,
+                    missingChampion: !!dealRoomHealth.topDealMissingChampion,
+                    missingNextStep: !!dealRoomHealth.topDealNeedsNextStep,
+                    nextStepOverdue: !!dealRoomHealth.topDealNextStepOverdue,
+                    proofThin: !!dealRoomHealth.topDealProofThin,
+                    truthDebtCount: Number(dealRoomHealth.topDealTruthDebtCount || 0),
+                    threadingDepth: Number(dealRoomHealth.topDealThreading || 0),
+                    threadingRisk: Number(dealRoomHealth.topDealThreading || 0) > 0 && Number(dealRoomHealth.topDealThreading || 0) < 3,
+                    stageStuck: Number(dealRoomHealth.topDealStageAgeDays || 0) > Number((dh.DEFAULTS && dh.DEFAULTS.stageStuckDays) || 21),
+                    recoveryCount: Number(dealRoomHealth.recoveryCount || 0),
+                    weightedPipeline: Number(dealRoomHealth.weightedPipeline || 0),
+                    roomReadiness: isTopDeal ? 3 : 2,
+                    urgency: inRecoveryQueue ? 11 : 8,
+                    severity: isTopDeal ? 8 : 6,
+                    linkedRoomTop: isTopDeal,
+                    causeId: isTopDeal ? String(dealRoomHealth.topDealCauseId || '') : '',
+                    pressureType: Number(dealRoomHealth.topDealTruthDebtCount || 0) >= 2 ? 'truth-debt' : 'recovery'
+                });
+            }
             function buildMoveRankingSignals(move, vital, family) {
                 var truthDebtCount = vital ? countDashboardTruthDebt(vital) : 0;
                 var threadingDepth = vital && vital.threadingDepth ? Number(vital.threadingDepth.engaged || 0) : 0;
@@ -2052,16 +2106,49 @@
                     pressureType: causeId === 'coverage_gap' ? 'motion-leverage' : (truthDebtCount >= 2 ? 'truth-debt' : 'follow-through')
                 };
             }
+            function moveUsesSignalRoom(move, family, baseSignals) {
+                if (family === 'opportunity') return true;
+                if (baseSignals && (baseSignals.coveragePressure || baseSignals.hasSignalConsole || baseSignals.marketMotion)) return true;
+                var source = [
+                    family,
+                    move && move.action,
+                    move && move.reason,
+                    move && move.causeId
+                ].join(' ').toLowerCase();
+                return /signal|outbound|coverage|motion/.test(source);
+            }
+            function buildSignalRoomBoostSignals(move, family, baseSignals) {
+                if (!signalRoomHealth || !moveUsesSignalRoom(move, family, baseSignals)) return baseSignals;
+                var topHeat = Number(signalRoomHealth.topHeat || 0);
+                var topHighConfidenceCount = Number(signalRoomHealth.topHighConfidenceCount || 0);
+                var topRecentCount = Number(signalRoomHealth.topRecentCount || 0);
+                return mergeRankingSignals(baseSignals, {
+                    heat: topHeat,
+                    signalCount: Number(signalRoomHealth.topSignalCount || 0),
+                    highConfidenceCount: topHighConfidenceCount,
+                    recentCount: topRecentCount,
+                    hasReplies: !!signalRoomHealth.topHasReplies,
+                    hasOpenDeal: !!signalRoomHealth.topHasActiveDeal,
+                    hasSignalConsole: true,
+                    marketMotion: true,
+                    roomReadiness: topHeat >= 75 ? 3 : 2,
+                    urgency: topHeat >= 75 ? 12 : 9,
+                    severity: topHighConfidenceCount >= 2 ? 8 : 6,
+                    linkedRoomTop: !!signalRoomHealth.topAccountId,
+                    pressureType: 'motion-leverage'
+                });
+            }
 
             var riskCards = briefing.atRisk.slice(0, 3).map(function(v) {
                 var stageLabel = dh.STAGE_LABELS[v.stage] || v.stage;
+                var rankingSignals = buildDealRoomBoostSignals(v, buildRiskRankingSignals(v));
                 return {
                     title: v.name,
                     copy: dh.dealNarrative(v),
                     badge: 'Risk ' + v.riskScore,
                     badgeTone: 'state-risk',
                     meta: [dh.money(v.value), stageLabel, v.staleDays + 'd stale'],
-                    rankingSignals: buildRiskRankingSignals(v),
+                    rankingSignals: rankingSignals,
                     sheetKey: registerDashboardSheet(buildRiskSheet(v)),
                     actions: [
                         { href: '/app/future-autopsy/?deal=' + encodeURIComponent(v.id), label: 'Run Autopsy' },
@@ -2072,13 +2159,16 @@
             var moveCards = (briefing.topMoves || []).slice(0, 3).map(function(m, index) {
                 var moveVital = m.dealId ? vitalsById[String(m.dealId)] : null;
                 var moveFamily = index === 0 ? 'move' : (m.causeId === 'coverage_gap' ? 'opportunity' : 'move');
+                var rankingSignals = buildMoveRankingSignals(m, moveVital, moveFamily);
+                rankingSignals = buildDealRoomBoostSignals(moveVital, rankingSignals);
+                rankingSignals = buildSignalRoomBoostSignals(m, moveFamily, rankingSignals);
                 return {
                     title: m.action,
                     copy: m.reason,
                     badge: index === 0 ? 'Now' : 'Next',
                     badgeTone: index === 0 ? 'state-ready' : 'state-live',
                     meta: [m.dealName || stage.stageBadge, m.causeId ? m.causeId.replace(/_/g, ' ') : 'command move'],
-                    rankingSignals: buildMoveRankingSignals(m, moveVital, moveFamily),
+                    rankingSignals: rankingSignals,
                     sheetKey: registerDashboardSheet(buildMoveSheet(m, stage)),
                     actions: m.dealId
                         ? [{ href: '/app/deal-workspace/?deal=' + encodeURIComponent(m.dealId), label: m.dealName || 'Open Deal' }]
@@ -2097,7 +2187,11 @@
                     badge: 'Opportunity',
                     badgeTone: 'state-live',
                     meta: ['heat ' + hotSuggestion.heat, hotSuggestion.count + ' hot accounts'],
-                    rankingSignals: {
+                    rankingSignals: buildSignalRoomBoostSignals({
+                        action: 'Turn ' + hotSuggestion.name + ' into a live outbound motion.',
+                        reason: hotSuggestion.reason,
+                        causeId: 'coverage_gap'
+                    }, 'opportunity', {
                         heat: Number(hotSuggestion.heat || 0),
                         urgency: 10,
                         severity: 7,
@@ -2107,7 +2201,7 @@
                         roomReadiness: 2,
                         causeId: 'coverage_gap',
                         pressureType: 'motion-leverage'
-                    },
+                    }),
                     sheetKey: registerDashboardSheet(buildGenericCommandSheet({
                         title: 'Turn ' + hotSuggestion.name + ' into a live outbound motion.',
                         copy: hotSuggestion.reason,
@@ -2142,7 +2236,7 @@
                     badge: 'Leverage',
                     badgeTone: 'state-ready',
                     meta: ['advisor ready', 'risk ' + advisorSuggestion.riskScore],
-                    rankingSignals: {
+                    rankingSignals: buildDealRoomBoostSignals(vitalsById[String(advisorSuggestion.dealId || '')] || null, {
                         risk: Number(advisorSuggestion.riskScore || 0),
                         staleDays: Number(advisorSuggestion.staleDays || 0),
                         urgency: 11,
@@ -2151,7 +2245,7 @@
                         roomReadiness: 1,
                         causeId: 'advisor_leverage',
                         pressureType: 'leverage'
-                    },
+                    }),
                     sheetKey: registerDashboardSheet(buildGenericCommandSheet({
                         title: 'Deploy ' + advisorSuggestion.advisor + ' on ' + advisorSuggestion.deal + '.',
                         copy: advisorSuggestion.staleDays + 'd dark, risk ' + advisorSuggestion.riskScore + '. Use advisor leverage only after the ask is specific.',

@@ -167,6 +167,11 @@
         var severity = signalNumber(signals, 'severity', 0, 0, 10);
         var urgency = signalNumber(signals, 'urgency', 0, 0, 100);
         var truthDebtCount = signalNumber(signals, 'truthDebtCount', 0, 0, 12);
+        var signalCount = signalNumber(signals, 'signalCount', 0, 0, 1000);
+        var highConfidenceCount = signalNumber(signals, 'highConfidenceCount', 0, 0, 1000);
+        var recentCount = signalNumber(signals, 'recentCount', 0, 0, 1000);
+        var recoveryCount = signalNumber(signals, 'recoveryCount', 0, 0, 50);
+        var weightedPipeline = signalNumber(signals, 'weightedPipeline', 0, 0, 100000000);
         var roomReadiness = signalNumber(signals, 'roomReadiness', countActions(card), 0, 10);
         var threadingDepth = signalNumber(signals, 'threadingDepth', 0, 0, 20);
         var missingChampion = signalBool(signals, 'missingChampion', testCardText(card, /(champion(?:\s+\w+){0,4}\s+(?:assumed|unproven|missing)|no champion|single-threaded)/i));
@@ -184,6 +189,8 @@
         var hasSignalConsole = signalBool(signals, 'hasSignalConsole', hasAction(card, /signal console/i));
         var hasAdvisor = signalBool(signals, 'hasAdvisor', hasAction(card, /advisor/i));
         var hasDiscovery = signalBool(signals, 'hasDiscovery', hasAction(card, /discovery/i));
+        var hasReplies = signalBool(signals, 'hasReplies', false);
+        var linkedRoomTop = signalBool(signals, 'linkedRoomTop', false);
         var causeId = signalText(signals, 'causeId', '');
         var pressureType = signalText(signals, 'pressureType', '');
         var gapCount = signalNumber(signals, 'gapCount', 0, 0, 20);
@@ -210,6 +217,11 @@
             severity: severity,
             urgency: urgency,
             truthDebtCount: truthDebtCount,
+            signalCount: signalCount,
+            highConfidenceCount: highConfidenceCount,
+            recentCount: recentCount,
+            recoveryCount: recoveryCount,
+            weightedPipeline: weightedPipeline,
             roomReadiness: roomReadiness,
             threadingDepth: threadingDepth,
             warningCount: warningCount,
@@ -229,6 +241,8 @@
             hasSignalConsole: hasSignalConsole,
             hasAdvisor: hasAdvisor,
             hasDiscovery: hasDiscovery,
+            hasReplies: hasReplies,
+            linkedRoomTop: linkedRoomTop,
             causeId: causeId,
             pressureType: pressureType,
             gapCount: gapCount,
@@ -247,11 +261,13 @@
         if (profile.nextStepOverdue) pushReason(reasons, 'next step overdue');
         if (profile.proofThin) pushReason(reasons, 'proof thin');
         if (profile.truthDebtCount >= 2) pushReason(reasons, 'truth debt');
+        if (profile.recoveryCount) pushReason(reasons, 'recovery queue');
         if (profile.missingChampion) pushReason(reasons, 'champion unproven');
         if (profile.weakChampion) pushReason(reasons, 'champion weak');
         if (profile.missingNextStep) pushReason(reasons, 'next step missing');
         if (profile.threadingRisk) pushReason(reasons, 'single-threaded');
         if (profile.stageStuck) pushReason(reasons, 'stage stuck');
+        if (profile.linkedRoomTop) pushReason(reasons, 'room lead');
         if (profile.hasAutopsy) pushReason(reasons, 'failure mode exposed');
         var meta = Array.isArray(card && card.meta) ? card.meta : [];
         meta.forEach(function (item) {
@@ -268,12 +284,16 @@
         if (profile.causeId) pushReason(reasons, formatCauseLabel(profile.causeId));
         if (profile.heat) pushReason(reasons, 'heat ' + profile.heat);
         if (profile.coveragePressure) pushReason(reasons, 'coverage pressure');
+        if (profile.highConfidenceCount >= 2) pushReason(reasons, 'high-conf cluster');
+        if (profile.recentCount >= 2) pushReason(reasons, 'fresh signals');
         if (profile.truthDebtCount >= 2) pushReason(reasons, 'truth debt');
         if (profile.proofThin) pushReason(reasons, 'proof thin');
         if (profile.nextStepOverdue) pushReason(reasons, 'next step overdue');
         if (profile.missingNextStep) pushReason(reasons, 'next step missing');
+        if (profile.hasReplies) pushReason(reasons, 'reply path');
         if (family === 'advisor' || profile.hasAdvisor) pushReason(reasons, 'advisor leverage');
         if (family === 'opportunity' || profile.hasSignalConsole) pushReason(reasons, 'market motion');
+        if (profile.linkedRoomTop) pushReason(reasons, 'room lead');
         if (profile.roomReadiness >= 2) pushReason(reasons, 'room ready');
         if (!reasons.length && profile.risk) pushReason(reasons, 'risk ' + profile.risk);
         if (!reasons.length && profile.hasOpenDeal) pushReason(reasons, 'room ready');
@@ -302,6 +322,7 @@
         score += Math.max(0, (14 - profile.qualScore)) * 1.1;
         score += Math.min(14, profile.stageAgeDays * 0.45);
         score += profile.truthDebtCount * 3;
+        score += Math.min(8, profile.recoveryCount * 2);
         if (profile.hasAutopsy) score += 11;
         if (profile.proofThin) score += 7;
         if (profile.missingChampion) score += 7;
@@ -310,6 +331,7 @@
         if (profile.nextStepOverdue) score += 9;
         if (profile.threadingRisk) score += 7;
         if (profile.stageStuck) score += 7;
+        if (profile.linkedRoomTop) score += 5;
         if (profile.driftSignal) score += 4;
         return clamp(Math.round(score), 0, 100);
     }
@@ -321,6 +343,9 @@
         score += amountPressure(profile.amount) * 0.7;
         score += profile.urgency * 0.9;
         score += profile.severity * 2;
+        score += Math.min(8, profile.signalCount * 0.5);
+        score += Math.min(10, profile.highConfidenceCount * 2);
+        score += Math.min(8, profile.recentCount * 1.5);
         if (profile.coveragePressure) score += 8;
         if (profile.marketMotion) score += 6;
         if (profile.truthDebtCount >= 2) score += 6;
@@ -328,8 +353,10 @@
         if (profile.missingNextStep) score += 4;
         if (profile.nextStepOverdue) score += 6;
         if (profile.hasOpenDeal) score += 3;
+        if (profile.hasReplies) score += 5;
         if (profile.hasSignalConsole) score += 4;
         if (profile.roomReadiness >= 2) score += 4;
+        if (profile.linkedRoomTop) score += 5;
         if (profile.causeId === 'coverage_gap') score += 8;
         if (profile.causeId === 'no_nextstep' || profile.causeId === 'next_step_overdue') score += 7;
         if (profile.causeId === 'no_champion' || profile.causeId === 'champion_weak') score += 6;
@@ -360,9 +387,13 @@
         confidence += Math.min(18, profile.gapCount * 5);
         confidence += profile.warningCount ? Math.min(16, profile.warningCount * 8) : 0;
         confidence += Math.min(12, profile.truthDebtCount * 4);
+        confidence += Math.min(10, profile.highConfidenceCount * 2);
+        confidence += Math.min(8, profile.recentCount * 2);
+        confidence += Math.min(8, profile.recoveryCount * 2);
         confidence += profile.nextStepOverdue ? 6 : 0;
         confidence += profile.stageStuck ? 6 : 0;
         confidence += profile.roomReadiness >= 2 ? 6 : 0;
+        confidence += profile.linkedRoomTop ? 6 : 0;
         confidence += profile.urgency ? Math.min(10, profile.urgency * 0.45) : 0;
         if (family === 'advisor' || family === 'opportunity') confidence += 6;
         if (family === 'system' || family === 'icp') confidence += 10;
@@ -636,14 +667,21 @@
         var truthDebtCount = Number(object && object.truthDebtCount || 0);
         var nextStepOverdue = !!(object && object.nextStepOverdue);
         var stageStuck = !!(object && object.stageStuck);
+        var signals = object && object.rankingSignals ? object.rankingSignals : null;
+        var highConfidenceCount = signalNumber(signals, 'highConfidenceCount', 0, 0, 1000);
+        var hasReplies = signalBool(signals, 'hasReplies', false);
+        var linkedRoomTop = signalBool(signals, 'linkedRoomTop', false);
 
         if (mode === 'queue') {
             if (family === 'risk') {
+                if (linkedRoomTop) return 'The live room says this deal needs intervention.';
                 if (truthDebtCount >= 2) return 'Truth debt is dragging this deal down.';
                 if (nextStepOverdue || stageStuck) return 'Execution drift is visible now.';
                 return 'Recovery is ahead of expansion.';
             }
             if (family === 'advisor') return 'Leverage is earned here, not decorative.';
+            if ((family === 'opportunity' || family === 'move') && hasReplies) return 'This thread has earned the next motion.';
+            if (family === 'opportunity' && highConfidenceCount >= 2) return 'Signal density makes this move real.';
             if (family === 'opportunity' && causeId === 'coverage_gap') return 'Coverage pressure makes this move real.';
             if (family === 'opportunity' || family === 'move') return 'This is the next move with leverage.';
             if (family === 'icp') return 'Truth work stays ahead of scale work.';
@@ -651,11 +689,14 @@
         }
 
         if (family === 'risk') {
+            if (linkedRoomTop) return 'The live room says this deal is slipping.';
             if (truthDebtCount >= 2) return 'This deal is weak where it matters.';
             if (nextStepOverdue || stageStuck) return 'This deal is drifting in the open.';
             return 'The week is drifting through this object.';
         }
         if (family === 'advisor') return 'Leverage is earned here, not decorative.';
+        if ((family === 'opportunity' || family === 'move') && hasReplies) return 'This thread has earned the next motion.';
+        if (family === 'opportunity' && highConfidenceCount >= 2) return 'Signal density makes this move real.';
         if (family === 'opportunity' && causeId === 'coverage_gap') return 'Coverage pressure makes this move real.';
         if (family === 'opportunity' || family === 'move') return 'This is the highest-leverage move right now.';
         if (family === 'icp') return 'Targeting truth is still upstream of everything else.';
