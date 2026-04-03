@@ -153,6 +153,7 @@
     <script src="/js/deal-health.js"></script>
     <script src="/js/proof-layer.js"></script>
     <script src="/js/week-one-lifecycle.js"></script>
+    <script src="/js/command-intelligence.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
     <script src="/js/require-auth.js"></script>
@@ -160,6 +161,7 @@
 <script>
     (function(){
         var dh = window.dealHealth;
+        var ci = window.gtmCommandIntelligence || null;
         if (!dh) { document.getElementById('dashContent').innerHTML = '<p style="color:var(--text-muted);">deal-health.js not loaded.</p>'; return; }
         var backupToastTimer = null;
         var dashboardSummaryTracked = false;
@@ -1256,6 +1258,50 @@
             }
             return cards.slice(0, 6);
         }
+        function buildDashboardPrimaryFromCommandObject(card, stage, fallbackPrimary) {
+            if (!card) return fallbackPrimary;
+            return {
+                label: card.badge || 'Now',
+                title: card.title || (fallbackPrimary && fallbackPrimary.title) || stage.title,
+                copy: card.copy || (fallbackPrimary && fallbackPrimary.copy) || stage.copy,
+                actions: Array.isArray(card.actions) ? card.actions.slice(0, 2) : ((fallbackPrimary && fallbackPrimary.actions) || []),
+                tags: Array.isArray(card.scoreReasons) && card.scoreReasons.length
+                    ? card.scoreReasons.slice(0, 4)
+                    : (Array.isArray(card.meta) ? card.meta.slice(0, 4) : ((fallbackPrimary && fallbackPrimary.tags) || []))
+            };
+        }
+        function materializeDashboardCommandSummary(summary) {
+            if (!summary) return null;
+            function attachSheet(card) {
+                if (!card) return null;
+                var next = Object.assign({}, card);
+                if (!next.sheetKey && next.sheetPayload) {
+                    next.sheetKey = registerDashboardSheet(next.sheetPayload);
+                }
+                return next;
+            }
+            return {
+                ranked: (summary.ranked || []).map(attachSheet),
+                spotlight: attachSheet(summary.spotlight),
+                queue: (summary.queue || []).map(attachSheet),
+                riskCards: (summary.riskCards || []).map(attachSheet),
+                moveCards: (summary.moveCards || []).map(attachSheet),
+                systemCards: (summary.systemCards || []).map(attachSheet)
+            };
+        }
+        function renderDashboardCommandMeta(card) {
+            var items = [];
+            (Array.isArray(card && card.meta) ? card.meta : []).forEach(function(item) {
+                if (item && items.indexOf(item) === -1) items.push(item);
+            });
+            (Array.isArray(card && card.scoreReasons) ? card.scoreReasons : []).slice(0, 4).forEach(function(reason) {
+                if (reason && items.indexOf(reason) === -1) items.push(reason);
+            });
+            if (!items.length) return '';
+            return '<div class="anchor-lane-meta">' + items.map(function(item) {
+                return '<span>' + escH(item) + '</span>';
+            }).join('') + '</div>';
+        }
         function renderDashboardCommandStage(config) {
             return '<section class="cmd-stage">' +
                 '<div class="cmd-stage-kicker">' + escH(config.kicker || 'Morning command') + '</div>' +
@@ -1338,7 +1384,7 @@
                         '</div>' +
                         '<div class="command-spotlight-title">' + escH(selected.title || '') + '</div>' +
                         '<div class="command-spotlight-copy">' + escH(selected.copy || '') + '</div>' +
-                        (selected.meta && selected.meta.length ? '<div class="anchor-lane-meta">' + selected.meta.map(function(item) { return '<span>' + escH(item) + '</span>'; }).join('') + '</div>' : '') +
+                        renderDashboardCommandMeta(selected) +
                         '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
                         (dashboardGraphPayload ? '<div class="command-spotlight-reward"><button type="button" class="command-spotlight-reward-btn" onclick="dashboardOpenGraph()"><span class="reward-kicker">Hidden reward</span><span class="reward-copy">See what compounded</span></button></div>' : '') +
                     '</div>' +
@@ -1368,7 +1414,7 @@
                         '<div class="chipRow"><span class="cmd-mode-btn is-active" style="pointer-events:none">Rank ' + escH(String(selected.order).padStart(2, '0')) + '</span><span class="shell-state-pill ' + escH(selected.badgeTone || 'state-ready') + '">' + escH(selected.badge || 'Ready') + '</span></div>' +
                         '<div class="command-queue-detail-title">' + escH(selected.title || '') + '</div>' +
                         '<div class="command-queue-detail-copy">' + escH(selected.copy || '') + '</div>' +
-                        (selected.meta && selected.meta.length ? '<div class="anchor-lane-meta">' + selected.meta.map(function(item) { return '<span>' + escH(item) + '</span>'; }).join('') + '</div>' : '') +
+                        renderDashboardCommandMeta(selected) +
                         '<div class="anchor-note"><strong>Run in this order.</strong> Clear this object before you promote lower-pressure work back into the front of the week.</div>' +
                         '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
                     '</div>' +
@@ -1868,7 +1914,34 @@
                     ]
                 });
             }
-            var queueCards = buildDashboardCommandQueue(primary, riskCards, moveCards, stage);
+            var fallbackPrimary = primary;
+            var queueCards = null;
+            var commandSummary = null;
+            if (ci && typeof ci.buildCommandObjects === 'function' && typeof ci.summarizeCommandContext === 'function') {
+                try {
+                    commandSummary = materializeDashboardCommandSummary(ci.summarizeCommandContext(ci.buildCommandObjects({
+                        primary: fallbackPrimary,
+                        riskCards: riskCards,
+                        moveCards: moveCards,
+                        stage: stage,
+                        shellContext: shellContext,
+                        dependencyWarnings: dependencyWarnings
+                    }), { limit: 6 }));
+                } catch (commandError) {
+                    console.error('Command intelligence failed to rank dashboard objects:', commandError);
+                    commandSummary = null;
+                }
+            }
+            if (commandSummary) {
+                primary = buildDashboardPrimaryFromCommandObject(commandSummary.spotlight, stage, fallbackPrimary);
+                if (commandSummary.riskCards && commandSummary.riskCards.length) riskCards = commandSummary.riskCards;
+                if (commandSummary.moveCards && commandSummary.moveCards.length) moveCards = commandSummary.moveCards;
+                queueCards = commandSummary.queue && commandSummary.queue.length
+                    ? commandSummary.queue
+                    : buildDashboardCommandQueue(primary, riskCards, moveCards, stage);
+            } else {
+                queueCards = buildDashboardCommandQueue(primary, riskCards, moveCards, stage);
+            }
 
             if (commandMode === 'brief') {
             html += '<section class="shell-section shell-section--subtle">';
