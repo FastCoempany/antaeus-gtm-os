@@ -145,6 +145,7 @@
                     <div class="ds-boot-state" id="bootState"></div>
                     <div class="ds-stats" id="statsBar"></div>
                     <div id="discoveryShellBand"></div>
+                    <div id="discoveryHealthPanel"></div>
                     <div class="ds-cat-bar" id="catBar"></div>
                     <div class="ds-first-meta">
                         <div id="frameworkGuide"></div>
@@ -213,6 +214,7 @@
             }
             document.getElementById('statsBar').innerHTML='';
             document.getElementById('discoveryShellBand').innerHTML='';
+            document.getElementById('discoveryHealthPanel').innerHTML='';
             document.getElementById('catBar').innerHTML='';
             document.getElementById('frameworkGuide').innerHTML='';
             document.getElementById('workedLoop').innerHTML='';
@@ -609,6 +611,75 @@
             node.innerHTML=stageHtml;
         }
 
+        function renderDiscoveryWorkspaceHealth(){
+            var node=document.getElementById('discoveryHealthPanel');
+            if(!node)return;
+            var agenda=getAgendaState();
+            var handoff=getHandoffState();
+            var deal=getLinkedDeal();
+            var meta=getFrameworkMeta(currentCat);
+            var advRate=stats.totalCalls>0?Math.round((stats.advancedCalls||0)/stats.totalCalls*100):0;
+            var posture=deal?'Deal-linked':agenda&&agenda.score>=65?'Agenda-linked':'Context thin';
+            var compounded=[];
+            var weakLinks=[];
+
+            if(stats.totalCalls>0){
+                compounded.push('<div class="workspace-health-item"><strong>Live call truth is accumulating.</strong> ' + escH(String(stats.totalCalls)) + ' call' + (stats.totalCalls===1?' has':'s have') + ' been logged into the room instead of left in memory.</div>');
+            }
+            if(workedSet.size>0){
+                compounded.push('<div class="workspace-health-item"><strong>The room is building a worked-move library.</strong> ' + escH(String(workedSet.size)) + ' move' + (workedSet.size===1?' has':'s have') + ' been marked worked and can sharpen the next live call.</div>');
+            }
+            if(agenda&&agenda.score>=65){
+                compounded.push('<div class="workspace-health-item"><strong>Planner quality is surviving the handoff.</strong> The current discovery run inherited enough setup to make the call feel prepared instead of improvised.</div>');
+            }
+            if(deal){
+                compounded.push('<div class="workspace-health-item"><strong>This call has somewhere durable to land.</strong> ' + escH(deal.accountName||deal.name||'The linked deal') + ' can carry the truth back into the pipeline after the meeting.</div>');
+            }
+            if(!compounded.length){
+                compounded.push('<div class="workspace-health-item"><strong>Discovery has a live starting point.</strong> The room is ready to compound, but the evidence base is still thin enough to stay conservative.</div>');
+            }
+
+            if(!deal){
+                weakLinks.push('<div class="workspace-health-item"><strong>There is still no durable deal handoff.</strong> Discovery is strongest when the call truth can travel back into Deal Workspace immediately.</div>');
+            }
+            if(!agenda||agenda.score<65){
+                weakLinks.push('<div class="workspace-health-item"><strong>Call setup is still thin.</strong> Bring more structure in from Call Planner so the next move is visible before the call starts.</div>');
+            }
+            if(workedSet.size===0){
+                weakLinks.push('<div class="workspace-health-item"><strong>Nothing has been marked worked yet.</strong> The room has not started turning live calls into reusable discovery judgment.</div>');
+            }
+            if(stats.totalCalls>0&&stats.totalCalls<3){
+                weakLinks.push('<div class="workspace-health-item"><strong>The call sample is still small.</strong> One or two live reps are useful, but not enough to call the room fully grounded yet.</div>');
+            }
+            if(handoff&&handoff.nextMove&&/research/i.test(String(handoff.nextMove))){
+                weakLinks.push('<div class="workspace-health-item"><strong>The next move is still drifting back into research.</strong> Discovery should force a clearer downstream action than more note-taking.</div>');
+            }
+            if(!weakLinks.length){
+                weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the calls honest, but the current discovery system is reading credibly.</div>');
+            }
+
+            node.innerHTML=
+                '<section class="shell-section shell-section--compact workspace-health">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Workspace health</div>'+
+                            '<div class="shell-section-title">See whether live discovery is compounding.</div>'+
+                            '<div class="shell-section-copy workspace-health-copy">Discovery Studio should show whether live calls, framework fit, and worked moves are producing a sharper downstream move.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="workspace-health-metrics">'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Call posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(posture)+'</div><div class="workspace-health-subcopy">'+escH(meta.label)+'</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Advance rate</div><div class="workspace-health-value">'+escH(String(advRate))+'%</div><div class="workspace-health-subcopy">'+escH(String(stats.totalCalls))+' calls logged.</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Worked loop</div><div class="workspace-health-value">'+escH(String(workedSet.size))+'</div><div class="workspace-health-subcopy">Moves carried forward from live calls.</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Deal linkage</div><div class="workspace-health-value workspace-health-value--sans">'+escH(deal?'Attached':'Thin')+'</div><div class="workspace-health-subcopy">'+escH(deal?(deal.accountName||deal.name||'Linked deal visible'):'No linked deal yet')+'</div></div>'+
+                    '</div>'+
+                    '<div class="workspace-health-grid">'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
+                    '</div>'+
+                '</section>';
+        }
+
         function renderFrameworkGuide(){
             var node=document.getElementById('frameworkGuide');
             if(!node)return;
@@ -710,6 +781,7 @@
             await syncDiscoveryState();
             renderCatBar();
             renderDiscoveryBridge();
+            renderDiscoveryWorkspaceHealth();
             renderFrameworkGuide();
             renderWorkedLoop();
             renderContent();
@@ -852,6 +924,7 @@
             localStorage.setItem('gtmos_discovery_worked',JSON.stringify(Array.from(workedSet)));
             await syncDiscoveryState();
             renderStats();
+            renderDiscoveryWorkspaceHealth();
             renderWorkedLoop();
         };
 
@@ -886,6 +959,7 @@
             refreshDiscoveryState();
             renderStats();
             renderDiscoveryBridge();
+            renderDiscoveryWorkspaceHealth();
             renderCatBar();
             renderFrameworkGuide();
             renderWorkedLoop();

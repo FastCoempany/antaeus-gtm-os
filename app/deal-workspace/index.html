@@ -527,8 +527,8 @@
                         '<div class="shell-section-header">'+
                             '<div class="shell-section-heading">'+
                                 '<div class="shell-section-kicker">Workspace health</div>'+
-                                '<div class="shell-section-title">Health becomes real once one live deal exists.</div>'+
-                                '<div class="shell-section-copy workspace-health-copy">Create one real board object with stage, value, next step, and qualification truth. Then the room can show what is compounding and what is still weak.</div>'+
+                                '<div class="shell-section-title">Health starts once one live deal exists.</div>'+
+                                '<div class="shell-section-copy workspace-health-copy">Create one real board object with stage, value, next step, and qualification truth.</div>'+
                             '</div>'+
                         '</div>'+
                     '</section>';
@@ -572,24 +572,27 @@
                 weakLinks.push('<div class="workspace-health-item"><strong>No immediate weak link is dominating the room.</strong> Keep the board honest, but the current posture is credible.</div>');
             }
 
+            compounded=compounded.slice(0,2);
+            weakLinks=weakLinks.slice(0,2);
+
             node.innerHTML=
                 '<section class="shell-section shell-section--compact workspace-health">'+
                     '<div class="shell-section-header">'+
                         '<div class="shell-section-heading">'+
                             '<div class="shell-section-kicker">Workspace health</div>'+
-                            '<div class="shell-section-title">See what is getting heavier and what is still fake.</div>'+
-                            '<div class="shell-section-copy workspace-health-copy">Deal Workspace should expose whether live pipeline truth is compounding or just being renamed through stage language.</div>'+
+                            '<div class="shell-section-title">See what is real and what is still weak.</div>'+
+                            '<div class="shell-section-copy workspace-health-copy">This room should show whether pipeline truth is compounding or just being renamed through stage language.</div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="workspace-health-metrics">'+
                         '<div class="workspace-health-metric"><div class="workspace-health-label">Board posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(snapshot.recoveryCount?'Recovery pressure':'Board believable')+'</div><div class="workspace-health-subcopy">'+escH(snapshot.activeDeals+' active deal'+(snapshot.activeDeals===1?'':'s'))+'</div></div>'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Weighted truth</div><div class="workspace-health-value">'+escH(fmtN(snapshot.weightedPipeline||0))+'</div><div class="workspace-health-subcopy">Weighted pipeline grounded in current deal state.</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Weighted truth</div><div class="workspace-health-value">'+escH(fmtN(snapshot.weightedPipeline||0))+'</div><div class="workspace-health-subcopy">Grounded in live deal state.</div></div>'+
                         '<div class="workspace-health-metric"><div class="workspace-health-label">Top threading</div><div class="workspace-health-value">'+escH(String(snapshot.topDealThreading||0))+'</div><div class="workspace-health-subcopy">'+escH(snapshot.topDealName||'No review target')+'</div></div>'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Recovery queue</div><div class="workspace-health-value">'+escH(String(snapshot.recoveryCount||0))+'</div><div class="workspace-health-subcopy">Deals currently making the board less honest.</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Recovery queue</div><div class="workspace-health-value">'+escH(String(snapshot.recoveryCount||0))+'</div><div class="workspace-health-subcopy">Deals making the board less honest.</div></div>'+
                     '</div>'+
                     '<div class="workspace-health-grid">'+
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">What compounded</div><div class="workspace-health-list">'+compounded.join('')+'</div></div>'+
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Weak links still visible</div><div class="workspace-health-list">'+weakLinks.join('')+'</div></div>'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.join('')+'</div></div>'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.join('')+'</div></div>'+
                     '</div>'+
                 '</section>';
         }

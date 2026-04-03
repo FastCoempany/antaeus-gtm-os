@@ -1096,7 +1096,7 @@ a:hover {
 }
 
 .workspace-health {
-    gap: 18px;
+    gap: 14px;
 }
 
 .workspace-health-copy {
@@ -1106,16 +1106,16 @@ a:hover {
 .workspace-health-metrics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
+    gap: 10px;
 }
 
 .workspace-health-metric {
     display: grid;
-    gap: 6px;
-    padding: 14px 16px;
-    border-radius: 16px;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 14px;
     border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.025);
 }
 
 .workspace-health-label {
@@ -1141,24 +1141,24 @@ a:hover {
 }
 
 .workspace-health-subcopy {
-    font-size: 0.76rem;
-    line-height: 1.5;
+    font-size: 0.72rem;
+    line-height: 1.45;
     color: var(--text-tertiary);
 }
 
 .workspace-health-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 12px;
 }
 
 .workspace-health-panel {
     display: grid;
-    gap: 10px;
-    padding: 16px 18px;
-    border-radius: 18px;
+    gap: 8px;
+    padding: 14px 16px;
+    border-radius: 16px;
     border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.025);
 }
 
 .workspace-health-panel-title {
@@ -1171,12 +1171,12 @@ a:hover {
 
 .workspace-health-list {
     display: grid;
-    gap: 8px;
+    gap: 6px;
 }
 
 .workspace-health-item {
-    font-size: 0.8rem;
-    line-height: 1.55;
+    font-size: 0.76rem;
+    line-height: 1.48;
     color: var(--text-secondary);
 }
 

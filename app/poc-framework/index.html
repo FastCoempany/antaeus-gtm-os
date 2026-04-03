@@ -141,6 +141,7 @@
                 <section class="poc-first-fold">
                     <div id="pocBootState"></div>
                     <div id="pocBridge"></div>
+                    <div id="pocHealthPanel"></div>
                 </section>
                 <div class="studio-layout">
                     <div class="builder-content">
@@ -583,6 +584,72 @@
                 '</section>';
         }
 
+        function renderPoCWorkspaceHealth() {
+            var node = byId('pocHealthPanel');
+            if (!node) return;
+            var quality = getPoCQuality();
+            var linkedDeal = quality.linkedDeal;
+            var stageLabel = linkedDeal ? (STAGE_LABELS[linkedDeal.stage] || linkedDeal.stage || 'Prospect') : 'Detached';
+            var compounded = [];
+            var weakLinks = [];
+
+            if (linkedDeal) {
+                compounded.push('<div class="workspace-health-item"><strong>Proof is attached to a live deal.</strong> ' + escH(linkedDeal.accountName || linkedDeal.name || 'The linked deal') + ' is giving this pilot real commercial pressure instead of letting it float as a side project.</div>');
+            }
+            if (quality.successCount >= 3) {
+                compounded.push('<div class="workspace-health-item"><strong>Success criteria can survive the readout.</strong> The pilot now has enough explicit pass-fail language to end in a real decision.</div>');
+            }
+            if (quality.boundaryCount >= 2) {
+                compounded.push('<div class="workspace-health-item"><strong>Scope boundaries are visible.</strong> The proof is less likely to sprawl into a services exercise before the commercial conversation lands.</div>');
+            }
+            if (quality.readoutOwner) {
+                compounded.push('<div class="workspace-health-item"><strong>Readout ownership exists before kickoff.</strong> A named owner makes it harder for activity to happen without a real decision moment.</div>');
+            }
+            if (!compounded.length) {
+                compounded.push('<div class="workspace-health-item"><strong>The proof has a usable starting shape.</strong> The room has enough structure to keep building, but it still needs stronger commercial anchoring.</div>');
+            }
+
+            if (!linkedDeal) {
+                weakLinks.push('<div class="workspace-health-item"><strong>This proof is still detached from the pipeline.</strong> Link a live deal so stage pressure, next step truth, and account context stay visible.</div>');
+            }
+            if (!quality.readoutOwner) {
+                weakLinks.push('<div class="workspace-health-item"><strong>No one owns the readout yet.</strong> Without a named owner, the pilot can generate activity without forcing a decision.</div>');
+            }
+            if (quality.successCount < 3) {
+                weakLinks.push('<div class="workspace-health-item"><strong>Success criteria are still thin.</strong> Tighten the readout standard so the PoC cannot hide behind vague language.</div>');
+            }
+            if (quality.boundaryCount < 2) {
+                weakLinks.push('<div class="workspace-health-item"><strong>Scope boundaries are still loose.</strong> The pilot needs harder limits before it turns into open-ended implementation.</div>');
+            }
+            if (quality.timingCls === 'risky') {
+                weakLinks.push('<div class="workspace-health-item"><strong>The deal is already late for invented proof.</strong> This PoC must justify a commercial decision, not buy time.</div>');
+            }
+            if (!weakLinks.length) {
+                weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the proof.</strong> Keep the scope honest, but the current plan is reading as commercially credible.</div>');
+            }
+
+            node.innerHTML =
+                '<section class="shell-section shell-section--compact workspace-health">' +
+                    '<div class="shell-section-header">' +
+                        '<div class="shell-section-heading">' +
+                            '<div class="shell-section-kicker">Workspace health</div>' +
+                            '<div class="shell-section-title">See whether the proof can survive the handoff.</div>' +
+                            '<div class="shell-section-copy workspace-health-copy">PoC Framework should show whether this pilot can hold commercial pressure after kickoff, readout, and the next deal move.</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="workspace-health-metrics">' +
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Proof posture</div><div class="workspace-health-value workspace-health-value--sans">' + escH(quality.band === 'ready' ? 'Commercially credible' : quality.band === 'workable' ? 'Needs tightening' : 'Proof thin') + '</div><div class="workspace-health-subcopy">' + escH(quality.bandLabel + ' / ' + quality.score + '/100') + '</div></div>' +
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Deal linkage</div><div class="workspace-health-value workspace-health-value--sans">' + escH(stageLabel) + '</div><div class="workspace-health-subcopy">' + escH(linkedDeal ? (linkedDeal.accountName || linkedDeal.name || 'Linked deal visible') : 'No live deal linked') + '</div></div>' +
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Boundaries</div><div class="workspace-health-value">' + escH(String(quality.boundaryCount || 0)) + '</div><div class="workspace-health-subcopy">Scope limits holding the pilot in place.</div></div>' +
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Readout owner</div><div class="workspace-health-value workspace-health-value--sans">' + escH(quality.readoutOwner ? 'Assigned' : 'Missing') + '</div><div class="workspace-health-subcopy">' + escH(quality.readoutOwner || 'Name the commercial readout owner.') + '</div></div>' +
+                    '</div>' +
+                    '<div class="workspace-health-grid">' +
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">' + compounded.slice(0,2).join('') + '</div></div>' +
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">' + weakLinks.slice(0,2).join('') + '</div></div>' +
+                    '</div>' +
+                '</section>';
+        }
+
         function renderRecentProofs() {
             var node = byId('pocRecentList');
             if (!node) return;
@@ -710,6 +777,7 @@ Does this structure work? Happy to adjust based on your constraints.
 Best,
 [Your name]`;
             renderPoCBridge();
+            renderPoCWorkspaceHealth();
             renderPoCQuality();
             byId('stat_quality').textContent = quality.bandLabel;
         };
