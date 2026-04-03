@@ -285,6 +285,7 @@
 <span><span class="dot" style="background:var(--tx3)"></span>0-49 Low</span>
 <span style="margin-left:auto;color:var(--tx4)">Score = signal count × type weight × source credibility × recency decay</span>
 </div>
+<div id="signalHealthPanel"></div>
 
 </section>
 <div class="main"><div class="grid" id="grid"></div></div>
@@ -811,10 +812,83 @@ function buildSignalConsoleHealthSnapshot(){
   };
 }
 
-function publishSignalConsoleHealthSnapshot(){
+function publishSignalConsoleHealthSnapshot(snapshot){
   try{
-    localStorage.setItem(SIGNAL_ROOM_HEALTH_KEY,JSON.stringify(buildSignalConsoleHealthSnapshot()));
+    localStorage.setItem(SIGNAL_ROOM_HEALTH_KEY,JSON.stringify(snapshot));
   }catch(e){}
+}
+
+function renderSignalWorkspaceHealth(snapshot){
+  const node=document.getElementById('signalHealthPanel');
+  if(!node)return;
+  if(!snapshot||!snapshot.accountCount){
+    node.innerHTML=
+      `<section class="shell-section shell-section--compact workspace-health">
+        <div class="shell-section-header">
+          <div class="shell-section-heading">
+            <div class="shell-section-kicker">Workspace health</div>
+            <div class="shell-section-title">Health becomes real once one account has live evidence.</div>
+            <div class="shell-section-copy workspace-health-copy">Signal Console becomes useful when one real account has enough evidence to justify motion, not just collection.</div>
+          </div>
+        </div>
+      </section>`;
+    return;
+  }
+
+  const compounded=[];
+  const weakLinks=[];
+  const linkedMotion=snapshot.topHasActiveDeal||snapshot.topHasReplies;
+  const topName=snapshot.topAccountName||'The top account';
+
+  if(snapshot.topHighConfidenceCount>=2){
+    compounded.push(`<div class="workspace-health-item"><strong>Evidence density is real.</strong> ${esc(topName)} is carrying ${snapshot.topHighConfidenceCount} high-confidence signals, which means the room is ranking more than ambient noise.</div>`);
+  }
+  if(snapshot.readyCount>0){
+    compounded.push(`<div class="workspace-health-item"><strong>The room has accounts ready for motion.</strong> ${snapshot.readyCount} account${snapshot.readyCount===1?' is':'s are'} currently hot enough to justify action.</div>`);
+  }
+  if(linkedMotion){
+    compounded.push(`<div class="workspace-health-item"><strong>Research is touching real execution.</strong> ${snapshot.topHasActiveDeal?'A live deal':'A reply path'} already exists on the current lead account.</div>`);
+  }
+  if(!compounded.length){
+    compounded.push('<div class="workspace-health-item"><strong>Live evidence exists.</strong> The room has started ranking real research, but motion still needs to catch up.</div>');
+  }
+
+  if(snapshot.topHeat>=75&&!linkedMotion){
+    weakLinks.push('<div class="workspace-health-item"><strong>Heat is not yet becoming motion.</strong> The lead account is hot, but there is still no live deal or reply path anchoring the work.</div>');
+  }
+  if(snapshot.topRecentCount<2){
+    weakLinks.push('<div class="workspace-health-item"><strong>Freshness is still thin.</strong> The top account does not yet have enough recent evidence to make the room feel fully current.</div>');
+  }
+  if(snapshot.topHighConfidenceCount<2){
+    weakLinks.push('<div class="workspace-health-item"><strong>Confidence is still narrow.</strong> The strongest account still needs more durable, believable evidence behind the next move.</div>');
+  }
+  if(snapshot.topNextMoveKind==='research'||snapshot.topNextMoveKind==='deepresearch'){
+    weakLinks.push('<div class="workspace-health-item"><strong>The next move is still research, not execution.</strong> The room has not yet earned a cleaner handoff into motion.</div>');
+  }
+  if(!weakLinks.length){
+    weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep signal freshness and conversion honest, but the console is behaving credibly.</div>');
+  }
+
+  node.innerHTML=
+    `<section class="shell-section shell-section--compact workspace-health">
+      <div class="shell-section-header">
+        <div class="shell-section-heading">
+          <div class="shell-section-kicker">Workspace health</div>
+          <div class="shell-section-title">See whether research is turning into real motion.</div>
+          <div class="shell-section-copy workspace-health-copy">Signal Console should show whether account heat is compounding into action or just getting louder.</div>
+        </div>
+      </div>
+      <div class="workspace-health-metrics">
+        <div class="workspace-health-metric"><div class="workspace-health-label">Research posture</div><div class="workspace-health-value workspace-health-value--sans">${esc(snapshot.topHeat>=75?'Motion ready':'Research heavy')}</div><div class="workspace-health-subcopy">${esc(snapshot.accountCount+' accounts · '+snapshot.signalCount+' signals')}</div></div>
+        <div class="workspace-health-metric"><div class="workspace-health-label">Top heat</div><div class="workspace-health-value">${esc(String(snapshot.topHeat||0))}</div><div class="workspace-health-subcopy">${esc(snapshot.topAccountName||'No ranked account yet')}</div></div>
+        <div class="workspace-health-metric"><div class="workspace-health-label">Ready now</div><div class="workspace-health-value">${esc(String(snapshot.readyCount||0))}</div><div class="workspace-health-subcopy">Accounts hot enough to justify motion now.</div></div>
+        <div class="workspace-health-metric"><div class="workspace-health-label">Execution linkage</div><div class="workspace-health-value workspace-health-value--sans">${esc(linkedMotion?'Attached':'Thin')}</div><div class="workspace-health-subcopy">${esc(snapshot.topHasActiveDeal?'Active deal visible':snapshot.topHasReplies?'Reply path visible':'No live handoff yet')}</div></div>
+      </div>
+      <div class="workspace-health-grid">
+        <div class="workspace-health-panel"><div class="workspace-health-panel-title">What compounded</div><div class="workspace-health-list">${compounded.join('')}</div></div>
+        <div class="workspace-health-panel"><div class="workspace-health-panel-title">Weak links still visible</div><div class="workspace-health-list">${weakLinks.join('')}</div></div>
+      </div>
+    </section>`;
 }
 
 function renderNextMoveButton(a,move){
@@ -1255,8 +1329,9 @@ function syncSignalShellOffset(){
 }
 
 function render(){
-  publishSignalConsoleHealthSnapshot();
-  syncSignalShellOffset();renderStats();renderCredits();renderSignalShellBand();renderControls();renderMorning();renderGrid();
+  const healthSnapshot=buildSignalConsoleHealthSnapshot();
+  publishSignalConsoleHealthSnapshot(healthSnapshot);
+  syncSignalShellOffset();renderStats();renderCredits();renderSignalShellBand();renderControls();renderMorning();renderSignalWorkspaceHealth(healthSnapshot);renderGrid();
 }
 
 function renderStats(){

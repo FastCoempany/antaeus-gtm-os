@@ -180,6 +180,7 @@
             <div class="app-content">
                 <div id="dwBootState"></div>
                 <div id="dwBridge"></div>
+                <div id="dealHealthPanel"></div>
                 <section class="dw-surface-top">
                     <div class="dw-stats" id="dealStats"></div>
                     <div class="dw-filter">
@@ -513,8 +514,84 @@
             };
         }
 
-        function publishDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted){
-            writeLS(DEAL_ROOM_HEALTH_KEY,buildDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted));
+        function publishDealWorkspaceHealthSnapshot(snapshot){
+            writeLS(DEAL_ROOM_HEALTH_KEY,snapshot);
+        }
+
+        function renderDealWorkspaceHealth(snapshot){
+            var node=document.getElementById('dealHealthPanel');
+            if(!node)return;
+            if(!snapshot||!snapshot.totalDeals){
+                node.innerHTML=
+                    '<section class="shell-section shell-section--compact workspace-health">'+
+                        '<div class="shell-section-header">'+
+                            '<div class="shell-section-heading">'+
+                                '<div class="shell-section-kicker">Workspace health</div>'+
+                                '<div class="shell-section-title">Health becomes real once one live deal exists.</div>'+
+                                '<div class="shell-section-copy workspace-health-copy">Create one real board object with stage, value, next step, and qualification truth. Then the room can show what is compounding and what is still weak.</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</section>';
+                return;
+            }
+
+            var compounded=[];
+            var weakLinks=[];
+
+            if(snapshot.weightedPipeline>0){
+                compounded.push('<div class="workspace-health-item"><strong>Weighted truth is live.</strong> '+escH(fmtN(snapshot.weightedPipeline))+' is now grounded in active deal state instead of raw pipeline vanity.</div>');
+            }
+            if(snapshot.topDealQualificationBand==='strong'||snapshot.topDealQualificationBand==='workable'){
+                compounded.push('<div class="workspace-health-item"><strong>The lead deal has usable qualification.</strong> '+escH(snapshot.topDealName||'The top deal')+' is reading as '+escH(snapshot.topDealQualificationBand)+', which means the board has real buying truth to work from.</div>');
+            }
+            if(Number(snapshot.topDealThreading||0)>=2){
+                compounded.push('<div class="workspace-health-item"><strong>Threading is no longer purely single-owner.</strong> '+escH(String(snapshot.topDealThreading))+' engaged stakeholders are visible on the current review target.</div>');
+            }
+            if(!compounded.length){
+                compounded.push('<div class="workspace-health-item"><strong>The room has truth to work with.</strong> Active deals exist, but compounding is still thin enough that the board should stay conservative.</div>');
+            }
+
+            if(Number(snapshot.recoveryCount||0)>0){
+                weakLinks.push('<div class="workspace-health-item"><strong>Recovery pressure is still visible.</strong> '+escH(String(snapshot.recoveryCount))+' deal'+(Number(snapshot.recoveryCount||0)===1?' needs':'s need')+' intervention before the board is honestly healthy.</div>');
+            }
+            if(snapshot.topDealMissingChampion){
+                weakLinks.push('<div class="workspace-health-item"><strong>Champion truth is still missing.</strong> The current review target has stage language without a named internal owner.</div>');
+            }
+            if(snapshot.topDealNeedsNextStep){
+                weakLinks.push('<div class="workspace-health-item"><strong>The next step is not anchored.</strong> This room should not let stage labels outrun a dated move.</div>');
+            }else if(snapshot.topDealNextStepOverdue){
+                weakLinks.push('<div class="workspace-health-item"><strong>The next step is already late.</strong> Execution drift is now visible on the review target.</div>');
+            }
+            if(snapshot.topDealProofThin){
+                weakLinks.push('<div class="workspace-health-item"><strong>Qualification is still thin.</strong> The board is carrying less proof than the stage is implying.</div>');
+            }
+            if(Number(snapshot.topDealThreading||0)>0&&Number(snapshot.topDealThreading||0)<2){
+                weakLinks.push('<div class="workspace-health-item"><strong>Threading is still narrow.</strong> One-thread deal ownership can make the board flatter than reality.</div>');
+            }
+            if(!weakLinks.length){
+                weakLinks.push('<div class="workspace-health-item"><strong>No immediate weak link is dominating the room.</strong> Keep the board honest, but the current posture is credible.</div>');
+            }
+
+            node.innerHTML=
+                '<section class="shell-section shell-section--compact workspace-health">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Workspace health</div>'+
+                            '<div class="shell-section-title">See what is getting heavier and what is still fake.</div>'+
+                            '<div class="shell-section-copy workspace-health-copy">Deal Workspace should expose whether live pipeline truth is compounding or just being renamed through stage language.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="workspace-health-metrics">'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Board posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(snapshot.recoveryCount?'Recovery pressure':'Board believable')+'</div><div class="workspace-health-subcopy">'+escH(snapshot.activeDeals+' active deal'+(snapshot.activeDeals===1?'':'s'))+'</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Weighted truth</div><div class="workspace-health-value">'+escH(fmtN(snapshot.weightedPipeline||0))+'</div><div class="workspace-health-subcopy">Weighted pipeline grounded in current deal state.</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Top threading</div><div class="workspace-health-value">'+escH(String(snapshot.topDealThreading||0))+'</div><div class="workspace-health-subcopy">'+escH(snapshot.topDealName||'No review target')+'</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Recovery queue</div><div class="workspace-health-value">'+escH(String(snapshot.recoveryCount||0))+'</div><div class="workspace-health-subcopy">Deals currently making the board less honest.</div></div>'+
+                    '</div>'+
+                    '<div class="workspace-health-grid">'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">What compounded</div><div class="workspace-health-list">'+compounded.join('')+'</div></div>'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Weak links still visible</div><div class="workspace-health-list">'+weakLinks.join('')+'</div></div>'+
+                    '</div>'+
+                '</section>';
         }
 
         function renderDealQueueCard(card,index){
@@ -873,9 +950,11 @@
             var lost=allDeals.filter(function(d){return d.stage==='closed-lost';});
             var pipeline=active.reduce(function(s,d){return s+Number(d.value||0);},0);
             var weighted=active.reduce(function(s,d){return s+Number(d.value||0)*(STAGE_PROB[d.stage]||0);},0);
-            publishDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted);
+            var workspaceHealth=buildDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted);
+            publishDealWorkspaceHealthSnapshot(workspaceHealth);
 
             renderWorkspaceBridge(allDeals,active,pipeline,weighted);
+            renderDealWorkspaceHealth(workspaceHealth);
             renderDealTopMetrics(active,pipeline,weighted,won,lost);
 
             var deals=filterDeals(allDeals);

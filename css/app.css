@@ -1095,6 +1095,95 @@ a:hover {
     line-height: 1.6;
 }
 
+.workspace-health {
+    gap: 18px;
+}
+
+.workspace-health-copy {
+    max-width: 64ch;
+}
+
+.workspace-health-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.workspace-health-metric {
+    display: grid;
+    gap: 6px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+}
+
+.workspace-health-label {
+    font-size: 0.64rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.workspace-health-value {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.05;
+    color: var(--text-primary);
+}
+
+.workspace-health-value--sans {
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 700;
+}
+
+.workspace-health-subcopy {
+    font-size: 0.76rem;
+    line-height: 1.5;
+    color: var(--text-tertiary);
+}
+
+.workspace-health-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.workspace-health-panel {
+    display: grid;
+    gap: 10px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+}
+
+.workspace-health-panel-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand-gold);
+}
+
+.workspace-health-list {
+    display: grid;
+    gap: 8px;
+}
+
+.workspace-health-item {
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+}
+
+.workspace-health-item strong {
+    color: var(--text-primary);
+}
+
 .shell-chip-row {
     display: flex;
     flex-wrap: wrap;
@@ -3474,6 +3563,12 @@ body.command-surface-page .sidebar-footer {
 
     .auth-grid,
     .transition-hero-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .workspace-health-grid {
         grid-template-columns: 1fr;
     }
 }
