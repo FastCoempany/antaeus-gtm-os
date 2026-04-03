@@ -5,6 +5,13 @@
         return String(value || '').trim();
     }
 
+    function slug(value) {
+        return tx(value)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '') || 'item';
+    }
+
     function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
     }
@@ -41,11 +48,24 @@
         return 0;
     }
 
+    function parseMoney(card) {
+        var meta = Array.isArray(card && card.meta) ? card.meta : [];
+        for (var i = 0; i < meta.length; i++) {
+            if (/\$/.test(meta[i])) return clamp(parseNumber(meta[i]), 0, 100000000);
+        }
+        return 0;
+    }
+
     function hasAction(card, pattern) {
         var actions = Array.isArray(card && card.actions) ? card.actions : [];
         return actions.some(function (action) {
             return pattern.test(String((action && action.label) || ''));
         });
+    }
+
+    function countActions(card) {
+        var actions = Array.isArray(card && card.actions) ? card.actions : [];
+        return actions.length;
     }
 
     function normalizeTone(card, family) {
@@ -66,202 +86,460 @@
         return 0;
     }
 
-    function buildRiskReasons(card) {
+    function roomFamilyLabel(family) {
+        if (family === 'risk') return 'Pipeline';
+        if (family === 'advisor') return 'Leverage';
+        if (family === 'opportunity') return 'Motion';
+        if (family === 'move') return 'Command';
+        if (family === 'icp') return 'Truth';
+        if (family === 'system') return 'System';
+        return 'Command';
+    }
+
+    function amountPressure(amount) {
+        if (amount >= 1000000) return 16;
+        if (amount >= 500000) return 13;
+        if (amount >= 250000) return 10;
+        if (amount >= 100000) return 7;
+        if (amount > 0) return 3;
+        return 0;
+    }
+
+    function readSignals(card) {
+        return card && card.rankingSignals && typeof card.rankingSignals === 'object'
+            ? card.rankingSignals
+            : {};
+    }
+
+    function signalNumber(signals, key, fallback, min, max) {
+        if (signals && signals[key] !== undefined && signals[key] !== null && signals[key] !== '') {
+            return clamp(parseNumber(signals[key]), min, max);
+        }
+        return fallback;
+    }
+
+    function signalBool(signals, key, fallback) {
+        if (signals && signals[key] !== undefined && signals[key] !== null) return !!signals[key];
+        return !!fallback;
+    }
+
+    function signalText(signals, key, fallback) {
+        var value = signals && signals[key] !== undefined && signals[key] !== null ? signals[key] : fallback;
+        return tx(value);
+    }
+
+    function formatCauseLabel(causeId) {
+        var label = tx(causeId).replace(/_/g, ' ');
+        if (!label) return '';
+        if (label === 'no nextstep') return 'next step missing';
+        if (label === 'stale thread') return 'thread stale';
+        if (label === 'no champion') return 'champion missing';
+        if (label === 'champion weak') return 'champion weak';
+        if (label === 'no eb') return 'economic buyer missing';
+        if (label === 'no process') return 'process unclear';
+        if (label === 'impact not real') return 'impact vague';
+        if (label === 'usecase blurry') return 'use case blurry';
+        if (label === 'single threaded') return 'single-threaded';
+        if (label === 'next step overdue') return 'next step overdue';
+        return label;
+    }
+
+    function testCardText(card, pattern) {
+        var source = [
+            tx(card && card.title),
+            tx(card && card.copy),
+            Array.isArray(card && card.meta) ? card.meta.join(' ') : ''
+        ].join(' ');
+        return pattern.test(source);
+    }
+
+    function buildSignalProfile(card, family, input) {
+        var context = input && input.shellContext ? input.shellContext : {};
+        var warningCount = Array.isArray(input && input.dependencyWarnings) ? input.dependencyWarnings.length : 0;
+        var signals = readSignals(card);
+        var risk = signalNumber(signals, 'risk', parseRisk(card), 0, 100);
+        var heat = signalNumber(signals, 'heat', parseHeat(card), 0, 100);
+        var staleDays = signalNumber(signals, 'staleDays', parseStaleDays(card), 0, 365);
+        var amount = signalNumber(signals, 'amount', parseMoney(card), 0, 100000000);
+        var stageAgeDays = signalNumber(signals, 'stageAgeDays', 0, 0, 365);
+        var qualScore = signalNumber(signals, 'qualScore', 0, 0, 18);
+        var nextStepDaysAway = signalNumber(signals, 'nextStepDaysAway', 0, -365, 365);
+        var severity = signalNumber(signals, 'severity', 0, 0, 10);
+        var urgency = signalNumber(signals, 'urgency', 0, 0, 100);
+        var truthDebtCount = signalNumber(signals, 'truthDebtCount', 0, 0, 12);
+        var roomReadiness = signalNumber(signals, 'roomReadiness', countActions(card), 0, 10);
+        var threadingDepth = signalNumber(signals, 'threadingDepth', 0, 0, 20);
+        var missingChampion = signalBool(signals, 'missingChampion', testCardText(card, /(champion(?:\s+\w+){0,4}\s+(?:assumed|unproven|missing)|no champion|single-threaded)/i));
+        var weakChampion = signalBool(signals, 'weakChampion', testCardText(card, /(champion weak|non-committal)/i));
+        var missingNextStep = signalBool(signals, 'missingNextStep', testCardText(card, /(no dated next step|next step missing|angle still missing|no real next step|act next)/i));
+        var proofThin = signalBool(signals, 'proofThin', testCardText(card, /(proof thin|credibility still thin|proof owner not assigned|truth missing|targeting truth missing|missing ICP)/i));
+        var coveragePressure = signalBool(signals, 'coveragePressure', testCardText(card, /(coverage pressure|coverage gap)/i));
+        var driftSignal = signalBool(signals, 'driftSignal', testCardText(card, /(drift|drifting|stale|dark)/i));
+        var marketMotion = signalBool(signals, 'marketMotion', testCardText(card, /(outbound|signal|heat|motion)/i));
+        var threadingRisk = signalBool(signals, 'threadingRisk', testCardText(card, /(single-threaded)/i));
+        var nextStepOverdue = signalBool(signals, 'nextStepOverdue', nextStepDaysAway < 0);
+        var stageStuck = signalBool(signals, 'stageStuck', stageAgeDays > 14);
+        var hasAutopsy = signalBool(signals, 'hasAutopsy', hasAction(card, /autopsy/i));
+        var hasOpenDeal = signalBool(signals, 'hasOpenDeal', hasAction(card, /open deal/i));
+        var hasSignalConsole = signalBool(signals, 'hasSignalConsole', hasAction(card, /signal console/i));
+        var hasAdvisor = signalBool(signals, 'hasAdvisor', hasAction(card, /advisor/i));
+        var hasDiscovery = signalBool(signals, 'hasDiscovery', hasAction(card, /discovery/i));
+        var causeId = signalText(signals, 'causeId', '');
+        var pressureType = signalText(signals, 'pressureType', '');
+        var gapCount = signalNumber(signals, 'gapCount', 0, 0, 20);
+
+        if (!gapCount) {
+            if (missingChampion) gapCount += 1;
+            if (missingNextStep) gapCount += 1;
+            if (proofThin) gapCount += 1;
+            if (coveragePressure) gapCount += 1;
+            if (driftSignal && family === 'risk') gapCount += 1;
+            if (warningCount && family === 'system') gapCount += warningCount;
+            if (family === 'icp') gapCount += 1;
+            if (truthDebtCount) gapCount += Math.min(3, truthDebtCount);
+        }
+
+        return {
+            risk: risk,
+            heat: heat,
+            staleDays: staleDays,
+            amount: amount,
+            stageAgeDays: stageAgeDays,
+            qualScore: qualScore,
+            nextStepDaysAway: nextStepDaysAway,
+            severity: severity,
+            urgency: urgency,
+            truthDebtCount: truthDebtCount,
+            roomReadiness: roomReadiness,
+            threadingDepth: threadingDepth,
+            warningCount: warningCount,
+            actionCount: countActions(card),
+            missingChampion: missingChampion,
+            weakChampion: weakChampion,
+            missingNextStep: missingNextStep,
+            proofThin: proofThin,
+            coveragePressure: coveragePressure,
+            driftSignal: driftSignal,
+            marketMotion: marketMotion,
+            threadingRisk: threadingRisk,
+            nextStepOverdue: nextStepOverdue,
+            stageStuck: stageStuck,
+            hasAutopsy: hasAutopsy,
+            hasOpenDeal: hasOpenDeal,
+            hasSignalConsole: hasSignalConsole,
+            hasAdvisor: hasAdvisor,
+            hasDiscovery: hasDiscovery,
+            causeId: causeId,
+            pressureType: pressureType,
+            gapCount: gapCount,
+            contextAccounts: Number(context.accounts || 0),
+            contextSignals: Number(context.signals || 0),
+            contextDeals: Number(context.deals || 0),
+            contextIcps: Number(context.icps || 0),
+            contextMotions: Number(context.motions || 0)
+        };
+    }
+
+    function buildRiskReasons(card, profile) {
         var reasons = [];
-        var risk = parseRisk(card);
-        var staleDays = parseStaleDays(card);
-        if (risk) pushReason(reasons, 'risk ' + risk);
-        if (staleDays) pushReason(reasons, staleDays + 'd stale');
-        if (!hasAction(card, /open deal/i)) pushReason(reasons, 'deal context thin');
-        if (/autopsy/i.test(tx(card && card.title))) pushReason(reasons, 'failure mode exposed');
+        if (profile.risk) pushReason(reasons, 'risk ' + profile.risk);
+        if (profile.staleDays) pushReason(reasons, profile.staleDays + 'd stale');
+        if (profile.nextStepOverdue) pushReason(reasons, 'next step overdue');
+        if (profile.proofThin) pushReason(reasons, 'proof thin');
+        if (profile.truthDebtCount >= 2) pushReason(reasons, 'truth debt');
+        if (profile.missingChampion) pushReason(reasons, 'champion unproven');
+        if (profile.weakChampion) pushReason(reasons, 'champion weak');
+        if (profile.missingNextStep) pushReason(reasons, 'next step missing');
+        if (profile.threadingRisk) pushReason(reasons, 'single-threaded');
+        if (profile.stageStuck) pushReason(reasons, 'stage stuck');
+        if (profile.hasAutopsy) pushReason(reasons, 'failure mode exposed');
         var meta = Array.isArray(card && card.meta) ? card.meta : [];
         meta.forEach(function (item) {
             if (/\$/.test(item)) return;
-            if (/stale/i.test(item)) return;
-            if (/risk/i.test(item)) return;
+            if (/stale|risk/i.test(item)) return;
             if (reasons.length >= 4) return;
             pushReason(reasons, item);
         });
         return reasons.slice(0, 4);
     }
 
-    function buildMoveReasons(card) {
+    function buildMoveReasons(card, profile, family) {
         var reasons = [];
-        var heat = parseHeat(card);
-        var risk = parseRisk(card);
-        if (heat) pushReason(reasons, 'heat ' + heat);
-        if (risk) pushReason(reasons, 'risk ' + risk);
-        if (/coverage/i.test(tx(card && card.copy))) pushReason(reasons, 'coverage pressure');
-        if (/advisor/i.test(tx(card && card.title))) pushReason(reasons, 'advisor leverage ready');
-        if (/outbound|signal/i.test(tx(card && card.title) + ' ' + tx(card && card.copy))) pushReason(reasons, 'market motion available');
-        var meta = Array.isArray(card && card.meta) ? card.meta : [];
-        meta.forEach(function (item) {
-            if (/\$/.test(item)) return;
-            if (/heat|risk/i.test(item)) return;
-            if (reasons.length >= 4) return;
-            pushReason(reasons, item);
-        });
+        if (profile.causeId) pushReason(reasons, formatCauseLabel(profile.causeId));
+        if (profile.heat) pushReason(reasons, 'heat ' + profile.heat);
+        if (profile.coveragePressure) pushReason(reasons, 'coverage pressure');
+        if (profile.truthDebtCount >= 2) pushReason(reasons, 'truth debt');
+        if (profile.proofThin) pushReason(reasons, 'proof thin');
+        if (profile.nextStepOverdue) pushReason(reasons, 'next step overdue');
+        if (profile.missingNextStep) pushReason(reasons, 'next step missing');
+        if (family === 'advisor' || profile.hasAdvisor) pushReason(reasons, 'advisor leverage');
+        if (family === 'opportunity' || profile.hasSignalConsole) pushReason(reasons, 'market motion');
+        if (profile.roomReadiness >= 2) pushReason(reasons, 'room ready');
+        if (!reasons.length && profile.risk) pushReason(reasons, 'risk ' + profile.risk);
+        if (!reasons.length && profile.hasOpenDeal) pushReason(reasons, 'room ready');
         if (!reasons.length) pushReason(reasons, 'next move ready');
         return reasons.slice(0, 4);
     }
 
-    function buildSystemReasons(card, input) {
+    function buildSystemReasons(profile) {
         var reasons = [];
-        var warnings = Array.isArray(input && input.dependencyWarnings) ? input.dependencyWarnings : [];
-        if (warnings.length) pushReason(reasons, warnings.length + ' sync warning' + (warnings.length === 1 ? '' : 's'));
+        if (profile.warningCount) pushReason(reasons, profile.warningCount + ' sync warning' + (profile.warningCount === 1 ? '' : 's'));
         pushReason(reasons, 'local fallback active');
+        pushReason(reasons, 'trust surface compromised');
         return reasons.slice(0, 4);
     }
 
-    function buildIcpReasons(input) {
+    function buildIcpReasons(profile) {
         var reasons = [];
         pushReason(reasons, 'targeting truth missing');
-        var context = input && input.shellContext ? input.shellContext : {};
-        if (context.signals || context.accounts) pushReason(reasons, 'market layer already live');
-        if (context.deals) pushReason(reasons, 'deal layer depends on ICP');
+        if (profile.contextSignals || profile.contextAccounts) pushReason(reasons, 'market layer already live');
+        if (profile.contextDeals) pushReason(reasons, 'deal layer depends on ICP');
         return reasons.slice(0, 4);
     }
 
-    function scoreRiskCard(card) {
-        var risk = parseRisk(card);
-        var staleDays = parseStaleDays(card);
-        var score = (risk * 0.72) + (staleDays * 1.25);
-        if (staleDays >= 14) score += 8;
-        if (hasAction(card, /run autopsy/i)) score += 10;
-        return clamp(score, 0, 100);
+    function scoreRiskCard(profile) {
+        var score = (profile.risk * 0.5) + (profile.staleDays * 1.1) + amountPressure(profile.amount);
+        score += Math.max(0, (14 - profile.qualScore)) * 1.1;
+        score += Math.min(14, profile.stageAgeDays * 0.45);
+        score += profile.truthDebtCount * 3;
+        if (profile.hasAutopsy) score += 11;
+        if (profile.proofThin) score += 7;
+        if (profile.missingChampion) score += 7;
+        if (profile.weakChampion) score += 4;
+        if (profile.missingNextStep) score += 8;
+        if (profile.nextStepOverdue) score += 9;
+        if (profile.threadingRisk) score += 7;
+        if (profile.stageStuck) score += 7;
+        if (profile.driftSignal) score += 4;
+        return clamp(Math.round(score), 0, 100);
     }
 
-    function scoreMoveCard(card, family) {
-        var heat = parseHeat(card);
-        var risk = parseRisk(card);
+    function scoreMoveCard(profile, family) {
         var score = family === 'advisor' ? 66 : family === 'opportunity' ? 62 : 56;
-        score += heat * 0.35;
-        score += risk * 0.3;
-        if (card && card.badge === 'Now') score += 10;
-        if (card && card.badge === 'Next') score += 4;
-        if (/coverage/i.test(tx(card && card.copy))) score += 8;
-        if (/advisor/i.test(tx(card && card.title))) score += 10;
-        return clamp(score, 0, 100);
+        score += profile.heat * 0.24;
+        score += profile.risk * 0.18;
+        score += amountPressure(profile.amount) * 0.7;
+        score += profile.urgency * 0.9;
+        score += profile.severity * 2;
+        if (profile.coveragePressure) score += 8;
+        if (profile.marketMotion) score += 6;
+        if (profile.truthDebtCount >= 2) score += 6;
+        if (profile.proofThin) score += 5;
+        if (profile.missingNextStep) score += 4;
+        if (profile.nextStepOverdue) score += 6;
+        if (profile.hasOpenDeal) score += 3;
+        if (profile.hasSignalConsole) score += 4;
+        if (profile.roomReadiness >= 2) score += 4;
+        if (profile.causeId === 'coverage_gap') score += 8;
+        if (profile.causeId === 'no_nextstep' || profile.causeId === 'next_step_overdue') score += 7;
+        if (profile.causeId === 'no_champion' || profile.causeId === 'champion_weak') score += 6;
+        if (family === 'advisor') score += 8;
+        if (family === 'opportunity') score += 6;
+        return clamp(Math.round(score), 0, 100);
     }
 
-    function scoreSystemCard(input) {
-        var warnings = Array.isArray(input && input.dependencyWarnings) ? input.dependencyWarnings : [];
-        return clamp(48 + (warnings.length * 8), 0, 88);
+    function scoreSystemCard(profile) {
+        return clamp(Math.round(48 + (profile.warningCount * 10) + (profile.contextDeals ? 4 : 0)), 0, 90);
     }
 
-    function scoreIcpCard(input) {
-        var context = input && input.shellContext ? input.shellContext : {};
+    function scoreIcpCard(profile) {
         var score = 52;
-        if (context.signals || context.accounts) score += 8;
-        if (context.deals) score += 10;
-        return clamp(score, 0, 82);
+        if (profile.contextAccounts || profile.contextSignals) score += 8;
+        if (profile.contextDeals) score += 10;
+        if (profile.contextMotions) score += 4;
+        return clamp(Math.round(score), 0, 86);
     }
 
-    function buildObjectFromCard(card, family, input) {
-        var score = family === 'risk'
-            ? scoreRiskCard(card)
-            : scoreMoveCard(card, family);
-        var reasons = family === 'risk'
-            ? buildRiskReasons(card)
-            : buildMoveReasons(card);
-        var actions = Array.isArray(card && card.actions) ? card.actions.slice() : [];
-        return {
-            id: tx(card && card.commandId) || tx(card && card.title).toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-            objectType: family === 'risk' ? 'deal' : family === 'opportunity' ? 'signal' : 'motion',
+    function scoreRankingConfidence(profile, family) {
+        var confidence = 36;
+        confidence += Math.min(18, profile.risk * 0.12);
+        confidence += Math.min(14, profile.heat * 0.12);
+        confidence += profile.staleDays ? 10 : 0;
+        confidence += profile.amount ? 8 : 0;
+        confidence += Math.min(12, profile.actionCount * 6);
+        confidence += Math.min(18, profile.gapCount * 5);
+        confidence += profile.warningCount ? Math.min(16, profile.warningCount * 8) : 0;
+        confidence += Math.min(12, profile.truthDebtCount * 4);
+        confidence += profile.nextStepOverdue ? 6 : 0;
+        confidence += profile.stageStuck ? 6 : 0;
+        confidence += profile.roomReadiness >= 2 ? 6 : 0;
+        confidence += profile.urgency ? Math.min(10, profile.urgency * 0.45) : 0;
+        if (family === 'advisor' || family === 'opportunity') confidence += 6;
+        if (family === 'system' || family === 'icp') confidence += 10;
+        return clamp(Math.round(confidence), 40, 94);
+    }
+
+    function labelRankingConfidence(score) {
+        if (score >= 78) return 'stable lead';
+        if (score >= 58) return 'supported';
+        return 'mixed signal';
+    }
+
+    function computeStabilityBonus(object, family, options) {
+        var snapshot = options && options.previousSnapshot ? options.previousSnapshot : null;
+        if (!snapshot) return 0;
+
+        var objectId = tx(object && object.id);
+        var objectTitle = slug(object && object.title);
+        var bonus = 0;
+
+        if (objectId && objectId === tx(snapshot.spotlightObjectId)) bonus += 6;
+        else if (objectTitle && objectTitle === slug(snapshot.spotlightTitle)) bonus += 6;
+
+        var topQueueIds = Array.isArray(snapshot.topQueueIds) ? snapshot.topQueueIds : [];
+        var topQueueTitles = Array.isArray(snapshot.topQueueTitles) ? snapshot.topQueueTitles : [];
+        if (objectId && topQueueIds.indexOf(objectId) >= 0) bonus += 2;
+        else if (objectTitle && topQueueTitles.indexOf(objectTitle) >= 0) bonus += 2;
+
+        if (family === 'system') bonus = Math.min(bonus, 4);
+        if (family === 'icp') bonus = Math.min(bonus, 5);
+
+        return clamp(bonus, 0, 8);
+    }
+
+    function buildReasons(card, family, profile) {
+        if (family === 'risk') return buildRiskReasons(card, profile);
+        if (family === 'system') return buildSystemReasons(profile);
+        if (family === 'icp') return buildIcpReasons(profile);
+        return buildMoveReasons(card, profile, family);
+    }
+
+    function scoreFamily(profile, family) {
+        if (family === 'risk') return scoreRiskCard(profile);
+        if (family === 'system') return scoreSystemCard(profile);
+        if (family === 'icp') return scoreIcpCard(profile);
+        return scoreMoveCard(profile, family);
+    }
+
+    function objectTypeForFamily(family) {
+        if (family === 'risk') return 'deal';
+        if (family === 'opportunity') return 'signal';
+        if (family === 'advisor') return 'motion';
+        if (family === 'system') return 'system';
+        if (family === 'icp') return 'icp';
+        return 'motion';
+    }
+
+    function finalizeCommandObject(base, family, input, options) {
+        var object = {
+            id: tx(base && base.id) || slug(base && base.title),
+            objectType: tx(base && base.objectType) || objectTypeForFamily(family),
+            title: tx(base && base.title),
+            copy: tx(base && base.copy),
+            badge: tx(base && base.badge),
+            badgeTone: normalizeTone(base, family),
+            metricLabel: tx(base && base.metricLabel) || tx(base && base.badge) || 'Command state',
+            metricValue: tx(base && base.metricValue),
+            meta: Array.isArray(base && base.meta) ? base.meta.slice() : [],
+            actions: Array.isArray(base && base.actions) ? base.actions.slice() : [],
+            sheetKey: tx(base && base.sheetKey),
+            focusObject: tx(base && base.focusObject) || tx(base && base.title),
+            focusRoom: tx(base && base.focusRoom) || (((base && base.actions && base.actions[0]) || {}).roomLabel || ''),
+            rankingSignals: base && base.rankingSignals ? Object.assign({}, base.rankingSignals) : null,
+            commandFamily: family,
+            stateKey: tx(base && base.stateKey) || family,
+            source: base && base.source ? base.source : null
+        };
+        var profile = buildSignalProfile(object, family, input);
+        var baseScore = scoreFamily(profile, family);
+        var stabilityBonus = computeStabilityBonus(object, family, options);
+        var rankingConfidence = scoreRankingConfidence(profile, family);
+
+        object.baseScore = baseScore;
+        object.stabilityBonus = stabilityBonus;
+        object.score = clamp(baseScore + stabilityBonus, 0, 100);
+        object.metricValue = object.metricValue || String(object.score);
+        object.scoreReasons = buildReasons(object, family, profile);
+        object.rankingConfidence = rankingConfidence;
+        object.rankingConfidenceLabel = labelRankingConfidence(rankingConfidence);
+        object.roomFamilyLabel = roomFamilyLabel(family);
+        object.truthDebtCount = profile.truthDebtCount;
+        object.nextStepOverdue = profile.nextStepOverdue;
+        object.stageStuck = profile.stageStuck;
+        object.causeId = profile.causeId;
+        object.pressureType = profile.pressureType;
+
+        return object;
+    }
+
+    function buildObjectFromCard(card, family, input, options) {
+        return finalizeCommandObject({
+            id: tx(card && card.commandId) || slug(card && card.title),
             title: tx(card && card.title),
             copy: tx(card && card.copy),
             badge: tx(card && card.badge),
             badgeTone: normalizeTone(card, family),
             metricLabel: tx(card && card.badge) || 'Command state',
-            metricValue: String(score),
+            metricValue: '',
             meta: Array.isArray(card && card.meta) ? card.meta.slice() : [],
-            actions: actions,
+            actions: Array.isArray(card && card.actions) ? card.actions.slice() : [],
             sheetKey: tx(card && card.sheetKey),
+            rankingSignals: card && card.rankingSignals ? Object.assign({}, card.rankingSignals) : null,
             focusObject: tx(card && card.title),
-            focusRoom: actions[0] && actions[0].roomLabel ? actions[0].roomLabel : '',
-            score: score,
-            scoreReasons: reasons,
-            commandFamily: family,
+            focusRoom: card && card.actions && card.actions[0] && card.actions[0].roomLabel ? card.actions[0].roomLabel : '',
             stateKey: family,
             source: card || null
-        };
+        }, family, input, options);
     }
 
-    function buildSystemObject(input) {
-        var warnings = Array.isArray(input && input.dependencyWarnings) ? input.dependencyWarnings : [];
-        return {
+    function buildSystemObject(input, options) {
+        return finalizeCommandObject({
             id: 'system-trust',
-            objectType: 'system',
             title: 'Repair trust in the command surface.',
             copy: 'Some synced inputs fell back to local state. Rebuild trust before you over-read the current ordering.',
             badge: 'Risk',
             badgeTone: 'state-risk',
             metricLabel: 'System pressure',
-            metricValue: String(scoreSystemCard(input)),
-            meta: ['local fallback', warnings.length + ' sync warning' + (warnings.length === 1 ? '' : 's')],
+            metricValue: '',
+            meta: ['local fallback'],
             actions: [
                 { href: '/app/settings/', label: 'Open Settings', tone: 'btn-secondary', roomLabel: 'Settings' },
                 { href: '/app/dashboard/?mode=spotlight', label: 'Refresh view', tone: 'btn-secondary', roomLabel: 'Dashboard' }
             ],
-            sheetKey: '',
             focusObject: 'Command surface trust',
             focusRoom: 'Settings',
-            score: scoreSystemCard(input),
-            scoreReasons: buildSystemReasons(null, input),
-            commandFamily: 'system',
-            stateKey: 'system',
-            source: null
-        };
+            stateKey: 'system'
+        }, 'system', input, options);
     }
 
-    function buildIcpObject(input) {
-        return {
+    function buildIcpObject(input, options) {
+        return finalizeCommandObject({
             id: 'icp-truth',
-            objectType: 'icp',
             title: 'Save one ICP before the week drifts.',
             copy: 'Market signals or deals exist, but targeting truth is still missing. The system is carrying that ambiguity everywhere else.',
             badge: 'Truth gap',
             badgeTone: 'state-ready',
             metricLabel: 'ICP pressure',
-            metricValue: String(scoreIcpCard(input)),
+            metricValue: '',
             meta: ['missing ICP', 'targeting layer'],
             actions: [
                 { href: '/app/icp-studio/', label: 'Open ICP Studio', roomLabel: 'ICP Studio' }
             ],
-            sheetKey: '',
             focusObject: 'ICP truth',
             focusRoom: 'ICP Studio',
-            score: scoreIcpCard(input),
-            scoreReasons: buildIcpReasons(input),
-            commandFamily: 'icp',
-            stateKey: 'icp',
-            source: null
-        };
+            stateKey: 'icp'
+        }, 'icp', input, options);
     }
 
-    function buildFallbackPrimaryObject(input) {
+    function buildFallbackPrimaryObject(input, options) {
         var primary = input && input.primary ? input.primary : null;
         if (!primary) return null;
-        return {
+        return finalizeCommandObject({
             id: 'primary-fallback',
-            objectType: 'system',
             title: tx(primary.title),
             copy: tx(primary.copy),
             badge: tx(primary.label) || 'Now',
             badgeTone: normalizeTone(primary, 'move'),
             metricLabel: 'Command state',
-            metricValue: '50',
+            metricValue: '',
             meta: Array.isArray(primary.tags) ? primary.tags.slice() : [],
             actions: Array.isArray(primary.actions) ? primary.actions.slice() : [],
             sheetKey: tx(primary.sheetKey),
             focusObject: tx(primary.title),
             focusRoom: '',
-            score: 50,
-            scoreReasons: ['stage pressure', 'front-door fallback'],
-            commandFamily: 'move',
             stateKey: 'move',
             source: primary
-        };
+        }, 'move', input, options);
     }
 
     function dedupeObjects(objects) {
@@ -275,36 +553,43 @@
         });
     }
 
-    function buildCommandObjects(input) {
+    function buildCommandObjects(input, options) {
         var objects = [];
         var riskCards = Array.isArray(input && input.riskCards) ? input.riskCards : [];
         var moveCards = Array.isArray(input && input.moveCards) ? input.moveCards : [];
+
         riskCards.forEach(function (card) {
-            objects.push(buildObjectFromCard(card, 'risk', input));
+            objects.push(buildObjectFromCard(card, 'risk', input, options));
         });
+
         moveCards.forEach(function (card) {
             var family = /advisor/i.test(tx(card && card.title))
                 ? 'advisor'
                 : (/outbound|signal/i.test(tx(card && card.title) + ' ' + tx(card && card.copy)) ? 'opportunity' : 'move');
-            objects.push(buildObjectFromCard(card, family, input));
+            objects.push(buildObjectFromCard(card, family, input, options));
         });
+
         if (!objects.length) {
-            var fallback = buildFallbackPrimaryObject(input);
+            var fallback = buildFallbackPrimaryObject(input, options);
             if (fallback) objects.push(fallback);
         }
+
         if (Array.isArray(input && input.dependencyWarnings) && input.dependencyWarnings.length) {
-            objects.push(buildSystemObject(input));
+            objects.push(buildSystemObject(input, options));
         }
+
         var context = input && input.shellContext ? input.shellContext : {};
         if (!context.icps && (context.accounts || context.signals || context.deals)) {
-            objects.push(buildIcpObject(input));
+            objects.push(buildIcpObject(input, options));
         }
+
         return dedupeObjects(objects);
     }
 
     function rankCommandObjects(objects) {
         return (objects || []).slice().sort(function (a, b) {
             if ((b.score || 0) !== (a.score || 0)) return (b.score || 0) - (a.score || 0);
+            if ((b.baseScore || 0) !== (a.baseScore || 0)) return (b.baseScore || 0) - (a.baseScore || 0);
             if (familyPriority(b.commandFamily) !== familyPriority(a.commandFamily)) {
                 return familyPriority(b.commandFamily) - familyPriority(a.commandFamily);
             }
@@ -333,63 +618,109 @@
         return list[0] + ' and ' + list[1];
     }
 
+    function explainLeadCopy(object, mode, because) {
+        var confidenceLabel = tx(object && object.rankingConfidenceLabel);
+        if (mode === 'queue') {
+            if (confidenceLabel === 'stable lead') return 'The order is stable because ' + because + '.';
+            if (confidenceLabel === 'supported') return 'The order is supported because ' + because + '.';
+            return 'This stays visible because ' + because + '.';
+        }
+        if (confidenceLabel === 'stable lead') return 'The lead is stable because ' + because + '.';
+        if (confidenceLabel === 'supported') return 'It is in the light because ' + because + '.';
+        return 'It stays in the light because ' + because + '.';
+    }
+
+    function explainTitleForObject(object, mode) {
+        var family = tx(object && object.commandFamily);
+        var causeId = tx(object && object.causeId);
+        var truthDebtCount = Number(object && object.truthDebtCount || 0);
+        var nextStepOverdue = !!(object && object.nextStepOverdue);
+        var stageStuck = !!(object && object.stageStuck);
+
+        if (mode === 'queue') {
+            if (family === 'risk') {
+                if (truthDebtCount >= 2) return 'Truth debt is dragging this deal down.';
+                if (nextStepOverdue || stageStuck) return 'Execution drift is visible now.';
+                return 'Recovery is ahead of expansion.';
+            }
+            if (family === 'advisor') return 'Leverage is earned here, not decorative.';
+            if (family === 'opportunity' && causeId === 'coverage_gap') return 'Coverage pressure makes this move real.';
+            if (family === 'opportunity' || family === 'move') return 'This is the next move with leverage.';
+            if (family === 'icp') return 'Truth work stays ahead of scale work.';
+            return 'This keeps the command surface honest.';
+        }
+
+        if (family === 'risk') {
+            if (truthDebtCount >= 2) return 'This deal is weak where it matters.';
+            if (nextStepOverdue || stageStuck) return 'This deal is drifting in the open.';
+            return 'The week is drifting through this object.';
+        }
+        if (family === 'advisor') return 'Leverage is earned here, not decorative.';
+        if (family === 'opportunity' && causeId === 'coverage_gap') return 'Coverage pressure makes this move real.';
+        if (family === 'opportunity' || family === 'move') return 'This is the highest-leverage move right now.';
+        if (family === 'icp') return 'Targeting truth is still upstream of everything else.';
+        return 'System trust is affecting the rest of the stack.';
+    }
+
     function explainCommandObject(object, mode) {
         var family = tx(object && object.commandFamily);
         var reasons = Array.isArray(object && object.scoreReasons) ? object.scoreReasons : [];
         var because = joinReasons(reasons);
+
         if (mode === 'queue') {
             if (family === 'risk') {
                 return {
                     label: 'Why this order',
-                    title: 'Recovery is ahead of expansion.',
-                    copy: 'This stays near the front because ' + because + '.'
+                    title: explainTitleForObject(object, mode),
+                    copy: explainLeadCopy(object, mode, because)
                 };
             }
             if (family === 'advisor' || family === 'opportunity' || family === 'move') {
                 return {
                     label: 'Why this order',
-                    title: 'This is the next move with leverage.',
-                    copy: 'It stays in front of lower-pressure work because ' + because + '.'
+                    title: explainTitleForObject(object, mode),
+                    copy: explainLeadCopy(object, mode, because)
                 };
             }
             if (family === 'icp') {
                 return {
                     label: 'Why this order',
-                    title: 'Truth work must happen before scale work.',
-                    copy: 'This stays visible because ' + because + '.'
+                    title: explainTitleForObject(object, mode),
+                    copy: explainLeadCopy(object, mode, because)
                 };
             }
             return {
                 label: 'Why this order',
-                title: 'This keeps the command surface honest.',
-                copy: 'It stays in the ranked run because ' + because + '.'
+                title: explainTitleForObject(object, mode),
+                copy: explainLeadCopy(object, mode, because)
             };
         }
+
         if (family === 'risk') {
             return {
                 label: 'Why this is here',
-                title: 'The week is drifting through this object.',
-                copy: 'It is in the light because ' + because + '.'
+                title: explainTitleForObject(object, mode),
+                copy: explainLeadCopy(object, mode, because)
             };
         }
         if (family === 'advisor' || family === 'opportunity' || family === 'move') {
             return {
                 label: 'Why this is here',
-                title: 'This is the highest-leverage move right now.',
-                copy: 'It is in the light because ' + because + '.'
+                title: explainTitleForObject(object, mode),
+                copy: explainLeadCopy(object, mode, because)
             };
         }
         if (family === 'icp') {
             return {
                 label: 'Why this is here',
-                title: 'Targeting truth is still upstream of everything else.',
-                copy: 'It is in the light because ' + because + '.'
+                title: explainTitleForObject(object, mode),
+                copy: explainLeadCopy(object, mode, because)
             };
         }
         return {
             label: 'Why this is here',
-            title: 'System trust is affecting the rest of the stack.',
-            copy: 'It is in the light because ' + because + '.'
+            title: explainTitleForObject(object, mode),
+            copy: explainLeadCopy(object, mode, because)
         };
     }
 

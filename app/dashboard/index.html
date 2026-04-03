@@ -1214,7 +1214,9 @@
                 }).join('') + '</div>' : '') +
             '</div>';
         }
-        function buildDashboardSnapshot(mode, stage, context, briefing, dependencyWarnings, weekOneState) {
+        function buildDashboardSnapshot(mode, stage, context, briefing, dependencyWarnings, weekOneState, rankingState) {
+            var spotlight = rankingState && rankingState.spotlight ? rankingState.spotlight : null;
+            var queue = rankingState && Array.isArray(rankingState.queue) ? rankingState.queue : [];
             return {
                 capturedAt: new Date().toISOString(),
                 mode: mode,
@@ -1229,7 +1231,12 @@
                 atRisk: briefing && briefing.atRisk ? briefing.atRisk.length : 0,
                 topMoves: briefing && briefing.topMoves ? briefing.topMoves.length : 0,
                 syncWarnings: dependencyWarnings.length,
-                weekOneDay: weekOneState && weekOneState.active ? weekOneState.dayNumber : null
+                weekOneDay: weekOneState && weekOneState.active ? weekOneState.dayNumber : null,
+                spotlightObjectId: spotlight ? String(spotlight.id || '') : '',
+                spotlightTitle: spotlight ? String(spotlight.title || '') : '',
+                spotlightConfidence: spotlight ? String(spotlight.rankingConfidenceLabel || '') : '',
+                topQueueIds: queue.slice(0, 4).map(function(card) { return String(card && card.id || ''); }).filter(Boolean),
+                topQueueTitles: queue.slice(0, 4).map(function(card) { return slugDashboardCommandTitle(card && card.title || ''); }).filter(Boolean)
             };
         }
         function buildDashboardDelta(previous, current) {
@@ -1411,14 +1418,21 @@
         }
         function buildDashboardPrimaryFromCommandObject(card, stage, fallbackPrimary) {
             if (!card) return fallbackPrimary;
+            var tags = [];
+            if (card.rankingConfidenceLabel) tags.push(card.rankingConfidenceLabel);
+            if (Array.isArray(card.scoreReasons) && card.scoreReasons.length) {
+                tags = tags.concat(card.scoreReasons.slice(0, Math.max(0, 4 - tags.length)));
+            } else if (Array.isArray(card.meta) && card.meta.length) {
+                tags = tags.concat(card.meta.slice(0, Math.max(0, 4 - tags.length)));
+            } else if (fallbackPrimary && Array.isArray(fallbackPrimary.tags)) {
+                tags = tags.concat(fallbackPrimary.tags.slice(0, Math.max(0, 4 - tags.length)));
+            }
             return {
                 label: card.badge || 'Now',
                 title: card.title || (fallbackPrimary && fallbackPrimary.title) || stage.title,
                 copy: card.copy || (fallbackPrimary && fallbackPrimary.copy) || stage.copy,
                 actions: Array.isArray(card.actions) ? card.actions.slice(0, 2) : ((fallbackPrimary && fallbackPrimary.actions) || []),
-                tags: Array.isArray(card.scoreReasons) && card.scoreReasons.length
-                    ? card.scoreReasons.slice(0, 4)
-                    : (Array.isArray(card.meta) ? card.meta.slice(0, 4) : ((fallbackPrimary && fallbackPrimary.tags) || []))
+                tags: tags
             };
         }
         function materializeDashboardCommandSummary(summary) {
@@ -1442,6 +1456,7 @@
         }
         function renderDashboardCommandMeta(card) {
             var items = [];
+            if (card && card.rankingConfidenceLabel) items.push(card.rankingConfidenceLabel);
             (Array.isArray(card && card.meta) ? card.meta : []).forEach(function(item) {
                 if (item && items.indexOf(item) === -1) items.push(item);
             });
@@ -1821,9 +1836,12 @@
                         '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Operating lanes</div><div class="shell-section-title">What this page wants from you first</div><div class="shell-section-copy">Give it the minimum truth stack, then let it compound.</div></div></div>' +
                         '<div class="anchor-lane-grid">' + emptyLanes.map(renderDashboardLane).join('') + '</div>' +
                     '</section>';
-                var emptySnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, null, dependencyWarnings, weekOneState);
-                var emptyDelta = buildDashboardDelta(previousSnapshot, emptySnapshot);
                 var emptyCards = buildDashboardEmptyCards(stage, shellContext);
+                var emptySnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, null, dependencyWarnings, weekOneState, {
+                    spotlight: emptyCards[0] || null,
+                    queue: emptyCards.slice(0, 4)
+                });
+                var emptyDelta = buildDashboardDelta(previousSnapshot, emptySnapshot);
                 emptyHtml = weekOneBanner + warningBanner + renderDashboardCommandMode(commandMode, emptyDelta) + (
                     commandMode === 'spotlight'
                         ? renderDashboardSpotlight(emptyCards)
@@ -1914,8 +1932,6 @@
             var primary = buildDashboardPrimary(stage, briefing, hotSuggestion);
             primary.sheetKey = registerDashboardSheet(buildPrimarySheet(primary, stage, shellContext));
             var lanes = buildDashboardLanes(stage, primary, briefing, advisorSuggestion, dependencyWarnings);
-            var commandSnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, briefing, dependencyWarnings, weekOneState);
-            var commandDelta = buildDashboardDelta(previousSnapshot, commandSnapshot);
             dashboardGraphPayload = buildDashboardGraphPayload({
                 icps: icpState,
                 accounts: signalConsoleState.accounts,
@@ -1965,6 +1981,78 @@
             html += '</section>';
             }
 
+            var vitalsById = {};
+            active.forEach(function(vital) {
+                vitalsById[String(vital.id)] = vital;
+            });
+            function countDashboardTruthDebt(vital) {
+                if (!vital || !vital.missing) return 0;
+                var keys = ['champion', 'eb', 'usecase', 'impact', 'process', 'competition', 'risks'];
+                var total = 0;
+                keys.forEach(function(key) {
+                    if (vital.missing[key]) total += 1;
+                });
+                if (vital.missing.nextstep || !vital.nextStepHasDate) total += 1;
+                return total;
+            }
+            function buildRiskRankingSignals(vital) {
+                var truthDebtCount = countDashboardTruthDebt(vital);
+                var threadingDepth = vital && vital.threadingDepth ? Number(vital.threadingDepth.engaged || 0) : 0;
+                var nextStepOverdue = vital && vital.nextStepDaysAway !== null && Number(vital.nextStepDaysAway) < 0;
+                return {
+                    risk: Number(vital.riskScore || 0),
+                    staleDays: Number(vital.staleDays || 0),
+                    amount: Number(vital.value || 0),
+                    stageAgeDays: Number(vital.stageAgeDays || 0),
+                    qualScore: Number(vital.qualScore || 0),
+                    nextStepDaysAway: vital.nextStepDaysAway === null ? 0 : Number(vital.nextStepDaysAway || 0),
+                    missingChampion: !!(vital.missing && vital.missing.champion),
+                    weakChampion: !!(vital.gates && vital.gates.champion === 'weak'),
+                    missingNextStep: !!(vital.missing && vital.missing.nextstep) || !vital.nextStepHasDate,
+                    nextStepOverdue: nextStepOverdue,
+                    proofThin: !!(vital.missing && (vital.missing.impact || vital.missing.process || vital.missing.usecase || vital.missing.eb)),
+                    truthDebtCount: truthDebtCount,
+                    threadingDepth: threadingDepth,
+                    threadingRisk: threadingDepth > 0 && threadingDepth < 3 && Number(vital.value || 0) >= 50000,
+                    stageStuck: Number(vital.stageAgeDays || 0) > Number((dh.DEFAULTS && dh.DEFAULTS.stageStuckDays) || 21),
+                    hasAutopsy: true,
+                    hasOpenDeal: true,
+                    roomReadiness: 2,
+                    pressureType: truthDebtCount >= 2 ? 'truth-debt' : (nextStepOverdue || Number(vital.staleDays || 0) >= Number((dh.DEFAULTS && dh.DEFAULTS.staleWarnDays) || 7) ? 'execution-drift' : 'recovery')
+                };
+            }
+            function buildMoveRankingSignals(move, vital, family) {
+                var truthDebtCount = vital ? countDashboardTruthDebt(vital) : 0;
+                var threadingDepth = vital && vital.threadingDepth ? Number(vital.threadingDepth.engaged || 0) : 0;
+                var causeId = String((move && move.causeId) || '');
+                return {
+                    risk: vital ? Number(vital.riskScore || 0) : 0,
+                    staleDays: vital ? Number(vital.staleDays || 0) : 0,
+                    amount: vital ? Number(vital.value || 0) : 0,
+                    stageAgeDays: vital ? Number(vital.stageAgeDays || 0) : 0,
+                    qualScore: vital ? Number(vital.qualScore || 0) : 0,
+                    nextStepDaysAway: vital && vital.nextStepDaysAway !== null ? Number(vital.nextStepDaysAway || 0) : 0,
+                    missingChampion: !!(vital && vital.missing && vital.missing.champion),
+                    weakChampion: !!(vital && vital.gates && vital.gates.champion === 'weak'),
+                    missingNextStep: !!(vital && vital.missing && vital.missing.nextstep) || !!(vital && !vital.nextStepHasDate),
+                    nextStepOverdue: !!(vital && vital.nextStepDaysAway !== null && Number(vital.nextStepDaysAway) < 0),
+                    proofThin: !!(vital && vital.missing && (vital.missing.impact || vital.missing.process || vital.missing.usecase || vital.missing.eb)),
+                    truthDebtCount: truthDebtCount,
+                    threadingDepth: threadingDepth,
+                    threadingRisk: threadingDepth > 0 && threadingDepth < 3 && Number((vital && vital.value) || 0) >= 50000,
+                    severity: Number((move && move.severity) || 0),
+                    urgency: Number((move && move.urgency) || 0),
+                    causeId: causeId,
+                    coveragePressure: causeId === 'coverage_gap',
+                    marketMotion: family === 'opportunity' || /signal|outbound|motion/i.test(String((move && move.action) || '') + ' ' + String((move && move.reason) || '')),
+                    hasOpenDeal: !!(move && move.dealId),
+                    hasSignalConsole: causeId === 'coverage_gap',
+                    hasAdvisor: family === 'advisor',
+                    roomReadiness: move && move.dealId ? 2 : 1,
+                    pressureType: causeId === 'coverage_gap' ? 'motion-leverage' : (truthDebtCount >= 2 ? 'truth-debt' : 'follow-through')
+                };
+            }
+
             var riskCards = briefing.atRisk.slice(0, 3).map(function(v) {
                 var stageLabel = dh.STAGE_LABELS[v.stage] || v.stage;
                 return {
@@ -1973,6 +2061,7 @@
                     badge: 'Risk ' + v.riskScore,
                     badgeTone: 'state-risk',
                     meta: [dh.money(v.value), stageLabel, v.staleDays + 'd stale'],
+                    rankingSignals: buildRiskRankingSignals(v),
                     sheetKey: registerDashboardSheet(buildRiskSheet(v)),
                     actions: [
                         { href: '/app/future-autopsy/?deal=' + encodeURIComponent(v.id), label: 'Run Autopsy' },
@@ -1981,12 +2070,15 @@
                 };
             });
             var moveCards = (briefing.topMoves || []).slice(0, 3).map(function(m, index) {
+                var moveVital = m.dealId ? vitalsById[String(m.dealId)] : null;
+                var moveFamily = index === 0 ? 'move' : (m.causeId === 'coverage_gap' ? 'opportunity' : 'move');
                 return {
                     title: m.action,
                     copy: m.reason,
                     badge: index === 0 ? 'Now' : 'Next',
                     badgeTone: index === 0 ? 'state-ready' : 'state-live',
                     meta: [m.dealName || stage.stageBadge, m.causeId ? m.causeId.replace(/_/g, ' ') : 'command move'],
+                    rankingSignals: buildMoveRankingSignals(m, moveVital, moveFamily),
                     sheetKey: registerDashboardSheet(buildMoveSheet(m, stage)),
                     actions: m.dealId
                         ? [{ href: '/app/deal-workspace/?deal=' + encodeURIComponent(m.dealId), label: m.dealName || 'Open Deal' }]
@@ -2005,6 +2097,17 @@
                     badge: 'Opportunity',
                     badgeTone: 'state-live',
                     meta: ['heat ' + hotSuggestion.heat, hotSuggestion.count + ' hot accounts'],
+                    rankingSignals: {
+                        heat: Number(hotSuggestion.heat || 0),
+                        urgency: 10,
+                        severity: 7,
+                        coveragePressure: true,
+                        marketMotion: true,
+                        hasSignalConsole: true,
+                        roomReadiness: 2,
+                        causeId: 'coverage_gap',
+                        pressureType: 'motion-leverage'
+                    },
                     sheetKey: registerDashboardSheet(buildGenericCommandSheet({
                         title: 'Turn ' + hotSuggestion.name + ' into a live outbound motion.',
                         copy: hotSuggestion.reason,
@@ -2039,6 +2142,16 @@
                     badge: 'Leverage',
                     badgeTone: 'state-ready',
                     meta: ['advisor ready', 'risk ' + advisorSuggestion.riskScore],
+                    rankingSignals: {
+                        risk: Number(advisorSuggestion.riskScore || 0),
+                        staleDays: Number(advisorSuggestion.staleDays || 0),
+                        urgency: 11,
+                        severity: 8,
+                        hasAdvisor: true,
+                        roomReadiness: 1,
+                        causeId: 'advisor_leverage',
+                        pressureType: 'leverage'
+                    },
                     sheetKey: registerDashboardSheet(buildGenericCommandSheet({
                         title: 'Deploy ' + advisorSuggestion.advisor + ' on ' + advisorSuggestion.deal + '.',
                         copy: advisorSuggestion.staleDays + 'd dark, risk ' + advisorSuggestion.riskScore + '. Use advisor leverage only after the ask is specific.',
@@ -2076,7 +2189,13 @@
                         stage: stage,
                         shellContext: shellContext,
                         dependencyWarnings: dependencyWarnings
-                    }), { limit: 6 }));
+                    }, {
+                        previousSnapshot: previousSnapshot,
+                        mode: commandMode
+                    }), {
+                        limit: 6,
+                        previousSnapshot: previousSnapshot
+                    }));
                 } catch (commandError) {
                     console.error('Command intelligence failed to rank dashboard objects:', commandError);
                     commandSummary = null;
@@ -2092,6 +2211,12 @@
             } else {
                 queueCards = buildDashboardCommandQueue(primary, riskCards, moveCards, stage);
             }
+
+            var commandSnapshot = buildDashboardSnapshot(commandMode, stage, shellContext, briefing, dependencyWarnings, weekOneState, {
+                spotlight: commandSummary && commandSummary.spotlight ? commandSummary.spotlight : (queueCards && queueCards[0] ? queueCards[0] : null),
+                queue: queueCards || []
+            });
+            var commandDelta = buildDashboardDelta(previousSnapshot, commandSnapshot);
 
             if (commandMode === 'brief') {
             html += '<section class="shell-section shell-section--subtle">';
