@@ -227,6 +227,27 @@
                 window.history.replaceState({}, '', url.pathname + url.search + url.hash);
             } catch (error) {}
         }
+        function readDashboardReturnSelection() {
+            try {
+                var params = new URLSearchParams(window.location.search || '');
+                return {
+                    commandId: String(params.get('commandId') || '').trim(),
+                    focusObject: String(params.get('focusObject') || '').trim()
+                };
+            } catch (error) {
+                return { commandId: '', focusObject: '' };
+            }
+        }
+        function syncDashboardSelectionUrl(commandId, focusObject) {
+            try {
+                var url = new URL(window.location.href);
+                if (commandId) url.searchParams.set('commandId', commandId);
+                else url.searchParams.delete('commandId');
+                if (focusObject) url.searchParams.set('focusObject', focusObject);
+                else url.searchParams.delete('focusObject');
+                window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+            } catch (error) {}
+        }
         function getDashboardCommandMode() {
             try {
                 var queryMode = new URLSearchParams(window.location.search).get('mode');
@@ -898,10 +919,14 @@
                 if (url.searchParams.get('returnTo')) return href;
             } catch (error) {}
             var currentMode = getDashboardCommandMode();
+            var normalizedFocusObject = String(focusObject || '').trim();
             return appendDashboardHrefParams(href, {
-                returnTo: '/app/dashboard/?mode=' + encodeURIComponent(currentMode),
+                returnTo: appendDashboardHrefParams('/app/dashboard/?mode=' + encodeURIComponent(currentMode), {
+                    commandId: normalizedFocusObject ? ('dashboard-command-' + slugDashboardCommandTitle(normalizedFocusObject)) : '',
+                    focusObject: normalizedFocusObject
+                }),
                 returnLabel: 'Back to ' + getDashboardCommandModeLabel(currentMode),
-                focusObject: focusObject || '',
+                focusObject: normalizedFocusObject,
                 focusRoom: inferDashboardRoomLabel(href, action.roomLabel),
                 fromMode: currentMode,
                 fromSurface: 'dashboard-command'
@@ -950,11 +975,15 @@
             if (!action || !action.href) return null;
             var currentMode = getDashboardCommandMode();
             var roomLabel = inferDashboardRoomLabel(action.href, preferredRoomLabel || action.roomLabel);
+            var normalizedSheetTitle = String(sheetTitle || '').trim();
             return {
                 href: appendDashboardHrefParams(action.href, {
-                    returnTo: '/app/dashboard/?mode=' + encodeURIComponent(currentMode),
+                    returnTo: appendDashboardHrefParams('/app/dashboard/?mode=' + encodeURIComponent(currentMode), {
+                        commandId: normalizedSheetTitle ? ('dashboard-command-' + slugDashboardCommandTitle(normalizedSheetTitle)) : '',
+                        focusObject: normalizedSheetTitle
+                    }),
                     returnLabel: 'Back to ' + getDashboardCommandModeLabel(currentMode),
-                    focusObject: sheetTitle || '',
+                    focusObject: normalizedSheetTitle,
                     focusRoom: roomLabel,
                     fromMode: currentMode,
                     fromSurface: 'dashboard-sheet'
@@ -976,19 +1005,44 @@
                 .replace(/^-+|-+$/g, '') || 'item';
         }
         function primeDashboardCommandCards(cards) {
-            var list = (cards || []).map(function(card, index) {
+            var seenCommandIds = {};
+            var list = (cards || []).map(function(card) {
                 var next = Object.assign({}, card);
-                next.commandId = next.commandId || ('dashboard-command-' + index + '-' + slugDashboardCommandTitle(next.title || next.badge || 'item'));
+                var baseId = next.commandId || ('dashboard-command-' + slugDashboardCommandTitle(next.title || next.badge || 'item'));
+                var uniqueId = baseId;
+                var duplicateIndex = 2;
+                while (seenCommandIds[uniqueId]) {
+                    uniqueId = baseId + '-' + duplicateIndex;
+                    duplicateIndex += 1;
+                }
+                seenCommandIds[uniqueId] = true;
+                next.commandId = uniqueId;
                 return next;
             });
+            var selectionHint = readDashboardReturnSelection();
             dashboardActiveCommandId = localStorage.getItem(DASHBOARD_ACTIVE_COMMAND_KEY) || dashboardActiveCommandId || '';
             if (!list.length) {
                 dashboardActiveCommandId = '';
+                syncDashboardSelectionUrl('', '');
                 return list;
             }
-            var hasActive = list.some(function(card) { return card.commandId === dashboardActiveCommandId; });
-            if (!hasActive) dashboardActiveCommandId = list[0].commandId;
+            var matched = null;
+            if (selectionHint.commandId) {
+                matched = list.find(function(card) { return card.commandId === selectionHint.commandId; }) || null;
+            }
+            if (!matched && selectionHint.focusObject) {
+                var wantedTitle = slugDashboardCommandTitle(selectionHint.focusObject);
+                matched = list.find(function(card) {
+                    return slugDashboardCommandTitle(card.title || '') === wantedTitle;
+                }) || null;
+            }
+            if (!matched && dashboardActiveCommandId) {
+                matched = list.find(function(card) { return card.commandId === dashboardActiveCommandId; }) || null;
+            }
+            if (!matched) matched = list[0];
+            dashboardActiveCommandId = matched.commandId;
             localStorage.setItem(DASHBOARD_ACTIVE_COMMAND_KEY, dashboardActiveCommandId);
+            syncDashboardSelectionUrl(dashboardActiveCommandId, matched.title || '');
             return list;
         }
         function getDashboardActiveCommandCard(cards) {
@@ -2226,6 +2280,7 @@
             if (!commandId) return;
             dashboardActiveCommandId = commandId;
             localStorage.setItem(DASHBOARD_ACTIVE_COMMAND_KEY, commandId);
+            syncDashboardSelectionUrl(commandId, '');
             dashboardSheetActiveKey = null;
             dashboardGraphOpen = false;
             Promise.resolve(render()).catch(onDashboardBootFailure);
