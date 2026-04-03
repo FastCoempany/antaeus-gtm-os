@@ -107,6 +107,11 @@
         .dashboard-graph-kicker{font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-blue);}
         .dashboard-graph-title{font-family:var(--font-serif);font-size:clamp(2rem,3vw,2.8rem);line-height:0.98;color:var(--text-primary);max-width:14ch;margin-top:8px;}
         .dashboard-graph-copy{font-size:0.92rem;line-height:1.75;color:var(--text-secondary);max-width:70ch;margin-top:8px;}
+        .dashboard-graph-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+        .dashboard-graph-metric-card{display:grid;gap:4px;padding:12px 14px;border-radius:16px;border:1px solid rgba(10,28,64,0.08);background:rgba(248,250,252,0.96);}
+        .dashboard-graph-metric-label{font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);}
+        .dashboard-graph-metric-value{font-family:var(--font-serif);font-size:1.7rem;line-height:1;color:var(--text-primary);}
+        .dashboard-graph-metric-copy{font-size:0.76rem;line-height:1.5;color:var(--text-secondary);}
         .dashboard-graph-stage{position:relative;min-height:340px;border-radius:22px;border:1px dashed rgba(36,113,231,0.22);background:linear-gradient(180deg,rgba(36,113,231,0.05),rgba(255,255,255,0.92));overflow:hidden;}
         .dashboard-graph-svg{position:absolute;inset:0;width:100%;height:100%;}
         .dashboard-graph-node{position:absolute;display:grid;gap:8px;width:min(240px,28vw);padding:14px 16px;border-radius:18px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.96);box-shadow:0 12px 30px rgba(10,28,64,0.08);}
@@ -121,8 +126,16 @@
         .dashboard-graph-summary-card{display:grid;gap:6px;padding:14px 16px;border-radius:18px;border:1px solid rgba(10,28,64,0.08);background:rgba(248,250,252,0.96);}
         .dashboard-graph-summary-card strong{font-size:0.92rem;color:var(--text-primary);}
         .dashboard-graph-summary-card p{font-size:0.8rem;line-height:1.6;color:var(--text-secondary);}
+        .dashboard-graph-health{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
+        .dashboard-graph-health-card{display:grid;gap:10px;padding:16px 18px;border-radius:18px;border:1px solid rgba(10,28,64,0.08);background:rgba(248,250,252,0.96);}
+        .dashboard-graph-health-card.is-risk{border-color:rgba(230,112,30,0.22);background:linear-gradient(180deg,rgba(230,112,30,0.07),rgba(248,250,252,0.96));}
+        .dashboard-graph-health-kicker{font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);}
+        .dashboard-graph-health-list{display:grid;gap:8px;margin:0;padding:0;list-style:none;}
+        .dashboard-graph-health-list li{font-size:0.8rem;line-height:1.55;color:var(--text-secondary);padding-left:14px;position:relative;}
+        .dashboard-graph-health-list li::before{content:'';position:absolute;left:0;top:0.58rem;width:6px;height:6px;border-radius:50%;background:rgba(36,113,231,0.72);}
+        .dashboard-graph-health-card.is-risk .dashboard-graph-health-list li::before{background:rgba(230,112,30,0.8);}
         @media(max-width:980px){.command-spotlight-shell,.command-queue-shell{grid-template-columns:1fr;}}
-        @media(max-width:900px){.dashboard-graph-node{position:static;width:auto}.dashboard-graph-stage{display:grid;gap:12px;padding:14px;min-height:auto}.dashboard-graph-svg{display:none;}}
+        @media(max-width:900px){.dashboard-graph-node{position:static;width:auto}.dashboard-graph-stage{display:grid;gap:12px;padding:14px;min-height:auto}.dashboard-graph-svg{display:none;}.dashboard-graph-health{grid-template-columns:1fr;}}
         @media(max-width:800px){.dash-tool-row,.dash-tool-actions{flex-direction:column;align-items:stretch;}}
     </style>
 </head>
@@ -565,13 +578,55 @@
             if (score >= warnFloor) return 'state-ready';
             return 'state-risk';
         }
+        function buildDashboardGraphWeakLinks(input, context) {
+            var payload = input || {};
+            var weakLinks = [];
+            var shellContext = payload.shellContext || {};
+            var icps = payload.icps && Array.isArray(payload.icps.icps) ? payload.icps.icps.slice() : [];
+            var accounts = Array.isArray(payload.accounts) ? payload.accounts.slice() : [];
+            var activeDeals = Array.isArray(payload.activeDeals) ? payload.activeDeals.slice() : [];
+            var topDeal = context && context.topDeal ? context.topDeal : null;
+            var hottest = context && context.hottest ? context.hottest : null;
+            var readinessSnapshot = context && context.readinessSnapshot ? context.readinessSnapshot : null;
+            var motionCounts = payload.motionCounts || { total: 0, calls: 0, touches: 0 };
+            var dealNames = activeDeals.map(function(deal) {
+                return String((deal && (deal.accountName || deal.account_name || deal.name)) || '').toLowerCase();
+            });
+
+            if (!icps.length && (shellContext.accounts || shellContext.signals || shellContext.deals)) {
+                weakLinks.push('Targeting truth is still missing, so downstream work is carrying ambiguity.');
+            } else if (icps.length) {
+                var bestIcp = icps.slice().sort(function(left, right) { return Number(right.qualityScore || 0) - Number(left.qualityScore || 0); })[0];
+                if (bestIcp && Number(bestIcp.qualityScore || 0) < 70) {
+                    weakLinks.push('The best ICP is still thin, so the market layer may be outrunning targeting truth.');
+                }
+            }
+            if (hottest) {
+                var hottestName = String(hottest.name || '').toLowerCase();
+                if (hottestName && dealNames.indexOf(hottestName) === -1) {
+                    weakLinks.push('The hottest signal cluster is not attached to a live deal yet.');
+                }
+            }
+            if (topDeal && Number(topDeal.riskScore || 0) >= 70) {
+                weakLinks.push('The top live deal still needs recovery before the week can safely expand.');
+            }
+            if (motionCounts.total < 2 && (shellContext.accounts || shellContext.deals)) {
+                weakLinks.push('Execution evidence is still thin, so the command stack has limited fresh motion to read.');
+            }
+            if (readinessSnapshot && typeof readinessSnapshot.score === 'number' && Number(readinessSnapshot.score) < 60) {
+                weakLinks.push('System readiness is still leaning on thin evidence instead of repeated proof.');
+            }
+            return weakLinks.slice(0, 4);
+        }
         function buildDashboardGraphPayload(input) {
             var payload = input || {};
             var nodes = [];
+            var compounded = [];
             var icps = payload.icps && Array.isArray(payload.icps.icps) ? payload.icps.icps.slice() : [];
+            var bestIcp = null;
             if (icps.length) {
                 icps.sort(function(left, right) { return Number(right.qualityScore || 0) - Number(left.qualityScore || 0); });
-                var bestIcp = icps[0];
+                bestIcp = icps[0];
                 var icpName = bestIcp.name || bestIcp.title || bestIcp.industry || 'Targeting truth';
                 var icpScore = Number(bestIcp.qualityScore || 0);
                 nodes.push({
@@ -581,11 +636,13 @@
                     copy: 'Targeting is no longer abstract. The wedge is feeding territory, sourcing, and outbound.',
                     tone: graphToneFromScore(icpScore || 72, 82, 68)
                 });
+                compounded.push('Targeting truth is feeding multiple downstream rooms instead of sitting as a worksheet.');
             }
             var accounts = Array.isArray(payload.accounts) ? payload.accounts.slice() : [];
+            var hottest = null;
             if (accounts.length) {
                 accounts.sort(function(left, right) { return Number(right._heat || 0) - Number(left._heat || 0); });
-                var hottest = accounts[0];
+                hottest = accounts[0];
                 var signalCount = Array.isArray(hottest.signals) ? hottest.signals.length : 0;
                 var heat = Number(hottest._heat || 0);
                 nodes.push({
@@ -595,6 +652,7 @@
                     copy: signalCount ? (signalCount + ' signal' + (signalCount === 1 ? '' : 's') + ' are now feeding the operating loop.') : 'The market layer is live enough to change what the command stack sees.',
                     tone: graphToneFromScore(heat || 70, 80, 60)
                 });
+                compounded.push('Signal heat is changing command priority instead of disappearing into a separate tool.');
             }
             var topDeal = null;
             if (payload.briefing && Array.isArray(payload.briefing.atRisk) && payload.briefing.atRisk.length) {
@@ -611,6 +669,7 @@
                     copy: 'Pipeline pressure is now attached to a real object instead of a founder memory.',
                     tone: topDeal.riskScore ? graphToneFromScore(100 - Number(topDeal.riskScore || 0), 45, 25) : 'state-ready'
                 });
+                compounded.push('Deal pressure is attached to a live object, so recovery work has a real place to land.');
             }
             var readinessSnapshot = readLS('gtmos_readiness_snapshot', null);
             if (readinessSnapshot && typeof readinessSnapshot.score === 'number') {
@@ -621,6 +680,7 @@
                     copy: 'The hiring question is now being answered by live evidence, not founder confidence alone.',
                     tone: graphToneFromScore(Number(readinessSnapshot.score || 0), 80, 55)
                 });
+                compounded.push('Readiness is being informed by live operating evidence instead of narrative confidence.');
             } else if (payload.motionCounts && payload.motionCounts.total) {
                 nodes.push({
                     type: 'Motion',
@@ -629,14 +689,28 @@
                     copy: 'Calls, outbound, and follow-through are now feeding back into the system instead of disappearing in side notes.',
                     tone: graphToneFromScore(Number(payload.motionCounts.total || 0), 5, 2)
                 });
+                compounded.push('Execution traces are feeding back into the system instead of vanishing in side notes.');
             }
             if (nodes.length < 2) return null;
+            var weakLinks = buildDashboardGraphWeakLinks(payload, {
+                topDeal: topDeal,
+                hottest: hottest,
+                readinessSnapshot: readinessSnapshot
+            });
+            var liveNodes = nodes.filter(function(node) { return node.tone === 'state-live'; }).length;
+            var readyNodes = nodes.filter(function(node) { return node.tone === 'state-ready'; }).length;
+            var healthScore = Math.max(32, Math.min(96, Math.round(54 + (liveNodes * 12) + (readyNodes * 6) - (weakLinks.length * 8))));
             var headline = 'Something super cool you did that you did not know you did.';
-            var copy = 'Normal work across command, rooms, and handoffs built a denser operating structure without asking you to think in graph terms every day.';
+            var copy = 'Normal work across command, rooms, and handoffs built a denser operating structure without asking you to think in graph terms every day. This view shows both the compounding and the weak links still visible.';
             return {
                 headline: headline,
                 copy: copy,
-                nodes: nodes.slice(0, 4)
+                nodes: nodes.slice(0, 4),
+                compounded: compounded.slice(0, 4),
+                weakLinks: weakLinks,
+                healthScore: healthScore,
+                liveLayers: liveNodes,
+                riskLayers: weakLinks.length
             };
         }
         function renderDashboardGraph() {
@@ -670,11 +744,16 @@
                     '<section class="dashboard-graph-panel" role="dialog" aria-modal="true" aria-labelledby="dashboardGraphTitle" onclick="event.stopPropagation()">' +
                         '<div class="dashboard-graph-head">' +
                             '<div>' +
-                                '<div class="dashboard-graph-kicker">Graph reward</div>' +
+                                '<div class="dashboard-graph-kicker">Graph reward · Workspace health</div>' +
                                 '<h2 class="dashboard-graph-title" id="dashboardGraphTitle">' + escH(dashboardGraphPayload.headline) + '</h2>' +
                                 '<div class="dashboard-graph-copy">' + escH(dashboardGraphPayload.copy) + '</div>' +
                             '</div>' +
                             '<div class="anchor-primary-actions"><button type="button" class="btn btn-secondary" onclick="dashboardCloseGraph()">Back to command</button></div>' +
+                        '</div>' +
+                        '<div class="dashboard-graph-metrics">' +
+                            '<div class="dashboard-graph-metric-card"><div class="dashboard-graph-metric-label">Workspace health</div><div class="dashboard-graph-metric-value">' + escH(String(dashboardGraphPayload.healthScore || 0)) + '</div><div class="dashboard-graph-metric-copy">Higher means more of the operating system is compounding cleanly.</div></div>' +
+                            '<div class="dashboard-graph-metric-card"><div class="dashboard-graph-metric-label">Live layers</div><div class="dashboard-graph-metric-value">' + escH(String(dashboardGraphPayload.liveLayers || 0)) + '</div><div class="dashboard-graph-metric-copy">These layers are reading as genuinely live, not just present.</div></div>' +
+                            '<div class="dashboard-graph-metric-card"><div class="dashboard-graph-metric-label">Weak links</div><div class="dashboard-graph-metric-value">' + escH(String(dashboardGraphPayload.riskLayers || 0)) + '</div><div class="dashboard-graph-metric-copy">These are the structural gaps still visible underneath the compounding.</div></div>' +
                         '</div>' +
                         '<div class="dashboard-graph-stage">' +
                             '<svg class="dashboard-graph-svg" viewBox="0 0 920 360" preserveAspectRatio="none">' + visiblePaths.map(function(path) {
@@ -692,6 +771,20 @@
                         '<div class="dashboard-graph-summary">' + nodes.map(function(node) {
                             return '<div class="dashboard-graph-summary-card"><strong>' + escH(node.type + ' · ' + node.title) + '</strong><p>' + escH(node.copy) + '</p></div>';
                         }).join('') + '</div>' +
+                        '<div class="dashboard-graph-health">' +
+                            '<div class="dashboard-graph-health-card">' +
+                                '<div class="dashboard-graph-health-kicker">What compounded</div>' +
+                                '<ul class="dashboard-graph-health-list">' + (dashboardGraphPayload.compounded || []).map(function(item) {
+                                    return '<li>' + escH(item) + '</li>';
+                                }).join('') + '</ul>' +
+                            '</div>' +
+                            '<div class="dashboard-graph-health-card is-risk">' +
+                                '<div class="dashboard-graph-health-kicker">Weak links still visible</div>' +
+                                '<ul class="dashboard-graph-health-list">' + ((dashboardGraphPayload.weakLinks && dashboardGraphPayload.weakLinks.length ? dashboardGraphPayload.weakLinks : ['No obvious structural weak link is dominating the current workspace.']).map(function(item) {
+                                    return '<li>' + escH(item) + '</li>';
+                                }).join('')) + '</ul>' +
+                            '</div>' +
+                        '</div>' +
                     '</section>' +
                 '</div>';
             document.body.classList.add('dashboard-graph-open');
@@ -1640,7 +1733,8 @@
                     icps: icpState,
                     accounts: signalConsoleState.accounts,
                     activeDeals: active,
-                    motionCounts: motionCounts
+                    motionCounts: motionCounts,
+                    shellContext: shellContext
                 });
                 if (!dashboardSummaryTracked) {
                     dashboardSummaryTracked = true;
@@ -1788,7 +1882,8 @@
                 accounts: signalConsoleState.accounts,
                 activeDeals: active,
                 motionCounts: motionCounts,
-                briefing: briefing
+                briefing: briefing,
+                shellContext: shellContext
             });
             html += renderDashboardCommandMode(commandMode, commandDelta);
             if (commandMode === 'brief') {
