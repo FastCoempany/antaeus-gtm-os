@@ -326,9 +326,77 @@
         };
     }
 
+    function joinReasons(reasons) {
+        var list = (Array.isArray(reasons) ? reasons : []).filter(Boolean).slice(0, 2);
+        if (!list.length) return 'the command pressure is higher than the surrounding work';
+        if (list.length === 1) return list[0];
+        return list[0] + ' and ' + list[1];
+    }
+
+    function explainCommandObject(object, mode) {
+        var family = tx(object && object.commandFamily);
+        var reasons = Array.isArray(object && object.scoreReasons) ? object.scoreReasons : [];
+        var because = joinReasons(reasons);
+        if (mode === 'queue') {
+            if (family === 'risk') {
+                return {
+                    label: 'Why this order',
+                    title: 'Recovery is ahead of expansion.',
+                    copy: 'This stays near the front because ' + because + '.'
+                };
+            }
+            if (family === 'advisor' || family === 'opportunity' || family === 'move') {
+                return {
+                    label: 'Why this order',
+                    title: 'This is the next move with leverage.',
+                    copy: 'It stays in front of lower-pressure work because ' + because + '.'
+                };
+            }
+            if (family === 'icp') {
+                return {
+                    label: 'Why this order',
+                    title: 'Truth work must happen before scale work.',
+                    copy: 'This stays visible because ' + because + '.'
+                };
+            }
+            return {
+                label: 'Why this order',
+                title: 'This keeps the command surface honest.',
+                copy: 'It stays in the ranked run because ' + because + '.'
+            };
+        }
+        if (family === 'risk') {
+            return {
+                label: 'Why this is here',
+                title: 'The week is drifting through this object.',
+                copy: 'It is in the light because ' + because + '.'
+            };
+        }
+        if (family === 'advisor' || family === 'opportunity' || family === 'move') {
+            return {
+                label: 'Why this is here',
+                title: 'This is the highest-leverage move right now.',
+                copy: 'It is in the light because ' + because + '.'
+            };
+        }
+        if (family === 'icp') {
+            return {
+                label: 'Why this is here',
+                title: 'Targeting truth is still upstream of everything else.',
+                copy: 'It is in the light because ' + because + '.'
+            };
+        }
+        return {
+            label: 'Why this is here',
+            title: 'System trust is affecting the rest of the stack.',
+            copy: 'It is in the light because ' + because + '.'
+        };
+    }
+
     window.gtmCommandIntelligence = {
         buildCommandObjects: buildCommandObjects,
         rankCommandObjects: rankCommandObjects,
-        summarizeCommandContext: summarizeCommandContext
+        summarizeCommandContext: summarizeCommandContext,
+        explainCommandObject: explainCommandObject
     };
 })();

@@ -86,6 +86,10 @@
         .command-spotlight-item-title{font-size:1.05rem;font-weight:700;color:var(--text-primary);line-height:1.25;}
         .command-spotlight-item-rank{font-family:var(--font-serif);font-size:1.15rem;color:var(--accent-blue);line-height:1;}
         .command-spotlight-item-footer{padding-top:10px;border-top:1px solid rgba(10,28,64,0.08);font-size:0.7rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);}
+        .command-explain{display:grid;gap:6px;padding:12px 14px;border-radius:16px;border:1px solid rgba(36,113,231,0.14);background:linear-gradient(135deg,rgba(36,113,231,0.05),rgba(255,255,255,0.94));}
+        .command-explain-label{font-size:0.64rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-blue);}
+        .command-explain-title{font-size:0.94rem;font-weight:700;line-height:1.3;color:var(--text-primary);}
+        .command-explain-copy{font-size:0.8rem;line-height:1.6;color:var(--text-secondary);}
         .command-queue-shell{display:grid;grid-template-columns:minmax(300px,.48fr) minmax(0,.82fr);gap:16px;align-items:start;}
         .command-queue-list{display:grid;gap:10px;}
         .command-queue-item{appearance:none;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:12px 14px;border-radius:16px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.88);text-align:left;cursor:pointer;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;}
@@ -1302,6 +1306,17 @@
                 return '<span>' + escH(item) + '</span>';
             }).join('') + '</div>';
         }
+        function renderDashboardCommandExplain(card, mode) {
+            var explanation = ci && typeof ci.explainCommandObject === 'function'
+                ? ci.explainCommandObject(card, mode)
+                : null;
+            if (!explanation) return '';
+            return '<div class="command-explain">' +
+                '<div class="command-explain-label">' + escH(explanation.label || (mode === 'queue' ? 'Why this order' : 'Why this is here')) + '</div>' +
+                '<div class="command-explain-title">' + escH(explanation.title || '') + '</div>' +
+                '<div class="command-explain-copy">' + escH(explanation.copy || '') + '</div>' +
+            '</div>';
+        }
         function renderDashboardCommandStage(config) {
             return '<section class="cmd-stage">' +
                 '<div class="cmd-stage-kicker">' + escH(config.kicker || 'Morning command') + '</div>' +
@@ -1385,6 +1400,7 @@
                         '<div class="command-spotlight-title">' + escH(selected.title || '') + '</div>' +
                         '<div class="command-spotlight-copy">' + escH(selected.copy || '') + '</div>' +
                         renderDashboardCommandMeta(selected) +
+                        renderDashboardCommandExplain(selected, 'spotlight') +
                         '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
                         (dashboardGraphPayload ? '<div class="command-spotlight-reward"><button type="button" class="command-spotlight-reward-btn" onclick="dashboardOpenGraph()"><span class="reward-kicker">Hidden reward</span><span class="reward-copy">See what compounded</span></button></div>' : '') +
                     '</div>' +
@@ -1415,7 +1431,7 @@
                         '<div class="command-queue-detail-title">' + escH(selected.title || '') + '</div>' +
                         '<div class="command-queue-detail-copy">' + escH(selected.copy || '') + '</div>' +
                         renderDashboardCommandMeta(selected) +
-                        '<div class="anchor-note"><strong>Run in this order.</strong> Clear this object before you promote lower-pressure work back into the front of the week.</div>' +
+                        renderDashboardCommandExplain(selected, 'queue') +
                         '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
                     '</div>' +
                 '</div>' +
