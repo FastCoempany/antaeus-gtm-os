@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Antaeus Phase 7 Shell Nav Proof</title>
+  <style>
+    :root{--bg:#edf3fb;--surface:#ffffff;--surface2:#f7faff;--ink:#10244f;--soft:#5d7199;--faint:#8196be;--line:#d9e4f5;--blue:#2d6cf6;--orange:#f07a18;--green:#1b9b6b;--navy:#111c33;--navy2:#18243d;--shadow:0 22px 60px rgba(17,36,79,.08);--r1:28px;--r2:20px;--r3:14px;--sans:"Plus Jakarta Sans",Inter,system-ui,sans-serif;--display:"Outfit","Plus Jakarta Sans",Inter,system-ui,sans-serif;--mono:"Space Mono",Consolas,monospace}
+    *{box-sizing:border-box} html,body{height:100%} body{margin:0;background:linear-gradient(180deg,#f8fbff 0,var(--bg) 100%);color:var(--ink);font-family:var(--sans)}
+    .app{min-height:100%;display:grid;grid-template-columns:290px 1fr}
+    .rail{background:linear-gradient(180deg,var(--navy) 0,var(--navy2) 100%);color:#eef4ff;padding:26px 20px 18px;display:flex;flex-direction:column;gap:16px;border-right:1px solid rgba(255,255,255,.06)}
+    .brand h1{margin:0;font:700 38px/.92 var(--display);letter-spacing:-.06em}.brand p{margin:10px 0 0;color:rgba(238,244,255,.72);font-size:12px;line-height:1.55}
+    .card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:16px}
+    .kicker{font:11px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#95aad0;margin-bottom:10px}
+    .copy{color:rgba(238,244,255,.8);font-size:13px;line-height:1.6}
+    .stack,.families,.utils{display:grid;gap:8px;margin-top:12px}
+    .btn,.family,.util,.mode,.close{appearance:none;border:none;background:#fff;color:var(--ink);font:700 14px var(--sans);cursor:pointer}
+    .btn{border-radius:999px;padding:11px 14px;text-align:left}
+    .btn.alt{background:transparent;color:#f2f6ff;border:1px solid rgba(255,255,255,.12)}
+    .family,.util{background:transparent;color:#e2ebfa;border:1px solid rgba(255,255,255,.08);padding:11px 12px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;text-align:left}
+    .family:hover,.family.active,.util:hover,.util.active{background:rgba(255,255,255,.06)}
+    .meta{font:11px var(--mono);letter-spacing:.08em;color:#9bb0d3}
+    .note{margin-top:auto;border:1px solid rgba(101,223,180,.22);background:rgba(28,168,121,.06);color:#c5f3de;padding:10px 12px;border-radius:14px;font-size:12px;line-height:1.55}
+    .main{padding:26px 28px 36px;display:grid;gap:18px}
+    .hero,.surface,.tray,.aside{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:var(--r1);box-shadow:var(--shadow)}
+    .hero{padding:22px 24px;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:22px;align-items:end}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .chip{font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--faint)}
+    .chip.green{color:var(--green);border-color:rgba(27,155,107,.22);background:rgba(27,155,107,.05)}
+    .hero h2{margin:0;font:700 54px/.92 var(--display);letter-spacing:-.065em;max-width:760px}
+    .hero p{margin:14px 0 0;max-width:760px;color:var(--soft);line-height:1.7;font-size:16px}
+    .metric{padding:14px 16px;border:1px solid var(--line);border-radius:20px;background:#fff}
+    .metric h3{margin:0 0 8px;font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+    .metric strong{display:block;font:700 32px/.95 var(--display);letter-spacing:-.05em}
+    .metric p{margin:6px 0 0;color:var(--soft);font-size:13px;line-height:1.55}
+    .body{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+    .surface{padding:24px;display:grid;gap:16px}.aside{padding:22px;display:grid;gap:14px;position:sticky;top:26px}
+    .head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end;padding-bottom:16px;border-bottom:1px solid var(--line)}
+    .head h3,.aside h3,.tray h3{margin:0;font:700 24px/1 var(--display);letter-spacing:-.05em}
+    .head p,.aside p,.tray p{margin:8px 0 0;color:var(--soft);line-height:1.65}
+    .modes{display:flex;gap:8px;background:#fff;border:1px solid var(--line);padding:6px;border-radius:999px}
+    .mode{background:transparent;color:var(--soft);padding:10px 14px;border-radius:999px}
+    .mode.active{background:var(--blue);color:#fff}
+    .content{display:grid;gap:16px}
+    .panel{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:20px}
+    .brief{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    .panel h4{margin:0 0 10px;font:700 20px/1.08 var(--display);letter-spacing:-.04em}.panel p{margin:0;color:var(--soft);line-height:1.7}
+    .list{margin:14px 0 0;padding-left:18px;color:var(--soft);display:grid;gap:8px;font-size:14px;line-height:1.6}
+    .spot{display:grid;grid-template-columns:minmax(0,1.18fr) 310px;gap:16px}
+    .spot-card,.queue-detail{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;display:grid;gap:16px}
+    .top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+    .badges,.acts,.tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--faint)}
+    .tag.orange{color:var(--orange);border-color:rgba(240,122,24,.24);background:rgba(240,122,24,.05)}
+    .tag.blue{color:var(--blue);border-color:rgba(45,108,246,.22);background:rgba(45,108,246,.06)}
+    .tag.green{color:var(--green);border-color:rgba(27,155,107,.22);background:rgba(27,155,107,.06)}
+    .num{margin:0;font:700 52px/.9 var(--display);letter-spacing:-.06em;color:var(--blue)}
+    .spot-card h4,.queue-detail h4{margin:0;font:700 52px/.94 var(--display);letter-spacing:-.07em;max-width:680px}
+    .spot-card p,.queue-detail p{margin:0;color:var(--soft);line-height:1.7;font-size:16px}
+    .acts button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:12px 16px;font:800 14px var(--sans)}
+    .acts .primary{background:var(--orange);border-color:var(--orange);color:#fff}.acts .secondary{background:rgba(45,108,246,.07);border-color:rgba(45,108,246,.18);color:var(--blue)}
+    .reward{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border:1px solid rgba(45,108,246,.18);border-radius:18px;background:rgba(45,108,246,.05);font-weight:700;width:max-content}
+    .reward small{display:block;font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+    .selectors,.queue-list{display:grid;gap:10px}
+    .selector,.qrow{appearance:none;width:100%;background:#fff;border:1px solid var(--line);border-radius:20px;cursor:pointer;text-align:left;color:var(--ink);font:inherit}
+    .selector{padding:14px;display:grid;gap:10px}.selector.active,.qrow.active{border-color:rgba(45,108,246,.42);box-shadow:0 12px 28px rgba(45,108,246,.1)}
+    .selector h5,.qrow h5{margin:0;font-size:18px;line-height:1.24;letter-spacing:-.03em}.selector .row,.qrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start}
+    .selector strong{font:700 31px/.95 var(--display);letter-spacing:-.05em;color:var(--blue)}
+    .selector .foot,.qsub{color:var(--faint);font-size:12px}
+    .queue{display:grid;grid-template-columns:380px minmax(0,1fr);gap:16px}
+    .qrow{padding:16px;grid-template-columns:56px minmax(0,1fr) auto;align-items:center}
+    .rank{font:700 40px/.92 var(--display);color:var(--blue)}
+    .reason{border-top:1px solid var(--line);padding-top:14px}.reason h5{margin:0 0 8px;font:11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)} .reason p{font-size:14px}
+    .aside .row{display:grid;gap:4px;padding-top:10px;border-top:1px solid var(--line)} .aside .row:first-of-type{padding-top:0;border-top:none}
+    .aside .lab{font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)} .aside .val{font-size:14px;line-height:1.55}
+    .tray{padding:22px;display:none;gap:16px}.tray.open{display:grid}
+    .tray-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end;padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .room{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;display:grid;gap:10px}
+    .room h4{margin:0;font-size:18px;letter-spacing:-.03em}.room p{margin:0;color:var(--soft);font-size:14px;line-height:1.65}
+    @media (max-width:1400px){.body{grid-template-columns:minmax(0,1fr)}.aside{position:static}}
+    @media (max-width:1100px){.app{grid-template-columns:1fr}.rail{border-right:none;border-bottom:1px solid rgba(255,255,255,.06)}.hero,.body,.head,.brief,.spot,.queue,.grid{grid-template-columns:1fr}.hero h2,.spot-card h4,.queue-detail h4{font-size:40px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="rail">
+      <div class="brand">
+        <h1>Antaeus</h1>
+        <p>Phase 7 proof: shell hierarchy changes, module brains do not.</p>
+      </div>
+      <div class="card">
+        <div class="kicker">Command first</div>
+        <div class="copy">Open into pressure. Use rooms only when command or the sheet makes the next room obvious.</div>
+        <div class="stack">
+          <button class="btn" data-mode-jump="spotlight">Open Spotlight</button>
+          <button class="btn alt" data-mode-jump="brief">Read Brief</button>
+          <button class="btn alt" data-mode-jump="queue">Run Queue</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kicker">Room access</div>
+        <div class="copy">Rooms remain fully reachable, but stop competing equally with command for first attention.</div>
+        <div class="families" id="families"></div>
+      </div>
+      <div class="card">
+        <div class="kicker">Utilities</div>
+        <div class="utils" id="utils"></div>
+      </div>
+      <div class="note">The shell can get cleaner and smarter. Signal Console, Future Autopsy, discovery rigor, deal pressure, proof logic, and compounding routes stay protected.</div>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div>
+          <div class="chips">
+            <span class="chip">Phase 7</span>
+            <span class="chip green">Behavior-first shell</span>
+          </div>
+          <h2>The shell should point to pressure, not rooms.</h2>
+          <p>This proof shows the intended Phase 7 result: command is primary, room access is secondary, utilities are tertiary, copy burden is reduced, and deep rooms remain intact.</p>
+        </div>
+        <div class="metric">
+          <h3>Phase 7 promise</h3>
+          <strong>Command first</strong>
+          <p>Replace flat hallway browsing with pressure-driven entry and contextual room access.</p>
+        </div>
+      </section>
+
+      <section class="body">
+        <div style="display:grid;gap:18px">
+          <section class="surface">
+            <div class="head">
+              <div>
+                <div class="kicker" style="color:var(--orange)">Shell/nav proof</div>
+                <h3>Command stays primary. Room access becomes contextual.</h3>
+                <p>This is not a prettier sidebar. It is a shell that reduces menu burden while preserving room seriousness and continuity.</p>
+              </div>
+              <div class="modes">
+                <button class="mode active" data-mode="brief">Brief</button>
+                <button class="mode" data-mode="spotlight">Spotlight</button>
+                <button class="mode" data-mode="queue">Queue</button>
+              </div>
+            </div>
+            <div class="content" id="content"></div>
+          </section>
+          <section class="tray" id="tray"></section>
+        </div>
+
+        <aside class="aside">
+          <div>
+            <div class="kicker" style="color:var(--orange)">Guardrails</div>
+            <h3>What Phase 7 can and cannot touch</h3>
+            <p>Shell hierarchy, visibility, grouping, and disclosure timing can change. GTM frameworks, methodology, room logic, strategic seriousness, and compounding rules cannot.</p>
+          </div>
+          <div class="row"><div class="lab">Primary</div><div class="val">Command surfaces and the next move.</div></div>
+          <div class="row"><div class="lab">Secondary</div><div class="val">Room access grouped by family and summoned when needed.</div></div>
+          <div class="row"><div class="lab">Tertiary</div><div class="val">Settings, backup, methodology, and account utilities.</div></div>
+          <div class="row"><div class="lab">No-break continuity</div><div class="val">Return path, pinned object, room-entry bridge, focus object, and compounding routes remain intact.</div></div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const families = {
+      intelligence:{label:'Intelligence',count:4,copy:'Targeting and research rooms stay reachable, but no longer shout before command has ranked pressure.',rooms:[
+        ['Signal Console','Interpret account heat and route into real motion.','named asset · account heat · motion handoff'],
+        ['ICP Studio','Sharpen who to sell to and set downstream targeting defaults.','targeting truth · default context'],
+        ['Territory Architect','Define tiers and theses for account attention.','tier logic · territory structure'],
+        ['Sourcing Workbench','Push prospects forward with continuity into Signal Console.','prospect push · next move']
+      ]},
+      pipeline:{label:'Pipeline',count:4,copy:'Pipeline rooms remain the decisive deep rooms. The shell only changes how the user reaches them.',rooms:[
+        ['Deal Workspace','Control stage truth, pressure, and next-step quality.','stage truth · pressure'],
+        ['Future Autopsy','Diagnose failure modes and route to the exact corrective room.','named asset · severity'],
+        ['PoC Framework','Turn proof into operating structure that strengthens the deal.','proof logic · deal linkage'],
+        ['Advisor Deploy','Use advisors as a consequential move, not a side log.','deal-linked · execution']
+      ]},
+      motion:{label:'Motion',count:3,copy:'Motion rooms remain distinct. The shell just stops making the user browse them before command has done its work.',rooms:[
+        ['Outbound Studio','Run outbound motion with shared motion truth.','motion truth · channel craft'],
+        ['Cold Call Studio','Capture live-call outcomes that flow back into deal pressure.','live consequence · call truth'],
+        ['LinkedIn Playbook','Keep channel-specific craft without generic outreach drift.','channel-specific · craft']
+      ]},
+      calls:{label:'Calls + Discovery',count:2,copy:'Planning and discovery stay deep rooms. The shell only reduces the burden of finding them at the wrong moment.',rooms:[
+        ['Call Planner','Prepare agenda quality with a real handoff into Discovery.','agenda quality · handoff'],
+        ['Discovery Studio','Run the framework and sharpen deal truth.','framework rigor · deal sharpening']
+      ]},
+      system:{label:'System',count:4,copy:'System rooms stay available, but they stop competing with execution surfaces for first attention.',rooms:[
+        ['Quota Workback','Translate quota math into execution pressure.','pressure math · targets'],
+        ['Readiness','Show whether the system is credibly ready.','synthesis · readiness truth'],
+        ['Founding GTM / Handoff','Assemble exported operating truth.','supreme output · handoff'],
+        ['Settings','Keep backup, restore, and trust visible without competing with command.','trust · utility']
+      ]}
+    };
+    const utils = {
+      settings:{label:'Settings + Backup',copy:'Trust and durability stay reachable, but below command and room access.',items:[['Backup + export','Portable durability when the user needs safety.'],['Restore + reset','Controlled recovery without shell competition.']]},
+      help:{label:'Methodology + Help',copy:'Methodology remains intact, but becomes more on-demand and less shell-burdening.',items:[['Methodology hub','Longer explanation of doctrine and how the methods work.'],['Contextual help','Summoned guidance instead of persistent shell prose.']]},
+      account:{label:'Workspace + Account',copy:'Account controls stay available, but tertiary.',items:[['Workspace identity','A lighter account/workspace signal.'],['Account actions','Seat and sign-out actions away from command gravity.']]}
+    };
+    const cards = [
+      {id:'apex',title:'Recover Apex Fintech before the week drifts.',copy:'No dated next step, stale thread pressure, and thin solution-fit evidence are converging on the same deal.',n:'01',b1:'Now',b2:'In the light',state:'Urgent',meta:['risk 100','solution fit','47d stale'],actions:['Inspect','Run Autopsy','Open Deal'],reward:true},
+      {id:'cascadia',title:'Cascadia Health Network',copy:'Signal heat is live enough to act, but the account still needs the right motion path.',n:'62',b1:'Active',b2:'In motion',state:'Active',meta:['signal heat','3 gaps'],actions:['Inspect','Open Signal Console']},
+      {id:'northstar',title:'Northstar Health',copy:'The outreach thread is alive, but the deal route is still underbuilt.',n:'03',b1:'Risk 100',b2:'Pressure',state:'Urgent',meta:['run autopsy','deal pressure'],actions:['Inspect','Open Deal']},
+      {id:'voltops',title:'VoltOps',copy:'The object is healthy enough to monitor, not to dominate the shell right now.',n:'84',b1:'Healthy',b2:'Compounding',state:'Healthy',meta:['quality score','proof stronger'],actions:['Inspect','Open Deal']}
+    ];
+    let mode='brief', selected='apex', tray=null;
+    const esc=s=>String(s).replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const getSel=()=>cards.find(c=>c.id===selected)||cards[0];
+    const badgeClass=s=>s==='Healthy'?'green':(s==='Active'?'blue':'orange');
+    function renderFamilies(){document.getElementById('families').innerHTML=Object.entries(families).map(([k,v])=>`<button class="family ${tray===k?'active':''}" data-family="${k}"><span>${esc(v.label)}</span><span class="meta">${esc(v.count)} rooms</span></button>`).join('')}
+    function renderUtils(){document.getElementById('utils').innerHTML=Object.entries(utils).map(([k,v])=>`<button class="util ${tray===k?'active':''}" data-util="${k}"><span>${esc(v.label)}</span><span class="meta">tertiary</span></button>`).join('')}
+    function renderBrief(){return `<div class="brief"><article class="panel"><div class="kicker">What changed</div><h4>The shell should open on pressure, not on a room menu.</h4><p>The user should see the operating story first, not a hallway of destinations. Rooms stay fully reachable once command has made the next move legible.</p><ul class="list"><li>No top-level module democracy on first load.</li><li>One object gets the light before room browsing begins.</li><li>Utilities stay reachable, but stop competing with command.</li></ul></article><article class="panel"><div class="kicker">Behavioral fit</div><h4>Why this shell is less work on the user.</h4><p>Lower cognitive load, fewer equal-weight choices, stronger continuation, and a clearer re-entry path. The shell stops asking the user to remember where work lives.</p></article></div>`}
+    function renderSpotlight(){const s=getSel(), others=cards.filter(c=>c.id!==s.id); return `<div class="spot"><article class="spot-card"><div class="top"><div class="tags"><span class="tag orange">${esc(s.b1)}</span><span class="tag blue">${esc(s.b2)}</span></div><p class="num">${esc(s.n)}</p></div><h4>${esc(s.title)}</h4><p>${esc(s.copy)}</p><div class="tags">${s.meta.map(m=>`<span class="tag">${esc(m)}</span>`).join('')}</div><div class="acts"><button>Inspect</button><button class="primary">${esc(s.actions[1]||'Open room')}</button><button class="secondary">${esc(s.actions[2]||'Open object')}</button></div>${s.reward?`<div class="reward"><div><small>Hidden reward</small>See what compounded</div></div>`:''}</article><aside class="selectors">${others.map(c=>`<button class="selector" data-select="${esc(c.id)}"><div class="row"><div><div class="tags"><span class="tag ${badgeClass(c.state)}">${esc(c.state)}</span></div><h5>${esc(c.title)}</h5></div><strong>${esc(c.n)}</strong></div><div class="foot">${esc(c.meta[0]||'Inspect')} · ${esc(c.actions[1]||'Open room')}</div></button>`).join('')}</aside></div>`}
+    function renderQueue(){const s=getSel(); return `<div class="queue"><div class="queue-list">${cards.map((c,i)=>`<button class="qrow ${c.id===s.id?'active':''}" data-select="${esc(c.id)}"><div class="rank">${String(i+1).padStart(2,'0')}</div><div><h5>${esc(c.title)}</h5><div class="qsub">${esc(c.meta[0]||'Run the next move')}</div></div><div class="meta">${esc(c.actions[1]||'Open room')}</div></button>`).join('')}</div><article class="queue-detail"><div class="tags"><span class="tag blue">Ranked order</span><span class="tag ${badgeClass(s.state)}">${esc(s.state)}</span></div><h4>${esc(s.title)}</h4><p>${esc(s.copy)}</p><div class="tags">${s.meta.map(m=>`<span class="tag">${esc(m)}</span>`).join('')}</div><div class="reason"><h5>Why this order</h5><p>Queue is the only mode that should feel explicitly ranked. It removes room browsing and leaves a single execution spine: act here, then move to the next object without reconstructing context.</p></div><div class="acts"><button>Inspect</button><button class="primary">${esc(s.actions[1]||'Open room')}</button><button class="secondary">${esc(s.actions[2]||'Open object')}</button></div></article></div>`}
+    function renderContent(){document.getElementById('content').innerHTML=mode==='brief'?renderBrief():mode==='spotlight'?renderSpotlight():renderQueue()}
+    function renderTray(){const el=document.getElementById('tray'); if(!tray){el.className='tray'; el.innerHTML=''; return;} const fam=families[tray], util=utils[tray]; if(fam){el.className='tray open'; el.innerHTML=`<div class="tray-head"><div><div class="kicker" style="color:var(--orange)">Room access</div><h3>${esc(fam.label)} remains fully reachable.</h3><p>${esc(fam.copy)}</p></div><button class="close btn alt" data-close>Close</button></div><div class="grid">${fam.rooms.map(r=>`<article class="room"><div class="kicker">Preserved deep room</div><h4>${esc(r[0])}</h4><p>${esc(r[1])}</p><div class="meta">${esc(r[2])}</div></article>`).join('')}</div>`} else if(util){el.className='tray open'; el.innerHTML=`<div class="tray-head"><div><div class="kicker" style="color:var(--orange)">Utility layer</div><h3>${esc(util.label)} sits below command and room access.</h3><p>${esc(util.copy)}</p></div><button class="close btn alt" data-close>Close</button></div><div class="grid">${util.items.map(r=>`<article class="room"><div class="kicker">Tertiary access</div><h4>${esc(r[0])}</h4><p>${esc(r[1])}</p></article>`).join('')}</div>`}}
+    function sync(){document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); document.querySelectorAll('[data-mode-jump]').forEach(b=>b.classList.toggle('active',b.dataset.modeJump===mode));}
+    function rerender(){sync(); renderFamilies(); renderUtils(); renderContent(); renderTray()}
+    document.addEventListener('click',e=>{const m=e.target.closest('[data-mode]'); if(m){mode=m.dataset.mode; tray=null; rerender(); return} const mj=e.target.closest('[data-mode-jump]'); if(mj){mode=mj.dataset.modeJump; tray=null; rerender(); return} const s=e.target.closest('[data-select]'); if(s){selected=s.dataset.select; rerender(); return} const f=e.target.closest('[data-family]'); if(f){tray=tray===f.dataset.family?null:f.dataset.family; rerender(); return} const u=e.target.closest('[data-util]'); if(u){tray=tray===u.dataset.util?null:u.dataset.util; rerender(); return} if(e.target.closest('[data-close]')){tray=null; rerender()}});
+    rerender();
+  </script>
+</body>
+</html>
