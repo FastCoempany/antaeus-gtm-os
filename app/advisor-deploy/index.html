@@ -137,6 +137,7 @@ h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px
     <section class="advisor-first-fold">
     <div id="advisorBootState"></div>
     <div id="advisorShellBand"></div>
+    <div id="advisorHealthPanel"></div>
 
     <div class="tabs">
         <button class="tab on" onclick="showTab('dashboard')">Dashboard</button>
@@ -337,6 +338,7 @@ window.showTab=function(id){
     document.getElementById('tab-'+id).classList.add('on');
     var labels={dashboard:'Dashboard',registry:'Registry',matrix:'Deal × Advisor',playbook:'Playbook',builder:'Ask Builder',impact:'Impact'};
     document.querySelectorAll('.tab').forEach(function(t){if(t.textContent===labels[id])t.classList.add('on')});
+    renderAdvisorWorkspaceHealth();
     if(id==='dashboard')renderDashboard();
     if(id==='registry')renderRegistry();
     if(id==='matrix')renderMatrix();
@@ -437,6 +439,76 @@ function recommendedDeploymentForDeal(deal){
         pressure:dealPressure(deal),
         why:why
     };
+}
+function renderAdvisorWorkspaceHealth(){
+    var node=document.getElementById('advisorHealthPanel');
+    if(!node)return;
+    var advisors=getAdvisors();
+    var deps=getDeployments();
+    var deals=getDeals().filter(function(d){return d&&d.stage!=='closed-won'&&d.stage!=='closed-lost'});
+    var recommended=deals.map(function(deal){return {deal:deal,reco:recommendedDeploymentForDeal(deal)};});
+    var coveredCount=deals.filter(function(deal){return advisorsForDeal(deal).length>0;}).length;
+    var uncoveredCount=Math.max(0,deals.length-coveredCount);
+    var deployNowCount=recommended.filter(function(item){return item.reco&&item.reco.state==='now';}).length;
+    var activeCount=deps.filter(function(dep){return !dep.outcome||dep.outcome==='pending'||dep.outcome==='engaged';}).length;
+    var successfulCount=deps.filter(function(dep){return dep.outcome==='successful';}).length;
+    var impactRate=deps.length?Math.round(successfulCount/deps.length*100):0;
+    var cooldownCount=advisors.filter(function(a){return !getCooldownStatus(a).ok;}).length;
+    var compounded=[];
+    var weakLinks=[];
+    var posture=deployNowCount>0?'Deploy now':activeCount>0?'Follow-through':advisors.length&&deals.length?'Map next ask':'Registry first';
+
+    if(coveredCount>0){
+        compounded.push('<div class="workspace-health-item"><strong>Advisor coverage exists on live deals.</strong> '+coveredCount+' active deal'+(coveredCount===1?' has':'s have')+' at least one mapped relationship that can become real leverage.</div>');
+    }
+    if(deployNowCount>0){
+        compounded.push('<div class="workspace-health-item"><strong>There are justified deployment moments right now.</strong> '+deployNowCount+' live deal'+(deployNowCount===1?' is':'s are')+' currently has enough pressure and available coverage to justify an ask.</div>');
+    }
+    if(successfulCount>0){
+        compounded.push('<div class="workspace-health-item"><strong>Advisor leverage has already changed outcomes.</strong> '+successfulCount+' logged deployment'+(successfulCount===1?' has':'s have')+' produced a successful result the room can learn from.</div>');
+    }
+    if(!compounded.length){
+        compounded.push('<div class="workspace-health-item"><strong>The room has a usable starting point.</strong> Advisor Deploy can map leverage now, but the real proof still needs to accumulate on live deals.</div>');
+    }
+
+    if(!advisors.length){
+        weakLinks.push('<div class="workspace-health-item"><strong>No advisor registry exists yet.</strong> The room cannot create real leverage until relationships are mapped first.</div>');
+    }
+    if(uncoveredCount>0){
+        weakLinks.push('<div class="workspace-health-item"><strong>Coverage gaps are still visible.</strong> '+uncoveredCount+' live deal'+(uncoveredCount===1?' has':'s have')+' no mapped advisor relationship yet.</div>');
+    }
+    if(cooldownCount>0){
+        weakLinks.push('<div class="workspace-health-item"><strong>Some of the best paths are cooling down.</strong> '+cooldownCount+' advisor'+(cooldownCount===1?' is':'s are')+' is temporarily less usable for a fresh deployment.</div>');
+    }
+    if(deps.length===0){
+        weakLinks.push('<div class="workspace-health-item"><strong>No deployment loop is logged yet.</strong> Until one ask is sent and tracked, the room cannot prove that outside leverage is changing deals.</div>');
+    }else if(impactRate<40){
+        weakLinks.push('<div class="workspace-health-item"><strong>Impact quality is still mixed.</strong> Logged advisor activity exists, but the success rate is not yet strong enough to trust blindly.</div>');
+    }
+    if(!weakLinks.length){
+        weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the asks surgical, but the advisor system is behaving credibly right now.</div>');
+    }
+
+    node.innerHTML=
+        '<section class="shell-section shell-section--compact workspace-health">'+
+            '<div class="shell-section-header">'+
+                '<div class="shell-section-heading">'+
+                    '<div class="shell-section-kicker">Workspace health</div>'+
+                    '<div class="shell-section-title">See where outside leverage is real.</div>'+
+                    '<div class="shell-section-copy workspace-health-copy">Advisor Deploy should show whether mapped relationships, justified moments, and logged asks are actually changing live deals.</div>'+
+                '</div>'+
+            '</div>'+
+            '<div class="workspace-health-metrics">'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Leverage posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(posture)+'</div><div class="workspace-health-subcopy">'+escH(deals.length+' active deal'+(deals.length===1?'':'s'))+'</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Covered deals</div><div class="workspace-health-value">'+coveredCount+'</div><div class="workspace-health-subcopy">Live deals with mapped advisor access.</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Deploy now</div><div class="workspace-health-value">'+deployNowCount+'</div><div class="workspace-health-subcopy">Deals with justified available leverage.</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Open loops</div><div class="workspace-health-value">'+activeCount+'</div><div class="workspace-health-subcopy">'+(deps.length?impactRate+'% impact rate.':'No logged deployments yet.')+'</div></div>'+
+            '</div>'+
+            '<div class="workspace-health-grid">'+
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
+            '</div>'+
+        '</section>';
 }
 function syncDeploymentToDeal(dep){
     var deal=dep&&dep.dealId?getDealById(dep.dealId):findDealByName(dep&&dep.dealName);
@@ -563,6 +635,7 @@ window.addAdvisor=function(){
         createdAt:new Date().toISOString()
     });
     saveAdvisors(advisors);
+    renderAdvisorWorkspaceHealth();
     ['rName','rTitle','rExpertise','rEquity','rCompanies'].forEach(function(id){document.getElementById(id).value=''});
     toast('Advisor added');renderRegistry();
 };
@@ -589,7 +662,7 @@ function renderRegistry(){
 window.removeAdvisor=function(id){
     if(!confirm('Remove this advisor?'))return;
     var advisors=getAdvisors().filter(function(a){return a.id!==id});
-    saveAdvisors(advisors);renderRegistry();toast('Removed');
+    saveAdvisors(advisors);renderAdvisorWorkspaceHealth();renderRegistry();toast('Removed');
 };
 
 window.editAdvisor=function(id){
@@ -599,7 +672,7 @@ window.editAdvisor=function(id){
     var newCompanies=prompt('Edit connected companies (comma-separated):',a.companies.join(', '));
     if(newCompanies!==null){
         a.companies=newCompanies.split(',').map(function(s){return s.trim()}).filter(Boolean);
-        saveAdvisors(advisors);renderRegistry();toast('Updated');
+        saveAdvisors(advisors);renderAdvisorWorkspaceHealth();renderRegistry();toast('Updated');
     }
 };
 
@@ -769,6 +842,7 @@ window.openDealFromDeployment=function(depId){
 };
 
 function renderDashboard(){
+    renderAdvisorWorkspaceHealth();
     var advisors=getAdvisors();
     var deps=getDeployments();
     var deals=getDeals().filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost'});
@@ -885,6 +959,7 @@ window.updateDepOutcome=function(depId,val){
         d.outcomeDate=new Date().toISOString();
         saveDeployments(deps);
         syncDeploymentToDeal(d);
+        renderAdvisorWorkspaceHealth();
         renderDashboard();
         renderImpact();
         toast('Outcome updated');
@@ -1045,6 +1120,7 @@ window.logDeployment=function(){
     saveDeployments(deps);
     syncDeploymentToDeal(dep);
     toast('Deployment logged and linked to deal');
+    renderAdvisorWorkspaceHealth();
     wizard={step:1,dealId:null,dealName:null,moment:null,advisor:null};
     showTab('dashboard');
 };
@@ -1144,6 +1220,7 @@ async function bootAdvisorDeploy(){
         await window.gtmPersistence.deals.load().catch(function(error){console.error('Advisor Deploy deals preload failed:',error);});
     }
     renderPlaybook();
+    renderAdvisorWorkspaceHealth();
     renderDashboard();
     clearAdvisorBootState();
 }

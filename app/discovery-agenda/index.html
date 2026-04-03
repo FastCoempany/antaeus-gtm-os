@@ -147,6 +147,7 @@
                             <button class="cp-persona-btn" data-p="revops" onclick="setPer(this)">RevOps</button>
                         </div>
                     </div>
+                    <div id="plannerHealthPanel"></div>
                 </section>
 
                 <div class="cp-agenda" id="agenda">
@@ -213,6 +214,7 @@
             var html='<div class="cp-boot-eyebrow">'+(kind==='loading'?'Loading module':'Load failed')+'</div>';
             html+='<div class="cp-boot-title">'+escH(title)+'</div>';
             html+='<div class="cp-boot-text">'+escH(text)+'</div>';
+            document.getElementById('plannerHealthPanel').innerHTML='';
             if(kind==='error'){
                 html+='<div class="cp-boot-actions">';
                 html+='<button class="cp-boot-btn" type="button" onclick="retryDiscoveryAgendaBoot()">Retry Call Planner</button>';
@@ -545,6 +547,70 @@
                 '</section>';
         }
 
+        function renderPlannerWorkspaceHealth(){
+            var node=document.getElementById('plannerHealthPanel');
+            if(!node)return;
+            var quality=getAgendaQuality();
+            var company=(matchedAccount&&matchedAccount.name)||(quality.linkedDeal&&(quality.linkedDeal.accountName||quality.linkedDeal.name))||'No account context yet';
+            var whyNowState=quality.hasSignal?'Signal-backed':quality.notes.length>=20?'Notes-backed':'Missing';
+            var posture=quality.bandLabel;
+            var compounded=[];
+            var weakLinks=[];
+
+            if(contactName.length>=2){
+                compounded.push('<div class="workspace-health-item"><strong>A real person is on the board.</strong> '+escH(contactName)+' is giving the call a concrete human target instead of a generic persona guess.</div>');
+            }
+            if(matchedAccount||quality.linkedin){
+                compounded.push('<div class="workspace-health-item"><strong>Account context is visible.</strong> The agenda is no longer detached from the account thread the call has to move.</div>');
+            }
+            if(quality.hasSignal||quality.notes.length>=20){
+                compounded.push('<div class="workspace-health-item"><strong>The why-now angle is explicit.</strong> This call now has enough trigger context to sound timely instead of generic.</div>');
+            }
+            if(quality.linkedDeal){
+                compounded.push('<div class="workspace-health-item"><strong>The call has somewhere durable to land.</strong> '+escH(quality.linkedDeal.accountName||'The linked deal')+' can carry the truth back into pipeline and discovery.</div>');
+            }
+            if(!compounded.length){
+                compounded.push('<div class="workspace-health-item"><strong>The room has a workable starting point.</strong> Call Planner can keep building, but the agenda still needs more live context before it becomes believable.</div>');
+            }
+
+            if(contactName.length<2){
+                weakLinks.push('<div class="workspace-health-item"><strong>The real person is still missing.</strong> Until the call targets a named human, the agenda will stay vague.</div>');
+            }
+            if(!(matchedAccount||quality.linkedin)){
+                weakLinks.push('<div class="workspace-health-item"><strong>Account context is still thin.</strong> Match the account in Signal Console or add LinkedIn context so the prep has something real to anchor on.</div>');
+            }
+            if(!(quality.hasSignal||quality.notes.length>=20)){
+                weakLinks.push('<div class="workspace-health-item"><strong>The why-now is still weak.</strong> The call needs a real trigger or enough custom context to justify the meeting.</div>');
+            }
+            if(!quality.linkedDeal){
+                weakLinks.push('<div class="workspace-health-item"><strong>The advancement path is still detached.</strong> Link the call to a live deal so the result does not die as notes.</div>');
+            }
+            if(!weakLinks.length){
+                weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the prep.</strong> Keep the agenda honest, but the current call plan is reading credibly.</div>');
+            }
+
+            node.innerHTML=
+                '<section class="shell-section shell-section--compact workspace-health">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Workspace health</div>'+
+                            '<div class="shell-section-title">See whether the meeting is truly ready.</div>'+
+                            '<div class="shell-section-copy workspace-health-copy">Call Planner should show whether live call prep can actually survive the handoff into Discovery Studio and Deal Workspace.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="workspace-health-metrics">'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Prep posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(posture)+'</div><div class="workspace-health-subcopy">'+escH(quality.score+'/100 agenda quality')+'</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Current context</div><div class="workspace-health-value workspace-health-value--sans">'+escH(contactName||'No person yet')+'</div><div class="workspace-health-subcopy">'+escH(company)+'</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Why now</div><div class="workspace-health-value workspace-health-value--sans">'+escH(whyNowState)+'</div><div class="workspace-health-subcopy">'+(quality.hasSignal?'Signal visible.':quality.notes.length>=20?'Custom context captured.':'No durable trigger yet.')+'</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Deal linkage</div><div class="workspace-health-value workspace-health-value--sans">'+escH(quality.linkedDeal?'Attached':'Thin')+'</div><div class="workspace-health-subcopy">'+escH(quality.linkedDeal?(quality.linkedDeal.accountName||quality.linkedDeal.name||'Linked deal visible'):'No linked deal yet')+'</div></div>'+
+                    '</div>'+
+                    '<div class="workspace-health-grid">'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
+                    '</div>'+
+                '</section>';
+        }
+
         function getAgendaSnapshot(){
             var quality=getAgendaQuality();
             return {
@@ -607,7 +673,7 @@
             btn.classList.add('active');
             persona=btn.dataset.p;
             if(contactName)buildAgenda();
-            else renderPlannerBridge();
+            else{renderPlannerBridge();renderPlannerWorkspaceHealth();}
         };
 
         window.onSearch=function(val){
@@ -624,17 +690,19 @@
             } else {
                 document.getElementById('agenda').classList.remove('visible');
                 renderPlannerBridge();
+                renderPlannerWorkspaceHealth();
             }
         };
 
         window.refreshCallPlanner=function(){
             if(contactName)buildAgenda();
-            else renderPlannerBridge();
+            else{renderPlannerBridge();renderPlannerWorkspaceHealth();}
         };
 
         function buildAgenda(){
             document.getElementById('agenda').classList.add('visible');
             renderPlannerBridge();
+            renderPlannerWorkspaceHealth();
             renderAgendaQuality();
             var linkedDeal=getLinkedDeal();
 
@@ -725,6 +793,7 @@
             await syncSignalConsoleAccounts();
             populateDealDropdown();
             renderPlannerBridge();
+            renderPlannerWorkspaceHealth();
             clearBootState();
         }
 
