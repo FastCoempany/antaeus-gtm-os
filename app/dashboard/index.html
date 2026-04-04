@@ -1744,6 +1744,114 @@
 
             var dealRoomHealth = readLS('gtmos_deal_room_health', null);
             var signalRoomHealth = readLS('gtmos_signal_room_health', null);
+            var readinessSnapshot = readLS('gtmos_readiness_snapshot', null);
+            var quotaTargets = readLS('gtmos_quota_targets', null);
+            var outboundSeed = readLS('gtmos_outbound_seed', null);
+
+            function clampHealthScore(value) {
+                return Math.max(0, Math.min(100, Math.round(Number(value || 0))));
+            }
+            function buildDashboardHealthSummaries() {
+                var summaries = {};
+                if (dealRoomHealth && (dealRoomHealth.topDealId || dealRoomHealth.recoveryCount)) {
+                    var dealTruthDebt = Number(dealRoomHealth.topDealTruthDebtCount || 0);
+                    var dealPressure = 28 +
+                        Math.min(24, Number(dealRoomHealth.recoveryCount || 0) * 6) +
+                        Math.min(24, dealTruthDebt * 8) +
+                        (dealRoomHealth.topDealNextStepOverdue ? 12 : 0) +
+                        (dealRoomHealth.topDealProofThin ? 10 : 0) +
+                        (dealRoomHealth.topDealMissingChampion ? 8 : 0);
+                    summaries.deal = {
+                        room: 'Deal Workspace',
+                        pattern: 'workspace',
+                        topObjectId: String(dealRoomHealth.topDealId || ''),
+                        topObjectName: String(dealRoomHealth.topDealName || ''),
+                        pressureScore: clampHealthScore(dealPressure),
+                        posture: dealTruthDebt >= 2 ? 'truth debt visible' : (Number(dealRoomHealth.recoveryCount || 0) > 0 ? 'recovery pressure' : 'steady'),
+                        recoveryCount: Number(dealRoomHealth.recoveryCount || 0),
+                        truthDebtCount: dealTruthDebt,
+                        missingChampion: !!dealRoomHealth.topDealMissingChampion,
+                        nextStepOverdue: !!dealRoomHealth.topDealNextStepOverdue,
+                        proofThin: !!dealRoomHealth.topDealProofThin,
+                        threadingRisk: Number(dealRoomHealth.topDealThreading || 0) > 0 && Number(dealRoomHealth.topDealThreading || 0) < 3
+                    };
+                }
+                if (signalRoomHealth && (signalRoomHealth.topAccountId || signalRoomHealth.signalCount)) {
+                    var topHeat = Number(signalRoomHealth.topHeat || 0);
+                    var topHighConfidenceCount = Number(signalRoomHealth.topHighConfidenceCount || 0);
+                    var topRecentCount = Number(signalRoomHealth.topRecentCount || 0);
+                    var motionReady = topHeat >= 75 && topHighConfidenceCount >= 2;
+                    var signalPressure = 24 +
+                        Math.min(30, topHeat * 0.35) +
+                        Math.min(20, topHighConfidenceCount * 5) +
+                        Math.min(12, topRecentCount * 3) +
+                        (motionReady ? 8 : 0);
+                    summaries.signal = {
+                        room: 'Signal Console',
+                        pattern: 'workspace',
+                        topObjectId: String(signalRoomHealth.topAccountId || ''),
+                        topObjectName: String(signalRoomHealth.topAccountName || ''),
+                        pressureScore: clampHealthScore(signalPressure),
+                        posture: motionReady ? 'motion ready' : 'research heavy',
+                        motionReady: motionReady,
+                        evidenceThin: topHighConfidenceCount < 2 || topRecentCount < 2,
+                        topHeat: topHeat,
+                        highConfidenceCount: topHighConfidenceCount,
+                        recentCount: topRecentCount,
+                        hasReplies: !!signalRoomHealth.topHasReplies,
+                        linkedMotion: !!signalRoomHealth.topHasActiveDeal
+                    };
+                }
+                if (readinessSnapshot && typeof readinessSnapshot.score === 'number') {
+                    var weakestDimension = String(readinessSnapshot.weakestDimension || '');
+                    var readinessScore = Number(readinessSnapshot.score || 0);
+                    summaries.readiness = {
+                        room: 'Readiness Score',
+                        pattern: 'system',
+                        score: readinessScore,
+                        fragilityScore: clampHealthScore(100 - readinessScore),
+                        posture: readinessScore >= 80 ? 'strong' : readinessScore >= 55 ? 'working' : 'fragile',
+                        weakestDimension: weakestDimension,
+                        strongestDimension: String(readinessSnapshot.strongestDimension || ''),
+                        dimensionsLive: Array.isArray(readinessSnapshot.dimensions)
+                            ? readinessSnapshot.dimensions.filter(function(item) { return Number(item && item.score || 0) > 0; }).length
+                            : 0,
+                        topActionModule: Array.isArray(readinessSnapshot.topActions) && readinessSnapshot.topActions[0]
+                            ? String(readinessSnapshot.topActions[0].module || '')
+                            : '',
+                        icpWeak: /icp/i.test(weakestDimension),
+                        discoveryWeak: /discovery/i.test(weakestDimension),
+                        outreachWeak: /outreach/i.test(weakestDimension),
+                        dealsWeak: /deals/i.test(weakestDimension),
+                        playbookWeak: /playbook/i.test(weakestDimension)
+                    };
+                }
+                if (quotaTargets && typeof quotaTargets === 'object') {
+                    var qualityScore = Number(quotaTargets.quality_score || 0);
+                    var touchesWeek = Number(quotaTargets.touches_week || 0);
+                    var activeAccounts = Number(quotaTargets.active_accounts || 0);
+                    var quotaPressure = 26 +
+                        Math.min(28, Math.max(0, 70 - qualityScore) * 0.6) +
+                        Math.min(20, touchesWeek / 4) +
+                        Math.min(16, activeAccounts);
+                    summaries.quota = {
+                        room: 'Quota Workback',
+                        pattern: 'system',
+                        qualityScore: qualityScore,
+                        pressureScore: clampHealthScore(quotaPressure),
+                        posture: qualityScore >= 75 ? 'credible' : qualityScore >= 55 ? 'supported' : 'fragile',
+                        qualityBand: String(quotaTargets.quality_band || ''),
+                        touchesWeek: touchesWeek,
+                        activeAccounts: activeAccounts,
+                        pipelineNeededMonth: Number(quotaTargets.pipeline_needed_month || 0),
+                        benchmarkBand: String(quotaTargets.benchmark_band || ''),
+                        coverageTarget: Number(outboundSeed && outboundSeed.coverage_target || 0),
+                        fragile: qualityScore > 0 && qualityScore < 60
+                    };
+                }
+                return summaries;
+            }
+            var healthSummaries = buildDashboardHealthSummaries();
 
             var vitals = deals.map(function(deal) { return dh.computeVitals(deal); }).filter(Boolean);
             var quota = dh.loadQuota();
@@ -2282,7 +2390,8 @@
                         moveCards: moveCards,
                         stage: stage,
                         shellContext: shellContext,
-                        dependencyWarnings: dependencyWarnings
+                        dependencyWarnings: dependencyWarnings,
+                        healthSummaries: healthSummaries
                     }, {
                         previousSnapshot: previousSnapshot,
                         mode: commandMode

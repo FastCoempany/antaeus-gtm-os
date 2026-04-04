@@ -128,6 +128,31 @@
         return tx(value);
     }
 
+    function readHealthSummary(input, key) {
+        var summaries = input && input.healthSummaries && typeof input.healthSummaries === 'object'
+            ? input.healthSummaries
+            : {};
+        var summary = summaries[key];
+        return summary && typeof summary === 'object' ? summary : null;
+    }
+
+    function summaryNumber(summary, key, fallback, min, max) {
+        if (summary && summary[key] !== undefined && summary[key] !== null && summary[key] !== '') {
+            return clamp(parseNumber(summary[key]), min, max);
+        }
+        return fallback;
+    }
+
+    function summaryBool(summary, key, fallback) {
+        if (summary && summary[key] !== undefined && summary[key] !== null) return !!summary[key];
+        return !!fallback;
+    }
+
+    function summaryText(summary, key, fallback) {
+        var value = summary && summary[key] !== undefined && summary[key] !== null ? summary[key] : fallback;
+        return tx(value);
+    }
+
     function formatCauseLabel(causeId) {
         var label = tx(causeId).replace(/_/g, ' ');
         if (!label) return '';
@@ -156,6 +181,10 @@
     function buildSignalProfile(card, family, input) {
         var context = input && input.shellContext ? input.shellContext : {};
         var warningCount = Array.isArray(input && input.dependencyWarnings) ? input.dependencyWarnings.length : 0;
+        var dealHealth = readHealthSummary(input, 'deal');
+        var signalHealth = readHealthSummary(input, 'signal');
+        var readinessHealth = readHealthSummary(input, 'readiness');
+        var quotaHealth = readHealthSummary(input, 'quota');
         var signals = readSignals(card);
         var risk = signalNumber(signals, 'risk', parseRisk(card), 0, 100);
         var heat = signalNumber(signals, 'heat', parseHeat(card), 0, 100);
@@ -194,6 +223,25 @@
         var causeId = signalText(signals, 'causeId', '');
         var pressureType = signalText(signals, 'pressureType', '');
         var gapCount = signalNumber(signals, 'gapCount', 0, 0, 20);
+        var dealRoomPressureScore = summaryNumber(dealHealth, 'pressureScore', 0, 0, 100);
+        var dealRoomTruthDebt = summaryNumber(dealHealth, 'truthDebtCount', 0, 0, 20);
+        var signalRoomPressureScore = summaryNumber(signalHealth, 'pressureScore', 0, 0, 100);
+        var signalRoomMotionReady = summaryBool(signalHealth, 'motionReady', false);
+        var signalRoomEvidenceThin = summaryBool(signalHealth, 'evidenceThin', false);
+        var readinessScore = summaryNumber(readinessHealth, 'score', 0, 0, 100);
+        var readinessFragility = summaryNumber(readinessHealth, 'fragilityScore', readinessScore ? (100 - readinessScore) : 0, 0, 100);
+        var readinessWeakestDimension = summaryText(readinessHealth, 'weakestDimension', '');
+        var readinessIcpWeak = summaryBool(readinessHealth, 'icpWeak', /icp/i.test(readinessWeakestDimension));
+        var readinessDiscoveryWeak = summaryBool(readinessHealth, 'discoveryWeak', /discovery/i.test(readinessWeakestDimension));
+        var readinessOutreachWeak = summaryBool(readinessHealth, 'outreachWeak', /outreach/i.test(readinessWeakestDimension));
+        var readinessDealsWeak = summaryBool(readinessHealth, 'dealsWeak', /deals/i.test(readinessWeakestDimension));
+        var readinessPlaybookWeak = summaryBool(readinessHealth, 'playbookWeak', /playbook/i.test(readinessWeakestDimension));
+        var quotaQualityScore = summaryNumber(quotaHealth, 'qualityScore', 0, 0, 100);
+        var quotaPressureScore = summaryNumber(quotaHealth, 'pressureScore', 0, 0, 100);
+        var quotaTouchesWeek = summaryNumber(quotaHealth, 'touchesWeek', 0, 0, 1000000);
+        var quotaActiveAccounts = summaryNumber(quotaHealth, 'activeAccounts', 0, 0, 1000000);
+        var quotaQualityBand = summaryText(quotaHealth, 'qualityBand', '');
+        var quotaFragile = summaryBool(quotaHealth, 'fragile', quotaQualityScore > 0 && quotaQualityScore < 60);
 
         if (!gapCount) {
             if (missingChampion) gapCount += 1;
@@ -204,6 +252,8 @@
             if (warningCount && family === 'system') gapCount += warningCount;
             if (family === 'icp') gapCount += 1;
             if (truthDebtCount) gapCount += Math.min(3, truthDebtCount);
+            if (quotaFragile && (family === 'move' || family === 'opportunity' || family === 'risk')) gapCount += 1;
+            if (readinessIcpWeak && family === 'icp') gapCount += 1;
         }
 
         return {
@@ -246,6 +296,25 @@
             causeId: causeId,
             pressureType: pressureType,
             gapCount: gapCount,
+            dealRoomPressureScore: dealRoomPressureScore,
+            dealRoomTruthDebt: dealRoomTruthDebt,
+            signalRoomPressureScore: signalRoomPressureScore,
+            signalRoomMotionReady: signalRoomMotionReady,
+            signalRoomEvidenceThin: signalRoomEvidenceThin,
+            readinessScore: readinessScore,
+            readinessFragility: readinessFragility,
+            readinessWeakestDimension: readinessWeakestDimension,
+            readinessIcpWeak: readinessIcpWeak,
+            readinessDiscoveryWeak: readinessDiscoveryWeak,
+            readinessOutreachWeak: readinessOutreachWeak,
+            readinessDealsWeak: readinessDealsWeak,
+            readinessPlaybookWeak: readinessPlaybookWeak,
+            quotaQualityScore: quotaQualityScore,
+            quotaPressureScore: quotaPressureScore,
+            quotaTouchesWeek: quotaTouchesWeek,
+            quotaActiveAccounts: quotaActiveAccounts,
+            quotaQualityBand: quotaQualityBand,
+            quotaFragile: quotaFragile,
             contextAccounts: Number(context.accounts || 0),
             contextSignals: Number(context.signals || 0),
             contextDeals: Number(context.deals || 0),
@@ -267,6 +336,9 @@
         if (profile.missingNextStep) pushReason(reasons, 'next step missing');
         if (profile.threadingRisk) pushReason(reasons, 'single-threaded');
         if (profile.stageStuck) pushReason(reasons, 'stage stuck');
+        if (profile.dealRoomPressureScore >= 60) pushReason(reasons, 'room pressure high');
+        if (profile.readinessDealsWeak) pushReason(reasons, 'deals weakest dimension');
+        if (profile.quotaPressureScore >= 60) pushReason(reasons, 'quota pressure');
         if (profile.linkedRoomTop) pushReason(reasons, 'room lead');
         if (profile.hasAutopsy) pushReason(reasons, 'failure mode exposed');
         var meta = Array.isArray(card && card.meta) ? card.meta : [];
@@ -290,6 +362,12 @@
         if (profile.proofThin) pushReason(reasons, 'proof thin');
         if (profile.nextStepOverdue) pushReason(reasons, 'next step overdue');
         if (profile.missingNextStep) pushReason(reasons, 'next step missing');
+        if (profile.quotaPressureScore >= 60) pushReason(reasons, 'quota pressure');
+        if (profile.signalRoomMotionReady) pushReason(reasons, 'signal room ready');
+        if (profile.signalRoomEvidenceThin) pushReason(reasons, 'evidence still thin');
+        if (profile.readinessOutreachWeak) pushReason(reasons, 'outreach weakest link');
+        if (profile.readinessDiscoveryWeak) pushReason(reasons, 'discovery weakest link');
+        if (profile.readinessPlaybookWeak && family === 'advisor') pushReason(reasons, 'playbook weakest link');
         if (profile.hasReplies) pushReason(reasons, 'reply path');
         if (family === 'advisor' || profile.hasAdvisor) pushReason(reasons, 'advisor leverage');
         if (family === 'opportunity' || profile.hasSignalConsole) pushReason(reasons, 'market motion');
@@ -304,14 +382,19 @@
     function buildSystemReasons(profile) {
         var reasons = [];
         if (profile.warningCount) pushReason(reasons, profile.warningCount + ' sync warning' + (profile.warningCount === 1 ? '' : 's'));
+        if (profile.readinessScore) pushReason(reasons, 'readiness ' + profile.readinessScore + '/100');
+        if (profile.readinessWeakestDimension) pushReason(reasons, profile.readinessWeakestDimension.toLowerCase() + ' weakest dimension');
+        if (profile.quotaPressureScore >= 60) pushReason(reasons, 'quota pressure');
+        if (profile.quotaQualityBand) pushReason(reasons, 'plan ' + profile.quotaQualityBand.toLowerCase());
         pushReason(reasons, 'local fallback active');
-        pushReason(reasons, 'trust surface compromised');
         return reasons.slice(0, 4);
     }
 
     function buildIcpReasons(profile) {
         var reasons = [];
+        if (profile.readinessIcpWeak) pushReason(reasons, 'ICP weakest dimension');
         pushReason(reasons, 'targeting truth missing');
+        if (profile.quotaPressureScore >= 60) pushReason(reasons, 'quota pressure is downstream');
         if (profile.contextSignals || profile.contextAccounts) pushReason(reasons, 'market layer already live');
         if (profile.contextDeals) pushReason(reasons, 'deal layer depends on ICP');
         return reasons.slice(0, 4);
@@ -333,6 +416,9 @@
         if (profile.stageStuck) score += 7;
         if (profile.linkedRoomTop) score += 5;
         if (profile.driftSignal) score += 4;
+        if (profile.dealRoomPressureScore >= 60) score += 4;
+        if (profile.readinessDealsWeak) score += 5;
+        if (profile.quotaPressureScore >= 60) score += 4;
         return clamp(Math.round(score), 0, 100);
     }
 
@@ -360,13 +446,24 @@
         if (profile.causeId === 'coverage_gap') score += 8;
         if (profile.causeId === 'no_nextstep' || profile.causeId === 'next_step_overdue') score += 7;
         if (profile.causeId === 'no_champion' || profile.causeId === 'champion_weak') score += 6;
+        if (profile.quotaPressureScore >= 60 && (family === 'move' || family === 'opportunity')) score += 7;
+        if (profile.signalRoomMotionReady && family === 'opportunity') score += 6;
+        if (profile.readinessOutreachWeak && (family === 'move' || family === 'opportunity')) score += 4;
+        if (profile.readinessDiscoveryWeak && family === 'move') score += 3;
+        if (profile.readinessPlaybookWeak && family === 'advisor') score += 5;
         if (family === 'advisor') score += 8;
         if (family === 'opportunity') score += 6;
         return clamp(Math.round(score), 0, 100);
     }
 
     function scoreSystemCard(profile) {
-        return clamp(Math.round(48 + (profile.warningCount * 10) + (profile.contextDeals ? 4 : 0)), 0, 90);
+        return clamp(Math.round(
+            48 +
+            (profile.warningCount * 10) +
+            (profile.contextDeals ? 4 : 0) +
+            Math.min(18, profile.readinessFragility * 0.18) +
+            Math.min(14, profile.quotaPressureScore * 0.14)
+        ), 0, 94);
     }
 
     function scoreIcpCard(profile) {
@@ -374,6 +471,8 @@
         if (profile.contextAccounts || profile.contextSignals) score += 8;
         if (profile.contextDeals) score += 10;
         if (profile.contextMotions) score += 4;
+        if (profile.readinessIcpWeak) score += 18;
+        if (profile.quotaPressureScore >= 60) score += 4;
         return clamp(Math.round(score), 0, 86);
     }
 
@@ -395,6 +494,8 @@
         confidence += profile.roomReadiness >= 2 ? 6 : 0;
         confidence += profile.linkedRoomTop ? 6 : 0;
         confidence += profile.urgency ? Math.min(10, profile.urgency * 0.45) : 0;
+        confidence += profile.readinessScore ? 4 : 0;
+        confidence += profile.quotaPressureScore ? 4 : 0;
         if (family === 'advisor' || family === 'opportunity') confidence += 6;
         if (family === 'system' || family === 'icp') confidence += 10;
         return clamp(Math.round(confidence), 40, 94);
@@ -489,6 +590,10 @@
         object.stageStuck = profile.stageStuck;
         object.causeId = profile.causeId;
         object.pressureType = profile.pressureType;
+        object.readinessFragility = profile.readinessFragility;
+        object.readinessIcpWeak = profile.readinessIcpWeak;
+        object.quotaPressureScore = profile.quotaPressureScore;
+        object.signalRoomMotionReady = profile.signalRoomMotionReady;
 
         return object;
     }
@@ -671,35 +776,48 @@
         var highConfidenceCount = signalNumber(signals, 'highConfidenceCount', 0, 0, 1000);
         var hasReplies = signalBool(signals, 'hasReplies', false);
         var linkedRoomTop = signalBool(signals, 'linkedRoomTop', false);
+        var quotaPressureScore = Number(object && object.quotaPressureScore || 0);
+        var readinessFragility = Number(object && object.readinessFragility || 0);
+        var readinessIcpWeak = !!(object && object.readinessIcpWeak);
 
         if (mode === 'queue') {
             if (family === 'risk') {
                 if (linkedRoomTop) return 'The live room says this deal needs intervention.';
                 if (truthDebtCount >= 2) return 'Truth debt is dragging this deal down.';
+                if (quotaPressureScore >= 60) return 'Quota pressure is exposing deal weakness.';
                 if (nextStepOverdue || stageStuck) return 'Execution drift is visible now.';
                 return 'Recovery is ahead of expansion.';
             }
             if (family === 'advisor') return 'Leverage is earned here, not decorative.';
+            if ((family === 'opportunity' || family === 'move') && quotaPressureScore >= 60) return 'Quota pressure makes this motion real.';
             if ((family === 'opportunity' || family === 'move') && hasReplies) return 'This thread has earned the next motion.';
             if (family === 'opportunity' && highConfidenceCount >= 2) return 'Signal density makes this move real.';
             if (family === 'opportunity' && causeId === 'coverage_gap') return 'Coverage pressure makes this move real.';
             if (family === 'opportunity' || family === 'move') return 'This is the next move with leverage.';
+            if (family === 'icp' && readinessIcpWeak) return 'Readiness still says targeting truth is weakest.';
             if (family === 'icp') return 'Truth work stays ahead of scale work.';
+            if (readinessFragility >= 45) return 'System fragility is still visible in readiness.';
+            if (quotaPressureScore >= 60) return 'The plan is still more fragile than believable.';
             return 'This keeps the command surface honest.';
         }
 
         if (family === 'risk') {
             if (linkedRoomTop) return 'The live room says this deal is slipping.';
             if (truthDebtCount >= 2) return 'This deal is weak where it matters.';
+            if (quotaPressureScore >= 60) return 'Quota pressure is exposing deal weakness.';
             if (nextStepOverdue || stageStuck) return 'This deal is drifting in the open.';
             return 'The week is drifting through this object.';
         }
         if (family === 'advisor') return 'Leverage is earned here, not decorative.';
+        if ((family === 'opportunity' || family === 'move') && quotaPressureScore >= 60) return 'Quota pressure makes this motion real.';
         if ((family === 'opportunity' || family === 'move') && hasReplies) return 'This thread has earned the next motion.';
         if (family === 'opportunity' && highConfidenceCount >= 2) return 'Signal density makes this move real.';
         if (family === 'opportunity' && causeId === 'coverage_gap') return 'Coverage pressure makes this move real.';
         if (family === 'opportunity' || family === 'move') return 'This is the highest-leverage move right now.';
+        if (family === 'icp' && readinessIcpWeak) return 'Readiness still says targeting truth is weakest.';
         if (family === 'icp') return 'Targeting truth is still upstream of everything else.';
+        if (readinessFragility >= 45) return 'System fragility is still visible in readiness.';
+        if (quotaPressureScore >= 60) return 'The plan is still more fragile than believable.';
         return 'System trust is affecting the rest of the stack.';
     }
 
