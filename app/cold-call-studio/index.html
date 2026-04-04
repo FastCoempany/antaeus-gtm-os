@@ -104,6 +104,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .cold-first-fold{padding:0 0 16px;border-bottom:1px solid rgba(255,255,255,0.05);background:linear-gradient(180deg,rgba(15,19,28,0.72) 0%,rgba(10,13,20,0.24) 100%);}
 .cold-first-fold .topbar{position:sticky;top:var(--cold-call-shell-offset,0px);border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(7,8,10,0.88);}
 .cold-first-fold .cold-shell-band{padding-top:16px;border-bottom:none;}
+.cold-first-fold #coldCallHealthPanel{padding:0 24px;margin-top:16px;}
 /* VM */
 .vm-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px;}
 /* Postcard */
@@ -168,6 +169,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
 </div>
 <div class="cold-shell-band" id="coldCallShellBand"></div>
+<div id="coldCallHealthPanel"></div>
 </section>
 <div class="app">
     <div class="main" id="mainArea"></div>
@@ -605,10 +607,81 @@ function renderColdCallShellBand(){
     node.innerHTML=stageHtml;
 }
 
+function renderColdCallWorkspaceHealth(){
+    var node=document.getElementById('coldCallHealthPanel');
+    if(!node)return;
+    var stats=getRecentCallStats();
+    var capture=syncCaptureAccount();
+    var mode=getStageMode(S.stage);
+    var signal=getAccountSignal();
+    var compounded=[];
+    var weakLinks=[];
+    var accountCallCount=stats.total;
+    if(selectedAccount){
+        var data=readLS('gtmos_cold_call_log',{calls:[]})||{calls:[]};
+        var calls=Array.isArray(data.calls)?data.calls:[];
+        accountCallCount=calls.filter(function(call){return call.accountName===selectedAccount;}).length;
+    }
+
+    if(selectedAccount){
+        compounded.push('<div class="workspace-health-item"><strong>The call is anchored to a live account.</strong> '+escH(selectedAccount)+' is now the named operating target instead of a generic list pull.</div>');
+    }
+    if(accountData&&Number(accountData._heat||0)>=70){
+        compounded.push('<div class="workspace-health-item"><strong>The account already has temperature.</strong> Heat '+escH(String(accountData._heat))+' means the call is not entering a cold vacuum.</div>');
+    }
+    if(stats.booked>0||stats.callbacks>0||stats.referrals>0){
+        compounded.push('<div class="workspace-health-item"><strong>The outcome loop is teaching the room.</strong> '+escH(String(stats.booked))+' meetings, '+escH(String(stats.callbacks))+' callbacks, and '+escH(String(stats.referrals))+' referrals are shaping the next route.</div>');
+    }
+    if(accountCallCount>0){
+        compounded.push('<div class="workspace-health-item"><strong>This account already has call memory.</strong> '+escH(String(accountCallCount))+' logged call'+(accountCallCount===1?' is':'s are')+' keeping the next touch from starting from zero.</div>');
+    }
+    if(!compounded.length){
+        compounded.push('<div class="workspace-health-item"><strong>The room can already hold a live call state.</strong> The next gain is turning that state into a named account and real outcome loop.</div>');
+    }
+
+    if(!selectedAccount){
+        weakLinks.push('<div class="workspace-health-item"><strong>No account is selected yet.</strong> Cold Call Studio gets thin fast if the operator dials before the target is named.</div>');
+    }
+    if(selectedAccount&&!signal){
+        weakLinks.push('<div class="workspace-health-item"><strong>The signal anchor is still weak.</strong> The call is running on script discipline more than on live account evidence.</div>');
+    }
+    if(mode==='post'&&!LAST_OUTCOME){
+        weakLinks.push('<div class="workspace-health-item"><strong>The last call has not been logged.</strong> Post-call mode only compounds if the outcome is captured while it is still fresh.</div>');
+    }
+    if(selectedAccount&&capture&&capture.callbackDate&&!capture.notes){
+        weakLinks.push('<div class="workspace-health-item"><strong>The callback is not yet contextualized.</strong> Locking a date without a note still leaves the next touch underbuilt.</div>');
+    }
+    if(!weakLinks.length){
+        weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the outcome loop honest, but the call system is reading credibly.</div>');
+    }
+
+    node.innerHTML=
+        '<section class="shell-section shell-section--compact workspace-health">'+
+            '<div class="shell-section-header">'+
+                '<div class="shell-section-heading">'+
+                    '<div class="shell-section-kicker">Workspace health</div>'+
+                    '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
+                    '<div class="shell-section-copy workspace-health-copy">Cold Call Studio should show whether live call repetition is becoming a real operating loop or still resting on isolated scripts.</div>'+
+                '</div>'+
+            '</div>'+
+            '<div class="workspace-health-metrics">'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Call posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(mode==='pre'?'Prep mode':mode==='post'?'Post-call mode':'Live-call mode')+'</div><div class="workspace-health-subcopy">'+escH(selectedAccount||'Need account')+'</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Signal anchor</div><div class="workspace-health-value workspace-health-value--sans">'+escH(signal?'Live signal':'Thin')+'</div><div class="workspace-health-subcopy">'+escH(signal||'No live signal linked yet.')+'</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Calls logged</div><div class="workspace-health-value">'+escH(String(stats.total||0))+'</div><div class="workspace-health-subcopy">'+escH(String(accountCallCount||0))+' on this account.</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Outcome loop</div><div class="workspace-health-value workspace-health-value--sans">'+escH(stats.booked>0?'Live':'Forming')+'</div><div class="workspace-health-subcopy">'+escH(String(stats.booked))+' meetings, '+escH(String(stats.callbacks))+' callbacks.</div></div>'+
+            '</div>'+
+            '<div class="workspace-health-grid">'+
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
+            '</div>'+
+        '</section>';
+}
+
 function render(){
     syncColdCallShellOffset();
     renderPhases();
     renderColdCallShellBand();
+    renderColdCallWorkspaceHealth();
     var stage=FLOW[S.stage];if(!stage)return;
     if(stage.type==='briefing')renderBriefing();
     else if(stage.type==='voicemail')renderVoicemail();

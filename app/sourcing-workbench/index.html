@@ -221,6 +221,7 @@
 .sw-first-fold #swShellBand{margin-bottom:16px;}
 .sw-first-fold .sw-capacity{margin-bottom:16px;}
 .sw-first-fold .sw-tabs{margin-bottom:0;}
+.sw-first-fold #swHealthPanel{margin-top:16px;}
 @media(max-width:900px){.sw-first-fold{padding:14px;}}
 </style>
 </head>
@@ -263,6 +264,7 @@
         <button class="sw-tab" data-tab="personas" onclick="swTab('personas')">Persona Maps</button>
         <button class="sw-tab" data-tab="sourceIntel" onclick="swTab('sourceIntel')">Source Intelligence</button>
     </div>
+    <div id="swHealthPanel"></div>
     </section>
 
     <!-- QUERY BUILDER -->
@@ -715,6 +717,86 @@ function renderBridge(){
     }
 }
 
+function renderWorkbenchHealth(){
+    var node=document.getElementById('swHealthPanel');
+    if(!node)return;
+    var theses=getTheses();
+    var cards=getQueryCards();
+    var prospects=getProspects();
+    var personas=getPersonas();
+    var ready=prospects.filter(function(p){return getProspectQuality(p).recommendedStage==='ready'&&p.stage!=='pushed';}).length;
+    var pushed=prospects.filter(function(p){return p.stage==='pushed';}).length;
+    var researched=prospects.filter(function(p){return p.stage==='researched'||p.stage==='ready'||p.stage==='pushed';}).length;
+    var captured=prospects.filter(function(p){return p.stage==='captured';}).length;
+    var topProspect=null;
+    var topQuality=null;
+    prospects.forEach(function(prospect){
+        var quality=getProspectQuality(prospect);
+        if(!topQuality||quality.score>topQuality.score){
+            topProspect=prospect;
+            topQuality=quality;
+        }
+    });
+    var compounded=[];
+    var weakLinks=[];
+
+    if(theses.length>0 && cards.length>0){
+        compounded.push('<div class="workspace-health-item"><strong>The queue is thesis-led.</strong> '+esc(String(cards.length))+' query card'+(cards.length===1?' is':'s are')+' now working from '+esc(String(theses.length))+' active thesis'+(theses.length===1?'':'es')+'.</div>');
+    }
+    if(researched>0){
+        compounded.push('<div class="workspace-health-item"><strong>Research is turning capture into judgment.</strong> '+esc(String(researched))+' account'+(researched===1?' has':'s have')+' moved beyond raw capture into real evaluation.</div>');
+    }
+    if(ready>0 || pushed>0){
+        compounded.push('<div class="workspace-health-item"><strong>The room is producing handoffs.</strong> '+esc(String(ready))+' ready and '+esc(String(pushed))+' pushed account'+((ready+pushed)===1?' is':'s are')+' proving the queue can feed downstream work.</div>');
+    }
+    if(personas.length>0){
+        compounded.push('<div class="workspace-health-item"><strong>Buyer logic is attached.</strong> '+esc(String(personas.length))+' persona pattern'+(personas.length===1?' is':'s are')+' helping the queue avoid generic account selection.</div>');
+    }
+    if(!compounded.length){
+        compounded.push('<div class="workspace-health-item"><strong>The workbench has a sourcing skeleton.</strong> The next gain is turning more captured accounts into researched and ready ones.</div>');
+    }
+
+    if(!theses.length){
+        weakLinks.push('<div class="workspace-health-item"><strong>No thesis is driving the queue.</strong> Without an active thesis, the workbench slides back into account browsing.</div>');
+    }
+    if(cards.length && !prospects.length){
+        weakLinks.push('<div class="workspace-health-item"><strong>Query logic exists, but no accounts are captured yet.</strong> The room still needs a real queue to judge.</div>');
+    }
+    if(captured>researched){
+        weakLinks.push('<div class="workspace-health-item"><strong>The captured pile is outrunning research.</strong> '+esc(String(captured))+' captured vs '+esc(String(researched))+' researched means the queue may be widening faster than it is being judged.</div>');
+    }
+    if(prospects.length>0 && ready===0 && pushed===0){
+        weakLinks.push('<div class="workspace-health-item"><strong>No account is ready for the next room yet.</strong> The queue still needs a believable entry point before it earns a handoff.</div>');
+    }
+    if(topQuality && topQuality.gaps && topQuality.gaps.length){
+        weakLinks.push('<div class="workspace-health-item"><strong>The best prospect still has a truth gap.</strong> '+esc(topProspect&&topProspect.name?topProspect.name:'The lead account')+' is still carrying '+esc(topQuality.gaps[0])+'.</div>');
+    }
+    if(!weakLinks.length){
+        weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the queue bounded, but the sourcing system is reading credibly.</div>');
+    }
+
+    node.innerHTML=
+        '<section class="shell-section shell-section--compact workspace-health">'+
+            '<div class="shell-section-header">'+
+                '<div class="shell-section-heading">'+
+                    '<div class="shell-section-kicker">Workspace health</div>'+
+                    '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
+                    '<div class="shell-section-copy workspace-health-copy">Sourcing Workbench should show whether thesis-led sourcing is producing a bounded queue worth researching and handing forward.</div>'+
+                '</div>'+
+            '</div>'+
+            '<div class="workspace-health-metrics">'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Queue posture</div><div class="workspace-health-value workspace-health-value--sans">'+esc(ready>0||pushed>0?'Handoff forming':cards.length?'Research heavy':'Need source logic')+'</div><div class="workspace-health-subcopy">'+esc(String(prospects.length))+' prospects in the room.</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Active theses</div><div class="workspace-health-value">'+esc(String(theses.length))+'</div><div class="workspace-health-subcopy">'+esc(String(cards.length))+' query cards live.</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Ready now</div><div class="workspace-health-value">'+esc(String(ready))+'</div><div class="workspace-health-subcopy">'+esc(String(pushed))+' already pushed forward.</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Lead account</div><div class="workspace-health-value workspace-health-value--sans">'+esc(topProspect&&topProspect.name?topProspect.name:'No lead yet')+'</div><div class="workspace-health-subcopy">'+esc(topQuality?topQuality.label:'Build the first believable lead.')+'</div></div>'+
+            '</div>'+
+            '<div class="workspace-health-grid">'+
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
+            '</div>'+
+        '</section>';
+}
+
 // ============ STATE ============
 var currentTab = 'queryBuilder';
 var ppFilter = 'all';
@@ -722,6 +804,7 @@ var ppFilter = 'all';
 // ============ RENDER ============
 function render(){
     renderBridge();
+    renderWorkbenchHealth();
     renderCapacity();
     document.querySelectorAll('.sw-tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===currentTab);});
     document.querySelectorAll('.sw-view').forEach(function(v){v.classList.toggle('active',v.id===currentTab);});
