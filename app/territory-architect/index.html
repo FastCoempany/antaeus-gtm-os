@@ -251,6 +251,7 @@
 }
 .ta-first-fold{margin-bottom:var(--space-lg);padding:18px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
 .ta-first-fold #territoryBootState{margin-bottom:14px;}
+.ta-health-slot{margin-top:16px;}
 @media(max-width:900px){.ta-first-fold{padding:14px;}}
 </style>
 </head>
@@ -426,6 +427,7 @@
         <button class="ta-view-tab" data-view="intelligence" onclick="switchView('intelligence')">Intelligence</button>
         <button class="ta-view-tab" data-view="manage" onclick="switchView('manage')">Manage</button>
     </div>
+    <div id="taHealthPanel" class="ta-health-slot"></div>
 
     <!-- COCKPIT VIEW -->
     <div class="ta-view active" id="cockpitView">
@@ -791,6 +793,80 @@ function renderTerritoryBridge() {
     }
 }
 
+function renderTerritoryWorkspaceHealth() {
+    var node = document.getElementById('taHealthPanel');
+    if (!node) return;
+
+    var theses = getTheses().filter(function(t) { return t.status === 'active'; });
+    var approaches = getApproaches().filter(function(a) { return a.status === 'active'; });
+    var accounts = getAccounts().filter(function(a) { return a.status === 'active'; });
+    var signals = getSignals();
+    var icp = getBestIcpSummary();
+    var progressionRate = theses.length
+        ? Math.round(theses.reduce(function(total, thesis) {
+            return total + thesisProgressionRate(thesis.id);
+        }, 0) / theses.length)
+        : 0;
+    var progressingCount = getDispositions().filter(function(d) { return d.type === 'progressing'; }).length;
+    var posture = !icp ? 'Need wedge' : (!theses.length ? 'Shape thesis' : (!accounts.length ? 'Build battlefield' : (progressionRate >= 20 ? 'Battlefield live' : 'Signal for proof')));
+    var compounded = [];
+    var weakLinks = [];
+
+    if (icp && icp.statement) {
+        compounded.push('<div class="workspace-health-item"><strong>The territory is anchored to a real wedge.</strong> The room is not starting from a blank TAM; it is inheriting a defined targeting thesis from ICP work.</div>');
+    }
+    if (theses.length >= 2) {
+        compounded.push('<div class="workspace-health-item"><strong>Multiple live theses are now shaping the battlefield.</strong> ' + theses.length + ' active theses are enough to rank accounts by a real point of view instead of gut feel.</div>');
+    }
+    if (accounts.length >= 10 || progressingCount > 0 || signals.length > 0) {
+        compounded.push('<div class="workspace-health-item"><strong>The territory is producing real operating evidence.</strong> Accounts, signals, and dispositions now exist to show whether the thesis stack is becoming believable.</div>');
+    }
+    if (!compounded.length) {
+        compounded.push('<div class="workspace-health-item"><strong>The room has a strategic starting point.</strong> Territory Architect can shape the battlefield now, but the pressure loops still need to be earned.</div>');
+    }
+
+    if (!icp || !icp.statement) {
+        weakLinks.push('<div class="workspace-health-item"><strong>No saved ICP anchor is visible.</strong> Territory design is stronger when a real wedge already exists upstream.</div>');
+    }
+    if (!theses.length) {
+        weakLinks.push('<div class="workspace-health-item"><strong>No active theses are carrying the battlefield.</strong> Without hypotheses, accounts become a list instead of a territory.</div>');
+    }
+    if (theses.length && !approaches.length) {
+        weakLinks.push('<div class="workspace-health-item"><strong>The territory still lacks opening angles.</strong> Theses exist, but no active approaches are available to test them in motion.</div>');
+    }
+    if (accounts.length < 10) {
+        weakLinks.push('<div class="workspace-health-item"><strong>The live account set is still thin.</strong> The room needs enough accounts to expose which theses deserve real attention.</div>');
+    } else if (progressionRate < 10) {
+        weakLinks.push('<div class="workspace-health-item"><strong>Progression is still weak.</strong> The active battlefield exists, but it is not yet producing enough forward motion to trust blindly.</div>');
+    } else if (!signals.length) {
+        weakLinks.push('<div class="workspace-health-item"><strong>Signal density is still light.</strong> The territory needs more fresh evidence to keep the ranking honest.</div>');
+    }
+    if (!weakLinks.length) {
+        weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the battlefield.</strong> Keep re-tiering honestly, but the territory is behaving credibly right now.</div>');
+    }
+
+    node.innerHTML =
+        '<section class="shell-section shell-section--compact workspace-health">' +
+            '<div class="shell-section-header">' +
+                '<div class="shell-section-heading">' +
+                    '<div class="shell-section-kicker">Workspace health</div>' +
+                    '<div class="shell-section-title">See what is compounding and what is still weak.</div>' +
+                    '<div class="shell-section-copy workspace-health-copy">Territory Architect should show whether upstream wedge truth is becoming a real battlefield with evidence, progression, and usable priority.</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="workspace-health-metrics">' +
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Territory posture</div><div class="workspace-health-value workspace-health-value--sans">' + esc(posture) + '</div><div class="workspace-health-subcopy">' + esc(icp && icp.industry ? icp.industry : 'No saved ICP anchor yet') + '</div></div>' +
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Active theses</div><div class="workspace-health-value">' + theses.length + '</div><div class="workspace-health-subcopy">' + esc(approaches.length + ' active approach' + (approaches.length === 1 ? '' : 'es')) + '</div></div>' +
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Live accounts</div><div class="workspace-health-value">' + accounts.length + '</div><div class="workspace-health-subcopy">Accounts currently carrying territory pressure.</div></div>' +
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Progression</div><div class="workspace-health-value">' + progressionRate + '%</div><div class="workspace-health-subcopy">' + esc(progressingCount + ' progressing disposition' + (progressingCount === 1 ? '' : 's')) + '</div></div>' +
+            '</div>' +
+            '<div class="workspace-health-grid">' +
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">' + compounded.slice(0, 2).join('') + '</div></div>' +
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">' + weakLinks.slice(0, 2).join('') + '</div></div>' +
+            '</div>' +
+        '</section>';
+}
+
 var MAX_ACCOUNTS = 300;
 
 // ============ DERIVED METRICS ============
@@ -1110,6 +1186,7 @@ function renderApp() {
     populateThesisDropdowns();
     populateAccountDropdowns();
     renderTerritoryBridge();
+    renderTerritoryWorkspaceHealth();
     if (currentView === 'territory') renderTerritoryView();
     else if (currentView === 'cockpit') renderCockpitView();
     else if (currentView === 'intelligence') renderIntelligenceView();

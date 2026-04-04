@@ -144,6 +144,7 @@
         .icp-first-fold { margin-bottom: var(--space-lg); padding: 18px; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; background: linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%); box-shadow: 0 22px 44px rgba(0,0,0,0.14); }
         .icp-first-fold #icpBootState { margin-bottom: 14px; }
         .icp-first-fold #icpShellBand { margin-bottom: 0; }
+        .icp-first-fold #icpHealthPanel { margin-top: 16px; }
         @media (max-width: 900px) { .icp-first-fold { padding: 14px; } }
     </style>
 </head>
@@ -173,6 +174,7 @@
                 <section class="icp-first-fold">
                 <div id="icpBootState"></div>
                 <div id="icpShellBand"></div>
+                <div id="icpHealthPanel"></div>
                 </section>
                 <div class="studio-layout shell-context-layout">
                     <div class="builder-content shell-work-column">
@@ -1080,6 +1082,72 @@
             });
         }
 
+        function renderIcpWorkspaceHealth(quality, buyer, trigger, proof, activeAccounts) {
+            var node = byId('icpHealthPanel');
+            if (!node) return;
+
+            var analytics = getIcpAnalyticsState();
+            var savedCount = analytics.icps.length;
+            var workedCount = analytics.totalWorked || 0;
+            var qualityState = qualityStateLabel(quality);
+            var unmetChecks = (quality && quality.checks ? quality.checks : []).filter(function(check) {
+                return check.tone !== 'good';
+            });
+            var posture = qualityState.label;
+            var compounded = [];
+            var weakLinks = [];
+
+            if (quality && (quality.tier === 'sharp' || quality.tier === 'workable')) {
+                compounded.push('<div class="workspace-health-item"><strong>The wedge is specific enough to route downstream.</strong> The room has narrowed targeting into a slice the rest of the app can actually trust.</div>');
+            }
+            if (activeAccounts >= 20) {
+                compounded.push('<div class="workspace-health-item"><strong>There is enough account volume to pressure-test the wedge.</strong> ' + activeAccounts + ' active accounts is enough to stop the ICP from staying theoretical.</div>');
+            }
+            if (workedCount > 0) {
+                compounded.push('<div class="workspace-health-item"><strong>Saved work has already produced real learning loops.</strong> ' + workedCount + ' worked ICP' + (workedCount === 1 ? ' has' : 's have') + ' started turning targeting into evidence.</div>');
+            }
+            if (!compounded.length) {
+                compounded.push('<div class="workspace-health-item"><strong>The room has a usable starting point.</strong> The wedge can be improved here now, but downstream proof still needs to be earned.</div>');
+            }
+
+            if (!quality || quality.tier === 'too-thin' || quality.tier === 'forming') {
+                weakLinks.push('<div class="workspace-health-item"><strong>The wedge is still too broad to trust fully.</strong> Until the ICP gets sharper, the rest of the system will inherit generic targeting.</div>');
+            }
+            if (!buyer || !trigger || !proof) {
+                weakLinks.push('<div class="workspace-health-item"><strong>Critical operating fields are still missing.</strong> Buyer, trigger, and proof window are the minimum needed for downstream rooms to behave seriously.</div>');
+            }
+            if (activeAccounts < 20) {
+                weakLinks.push('<div class="workspace-health-item"><strong>Active-fit volume is still thin.</strong> The room needs enough accounts to test whether this wedge survives real territory pressure.</div>');
+            }
+            if (unmetChecks.length) {
+                weakLinks.push('<div class="workspace-health-item"><strong>The top targeting gap is still visible.</strong> ' + esc(unmetChecks[0].text) + '</div>');
+            }
+            if (!weakLinks.length) {
+                weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the wedge.</strong> Keep it narrow, but the ICP is behaving credibly right now.</div>');
+            }
+
+            node.innerHTML =
+                '<section class="shell-section shell-section--compact workspace-health">' +
+                    '<div class="shell-section-header">' +
+                        '<div class="shell-section-heading">' +
+                            '<div class="shell-section-kicker">Workspace health</div>' +
+                            '<div class="shell-section-title">See what is compounding and what is still weak.</div>' +
+                            '<div class="shell-section-copy workspace-health-copy">ICP Studio should show whether the current wedge is actually becoming specific enough to power the rest of the system.</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="workspace-health-metrics">' +
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Wedge posture</div><div class="workspace-health-value workspace-health-value--sans">' + esc(posture) + '</div><div class="workspace-health-subcopy">' + esc((quality ? quality.score : 0) + '/100 quality') + '</div></div>' +
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Active fit</div><div class="workspace-health-value">' + activeAccounts + '</div><div class="workspace-health-subcopy">Accounts available to pressure-test the wedge.</div></div>' +
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Saved proofs</div><div class="workspace-health-value">' + savedCount + '</div><div class="workspace-health-subcopy">Saved ICP patterns in the local library.</div></div>' +
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Worked loops</div><div class="workspace-health-value">' + workedCount + '</div><div class="workspace-health-subcopy">Saved wedges marked as actually worked.</div></div>' +
+                    '</div>' +
+                    '<div class="workspace-health-grid">' +
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">' + compounded.slice(0, 2).join('') + '</div></div>' +
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">' + weakLinks.slice(0, 2).join('') + '</div></div>' +
+                    '</div>' +
+                '</section>';
+        }
+
         function renderIcpOperatingBoard(quality, statement, focus, examples, fields) {
             var board = byId('icpOperatingBoard');
             if (!board) return;
@@ -1211,6 +1279,7 @@
 
             renderList(byId('out_downstream'), buildDownstreamImpact(industry, size, geo, buyer, pain, trigger, proof, activeAccounts));
             renderIcpShellChrome(quality, industry, size, geo, buyer, trigger, activeAccounts);
+            renderIcpWorkspaceHealth(quality, buyer, trigger, proof, activeAccounts);
 
             var examples = buildExamples(industry, size, geo, buyer, pain, trigger, proof);
             byId('out_example').textContent = examples.strong;
