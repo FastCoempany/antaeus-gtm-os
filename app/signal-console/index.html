@@ -818,7 +818,7 @@ function publishSignalConsoleHealthSnapshot(snapshot){
   }catch(e){}
 }
 
-function renderSignalWorkspaceHealth(snapshot){
+function renderSignalWorkspaceHealthLegacy(snapshot){
   const node=document.getElementById('signalHealthPanel');
   if(!node)return;
   if(!snapshot||!snapshot.accountCount){
@@ -874,7 +874,7 @@ function renderSignalWorkspaceHealth(snapshot){
       <div class="shell-section-header">
         <div class="shell-section-heading">
           <div class="shell-section-kicker">Workspace health</div>
-          <div class="shell-section-title">See whether research is turning into real motion.</div>
+          <div class="shell-section-title">See what is compounding and what is still weak.</div>
           <div class="shell-section-copy workspace-health-copy">Signal Console should show whether account heat is compounding into action or just getting louder.</div>
         </div>
       </div>
@@ -885,8 +885,8 @@ function renderSignalWorkspaceHealth(snapshot){
         <div class="workspace-health-metric"><div class="workspace-health-label">Execution linkage</div><div class="workspace-health-value workspace-health-value--sans">${esc(linkedMotion?'Attached':'Thin')}</div><div class="workspace-health-subcopy">${esc(snapshot.topHasActiveDeal?'Active deal visible':snapshot.topHasReplies?'Reply path visible':'No live handoff yet')}</div></div>
       </div>
       <div class="workspace-health-grid">
-        <div class="workspace-health-panel"><div class="workspace-health-panel-title">What compounded</div><div class="workspace-health-list">${compounded.join('')}</div></div>
-        <div class="workspace-health-panel"><div class="workspace-health-panel-title">Weak links still visible</div><div class="workspace-health-list">${weakLinks.join('')}</div></div>
+        <div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">${compounded.join('')}</div></div>
+        <div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">${weakLinks.join('')}</div></div>
       </div>
     </section>`;
 }
@@ -970,7 +970,7 @@ function renderSignalWorkspaceHealth(snapshot){
       <div class="shell-section-header">
         <div class="shell-section-heading">
           <div class="shell-section-kicker">Workspace health</div>
-          <div class="shell-section-title">See whether research is becoming motion.</div>
+          <div class="shell-section-title">See what is compounding and what is still weak.</div>
           <div class="shell-section-copy workspace-health-copy">This room should show whether account heat is compounding into action or just getting louder.</div>
         </div>
       </div>
