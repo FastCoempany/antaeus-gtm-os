@@ -85,6 +85,7 @@
         .fa-first-fold #futureAutopsyReturnBridge .shell-handoff-bridge{margin-bottom:0;}
         .fa-first-fold .fa-hero{margin-bottom:14px;}
         .fa-first-fold .fa-picker{margin-bottom:0;}
+        .fa-first-fold #futureAutopsyHealthPanel{margin-top:14px;}
         @media(max-width:960px){.fa-bridge-grid,.fa-example-row,.fa-action-grid{grid-template-columns:1fr 1fr;}}
         @media(max-width:800px){.fa-grid,.fa-bridge-grid,.fa-example-row,.fa-action-grid{grid-template-columns:1fr;}.fa-picker{flex-direction:column;}.fa-first-fold{padding:14px;}}
     </style>
@@ -125,6 +126,7 @@
                     <button class="fa-btn" onclick="autopsyOfDay()">Autopsy of the Day</button>
                     <button class="fa-btn" onclick="copyAutopsy()">&#128203; Copy</button>
                 </div>
+                <div id="futureAutopsyHealthPanel"></div>
                 </section>
                 <div id="autopsyContent"></div>
             </div>
@@ -200,6 +202,7 @@
         var PREFS = Object.assign({}, dh.DEFAULTS, { autopsyHorizonDays: 45 });
         document.getElementById('horizonDays').textContent = PREFS.autopsyHorizonDays;
         renderFutureAutopsyReturnBridge();
+        renderFutureAutopsyHealth(null, null);
 
         // ── AUTOPSY-SPECIFIC DATA (beyond deal-health.js) ──
 
@@ -617,6 +620,82 @@
             return { label: 'Open Deal Workspace', href: buildFutureAutopsyRoomHref('/app/deal-workspace/?deal=' + encodeURIComponent(v.id), v.name, 'Deal Workspace') };
         }
 
+        function renderFutureAutopsyHealth(a, v) {
+            var node = document.getElementById('futureAutopsyHealthPanel');
+            if (!node) return;
+            if (!a || !v) {
+                node.innerHTML =
+                    '<section class="shell-section shell-section--compact workspace-health">'+
+                        '<div class="shell-section-header">'+
+                            '<div class="shell-section-heading">'+
+                                '<div class="shell-section-kicker">Workspace health</div>'+
+                                '<div class="shell-section-title">Health starts once one live deal is selected.</div>'+
+                                '<div class="shell-section-copy workspace-health-copy">Run one autopsy so this room can show what failure pressure is compounding and what is still weak.</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</section>';
+                return;
+            }
+
+            var timing = getTimingState(v, a);
+            var topCause = a.lose && a.lose.causes && a.lose.causes[0] ? a.lose.causes[0] : null;
+            var totalTasks = (a.countermeasures || []).length;
+            var doneTasks = (a.countermeasures || []).filter(function(task) {
+                return taskState(v.id, task.taskId);
+            }).length;
+            var openTasks = Math.max(0, totalTasks - doneTasks);
+            var winCount = a.win && a.win.conditions ? a.win.conditions.length : 0;
+            var compounded = [];
+            var weakLinks = [];
+
+            if (topCause) {
+                compounded.push('<div class="workspace-health-item"><strong>The failure theme is named.</strong> ' + escH(causeLabel(topCause.id)) + ' is now explicit instead of hiding behind stage language.</div>');
+            }
+            if (doneTasks > 0) {
+                compounded.push('<div class="workspace-health-item"><strong>Corrective work has started.</strong> ' + escH(String(doneTasks)) + ' countermeasure' + (doneTasks === 1 ? ' is' : 's are') + ' already marked done on this deal.</div>');
+            }
+            if (winCount >= 3) {
+                compounded.push('<div class="workspace-health-item"><strong>The save path is concrete.</strong> ' + escH(String(winCount)) + ' winning conditions are visible, so the room is pushing toward recovery instead of diagnosis theater.</div>');
+            }
+            if (!compounded.length) {
+                compounded.push('<div class="workspace-health-item"><strong>The room is exposing a live failure pattern.</strong> The autopsy is already more honest than a stage-only read.</div>');
+            }
+
+            if (topCause) {
+                weakLinks.push('<div class="workspace-health-item"><strong>' + escH(causeLabel(topCause.id)) + ' is still the live integrity risk.</strong> ' + escH(topCause.text || 'This failure pattern is still the most likely killer.') + '</div>');
+            }
+            if (openTasks > 0) {
+                weakLinks.push('<div class="workspace-health-item"><strong>Corrective work is still open.</strong> ' + escH(String(openTasks)) + ' countermeasure' + (openTasks === 1 ? ' is' : 's are') + ' not yet complete on the current deal.</div>');
+            }
+            if (a.killSwitch && a.killSwitch.recommended) {
+                weakLinks.push('<div class="workspace-health-item"><strong>Exit pressure is real.</strong> The kill switch is already saying this thread may no longer deserve more calendar time.</div>');
+            }
+            if (!weakLinks.length) {
+                weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the diagnosis honest, but the current corrective path is credible.</div>');
+            }
+
+            node.innerHTML =
+                '<section class="shell-section shell-section--compact workspace-health">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">Workspace health</div>'+
+                            '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
+                            '<div class="shell-section-copy workspace-health-copy">Future Autopsy should show whether diagnosis is turning into corrective work or still sitting as a smart warning.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="workspace-health-metrics">'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Failure posture</div><div class="workspace-health-value workspace-health-value--sans">' + escH(timing.label) + '</div><div class="workspace-health-subcopy">' + escH(v.stageRaw || v.stage || 'Live deal') + '</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Top cause</div><div class="workspace-health-value workspace-health-value--sans">' + escH(topCause ? causeLabel(topCause.id) : 'Not named') + '</div><div class="workspace-health-subcopy">' + escH(v.name || 'Current deal') + '</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Open counters</div><div class="workspace-health-value">' + escH(String(openTasks)) + '</div><div class="workspace-health-subcopy">' + escH(String(doneTasks)) + ' complete so far.</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Exit pressure</div><div class="workspace-health-value workspace-health-value--sans">' + escH(a.killSwitch && a.killSwitch.recommended ? 'Consider exit' : 'Stay active') + '</div><div class="workspace-health-subcopy">' + escH(a.killSwitch && a.killSwitch.reason ? a.killSwitch.reason : 'No kill recommendation active.') + '</div></div>'+
+                    '</div>'+
+                    '<div class="workspace-health-grid">'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">' + compounded.slice(0,2).join('') + '</div></div>'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">' + weakLinks.slice(0,2).join('') + '</div></div>'+
+                    '</div>'+
+                '</section>';
+        }
+
         function renderAutopsy(a, v) {
             document.getElementById('dealSub').textContent = 'Deal: ' + v.name + ' \u2014 ' + dh.money(v.value) + ' \u2014 ' + v.stageRaw + ' \u2014 Qual ' + v.qualScore + '/18 \u2014 Risk ' + v.riskScore + '/100';
 
@@ -751,11 +830,13 @@
             html += '</div></div>';
 
             document.getElementById('autopsyContent').innerHTML = html;
+            renderFutureAutopsyHealth(a, v);
         }
 
         window.onTaskToggle = function(dealId, taskId, el) {
             var now = toggleTask(dealId, taskId);
             el.closest('.fa-task').classList.toggle('done', now);
+            renderFutureAutopsyHealth(currentAutopsy, currentVitals);
         };
 
         window.openAutopsyAction = function(which) {
@@ -815,6 +896,7 @@
             console.error('Future Autopsy boot failed:',error);
             document.getElementById('autopsyContent').innerHTML='';
             document.getElementById('dealSub').textContent='Future Autopsy failed to load.';
+            renderFutureAutopsyHealth(null, null);
             showFutureAutopsyBootState(
                 'error',
                 'Future Autopsy could not load.',
@@ -848,6 +930,7 @@
 
             if (allVitals.length === 0) {
                 document.getElementById('dealSub').textContent = 'No deals to autopsy yet.';
+                renderFutureAutopsyHealth(null, null);
                 document.getElementById('autopsyContent').innerHTML = '<div class="fa-empty"><div style="font-size:2rem;margin-bottom:12px;">\ud83d\udd2c</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No active deals</div><div>Create your first deal in <a href="/app/deal-workspace/">Deal Workspace</a>, then come back to stress-test it.</div></div>';
             } else {
                 var urlDeal = new URLSearchParams(window.location.search).get('deal');

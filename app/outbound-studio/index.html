@@ -149,6 +149,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
 .action-note{margin-top:10px;font-size:0.72rem;color:var(--text-muted);}
 .outbound-first-fold{margin-bottom:var(--space-lg);padding:18px 18px 8px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg,rgba(18,24,42,0.96) 0%,rgba(12,18,33,0.98) 100%);box-shadow:0 22px 44px rgba(0,0,0,0.14);}
 .outbound-first-fold #outboundShellBand{margin-bottom:18px;}
+.outbound-first-fold #outboundHealthPanel{margin-top:16px;}
 .outbound-first-fold .tabs{margin-bottom:0;border-bottom-color:rgba(255,255,255,0.06);}
 .outbound-generator-top{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(280px,0.82fr);gap:12px;margin-bottom:var(--space-md);}
 .outbound-generator-top .card{margin-bottom:0;}
@@ -190,6 +191,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text-secondar
             <button class="tab" onclick="showTab('log')">Touch Log</button>
             <button class="tab" onclick="showTab('library')">Content Library</button>
         </div>
+        <div id="outboundHealthPanel"></div>
     </section>
 
     <!-- ==================== TAB 1: GENERATOR ==================== -->
@@ -762,9 +764,86 @@ function renderBridge(){
             ]
         });
         node.insertAdjacentHTML('beforeend',stageHtml);
+        renderOutboundWorkspaceHealth();
         return;
     }
     node.innerHTML=stageHtml;
+    renderOutboundWorkspaceHealth();
+}
+
+function renderOutboundWorkspaceHealth(){
+    var node=document.getElementById('outboundHealthPanel');
+    if(!node)return;
+    var motion=getCurrentMotionState();
+    if(!motion.accountName && !motion.contactName){
+        node.innerHTML=
+            '<section class="shell-section shell-section--compact workspace-health">'+
+                '<div class="shell-section-header">'+
+                    '<div class="shell-section-heading">'+
+                        '<div class="shell-section-kicker">Workspace health</div>'+
+                        '<div class="shell-section-title">Health starts once one account is in motion.</div>'+
+                        '<div class="shell-section-copy workspace-health-copy">Pick one live account, one buyer, and one trigger so this room can show what is compounding and what is still weak.</div>'+
+                    '</div>'+
+                '</div>'+
+            '</section>';
+        return;
+    }
+
+    var compounded=[];
+    var weakLinks=[];
+
+    if(motion.accountName){
+        compounded.push('<div class="workspace-health-item"><strong>The target is no longer generic.</strong> ' + escH(motion.accountName) + ' is now the live account anchoring the motion.</div>');
+    }
+    if(motion.signalHeadline){
+        compounded.push('<div class="workspace-health-item"><strong>Signal evidence is carrying the motion.</strong> The angle is tied to a live account signal instead of an abstract trigger.</div>');
+    }
+    if(motion.existingTouches>0){
+        compounded.push('<div class="workspace-health-item"><strong>Motion history exists.</strong> ' + escH(String(motion.existingTouches)) + ' logged touch' + (motion.existingTouches===1?' is':'es are') + ' already giving the next send more context.</div>');
+    }
+    if(motion.band==='strong' || motion.band==='workable'){
+        compounded.push('<div class="workspace-health-item"><strong>The move is believable enough to run.</strong> The current posture is ' + escH(motion.bandLabel.toLowerCase()) + ', which means the room is close to live execution.</div>');
+    }
+    if(!compounded.length){
+        compounded.push('<div class="workspace-health-item"><strong>The room has a real motion skeleton.</strong> Keep tightening it until the next send feels earned.</div>');
+    }
+
+    if(!motion.contactName){
+        weakLinks.push('<div class="workspace-health-item"><strong>The named buyer is still missing.</strong> Outbound stays weak if the motion is aimed at an account but not a person.</div>');
+    }
+    if(!motion.signalHeadline){
+        weakLinks.push('<div class="workspace-health-item"><strong>The signal anchor is still thin.</strong> The room is leaning more on the trigger template than on live account evidence.</div>');
+    }
+    if(motion.existingTouches===0){
+        weakLinks.push('<div class="workspace-health-item"><strong>No touch has been logged yet.</strong> The motion has not started compounding into a real sequence record.</div>');
+    }
+    if(motion.band==='brittle'){
+        weakLinks.push('<div class="workspace-health-item"><strong>The motion is still too thin.</strong> Add more specificity before you let the room pretend this is ready.</div>');
+    }
+    if(!weakLinks.length){
+        weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the ask honest, but the outbound motion is reading credibly.</div>');
+    }
+
+    node.innerHTML=
+        '<section class="shell-section shell-section--compact workspace-health">'+
+            '<div class="shell-section-header">'+
+                '<div class="shell-section-heading">'+
+                    '<div class="shell-section-kicker">Workspace health</div>'+
+                    '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
+                    '<div class="shell-section-copy workspace-health-copy">Outbound Studio should show whether one believable motion is getting stronger or still resting on generic outreach habits.</div>'+
+                '</div>'+
+            '</div>'+
+            '<div class="workspace-health-metrics">'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Motion posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(motion.bandLabel)+'</div><div class="workspace-health-subcopy">'+escH(motion.accountName||'Need target')+'</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Primary channel</div><div class="workspace-health-value workspace-health-value--sans">'+escH(motion.primaryChannel)+'</div><div class="workspace-health-subcopy">'+escH(motion.ctaLabel)+'</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Logged touches</div><div class="workspace-health-value">'+escH(String(motion.existingTouches||0))+'</div><div class="workspace-health-subcopy">Sequence continuity on this account.</div></div>'+
+                '<div class="workspace-health-metric"><div class="workspace-health-label">Evidence anchor</div><div class="workspace-health-value workspace-health-value--sans">'+escH(motion.signalHeadline?'Live signal':'Trigger-led')+'</div><div class="workspace-health-subcopy">'+escH(motion.contactName||'No named buyer yet')+'</div></div>'+
+            '</div>'+
+            '<div class="workspace-health-grid">'+
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
+                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
+            '</div>'+
+        '</section>';
 }
 
 function renderMotionBrief(){
