@@ -68,6 +68,7 @@
         .readiness-first-fold #readinessShellBand{margin-bottom:16px;}
         .readiness-first-fold .hero-score-wrap{padding:28px 0 24px;}
         .readiness-first-fold .score-story{margin-bottom:0;}
+        .readiness-first-fold #readinessSystemHealth{margin-top:16px;}
         @media(max-width:900px){ .score-story{grid-template-columns:1fr;} }
         @media(max-width:700px){ .readiness-first-fold{padding:14px;} }
     </style>
@@ -97,6 +98,7 @@
                 <div id="readinessShellBand"></div>
                 <div class="hero-score-wrap" id="heroWrap"></div>
                 <div class="score-story" id="scoreStory"></div>
+                <div id="readinessSystemHealth"></div>
                 </section>
                 <div class="actions-title">Highest-impact moves to improve your score</div>
                 <div id="actionsList"></div>
@@ -408,6 +410,55 @@
         // ══════════════════════════════════════════════════════
         // ACTIONS — all unmet criteria + linked module actions, sorted by pts
         // ══════════════════════════════════════════════════════
+        (function renderReadinessSystemHealth(){
+            var node=document.getElementById('readinessSystemHealth');
+            if(!node)return;
+            var compounded=[];
+            var weakLinks=[];
+            var proofCount=wins + (handoffExport?1:0) + (advisorCount>=1&&depCount>=1?1:0);
+
+            if(momentumDims>=3){
+                compounded.push('<div class="workspace-health-item"><strong>Multiple dimensions are carrying real weight.</strong> '+momentumDims+' of 5 readiness dimensions are now backed by live evidence instead of founder confidence alone.</div>');
+            }
+            if(strongestDim){
+                compounded.push('<div class="workspace-health-item"><strong>'+strongestDim.name+' is acting as the current proof anchor.</strong> This is the part of the operating system that already behaves most like something a new hire could inherit.</div>');
+            }
+            if(!compounded.length){
+                compounded.push('<div class="workspace-health-item"><strong>The system has an early proof base.</strong> The score is still fragile, but the room can already show what is carrying real weight and what is still too early.</div>');
+            }
+
+            if(weakestDim){
+                weakLinks.push('<div class="workspace-health-item"><strong>'+weakestDim.name+' is still the main drag on handoff confidence.</strong> Until it improves, the system will keep depending on founder interpretation too heavily.</div>');
+            }
+            if(topMisses[0]){
+                weakLinks.push('<div class="workspace-health-item"><strong>The top unlock is still unresolved.</strong> '+topMisses[0].label+' is the fastest way to change the readiness posture from here.</div>');
+            }
+            if(!weakLinks.length){
+                weakLinks.push('<div class="workspace-health-item"><strong>No single fragility is dominating the score.</strong> Keep compounding the operating system, but the handoff logic is behaving credibly right now.</div>');
+            }
+
+            node.innerHTML=
+                '<section class="shell-section shell-section--compact workspace-health">'+
+                    '<div class="shell-section-header">'+
+                        '<div class="shell-section-heading">'+
+                            '<div class="shell-section-kicker">System health</div>'+
+                            '<div class="shell-section-title">See what is carrying the system and what is still fragile.</div>'+
+                            '<div class="shell-section-copy workspace-health-copy">Readiness should reveal whether the system can be inherited, not just whether the score looks better than last week.</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="workspace-health-metrics">'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">System posture</div><div class="workspace-health-value workspace-health-value--sans">'+verdict+'</div><div class="workspace-health-subcopy">'+total+'/100 readiness</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Dimensions live</div><div class="workspace-health-value">'+momentumDims+'/5</div><div class="workspace-health-subcopy">Dimensions carrying real operating evidence.</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Top drag</div><div class="workspace-health-value workspace-health-value--sans">'+(weakestDim?weakestDim.name:'None')+'</div><div class="workspace-health-subcopy">Main source of handoff fragility right now.</div></div>'+
+                        '<div class="workspace-health-metric"><div class="workspace-health-label">Reference proof</div><div class="workspace-health-value">'+proofCount+'</div><div class="workspace-health-subcopy">'+wins+' won, '+(handoffExport?1:0)+' exported, '+((advisorCount>=1&&depCount>=1)?1:0)+' advisor loop.</div></div>'+
+                    '</div>'+
+                    '<div class="workspace-health-grid">'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Carrying the system</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
+                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still fragile</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
+                    '</div>'+
+                '</section>';
+        })();
+
         var actions=[];
         // Module-linked actions (with deep links)
         if(icpCount===0)actions.push({pts:5,label:'Add your first ICP profile',desc:'Define who you sell to.',link:'/app/icp-studio/',lt:'ICP Studio'});

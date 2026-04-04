@@ -83,6 +83,7 @@
         .qw-first-fold #quotaTopBoard{margin-bottom:16px;}
         .qw-first-fold .qw-hero{margin-bottom:14px;}
         .qw-first-fold .qw-coverage{margin-bottom:0;}
+        .qw-first-fold #quotaSystemHealth{margin-top:14px;}
         @media(max-width:900px){.qw-bridge,.qw-plan,.qw-handoff-grid,.qw-summary-block{grid-template-columns:1fr;}}
         @media(max-width:700px){.qw-inputs,.qw-adv-grid,.qw-bench{grid-template-columns:1fr;}.qw-first-fold{padding:14px;}}
     </style>
@@ -121,6 +122,7 @@
                 </div>
 
                 <div class="qw-coverage" id="coverageBar"></div>
+                <div id="quotaSystemHealth"></div>
                 </section>
                 <div class="qw-card" id="planCard"></div>
 
@@ -257,6 +259,63 @@
                 document.getElementById('coverageBar').innerHTML =
                     '<div class="qw-cov-head"><div class="qw-cov-title">Pipeline coverage</div><div class="qw-cov-ratio" style="color:var(--text-muted);">'+(quota && acv ? 'No deals yet' : 'Set quota and ACV to see coverage')+'</div></div>'+
                     '<div class="qw-empty-note">Coverage should become the dashboard pressure layer. Right now this module is waiting for a real quota target and live deal data.</div>';
+            }
+
+            function renderQuotaSystemHealth(metrics, benchmark, coverage, quality){
+                var node=document.getElementById('quotaSystemHealth');
+                if(!node)return;
+                var compounded=[];
+                var weakLinks=[];
+                var winFit=assumptionState(metrics.winRateRaw, benchmark.winRate)==='benchmark';
+                var m2oFit=assumptionState(metrics.meetingToOppRaw, benchmark.m2o, 0.15)==='benchmark';
+                var cycleFit=assumptionState(metrics.cycleDays, benchmark.cycle, 0.2)==='benchmark';
+                var fitCount=(winFit?1:0)+(m2oFit?1:0)+(cycleFit?1:0);
+
+                if(metrics.qualityScore>=82){
+                    compounded.push('<div class="workspace-health-item"><strong>The planning math is currently believable.</strong> The assumptions, coverage posture, and weekly pressure are close enough to operating truth to guide real behavior.</div>');
+                }
+                if((coverage.ratio||0) >= benchmark.coverage){
+                    compounded.push('<div class="workspace-health-item"><strong>Coverage is already supporting the target.</strong> Pipeline volume is at or above the benchmark the quota plan expects.</div>');
+                } else if(fitCount>=2){
+                    compounded.push('<div class="workspace-health-item"><strong>Most core assumptions still fit the band.</strong> The weekly plan is not fully proven yet, but the model is anchored to credible operating ranges.</div>');
+                }
+                if(!compounded.length){
+                    compounded.push('<div class="workspace-health-item"><strong>The room has a usable pressure model.</strong> Quota Workback can already show the right questions, but the plan still needs harder proof before it should be trusted blindly.</div>');
+                }
+
+                if((coverage.ratio||0) < benchmark.coverage){
+                    weakLinks.push('<div class="workspace-health-item"><strong>Coverage is still below plan.</strong> Until pipeline support catches up, the math remains more aspiration than operating truth.</div>');
+                }
+                if(fitCount<2){
+                    weakLinks.push('<div class="workspace-health-item"><strong>Too many assumptions have drifted away from benchmark reality.</strong> Custom math can be right, but it needs stronger proof before it should run the quarter.</div>');
+                }
+                if(metrics.touchesDay>25 || metrics.activeAccounts>250){
+                    weakLinks.push('<div class="workspace-health-item"><strong>Daily pressure may still be unrealistic.</strong> The required touch volume or account load suggests the current plan could outrun actual execution capacity.</div>');
+                }
+                if(!weakLinks.length){
+                    weakLinks.push('<div class="workspace-health-item"><strong>No single fragility is dominating the plan.</strong> Keep pressure-testing conversions, but the quota model is behaving credibly right now.</div>');
+                }
+
+                node.innerHTML=
+                    '<section class="shell-section shell-section--compact workspace-health">'+
+                        '<div class="shell-section-header">'+
+                            '<div class="shell-section-heading">'+
+                                '<div class="shell-section-kicker">System health</div>'+
+                                '<div class="shell-section-title">See what is holding in the plan and what is still fragile.</div>'+
+                                '<div class="shell-section-copy workspace-health-copy">Quota Workback should expose whether the math can be run, not just whether the spreadsheet technically closes.</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="workspace-health-metrics">'+
+                            '<div class="workspace-health-metric"><div class="workspace-health-label">Plan posture</div><div class="workspace-health-value workspace-health-value--sans">'+quality.label+'</div><div class="workspace-health-subcopy">'+metrics.qualityScore+'/100 planning quality</div></div>'+
+                            '<div class="workspace-health-metric"><div class="workspace-health-label">Coverage</div><div class="workspace-health-value">'+(coverage.ratio||0)+'x</div><div class="workspace-health-subcopy">Against a '+benchmark.coverage+'x target.</div></div>'+
+                            '<div class="workspace-health-metric"><div class="workspace-health-label">Touches / week</div><div class="workspace-health-value">'+fmtN(metrics.touchesWeek)+'</div><div class="workspace-health-subcopy">'+metrics.touchesDay+' per day across '+fmtN(metrics.activeAccounts)+' accounts.</div></div>'+
+                            '<div class="workspace-health-metric"><div class="workspace-health-label">Pressure fit</div><div class="workspace-health-value">'+fitCount+'/3</div><div class="workspace-health-subcopy">Win, meeting, and cycle assumptions still in band.</div></div>'+
+                        '</div>'+
+                        '<div class="workspace-health-grid">'+
+                            '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Holding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
+                            '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still fragile</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
+                        '</div>'+
+                    '</section>';
             }
 
             function renderBridge(metrics, benchmark, quality){
@@ -504,6 +563,7 @@
 
                 renderBridge(metrics, benchmark, quality);
                 renderCoverage(quota, acv, coverage, benchmark);
+                renderQuotaSystemHealth(metrics, benchmark, coverage, quality);
                 renderPlan(metrics, benchmark, quality);
                 renderMath(metrics);
                 renderHandoffs(metrics, benchmark, coverage);
