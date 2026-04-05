@@ -70,7 +70,20 @@ graph TD
     linkStyle 4,5,6,7,8,9,10,11,12,13,14 stroke:#E6701E,stroke-width:2px;
     linkStyle 15,16,17,18 stroke:#129266,stroke-width:3px;
 
-    class A1 rawData;
-    class B1,B2,B3 normalization;
-    class C1,C2,C3,E1,E2,E3 gateEngine;
-    class D
+    class A1 rawData
+    class B1 normalization
+    class B2 normalization
+    class B3 normalization
+    class C1 gateEngine
+    class C2 gateEngine
+    class C3 gateEngine
+    class D1 riskEngine
+    class D2 riskEngine
+    class D3 riskEngine
+    class E1 gateEngine
+    class E2 gateEngine
+    class E3 gateEngine
+    class F1 output
+    class F2 output
+    class F3 output
+```
