@@ -7,37 +7,37 @@ graph TD
     classDef output fill:#F1FBF7,stroke:#129266,stroke-width:2px,color:#083F2D,rx:16px,ry:16px;
 
     subgraph Local_Data [Local Data]
-        A1[(localStorage / Workspace)] :::rawData
+        A1[(localStorage / Workspace)]
     end
 
     subgraph Data_Standardization [Blue Structure]
-        B1[adaptDeal Normalizer] :::normalization
-        B2[stageAgeDays] :::normalization
-        B3[threadingDepth Math] :::normalization
+        B1[adaptDeal Normalizer]
+        B2[stageAgeDays]
+        B3[threadingDepth Math]
     end
 
     subgraph Qualification_Engine [Orange Pressure]
-        C1{assessGates Filter} :::gateEngine
-        C2[missingMap Generator] :::gateEngine
-        C3[qualScore: 0-18] :::gateEngine
+        C1{assessGates Filter}
+        C2[missingMap Generator]
+        C3[qualScore: 0-18]
     end
 
     subgraph Vitals_Risk_Math [Orange Pressure]
-        D1{computeVitals Engine} :::riskEngine
-        D2[computeRisk: 0-100 Score] :::riskEngine
-        D3[CAUSES Engine Diagnosis] :::riskEngine
+        D1{computeVitals Engine}
+        D2[computeRisk: 0-100 Score]
+        D3[CAUSES Engine Diagnosis]
     end
 
     subgraph The_Move_Generator [Orange Pressure]
-        E1[topCauses Extractor] :::gateEngine
-        E2[MOVE_TEMPLATES] :::gateEngine
-        E3{generateMoves} :::gateEngine
+        E1[topCauses Extractor]
+        E2[MOVE_TEMPLATES]
+        E3{generateMoves}
     end
 
     subgraph Deal_Outputs [Green Health]
-        F1[Single Deal Narrative] :::output
-        F2[Pipeline Coverage Math] :::output
-        F3[Monday Review Briefing] :::output
+        F1[Single Deal Narrative]
+        F2[Pipeline Coverage Math]
+        F3[Monday Review Briefing]
     end
 
     A1 -->|Raw v31/v32 Deal Data| B1
@@ -69,3 +69,8 @@ graph TD
     linkStyle 0,1,2,3 stroke:#2471E7,stroke-width:2px;
     linkStyle 4,5,6,7,8,9,10,11,12,13,14 stroke:#E6701E,stroke-width:2px;
     linkStyle 15,16,17,18 stroke:#129266,stroke-width:3px;
+
+    class A1 rawData;
+    class B1,B2,B3 normalization;
+    class C1,C2,C3,E1,E2,E3 gateEngine;
+    class D
