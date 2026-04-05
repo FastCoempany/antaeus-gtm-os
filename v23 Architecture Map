@@ -1,3 +1,4 @@
+```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#F6F8FC', 'primaryTextColor': '#0A1C40', 'primaryBorderColor': '#C6D3E3', 'lineColor': '#2471E7', 'background': '#FFFFFF'}}}%%
 
 graph TD
@@ -78,3 +79,4 @@ graph TD
     linkStyle 0,1,2,3 stroke:#2471E7,stroke-width:2px; %% Blue info paths
     linkStyle 4,5,6,7,8,9,10,11,12,13,14 stroke:#E6701E,stroke-width:2px; %% Orange pressure paths
     linkStyle 15,16,17,18 stroke:#129266,stroke-width:3px; %% Green completion paths
+```
