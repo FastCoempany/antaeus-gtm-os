@@ -1,0 +1,114 @@
+﻿Semiotics article No. 2
+
+What is semiotics and why it’s crucial for designers
+Why we need to learn what users understand before we try to help them.
+ Valery Zanimanski 
+
+Valery Zanimanski
+Follow
+8 min read
+·
+Feb 21, 2021
+132
+1
+Press enter or click to view image in full size
+ Directional and navigational signs in a public space. 
+
+Image by Sebastian Herrmann
+Let’s start with a simple concept: what would happen if you clicked on this icon here?
+ The browser toolbar with the Home button. 
+
+Maybe it’s akin to “going back home”, but your browser won’t necessarily send you “back” anywhere, because that’s another button — and you might not have started your session from the home page anyway.
+Yet we know perfectly well that this button will send us to some kind of the main screen — how does this happen?
+Take the “mail” icon also — e-messaging has nothing to do with actual letters or envelopes, yet we immediately know what the mail envelope means and what’s supposed to happen once we click on it.
+When we’re talking about semiotics in design, this is what we mean.
+The house icon is perfect for me as a user. There’s nothing to improve upon.
+At some point, you and I were “taught” that house icon means “the main page” — and now, this is common-sense iconic knowledge throughout the world.
+The way the understanding of signs is created and developed is what semantics study, and what UI designers need to be very conscious of during our work.
+In this article, I’ll explore the dialogic nature of the UI design, what semiotics is in general and in the UX context, and why we’re all better off conceptualizing UI as what it is: a mesh of signs, icons, indexes.
+UI is always a dialogue
+There are many different ways to look at what a UI designer does. But through it all, the main thing we do is communicate.
+We take a certain idea and find a way to transfer it to the end-user without losing sight of what they can reasonably understand.
+“Understand” is the keyword here: we often talk so much about user “satisfaction”, that we might lose sight of “user comprehension”, though of course, you can’t enjoy a product you don’t understand very well.
+In the same way, it’s not easy to enjoy a conversation with a person with whom you have no common language.
+Any time any of us open any website or app, we’re starting a particular kind of conversation.
+Design experts are working day and night to try and imagine all of the possible interesting conversations that a person might have with us in our product.
+We create every possible branch of that conversation, and we’re the ones making sure those conversations can actually take place.
+Like in any dialogue, there’s what needs to be said, and how we end up saying it. Those are two different, but related things.
+The former of these is largely not up to us, as we have our clients and stakeholders that have the ideas they feel need to be expressed in the final work.
+The latter, however, is all our territory.
+We are the ones who are responsible for structuring and organizing the communication of ideas & their reception by the people who actually end up using our products.
+Semiotics and Speaking the User’s Language
+In the simplest terms, semiotics studies signs and what they mean for humans. (If you want more difficult terms, head to this introductory article on elements of semiotics as a system)
+In a way, every designer in the world is a practicing semiotician. The way we design icons, buttons, and supportive imagery is all about how we think our users will read them.
+Semiotic design is different from navigation design or creating informational architecture. It’s not about creating the content itself either.
+As any designer will know, creating connections between information pieces and filling your product up with content are separate ordeals from actually communicating all of this to your user, so they, too, could revel in your smart architecture.
+It’s all a part of making visual meanings. Ultimately, it’s the enormous difference between looking at an icon and knowing exactly what it means vs. reading the pop-up text.
+The usability problems of apps or web pages are very often all about that: lack of proper semiotic understanding in design, i.e. putting time and effort into making icons and signs readily readable.
+E.g. it’s the “mysterious” icons we leave in because there is no time to re-make it (aim for clarity & readability always).
+Or the menu names which never mean whatever we need, so we’re stuck trying to decipher which button to press.
+All of these critical breakdowns of design are due to the fact we didn’t pay semiotic design its proper due.
+Two Ways to Analyze Your UI Elements
+Now let’s try and figure out how to address these misunderstandings.
+What we need is a tool for analysis of our UI elements from a semiotics point of view.
+There are two ways to go about it:
+1. Match what they know.
+2. Teach them from scratch.
+Let’s start with the first one.
+Matching User Knowledge
+“Matching” here simply means comparing what our UI elements suppose users should understand vs. what they actually know very well — sounds simple enough, but it’s crucial to avoid user misunderstandings.
+This kind of inspection should consist of three stages more or less:
+1. First, we analyze the syntax of our UI elements, their consistency independent of user understanding.
+2. Then we start considering our user profile — who these people are, and what kind of things do they know?
+3. Finally, we observe the actual users and see if any misunderstandings actually happen.
+Obviously, all of our efforts within this particular framework are built upon our belief that the user has mastered certain skills and knowledge outside of the app, and that we can adjust our work to match that knowledge.
+Get Valery Zanimanski’s stories in your inbox
+Join Medium for free to get updates from this writer.
+Subscribe
+Remember me for faster sign in
+Where can we get the supposed user knowledge from, then? The answer is not super satisfying, but it’s the only one we have: it depends.
+Mostly, it depends on your product.
+If you’re designing for a museum app, the people using the app will not be jarred by the icons related to history, obscure imagery, and wordings.
+To match that, we need topic research — what’s been used by the app/website before? What kind of knowledge do users have about the topic from the outside world?
+In the same vein, user knowledge can come from other apps/websites in your category.
+If every business website has the same basic set of terms and icons, then standing out will simply jar the user and create misunderstandings where there shouldn’t be any.
+To match that user knowledge, we need competitive UX research — seeing how the market presents certain things will let you know how your user expects things to look and feel.
+Teaching User New Things
+Of course, there’s a different approach: teach them everything.
+Instead of matching what your user already knows from the outside world, you focus entirely on the app itself and how you present things within it.
+You treat your UI like a video game tutorial and act accordingly.
+Instead of figuring out how to match your users’ knowledge to your icons, you actively show the users — this button means X, that icon means Y.
+Key features in designing a UI like that are:
+1. Incrementalism — nobody can learn all of your buttons and icons all at once.
+2. Feedback — when users encounter new buttons, they anticipate certain things, and that anticipation needs to be addressed by you telling them how they’re doing.
+3. Mastery — somehow you need to provide a feeling of becoming a real “pro” at your product.
+This last point is closely tied to gamification I’ve talked about before.
+Of course, most of us are going to match instead of teaching, though we’ll do a bit of both throughout.
+What both approaches have in common is the focus on comprehension.
+What they differ in is that the second approach makes our products actively create new semantic knowledge in our users.
+Always Consider Your Users’ Common Sense
+An important thing to consider also when creating UI, no matter which approaches you’re using, is common sense.
+This is not meant as some sort of dramatic rhetorical trick. In order to properly create new knowledge, we need to rely on our users to be able to solve the problems we give to them.
+Common sense for UI simply means common and everyday terms that users know well enough to interpret the signs.
+This is the “envelope” icon for email, a real-world calendar picture to represent an electronic calendar.
+That common sense comes from the cultural background, the overall general knowledge people you’re aiming to influence will have for sure.
+And, yes, shooting and hitting common sense knowledge, either by matching or by teaching, is the best.
+As I’ve said before, you can’t do better for the email icon than the mail envelope.
+But relying on common sense comes with its own host of dangers. First of all, regional differences — common sense in Asia and Europe will be largely different.
+Second of all, the “common sense” signs pool is not that large! If your product is very specific, say a website constructor, there isn’t much in the common sense signs to draw on.
+In Conclusion
+Before we can talk about satisfying user needs or addressing user goals, we need to make them understand what each element means for them.
+For semiotics design, what we should be focusing on first and foremost is comprehension — either by meeting our users’ knowledge or by proactively teaching them.
+Do the users we want understand what each element means, and also how to use those elements?
+The goal is to bridge the gap, minimize the distance between us and our users. In the simplest terms, our user knows what a “house” icon means, and that’s exactly how we use it.
+If a house icon led you to the real estate website, you’d be somewhat confused.
+The thing is that once the user understands the premise of each button and icon, and we’re certain of that, then fixing UI problems is all about navigation and structure.
+And knowing that could really make our jobs a million times easier.
+Explore More About Semiotics & Design
+Just so we’re clear, I’m far from being the inventor of semiotics + design pairing, they complement each other too perfectly for that.
+Here are some references for you to dive deeper into semiotics.
+Signo — resource with plenty of insightful articles on semiotics as a discipline.
+Semiotics: A Primer for Designers — an insightful and long-ish write-up on theory of what semiotics are how designers benefit from knowing it.
+Role of Semiotics in Design Thinking & UX Design — a short and fun write-up about the topic using Bluetooth icon as an example.
+Design and Semiotics — a great modern scholar’s take on semiotics in design from a more academic POV.
+Semiotic Perspective in Product Design — on how conscious design can help people heal.

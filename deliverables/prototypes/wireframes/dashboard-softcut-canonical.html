@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Dashboard Canonical Soft Cut</title>
+  <style>
+    :root {
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --soft: #4f6b8b;
+      --muted: #7c90ad;
+      --cold: #9badc3;
+      --line: rgba(10, 28, 64, 0.08);
+      --glass: rgba(255,255,255,0.84);
+      --shadow-soft: 0 16px 44px rgba(10, 28, 64, 0.07);
+      --shadow-float: 0 28px 74px rgba(10, 28, 64, 0.14);
+      --paper-blue: linear-gradient(180deg, rgba(238,245,255,0.98) 0%, rgba(255,255,255,0.97) 100%);
+      --paper-orange: linear-gradient(180deg, rgba(255,243,234,0.98) 0%, rgba(255,255,255,0.98) 100%);
+      --paper-white: linear-gradient(180deg, rgba(248,251,255,0.98) 0%, rgba(255,255,255,0.98) 100%);
+      --rail-width: 520px;
+      --card-height: 182px;
+      --dock-width: 104px;
+      --radius: 24px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 24px 22px 88px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .page { max-width: 1560px; margin: 0 auto; display: grid; gap: 28px; }
+    .topline {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+      padding: 2px 2px 0;
+    }
+    .topline .accent { color: var(--orange); }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--rail-width);
+      gap: 48px;
+      align-items: start;
+      min-height: 100vh;
+    }
+
+    .main {
+      display: grid;
+      gap: 26px;
+      align-content: start;
+      padding-top: 8px;
+    }
+
+    .carousel-shell { width: 360px; height: 112px; perspective: 1600px; }
+    .carousel { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+    .mode-card {
+      position: absolute; top: 10px; width: 144px; height: 88px; padding: 10px 12px;
+      border-radius: 22px; border: 1px solid rgba(10, 28, 64, 0.08); box-shadow: var(--shadow-soft); overflow: hidden;
+    }
+    .mode-card.brief { background: var(--paper-blue); }
+    .mode-card.spotlight { background: var(--paper-orange); }
+    .mode-card.queue { background: var(--paper-white); }
+    .mode-card .sub {
+      font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 4px;
+    }
+    .mode-card .count {
+      position: absolute; top: 9px; right: 12px; font-size: 18px; line-height: 1; color: rgba(10,28,64,0.28); letter-spacing: -0.08em;
+    }
+    .mode-card h3 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 25px; line-height: 0.92; letter-spacing: -0.07em; max-width: 108px;
+    }
+    .mode-card .bar {
+      position: absolute; left: 12px; right: 12px; bottom: 10px; height: 6px; border-radius: var(--radius-pill);
+      background: rgba(10,28,64,0.08); overflow: hidden;
+    }
+    .mode-card .bar span { display: block; height: 100%; border-radius: inherit; }
+    .mode-card.brief .bar span { width: 36%; background: var(--blue); }
+    .mode-card.spotlight .bar span { width: 68%; background: var(--orange); }
+    .mode-card.queue .bar span { width: 48%; background: var(--navy); }
+    .is-front { z-index: 6; transform: translate3d(108px, 0, 82px) rotateY(0deg) rotateX(8deg); box-shadow: var(--shadow-float); }
+    .is-left { z-index: 3; transform: translate3d(0, 12px, 12px) rotateY(42deg) rotateX(8deg); }
+    .is-right { z-index: 2; transform: translate3d(206px, 12px, 8px) rotateY(-42deg) rotateX(8deg); }
+
+    .hero {
+      display: grid;
+      gap: 14px;
+      max-width: 840px;
+    }
+    .hero .eyebrow {
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); font-weight: 700;
+    }
+    .hero h1 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(68px, 8vw, 114px);
+      line-height: 0.9;
+      letter-spacing: -0.1em;
+    }
+    .hero p {
+      max-width: 620px;
+      color: var(--soft);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .signal-line {
+      display: flex; flex-wrap: wrap; gap: 20px 22px; align-items: center;
+      font-size: 14px; color: var(--soft);
+    }
+    .signal-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700;
+      color: var(--muted);
+    }
+    .signal-chip strong {
+      font-size: 15px; letter-spacing: -0.03em; text-transform: none; color: currentColor;
+    }
+    .signal-chip.hot strong { color: var(--orange); }
+    .signal-chip.warm strong { color: var(--blue); }
+    .signal-chip.live strong { color: var(--green); }
+    .signal-chip.cold strong { color: var(--cold); }
+
+    .mark { width: 18px; height: 18px; display: inline-grid; place-items: center; color: currentColor; flex: 0 0 auto; }
+    .mark svg {
+      width: 18px; height: 18px; stroke: currentColor; stroke-width: 2.15; fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .btn-primary, .btn-ghost, .text-link { font: inherit; border: 0; background: none; padding: 0; color: inherit; }
+    .btn-primary {
+      min-height: 50px; padding: 0 22px; border-radius: 18px; background: var(--orange); color: #fff; font-weight: 700;
+      box-shadow: 0 14px 28px rgba(230,112,30,0.22);
+    }
+    .btn-ghost {
+      min-height: 44px; padding: 0 18px; border-radius: 16px; background: rgba(255,255,255,0.82);
+      color: var(--navy); border: 1px solid rgba(10,28,64,0.12); font-weight: 700;
+    }
+    .text-link { color: var(--blue); font-weight: 700; }
+
+    .meta-shelf {
+      width: fit-content;
+      display: grid;
+      gap: 6px;
+      padding: 14px 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.74);
+      box-shadow: var(--shadow-soft);
+    }
+    .meta-shelf .kicker {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+    }
+    .meta-shelf .copy {
+      font-size: 18px; line-height: 1.25; letter-spacing: -0.03em; font-weight: 700;
+    }
+
+    .rail-head {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .rail-head .kicker {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+    }
+    .rail-head .title {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 22px; line-height: 1; letter-spacing: -0.04em;
+    }
+
+    .rail { width: var(--rail-width); display: grid; gap: 14px; align-content: start; }
+    .slice {
+      width: var(--rail-width);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--dock-width);
+      align-items: stretch;
+      column-gap: 10px;
+    }
+    .left, .right {
+      background: var(--glass);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .left {
+      position: relative;
+      min-height: var(--card-height);
+      padding: 18px 18px 16px 22px;
+      border-radius: var(--radius) 0 0 var(--radius);
+    }
+    .left::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: var(--blue);
+    }
+    .slice.hot .left::before { background: var(--orange); }
+    .slice.warm .left::before { background: var(--blue); }
+    .slice.live .left::before { background: var(--green); }
+
+    .right {
+      min-height: var(--card-height);
+      padding: 18px 18px 16px 14px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      display: grid;
+      grid-template-rows: 36px 26px 26px 26px 1fr;
+      align-content: start;
+      justify-items: end;
+    }
+
+    .card-name {
+      font-size: 22px; line-height: 1.06; font-weight: 700; letter-spacing: -0.04em; margin-bottom: 14px;
+    }
+    .card-amt {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 34px; line-height: 0.9; letter-spacing: -0.08em; color: rgba(10,28,64,0.52); white-space: nowrap;
+    }
+
+    .docket { display: grid; gap: 8px; margin-bottom: 10px; }
+    .docket-row {
+      display: grid;
+      grid-template-columns: 78px 68px minmax(0, 1fr);
+      gap: 14px;
+      min-height: 28px;
+      align-items: center;
+    }
+    .docket-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700;
+      color: rgba(124,144,173,0.92); white-space: nowrap;
+    }
+    .value {
+      font-size: 15px; line-height: 1.06; letter-spacing: -0.04em; font-weight: 700; white-space: nowrap;
+      justify-self: start; padding-left: 4px;
+    }
+    .docket-note {
+      min-width: 0; font-size: 12px; line-height: 1.25; color: var(--soft);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .tone-hot { color: var(--orange); }
+    .tone-warm { color: var(--blue); }
+    .tone-live { color: var(--green); }
+    .tone-cold { color: var(--cold); }
+
+    .docket-foot {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding-top: 8px; border-top: 1px solid var(--line);
+      font-size: 12px; line-height: 1.25; color: var(--soft);
+    }
+    .flag { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+    .line-slot { width: 64px; display: grid; align-items: center; justify-items: end; }
+    .rule {
+      width: 64px; height: 4px; border-radius: var(--radius-pill); background: rgba(10,28,64,0.08); overflow: hidden;
+    }
+    .rule span { display: block; width: 100%; height: 100%; border-radius: inherit; background: currentColor; }
+
+    @media (max-width: 1240px) {
+      .dashboard { grid-template-columns: 1fr; }
+      .rail, .slice { width: 100%; }
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 18px 14px 48px; }
+      .hero h1 { font-size: 58px; }
+      .slice { grid-template-columns: 1fr; row-gap: 10px; }
+      .left, .right { border-radius: var(--radius); }
+      .right { min-height: auto; }
+      .docket-row { grid-template-columns: 74px 60px minmax(0, 1fr); gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Dashboard canonical soft cut</span>
+      <span>Antaeus</span>
+    </div>
+
+    <section class="dashboard">
+      <section class="main">
+        <div class="carousel-shell">
+          <div class="carousel">
+            <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+          </div>
+        </div>
+
+        <div class="hero">
+          <div class="eyebrow">Spotlight</div>
+          <h1>Recover Apex Fintech before the week drifts.</h1>
+          <p>No dated next step. The proof exists, but the live account has drifted too long without a real move.</p>
+        </div>
+
+        <div class="signal-line">
+          <span class="signal-chip hot"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>Risk <strong>100</strong></span>
+          <span class="signal-chip warm"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>Proof <strong>Fit</strong></span>
+          <span class="signal-chip cold"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>Motion <strong>47d</strong></span>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary">Inspect</button>
+          <button class="btn-ghost">Run autopsy</button>
+          <button class="text-link">Open deal</button>
+        </div>
+
+        <div class="meta-shelf">
+          <div class="kicker">Why this account is first</div>
+          <div class="copy">All three channels disagree in the wrong direction at once.</div>
+        </div>
+      </section>
+
+      <aside class="rail">
+        <div class="rail-head">
+          <div class="kicker">Critical accounts</div>
+          <div class="title">Immediate command rail</div>
+        </div>
+
+        <article class="slice hot">
+          <div class="left">
+            <div class="card-name">Apex Fintech</div>
+            <div class="docket">
+              <div class="docket-row tone-hot">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>Risk</div>
+                <div class="value">100</div>
+                <div class="docket-note">No dated next step.</div>
+              </div>
+              <div class="docket-row tone-warm">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>Proof</div>
+                <div class="value">Fit</div>
+                <div class="docket-note">Case exists, still thin.</div>
+              </div>
+              <div class="docket-row tone-cold">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>Motion</div>
+                <div class="value">47d</div>
+                <div class="docket-note">Nothing live changed it.</div>
+              </div>
+            </div>
+            <div class="docket-foot"><span>The account ranks first because all three signals remain unresolved.</span><span class="flag">Immediate</span></div>
+          </div>
+          <div class="right">
+            <div class="card-amt">$140k</div>
+            <div class="line-slot"><div class="rule tone-hot"><span></span></div></div>
+            <div class="line-slot"><div class="rule tone-warm"><span></span></div></div>
+            <div class="line-slot"><div class="rule tone-cold"><span></span></div></div>
+          </div>
+        </article>
+
+        <article class="slice warm">
+          <div class="left">
+            <div class="card-name">Northstar Health</div>
+            <div class="docket">
+              <div class="docket-row tone-hot">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>Risk</div>
+                <div class="value">Drift</div>
+                <div class="docket-note">Stage reads stronger than truth.</div>
+              </div>
+              <div class="docket-row tone-warm">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>Proof</div>
+                <div class="value">Thin</div>
+                <div class="docket-note">Qualification is still soft.</div>
+              </div>
+              <div class="docket-row tone-cold">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>Motion</div>
+                <div class="value">Owner</div>
+                <div class="docket-note">No one is carrying the fix.</div>
+              </div>
+            </div>
+            <div class="docket-foot"><span>The deal looks cleaner than the underlying account truth deserves.</span><span class="flag">Watch</span></div>
+          </div>
+          <div class="right">
+            <div class="card-amt">$180k</div>
+            <div class="line-slot"><div class="rule tone-hot"><span></span></div></div>
+            <div class="line-slot"><div class="rule tone-warm"><span></span></div></div>
+            <div class="line-slot"><div class="rule tone-cold"><span></span></div></div>
+          </div>
+        </article>
+
+        <article class="slice warm">
+          <div class="left">
+            <div class="card-name">VoltOps</div>
+            <div class="docket">
+              <div class="docket-row tone-hot">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>Risk</div>
+                <div class="value">Gap</div>
+                <div class="docket-note">Heat has not become action.</div>
+              </div>
+              <div class="docket-row tone-warm">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>Proof</div>
+                <div class="value">Cover</div>
+                <div class="docket-note">The case is incomplete.</div>
+              </div>
+              <div class="docket-row tone-live">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span>Motion</div>
+                <div class="value">Hot</div>
+                <div class="docket-note">Live account heat is real.</div>
+              </div>
+            </div>
+            <div class="docket-foot"><span>Signal is real; the tracked move is still missing.</span><span class="flag">Convert</span></div>
+          </div>
+          <div class="right">
+            <div class="card-amt">$95k</div>
+            <div class="line-slot"><div class="rule tone-hot"><span></span></div></div>
+            <div class="line-slot"><div class="rule tone-warm"><span></span></div></div>
+            <div class="line-slot"><div class="rule tone-live"><span></span></div></div>
+          </div>
+        </article>
+
+        <article class="slice live">
+          <div class="left">
+            <div class="card-name">Cascadia Health Network</div>
+            <div class="docket">
+              <div class="docket-row tone-hot">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>Risk</div>
+                <div class="value">Log it</div>
+                <div class="docket-note">The move is not captured.</div>
+              </div>
+              <div class="docket-row tone-warm">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>Proof</div>
+                <div class="value">$120k</div>
+                <div class="docket-note">Commercial shape is real.</div>
+              </div>
+              <div class="docket-row tone-live">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span>Motion</div>
+                <div class="value">Ready</div>
+                <div class="docket-note">Warm enough to move now.</div>
+              </div>
+            </div>
+            <div class="docket-foot"><span>The account is live enough to act on even though the system trails it.</span><span class="flag">Now</span></div>
+          </div>
+          <div class="right">
+            <div class="card-amt">$120k</div>
+            <div class="line-slot"><div class="rule tone-hot"><span></span></div></div>
+            <div class="line-slot"><div class="rule tone-warm"><span></span></div></div>
+            <div class="line-slot"><div class="rule tone-live"><span></span></div></div>
+          </div>
+        </article>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

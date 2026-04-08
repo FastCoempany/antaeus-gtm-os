@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Mode Carousel Specimen</title>
+  <style>
+    :root {
+      --page: #f6f8fc;
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --soft: #46607f;
+      --muted: #7a8da8;
+      --line: rgba(10, 28, 64, 0.12);
+      --shadow-soft: 0 16px 40px rgba(10, 28, 64, 0.06);
+      --shadow-float: 0 28px 70px rgba(10, 28, 64, 0.14);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.06), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f4f7fc 100%);
+      color: var(--navy);
+      -webkit-font-smoothing: antialiased;
+      padding: 42px 24px 96px;
+    }
+
+    .page {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: grid;
+      gap: 34px;
+    }
+
+    .eyebrow,
+    .label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .eyebrow { color: var(--orange); }
+    .label { color: var(--muted); }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(38px, 6vw, 78px);
+      line-height: 0.9;
+      letter-spacing: -0.07em;
+      max-width: 900px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      max-width: 980px;
+    }
+
+    .hero p,
+    .readout p,
+    .note {
+      color: var(--soft);
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .lock {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.86);
+      box-shadow: var(--shadow-soft);
+      font-weight: 700;
+    }
+
+    .lock span:last-child { color: var(--soft); }
+
+    .stage {
+      position: relative;
+      min-height: 520px;
+      padding: 28px 0 20px;
+      perspective: 1600px;
+      overflow: hidden;
+    }
+
+    .stage::before,
+    .stage::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .stage::before {
+      top: 40px;
+      left: 10%;
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, rgba(36,113,231,0.09), rgba(36,113,231,0.02) 56%, transparent 76%);
+    }
+
+    .stage::after {
+      top: 80px;
+      right: 8%;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(230,112,30,0.09), rgba(230,112,30,0.02) 56%, transparent 76%);
+    }
+
+    .carousel-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+    }
+
+    .carousel-plane {
+      position: relative;
+      width: min(1160px, 92vw);
+      height: 420px;
+      transform-style: preserve-3d;
+    }
+
+    .mode-card {
+      position: absolute;
+      top: 30px;
+      width: 420px;
+      height: 320px;
+      padding: 26px 28px 24px;
+      border-radius: 32px;
+      border: 1px solid rgba(10,28,64,0.1);
+      background: rgba(255,255,255,0.9);
+      box-shadow: var(--shadow-soft);
+      transform-style: preserve-3d;
+      transition:
+        transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 420ms ease,
+        filter 420ms ease;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .mode-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.25), transparent 38%);
+      pointer-events: none;
+    }
+
+    .mode-card.brief {
+      background: linear-gradient(180deg, rgba(237,244,255,0.94) 0%, rgba(255,255,255,0.96) 100%);
+    }
+
+    .mode-card.spotlight {
+      background: linear-gradient(180deg, rgba(255,244,235,0.96) 0%, rgba(255,255,255,0.98) 100%);
+    }
+
+    .mode-card.queue {
+      background: linear-gradient(180deg, rgba(249,251,255,0.96) 0%, rgba(255,255,255,0.98) 100%);
+    }
+
+    .mode-card .mode-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 26px;
+    }
+
+    .mode-card .title {
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--navy);
+      opacity: 0.74;
+    }
+
+    .mode-card .index {
+      font-size: 34px;
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+      color: var(--navy);
+      opacity: 0.38;
+    }
+
+    .mode-card h2 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 54px;
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      max-width: 240px;
+      margin-bottom: 18px;
+    }
+
+    .mode-card p {
+      margin: 0;
+      max-width: 270px;
+      color: var(--soft);
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .mode-card .bar {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 26px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(10,28,64,0.08);
+      overflow: hidden;
+    }
+
+    .mode-card .bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .mode-card.brief .bar > span { width: 34%; background: var(--blue); }
+    .mode-card.spotlight .bar > span { width: 62%; background: var(--orange); }
+    .mode-card.queue .bar > span { width: 48%; background: var(--navy); }
+
+    .mode-card.is-front {
+      z-index: 5;
+      transform: translate3d(370px, 0, 180px) rotateY(0deg) rotateX(7deg);
+      box-shadow: var(--shadow-float);
+      filter: none;
+      opacity: 1;
+    }
+
+    .mode-card.is-left {
+      z-index: 2;
+      transform: translate3d(90px, 18px, 0) rotateY(30deg) rotateX(7deg);
+      box-shadow: 0 16px 34px rgba(10,28,64,0.06);
+      filter: saturate(0.92);
+      opacity: 0.96;
+    }
+
+    .mode-card.is-right {
+      z-index: 1;
+      transform: translate3d(650px, 18px, -4px) rotateY(-30deg) rotateX(7deg);
+      box-shadow: 0 16px 34px rgba(10,28,64,0.06);
+      filter: saturate(0.92);
+      opacity: 0.96;
+    }
+
+    .readout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.7fr);
+      gap: 24px;
+      align-items: start;
+      padding-top: 10px;
+    }
+
+    .readout-left {
+      display: grid;
+      gap: 10px;
+    }
+
+    .readout-left h3 {
+      font-size: 34px;
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+
+    .signals {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-top: 10px;
+    }
+
+    .signal {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.88);
+      box-shadow: var(--shadow-soft);
+      color: var(--soft);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .signal .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(10,28,64,0.2);
+    }
+
+    .signal.blue .dot { background: var(--blue); }
+    .signal.orange .dot { background: var(--orange); }
+    .signal.green .dot { background: var(--green); }
+
+    .mini-ledger {
+      display: grid;
+      gap: 0;
+      align-content: start;
+    }
+
+    .mini-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+      padding: 12px 0;
+    }
+
+    .mini-row + .mini-row {
+      border-top: 1px solid rgba(10,28,64,0.08);
+    }
+
+    .mini-row strong {
+      font-size: 20px;
+      letter-spacing: -0.05em;
+    }
+
+    .mini-row span {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .mini-rank {
+      font-size: 28px;
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+      color: var(--blue);
+    }
+
+    @media (max-width: 1180px) {
+      .carousel-plane {
+        width: min(940px, 96vw);
+        height: 400px;
+      }
+
+      .mode-card {
+        width: 340px;
+        height: 290px;
+      }
+
+      .mode-card h2 { font-size: 46px; }
+
+      .mode-card.is-front { transform: translate3d(300px, 0, 140px) rotateY(0deg) rotateX(7deg); }
+      .mode-card.is-left { transform: translate3d(50px, 18px, 0) rotateY(30deg) rotateX(7deg); }
+      .mode-card.is-right { transform: translate3d(540px, 18px, 0) rotateY(-30deg) rotateX(7deg); }
+    }
+
+    @media (max-width: 900px) {
+      .carousel-wrap {
+        min-height: 320px;
+      }
+
+      .carousel-plane {
+        width: 100%;
+        height: 280px;
+      }
+
+      .mode-card {
+        width: 230px;
+        height: 220px;
+        padding: 18px 18px 16px;
+      }
+
+      .mode-card h2 { font-size: 32px; max-width: 170px; }
+      .mode-card p { font-size: 13px; max-width: 180px; }
+      .mode-card .bar { left: 18px; right: 18px; bottom: 18px; }
+
+      .mode-card.is-front { transform: translate3d(calc(50vw - 115px), 0, 80px) rotateY(0deg) rotateX(7deg); }
+      .mode-card.is-left { transform: translate3d(0, 18px, 0) rotateY(28deg) rotateX(7deg); }
+      .mode-card.is-right { transform: translate3d(calc(100vw - 300px), 18px, 0) rotateY(-28deg) rotateX(7deg); }
+
+      .readout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Mode Carousel Specimen</div>
+      <h1>Three separate moments. One tilted carousel.</h1>
+      <div class="lock"><strong>Lock</strong><span>all labels stay readable</span></div>
+    </section>
+
+    <section class="stage">
+      <div class="carousel-wrap">
+        <div class="carousel-plane" id="carouselPlane">
+          <article class="mode-card brief" data-mode="brief">
+            <div class="mode-top">
+              <div class="title">Brief</div>
+              <div class="index">01</div>
+            </div>
+            <h2>Brief.</h2>
+            <p>Fast read. Pressure summary. The shortest path into the truth.</p>
+            <div class="bar"><span></span></div>
+          </article>
+
+          <article class="mode-card spotlight" data-mode="spotlight">
+            <div class="mode-top">
+              <div class="title">Spotlight</div>
+              <div class="index">02</div>
+            </div>
+            <h2>Spotlight.</h2>
+            <p>One object forward. Full attention. The rest stays visible behind it.</p>
+            <div class="bar"><span></span></div>
+          </article>
+
+          <article class="mode-card queue" data-mode="queue">
+            <div class="mode-top">
+              <div class="title">Queue</div>
+              <div class="index">03</div>
+            </div>
+            <h2>Queue.</h2>
+            <p>Ordered execution. Sequence made explicit. One move clears the next.</p>
+            <div class="bar"><span></span></div>
+          </article>
+        </div>
+      </div>
+
+      <section class="readout">
+        <div class="readout-left">
+          <div class="label">Readout</div>
+          <h3 id="readoutTitle">One object fully forward.</h3>
+          <p id="readoutBody">Spotlight rotates into the front plane. The other two moments stay visible, readable, and structurally related behind it.</p>
+          <div class="signals" id="signals">
+            <div class="signal orange"><span class="dot"></span>front plane</div>
+            <div class="signal blue"><span class="dot"></span>readable behind</div>
+            <div class="signal green"><span class="dot"></span>same instrument</div>
+          </div>
+        </div>
+        <div class="mini-ledger" id="miniLedger">
+          <div class="mini-row">
+            <div>
+              <strong>One object</strong>
+              <span>Full attention</span>
+            </div>
+            <div class="mini-rank">01</div>
+          </div>
+          <div class="mini-row">
+            <div>
+              <strong>Why here</strong>
+              <span>Truth debt visible</span>
+            </div>
+            <div class="mini-rank">02</div>
+          </div>
+          <div class="mini-row">
+            <div>
+              <strong>Next move</strong>
+              <span>Inspect or go deeper</span>
+            </div>
+            <div class="mini-rank">03</div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.mode-card'));
+      var order = ['brief', 'spotlight', 'queue'];
+      var title = document.getElementById('readoutTitle');
+      var body = document.getElementById('readoutBody');
+      var ledger = document.getElementById('miniLedger');
+
+      var readout = {
+        brief: {
+          title: 'Fast summary, low burden.',
+          body: 'Brief should feel like a severe note slipped onto the desk. It rotates forward without becoming a tab or a pill.',
+          rows: [
+            ['Pressure note', 'What changed', '01'],
+            ['Fast scan', 'Low burden', '02'],
+            ['Hand-off', 'Into spotlight', '03']
+          ]
+        },
+        spotlight: {
+          title: 'One object fully forward.',
+          body: 'Spotlight rotates into the front plane. The other two moments stay visible, readable, and structurally related behind it.',
+          rows: [
+            ['One object', 'Full attention', '01'],
+            ['Why here', 'Truth debt visible', '02'],
+            ['Next move', 'Inspect or go deeper', '03']
+          ]
+        },
+        queue: {
+          title: 'Ordered execution, visibly sequenced.',
+          body: 'Queue comes forward as a distinct moment. It should feel like execution order, not a second spotlight card.',
+          rows: [
+            ['First move', 'Clear the blocker', '01'],
+            ['Second move', 'Convert pressure', '02'],
+            ['Third move', 'Hand off cleanly', '03']
+          ]
+        }
+      };
+
+      function renderRows(rows) {
+        ledger.innerHTML = rows.map(function (row) {
+          return (
+            '<div class="mini-row">' +
+              '<div>' +
+                '<strong>' + row[0] + '</strong>' +
+                '<span>' + row[1] + '</span>' +
+              '</div>' +
+              '<div class="mini-rank">' + row[2] + '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function layout() {
+        cards.forEach(function (card) {
+          var mode = card.getAttribute('data-mode');
+          card.classList.remove('is-left', 'is-front', 'is-right');
+          if (mode === order[0]) card.classList.add('is-left');
+          if (mode === order[1]) card.classList.add('is-front');
+          if (mode === order[2]) card.classList.add('is-right');
+        });
+
+        var active = order[1];
+        title.textContent = readout[active].title;
+        body.textContent = readout[active].body;
+        renderRows(readout[active].rows);
+      }
+
+      cards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          var mode = card.getAttribute('data-mode');
+          if (mode === order[1]) return;
+          while (order[1] !== mode) {
+            order.push(order.shift());
+          }
+          layout();
+        });
+      });
+
+      layout();
+    })();
+  </script>
+</body>
+</html>

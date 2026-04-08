@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Facial Architecture Test Output V4</title>
+  <style>
+    :root {
+      --page: #f7f9fd;
+      --paper: #ffffff;
+      --paper-blue: #edf4ff;
+      --paper-orange: #fff3ea;
+      --paper-green: #eef8f2;
+      --line: rgba(10, 28, 64, 0.1);
+      --line-strong: rgba(10, 28, 64, 0.16);
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --text-soft: #46607f;
+      --text-muted: #7a8da8;
+      --shadow-soft: 0 18px 44px rgba(10, 28, 64, 0.05);
+      --shadow-float: 0 24px 64px rgba(10, 28, 64, 0.08);
+      --content: 1360px;
+      --radius: 28px;
+      --radius-sm: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.06), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f4f7fc 100%);
+      color: var(--navy);
+      -webkit-font-smoothing: antialiased;
+      padding: 34px 24px 96px;
+    }
+
+    .page {
+      max-width: var(--content);
+      margin: 0 auto;
+      display: grid;
+      gap: 120px;
+    }
+
+    .intro {
+      display: grid;
+      gap: 10px;
+      max-width: 980px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    .intro h1,
+    .surface h2 {
+      margin: 0;
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+    }
+
+    .intro h1 {
+      font-size: clamp(36px, 6vw, 70px);
+      max-width: 1040px;
+    }
+
+    .intro p,
+    .surface-copy p,
+    .side p,
+    .metric p,
+    .list-block li,
+    .wash p,
+    .note {
+      color: var(--text-soft);
+    }
+
+    .intro p {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .surface {
+      position: relative;
+      display: grid;
+      gap: 26px;
+    }
+
+    .surface-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .surface-title {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .surface-name {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(10, 28, 64, 0.12);
+      background: rgba(255,255,255,0.82);
+      color: var(--text-soft);
+    }
+
+    .pill.orange { color: var(--orange); background: rgba(255,243,234,0.9); border-color: rgba(230,112,30,0.2); }
+    .pill.blue { color: var(--blue); background: rgba(237,244,255,0.9); border-color: rgba(36,113,231,0.22); }
+    .pill.green { color: var(--green); background: rgba(238,248,242,0.92); border-color: rgba(45,122,75,0.18); }
+
+    .surface-body {
+      display: grid;
+      grid-template-columns: 1.24fr 0.76fr;
+      gap: 42px;
+      align-items: start;
+    }
+
+    .surface-copy {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .surface-copy h2 {
+      font-size: clamp(62px, 7vw, 102px);
+      max-width: 820px;
+    }
+
+    .surface-copy p {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.45;
+      max-width: 760px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      cursor: default;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 12px 28px rgba(230,112,30,0.22);
+    }
+
+    .button.soft {
+      background: rgba(255,255,255,0.9);
+      color: var(--navy);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .inline-link {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .proof-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .metric strong,
+    .shelf strong,
+    .side strong,
+    .ledger-row strong,
+    .wash strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 32px;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+    }
+
+    .metric p,
+    .side p,
+    .shelf p,
+    .wash p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .shelf {
+      padding: 22px 24px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.9);
+      box-shadow: var(--shadow-float);
+    }
+
+    .shelf.blue { background: linear-gradient(180deg, rgba(237,244,255,0.95) 0%, rgba(255,255,255,0.96) 100%); }
+    .shelf.orange { background: linear-gradient(180deg, rgba(255,243,234,0.95) 0%, rgba(255,255,255,0.96) 100%); }
+
+    .note {
+      font-size: 14px;
+      line-height: 1.45;
+      max-width: 560px;
+    }
+
+    .welcome-shape,
+    .command-shape,
+    .diag-shape {
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 999px;
+    }
+
+    .welcome-shape {
+      top: 80px;
+      right: 18px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(36,113,231,0.08) 0%, rgba(36,113,231,0.02) 56%, transparent 74%);
+    }
+
+    .command-shape {
+      top: 110px;
+      left: 44%;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(230,112,30,0.07) 0%, rgba(36,113,231,0.03) 56%, transparent 76%);
+    }
+
+    .diag-shape {
+      top: 120px;
+      right: 16%;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(36,113,231,0.06) 0%, rgba(10,28,64,0.03) 58%, transparent 76%);
+    }
+
+    .mode-stack {
+      position: relative;
+      width: 300px;
+      height: 76px;
+    }
+
+    .mode-pane {
+      position: absolute;
+      top: 0;
+      width: 128px;
+      height: 64px;
+      border: 1px solid rgba(10,28,64,0.14);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.82);
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+      box-shadow: 0 8px 22px rgba(10,28,64,0.04);
+    }
+
+    .mode-pane[data-mode="brief"] { left: 0; z-index: 1; }
+    .mode-pane[data-mode="spotlight"] { left: 78px; z-index: 2; }
+    .mode-pane[data-mode="queue"] { left: 156px; z-index: 1; }
+
+    .mode-pane.active {
+      z-index: 5 !important;
+      transform: translateY(-6px);
+      box-shadow: 0 18px 38px rgba(10,28,64,0.1);
+      background: rgba(255,255,255,0.96);
+      color: var(--navy);
+      border-color: rgba(10,28,64,0.18);
+    }
+
+    .mode-pane.active.brief {
+      color: var(--blue);
+      background: rgba(237,244,255,0.96);
+      border-color: rgba(36,113,231,0.24);
+    }
+
+    .mode-pane.active.spotlight {
+      color: var(--orange);
+      background: rgba(255,243,234,0.97);
+      border-color: rgba(230,112,30,0.24);
+    }
+
+    .mode-pane.active.queue {
+      color: var(--navy);
+      background: rgba(255,255,255,0.98);
+      border-color: rgba(10,28,64,0.18);
+    }
+
+    .ledger {
+      display: grid;
+      gap: 0;
+      align-content: start;
+      padding-top: 16px;
+    }
+
+    .ledger-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      padding: 16px 0;
+    }
+
+    .ledger-row + .ledger-row {
+      border-top: 1px solid rgba(10,28,64,0.08);
+    }
+
+    .ledger-row strong {
+      font-size: 24px;
+    }
+
+    .ledger-row p {
+      margin: 8px 0 0;
+      font-size: 12px;
+      line-height: 1.45;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .rank {
+      font-size: 42px;
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+      color: var(--blue);
+    }
+
+    .command-aux {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: 1.14fr 0.86fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .diag-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 6px;
+    }
+
+    .list-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-top: 12px;
+    }
+
+    .list-block {
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-block ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-soft);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .list-block li + li { margin-top: 8px; }
+
+    .diag-secondary {
+      display: grid;
+      gap: 20px;
+      align-content: start;
+      padding-top: 18px;
+    }
+
+    .wash {
+      padding: 18px 20px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(237,244,255,0.92) 100%);
+    }
+
+    .wash strong {
+      margin-bottom: 8px;
+    }
+
+    .stacked-actions {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      justify-items: start;
+    }
+
+    @media (max-width: 1080px) {
+      .surface-body,
+      .diag-grid,
+      .proof-row,
+      .command-aux,
+      .list-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mode-stack {
+        width: 100%;
+        height: 70px;
+      }
+
+      .mode-pane[data-mode="brief"] { left: 0; }
+      .mode-pane[data-mode="spotlight"] { left: 72px; }
+      .mode-pane[data-mode="queue"] { left: 144px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <div class="eyebrow">Facial Architecture Test Output · V4</div>
+      <h1>Kill the pill-row. Let mode-switching feel like stacked lenses, not generic tabs.</h1>
+      <p>This round keeps the open field, reduces the equal-width oval behavior further, and introduces a clickable stacked-pane control for `Brief`, `Spotlight`, and `Queue` so mode feels like changing view depth instead of pressing software tabs.</p>
+    </section>
+
+    <section class="surface">
+      <div class="welcome-shape"></div>
+      <div class="surface-head">
+        <div class="surface-title">
+          <div class="eyebrow">Threshold</div>
+          <div class="surface-name">Welcome · Open Threshold</div>
+        </div>
+        <span class="pill green">Week 1</span>
+      </div>
+      <div class="surface-body">
+        <div class="surface-copy">
+          <div class="note">Welcome should feel like a threshold into real work, not a corridor of cards and helper lanes.</div>
+          <h2>You are moving from setup into a real operating system.</h2>
+          <p>One live motion is what turns this from a promising workspace into something a first serious operator could inherit without reverse-engineering your memory.</p>
+          <div class="actions">
+            <a class="button primary">Log the first live motion</a>
+            <a class="inline-link" href="#">Open Spotlight</a>
+          </div>
+          <div class="proof-row">
+            <div class="metric">
+              <span class="label">Targeting</span>
+              <strong>1</strong>
+              <p>ICP truth exists.</p>
+            </div>
+            <div class="metric">
+              <span class="label">Pipeline</span>
+              <strong>69</strong>
+              <p>Deals are live enough to steer.</p>
+            </div>
+            <div class="metric">
+              <span class="label">Signals</span>
+              <strong>11</strong>
+              <p>Research is no longer thin.</p>
+            </div>
+            <div class="metric">
+              <span class="label">Motion</span>
+              <strong>0</strong>
+              <p>The app still needs proof.</p>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="shelf blue">
+            <span class="label">What becomes real next</span>
+            <strong>The first live touch.</strong>
+            <p>That is the threshold proof that makes the rest of the product believable.</p>
+          </div>
+          <div class="side">
+            <span class="label">Quiet proof</span>
+            <p>Targeting, pipeline, and signal are live. Motion is the last missing public proof.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="surface">
+      <div class="command-shape"></div>
+      <div class="surface-head">
+        <div class="surface-title">
+          <div class="eyebrow">Command Chamber</div>
+          <div class="surface-name">Dashboard · Stacked Mode Chamber</div>
+        </div>
+        <div class="mode-stack" id="modeStack">
+          <div class="mode-pane brief" data-mode="brief">Brief</div>
+          <div class="mode-pane spotlight active" data-mode="spotlight">Spotlight</div>
+          <div class="mode-pane queue" data-mode="queue">Queue</div>
+        </div>
+      </div>
+      <div class="surface-body">
+        <div class="surface-copy">
+          <div class="note" id="modeNote">Command gets an open field. Ranked work sits on a ledger edge, not inside a mini-card column.</div>
+          <h2 id="modeTitle">Recover Apex Fintech before the week drifts.</h2>
+          <p id="modeBody">No dated next step. Champion confidence is soft. The page should not need a hierarchy of boxes to say something this simple and severe.</p>
+          <div class="actions" id="modeActions">
+            <a class="button primary">Inspect</a>
+            <a class="inline-link" href="#">Run Autopsy</a>
+            <a class="button soft">Open Deal</a>
+          </div>
+          <div class="command-aux">
+            <div class="metric" id="modeReason">
+              <span class="label">Why here</span>
+              <strong>Truth debt</strong>
+              <p>The live rooms say this deal needs intervention now.</p>
+            </div>
+            <div class="shelf orange" id="modeReward">
+              <span class="label">Reward</span>
+              <strong>See what compounded</strong>
+              <p>The graph stays earned, not bolted into the page.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="ledger" id="modeLedger">
+          <div class="ledger-row">
+            <div>
+              <span class="label">01</span>
+              <strong>Recover Apex Fintech</strong>
+              <p>Risk 100 · no next step</p>
+            </div>
+            <div class="rank">01</div>
+          </div>
+          <div class="ledger-row">
+            <div>
+              <span class="label">02</span>
+              <strong>Northstar Health</strong>
+              <p>Proof thin · stage drift</p>
+            </div>
+            <div class="rank">02</div>
+          </div>
+          <div class="ledger-row">
+            <div>
+              <span class="label">03</span>
+              <strong>VoltOps</strong>
+              <p>Signal hot · motion weak</p>
+            </div>
+            <div class="rank">03</div>
+          </div>
+          <div class="ledger-row">
+            <div>
+              <span class="label">04</span>
+              <strong>Cascadia Health Network</strong>
+              <p>Heat real · action not logged</p>
+            </div>
+            <div class="rank">04</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="surface">
+      <div class="diag-shape"></div>
+      <div class="surface-head">
+        <div class="surface-title">
+          <div class="eyebrow">Diagnosis Table</div>
+          <div class="surface-name">Future Autopsy · Chamber Cut</div>
+        </div>
+        <span class="pill orange">Pipeline</span>
+      </div>
+      <div class="diag-grid">
+        <div class="surface-copy">
+          <div class="note">Continuity is reduced to a thin signal. Diagnosis gets the stage. Actions stop looking like sibling capsules.</div>
+          <h2>How you lose is already visible.</h2>
+          <p>The most likely failure is not abstract risk. It is negotiation pressure widening while owner clarity and the next step stay soft.</p>
+          <div class="stacked-actions">
+            <a class="button primary">Run now</a>
+            <a class="button soft">Open Deal Workspace</a>
+            <a class="inline-link" href="#">Back to Meridian Logistics Global</a>
+          </div>
+          <div class="diag-meta">
+            <span class="pill blue">Meridian Logistics Global</span>
+            <span class="pill">45 days out</span>
+            <span class="pill">Risk 62</span>
+          </div>
+          <div class="list-grid">
+            <div class="list-block">
+              <span class="label">Evidence now</span>
+              <ul>
+                <li>No dated next step is carrying the deal.</li>
+                <li>Executive alignment remains fuzzy.</li>
+                <li>Process is widening before control is locked.</li>
+              </ul>
+            </div>
+            <div class="list-block">
+              <span class="label">Still weak</span>
+              <ul>
+                <li>Owner clarity is soft.</li>
+                <li>The pressure is visible but not corrected.</li>
+                <li>The deal still reads healthier than it is.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <aside class="diag-secondary">
+          <div class="shelf blue">
+            <span class="label">Corrective move</span>
+            <strong>Force one changed move into the live deal today.</strong>
+            <p>Autopsy should end in corrective motion, not a clever diagnosis.</p>
+          </div>
+          <div class="wash">
+            <span class="label">Compounding</span>
+            <strong>Discovery truth exists.</strong>
+            <p>The room already has enough truth to stop pretending this is only theoretical risk.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var panes = Array.prototype.slice.call(document.querySelectorAll('.mode-pane'));
+      var title = document.getElementById('modeTitle');
+      var body = document.getElementById('modeBody');
+      var note = document.getElementById('modeNote');
+      var reason = document.getElementById('modeReason');
+      var reward = document.getElementById('modeReward');
+      var ledger = document.getElementById('modeLedger');
+
+      var content = {
+        brief: {
+          title: 'What changed since 1m ago.',
+          body: 'Brief should feel like a pressure summary, not like a shrunken dashboard. It should tell you what moved without turning into a reporting page.',
+          note: 'Brief is the quickest read. It should feel like a severe note slipped onto the desk, not another panel.',
+          reasonTitle: 'Why here',
+          reasonBody: 'No major object-count shift. The work still needs ranking, not more explanation.',
+          rewardTitle: 'Use next',
+          rewardBody: 'Brief should hand off into Spotlight or Queue without becoming a permanent view.',
+          ledger: [
+            ['No new motion yet', 'The motion layer still needs proof', '01'],
+            ['Top deal still drifting', 'Pipeline pressure has not relaxed', '02'],
+            ['Signal heat unchanged', 'No fresh account movement yet', '03']
+          ]
+        },
+        spotlight: {
+          title: 'Recover Apex Fintech before the week drifts.',
+          body: 'No dated next step. Champion confidence is soft. The page should not need a hierarchy of boxes to say something this simple and severe.',
+          note: 'Command gets an open field. Ranked work sits on a ledger edge, not inside a mini-card column.',
+          reasonTitle: 'Truth debt',
+          reasonBody: 'The live rooms say this deal needs intervention now.',
+          rewardTitle: 'See what compounded',
+          rewardBody: 'The graph stays earned, not bolted into the page.',
+          ledger: [
+            ['Recover Apex Fintech', 'Risk 100 · no next step', '01'],
+            ['Northstar Health', 'Proof thin · stage drift', '02'],
+            ['VoltOps', 'Signal hot · motion weak', '03'],
+            ['Cascadia Health Network', 'Heat real · action not logged', '04']
+          ]
+        },
+        queue: {
+          title: 'Run the corrective order in sequence.',
+          body: 'Queue should feel like execution spine, not spotlight clone. The order is the point. The user should read sequence, not browse cards.',
+          note: 'Queue is the only view that should feel explicitly ordered and procedural.',
+          reasonTitle: 'Why this order',
+          reasonBody: 'The highest-pressure move should clear first so the downstream work stops drifting.',
+          rewardTitle: 'After the first move',
+          rewardBody: 'The next object should become clearer, not noisier.',
+          ledger: [
+            ['Run Future Autopsy', 'Resolve the top truth debt first', '01'],
+            ['Force next step in Deal Workspace', 'Convert diagnosis into real movement', '02'],
+            ['Open Signal Console', 'Turn heat into actual motion', '03'],
+            ['Log first live touch', 'Make the motion layer believable', '04']
+          ]
+        }
+      };
+
+      function renderLedger(items) {
+        ledger.innerHTML = items.map(function (item) {
+          return (
+            '<div class="ledger-row">' +
+              '<div>' +
+                '<span class="label">' + item[2] + '</span>' +
+                '<strong>' + item[0] + '</strong>' +
+                '<p>' + item[1] + '</p>' +
+              '</div>' +
+              '<div class="rank">' + item[2] + '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function activate(mode) {
+        panes.forEach(function (pane) {
+          var isActive = pane.getAttribute('data-mode') === mode;
+          pane.classList.toggle('active', isActive);
+        });
+        var next = content[mode];
+        title.textContent = next.title;
+        body.textContent = next.body;
+        note.textContent = next.note;
+        reason.querySelector('strong').textContent = next.reasonTitle;
+        reason.querySelector('p').textContent = next.reasonBody;
+        reward.querySelector('strong').textContent = next.rewardTitle;
+        reward.querySelector('p').textContent = next.rewardBody;
+        renderLedger(next.ledger);
+      }
+
+      panes.forEach(function (pane) {
+        pane.addEventListener('click', function () {
+          activate(pane.getAttribute('data-mode'));
+        });
+      });
+
+      activate('spotlight');
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Dashboard Systems Corrected</title>
+  <style>
+    :root {
+      --paper: rgba(255, 255, 255, 0.88);
+      --paper-strong: rgba(255, 255, 255, 0.94);
+      --line: rgba(10, 28, 64, 0.11);
+      --line-soft: rgba(10, 28, 64, 0.07);
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --muted: #7c90ad;
+      --soft: #4f6b8b;
+      --cold: #a4b2c8;
+      --shadow-soft: 0 18px 50px rgba(10, 28, 64, 0.08);
+      --shadow-float: 0 30px 90px rgba(10, 28, 64, 0.14);
+      --radius-xl: 30px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36, 113, 231, 0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230, 112, 30, 0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 24px 22px 88px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, p { margin: 0; }
+    .page { max-width: 1580px; margin: 0 auto; display: grid; gap: 56px; }
+    .topline {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 700;
+      color: var(--muted); padding: 2px 2px 0;
+    }
+    .topline .accent { color: var(--orange); }
+
+    .system {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      gap: 26px;
+      align-content: start;
+      padding-top: 8px;
+    }
+    .system::before,
+    .system::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .system::before {
+      width: 420px;
+      height: 420px;
+      left: 2%;
+      top: 3%;
+      background: radial-gradient(circle, rgba(36, 113, 231, 0.08), rgba(36, 113, 231, 0.02) 58%, transparent 76%);
+    }
+    .system::after {
+      width: 320px;
+      height: 320px;
+      right: 7%;
+      top: 9%;
+      background: radial-gradient(circle, rgba(230, 112, 30, 0.08), rgba(230, 112, 30, 0.02) 58%, transparent 76%);
+    }
+
+    .sys-head { display: flex; justify-content: space-between; align-items: start; gap: 20px; }
+    .sys-name { display: grid; gap: 8px; }
+    .label {
+      font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+    }
+    .sys-name h2 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 34px; line-height: 0.94; letter-spacing: -0.05em;
+    }
+    .sys-name p { max-width: 660px; color: var(--soft); font-size: 15px; line-height: 1.45; }
+
+    .sys-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 470px;
+      gap: 40px;
+      align-items: start;
+    }
+    .main { display: grid; gap: 22px; align-content: start; }
+    .hero { display: grid; gap: 16px; }
+    .hero .eyebrow {
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: var(--orange);
+    }
+    .hero h1 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(70px, 8vw, 124px); line-height: 0.88; letter-spacing: -0.1em; max-width: 860px;
+    }
+    .hero-copy {
+      max-width: 620px; color: var(--soft); font-size: 22px; line-height: 1.35; letter-spacing: -0.03em;
+    }
+
+    .actions { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .btn-primary, .btn-ghost, .text-link { font: inherit; border: 0; background: none; padding: 0; color: inherit; }
+    .btn-primary {
+      min-height: 50px; padding: 0 22px; border-radius: 18px; background: var(--orange); color: #fff; font-weight: 700;
+      box-shadow: 0 14px 28px rgba(230, 112, 30, 0.22);
+    }
+    .btn-ghost {
+      min-height: 44px; padding: 0 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(10, 28, 64, 0.12); color: var(--navy); font-weight: 700;
+    }
+    .text-link { color: var(--blue); font-weight: 700; }
+    .mode-shell { width: 360px; height: 124px; perspective: 1400px; }
+    .carousel { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+    .mode-card {
+      position: absolute; top: 8px; width: 152px; height: 94px; padding: 12px 14px 14px;
+      border-radius: 24px; border: 1px solid rgba(10, 28, 64, 0.08); box-shadow: var(--shadow-soft);
+      background: var(--paper-strong); overflow: hidden; transform-style: preserve-3d; backface-visibility: hidden;
+    }
+    .mode-card::before {
+      content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0.36), transparent 42%);
+      pointer-events: none;
+    }
+    .mode-card.brief { background: linear-gradient(180deg, rgba(238,245,255,0.98), rgba(255,255,255,0.98)); }
+    .mode-card.spotlight { background: linear-gradient(180deg, rgba(255,243,234,0.98), rgba(255,255,255,0.98)); }
+    .mode-card.queue { background: linear-gradient(180deg, rgba(248,251,255,0.98), rgba(255,255,255,0.98)); }
+    .mode-card .sub {
+      font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+      margin-bottom: 8px; white-space: nowrap;
+    }
+    .mode-card .count {
+      position: absolute; top: 10px; right: 12px; font-size: 22px; line-height: 1; letter-spacing: -0.08em;
+      color: rgba(10, 28, 64, 0.24);
+    }
+    .mode-card h3 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 36px; line-height: 0.9; letter-spacing: -0.07em; max-width: 110px;
+    }
+    .mode-card .bar {
+      position: absolute; left: 14px; right: 14px; bottom: 12px; height: 6px; border-radius: var(--radius-pill);
+      background: rgba(10, 28, 64, 0.08); overflow: hidden;
+    }
+    .mode-card .bar span { display: block; height: 100%; border-radius: inherit; }
+    .mode-card.brief .bar span { width: 36%; background: var(--blue); }
+    .mode-card.spotlight .bar span { width: 68%; background: var(--orange); }
+    .mode-card.queue .bar span { width: 48%; background: var(--navy); }
+    .mode-card.is-front {
+      z-index: 4; transform: translate3d(106px, 0, 90px) rotateY(0deg) rotateX(8deg); box-shadow: var(--shadow-float);
+    }
+    .mode-card.is-left { z-index: 2; transform: translate3d(0, 18px, 14px) rotateY(42deg) rotateX(8deg); }
+    .mode-card.is-right { z-index: 1; transform: translate3d(192px, 18px, 10px) rotateY(-42deg) rotateX(8deg); }
+
+    .legend { display: flex; gap: 14px 16px; align-items: center; flex-wrap: wrap; }
+    .legend-item {
+      display: inline-flex; align-items: center; gap: 8px; min-height: 30px;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+      white-space: nowrap;
+    }
+    .sig-mark {
+      width: 22px; height: 22px; border-radius: 10px; display: grid; place-items: center;
+      background: rgba(255,255,255,0.88); border: 1px solid rgba(10, 28, 64, 0.08); box-shadow: var(--shadow-soft); color: currentColor;
+    }
+    .legend-item.hot { color: var(--orange); }
+    .legend-item.warm { color: var(--blue); }
+    .legend-item.live { color: var(--green); }
+    .legend-item.cold { color: var(--cold); }
+    .sig-mark svg {
+      width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .accounts { display: grid; gap: 14px; align-content: start; }
+    .card, .strip, .module-card {
+      background: var(--paper); box-shadow: var(--shadow-soft); border: 1px solid rgba(10, 28, 64, 0.06);
+    }
+    .card { padding: 18px 20px 18px 22px; border-radius: 26px; display: grid; gap: 14px; }
+    .strip { padding: 16px 18px; border-radius: 22px; display: grid; gap: 14px; }
+    .module-card { padding: 18px; border-radius: 26px; display: grid; gap: 14px; }
+    .account-head { display: flex; justify-content: space-between; gap: 14px; align-items: end; }
+    .account-head .name { font-size: 22px; line-height: 1.08; font-weight: 700; letter-spacing: -0.04em; }
+    .account-head .amt {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 28px; line-height: 0.9; letter-spacing: -0.07em;
+      color: rgba(10, 28, 64, 0.45); white-space: nowrap;
+    }
+    .triad-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .triad-cell { display: grid; gap: 6px; align-content: start; min-width: 0; }
+    .triad-cell + .triad-cell { border-left: 1px solid var(--line-soft); padding-left: 12px; }
+    .triad-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .triad-kicker { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted); white-space: nowrap; }
+    .triad-value {
+      font-size: 18px; line-height: 1.05; font-weight: 700; letter-spacing: -0.04em; color: var(--navy);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .triad-note { font-size: 12px; line-height: 1.35; color: var(--soft); min-height: 32px; }
+    .hotline { height: 4px; border-radius: 999px; background: rgba(10, 28, 64, 0.08); overflow: hidden; }
+    .hotline span { display: block; height: 100%; width: 100%; border-radius: inherit; background: currentColor; }
+    .triad-cell.hot { color: var(--orange); }
+    .triad-cell.warm { color: var(--blue); }
+    .triad-cell.live { color: var(--green); }
+    .triad-cell.cold { color: var(--cold); }
+
+    .module-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .module { display: grid; gap: 8px; padding: 14px 12px; border-radius: 20px; background: rgba(255, 255, 255, 0.72); }
+    .module .module-line { display: flex; align-items: center; gap: 8px; }
+    .module .module-label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+    .module .module-value { font-size: 18px; line-height: 1.05; font-weight: 700; letter-spacing: -0.04em; white-space: nowrap; }
+    .module .module-note { font-size: 12px; line-height: 1.35; color: var(--soft); min-height: 32px; }
+    .module.hot { background: rgba(255, 244, 235, 0.88); }
+    .module.warm { background: rgba(237, 244, 255, 0.92); }
+    .module.live { background: rgba(238, 248, 242, 0.92); }
+    .module.cold { background: rgba(248, 251, 255, 0.92); }
+
+    .command-row { display: grid; grid-template-columns: minmax(0, 1fr) 112px 112px 112px; gap: 16px; align-items: center; }
+    .command-title { min-width: 0; display: grid; gap: 4px; }
+    .command-title .name { font-size: 22px; line-height: 1.08; font-weight: 700; letter-spacing: -0.04em; }
+    .command-title .sub { font-size: 12px; line-height: 1.35; color: var(--soft); }
+    .command-pill {
+      min-height: 78px; border-radius: 20px; padding: 12px 12px 10px; display: grid; gap: 6px; align-content: start;
+      background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(10, 28, 64, 0.06);
+    }
+    .command-pill .command-line { display: flex; align-items: center; gap: 8px; }
+    .command-pill .role { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+    .command-pill .value { font-size: 18px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; white-space: nowrap; }
+    .command-pill .note { font-size: 11px; line-height: 1.35; color: var(--soft); min-height: 30px; }
+
+    .footer-legend {
+      display: flex; gap: 14px 18px; flex-wrap: wrap; align-items: center;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+    }
+
+    @media (max-width: 1220px) { .sys-body { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) {
+      body { padding: 18px 14px 52px; }
+      .hero h1 { font-size: 60px; }
+      .mode-shell { width: 320px; }
+      .mode-card.is-front { transform: translate3d(92px, 0, 90px) rotateY(0deg) rotateX(8deg); }
+      .mode-card.is-right { transform: translate3d(168px, 18px, 10px) rotateY(-42deg) rotateX(8deg); }
+      .triad-grid, .module-grid, .command-row { grid-template-columns: 1fr; }
+      .triad-cell + .triad-cell {
+        border-left: 0; padding-left: 0; padding-top: 10px; border-top: 1px solid var(--line-soft);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Dashboard systems · strict corrected pass</span>
+      <span>Antaeus</span>
+    </div>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="sys-name">
+          <div class="label">System 01 corrected</div>
+          <h2>Structured signal lanes</h2>
+          <p>The account rail stops pretending there is one magical heat scale. Every account uses the same three real dimensions: risk, proof, and motion. No filler chips. No fake meter. No wrapped signal row.</p>
+        </div>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="mode-shell">
+            <div class="carousel">
+              <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+            </div>
+          </div>
+          <div class="hero">
+            <div class="eyebrow">Spotlight</div>
+            <h1>Recover Apex Fintech before the week drifts.</h1>
+            <p class="hero-copy">The command view feels urgent because the account rail is built from three fixed realities instead of decorative signal clutter.</p>
+          </div>
+          <div class="legend">
+            <span class="legend-item hot"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>risk</span>
+            <span class="legend-item warm"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>proof</span>
+            <span class="legend-item live"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span>motion</span>
+          </div>
+          <div class="actions">
+            <button class="btn-primary">Inspect</button>
+            <button class="btn-ghost">Run autopsy</button>
+            <button class="text-link">See what compounded</button>
+          </div>
+        </section>
+        <aside class="accounts">
+          <article class="card">
+            <div class="account-head"><div class="name">Apex Fintech</div><div class="amt">$140k</div></div>
+            <div class="triad-grid">
+              <div class="triad-cell hot">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="triad-kicker">Risk</span></div>
+                <div class="triad-value">100</div>
+                <div class="triad-note">No dated next step.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+              <div class="triad-cell warm">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="triad-kicker">Proof</span></div>
+                <div class="triad-value">Solution fit</div>
+                <div class="triad-note">Proof exists, but still thin.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+              <div class="triad-cell cold">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="triad-kicker">Motion</span></div>
+                <div class="triad-value">47d stale</div>
+                <div class="triad-note">Nothing recent has changed the deal.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="account-head"><div class="name">Northstar Health</div><div class="amt">$180k</div></div>
+            <div class="triad-grid">
+              <div class="triad-cell hot">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="triad-kicker">Risk</span></div>
+                <div class="triad-value">Stage drift</div>
+                <div class="triad-note">The stage is reading stronger than the truth.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+              <div class="triad-cell warm">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="triad-kicker">Proof</span></div>
+                <div class="triad-value">Thin</div>
+                <div class="triad-note">Champion case is still soft.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+              <div class="triad-cell cold">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="triad-kicker">Motion</span></div>
+                <div class="triad-value">Owner soft</div>
+                <div class="triad-note">No one is carrying the correction yet.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="account-head"><div class="name">VoltOps</div><div class="amt">$95k</div></div>
+            <div class="triad-grid">
+              <div class="triad-cell hot">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="triad-kicker">Risk</span></div>
+                <div class="triad-value">Action gap</div>
+                <div class="triad-note">Heat exists but has not become action.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+              <div class="triad-cell warm">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="triad-kicker">Proof</span></div>
+                <div class="triad-value">Coverage gap</div>
+                <div class="triad-note">Signal says yes; the case is incomplete.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+              <div class="triad-cell live">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="triad-kicker">Motion</span></div>
+                <div class="triad-value">Signal hot</div>
+                <div class="triad-note">Live account heat is real right now.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="account-head"><div class="name">Cascadia Health Network</div><div class="amt">$120k</div></div>
+            <div class="triad-grid">
+              <div class="triad-cell hot">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="triad-kicker">Risk</span></div>
+                <div class="triad-value">Action not logged</div>
+                <div class="triad-note">The move exists, but the system has not captured it.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+              <div class="triad-cell warm">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="triad-kicker">Proof</span></div>
+                <div class="triad-value">$120k real</div>
+                <div class="triad-note">The commercial shape is believable.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+              <div class="triad-cell live">
+                <div class="triad-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="triad-kicker">Motion</span></div>
+                <div class="triad-value">Heat real</div>
+                <div class="triad-note">The account is warm enough to move now.</div>
+                <div class="hotline"><span></span></div>
+              </div>
+            </div>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="sys-name">
+          <div class="label">Reimagined 01</div>
+          <h2>Triad modules</h2>
+          <p>Each account keeps the same three truths, but the signals become firmer, more modular blocks. This is still serious, but more instrument-like than the corrected baseline.</p>
+        </div>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="mode-shell">
+            <div class="carousel">
+              <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+            </div>
+          </div>
+          <div class="hero">
+            <div class="eyebrow">Spotlight</div>
+            <h1>Apex Fintech is breaking on three fronts at once.</h1>
+            <p class="hero-copy">This version treats the account rail like a modular instrument bank. Every module has one role, one mark, one value, one note.</p>
+          </div>
+          <div class="actions">
+            <button class="btn-primary">Inspect</button>
+            <button class="btn-ghost">Open deal</button>
+            <button class="text-link">See what compounded</button>
+          </div>
+        </section>
+        <aside class="accounts">
+          <article class="module-card">
+            <div class="account-head"><div class="name">Apex Fintech</div><div class="amt">$140k</div></div>
+            <div class="module-grid">
+              <div class="module hot"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="module-label">Risk</span></div><div class="module-value">100</div><div class="module-note">No dated next step.</div></div>
+              <div class="module warm"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="module-label">Proof</span></div><div class="module-value">Fit</div><div class="module-note">Case exists, but still thin.</div></div>
+              <div class="module cold"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="module-label">Motion</span></div><div class="module-value">47d</div><div class="module-note">Stalled for too long.</div></div>
+            </div>
+          </article>
+          <article class="module-card">
+            <div class="account-head"><div class="name">Northstar Health</div><div class="amt">$180k</div></div>
+            <div class="module-grid">
+              <div class="module hot"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="module-label">Risk</span></div><div class="module-value">Drift</div><div class="module-note">Stage reads too far ahead.</div></div>
+              <div class="module warm"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="module-label">Proof</span></div><div class="module-value">Thin</div><div class="module-note">Qualification still weak.</div></div>
+              <div class="module cold"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="module-label">Motion</span></div><div class="module-value">Owner</div><div class="module-note">No corrective carrier.</div></div>
+            </div>
+          </article>
+          <article class="module-card">
+            <div class="account-head"><div class="name">VoltOps</div><div class="amt">$95k</div></div>
+            <div class="module-grid">
+              <div class="module hot"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="module-label">Risk</span></div><div class="module-value">Gap</div><div class="module-note">Action has not caught up.</div></div>
+              <div class="module warm"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="module-label">Proof</span></div><div class="module-value">Coverage</div><div class="module-note">The case is incomplete.</div></div>
+              <div class="module live"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="module-label">Motion</span></div><div class="module-value">Hot</div><div class="module-note">Live account heat now.</div></div>
+            </div>
+          </article>
+          <article class="module-card">
+            <div class="account-head"><div class="name">Cascadia Health Network</div><div class="amt">$120k</div></div>
+            <div class="module-grid">
+              <div class="module hot"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="module-label">Risk</span></div><div class="module-value">Log it</div><div class="module-note">Action is not captured.</div></div>
+              <div class="module warm"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="module-label">Proof</span></div><div class="module-value">$120k</div><div class="module-note">Commercial shape is real.</div></div>
+              <div class="module live"><div class="module-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="module-label">Motion</span></div><div class="module-value">Ready</div><div class="module-note">Warm enough to move now.</div></div>
+            </div>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="sys-name">
+          <div class="label">Reimagined 02</div>
+          <h2>Command strips</h2>
+          <p>This version is the hardest-edged command-center read. The account list becomes a field of horizontal strips with fixed diagnostic stations. Each strip reads like a serious operating line, not editorial content.</p>
+        </div>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="mode-shell">
+            <div class="carousel">
+              <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+            </div>
+          </div>
+          <div class="hero">
+            <div class="eyebrow">Spotlight</div>
+            <h1>Every live account becomes a command strip.</h1>
+            <p class="hero-copy">The right column behaves like an operating console. Same stations. Same signs. Same semantic order on every strip.</p>
+          </div>
+          <div class="footer-legend"><span>risk first</span><span>proof second</span><span>motion third</span></div>
+          <div class="actions">
+            <button class="btn-primary">Inspect</button>
+            <button class="btn-ghost">Open deal</button>
+            <button class="text-link">Run autopsy</button>
+          </div>
+        </section>
+        <aside class="accounts">
+          <article class="strip">
+            <div class="command-row">
+              <div class="command-title"><div class="name">Apex Fintech - $140k</div><div class="sub">This is the account that should change today.</div></div>
+              <div class="command-pill hot"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="role">Risk</span></div><div class="value">100</div><div class="note">No dated next step.</div></div>
+              <div class="command-pill warm"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="role">Proof</span></div><div class="value">Fit</div><div class="note">Proof exists but is thin.</div></div>
+              <div class="command-pill cold"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="role">Motion</span></div><div class="value">47d</div><div class="note">No live change recorded.</div></div>
+            </div>
+          </article>
+          <article class="strip">
+            <div class="command-row">
+              <div class="command-title"><div class="name">Northstar Health - $180k</div><div class="sub">The account looks healthier than the truth underneath it.</div></div>
+              <div class="command-pill hot"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="role">Risk</span></div><div class="value">Drift</div><div class="note">Stage signal is misleading.</div></div>
+              <div class="command-pill warm"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="role">Proof</span></div><div class="value">Thin</div><div class="note">Qualification still weak.</div></div>
+              <div class="command-pill cold"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="role">Motion</span></div><div class="value">Owner</div><div class="note">No corrective carrier.</div></div>
+            </div>
+          </article>
+          <article class="strip">
+            <div class="command-row">
+              <div class="command-title"><div class="name">VoltOps - $95k</div><div class="sub">This is live, but the system has not converted it yet.</div></div>
+              <div class="command-pill hot"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="role">Risk</span></div><div class="value">Gap</div><div class="note">Heat is not becoming action.</div></div>
+              <div class="command-pill warm"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="role">Proof</span></div><div class="value">Coverage</div><div class="note">Case not complete enough.</div></div>
+              <div class="command-pill live"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="role">Motion</span></div><div class="value">Hot</div><div class="note">Live signal in the room.</div></div>
+            </div>
+          </article>
+          <article class="strip">
+            <div class="command-row">
+              <div class="command-title"><div class="name">Cascadia Health Network - $120k</div><div class="sub">The signal is credible, but the system record is behind it.</div></div>
+              <div class="command-pill hot"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="role">Risk</span></div><div class="value">Log it</div><div class="note">Action is not yet captured.</div></div>
+              <div class="command-pill warm"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="role">Proof</span></div><div class="value">$120k</div><div class="note">The commercial case is real.</div></div>
+              <div class="command-pill live"><div class="command-line"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="role">Motion</span></div><div class="value">Ready</div><div class="note">Warm enough to push now.</div></div>
+            </div>
+          </article>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

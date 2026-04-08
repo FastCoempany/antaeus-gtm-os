@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Visible Grammar Lock Board</title>
+  <style>
+    :root {
+      --page: #f7f9fd;
+      --paper: rgba(255, 255, 255, 0.9);
+      --paper-solid: #ffffff;
+      --wash-blue: #edf4ff;
+      --wash-orange: #fff4eb;
+      --wash-green: #eef8f2;
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --soft: #46607f;
+      --muted: #7a8da8;
+      --line: rgba(10, 28, 64, 0.1);
+      --line-strong: rgba(10, 28, 64, 0.16);
+      --shadow-soft: 0 14px 36px rgba(10, 28, 64, 0.05);
+      --shadow-float: 0 24px 60px rgba(10, 28, 64, 0.09);
+      --content: 1380px;
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 25%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.06), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f4f7fc 100%);
+      color: var(--navy);
+      padding: 34px 24px 96px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: var(--content);
+      margin: 0 auto;
+      display: grid;
+      gap: 54px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      max-width: 980px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    h1, h2, h3, h4, p { margin: 0; }
+
+    h1, .display-sample {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 74px);
+    }
+
+    .hero p,
+    .section-note,
+    .micro,
+    .rule-list li,
+    .body-sample,
+    .small-copy {
+      color: var(--soft);
+    }
+
+    .hero p {
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .brains-lock {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      box-shadow: var(--shadow-soft);
+      width: fit-content;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .brains-lock span:last-child {
+      color: var(--soft);
+      font-weight: 600;
+    }
+
+    .section {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      display: grid;
+      gap: 6px;
+    }
+
+    .section-title h2 {
+      font-size: 28px;
+      letter-spacing: -0.05em;
+    }
+
+    .section-note {
+      font-size: 15px;
+      line-height: 1.45;
+      max-width: 760px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+
+    .open-plane {
+      position: relative;
+      min-height: 360px;
+      padding: 28px 0 0;
+      overflow: hidden;
+    }
+
+    .shape-a,
+    .shape-b {
+      position: absolute;
+      z-index: -1;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .shape-a {
+      top: 22px;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(36,113,231,0.08), rgba(36,113,231,0.02) 55%, transparent 72%);
+    }
+
+    .shape-b {
+      top: 140px;
+      left: 34%;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(230,112,30,0.07), rgba(230,112,30,0.02) 56%, transparent 74%);
+    }
+
+    .ruler-line {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(10,28,64,0.12), rgba(10,28,64,0.02));
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .meta-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(10,28,64,0.12);
+      background: rgba(255,255,255,0.82);
+      color: var(--soft);
+    }
+
+    .pill.blue { color: var(--blue); background: rgba(237,244,255,0.94); border-color: rgba(36,113,231,0.2); }
+    .pill.orange { color: var(--orange); background: rgba(255,244,235,0.96); border-color: rgba(230,112,30,0.2); }
+    .pill.green { color: var(--green); background: rgba(238,248,242,0.96); border-color: rgba(45,122,75,0.18); }
+
+    .surface-name {
+      font-size: 27px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+
+    .plane-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.72fr);
+      gap: 38px;
+      align-items: start;
+      padding-top: 26px;
+    }
+
+    .display-sample {
+      font-size: clamp(64px, 6vw, 100px);
+      max-width: 780px;
+    }
+
+    .body-sample {
+      margin-top: 18px;
+      font-size: 19px;
+      line-height: 1.45;
+      max-width: 720px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: default;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 14px 30px rgba(230,112,30,0.22);
+    }
+
+    .button.soft {
+      background: rgba(255,255,255,0.92);
+      color: var(--navy);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .inline-link {
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .shelf {
+      padding: 20px 22px;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-float);
+      background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(237,244,255,0.96) 100%);
+    }
+
+    .shelf.orange {
+      background: linear-gradient(180deg, rgba(255,244,235,0.96) 0%, rgba(255,255,255,0.96) 100%);
+    }
+
+    .shelf h3 {
+      font-size: 31px;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      margin: 8px 0 10px;
+    }
+
+    .small-copy {
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .ledger {
+      display: grid;
+      gap: 0;
+      align-content: start;
+      padding-top: 4px;
+    }
+
+    .ledger-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+      padding: 15px 0;
+    }
+
+    .ledger-row + .ledger-row {
+      border-top: 1px solid rgba(10,28,64,0.08);
+    }
+
+    .ledger-row strong {
+      font-size: 24px;
+      letter-spacing: -0.05em;
+    }
+
+    .ledger-row p {
+      margin-top: 7px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .rank {
+      font-size: 42px;
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      color: var(--blue);
+    }
+
+    .rule-list {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 10px;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .containment-row {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .containment-card {
+      min-height: 180px;
+      padding: 18px 18px 16px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.86);
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .containment-card.wash {
+      background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(237,244,255,0.94));
+      box-shadow: none;
+    }
+
+    .containment-card.ghost {
+      background: transparent;
+      box-shadow: none;
+      border: 1px dashed rgba(10,28,64,0.12);
+    }
+
+    .crossed {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .crossed::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      background:
+        linear-gradient(135deg, transparent 47%, rgba(230,112,30,0.45) 48%, rgba(230,112,30,0.45) 52%, transparent 53%);
+      pointer-events: none;
+    }
+
+    .mini-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .mini-box {
+      min-height: 34px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(10,28,64,0.08);
+    }
+
+    .mode-board {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.2fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .mode-stack {
+      position: relative;
+      width: 320px;
+      height: 78px;
+    }
+
+    .mode-pane {
+      position: absolute;
+      top: 0;
+      width: 134px;
+      height: 64px;
+      border-radius: 22px;
+      border: 1px solid rgba(10,28,64,0.14);
+      background: rgba(255,255,255,0.84);
+      color: var(--soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 8px 22px rgba(10,28,64,0.05);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+    }
+
+    .mode-pane[data-mode="brief"] { left: 0; z-index: 1; }
+    .mode-pane[data-mode="spotlight"] { left: 84px; z-index: 3; }
+    .mode-pane[data-mode="queue"] { left: 168px; z-index: 1; }
+
+    .mode-pane.active {
+      transform: translateY(-7px);
+      z-index: 5 !important;
+      background: rgba(255,255,255,0.98);
+      box-shadow: 0 20px 40px rgba(10,28,64,0.12);
+      color: var(--navy);
+      border-color: rgba(10,28,64,0.18);
+    }
+
+    .mode-pane.active.brief { background: rgba(237,244,255,0.98); color: var(--blue); border-color: rgba(36,113,231,0.22); }
+    .mode-pane.active.spotlight { background: rgba(255,244,235,0.98); color: var(--orange); border-color: rgba(230,112,30,0.22); }
+    .mode-pane.active.queue { background: rgba(255,255,255,0.98); color: var(--navy); }
+
+    .type-board {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 34px;
+    }
+
+    .type-ladder {
+      display: grid;
+      gap: 16px;
+    }
+
+    .type-row {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .type-row .sample {
+      letter-spacing: -0.05em;
+      color: var(--navy);
+    }
+
+    .sample.display {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 84px;
+      line-height: 0.9;
+    }
+
+    .sample.object {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 52px;
+      line-height: 0.92;
+    }
+
+    .sample.section {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 0.98;
+    }
+
+    .sample.body {
+      font-size: 19px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    .sample.meta {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .tiny {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    @media (max-width: 1120px) {
+      .grid-2,
+      .grid-3,
+      .plane-body,
+      .containment-row,
+      .mode-board,
+      .type-board {
+        grid-template-columns: 1fr;
+      }
+
+      .proof-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Visible Grammar Lock</div>
+      <h1>Reduce visible burden, not room intelligence.</h1>
+      <p>This board locks the face of the product before another full page is rebuilt. The brains stay intact. The visible grammar changes everywhere.</p>
+      <div class="brains-lock">
+        <strong>Rule:</strong>
+        <span>rewrite the face, not the mind</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Shell Grammar</div>
+          <h2>Field first. Shelves second. Rail invoked, not central.</h2>
+        </div>
+        <div class="section-note">The shell stops behaving like a permanent wall of destinations. The page belongs to the work. Support enters as light signals, shelves, or invoked access.</div>
+      </div>
+      <div class="grid-2">
+        <div class="open-plane">
+          <div class="shape-a"></div>
+          <div class="shape-b"></div>
+          <div class="meta-row">
+            <div class="meta-left">
+              <div class="eyebrow">Command Chamber</div>
+              <div class="surface-name">Dashboard</div>
+            </div>
+            <span class="pill orange">Spotlight</span>
+          </div>
+          <div class="ruler-line"></div>
+          <div class="plane-body">
+            <div>
+              <div class="display-sample">Recover Apex Fintech before the week drifts.</div>
+              <div class="body-sample">The page opens on pressure, not on module doors. One large field. One earned shelf. One ledger edge.</div>
+              <div class="actions">
+                <span class="button primary">Inspect</span>
+                <span class="inline-link">Run Autopsy</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="shelf">
+                <div class="label">Why here</div>
+                <h3>Truth debt</h3>
+                <div class="small-copy">The live rooms say this needs intervention now.</div>
+              </div>
+              <div class="ledger">
+                <div class="ledger-row">
+                  <div>
+                    <strong>Recover Apex Fintech</strong>
+                    <p>Risk 100 · no next step</p>
+                  </div>
+                  <div class="rank">01</div>
+                </div>
+                <div class="ledger-row">
+                  <div>
+                    <strong>Northstar Health</strong>
+                    <p>Proof thin · stage drift</p>
+                  </div>
+                  <div class="rank">02</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="shelf orange">
+          <div class="label">Lock</div>
+          <h3>No permanent hallway in the center.</h3>
+          <ul class="rule-list">
+            <li>The page is not inside one giant card.</li>
+            <li>The room rail is not the hero of the shell.</li>
+            <li>Continuity appears as a signal, not a wall of chrome.</li>
+            <li>Utilities stay reachable without competing with work.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Action Grammar</div>
+          <h2>One real primary. One soft secondary. One inline escape.</h2>
+        </div>
+        <div class="section-note">Actions stop pretending to be siblings. If everything looks equally clickable, nothing is ranked.</div>
+      </div>
+      <div class="grid-3">
+        <div class="shelf">
+          <div class="label">Primary</div>
+          <h3>Run now</h3>
+          <div class="actions"><span class="button primary">Run now</span></div>
+          <div class="small-copy">Pressure move. Rare. Loud.</div>
+        </div>
+        <div class="shelf">
+          <div class="label">Secondary</div>
+          <h3>Open Deal Workspace</h3>
+          <div class="actions"><span class="button soft">Open Deal Workspace</span></div>
+          <div class="small-copy">Supportive, visible, but not competing.</div>
+        </div>
+        <div class="shelf">
+          <div class="label">Inline</div>
+          <h3>Back to Meridian Logistics Global</h3>
+          <div class="actions"><span class="inline-link">Back to Meridian Logistics Global</span></div>
+          <div class="small-copy">Tertiary. Carries continuity without button chrome.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Containment Grammar</div>
+          <h2>Containment is earned, not default.</h2>
+        </div>
+        <div class="section-note">Use open plane first. Then one floating shelf, one wash, or one ledger edge if needed. Containers are the exception, not the layout system.</div>
+      </div>
+      <div class="containment-row">
+        <div class="containment-card">
+          <div class="label">Open plane</div>
+          <div class="display-sample" style="font-size:44px; max-width: 280px;">Field before fence.</div>
+          <div class="small-copy">Default for primary work.</div>
+        </div>
+        <div class="containment-card">
+          <div class="label">Floating shelf</div>
+          <strong style="font-size:28px;">Earned emphasis</strong>
+          <div class="small-copy">Use for one corrective or proof note.</div>
+        </div>
+        <div class="containment-card wash">
+          <div class="label">Wash plane</div>
+          <strong style="font-size:28px;">Quiet support</strong>
+          <div class="small-copy">Use for atmospheric guidance, not main structure.</div>
+        </div>
+        <div class="containment-card ghost crossed">
+          <div class="label">Rejected</div>
+          <div class="mini-stack">
+            <div class="mini-box"></div>
+            <div class="mini-box"></div>
+            <div class="mini-box"></div>
+          </div>
+          <div class="small-copy">Card soup as layout system.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Mode-Switch Grammar</div>
+          <h2>Modes change like stacked lenses, not generic tabs.</h2>
+        </div>
+        <div class="section-note">`Brief / Spotlight / Queue` should feel like different viewing densities of the same command instrument.</div>
+      </div>
+      <div class="mode-board">
+        <div>
+          <div class="mode-stack" id="modeStack">
+            <div class="mode-pane brief" data-mode="brief">Brief</div>
+            <div class="mode-pane spotlight active" data-mode="spotlight">Spotlight</div>
+            <div class="mode-pane queue" data-mode="queue">Queue</div>
+          </div>
+        </div>
+        <div class="shelf" id="modeReadout">
+          <div class="label">Readout</div>
+          <h3 id="modeReadoutTitle">Spotlight brings one object fully forward.</h3>
+          <div class="small-copy" id="modeReadoutBody">The front pane gets the strongest emphasis. The other modes remain visible behind it so the switch feels like changing depth, not jumping tabs.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Typography Hierarchy</div>
+          <h2>Type carries the hierarchy. Not boxes. Not chip spam.</h2>
+        </div>
+        <div class="section-note">This is how we kill the “50 text sizes” problem. The screen speaks in one voice.</div>
+      </div>
+      <div class="type-board">
+        <div class="type-ladder">
+          <div class="type-row">
+            <div class="label">Display</div>
+            <div class="sample display">How you lose is already visible.</div>
+          </div>
+          <div class="type-row">
+            <div class="label">Object title</div>
+            <div class="sample object">Recover Apex Fintech before the week drifts.</div>
+          </div>
+          <div class="type-row">
+            <div class="label">Section title</div>
+            <div class="sample section">Force one changed move into the live deal today.</div>
+          </div>
+          <div class="type-row">
+            <div class="label">Body</div>
+            <div class="sample body">The app should say difficult things in calm language. Support text stays subordinate to the object and the move.</div>
+          </div>
+          <div class="type-row">
+            <div class="label">Meta</div>
+            <div class="sample meta">Risk 62 · Pipeline · 45 days out</div>
+          </div>
+        </div>
+        <div class="shelf orange">
+          <div class="label">Lock</div>
+          <h3>One hierarchy, not fifty voices.</h3>
+          <ul class="rule-list">
+            <li>Display is rare and earned.</li>
+            <li>Object title carries page authority.</li>
+            <li>Support text stays at one readable body size.</li>
+            <li>Metadata uses one uppercase system only.</li>
+            <li>If a label is decorative, it should disappear.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var panes = Array.prototype.slice.call(document.querySelectorAll('.mode-pane'));
+      var title = document.getElementById('modeReadoutTitle');
+      var body = document.getElementById('modeReadoutBody');
+      var content = {
+        brief: {
+          title: 'Brief is the quickest read.',
+          body: 'It should feel like a severe note slipped onto the desk. Fast summary. Low burden. No pill-tab energy.'
+        },
+        spotlight: {
+          title: 'Spotlight brings one object fully forward.',
+          body: 'The front pane gets the strongest emphasis. The other modes remain visible behind it so the switch feels like changing depth, not jumping tabs.'
+        },
+        queue: {
+          title: 'Queue makes the order itself visible.',
+          body: 'Queue should feel explicitly sequential. The pane comes forward, but the system still reads as one command instrument.'
+        }
+      };
+
+      function activate(mode) {
+        panes.forEach(function (pane) {
+          var isActive = pane.getAttribute('data-mode') === mode;
+          pane.classList.toggle('active', isActive);
+        });
+        title.textContent = content[mode].title;
+        body.textContent = content[mode].body;
+      }
+
+      panes.forEach(function (pane) {
+        pane.addEventListener('click', function () {
+          activate(pane.getAttribute('data-mode'));
+        });
+      });
+
+      activate('spotlight');
+    })();
+  </script>
+</body>
+</html>

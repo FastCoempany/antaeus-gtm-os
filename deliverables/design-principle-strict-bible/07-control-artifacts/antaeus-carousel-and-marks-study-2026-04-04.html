@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Carousel and Marks Study</title>
+  <style>
+    :root {
+      --bg: #f5f8fd;
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --soft: #4f6b8b;
+      --muted: #7c90ad;
+      --paper: rgba(255, 255, 255, 0.9);
+      --paper-blue: linear-gradient(180deg, rgba(238,245,255,0.98) 0%, rgba(255,255,255,0.96) 100%);
+      --paper-orange: linear-gradient(180deg, rgba(255,243,234,0.98) 0%, rgba(255,255,255,0.98) 100%);
+      --paper-white: linear-gradient(180deg, rgba(248,251,255,0.98) 0%, rgba(255,255,255,0.98) 100%);
+      --line: rgba(10, 28, 64, 0.1);
+      --shadow-soft: 0 18px 54px rgba(10, 28, 64, 0.08);
+      --shadow-float: 0 34px 90px rgba(10, 28, 64, 0.16);
+      --radius-xl: 34px;
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 30px 22px 80px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .page {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: grid;
+      gap: 38px;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 2px 2px 0;
+    }
+
+    .topline .accent { color: var(--orange); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    .label {
+      margin-bottom: 12px;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .carousel-stage {
+      min-height: 640px;
+      position: relative;
+      perspective: 1800px;
+      overflow: visible;
+    }
+
+    .ambient-a,
+    .ambient-b {
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .ambient-a {
+      width: 360px;
+      height: 360px;
+      left: 4%;
+      top: 8%;
+      background: radial-gradient(circle, rgba(36,113,231,0.1), rgba(36,113,231,0.02) 58%, transparent 74%);
+    }
+
+    .ambient-b {
+      width: 320px;
+      height: 320px;
+      right: 8%;
+      top: 12%;
+      background: radial-gradient(circle, rgba(230,112,30,0.09), rgba(230,112,30,0.02) 56%, transparent 74%);
+    }
+
+    .carousel-plane {
+      position: relative;
+      width: min(900px, 100%);
+      height: 430px;
+      margin-top: 14px;
+      transform-style: preserve-3d;
+    }
+
+    .mode-card {
+      position: absolute;
+      top: 36px;
+      width: 350px;
+      height: 270px;
+      padding: 24px 26px 22px;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(10, 28, 64, 0.08);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      cursor: pointer;
+      transition:
+        transform 640ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 640ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 420ms ease,
+        filter 420ms ease;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    .mode-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent 42%);
+      pointer-events: none;
+    }
+
+    .mode-card.brief { background: var(--paper-blue); }
+    .mode-card.spotlight { background: var(--paper-orange); }
+    .mode-card.queue { background: var(--paper-white); }
+
+    .mode-card .count {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -0.08em;
+      color: rgba(10,28,64,0.28);
+    }
+
+    .mode-card h2 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 60px;
+      line-height: 0.88;
+      letter-spacing: -0.08em;
+      margin-bottom: 16px;
+      max-width: 220px;
+    }
+
+    .mode-card .sub {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .mode-card .bar {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 22px;
+      height: 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(10,28,64,0.08);
+      overflow: hidden;
+    }
+
+    .mode-card .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .mode-card.brief .bar span { width: 36%; background: var(--blue); }
+    .mode-card.spotlight .bar span { width: 68%; background: var(--orange); }
+    .mode-card.queue .bar span { width: 48%; background: var(--navy); }
+
+    .mode-card.is-front {
+      z-index: 6;
+      transform: translate3d(275px, 4px, 170px) rotateY(0deg) rotateX(8deg);
+      box-shadow: var(--shadow-float);
+      opacity: 1;
+      filter: none;
+    }
+
+    .mode-card.is-left {
+      z-index: 3;
+      transform: translate3d(16px, 42px, 26px) rotateY(47deg) rotateX(8deg);
+      opacity: 0.98;
+      filter: saturate(0.95);
+    }
+
+    .mode-card.is-right {
+      z-index: 2;
+      transform: translate3d(540px, 42px, 14px) rotateY(-47deg) rotateX(8deg);
+      opacity: 0.98;
+      filter: saturate(0.93);
+    }
+
+    .readout {
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+      width: fit-content;
+    }
+
+    .readout .line {
+      width: 170px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(36,113,231,0.34), rgba(230,112,30,0.34));
+    }
+
+    .readout .head {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 28px;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+    }
+
+    .readout .meta {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .marks-panel {
+      display: grid;
+      gap: 22px;
+    }
+
+    .marks-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px 28px;
+      align-items: start;
+      padding-top: 6px;
+    }
+
+    .mark-item {
+      display: grid;
+      gap: 12px;
+      justify-items: start;
+    }
+
+    .mark-box {
+      width: 64px;
+      height: 64px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.86);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(10,28,64,0.06);
+      color: var(--navy);
+    }
+
+    .mark-box svg {
+      width: 26px;
+      height: 26px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mark-box.blue { color: var(--blue); background: rgba(237,244,255,0.98); }
+    .mark-box.orange { color: var(--orange); background: rgba(255,244,235,0.98); }
+    .mark-box.green { color: var(--green); background: rgba(238,248,242,0.98); }
+
+    .mark-name {
+      font-size: 16px;
+      line-height: 1.2;
+      color: var(--navy);
+    }
+
+    .legend {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding-top: 12px;
+    }
+
+    .swatch {
+      width: 86px;
+      height: 86px;
+      border-radius: 28px;
+      border: 1px solid rgba(10,28,64,0.06);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .swatch.navy { background: #122755; }
+    .swatch.blue { background: linear-gradient(180deg, #3b86f5 0%, #2471e7 100%); }
+    .swatch.orange { background: linear-gradient(180deg, #f28a31 0%, #e6701e 100%); }
+
+    .legend .line {
+      width: 120px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(10,28,64,0.08);
+      overflow: hidden;
+    }
+
+    .legend .line span {
+      display: block;
+      width: 64%;
+      height: 100%;
+      background: var(--orange);
+      border-radius: inherit;
+    }
+
+    @media (max-width: 1160px) {
+      .layout { grid-template-columns: 1fr; }
+      .carousel-plane { width: min(760px, 100%); }
+      .mode-card.is-front { transform: translate3d(220px, 4px, 170px) rotateY(0deg) rotateX(8deg); }
+      .mode-card.is-right { transform: translate3d(440px, 42px, 14px) rotateY(-47deg) rotateX(8deg); }
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 20px 14px 48px; }
+      .carousel-stage { min-height: 540px; }
+      .carousel-plane { height: 350px; }
+      .mode-card { width: 240px; height: 200px; padding: 18px 18px 18px; }
+      .mode-card h2 { font-size: 42px; }
+      .mode-card.is-front { transform: translate3d(82px, 4px, 120px) rotateY(0deg) rotateX(8deg); }
+      .mode-card.is-left { transform: translate3d(-10px, 38px, 12px) rotateY(44deg) rotateX(8deg); }
+      .mode-card.is-right { transform: translate3d(170px, 38px, 10px) rotateY(-44deg) rotateX(8deg); }
+      .marks-grid { grid-template-columns: 1fr 1fr; gap: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Carousel + Marks Study</span>
+      <span>Antaeus</span>
+    </div>
+
+    <div class="layout">
+      <section>
+        <div class="label">Mode</div>
+        <div class="carousel-stage">
+          <div class="ambient-a"></div>
+          <div class="ambient-b"></div>
+          <div class="carousel-plane">
+            <article class="mode-card brief is-left" data-mode="brief">
+              <div class="count">01</div>
+              <div class="sub">summary pressure</div>
+              <h2>Brief</h2>
+              <div class="bar"><span></span></div>
+            </article>
+
+            <article class="mode-card spotlight is-front" data-mode="spotlight">
+              <div class="count">02</div>
+              <div class="sub">one object forward</div>
+              <h2>Spotlight</h2>
+              <div class="bar"><span></span></div>
+            </article>
+
+            <article class="mode-card queue is-right" data-mode="queue">
+              <div class="count">03</div>
+              <div class="sub">ranked order visible</div>
+              <h2>Queue</h2>
+              <div class="bar"><span></span></div>
+            </article>
+          </div>
+
+          <div class="readout" id="readout">
+            <div class="head">Spotlight</div>
+            <div class="line"></div>
+            <div class="meta">one object forward</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="marks-panel">
+        <div class="label">Marks</div>
+        <div class="marks-grid">
+          <div class="mark-item">
+            <div class="mark-box blue">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>
+            </div>
+            <div class="mark-name">Signal</div>
+          </div>
+
+          <div class="mark-item">
+            <div class="mark-box orange">
+              <svg viewBox="0 0 24 24"><path d="M6 18L18 6"></path><path d="M10 6h8v8"></path></svg>
+            </div>
+            <div class="mark-name">Motion</div>
+          </div>
+
+          <div class="mark-item">
+            <div class="mark-box">
+              <svg viewBox="0 0 24 24"><rect x="6" y="8" width="12" height="10" rx="2"></rect><path d="M9 8V6h6v2"></path></svg>
+            </div>
+            <div class="mark-name">Deal</div>
+          </div>
+
+          <div class="mark-item">
+            <div class="mark-box green">
+              <svg viewBox="0 0 24 24"><path d="M6 12l4 4 8-8"></path></svg>
+            </div>
+            <div class="mark-name">Healthy</div>
+          </div>
+
+          <div class="mark-item">
+            <div class="mark-box orange">
+              <svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg>
+            </div>
+            <div class="mark-name">Risk</div>
+          </div>
+
+          <div class="mark-item">
+            <div class="mark-box blue">
+              <svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg>
+            </div>
+            <div class="mark-name">Proof</div>
+          </div>
+
+          <div class="mark-item">
+            <div class="mark-box">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 7v10"></path><path d="M7 12h10"></path></svg>
+            </div>
+            <div class="mark-name">Command</div>
+          </div>
+
+          <div class="mark-item">
+            <div class="mark-box orange">
+              <svg viewBox="0 0 24 24"><path d="M6 18L18 6"></path><path d="M12 6h6v6"></path></svg>
+            </div>
+            <div class="mark-name">Next move</div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="swatch navy"></div>
+          <div class="swatch blue"></div>
+          <div class="swatch orange"></div>
+          <div class="line"><span></span></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const cards = Array.from(document.querySelectorAll(".mode-card"));
+      const readout = document.getElementById("readout");
+      const states = {
+        brief: { head: "Brief", meta: "summary pressure" },
+        spotlight: { head: "Spotlight", meta: "one object forward" },
+        queue: { head: "Queue", meta: "ranked order visible" }
+      };
+
+      function setFront(mode) {
+        const order = {
+          brief: ["brief", "queue", "spotlight"],
+          spotlight: ["spotlight", "brief", "queue"],
+          queue: ["queue", "spotlight", "brief"]
+        }[mode];
+
+        cards.forEach((card) => {
+          const current = card.dataset.mode;
+          card.classList.remove("is-front", "is-left", "is-right");
+          if (current === order[0]) {
+            card.classList.add("is-front");
+          } else if (current === order[1]) {
+            card.classList.add("is-left");
+          } else {
+            card.classList.add("is-right");
+          }
+        });
+
+        readout.querySelector(".head").textContent = states[mode].head;
+        readout.querySelector(".meta").textContent = states[mode].meta;
+      }
+
+      cards.forEach((card) => {
+        card.addEventListener("click", () => setFront(card.dataset.mode));
+      });
+    })();
+  </script>
+</body>
+</html>

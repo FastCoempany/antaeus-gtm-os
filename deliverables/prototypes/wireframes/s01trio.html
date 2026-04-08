@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Dashboard System 01 Trio</title>
+  <style>
+    :root {
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --soft: #4f6b8b;
+      --muted: #7c90ad;
+      --cold: #9badc3;
+      --line: rgba(10, 28, 64, 0.08);
+      --glass: rgba(255,255,255,0.8);
+      --shadow-soft: 0 16px 44px rgba(10, 28, 64, 0.07);
+      --shadow-float: 0 28px 74px rgba(10, 28, 64, 0.14);
+      --paper-blue: linear-gradient(180deg, rgba(238,245,255,0.98) 0%, rgba(255,255,255,0.97) 100%);
+      --paper-orange: linear-gradient(180deg, rgba(255,243,234,0.98) 0%, rgba(255,255,255,0.98) 100%);
+      --paper-white: linear-gradient(180deg, rgba(248,251,255,0.98) 0%, rgba(255,255,255,0.98) 100%);
+      --radius-pill: 999px;
+      --rail-width: 520px;
+      --card-height: 182px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 24px 22px 90px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .page { max-width: 1560px; margin: 0 auto; display: grid; gap: 54px; }
+    .topline {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 700;
+      color: var(--muted); padding: 2px 2px 0;
+    }
+    .topline .accent { color: var(--orange); }
+
+    .system {
+      position: relative; min-height: 100vh; display: grid; gap: 24px; padding-top: 8px;
+    }
+    .system::before, .system::after {
+      content: ""; position: absolute; border-radius: 999px; pointer-events: none; z-index: -1;
+    }
+    .system::before {
+      width: 420px; height: 420px; left: 2%; top: 1%;
+      background: radial-gradient(circle, rgba(36,113,231,0.08), rgba(36,113,231,0.02) 58%, transparent 74%);
+    }
+    .system::after {
+      width: 320px; height: 320px; right: 7%; top: 7%;
+      background: radial-gradient(circle, rgba(230,112,30,0.08), rgba(230,112,30,0.02) 58%, transparent 74%);
+    }
+
+    .sys-head { display: grid; gap: 6px; }
+    .label {
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+    }
+    .sys-head h2 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 34px; line-height: 0.95; letter-spacing: -0.05em;
+    }
+    .sys-head p { max-width: 620px; color: var(--soft); font-size: 15px; line-height: 1.4; }
+
+    .sys-body { display: grid; grid-template-columns: minmax(0, 1fr) var(--rail-width); gap: 40px; align-items: start; }
+    .main { display: grid; gap: 22px; align-content: start; }
+
+    .carousel-shell { width: 360px; height: 112px; perspective: 1600px; }
+    .carousel { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+    .mode-card {
+      position: absolute; top: 10px; width: 144px; height: 88px; padding: 10px 12px;
+      border-radius: 22px; border: 1px solid rgba(10, 28, 64, 0.08); box-shadow: var(--shadow-soft); overflow: hidden;
+    }
+    .mode-card.brief { background: var(--paper-blue); }
+    .mode-card.spotlight { background: var(--paper-orange); }
+    .mode-card.queue { background: var(--paper-white); }
+    .mode-card .sub {
+      font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 4px;
+    }
+    .mode-card .count {
+      position: absolute; top: 9px; right: 12px; font-size: 18px; line-height: 1; color: rgba(10,28,64,0.28); letter-spacing: -0.08em;
+    }
+    .mode-card h3 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 25px; line-height: 0.92; letter-spacing: -0.07em; max-width: 108px;
+    }
+    .mode-card .bar {
+      position: absolute; left: 12px; right: 12px; bottom: 10px; height: 6px; border-radius: var(--radius-pill); background: rgba(10,28,64,0.08); overflow: hidden;
+    }
+    .mode-card .bar span { display: block; height: 100%; border-radius: inherit; }
+    .mode-card.brief .bar span { width: 36%; background: var(--blue); }
+    .mode-card.spotlight .bar span { width: 68%; background: var(--orange); }
+    .mode-card.queue .bar span { width: 48%; background: var(--navy); }
+    .is-front { z-index: 6; transform: translate3d(108px, 0, 82px) rotateY(0deg) rotateX(8deg); box-shadow: var(--shadow-float); }
+    .is-left { z-index: 3; transform: translate3d(0, 12px, 12px) rotateY(42deg) rotateX(8deg); }
+    .is-right { z-index: 2; transform: translate3d(206px, 12px, 8px) rotateY(-42deg) rotateX(8deg); }
+
+    .hero { display: grid; gap: 16px; }
+    .eyebrow {
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); font-weight: 700;
+    }
+    .hero h1 {
+      max-width: 780px; font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(66px, 8vw, 112px); line-height: 0.9; letter-spacing: -0.1em;
+    }
+
+    .actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .btn-primary, .btn-ghost, .text-link { font: inherit; border: 0; background: none; padding: 0; color: inherit; }
+    .btn-primary {
+      min-height: 50px; padding: 0 22px; border-radius: 18px; background: var(--orange); color: #fff; font-weight: 700;
+      box-shadow: 0 14px 28px rgba(230,112,30,0.22);
+    }
+    .btn-ghost {
+      min-height: 44px; padding: 0 18px; border-radius: 16px; background: rgba(255,255,255,0.82); color: var(--navy);
+      border: 1px solid rgba(10,28,64,0.12); font-weight: 700;
+    }
+    .text-link { color: var(--blue); font-weight: 700; }
+
+    .rail { width: var(--rail-width); display: grid; gap: 14px; align-content: start; }
+    .card {
+      position: relative; width: var(--rail-width); height: var(--card-height); padding: 18px 18px 16px 22px;
+      border-radius: 24px; background: var(--glass); box-shadow: var(--shadow-soft); overflow: hidden;
+    }
+    .card::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--blue);
+    }
+    .card.hot::before { background: var(--orange); }
+    .card.warm::before { background: var(--blue); }
+    .card.live::before { background: var(--green); }
+    .card.cold::before { background: var(--cold); }
+
+    .card-head {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-bottom: 14px;
+    }
+    .card-name { font-size: 22px; line-height: 1.06; font-weight: 700; letter-spacing: -0.04em; }
+    .card-amt {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 34px; line-height: 0.9; letter-spacing: -0.08em; color: rgba(10,28,64,0.52);
+      white-space: nowrap;
+    }
+
+    .mark { width: 10px; height: 10px; display: inline-grid; place-items: center; color: currentColor; flex: 0 0 auto; }
+    .mark svg {
+      width: 10px; height: 10px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .tone-hot { color: var(--orange); }
+    .tone-warm { color: var(--blue); }
+    .tone-live { color: var(--green); }
+    .tone-cold { color: var(--cold); }
+
+    .micro {
+      font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted); white-space: nowrap;
+    }
+    .value {
+      font-size: 15px; line-height: 1.06; letter-spacing: -0.04em; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .note {
+      font-size: 12px; line-height: 1.28; color: var(--soft); min-height: 30px;
+    }
+    .rule {
+      height: 4px; border-radius: var(--radius-pill); background: rgba(10,28,64,0.08); overflow: hidden;
+    }
+    .rule span { display: block; width: 100%; height: 100%; border-radius: inherit; background: currentColor; }
+    .foot {
+      padding-top: 8px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.28; color: var(--soft);
+    }
+
+    .ledger {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 10px;
+    }
+    .ledger-station { min-width: 0; display: grid; gap: 4px; align-content: start; }
+    .ledger-station + .ledger-station { border-left: 1px solid var(--line); padding-left: 12px; }
+    .station-head { display: flex; align-items: center; gap: 7px; min-width: 0; }
+
+    .bands {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px;
+    }
+    .band {
+      min-width: 0; display: grid; gap: 6px; padding: 10px 10px 8px; border-radius: 16px; background: rgba(255,255,255,0.66); border: 1px solid rgba(10,28,64,0.06);
+    }
+    .band-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .band-id { display: flex; align-items: center; gap: 6px; min-width: 0; }
+    .band-foot {
+      display: flex; align-items: center; gap: 10px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.25; color: var(--soft);
+    }
+    .band-foot .em { color: var(--navy); font-weight: 700; white-space: nowrap; }
+
+    .docket { display: grid; gap: 8px; margin-bottom: 10px; }
+    .docket-row {
+      display: grid; grid-template-columns: 56px 52px minmax(0, 1fr); gap: 10px; min-height: 28px; align-items: center;
+    }
+    .docket-label { display: flex; align-items: center; gap: 6px; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted); white-space: nowrap; }
+    .docket-text {
+      min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) 64px; gap: 10px; align-items: center;
+    }
+    .docket-note {
+      min-width: 0; font-size: 12px; line-height: 1.25; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .docket-foot {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.25; color: var(--soft);
+    }
+    .flag { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+    @media (max-width: 1220px) {
+      .sys-body { grid-template-columns: 1fr; }
+      .rail, .card { width: 100%; }
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 18px 14px 48px; }
+      .hero h1 { font-size: 58px; }
+      .ledger, .bands { grid-template-columns: 1fr; gap: 8px; }
+      .ledger-station + .ledger-station { border-left: 0; padding-left: 0; padding-top: 8px; border-top: 1px solid var(--line); }
+      .docket-row { grid-template-columns: 54px 44px minmax(0, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Dashboard system 01 shell-locked trio</span>
+      <span>Antaeus</span>
+    </div>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="label">System 01D</div>
+        <h2>Signal ledger</h2>
+        <p>Same shell. Three fixed stations. No filler chips, no fake meter, one quiet footer line.</p>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="carousel-shell">
+            <div class="carousel">
+              <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+            </div>
+          </div>
+          <div class="hero">
+            <div class="eyebrow">Spotlight</div>
+            <h1>Recover Apex Fintech before the week drifts.</h1>
+          </div>
+          <div class="actions">
+            <button class="btn-primary">Inspect</button>
+            <button class="btn-ghost">Run autopsy</button>
+            <button class="text-link">See what compounded</button>
+          </div>
+        </section>
+        <aside class="rail">
+          <article class="card hot">
+            <div class="card-head"><div class="card-name">Apex Fintech</div><div class="card-amt">$140k</div></div>
+            <div class="ledger">
+              <div class="ledger-station tone-hot">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="micro">Risk</span></div>
+                <div class="value">100</div>
+                <div class="note">No dated next step.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="ledger-station tone-warm">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="micro">Proof</span></div>
+                <div class="value">Fit</div>
+                <div class="note">Case exists, still thin.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="ledger-station tone-cold">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="micro">Motion</span></div>
+                <div class="value">47d</div>
+                <div class="note">Nothing live changed it.</div>
+                <div class="rule"><span></span></div>
+              </div>
+            </div>
+            <div class="foot">Proof exists, but the live account has drifted too long without a real move.</div>
+          </article>
+          <article class="card warm">
+            <div class="card-head"><div class="card-name">Northstar Health</div><div class="card-amt">$180k</div></div>
+            <div class="ledger">
+              <div class="ledger-station tone-hot">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="micro">Risk</span></div>
+                <div class="value">Drift</div>
+                <div class="note">Stage reads stronger than truth.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="ledger-station tone-warm">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="micro">Proof</span></div>
+                <div class="value">Thin</div>
+                <div class="note">Qualification is still soft.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="ledger-station tone-cold">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="micro">Motion</span></div>
+                <div class="value">Owner</div>
+                <div class="note">No one is carrying the fix.</div>
+                <div class="rule"><span></span></div>
+              </div>
+            </div>
+            <div class="foot">This looks healthier than it is because the proof and owner layer are still misaligned.</div>
+          </article>
+          <article class="card warm">
+            <div class="card-head"><div class="card-name">VoltOps</div><div class="card-amt">$95k</div></div>
+            <div class="ledger">
+              <div class="ledger-station tone-hot">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="micro">Risk</span></div>
+                <div class="value">Gap</div>
+                <div class="note">Heat has not become action.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="ledger-station tone-warm">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="micro">Proof</span></div>
+                <div class="value">Cover</div>
+                <div class="note">The case is incomplete.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="ledger-station tone-live">
+                <div class="station-head"><span class="mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="micro">Motion</span></div>
+                <div class="value">Hot</div>
+                <div class="note">Live account heat is real.</div>
+                <div class="rule"><span></span></div>
+              </div>
+            </div>
+            <div class="foot">This is not dead. It is failing to convert signal into a tracked move.</div>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="label">System 01E</div>
+        <h2>Ribbon stations</h2>
+        <p>Same shell again, but the three signals become embedded stations instead of separate columns.</p>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="carousel-shell">
+            <div class="carousel">
+              <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+            </div>
+          </div>
+          <div class="hero">
+            <div class="eyebrow">Spotlight</div>
+            <h1>Apex Fintech deserves a tighter command register.</h1>
+          </div>
+          <div class="actions">
+            <button class="btn-primary">Inspect</button>
+            <button class="text-link">Run autopsy</button>
+          </div>
+        </section>
+        <aside class="rail">
+          <article class="card hot">
+            <div class="card-head"><div class="card-name">Apex Fintech</div><div class="card-amt">$140k</div></div>
+            <div class="bands">
+              <div class="band tone-hot">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="micro">Risk</span></div>
+                  <div class="value">100</div>
+                </div>
+                <div class="note">No dated next step.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="band tone-warm">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="micro">Proof</span></div>
+                  <div class="value">Fit</div>
+                </div>
+                <div class="note">Case exists, still thin.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="band tone-cold">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="micro">Motion</span></div>
+                  <div class="value">47d</div>
+                </div>
+                <div class="note">Nothing live changed it.</div>
+                <div class="rule"><span></span></div>
+              </div>
+            </div>
+            <div class="band-foot"><span class="em">Risk leads.</span><span>Proof exists, motion is still stale.</span></div>
+          </article>
+          <article class="card warm">
+            <div class="card-head"><div class="card-name">Northstar Health</div><div class="card-amt">$180k</div></div>
+            <div class="bands">
+              <div class="band tone-hot">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="micro">Risk</span></div>
+                  <div class="value">Drift</div>
+                </div>
+                <div class="note">Stage reads stronger than truth.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="band tone-warm">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="micro">Proof</span></div>
+                  <div class="value">Thin</div>
+                </div>
+                <div class="note">Qualification is still soft.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="band tone-cold">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="micro">Motion</span></div>
+                  <div class="value">Owner</div>
+                </div>
+                <div class="note">No one is carrying the fix.</div>
+                <div class="rule"><span></span></div>
+              </div>
+            </div>
+            <div class="band-foot"><span class="em">Proof misleads.</span><span>The commercial shape reads better than the account truth.</span></div>
+          </article>
+          <article class="card live">
+            <div class="card-head"><div class="card-name">Cascadia Health Network</div><div class="card-amt">$120k</div></div>
+            <div class="bands">
+              <div class="band tone-hot">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="micro">Risk</span></div>
+                  <div class="value">Log it</div>
+                </div>
+                <div class="note">The move is not captured.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="band tone-warm">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="micro">Proof</span></div>
+                  <div class="value">$120k</div>
+                </div>
+                <div class="note">Commercial shape is real.</div>
+                <div class="rule"><span></span></div>
+              </div>
+              <div class="band tone-live">
+                <div class="band-head">
+                  <div class="band-id"><span class="mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="micro">Motion</span></div>
+                  <div class="value">Ready</div>
+                </div>
+                <div class="note">Warm enough to move now.</div>
+                <div class="rule"><span></span></div>
+              </div>
+            </div>
+            <div class="band-foot"><span class="em">Motion leads.</span><span>The account is live enough to act on even though the system trails it.</span></div>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="label">System 01F</div>
+        <h2>Command docket</h2>
+        <p>Same shell again. This time the triad becomes a three-row docket with one row per signal.</p>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="carousel-shell">
+            <div class="carousel">
+              <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+              <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+            </div>
+          </div>
+          <div class="hero">
+            <div class="eyebrow">Spotlight</div>
+            <h1>Apex Fintech should read like a command docket.</h1>
+          </div>
+          <div class="actions">
+            <button class="btn-primary">Inspect</button>
+            <button class="text-link">Open deal</button>
+          </div>
+        </section>
+        <aside class="rail">
+          <article class="card hot">
+            <div class="card-head"><div class="card-name">Apex Fintech</div><div class="card-amt">$140k</div></div>
+            <div class="docket">
+              <div class="docket-row tone-hot">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>Risk</div>
+                <div class="value">100</div>
+                <div class="docket-text"><div class="docket-note">No dated next step.</div><div class="rule"><span></span></div></div>
+              </div>
+              <div class="docket-row tone-warm">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>Proof</div>
+                <div class="value">Fit</div>
+                <div class="docket-text"><div class="docket-note">Case exists, still thin.</div><div class="rule"><span></span></div></div>
+              </div>
+              <div class="docket-row tone-cold">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>Motion</div>
+                <div class="value">47d</div>
+                <div class="docket-text"><div class="docket-note">Nothing live changed it.</div><div class="rule"><span></span></div></div>
+              </div>
+            </div>
+            <div class="docket-foot"><span>The account ranks first because all three signals remain unresolved.</span><span class="flag">Immediate</span></div>
+          </article>
+          <article class="card warm">
+            <div class="card-head"><div class="card-name">Northstar Health</div><div class="card-amt">$180k</div></div>
+            <div class="docket">
+              <div class="docket-row tone-hot">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>Risk</div>
+                <div class="value">Drift</div>
+                <div class="docket-text"><div class="docket-note">Stage reads stronger than truth.</div><div class="rule"><span></span></div></div>
+              </div>
+              <div class="docket-row tone-warm">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>Proof</div>
+                <div class="value">Thin</div>
+                <div class="docket-text"><div class="docket-note">Qualification is still soft.</div><div class="rule"><span></span></div></div>
+              </div>
+              <div class="docket-row tone-cold">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>Motion</div>
+                <div class="value">Owner</div>
+                <div class="docket-text"><div class="docket-note">No one is carrying the fix.</div><div class="rule"><span></span></div></div>
+              </div>
+            </div>
+            <div class="docket-foot"><span>The deal reads cleaner than the underlying account truth deserves.</span><span class="flag">Watch</span></div>
+          </article>
+          <article class="card warm">
+            <div class="card-head"><div class="card-name">VoltOps</div><div class="card-amt">$95k</div></div>
+            <div class="docket">
+              <div class="docket-row tone-hot">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>Risk</div>
+                <div class="value">Gap</div>
+                <div class="docket-text"><div class="docket-note">Heat has not become action.</div><div class="rule"><span></span></div></div>
+              </div>
+              <div class="docket-row tone-warm">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>Proof</div>
+                <div class="value">Cover</div>
+                <div class="docket-text"><div class="docket-note">The case is incomplete.</div><div class="rule"><span></span></div></div>
+              </div>
+              <div class="docket-row tone-live">
+                <div class="docket-label"><span class="mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span>Motion</div>
+                <div class="value">Hot</div>
+                <div class="docket-text"><div class="docket-note">Live account heat is real.</div><div class="rule"><span></span></div></div>
+              </div>
+            </div>
+            <div class="docket-foot"><span>Signal is real; the tracked move is still missing.</span><span class="flag">Convert</span></div>
+          </article>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

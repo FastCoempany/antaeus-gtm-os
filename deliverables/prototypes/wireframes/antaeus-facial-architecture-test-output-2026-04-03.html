@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Facial Architecture Test Output</title>
+  <style>
+    :root {
+      --page: #f6f8fc;
+      --surface: #ffffff;
+      --surface-alt: #edf2f9;
+      --border: #d7e0ee;
+      --border-strong: #c6d3e3;
+      --text: #0a1c40;
+      --text-soft: #46607f;
+      --text-muted: #7a8da8;
+      --orange: #e6701e;
+      --orange-soft: #fff3ea;
+      --blue: #2471e7;
+      --blue-soft: #eef5ff;
+      --green-soft: #eef8f2;
+      --shadow: 0 18px 50px rgba(10, 28, 64, 0.06);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --content: 1220px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: linear-gradient(180deg, #fbfcfe 0%, #f3f7fd 100%); color: var(--text); }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      line-height: 1.35;
+      -webkit-font-smoothing: antialiased;
+      padding: 32px 24px 80px;
+    }
+
+    .page {
+      max-width: var(--content);
+      margin: 0 auto;
+      display: grid;
+      gap: 28px;
+    }
+
+    .intro {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      padding: 10px 4px 0;
+    }
+
+    .intro h1 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 0.94;
+      letter-spacing: -0.05em;
+      max-width: 780px;
+    }
+
+    .intro p {
+      margin: 10px 0 0;
+      max-width: 620px;
+      color: var(--text-soft);
+      font-size: 18px;
+    }
+
+    .intro-note {
+      min-width: 220px;
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(198, 211, 227, 0.8);
+      color: var(--text-soft);
+      font-size: 13px;
+      box-shadow: var(--shadow);
+    }
+
+    .frame {
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(215, 224, 238, 0.9);
+      border-radius: 36px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .frame-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 28px;
+      border-bottom: 1px solid rgba(215, 224, 238, 0.8);
+      background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(250,252,255,0.88) 100%);
+    }
+
+    .frame-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      color: var(--text-soft);
+      background: rgba(255,255,255,0.86);
+    }
+
+    .pill.orange { color: var(--orange); border-color: #f3c39f; background: var(--orange-soft); }
+    .pill.blue { color: var(--blue); border-color: #bfd5ff; background: var(--blue-soft); }
+    .pill.green { color: #2d7a4b; border-color: #cfe7d8; background: var(--green-soft); }
+
+    .frame-title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .frame-body {
+      padding: 28px;
+      background:
+        radial-gradient(circle at top left, rgba(36,113,231,0.04), transparent 32%),
+        radial-gradient(circle at top right, rgba(230,112,30,0.04), transparent 24%),
+        linear-gradient(180deg, #fdfefe 0%, #f7f9fd 100%);
+    }
+
+    .surface {
+      background: var(--surface);
+      border: 1px solid rgba(215,224,238,0.9);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+    }
+
+    .surface + .surface { margin-top: 18px; }
+
+    .thin-strip {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 18px;
+      border: 1px solid rgba(215,224,238,0.9);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 0.75fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(54px, 7vw, 86px);
+      line-height: 0.94;
+      letter-spacing: -0.06em;
+      max-width: 760px;
+    }
+
+    .hero p {
+      margin: 16px 0 0;
+      font-size: 19px;
+      color: var(--text-soft);
+      max-width: 700px;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 18px;
+      border: 1px solid var(--border-strong);
+      background: #fff;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: white;
+    }
+
+    .proof-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 18px;
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(215,224,238,0.9);
+    }
+
+    .proof-item strong,
+    .metric strong {
+      display: block;
+      font-size: 32px;
+      line-height: 0.94;
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .proof-item span,
+    .metric span {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .proof-item p,
+    .metric p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    .mini-rail {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-note {
+      padding: 18px 0;
+      border-top: 1px solid rgba(215,224,238,0.9);
+    }
+
+    .mini-note:first-child { border-top: 0; padding-top: 0; }
+
+    .mini-note h3,
+    .side-stack h3 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .mini-note strong,
+    .side-stack strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 28px;
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+
+    .mini-note p,
+    .side-stack p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 15px;
+    }
+
+    .command-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.7fr);
+      gap: 24px;
+      margin-top: 18px;
+    }
+
+    .spotlight {
+      padding: 24px;
+      border-radius: 26px;
+      border: 1px solid rgba(215,224,238,0.95);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(249,251,255,0.98) 100%);
+      min-height: 420px;
+    }
+
+    .spotlight h2,
+    .diagnosis-hero h2 {
+      margin: 18px 0 0;
+      font-size: clamp(44px, 5vw, 72px);
+      line-height: 0.94;
+      letter-spacing: -0.06em;
+      max-width: 680px;
+    }
+
+    .spotlight p,
+    .diagnosis-hero p {
+      margin: 16px 0 0;
+      max-width: 620px;
+      color: var(--text-soft);
+      font-size: 18px;
+    }
+
+    .selector {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .selector-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 18px 18px 16px;
+      border: 1px solid rgba(215,224,238,0.95);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .selector-item strong {
+      font-size: 18px;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .selector-item small {
+      display: block;
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .selector-item .rank {
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      color: var(--blue);
+    }
+
+    .diagnosis-shell {
+      background: linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+      border: 1px solid rgba(215,224,238,0.85);
+      border-radius: 34px;
+      overflow: hidden;
+    }
+
+    .diagnosis-top {
+      padding: 24px 28px 18px;
+      border-bottom: 1px solid rgba(198,211,227,0.75);
+      background:
+        radial-gradient(circle at top right, rgba(36,113,231,0.07), transparent 32%),
+        linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(243,247,255,0.95) 100%);
+    }
+
+    .diagnosis-top .thin-strip { margin-top: 0; }
+
+    .diagnosis-hero {
+      padding: 30px 28px 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      padding: 0 28px 28px;
+    }
+
+    .evidence-panel {
+      padding: 22px;
+      border: 1px solid rgba(215,224,238,0.95);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.78);
+    }
+
+    .evidence-panel h3 {
+      margin: 0 0 12px;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .evidence-panel ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-soft);
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .evidence-panel li + li { margin-top: 8px; }
+
+    .next-move {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .next-move strong {
+      font-size: 34px;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+    }
+
+    .next-move p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 17px;
+    }
+
+    .health-bar {
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(215,224,238,0.85);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .health-chipset {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .command-grid,
+      .evidence-grid,
+      .proof-strip,
+      .health-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .intro {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .frame-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <div>
+        <div class="eyebrow">Test Output</div>
+        <h1>Facial architecture proof. Full visible rebuild, not patched cleanup.</h1>
+        <p>This is a non-production artifact showing the kind of visual renovation I now understand: fewer boxes, quieter shell, stronger typography, restrained color, less architecture jargon, and rooms that feel authored instead of assembled.</p>
+      </div>
+      <div class="intro-note">
+        Rule: <strong>rewrite the face, not the mind</strong><br />
+        The module logic stays. The visible language is rebuilt.
+      </div>
+    </section>
+
+    <section class="frame">
+      <div class="frame-head">
+        <div class="frame-label">
+          <div class="eyebrow">Threshold Family</div>
+          <h2 class="frame-title">Welcome Variant · Threshold Hall</h2>
+        </div>
+        <div class="pill orange">Week 1</div>
+      </div>
+      <div class="frame-body">
+        <div class="surface">
+          <div class="hero">
+            <div>
+              <div class="muted">Welcome</div>
+              <h2>You are no longer setting up. You are making the system real.</h2>
+              <p>One real motion turns this from a promising workspace into an operating instrument. The page stops acting like a tutorial and starts acting like a threshold.</p>
+              <div class="action-row">
+                <a class="button primary" href="#">Log the first live motion</a>
+                <a class="button" href="#">Open Spotlight</a>
+              </div>
+              <div class="proof-strip">
+                <div class="proof-item">
+                  <span>Targeting</span>
+                  <strong>1</strong>
+                  <p>ICP truth exists.</p>
+                </div>
+                <div class="proof-item">
+                  <span>Pipeline</span>
+                  <strong>69</strong>
+                  <p>Deals are real enough to steer.</p>
+                </div>
+                <div class="proof-item">
+                  <span>Signals</span>
+                  <strong>11</strong>
+                  <p>Research is live.</p>
+                </div>
+                <div class="proof-item">
+                  <span>Motion</span>
+                  <strong>0</strong>
+                  <p>The system still needs proof.</p>
+                </div>
+              </div>
+            </div>
+            <aside class="mini-rail">
+              <div class="mini-note">
+                <h3>What becomes real next</h3>
+                <strong>The first live touch.</strong>
+                <p>Once motion is logged, the command layer stops feeling hypothetical.</p>
+              </div>
+              <div class="mini-note">
+                <h3>Quiet proof</h3>
+                <p>Targeting exists. Pipeline exists. Signal exists. Motion does not.</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="frame">
+      <div class="frame-head">
+        <div class="frame-label">
+          <div class="eyebrow">Command Chamber</div>
+          <h2 class="frame-title">Dashboard Variant · Chamber One</h2>
+        </div>
+        <div class="pill blue">Spotlight</div>
+      </div>
+      <div class="frame-body">
+        <div class="surface">
+          <div class="thin-strip">
+            <div><strong>Command</strong> starts here. Rooms are earned after pressure becomes legible.</div>
+            <div class="health-chipset">
+              <span class="pill blue">Brief</span>
+              <span class="pill orange">Spotlight</span>
+              <span class="pill">Queue</span>
+            </div>
+          </div>
+
+          <div class="command-grid">
+            <section class="spotlight">
+              <div class="health-chipset">
+                <span class="pill orange">Now</span>
+                <span class="pill blue">Stable lead</span>
+              </div>
+              <h2>Recover Apex Fintech before the week drifts.</h2>
+              <p>No dated next step. Champion confidence is soft. The system should not need three cards and a side rail to tell you that.</p>
+              <div class="action-row">
+                <a class="button primary" href="#">Inspect</a>
+                <a class="button" href="#">Run Autopsy</a>
+                <a class="button" href="#">Open Deal</a>
+              </div>
+              <div class="health-bar">
+                <div class="metric">
+                  <span>Why here</span>
+                  <strong>Truth debt</strong>
+                  <p>The live rooms say this deal needs intervention now.</p>
+                </div>
+                <div class="metric">
+                  <span>Reward</span>
+                  <strong>See what compounded</strong>
+                  <p>The graph stays earned, not bolted into the page.</p>
+                </div>
+              </div>
+            </section>
+
+            <aside class="selector">
+              <div class="selector-item">
+                <div>
+                  <strong>Recover Apex Fintech</strong>
+                  <small>risk 100 · no next step</small>
+                </div>
+                <div class="rank">01</div>
+              </div>
+              <div class="selector-item">
+                <div>
+                  <strong>Northstar Health</strong>
+                  <small>proof thin · stage drift</small>
+                </div>
+                <div class="rank">02</div>
+              </div>
+              <div class="selector-item">
+                <div>
+                  <strong>VoltOps</strong>
+                  <small>signal hot · motion weak</small>
+                </div>
+                <div class="rank">03</div>
+              </div>
+              <div class="selector-item">
+                <div>
+                  <strong>Cascadia Health Network</strong>
+                  <small>heat real · action not logged</small>
+                </div>
+                <div class="rank">04</div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="frame">
+      <div class="frame-head">
+        <div class="frame-label">
+          <div class="eyebrow">Diagnosis Table</div>
+          <h2 class="frame-title">Future Autopsy Variant · Surgical Chamber</h2>
+        </div>
+        <div class="pill orange">Pipeline</div>
+      </div>
+      <div class="frame-body">
+        <div class="diagnosis-shell">
+          <div class="diagnosis-top">
+            <div class="thin-strip">
+              <div><strong>Meridian Logistics Global</strong> stays pinned as you enter Future Autopsy.</div>
+              <div class="health-chipset">
+                <span class="pill blue">Back to Deal Workspace</span>
+                <span class="pill">Open Spotlight</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="diagnosis-hero">
+            <div class="muted">Future Autopsy · 45 days out</div>
+            <h2>How you lose is already visible.</h2>
+            <p>The most likely failure is not abstract risk. It is negotiation pressure widening while owner clarity and the next step stay soft.</p>
+            <div class="action-row">
+              <a class="button primary" href="#">Run now</a>
+              <a class="button" href="#">Open Deal Workspace</a>
+            </div>
+          </div>
+
+          <div class="evidence-grid">
+            <section class="evidence-panel">
+              <h3>Evidence now</h3>
+              <ul>
+                <li>No dated next step is carrying the deal.</li>
+                <li>Executive alignment remains fuzzy.</li>
+                <li>Process is widening before control is locked.</li>
+              </ul>
+            </section>
+
+            <section class="evidence-panel next-move">
+              <h3>Corrective move</h3>
+              <strong>Force one changed move into the live deal today.</strong>
+              <p>Autopsy should end in a corrective action, not a clever diagnosis.</p>
+              <div class="health-chipset">
+                <span class="pill orange">Compounding</span>
+                <span class="pill blue">Discovery truth exists</span>
+              </div>
+              <div class="health-chipset">
+                <span class="pill">Still weak</span>
+                <span class="pill">No next step</span>
+                <span class="pill">Owner soft</span>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

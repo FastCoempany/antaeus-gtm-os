@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Dashboard System 01 Variants</title>
+  <style>
+    :root {
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --soft: #4f6b8b;
+      --muted: #7c90ad;
+      --cold: #9badc3;
+      --shadow-soft: 0 16px 44px rgba(10, 28, 64, 0.07);
+      --shadow-float: 0 28px 74px rgba(10, 28, 64, 0.14);
+      --paper-blue: linear-gradient(180deg, rgba(238,245,255,0.98) 0%, rgba(255,255,255,0.97) 100%);
+      --paper-orange: linear-gradient(180deg, rgba(255,243,234,0.98) 0%, rgba(255,255,255,0.98) 100%);
+      --paper-white: linear-gradient(180deg, rgba(248,251,255,0.98) 0%, rgba(255,255,255,0.98) 100%);
+      --glass: rgba(255,255,255,0.76);
+      --radius-pill: 999px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 26px 22px 90px;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, p { margin: 0; }
+    .page { max-width: 1580px; margin: 0 auto; display: grid; gap: 58px; }
+    .topline {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 700;
+      color: var(--muted); padding: 2px 2px 0;
+    }
+    .topline .accent { color: var(--orange); }
+    .system {
+      position: relative; display: grid; gap: 24px; min-height: 100vh; padding-top: 10px;
+    }
+    .system::before, .system::after {
+      content: ""; position: absolute; border-radius: 999px; pointer-events: none; z-index: -2;
+    }
+    .system::before {
+      width: 420px; height: 420px; left: 2%; top: 2%;
+      background: radial-gradient(circle, rgba(36,113,231,0.08), rgba(36,113,231,0.02) 58%, transparent 74%);
+    }
+    .system::after {
+      width: 320px; height: 320px; right: 8%; top: 8%;
+      background: radial-gradient(circle, rgba(230,112,30,0.08), rgba(230,112,30,0.02) 58%, transparent 74%);
+    }
+    .sys-head { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+    .sys-name { display: grid; gap: 6px; }
+    .label {
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+    }
+    .sys-name h2 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 34px; line-height: 0.95; letter-spacing: -0.05em;
+    }
+    .sys-name p { color: var(--soft); font-size: 15px; line-height: 1.4; max-width: 560px; }
+    .sys-body { display: grid; grid-template-columns: minmax(0, 1fr) 440px; gap: 38px; align-items: start; }
+    .main { display: grid; gap: 22px; align-content: start; }
+    .hero { display: grid; gap: 18px; }
+    .hero .eyebrow {
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); font-weight: 700;
+    }
+    .hero h1 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(66px, 8vw, 122px); line-height: 0.88; letter-spacing: -0.1em; max-width: 880px;
+    }
+    .actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .btn-primary, .btn-ghost, .text-link { font: inherit; border: 0; background: none; padding: 0; color: inherit; }
+    .btn-primary {
+      min-height: 50px; padding: 0 22px; border-radius: 18px; background: var(--orange); color: #fff; font-weight: 700;
+      box-shadow: 0 14px 28px rgba(230,112,30,0.22);
+    }
+    .btn-ghost {
+      min-height: 44px; padding: 0 18px; border-radius: 16px; background: rgba(255,255,255,0.82);
+      color: var(--navy); border: 1px solid rgba(10,28,64,0.12); font-weight: 700;
+    }
+    .text-link { color: var(--blue); font-weight: 700; }
+    .shelf {
+      width: fit-content; min-width: 240px; padding: 14px 18px; border-radius: 24px; background: var(--glass);
+      box-shadow: var(--shadow-soft); display: grid; gap: 6px;
+    }
+    .shelf .kicker {
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+    }
+    .shelf .copy {
+      font-size: 19px; line-height: 1.22; font-weight: 700; letter-spacing: -0.03em; max-width: 360px;
+    }
+    .carousel-shell { width: 500px; height: 166px; perspective: 1600px; }
+    .carousel { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+    .mode-card {
+      position: absolute; top: 16px; width: 210px; height: 128px; padding: 14px 16px 14px;
+      border-radius: 28px; border: 1px solid rgba(10,28,64,0.08); box-shadow: var(--shadow-soft);
+      overflow: hidden; transform-style: preserve-3d; backface-visibility: hidden;
+    }
+    .mode-card::before {
+      content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent 42%);
+      pointer-events: none;
+    }
+    .mode-card.brief { background: var(--paper-blue); }
+    .mode-card.spotlight { background: var(--paper-orange); }
+    .mode-card.queue { background: var(--paper-white); }
+    .mode-card .sub {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+      margin-bottom: 8px; white-space: nowrap;
+    }
+    .mode-card .count {
+      position: absolute; top: 12px; right: 16px; font-size: 24px; line-height: 1; letter-spacing: -0.08em;
+      color: rgba(10,28,64,0.28);
+    }
+    .mode-card h3 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 36px; line-height: 0.9; letter-spacing: -0.07em; max-width: 150px;
+    }
+    .mode-card .bar {
+      position: absolute; left: 16px; right: 16px; bottom: 14px; height: 8px; border-radius: var(--radius-pill);
+      background: rgba(10,28,64,0.08); overflow: hidden;
+    }
+    .mode-card .bar span { display: block; height: 100%; border-radius: inherit; }
+    .mode-card.brief .bar span { width: 36%; background: var(--blue); }
+    .mode-card.spotlight .bar span { width: 68%; background: var(--orange); }
+    .mode-card.queue .bar span { width: 48%; background: var(--navy); }
+    .mode-card.is-front { z-index: 6; transform: translate3d(148px, 0, 110px) rotateY(0deg) rotateX(8deg); box-shadow: var(--shadow-float); }
+    .mode-card.is-left { z-index: 3; transform: translate3d(0, 20px, 18px) rotateY(42deg) rotateX(8deg); opacity: 0.98; filter: saturate(0.96); }
+    .mode-card.is-right { z-index: 2; transform: translate3d(290px, 20px, 10px) rotateY(-42deg) rotateX(8deg); opacity: 0.98; filter: saturate(0.93); }
+    .legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .legend-item, .signal-token {
+      display: inline-flex; align-items: center; gap: 8px; min-height: 30px; padding: 0 12px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.9); border: 1px solid rgba(10,28,64,0.08); font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase; font-weight: 700; color: var(--muted); white-space: nowrap;
+    }
+    .signal-token.hot, .legend-item.hot { color: var(--orange); background: rgba(255,244,235,0.98); }
+    .signal-token.warm, .legend-item.warm { color: var(--blue); background: rgba(237,244,255,0.98); }
+    .signal-token.live, .legend-item.live { color: var(--green); background: rgba(238,248,242,0.98); }
+    .signal-token.cold, .legend-item.cold { color: var(--cold); background: rgba(248,251,255,0.98); }
+    .sig-mark { width: 12px; height: 12px; display: inline-grid; place-items: center; color: currentColor; }
+    .sig-mark svg {
+      width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .rail, .matrix, .slate-stack { display: grid; gap: 14px; align-content: start; }
+    .rail-item, .matrix-item {
+      position: relative; display: grid; gap: 12px; padding: 16px 18px 16px 22px; border-radius: 24px; background: var(--glass);
+      box-shadow: var(--shadow-soft); overflow: hidden;
+    }
+    .rail-item::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--blue);
+    }
+    .rail-item.hot::before { background: var(--orange); }
+    .rail-item.warm::before { background: var(--blue); }
+    .rail-item.live::before { background: var(--green); }
+    .rail-item.cold::before { background: var(--cold); }
+    .rail-top { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; }
+    .rail-top .name { font-size: 22px; line-height: 1.08; font-weight: 700; letter-spacing: -0.04em; }
+    .rail-top .amt {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 34px; line-height: 0.9; letter-spacing: -0.08em;
+      color: rgba(10,28,64,0.52);
+    }
+    .pressure-scale { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; align-items: center; }
+    .pressure-scale span { display: block; height: 6px; border-radius: 999px; background: rgba(10,28,64,0.08); }
+    .pressure-scale span.hot { background: var(--orange); }
+    .pressure-scale span.warm { background: var(--blue); }
+    .pressure-scale span.live { background: var(--green); }
+    .pressure-scale span.cold { background: var(--cold); }
+    .lane-grid, .register-grid, .docket-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start;
+    }
+    .lane, .register, .docket { min-width: 0; display: grid; gap: 5px; }
+    .lane + .lane, .register + .register, .docket + .docket {
+      border-left: 1px solid rgba(10,28,64,0.08); padding-left: 12px;
+    }
+    .lane-top, .register-top, .docket-top {
+      display: flex; align-items: center; gap: 7px; min-width: 0;
+    }
+    .lane-kicker, .register-kicker, .docket-kicker {
+      font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--muted); white-space: nowrap;
+    }
+    .lane-value, .register-value, .docket-value {
+      font-size: 17px; line-height: 1.05; font-weight: 700; letter-spacing: -0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .lane-note, .register-note, .docket-note {
+      font-size: 12px; line-height: 1.32; color: var(--soft); min-height: 30px;
+    }
+    .lane-rule, .register-rule, .docket-rule {
+      height: 4px; border-radius: 999px; background: rgba(10,28,64,0.08); overflow: hidden;
+    }
+    .lane-rule span, .register-rule span, .docket-rule span {
+      display: block; width: 100%; height: 100%; border-radius: inherit; background: currentColor;
+    }
+    .lane.hot, .register.hot, .docket.hot { color: var(--orange); }
+    .lane.warm, .register.warm, .docket.warm { color: var(--blue); }
+    .lane.live, .register.live, .docket.live { color: var(--green); }
+    .lane.cold, .register.cold, .docket.cold { color: var(--cold); }
+    .rail-summary, .register-summary, .docket-summary {
+      margin-top: 2px; font-size: 12px; line-height: 1.35; color: var(--soft);
+    }
+    .matrix-item { grid-template-columns: 96px 1fr; gap: 16px; align-items: stretch; padding: 14px; }
+    .matrix-core {
+      border-radius: 22px; display: grid; place-items: center; font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 32px;
+      line-height: 0.9; letter-spacing: -0.08em; color: #fff; overflow: hidden;
+    }
+    .matrix-core.hot { background: linear-gradient(180deg, #f28a31, #e6701e); }
+    .matrix-core.warm { background: linear-gradient(180deg, #3b86f5, #2471e7); }
+    .matrix-core.live { background: linear-gradient(180deg, #3b9260, #2d7a4b); }
+    .matrix-core.cold { background: linear-gradient(180deg, #9baac0, #7c90ad); }
+    .matrix-copy { display: grid; gap: 10px; align-content: center; }
+    .matrix-copy .name { font-size: 20px; line-height: 1.08; font-weight: 700; letter-spacing: -0.04em; }
+    .index-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; color: var(--soft); font-size: 13px; line-height: 1.35; }
+    .trace { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 2px; }
+    .trace span {
+      display: block; height: 10px; border-radius: 999px; background: rgba(10,28,64,0.08); overflow: hidden; position: relative;
+    }
+    .trace span::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: currentColor; transform-origin: left center; }
+    .trace .hot { color: var(--orange); }
+    .trace .warm { color: var(--blue); }
+    .trace .live { color: var(--green); }
+    .trace .cold { color: var(--cold); }
+    .trace .hot::after { transform: scaleX(0.92); }
+    .trace .warm::after { transform: scaleX(0.66); }
+    .trace .live::after { transform: scaleX(0.54); }
+    .trace .cold::after { transform: scaleX(0.32); }
+    .slate { display: grid; gap: 12px; padding: 18px 18px 14px; border-radius: 28px; background: rgba(12,26,58,0.92); color: #fff; box-shadow: var(--shadow-soft); }
+    .slate .rail-top .name, .slate .rail-top .amt { color: #fff; }
+    .slate .signal-token { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.08); }
+    .lexicon-dock { display: grid; gap: 10px; padding: 16px 18px; border-radius: 24px; background: var(--glass); box-shadow: var(--shadow-soft); margin-bottom: 6px; }
+    .lexicon-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .lexicon-item { display: grid; justify-items: start; gap: 8px; padding: 10px; border-radius: 18px; background: rgba(255,255,255,0.68); }
+    .lexicon-box {
+      width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; border: 1px solid rgba(10,28,64,0.06);
+      box-shadow: var(--shadow-soft); color: var(--navy); background: rgba(255,255,255,0.92);
+    }
+    .lexicon-box.hot { color: var(--orange); background: rgba(255,244,235,0.98); }
+    .lexicon-box.warm { color: var(--blue); background: rgba(237,244,255,0.98); }
+    .lexicon-box.live { color: var(--green); background: rgba(238,248,242,0.98); }
+    .lexicon-box.cold { color: var(--cold); background: rgba(248,251,255,0.98); }
+    .lexicon-box svg {
+      width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .lexicon-item span { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    .page > section.system:nth-of-type(2),
+    .page > section.system:nth-of-type(3) { display: none; }
+    @media (max-width: 1180px) { .sys-body { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) {
+      body { padding: 18px 14px 48px; }
+      .hero h1 { font-size: 60px; }
+      .carousel-shell { width: 340px; height: 144px; }
+      .mode-card { width: 160px; height: 104px; padding: 12px 14px; }
+      .mode-card .sub { font-size: 8px; margin-bottom: 5px; }
+      .mode-card .count { font-size: 20px; top: 10px; right: 12px; }
+      .mode-card h3 { font-size: 28px; max-width: 110px; }
+      .mode-card .bar { left: 14px; right: 14px; bottom: 12px; height: 6px; }
+      .mode-card.is-front { transform: translate3d(92px, 0, 90px) rotateY(0deg) rotateX(8deg); }
+      .mode-card.is-left { transform: translate3d(0, 18px, 14px) rotateY(42deg) rotateX(8deg); }
+      .mode-card.is-right { transform: translate3d(180px, 18px, 8px) rotateY(-42deg) rotateX(8deg); }
+      .matrix-item { grid-template-columns: 1fr; }
+      .lexicon-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Dashboard system 01 variants</span>
+      <span>Antaeus</span>
+    </div>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="sys-name">
+          <div class="label">System 01A</div>
+          <h2>Structured signal lanes</h2>
+          <p>Keep the slimmer rail-item proportions, but swap the fake heat language for three fixed lanes: risk, proof, and motion.</p>
+        </div>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="carousel-shell"><div class="carousel">
+            <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+          </div></div>
+          <div class="hero"><div class="eyebrow">Spotlight</div><h1>Recover Apex Fintech before the week drifts.</h1></div>
+          <div class="legend">
+            <span class="legend-item hot"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>risk</span>
+            <span class="legend-item warm"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>proof</span>
+            <span class="legend-item live"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span>motion</span>
+          </div>
+          <div class="actions"><button class="btn-primary">Inspect</button><button class="btn-ghost">Run autopsy</button><button class="text-link">See what compounded</button></div>
+          <div class="shelf"><div class="kicker">Why this changes the mockup</div><div class="copy">The right column stops being editorial. It becomes a readable sign system.</div></div>
+        </section>
+        <aside class="rail">
+          <article class="rail-item hot">
+            <div class="rail-top"><div class="name">Apex Fintech</div><div class="amt">$140k</div></div>
+            <div class="lane-grid">
+              <div class="lane hot"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="lane-kicker">Risk</span></div><div class="lane-value">100</div><div class="lane-note">No dated next step.</div><div class="lane-rule"><span></span></div></div>
+              <div class="lane warm"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="lane-kicker">Proof</span></div><div class="lane-value">Fit</div><div class="lane-note">Case exists, still thin.</div><div class="lane-rule"><span></span></div></div>
+              <div class="lane cold"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="lane-kicker">Motion</span></div><div class="lane-value">47d</div><div class="lane-note">Nothing live has changed it.</div><div class="lane-rule"><span></span></div></div>
+            </div>
+            <div class="rail-summary">Proof exists, but the live account has drifted too long without a real move.</div>
+          </article>
+          <article class="rail-item warm">
+            <div class="rail-top"><div class="name">Northstar Health</div><div class="amt">$180k</div></div>
+            <div class="lane-grid">
+              <div class="lane hot"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="lane-kicker">Risk</span></div><div class="lane-value">Drift</div><div class="lane-note">Stage reads stronger than truth.</div><div class="lane-rule"><span></span></div></div>
+              <div class="lane warm"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="lane-kicker">Proof</span></div><div class="lane-value">Thin</div><div class="lane-note">Qualification is still soft.</div><div class="lane-rule"><span></span></div></div>
+              <div class="lane cold"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="lane-kicker">Motion</span></div><div class="lane-value">Owner</div><div class="lane-note">No one is carrying the fix.</div><div class="lane-rule"><span></span></div></div>
+            </div>
+            <div class="rail-summary">This one feels healthy until you see that the proof and the live owner layer are not aligned.</div>
+          </article>
+          <article class="rail-item warm">
+            <div class="rail-top"><div class="name">VoltOps</div><div class="amt">$95k</div></div>
+            <div class="lane-grid">
+              <div class="lane hot"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="lane-kicker">Risk</span></div><div class="lane-value">Gap</div><div class="lane-note">Heat has not become action.</div><div class="lane-rule"><span></span></div></div>
+              <div class="lane warm"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="lane-kicker">Proof</span></div><div class="lane-value">Cover</div><div class="lane-note">The case is incomplete.</div><div class="lane-rule"><span></span></div></div>
+              <div class="lane live"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="lane-kicker">Motion</span></div><div class="lane-value">Hot</div><div class="lane-note">Live account heat is real.</div><div class="lane-rule"><span></span></div></div>
+            </div>
+            <div class="rail-summary">This is not dead. It is simply failing to convert real signal into a tracked move.</div>
+          </article>
+          <article class="rail-item live">
+            <div class="rail-top"><div class="name">Cascadia Health Network</div><div class="amt">$120k</div></div>
+            <div class="lane-grid">
+              <div class="lane hot"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="lane-kicker">Risk</span></div><div class="lane-value">Log it</div><div class="lane-note">The move is not captured.</div><div class="lane-rule"><span></span></div></div>
+              <div class="lane warm"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="lane-kicker">Proof</span></div><div class="lane-value">$120k</div><div class="lane-note">Commercial shape is real.</div><div class="lane-rule"><span></span></div></div>
+              <div class="lane live"><div class="lane-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="lane-kicker">Motion</span></div><div class="lane-value">Ready</div><div class="lane-note">Warm enough to move now.</div><div class="lane-rule"><span></span></div></div>
+            </div>
+            <div class="rail-summary">The signal is real enough to act on, but the system is still behind what the room already knows.</div>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="sys-name">
+          <div class="label">System 01B</div>
+          <h2>Register field</h2>
+          <p>Keep the same slim bodies, but make each account read like a compact instrument register: three fixed stations and one quiet account summary.</p>
+        </div>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="carousel-shell"><div class="carousel">
+            <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+          </div></div>
+          <div class="hero"><div class="eyebrow">Spotlight</div><h1>Apex Fintech is where the three registers disagree.</h1></div>
+          <div class="actions"><button class="btn-primary">Inspect</button><button class="text-link">Run autopsy</button></div>
+          <div class="shelf"><div class="kicker">System logic</div><div class="copy">This version turns the same three truths into a tighter diagnostic register.</div></div>
+        </section>
+        <aside class="matrix">
+          <article class="matrix-item"><div class="matrix-core hot">100</div><div class="matrix-copy"><div class="name">Apex Fintech</div><div class="trace"><span class="hot"></span><span class="warm"></span><span class="cold"></span></div><div class="index-row">risk 100 · solution fit · 47d stale</div></div></article>
+          <article class="matrix-item"><div class="matrix-core warm">84</div><div class="matrix-copy"><div class="name">Northstar Health</div><div class="trace"><span class="warm"></span><span class="hot"></span><span class="cold"></span></div><div class="index-row">proof thin · stage drift · owner soft</div></div></article>
+          <article class="matrix-item"><div class="matrix-core warm">72</div><div class="matrix-copy"><div class="name">VoltOps</div><div class="trace"><span class="live"></span><span class="cold"></span><span class="cold"></span></div><div class="index-row">signal hot · motion weak · touch missing</div></div></article>
+          <article class="matrix-item"><div class="matrix-core live">69</div><div class="matrix-copy"><div class="name">Cascadia Health Network</div><div class="trace"><span class="live"></span><span class="hot"></span><span class="warm"></span></div><div class="index-row">heat real · action not logged · ready now</div></div></article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="sys-name">
+          <div class="label">System 03</div>
+          <h2>Taught Antaeus lexicon</h2>
+          <p>Teach the system deliberately: small lexicon dock, incremental repetition, then lean on the marks more than plain editorial text.</p>
+        </div>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="carousel-shell"><div class="carousel">
+            <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+          </div></div>
+          <div class="hero"><div class="eyebrow">Spotlight</div><h1>One account forward. Four signs behind it.</h1></div>
+          <div class="actions"><button class="btn-primary">Inspect</button><button class="btn-ghost">Open deal</button><button class="text-link">See what compounded</button></div>
+          <div class="shelf"><div class="kicker">Why this changes the mockup</div><div class="copy">This version explicitly teaches the symbol lexicon, then lets the right rail use it with less prose.</div></div>
+        </section>
+        <aside class="slate-stack">
+          <div class="lexicon-dock">
+            <div class="label">Lexicon</div>
+            <div class="lexicon-grid">
+              <div class="lexicon-item"><div class="lexicon-box hot"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></div><span>risk</span></div>
+              <div class="lexicon-item"><div class="lexicon-box warm"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></div><span>proof</span></div>
+              <div class="lexicon-item"><div class="lexicon-box live"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></div><span>heat</span></div>
+              <div class="lexicon-item"><div class="lexicon-box cold"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></div><span>stale</span></div>
+            </div>
+          </div>
+          <article class="slate"><div class="rail-top"><div class="name">Apex Fintech</div><div class="amt">$140k</div></div><div class="legend"><span class="signal-token hot"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>100</span><span class="signal-token warm"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>fit</span><span class="signal-token cold"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>47d</span></div></article>
+          <article class="slate"><div class="rail-top"><div class="name">Northstar Health</div><div class="amt">$180k</div></div><div class="legend"><span class="signal-token warm"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>thin</span><span class="signal-token hot"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>drift</span><span class="signal-token cold"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>soft</span></div></article>
+          <article class="slate"><div class="rail-top"><div class="name">VoltOps</div><div class="amt">$95k</div></div><div class="legend"><span class="signal-token live"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span>hot</span><span class="signal-token cold"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>weak</span><span class="signal-token cold"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>miss</span></div></article>
+          <article class="slate"><div class="rail-top"><div class="name">Cascadia Health Network</div><div class="amt">$120k</div></div><div class="legend"><span class="signal-token live"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span>real</span><span class="signal-token hot"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M6 18L18 6"></path><path d="M12 6h6v6"></path></svg></span>gap</span><span class="signal-token warm"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M6 18L18 6"></path><path d="M12 6h6v6"></path></svg></span>now</span></div></article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="sys-name">
+          <div class="label">System 01B</div>
+          <h2>Register field</h2>
+          <p>Keep the same slim bodies, but make each account read like a compact instrument register: three fixed stations and one quiet account summary.</p>
+        </div>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="carousel-shell"><div class="carousel">
+            <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+          </div></div>
+          <div class="hero"><div class="eyebrow">Spotlight</div><h1>Apex Fintech is where the three registers disagree.</h1></div>
+          <div class="actions"><button class="btn-primary">Inspect</button><button class="text-link">Run autopsy</button></div>
+          <div class="shelf"><div class="kicker">System logic</div><div class="copy">This version turns the same three truths into a tighter diagnostic register.</div></div>
+        </section>
+        <aside class="rail">
+          <article class="rail-item hot"><div class="rail-top"><div class="name">Apex Fintech</div><div class="amt">$140k</div></div><div class="register-grid"><div class="register hot"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="register-kicker">Risk</span></div><div class="register-value">100</div><div class="register-note">No dated next step.</div><div class="register-rule"><span></span></div></div><div class="register warm"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="register-kicker">Proof</span></div><div class="register-value">Fit</div><div class="register-note">Case exists, still thin.</div><div class="register-rule"><span></span></div></div><div class="register cold"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="register-kicker">Motion</span></div><div class="register-value">47d</div><div class="register-note">Nothing live has changed it.</div><div class="register-rule"><span></span></div></div></div><div class="register-summary">The account wins the register because all three stations are pulling in the wrong direction at once.</div></article>
+          <article class="rail-item warm"><div class="rail-top"><div class="name">Northstar Health</div><div class="amt">$180k</div></div><div class="register-grid"><div class="register hot"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="register-kicker">Risk</span></div><div class="register-value">Drift</div><div class="register-note">Stage outruns truth.</div><div class="register-rule"><span></span></div></div><div class="register warm"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="register-kicker">Proof</span></div><div class="register-value">Thin</div><div class="register-note">Qualification still weak.</div><div class="register-rule"><span></span></div></div><div class="register cold"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="register-kicker">Motion</span></div><div class="register-value">Owner</div><div class="register-note">Fix has no carrier.</div><div class="register-rule"><span></span></div></div></div><div class="register-summary">This one is deceptive: better-looking than it deserves, because the owner layer is still empty.</div></article>
+          <article class="rail-item warm"><div class="rail-top"><div class="name">VoltOps</div><div class="amt">$95k</div></div><div class="register-grid"><div class="register hot"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="register-kicker">Risk</span></div><div class="register-value">Gap</div><div class="register-note">Action is lagging.</div><div class="register-rule"><span></span></div></div><div class="register warm"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="register-kicker">Proof</span></div><div class="register-value">Cover</div><div class="register-note">Case not complete.</div><div class="register-rule"><span></span></div></div><div class="register live"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="register-kicker">Motion</span></div><div class="register-value">Hot</div><div class="register-note">Live heat exists.</div><div class="register-rule"><span></span></div></div></div><div class="register-summary">This is a conversion problem, not an interest problem.</div></article>
+          <article class="rail-item live"><div class="rail-top"><div class="name">Cascadia Health Network</div><div class="amt">$120k</div></div><div class="register-grid"><div class="register hot"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="register-kicker">Risk</span></div><div class="register-value">Log it</div><div class="register-note">System is behind reality.</div><div class="register-rule"><span></span></div></div><div class="register warm"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="register-kicker">Proof</span></div><div class="register-value">$120k</div><div class="register-note">Commercial shape is real.</div><div class="register-rule"><span></span></div></div><div class="register live"><div class="register-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="register-kicker">Motion</span></div><div class="register-value">Ready</div><div class="register-note">Warm enough to move.</div><div class="register-rule"><span></span></div></div></div><div class="register-summary">The point here is that the heat is real and the system just hasn’t fully caught up yet.</div></article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="system">
+      <div class="sys-head">
+        <div class="sys-name">
+          <div class="label">System 01C</div>
+          <h2>Command docket</h2>
+          <p>Same slim bodies again, but the signal syntax becomes even harder-edged: account first, then a compact docket of three fixed stations.</p>
+        </div>
+      </div>
+      <div class="sys-body">
+        <section class="main">
+          <div class="carousel-shell"><div class="carousel">
+            <article class="mode-card brief is-left"><div class="sub">summary pressure</div><div class="count">01</div><h3>Brief</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card spotlight is-front"><div class="sub">one object forward</div><div class="count">02</div><h3>Spotlight</h3><div class="bar"><span></span></div></article>
+            <article class="mode-card queue is-right"><div class="sub">ranked order visible</div><div class="count">03</div><h3>Queue</h3><div class="bar"><span></span></div></article>
+          </div></div>
+          <div class="hero"><div class="eyebrow">Spotlight</div><h1>Apex Fintech belongs in a command docket, not an editorial card.</h1></div>
+          <div class="actions"><button class="btn-primary">Inspect</button><button class="btn-ghost">Open deal</button><button class="text-link">Run autopsy</button></div>
+          <div class="shelf"><div class="kicker">System logic</div><div class="copy">This version reads the rail like a concise operating docket: fixed stations, harder labels, less softness.</div></div>
+        </section>
+        <aside class="rail">
+          <article class="rail-item hot"><div class="rail-top"><div class="name">Apex Fintech</div><div class="amt">$140k</div></div><div class="docket-grid"><div class="docket hot"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="docket-kicker">Risk</span></div><div class="docket-value">100</div><div class="docket-note">No dated step.</div><div class="docket-rule"><span></span></div></div><div class="docket warm"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="docket-kicker">Proof</span></div><div class="docket-value">Fit</div><div class="docket-note">Still thin.</div><div class="docket-rule"><span></span></div></div><div class="docket cold"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="docket-kicker">Motion</span></div><div class="docket-value">47d</div><div class="docket-note">No change logged.</div><div class="docket-rule"><span></span></div></div></div><div class="docket-summary">The account is not first because it is biggest. It is first because all three stations remain unresolved.</div></article>
+          <article class="rail-item warm"><div class="rail-top"><div class="name">Northstar Health</div><div class="amt">$180k</div></div><div class="docket-grid"><div class="docket hot"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="docket-kicker">Risk</span></div><div class="docket-value">Drift</div><div class="docket-note">Stage overstated.</div><div class="docket-rule"><span></span></div></div><div class="docket warm"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="docket-kicker">Proof</span></div><div class="docket-value">Thin</div><div class="docket-note">Case incomplete.</div><div class="docket-rule"><span></span></div></div><div class="docket cold"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span><span class="docket-kicker">Motion</span></div><div class="docket-value">Owner</div><div class="docket-note">No carrier.</div><div class="docket-rule"><span></span></div></div></div><div class="docket-summary">A stronger-looking deal than it deserves because the proof and owner signals are misaligned.</div></article>
+          <article class="rail-item warm"><div class="rail-top"><div class="name">VoltOps</div><div class="amt">$95k</div></div><div class="docket-grid"><div class="docket hot"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="docket-kicker">Risk</span></div><div class="docket-value">Gap</div><div class="docket-note">Action lags.</div><div class="docket-rule"><span></span></div></div><div class="docket warm"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="docket-kicker">Proof</span></div><div class="docket-value">Cover</div><div class="docket-note">Case partial.</div><div class="docket-rule"><span></span></div></div><div class="docket live"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="docket-kicker">Motion</span></div><div class="docket-value">Hot</div><div class="docket-note">Heat is real.</div><div class="docket-rule"><span></span></div></div></div><div class="docket-summary">The room says this is alive. The system says it still lacks a corresponding move.</div></article>
+          <article class="rail-item live"><div class="rail-top"><div class="name">Cascadia Health Network</div><div class="amt">$120k</div></div><div class="docket-grid"><div class="docket hot"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span><span class="docket-kicker">Risk</span></div><div class="docket-value">Log it</div><div class="docket-note">System lag.</div><div class="docket-rule"><span></span></div></div><div class="docket warm"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span><span class="docket-kicker">Proof</span></div><div class="docket-value">$120k</div><div class="docket-note">Case is real.</div><div class="docket-rule"><span></span></div></div><div class="docket live"><div class="docket-top"><span class="sig-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span class="docket-kicker">Motion</span></div><div class="docket-value">Ready</div><div class="docket-note">Move now.</div><div class="docket-rule"><span></span></div></div></div><div class="docket-summary">This one should look less distressed than the others, but still feel live and consequential.</div></article>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

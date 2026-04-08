@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Non-Verbal Visible Grammar Board</title>
+  <style>
+    :root {
+      --page: #f6f8fc;
+      --paper: rgba(255, 255, 255, 0.88);
+      --paper-solid: #ffffff;
+      --wash-blue: #edf4ff;
+      --wash-orange: #fff4eb;
+      --wash-green: #eef8f2;
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --soft: #46607f;
+      --muted: #7a8da8;
+      --line: rgba(10, 28, 64, 0.1);
+      --line-strong: rgba(10, 28, 64, 0.16);
+      --shadow-soft: 0 12px 30px rgba(10, 28, 64, 0.05);
+      --shadow-float: 0 24px 60px rgba(10, 28, 64, 0.08);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --content: 1440px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.06), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f3f7fc 100%);
+      color: var(--navy);
+      padding: 34px 24px 90px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: var(--content);
+      margin: 0 auto;
+      display: grid;
+      gap: 34px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      padding-bottom: 8px;
+    }
+
+    .eyebrow,
+    .label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .eyebrow { color: var(--orange); }
+    .label { color: var(--muted); }
+
+    h1, h2, h3, h4, p { margin: 0; }
+
+    h1, .display-sample, .object-sample {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 74px);
+      max-width: 980px;
+    }
+
+    .micro {
+      color: var(--soft);
+      font-size: 15px;
+      line-height: 1.4;
+      max-width: 620px;
+    }
+
+    .hero-lock {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.8);
+      box-shadow: var(--shadow-soft);
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .hero-lock span:last-child { color: var(--soft); }
+
+    .board {
+      display: grid;
+      gap: 22px;
+    }
+
+    .row {
+      display: grid;
+      gap: 22px;
+    }
+
+    .row.two { grid-template-columns: 1.25fr 0.75fr; }
+    .row.three { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .row.four { grid-template-columns: repeat(4, minmax(0,1fr)); }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid rgba(10,28,64,0.06);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(8px);
+      min-height: 180px;
+    }
+
+    .card.tight { min-height: 0; }
+
+    .plane {
+      position: relative;
+      min-height: 420px;
+      padding: 6px 0 0;
+      overflow: hidden;
+    }
+
+    .shape-a,
+    .shape-b,
+    .shape-c {
+      position: absolute;
+      z-index: -1;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .shape-a {
+      top: 20px;
+      right: 40px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(36,113,231,0.08), rgba(36,113,231,0.02) 56%, transparent 74%);
+    }
+
+    .shape-b {
+      top: 170px;
+      left: 42%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(230,112,30,0.07), rgba(230,112,30,0.02) 56%, transparent 76%);
+    }
+
+    .shape-c {
+      bottom: 26px;
+      left: 26px;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(45,122,75,0.05), rgba(45,122,75,0.02) 54%, transparent 74%);
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .meta-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .surface-name {
+      font-size: 28px;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(10,28,64,0.12);
+      background: rgba(255,255,255,0.82);
+      color: var(--soft);
+    }
+
+    .pill.orange { color: var(--orange); background: rgba(255,244,235,0.94); border-color: rgba(230,112,30,0.22); }
+    .pill.blue { color: var(--blue); background: rgba(237,244,255,0.94); border-color: rgba(36,113,231,0.22); }
+    .pill.green { color: var(--green); background: rgba(238,248,242,0.94); border-color: rgba(45,122,75,0.18); }
+
+    .rule-dots {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(10,28,64,0.14);
+    }
+
+    .dot.blue { background: var(--blue); }
+    .dot.orange { background: var(--orange); }
+    .dot.green { background: var(--green); }
+
+    .plane-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.72fr);
+      gap: 38px;
+      align-items: start;
+      padding-top: 26px;
+    }
+
+    .display-sample {
+      font-size: clamp(68px, 6vw, 104px);
+      max-width: 760px;
+    }
+
+    .body-sample {
+      margin-top: 18px;
+      max-width: 720px;
+      color: var(--soft);
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 14px 30px rgba(230,112,30,0.22);
+    }
+
+    .button.soft {
+      background: rgba(255,255,255,0.92);
+      color: var(--navy);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .inline-link {
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+    }
+
+    .shelf {
+      padding: 20px 22px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(237,244,255,0.96) 100%);
+      box-shadow: var(--shadow-float);
+      min-height: 150px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .shelf.orange {
+      background: linear-gradient(180deg, rgba(255,244,235,0.95) 0%, rgba(255,255,255,0.96) 100%);
+    }
+
+    .shelf h3 {
+      font-size: 30px;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+    }
+
+    .small-copy {
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    .ledger {
+      display: grid;
+      gap: 0;
+      padding-top: 4px;
+    }
+
+    .ledger-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: end;
+      padding: 16px 0;
+    }
+
+    .ledger-row + .ledger-row {
+      border-top: 1px solid rgba(10,28,64,0.08);
+    }
+
+    .ledger-row strong {
+      font-size: 24px;
+      letter-spacing: -0.05em;
+    }
+
+    .ledger-row p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .rank {
+      font-size: 42px;
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      color: var(--blue);
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .icon-tile {
+      display: grid;
+      gap: 12px;
+      justify-items: start;
+      align-content: start;
+    }
+
+    .glyph {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.82);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .glyph.orange { background: rgba(255,244,235,0.96); }
+    .glyph.blue { background: rgba(237,244,255,0.96); }
+    .glyph.green { background: rgba(238,248,242,0.96); }
+
+    .glyph svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--navy);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .glyph.orange svg { stroke: var(--orange); }
+    .glyph.blue svg { stroke: var(--blue); }
+    .glyph.green svg { stroke: var(--green); }
+
+    .tiny { color: var(--soft); font-size: 13px; line-height: 1.35; }
+
+    .mode-board {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.75fr) minmax(0, 1.1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .mode-stack {
+      position: relative;
+      width: 320px;
+      height: 78px;
+    }
+
+    .mode-pane {
+      position: absolute;
+      top: 0;
+      width: 134px;
+      height: 64px;
+      border-radius: 22px;
+      border: 1px solid rgba(10,28,64,0.14);
+      background: rgba(255,255,255,0.84);
+      color: var(--soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 8px 22px rgba(10,28,64,0.05);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+    }
+
+    .mode-pane[data-mode="brief"] { left: 0; z-index: 1; }
+    .mode-pane[data-mode="spotlight"] { left: 84px; z-index: 3; }
+    .mode-pane[data-mode="queue"] { left: 168px; z-index: 1; }
+
+    .mode-pane.active {
+      transform: translateY(-7px);
+      z-index: 5 !important;
+      background: rgba(255,255,255,0.98);
+      box-shadow: 0 20px 40px rgba(10,28,64,0.12);
+      color: var(--navy);
+      border-color: rgba(10,28,64,0.18);
+    }
+
+    .mode-pane.active.brief { background: rgba(237,244,255,0.98); color: var(--blue); border-color: rgba(36,113,231,0.22); }
+    .mode-pane.active.spotlight { background: rgba(255,244,235,0.98); color: var(--orange); border-color: rgba(230,112,30,0.22); }
+    .mode-pane.active.queue { background: rgba(255,255,255,0.98); color: var(--navy); }
+
+    .containment-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .containment {
+      min-height: 190px;
+      border-radius: 26px;
+      padding: 16px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      background: rgba(255,255,255,0.84);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .containment.wash { background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(237,244,255,0.94)); box-shadow: none; }
+    .containment.ghost { background: transparent; border: 1px dashed rgba(10,28,64,0.14); box-shadow: none; }
+
+    .mini-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .mini-box {
+      min-height: 34px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(10,28,64,0.08);
+    }
+
+    .crossed {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .crossed::after {
+      content: "";
+      position: absolute;
+      inset: 20px;
+      background: linear-gradient(135deg, transparent 47%, rgba(230,112,30,0.44) 48%, rgba(230,112,30,0.44) 52%, transparent 53%);
+      pointer-events: none;
+    }
+
+    .type-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.78fr);
+      gap: 28px;
+    }
+
+    .type-ladder {
+      display: grid;
+      gap: 16px;
+    }
+
+    .type-row {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .sample {
+      color: var(--navy);
+      letter-spacing: -0.05em;
+    }
+
+    .sample.display {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 84px;
+      line-height: 0.9;
+    }
+
+    .sample.object {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 52px;
+      line-height: 0.92;
+    }
+
+    .sample.section {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 0.98;
+    }
+
+    .sample.body {
+      font-size: 19px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    .sample.meta {
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1120px) {
+      .row.two,
+      .row.three,
+      .row.four,
+      .plane-body,
+      .mode-board,
+      .containment-row,
+      .type-board {
+        grid-template-columns: 1fr;
+      }
+
+      .icon-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Non-Verbal Visible Grammar Board</div>
+      <h1>Reduce visible burden, not room intelligence.</h1>
+      <div class="hero-lock"><strong>Rule</strong><span>rewrite the face, not the mind</span></div>
+    </section>
+
+    <section class="row two">
+      <div class="plane">
+        <div class="shape-a"></div>
+        <div class="shape-b"></div>
+        <div class="shape-c"></div>
+        <div class="meta-row">
+          <div class="meta-left">
+            <div class="eyebrow">Shell</div>
+            <div class="surface-name">Field · shelf · ledger</div>
+          </div>
+          <span class="pill orange">Spotlight</span>
+        </div>
+        <div class="plane-body">
+          <div>
+            <div class="display-sample">Recover Apex Fintech before the week drifts.</div>
+            <div class="actions">
+              <span class="button primary">Inspect</span>
+              <span class="inline-link">Run Autopsy</span>
+            </div>
+          </div>
+          <div>
+            <div class="shelf">
+              <div class="label">Why here</div>
+              <h3>Truth debt</h3>
+            </div>
+            <div class="ledger">
+              <div class="ledger-row">
+                <div>
+                  <strong>Recover Apex Fintech</strong>
+                  <p>Risk 100 · no next step</p>
+                </div>
+                <div class="rank">01</div>
+              </div>
+              <div class="ledger-row">
+                <div>
+                  <strong>Northstar Health</strong>
+                  <p>Proof thin · stage drift</p>
+                </div>
+                <div class="rank">02</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label">Lock</div>
+        <div class="rule-dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot orange"></span>
+        </div>
+        <div class="small-copy" style="margin-top:12px;">No page-as-card. No center hallway. One field. One earned shelf. One ledger edge.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Marks</div>
+          <h2>Object and state marks</h2>
+        </div>
+      </div>
+      <div class="icon-grid">
+        <div class="icon-tile">
+          <div class="glyph blue">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </div>
+          <div class="tiny">Signal</div>
+        </div>
+        <div class="icon-tile">
+          <div class="glyph orange">
+            <svg viewBox="0 0 24 24"><path d="M4 16l5-5 4 4 7-7"></path><path d="M14 8h6v6"></path></svg>
+          </div>
+          <div class="tiny">Motion</div>
+        </div>
+        <div class="icon-tile">
+          <div class="glyph">
+            <svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="2"></rect><path d="M8 6V4h8v2"></path></svg>
+          </div>
+          <div class="tiny">Deal</div>
+        </div>
+        <div class="icon-tile">
+          <div class="glyph green">
+            <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <div class="tiny">Healthy</div>
+        </div>
+        <div class="icon-tile">
+          <div class="glyph orange">
+            <svg viewBox="0 0 24 24"><path d="M12 3v10"></path><circle cx="12" cy="17" r="1"></circle><path d="M5.5 20h13"></path></svg>
+          </div>
+          <div class="tiny">Risk</div>
+        </div>
+        <div class="icon-tile">
+          <div class="glyph blue">
+            <svg viewBox="0 0 24 24"><path d="M7 7h10v10H7z"></path><path d="M4 4h10"></path><path d="M4 4v10"></path></svg>
+          </div>
+          <div class="tiny">Proof</div>
+        </div>
+        <div class="icon-tile">
+          <div class="glyph">
+            <svg viewBox="0 0 24 24"><path d="M6 12h12"></path><path d="M12 6v12"></path><circle cx="12" cy="12" r="9"></circle></svg>
+          </div>
+          <div class="tiny">Command</div>
+        </div>
+        <div class="icon-tile">
+          <div class="glyph orange">
+            <svg viewBox="0 0 24 24"><path d="M6 18l12-12"></path><path d="M9 6h9v9"></path></svg>
+          </div>
+          <div class="tiny">Next move</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row three">
+      <div class="card tight">
+        <div class="label">Action</div>
+        <div class="actions">
+          <span class="button primary">Run now</span>
+        </div>
+      </div>
+      <div class="card tight">
+        <div class="label">Support</div>
+        <div class="actions">
+          <span class="button soft">Open Deal Workspace</span>
+        </div>
+      </div>
+      <div class="card tight">
+        <div class="label">Inline</div>
+        <div class="actions">
+          <span class="inline-link">Back to Meridian Logistics Global</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Containment</div>
+          <h2>Open plane before box</h2>
+        </div>
+      </div>
+      <div class="containment-row">
+        <div class="containment">
+          <div class="label">Open plane</div>
+          <div class="display-sample" style="font-size:42px;">Field</div>
+        </div>
+        <div class="containment">
+          <div class="label">Shelf</div>
+          <div class="shelf orange" style="min-height:110px;">
+            <h3>Earned emphasis</h3>
+          </div>
+        </div>
+        <div class="containment wash">
+          <div class="label">Wash</div>
+          <div class="small-copy">Quiet support</div>
+        </div>
+        <div class="containment ghost crossed">
+          <div class="label">Rejected</div>
+          <div class="mini-stack">
+            <div class="mini-box"></div>
+            <div class="mini-box"></div>
+            <div class="mini-box"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Mode</div>
+          <h2>Stacked lenses</h2>
+        </div>
+      </div>
+      <div class="mode-board">
+        <div>
+          <div class="mode-stack" id="modeStack">
+            <div class="mode-pane brief" data-mode="brief">Brief</div>
+            <div class="mode-pane spotlight active" data-mode="spotlight">Spotlight</div>
+            <div class="mode-pane queue" data-mode="queue">Queue</div>
+          </div>
+        </div>
+        <div class="card" id="modeReadout">
+          <div class="label">Readout</div>
+          <div class="small-copy" id="modeText">One object forward. Other modes still visible behind it.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <div class="eyebrow">Type</div>
+          <h2>One voice</h2>
+        </div>
+      </div>
+      <div class="type-board">
+        <div class="type-ladder">
+          <div class="type-row">
+            <div class="label">Display</div>
+            <div class="sample display">How you lose is already visible.</div>
+          </div>
+          <div class="type-row">
+            <div class="label">Object</div>
+            <div class="sample object">Recover Apex Fintech before the week drifts.</div>
+          </div>
+          <div class="type-row">
+            <div class="label">Section</div>
+            <div class="sample section">Force one changed move into the live deal today.</div>
+          </div>
+          <div class="type-row">
+            <div class="label">Body</div>
+            <div class="sample body">Support text stays subordinate to the object and the move.</div>
+          </div>
+          <div class="type-row">
+            <div class="label">Meta</div>
+            <div class="sample meta">Risk 62 · Pipeline · 45 days out</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="label">Lock</div>
+          <div class="small-copy">Display rare. Object title carries authority. Body only one readable size. Metadata one uppercase system.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var panes = Array.prototype.slice.call(document.querySelectorAll('.mode-pane'));
+      var modeText = document.getElementById('modeText');
+      var copy = {
+        brief: 'Fast summary. Low burden. Severe note, not tab strip.',
+        spotlight: 'One object forward. Other modes still visible behind it.',
+        queue: 'Explicit order. Same instrument. Different depth.'
+      };
+      function activate(mode) {
+        panes.forEach(function (pane) {
+          pane.classList.toggle('active', pane.getAttribute('data-mode') === mode);
+        });
+        modeText.textContent = copy[mode];
+      }
+      panes.forEach(function (pane) {
+        pane.addEventListener('click', function () {
+          activate(pane.getAttribute('data-mode'));
+        });
+      });
+      activate('spotlight');
+    })();
+  </script>
+</body>
+</html>

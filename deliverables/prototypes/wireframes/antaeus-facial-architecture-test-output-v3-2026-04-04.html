@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Facial Architecture Test Output V3</title>
+  <style>
+    :root {
+      --page: #f7f9fd;
+      --paper: #ffffff;
+      --paper-blue: #eef4ff;
+      --paper-orange: #fff4eb;
+      --paper-green: #eff8f2;
+      --line: rgba(10, 28, 64, 0.12);
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --text-soft: #46607f;
+      --text-muted: #7a8da8;
+      --shadow-soft: 0 18px 48px rgba(10, 28, 64, 0.05);
+      --shadow-float: 0 28px 70px rgba(10, 28, 64, 0.08);
+      --content: 1340px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.07), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.07), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f4f8fc 100%);
+      color: var(--navy);
+      -webkit-font-smoothing: antialiased;
+      padding: 36px 24px 90px;
+    }
+
+    .page {
+      max-width: var(--content);
+      margin: 0 auto;
+      display: grid;
+      gap: 120px;
+    }
+
+    .intro {
+      display: grid;
+      gap: 12px;
+      max-width: 920px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    .intro h1,
+    .surface h2 {
+      margin: 0;
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+    }
+
+    .intro h1 {
+      font-size: clamp(34px, 6vw, 68px);
+      max-width: 980px;
+    }
+
+    .intro p,
+    .surface-copy p,
+    .shelf p,
+    .ledger p,
+    .side p,
+    .list-block li,
+    .small-note {
+      color: var(--text-soft);
+    }
+
+    .intro p {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .surface {
+      position: relative;
+      padding: 10px 0 0;
+    }
+
+    .surface-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .surface-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(10,28,64,0.12);
+      background: rgba(255,255,255,0.8);
+      color: var(--text-soft);
+    }
+
+    .pill.blue { color: var(--blue); background: rgba(238,244,255,0.9); border-color: rgba(36,113,231,0.22); }
+    .pill.orange { color: var(--orange); background: rgba(255,244,235,0.92); border-color: rgba(230,112,30,0.22); }
+    .pill.green { color: var(--green); background: rgba(239,248,242,0.92); border-color: rgba(45,122,75,0.18); }
+
+    .surface-name {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+
+    .surface-body {
+      display: grid;
+      grid-template-columns: 1.25fr 0.72fr;
+      gap: 44px;
+      align-items: start;
+    }
+
+    .surface-copy {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .surface-copy h2 {
+      font-size: clamp(62px, 7vw, 102px);
+      max-width: 800px;
+    }
+
+    .surface-copy p {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.45;
+      max-width: 760px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 18px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      cursor: default;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 12px 30px rgba(230,112,30,0.22);
+    }
+
+    .button.soft {
+      background: rgba(255,255,255,0.92);
+      color: var(--navy);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .inline-link {
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .proof-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+      padding-top: 24px;
+    }
+
+    .metric {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .metric .label,
+    .ledger .label,
+    .shelf .label,
+    .list-block .label,
+    .side .label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .metric strong {
+      font-size: 34px;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+    }
+
+    .metric p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .shelf {
+      position: relative;
+      padding: 22px 24px;
+      border-radius: 26px;
+      background: rgba(255,255,255,0.9);
+      box-shadow: var(--shadow-float);
+    }
+
+    .shelf.orange { background: linear-gradient(180deg, rgba(255,244,235,0.94) 0%, rgba(255,255,255,0.96) 100%); }
+    .shelf.blue { background: linear-gradient(180deg, rgba(238,244,255,0.94) 0%, rgba(255,255,255,0.96) 100%); }
+
+    .shelf strong,
+    .side strong,
+    .ledger strong {
+      display: block;
+      margin: 8px 0 10px;
+      font-size: 30px;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+    }
+
+    .shelf p,
+    .side p,
+    .ledger p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .welcome-shape,
+    .command-shape,
+    .diagnosis-shape {
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 999px;
+      filter: blur(0.2px);
+    }
+
+    .welcome-shape {
+      top: 80px;
+      right: 40px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(36,113,231,0.08) 0%, rgba(36,113,231,0.02) 54%, transparent 72%);
+    }
+
+    .command-shape {
+      top: 110px;
+      left: 42%;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(230,112,30,0.08) 0%, rgba(36,113,231,0.03) 48%, transparent 72%);
+    }
+
+    .diagnosis-shape {
+      top: 90px;
+      right: 18%;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(36,113,231,0.06) 0%, rgba(10,28,64,0.03) 58%, transparent 76%);
+    }
+
+    .ledger {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      padding-left: 14px;
+    }
+
+    .ledger-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+    }
+
+    .ledger-row .rank {
+      font-size: 44px;
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      color: var(--blue);
+    }
+
+    .ledger-row + .ledger-row {
+      padding-top: 18px;
+      border-top: 1px solid rgba(10,28,64,0.08);
+    }
+
+    .command-aux {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 22px;
+    }
+
+    .small-note {
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 38px;
+      align-items: start;
+    }
+
+    .list-block {
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-block ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-soft);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .list-block li + li { margin-top: 8px; }
+
+    .diag-secondary {
+      display: grid;
+      gap: 20px;
+      align-content: start;
+      padding-top: 16px;
+    }
+
+    .diag-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .wash {
+      padding: 18px 20px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(237,244,255,0.9) 100%);
+    }
+
+    .wash strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 28px;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+    }
+
+    .wash p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 1020px) {
+      .surface-body,
+      .diag-grid,
+      .proof-row,
+      .command-aux {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <div class="eyebrow">Facial Architecture Test Output · V3</div>
+      <h1>Open field. Layered shelves. Ledger edge. Fewer lines. Fewer boxes. Less “app UI.”</h1>
+      <p>These are still three separate page examples, but now the composition is intentionally freer: no giant parent card, fewer hard dividers, no equal-width action pills as the default, and only earned containment.</p>
+    </section>
+
+    <section class="surface">
+      <div class="welcome-shape"></div>
+      <div class="surface-meta">
+        <div class="surface-meta-left">
+          <div class="eyebrow">Threshold</div>
+          <div class="surface-name">Welcome · Open Threshold</div>
+        </div>
+        <span class="pill green">Week 1</span>
+      </div>
+      <div class="surface-body">
+        <div class="surface-copy">
+          <div class="small-note">Welcome stops behaving like a corridor and starts behaving like the threshold into real operating work.</div>
+          <h2>You are moving from setup into a real operating system.</h2>
+          <p>One live motion is what turns this from a promising workspace into something your first serious hire could inherit without decoding your memory.</p>
+          <div class="actions">
+            <a class="button primary">Log the first live motion</a>
+            <a class="button soft">Open Spotlight</a>
+            <a class="inline-link" href="#">See the operating rhythm</a>
+          </div>
+          <div class="proof-row">
+            <div class="metric">
+              <span class="label">Targeting</span>
+              <strong>1</strong>
+              <p>ICP truth exists.</p>
+            </div>
+            <div class="metric">
+              <span class="label">Pipeline</span>
+              <strong>69</strong>
+              <p>Deals are live enough to steer.</p>
+            </div>
+            <div class="metric">
+              <span class="label">Signals</span>
+              <strong>11</strong>
+              <p>Research is no longer thin.</p>
+            </div>
+            <div class="metric">
+              <span class="label">Motion</span>
+              <strong>0</strong>
+              <p>The app still needs proof.</p>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="shelf blue">
+            <span class="label">What becomes real next</span>
+            <strong>The first live touch.</strong>
+            <p>Motion is the threshold proof that makes the rest of the app believable.</p>
+          </div>
+          <div class="side">
+            <span class="label">Quiet proof</span>
+            <p>Targeting, pipeline, and signal are already live. Motion is the last missing public proof.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="surface">
+      <div class="command-shape"></div>
+      <div class="surface-meta">
+        <div class="surface-meta-left">
+          <div class="eyebrow">Command Chamber</div>
+          <div class="surface-name">Dashboard · Open Ledger</div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span class="pill blue">Brief</span>
+          <span class="pill orange">Spotlight</span>
+          <span class="pill">Queue</span>
+        </div>
+      </div>
+      <div class="surface-body">
+        <div class="surface-copy">
+          <div class="small-note">Command gets the open field. Ranked work sits on a ledger edge, not inside a mini-card column.</div>
+          <h2>Recover Apex Fintech before the week drifts.</h2>
+          <p>No dated next step. Champion confidence is soft. The page should not need a hierarchy of boxes to say something this simple and severe.</p>
+          <div class="actions">
+            <a class="button primary">Inspect</a>
+            <a class="inline-link" href="#">Run Autopsy</a>
+            <a class="button soft">Open Deal</a>
+          </div>
+          <div class="command-aux">
+            <div class="metric">
+              <span class="label">Why here</span>
+              <strong>Truth debt</strong>
+              <p>The live rooms say this deal needs intervention now.</p>
+            </div>
+            <div class="shelf orange">
+              <span class="label">Reward</span>
+              <strong>See what compounded</strong>
+              <p>The graph stays earned, not bolted into the page.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="ledger">
+          <div class="ledger-row">
+            <div>
+              <span class="label">01</span>
+              <strong>Recover Apex Fintech</strong>
+              <p>Risk 100 · no next step</p>
+            </div>
+            <div class="rank">01</div>
+          </div>
+          <div class="ledger-row">
+            <div>
+              <span class="label">02</span>
+              <strong>Northstar Health</strong>
+              <p>Proof thin · stage drift</p>
+            </div>
+            <div class="rank">02</div>
+          </div>
+          <div class="ledger-row">
+            <div>
+              <span class="label">03</span>
+              <strong>VoltOps</strong>
+              <p>Signal hot · motion weak</p>
+            </div>
+            <div class="rank">03</div>
+          </div>
+          <div class="ledger-row">
+            <div>
+              <span class="label">04</span>
+              <strong>Cascadia Health Network</strong>
+              <p>Heat real · action not logged</p>
+            </div>
+            <div class="rank">04</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="surface">
+      <div class="diagnosis-shape"></div>
+      <div class="surface-meta">
+        <div class="surface-meta-left">
+          <div class="eyebrow">Diagnosis Table</div>
+          <div class="surface-name">Future Autopsy · Chamber Cut</div>
+        </div>
+        <span class="pill orange">Pipeline</span>
+      </div>
+      <div class="diag-grid">
+        <div class="surface-copy">
+          <div class="small-note">Continuity becomes a thin sentence, not stacked chrome. Diagnosis gets the stage.</div>
+          <h2>How you lose is already visible.</h2>
+          <p>The most likely failure is not abstract risk. It is negotiation pressure widening while owner clarity and the next step stay soft.</p>
+          <div class="actions">
+            <a class="button primary">Run now</a>
+            <a class="button soft">Open Deal Workspace</a>
+            <a class="inline-link" href="#">Back to the deal</a>
+          </div>
+          <div class="diag-meta">
+            <span class="pill blue">Meridian Logistics Global</span>
+            <span class="pill">45 days out</span>
+            <span class="pill">Risk 62</span>
+          </div>
+          <div class="evidence">
+            <div class="list-block">
+              <span class="label">Evidence now</span>
+              <ul>
+                <li>No dated next step is carrying the deal.</li>
+                <li>Executive alignment remains fuzzy.</li>
+                <li>Process is widening before control is locked.</li>
+              </ul>
+            </div>
+            <div class="list-block">
+              <span class="label">Still weak</span>
+              <ul>
+                <li>Owner clarity is soft.</li>
+                <li>The pressure is visible but not corrected.</li>
+                <li>The deal still reads healthier than it is.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <aside class="diag-secondary">
+          <div class="shelf blue">
+            <span class="label">Corrective move</span>
+            <strong>Force one changed move into the live deal today.</strong>
+            <p>Autopsy should end in corrective motion, not a clever diagnosis.</p>
+          </div>
+          <div class="wash">
+            <span class="label">Compounding</span>
+            <strong>Discovery truth exists.</strong>
+            <p>The room already has enough truth to stop pretending this is only theoretical risk.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

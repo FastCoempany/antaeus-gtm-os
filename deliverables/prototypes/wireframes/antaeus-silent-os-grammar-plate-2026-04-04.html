@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Silent OS Grammar Plate</title>
+  <style>
+    :root {
+      --page: #f5f8fd;
+      --paper: rgba(255, 255, 255, 0.84);
+      --paper-strong: rgba(255, 255, 255, 0.94);
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --soft: #547091;
+      --muted: #7c90ad;
+      --line: rgba(10, 28, 64, 0.1);
+      --shadow-soft: 0 18px 48px rgba(10, 28, 64, 0.06);
+      --shadow-float: 0 26px 70px rgba(10, 28, 64, 0.12);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --content: 1520px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.07), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.06), transparent 26%),
+        linear-gradient(180deg, #fbfcff 0%, #f3f7fc 100%);
+      color: var(--navy);
+      padding: 28px 22px 72px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .page {
+      max-width: var(--content);
+      margin: 0 auto;
+      display: grid;
+      gap: 28px;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 4px 2px 0;
+    }
+
+    .topline .accent { color: var(--orange); }
+
+    .plate {
+      display: grid;
+      gap: 26px;
+    }
+
+    .band {
+      display: grid;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .band.top {
+      grid-template-columns: 1.15fr 0.72fr 0.72fr;
+    }
+
+    .band.lower {
+      grid-template-columns: 1.18fr 0.72fr;
+    }
+
+    .label {
+      margin-bottom: 12px;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .stage {
+      min-height: 290px;
+      position: relative;
+      perspective: 1600px;
+    }
+
+    .carousel-wrap {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      transform-style: preserve-3d;
+    }
+
+    .mode-card {
+      position: absolute;
+      top: 18px;
+      width: 260px;
+      height: 190px;
+      padding: 18px 20px;
+      border-radius: 28px;
+      border: 1px solid rgba(10, 28, 64, 0.08);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      transition:
+        transform 560ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 560ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 420ms ease,
+        filter 420ms ease;
+      transform-style: preserve-3d;
+      overflow: hidden;
+    }
+
+    .mode-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.32), transparent 36%);
+      pointer-events: none;
+    }
+
+    .mode-card.brief {
+      background: linear-gradient(180deg, rgba(235,244,255,0.98) 0%, rgba(255,255,255,0.97) 100%);
+    }
+
+    .mode-card.spotlight {
+      background: linear-gradient(180deg, rgba(255,243,234,0.99) 0%, rgba(255,255,255,0.98) 100%);
+    }
+
+    .mode-card.queue {
+      background: linear-gradient(180deg, rgba(247,250,255,0.98) 0%, rgba(255,255,255,0.98) 100%);
+    }
+
+    .mode-card h2 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 44px;
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      margin-bottom: 18px;
+    }
+
+    .mode-card .count {
+      position: absolute;
+      right: 20px;
+      top: 16px;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.08em;
+      color: rgba(10, 28, 64, 0.34);
+    }
+
+    .mode-card .tail {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 18px;
+      height: 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(10, 28, 64, 0.08);
+      overflow: hidden;
+    }
+
+    .mode-card .tail span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .mode-card.brief .tail span { width: 34%; background: var(--blue); }
+    .mode-card.spotlight .tail span { width: 64%; background: var(--orange); }
+    .mode-card.queue .tail span { width: 46%; background: var(--navy); }
+
+    .mode-card.is-front {
+      z-index: 5;
+      transform: translate3d(220px, 0, 160px) rotateY(0deg) rotateX(8deg);
+      box-shadow: var(--shadow-float);
+      opacity: 1;
+      filter: none;
+    }
+
+    .mode-card.is-left {
+      z-index: 2;
+      transform: translate3d(16px, 20px, 6px) rotateY(30deg) rotateX(8deg);
+      opacity: 0.96;
+      filter: saturate(0.94);
+    }
+
+    .mode-card.is-right {
+      z-index: 1;
+      transform: translate3d(418px, 18px, -8px) rotateY(-30deg) rotateX(8deg);
+      opacity: 0.94;
+      filter: saturate(0.9);
+    }
+
+    .readout {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+      padding-left: 8px;
+    }
+
+    .readout .head {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 22px;
+      letter-spacing: -0.05em;
+    }
+
+    .readout .line {
+      width: 160px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(36,113,231,0.36), rgba(230,112,30,0.36));
+    }
+
+    .readout .meta {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .specimen {
+      position: relative;
+      min-height: 290px;
+      border-radius: 36px;
+      background:
+        radial-gradient(circle at 10% 12%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 88% 16%, rgba(230,112,30,0.05), transparent 22%),
+        linear-gradient(180deg, rgba(255,255,255,0.54), rgba(255,255,255,0.18));
+      overflow: hidden;
+      padding: 18px 20px 24px;
+    }
+
+    .specimen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+      pointer-events: none;
+    }
+
+    .specimen .shelf {
+      width: fit-content;
+      min-width: 180px;
+      min-height: 54px;
+      padding: 12px 18px;
+      border-radius: 24px;
+      background: var(--paper-strong);
+      box-shadow: var(--shadow-soft);
+      font-size: 14px;
+      color: var(--soft);
+    }
+
+    .specimen .shelf strong {
+      display: block;
+      color: var(--navy);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .specimen .field {
+      margin-top: 28px;
+      width: min(520px, 80%);
+    }
+
+    .field .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .field h1 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(68px, 7vw, 106px);
+      line-height: 0.88;
+      letter-spacing: -0.09em;
+      margin-bottom: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .btn-primary,
+    .btn-ghost,
+    .text-link,
+    .chip {
+      font: inherit;
+      border: 0;
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .btn-primary {
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 18px;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 16px 30px rgba(230,112,30,0.22);
+    }
+
+    .btn-ghost {
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.84);
+      color: var(--navy);
+      border: 1px solid rgba(10,28,64,0.12);
+      font-weight: 700;
+    }
+
+    .text-link {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 12px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: 1px solid rgba(10,28,64,0.08);
+      background: rgba(255,255,255,0.78);
+      color: var(--muted);
+    }
+
+    .chip.blue {
+      color: var(--blue);
+      background: rgba(237,244,255,0.98);
+      border-color: rgba(36,113,231,0.18);
+    }
+
+    .chip.orange {
+      color: var(--orange);
+      background: rgba(255,244,235,0.98);
+      border-color: rgba(230,112,30,0.18);
+    }
+
+    .ledger {
+      position: absolute;
+      right: 34px;
+      top: 50px;
+      width: 340px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .row-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+      padding: 0 0 14px;
+      border-bottom: 1px solid rgba(10, 28, 64, 0.08);
+    }
+
+    .row-item .name {
+      font-size: 20px;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+
+    .row-item .meta {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .row-item .num {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 48px;
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      color: var(--blue);
+    }
+
+    .grid-two {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .plate-card {
+      min-height: 260px;
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,0.56);
+      box-shadow: var(--shadow-soft);
+      padding: 20px;
+    }
+
+    .marks {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .mark-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(10,28,64,0.08);
+      box-shadow: var(--shadow-soft);
+      color: var(--navy);
+    }
+
+    .mark svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mark.blue { color: var(--blue); background: rgba(237,244,255,0.98); }
+    .mark.orange { color: var(--orange); background: rgba(255,244,235,0.98); }
+    .mark.green { color: var(--green); background: rgba(238,248,242,0.98); }
+
+    .swatch {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .swatch .tile {
+      height: 88px;
+      border-radius: 22px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(10,28,64,0.06);
+    }
+
+    .tile.navy { background: var(--navy); }
+    .tile.blue { background: linear-gradient(180deg, #2e7cf0, #2471e7); }
+    .tile.orange { background: linear-gradient(180deg, #ef862e, #e6701e); }
+
+    .containment {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .containment .stack {
+      min-height: 230px;
+      position: relative;
+      border-radius: 30px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 16% 18%, rgba(36,113,231,0.06), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
+    }
+
+    .stack .wash {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 72% 72%, rgba(230,112,30,0.07), transparent 18%),
+        radial-gradient(circle at 18% 76%, rgba(45,122,75,0.05), transparent 18%);
+    }
+
+    .stack .shelf-a,
+    .stack .shelf-b,
+    .stack .ledge {
+      position: absolute;
+      background: rgba(255,255,255,0.88);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(10,28,64,0.06);
+    }
+
+    .stack .shelf-a {
+      top: 26px;
+      left: 24px;
+      width: 186px;
+      height: 54px;
+      border-radius: 22px;
+    }
+
+    .stack .shelf-b {
+      top: 92px;
+      right: 24px;
+      width: 150px;
+      height: 94px;
+      border-radius: 24px;
+    }
+
+    .stack .ledge {
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      height: 88px;
+      border-radius: 28px;
+    }
+
+    .stack .ghost-no {
+      position: absolute;
+      top: 26px;
+      right: 24px;
+      width: 102px;
+      height: 102px;
+      border-radius: 30px;
+      border: 2px dashed rgba(10,28,64,0.16);
+      opacity: 0.4;
+    }
+
+    .stack .ghost-no::before,
+    .stack .ghost-no::after {
+      content: "";
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      top: 49px;
+      height: 2px;
+      background: rgba(10,28,64,0.2);
+      transform-origin: center;
+    }
+
+    .stack .ghost-no::before { transform: rotate(45deg); }
+    .stack .ghost-no::after { transform: rotate(-45deg); }
+
+    .type-plate {
+      display: grid;
+      gap: 20px;
+      align-content: start;
+      min-height: 100%;
+    }
+
+    .type-plate .t1,
+    .type-plate .t2,
+    .type-plate .t3 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+    }
+
+    .type-plate .t1 { font-size: clamp(56px, 5vw, 88px); }
+    .type-plate .t2 { font-size: clamp(34px, 3vw, 52px); }
+    .type-plate .t3 { font-size: clamp(22px, 2vw, 32px); font-weight: 700; }
+    .type-plate .t4 { font-size: 18px; color: var(--soft); line-height: 1.45; }
+    .type-plate .t5 {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .strip {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    @media (max-width: 1180px) {
+      .band.top,
+      .band.lower {
+        grid-template-columns: 1fr;
+      }
+
+      .carousel-wrap {
+        height: 270px;
+      }
+
+      .mode-card.is-front {
+        transform: translate3d(180px, 0, 150px) rotateY(0deg) rotateX(8deg);
+      }
+
+      .mode-card.is-left {
+        transform: translate3d(0, 20px, 0) rotateY(30deg) rotateX(8deg);
+      }
+
+      .mode-card.is-right {
+        transform: translate3d(360px, 18px, -6px) rotateY(-30deg) rotateX(8deg);
+      }
+
+      .ledger {
+        position: static;
+        width: 100%;
+        margin-top: 30px;
+      }
+
+      .field {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 20px 14px 48px; }
+
+      .mode-card {
+        width: 220px;
+        height: 170px;
+      }
+
+      .mode-card h2 { font-size: 36px; }
+
+      .mode-card.is-front {
+        transform: translate3d(84px, 0, 130px) rotateY(0deg) rotateX(8deg);
+      }
+
+      .mode-card.is-left {
+        transform: translate3d(-18px, 20px, 0) rotateY(28deg) rotateX(8deg);
+      }
+
+      .mode-card.is-right {
+        transform: translate3d(190px, 18px, -8px) rotateY(-28deg) rotateX(8deg);
+      }
+
+      .specimen { padding: 18px 16px 20px; }
+      .field h1 { font-size: 66px; }
+      .grid-two { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Silent OS Grammar Plate</span>
+      <span>Antaeus</span>
+    </div>
+
+    <section class="plate">
+      <div class="band top">
+        <section>
+          <div class="label">Mode</div>
+          <div class="stage">
+            <div class="carousel-wrap" id="carousel">
+              <article class="mode-card brief is-left" data-mode="brief">
+                <div class="count">01</div>
+                <h2>Brief</h2>
+                <div class="tail"><span></span></div>
+              </article>
+              <article class="mode-card spotlight is-front" data-mode="spotlight">
+                <div class="count">02</div>
+                <h2>Spotlight</h2>
+                <div class="tail"><span></span></div>
+              </article>
+              <article class="mode-card queue is-right" data-mode="queue">
+                <div class="count">03</div>
+                <h2>Queue</h2>
+                <div class="tail"><span></span></div>
+              </article>
+            </div>
+            <div class="readout" id="readout">
+              <div class="head">Spotlight</div>
+              <div class="line"></div>
+              <div class="meta">one object forward</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="plate-card">
+          <div class="label">Marks</div>
+          <div class="marks">
+            <div class="mark-row">
+              <div class="mark blue">
+                <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>
+              </div>
+              <div class="mark orange">
+                <svg viewBox="0 0 24 24"><path d="M4 18l8-12 8 12"/></svg>
+              </div>
+              <div class="mark">
+                <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+              </div>
+              <div class="mark green">
+                <svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>
+              </div>
+            </div>
+            <div class="mark-row">
+              <div class="mark">
+                <svg viewBox="0 0 24 24"><path d="M12 4l7 4v8l-7 4-7-4V8z"/></svg>
+              </div>
+              <div class="mark blue">
+                <svg viewBox="0 0 24 24"><path d="M4 12h16M12 4v16"/></svg>
+              </div>
+              <div class="mark orange">
+                <svg viewBox="0 0 24 24"><path d="M12 4l8 8-8 8-8-8z"/></svg>
+              </div>
+              <div class="mark">
+                <svg viewBox="0 0 24 24"><path d="M6 18L18 6M6 6h12v12"/></svg>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="tile navy"></div>
+              <div class="tile blue"></div>
+              <div class="tile orange"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="plate-card">
+          <div class="label">Actions</div>
+          <div class="type-plate" style="gap: 18px;">
+            <div class="strip">
+              <button class="btn-primary">Inspect</button>
+            </div>
+            <div class="strip">
+              <button class="btn-ghost">Open deal</button>
+              <button class="chip blue">risk 100</button>
+            </div>
+            <div class="strip">
+              <button class="text-link">Run autopsy</button>
+              <button class="text-link">See what compounded</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="band lower">
+        <section class="specimen">
+          <div class="shelf">
+            <strong>Field</strong>
+            open plane
+          </div>
+
+          <div class="field">
+            <div class="eyebrow">Spotlight</div>
+            <h1>Apex Fintech</h1>
+            <div class="actions">
+              <button class="btn-primary">Inspect</button>
+              <button class="text-link">Run autopsy</button>
+            </div>
+          </div>
+
+          <aside class="ledger">
+            <div class="row-item">
+              <div>
+                <div class="name">Apex Fintech</div>
+                <div class="meta">risk 100 · no next step</div>
+              </div>
+              <div class="num">01</div>
+            </div>
+            <div class="row-item">
+              <div>
+                <div class="name">Northstar Health</div>
+                <div class="meta">proof thin · stage drift</div>
+              </div>
+              <div class="num">02</div>
+            </div>
+          </aside>
+        </section>
+
+        <div class="grid-two">
+          <section class="plate-card containment">
+            <div class="label">Containment</div>
+            <div class="stack">
+              <div class="wash"></div>
+              <div class="shelf-a"></div>
+              <div class="shelf-b"></div>
+              <div class="ledge"></div>
+              <div class="ghost-no"></div>
+            </div>
+          </section>
+
+          <section class="plate-card type-plate">
+            <div class="label">Type</div>
+            <div class="t1">How you lose.</div>
+            <div class="t2">Apex Fintech</div>
+            <div class="t3">Force one changed move.</div>
+            <div class="t4">Support text stays quiet.</div>
+            <div class="t5">risk 62 · pipeline · 45 days out</div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const cards = Array.from(document.querySelectorAll(".mode-card"));
+      const readout = document.getElementById("readout");
+
+      const states = {
+        brief: { head: "Brief", meta: "pressure in summary" },
+        spotlight: { head: "Spotlight", meta: "one object forward" },
+        queue: { head: "Queue", meta: "ranked stack visible" }
+      };
+
+      function applyFront(mode) {
+        const order = {
+          brief: ["brief", "spotlight", "queue"],
+          spotlight: ["spotlight", "brief", "queue"],
+          queue: ["queue", "spotlight", "brief"]
+        }[mode];
+
+        cards.forEach((card) => {
+          const current = card.dataset.mode;
+          card.classList.remove("is-front", "is-left", "is-right");
+          if (current === order[0]) {
+            card.classList.add("is-front");
+          } else if (current === order[1]) {
+            card.classList.add("is-left");
+          } else {
+            card.classList.add("is-right");
+          }
+        });
+
+        readout.querySelector(".head").textContent = states[mode].head;
+        readout.querySelector(".meta").textContent = states[mode].meta;
+      }
+
+      cards.forEach((card) => {
+        card.addEventListener("click", () => applyFront(card.dataset.mode));
+      });
+    })();
+  </script>
+</body>
+</html>
