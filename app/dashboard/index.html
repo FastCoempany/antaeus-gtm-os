@@ -1281,29 +1281,235 @@
                 items: items.slice(0, 4)
             };
         }
-        function renderDashboardCommandMode(mode, delta) {
-            var copyMap = {
-                brief: 'Read the operating story before you choose the next move.',
-                spotlight: 'Put one object in the light and keep the rest secondary.',
-                queue: 'Run the work in order when the next sequence matters more than the whole board.'
-            };
-            return '<section class="cmd-mode-strip">' +
-                '<div class="cmd-mode-top">' +
-                    '<div class="shell-section-heading">' +
-                        '<div class="shell-section-kicker">Command modes</div>' +
-                        '<div class="shell-section-title">One urgency engine. Three render densities.</div>' +
-                        '<div class="cmd-mode-copy">' + escH(copyMap[mode] || copyMap.brief) + '</div>' +
-                    '</div>' +
-                    '<div class="cmd-mode-controls">' +
-                        '<button class="cmd-mode-btn' + (mode === 'brief' ? ' is-active' : '') + '" onclick="setDashboardCommandMode(\'brief\')">Brief</button>' +
-                        '<button class="cmd-mode-btn' + (mode === 'spotlight' ? ' is-active' : '') + '" onclick="setDashboardCommandMode(\'spotlight\')">Spotlight</button>' +
-                        '<button class="cmd-mode-btn' + (mode === 'queue' ? ' is-active' : '') + '" onclick="setDashboardCommandMode(\'queue\')">Queue</button>' +
-                    '</div>' +
+        function readDashboardSoftCutSignals(card) {
+            return card && card.rankingSignals && typeof card.rankingSignals === 'object'
+                ? card.rankingSignals
+                : {};
+        }
+        function parseDashboardSoftCutAmount(card) {
+            var signals = readDashboardSoftCutSignals(card);
+            var amount = Number(signals.amount || 0);
+            if (amount > 0) return amount;
+            var meta = Array.isArray(card && card.meta) ? card.meta : [];
+            for (var i = 0; i < meta.length; i++) {
+                var match = String(meta[i] || '').match(/\$[\d,.]+(?:k|m)?/i);
+                if (!match) continue;
+                var token = match[0].toLowerCase();
+                var numeric = parseFloat(token.replace(/[^0-9.]/g, '')) || 0;
+                if (token.indexOf('m') >= 0) return Math.round(numeric * 1000000);
+                if (token.indexOf('k') >= 0) return Math.round(numeric * 1000);
+                return Math.round(numeric);
+            }
+            return 0;
+        }
+        function formatDashboardSoftCutMoney(amount) {
+            var numeric = Number(amount || 0);
+            if (!numeric) return '';
+            if (dh && typeof dh.money === 'function') return dh.money(numeric);
+            if (numeric >= 1000000) return '$' + (numeric / 1000000).toFixed(numeric % 1000000 === 0 ? 0 : 1) + 'm';
+            if (numeric >= 1000) return '$' + Math.round(numeric / 1000) + 'k';
+            return '$' + Math.round(numeric);
+        }
+        function dashboardSoftCutSentence(text, fallback) {
+            var source = String(text || '').trim();
+            if (!source) return fallback || '';
+            var sentence = source.split(/(?<=[.!?])\s+/)[0] || source;
+            return sentence.replace(/\s+/g, ' ').trim();
+        }
+        function dashboardSoftCutDisplayName(card) {
+            var title = String((card && (card.focusObject || card.title)) || '').trim();
+            var meta = Array.isArray(card && card.meta) ? card.meta : [];
+            var metaCandidate = String(meta[0] || '').trim();
+            if (metaCandidate && !/\$|risk|heat|layer|command move|advisor ready|stable lead|supported|mixed signal/i.test(metaCandidate)) {
+                return metaCandidate;
+            }
+            var patterns = [
+                /^Recover\s+(.+?)\s+before/i,
+                /^Turn\s+(.+?)\s+into/i,
+                /^Deploy\s+.+?\s+on\s+(.+?)(?:\.|$)/i,
+                /^Open\s+(.+?)(?:\.|$)/i
+            ];
+            for (var i = 0; i < patterns.length; i++) {
+                var match = title.match(patterns[i]);
+                if (match && match[1]) return match[1].trim();
+            }
+            return title.replace(/[.!?]+$/, '');
+        }
+        function dashboardSoftCutModePosition(target, active) {
+            if (target === active) return 'is-front';
+            if (active === 'brief') return target === 'queue' ? 'is-left' : 'is-right';
+            if (active === 'spotlight') return target === 'brief' ? 'is-left' : 'is-right';
+            return target === 'spotlight' ? 'is-left' : 'is-right';
+        }
+        function renderDashboardModeCarousel(mode) {
+            function renderCard(key, label, sub, count, theme) {
+                return '<button type="button" class="dashboard-mode-card dashboard-mode-card--' + escH(theme) + ' ' + dashboardSoftCutModePosition(key, mode) + '" onclick="setDashboardCommandMode(\'' + escH(key) + '\')">' +
+                    '<span class="dashboard-mode-card-sub">' + escH(sub) + '</span>' +
+                    '<span class="dashboard-mode-card-count">' + escH(count) + '</span>' +
+                    '<span class="dashboard-mode-card-title">' + escH(label) + '</span>' +
+                    '<span class="dashboard-mode-card-bar"><span></span></span>' +
+                '</button>';
+            }
+            return '<div class="dashboard-mode-orbit"><div class="dashboard-mode-carousel">' +
+                renderCard('brief', 'Brief', 'summary pressure', '01', 'brief') +
+                renderCard('spotlight', 'Spotlight', 'one object forward', '02', 'spotlight') +
+                renderCard('queue', 'Queue', 'ranked order visible', '03', 'queue') +
+            '</div></div>';
+        }
+        function renderDashboardSoftCutMark(kind) {
+            if (kind === 'proof') {
+                return '<span class="dashboard-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="10" height="10"></rect><path d="M9 9h10v10"></path></svg></span>';
+            }
+            if (kind === 'motion-live') {
+                return '<span class="dashboard-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span>';
+            }
+            if (kind === 'motion') {
+                return '<span class="dashboard-mark"><svg viewBox="0 0 24 24"><path d="M7 12h10"></path><path d="M12 7v10"></path></svg></span>';
+            }
+            return '<span class="dashboard-mark"><svg viewBox="0 0 24 24"><path d="M12 5v9"></path><path d="M12 18h.01"></path><path d="M8 21h8"></path></svg></span>';
+        }
+        function buildDashboardSoftCutRows(card) {
+            var signals = readDashboardSoftCutSignals(card);
+            var amount = parseDashboardSoftCutAmount(card);
+            var risk = Number(signals.risk || 0);
+            var qualScore = Number(signals.qualScore || 0);
+            var staleDays = Number(signals.staleDays || 0);
+            var heat = Number(signals.heat || 0);
+            var truthDebtCount = Number(signals.truthDebtCount || 0);
+            var missingChampion = !!signals.missingChampion || !!signals.threadingRisk;
+            var missingNextStep = !!signals.missingNextStep || !!signals.nextStepOverdue;
+            var proofThin = !!signals.proofThin || truthDebtCount >= 2;
+            var coveragePressure = !!signals.coveragePressure || String(card && card.causeId || '') === 'coverage_gap';
+            var roomReady = Number(signals.roomReadiness || 0) >= 2;
+            var riskValue = missingNextStep ? '100' : (coveragePressure ? 'Gap' : (missingChampion ? 'Owner' : (risk >= 70 ? String(Math.round(risk)) : (card && card.badge ? String(card.badge).replace(/^Risk\s+/i, '') : 'Open'))));
+            var riskNote = missingNextStep
+                ? 'No dated next step.'
+                : (coveragePressure
+                    ? 'Heat has not become action.'
+                    : (missingChampion
+                        ? 'No one is carrying the fix.'
+                        : (truthDebtCount >= 2
+                            ? 'Stage reads stronger than truth.'
+                            : dashboardSoftCutSentence(card && card.copy, 'Pressure is still unresolved.'))));
+            var proofValue = proofThin ? 'Thin' : (qualScore >= 12 ? 'Fit' : (amount >= 100000 ? 'Cover' : 'Case'));
+            var proofNote = proofThin
+                ? 'Case exists, still thin.'
+                : (qualScore >= 12
+                    ? 'Qualification holds.'
+                    : (amount >= 100000
+                        ? 'Commercial shape is real.'
+                        : 'Proof is still incomplete.'));
+            var motionValue = (heat >= 75 || !!card.signalRoomMotionReady)
+                ? 'Hot'
+                : (staleDays > 0
+                    ? staleDays + 'd'
+                    : (missingChampion
+                        ? 'Owner'
+                        : (roomReady ? 'Ready' : 'Cold')));
+            var motionTone = (motionValue === 'Hot' || motionValue === 'Ready') ? 'tone-live' : 'tone-cold';
+            var motionNote = motionValue === 'Hot'
+                ? 'Live account heat is real.'
+                : (motionValue === 'Ready'
+                    ? 'A live room can move it.'
+                    : (motionValue === 'Owner'
+                        ? 'No one is carrying the fix.'
+                        : 'Nothing live changed it.'));
+            return [
+                { key: 'risk', label: 'Risk', value: riskValue, note: riskNote, toneClass: 'tone-hot', markKind: 'risk' },
+                { key: 'proof', label: 'Proof', value: proofValue, note: proofNote, toneClass: 'tone-warm', markKind: 'proof' },
+                { key: 'motion', label: 'Motion', value: motionValue, note: motionNote, toneClass: motionTone, markKind: motionTone === 'tone-live' ? 'motion-live' : 'motion' }
+            ];
+        }
+        function dashboardSoftCutTone(card, rows) {
+            var signals = readDashboardSoftCutSignals(card);
+            if (rows[2] && rows[2].toneClass === 'tone-live') return 'tone-live';
+            if (!!signals.nextStepOverdue || !!signals.missingNextStep || Number(signals.risk || 0) >= 90) return 'tone-hot';
+            return 'tone-warm';
+        }
+        function renderDashboardSoftCutSignalLine(card) {
+            var rows = buildDashboardSoftCutRows(card);
+            return '<div class="dashboard-command-signals">' + rows.map(function(row) {
+                return '<span class="dashboard-command-signal ' + escH(row.toneClass) + '">' + renderDashboardSoftCutMark(row.markKind) + escH(row.label) + ' <strong>' + escH(row.value) + '</strong></span>';
+            }).join('') + '</div>';
+        }
+        function renderDashboardSoftCutMeta(card, mode) {
+            var explanation = ci && typeof ci.explainCommandObject === 'function'
+                ? ci.explainCommandObject(card, mode)
+                : null;
+            var copy = dashboardSoftCutSentence((explanation && (explanation.copy || explanation.title)) || '', '');
+            if (!copy) {
+                var reasons = Array.isArray(card && card.scoreReasons) ? card.scoreReasons : [];
+                copy = reasons.length ? reasons.slice(0, 2).join(' · ') : dashboardSoftCutSentence(card && card.copy, 'This object is staying visible because the pressure is still unresolved.');
+            }
+            return '<div class="dashboard-command-meta"><div class="dashboard-command-meta-kicker">' + escH(mode === 'queue' ? 'Why it holds rank' : 'Why it is first') + '</div><div class="dashboard-command-meta-copy">' + escH(copy) + '</div></div>';
+        }
+        function renderDashboardSoftCutPrimary(card, mode) {
+            var actions = (card.actions || []).slice(0, 2);
+            var eyebrow = mode === 'queue'
+                ? 'Queue · ' + String(card.order || 1).padStart(2, '0')
+                : 'Spotlight';
+            return '<section class="dashboard-command-shell">' +
+                '<div class="dashboard-command-hero">' +
+                    '<div class="dashboard-command-eyebrow">' + escH(eyebrow) + '</div>' +
+                    '<div class="dashboard-command-title">' + escH(card.title || '') + '</div>' +
+                    '<div class="dashboard-command-copy">' + escH(card.copy || '') + '</div>' +
                 '</div>' +
-                '<div class="cmd-delta">' +
-                    '<div class="cmd-delta-title">' + escH(delta.title) + '</div>' +
-                    '<div class="cmd-delta-copy">Use this before choosing the next move.</div>' +
-                    '<ul class="cmd-delta-list">' + (delta.items || []).map(function(item) {
+                renderDashboardSoftCutSignalLine(card) +
+                '<div class="dashboard-command-actions">' + createDashboardInspectAction(card.sheetKey) + actions.map(function(action) {
+                    return createDashboardAction(action, action.tone, card.title);
+                }).join('') + (dashboardGraphPayload ? '<button type="button" class="btn btn-link" onclick="dashboardOpenGraph()">See what compounded</button>' : '') + '</div>' +
+                renderDashboardSoftCutMeta(card, mode) +
+            '</section>';
+        }
+        function renderDashboardSoftCutCard(card, index) {
+            var rows = buildDashboardSoftCutRows(card);
+            var tone = dashboardSoftCutTone(card, rows);
+            var active = card.commandId === dashboardActiveCommandId ? ' is-active' : '';
+            var amount = formatDashboardSoftCutMoney(parseDashboardSoftCutAmount(card));
+            var dockValue = amount || (card.badge ? escH(card.badge) : '--');
+            var footCopy = dashboardSoftCutSentence(card && card.copy, 'This object remains unresolved.');
+            var flag = card.badge || card.rankingConfidenceLabel || ('0' + String(index + 1)).slice(-2);
+            return '<button type="button" class="dashboard-softcut-card ' + escH(tone) + active + '" onclick="setDashboardActiveCommandCard(\'' + escH(card.commandId) + '\')">' +
+                '<div class="dashboard-softcut-left">' +
+                    '<div class="dashboard-softcut-name">' + escH(dashboardSoftCutDisplayName(card)) + '</div>' +
+                    '<div class="dashboard-softcut-docket">' + rows.map(function(row) {
+                        return '<div class="dashboard-softcut-row ' + escH(row.toneClass) + '">' +
+                            '<div class="dashboard-softcut-label">' + renderDashboardSoftCutMark(row.markKind) + escH(row.label) + '</div>' +
+                            '<div class="dashboard-softcut-value">' + escH(row.value) + '</div>' +
+                            '<div class="dashboard-softcut-note">' + escH(row.note) + '</div>' +
+                        '</div>';
+                    }).join('') + '</div>' +
+                    '<div class="dashboard-softcut-foot"><span>' + escH(footCopy) + '</span><span class="dashboard-softcut-flag">' + escH(flag) + '</span></div>' +
+                '</div>' +
+                '<div class="dashboard-softcut-right">' +
+                    '<div class="dashboard-softcut-amount">' + dockValue + '</div>' +
+                    rows.map(function(row) {
+                        return '<div class="dashboard-softcut-rule-slot"><div class="dashboard-softcut-rule ' + escH(row.toneClass) + '"><span></span></div></div>';
+                    }).join('') +
+                '</div>' +
+            '</button>';
+        }
+        function renderDashboardCriticalRail(cards, mode) {
+            var rail = document.getElementById('dashboardShellRail');
+            if (!rail) return;
+            var list = primeDashboardCommandCards(cards || []).map(function(card, index) {
+                card.order = index + 1;
+                return card;
+            }).slice(0, 4);
+            rail.className = 'shell-context-rail dashboard-critical-rail';
+            if (!list.length) {
+                rail.innerHTML = '';
+                return;
+            }
+            rail.innerHTML = '<div class="dashboard-critical-head"><div class="dashboard-critical-kicker">Critical accounts</div><div class="dashboard-critical-title">' + escH(mode === 'queue' ? 'Ranked command rail' : 'Immediate command rail') + '</div></div>' +
+                list.map(function(card, index) { return renderDashboardSoftCutCard(card, index); }).join('');
+        }
+        function renderDashboardCommandMode(mode, delta) {
+            return '<section class="dashboard-mode-shell">' +
+                renderDashboardModeCarousel(mode) +
+                '<div class="dashboard-delta-shelf">' +
+                    '<div class="dashboard-delta-title">' + escH(delta.title) + '</div>' +
+                    '<ul class="dashboard-delta-list">' + (delta.items || []).slice(0, 3).map(function(item) {
                         return '<li>' + escH(item) + '</li>';
                     }).join('') + '</ul>' +
                 '</div>' +
@@ -1547,28 +1753,7 @@
             });
             var selected = getDashboardActiveCommandCard(list);
             if (!selected) return '';
-            var actions = (selected.actions || []).slice(0, 2);
-            return '<section class="shell-section shell-section--subtle">' +
-                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Spotlight</div><div class="shell-section-title">Put one object in the light.</div><div class="shell-section-copy">Use the selector stack only to choose what gets the full focus.</div></div></div>' +
-                '<div class="command-spotlight-shell">' +
-                    '<div class="command-spotlight-main">' +
-                        '<div class="command-spotlight-head">' +
-                            '<div class="chipRow">' +
-                                '<span class="shell-state-pill ' + escH(selected.badgeTone || 'state-ready') + '">' + escH(selected.badge || 'Ready') + '</span>' +
-                                '<span class="cmd-mode-btn is-active" style="pointer-events:none">In the light</span>' +
-                            '</div>' +
-                            '<div class="command-spotlight-metric">' + escH(String(selected.order).padStart(2, '0')) + '</div>' +
-                        '</div>' +
-                        '<div class="command-spotlight-title">' + escH(selected.title || '') + '</div>' +
-                        '<div class="command-spotlight-copy">' + escH(selected.copy || '') + '</div>' +
-                        renderDashboardCommandMeta(selected) +
-                        renderDashboardCommandExplain(selected, 'spotlight') +
-                        '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
-                        (dashboardGraphPayload ? '<div class="command-spotlight-reward"><button type="button" class="command-spotlight-reward-btn" onclick="dashboardOpenGraph()"><span class="reward-kicker">Hidden reward</span><span class="reward-copy">See what compounded</span></button></div>' : '') +
-                    '</div>' +
-                    '<aside class="command-spotlight-stack">' + list.map(renderDashboardSpotlightStackItem).join('') + '</aside>' +
-                '</div>' +
-            '</section>';
+            return renderDashboardSoftCutPrimary(selected, 'spotlight');
         }
         function renderDashboardQueueMode(cards) {
             var list = primeDashboardCommandCards(cards).map(function(card, index) {
@@ -1577,33 +1762,12 @@
             });
             var selected = getDashboardActiveCommandCard(list);
             if (!selected) return '';
-            var actions = (selected.actions || []).slice(0, 2);
-            return '<section class="shell-section shell-section--subtle">' +
-                '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Queue</div><div class="shell-section-title">Run the work in one ranked order.</div><div class="shell-section-copy">Use Queue when execution order matters more than broad scan.</div></div></div>' +
-                '<div class="command-queue-shell">' +
-                    '<div class="command-queue-list">' + list.map(function(card, index) {
-                        return '<button type="button" class="command-queue-item' + (card.commandId === dashboardActiveCommandId ? ' is-active' : '') + '" onclick="setDashboardActiveCommandCard(\'' + escH(card.commandId) + '\')">' +
-                            '<div class="command-queue-rank">' + escH(String(index + 1)) + '</div>' +
-                            '<div class="command-queue-body"><div class="command-queue-title">' + escH(card.title || '') + '</div><div class="command-queue-next">' + escH((card.actions && card.actions[0] ? card.actions[0].label : 'Keep this honest')) + '</div></div>' +
-                            '<span class="shell-state-pill ' + escH(card.badgeTone || 'state-ready') + '">' + escH(card.badge || 'Ready') + '</span>' +
-                        '</button>';
-                    }).join('') + '</div>' +
-                    '<div class="command-queue-detail">' +
-                        '<div class="chipRow"><span class="cmd-mode-btn is-active" style="pointer-events:none">Rank ' + escH(String(selected.order).padStart(2, '0')) + '</span><span class="shell-state-pill ' + escH(selected.badgeTone || 'state-ready') + '">' + escH(selected.badge || 'Ready') + '</span></div>' +
-                        '<div class="command-queue-detail-title">' + escH(selected.title || '') + '</div>' +
-                        '<div class="command-queue-detail-copy">' + escH(selected.copy || '') + '</div>' +
-                        renderDashboardCommandMeta(selected) +
-                        renderDashboardCommandExplain(selected, 'queue') +
-                        '<div class="anchor-primary-actions">' + createDashboardInspectAction(selected.sheetKey) + actions.map(function(action) { return createDashboardAction(action, action.tone, selected.title); }).join('') + '</div>' +
-                    '</div>' +
-                '</div>' +
-            '</section>';
+            return renderDashboardSoftCutPrimary(selected, 'queue');
         }
 
         function renderDashboardShell(stage, context, weekOneState, dependencyWarnings) {
             if (!window.gtmShellChrome) return;
             var tone = getDashboardStageTone(stage.key);
-            var backup = backupStatus();
             var marketLabel = (context.accounts > 0 || context.signals > 0)
                 ? context.accounts + ' account' + (context.accounts === 1 ? '' : 's') + ' · ' + context.signals + ' signal' + (context.signals === 1 ? '' : 's')
                 : 'Missing live market input';
@@ -1638,35 +1802,11 @@
                 })
             });
 
-            window.gtmShellChrome.renderContextRail('#dashboardShellRail', {
-                variant: 'quiet',
-                cards: [
-                    {
-                        kicker: 'Current posture',
-                        title: context.deals ? 'The dashboard is reading real work.' : 'The dashboard is still teaching setup.',
-                        copy: context.deals
-                            ? 'Keep upstream modules honest so command stays believable.'
-                            : 'Get one ICP, one live account or signal, one real deal, and one logged motion.',
-                        items: [
-                            context.icps ? 'Targeting truth exists.' : 'Targeting truth missing.',
-                            (context.accounts > 0 || context.signals > 0) ? 'Market context exists.' : 'Market context missing.',
-                            context.deals ? context.activeDeals + ' active deal' + (context.activeDeals === 1 ? '' : 's') + ' are shaping the brief.' : 'No live deals yet.',
-                            dependencyWarnings.length ? dependencyWarnings.length + ' synced input layer' + (dependencyWarnings.length === 1 ? '' : 's') + ' fell back to local state.' : 'No sync warnings in the latest rebuild.'
-                        ]
-                    },
-                    {
-                        kicker: 'Trust + recovery',
-                        title: backup && backup.hasExport ? 'Offline backup exists.' : 'Export a recovery file this week.',
-                        copy: backup && backup.hasExport
-                            ? formatBackupDate(backup.lastExportAt)
-                            : 'Cloud sync is live, but you still want one portable JSON backup outside this browser.',
-                        actions: [
-                            { label: 'Export Backup', action: "runDataAction('export')", tone: backup && backup.hasExport ? 'ghost' : 'primary' },
-                            { href: '/app/settings/', label: 'Open Settings' }
-                        ]
-                    }
-                ]
-            });
+            var rail = document.getElementById('dashboardShellRail');
+            if (rail) {
+                rail.className = 'shell-context-rail dashboard-critical-rail';
+                rail.innerHTML = '';
+            }
         }
 
         async function render() {
@@ -1962,6 +2102,7 @@
                 );
                 document.getElementById('dashContent').innerHTML =
                     emptyHtml;
+                renderDashboardCriticalRail(emptyCards, commandMode);
                 renderDashboardSheet();
                 renderDashboardGraph();
                 saveDashboardSnapshot(emptySnapshot);
@@ -2466,6 +2607,7 @@
             html += '</section>';
 
             document.getElementById('dashContent').innerHTML = html;
+            renderDashboardCriticalRail(queueCards, commandMode);
             renderDashboardSheet();
             renderDashboardGraph();
             saveDashboardSnapshot(commandSnapshot);
