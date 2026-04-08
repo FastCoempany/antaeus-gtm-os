@@ -34,17 +34,19 @@
 .sc-root ::-webkit-scrollbar{width:4px;height:4px}.sc-root ::-webkit-scrollbar-track{background:transparent}.sc-root ::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
 .sc-root input,.sc-root select,.sc-root textarea,.sc-root button{font-family:inherit}
 
-/* ── TOP BAR ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ TOP BAR Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .top{position:sticky;top:var(--signal-shell-offset,0px);z-index:38;background:rgba(6,8,12,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;padding:10px 20px;min-height:52px;flex-wrap:wrap}
-.sc-root .top-search{flex:1 1 280px;max-width:360px;position:relative}
+.sc-root .top-search{flex:1 1 300px;max-width:420px;position:relative}
 .sc-root .top-search input{width:100%;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:6px 10px 6px 28px;font-size:.8rem;color:var(--tx);outline:none;transition:border .15s}
 .sc-root .top-search input:focus{border-color:var(--gold)}
-.sc-root .top-search::before{content:'⌕';position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:.85rem;color:var(--tx3)}
-.sc-root .top-stats{display:flex;gap:14px;font-family:var(--mono);font-size:.65rem;color:var(--tx3);margin-left:auto;flex-shrink:0;flex-wrap:wrap}
-.sc-root .top-stats b{color:var(--tx2);font-weight:500}
-.sc-root .top-credits{font-family:var(--mono);font-size:.6rem;padding:3px 8px;border-radius:20px;background:var(--surf2);border:1px solid var(--bdr);color:var(--tx3)}
+.sc-root .top-search::before{content:'Ã¢Å’â€¢';position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:.85rem;color:var(--tx3)}
+.sc-root .top-stats{display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap}
+.sc-root .top-stat{display:grid;gap:2px;padding:6px 10px 7px;border-radius:12px;background:var(--surf2);border:1px solid var(--bdr)}
+.sc-root .top-stat-label{font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)}
+.sc-root .top-stat-value{font-size:.82rem;font-weight:700;color:var(--tx)}
+.sc-root .top-credits{font-family:var(--mono);font-size:.6rem;padding:5px 10px;border-radius:999px;background:var(--surf2);border:1px solid var(--bdr);color:var(--tx3)}
 .sc-root .top-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
-.signal-first-fold{margin:0 20px 14px;padding:14px 16px 6px;border:1px solid rgba(255,255,255,.06);border-radius:16px;background:linear-gradient(180deg,rgba(15,19,28,.94) 0%,rgba(10,13,20,.98) 100%);box-shadow:0 22px 48px rgba(0,0,0,.18)}
+.signal-first-fold{margin:0 20px 14px;padding:14px 16px 6px;border:1px solid rgba(255,255,255,.06);border-radius:16px;background:linear-gradient(180deg,rgba(15,19,28,.94) 0%,rgba(10,13,20,.98) 100%);box-shadow:0 22px 48px rgba(0,0,0,.18);display:flex;flex-direction:column}
 .signal-shell-band{padding:0;background:none;}
 .signal-shell-band .shell-command-band{margin:0;}
 
@@ -55,7 +57,7 @@
 .sc-root .btn-red{border-color:rgba(232,84,84,.3);color:var(--red)}.sc-root .btn-red:hover{background:var(--red2)}
 .sc-root .btn-icon{width:28px;height:28px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;border-radius:50%}
 
-/* ── MORNING BRIEF ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ MORNING BRIEF Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .morning{background:linear-gradient(135deg,rgba(207,163,58,.06),rgba(77,156,240,.04));border:1px solid var(--gold2);border-radius:var(--r2);margin:14px 0 0;padding:16px 20px;display:none}
 .sc-root .morning.show{display:block;animation:fadeIn .4s ease}
 .sc-root .morning-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -70,7 +72,7 @@
 .sc-root .morning-sig{font-size:.72rem;color:var(--tx2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sc-root .morning-prep{font-size:.68rem;margin-top:4px}
 
-/* ── CONTROLS BAR ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ CONTROLS BAR Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 4px 10px;border-bottom:1px solid var(--bdr)}
 .sc-root .mode-group{display:flex;gap:0;border:1px solid var(--bdr2);border-radius:var(--r);overflow:hidden}
 .sc-root .mode-btn{font-size:.7rem;font-weight:500;padding:5px 14px;background:var(--surf);color:var(--tx3);cursor:pointer;border:none;border-right:1px solid var(--bdr);transition:all .12s}
@@ -83,17 +85,17 @@
 .sc-root .chip.on{background:var(--gold2);border-color:rgba(207,163,58,.3);color:var(--gold)}
 .sc-root .chip b{font-weight:600;margin-left:3px}
 
-/* ── SCORE LEGEND ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ SCORE LEGEND Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .legend{display:flex;gap:16px;padding:8px 4px 2px;border-bottom:0;font-family:var(--mono);font-size:.6rem;color:var(--tx3);flex-wrap:wrap;align-items:center}
 .sc-root .legend-label{font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tx4)}
 .sc-root .legend span{display:flex;align-items:center;gap:4px}
 .sc-root .legend .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ── MAIN ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ MAIN Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .main{padding:6px 20px 60px;position:relative;z-index:1}
 .sc-root .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:10px}
 
-/* ── ACCOUNT CARDS ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ ACCOUNT CARDS Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;transition:all .18s;cursor:pointer;animation:cardUp .35s ease both}
 .sc-root .card:hover{border-color:var(--bdr2);box-shadow:0 4px 24px rgba(0,0,0,.25)}
 .sc-root .card.open{grid-column:1/-1;cursor:default;border-color:rgba(207,163,58,.15)}
@@ -131,7 +133,7 @@
 .sc-root .p-pain{background:var(--red2);color:var(--red)}.sc-root .p-intel{background:var(--blue2);color:var(--blue)}
 .sc-root .p-mkt{background:var(--green2);color:var(--green)}
 
-/* ── EXPANDED DETAIL ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ EXPANDED DETAIL Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .detail{display:none;border-top:1px solid var(--bdr)}
 .sc-root .card.open .detail{display:block}
 .sc-root .detail-actions{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--bdr);flex-wrap:wrap;align-items:center}
@@ -149,7 +151,7 @@
 .sc-root .detail-score-copy strong{color:var(--tx)}
 .detail-.sc-root{padding:14px 16px}
 
-/* ── SIGNAL ITEMS ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ SIGNAL ITEMS Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .sig{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;transition:border .12s;position:relative}
 .sc-root .sig:hover{border-color:var(--bdr2)}
 .sc-root .sig.stale{opacity:.45}
@@ -177,7 +179,7 @@
 
 .sc-root .brief-bar{display:flex;gap:6px;padding:12px 16px;border-top:1px solid var(--bdr);background:var(--surf2)}
 
-/* ── MODAL ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ MODAL Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px}
 .sc-root .overlay.on{display:flex}
 .sc-root .modal{background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r3);width:100%;max-width:560px;max-height:82vh;overflow-y:auto;padding:20px}
@@ -191,7 +193,7 @@
 .sc-root .modal .preview-table th{text-align:left;padding:4px 6px;background:var(--surf2);color:var(--tx2);font-family:var(--mono);font-size:.62rem;border:1px solid var(--bdr)}
 .sc-root .modal .preview-table td{padding:4px 6px;border:1px solid var(--bdr);color:var(--tx3);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* ── LOADING ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ LOADING Ã¢â€â‚¬Ã¢â€â‚¬ */
 .sc-root .shimmer{background:linear-gradient(90deg,var(--surf) 25%,var(--surf3) 50%,var(--surf) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
@@ -210,7 +212,7 @@
 }
 
 
-/* ── Signal Console integration overrides ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ Signal Console integration overrides Ã¢â€â‚¬Ã¢â€â‚¬ */
 .app-main.sc-host {
     padding: 0 !important;
     overflow-y: auto;
@@ -234,6 +236,633 @@
     .signal-first-fold { margin: 0 12px 12px; padding: 12px 12px 4px; }
 }
 
+/* Live Instrument rebuild */
+body.room-signal-console .app-main.sc-host{
+    background:
+        radial-gradient(circle at top left, rgba(36,113,231,.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(230,112,30,.08), transparent 26%),
+        linear-gradient(180deg,#fbfcfe 0%,#f4f7fb 100%);
+}
+body.room-signal-console .sc-root{
+    --bg:#f4f7fb;--bg2:#ffffff;--surf:#ffffff;--surf2:#f6f8fc;--surf3:#eef3fb;--surf4:#e4ebf6;
+    --bdr:rgba(10,28,64,.08);--bdr2:rgba(10,28,64,.12);--bdr3:rgba(36,113,231,.2);
+    --tx:#253b5d;--tx2:#46607f;--tx3:#7a8da8;--tx4:#97a8bf;
+    --gold:#e6701e;--gold2:rgba(230,112,30,.12);--gold3:rgba(230,112,30,.05);
+    --blue:#2471e7;--blue2:rgba(36,113,231,.12);
+    --green:#1f9d55;--green2:rgba(31,157,85,.12);
+    --red:#c2410c;--red2:rgba(194,65,12,.12);
+    --amber:#e6701e;--amber2:rgba(230,112,30,.12);
+    --purple:#7c5cff;--purple2:rgba(124,92,255,.12);
+    --cyan:#2471e7;--cyan2:rgba(36,113,231,.12);
+    --brig:'Outfit',system-ui,sans-serif;
+    --mono:'Space Mono','IBM Plex Mono','Courier New',monospace;
+}
+body.room-signal-console .signal-first-fold{
+    margin:0 20px 18px;
+    padding:8px 0 0;
+    border:none;
+    border-radius:0;
+    background:none;
+    box-shadow:none;
+}
+body.room-signal-console .signal-shell-band{padding:0 0 8px}
+body.room-signal-console .signal-shell-band{order:2}
+body.room-signal-console .signal-shell-band .shell-command-band{display:none}
+body.room-signal-console .signal-shell-band .shell-handoff-bridge,
+body.room-signal-console .signal-shell-band .shell-pinned-object{
+    margin-bottom:14px;
+}
+body.room-signal-console .signal-shell-band .shell-handoff-bridge{
+    background:rgba(255,255,255,.84);
+    border:1px solid rgba(10,28,64,.08);
+    box-shadow:0 12px 28px rgba(19,42,79,.06);
+}
+body.room-signal-console .signal-shell-band .shell-pinned-object{
+    background:rgba(255,255,255,.76);
+    border:1px solid rgba(10,28,64,.08);
+}
+body.room-signal-console .signal-instrument-stage{
+    display:grid;
+    grid-template-columns:minmax(0,1.1fr) minmax(320px,.72fr);
+    gap:20px;
+    align-items:end;
+    padding:8px 0 10px;
+}
+body.room-signal-console .signal-stage-field{display:grid;gap:14px;min-width:0}
+body.room-signal-console .signal-stage-kicker{
+    font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+}
+body.room-signal-console .signal-stage-title{
+    max-width:15.5ch;
+    font-family:'Outfit',var(--brig);
+    font-size:clamp(2.75rem,4.8vw,4.2rem);
+    line-height:.94;
+    letter-spacing:-.1em;
+    color:#0a1c40;
+}
+body.room-signal-console .signal-stage-copy{
+    max-width:38ch;
+    font-size:.98rem;
+    line-height:1.6;
+    color:var(--tx2);
+}
+body.room-signal-console .signal-stage-focus{
+    display:grid;
+    gap:12px;
+    padding:18px 20px;
+    border-radius:28px;
+    background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(245,248,253,.88) 100%);
+    box-shadow:0 18px 42px rgba(19,42,79,.08);
+    align-self:end;
+    max-width:440px;
+    justify-self:end;
+    margin-bottom:8px;
+}
+body.room-signal-console .signal-stage-label{
+    font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tx3);
+}
+body.room-signal-console .signal-stage-account{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:14px
+}
+body.room-signal-console .signal-stage-name{
+    font-size:1.32rem;line-height:1.06;color:#0a1c40;font-weight:700
+}
+body.room-signal-console .signal-stage-heat{
+    display:inline-flex;align-items:center;justify-content:center;min-width:64px;height:34px;padding:0 10px;border-radius:14px;
+    font-family:var(--mono);font-size:.78rem;font-weight:700;background:rgba(244,247,251,.95);border:1px solid rgba(10,28,64,.08);color:#0a1c40
+}
+body.room-signal-console .signal-stage-signal,
+body.room-signal-console .signal-stage-move{
+    font-size:.84rem;line-height:1.55;color:var(--tx2)
+}
+body.room-signal-console .signal-stage-move strong{color:#0a1c40}
+body.room-signal-console .top{
+    position:sticky;
+    top:var(--signal-shell-offset,0px);
+    z-index:28;
+    margin:0 0 18px;
+    padding:12px 14px;
+    min-height:unset;
+    border:1px solid rgba(10,28,64,.08);
+    border-radius:24px;
+    background:rgba(255,255,255,.84);
+    backdrop-filter:blur(16px);
+    box-shadow:0 14px 34px rgba(19,42,79,.06);
+    order:1;
+    display:grid;
+    grid-template-columns:minmax(320px,1fr) auto;
+    grid-template-areas:
+      "search status"
+      "toolbar toolbar";
+    gap:12px 14px;
+    align-items:center;
+}
+body.room-signal-console .top-search input{
+    background:rgba(244,247,251,.95);
+    border:1px solid rgba(10,28,64,.08);
+    color:#0a1c40;
+    padding:8px 12px;
+}
+body.room-signal-console .top-search{grid-area:search;max-width:none}
+body.room-signal-console .top-search::before{content:none}
+body.room-signal-console .top-status{
+    grid-area:status;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:10px;
+    flex-wrap:wrap;
+}
+body.room-signal-console .top-stats,
+body.room-signal-console .top-credits{color:var(--tx3)}
+body.room-signal-console .top-stat{background:rgba(244,247,251,.9);border-color:rgba(10,28,64,.08)}
+body.room-signal-console .top-stat-value{color:#0a1c40}
+body.room-signal-console .top-credits{background:rgba(244,247,251,.9);border-color:rgba(10,28,64,.08)}
+body.room-signal-console .top-toolbar{
+    grid-area:toolbar;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+body.room-signal-console .top-actions-utility{
+    margin-right:auto;
+}
+body.room-signal-console .top-actions-primary{
+    margin-left:auto;
+}
+body.room-signal-console #btnEnrichAll{
+    background:rgba(230,112,30,.1);
+    border-color:rgba(230,112,30,.18);
+    color:var(--gold);
+}
+body.room-signal-console #btnAddAcct{
+    color:#0a1c40;
+}
+body.room-signal-console .btn{border-radius:12px}
+body.room-signal-console .btn-gold{background:var(--gold);border-color:rgba(230,112,30,.28);color:#0a1c40}
+body.room-signal-console .morning{
+    margin:0 0 14px;
+    padding:0;
+    border:none;
+    background:none;
+    order:5;
+}
+body.room-signal-console .signal-morning-shell{
+    display:grid;gap:12px;
+    padding:18px 20px;
+    border-radius:28px;
+    background:rgba(255,255,255,.82);
+    box-shadow:0 16px 38px rgba(19,42,79,.06);
+}
+body.room-signal-console .signal-morning-head{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap
+}
+body.room-signal-console .signal-morning-kicker{
+    font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)
+}
+body.room-signal-console .signal-brief-list{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px
+}
+body.room-signal-console .signal-brief-card{
+    display:grid;grid-template-columns:28px minmax(0,1fr);gap:14px;
+    padding:14px 0;border-top:1px solid rgba(10,28,64,.08)
+}
+body.room-signal-console .signal-brief-card:first-child{padding-top:0;border-top:none}
+body.room-signal-console .signal-brief-rank{
+    font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.12em;color:var(--tx3);
+    padding-top:2px
+}
+body.room-signal-console .signal-brief-body{display:grid;gap:6px;min-width:0}
+body.room-signal-console .signal-brief-top{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:12px
+}
+body.room-signal-console .signal-brief-name{font-size:.98rem;font-weight:700;line-height:1.15;color:#0a1c40}
+body.room-signal-console .signal-brief-heat{
+    display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase
+}
+body.room-signal-console .signal-brief-dot{
+    width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0
+}
+body.room-signal-console .signal-brief-heat.h-hot{color:var(--gold);background:none;border:none}
+body.room-signal-console .signal-brief-heat.h-warm{color:var(--blue);background:none;border:none}
+body.room-signal-console .signal-brief-heat.h-med{color:var(--green);background:none;border:none}
+body.room-signal-console .signal-brief-heat.h-cool{color:var(--tx3);background:none;border:none}
+body.room-signal-console .signal-brief-signal{
+    font-size:.8rem;line-height:1.5;color:var(--tx2)
+}
+body.room-signal-console .signal-brief-bottom{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap
+}
+body.room-signal-console .signal-brief-move{
+    font-size:.72rem;line-height:1.45;color:var(--tx3)
+}
+body.room-signal-console .controls{
+    padding:8px 0 14px;
+    border-bottom:none;
+    order:4;
+}
+body.room-signal-console .signal-orbit{
+    display:grid;
+    grid-template-columns:repeat(12,minmax(0,1fr));
+    gap:14px;
+    align-items:stretch;
+    padding:8px 0 18px;
+}
+body.room-signal-console .signal-orb{
+    display:grid;
+    gap:4px;
+    align-content:start;
+    padding:16px 18px;
+    border:none;
+    border-radius:24px;
+    background:rgba(255,255,255,.76);
+    box-shadow:0 16px 32px rgba(19,42,79,.06);
+    text-align:left;
+    cursor:pointer;
+    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+body.room-signal-console .signal-orb:hover{
+    transform:translateY(-2px);
+    box-shadow:0 22px 38px rgba(19,42,79,.09);
+    background:rgba(255,255,255,.94);
+}
+body.room-signal-console .signal-orb-label{
+    font-size:.64rem;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--tx3);
+}
+body.room-signal-console .signal-orb-value{
+    font-family:'Outfit',var(--brig);
+    font-size:1.9rem;
+    line-height:.95;
+    color:#0a1c40;
+}
+body.room-signal-console .signal-orb-copy{
+    font-size:.76rem;
+    line-height:1.45;
+    color:var(--tx2);
+}
+body.room-signal-console .signal-orb strong{
+    font-size:1.18rem;
+    line-height:1.1;
+    color:#0a1c40;
+}
+body.room-signal-console .signal-orb--accounts{grid-column:1 / span 3}
+body.room-signal-console .signal-orb--signals{grid-column:4 / span 3}
+body.room-signal-console .signal-orb--ready{grid-column:7 / span 3}
+body.room-signal-console .signal-orb--posture{grid-column:10 / span 3;background:rgba(255,249,242,.82)}
+body.room-signal-console .signal-filter-bar{
+    display:grid;gap:12px
+}
+body.room-signal-console .signal-filter-group{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center
+}
+body.room-signal-console .signal-filter-label{
+    font-size:.64rem;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--tx3);
+    min-width:76px;
+}
+body.room-signal-console .mode-group{
+    border:1px solid rgba(10,28,64,.08);
+    border-radius:16px;
+    background:rgba(255,255,255,.84);
+    overflow:hidden;
+}
+body.room-signal-console .mode-btn{
+    background:transparent;color:var(--tx3);border-right:1px solid rgba(10,28,64,.08)
+}
+body.room-signal-console .mode-btn.active{background:rgba(230,112,30,.1);color:var(--gold)}
+body.room-signal-console .chip{
+    padding:5px 10px;
+    border-radius:999px;
+    border:1px solid rgba(10,28,64,.08);
+    background:rgba(255,255,255,.72);
+    color:var(--tx3);
+}
+body.room-signal-console .chip.on{
+    background:rgba(36,113,231,.08);
+    border-color:rgba(36,113,231,.18);
+    color:var(--blue);
+}
+body.room-signal-console .signal-filter-select{
+    min-height:34px;
+    padding:0 12px;
+    border-radius:999px;
+    border:1px solid rgba(10,28,64,.08);
+    background:rgba(255,255,255,.78);
+    color:#0a1c40;
+    font-size:.76rem;
+}
+body.room-signal-console .signal-guide{
+    padding:0 0 14px;
+    order:3;
+}
+body.room-signal-console #signalHealthPanel{order:6}
+body.room-signal-console .signal-guide-shell{
+    display:grid;
+    gap:14px;
+    padding:14px 0 18px;
+    border-top:1px solid rgba(10,28,64,.08);
+    border-bottom:1px solid rgba(10,28,64,.08);
+}
+body.room-signal-console .signal-guide-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+body.room-signal-console .signal-guide-title{
+    font-size:.68rem;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+}
+body.room-signal-console .signal-guide-readline{
+    font-size:.82rem;
+    line-height:1.5;
+    color:var(--tx2);
+}
+body.room-signal-console .signal-guide-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:18px;
+}
+body.room-signal-console .signal-guide-col{
+    display:grid;
+    gap:10px;
+    min-width:0;
+}
+body.room-signal-console .signal-guide-label{
+    font-size:.66rem;
+    font-weight:700;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--tx3);
+}
+body.room-signal-console .signal-guide-list{
+    list-style:none;
+    display:grid;
+    gap:8px;
+    padding:0;
+    margin:0;
+}
+body.room-signal-console .signal-guide-list li{
+    display:grid;
+    gap:2px;
+}
+body.room-signal-console .signal-guide-list strong{
+    font-size:.78rem;
+    color:#0a1c40;
+}
+body.room-signal-console .signal-guide-list span{
+    font-size:.74rem;
+    line-height:1.45;
+    color:var(--tx2);
+}
+body.room-signal-console .signal-guide-bands{
+    display:grid;
+    gap:7px;
+}
+body.room-signal-console .signal-guide-band{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--mono);
+    font-size:.68rem;
+    color:var(--tx2);
+}
+body.room-signal-console .signal-guide-band::before{
+    content:'';
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:currentColor;
+    flex-shrink:0;
+}
+body.room-signal-console .signal-guide-band.hot{color:var(--gold)}
+body.room-signal-console .signal-guide-band.active{color:var(--blue)}
+body.room-signal-console .signal-guide-band.watch{color:var(--green)}
+body.room-signal-console .signal-guide-band.low{color:var(--tx3)}
+body.room-signal-console .signal-guide-spec{
+    display:grid;
+    gap:8px;
+    padding:12px 14px;
+    border-radius:18px;
+    border:1px solid rgba(10,28,64,.08);
+    background:rgba(255,255,255,.74);
+}
+body.room-signal-console .signal-guide-spec-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+}
+body.room-signal-console .signal-guide-spec-name{
+    font-size:.92rem;
+    font-weight:700;
+    color:#0a1c40;
+}
+body.room-signal-console .signal-guide-spec-heat{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:44px;
+    height:30px;
+    border-radius:12px;
+    background:rgba(230,112,30,.12);
+    color:var(--gold);
+    font-family:var(--mono);
+    font-size:.7rem;
+    font-weight:700;
+}
+body.room-signal-console .signal-guide-spec-line{
+    font-size:.76rem;
+    line-height:1.45;
+    color:var(--tx2);
+}
+body.room-signal-console .signal-guide-spec-line strong{
+    color:#0a1c40;
+}
+body.room-signal-console .signal-guide-shell.is-collapsed .signal-guide-grid{
+    display:none;
+}
+body.room-signal-console .legend{display:none}
+body.room-signal-console .main{padding:0 20px 60px}
+body.room-signal-console .grid{grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:14px}
+body.room-signal-console .card{
+    background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(251,252,254,.96) 100%);
+    border:1px solid rgba(10,28,64,.08);
+    border-radius:24px;
+    box-shadow:0 16px 36px rgba(19,42,79,.06);
+}
+body.room-signal-console .card:hover{border-color:rgba(36,113,231,.18);box-shadow:0 22px 48px rgba(19,42,79,.08)}
+body.room-signal-console .card.open{border-color:rgba(230,112,30,.14)}
+body.room-signal-console .card-head{padding:18px 20px 10px}
+body.room-signal-console .heat{
+    width:42px;height:42px;border-radius:14px;font-size:.78rem
+}
+body.room-signal-console .h-hot{background:rgba(230,112,30,.12);color:var(--gold);border-color:rgba(230,112,30,.2)}
+body.room-signal-console .h-warm{background:rgba(36,113,231,.1);color:var(--blue);border-color:rgba(36,113,231,.18)}
+body.room-signal-console .h-med{background:rgba(31,157,85,.12);color:var(--green);border-color:rgba(31,157,85,.18)}
+body.room-signal-console .h-cool{background:rgba(10,28,64,.04);color:var(--tx3);border-color:rgba(10,28,64,.08)}
+body.room-signal-console .card-name{font-size:1.02rem;color:#0a1c40}
+body.room-signal-console .card-ticker,
+body.room-signal-console .card-meta{color:var(--tx3)}
+body.room-signal-console .fortune-badge{background:rgba(230,112,30,.08);color:var(--gold);border-color:rgba(230,112,30,.18)}
+body.room-signal-console .card-lead{
+    padding:0 20px 12px;
+    font-size:.82rem;line-height:1.5;color:var(--tx2)
+}
+body.room-signal-console .card-lead strong{color:#0a1c40}
+body.room-signal-console .card-pills{display:none}
+body.room-signal-console .pill{
+    background:rgba(244,247,251,.92);
+    border:1px solid rgba(10,28,64,.08);
+    color:var(--tx3);
+}
+body.room-signal-console .card-guidance{padding:0 20px 18px}
+body.room-signal-console .card-guidance-row{align-items:center}
+body.room-signal-console .card-status{
+    padding:0;border:none;border-radius:0;background:none;
+    font-size:.62rem;letter-spacing:.14em
+}
+body.room-signal-console .card-status.ok{color:var(--green);background:none;border:none}
+body.room-signal-console .card-status.warn{color:var(--gold);background:none;border:none}
+body.room-signal-console .card-status.error{color:var(--red);background:none;border:none}
+body.room-signal-console .card-status.progress{color:var(--purple);background:none;border:none}
+body.room-signal-console .card-scoreline{color:var(--tx3)}
+body.room-signal-console .card-guidance-note{font-size:.74rem;color:var(--tx2)}
+body.room-signal-console .card-next{
+    background:none;
+    border:none;
+    border-radius:0;
+    padding:2px 0 0;
+}
+body.room-signal-console .card-next-label{color:var(--gold)}
+body.room-signal-console .card-next-title{color:#0a1c40}
+body.room-signal-console .card-next-reason{color:var(--tx2)}
+body.room-signal-console .detail{
+    border-top:1px solid rgba(10,28,64,.08);
+    background:rgba(247,250,255,.84);
+}
+body.room-signal-console .detail-actions,
+body.room-signal-console .detail-research,
+body.room-signal-console .detail-tabs,
+body.room-signal-console .brief-bar{border-color:rgba(10,28,64,.08)}
+body.room-signal-console .detail-score{
+    background:rgba(255,255,255,.6);
+    border-bottom:1px solid rgba(10,28,64,.08);
+    color:var(--tx3);
+}
+body.room-signal-console .detail-score-chip{background:rgba(244,247,251,.95);border-color:rgba(10,28,64,.08);color:var(--tx2)}
+body.room-signal-console .detail-score-copy{color:var(--tx2)}
+body.room-signal-console .sig{
+    background:rgba(255,255,255,.94);
+    border:1px solid rgba(10,28,64,.08);
+}
+body.room-signal-console .sig:hover{border-color:rgba(36,113,231,.16)}
+body.room-signal-console .sig-detail,
+body.room-signal-console .sig-why,
+body.room-signal-console .sig-src,
+body.room-signal-console .sig-age{color:var(--tx2)}
+body.room-signal-console .sig-conf{background:rgba(244,247,251,.95);color:var(--tx2)}
+body.room-signal-console .workspace-health{
+    border-radius:0;
+    background:none;
+    box-shadow:none;
+}
+body.room-signal-console .signal-health-shelf{
+    display:grid;gap:14px;
+    padding:10px 0 18px;
+    border-top:1px solid rgba(10,28,64,.08);
+    border-bottom:1px solid rgba(10,28,64,.08);
+}
+body.room-signal-console .signal-health-top{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap
+}
+body.room-signal-console .signal-health-title{
+    font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)
+}
+body.room-signal-console .signal-health-posture{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)
+}
+body.room-signal-console .signal-health-stats{
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px
+}
+body.room-signal-console .signal-health-stat{
+    display:grid;gap:6px;min-width:0
+}
+body.room-signal-console .signal-health-label{
+    font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3)
+}
+body.room-signal-console .signal-health-stat strong{
+    font-size:1.02rem;line-height:1.1;color:#0a1c40
+}
+body.room-signal-console .signal-health-stat small{
+    font-size:.72rem;line-height:1.45;color:var(--tx2)
+}
+body.room-signal-console .signal-health-columns{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px
+}
+body.room-signal-console .signal-health-column-title{
+    font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);margin-bottom:8px
+}
+body.room-signal-console .signal-health-list{
+    list-style:none;display:grid;gap:7px;padding:0;margin:0
+}
+body.room-signal-console .signal-health-list li{
+    font-size:.78rem;line-height:1.5;color:var(--tx2)
+}
+body.room-signal-console .signal-health-shelf--empty{
+    padding:10px 0 16px;border-top:1px solid rgba(10,28,64,.08)
+}
+@media(max-width:980px){
+    body.room-signal-console .signal-instrument-stage{grid-template-columns:1fr}
+    body.room-signal-console .signal-orbit{grid-template-columns:repeat(2,minmax(0,1fr))}
+    body.room-signal-console .signal-orb--accounts,
+    body.room-signal-console .signal-orb--signals,
+    body.room-signal-console .signal-orb--ready,
+    body.room-signal-console .signal-orb--posture{grid-column:auto}
+    body.room-signal-console .signal-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    body.room-signal-console .signal-health-stats,
+    body.room-signal-console .signal-health-columns{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:768px){
+    body.room-signal-console .main{padding:0 12px 60px}
+    body.room-signal-console .signal-first-fold{margin:0 12px 16px}
+    body.room-signal-console .top{
+        grid-template-columns:1fr;
+        grid-template-areas:
+          "search"
+          "status"
+          "toolbar";
+    }
+    body.room-signal-console .top-status,
+    body.room-signal-console .top-toolbar,
+    body.room-signal-console .top-actions-primary,
+    body.room-signal-console .top-actions-utility{
+        justify-content:flex-start;
+        margin:0;
+    }
+    body.room-signal-console .signal-stage-title{font-size:clamp(2.7rem,15vw,4.2rem);max-width:11ch}
+    body.room-signal-console .signal-orbit{grid-template-columns:1fr}
+    body.room-signal-console .grid{grid-template-columns:1fr}
+    body.room-signal-console .signal-guide-grid{grid-template-columns:1fr}
+    body.room-signal-console .signal-health-stats,
+    body.room-signal-console .signal-health-columns{grid-template-columns:1fr}
+    body.room-signal-console .signal-brief-card{grid-template-columns:24px 1fr}
+}
+
     </style>
 </head>
 <body class="room-wave2 room-signal-console">
@@ -247,35 +876,26 @@
         </aside>
         
         <main class="app-main sc-host">
-            <header class="app-header module-header">
-                <div class="module-header-title">
-                    <div class="shell-header-meta">
-                        <span class="shell-header-kicker">Signals family</span>
-                        <span class="shell-header-state state-live">Research console</span>
-                    </div>
-                    <h1 class="page-title">Signal Console</h1>
-                    <p class="page-subtitle">Find the accounts worth acting on, understand why they matter now, and hand that signal forward.</p>
-                </div>
-            </header>
             <div class="sc-root">
 <section class="signal-first-fold">
 <div class="signal-shell-band" id="signalShellBand"></div>
 <div class="top">
-<div class="top-search"><input type="text" id="searchIn" placeholder="Search accounts, signals..." /></div>
+<div class="top-search"><input type="text" id="searchIn" placeholder="Search accounts or signals..." /></div>
 <div class="top-stats" id="topStats"></div>
 <div class="top-credits" id="topCredits"></div>
-<div class="top-actions">
-<button class="btn" id="btnUploadCSV">📎 CSV</button>
+<div class="top-actions top-actions-utility">
+<button class="btn" id="btnUploadCSV">Ã°Å¸â€œÅ½ CSV</button>
 <button class="btn" id="btnAddAcct">+ Account</button>
 <button class="btn" id="btnAddSig">+ Signal</button>
-<button class="btn" id="btnExport">Export ▾</button>
-<button class="btn btn-gold" id="btnEnrichAll">🔍 Enrich All</button>
+<button class="btn" id="btnExport">Export Ã¢â€“Â¾</button>
+<button class="btn btn-gold" id="btnEnrichAll">Ã°Å¸â€Â Enrich All</button>
 </div>
 </div>
 
 <div class="morning" id="morningBrief"></div>
 
 <div class="controls" id="controlsBar"></div>
+<div class="signal-guide" id="signalGuide"></div>
 
 <div class="legend" id="legendBar">
 <span class="legend-label">Score Legend</span>
@@ -283,7 +903,7 @@
 <span><span class="dot" style="background:var(--amber)"></span>75-90 Active</span>
 <span><span class="dot" style="background:var(--blue)"></span>50-74 Watch</span>
 <span><span class="dot" style="background:var(--tx3)"></span>0-49 Low</span>
-<span style="margin-left:auto;color:var(--tx4)">Score = signal count × type weight × source credibility × recency decay</span>
+<span style="margin-left:auto;color:var(--tx4)">Score = signal count Ãƒâ€” type weight Ãƒâ€” source credibility Ãƒâ€” recency decay</span>
 </div>
 <div id="signalHealthPanel"></div>
 
@@ -302,9 +922,9 @@
     <script src="/js/require-auth.js"></script>
 <script>
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // CONSTANTS
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 
 const CATS={
 ai_transformation:{l:'AI & Transformation',p:'p-ai',d:'d-ai'},
@@ -338,15 +958,15 @@ function srcConf(name){const n=(name||'').toLowerCase();for(const[k,v]of Object.
 function gNews(c,t){return`https://news.google.com/search?q=%22${encodeURIComponent(c)}%22+${encodeURIComponent(t||'')}&hl=en-US`}
 function secUrl(c){return`https://efts.sec.gov/LATEST/search-index?q=%22${encodeURIComponent(c)}%22&dateRange=custom&startdt=2024-01-01`}
 
-// ── SEED ACCOUNTS ──
+// Ã¢â€â‚¬Ã¢â€â‚¬ SEED ACCOUNTS Ã¢â€â‚¬Ã¢â€â‚¬
 const SEEDS=[
 {id:'cat',name:'Caterpillar',ticker:'CAT',industry:'Industrial',sector:'Heavy Equipment',revenue:'$67B',employees:'~113,000',hq:'Irving, TX',linkedin:'caterpillar',domain:'caterpillar.com',fortune_rank:22,signals:[
-{cat:'ai_transformation',headline:'Caterpillar investing in AI-powered autonomous mining and construction',detail:'1.5M+ connected assets, CES 2025 AI exhibit, 2.5x more autonomy experience than any auto manufacturer.',why:'If you sell AI infrastructure, MLOps, or edge computing — their engineering teams need vendor support for scaling autonomous systems.',url:gNews('Caterpillar','AI autonomous CES 2025'),source_name:'CES 2025 / Cat Innovation',published_date:'2025-01',confidence:.90,is_ai:true},
+{cat:'ai_transformation',headline:'Caterpillar investing in AI-powered autonomous mining and construction',detail:'1.5M+ connected assets, CES 2025 AI exhibit, 2.5x more autonomy experience than any auto manufacturer.',why:'If you sell AI infrastructure, MLOps, or edge computing Ã¢â‚¬â€ their engineering teams need vendor support for scaling autonomous systems.',url:gNews('Caterpillar','AI autonomous CES 2025'),source_name:'CES 2025 / Cat Innovation',published_date:'2025-01',confidence:.90,is_ai:true},
 {cat:'pain_point',headline:'Supply chain parts constraints across product lines',detail:'Publicly reported parts constraints, extended availability windows, semiconductor shortages. Dealer inventories near historical lows.',why:'Procurement optimization software has direct, quantifiable impact. SVP Pam Heminger stated priority: "adopting new technologies" for supplier management.',url:secUrl('Caterpillar'),source_name:'SEC Filings / Earnings',published_date:'2024-12',confidence:.92},
 {cat:'pain_point',headline:'Retiring workforce creating tribal knowledge loss',detail:'Engineers with 20-30 years of undocumented expertise on part tolerances, supplier performance, design decisions are retiring at accelerating rates.',why:'Knowledge management, documentation automation, and AI-assisted onboarding tools address this directly. Pain is urgent and worsening.',url:gNews('Caterpillar','workforce retirement manufacturing'),source_name:'Industry Analysis',published_date:'2025-01',confidence:.85},
 {cat:'internal_intel',headline:'Pam Heminger (SVP Strategic Procurement) publicly prioritizing tech adoption',detail:'Public statements about strengthening supplier relationships and adopting new technologies. Signals top-down procurement modernization.',why:'When the SVP says "we need new technology," the budget conversation is already happening. Reference her quotes in outreach.',url:'https://www.caterpillar.com/en/company/strategy.html',source_name:'CAT Annual Report',published_date:'2024-03',confidence:.95},
 {cat:'trigger_event',headline:'Tariff exposure forcing procurement re-evaluation',detail:'Trade tensions affecting critical materials including semiconductors. Every tariff change forces re-sourcing decisions.',why:'Tariff changes create urgency for supplier identification and supply chain risk visualization tools.',url:gNews('Caterpillar','tariff supply chain'),source_name:'Trade Policy / News',published_date:'2025-02',confidence:.88},
-{cat:'market_position',headline:'Record $67.1B revenue (2023) followed by cost discipline phase',detail:'Best year in 98-year history. Now entering optimization phase — maintaining margins while investing in technology.',why:'Companies post-record-revenue with an "optimize" mandate have budget AND urgency for efficiency tools.',url:secUrl('Caterpillar'),source_name:'10-K Annual Filing',published_date:'2024-02',confidence:.95}
+{cat:'market_position',headline:'Record $67.1B revenue (2023) followed by cost discipline phase',detail:'Best year in 98-year history. Now entering optimization phase Ã¢â‚¬â€ maintaining margins while investing in technology.',why:'Companies post-record-revenue with an "optimize" mandate have budget AND urgency for efficiency tools.',url:secUrl('Caterpillar'),source_name:'10-K Annual Filing',published_date:'2024-02',confidence:.95}
 ]},
 {id:'jpm',name:'JPMorgan Chase',ticker:'JPM',industry:'Financial Services',sector:'Banking',revenue:'$178B',employees:'~313,000',hq:'New York, NY',linkedin:'jpmorgan',domain:'jpmorganchase.com',fortune_rank:6,signals:[
 {cat:'ai_transformation',headline:'JPM spending $17B+ on tech annually with 2,000+ AI/ML use cases in production',detail:'LLM Suite deployed to 60,000+ employees. AI for fraud detection, trading, contract analysis, research.',why:'$17B tech spend = enormous vendor ecosystem. AI tooling, data infrastructure, compliance tech, developer tools all actively procured.',url:gNews('JPMorgan','AI artificial intelligence technology'),source_name:'Earnings / Press',published_date:'2025-01',confidence:.92,is_ai:true},
@@ -378,7 +998,7 @@ const SEEDS=[
 ]},
 {id:'gs',name:'Goldman Sachs',ticker:'GS',industry:'Financial Services',sector:'Investment Banking',revenue:'$51B',employees:'~46,000',hq:'New York, NY',linkedin:'goldman-sachs',domain:'goldmansachs.com',fortune_rank:55,signals:[
 {cat:'ai_transformation',headline:'1,000+ engineers on AI/ML: proprietary LLM platform for code gen and research',detail:'GS AI assistant for code generation, research summarization, client communications. Built proprietary AI platform.',why:'1,000+ AI engineers = massive demand for ML infrastructure, model monitoring, data labeling, experiment tracking, AI governance.',url:gNews('Goldman Sachs','AI artificial intelligence platform'),source_name:'Press / Conferences',published_date:'2025-01',confidence:.90,is_ai:true},
-{cat:'trigger_event',headline:'Transaction banking (TxB) greenfield build creating new tech demand',detail:'Building TxB from scratch to compete with JPM/Citi. Requires entirely new payment infrastructure, treasury systems, client portals.',why:'Greenfield business units are best prospects — no incumbents, no legacy, urgency to build fast.',url:gNews('Goldman Sachs','transaction banking technology'),source_name:'News / Analysts',published_date:'2024-09',confidence:.85}
+{cat:'trigger_event',headline:'Transaction banking (TxB) greenfield build creating new tech demand',detail:'Building TxB from scratch to compete with JPM/Citi. Requires entirely new payment infrastructure, treasury systems, client portals.',why:'Greenfield business units are best prospects Ã¢â‚¬â€ no incumbents, no legacy, urgency to build fast.',url:gNews('Goldman Sachs','transaction banking technology'),source_name:'News / Analysts',published_date:'2024-09',confidence:.85}
 ]},
 {id:'de',name:'Deere & Company',ticker:'DE',industry:'Industrial',sector:'Agriculture Equipment',revenue:'$61B',employees:'~83,000',hq:'Moline, IL',linkedin:'john-deere',domain:'deere.com',fortune_rank:63,signals:[
 {cat:'ai_transformation',headline:'$2B+ in precision agriculture: autonomous tractors and See & Spray AI',detail:'Computer vision reducing herbicide use 77%. Fully autonomous tractors in production. Most advanced ag AI in industry.',why:'Edge computing, computer vision infrastructure, satellite data processing, rural connectivity solutions all needed.',url:gNews('Deere','autonomous AI precision agriculture'),source_name:'CES / Press',published_date:'2025-01',confidence:.92,is_ai:true},
@@ -390,7 +1010,7 @@ const SEEDS=[
 ]},
 {id:'dal',name:'Delta Air Lines',ticker:'DAL',industry:'Transportation',sector:'Airlines',revenue:'$58B',employees:'~100,000',hq:'Atlanta, GA',linkedin:'delta-air-lines',domain:'delta.com',fortune_rank:69,signals:[
 {cat:'trigger_event',headline:'CrowdStrike outage: $500M+ losses driving IT resilience overhaul',detail:'July 2024. 7,000+ flight cancellations. Public feud with CrowdStrike/Microsoft. Now overhauling IT resilience.',why:'Post-outage = aggressive investment in redundancy, disaster recovery, observability, vendor diversification.',url:gNews('Delta','CrowdStrike outage IT resilience'),source_name:'News / SEC',published_date:'2024-10',confidence:.95},
-{cat:'ai_transformation',headline:'AI for dynamic pricing, crew scheduling, and predictive maintenance',detail:'Revenue management, crew optimization, fleet maintenance — all deploying AI-assisted decision systems.',why:'Airline operations AI is specialized but large. Revenue management, crew optimization, fleet maintenance each have dedicated ecosystems.',url:gNews('Delta','AI dynamic pricing crew'),source_name:'Press / Conferences',published_date:'2024-08',confidence:.82,is_ai:true}
+{cat:'ai_transformation',headline:'AI for dynamic pricing, crew scheduling, and predictive maintenance',detail:'Revenue management, crew optimization, fleet maintenance Ã¢â‚¬â€ all deploying AI-assisted decision systems.',why:'Airline operations AI is specialized but large. Revenue management, crew optimization, fleet maintenance each have dedicated ecosystems.',url:gNews('Delta','AI dynamic pricing crew'),source_name:'Press / Conferences',published_date:'2024-08',confidence:.82,is_ai:true}
 ]},
 {id:'pfe',name:'Pfizer',ticker:'PFE',industry:'Pharma',sector:'Pharmaceuticals',revenue:'$58B',employees:'~88,000',hq:'New York, NY',linkedin:'pfizer',domain:'pfizer.com',fortune_rank:42,signals:[
 {cat:'trigger_event',headline:'$43B Seagen acquisition: oncology pipeline integration underway',detail:'Largest pharma acquisition of 2023. Integrating ADC technology and pipeline. Massive R&D/IT integration workstream.',why:'Mega-acquisition = 2-3 years of heavy tech procurement. Data migration, clinical trial management, regulatory submission tools.',url:gNews('Pfizer','Seagen acquisition integration'),source_name:'SEC / News',published_date:'2024-06',confidence:.90},
@@ -406,14 +1026,15 @@ const SEEDS=[
 ]}
 ];
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // STATE
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 const LS='gtmos_sc_v4';
 const SIGNAL_ROOM_HEALTH_KEY='gtmos_signal_room_health';
 const LS_USAGE='gtmos_sc_usage_v4';
 const LS_MORNING='gtmos_sc_morning_v4';
 const LS_BATCHES='gtmos_sc_batches_v4';
+const LS_GUIDE='gtmos_sc_guide_v1';
 const MAX_DAILY=50;
 const DEFAULT_ENRICHMENT_BASE_URL='https://enrich.antaeus.app';
 const SC_SYNC={cloudEnabled:!!(window.gtmPersistence&&window.gtmPersistence.signalConsole),hydrated:false,loading:false,saving:false,lastSyncedAt:null,error:null};
@@ -604,7 +1225,7 @@ function summarizeLaneActivity(debug){
   const candidates=lanes.reduce((sum,l)=>sum+(Number(l.candidateCount)||0),0);
   const evidence=lanes.reduce((sum,l)=>sum+(Number(l.evidenceCount)||0),0);
   const laneLabel=active?active+' lane'+(active===1?'':'s'):'no active lanes';
-  return laneLabel+' • '+candidates+' source candidates • '+evidence+' evidence pages';
+  return laneLabel+' Ã¢â‚¬Â¢ '+candidates+' source candidates Ã¢â‚¬Â¢ '+evidence+' evidence pages';
 }
 
 function buildDeepResearchPhases(){
@@ -638,9 +1259,9 @@ function today(){return new Date().toISOString().slice(0,10)}
 
 let S=load();
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // SCORING ENGINE
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 function recency(sig){
   const d=new Date(sig.published_date||sig.fetched_at||'2024-01-01');
   const days=(Date.now()-d.getTime())/864e5;
@@ -666,7 +1287,7 @@ function scoreExplain(a){
 }
 function scoreDetail(a){
   const sigs=(a.signals||[]).filter(s=>s.status!=='flagged');
-  let lines=[`Score Breakdown — ${a.name} (${heat(a)})`,''];
+  let lines=[`Score Breakdown Ã¢â‚¬â€ ${a.name} (${heat(a)})`,''];
   for(const s of sigs.slice(0,8)){
     const base=(s.is_ai||s.ai)?18:12;
     const conf=(s.confidence||.65)>=.9?5:0;
@@ -879,7 +1500,7 @@ function renderSignalWorkspaceHealthLegacy(snapshot){
         </div>
       </div>
       <div class="workspace-health-metrics">
-        <div class="workspace-health-metric"><div class="workspace-health-label">Research posture</div><div class="workspace-health-value workspace-health-value--sans">${esc(snapshot.topHeat>=75?'Motion ready':'Research heavy')}</div><div class="workspace-health-subcopy">${esc(snapshot.accountCount+' accounts · '+snapshot.signalCount+' signals')}</div></div>
+        <div class="workspace-health-metric"><div class="workspace-health-label">Research posture</div><div class="workspace-health-value workspace-health-value--sans">${esc(snapshot.topHeat>=75?'Motion ready':'Research heavy')}</div><div class="workspace-health-subcopy">${esc(snapshot.accountCount+' accounts Ã‚Â· '+snapshot.signalCount+' signals')}</div></div>
         <div class="workspace-health-metric"><div class="workspace-health-label">Top heat</div><div class="workspace-health-value">${esc(String(snapshot.topHeat||0))}</div><div class="workspace-health-subcopy">${esc(snapshot.topAccountName||'No ranked account yet')}</div></div>
         <div class="workspace-health-metric"><div class="workspace-health-label">Ready now</div><div class="workspace-health-value">${esc(String(snapshot.readyCount||0))}</div><div class="workspace-health-subcopy">Accounts hot enough to justify motion now.</div></div>
         <div class="workspace-health-metric"><div class="workspace-health-label">Execution linkage</div><div class="workspace-health-value workspace-health-value--sans">${esc(linkedMotion?'Attached':'Thin')}</div><div class="workspace-health-subcopy">${esc(snapshot.topHasActiveDeal?'Active deal visible':snapshot.topHasReplies?'Reply path visible':'No live handoff yet')}</div></div>
@@ -916,13 +1537,13 @@ function renderSignalWorkspaceHealth(snapshot){
   if(!node)return;
   if(!snapshot||!snapshot.accountCount){
     node.innerHTML=
-      `<section class="shell-section shell-section--compact workspace-health">
-        <div class="shell-section-header">
-          <div class="shell-section-heading">
-            <div class="shell-section-kicker">Workspace health</div>
-            <div class="shell-section-title">Health starts once one account has live evidence.</div>
-            <div class="shell-section-copy workspace-health-copy">Signal Console becomes useful once one real account can justify motion.</div>
-          </div>
+      `<section class="signal-health-shelf signal-health-shelf--empty">
+        <div class="signal-health-top">
+          <div class="signal-health-title">Workspace health</div>
+          <div class="signal-health-posture">Waiting on evidence</div>
+        </div>
+        <div class="signal-health-stat">
+          <small>One real account gives the room a center of gravity.</small>
         </div>
       </section>`;
     return;
@@ -932,57 +1553,61 @@ function renderSignalWorkspaceHealth(snapshot){
   const weakLinks=[];
   const linkedMotion=snapshot.topHasActiveDeal||snapshot.topHasReplies;
   const topName=snapshot.topAccountName||'The top account';
+  const posture=snapshot.topHeat>=75?'Motion ready':'Research heavy';
 
   if(snapshot.topHighConfidenceCount>=2){
-    compounded.push(`<div class="workspace-health-item"><strong>Evidence density is real.</strong> ${esc(topName)} has ${snapshot.topHighConfidenceCount} high-confidence signals behind it.</div>`);
+    compounded.push(`${topName} has ${snapshot.topHighConfidenceCount} firm signals behind it.`);
   }
   if(snapshot.readyCount>0){
-    compounded.push(`<div class="workspace-health-item"><strong>Accounts are ready for motion.</strong> ${snapshot.readyCount} account${snapshot.readyCount===1?' is':'s are'} hot enough to justify action.</div>`);
+    compounded.push(`${snapshot.readyCount} account${snapshot.readyCount===1?' is':'s are'} hot enough to move.`);
   }
   if(linkedMotion){
-    compounded.push(`<div class="workspace-health-item"><strong>Research is touching execution.</strong> ${snapshot.topHasActiveDeal?'A live deal':'A reply path'} already exists on the lead account.</div>`);
+    compounded.push(`${snapshot.topHasActiveDeal?'A live deal':'A reply path'} already anchors the lead account.`);
   }
   if(!compounded.length){
-    compounded.push('<div class="workspace-health-item"><strong>Live evidence exists.</strong> The room is ranking real research, but motion still needs to catch up.</div>');
+    compounded.push('Live evidence exists, but motion still needs to catch up.');
   }
 
   if(snapshot.topHeat>=75&&!linkedMotion){
-    weakLinks.push('<div class="workspace-health-item"><strong>Heat is not yet becoming motion.</strong> The lead account is hot, but there is still no live deal or reply path anchoring the work.</div>');
+    weakLinks.push('Heat is not yet becoming motion.');
   }
   if(snapshot.topRecentCount<2){
-    weakLinks.push('<div class="workspace-health-item"><strong>Freshness is still thin.</strong> The top account does not yet have enough recent evidence to feel fully current.</div>');
+    weakLinks.push('Freshness on the lead account is still thin.');
   }
   if(snapshot.topHighConfidenceCount<2){
-    weakLinks.push('<div class="workspace-health-item"><strong>Confidence is still narrow.</strong> The strongest account still needs more durable evidence behind the next move.</div>');
+    weakLinks.push('Confidence behind the next move is still narrow.');
   }
   if(snapshot.topNextMoveKind==='research'||snapshot.topNextMoveKind==='deepresearch'){
-    weakLinks.push('<div class="workspace-health-item"><strong>The next move is still research.</strong> The room has not yet earned a cleaner handoff into motion.</div>');
+    weakLinks.push('The next move is still research.');
   }
   if(!weakLinks.length){
-    weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> The console is behaving credibly right now.</div>');
+    weakLinks.push('No single weak link is dominating the room.');
   }
 
   const compactCompounded=compounded.slice(0,2);
   const compactWeakLinks=weakLinks.slice(0,2);
 
   node.innerHTML=
-    `<section class="shell-section shell-section--compact workspace-health">
-      <div class="shell-section-header">
-        <div class="shell-section-heading">
-          <div class="shell-section-kicker">Workspace health</div>
-          <div class="shell-section-title">See what is compounding and what is still weak.</div>
-          <div class="shell-section-copy workspace-health-copy">This room should show whether account heat is compounding into action or just getting louder.</div>
+    `<section class="signal-health-shelf">
+      <div class="signal-health-top">
+        <div class="signal-health-title">Workspace health</div>
+        <div class="signal-health-posture">${esc(posture)}</div>
+      </div>
+      <div class="signal-health-stats">
+        <div class="signal-health-stat"><span class="signal-health-label">Accounts</span><strong>${esc(String(snapshot.accountCount||0))}</strong><small>${esc(String(snapshot.signalCount||0)+' signals')}</small></div>
+        <div class="signal-health-stat"><span class="signal-health-label">Top heat</span><strong>${esc(String(snapshot.topHeat||0))}</strong><small>${esc(snapshot.topAccountName||'No ranked account yet')}</small></div>
+        <div class="signal-health-stat"><span class="signal-health-label">Ready now</span><strong>${esc(String(snapshot.readyCount||0))}</strong><small>Accounts hot enough to move.</small></div>
+        <div class="signal-health-stat"><span class="signal-health-label">Execution</span><strong>${esc(linkedMotion?'Attached':'Thin')}</strong><small>${esc(snapshot.topHasActiveDeal?'Active deal visible':snapshot.topHasReplies?'Reply path visible':'No live handoff yet')}</small></div>
+      </div>
+      <div class="signal-health-columns">
+        <div>
+          <div class="signal-health-column-title">Compounding</div>
+          <ul class="signal-health-list">${compactCompounded.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>
         </div>
-      </div>
-      <div class="workspace-health-metrics">
-        <div class="workspace-health-metric"><div class="workspace-health-label">Research posture</div><div class="workspace-health-value workspace-health-value--sans">${esc(snapshot.topHeat>=75?'Motion ready':'Research heavy')}</div><div class="workspace-health-subcopy">${esc(snapshot.accountCount+' accounts · '+snapshot.signalCount+' signals')}</div></div>
-        <div class="workspace-health-metric"><div class="workspace-health-label">Top heat</div><div class="workspace-health-value">${esc(String(snapshot.topHeat||0))}</div><div class="workspace-health-subcopy">${esc(snapshot.topAccountName||'No ranked account yet')}</div></div>
-        <div class="workspace-health-metric"><div class="workspace-health-label">Ready now</div><div class="workspace-health-value">${esc(String(snapshot.readyCount||0))}</div><div class="workspace-health-subcopy">Accounts hot enough to justify motion.</div></div>
-        <div class="workspace-health-metric"><div class="workspace-health-label">Execution linkage</div><div class="workspace-health-value workspace-health-value--sans">${esc(linkedMotion?'Attached':'Thin')}</div><div class="workspace-health-subcopy">${esc(snapshot.topHasActiveDeal?'Active deal visible':snapshot.topHasReplies?'Reply path visible':'No live handoff yet')}</div></div>
-      </div>
-      <div class="workspace-health-grid">
-        <div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">${compactCompounded.join('')}</div></div>
-        <div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">${compactWeakLinks.join('')}</div></div>
+        <div>
+          <div class="signal-health-column-title">Still weak</div>
+          <ul class="signal-health-list">${compactWeakLinks.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>
+        </div>
       </div>
     </section>`;
 }
@@ -995,7 +1620,7 @@ function renderCardGuidance(a){
   <div class="card-guidance">
     <div class="card-guidance-row">
       <span class="card-status ${research.tone}">${esc(research.label)}</span>
-      <span class="card-scoreline">Heat ${metrics.heat} | ${metrics.signalCount} signals | ${metrics.recentCount} recent | ${metrics.highConfidenceCount} high-conf</span>
+      <span class="card-scoreline">${metrics.signalCount} signals Ã‚Â· ${metrics.highConfidenceCount} firm Ã‚Â· ${metrics.recentCount} recent</span>
     </div>
     <div class="card-guidance-note">${esc(research.copy)}</div>
     <div class="card-next">
@@ -1027,9 +1652,9 @@ function renderHeatExplainability(a){
   </div>`;
 }
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // PAIN AUTO-TAGGING
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 function autoTag(sig){
   const blob=[sig.headline,sig.detail,sig.why_it_matters||sig.why].join(' ').toLowerCase();
   const tags=[];
@@ -1039,13 +1664,13 @@ function autoTag(sig){
   return tags.slice(0,4);
 }
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // ANTHROPIC API ENRICHMENT
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 async function enrichAccount(acct){
   const prompt=`Research "${acct.name}" (ticker: ${acct.ticker||'N/A'}, industry: ${acct.industry||'unknown'}, domain: ${acct.domain||'N/A'}).
 
-Return ONLY a JSON array of 4-6 sales-relevant signals a SaaS salesperson would use to prepare for a cold call. No preamble, no markdown fences — just the JSON array.
+Return ONLY a JSON array of 4-6 sales-relevant signals a SaaS salesperson would use to prepare for a cold call. No preamble, no markdown fences Ã¢â‚¬â€ just the JSON array.
 
 Each signal object must have these exact fields:
 - "category": one of "ai_transformation", "trigger_event", "pain_point", "internal_intel", "market_position"
@@ -1151,12 +1776,12 @@ async function enrichAll(){
   alert('Research complete. Refreshed '+refreshed+' account'+(refreshed===1?'':'s')+(failures?'; '+failures+' failed.':'')+'.');
 }
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // CSV UPLOAD
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 function showCSVModal(){
   showModal(`
-<h3>📎 Upload Account List (CSV)</h3>
+<h3>Ã°Å¸â€œÅ½ Upload Account List (CSV)</h3>
 <p style="font-size:.76rem;color:var(--tx2);margin-bottom:10px">Upload a CSV with your target accounts. We'll map columns and optionally enrich them with live research.</p>
 <input type="file" id="csvFile" accept=".csv" style="margin-bottom:10px" />
 <div id="csvPreview"></div>
@@ -1191,7 +1816,7 @@ function handleCSVFile(e){
     const domCol=cols.find(c=>/website|url|domain|web/i.test(c))||'';
     const indCol=cols.find(c=>/industry|vertical|sector/i.test(c))||'';
     const mapDiv=document.getElementById('csvMapping');mapDiv.style.display='block';
-    const opts=c=>'<option value="">— skip —</option>'+cols.map(col=>`<option value="${esc(col)}" ${col===c?'selected':''}>${esc(col)}</option>`).join('');
+    const opts=c=>'<option value="">Ã¢â‚¬â€ skip Ã¢â‚¬â€</option>'+cols.map(col=>`<option value="${esc(col)}" ${col===c?'selected':''}>${esc(col)}</option>`).join('');
     document.getElementById('csvColName').innerHTML=opts(nameCol);
     document.getElementById('csvColDomain').innerHTML=opts(domCol);
     document.getElementById('csvColInd').innerHTML=opts(indCol);
@@ -1237,9 +1862,9 @@ function importCSV(){
   }
 }
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // EXPORTS
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 function showExportModal(){
   showModal(`
 <h3>Export Accounts + Signals</h3>
@@ -1291,7 +1916,7 @@ function doExport(){
     accts.forEach(a=>{const s=(a.signals||[])[0];if(s)rows.push([a.name,s.headline,s.why||s.why_it_matters||'',s.url||''])});
     content=Papa.unparse(rows);filename='signal-console-outreach-'+today()+'.csv';
   }else if(fmt==='brief'){
-    content=accts.map(a=>genBrief(a)).join('\n\n'+'═'.repeat(60)+'\n\n');
+    content=accts.map(a=>genBrief(a)).join('\n\n'+'Ã¢â€¢Â'.repeat(60)+'\n\n');
     filename='signal-console-briefs-'+today()+'.md';type='text/markdown';
   }else{
     content=JSON.stringify(accts,null,2);filename='signal-console-'+today()+'.json';type='application/json';
@@ -1306,16 +1931,16 @@ function genBrief(a){
   const h=heat(a);
   const sigs=(a.signals||[]).filter(s=>s.status!=='flagged');
   const top3=sigs.sort((x,y)=>(y.confidence||0)*recency(y)-(x.confidence||0)*recency(x)).slice(0,3);
-  let t=`PRE-CALL INTEL BRIEF — ${a.name}${a.ticker?' ('+a.ticker+')':''}\n${'═'.repeat(50)}\n`;
-  t+=`Industry: ${a.industry||'—'} · ${a.sector||''}\nRevenue: ${a.revenue||'—'} | Employees: ${a.employees||'—'} | HQ: ${a.hq||'—'}\nHeat: ${h}/99 — ${h>=91?'HOT':h>=75?'ACTIVE':h>=50?'WATCH':'LOW'}\n\n`;
-  t+=`▸ TOP SIGNALS\n${'─'.repeat(40)}\n`;
+  let t=`PRE-CALL INTEL BRIEF Ã¢â‚¬â€ ${a.name}${a.ticker?' ('+a.ticker+')':''}\n${'Ã¢â€¢Â'.repeat(50)}\n`;
+  t+=`Industry: ${a.industry||'Ã¢â‚¬â€'} Ã‚Â· ${a.sector||''}\nRevenue: ${a.revenue||'Ã¢â‚¬â€'} | Employees: ${a.employees||'Ã¢â‚¬â€'} | HQ: ${a.hq||'Ã¢â‚¬â€'}\nHeat: ${h}/99 Ã¢â‚¬â€ ${h>=91?'HOT':h>=75?'ACTIVE':h>=50?'WATCH':'LOW'}\n\n`;
+  t+=`Ã¢â€“Â¸ TOP SIGNALS\n${'Ã¢â€â‚¬'.repeat(40)}\n`;
   top3.forEach((s,i)=>{
-    t+=`${i+1}. ${s.is_ai?'[AI] ':''}${s.headline}\n   ${s.detail||''}\n   💡 ${s.why||s.why_it_matters||''}\n   📎 ${s.source_name||''} | ${s.published_date||''} | ${Math.round((s.confidence||0)*100)}% conf\n   ${s.url||''}\n\n`;
+    t+=`${i+1}. ${s.is_ai?'[AI] ':''}${s.headline}\n   ${s.detail||''}\n   Ã°Å¸â€™Â¡ ${s.why||s.why_it_matters||''}\n   Ã°Å¸â€œÅ½ ${s.source_name||''} | ${s.published_date||''} | ${Math.round((s.confidence||0)*100)}% conf\n   ${s.url||''}\n\n`;
   });
-  t+=`▸ DISCOVERY QUESTIONS\n${'─'.repeat(40)}\n`;
+  t+=`Ã¢â€“Â¸ DISCOVERY QUESTIONS\n${'Ã¢â€â‚¬'.repeat(40)}\n`;
   top3.forEach(s=>{
     if(s.cat==='pain_point')t+=`- "How are you currently handling ${s.headline.toLowerCase().includes('supply')?'the supply chain constraints':'this challenge'}?"\n`;
-    else if(s.cat==='trigger_event')t+=`- "I saw the ${s.headline.split(':')[0].toLowerCase()} — how is that affecting your team\'s priorities?"\n`;
+    else if(s.cat==='trigger_event')t+=`- "I saw the ${s.headline.split(':')[0].toLowerCase()} Ã¢â‚¬â€ how is that affecting your team\'s priorities?"\n`;
     else if(s.cat==='ai_transformation')t+=`- "With your AI initiatives, what\'s the biggest infrastructure challenge right now?"\n`;
     else t+=`- "What\'s driving the biggest urgency in your org right now?"\n`;
   });
@@ -1323,9 +1948,9 @@ function genBrief(a){
   return t;
 }
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // FILTERING
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 function getVisible(){
   let a=S.accounts;
   if(S.mode==='active')a=a.filter(x=>heat(x)>=75);
@@ -1339,9 +1964,9 @@ function getVisible(){
   return a.sort((x,y)=>heat(y)-heat(x));
 }
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // RENDERING
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 window.focusSignalAccountById=function(id){
   if(!id)return;
   S.expanded=id;
@@ -1361,12 +1986,13 @@ function renderSignalShellBand(){
   const hottest=all.slice().sort((a,b)=>heat(b)-heat(a))[0]||null;
   const signalCount=all.reduce((sum,a)=>sum+(a.signals||[]).filter(s=>s.status!=='flagged').length,0);
   const activeCount=all.filter(a=>heat(a)>=75).length;
-  const title=hottest
-    ? 'Focus the next account worth acting on, not the loudest pile of noise.'
-    : 'Get one real account into the system so Signal Console can stop briefing empty space.';
-  const copy=hottest
-    ? 'Signal Console should collapse research into a ranked next move. The point is not collecting signals, it is deciding where motion should go next.'
-    : 'Add or import one account, then run research once. The rest of the workflow gets dramatically clearer after real external evidence exists.';
+  const leadSignal=hottest?(hottest.signals||[]).filter(s=>s.status!=='flagged')[0]||null:null;
+  const stageTitle=hottest
+    ? 'Act on the accounts<br>that matter now.'
+    : 'Seed one real account so the console can start ranking reality.';
+  const stageCopy=hottest
+    ? 'Use live heat, proof, and recency to decide where the next move belongs.'
+    : 'One real account and one real signal are enough to make this room useful.';
   const stateLabel=hottest?'Live research':'Needs accounts';
   const stateTone=hottest?'live':'thin';
   const nextMove=hottest
@@ -1375,12 +2001,12 @@ function renderSignalShellBand(){
   if(window.gtmShellChrome){
     window.gtmShellChrome.renderCommandBand('#signalShellBand',{
       kicker:'Intelligence bridge',
-      title:title,
-      copy:copy,
+      title:'',
+      copy:'',
       stateLabel:stateLabel,
       stateTone:stateTone,
       metrics:[
-        {label:'Highest-priority account',value:hottest?(hottest.name+' · heat '+heat(hottest)):'No scored account yet'},
+        {label:'Highest-priority account',value:hottest?(hottest.name+' Ã‚Â· heat '+heat(hottest)):'No scored account yet'},
         {label:'Signals in play',value:String(signalCount)},
         {label:'Accounts ready now',value:String(activeCount)},
         {label:'Next move',value:nextMove}
@@ -1399,29 +2025,96 @@ function renderSignalShellBand(){
 
 function syncSignalShellOffset(){
   const host=document.querySelector('.sc-host');
-  const header=host&&host.querySelector('.app-header');
   if(!host)return;
-  host.style.setProperty('--signal-shell-offset',header?`${header.offsetHeight}px`:'0px');
+  host.style.setProperty('--signal-shell-offset','0px');
 }
 
 function render(){
   const healthSnapshot=buildSignalConsoleHealthSnapshot();
   publishSignalConsoleHealthSnapshot(healthSnapshot);
-  syncSignalShellOffset();renderStats();renderCredits();renderSignalShellBand();renderControls();renderMorning();renderSignalWorkspaceHealth(healthSnapshot);renderGrid();
+  syncSignalShellOffset();renderStats();renderCredits();renderSignalShellBand();renderControlsRefaced();renderSignalInstrumentGuide();renderMorning();renderSignalWorkspaceHealth(healthSnapshot);renderGrid();
 }
 
 function renderStats(){
-  const all=S.accounts;const sigs=all.reduce((s,a)=>s+(a.signals||[]).length,0);
+  const all=S.accounts;
+  const sigs=all.reduce((s,a)=>s+(a.signals||[]).length,0);
   const ai=all.reduce((s,a)=>s+(a.signals||[]).filter(x=>x.is_ai).length,0);
-  document.getElementById('topStats').innerHTML=`<div>Accts <b>${all.length}</b></div><div>Signals <b>${sigs}</b></div><div>AI <b style="color:var(--purple)">${ai}</b></div>`;
+  const active=all.filter(a=>heat(a)>=75).length;
+  document.getElementById('topStats').innerHTML=`
+    <div class="top-stat"><span class="top-stat-label">Accounts</span><span class="top-stat-value">${all.length}</span></div>
+    <div class="top-stat"><span class="top-stat-label">Signals</span><span class="top-stat-value">${sigs}</span></div>
+    <div class="top-stat"><span class="top-stat-label">Ready now</span><span class="top-stat-value">${active}</span></div>
+    <div class="top-stat"><span class="top-stat-label">AI signals</span><span class="top-stat-value">${ai}</span></div>`;
+  const statTitles=[
+    'Tracked accounts currently on this board.',
+    'All saved and live signals shaping the board.',
+    'Accounts hot enough to justify a next move now.',
+    'Signals explicitly tagged as AI-related.'
+  ];
+  [...document.querySelectorAll('#topStats .top-stat')].forEach((node,index)=>{
+    node.title=statTitles[index]||'';
+  });
+  const uploadBtn=document.getElementById('btnUploadCSV');
+  if(uploadBtn)uploadBtn.textContent='Import CSV';
+  const addAcctBtn=document.getElementById('btnAddAcct');
+  if(addAcctBtn)addAcctBtn.textContent='Add account';
+  const addSigBtn=document.getElementById('btnAddSig');
+  if(addSigBtn)addSigBtn.textContent='Add signal';
+  const enrichBtn=document.getElementById('btnEnrichAll');
+  if(enrichBtn)enrichBtn.textContent='Enrich all';
+  const exportBtn=document.getElementById('btnExport');
+  if(exportBtn)exportBtn.textContent='Export';
+  organizeSignalTopBar();
+}
+
+function organizeSignalTopBar(){
+  const top=document.querySelector('.sc-root .top');
+  const search=document.querySelector('.sc-root .top-search');
+  const stats=document.getElementById('topStats');
+  const credits=document.getElementById('topCredits');
+  const uploadBtn=document.getElementById('btnUploadCSV');
+  const exportBtn=document.getElementById('btnExport');
+  const addAcctBtn=document.getElementById('btnAddAcct');
+  const addSigBtn=document.getElementById('btnAddSig');
+  const enrichBtn=document.getElementById('btnEnrichAll');
+  const focusBtn=document.getElementById('btnFocusPriority');
+  const guideBtn=document.getElementById('btnGuideToggle');
+  if(focusBtn)focusBtn.remove();
+  if(guideBtn)guideBtn.remove();
+  if(!top||!search||!stats||!credits)return;
+  let statusWrap=top.querySelector('.top-status');
+  if(!statusWrap){
+    statusWrap=document.createElement('div');
+    statusWrap.className='top-status';
+  }
+  let toolbar=top.querySelector('.top-toolbar');
+  if(!toolbar){
+    toolbar=document.createElement('div');
+    toolbar.className='top-toolbar';
+  }
+  let utility=toolbar.querySelector('.top-actions-utility');
+  if(!utility){
+    utility=document.createElement('div');
+    utility.className='top-actions top-actions-utility';
+  }
+  let primary=toolbar.querySelector('.top-actions-primary');
+  if(!primary){
+    primary=document.createElement('div');
+    primary.className='top-actions top-actions-primary';
+  }
+  statusWrap.replaceChildren(stats,credits);
+  utility.replaceChildren(...[uploadBtn,exportBtn].filter(Boolean));
+  primary.replaceChildren(...[addAcctBtn,addSigBtn,enrichBtn].filter(Boolean));
+  toolbar.replaceChildren(utility,primary);
+  top.replaceChildren(search,statusWrap,toolbar);
 }
 function renderCredits(){
-  const parts=[`Research ${remaining()}/${MAX_DAILY} today`];
+  const parts=[`Research budget ${remaining()}/${MAX_DAILY}`];
   if(SC_SYNC.loading)parts.push('loading cloud');
-  else if(SC_SYNC.saving)parts.push('syncing');
-  else if(SC_SYNC.lastSyncedAt)parts.push('cloud '+formatRelativeTime(SC_SYNC.lastSyncedAt));
+  else if(SC_SYNC.saving)parts.push('syncing now');
+  else if(SC_SYNC.lastSyncedAt)parts.push('cloud synced '+formatRelativeTime(SC_SYNC.lastSyncedAt));
   else if(SC_SYNC.cloudEnabled)parts.push('cloud ready');
-  if(SC_SYNC.error)parts.push('local cache');
+  if(SC_SYNC.error)parts.push('local cache only');
   document.getElementById('topCredits').textContent=parts.join(' | ');
 }
 
@@ -1429,18 +2122,21 @@ function renderControls(){
   const bar=document.getElementById('controlsBar');
   const batches=readScopedUiJson(LS_BATCHES,[]);
   const industries=[...new Set(S.accounts.map(a=>a.industry).filter(Boolean))].sort();
-  const pains=Object.entries(PAIN_LIB);
-  let h='<div class="mode-group">';
+  let h='<div class="signal-filter-group"><span class="signal-filter-label">View</span><div class="mode-group">';
   ['complex','active','surgical','ai_trends'].forEach(m=>{
-    const labels={complex:'Complex',active:'Active 75+',surgical:'Surgical',ai_trends:'AI Trends'};
-    h+=`<button class="mode-btn ${S.mode===m?'active':''}" data-mode="${m}">${labels[m]}</button>`;
+    const labels={complex:'Full board',active:'Ready now',surgical:'Current batch',ai_trends:'AI leaders'};
+    const titles={
+      complex:'See the full ranked board.',
+      active:'Show only accounts hot enough to move now.',
+      surgical:'Focus only on the current uploaded batch.',
+      ai_trends:'Show Fortune-ranked accounts with AI-relevant signals.'
+    };
+    h+=`<button class="mode-btn ${S.mode===m?'active':''}" data-mode="${m}" title="${titles[m]}">${labels[m]}</button>`;
   });
-  h+='</div><div class="filter-sep"></div>';
-  // Industry
-  h+=`<button class="chip ${S.industry==='all'?'on':''}" data-ind="all">All Industries</button>`;
-  industries.forEach(i=>{const ct=S.accounts.filter(a=>a.industry===i).length;h+=`<button class="chip ${S.industry===i?'on':''}" data-ind="${esc(i)}">${esc(i)}<b>${ct}</b></button>`});
+  h+='</div></div>';
+  h+=`<div class="signal-filter-group"><span class="signal-filter-label">Industry</span><select id="industrySel" class="signal-filter-select"><option value="all">All industries</option>${industries.map(i=>`<option value="${esc(i)}" ${S.industry===i?'selected':''}>${esc(i)}</option>`).join('')}</select></div>`;
   // AI toggle
-  h+=`<div class="filter-sep"></div><button class="chip ${S.aiOnly?'on':''}" data-aitoggle>🤖 AI Only</button>`;
+  h+=`<div class="filter-sep"></div><button class="chip ${S.aiOnly?'on':''}" data-aitoggle>Ã°Å¸Â¤â€“ AI Only</button>`;
   // Batch selector (if batches exist)
   if(batches.length){
     h+=`<div class="filter-sep"></div><select id="batchSel" style="font-size:.7rem;background:var(--surf);border:1px solid var(--bdr);color:var(--tx2);border-radius:var(--r);padding:4px 8px">`;
@@ -1466,8 +2162,8 @@ function renderMorning(){
   mb.classList.add('show');
   mb.innerHTML=`
 <div class="morning-head">
-  <div class="morning-title">Morning Brief — ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}</div>
-  <button class="morning-dismiss" id="dismissMorning">✕</button>
+  <div class="morning-title">Morning Brief Ã¢â‚¬â€ ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}</div>
+  <button class="morning-dismiss" id="dismissMorning">Ã¢Å“â€¢</button>
 </div>
 <div class="morning-items">
   ${top3.map(a=>{const h=heat(a);return`
@@ -1483,7 +2179,7 @@ function renderMorning(){
   document.getElementById('dismissMorning').onclick=()=>{writeScopedUiText(LS_MORNING,today());mb.classList.remove('show')};
   mb.querySelectorAll('[data-prep]').forEach(b=>b.onclick=()=>{
     const acct=S.accounts.find(a=>a.id===b.dataset.prep);
-    if(acct)navigator.clipboard.writeText(genBrief(acct)).then(()=>{b.textContent='✓ Copied!';setTimeout(()=>b.textContent='Prep Call',1500)});
+    if(acct)navigator.clipboard.writeText(genBrief(acct)).then(()=>{b.textContent='Ã¢Å“â€œ Copied!';setTimeout(()=>b.textContent='Prep Call',1500)});
   });
 }
 
@@ -1499,73 +2195,83 @@ function renderSignalShellBand(){
   const nextMove=hottest
     ? getNextMove(hottest).title
     : 'Add the first account or upload a CSV so there is a real surface to score.';
-  const title=hottest
-    ? 'Focus the next account worth acting on, not the loudest pile of noise.'
-    : 'Get one real account into the system so Signal Console can stop briefing empty space.';
-  const copy=hottest
-    ? 'Signal Console should collapse research into a ranked next move. The point is not collecting signals, it is deciding where motion should go next.'
-    : 'Add or import one account, then run research once. The rest of the workflow gets dramatically clearer after real external evidence exists.';
+  const leadSignal=hottest?(hottest.signals||[]).filter(s=>s.status!=='flagged')[0]||null:null;
+  const stageTitle=hottest
+    ? 'Act on the accounts<br>that have earned motion.'
+    : 'Seed one real account so the console can start ranking reality.';
+  const stageCopy=hottest
+    ? 'Use heat, proof, and recency to decide where the next move belongs.'
+    : 'One real account and one real signal are enough to make this room useful.';
   const stageHtml=
-    `<section class="shell-section anchor-stage">
-      <div class="anchor-stage-grid">
-        <div>
-          <div class="anchor-eyebrow">Market intelligence board</div>
-          <div class="anchor-headline">${esc(hottest?'Turn research into the next motion, not more noise.':'Seed one real account so the console can start ranking reality.')}</div>
-          <div class="anchor-support">${esc(hottest
-            ? 'The console should tell you which account deserves motion now, why it matters, and what to do before you reach out.'
-            : 'This surface becomes useful the moment one real account and one real signal exist. Until then, it is only scaffolding.')}</div>
-          <div class="anchor-chip-row">
-            <span class="anchor-chip">${all.length} accounts</span>
-            <span class="anchor-chip">${signalCount} signals</span>
-            <span class="anchor-chip">${activeCount} ready now</span>
-            <span class="anchor-chip">${esc(stateLabel)}</span>
-          </div>
-          <div class="anchor-primary-card">
-            <div class="anchor-primary-label">Priority account</div>
-            <div class="anchor-primary-title">${esc(hottest?hottest.name:'No scored account yet')}</div>
-            <div class="anchor-primary-copy">${esc(hottest
-              ? getAccountExecutionContext(hottest).brief
-              : 'Use Add Account or CSV import, then run one enrichment pass so the console can stop briefing empty space.')}</div>
-            <div class="anchor-primary-actions">
-              ${hottest
-                ? `<button class="btn btn-primary" type="button" onclick="focusSignalAccountById('${hottest.id}')">Open hottest account</button>`
-                : '<button class="btn btn-primary" type="button" onclick="document.getElementById(\'btnAddAcct\').click()">Add account</button>'}
-              <button class="btn btn-secondary" type="button" onclick="document.getElementById('btnEnrichAll').click()">Run enrich all</button>
-            </div>
-          </div>
-        </div>
-        <div class="anchor-mini-grid">
-          <div class="anchor-mini-card"><div class="anchor-mini-label">Signals in play</div><div class="anchor-mini-value">${signalCount}</div><div class="anchor-mini-copy">Live and saved research currently shaping the field.</div></div>
-          <div class="anchor-mini-card"><div class="anchor-mini-label">Accounts ready now</div><div class="anchor-mini-value">${activeCount}</div><div class="anchor-mini-copy">Heat 75+ with enough evidence to justify motion.</div></div>
-          <div class="anchor-mini-card"><div class="anchor-mini-label">Next move</div><div class="anchor-mini-value">${esc(nextMove)}</div><div class="anchor-mini-copy">The console should always hand motion forward.</div></div>
-          <div class="anchor-mini-card"><div class="anchor-mini-label">Research posture</div><div class="anchor-mini-value">${esc(stateLabel)}</div><div class="anchor-mini-copy">${esc(hottest?'The board has enough evidence to rank a real next move.':'The board still needs one account with live research behind it.')}</div></div>
-        </div>
+    `<section class="signal-instrument-stage">
+      <div class="signal-stage-field">
+        <div class="signal-stage-kicker">Live instrument</div>
+        <h1 class="signal-stage-title">${stageTitle}</h1>
+        <p class="signal-stage-copy">${esc(stageCopy)}</p>
       </div>
+      <div class="signal-stage-focus">
+        <div class="signal-stage-label">Priority account</div>
+        <div class="signal-stage-account">
+          <div class="signal-stage-name">${esc(hottest?hottest.name:'No scored account yet')}</div>
+          <span class="signal-stage-heat">${hottest?`Heat ${heat(hottest)}`:esc(stateLabel)}</span>
+        </div>
+        <div class="signal-stage-signal">${esc(leadSignal?leadSignal.headline:'No live signal yet')}</div>
+        <div class="signal-stage-move"><strong>Next move</strong> ${esc(nextMove)}</div>
+      </div>
+    </section>
+    <section class="signal-orbit" aria-label="Signal console register">
+      <button class="signal-orb signal-orb--accounts" type="button" id="signalOrbAccounts" title="Jump to the account grid.">
+        <span class="signal-orb-label">Accounts</span>
+        <span class="signal-orb-value">${all.length}</span>
+        <span class="signal-orb-copy">currently in play</span>
+      </button>
+      <button class="signal-orb signal-orb--signals" type="button" id="signalOrbSignals" title="See the board and its live signal load.">
+        <span class="signal-orb-label">Signals</span>
+        <span class="signal-orb-value">${signalCount}</span>
+        <span class="signal-orb-copy">live reasons on the field</span>
+      </button>
+      <button class="signal-orb signal-orb--ready" type="button" id="signalOrbReady" title="Filter to accounts ready for a next move.">
+        <span class="signal-orb-label">Ready now</span>
+        <span class="signal-orb-value">${activeCount}</span>
+        <span class="signal-orb-copy">hot enough to move</span>
+      </button>
+      <button class="signal-orb signal-orb--posture" type="button" id="signalOrbPosture" title="Open the guide for how this room reads.">
+        <span class="signal-orb-label">Room posture</span>
+        <strong>${esc(stateLabel)}</strong>
+        <span class="signal-orb-copy">${esc(hottest?'The board can rank a real next move.':'The board still needs one account with live evidence.')}</span>
+      </button>
     </section>`;
   if(window.gtmShellChrome){
     window.gtmShellChrome.renderCommandBand('#signalShellBand',{
       kicker:'Intelligence bridge',
-      title:title,
-      copy:copy,
+      title:'',
+      copy:'',
       stateLabel:stateLabel,
       stateTone:stateTone,
-      metrics:[
-        {label:'Highest-priority account',value:hottest?(hottest.name+' · heat '+heat(hottest)):'No scored account yet'},
-        {label:'Signals in play',value:String(signalCount)},
-        {label:'Accounts ready now',value:String(activeCount)},
-        {label:'Next move',value:nextMove}
-      ],
-      actions:[
-        hottest
-          ? {label:'Open Hottest Account',action:'focusSignalAccountById("'+hottest.id+'")',tone:'primary'}
-          : {label:'Add Account',action:'document.getElementById("btnAddAcct").click()',tone:'primary'},
-        {label:'Run Enrich All',action:'document.getElementById("btnEnrichAll").click()'}
-      ]
+      metrics:[],
+      actions:[]
     });
     node.insertAdjacentHTML('beforeend',stageHtml);
+    wireSignalOrbit();
     return;
   }
   node.innerHTML=stageHtml;
+  wireSignalOrbit();
+}
+
+function wireSignalOrbit(){
+  const grid=document.getElementById('grid');
+  const accounts=document.getElementById('signalOrbAccounts');
+  if(accounts)accounts.onclick=()=>{if(grid)grid.scrollIntoView({behavior:'smooth',block:'start'});};
+  const signals=document.getElementById('signalOrbSignals');
+  if(signals)signals.onclick=()=>{if(grid)grid.scrollIntoView({behavior:'smooth',block:'start'});};
+  const ready=document.getElementById('signalOrbReady');
+  if(ready)ready.onclick=()=>{S.mode='active';render();};
+  const posture=document.getElementById('signalOrbPosture');
+  if(posture)posture.onclick=()=>{
+    writeScopedUiText(LS_GUIDE,'open');
+    renderSignalInstrumentGuide();
+  };
 }
 
 function renderControls(){
@@ -1587,22 +2293,110 @@ function renderControls(){
     batches.forEach(b=>{filters+=`<option value="${b.id}" ${S.activeBatch===b.id?'selected':''}>${esc(b.name)} (${b.count})</option>`});
     filters+='</select>';
   }
-  bar.innerHTML=
-    `<section class="shell-section shell-section--compact">
-      <div class="shell-section-header">
-        <div class="shell-section-heading">
-          <div class="shell-section-kicker">Refine the field</div>
-          <div class="shell-section-title">Use one narrow view of the market, not the whole pile at once.</div>
-          <div class="shell-section-copy">Modes, industries, and AI-only filtering should sharpen the next action, not add decorative controls.</div>
-        </div>
-      </div>
-      <div>${filters}</div>
-    </section>`;
+  bar.innerHTML=`<div class="signal-filter-bar">${filters}</div>`;
   bar.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;render()});
   bar.querySelectorAll('[data-ind]').forEach(b=>b.onclick=()=>{S.industry=b.dataset.ind;render()});
   bar.querySelector('[data-aitoggle]').onclick=()=>{S.aiOnly=!S.aiOnly;render()};
   const bsel=bar.querySelector('#batchSel');
   if(bsel)bsel.onchange=()=>{S.activeBatch=bsel.value||null;render()};
+}
+
+function renderControlsRefaced(){
+  const bar=document.getElementById('controlsBar');
+  const batches=readScopedUiJson(LS_BATCHES,[]);
+  const industries=[...new Set(S.accounts.map(a=>a.industry).filter(Boolean))].sort();
+  let h='<div class="signal-filter-bar">';
+  h+='<div class="signal-filter-group"><span class="signal-filter-label">View</span><div class="mode-group">';
+  ['complex','active','surgical','ai_trends'].forEach(m=>{
+    const labels={complex:'Full board',active:'Ready now',surgical:'Current batch',ai_trends:'AI leaders'};
+    const titles={
+      complex:'See the full ranked board.',
+      active:'Show only accounts hot enough to move now.',
+      surgical:'Focus only on the current uploaded batch.',
+      ai_trends:'Show Fortune-ranked accounts with AI-related signals.'
+    };
+    h+=`<button class="mode-btn ${S.mode===m?'active':''}" data-mode="${m}" title="${titles[m]}">${labels[m]}</button>`;
+  });
+  h+='</div></div>';
+  h+=`<div class="signal-filter-group"><span class="signal-filter-label">Industry</span><select id="industrySel" class="signal-filter-select"><option value="all">All industries</option>${industries.map(i=>`<option value="${esc(i)}" ${S.industry===i?'selected':''}>${esc(i)}</option>`).join('')}</select></div>`;
+  h+=`<div class="signal-filter-group"><span class="signal-filter-label">Focus</span><button class="chip ${S.aiOnly?'on':''}" data-aitoggle title="Only show accounts with AI-related signals.">AI signals only</button></div>`;
+  if(batches.length){
+    h+=`<div class="signal-filter-group"><span class="signal-filter-label">Batch</span><select id="batchSel" class="signal-filter-select"><option value="">All batches</option>${batches.map(b=>`<option value="${b.id}" ${S.activeBatch===b.id?'selected':''}>${esc(b.name)} (${b.count})</option>`).join('')}</select></div>`;
+  }
+  h+='</div>';
+  bar.innerHTML=h;
+  bar.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;render()});
+  const industrySel=bar.querySelector('#industrySel');
+  if(industrySel)industrySel.onchange=()=>{S.industry=industrySel.value;render()};
+  const aiToggle=bar.querySelector('[data-aitoggle]');
+  if(aiToggle)aiToggle.onclick=()=>{S.aiOnly=!S.aiOnly;render()};
+  const bsel=bar.querySelector('#batchSel');
+  if(bsel)bsel.onchange=()=>{S.activeBatch=bsel.value||null;render()};
+}
+
+function renderSignalInstrumentGuide(){
+  const node=document.getElementById('signalGuide');
+  if(!node)return;
+  const collapsed=readScopedUiText(LS_GUIDE,'open')==='closed';
+  node.innerHTML=
+    `<section class="signal-guide-shell ${collapsed?'is-collapsed':''}">
+      <div class="signal-guide-head">
+        <div>
+          <div class="signal-guide-title">How this console works</div>
+          <div class="signal-guide-readline">Read the orbit, then the top signal, then the next move.</div>
+        </div>
+        <button class="btn" type="button" id="signalGuideToggle">${collapsed?'Show guide':'Hide guide'}</button>
+      </div>
+      <div class="signal-guide-grid">
+        <div class="signal-guide-col">
+          <div class="signal-guide-label">Register</div>
+          <ul class="signal-guide-list">
+            <li><strong>Accounts</strong><span>Names currently in play.</span></li>
+            <li><strong>Signals</strong><span>Live evidence shaping the board.</span></li>
+            <li><strong>Ready now</strong><span>Heat 75+ with enough proof to act.</span></li>
+            <li><strong>Room posture</strong><span>Whether the console can rank a real next move.</span></li>
+          </ul>
+        </div>
+        <div class="signal-guide-col">
+          <div class="signal-guide-label">Views</div>
+          <ul class="signal-guide-list">
+            <li><strong>Full board</strong><span>The full ranked field.</span></li>
+            <li><strong>Ready now</strong><span>Only accounts hot enough to move now.</span></li>
+            <li><strong>Current batch</strong><span>The active uploaded slice only.</span></li>
+            <li><strong>AI leaders</strong><span>Accounts with meaningful AI-related signals.</span></li>
+          </ul>
+        </div>
+        <div class="signal-guide-col">
+          <div class="signal-guide-label">Heat bands</div>
+          <div class="signal-guide-bands">
+            <span class="signal-guide-band hot">91-99 Move now</span>
+            <span class="signal-guide-band active">75-90 Angle formed</span>
+            <span class="signal-guide-band watch">50-74 Worth tracking</span>
+            <span class="signal-guide-band low">0-49 Too thin or stale</span>
+          </div>
+        </div>
+        <div class="signal-guide-col">
+          <div class="signal-guide-label">Card anatomy</div>
+          <div class="signal-guide-spec">
+            <div class="signal-guide-spec-top">
+              <div class="signal-guide-spec-name">Priority account</div>
+              <div class="signal-guide-spec-heat">82</div>
+            </div>
+            <div class="signal-guide-spec-line"><strong>Top signal</strong> tells you why the account rose.</div>
+            <div class="signal-guide-spec-line"><strong>Next move</strong> tells you what the console wants done.</div>
+            <div class="signal-guide-spec-line"><strong>Open the card</strong> for the full research file.</div>
+          </div>
+        </div>
+      </div>
+    </section>`;
+  const toggle=node.querySelector('#signalGuideToggle');
+  if(toggle){
+    toggle.onclick=()=>{
+      writeScopedUiText(LS_GUIDE,collapsed?'open':'closed');
+      renderSignalInstrumentGuide();
+      renderStats();
+    };
+  }
 }
 
 function renderMorning(){
@@ -1613,39 +2407,31 @@ function renderMorning(){
   if(!top3.length){mb.classList.remove('show');mb.innerHTML='';return}
   mb.classList.add('show');
   mb.innerHTML=
-    `<section class="shell-section">
-      <div class="shell-section-header">
-        <div class="shell-section-heading">
-          <div class="shell-section-kicker">Morning brief</div>
-          <div class="shell-section-title">${esc(new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}))}</div>
-          <div class="shell-section-copy">Start with one account worth acting on, then hand that signal into motion without reopening the whole market.</div>
-        </div>
-        <div class="shell-section-actions">
-          <button class="btn btn-ghost" type="button" id="dismissMorning">Dismiss for today</button>
-        </div>
+    `<section class="signal-morning-shell">
+      <div class="signal-morning-head">
+        <div class="signal-morning-kicker">Morning brief - ${esc(new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}))}</div>
+        <button class="btn btn-ghost" type="button" id="dismissMorning">Dismiss</button>
       </div>
-      <div class="anchor-queue">
+      <div class="signal-brief-list">
         ${top3.map((a,index)=>{
-          const summary=getAccountExecutionContext(a);
+          const h=heat(a);
+          const topSignal=(a.signals||[]).filter(s=>s.status!=='flagged')[0]||null;
           const move=getNextMove(a);
-          return `<div class="anchor-queue-card">
-            <div class="anchor-queue-top">
-              <div style="display:flex;gap:12px;align-items:flex-start;">
-                <div class="anchor-queue-rank">${index+1}</div>
-                <div><div class="anchor-queue-title">${esc(a.name)}</div></div>
+          const heatLabel=h>=75?'Hot':h>=50?'Watch':h>=25?'Live':'Low';
+          return `<article class="signal-brief-card">
+            <div class="signal-brief-rank">${String(index+1).padStart(2,'0')}</div>
+            <div class="signal-brief-body">
+              <div class="signal-brief-top">
+                <div class="signal-brief-name">${esc(a.name)}</div>
+                <div class="signal-brief-heat ${heatCls(h)}"><span class="signal-brief-dot"></span>${esc(heatLabel)} ${h}</div>
               </div>
-              <span class="shell-state-pill state-${heat(a)>=75?'ready':heat(a)>=50?'live':'thin'}">Heat ${heat(a)}</span>
+              <div class="signal-brief-signal">${esc(topSignal?topSignal.headline:'No live signal yet')}</div>
+              <div class="signal-brief-bottom">
+                <span class="signal-brief-move">${esc(move.title)}</span>
+                <button class="btn btn-secondary" type="button" data-prep="${a.id}">Prep call</button>
+              </div>
             </div>
-            <div class="anchor-queue-copy">${esc(summary.brief)}</div>
-            <div class="anchor-queue-meta">
-              <span>${esc((a.signals||[])[0]?.headline||'No live signal yet')}</span>
-              <span>${esc(move.title)}</span>
-            </div>
-            <div class="anchor-queue-actions">
-              <button class="btn btn-primary" type="button" data-prep="${a.id}">Prep call</button>
-              <button class="btn btn-secondary" type="button" data-open="${a.id}">Open account</button>
-            </div>
-          </div>`;
+          </article>`;
         }).join('')}
       </div>
     </section>`;
@@ -1654,7 +2440,6 @@ function renderMorning(){
     const acct=S.accounts.find(a=>a.id===b.dataset.prep);
     if(acct)navigator.clipboard.writeText(genBrief(acct)).then(()=>{b.textContent='Copied brief';setTimeout(()=>b.textContent='Prep call',1500)});
   });
-  mb.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>focusSignalAccountById(b.dataset.open));
 }
 
 async function runDeepResearch(acctId,button){
@@ -1671,7 +2456,7 @@ async function runDeepResearch(acctId,button){
     if(!statusEl)return;
     statusEl.style.display='block';
     statusEl.style.color='#a855f7';
-    statusEl.innerHTML='⚡ '+phases[Math.min(phaseIdx,phases.length-1)]+' <b>'+esc(acct.name)+'</b>';
+    statusEl.innerHTML='Ã¢Å¡Â¡ '+phases[Math.min(phaseIdx,phases.length-1)]+' <b>'+esc(acct.name)+'</b>';
   };
 
   if(button){
@@ -1747,7 +2532,8 @@ function renderGrid(){
   grid.innerHTML=accts.map((a,i)=>{
     const h=heat(a);const isOpen=S.expanded===a.id;
     const cats={};(a.signals||[]).forEach(s=>{cats[s.cat]=(cats[s.cat]||0)+1});
-    const pills=Object.entries(cats).map(([c,n])=>CATS[c]?`<span class="pill ${CATS[c].p}">${CATS[c].l} ${n}</span>`:'').join('');
+    const topSignal=(a.signals||[]).filter(s=>s.status!=='flagged')[0]||null;
+    const pills=Object.entries(cats).slice(0,2).map(([c,n])=>CATS[c]?`<span class="pill ${CATS[c].p}">${CATS[c].l} ${n}</span>`:'').join('');
     return`
 <div class="card ${isOpen?'open':''}" data-id="${a.id}" style="animation-delay:${i*30}ms">
   <div class="card-head" data-toggle="${a.id}">
@@ -1757,9 +2543,10 @@ function renderGrid(){
         ${a.fortune_rank?`<span class="fortune-badge">F#${a.fortune_rank}</span>`:''}
         ${a.origin==='uploaded'?'<span style="font-size:.55rem;color:var(--cyan);font-family:var(--mono)">CSV</span>':''}
       </div>
-      <div class="card-meta">${[a.industry,a.sector,a.revenue,a.employees,a.hq].filter(Boolean).map(esc).join(' · ')}</div>
+      <div class="card-meta">${[a.industry,a.sector,a.revenue,a.employees,a.hq].filter(Boolean).map(esc).join(' Ã‚Â· ')}</div>
     </div>
   </div>
+  <div class="card-lead"><strong>${esc(topSignal?topSignal.headline:'No live signal yet')}</strong></div>
   <div class="card-pills">${pills}</div>
   ${renderCardGuidance(a)}
   ${isOpen?renderDetail(a):''}
@@ -1772,16 +2559,16 @@ function renderGrid(){
   // Enrich buttons
   grid.querySelectorAll('[data-enrich]').forEach(b=>b.onclick=e=>{e.stopPropagation();doEnrich(b.dataset.enrich,b)});
   // Copy brief
-  grid.querySelectorAll('[data-brief]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.brief);if(acct){navigator.clipboard.writeText(genBrief(acct));b.textContent='✓ Copied!';setTimeout(()=>b.textContent='📋 Copy Brief',1500)}});
+  grid.querySelectorAll('[data-brief]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.brief);if(acct){navigator.clipboard.writeText(genBrief(acct));b.textContent='Ã¢Å“â€œ Copied!';setTimeout(()=>b.textContent='Ã°Å¸â€œâ€¹ Copy Brief',1500)}});
   // Copy signals
-  grid.querySelectorAll('[data-copysigs]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.copysigs);if(acct){const t=(acct.signals||[]).map(s=>`• ${s.headline}\n  ${s.why||''}\n  ${s.url||''}`).join('\n\n');navigator.clipboard.writeText(t);b.textContent='✓';setTimeout(()=>b.textContent='Signals',1500)}});
+  grid.querySelectorAll('[data-copysigs]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.copysigs);if(acct){const t=(acct.signals||[]).map(s=>`Ã¢â‚¬Â¢ ${s.headline}\n  ${s.why||''}\n  ${s.url||''}`).join('\n\n');navigator.clipboard.writeText(t);b.textContent='Ã¢Å“â€œ';setTimeout(()=>b.textContent='Signals',1500)}});
   // Verify/flag
   grid.querySelectorAll('[data-verify]').forEach(b=>b.onclick=e=>{e.stopPropagation();const[aid,sid]=b.dataset.verify.split('|');const acct=S.accounts.find(a=>a.id===aid);if(!acct)return;const sig=(acct.signals||[]).find(s=>s.id===sid);if(sig){sig.status=sig.status==='verified'?'unverified':'verified';if(sig.status==='verified')sig.confidence=Math.min(1,(sig.confidence||.7)+.05);acct.updated_at=new Date().toISOString();save(S);renderGrid();persistSignalConsoleAccount(acct)}});
   grid.querySelectorAll('[data-flag]').forEach(b=>b.onclick=e=>{e.stopPropagation();const[aid,sid]=b.dataset.flag.split('|');const acct=S.accounts.find(a=>a.id===aid);if(!acct)return;const sig=(acct.signals||[]).find(s=>s.id===sid);if(sig){sig.status=sig.status==='flagged'?'unverified':'flagged';acct.updated_at=new Date().toISOString();save(S);renderGrid();persistSignalConsoleAccount(acct)}});
   // Score detail
   grid.querySelectorAll('[data-scoredetail]').forEach(b=>b.onclick=e=>{e.stopPropagation();const acct=S.accounts.find(a=>a.id===b.dataset.scoredetail);if(acct)alert(scoreDetail(acct))});
 
-  // ⚡ DEEP RESEARCH — Browserbase enrichment
+  // Ã¢Å¡Â¡ DEEP RESEARCH Ã¢â‚¬â€ Browserbase enrichment
   grid.querySelectorAll('[data-deepresearch]').forEach(b=>b.onclick=e=>{
     e.stopPropagation();
     runDeepResearch(b.dataset.deepresearch,b);
@@ -1796,9 +2583,9 @@ function renderGrid(){
     b.disabled=true;
     b.innerHTML='<span class="enriching-badge">Researching...</span>';
     statusEl.style.display='block';
-    statusEl.innerHTML='⚡ Connecting to Browserbase... Launching 3 parallel research sessions for <b>'+esc(acct.name)+'</b>';
+    statusEl.innerHTML='Ã¢Å¡Â¡ Connecting to Browserbase... Launching 3 parallel research sessions for <b>'+esc(acct.name)+'</b>';
 
-    const phases=['⚡ Searching Google News...','⚡ Scanning company website + careers...','⚡ Extracting strategic intelligence...','⚡ Processing signals...'];
+    const phases=['Ã¢Å¡Â¡ Searching Google News...','Ã¢Å¡Â¡ Scanning company website + careers...','Ã¢Å¡Â¡ Extracting strategic intelligence...','Ã¢Å¡Â¡ Processing signals...'];
     let phaseIdx=0;
     const phaseTimer=setInterval(()=>{phaseIdx++;if(phaseIdx<phases.length)statusEl.innerHTML=phases[phaseIdx]},8000);
 
@@ -1838,25 +2625,25 @@ function renderGrid(){
       acct._lastEnriched=data.enrichedAt;
       save(S);
 
-      statusEl.innerHTML='✓ <b>'+newSignals.length+' new signals</b> added from live web research ('+data.elapsed+')';
+      statusEl.innerHTML='Ã¢Å“â€œ <b>'+newSignals.length+' new signals</b> added from live web research ('+data.elapsed+')';
       statusEl.style.color='#4a9e6e';
       setTimeout(()=>{statusEl.style.display='none';statusEl.style.color='#a855f7'},4000);
       b.disabled=false;
-      b.innerHTML='⚡ Deep Research';
+      b.innerHTML='Ã¢Å¡Â¡ Deep Research';
       renderGrid();
     })
     .catch(err=>{
       clearInterval(phaseTimer);
-      statusEl.innerHTML='✗ '+esc(err.message)+(err.message.includes('Failed to fetch')?' — is the enrichment service reachable?':'');
+      statusEl.innerHTML='Ã¢Å“â€” '+esc(err.message)+(err.message.includes('Failed to fetch')?' Ã¢â‚¬â€ is the enrichment service reachable?':'');
       statusEl.style.color='#c05a52';
       b.disabled=false;
-      b.innerHTML='⚡ Deep Research';
+      b.innerHTML='Ã¢Å¡Â¡ Deep Research';
       setTimeout(()=>{statusEl.style.display='none';statusEl.style.color='#a855f7'},6000);
     });
   });
 }
 
-// E7: Recommended Play card — temperature auto-detection + channel/CTA recommendation
+// E7: Recommended Play card Ã¢â‚¬â€ temperature auto-detection + channel/CTA recommendation
 function renderResearchStatus(a){
   const state=getResearchState(a);
   const color=state.tone==='ok'?'#4a9e6e':state.tone==='error'?'#c05a52':state.tone==='progress'?'#a855f7':'#e0a030';
@@ -1921,7 +2708,7 @@ function renderDetail(a){
   ${renderRecPlay(a)}
   <div class="detail-research">
     <span style="font-size:.6rem;color:var(--tx4);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 0">Research:</span>
-    ${researchLinks.map(([u,l])=>`<a class="rlink" href="${esc(u)}" target="_blank" rel="noopener">↗ ${l}</a>`).join('')}
+    ${researchLinks.map(([u,l])=>`<a class="rlink" href="${esc(u)}" target="_blank" rel="noopener">Ã¢â€ â€” ${l}</a>`).join('')}
   </div>
   ${renderHeatExplainability(a)}
   <div class="detail-tabs">
@@ -1935,21 +2722,21 @@ function renderDetail(a){
       return`
       <div class="sig ${stale&&!flagged?'stale':''} ${flagged?'flagged':''}">
         <div class="sig-actions">
-          <button class="sig-vbtn ${s.status==='verified'?'verified':''}" data-verify="${a.id}|${s.id}" title="Verify">✓</button>
-          <button class="sig-vbtn ${s.status==='flagged'?'flag':''}" data-flag="${a.id}|${s.id}" title="Flag">⚑</button>
+          <button class="sig-vbtn ${s.status==='verified'?'verified':''}" data-verify="${a.id}|${s.id}" title="Verify">Ã¢Å“â€œ</button>
+          <button class="sig-vbtn ${s.status==='flagged'?'flag':''}" data-flag="${a.id}|${s.id}" title="Flag">Ã¢Å¡â€˜</button>
         </div>
         <div class="sig-top">
           <div class="sig-dot ${ci.d||''}"></div>
           <div class="sig-body">
             <div class="sig-hl">${esc(s.headline)}${s.is_ai?'<span class="sig-ai">AI</span>':''}</div>
             <div class="sig-detail">${esc(s.detail)}</div>
-            ${(s.why||s.why_it_matters)?`<details style="margin-top:4px;"><summary style="font-size:.68rem;color:var(--tx3);cursor:pointer;opacity:.6;">Why it matters</summary><div class="sig-why">💡 ${esc(s.why||s.why_it_matters||'')}</div></details>`:''}
+            ${(s.why||s.why_it_matters)?`<details style="margin-top:4px;"><summary style="font-size:.68rem;color:var(--tx3);cursor:pointer;opacity:.6;">Why it matters</summary><div class="sig-why">Ã°Å¸â€™Â¡ ${esc(s.why||s.why_it_matters||'')}</div></details>`:''}
             <div class="sig-foot">
-              <span class="sig-src">📎 ${esc(s.source_name||'')} ${s.url?`· <a href="${esc(s.url)}" target="_blank" rel="noopener">Source →</a>`:''}</span>
+              <span class="sig-src">Ã°Å¸â€œÅ½ ${esc(s.source_name||'')} ${s.url?`Ã‚Â· <a href="${esc(s.url)}" target="_blank" rel="noopener">Source Ã¢â€ â€™</a>`:''}</span>
               <span class="sig-conf">${Math.round((s.confidence||0)*100)}% conf</span>
               ${ageLabel?`<span class="sig-age">${ageLabel}</span>`:''}
               <span class="sig-src">${esc(s.published_date||'')}</span>
-              ${s.status==='verified'?'<span style="color:var(--green);font-size:.6rem">✓ verified</span>':''}
+              ${s.status==='verified'?'<span style="color:var(--green);font-size:.6rem">Ã¢Å“â€œ verified</span>':''}
             </div>
             ${(s.pain_tags||[]).length?`<div class="sig-tags">${s.pain_tags.map(t=>PAIN_LIB[t]?`<span class="sig-tag">${PAIN_LIB[t].l}</span>`:'').join('')}</div>`:''}
           </div>
@@ -1958,15 +2745,15 @@ function renderDetail(a){
     }).join(''):'<div style="color:var(--tx3);padding:16px">No signals in this category.</div>'}
   </div>
   <div class="brief-bar">
-    <button class="btn btn-gold btn-sm" data-brief="${a.id}">📋 Copy Pre-Call Brief</button>
+    <button class="btn btn-gold btn-sm" data-brief="${a.id}">Ã°Å¸â€œâ€¹ Copy Pre-Call Brief</button>
     <button class="btn btn-sm" data-copysigs="${a.id}">Copy Signals Only</button>
   </div>
 </div>`;
 }
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // MODALS
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 function showModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('overlay').classList.add('on')}
 function hideModal(){document.getElementById('overlay').classList.remove('on')}
 document.getElementById('overlay').onclick=e=>{if(e.target===e.currentTarget)hideModal()};
@@ -2028,17 +2815,17 @@ document.getElementById('btnAddSig').onclick=()=>{
   };
 };
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // EVENT WIRING
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 document.getElementById('searchIn').oninput=e=>{S.search=e.target.value;renderGrid()};
 document.getElementById('btnUploadCSV').onclick=showCSVModal;
 document.getElementById('btnExport').onclick=showExportModal;
 document.getElementById('btnEnrichAll').onclick=enrichAll;
 
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 // INIT
-// ═══════════════════════════════════════════
+// Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 render();
 hydrateSignalConsoleFromCloud();
 window.addEventListener('resize',syncSignalShellOffset);
