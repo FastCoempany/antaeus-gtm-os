@@ -5,3 +5,4 @@ enrichment-server/node_modules/
 node_modules/
 tmp-*.png
 *.log
+dist/

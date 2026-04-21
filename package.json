@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build:cloudflare": "node tools/deploy/build-cloudflare-assets.js",
+    "deploy:cloudflare": "npm run build:cloudflare && npx wrangler versions upload"
+  },
+  "devDependencies": {
+    "wrangler": "^4.84.0"
+  }
+}
