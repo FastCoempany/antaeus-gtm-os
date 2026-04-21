@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Future Autopsy Radical Concepts Round 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#0a1c40;
+      --ink:#10274f;
+      --soft:#5f7594;
+      --muted:#8b9cb4;
+      --line:rgba(10,28,64,.08);
+      --line-strong:rgba(10,28,64,.16);
+      --paper:#fcfdff;
+      --paper-2:#f3f7fd;
+      --orange:#e6701e;
+      --blue:#2471e7;
+      --green:#2d7a4b;
+      --red:#cb514e;
+      --amber:#c48b2b;
+      --shadow-soft:0 18px 42px rgba(10,28,64,.08);
+      --shadow-hard:0 32px 80px rgba(10,28,64,.12);
+      --radius-xl:40px;
+      --radius-lg:26px;
+      --radius-md:18px;
+      --radius-pill:999px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Plus Jakarta Sans",Inter,system-ui,sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,.06), transparent 26%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,.05), transparent 24%),
+        linear-gradient(180deg,#fbfcff 0%,#f2f6fc 100%);
+      padding:28px 22px 88px;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    h1,h2,h3,h4,p{margin:0}
+    .page{max-width:1580px;margin:0 auto;display:grid;gap:30px}
+    .topline{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+      padding:0 6px;
+      font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+      color:var(--muted);font-weight:700;
+    }
+    .topline .accent{color:var(--orange)}
+
+    .board{
+      position:relative;
+      overflow:hidden;
+      min-height:920px;
+      border:1px solid rgba(10,28,64,.06);
+      border-radius:42px;
+      box-shadow:var(--shadow-hard);
+    }
+    .board-meta{
+      position:absolute;
+      top:26px;left:28px;right:28px;
+      display:flex;justify-content:space-between;gap:18px;
+      z-index:6;
+    }
+    .board-id{
+      font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;
+    }
+    .board-id .accent{color:var(--orange)}
+    .board-name{
+      font-family:"Outfit","Plus Jakarta Sans",sans-serif;
+      font-size:38px;line-height:1;letter-spacing:-.05em;font-weight:700;color:var(--navy);
+    }
+    .board-meaning{
+      max-width:420px;
+      font-size:14px;line-height:1.55;color:var(--soft);text-align:right;
+    }
+    .tag{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:34px;padding:0 12px;border-radius:999px;
+      border:1px solid rgba(10,28,64,.1);
+      background:rgba(255,255,255,.76);
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+    }
+    .label{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    }
+    .btn-primary{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:46px;padding:0 18px;border-radius:18px;border:0;
+      background:var(--orange);color:#fff;font:inherit;font-weight:700;
+      box-shadow:0 14px 30px rgba(230,112,30,.22);
+    }
+    .btn-ghost{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:42px;padding:0 16px;border-radius:18px;
+      border:1px solid rgba(10,28,64,.1);background:rgba(255,255,255,.78);
+      color:var(--navy);font:inherit;font-weight:700;
+    }
+
+    /* Cross Examination */
+    .cross{
+      background:
+        linear-gradient(180deg,#fffdfa 0%,#f7f1e8 100%);
+      padding:112px 34px 34px;
+    }
+    .cross:before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        linear-gradient(90deg, transparent 0 86px, rgba(10,28,64,.04) 86px 87px, transparent 87px 100%),
+        linear-gradient(180deg, transparent 0 118px, rgba(10,28,64,.04) 118px 119px, transparent 119px 100%);
+      pointer-events:none;
+    }
+    .cross-shell{
+      display:grid;
+      grid-template-columns:1fr 1fr 300px;
+      gap:20px;
+      align-items:start;
+      min-height:760px;
+    }
+    .bench{
+      padding:24px 24px 22px;
+      border-radius:26px;
+      background:rgba(255,255,255,.76);
+      border:1px solid rgba(10,28,64,.08);
+      box-shadow:var(--shadow-soft);
+      display:grid;gap:16px;
+    }
+    .bench-head{
+      display:flex;justify-content:space-between;gap:14px;align-items:flex-start;
+    }
+    .bench-title{
+      font-family:"DM Serif Display",Georgia,serif;
+      font-size:42px;line-height:.95;letter-spacing:-.05em;max-width:7ch;
+    }
+    .bench-stamp{
+      transform:rotate(-8deg);
+      border:2px solid rgba(203,81,78,.38);
+      color:var(--red);
+      border-radius:999px;
+      padding:8px 14px;
+      font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+    }
+    .argument{
+      display:grid;gap:10px;
+      padding:14px 0;
+      border-top:1px solid rgba(10,28,64,.08);
+    }
+    .argument:first-of-type{border-top:0;padding-top:0}
+    .argument h4{font-size:18px;line-height:1.15;font-weight:700}
+    .argument p{font-size:14px;line-height:1.55;color:var(--soft)}
+    .objection{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--red);
+    }
+    .objection:before{
+      content:"";
+      width:10px;height:10px;border-radius:50%;background:var(--red);
+    }
+    .verdict-rail{
+      display:grid;gap:14px;align-content:start;
+    }
+    .motion-card{
+      padding:18px;border-radius:24px;
+      background:rgba(255,255,255,.82);
+      border:1px solid rgba(10,28,64,.08);
+      box-shadow:var(--shadow-soft);
+      display:grid;gap:10px;
+    }
+    .motion-card h4{font-size:18px;line-height:1.15;font-weight:700}
+    .motion-card p{font-size:14px;line-height:1.55;color:var(--soft)}
+    .motion-card a{
+      text-decoration:none;color:var(--blue);
+      font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    }
+
+    /* Black Box */
+    .blackbox{
+      background:
+        radial-gradient(circle at 82% 18%, rgba(230,112,30,.18), transparent 22%),
+        linear-gradient(180deg,#101520 0%,#171f2d 100%);
+      color:#e8edf8;
+      padding:112px 34px 34px;
+    }
+    .blackbox .board-name,
+    .blackbox .board-meaning{color:#e8edf8}
+    .blackbox .board-id{color:#8b97ad}
+    .blackbox .board-id .accent{color:#ffb15f}
+    .blackbox .label{color:#8b97ad}
+    .blackbox-shell{
+      display:grid;
+      grid-template-columns:1.1fr .8fr;
+      gap:22px;
+      min-height:760px;
+      align-items:start;
+    }
+    .recorder{
+      padding:24px 24px 22px;
+      border-radius:28px;
+      background:linear-gradient(180deg, rgba(18,24,38,.94), rgba(11,16,26,.96));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 28px 80px rgba(0,0,0,.34);
+      display:grid;gap:20px;
+    }
+    .recorder-title{
+      font-family:"Outfit","Plus Jakarta Sans",sans-serif;
+      font-size:66px;line-height:.92;letter-spacing:-.08em;font-weight:700;max-width:8ch;
+    }
+    .recorder-copy{max-width:58ch;font-size:15px;line-height:1.6;color:#b2bdd1}
+    .timeline{
+      display:grid;gap:16px;
+      margin-top:6px;
+    }
+    .frame{
+      display:grid;
+      grid-template-columns:86px 1fr 140px;
+      gap:16px;
+      align-items:center;
+      padding:12px 0;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .frame:first-child{border-top:0;padding-top:0}
+    .frame-time{
+      font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#8b97ad;
+    }
+    .frame-trace{
+      position:relative;
+      height:58px;
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+    }
+    .frame-trace svg{position:absolute;inset:0;width:100%;height:100%}
+    .frame-status{
+      display:grid;gap:6px;
+    }
+    .frame-status .state{font-size:14px;font-weight:700}
+    .frame-status .copy{font-size:13px;line-height:1.4;color:#b2bdd1}
+    .frame-status .orange{color:#ffb15f}
+    .frame-status .blue{color:#71a7ff}
+    .frame-status .green{color:#7fd79c}
+    .blackbox-dock{
+      display:grid;gap:14px;align-content:start;
+    }
+    .bb-card{
+      padding:18px;border-radius:24px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 18px 40px rgba(0,0,0,.2);
+      display:grid;gap:10px;
+    }
+    .bb-card h4{font-size:18px;line-height:1.15;font-weight:700}
+    .bb-card p{font-size:14px;line-height:1.55;color:#b2bdd1}
+    .bb-card a{
+      color:#8db7ff;text-decoration:none;
+      font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    }
+
+    /* Switchboard */
+    .switchboard{
+      background:
+        radial-gradient(circle at 100% 0%, rgba(36,113,231,.08), transparent 28%),
+        linear-gradient(180deg,#f7fbff 0%,#eef5fb 100%);
+      padding:112px 34px 34px;
+    }
+    .switch-shell{
+      display:grid;
+      grid-template-columns:1fr 320px;
+      gap:24px;
+      min-height:760px;
+      align-items:start;
+    }
+    .panel{
+      position:relative;
+      padding:26px 26px 24px;
+      border-radius:32px;
+      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(243,248,253,.92));
+      border:1px solid rgba(10,28,64,.08);
+      box-shadow:var(--shadow-hard);
+      display:grid;gap:20px;
+    }
+    .panel-title{
+      font-family:"Outfit","Plus Jakarta Sans",sans-serif;
+      font-size:60px;line-height:.92;letter-spacing:-.08em;font-weight:700;max-width:8ch;
+    }
+    .panel-copy{max-width:58ch;font-size:15px;line-height:1.6;color:var(--soft)}
+    .circuit-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+      margin-top:6px;
+    }
+    .circuit{
+      padding:18px;border-radius:24px;
+      background:rgba(255,255,255,.72);
+      border:1px solid rgba(10,28,64,.08);
+      display:grid;gap:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .circuit:after{
+      content:"";
+      position:absolute;
+      right:-24px;top:50%;
+      width:80px;height:2px;
+      background:linear-gradient(90deg, rgba(10,28,64,.14), transparent);
+      transform:translateY(-50%);
+    }
+    .circuit-top{
+      display:flex;justify-content:space-between;gap:12px;align-items:center;
+    }
+    .toggle{
+      width:40px;height:24px;border-radius:999px;background:rgba(10,28,64,.12);position:relative;
+    }
+    .toggle:before{
+      content:"";
+      position:absolute;top:3px;left:4px;width:18px;height:18px;border-radius:50%;background:#fff;
+      box-shadow:0 2px 10px rgba(10,28,64,.12);
+    }
+    .toggle.live{background:rgba(45,122,75,.34)}
+    .toggle.live:before{left:18px}
+    .toggle.fail{background:rgba(203,81,78,.26)}
+    .toggle.fail:before{left:4px;background:#fff2f1}
+    .circuit h4{font-size:18px;line-height:1.15;font-weight:700}
+    .circuit p{font-size:14px;line-height:1.5;color:var(--soft)}
+    .circuit .route{
+      font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--blue);
+    }
+    .switch-dock{
+      display:grid;gap:14px;align-content:start;
+    }
+    .sw-card{
+      padding:18px;border-radius:24px;
+      background:rgba(255,255,255,.8);
+      border:1px solid rgba(10,28,64,.08);
+      box-shadow:var(--shadow-soft);
+      display:grid;gap:10px;
+    }
+    .sw-card h4{font-size:18px;line-height:1.15;font-weight:700}
+    .sw-card p{font-size:14px;line-height:1.55;color:var(--soft)}
+
+    @media (max-width: 1180px){
+      .cross-shell,.blackbox-shell,.switch-shell,.board-meta{grid-template-columns:1fr}
+      .board-meaning{text-align:left;max-width:none}
+      .blackbox .board-meaning{text-align:left}
+      .cross .board-meaning,.switchboard .board-meaning{text-align:left}
+    }
+    @media (max-width: 880px){
+      .board{min-height:auto}
+      .cross,.blackbox,.switchboard{padding:120px 22px 26px}
+      .cross-shell{grid-template-columns:1fr}
+      .frame{grid-template-columns:1fr}
+      .circuit-grid{grid-template-columns:1fr}
+      .panel-title,.recorder-title,.bench-title{font-size:44px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Future Autopsy</span>
+      <span>Radical Concept Round 2</span>
+    </div>
+
+    <section class="board cross">
+      <div class="board-meta">
+        <div>
+          <div class="board-id"><span class="accent">Variant 04</span> · Cross-Examination Bench</div>
+          <div class="board-name">Put the deal story on trial.</div>
+        </div>
+        <p class="board-meaning">The deal does not get reviewed; it gets prosecuted. One side presents the official story, the other side impeaches it. The forcing mechanic is verdict: the user must decide whether the deal story survives scrutiny before they can keep the forecast intact.</p>
+      </div>
+
+      <div class="cross-shell">
+        <div class="bench">
+          <div class="bench-head">
+            <div>
+              <div class="label">Defense story</div>
+              <div class="bench-title">“This is a healthy late-stage negotiation.”</div>
+            </div>
+            <div class="tag">$280k</div>
+          </div>
+          <div class="argument">
+            <h4>The account is engaged and procurement is moving.</h4>
+            <p>Recent activity, pilot proof, and verbal momentum all point to a deal that sounds active enough to stay in late-stage language.</p>
+          </div>
+          <div class="argument">
+            <h4>Pipeline value still feels intact.</h4>
+            <p>The forecast is benefiting from activity that looks like seriousness even though the internal decision chain is not yet explicit.</p>
+          </div>
+        </div>
+
+        <div class="bench">
+          <div class="bench-head">
+            <div>
+              <div class="label">Cross-examination</div>
+              <div class="bench-title">The story collapses under three objections.</div>
+            </div>
+            <div class="bench-stamp">Overruled</div>
+          </div>
+          <div class="argument">
+            <div class="objection">Objection 01</div>
+            <h4>No dated next step.</h4>
+            <p>If the negotiation is real, the calendar should prove it. Right now the board is carrying stage language without motion truth.</p>
+          </div>
+          <div class="argument">
+            <div class="objection">Objection 02</div>
+            <h4>Proof is not owned.</h4>
+            <p>Pilot evidence exists, but there is still no clear internal owner responsible for turning evidence into a decision.</p>
+          </div>
+          <div class="argument">
+            <div class="objection">Objection 03</div>
+            <h4>Process is widening before control.</h4>
+            <p>Procurement is adding surface area faster than the deal is gaining control over the path to decision.</p>
+          </div>
+        </div>
+
+        <aside class="verdict-rail">
+          <div class="motion-card">
+            <div class="label">Verdict</div>
+            <h4>The current story does not survive.</h4>
+            <p>The stage is ahead of the truth. The room should force one changed move into the deal before more narrative is trusted.</p>
+          </div>
+          <div class="motion-card">
+            <div class="label">Motion to correct</div>
+            <h4>Change the live deal first.</h4>
+            <a href="#">Deal workspace</a>
+          </div>
+          <div class="motion-card">
+            <div class="label">Then</div>
+            <h4>Pin owner and close path.</h4>
+            <a href="#">Call planner · PoC framework</a>
+          </div>
+          <div class="motion-card">
+            <button class="btn-primary">Enter trial</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="board blackbox">
+      <div class="board-meta">
+        <div>
+          <div class="board-id"><span class="accent">Variant 05</span> · Black Box Reconstruction</div>
+          <div class="board-name">Reconstruct the last truthful moments.</div>
+        </div>
+        <p class="board-meaning">Autopsy becomes a flight-recorder reconstruction. The room shows the last meaningful signals before the deal lost control. The forcing mechanic is sequence: the user is compelled to identify where the flight path broke rather than merely reading static risk labels.</p>
+      </div>
+
+      <div class="blackbox-shell">
+        <div class="recorder">
+          <div>
+            <div class="label">Black box transcript</div>
+            <div class="recorder-title">The loss was recorded before it was recognized.</div>
+          </div>
+          <p class="recorder-copy">This surface replays the last signal-bearing moments that mattered. Not every moment is equal. The room is built to show where control broke, which trace went quiet, and what corrective room still could have re-routed the deal.</p>
+
+          <div class="timeline">
+            <div class="frame">
+              <div class="frame-time">T-45</div>
+              <div class="frame-trace">
+                <svg viewBox="0 0 900 58" preserveAspectRatio="none">
+                  <path d="M12 28 C110 28, 160 12, 230 14 S340 42, 430 42 S560 18, 650 18 S760 34, 888 34" fill="none" stroke="#ffb15f" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="frame-status">
+                <div class="state orange">Calendar gap opens</div>
+                <div class="copy">The first real loss signal is not silence. It is the missing next step.</div>
+              </div>
+            </div>
+            <div class="frame">
+              <div class="frame-time">T-32</div>
+              <div class="frame-trace">
+                <svg viewBox="0 0 900 58" preserveAspectRatio="none">
+                  <path d="M12 18 C140 18, 220 20, 360 32 S540 42, 660 34 S780 26, 888 24" fill="none" stroke="#71a7ff" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="frame-status">
+                <div class="state blue">Proof loses owner</div>
+                <div class="copy">Evidence still exists, but no one is carrying it toward a decision.</div>
+              </div>
+            </div>
+            <div class="frame">
+              <div class="frame-time">T-18</div>
+              <div class="frame-trace">
+                <svg viewBox="0 0 900 58" preserveAspectRatio="none">
+                  <path d="M12 14 C130 20, 240 18, 350 18 S520 20, 620 30 S760 44, 888 44" fill="none" stroke="#7fd79c" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="frame-status">
+                <div class="state green">Activity masks decay</div>
+                <div class="copy">The thread still moves, but it is no longer moving the deal toward a controlled close.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="blackbox-dock">
+          <div class="bb-card">
+            <div class="label">Primary break</div>
+            <h4>Negotiation language survived longer than the next step did.</h4>
+            <p>The board kept a late-stage posture after the mechanics that justify it were already gone.</p>
+          </div>
+          <div class="bb-card">
+            <div class="label">Reroute now</div>
+            <h4>Reconstruct control in the live deal.</h4>
+            <a href="#">Deal workspace</a>
+          </div>
+          <div class="bb-card">
+            <div class="label">Then</div>
+            <h4>Re-record proof ownership.</h4>
+            <a href="#">PoC framework</a>
+          </div>
+          <div class="bb-card">
+            <button class="btn-primary">Replay autopsy</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="board switchboard">
+      <div class="board-meta">
+        <div>
+          <div class="board-id"><span class="accent">Variant 06</span> · Catastrophe Switchboard</div>
+          <div class="board-name">The deal is a failing machine.</div>
+        </div>
+        <p class="board-meaning">Autopsy becomes a control panel. The room shows the live circuits that are still carrying the deal and the ones that have already failed. The forcing mechanic is rewire: the user is pushed to restore a broken circuit, not admire a diagnosis.</p>
+      </div>
+
+      <div class="switch-shell">
+        <div class="panel">
+          <div>
+            <div class="label">Control panel</div>
+            <div class="panel-title">Three circuits are carrying the story. One is already out.</div>
+          </div>
+          <p class="panel-copy">This surface treats the deal like a live machine. The stage survives only while a few core circuits still hold: dated motion, proof ownership, internal sponsor, and process control. When one trips, the rest start covering for it until the whole board lies.</p>
+
+          <div class="circuit-grid">
+            <div class="circuit">
+              <div class="circuit-top">
+                <div class="label">Circuit 01</div>
+                <div class="toggle fail"></div>
+              </div>
+              <h4>Dated next step</h4>
+              <p>The board has no live calendar anchor. This is the first broken switch.</p>
+              <div class="route">Repair in Deal Workspace</div>
+            </div>
+            <div class="circuit">
+              <div class="circuit-top">
+                <div class="label">Circuit 02</div>
+                <div class="toggle live"></div>
+              </div>
+              <h4>Activity signal</h4>
+              <p>The account is still active enough to create false reassurance.</p>
+              <div class="route">Signal still alive</div>
+            </div>
+            <div class="circuit">
+              <div class="circuit-top">
+                <div class="label">Circuit 03</div>
+                <div class="toggle fail"></div>
+              </div>
+              <h4>Proof ownership</h4>
+              <p>Evidence exists, but no one is accountable for the internal readout.</p>
+              <div class="route">Repair in PoC</div>
+            </div>
+            <div class="circuit">
+              <div class="circuit-top">
+                <div class="label">Circuit 04</div>
+                <div class="toggle fail"></div>
+              </div>
+              <h4>Process control</h4>
+              <p>Procurement has more motion than the close plan does.</p>
+              <div class="route">Repair in Call Planner</div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="switch-dock">
+          <div class="sw-card">
+            <div class="label">Current state</div>
+            <h4>The machine is still running on activity, not control.</h4>
+            <p>That is why the deal still feels alive while its core circuits are already failing.</p>
+          </div>
+          <div class="sw-card">
+            <div class="label">Repair order</div>
+            <h4>Fix one switch at a time.</h4>
+            <p>Restore the dated move first, then the owner, then the close-path control.</p>
+          </div>
+          <div class="sw-card">
+            <button class="btn-primary">Rewire now</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

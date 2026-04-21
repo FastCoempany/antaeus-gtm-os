@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus PoC Framework Radical Triptych V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#071735;
+      --blue:#2f7df0;
+      --orange:#ed6b1f;
+      --green:#23764d;
+      --red:#c94a43;
+      --paper:#f5f8fc;
+      --warm:#fbf4ea;
+      --line:rgba(92,111,139,.18);
+      --muted:#65768f;
+      --ghost:#e9eef6;
+      --sans:"Public Sans",sans-serif;
+      --serif:"DM Serif Display",serif;
+      --mono:"JetBrains Mono",monospace;
+      --shadow:0 34px 90px rgba(22,38,66,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        linear-gradient(rgba(48,92,150,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(48,92,150,.035) 1px, transparent 1px),
+        radial-gradient(circle at 18% 6%, rgba(47,125,240,.08), transparent 28%),
+        radial-gradient(circle at 84% 18%, rgba(237,107,31,.08), transparent 30%),
+        var(--paper);
+      background-size:30px 30px,30px 30px,auto,auto,auto;
+      color:var(--ink);
+      font-family:var(--sans);
+    }
+    main{width:min(1760px, calc(100vw - 72px));margin:0 auto;padding:38px 0 96px}
+    .mast{display:flex;justify-content:space-between;align-items:center;margin-bottom:44px}
+    .tag,.brand,.micro,.section-id{
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.34em;
+      font-size:11px;
+      font-weight:800;
+    }
+    .tag{color:var(--orange)}
+    .brand{color:#7d8aa1}
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(520px, 900px) 1fr;
+      gap:80px;
+      align-items:end;
+      border-bottom:1px solid var(--line);
+      padding-bottom:44px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(78px, 8vw, 156px);
+      line-height:.84;
+      letter-spacing:-.095em;
+      max-width:980px;
+    }
+    .hero p{
+      margin:0;
+      color:#455978;
+      font-size:19px;
+      line-height:1.62;
+      max-width:650px;
+    }
+    .variant{padding:76px 0 104px;border-bottom:1px solid var(--line)}
+    .variant-head{display:grid;grid-template-columns:minmax(560px, 1fr) 440px;gap:54px;align-items:end;margin-bottom:44px}
+    .section-id{color:var(--orange);margin-bottom:18px}
+    h2{font-size:clamp(54px, 6vw, 112px);line-height:.86;letter-spacing:-.075em;margin:0}
+    .explain{color:#526681;line-height:1.62;font-size:16px}
+    .explain strong{color:var(--ink)}
+    .micro{letter-spacing:.24em;color:#8a98ad}
+
+    /* Shared */
+    .mark{
+      width:22px;height:22px;border-radius:999px;
+      display:inline-grid;place-items:center;
+      border:2px solid currentColor;
+      font-family:var(--mono);
+      font-size:10px;
+      font-weight:900;
+    }
+    .orange{color:var(--orange)}
+    .blue{color:var(--blue)}
+    .green{color:var(--green)}
+    .red{color:var(--red)}
+
+    /* Variant 01 - Airlock */
+    .airlock{
+      min-height:780px;
+      display:grid;
+      grid-template-columns:330px minmax(620px,1fr) 330px;
+      gap:28px;
+      align-items:center;
+    }
+    .gate-read{
+      min-height:640px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:34px 0;
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+    }
+    .gate-read h3{font-size:42px;line-height:.94;letter-spacing:-.065em;margin:12px 0 16px}
+    .gate-read p{color:#5d6f8b;line-height:1.55;margin:0}
+    .read-line{padding:24px 0;border-top:1px solid var(--line)}
+    .read-line:first-child{border-top:0}
+    .read-line b{display:block;font-family:var(--mono);letter-spacing:.22em;text-transform:uppercase;font-size:11px;color:#93a0b4;margin-bottom:9px}
+    .read-line strong{font-size:20px;letter-spacing:-.04em}
+    .airlock-core{
+      position:relative;
+      min-height:760px;
+      border-radius:999px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.98) 0 24%, transparent 25%),
+        radial-gradient(circle at center, transparent 0 38%, rgba(255,255,255,.82) 39% 48%, transparent 49%),
+        conic-gradient(from 180deg, rgba(201,74,67,.18), rgba(237,107,31,.18), rgba(47,125,240,.14), rgba(35,118,77,.18), rgba(201,74,67,.18));
+      border:1px solid rgba(92,111,139,.18);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .airlock-core:before,
+    .airlock-core:after{
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      border:1px dashed rgba(92,111,139,.24);
+      inset:90px;
+    }
+    .airlock-core:after{inset:210px;border-style:solid;opacity:.48}
+    .door{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:46%;
+      height:2px;
+      background:linear-gradient(90deg, transparent, rgba(7,23,53,.24), transparent);
+      transform-origin:left center;
+    }
+    .door:nth-child(1){transform:rotate(0deg)}
+    .door:nth-child(2){transform:rotate(72deg)}
+    .door:nth-child(3){transform:rotate(144deg)}
+    .door:nth-child(4){transform:rotate(216deg)}
+    .door:nth-child(5){transform:rotate(288deg)}
+    .airlock-center{
+      position:absolute;
+      inset:230px;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      z-index:3;
+    }
+    .airlock-center h3{
+      margin:12px 0 14px;
+      font-size:clamp(50px, 5.5vw, 104px);
+      line-height:.82;
+      letter-spacing:-.09em;
+    }
+    .airlock-center p{color:#5d6f8b;line-height:1.52;margin:0 auto;max-width:340px}
+    .pressure{
+      position:absolute;
+      width:174px;
+      min-height:118px;
+      padding:18px 20px;
+      background:rgba(255,255,255,.86);
+      border:1px solid rgba(92,111,139,.17);
+      border-radius:28px;
+      box-shadow:0 18px 50px rgba(29,45,71,.11);
+    }
+    .pressure b{display:block;font-family:var(--mono);letter-spacing:.2em;text-transform:uppercase;font-size:10px;color:#8d9aaf;margin-bottom:10px}
+    .pressure strong{display:block;font-size:20px;letter-spacing:-.04em;line-height:1.05}
+    .p1{left:50%;top:38px;transform:translateX(-50%)}
+    .p2{right:54px;top:224px}
+    .p3{right:112px;bottom:76px}
+    .p4{left:112px;bottom:76px}
+    .p5{left:54px;top:224px}
+    .gate-action{
+      display:grid;
+      gap:12px;
+      padding:26px 0;
+      border-top:1px solid var(--line);
+    }
+    .gate-action span{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:900;
+    }
+
+    /* Variant 02 - Seismograph */
+    .seismo{
+      min-height:760px;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      gap:28px;
+    }
+    .trace-panel{
+      min-height:570px;
+      position:relative;
+      border-radius:48px;
+      overflow:hidden;
+      background:
+        linear-gradient(rgba(47,125,240,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(47,125,240,.05) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(251,247,240,.82));
+      background-size:34px 34px,34px 34px,auto;
+      border:1px solid rgba(92,111,139,.18);
+      box-shadow:var(--shadow);
+    }
+    .axis{
+      position:absolute;left:0;right:0;height:1px;background:rgba(92,111,139,.18);
+    }
+    .axis.a{top:24%}.axis.b{top:50%}.axis.c{top:76%}
+    .axis label{
+      position:absolute;left:28px;top:-18px;
+      font-family:var(--mono);text-transform:uppercase;letter-spacing:.26em;font-weight:900;font-size:10px;color:#8b98ad;
+    }
+    .wave{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+    }
+    .trace-word{
+      position:absolute;
+      left:54px;
+      top:48px;
+      max-width:620px;
+      font-size:clamp(58px, 6vw, 122px);
+      line-height:.84;
+      letter-spacing:-.09em;
+      z-index:2;
+    }
+    .needle{
+      position:absolute;
+      left:64%;
+      top:0;
+      bottom:0;
+      width:2px;
+      background:linear-gradient(transparent, var(--orange), transparent);
+      opacity:.9;
+    }
+    .needle:before{
+      content:"run / no-run line";
+      position:absolute;
+      top:28px;
+      left:18px;
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-size:10px;
+      color:var(--orange);
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .seismo-read{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+    }
+    .seismo-read div{padding:24px 28px;border-left:1px solid var(--line)}
+    .seismo-read div:first-child{border-left:0}
+    .seismo-read strong{display:block;font-size:24px;letter-spacing:-.05em;margin:10px 0 7px}
+    .seismo-read p{margin:0;color:#61728d;line-height:1.45;font-size:14px}
+    .frequency{
+      display:grid;
+      grid-template-columns:320px 1fr 320px;
+      gap:26px;
+      align-items:start;
+    }
+    .frequency h3{margin:0;font-size:44px;line-height:.94;letter-spacing:-.065em}
+    .frequency p{margin:0;color:#5d6f8b;line-height:1.58}
+    .band{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-height:50px;
+      border-top:1px solid var(--line);
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:11px;
+      font-weight:900;
+    }
+    .band:before{content:"";width:80px;height:4px;border-radius:99px;background:currentColor}
+
+    /* Variant 03 - Proof Theater */
+    .theater{
+      min-height:820px;
+      display:grid;
+      grid-template-columns:300px 1fr 310px;
+      gap:28px;
+      align-items:center;
+    }
+    .backstage{
+      display:grid;
+      gap:20px;
+      border-right:1px solid var(--line);
+      padding-right:28px;
+    }
+    .cue{
+      min-height:96px;
+      display:grid;
+      grid-template-columns:26px 1fr;
+      gap:14px;
+      align-items:start;
+      border-top:1px solid var(--line);
+      padding-top:18px;
+    }
+    .cue strong{display:block;font-size:19px;letter-spacing:-.04em}
+    .cue span{display:block;color:#62738e;font-size:13px;line-height:1.45;margin-top:6px}
+    .stage{
+      position:relative;
+      min-height:760px;
+      border-radius:54px;
+      background:
+        radial-gradient(circle at 50% 15%, rgba(255,255,255,.94), transparent 42%),
+        linear-gradient(180deg, #071735, #101b34 64%, #f7f8fb 64.2%);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      border:1px solid rgba(92,111,139,.17);
+    }
+    .spot{
+      position:absolute;
+      left:50%;
+      top:0;
+      width:58%;
+      height:62%;
+      transform:translateX(-50%);
+      clip-path:polygon(35% 0,65% 0,100% 100%,0 100%);
+      background:linear-gradient(rgba(255,255,255,.24), rgba(255,255,255,.02));
+      opacity:.75;
+    }
+    .stage h3{
+      position:absolute;
+      left:54px;
+      top:54px;
+      right:54px;
+      color:white;
+      font-size:clamp(58px, 6vw, 118px);
+      line-height:.82;
+      letter-spacing:-.09em;
+      margin:0;
+      z-index:2;
+    }
+    .stage h3 em{font-style:normal;color:var(--orange)}
+    .floor{
+      position:absolute;
+      left:44px;
+      right:44px;
+      bottom:42px;
+      min-height:230px;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:1px;
+      background:rgba(92,111,139,.20);
+      border-radius:32px;
+      overflow:hidden;
+      border:1px solid rgba(92,111,139,.16);
+    }
+    .floor div{
+      background:rgba(255,255,255,.9);
+      padding:28px 30px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .floor b{font-family:var(--mono);letter-spacing:.22em;text-transform:uppercase;font-size:10px;color:#8d9aaf}
+    .floor strong{font-size:30px;line-height:.98;letter-spacing:-.06em}
+    .floor span{color:#62738e;line-height:1.45;font-size:14px}
+    .review{
+      border-left:1px solid var(--line);
+      padding-left:28px;
+      min-height:640px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .review h3{font-size:48px;line-height:.92;letter-spacing:-.07em;margin:12px 0 18px}
+    .review p{color:#5f708c;line-height:1.58;margin:0}
+    .verdict{
+      display:grid;
+      gap:18px;
+      border-top:1px solid var(--line);
+      padding-top:28px;
+    }
+    .verdict div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding-bottom:16px}
+    .verdict b{font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8d9aaf}
+    .verdict strong{font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;font-size:11px}
+
+    @media(max-width:1120px){
+      main{width:min(100vw - 34px, 980px)}
+      .hero,.variant-head,.airlock,.frequency,.theater{grid-template-columns:1fr}
+      .airlock-core{min-height:640px}
+      .airlock-center{inset:180px}
+      .seismo-read{grid-template-columns:1fr 1fr}
+      .backstage,.review{border:0;padding:0}
+      .floor{grid-template-columns:1fr;position:relative;left:auto;right:auto;bottom:auto;margin:430px 24px 24px}
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mast">
+      <div class="tag">PoC Framework / Radical Round Two</div>
+      <div class="brand">Antaeus</div>
+    </div>
+    <section class="hero">
+      <h1>Stop making proof look like paperwork.</h1>
+      <p>The room needs a face that forces discipline before a pilot begins. These are not dashboard compositions. They are three different operating rituals for deciding whether proof is real enough to run.</p>
+    </section>
+
+    <section class="variant">
+      <div class="variant-head">
+        <div>
+          <div class="section-id">Variant 01 / Pilot Airlock</div>
+          <h2>No seal, no pilot.</h2>
+        </div>
+        <p class="explain"><strong>Logic:</strong> a PoC is not a form. It is an airlock between enthusiasm and evidence. The operator must equalize claim, owner, proof, timeline, and kill rule before the pilot door opens.</p>
+      </div>
+      <div class="airlock">
+        <aside class="gate-read">
+          <div>
+            <div class="micro">Door read</div>
+            <h3>Northstar is not sealed.</h3>
+            <p>The test has a useful claim but the authority side still leaks.</p>
+          </div>
+          <div>
+            <div class="read-line"><b>Seal one</b><strong>Claim is specific.</strong></div>
+            <div class="read-line"><b>Seal two</b><strong>Baseline is named.</strong></div>
+            <div class="read-line"><b>Seal three</b><strong>Owner still soft.</strong></div>
+          </div>
+        </aside>
+        <div class="airlock-core">
+          <i class="door"></i><i class="door"></i><i class="door"></i><i class="door"></i><i class="door"></i>
+          <div class="pressure p1"><b>claim</b><strong>Reduce triage time.</strong></div>
+          <div class="pressure p2"><b>proof</b><strong>Before / after on live queue.</strong></div>
+          <div class="pressure p3"><b>owner</b><strong>Economic readout missing.</strong></div>
+          <div class="pressure p4"><b>timebox</b><strong>7 days.</strong></div>
+          <div class="pressure p5"><b>kill</b><strong>No baseline, no run.</strong></div>
+          <div class="airlock-center">
+            <div>
+              <div class="micro">Pilot door</div>
+              <h3>Hold the room.</h3>
+              <p>Do not let a test begin until the proof can survive a decision conversation.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="gate-read">
+          <div>
+            <div class="micro">Operator move</div>
+            <h3>Name the readout owner.</h3>
+            <p>The room should route to Deal Workspace only after the owner and decision path are sealed.</p>
+          </div>
+          <div class="gate-action">
+            <span class="orange">tighten owner <b>now</b></span>
+            <span class="blue">draft proof rule <b>ready</b></span>
+            <span class="green">run pilot <b>blocked</b></span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="variant">
+      <div class="variant-head">
+        <div>
+          <div class="section-id">Variant 02 / Proof Seismograph</div>
+          <h2>The pilot reads like an instrument.</h2>
+        </div>
+        <p class="explain"><strong>Logic:</strong> instead of cards explaining proof health, the room becomes a live trace. Weak proof creates noise. Decision-grade proof crosses a run line. This is the most OS-like direction.</p>
+      </div>
+      <div class="seismo">
+        <div class="trace-panel">
+          <div class="axis a"><label>claim signal</label></div>
+          <div class="axis b"><label>proof threshold</label></div>
+          <div class="axis c"><label>decision pressure</label></div>
+          <svg class="wave" viewBox="0 0 1400 570" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 350 C90 330 130 260 205 278 C270 294 275 412 350 402 C430 390 410 230 500 235 C580 240 600 362 675 330 C755 296 738 130 835 150 C928 169 930 410 1020 390 C1110 370 1080 245 1180 252 C1260 258 1270 210 1400 190" fill="none" stroke="#ed6b1f" stroke-width="5" opacity=".86"/>
+            <path d="M0 390 C90 420 168 410 244 374 C322 337 384 346 458 374 C536 404 610 412 684 360 C763 304 818 314 898 350 C976 386 1044 430 1126 380 C1210 330 1288 312 1400 340" fill="none" stroke="#2f7df0" stroke-width="4" opacity=".58"/>
+            <path d="M0 250 C115 255 170 250 255 244 C345 237 395 238 470 244 C560 252 640 250 730 232 C825 214 910 214 1010 218 C1135 224 1244 198 1400 180" fill="none" stroke="#23764d" stroke-width="4" opacity=".62"/>
+          </svg>
+          <div class="trace-word">Proof is noisy until it changes a decision.</div>
+          <div class="needle"></div>
+        </div>
+        <div class="seismo-read">
+          <div><div class="micro">Claim</div><strong>Clear enough</strong><p>The buyer knows what the test is meant to prove.</p></div>
+          <div><div class="micro">Baseline</div><strong>Weak</strong><p>No current number means the trace cannot show lift.</p></div>
+          <div><div class="micro">Owner</div><strong>Missing</strong><p>The proof has no person to carry it forward.</p></div>
+          <div><div class="micro">Run line</div><strong>Not crossed</strong><p>One more lock is required before kickoff.</p></div>
+        </div>
+        <div class="frequency">
+          <h3>What to tune next.</h3>
+          <p>Move the weakest frequency, not every field. The interface should make the operator fix the single proof dimension that is keeping the pilot from becoming decision-grade.</p>
+          <div>
+            <div class="band red">authority gap</div>
+            <div class="band orange">baseline soft</div>
+            <div class="band green">claim stable</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="variant">
+      <div class="variant-head">
+        <div>
+          <div class="section-id">Variant 03 / Proof Theater</div>
+          <h2>Rehearse the readout before the pilot starts.</h2>
+        </div>
+        <p class="explain"><strong>Logic:</strong> the room acts like a stage before a decision meeting. If the final readout cannot be performed clearly today, the pilot is not ready. This direction is the most unusual and most behavior-forcing.</p>
+      </div>
+      <div class="theater">
+        <aside class="backstage">
+          <div class="cue"><span class="mark orange">1</span><div><strong>Opening claim</strong><span>What the pilot must prove in one sentence.</span></div></div>
+          <div class="cue"><span class="mark blue">2</span><div><strong>Buyer proof line</strong><span>The evidence the buyer will accept as real.</span></div></div>
+          <div class="cue"><span class="mark green">3</span><div><strong>Readout scene</strong><span>Who is in the room when proof is shown.</span></div></div>
+          <div class="cue"><span class="mark red">4</span><div><strong>Failure line</strong><span>What kills the pilot without drama.</span></div></div>
+        </aside>
+        <div class="stage">
+          <div class="spot"></div>
+          <h3>The pilot must survive its <em>final scene</em> first.</h3>
+          <div class="floor">
+            <div><b>scene one</b><strong>Show the before state.</strong><span>Current support triage time is visible and accepted.</span></div>
+            <div><b>scene two</b><strong>Show the changed state.</strong><span>The buyer can see lift without vendor interpretation.</span></div>
+            <div><b>scene three</b><strong>Ask for the decision.</strong><span>The owner knows what happens if the evidence is good.</span></div>
+          </div>
+        </div>
+        <aside class="review">
+          <div>
+            <div class="micro">Stage manager read</div>
+            <h3>The readout cannot close yet.</h3>
+            <p>The final scene breaks because the executive owner is not named. The pilot may run, but it will not create a decision.</p>
+          </div>
+          <div class="verdict">
+            <div><b>proof scene</b><strong class="green">ready</strong></div>
+            <div><b>decision scene</b><strong class="red">missing</strong></div>
+            <div><b>next move</b><strong class="orange">cast owner</strong></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

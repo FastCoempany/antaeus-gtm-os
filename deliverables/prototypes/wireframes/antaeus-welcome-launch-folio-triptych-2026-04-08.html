@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Launch Folio Behavior Study</title>
+  <style>
+    :root {
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --soft: #4d6786;
+      --muted: #7f92af;
+      --line: rgba(10, 28, 64, 0.09);
+      --line-strong: rgba(10, 28, 64, 0.17);
+      --paper-cool: linear-gradient(180deg, rgba(239,245,255,0.98) 0%, rgba(255,255,255,0.96) 100%);
+      --paper-green: linear-gradient(180deg, rgba(239,249,244,0.98) 0%, rgba(255,255,255,0.96) 100%);
+      --paper-warm: linear-gradient(180deg, rgba(255,245,238,0.99) 0%, rgba(255,255,255,0.98) 100%);
+      --shadow-soft: 0 18px 54px rgba(10, 28, 64, 0.08);
+      --shadow-float: 0 28px 86px rgba(10, 28, 64, 0.14);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 20px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 22%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 28px 24px 88px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    .page {
+      max-width: 1540px;
+      margin: 0 auto;
+      display: grid;
+      gap: 52px;
+    }
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .topline .accent { color: var(--orange); }
+
+    .variant {
+      display: grid;
+      grid-template-columns: minmax(0, 1.16fr) minmax(320px, 0.8fr);
+      gap: 42px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+    }
+    .variant:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+    .main {
+      min-width: 0;
+      display: grid;
+      gap: 24px;
+      align-content: start;
+    }
+    .side {
+      min-width: 0;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      padding-top: 12px;
+    }
+
+    .kicker {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--orange);
+    }
+    .title {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(72px, 8vw, 120px);
+      line-height: 0.88;
+      letter-spacing: -0.1em;
+      max-width: 11ch;
+    }
+    .support {
+      max-width: 640px;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--soft);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-primary, .btn-ghost, .text-link {
+      font: inherit;
+      color: inherit;
+      text-decoration: none;
+      border: 0;
+      background: none;
+      padding: 0;
+    }
+    .btn-primary {
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 18px;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 16px 34px rgba(230,112,30,0.24);
+    }
+    .btn-ghost {
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid var(--line-strong);
+      color: var(--navy);
+      font-weight: 700;
+    }
+    .text-link {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .shelf {
+      padding: 18px 20px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.76);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 10px;
+    }
+    .shelf-label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .shelf-copy {
+      font-size: 17px;
+      line-height: 1.35;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .mini-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .mini-row strong {
+      margin-left: 6px;
+      font-size: 15px;
+      letter-spacing: -0.04em;
+      color: var(--navy);
+      text-transform: none;
+    }
+
+    .folio-stage {
+      position: relative;
+      min-height: 580px;
+      display: grid;
+      place-items: center;
+    }
+    .folio-stack {
+      position: relative;
+      width: min(900px, 100%);
+      height: 510px;
+      perspective: 1800px;
+    }
+    .leaf {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      padding: 30px 32px;
+    }
+    .leaf.back {
+      background: var(--paper-cool);
+      transform: rotate(-5.3deg) translate(-24px, 20px);
+    }
+    .leaf.mid {
+      background: var(--paper-green);
+      transform: rotate(2.8deg) translate(16px, 12px);
+    }
+    .leaf.front {
+      background: var(--paper-warm);
+      transform: rotate(-1.6deg);
+      box-shadow: var(--shadow-float);
+    }
+    .leaf-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+    .leaf-kicker {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .leaf-title {
+      margin-top: 8px;
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 44px;
+      line-height: 0.94;
+      letter-spacing: -0.07em;
+      max-width: 8.8ch;
+    }
+    .stamp {
+      width: 94px;
+      height: 94px;
+      border-radius: 50%;
+      border: 1px solid rgba(230,112,30,0.22);
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.62);
+      color: var(--orange);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.35;
+      font-weight: 700;
+      transform: rotate(-12deg);
+    }
+    .leaf-copy {
+      max-width: 36ch;
+      font-size: 15px;
+      line-height: 1.54;
+      color: var(--soft);
+    }
+    .folio-grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .folio-cell {
+      min-height: 128px;
+      padding: 16px 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .folio-cell .label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .folio-cell .value {
+      font-size: 24px;
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .folio-cell .note {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    /* Variant-specific behavior engines */
+    .cell-lock {
+      position: relative;
+      background: rgba(255,248,244,0.86);
+      border-color: rgba(230,112,30,0.18);
+      box-shadow: inset 0 0 0 1px rgba(230,112,30,0.06);
+    }
+    .cell-lock::after {
+      content: "";
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      width: 24px;
+      height: 24px;
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.52)),
+        rgba(230,112,30,0.12);
+      border: 1px solid rgba(230,112,30,0.18);
+      box-shadow: 0 10px 20px rgba(230,112,30,0.08);
+    }
+    .cell-lock::before {
+      content: "";
+      position: absolute;
+      right: 21px;
+      top: 8px;
+      width: 10px;
+      height: 8px;
+      border: 2px solid rgba(230,112,30,0.52);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .order-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid var(--line);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .order-mark.current {
+      color: var(--orange);
+      border-color: rgba(230,112,30,0.18);
+      background: rgba(255,246,240,0.86);
+    }
+
+    .seal-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .seal-pill {
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.74);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+      width: fit-content;
+    }
+    .seal-pill.live {
+      background: rgba(240,249,244,0.92);
+      color: var(--green);
+      border-color: rgba(45,122,75,0.14);
+    }
+    .seal-pill.pending {
+      background: rgba(255,245,238,0.92);
+      color: var(--orange);
+      border-color: rgba(230,112,30,0.18);
+    }
+
+    @media (max-width: 1220px) {
+      .variant {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .side {
+        padding-top: 0;
+      }
+    }
+
+    @media (max-width: 860px) {
+      body { padding: 22px 14px 66px; }
+      .title { font-size: clamp(52px, 14vw, 88px); }
+      .folio-stack { height: 740px; }
+      .folio-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topline">
+      <span class="accent">Launch Folio Behavior Study</span>
+      <span>Antaeus</span>
+    </div>
+
+    <section class="variant">
+      <div class="main">
+        <div class="kicker">Launch Folio · Commission Lock</div>
+        <h1 class="title">Open the live mandate.</h1>
+        <p class="support">The original commissioned-file structure stays intact. The forcing mechanic is the one locked cell that keeps the file visibly incomplete until the next act is done.</p>
+        <div class="actions">
+          <button class="btn-primary">Research first account</button>
+          <button class="btn-ghost">Open Spotlight</button>
+          <a class="text-link" href="#">Inspect locked mandate</a>
+        </div>
+
+        <div class="folio-stage">
+          <div class="folio-stack">
+            <div class="leaf back">
+              <div class="leaf-kicker">Layer 01</div>
+              <div class="leaf-title">Targeting truth is already held.</div>
+            </div>
+
+            <div class="leaf mid">
+              <div class="leaf-kicker">Layer 02</div>
+              <div class="leaf-title">Deals exist, but they still need external pressure.</div>
+            </div>
+
+            <div class="leaf front">
+              <div class="leaf-top">
+                <div>
+                  <div class="leaf-kicker">Active mandate</div>
+                  <div class="leaf-title">Research one live account and stop the brief from ranking empty space.</div>
+                </div>
+                <div class="stamp">Week 1<br>Day 4</div>
+              </div>
+
+              <div class="leaf-copy">The first researched account is the one unresolved lock inside the file. The page should feel one action short of becoming legitimate.</div>
+
+              <div class="folio-grid">
+                <div class="folio-cell">
+                  <div class="label">Where you are</div>
+                  <div class="value">Targeting and deals are already live.</div>
+                  <div class="note">The workspace has internal shape. It still lacks one external anchor.</div>
+                </div>
+                <div class="folio-cell cell-lock">
+                  <div class="label">What is missing</div>
+                  <div class="value">Account truth.</div>
+                  <div class="note">Signal Console needs one real company before the command layer sounds earned.</div>
+                </div>
+                <div class="folio-cell">
+                  <div class="label">What unlocks next</div>
+                  <div class="value">Heat, ranking, and handoff.</div>
+                  <div class="note">The first researched account turns downstream motion into something the system can trust.</div>
+                </div>
+                <div class="folio-cell">
+                  <div class="label">Return behavior</div>
+                  <div class="value">Re-enter through Spotlight.</div>
+                  <div class="note">The brief should sharpen after the account is real.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="shelf">
+          <div class="shelf-label">Behavior forcing</div>
+          <div class="shelf-copy">One locked cell makes the file feel unresolved. The user wants to complete the mandate.</div>
+        </div>
+        <div class="mini-row">
+          <span>Lock<strong>01</strong></span>
+          <span>Mandate<strong>Live</strong></span>
+          <span>Next<strong>Account</strong></span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="variant">
+      <div class="main">
+        <div class="kicker">Launch Folio · Order of Operations</div>
+        <h1 class="title">Open the live mandate.</h1>
+        <p class="support">The commissioned-file structure stays intact. The forcing mechanic becomes strict order: one current step, one next, one after. The dossier refuses equal weighting.</p>
+        <div class="actions">
+          <button class="btn-primary">Enter Signal Console</button>
+          <button class="btn-ghost">Open Spotlight</button>
+          <a class="text-link" href="#">Inspect order chain</a>
+        </div>
+
+        <div class="folio-stage">
+          <div class="folio-stack">
+            <div class="leaf back">
+              <div class="leaf-kicker">Layer 01</div>
+              <div class="leaf-title">Targeting truth is already held.</div>
+            </div>
+
+            <div class="leaf mid">
+              <div class="leaf-kicker">Layer 02</div>
+              <div class="leaf-title">Deals exist, but they still need external pressure.</div>
+            </div>
+
+            <div class="leaf front">
+              <div class="leaf-top">
+                <div>
+                  <div class="leaf-kicker">Active mandate</div>
+                  <div class="leaf-title">Research one live account and stop the brief from ranking empty space.</div>
+                </div>
+                <div class="stamp">Week 1<br>Day 4</div>
+              </div>
+
+              <div class="leaf-copy">The file becomes an order chain. The user should feel sequence discipline, not a field of equally valid next moves.</div>
+
+              <div class="folio-grid">
+                <div class="folio-cell">
+                  <div class="label">Current order</div>
+                  <div class="order-mark current">01 · Now</div>
+                  <div class="value">Research one live account.</div>
+                  <div class="note">Signal Console needs one named company before the rest of the command system can sound specific.</div>
+                </div>
+                <div class="folio-cell">
+                  <div class="label">Then</div>
+                  <div class="order-mark">02 · Then</div>
+                  <div class="value">Return to Spotlight.</div>
+                  <div class="note">The command layer should reflect the new center the moment the account becomes real.</div>
+                </div>
+                <div class="folio-cell">
+                  <div class="label">After</div>
+                  <div class="order-mark">03 · After</div>
+                  <div class="value">Log the first motion.</div>
+                  <div class="note">The first move should attach to a believable external target, not a placeholder workflow.</div>
+                </div>
+                <div class="folio-cell">
+                  <div class="label">Why order matters</div>
+                  <div class="value">The week should not be skippable.</div>
+                  <div class="note">The page visually demotes every step that is not current, so the user stops wandering.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="shelf">
+          <div class="shelf-label">Behavior forcing</div>
+          <div class="shelf-copy">The dossier becomes sequence law. It tells the user what comes now, then, and after.</div>
+        </div>
+        <div class="mini-row">
+          <span>Current<strong>01</strong></span>
+          <span>Then<strong>02</strong></span>
+          <span>After<strong>03</strong></span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="variant">
+      <div class="main">
+        <div class="kicker">Launch Folio · Seal Progression</div>
+        <h1 class="title">Open the live mandate.</h1>
+        <p class="support">The commissioned-file structure stays intact. The forcing mechanic becomes earned validation: two seals are already live, one seal is pending, and the week does not feel fully official until it lands.</p>
+        <div class="actions">
+          <button class="btn-primary">Earn account seal</button>
+          <button class="btn-ghost">Open Signal Console</button>
+          <a class="text-link" href="#">Inspect seal chain</a>
+        </div>
+
+        <div class="folio-stage">
+          <div class="folio-stack">
+            <div class="leaf back">
+              <div class="leaf-kicker">Layer 01</div>
+              <div class="leaf-title">Targeting truth is already held.</div>
+            </div>
+
+            <div class="leaf mid">
+              <div class="leaf-kicker">Layer 02</div>
+              <div class="leaf-title">Deals exist, but they still need external pressure.</div>
+            </div>
+
+            <div class="leaf front">
+              <div class="leaf-top">
+                <div>
+                  <div class="leaf-kicker">Active mandate</div>
+                  <div class="leaf-title">Research one live account and stop the brief from ranking empty space.</div>
+                </div>
+                <div class="stamp">Week 1<br>Day 4</div>
+              </div>
+
+              <div class="leaf-copy">The file becomes progressively official. The user sees what has already been validated and what single missing seal still keeps the week provisional.</div>
+
+              <div class="folio-grid">
+                <div class="folio-cell">
+                  <div class="label">Seals already held</div>
+                  <div class="seal-bar">
+                    <div class="seal-pill live">Targeting</div>
+                    <div class="seal-pill live">Pipeline</div>
+                  </div>
+                  <div class="note">The system already recognizes wedge truth and deal truth as live.</div>
+                </div>
+                <div class="folio-cell">
+                  <div class="label">Pending seal</div>
+                  <div class="seal-bar">
+                    <div class="seal-pill pending">Account truth</div>
+                  </div>
+                  <div class="value">One live account makes the week official.</div>
+                  <div class="note">This is the single missing validation that changes the meaning of the rest of the system.</div>
+                </div>
+                <div class="folio-cell">
+                  <div class="label">What unlocks next</div>
+                  <div class="value">Heat, ranking, and handoff.</div>
+                  <div class="note">Once the account seal lands, command and motion should stop reading as preparation and start reading as evidence.</div>
+                </div>
+                <div class="folio-cell">
+                  <div class="label">Return behavior</div>
+                  <div class="value">Re-enter through Spotlight.</div>
+                  <div class="note">The command layer should show the effect of the newly earned seal immediately.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="shelf">
+          <div class="shelf-label">Behavior forcing</div>
+          <div class="shelf-copy">The page feels one seal short of official. The user is pulled toward completing the chain.</div>
+        </div>
+        <div class="mini-row">
+          <span>Held<strong>02</strong></span>
+          <span>Pending<strong>01</strong></span>
+          <span>Next<strong>Seal</strong></span>
+        </div>
+      </aside>
+    </section>
+  </div>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Territory Architect Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0a1c40;
+      --ink: #10274f;
+      --soft: #617793;
+      --muted: #91a3bb;
+      --line: rgba(10, 28, 64, 0.1);
+      --paper: rgba(255,255,255,0.88);
+      --orange: #e6701e;
+      --blue: #2471e7;
+      --green: #2d7a4b;
+      --red: #c44739;
+      --shadow-soft: 0 18px 42px rgba(10, 28, 64, 0.08);
+      --shadow-hard: 0 28px 86px rgba(10, 28, 64, 0.12);
+      --radius-pill: 999px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 28px 22px 90px;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, p { margin: 0; }
+    .page { max-width: 1600px; margin: 0 auto; display: grid; gap: 26px; }
+    .topline {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      padding: 0 6px; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--muted); font-weight: 700;
+    }
+    .topline .accent { color: var(--orange); }
+    .board {
+      position: relative;
+      overflow: hidden;
+      min-height: 980px;
+      padding: 30px 32px 34px;
+      border-radius: 40px;
+      border: 1px solid rgba(10, 28, 64, 0.06);
+      box-shadow: var(--shadow-hard);
+      background:
+        radial-gradient(circle at 86% 12%, rgba(230,112,30,0.06), transparent 22%),
+        radial-gradient(circle at 12% 0%, rgba(36,113,231,0.06), transparent 24%),
+        linear-gradient(180deg, rgba(253,254,255,0.98) 0%, rgba(242,246,252,0.98) 100%);
+    }
+    .board::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(10,28,64,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,28,64,0.03) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .meta {
+      position: relative; z-index: 1;
+      display: flex; justify-content: space-between; align-items: start; gap: 24px;
+      margin-bottom: 26px;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+    }
+    .meta .accent { color: var(--orange); }
+    .meta .meaning {
+      max-width: 460px;
+      font-size: 14px; line-height: 1.55; text-transform: none; letter-spacing: 0; font-weight: 500;
+      color: var(--soft); text-align: right;
+    }
+    .chrome {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 24px; align-items: start;
+    }
+    .spine { display: grid; gap: 16px; align-content: start; padding-top: 6px; }
+    .brand { font-family: "Outfit", sans-serif; font-size: 18px; letter-spacing: 0.04em; color: var(--navy); }
+    .dot { width: 14px; height: 14px; border-radius: 50%; margin-left: 2px; background: var(--orange); box-shadow: 0 0 0 8px rgba(230,112,30,0.08); }
+    .rail { width: 1px; height: 260px; margin-left: 8px; background: linear-gradient(180deg, rgba(10,28,64,0.12), rgba(10,28,64,0)); }
+    .surface { display: grid; gap: 24px; }
+    .eyebrow { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--orange); font-weight: 700; }
+    .pill {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 32px; padding: 0 12px;
+      border-radius: var(--radius-pill); border: 1px solid var(--line); background: rgba(255,255,255,0.76);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+    }
+    .pill.orange { color: var(--orange); border-color: rgba(230,112,30,0.18); background: rgba(230,112,30,0.08); }
+    .pill.blue { color: var(--blue); border-color: rgba(36,113,231,0.18); background: rgba(36,113,231,0.08); }
+    .pill.green { color: var(--green); border-color: rgba(45,122,75,0.18); background: rgba(45,122,75,0.08); }
+    .pill.red { color: var(--red); border-color: rgba(196,71,57,0.18); background: rgba(196,71,57,0.08); }
+    .footer-note {
+      display: grid; gap: 8px; width: fit-content; padding-top: 10px; border-top: 1px solid var(--line);
+    }
+    .footer-note .title {
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+    }
+    .footer-note .copy { font-size: 14px; line-height: 1.55; color: var(--soft); max-width: 76ch; }
+    .mark {
+      width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+      font-size: 12px; font-weight: 700; background: rgba(10,28,64,0.06); color: var(--navy);
+    }
+    .mark.orange { background: rgba(230,112,30,0.12); color: var(--orange); }
+    .mark.blue { background: rgba(36,113,231,0.12); color: var(--blue); }
+    .mark.green { background: rgba(45,122,75,0.12); color: var(--green); }
+    .mark.red { background: rgba(196,71,57,0.12); color: var(--red); }
+
+    .variant-one {
+      display: grid;
+      gap: 26px;
+    }
+    .frontline-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 28px;
+      align-items: end;
+    }
+    .frontline-title {
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(58px, 7vw, 116px);
+      line-height: 0.9;
+      letter-spacing: -0.11em;
+      max-width: 8.2ch;
+    }
+    .frontline-copy { font-size: 17px; line-height: 1.55; color: var(--soft); max-width: 44ch; }
+    .frontline-read {
+      display: grid;
+      gap: 16px;
+      padding: 22px 24px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .read-head {
+      display: flex; justify-content: space-between; align-items: end; gap: 14px;
+      padding-bottom: 14px; border-bottom: 1px solid var(--line);
+    }
+    .read-head .label,
+    .zone-label,
+    .board-label,
+    .signal-key,
+    .calendar-label,
+    .cadence-step {
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+    }
+    .read-head .copy { font-size: 28px; line-height: 1; font-weight: 700; letter-spacing: -0.05em; }
+    .read-head .value { font-family: "Outfit", sans-serif; font-size: 62px; line-height: 0.9; color: var(--green); letter-spacing: -0.09em; }
+    .read-row { display: grid; gap: 6px; }
+    .read-row .headline { font-size: 20px; line-height: 1.1; letter-spacing: -0.04em; font-weight: 700; }
+    .read-row .copy { font-size: 14px; line-height: 1.5; color: var(--soft); }
+
+    .battle-board {
+      display: grid;
+      gap: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+    .battle-zone {
+      display: grid;
+      gap: 10px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .battle-zone:last-child { border-bottom: 0; }
+    .zone-head {
+      display: flex; justify-content: space-between; gap: 14px; align-items: center;
+    }
+    .zone-title { font-size: 24px; line-height: 1; letter-spacing: -0.05em; font-weight: 700; }
+    .tickets {
+      display: grid;
+      gap: 10px;
+    }
+    .ticket {
+      display: grid;
+      grid-template-columns: 34px minmax(160px, 0.45fr) minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .ticket:last-child { border-bottom: 0; }
+    .ticket-name { font-size: 18px; font-weight: 700; letter-spacing: -0.04em; }
+    .ticket-copy { font-size: 14px; line-height: 1.45; color: var(--ink); }
+    .ticket-state { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; white-space: nowrap; }
+    .ticket-state.good { color: var(--green); }
+    .ticket-state.warn { color: var(--orange); }
+    .ticket-state.risk { color: var(--red); }
+
+    .variant-two {
+      display: grid;
+      gap: 28px;
+    }
+    .rank-hero {
+      display: grid;
+      gap: 14px;
+      max-width: 840px;
+    }
+    .rank-title {
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(58px, 7vw, 116px);
+      line-height: 0.9;
+      letter-spacing: -0.11em;
+      max-width: 8.3ch;
+    }
+    .rank-copy { font-size: 17px; line-height: 1.58; color: var(--soft); max-width: 52ch; }
+    .rank-frame {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.82fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .rank-list {
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .rank-row {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto auto;
+      gap: 14px;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .rank-row:last-child { border-bottom: 0; }
+    .rank-name { font-size: 38px; line-height: 0.94; letter-spacing: -0.08em; font-weight: 700; }
+    .rank-meta, .rank-state { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; white-space: nowrap; }
+    .rank-meta { color: var(--muted); }
+    .rank-state.hot { color: var(--orange); }
+    .rank-state.good { color: var(--green); }
+    .rank-state.risk { color: var(--red); }
+    .decision-dock {
+      display: grid;
+      gap: 16px;
+      padding: 24px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .dock-line {
+      display: grid;
+      gap: 6px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .dock-line:last-child { border-bottom: 0; padding-bottom: 0; }
+    .dock-line .headline { font-size: 22px; line-height: 1.1; letter-spacing: -0.05em; font-weight: 700; }
+    .dock-line .copy { font-size: 14px; line-height: 1.5; color: var(--soft); }
+
+    .variant-three {
+      display: grid;
+      gap: 26px;
+    }
+    .atlas-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.82fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .atlas-title {
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(54px, 6.4vw, 102px);
+      line-height: 0.9;
+      letter-spacing: -0.11em;
+      max-width: 8.8ch;
+    }
+    .atlas-copy { font-size: 17px; line-height: 1.58; color: var(--soft); max-width: 50ch; }
+    .atlas-field {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .atlas-ledger {
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .atlas-row {
+      display: grid;
+      grid-template-columns: 32px 132px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .atlas-row:last-child { border-bottom: 0; }
+    .atlas-copyline { font-size: 15px; line-height: 1.45; color: var(--ink); }
+    .atlas-state { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; }
+    .atlas-state.good { color: var(--green); }
+    .atlas-state.warn { color: var(--orange); }
+    .atlas-state.risk { color: var(--red); }
+    .signal-map {
+      position: relative;
+      min-height: 620px;
+      border-radius: 34px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 20% 22%, rgba(230,112,30,0.08), transparent 18%),
+        radial-gradient(circle at 80% 24%, rgba(36,113,231,0.08), transparent 18%),
+        radial-gradient(circle at 56% 74%, rgba(45,122,75,0.08), transparent 20%),
+        rgba(255,255,255,0.72);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .signal-map::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(10,28,64,0.06) 0 1px, transparent 1px) center/120px 120px,
+        linear-gradient(0deg, rgba(10,28,64,0.04) 1px, transparent 1px) center/100% 120px,
+        linear-gradient(90deg, rgba(10,28,64,0.04) 1px, transparent 1px) center/120px 100%;
+      opacity: 0.5;
+    }
+    .zone-ring {
+      position: absolute;
+      border: 1px dashed rgba(10,28,64,0.12);
+      border-radius: 999px;
+    }
+    .zone-ring.one { inset: 110px 150px 120px 150px; }
+    .zone-ring.two { inset: 70px 95px 80px 95px; }
+    .zone-ring.three { inset: 28px 36px 36px 36px; }
+    .map-label {
+      position: absolute;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .map-label.core { top: 84px; left: 50%; transform: translateX(-50%); }
+    .map-label.watch { top: 42px; right: 54px; }
+    .map-label.false { bottom: 42px; left: 48px; }
+    .signal-node {
+      position: absolute;
+      display: grid;
+      gap: 4px;
+      min-width: 140px;
+      padding: 14px 16px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.9);
+      box-shadow: var(--shadow-soft);
+    }
+    .signal-node .name { font-size: 17px; font-weight: 700; letter-spacing: -0.04em; }
+    .signal-node .copy { font-size: 12px; line-height: 1.45; color: var(--soft); }
+    .signal-node.orange { box-shadow: 0 14px 30px rgba(230,112,30,0.10); }
+    .signal-node.blue { box-shadow: 0 14px 30px rgba(36,113,231,0.10); }
+    .signal-node.green { box-shadow: 0 14px 30px rgba(45,122,75,0.10); }
+    .signal-node.red { box-shadow: 0 14px 30px rgba(196,71,57,0.08); }
+    .node-a { top: 120px; left: 94px; }
+    .node-b { top: 160px; right: 112px; }
+    .node-c { top: 308px; left: 240px; }
+    .node-d { bottom: 130px; right: 180px; }
+    .node-e { bottom: 72px; left: 82px; }
+
+    @media (max-width: 1220px) {
+      .chrome { grid-template-columns: 1fr; }
+      .spine { display: none; }
+      .frontline-hero, .battle-grid, .rank-frame, .atlas-hero, .atlas-field { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 820px) {
+      .board { min-height: auto; padding: 26px 20px 28px; }
+      .meta { display: grid; gap: 10px; }
+      .meta .meaning { text-align: left; max-width: none; }
+      .frontline-title, .rank-title, .atlas-title { max-width: none; }
+      .ticket, .rank-row, .atlas-row { grid-template-columns: 28px 1fr; }
+      .ticket > :nth-child(3), .ticket > :nth-child(4),
+      .rank-row > :nth-child(3), .rank-row > :nth-child(4),
+      .atlas-row > :nth-child(3), .atlas-row > :nth-child(4) { grid-column: 2; }
+      .rank-name { font-size: 28px; }
+      .signal-map { min-height: 0; padding: 22px; display: grid; gap: 14px; }
+      .zone-ring, .map-label { display: none; }
+      .signal-node { position: relative; inset: auto !important; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <div><span class="accent">Territory Architect</span> Taste-Test Triptych</div>
+      <div>Antaeus</div>
+    </div>
+
+    <section class="board">
+      <div class="meta">
+        <div><span class="accent">Variant 01</span> / Frontline Board</div>
+        <div class="meaning">This version treats Territory Architect like a live frontline board. The room exists to separate the accounts being actively worked from the reserve bench and the names that should be cut immediately.</div>
+      </div>
+      <div class="chrome">
+        <div class="spine"><div class="brand">ANTAEUS</div><div class="dot"></div><div class="rail"></div></div>
+        <div class="surface variant-one">
+          <div class="frontline-hero">
+            <div>
+              <div class="eyebrow">Variant 01 / Frontline board</div>
+              <div class="frontline-title">Make the field small enough to win.</div>
+              <div class="frontline-copy">Territory Architect should feel like active roster management, not a list-builder. The user needs to know which accounts are in the fight, which are on the bench, and which names are wasting attention.</div>
+              <div class="kicker-row" style="margin-top:14px;">
+                <span class="pill orange">14 on the field</span>
+                <span class="pill blue">9 in reserve</span>
+                <span class="pill red">4 to cut</span>
+              </div>
+            </div>
+            <aside class="frontline-read">
+              <div class="read-head"><div><div class="label">Field read</div><div class="copy">Overloaded</div></div><div class="value" style="color:var(--orange);">61</div></div>
+              <div class="read-row"><div class="label">Main warning</div><div class="headline">Tier 2 is stealing time from the frontline.</div><div class="copy">If the reserve bench feels emotionally equal to the active field, the room is not doing its job.</div></div>
+              <div class="read-row"><div class="label">Immediate move</div><div class="headline">Cut four decorative names before next Monday.</div><div class="copy">The room should force a smaller field before it asks for more enrichment or more accounts.</div></div>
+            </aside>
+          </div>
+          <div class="battle-board">
+            <div class="battle-zone">
+              <div class="zone-head"><div class="zone-title">Frontline</div><div class="zone-label">Work daily</div></div>
+              <div class="tickets">
+                <div class="ticket"><div class="mark orange">01</div><div class="ticket-name">Meridian Freight</div><div class="ticket-copy">Customs leadership changed, EU routing complexity is visible, and the buyer sits close to budget.</div><div class="ticket-state good">Attack</div></div>
+                <div class="ticket"><div class="mark orange">02</div><div class="ticket-name">Northstar Cartage</div><div class="ticket-copy">Signal is real and urgency is live, but proof still needs one stronger operational angle.</div><div class="ticket-state warn">Tighten</div></div>
+              </div>
+            </div>
+            <div class="battle-zone">
+              <div class="zone-head"><div class="zone-title">Reserve Bench</div><div class="zone-label">Promote only on evidence</div></div>
+              <div class="tickets">
+                <div class="ticket"><div class="mark blue">03</div><div class="ticket-name">VoltRoute</div><div class="ticket-copy">Good thesis fit, but the owner is still indirect. This name is alive, not yet urgent.</div><div class="ticket-state warn">Watch</div></div>
+                <div class="ticket"><div class="mark blue">04</div><div class="ticket-name">HarborMesh</div><div class="ticket-copy">Proof is strong enough to save, but the current account lacks forcing pressure.</div><div class="ticket-state warn">Hold</div></div>
+              </div>
+            </div>
+            <div class="battle-zone">
+              <div class="zone-head"><div class="zone-title">Cut List</div><div class="zone-label">Remove now</div></div>
+              <div class="tickets">
+                <div class="ticket"><div class="mark red">05</div><div class="ticket-name">Apex Shipping</div><div class="ticket-copy">Large, familiar, and irrelevant. This is a confidence name, not a battlefield account.</div><div class="ticket-state risk">Cut</div></div>
+                <div class="ticket"><div class="mark red">06</div><div class="ticket-name">Bluewater Transit</div><div class="ticket-copy">No visible trigger, no owner, and no current reason to consume sourcing effort.</div><div class="ticket-state risk">Cut</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-note"><div class="title">What this face is solving</div><div class="copy">This version is for a room that should feel active and ruthless. The user sees territory as a living roster, not a broad set of accounts that all deserve equal hope.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="board">
+      <div class="meta">
+        <div><span class="accent">Variant 02</span> / Signal Field</div>
+        <div class="meaning">This version treats Territory Architect like a signal field. The room exists to show which accounts are moving toward the center of proof and which ones are drifting into dead territory.</div>
+      </div>
+      <div class="chrome">
+        <div class="spine"><div class="brand">ANTAEUS</div><div class="dot"></div><div class="rail"></div></div>
+        <div class="surface variant-three">
+          <div class="atlas-hero">
+            <div>
+              <div class="eyebrow">Variant 02 / Signal field</div>
+              <div class="atlas-title">Territory should behave like live signal gravity.</div>
+              <div class="atlas-copy">This room becomes spatial instead of list-shaped. Accounts move inward when signal, owner, and urgency converge. They drift outward when they only sound strategically plausible.</div>
+            </div>
+            <div class="footer-note" style="border-top:0;padding-top:0;">
+              <div class="title">Operating rule</div>
+              <div class="copy">The operator should see the shape of the battlefield at a glance: core, watch ring, and false territory.</div>
+            </div>
+          </div>
+          <div class="atlas-field">
+            <div class="atlas-ledger">
+              <div class="atlas-row"><div class="mark orange">T</div><div class="field">Thesis</div><div class="atlas-copyline">Industrial operators under supplier resilience pressure after multi-site expansion.</div><div class="atlas-state good">Live</div></div>
+              <div class="atlas-row"><div class="mark blue">S</div><div class="field">Signal rule</div><div class="atlas-copyline">New site openings, supplier shocks, and sourcing instability count. Generic “growth” does not.</div><div class="atlas-state good">Bounded</div></div>
+              <div class="atlas-row"><div class="mark green">O</div><div class="field">Owner</div><div class="atlas-copyline">Procurement and operations leadership stay in focus; broad leadership teams do not.</div><div class="atlas-state warn">Narrow more</div></div>
+              <div class="atlas-row"><div class="mark red">R</div><div class="field">Replacement</div><div class="atlas-copyline">Three current accounts still survive because they look impressive, not because they fit the field.</div><div class="atlas-state risk">Cull</div></div>
+            </div>
+            <div class="signal-map">
+              <div class="zone-ring one"></div>
+              <div class="zone-ring two"></div>
+              <div class="zone-ring three"></div>
+              <div class="map-label core">Core field</div>
+              <div class="map-label watch">Watch ring</div>
+              <div class="map-label false">False territory</div>
+
+              <div class="signal-node orange node-a"><div class="signal-key">Core</div><div class="name">Meridian Industrial</div><div class="copy">New plant launch and supplier review underway.</div></div>
+              <div class="signal-node blue node-b"><div class="signal-key">Watch</div><div class="name">Northstar Manufacturing</div><div class="copy">Signal exists, but owner is still second-hand.</div></div>
+              <div class="signal-node green node-c"><div class="signal-key">Core</div><div class="name">VoltWorks</div><div class="copy">Operational proof is visible and the thesis fits cleanly.</div></div>
+              <div class="signal-node red node-d"><div class="signal-key">Drift</div><div class="name">Apex Freight</div><div class="copy">No forcing pressure. Still survives because it sounds important.</div></div>
+              <div class="signal-node red node-e"><div class="signal-key">Drift</div><div class="name">Bluewater Transit</div><div class="copy">Broad category fit with no evidence that the battlefield is live.</div></div>
+            </div>
+          </div>
+          <div class="footer-note"><div class="title">What this face is solving</div><div class="copy">This version is for a room that should feel more like field intelligence than list administration. It makes proximity to live proof visible instead of burying it inside scores and tabs.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="board">
+      <div class="meta">
+        <div><span class="accent">Variant 03</span> / Campaign Cadence</div>
+        <div class="meaning">This version treats Territory Architect like a campaign cadence surface. The room exists to show what the operator is working this week, what graduates next week, and what gets retired before the campaign slips into noise.</div>
+      </div>
+      <div class="chrome">
+        <div class="spine"><div class="brand">ANTAEUS</div><div class="dot"></div><div class="rail"></div></div>
+        <div class="surface variant-two">
+          <div class="rank-hero">
+            <div class="eyebrow">Variant 03 / Campaign cadence</div>
+            <div class="rank-title">Run the territory like a campaign, not a warehouse.</div>
+            <div class="rank-copy">This room becomes time-based. Instead of asking what the territory is in theory, it asks what is live this week, what rotates in next week, and what must leave the campaign immediately.</div>
+            <div class="kicker-row">
+              <span class="pill orange">Week 1 live</span>
+              <span class="pill blue">Week 2 queue</span>
+              <span class="pill red">Friday pulse</span>
+            </div>
+          </div>
+          <div class="rank-frame">
+            <div class="rank-list">
+              <div class="rank-row"><div class="mark orange">W1</div><div class="rank-name">Meridian Freight</div><div class="rank-meta">Current week</div><div class="rank-state hot">Run now</div></div>
+              <div class="rank-row"><div class="mark orange">W1</div><div class="rank-name">Northstar Cartage</div><div class="rank-meta">Current week</div><div class="rank-state hot">Run now</div></div>
+              <div class="rank-row"><div class="mark blue">W2</div><div class="rank-name">VoltRoute</div><div class="rank-meta">Next week</div><div class="rank-state good">Promote</div></div>
+              <div class="rank-row"><div class="mark blue">W2</div><div class="rank-name">HarborMesh</div><div class="rank-meta">Next week</div><div class="rank-state good">Promote</div></div>
+              <div class="rank-row"><div class="mark red">Fri</div><div class="rank-name">Apex Shipping</div><div class="rank-meta">Pulse review</div><div class="rank-state risk">Retire</div></div>
+              <div class="rank-row"><div class="mark red">Fri</div><div class="rank-name">Bluewater Transit</div><div class="rank-meta">Pulse review</div><div class="rank-state risk">Retire</div></div>
+            </div>
+            <aside class="decision-dock">
+              <div class="dock-line"><div class="calendar-label">This week</div><div class="headline">Work two accounts hard enough to learn, not twelve accounts lightly enough to guess.</div><div class="copy">The room should make campaign focus visible. If the current week can hold more than a few accounts, it is still pretending to prioritize.</div></div>
+              <div class="dock-line"><div class="calendar-label">Next week</div><div class="headline">Only promote reserve accounts that earned a real reason to enter the campaign.</div><div class="copy">The queue should feel like a disciplined handoff, not a softer list of things the user likes.</div></div>
+              <div class="dock-line"><div class="calendar-label">Friday pulse</div><div class="headline">Retire names that looked good but taught nothing.</div><div class="copy">This version makes the weekly pulse the authority for cutting, not a decorative review ritual.</div></div>
+            </aside>
+          </div>
+          <div class="footer-note"><div class="title">What this face is solving</div><div class="copy">This version is for a room that should feel cadence-driven and behavioral. It forces territory to operate like a campaign calendar with entry, review, and retirement logic.</div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

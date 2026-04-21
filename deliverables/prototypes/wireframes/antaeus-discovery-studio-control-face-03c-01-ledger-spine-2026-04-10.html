@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery Studio Control Face 03C-01 - Ledger Spine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="./discovery-studio-control-face-03b-foundation-data-2026-04-10.js"></script>
+  <style>
+    :root{
+      --bg:#f4f8fe;--ink:#102a58;--muted:#6f86ab;--line:rgba(16,42,88,.12);--line2:rgba(16,42,88,.22);
+      --blue:#2f70f0;--orange:#e87821;--green:#2f8755;--red:#c84d4d;--shadow:0 22px 54px rgba(16,42,88,.08);
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;color:var(--ink);
+      background:
+        radial-gradient(circle at 16% 0%, rgba(47,112,240,.08), transparent 24%),
+        radial-gradient(circle at 86% 0%, rgba(232,120,33,.08), transparent 22%),
+        linear-gradient(180deg,#fbfdff 0%,var(--bg) 100%);
+      padding:26px 24px 42px;
+    }
+    button{font:inherit}
+    .page{max-width:1660px;margin:0 auto}
+    .mast{display:flex;justify-content:space-between;align-items:end;gap:20px;padding-bottom:18px;border-bottom:1px solid var(--line2)}
+    .kicker,.mono,.micro{font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:700}
+    .kicker{color:var(--orange)}
+    .brand{margin-top:6px;font-family:"Outfit",sans-serif;font-size:24px;line-height:.94;letter-spacing:-.05em}
+    .stamp{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9bacbf;font-weight:700}
+    .board{display:grid;grid-template-columns:188px minmax(0,1fr);gap:36px;margin-top:20px}
+    .palette{position:sticky;top:18px;align-self:start}
+    .mono{color:#97a8c2}
+    .frameworks,.segments,.responses{margin-top:12px;border-top:1px solid var(--line)}
+    .frameworkBtn,.segmentHead,.replyBtn{width:100%;background:none;border:0;color:inherit;text-align:left;cursor:pointer}
+    .frameworkBtn{display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);transition:opacity .16s ease}
+    .frameworkBtn:hover{opacity:.82}
+    .dot,.segDot,.replyDot,.toolDot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(16,42,88,.16);position:relative;flex:0 0 auto}
+    .dot::after,.segDot::after,.replyDot::after,.toolDot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#d9e1ef}
+    .frameworkBtn.active .dot::after{background:var(--orange)}
+    .fwName{font-size:14px;line-height:1.3;color:#91a4bf;font-weight:700}
+    .frameworkBtn.active .fwName{color:var(--ink)}
+    .paletteNote{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;line-height:1.6;color:var(--muted)}
+    .main{display:grid;gap:18px}
+    .title{font-family:"Outfit",sans-serif;font-size:34px;line-height:.94;letter-spacing:-.06em;max-width:12ch}
+    .segment{padding:6px 0 8px;border-bottom:1px solid var(--line)}
+    .segment.active{padding-bottom:20px;border-bottom-color:transparent}
+    .segmentHead{display:grid;grid-template-columns:12px 44px minmax(0,1fr);gap:12px;align-items:center;padding:14px 6px 14px 2px;border-radius:18px;transition:background .16s ease}
+    .segmentHead:hover{background:rgba(255,255,255,.52)}
+    .segment.active .segDot::after{background:var(--blue)}
+    .segment.start .segDot::after{background:var(--orange)}
+    .segNum{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .segTitle{font-family:"Outfit",sans-serif;font-size:30px;line-height:.96;letter-spacing:-.05em}
+    .segmentBody{display:none;margin-top:8px;padding:20px 20px 20px 24px;border:1px solid rgba(47,112,240,.16);border-radius:30px;background:rgba(255,255,255,.9);box-shadow:var(--shadow)}
+    .segment.active .segmentBody{display:grid;gap:18px}
+    .grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.92fr) 320px;gap:30px;align-items:start}
+    .lineText{margin-top:10px;font-family:"Outfit",sans-serif;font-size:52px;line-height:.91;letter-spacing:-.07em;max-width:14ch}
+    .responses{background:rgba(255,255,255,.5);border-radius:20px;border:1px solid rgba(16,42,88,.06);overflow:hidden}
+    .replyBtn{display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);transition:background .16s ease}
+    .replyBtn:last-child{border-bottom:0}
+    .replyBtn.active{background:rgba(255,255,255,.84)}
+    .replyBtn.green .replyDot::after{background:var(--green)}
+    .replyBtn.orange .replyDot::after{background:var(--orange)}
+    .replyBtn.red .replyDot::after{background:var(--red)}
+    .replyMeta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .replyQuote{margin-top:7px;font-size:28px;line-height:1.03;letter-spacing:-.04em;font-weight:700;max-width:22ch;opacity:.58;transition:opacity .16s ease}
+    .replyBtn.active .replyQuote{opacity:1}
+    .nextLine{margin-top:10px;font-family:"Outfit",sans-serif;font-size:40px;line-height:.92;letter-spacing:-.06em;max-width:12ch}
+    .toolTabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+    .toolBtn{display:flex;align-items:center;gap:10px;padding:0 0 6px;background:none;border:0;border-bottom:2px solid transparent;color:#96a7c2;cursor:pointer;font-size:14px;font-weight:700}
+    .toolBtn.active{color:var(--ink);border-bottom-color:var(--orange)}
+    .toolBtn.facts .toolDot::after{background:var(--blue)}
+    .toolBtn.recover .toolDot::after{background:var(--red)}
+    .toolBtn.leave .toolDot::after{background:var(--orange)}
+    .toolPanel{margin-top:14px;padding:16px 18px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.78);display:grid;gap:12px}
+    .toolTitle{font-family:"Outfit",sans-serif;font-size:26px;line-height:.96;letter-spacing:-.05em}
+    .toolList{display:grid;gap:10px}
+    .toolRow{padding-bottom:10px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.58;color:var(--muted)}
+    .toolRow:last-child{padding-bottom:0;border-bottom:0}
+    @media (max-width:1180px){
+      .board{grid-template-columns:1fr}
+      .palette{position:static}
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="mast">
+      <div>
+        <div class="kicker">Discovery Studio / Control Face 03C / Variant 01</div>
+        <div class="brand">Ledger spine.</div>
+      </div>
+      <div class="stamp" id="frameworkStamp"></div>
+    </div>
+
+    <div class="board">
+      <aside class="palette">
+        <div class="mono">Frameworks</div>
+        <div class="frameworks" id="frameworks"></div>
+        <div class="paletteNote">The framework rail stays quiet. The segment spine is still the instrument.</div>
+      </aside>
+      <main class="main">
+        <div class="title">Choose the segment. Work inside the segment.</div>
+        <div class="segments" id="segments"></div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const foundation = window.DS_CONTROL_FACE_FOUNDATION;
+    let frameworkIndex = foundation.defaultFrameworkIndex;
+    let activeSegment = '1';
+    let activeReply = 0;
+    let activeTool = 'facts';
+
+    function currentSegment(){ return foundation.segments.find(s => s.id === activeSegment); }
+
+    function renderFrameworks(){
+      document.getElementById('frameworkStamp').textContent = foundation.frameworks[frameworkIndex];
+      document.getElementById('frameworks').innerHTML = foundation.frameworks.map((f,i)=>`
+        <button class="frameworkBtn ${i===frameworkIndex?'active':''}" onclick="frameworkIndex=${i};render()">
+          <span class="dot"></span><span class="fwName">${f}</span>
+        </button>
+      `).join('');
+    }
+
+    function toolsMarkup(segment){
+      const tools = {
+        facts:{title:'What we know so far', rows:segment.facts},
+        recover:{title:'If they push back', rows:segment.recover},
+        leave:{title:'Before you move on', rows:segment.leave}
+      };
+      const tool = tools[activeTool];
+      return `
+        <div class="toolTabs">
+          <button class="toolBtn facts ${activeTool==='facts'?'active':''}" onclick="setTool('facts')"><span class="toolDot"></span><span>What we know so far</span></button>
+          <button class="toolBtn recover ${activeTool==='recover'?'active':''}" onclick="setTool('recover')"><span class="toolDot"></span><span>If they push back</span></button>
+          <button class="toolBtn leave ${activeTool==='leave'?'active':''}" onclick="setTool('leave')"><span class="toolDot"></span><span>Before you move on</span></button>
+        </div>
+        <div class="toolPanel">
+          <div class="toolTitle">${tool.title}</div>
+          <div class="toolList">${tool.rows.map(row=>`<div class="toolRow">${row}</div>`).join('')}</div>
+        </div>
+      `;
+    }
+
+    function repliesMarkup(segment){
+      return segment.replies.map((reply,index)=>`
+        <button class="replyBtn ${reply.tone} ${index===activeReply?'active':''}" onclick="activeReply=${index};renderSegments()">
+          <span class="replyDot"></span>
+          <span><span class="replyMeta">${reply.meta}</span><span class="replyQuote">${reply.quote}</span></span>
+        </button>
+      `).join('');
+    }
+
+    function segmentMarkup(segment){
+      const nextIndex = Math.min(activeReply, segment.next.length - 1);
+      return `
+        <div class="segment ${segment.id===activeSegment?'active':''} ${segment.id==='1'?'start':''}">
+          <button class="segmentHead" onclick="activeSegment='${segment.id}';activeReply=0;activeTool='facts';renderSegments()">
+            <span class="segDot"></span><span class="segNum">${segment.n}</span><span class="segTitle">${segment.t}</span>
+          </button>
+          <div class="segmentBody">
+            <div class="grid">
+              <div>
+                <div class="micro">Say this now</div>
+                <div class="lineText">${segment.say}</div>
+              </div>
+              <div>
+                <div class="micro">Buyer might say</div>
+                <div class="responses">${repliesMarkup(segment)}</div>
+              </div>
+              <div>
+                <div class="micro">Say next</div>
+                <div class="nextLine">${segment.next[nextIndex] || segment.next[0]}</div>
+                ${toolsMarkup(segment)}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSegments(){
+      document.getElementById('segments').innerHTML = foundation.segments.map(segmentMarkup).join('');
+    }
+
+    function setTool(tool){ activeTool = tool; renderSegments(); }
+    function render(){ renderFrameworks(); renderSegments(); }
+    render();
+  </script>
+</body>
+</html>

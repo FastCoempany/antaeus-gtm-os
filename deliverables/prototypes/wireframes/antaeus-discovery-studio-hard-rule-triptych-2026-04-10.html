@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Discovery Studio Hard-Rule Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#eef4fb; --panel:#ffffff; --line:rgba(8,27,63,.1); --text:#0a1c40; --muted:#7287a8;
+      --blue:#246fe7; --orange:#e4711f; --green:#2f7b4d; --red:#cf4d49; --shadow:0 24px 60px rgba(8,27,63,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;color:var(--text);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,111,231,.08), transparent 24%),
+        radial-gradient(circle at 100% 12%, rgba(228,113,31,.08), transparent 24%),
+        linear-gradient(180deg,#fbfdff 0%, var(--bg) 100%);
+    }
+    button{font:inherit;color:inherit;appearance:none;-webkit-appearance:none}
+    .page{width:min(1560px,calc(100vw - 36px));margin:0 auto;padding:28px 0 60px}
+    .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--orange);font-weight:700}
+    .intro{margin:8px 0 26px;max-width:76ch;font-size:14px;line-height:1.65;color:var(--muted)}
+    .stack{display:grid;gap:28px}
+    .board{
+      position:relative;overflow:hidden;padding:24px;border:1px solid var(--line);border-radius:30px;
+      background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(243,247,252,.94));box-shadow:var(--shadow);
+    }
+    .board::before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.42;
+      background-image:linear-gradient(rgba(8,27,63,.022) 1px, transparent 1px),linear-gradient(90deg, rgba(8,27,63,.022) 1px, transparent 1px);
+      background-size:32px 32px;
+    }
+    .board>*{position:relative;z-index:1}
+    .head{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:end;margin-bottom:14px}
+    .head h2{margin:4px 0 0;font-family:"Outfit",sans-serif;font-size:26px;line-height:.95;letter-spacing:-.05em}
+    .head p{margin:0;max-width:68ch;font-size:13px;line-height:1.55;color:var(--muted)}
+    .status{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.75);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:var(--blue)}
+    .topbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.76);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#8ea0ba;white-space:nowrap;
+    }
+    .pill strong{font-size:12px;letter-spacing:0;text-transform:none;color:var(--text)}
+    .live{color:var(--green);border-color:rgba(47,123,77,.18);background:rgba(47,123,77,.08)}
+    .warn{color:var(--orange);border-color:rgba(228,113,31,.18);background:rgba(228,113,31,.08)}
+    .alert{color:var(--red);border-color:rgba(207,77,73,.18);background:rgba(207,77,73,.08)}
+    .blue{color:var(--blue);border-color:rgba(36,111,231,.18);background:rgba(36,111,231,.08)}
+    .mark{position:relative;width:16px;height:16px;flex:0 0 auto}
+    .dot::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--orange)}
+    .pulse{border-radius:50%;background:rgba(47,123,77,.12);border:1px solid rgba(47,123,77,.18)}
+    .pulse::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--green)}
+    .alertmark{border-radius:50%;background:rgba(207,77,73,.1);border:1px solid rgba(207,77,73,.18)}
+    .alertmark::before{content:"!";position:absolute;inset:0;display:grid;place-items:center;color:var(--red);font-weight:700;font-size:12px}
+    .skip::before{content:"";position:absolute;left:1px;top:7px;width:10px;height:2px;background:var(--orange);border-radius:999px}
+    .skip::after{content:"";position:absolute;right:0;top:4px;width:6px;height:6px;border-top:2px solid var(--orange);border-right:2px solid var(--orange);transform:rotate(45deg)}
+    .copymark::before,.copymark::after{content:"";position:absolute;width:9px;height:11px;border-radius:4px;border:1px solid rgba(36,111,231,.22);background:rgba(36,111,231,.08)}
+    .copymark::before{left:3px;top:4px;background:#fff}.copymark::after{left:6px;top:2px}
+
+    .box{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.82));box-shadow:0 16px 40px rgba(8,27,63,.07)}
+    .boxpad{padding:18px}
+    .label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:#8ea0ba}
+    .say{font-family:"Outfit",sans-serif;font-size:34px;line-height:.95;letter-spacing:-.06em;margin:8px 0 0;max-width:13ch}
+    .body{font-size:14px;line-height:1.58;color:var(--muted)}
+    .meta{font-size:13px;line-height:1.5;color:var(--muted)}
+    .spine,.utility,.ledger{display:grid;gap:10px;align-content:start}
+    .spine-row{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
+    .n{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:10px;font-weight:700;color:#8ea0ba;background:rgba(255,255,255,.76)}
+    .spine-row.active .n{background:rgba(228,113,31,.08);border-color:rgba(228,113,31,.18);color:var(--orange)}
+    .spine-row strong{display:block;font-size:14px;letter-spacing:-.02em}
+    .spine-row span{display:block;margin-top:3px;font-size:12px;line-height:1.46;color:var(--muted)}
+    .responses{display:grid;gap:0}
+    .resp{
+      width:100%;display:grid;grid-template-columns:16px 1fr;gap:12px;align-items:start;padding:14px 2px;border:0;border-top:1px solid var(--line);
+      background:transparent;text-align:left;cursor:pointer;
+    }
+    .resp:last-child{border-bottom:1px solid var(--line)}
+    .resp.active{background:linear-gradient(90deg,rgba(36,111,231,.08),rgba(255,255,255,0))}
+    .resp strong{display:block;font-size:18px;line-height:1.04;letter-spacing:-.04em}
+    .resp span span{display:block;margin-top:5px;font-size:13px;line-height:1.52;color:var(--muted)}
+    .runner{display:grid;gap:14px}
+    .ruleline{padding-top:12px;border-top:1px solid var(--line)}
+    .utility-line{display:grid;grid-template-columns:16px 1fr;gap:10px;align-items:start}
+    .utility-line strong{display:block;font-size:14px;line-height:1.28;letter-spacing:-.02em}
+    .utility-line span{display:block;margin-top:4px;font-size:12px;line-height:1.5;color:var(--muted)}
+    .v1{display:grid;grid-template-columns:210px minmax(0,1fr) 300px;gap:20px;min-height:700px}
+    .v2{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;min-height:700px}
+    .v2-main{display:grid;gap:14px}
+    .turns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .v3{display:grid;grid-template-columns:240px minmax(0,1fr) 270px;gap:20px;min-height:700px}
+    .desk{display:grid;gap:12px}
+    .ticket{padding:16px 18px;border-top:1px solid var(--line)}
+    .ticket:first-child{border-top:0}
+    .compact{font-size:12px;line-height:1.48;color:var(--muted)}
+    @media (max-width:1320px){.v1,.v2,.v3,.turns{grid-template-columns:1fr}}
+    @media (max-width:900px){.page{width:min(100vw - 20px,100%)}.head{grid-template-columns:1fr}.say{font-size:28px}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="eyebrow">Discovery Studio Hard-Rule Pass</div>
+    <p class="intro">No big conceptual headlines. Every primary object below does one of four jobs only: tell the rep what to say, tell the rep what the buyer might say, tell the rep where they are in time, or recover the call.</p>
+
+    <section class="stack">
+      <article class="board">
+        <header class="head">
+          <div><div class="eyebrow">Variant 01 - Phase Spine Console</div><h2>Run the phase, not the concept.</h2></div>
+          <p>Strongest when you want the rep to always know where they are in the call and what the next legal move is if time starts collapsing.</p>
+          <div class="status">Time - Say - Hear</div>
+        </header>
+        <div class="topbar">
+          <div class="pill live"><span class="mark pulse"></span>Call <strong>07:42</strong></div>
+          <div class="pill warn">Phase <strong>03 Current State</strong></div>
+          <div class="pill alert">Pace <strong>Tight</strong></div>
+          <div class="pill blue">Jump <strong>Stakeholder map at 10:00</strong></div>
+          <div class="pill">Next step <strong>Not locked</strong></div>
+        </div>
+        <div class="v1">
+          <aside class="spine">
+            <div class="label">Phase spine</div>
+            <div class="spine-row"><div class="n">01</div><div><strong>Open</strong><span>Permission and hypothesis bridge.</span></div></div>
+            <div class="spine-row"><div class="n">02</div><div><strong>Why now</strong><span>Name the disruption.</span></div></div>
+            <div class="spine-row active"><div class="n">03</div><div><strong>Current state</strong><span>How do they handle it today?</span></div></div>
+            <div class="spine-row"><div class="n">04</div><div><strong>Depth</strong><span>Owner, cost, consequence.</span></div></div>
+            <div class="spine-row"><div class="n">05</div><div><strong>Stakeholders</strong><span>Who else must believe it?</span></div></div>
+            <div class="spine-row"><div class="n">06</div><div><strong>Close</strong><span>Calendar the next move.</span></div></div>
+          </aside>
+          <div class="runner">
+            <section class="box boxpad">
+              <div class="label">Say this now</div>
+              <div class="say">“Help me sort one thing first: when supplier risk moves, do you need earlier warning, or do you need a way to model the operational hit before it lands?”</div>
+            </section>
+            <section class="box boxpad">
+              <div class="label">Buyer might say</div>
+              <div class="responses" data-response-group="v1">
+                <button class="resp active" data-response="v1-a"><span class="mark pulse"></span><span><strong>“We need earlier warning.”</strong><span>Push toward monitoring truth and alert ownership.</span></span></button>
+                <button class="resp" data-response="v1-b"><span class="mark dot"></span><span><strong>“We need to model impact before it hits.”</strong><span>Push toward simulation truth and operations planning.</span></span></button>
+                <button class="resp" data-response="v1-c"><span class="mark alertmark"></span><span><strong>“I’m not sure.”</strong><span>Force a choice by asking what leadership would pay to solve first.</span></span></button>
+              </div>
+            </section>
+            <section class="box boxpad">
+              <div class="label">Say next</div>
+              <div class="meta response-panel active" id="v1-a">“Then I want to stay on warning quality for a minute. When an alert becomes real, who owns the response and what changes because they saw it earlier?”</div>
+              <div class="meta response-panel" id="v1-b" hidden>“Good. Then this is not a watchlist problem. It is a planning problem. What decision gets better when you can model the disruption before it lands?”</div>
+              <div class="meta response-panel" id="v1-c" hidden>“If you had to pick one, what would make leadership move faster: a better warning signal, or a clearer simulation of the cost?”</div>
+              <div class="ruleline"><div class="label">Must learn before moving</div><div class="body">Which side of the framework is actually in force: monitoring or simulation.</div></div>
+            </section>
+          </div>
+          <aside class="utility">
+            <section class="box boxpad">
+              <div class="label">Recover the call</div>
+              <div class="utility-line"><span class="mark skip"></span><div><strong>Demo now</strong><span>“Happy to, but I need one more branch so I show the right proof.”</span></div></div>
+              <div class="utility-line"><span class="mark alertmark"></span><div><strong>Pricing</strong><span>“Price changes depending on whether this is monitoring or simulation.”</span></div></div>
+              <div class="utility-line"><span class="mark dot"></span><div><strong>Send info</strong><span>“I can send the wrong thing fast or the right thing after one more answer.”</span></div></div>
+              <div class="utility-line"><span class="mark pulse"></span><div><strong>Wrong person</strong><span>“Who owns this when procurement and operations disagree?”</span></div></div>
+            </section>
+            <section class="box boxpad">
+              <div class="label">Proof drawer</div>
+              <div class="compact">Vantive = scenario modeling and operational consequence. Craft = supplier monitoring and risk visibility. Do not deploy either proof set until the branch is chosen.</div>
+            </section>
+          </aside>
+        </div>
+      </article>
+
+      <article class="board">
+        <header class="head">
+          <div><div class="eyebrow">Variant 02 - Two-Turn Runner</div><h2>Say now, hear next, answer fast.</h2></div>
+          <p>Strongest when the rep needs the center of gravity on the exact turn sequence instead of on the phase map.</p>
+          <div class="status">Say - Hear - Recover</div>
+        </header>
+        <div class="topbar">
+          <div class="pill warn">Call <strong>11:18</strong></div>
+          <div class="pill alert">Pace <strong>Over</strong></div>
+          <div class="pill blue">Skip next <strong>Go straight to stakeholders</strong></div>
+          <div class="pill">Compression <strong>Available</strong></div>
+        </div>
+        <div class="v2">
+          <div class="v2-main">
+            <div class="turns">
+              <section class="box boxpad">
+                <div class="label">Say this now</div>
+                <div class="say">“Right now, is the bigger problem that you can’t see supplier risk early enough, or that you can’t model what it does to the business once you do?”</div>
+              </section>
+              <section class="box boxpad">
+                <div class="label">Recover if they interrupt</div>
+                <div class="body">Pricing: “To price it honestly, I need to know which of those two jobs the product is doing for you.”</div>
+                <div class="body">Demo: “Yes, but I don’t want to demo the wrong branch.”</div>
+                <div class="body">Send info: “I can send two completely different proof paths. Which one should I send?”</div>
+              </section>
+            </div>
+            <section class="box boxpad">
+              <div class="label">Buyer might say</div>
+              <div class="responses" data-response-group="v2">
+                <button class="resp active" data-response="v2-a"><span class="mark pulse"></span><span><strong>“It starts with visibility.”</strong><span>Move into alert quality, signal trust, and response ownership.</span></span></button>
+                <button class="resp" data-response="v2-b"><span class="mark dot"></span><span><strong>“The issue is planning.”</strong><span>Move into scenario review, operational consequence, and cross-functional use.</span></span></button>
+                <button class="resp" data-response="v2-c"><span class="mark alertmark"></span><span><strong>“We sort of need both.”</strong><span>Force the first use-case, not the eventual product story.</span></span></button>
+              </div>
+            </section>
+            <section class="box boxpad">
+              <div class="label">Say next</div>
+              <div class="meta response-panel active" id="v2-a">“Then let’s stay on visibility. What makes an alert credible enough that someone actually changes behavior because of it?”</div>
+              <div class="meta response-panel" id="v2-b" hidden>“Then let’s stay on planning. What operational decision gets better when you can run the scenario before the disruption lands?”</div>
+              <div class="meta response-panel" id="v2-c" hidden>“You may end up with both, but which one would leadership buy first if budget only covered one starting point?”</div>
+            </section>
+          </div>
+          <aside class="ledger">
+            <section class="box boxpad">
+              <div class="label">Time control</div>
+              <div class="utility-line"><span class="mark alertmark"></span><div><strong>Over pace</strong><span>Drop any category education. Stay on branch choice and owner only.</span></div></div>
+              <div class="utility-line"><span class="mark skip"></span><div><strong>Next forced jump</strong><span>Stakeholder mapping at minute 12 even if depth is incomplete.</span></div></div>
+            </section>
+            <section class="box boxpad">
+              <div class="label">Next-step lock</div>
+              <div class="compact">“If this is planning-first, I want operations and procurement in the next review. If it is visibility-first, I want the owner of daily alert response.”</div>
+            </section>
+          </aside>
+        </div>
+      </article>
+
+      <article class="board">
+        <header class="head">
+          <div><div class="eyebrow">Variant 03 - Compression Desk</div><h2>Built for the two-minute buyer.</h2></div>
+          <p>Strongest when the rep expects a distracted buyer and needs the room to collapse to only essential moves.</p>
+          <div class="status">Time - Recover - Lock</div>
+        </header>
+        <div class="topbar">
+          <div class="pill alert">Compress <strong>On</strong></div>
+          <div class="pill warn">Call <strong>02:21</strong></div>
+          <div class="pill blue">Essential path <strong>4 moves left</strong></div>
+          <div class="pill">Outcome <strong>Book or park</strong></div>
+        </div>
+        <div class="v3">
+          <aside class="spine">
+            <div class="label">Essential path</div>
+            <div class="spine-row active"><div class="n">1</div><div><strong>Say hypothesis</strong><span>One sharp line only.</span></div></div>
+            <div class="spine-row"><div class="n">2</div><div><strong>Force branch</strong><span>Pick the real problem.</span></div></div>
+            <div class="spine-row"><div class="n">3</div><div><strong>Name owner</strong><span>Who acts when it matters?</span></div></div>
+            <div class="spine-row"><div class="n">4</div><div><strong>Lock next step</strong><span>Calendar or park with trigger.</span></div></div>
+          </aside>
+          <div class="desk">
+            <section class="box">
+              <div class="ticket"><div class="label">Say this now</div><div class="say">“My read is that supplier risk is already visible, but your team still lacks a reliable way to act on it. Wrong?”</div></div>
+              <div class="ticket"><div class="label">If they say yes</div><div class="body">“Then who is supposed to act first when the signal turns real?”</div></div>
+              <div class="ticket"><div class="label">If they say no</div><div class="body">“Good. What is the real first failure then: warning quality or planning confidence?”</div></div>
+              <div class="ticket"><div class="label">If they interrupt with pricing or demo</div><div class="body">“I can answer that honestly after one branch decision, otherwise I’ll point you to the wrong proof.”</div></div>
+              <div class="ticket"><div class="label">Lock next step</div><div class="body">“Worth a 25-minute review with the person who owns supplier response, or should I park this until that owner is in?”</div></div>
+            </section>
+          </div>
+          <aside class="utility">
+            <section class="box boxpad">
+              <div class="label">Support proof</div>
+              <div class="utility-line"><span class="mark dot"></span><div><strong>Simulation proof</strong><span>Use only if they choose planning first.</span></div></div>
+              <div class="utility-line"><span class="mark pulse"></span><div><strong>Monitoring proof</strong><span>Use only if they choose visibility first.</span></div></div>
+            </section>
+            <section class="box boxpad">
+              <div class="label">Park cleanly</div>
+              <div class="compact">“I’m happy to leave this parked until the owner of supplier response is part of the conversation.”</div>
+            </section>
+          </aside>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-response-group]").forEach((group) => {
+      const buttons = group.querySelectorAll("[data-response]");
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const prefix = button.dataset.response.split("-")[0];
+          buttons.forEach((b) => b.classList.remove("active"));
+          button.classList.add("active");
+          document.querySelectorAll(".response-panel").forEach((panel) => {
+            if (panel.id.startsWith(prefix + "-")) {
+              panel.hidden = panel.id !== button.dataset.response;
+              panel.classList.toggle("active", panel.id === button.dataset.response);
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Discovery Studio On-Call Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#eef4fb;
+      --field:#fbfdff;
+      --panel:rgba(255,255,255,0.84);
+      --panel-solid:#ffffff;
+      --line:rgba(8,27,63,0.1);
+      --text:#091c3d;
+      --muted:#7085a6;
+      --blue:#246fe7;
+      --orange:#e4711f;
+      --green:#2f7b4d;
+      --red:#cf4d49;
+      --shadow:0 28px 72px rgba(8,27,63,0.12);
+      --radius-xl:34px;
+      --radius-lg:26px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    button{font:inherit;color:inherit;appearance:none;-webkit-appearance:none}
+    body{
+      font-family:"Public Sans",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,111,231,0.08), transparent 24%),
+        radial-gradient(circle at 100% 12%, rgba(228,113,31,0.08), transparent 24%),
+        linear-gradient(180deg,#fbfdff 0%, var(--bg) 100%);
+    }
+    .page{width:min(1600px, calc(100vw - 36px));margin:0 auto;padding:30px 0 64px}
+    .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;font-weight:700;color:var(--orange)}
+    .title{margin:8px 0 12px;font-family:"Outfit",sans-serif;font-size:58px;line-height:.92;letter-spacing:-.07em;max-width:12ch}
+    .sub{margin:0 0 28px;max-width:78ch;font-size:16px;line-height:1.7;color:var(--muted)}
+    .stack{display:grid;gap:34px}
+    .board{
+      position:relative;overflow:hidden;padding:28px;border:1px solid var(--line);border-radius:var(--radius-xl);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(36,111,231,0.11), transparent 28%),
+        radial-gradient(circle at 88% 100%, rgba(228,113,31,0.08), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(243,247,252,0.95));
+      box-shadow:var(--shadow);
+    }
+    .board::before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.48;
+      background-image:
+        linear-gradient(rgba(8,27,63,0.024) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,27,63,0.024) 1px, transparent 1px);
+      background-size:32px 32px;
+    }
+    .board>*{position:relative;z-index:1}
+    .board-head{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:end;margin-bottom:20px}
+    .board-name{margin:5px 0 0;font-family:"Outfit",sans-serif;font-size:28px;line-height:.95;letter-spacing:-.05em}
+    .board-note{margin:0;max-width:72ch;font-size:14px;line-height:1.6;color:var(--muted)}
+    .status{
+      display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 16px;border-radius:999px;
+      border:1px solid var(--line);background:rgba(255,255,255,0.72);color:var(--blue);
+      font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;white-space:nowrap;
+    }
+    .tempo-strip{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,0.72);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#8ca0bc;white-space:nowrap;
+    }
+    .chip strong{color:var(--text);font-size:12px;letter-spacing:0;text-transform:none}
+    .chip.live{color:var(--green);border-color:rgba(47,123,77,0.18);background:rgba(47,123,77,0.08)}
+    .chip.warn{color:var(--orange);border-color:rgba(228,113,31,0.18);background:rgba(228,113,31,0.08)}
+    .chip.alert{color:var(--red);border-color:rgba(207,77,73,0.18);background:rgba(207,77,73,0.08)}
+    .chip.blue{color:var(--blue);border-color:rgba(36,111,231,0.18);background:rgba(36,111,231,0.08)}
+    .mark{position:relative;width:18px;height:18px;flex:0 0 auto}
+    .m-dot::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 6px rgba(228,113,31,0.1)}
+    .m-branch::before{content:"";position:absolute;left:8px;top:2px;width:2px;height:14px;border-radius:999px;background:var(--blue)}
+    .m-branch::after{content:"";position:absolute;left:8px;top:8px;width:7px;height:7px;border-top:2px solid var(--blue);border-right:2px solid var(--blue);transform:rotate(45deg)}
+    .m-pulse{border-radius:50%;background:rgba(47,123,77,0.13);border:1px solid rgba(47,123,77,0.18)}
+    .m-pulse::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--green)}
+    .m-pulse::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(47,123,77,0.18);animation:pulse 1.8s ease-out infinite}
+    .m-alert{border-radius:50%;background:rgba(207,77,73,0.1);border:1px solid rgba(207,77,73,0.18)}
+    .m-alert::before{content:"!";position:absolute;inset:0;display:grid;place-items:center;color:var(--red);font-size:13px;font-weight:700}
+    .m-copy::before,.m-copy::after{content:"";position:absolute;width:10px;height:12px;border-radius:4px;border:1px solid rgba(36,111,231,0.22);background:rgba(36,111,231,0.08)}
+    .m-copy::before{left:4px;top:5px;background:#fff}
+    .m-copy::after{left:7px;top:3px}
+    .m-skip::before{content:"";position:absolute;left:2px;top:8px;width:10px;height:2px;background:var(--orange);border-radius:999px}
+    .m-skip::after{content:"";position:absolute;right:1px;top:5px;width:7px;height:7px;border-top:2px solid var(--orange);border-right:2px solid var(--orange);transform:rotate(45deg)}
+    @keyframes pulse{
+      0%{transform:scale(.92);opacity:.72}
+      70%{transform:scale(1.22);opacity:0}
+      100%{transform:scale(1.22);opacity:0}
+    }
+    .card{
+      border:1px solid var(--line);border-radius:var(--radius-lg);
+      background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.78));
+      box-shadow:0 18px 44px rgba(8,27,63,0.08);
+    }
+    .label{font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:#8ea2be}
+    .copy{font-size:14px;line-height:1.58;color:var(--muted)}
+    .value{font-size:18px;line-height:1.34;font-weight:700;color:var(--text)}
+
+    .variant-01{display:grid;grid-template-columns:232px minmax(0,1fr) 312px;gap:22px;min-height:760px}
+    .framework-rail{display:grid;gap:8px;align-content:start;padding-top:6px}
+    .rail-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+    .rail-note{font-size:12px;line-height:1.5;color:var(--muted);max-width:18ch;text-align:right}
+    .rail-row{
+      width:100%;display:grid;grid-template-columns:14px 1fr;gap:14px;align-items:center;padding:14px 0;border:0;border-bottom:1px solid var(--line);
+      background:transparent;text-align:left;color:#8ca0bc;cursor:pointer;
+    }
+    .rail-row:last-child{border-bottom:0}
+    .rail-row strong{display:block;font-size:18px;line-height:1.04;letter-spacing:-.03em}
+    .rail-row span span{display:block;margin-top:4px;font-size:12px;color:#95a8c2}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(8,27,63,0.14);box-shadow:0 0 0 7px rgba(8,27,63,0.04)}
+    .rail-row.active{color:var(--text)}
+    .rail-row.active .dot{background:var(--orange);box-shadow:0 0 0 10px rgba(228,113,31,0.11)}
+    .center-stack,.side-stack{display:grid;gap:14px;align-content:start}
+    .lead{display:grid;gap:16px;padding:26px}
+    .lead-top{display:flex;justify-content:space-between;gap:12px;align-items:start}
+    .lead-title{margin:0;font-family:"DM Serif Display",serif;font-size:60px;line-height:.9;letter-spacing:-.03em;max-width:9ch}
+    .lead-copy{margin:0;max-width:46ch;font-size:17px;line-height:1.68;color:var(--muted)}
+    .track-pills{display:flex;gap:8px;flex-wrap:wrap}
+    .track-btn{
+      min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,0.72);color:#8ca0bc;
+      font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;cursor:pointer;
+    }
+    .track-btn.active{background:rgba(36,111,231,0.08);border-color:rgba(36,111,231,0.18);color:var(--blue)}
+    .lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:14px;border-top:1px solid var(--line)}
+    .cell .value,.cell .copy{margin-top:6px}
+    .rescue-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .rescue,.support-line,.tieback-line,.action-line{
+      display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start;
+    }
+    .rescue{padding:14px 0;border-top:1px solid var(--line)}
+    .rescue strong,.support-line strong,.tieback-line strong,.action-line strong{display:block;font-size:14px;line-height:1.28;letter-spacing:-.02em}
+    .rescue span,.support-line span,.tieback-line span,.action-line span{display:block;margin-top:4px;font-size:12px;line-height:1.5;color:var(--muted)}
+    .response-panel,.support-panel,.tieback-panel,.utility-card,.script-card{padding:18px}
+    .response-list,.support-list,.tieback-list,.phase-ladder,.utility-stack,.script-plane{display:grid;gap:12px}
+    .response{
+      width:100%;display:grid;grid-template-columns:18px 1fr;gap:12px;align-items:start;padding:14px 0;border:0;border-bottom:1px solid var(--line);
+      background:transparent;text-align:left;color:inherit;cursor:pointer;
+    }
+    .response:last-child{border-bottom:0}
+    .response .value{font-size:20px;line-height:1.02}
+    .response .copy{margin-top:6px}
+    .response.active .value{color:var(--text)}
+
+    .variant-02{display:grid;gap:18px;min-height:760px}
+    .variant-02-main{display:grid;grid-template-columns:192px minmax(0,1fr) 286px;gap:22px}
+    .phase-row{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:start}
+    .phase-num{
+      width:24px;height:24px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;
+      font-size:10px;font-weight:700;letter-spacing:.08em;color:#8ca0bc;background:rgba(255,255,255,0.74);
+    }
+    .phase-row.active .phase-num{border-color:rgba(228,113,31,0.18);background:rgba(228,113,31,0.08);color:var(--orange)}
+    .phase-row strong{display:block;font-size:14px;letter-spacing:-.02em}
+    .phase-row span{display:block;margin-top:4px;font-size:12px;line-height:1.48;color:var(--muted)}
+    .script-title{margin:0;font-family:"Outfit",sans-serif;font-size:54px;line-height:.92;letter-spacing:-.07em;max-width:8ch}
+    .script-copy{margin:0;max-width:48ch;font-size:17px;line-height:1.68;color:var(--muted)}
+    .branch-rail{display:grid;gap:0;margin-top:6px}
+    .branch{
+      width:100%;display:grid;grid-template-columns:18px 142px 1fr 1fr;gap:14px;align-items:start;padding:14px 4px;border:0;border-top:1px solid var(--line);
+      background:transparent;text-align:left;cursor:pointer;
+    }
+    .branch:last-child{border-bottom:1px solid var(--line)}
+    .branch.active{background:linear-gradient(90deg, rgba(36,111,231,0.08), rgba(255,255,255,0))}
+    .branch .label{padding-top:2px}
+    .branch .value{font-size:17px}
+    .branch .copy{font-size:13px}
+    .variant-03{display:grid;grid-template-columns:minmax(500px,0.94fr) minmax(0,1.06fr);gap:30px;min-height:820px}
+    .worksheet-pane,.switcher-pane{display:grid;gap:20px;align-content:start}
+    .worksheet-rail{display:grid;gap:0;border-top:1px solid var(--line)}
+    .ws-row{
+      width:100%;display:grid;grid-template-columns:16px minmax(0,1fr) 116px 84px;gap:14px;align-items:center;min-height:86px;
+      border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;color:#8ea2bf;cursor:pointer;
+    }
+    .ws-row:last-child{border-bottom:0}
+    .ws-row .name{font-size:34px;line-height:.92;letter-spacing:-.06em}
+    .ws-row .stage{font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:#9aafc8}
+    .ws-row .amt{justify-self:end;font-size:19px;color:#90a3bd}
+    .ws-row.active{color:var(--text)}
+    .ws-row.active .dot{background:var(--orange);box-shadow:0 0 0 10px rgba(228,113,31,0.11)}
+    .ws-row.active .amt{color:var(--text)}
+    .action-strip{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:14px;border-top:1px solid var(--line);
+    }
+    .switcher-meta{display:grid;gap:8px;max-width:52ch}
+    .meta-top{display:flex;align-items:center;gap:12px}
+    .pulse-mark{
+      position:relative;width:18px;height:18px;border-radius:50%;background:rgba(228,113,31,0.14);border:1px solid rgba(228,113,31,0.18);
+      box-shadow:0 0 0 7px rgba(228,113,31,0.08);
+    }
+    .pulse-mark::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--orange)}
+    .pulse-mark::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(228,113,31,0.18);animation:pulse 1.8s ease-out infinite}
+    .switcher-title{margin:0;font-family:"Outfit",sans-serif;font-size:44px;line-height:.92;letter-spacing:-.06em;font-weight:700;max-width:11ch}
+    .switcher-copy{margin:0;max-width:52ch;font-size:15px;line-height:1.62;color:var(--muted)}
+    .fan{position:relative;height:500px;margin-top:4px}
+    .sheet{
+      position:absolute;left:24px;width:min(700px, calc(100% - 38px));border:1px solid rgba(8,27,63,0.09);border-radius:32px;
+      background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);padding:22px 22px 16px;text-align:left;cursor:pointer;
+      box-shadow:0 24px 56px rgba(8,27,63,0.12);transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    .sheet[data-pos="3"]{top:36px;transform:rotate(-.4deg);z-index:1}
+    .sheet[data-pos="2"]{top:18px;transform:rotate(.18deg);z-index:2}
+    .sheet[data-pos="1"]{top:0;transform:rotate(0deg);z-index:3}
+    .sheet.front{z-index:5;transform:translateY(-2px) rotate(0deg);box-shadow:0 34px 72px rgba(8,27,63,0.16)}
+    .sheet-label{
+      display:inline-flex;align-items:center;min-height:32px;padding:0 13px;border-radius:999px;margin-bottom:14px;
+      font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;
+    }
+    .tone-orange{background:rgba(228,113,31,0.12);color:var(--orange)}
+    .tone-blue{background:rgba(36,111,231,0.12);color:var(--blue)}
+    .tone-green{background:rgba(47,123,77,0.12);color:var(--green)}
+    .sheet h3{margin:0 0 12px;font-family:"DM Serif Display",serif;font-size:50px;line-height:.9;letter-spacing:-.03em;max-width:8ch}
+    .sheet-callout{margin:0 0 14px;max-width:38ch;font-size:15px;line-height:1.56;color:var(--muted)}
+    .sheet-foot{display:grid;grid-template-columns:130px 144px 1fr;gap:16px;padding-top:14px;border-top:1px solid var(--line)}
+    .sheet:not(.front) h3{font-size:40px;max-width:9ch}
+    .sheet:not(.front) .sheet-callout{display:none}
+    .sheet:not(.front) .sheet-foot{grid-template-columns:1fr;padding-top:12px}
+    .sheet:not(.front) .sheet-foot .cell:nth-child(1),
+    .sheet:not(.front) .sheet-foot .cell:nth-child(2){display:none}
+    .sheet:not(.front) .sheet-foot .cell .copy{font-size:13px}
+    .handoff{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding-top:16px;border-top:1px solid var(--line)}
+    .tone-k-green{color:var(--green)}
+    .tone-k-blue{color:var(--blue)}
+    .tone-k-orange{color:var(--orange)}
+    @media (max-width:1400px){
+      .variant-01,.variant-02-main,.variant-03{grid-template-columns:1fr}
+      .fan{height:560px}
+      .sheet{left:10px;width:calc(100% - 20px)}
+    }
+    @media (max-width:980px){
+      .page{width:min(100vw - 20px, 100%)}
+      .board{padding:20px}
+      .board-head{grid-template-columns:1fr;align-items:start}
+      .title{font-size:46px}
+      .lead-title,.script-title{font-size:44px}
+      .rescue-row,.lead-grid,.action-strip,.handoff,.sheet-foot{grid-template-columns:1fr}
+      .branch{grid-template-columns:18px 1fr}
+      .branch .copy{grid-column:2}
+      .ws-row{grid-template-columns:16px minmax(0,1fr) 84px}
+      .ws-row .stage{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="eyebrow">Discovery Studio On-Call Triptych</div>
+    <h1 class="title">Mockups built for the live call, not the framework shelf.</h1>
+    <p class="sub">Three Discovery Studio first-fold systems rebuilt around the now-locked rules: visible tempo, essentials-mode compression, skip-ahead rescue, reachable support proof, and strict hold-vs-deploy value behavior.</p>
+
+    <section class="stack">
+      <article class="board">
+        <header class="board-head">
+          <div>
+            <div class="eyebrow">Variant 01 - Tempo Deck</div>
+            <h2 class="board-name">The room behaves like a live call cockpit.</h2>
+          </div>
+          <p class="board-note">Framework rail left, live script center, responses and support right. The first thing the room tells the rep is not what the framework is. It tells the rep whether the call is still on pace.</p>
+          <div class="status">Tempo - Node - Rescue</div>
+        </header>
+
+        <div class="tempo-strip">
+          <div class="chip live"><span class="mark m-pulse"></span>Call clock <strong>07:42</strong></div>
+          <div class="chip warn">Phase 03 <strong>Tight</strong></div>
+          <div class="chip blue">Compression <strong>Ready</strong></div>
+          <div class="chip">Hold / deploy <strong>Hold proof</strong></div>
+          <div class="chip alert">Next step <strong>Not locked</strong></div>
+        </div>
+
+        <div class="variant-01">
+          <aside class="framework-rail" data-toggle-group>
+            <div class="rail-head">
+              <div class="label">Framework worksheet</div>
+              <div class="rail-note">Lock the category machine before you run the call.</div>
+            </div>
+            <button class="rail-row active" data-toggle-item><span class="dot"></span><span><strong>Sales / Revenue Intelligence</strong><span>Attention routing - manager proof - forecast truth</span></span></button>
+            <button class="rail-row" data-toggle-item><span class="dot"></span><span><strong>Manufacturing / Supply Chain</strong><span>Scenario planning - supplier exposure - resilience ownership</span></span></button>
+            <button class="rail-row" data-toggle-item><span class="dot"></span><span><strong>Data / Intelligence Infrastructure</strong><span>Freshness - reliability - retrieval trust</span></span></button>
+            <button class="rail-row" data-toggle-item><span class="dot"></span><span><strong>Legal / Legal Ops</strong><span>Review burden - privilege risk - human threshold</span></span></button>
+            <button class="rail-row" data-toggle-item><span class="dot"></span><span><strong>Recruiting / Talent</strong><span>Hiring flow - manager drag - quality variance</span></span></button>
+          </aside>
+
+          <div class="center-stack">
+            <section class="lead card">
+              <div class="lead-top">
+                <div class="label">Active node - hypothesis lead</div>
+                <div class="chip warn">Jump rule <strong>Skip to owner proof if still vague</strong></div>
+              </div>
+              <h3 class="lead-title">Your reps are seeing the heat, but not converting it into action fast enough.</h3>
+              <p class="lead-copy">Based on what I can see, the issue is not a shortage of accounts. It is a shortage of inspection discipline. Attention is moving on feel, which means the most urgent live signal gets reviewed too late to matter.</p>
+              <div class="track-pills" data-toggle-group>
+                <button class="track-btn active" data-toggle-item>Engaged</button>
+                <button class="track-btn" data-toggle-item>Guarded</button>
+                <button class="track-btn" data-toggle-item>Skeptical</button>
+                <button class="track-btn" data-toggle-item>Compressed</button>
+              </div>
+              <div class="lead-grid">
+                <div class="cell">
+                  <div class="label">Progression rule</div>
+                  <div class="value">Name the current inspection method.</div>
+                  <div class="copy">Do not move forward until the buyer shows how reps currently decide what deserves immediate attention.</div>
+                </div>
+                <div class="cell">
+                  <div class="label">What to learn next</div>
+                  <div class="value">Who owns the threshold.</div>
+                  <div class="copy">Manager pain and rep pain split here. The room must know who actually defines signal seriousness.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card response-panel">
+              <div class="label">Skip-ahead rescue tray</div>
+              <div class="rescue-row">
+                <div class="rescue"><span class="mark m-skip"></span><div><strong>Demo request</strong><span>Trade for two more questions, then route to the right proof session.</span></div></div>
+                <div class="rescue"><span class="mark m-alert"></span><div><strong>Pricing ask</strong><span>Anchor on current inspection waste, then earn the real evaluation meeting.</span></div></div>
+                <div class="rescue"><span class="mark m-branch"></span><div><strong>Send me info</strong><span>Upgrade the brush-off into a timed callback with a shareable trigger summary.</span></div></div>
+                <div class="rescue"><span class="mark m-dot"></span><div><strong>Wrong person</strong><span>Capture the right owner while preserving the current contact as sponsor.</span></div></div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="side-stack">
+            <section class="card response-panel">
+              <div class="label">Response rail</div>
+              <div class="response-list" data-toggle-group>
+                <button class="response active" data-toggle-item><span class="mark m-pulse"></span><span><span class="value">"That's fair. Reps chase whatever feels hottest."</span><span class="copy">Green path. Move into the inspection routine and who calls a signal real.</span></span></button>
+                <button class="response" data-toggle-item><span class="mark m-alert"></span><span><span class="value">"We already have tools for this."</span><span class="copy">Amber path. Test whether the stack creates behavior change or just reporting furniture.</span></span></button>
+                <button class="response" data-toggle-item><span class="mark m-branch"></span><span><span class="value">"I've got two minutes."</span><span class="copy">Compression path. One proof question, one owner question, hard next-step lock.</span></span></button>
+              </div>
+            </section>
+
+            <section class="card support-panel">
+              <div class="label">Support dossier</div>
+              <div class="support-list">
+                <div class="support-line"><span class="mark m-dot"></span><div><strong>Proof anchor</strong><span>Behavior-routing proof beats summary dashboards. Keep the comparison on action timing.</span></div></div>
+                <div class="support-line"><span class="mark m-branch"></span><div><strong>Deployment note</strong><span>No category overview speech here. Stay in the buyer's inspection method until they admit the threshold gap.</span></div></div>
+                <div class="support-line"><span class="mark m-pulse"></span><div><strong>Competitive prompt</strong><span>If they name Clari, Gong, or internal RevOps, ask what changed behavior versus what merely visualized it.</span></div></div>
+              </div>
+            </section>
+
+            <section class="card tieback-panel">
+              <div class="label">Hold / deploy ledger</div>
+              <div class="tieback-list">
+                <div class="tieback-line"><span class="mark m-alert"></span><div><strong>Hold now</strong><span>Do not deploy pricing or architecture while the inspection method is still fuzzy.</span></div></div>
+                <div class="tieback-line"><span class="mark m-pulse"></span><div><strong>Deploy now</strong><span>Once the threshold owner is named, deploy the manager-proof reframe.</span></div></div>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </article>
+
+      <article class="board">
+        <header class="board-head">
+          <div>
+            <div class="eyebrow">Variant 02 - Interruption Rail</div>
+            <h2 class="board-name">The room behaves like a guided call runner.</h2>
+          </div>
+          <p class="board-note">This version makes interruption recovery the hero. Phase ladder left, the speakable script in the center, and the proof utilities held in a quiet right rail.</p>
+          <div class="status">Phase - Branch - Dossier</div>
+        </header>
+
+        <div class="tempo-strip">
+          <div class="chip warn">Call clock <strong>11:18</strong></div>
+          <div class="chip alert">Tempo <strong>Over pace</strong></div>
+          <div class="chip blue">Jump now <strong>Stakeholder mapping</strong></div>
+          <div class="chip">Compression <strong>Available</strong></div>
+        </div>
+
+        <div class="variant-02-main">
+          <aside class="phase-ladder">
+            <div class="label">Phase ladder</div>
+            <div class="phase-row"><div class="phase-num">01</div><div><strong>Open</strong><span>Permission bridge and hypothesis permission.</span></div></div>
+            <div class="phase-row active"><div class="phase-num">02</div><div><strong>Why now</strong><span>Name the current disruption, not the category generally.</span></div></div>
+            <div class="phase-row"><div class="phase-num">03</div><div><strong>Current state</strong><span>How do they do it today, in order, under pressure?</span></div></div>
+            <div class="phase-row"><div class="phase-num">04</div><div><strong>Depth</strong><span>Owner, cost, consequence, and stall source.</span></div></div>
+            <div class="phase-row"><div class="phase-num">05</div><div><strong>Stakeholders</strong><span>Who else needs to believe this is real?</span></div></div>
+            <div class="phase-row"><div class="phase-num">06</div><div><strong>Close</strong><span>Lock a real next move, not admiration.</span></div></div>
+          </aside>
+
+          <div class="script-plane">
+            <section class="card script-card">
+              <div class="label">Active node - supply chain / scenario planning</div>
+              <h3 class="script-title">Do they need monitoring, or do they need pre-disruption simulation?</h3>
+              <p class="script-copy">The call should force the buyer to choose whether their real pain is supplier watchfulness or operational scenario planning. That split changes the rest of the room.</p>
+              <div class="branch-rail" data-toggle-group>
+                <button class="branch active" data-toggle-item><span class="mark m-pulse"></span><span class="label">Buyer says</span><span class="value">"We need earlier warning when supplier risk moves."</span><span class="copy">Push toward monitoring truth, change-detection, and risk ownership.</span></button>
+                <button class="branch" data-toggle-item><span class="mark m-branch"></span><span class="label">Buyer says</span><span class="value">"We need to model the impact before it hits."</span><span class="copy">Push toward simulation truth, scenario confidence, and operations planning.</span></button>
+                <button class="branch" data-toggle-item><span class="mark m-alert"></span><span class="label">Buyer says</span><span class="value">"I'm not sure yet."</span><span class="copy">Run the challenge branch. Ask which side leadership would pay to solve first.</span></button>
+              </div>
+            </section>
+
+            <section class="card utility-card">
+              <div class="label">Skip-ahead rescue tray</div>
+              <div class="support-list">
+                <div class="support-line"><span class="mark m-skip"></span><div><strong>Pricing interruption</strong><span>"To price this honestly, I need to know whether the scope is monitoring or simulation."</span></div></div>
+                <div class="support-line"><span class="mark m-alert"></span><div><strong>Send me info</strong><span>"I can send the wrong thing fast, or the right thing after one more branch."</span></div></div>
+                <div class="support-line"><span class="mark m-dot"></span><div><strong>Wrong person</strong><span>"Who owns supplier-risk truth when operations and procurement disagree?"</span></div></div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="utility-stack">
+            <section class="card utility-card">
+              <div class="label">Support dossier</div>
+              <div class="support-list">
+                <div class="support-line"><span class="mark m-dot"></span><div><strong>Vantive anchor</strong><span>Use when the buyer needs scenario planning, disruption modeling, and operations consequence clarity.</span></div></div>
+                <div class="support-line"><span class="mark m-branch"></span><div><strong>Craft anchor</strong><span>Use when the buyer needs monitoring, supplier watchfulness, and centralized intelligence profiles.</span></div></div>
+              </div>
+            </section>
+
+            <section class="card utility-card">
+              <div class="label">Hold / deploy</div>
+              <div class="support-list">
+                <div class="support-line"><span class="mark m-alert"></span><div><strong>Hold</strong><span>Do not sell "resilience platform" language before the buyer chooses their real posture.</span></div></div>
+                <div class="support-line"><span class="mark m-pulse"></span><div><strong>Deploy</strong><span>Once the branch is chosen, deploy the matching architecture truth immediately.</span></div></div>
+              </div>
+            </section>
+
+            <section class="card utility-card">
+              <div class="label">Next-step lock</div>
+              <div class="value">Book the simulation review with operations and procurement.</div>
+              <div class="copy" style="margin-top:8px">If they stay on monitoring, reframe the next step as supplier-risk review with the owner of daily alerts.</div>
+            </section>
+          </aside>
+        </div>
+      </article>
+
+      <article class="board">
+        <header class="board-head">
+          <div>
+            <div class="eyebrow">Variant 03 - Worksheet Rail Switcher</div>
+            <h2 class="board-name">The room behaves like a worksheet rail feeding a disciplined lead-sheet switcher.</h2>
+          </div>
+          <p class="board-note">This is the corrected version of the earlier worksheet rail idea. Bigger worksheet on the left, compact action strip beneath it, and a cleaner right-side lead-sheet fan with less overlap and much stricter on-call purpose.</p>
+          <div class="status">Worksheet - Switcher - Handoff</div>
+        </header>
+
+        <div class="tempo-strip">
+          <div class="chip live">Call clock <strong>06:14</strong></div>
+          <div class="chip live">Tempo <strong>On pace</strong></div>
+          <div class="chip blue">Compression <strong>Stand by</strong></div>
+          <div class="chip warn">Tie-back <strong>Hold proof</strong></div>
+          <div class="chip alert">Next step <strong>Unsecured</strong></div>
+        </div>
+
+        <div class="variant-03">
+          <div class="worksheet-pane">
+            <div class="rail-head">
+              <div class="label">Framework worksheet - 9 live systems</div>
+              <div class="rail-note">Choose the right machine fast, then stay in the call.</div>
+            </div>
+
+            <div class="worksheet-rail" data-toggle-group>
+              <button class="ws-row active" data-toggle-item><span class="dot"></span><span class="name">Manufacturing / Supply Chain</span><span class="stage">Reactive or proactive</span><span class="amt">Vantive / Craft</span></button>
+              <button class="ws-row" data-toggle-item><span class="dot"></span><span class="name">Sales / Revenue Intelligence</span><span class="stage">Rep or manager</span><span class="amt">Actively / Attention</span></button>
+              <button class="ws-row" data-toggle-item><span class="dot"></span><span class="name">Data / Intelligence Infrastructure</span><span class="stage">Fuel line</span><span class="amt">Newscatcher</span></button>
+              <button class="ws-row" data-toggle-item><span class="dot"></span><span class="name">Legal / Legal Ops</span><span class="stage">Risk tolerance</span><span class="amt">4 systems</span></button>
+              <button class="ws-row" data-toggle-item><span class="dot"></span><span class="name">Customer Support / Operations</span><span class="stage">Queue truth</span><span class="amt">3 systems</span></button>
+            </div>
+
+            <div class="action-strip">
+              <div class="action-line"><span class="mark m-pulse"></span><div><strong>Run node</strong><span>Advance the live conversation from hypothesis into the earned next question.</span></div></div>
+              <div class="action-line"><span class="mark m-alert"></span><div><strong>Open objection</strong><span>Surface the right counter without leaving the room or flattening the call.</span></div></div>
+              <div class="action-line"><span class="mark m-copy"></span><div><strong>Export handoff</strong><span>Pass only the learned truth into the next room once the node is complete.</span></div></div>
+            </div>
+          </div>
+
+          <div class="switcher-pane">
+            <div class="switcher-meta">
+              <div class="meta-top">
+                <span class="pulse-mark"></span>
+                <span class="label">Pinned framework - manufacturing / supply chain</span>
+              </div>
+              <div class="switcher-title">The room should know whether this is simulation pain or monitoring pain before anything else.</div>
+              <p class="switcher-copy">The selected framework stays visible above the fan so the rep never loses category orientation when the buyer changes direction. Each lead sheet is clickable and can take the front position.</p>
+            </div>
+
+            <div class="fan" data-sheet-group>
+              <button class="sheet front" data-sheet data-pos="1">
+                <span class="sheet-label tone-green">Next-step lock</span>
+                <h3>Book the resilience review with operations and procurement in one room.</h3>
+                <p class="sheet-callout">Use this live when the buyer admits they need cross-functional scenario ownership, not a prettier alert stream.</p>
+                <div class="sheet-foot">
+                  <div class="cell"><div class="label">Fork</div><div class="copy">Simulation</div></div>
+                  <div class="cell"><div class="label">Signal</div><div class="copy">Cross-functional</div></div>
+                  <div class="cell"><div class="copy">The first real branch is whether they need proactive scenario planning or reactive supplier intelligence. Everything downstream changes.</div></div>
+                </div>
+              </button>
+
+              <button class="sheet" data-sheet data-pos="2">
+                <span class="sheet-label tone-blue">What sits underneath</span>
+                <h3>Monitoring pain without an owner always becomes dashboard furniture.</h3>
+                <p class="sheet-callout">Use this live when the buyer keeps talking about visibility but cannot say who acts when a supplier risk score moves.</p>
+                <div class="sheet-foot">
+                  <div class="cell"><div class="label">Fork</div><div class="copy">Monitoring</div></div>
+                  <div class="cell"><div class="label">Signal</div><div class="copy">Ownerless</div></div>
+                  <div class="cell"><div class="copy">If no one carries the change response, centralized supplier intelligence becomes passive reporting.</div></div>
+                </div>
+              </button>
+
+              <button class="sheet" data-sheet data-pos="3">
+                <span class="sheet-label tone-orange">Visible symptom</span>
+                <h3>The buyer keeps naming supplier risk, but not what breaks first when it lands.</h3>
+                <p class="sheet-callout">Use this live as the front sheet when the call is still too abstract and the buyer is speaking in category language instead of workflow consequence.</p>
+                <div class="sheet-foot">
+                  <div class="cell"><div class="label">Fork</div><div class="copy">Diagnosis</div></div>
+                  <div class="cell"><div class="label">Signal</div><div class="copy">Abstract</div></div>
+                  <div class="cell"><div class="copy">Make them choose what breaks first: production planning, supplier continuity, or procurement response time.</div></div>
+                </div>
+              </button>
+            </div>
+
+            <div class="handoff">
+              <div class="cell"><div class="label tone-k-green">Deal Workspace</div><div class="value">Carry the corrective route.</div><div class="copy">Bring the chosen branch, owner gap, and proof threshold into the live deal plan.</div></div>
+              <div class="cell"><div class="label tone-k-blue">Call Planner</div><div class="value">Carry the forcing question.</div><div class="copy">What breaks when supplier risk moves, and who actually owns the response path?</div></div>
+              <div class="cell"><div class="label tone-k-orange">Future Autopsy</div><div class="value">Carry the drift clues.</div><div class="copy">Reactive monitoring with no named owner is the early clue that the pipeline story will drift later.</div></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-toggle-group]").forEach((group) => {
+      const items = group.querySelectorAll("[data-toggle-item]");
+      items.forEach((item) => {
+        item.addEventListener("click", () => {
+          items.forEach((el) => el.classList.remove("active"));
+          item.classList.add("active");
+        });
+      });
+    });
+
+    const sheets = document.querySelectorAll("[data-sheet]");
+    const setFront = (target) => {
+      const order = [target, ...Array.from(sheets).filter((sheet) => sheet !== target)];
+      order.forEach((sheet, index) => {
+        sheet.classList.toggle("front", index === 0);
+        sheet.dataset.pos = String(index + 1);
+      });
+    };
+
+    sheets.forEach((sheet) => {
+      sheet.addEventListener("click", () => setFront(sheet));
+    });
+  </script>
+</body>
+</html>

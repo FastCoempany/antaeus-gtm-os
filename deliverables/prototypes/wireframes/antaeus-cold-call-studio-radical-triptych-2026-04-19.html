@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Cold Call Studio Radical Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#07183d;
+      --ink:#142f5e;
+      --muted:#8396b6;
+      --faint:#dce6f2;
+      --paper:#fbfdff;
+      --wash:#edf4fb;
+      --orange:#ee6f1d;
+      --blue:#2f73e8;
+      --green:#2f8b5b;
+      --red:#c94943;
+      --gold:#d9a96b;
+      --coal:#0e162a;
+      --shadow:0 34px 90px rgba(7,24,61,.14);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:"Plus Jakarta Sans",sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 0 0,rgba(47,115,232,.08),transparent 24%),
+        radial-gradient(circle at 100% 2%,rgba(238,111,29,.07),transparent 26%),
+        linear-gradient(180deg,#fbfdff 0,#eef4fb 100%);
+      -webkit-font-smoothing:antialiased;
+      padding:34px 28px 92px;
+    }
+    h1,h2,h3,p{margin:0}
+    .page{max-width:1720px;margin:0 auto;display:grid;gap:38px}
+    .mast{
+      display:flex;justify-content:space-between;align-items:center;gap:20px;
+      padding:0 8px;text-transform:uppercase;letter-spacing:.24em;font-size:11px;font-weight:900;color:var(--muted);
+    }
+    .mast strong{color:var(--orange)}
+    .plate{
+      position:relative;overflow:hidden;min-height:820px;border-radius:46px;
+      border:1px solid rgba(7,24,61,.08);
+      background:
+        linear-gradient(rgba(7,24,61,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(7,24,61,.035) 1px,transparent 1px),
+        linear-gradient(180deg,rgba(255,255,255,.98),rgba(245,249,255,.97));
+      background-size:34px 34px,34px 34px,100% 100%;
+      box-shadow:var(--shadow);
+      padding:38px 44px 46px;
+    }
+    .plate>*{position:relative;z-index:1}
+    .head{
+      display:grid;grid-template-columns:minmax(420px,680px) minmax(320px,520px);
+      justify-content:space-between;gap:34px;margin-bottom:36px;
+    }
+    .kicker{text-transform:uppercase;letter-spacing:.24em;font-size:11px;font-weight:900;color:var(--muted);margin-bottom:12px}
+    .kicker span{color:var(--orange)}
+    .title{
+      font-family:"Outfit",sans-serif;font-size:clamp(54px,5.8vw,102px);
+      line-height:.86;letter-spacing:-.085em;font-weight:900;max-width:10.8ch;color:var(--navy);
+    }
+    .title .o{color:var(--orange)} .title .b{color:var(--blue)} .title .g{color:var(--green)} .title .r{color:var(--red)}
+    .copy{color:#60799e;font-size:15px;line-height:1.65;max-width:520px;justify-self:end;padding-top:6px}
+    .law{margin-top:18px;padding-top:16px;border-top:1px solid rgba(7,24,61,.14);display:grid;grid-template-columns:110px 1fr;gap:18px}
+    .law span:first-child{text-transform:uppercase;letter-spacing:.2em;font-size:10px;font-weight:900;color:var(--muted)}
+    .law span:last-child{font-weight:900;color:var(--navy)}
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .pill{border:1px solid rgba(7,24,61,.14);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.18em;font-size:10px;font-weight:900;color:#6f83a4}
+    .pill.hot{color:var(--orange);border-color:rgba(238,111,29,.25)}
+    .pill.blue{color:var(--blue);border-color:rgba(47,115,232,.25)}
+    .pill.green{color:var(--green);border-color:rgba(47,139,91,.25)}
+
+    /* 01 Receiver pit */
+    .receiver-grid{display:grid;grid-template-columns:330px minmax(560px,1fr) 330px;gap:30px;align-items:stretch}
+    .signal-column{border-top:1px solid rgba(7,24,61,.14);display:grid;align-content:start;gap:0}
+    .signal-line{display:grid;grid-template-columns:42px 1fr;gap:16px;padding:21px 0;border-bottom:1px solid rgba(7,24,61,.1)}
+    .sig-dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:1px solid currentColor;font-weight:900}
+    .signal-line:nth-child(1){color:var(--orange)} .signal-line:nth-child(2){color:var(--blue)} .signal-line:nth-child(3){color:var(--green)} .signal-line:nth-child(4){color:var(--red)}
+    .signal-line h3{font-size:20px;letter-spacing:-.05em;color:var(--navy);line-height:1.05}
+    .signal-line p{font-size:13px;color:#647da0;line-height:1.45;margin-top:7px}
+    .receiver-pit{
+      position:relative;min-height:560px;border-radius:999px 999px 54px 54px;
+      background:radial-gradient(circle at 50% 18%,rgba(238,111,29,.14),transparent 18%),linear-gradient(180deg,#101a32 0,#0a1430 72%,#07112a 100%);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 36px 92px rgba(7,24,61,.22);
+      padding:38px;overflow:hidden;color:white;
+    }
+    .receiver-pit:before{
+      content:"";position:absolute;left:50%;top:44px;transform:translateX(-50%);
+      width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 0 0 74px rgba(255,255,255,.035),0 0 0 148px rgba(255,255,255,.022);
+    }
+    .receiver-pit:after{
+      content:"";position:absolute;left:72px;right:72px;bottom:62px;height:18px;border-radius:999px;
+      background:linear-gradient(90deg,var(--orange),var(--blue),var(--green),var(--red));
+      filter:blur(.15px);opacity:.75;
+    }
+    .receiver-copy{position:absolute;left:58px;right:58px;top:146px;text-align:center}
+    .receiver-copy small{text-transform:uppercase;letter-spacing:.24em;color:#93a9cc;font-weight:900;font-size:11px}
+    .receiver-copy h2{font-family:"DM Serif Display",serif;font-size:clamp(56px,6.2vw,104px);line-height:.83;letter-spacing:-.075em;margin-top:18px;color:#fff}
+    .receiver-copy p{margin:22px auto 0;max-width:480px;color:#b8c7df;line-height:1.55}
+    .tone-wheel{
+      position:absolute;left:50%;bottom:108px;transform:translateX(-50%);width:340px;height:86px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.045);
+      display:grid;grid-template-columns:repeat(5,1fr);align-items:center;padding:0 18px;gap:12px
+    }
+    .tone-wheel span{height:34px;border-radius:999px;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#c5d3ea;font-weight:900}
+    .readout{border-top:1px solid rgba(7,24,61,.14);display:grid;gap:24px;align-content:start}
+    .read-line{border-bottom:1px solid rgba(7,24,61,.1);padding:0 0 24px}
+    .read-line small{text-transform:uppercase;letter-spacing:.22em;font-size:10px;font-weight:900;color:var(--muted)}
+    .read-line h3{font-family:"Outfit",sans-serif;font-size:30px;line-height:1.02;letter-spacing:-.06em;margin-top:11px}
+    .read-line strong{display:block;font-size:74px;line-height:1;color:var(--green);letter-spacing:-.08em;margin-top:8px}
+
+    /* 02 Talk loom */
+    .loom-wrap{display:grid;grid-template-columns:minmax(620px,1fr) 390px;gap:34px}
+    .loom-stage{position:relative;min-height:600px;padding:32px 0 40px}
+    .loom-rail{position:absolute;left:90px;right:42px;height:1px;background:rgba(7,24,61,.13)}
+    .loom-rail.r1{top:76px}.loom-rail.r2{top:186px}.loom-rail.r3{top:296px}.loom-rail.r4{top:406px}.loom-rail.r5{top:516px}
+    .thread{
+      position:absolute;left:72px;right:20px;height:72px;border-radius:999px;
+      display:grid;grid-template-columns:130px 1fr 170px;align-items:center;gap:24px;
+      padding:0 28px;border:1px solid rgba(7,24,61,.12);background:rgba(255,255,255,.74);
+      box-shadow:0 18px 60px rgba(7,24,61,.08);
+    }
+    .thread.t1{top:35px;transform:rotate(-1deg)} .thread.t2{top:145px;transform:rotate(.7deg)} .thread.t3{top:255px;transform:rotate(-.5deg)} .thread.t4{top:365px;transform:rotate(1.1deg)} .thread.t5{top:475px;transform:rotate(-.8deg)}
+    .thread:before{content:"";width:16px;height:16px;border-radius:50%;border:4px solid currentColor;background:#fff;position:absolute;left:-8px}
+    .thread.t1{color:var(--orange)} .thread.t2{color:var(--blue)} .thread.t3{color:var(--green)} .thread.t4{color:var(--red)} .thread.t5{color:#75839b}
+    .thread small{text-transform:uppercase;letter-spacing:.18em;font-size:10px;font-weight:900;color:var(--muted)}
+    .thread h3{font-size:26px;letter-spacing:-.06em;line-height:1.02;color:var(--navy)}
+    .thread p{color:#647da0;font-size:13px;line-height:1.45}
+    .thread b{text-transform:uppercase;letter-spacing:.16em;font-size:10px;color:currentColor}
+    .loom-needle{
+      position:absolute;left:36px;top:18px;width:34px;height:564px;border-radius:999px;
+      background:linear-gradient(180deg,var(--orange),var(--blue),var(--green),var(--red));
+      box-shadow:0 20px 70px rgba(7,24,61,.12);
+    }
+    .loom-side{padding-top:16px;border-top:1px solid rgba(7,24,61,.14)}
+    .giant-number{font-family:"Outfit";font-size:128px;letter-spacing:-.1em;line-height:.8;color:var(--orange);font-weight:900}
+    .loom-side h3{font-size:32px;letter-spacing:-.06em;line-height:1.03;margin-top:20px}
+    .loom-side p{color:#60799e;line-height:1.6;margin-top:13px}
+    .operator-line{margin-top:26px;border-top:1px solid rgba(7,24,61,.12);padding-top:18px}
+    .operator-line small{text-transform:uppercase;letter-spacing:.2em;font-size:10px;color:var(--muted);font-weight:900}
+    .operator-line strong{display:block;font-size:24px;letter-spacing:-.04em;margin-top:8px}
+
+    /* 03 Cue booth */
+    .booth{
+      display:grid;grid-template-columns:250px minmax(590px,1fr) 320px;gap:26px;align-items:start;
+      min-height:570px;
+    }
+    .cue-tabs{display:grid;gap:14px;padding-top:10px}
+    .cue-tab{
+      min-height:92px;border-radius:4px 28px 28px 4px;background:rgba(255,255,255,.86);
+      border-left:7px solid currentColor;box-shadow:0 18px 54px rgba(7,24,61,.08);
+      padding:18px 20px;color:var(--muted);
+    }
+    .cue-tab:nth-child(1){color:var(--orange)} .cue-tab:nth-child(2){color:var(--blue)} .cue-tab:nth-child(3){color:var(--green)} .cue-tab:nth-child(4){color:var(--red)}
+    .cue-tab small{text-transform:uppercase;letter-spacing:.2em;font-size:10px;font-weight:900;color:currentColor}
+    .cue-tab h3{font-size:22px;line-height:1.02;letter-spacing:-.055em;color:var(--navy);margin-top:8px}
+    .cue-stage{
+      min-height:570px;border-radius:42px;background:linear-gradient(180deg,#111d39 0,#081633 100%);
+      box-shadow:0 34px 90px rgba(7,24,61,.24);padding:36px;position:relative;overflow:hidden;color:white;
+    }
+    .cue-stage:before{
+      content:"";position:absolute;inset:36px;border:1px solid rgba(255,255,255,.1);border-radius:30px;
+      background:
+        linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+      background-size:28px 28px;
+    }
+    .cue-stage>*{position:relative;z-index:1}
+    .booth-meta{display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;letter-spacing:.24em;font-size:11px;font-weight:900;color:#8da3c7}
+    .booth-meter{height:10px;border-radius:999px;margin:30px 0 40px;background:linear-gradient(90deg,var(--orange),var(--blue),var(--green),var(--red));opacity:.75}
+    .live-line small{text-transform:uppercase;letter-spacing:.22em;font-size:11px;color:#8da3c7;font-weight:900}
+    .live-line h2{font-family:"Outfit";font-size:clamp(52px,5.6vw,92px);line-height:.86;letter-spacing:-.085em;margin-top:14px;color:white;max-width:10ch}
+    .response-tray{
+      position:absolute;left:72px;right:72px;bottom:58px;border-radius:28px;background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.13);padding:20px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+    }
+    .tray-cell small{text-transform:uppercase;letter-spacing:.2em;font-size:9px;color:#8da3c7;font-weight:900}
+    .tray-cell strong{display:block;font-size:20px;line-height:1.04;margin-top:8px}
+    .cue-right{border-top:1px solid rgba(7,24,61,.14)}
+    .cue-read{padding:22px 0;border-bottom:1px solid rgba(7,24,61,.1)}
+    .cue-read small{text-transform:uppercase;letter-spacing:.22em;font-size:10px;color:var(--muted);font-weight:900}
+    .cue-read h3{font-size:30px;line-height:1.03;letter-spacing:-.06em;margin-top:10px}
+    .cue-read p{color:#60799e;font-size:14px;line-height:1.55;margin-top:10px}
+    .cue-read .score{font-size:86px;color:var(--green);font-family:"Outfit";font-weight:900;letter-spacing:-.1em;line-height:.86}
+
+    @media(max-width:1100px){
+      .head,.receiver-grid,.loom-wrap,.booth{grid-template-columns:1fr}
+      .copy{justify-self:start}
+      .receiver-pit,.loom-stage,.cue-stage{min-height:540px}
+      .thread{left:50px;right:0;grid-template-columns:110px 1fr}
+      .thread b{display:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="mast"><strong>Cold Call Studio</strong><span>Radical Taste-Test Triptych</span><span>ANTAEUS</span></div>
+
+    <section class="plate">
+      <div class="head">
+        <div>
+          <div class="kicker"><span>Variant 01</span> / Receiver Pit</div>
+          <h1 class="title">Make the call feel like a controlled drop into live pressure.</h1>
+        </div>
+        <div class="copy">
+          This direction treats the cold call as an audio chamber. The user enters one central receiver, not a script grid. The visible job is pace, opening control, live response, and exit path.
+          <div class="law"><span>Room law</span><span>If the call is live, the interface should narrow, not widen.</span></div>
+          <div class="pillrow"><span class="pill hot">live opener</span><span class="pill blue">reply fork</span><span class="pill green">earned exit</span></div>
+        </div>
+      </div>
+      <div class="receiver-grid">
+        <div class="signal-column">
+          <div class="signal-line"><span class="sig-dot">1</span><div><h3>Interrupt cleanly</h3><p>Own that this is a cold interruption before the buyer has to say it.</p></div></div>
+          <div class="signal-line"><span class="sig-dot">2</span><div><h3>One reason only</h3><p>The first sentence cannot carry company, product, market, and proof.</p></div></div>
+          <div class="signal-line"><span class="sig-dot">3</span><div><h3>Recover fast</h3><p>The rescue line is always visible because rejection happens before structure.</p></div></div>
+          <div class="signal-line"><span class="sig-dot">4</span><div><h3>Exit earned</h3><p>The call only hands off when a real next condition exists.</p></div></div>
+        </div>
+        <div class="receiver-pit">
+          <div class="receiver-copy">
+            <small>Active receiver</small>
+            <h2>I know I am interrupting. Give me 20 seconds.</h2>
+            <p>The middle is deliberately physical: the rep should feel one live line in hand, not a library of possible words.</p>
+          </div>
+          <div class="tone-wheel"><span>low</span><span>direct</span><span>proof</span><span>rescue</span><span>exit</span></div>
+        </div>
+        <div class="readout">
+          <div class="read-line"><small>Call read</small><strong>29</strong><h3>Still too much explanation before the buyer speaks.</h3></div>
+          <div class="read-line"><small>Operator move</small><h3>Cut to one operating reason and wait.</h3></div>
+          <div class="read-line"><small>Next room if earned</small><h3>Call Planner or Deal Workspace, never a generic note.</h3></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="plate">
+      <div class="head">
+        <div>
+          <div class="kicker"><span>Variant 02</span> / Talk Loom</div>
+          <h1 class="title">Weave opener, objection, proof, and ask into one live route.</h1>
+        </div>
+        <div class="copy">
+          This direction avoids panels and instead makes the call a threaded route. Every line has a job. If the buyer pulls on one thread, the interface shows the next thread to grab.
+          <div class="law"><span>Room law</span><span>A call script is not a document. It is a sequence of tension changes.</span></div>
+          <div class="pillrow"><span class="pill hot">opening thread</span><span class="pill blue">buyer pull</span><span class="pill green">ask lock</span></div>
+        </div>
+      </div>
+      <div class="loom-wrap">
+        <div class="loom-stage">
+          <div class="loom-needle"></div>
+          <div class="loom-rail r1"></div><div class="loom-rail r2"></div><div class="loom-rail r3"></div><div class="loom-rail r4"></div><div class="loom-rail r5"></div>
+          <div class="thread t1"><small>Say first</small><h3>“I am calling because your queue widened after expansion.”</h3><b>hold</b></div>
+          <div class="thread t2"><small>If curious</small><h3>Walk the operational consequence, not the product.</h3><b>pull</b></div>
+          <div class="thread t3"><small>If skeptical</small><h3>Trade one proof point for one admission.</h3><b>tighten</b></div>
+          <div class="thread t4"><small>If hostile</small><h3>Exit cleanly with a reason to reopen later.</h3><b>release</b></div>
+          <div class="thread t5"><small>If earned</small><h3>Ask for one calendar move with owner and reason.</h3><b>lock</b></div>
+        </div>
+        <aside class="loom-side">
+          <div class="giant-number">05</div>
+          <h3>Five moves are enough if each move knows what pressure it carries.</h3>
+          <p>The visual system keeps the rep from hunting through paragraphs. The call advances by pulling one thread at a time.</p>
+          <div class="operator-line"><small>Weakest thread</small><strong>The opener still contains too much product logic.</strong></div>
+          <div class="operator-line"><small>Required correction</small><strong>Name the business strain before naming the company.</strong></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="plate">
+      <div class="head">
+        <div>
+          <div class="kicker"><span>Variant 03</span> / Cue Booth</div>
+          <h1 class="title">Put the rep in a booth with one cue, three reactions, and one exit.</h1>
+        </div>
+        <div class="copy">
+          This is the most studio-like direction. It borrows the Cue Booth idea but makes it spoken-motion specific: live cue on stage, likely replies on the tray, and the route read on the right.
+          <div class="law"><span>Room law</span><span>The rep should not read a script. The rep should receive cues.</span></div>
+          <div class="pillrow"><span class="pill hot">cue selected</span><span class="pill blue">reply tray</span><span class="pill green">next room</span></div>
+        </div>
+      </div>
+      <div class="booth">
+        <nav class="cue-tabs">
+          <div class="cue-tab"><small>Cue one</small><h3>Cold permission opener</h3></div>
+          <div class="cue-tab"><small>Cue two</small><h3>Why you called now</h3></div>
+          <div class="cue-tab"><small>Cue three</small><h3>Proof without pitch</h3></div>
+          <div class="cue-tab"><small>Cue four</small><h3>Clean exit or next move</h3></div>
+        </nav>
+        <section class="cue-stage">
+          <div class="booth-meta"><span>Booth 01 / Cold Call</span><span>live cue armed</span></div>
+          <div class="booth-meter"></div>
+          <div class="live-line">
+            <small>Say this first</small>
+            <h2>“I know this is out of the blue. The reason I called is specific.”</h2>
+          </div>
+          <div class="response-tray">
+            <div class="tray-cell"><small>If they say busy</small><strong>Give the reason in one sentence.</strong></div>
+            <div class="tray-cell"><small>If they ask who</small><strong>Name role, signal, and why them.</strong></div>
+            <div class="tray-cell"><small>If they push back</small><strong>Release pressure, then ask one narrow question.</strong></div>
+          </div>
+        </section>
+        <aside class="cue-right">
+          <div class="cue-read"><small>Booth read</small><div class="score">64</div><p>Usable, but the opening cue still asks the buyer to trust too much too soon.</p></div>
+          <div class="cue-read"><small>Operator move</small><h3>Lead with the change in their world, not your category.</h3></div>
+          <div class="cue-read"><small>Handoff</small><h3>Calendar hold, Call Planner, or Deal Workspace only when the buyer gives a concrete reason.</h3></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

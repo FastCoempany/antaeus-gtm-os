@@ -1,1077 +1,514 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PoC Framework - Antaeus GTM OS</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/app.css">
-    <style>
-        .studio-layout { display: grid; grid-template-columns: 1fr 320px; gap: var(--space-lg); min-height: calc(100vh - 140px); }
-        @media (max-width: 1200px) { .studio-layout { grid-template-columns: 1fr; } .side-panel { display: none; } }
-        
-        .builder-section { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-lg); }
-        .section-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); }
-        .section-icon { font-size: 1.5rem; }
-        .section-title { font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary); }
-        .section-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
-        
-        .callout { padding: var(--space-md); border-radius: var(--radius-md); margin-bottom: var(--space-md); }
-        .callout-green { background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--accent-green); }
-        .callout-amber { background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--accent-amber); }
-        .callout-red { background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red); }
-        .callout-title { font-size: 0.8rem; font-weight: 700; margin-bottom: var(--space-xs); }
-        .callout-green .callout-title { color: var(--accent-green); }
-        .callout-amber .callout-title { color: var(--accent-amber); }
-        .callout-red .callout-title { color: var(--accent-red); }
-        .callout ul { margin-left: 18px; margin-top: var(--space-xs); }
-        .callout li { font-size: 0.85rem; color: var(--text-tertiary); margin-bottom: 4px; }
-        
-        .callout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg); }
-        @media (max-width: 900px) { .callout-grid { grid-template-columns: 1fr; } }
-
-        .poc-bridge{background:linear-gradient(180deg,rgba(212,165,116,0.08),rgba(212,165,116,0.02));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-lg);padding:20px;margin-bottom:var(--space-lg);}
-        .poc-bridge-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
-        .poc-bridge-k{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.9px;color:var(--brand-gold);font-weight:700;}
-        .poc-bridge-state{font-size:0.72rem;font-weight:700;padding:5px 10px;border-radius:var(--radius-full);border:1px solid transparent;}
-        .poc-bridge-state.now{color:#22c55e;background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.22);}
-        .poc-bridge-state.later{color:#f59e0b;background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.22);}
-        .poc-bridge-state.risky{color:#ef4444;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.22);}
-        .poc-bridge-title{font-family:var(--font-serif);font-size:1.18rem;color:var(--text-primary);margin-bottom:8px;}
-        .poc-bridge-copy{font-size:0.85rem;color:var(--text-tertiary);line-height:1.65;margin-bottom:14px;}
-        .poc-bridge-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px;}
-        .poc-bridge-block{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);padding:12px;}
-        .poc-bridge-label{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
-        .poc-bridge-value{font-size:0.82rem;color:var(--text-secondary);line-height:1.55;}
-        .poc-bridge-actions{display:flex;gap:10px;flex-wrap:wrap;}
-        .poc-bridge-btn{padding:9px 14px;border-radius:var(--radius-md);font-size:0.78rem;font-weight:700;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
-        .poc-bridge-btn:hover{border-color:var(--border-hover);color:var(--text-secondary);}
-        .poc-bridge-btn.primary{border-color:rgba(212,165,116,0.3);background:rgba(212,165,116,0.06);color:var(--brand-gold);}
-        .poc-bridge-btn.primary:hover{background:rgba(212,165,116,0.12);}
-        .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
-        .input-grid.input-grid-2 { grid-template-columns: repeat(2, 1fr); }
-        @media (max-width: 900px) { .input-grid, .input-grid.input-grid-2, .poc-bridge-grid { grid-template-columns: 1fr; } }
-        
-        .input-group { display: flex; flex-direction: column; }
-        .input-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-xs); }
-        .input-group select, .input-group input, .input-group textarea { width: 100%; padding: var(--space-sm) var(--space-md); background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; }
-        .input-group textarea { min-height: 100px; resize: vertical; font-family: var(--font-mono); }
-        .input-group select:focus, .input-group input:focus, .input-group textarea:focus { outline: none; border-color: var(--brand-gold); }
-        
-        .output-box { background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-md); }
-        .output-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--brand-gold); margin-bottom: var(--space-sm); display: flex; align-items: center; justify-content: space-between; }
-        .output-text { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap; }
-        
-        .output-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
-        @media (max-width: 900px) { .output-grid { grid-template-columns: 1fr; } }
-        
-        .copy-btn { background: transparent; border: 1px solid var(--border-default); border-radius: var(--radius-sm); padding: var(--space-xs) var(--space-sm); font-size: 0.7rem; color: var(--text-muted); cursor: pointer; }
-        .copy-btn:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
-        
-        .duration-btns { display: flex; gap: var(--space-sm); }
-        .dur-btn { padding: var(--space-xs) var(--space-sm); border: 1px solid var(--border-default); border-radius: var(--radius-md); background: transparent; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; }
-        .dur-btn:hover { border-color: var(--brand-gold); }
-        .dur-btn.active { background: rgba(212, 175, 55, 0.15); border-color: var(--brand-gold); color: var(--brand-gold); }
-        
-        .side-panel { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); position: sticky; top: 20px; height: fit-content; }
-        .panel-title { font-family: var(--font-serif); font-size: 1rem; color: var(--text-primary); margin-bottom: var(--space-md); }
-        .stat-row { display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: 1px solid var(--border-default); }
-        .stat-row:last-child { border-bottom: none; }
-        .stat-label { font-size: 0.85rem; color: var(--text-muted); }
-        .stat-value { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-primary); }
-        .stat-value.good { color: var(--accent-green); }
-        
-        .worked-toggle { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-md); padding: var(--space-sm); background: rgba(34, 197, 94, 0.1); border-radius: var(--radius-md); cursor: pointer; }
-        .worked-toggle input { width: 18px; height: 18px; accent-color: var(--accent-green); }
-        .worked-toggle label { font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
-        
-        .action-bar { display: flex; gap: var(--space-md); padding: var(--space-lg); background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); margin-top: var(--space-lg); }
-        .action-bar .btn { flex: 1; }
-        .poc-proof-guide{margin-top:12px;padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);font-size:0.75rem;color:var(--text-muted);line-height:1.6;}
-        .poc-proof-guide strong{color:var(--text-secondary);}
-        .poc-quality{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:var(--space-md);}
-        .poc-quality-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius-md);padding:12px;}
-        .poc-quality-label{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
-        .poc-quality-value{font-size:0.9rem;color:var(--text-primary);font-weight:700;}
-        .poc-quality-value.ready{color:#22c55e;}
-        .poc-quality-value.workable{color:#f59e0b;}
-        .poc-quality-value.thin{color:#ef4444;}
-        .poc-quality-copy{margin-top:4px;font-size:0.76rem;color:var(--text-muted);line-height:1.5;}
-        .proof-list{margin-top:var(--space-md);}
-        .proof-item{padding:10px 0;border-top:1px solid var(--border-default);}
-        .proof-item:first-child{border-top:none;padding-top:0;}
-        .proof-item-title{font-size:0.82rem;font-weight:700;color:var(--text-primary);}
-        .proof-item-copy{font-size:0.74rem;color:var(--text-muted);line-height:1.5;margin-top:4px;}
-        .proof-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:var(--radius-full);font-size:0.68rem;font-weight:700;margin-top:6px;border:1px solid transparent;}
-        .proof-chip.ready{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);color:#22c55e;}
-        .proof-chip.workable{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.2);color:#f59e0b;}
-        .proof-chip.thin{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2);color:#ef4444;}
-        .poc-first-fold{margin-bottom:var(--space-lg);}
-        .poc-builder-top{display:grid;gap:var(--space-md);margin-bottom:var(--space-lg);}
-        .poc-builder-top .builder-section{margin-bottom:0;}
-        .poc-builder-top .builder-section:first-child{background:linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%);border-color:rgba(255,255,255,0.06);}
-        .poc-builder-top .builder-section:last-child{background:linear-gradient(180deg, rgba(17,22,38,0.98) 0%, rgba(14,20,35,1) 100%);border-color:rgba(255,255,255,0.06);}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PoC Framework - Antaeus GTM OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<style>
+.room-poc-framework{--ink:#071936;--muted:#667792;--faint:#91a1b8;--line:rgba(9,25,54,.13);--line2:rgba(9,25,54,.22);--orange:#ec6c1b;--blue:#2f78e6;--green:#2c8150;--red:#c9443f;--gold:#d4a574;--dark:#081226;background:#070d19;color:var(--ink)}
+.room-poc-framework .app-main{min-width:0;background:linear-gradient(rgba(47,120,230,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(47,120,230,.04) 1px,transparent 1px),radial-gradient(circle at 82% 18%,rgba(236,108,27,.12),transparent 32rem),linear-gradient(180deg,#f9fbff,#eef4fb);background-size:32px 32px,32px 32px,auto,auto}
+.room-poc-framework .app-header{position:sticky;top:0;z-index:20;padding:26px 34px 22px;color:#fff;background:linear-gradient(180deg,rgba(6,12,24,.96),rgba(6,12,24,.9));border-bottom:1px solid rgba(255,255,255,.09);backdrop-filter:blur(16px)}
+.fh{display:flex;align-items:flex-start;justify-content:space-between;gap:28px}.fk,.fl,.rl,.ml,.dk,.lk,.wn,.mk{font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.28em;font-weight:700;font-size:.69rem}.fk{color:var(--gold);margin-bottom:8px}.fh h1{font-family:"DM Serif Display",serif;font-size:clamp(2rem,4vw,3.5rem);line-height:.95;margin:0;color:#fff}.fh p{max-width:680px;margin:12px 0 0;color:rgba(255,255,255,.72);font-size:.98rem;line-height:1.55}.ha{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap;min-width:420px}
+.fa,.cd,.la,.dp,.da{border:1px solid var(--line2);border-radius:999px;background:rgba(255,255,255,.78);color:var(--ink);font-family:"Public Sans",sans-serif;font-weight:800;cursor:pointer;transition:transform .16s,border-color .16s}.fa{min-height:38px;padding:0 15px}.cd,.da{padding:9px 12px}.la{padding:11px 14px}.fa:hover,.cd:hover,.la:hover,.dp:hover,.da:hover{transform:translateY(-1px);border-color:rgba(236,108,27,.42)}.primary{background:var(--gold);border-color:rgba(236,108,27,.32);color:#06101f}.ghost{background:transparent;color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.16)}.fs{min-height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.72);background:rgba(255,255,255,.04);font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.14em;font-size:.68rem;padding:0 12px}
+.fc{padding:34px}#pocBootState{margin-bottom:16px}.stage{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(360px,.8fr);min-height:680px;border-radius:42px;overflow:hidden;position:relative;background:linear-gradient(135deg,#071225 0%,#0f1f3a 48%,#f6f1e8 49%,#fff 100%);box-shadow:0 24px 60px rgba(11,24,45,.12);border:1px solid rgba(255,255,255,.72)}.stage:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 18%,rgba(47,120,230,.22),transparent 18rem),radial-gradient(circle at 52% 58%,rgba(236,108,27,.22),transparent 22rem);mix-blend-mode:screen;opacity:.72}.forge,.cast{position:relative;z-index:1;min-width:0;padding:clamp(28px,4vw,54px)}.fl{color:var(--orange);margin-bottom:20px}.ft{max-width:760px;margin:0;font-family:"DM Serif Display",serif;color:#fff;font-size:clamp(4rem,7vw,8.8rem);line-height:.78;letter-spacing:-.075em}.ft .b{color:#78aaff}.ft .g{color:#61c987}.th{max-width:680px;margin:28px 0 0;color:rgba(255,255,255,.76);font-size:clamp(1rem,1.3vw,1.28rem);line-height:1.65}
+.heat{max-width:740px;margin-top:44px;display:grid;gap:18px}.hr{display:grid;grid-template-columns:130px 1fr 84px;align-items:center;gap:18px}.hn{color:rgba(255,255,255,.68);font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.22em;font-size:.68rem;font-weight:700}.ht{height:4px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden}.hf{height:100%;width:var(--w,10%);background:var(--c,var(--orange));border-radius:inherit}.hs{color:rgba(255,255,255,.8);font-size:.78rem;font-weight:800;text-align:right}
+.floor{margin-top:54px;border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:26px;background:rgba(255,255,255,.055);backdrop-filter:blur(18px)}.molds{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.mold{min-height:146px;border-radius:24px;padding:18px;position:relative;overflow:hidden;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.11)}.mold:after{content:"";position:absolute;left:18px;right:18px;bottom:18px;height:5px;border-radius:999px;background:var(--mc,rgba(255,255,255,.2));opacity:.86}.mold.hot{--mc:var(--orange)}.mold.cast{--mc:var(--green)}.mold.cold{--mc:#8fa0b8}.mold.red{--mc:var(--red)}.ml{color:rgba(255,255,255,.52);font-size:.62rem;letter-spacing:.22em}.mv{margin-top:12px;color:#fff;font-size:1.05rem;line-height:1.25;font-weight:800}
+.cast{display:flex;flex-direction:column;justify-content:space-between}.ingot{padding:28px;border-radius:34px;background:rgba(255,255,255,.9);border:1px solid rgba(9,25,54,.12);box-shadow:0 20px 52px rgba(20,36,60,.14)}.it{display:flex;justify-content:space-between;gap:22px;padding-bottom:24px;border-bottom:1px solid var(--line)}.score{font-family:"DM Serif Display",serif;font-size:clamp(4rem,7vw,7rem);color:var(--green);line-height:.84}.ingot h2{margin:0;font-family:"DM Serif Display",serif;font-size:clamp(2rem,4vw,4.3rem);line-height:.86;letter-spacing:-.045em}.il{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}.il:last-child{border-bottom:0;padding-bottom:0}.rl,.dk,.lk,.mk{color:var(--faint);letter-spacing:.23em}.il p{margin:0;color:var(--muted);line-height:1.55}.il strong{color:var(--ink);font-weight:900}.note{margin-top:24px;border-radius:24px;padding:22px;background:linear-gradient(90deg,rgba(236,108,27,.14),transparent),rgba(255,255,255,.76);border-left:4px solid var(--orange)}.note strong{display:block;margin-bottom:6px;color:var(--orange)}.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.la.primary{background:var(--dark);color:#fff;border-color:var(--dark)}
+.secondary{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;margin-top:28px}.sheet,.docs,.ledger{padding:24px;border-radius:34px;background:rgba(255,255,255,.76);border:1px solid rgba(9,25,54,.1);box-shadow:0 18px 46px rgba(14,31,55,.08);backdrop-filter:blur(18px)}.head,.ledger-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding-bottom:18px;border-bottom:1px solid var(--line)}.head h2,.dh h2,.ledger-head h2{margin:0;font-family:"DM Serif Display",serif;font-size:clamp(1.9rem,3vw,3.4rem);line-height:.95}.dur{display:inline-flex;gap:8px;padding:6px;border-radius:999px;background:rgba(8,18,38,.06)}.dp{min-width:74px;padding:9px 12px;border-color:transparent;background:transparent;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:.67rem;text-transform:uppercase;letter-spacing:.14em}.dp.active{background:#fff;color:var(--orange);box-shadow:0 10px 24px rgba(20,36,60,.08)}
+.wr{display:grid;grid-template-columns:44px 210px minmax(0,1fr);gap:20px;align-items:start;padding:22px 0;border-bottom:1px solid var(--line)}.wr:last-child{border-bottom:0}.wn{width:34px;height:34px;border-radius:999px;display:grid;place-items:center;background:rgba(236,108,27,.12);color:var(--orange);letter-spacing:0}.wr label{color:var(--ink);font-weight:900;line-height:1.2}.hint{margin-top:8px;color:var(--muted);font-size:.86rem;line-height:1.5}.nf{width:100%;border:0;border-bottom:1px solid rgba(9,25,54,.24);background:transparent;border-radius:0;color:var(--ink);font:700 1rem "Public Sans",sans-serif;line-height:1.45;padding:2px 0 11px;resize:vertical}.nf.ta{min-height:104px;font-family:"JetBrains Mono",monospace;font-weight:500;font-size:.9rem;white-space:pre-wrap}.nf:focus{outline:none;border-color:var(--orange)}
+.dh{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--line)}.doc{border-top:1px solid var(--line);padding:16px 0}.doc:last-child{border-bottom:1px solid var(--line)}.doc summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center}.doc summary::-webkit-details-marker{display:none}.dt{font-weight:900;font-size:1.04rem;color:var(--ink)}.prev{color:var(--muted);font-size:.86rem;margin-top:5px}.pt{margin-top:16px;padding:18px;border-radius:18px;background:rgba(8,18,38,.045);color:var(--ink);font:500 .88rem/1.68 "JetBrains Mono",monospace;white-space:pre-wrap;max-height:420px;overflow:auto}.doc-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.ledger{margin-top:24px;grid-column:1/-1}.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-bottom:1px solid var(--line)}.stat{padding:18px 14px;border-right:1px solid var(--line)}.stat:last-child{border-right:0}.stat b{display:block;color:var(--ink);font-size:1.35rem;line-height:1}.stat span{display:block;margin-top:8px;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.18em}.recent{display:grid;grid-template-columns:1.2fr 1fr .7fr auto;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.recent:last-child{border-bottom:0}.recent strong{color:var(--ink)}.recent span{color:var(--muted);font-size:.86rem}.pill{border-radius:999px;padding:6px 9px;background:rgba(47,120,230,.09);color:var(--blue);font-family:"JetBrains Mono",monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;font-weight:800;justify-self:end}.pill.ready{background:rgba(44,129,80,.12);color:var(--green)}.pill.thin{background:rgba(201,68,63,.1);color:var(--red)}
+@media(max-width:1320px){.stage,.secondary{grid-template-columns:1fr}.stage{background:linear-gradient(180deg,#071225 0%,#0f1f3a 52%,#f8f5ef 52%,#fff 100%)}.molds,.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:900px){.room-poc-framework .app-header,.fc{padding-left:18px;padding-right:18px}.fh,.head,.ledger-head{display:block}.ha{min-width:0;justify-content:flex-start;margin-top:18px}.stage{border-radius:28px}.forge,.cast{padding:26px}.ft{font-size:clamp(4.4rem,22vw,7rem)}.hr,.il,.wr,.recent{grid-template-columns:1fr}.molds,.stats{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid var(--line)}}
+</style>
 </head>
 <body class="room-wave2 room-poc-framework">
-        <script src="/js/app-auth-preflight.js"></script>
+<script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
-        <aside class="app-sidebar">
-            <script src="/js/analytics-site-config.js"></script>
-    <script src="/js/analytics.js"></script>
-            <script src="/js/data-manager.js"></script>
-            <script src="/js/nav.js"></script>
-        </aside>
-        
-        <main class="app-main">
-            <header class="app-header module-header">
-                <div class="module-header-title">
-                    <div class="shell-header-meta">
-                        <span class="shell-header-kicker">Proof family</span>
-                        <span class="shell-header-state state-ready">Pilot scope</span>
-                    </div>
-                    <h1 class="page-title">PoC Framework</h1>
-                    <p class="page-subtitle pop-subtitle">No clear success criteria, no pilot. Scope tightly and force a decision.</p>
-                </div>
-            </header>
-            
-            <div class="app-content">
-                <section class="poc-first-fold">
-                    <div id="pocBootState"></div>
-                    <div id="pocBridge"></div>
-                    <div id="pocHealthPanel"></div>
-                </section>
-                <div class="studio-layout">
-                    <div class="builder-content">
-                        <section class="poc-builder-top">
-                            <!-- What This Produces / Rules / What Breaks -->
-                            <div class="builder-section">
-                                <div class="callout-grid">
-                                    <div class="callout callout-green">
-                                        <div class="callout-title">What this produces</div>
-                                        <ul>
-                                            <li><strong>Scoped hypothesis</strong> to test</li>
-                                            <li><strong>Success criteria</strong> defined upfront</li>
-                                            <li><strong>Boundaries</strong> that prevent scope creep</li>
-                                        </ul>
-                                    </div>
-                                    <div class="callout callout-amber">
-                                        <div class="callout-title">The rules</div>
-                                        <ul>
-                                            <li><strong>7-14 days max</strong> - no endless trials</li>
-                                            <li><strong>Written success criteria</strong> before kickoff</li>
-                                            <li><strong>Executive sponsor</strong> at readout</li>
-                                        </ul>
-                                    </div>
-                                    <div class="callout callout-red">
-                                        <div class="callout-title">What breaks PoCs</div>
-                                        <ul>
-                                            <li>No hypothesis - just "try it"</li>
-                                            <li>Success criteria written after</li>
-                                            <li>No decision maker at readout</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Inputs -->
-                            <div class="builder-section">
-                                <div class="section-header">
-                                    <span class="section-icon">Inputs</span>
-                                    <div>
-                                        <div class="section-title">PoC Inputs</div>
-                                        <div class="section-subtitle">Define the test parameters.</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="input-grid">
-                                    <div class="input-group">
-                                        <label>Your Company / Product</label>
-                                        <input type="text" id="in_vendor" placeholder="e.g., Acme Analytics" oninput="generatePoC()">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Prospect Company</label>
-                                        <input type="text" id="in_account" placeholder="e.g., Globex" oninput="generatePoC()">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>PoC Duration</label>
-                                        <div class="duration-btns">
-                                            <button class="dur-btn active" id="dur7" onclick="setDuration(7)">7 days</button>
-                                            <button class="dur-btn" id="dur14" onclick="setDuration(14)">14 days</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-grid input-grid-2">
-                                    <div class="input-group">
-                                        <label>Linked Deal (optional)</label>
-                                        <select id="in_linked_deal" onchange="onLinkedDealChange()">
-                                            <option value="">No linked deal</option>
-                                        </select>
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Readout Owner</label>
-                                        <input type="text" id="in_readout_owner" placeholder="e.g., VP Sales + Economic Buyer" oninput="generatePoC()">
-                                    </div>
-                                </div>
-                                
-                                <div class="output-grid" style="margin-top: var(--space-md);">
-                                    <div class="input-group">
-                                        <label>Success Criteria (edit)</label>
-                                        <textarea id="in_success" oninput="generatePoC()">1) Customer can validate the output in <2 minutes
-2) We reduce manual steps by ~30% for the selected workflow
-3) Security/IT agrees the approach is acceptable for production</textarea>
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Scope Boundaries (what we won't do)</label>
-                                        <textarea id="in_boundaries" oninput="generatePoC()">- No custom integration build during PoC
-- No full production deployment
-- No expansion to additional business units without a signed plan</textarea>
-                                    </div>
-                                </div>
-                                <div id="pocQuality" class="poc-quality"></div>
-                            </div>
-                        </section>
-                        
-                        <!-- PoC Outputs -->
-                        <div class="builder-section">
-                            <div class="section-header">
-                                <span class="section-icon">PoC</span>
-                                <div>
-                                    <div class="section-title">PoC Documents</div>
-                                    <div class="section-subtitle">Everything you need to run a tight proof of concept.</div>
-                                </div>
-                            </div>
-                            
-                            <div class="output-grid">
-                                <div class="output-box">
-                                    <div class="output-title">PoC Scope Doc <button class="copy-btn" onclick="copyOut('out_scope')">Copy</button></div>
-                                    <div class="output-text" id="out_scope">Fill inputs to generate.</div>
-                                </div>
-                                <div class="output-box">
-                                    <div class="output-title">PoC Kickoff Agenda <button class="copy-btn" onclick="copyOut('out_kickoff')">Copy</button></div>
-                                    <div class="output-text" id="out_kickoff">Fill inputs to generate.</div>
-                                </div>
-                            </div>
-                            
-                            <div class="output-grid">
-                                <div class="output-box">
-                                    <div class="output-title">PoC Readout Agenda <button class="copy-btn" onclick="copyOut('out_readout')">Copy</button></div>
-                                    <div class="output-text" id="out_readout">Fill inputs to generate.</div>
-                                </div>
-                                <div class="output-box">
-                                    <div class="output-title">PoC Proposal Email <button class="copy-btn" onclick="copyOut('out_email')">Copy</button></div>
-                                    <div class="output-text" id="out_email">Fill inputs to generate.</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- PoC Outcome Tracking (D2) -->
-                        <div class="builder-section" style="padding:16px;">
-                            <div style="display:flex;align-items:center;gap:12px;">
-                                <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;">PoC Outcome</div>
-                                <select id="pocOutcome" style="flex:1;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:0.85rem;">
-                                    <option value="in_progress">In Progress</option>
-                                    <option value="converted">Converted to Deal</option>
-                                    <option value="not_converted">Did Not Convert</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <!-- Actions -->
-                        
-                        <div class="action-bar" style="margin-top:16px;flex-wrap:wrap;">
-                            <button class="btn btn-ghost" onclick="resetForm()">Reset</button>
-                            <div style="display:flex;gap:6px;align-items:center;">
-                                <span style="font-size:0.62rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;white-space:nowrap;">Choose format:</span>
-                                <select id="pocDownloadFmt" style="padding:6px 10px;background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.8rem;">
-                                    <option value="txt">TXT</option>
-                                    <option value="csv">CSV</option>
-                                    <option value="json">JSON</option>
-                                </select>
-                                <button class="btn btn-secondary" onclick="downloadAll()">Download All</button>
-                            </div>
-                            <button class="btn btn-primary" onclick="savePoC()">Save to Deal</button>
-                        </div>
-                        <div class="poc-proof-guide"><strong>Save to Deal</strong> writes the proof plan into your PoC tracker and, when a live deal is linked, pushes the current proof shape back into that deal. <strong>Download All</strong> exports the same proof package in the format you actually selected. <strong>Reset</strong> clears the editor only.</div>
-                    </div>
-                    
-                    <!-- Side Panel -->
-                    <div class="side-panel">
-                        <div class="panel-title">PoC Stats</div>
-                        <div class="stat-row">
-                            <span class="stat-label">PoCs run</span>
-                            <span class="stat-value" id="stat_total">0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Converted</span>
-                            <span class="stat-value good" id="stat_converted">0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Conversion rate</span>
-                            <span class="stat-value" id="stat_rate">-</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">In progress</span>
-                            <span class="stat-value" id="stat_progress">0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Linked to deals</span>
-                            <span class="stat-value" id="stat_linked">0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Current standard</span>
-                            <span class="stat-value" id="stat_quality">-</span>
-                        </div>
-                        <div class="proof-list">
-                            <div class="panel-title" style="font-size:0.95rem;margin-bottom:10px;">Recent proofs</div>
-                            <div id="pocRecentList"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/migration.js"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/js/require-auth.js"></script>
-    <script src="/js/module-boot-state.js"></script>
-    <script src="/js/tour-guide.js"></script>
-    <script src="/js/module-tooltips.js"></script>
-    <script src="/js/guided-rail.js"></script>
-    <script src="/js/data-flow.js"></script>
-    <script src="/js/collapsible-sections.js"></script>
-    <script src="/js/save-indicator.js"></script>
-    <script src="/js/unsaved-guard.js"></script>
-    <script src="/js/artifact-store.js"></script>
-    
-    <script>
-        let durationDays = 7;
-        
-        function byId(id) { return document.getElementById(id); }
-        function val(id) { return (byId(id)?.value || '').trim(); }
-        function safe(v, fallback) { return v && v.trim().length ? v.trim() : fallback; }
-        function readLS(key, fallback) { try { var raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch (e) { return fallback; } }
-        function escH(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
-        function buildPocRoomHref(href, focusObject, roomLabel){
-            try{
-                var url=new URL(href, window.location.origin);
-                url.searchParams.set('returnTo','/app/poc-framework/');
-                url.searchParams.set('returnLabel','Back to PoC Framework');
-                if(focusObject)url.searchParams.set('focusObject',focusObject);
-                if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
-                url.searchParams.set('fromMode','room');
-                url.searchParams.set('fromSurface','poc-framework');
-                return url.pathname+url.search+url.hash;
-            }catch(error){
-                return href;
-            }
+<aside class="app-sidebar">
+<script src="/js/analytics-site-config.js"></script>
+<script src="/js/analytics.js"></script>
+<script src="/js/data-manager.js"></script>
+<script src="/js/demo-storage-bootstrap.js"></script>
+<script src="/js/workspace-guard.js"></script>
+<script src="/js/nav.js"></script>
+</aside>
+<main class="app-main">
+<header class="app-header"><div class="fh"><div><div class="fk">Proof family</div><h1>PoC Framework</h1><p>Cast proof before the pilot burns a week. The room keeps pilots from becoming optimism theater by forcing claim, owner, metric, and kill rule into one proof object.</p></div><div class="ha"><button class="fa ghost" type="button" data-action="reset">Reset</button><select id="pocDownloadFmt" class="fs" aria-label="Export format"><option value="md">Markdown</option><option value="txt">Text</option></select><button class="fa ghost" type="button" data-action="download">Download proof pack</button><button class="fa primary" type="button" data-action="save">Save proof</button></div></div></header>
+<div class="fc"><div id="pocBootState"></div>
+<section class="stage" aria-labelledby="foundryTitle">
+<div class="forge"><div class="fl">Proof foundry</div><h2 class="ft" id="foundryTitle">Raw <span class="b">interest</span> is not <span class="g">proof</span> until it can be carried.</h2><p class="th">A PoC should not reward activity. It should cast one decision-grade object that a buyer, champion, and internal team can all point to without re-explaining the whole story.</p><div class="heat" aria-label="Proof heat ledger"><div class="hr"><div class="hn">Claim heat</div><div class="ht"><div class="hf" id="heatClaim"></div></div><div class="hs" id="heatClaimLabel">cold</div></div><div class="hr"><div class="hn">Owner heat</div><div class="ht"><div class="hf" id="heatOwner"></div></div><div class="hs" id="heatOwnerLabel">cold</div></div><div class="hr"><div class="hn">Kill heat</div><div class="ht"><div class="hf" id="heatKill"></div></div><div class="hs" id="heatKillLabel">cold</div></div></div><div class="floor"><div class="rl" style="margin-bottom:16px">Five molds</div><div class="molds" id="moldGrid"></div></div></div>
+<div class="cast"><div class="ingot"><div class="it"><div><div class="rl">Run read</div><h2 id="pocQualityTitle">Raw interest is still not proof.</h2></div><div class="score" id="stat_quality">0</div></div><div class="il"><div class="rl">Linked deal</div><p id="linkedDealRead">No linked deal yet.</p></div><div class="il"><div class="rl">Weakest mold</div><p><strong id="weakestMoldTitle">Claim</strong><br><span id="weakestMoldCopy">Name the proof claim before scoping work.</span></p></div><div class="il"><div class="rl">What changes downstream</div><p>Deal Workspace gets a proof object, Future Autopsy gets a kill rule, and Advisor Deploy gets portable evidence.</p></div><div class="note"><strong>Next operator move</strong><span id="pocNextMove">Name the proof claim before scoping work.</span></div><div class="links"><button class="la primary" type="button" data-action="openDeal">Open Deal Workspace</button><button class="la" type="button" data-action="openAutopsy">Open Future Autopsy</button><button class="la" type="button" data-action="openAdvisor">Open Advisor Deploy</button></div></div></div>
+</section>
+<div class="secondary">
+<section class="sheet" aria-labelledby="worksheetTitle"><div class="head"><div><div class="lk">Worksheet</div><h2 id="worksheetTitle">The proof object gets forged here.</h2></div><div class="dur"><button class="dp active" type="button" data-duration="7" id="dur7">7 days</button><button class="dp" type="button" data-duration="14" id="dur14">14 days</button></div></div>
+<div class="wr"><div class="wn">01</div><div><label for="in_linked_deal">Linked deal</label><div class="hint">Use a live deal or keep this as a standalone proof draft.</div></div><select id="in_linked_deal" class="nf"><option value="">No linked deal</option></select></div>
+<div class="wr"><div class="wn">02</div><div><label for="in_vendor">Vendor / product</label><div class="hint">What product is being proven?</div></div><input id="in_vendor" class="nf" type="text" value="Antaeus GTM OS"></div>
+<div class="wr"><div class="wn">03</div><div><label for="in_account">Account</label><div class="hint">Who is carrying the proof?</div></div><input id="in_account" class="nf" type="text" value="Apex Fintech"></div>
+<div class="wr"><div class="wn">04</div><div><label for="in_readout_owner">Readout owner</label><div class="hint">A PoC without a named readout owner is still theater.</div></div><input id="in_readout_owner" class="nf" type="text" value="VP Revenue Operations"></div>
+<div class="wr"><div class="wn">05</div><div><label for="in_success">Success criteria</label><div class="hint">Use pass/fail proof claims. One per line.</div></div><textarea id="in_success" class="nf ta">CRM sync produces a weekly account-risk view without manual cleanup.
+Top 20 accounts are scored with evidence links and owner-ready next actions.
+Sales leader can decide expand / pause / stop in the readout.</textarea></div>
+<div class="wr"><div class="wn">06</div><div><label for="in_boundaries">Boundaries / kill rules</label><div class="hint">Define what the pilot will not prove.</div></div><textarea id="in_boundaries" class="nf ta">No custom integrations beyond CSV or existing CRM export.
+No success claim without buyer-owned source data.
+If readout owner misses the decision meeting, stop the PoC.</textarea></div>
+<div class="wr"><div class="wn">07</div><div><label for="pocOutcome">Outcome</label><div class="hint">The current proof state. Saving writes this into room memory.</div></div><select id="pocOutcome" class="nf"><option value="not_started">Not started</option><option value="in_progress" selected>In progress</option><option value="converted">Converted</option><option value="failed">Failed</option></select></div>
+</section>
+<section class="docs" aria-labelledby="docsTitle"><div class="dh"><div class="lk">Proof documents</div><h2 id="docsTitle">Generated pack</h2></div>
+<details class="doc" open><summary><div><div class="dk">Scope</div><div class="dt">PoC scope</div><div class="prev">The written proof boundary.</div></div><button class="cd" type="button" data-copy-target="out_scope">Copy</button></summary><div id="out_scope" class="pt"></div></details>
+<details class="doc"><summary><div><div class="dk">Kickoff</div><div class="dt">Kickoff agenda</div><div class="prev">How proof starts clean.</div></div><button class="cd" type="button" data-copy-target="out_kickoff">Copy</button></summary><div id="out_kickoff" class="pt"></div></details>
+<details class="doc"><summary><div><div class="dk">Readout</div><div class="dt">Readout agenda</div><div class="prev">How the buyer decides.</div></div><button class="cd" type="button" data-copy-target="out_readout">Copy</button></summary><div id="out_readout" class="pt"></div></details>
+<details class="doc"><summary><div><div class="dk">Email</div><div class="dt">Proposal email</div><div class="prev">The portable ask.</div></div><button class="cd" type="button" data-copy-target="out_email">Copy</button></summary><div id="out_email" class="pt"></div></details>
+<div class="doc-actions"><button class="da primary" type="button" data-action="save">Save proof</button><button class="da" type="button" data-action="download">Export pack</button><button class="da" type="button" data-action="reset">Reset worksheet</button></div></section>
+<section class="ledger" aria-labelledby="ledgerTitle"><div class="ledger-head"><div><div class="lk">Room ledger</div><h2 id="ledgerTitle">Proof history stays subordinate.</h2></div><div class="mk" id="stat_progress">0 active</div></div><div class="stats"><div class="stat"><b id="stat_total">0</b><span>Total PoCs</span></div><div class="stat"><b id="stat_converted">0</b><span>Converted</span></div><div class="stat"><b id="stat_rate">0%</b><span>Win rate</span></div><div class="stat"><b id="stat_linked">0</b><span>Linked deal</span></div><div class="stat"><b id="stat_docs">4</b><span>Docs live</span></div><div class="stat"><b id="stat_band">Thin</b><span>Current band</span></div></div><div id="pocRecentList"></div></section>
+</div></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/migration.js"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/require-auth.js"></script>
+<script src="/js/module-boot-state.js"></script>
+<script src="/js/tour-guide.js"></script>
+<script src="/js/module-tooltips.js"></script>
+<script src="/js/guided-rail.js"></script>
+<script src="/js/data-flow.js"></script>
+<script src="/js/collapsible-sections.js"></script>
+<script src="/js/save-indicator.js"></script>
+<script src="/js/unsaved-guard.js"></script>
+<script src="/js/artifact-store.js"></script>
+<script>
+let durationDays=7;
+const storageKey="gtmos_poc_data";
+const byId=(id)=>document.getElementById(id);
+const val=(id)=>(byId(id)?.value||"").trim();
+const safe=(text,fallback)=>(text||"").trim()||fallback;
+const escH=(value)=>String(value||"").replace(/[&<>"']/g,(char)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+const readLS=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback));}catch{return fallback;}};
+const STAGE_LABELS={discovery:"Discovery",qualification:"Qualification",poc:"PoC",proposal:"Proposal",negotiation:"Negotiation",closed_won:"Closed won",closed_lost:"Closed lost"};
+const urlDealId=new URLSearchParams(window.location.search).get("deal");
+
+function buildPocRoomHref(path,params={}){
+    const url=new URL(path,window.location.origin);
+    url.searchParams.set("returnTo","/app/poc-framework/");
+    url.searchParams.set("returnLabel","Back to PoC Framework");
+    Object.entries(params).forEach(([key,value])=>{
+        if(value!==undefined&&value!==null&&String(value).trim())url.searchParams.set(key,value);
+    });
+    return url.toString();
+}
+function slugify(value){return String(value||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,80)||"poc";}
+function countBulletLines(text){return String(text||"").split(/\n+/).map((line)=>line.trim()).filter(Boolean).length;}
+function firstBullet(text,fallback){return String(text||"").split(/\n+/).map((line)=>line.trim()).filter(Boolean)[0]||fallback;}
+function fmtDate(date){try{return new Intl.DateTimeFormat(undefined,{month:"short",day:"numeric",year:"numeric"}).format(date);}catch{return date.toISOString().slice(0,10);}}
+function fmtMoney(value){
+    const num=Number(value||0);
+    if(!num)return "$0";
+    if(num>=1000000)return `$${(num/1000000).toFixed(num%1000000?1:0)}M`;
+    if(num>=1000)return `$${Math.round(num/1000)}k`;
+    return `$${num}`;
+}
+function getDeals(){return readLS("gtmos_deal_workspaces",[]);}
+function getLinkedDeal(){
+    const selected=val("in_linked_deal")||urlDealId;
+    if(!selected)return null;
+    return getDeals().find((deal)=>String(deal.id)===String(selected))||null;
+}
+function populateDealDropdown(){
+    const select=byId("in_linked_deal");
+    if(!select)return;
+    const deals=getDeals();
+    select.innerHTML='<option value="">No linked deal</option>'+deals.map((deal)=>{
+        const name=safe(deal.name||deal.account,"Unnamed deal");
+        const stage=STAGE_LABELS[deal.stage]||safe(deal.stage,"Live");
+        const amount=fmtMoney(deal.value||deal.amount);
+        return `<option value="${escH(deal.id)}">${escH(name)} - ${escH(stage)} - ${escH(amount)}</option>`;
+    }).join("");
+    if(urlDealId&&deals.some((deal)=>String(deal.id)===String(urlDealId))){
+        select.value=urlDealId;
+        applyLinkedDealDefaults(getLinkedDeal());
+    }
+}
+function applyLinkedDealDefaults(deal){
+    if(!deal)return;
+    if(byId("in_account"))byId("in_account").value=safe(deal.name||deal.account,val("in_account"));
+    if(byId("in_readout_owner")&&deal.owner&&!val("in_readout_owner"))byId("in_readout_owner").value=deal.owner;
+}
+function getPoCQuality(){
+    const linkedDeal=getLinkedDeal();
+    const successCount=countBulletLines(val("in_success"));
+    const boundaryCount=countBulletLines(val("in_boundaries"));
+    const hasVendor=Boolean(val("in_vendor"));
+    const hasAccount=Boolean(val("in_account"));
+    const hasOwner=Boolean(val("in_readout_owner"));
+    let score=0;
+    if(hasVendor)score+=10;
+    if(hasAccount)score+=10;
+    score+=Math.min(successCount,4)*10;
+    score+=Math.min(boundaryCount,3)*8;
+    if(hasOwner)score+=16;
+    if(linkedDeal)score+=10;
+    if(linkedDeal?.stage==="poc"||linkedDeal?.stage==="proposal")score+=4;
+    score=Math.min(100,score);
+    const band=score>=80?"ready":score>=60?"workable":"thin";
+    const bandLabel=band==="ready"?"Cast":band==="workable"?"Hot":"Thin";
+    const title=band==="ready"?"Decision-grade proof is cast.":band==="workable"?"Proof is hot, but not portable.":"Raw interest is still not proof.";
+    const weakest=!hasAccount?{title:"Account",copy:"Name the account before scoping proof."}
+        :!hasOwner?{title:"Owner",copy:"Name the readout owner before the pilot starts."}
+        :successCount<3?{title:"Metric",copy:"Add at least three pass/fail criteria."}
+        :boundaryCount<2?{title:"Kill rule",copy:"Define when the PoC stops."}
+        :{title:"Readout",copy:"Carry the proof into the decision meeting."};
+    return {
+        score,band,bandLabel,title,next:weakest.copy,weakest,linkedDeal,successCount,boundaryCount,hasOwner,
+        claimHeat:Math.min(100,successCount*28+(hasAccount?16:0)),
+        ownerHeat:hasOwner?100:linkedDeal?.owner?72:18,
+        killHeat:Math.min(100,boundaryCount*38)
+    };
+}
+function heatLabel(value){if(value>=80)return"cast";if(value>=55)return"hot";if(value>=25)return"warming";return"cold";}
+function heatColor(value){if(value>=80)return"var(--green)";if(value>=55)return"var(--orange)";if(value>=25)return"var(--blue)";return"#8fa0b8";}
+function deriveMolds(quality){
+    const linkedDeal=quality.linkedDeal;
+    const owner=safe(val("in_readout_owner")||linkedDeal?.owner,"No readout owner");
+    return [
+        {label:"Claim",value:firstBullet(val("in_success"),"Name the proof claim"),state:quality.successCount?"hot":"red"},
+        {label:"Baseline",value:quality.successCount>=2?"Criteria can be tested.":"Current state is not measurable.",state:quality.successCount>=2?"cast":"cold"},
+        {label:"Owner",value:owner,state:quality.hasOwner?"cast":"red"},
+        {label:"Metric",value:quality.successCount>=3?`${quality.successCount} pass/fail criteria`:"Need 3 criteria",state:quality.successCount>=3?"cast":"hot"},
+        {label:"Kill",value:quality.boundaryCount>=2?`${quality.boundaryCount} stop rules`:"Kill rule too soft",state:quality.boundaryCount>=2?"cast":"red"}
+    ];
+}
+function renderFoundry(){
+    const quality=getPoCQuality();
+    [["heatClaim","heatClaimLabel",quality.claimHeat],["heatOwner","heatOwnerLabel",quality.ownerHeat],["heatKill","heatKillLabel",quality.killHeat]].forEach(([barId,labelId,value])=>{
+        const bar=byId(barId);
+        const label=byId(labelId);
+        if(bar){
+            bar.style.setProperty("--w",`${Math.max(8,value)}%`);
+            bar.style.setProperty("--c",heatColor(value));
         }
-        function slugify(v){ return String(v||'poc-framework').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,64) || 'poc-framework'; }
-        function countBulletLines(v){ return String(v||'').split('\n').map(function(line){ return line.trim(); }).filter(function(line){ return line.length >= 6; }).length; }
-        function fmtDate(iso){ if(!iso) return 'No date'; var d=new Date(iso); return isNaN(d.getTime()) ? 'No date' : new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric'}).format(d); }
-        function fmtMoney(n){ return '$' + Number(n || 0).toLocaleString(); }
+        if(label)label.textContent=heatLabel(value);
+    });
+    const molds=deriveMolds(quality);
+    if(byId("moldGrid")){
+        byId("moldGrid").innerHTML=molds.map((mold)=>`<div class="mold ${escH(mold.state)}"><div class="ml">${escH(mold.label)}</div><div class="mv">${escH(mold.value)}</div></div>`).join("");
+    }
+    const linkedDeal=quality.linkedDeal;
+    const linkedDealText=linkedDeal?`${safe(linkedDeal.name||linkedDeal.account,"Linked deal")} - ${STAGE_LABELS[linkedDeal.stage]||safe(linkedDeal.stage,"Live")} - ${fmtMoney(linkedDeal.value||linkedDeal.amount)}`:"No linked deal yet. Save as standalone proof or attach a live deal.";
+    if(byId("pocQualityTitle"))byId("pocQualityTitle").textContent=quality.title;
+    if(byId("stat_quality"))byId("stat_quality").textContent=quality.score;
+    if(byId("stat_band"))byId("stat_band").textContent=quality.bandLabel;
+    if(byId("linkedDealRead"))byId("linkedDealRead").textContent=linkedDealText;
+    if(byId("weakestMoldTitle"))byId("weakestMoldTitle").textContent=quality.weakest.title;
+    if(byId("weakestMoldCopy"))byId("weakestMoldCopy").textContent=quality.weakest.copy;
+    if(byId("pocNextMove"))byId("pocNextMove").textContent=quality.next;
+}
+function generatePoC(){
+    const vendor=safe(val("in_vendor"),"[Vendor]");
+    const account=safe(val("in_account"),"[Account]");
+    const owner=safe(val("in_readout_owner"),"[Readout owner]");
+    const success=safe(val("in_success"),"- [Success criterion 1]\n- [Success criterion 2]");
+    const boundaries=safe(val("in_boundaries"),"- [Boundary 1]\n- [Boundary 2]");
+    const today=new Date();
+    const end=new Date(today.getTime()+durationDays*86400000);
+    const linkedDeal=getLinkedDeal();
+    const dealLine=linkedDeal?`Linked deal: ${safe(linkedDeal.name||linkedDeal.account,account)} (${STAGE_LABELS[linkedDeal.stage]||safe(linkedDeal.stage,"Live")}, ${fmtMoney(linkedDeal.value||linkedDeal.amount)})`:"Linked deal: None";
+    if(byId("out_scope"))byId("out_scope").textContent=`POC SCOPE - ${vendor} x ${account}
 
-        var STAGE_LABELS = { prospect:'Prospect', discovery:'Discovery', evaluation:'Solution Fit', poc:'PoC / Pilot', negotiation:'Negotiation', verbal:'Verbal Commit', 'closed-won':'Closed Won', 'closed-lost':'Closed Lost' };
-        var urlDealId = new URLSearchParams(window.location.search).get('deal');
+Run dates: ${fmtDate(today)} to ${fmtDate(end)} (${durationDays} days)
+Readout owner: ${owner}
+${dealLine}
 
-        function getDeals() {
-            var deals = readLS('gtmos_deal_workspaces', []);
-            if (!Array.isArray(deals)) deals = Object.values(deals || {});
-            return deals;
-        }
+Decision question:
+Can ${vendor} produce enough buyer-owned proof for ${account} to make an expand / pause / stop decision?
 
-        function getLinkedDeal() {
-            var id = val('in_linked_deal');
-            if (!id) return null;
-            return getDeals().find(function(d){ return d && d.id === id; }) || null;
-        }
-
-        function populateDealDropdown() {
-            var sel = byId('in_linked_deal');
-            if (!sel) return;
-            var deals = getDeals().filter(function(d){ return d && d.stage !== 'closed-won' && d.stage !== 'closed-lost'; });
-            sel.innerHTML = '<option value="">No linked deal</option>' + deals.map(function(d){
-                return '<option value="' + escH(d.id) + '">' + escH(d.accountName || 'Unnamed') + ' - ' + escH(STAGE_LABELS[d.stage] || d.stage || 'Prospect') + ' - ' + fmtMoney(d.value || 0) + '</option>';
-            }).join('');
-            if (urlDealId && deals.some(function(d){ return d.id === urlDealId; })) {
-                sel.value = urlDealId;
-            }
-        }
-
-        function applyLinkedDealDefaults(deal) {
-            if (!deal) return;
-            if (!val('in_account')) byId('in_account').value = deal.accountName || '';
-            if (!val('in_readout_owner')) {
-                byId('in_readout_owner').value = deal.economicBuyer || deal.champion || '';
-            }
-        }
-
-        function getPoCQuality() {
-            var linkedDeal = getLinkedDeal();
-            var successCount = countBulletLines(val('in_success'));
-            var boundaryCount = countBulletLines(val('in_boundaries'));
-            var readoutOwner = val('in_readout_owner');
-            var vendorReady = val('in_vendor').length >= 2;
-            var accountReady = val('in_account').length >= 2;
-            var score = 0;
-            if (vendorReady) score += 10;
-            if (accountReady) score += 10;
-            if (successCount >= 3) score += 25; else if (successCount >= 2) score += 15; else if (successCount >= 1) score += 8;
-            if (boundaryCount >= 2) score += 15; else if (boundaryCount >= 1) score += 8;
-            if (readoutOwner.length >= 3) score += 15;
-            if (linkedDeal) score += 15;
-            if (linkedDeal && (linkedDeal.stage === 'evaluation' || linkedDeal.stage === 'poc')) score += 10;
-
-            var band = score >= 80 ? 'ready' : score >= 60 ? 'workable' : 'thin';
-            var bandLabel = band === 'ready' ? 'Ready now' : band === 'workable' ? 'Workable' : 'Thin';
-            var timingCls = linkedDeal
-                ? (linkedDeal.stage === 'evaluation' || linkedDeal.stage === 'poc' ? 'now' : (linkedDeal.stage === 'negotiation' || linkedDeal.stage === 'verbal' ? 'risky' : 'later'))
-                : 'later';
-            var timingLabel = timingCls === 'now' ? 'Best run now' : timingCls === 'risky' ? 'Use carefully now' : 'Set this up before the stage advances';
-            var timingTitle = timingCls === 'now'
-                ? 'This is the right moment to force proof.'
-                : timingCls === 'risky'
-                    ? 'This deal is already late to be inventing proof.'
-                    : 'This proof should be designed before the deal claims pilot momentum.';
-            var timingCopy = !linkedDeal
-                ? 'Link a real deal so the proof plan belongs to a stage, a next step, and an actual account thread.'
-                : linkedDeal.stage === 'evaluation' || linkedDeal.stage === 'poc'
-                    ? 'The deal is at the point where explicit success criteria, readout ownership, and scope boundaries should force the decision path.'
-                    : linkedDeal.stage === 'negotiation' || linkedDeal.stage === 'verbal'
-                        ? 'At this stage, a new PoC can become a stall tactic unless it is tied to a concrete commercial decision and owner.'
-                        : 'This proof plan is useful, but the deal still needs stronger qualification and ownership before the pilot becomes the center of gravity.';
-            var next = !linkedDeal
-                ? 'Link the proof to a live deal first.'
-                : !readoutOwner
-                    ? 'Name the readout owner before kickoff.'
-                    : successCount < 3
-                        ? 'Tighten success criteria so the readout can end in a decision.'
-                        : boundaryCount < 2
-                            ? 'Tighten scope boundaries so this does not sprawl into services.'
-                            : band === 'ready'
-                                ? 'This proof plan is strong enough to run and should hand into Deal Workspace immediately.'
-                                : 'Tighten the weak areas before you call this a real PoC.';
-            return {
-                score: score,
-                band: band,
-                bandLabel: bandLabel,
-                successCount: successCount,
-                boundaryCount: boundaryCount,
-                readoutOwner: readoutOwner,
-                linkedDeal: linkedDeal,
-                timingCls: timingCls,
-                timingLabel: timingLabel,
-                timingTitle: timingTitle,
-                timingCopy: timingCopy,
-                next: next
-            };
-        }
-
-        function renderPoCBridge() {
-            var node = byId('pocBridge');
-            if (!node) return;
-            var quality = getPoCQuality();
-            var linkedDeal = quality.linkedDeal;
-            var stageValue = linkedDeal ? (STAGE_LABELS[linkedDeal.stage] || linkedDeal.stage || 'Prospect') : 'No live deal linked';
-            var pressure = linkedDeal
-                ? (linkedDeal.nextStepDate ? 'Next step due ' + fmtDate(linkedDeal.nextStepDate) : 'No dated next step on linked deal')
-                : 'Proof plan is still detached from the pipeline';
-            var oneSession = linkedDeal
-                ? 'Leave with a proof scope that can survive kickoff, readout, and the commercial conversation after it.'
-                : 'Leave with a real proof design and a linked deal so the pilot belongs to the pipeline.';
-            var stateTone = quality.band === 'ready' ? 'live' : quality.band === 'workable' ? 'ready' : 'risk';
-            if (window.gtmShellChrome) {
-                window.gtmShellChrome.applyHeader({
-                    family: 'Pipeline',
-                    stateLabel: quality.bandLabel,
-                    stateTone: stateTone
-                });
-                window.gtmShellChrome.renderCommandBand('#pocBridge', {
-                    kicker: 'Proof operating board',
-                    title: quality.timingTitle,
-                    copy: 'PoC Framework should force a scoped hypothesis, hard success criteria, and a readout path that survives the commercial conversation after the pilot ends.',
-                    stateLabel: quality.timingLabel,
-                    stateTone: stateTone,
-                    metrics: [
-                        { label: 'Linked deal', value: linkedDeal ? (linkedDeal.accountName || linkedDeal.name || 'Linked deal') : 'No live deal linked' },
-                        { label: 'Proof standard', value: quality.bandLabel + ' / ' + quality.score + '/100' },
-                        { label: 'Pressure point', value: pressure },
-                        { label: 'One-session win', value: oneSession }
-                    ],
-                    actions: [
-                        { label: 'Save to Deal', action: 'savePoC()', tone: 'primary' },
-                        { label: linkedDeal ? 'Open Linked Deal' : 'Open Deal Workspace', action: 'openLinkedDealWorkspace()' },
-                        { label: linkedDeal ? 'Stress-test this deal' : 'Open Future Autopsy', action: 'openFutureAutopsy()' }
-                    ]
-                });
-                node.innerHTML +=
-                    '<section class="anchor-stage">' +
-                        '<div class="anchor-stage-grid">' +
-                            '<div>' +
-                                '<div class="anchor-eyebrow">Proof operating board</div>' +
-                                '<div class="anchor-headline anchor-headline--wide">' + escH(quality.timingTitle) + '</div>' +
-                                '<div class="anchor-support">' + escH(quality.timingCopy) + '</div>' +
-                                '<div class="anchor-chip-row">' +
-                                    '<span class="anchor-chip">' + escH(quality.bandLabel) + '</span>' +
-                                    '<span class="anchor-chip">' + escH(stageValue) + '</span>' +
-                                    '<span class="anchor-chip">' + (linkedDeal ? 'Deal-linked' : 'Detached from pipeline') + '</span>' +
-                                '</div>' +
-                                '<div class="anchor-primary-card">' +
-                                    '<div class="anchor-primary-label">Pressure read</div>' +
-                                    '<div class="anchor-primary-title">' + escH(pressure) + '</div>' +
-                                    '<div class="anchor-primary-copy">' + escH(oneSession) + '</div>' +
-                                    '<div class="anchor-primary-actions">' +
-                                        '<button class="btn btn-primary" type="button" onclick="savePoC()">Save to Deal</button>' +
-                                        '<button class="btn btn-secondary" type="button" onclick="openFutureAutopsy()">' + (linkedDeal ? 'Stress-test this deal' : 'Open Future Autopsy') + '</button>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="anchor-mini-grid">' +
-                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Proof timing</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.timingLabel) + '</div><div class="anchor-mini-copy">Run the PoC when the deal needs proof, not when the team is out of ideas.</div></div>' +
-                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Current standard</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.bandLabel) + '</div><div class="anchor-mini-copy">' + quality.score + '/100 quality based on success criteria, scope boundaries, and readout ownership.</div></div>' +
-                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Readout owner</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.readoutOwner || 'Not set') + '</div><div class="anchor-mini-copy">No owner means the pilot can generate activity without a real decision.</div></div>' +
-                                '<div class="anchor-mini-card"><div class="anchor-mini-label">Handshake</div><div class="anchor-mini-value anchor-mini-value--sans">' + (linkedDeal ? 'Proof syncs back into the deal' : 'Link a deal so the proof belongs to the pipeline') + '</div><div class="anchor-mini-copy">The commercial thread should stay visible before, during, and after the pilot.</div></div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</section>';
-                return;
-            }
-            node.innerHTML =
-                '<section class="anchor-stage">' +
-                    '<div class="anchor-stage-grid">' +
-                        '<div>' +
-                            '<div class="anchor-eyebrow">Proof operating board</div>' +
-                            '<div class="anchor-headline anchor-headline--wide">' + escH(quality.timingTitle) + '</div>' +
-                            '<div class="anchor-support">' + escH(quality.timingCopy) + '</div>' +
-                            '<div class="anchor-chip-row">' +
-                                '<span class="anchor-chip">' + escH(quality.bandLabel) + '</span>' +
-                                '<span class="anchor-chip">' + escH(stageValue) + '</span>' +
-                                '<span class="anchor-chip">' + (linkedDeal ? 'Deal-linked' : 'Detached from pipeline') + '</span>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="anchor-mini-grid">' +
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Pressure point</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(pressure) + '</div><div class="anchor-mini-copy">' + escH(oneSession) + '</div></div>' +
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Current standard</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.bandLabel) + '</div><div class="anchor-mini-copy">' + quality.score + '/100 quality.</div></div>' +
-                        '</div>' +
-                    '</div>' +
-                '</section>';
-        }
-
-        function renderPoCQuality() {
-            var node = byId('pocQuality');
-            if (!node) return;
-            var quality = getPoCQuality();
-            node.innerHTML =
-                '<section class="shell-section shell-section--compact">' +
-                    '<div class="shell-section-header">' +
-                        '<div class="shell-section-heading">' +
-                            '<div class="shell-section-kicker">Proof standard</div>' +
-                            '<div class="shell-section-title">How credible is this pilot right now?</div>' +
-                            '<div class="shell-section-copy">The framework is only valuable if the proof can survive kickoff, readout, and the commercial decision afterward.</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="anchor-mini-grid">' +
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Current standard</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.bandLabel) + '</div><div class="anchor-mini-copy">' + quality.score + '/100 quality based on linked deal, criteria, boundaries, and readout ownership.</div></div>' +
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Success criteria</div><div class="anchor-mini-value anchor-mini-value--sans">' + quality.successCount + ' defined</div><div class="anchor-mini-copy">A real PoC needs explicit pass-fail criteria before kickoff.</div></div>' +
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Scope boundaries</div><div class="anchor-mini-value anchor-mini-value--sans">' + quality.boundaryCount + ' set</div><div class="anchor-mini-copy">Boundaries stop the pilot from becoming an endless free implementation.</div></div>' +
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Readout ownership</div><div class="anchor-mini-value anchor-mini-value--sans">' + escH(quality.readoutOwner || 'Not set') + '</div><div class="anchor-mini-copy">If nobody owns the readout, activity can happen without a real decision.</div></div>' +
-                    '</div>' +
-                    '<div class="shell-section-note"><strong>Next move:</strong> ' + escH(quality.next) + '</div>' +
-                '</section>';
-        }
-
-        function renderPoCWorkspaceHealth() {
-            var node = byId('pocHealthPanel');
-            if (!node) return;
-            var quality = getPoCQuality();
-            var linkedDeal = quality.linkedDeal;
-            var stageLabel = linkedDeal ? (STAGE_LABELS[linkedDeal.stage] || linkedDeal.stage || 'Prospect') : 'Detached';
-            var compounded = [];
-            var weakLinks = [];
-
-            if (linkedDeal) {
-                compounded.push('<div class="workspace-health-item"><strong>Proof is attached to a live deal.</strong> ' + escH(linkedDeal.accountName || linkedDeal.name || 'The linked deal') + ' is giving this pilot real commercial pressure instead of letting it float as a side project.</div>');
-            }
-            if (quality.successCount >= 3) {
-                compounded.push('<div class="workspace-health-item"><strong>Success criteria can survive the readout.</strong> The pilot now has enough explicit pass-fail language to end in a real decision.</div>');
-            }
-            if (quality.boundaryCount >= 2) {
-                compounded.push('<div class="workspace-health-item"><strong>Scope boundaries are visible.</strong> The proof is less likely to sprawl into a services exercise before the commercial conversation lands.</div>');
-            }
-            if (quality.readoutOwner) {
-                compounded.push('<div class="workspace-health-item"><strong>Readout ownership exists before kickoff.</strong> A named owner makes it harder for activity to happen without a real decision moment.</div>');
-            }
-            if (!compounded.length) {
-                compounded.push('<div class="workspace-health-item"><strong>The proof has a usable starting shape.</strong> The room has enough structure to keep building, but it still needs stronger commercial anchoring.</div>');
-            }
-
-            if (!linkedDeal) {
-                weakLinks.push('<div class="workspace-health-item"><strong>This proof is still detached from the pipeline.</strong> Link a live deal so stage pressure, next step truth, and account context stay visible.</div>');
-            }
-            if (!quality.readoutOwner) {
-                weakLinks.push('<div class="workspace-health-item"><strong>No one owns the readout yet.</strong> Without a named owner, the pilot can generate activity without forcing a decision.</div>');
-            }
-            if (quality.successCount < 3) {
-                weakLinks.push('<div class="workspace-health-item"><strong>Success criteria are still thin.</strong> Tighten the readout standard so the PoC cannot hide behind vague language.</div>');
-            }
-            if (quality.boundaryCount < 2) {
-                weakLinks.push('<div class="workspace-health-item"><strong>Scope boundaries are still loose.</strong> The pilot needs harder limits before it turns into open-ended implementation.</div>');
-            }
-            if (quality.timingCls === 'risky') {
-                weakLinks.push('<div class="workspace-health-item"><strong>The deal is already late for invented proof.</strong> This PoC must justify a commercial decision, not buy time.</div>');
-            }
-            if (!weakLinks.length) {
-                weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the proof.</strong> Keep the scope honest, but the current plan is reading as commercially credible.</div>');
-            }
-
-            node.innerHTML =
-                '<section class="shell-section shell-section--compact workspace-health">' +
-                    '<div class="shell-section-header">' +
-                        '<div class="shell-section-heading">' +
-                            '<div class="shell-section-kicker">Workspace health</div>' +
-                            '<div class="shell-section-title">See what is compounding and what is still weak.</div>' +
-                            '<div class="shell-section-copy workspace-health-copy">PoC Framework should show whether this pilot can hold commercial pressure after kickoff, readout, and the next deal move.</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="workspace-health-metrics">' +
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Proof posture</div><div class="workspace-health-value workspace-health-value--sans">' + escH(quality.band === 'ready' ? 'Commercially credible' : quality.band === 'workable' ? 'Needs tightening' : 'Proof thin') + '</div><div class="workspace-health-subcopy">' + escH(quality.bandLabel + ' / ' + quality.score + '/100') + '</div></div>' +
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Deal linkage</div><div class="workspace-health-value workspace-health-value--sans">' + escH(stageLabel) + '</div><div class="workspace-health-subcopy">' + escH(linkedDeal ? (linkedDeal.accountName || linkedDeal.name || 'Linked deal visible') : 'No live deal linked') + '</div></div>' +
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Boundaries</div><div class="workspace-health-value">' + escH(String(quality.boundaryCount || 0)) + '</div><div class="workspace-health-subcopy">Scope limits holding the pilot in place.</div></div>' +
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Readout owner</div><div class="workspace-health-value workspace-health-value--sans">' + escH(quality.readoutOwner ? 'Assigned' : 'Missing') + '</div><div class="workspace-health-subcopy">' + escH(quality.readoutOwner || 'Name the commercial readout owner.') + '</div></div>' +
-                    '</div>' +
-                    '<div class="workspace-health-grid">' +
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">' + compounded.slice(0,2).join('') + '</div></div>' +
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">' + weakLinks.slice(0,2).join('') + '</div></div>' +
-                    '</div>' +
-                '</section>';
-        }
-
-        function renderRecentProofs() {
-            var node = byId('pocRecentList');
-            if (!node) return;
-            var pocs = (readPocList().pocs || []).slice().sort(function(a,b){ return new Date(b.updated || b.created || 0) - new Date(a.updated || a.created || 0); }).slice(0,4);
-            if (!pocs.length) {
-                node.innerHTML = '<div class="proof-item"><div class="proof-item-copy">No proofs saved yet. Save one strong PoC and it will start compounding here.</div></div>';
-                return;
-            }
-            node.innerHTML = pocs.map(function(poc){
-                var stage = poc.linkedStage ? (STAGE_LABELS[poc.linkedStage] || poc.linkedStage) : 'Detached';
-                var band = poc.qualityBand || 'thin';
-                var bandLabel = band === 'ready' ? 'Ready now' : band === 'workable' ? 'Workable' : 'Thin';
-                return '<div class="proof-item">' +
-                    '<div class="proof-item-title">' + escH(poc.account || 'Unnamed account') + '</div>' +
-                    '<div class="proof-item-copy">' + escH(stage) + ' · ' + escH(poc.outcome || 'in_progress') + ' · ' + escH(fmtDate(poc.updated || poc.created)) + '</div>' +
-                    '<div class="proof-chip ' + band + '">' + escH(bandLabel) + ' · ' + Number(poc.qualityScore || 0) + '/100</div>' +
-                '</div>';
-            }).join('');
-        }
-        
-        window.setDuration = function(n) {
-            durationDays = n;
-            byId('dur7').classList.toggle('active', n === 7);
-            byId('dur14').classList.toggle('active', n === 14);
-            generatePoC();
-        };
-        
-        window.generatePoC = function() {
-            const vendor = safe(val('in_vendor'), '[Your Company]');
-            const account = safe(val('in_account'), '[Prospect]');
-            const success = val('in_success') || 'Define success criteria';
-            const boundaries = val('in_boundaries') || 'Define boundaries';
-            const quality = getPoCQuality();
-            const linkedDeal = quality.linkedDeal;
-            const readoutOwner = safe(val('in_readout_owner'), linkedDeal ? (linkedDeal.economicBuyer || linkedDeal.champion || '[Decision owner]') : '[Decision owner]');
-            const stageLabel = linkedDeal ? (STAGE_LABELS[linkedDeal.stage] || linkedDeal.stage || 'Prospect') : 'No linked deal';
-            
-            byId('out_scope').textContent = `POC SCOPE DOCUMENT
-${account} x ${vendor}
-
-DURATION: ${durationDays} days
-LINKED DEAL STAGE: ${stageLabel}
-
-HYPOTHESIS:
-We believe ${vendor} can [specific outcome] for ${account} by [specific mechanism].
-
-SUCCESS CRITERIA:
+Success criteria:
 ${success}
 
-BOUNDARIES (Out of Scope):
+Boundaries / kill rules:
 ${boundaries}
 
-REQUIRED PARTICIPANTS:
-- ${account}: Champion + 1 technical resource
-- ${vendor}: AE + SE
-- Readout owner: ${readoutOwner}
+Required readout:
+1. What changed during the proof window?
+2. Which criteria passed, failed, or stayed ambiguous?
+3. What decision is now justified?
 
-NEXT STEP IF SUCCESSFUL:
-Commercial discussion with economic buyer within 5 business days of readout.`;
+If the readout owner is not present, the PoC does not count as decision proof.`;
+    if(byId("out_kickoff"))byId("out_kickoff").textContent=`POC KICKOFF AGENDA - ${account}
 
-            byId('out_kickoff').textContent = `POC KICKOFF AGENDA (30 min)
+1. Confirm the proof claim.
+"The purpose of this PoC is to prove whether ${vendor} can create a decision-grade outcome for ${account}, not to explore every possible feature."
 
-1. [5 min] Confirm hypothesis and success criteria
-   - Read them aloud. Get verbal confirmation.
-
-2. [10 min] Technical walkthrough
-   - What we're testing, how we're testing it
-
-3. [10 min] Logistics
-   - Data/access requirements
-   - Communication cadence (daily async or 2x check-ins)
-   - Escalation path if blocked
-
-4. [5 min] Schedule readout
-   - Date: Day ${durationDays}
-   - Required attendees: Champion + ${readoutOwner}
-   - Decision expected at readout: Go/No-Go`;
-
-            byId('out_readout').textContent = `POC READOUT AGENDA (30 min)
-
-1. [5 min] Recap hypothesis and success criteria
-
-2. [15 min] Results walkthrough
-   - Criterion 1: Pass/Fail + evidence
-   - Criterion 2: Pass/Fail + evidence
-   - Criterion 3: Pass/Fail + evidence
-
-3. [5 min] ${account} feedback
-   - What worked? What didn't?
-
-4. [5 min] Recommendation + Next Steps
-   - If pass: "Based on results, we recommend moving to commercial terms. Can we schedule that discussion for [date]?"
-   - If partial: "Here's what we'd adjust for a production rollout..."`;
-
-            byId('out_email').textContent = `Subject: ${account} x ${vendor} - PoC Proposal (${durationDays} days)
-
-Hi [Name],
-
-Following our conversation, I wanted to formalize the proof of concept structure:
-
-WHAT WE'RE TESTING:
-[Specific hypothesis]
-
-WHY NOW:
-${quality.next}
-
-SUCCESS CRITERIA:
+2. Confirm the success criteria.
 ${success}
 
-TIMELINE:
-- Kickoff: [Date]
-- Duration: ${durationDays} days
-- Readout: [Date] with you + [economic buyer]
-
-WHAT WE NEED FROM YOU:
-- 30 min for kickoff
-- [Specific data/access]
-- ${readoutOwner} at readout
-
-WHAT WE WON'T DO:
+3. Confirm the boundaries.
 ${boundaries}
 
-Does this structure work? Happy to adjust based on your constraints.
+4. Confirm owner and readout.
+Owner: ${owner}
+Readout date: ${fmtDate(end)}
 
-Best,
-[Your name]`;
-            renderPoCBridge();
-            renderPoCWorkspaceHealth();
-            renderPoCQuality();
-            byId('stat_quality').textContent = quality.bandLabel;
-        };
-        
-        window.copyOut = function(id) {
-            const text = byId(id).textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = event.target;
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = 'Copy', 1500);
-            });
-        };
-        
-        window.resetForm = function() {
-            byId('in_vendor').value = '';
-            byId('in_account').value = '';
-            byId('in_linked_deal').value = '';
-            byId('in_readout_owner').value = '';
-            setDuration(7);
-            byId('in_success').value = `1) Customer can validate the output in <2 minutes
-2) We reduce manual steps by ~30% for the selected workflow
-3) Security/IT agrees the approach is acceptable for production`;
-            byId('in_boundaries').value = `- No custom integration build during PoC
-- No full production deployment
-- No expansion to additional business units without a signed plan`;
-            byId('pocOutcome').value = 'in_progress';
-            generatePoC();
-        };
+5. Confirm stop condition.
+If the proof cannot be carried into a buyer decision, the PoC stops instead of drifting.`;
+    if(byId("out_readout"))byId("out_readout").textContent=`POC READOUT AGENDA - ${account}
 
-        window.onLinkedDealChange = function() {
-            var linkedDeal = getLinkedDeal();
-            applyLinkedDealDefaults(linkedDeal);
-            generatePoC();
-        };
+1. Restate the decision question.
+Can ${vendor} produce enough proof for ${account} to make an expand / pause / stop decision?
 
-        function buildDownloadPayload() {
-            var quality = getPoCQuality();
-            return {
-                vendor: val('in_vendor'),
-                account: val('in_account'),
-                linkedDealId: quality.linkedDeal ? quality.linkedDeal.id : '',
-                linkedDealStage: quality.linkedDeal ? (quality.linkedDeal.stage || '') : '',
-                readoutOwner: val('in_readout_owner'),
-                durationDays: durationDays,
-                outcome: byId('pocOutcome').value,
-                qualityScore: quality.score,
-                qualityBand: quality.band,
-                outputs: {
-                    scope: byId('out_scope').textContent,
-                    kickoff: byId('out_kickoff').textContent,
-                    readout: byId('out_readout').textContent,
-                    email: byId('out_email').textContent
-                },
-                exportedAt: new Date().toISOString()
-            };
+2. Read the criteria.
+${success}
+
+3. Read the boundaries.
+${boundaries}
+
+4. Decide.
+- Expand if criteria passed and a buyer owner accepts the next step.
+- Pause if data or ownership is missing.
+- Stop if the proof did not survive the agreed boundary.
+
+5. Name the next move.
+Owner: ${owner}
+Date: ${fmtDate(end)}`;
+    if(byId("out_email"))byId("out_email").textContent=`Subject: ${account} PoC scope and readout owner
+
+Hi team,
+
+Here is the proposed ${durationDays}-day PoC structure for ${vendor} and ${account}.
+
+The goal is not to run an open-ended trial. The goal is to produce decision-grade proof against the criteria below:
+
+${success}
+
+We will keep the scope inside these boundaries:
+
+${boundaries}
+
+Readout owner: ${owner}
+Readout target: ${fmtDate(end)}
+
+If this still matches how you want to evaluate, we can lock the PoC and start the proof window.
+
+Best,`;
+    renderFoundry();
+    updatePocStats();
+    renderRecentProofs();
+}
+async function copyOut(id,button){
+    const text=byId(id)?.textContent||"";
+    if(!text)return;
+    await navigator.clipboard.writeText(text);
+    if(button){
+        const old=button.textContent;
+        button.textContent="Copied";
+        setTimeout(()=>{button.textContent=old;},1100);
+    }
+}
+function setDuration(days){
+    durationDays=Number(days)||7;
+    byId("dur7")?.classList.toggle("active",durationDays===7);
+    byId("dur14")?.classList.toggle("active",durationDays===14);
+    generatePoC();
+}
+function resetForm(){
+    if(byId("in_vendor"))byId("in_vendor").value="Antaeus GTM OS";
+    if(byId("in_account"))byId("in_account").value="Apex Fintech";
+    if(byId("in_readout_owner"))byId("in_readout_owner").value="VP Revenue Operations";
+    if(byId("in_success"))byId("in_success").value="CRM sync produces a weekly account-risk view without manual cleanup.\nTop 20 accounts are scored with evidence links and owner-ready next actions.\nSales leader can decide expand / pause / stop in the readout.";
+    if(byId("in_boundaries"))byId("in_boundaries").value="No custom integrations beyond CSV or existing CRM export.\nNo success claim without buyer-owned source data.\nIf readout owner misses the decision meeting, stop the PoC.";
+    if(byId("pocOutcome"))byId("pocOutcome").value="in_progress";
+    if(byId("in_linked_deal"))byId("in_linked_deal").value="";
+    setDuration(7);
+}
+function onLinkedDealChange(){
+    applyLinkedDealDefaults(getLinkedDeal());
+    generatePoC();
+}
+function buildDownloadPayload(){
+    return [
+        byId("out_scope")?.textContent||"",
+        "\n\n---\n\n",
+        byId("out_kickoff")?.textContent||"",
+        "\n\n---\n\n",
+        byId("out_readout")?.textContent||"",
+        "\n\n---\n\n",
+        byId("out_email")?.textContent||""
+    ].join("");
+}
+function downloadAll(){
+    const fmt=byId("pocDownloadFmt")?.value||"md";
+    const blob=new Blob([buildDownloadPayload()],{type:"text/plain;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=`${slugify(val("in_account"))}-poc-proof-pack.${fmt}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
+function readPocList(){
+    const data=readLS(storageKey,{pocs:[]});
+    if(Array.isArray(data))return data;
+    if(Array.isArray(data?.pocs))return data.pocs;
+    return [];
+}
+function writePocList(list){
+    const payload={pocs:list};
+    localStorage.setItem(storageKey,JSON.stringify(payload));
+    if(window.persistence&&typeof window.persistence.saveDoc==="function")window.persistence.saveDoc("poc_frameworks",payload);
+}
+function syncPocIntoDeal(pocEntry){
+    if(!pocEntry.linkedDealId)return;
+    const deals=getDeals();
+    const index=deals.findIndex((deal)=>String(deal.id)===String(pocEntry.linkedDealId));
+    if(index<0)return;
+    deals[index]={...deals[index],poc:{
+        status:pocEntry.outcome,
+        score:pocEntry.qualityScore,
+        band:pocEntry.qualityBand,
+        readoutOwner:pocEntry.readoutOwner,
+        durationDays:pocEntry.durationDays,
+        successCriteria:pocEntry.successCriteria,
+        boundaries:pocEntry.boundaries,
+        updatedAt:pocEntry.updatedAt
+    }};
+    localStorage.setItem("gtmos_deal_workspaces",JSON.stringify(deals));
+    if(window.persistence&&typeof window.persistence.saveDoc==="function")window.persistence.saveDoc("deal_workspaces",deals);
+}
+function savePoC(){
+    generatePoC();
+    const quality=getPoCQuality();
+    const linkedDeal=quality.linkedDeal;
+    const entry={
+        id:`${slugify(val("in_account"))}-${Date.now()}`,
+        account:safe(val("in_account"),"Unnamed account"),
+        vendor:safe(val("in_vendor"),"Unnamed vendor"),
+        linkedDealId:linkedDeal?.id||val("in_linked_deal")||"",
+        linkedDealName:linkedDeal?safe(linkedDeal.name||linkedDeal.account,""):"",
+        readoutOwner:safe(val("in_readout_owner"),""),
+        durationDays,
+        outcome:byId("pocOutcome")?.value||"not_started",
+        successCriteria:val("in_success"),
+        boundaries:val("in_boundaries"),
+        qualityScore:quality.score,
+        qualityBand:quality.band,
+        docs:{
+            scope:byId("out_scope")?.textContent||"",
+            kickoff:byId("out_kickoff")?.textContent||"",
+            readout:byId("out_readout")?.textContent||"",
+            email:byId("out_email")?.textContent||""
+        },
+        updatedAt:new Date().toISOString()
+    };
+    const list=readPocList().filter((item)=>!(item.account===entry.account&&item.vendor===entry.vendor));
+    list.unshift(entry);
+    writePocList(list.slice(0,20));
+    syncPocIntoDeal(entry);
+    if(window.artifactStore?.saveArtifact){
+        window.artifactStore.saveArtifact({
+            type:"poc",
+            title:`${entry.account} PoC proof pack`,
+            content:buildDownloadPayload(),
+            metadata:{account:entry.account,vendor:entry.vendor,qualityScore:entry.qualityScore,linkedDealId:entry.linkedDealId}
+        });
+    }
+    renderRecentProofs();
+    updatePocStats();
+    alert("PoC proof saved.");
+}
+function updatePocStats(){
+    const list=readPocList();
+    const converted=list.filter((item)=>item.outcome==="converted").length;
+    const active=list.filter((item)=>item.outcome==="in_progress"||item.outcome==="not_started").length;
+    const linked=list.filter((item)=>item.linkedDealId).length;
+    const rate=list.length?Math.round((converted/list.length)*100):0;
+    const quality=getPoCQuality();
+    if(byId("stat_total"))byId("stat_total").textContent=list.length;
+    if(byId("stat_converted"))byId("stat_converted").textContent=converted;
+    if(byId("stat_rate"))byId("stat_rate").textContent=`${rate}%`;
+    if(byId("stat_progress"))byId("stat_progress").textContent=`${active} active`;
+    if(byId("stat_linked"))byId("stat_linked").textContent=linked;
+    if(byId("stat_band"))byId("stat_band").textContent=quality.bandLabel;
+}
+function renderRecentProofs(){
+    const node=byId("pocRecentList");
+    if(!node)return;
+    const list=readPocList().slice(0,6);
+    if(!list.length){
+        node.innerHTML='<div class="recent"><strong>No saved proof packs yet.</strong><span>Save the current worksheet when the proof object is usable.</span><span></span><span class="pill thin">Empty</span></div>';
+        return;
+    }
+    node.innerHTML=list.map((item)=>{
+        const band=item.qualityBand==="ready"?"ready":item.qualityBand==="workable"?"":"thin";
+        return `<div class="recent"><strong>${escH(item.account)}</strong><span>${escH(item.vendor)}${item.linkedDealName?` - ${escH(item.linkedDealName)}`:""}</span><span>${escH(fmtDate(new Date(item.updatedAt||Date.now())))}</span><span class="pill ${band}">${escH(item.qualityBand||"thin")} ${Number(item.qualityScore||0)}</span></div>`;
+    }).join("");
+}
+function openLinkedDealWorkspace(){
+    const deal=getLinkedDeal();
+    window.location.href=buildPocRoomHref("/app/deal-workspace/",{deal:deal?.id||"",focusRoom:"PoC Framework",focusObject:safe(val("in_account"),"PoC account")});
+}
+function openFutureAutopsy(){
+    const deal=getLinkedDeal();
+    window.location.href=buildPocRoomHref("/app/future-autopsy/",{deal:deal?.id||"",focusRoom:"PoC Framework",focusObject:safe(val("in_account"),"PoC account")});
+}
+function openAdvisorDeploy(){
+    const deal=getLinkedDeal();
+    window.location.href=buildPocRoomHref("/app/advisor-deploy/",{deal:deal?.id||"",focusRoom:"PoC Framework",focusObject:safe(val("in_account"),"PoC account")});
+}
+function showPocBootState(message,kind="loading"){
+    const node=byId("pocBootState");
+    if(!node)return;
+    node.innerHTML=`<div class="module-boot module-boot-${escH(kind)}" role="status"><div><strong>${escH(kind==="error"?"PoC room needs attention":"Loading PoC room")}</strong><p>${escH(message)}</p></div>${kind==="error"?'<button type="button" data-action="retryBoot">Retry</button>':""}</div>`;
+}
+function clearPocBootState(){const node=byId("pocBootState");if(node)node.innerHTML="";}
+function onPocFrameworkBootFailure(error){
+    console.error("PoC Framework boot failed",error);
+    showPocBootState(error?.message||"The PoC room could not finish loading.","error");
+}
+function retryPocFrameworkBoot(){bootPocFramework();}
+async function bootPocFramework(){
+    try{
+        showPocBootState("Loading proof data, deal memory, and room handoffs.");
+        if(window.requireAuth&&window.requireAuth.isPending?.())await window.requireAuth.waitForAuth({timeoutMs:8000});
+        if(window.persistence&&typeof window.persistence.loadDoc==="function"){
+            await Promise.allSettled([window.persistence.loadDoc("poc_frameworks"),window.persistence.loadDoc("deal_workspaces")]);
         }
-        
-        window.downloadAll = function() {
-            var format = byId('pocDownloadFmt').value;
-            var payload = buildDownloadPayload();
-            var filenameBase = slugify((payload.account || 'poc-framework') + '-' + (payload.linkedDealStage || 'proof'));
-            var content = '';
-            var type = 'text/plain';
-            var ext = 'txt';
-            if (format === 'csv') {
-                ext = 'csv';
-                type = 'text/csv';
-                content = [
-                    'section,content',
-                    '"scope","' + payload.outputs.scope.replace(/"/g, '""').replace(/\n/g, ' | ') + '"',
-                    '"kickoff","' + payload.outputs.kickoff.replace(/"/g, '""').replace(/\n/g, ' | ') + '"',
-                    '"readout","' + payload.outputs.readout.replace(/"/g, '""').replace(/\n/g, ' | ') + '"',
-                    '"email","' + payload.outputs.email.replace(/"/g, '""').replace(/\n/g, ' | ') + '"'
-                ].join('\n');
-            } else if (format === 'json') {
-                ext = 'json';
-                type = 'application/json';
-                content = JSON.stringify(payload, null, 2);
-            } else {
-                content = payload.outputs.scope + '\n\n---\n\n' + payload.outputs.kickoff + '\n\n---\n\n' + payload.outputs.readout + '\n\n---\n\n' + payload.outputs.email;
-            }
-
-            const blob = new Blob([content], { type: type });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filenameBase + '.' + ext;
-            a.click();
-            URL.revokeObjectURL(url);
-        };
-        
-        function readPocList() {
-            try { return JSON.parse(localStorage.getItem('gtmos_poc_data') || '{"pocs":[]}'); }
-            catch (e) { return { pocs: [] }; }
-        }
-
-        function writePocList(pocList) {
-            localStorage.setItem('gtmos_poc_data', JSON.stringify(pocList));
-            if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.save === 'function') {
-                window.gtmPersistence.docs.save('gtmos_poc_data', pocList).catch(function(error) {
-                    console.error('PoC Framework sync failed:', error);
-                });
-            }
-        }
-
-        async function syncPocIntoDeal(pocEntry) {
-            if (!pocEntry.linkedDeal) return;
-            var deals = getDeals();
-            var deal = deals.find(function(d){ return d && d.id === pocEntry.linkedDeal; });
-            if (!deal) return;
-            deal.poc = {
-                duration: pocEntry.duration,
-                success: pocEntry.success,
-                boundaries: pocEntry.boundaries,
-                outcome: pocEntry.outcome,
-                readoutOwner: pocEntry.readoutOwner,
-                qualityScore: pocEntry.qualityScore,
-                qualityBand: pocEntry.qualityBand,
-                updatedAt: pocEntry.updated || pocEntry.created
-            };
-            if (!deal.nextStep && deal.stage === 'evaluation') {
-                deal.nextStep = 'PoC kickoff and success criteria';
-            }
-            deal.updated_at = new Date().toISOString();
-            localStorage.setItem('gtmos_deal_workspaces', JSON.stringify(deals));
-            if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.save === 'function') {
-                await window.gtmPersistence.deals.save(deal).catch(function(error){
-                    console.error('PoC Framework deal sync failed:', error);
-                });
-            }
-        }
-
-        window.savePoC = async function() {
-            var pocList = readPocList();
-            var quality = getPoCQuality();
-            var pocEntry = {
-                id: 'poc_' + Date.now(),
-                vendor: val('in_vendor'),
-                account: val('in_account'),
-                linkedDeal: quality.linkedDeal ? quality.linkedDeal.id : '',
-                linkedStage: quality.linkedDeal ? quality.linkedDeal.stage : '',
-                readoutOwner: val('in_readout_owner'),
-                duration: durationDays,
-                success: val('in_success'),
-                boundaries: val('in_boundaries'),
-                outcome: byId('pocOutcome').value,
-                qualityScore: quality.score,
-                qualityBand: quality.band,
-                created: new Date().toISOString(),
-                updated: new Date().toISOString()
-            };
-            // Check if updating existing PoC for same account
-            var existingIdx = pocList.pocs.findIndex(function(p){
-                return (p.linkedDeal && pocEntry.linkedDeal && p.linkedDeal === pocEntry.linkedDeal)
-                    || (p.account === pocEntry.account && p.vendor === pocEntry.vendor && pocEntry.account);
-            });
-            if (existingIdx >= 0) {
-                pocEntry.id = pocList.pocs[existingIdx].id || pocEntry.id;
-                pocEntry.created = pocList.pocs[existingIdx].created || pocEntry.created;
-                pocList.pocs[existingIdx] = pocEntry;
-            } else {
-                pocList.pocs.push(pocEntry);
-            }
-            writePocList(pocList);
-            await syncPocIntoDeal(pocEntry);
-            if (window.ArtifactStore && typeof window.ArtifactStore.save === 'function') {
-                window.ArtifactStore.save({
-                    studio: 'poc_framework',
-                    artifact_type: 'proof_plan',
-                    title: (pocEntry.account || 'PoC Framework') + ' proof plan',
-                    tags: ['poc', pocEntry.linkedStage || 'unlinked', pocEntry.outcome || 'in_progress'],
-                    payload: buildDownloadPayload(),
-                    meta: { qualityScore: pocEntry.qualityScore, qualityBand: pocEntry.qualityBand },
-                    outcome: pocEntry.outcome
-                }).catch(function(error){
-                    console.error('PoC Framework artifact save failed:', error);
-                });
-            }
-            updatePocStats();
-            alert('PoC saved.');
-            if (window.saveIndicator) saveIndicator.saved();
-        };
-        
-        function updatePocStats() {
-            var pocList = readPocList();
-            var pocs = pocList.pocs || [];
-            var total = pocs.length;
-            var converted = pocs.filter(function(p){ return p.outcome === 'converted'; }).length;
-            var inProgress = pocs.filter(function(p){ return p.outcome === 'in_progress'; }).length;
-            var linked = pocs.filter(function(p){ return !!p.linkedDeal; }).length;
-            var rate = total > 0 ? Math.round(converted / total * 100) + '%' : '-';
-            byId('stat_total').textContent = total;
-            byId('stat_converted').textContent = converted;
-            byId('stat_rate').textContent = rate;
-            byId('stat_progress').textContent = inProgress;
-            byId('stat_linked').textContent = linked;
-            byId('stat_quality').textContent = getPoCQuality().bandLabel;
-            renderRecentProofs();
-        }
-
-        window.openLinkedDealWorkspace = function() {
-            var linkedDeal = getLinkedDeal();
-            var focusObject = linkedDeal ? (linkedDeal.accountName || linkedDeal.name || val('in_account') || 'Proof-linked deal') : (val('in_account') || 'Proof-linked deal');
-            var href = linkedDeal ? ('/app/deal-workspace/?deal=' + encodeURIComponent(linkedDeal.id)) : '/app/deal-workspace/';
-            location.href = buildPocRoomHref(href, focusObject, 'Deal Workspace');
-        };
-
-        window.openFutureAutopsy = function() {
-            var linkedDeal = getLinkedDeal();
-            var focusObject = linkedDeal ? (linkedDeal.accountName || linkedDeal.name || val('in_account') || 'Proof-linked deal') : (val('in_account') || 'Proof-linked deal');
-            var href = linkedDeal ? ('/app/future-autopsy/?deal=' + encodeURIComponent(linkedDeal.id)) : '/app/future-autopsy/';
-            location.href = buildPocRoomHref(href, focusObject, 'Future Autopsy');
-        };
-
-        function showPocBootState(kind, title, text) {
-            if (!window.gtmModuleBootState) return;
-            window.gtmModuleBootState.show('#pocBootState', {
-                kind: kind,
-                title: title,
-                text: text,
-                retryLabel: 'Retry PoC Framework',
-                retryAction: 'retryPocFrameworkBoot'
-            });
-        }
-
-        function clearPocBootState() {
-            if (!window.gtmModuleBootState) return;
-            window.gtmModuleBootState.clear('#pocBootState');
-        }
-
-        function onPocFrameworkBootFailure(error) {
-            console.error('PoC Framework boot failed:', error);
-            showPocBootState(
-                'error',
-                'PoC Framework could not finish loading.',
-                'Antaeus hit a startup failure while rebuilding your PoC generator and proof metrics. Retry once. If it fails again, refresh the page and check whether the current auth session or synced proof data is unhealthy.'
-            );
-        }
-
-        window.retryPocFrameworkBoot = function() {
-            bootPocFramework().catch(onPocFrameworkBootFailure);
-        };
-        
-        // Initialize
-        async function bootPocFramework() {
-            showPocBootState(
-                'loading',
-                'Loading PoC Framework...',
-                'Antaeus is rebuilding your PoC generator and proof metrics.'
-            );
-            if (window.gtmPersistence && window.gtmPersistence.docs && typeof window.gtmPersistence.docs.load === 'function') {
-                await window.gtmPersistence.docs.load({ keys: ['gtmos_poc_data'] }).catch(function(error) {
-                    console.error('PoC Framework docs preload failed:', error);
-                });
-            }
-            if (window.gtmPersistence && window.gtmPersistence.deals && typeof window.gtmPersistence.deals.load === 'function') {
-                await window.gtmPersistence.deals.load().catch(function(error) {
-                    console.error('PoC Framework deals preload failed:', error);
-                });
-            }
-            populateDealDropdown();
-            if (urlDealId) {
-                applyLinkedDealDefaults(getLinkedDeal());
-            }
-            generatePoC();
-            updatePocStats();
-            if (window.saveIndicator) saveIndicator.mountAfter('.page-title');
-            clearPocBootState();
-        }
-
-        if (window.__gtmosAuthGatePending && window.requireAuthReady && typeof window.requireAuthReady.then === 'function') {
-            showPocBootState(
-                'loading',
-                'Waiting for auth',
-                'PoC Framework is waiting for your authenticated workspace before it rebuilds your proof generator.'
-            );
-            window.requireAuthReady.then(bootPocFramework).catch(onPocFrameworkBootFailure);
-        } else if (window.__gtmosAuthGatePending) {
-            showPocBootState(
-                'loading',
-                'Waiting for auth',
-                'PoC Framework is waiting for your authenticated workspace before it rebuilds your proof generator.'
-            );
-            window.addEventListener('gtmos:auth-ready', function() {
-                bootPocFramework().catch(onPocFrameworkBootFailure);
-            }, { once: true });
-        } else {
-            bootPocFramework().catch(onPocFrameworkBootFailure);
-        }
-
-        function startTour() {
-            if (typeof TourGuide !== 'undefined') TourGuide.start();
-        }
-    </script>
+        populateDealDropdown();
+        generatePoC();
+        renderRecentProofs();
+        updatePocStats();
+        if(window.saveIndicator?.mount)window.saveIndicator.mount();
+        clearPocBootState();
+    }catch(error){onPocFrameworkBootFailure(error);}
+}
+function bindPocFramework(){
+    ["in_vendor","in_account","in_readout_owner","in_success","in_boundaries","pocOutcome"].forEach((id)=>{
+        byId(id)?.addEventListener("input",generatePoC);
+        byId(id)?.addEventListener("change",generatePoC);
+    });
+    byId("in_linked_deal")?.addEventListener("change",onLinkedDealChange);
+    document.addEventListener("click",(event)=>{
+        const durationButton=event.target.closest("[data-duration]");
+        if(durationButton){setDuration(durationButton.dataset.duration);return;}
+        const copyButton=event.target.closest("[data-copy-target]");
+        if(copyButton){event.preventDefault();event.stopPropagation();copyOut(copyButton.dataset.copyTarget,copyButton);return;}
+        const actionButton=event.target.closest("[data-action]");
+        if(!actionButton)return;
+        const action=actionButton.dataset.action;
+        if(action==="reset")resetForm();
+        if(action==="download")downloadAll();
+        if(action==="save")savePoC();
+        if(action==="openDeal")openLinkedDealWorkspace();
+        if(action==="openAutopsy")openFutureAutopsy();
+        if(action==="openAdvisor")openAdvisorDeploy();
+        if(action==="retryBoot")retryPocFrameworkBoot();
+    });
+}
+document.addEventListener("DOMContentLoaded",()=>{
+    bindPocFramework();
+    bootPocFramework();
+});
+</script>
 </body>
 </html>
-

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Discovery Studio Runtime Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f2f7fd;
+      --field:#fbfdff;
+      --panel:rgba(255,255,255,0.78);
+      --panel-2:rgba(255,255,255,0.92);
+      --text:#0a1c40;
+      --muted:#6d83a3;
+      --line:rgba(10,28,64,0.08);
+      --blue:#2471e7;
+      --orange:#e6701e;
+      --green:#2d7a4b;
+      --red:#c44b45;
+      --shadow:0 28px 72px rgba(10,28,64,0.11);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.08), transparent 24%),
+        radial-gradient(circle at 100% 10%, rgba(230,112,30,0.08), transparent 22%),
+        linear-gradient(180deg,#fbfdff 0%,var(--bg) 100%);
+    }
+    .page{width:min(1560px,calc(100vw - 36px));margin:0 auto;padding:28px 0 60px}
+    .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--orange);font-weight:700}
+    .title{margin:8px 0 10px;font-family:"Outfit",sans-serif;font-size:58px;line-height:.92;letter-spacing:-.07em;max-width:12ch}
+    .sub{margin:0 0 26px;max-width:74ch;font-size:16px;line-height:1.7;color:var(--muted)}
+    .stack{display:grid;gap:34px}
+    .board{
+      position:relative;overflow:hidden;padding:28px;border:1px solid var(--line);border-radius:34px;
+      background:
+        radial-gradient(circle at 9% 0%, rgba(36,113,231,0.12), transparent 28%),
+        radial-gradient(circle at 90% 100%, rgba(230,112,30,0.09), transparent 24%),
+        linear-gradient(180deg,rgba(255,255,255,.95),rgba(241,246,252,.95));
+      box-shadow:var(--shadow);
+    }
+    .board::before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;
+      background-image:
+        linear-gradient(rgba(10,28,64,.026) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,28,64,.026) 1px, transparent 1px);
+      background-size:32px 32px;
+    }
+    .board>*{position:relative;z-index:1}
+    .board-head{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:end;margin-bottom:20px}
+    .board-name{margin:5px 0 0;font-family:"Outfit",sans-serif;font-size:27px;letter-spacing:-.05em;line-height:.95}
+    .board-note{margin:0;max-width:64ch;font-size:14px;line-height:1.6;color:var(--muted)}
+    .status{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.7);color:var(--blue);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700}
+    .mark{width:18px;height:18px;position:relative;flex:0 0 auto}
+    .m-dot::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 6px rgba(230,112,30,.1)}
+    .m-fork::before{content:"";position:absolute;left:8px;top:1px;width:2px;height:14px;background:var(--blue);border-radius:999px}
+    .m-fork::after{content:"";position:absolute;left:8px;top:7px;width:7px;height:7px;border-top:2px solid var(--blue);border-right:2px solid var(--blue);transform:rotate(45deg)}
+    .m-signal::before{content:"";position:absolute;inset:3px;border-radius:50%;border:2px solid var(--green);background:rgba(45,122,75,.08)}
+    .m-signal::after{content:"";position:absolute;left:7px;top:7px;width:4px;height:4px;border-radius:50%;background:var(--green)}
+    .m-alert::before{content:"";position:absolute;inset:2px;border-radius:50%;background:rgba(196,75,69,.1);border:1px solid rgba(196,75,69,.18)}
+    .m-alert::after{content:"!";position:absolute;inset:0;display:grid;place-items:center;color:var(--red);font-weight:700;font-size:14px}
+    .m-copy::before,.m-copy::after{content:"";position:absolute;width:10px;height:12px;border-radius:4px;border:1px solid rgba(36,113,231,.22);background:rgba(36,113,231,.08)}
+    .m-copy::before{left:4px;top:5px;background:#fff}.m-copy::after{left:7px;top:3px}
+    .m-route::before{content:"";position:absolute;left:2px;top:8px;width:11px;height:2px;background:var(--green);border-radius:999px}
+    .m-route::after{content:"";position:absolute;right:1px;top:5px;width:7px;height:7px;border-top:2px solid var(--green);border-right:2px solid var(--green);transform:rotate(45deg)}
+    .pill{min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.72);color:#8ea0ba;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700}
+    .pill.active{background:rgba(36,113,231,.08);border-color:rgba(36,113,231,.18);color:var(--blue)}
+    .mini{display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.7);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+    .mini strong{font-size:12px;letter-spacing:0;text-transform:none;color:var(--text)}
+    .list{display:grid;gap:10px}
+    .line{display:grid;grid-template-columns:18px 1fr;gap:12px;align-items:start;padding-bottom:10px;border-bottom:1px solid var(--line)}
+    .line:last-child{border-bottom:0;padding-bottom:0}
+    .line strong{display:block;font-size:16px;color:var(--text);margin-bottom:3px;letter-spacing:-.03em}
+    .line span{display:block;font-size:13px;line-height:1.5;color:var(--muted)}
+    button{font:inherit}
+    .v1{display:grid;grid-template-columns:248px minmax(0,1fr) 344px;gap:24px;min-height:740px}
+    .rail{display:grid;gap:8px;align-content:start;padding-top:10px}
+    .rail-label{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+    .rail-row{width:100%;display:grid;grid-template-columns:14px 1fr;gap:14px;align-items:center;padding:12px 0;border:0;border-bottom:1px solid var(--line);background:transparent;color:#8ea0ba;text-align:left;cursor:pointer}
+    .rail-row:last-child{border-bottom:0}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(10,28,64,.14);box-shadow:0 0 0 7px rgba(10,28,64,.04)}
+    .rail-row.active{color:var(--text)}
+    .rail-row.active .dot{background:var(--orange);box-shadow:0 0 0 9px rgba(230,112,30,.1)}
+    .rail-row strong{display:block;font-size:17px;letter-spacing:-.03em}
+    .rail-row span span{display:block;font-size:12px;color:#93a5be;margin-top:3px}
+    .lead-sheet{display:grid;gap:16px;padding:28px;border:1px solid var(--line);border-radius:32px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.84));box-shadow:0 16px 48px rgba(36,113,231,.08)}
+    .sheet-k{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--orange);font-weight:700}
+    .sheet-title{margin:0;font-family:"DM Serif Display",serif;font-size:60px;line-height:.9;letter-spacing:-.04em;max-width:9ch}
+    .sheet-copy{margin:0;font-size:18px;line-height:1.7;color:var(--muted);max-width:42ch}
+    .tracks{display:flex;gap:10px;flex-wrap:wrap}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:16px;border-top:1px solid var(--line)}
+    .fact .k,.handler .k,.bank .k,.cell .k,.meta .k{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8ea0ba;font-weight:700}
+    .fact .v,.handler .v,.bank .v,.cell .v{font-size:17px;line-height:1.35;font-weight:700;color:var(--text);margin-top:6px}
+    .fact .c,.handler .c,.bank .c,.cell .c{font-size:14px;line-height:1.55;color:var(--muted);margin-top:6px}
+    .handler-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .handler{padding:14px;background:rgba(255,255,255,.24);border-top:1px solid rgba(10,28,64,.1)}
+    .dock{display:grid;gap:14px;align-content:start;padding-top:10px}
+    .resp-col{display:grid;gap:12px}
+    .resp{width:100%;border:1px solid rgba(10,28,64,.06);border-radius:24px;background:rgba(255,255,255,.62);padding:18px;text-align:left;cursor:pointer;box-shadow:0 16px 36px rgba(10,28,64,.06)}
+    .resp.active{border-color:rgba(36,113,231,.18);box-shadow:0 22px 44px rgba(36,113,231,.08)}
+    .resp-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .resp-k{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8ea0ba;font-weight:700}
+    .resp-v{font-size:24px;line-height:.96;letter-spacing:-.04em;font-weight:700;margin-bottom:6px}
+    .resp-c{font-size:14px;line-height:1.55;color:var(--muted)}
+    .bank{display:grid;gap:14px;padding:18px;border-radius:28px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(255,255,255,.72))}
+    .bank-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+    .v2{display:grid;gap:22px;min-height:740px}
+    .top-band{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .band{display:flex;gap:8px;flex-wrap:wrap}
+    .band button{border:0;background:transparent;color:#8ea0ba;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;padding:0 0 6px;border-bottom:2px solid transparent;cursor:pointer}
+    .band button.active{color:var(--text);border-bottom-color:var(--orange)}
+    .v2-grid{display:grid;grid-template-columns:210px minmax(0,1fr) 354px;gap:22px}
+    .signals{display:grid;gap:16px;align-content:start;padding-top:6px}
+    .tape{display:grid;gap:12px;padding:24px;border-top:2px solid rgba(36,113,231,.16);background:rgba(255,255,255,.5)}
+    .tape h3{margin:0;font-family:"Outfit",sans-serif;font-size:58px;line-height:.9;letter-spacing:-.08em;max-width:9ch}
+    .tape p{margin:0;max-width:48ch;font-size:18px;line-height:1.7;color:var(--muted)}
+    .branches{display:grid;gap:0}
+    .branch{width:100%;display:grid;grid-template-columns:18px 150px 1fr 1fr;gap:14px;align-items:start;padding:14px 4px;border:0;border-top:1px solid var(--line);background:transparent;text-align:left;cursor:pointer}
+    .branch:last-child{border-bottom:1px solid var(--line)}
+    .branch.active{background:linear-gradient(90deg,rgba(36,113,231,.08),rgba(255,255,255,0))}
+    .branch .tag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8ea0ba;font-weight:700;padding-top:2px}
+    .branch .h{font-size:17px;line-height:1.28;font-weight:700}
+    .branch .b{font-size:14px;line-height:1.55;color:var(--muted)}
+    .right{display:grid;gap:14px;align-content:start}
+
+    .v3{display:grid;grid-template-columns:minmax(440px,.96fr) minmax(0,1.04fr);gap:32px;min-height:800px}
+    .worksheet{display:grid;gap:18px;align-content:start;padding-top:8px}
+    .ws-head{display:flex;justify-content:space-between;gap:18px;align-items:baseline}
+    .ws-head .note{max-width:28ch;text-align:right;font-size:13px;line-height:1.45;color:var(--muted)}
+    .ws-body{border-top:1px solid var(--line)}
+    .ws-row{width:100%;display:grid;grid-template-columns:18px minmax(0,1fr) 120px 82px;gap:14px;align-items:center;min-height:74px;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;cursor:pointer}
+    .ws-row:last-child{border-bottom:0}
+    .ws-row .name{font-size:30px;line-height:.92;letter-spacing:-.06em;color:#8aa0bf}
+    .ws-row .stage{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9caec6;font-weight:700}
+    .ws-row .amt{justify-self:end;font-size:18px;color:#90a1bb}
+    .ws-row.active .name,.ws-row.active .amt{color:var(--text);font-weight:700}
+    .ws-row.active .dot{background:var(--orange);box-shadow:0 0 0 10px rgba(230,112,30,.1)}
+    .action-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding-top:10px;border-top:1px solid var(--line)}
+    .action{display:grid;grid-template-columns:20px 1fr;gap:12px;align-items:start}
+    .action strong{display:block;font-size:14px;line-height:1.24;letter-spacing:-.02em}
+    .action span{display:block;font-size:12px;line-height:1.48;color:var(--muted)}
+    .switcher{position:relative;min-height:760px;padding-top:148px;padding-left:12px}
+    .meta{position:absolute;left:12px;top:0;display:grid;gap:8px;max-width:44ch}
+    .meta-top{display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#8ea0ba;font-weight:700}
+    .pulse{position:relative;width:18px;height:18px;border-radius:50%;background:rgba(230,112,30,.16);border:1px solid rgba(230,112,30,.2);box-shadow:0 0 0 7px rgba(230,112,30,.08)}
+    .pulse::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(230,112,30,.18);animation:pulse 1.8s ease-out infinite}
+    @keyframes pulse{0%{transform:scale(.94);opacity:.7}72%{transform:scale(1.24);opacity:0}100%{transform:scale(1.24);opacity:0}}
+    .meta-name{font-family:"Outfit",sans-serif;font-size:36px;line-height:.92;letter-spacing:-.06em;font-weight:700}
+    .meta-sub{font-size:15px;line-height:1.55;color:var(--muted)}
+    .fan{position:relative;width:min(100%,690px);height:470px;margin-left:auto}
+    .sheet{
+      position:absolute;
+      width:88%;
+      border:1px solid rgba(10,28,64,.09);
+      border-radius:30px;
+      background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+      padding:22px 22px 16px;
+      text-align:left;
+      cursor:pointer;
+      box-shadow:0 24px 56px rgba(10,28,64,.11);
+      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    .sheet[data-pos="3"]{top:30px;left:10px;z-index:1;transform:rotate(-.45deg)}
+    .sheet[data-pos="2"]{top:16px;left:20px;z-index:2;transform:rotate(.25deg)}
+    .sheet[data-pos="1"]{top:0;left:30px;z-index:3;transform:rotate(-.1deg)}
+    .sheet.front{z-index:5;transform:translateY(-2px) rotate(0deg);box-shadow:0 32px 70px rgba(10,28,64,.15);opacity:1}
+    .sheet:not(.front){opacity:.98}
+    .sheet-label{display:inline-flex;align-items:center;min-height:32px;padding:0 13px;border-radius:999px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+    .tone-orange{background:rgba(230,112,30,.12);color:var(--orange)}
+    .tone-blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .tone-green{background:rgba(45,122,75,.12);color:var(--green)}
+    .sheet h3{margin:0 0 12px;font-family:"DM Serif Display",serif;font-size:48px;line-height:.9;letter-spacing:-.03em;max-width:8ch}
+    .sheet-callout{margin:0 0 14px;max-width:38ch;font-size:15px;line-height:1.55;color:var(--muted)}
+    .sheet-foot{display:grid;grid-template-columns:130px 140px 1fr;gap:16px;padding-top:14px;border-top:1px solid var(--line)}
+    .sheet:not(.front) h3{font-size:38px;max-width:9ch}
+    .sheet:not(.front) .sheet-callout{display:none}
+    .sheet:not(.front) .sheet-foot{grid-template-columns:1fr;padding-top:12px}
+    .sheet:not(.front) .sheet-foot .cell:nth-child(1),
+    .sheet:not(.front) .sheet-foot .cell:nth-child(2){display:none}
+    .sheet:not(.front) .sheet-foot .cell .c{font-size:13px}
+    .handoff{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+    .k-orange{color:var(--orange)} .k-blue{color:var(--blue)} .k-green{color:var(--green)}
+
+    @media (max-width:1320px){
+      .v1,.v2-grid,.v3{grid-template-columns:1fr}
+      .switcher{min-height:640px;padding-top:28px;padding-left:0}
+      .fan{margin-left:0}
+      .meta{position:static;margin-bottom:18px}
+    }
+    @media (max-width:920px){
+      .page{width:min(100vw - 20px,100%)} .board{padding:20px}
+      .board-head{grid-template-columns:1fr;align-items:start}
+      .title{font-size:46px}.sheet-title,.tape h3{font-size:46px}.sheet h3{font-size:40px}
+      .split,.handler-row,.action-row,.handoff,.sheet-foot{grid-template-columns:1fr}
+      .branch{grid-template-columns:18px 1fr}.branch .b{grid-column:2}
+      .ws-row{grid-template-columns:18px minmax(0,1fr) 82px}.ws-row .stage{display:none}
+      .fan{height:560px}.sheet{width:calc(100% - 24px)}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="eyebrow">Discovery Studio Taste Tests</div>
+    <h1 class="title">Runtime-first mockups for the live discovery engine.</h1>
+    <p class="sub">Three first-fold directions built directly from the Discovery Studio runtime wiring sheet. Same machine underneath. Different shell grammar above it.</p>
+
+    <section class="stack">
+      <article class="board">
+        <header class="board-head">
+          <div>
+            <div class="eyebrow">Variant 01 - Lead Sheet Table</div>
+            <h2 class="board-name">The room behaves like a live conversation table.</h2>
+          </div>
+          <p class="board-note">Framework registry on the left, active node in the center, response branching and earned truth on the right.</p>
+          <div class="status">Framework - Node - Response</div>
+        </header>
+        <div class="v1">
+          <div class="rail" data-toggle-group>
+            <div class="rail-label">Framework Registry</div>
+            <button class="rail-row active" data-toggle-item><span class="dot"></span><span><strong>Sales / Revenue Intelligence</strong><span>Manager inspection - rep signal - forecast credibility</span></span></button>
+            <button class="rail-row" data-toggle-item><span class="dot"></span><span><strong>Manufacturing / Supply Chain</strong><span>Scenario planning - supplier monitoring - resilience</span></span></button>
+            <button class="rail-row" data-toggle-item><span class="dot"></span><span><strong>Data / Intelligence Infrastructure</strong><span>Freshness - coverage - retrieval-grade inputs</span></span></button>
+            <button class="rail-row" data-toggle-item><span class="dot"></span><span><strong>Legal / Legal Ops</strong><span>Risk tolerance - review burden - privilege</span></span></button>
+            <button class="rail-row" data-toggle-item><span class="dot"></span><span><strong>Recruiting / Talent</strong><span>Hiring flow - drop-off - manager calibration</span></span></button>
+          </div>
+          <div class="list">
+            <section class="lead-sheet">
+              <div class="sheet-k"><span class="mark m-fork"></span><span>Active Node - Hypothesis Lead</span></div>
+              <h3 class="sheet-title">Your reps are seeing the signal, but not acting on it in time.</h3>
+              <p class="sheet-copy">Based on what I can see, the team is not short on accounts. It is short on conviction. The result is pipeline attention drifting into the wrong places while the best live signal gets inspected too late.</p>
+              <div class="tracks" data-toggle-group>
+                <button class="pill active" data-toggle-item>Engaged</button>
+                <button class="pill" data-toggle-item>Guarded</button>
+                <button class="pill" data-toggle-item>Skeptical</button>
+                <button class="pill" data-toggle-item>Compressed</button>
+              </div>
+              <div class="split">
+                <div class="fact"><div class="k">Progression Rule</div><div class="v">Name the current prioritization method.</div><div class="c">The node is not complete until the buyer shows how attention is currently allocated.</div></div>
+                <div class="fact"><div class="k">What To Learn Next</div><div class="v">Who owns the inspection standard.</div><div class="c">Manager pain and rep pain diverge here. The room should know which side is paying.</div></div>
+              </div>
+            </section>
+            <section class="handler-row">
+              <div class="handler"><div class="k">Objection Drawer</div><div class="v">"We already have Gong and Clari."</div><div class="c">Competitive displacement sits beside the node, not in an appendix.</div></div>
+              <div class="handler"><div class="k">Inbound Question</div><div class="v">"What makes you different?"</div><div class="c">Differentiate on attention routing, then bridge back to current method.</div></div>
+              <div class="handler"><div class="k">Next Move</div><div class="v">Earn a manager + RevOps working session.</div><div class="c">The room should always be earning the next conversation.</div></div>
+            </section>
+          </div>
+          <aside class="dock">
+            <div class="resp-col" data-toggle-group>
+              <button class="resp active" data-toggle-item><div class="resp-top"><span class="mark m-signal"></span><span class="resp-k">Prospect Response</span></div><div class="resp-v">"That's fair. Our reps chase whatever feels hottest."</div><div class="resp-c">Green path. Move into current-state method and manager inspection cadence.</div></button>
+              <button class="resp" data-toggle-item><div class="resp-top"><span class="mark m-alert"></span><span class="resp-k">Prospect Response</span></div><div class="resp-v">"We already have tools for this."</div><div class="resp-c">Amber path. Test whether the stack solves the behavior problem or just reports it.</div></button>
+              <button class="resp" data-toggle-item><div class="resp-top"><span class="mark m-fork"></span><span class="resp-k">Prospect Response</span></div><div class="resp-v">"I've got two minutes."</div><div class="resp-c">Compression path. Shrink to one proof question and a hard next-step lock.</div></button>
+            </div>
+            <section class="bank">
+              <div class="bank-head"><div class="k">Learned Facts Dock</div><div class="mini"><span class="mark m-signal"></span><strong>3 earned</strong></div></div>
+              <div class="list">
+                <div class="line"><span class="mark m-route"></span><div><strong>Priority method is manager intuition.</strong><span>No ranked operating system is guiding where reps spend the week.</span></div></div>
+                <div class="line"><span class="mark m-signal"></span><div><strong>RevOps is not the active owner.</strong><span>The inspection burden sits in frontline management.</span></div></div>
+                <div class="line"><span class="mark m-alert"></span><div><strong>Forecast confidence is cosmetic.</strong><span>The current view explains pipeline after the fact instead of steering it live.</span></div></div>
+              </div>
+            </section>
+            <section class="bank">
+              <div class="bank-head"><div class="k">Signal Ledger</div><div class="mini"><span class="mark m-alert"></span><strong>stack overlap</strong></div></div>
+              <div class="list">
+                <div class="line"><span class="mark m-signal"></span><div><strong>Named operational consequence</strong><span>They can point to opportunities that died because attention drifted.</span></div></div>
+                <div class="line"><span class="mark m-alert"></span><div><strong>Possible fake sophistication</strong><span>Multiple tools named immediately. Test whether any changed rep behavior.</span></div></div>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </article>
+
+      <article class="board">
+        <header class="board-head">
+          <div>
+            <div class="eyebrow">Variant 02 - Counter Rail</div>
+            <h2 class="board-name">The room behaves like a switchboard, not a page.</h2>
+          </div>
+          <p class="board-note">Framework choice compresses into the top band. Signals sit left, live node and branches sit center, next-step and handoff logic sit right.</p>
+          <div class="status">Signals - Branches - Docket</div>
+        </header>
+        <div class="v2">
+          <div class="top-band">
+            <div class="rail-label">Framework Band</div>
+            <div class="band" data-toggle-group>
+              <button class="active" data-toggle-item>Data Infrastructure</button>
+              <button data-toggle-item>Supply Chain</button>
+              <button data-toggle-item>Revenue Intelligence</button>
+              <button data-toggle-item>GovTech</button>
+              <button data-toggle-item>AI-Native</button>
+            </div>
+            <div class="status">Compressed Ready</div>
+          </div>
+          <div class="v2-grid">
+            <div class="signals">
+              <div class="rail-label">Signal Column</div>
+              <div class="line"><span class="mark m-signal"></span><div><strong>Freshness matters operationally.</strong><span>Stale external data degrades product quality.</span></div></div>
+              <div class="line"><span class="mark m-alert"></span><div><strong>Build instinct is present.</strong><span>They may believe internal crawling is good enough.</span></div></div>
+              <div class="line"><span class="mark m-fork"></span><div><strong>Decision maker may be split.</strong><span>Product wants speed. Data engineering wants structure and rights.</span></div></div>
+            </div>
+            <div class="list">
+              <section class="tape">
+                <div class="eyebrow">Active Node - Diagnostic Discovery</div>
+                <h3>What breaks in your product when the outside world changes faster than your data does?</h3>
+                <p>The node should feel live and directional. It is not a framework summary. It is the exact question the room wants answered right now.</p>
+              </section>
+              <div class="branches" data-toggle-group>
+                <button class="branch active" data-toggle-item><span class="mark m-signal"></span><span class="tag">Engaged</span><span class="h">"Our risk alerts go stale before the team even opens them."</span><span class="b">Move deeper into alert latency, trust damage, and what real-time would need to mean for them.</span></button>
+                <button class="branch" data-toggle-item><span class="mark m-alert"></span><span class="tag">Guarded</span><span class="h">"We have data sources already."</span><span class="b">Open the build-vs-buy branch. Test coverage, structure, and maintenance drag.</span></button>
+                <button class="branch" data-toggle-item><span class="mark m-fork"></span><span class="tag">Compressed</span><span class="h">"Send me docs. I'm between meetings."</span><span class="b">Bridge to one qualification question, then earn a product + data-owner review.</span></button>
+              </div>
+            </div>
+            <aside class="right">
+              <section class="bank">
+                <div class="k">Fact Dock</div>
+                <div class="cell"><div class="k">Active Framework</div><div class="v">Data / Intelligence Infrastructure</div><div class="c">Fuel line, not vehicle.</div></div>
+                <div class="cell"><div class="k">Missing Truth</div><div class="v">No proof yet that the current feed is retrieval-grade.</div><div class="c">Without that, the room cannot credibly move to a next-step lock.</div></div>
+                <div class="cell"><div class="k">Next-Step Docket</div><div class="v">Book product + data engineering review.</div><div class="c">Bring one live downstream use case and one latency example.</div></div>
+              </section>
+              <section class="bank">
+                <div class="k">Route Handoff</div>
+                <div class="cell"><div class="k">Deal Workspace</div><div class="c">Carry current-state method, proof threshold, and buying split.</div></div>
+                <div class="cell"><div class="k">Call Planner</div><div class="c">Carry top hypothesis, likely objections, and the data-owner branch.</div></div>
+                <div class="cell"><div class="k">Future Autopsy</div><div class="c">Carry clues if the feed is stale, thin, or politically ownerless.</div></div>
+              </section>
+            </aside>
+          </div>
+        </div>
+      </article>
+
+      <article class="board">
+        <header class="board-head">
+          <div>
+            <div class="eyebrow">Variant 03 - Lead Sheet Switcher</div>
+            <h2 class="board-name">The room behaves like a worksheet rail feeding a live sheet fan.</h2>
+          </div>
+          <p class="board-note">Oversized framework worksheet on the left, compact call actions beneath it, and a disciplined lead-sheet switcher on the right built for live use during the call.</p>
+          <div class="status">Rail - Switcher - Handoff</div>
+        </header>
+        <div class="v3">
+          <div class="worksheet">
+            <div class="ws-head">
+              <div class="rail-label">Framework Worksheet - 9 live systems</div>
+              <div class="note">The selector is oversized on purpose. Discovery should start by locking the category machine, not by scrolling through teaching copy.</div>
+            </div>
+            <div class="ws-body" data-toggle-group>
+              <button class="ws-row active" data-toggle-item><span class="dot"></span><span class="name">Manufacturing / Supply Chain</span><span class="stage">Proactive or reactive</span><span class="amt">Vantive/Craft</span></button>
+              <button class="ws-row" data-toggle-item><span class="dot"></span><span class="name">Sales / Revenue Intelligence</span><span class="stage">Rep or manager</span><span class="amt">Actively/Attention</span></button>
+              <button class="ws-row" data-toggle-item><span class="dot"></span><span class="name">Data / Intelligence Infrastructure</span><span class="stage">Fuel line</span><span class="amt">Newscatcher</span></button>
+              <button class="ws-row" data-toggle-item><span class="dot"></span><span class="name">Legal / Legal Ops</span><span class="stage">Risk tolerance</span><span class="amt">4 companies</span></button>
+              <button class="ws-row" data-toggle-item><span class="dot"></span><span class="name">Customer Support / Operations</span><span class="stage">Queue truth</span><span class="amt">3 companies</span></button>
+            </div>
+            <div class="action-row">
+              <div class="action"><span class="mark m-route"></span><div><strong>Run node</strong><span>Advance the conversation from hypothesis to earned next question.</span></div></div>
+              <div class="action"><span class="mark m-alert"></span><div><strong>Open objection path</strong><span>Surface the specific counter and counter-why without leaving the room.</span></div></div>
+              <div class="action"><span class="mark m-copy"></span><div><strong>Export handoff</strong><span>Pass the learned truth to the next room without forcing restatement.</span></div></div>
+            </div>
+          </div>
+          <div class="switcher">
+            <div class="meta">
+              <div class="meta-top"><span class="pulse"></span><span>Pinned framework - Manufacturing / Supply Chain</span></div>
+              <div class="meta-main">
+                <div class="meta-name">The room should know whether this is simulation or monitoring.</div>
+              <div class="meta-sub">The selected framework becomes the context banner over the switcher so the rep can stay oriented while the buyer changes direction.</div>
+              </div>
+            </div>
+            <div class="fan" data-fan-group>
+              <button class="sheet front" data-fan-sheet data-pos="1">
+                <div class="sheet-label tone-orange">Active Node</div>
+                <h3>Is the pain disruption forecasting or supplier monitoring?</h3>
+                <p class="sheet-callout">Use this live: get the buyer to choose one side first. Do not discuss proof, pricing, or architecture until that split is real.</p>
+                <div class="sheet-foot">
+                  <div class="cell"><div class="k">Fork</div><div class="v">Vantive or Craft</div></div>
+                  <div class="cell"><div class="k">Signal</div><div class="v">Owner split</div></div>
+                  <div class="cell"><div class="c">The first real branch is whether they need proactive scenario planning or reactive supplier intelligence. Everything downstream changes.</div></div>
+                </div>
+              </button>
+              <button class="sheet" data-fan-sheet data-pos="2">
+                <div class="sheet-label tone-blue">Expanded Response</div>
+                <h3>"We get alerts, but we still react too late."</h3>
+                <div class="sheet-foot">
+                  <div class="cell"><div class="k">Counter</div><div class="v">Move deeper</div></div>
+                  <div class="cell"><div class="k">Learn next</div><div class="v">Operational consequence</div></div>
+                  <div class="cell"><div class="c">Test line-down risk, OTIF impact, and how decisions are actually made once the alert lands.</div></div>
+                </div>
+              </button>
+              <button class="sheet" data-fan-sheet data-pos="3">
+                <div class="sheet-label tone-green">Next-Step Lock</div>
+                <h3>Book the resilience review with operations and procurement in one room.</h3>
+                <div class="sheet-foot">
+                  <div class="cell"><div class="k">Disposition</div><div class="v">Meeting booked</div></div>
+                  <div class="cell"><div class="k">Proof threshold</div><div class="v">Real scenario</div></div>
+                  <div class="cell"><div class="c">The room ends with one disruption case, one supplier-risk example, and one owner from each side.</div></div>
+                </div>
+              </button>
+            </div>
+            <div class="handoff">
+              <div class="cell"><div class="k k-orange">Deal Workspace</div><div class="v">Carry the buying split.</div><div class="c">Procurement owner, operations owner, current review cadence, and proof threshold.</div></div>
+              <div class="cell"><div class="k k-blue">Call Planner</div><div class="v">Carry the forcing question.</div><div class="c">What breaks when the alert lands, and who feels it first.</div></div>
+              <div class="cell"><div class="k k-green">Future Autopsy</div><div class="v">Carry the drift clues.</div><div class="c">Reactive firefighting, no named owner, and cosmetic dashboarding.</div></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+  <script>
+    document.querySelectorAll('[data-toggle-group]').forEach(function(group){
+      group.querySelectorAll('[data-toggle-item]').forEach(function(item){
+        item.addEventListener('click', function(){
+          group.querySelectorAll('[data-toggle-item]').forEach(function(s){ s.classList.remove('active'); });
+          item.classList.add('active');
+        });
+      });
+    });
+    document.querySelectorAll('[data-fan-group]').forEach(function(group){
+      group.querySelectorAll('[data-fan-sheet]').forEach(function(sheet){
+        sheet.addEventListener('click', function(){
+          group.querySelectorAll('[data-fan-sheet]').forEach(function(s){ s.classList.remove('front'); });
+          sheet.classList.add('front');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

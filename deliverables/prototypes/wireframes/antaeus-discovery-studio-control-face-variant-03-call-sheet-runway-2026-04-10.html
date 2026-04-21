@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery Studio Control Face 03 - Call Sheet Runway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f3f7fd;--ink:#102a58;--muted:#738aaf;--line:rgba(16,42,88,.12);--line2:rgba(16,42,88,.22);
+      --blue:#2f70f0;--orange:#e87821;--green:#2f8755;--red:#c84d4d;--shadow:0 24px 60px rgba(16,42,88,.08);
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;color:var(--ink);
+      background:
+        radial-gradient(circle at 16% 0%, rgba(47,112,240,.08), transparent 24%),
+        radial-gradient(circle at 88% 0%, rgba(232,120,33,.08), transparent 22%),
+        linear-gradient(180deg,#fbfdff 0%, var(--bg) 100%);
+      padding:24px;
+    }
+    button{font:inherit}
+    .page{max-width:1700px;margin:0 auto}
+    .topline{
+      display:flex;justify-content:space-between;align-items:center;gap:18px;
+      padding-bottom:14px;border-bottom:1px solid var(--line2);
+    }
+    .kicker,.mono,.micro{font-size:11px;letter-spacing:.28em;text-transform:uppercase;font-weight:700}
+    .kicker{color:var(--orange)}
+    .brand{display:grid;gap:8px}
+    .name{font-family:"Outfit",sans-serif;font-size:36px;line-height:.95;letter-spacing:-.06em}
+    .sub{font-size:14px;line-height:1.7;color:var(--muted);max-width:56ch}
+    .topmeta{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{padding:10px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.82);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    .board{display:grid;grid-template-columns:180px minmax(0,1fr) 230px;gap:34px;margin-top:18px}
+    .palette,.rescue{position:sticky;top:20px;align-self:start}
+    .mono{color:#9aacc8}
+    .frameworkDrawer{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+    .fw{
+      width:100%;display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;align-items:center;
+      padding:10px 0;border:0;background:none;text-align:left;cursor:pointer;color:inherit;
+    }
+    .fwDot,.laneDot,.replyDot,.trayDot,.resDot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(16,42,88,.16);position:relative;flex:0 0 auto}
+    .fwDot::after,.laneDot::after,.replyDot::after,.trayDot::after,.resDot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#d9e1ef}
+    .fw.active .fwDot::after{background:var(--orange)}
+    .fwName{font-size:14px;line-height:1.32;color:#91a3be;font-weight:700}
+    .fw.active .fwName{color:var(--ink)}
+    .legend{margin-top:18px;font-size:13px;line-height:1.7;color:var(--muted)}
+    .runway{min-width:0;display:grid;gap:18px}
+    .hero{
+      display:grid;grid-template-columns:minmax(0,1.1fr) 290px;gap:28px;align-items:start;
+      padding:10px 0 20px;border-bottom:1px solid var(--line2);
+    }
+    .heroK,.panelK,.trayK{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .heroLine{margin-top:10px;font-family:"Outfit",sans-serif;font-size:58px;line-height:.92;letter-spacing:-.07em;max-width:15ch}
+    .heroSub{margin-top:10px;font-size:14px;line-height:1.72;color:var(--muted);max-width:56ch}
+    .promptPanel{
+      padding:18px 18px 16px;border:1px solid var(--line);border-radius:24px;background:rgba(255,255,255,.76);box-shadow:var(--shadow)
+    }
+    .promptTitle{margin-top:10px;font-family:"Outfit",sans-serif;font-size:28px;line-height:.96;letter-spacing:-.05em;max-width:11ch}
+    .promptCopy{margin-top:10px;font-size:13px;line-height:1.72;color:var(--muted)}
+    .laneStack{display:grid;gap:10px}
+    .lane{
+      border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.6);padding:8px 10px 8px 12px;
+      display:grid;grid-template-columns:12px 46px minmax(0,1fr) auto;gap:12px;align-items:center;
+      cursor:pointer;
+    }
+    .lane.active{border-color:rgba(232,120,33,.26);box-shadow:0 10px 28px rgba(232,120,33,.08)}
+    .lane.active .laneDot::after{background:var(--orange)}
+    .laneNum{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9fb1cb;font-weight:700}
+    .laneName{font-family:"Outfit",sans-serif;font-size:22px;line-height:.96;letter-spacing:-.05em}
+    .laneState{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9fb0ca;font-weight:700}
+    .sheet{
+      padding:24px 0 0;
+    }
+    .sheetHead{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .sheetMark{
+      width:44px;height:44px;border-radius:50%;border:1px solid rgba(47,112,240,.22);background:rgba(47,112,240,.08);position:relative;
+    }
+    .sheetMark::after{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--blue)}
+    .sheetTitle{font-family:"Outfit",sans-serif;font-size:30px;line-height:.96;letter-spacing:-.05em}
+    .sheetState{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:700}
+    .sheetGrid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px;padding-top:18px}
+    .replyStack{display:grid;gap:0;border-top:1px solid var(--line)}
+    .reply{
+      width:100%;display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:12px;align-items:start;
+      padding:14px 0;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;cursor:pointer;color:inherit;
+    }
+    .reply.green .replyDot::after{background:var(--green)} .reply.orange .replyDot::after{background:var(--orange)} .reply.red .replyDot::after{background:var(--red)}
+    .replyMeta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9aacbf;font-weight:700}
+    .replyQuote{margin-top:7px;font-size:22px;line-height:1.08;letter-spacing:-.04em;font-weight:700;max-width:25ch}
+    .replyCopy{margin-top:7px;font-size:13px;line-height:1.68;color:var(--muted)}
+    .worked{padding:0;border:0;background:none;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#92a3bf;font-weight:700;cursor:pointer}
+    .worked.on{color:var(--green)}
+    .asidePanel{display:grid;gap:18px}
+    .asideBlock{padding-bottom:16px;border-bottom:1px solid var(--line)}
+    .asideLine{margin-top:8px;font-family:"Outfit",sans-serif;font-size:29px;line-height:.96;letter-spacing:-.05em;max-width:12ch}
+    .body{margin-top:8px;font-size:13px;line-height:1.72;color:var(--muted)}
+    .tray{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:18px;border-top:1px solid var(--line2)
+    }
+    .trayHead{display:flex;align-items:center;gap:10px}
+    .trayDot.truth::after{background:var(--blue)} .trayDot.worked::after{background:var(--green)} .trayDot.lock::after{background:var(--orange)}
+    .trayTitle{font-family:"Outfit",sans-serif;font-size:23px;line-height:.96;letter-spacing:-.05em}
+    .rescueList{margin-top:12px;border-top:1px solid var(--line)}
+    .rescueItem{display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+    .resDot.loss::after{background:var(--red)} .resDot.proof::after{background:var(--orange)} .resDot.clean::after{background:var(--blue)} .resDot.room::after{background:#9db9ff}
+    .resTitle{font-size:14px;line-height:1.35;font-weight:700}
+    .resCopy{margin-top:5px;font-size:13px;line-height:1.72;color:var(--muted)}
+    @media (max-width: 1400px){
+      .board{grid-template-columns:170px minmax(0,1fr)}
+      .rescue{grid-column:1 / -1;position:static}
+    }
+    @media (max-width: 980px){
+      .board{grid-template-columns:1fr}
+      .palette{position:static}
+      .hero,.sheetGrid,.tray{grid-template-columns:1fr}
+      .lane{grid-template-columns:12px 38px minmax(0,1fr)}
+      .laneState{grid-column:2 / -1}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topline">
+      <div class="brand">
+        <div class="kicker">Discovery Studio · Control Face 03</div>
+        <div class="name">Call-sheet runway.</div>
+        <div class="sub">A larger active call sheet, a softer left framework palette, and a rounded lane runway for segment switching. The room reads like a live conductor sheet, not a framework index.</div>
+      </div>
+      <div class="topmeta">
+        <div class="chip">call-ready</div>
+        <div class="chip">segment-led</div>
+        <div class="chip">rescue-fixed</div>
+      </div>
+    </div>
+
+    <div class="board">
+      <aside class="palette">
+        <div class="mono">Framework palette</div>
+        <div class="frameworkDrawer" id="frameworkDrawer"></div>
+        <div class="legend">The palette should feel secondary. It is there when the rep needs it, but it must never overpower the live sheet.</div>
+      </aside>
+
+      <main class="runway">
+        <section class="hero" id="hero"></section>
+        <section class="laneStack" id="laneStack"></section>
+        <section class="sheet" id="sheet"></section>
+        <section class="tray" id="tray"></section>
+      </main>
+
+      <aside class="rescue">
+        <div class="mono">Recover the call</div>
+        <div class="rescueList" id="rescueList"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const frameworks = ['Legal Ops','Recruiting','Product / UX','GovTech','Customer Support','Sales / Revenue','Manufacturing','Data / Intelligence','AI-Native'];
+    const segments = [
+      {id:'1',n:'01',t:'Opening frame',state:'queued',cue:'Permission + hypothesis',say:'Most teams I talk to already have some support automation in place, but the expensive edge cases still bounce to humans. Is that what is happening here too?', replies:[
+        {tone:'green',meta:'Useful correction',quote:'"Mostly. The issue is the bot can answer, but it cannot resolve."',copy:'Good. They corrected the frame instead of rejecting it.'},
+        {tone:'orange',meta:'Too broad',quote:'"We have a pretty standard support setup."',copy:'Still too generic. Pull for systems and handoffs.'}
+      ], next:'Name the system, then the human handoff.', learn:'Hypothesis accepted or corrected.', worked:'Hypothesis opener', lock:'No lock yet.'},
+      {id:'2',n:'02',t:'Current-state truth',state:'live',cue:'Workflow before diagnosis',say:'From what I could tell, it looks like you are running Zendesk or Intercom for ticketing, probably doing email and chat, maybe some phone. Is that roughly right, or is it more complicated than that?', replies:[
+        {tone:'green',meta:'Detailed answer',quote:'"Yeah, we are on Intercom, doing about 15K tickets a month. Team of 25. Bots mostly deflect."',copy:'Now the workflow is concrete enough to drive the next question.'},
+        {tone:'orange',meta:'Thin answer',quote:'"We use Zendesk. Support team is about 20 people. Pretty standard."',copy:'Still polite, still vague.'},
+        {tone:'red',meta:'Defensive answer',quote:'"Why do you need to know our setup? Why not just show the product?"',copy:'Trust is not earned yet.'}
+      ], next:'Of those tickets, what percentage truly needs human judgment?', learn:'Stack, volume, team shape, and automation gap.', worked:'Current-state opener', lock:'Still too early.'},
+      {id:'3',n:'03',t:'Pain and consequence',state:'queued',cue:'Name the failure',say:'Where does the current setup start hurting: speed, cost, quality, burnout, or all of the above?', replies:[], next:'Push to one painful consequence.', learn:'A breakage pattern is named.', worked:'Pain sharpened', lock:'No lock until pain has an owner.'},
+      {id:'4',n:'04',t:'Trigger and urgency',state:'queued',cue:'Why now',say:'What changed recently that made this worth looking at now?', replies:[], next:'Distinguish real urgency from ambient curiosity.', learn:'A trigger enters the room.', worked:'Trigger surfaced', lock:'Still not a lock point.'},
+      {id:'5',n:'05',t:'Stakeholder and ownership',state:'queued',cue:'Owner, approver, blocker',say:'Who actually owns this pain, and who would own the change if this became real?', replies:[], next:'Separate pain owner from budget owner.', learn:'Stakeholder map forms.', worked:'Owner map', lock:'Can only lock if owner is real.'},
+      {id:'6',n:'06',t:'Proof threshold',state:'missing',cue:'What proof matters',say:'What would they need to believe before movement feels safe enough to earn?', replies:[], next:'Choose the lightest valid proof.', learn:'Proof requirement named.', worked:'Proof route', lock:'No lock without proof fit.'},
+      {id:'7',n:'07',t:'Current vendor and displacement',state:'partial',cue:'What are they defending',say:'What have they tried already, and what still keeps the status quo alive?', replies:[], next:'Find switching cost and political inertia.', learn:'Displacement path visible.', worked:'Displacement route', lock:'Still pre-lock.'},
+      {id:'8',n:'08',t:'Decision architecture',state:'partial',cue:'Real approval path',say:'If this became real, what would the decision path actually look like?', replies:[], next:'Map approvals and hidden gates.', learn:'Decision path named.', worked:'Decision map', lock:'Lock only if the route is navigable.'},
+      {id:'9',n:'09',t:'Next-step lock',state:'partial',cue:'Date, owner, purpose',say:'What is the next review worth taking, and who must be there?', replies:[], next:'Turn the branch into a real calendar event.', learn:'A real next action appears.', worked:'Next-step lock', lock:'This is the first true lock.'},
+      {id:'10',n:'10',t:'Post-call routing',state:'missing',cue:'Carry truth forward',say:'What belongs in Deal Workspace, what stays in Call Planner, and what belongs in Future Autopsy?', replies:[], next:'Export only earned truth.', learn:'Handoff package forms.', worked:'Handoff packaged', lock:'Route only.'}
+    ];
+    const rescue = [
+      {tone:'loss',title:'If they answer vaguely',copy:'Trade one concrete hypothesis for one concrete correction.'},
+      {tone:'proof',title:'If they ask for proof early',copy:'Ask what belief they are actually trying to earn before choosing proof.'},
+      {tone:'clean',title:'If they answer cleanly',copy:'Move to consequence, not another setup question.'},
+      {tone:'room',title:'If you need the next room',copy:'Carry earned truth, missing truth, and the branch condition.'}
+    ];
+    let frameworkIndex = 4;
+    let activeSegment = '2';
+    let activeReply = 0;
+    const worked = new Set();
+
+    function current(){ return segments.find(s=>s.id===activeSegment); }
+    function renderFrameworks(){
+      document.getElementById('frameworkDrawer').innerHTML = frameworks.map((f,i)=>`
+        <button class="fw ${i===frameworkIndex?'active':''}" onclick="frameworkIndex=${i};render()">
+          <span class="fwDot"></span><span class="fwName">${f}</span>
+        </button>
+      `).join('');
+    }
+    function renderHero(){
+      const s = current();
+      document.getElementById('hero').innerHTML = `
+        <div>
+          <div class="heroK">Active segment</div>
+          <div class="heroLine">${s.say}</div>
+          <div class="heroSub">${s.cue}. The rep should feel one live line in hand, not ten sections demanding attention.</div>
+        </div>
+        <div class="promptPanel">
+          <div class="panelK">Active framework</div>
+          <div class="promptTitle">${frameworks[frameworkIndex]}</div>
+          <div class="promptCopy">The framework label stays quiet. The room should still feel like a call surface first.</div>
+        </div>
+      `;
+    }
+    function renderLanes(){
+      document.getElementById('laneStack').innerHTML = segments.map(s=>`
+        <button class="lane ${s.id===activeSegment?'active':''}" onclick="activeSegment='${s.id}';activeReply=0;render()">
+          <span class="laneDot"></span>
+          <span class="laneNum">${s.n}</span>
+          <span class="laneName">${s.t}</span>
+          <span class="laneState">${s.state}</span>
+        </button>
+      `).join('');
+    }
+    function renderSheet(){
+      const s = current(), reply = (s.replies||[])[activeReply];
+      document.getElementById('sheet').innerHTML = `
+        <div class="sheetHead">
+          <span class="sheetMark"></span>
+          <div>
+            <div class="trayK">${s.cue}</div>
+            <div class="sheetTitle">${s.t}</div>
+          </div>
+          <div class="sheetState">live sheet</div>
+        </div>
+        <div class="sheetGrid">
+          <div>
+            <div class="trayK">Buyer might say</div>
+            <div class="replyStack">
+              ${(s.replies||[]).length ? s.replies.map((r,i)=>`
+                <button class="reply ${r.tone}" onclick="activeReply=${i};render()">
+                  <span class="replyDot"></span>
+                  <span>
+                    <span class="replyMeta">${r.meta}</span>
+                    <span class="replyQuote">${r.quote}</span>
+                    <span class="replyCopy">${r.copy}</span>
+                  </span>
+                  <span class="worked ${worked.has(s.id+'-'+i)?'on':''}" onclick="event.stopPropagation();toggleWorked('${s.id}-${i}')">${worked.has(s.id+'-'+i)?'worked':'mark worked'}</span>
+                </button>
+              `).join('') : `<div class="body">This lane stays compressed until it becomes the live sheet.</div>`}
+            </div>
+          </div>
+          <div class="asidePanel">
+            <div class="asideBlock">
+              <div class="trayK">Say next</div>
+              <div class="asideLine">${s.next}</div>
+              <div class="body">${reply ? reply.copy : s.learn}</div>
+            </div>
+            <div class="asideBlock">
+              <div class="trayK">Learned truth</div>
+              <div class="body">${s.learn}</div>
+            </div>
+            <div class="asideBlock">
+              <div class="trayK">Lock condition</div>
+              <div class="body">${s.lock}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    function renderTray(){
+      const s = current();
+      document.getElementById('tray').innerHTML = `
+        <div>
+          <div class="trayHead"><span class="trayDot truth"></span><span class="trayTitle">Learned truth</span></div>
+          <div class="body">${s.learn}</div>
+        </div>
+        <div>
+          <div class="trayHead"><span class="trayDot worked"></span><span class="trayTitle">Worked memory</span></div>
+          <div class="body">${s.worked}</div>
+        </div>
+        <div>
+          <div class="trayHead"><span class="trayDot lock"></span><span class="trayTitle">Next-step lock</span></div>
+          <div class="body">${s.lock}</div>
+        </div>
+      `;
+    }
+    function renderRescue(){
+      document.getElementById('rescueList').innerHTML = rescue.map(item=>`
+        <div class="rescueItem">
+          <span class="resDot ${item.tone}"></span>
+          <span><div class="resTitle">${item.title}</div><div class="resCopy">${item.copy}</div></span>
+        </div>
+      `).join('');
+    }
+    function toggleWorked(id){ if(worked.has(id)) worked.delete(id); else worked.add(id); render(); }
+    function render(){ renderFrameworks(); renderHero(); renderLanes(); renderSheet(); renderTray(); renderRescue(); }
+    render();
+  </script>
+</body>
+</html>

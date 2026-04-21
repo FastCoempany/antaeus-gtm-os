@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery Studio Ledger Spine Canonical</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="./discovery-studio-control-face-03b-foundation-data-2026-04-10.js"></script>
+  <style>
+    :root{
+      --bg:#f4f8fe;
+      --ink:#102a58;
+      --muted:#7086aa;
+      --line:rgba(16,42,88,.12);
+      --line-strong:rgba(16,42,88,.22);
+      --surface:rgba(255,255,255,.84);
+      --surface-2:rgba(255,255,255,.92);
+      --blue:#2f70f0;
+      --orange:#e87821;
+      --green:#2f8755;
+      --red:#c84d4d;
+      --shadow:0 22px 56px rgba(16,42,88,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 14% 0%, rgba(47,112,240,.08), transparent 24%),
+        radial-gradient(circle at 86% 0%, rgba(232,120,33,.08), transparent 22%),
+        linear-gradient(180deg,#fbfdff 0%, var(--bg) 100%);
+      padding:26px 24px 44px;
+    }
+    button{font:inherit}
+    .page{max-width:1680px;margin:0 auto}
+    .mast{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:20px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line-strong);
+    }
+    .kicker,.mono,.micro{
+      font-size:11px;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+    .kicker{color:var(--orange)}
+    .brand{
+      margin-top:6px;
+      font-family:"Outfit",sans-serif;
+      font-size:24px;
+      line-height:.94;
+      letter-spacing:-.05em;
+    }
+    .stamp{
+      font-size:11px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:#9bacbf;
+      font-weight:700;
+    }
+    .board{
+      display:grid;
+      grid-template-columns:206px minmax(0,1fr);
+      gap:34px;
+      margin-top:20px;
+    }
+    .rail{
+      position:sticky;
+      top:18px;
+      align-self:start;
+      padding:18px 16px 20px;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:var(--surface);
+      box-shadow:var(--shadow);
+    }
+    .mono{color:#96a8c2}
+    .frameworks,.responses{
+      margin-top:12px;
+      border-top:1px solid var(--line);
+    }
+    .frameworkBtn,.segmentHead,.replyBtn,.toolTab{
+      width:100%;
+      border:0;
+      background:none;
+      color:inherit;
+      text-align:left;
+      cursor:pointer;
+    }
+    .frameworkBtn{
+      display:grid;
+      grid-template-columns:12px minmax(0,1fr);
+      gap:12px;
+      align-items:center;
+      padding:11px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .frameworkBtn.active{
+      color:var(--ink);
+    }
+    .frameworkBtn.active .fwName{
+      color:var(--ink);
+    }
+    .frameworkBtn.active .dot::after{
+      background:var(--orange);
+    }
+    .dot,.segDot,.replyDot,.toolDot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      border:1px solid rgba(16,42,88,.16);
+      position:relative;
+      flex:0 0 auto;
+    }
+    .dot::after,.segDot::after,.replyDot::after,.toolDot::after{
+      content:"";
+      position:absolute;
+      inset:3px;
+      border-radius:50%;
+      background:#d9e1ef;
+    }
+    .fwName{
+      font-size:14px;
+      line-height:1.28;
+      color:#90a4bf;
+      font-weight:700;
+      transition:color .16s ease;
+    }
+    .railNote{
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px solid var(--line);
+      font-size:12px;
+      line-height:1.6;
+      color:var(--muted);
+    }
+    .main{
+      display:grid;
+      gap:14px;
+    }
+    .titleRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:20px;
+      padding-bottom:6px;
+    }
+    .title{
+      font-family:"Outfit",sans-serif;
+      font-size:32px;
+      line-height:.94;
+      letter-spacing:-.06em;
+    }
+    .segments{
+      display:grid;
+      gap:0;
+    }
+    .segment{
+      padding:6px 0 8px;
+      border-bottom:1px solid var(--line);
+    }
+    .segment.active{
+      padding-bottom:20px;
+      border-bottom-color:transparent;
+    }
+    .segmentHead{
+      display:grid;
+      grid-template-columns:12px 44px minmax(0,1fr);
+      gap:12px;
+      align-items:center;
+      padding:12px 4px 12px 2px;
+    }
+    .segment.start .segDot::after{
+      background:var(--orange);
+    }
+    .segment.active .segDot::after{
+      background:var(--blue);
+    }
+    .segNum{
+      font-size:11px;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      color:#9badc7;
+      font-weight:700;
+    }
+    .segTitle{
+      font-family:"Outfit",sans-serif;
+      font-size:30px;
+      line-height:.96;
+      letter-spacing:-.05em;
+    }
+    .segmentBody{
+      display:none;
+      margin-top:8px;
+      padding:20px 20px 20px 24px;
+      border:1px solid rgba(47,112,240,.16);
+      border-radius:30px;
+      background:var(--surface-2);
+      box-shadow:var(--shadow);
+    }
+    .segment.active .segmentBody{
+      display:grid;
+      gap:20px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.08fr) minmax(320px,.96fr) 330px;
+      gap:30px;
+      align-items:start;
+    }
+    .lineText{
+      margin-top:10px;
+      font-family:"Outfit",sans-serif;
+      font-size:54px;
+      line-height:.91;
+      letter-spacing:-.07em;
+      max-width:14ch;
+    }
+    .responses{
+      background:rgba(255,255,255,.48);
+      border-radius:20px;
+      border:1px solid rgba(16,42,88,.06);
+      overflow:hidden;
+    }
+    .replyBtn{
+      display:grid;
+      grid-template-columns:12px minmax(0,1fr);
+      gap:12px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      transition:background .16s ease, border-color .16s ease;
+    }
+    .replyBtn:last-child{
+      border-bottom:0;
+    }
+    .replyBtn.active{
+      background:rgba(255,255,255,.84);
+    }
+    .replyBtn.green .replyDot::after{background:var(--green)}
+    .replyBtn.orange .replyDot::after{background:var(--orange)}
+    .replyBtn.red .replyDot::after{background:var(--red)}
+    .replyMeta{
+      font-size:11px;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      color:#9badc7;
+      font-weight:700;
+    }
+    .replyQuote{
+      margin-top:7px;
+      font-size:28px;
+      line-height:1.03;
+      letter-spacing:-.04em;
+      font-weight:700;
+      max-width:22ch;
+      opacity:.56;
+      transition:opacity .16s ease;
+    }
+    .replyBtn.active .replyQuote{
+      opacity:1;
+    }
+    .commandCol{
+      display:grid;
+      gap:18px;
+    }
+    .nextCard{
+      padding:0 0 18px;
+      border-bottom:1px solid var(--line);
+    }
+    .nextLine{
+      margin-top:10px;
+      font-family:"Outfit",sans-serif;
+      font-size:42px;
+      line-height:.92;
+      letter-spacing:-.06em;
+      max-width:12ch;
+    }
+    .toolTabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .toolTab{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:0 0 6px;
+      color:#95a7c2;
+      border-bottom:2px solid transparent;
+      font-size:14px;
+      font-weight:700;
+    }
+    .toolTab.active{
+      color:var(--ink);
+      border-bottom-color:var(--orange);
+    }
+    .toolTab.facts .toolDot::after{background:var(--blue)}
+    .toolTab.recover .toolDot::after{background:var(--red)}
+    .toolTab.leave .toolDot::after{background:var(--orange)}
+    .toolPanel{
+      padding:16px 18px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(255,255,255,.78);
+      display:grid;
+      gap:12px;
+    }
+    .toolTitle{
+      font-family:"Outfit",sans-serif;
+      font-size:26px;
+      line-height:.96;
+      letter-spacing:-.05em;
+    }
+    .toolList{
+      display:grid;
+      gap:10px;
+    }
+    .toolRow{
+      padding-bottom:10px;
+      border-bottom:1px solid var(--line);
+      font-size:14px;
+      line-height:1.58;
+      color:var(--muted);
+    }
+    .toolRow:last-child{
+      padding-bottom:0;
+      border-bottom:0;
+    }
+    @media (max-width:1200px){
+      .board{
+        grid-template-columns:1fr;
+      }
+      .rail{
+        position:static;
+      }
+      .grid{
+        grid-template-columns:1fr;
+      }
+    }
+    @media (max-width:760px){
+      body{padding:18px 14px 28px}
+      .titleRow{
+        align-items:start;
+        flex-direction:column;
+      }
+      .lineText{
+        font-size:42px;
+      }
+      .replyQuote,.nextLine,.toolTitle{
+        font-size:28px;
+      }
+      .segTitle{
+        font-size:24px;
+      }
+      .segmentHead{
+        grid-template-columns:12px 34px minmax(0,1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="mast">
+      <div>
+        <div class="kicker">Discovery Studio / Canonical Control Face</div>
+        <div class="brand">Ledger spine.</div>
+      </div>
+      <div class="stamp" id="frameworkStamp"></div>
+    </div>
+
+    <div class="board">
+      <aside class="rail">
+        <div class="mono">Frameworks</div>
+        <div class="frameworks" id="frameworks"></div>
+        <div class="railNote">Switch the lens only when the room actually changes.</div>
+      </aside>
+
+      <main class="main">
+        <div class="titleRow">
+          <div class="title">Open one segment. Run the call from there.</div>
+        </div>
+        <div class="segments" id="segments"></div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const foundation = window.DS_CONTROL_FACE_FOUNDATION;
+    let frameworkIndex = foundation.defaultFrameworkIndex;
+    let activeSegment = '1';
+    let activeReply = 0;
+    let activeTool = 'facts';
+
+    function renderFrameworks() {
+      document.getElementById('frameworkStamp').textContent = foundation.frameworks[frameworkIndex];
+      document.getElementById('frameworks').innerHTML = foundation.frameworks.map((framework, index) => `
+        <button class="frameworkBtn ${index === frameworkIndex ? 'active' : ''}" onclick="frameworkIndex=${index};render()">
+          <span class="dot"></span>
+          <span class="fwName">${framework}</span>
+        </button>
+      `).join('');
+    }
+
+    function toolsMarkup(segment) {
+      const tools = {
+        facts: { title: 'What we know so far', rows: segment.facts },
+        recover: { title: 'If they push back', rows: segment.recover },
+        leave: { title: 'Before you move on', rows: segment.leave }
+      };
+      const tool = tools[activeTool];
+      return `
+        <div class="toolTabs">
+          <button class="toolTab facts ${activeTool === 'facts' ? 'active' : ''}" onclick="setTool('facts')"><span class="toolDot"></span><span>What we know so far</span></button>
+          <button class="toolTab recover ${activeTool === 'recover' ? 'active' : ''}" onclick="setTool('recover')"><span class="toolDot"></span><span>If they push back</span></button>
+          <button class="toolTab leave ${activeTool === 'leave' ? 'active' : ''}" onclick="setTool('leave')"><span class="toolDot"></span><span>Before you move on</span></button>
+        </div>
+        <div class="toolPanel">
+          <div class="toolTitle">${tool.title}</div>
+          <div class="toolList">
+            ${tool.rows.map(row => `<div class="toolRow">${row}</div>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function repliesMarkup(segment) {
+      return segment.replies.map((reply, index) => `
+        <button class="replyBtn ${reply.tone} ${index === activeReply ? 'active' : ''}" onclick="activeReply=${index};renderSegments()">
+          <span class="replyDot"></span>
+          <span>
+            <span class="replyMeta">${reply.meta}</span>
+            <span class="replyQuote">${reply.quote}</span>
+          </span>
+        </button>
+      `).join('');
+    }
+
+    function segmentMarkup(segment) {
+      const nextIndex = Math.min(activeReply, segment.next.length - 1);
+      return `
+        <div class="segment ${segment.id === activeSegment ? 'active' : ''} ${segment.id === '1' ? 'start' : ''}">
+          <button class="segmentHead" onclick="activeSegment='${segment.id}';activeReply=0;activeTool='facts';renderSegments()">
+            <span class="segDot"></span>
+            <span class="segNum">${segment.n}</span>
+            <span class="segTitle">${segment.t}</span>
+          </button>
+          <div class="segmentBody">
+            <div class="grid">
+              <div>
+                <div class="micro">Say this now</div>
+                <div class="lineText">${segment.say}</div>
+              </div>
+              <div>
+                <div class="micro">Buyer might say</div>
+                <div class="responses">${repliesMarkup(segment)}</div>
+              </div>
+              <div class="commandCol">
+                <div class="nextCard">
+                  <div class="micro">Say next</div>
+                  <div class="nextLine">${segment.next[nextIndex] || segment.next[0]}</div>
+                </div>
+                ${toolsMarkup(segment)}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSegments() {
+      document.getElementById('segments').innerHTML = foundation.segments.map(segmentMarkup).join('');
+    }
+
+    function setTool(tool) {
+      activeTool = tool;
+      renderSegments();
+    }
+
+    function render() {
+      renderFrameworks();
+      renderSegments();
+    }
+
+    render();
+  </script>
+</body>
+</html>

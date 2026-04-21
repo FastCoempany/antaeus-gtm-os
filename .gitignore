@@ -1,3 +1,7 @@
 .tmp/
 API Keys_anthropic/
 enrichment-server/node_modules/
+
+node_modules/
+tmp-*.png
+*.log

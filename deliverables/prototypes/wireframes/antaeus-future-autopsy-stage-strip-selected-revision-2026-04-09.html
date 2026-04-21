@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Future Autopsy Stage Strip Revision</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0a1c40;
+      --soft: #617899;
+      --muted: #8da0ba;
+      --line: rgba(10, 28, 64, 0.08);
+      --line-strong: rgba(10, 28, 64, 0.14);
+      --field: #f5f8fe;
+      --white: rgba(255, 255, 255, 0.78);
+      --orange: #e6701e;
+      --blue: #2471e7;
+      --green: #2d7a4b;
+      --red: #c44b45;
+      --red-wash: rgba(196, 75, 69, 0.08);
+      --green-wash: rgba(45, 122, 75, 0.08);
+      --blue-wash: rgba(36, 113, 231, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(36, 113, 231, 0.12), transparent 28%),
+        radial-gradient(circle at 82% 78%, rgba(230, 112, 30, 0.09), transparent 26%),
+        linear-gradient(180deg, #fbfcff 0%, #eff5fc 100%);
+      padding: 28px 22px 72px;
+    }
+
+    h1, h2, h3, h4, p { margin: 0; }
+
+    .page {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      gap: 28px;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      padding: 0 6px;
+    }
+
+    .accent { color: var(--orange); }
+
+    .board {
+      position: relative;
+      overflow: hidden;
+      border-radius: 42px;
+      border: 1px solid rgba(10, 28, 64, 0.06);
+      box-shadow: 0 26px 72px rgba(10, 28, 64, 0.11);
+      background:
+        linear-gradient(rgba(10, 28, 64, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10, 28, 64, 0.03) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 249, 255, 0.92) 100%);
+      background-size: 32px 32px, 32px 32px, auto;
+      padding: 36px;
+      display: grid;
+      gap: 26px;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      align-items: end;
+    }
+
+    .meta-copy {
+      max-width: 620px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .id {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .name {
+      font-family: "Outfit", sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      font-size: 42px;
+      line-height: 0.98;
+    }
+
+    .meaning {
+      max-width: 520px;
+      color: var(--soft);
+      font-size: 14px;
+      line-height: 1.65;
+      text-align: right;
+    }
+
+    .kicker {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .stage-strip {
+      display: grid;
+      grid-template-columns: 1.2fr 0.7fr 0.9fr;
+      gap: 22px;
+      align-items: stretch;
+      padding: 14px 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(10, 28, 64, 0.05);
+    }
+
+    .stage-cell {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .stage-cell + .stage-cell {
+      padding-left: 22px;
+      border-left: 1px solid rgba(10, 28, 64, 0.08);
+    }
+
+    .stage-label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .stage-value {
+      font-family: "Outfit", sans-serif;
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+
+    .stage-copy {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--soft);
+      max-width: 32ch;
+    }
+
+    .pipeline-line {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--soft);
+    }
+
+    .pipeline-line .node {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pipeline-line .node:after {
+      content: "";
+      width: 18px;
+      height: 1px;
+      background: rgba(10, 28, 64, 0.18);
+      display: inline-block;
+      margin-left: 4px;
+    }
+
+    .pipeline-line .node:last-child:after { display: none; }
+
+    .pipeline-line .active {
+      color: var(--navy);
+    }
+
+    .pipeline-line .active .node-pill {
+      background: rgba(36, 113, 231, 0.12);
+      color: var(--blue);
+    }
+
+    .node-pill {
+      min-height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      background: rgba(10, 28, 64, 0.05);
+      color: var(--muted);
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .verdict-shell {
+      display: grid;
+      gap: 18px;
+      padding: 26px;
+      border-radius: 34px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(10, 28, 64, 0.06);
+      box-shadow: 0 18px 42px rgba(10, 28, 64, 0.07);
+    }
+
+    .toggle-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .toggle {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--soft);
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .toggle-inner {
+      min-height: 74px;
+      border-radius: 22px;
+      padding: 14px 16px;
+      border: 1px solid rgba(10, 28, 64, 0.06);
+      background: rgba(10, 28, 64, 0.02);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      transition: 180ms ease;
+    }
+
+    .toggle:hover .toggle-inner {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(10, 28, 64, 0.06);
+    }
+
+    .toggle.active-left .toggle-inner {
+      border-color: rgba(196, 75, 69, 0.18);
+      background: var(--red-wash);
+      color: var(--navy);
+    }
+
+    .toggle.active-right .toggle-inner {
+      border-color: rgba(45, 122, 75, 0.18);
+      background: var(--green-wash);
+      color: var(--navy);
+    }
+
+    .toggle-title {
+      font-family: "Outfit", sans-serif;
+      font-size: 24px;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .toggle-note {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--soft);
+    }
+
+    .mark {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+    }
+
+    .mark-fracture {
+      border-radius: 50%;
+      border: 2px solid rgba(196, 75, 69, 0.5);
+      box-shadow: inset 0 0 0 8px rgba(196, 75, 69, 0.08);
+    }
+
+    .mark-fracture:before,
+    .mark-fracture:after {
+      content: "";
+      position: absolute;
+      background: var(--red);
+      border-radius: 999px;
+    }
+
+    .mark-fracture:before {
+      width: 18px;
+      height: 3px;
+      top: 9px;
+      left: 9px;
+      transform: rotate(38deg);
+    }
+
+    .mark-fracture:after {
+      width: 12px;
+      height: 3px;
+      top: 20px;
+      left: 15px;
+      transform: rotate(-34deg);
+    }
+
+    .mark-seal {
+      border-radius: 12px;
+      background: rgba(45, 122, 75, 0.12);
+      border: 1px solid rgba(45, 122, 75, 0.18);
+      transform: rotate(10deg);
+    }
+
+    .mark-seal:before,
+    .mark-seal:after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 10px;
+      border: 2px solid rgba(45, 122, 75, 0.45);
+    }
+
+    .mark-seal:after {
+      inset: 13px;
+      border-radius: 50%;
+      border-width: 0;
+      background: var(--green);
+      opacity: 0.85;
+    }
+
+    .panel {
+      display: none;
+      gap: 18px;
+    }
+
+    .panel.active {
+      display: grid;
+    }
+
+    .verdict-title {
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: 54px;
+      line-height: 0.94;
+      letter-spacing: -0.05em;
+      max-width: 12ch;
+    }
+
+    .verdict-intro {
+      color: var(--soft);
+      font-size: 15px;
+      line-height: 1.65;
+      max-width: 48ch;
+    }
+
+    .signature-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .sig {
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: 1px solid rgba(10, 28, 64, 0.08);
+    }
+
+    .sig.red { color: var(--red); background: var(--red-wash); border-color: rgba(196, 75, 69, 0.15); }
+    .sig.green { color: var(--green); background: var(--green-wash); border-color: rgba(45, 122, 75, 0.14); }
+
+    .rail {
+      display: grid;
+      gap: 0;
+      padding-top: 2px;
+    }
+
+    .rail-row {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 14px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .rail-row:first-child { border-top: 0; }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 7px rgba(196, 75, 69, 0.09);
+      margin-top: 7px;
+    }
+
+    .tick {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(45, 122, 75, 0.12);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+
+    .docket {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      padding: 26px;
+      border-radius: 34px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(10, 28, 64, 0.06);
+      box-shadow: 0 18px 42px rgba(10, 28, 64, 0.07);
+    }
+
+    .docket-title {
+      font-family: "Outfit", sans-serif;
+      font-size: 34px;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+
+    .docket-sub {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--soft);
+      max-width: 36ch;
+    }
+
+    .work-list {
+      display: grid;
+      gap: 0;
+      margin-top: 8px;
+    }
+
+    .work-item {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 16px;
+      align-items: start;
+      padding: 15px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .work-item:first-child { border-top: 0; }
+
+    .work-tag {
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .work-tag.red { background: var(--red-wash); color: var(--red); }
+    .work-tag.green { background: var(--green-wash); color: var(--green); }
+    .work-tag.blue { background: var(--blue-wash); color: var(--blue); }
+
+    .room-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(10, 28, 64, 0.1);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.82);
+      white-space: nowrap;
+    }
+
+    .room-link.red {
+      border-color: rgba(196, 75, 69, 0.18);
+      color: var(--red);
+      background: var(--red-wash);
+    }
+
+    .exit-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(10, 28, 64, 0.08);
+    }
+
+    .pill {
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .pill.red { background: var(--red-wash); color: var(--red); }
+    .pill.green { background: var(--green-wash); color: var(--green); }
+
+    .small-copy {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--soft);
+    }
+
+    @media (max-width: 1180px) {
+      .meta,
+      .stage-strip,
+      .main,
+      .toggle-row,
+      .work-item,
+      .exit-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stage-cell + .stage-cell {
+        padding-left: 0;
+        padding-top: 18px;
+        border-left: 0;
+        border-top: 1px solid rgba(10, 28, 64, 0.08);
+      }
+
+      .meaning { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Future Autopsy</span>
+      <span>Selected Stage Strip Revision</span>
+    </div>
+
+    <section class="board">
+      <header class="meta">
+        <div class="meta-copy">
+          <div class="id"><span class="accent">Selected revision</span> · Variant 02 · Stage Strip</div>
+          <div class="name">Stage context stays narrow. The verdict becomes one switchable field. The docket becomes the bridge.</div>
+        </div>
+        <p class="meaning">This revision removes generic stage theater, gives the room one verdict surface with custom Antaeus marks, and changes the intervention docket based on the selected outcome.</p>
+      </header>
+
+      <section class="stage-strip" aria-label="Stage context strip">
+        <div class="stage-cell">
+          <div class="stage-label">Pipeline path in this workspace</div>
+          <div class="pipeline-line">
+            <span class="node"><span class="node-pill">Discovery</span></span>
+            <span class="node active"><span class="node-pill">Qualification</span></span>
+            <span class="node"><span class="node-pill">Proposal</span></span>
+            <span class="node"><span class="node-pill">Close</span></span>
+          </div>
+          <div class="stage-copy">The strip only orients the deal inside its actual pipeline model. It does not retell the failure anatomy already shown above.</div>
+        </div>
+        <div class="stage-cell">
+          <div class="stage-label">Current stage age</div>
+          <div class="stage-value">54d</div>
+          <div class="stage-copy">Time in stage is relevant because long stage age without a dated next step usually means the label is outrunning reality.</div>
+        </div>
+        <div class="stage-cell">
+          <div class="stage-label">Gate still missing</div>
+          <div class="stage-value">Named budget owner</div>
+          <div class="stage-copy">This is context, not a second diagnosis. It tells the user what institutional gate still has to become real.</div>
+        </div>
+      </section>
+
+      <section class="main">
+        <div class="verdict-shell">
+          <div class="kicker">What happens now</div>
+          <div class="toggle-row" role="tablist" aria-label="Autopsy verdict states">
+            <button class="toggle active-left" id="leftToggle" type="button" aria-selected="true" data-target="left-alone">
+              <span class="toggle-inner">
+                <span class="mark mark-fracture" aria-hidden="true"></span>
+                <span>
+                  <span class="toggle-title">If left alone</span>
+                  <span class="toggle-note">Collapse stays procedural. The room shows how the deal quietly dies if nobody interrupts the thread.</span>
+                </span>
+              </span>
+            </button>
+            <button class="toggle" id="rightToggle" type="button" aria-selected="false" data-target="corrected">
+              <span class="toggle-inner">
+                <span class="mark mark-seal" aria-hidden="true"></span>
+                <span>
+                  <span class="toggle-title">If corrected</span>
+                  <span class="toggle-note">Control returns. The room shows what becomes true when the missing ownership and proof are forced into the deal.</span>
+                </span>
+              </span>
+            </button>
+          </div>
+
+          <section class="panel active" id="panel-left-alone" aria-live="polite">
+            <div class="verdict-title">You lose quietly in committee.</div>
+            <p class="verdict-intro">The opportunity keeps enough surface motion to look alive, but no dated next step or internal owner ever makes the stage real. That is why this close ends as drift instead of a dramatic collapse.</p>
+            <div class="signature-list">
+              <span class="sig red">No next step</span>
+              <span class="sig red">Stale thread</span>
+              <span class="sig red">No champion</span>
+              <span class="sig red">No budget owner</span>
+            </div>
+            <div class="rail">
+              <div class="rail-row">
+                <div class="dot"></div>
+                <div><strong>Momentum becomes polite noise.</strong><div class="small-copy" style="margin-top:6px;">Activity remains visible enough to preserve optimism, but not enough to preserve control.</div></div>
+              </div>
+              <div class="rail-row">
+                <div class="dot"></div>
+                <div><strong>Qualification turns decorative.</strong><div class="small-copy" style="margin-top:6px;">The stage label survives longer than the buying reality underneath it.</div></div>
+              </div>
+              <div class="rail-row">
+                <div class="dot"></div>
+                <div><strong>The board gets less believable.</strong><div class="small-copy" style="margin-top:6px;">One unreal deal distorts the rest of the pipeline around it.</div></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-corrected" aria-live="polite">
+            <div class="verdict-title">You restore control before the stage lies again.</div>
+            <p class="verdict-intro">The deal does not become healthier because the label was protected. It becomes healthier because the missing ownership, budget authority, and next-step cadence are finally made explicit.</p>
+            <div class="signature-list">
+              <span class="sig green">Next step dated</span>
+              <span class="sig green">Owner named</span>
+              <span class="sig green">Budget confirmed</span>
+              <span class="sig green">Proof accepted</span>
+            </div>
+            <div class="rail">
+              <div class="rail-row">
+                <div class="tick">+</div>
+                <div><strong>Calendar truth returns.</strong><div class="small-copy" style="margin-top:6px;">Both sides now know when the thread continues and who owns the motion.</div></div>
+              </div>
+              <div class="rail-row">
+                <div class="tick">+</div>
+                <div><strong>The stage becomes earned again.</strong><div class="small-copy" style="margin-top:6px;">Qualification means something because the institutional gate is now real.</div></div>
+              </div>
+              <div class="rail-row">
+                <div class="tick">+</div>
+                <div><strong>The board regains honesty.</strong><div class="small-copy" style="margin-top:6px;">The deal no longer flatters the pipeline with borrowed momentum.</div></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="docket" id="docketPanel">
+          <div class="kicker">Intervention docket</div>
+          <div class="docket-title" id="docketTitle">What interrupts the collapse</div>
+          <div class="docket-sub" id="docketSub">The docket is the bridge, not a separate conclusion. In this state it shows the specific interventions that prevent the left-alone verdict from becoming inevitable.</div>
+
+          <div class="work-list" id="workList">
+            <div class="work-item">
+              <div class="work-tag red">01</div>
+              <div>
+                <strong>Put a date on the next step</strong>
+                <div class="small-copy" style="margin-top:6px;">Proof: calendar invite accepted with date and owner.</div>
+              </div>
+              <a href="#" class="room-link">Open Deal</a>
+            </div>
+            <div class="work-item">
+              <div class="work-tag red">02</div>
+              <div>
+                <strong>Name the internal champion now</strong>
+                <div class="small-copy" style="margin-top:6px;">Proof: champion tied to the next motion, not just verbal support.</div>
+              </div>
+              <a href="#" class="room-link">Open Deal</a>
+            </div>
+            <div class="work-item">
+              <div class="work-tag red">03</div>
+              <div>
+                <strong>Force budget-owner entry</strong>
+                <div class="small-copy" style="margin-top:6px;">Proof: economic buyer named before the stage advances again.</div>
+              </div>
+              <a href="#" class="room-link">Open Call Planner</a>
+            </div>
+          </div>
+
+          <div class="exit-row" id="exitRow">
+            <div class="pill red">Exit pressure</div>
+            <div class="small-copy" id="exitCopy">Kill switch stays off for now, but only because there is still a live path to restore the thread.</div>
+            <a href="#" class="room-link red" id="exitAction">Copy close-clean script</a>
+          </div>
+        </aside>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const states = {
+      left: {
+        toggleId: "leftToggle",
+        panelId: "panel-left-alone",
+        title: "What interrupts the collapse",
+        sub: "The docket is the bridge, not a separate conclusion. In this state it shows the specific interventions that prevent the left-alone verdict from becoming inevitable.",
+        exitPill: "Exit pressure",
+        exitCopy: "Kill switch stays off for now, but only because there is still a live path to restore the thread.",
+        exitAction: "Copy close-clean script",
+        exitActionClass: "room-link red",
+        items: [
+          { tag: "01", tone: "red", title: "Put a date on the next step", copy: "Proof: calendar invite accepted with date and owner.", action: "Open Deal" },
+          { tag: "02", tone: "red", title: "Name the internal champion now", copy: "Proof: champion tied to the next motion, not just verbal support.", action: "Open Deal" },
+          { tag: "03", tone: "red", title: "Force budget-owner entry", copy: "Proof: economic buyer named before the stage advances again.", action: "Open Call Planner" }
+        ]
+      },
+      right: {
+        toggleId: "rightToggle",
+        panelId: "panel-corrected",
+        title: "What sustains the recovery",
+        sub: "The same bridge now gets framed as maintenance. In this state the docket preserves the corrected verdict so the deal does not slide back into decorative stage language.",
+        exitPill: "Exit recedes",
+        exitCopy: "Kill switch pressure falls away while the restored proof and ownership remain alive in the deal.",
+        exitAction: "Open Deal",
+        exitActionClass: "room-link",
+        items: [
+          { tag: "01", tone: "green", title: "Lock the next-step cadence", copy: "Proof: both sides keep the dated sequence alive after the first correction.", action: "Open Deal" },
+          { tag: "02", tone: "green", title: "Turn owner into close path", copy: "Proof: the champion and budget owner stay attached to the actual decision map.", action: "Open Deal" },
+          { tag: "03", tone: "blue", title: "Convert proof into a mutual plan", copy: "Proof: the use case, authority, and procurement path remain synchronized.", action: "Open Call Planner" }
+        ]
+      }
+    };
+
+    const workList = document.getElementById("workList");
+    const docketTitle = document.getElementById("docketTitle");
+    const docketSub = document.getElementById("docketSub");
+    const exitRow = document.getElementById("exitRow");
+    const exitCopy = document.getElementById("exitCopy");
+    const exitAction = document.getElementById("exitAction");
+    const panels = document.querySelectorAll(".panel");
+    const toggles = document.querySelectorAll(".toggle");
+
+    function renderItems(items) {
+      workList.innerHTML = items.map((item) => `
+        <div class="work-item">
+          <div class="work-tag ${item.tone}">${item.tag}</div>
+          <div>
+            <strong>${item.title}</strong>
+            <div class="small-copy" style="margin-top:6px;">${item.copy}</div>
+          </div>
+          <a href="#" class="room-link">${item.action}</a>
+        </div>
+      `).join("");
+    }
+
+    function applyState(key) {
+      const state = states[key];
+      toggles.forEach((toggle) => {
+        toggle.classList.remove("active-left", "active-right");
+        toggle.setAttribute("aria-selected", "false");
+      });
+      panels.forEach((panel) => panel.classList.remove("active"));
+
+      const leftToggle = document.getElementById("leftToggle");
+      const rightToggle = document.getElementById("rightToggle");
+
+      if (key === "left") {
+        leftToggle.classList.add("active-left");
+        leftToggle.setAttribute("aria-selected", "true");
+      } else {
+        rightToggle.classList.add("active-right");
+        rightToggle.setAttribute("aria-selected", "true");
+      }
+
+      document.getElementById(state.panelId).classList.add("active");
+      docketTitle.textContent = state.title;
+      docketSub.textContent = state.sub;
+      renderItems(state.items);
+      exitRow.querySelector(".pill").textContent = state.exitPill;
+      exitRow.querySelector(".pill").className = `pill ${key === "left" ? "red" : "green"}`;
+      exitCopy.textContent = state.exitCopy;
+      exitAction.textContent = state.exitAction;
+      exitAction.className = state.exitActionClass;
+    }
+
+    document.getElementById("leftToggle").addEventListener("click", () => applyState("left"));
+    document.getElementById("rightToggle").addEventListener("click", () => applyState("right"));
+
+    applyState("left");
+  </script>
+</body>
+</html>

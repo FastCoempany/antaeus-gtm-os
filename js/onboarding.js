@@ -58,8 +58,10 @@
     }
 
     function isCompleted() {
-        var state = getState();
-        return !!(state && state.completed === true);
+        if (window.gtmWorkspaceGuard && typeof window.gtmWorkspaceGuard.isCompleted === 'function') {
+            return window.gtmWorkspaceGuard.isCompleted();
+        }
+        return false;
     }
 
     function seedBaseWorkspace(persona, answers) {
@@ -465,12 +467,11 @@
 
     function guardPage() {
         var path = window.location.pathname;
-        if (path.indexOf('/app/onboarding') >= 0) return;
-        if (path.indexOf('/login') >= 0) return;
-        if (path.indexOf('/signup') >= 0) return;
-        if (path.indexOf('/auth/') >= 0) return;
-        if (path.indexOf('/forgot-password') >= 0) return;
-        if (!isCompleted()) window.location.replace('/app/onboarding/');
+        if (window.gtmWorkspaceGuard && typeof window.gtmWorkspaceGuard.redirectToOnboardingIfNeeded === 'function') {
+            window.gtmWorkspaceGuard.redirectToOnboardingIfNeeded(path);
+            return false;
+        }
+        return false;
     }
 
     window.gtmOnboarding = {

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus PoC Framework Radical Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#071735;
+      --muted:#70809d;
+      --faint:#dce5f0;
+      --paper:#f5f8fc;
+      --paper-warm:#fbf7f0;
+      --blue:#2f7df0;
+      --orange:#ed6b1f;
+      --green:#2b7f52;
+      --red:#c94a43;
+      --gold:#d2a267;
+      --shadow:0 28px 80px rgba(31,47,76,.13);
+      --hair:1px solid rgba(92,111,139,.18);
+      --sans:"Public Sans",sans-serif;
+      --serif:"DM Serif Display",serif;
+      --mono:"JetBrains Mono",monospace;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        linear-gradient(rgba(44,95,159,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(44,95,159,.035) 1px, transparent 1px),
+        radial-gradient(circle at 18% 8%, rgba(47,125,240,.08), transparent 30%),
+        radial-gradient(circle at 78% 16%, rgba(237,107,31,.07), transparent 34%),
+        var(--paper);
+      background-size:28px 28px,28px 28px,auto,auto,auto;
+      color:var(--ink);
+      font-family:var(--sans);
+    }
+    main{width:min(1720px, calc(100vw - 72px)); margin:0 auto; padding:42px 0 90px}
+    .brand-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:34px}
+    .kicker{font-family:var(--mono); text-transform:uppercase; letter-spacing:.42em; font-size:12px; color:var(--orange); font-weight:700}
+    .brand{font-family:var(--mono); text-transform:uppercase; letter-spacing:.34em; color:#71809b; font-size:12px; font-weight:700}
+    .intro{
+      display:grid;
+      grid-template-columns:minmax(460px, 820px) 1fr;
+      align-items:end;
+      gap:70px;
+      padding-bottom:46px;
+      border-bottom:var(--hair);
+    }
+    .intro h1{
+      font-size:clamp(70px, 7vw, 138px);
+      line-height:.86;
+      letter-spacing:-.085em;
+      margin:16px 0 20px;
+      max-width:880px;
+    }
+    .intro p{font-size:19px; line-height:1.65; color:#405273; max-width:730px; margin:0}
+    .legend{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      align-self:stretch;
+      align-content:end;
+    }
+    .legend span{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-height:46px;
+      border-top:var(--hair);
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-size:11px;
+      font-weight:700;
+      color:#73839f;
+    }
+    .dot{width:11px;height:11px;border-radius:999px;display:inline-block}
+    .dot.green{background:var(--green)} .dot.orange{background:var(--orange)} .dot.blue{background:var(--blue)} .dot.red{background:var(--red)}
+    .variant{padding:70px 0 96px; border-bottom:var(--hair)}
+    .variant-head{display:flex;justify-content:space-between;gap:40px;align-items:flex-start;margin-bottom:38px}
+    .variant-title{font-family:var(--mono);letter-spacing:.36em;text-transform:uppercase;color:var(--orange);font-weight:700;font-size:12px;margin-bottom:16px}
+    .variant h2{font-size:clamp(40px, 5vw, 84px);line-height:.9;letter-spacing:-.065em;margin:0;max-width:860px}
+    .variant-note{max-width:520px;color:#536783;line-height:1.62;font-size:16px}
+    .label{font-family:var(--mono);text-transform:uppercase;letter-spacing:.28em;font-weight:800;font-size:11px;color:#8b98ad}
+    .mini-rule{font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;font-size:11px;font-weight:800;color:var(--green)}
+
+    /* Variant 01 */
+    .crucible{
+      min-height:760px;
+      display:grid;
+      grid-template-columns:290px minmax(560px, 1fr) 330px;
+      gap:30px;
+      align-items:center;
+    }
+    .rail{
+      display:grid;
+      gap:34px;
+      position:relative;
+      padding:38px 0;
+    }
+    .rail:before{
+      content:"";
+      position:absolute;
+      left:22px;
+      top:0;
+      bottom:0;
+      width:2px;
+      background:linear-gradient(var(--orange),var(--blue),var(--green));
+      opacity:.45;
+    }
+    .lever{
+      display:grid;
+      grid-template-columns:44px 1fr;
+      gap:16px;
+      align-items:start;
+      position:relative;
+    }
+    .lever-mark{
+      width:44px;height:44px;border-radius:999px;background:white;border:1px solid rgba(92,111,139,.18);
+      display:grid;place-items:center;box-shadow:0 18px 40px rgba(38,53,78,.08);font-family:var(--mono);font-weight:800;color:var(--orange);
+    }
+    .lever h3{margin:0 0 8px;font-size:20px;letter-spacing:-.04em}
+    .lever p{margin:0;color:#60728f;line-height:1.55;font-size:14px}
+    .chamber{
+      position:relative;
+      min-height:660px;
+      border-radius:999px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.98) 0 31%, rgba(255,255,255,.83) 32% 48%, transparent 49%),
+        conic-gradient(from -90deg, rgba(43,127,82,.16), rgba(47,125,240,.12), rgba(237,107,31,.18), rgba(201,74,67,.14), rgba(43,127,82,.16));
+      box-shadow:var(--shadow);
+      border:1px solid rgba(92,111,139,.16);
+      overflow:hidden;
+    }
+    .chamber:before,.chamber:after{
+      content:"";
+      position:absolute;
+      inset:86px;
+      border:1px dashed rgba(92,111,139,.22);
+      border-radius:999px;
+    }
+    .chamber:after{inset:190px;border-style:solid;opacity:.42}
+    .proof-core{
+      position:absolute;
+      inset:190px;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      z-index:2;
+    }
+    .proof-core h3{font-size:clamp(46px, 5vw, 96px);line-height:.85;letter-spacing:-.08em;margin:0}
+    .proof-core p{max-width:330px;color:#60728f;line-height:1.55;margin:20px auto 0}
+    .heat-tick{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:38%;
+      height:2px;
+      transform-origin:left center;
+      background:linear-gradient(90deg, transparent, rgba(237,107,31,.7));
+      opacity:.65;
+    }
+    .heat-tick:nth-child(1){transform:rotate(-42deg)}
+    .heat-tick:nth-child(2){transform:rotate(8deg)}
+    .heat-tick:nth-child(3){transform:rotate(61deg)}
+    .pass-strip{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:54px;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      padding:14px 22px;
+      border-radius:999px;
+      background:rgba(255,255,255,.72);
+      backdrop-filter:blur(14px);
+      border:var(--hair);
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:11px;
+      font-weight:800;
+    }
+    .seal-read{
+      align-self:stretch;
+      display:grid;
+      grid-template-rows:1fr auto;
+      gap:22px;
+    }
+    .seal{
+      min-height:400px;
+      background:#fff;
+      border-radius:42px;
+      box-shadow:var(--shadow);
+      padding:34px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      border:var(--hair);
+    }
+    .seal-score{font-size:106px;line-height:.8;color:var(--green);letter-spacing:-.08em}
+    .seal h3{font-size:30px;line-height:1.05;margin:0;letter-spacing:-.05em}
+    .seal p{color:#60728f;line-height:1.55;margin:12px 0 0}
+    .readout-lines{display:grid;gap:1px;background:rgba(92,111,139,.15);border-radius:28px;overflow:hidden;border:var(--hair)}
+    .readout-lines div{display:flex;justify-content:space-between;gap:18px;padding:18px 20px;background:rgba(255,255,255,.78)}
+    .readout-lines strong{font-size:15px}
+    .readout-lines b{font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;font-size:11px}
+
+    /* Variant 02 */
+    .bench{
+      min-height:760px;
+      display:grid;
+      grid-template-columns:1fr 310px;
+      gap:40px;
+      align-items:stretch;
+    }
+    .bench-surface{
+      position:relative;
+      min-height:720px;
+      padding:46px 48px;
+      border-radius:54px;
+      background:
+        linear-gradient(90deg, rgba(47,125,240,.04) 1px, transparent 1px),
+        linear-gradient(rgba(47,125,240,.04) 1px, transparent 1px),
+        linear-gradient(110deg, rgba(255,255,255,.94), rgba(251,247,240,.82));
+      background-size:32px 32px,32px 32px,auto;
+      box-shadow:var(--shadow);
+      border:var(--hair);
+      overflow:hidden;
+    }
+    .bench-title{
+      max-width:620px;
+      font-size:clamp(54px, 6vw, 110px);
+      line-height:.85;
+      letter-spacing:-.08em;
+      margin:12px 0 42px;
+    }
+    .clamps{
+      position:absolute;
+      right:54px;
+      top:68px;
+      width:340px;
+      display:grid;
+      gap:16px;
+    }
+    .clamp{
+      display:grid;
+      grid-template-columns:38px 1fr;
+      gap:14px;
+      align-items:center;
+      padding:16px 0;
+      border-bottom:var(--hair);
+    }
+    .clamp-mark{
+      width:38px;height:38px;border-radius:16px;display:grid;place-items:center;font-family:var(--mono);font-weight:900;
+      background:#fff;border:var(--hair);color:var(--blue);
+    }
+    .clamp:nth-child(2) .clamp-mark{color:var(--orange)}
+    .clamp:nth-child(3) .clamp-mark{color:var(--green)}
+    .clamp strong{display:block;font-size:18px;letter-spacing:-.035em}
+    .clamp span{display:block;color:#6b7a94;font-size:13px;margin-top:4px;line-height:1.4}
+    .evidence-strips{
+      display:grid;
+      gap:18px;
+      max-width:760px;
+      margin-top:30px;
+    }
+    .strip{
+      display:grid;
+      grid-template-columns:110px 1fr 130px;
+      align-items:center;
+      gap:24px;
+      min-height:78px;
+      border-bottom:var(--hair);
+    }
+    .strip .num{font-family:var(--mono);letter-spacing:.2em;color:#91a0b6;font-size:12px;font-weight:800}
+    .strip h3{margin:0;font-size:26px;letter-spacing:-.05em}
+    .strip p{margin:6px 0 0;color:#5e6f8c;font-size:14px;line-height:1.45}
+    .stamp{
+      justify-self:end;
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:11px;
+      font-weight:900;
+    }
+    .stamp.pass{color:var(--green)} .stamp.warn{color:var(--orange)} .stamp.fail{color:var(--red)}
+    .bench-side{
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      border-left:var(--hair);
+      padding-left:34px;
+    }
+    .bench-side h3{font-size:40px;line-height:.98;letter-spacing:-.06em;margin:12px 0 16px}
+    .bench-side p{color:#596b86;line-height:1.62}
+    .bench-action{
+      border-top:var(--hair);
+      padding-top:28px;
+    }
+    .bench-action .go{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      color:var(--orange);
+      text-decoration:none;
+      font-size:18px;
+    }
+    .go-mark{width:34px;height:34px;border-radius:999px;background:rgba(237,107,31,.12);display:grid;place-items:center}
+
+    /* Variant 03 */
+    .treaty{
+      min-height:760px;
+      display:grid;
+      grid-template-columns:360px 1fr;
+      gap:52px;
+      align-items:start;
+    }
+    .treaty-index{
+      position:sticky;
+      top:20px;
+      padding-top:18px;
+    }
+    .treaty-index h3{font-size:42px;line-height:.95;letter-spacing:-.06em;margin:14px 0 28px}
+    .treaty-line{
+      display:grid;
+      grid-template-columns:34px 1fr;
+      gap:14px;
+      padding:18px 0;
+      border-top:var(--hair);
+      align-items:start;
+    }
+    .treaty-line i{width:22px;height:22px;border-radius:999px;border:2px solid currentColor;display:block;margin-top:2px}
+    .treaty-line:nth-child(3){color:var(--orange)}
+    .treaty-line:nth-child(4){color:var(--blue)}
+    .treaty-line:nth-child(5){color:var(--green)}
+    .treaty-line:nth-child(6){color:var(--red)}
+    .treaty-line strong{color:var(--ink);font-size:17px}
+    .treaty-line span{display:block;color:#62728d;font-size:13px;line-height:1.45;margin-top:6px}
+    .treaty-sheet{
+      position:relative;
+      min-height:760px;
+      background:
+        linear-gradient(rgba(7,23,53,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(7,23,53,.03) 1px, transparent 1px),
+        #fffdfa;
+      background-size:36px 36px,36px 36px,auto;
+      border-radius:34px;
+      border:1px solid rgba(92,111,139,.18);
+      box-shadow:var(--shadow);
+      padding:56px 62px;
+      overflow:hidden;
+    }
+    .treaty-sheet:before{
+      content:"";
+      position:absolute;
+      left:0;top:0;bottom:0;width:9px;
+      background:linear-gradient(var(--orange),var(--blue),var(--green));
+    }
+    .treaty-sheet h3{
+      font-family:var(--serif);
+      font-size:clamp(62px, 6vw, 112px);
+      line-height:.86;
+      letter-spacing:-.035em;
+      margin:16px 0 38px;
+      max-width:760px;
+    }
+    .pledge-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:36px;
+      align-items:start;
+    }
+    .pledge-list{display:grid;gap:0;border-top:var(--hair)}
+    .pledge{
+      display:grid;
+      grid-template-columns:76px 1fr 120px;
+      align-items:center;
+      gap:22px;
+      min-height:96px;
+      border-bottom:var(--hair);
+    }
+    .pledge b{font-family:var(--mono);letter-spacing:.22em;text-transform:uppercase;font-size:11px;color:#8a99af}
+    .pledge strong{font-size:22px;letter-spacing:-.05em}
+    .pledge small{justify-self:end;font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;font-weight:900;color:var(--green)}
+    .pledge:nth-child(4) small{color:var(--orange)}
+    .decision-seal{
+      min-height:470px;
+      border-radius:999px 999px 44px 44px;
+      background:linear-gradient(180deg, rgba(7,23,53,.96), rgba(7,23,53,.86));
+      color:white;
+      padding:48px 40px 36px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      box-shadow:0 28px 80px rgba(7,23,53,.25);
+    }
+    .decision-seal .label{color:#a8b7d0}
+    .decision-seal h4{font-size:42px;line-height:.98;letter-spacing:-.06em;margin:16px 0}
+    .decision-seal p{color:#cad5e4;line-height:1.55;margin:0}
+    .seal-actions{
+      display:grid;
+      gap:12px;
+    }
+    .seal-actions span{
+      display:flex;justify-content:space-between;align-items:center;
+      border-top:1px solid rgba(255,255,255,.18);
+      padding-top:14px;
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:11px;
+      font-weight:800;
+    }
+    .why{
+      margin-top:34px;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:18px;
+    }
+    .why div{border-top:var(--hair);padding-top:14px;color:#60728f;line-height:1.5}
+    .why strong{display:block;color:var(--ink);font-size:17px;margin-bottom:8px}
+    @media (max-width:1100px){
+      main{width:min(100vw - 32px, 980px)}
+      .intro,.crucible,.bench,.treaty{grid-template-columns:1fr}
+      .legend{grid-template-columns:1fr 1fr}
+      .variant-head{display:block}
+      .clamps{position:relative;right:auto;top:auto;width:auto;margin-top:24px}
+      .bench-side{border-left:none;border-top:var(--hair);padding:28px 0 0}
+      .treaty-index{position:relative}
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="brand-row">
+      <div class="kicker">PoC Framework Taste-Test Triptych</div>
+      <div class="brand">Antaeus</div>
+    </div>
+    <section class="intro">
+      <div>
+        <h1>Proof should feel earned, not administered.</h1>
+        <p>PoC Framework cannot be another worksheet. Its face should force the operator to name the claim, the proof threshold, the owner, and the decision rule before any pilot becomes real.</p>
+      </div>
+      <div class="legend">
+        <span><i class="dot orange"></i> claim</span>
+        <span><i class="dot blue"></i> proof</span>
+        <span><i class="dot green"></i> pass</span>
+        <span><i class="dot red"></i> kill</span>
+      </div>
+    </section>
+
+    <section class="variant" id="proof-crucible">
+      <div class="variant-head">
+        <div>
+          <div class="variant-title">Variant 01 / Proof Crucible</div>
+          <h2>A pilot becomes a pressure chamber.</h2>
+        </div>
+        <p class="variant-note">Best if PoC Framework should feel like a gate. The user loads one hypothesis, locks three proof levers, and watches whether the pilot is ready, thin, or unsafe to run.</p>
+      </div>
+      <div class="crucible">
+        <div class="rail">
+          <div class="lever">
+            <div class="lever-mark">H</div>
+            <div><h3>Hypothesis</h3><p>One thing the buyer must believe after the test.</p></div>
+          </div>
+          <div class="lever">
+            <div class="lever-mark">O</div>
+            <div><h3>Owner</h3><p>One person accountable for the readout and decision.</p></div>
+          </div>
+          <div class="lever">
+            <div class="lever-mark">M</div>
+            <div><h3>Measure</h3><p>One measurable before/after proof condition.</p></div>
+          </div>
+          <div class="lever">
+            <div class="lever-mark">K</div>
+            <div><h3>Kill rule</h3><p>One condition that ends the pilot instead of extending it.</p></div>
+          </div>
+        </div>
+        <div class="chamber">
+          <i class="heat-tick"></i>
+          <i class="heat-tick"></i>
+          <i class="heat-tick"></i>
+          <div class="proof-core">
+            <div>
+              <div class="label">Active claim</div>
+              <h3>Can this prove a decision?</h3>
+              <p>Northstar Health needs ownership and a real success rule before the pilot is safe.</p>
+            </div>
+          </div>
+          <div class="pass-strip"><span>7 day scope</span><span>economic buyer required</span><span>readout locked</span></div>
+        </div>
+        <div class="seal-read">
+          <div class="seal">
+            <div>
+              <div class="label">Run read</div>
+              <div class="seal-score">62</div>
+            </div>
+            <div>
+              <h3>Workable, but still politically thin.</h3>
+              <p>The proof exists, but the readout owner is not strong enough to carry a decision.</p>
+            </div>
+          </div>
+          <div class="readout-lines">
+            <div><strong>Run pilot</strong><b style="color:var(--orange)">not yet</b></div>
+            <div><strong>Tighten proof</strong><b style="color:var(--blue)">now</b></div>
+            <div><strong>Send to advisor</strong><b style="color:var(--green)">if owner locks</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="variant" id="evidence-bench">
+      <div class="variant-head">
+        <div>
+          <div class="variant-title">Variant 02 / Evidence Bench</div>
+          <h2>The room becomes a forensic proof table.</h2>
+        </div>
+        <p class="variant-note">Best if the room should feel analytical and premium. Every proof item sits as an inspected strip, with clamps that keep the user from drifting into vague pilot language.</p>
+      </div>
+      <div class="bench">
+        <div class="bench-surface">
+          <div class="label">Bench question</div>
+          <h3 class="bench-title">What evidence would make the buyer say yes?</h3>
+          <div class="clamps">
+            <div class="clamp"><div class="clamp-mark">1</div><div><strong>Business proof</strong><span>Does the result change cost, speed, risk, or throughput?</span></div></div>
+            <div class="clamp"><div class="clamp-mark">2</div><div><strong>Technical proof</strong><span>Can it run in their actual environment without fantasy assumptions?</span></div></div>
+            <div class="clamp"><div class="clamp-mark">3</div><div><strong>Decision proof</strong><span>Can the owner carry the readout to a real buying step?</span></div></div>
+          </div>
+          <div class="evidence-strips">
+            <div class="strip">
+              <div class="num">EVID 01</div>
+              <div><h3>Use their own data.</h3><p>Proof does not count if it only works in the vendor sandbox.</p></div>
+              <div class="stamp pass">locked</div>
+            </div>
+            <div class="strip">
+              <div class="num">EVID 02</div>
+              <div><h3>Name the before state.</h3><p>The pilot cannot improve a metric nobody measured before kickoff.</p></div>
+              <div class="stamp warn">thin</div>
+            </div>
+            <div class="strip">
+              <div class="num">EVID 03</div>
+              <div><h3>Force the readout room.</h3><p>If the buyer says “send me the results,” the pilot is already weak.</p></div>
+              <div class="stamp fail">missing</div>
+            </div>
+            <div class="strip">
+              <div class="num">EVID 04</div>
+              <div><h3>Agree on the kill condition.</h3><p>The test needs an honest failure path, not infinite extension.</p></div>
+              <div class="stamp warn">draft</div>
+            </div>
+          </div>
+        </div>
+        <aside class="bench-side">
+          <div>
+            <div class="label">Weakest proof</div>
+            <h3>No readout owner.</h3>
+            <p>The test is useful only if a named person can say what happens when the evidence is good.</p>
+          </div>
+          <div>
+            <div class="label">Proof rule</div>
+            <h3>Evidence beats enthusiasm.</h3>
+            <p>Do not run a PoC to create belief. Run it to verify a belief that is already specific.</p>
+          </div>
+          <div class="bench-action">
+            <a class="go" href="#"><span class="go-mark">→</span> tighten readout owner</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="variant" id="pilot-treaty">
+      <div class="variant-head">
+        <div>
+          <div class="variant-title">Variant 03 / Pilot Treaty</div>
+          <h2>The PoC is a commitment instrument.</h2>
+        </div>
+        <p class="variant-note">Best if the room should feel severe and behavior-forcing. It treats the pilot as an agreement: no owner, no threshold, no decision rule means no pilot.</p>
+      </div>
+      <div class="treaty">
+        <aside class="treaty-index">
+          <div class="label">Treaty clauses</div>
+          <h3>No agreement, no experiment.</h3>
+          <div class="treaty-line"><i></i><div><strong>Claim clause</strong><span>The exact thing the pilot is allowed to prove.</span></div></div>
+          <div class="treaty-line"><i></i><div><strong>Evidence clause</strong><span>The measured condition that changes buyer belief.</span></div></div>
+          <div class="treaty-line"><i></i><div><strong>Authority clause</strong><span>The person who turns proof into a next step.</span></div></div>
+          <div class="treaty-line"><i></i><div><strong>Exit clause</strong><span>The condition that kills the test cleanly.</span></div></div>
+        </aside>
+        <div class="treaty-sheet">
+          <div class="label">Active pilot treaty</div>
+          <h3>Northstar gets seven days to prove triage time drops.</h3>
+          <div class="pledge-grid">
+            <div>
+              <div class="pledge-list">
+                <div class="pledge"><b>01</b><strong>Data set named</strong><small>locked</small></div>
+                <div class="pledge"><b>02</b><strong>Baseline named</strong><small>locked</small></div>
+                <div class="pledge"><b>03</b><strong>Success threshold</strong><small>clear</small></div>
+                <div class="pledge"><b>04</b><strong>Economic readout owner</strong><small>missing</small></div>
+                <div class="pledge"><b>05</b><strong>Decision path after proof</strong><small>draft</small></div>
+              </div>
+              <div class="why">
+                <div><strong>What this protects</strong> A pilot does not become free consulting.</div>
+                <div><strong>What it unlocks</strong> Deal Workspace gets a real proof object.</div>
+                <div><strong>Where it routes</strong> Advisor Deploy only if the ask is specific.</div>
+              </div>
+            </div>
+            <div class="decision-seal">
+              <div>
+                <div class="label">Decision seal</div>
+                <h4>Not signed enough to run.</h4>
+                <p>The evidence path is strong. The authority path is still soft.</p>
+              </div>
+              <div class="seal-actions">
+                <span>run read <b>67</b></span>
+                <span>operator move <b>name owner</b></span>
+                <span>handoff <b>deal proof</b></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

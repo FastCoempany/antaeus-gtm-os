@@ -6,100 +6,12 @@ const SUPABASE_URL = 'https://wjdqmgxwulqxxxnyuzyl.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_jJNFxW9cMGvv-cuqIxiZ2w_AOBkWZGm';
 
 function bootstrapEnvironmentMode() {
-    if (window.__gtmosEnvBootstrapped) {
-        return window.gtmEnvironment || { mode: 'prod', isDemo: false };
-    }
-    window.__gtmosEnvBootstrapped = true;
-
-    var MODE_KEY = 'gtmos_env_mode';
-    var mode = 'prod';
-    try {
-        var params = new URLSearchParams(window.location.search || '');
-        var demoParam = (params.get('demo') || '').toLowerCase();
-        if (demoParam === '1' || demoParam === 'true') {
-            sessionStorage.setItem(MODE_KEY, 'demo');
-        } else if (demoParam === '0' || demoParam === 'false') {
-            sessionStorage.setItem(MODE_KEY, 'prod');
-        }
-        mode = sessionStorage.getItem(MODE_KEY) || 'prod';
-    } catch (e) {
-        mode = 'prod';
-    }
-
-    var isDemo = mode === 'demo';
-    window.gtmEnvironment = { mode: isDemo ? 'demo' : 'prod', isDemo: isDemo };
-
-    if (!isDemo || !window.localStorage) return window.gtmEnvironment;
-
-    var prefix = 'gtmos_demo__';
-    var storageProto = window.Storage && window.Storage.prototype;
-    if (!storageProto || storageProto.__gtmosDemoStoragePatch) return window.gtmEnvironment;
-    storageProto.__gtmosDemoStoragePatch = true;
-
-    var rawGetItem = storageProto.getItem;
-    var rawSetItem = storageProto.setItem;
-    var rawRemoveItem = storageProto.removeItem;
-    var rawKey = storageProto.key;
-    var rawClear = storageProto.clear;
-
-    function isDemoStorageMode() {
-        try { return sessionStorage.getItem(MODE_KEY) === 'demo'; }
-        catch (e) { return false; }
-    }
-
-    function shouldPatch(storageObj) {
-        return storageObj === window.localStorage && isDemoStorageMode();
-    }
-
-    function mapKey(key) {
-        var next = String(key || '');
-        if (next.indexOf('gtmos_') !== 0) return next;
-        if (next.indexOf(prefix) === 0) return next;
-        return prefix + next;
-    }
-
-    storageProto.getItem = function(key) {
-        if (shouldPatch(this)) return rawGetItem.call(this, mapKey(key));
-        return rawGetItem.call(this, key);
-    };
-
-    storageProto.setItem = function(key, value) {
-        if (shouldPatch(this)) return rawSetItem.call(this, mapKey(key), value);
-        return rawSetItem.call(this, key, value);
-    };
-
-    storageProto.removeItem = function(key) {
-        if (shouldPatch(this)) return rawRemoveItem.call(this, mapKey(key));
-        return rawRemoveItem.call(this, key);
-    };
-
-    storageProto.key = function(index) {
-        if (!shouldPatch(this)) return rawKey.call(this, index);
-        var demoKeys = [];
-        for (var i = 0; i < this.length; i++) {
-            var storageKey = rawKey.call(this, i);
-            if (storageKey && storageKey.indexOf(prefix) === 0) {
-                demoKeys.push(storageKey.slice(prefix.length));
-            }
-        }
-        return demoKeys[index] || null;
-    };
-
-    storageProto.clear = function() {
-        if (!shouldPatch(this)) return rawClear.call(this);
-        var toDelete = [];
-        for (var i = 0; i < this.length; i++) {
-            var storageKey = rawKey.call(this, i);
-            if (storageKey && storageKey.indexOf(prefix) === 0) {
-                toDelete.push(storageKey);
-            }
-        }
-        toDelete.forEach(function(storageKey) {
-            rawRemoveItem.call(window.localStorage, storageKey);
+    if (window.gtmDemoStorageBootstrap && typeof window.gtmDemoStorageBootstrap.bootstrapEnvironmentMode === 'function') {
+        return window.gtmDemoStorageBootstrap.bootstrapEnvironmentMode({
+            search: window.location.search
         });
-    };
-
-    return window.gtmEnvironment;
+    }
+    return window.gtmEnvironment || { mode: 'prod', isDemo: false };
 }
 
 bootstrapEnvironmentMode();

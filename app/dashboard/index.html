@@ -146,6 +146,8 @@
             <script src="/js/analytics-site-config.js"></script>
     <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
+            <script src="/js/demo-storage-bootstrap.js"></script>
+<script src="/js/workspace-guard.js"></script>
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
@@ -1505,6 +1507,13 @@
                 list.map(function(card, index) { return renderDashboardSoftCutCard(card, index); }).join('');
         }
         function renderDashboardCommandMode(mode, delta) {
+            delta = delta && typeof delta === 'object'
+                ? delta
+                : {
+                    title: 'No command delta available yet.',
+                    copy: 'The dashboard can still render the current command view while snapshot memory catches up.',
+                    items: ['No comparison checkpoint is available for this view yet.']
+                };
             return '<section class="dashboard-mode-shell">' +
                 renderDashboardModeCarousel(mode) +
                 '<div class="dashboard-delta-shelf">' +

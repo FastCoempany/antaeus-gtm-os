@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Deal Workspace Diagnosis Triptych</title>
+  <style>
+    :root {
+      --navy: #0a1c40;
+      --blue: #2471e7;
+      --orange: #e6701e;
+      --green: #2d7a4b;
+      --ink: #10274f;
+      --soft: #5f7594;
+      --muted: #8b9cb4;
+      --line: rgba(10, 28, 64, 0.09);
+      --line-strong: rgba(10, 28, 64, 0.16);
+      --paper: rgba(255,255,255,0.84);
+      --paper-2: rgba(255,255,255,0.92);
+      --shadow-soft: 0 18px 44px rgba(10, 28, 64, 0.07);
+      --shadow-float: 0 28px 74px rgba(10, 28, 64, 0.14);
+      --radius-xl: 30px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 26%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 28px 22px 88px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, p { margin: 0; }
+
+    .page {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: grid;
+      gap: 26px;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 0 4px;
+    }
+
+    .topline .accent { color: var(--orange); }
+
+    .artboard {
+      position: relative;
+      overflow: hidden;
+      min-height: 1020px;
+      padding: 28px 30px 34px;
+      border-radius: 38px;
+      border: 1px solid rgba(10, 28, 64, 0.06);
+      background:
+        radial-gradient(circle at 88% 10%, rgba(230,112,30,0.05), transparent 28%),
+        radial-gradient(circle at 8% 0%, rgba(36,113,231,0.05), transparent 28%),
+        linear-gradient(180deg, rgba(252,253,255,0.98) 0%, rgba(244,247,252,0.98) 100%);
+      box-shadow: 0 28px 90px rgba(10, 28, 64, 0.09);
+    }
+
+    .artboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 20px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .artboard-header .label { color: var(--orange); }
+
+    .chrome {
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .spine {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+      padding-top: 8px;
+    }
+
+    .brand {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      color: var(--navy);
+    }
+
+    .spine-rail {
+      width: 1px;
+      height: 220px;
+      background: linear-gradient(180deg, rgba(10,28,64,0.12), rgba(10,28,64,0));
+      margin-left: 8px;
+    }
+
+    .spine-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--orange);
+      margin-left: 2px;
+      box-shadow: 0 0 0 8px rgba(230,112,30,0.08);
+    }
+
+    .surface {
+      display: grid;
+      gap: 24px;
+    }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.84fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+      max-width: 860px;
+    }
+
+    .hero h1 {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(74px, 9vw, 132px);
+      line-height: 0.9;
+      letter-spacing: -0.11em;
+      max-width: 8ch;
+      color: var(--navy);
+    }
+
+    .hero p {
+      max-width: 620px;
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary,
+    .btn-ghost,
+    .btn-link {
+      border: 0;
+      background: none;
+      font: inherit;
+      padding: 0;
+      color: inherit;
+    }
+
+    .btn-primary {
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 18px;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 14px 30px rgba(230,112,30,0.22);
+    }
+
+    .btn-ghost {
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(10,28,64,0.12);
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .btn-link {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .brief-note {
+      display: grid;
+      gap: 6px;
+      width: fit-content;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .brief-note .kicker {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .brief-note .copy {
+      max-width: 520px;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    .target-slab,
+    .target-folio,
+    .target-ledger {
+      padding: 22px 24px;
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      background: var(--paper-2);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .target-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .target-kicker {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .target-title {
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .target-value {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 32px;
+      line-height: 1;
+      color: var(--green);
+      letter-spacing: -0.06em;
+      white-space: nowrap;
+    }
+
+    .target-copy {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--soft);
+      margin-bottom: 14px;
+    }
+
+    .signal-grid {
+      display: grid;
+      gap: 9px;
+    }
+
+    .signal-row {
+      display: grid;
+      grid-template-columns: 26px 84px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .signal-row:last-child { border-bottom: 0; }
+
+    .signal-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      background: rgba(10,28,64,0.06);
+    }
+
+    .signal-mark.risk { background: rgba(230,112,30,0.12); color: var(--orange); }
+    .signal-mark.proof { background: rgba(36,113,231,0.12); color: var(--blue); }
+    .signal-mark.motion { background: rgba(45,122,75,0.12); color: var(--green); }
+
+    .signal-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .signal-copy {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+
+    .register-strip,
+    .register-grid,
+    .register-rowset {
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .register-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .register-row:last-child { border-bottom: 0; }
+
+    .register-row .name {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .register-row .sub {
+      margin-top: 5px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    .register-row .val {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 8px 0 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .filter-shell {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.78);
+      min-width: 240px;
+    }
+
+    .filter-shell .tag {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .filter-shell .value {
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.03em;
+    }
+
+    .count {
+      font-size: 14px;
+      color: var(--soft);
+    }
+
+    .stats-line {
+      display: flex;
+      gap: 26px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .stat-chip {
+      display: grid;
+      gap: 2px;
+    }
+
+    .stat-chip .label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .stat-chip .value {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--navy);
+      letter-spacing: -0.05em;
+    }
+
+    .stat-chip .sub {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    .queue-ledger {
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .queue-row {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1.15fr) minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .queue-row:last-child { border-bottom: 0; }
+
+    .queue-rank {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--orange);
+      background: rgba(230,112,30,0.1);
+    }
+
+    .queue-name {
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .queue-kicker {
+      margin-bottom: 5px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .queue-reason {
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--soft);
+    }
+
+    .queue-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(230,112,30,0.18);
+      background: rgba(230,112,30,0.08);
+      color: var(--orange);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .queue-cta {
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .shelf-row {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .shelf,
+    .lane-plate {
+      padding: 20px 22px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .shelf .title,
+    .lane-plate .title {
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .shelf p,
+    .lane-plate p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .lane-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .lane {
+      padding: 18px 18px 20px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+    }
+
+    .lane .state {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .lane .headline {
+      font-size: 26px;
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .lane .copy {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--soft);
+    }
+
+    .lane .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .lane .meta span {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.7);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .variant-a .stage-grid { grid-template-columns: minmax(0, 1.18fr) minmax(340px, 0.82fr); }
+    .variant-a .queue-ledger { margin-top: 2px; }
+
+    .variant-a,
+    .variant-c { display: none; }
+    .variant-b .stage-grid { grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr); }
+    .variant-b .target-folio {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 110px;
+      gap: 16px;
+      align-items: start;
+      background: linear-gradient(180deg, rgba(255,247,240,0.92) 0%, rgba(255,255,255,0.96) 100%);
+    }
+    .variant-b .folio-dock {
+      display: grid;
+      gap: 10px;
+    }
+    .variant-b .folio-dock .tab {
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.92);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      text-align: center;
+    }
+    .variant-b .folio-dock .tab.is-risk {
+      border-color: rgba(230,112,30,0.18);
+      color: var(--orange);
+      background: rgba(230,112,30,0.08);
+    }
+    .variant-b .queue-row {
+      grid-template-columns: 56px minmax(0, 1fr) auto;
+    }
+    .variant-b .queue-row .queue-badge { justify-self: start; }
+    .variant-b .micro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+    }
+    .variant-b .micro {
+      display: grid;
+      gap: 6px;
+      padding: 14px 0 10px;
+      border-top: 1px solid var(--line);
+    }
+    .variant-b .micro .label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .variant-b .micro .value {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--navy);
+      letter-spacing: -0.05em;
+    }
+    .variant-b .micro .sub {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+    .variant-b .lane-grid {
+      margin-top: 2px;
+    }
+    .variant-b .lane {
+      border: 0;
+      background: rgba(255,255,255,0.52);
+      box-shadow: 0 18px 40px rgba(10, 28, 64, 0.08);
+      backdrop-filter: blur(6px);
+    }
+    .variant-b .lane .state {
+      margin-bottom: 12px;
+    }
+    .variant-b .lane .meta span {
+      border: 0;
+      background: rgba(255,255,255,0.72);
+      box-shadow: inset 0 0 0 1px rgba(10,28,64,0.08);
+    }
+
+    .variant-c .hero h1 { max-width: 9ch; }
+    .variant-c .stage-grid { grid-template-columns: minmax(0, 1fr); }
+    .variant-c .upper-table {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .variant-c .target-ledger {
+      display: grid;
+      gap: 14px;
+      background: rgba(255,255,255,0.88);
+    }
+    .variant-c .target-ledger .bar {
+      height: 1px;
+      background: var(--line-strong);
+    }
+    .variant-c .target-ledger .dockline {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: baseline;
+      padding-top: 8px;
+    }
+    .variant-c .dockline .name {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .variant-c .dockline .value {
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .variant-c .micro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+    }
+    .variant-c .micro {
+      display: grid;
+      gap: 6px;
+      padding: 14px 0 10px;
+      border-top: 1px solid var(--line);
+    }
+    .variant-c .micro .label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .variant-c .micro .value {
+      font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--navy);
+      letter-spacing: -0.05em;
+    }
+    .variant-c .micro .sub {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    @media (max-width: 1200px) {
+      .chrome { grid-template-columns: 1fr; }
+      .spine { display: none; }
+      .stage-grid,
+      .shelf-row,
+      .variant-c .upper-table { grid-template-columns: 1fr; }
+      .lane-grid { grid-template-columns: 1fr; }
+      .queue-row { grid-template-columns: 42px minmax(0,1fr); }
+      .queue-row > :nth-child(3),
+      .queue-row > :nth-child(4) { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topline">
+      <div><span class="accent">Deal Workspace</span> Diagnosis Triptych</div>
+      <div>Antaeus</div>
+    </div>
+
+    <section class="artboard variant-a">
+      <div class="artboard-header">
+        <div><span class="label">Variant 01</span> Pressure Ledger</div>
+        <div>Diagnosis Table</div>
+      </div>
+      <div class="chrome">
+        <div class="spine">
+          <div class="brand">ANTAEUS</div>
+          <div class="spine-dot"></div>
+          <div class="spine-rail"></div>
+        </div>
+        <div class="surface">
+          <div class="stage-grid">
+            <div class="hero">
+              <div class="eyebrow">Board truth</div>
+              <h1>Recover the deals that are lying about stage.</h1>
+              <p>When the board starts drifting, fix the no-date, overdue, or thin-thread deals before you trust forecast language.</p>
+              <div class="hero-actions">
+                <button class="btn-primary">Open recovery queue</button>
+                <button class="btn-ghost">New deal</button>
+                <button class="btn-link">Stress-test top deal</button>
+              </div>
+              <div class="brief-note">
+                <div class="kicker">One-session win</div>
+                <div class="copy">Leave this page knowing which deal is healthiest, which deal is rotting, and what the next dated move is on both.</div>
+              </div>
+            </div>
+            <div class="target-slab">
+              <div class="target-kicker">Current review target</div>
+              <div class="target-head">
+                <div class="target-title">Northstar Health</div>
+                <div class="target-value">$180k</div>
+              </div>
+              <div class="target-copy">Stage reads stronger than truth. Qualification is still soft and no one is clearly carrying the fix.</div>
+              <div class="signal-grid">
+                <div class="signal-row">
+                  <div class="signal-mark risk">!</div>
+                  <div class="signal-label">Risk</div>
+                  <div class="signal-copy">Drift · stage outpacing reality</div>
+                </div>
+                <div class="signal-row">
+                  <div class="signal-mark proof">≡</div>
+                  <div class="signal-label">Proof</div>
+                  <div class="signal-copy">Thin · qualification still soft</div>
+                </div>
+                <div class="signal-row">
+                  <div class="signal-mark motion">→</div>
+                  <div class="signal-label">Motion</div>
+                  <div class="signal-copy">Owner · no one carrying the fix</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="filter-shell">
+              <div class="tag">Filter</div>
+              <div class="value">At risk</div>
+            </div>
+            <div class="stats-line">
+              <div class="stat-chip">
+                <div class="label">Active deals</div>
+                <div class="value">68</div>
+                <div class="sub">Live opportunities under pressure.</div>
+              </div>
+              <div class="stat-chip">
+                <div class="label">Weighted truth</div>
+                <div class="value">$4.8M</div>
+                <div class="sub">What the board is honestly worth.</div>
+              </div>
+              <div class="stat-chip">
+                <div class="label">Recovery queue</div>
+                <div class="value">3</div>
+                <div class="sub">Deals degrading credibility now.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="queue-ledger">
+            <div class="queue-row">
+              <div class="queue-rank">1</div>
+              <div>
+                <div class="queue-kicker">Apex Fintech</div>
+                <div class="queue-name">No dated next step</div>
+              </div>
+              <div class="queue-reason">Add a dated move now. Stage language is outrunning execution truth.</div>
+              <div>
+                <div class="queue-badge">Recovery item</div>
+                <div class="queue-cta" style="margin-top:12px;">Open autopsy</div>
+              </div>
+            </div>
+            <div class="queue-row">
+              <div class="queue-rank">2</div>
+              <div>
+                <div class="queue-kicker">Northstar Health</div>
+                <div class="queue-name">Qualification still thin</div>
+              </div>
+              <div class="queue-reason">The board is reading confidence without enough proof underneath it.</div>
+              <div>
+                <div class="queue-badge">Deal intervention</div>
+                <div class="queue-cta" style="margin-top:12px;">Edit deal</div>
+              </div>
+            </div>
+            <div class="queue-row">
+              <div class="queue-rank">3</div>
+              <div>
+                <div class="queue-kicker">VoltOps</div>
+                <div class="queue-name">Thread too narrow</div>
+              </div>
+              <div class="queue-reason">Signal exists, but it still has not become a carried live opportunity.</div>
+              <div>
+                <div class="queue-badge">Pressure route</div>
+                <div class="queue-cta" style="margin-top:12px;">Open signal</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard variant-b">
+      <div class="artboard-header">
+        <div><span class="label">Variant 02</span> Intervention Desk</div>
+        <div>Diagnosis Table</div>
+      </div>
+      <div class="chrome">
+        <div class="spine">
+          <div class="brand">ANTAEUS</div>
+          <div class="spine-dot"></div>
+          <div class="spine-rail"></div>
+        </div>
+        <div class="surface">
+          <div class="stage-grid">
+            <div class="hero">
+              <div class="eyebrow">Deal review</div>
+              <h1>Make the board confess where it is weak.</h1>
+              <p>Do not scan 68 deals as if they are equal. Start with the live thread that is making the board flatter than reality.</p>
+              <div class="hero-actions">
+                <button class="btn-primary">Run intervention</button>
+                <button class="btn-ghost">Open at-risk only</button>
+                <button class="btn-link">New deal</button>
+              </div>
+            </div>
+
+            <div class="target-folio">
+              <div>
+                <div class="target-kicker">Commissioned case</div>
+                <div class="target-head">
+                  <div class="target-title">Northstar Health</div>
+                  <div class="target-value">$180k</div>
+                </div>
+                <div class="target-copy">This is the live case the room should sharpen first. If it cannot survive pressure, the rest of the board becomes decorative.</div>
+                <div class="signal-grid">
+                  <div class="signal-row">
+                    <div class="signal-mark risk">!</div>
+                    <div class="signal-label">Risk</div>
+                    <div class="signal-copy">Drift · stage outruns truth</div>
+                  </div>
+                  <div class="signal-row">
+                    <div class="signal-mark proof">≡</div>
+                    <div class="signal-label">Proof</div>
+                    <div class="signal-copy">Thin · qualification not locked</div>
+                  </div>
+                  <div class="signal-row">
+                    <div class="signal-mark motion">→</div>
+                    <div class="signal-label">Motion</div>
+                    <div class="signal-copy">Owner · internal carry missing</div>
+                  </div>
+                </div>
+              </div>
+                <div class="signal-grid signal-grid-clean">
+                  <div class="signal-row">
+                    <div class="signal-mark risk">!</div>
+                    <div class="signal-label">Risk</div>
+                    <div class="signal-copy">Drift · stage outruns truth</div>
+                  </div>
+                  <div class="signal-row">
+                    <div class="signal-mark proof">≡</div>
+                    <div class="signal-label">Proof</div>
+                    <div class="signal-copy">Thin · qualification not locked</div>
+                  </div>
+                  <div class="signal-row">
+                    <div class="signal-mark motion">→</div>
+                    <div class="signal-label">Motion</div>
+                    <div class="signal-copy">Owner · internal carry missing</div>
+                  </div>
+                </div>
+              <div class="folio-dock">
+                <div class="tab is-risk">3 active drags</div>
+                <div class="tab">One-session win</div>
+                <div class="tab">Weighted truth</div>
+                <div class="tab">Recovery queue</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="micro-grid">
+            <div class="micro">
+              <div class="label">Active deals</div>
+              <div class="value">68</div>
+              <div class="sub">Live opportunities still under pressure.</div>
+            </div>
+            <div class="micro">
+              <div class="label">Pipeline</div>
+              <div class="value">$9.5M</div>
+              <div class="sub">Raw value before stage probability.</div>
+            </div>
+            <div class="micro">
+              <div class="label">Closed truth</div>
+              <div class="value">1 / 0</div>
+              <div class="sub">Won versus lost keeps forecast language grounded.</div>
+            </div>
+          </div>
+
+          <div class="lane-grid">
+            <div class="lane">
+              <div class="state">Now</div>
+              <div class="headline">Recover the weakest live thread</div>
+              <div class="copy">The board is only as honest as the deals with no dated next step, overdue motion, or thin qualification.</div>
+              <div class="meta"><span>3 recovery items</span><span>65 healthy</span></div>
+            </div>
+            <div class="lane">
+              <div class="state">Next</div>
+              <div class="headline">Tighten the best live opportunity</div>
+              <div class="copy">Use the top-valued live deal as the forcing function. If it cannot survive qualification pressure, the rest of the board is decorative.</div>
+              <div class="meta"><span>Northstar Health</span><span>$180k</span></div>
+            </div>
+            <div class="lane">
+              <div class="state">Keep honest</div>
+              <div class="headline">Do not let stage outrun next-step truth</div>
+              <div class="copy">A stage without a dated move is just optimism. Keep the close path and stakeholder map in sync with reality.</div>
+              <div class="meta"><span>68 next-step gaps</span><span>Stalled 7d+</span></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="filter-shell">
+              <div class="tag">Filter</div>
+              <div class="value">All deals</div>
+            </div>
+            <div class="hero-actions">
+              <button class="btn-primary">Open recovery queue</button>
+              <button class="btn-ghost">Stress-test top deal</button>
+              <button class="btn-link">New deal</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard variant-c">
+      <div class="artboard-header">
+        <div><span class="label">Variant 03</span> Severe Table</div>
+        <div>Diagnosis Table</div>
+      </div>
+      <div class="chrome">
+        <div class="spine">
+          <div class="brand">ANTAEUS</div>
+          <div class="spine-dot"></div>
+          <div class="spine-rail"></div>
+        </div>
+        <div class="surface">
+          <div class="hero">
+            <div class="eyebrow">Intervention view</div>
+            <h1>See the board as an exposure table, not a comfort blanket.</h1>
+            <p>The board should read like a piece of operating equipment: pressure first, proof second, route third.</p>
+          </div>
+
+          <div class="upper-table">
+            <div class="target-ledger">
+              <div class="target-kicker">Current review target</div>
+              <div class="target-head">
+                <div class="target-title">Northstar Health</div>
+                <div class="target-value">$180k</div>
+              </div>
+              <div class="target-copy">The board is trusting stage language more than deal truth. Qualification is thin, and the internal carry is still weak.</div>
+              <div class="bar"></div>
+              <div class="dockline">
+                <div class="name">Risk</div>
+                <div class="value">Drift</div>
+              </div>
+              <div class="dockline">
+                <div class="name">Proof</div>
+                <div class="value">Thin</div>
+              </div>
+              <div class="dockline">
+                <div class="name">Motion</div>
+                <div class="value">Owner</div>
+              </div>
+            </div>
+
+            <div class="register-rowset">
+              <div class="register-row">
+                <div>
+                  <div class="name">Board posture</div>
+                  <div class="sub">The weakest live deals need intervention now.</div>
+                </div>
+                <div class="val">Recovery pressure</div>
+              </div>
+              <div class="register-row">
+                <div>
+                  <div class="name">Weighted truth</div>
+                  <div class="sub">Active pipeline after stage probability.</div>
+                </div>
+                <div class="val">$4.8M</div>
+              </div>
+              <div class="register-row">
+                <div>
+                  <div class="name">Recovery queue</div>
+                  <div class="sub">Deals making the board less believable.</div>
+                </div>
+                <div class="val">3</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="micro-grid">
+            <div class="micro">
+              <div class="label">Active deals</div>
+              <div class="value">68</div>
+              <div class="sub">Live opportunities still under pressure.</div>
+            </div>
+            <div class="micro">
+              <div class="label">Pipeline</div>
+              <div class="value">$9.5M</div>
+              <div class="sub">Raw value before stage probability.</div>
+            </div>
+            <div class="micro">
+              <div class="label">Closed truth</div>
+              <div class="value">1 / 0</div>
+              <div class="sub">Won versus lost keeps forecast language grounded.</div>
+            </div>
+          </div>
+
+          <div class="lane-grid">
+            <div class="lane">
+              <div class="state">Now</div>
+              <div class="headline">Recover the weakest live thread</div>
+              <div class="copy">The board is only as honest as the deals with no dated next step, overdue motion, or thin qualification.</div>
+              <div class="meta"><span>3 recovery items</span><span>65 healthy</span></div>
+            </div>
+            <div class="lane">
+              <div class="state">Next</div>
+              <div class="headline">Tighten the best live opportunity</div>
+              <div class="copy">Use the top-valued live deal as the forcing function. If it cannot survive qualification pressure, the rest of the board is decorative.</div>
+              <div class="meta"><span>Northstar Health</span><span>$180k</span></div>
+            </div>
+            <div class="lane">
+              <div class="state">Keep honest</div>
+              <div class="headline">Do not let stage outrun next-step truth</div>
+              <div class="copy">A stage without a dated move is just optimism. Keep the close path and stakeholder map in sync with reality.</div>
+              <div class="meta"><span>68 next-step gaps</span><span>Stalled 7d+</span></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="filter-shell">
+              <div class="tag">Filter</div>
+              <div class="value">All deals</div>
+            </div>
+            <div class="hero-actions">
+              <button class="btn-primary">Open recovery queue</button>
+              <button class="btn-ghost">Stress-test top deal</button>
+              <button class="btn-link">New deal</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

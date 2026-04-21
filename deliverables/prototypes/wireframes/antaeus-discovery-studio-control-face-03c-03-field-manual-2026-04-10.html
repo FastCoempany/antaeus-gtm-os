@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery Studio Control Face 03C-03 - Field Manual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="./discovery-studio-control-face-03b-foundation-data-2026-04-10.js"></script>
+  <style>
+    :root{
+      --bg:#f5f8ff;--ink:#102a58;--muted:#7288ac;--line:rgba(16,42,88,.12);--line2:rgba(16,42,88,.22);
+      --blue:#2f70f0;--orange:#e87821;--green:#2f8755;--red:#c84d4d;--shadow:0 22px 54px rgba(16,42,88,.08);
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;color:var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(47,112,240,.08), transparent 24%),
+        radial-gradient(circle at 88% 0%, rgba(232,120,33,.08), transparent 22%),
+        linear-gradient(180deg,#fbfdff 0%,var(--bg) 100%);
+      padding:26px 24px 44px;
+    }
+    button{font:inherit}
+    .page{max-width:1680px;margin:0 auto}
+    .mast{display:flex;justify-content:space-between;align-items:end;gap:24px;padding-bottom:16px;border-bottom:1px solid var(--line2)}
+    .kicker,.mono,.micro{font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:700}
+    .kicker{color:var(--orange)}
+    .brand{margin-top:6px;font-family:"Outfit",sans-serif;font-size:24px;line-height:.94;letter-spacing:-.05em}
+    .summary{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .board{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:34px;margin-top:18px}
+    .manual{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;align-items:start}
+    .leftRail{position:sticky;top:18px;align-self:start}
+    .frameworkCard{padding:20px 18px;border:1px solid var(--line);border-radius:30px;background:rgba(255,255,255,.8);box-shadow:var(--shadow)}
+    .frameworks,.responses{margin-top:14px;border-top:1px solid var(--line)}
+    .frameworkBtn,.replyBtn,.segmentButton{width:100%;border:0;background:none;color:inherit;text-align:left;cursor:pointer}
+    .frameworkBtn{display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+    .dot,.segmentDot,.replyDot,.toolDot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(16,42,88,.16);position:relative;flex:0 0 auto}
+    .dot::after,.segmentDot::after,.replyDot::after,.toolDot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#d9e1ef}
+    .frameworkBtn.active .dot::after{background:var(--orange)}
+    .fwName{font-size:14px;line-height:1.3;color:#90a3be;font-weight:700}
+    .frameworkBtn.active .fwName{color:var(--ink)}
+    .fwNote{margin-top:18px;font-size:13px;line-height:1.62;color:var(--muted)}
+    .spine{display:grid;gap:0}
+    .segmentItem{display:grid;grid-template-columns:140px minmax(0,1fr);gap:26px;padding:12px 0;border-top:1px solid var(--line)}
+    .segmentButton{display:grid;grid-template-columns:12px 38px minmax(0,1fr);gap:12px;align-items:center}
+    .segmentItem.active .segmentDot::after{background:var(--blue)}
+    .segmentItem.start .segmentDot::after{background:var(--orange)}
+    .segNum{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .segTitle{font-family:"Outfit",sans-serif;font-size:26px;line-height:.96;letter-spacing:-.05em}
+    .segmentPanel{display:none}
+    .segmentItem.active .segmentPanel{display:grid;gap:16px}
+    .topRow{display:grid;grid-template-columns:minmax(0,1.05fr) 300px;gap:34px;align-items:start}
+    .lineText{font-family:"Outfit",sans-serif;font-size:50px;line-height:.92;letter-spacing:-.07em;max-width:14ch}
+    .nextPanel{padding:12px 0 0 14px;border-left:1px solid var(--line)}
+    .nextLine{margin-top:8px;font-family:"Outfit",sans-serif;font-size:36px;line-height:.95;letter-spacing:-.06em;max-width:11ch}
+    .replyBtn{display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+    .replyBtn:last-child{border-bottom:0}
+    .replyBtn.green .replyDot::after{background:var(--green)}
+    .replyBtn.orange .replyDot::after{background:var(--orange)}
+    .replyBtn.red .replyDot::after{background:var(--red)}
+    .replyMeta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .replyQuote{margin-top:7px;font-size:26px;line-height:1.05;letter-spacing:-.04em;font-weight:700;max-width:22ch;opacity:.58;transition:opacity .16s ease}
+    .replyBtn.active .replyQuote{opacity:1}
+    .toolStrip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding-top:16px;border-top:1px solid var(--line)}
+    .toolBlock{padding-right:12px}
+    .toolHead{display:flex;align-items:center;gap:10px;padding:0;background:none;border:0;color:#96a7c0;font-size:14px;font-weight:700;cursor:pointer}
+    .toolHead.active{color:var(--ink)}
+    .toolHead.facts .toolDot::after{background:var(--blue)}
+    .toolHead.recover .toolDot::after{background:var(--red)}
+    .toolHead.leave .toolDot::after{background:var(--orange)}
+    .toolList{display:grid;gap:10px;margin-top:12px}
+    .toolRow{font-size:14px;line-height:1.58;color:var(--muted)}
+    .rightMeta{position:sticky;top:18px;align-self:start}
+    .metaPanel{padding-top:12px;border-top:1px solid var(--line)}
+    .metaLine{margin-top:10px;font-family:"Outfit",sans-serif;font-size:28px;line-height:.96;letter-spacing:-.05em}
+    .metaCopy{margin-top:12px;font-size:13px;line-height:1.62;color:var(--muted)}
+    @media (max-width:1320px){
+      .board,.manual,.segmentItem,.topRow,.toolStrip{grid-template-columns:1fr}
+      .leftRail,.rightMeta{position:static}
+      .nextPanel{padding-left:0;border-left:0;border-top:1px solid var(--line)}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="mast">
+      <div>
+        <div class="kicker">Discovery Studio / Control Face 03C / Variant 03</div>
+        <div class="brand">Field manual.</div>
+      </div>
+      <div class="summary" id="frameworkStamp"></div>
+    </div>
+
+    <div class="board">
+      <div class="manual">
+        <aside class="leftRail">
+          <div class="frameworkCard">
+            <div class="mono">Framework lens</div>
+            <div class="frameworks" id="frameworks"></div>
+            <div class="fwNote">This rail sets the category context. The rep still lives in the open segment to the right.</div>
+          </div>
+        </aside>
+
+        <main class="spine" id="segments"></main>
+      </div>
+
+      <aside class="rightMeta">
+        <div class="mono">Room rule</div>
+        <div class="metaPanel">
+          <div class="metaLine">Keep one segment open. Pivot inside it.</div>
+          <div class="metaCopy">This variant treats the room more like a field manual: the segment label stays in the left gutter, while the live call language opens in the right field.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const foundation = window.DS_CONTROL_FACE_FOUNDATION;
+    let frameworkIndex = foundation.defaultFrameworkIndex;
+    let activeSegment = '3';
+    let activeReply = 0;
+    let activeTool = 'facts';
+
+    function renderFrameworks(){
+      document.getElementById('frameworkStamp').textContent = foundation.frameworks[frameworkIndex];
+      document.getElementById('frameworks').innerHTML = foundation.frameworks.map((f,i)=>`
+        <button class="frameworkBtn ${i===frameworkIndex?'active':''}" onclick="frameworkIndex=${i};render()">
+          <span class="dot"></span><span class="fwName">${f}</span>
+        </button>
+      `).join('');
+    }
+
+    function toolColumn(segment, type, title, rows){
+      return `
+        <div class="toolBlock">
+          <button class="toolHead ${type} ${activeTool===type?'active':''}" onclick="setTool('${type}')"><span class="toolDot"></span><span>${title}</span></button>
+          ${activeTool===type ? `<div class="toolList">${rows.map(row=>`<div class="toolRow">${row}</div>`).join('')}</div>` : ''}
+        </div>
+      `;
+    }
+
+    function repliesMarkup(segment){
+      return segment.replies.map((reply,index)=>`
+        <button class="replyBtn ${reply.tone} ${index===activeReply?'active':''}" onclick="activeReply=${index};renderSegments()">
+          <span class="replyDot"></span>
+          <span><span class="replyMeta">${reply.meta}</span><span class="replyQuote">${reply.quote}</span></span>
+        </button>
+      `).join('');
+    }
+
+    function segmentMarkup(segment){
+      const nextIndex = Math.min(activeReply, segment.next.length - 1);
+      return `
+        <div class="segmentItem ${segment.id===activeSegment?'active':''} ${segment.id==='1'?'start':''}">
+          <div>
+            <button class="segmentButton" onclick="activeSegment='${segment.id}';activeReply=0;activeTool='facts';renderSegments()">
+              <span class="segmentDot"></span><span class="segNum">${segment.n}</span><span class="segTitle">${segment.t}</span>
+            </button>
+          </div>
+          <div class="segmentPanel">
+            <div class="topRow">
+              <div>
+                <div class="micro">Say this now</div>
+                <div class="lineText">${segment.say}</div>
+              </div>
+              <div class="nextPanel">
+                <div class="micro">Say next</div>
+                <div class="nextLine">${segment.next[nextIndex] || segment.next[0]}</div>
+              </div>
+            </div>
+            <div>
+              <div class="micro">Buyer might say</div>
+              <div class="responses">${repliesMarkup(segment)}</div>
+            </div>
+            <div class="toolStrip">
+              ${toolColumn(segment,'facts','What we know so far',segment.facts)}
+              ${toolColumn(segment,'recover','If they push back',segment.recover)}
+              ${toolColumn(segment,'leave','Before you move on',segment.leave)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSegments(){
+      document.getElementById('segments').innerHTML = foundation.segments.map(segmentMarkup).join('');
+    }
+
+    function setTool(tool){ activeTool = tool; renderSegments(); }
+    function render(){ renderFrameworks(); renderSegments(); }
+    render();
+  </script>
+</body>
+</html>

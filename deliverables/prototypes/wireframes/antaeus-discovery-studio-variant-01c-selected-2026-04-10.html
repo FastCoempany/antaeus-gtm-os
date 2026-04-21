@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Discovery Studio Variant 01C Selected</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f2f6fc;
+      --ink:#0a1d43;
+      --muted:#7187a8;
+      --line:rgba(10,29,67,.12);
+      --line-strong:rgba(10,29,67,.22);
+      --blue:#256fe7;
+      --orange:#e5721f;
+      --green:#2f7b4d;
+      --red:#cd4f49;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(37,111,231,.09), transparent 26%),
+        radial-gradient(circle at 100% 12%, rgba(229,114,31,.09), transparent 24%),
+        linear-gradient(180deg,#fbfdff 0%, var(--bg) 100%);
+      padding:30px 20px 72px;
+    }
+    button{
+      font:inherit;
+      color:inherit;
+      background:none;
+      border:0;
+      padding:0;
+      cursor:pointer;
+      appearance:none;
+      -webkit-appearance:none;
+    }
+    .page{
+      max-width:1560px;
+      margin:0 auto;
+    }
+    .topline{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:14px;
+      font-size:11px;
+      letter-spacing:.3em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:#8ea0ba;
+    }
+    .topline .accent{color:var(--orange)}
+    .board{
+      position:relative;
+      padding:18px 0 0;
+      border-top:1px solid var(--line-strong);
+    }
+    .board::before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:240px;
+      background:
+        linear-gradient(90deg, rgba(37,111,231,.05), transparent 40%),
+        linear-gradient(270deg, rgba(229,114,31,.05), transparent 40%);
+      pointer-events:none;
+    }
+    .board > *{position:relative;z-index:1}
+    .head{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:18px;
+      align-items:end;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--line);
+    }
+    .eyebrow{
+      font-size:11px;
+      letter-spacing:.34em;
+      text-transform:uppercase;
+      color:var(--orange);
+      font-weight:700;
+    }
+    h1{
+      margin:4px 0 0;
+      font-family:"Outfit",sans-serif;
+      font-size:28px;
+      line-height:.95;
+      letter-spacing:-.05em;
+    }
+    .head p{
+      margin:0;
+      max-width:72ch;
+      font-size:13px;
+      line-height:1.58;
+      color:var(--muted);
+    }
+    .headnote{
+      font-size:11px;
+      line-height:1.5;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--blue);
+      text-align:right;
+      white-space:nowrap;
+    }
+    .layout{
+      display:grid;
+      grid-template-columns:230px minmax(0,1fr) 300px;
+      gap:28px;
+      padding-top:18px;
+      min-height:700px;
+    }
+    .label{
+      font-size:11px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:#8ea0ba;
+    }
+    .glyph{
+      position:relative;
+      display:inline-block;
+      width:16px;
+      height:16px;
+      flex:0 0 auto;
+    }
+    .g-phase{
+      border-radius:50%;
+      border:1px solid rgba(229,114,31,.24);
+    }
+    .g-phase::before{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:50%;
+      background:var(--orange);
+    }
+    .g-live{
+      border-radius:50%;
+      border:1px solid rgba(47,123,77,.22);
+      box-shadow:0 0 0 6px rgba(47,123,77,.08);
+    }
+    .g-live::before{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:50%;
+      background:var(--green);
+    }
+    .g-alert{
+      border-radius:50%;
+      border:1px solid rgba(205,79,73,.22);
+      background:rgba(205,79,73,.06);
+    }
+    .g-alert::before{
+      content:"!";
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      color:var(--red);
+      font-size:11px;
+      font-weight:700;
+    }
+    .g-send::before{
+      content:"";
+      position:absolute;
+      left:1px;
+      top:7px;
+      width:8px;
+      height:2px;
+      border-radius:999px;
+      background:var(--orange);
+    }
+    .g-send::after{
+      content:"";
+      position:absolute;
+      right:0;
+      top:4px;
+      width:7px;
+      height:7px;
+      border-top:2px solid var(--orange);
+      border-right:2px solid var(--orange);
+      transform:rotate(45deg);
+    }
+    .g-copy::before,
+    .g-copy::after{
+      content:"";
+      position:absolute;
+      width:9px;
+      height:11px;
+      border-radius:4px;
+      border:1px solid rgba(37,111,231,.24);
+    }
+    .g-copy::before{
+      left:2px;
+      top:4px;
+      background:#fff;
+    }
+    .g-copy::after{
+      left:5px;
+      top:2px;
+      background:rgba(37,111,231,.08);
+    }
+    .g-branch{
+      border-left:2px solid var(--blue);
+    }
+    .g-branch::before,
+    .g-branch::after{
+      content:"";
+      position:absolute;
+      left:1px;
+      width:10px;
+      height:2px;
+      background:var(--blue);
+      border-radius:999px;
+      transform-origin:left center;
+    }
+    .g-branch::before{top:5px;transform:rotate(-35deg)}
+    .g-branch::after{top:10px;transform:rotate(35deg)}
+
+    .lane-list,.recover-list{
+      display:grid;
+      gap:0;
+    }
+    .lane-row,.recover-row,.response-row{
+      display:grid;
+      grid-template-columns:18px 1fr;
+      gap:12px;
+      align-items:start;
+      padding:13px 0;
+      border-top:1px solid var(--line);
+    }
+    .lane-row:first-of-type,.recover-row:first-of-type,.response-row:first-of-type{margin-top:10px}
+    .lane-row strong,.recover-row strong,.response-row strong{
+      display:block;
+      font-size:14px;
+      line-height:1.28;
+      letter-spacing:-.02em;
+    }
+    .lane-row em,.recover-row em,.response-row em{
+      display:block;
+      margin-top:4px;
+      font-style:normal;
+      font-size:12px;
+      line-height:1.52;
+      color:var(--muted);
+    }
+    .lane-row.active{
+      background:linear-gradient(90deg, rgba(229,114,31,.08), rgba(229,114,31,0));
+    }
+    .lane-row.active strong{color:var(--orange)}
+    .script-grid{
+      display:grid;
+      grid-template-columns:190px minmax(0,1fr);
+      gap:22px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+    }
+    .script-grid .key{
+      font-size:11px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:#8ea0ba;
+      padding-top:6px;
+    }
+    .script-grid .value{
+      font-size:28px;
+      line-height:.98;
+      letter-spacing:-.05em;
+      font-family:"Outfit",sans-serif;
+      max-width:18ch;
+    }
+    .script-grid .value.small{
+      font-size:22px;
+      max-width:24ch;
+    }
+    .response-row{
+      width:100%;
+      text-align:left;
+    }
+    .response-row.active{
+      background:linear-gradient(90deg, rgba(37,111,231,.10), rgba(37,111,231,0) 76%);
+    }
+    .response-row strong{
+      font-size:20px;
+      line-height:1.04;
+      letter-spacing:-.05em;
+    }
+    .note{
+      font-size:13px;
+      line-height:1.58;
+      color:var(--muted);
+    }
+    @media (max-width:1380px){
+      .layout{grid-template-columns:1fr}
+    }
+    @media (max-width:960px){
+      .head{grid-template-columns:1fr}
+      .headnote{text-align:left}
+      .script-grid{grid-template-columns:1fr}
+      .topline{display:grid;justify-content:unset}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topline">
+      <span class="accent">Discovery Studio Selected Direction</span>
+      <span>Variant 01C · Operator Ledger</span>
+    </div>
+
+    <section class="board">
+      <header class="head">
+        <div>
+          <div class="eyebrow">Variant 01C - Operator Ledger</div>
+          <h1>Say, hear, answer, recover as one worksheet.</h1>
+        </div>
+        <p>The selected Discovery Studio direction. This is the most procedural on-call face: no ornamental timer, no filler chips, no boxed card grammar, and no big conceptual detours. Every primary object either tells the rep what to say, what the buyer might say, where they are in time, or how to recover the call.</p>
+        <div class="headnote">Selected discovery taste test<br>On-call primary<br>Zero-box grammar</div>
+      </header>
+
+      <div class="layout">
+        <aside>
+          <div class="label">Where they are in time</div>
+          <div class="lane-list">
+            <div class="lane-row">
+              <span class="glyph g-phase"></span>
+              <span><strong>Open</strong><em>Permission and tension.</em></span>
+            </div>
+            <div class="lane-row active">
+              <span class="glyph g-phase"></span>
+              <span><strong>Current state</strong><em>Sort the first real problem before proving anything.</em></span>
+            </div>
+            <div class="lane-row">
+              <span class="glyph g-phase"></span>
+              <span><strong>Owner</strong><em>Name who acts when risk turns real.</em></span>
+            </div>
+            <div class="lane-row">
+              <span class="glyph g-phase"></span>
+              <span><strong>Next step</strong><em>Calendar the correct follow-up room.</em></span>
+            </div>
+          </div>
+        </aside>
+
+        <main>
+          <div class="script-grid">
+            <div class="key">Say this now</div>
+            <div class="value">"My read is that supplier risk is already visible, but your team still lacks a reliable way to act on it. Wrong?"</div>
+          </div>
+
+          <div class="script-grid" data-response-group="selected-ledger">
+            <div class="key">Buyer might say</div>
+            <div>
+              <button class="response-row active" data-response="selected-ledger-a">
+                <span class="glyph g-live"></span>
+                <span><strong>"Yes, we see it but do not act fast enough."</strong><em>Move toward owner, response timing, and escalation logic.</em></span>
+              </button>
+              <button class="response-row" data-response="selected-ledger-b">
+                <span class="glyph g-branch"></span>
+                <span><strong>"No, the bigger issue is modeling the impact."</strong><em>Move toward simulation, scenario review, and financial consequence.</em></span>
+              </button>
+              <button class="response-row" data-response="selected-ledger-c">
+                <span class="glyph g-alert"></span>
+                <span><strong>"It depends on the disruption."</strong><em>Force the first repeatable use case instead of accepting ambiguity.</em></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="script-grid">
+            <div class="key">Say next</div>
+            <div class="value small response-panel active" id="selected-ledger-a">"Then who is supposed to move first when the signal turns real, and what actually changes because they saw it earlier?"</div>
+            <div class="value small response-panel" id="selected-ledger-b" hidden>"Then what decision gets better when you can model the disruption before it lands, and who depends on that answer?"</div>
+            <div class="value small response-panel" id="selected-ledger-c" hidden>"When this becomes urgent, which side hurts first: not seeing it soon enough or not knowing what to do once you do?"</div>
+          </div>
+
+          <div class="script-grid">
+            <div class="key">Must learn before moving</div>
+            <div class="note">Pick the first paid job, name the owner, and lock the correct next room before proving product.</div>
+          </div>
+        </main>
+
+        <aside>
+          <div class="label">Recover the call</div>
+          <div class="recover-list">
+            <div class="recover-row">
+              <span class="glyph g-send"></span>
+              <span><strong>Demo</strong><em>"I can show that after we decide whether this is response-first or planning-first."</em></span>
+            </div>
+            <div class="recover-row">
+              <span class="glyph g-alert"></span>
+              <span><strong>Price</strong><em>"That depends on which job you are actually buying first."</em></span>
+            </div>
+            <div class="recover-row">
+              <span class="glyph g-branch"></span>
+              <span><strong>Send something</strong><em>"I can send the right proof path once we choose the right branch."</em></span>
+            </div>
+            <div class="recover-row">
+              <span class="glyph g-copy"></span>
+              <span><strong>Park cleanly</strong><em>"Happy to park this until the response owner or planning owner is in the room."</em></span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-response-group]").forEach((group) => {
+      const buttons = group.querySelectorAll("[data-response]");
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const prefix = button.dataset.response.split("-").slice(0, -1).join("-");
+          buttons.forEach((candidate) => candidate.classList.remove("active"));
+          button.classList.add("active");
+          document.querySelectorAll(".response-panel").forEach((panel) => {
+            if (!panel.id.startsWith(prefix + "-")) return;
+            const active = panel.id === button.dataset.response;
+            panel.hidden = !active;
+            panel.classList.toggle("active", active);
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

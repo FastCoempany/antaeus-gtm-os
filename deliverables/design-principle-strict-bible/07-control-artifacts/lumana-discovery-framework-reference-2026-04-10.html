@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumana Discovery Framework — Horizon Distribution Group</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0b;
+  --surface: #131316;
+  --surface-2: #1a1a1f;
+  --surface-3: #222228;
+  --border: #2a2a32;
+  --border-active: #4a4a55;
+  --text: #e8e8ec;
+  --text-muted: #8b8b96;
+  --text-dim: #5a5a66;
+  --accent: #c8ff00;
+  --accent-dim: rgba(200,255,0,0.08);
+  --accent-mid: rgba(200,255,0,0.15);
+  --red: #ff4d4f;
+  --red-dim: rgba(255,77,79,0.1);
+  --orange: #ff9f43;
+  --orange-dim: rgba(255,159,67,0.1);
+  --blue: #4fc3f7;
+  --blue-dim: rgba(79,195,247,0.08);
+  --green: #66bb6a;
+  --green-dim: rgba(102,187,106,0.1);
+  --purple: #b388ff;
+  --purple-dim: rgba(179,136,255,0.08);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --serif: 'Instrument Serif', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Header */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,11,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--accent); letter-spacing: 2px; text-transform: uppercase;
+  background: var(--accent-dim); padding: 6px 12px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(200,255,0,0.15);
+}
+.header h1 {
+  font-family: var(--serif); font-size: 22px; font-weight: 400;
+  color: var(--text);
+}
+.header-right { display: flex; gap: 10px; align-items: center; }
+.timer-btn {
+  background: var(--surface-2); border: 1px solid var(--border);
+  color: var(--text); padding: 8px 16px; border-radius: var(--radius-sm);
+  font-family: var(--mono); font-size: 13px; cursor: pointer;
+  transition: all 0.2s;
+}
+.timer-btn:hover { border-color: var(--accent); background: var(--accent-dim); }
+.timer-btn.running { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.progress-pill {
+  font-family: var(--mono); font-size: 11px; color: var(--text-muted);
+  background: var(--surface-2); padding: 6px 12px; border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+/* Layout */
+.container {
+  max-width: 1100px; margin: 0 auto; padding: 24px 32px 80px;
+}
+
+/* Phase Sections */
+.phase {
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.phase:hover { border-color: var(--border-active); }
+.phase.active { border-color: rgba(200,255,0,0.25); }
+
+.phase-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--surface);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.phase-header:hover { background: var(--surface-2); }
+
+.phase-header-left { display: flex; align-items: center; gap: 14px; }
+.phase-number {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--accent); letter-spacing: 1.5px;
+  background: var(--accent-dim); padding: 4px 10px; border-radius: 4px;
+  min-width: 28px; text-align: center;
+}
+.phase-title {
+  font-size: 15px; font-weight: 600; color: var(--text);
+}
+.phase-time {
+  font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+.phase-chevron {
+  color: var(--text-dim); transition: transform 0.3s;
+  font-size: 14px;
+}
+.phase.open .phase-chevron { transform: rotate(180deg); }
+
+.phase-header-right { display: flex; align-items: center; gap: 12px; }
+.phase-progress {
+  font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+}
+
+.phase-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  background: var(--bg);
+}
+.phase.open .phase-body { max-height: 8000px; }
+.phase-content { padding: 20px; }
+
+/* Cards inside phases */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border-active); }
+.card:last-child { margin-bottom: 0; }
+
+.card-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 10px;
+  display: inline-block;
+  padding: 3px 8px; border-radius: 4px;
+}
+.card-label.question { color: var(--blue); background: var(--blue-dim); }
+.card-label.intel { color: var(--purple); background: var(--purple-dim); }
+.card-label.tactic { color: var(--orange); background: var(--orange-dim); }
+.card-label.risk { color: var(--red); background: var(--red-dim); }
+.card-label.close { color: var(--green); background: var(--green-dim); }
+.card-label.value { color: var(--accent); background: var(--accent-dim); }
+
+.card h3 {
+  font-size: 14px; font-weight: 600; margin-bottom: 8px;
+  color: var(--text);
+}
+
+.question-block {
+  background: var(--surface-2);
+  border-left: 2px solid var(--blue);
+  padding: 10px 14px;
+  margin: 8px 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.question-block.risk-q { border-left-color: var(--red); }
+.question-block.follow-up { border-left-color: var(--orange); }
+.question-block.close-q { border-left-color: var(--green); }
+.question-block.value-q { border-left-color: var(--accent); }
+
+.q-check {
+  width: 16px; height: 16px; min-width: 16px;
+  border: 1.5px solid var(--border-active);
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 3px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  font-size: 10px; color: transparent;
+}
+.q-check.checked {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--bg);
+}
+
+.q-text { flex: 1; }
+
+.sub-note {
+  font-size: 12px; color: var(--text-muted);
+  margin-top: 4px; font-style: italic;
+}
+.sub-note strong { color: var(--text); font-style: normal; font-weight: 500; }
+
+/* Tie-back banners */
+.tieback {
+  background: var(--accent-dim);
+  border: 1px solid rgba(200,255,0,0.12);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--accent);
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.tieback-icon { min-width: 16px; margin-top: 1px; }
+
+/* Notes */
+.notes-area {
+  width: 100%; min-height: 60px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13px;
+  resize: vertical;
+  margin-top: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.notes-area:focus { border-color: var(--accent); }
+.notes-area::placeholder { color: var(--text-dim); }
+
+/* Scorecard */
+.scorecard {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px; margin-top: 12px;
+}
+.score-item {
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px;
+  text-align: center; cursor: pointer;
+  transition: all 0.2s;
+}
+.score-item:hover { border-color: var(--border-active); }
+.score-item.scored { border-color: var(--accent); background: var(--accent-dim); }
+.score-item .label {
+  font-size: 10px; font-family: var(--mono);
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 4px;
+}
+.score-item .value {
+  font-size: 22px; font-weight: 700; color: var(--text);
+  font-family: var(--mono);
+}
+.score-item.scored .value { color: var(--accent); }
+
+/* Objection handlers */
+.objection {
+  background: var(--red-dim);
+  border: 1px solid rgba(255,77,79,0.15);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-top: 8px;
+}
+.objection-trigger {
+  font-size: 12px; font-weight: 600; color: var(--red);
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+}
+.objection-response {
+  font-size: 12.5px; color: var(--text-muted);
+  margin-top: 8px; display: none; line-height: 1.55;
+}
+.objection.open .objection-response { display: block; }
+
+/* Utility */
+.divider {
+  height: 1px; background: var(--border); margin: 16px 0;
+}
+.flex-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.flex-row > * { flex: 1; min-width: 200px; }
+
+.tag {
+  display: inline-block; font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.5px;
+  padding: 3px 8px; border-radius: 4px;
+  margin-right: 4px; margin-bottom: 4px;
+}
+.tag.meddpicc { color: var(--purple); background: var(--purple-dim); }
+.tag.criteria { color: var(--orange); background: var(--orange-dim); }
+
+/* Info blocks */
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  margin-top: 10px;
+}
+.info-item {
+  background: var(--surface-2); border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+.info-item .label {
+  font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px;
+}
+.info-item .val { font-size: 13px; color: var(--text); }
+
+/* Cheat sheet sidebar */
+.cheat-toggle {
+  position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  background: var(--accent); color: var(--bg);
+  border: none; padding: 12px 20px; border-radius: 50px;
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.5px;
+  box-shadow: 0 4px 24px rgba(200,255,0,0.25);
+  transition: transform 0.2s;
+}
+.cheat-toggle:hover { transform: scale(1.05); }
+
+.cheat-sheet {
+  position: fixed; top: 0; right: -420px; width: 400px; height: 100vh;
+  background: var(--surface); border-left: 1px solid var(--border);
+  z-index: 150; padding: 24px;
+  overflow-y: auto;
+  transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.cheat-sheet.visible { right: 0; }
+.cheat-sheet h2 {
+  font-family: var(--serif); font-size: 20px; margin-bottom: 16px;
+  color: var(--accent);
+}
+.cheat-section { margin-bottom: 20px; }
+.cheat-section h3 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px;
+  color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;
+}
+.cheat-section p, .cheat-section li {
+  font-size: 12.5px; color: var(--text-muted); line-height: 1.55;
+}
+.cheat-section ul { padding-left: 16px; }
+.cheat-section li { margin-bottom: 4px; }
+.cheat-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); z-index: 140;
+  display: none;
+}
+.cheat-overlay.visible { display: block; }
+
+/* Print */
+@media print {
+  .header { position: static; }
+  .cheat-toggle, .cheat-sheet, .cheat-overlay { display: none !important; }
+  .phase-body { max-height: none !important; }
+  body { background: #fff; color: #111; }
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .container { padding: 16px; }
+  .header { padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .scorecard { grid-template-columns: 1fr 1fr; }
+  .cheat-sheet { width: 100%; right: -100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">LUMANA</div>
+    <h1>Discovery Framework — Horizon Distribution Group</h1>
+  </div>
+  <div class="header-right">
+    <span class="progress-pill" id="progressPill">0 / 48 covered</span>
+    <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">00:00</button>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================== -->
+<!-- PRE-CALL INTEL SECTION -->
+<!-- ============================== -->
+<div class="phase open" data-phase="0">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">00</span>
+      <span class="phase-title">Pre-Call Intel & Battle Card</span>
+      <span class="phase-time">Reference — don't read on call</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <!-- Prospect Snapshot -->
+      <div class="card">
+        <span class="card-label intel">PROSPECT DOSSIER</span>
+        <h3>Horizon Distribution Group</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="label">Persona</div>
+            <div class="val">Director of Security & Risk</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Footprint</div>
+            <div class="val">20–50 distributed facilities</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Camera Hardware</div>
+            <div class="val">Mixed — Axis, Honeywell, random OEMs</div>
+          </div>
+          <div class="info-item">
+            <div class="label">VMS</div>
+            <div class="val">Legacy (unnamed, aging infrastructure)</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Automation</div>
+            <div class="val">Limited — heavy manual investigation load</div>
+          </div>
+          <div class="info-item">
+            <div class="label">CFO Mandate</div>
+            <div class="val">Cost-efficient modernization across all depts</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Last 12 Months Pain</div>
+            <div class="val">After-hours incidents, blind spots, manual investigation surge</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Call Type</div>
+            <div class="val">Initial Discovery — 15-20 min</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lumana Battle Card -->
+      <div class="card">
+        <span class="card-label value">LUMANA BATTLE CARD</span>
+        <h3>Key Value Props to Deploy</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="label">Camera Agnostic</div>
+            <div class="val">Works with ANY IP camera — Axis, Honeywell, OEMs. No rip-and-replace. Core device plugs into existing network.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">AI-First Platform</div>
+            <div class="val">Self-learning AI engine (VIA-1) transforms passive cameras into continuous-learning AI agents. Near-human perception.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">False Alert Reduction</div>
+            <div class="val">Up to 90% reduction in false alerts. Eliminates monitoring fatigue.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Hybrid Cloud</div>
+            <div class="val">Local recording + cloud management. Remote access from any browser or mobile. Single pane of glass across all locations.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Deployment Speed</div>
+            <div class="val">Weeks, not months. 3-phase process: Assessment → Deployment → Optimization. Zero disruption to current ops.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Investigation Speed</div>
+            <div class="val">AI-powered search across millions of hours of video in seconds. Automatic alert verification + emergency dispatch.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Scale / Social Proof</div>
+            <div class="val">50,000+ cameras deployed. $64M raised ($40M Series A — largest in physical security). Customers: Meta, McDonald's, NYU, MN Twins.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Enterprise Security</div>
+            <div class="val">SOC 2 compliant. End-to-end encryption. Zero-trust architecture. SSO/MFA/SAML. NDAA-compliant hardware.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">ROI</div>
+            <div class="val">Typical 100-300% ROI within 2 years. Reduced staffing needs, fewer incidents, elimination of hardware replacement costs.</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Integrations</div>
+            <div class="val">Access control (Kisi), sensors, enterprise systems. Tailgating detection, active deterrence. Unified platform.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assessment Criteria -->
+      <div class="card">
+        <span class="card-label criteria">THEY'RE GRADING YOU ON</span>
+        <h3>Mock Disco Evaluation Criteria</h3>
+        <div class="info-grid">
+          <div class="info-item"><div class="label">1</div><div class="val">Question quality & sequencing</div></div>
+          <div class="info-item"><div class="label">2</div><div class="val">Ability to extract relevant detail</div></div>
+          <div class="info-item"><div class="label">3</div><div class="val">Framing & reframing skills</div></div>
+          <div class="info-item"><div class="label">4</div><div class="val">Executive presence & tone</div></div>
+          <div class="info-item"><div class="label">5</div><div class="val">Connecting insights → Lumana's value</div></div>
+          <div class="info-item"><div class="label">6</div><div class="val">Closing strength & control of next steps</div></div>
+        </div>
+      </div>
+
+      <!-- MEDDPICC Mapping -->
+      <div class="card">
+        <span class="card-label meddpicc">MEDDPICC MAP</span>
+        <h3>Fields to Populate During This Call</h3>
+        <div class="scorecard" id="meddpiccBoard">
+          <div class="score-item" onclick="toggleScore(this)"><div class="label">Metrics</div><div class="value">—</div></div>
+          <div class="score-item" onclick="toggleScore(this)"><div class="label">Econ Buyer</div><div class="value">—</div></div>
+          <div class="score-item" onclick="toggleScore(this)"><div class="label">Decision Criteria</div><div class="value">—</div></div>
+          <div class="score-item" onclick="toggleScore(this)"><div class="label">Decision Process</div><div class="value">—</div></div>
+          <div class="score-item" onclick="toggleScore(this)"><div class="label">Paper Process</div><div class="value">—</div></div>
+          <div class="score-item" onclick="toggleScore(this)"><div class="label">Identify Pain</div><div class="value">—</div></div>
+          <div class="score-item" onclick="toggleScore(this)"><div class="label">Champion</div><div class="value">—</div></div>
+          <div class="score-item" onclick="toggleScore(this)"><div class="label">Competition</div><div class="value">—</div></div>
+        </div>
+        <textarea class="notes-area" placeholder="MEDDPICC live notes — capture intel here as you go..."></textarea>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- PHASE 1: OPENING -->
+<!-- ============================== -->
+<div class="phase" data-phase="1">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">01</span>
+      <span class="phase-title">Opening & Agenda Set</span>
+      <span class="phase-time">~2 min</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-progress" data-phase-count="1"></span>
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <div class="card">
+        <span class="card-label tactic">RAPPORT + FRAME</span>
+        <h3>Build Trust & Set a Clear Agenda</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Goal: Establish executive presence. Show you value their time. Get permission to run a structured call. Demonstrate you've done your homework.</p>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Warm open]</strong> — "Appreciate you carving out time today. Before we dive in — I know you're running security across a pretty distributed footprint, so I don't want to waste a minute. Would it be helpful if I shared what I had in mind for our conversation and you can adjust?"
+            <div class="sub-note">Sets the tone that you respect their seniority and time. Gets consent for your agenda.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Agenda frame]</strong> — "I was thinking: spend the first chunk understanding your world — what's working, what's not, what's keeping your team up at night. Then, if it makes sense, I can share where we've helped similar orgs — and we can decide together if there's a reason to keep talking. Fair?"
+            <div class="sub-note"><strong>Assessment criteria hit:</strong> Clear agenda → Executive presence & tone. "Decide together" = consultative, not pushy.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Pre-frame honesty]</strong> — "And honestly — if at the end of this it doesn't seem like there's a fit, I'll be the first to tell you. I'd rather save us both time. Sound good?"
+            <div class="sub-note"><strong>Risk-forward signal.</strong> Shows you're not desperate. Builds instant credibility.</div>
+          </div>
+        </div>
+
+        <div class="tieback">
+          <span class="tieback-icon">⚡</span>
+          <span><strong>Anti-pitch signal:</strong> "This is not a pitch call — think like a consultant." You're being graded on NOT defaulting to product dump. The agenda frame proves you can run a call.</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-label tactic">MICRO-RAPPORT</span>
+        <h3>Quick Human Connection</h3>
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Role-based rapport]</strong> — "How long have you been in the security & risk seat at Horizon? I imagine managing 20+ sites keeps things interesting."
+            <div class="sub-note">Role-specific, not small-talk. Shows you've read the brief. Opens a thread about scope/complexity.</div>
+          </div>
+        </div>
+      </div>
+
+      <textarea class="notes-area" placeholder="Phase 1 notes — any rapport hooks, personal details, corrections to your assumptions..."></textarea>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- PHASE 2: WHY NOW -->
+<!-- ============================== -->
+<div class="phase" data-phase="2">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">02</span>
+      <span class="phase-title">Diagnose the "Why Now"</span>
+      <span class="phase-time">~3 min</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-progress" data-phase-count="2"></span>
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <div class="card">
+        <span class="card-label question">TRIGGER EVENT</span>
+        <h3>What Broke / Changed That Brought Them to the Table?</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">The prompt tells you: after-hours incidents, blind spots, manual investigations. But you need THEM to say it — and go deeper.</p>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Open-ended trigger]</strong> — "What's happening right now that made evaluating a new approach worth your time?"
+            <div class="sub-note">Open, not leading. Lets them frame it. Whatever they say first is usually what hurts most.</div>
+          </div>
+        </div>
+
+        <div class="question-block follow-up">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Push deeper]</strong> — "You mentioned [X]. Was there a specific incident that was the tipping point — or is this more of a slow burn that finally hit critical mass?"
+            <div class="sub-note"><strong>Framing skill:</strong> "Tipping point vs. slow burn" is a reframe that forces them to self-diagnose urgency.</div>
+          </div>
+        </div>
+
+        <div class="question-block follow-up">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[CFO pressure probe]</strong> — "And I imagine with the CFO pushing cost-efficient modernization across the board — does that create more urgency for you, or more friction?"
+            <div class="sub-note"><strong>Risk-forward.</strong> You're naming the tension between "we need to act" and "we need to justify spend." This is a sophisticated question.</div>
+          </div>
+        </div>
+
+        <div class="question-block risk-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Risk of inaction]</strong> — "If nothing changes in the next 6-12 months, what happens? Does the situation stabilize, or does it get worse?"
+            <div class="sub-note"><strong>CRITICAL:</strong> This forces them to articulate cost of doing nothing. If they say "it gets worse" — that's your urgency anchor for the rest of the call.</div>
+          </div>
+        </div>
+
+        <div class="tieback">
+          <span class="tieback-icon">⚡</span>
+          <span><strong>Lumana tie-back (hold for now):</strong> Camera-agnostic = no rip-and-replace = CFO-friendly modernization. You'll use this later, not here. Right now, just diagnose.</span>
+        </div>
+      </div>
+
+      <textarea class="notes-area" placeholder="Capture: What's the trigger? Specific incident? CFO dynamics? Their words for the pain..."></textarea>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- PHASE 3: CURRENT STATE & WORKFLOWS -->
+<!-- ============================== -->
+<div class="phase" data-phase="3">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">03</span>
+      <span class="phase-title">Current Security Posture & Workflow Diagnosis</span>
+      <span class="phase-time">~4 min</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-progress" data-phase-count="3"></span>
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <!-- Infrastructure -->
+      <div class="card">
+        <span class="card-label question">INFRASTRUCTURE</span>
+        <h3>Camera, VMS & Technology Stack</h3>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Camera landscape]</strong> — "Walk me through the camera environment. You've got Axis, Honeywell, some OEMs — roughly how many cameras total across all sites? And are they all IP-based, or do you still have analog in the mix?"
+            <div class="sub-note">You already know the brands. Showing that = homework done. The analog question matters because Lumana needs IP (encoders for analog).</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[VMS deep-dive]</strong> — "What VMS are you running today? And when you say it's aging — is that a software version issue, a hardware issue, or both?"
+            <div class="sub-note">Diagnoses: Are they on Milestone, Genetec, Avigilon, something else? "Aging" can mean different things — slow, unsupported, expensive to maintain.</div>
+          </div>
+        </div>
+
+        <div class="question-block follow-up">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[VMS pain specifics]</strong> — "When your team needs to pull footage for an investigation — what does that process actually look like? How long does it take?"
+            <div class="sub-note"><strong>Extract the workflow.</strong> This gets at manual investigation pain. Clock the answer — if it's hours, that's a massive Lumana value play (AI search in seconds).</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Network & remote access]</strong> — "Can your team view cameras remotely today, or is it mostly on-site at each facility?"
+            <div class="sub-note">Lumana's cloud access (any browser/mobile) is a differentiator if they're currently site-locked.</div>
+          </div>
+        </div>
+
+        <div class="tieback">
+          <span class="tieback-icon">⚡</span>
+          <span><strong>Value tie-back:</strong> "Interesting — one thing I'll share later is that our platform overlays on top of what you already have. Your Axis, Honeywell, OEMs — they all stay. The AI layer just makes them smarter."</span>
+        </div>
+      </div>
+
+      <!-- Operational Workflow -->
+      <div class="card">
+        <span class="card-label question">OPERATIONS</span>
+        <h3>Daily Workflows, Monitoring & Incident Response</h3>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Monitoring model]</strong> — "How does monitoring work day-to-day? Do you have a central SOC watching feeds, or is it site-by-site?"
+            <div class="sub-note">Distributed vs. centralized monitoring model. This shapes the "single pane of glass" narrative.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Staffing pressure]</strong> — "How many people on your team are currently spending time on monitoring and investigations? Is that sustainable?"
+            <div class="sub-note"><strong>Quantify:</strong> Number of FTEs × hours × cost = total manual investigation burden. This becomes a Metrics conversation for MEDDPICC.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[After-hours gap]</strong> — "You mentioned after-hours incidents. What's your coverage model outside business hours? Is there any automated alerting, or is it all reactive?"
+            <div class="sub-note">Probes the automation gap. After-hours = when AI monitoring creates the most value (no human watching).</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Blind spot specifics]</strong> — "The blind spots across facilities — is that a camera coverage issue, a visibility issue (you have cameras but can't see them centrally), or something else?"
+            <div class="sub-note"><strong>Reframe skill:</strong> You're helping them disaggregate the problem. Blind spots could be physical coverage, data visibility, or both.</div>
+          </div>
+        </div>
+
+        <div class="question-block follow-up">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[False alarm fatigue]</strong> — "How much noise do you deal with? False alerts, motion triggers that aren't real threats — is that a thing?"
+            <div class="sub-note">If yes, 90% false alert reduction is a knockout punch. Clock their reaction.</div>
+          </div>
+        </div>
+
+        <div class="tieback">
+          <span class="tieback-icon">⚡</span>
+          <span><strong>Value tie-back:</strong> Self-learning AI agents that monitor 24/7, push real-time alerts (not noise), and let you search millions of hours of footage in seconds. That's the reframe: from reactive to proactive.</span>
+        </div>
+      </div>
+
+      <textarea class="notes-area" placeholder="Capture: Camera count, VMS name, investigation time, monitoring model, staffing numbers, blind spot type..."></textarea>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- PHASE 4: BUSINESS IMPACT -->
+<!-- ============================== -->
+<div class="phase" data-phase="4">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">04</span>
+      <span class="phase-title">Quantify Business Impact</span>
+      <span class="phase-time">~3 min</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-progress" data-phase-count="4"></span>
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <div class="card">
+        <span class="card-label risk">IMPACT QUANTIFICATION</span>
+        <h3>Turn Pain Into Numbers</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">The prompt explicitly requires: "Quantify business impact where possible." This is where you earn the highest marks — turning abstract pain into dollars, hours, and risk exposure.</p>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Investigation cost]</strong> — "You mentioned investigations are eating up staff time. If you had to ballpark — how many investigation hours per week across your team? And what does that cost you when you factor in the salary?"
+            <div class="sub-note"><strong>Math hook:</strong> If 3 people × 10 hrs/week × $40/hr = $62K/year just on manual investigation labor. You don't say this — but you file it.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Incident cost]</strong> — "When one of those after-hours incidents happens — what's the financial exposure? I'm talking shrinkage, damage, liability, insurance impact — all in."
+            <div class="sub-note">Gets at direct financial impact per incident. Even a rough number creates urgency.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Scaling pain]</strong> — "As Horizon grows — are these problems getting proportionally worse? Like, every new facility is another set of cameras, another blind spot?"
+            <div class="sub-note"><strong>Future-state framing.</strong> If the answer is yes, the problem compounds. Makes the case for a scalable platform.</div>
+          </div>
+        </div>
+
+        <div class="question-block risk-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Reputation/compliance risk]</strong> — "Beyond the operational cost — is there any exposure on the compliance or liability side? I ask because some orgs in distribution have found that aging security infrastructure creates gaps that auditors or insurers flag."
+            <div class="sub-note"><strong>Risk-forward:</strong> Opens a thread they may not have considered. Compliance risk can accelerate timelines faster than operational pain.</div>
+          </div>
+        </div>
+
+        <div class="question-block follow-up">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[VMS maintenance cost]</strong> — "What does it cost you to keep the current VMS running? Maintenance contracts, server hardware, IT support time?"
+            <div class="sub-note">Legacy VMS = hidden cost center. This becomes a line item in the ROI conversation.</div>
+          </div>
+        </div>
+
+        <div class="tieback">
+          <span class="tieback-icon">⚡</span>
+          <span><strong>ROI seed:</strong> Typical Lumana customers see 100-300% ROI within 2 years. You don't say this yet — but every number they give you is ammunition for the business case later.</span>
+        </div>
+      </div>
+
+      <textarea class="notes-area" placeholder="Capture: Investigation hours/week, cost per incident, VMS maintenance cost, compliance exposure, growth trajectory..."></textarea>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- PHASE 5: STAKEHOLDERS -->
+<!-- ============================== -->
+<div class="phase" data-phase="5">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">05</span>
+      <span class="phase-title">Cross-Functional Stakeholders & Decision Landscape</span>
+      <span class="phase-time">~3 min</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-progress" data-phase-count="5"></span>
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <div class="card">
+        <span class="card-label question">DECISION MAP</span>
+        <h3>Who's In the Room? Who's Not But Should Be?</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Prompt requires: Explore cross-functional stakeholders (IT, Security, Ops, Finance). You need to map the buying committee without sounding like you're running an interrogation.</p>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Decision landscape — soft]</strong> — "If you decided this was worth pursuing — what does that process look like at Horizon? Is this a decision you'd own, or would other groups need to be involved?"
+            <div class="sub-note">Non-threatening way to map the committee. "Own vs. involved" is cleaner than "who's the decision maker."</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[IT relationship]</strong> — "Where does IT fit into this? Would they need to sign off on anything related to network, cloud, or data security?"
+            <div class="sub-note">IT is always a stakeholder in camera/VMS deployments. Cloud architecture = IT cares. Network changes = IT cares.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Ops involvement]</strong> — "Is there an operations or facilities team that would weigh in? Sometimes in distribution, Ops has strong opinions about what happens on-site."
+            <div class="sub-note">Distribution = warehouse ops is a power center. Their buy-in can make or break deployment.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[CFO / Finance gate]</strong> — "You mentioned the CFO is driving cost-efficient modernization. Would Finance be involved in evaluating something like this — or is it more that you'd need to make the business case and bring it to them?"
+            <div class="sub-note"><strong>MEDDPICC — Economic Buyer probe.</strong> Are they the champion who needs to sell up, or does CFO need to be in the room?</div>
+          </div>
+        </div>
+
+        <div class="question-block follow-up">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Champion test]</strong> — "If this did look like a fit — would you be the one championing it internally?"
+            <div class="sub-note"><strong>Direct champion identification.</strong> If they say yes, they're your champion. If they hedge, you need another path.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Prior attempts]</strong> — "Has Horizon looked at modernizing the security stack before? I only ask because sometimes there's history that's useful to know about."
+            <div class="sub-note"><strong>Surfaces:</strong> Failed projects, political baggage, competing vendors, prior budget rejections. Gold mine intel.</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Competitive landscape]</strong> — "Are you looking at other solutions alongside this, or is this more of an early exploration?"
+            <div class="sub-note"><strong>MEDDPICC — Competition.</strong> Knowing the competitive field shapes your positioning. Don't be afraid to ask directly.</div>
+          </div>
+        </div>
+
+        <div class="tieback">
+          <span class="tieback-icon">⚡</span>
+          <span><strong>Deployment angle for IT:</strong> Lumana's Core device is plug-and-play. No port forwarding. Zero-trust architecture. SOC 2. This is how you neutralize IT objections before they form.</span>
+        </div>
+      </div>
+
+      <textarea class="notes-area" placeholder="Stakeholder map: Champion? Economic Buyer? IT blocker? Ops influencer? Prior evaluations? Competitors in play?"></textarea>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- PHASE 6: VALUE TIE-BACK -->
+<!-- ============================== -->
+<div class="phase" data-phase="6">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">06</span>
+      <span class="phase-title">Insight Delivery & Lumana Value Bridge</span>
+      <span class="phase-time">~2 min</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-progress" data-phase-count="6"></span>
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <div class="card">
+        <span class="card-label value">CONSULTATIVE BRIDGE</span>
+        <h3>Connect Their Pain → Lumana's Architecture</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">This is NOT a product dump. You're reflecting back what you heard and showing how the architecture maps to their specific situation. Use THEIR language.</p>
+
+        <div class="question-block value-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Recap reframe]</strong> — "Let me make sure I'm tracking. You've got [X] facilities, mixed hardware, a legacy VMS that's costing you in maintenance and investigation time, after-hours gaps where nobody's watching, and a CFO who wants modernization that actually pencils. That right?"
+            <div class="sub-note"><strong>Assessment criteria:</strong> Framing & reframing. You're proving you listened. Recapping in their words shows mastery.</div>
+          </div>
+        </div>
+
+        <div class="question-block value-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Architecture bridge]</strong> — "Here's why that's interesting to me. The whole reason Lumana exists is for exactly this scenario. Camera-agnostic — so your Axis, Honeywell, OEMs all stay. The AI layer sits on top and turns those cameras into intelligent sensors that monitor 24/7, push real alerts — not noise — and let your team search across all your footage in seconds instead of hours."
+            <div class="sub-note">60 seconds MAX. Hit: camera-agnostic, AI overlay, 24/7 monitoring, alert quality, investigation speed. That's it.</div>
+          </div>
+        </div>
+
+        <div class="question-block value-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[CFO-ready framing]</strong> — "And the CFO angle — no rip-and-replace. You're not buying new cameras. You're making the ones you already own dramatically smarter. That's a modernization story that Finance tends to love."
+            <div class="sub-note"><strong>Connects insight → value.</strong> You heard the CFO pressure in Phase 2. Now you're showing them how Lumana solves that political problem.</div>
+          </div>
+        </div>
+
+        <div class="question-block value-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Social proof — light touch]</strong> — "We're deployed across 50,000+ cameras now — Meta, McDonald's, NYU — a lot of organizations with distributed footprints like yours. So this isn't theoretical."
+            <div class="sub-note">Brief. Credibility. Done. Don't over-narrate the logos.</div>
+          </div>
+        </div>
+
+        <div class="question-block follow-up">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Gut check]</strong> — "Does that resonate with what you're trying to solve? Or am I missing something?"
+            <div class="sub-note"><strong>Critical.</strong> Invites correction. Shows intellectual humility. Lets them add context you missed.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Objection Handlers -->
+      <div class="card">
+        <span class="card-label risk">OBJECTION PREP</span>
+        <h3>Likely Pushback & Reframes</h3>
+
+        <div class="objection" onclick="this.classList.toggle('open')">
+          <div class="objection-trigger">▸ "We're not ready to rip out our VMS"</div>
+          <div class="objection-response">"Totally hear you — and you don't have to. Lumana actually works alongside your current VMS. The Core device sits on your network and adds the AI layer without touching what's already running. Most of our customers keep their existing system operational during and after deployment."</div>
+        </div>
+
+        <div class="objection" onclick="this.classList.toggle('open')">
+          <div class="objection-trigger">▸ "We've been burned by AI hype before"</div>
+          <div class="objection-response">"Fair. A lot of AI in this space has been more marketing than substance. What I'd point to is that we're at 50,000+ cameras with orgs like Meta and McDonald's who have zero tolerance for false promises. Our AI is self-learning — it calibrates to your specific environment, which is why the false alert reduction is so dramatic. Happy to show you exactly how that works in a demo with YOUR camera feeds."</div>
+        </div>
+
+        <div class="objection" onclick="this.classList.toggle('open')">
+          <div class="objection-trigger">▸ "Budget is tight / CFO is skeptical of new spend"</div>
+          <div class="objection-response">"Makes sense. Here's how other orgs have framed it: you're already spending on the legacy VMS maintenance, investigation labor, and incident losses. Lumana typically delivers 100-300% ROI within 2 years because it attacks all three. The story to Finance isn't 'new expense' — it's 'lower total cost of security operations.' Would it help if we built that business case together?"</div>
+        </div>
+
+        <div class="objection" onclick="this.classList.toggle('open')">
+          <div class="objection-trigger">▸ "I need to check with IT / they'll have concerns about cloud"</div>
+          <div class="objection-response">"100%. IT should absolutely be in the conversation. Quick context that might help: we're SOC 2 compliant, zero-trust architecture, end-to-end encryption, SSO/MFA/SAML — and the Core device doesn't require port forwarding. We've passed IT security reviews at Fortune 500s. Would it be useful to bring your IT lead into the next conversation?"</div>
+        </div>
+
+        <div class="objection" onclick="this.classList.toggle('open')">
+          <div class="objection-trigger">▸ "We're already evaluating [Competitor X]"</div>
+          <div class="objection-response">"Good — it means you're serious about solving this. I'd only ask: are they requiring you to replace your cameras, or can they work with what you have? And are they offering actual AI detection, or rules-based analytics marketed as AI? Those are the two questions that tend to separate solutions in this space. Happy to do a side-by-side if that's useful."</div>
+        </div>
+      </div>
+
+      <textarea class="notes-area" placeholder="Capture: Their reaction to the value bridge, any new objections, what resonated most..."></textarea>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- PHASE 7: CLOSE & NEXT STEPS -->
+<!-- ============================== -->
+<div class="phase" data-phase="7">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">07</span>
+      <span class="phase-title">Close — Next Steps & Mutual Commitment</span>
+      <span class="phase-time">~2 min</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-progress" data-phase-count="7"></span>
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <div class="card">
+        <span class="card-label close">ADVANCE THE DEAL</span>
+        <h3>Establish Alignment & Secure Next Step</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Prompt requires: "Establish alignment for formal evaluation" and "Secure next step with clear ownership and timeline." This is where closing strength gets graded. Be specific. Be confident.</p>
+
+        <div class="question-block close-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Alignment check]</strong> — "Based on everything we've talked about — does this feel like something worth exploring further? I don't want to assume."
+            <div class="sub-note">Simple. Gets a yes/no. If yes, you earned it. If no, you find out why now vs. later.</div>
+          </div>
+        </div>
+
+        <div class="question-block close-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Concrete next step]</strong> — "What I'd recommend as a next step: a 30-minute demo where we use YOUR camera feeds — or similar environments — so you can see exactly how the AI handles the scenarios you described. We could bring your IT lead and anyone else who'd want to evaluate the technical architecture. Does that make sense?"
+            <div class="sub-note"><strong>Specific, valuable, multi-threaded.</strong> You're proposing something THEY get value from, not a generic 'let me show you slides.'</div>
+          </div>
+        </div>
+
+        <div class="question-block close-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Timeline & ownership]</strong> — "When would make sense? This week or next? And would you send the invite, or should I coordinate directly?"
+            <div class="sub-note"><strong>Assessment criteria: Closing strength.</strong> You're asking for a specific date and who owns the scheduling. This is control, not aggression.</div>
+          </div>
+        </div>
+
+        <div class="question-block close-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Mutual action plan]</strong> — "I'll send over a quick summary of what we covered today — the key pain points, the areas of fit, and the agenda for the demo. That way you've got something concrete to share with [stakeholders they mentioned]. Fair?"
+            <div class="sub-note"><strong>Professional follow-through signal.</strong> Shows you'll do the work. Gives them ammo to sell internally. "Fair?" closes the loop.</div>
+          </div>
+        </div>
+
+        <div class="question-block risk-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Risk-forward close — if they hesitate]</strong> — "I hear some hesitation — and that's totally fine. Can I ask: what would need to be true for this to be worth your team's time for a deeper look?"
+            <div class="sub-note"><strong>Salvage move.</strong> If they go soft on next steps, this re-opens the door without being pushy. It puts the criteria in their hands.</div>
+          </div>
+        </div>
+
+        <div class="question-block close-q">
+          <div class="q-check" onclick="toggleCheck(this)">✓</div>
+          <div class="q-text">
+            <strong>[Hard stop respect]</strong> — "I know we're bumping up on time. Thank you for being so open — I got a lot of value from this conversation and I hope you did too. Looking forward to the next one."
+            <div class="sub-note"><strong>Tone:</strong> Warm. Grateful. Confident. You're not begging. You're a peer who just ran a great meeting.</div>
+          </div>
+        </div>
+
+        <div class="tieback">
+          <span class="tieback-icon">⚡</span>
+          <span><strong>Demo framing for later:</strong> Lumana offers instant demos and tailored assessments. 3-phase deployment: Assessment → Deployment → Optimization. Deployment in weeks, not months. Zero disruption.</span>
+        </div>
+      </div>
+
+      <textarea class="notes-area" placeholder="Capture: Next step committed, date/time, who's attending, what you're sending, any risks to deal progression..."></textarea>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- POST-CALL DEBRIEF -->
+<!-- ============================== -->
+<div class="phase" data-phase="8">
+  <div class="phase-header" onclick="togglePhase(this)">
+    <div class="phase-header-left">
+      <span class="phase-number">08</span>
+      <span class="phase-title">Post-Call Self-Debrief & Score</span>
+      <span class="phase-time">After call</span>
+    </div>
+    <div class="phase-header-right">
+      <span class="phase-chevron">▾</span>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="phase-content">
+
+      <div class="card">
+        <span class="card-label criteria">SELF-ASSESSMENT</span>
+        <h3>Score Yourself Against Their Rubric</h3>
+        <div class="scorecard" id="selfScore">
+          <div class="score-item" onclick="cycleScore(this)"><div class="label">Question Quality</div><div class="value">—</div></div>
+          <div class="score-item" onclick="cycleScore(this)"><div class="label">Detail Extraction</div><div class="value">—</div></div>
+          <div class="score-item" onclick="cycleScore(this)"><div class="label">Framing/Reframe</div><div class="value">—</div></div>
+          <div class="score-item" onclick="cycleScore(this)"><div class="label">Exec Presence</div><div class="value">—</div></div>
+          <div class="score-item" onclick="cycleScore(this)"><div class="label">Value Connect</div><div class="value">—</div></div>
+          <div class="score-item" onclick="cycleScore(this)"><div class="label">Close Strength</div><div class="value">—</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-label intel">DEBRIEF</span>
+        <h3>What Worked / What to Adjust</h3>
+        <textarea class="notes-area" placeholder="What went well?"></textarea>
+        <textarea class="notes-area" placeholder="What would you do differently?"></textarea>
+        <textarea class="notes-area" placeholder="What intel did you miss? What questions should you have asked?"></textarea>
+        <textarea class="notes-area" placeholder="Key quotes from the prospect (use their exact words for follow-up)"></textarea>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<!-- CHEAT SHEET BUTTON -->
+<button class="cheat-toggle" onclick="toggleCheat()">⚡ QUICK REF</button>
+
+<!-- CHEAT SHEET OVERLAY -->
+<div class="cheat-overlay" id="cheatOverlay" onclick="toggleCheat()"></div>
+<div class="cheat-sheet" id="cheatSheet">
+  <h2>Quick Reference</h2>
+
+  <div class="cheat-section">
+    <h3>Lumana Core Stats</h3>
+    <ul>
+      <li>50,000+ cameras deployed</li>
+      <li>$64M raised ($40M Series A — largest in physical security history)</li>
+      <li>Founded 2021, out of stealth ~2024</li>
+      <li>Key customers: Meta, McDonald's, NYU, MN Twins, TuffShed, Steak 'n Shake</li>
+      <li>SOC 2, NDAA, zero-trust, E2E encryption, SSO/MFA/SAML</li>
+      <li>Hybrid cloud: local recording + cloud management</li>
+      <li>Backed by Wing Venture Capital, Norwest, S Capital</li>
+    </ul>
+  </div>
+
+  <div class="cheat-section">
+    <h3>Key Differentiators</h3>
+    <ul>
+      <li><strong>Camera agnostic</strong> — any IP camera, no rip-and-replace</li>
+      <li><strong>VIA-1 AI engine</strong> — self-learning, near-human perception</li>
+      <li><strong>90% false alert reduction</strong></li>
+      <li><strong>Core device</strong> — plug-and-play, replaces/augments NVR</li>
+      <li><strong>Deployment in weeks</strong>, not months</li>
+      <li><strong>100-300% ROI</strong> within 2 years typical</li>
+      <li><strong>AI-powered search</strong> — millions of hours in seconds</li>
+      <li><strong>Active deterrence</strong> + auto alert verification + emergency dispatch</li>
+    </ul>
+  </div>
+
+  <div class="cheat-section">
+    <h3>Horizon-Specific Angles</h3>
+    <ul>
+      <li>Mixed cameras (Axis, Honeywell, OEM) → camera-agnostic platform</li>
+      <li>Legacy VMS → Core device overlays, no rip-and-replace</li>
+      <li>After-hours incidents → 24/7 AI monitoring + real-time alerts</li>
+      <li>Blind spots → centralized visibility, single pane of glass</li>
+      <li>Manual investigations → AI search in seconds, not hours</li>
+      <li>CFO modernization mandate → no new cameras, just smarter ones</li>
+      <li>20-50 facilities → scalable cloud platform, unlimited cameras/users</li>
+    </ul>
+  </div>
+
+  <div class="cheat-section">
+    <h3>Deployment Model</h3>
+    <ul>
+      <li><strong>Phase 1:</strong> Assessment — camera inventory, network, requirements</li>
+      <li><strong>Phase 2:</strong> Deployment — Core connects, AI activates, calibration</li>
+      <li><strong>Phase 3:</strong> Optimization — tuning, expansion, insights</li>
+      <li>Analog cameras need encoder (inexpensive) for IP conversion</li>
+    </ul>
+  </div>
+
+  <div class="cheat-section">
+    <h3>MEDDPICC Cheat</h3>
+    <ul>
+      <li><strong>M</strong>etrics — investigation hrs, incident cost, VMS maintenance</li>
+      <li><strong>E</strong>conomic Buyer — CFO (modernization mandate)</li>
+      <li><strong>D</strong>ecision Criteria — TBD (ask: what matters most?)</li>
+      <li><strong>D</strong>ecision Process — TBD (ask: what does eval look like?)</li>
+      <li><strong>P</strong>aper Process — TBD (procurement, legal, IT security review)</li>
+      <li><strong>I</strong>dentify Pain — after-hours, blind spots, manual investigations</li>
+      <li><strong>C</strong>hampion — Director of Security & Risk (test on call)</li>
+      <li><strong>C</strong>ompetition — TBD (ask directly)</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+// Timer
+let timerRunning = false;
+let timerSeconds = 0;
+let timerInterval;
+
+function toggleTimer() {
+  const btn = document.getElementById('timerBtn');
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    btn.classList.remove('running');
+  } else {
+    timerInterval = setInterval(() => {
+      timerSeconds++;
+      const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+      const s = (timerSeconds % 60).toString().padStart(2, '0');
+      btn.textContent = `${m}:${s}`;
+      // Color warn at 15 min
+      if (timerSeconds >= 900 && timerSeconds < 1200) {
+        btn.style.borderColor = 'var(--orange)';
+        btn.style.color = 'var(--orange)';
+      } else if (timerSeconds >= 1200) {
+        btn.style.borderColor = 'var(--red)';
+        btn.style.color = 'var(--red)';
+      }
+    }, 1000);
+    btn.classList.add('running');
+  }
+  timerRunning = !timerRunning;
+}
+
+// Phase toggle
+function togglePhase(header) {
+  const phase = header.parentElement;
+  phase.classList.toggle('open');
+}
+
+// Checkbox
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.q-check').length;
+  const checked = document.querySelectorAll('.q-check.checked').length;
+  document.getElementById('progressPill').textContent = `${checked} / ${total} covered`;
+
+  // Update per-phase counts
+  document.querySelectorAll('.phase[data-phase]').forEach(phase => {
+    const pTotal = phase.querySelectorAll('.q-check').length;
+    const pChecked = phase.querySelectorAll('.q-check.checked').length;
+    const counter = phase.querySelector('[data-phase-count]');
+    if (counter && pTotal > 0) {
+      counter.textContent = `${pChecked}/${pTotal}`;
+    }
+  });
+}
+
+// Score cycling
+function toggleScore(el) {
+  el.classList.toggle('scored');
+  const v = el.querySelector('.value');
+  v.textContent = el.classList.contains('scored') ? '✓' : '—';
+}
+
+const scoreValues = ['—', '1', '2', '3', '4', '5'];
+function cycleScore(el) {
+  const v = el.querySelector('.value');
+  let idx = scoreValues.indexOf(v.textContent);
+  idx = (idx + 1) % scoreValues.length;
+  v.textContent = scoreValues[idx];
+  el.classList.toggle('scored', idx > 0);
+}
+
+// Cheat sheet
+function toggleCheat() {
+  document.getElementById('cheatSheet').classList.toggle('visible');
+  document.getElementById('cheatOverlay').classList.toggle('visible');
+}
+
+// Init
+updateProgress();
+
+// Auto-save notes to localStorage
+document.querySelectorAll('.notes-area').forEach((ta, i) => {
+  const key = `disco_note_${i}`;
+  const saved = localStorage.getItem(key);
+  if (saved) ta.value = saved;
+  ta.addEventListener('input', () => localStorage.setItem(key, ta.value));
+});
+
+// Auto-save checkboxes
+function saveChecks() {
+  const states = [];
+  document.querySelectorAll('.q-check').forEach(el => states.push(el.classList.contains('checked')));
+  localStorage.setItem('disco_checks', JSON.stringify(states));
+}
+function loadChecks() {
+  try {
+    const states = JSON.parse(localStorage.getItem('disco_checks'));
+    if (states) {
+      document.querySelectorAll('.q-check').forEach((el, i) => {
+        if (states[i]) el.classList.add('checked');
+      });
+      updateProgress();
+    }
+  } catch(e) {}
+}
+document.addEventListener('click', e => { if (e.target.classList.contains('q-check')) setTimeout(saveChecks, 50); });
+loadChecks();
+</script>
+</body>
+</html>

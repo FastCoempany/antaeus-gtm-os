@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antaeus Deal Workspace Board Area Triptych</title>
+  <style>
+    :root{
+      --navy:#0a1c40;
+      --ink:#10274f;
+      --soft:#5f7594;
+      --muted:#8b9cb4;
+      --line:rgba(10,28,64,.09);
+      --paper:rgba(255,255,255,.94);
+      --paper-2:rgba(255,255,255,.84);
+      --orange:#e6701e;
+      --blue:#2471e7;
+      --green:#2d7a4b;
+      --red:#c94b47;
+      --shadow:0 26px 70px rgba(10,28,64,.1);
+      --shadow-soft:0 16px 40px rgba(10,28,64,.08);
+      --radius-xl:34px;
+      --radius-lg:24px;
+      --radius-md:18px;
+      --radius-pill:999px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Plus Jakarta Sans",Inter,system-ui,sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,.06), transparent 26%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,.05), transparent 24%),
+        linear-gradient(180deg,#fbfcff 0%,#f3f7fc 100%);
+      padding:28px 22px 88px;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    h1,h2,h3,h4,p{margin:0}
+
+    .page{max-width:1560px;margin:0 auto;display:grid;gap:26px}
+    .topline{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+      font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:var(--muted);
+      padding:0 4px;
+    }
+    .topline .accent{color:var(--orange)}
+
+    .artboard{
+      position:relative;overflow:hidden;min-height:900px;padding:28px 30px 34px;
+      border-radius:38px;border:1px solid rgba(10,28,64,.06);
+      background:
+        radial-gradient(circle at 88% 10%, rgba(230,112,30,.05), transparent 28%),
+        radial-gradient(circle at 8% 0%, rgba(36,113,231,.05), transparent 28%),
+        linear-gradient(180deg, rgba(252,253,255,.98) 0%, rgba(244,247,252,.98) 100%);
+      box-shadow:var(--shadow);
+    }
+
+    .artboard-header{
+      display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px;
+      font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    }
+    .artboard-header .label{color:var(--orange)}
+
+    .surface{display:grid;gap:22px}
+
+    .toolbar{
+      display:grid;grid-template-columns:minmax(320px,1.2fr) auto auto;gap:16px;align-items:center;
+      padding:14px 16px;border-radius:24px;background:var(--paper);border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+    }
+    .search-shell{
+      display:flex;align-items:center;gap:12px;padding:0 14px;height:54px;border-radius:18px;
+      background:rgba(247,250,254,.95);border:1px solid rgba(10,28,64,.08);color:var(--soft);
+      font-size:15px;
+    }
+    .search-dot{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(36,113,231,.5)}
+    .toolbar-readouts,.toolbar-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .readout,.action-chip,.action-btn,.action-link{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      min-height:44px;padding:0 16px;border-radius:18px;font:inherit
+    }
+    .readout{
+      border:1px solid rgba(10,28,64,.08);background:rgba(255,255,255,.84);color:var(--navy);font-weight:700
+    }
+    .readout span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .action-chip{
+      border:1px solid rgba(10,28,64,.08);background:rgba(255,255,255,.82);color:var(--navy);font-weight:700
+    }
+    .action-btn{
+      border:0;background:var(--orange);color:#fff;font-weight:700;box-shadow:0 14px 30px rgba(230,112,30,.22)
+    }
+    .action-link{
+      min-height:auto;padding:0;border:0;background:none;color:var(--blue);font-weight:700
+    }
+
+    .filter-ribbon{
+      display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
+      padding:4px 2px 0;
+    }
+    .filter-shell{
+      display:inline-flex;align-items:center;gap:12px;padding:10px 14px;border-radius:999px;
+      border:1px solid rgba(10,28,64,.08);background:rgba(255,255,255,.78)
+    }
+    .filter-label{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700
+    }
+    .filter-value{font-size:17px;font-weight:700;color:var(--navy)}
+    .reserve-readout{font-size:13px;color:var(--soft)}
+
+    .case-grid{display:grid;gap:18px}
+
+    .case-card{
+      padding:20px 22px;border-radius:26px;background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,250,254,.9));
+      border:1px solid rgba(10,28,64,.08);box-shadow:var(--shadow-soft)
+    }
+    .case-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}
+    .case-title-row{display:flex;align-items:center;gap:10px}
+    .case-dot{width:12px;height:12px;border-radius:50%}
+    .case-dot.risk{background:var(--red)}
+    .case-dot.proof{background:var(--blue)}
+    .case-dot.motion{background:var(--green)}
+    .case-name{font-size:30px;line-height:.98;letter-spacing:-.05em;font-weight:700;color:var(--navy)}
+    .case-value{font-family:"DM Serif Display",serif;font-size:38px;line-height:1;color:var(--navy);white-space:nowrap}
+    .case-body{display:grid;gap:10px}
+    .signal-line{display:grid;grid-template-columns:78px minmax(96px,132px) 1fr;gap:12px;align-items:center;padding:6px 0;border-top:1px solid rgba(10,28,64,.07)}
+    .signal-line:first-child{border-top:0;padding-top:0}
+    .signal-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .signal-value{font-size:15px;font-weight:700}
+    .signal-value.risk{color:var(--orange)}
+    .signal-value.proof{color:var(--blue)}
+    .signal-value.motion{color:var(--green)}
+    .signal-copy{font-size:14px;line-height:1.45;color:var(--ink)}
+    .case-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid rgba(10,28,64,.07)}
+    .case-footer .kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .case-footer .link{font-size:14px;color:var(--blue);font-weight:700}
+
+    .reserve-strip{
+      display:flex;gap:12px;flex-wrap:wrap;padding:12px 0 0
+    }
+    .reserve-pill{
+      display:grid;gap:2px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.72);
+      border:1px solid rgba(10,28,64,.08);min-width:160px
+    }
+    .reserve-pill .name{font-size:13px;font-weight:700;color:var(--navy)}
+    .reserve-pill .meta{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+    .variant-a .case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .variant-a .hero-case{grid-column:span 2}
+
+    .variant-b .lane-stack{display:grid;gap:18px}
+    .variant-b .lane-row{display:grid;grid-template-columns:160px 1fr;gap:16px;align-items:start}
+    .lane-label{
+      display:grid;gap:6px;padding-top:8px
+    }
+    .lane-label .state{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);font-weight:700}
+    .lane-label .copy{font-size:14px;line-height:1.5;color:var(--soft)}
+    .lane-cases{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .variant-b .case-card{background:rgba(255,255,255,.48);border:0;box-shadow:0 18px 42px rgba(10,28,64,.08);backdrop-filter:blur(6px)}
+
+    .variant-c .command-table{
+      display:grid;grid-template-columns:minmax(0,1.08fr) minmax(300px,.72fr);gap:20px
+    }
+    .variant-c .primary-case{min-height:100%}
+    .stack-col{display:grid;gap:16px}
+    .mini-case{padding:18px 20px;border-radius:22px;background:rgba(255,255,255,.82);border:1px solid rgba(10,28,64,.08);box-shadow:var(--shadow-soft)}
+    .mini-case .mini-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}
+    .mini-case .mini-title{font-size:22px;line-height:1;letter-spacing:-.04em;font-weight:700;color:var(--navy)}
+    .mini-case .mini-value{font-family:"DM Serif Display",serif;font-size:28px;line-height:1;color:var(--navy)}
+    .mini-case .mini-copy{font-size:14px;line-height:1.55;color:var(--soft)}
+    .variant-c .reserve-strip{padding-top:2px}
+
+    @media (max-width: 1100px){
+      .toolbar{grid-template-columns:1fr}
+      .variant-a .case-grid,
+      .variant-c .command-table,
+      .variant-b .lane-row,
+      .lane-cases{grid-template-columns:1fr}
+      .variant-a .hero-case{grid-column:auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topline">
+      <div><span class="accent">Deal Workspace</span> board-area triptych</div>
+      <div>Antaeus</div>
+    </div>
+
+    <section class="artboard variant-a">
+      <div class="artboard-header">
+        <div><span class="label">Variant 01</span> Pressure Shelf</div>
+        <div>Only the cases under real pressure stay open</div>
+      </div>
+      <div class="surface">
+        <div class="toolbar">
+          <div class="search-shell"><div class="search-dot"></div><div>Search deal or intervention</div></div>
+          <div class="toolbar-readouts">
+            <div class="readout"><span>Visible</span> 4</div>
+            <div class="readout"><span>Reserve</span> 64</div>
+            <div class="readout"><span>Pipeline</span> $9.5M</div>
+          </div>
+          <div class="toolbar-actions">
+            <div class="action-chip">At risk only</div>
+            <div class="action-chip">Stage drift</div>
+            <button class="action-btn">Run intervention</button>
+          </div>
+        </div>
+
+        <div class="filter-ribbon">
+          <div class="filter-shell">
+            <div class="filter-label">Board filter</div>
+            <div class="filter-value">Pressure shelf</div>
+          </div>
+          <div class="reserve-readout">The rest of the board stays in reserve until it earns surface area.</div>
+        </div>
+
+        <div class="case-grid">
+          <div class="case-card hero-case">
+            <div class="case-head">
+              <div class="case-title-row"><div class="case-dot risk"></div><div class="case-name">Apex Fintech</div></div>
+              <div class="case-value">$140k</div>
+            </div>
+            <div class="case-body">
+              <div class="signal-line"><div class="signal-label">Risk</div><div class="signal-value risk">100</div><div class="signal-copy">No dated next step. Stage is outrunning reality.</div></div>
+              <div class="signal-line"><div class="signal-label">Proof</div><div class="signal-value proof">Thin</div><div class="signal-copy">Qualification exists, but still cannot support the stage story.</div></div>
+              <div class="signal-line"><div class="signal-label">Motion</div><div class="signal-value motion">47d</div><div class="signal-copy">Nothing live has changed the case recently.</div></div>
+            </div>
+            <div class="case-footer"><div class="kicker">Now</div><div class="link">Open recovery queue</div></div>
+          </div>
+
+          <div class="case-card">
+            <div class="case-head">
+              <div class="case-title-row"><div class="case-dot proof"></div><div class="case-name">Northstar Health</div></div>
+              <div class="case-value">$180k</div>
+            </div>
+            <div class="case-body">
+              <div class="signal-line"><div class="signal-label">Risk</div><div class="signal-value risk">Drift</div><div class="signal-copy">Stage reads stronger than truth.</div></div>
+              <div class="signal-line"><div class="signal-label">Proof</div><div class="signal-value proof">Thin</div><div class="signal-copy">Qualification is still soft.</div></div>
+              <div class="signal-line"><div class="signal-label">Motion</div><div class="signal-value motion">Owner</div><div class="signal-copy">No one is carrying the fix.</div></div>
+            </div>
+            <div class="case-footer"><div class="kicker">Next</div><div class="link">Stress-test top deal</div></div>
+          </div>
+
+          <div class="case-card">
+            <div class="case-head">
+              <div class="case-title-row"><div class="case-dot motion"></div><div class="case-name">VoltOps</div></div>
+              <div class="case-value">$95k</div>
+            </div>
+            <div class="case-body">
+              <div class="signal-line"><div class="signal-label">Risk</div><div class="signal-value risk">Gap</div><div class="signal-copy">Heat has not become action.</div></div>
+              <div class="signal-line"><div class="signal-label">Proof</div><div class="signal-value proof">Cover</div><div class="signal-copy">The case is incomplete.</div></div>
+              <div class="signal-line"><div class="signal-label">Motion</div><div class="signal-value motion">Hot</div><div class="signal-copy">Live account heat is real.</div></div>
+            </div>
+            <div class="case-footer"><div class="kicker">Keep honest</div><div class="link">Hold in reserve</div></div>
+          </div>
+        </div>
+
+        <div class="reserve-strip">
+          <div class="reserve-pill"><div class="meta">Reserve / stalled</div><div class="name">Meridian Logistics</div></div>
+          <div class="reserve-pill"><div class="meta">Reserve / pilot</div><div class="name">Cascadia Health</div></div>
+          <div class="reserve-pill"><div class="meta">Reserve / verbal</div><div class="name">Acme Industries</div></div>
+          <div class="reserve-pill"><div class="meta">Reserve / prospect</div><div class="name">Blue River</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard variant-b">
+      <div class="artboard-header">
+        <div><span class="label">Variant 02</span> Intervention Rail</div>
+        <div>The board is three active lanes, not a CRM grid</div>
+      </div>
+      <div class="surface">
+        <div class="toolbar">
+          <div class="search-shell"><div class="search-dot"></div><div>Search deal, account, or intervention</div></div>
+          <div class="toolbar-readouts">
+            <div class="readout"><span>Now</span> 2</div>
+            <div class="readout"><span>Next</span> 1</div>
+            <div class="readout"><span>Reserve</span> 65</div>
+          </div>
+          <div class="toolbar-actions">
+            <div class="action-chip">Intervention rail</div>
+            <div class="action-chip">All deals</div>
+            <button class="action-btn">Run queue</button>
+          </div>
+        </div>
+
+        <div class="filter-ribbon">
+          <div class="filter-shell">
+            <div class="filter-label">Board filter</div>
+            <div class="filter-value">Intervention rail</div>
+          </div>
+          <div class="reserve-readout">Only the deals attached to a live intervention path are visible.</div>
+        </div>
+
+        <div class="lane-stack">
+          <div class="lane-row">
+            <div class="lane-label">
+              <div class="state">Now</div>
+              <div class="copy">Immediate pressure. These cases are distorting the board.</div>
+            </div>
+            <div class="lane-cases">
+              <div class="case-card">
+                <div class="case-head">
+                  <div class="case-title-row"><div class="case-dot risk"></div><div class="case-name">Apex Fintech</div></div>
+                  <div class="case-value">$140k</div>
+                </div>
+                <div class="case-body">
+                  <div class="signal-line"><div class="signal-label">Risk</div><div class="signal-value risk">100</div><div class="signal-copy">No dated next step.</div></div>
+                  <div class="signal-line"><div class="signal-label">Proof</div><div class="signal-value proof">Thin</div><div class="signal-copy">Qualification still soft.</div></div>
+                  <div class="signal-line"><div class="signal-label">Motion</div><div class="signal-value motion">47d</div><div class="signal-copy">Nothing live has changed it.</div></div>
+                </div>
+              </div>
+              <div class="case-card">
+                <div class="case-head">
+                  <div class="case-title-row"><div class="case-dot risk"></div><div class="case-name">Northstar Health</div></div>
+                  <div class="case-value">$180k</div>
+                </div>
+                <div class="case-body">
+                  <div class="signal-line"><div class="signal-label">Risk</div><div class="signal-value risk">Drift</div><div class="signal-copy">Stage reads stronger than truth.</div></div>
+                  <div class="signal-line"><div class="signal-label">Proof</div><div class="signal-value proof">Thin</div><div class="signal-copy">Qualification not locked.</div></div>
+                  <div class="signal-line"><div class="signal-label">Motion</div><div class="signal-value motion">Owner</div><div class="signal-copy">Internal carry missing.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lane-row">
+            <div class="lane-label">
+              <div class="state">Next</div>
+              <div class="copy">One case that should tighten the board if it survives scrutiny.</div>
+            </div>
+            <div class="lane-cases">
+              <div class="case-card">
+                <div class="case-head">
+                  <div class="case-title-row"><div class="case-dot proof"></div><div class="case-name">VoltOps</div></div>
+                  <div class="case-value">$95k</div>
+                </div>
+                <div class="case-body">
+                  <div class="signal-line"><div class="signal-label">Risk</div><div class="signal-value risk">Gap</div><div class="signal-copy">Heat has not become action.</div></div>
+                  <div class="signal-line"><div class="signal-label">Proof</div><div class="signal-value proof">Cover</div><div class="signal-copy">Case not complete.</div></div>
+                  <div class="signal-line"><div class="signal-label">Motion</div><div class="signal-value motion">Hot</div><div class="signal-copy">Live account heat is real.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lane-row">
+            <div class="lane-label">
+              <div class="state">Keep honest</div>
+              <div class="copy">The rest of the board remains in reserve until it earns a lane.</div>
+            </div>
+            <div class="reserve-strip">
+              <div class="reserve-pill"><div class="meta">Reserve / 7d stale</div><div class="name">Cascadia</div></div>
+              <div class="reserve-pill"><div class="meta">Reserve / thin proof</div><div class="name">Meridian</div></div>
+              <div class="reserve-pill"><div class="meta">Reserve / verbal</div><div class="name">Blue Harbor</div></div>
+              <div class="reserve-pill"><div class="meta">Reserve / pilot</div><div class="name">Acme</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard variant-c">
+      <div class="artboard-header">
+        <div><span class="label">Variant 03</span> Case Reserve Table</div>
+        <div>One primary case, two support cases, everything else held below</div>
+      </div>
+      <div class="surface">
+        <div class="toolbar">
+          <div class="search-shell"><div class="search-dot"></div><div>Search deal or reserve case</div></div>
+          <div class="toolbar-readouts">
+            <div class="readout"><span>Primary</span> 1</div>
+            <div class="readout"><span>Support</span> 2</div>
+            <div class="readout"><span>Reserve</span> 65</div>
+          </div>
+          <div class="toolbar-actions">
+            <div class="action-chip">Case reserve</div>
+            <div class="action-chip">Weighted truth</div>
+            <button class="action-btn">Open primary case</button>
+          </div>
+        </div>
+
+        <div class="filter-ribbon">
+          <div class="filter-shell">
+            <div class="filter-label">Board filter</div>
+            <div class="filter-value">Case reserve</div>
+          </div>
+          <div class="reserve-readout">The page shows only the commissioned case and its immediate support cases.</div>
+        </div>
+
+        <div class="command-table">
+          <div class="case-card primary-case">
+            <div class="case-head">
+              <div class="case-title-row"><div class="case-dot risk"></div><div class="case-name">Northstar Health</div></div>
+              <div class="case-value">$180k</div>
+            </div>
+            <div class="case-body">
+              <div class="signal-line"><div class="signal-label">Risk</div><div class="signal-value risk">Drift</div><div class="signal-copy">Stage reads stronger than truth. This case is teaching the wrong lesson.</div></div>
+              <div class="signal-line"><div class="signal-label">Proof</div><div class="signal-value proof">Thin</div><div class="signal-copy">Qualification is still soft for this stage.</div></div>
+              <div class="signal-line"><div class="signal-label">Motion</div><div class="signal-value motion">Owner</div><div class="signal-copy">Internal carry is not visibly owned.</div></div>
+            </div>
+            <div class="case-footer"><div class="kicker">Commissioned case</div><div class="link">Stress-test top deal</div></div>
+          </div>
+
+          <div class="stack-col">
+            <div class="mini-case">
+              <div class="mini-head">
+                <div class="mini-title">Apex Fintech</div>
+                <div class="mini-value">$140k</div>
+              </div>
+              <div class="mini-copy">Immediate recovery case. No dated next step.</div>
+            </div>
+            <div class="mini-case">
+              <div class="mini-head">
+                <div class="mini-title">VoltOps</div>
+                <div class="mini-value">$95k</div>
+              </div>
+              <div class="mini-copy">Support case. Heat is real but the move layer is weak.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reserve-strip">
+          <div class="reserve-pill"><div class="meta">Reserve / active</div><div class="name">Meridian Logistics</div></div>
+          <div class="reserve-pill"><div class="meta">Reserve / evaluation</div><div class="name">Acme Industries</div></div>
+          <div class="reserve-pill"><div class="meta">Reserve / prospect</div><div class="name">Cascadia</div></div>
+          <div class="reserve-pill"><div class="meta">Reserve / quiet</div><div class="name">Blue River</div></div>
+          <div class="reserve-pill"><div class="meta">Reserve / close</div><div class="name">PacificRoute</div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
