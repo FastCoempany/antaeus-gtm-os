@@ -338,7 +338,7 @@ Gold:
 - reserved for premium or consequential states
 - never used as decoration or default accent
 
-No color may appear as decorative rainbow across a working surface. Every color must earn its place by carrying a semantic role.
+Every color carries a semantic role.
 
 ### Motion
 
