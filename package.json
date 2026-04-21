@@ -4,6 +4,8 @@
     "deploy:cloudflare": "npm run build:cloudflare && npx wrangler versions upload"
   },
   "devDependencies": {
+    "playwright": "^1.59.1",
+    "puppeteer": "^24.42.0",
     "wrangler": "^4.84.0"
   }
 }

@@ -30,7 +30,10 @@ async function main() {
     var headed = hasFlag("--headed");
     var qaMode = hasFlag("--qa");
 
-    var browser = await playwright.chromium.launch({ headless: !headed });
+    var browser = await playwright.chromium.launch({
+        headless: !headed,
+        executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined
+    });
     var page = await browser.newPage({ viewport: { width: width, height: height } });
 
     try {
