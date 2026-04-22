@@ -138,4 +138,906 @@ Five truths govern architecture decisions. These are harder than styling rules.
 
 These are older than and harder than the face direction. A pretty face that violates any of these is off-brand.
 
-<!-- END_OF_DRAFT -->
+## 4. Room Catalog
+
+Every room is captured below with its mind locked. The format is the same for each:
+
+- **Family** — the composition family (see Part II §2)
+- **Purpose** — one sentence the room must earn
+- **Strategic logic** — what it actually knows / does / forces
+- **Primitives / frameworks** — the substance that lives in the room
+- **Flows in** — where its input comes from
+- **Flows out** — where its output lands
+- **Must never be flattened** — the substance the face may not touch
+
+Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Preflight doc (`03-facial-architecture/antaeus-phase-7-preflight-behavioral-copy-burden-audit-and-disclosure-matrix-2026-04-02.md` §11). That matrix is binding.
+
+---
+
+### 4.1 Welcome — Threshold
+
+- **Purpose:** move the user from setup into the first real operating move.
+- **Strategic logic:** preserve activation truth and the Week-1 rhythm; give re-entry a calm on-ramp; show the user their own progress without gamifying it. Welcome is not a landing page; it is a disciplined threshold into real work.
+- **Primitives:** first-ICP milestone, first live signal/account milestone, first deal milestone, first logged motion milestone, re-entry path into command.
+- **Flows in:** `gtmos_activation_context` from Onboarding.
+- **Flows out:** directional handoff into Dashboard, Call Planner, or the first ICP Studio session depending on activation state.
+- **Must never be flattened:** the sense that the user is becoming operational, not completing a tutorial. Never show "all done"; always reveal the next open loop.
+
+### 4.2 Dashboard — Command Chamber
+
+- **Purpose:** show the user the one ranked object under the most pressure right now, with one dominant next move, without browsing.
+- **Strategic logic:** the dashboard is where the hallway dies. It ranks pressure across all objects, exposes the reason a specific object is first, and offers one compressed act-or-inspect move. Three density modes (Brief / Spotlight / Queue) support different cognitive states; all three preserve ranking. Graph reward + workspace-health view belong here.
+- **Primitives:** ranked object list, Brief narrative, Spotlight focus object, Queue triage flow, command intelligence ranking inputs (signal heat, deal pressure, staleness, value, downstream impact), graph reward, workspace health summary.
+- **Flows in:** workspace health summaries from every deep room; system-health variant from Readiness + Quota Workback; signal heat from Signal Console; deal pressure from Deal Workspace.
+- **Flows out:** one-click routing into whichever room owns the ranked object (with `focusObject`, `returnTo` preserved).
+- **Must never be flattened:** Brief/Spotlight/Queue as distinct modes; the room-browsing rail does not belong center stage; command intelligence must stay reasoned, not decorative.
+
+### 4.3 Onboarding — Threshold
+
+- **Purpose:** produce real Brief items as a side effect of setup, so the user lands in a Dashboard that is already live.
+- **Strategic logic:** activation is behavioral engineering, not a form. Each micro-commitment creates escalating psychological investment (Commitment + Consistency). The first ask must be genuinely low-friction. By the end, the Brief should contain 8–15 ranked items so the dashboard does not feel empty.
+- **Primitives:** ICP definition, first 10 accounts, email connection, first quota target, first motion — each produces one or more Brief items.
+- **Flows in:** new user context (industry, scale).
+- **Flows out:** `gtmos_activation_context` + seeded items across ICP Studio, Territory, Signal Console, Dashboard.
+- **Must never be flattened:** the principle that onboarding output *becomes* the Brief — not a separate "completion" screen.
+
+### 4.4 ICP Studio — Decision Bench
+
+- **Purpose:** sharpen one strategic wedge so downstream rooms have real targeting truth to inherit.
+- **Strategic logic:** the ICP object is the thing being sharpened; it is the central authored surface, not a form output. "Thin means fewer assumptions, fewer personas, fewer use cases." The ICP is the filter that manifests as "ICP Match" scoring on every Account everywhere.
+- **Primitives:** ICP statement, buying-group minimum, focus recommendation, owner/pain/trigger/proof-window inputs, match histogram.
+- **Flows in:** Onboarding activation; founder conviction.
+- **Flows out:** ICP match score reaches Territory Architect, Sourcing Workbench, Signal Console, Outbound Studio, Discovery Studio, Readiness, Handoff Kit.
+- **Must never be flattened:** ICP sharpness as a strategic bet; never weaken it into a generic persona form.
+
+### 4.5 Territory Architect — Decision Bench
+
+- **Purpose:** turn the ICP into a tiered territory with theses, approaches, and a hard 300-account ceiling that forces strategic ownership.
+- **Strategic logic:** the territory is a map of strategic bets, not a list. Theses encode "what pressure + which segment + why we're the right seller." Tiers are a resource-allocation commitment, not a ranking. The 300-cap and swap mechanic make each account feel consequential.
+- **Primitives:** sales-cycle calibration, theses, approaches, tiers, thesis-to-account tagging, approach ledger.
+- **Flows in:** ICP Studio.
+- **Flows out:** tier + thesis into Sourcing Workbench, Signal Console.
+- **Must never be flattened:** the strategic tier logic; the act of making a thesis. Never reduce to a contact list builder.
+
+### 4.6 Sourcing Workbench — Decision Bench
+
+- **Purpose:** turn theses into named, pushable prospects; prevent the territory from sitting as a blank ceiling.
+- **Strategic logic:** a prospect-push engine tied to thesis. Query Cards make platform-specific search reproducible. Research on a prospect converts it into a qualified account. The room's north star is pushing clean prospects forward and *not* polishing them here.
+- **Primitives:** query cards (per platform), prospect records, research modal (match/entry-point/approach), pipeline tabs, persona guidance.
+- **Flows in:** Territory Architect (thesis, tier, approach vocabulary).
+- **Flows out:** qualified accounts into Signal Console; push decisions carry thesis + approach context forward.
+- **Must never be flattened:** the discipline that accounts must pass thesis match before they reach Signal Console.
+
+### 4.7 Signal Console — Live Instrument (*named premium asset*)
+
+- **Purpose:** convert signals into ranked motion; the live radar where account heat becomes real work.
+- **Strategic logic:** signals are time-limited events. Heat = signal count × type weight × source credibility × recency decay. Research on a qualified account may justify motion; research without motion is collection theater. Account heat feeds Dashboard command ranking.
+- **Primitives:** account list, signal records, heat score per account, morning brief, research posture ("motion ready" vs "research heavy"), workspace-health block (compounding vs still weak), enrich-all flow.
+- **Flows in:** accounts from Sourcing Workbench + Territory Architect; ICP match score.
+- **Flows out:** ranked accounts into Outbound Studio, Cold Call Studio, LinkedIn Playbook; heat + readiness into Dashboard; heat + motion state into Handoff Kit.
+- **Must never be flattened:** signal interpretation, account-to-motion logic, account priority meaning. Never reduce to a badge list or passive timeline.
+
+### 4.8 Outbound Studio — Live Instrument
+
+- **Purpose:** route one live outbound line — account × buyer × temperature × trigger × next-question — before it leaves.
+- **Strategic logic:** "no send path without a named strain." Operator cannot route generic category language into a live channel. Every route keeps a recovery cable on the same board. Persona × temperature × trigger produces the exact line.
+- **Primitives:** operator rack inputs (account, buyer, persona, temperature, trigger), route method sheet, no-ask mode toggle, generated send line, angle save, touch log.
+- **Flows in:** account + heat from Signal Console; personas from ICP Studio; approaches from Territory Architect.
+- **Flows out:** motion truth into Dashboard, LinkedIn Playbook, Readiness, Handoff Kit.
+- **Must never be flattened:** motion craft and anti-spam seriousness. Never a template-spam generator.
+
+### 4.9 Cold Call Studio — Live Instrument
+
+- **Purpose:** narrow pressure thread-by-thread during a live cold call; turn script archives into one pulled thread at a time.
+- **Strategic logic:** six named threads (Prep → Opener → Pressure → Proof → Ask → Exit) each with buyer-might-say branches and recommended next lines. A cold call is won by narrowing pressure, not widening explanation. The rep lives in one thread at a time.
+- **Primitives:** thread spine, buyer-response branches, say-next capture panel, outcome logging (meeting_booked, callback_scheduled, referral, etc.), score read, call memory table.
+- **Flows in:** signal account from Signal Console; ICP persona.
+- **Flows out:** on `meeting_booked`, creates a Deal record; call outcomes into Dashboard, Deal Workspace, Readiness, Handoff.
+- **Must never be flattened:** live-call consequence; never becomes a script library.
+
+### 4.10 LinkedIn Playbook — Live Instrument
+
+- **Purpose:** use LinkedIn as disciplined air cover — never the opening scene.
+- **Strategic logic:** five cues (Watch public signal → Comment with one operating read → Connect after recognition → Give proof before asking → Ask only when earned). The inbox is not the opening scene. Public cue first, ask only when trust has compounded.
+- **Primitives:** five-cue ladder, cue log form, cue-method templates (Connection, Public cue, Give-first, Ask), channel memory stats (touches, acceptance, reply rate).
+- **Flows in:** account and persona from Signal Console / Outbound Studio.
+- **Flows out:** motion truth into Dashboard, Signal Console, Readiness, Handoff.
+- **Must never be flattened:** channel-specific discipline. Never flatten into generic outreach tips.
+
+### 4.11 Call Planner — Live Instrument *(app path: `/app/discovery-agenda/`)*
+
+- **Purpose:** prepare the exact shape of the next call so the rep arrives with conviction, not hope.
+- **Strategic logic:** four-stop spine — Open / Reason now / Probe / Advance ask. The plan is not an agenda; it is the rep's pre-conviction. The plan must die in the call (get used), not die in the planner (go unused).
+- **Primitives:** account + persona + deal witness column; four agenda strips; outcome capture + customize sub-form; handoff actions.
+- **Flows in:** signal + account heat from Signal Console; deal state from Deal Workspace; ICP persona.
+- **Flows out:** `gtmos_call_handoff` payload into Discovery Studio; advance-ask intent into Deal Workspace.
+- **Must never be flattened:** agenda quality; the link to Discovery and Deal. Never reduce to a plain agenda form.
+
+### 4.12 Discovery Studio — Diagnosis Table / Live Instrument hybrid *(named premium asset)*
+
+*See also the five 2026-04-10 guardian specs in `08-room-guardian-specs/`. Those are binding.*
+
+- **Purpose:** a live discovery operating console — the rep speaks, branches, recovers, locks the next move, and hands truth into the next room without restating.
+- **Strategic logic:** one vertical, collapsible, branch-driven call rail. The rep lives in one open segment at a time; everything else stays compressed but jumpable. Discovery is not a framework gallery, not a methodology viewer, not a notepad. The room answers live pressure with control, not density.
+- **Primitives (21 per the runtime wiring sheet):** `frameworkRegistry` (9 frameworks), `activeFramework`, `callClock`, `phaseTempoPlan`, `activeNode`, `activeTrack`, `essentialNodeSet`, `skipAheadHandlers`, `responseSet`, `expandedResponse`, `learnedFacts`, `signalLedger`, `tiebackLedger`, `supportDossier`, `objectionLibrary`, `inboundQuestionHandlers`, `compressionMode`, `nextStepLock`, `callDisposition`, `postCallPackage`, `handoffPayload`.
+- **Fixed segment spine (10):** Opening frame → Current-state truth → Pain and consequence → Trigger and urgency → Stakeholder and ownership → Proof threshold → Current vendor and displacement → Decision architecture → Next-step lock → Post-call routing.
+- **Nine frameworks (locked):** Legal; Recruiting/Talent; Product/UX/Enablement; GovTech/Compliance; Customer Support/Operations; Sales/Revenue Intelligence; Manufacturing/Supply Chain/Engineering; Data/Intelligence Infrastructure; AI-Native Buyer.
+- **Required global rails (7):** framework rail, segment rail, recover-the-call rail, learned-truth ledger, worked memory, next-step docket, support dossier.
+- **Flows in:** `gtmos_call_handoff` from Call Planner; deal state from Deal Workspace.
+- **Flows out:** Deal Workspace (active framework, learned facts, stakeholder map, current-state method, trigger event, proof threshold, blockers, next-step lock); Call Planner (framework, segment context, hypothesis, open questions, objections, stakeholder map); Future Autopsy (failure-pattern clues, unresolved proof gaps, stalled-next-step evidence, disqualification indicators).
+- **Must never be flattened:** any of the 21 primitives; the hard on-call control laws (visible call clock + tempo, compression mode that actually filters nodes, skip-ahead handlers, support dossier, tie-back discipline). *If a visual object cannot map to a primitive, it should not exist in the room.*
+
+### 4.13 Deal Workspace — Diagnosis Table
+
+- **Purpose:** surface the recovery queue — which deals are weakest, why, and what the next corrective move is.
+- **Strategic logic:** the room is an intervention board, not a Kanban. First-fold should expose pressure fast — "which deals will close-lost if I do nothing this week, and what's the smallest corrective move." Stage is not truth unless next-step truth backs it up.
+- **Primitives:** intervention board (dealGrid), 9-field deal-health modal (champion, EB, use case, pain, competition, process, notes, forecast, momentum), recovery queue panel, deal-health panel, loss-reason modal feeding Playbook loss patterns.
+- **Flows in:** deals auto-created from Cold Call; deal state updates from Discovery Studio; proof state from PoC Framework; advisor effect from Advisor Deploy.
+- **Flows out:** deal pressure into Future Autopsy, Dashboard, Readiness, Handoff Kit; loss patterns into Founding GTM.
+- **Must never be flattened:** deal pressure, next-step quality, stage truth, qualification seriousness. Never a passive record page.
+
+### 4.14 Future Autopsy — Diagnosis Table *(named premium asset)*
+
+- **Purpose:** pre-mortem the deal before it dies; show the causal pattern and the corrective route.
+- **Strategic logic:** "the deal is pinned as evidence." Forensic light-table posture. Six live pinned cases form a ledger; the analysis column shows causal pattern (e.g., *pressure before clarity*), intervention options (change the 3× deal truth / test the risk-fix lens / rebuild the agenda), and a command row (Run selected / Urgent autopsy deal / Copy brief).
+- **Primitives:** pinned-case ledger, horizon tag (days out), causal-pattern narrative, intervention options, command row, route rack (back to Deal Workspace / Call Planner / Discovery Studio / PoC Framework).
+- **Flows in:** deals with pressure/stage truth from Deal Workspace; unresolved gaps from Discovery Studio; proof state from PoC.
+- **Flows out:** reroute logic into Deal Workspace, Call Planner, Discovery Studio, PoC Framework.
+- **Must never be flattened:** failure-pattern diagnosis, consequential route correction, strategic severity. Never soften into "risk review." This is the positive example the other Diagnosis Table rooms should borrow from.
+
+### 4.15 PoC Framework — Decision Bench
+
+- **Purpose:** cast one decision-grade proof object so pilots stop becoming optimism theater.
+- **Strategic logic:** "raw interest is not proof until it can be carried." The room forges four molds — Claim, Owner, Metric, Kill rule — plus linked deal and readout owner. The dark/light split stage visually encodes raw → refined.
+- **Primitives:** linked deal, vendor, account, readout owner, success criteria (pass/fail), boundaries/kill rules, outcome state, duration toggle (7d/14d), proof pack (docs), heat ledger (claim heat / owner heat / kill heat), weakest-mold diagnosis.
+- **Flows in:** deal from Deal Workspace.
+- **Flows out:** proof object into Deal Workspace (risk), Future Autopsy (kill rule), Advisor Deploy (portable evidence); proof state into Handoff.
+- **Must never be flattened:** proof design, proof-weakness visibility, proof-to-deal compounding. Never a checklist.
+
+### 4.16 Advisor Deploy — Live Instrument
+
+- **Purpose:** prepare one backchannel ask before spending external trust; route it, log it, watch it come back as deal movement.
+- **Strategic logic:** "private influence desk." Deal × advisor × ask-moment produces the exact ask. Stamps record Send / Hold / Reroute. Every ask must return as deal update, advisor hold, or reroute. Trust is spent, not spent.
+- **Primitives:** deal/advisor/ask-moment routing, proof blotter, rolodex of advisors, ask-sheet composer, outcome stamps, advisor registry (tier, expertise, companies, notes), deployment-loops ledger, desk-read impact grid.
+- **Flows in:** deal from Deal Workspace; proof from PoC Framework.
+- **Flows out:** advisor effect on deal pressure → Deal Workspace, Dashboard, Handoff.
+- **Must never be flattened:** the deal-linked consequence; advisor use is not a side log.
+
+### 4.17 Readiness Score — System Ledger
+
+- **Purpose:** synthesize across all rooms whether the motion is hire-ready, and tell the user what is still fragile.
+- **Strategic logic:** readiness is a multi-dimensional system view (Playbook, Signal Console, Pipeline, Deal Quality, Discovery Quality, Proof, Handoff). Score is earned, not gamified. The room exists to make fragility legible so the user can fix it before the hire arrives.
+- **Primitives:** dimension scores, overall readiness score, verdict ("Hire-ready with guardrails" / "Partial" / "Thin"), posture per dimension, system-health variant (not Workspace health), unlock logic, bar chart across dimensions.
+- **Flows in:** summaries from every deep room; `gtmos_readiness_snapshot`.
+- **Flows out:** verdict + dimension breakdowns into Dashboard, Welcome, Handoff Kit.
+- **Must never be flattened:** system truth, score credibility, handoff confidence. Never decorative scoring.
+
+### 4.18 Quota Workback — System Ledger
+
+- **Purpose:** turn a quota target into weekly execution pressure the user can feel.
+- **Strategic logic:** quota math is execution pressure, not isolated planning. The workback tells the user how many meetings per day, motions per week, and deals per quarter they actually need — pinned against real pipeline state.
+- **Primitives:** annual quota, ACV, win rate, cycle length, daily activity targets, pipeline coverage, system-health variant (fragility, coverage).
+- **Flows in:** pipeline from Deal Workspace; motion from Outbound/Cold Call; onboarding targets.
+- **Flows out:** targets into Dashboard; coverage truth into Readiness; execution pressure into Outbound + Cold Call.
+- **Must never be flattened:** quota as execution pressure. Never disconnected planning math.
+
+### 4.19 Founding GTM / Handoff Kit — System Ledger
+
+- **Purpose:** the exportable artifact the first hire actually inherits — a documented, scorable, handoff-ready system.
+- **Strategic logic:** the whole app compounds here. Six sections: how the 1st hire fits, how we sell now, how we run discovery, how we close, how we win/loss, scorecard. The handoff is the north star — everything else is upstream to it. Loss patterns from Deal Workspace feed the win/loss section.
+- **Primitives:** 5-section strategic playbook, 6-step deal methodology, scorecard, exportable brief.
+- **Flows in:** every room. Especially: loss patterns from Deal Workspace; readiness from Readiness; motion memory from Outbound/Cold Call/LinkedIn; discovery truth from Discovery Studio.
+- **Flows out:** export history + completeness into Dashboard, Readiness.
+- **Must never be flattened:** handoff seriousness; exported system truth. Never weakened into a generic document template.
+
+### 4.20 Settings — Trust Annex
+
+- **Purpose:** keep the user safe, make trust and recovery real, without stealing attention from live operating rooms.
+- **Strategic logic:** calm, plainspoken utility. Export all data, import, delete all, sync state, data-stored-locally notice, account controls. No drama, no internal architecture language, no fake product excitement.
+- **Primitives:** backup/restore, role + onboarding state, category framing, browser-specific controls.
+- **Flows in/out:** manages `gtmos_*` localStorage keys; bridges to Supabase auth.
+- **Must never be flattened:** the trust signals. Never mixed with operating-room energy.
+
+---
+
+## 5. Named premium assets (protected)
+
+These rooms carry named-asset protection: they may not be genericized, renamed, folded into other rooms, or casualized.
+
+- **Signal Console**
+- **Future Autopsy**
+- **Discovery Studio** *(by virtue of the 2026-04-10 strict room contract and the five guardian specs)*
+
+A face pass may tighten how these rooms look. A face pass may not reduce what they know.
+
+---
+
+## 6. Compounding rules (cross-room)
+
+The full matrix lives in `03-facial-architecture/antaeus-phase-7-preflight-behavioral-copy-burden-audit-and-disclosure-matrix-2026-04-02.md` §11. Short form:
+
+- **Onboarding** seeds ICP framing, Discovery framing, Quota framing, Settings, Welcome, Dashboard (`gtmos_activation_context`).
+- **ICP Studio** feeds Territory, Sourcing, Signal Console, Outbound, Discovery, Readiness, Handoff (shared targeting defaults).
+- **Territory** feeds Sourcing, Signal Console (tiers + theses).
+- **Sourcing** feeds Signal Console, Territory (pushed prospect continuity).
+- **Signal Console** feeds Outbound, LinkedIn, Dashboard, Readiness, Handoff (account heat + motion context).
+- **Outbound / LinkedIn / Cold Call** feed Dashboard, Readiness, Handoff (shared motion truth).
+- **Cold Call** also creates Deals on `meeting_booked` and feeds Deal Workspace directly.
+- **Call Planner ↔ Discovery Studio** via `gtmos_call_handoff`.
+- **Discovery Studio** feeds Deal Workspace, Handoff, Readiness.
+- **Deal Workspace** feeds Future Autopsy, PoC, Advisor, Dashboard, Readiness, Handoff.
+- **Future Autopsy** feeds Deal Workspace, Call Planner, Discovery Studio, PoC (reroute logic).
+- **PoC Framework** feeds Deal Workspace, Dashboard, Handoff.
+- **Advisor Deploy** feeds Deal Workspace, Dashboard, Handoff.
+- **Quota Workback** feeds Dashboard, Outbound, Cold Call, Deal, Readiness.
+- **Readiness** feeds Dashboard, Welcome, Handoff (`gtmos_readiness_snapshot`).
+- **Handoff Kit** feeds Readiness, Dashboard, future launch readiness.
+
+**Preserved continuity params (do not break):** `returnTo`, `returnLabel`, `focusObject`, `focusRoom`, `fromMode`, `fromSurface`, room-entry bridge, pinned context, stable command selection on return.
+
+---
+
+# Part II — The Face
+
+## 1. Direction lock
+
+Antaeus is no longer dark-first. The current direction — confirmed by the visual-identity-lock memo (2026-04-01), the visual-system-spec (2026-04-01), and the refaced rooms — is:
+
+**bright · severe · composed · authored · dense but calm**
+
+The interior reads as a premium operating instrument rendered on a bright, quiet field. Not a dark founder-admin shell. Not a generic SaaS pastel. Not a trend-chasing clean-design kit.
+
+### The one exception: System Ledger rooms are dark
+
+Not every room is bright. Evidence from the live refaced rooms shows a consistent pattern:
+
+- **Readiness Score** — full dark navy
+- **Quota Workback** — full dark navy
+- **Founding GTM / Handoff Kit** — full dark navy
+- **PoC Framework** — dark/light split stage (dark "forge" left, cream "cast" right)
+- **ICP Studio** — dark hero band over bright work area
+
+The pattern: **synthesis, judgment, and earned-truth surfaces are allowed to go dark. Live operating rooms, entry surfaces, and diagnosis tables stay bright.** Dark is where the system reconciles evidence and asks to be taken seriously. It is not a default; it is earned.
+
+This aligns with the rubric's fail signal "dark-and-heavy founder admin energy" — that fail mode is about *default* darkness. System-ledger darkness is different; it's consequential, not decorative.
+
+### What bright means here
+
+The base field is a soft, bright neutral with a cool cast — `#F6F8FC` territory, not stark white. Restrained gradient air is allowed: radial washes of blue and orange behind the base, subtle graph-paper undertexture (1px grid at ~32–34px with very low opacity). Deep navy ink sits on top for authority. The bright field is quiet, not flat.
+
+### What dark means here
+
+When a room goes dark, it goes navy — `#0A1C40` territory — with light text, restrained orange accents for pressure, and green only for earned health/completion. Dark rooms must earn their weight: they are saying "the system is reconciling evidence and you should feel that." Dark is not ornamental.
+
+---
+
+## 2. Typography lock
+
+- **Serif** — authority, emphasis, consequence. Authored serif headlines carry the thesis of the room. Large, confident, often `clamp(48px, 6vw, 108px)` for the dominant thesis line. Preferred: *DM Serif Display*.
+- **Modern sans** — control surfaces and reading. Buttons, inputs, body copy, labels. Preferred: *Public Sans*, *Plus Jakarta Sans*, *Outfit* (for display-weight sans).
+- **Mono** — kickers, meters, operational micro-labels only. Never body text. Letter-spaced uppercase for section codes. Preferred: *JetBrains Mono*, *IBM Plex Mono*.
+
+**The compression rule:** authored serif headlines carry the thesis. Sans carries the work. Mono recedes.
+
+**Type discipline:**
+- One dominant thesis per surface — never two competing serifs at similar weight
+- Max 3 sizes in the first visible zone
+- Mono must do semantic work (kicker, code, score) — never decoration
+- Giant display type must be *earned*; never use it to fill space
+
+---
+
+## 3. Color semantic roles
+
+| Role | Meaning | Use |
+|---|---|---|
+| **Navy** | ink / authority / structural text | default body + display, deep UI |
+| **Orange** | focus / pressure / primary action / urgency | the one dominant move; rationed, never decorative |
+| **Blue** | system intelligence / information / secondary action | system-state, links, informational chips |
+| **Green** | healthy / ready / live | real completion or earned health only |
+| **Amber** | caution / needs sharpening | mid-weight warnings |
+| **Red** | real risk / real failure / intervention needed | decaying deals, destructive actions |
+| **Gold** | earned emphasis / premium / consequential states | reserved; not a default accent |
+
+Every color carries a semantic role. If a color appears without carrying meaning, remove or recolor it.
+
+**Rationing rules:**
+- Orange is the most powerful color; use it on the one primary move per surface, and only once
+- Green must be earned — never a default "looks positive" color
+- Amber is more common than red; red is the last-resort intervention color
+- Gold and blue should not compete as co-dominant accents
+
+---
+
+## 4. Composition families
+
+Seven families cover the whole product. Every room maps to one primary family. Families define first-fold structure, hierarchy rhythm, allowed plane count, copy burden, color posture, what must feel loud, what must feel recessive.
+
+No room invents its own family. If a new room doesn't map cleanly, update this doc first.
+
+### 4.1 Threshold (entry)
+- **Rooms:** Welcome, Onboarding
+- **Feel:** invitational, bright, composed, transitional, confidence-building
+- **Laws:** one commanding statement; one dominant next move; progress visible but not gamified; support context quiet and secondary; very low menu burden
+- **Avoid:** hero + card pile; orientation copy avalanche; recovery surfaces competing in the center
+
+### 4.2 Command Chamber (ranking)
+- **Rooms:** Dashboard
+- **Feel:** ranked, precise, calm under pressure, instrument-like
+- **Laws:** one focal object or ranked order; command density is the star; support/trust surfaces pushed outward; room access secondary and summoned, not central; explanation compressed into tight reasons
+- **Avoid:** dashboard vanity metrics; equal-weight boxes; room-browsing center stage
+
+### 4.3 Live Instrument (live execution)
+- **Rooms:** Signal Console, Outbound Studio, Cold Call Studio, LinkedIn Playbook, Call Planner, Discovery Studio, Advisor Deploy
+- **Feel:** live, tense, immediate, operational
+- **Laws:** top of page behaves like a working console, not a report; action controls are real and proximal; context visible but compressed; health is a short pulse, not a summary essay
+- **Avoid:** tutorial-like intros; stacked advisory cards; live rooms looking like admin forms
+
+### 4.4 Decision Bench (strategic shaping)
+- **Rooms:** ICP Studio, Territory Architect, Sourcing Workbench, PoC Framework
+- **Feel:** deliberate, sharpened, exacting, constructive
+- **Laws:** the object being sharpened is visually central; the top should show what quality or truth is being improved; builder controls support the object, not the other way around; proof of downstream consequence stays visible
+- **Avoid:** worksheet energy; equal-weight builder panels; "fill out the form" feeling
+
+### 4.5 Diagnosis Table (intervention)
+- **Rooms:** Deal Workspace, Future Autopsy
+- **Feel:** severe, investigative, consequence-aware, corrective
+- **Laws:** first-visible zone exposes pressure fast; risk and truth are legible before long explanation; corrective route is obvious; health language feels like operating truth, not analytics theater
+- **Avoid:** abstract diagnosis without corrective motion; dramatic narrative copy at the top; boxed warning-board clutter
+
+### 4.6 System Ledger (synthesis — dark)
+- **Rooms:** Readiness Score, Quota Workback, Founding GTM / Handoff Kit
+- **Feel:** earned, synthesizing, steady, authoritative, consequential
+- **Laws:** the system should feel like it is reconciling evidence; one summary state dominates; secondary metrics support that state; compact system-health pattern is acceptable; **dark is permitted and recommended**
+- **Avoid:** BI-dashboard composition; scoring-widget field; decorative metrics with no consequence
+
+### 4.7 Trust Annex (utility)
+- **Rooms:** Settings, auth, legal/privacy, purchase
+- **Feel:** calm, trustworthy, plainspoken
+- **Laws:** no drama; no internal architecture language; clear recovery moves; clear trust signals
+- **Avoid:** overdesigned utility chrome; fake product excitement
+
+### 4.8 Hybrid families (Decision Bench with dark hero)
+
+ICP Studio and PoC Framework use a Decision Bench mind with a **dark hero band above a bright work area**. This is allowed. The dark hero carries the strategic thesis; the bright lower area is where the actual decision gets shaped. Do not invent new hybrid patterns without updating this doc.
+
+---
+
+## 5. Global face constraints
+
+Across all families:
+
+- **Max 3 dominant visual planes** in the first visible zone (hard reject above that)
+- **One primary move per surface** (hard reject if two compete)
+- **Chips must be semantic**, not decorative
+- **Box count must stay low** — card accumulation as the main ordering system is a hard reject
+- **Explanatory copy defers downward** whenever possible
+- **The shell supports, does not dominate**
+- **The mouse-first user must succeed** — command palette is a force multiplier, not a dependency
+
+### Hard rejects
+
+Any surface that does any of these fails:
+- Revives flat hallway logic (rooms/menus compete with the work)
+- Uses more than 3 dominant visual planes in the first fold
+- Relies on card accumulation as the main ordering system
+- Uses internal architecture language as visible product copy
+- Uses green, blue, and orange as decorative candy rather than semantic roles
+- Makes the product feel more like a generic dashboard than a premium operating instrument
+- Achieves calm by erasing pressure
+- Achieves beauty by flattening module substance
+- Rewrites the mind instead of the face
+
+---
+
+## 6. Motion and state
+
+**Motion** is sparse, consequential, and state-based. It guides attention; it does not entertain. Use motion for first-load staging, focus shifts, state-change confirmation, ranked action emphasis, and important transition continuity. Never for hover theater, microinteraction excess, or friendliness.
+
+**Every surface must treat** these states explicitly:
+
+- `empty` — why the page matters + what unlocks it + one next action (sparse states should feel useful, directional, intelligent)
+- `sparse` — most early use is sparse; sparse must feel real, not "missing"
+- `active` / `strong` / `risky` — color and weight reserved for these
+- `loading` / `error` — never blank; never swallowed; never cryptic
+- `saved` / `unsaved` — never let the user wonder if it saved
+
+---
+
+# Part III — The Behavior
+
+The product is engineered around behavior. Every rule here exists because there is evidence — usually a replicated effect at d ≥ 0.5 — that says it works on real users. Behavioral doctrine is the spine connecting mind and face; this part is how we defend the user's attention, confidence, and follow-through.
+
+The canonical source for this part is `03-research-backbone/antaeus-architecture-restructure-research-brief-source-2026-03-31.md` (the 40-source research synthesis) and `01-charter-and-laws/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md` (the seven behavioral rules).
+
+## 1. The three resistances
+
+Every design decision reduces one of three resistances. If a decision reduces none of them, it is probably decoration.
+
+- **Cognitive resistance** — "what is this for / what do I do next / what object am I on / what changed because of what I just did"
+- **Emotional resistance** — "judged by complexity / punished by blank states / lost in a dead end / unsure if the app is trustworthy"
+- **Operational resistance** — "re-enter known context / carry context between modules manually / guess whether it saved / guess whether the output matters downstream"
+
+A room that *looks* better but increases any resistance is worse than the version before.
+
+## 2. Least-resistance doctrine
+
+Antaeus is designed around the least path of resistance toward real work.
+
+That means:
+- the app always ranks the next move
+- context carries automatically (see `focusObject`, `returnTo`, etc.)
+- the user sees one dominant action at a time
+- the app reduces branch decisions wherever possible
+- every page either produces something or routes the user to the thing that will
+
+Least resistance does NOT mean: fewer controls at all costs, oversimplifying serious work, hiding operating truth. It means: less friction to *meaningful* action, less drift into low-value behavior, less room for ambiguous wandering.
+
+## 3. The seven behavioral design rules
+
+These are binding. Every room should pass all seven. Most room liabilities I find are failures of these, not of visual rules.
+
+1. **One dominant move per screen** — one primary move, one secondary, everything else visually quieter. If everything looks clickable, nothing is ranked.
+2. **Object before controls** — the user first sees what object is in focus, what condition it's in, what pressure exists. Only then should they see the control set.
+3. **State before explanation** — show current state, confidence, pressure, next move before long copy. Good users scan before they read.
+4. **Reward truth, not activity** — visual reward comes from sharper targeting / stronger signal / stronger qualification / better proof / real handoff readiness. Never from clicks, fields, or content volume.
+5. **Every save must visibly matter** — after a save, the user should see at least one of: a score changed, a suggestion improved, a dashboard changed, a milestone moved, the handoff got stronger. If nothing visibly changes, the app feels fake.
+6. **No module feels isolated** — every major screen shows where its input came from and what it affects next. Subtle is fine. Absent is not.
+7. **Escalation beats clutter** — do not present all seriousness at once. Escalate visual intensity only when risk increases, the user is about to do something destructive, a deal is decaying, a handoff is dangerously thin, or a workflow is about to break trust.
+
+## 4. The strongest behavioral levers (ranked)
+
+From research, in order of effect size:
+
+1. **Prefilled context** — the app already knows who the user is and what they were working on. No restate.
+2. **Ranked next move** — the app tells the user what to do next, with a reason.
+3. **Visible consequence** — what changes downstream if the user acts is visible before the action.
+4. **Explicit progress** — compounding is shown (score deltas, ledgers updating, workspace health shifting).
+5. **Save-state trust** — never any ambiguity about whether something saved.
+6. **Contextual handoff** — when the user moves rooms, context moves with them.
+7. **Restrained motion** — motion only where it clarifies state change.
+
+Any feature you design should leverage as high on this list as possible.
+
+## 5. Fourteen behavioral principles (ranked by evidence + applicability)
+
+### Tier 1 — high confidence, high applicability
+
+**Implementation Intentions** (Gollwitzer 1999; meta-analysis 94 studies, 8,000+ participants, d = 0.65)
+→ *Every object surface presents a specific, contextual next action in if-then form.* Never "follow up on this deal" — always "Send the pricing proposal to Sarah Chen by Tuesday because her budget review is Wednesday." The specificity is what drives the effect.
+
+**Goal Gradient Effect** (Hull 1932; Kivetz 2006)
+→ *The Readiness Score is a goal gradient accelerator.* Milestones at 25%, 50%, 75%, 100% each unlock a micro-moment and reveal the next milestone. U-shaped motivation curve means don't let the user plateau in the middle — surface "what moves it" language.
+
+**Commitment and Consistency** (Freedman & Fraser 1966; 4.5× compliance increase)
+→ *Onboarding uses escalating micro-commitments.* Each step creates psychological investment. The first ask must be genuinely low-friction; asking for company name as the first field cuts conversion 50%.
+
+**Cognitive Load Theory** (Sweller 1988)
+→ *Reduce extraneous load at every decision.* Hick's Law quantifies this: ≤5 primary navigation items, ≤5 items in the first visible Dashboard zone. The Paradox of Choice effect is real when the domain is unfamiliar — that's our founder.
+
+### Tier 2 — strong evidence, requires careful application
+
+**Endowed Progress Effect** (Nunes & Dreze 2006; 82% higher completion, 34% vs 19%)
+→ *Onboarding converts "not started" into "underway" immediately.* Importing contacts, connecting email, completing ICP each register as "3 of 8 steps complete." The 10–25% initial endowment is the research sweet spot.
+
+**Loss Aversion + IKEA Effect** (Kahneman & Tversky 1979; 90% replication across 19 countries; Norton 2012, 63% premium on assembled items)
+→ *Make cross-object data flow visible.* When a user logs a call, show it flows to the contact timeline, the deal activity log, the account summary, tomorrow's Brief. The user must see their work has tentacles across the system.
+
+**Zeigarnik / Ovsiankina** — *critical nuance:* the 2025 meta-analysis (Ghibellini & Meier) **debunked the memory component of the Zeigarnik Effect**. What remains is the **Ovsiankina Effect — the motivational drive to resume interrupted tasks.**
+→ *Don't rely on users remembering incomplete tasks. Surface incomplete states visibly and make resumption the path of least resistance.* "Celebrate briefly → reveal next opportunity immediately" is the post-win rule. Never "all done." Post-reward motivation drops sharply to baseline — the moment after completion is the highest churn risk.
+
+### Tier 3 — powerful, ethical guardrails required
+
+**Variable Ratio Reinforcement** (Skinner)
+→ *We use variable **insights**, not variable **rewards**.* The ethical line: rewards that create addiction exploit users (infinite scroll, loot boxes); insights that surface genuine patterns serve users ("Your Tuesday emails get 3× higher open rates"). Antaeus uses pattern detection, cross-object correlations, anomaly alerts. Never intermittent notifications designed to maximize session time.
+
+**Self-Determination Theory** (Deci & Ryan 2000 — autonomy/competence/relatedness)
+→ *Avoid points, badges, leaderboards for core sales activities* (the overjustification effect undermines intrinsic motivation). Provide competence-affirming feedback: "Your outreach response rate improved from 8% to 12% this week." Relatedness via anonymous stage-based benchmarking ("Founders at your ARR typically have 23 active accounts") — with injunctive norms for outperformers ("You're ahead of most founders at your stage ✓") to prevent the Opower boomerang.
+
+**Peak-End Rule** (Kahneman 1993; 2022 meta-analysis 174 samples)
+→ *Every session has a designed peak and a designed end.* The peak is an insight delivery or achievement moment; the end is a progress summary + next-session trigger. Never end on error, timeout, or "nothing to show."
+
+**Temporal Discounting**
+→ *Visual aging on stale objects* (green → yellow → orange → red). Explicit temporal framing ("Win rate drops 40% after 30 days of inactivity") makes future cost present. But alarm fatigue is real — signal decay applies selectively to the 3–5 highest-impact items in the Brief.
+
+## 6. The hallway problem
+
+The core architectural problem the app is solving is **the hallway** — too many equal-weight doors, the user repeatedly deciding "where do I go now." Architecture work has been replacing the hallway with a **smarter front door**.
+
+The sequence the product is trying to produce:
+
+- old sequence: `module → page → local controls`
+- new sequence: `command → object → lens → downstream loop`
+
+Every room and every face pass must strengthen the new sequence. Anything that revives equal-weight destinations is hallway behavior and fails.
+
+**What hallway behavior looks like in a refaced room:**
+- multiple navigation strips before content (discovered during Discovery Studio audit: 4 strips = hallway)
+- tabs at the top of a room as the primary organizing logic
+- a sidebar rail that competes with the main work
+- room browsing at the center of the command chamber
+
+**What the front door looks like:**
+- one ranked object with one dominant move
+- room access as a secondary, summoned action
+- the current object carries forward with continuity params
+- the shell is stable background, not a decision layer
+
+## 7. Loop transformation (never closure)
+
+**Tension migrates forward through object state; it does not resolve at completion.** This is the Ovsiankina-based design principle, not the debunked Zeigarnik memory claim.
+
+The chain every object follows:
+
+- **Signal → Motion** — triaging doesn't close the loop, it transforms into "Motion created — first touchpoint draft ready for review"
+- **Motion → Contact response** — sending doesn't close; transforms into "Sequence active — monitoring for engagement signals"
+- **Response → Deal** — a positive response transforms into "Deal created — 2 of 8 deal qualification steps already complete"
+- **Deal advancement** — moving stages transforms into the next stage's gap: "Proposal stage — 0 of 4 proof points documented"
+- **Deal won → Handoff** — the highest-risk post-reward reset. Never "Congratulations, deal closed." Always "Deal won — Handoff package 0% complete. Your first hire will need: account context, contact relationships, discovery notes, competitive intelligence."
+
+The ethical constraint: every downstream loop must represent **genuine value** the user would want to do anyway. Not artificial anxiety. The Readiness Score dropping because the user hasn't logged enough calls this week is punitive gamification — banned. "Document your discovery for the handoff" is genuinely useful — surfaced at the moment when motivation and context are highest.
+
+## 8. Session design arc
+
+The session is engineered end-to-end.
+
+- **First 30 seconds (new user):** minimal steps, belief-system-first. Show the thesis briefly ("This is your strategic operating room"), drop into guided ICP definition with one field to complete first. The peak of the first session is when the user's first data appears in the Brief — the IKEA "I built this" moment.
+- **First 5 minutes (any session):** narrative Brief in 3–5 sentences + one variable-insight line ("Deals where you scheduled demos within 48 hours close 2.7× faster — you have 2 opportunities to test this today"). Within 30 seconds the user can switch to Grid or Queue. Every item uses implementation-intention if-then specificity.
+- **Returning user (daily):** Brief opens as "what changed since last session" — new signals / state-changed deals / scheduled items now due. Variable insight every visit.
+- **Session end:** designed closing card. "Today: 3 calls logged, 2 deals advanced, pipeline +$28K. Tomorrow: Acme demo prep, follow up with 2 stale accounts." This loads the next session's internal trigger. Peak-End Rule: never end on error, timeout, or "nothing to show."
+
+## 9. Copy burden discipline
+
+Copy is one of the highest-leverage places the face can fail. The rule from the Phase-7 Preflight (binding):
+
+**Remove visibility burden before removing meaning. Do not delete substance; redistribute it to the correct layer.**
+
+### Layer budget
+
+- **Command layer:** one headline, one rationale sentence per zone, 0–3 reasons per selected object, no paragraph longer than 2 sentences in the core command area
+- **Sheet layer:** one why-now, one continuity statement, 3–5 evidence/gap rows, one room-entry reason, one dominant CTA
+- **Room first fold:** title + compact subtitle + bridge + pinned context + one composed setup zone. No more than one deeper explanatory cluster visible before the user starts working.
+- **Methodology layer:** unconstrained, but disclosed progressively and intentionally
+
+### What to remove vs. move
+
+- **Remove** only if purely repetitive, decorative reassurance without operational value, or hallway-era onboarding remnants
+- **Compress** if strategically right but too long, or redundant to what the UI already shows
+- **Move to sheet** if explains why a selected object matters now, or justifies room entry
+- **Move deeper into room** if it's methodology, process, framework nuance
+- **Gate / progressively disclose** if it teaches rather than directs
+
+**Never valid reasons to remove text:** "the screen feels busy," "modern apps are minimal," "we need fewer words." Text must earn removal by redundancy, not by volume alone.
+
+## 10. State language lock
+
+The product's state vocabulary is specific. Use these, not their softer cousins.
+
+**Good states:** `Ready now`, `Workable`, `Thin`, `Operating`, `Needs intervention`, `At risk`, `Handoff-ready`, `Partial`, `Compounding`, `Still weak`.
+
+**Bad states:** vague positivity, gamification pops, decorative achievement language, "Great work!" / "You're doing amazing" copy.
+
+**Error language:** honest, calm, specific, recoverable when possible. Not dramatic, robotic, vague, or technical-by-default.
+
+**Workspace health taxonomy (frozen by the 2026-04-03 closeout memo):**
+- 12 rooms use **Workspace health** pattern (Signal Console, Deal Workspace, PoC, Discovery Studio, Advisor Deploy, Discovery Agenda / Call Planner, Future Autopsy, Outbound, Cold Call, Sourcing, ICP, Territory). Shared vocabulary: `Compounding` / `Still weak`.
+- 2 rooms use **System health** variant (Readiness, Quota Workback). Room-native vocabulary, score/coverage/fragility framing.
+- 6 rooms intentionally get **neither** (Dashboard, Welcome, Onboarding, Settings, Founding GTM, LinkedIn Playbook). Reasons are in the closeout memo.
+
+Future rooms must justify their health treatment through product leverage, not coverage vanity.
+
+---
+
+# Part IV — Mind ↔ Face ↔ Behavior Integration
+
+The three layers are not independent. Mind defines what a room knows; behavior defines how the user should feel using it; face defines how it looks. A room is only right when all three agree. This part is the working glue.
+
+## 1. The design-a-room order (when building new)
+
+Use this order, not a different one:
+
+1. **Family first** — which composition family? If unclear, don't build yet; update Part II §4 first.
+2. **Mind second** — what sacred nouns does the room operate on? What does it know? What flows in / out? What must never be flattened? Write it in Part I §4 format *before* designing.
+3. **Behavior third** — which behavioral rules (Part III §3) does this room lean on? Which of the seven levers (Part III §4) are we pulling? What's the room's specific loop-transformation?
+4. **Face last** — triptych exploration, taste-test against rubric, apply winner.
+
+Doing these out of order produces rooms that look good and operate badly.
+
+## 2. How to judge a room (the pass)
+
+Run the room against these, in this order. Any failure anywhere is a failure of the whole.
+
+### Mind pass
+- Does the room still operate on its sacred noun(s)?
+- Is the strategic substance intact against what Part I §4 locks?
+- Are the handoff obligations preserved?
+- Are `returnTo`, `focusObject`, etc. continuity params still working?
+
+### Behavior pass
+- Is there one dominant move? (Rule 1)
+- Is the object shown before the controls? (Rule 2)
+- Does the room show state before explanation? (Rule 3)
+- Does reward come from truth, not activity? (Rule 4)
+- Does every save visibly matter? (Rule 5)
+- Is "flows in from / flows out to" visible on the surface somewhere? (Rule 6)
+- Is escalation reserved for real risk? (Rule 7)
+- Is the loop transformation visible (never "all done")?
+- Are copy budgets honored per layer?
+
+### Face pass
+- Map to exactly one composition family?
+- ≤ 3 dominant planes in the first zone?
+- Colors carrying semantic roles only?
+- Type hierarchy authored, not accidental?
+- The first-fold thesis legible before reading?
+- Dark only if this is a System Ledger (or approved hybrid)?
+
+### Rubric pass (from `05-facial-architecture-and-composition/antaeus-facial-architecture-rubric-2026-04-03.md`)
+- Distinctiveness (A1), emotional territory (A2), beauty (A3)
+- Dominant-move clarity (B1), object clarity (B2), copy burden (B3), plane count (B4), box count (B5)
+- Hallway suppression (C1), continuity (C2), pressure legibility (C3), progressive disclosure (C4)
+- Color / typography / container / surface discipline (D1–D4)
+- Module-brain preservation (E1), strategic seriousness (E2), methodology placement (E3)
+
+## 3. Drift modes to catch
+
+These are the failure patterns that keep recurring. Scan for them first.
+
+- **Hallway revival** — multiple nav strips, tab-as-primary-organizing-logic, menu competing with the work
+- **Card soup** — structure carried by bordered containers instead of composition
+- **Plane overrun** — more than 3 dominant planes in the first visible zone
+- **Rainbow accent** — green/blue/orange/red used decoratively, not semantically (most often in gradient meters or legend bars)
+- **Worksheet energy** — input grids dominating where the shaped object should be central (ICP / Territory / Sourcing risks)
+- **Metaphor ornament** — distinctive metaphor (desk, loom, booth, foundry) becoming decorative instead of operational (rotations, stamps, staples, spotlights)
+- **Designer-voice copy leak** — wireframe-comment text showing up in the UI ("Feels closest to a forensic worksheet…")
+- **Doctrine in the first fold** — law cards, room laws, methodology sprayed where the work should live
+- **Two primary moves competing** — doubled CTA rows, co-equal big actions, equal-weight destinations
+- **Hardcoded state** — "6 live cases" hardcoded when the data might be 5 or 7
+- **"All done" stopping point** — loop closure without loop transformation
+
+## 4. The mind-correction protocol
+
+Face work will sometimes surface a mind error. The old rule was "rewrite the face, not the mind." The amended rule is:
+
+**Face work may surface mind errors. When it does, fix the mind too. But run every mind change by the founder before committing.**
+
+How to do this cleanly:
+
+1. Name the mind issue explicitly — "the room's mind says X but the face pass shows X breaks behavioral rule Y"
+2. Propose the mind correction in writing (one paragraph)
+3. Get founder confirmation (not implied — direct)
+4. Update the relevant Part I §4 entry (and any downstream docs it invalidates)
+5. Only then apply the face change
+
+Do not "fix the mind" silently while claiming to be doing a face pass. Substance changes are founder-approved.
+
+## 5. The "does this earn its place" test
+
+Borrowed from the Discovery Studio runtime primitives sheet, generalized:
+
+**If a visible UI object cannot map to a primitive (a sacred noun, a behavioral lever, or a compounding flow), it should not exist in the room.**
+
+Apply this when auditing:
+- A decorative meter → what primitive does it represent? If none, kill it.
+- A colored chip → what semantic role? If none, kill it.
+- An extra CTA → which move is it? If the same move is already primary, kill it.
+- A section of explanatory copy → what layer does it belong in per the copy-burden discipline? If too early, move it or gate it.
+
+This one test catches the majority of face liabilities.
+
+---
+
+# Part V — Current state and working canon
+
+This part is time-sensitive. When reality diverges from what's written here, update this part — not the other parts.
+
+## 1. Where the refacing pass stands (2026-04-21)
+
+The refacing pass (arc: Apr 1 → ongoing) is partially complete. Screenshot-based re-audit — not DOM-based — produced the following status. DOM-based audits from earlier in this session were consistently too harsh; rendered output is stronger than CSS reading suggested.
+
+### Substantially refaced (current visual language)
+
+Bright-field operating rooms:
+- **Welcome** — Threshold, strong refacing, week-one checklist working
+- **Dashboard** — Command Chamber, command intelligence rail + Spotlight + ranked accounts
+- **Signal Console** — Live Instrument, bright (not dark as the CSS vars suggested), `Meridian Logistics` spotlight + dense account grid
+- **Outbound Studio** — Live Instrument, switchboard metaphor restrained, 3-column route board
+- **Cold Call Studio** — Live Instrument, six-thread spine working, score + say-next capture panels below
+- **LinkedIn Playbook** — Live Instrument, 5-cue ladder + dark center "stage" in a bright room
+- **Call Planner (Discovery Agenda)** — Live Instrument, four-stop spine (Open / Reason now / Probe / Advance ask) clean
+- **Discovery Studio** — Live Instrument / Diagnosis Table hybrid, 10-segment spine implemented, compression mode works
+- **Territory Architect** — Decision Bench, "Let signal pull the territory into shape" mature execution
+- **Sourcing Workbench** — Decision Bench, ticket-board metaphor, clean
+- **ICP Studio** — Decision Bench with dark hero + bright work area split
+- **Deal Workspace** — Diagnosis Table, intervention board + recovery queue working
+- **Future Autopsy** — Diagnosis Table, forensic light-table, **positive example the others should borrow from**
+- **Advisor Deploy** — Live Instrument, rolodex metaphor + ask-ready score + registry/loops ledger
+
+Dark System Ledger rooms:
+- **PoC Framework** — Decision Bench hybrid (dark forge / cream cast split)
+- **Readiness Score** — System Ledger, full dark
+- **Quota Workback** — System Ledger, full dark
+- **Founding GTM / Handoff Kit** — System Ledger, full dark
+
+Utility:
+- **Settings** — Trust Annex, bright, functional cards
+
+### Still owed work (priority order)
+
+1. **Discovery Studio — add missing global rails.** Contract requires 7 global persistent rails; the live room implements 2 (framework rail + segment rail). Missing: recover-the-call rail, learned-truth ledger, worked memory surface, next-step docket, support dossier. Rendered probe confirms this. Highest-priority deep work.
+2. **Discovery Studio — brittleness debt.** Still HTML-string assembly + inline handlers in `js/discovery-studio-segment-jump-room.js`; brittleness audit (2026-04-16) flagged as P1. This room is where facial debt and code debt compound most.
+3. **Deal Workspace — brittleness debt.** Same class of problem, P1 in the brittleness audit.
+4. **Onboarding.** Cannot audit via screenshot because the demo-seed script gates on it; still on the unrefaced list by line-delta. Needs attention — it seeds the whole system.
+5. **Cross-room sweep.** Scan all refaced rooms for the drift modes in Part IV §3. Low-risk pass, high consistency payoff. Candidates I saw in DOM that need visual verification:
+   - Signal Console legend bar (scoring-formula caption smells like internal language)
+   - Any rainbow gradients doing decorative work (LinkedIn stage had some dots)
+   - Any designer-voice copy leaks (Future Autopsy had "Feels closest to a forensic worksheet…" in the DOM — check if still present)
+6. **Deploy pipeline exercise.** Cloudflare pipeline committed Apr 20 but never actually run end-to-end. Needs a first deploy to validate.
+
+### Pre-beta shipping hygiene (mostly untouched)
+
+The Feb 2026 `GTM-OS-EXHAUSTIVE-IMPROVEMENT-PLAN.md` had 9 phases of ship-hygiene. Most are not done. The critical ones to pick up before beta:
+
+- **Phase 1 (ship-blockers):** unsaved-changes guard, auth failure user-facing errors, auto-save on Founding GTM
+- **Phase 2 (data safety):** analytics SDK integration (Posthog or Plausible), "Export All Data" JSON, "Data stored locally" notice, "Delete my data"
+- **Phase 3 (export completeness):** Deal Workspace CSV, Readiness export, Command Center export
+- **Phase 5 (label fixes):** rename "Command Center" → "Pipeline Dashboard," "Live Discovery" → "Discovery Frameworks," "Content Builder" → "Sales Collateral Builder," "Agent Lab" → "AI Agents (beta)"
+
+These don't block the refacing pass, but they do block beta.
+
+## 2. Canonical doc locations
+
+Canon order of authority (highest first):
+
+1. **This file** (`CLAUDE.md`) — operating canon for sessions
+2. `deliverables/design-principle-strict-bible/` — deeper authority for specific topics:
+   - `01-charter-and-laws/` — UI/UX design thesis + rebrand truth-lock
+   - `02-brand-and-visual-system/` — visual identity lock + visual system spec
+   - `03-research-backbone/` — architecture restructure research brief + review (40-source synthesis, behavioral evidence)
+   - `03-facial-architecture/` — facial architecture rubric + taste-test program + Phase-7 preflight
+   - `05-facial-architecture-and-composition/` — composition families
+   - `06-preservation-guardrails/` — phase-7 module preservation signoff + compounding rules
+   - `07-control-artifacts/` — Lumana reference HTMLs + taste tests
+   - `08-room-guardian-specs/` — **only Discovery Studio is fully specified; the other rooms need their own guardian specs over time**
+3. `deliverables/plans/` — implementation specs (active + historical)
+4. `deliverables/prototypes/wireframes/` — the triptych archive
+
+If a lower authority conflicts with this file, either the lower wins (and this file gets updated) or this file wins (and the lower gets archived). Do not leave contradictions.
+
+**Stale canon to watch:** `PRODUCT_CONTEXT.md` at repo root describes the v22/v23 world pre-refacing. Treat it as archived background; do not update it; this file supersedes it. (Internal `Last updated: 2025-02-11` in that file is a typo for 2026.)
+
+## 3. Branch convention
+
+Current working branches:
+
+- `main` — behind the refacing work; not the primary line
+- `gtm-os-refacing-checkpoint` — the main refacing line
+- `claude/generate-work-report-pnrJu` — Claude's working branch for this session
+- `cloudflare/workers-autoconfig` — deploy config
+
+Rule for ongoing work (unless the user says otherwise):
+
+- Claude work lands on a feature branch under `claude/` or a descriptively-named branch
+- Direct commits to the branch; user reviews in bulk, not per-commit
+- Pull request is created only when the user explicitly asks
+- Never push to `main` or `gtm-os-refacing-checkpoint` without explicit founder approval
+
+## 4. Dev-server + screenshot workflow (critical)
+
+**Never audit a room from DOM or CSS alone.** Visual render tells a different story. Use this workflow:
+
+### Start the server
+
+```bash
+python3 -m http.server 4173 --bind 127.0.0.1
+```
+
+(Run via `run_in_background: true` from a Claude session, or leave running in a real terminal.)
+
+### Capture a single room
+
+```bash
+PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="$(node -e 'console.log(require("puppeteer").executablePath())')" \
+  node tools/qa/capture-demo-room.js \
+  --path /app/<room>/ \
+  --scenario mm \
+  --qa \
+  --screenshot /tmp/room-shots/<room>.png
+```
+
+Flags:
+- `--scenario mm` (mid-market demo data) or `--scenario ent` (enterprise)
+- `--qa` suppresses tours/overlays
+- `--path` is the room route; auto-appends `?demo=1`
+
+### Environment notes
+
+- Playwright's CDN is blocked in some environments; Puppeteer's works. The `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` env var shim in `tools/qa/capture-demo-room.js` (added 2026-04-21) points Playwright at Puppeteer's Chrome binary. No change on Windows/Mac default installs.
+- If `playwright` or `puppeteer` are missing: `npm install` at repo root.
+- If Chrome binary is missing: `npx puppeteer browsers install chrome` — Puppeteer's CDN is allowlisted where Playwright's is not.
+- Server on `127.0.0.1:4173` is the default the capture script expects. Override with `--base-url`.
+
+### Interactive deep pass
+
+For audits that need more than a single-state screenshot (state transitions, interaction sequences, cross-room handoff), write a small Playwright script at repo root (so `require('./tools/qa/demo-room-bootstrap')` resolves). Template pattern:
+
+```js
+const playwright = require("playwright");
+const bootstrap = require("./tools/qa/demo-room-bootstrap");
+
+async function main() {
+  const browser = await playwright.chromium.launch({
+    headless: true,
+    executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+  });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 2400 } });
+  try {
+    await bootstrap.bootstrapDemoRoom(page, {
+      baseUrl: "http://127.0.0.1:4173",
+      roomPath: "/app/<room>/",
+      scenario: "mm",
+      qaMode: true
+    });
+    // ...interact, probe via page.evaluate, screenshot multiple states
+  } finally { await browser.close(); }
+}
+main().catch(e => { console.error(e); process.exit(1); });
+```
+
+Delete the temp script after the pass. Do not leave audit scripts in the repo.
+
+### Probing the DOM for contract compliance
+
+From within `page.evaluate(() => { ... })`, count semantic elements and check against the room's guardian spec. Example (Discovery Studio):
+
+```js
+const probe = {
+  frameworkBtns: document.querySelectorAll('.dsj-framework-btn').length,
+  segmentNodes: document.querySelectorAll('.dsj-node').length,
+  essentialNodes: document.querySelectorAll('.dsj-node.is-essential').length,
+  recoverRail: !!document.querySelector('[class*="recover"]'),
+  supportDossier: !!document.querySelector('[class*="support"]')
+  // ...check every contract item
+};
+```
+
+Probe results can be checked directly against the guardian spec.
+
+## 5. How to pick up this work in a future session
+
+If you (or a future Claude session) are opening this cold:
+
+1. **Read this file top to bottom.** Don't skim.
+2. **Confirm current state** — Part V §1 is time-sensitive. Check git log for commits since the "Refacing pass stands" date above. If there are new commits, the state is stale; render a few rooms and update this section before doing other work.
+3. **Start the server + render the room you're working on** before making any face change.
+4. **Run the room against Part IV §2** (the mind / behavior / face / rubric pass) before doing anything.
+5. **For substance changes (mind corrections), stop and ask the founder first.** Part IV §4 protocol. Never silently.
+6. **Commit in small, clear pieces.** Stop hook in this repo flags uncommitted/untracked files.
+
+## 6. Session log (current)
+
+Add entries here when a session meaningfully shifts doctrine or state, so the next session sees what changed.
+
+| Date | Session | What shifted |
+|---|---|---|
+| 2026-04-21 | Initial canon draft | Established this document as the canon. Reconciled truth-lock memo: interior is bright, not dark (dark reserved for System Ledger rooms). Amended "rewrite the face, not the mind" to allow mind corrections with founder approval. Set up Linux rendering pipeline (Playwright + Puppeteer Chrome binary + Python static server). Screenshot-based re-audit of all 19 reachable rooms corrected multiple DOM-based audit errors. Discovery Studio contract probe identified 5 of 7 required global rails missing. |
+
+## 7. Closing: the bar
+
+Antaeus is not trying to be friendlier, broader, or more generic. It is trying to be:
+
+- more specific
+- more severe
+- more operational
+- more pressure-aware
+- more transfer-ready
+
+The redesign succeeds when the user thinks:
+- *"I know what this is."*
+- *"I know why it matters."*
+- *"I know what happens next."*
+- *"This feels sharper than the tools I'm used to."*
+- *"This system sees what is actually happening."*
+- *"This is something my first hire could actually inherit."*
+
+If a change moves the product away from that bar, revert it. If it moves toward it, ship it.
