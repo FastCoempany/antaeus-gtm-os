@@ -1153,8 +1153,7 @@
                             <div class="fa-case-switcher">
                                 <div class="fa-ledger-shell">
                                     <div class="fa-ledger-head">
-                                        <div class="fa-ledger-title">Pinned-case ledger · 6 live cases</div>
-                                        <div class="fa-ledger-note">Feels closest to a forensic worksheet while still letting the six-case list dominate the fold.</div>
+                                        <div class="fa-ledger-title" id="faLedgerTitle">Pinned-case ledger</div>
                                     </div>
                                     <div id="futureAutopsyLedger" class="fa-ledger"></div>
                                     <div id="futureAutopsyCommandRow" class="fa-command-row">
@@ -1165,7 +1164,7 @@
                                                 <span class="fa-command-copy">Recompute around the active line.</span>
                                             </span>
                                         </button>
-                                        <button class="fa-command-link fa-command-link--urgent" type="button" onclick="autopsyOfDay()" title="Jump to the most urgent live case in the six-case autopsy universe.">
+                                        <button class="fa-command-link fa-command-link--urgent" type="button" onclick="autopsyOfDay()" title="Jump to the most urgent live case in the autopsy ledger.">
                                             <span class="fa-command-symbol fa-command-symbol--urgent"></span>
                                             <span class="fa-command-text">
                                                 <span class="fa-command-title">Urgent autopsy deal</span>
@@ -1993,6 +1992,12 @@
         function renderLedger() {
             var node = document.getElementById('futureAutopsyLedger');
             if (!node) return;
+            var titleNode = document.getElementById('faLedgerTitle');
+            if (titleNode) {
+                titleNode.textContent = autopsyUniverse.length
+                    ? 'Pinned-case ledger · ' + autopsyUniverse.length + ' live case' + (autopsyUniverse.length === 1 ? '' : 's')
+                    : 'Pinned-case ledger';
+            }
             if (!autopsyUniverse.length) {
                 node.innerHTML = '';
                 syncWorksheetActionState();
