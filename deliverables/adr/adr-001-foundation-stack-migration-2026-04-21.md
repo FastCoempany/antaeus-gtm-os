@@ -452,4 +452,103 @@ Gate:
 **Phase 2 rollback:**
 - Migration is feature-flagged off by default. No user has been migrated yet. Rolling back means: flip the flag off, delete the Supabase tables, remove the data client. No user impact.
 
+---
+
+### Phase 3 — Pilot room migration: Discovery Studio (estimated 4–6 weeks)
+
+**Purpose:** Rebuild Discovery Studio on the new stack end-to-end as the first full exercise of the foundation. Discovery Studio is chosen as pilot because (a) it has the most in-session context loaded from Waves 1–4; (b) it already has the richest per-room doctrine (five guardian specs); (c) it's where facial + brittleness debt compound most; and (d) it has enough real complexity (21 runtime primitives, 10-segment spine, 9 frameworks) to exercise every stack capability.
+
+**Subphase 3.1 — Component architecture (est. 4–6 days)**
+
+Tasks:
+- Author `src/components/DiscoveryStudio/` directory with one Preact component per runtime primitive or UI zone. Structure roughly:
+  - `DiscoveryStudio.tsx` (root)
+  - `FrameworkRail.tsx`, `SegmentStrip.tsx`, `QuickRow.tsx`
+  - `Phase.tsx` (segment container), `Node.tsx`, `Branch.tsx`
+  - `LedgerStrip.tsx`, `NextStepDocket.tsx`, `Dossier.tsx`
+  - `Dock.tsx` with `RecoverPane.tsx`, `ContextPane.tsx`, `RoutesPane.tsx`
+- Each component's props are TypeScript-typed. Props correspond to primitive names from the runtime wiring sheet (`activeFramework`, `activeNode`, `learnedFacts`, etc.).
+- State lives in a single top-level `useDiscoveryStudio()` hook that reads from the data client (Phase 2) and exposes action creators for each user intent (`setFramework`, `openSegment`, `toggleBranch`, `markWorked`, etc.).
+
+Gate:
+- TypeScript compiles with strict mode, zero `any`, zero suppression comments.
+- Every visible element maps to a primitive (the "does this earn its place" test from canon Part IV §5 enforced structurally by the component tree).
+
+**Subphase 3.2 — Data-layer wiring (est. 3–5 days)**
+
+Tasks:
+- Discovery Studio reads/writes `learnedFacts`, `nextStep`, `checkedNodes`, `openSegment`, `activeFramework`, `dossierOpen` via the Phase 2 data client.
+- Realtime subscription: if another tab or another user edits the same call-in-progress, changes propagate.
+- Optimistic updates: branch-click writes to state instantly; server sync happens in background.
+- Offline-tolerant: works fully offline, syncs when connection resumes.
+
+Gate:
+- Playwright E2E test: open two tabs, click a branch in Tab A, verify the fact appears in Tab B's ledger strip within 1 second.
+- Playwright E2E: take Tab A offline, make changes, bring Tab A online, verify sync.
+
+**Subphase 3.3 — Test coverage (est. 3–5 days)**
+
+Tasks:
+- Unit tests per component (Vitest + @testing-library/preact): each component renders correctly given props, responds to simulated user events correctly.
+- Integration tests for the data-client bindings.
+- E2E tests (Playwright) for the critical user journeys: open call → select framework → navigate segment → branch a response → lock next step → hand off to Deal Workspace.
+- Visual regression baseline: capture screenshots of key states; CI fails if pixels drift beyond a threshold.
+
+Gate:
+- Unit + component test coverage on Discovery Studio code ≥ 85%.
+- All seven contract-required rails (framework, segment, recover, learned, worked, next-step docket, support dossier) have at least one E2E test verifying them.
+- Visual regression baseline locked.
+
+**Subphase 3.4 — Feature-flag rollout (est. 2–4 days)**
+
+Tasks:
+- Wire Posthog feature flag `discovery_studio_preact`. Default: false (users get the old room).
+- When flag is on, the Discovery Studio entry point renders the Preact version instead of loading `discovery-studio-segment-jump-room.js`.
+- Both old and new rooms coexist in the repo during this window; no file deletion yet.
+- Enable flag for internal users (founder + any test accounts) first.
+- Monitor Sentry for new-room errors; monitor Posthog for interaction funnels.
+
+Gate:
+- New room runs error-free in Sentry for 7 consecutive days with internal users active.
+- Interaction funnels in Posthog match or exceed the old room's (no usability regression).
+- Founder signs off on the visual + behavioral parity.
+
+**Subphase 3.5 — General rollout (est. 1–3 days)**
+
+Tasks:
+- Enable flag for 10% of users.
+- Monitor for 48 hours: error rate ≤ existing baseline, session completion rates unchanged or better.
+- Enable flag for 50% of users.
+- Monitor for 48 hours.
+- Enable flag for 100% of users.
+- Monitor for 7 days.
+
+Gate:
+- 100% rollout stable for 7 days.
+- No Sentry regressions.
+- No Posthog funnel regressions.
+- Founder approves moving to Phase 4.
+
+**Subphase 3.6 — Cleanup (est. 1–2 days)**
+
+Tasks:
+- Delete `js/discovery-studio-segment-jump-room.js`, `js/discovery-segment-runtime*.js`, `app/discovery-studio/index.html` (replaced by Vite-generated entry).
+- Remove the feature flag (new room is permanent).
+- Update canon Part V §1 "refacing status" to reflect that Discovery Studio is now on the new stack.
+- Add a post-mortem note: what surprised us, what we'd do differently for the next room.
+
+Gate:
+- Old code removed, repo is clean.
+- Canon reflects new state.
+- Post-mortem captured.
+
+**Overall Phase 3 gate:**
+- Discovery Studio running 100% on new stack for 7 days.
+- No open critical Sentry issues.
+- Test coverage targets met.
+- Post-mortem written.
+- Founder approves continuing to Phase 4.
+
+**Phase 3 rollback:** Flip the feature flag off. Users return to the old room immediately. The migration tool (Phase 2) can be reversed if any data corruption occurred (localStorage was preserved until sync confirmed).
+
 <!-- END_OF_DRAFT -->
