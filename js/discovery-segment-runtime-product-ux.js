@@ -51,6 +51,28 @@
 
   var base = runtime.frameworks["product-ux"];
 
+  var supportDossier = [
+    { title:"Where it breaks", items:["Whether the pain is research / discovery, synthesis, onboarding, enablement, or adoption measurement", "What gets lost between research → product → engineering → GTM → customer-facing teams", "Manual documentation burden and who carries it"] },
+    { title:"Proof burden", items:["Adoption or activation lift on a feature or workflow the team already cares about", "Documentation or enablement turnaround against their current tribal-knowledge reliance", "Cross-functional visibility proof: does the data actually reach product, CS, and enablement in one place"] },
+    { title:"Decision path", items:["Head of Product or CPO sponsor who feels the adoption or velocity pressure", "Product ops or enablement lead who owns the documentation and adoption story", "Design research or UXR owner if research synthesis is the primary lane"] }
+  ];
+  var objectionLibrary = [
+    { trigger:"we already have docs and wikis", reply:"Good. How often do they get used, and how often does the same question get re-asked in Slack anyway? Documentation that exists but is not trusted is not documentation." },
+    { trigger:"we use Pendo already", reply:"Fair. What does Pendo tell you that actually changes a product decision, and what does it leave you wondering about that you still go ask in other channels?" },
+    { trigger:"our PMs do not want more tooling", reply:"Understandable. The question is whether this tooling replaces a burden or adds one. Which part of the PM week is currently lost to work that should not require a person?" },
+    { trigger:"show me the ROI", reply:"Happy to. Before I send generic numbers, tell me which feature or workflow is currently under-adopted, because the business case looks different when pointed at a real drag on revenue or retention." }
+  ];
+  var inboundQuestionHandlers = [
+    { question:"How is this different from Scribe or Pendo?", bridge:"Depends on the lane. Scribe-style is documentation generation; Pendo-style is adoption analytics. Which of those is the currently loudest pain for your team?" },
+    { question:"Does it replace user research?", bridge:"No. More useful: what is the synthesis or translation layer between research and product decisions today, and where does that layer currently drop signal?" },
+    { question:"Can it integrate with Notion / Confluence / Intercom?", bridge:"In most cases yes. The more telling question: if the integration worked perfectly, which of those surfaces would your team actually trust to drive a decision?" }
+  ];
+  var skipAheadHandlers = [
+    { trigger:"asks for pricing too early", reply:"Pricing fits once we know whether under-adoption or lost research signal is expensive enough to justify change. What is the business cost of the current gap?" },
+    { trigger:"asks for demo too early", reply:"I can show it. First tell me which feature or research loop you would want the demo to prove works in your environment — otherwise it becomes a tour." },
+    { trigger:"sends me to PM team", reply:"Happy to talk to them. Before that, which outcome is the tool supposed to improve — adoption, speed of synthesis, or cross-team visibility? Each asks different questions of the PM team." }
+  ];
+
   runtime.frameworks["product-ux"] = {
     id:base.id,
     label:base.label,
@@ -63,6 +85,10 @@
     proof:base.proof,
     nextReview:base.nextReview,
     routeFocus:base.routeFocus,
+    supportDossier:supportDossier,
+    objectionLibrary:objectionLibrary,
+    inboundQuestionHandlers:inboundQuestionHandlers,
+    skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       {
         title:"Pick one live decision",

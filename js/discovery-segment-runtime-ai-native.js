@@ -16,6 +16,29 @@
   }
 
   var base = runtime.frameworks["ai-native"];
+
+  var supportDossier = [
+    { title:"Trust and governance", items:["Tolerance for model error — what error rate is acceptable, and in which workflows", "Human-in-the-loop requirements — where humans must stay by policy or preference", "Explainability and audit expectations — what level of transparency is required"] },
+    { title:"Proof burden", items:["Live test on their own data with their real error-consequence profile", "Evaluation methodology match — benchmark, red-team, reference, or pilot", "Security / privacy / data-boundary posture against their specific regulatory environment"] },
+    { title:"Decision path", items:["End users who will actually use it day-to-day", "IT / security / legal gates if data or workflow integration is real", "Executive sponsor who is willing to fund production rollout if the pilot lands"] }
+  ];
+  var objectionLibrary = [
+    { trigger:"we already use AI somewhere", reply:"Good. What worked and what failed? The pattern of what failed tells us whether this is a replacement, an addition, or a different layer entirely." },
+    { trigger:"we are in pilot purgatory", reply:"Fair. That usually means the pilot proved something narrow but leadership will not fund production. What specifically is missing — evaluation confidence, adoption readiness, or business case?" },
+    { trigger:"legal or security will never allow this", reply:"Understandable posture. What specifically would they need to be satisfied — data residency, retention policy, training-data transparency, or something else? Abstract AI skepticism is different from specific gate-failure." },
+    { trigger:"accuracy matters too much here", reply:"Then the question is not whether to use AI, but what error rate is acceptable for which workflow. Walk me through a decision where a draft-quality output would save time even if a human still confirms it." }
+  ];
+  var inboundQuestionHandlers = [
+    { question:"How do you evaluate model quality?", bridge:"Serious question. Depends on what you actually care about — retrieval accuracy, task completion, output quality, or cost-per-decision. Which of those dominates your evaluation criteria today?" },
+    { question:"What happens when the model is wrong?", bridge:"Real concern. What is the blast radius of a wrong answer in this workflow, and what fallback or human checkpoint do you want in place? Error-handling architecture follows from that." },
+    { question:"Where does the human stay in control?", bridge:"Good frame. Which specific decisions do you want to keep with a human and which are you willing to delegate if the tool earns the right? Different workflows draw that line differently." }
+  ];
+  var skipAheadHandlers = [
+    { trigger:"asks for pricing too early", reply:"Pricing is less useful than scope. Which workflow do you want this in, and at what confidence threshold? The answer changes the pricing conversation substantially." },
+    { trigger:"asks for demo too early", reply:"I can show it. First tell me which workflow or error case you want the demo to survive, otherwise the demo becomes an AI tour instead of a decision-grade test." },
+    { trigger:"wants to involve security immediately", reply:"Happy to bring security in. Before that, which workflow is this supposed to improve? Security needs that to evaluate fit, not just threat model." }
+  ];
+
   runtime.frameworks["ai-native"] = {
     id:base.id,
     label:base.label,
@@ -28,6 +51,10 @@
     proof:base.proof,
     nextReview:base.nextReview,
     routeFocus:base.routeFocus,
+    supportDossier:supportDossier,
+    objectionLibrary:objectionLibrary,
+    inboundQuestionHandlers:inboundQuestionHandlers,
+    skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       { title:"Find the trust break", copy:"Anchor the call to the first point where humans still have to rescue the AI workflow.", action:jumpNode("Open trust break", "current-state-truth", "trust-break", "blu") },
       { title:"Name the blocker", copy:"Get specific about governance, adoption, or control instead of abstract AI interest.", action:jumpNode("Open trust burden", "pain-and-consequence", "trust-burden", "org") },

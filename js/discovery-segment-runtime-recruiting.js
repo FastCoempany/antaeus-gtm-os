@@ -51,6 +51,28 @@
 
   var base = runtime.frameworks["recruiting"];
 
+  var supportDossier = [
+    { title:"Funnel pain", items:["Which stage is bleeding time: sourcing, screening, scheduling, interviewing, or closing", "Whether recruiter pain and hiring-manager pain are different problems in the org", "Drop-off points and candidate-experience concerns at the relevant roles"] },
+    { title:"Proof burden", items:["Time-to-fill or offer-acceptance lift against their last two quarters on comparable roles", "Evaluation-consistency improvement on a role family that suffers from calibration gaps", "Fairness / bias / compliance posture documented against their regulatory environment"] },
+    { title:"Decision path", items:["CHRO or VP Talent sponsor who feels the hiring-velocity cost", "TA operations or systems evaluator who owns the stack (ATS, CRM, sourcing, assessment)", "Hiring managers whose experience has to survive the change"] }
+  ];
+  var objectionLibrary = [
+    { trigger:"our ATS already does this", reply:"Which part? ATS tracking and AI screening are different layers. Which piece of the funnel is the ATS genuinely solving, and which piece are recruiters still carrying manually?" },
+    { trigger:"you cannot automate human judgment in hiring", reply:"Agreed on the final decision. The question is whether the time spent getting to that decision is all human judgment or mostly coordination, scheduling, and triage. Which of those is eating your team this quarter?" },
+    { trigger:"we are in a hiring freeze", reply:"Understood. Then the question is what you want ready when the freeze lifts. Is the pain before the freeze a candidate-pipeline hygiene problem or a funnel-conversion problem? Those prepare differently." },
+    { trigger:"bias and compliance will block this", reply:"Fair. Those are live gates especially under NYC 144 or EU AI Act. What specifically would satisfy your counsel — audit methodology, demographic reporting, or evaluation transparency?" }
+  ];
+  var inboundQuestionHandlers = [
+    { question:"How is this different from HeyMilo or Moonhub?", bridge:"Depends on where the funnel breaks for you. Moonhub-style is sourcing coverage; HeyMilo-style is interview automation. Which bottleneck is currently loudest?" },
+    { question:"Does this replace our ATS?", bridge:"No. The question is whether the ATS is hiding pain that a layer above it could surface. What work still happens in spreadsheets or Slack despite the ATS being there?" },
+    { question:"What about DEI compliance?", bridge:"Serious concern. What posture does your counsel hold — full audit trail, demographic neutrality at scoring, or evaluation transparency? Each implies different evaluation architecture." }
+  ];
+  var skipAheadHandlers = [
+    { trigger:"asks for pricing too early", reply:"Pricing fits once we know whether the funnel cost is material enough to justify change. What did the last quarter of hiring cost you in time-to-fill or failed hires?" },
+    { trigger:"asks for demo too early", reply:"I can demo it. First tell me which role family or funnel stage you would want it to prove — otherwise it becomes a generic tour." },
+    { trigger:"routes to procurement or legal", reply:"Happy to engage them directly. Before that, which hiring outcome is this supposed to improve? Procurement and legal will need that to evaluate fit beyond policy review." }
+  ];
+
   runtime.frameworks["recruiting"] = {
     id:base.id,
     label:base.label,
@@ -63,6 +85,10 @@
     proof:base.proof,
     nextReview:base.nextReview,
     routeFocus:base.routeFocus,
+    supportDossier:supportDossier,
+    objectionLibrary:objectionLibrary,
+    inboundQuestionHandlers:inboundQuestionHandlers,
+    skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       {
         title:"Pick one live req",

@@ -16,6 +16,29 @@
   }
 
   var base = runtime.frameworks["govtech"];
+
+  var supportDossier = [
+    { title:"Regulatory pressure", items:["Audit exposure and consequences of non-compliance — fines, lawsuits, public accountability", "Data sensitivity and access controls (CJIS, FERPA, HIPAA, COPPA, etc.)", "Stakeholder sprawl: department heads, IT, legal, procurement, elected officials, citizens"] },
+    { title:"Proof burden", items:["Audit-defensibility of the workflow on a specific compliance requirement they already track", "Migration path from paper or spreadsheets with preserved audit trail", "Certifications on hand (FedRAMP, StateRAMP, SOC 2) against what their procurement demands"] },
+    { title:"Decision path", items:["Administrator or department director who feels the operational drag", "IT security and legal reviewers who own procurement gates", "Elected official or political sponsor if public accountability or budget cycle timing is a factor"] }
+  ];
+  var objectionLibrary = [
+    { trigger:"too much red tape to buy anything", reply:"Real obstacle. Which specific procurement path or budget cycle does this have to survive? Sole-source, state contract, cooperative purchasing, or RFP all have different timelines." },
+    { trigger:"we are mid-RFP with someone else", reply:"Understood. Is the RFP already scored, or is there still room for a better-specified response? And what specifically did the current shortlist fail to address?" },
+    { trigger:"budget is locked until next cycle", reply:"Fair. Then the question is whether there is emergency procurement authority for the pain you are carrying now, or whether the right move is to prepare for the next cycle properly." },
+    { trigger:"send me certifications", reply:"Happy to. Which one is the live gate — FedRAMP, StateRAMP, SOC 2, or something your agency asks for specifically? The relevant packet depends on the exact requirement." }
+  ];
+  var inboundQuestionHandlers = [
+    { question:"Are you FedRAMP authorized?", bridge:"Direct answer: here is the current status. More useful: is FedRAMP a hard gate for your procurement path, or would StateRAMP / SOC 2 / ATO satisfy the requirement you are actually carrying?" },
+    { question:"How does this work with our existing IT infrastructure?", bridge:"Depends on what the current infrastructure is. Is it modern cloud, legacy on-prem, or a mix? The integration approach is very different across those." },
+    { question:"What about public records requests?", bridge:"Real consideration. What does your current process require — full audit trail, redaction support, or retention-policy alignment? Each shapes the technical requirement." }
+  ];
+  var skipAheadHandlers = [
+    { trigger:"asks for pricing too early", reply:"Pricing fits once we know which procurement path and budget cycle this lives in. Walk me through how budget gets allocated for something like this in your agency." },
+    { trigger:"asks for demo too early", reply:"I can show it. First tell me which workflow or compliance gap you want the demo to prove it handles — otherwise it becomes a generic tour." },
+    { trigger:"routes to IT first", reply:"Happy to engage IT. Before that, which operational or compliance outcome is this supposed to improve? IT will need that to evaluate fit, not just technical posture." }
+  ];
+
   runtime.frameworks["govtech"] = {
     id:base.id,
     label:base.label,
@@ -28,6 +51,10 @@
     proof:base.proof,
     nextReview:base.nextReview,
     routeFocus:base.routeFocus,
+    supportDossier:supportDossier,
+    objectionLibrary:objectionLibrary,
+    inboundQuestionHandlers:inboundQuestionHandlers,
+    skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       { title:"Trace one risky case", copy:"Use one live case path instead of abstract workflow talk.", action:jumpNode("Open risky case", "current-state-truth", "risky-case", "blu") },
       { title:"Name the pressure", copy:"Get to the audit, backlog, or trust event forcing the review.", action:jumpNode("Open pressure source", "trigger-and-urgency", "audit-event", "org") },

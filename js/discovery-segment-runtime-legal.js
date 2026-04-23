@@ -51,6 +51,28 @@
 
   var base = runtime.frameworks["legal"];
 
+  var supportDossier = [
+    { title:"Matter burden", items:["Which matter type carries the most turnaround pressure right now", "Where partner, associate, or paralegal time is being spent on low-judgment work", "Human review requirements — where a person must stay in the loop by policy or preference"] },
+    { title:"Proof burden", items:["Benchmark on a non-sensitive matter against their current output quality", "Evidence of hallucination risk mitigation at a level their risk posture accepts", "Confidentiality, privilege, and data-residency story at their specific scale"] },
+    { title:"Decision path", items:["GC or managing partner sponsor who feels the turnaround or cost pressure", "Legal ops or IT evaluator who runs the stack today (iManage, NetDocuments, Clio, Relativity)", "Security and compliance review if the data touches privileged content"] }
+  ];
+  var objectionLibrary = [
+    { trigger:"AI cannot be trusted with legal work", reply:"Understood. That posture is correct for some workflows and wrong for others. Which specific workflow are you picturing when you say that — drafting, review, research, or document management?" },
+    { trigger:"our partners will never adopt this", reply:"Fair signal. The question is whether this makes the associate and paralegal work better, which either frees the partner or doesn't. Where does partner time currently get wasted that shouldn't?" },
+    { trigger:"billable-hour model makes this hard", reply:"It complicates it, but not always the way people assume. Are you billing hourly across all of this work, or is some of it on alternative fee arrangements where efficiency actually helps?" },
+    { trigger:"send me a security document", reply:"Happy to. Which specific concern does it need to answer — privilege, data residency, retention, or model training — so I do not send a generic packet that misses the real question?" }
+  ];
+  var inboundQuestionHandlers = [
+    { question:"How is this different from Harvey or Clearbrief?", bridge:"Depends on which workflow is actually bleeding time right now. Is the pain in drafting, review, research, or document management? The best tool differs per lane." },
+    { question:"Can you work with our DMS?", bridge:"In most cases yes. More useful: which DMS is it, and is the pain that documents are stuck there, or that the workflow around them is manual?" },
+    { question:"What about hallucination?", bridge:"Real concern. What is your zero-tolerance line, and what is the workflow where draft-quality output is acceptable as a starting point? Those lines matter more than the general risk." }
+  ];
+  var skipAheadHandlers = [
+    { trigger:"asks for pricing too early", reply:"Pricing makes sense once we know whether a specific workflow is expensive enough to justify any change. Which matter type costs you most to run today?" },
+    { trigger:"asks for demo too early", reply:"I can show it. First tell me which matter or workflow you would want the demo to survive — otherwise the demo becomes a feature tour instead of a test." },
+    { trigger:"wants to route to IT", reply:"Happy to involve IT. Before that, which workflow or matter type is this supposed to help? IT will need that to evaluate fit, not just security posture." }
+  ];
+
   runtime.frameworks["legal"] = {
     id:base.id,
     label:base.label,
@@ -63,6 +85,10 @@
     proof:base.proof,
     nextReview:base.nextReview,
     routeFocus:base.routeFocus,
+    supportDossier:supportDossier,
+    objectionLibrary:objectionLibrary,
+    inboundQuestionHandlers:inboundQuestionHandlers,
+    skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       {
         title:"Scope one painful workflow",
