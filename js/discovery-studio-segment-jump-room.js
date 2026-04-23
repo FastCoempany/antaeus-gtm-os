@@ -136,13 +136,18 @@
         openNodes: {},
         activeBranches: {},
         checkedNodes: {},
-        selectedInterrupt: ""
+        selectedInterrupt: "",
+        learnedFacts: [],
+        nextStep: { date:"", owner:"", attendees:"", purpose:"", reason:"" }
       };
     }
-    if(!state.frameworks[frameworkId].openNodes || typeof state.frameworks[frameworkId].openNodes !== "object"){
-      state.frameworks[frameworkId].openNodes = {};
+    var fs = state.frameworks[frameworkId];
+    if(!fs.openNodes || typeof fs.openNodes !== "object") fs.openNodes = {};
+    if(!Array.isArray(fs.learnedFacts)) fs.learnedFacts = [];
+    if(!fs.nextStep || typeof fs.nextStep !== "object"){
+      fs.nextStep = { date:"", owner:"", attendees:"", purpose:"", reason:"" };
     }
-    return state.frameworks[frameworkId];
+    return fs;
   }
 
   function getFrameworkState(frameworkId){
@@ -277,11 +282,51 @@
     render();
   }
 
+  function findBranch(framework, nodeId, branchIndex){
+    if(!framework || !Array.isArray(framework.segments)) return null;
+    for(var s = 0; s < framework.segments.length; s++){
+      var segment = framework.segments[s];
+      if(!Array.isArray(segment.nodes)) continue;
+      for(var n = 0; n < segment.nodes.length; n++){
+        var node = segment.nodes[n];
+        if(node.id !== nodeId) continue;
+        return (node.branches || [])[branchIndex] || null;
+      }
+    }
+    return null;
+  }
+
+  function recordLearnedFact(frameworkState, nodeId, branchIndex){
+    var framework = getActiveFramework();
+    var branch = findBranch(framework, nodeId, branchIndex);
+    if(!branch || !branch.clear) return;
+    if(!Array.isArray(frameworkState.learnedFacts)) frameworkState.learnedFacts = [];
+    var key = nodeId + ":" + branchIndex;
+    var existing = frameworkState.learnedFacts.find(function(entry){ return entry.key === key; });
+    if(existing){
+      existing.ts = Date.now();
+      return;
+    }
+    var segmentKey = nodeId.split("--")[0];
+    frameworkState.learnedFacts.push({
+      key: key,
+      fact: branch.clear,
+      segmentKey: segmentKey,
+      nodeId: nodeId,
+      branchIndex: branchIndex,
+      ts: Date.now()
+    });
+  }
+
   function toggleBranch(nodeId, branchIndex){
     var frameworkState = getFrameworkState(state.frameworkId);
     var segmentKey = nodeId.split("--")[0];
     frameworkState.openNodes[segmentKey] = nodeId;
-    frameworkState.activeBranches[nodeId] = frameworkState.activeBranches[nodeId] === branchIndex ? -1 : branchIndex;
+    var wasActive = frameworkState.activeBranches[nodeId] === branchIndex;
+    frameworkState.activeBranches[nodeId] = wasActive ? -1 : branchIndex;
+    if(!wasActive){
+      recordLearnedFact(frameworkState, nodeId, branchIndex);
+    }
     persist();
     render();
   }
