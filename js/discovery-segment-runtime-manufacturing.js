@@ -51,6 +51,28 @@
 
   var base = runtime.frameworks.manufacturing;
 
+  var supportDossier = [
+    { title:"Operational consequence", items:["Line-down risk or missed OTIF on the supplier under discussion", "Working-capital distortion when the disruption was last absorbed manually", "Executive visibility: whether the resilience story reaches the board or dies in a spreadsheet"] },
+    { title:"Proof burden", items:["Accuracy of the supplier or N-tier map against what their ERP knows", "Credibility of one scenario they already simulated internally", "Freshness of monitoring signal on a supplier they care about right now"] },
+    { title:"Decision path", items:["Supply chain risk or resilience owner who feels the disruption cost", "Procurement or sourcing lead who owns the supplier relationship", "Operations / manufacturing executive who absorbs the downstream pain"] }
+  ];
+  var objectionLibrary = [
+    { trigger:"we already monitor suppliers", reply:"Good. Which supplier surprised you most in the last 18 months, and what was the monitoring layer doing the week before it did?" },
+    { trigger:"we have an ERP for this", reply:"ERPs tell you what you bought. The question is whether they tell you which supplier is about to fail you. Walk me through how a real disruption becomes visible today." },
+    { trigger:"just send a dashboard", reply:"Happy to. First tell me which decision the dashboard is supposed to inform — resilience, diligence, sourcing, or executive narrative — because the dashboards for each are different." },
+    { trigger:"data is too messy for this to work", reply:"Fair. Then the first question is not about our product. It is whether the supplier data is good enough for anyone — internal or external — to run a risk system on. What state is it in?" }
+  ];
+  var inboundQuestionHandlers = [
+    { question:"How is this different from Craft or Vantive?", bridge:"Depends on which motion you are in. Craft-style is reactive supplier intelligence; Vantive-style is proactive scenario planning. Which one does your team actually need this quarter?" },
+    { question:"Can you map N-tier suppliers?", bridge:"In many cases yes, but the real question is whether N-tier visibility would change a decision you are making. Which tier-two supplier surprise cost you most recently?" },
+    { question:"What about cybersecurity and ESG risk?", bridge:"Both are real layers. The useful version is whether one of them is already creating executive pressure — if not, adding the layer is cosmetic." }
+  ];
+  var skipAheadHandlers = [
+    { trigger:"asks for pricing too early", reply:"Pricing makes sense once we know whether the last disruption was expensive enough to justify changing the review process. What did that one cost?" },
+    { trigger:"asks for demo too early", reply:"I can show it. First tell me which supplier or scenario you would want the demo to survive — otherwise it becomes a tour instead of a test." },
+    { trigger:"wants technical integration detail", reply:"Integration only matters if the resilience case is real enough to deserve fixing. Which operational decision would this need to support first?" }
+  ];
+
   runtime.frameworks.manufacturing = {
     id:base.id,
     label:base.label,
@@ -63,6 +85,10 @@
     proof:base.proof,
     nextReview:base.nextReview,
     routeFocus:base.routeFocus,
+    supportDossier:supportDossier,
+    objectionLibrary:objectionLibrary,
+    inboundQuestionHandlers:inboundQuestionHandlers,
+    skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       {
         title:"Classify the motion",

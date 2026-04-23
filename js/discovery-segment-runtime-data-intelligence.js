@@ -51,6 +51,28 @@
 
   var base = runtime.frameworks["data-intelligence"];
 
+  var supportDossier = [
+    { title:"Downstream use", items:["Which product, model, or monitoring workflow the data actually powers", "What false positives and false negatives cost them operationally right now", "Whether they need raw API, enriched intelligence layer, or alerting infrastructure"] },
+    { title:"Proof burden", items:["Retrieval accuracy on a live query they care about this quarter", "Freshness and latency benchmarked against their current internal alternative", "Source breadth, language coverage, and schema stability for their real workload"] },
+    { title:"Decision path", items:["Product, data, or AI-platform owner who feels the feed quality pain", "Engineering or infra evaluator who decides build-versus-buy", "Risk, compliance, or licensing owner if governance is a live gate"] }
+  ];
+  var objectionLibrary = [
+    { trigger:"we can build this internally", reply:"Many teams can. The real question is whether building this keeps your best engineers from building the thing only your company can build. What are they not getting to because of this feed?" },
+    { trigger:"we already license a news feed", reply:"Good. When was the last time that feed surfaced something that changed a decision, and when was the last time it added noise you had to filter out downstream?" },
+    { trigger:"data rights and licensing will block this", reply:"Fair. Those are real gates. What is the scope of use that matters most — retrieval for models, monitoring for alerts, or analyst research — because the licensing story differs for each." },
+    { trigger:"our data is too messy for any feed to fix", reply:"That may be true. Then the question is not about our feed. It is whether the messiness blocks one decision that matters now, and whether external signal could route around it." }
+  ];
+  var inboundQuestionHandlers = [
+    { question:"What sources do you cover?", bridge:"Broad, but that is rarely the deciding factor. More useful: which source or language would you notice if it were missing from the first week of usage?" },
+    { question:"How does this help with LLM retrieval?", bridge:"Depends on whether your model is hallucinating on known-unknowns or unknown-unknowns. What is the failure pattern today when the model gets a freshness-sensitive question wrong?" },
+    { question:"Can we try it with our data?", bridge:"Yes. First tell me which query or workflow you would want the pilot to survive, because a generic trial will not reveal what matters." }
+  ];
+  var skipAheadHandlers = [
+    { trigger:"asks for pricing too early", reply:"Pricing fits once we know whether the feed changes a decision or a product output downstream. What problem is it supposed to solve first?" },
+    { trigger:"asks for demo too early", reply:"I can demo it. First tell me which query, entity, or monitoring case you would want the demo to prove — otherwise it becomes a tour." },
+    { trigger:"sends me to data engineering", reply:"Happy to talk to them. Before that, what operational or product outcome is supposed to come out of this feed? Engineering will need that to evaluate fit." }
+  ];
+
   runtime.frameworks["data-intelligence"] = {
     id:base.id,
     label:base.label,
@@ -63,6 +85,10 @@
     proof:base.proof,
     nextReview:base.nextReview,
     routeFocus:base.routeFocus,
+    supportDossier:supportDossier,
+    objectionLibrary:objectionLibrary,
+    inboundQuestionHandlers:inboundQuestionHandlers,
+    skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       {
         title:"Classify the dependency",
