@@ -551,4 +551,169 @@ Gate:
 
 **Phase 3 rollback:** Flip the feature flag off. Users return to the old room immediately. The migration tool (Phase 2) can be reversed if any data corruption occurred (localStorage was preserved until sync confirmed).
 
-<!-- END_OF_DRAFT -->
+---
+
+### Phase 4 — Progressive room migration (estimated 3–6 months)
+
+**Purpose:** Migrate every remaining dynamic room to the new stack, one at a time, using the Phase 3 pilot as the template. Each room follows the same subphases (architecture → data wiring → tests → feature flag → gradual rollout → cleanup).
+
+**Migration order** (priority-weighted):
+
+1. **Deal Workspace** — second brittleness-debt P1 room; highest user value after Discovery Studio; good stress-test of the data layer since deals relate to many other nouns.
+2. **Dashboard** — ranking layer; already refaced but the command-intelligence logic benefits most from type safety and real-time updates.
+3. **Signal Console** — named premium asset; heaviest account-list rendering; realtime payoff is immediate ("new signal just landed" live updates).
+4. **Future Autopsy** — named premium asset; recently cleaned of inline handlers (`59aef90`), now ready for the full migration.
+5. **PoC Framework** — split-stage hybrid; good test of complex layouts under Preact.
+6. **Outbound Studio** — motion craft; benefits from typed message templates.
+7. **Cold Call Studio** — live call execution; similar to Discovery Studio in interaction density.
+8. **LinkedIn Playbook** — channel-specific logic; simpler migration.
+9. **Advisor Deploy** — unique desktop metaphor; worth auditing whether the rolodex metaphor holds up under Preact's stable DOM.
+10. **Call Planner (`discovery-agenda/`)** — feeds Discovery Studio; simpler migration.
+11. **Territory Architect** — strategic shaping; form-heavy, good test of controlled inputs under Preact.
+12. **Sourcing Workbench** — ticket-board metaphor; simpler.
+13. **ICP Studio** — already has unsaved-guard wired; simpler migration because strict form behavior is well-scoped.
+14. **Readiness Score** — System Ledger, dark room; test of dark-surface components.
+15. **Quota Workback** — System Ledger; similar to Readiness.
+16. **Founding GTM / Handoff Kit** — System Ledger; export-heavy logic that benefits from typed output contracts.
+17. **Welcome** — Threshold room; simpler.
+18. **Onboarding** — Threshold room; also enables finally auditing onboarding, which has been blocked by the demo-seed bootstrap gate.
+19. **Settings** — Trust Annex; mostly static, minimal migration.
+
+**Per-room estimated cost** (after Phase 3 pilot, velocity should accelerate):
+- Rooms 1–3 (Deal Workspace, Dashboard, Signal Console): ~3–4 weeks each. Complex, touch many primitives.
+- Rooms 4–9: ~2–3 weeks each.
+- Rooms 10–19: ~1–2 weeks each.
+
+**Per-room gate:**
+Same as Phase 3 — unit + component + E2E tests pass, visual regression baseline intact, feature flag stable in production for 7 days at 100% rollout, founder approves.
+
+**Phase 4 overall gate:**
+- All 19 rooms migrated and stable.
+- Old `/app/<room>/index.html` files and old JS `js/<room>-*.js` runtime files deleted.
+- Single unified build pipeline in Vite.
+- Canon Part V §1 reflects final state.
+
+**Phase 4 rollback per room:** Each room has its own feature flag. Flip off, users return to old room (as long as old room's code has not been deleted — hence the "cleanup" subphase runs only after 7 stable days at 100% rollout).
+
+---
+
+### Phase 5 — Static pages polish + ongoing (open-ended)
+
+**Purpose:** Once dynamic rooms are migrated, polish the remaining static surfaces (landing, auth, legal) with whatever shared Preact components make sense, without sacrificing SEO or first-paint speed.
+
+**Tasks:**
+- Audit which static pages share visual chrome (logo, footer, auth-form styling). Extract shared CSS into reusable patterns (no Preact needed).
+- For the marketing landing page specifically, consider whether any interactive element (a countdown, A/B-tested hero copy, a demo-triggering CTA) warrants Preact. If yes, add it as a small island — the rest of the page stays static HTML.
+- Add prerendering via Vite's SSG capabilities if a public page ever has Preact-rendered content that needs SEO.
+- Continue adding new features as Preact components by default. New rooms never get built on the old stack.
+
+**No hard gate.** Phase 5 is ongoing steady-state, not a discrete project.
+
+---
+
+## 7. Acceptance criteria + success metrics
+
+The migration is considered successful when all of the following are true:
+
+**Functional correctness:**
+- Every room on new stack renders the same visible output it rendered on the old stack (visual regression baselines pass within tolerance).
+- Every sacred noun read/write operation produces identical results across old and new implementations (data migration correctness verified).
+- No user-reported data loss during migration (target: zero reports).
+
+**Performance:**
+- First paint time on typical room ≤ current baseline (measured via Lighthouse + Posthog web vitals).
+- Time to interactive ≤ 2 seconds on 3G emulation for any room.
+- Interaction response (click → visible state change) ≤ 100ms for 95th percentile actions.
+- Memory footprint per tab ≤ current baseline + 20% (allowance for Preact + Sentry + Posthog runtime).
+
+**Reliability:**
+- Sentry unhandled-error rate ≤ 0.1% of sessions (target: lower than current; we cannot measure current because there's no Sentry today, but we set this target for post-migration).
+- CI test pass rate ≥ 99% on `main` branch.
+- Deploy rollback time (flag flip) ≤ 60 seconds.
+
+**Developer experience:**
+- Time from "fresh clone" to "running locally" ≤ 10 minutes for a new contributor.
+- Time to add a new CRUD operation on an existing noun ≤ 2 hours for an engineer familiar with the stack.
+- Time to write + pass a Preact component test ≤ 30 minutes for an engineer familiar with the stack.
+
+**Security:**
+- RLS-isolation verified: no session can read another workspace's rows under any tested attack path.
+- No secrets in client bundle (verified by CI linting).
+- CSP headers on all room responses.
+
+**Canon alignment:**
+- Every room's visible output still passes the canon's four-pass judgment (mind / behavior / face / rubric) per Part IV §2.
+- No sacred noun was redefined during migration.
+- All compounding flows (Part I §6) still work end-to-end.
+
+---
+
+## 8. Rollback / unwind protocol
+
+The migration is designed to be reversible at every phase. Specifically:
+
+**Phase 0–1 rollback:** Trivial. Delete new files, no user impact.
+
+**Phase 2 rollback (before any room consumes the data layer):** Trivial. Disable migration flag, delete Supabase tables, remove data-client library.
+
+**Phase 2 rollback (after some rooms are migrated):** Destructive if rooms depend on Postgres data that no longer exists in localStorage. Mitigation:
+- Every migration run preserves localStorage as the source of truth until server sync confirms.
+- A reverse-migration tool (`src/migration/supabase-to-localstorage.ts`) is built and tested in Phase 2 specifically as an unwind path, even though we don't expect to use it.
+
+**Phase 3+ rollback (per room):** Flag flip. ≤ 60 seconds. Old room code is preserved in the repo until 7-day-stable gate passes.
+
+**Total unwind:** If the entire migration needs to be abandoned (extreme scenario), the old room files are deleted only after 7 days of stable 100% rollout per room, so at any mid-migration point, the unmigrated rooms are still in place. Migrated rooms can be rolled back individually via their feature flags.
+
+**Safety net:** Every commit that migrates or removes production code must reference this ADR in its commit message. A future session reviewing an unfamiliar change can trace back to this plan.
+
+---
+
+## 9. Open questions
+
+These are deliberately left open for founder input. The ADR cannot move to APPROVED status until these are resolved, either here or in a separate founder directive.
+
+1. **Multi-workspace support.** Should the schema model a user belonging to multiple workspaces (team feature) from day one, or should we start single-workspace-per-user and evolve? My recommendation: model `workspaces` + `workspace_members` tables from day one (easy to build now, expensive to retrofit) but keep the UI single-workspace until a real use case emerges.
+2. **Staging environment.** Do we spin up a separate Supabase project for staging/preview deploys, or use branching within one project? My recommendation: separate staging project — cleaner isolation.
+3. **Sentry + Posthog costs at scale.** Both have free tiers. At 100K concurrent users, paid plans are needed. Is this in the budget? Should be, but worth confirming.
+4. **PR review process.** Do we require founder approval on every PR, or set up auto-merge for routine changes after CI passes? My recommendation: founder approval required during migration phases; routine auto-merge after migration is complete.
+5. **Mobile breakpoints.** Current CSS has some responsive rules; should the migrated rooms explicitly target mobile/tablet, or stay desktop-first? My recommendation: stay desktop-first (Antaeus is a deep operating tool, not a quick-glance mobile app). Revisit post-migration.
+6. **Deferred: SPA routing.** Worth revisiting post-Phase 4. A future ADR.
+7. **Deferred: real SSR.** Worth revisiting if SEO becomes a competitive need. A future ADR.
+
+---
+
+## 10. Canonical references + canon updates
+
+This ADR becomes part of the canon hierarchy. Specifically:
+
+- **Authority order** (from `CLAUDE.md` Part V §2) is updated to include ADRs right after the bible:
+  1. `CLAUDE.md` (operating canon)
+  2. `deliverables/design-principle-strict-bible/` (deeper authority)
+  3. **`deliverables/adr/` (architectural decisions, in order)** ← NEW
+  4. `deliverables/plans/` (implementation specs)
+  5. `deliverables/prototypes/wireframes/` (triptych archive)
+
+- **`CLAUDE.md` Part V §2** will be edited to add the `deliverables/adr/` location, pointing specifically to this ADR as the first entry.
+
+- **`CLAUDE.md` will get a new Part II.5** (Component + Data Architecture) summarizing the stack decisions from this ADR at the canon level, with a forward-reference to the ADR for rationale + full detail.
+
+- **`CLAUDE.md` Part V §6 (session log)** will get an entry: *"2026-04-21 — ADR-001 Foundation stack migration approved. Stack commits to Preact + TS + Vite + Supabase (extended) + Vitest/Playwright + Sentry + Posthog + GitHub Actions CI. 5-phase implementation plan, 3–6 month horizon. No mind changes; all canon Parts I–IV preserved."*
+
+- This ADR's **status field** will flip from DRAFT to APPROVED only after founder sign-off. The date of approval will be captured in the frontispiece.
+
+---
+
+## 11. Founder approval block
+
+*To be completed by founder at time of approval.*
+
+- [ ] I have read this ADR in full.
+- [ ] I have resolved the open questions in §9 (or accepted Claude's recommendations where not otherwise specified).
+- [ ] I approve the stack choices in §2.
+- [ ] I approve the 5-phase implementation plan in §6.
+- [ ] I approve the rollback/unwind protocol in §8.
+- [ ] I approve updating `CLAUDE.md` per §10.
+
+**Approved by:** _____________________
+**Date of approval:** _____________________
+**Notes / conditions:** _____________________
