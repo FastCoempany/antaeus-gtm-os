@@ -14,6 +14,8 @@ This directory holds the CI/CD workflows that gate PRs and handle deploys.
 
 These must be configured in the GitHub repo before the workflows will run successfully. Setting them is a founder (or repo-admin) action — the CI workflows cannot configure them.
 
+**→ For step-by-step click-through instructions, see [`docs/founder-phase-1-external-setup.md`](../docs/founder-phase-1-external-setup.md).** That walkthrough covers every external-service setup (Sentry, Posthog, Cloudflare token, GitHub secrets, branch protection, Supabase staging) in the correct order with verification steps. This README is the summary; the walkthrough is the actionable version.
+
 ### 1. Required secrets
 
 Set in **Settings → Secrets and variables → Actions → Repository secrets**:
