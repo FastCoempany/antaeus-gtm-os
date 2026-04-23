@@ -881,6 +881,12 @@ These items were in the priority list earlier in the session and are now complet
 
 - **Support-dossier content authoring complete for all 9 frameworks.** Follow-on to Wave 4. Each framework runtime now exports `supportDossier` (3 topics × 3 items), `objectionLibrary` (4 trigger→reply pairs), `inboundQuestionHandlers` (3 question→bridge pairs), and `skipAheadHandlers` (3 trigger→reply pairs). Commits: `9a32eb5` sales-revenue, `58169e5` manufacturing + data-intelligence, `8e54682` legal + recruiting + product-ux + govtech + ai-native. Each framework's topic titles verified distinct via Playwright probe. Content follows the category-native vocabulary in the guardian build spec (e.g., legal anchors on Harvey/Clearbrief + partner/in-house dynamic + billable-hour politics; ai-native anchors on pilot purgatory + evaluation methodology + human-in-the-loop architecture). The drawer now lights up on every framework.
 
+- **Future Autopsy brittleness: inline-handler cleanup** (`59aef90`). Removed all 8 inline `onclick`/`onkeydown` attributes in Future Autopsy, including one that effectively eval'd an arbitrary string from `docket.exitActionHref` into an onclick attribute. Replaced with `data-fa-action` / `data-fa-arg` pattern + delegated document-level listeners. Window-attached functions (runSelected, selectPinnedCase, setForensicSheet, setFutureAutopsyVerdict, copyAutopsy, autopsyOfDay, copyKill) are now called by name lookup instead of string interpolation into attributes. Verified interactions via Playwright: pinned-case select, Run selected, setForensicSheet('symptom'), setFutureAutopsyVerdict('corrected') all dispatch correctly. Addresses the **inline-handler** dimension of the 2026-04-16 brittleness audit P1 for Future Autopsy. The **string-assembly innerHTML** dimension (still present in Discovery Studio and Deal Workspace) remains — that's the bigger refactor and was explicitly deferred.
+
+- **Unsaved-changes guard activated for ICP Studio + PoC Framework** (`2e18122`). `js/unsaved-guard.js` existed already but both rooms loaded it without calling `.watch()`, so the guard was inert. Added `unsavedGuard.watch('.builder-content')` at the tail of `bootIcpStudio()` and `unsavedGuard.watch('.fc')` at the tail of `bootPocFramework()`. Added missing `markClean()` call at end of `savePoC()`. Verified via Playwright: guard loaded, isDirty=false on load, isDirty=true after a simulated input event. Remaining rooms needing the same wiring: Founding GTM, Outbound Studio, Deal Workspace, CFO Negotiation, Discovery Agenda, Content Builder.
+
+- **Label renames (Phase 5) verified already done.** During audit, grepped for "Command Center", "Live Discovery", "Content Builder", "Agent Lab" across HTML/JS/CSS. Zero matches. The architecture-reset / nav re-architecture work already renamed them. Phase 5 can be marked done.
+
 ### Still owed work (priority order)
 
 1. **Discovery Studio + Deal Workspace brittleness debt** (P1 in the 2026-04-16 audit). Both rooms use HTML-string assembly + inline handlers. Waves 1–4 added 4 more render-functions in the same style, which extended the debt. Consider a small `renderSection` helper before continuing to add surfaces, or do a full pattern cleanup later.
@@ -891,10 +897,13 @@ These items were in the priority list earlier in the session and are now complet
 
 The Feb 2026 `GTM-OS-EXHAUSTIVE-IMPROVEMENT-PLAN.md` had 9 phases of ship-hygiene. Most are not done. The critical ones to pick up before beta:
 
-- **Phase 1 (ship-blockers):** unsaved-changes guard, auth failure user-facing errors, auto-save on Founding GTM
+- **Phase 1 (ship-blockers):**
+  - Unsaved-changes guard: `js/unsaved-guard.js` exists and is wired for **ICP Studio + PoC Framework** as of 2026-04-21 (commit `2e18122`). Still needs to be activated in Founding GTM, Outbound Studio, Deal Workspace, CFO Negotiation, Discovery Agenda, Content Builder. Each room needs the script tag + `unsavedGuard.watch(<container>)` in its boot + `unsavedGuard.markClean()` in its save handler.
+  - Auth failure user-facing errors: still owed
+  - Auto-save on Founding GTM: still owed
 - **Phase 2 (data safety):** analytics SDK integration (Posthog or Plausible), "Export All Data" JSON, "Data stored locally" notice, "Delete my data"
 - **Phase 3 (export completeness):** Deal Workspace CSV, Readiness export, Command Center export
-- **Phase 5 (label fixes):** rename "Command Center" → "Pipeline Dashboard," "Live Discovery" → "Discovery Frameworks," "Content Builder" → "Sales Collateral Builder," "Agent Lab" → "AI Agents (beta)"
+- ~~**Phase 5 (label fixes):**~~ *Already done during architecture-reset / nav re-architecture. The flagged labels (Command Center, Live Discovery, Content Builder, Agent Lab) no longer exist in the current code. Verified via grep 2026-04-21.*
 
 These don't block the refacing pass, but they do block beta.
 
