@@ -921,8 +921,9 @@ Canon order of authority (highest first):
    - `06-preservation-guardrails/` — phase-7 module preservation signoff + compounding rules
    - `07-control-artifacts/` — Lumana reference HTMLs + taste tests
    - `08-room-guardian-specs/` — **only Discovery Studio is fully specified; the other rooms need their own guardian specs over time**
-3. `deliverables/plans/` — implementation specs (active + historical)
-4. `deliverables/prototypes/wireframes/` — the triptych archive
+3. **`deliverables/adr/`** — architectural decision records, numbered and dated. Each ADR documents a single major architectural choice with rationale, alternatives considered, and implementation plan. ADRs supersede earlier ADRs explicitly; no ADR is ever silently overridden. First ADR: `adr-001-foundation-stack-migration-2026-04-21.md` (stack migration to Preact + TypeScript + Vite + Supabase (extended) + Vitest/Playwright + Sentry + Posthog + GitHub Actions CI). See `deliverables/adr/README.md` for the ADR process.
+4. `deliverables/plans/` — implementation specs (active + historical)
+5. `deliverables/prototypes/wireframes/` — the triptych archive
 
 If a lower authority conflicts with this file, either the lower wins (and this file gets updated) or this file wins (and the lower gets archived). Do not leave contradictions.
 
