@@ -622,6 +622,84 @@
       '</section>';
   }
 
+  function findNodeInFramework(framework, nodeId){
+    if(!framework || !Array.isArray(framework.segments)) return null;
+    for(var s = 0; s < framework.segments.length; s++){
+      var segment = framework.segments[s];
+      if(!Array.isArray(segment.nodes)) continue;
+      for(var n = 0; n < segment.nodes.length; n++){
+        if(segment.nodes[n].id === nodeId){
+          return { node: segment.nodes[n], segment: segment };
+        }
+      }
+    }
+    return null;
+  }
+
+  function renderLedgerStrip(){
+    var framework = getActiveFramework();
+    if(!framework) return "";
+    var frameworkState = getFrameworkState(state.frameworkId);
+    var facts = (frameworkState.learnedFacts || []).slice().sort(function(a,b){ return (b.ts||0) - (a.ts||0); });
+    var checked = frameworkState.checkedNodes || {};
+    var checkedIds = Object.keys(checked).filter(function(id){ return checked[id]; });
+    var workedEntries = checkedIds.map(function(nodeId){
+      var hit = findNodeInFramework(framework, nodeId);
+      return hit ? { nodeId: nodeId, node: hit.node, segment: hit.segment } : null;
+    }).filter(Boolean);
+    var essentialTotal = 0;
+    (framework.segments || []).forEach(function(segment){
+      (segment.nodes || []).forEach(function(node){ if(node.essential) essentialTotal++; });
+    });
+
+    var learnedRows;
+    if(!facts.length){
+      learnedRows = '<div class="dsj-ledger-empty">No earned truth yet. Open a branch to record what was learned.</div>';
+    } else {
+      learnedRows = facts.slice(0, 10).map(function(fact){
+        var hit = findNodeInFramework(framework, fact.nodeId);
+        var segmentTitle = hit ? hit.segment.title : fact.segmentKey;
+        return '' +
+          '<button type="button" class="dsj-ledger-row" data-ledger-jump="' + esc(fact.nodeId) + '">' +
+            '<span class="dsj-ledger-fact">' + esc(fact.fact) + '</span>' +
+            '<span class="dsj-ledger-source">' + esc(segmentTitle) + '</span>' +
+          '</button>';
+      }).join("");
+    }
+
+    var workedRows;
+    if(!workedEntries.length){
+      workedRows = '<div class="dsj-ledger-empty">Nothing marked worked. Click the &#10003; on a node when a move landed.</div>';
+    } else {
+      workedRows = workedEntries.slice(0, 10).map(function(entry){
+        var text = entry.node.text || entry.node.badge || "";
+        return '' +
+          '<button type="button" class="dsj-ledger-row" data-ledger-jump="' + esc(entry.nodeId) + '">' +
+            '<span class="dsj-ledger-fact">' + esc(text) + '</span>' +
+            '<span class="dsj-ledger-source">' + esc(entry.segment.title) + '</span>' +
+          '</button>';
+      }).join("");
+    }
+
+    return '' +
+      '<section class="dsj-ledger-strip" id="dsjLedgerStrip">' +
+        '<div class="dsj-ledger-col">' +
+          '<div class="dsj-ledger-head">' +
+            '<span class="dsj-ledger-label">Learned truth</span>' +
+            '<span class="dsj-ledger-count">' + esc(String(facts.length)) + '</span>' +
+          '</div>' +
+          '<div class="dsj-ledger-list">' + learnedRows + '</div>' +
+        '</div>' +
+        '<div class="dsj-ledger-col">' +
+          '<div class="dsj-ledger-head">' +
+            '<span class="dsj-ledger-label">Worked</span>' +
+            '<span class="dsj-ledger-count">' + esc(String(workedEntries.length)) + '<small> / ' + esc(String(essentialTotal)) + ' essential</small></span>' +
+          '</div>' +
+          '<div class="dsj-ledger-list">' + workedRows + '</div>' +
+        '</div>' +
+      '</section>';
+  }
+
   function renderNextStepDocket(){
     var frameworkState = getFrameworkState(state.frameworkId);
     var ns = frameworkState.nextStep || {};
@@ -680,6 +758,7 @@
         '<div class="dsj-stack">' +
           visibleSegments(framework).map(function(segment){ return renderPhase(segment, openSegmentKey); }).join("") +
         '</div>' +
+        renderLedgerStrip() +
         renderNextStepDocket() +
       '</main>';
   }
@@ -852,6 +931,12 @@
       var targetButton = event.target.closest("[data-target]");
       if(targetButton && root.contains(targetButton)){
         handleActionTarget(targetButton.getAttribute("data-target"));
+        return;
+      }
+
+      var ledgerJump = event.target.closest("[data-ledger-jump]");
+      if(ledgerJump && root.contains(ledgerJump)){
+        handleActionTarget("node:" + ledgerJump.getAttribute("data-ledger-jump"));
         return;
       }
 

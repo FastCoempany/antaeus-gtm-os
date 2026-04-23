@@ -974,6 +974,105 @@ body.room-discovery-studio .module-header{
   }
 }
 
+/* Learned + Worked ledger strip (Wave 3) */
+.dsj-ledger-strip{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.dsj-ledger-col{
+  padding:14px 16px 16px;
+  border-radius:16px;
+  background:var(--dsj-panel-soft);
+  border:1px solid var(--dsj-line);
+}
+.dsj-ledger-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.dsj-ledger-label{
+  font-family:"JetBrains Mono","IBM Plex Mono",monospace;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--dsj-muted);
+}
+.dsj-ledger-count{
+  font-family:"DM Serif Display","Outfit",sans-serif;
+  font-size:22px;
+  line-height:1;
+  color:var(--dsj-ink);
+  font-weight:400;
+}
+.dsj-ledger-count small{
+  font-family:"JetBrains Mono","IBM Plex Mono",monospace;
+  font-size:10px;
+  font-weight:600;
+  color:var(--dsj-muted);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-left:4px;
+}
+.dsj-ledger-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  max-height:220px;
+  overflow-y:auto;
+}
+.dsj-ledger-row{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  text-align:left;
+  padding:9px 11px;
+  border-radius:10px;
+  border:1px solid transparent;
+  background:var(--dsj-bg-top);
+  color:var(--dsj-ink);
+  cursor:pointer;
+  font-family:inherit;
+  font-size:13px;
+  line-height:1.4;
+  transition:border-color .14s, background .14s;
+}
+.dsj-ledger-row:hover,
+.dsj-ledger-row:focus-visible{
+  border-color:var(--dsj-blue-18);
+  background:var(--dsj-panel);
+  outline:none;
+}
+.dsj-ledger-fact{
+  color:var(--dsj-ink);
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.dsj-ledger-source{
+  font-family:"JetBrains Mono","IBM Plex Mono",monospace;
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--dsj-muted);
+}
+.dsj-ledger-empty{
+  padding:10px 12px;
+  color:var(--dsj-muted);
+  font-size:13px;
+  line-height:1.5;
+  font-style:italic;
+}
+@media (max-width: 900px){
+  .dsj-ledger-strip{ grid-template-columns:1fr; }
+}
+
 /* Next-step docket (Wave 2) */
 .dsj-next-step-docket{
   margin-top:18px;
