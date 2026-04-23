@@ -379,4 +379,77 @@ Gate:
 
 **Phase 1 rollback:** Foundation coexists with the old app; removing `src/`, `vite.config.ts`, `tsconfig.json`, and `package.json` build scripts returns the app to its pre-Phase-1 state. No user-visible change.
 
+---
+
+### Phase 2 — Data architecture + migration (estimated 3–4 weeks)
+
+**Purpose:** Design the Postgres schema, set up row-level security, build a one-way migration from localStorage into the database, add realtime subscriptions, and keep localStorage as offline cache. No rooms migrate to Preact yet — this phase is purely backend.
+
+**Subphase 2.1 — Schema design (est. 4–6 days)**
+
+Tasks:
+- Model every sacred noun as a Postgres table: `icps`, `accounts`, `signals`, `motions`, `calls`, `deals`, `proofs`, `advisor_deployments`, `readiness_snapshots`, `handoff_artifacts`.
+- Model cross-noun relations as foreign keys (e.g., `deals.account_id`, `calls.deal_id`, `proofs.deal_id`).
+- Model workspace state (`workspaces`, `workspace_members`) to support the future multi-user path without building it yet.
+- Write migrations in Supabase's migration format (SQL files in `supabase/migrations/`).
+- Generate TypeScript types from the schema using the Supabase CLI. Check generated types into `src/lib/db-types.ts`.
+- Write an architecture note explaining how the schema maps to each room's state.
+
+Gate:
+- All sacred nouns are tables with correct relationships.
+- `supabase db reset` then `supabase db push` applies migrations cleanly to a fresh Supabase project.
+- Generated TS types compile and expose every expected field.
+
+**Subphase 2.2 — Row-level security policies (est. 3–5 days)**
+
+Tasks:
+- Write RLS policies: every row has `workspace_id`; every policy filters on `auth.uid()` → workspace membership.
+- Explicitly test RLS: a second user's queries return zero rows for the first user's workspace. Integration test written.
+- Document the policy model in a `supabase/README.md` so the rules are legible, not only expressed as SQL.
+
+Gate:
+- RLS integration test confirms isolation.
+- Admin service role key is stored only in server-side env (Cloudflare Workers env if needed), never in client bundle.
+- No client-side code can escalate privilege.
+
+**Subphase 2.3 — Migration from localStorage to Postgres (est. 5–7 days)**
+
+Tasks:
+- Write a one-way migration tool (`src/migration/localstorage-to-supabase.ts`) that reads every known `gtmos_*` key and writes it to the correct table.
+- Migration is idempotent: rerunning it produces no duplicate rows. Uses deterministic IDs derived from content when possible, otherwise uses localStorage timestamps as tie-breakers.
+- Migration is dry-runnable: a preview mode reports what WOULD be written without writing.
+- Migration preserves existing data integrity: every noun that was in localStorage is in Postgres after migration, with no field loss.
+- Migration runs client-side on first login post-deploy (behind a feature flag), with explicit user consent via a one-time prompt.
+- Failed migrations do not corrupt existing localStorage — source is preserved until server-side confirms success.
+
+Gate:
+- Dry-run against a seeded demo workspace lists every noun correctly.
+- Live migration against a test workspace completes without data loss.
+- Post-migration, the workspace reads from Postgres and matches exactly what localStorage had.
+- Rerunning migration produces zero duplicate rows.
+
+**Subphase 2.4 — Realtime subscriptions + offline cache (est. 4–6 days)**
+
+Tasks:
+- Build `src/lib/data-client.ts`: a typed client that wraps supabase-js for each noun type.
+- Subscribe to Postgres changefeeds per workspace. Cache results in-memory and in localStorage (localStorage now serves as offline / fast-reload cache, not primary).
+- Implement optimistic updates: client writes to localStorage + issues server write in parallel; on server confirmation, reconcile; on server failure, roll back and surface error.
+- Conflict resolution: last-write-wins at the row level by default; per-field LWW for high-churn fields where needed.
+- Implement `useSacredNoun<T>(nounType, id)` Preact hook for rooms (used starting Phase 3).
+
+Gate:
+- A change made in Tab A appears in Tab B within 1 second (same browser, same account).
+- A change made on Device A appears on Device B within 1 second (different browsers, same account).
+- Offline: changes buffered locally, synced on reconnect.
+- Optimistic update rollback on server failure is user-visible and non-destructive.
+
+**Overall Phase 2 gate:**
+- Schema deployed to production Supabase.
+- RLS verified.
+- Migration tool ready but NOT yet triggered for real users (behind a feature flag defaulting to off).
+- Data client library ready to be consumed by the first migrated room in Phase 3.
+
+**Phase 2 rollback:**
+- Migration is feature-flagged off by default. No user has been migrated yet. Rolling back means: flip the flag off, delete the Supabase tables, remove the data client. No user impact.
+
 <!-- END_OF_DRAFT -->
