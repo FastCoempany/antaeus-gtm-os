@@ -415,6 +415,7 @@ function savePoC(){
     }
     renderRecentProofs();
     updatePocStats();
+    if (window.unsavedGuard) window.unsavedGuard.markClean();
     alert("PoC proof saved.");
 }
 function updatePocStats(){
@@ -479,6 +480,7 @@ async function bootPocFramework(){
         renderRecentProofs();
         updatePocStats();
         if(window.saveIndicator?.mount)window.saveIndicator.mount();
+        if(window.unsavedGuard)window.unsavedGuard.watch(".fc");
         clearPocBootState();
     }catch(error){onPocFrameworkBootFailure(error);}
 }

@@ -2100,6 +2100,10 @@
                 console.error('ICP library failed to render:', error);
             }
 
+            if (window.unsavedGuard) {
+                unsavedGuard.watch('.builder-content');
+            }
+
             clearIcpBootState();
         }
 
