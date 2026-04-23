@@ -1,0 +1,96 @@
+# ci.yml — Antaeus GTM OS continuous integration
+#
+# Runs on every pull request and every push to non-main branches. Gates
+# merge into main: PR cannot merge unless all required jobs below are green.
+#
+# Jobs are intentionally split so failures point to the specific category
+# (typecheck vs. unit test vs. E2E vs. build). Each job runs independently
+# so a flaky E2E doesn't block a typecheck failure from being fixed.
+#
+# See deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6 Phase 1.3.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+
+  unit-test:
+    name: Unit + component tests (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+
+  e2e-test:
+    name: E2E smoke tests (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: npm ci --no-audit --no-fund
+      # GitHub runners' network allowlists Playwright's Chromium CDN.
+      # --with-deps ensures system libraries required by Chromium are present.
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+      - name: Run E2E smoke tests
+        run: npm run test:e2e
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  build:
+    name: Vite build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - name: Vite build
+        run: npm run build
+      - name: Cloudflare static assets build
+        run: npm run build:cloudflare
+      - name: Verify dist/ emitted
+        run: |
+          test -d dist || (echo "dist/ missing" && exit 1)
+          ls -la dist/

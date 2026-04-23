@@ -1,0 +1,71 @@
+# pr-preview.yml — Antaeus GTM OS preview deploys for pull requests
+#
+# On every PR, builds the site and deploys a preview URL via Cloudflare
+# Pages' native GitHub integration. Posts the preview URL as a comment on
+# the PR so reviewers can click through to the live build.
+#
+# This is distinct from ci.yml: ci.yml verifies correctness; this workflow
+# publishes an artifact. If CI fails, the preview is still useful for the
+# PR author to debug against.
+#
+# Secrets required (same as deploy.yml):
+#   CLOUDFLARE_API_TOKEN
+#   CLOUDFLARE_ACCOUNT_ID
+#
+# Additional required: CLOUDFLARE_PAGES_PROJECT_NAME (set as a GitHub
+# repository variable, not a secret — it's public-safe).
+#
+# See deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6 Phase 1.3.
+
+name: PR preview deploy
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  deployments: write
+
+concurrency:
+  group: pr-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    name: Build + deploy preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - name: Build
+        run: |
+          npm run build
+          npm run build:cloudflare
+      - name: Deploy preview to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        id: preview
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ vars.CLOUDFLARE_PAGES_PROJECT_NAME }}
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: pr-${{ github.event.pull_request.number }}
+      - name: Comment preview URL on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = "${{ steps.preview.outputs.url }}";
+            if (!url) return;
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Preview deployed: ${url}`
+            });
