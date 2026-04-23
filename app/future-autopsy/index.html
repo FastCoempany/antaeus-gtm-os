@@ -1157,21 +1157,21 @@
                                     </div>
                                     <div id="futureAutopsyLedger" class="fa-ledger"></div>
                                     <div id="futureAutopsyCommandRow" class="fa-command-row">
-                                        <button class="fa-command-link fa-command-link--run" type="button" onclick="runSelected()" title="Run Future Autopsy for the active pinned-case ledger line.">
+                                        <button class="fa-command-link fa-command-link--run" type="button" data-fa-action="runSelected" title="Run Future Autopsy for the active pinned-case ledger line.">
                                             <span class="fa-command-symbol fa-command-symbol--run"></span>
                                             <span class="fa-command-text">
                                                 <span class="fa-command-title">Run selected</span>
                                                 <span class="fa-command-copy">Recompute around the active line.</span>
                                             </span>
                                         </button>
-                                        <button class="fa-command-link fa-command-link--urgent" type="button" onclick="autopsyOfDay()" title="Jump to the most urgent live case in the autopsy ledger.">
+                                        <button class="fa-command-link fa-command-link--urgent" type="button" data-fa-action="autopsyOfDay" title="Jump to the most urgent live case in the autopsy ledger.">
                                             <span class="fa-command-symbol fa-command-symbol--urgent"></span>
                                             <span class="fa-command-text">
                                                 <span class="fa-command-title">Urgent autopsy deal</span>
                                                 <span class="fa-command-copy">Jump to the most urgent line.</span>
                                             </span>
                                         </button>
-                                        <button class="fa-command-link fa-command-link--copy" type="button" onclick="copyAutopsy()" title="Copy the current autopsy summary, winning conditions, and countermeasures.">
+                                        <button class="fa-command-link fa-command-link--copy" type="button" data-fa-action="copyAutopsy" title="Copy the current autopsy summary, winning conditions, and countermeasures.">
                                             <span class="fa-command-symbol fa-command-symbol--copy"></span>
                                             <span class="fa-command-text">
                                                 <span class="fa-command-title">Copy brief</span>
@@ -1639,9 +1639,8 @@
                 : key === 'proof'
                     ? 'fa-sheet-b fa-sheet-proof'
                     : 'fa-sheet-c fa-sheet-pattern';
-            var command = "setForensicSheet('" + key + "')";
             var active = getForensicSheetState() === key;
-            return '<article class="fa-sheet ' + slotClass + '" role="button" tabindex="0" aria-pressed="' + (active ? 'true' : 'false') + '" aria-label="Bring ' + escH(tabLabel.toLowerCase()) + ' to the front" onclick="' + command + '" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();' + command + ';}">' +
+            return '<article class="fa-sheet ' + slotClass + '" role="button" tabindex="0" aria-pressed="' + (active ? 'true' : 'false') + '" aria-label="Bring ' + escH(tabLabel.toLowerCase()) + ' to the front" data-fa-action="setForensicSheet" data-fa-arg="' + escH(key) + '">' +
                 '<div class="fa-sheet-tab ' + escH(tabTone) + '">' + escH(tabLabel) + '</div>' +
                 '<div class="fa-sheet-title">' + escH(title) + '</div>' +
                 '<div class="fa-sheet-row">' +
@@ -2006,7 +2005,7 @@
             node.innerHTML = autopsyUniverse.map(function(v) {
                 var active = v.id === selectedDealId;
                 var shortStage = autopsyStageShort(v.stageRaw || v.stage);
-                return '<button class="fa-ledger-row' + (active ? ' active' : '') + '" type="button" onclick="selectPinnedCase(\'' + escH(v.id) + '\')" title="Pin ' + escH(v.name) + ' as the active autopsy case.">' +
+                return '<button class="fa-ledger-row' + (active ? ' active' : '') + '" type="button" data-fa-action="selectPinnedCase" data-fa-arg="' + escH(v.id) + '" title="Pin ' + escH(v.name) + ' as the active autopsy case.">' +
                     '<span class="fa-ledger-mark"></span>' +
                     '<span class="fa-ledger-name">' + escH(v.name) + '</span>' +
                     '<span class="fa-ledger-stage">' + escH(shortStage) + '</span>' +
@@ -2422,10 +2421,10 @@
 
             html += '<section class="fa-verdict-layout fa-verdict-layout--single">';
             html += '<div class="fa-toggle-row" role="tablist" aria-label="Autopsy verdict states">';
-            html += '<button class="fa-verdict-toggle' + (currentVerdictMode !== 'corrected' ? ' active-left' : '') + '" type="button" aria-selected="' + (currentVerdictMode !== 'corrected' ? 'true' : 'false') + '" onclick="setFutureAutopsyVerdict(\'left\')">';
+            html += '<button class="fa-verdict-toggle' + (currentVerdictMode !== 'corrected' ? ' active-left' : '') + '" type="button" aria-selected="' + (currentVerdictMode !== 'corrected' ? 'true' : 'false') + '" data-fa-action="setFutureAutopsyVerdict" data-fa-arg="left">';
             html += '<span class="fa-verdict-inner"><span class="fa-verdict-mark fa-verdict-mark--fracture"></span><span><span class="fa-verdict-title">If left alone</span></span></span>';
             html += '</button>';
-            html += '<button class="fa-verdict-toggle' + (currentVerdictMode === 'corrected' ? ' active-right' : '') + '" type="button" aria-selected="' + (currentVerdictMode === 'corrected' ? 'true' : 'false') + '" onclick="setFutureAutopsyVerdict(\'corrected\')">';
+            html += '<button class="fa-verdict-toggle' + (currentVerdictMode === 'corrected' ? ' active-right' : '') + '" type="button" aria-selected="' + (currentVerdictMode === 'corrected' ? 'true' : 'false') + '" data-fa-action="setFutureAutopsyVerdict" data-fa-arg="corrected">';
             html += '<span class="fa-verdict-inner"><span class="fa-verdict-mark fa-verdict-mark--seal"></span><span><span class="fa-verdict-title">If corrected</span></span></span>';
             html += '</button>';
             html += '</div>';
@@ -2447,7 +2446,9 @@
             html += '<div class="fa-docket-exit-pill ' + escH(docket.exitTone) + '">' + escH(docket.exitPill) + '</div>';
             html += '<div class="fa-docket-exit-copy">' + escH(docket.exitCopy) + '</div>';
             if (docket.exitActionHref.indexOf('javascript:') === 0) {
-                html += '<button class="fa-docket-exit-link red" onclick="' + escH(docket.exitActionHref.replace('javascript:', '')) + '">' + escH(docket.exitActionLabel) + '</button>';
+                // Extract the function name from "javascript:fnName()" — only no-arg calls supported here
+                var jsCall = docket.exitActionHref.replace('javascript:', '').replace(/\s*\(\s*\)\s*;?\s*$/, '');
+                html += '<button class="fa-docket-exit-link red" type="button" data-fa-action="' + escH(jsCall) + '">' + escH(docket.exitActionLabel) + '</button>';
             } else {
                 html += '<a class="fa-docket-exit-link" href="' + escH(docket.exitActionHref) + '">' + escH(docket.exitActionLabel) + '</a>';
             }
@@ -2590,6 +2591,30 @@
         } else {
             bootFutureAutopsy().catch(onFutureAutopsyBootFailure);
         }
+
+        // Delegated action dispatcher — replaces inline onclick/onkeydown handlers.
+        // Rendered buttons carry data-fa-action="<fnName>" and optional data-fa-arg="<value>".
+        // The function must be attached to window (runSelected, selectPinnedCase, etc.).
+        function invokeFaAction(el) {
+            var name = el.getAttribute('data-fa-action');
+            if (!name) return false;
+            var fn = window[name];
+            if (typeof fn !== 'function') return false;
+            var arg = el.getAttribute('data-fa-arg');
+            if (arg != null) fn(arg); else fn();
+            return true;
+        }
+        document.addEventListener('click', function(event) {
+            var el = event.target.closest('[data-fa-action]');
+            if (!el) return;
+            if (invokeFaAction(el)) event.preventDefault();
+        });
+        document.addEventListener('keydown', function(event) {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            var el = event.target.closest('[data-fa-action][role="button"], [data-fa-action][tabindex]');
+            if (!el) return;
+            if (invokeFaAction(el)) event.preventDefault();
+        });
     })();
     </script>
 </body>
