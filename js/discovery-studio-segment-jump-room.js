@@ -36,6 +36,7 @@
     emergency: false,
     panelHidden: false,
     dockView: "recover",
+    dossierOpen: false,
     frameworks: {}
   });
   if(!state || typeof state !== "object") state = {};
@@ -43,6 +44,7 @@
   if(typeof state.frameworkId !== "string") state.frameworkId = "";
   state.emergency = !!state.emergency;
   state.panelHidden = !!state.panelHidden;
+  state.dossierOpen = !!state.dossierOpen;
   state.dockView = ["recover","context","routes"].indexOf(state.dockView) > -1 ? state.dockView : "recover";
 
   function esc(value){
@@ -275,6 +277,12 @@
     render();
   }
 
+  function toggleDossier(){
+    state.dossierOpen = !state.dossierOpen;
+    persist();
+    render();
+  }
+
   function setDockView(view){
     if(["recover","context","routes"].indexOf(view) === -1) return;
     state.dockView = view;
@@ -468,6 +476,14 @@
     return '<button type="button" class="' + esc(extraClass || "dsj-inline-btn") + (cls ? (" " + cls) : "") + '" data-target="' + esc(action.target) + '">' + esc(action.label) + '</button>';
   }
 
+  function hasDossierData(framework){
+    if(!framework) return false;
+    var d = Array.isArray(framework.supportDossier) && framework.supportDossier.length;
+    var o = Array.isArray(framework.objectionLibrary) && framework.objectionLibrary.length;
+    var q = Array.isArray(framework.inboundQuestionHandlers) && framework.inboundQuestionHandlers.length;
+    return !!(d || o || q);
+  }
+
   function renderTopbar(framework, context, segmentKey){
     var pills = [
       renderMiniPill("Focus", context.focusObject)
@@ -477,6 +493,9 @@
     }else if(context.agenda && context.agenda.company){
       pills.push(renderMiniPill("Agenda", context.agenda.company));
     }
+    var dossierBtn = hasDossierData(framework)
+      ? '<button type="button" class="dsj-panel-toggle" id="dsjDossierBtn">' + esc(state.dossierOpen ? 'Close dossier' : 'Dossier') + '</button>'
+      : '';
     return '' +
       '<div class="dsj-topbar">' +
         '<div class="dsj-topbar-left">' +
@@ -485,6 +504,7 @@
         '</div>' +
         '<div class="dsj-topbar-center">' + pills.join("") + '</div>' +
         '<div class="dsj-topbar-right">' +
+          dossierBtn +
           '<button type="button" class="dsj-icon-btn ' + (state.emergency ? 'is-hot' : 'is-warning') + '" id="dsjEmergencyBtn">' + (state.emergency ? 'Full view' : 'Compress') + '</button>' +
           '<button type="button" class="dsj-panel-toggle" id="dsjPanelToggle">' + esc(state.panelHidden ? 'Show dock' : 'Hide dock') + '</button>' +
         '</div>' +
@@ -700,6 +720,68 @@
       '</section>';
   }
 
+  function renderDossier(framework){
+    if(!hasDossierData(framework)) return "";
+    if(!state.dossierOpen) return "";
+    var dossier = Array.isArray(framework.supportDossier) ? framework.supportDossier : [];
+    var objections = Array.isArray(framework.objectionLibrary) ? framework.objectionLibrary : [];
+    var inbound = Array.isArray(framework.inboundQuestionHandlers) ? framework.inboundQuestionHandlers : [];
+    var dossierSection = dossier.length ? '' +
+      '<section class="dsj-dossier-section">' +
+        '<div class="dsj-dossier-label">Proof &amp; decision anchors</div>' +
+        '<div class="dsj-dossier-topic-stack">' +
+          dossier.map(function(topic){
+            var items = (topic.items || []).map(function(item){
+              return '<li>' + esc(item) + '</li>';
+            }).join("");
+            return '' +
+              '<div class="dsj-dossier-topic">' +
+                '<div class="dsj-dossier-topic-title">' + esc(topic.title) + '</div>' +
+                '<ul class="dsj-dossier-topic-list">' + items + '</ul>' +
+              '</div>';
+          }).join("") +
+        '</div>' +
+      '</section>' : '';
+    var objectionSection = objections.length ? '' +
+      '<section class="dsj-dossier-section">' +
+        '<div class="dsj-dossier-label">Objection library</div>' +
+        '<div class="dsj-dossier-pairs">' +
+          objections.map(function(item){
+            return '' +
+              '<div class="dsj-dossier-pair">' +
+                '<div class="dsj-dossier-trigger">' + esc(item.trigger) + '</div>' +
+                '<div class="dsj-dossier-reply">' + esc(item.reply) + '</div>' +
+              '</div>';
+          }).join("") +
+        '</div>' +
+      '</section>' : '';
+    var inboundSection = inbound.length ? '' +
+      '<section class="dsj-dossier-section">' +
+        '<div class="dsj-dossier-label">Inbound question handlers</div>' +
+        '<div class="dsj-dossier-pairs">' +
+          inbound.map(function(item){
+            return '' +
+              '<div class="dsj-dossier-pair">' +
+                '<div class="dsj-dossier-trigger">' + esc(item.question) + '</div>' +
+                '<div class="dsj-dossier-reply">' + esc(item.bridge) + '</div>' +
+              '</div>';
+          }).join("") +
+        '</div>' +
+      '</section>' : '';
+    return '' +
+      '<div class="dsj-dossier-backdrop" id="dsjDossierBackdrop"></div>' +
+      '<aside class="dsj-dossier" id="dsjDossier" role="dialog" aria-label="Support dossier">' +
+        '<header class="dsj-dossier-head">' +
+          '<div>' +
+            '<div class="dsj-dossier-kicker">Support dossier</div>' +
+            '<div class="dsj-dossier-title">Reachable proof. Quiet until needed.</div>' +
+          '</div>' +
+          '<button type="button" class="dsj-dossier-close" id="dsjDossierClose" aria-label="Close dossier">Close</button>' +
+        '</header>' +
+        '<div class="dsj-dossier-body">' + dossierSection + objectionSection + inboundSection + '</div>' +
+      '</aside>';
+  }
+
   function renderNextStepDocket(){
     var frameworkState = getFrameworkState(state.frameworkId);
     var ns = frameworkState.nextStep || {};
@@ -898,6 +980,12 @@
         return;
       }
 
+      var dossierBtn = event.target.closest("#dsjDossierBtn, #dsjDossierClose, #dsjDossierBackdrop");
+      if(dossierBtn && root.contains(dossierBtn)){
+        toggleDossier();
+        return;
+      }
+
       var frameworkButton = event.target.closest("[data-framework]");
       if(frameworkButton && root.contains(frameworkButton)){
         setFramework(frameworkButton.getAttribute("data-framework"));
@@ -960,6 +1048,11 @@
     });
 
     root.addEventListener("keydown", function(event){
+      if(event.key === "Escape" && state.dossierOpen){
+        event.preventDefault();
+        toggleDossier();
+        return;
+      }
       if(event.key !== "Enter" && event.key !== " ") return;
       var nodeHead = event.target.closest("[data-node-head]");
       if(!nodeHead || !root.contains(nodeHead)) return;
@@ -967,6 +1060,12 @@
       var parts = (nodeHead.getAttribute("data-node-head") || "").split("|");
       if(parts.length === 2){
         setOpenNode(parts[0], parts[1]);
+      }
+    });
+    document.addEventListener("keydown", function(event){
+      if(event.key === "Escape" && state.dossierOpen){
+        event.preventDefault();
+        toggleDossier();
       }
     });
   }
@@ -1006,7 +1105,8 @@
         renderFrameworkRail() +
         renderCenter(framework, openSegmentKey) +
         renderDock(framework, context) +
-      '</div>';
+      '</div>' +
+      renderDossier(framework);
 
     bindEvents();
   }
