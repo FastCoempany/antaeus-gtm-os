@@ -51,6 +51,28 @@
 
   var base = runtime.frameworks["sales-revenue"];
 
+  var supportDossier = [
+    { title:"Proof burden", items:["Lift in forecast accuracy against their last two quarters", "Live walkthrough against a stale deal they already carry", "Reduction in rescue work by managers in Monday reviews"] },
+    { title:"Decision path", items:["VP Sales or CRO sponsor who feels the forecast credibility pain", "RevOps or systems evaluator who owns the stack today", "Frontline managers whose weekly review has to survive the change"] },
+    { title:"Incumbent landscape", items:["Gong or Clari already generating noise the team does not act on", "Salesforce + Outreach or Salesloft as the system of record", "Manual notes, spreadsheets, or founder-led pipeline review"] }
+  ];
+  var objectionLibrary = [
+    { trigger:"we already have Gong", reply:"Good. Which deals did Gong save last quarter, and which did it narrate while they died?" },
+    { trigger:"our reps will never use this", reply:"Understood. Then the first question is whether the rep work it replaces is worse than the rep work it adds. Walk me through what a rep does manually today to get a deal through qualification." },
+    { trigger:"show me the revenue lift", reply:"Happy to. Before I send anything, tell me what forecast miss or win-rate drop made this a live conversation — otherwise the numbers will feel generic." },
+    { trigger:"we need to loop in RevOps", reply:"Good. What should RevOps walk into this session already knowing so the meeting is about decision, not re-briefing?" }
+  ];
+  var inboundQuestionHandlers = [
+    { question:"How is this different from Gong or Clari?", bridge:"Depends on what you are still doing manually despite having them. What does a manager still rescue on Mondays that the tool does not catch?" },
+    { question:"Does this replace Salesforce?", bridge:"No. The question is whether the CRM keeps lying to you — whether stage fidelity, next-step truth, and forecast credibility survive the current process." },
+    { question:"Can you integrate with our stack?", bridge:"Almost certainly. More useful question: which piece of the stack would you consolidate or retire if this actually worked?" }
+  ];
+  var skipAheadHandlers = [
+    { trigger:"asks for pricing too early", reply:"Pricing will matter once we know whether the forecast gap is expensive enough to justify any change. Walk me through what last quarter's miss cost before we size this." },
+    { trigger:"asks for demo too early", reply:"I can show it. First tell me which deal type or forecast call you would want it to survive — otherwise the demo will be generic and useless." },
+    { trigger:"wrong person or redirect", reply:"No problem. Who on your team would feel the forecast or pipeline pain most directly? I would rather earn the right conversation than force this one." }
+  ];
+
   runtime.frameworks["sales-revenue"] = {
     id:base.id,
     label:base.label,
@@ -63,6 +85,10 @@
     proof:base.proof,
     nextReview:base.nextReview,
     routeFocus:base.routeFocus,
+    supportDossier:supportDossier,
+    objectionLibrary:objectionLibrary,
+    inboundQuestionHandlers:inboundQuestionHandlers,
+    skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       {
         title:"Inspect one live commit",
