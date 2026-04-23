@@ -1,0 +1,64 @@
+import { test, expect } from "@playwright/test";
+
+/**
+ * Phase 1.2 smoke tests.
+ *
+ * Purpose: verify that rooms load successfully through the bootstrap flow
+ * without runtime errors. These are NOT functional tests — they assert the
+ * app boots cleanly, not that any specific feature works. Functional E2E
+ * tests land per-room starting in Phase 3 (Discovery Studio migration).
+ *
+ * The bootstrap flow uses the existing demo-seed mechanism:
+ *   /demo-seed.html?autoseed=mm&return=<roomPath>
+ * which seeds localStorage with mid-market demo data and redirects to the
+ * requested room. Identical to what tools/qa/capture-demo-room.js uses.
+ */
+test.describe("room boot smoke tests", () => {
+    test("dashboard loads with seeded demo data", async ({ page }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        const returnPath = encodeURIComponent("/app/dashboard/?demo=1&qa=1");
+        await page.goto(`/demo-seed.html?demo=1&autoseed=mm&return=${returnPath}`);
+
+        await page.waitForURL(/\/app\/dashboard\//, { timeout: 20_000 });
+        await page.waitForLoadState("networkidle");
+
+        // Dashboard must not have thrown any runtime errors during boot.
+        expect(errors, `page errors during boot:\n${errors.join("\n")}`).toEqual([]);
+    });
+
+    test("discovery-studio loads with seeded demo data", async ({ page }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        const returnPath = encodeURIComponent("/app/discovery-studio/?demo=1&qa=1");
+        await page.goto(`/demo-seed.html?demo=1&autoseed=mm&return=${returnPath}`);
+
+        await page.waitForURL(/\/app\/discovery-studio\//, { timeout: 20_000 });
+        await page.waitForLoadState("networkidle");
+
+        // Core Discovery Studio contract rails must be present in the DOM.
+        // These are the invariants Waves 1-4 established; smoke test ensures
+        // they don't silently disappear as other refactors happen.
+        await expect(page.locator(".dsj-framework-btn").first()).toBeVisible();
+        await expect(page.locator(".dsj-jump-btn").first()).toBeVisible();
+        await expect(page.locator("#dsjNextStepDocket")).toBeVisible();
+        await expect(page.locator("#dsjLedgerStrip")).toBeVisible();
+
+        expect(errors, `page errors during boot:\n${errors.join("\n")}`).toEqual([]);
+    });
+
+    test("deal-workspace loads with seeded demo data", async ({ page }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        const returnPath = encodeURIComponent("/app/deal-workspace/?demo=1&qa=1");
+        await page.goto(`/demo-seed.html?demo=1&autoseed=mm&return=${returnPath}`);
+
+        await page.waitForURL(/\/app\/deal-workspace\//, { timeout: 20_000 });
+        await page.waitForLoadState("networkidle");
+
+        expect(errors, `page errors during boot:\n${errors.join("\n")}`).toEqual([]);
+    });
+});

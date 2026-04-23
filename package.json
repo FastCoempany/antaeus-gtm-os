@@ -6,11 +6,13 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "echo 'E2E: use tools/qa/capture-demo-room.js directly until Phase 1.2 Playwright integration lands'",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
     "build:cloudflare": "node tools/deploy/build-cloudflare-assets.js",
     "deploy:cloudflare": "npm run build:cloudflare && npx wrangler versions upload"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@preact/preset-vite": "^2.10.5",
     "@testing-library/preact": "^3.2.4",
     "@types/node": "^25.6.0",
