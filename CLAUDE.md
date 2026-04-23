@@ -544,6 +544,83 @@ Any surface that does any of these fails:
 
 ---
 
+# Part II.5 — Component + Data Architecture
+
+**Authority:** This part is governed by `deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md`. The ADR is the deeper reference; this section is the canonical summary for session-level operation.
+
+## 1. The stack
+
+Antaeus is being migrated from static HTML + localStorage + innerHTML string assembly to a proper component + reactive-data stack. Approved 2026-04-21.
+
+| Layer | Tool |
+|---|---|
+| Component framework | Preact 10 + JSX |
+| Language | TypeScript (strict mode) |
+| Build tool | Vite 8 |
+| Styling | Vanilla CSS + variables (unchanged from today) |
+| Data persistence | Supabase Postgres (Phase 2) |
+| Real-time | Supabase Realtime (Phase 2) |
+| Auth | Supabase Auth (unchanged from today; extended) |
+| Unit + component tests | Vitest 4 + @testing-library/preact |
+| E2E tests | Playwright 1.59 |
+| Error tracking | Sentry Browser SDK |
+| Product analytics + feature flags | Posthog JS |
+| CI/CD | GitHub Actions |
+| Hosting | Cloudflare Pages (unchanged) |
+
+## 2. Code conventions
+
+- **New components** live under `src/` as `.tsx` files. Tests colocate as `<Name>.test.tsx`.
+- **Canonical templates**: `src/_templates/Example.template.tsx` + `.test.tsx` show the expected shape. Copy these when adding a new component.
+- **Strict TypeScript**: no `any`, no suppression comments, no implicit returns. Refactor until the compiler is satisfied.
+- **Path alias**: `@/*` maps to `src/*`. Use it in imports.
+- **Error reporting**: all caught errors that reach top-level state should go through `reportError(error, context)` from `src/lib/observability.ts`, not raw `console.error`.
+- **Analytics events**: emit via `trackEvent(name, properties)`. Names use `snake_case`. Never trigger events in hot render paths; emit on user intent or material state transitions.
+- **Feature flags**: during Phase 3+ rolling migration, every new-stack room lives behind a Posthog flag. Check via `isFeatureEnabled(flagKey)`.
+
+## 3. Commands
+
+```bash
+npm run dev           # Vite dev server with HMR, serves on 127.0.0.1:4173
+npm run build         # Typecheck + Vite production build → dist/
+npm run preview       # Serve built dist/
+npm run typecheck     # Typecheck without emit (fast feedback)
+npm run test          # Vitest run (single pass, CI-style)
+npm run test:watch    # Vitest watch mode
+npm run test:e2e      # Playwright E2E smoke tests
+npm run test:e2e:headed  # Same, with visible browser
+npm run build:cloudflare  # Legacy static-asset build; still used during migration
+npm run deploy:cloudflare # Wrangler deploy (manual; CI handles main branch)
+```
+
+## 4. Migration state
+
+The stack is live as foundation (Phase 1). No rooms have migrated yet. Existing static rooms under `app/<room>/index.html` continue to work unchanged during Phases 1–2. Room migration begins Phase 3 (Discovery Studio first), feature-flagged so rollback is instant.
+
+**Never add a new room on the old stack.** If a new room is needed before its "turn" in the Phase 4 priority list, build it in Preact/TS on the new stack. The old stack is deprecated and in-place only because migration takes time.
+
+## 5. CI gates
+
+Every PR runs (via `.github/workflows/ci.yml`):
+- `npm run typecheck`
+- `npm test` (Vitest)
+- `npm run test:e2e` (Playwright smoke)
+- `npm run build` (Vite)
+
+All four must pass to merge. Merges to `main` re-run the gate and deploy on success.
+
+## 6. Commit-message convention
+
+Any commit that touches `src/`, migrated rooms, workflow files, or architecture-level configuration should reference the ADR it serves in the commit body:
+
+```
+Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6 Phase 1.X
+```
+
+This gives a future session the trail from any commit back to its governing decision.
+
+---
+
 # Part III — The Behavior
 
 The product is engineered around behavior. Every rule here exists because there is evidence — usually a replicated effect at d ≥ 0.5 — that says it works on real users. Behavioral doctrine is the spine connecting mind and face; this part is how we defend the user's attention, confidence, and follow-through.
@@ -887,11 +964,38 @@ These items were in the priority list earlier in the session and are now complet
 
 - **Label renames (Phase 5) verified already done.** During audit, grepped for "Command Center", "Live Discovery", "Content Builder", "Agent Lab" across HTML/JS/CSS. Zero matches. The architecture-reset / nav re-architecture work already renamed them. Phase 5 can be marked done.
 
-### Still owed work (priority order)
+### Foundation migration in progress (ADR-001, approved 2026-04-21)
 
-1. **Discovery Studio + Deal Workspace brittleness debt** (P1 in the 2026-04-16 audit). Both rooms use HTML-string assembly + inline handlers. Waves 1–4 added 4 more render-functions in the same style, which extended the debt. Consider a small `renderSection` helper before continuing to add surfaces, or do a full pattern cleanup later.
-2. **Onboarding audit.** Cannot capture via the demo-seed bootstrap (the script refuses to land there by design); still on the unrefaced list by line-delta. Needs attention since it seeds the whole Brief. Approach: render directly via a temporary bootstrap script that bypasses the gate.
-3. **Deploy pipeline exercise.** The Cloudflare pipeline committed on 2026-04-20 (`5889bde`) has never been run end-to-end. Needs a first `wrangler deploy` to validate.
+The repo is mid-migration from the legacy static-HTML + localStorage + innerHTML pattern onto **Preact + TypeScript + Vite + Supabase (extended) + Vitest/Playwright + Sentry + Posthog + GitHub Actions**. Full rationale and 5-phase plan in `deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md`.
+
+**Phase 1 (Foundation) — COMPLETE as of 2026-04-21:**
+- 1.1 Build tooling (Vite + TS + Preact) — commit `00d723b`
+- 1.2 Testing infrastructure (Vitest + Playwright Test + canonical templates) — commit `98bb3f6`
+- 1.3 CI/CD (GitHub Actions: ci.yml + deploy.yml + pr-preview.yml) — commit `de0539b`
+- 1.4 Observability (Sentry + Posthog SDKs + wrappers) — commit `026c419`
+- 1.5 Canon update + ADR maintenance rhythm — this commit
+
+**Founder actions required before Phase 1 is fully operational:**
+- Create Sentry + Posthog projects; set `VITE_SENTRY_DSN` + `VITE_POSTHOG_API_KEY` in Cloudflore Pages build env (see `.env.example`).
+- Set `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` as GitHub Actions secrets (see `.github/README.md`).
+- Set `CLOUDFLARE_PAGES_PROJECT_NAME` as a GitHub Actions variable.
+- Configure branch protection on `main` with all four CI jobs as required status checks.
+- Set up required-reviewer approval on the `production` environment if desired.
+
+**Phase 2 (Data architecture + migration) — next up:**
+- Design Postgres schema (workspaces + workspace_members + every sacred noun)
+- Write RLS policies and verify isolation
+- Build one-way migration from localStorage → Supabase with idempotency + reversibility
+- Wire Supabase Realtime subscriptions per noun type
+- Spin up separate Supabase project for staging (per founder directive Q2)
+
+**Phase 3–5 (room migration + polish) — later.** See ADR §6.
+
+### Still owed work unrelated to migration
+
+1. **Discovery Studio + Deal Workspace brittleness debt** in the legacy code — partially superseded by the Phase 3 migration (the old code gets replaced, not refactored). Future Autopsy inline-handler cleanup was already applied (`59aef90`) and carries forward.
+2. **Onboarding audit.** Cannot capture via the demo-seed bootstrap (the script refuses to land there by design); still on the unrefaced list by line-delta. Will be addressed when Onboarding migrates in Phase 4.
+3. **Deploy pipeline exercise.** The Cloudflare pipeline committed on 2026-04-20 (`5889bde`) has never been run end-to-end. The new `.github/workflows/deploy.yml` will exercise it once founder sets CI secrets + merges to main.
 
 ### Pre-beta shipping hygiene (mostly untouched)
 
@@ -1045,6 +1149,7 @@ Add entries here when a session meaningfully shifts doctrine or state, so the ne
 |---|---|---|
 | 2026-04-21 | Initial canon draft | Established this document as the canon. Reconciled truth-lock memo: interior is bright, not dark (dark reserved for System Ledger rooms). Amended "rewrite the face, not the mind" to allow mind corrections with founder approval. Set up Linux rendering pipeline (Playwright + Puppeteer Chrome binary + Python static server). Screenshot-based re-audit of all 19 reachable rooms corrected multiple DOM-based audit errors. Discovery Studio contract probe identified 5 of 7 required global rails missing. |
 | 2026-04-21 | Canon execution — sweep + Discovery Studio rails | No doctrine shifts. State shifts: (1) Cross-room drift-mode sweep complete for the four flagged candidates — Future Autopsy designer-voice leak + hardcoded case count removed, Signal Console scoring-formula caption removed, LinkedIn Playbook rainbow cue-meter + marquee dots replaced/deleted, Cold Call Studio rainbow loom-needle neutralized. (2) Discovery Studio reached contract completeness — all 7 global persistent rails now implemented across four commits (Waves 1–4). New state fields: `frameworkState.learnedFacts[]` and `frameworkState.nextStep{}` (auto-populated from branch `clear` text + user input respectively); new top-level `state.dossierOpen`. New render functions: `renderLedgerStrip()`, `renderNextStepDocket()`, `renderDossier()`. New event path: `[data-ledger-jump]` routes to `handleActionTarget("node:")` for click-to-jump. Drawer gates on `hasDossierData(framework)` so the "Dossier" topbar button appears only for frameworks whose runtime files have authored `supportDossier` / `objectionLibrary` / `inboundQuestionHandlers` — currently only `customer-support`. Caught and fixed: `js/discovery-segment-runtime-customer-support.js` was never loaded by `app/discovery-studio/index.html`; its script tag was missing. Added. Doctrine verification: the session respected Part IV §4 (mind-correction protocol) — no mind changes were made without founder approval; the load-order bug was a mechanical/build issue, not a mind change, so no approval gate was triggered. |
+| 2026-04-21 | ADR-001 foundation stack migration — approved + Phase 1 shipped | **Major architectural commitment.** Founder approved ADR-001 adopting Preact + TypeScript + Vite + Supabase (extended for data, not just auth) + Vitest + Playwright Test runner + Sentry + Posthog + GitHub Actions CI/CD as the permanent foundation for Antaeus. Scale target set to ~2,500 concurrent users initially (not 100K). Desktop-only product confirmed — mobile CSS may be deleted during migration. SPA routing and SSR both deferred with documented assessments. Phase 1 (Foundation) shipped in a single session: `00d723b` build tooling (Vite + TS + Preact + Vitest), `98bb3f6` testing infrastructure (Playwright Test runner + canonical templates + three boot smoke tests that assert no pageerror on dashboard / discovery-studio / deal-workspace AND the four Discovery Studio contract rails are visible), `de0539b` GitHub Actions (ci.yml + deploy.yml + pr-preview.yml + `.github/README.md` documenting required secrets and branch-protection setup), `026c419` observability (@sentry/browser + posthog-js + wrappers at src/lib/observability.ts + typed `import.meta.env` + `.env.example`). Canon updated: new Part II.5 (Component + Data Architecture) summarizes the stack and conventions; Part V §1 reflects foundation-in-progress; §2 already references `deliverables/adr/`. No room migrated yet — Phase 2 (data architecture) begins next session. All existing static rooms continue to work unchanged. |
 
 ## 7. Closing: the bar
 
