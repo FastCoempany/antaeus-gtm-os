@@ -862,17 +862,29 @@ Dark System Ledger rooms:
 Utility:
 - **Settings** — Trust Annex, bright, functional cards
 
+### Recently closed (2026-04-21)
+
+These items were in the priority list earlier in the session and are now complete. They remain visible here until the next session confirms nothing regressed.
+
+- **Cross-room drift-mode sweep.** All four flagged drift-mode liabilities fixed, each verified before/after render, each committed separately:
+  - `bb4a280` Future Autopsy — deleted `"Feels closest to a forensic worksheet..."` designer-voice leak; made `Pinned-case ledger · N live cases` count dynamic (was hardcoded "6"); updated the urgent-button tooltip to drop the "six-case autopsy universe" phrasing.
+  - `999be95` Signal Console — removed the `Score = signal count × type weight × source credibility × recency decay` internal-language caption; collapsed numeric thresholds ("91-99 Hot") to color + state mapping; renamed "Score Legend" → "Heat"; incidentally cleaned up mojibake on the `×` signs.
+  - `7f03723` LinkedIn Playbook — replaced the rainbow cue-meter gradient (red→orange→blue→green) with a semantic progress track (neutral base + green fill to score position); deleted the 12-dot decorative marquee strip at the top of the stage panel.
+  - `75c2c21` Cold Call Studio — replaced the rainbow loom-needle (orange→blue→green→red vertical bar) with a 2px neutral hairline; per-thread color dots are now the unambiguous semantic carriers.
+
+- **Discovery Studio — all 7 contract rails implemented.** The rails design plan lives at `deliverables/plans/antaeus-discovery-studio-missing-rails-plan-2026-04-21.md`. Four waves shipped in order:
+  - `e9636c2` Wave 1 — extended `frameworkState` with `learnedFacts[]` and `nextStep{date,owner,attendees,purpose,reason}`; `toggleBranch` now records the branch's `clear` text into `learnedFacts` on open, with dedupe by `nodeId:branchIndex`. No UI change yet; verified via Playwright probe (3 clicks → 2 distinct facts + 1 dedupe skip on re-click).
+  - `c7f9ed7` Wave 2 — next-step docket: sticky card under the segment stack, 5-field responsive grid (date / owner / attendees / purpose wide / reason wide), three state modes (`is-empty` orange border + "No lock yet", `is-partial` amber + "Missing: <fields>", `is-locked` green + "Locked"). Required subset for locked: date + owner + purpose. Updates status on blur via the `change` event (preserves focus mid-typing).
+  - `463d209` Wave 3 — learned + worked ledger strip: two-column grid between segment stack and docket, reads `learnedFacts` (left) and `checkedNodes` resolved to node-text via `findNodeInFramework` (right), click any row to jump and open the source node. Ratio "N / essential total" on the worked column.
+  - `c278590` Wave 4 — support dossier drawer: 520px right-side slide-in summoned via a topbar "Dossier" button that only renders when `hasDossierData(framework)` is true. Sections: proof & decision anchors (nested topic lists), objection library (trigger → reply), inbound question handlers (question → bridge). Close paths: dedicated button, Escape, backdrop click. Currently lights up only for `customer-support`; the other 8 frameworks need their runtime files populated.
+  - Side effect: caught + fixed a load-order bug — `js/discovery-segment-runtime-customer-support.js` existed with rich pre-authored support data but was never included by `app/discovery-studio/index.html`. Added the script tag.
+
 ### Still owed work (priority order)
 
-1. **Discovery Studio — add missing global rails.** Contract requires 7 global persistent rails; the live room implements 2 (framework rail + segment rail). Missing: recover-the-call rail, learned-truth ledger, worked memory surface, next-step docket, support dossier. Rendered probe confirms this. Highest-priority deep work.
-2. **Discovery Studio — brittleness debt.** Still HTML-string assembly + inline handlers in `js/discovery-studio-segment-jump-room.js`; brittleness audit (2026-04-16) flagged as P1. This room is where facial debt and code debt compound most.
-3. **Deal Workspace — brittleness debt.** Same class of problem, P1 in the brittleness audit.
-4. **Onboarding.** Cannot audit via screenshot because the demo-seed script gates on it; still on the unrefaced list by line-delta. Needs attention — it seeds the whole system.
-5. **Cross-room sweep.** Scan all refaced rooms for the drift modes in Part IV §3. Low-risk pass, high consistency payoff. Candidates I saw in DOM that need visual verification:
-   - Signal Console legend bar (scoring-formula caption smells like internal language)
-   - Any rainbow gradients doing decorative work (LinkedIn stage had some dots)
-   - Any designer-voice copy leaks (Future Autopsy had "Feels closest to a forensic worksheet…" in the DOM — check if still present)
-6. **Deploy pipeline exercise.** Cloudflare pipeline committed Apr 20 but never actually run end-to-end. Needs a first deploy to validate.
+1. **Support-dossier content authoring for the other 8 frameworks** (Wave 4 follow-on). The drawer UI is live and gates on data availability, so each framework lights up automatically when its runtime file exports `supportDossier`, `objectionLibrary`, and `inboundQuestionHandlers` arrays. Template is `js/discovery-segment-runtime-customer-support.js`. Remaining frameworks: `legal`, `recruiting`, `product-ux`, `govtech`, `customer-support` *(done)*, `sales-revenue`, `manufacturing`, `data-intelligence`, `ai-native`. Expected volume per framework: ~3 dossier topics × 3 items + 4 objections + 3 inbound handlers + 3 skip-ahead handlers ≈ 19 items of commercial prose.
+2. **Discovery Studio + Deal Workspace brittleness debt** (P1 in the 2026-04-16 audit). Both rooms use HTML-string assembly + inline handlers. Waves 1–4 added 4 more render-functions in the same style, which extended the debt. Consider a small `renderSection` helper before continuing to add surfaces, or do a full pattern cleanup later.
+3. **Onboarding audit.** Cannot capture via the demo-seed bootstrap (the script refuses to land there by design); still on the unrefaced list by line-delta. Needs attention since it seeds the whole Brief. Approach: render directly via a temporary bootstrap script that bypasses the gate.
+4. **Deploy pipeline exercise.** The Cloudflare pipeline committed on 2026-04-20 (`5889bde`) has never been run end-to-end. Needs a first `wrangler deploy` to validate.
 
 ### Pre-beta shipping hygiene (mostly untouched)
 
@@ -1021,6 +1033,7 @@ Add entries here when a session meaningfully shifts doctrine or state, so the ne
 | Date | Session | What shifted |
 |---|---|---|
 | 2026-04-21 | Initial canon draft | Established this document as the canon. Reconciled truth-lock memo: interior is bright, not dark (dark reserved for System Ledger rooms). Amended "rewrite the face, not the mind" to allow mind corrections with founder approval. Set up Linux rendering pipeline (Playwright + Puppeteer Chrome binary + Python static server). Screenshot-based re-audit of all 19 reachable rooms corrected multiple DOM-based audit errors. Discovery Studio contract probe identified 5 of 7 required global rails missing. |
+| 2026-04-21 | Canon execution — sweep + Discovery Studio rails | No doctrine shifts. State shifts: (1) Cross-room drift-mode sweep complete for the four flagged candidates — Future Autopsy designer-voice leak + hardcoded case count removed, Signal Console scoring-formula caption removed, LinkedIn Playbook rainbow cue-meter + marquee dots replaced/deleted, Cold Call Studio rainbow loom-needle neutralized. (2) Discovery Studio reached contract completeness — all 7 global persistent rails now implemented across four commits (Waves 1–4). New state fields: `frameworkState.learnedFacts[]` and `frameworkState.nextStep{}` (auto-populated from branch `clear` text + user input respectively); new top-level `state.dossierOpen`. New render functions: `renderLedgerStrip()`, `renderNextStepDocket()`, `renderDossier()`. New event path: `[data-ledger-jump]` routes to `handleActionTarget("node:")` for click-to-jump. Drawer gates on `hasDossierData(framework)` so the "Dossier" topbar button appears only for frameworks whose runtime files have authored `supportDossier` / `objectionLibrary` / `inboundQuestionHandlers` — currently only `customer-support`. Caught and fixed: `js/discovery-segment-runtime-customer-support.js` was never loaded by `app/discovery-studio/index.html`; its script tag was missing. Added. Doctrine verification: the session respected Part IV §4 (mind-correction protocol) — no mind changes were made without founder approval; the load-order bug was a mechanical/build issue, not a mind change, so no approval gate was triggered. |
 
 ## 7. Closing: the bar
 
