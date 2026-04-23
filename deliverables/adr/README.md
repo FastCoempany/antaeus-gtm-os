@@ -52,4 +52,4 @@ Every ADR requires founder approval before moving from `PROPOSED` to `APPROVED`.
 
 | # | Title | Status |
 |---|---|---|
-| 001 | [Foundation Stack Migration](./adr-001-foundation-stack-migration-2026-04-21.md) | DRAFT — awaiting founder approval |
+| 001 | [Foundation Stack Migration](./adr-001-foundation-stack-migration-2026-04-21.md) | APPROVED 2026-04-21 |

@@ -1,9 +1,10 @@
 # ADR-001 — Foundation Stack Migration
 
-- **Status:** DRAFT — awaiting founder approval
-- **Date:** 2026-04-21
+- **Status:** APPROVED
+- **Date drafted:** 2026-04-21
+- **Date approved:** 2026-04-21
 - **Authors:** Claude (Anthropic) with Founder direction
-- **Approvers:** Founder
+- **Approvers:** Founder (signed §11 on 2026-04-21)
 - **Supersedes:** None (this is the first ADR)
 - **Superseded by:** None
 - **Related:** `CLAUDE.md` (canon), `deliverables/audits/antaeus-app-brittleness-audit-2026-04-16.md`, `GTM-OS-EXHAUSTIVE-IMPROVEMENT-PLAN.md`
@@ -40,7 +41,7 @@ The founder has stated that the product's trajectory requires:
 - An absolutely beautiful user experience across every surface
 - Nothing ever breaks
 - Updates are smooth and expertly wired
-- Eventually supporting 100,000+ concurrent users
+- Eventually supporting ~2,500 concurrent users comfortably, with room to scale further without re-architecting
 - No clock pressure — willingness to spend significantly more time on foundation work now in exchange for durability later
 
 None of these are achievable with the current architecture. Specifically:
@@ -273,6 +274,7 @@ To prevent scope creep, this ADR explicitly does NOT include:
 - **Redesigning the mind.** Canon Parts I–IV are untouched. The room purposes, sacred nouns, compounding rules, facial architecture, and behavioral doctrine are not being changed — only the tools we use to implement them.
 - **Adding a new pricing tier, entitlement system, or billing integration.** Out of scope.
 - **Building server-side rendering (SSR) for rooms.** Rooms render client-side; only public pages may get prerendered at build time if beneficial for SEO. Full SSR for authenticated rooms is explicitly deferred to a future ADR.
+- **Mobile responsive design.** The product is explicitly desktop-only. Antaeus is a deep operating tool, not a quick-glance mobile app. Any existing mobile CSS breakpoints or responsive rules that add build complexity, debugging cost, or maintenance overhead during migration may be deleted without further approval. A distinct mobile experience (a lite-view or similar) may be considered separately in a future ADR; it is not part of this foundation migration.
 - **Internationalization / i18n.** Out of scope.
 - **Mobile-native apps (iOS/Android).** Out of scope. Web remains the target.
 - **Going SPA (single-page routing).** Deferred. Each room stays its own HTML entry point.
@@ -668,17 +670,32 @@ The migration is designed to be reversible at every phase. Specifically:
 
 ---
 
-## 9. Open questions
+## 9. Open questions — resolved 2026-04-21
 
-These are deliberately left open for founder input. The ADR cannot move to APPROVED status until these are resolved, either here or in a separate founder directive.
+Each question is paired with the founder's answer as given on 2026-04-21. This section is preserved as a historical record; future ADRs should reference the founder answer here rather than re-litigate.
 
-1. **Multi-workspace support.** Should the schema model a user belonging to multiple workspaces (team feature) from day one, or should we start single-workspace-per-user and evolve? My recommendation: model `workspaces` + `workspace_members` tables from day one (easy to build now, expensive to retrofit) but keep the UI single-workspace until a real use case emerges.
-2. **Staging environment.** Do we spin up a separate Supabase project for staging/preview deploys, or use branching within one project? My recommendation: separate staging project — cleaner isolation.
-3. **Sentry + Posthog costs at scale.** Both have free tiers. At 100K concurrent users, paid plans are needed. Is this in the budget? Should be, but worth confirming.
-4. **PR review process.** Do we require founder approval on every PR, or set up auto-merge for routine changes after CI passes? My recommendation: founder approval required during migration phases; routine auto-merge after migration is complete.
-5. **Mobile breakpoints.** Current CSS has some responsive rules; should the migrated rooms explicitly target mobile/tablet, or stay desktop-first? My recommendation: stay desktop-first (Antaeus is a deep operating tool, not a quick-glance mobile app). Revisit post-migration.
-6. **Deferred: SPA routing.** Worth revisiting post-Phase 4. A future ADR.
-7. **Deferred: real SSR.** Worth revisiting if SEO becomes a competitive need. A future ADR.
+1. **Multi-workspace support.** Should the schema model a user belonging to multiple workspaces (team feature) from day one, or should we start single-workspace-per-user and evolve?
+   - **Founder answer:** Yes — model multi-workspace from day one to avoid expensive retrofit later. Schema includes `workspaces` and `workspace_members` tables from Phase 2 Subphase 2.1. UI remains single-workspace-per-user for now; the data model supports expansion without migration.
+
+2. **Staging environment.** Do we spin up a separate Supabase project for staging/preview deploys, or use branching within one project?
+   - **Founder answer:** Separate Supabase project for staging/preview. Cleaner isolation. Phase 1 Subphase 1.3 provisions both.
+
+3. **Sentry + Posthog costs at scale.** What scale are we budgeting for?
+   - **Founder answer:** Target is ~2,500 concurrent users comfortably, not 100K. Free-tier Sentry and Posthog are likely sufficient for that range; paid plans only if we approach their limits. Budget proportionate to that target.
+
+4. **PR review process.** Founder approval per PR during migration, or auto-merge for routine changes after CI passes?
+   - **Founder answer:** Founder approval required during migration phases. Routine auto-merge permitted after migration is complete and the new stack is stable.
+
+5. **Mobile breakpoints.** Stay desktop-first, or target mobile/tablet explicitly?
+   - **Founder answer:** 100% desktop-focused. Anything mobile-related that lags the build should be deleted during migration. A distinct mobile experience (a lite-view or similar) may come later as a separate product. See §5 (non-goals) for the hard constraint.
+
+6. **Deferred: SPA routing.** Worth revisiting post-Phase 4?
+   - **Founder answer:** Deferring is acceptable only if retrofitting SPA routing later is not a headache vs. doing it now.
+   - **Claude's honest read for the record:** Deferring is not a headache later. Each room is already being built as a clean Preact component tree during Phase 3–4. Moving from multi-page to SPA is a top-level bootstrap change (what renders where, how routing intercepts navigation) and touches no room-internal code. The real prerequisite for SPA is having clean components — which Phases 1–3 build. Retrofitting SPA onto unclean components would be painful; retrofitting onto clean components is straightforward. Therefore: deferring is the correct call. A future ADR can introduce SPA routing once Phase 4 is substantially done.
+
+7. **Deferred: real SSR.** Worth revisiting if SEO becomes a competitive need?
+   - **Founder answer:** Deferring accepted, but SEO-competitive public pages are a real requirement.
+   - **Plan to honor this:** Public pages (landing, privacy, auth) remain plain HTML, which is already the most SEO-competitive posture possible — content is pre-rendered and indexable without any JS. Phase 5 polishes these pages. If at any point a public page needs dynamic content that affects indexing, Vite supports static site generation (SSG) via plugins that pre-render at build time (different from live SSR, which is what was deferred). SSG is viable without a new ADR; full live SSR for authenticated rooms stays deferred.
 
 ---
 
@@ -705,15 +722,17 @@ This ADR becomes part of the canon hierarchy. Specifically:
 
 ## 11. Founder approval block
 
-*To be completed by founder at time of approval.*
+- [x] I have read this ADR in full.
+- [x] I have resolved the open questions in §9 (or accepted Claude's recommendations where not otherwise specified).
+- [x] I approve the stack choices in §2.
+- [x] I approve the 5-phase implementation plan in §6.
+- [x] I approve the rollback/unwind protocol in §8.
+- [x] I approve updating `CLAUDE.md` per §10.
 
-- [ ] I have read this ADR in full.
-- [ ] I have resolved the open questions in §9 (or accepted Claude's recommendations where not otherwise specified).
-- [ ] I approve the stack choices in §2.
-- [ ] I approve the 5-phase implementation plan in §6.
-- [ ] I approve the rollback/unwind protocol in §8.
-- [ ] I approve updating `CLAUDE.md` per §10.
-
-**Approved by:** _____________________
-**Date of approval:** _____________________
-**Notes / conditions:** _____________________
+**Approved by:** Founder
+**Date of approval:** 2026-04-21
+**Notes / conditions:**
+- Scale target is ~2,500 concurrent users initially (not 100K as earlier drafts assumed).
+- Desktop-only. Mobile responsive CSS may be deleted during migration if it costs anything.
+- SPA routing deferred with Claude's assessment that retrofit is not a headache later.
+- SEO competitiveness is a real requirement; public pages stay static HTML; SSG available via Vite without a new ADR if needed.
