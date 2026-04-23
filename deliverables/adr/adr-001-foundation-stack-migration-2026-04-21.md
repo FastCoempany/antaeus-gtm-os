@@ -281,4 +281,102 @@ To prevent scope creep, this ADR explicitly does NOT include:
 
 If any of the above becomes desirable later, it gets its own ADR.
 
+---
+
+## 6. Implementation plan
+
+Five phases, each with explicit tasks, gates, acceptance criteria, and rollback points. A phase does not begin until the previous phase's gate is passed.
+
+### Phase 0 — ADR approval
+
+**Purpose:** Founder reviews this document and formally approves or requests revisions.
+
+**Tasks:**
+- Founder reads ADR in full
+- Founder resolves any open questions (see §9)
+- Founder marks status DRAFT → APPROVED in this doc
+- Canon (`CLAUDE.md`) Part V §2 updated to reference `deliverables/adr/` as a new canonical-doc location
+
+**Gate before Phase 1 begins:** ADR status = APPROVED, committed to git.
+
+**Rollback:** Trivial — delete the ADR, return to status quo. No code has changed.
+
+---
+
+### Phase 1 — Foundation setup (estimated 3–4 weeks)
+
+**Purpose:** Install the stack alongside the existing static app without disturbing any running room. Every existing room continues to work unchanged throughout this phase.
+
+**Subphase 1.1 — Build tooling (est. 2–4 days)**
+
+Tasks:
+- Install Vite + TypeScript + Preact as dev dependencies. Configure `vite.config.ts`, `tsconfig.json`, `package.json` scripts.
+- Configure Vite for multi-page mode: each `app/<room>/index.html` stays a separate entry point; Vite bundles its JS module.
+- Set up `src/` directory for new TS/TSX code. Old JS files in `js/` remain untouched.
+- Set up `src/lib/` for shared utilities.
+- Ensure `npm run build` produces a `dist/` folder that matches the current Cloudflare Pages expectation.
+- Update `wrangler.jsonc` if needed so the deploy pipeline consumes `dist/` output instead of the repo root.
+
+Gate:
+- Running `npm run build` succeeds.
+- Running `npm run dev` serves the app locally with HMR.
+- Visiting any existing room in dev mode renders exactly as it does today (no regressions).
+- Cloudflare Pages preview deploy succeeds against a test branch.
+
+**Subphase 1.2 — Testing infrastructure (est. 2–3 days)**
+
+Tasks:
+- Install Vitest + @testing-library/preact. Configure `vitest.config.ts`.
+- Carry over existing Playwright setup (`tools/qa/`) — already working as of Wave 4 session.
+- Write a canonical template test file that future tests can copy.
+- Wire `npm test` → Vitest unit + component. `npm run e2e` → Playwright.
+
+Gate:
+- `npm test` runs successfully (even if there are zero real tests yet).
+- `npm run e2e` runs the existing capture-demo-room.js against a single room and passes.
+
+**Subphase 1.3 — CI/CD (est. 2–3 days)**
+
+Tasks:
+- Set up `.github/workflows/ci.yml`: on PR, run type check + unit tests + E2E tests + build.
+- Set up `.github/workflows/deploy.yml`: on merge to `main`, build and deploy to Cloudflare Pages production. Block deploy if CI failed.
+- Set up PR preview deploys via Cloudflare Pages' GitHub integration.
+- Set required status checks on `main` branch.
+
+Gate:
+- A trial PR triggers CI and shows type check, unit tests, E2E tests passing/failing correctly.
+- Merging a trial PR to a test branch triggers a preview deploy at a known URL.
+
+**Subphase 1.4 — Observability (est. 1–2 days)**
+
+Tasks:
+- Create Sentry project. Add Sentry Browser SDK to the existing shell (loaded via `<script>` tag for now; will be bundled properly in migrated rooms).
+- Create Posthog project. Add Posthog JS SDK via the same pattern.
+- Configure both with environment-based DSNs (dev vs. prod).
+- Verify test error triggers a Sentry event.
+- Verify a test `posthog.capture` shows up in the Posthog dashboard.
+
+Gate:
+- A test error in production reaches Sentry within seconds.
+- A test event reaches Posthog.
+
+**Subphase 1.5 — Canon + ADR maintenance rhythm (est. 1 day)**
+
+Tasks:
+- Update `CLAUDE.md` Part V to reflect new stack availability, new working conventions, new test/deploy commands.
+- Add a new `deliverables/adr/README.md` documenting the ADR process (when to write one, template, approval flow).
+- Establish: any PR touching `src/` or migration-phase rooms references which phase + ADR it serves.
+
+Gate:
+- Canon is updated.
+- ADR README is in place.
+- A dry-run "would a new session reading this understand the stack in 10 minutes" passes.
+
+**Overall Phase 1 gate (must all be true to start Phase 2):**
+- All four subphases green.
+- No existing room regressed (verified by running the existing Playwright capture script against all rooms — identical screenshots before and after).
+- Founder has reviewed and approved the Phase 1 closeout.
+
+**Phase 1 rollback:** Foundation coexists with the old app; removing `src/`, `vite.config.ts`, `tsconfig.json`, and `package.json` build scripts returns the app to its pre-Phase-1 state. No user-visible change.
+
 <!-- END_OF_DRAFT -->
