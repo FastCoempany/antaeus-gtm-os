@@ -318,6 +318,17 @@
     });
   }
 
+  function setNextStepField(field, value){
+    if(["date","owner","attendees","purpose","reason"].indexOf(field) === -1) return;
+    var frameworkState = getFrameworkState(state.frameworkId);
+    if(!frameworkState.nextStep || typeof frameworkState.nextStep !== "object"){
+      frameworkState.nextStep = { date:"", owner:"", attendees:"", purpose:"", reason:"" };
+    }
+    frameworkState.nextStep[field] = String(value == null ? "" : value);
+    persist();
+    render();
+  }
+
   function toggleBranch(nodeId, branchIndex){
     var frameworkState = getFrameworkState(state.frameworkId);
     var segmentKey = nodeId.split("--")[0];
@@ -611,6 +622,56 @@
       '</section>';
   }
 
+  function renderNextStepDocket(){
+    var frameworkState = getFrameworkState(state.frameworkId);
+    var ns = frameworkState.nextStep || {};
+    var fields = {
+      date: ns.date || "",
+      owner: ns.owner || "",
+      attendees: ns.attendees || "",
+      purpose: ns.purpose || "",
+      reason: ns.reason || ""
+    };
+    var required = ["date","owner","purpose"];
+    var missing = required.filter(function(k){ return !fields[k]; });
+    var anyFilled = Object.keys(fields).some(function(k){ return !!fields[k]; });
+    var mode = missing.length === 0 ? "locked" : anyFilled ? "partial" : "empty";
+    var statusLabel = mode === "locked"
+      ? "Locked"
+      : mode === "partial"
+        ? "Missing: " + missing.join(", ")
+        : "No lock yet";
+    var prompt = mode === "empty"
+      ? "No next step locked. A next step is not valid unless it has date, owner, and reason."
+      : mode === "partial"
+        ? "Tighten the lock before the call closes."
+        : "Earned. The lock survives the call.";
+    var fieldConfig = [
+      { key:"date", label:"Date", type:"date", placeholder:"" },
+      { key:"owner", label:"Owner", type:"text", placeholder:"Name + role" },
+      { key:"attendees", label:"Attendees", type:"text", placeholder:"Who else joins" },
+      { key:"purpose", label:"Purpose", type:"text", placeholder:"What the meeting decides", wide:true },
+      { key:"reason", label:"Reason it follows", type:"text", placeholder:"Earned truth that makes this move real", wide:true }
+    ];
+    var body = fieldConfig.map(function(f){
+      var cls = "dsj-docket-field" + (f.wide ? " dsj-docket-field--wide" : "");
+      return '<label class="' + cls + '">' +
+        '<span class="dsj-docket-field-label">' + esc(f.label) + '</span>' +
+        '<input type="' + f.type + '" class="dsj-docket-input" data-next-step-field="' + esc(f.key) + '" value="' + esc(fields[f.key]) + '"' +
+        (f.placeholder ? ' placeholder="' + esc(f.placeholder) + '"' : "") + '>' +
+        '</label>';
+    }).join("");
+    return '' +
+      '<section class="dsj-next-step-docket is-' + mode + '" id="dsjNextStepDocket">' +
+        '<div class="dsj-docket-head">' +
+          '<span class="dsj-docket-label">Next-step lock</span>' +
+          '<span class="dsj-docket-status is-' + mode + '">' + esc(statusLabel) + '</span>' +
+        '</div>' +
+        '<div class="dsj-docket-prompt">' + esc(prompt) + '</div>' +
+        '<div class="dsj-docket-body">' + body + '</div>' +
+      '</section>';
+  }
+
   function renderCenter(framework, openSegmentKey){
     return '' +
       '<main class="dsj-center">' +
@@ -619,6 +680,7 @@
         '<div class="dsj-stack">' +
           visibleSegments(framework).map(function(segment){ return renderPhase(segment, openSegmentKey); }).join("") +
         '</div>' +
+        renderNextStepDocket() +
       '</main>';
   }
 
@@ -802,6 +864,13 @@
       var dockButton = event.target.closest("[data-dock-view]");
       if(dockButton && root.contains(dockButton)){
         setDockView(dockButton.getAttribute("data-dock-view"));
+      }
+    });
+
+    root.addEventListener("change", function(event){
+      var nextStepField = event.target.closest("[data-next-step-field]");
+      if(nextStepField && root.contains(nextStepField)){
+        setNextStepField(nextStepField.getAttribute("data-next-step-field"), event.target.value);
       }
     });
 
