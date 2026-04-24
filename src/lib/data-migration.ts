@@ -379,9 +379,18 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
         // artifact_type, title. Confirmed 2026-04-24 via
         // `select column_name, is_nullable, column_default from
         // information_schema.columns where table_name = 'studio_artifacts'`.
-        // All other columns either have defaults or are nullable.
+        //
+        // `studio` additionally carries a CHECK constraint
+        // (studio_artifacts_studio_check) restricting it to:
+        //   'discovery', 'sequence_composer', 'trigger_angle', 'asset_builder',
+        //   'conversion', 'cfo_negotiation', 'reply_engine', 'outbound_os',
+        //   'quota_workback', 'thin_icp'.
+        // We pick 'discovery' for the blob row — it's the broadest value and
+        // Discovery Studio is the first Phase 4 room migration, so the blob
+        // naturally "lives" there until unpacked. `artifact_type` + `title`
+        // have no CHECK constraint; the placeholder string satisfies them.
         placeholderFields: {
-            studio: MIGRATION_BLOB_PLACEHOLDER,
+            studio: "discovery",
             artifact_type: MIGRATION_BLOB_PLACEHOLDER,
             title: MIGRATION_BLOB_PLACEHOLDER
         }
