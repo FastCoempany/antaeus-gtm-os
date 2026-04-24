@@ -92,13 +92,45 @@ function initPosthog(): ObservabilityStatus["posthog"] {
 /**
  * Report a handled error to Sentry. Falls back to console.error when
  * Sentry is not initialized (local dev, tests).
+ *
+ * Non-Error values (e.g. Supabase returns plain objects with {message,
+ * code, hint, details}) are wrapped in a real Error instance before being
+ * captured — otherwise Sentry emits a generic "Object captured as exception
+ * with keys: ..." placeholder instead of a useful title + stack trace.
  */
 export function reportError(error: unknown, context?: Record<string, unknown>): void {
+    const wrapped = error instanceof Error ? error : wrapAsError(error);
     if (!sentryInitialized) {
-        console.error("[observability] reportError (sentry disabled):", error, context);
+        console.error("[observability] reportError (sentry disabled):", wrapped, context);
         return;
     }
-    Sentry.captureException(error, context ? { extra: context } : undefined);
+    Sentry.captureException(wrapped, context ? { extra: context } : undefined);
+}
+
+function wrapAsError(value: unknown): Error {
+    if (value === null || value === undefined) {
+        return new Error("unknown error");
+    }
+    if (typeof value === "string") {
+        return new Error(value);
+    }
+    if (typeof value === "object") {
+        const v = value as Record<string, unknown>;
+        const parts: string[] = [];
+        if (typeof v.message === "string") parts.push(v.message);
+        if (typeof v.code === "string" || typeof v.code === "number") {
+            parts.push(`(code: ${v.code})`);
+        }
+        if (typeof v.hint === "string") parts.push(`hint: ${v.hint}`);
+        if (typeof v.details === "string") parts.push(`details: ${v.details}`);
+        const msg = parts.length > 0 ? parts.join(" ") : "non-Error object thrown";
+        const e = new Error(msg);
+        // Preserve the original as a `cause` so Sentry shows the original
+        // object as a secondary context.
+        (e as Error & { cause?: unknown }).cause = value;
+        return e;
+    }
+    return new Error(String(value));
 }
 
 /**
