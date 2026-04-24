@@ -318,6 +318,44 @@ describe("pass-through migrators", () => {
         expect(calls.signalConsoleAccounts).toHaveLength(0);
     });
 
+    it("injects placeholder values for NOT NULL label columns", async () => {
+        // Tables like icps, deals, sequences mark name/account_name as NOT NULL.
+        // The migrator must inject a distinctive placeholder so the insert
+        // satisfies the constraint AND Phase 3+ room migrations can detect
+        // blob rows by matching the placeholder string.
+        const storage = makeStorage({
+            gtmos_deal_workspaces: JSON.stringify([{ id: "d1" }])
+        });
+        const { client, calls } = makeSpyDataClient();
+        await runDataMigration({
+            storage,
+            dataClient: client,
+            __bypassFlag: true
+        });
+
+        expect(calls.deals).toHaveLength(1);
+        const row = calls.deals![0] as { account_name?: string };
+        expect(row.account_name).toBe("__gtmos_migration_blob__");
+    });
+
+    it("injects user_id for tables that require it explicitly", async () => {
+        // pipeline_settings + studio_artifacts don't have a default on user_id,
+        // so the migrator must look up the current user and set it on insert.
+        const storage = makeStorage({
+            gtmos_qw_inputs: JSON.stringify({ target_quota: 1000000 })
+        });
+        const { client, calls } = makeSpyDataClient();
+        await runDataMigration({
+            storage,
+            dataClient: client,
+            __bypassFlag: true
+        });
+
+        expect(calls.pipelineSettings).toHaveLength(1);
+        const row = calls.pipelineSettings![0] as { user_id?: string };
+        expect(row.user_id).toBe("test-user");
+    });
+
     it("preserves non-JSON values as raw strings in the blob (no error)", async () => {
         // Some legacy localStorage keys (e.g. gtmos_handoff_exported) were
         // written as bare strings, not JSON-wrapped. The migrator must not

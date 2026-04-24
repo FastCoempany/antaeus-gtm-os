@@ -246,97 +246,164 @@ function resolveMigrators(): Migrator[] {
  * localStorage into it requires room-specific knowledge that belongs in
  * the Phase 4 Onboarding + Settings migrations, not this generic tool.
  */
-const PASSTHROUGH_MAP: Record<string, string[]> = {
-    icps: [
-        "gtmos_icp_analytics",
-        "gtmos_deal_links",
-        "gtmos_sw_persona_maps",
-        "gtmos_sw_prospects",
-        "gtmos_sw_query_cards"
-    ],
-    deals: [
-        "gtmos_deal_workspaces",
-        "gtmos_deal_stage_history",
-        "gtmos_deal_outcomes",
-        "gtmos_deal_room_health"
-    ],
-    sequences: [
-        "gtmos_angles",
-        "gtmos_outbound_touches",
-        "gtmos_linkedin_log",
-        "gtmos_outbound_seed"
-    ],
-    signal_console_accounts: [
-        "gtmos_sc_v4",
-        "gtmos_sc_usage_v4",
-        "gtmos_sc_morning_v4",
-        "gtmos_sc_batches_v4",
-        "gtmos_sc_guide_v1",
-        "gtmos_signal_room_health",
-        "gtmos_ta_signals"
-    ],
-    discovery_frameworks: [
-        "gtmos_discovery_worked"
-    ],
-    discovery_call_logs: [
-        "gtmos_discovery_stats",
-        "gtmos_discovery_agenda",
-        "gtmos_call_handoff",
-        "gtmos_cold_call_log"
-    ],
-    pipeline_settings: [
-        "gtmos_qw_inputs",
-        "gtmos_quota_targets",
-        "gtmos_territory",
-        "gtmos_ta_setup",
-        "gtmos_ta_theses",
-        "gtmos_ta_approaches",
-        "gtmos_ta_accounts",
-        "gtmos_ta_dispositions",
-        "gtmos_ta_swap_history",
-        "gtmos_ta_retier_history",
-        "gtmos_ta_calibrations"
-    ],
-    studio_artifacts: [
-        "gtmos_playbook",
-        "gtmos_playbook_notes",
-        "gtmos_autopsy_log_v1",
-        "gtmos_poc_data"
-    ],
-    proofs: [
-        "gtmos_cfo_worked_moves"
-    ],
-    advisor_deployments: [
-        "gtmos_advisor_deployments",
-        "gtmos_advisor_registry"
-    ],
-    readiness_snapshots: [
-        "gtmos_readiness_snapshot"
-    ],
-    handoff_artifacts: [
-        "gtmos_handoff_exported"
-    ]
-};
-
-const MIGRATORS: Migrator[] = (
-    Object.entries(PASSTHROUGH_MAP) as Array<[TableName, string[]]>
-).map(([table, keys]) => makePassthroughMigrator(table, keys));
+/**
+ * Distinctive placeholder value used for NOT NULL label columns on legacy
+ * tables (icps.name, deals.account_name, etc.). The pass-through migrator
+ * inserts a single blob row per table — the actual values live in
+ * data.migrated_from_localstorage. This placeholder lets Phase 3+ room
+ * migrations detect blob rows by matching this string and unpacking them
+ * into properly-typed per-item rows.
+ */
+const MIGRATION_BLOB_PLACEHOLDER = "__gtmos_migration_blob__";
 
 /**
- * Build a pass-through migrator for a given table.
+ * Per-table migrator configuration. Lives as an array so ordering is
+ * explicit (parent nouns before children for FK integrity — not strictly
+ * required today because FKs use ON DELETE SET NULL, but cheap to
+ * preserve the discipline).
+ *
+ * `placeholderFields` covers NOT NULL label columns we can't derive from
+ * localStorage. `requiresUserId` tables don't have the usual
+ * `default auth.uid()` on user_id; the migrator injects it from
+ * data.currentUserId().
+ */
+interface MigratorConfig {
+    table: TableName;
+    keys: string[];
+    placeholderFields?: Record<string, string>;
+    requiresUserId?: boolean;
+}
+
+const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
+    {
+        table: "icps",
+        keys: [
+            "gtmos_icp_analytics",
+            "gtmos_deal_links",
+            "gtmos_sw_persona_maps",
+            "gtmos_sw_prospects",
+            "gtmos_sw_query_cards"
+        ],
+        placeholderFields: { name: MIGRATION_BLOB_PLACEHOLDER }
+    },
+    {
+        table: "deals",
+        keys: [
+            "gtmos_deal_workspaces",
+            "gtmos_deal_stage_history",
+            "gtmos_deal_outcomes",
+            "gtmos_deal_room_health"
+        ],
+        placeholderFields: { account_name: MIGRATION_BLOB_PLACEHOLDER }
+    },
+    {
+        table: "sequences",
+        keys: [
+            "gtmos_angles",
+            "gtmos_outbound_touches",
+            "gtmos_linkedin_log",
+            "gtmos_outbound_seed"
+        ],
+        placeholderFields: {
+            name: MIGRATION_BLOB_PLACEHOLDER,
+            sequence_key: MIGRATION_BLOB_PLACEHOLDER
+        }
+    },
+    {
+        table: "signal_console_accounts",
+        keys: [
+            "gtmos_sc_v4",
+            "gtmos_sc_usage_v4",
+            "gtmos_sc_morning_v4",
+            "gtmos_sc_batches_v4",
+            "gtmos_sc_guide_v1",
+            "gtmos_signal_room_health",
+            "gtmos_ta_signals"
+        ],
+        placeholderFields: { account_key: MIGRATION_BLOB_PLACEHOLDER }
+    },
+    {
+        table: "discovery_frameworks",
+        keys: ["gtmos_discovery_worked"],
+        placeholderFields: {
+            name: MIGRATION_BLOB_PLACEHOLDER,
+            framework_key: MIGRATION_BLOB_PLACEHOLDER
+        }
+    },
+    {
+        table: "discovery_call_logs",
+        keys: [
+            "gtmos_discovery_stats",
+            "gtmos_discovery_agenda",
+            "gtmos_call_handoff",
+            "gtmos_cold_call_log"
+        ]
+    },
+    {
+        table: "pipeline_settings",
+        keys: [
+            "gtmos_qw_inputs",
+            "gtmos_quota_targets",
+            "gtmos_territory",
+            "gtmos_ta_setup",
+            "gtmos_ta_theses",
+            "gtmos_ta_approaches",
+            "gtmos_ta_accounts",
+            "gtmos_ta_dispositions",
+            "gtmos_ta_swap_history",
+            "gtmos_ta_retier_history",
+            "gtmos_ta_calibrations"
+        ],
+        requiresUserId: true
+    },
+    {
+        table: "studio_artifacts",
+        keys: [
+            "gtmos_playbook",
+            "gtmos_playbook_notes",
+            "gtmos_autopsy_log_v1",
+            "gtmos_poc_data"
+        ],
+        requiresUserId: true
+    },
+    {
+        table: "proofs",
+        keys: ["gtmos_cfo_worked_moves"]
+    },
+    {
+        table: "advisor_deployments",
+        keys: ["gtmos_advisor_deployments", "gtmos_advisor_registry"]
+    },
+    {
+        table: "readiness_snapshots",
+        keys: ["gtmos_readiness_snapshot"]
+    },
+    {
+        table: "handoff_artifacts",
+        keys: ["gtmos_handoff_exported"]
+    }
+];
+
+const MIGRATORS: Migrator[] = PASSTHROUGH_CONFIGS.map(makePassthroughMigrator);
+
+/**
+ * Build a pass-through migrator from a per-table config.
  *
  * Reads every assigned localStorage key, stops short if no keys had values
  * (nothing to migrate), otherwise assembles one `data.migrated_from_localstorage`
  * blob and inserts a single row via the data-client.
  *
+ * Inserts include:
+ *   - any `placeholderFields` from config (covers NOT NULL label columns)
+ *   - `user_id` if `requiresUserId: true` (for tables without auth.uid() default)
+ *   - the migration blob in `data`
+ *
  * Skip paths are counted in `rowsSkipped`, not `errors` — a user who never
  * used Deal Workspace legitimately has no `gtmos_deal_workspaces` key and
  * the migrator should silently skip `deals`.
  */
-function makePassthroughMigrator(
-    table: TableName,
-    keys: string[]
-): Migrator {
+function makePassthroughMigrator(config: MigratorConfig): Migrator {
+    const { table, keys, placeholderFields, requiresUserId } = config;
     return {
         table,
         async run({ storage, data, dryRun }): Promise<TableReport> {
@@ -401,13 +468,36 @@ function makePassthroughMigrator(
                 };
             }
 
-            const row = {
+            const row: Record<string, unknown> = {
+                ...(placeholderFields ?? {}),
                 data: {
                     migrated_from_localstorage: payload,
                     migrated_at: new Date().toISOString(),
                     migration_version: "phase-2.3-passthrough"
                 }
             };
+
+            if (requiresUserId) {
+                const userId = await data.currentUserId();
+                if (!userId) {
+                    return {
+                        table,
+                        keysRead,
+                        rowsTransformed,
+                        rowsInserted: 0,
+                        rowsSkipped: 0,
+                        errors: [
+                            ...errors,
+                            {
+                                key: "<user_id>",
+                                reason:
+                                    "table requires explicit user_id but no authenticated user found"
+                            }
+                        ]
+                    };
+                }
+                row.user_id = userId;
+            }
 
             try {
                 // Type-erase across the generic boundary — each concrete
