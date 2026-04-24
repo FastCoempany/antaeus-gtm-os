@@ -28,7 +28,7 @@ create table if not exists public.proofs (
     id uuid primary key default gen_random_uuid(),
     workspace_id uuid not null default public.current_user_default_workspace_id()
         references public.workspaces(id) on delete cascade,
-    created_by uuid default (select auth.uid()) references auth.users(id) on delete set null,
+    created_by uuid default auth.uid() references auth.users(id) on delete set null,
     deal_id uuid references public.deals(id) on delete set null,
     claim text,
     claim_owner text,
@@ -65,7 +65,7 @@ create table if not exists public.advisor_deployments (
     id uuid primary key default gen_random_uuid(),
     workspace_id uuid not null default public.current_user_default_workspace_id()
         references public.workspaces(id) on delete cascade,
-    created_by uuid default (select auth.uid()) references auth.users(id) on delete set null,
+    created_by uuid default auth.uid() references auth.users(id) on delete set null,
     deal_id uuid references public.deals(id) on delete set null,
     advisor_name text,
     advisor_tier text check (advisor_tier in ('investor', 'advisor', 'customer', 'other', null)),
@@ -103,7 +103,7 @@ create table if not exists public.readiness_snapshots (
     id uuid primary key default gen_random_uuid(),
     workspace_id uuid not null default public.current_user_default_workspace_id()
         references public.workspaces(id) on delete cascade,
-    created_by uuid default (select auth.uid()) references auth.users(id) on delete set null,
+    created_by uuid default auth.uid() references auth.users(id) on delete set null,
     overall_score integer check (overall_score between 0 and 100),
     verdict text check (verdict in ('hire_ready', 'partial', 'thin')),
     dimension_scores jsonb not null default '{}'::jsonb,
@@ -132,7 +132,7 @@ create table if not exists public.handoff_artifacts (
     id uuid primary key default gen_random_uuid(),
     workspace_id uuid not null default public.current_user_default_workspace_id()
         references public.workspaces(id) on delete cascade,
-    created_by uuid default (select auth.uid()) references auth.users(id) on delete set null,
+    created_by uuid default auth.uid() references auth.users(id) on delete set null,
     title text,
     sections jsonb not null default '{}'::jsonb,
     completeness_score integer check (completeness_score between 0 and 100),
