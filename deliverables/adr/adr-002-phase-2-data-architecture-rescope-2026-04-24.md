@@ -322,6 +322,10 @@ Phase 2 subphases are rewritten below to reflect the existing-schema-adoption ap
 - **Gate to start:** ADR-002 approved (this doc's §11 signed).
 - **Gate to proceed to Phase 3:** all four subphases below green.
 
+> **Note on estimates.** All time estimates in this ADR — "3–4 days," "1–2 days," "~2 weeks" — are **solo-engineer calendar baselines**. They're written for a future human reader who picks this up cold and needs to scope the work against a normal development pace. In practice, Claude-assisted sessions ship each Phase 2 subphase in the range of 15–90 wall-clock minutes (coding + incremental commits + brief founder dashboard actions). The ADR keeps the human-scale estimates because they communicate relative complexity better than raw wall-clock, and because future sessions should not assume Claude-speed is guaranteed for every task.
+
+
+
 ### Subphase 2.1 — Supabase Branches setup + schema extension (est. 3–4 days)
 
 **Tasks:**

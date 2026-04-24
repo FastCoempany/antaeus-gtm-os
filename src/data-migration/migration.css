@@ -87,6 +87,58 @@ code, tt {
     margin: 0;
 }
 
+/* ─── Environment banner ────────────────────────────────────────────── */
+
+.migration-page__env {
+    border-left: 3px solid var(--ant-ink-40);
+    background: var(--ant-field-raised);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 2px;
+}
+
+.migration-page__env--production {
+    border-left-color: var(--ant-accent-orange);
+    background: #FFF3EC;
+}
+
+.migration-page__env--preview {
+    border-left-color: var(--ant-accent-blue);
+    background: #EEF3FB;
+}
+
+.migration-page__env--thin {
+    border-left-color: var(--ant-ink-40);
+    background: var(--ant-field);
+}
+
+.migration-page__env-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ant-ink-70);
+    margin: 0 0 4px;
+    text-transform: uppercase;
+}
+
+.migration-page__env-value {
+    font-size: 16px;
+    margin: 0 0 6px;
+    line-height: 1.4;
+}
+
+.migration-page__env-value strong {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.migration-page__env-hint {
+    font-size: 13px;
+    color: var(--ant-ink-70);
+    margin: 0;
+}
+
 /* ─── Status strip ──────────────────────────────────────────────────── */
 
 .migration-page__status {

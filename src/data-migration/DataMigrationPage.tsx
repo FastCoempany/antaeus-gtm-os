@@ -35,6 +35,10 @@ export function DataMigrationPage(): JSX.Element {
         typeof window !== "undefined" && window.localStorage
             ? window.localStorage.getItem(MIGRATION_COMPLETE_KEY)
             : null;
+    const appEnv = (import.meta.env.VITE_APP_ENV ?? "development").toLowerCase();
+    const supabaseHost = resolveSupabaseHost(
+        import.meta.env.VITE_SUPABASE_URL ?? ""
+    );
 
     async function run(dryRun: boolean): Promise<void> {
         setRunning(true);
@@ -75,6 +79,28 @@ export function DataMigrationPage(): JSX.Element {
                     in Supabase. Your localStorage is not modified.
                 </p>
             </header>
+
+            <section
+                class={`migration-page__env migration-page__env--${envTone(
+                    appEnv
+                )}`}
+            >
+                <div class="migration-page__env-inner">
+                    <p class="migration-page__env-kicker">Target environment</p>
+                    <p class="migration-page__env-value">
+                        <strong>{appEnv}</strong>
+                        {supabaseHost ? (
+                            <>
+                                {" "}
+                                · Supabase <code>{supabaseHost}</code>
+                            </>
+                        ) : null}
+                    </p>
+                    <p class="migration-page__env-hint">
+                        {envHint(appEnv)}
+                    </p>
+                </div>
+            </section>
 
             <section class="migration-page__status">
                 <StatusRow
@@ -282,4 +308,38 @@ function formatDate(iso: string): string {
     } catch {
         return iso;
     }
+}
+
+/**
+ * Parse the Supabase URL to show a short, copy-pasteable host (without
+ * scheme or path), so the user can eyeball which project they're pointed
+ * at before clicking the live-migration button.
+ */
+function resolveSupabaseHost(url: string): string {
+    if (!url) return "";
+    try {
+        return new URL(url).host;
+    } catch {
+        return url;
+    }
+}
+
+/**
+ * Tone mapping for the env banner. Production is orange (pressure),
+ * preview is blue (informational), anything else is a thin neutral.
+ */
+function envTone(env: string): "production" | "preview" | "thin" {
+    if (env === "production") return "production";
+    if (env === "preview") return "preview";
+    return "thin";
+}
+
+function envHint(env: string): string {
+    if (env === "production") {
+        return "Writes land in the real Supabase project. Use Dry run first.";
+    }
+    if (env === "preview") {
+        return "Writes land in the Supabase preview branch. Safe for smoke testing.";
+    }
+    return "Local development. Make sure VITE_SUPABASE_URL is set before running.";
 }

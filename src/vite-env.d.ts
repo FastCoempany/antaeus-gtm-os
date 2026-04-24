@@ -18,6 +18,15 @@ interface ImportMetaEnv {
     readonly VITE_SUPABASE_URL?: string;
     /** Supabase anon key. Phase 2 introduces this. Safe for client bundle (row-level-security policies protect data). */
     readonly VITE_SUPABASE_ANON_KEY?: string;
+
+    /**
+     * Environment tag for the app as a whole: "production" | "preview" | "development".
+     * Set via Cloudflare Workers Builds Variables with different values for Production
+     * (main branch) vs Preview (feature branches). Used by in-app surfaces like the
+     * data-migration page to make the target environment legible before destructive
+     * actions. Separate from VITE_SENTRY_ENV so the two can diverge if needed.
+     */
+    readonly VITE_APP_ENV?: string;
 }
 
 interface ImportMeta {
