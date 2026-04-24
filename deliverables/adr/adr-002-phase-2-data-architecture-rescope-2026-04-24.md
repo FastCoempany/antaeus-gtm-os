@@ -409,3 +409,136 @@ Phase 2 subphases are rewritten below to reflect the existing-schema-adoption ap
 - Main-branch deploy reads/writes from production Supabase.
 - Feature-branch preview reads/writes from preview Supabase.
 - No cross-contamination (a preview insert does not appear in production).
+
+---
+
+## 7. Acceptance criteria + success metrics
+
+Phase 2 is accepted as complete when all are true:
+
+**Schema correctness:**
+- All 14 tables exist in both `main` and `preview` Supabase branches with identical structure.
+- Every existing table has a `workspace_id` column referencing `workspaces(id)`.
+- Every data table has RLS policies that check workspace membership via `workspace_members`.
+- Every one of the 4 existing auth users has a default workspace with them as `owner`.
+
+**Isolation verification:**
+- RLS integration test: a user in workspace A cannot read rows belonging to workspace B under any tested attack path.
+- Cross-branch isolation test: a write to the `preview` branch's tables does not appear in `main`.
+
+**Client integration:**
+- `src/lib/data-client.ts` compiles under strict TypeScript with zero `any`.
+- Two-tab realtime test: Tab A writes, Tab B sees the update within 1 second (same workspace).
+- Optimistic-update rollback test: a server error triggers local-state rollback + user-visible error.
+- Offline cache test: disable network, make changes, re-enable, changes sync to server.
+
+**Migration tool:**
+- Dry-run against founder's account produces correct diff.
+- Live-run migrates data successfully.
+- Rerunning produces zero duplicate rows (idempotency).
+- Rollback: migration flipped off after run leaves Supabase + localStorage in non-destroyed state.
+
+**Branch-aware builds:**
+- Main-branch production build reads from production Supabase.
+- Feature-branch preview build reads from preview Supabase.
+- CF Workers Builds logs show correct variable export.
+
+**Observability:**
+- Sentry captures any migration errors at the `data_migration` breadcrumb category.
+- Posthog tracks `data_migration_started` / `data_migration_completed` / `data_migration_error` events.
+
+**Canon alignment:**
+- CLAUDE.md Part II.5 updated with Phase 2 completion state.
+- CLAUDE.md Part V §6 gets a new session-log entry.
+- No sacred-noun substance (Part I) was changed.
+
+---
+
+## 8. Rollback / unwind protocol
+
+Phase 2 is designed to be reversible at every subphase.
+
+**Subphase 2.1 rollback (schema extension):**
+- Migrations tested against `preview` branch before merging to `main`.
+- If preview reveals a problem, fix migrations in preview; don't merge until verified.
+- If production merge unexpectedly breaks: Supabase Branches support rollback to pre-merge state via the dashboard.
+
+**Subphase 2.2 rollback (data client):**
+- Data client is a new file (`src/lib/data-client.ts`) not consumed by any existing room yet.
+- Rolling back = deleting the file + reverting generated types + reverting `js/supabase-config.js` env-var read.
+- No user impact because no room uses it yet.
+
+**Subphase 2.3 rollback (migration tool):**
+- Migration is behind a Posthog feature flag; default OFF until explicitly enabled.
+- Flip the flag OFF; no user's localStorage is touched again.
+- Already-migrated users retain both Supabase + localStorage copies (migration does not delete source until confirmed).
+- Reverse migration possible via a companion `src/migration/supabase-to-localstorage.ts` that can be authored if ever needed.
+
+**Subphase 2.4 rollback (branch-aware builds):**
+- Revert the CF Workers Builds commands to their pre-Phase-2 values (`npx wrangler deploy` and `npm ci && npm run deploy:cloudflare` without the env-var export prefixes).
+- Delete the PROD and PREVIEW Supabase variables (keep `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` pointing at production).
+- Feature-branch builds start pointing at production again (pre-Phase-2 state).
+
+**Full Phase 2 unwind:**
+- Revert all migration files and schema changes via `supabase db reset` on preview branch + manual schema revert on main (more invasive; only in extreme scenarios).
+- Delete `preview` branch.
+- Remove `src/lib/data-client.ts`, `src/lib/db-types.ts`, `src/migration/`.
+- Revert `js/supabase-config.js`.
+- Canon update reversed.
+
+Rollback is most painful after migration tool has run on real users. Mitigation: feature flag gates that behavior; default off until each user is explicitly opted in.
+
+---
+
+## 9. Open questions — resolved
+
+1. **Should the migration tool run automatically on first login post-deploy, or require explicit user opt-in?**
+   - **Decision:** explicit opt-in via Posthog feature flag `data_migration_live`. Default: OFF for all users. Founder opts themselves in first as pilot. After pilot is stable, enable globally. Rationale: a silent auto-migration on first login is a better user experience but a worse risk posture for pre-beta. Explicit opt-in trades convenience for reversibility.
+2. **Should we enable per-PR Supabase branches (auto-created per PR, destroyed on merge)?**
+   - **Decision:** defer to Phase 3. Phase 2 uses only `main` + persistent `preview`. Per-PR branches are valuable when multiple rooms migrate concurrently in Phase 3+ and feature branches need isolated data shapes. Not worth the extra setup in Phase 2.
+3. **Should `js/supabase-config.js` be removed or kept?**
+   - **Decision:** keep through Phase 2 and Phase 3. Unmigrated rooms (anything not yet on Preact) still load it via `<script>` tag. Phase 3 rooms use `import { supabaseClient } from '@/lib/data-client'` instead. When all rooms migrate (Phase 4 complete), `js/supabase-config.js` can be deleted.
+4. **Should the four new noun tables (`proofs`, `advisor_deployments`, `readiness_snapshots`, `handoff_artifacts`) include any columns beyond the standard pattern?**
+   - **Decision:** Phase 2 adds them with the minimum viable column set (id, workspace_id, user_id, timestamps, trigger, data jsonb, one or two typed top-level cols per table as needed — e.g., `proofs.kill_rule text`, `readiness_snapshots.overall_score numeric`). Column expansion is per-room-migration in Phase 3+; each room migration can add columns its UI needs via additive migrations.
+
+---
+
+## 10. Canon references + canon updates
+
+This ADR supersedes:
+- ADR-001 §9 Q2 (separate-Supabase-project-for-staging answer)
+- ADR-001 §6 Phase 2 subphase structure (rescoped in §6 above)
+
+This ADR preserves:
+- ADR-001 §2 stack decisions
+- ADR-001 §9 Q1 (multi-workspace from day one)
+- ADR-001 §9 Q3 (~2,500 concurrent users scale target)
+- All other ADR-001 answers and decisions
+
+Canon updates triggered by this ADR:
+- **`CLAUDE.md` Part II.5** gets a note pointing at ADR-002 for the revised Phase 2 plan.
+- **`CLAUDE.md` Part V §1** "Foundation migration in progress" section updated: Phase 2 subphases renumbered per this ADR; Supabase state acknowledged as substantially pre-built.
+- **`CLAUDE.md` Part V §6 session log** gets a new entry for 2026-04-24 covering: (a) discovery of existing Supabase state, (b) ADR-002 approval, (c) switch to Supabase Branches, (d) revised Phase 2 scope.
+- **`deliverables/adr/README.md`** gets a new row in the Current ADRs table.
+
+No doctrine (canon Parts I–IV) is touched.
+
+---
+
+## 11. Founder approval block
+
+- [x] I have read this ADR in full.
+- [x] I have resolved the open questions in §9 (or accepted Claude's recommendations where not otherwise specified).
+- [x] I approve Decision A: adopt existing schema; extend rather than replace; workspace-scoping retrofit while tables are empty; 4 new sacred-noun tables (`proofs`, `advisor_deployments`, `readiness_snapshots`, `handoff_artifacts`); Signal + Motion stay as jsonb-inside-parent for now.
+- [x] I approve Decision B: Supabase Branches for staging (supersedes ADR-001 §9 Q2). Persistent `preview` branch in Phase 2; per-PR branches deferred to Phase 3.
+- [x] I approve the revised Phase 2 implementation plan in §6.
+- [x] I approve the rollback/unwind protocol in §8.
+- [x] I approve the canon updates described in §10.
+
+**Approved by:** Founder
+**Date of approval:** 2026-04-24
+**Notes / conditions:**
+- Phase 2 starts when founder gives explicit go-ahead on a subsequent session.
+- Migration tool default-OFF via Posthog flag; founder opts in first.
+- Per-PR Supabase branches deferred to Phase 3.
+- `js/supabase-config.js` preserved through Phase 3; removed only when Phase 4 completes.
