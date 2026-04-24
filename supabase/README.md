@@ -16,14 +16,14 @@ supabase/
 ├── config.toml                                  # Supabase CLI project config
 ├── .gitignore                                   # .branches/, .temp/
 └── migrations/
-    ├── 0001_workspaces_and_members.sql          # new tenant boundary
-    ├── 0002_backfill_default_workspaces.sql     # one workspace per existing user
-    ├── 0003_workspace_id_retrofit.sql           # add workspace_id to existing tables
-    ├── 0004_new_noun_tables.sql                 # proofs, advisor_deployments, readiness_snapshots, handoff_artifacts
-    └── 0005_workspace_scoped_rls.sql            # flip the RLS gate from user-scoped → workspace-scoped
+    ├── 20260424170000_workspaces_and_members.sql        # new tenant boundary
+    ├── 20260424170001_backfill_default_workspaces.sql   # one workspace per existing user
+    ├── 20260424170002_workspace_id_retrofit.sql         # add workspace_id to existing tables
+    ├── 20260424170003_new_noun_tables.sql               # proofs, advisor_deployments, readiness_snapshots, handoff_artifacts
+    └── 20260424170004_workspace_scoped_rls.sql          # flip the RLS gate from user-scoped → workspace-scoped
 ```
 
-Migration files are ordered and one-way. They are applied in lexical order by the Supabase CLI. New migrations must use the next free `NNNN_` prefix and never rewrite history.
+Migration files are ordered and one-way. The Supabase CLI requires filenames in `<14-digit-timestamp>_<name>.sql` format (YYYYMMDDHHMMSS); it does **not** recognize short `NNNN_` prefixes — they silently return an empty migration list. New migrations should use `supabase migration new <name>` to get a well-formed timestamp prefix, or hand-author one in the same 14-digit format.
 
 ---
 
