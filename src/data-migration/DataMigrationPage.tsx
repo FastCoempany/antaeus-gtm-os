@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import type { JSX } from "preact";
 import {
     MIGRATION_COMPLETE_KEY,
@@ -6,7 +6,7 @@ import {
     runDataMigration,
     type MigrationReport
 } from "@/lib/data-migration";
-import { isFeatureEnabled } from "@/lib/observability";
+import { isFeatureEnabled, onFeatureFlagsReady } from "@/lib/observability";
 
 /**
  * Data migration UI — Phase 2.3.
@@ -30,7 +30,24 @@ export function DataMigrationPage(): JSX.Element {
     const [running, setRunning] = useState(false);
     const [lastError, setLastError] = useState<string | null>(null);
 
-    const flagOn = isFeatureEnabled(MIGRATION_FEATURE_FLAG);
+    // Posthog fetches feature flags async after init(), so a synchronous
+    // isFeatureEnabled() call on first mount often returns false before flags
+    // arrive. We seed with the sync value, then subscribe to the flag-load
+    // event and re-check. onFeatureFlagsReady fires once on first load and
+    // again on subsequent flag updates (e.g. after identify()).
+    const [flagOn, setFlagOn] = useState<boolean>(() =>
+        isFeatureEnabled(MIGRATION_FEATURE_FLAG)
+    );
+
+    useEffect(() => {
+        // Re-check immediately in case flags loaded between render + mount.
+        setFlagOn(isFeatureEnabled(MIGRATION_FEATURE_FLAG));
+        const unsubscribe = onFeatureFlagsReady(() => {
+            setFlagOn(isFeatureEnabled(MIGRATION_FEATURE_FLAG));
+        });
+        return unsubscribe;
+    }, []);
+
     const markerSetAt =
         typeof window !== "undefined" && window.localStorage
             ? window.localStorage.getItem(MIGRATION_COMPLETE_KEY)

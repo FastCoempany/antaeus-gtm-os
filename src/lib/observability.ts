@@ -137,3 +137,21 @@ export function isFeatureEnabled(flagKey: string): boolean {
     if (!posthogInitialized) return false;
     return posthog.isFeatureEnabled(flagKey) ?? false;
 }
+
+/**
+ * Subscribe to Posthog flag-load / flag-update events. Returns an unsubscribe
+ * function. The callback fires once flags are first loaded and again whenever
+ * the user's flags change (e.g. after identify()).
+ *
+ * Needed by UIs that render flag-dependent controls on mount — Posthog's flag
+ * fetch is async after init(), so a first-paint `isFeatureEnabled()` call
+ * returns the default (false) until the fetch completes.
+ */
+export function onFeatureFlagsReady(callback: () => void): () => void {
+    if (!posthogInitialized) {
+        // Posthog is not initialized; the callback will never fire. Return a
+        // no-op unsubscribe so callers don't need to branch.
+        return () => undefined;
+    }
+    return posthog.onFeatureFlags(callback);
+}
