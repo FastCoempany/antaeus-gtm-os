@@ -375,7 +375,14 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
             "gtmos_poc_data"
         ],
         requiresUserId: true,
-        placeholderFields: { studio: MIGRATION_BLOB_PLACEHOLDER }
+        // Schema has multiple NOT NULL columns without defaults — the legacy
+        // table was designed to tag every artifact with both its owning
+        // studio and its type. Migration blob fills both with the placeholder.
+        // If schema introspection reveals more required columns, add them here.
+        placeholderFields: {
+            studio: MIGRATION_BLOB_PLACEHOLDER,
+            artifact_type: MIGRATION_BLOB_PLACEHOLDER
+        }
     },
     {
         table: "proofs",
