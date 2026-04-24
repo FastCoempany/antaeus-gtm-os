@@ -37,7 +37,14 @@ export default defineConfig({
                 // Migrated room entry points land here over the course of Phase 3+.
                 // For Phase 1 foundation, we build a placeholder entry so `vite build`
                 // succeeds and CI can exercise the pipeline.
-                phase1: resolve(__dirname, "src/phase1-placeholder.ts")
+                phase1: resolve(__dirname, "src/phase1-placeholder.ts"),
+
+                // Phase 2.3 — data migration tool. Served at /data-migration/
+                // in dev (via src/migration/index.html) and under
+                // dist/src/migration/ in prod. The Cloudflare build rewrites
+                // the path to /data-migration/ as a top-level route — see
+                // tools/deploy/build-cloudflare-assets.js when Phase 2.4 lands.
+                migration: resolve(__dirname, "src/migration/index.html")
             }
         }
     },
