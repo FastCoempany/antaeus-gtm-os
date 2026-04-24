@@ -260,3 +260,152 @@ Keeping the decision open in this ADR so a future contributor understands the pa
 - The rooms currently render signal and motion data directly from the parent objects' jsonb. Promoting to standalone tables requires rewriting that rendering path in every affected room.
 - The denormalized shape is desirable for Realtime ("new signal arrived on account X → update view"), but the jsonb-inside-parent shape is adequate for most current use cases.
 - Deferring preserves the schema's working shape. When the first real need for standalone Signal/Motion tables appears (likely during Phase 4 room migration), a future ADR makes the call with concrete justification.
+
+---
+
+## 4. Consequences
+
+### 4.1 Positive
+
+- **Phase 2 calendar cost drops from 3–4 weeks to ~2 weeks.** Schema design + RLS + auth are already done.
+- **Zero data loss risk during schema extension.** Existing tables have 0 rows; adding `workspace_id` + updating RLS happens before any real data arrives.
+- **Preserves existing auth.** 4 real users keep their accounts; no forced re-signup.
+- **Multi-workspace-ready from the moment data starts flowing.** UI stays single-workspace-per-user (per §9 Q1 answer), but the data model supports team-style expansion later without migration pain.
+- **Supabase Branches give per-PR isolation for free.** Every feature branch can point at a fresh DB copy; preview deploys show real workflows without touching production.
+- **Less operational overhead than separate-project staging.** One Supabase project to monitor, one billing line, schema propagation automatic.
+- **Schema migrations are testable end-to-end.** Author migration → apply to a Supabase branch → verify in preview CF deploy → merge to main → schema propagates to main Supabase branch (production). This replaces the "write SQL, hope it works on first production apply" pattern.
+
+### 4.2 Negative
+
+- **Workspace retrofit adds one migration step that has to be authored carefully.** Changing RLS policies mid-lifecycle has failure modes (lock-outs if a policy is mis-written). Mitigation: Phase 2 Subphase 2.2 includes a dedicated test-in-preview-branch step before any production change.
+- **Client-side data layer is more complex than single-user-scoped would have been.** Every query has to go through workspace-membership resolution. One extra join or filter per operation. Mitigation: wrap in the typed client (`src/lib/data-client.ts`) so individual rooms never see the complexity.
+- **CF Workers Builds variable-per-branch limitation adds a small build-script complication.** The script that picks prod-vs-preview Supabase credentials based on build branch is custom code the team owns. Not hard, but is a new component.
+- **Supabase Branches is a newer feature than separate projects.** If it has a surprise failure mode, we discover it. Mitigation: Branches has been GA since late 2024; well-tested in production elsewhere. The `main` branch is always a fallback.
+
+### 4.3 Neutral
+
+- **Stack from ADR-001 unchanged.** Preact + TS + Vite + Vitest/Playwright + Sentry + Posthog + GHA + Cloudflare Workers Builds — all the same.
+- **Canon Parts I–IV unchanged.** Mind / face / behavior / integration doctrine is stack-independent.
+- **Existing SQL files in repo stay in place.** They're the historical record of the initial bootstrap. New migrations land in `supabase/migrations/` (new directory, standard Supabase CLI layout) going forward.
+
+### 4.4 Risks
+
+- **Workspace-scoping RLS could lock out existing users during the retrofit.** Mitigation: retrofit runs in the `preview` branch first, verified with a test query from each existing user's session token, then merged to main.
+- **Supabase Branches has rate limits / connection-pool nuances we haven't hit yet.** Mitigation: start with `main` + one `preview` branch. Don't enable per-PR branch creation until Phase 3+ when we actually benefit from it.
+- **Signal/Motion stay as jsonb longer than optimal for reactivity.** Mitigation: when a room needs fine-grained Signal reactivity, a targeted ADR-003 promotes Signal to its own table. Not a Phase 2 blocker.
+- **4 existing real users might have localStorage data that needs to survive workspace-retrofit migration.** Mitigation: the localStorage-to-Supabase migration tool runs AFTER workspace retrofit is in place. Each user's migration writes their rows into their default (auto-created) workspace.
+
+---
+
+## 5. Non-goals
+
+This ADR does NOT:
+
+- **Redesign any existing table's columns.** Column additions are fine; deletions or type changes are out of scope for Phase 2.
+- **Touch auth providers or user records.** 4 users keep their accounts and sessions.
+- **Change `js/supabase-config.js`'s hardcoded fallback values.** The env-var read is additive; the hardcoded URL + anon key remain as the fallback for local dev without `.env.local`.
+- **Build team collaboration features.** Schema supports multi-workspace; UI remains single-workspace-per-user per §9 Q1. Collaboration features are a separate future ADR.
+- **Migrate existing localStorage data across all 4 existing users automatically.** The migration tool runs behind a feature flag, opt-in per-user initially.
+- **Promote Signal or Motion to standalone tables.** Explicitly deferred to a future ADR when justified by Phase 3+ room needs.
+- **Deprecate the existing `js/` runtime files.** They continue serving unmigrated rooms through Phase 4. Only rooms that migrate to Preact stop using them.
+- **Adopt Supabase Edge Functions.** No server-side JS is planned for Phase 2. If a feature genuinely requires server code (e.g., cross-workspace aggregation for Readiness), a future ADR evaluates Edge Functions vs. alternatives.
+
+---
+
+## 6. Revised Phase 2 implementation plan
+
+Phase 2 subphases are rewritten below to reflect the existing-schema-adoption approach and Supabase Branches.
+
+### Phase 2 overall scope
+
+- **Estimated calendar cost:** ~2 weeks (down from 3–4 weeks in ADR-001).
+- **Gate to start:** ADR-002 approved (this doc's §11 signed).
+- **Gate to proceed to Phase 3:** all four subphases below green.
+
+### Subphase 2.1 — Supabase Branches setup + schema extension (est. 3–4 days)
+
+**Tasks:**
+
+1. **Create `preview` branch in Supabase dashboard.** `Branches` → `Create branch` → name: `preview` → source: `main` (production). Schema forks; data is empty.
+2. **Add a `supabase/` directory** to the repo with the standard CLI layout. Run `supabase init` (CLI).
+3. **Capture the existing state as migration zero.** Dump current production schema via `supabase db dump --schema public --data-only=false` into `supabase/migrations/0000_initial_schema_snapshot.sql`. This gives the CLI a baseline to diff against.
+4. **Author migration 0001: `workspaces` + `workspace_members` tables.** Schema:
+   - `workspaces` (id uuid pk, name text, owner_id uuid references auth.users, data jsonb, created_at, updated_at)
+   - `workspace_members` (workspace_id uuid, user_id uuid, role text check in ('owner','admin','member'), invited_at, joined_at, primary key (workspace_id, user_id))
+   - RLS on both: members can read their workspaces; owners can update/delete.
+5. **Author migration 0002: backfill default workspaces for existing users.** For each of the 4 existing auth users, insert a `workspaces` row owned by them (name: `<email> workspace`) and a `workspace_members` row linking them as `owner`.
+6. **Author migration 0003: `workspace_id` column retrofit on existing tables.** Add `workspace_id uuid not null default (select id from workspaces where owner_id = auth.uid() limit 1) references workspaces(id) on delete cascade` to: `icps`, `deals`, `sequences`, `signal_console_accounts`, `discovery_frameworks`, `discovery_call_logs`, `pipeline_settings`, `profiles`, `studio_artifacts`. (Tables with 0 rows take the column trivially; default gets resolved on next insert.)
+7. **Author migration 0004: `proofs`, `advisor_deployments`, `readiness_snapshots`, `handoff_artifacts` tables.** Follow the existing pattern: id uuid pk + workspace_id uuid + user_id uuid (created-by) + typed top-level cols + data jsonb + timestamps + trigger.
+8. **Author migration 0005: update RLS policies on all data tables** from `user_id`-based to `workspace_id`-based. Policy pattern: `(select auth.uid()) in (select user_id from workspace_members where workspace_id = <this row's workspace_id>)`.
+9. **Apply all migrations to `preview` branch first.** Verify via test queries from each of the 4 existing users' sessions that they can still read/write their data.
+10. **Merge `preview` → `main` in Supabase dashboard.** Schema propagates to production. Zero row changes in production (all existing tables are 0 rows; backfill migrations for workspaces + workspace_members insert 4+4 rows).
+
+**Gate:**
+- Preview branch has all 14 tables (10 existing + 4 new) with RLS enabled and workspace-scoping active.
+- Production branch has the same after merge.
+- A test query from each of the 4 existing users succeeds (reads 0 rows, writes new rows into their default workspace).
+- Zero production downtime.
+
+**Rollback:**
+- If `preview` branch reveals a problem: don't merge; fix migrations in `preview`; re-apply.
+- If production merge breaks something (unlikely given preview verification): rollback via Supabase branch operations (Branches support rollback to pre-merge state).
+
+### Subphase 2.2 — Typed data client (est. 3–4 days)
+
+**Tasks:**
+
+1. **Generate TS types from the extended schema.** `supabase gen types typescript --linked > src/lib/db-types.ts`. Commit generated file.
+2. **Build `src/lib/data-client.ts`:**
+   - Exports a typed client wrapping supabase-js
+   - One namespace per noun: `dataClient.icps.read()`, `.write()`, `.subscribe()`, etc.
+   - Reads current workspace from auth context (`auth.uid()` → their primary workspace)
+   - Optimistic update pattern: write to local state + issue server request in parallel; reconcile on success; rollback on failure with user-visible notification
+   - Offline-first: reads from localStorage cache first, then revalidates from server
+   - Realtime subscription wrapper: per-noun subscribe that yields inserts/updates/deletes for the current workspace's rows
+3. **Enable Realtime on all 14 tables** via Supabase dashboard (Replication → toggle each table on).
+4. **Update `js/supabase-config.js`:** read `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` from `import.meta.env`; fall back to hardcoded production values if unset (for local-dev-without-env-file safety).
+5. **Unit tests for the data client** (Vitest): happy path, optimistic-update rollback, offline behavior, realtime event dispatch.
+
+**Gate:**
+- `src/lib/db-types.ts` compiles with strict TS; every existing jsonb `data` column gets a typed interface.
+- `npm test` passes with data-client tests.
+- Integration test: two browser tabs on the same account. Tab A writes an ICP; Tab B receives it via Realtime within 1 second.
+
+### Subphase 2.3 — localStorage-to-Supabase migration tool (est. 3–4 days)
+
+**Tasks:**
+
+1. **Build `src/migration/localstorage-to-supabase.ts`:**
+   - Reads every known `gtmos_*` localStorage key
+   - For each key, transforms the stored value into Supabase-insert-ready rows, scoped to the user's default workspace
+   - Idempotent: content-derived IDs where feasible (e.g., hash of ICP name + user_id); timestamp tie-breakers otherwise
+   - Dry-run mode: reports what WOULD be written without writing
+   - Preserves localStorage source until server confirmation; deletes from localStorage only after successful write
+2. **Wire behind a Posthog feature flag `data_migration_live`.** Default: OFF. Manually enabled per user or globally when ready.
+3. **Build a migration-status UI component** (in `src/components/MigrationStatus.tsx`): shows migration progress when the flag is on; allows user to opt out and keep localStorage as source of truth if they prefer.
+4. **Test against an existing user's real localStorage data.** Use the founder's account as the pilot. Dry-run first. If dry-run output looks correct, live-run. Verify in Supabase that rows landed correctly.
+
+**Gate:**
+- Dry-run against the founder's account produces a correct diff.
+- Live-run against one user successfully migrates their data.
+- Rerunning the migration produces 0 duplicate rows.
+- Rollback path tested: if migration is flipped off after running, user keeps Supabase + localStorage copies; nothing is destroyed.
+
+### Subphase 2.4 — CF Workers Builds branch-aware credentials (est. 1–2 days)
+
+**Tasks:**
+
+1. **Add four new CF Workers Builds variables:**
+   - `VITE_SUPABASE_URL_PROD` = production branch URL (same as current hardcoded URL)
+   - `VITE_SUPABASE_ANON_KEY_PROD` = production anon key
+   - `VITE_SUPABASE_URL_PREVIEW` = preview branch URL (from Supabase dashboard after Subphase 2.1 creates the preview branch)
+   - `VITE_SUPABASE_ANON_KEY_PREVIEW` = preview anon key
+2. **Update the build/deploy/version commands in CF Workers Builds:**
+   - Deploy command (runs on main-branch pushes): `export VITE_SUPABASE_URL="$VITE_SUPABASE_URL_PROD" VITE_SUPABASE_ANON_KEY="$VITE_SUPABASE_ANON_KEY_PROD" && npm run build && npx wrangler deploy`
+   - Version command (runs on feature-branch pushes): `export VITE_SUPABASE_URL="$VITE_SUPABASE_URL_PREVIEW" VITE_SUPABASE_ANON_KEY="$VITE_SUPABASE_ANON_KEY_PREVIEW" && npm ci && npm run build && npm run build:cloudflare && npx wrangler versions upload`
+3. **Verify:** feature-branch build logs show the PREVIEW values being exported; main-branch build logs show PROD values. A deployed preview points at the Supabase preview branch (zero rows initially); a deployed production points at the Supabase main branch.
+
+**Gate:**
+- Main-branch deploy reads/writes from production Supabase.
+- Feature-branch preview reads/writes from preview Supabase.
+- No cross-contamination (a preview insert does not appear in production).
