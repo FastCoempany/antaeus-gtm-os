@@ -214,8 +214,10 @@ describe("pass-through migrators", () => {
     function makeSpyDataClient(): {
         client: import("./data-client").DataClient;
         calls: Record<string, unknown[]>;
+        upserts: Record<string, unknown[]>;
     } {
         const calls: Record<string, unknown[]> = {};
+        const upserts: Record<string, unknown[]> = {};
         const makeAccessor = (name: string) => {
             calls[name] = [];
             return {
@@ -231,8 +233,38 @@ describe("pass-through migrators", () => {
             };
         };
 
+        // Raw-client stub. Backs two paths:
+        //   (a) idempotency check — .from(t).select(...).eq(...).limit(1)
+        //       returns { data: [] } (no existing blob row, so proceed)
+        //   (b) upsert — .from(t).upsert(row, opts).select(...).single()
+        //       records the call and returns success
+        const rawClient = {
+            from: (table: string) => {
+                if (!upserts[table]) upserts[table] = [];
+                const queryBuilder = {
+                    select: () => queryBuilder,
+                    eq: () => queryBuilder,
+                    limit: () => Promise.resolve({ data: [], error: null }),
+                    single: () => Promise.resolve({ data: null, error: null })
+                };
+                return {
+                    select: () => queryBuilder,
+                    upsert: (row: unknown) => {
+                        upserts[table]!.push(row);
+                        const upsertBuilder = {
+                            select: () => upsertBuilder,
+                            single: () =>
+                                Promise.resolve({ data: row, error: null })
+                        };
+                        return upsertBuilder;
+                    }
+                };
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as unknown as AntaeusSupabaseClient;
+
         const client = {
-            client: {} as unknown as AntaeusSupabaseClient,
+            client: rawClient,
             currentUserId: () => Promise.resolve("test-user"),
             currentWorkspace: () => Promise.resolve(null),
             workspaces: makeAccessor("workspaces"),
@@ -252,7 +284,7 @@ describe("pass-through migrators", () => {
             handoffArtifacts: makeAccessor("handoffArtifacts")
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as unknown as import("./data-client").DataClient;
-        return { client, calls };
+        return { client, calls, upserts };
     }
 
     it("skips a table with no matching localStorage keys (silent, no error)", async () => {
@@ -339,10 +371,10 @@ describe("pass-through migrators", () => {
     });
 
     it("injects user_id for tables that require it explicitly", async () => {
-        // pipeline_settings + studio_artifacts don't have a default on user_id,
-        // so the migrator must look up the current user and set it on insert.
+        // studio_artifacts uses requiresUserId: true (no upsert) so user_id
+        // is injected on the regular insert path.
         const storage = makeStorage({
-            gtmos_qw_inputs: JSON.stringify({ target_quota: 1000000 })
+            gtmos_playbook: JSON.stringify({ frameworks: {} })
         });
         const { client, calls } = makeSpyDataClient();
         await runDataMigration({
@@ -351,9 +383,34 @@ describe("pass-through migrators", () => {
             __bypassFlag: true
         });
 
-        expect(calls.pipelineSettings).toHaveLength(1);
-        const row = calls.pipelineSettings![0] as { user_id?: string };
+        expect(calls.studioArtifacts).toHaveLength(1);
+        const row = calls.studioArtifacts![0] as { user_id?: string };
         expect(row.user_id).toBe("test-user");
+    });
+
+    it("uses upsert for tables with a 1-row-per-user constraint", async () => {
+        // pipeline_settings has upsertOnConflict: "user_id" so the migrator
+        // bypasses the typed accessor and uses the raw client's upsert.
+        const storage = makeStorage({
+            gtmos_qw_inputs: JSON.stringify({ target_quota: 1000000 })
+        });
+        const { client, calls, upserts } = makeSpyDataClient();
+        await runDataMigration({
+            storage,
+            dataClient: client,
+            __bypassFlag: true
+        });
+
+        // Did NOT use the typed insert
+        expect(calls.pipelineSettings).toHaveLength(0);
+        // DID use upsert via raw client.from('pipeline_settings').upsert(...)
+        expect(upserts.pipeline_settings).toHaveLength(1);
+        const row = upserts.pipeline_settings![0] as {
+            user_id?: string;
+            data?: { migration_version?: string };
+        };
+        expect(row.user_id).toBe("test-user");
+        expect(row.data?.migration_version).toBe("phase-2.3-passthrough");
     });
 
     it("preserves non-JSON values as raw strings in the blob (no error)", async () => {

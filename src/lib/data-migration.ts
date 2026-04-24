@@ -272,6 +272,12 @@ interface MigratorConfig {
     keys: string[];
     placeholderFields?: Record<string, string>;
     requiresUserId?: boolean;
+    /**
+     * Set to a column name (typically "user_id") to use upsert semantics
+     * with that column as the conflict target. Required for tables that
+     * enforce a 1-row-per-user invariant (e.g. pipeline_settings).
+     */
+    upsertOnConflict?: string;
 }
 
 const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
@@ -354,7 +360,11 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
             "gtmos_ta_retier_history",
             "gtmos_ta_calibrations"
         ],
-        requiresUserId: true
+        requiresUserId: true,
+        // Schema enforces 1 pipeline_settings row per user — upsert by user_id
+        // so the migrator cleanly merges into an existing row instead of
+        // colliding on the unique constraint.
+        upsertOnConflict: "user_id"
     },
     {
         table: "studio_artifacts",
@@ -364,7 +374,8 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
             "gtmos_autopsy_log_v1",
             "gtmos_poc_data"
         ],
-        requiresUserId: true
+        requiresUserId: true,
+        placeholderFields: { studio: MIGRATION_BLOB_PLACEHOLDER }
     },
     {
         table: "proofs",
@@ -403,7 +414,13 @@ const MIGRATORS: Migrator[] = PASSTHROUGH_CONFIGS.map(makePassthroughMigrator);
  * the migrator should silently skip `deals`.
  */
 function makePassthroughMigrator(config: MigratorConfig): Migrator {
-    const { table, keys, placeholderFields, requiresUserId } = config;
+    const {
+        table,
+        keys,
+        placeholderFields,
+        requiresUserId,
+        upsertOnConflict
+    } = config;
     return {
         table,
         async run({ storage, data, dryRun }): Promise<TableReport> {
@@ -468,6 +485,35 @@ function makePassthroughMigrator(config: MigratorConfig): Migrator {
                 };
             }
 
+            // Idempotency check — if a blob row already exists for this
+            // table (from a previous partial migration), skip inserting a
+            // duplicate. RLS scopes the query to the current user/workspace.
+            // Upsert tables don't need this check because upsert is itself
+            // idempotent on the conflict key.
+            if (!upsertOnConflict) {
+                try {
+                    const existing = await data.client
+                        .from(table)
+                        .select("id")
+                        .eq("data->>migration_version", "phase-2.3-passthrough")
+                        .limit(1);
+                    if (existing.data && existing.data.length > 0) {
+                        return {
+                            table,
+                            keysRead,
+                            rowsTransformed,
+                            rowsInserted: 0,
+                            rowsSkipped: 1,
+                            errors
+                        };
+                    }
+                } catch {
+                    // If the existence check itself errors (RLS policy quirk,
+                    // network blip), proceed with the insert — duplication is
+                    // a softer failure than data loss.
+                }
+            }
+
             const row: Record<string, unknown> = {
                 ...(placeholderFields ?? {}),
                 data: {
@@ -500,13 +546,26 @@ function makePassthroughMigrator(config: MigratorConfig): Migrator {
             }
 
             try {
-                // Type-erase across the generic boundary — each concrete
-                // accessor has its own Insert type, but at this call site
-                // we only know `table: TableName`. Same idiomatic pattern
-                // as makeNounAccessor() in data-client.ts.
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const accessor = (data as any)[toAccessorName(table)];
-                await accessor.insert(row);
+                if (upsertOnConflict) {
+                    // Bypass the typed accessor — DataClient doesn't expose
+                    // upsert in its public API yet (Phase 2.2 covered insert/
+                    // update/delete only). Use the raw client.
+                    const result = await data.client
+                        .from(table)
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        .upsert(row as any, { onConflict: upsertOnConflict })
+                        .select("id")
+                        .single();
+                    if (result.error) throw result.error;
+                } else {
+                    // Type-erase across the generic boundary — each concrete
+                    // accessor has its own Insert type, but at this call site
+                    // we only know `table: TableName`. Same idiomatic pattern
+                    // as makeNounAccessor() in data-client.ts.
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const accessor = (data as any)[toAccessorName(table)];
+                    await accessor.insert(row);
+                }
                 return {
                     table,
                     keysRead,
