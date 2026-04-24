@@ -228,6 +228,16 @@ Run this after any schema change and commit the regenerated file alongside the m
 
 **`supabase db push` fails with "not linked"** — run `supabase link --project-ref wjdqmgxwulqxxxnyuzyl` first.
 
+**`supabase db push` says "Remote database is up to date" but you just wrote migrations** — your migration filenames are using a short `NNNN_` prefix. Supabase CLI requires `<14-digit-timestamp>_<name>.sql` (e.g., `20260424170000_foo.sql`) and silently ignores other formats — `supabase migration list` will show an empty LOCAL column. Rename the files or use `supabase migration new <name>` to get a well-formed timestamp.
+
+**Migration fails with "cannot use subquery in DEFAULT expression (SQLSTATE 0A000)"** — you wrote something like `default (select auth.uid())` in a column definition. PostgreSQL forbids subqueries in DEFAULT clauses. Use the bare function call instead: `default auth.uid()`. Subqueries in RLS policy `USING` / `WITH CHECK` expressions are fine — only DEFAULT expressions reject them.
+
+**Remote migration history shows a phantom migration you didn't write (timestamp matches when you enabled branches)** — Supabase Branches inserts a snapshot-of-main entry into `supabase_migrations.schema_migrations` when branches are activated on a project. Clear it with `supabase migration repair --status reverted <timestamp> --db-url "<url>"`. This only touches the bookkeeping table; it does not alter any real schema.
+
+**"multiple primary keys for table X" during merge-request "Update branch"** — known limitation of Supabase Branches when preview has only *additively* diverged from main. The rebase step tries to re-apply main's schema snapshot on top of preview's existing tables. Workaround: abandon the merge-request flow and push migrations directly to main via `supabase db push --db-url <main-pooler-url>`. Migrations that were verified on preview will apply cleanly to main because they're idempotent. Delete the failed merge request and orphaned preview branch afterward to keep housekeeping clean.
+
+**"failed to connect... i/o timeout" when using a connection string with port 5432 and `db.<ref>.supabase.co`** — that's the Direct connection, which is IPv6-only on most networks. Use the **Session pooler** URL from the Connect modal instead: host `aws-N-<region>.pooler.supabase.com`, user `postgres.<project-ref>`, port 5432, IPv4-routable.
+
 **Migration fails with "function current_user_default_workspace_id does not exist"** — 0003 didn't run. Check `supabase migration list --linked` to see what actually applied.
 
 **RLS policy fails silently (inserts succeed but selects return nothing)** — the caller isn't a member of the target workspace. Confirm via `select * from public.workspace_members where user_id = auth.uid();` from the SQL editor as the affected user.
