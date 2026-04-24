@@ -375,13 +375,15 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
             "gtmos_poc_data"
         ],
         requiresUserId: true,
-        // Schema has multiple NOT NULL columns without defaults — the legacy
-        // table was designed to tag every artifact with both its owning
-        // studio and its type. Migration blob fills both with the placeholder.
-        // If schema introspection reveals more required columns, add them here.
+        // Schema has three NOT NULL columns without defaults: studio,
+        // artifact_type, title. Confirmed 2026-04-24 via
+        // `select column_name, is_nullable, column_default from
+        // information_schema.columns where table_name = 'studio_artifacts'`.
+        // All other columns either have defaults or are nullable.
         placeholderFields: {
             studio: MIGRATION_BLOB_PLACEHOLDER,
-            artifact_type: MIGRATION_BLOB_PLACEHOLDER
+            artifact_type: MIGRATION_BLOB_PLACEHOLDER,
+            title: MIGRATION_BLOB_PLACEHOLDER
         }
     },
     {
