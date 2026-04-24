@@ -546,7 +546,7 @@ Any surface that does any of these fails:
 
 # Part II.5 — Component + Data Architecture
 
-**Authority:** This part is governed by `deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md`. The ADR is the deeper reference; this section is the canonical summary for session-level operation.
+**Authority:** This part is governed by `deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md` and, for Phase 2 specifically, by `deliverables/adr/adr-002-phase-2-data-architecture-rescope-2026-04-24.md`. The ADRs are the deeper references; this section is the canonical summary for session-level operation.
 
 ## 1. The stack
 
@@ -982,12 +982,15 @@ The repo is mid-migration from the legacy static-HTML + localStorage + innerHTML
 - Configure branch protection on `main` with all four CI jobs as required status checks.
 - Set up required-reviewer approval on the `production` environment if desired.
 
-**Phase 2 (Data architecture + migration) — next up:**
-- Design Postgres schema (workspaces + workspace_members + every sacred noun)
-- Write RLS policies and verify isolation
-- Build one-way migration from localStorage → Supabase with idempotency + reversibility
-- Wire Supabase Realtime subscriptions per noun type
-- Spin up separate Supabase project for staging (per founder directive Q2)
+**Phase 2 (Data architecture + migration) — rescoped by ADR-002, approved 2026-04-24, not yet started:**
+
+Significantly smaller than originally planned. Existing production Supabase project (`antaeus-gtm-os` at `wjdqmgxwulqxxxnyuzyl.supabase.co`) already has 10 tables + 2 views deployed with RLS and 4 real auth users. ADR-002 rescopes Phase 2 to four subphases totaling ~2 weeks (down from 3–4 weeks in ADR-001):
+- 2.1 Supabase Branches setup (persistent `preview` branch) + schema extension: add `workspaces` + `workspace_members`, four missing noun tables (`proofs`, `advisor_deployments`, `readiness_snapshots`, `handoff_artifacts`), workspace_id retrofit on existing tables, RLS migration from user-scoped to workspace-scoped
+- 2.2 Typed data client at `src/lib/data-client.ts` with generated TS types + optimistic updates + realtime subscriptions
+- 2.3 localStorage → Supabase migration tool behind Posthog feature flag `data_migration_live` (default off, founder-opts-in-first)
+- 2.4 CF Workers Builds branch-aware credentials (PROD vars for main deploys, PREVIEW vars for feature-branch deploys)
+
+Supabase Branches replaces the original "separate staging project" plan from ADR-001 §9 Q2.
 
 **Phase 3–5 (room migration + polish) — later.** See ADR §6.
 
@@ -1149,6 +1152,7 @@ Add entries here when a session meaningfully shifts doctrine or state, so the ne
 |---|---|---|
 | 2026-04-21 | Initial canon draft | Established this document as the canon. Reconciled truth-lock memo: interior is bright, not dark (dark reserved for System Ledger rooms). Amended "rewrite the face, not the mind" to allow mind corrections with founder approval. Set up Linux rendering pipeline (Playwright + Puppeteer Chrome binary + Python static server). Screenshot-based re-audit of all 19 reachable rooms corrected multiple DOM-based audit errors. Discovery Studio contract probe identified 5 of 7 required global rails missing. |
 | 2026-04-21 | Canon execution — sweep + Discovery Studio rails | No doctrine shifts. State shifts: (1) Cross-room drift-mode sweep complete for the four flagged candidates — Future Autopsy designer-voice leak + hardcoded case count removed, Signal Console scoring-formula caption removed, LinkedIn Playbook rainbow cue-meter + marquee dots replaced/deleted, Cold Call Studio rainbow loom-needle neutralized. (2) Discovery Studio reached contract completeness — all 7 global persistent rails now implemented across four commits (Waves 1–4). New state fields: `frameworkState.learnedFacts[]` and `frameworkState.nextStep{}` (auto-populated from branch `clear` text + user input respectively); new top-level `state.dossierOpen`. New render functions: `renderLedgerStrip()`, `renderNextStepDocket()`, `renderDossier()`. New event path: `[data-ledger-jump]` routes to `handleActionTarget("node:")` for click-to-jump. Drawer gates on `hasDossierData(framework)` so the "Dossier" topbar button appears only for frameworks whose runtime files have authored `supportDossier` / `objectionLibrary` / `inboundQuestionHandlers` — currently only `customer-support`. Caught and fixed: `js/discovery-segment-runtime-customer-support.js` was never loaded by `app/discovery-studio/index.html`; its script tag was missing. Added. Doctrine verification: the session respected Part IV §4 (mind-correction protocol) — no mind changes were made without founder approval; the load-order bug was a mechanical/build issue, not a mind change, so no approval gate was triggered. |
+| 2026-04-24 | ADR-002 Phase 2 rescope — approved | Discovered during founder walkthrough of Phase 1 external setup that the production Supabase project (`antaeus-gtm-os`) already has 10 tables + 2 views deployed with RLS, 4 real auth users, and 5 SQL bootstrap files checked into the repo root. ADR-001's Phase 2 had assumed greenfield; reality is ~40–50% already done. ADR-002 approved: (a) adopt existing schema + extend it with `workspaces` + `workspace_members` + 4 missing noun tables + workspace_id retrofit on all existing tables + RLS migration to workspace-scoping; (b) use Supabase Branches for staging (persistent `preview` branch + optional per-PR branches in Phase 3+), supersedes ADR-001 §9 Q2. Phase 2 timeline drops from 3–4 weeks to ~2 weeks. Also in this session: removed redundant `.github/workflows/deploy.yml` + `.github/workflows/pr-preview.yml` because Cloudflare Workers Builds handles deploys natively via the Git integration on the `autumn-water-148a` Workers service; updated `docs/founder-phase-1-external-setup.md` to drop the retired CF-API-token/account-ID/project-name steps. Founder completed Phase 1 external setup items 1 (Sentry) + 2 (Posthog) during this session — VITE_SENTRY_DSN, VITE_SENTRY_ENV=production, VITE_POSTHOG_API_KEY now live in CF Workers Builds Variables and secrets. Remaining Phase 1 external setup item: branch protection on main (pending a first CI run). |
 | 2026-04-21 | ADR-001 foundation stack migration — approved + Phase 1 shipped | **Major architectural commitment.** Founder approved ADR-001 adopting Preact + TypeScript + Vite + Supabase (extended for data, not just auth) + Vitest + Playwright Test runner + Sentry + Posthog + GitHub Actions CI/CD as the permanent foundation for Antaeus. Scale target set to ~2,500 concurrent users initially (not 100K). Desktop-only product confirmed — mobile CSS may be deleted during migration. SPA routing and SSR both deferred with documented assessments. Phase 1 (Foundation) shipped in a single session: `00d723b` build tooling (Vite + TS + Preact + Vitest), `98bb3f6` testing infrastructure (Playwright Test runner + canonical templates + three boot smoke tests that assert no pageerror on dashboard / discovery-studio / deal-workspace AND the four Discovery Studio contract rails are visible), `de0539b` GitHub Actions (ci.yml + deploy.yml + pr-preview.yml + `.github/README.md` documenting required secrets and branch-protection setup), `026c419` observability (@sentry/browser + posthog-js + wrappers at src/lib/observability.ts + typed `import.meta.env` + `.env.example`). Canon updated: new Part II.5 (Component + Data Architecture) summarizes the stack and conventions; Part V §1 reflects foundation-in-progress; §2 already references `deliverables/adr/`. No room migrated yet — Phase 2 (data architecture) begins next session. All existing static rooms continue to work unchanged. |
 
 ## 7. Closing: the bar

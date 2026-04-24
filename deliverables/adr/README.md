@@ -53,3 +53,4 @@ Every ADR requires founder approval before moving from `PROPOSED` to `APPROVED`.
 | # | Title | Status |
 |---|---|---|
 | 001 | [Foundation Stack Migration](./adr-001-foundation-stack-migration-2026-04-21.md) | APPROVED 2026-04-21 |
+| 002 | [Phase 2 Data Architecture Rescope — Supabase Branches + Existing Schema Adoption](./adr-002-phase-2-data-architecture-rescope-2026-04-24.md) | APPROVED 2026-04-24. Supersedes ADR-001 §9 Q2 + rescopes ADR-001 §6 Phase 2. |
