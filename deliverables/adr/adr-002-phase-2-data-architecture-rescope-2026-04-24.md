@@ -114,3 +114,149 @@ Rather than silently compress Phase 2's timeline or silently adopt the existing 
 - Multi-workspace-from-day-one direction (ADR-001 §9 Q1) — preserved; this ADR adds the concrete retrofit path for existing user-scoped tables.
 - Desktop-only posture (§9 Q5) — preserved.
 - Row-level-security-at-DB-layer principle — preserved; existing per-user policies extend to per-workspace policies.
+
+---
+
+## 2. The decision
+
+Two decisions in this ADR.
+
+### 2.1 Decision A: adopt the existing schema; extend rather than replace
+
+The 10 tables already deployed to the production Supabase project are preserved. Phase 2 work adds to them rather than rebuilding from scratch.
+
+**What we keep from the existing schema:**
+
+- All 10 tables with their existing columns, primary keys, indexes, and per-user RLS policies
+- The jsonb `data` column pattern used on every table (typed top-level columns for hot-access fields + flexible jsonb bag for everything else)
+- The `updated_at` auto-update trigger pattern
+- The existing SQL bootstrap files in the repo root
+- The `js/supabase-config.js` client config (hardcoded URL + anon key)
+- The 4 existing auth users
+
+**What we add on top of the existing schema (Phase 2 work):**
+
+1. **Two new tables for multi-workspace support** (per ADR-001 §9 Q1):
+   - `workspaces` — id, name, owner_id, created_at, updated_at, data jsonb
+   - `workspace_members` — workspace_id, user_id, role (owner / admin / member), invited_at, joined_at
+
+2. **Four new tables for missing sacred nouns:**
+   - `proofs` — PoC proof objects (claim, owner, metric, kill_rule, linked_deal_id, data jsonb)
+   - `advisor_deployments` — backchannel asks (deal_id, advisor_id, ask_moment, stamp, data jsonb)
+   - `readiness_snapshots` — multi-dimension readiness scores (overall, per-dimension, verdict, data jsonb)
+   - `handoff_artifacts` — exportable package versions (sections jsonb, export_state, generated_at, data jsonb)
+
+3. **Workspace-scoping retrofit on every existing table:**
+   - Add `workspace_id uuid` column referencing `workspaces(id)` on: `icps`, `deals`, `sequences`, `signal_console_accounts`, `discovery_frameworks`, `discovery_call_logs`, `pipeline_settings`, `profiles`, `studio_artifacts`, plus the four new noun tables above
+   - Backfill existing rows (currently zero rows, so backfill is trivial): each existing user gets a default workspace auto-created; their rows are assigned to it
+   - Update RLS policies from `auth.uid() = user_id` to a workspace-membership check (pseudo: `workspace_id IN (SELECT workspace_id FROM workspace_members WHERE user_id = auth.uid())`)
+   - Keep `user_id` column as a convenience for "created by" tracking; the RLS gate moves to `workspace_id`
+
+4. **Enable Realtime** on the tables the reactive data layer needs. Phase 2 initial enable: all 14 tables (10 existing + 4 new). Enabled at the Supabase dashboard per table.
+
+5. **Client-side typed data layer** at `src/lib/data-client.ts`:
+   - Generated TS types from the full schema (`supabase gen types typescript`)
+   - Typed wrappers per noun exposing read / write / subscribe
+   - Optimistic-update pattern with server-confirm reconciliation
+   - Offline cache in localStorage (the existing localStorage becomes hydration cache, not primary store)
+
+6. **One-way migration tool** (`src/migration/localstorage-to-supabase.ts`):
+   - Read every known `gtmos_*` key from localStorage
+   - Transform into rows scoped to the user's default workspace
+   - Idempotent — rerunning produces zero duplicates (content-derived IDs where feasible; timestamp tie-breakers otherwise)
+   - Dry-run mode for preview
+   - Run once per user on first login post-Phase 2 deploy, behind a Posthog feature flag (`data_migration_live`), defaulting off until manually enabled per user or globally
+
+**Signal and Motion stay as jsonb-inside-parent for now.**
+
+- Signal is currently stored inside `signal_console_accounts.data` (the account record carries its signals as nested jsonb). Promoting to a standalone `signals` table is valuable for reactive "new signal just landed" updates but adds denormalization complexity. Deferred to a future ADR once we feel the pain.
+- Motion is currently stored inside `sequences.data` (sequences are Motion-carriers). Same deferred-promotion rationale.
+
+This is documented explicitly so a future session doesn't accidentally re-litigate the choice.
+
+### 2.2 Decision B: Supabase Branches for staging (supersedes ADR-001 §9 Q2)
+
+**What Supabase Branches are.** A production-ready Supabase feature (graduated from beta) that creates a fork of a project's schema into an isolated branch. The branch has its own database, its own data, and its own API endpoint but shares auth configuration with the parent. Schema migrations on production propagate to branches automatically; branch schema changes can be merged back into production. Branches can be short-lived (per-PR) or persistent (named staging environments).
+
+**Why Branches beats a separate project for our use case:**
+
+| Dimension | Separate project (ADR-001 §9 Q2 original) | Supabase Branches |
+|---|---|---|
+| Schema isolation | ✓ complete | ✓ complete |
+| Data isolation | ✓ complete | ✓ complete |
+| Credentials separation | ✓ separate URL + anon key | ✓ separate URL + anon key per branch |
+| Schema propagation | ✗ manual — must rerun every migration against both projects | ✓ automatic from main branch |
+| Auth user sharing | ✗ separate user table per project | ✓ auth is branch-shared by default (configurable) |
+| Operational overhead | moderate — two projects to monitor, two billing lines | low — one project |
+| Cost | free tier covers pre-beta | free tier covers pre-beta |
+| Per-PR previews | would require project-per-PR (not feasible) | ✓ branches are cheap enough for per-PR |
+| GitHub integration | manual via CI | ✓ native — branches auto-created per PR if GitHub integration enabled |
+| Production risk during schema migration | same — migrations must be tested first | lower — test on a branch, then merge to main |
+
+For a single-founder pre-beta product scaling to ~2,500 concurrent users (per ADR-001 §9 Q3), Branches are materially better. The "separate project" answer was correct when ADR-001 was drafted (Branches were still in early beta at that time); by 2026-04-24 they're production-ready and widely adopted.
+
+**Concrete plan for Supabase Branches on Antaeus:**
+
+1. **Keep `main` branch as production** (already exists; visible in dashboard as `main` with PRODUCTION tag).
+2. **Create a persistent `preview` branch** via Supabase dashboard → Branches → Create branch. Forks current prod schema; starts with empty data.
+3. **Add CF Workers Builds variables:**
+   - Existing (main branch = production builds): keep `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` pointing at the production branch's endpoint (what `js/supabase-config.js` already hardcodes).
+   - Since CF Workers Builds variables don't have per-environment scoping, dynamic branch detection happens in the build command: the Version command (for feature branches) overrides `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` with the preview-branch values. The Deploy command (for main) leaves them at production values.
+   - Implementation: extend the npm scripts with a tiny helper that reads `CF_PAGES_BRANCH` (or equivalent) and exports the right URL/key before `vite build`. Or: add both sets as CF variables with distinct names (`VITE_SUPABASE_URL_PROD`, `VITE_SUPABASE_URL_PREVIEW`, same for ANON_KEY) and let the helper pick.
+4. **Per-PR branches (optional Phase 2 extension)** — Supabase's GitHub integration auto-creates a branch per PR, destroyed on merge. If founded budget and surface area allow, enable this in Phase 2 Subphase 2.3.
+5. **Schema migrations flow:** author locally → push to a feature branch → CI deploys to a Supabase branch (or to `preview` for simplicity) → review → merge PR → schema propagates to main branch via Supabase merge.
+
+**`js/supabase-config.js` change:** switch from hardcoded values to reading `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` from `import.meta.env`. This way the same code points at prod in production builds and preview in feature-branch builds. Backwards compatible: if env vars are unset (local dev without `.env.local`), fall back to the hardcoded prod values so the app still runs.
+
+---
+
+## 3. Alternatives considered
+
+### 3.1 Alternative: replace the existing schema from scratch
+
+**What it would look like:** Drop all existing tables in the production Supabase project. Author new migrations from first principles per ADR-001's original plan. Write RLS from scratch. Migrate the 4 real users out and back in if needed.
+
+**Why rejected:**
+- Destroys 40–50% of already-correct work for no capability gain.
+- Risk of auth/user-data regression during a reset.
+- Breaks the working login/signup pages without a clear upside.
+- The existing schema is genuinely well-structured (typed top-level cols + jsonb bag pattern is the right shape).
+- Founder directive: no clock pressure, but also no reason to redo correct work.
+
+### 3.2 Alternative: keep existing schema as-is, skip the workspace retrofit
+
+**What it would look like:** Add the 4 missing noun tables but leave every existing table user-scoped. Punt multi-workspace to a future ADR.
+
+**Why rejected:**
+- Explicitly violates ADR-001 §9 Q1 founder answer ("multi-workspace from day one to avoid expensive retrofit later").
+- Retrofitting workspace scoping once real data is flowing is materially more expensive than doing it while tables are empty.
+- With 0 rows in every table, the retrofit is trivial right now.
+
+### 3.3 Alternative: separate Supabase project for staging (ADR-001 §9 Q2 original answer)
+
+**What it would look like:** Create `antaeus-gtm-os-staging` as a new Supabase project. Manually mirror schema. Set staging credentials in CF for feature-branch builds.
+
+**Why rejected:**
+- Higher operational cost than Supabase Branches (see §2.2 table).
+- Manual schema sync is error-prone; a drifting staging schema makes PR previews unreliable.
+- Per-PR branches are cheap on Branches; infeasible on projects.
+- The Supabase Branches feature has matured since ADR-001 was written.
+
+Keeping the decision open in this ADR so a future contributor understands the path not taken.
+
+### 3.4 Alternative: defer workspace-scoping retrofit to a post-Phase-2 ADR
+
+**What it would look like:** Phase 2 focuses on the 4 new tables + data client + migration + Branches. Workspace retrofit is a separate ADR-003 later.
+
+**Why rejected:**
+- While technically viable, splitting the retrofit out means the client-side data layer built in Phase 2 is written against user-scoped tables, then rewritten in Phase 3 against workspace-scoped tables. Double work.
+- Better to do the retrofit while the client is being built so they align from day one.
+
+### 3.5 Alternative: move Signal and Motion to their own tables now
+
+**What it would look like:** Add `signals` table (referencing `signal_console_accounts.id`) and `motions` table (referencing `sequences.id` or a different parent). Denormalize out of the jsonb bag.
+
+**Why rejected:**
+- The rooms currently render signal and motion data directly from the parent objects' jsonb. Promoting to standalone tables requires rewriting that rendering path in every affected room.
+- The denormalized shape is desirable for Realtime ("new signal arrived on account X → update view"), but the jsonb-inside-parent shape is adequate for most current use cases.
+- Deferring preserves the schema's working shape. When the first real need for standalone Signal/Motion tables appears (likely during Phase 4 room migration), a future ADR makes the call with concrete justification.
