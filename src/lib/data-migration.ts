@@ -426,7 +426,7 @@ function makePassthroughMigrator(
                     errors
                 };
             } catch (err) {
-                const reason = err instanceof Error ? err.message : String(err);
+                const reason = stringifyError(err);
                 reportError(err, { op: "passthroughMigrator", table });
                 return {
                     table,
@@ -473,6 +473,34 @@ export function __getRegisteredMigrators(): readonly Migrator[] {
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────
+
+/**
+ * Turn any thrown error into a readable message. Supabase errors are plain
+ * objects with `message`, `code`, `hint`, `details` — none of which survive
+ * `String(err)` (which just produces "[object Object]").
+ */
+function stringifyError(err: unknown): string {
+    if (err === null || err === undefined) return "unknown error";
+    if (err instanceof Error) return err.message;
+    if (typeof err === "string") return err;
+    if (typeof err === "object") {
+        const e = err as Record<string, unknown>;
+        const parts: string[] = [];
+        if (typeof e.message === "string") parts.push(e.message);
+        if (typeof e.code === "string" || typeof e.code === "number") {
+            parts.push(`(code: ${e.code})`);
+        }
+        if (typeof e.hint === "string") parts.push(`hint: ${e.hint}`);
+        if (typeof e.details === "string") parts.push(`details: ${e.details}`);
+        if (parts.length > 0) return parts.join(" ");
+        try {
+            return JSON.stringify(err);
+        } catch {
+            return "error (unserializable)";
+        }
+    }
+    return String(err);
+}
 
 function resolveLocalStorage(): Storage | null {
     if (typeof window === "undefined") return null;

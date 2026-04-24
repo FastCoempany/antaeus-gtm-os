@@ -40,9 +40,12 @@ export function getSupabaseClient(): AntaeusSupabaseClient {
             persistSession: true,
             autoRefreshToken: true,
             detectSessionInUrl: true,
-            // Supabase's default storage is window.localStorage. Kept explicit
-            // so anyone reading this knows where the session lives.
-            storageKey: "antaeus-supabase-auth"
+            // Must match the legacy app's storage key (js/supabase-config.js
+            // line 2141) so the new-stack client and the legacy client share
+            // the user's auth session. Without this, the new page would boot
+            // without a JWT, auth.uid() would be null, and every RLS-gated
+            // insert would silently fail.
+            storageKey: "antaeus-auth-token"
         },
         // Realtime is used by data-client subscribe(). Phase 2.2 turns it on.
         realtime: {
