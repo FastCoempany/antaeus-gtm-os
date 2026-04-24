@@ -318,23 +318,33 @@ describe("pass-through migrators", () => {
         expect(calls.signalConsoleAccounts).toHaveLength(0);
     });
 
-    it("records a per-key parse error when JSON is invalid", async () => {
+    it("preserves non-JSON values as raw strings in the blob (no error)", async () => {
+        // Some legacy localStorage keys (e.g. gtmos_handoff_exported) were
+        // written as bare strings, not JSON-wrapped. The migrator must not
+        // error on these — it preserves them verbatim so the data isn't lost.
         const storage = makeStorage({
-            gtmos_deal_workspaces: "{not valid json"
+            gtmos_handoff_exported: "2026-04-20T12:34:56.789Z"
         });
-        const { client } = makeSpyDataClient();
+        const { client, calls } = makeSpyDataClient();
         const report = await runDataMigration({
             storage,
             dataClient: client,
             __bypassFlag: true
         });
 
-        const deals = report.tables.find((t) => t.table === "deals");
-        expect(deals).toBeDefined();
-        expect(deals?.errors).toHaveLength(1);
-        expect(deals?.errors[0]?.key).toBe("gtmos_deal_workspaces");
-        expect(deals?.errors[0]?.reason).toMatch(/valid JSON/i);
-        expect(deals?.rowsInserted).toBe(0);
+        const handoff = report.tables.find(
+            (t) => t.table === "handoff_artifacts"
+        );
+        expect(handoff).toBeDefined();
+        expect(handoff?.errors).toHaveLength(0);
+        expect(handoff?.rowsInserted).toBe(1);
+
+        const row = calls.handoffArtifacts![0] as {
+            data: { migrated_from_localstorage: Record<string, unknown> };
+        };
+        expect(row.data.migrated_from_localstorage.gtmos_handoff_exported).toBe(
+            "2026-04-20T12:34:56.789Z"
+        );
     });
 
     it("dryRun does not call insert but still counts transforms", async () => {

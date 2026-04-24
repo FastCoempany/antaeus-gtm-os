@@ -348,15 +348,18 @@ function makePassthroughMigrator(
                 const raw = storage.getItem(key);
                 if (raw === null) continue;
                 keysRead.push(key);
-                const parsed = safeParse<unknown>(raw);
-                if (parsed === null) {
-                    errors.push({
-                        key,
-                        reason: "value was present but not valid JSON"
-                    });
-                    continue;
+                // Parse as JSON when possible; preserve as raw string otherwise.
+                // Some legacy localStorage keys (e.g. gtmos_handoff_exported,
+                // gtmos_product_category, gtmos_welcome_seen) were written as
+                // bare strings or primitives, not JSON-wrapped values. The
+                // migration blob keeps whatever the browser had — no data loss.
+                let value: unknown = raw;
+                try {
+                    value = JSON.parse(raw);
+                } catch {
+                    // Raw string fallback — `value` is already `raw`.
                 }
-                payload[key] = parsed;
+                payload[key] = value;
             }
 
             if (keysRead.length === 0) {
