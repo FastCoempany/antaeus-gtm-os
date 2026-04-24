@@ -1,63 +1,41 @@
-# GitHub Actions + repo setup
+# GitHub Actions setup
 
-This directory holds the CI/CD workflows that gate PRs and handle deploys.
+This directory holds the CI workflow that gates PRs. Deployment is handled natively by Cloudflare Workers Builds (the Git integration on your `autumn-water-148a` Workers service), not by GitHub Actions.
 
-## Workflows
+## Workflow
 
 | File | Trigger | Purpose |
 |---|---|---|
 | `workflows/ci.yml` | Every PR + push to non-main | Typecheck + Vitest + Playwright E2E + build. Required to pass before merge. |
-| `workflows/pr-preview.yml` | Every PR (open/sync/reopen) | Builds the site and deploys to a Cloudflare Pages preview URL; posts URL as a PR comment. |
-| `workflows/deploy.yml` | Push to `main` | Re-runs all CI gates against `main`, then deploys to production via `wrangler versions upload`. |
+
+Previously this directory also contained `deploy.yml` and `pr-preview.yml`. Both were removed on 2026-04-24 (superseded by ADR-002) because Cloudflare Workers Builds already handles production deploys on main-branch pushes and version previews on feature-branch pushes. Keeping the GitHub Actions deploy workflows alongside CF's native integration would have created race conditions and required redundant credentials in GitHub secrets.
 
 ## One-time repo setup required
 
-These must be configured in the GitHub repo before the workflows will run successfully. Setting them is a founder (or repo-admin) action — the CI workflows cannot configure them.
+**→ For step-by-step click-through instructions, see [`docs/founder-phase-1-external-setup.md`](../docs/founder-phase-1-external-setup.md).** That walkthrough covers every external-service setup in the correct order with verification steps. This README is the summary.
 
-**→ For step-by-step click-through instructions, see [`docs/founder-phase-1-external-setup.md`](../docs/founder-phase-1-external-setup.md).** That walkthrough covers every external-service setup (Sentry, Posthog, Cloudflare token, GitHub secrets, branch protection, Supabase staging) in the correct order with verification steps. This README is the summary; the walkthrough is the actionable version.
+### Branch protection on `main`
 
-### 1. Required secrets
+Required to gate merges on CI passing.
 
-Set in **Settings → Secrets and variables → Actions → Repository secrets**:
-
-| Secret | How to obtain | Used by |
-|---|---|---|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare dashboard → My Profile → API Tokens → Create Token with `Cloudflare Pages:Edit` + `Workers Scripts:Edit` scopes for the Antaeus account | `deploy.yml`, `pr-preview.yml` |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard → any zone page → right sidebar "Account ID" | `deploy.yml`, `pr-preview.yml` |
-
-### 2. Required repository variable
-
-Set in **Settings → Secrets and variables → Actions → Variables**:
-
-| Variable | Value | Used by |
-|---|---|---|
-| `CLOUDFLARE_PAGES_PROJECT_NAME` | The Cloudflare Pages project name (e.g., `antaeus-gtm-os`) | `pr-preview.yml` |
-
-### 3. Required branch protection on `main`
-
-**Settings → Branches → Branch protection rules → Add rule** for `main`:
-
-- ✅ Require a pull request before merging
-- ✅ Require status checks to pass before merging
-  - Required checks:
+Set in **GitHub → repo Settings → Branches → Branch protection rules → Add rule**:
+- Branch name pattern: `main`
+- ☑ Require a pull request before merging
+- ☑ Require status checks to pass before merging
+  - Required checks (add after at least one CI run has completed so the names populate the dropdown):
     - `Typecheck`
     - `Unit + component tests (Vitest)`
     - `E2E smoke tests (Playwright)`
     - `Vite build`
-- ✅ Require branches to be up to date before merging
-- ✅ Do not allow bypassing the above settings
+- ☑ Require branches to be up to date before merging
+- ☑ Do not allow bypassing the above settings
 
-### 4. Environment setup
+## What the workflow assumes
 
-Optional but recommended: **Settings → Environments → New environment** named `production`. Attach `deploy.yml`'s `deploy` job to it. Allows you to require manual approval before any production deploy if desired — turn on "Required reviewers" on the environment. Especially useful during Phase 2+ of the foundation migration.
-
-## What the workflows assume
-
-- Node.js 22 is the runtime.
+- Node.js 22 is the runtime on GitHub runners.
 - Python 3.11 is available (for the static server that Playwright's webServer invokes).
 - `npm ci` is clean on every run (lockfile is committed and deterministic).
-- `npm run build` produces a `dist/` directory.
-- `npm run build:cloudflare` produces the static asset tree the existing deploy script expects.
+- `npm run build` produces a `dist/` directory via Vite.
 - Playwright's chromium CDN is reachable from GitHub runners (it is by default; the Puppeteer-Chrome workaround in `tools/qa/capture-demo-room.js` is only needed for restrictive local environments).
 
 ## What to do if CI is red
@@ -72,5 +50,6 @@ Never merge with red CI.
 ## Where to go for context
 
 - Stack rationale: `deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md`
+- Phase 2 rescope + Supabase Branches decision: `deliverables/adr/adr-002-*.md`
 - Room-level contracts: `CLAUDE.md` (operating canon)
 - Rendering pipeline conventions: `CLAUDE.md` Part V §4
