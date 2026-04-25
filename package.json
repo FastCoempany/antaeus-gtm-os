@@ -25,6 +25,7 @@
     "wrangler": "^4.84.0"
   },
   "dependencies": {
+    "@preact/signals": "^2.4.0",
     "@sentry/browser": "^10.50.0",
     "@supabase/supabase-js": "^2.50.0",
     "posthog-js": "^1.371.2",
