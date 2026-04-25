@@ -445,6 +445,10 @@ button {
     max-width: 480px;
 }
 
+.dw-modal--health {
+    max-width: 720px;
+}
+
 .dw-modal__header {
     display: flex;
     justify-content: space-between;
@@ -526,6 +530,182 @@ button {
 
 .dw-modal__btn:hover {
     background: var(--dw-ink-15);
+}
+
+.dw-modal__btn--primary {
+    background: var(--dw-ink);
+    border-color: var(--dw-ink);
+    color: #fff;
+}
+
+.dw-modal__btn--primary:hover {
+    background: var(--dw-accent-orange);
+    border-color: var(--dw-accent-orange);
+}
+
+.dw-modal__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ─── Form ─────────────────────────────────────────────────────────── */
+
+.dw-form-section {
+    border-top: 1px solid var(--dw-border);
+    padding-top: 16px;
+    margin-top: 4px;
+}
+
+.dw-form-section:first-of-type {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.dw-form-section__title {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dw-ink-70);
+    margin: 0 0 12px;
+    font-weight: 600;
+}
+
+.dw-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.dw-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dw-form-field--wide {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+}
+
+.dw-form-field__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dw-ink-70);
+}
+
+.dw-form-field input[type="text"],
+.dw-form-field input[type="number"],
+.dw-form-field input[type="date"],
+.dw-form-field select,
+.dw-form-field textarea {
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--dw-ink);
+    background: var(--dw-field);
+    border: 1px solid var(--dw-border);
+    border-radius: 2px;
+    padding: 8px 10px;
+    width: 100%;
+}
+
+.dw-form-field textarea {
+    resize: vertical;
+    min-height: 40px;
+}
+
+.dw-form-field input:focus,
+.dw-form-field select:focus,
+.dw-form-field textarea:focus {
+    outline: none;
+    border-color: var(--dw-ink);
+    background: var(--dw-field-raised);
+}
+
+/* ─── Stakeholders editor ──────────────────────────────────────────── */
+
+.dw-stakeholders {
+    margin-top: 12px;
+    grid-column: 1 / -1;
+}
+
+.dw-stakeholders__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+}
+
+.dw-stakeholders__add {
+    background: transparent;
+    border: 1px solid var(--dw-border-strong);
+    border-radius: 2px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--dw-ink);
+}
+
+.dw-stakeholders__add:hover {
+    background: var(--dw-ink-15);
+}
+
+.dw-stakeholders__empty {
+    margin: 0;
+    color: var(--dw-ink-40);
+    font-size: 12px;
+    font-style: italic;
+}
+
+.dw-stakeholders__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dw-stakeholders__row {
+    display: grid;
+    grid-template-columns: 2fr 1.4fr auto auto;
+    gap: 6px;
+    align-items: center;
+}
+
+.dw-stakeholders__name,
+.dw-stakeholders__role {
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--dw-ink);
+    background: var(--dw-field);
+    border: 1px solid var(--dw-border);
+    border-radius: 2px;
+    padding: 6px 8px;
+}
+
+.dw-stakeholders__engaged {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--dw-ink-70);
+    white-space: nowrap;
+}
+
+.dw-stakeholders__remove {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    color: var(--dw-ink-40);
+    padding: 0 6px;
+    line-height: 1;
+}
+
+.dw-stakeholders__remove:hover {
+    color: var(--dw-accent-red);
 }
 
 .dw-loss-reasons {

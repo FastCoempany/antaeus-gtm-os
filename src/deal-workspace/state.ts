@@ -107,6 +107,21 @@ export function closeDealEditor(): void {
     editingPrevStage.value = null;
 }
 
+/**
+ * Detect a transition into closed-lost — used by Wave 3's save flow
+ * to gate the loss-reason modal so it only opens when a deal newly
+ * lands in closed-lost (not on subsequent edits to an already-lost
+ * deal).
+ */
+export function transitionedToLost(
+    prevStage: StageId | null,
+    nextStage: StageId
+): boolean {
+    if (nextStage !== "closed-lost") return false;
+    if (prevStage === "closed-lost") return false;
+    return true;
+}
+
 export function setDealFilter(filter: DealFilter): void {
     dealFilter.value = filter;
 }
