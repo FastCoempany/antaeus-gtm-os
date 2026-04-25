@@ -66,6 +66,9 @@ The files that protect the soul of the app while the face changes.
 ### `07-control-artifacts`
 The live visual references and approved control studies.
 
+### `08-room-guardian-specs`
+Room-specific guardian documents that lock module substance, frameworks, and operating requirements while the face is rebuilt.
+
 Legacy mirrored folders may still exist alongside this map from earlier organization passes.
 Use the folders above as the current reading order.
 
@@ -78,11 +81,37 @@ At the moment, these are the most useful live visual references in this bible:
   - locked direction: `Slice 01 · Soft cut`
 - `07-control-artifacts/dashboard-softcut-canonical.html`
   - canonical dashboard specimen built from the locked soft-cut command docket
+- `07-control-artifacts/lumana-discovery-command-center-reference-2026-04-10.html`
+  - hard control reference for Discovery Studio live-call command behavior: timer, compression, skip-ahead rescue, dossier panel, and phase tempo
+- `07-control-artifacts/lumana-discovery-framework-reference-2026-04-10.html`
+  - hard control reference for Discovery Studio question-block discipline, value tie-back timing, objection handling, and post-call structure
 
 And these are the current live written locks:
 
 - `04-symbol-lexicon/antaeus-symbol-lexicon-and-semiotic-rules-2026-04-04.md`
 - `05-canonical-systems/dashboard-soft-cut-command-docket-spec-2026-04-04.md`
+- `08-room-guardian-specs/antaeus-discovery-studio-guardian-build-spec-2026-04-10.md`
+  - canonical guardian for Discovery Studio room logic and framework substance
+- `08-room-guardian-specs/antaeus-discovery-studio-strict-room-contract-2026-04-10.md`
+  - hard room contract for Discovery Studio: vertical collapsible segment rail, forks, tracks, recovery, learned-truth capture, next-step lock, and handoff behavior
+- `08-room-guardian-specs/antaeus-discovery-studio-runtime-primitives-wiring-sheet-2026-04-10.md`
+  - literal Discovery Studio wiring sheet for mockups, state design, and live-room build
+- `08-room-guardian-specs/antaeus-discovery-studio-framework-schema-audit-2026-04-10.md`
+  - pass/fail runtime audit against the locked 9-framework registry and fixed 10-segment spine
+- `08-room-guardian-specs/antaeus-discovery-studio-lumana-on-call-control-lock-2026-04-10.md`
+  - extracted control laws from the Lumana reference files; governs on-call-first Discovery Studio behavior
+
+## Current room direction locks
+
+- Discovery Studio
+  - selected control-face direction: `Control Face 03C · Variant 01 · Ledger Spine`
+  - selected artifact: `../prototypes/wireframes/antaeus-discovery-studio-control-face-03c-01-ledger-spine-2026-04-10.html`
+  - supporting comparison artifacts:
+    - `../prototypes/wireframes/antaeus-discovery-studio-control-face-03c-02-switchback-sheet-2026-04-10.html`
+    - `../prototypes/wireframes/antaeus-discovery-studio-control-face-03c-03-field-manual-2026-04-10.html`
+  - archived earlier taste-test winner: `Variant 01C · Operator Ledger`
+    - `../prototypes/wireframes/antaeus-discovery-studio-variant-01c-selected-2026-04-10.html`
+  - implementation bridge artifact: `../prototypes/wireframes/antaeus-discovery-studio-implementation-bridge-skeleton-2026-04-10.html`
 
 ## Naming language
 

@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Call Planner Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f5f8fd;
+      --panel:rgba(255,255,255,0.72);
+      --panel-strong:rgba(255,255,255,0.9);
+      --line:rgba(10,28,64,0.1);
+      --text:#0a1c40;
+      --muted:#6e84a6;
+      --blue:#2471e7;
+      --orange:#e6701e;
+      --green:#2d7a4b;
+      --red:#c44b45;
+      --shadow:0 22px 60px rgba(10,28,64,0.1);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.08), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.07), transparent 22%),
+        linear-gradient(180deg,#fbfdff 0%, var(--bg) 100%);
+      color:var(--text);
+    }
+    .page{
+      width:min(1560px,calc(100vw - 40px));
+      margin:0 auto;
+      padding:28px 0 60px;
+    }
+    .intro{
+      margin-bottom:24px;
+      display:grid;
+      gap:8px;
+    }
+    .eyebrow{
+      font-size:11px;
+      letter-spacing:0.32em;
+      text-transform:uppercase;
+      color:var(--orange);
+      font-weight:700;
+    }
+    .title{
+      font-family:"Outfit",sans-serif;
+      font-size:54px;
+      line-height:0.95;
+      letter-spacing:-0.06em;
+      max-width:12ch;
+      margin:0;
+    }
+    .sub{
+      margin:0;
+      max-width:70ch;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.7;
+    }
+    .stack{
+      display:grid;
+      gap:34px;
+    }
+    .board{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(10,28,64,0.08);
+      border-radius:34px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(36,113,231,0.1), transparent 26%),
+        radial-gradient(circle at 90% 100%, rgba(230,112,30,0.08), transparent 24%),
+        linear-gradient(180deg,rgba(255,255,255,0.92) 0%, rgba(241,246,252,0.94) 100%);
+      box-shadow:var(--shadow);
+      padding:28px 28px 30px;
+    }
+    .board::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(10,28,64,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,28,64,0.03) 1px, transparent 1px);
+      background-size:32px 32px;
+      opacity:.45;
+      pointer-events:none;
+    }
+    .board > *{position:relative;z-index:1}
+    .board-head{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      align-items:flex-end;
+      margin-bottom:20px;
+    }
+    .board-id{
+      display:grid;
+      gap:4px;
+    }
+    .board-kicker{
+      font-size:11px;
+      letter-spacing:0.28em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .board-name{
+      font-family:"Outfit",sans-serif;
+      font-size:18px;
+      line-height:1;
+      letter-spacing:-0.04em;
+      font-weight:700;
+      color:var(--text);
+    }
+    .board-note{
+      max-width:70ch;
+      font-size:14px;
+      line-height:1.6;
+      color:var(--muted);
+    }
+    .status-tag{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:36px;
+      padding:0 14px;
+      border-radius:999px;
+      border:1px solid rgba(10,28,64,0.08);
+      background:rgba(255,255,255,0.75);
+      font-size:11px;
+      letter-spacing:0.2em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:var(--blue);
+      white-space:nowrap;
+    }
+
+    .mark{
+      width:22px;
+      height:22px;
+      position:relative;
+      flex:0 0 auto;
+    }
+    .mark.person::before{
+      content:"";
+      position:absolute;
+      left:5px;
+      top:1px;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      border:2px solid var(--blue);
+    }
+    .mark.person::after{
+      content:"";
+      position:absolute;
+      left:3px;
+      bottom:1px;
+      width:14px;
+      height:9px;
+      border-radius:10px 10px 7px 7px;
+      border:2px solid var(--blue);
+      border-top:0;
+    }
+    .mark.reason::before{
+      content:"";
+      position:absolute;
+      inset:2px;
+      border-radius:50%;
+      background:rgba(230,112,30,0.12);
+      border:1px solid rgba(230,112,30,0.18);
+    }
+    .mark.reason::after{
+      content:"!";
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      color:var(--orange);
+      font-size:16px;
+      font-weight:700;
+    }
+    .mark.route::before{
+      content:"";
+      position:absolute;
+      left:4px;
+      top:10px;
+      width:13px;
+      height:2px;
+      background:var(--green);
+      border-radius:999px;
+    }
+    .mark.route::after{
+      content:"";
+      position:absolute;
+      right:3px;
+      top:6px;
+      width:8px;
+      height:8px;
+      border-top:2px solid var(--green);
+      border-right:2px solid var(--green);
+      transform:rotate(45deg);
+    }
+    .mark.copy::before,
+    .mark.copy::after{
+      content:"";
+      position:absolute;
+      border-radius:5px;
+      border:1px solid rgba(36,113,231,0.26);
+      background:rgba(36,113,231,0.08);
+      width:12px;
+      height:14px;
+    }
+    .mark.copy::before{left:4px;top:5px;background:#fff}
+    .mark.copy::after{left:8px;top:3px}
+    .mark.advance::before{
+      content:"";
+      position:absolute;
+      inset:1px;
+      border-radius:50%;
+      background:rgba(45,122,75,0.12);
+      border:1px solid rgba(45,122,75,0.2);
+    }
+    .mark.advance::after{
+      content:"";
+      position:absolute;
+      left:7px;
+      top:6px;
+      width:8px;
+      height:5px;
+      border-left:2px solid var(--green);
+      border-bottom:2px solid var(--green);
+      transform:rotate(-45deg);
+    }
+    .mark.warning::before{
+      content:"";
+      position:absolute;
+      left:3px;
+      top:2px;
+      width:16px;
+      height:16px;
+      border-radius:4px;
+      border:1px solid rgba(196,75,69,0.18);
+      background:rgba(196,75,69,0.1);
+      transform:rotate(12deg);
+    }
+    .mark.warning::after{
+      content:"";
+      position:absolute;
+      left:10px;
+      top:5px;
+      width:2px;
+      height:8px;
+      background:var(--red);
+      box-shadow:0 10px 0 0 var(--red);
+      border-radius:999px;
+    }
+
+    .v1-shell{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(340px,0.9fr);
+      gap:34px;
+      align-items:start;
+    }
+    .v1-witness{
+      display:grid;
+      gap:18px;
+    }
+    .v1-dossier{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:16px;
+      align-items:end;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+    .v1-person{
+      display:grid;
+      gap:7px;
+    }
+    .v1-label{
+      font-size:11px;
+      letter-spacing:0.26em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .v1-name{
+      font-family:"Outfit",sans-serif;
+      font-size:56px;
+      line-height:0.9;
+      letter-spacing:-0.07em;
+      font-weight:700;
+      margin:0;
+    }
+    .v1-meta{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.5;
+    }
+    .v1-score{
+      justify-self:end;
+      text-align:right;
+    }
+    .v1-score strong{
+      display:block;
+      font-size:52px;
+      line-height:0.9;
+      letter-spacing:-0.06em;
+      font-family:"Outfit",sans-serif;
+      color:var(--text);
+    }
+    .v1-score span{
+      font-size:11px;
+      letter-spacing:0.24em;
+      text-transform:uppercase;
+      color:var(--green);
+      font-weight:700;
+    }
+    .v1-cues{
+      display:grid;
+      gap:0;
+    }
+    .v1-cue{
+      display:grid;
+      grid-template-columns:34px 120px 1fr;
+      gap:16px;
+      align-items:start;
+      padding:18px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .v1-cue:last-child{border-bottom:0}
+    .v1-cue-title{
+      font-size:11px;
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+      padding-top:4px;
+    }
+    .v1-cue-copy{
+      font-size:18px;
+      line-height:1.45;
+      color:var(--text);
+    }
+    .v1-cue-copy em{
+      display:block;
+      margin-top:6px;
+      font-style:normal;
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+    .v1-handoff{
+      display:grid;
+      gap:12px;
+      padding-top:6px;
+    }
+    .v1-route{
+      display:grid;
+      grid-template-columns:34px 1fr auto;
+      gap:14px;
+      align-items:center;
+      min-height:62px;
+      border-bottom:1px solid var(--line);
+    }
+    .v1-route:last-child{border-bottom:0}
+    .v1-route-label{
+      font-size:11px;
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .v1-route-title{
+      font-size:21px;
+      line-height:1;
+      letter-spacing:-0.05em;
+      font-family:"Outfit",sans-serif;
+      font-weight:700;
+    }
+    .v1-route-value{
+      font-size:13px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .v2-shell{
+      display:grid;
+      gap:26px;
+    }
+    .v2-film{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:14px;
+      align-items:stretch;
+    }
+    .v2-frame{
+      min-height:146px;
+      padding:18px 18px 16px;
+      border-radius:24px;
+      background:rgba(255,255,255,0.58);
+      border:1px solid rgba(10,28,64,0.08);
+      display:grid;
+      gap:10px;
+      align-content:start;
+    }
+    .v2-frame.active{
+      background:rgba(255,255,255,0.88);
+      box-shadow:0 18px 40px rgba(10,28,64,0.08);
+      transform:translateY(-3px);
+    }
+    .v2-step{
+      font-size:11px;
+      letter-spacing:0.24em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .v2-frame-title{
+      font-family:"Outfit",sans-serif;
+      font-size:26px;
+      line-height:0.95;
+      letter-spacing:-0.05em;
+      font-weight:700;
+      max-width:8ch;
+    }
+    .v2-frame-copy{
+      font-size:13px;
+      line-height:1.6;
+      color:var(--muted);
+    }
+    .v2-shell-bottom{
+      display:grid;
+      grid-template-columns:minmax(0,1.12fr) minmax(280px,0.88fr);
+      gap:34px;
+      align-items:start;
+    }
+    .v2-script{
+      display:grid;
+      gap:18px;
+    }
+    .v2-hero{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:20px;
+      align-items:end;
+      border-bottom:1px solid var(--line);
+      padding-bottom:18px;
+    }
+    .v2-hero-title{
+      margin:0;
+      font-family:"Outfit",sans-serif;
+      font-size:62px;
+      line-height:0.88;
+      letter-spacing:-0.08em;
+      max-width:9ch;
+    }
+    .v2-hero-copy{
+      color:var(--muted);
+      max-width:38ch;
+      font-size:14px;
+      line-height:1.65;
+    }
+    .v2-ladder{
+      display:grid;
+      gap:0;
+    }
+    .v2-row{
+      display:grid;
+      grid-template-columns:30px 124px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+      padding:15px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .v2-row:last-child{border-bottom:0}
+    .v2-row-title{
+      font-size:11px;
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+      padding-top:4px;
+    }
+    .v2-row-copy{
+      font-size:18px;
+      line-height:1.45;
+    }
+    .v2-row-copy small{
+      display:block;
+      margin-top:5px;
+      font-size:13px;
+      line-height:1.6;
+      color:var(--muted);
+    }
+    .v2-dock{
+      display:grid;
+      gap:14px;
+      align-content:start;
+      padding-top:6px;
+    }
+    .v2-dock-line{
+      display:grid;
+      grid-template-columns:100px 1fr;
+      gap:12px;
+      align-items:start;
+      min-height:44px;
+      border-bottom:1px solid var(--line);
+      padding-bottom:12px;
+    }
+    .v2-dock-line:last-child{border-bottom:0}
+    .v2-dock-label{
+      font-size:11px;
+      letter-spacing:0.2em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .v2-dock-value{
+      font-size:15px;
+      line-height:1.55;
+      color:var(--text);
+    }
+    .v2-dock-value strong{font-family:"Outfit",sans-serif;font-size:24px;line-height:1}
+
+    .v3-shell{
+      display:grid;
+      grid-template-columns:minmax(300px,0.78fr) minmax(0,1.12fr) minmax(250px,0.8fr);
+      gap:30px;
+      align-items:start;
+    }
+    .v3-witness{
+      display:grid;
+      gap:18px;
+      align-content:start;
+    }
+    .v3-witness-head{
+      padding-bottom:16px;
+      border-bottom:1px solid var(--line);
+    }
+    .v3-witness-name{
+      margin:8px 0 10px;
+      font-family:"Outfit",sans-serif;
+      font-size:48px;
+      line-height:0.92;
+      letter-spacing:-0.07em;
+      max-width:8ch;
+    }
+    .v3-witness-copy{
+      font-size:14px;
+      line-height:1.7;
+      color:var(--muted);
+    }
+    .v3-witness-stamps{
+      display:grid;
+      gap:8px;
+    }
+    .v3-stamp{
+      display:grid;
+      grid-template-columns:90px 1fr;
+      gap:12px;
+      align-items:center;
+      min-height:34px;
+      border-bottom:1px solid var(--line);
+    }
+    .v3-stamp:last-child{border-bottom:0}
+    .v3-stamp-label{
+      font-size:11px;
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .v3-stamp-value{
+      font-size:14px;
+      color:var(--text);
+      line-height:1.5;
+    }
+    .v3-mid{
+      display:grid;
+      gap:14px;
+    }
+    .v3-strip{
+      display:grid;
+      grid-template-columns:34px minmax(100px,0.55fr) minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+      padding:16px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .v3-strip:last-child{border-bottom:0}
+    .v3-strip-name{
+      font-size:11px;
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+      padding-top:4px;
+    }
+    .v3-strip-copy{
+      font-size:24px;
+      line-height:1.2;
+      letter-spacing:-0.04em;
+      font-family:"Outfit",sans-serif;
+      font-weight:700;
+    }
+    .v3-strip-copy small{
+      display:block;
+      margin-top:6px;
+      font-family:"Public Sans",sans-serif;
+      font-size:13px;
+      line-height:1.6;
+      font-weight:400;
+      color:var(--muted);
+      letter-spacing:0;
+    }
+    .v3-right{
+      display:grid;
+      gap:14px;
+      align-content:start;
+    }
+    .v3-dock-title{
+      font-size:11px;
+      letter-spacing:0.24em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:2px;
+    }
+    .v3-dock-line{
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:12px;
+      align-items:start;
+      min-height:58px;
+      border-bottom:1px solid var(--line);
+      padding-bottom:12px;
+    }
+    .v3-dock-line:last-child{border-bottom:0}
+    .v3-dock-copy{
+      font-size:15px;
+      line-height:1.55;
+      color:var(--text);
+    }
+    .v3-dock-copy strong{
+      display:block;
+      margin-bottom:3px;
+      font-family:"Outfit",sans-serif;
+      font-size:19px;
+      line-height:1;
+      letter-spacing:-0.04em;
+    }
+
+    @media (max-width: 1220px){
+      .v1-shell,
+      .v2-shell-bottom,
+      .v3-shell{grid-template-columns:1fr}
+      .v2-film{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 900px){
+      .page{width:min(100vw - 24px, 100%)}
+      .title{font-size:42px}
+      .board{padding:22px 18px}
+      .board-head{display:grid}
+      .v2-film{grid-template-columns:1fr}
+      .v1-dossier,
+      .v2-hero{grid-template-columns:1fr}
+      .v1-cue,
+      .v2-row,
+      .v3-strip{grid-template-columns:30px 1fr}
+      .v1-cue-title,
+      .v2-row-title,
+      .v3-strip-name{grid-column:2}
+      .v1-score{justify-self:start;text-align:left}
+      .v1-route,
+      .v3-dock-line{grid-template-columns:34px 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="intro">
+      <div class="eyebrow">Call Planner Taste Test</div>
+      <h1 class="title">Three real command grammars for the next room.</h1>
+      <p class="sub">Same room job in all three: pick the real person, force the reason now into the meeting, shape the exact advance ask, then hand the truth forward into Discovery Studio or Deal Workspace. These are intentionally different, not skin-level reskins.</p>
+    </section>
+
+    <div class="stack">
+      <section class="board">
+        <div class="board-head">
+          <div class="board-id">
+            <div class="board-kicker">Variant 01</div>
+            <div class="board-name">Pressure Script</div>
+            <div class="board-note">The call is treated like a guided interrogation rail. One person on the left, one pressure sequence down the middle, and the handoff routes on the right. Strongest when the room should feel procedural and disciplined.</div>
+          </div>
+          <div class="status-tag">call planner</div>
+        </div>
+
+        <div class="v1-shell">
+          <div class="v1-witness">
+            <div class="v1-dossier">
+              <div class="mark person"></div>
+              <div class="v1-person">
+                <div class="v1-label">Selected contact</div>
+                <h2 class="v1-name">Jane Smith</h2>
+                <div class="v1-meta">VP Operations · Apex Fintech · linked to $140K qualification thread</div>
+              </div>
+              <div class="v1-score">
+                <span>credible</span>
+                <strong>86</strong>
+              </div>
+            </div>
+
+            <div class="v1-cues">
+              <div class="v1-cue">
+                <div class="mark person"></div>
+                <div class="v1-cue-title">Open</div>
+                <div class="v1-cue-copy">Anchor the call in her actual operating burden.
+                  <em>“You own the workflow after the rep leaves the call. Where does the handoff break most often?”</em>
+                </div>
+              </div>
+              <div class="v1-cue">
+                <div class="mark reason"></div>
+                <div class="v1-cue-title">Reason now</div>
+                <div class="v1-cue-copy">TriZetto breach fallout is changing timing pressure.
+                  <em>Use the signal, not generic curiosity, to justify the conversation.</em>
+                </div>
+              </div>
+              <div class="v1-cue">
+                <div class="mark route"></div>
+                <div class="v1-cue-title">Probe</div>
+                <div class="v1-cue-copy">Surface where authority, ownership, or process is still missing.
+                  <em>Three buyer-tuned questions live here, not ten brainstorm prompts.</em>
+                </div>
+              </div>
+              <div class="v1-cue">
+                <div class="mark warning"></div>
+                <div class="v1-cue-title">Advance ask</div>
+                <div class="v1-cue-copy">Leave with a dated readout and the internal owner named.
+                  <em>If the ask cannot be spoken clearly, the agenda is still thin.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="v1-handoff">
+            <div class="v1-route">
+              <div class="mark advance"></div>
+              <div>
+                <div class="v1-route-label">Discovery Studio</div>
+                <div class="v1-route-title">Run the live conversation.</div>
+              </div>
+              <div class="v1-route-value">opener + probes</div>
+            </div>
+            <div class="v1-route">
+              <div class="mark route"></div>
+              <div>
+                <div class="v1-route-label">Deal Workspace</div>
+                <div class="v1-route-title">Record what changed in the deal.</div>
+              </div>
+              <div class="v1-route-value">owner + next step</div>
+            </div>
+            <div class="v1-route">
+              <div class="mark copy"></div>
+              <div>
+                <div class="v1-route-label">Portable brief</div>
+                <div class="v1-route-title">Take the call script with you.</div>
+              </div>
+              <div class="v1-route-value">copy agenda</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="board">
+        <div class="board-head">
+          <div class="board-id">
+            <div class="board-kicker">Variant 02</div>
+            <div class="board-name">Meeting Film</div>
+            <div class="board-note">The room becomes a visible sequence of meeting moments. Best when the product should feel like a live operating storyboard: open, trigger, probe, advance, log. Less dossier, more temporal flow.</div>
+          </div>
+          <div class="status-tag">agenda sequence</div>
+        </div>
+
+        <div class="v2-shell">
+          <div class="v2-film">
+            <div class="v2-frame active">
+              <div class="v2-step">Contact</div>
+              <div class="v2-frame-title">Jane Smith is the real room.</div>
+              <div class="v2-frame-copy">VP Ops. Apex Fintech. This is not a fake persona exercise anymore.</div>
+            </div>
+            <div class="v2-frame">
+              <div class="v2-step">Trigger</div>
+              <div class="v2-frame-title">Why now is visible.</div>
+              <div class="v2-frame-copy">Breach exposure gives the meeting urgency without manufactured drama.</div>
+            </div>
+            <div class="v2-frame">
+              <div class="v2-step">Probe</div>
+              <div class="v2-frame-title">Find the weak gate.</div>
+              <div class="v2-frame-copy">Ownership, process, or decision criteria should crack in this section.</div>
+            </div>
+            <div class="v2-frame">
+              <div class="v2-step">Advance</div>
+              <div class="v2-frame-title">Name the next move.</div>
+              <div class="v2-frame-copy">Dated follow-up, owner, and readout path are the real outputs.</div>
+            </div>
+            <div class="v2-frame">
+              <div class="v2-step">Land</div>
+              <div class="v2-frame-title">Hand the truth forward.</div>
+              <div class="v2-frame-copy">Discovery Studio runs the call. Deal Workspace receives the change.</div>
+            </div>
+          </div>
+
+          <div class="v2-shell-bottom">
+            <div class="v2-script">
+              <div class="v2-hero">
+                <div>
+                  <div class="v1-label">Active frame</div>
+                  <h2 class="v2-hero-title">Build the meeting so it earns a next step.</h2>
+                </div>
+                <div class="v2-hero-copy">This variant treats agenda quality as sequence quality. The meeting should visibly move from person to pressure to proof to advance ask.</div>
+              </div>
+
+              <div class="v2-ladder">
+                <div class="v2-row">
+                  <div class="mark person"></div>
+                  <div class="v2-row-title">Opening</div>
+                  <div class="v2-row-copy">“You own the workflow after the rep leaves the call. Where does the handoff break?”
+                    <small>Start inside her operating reality, not your product pitch.</small>
+                  </div>
+                </div>
+                <div class="v2-row">
+                  <div class="mark reason"></div>
+                  <div class="v2-row-title">Why now</div>
+                  <div class="v2-row-copy">Use the TriZetto disruption to ask whether timing, review pressure, or stakeholder load changed.
+                    <small>The trigger should justify the call in one sentence.</small>
+                  </div>
+                </div>
+                <div class="v2-row">
+                  <div class="mark warning"></div>
+                  <div class="v2-row-title">Advance ask</div>
+                  <div class="v2-row-copy">Leave with a dated readout call and the internal owner attached.
+                    <small>The room is thin if this still sounds vague.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="v2-dock">
+              <div class="v2-dock-line">
+                <div class="v2-dock-label">Band</div>
+                <div class="v2-dock-value"><strong>86 / Credible</strong> person clear · signal live · deal linked</div>
+              </div>
+              <div class="v2-dock-line">
+                <div class="v2-dock-label">Discovery Studio</div>
+                <div class="v2-dock-value">Carry the opener and the three probes into the live conversation room.</div>
+              </div>
+              <div class="v2-dock-line">
+                <div class="v2-dock-label">Deal Workspace</div>
+                <div class="v2-dock-value">Capture the changed owner, next step, and pressure note after the call lands.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="board">
+        <div class="board-head">
+          <div class="board-id">
+            <div class="board-kicker">Variant 03</div>
+            <div class="board-name">Witness Bench</div>
+            <div class="board-note">The contact becomes a witness under examination. The center strips name exactly what must be extracted from the call, while the right bench holds the onward moves. Strongest when the room should feel judicial, sparse, and high-stakes.</div>
+          </div>
+          <div class="status-tag">forcing room</div>
+        </div>
+
+        <div class="v3-shell">
+          <div class="v3-witness">
+            <div class="v3-witness-head">
+              <div class="v1-label">Witness</div>
+              <h2 class="v3-witness-name">Jane Smith</h2>
+              <div class="v3-witness-copy">VP Operations · Apex Fintech. The call only matters if this specific operator can confirm where ownership and workflow are still breaking.</div>
+            </div>
+            <div class="v3-witness-stamps">
+              <div class="v3-stamp">
+                <div class="v3-stamp-label">Linked deal</div>
+                <div class="v3-stamp-value">$140K qualification thread</div>
+              </div>
+              <div class="v3-stamp">
+                <div class="v3-stamp-label">Reason now</div>
+                <div class="v3-stamp-value">Breach pressure changed review timing</div>
+              </div>
+              <div class="v3-stamp">
+                <div class="v3-stamp-label">Agenda band</div>
+                <div class="v3-stamp-value">Credible</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="v3-mid">
+            <div class="v3-strip">
+              <div class="mark person"></div>
+              <div class="v3-strip-name">Open</div>
+              <div class="v3-strip-copy">Start where her system breaks.
+                <small>“What gets messy after the rep leaves the call?”</small>
+              </div>
+            </div>
+            <div class="v3-strip">
+              <div class="mark reason"></div>
+              <div class="v3-strip-name">Expose</div>
+              <div class="v3-strip-copy">Find the missing gate.
+                <small>Is it no owner, no criteria, or no decision path?</small>
+              </div>
+            </div>
+            <div class="v3-strip">
+              <div class="mark route"></div>
+              <div class="v3-strip-name">Advance</div>
+              <div class="v3-strip-copy">Force one concrete move.
+                <small>Dated follow-up, named internal owner, and readout path.</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="v3-right">
+            <div class="v3-dock-title">Bench routes</div>
+            <div class="v3-dock-line">
+              <div class="mark advance"></div>
+              <div class="v3-dock-copy">
+                <strong>Discovery Studio</strong>
+                Run the live conversation with this exact questioning structure.
+              </div>
+            </div>
+            <div class="v3-dock-line">
+              <div class="mark route"></div>
+              <div class="v3-dock-copy">
+                <strong>Deal Workspace</strong>
+                Log what changed in stage truth, ownership, and next-step reality.
+              </div>
+            </div>
+            <div class="v3-dock-line">
+              <div class="mark copy"></div>
+              <div class="v3-dock-copy">
+                <strong>Portable brief</strong>
+                Carry the opener, probes, and ask without reopening the room.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

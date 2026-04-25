@@ -1,0 +1,374 @@
+/*
+ * Data migration page — Phase 2.3.
+ *
+ * Bright Trust Annex posture (CLAUDE.md Part II §4.7): calm, plainspoken,
+ * trustworthy. Severe typography from the main design system, restrained
+ * accent colors, mono for the result ledger.
+ */
+
+:root {
+    --ant-ink: #0A1C40;
+    --ant-ink-70: rgba(10, 28, 64, 0.7);
+    --ant-ink-40: rgba(10, 28, 64, 0.4);
+    --ant-ink-15: rgba(10, 28, 64, 0.15);
+    --ant-field: #F6F8FC;
+    --ant-field-raised: #FFFFFF;
+    --ant-accent-orange: #FF6B1C;
+    --ant-accent-blue: #2E5AAC;
+    --ant-accent-green: #2E7D4C;
+    --ant-accent-amber: #B57500;
+    --ant-accent-red: #B4261F;
+    --ant-border: rgba(10, 28, 64, 0.1);
+    --ant-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--ant-field);
+    color: var(--ant-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+}
+
+code, tt {
+    font-family: "JetBrains Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-size: 0.92em;
+    background: var(--ant-ink-15);
+    padding: 0 4px;
+    border-radius: 2px;
+}
+
+.migration-page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 72px 32px 96px;
+}
+
+/* ─── Header ────────────────────────────────────────────────────────── */
+
+.migration-page__header {
+    margin-bottom: 48px;
+}
+
+.migration-page__kicker {
+    font-family: "JetBrains Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ant-ink-70);
+    margin: 0 0 16px;
+    text-transform: uppercase;
+}
+
+.migration-page__title {
+    font-family: "DM Serif Display", "Iowan Old Style", Georgia, serif;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    font-weight: 400;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+}
+
+.migration-page__subtitle {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ant-ink-70);
+    max-width: 58ch;
+    margin: 0;
+}
+
+/* ─── Environment banner ────────────────────────────────────────────── */
+
+.migration-page__env {
+    border-left: 3px solid var(--ant-ink-40);
+    background: var(--ant-field-raised);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 2px;
+}
+
+.migration-page__env--production {
+    border-left-color: var(--ant-accent-orange);
+    background: #FFF3EC;
+}
+
+.migration-page__env--preview {
+    border-left-color: var(--ant-accent-blue);
+    background: #EEF3FB;
+}
+
+.migration-page__env--thin {
+    border-left-color: var(--ant-ink-40);
+    background: var(--ant-field);
+}
+
+.migration-page__env-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ant-ink-70);
+    margin: 0 0 4px;
+    text-transform: uppercase;
+}
+
+.migration-page__env-value {
+    font-size: 16px;
+    margin: 0 0 6px;
+    line-height: 1.4;
+}
+
+.migration-page__env-value strong {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.migration-page__env-hint {
+    font-size: 13px;
+    color: var(--ant-ink-70);
+    margin: 0;
+}
+
+/* ─── Status strip ──────────────────────────────────────────────────── */
+
+.migration-page__status {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--ant-border);
+    border: 1px solid var(--ant-border);
+    border-radius: 2px;
+    margin-bottom: 40px;
+    overflow: hidden;
+}
+
+.migration-page__status-row {
+    background: var(--ant-field-raised);
+    padding: 18px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.migration-page__status-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ant-ink-40);
+    text-transform: uppercase;
+}
+
+.migration-page__status-value {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.migration-page__status-value--active {
+    color: var(--ant-accent-green);
+}
+
+.migration-page__status-value--thin {
+    color: var(--ant-ink-70);
+}
+
+/* ─── Actions ───────────────────────────────────────────────────────── */
+
+.migration-page__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.migration-page__btn {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border: 1px solid var(--ant-ink);
+    background: var(--ant-field-raised);
+    color: var(--ant-ink);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 100ms ease, border-color 100ms ease;
+}
+
+.migration-page__btn:hover:not(:disabled) {
+    background: var(--ant-ink-15);
+}
+
+.migration-page__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.migration-page__btn--primary {
+    background: var(--ant-accent-orange);
+    border-color: var(--ant-accent-orange);
+    color: #FFF;
+}
+
+.migration-page__btn--primary:hover:not(:disabled) {
+    background: #E45810;
+    border-color: #E45810;
+}
+
+.migration-page__btn--ghost {
+    background: transparent;
+}
+
+.migration-page__btn--warn {
+    background: var(--ant-field-raised);
+    border-color: var(--ant-accent-red);
+    color: var(--ant-accent-red);
+}
+
+/* ─── Error banner ──────────────────────────────────────────────────── */
+
+.migration-page__error {
+    background: #FBE9E7;
+    border-left: 3px solid var(--ant-accent-red);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+}
+
+.migration-page__error-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ant-accent-red);
+    margin: 0 0 6px;
+    text-transform: uppercase;
+}
+
+.migration-page__error-msg {
+    margin: 0;
+    color: var(--ant-ink);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+}
+
+/* ─── Report ────────────────────────────────────────────────────────── */
+
+.migration-page__report {
+    border: 1px solid var(--ant-border-strong);
+    border-radius: 2px;
+    padding: 28px 28px 20px;
+    background: var(--ant-field-raised);
+}
+
+.migration-page__report-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin: 0 0 20px;
+}
+
+.migration-page__report-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.migration-page__summary-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    background: var(--ant-field);
+    border: 1px solid var(--ant-border);
+    border-radius: 2px;
+}
+
+.migration-page__summary-cell--warn {
+    background: #FFF6E0;
+    border-color: var(--ant-accent-amber);
+}
+
+.migration-page__summary-cell--ok {
+    background: #ECF6EF;
+    border-color: rgba(46, 125, 76, 0.3);
+}
+
+.migration-page__summary-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--ant-ink-70);
+    text-transform: uppercase;
+}
+
+.migration-page__summary-value {
+    font-size: 20px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.migration-page__report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+}
+
+.migration-page__report-table th,
+.migration-page__report-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--ant-border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.migration-page__report-table th {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ant-ink-70);
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.migration-page__report-table td {
+    font-size: 14px;
+}
+
+.migration-page__report-table tr:last-child td {
+    border-bottom: none;
+}
+
+.migration-page__report-table details {
+    cursor: pointer;
+}
+
+.migration-page__report-table summary {
+    color: var(--ant-accent-red);
+    font-weight: 500;
+}
+
+.migration-page__report-table ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ant-ink-70);
+}
+
+/* ─── Footer ────────────────────────────────────────────────────────── */
+
+.migration-page__footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ant-border);
+    color: var(--ant-ink-40);
+    font-size: 12px;
+}

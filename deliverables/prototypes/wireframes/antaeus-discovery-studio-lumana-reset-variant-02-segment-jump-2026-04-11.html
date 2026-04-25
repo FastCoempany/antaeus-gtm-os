@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Discovery Studio · Variant 02</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./discovery-studio-lumana-reset-2026-04-11.css">
+</head>
+<body data-variant="jump">
+  <div class="topbar">
+    <div class="topbar-l"><span class="brand">ANTAEUS</span><h1 id="topTitle"></h1></div>
+    <div class="topbar-c" id="pDots"><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span></div>
+    <div class="topbar-r"><span class="pill" id="progressPill">0/0</span><button class="tbtn" id="timerBtn">00:00</button><button class="embtn" id="emergencyBtn">10-MIN</button></div>
+  </div>
+  <div class="estrip">
+    <span class="etag" data-e="q">① Questions</span><span class="etag" data-e="x">② Extraction</span><span class="etag" data-e="f">③ Framing</span><span class="etag" data-e="p">④ Presence</span><span class="etag" data-e="v">⑤ Value</span><span class="etag" data-e="c">⑥ Closing</span>
+  </div>
+  <div class="segment-strip" id="segmentStrip"></div>
+  <div class="embar" id="emergencyBar"><strong>Compress</strong> Only the essential discovery moves stay visible.</div>
+  <button class="rp-toggle" id="panelToggle">◧ PANEL</button>
+  <div class="layout">
+    <aside class="lnav">
+      <div class="lnav-head">Framework rail</div>
+      <div id="frameworkRail"></div>
+    </aside>
+    <main class="center">
+      <section class="framework-title" id="frameworkPrompt"></section>
+      <section class="quick-grid" id="quickGrid"></section>
+      <section id="centerStack"></section>
+    </main>
+    <aside class="rpanel" id="rightPanel"></aside>
+  </div>
+  <script src="./discovery-studio-lumana-reset-2026-04-11.js"></script>
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Future Autopsy Control Strip Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#0a1c40;
+      --ink:#10274f;
+      --soft:#5f7594;
+      --muted:#8b9cb4;
+      --paper:#fcfdff;
+      --orange:#e6701e;
+      --blue:#2471e7;
+      --green:#2d7a4b;
+      --shadow-soft:0 20px 48px rgba(10,28,64,.08);
+      --shadow-hard:0 34px 86px rgba(10,28,64,.14);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,.06), transparent 26%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,.05), transparent 24%),
+        linear-gradient(180deg,#fbfcff 0%,#f2f6fc 100%);
+      padding:28px 22px 72px;
+    }
+    h1,h2,h3,h4,p{margin:0}
+    .page{max-width:1520px;margin:0 auto;display:grid;gap:28px}
+    .topline{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+      padding:0 6px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+      color:var(--muted);font-weight:700;
+    }
+    .topline .accent{color:var(--orange)}
+    .triptych{display:grid;gap:26px}
+    .variant{
+      position:relative;
+      overflow:hidden;
+      min-height:760px;
+      border:1px solid rgba(10,28,64,.06);
+      border-radius:42px;
+      box-shadow:var(--shadow-hard);
+      background:
+        radial-gradient(circle at 16% 10%, rgba(36,113,231,.14), transparent 28%),
+        radial-gradient(circle at 90% 86%, rgba(230,112,30,.12), transparent 26%),
+        linear-gradient(180deg,#f8fbff 0%,#eef5fb 100%);
+      padding:106px 36px 36px;
+    }
+    .variant::before{
+      content:"";
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(10,28,64,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,28,64,.03) 1px, transparent 1px);
+      background-size:32px 32px;
+      pointer-events:none;
+      opacity:.45;
+    }
+    .variant-meta{
+      position:absolute;top:22px;left:28px;right:28px;z-index:2;
+      display:flex;justify-content:space-between;gap:18px;align-items:flex-start;
+    }
+    .variant-id{
+      font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;
+    }
+    .variant-id .accent{color:var(--orange)}
+    .variant-name{
+      font-family:"Outfit",sans-serif;font-size:34px;line-height:1;letter-spacing:-.05em;font-weight:700;color:var(--navy);
+    }
+    .variant-meaning{
+      max-width:420px;font-size:14px;line-height:1.55;color:var(--soft);text-align:right;
+    }
+    .stage{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:minmax(380px, 560px) minmax(420px, 1fr);
+      gap:34px;
+      align-items:start;
+      min-height:590px;
+    }
+    .pin-note{
+      position:relative;
+      min-height:310px;
+      padding:22px 24px 20px;
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(10,28,64,.08);
+      border-radius:28px;
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow-soft);
+      display:grid;
+      gap:12px;
+      align-content:start;
+    }
+    .pin-note::before{
+      content:"";
+      position:absolute;
+      width:18px;height:18px;border-radius:50%;
+      background:var(--orange);
+      top:-8px;left:22px;
+      box-shadow:0 0 0 6px rgba(230,112,30,.14);
+    }
+    .pin-label{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    }
+    .pin-title{
+      font-family:"Outfit",sans-serif;
+      font-size:31px;line-height:.94;letter-spacing:-.05em;font-weight:700;color:var(--navy);
+      margin-top:10px;max-width:10ch;
+    }
+    .pin-copy{font-size:14px;line-height:1.55;color:var(--soft);max-width:36ch}
+    .meta-row{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:2px;
+    }
+    .meta-pill{
+      min-height:34px;padding:0 12px;border-radius:999px;
+      border:1px solid rgba(10,28,64,.08);background:rgba(255,255,255,.52);
+      display:inline-flex;align-items:center;
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--soft);
+    }
+
+    .stack-shell{
+      position:relative;
+      min-height:530px;
+      padding:36px 46px 0 34px;
+    }
+    .sheet{
+      position:absolute;
+      width:min(620px,calc(100% - 64px));
+      border-radius:30px;
+      background:rgba(255,255,255,.58);
+      border:1px solid rgba(10,28,64,.08);
+      backdrop-filter:blur(16px);
+      box-shadow:var(--shadow-soft);
+      padding:22px 24px;
+    }
+    .sheet-a{left:24px;top:8px;transform:rotate(-2.4deg)}
+    .sheet-b{left:82px;top:114px;transform:rotate(1.7deg)}
+    .sheet-c{left:44px;top:272px;transform:rotate(-1deg)}
+    .sheet-tab{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:30px;padding:0 10px;border-radius:999px;margin-bottom:12px;
+      font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    }
+    .orange{background:rgba(230,112,30,.12);color:var(--orange)}
+    .blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .green{background:rgba(45,122,75,.12);color:var(--green)}
+    .sheet-title{
+      font-family:"DM Serif Display",Georgia,serif;
+      font-size:44px;line-height:.94;letter-spacing:-.06em;max-width:8ch;margin-bottom:14px;
+    }
+    .sheet-row{
+      display:grid;
+      grid-template-columns:36px 88px 112px 1fr;
+      gap:12px;align-items:center;
+      padding:10px 0;border-top:1px solid rgba(10,28,64,.08);
+    }
+    .mark{
+      width:30px;height:30px;border-radius:50%;
+      display:grid;place-items:center;font-size:15px;font-weight:700;
+    }
+    .mark.orange{background:rgba(230,112,30,.14);color:var(--orange)}
+    .mark.blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .mark.green{background:rgba(45,122,75,.12);color:var(--green)}
+    .row-label,.row-value,.row-copy{font-size:13px}
+    .row-label{letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .row-value{font-weight:700}
+    .row-value.orange{color:var(--orange)}
+    .row-value.blue{color:var(--blue)}
+    .row-value.green{color:var(--green)}
+    .row-copy{line-height:1.45;color:var(--ink)}
+
+    .control-zone{
+      margin-top:20px;
+      position:relative;
+      z-index:2;
+    }
+    .search-shell{
+      display:flex;align-items:center;gap:12px;
+      min-height:52px;padding:0 14px;
+      border-radius:20px;
+      border:1px solid rgba(10,28,64,.08);
+      background:rgba(255,255,255,.8);
+      box-shadow:0 10px 26px rgba(10,28,64,.04);
+      color:#8b9cb4;
+      font-size:0.92rem;
+    }
+    .search-dot{
+      width:14px;height:14px;border-radius:50%;
+      box-shadow:inset 0 0 0 2px rgba(36,113,231,.58);
+      flex:0 0 auto;
+    }
+    .deal-pill{
+      min-height:54px;padding:0 18px;border-radius:22px;
+      background:#1f2f4c;color:#fff;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:15px;font-weight:700;white-space:nowrap;
+      box-shadow:0 18px 34px rgba(10,28,64,.18);
+    }
+    .tiny-cap{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    }
+    .action-btn{
+      min-height:46px;padding:0 18px;border-radius:18px;
+      display:inline-flex;align-items:center;justify-content:center;
+      border:1px solid rgba(10,28,64,.1);
+      background:rgba(255,255,255,.76);
+      color:#0a1c40;
+      font-size:14px;font-weight:700;
+      box-shadow:none;
+    }
+    .action-btn.primary{
+      background:var(--orange);
+      border-color:transparent;
+      color:#0a1c40;
+      box-shadow:0 16px 34px rgba(230,112,30,.22);
+    }
+
+    .variant-a .control-zone{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:18px;
+      align-items:start;
+      max-width:640px;
+    }
+    .variant-a .control-left{display:grid;gap:12px}
+    .variant-a .action-row{display:flex;gap:10px;flex-wrap:wrap}
+    .variant-a .control-note{padding-left:2px}
+
+    .variant-b .control-zone{
+      max-width:640px;
+      display:grid;
+      gap:14px;
+    }
+    .variant-b .bench{
+      display:grid;
+      grid-template-columns:160px minmax(0,1fr) auto auto;
+      gap:12px;
+      align-items:center;
+      padding:14px;
+      border-radius:24px;
+      background:rgba(255,255,255,.46);
+      border:1px solid rgba(10,28,64,.06);
+      box-shadow:var(--shadow-soft);
+    }
+    .variant-b .stack-hint{
+      display:flex;justify-content:space-between;align-items:center;
+      color:var(--soft);font-size:12px;
+    }
+
+    .variant-c .control-zone{
+      max-width:660px;
+      display:grid;
+      grid-template-columns:188px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+    }
+    .variant-c .selector-card{
+      padding:16px 14px 14px;
+      border-radius:24px;
+      background:rgba(255,255,255,.7);
+      border:1px solid rgba(10,28,64,.08);
+      box-shadow:var(--shadow-soft);
+      display:grid;gap:12px;
+    }
+    .variant-c .selector-stack{
+      display:grid;gap:8px;
+    }
+    .variant-c .selector-item{
+      min-height:36px;padding:0 12px;border-radius:14px;
+      display:flex;align-items:center;justify-content:space-between;
+      background:rgba(255,255,255,.82);
+      border:1px solid rgba(10,28,64,.06);
+      font-size:12px;color:var(--soft);
+    }
+    .variant-c .selector-item.active{
+      background:#1f2f4c;color:#fff;border-color:transparent;
+    }
+    .variant-c .control-right{display:grid;gap:12px}
+    .variant-c .actions{
+      display:flex;gap:10px;flex-wrap:wrap;
+    }
+
+    @media (max-width:1180px){
+      .stage{grid-template-columns:1fr;min-height:0}
+      .stack-shell{padding:26px 18px 0}
+      .sheet{position:relative;width:100%;left:auto !important;top:auto !important;transform:none !important;margin-bottom:16px}
+      .variant-a .control-zone,
+      .variant-c .control-zone,
+      .variant-b .bench{grid-template-columns:1fr}
+      .variant-meta{position:static;margin-bottom:18px}
+      .variant{padding-top:34px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Future Autopsy</span>
+      <span>Control Strip Study</span>
+    </div>
+
+    <section class="triptych">
+      <article class="variant variant-a">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 01</span> · Bench Pairing</div>
+            <div class="variant-name">Pinned case + tools as a paired bench.</div>
+          </div>
+          <div class="variant-meaning">The selector stays near the pinned case, the chosen deal is a distinct right-hand anchor, and the actions read as one purposeful bench instead of three unrelated pills.</div>
+        </div>
+        <div class="stage">
+          <div>
+            <div class="pin-note">
+              <div class="pin-label">Pinned case</div>
+              <div class="pin-title">Apex Fintech</div>
+              <div class="pin-copy">$140,000 · qualification · risk 100/100</div>
+              <div class="meta-row">
+                <span class="meta-pill">Qual 0/18</span>
+                <span class="meta-pill">53d in stage</span>
+                <span class="meta-pill">Owner pending</span>
+              </div>
+            </div>
+            <div class="control-zone">
+              <div class="control-left">
+                <div class="search-shell"><span class="search-dot"></span><span>Filter top 10 live cases…</span></div>
+                <div class="action-row">
+                  <button class="action-btn primary">Run selected</button>
+                  <button class="action-btn">Autopsy of day</button>
+                  <button class="action-btn">Copy brief</button>
+                </div>
+                <div class="control-note tiny-cap">Selector universe: top 10 live cases only</div>
+              </div>
+              <div class="deal-pill">Apex Fintech — $140,000 — qualification</div>
+            </div>
+          </div>
+          <div class="stack-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row">
+                <div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row">
+                <div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row">
+                <div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant variant-b">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 02</span> · Tool Bench</div>
+            <div class="variant-name">One instrument row with the chosen case in the middle.</div>
+          </div>
+          <div class="variant-meaning">Everything becomes one composed bench: filter, selected case, day-autopsy jump, and copy. This feels less like scattered buttons and more like one precise operating strip.</div>
+        </div>
+        <div class="stage">
+          <div>
+            <div class="pin-note">
+              <div class="pin-label">Pinned case</div>
+              <div class="pin-title">Apex Fintech</div>
+              <div class="pin-copy">$140,000 · qualification · risk 100/100</div>
+              <div class="meta-row">
+                <span class="meta-pill">Qual 0/18</span>
+                <span class="meta-pill">53d in stage</span>
+                <span class="meta-pill">Owner pending</span>
+              </div>
+            </div>
+            <div class="control-zone">
+              <div class="bench">
+                <div class="tiny-cap">Top 10 live cases</div>
+                <div class="search-shell"><span class="search-dot"></span><span>Filter pinned-case list…</span></div>
+                <div class="deal-pill">Apex Fintech</div>
+                <button class="action-btn primary">Run selected</button>
+              </div>
+              <div class="stack-hint">
+                <span>Autopsy of day</span>
+                <span>Copy brief</span>
+              </div>
+            </div>
+          </div>
+          <div class="stack-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row">
+                <div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row">
+                <div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row">
+                <div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant variant-c">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 03</span> · Selector Drawer</div>
+            <div class="variant-name">A compact case drawer with actions separated by role.</div>
+          </div>
+          <div class="variant-meaning">The top-10 deal universe becomes a visible drawer, the chosen case becomes its own dark register chip, and the actions are grouped by meaning instead of all being equal-weight pills.</div>
+        </div>
+        <div class="stage">
+          <div>
+            <div class="pin-note">
+              <div class="pin-label">Pinned case</div>
+              <div class="pin-title">Apex Fintech</div>
+              <div class="pin-copy">$140,000 · qualification · risk 100/100</div>
+              <div class="meta-row">
+                <span class="meta-pill">Qual 0/18</span>
+                <span class="meta-pill">53d in stage</span>
+                <span class="meta-pill">Owner pending</span>
+              </div>
+            </div>
+            <div class="control-zone">
+              <div class="selector-card">
+                <div class="tiny-cap">Pinned-case drawer · 10 live cases</div>
+                <div class="selector-stack">
+                  <div class="selector-item active"><span>Apex Fintech</span><span>$140k</span></div>
+                  <div class="selector-item"><span>Northstar Health</span><span>$180k</span></div>
+                  <div class="selector-item"><span>VoltOps</span><span>$95k</span></div>
+                </div>
+              </div>
+              <div class="control-right">
+                <div class="deal-pill">Apex Fintech — qualification</div>
+                <div class="search-shell"><span class="search-dot"></span><span>Filter drawer…</span></div>
+                <div class="actions">
+                  <button class="action-btn primary">Run selected</button>
+                  <button class="action-btn">Autopsy of day</button>
+                  <button class="action-btn">Copy brief</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stack-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row">
+                <div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row">
+                <div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row">
+                <div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

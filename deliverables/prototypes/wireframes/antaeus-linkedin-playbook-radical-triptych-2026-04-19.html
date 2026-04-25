@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus LinkedIn Playbook Radical Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#081a41;
+      --ink:#16325d;
+      --soft:#6c83a4;
+      --muted:#9caeca;
+      --line:rgba(8,26,65,.13);
+      --line2:rgba(8,26,65,.08);
+      --paper:#fbfdff;
+      --wash:#eef4fb;
+      --orange:#ed6f1e;
+      --blue:#2f72e8;
+      --green:#2e8b59;
+      --red:#c94d45;
+      --gold:#d9a86e;
+      --coal:#101827;
+      --shadow:0 34px 90px rgba(8,26,65,.14);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      padding:34px 26px 96px;
+      font-family:"Plus Jakarta Sans",sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 3% 0,rgba(47,114,232,.08),transparent 24%),
+        radial-gradient(circle at 96% 0,rgba(237,111,30,.075),transparent 25%),
+        linear-gradient(180deg,#fbfdff 0,#edf3fb 100%);
+      -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3,p{margin:0}
+    .page{max-width:1660px;margin:0 auto;display:grid;gap:34px}
+    .mast{
+      display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 8px;
+      text-transform:uppercase;letter-spacing:.24em;font-size:11px;font-weight:900;color:var(--muted)
+    }
+    .mast strong{color:var(--orange)}
+    .plate{
+      position:relative;
+      overflow:hidden;
+      min-height:820px;
+      border:1px solid rgba(8,26,65,.08);
+      border-radius:46px;
+      background:
+        radial-gradient(circle at 0 0,rgba(47,114,232,.05),transparent 25%),
+        radial-gradient(circle at 100% 0,rgba(237,111,30,.06),transparent 26%),
+        linear-gradient(180deg,rgba(255,255,255,.98),rgba(244,248,255,.97));
+      box-shadow:var(--shadow);
+      padding:36px 42px 42px;
+    }
+    .plate:before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.26;
+      background-image:
+        linear-gradient(rgba(8,26,65,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(8,26,65,.035) 1px,transparent 1px);
+      background-size:34px 34px;
+    }
+    .plate>*{position:relative;z-index:1}
+    .variant-head{
+      display:grid;
+      grid-template-columns:minmax(360px,560px) minmax(280px,520px);
+      justify-content:space-between;
+      gap:32px;
+      margin-bottom:30px;
+    }
+    .kicker{
+      text-transform:uppercase;letter-spacing:.24em;font-size:11px;font-weight:900;color:var(--muted);
+      margin-bottom:12px;
+    }
+    .kicker span{color:var(--orange)}
+    .title{
+      font-family:"Outfit",sans-serif;
+      font-weight:900;
+      letter-spacing:-.082em;
+      line-height:.88;
+      font-size:clamp(48px,5vw,86px);
+      max-width:10.6ch;
+      color:var(--navy);
+    }
+    .title .o{color:var(--orange)}
+    .title .b{color:var(--blue)}
+    .title .g{color:var(--green)}
+    .intro{
+      justify-self:end;
+      max-width:520px;
+      color:var(--soft);
+      line-height:1.62;
+      font-size:15px;
+      padding-top:8px;
+    }
+    .law{
+      margin-top:18px;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+      display:grid;
+      grid-template-columns:110px 1fr;
+      gap:20px;
+      color:var(--navy);
+      font-weight:800;
+    }
+    .law span:first-child{
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:10px;
+    }
+    .small{
+      color:var(--soft);
+      line-height:1.55;
+      font-size:13px;
+      font-weight:500;
+    }
+
+    /* Variant 01: trust press */
+    .press-layout{
+      display:grid;
+      grid-template-columns:280px minmax(580px,1fr) 310px;
+      gap:28px;
+      align-items:start;
+    }
+    .type-drawer{
+      padding-top:12px;
+      border-top:1px solid var(--line);
+    }
+    .drawer-label{
+      text-transform:uppercase;letter-spacing:.2em;font-size:10px;font-weight:900;color:var(--muted);
+      margin-bottom:22px;
+    }
+    .slug{
+      min-height:84px;
+      display:grid;
+      grid-template-columns:32px 1fr;
+      gap:14px;
+      align-items:start;
+      border-bottom:1px solid var(--line2);
+      padding:0 0 18px;
+      margin-bottom:18px;
+    }
+    .slug-mark{
+      width:28px;height:28px;border-radius:50%;
+      border:1px solid currentColor;
+      display:grid;place-items:center;
+      font-weight:900;font-size:12px;
+      background:rgba(255,255,255,.65);
+    }
+    .slug:nth-child(2){color:var(--orange)}
+    .slug:nth-child(3){color:var(--blue)}
+    .slug:nth-child(4){color:var(--green)}
+    .slug:nth-child(5){color:var(--red)}
+    .slug h3{font-size:18px;line-height:1.12;letter-spacing:-.04em;color:var(--navy)}
+    .slug p{margin-top:7px;color:var(--soft);font-size:13px;line-height:1.45}
+    .press-bed{
+      position:relative;
+      min-height:520px;
+      border-radius:34px;
+      background:
+        linear-gradient(90deg,rgba(8,26,65,.05) 1px,transparent 1px) 0 0/48px 100%,
+        linear-gradient(180deg,rgba(8,26,65,.045) 1px,transparent 1px) 0 0/100% 48px,
+        linear-gradient(145deg,#fff 0,#f7faff 100%);
+      border:1px solid rgba(8,26,65,.08);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.72),0 24px 68px rgba(8,26,65,.09);
+      padding:34px 34px 28px;
+    }
+    .proof-sheet{
+      position:absolute;
+      left:48px;
+      top:44px;
+      width:64%;
+      min-height:340px;
+      transform:rotate(-2.2deg);
+      border-radius:4px 30px 30px 4px;
+      background:linear-gradient(180deg,#fff,#f8fbff);
+      border-left:10px solid rgba(237,111,30,.34);
+      box-shadow:0 30px 70px rgba(8,26,65,.12);
+      padding:38px 42px;
+    }
+    .proof-sheet .proof-k{
+      color:var(--orange);
+      text-transform:uppercase;
+      letter-spacing:.25em;
+      font-size:11px;
+      font-weight:900;
+      margin-bottom:16px;
+    }
+    .proof-sheet h2{
+      font-family:"DM Serif Display",serif;
+      font-size:clamp(48px,5vw,78px);
+      line-height:.9;
+      letter-spacing:-.055em;
+      color:var(--navy);
+      max-width:9.3ch;
+    }
+    .proof-sheet p{
+      margin-top:20px;
+      max-width:430px;
+      color:var(--soft);
+      line-height:1.6;
+    }
+    .composing-stick{
+      position:absolute;
+      right:36px;
+      top:92px;
+      width:265px;
+      transform:rotate(1.5deg);
+      display:grid;
+      gap:12px;
+    }
+    .stick-line{
+      padding:15px 18px;
+      background:#101b36;
+      color:#fff;
+      border-radius:999px;
+      font-weight:900;
+      letter-spacing:-.02em;
+      box-shadow:0 18px 34px rgba(8,26,65,.16);
+    }
+    .stick-line:nth-child(2){background:#edf3ff;color:var(--blue)}
+    .stick-line:nth-child(3){background:#fff4ea;color:var(--orange)}
+    .stick-line:nth-child(4){background:#eff8f2;color:var(--green)}
+    .imprint{
+      position:absolute;
+      left:66px;
+      right:42px;
+      bottom:34px;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:16px;
+      border-top:1px solid var(--line);
+      padding-top:18px;
+    }
+    .imprint div{
+      font-size:12px;
+      color:var(--soft);
+      line-height:1.45;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:900;
+    }
+    .imprint strong{
+      display:block;
+      color:var(--navy);
+      text-transform:none;
+      letter-spacing:-.03em;
+      font-size:18px;
+      line-height:1.08;
+      margin-top:7px;
+    }
+    .press-right{
+      border-top:1px solid var(--line);
+      padding-top:18px;
+    }
+    .gauge{
+      display:grid;
+      grid-template-columns:1fr 86px;
+      align-items:end;
+      gap:16px;
+      padding-bottom:20px;
+      border-bottom:1px solid var(--line);
+      margin-bottom:20px;
+    }
+    .gauge h3{font-size:24px;line-height:1.1;letter-spacing:-.04em}
+    .gauge .num{font-size:74px;line-height:.8;color:var(--green);font-family:"Outfit",sans-serif;letter-spacing:-.08em}
+    .stamp{
+      display:inline-flex;
+      border:1px solid currentColor;
+      border-radius:999px;
+      padding:8px 13px;
+      color:var(--orange);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:10px;
+      font-weight:900;
+      transform:rotate(-3deg);
+      margin:4px 8px 12px 0;
+    }
+
+    /* Variant 02: cue booth */
+    .booth-layout{
+      display:grid;
+      grid-template-columns:260px minmax(600px,1fr) 320px;
+      gap:30px;
+      min-height:560px;
+    }
+    .cue-strip{
+      border-left:1px solid var(--line);
+      padding-left:22px;
+      display:grid;
+      align-content:start;
+      gap:22px;
+    }
+    .cue{
+      display:grid;
+      grid-template-columns:28px 1fr;
+      gap:14px;
+      align-items:start;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line2);
+    }
+    .bulb{
+      width:18px;height:18px;border-radius:50%;
+      box-shadow:0 0 0 9px rgba(255,255,255,.85),0 0 32px currentColor;
+      margin-top:4px;
+    }
+    .cue:nth-child(1){color:var(--orange)}
+    .cue:nth-child(2){color:var(--blue)}
+    .cue:nth-child(3){color:var(--green)}
+    .cue:nth-child(4){color:var(--red)}
+    .cue h3{color:var(--navy);font-size:19px;line-height:1.12;letter-spacing:-.04em}
+    .cue p{color:var(--soft);font-size:13px;line-height:1.5;margin-top:7px}
+    .stage{
+      position:relative;
+      min-height:560px;
+      overflow:hidden;
+      border-radius:42px;
+      background:
+        radial-gradient(circle at 50% 72%,rgba(237,111,30,.26),transparent 18%),
+        radial-gradient(circle at 50% 22%,rgba(47,114,232,.18),transparent 33%),
+        linear-gradient(180deg,#101a34 0,#081126 100%);
+      color:#fff;
+      box-shadow:0 34px 80px rgba(8,26,65,.22);
+      padding:34px 42px;
+    }
+    .stage:before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:0;
+      transform:translateX(-50%);
+      width:68%;
+      height:72%;
+      background:radial-gradient(ellipse at top,rgba(255,255,255,.22),rgba(255,255,255,.045) 42%,transparent 70%);
+      clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);
+      pointer-events:none;
+    }
+    .marquee{
+      display:flex;
+      gap:11px;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:26px;
+    }
+    .marquee span{
+      width:12px;height:12px;border-radius:50%;
+      background:rgba(255,255,255,.26);
+    }
+    .marquee span:nth-child(3n+1){background:var(--orange)}
+    .marquee span:nth-child(3n+2){background:var(--blue)}
+    .marquee span:nth-child(3n+3){background:var(--green)}
+    .script{
+      position:relative;
+      max-width:680px;
+      margin:38px auto 0;
+      text-align:center;
+    }
+    .script .scene{
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-size:11px;
+      color:#9eb7e5;
+      font-weight:900;
+      margin-bottom:18px;
+    }
+    .script h2{
+      font-family:"Outfit",sans-serif;
+      font-size:clamp(54px,5vw,88px);
+      line-height:.9;
+      letter-spacing:-.08em;
+      color:#fff;
+    }
+    .script h2 span{color:var(--orange)}
+    .script p{
+      color:#b9c7df;
+      margin:22px auto 0;
+      max-width:520px;
+      line-height:1.6;
+    }
+    .cue-console{
+      position:absolute;
+      left:40px;
+      right:40px;
+      bottom:34px;
+      border-top:1px solid rgba(255,255,255,.14);
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:24px;
+      padding-top:20px;
+    }
+    .cue-console div{
+      color:#9eb7e5;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:10px;
+      font-weight:900;
+    }
+    .cue-console strong{
+      display:block;
+      margin-top:8px;
+      color:#fff;
+      text-transform:none;
+      letter-spacing:-.035em;
+      font-size:21px;
+      line-height:1.08;
+    }
+    .booth-read{
+      padding-top:20px;
+      border-top:1px solid var(--line);
+    }
+    .booth-read h3{
+      font-size:31px;
+      line-height:1.08;
+      letter-spacing:-.055em;
+      margin-bottom:16px;
+    }
+    .cue-meter{
+      height:7px;
+      width:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--red),var(--orange),var(--blue),var(--green));
+      margin:22px 0;
+      position:relative;
+    }
+    .cue-meter:after{
+      content:"";
+      position:absolute;
+      left:58%;
+      top:-7px;
+      width:20px;height:20px;border-radius:50%;
+      background:#fff;
+      border:5px solid var(--green);
+      box-shadow:0 12px 22px rgba(8,26,65,.15);
+    }
+    .booth-rule{
+      padding:17px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .booth-rule .micro,
+    .dock-item .micro,
+    .canal-label{
+      text-transform:uppercase;letter-spacing:.18em;font-size:10px;font-weight:900;color:var(--muted);
+    }
+    .booth-rule strong{
+      display:block;
+      margin-top:8px;
+      font-size:20px;
+      line-height:1.15;
+      letter-spacing:-.035em;
+    }
+
+    /* Variant 03: channel lock */
+    .lock-layout{
+      display:grid;
+      grid-template-columns:minmax(720px,1fr) 360px;
+      gap:32px;
+      align-items:start;
+    }
+    .lock-machine{
+      position:relative;
+      min-height:565px;
+      border-radius:46px;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.93),rgba(246,250,255,.96));
+      border:1px solid rgba(8,26,65,.08);
+      box-shadow:0 30px 72px rgba(8,26,65,.1);
+      overflow:hidden;
+      padding:44px 42px;
+    }
+    .water{
+      position:absolute;
+      left:0;right:0;bottom:0;
+      height:42%;
+      background:
+        linear-gradient(90deg,rgba(47,114,232,.09) 0,rgba(47,114,232,.16) 50%,rgba(46,139,89,.14) 100%);
+      clip-path:polygon(0 18%,12% 12%,28% 24%,43% 9%,57% 18%,72% 8%,86% 20%,100% 10%,100% 100%,0 100%);
+    }
+    .canal{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr 1fr;
+      gap:18px;
+      min-height:480px;
+      align-items:stretch;
+    }
+    .gate{
+      position:relative;
+      border-left:1px solid var(--line);
+      padding-left:24px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:480px;
+    }
+    .gate:first-child{border-left:0}
+    .gate:before{
+      content:"";
+      position:absolute;
+      left:-7px;
+      top:120px;
+      width:14px;height:190px;
+      border-radius:999px;
+      background:currentColor;
+      opacity:.7;
+    }
+    .gate.attention{color:var(--orange)}
+    .gate.useful{color:var(--blue)}
+    .gate.proof{color:var(--green)}
+    .gate.ask{color:var(--red)}
+    .gate h3{
+      color:var(--navy);
+      font-size:31px;
+      line-height:1;
+      letter-spacing:-.06em;
+      max-width:8ch;
+    }
+    .gate p{color:var(--soft);font-size:13px;line-height:1.55;max-width:190px;margin-top:12px}
+    .gate-status{
+      display:inline-flex;
+      align-items:center;
+      width:max-content;
+      padding:8px 13px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid currentColor;
+      color:currentColor;
+      font-size:10px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      box-shadow:0 10px 26px rgba(8,26,65,.08);
+    }
+    .lock-dock{
+      border-top:1px solid var(--line);
+      padding-top:18px;
+    }
+    .dock-item{
+      display:grid;
+      grid-template-columns:18px 1fr;
+      gap:14px;
+      padding:18px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .dock-dot{
+      width:12px;height:12px;border-radius:50%;
+      background:currentColor;
+      margin-top:5px;
+      box-shadow:0 0 0 8px rgba(255,255,255,.7);
+    }
+    .dock-item:nth-child(1){color:var(--orange)}
+    .dock-item:nth-child(2){color:var(--blue)}
+    .dock-item:nth-child(3){color:var(--green)}
+    .dock-item:nth-child(4){color:var(--red)}
+    .dock-item h3{
+      color:var(--navy);
+      font-size:22px;
+      line-height:1.1;
+      letter-spacing:-.04em;
+      margin:6px 0 7px;
+    }
+    .dock-item p{color:var(--soft);line-height:1.5;font-size:13px}
+    .lock-footer{
+      position:absolute;
+      left:42px;right:42px;bottom:30px;
+      z-index:2;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-top:1px solid rgba(8,26,65,.14);
+      padding-top:18px;
+    }
+    .lock-footer strong{font-size:20px;letter-spacing:-.04em}
+    .command{
+      display:flex;gap:10px;flex-wrap:wrap;
+    }
+    .command span{
+      border:1px solid currentColor;
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-weight:900;
+      background:rgba(255,255,255,.68);
+    }
+    .command .orange{color:var(--orange)}
+    .command .blue{color:var(--blue)}
+    .command .green{color:var(--green)}
+    .command .red{color:var(--red)}
+
+    @media(max-width:1100px){
+      body{padding:18px}
+      .plate{border-radius:28px;padding:24px;min-height:auto}
+      .variant-head,.press-layout,.booth-layout,.lock-layout{grid-template-columns:1fr}
+      .intro{justify-self:start;text-align:left}
+      .title{max-width:13ch}
+      .press-bed,.stage,.lock-machine{min-height:620px}
+      .composing-stick{position:relative;right:auto;top:auto;width:auto;margin-top:360px}
+      .proof-sheet{width:82%}
+      .canal{grid-template-columns:1fr;gap:26px}
+      .gate{min-height:200px}
+      .gate:before{height:120px;top:58px}
+      .lock-footer{position:relative;left:auto;right:auto;bottom:auto;margin-top:32px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="mast"><span><strong>LinkedIn Playbook</strong> radical taste reset</span><span>Antaeus</span></div>
+
+    <section class="plate">
+      <div class="variant-head">
+        <div>
+          <div class="kicker"><span>Variant 01</span> / Trust Press</div>
+          <h1 class="title">Compose the line before the channel sees it.</h1>
+        </div>
+        <div class="intro">
+          This treats LinkedIn like a proofing press, not a social dashboard. The rep assembles account, human, proof, and ask into one printable channel move. If any slug is missing, the line cannot leave the room.
+          <div class="law"><span>Room law</span><div>Nothing sends until the sentence has a real account, a real human, and a real reason to exist.</div></div>
+        </div>
+      </div>
+
+      <div class="press-layout">
+        <aside class="type-drawer">
+          <div class="drawer-label">Type drawer</div>
+          <div class="slug"><div class="slug-mark">A</div><div><h3>Account slug</h3><p>Meridian Logistics is active in Signal Console.</p></div></div>
+          <div class="slug"><div class="slug-mark">H</div><div><h3>Human slug</h3><p>Ops leader has public expansion post.</p></div></div>
+          <div class="slug"><div class="slug-mark">P</div><div><h3>Proof slug</h3><p>Use queue strain benchmark, not product copy.</p></div></div>
+          <div class="slug"><div class="slug-mark">X</div><div><h3>Ask locked</h3><p>Meeting ask stays blocked until one visible touch lands.</p></div></div>
+        </aside>
+
+        <section class="press-bed">
+          <div class="proof-sheet">
+            <div class="proof-k">Proof sheet</div>
+            <h2>The first touch should feel printed for one person.</h2>
+            <p>LinkedIn is not where the rep sprays polished language. It is where the channel earns familiarity before Outbound asks for time.</p>
+          </div>
+          <div class="composing-stick">
+            <div class="stick-line">Expansion strain visible</div>
+            <div class="stick-line">Name the operator</div>
+            <div class="stick-line">Comment, do not pitch</div>
+            <div class="stick-line">Log as social motion</div>
+          </div>
+          <div class="imprint">
+            <div>Run now<strong>Write the public comment.</strong></div>
+            <div>Watch for<strong>Like, reply, profile view.</strong></div>
+            <div>Carry into<strong>Outbound if familiarity lands.</strong></div>
+          </div>
+        </section>
+
+        <aside class="press-right">
+          <div class="gauge"><div><div class="drawer-label">Press read</div><h3>Warm enough to enter through the feed.</h3></div><div class="num">71</div></div>
+          <span class="stamp">No pitch</span>
+          <span class="stamp">One human</span>
+          <span class="stamp">Log touch</span>
+          <div class="booth-rule"><div class="micro">Weakest slug</div><strong>Proof is useful, but the human route is still thin.</strong></div>
+          <div class="booth-rule"><div class="micro">Operator move</div><strong>Comment once before connection request.</strong></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="plate">
+      <div class="variant-head">
+        <div>
+          <div class="kicker"><span>Variant 02</span> / Cue Booth</div>
+          <h1 class="title">Enter only when the room gives a cue.</h1>
+        </div>
+        <div class="intro">
+          This treats LinkedIn like a live cue booth. The rep does not browse, scroll, or guess. The room lights one cue at a time: watch, comment, connect, give, ask. Social motion becomes stage direction.
+          <div class="law"><span>Room law</span><div>The inbox is not the opening scene. The first visible cue usually happens in public.</div></div>
+        </div>
+      </div>
+
+      <div class="booth-layout">
+        <aside class="cue-strip">
+          <div class="cue"><div class="bulb"></div><div><h3>Watch the public signal.</h3><p>Identify the post that makes timing real.</p></div></div>
+          <div class="cue"><div class="bulb"></div><div><h3>Comment with one operating read.</h3><p>Sound useful without asking for anything.</p></div></div>
+          <div class="cue"><div class="bulb"></div><div><h3>Connect after recognition.</h3><p>The request comes after the name is no longer cold.</p></div></div>
+          <div class="cue"><div class="bulb"></div><div><h3>Ask only when the proof lands.</h3><p>No calendar push before the channel earns it.</p></div></div>
+        </aside>
+
+        <section class="stage">
+          <div class="marquee">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="script">
+            <div class="scene">Live cue / Cascadia Health</div>
+            <h2><span>Do not DM.</span> Make the public answer feel inevitable.</h2>
+            <p>The buyer has not given the channel permission yet. The room should keep the rep in the visible feed until one cue changes.</p>
+          </div>
+          <div class="cue-console">
+            <div>Say first<strong>That expansion pressure usually shows up in response time before it shows up in tooling.</strong></div>
+            <div>If they reply<strong>Ask which queue is absorbing the spike.</strong></div>
+            <div>If silent<strong>Wait. One more useful public touch before request.</strong></div>
+          </div>
+        </section>
+
+        <aside class="booth-read">
+          <div class="drawer-label">Booth read</div>
+          <h3>The channel is live, but the ask is premature.</h3>
+          <p class="small">The face should feel like a performance surface: cues, timing, and recovery. Not a post library.</p>
+          <div class="cue-meter"></div>
+          <div class="booth-rule"><div class="micro">Current cue</div><strong>Public comment, no ask.</strong></div>
+          <div class="booth-rule"><div class="micro">Recovery cue</div><strong>If they correct you, thank them and narrow.</strong></div>
+          <div class="booth-rule"><div class="micro">Handoff</div><strong>Outbound only after the cue proves familiarity.</strong></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="plate">
+      <div class="variant-head">
+        <div>
+          <div class="kicker"><span>Variant 03</span> / Channel Lock</div>
+          <h1 class="title">Raise trust through gates, not templates.</h1>
+        </div>
+        <div class="intro">
+          This treats LinkedIn like a canal lock. Attention, usefulness, proof, and ask each have a gate. The rep can see where pressure is high enough to advance and where the route must hold.
+          <div class="law"><span>Room law</span><div>The ask cannot pass a gate that attention and usefulness have not opened.</div></div>
+        </div>
+      </div>
+
+      <div class="lock-layout">
+        <section class="lock-machine">
+          <div class="water"></div>
+          <div class="canal">
+            <div class="gate attention">
+              <div>
+                <div class="canal-label">Gate 01</div>
+                <h3>Attention</h3>
+                <p>The buyer has visible public activity tied to the account signal.</p>
+              </div>
+              <div class="gate-status">Open</div>
+            </div>
+            <div class="gate useful">
+              <div>
+                <div class="canal-label">Gate 02</div>
+                <h3>Usefulness</h3>
+                <p>The comment adds an operating read instead of repeating a value prop.</p>
+              </div>
+              <div class="gate-status">Open</div>
+            </div>
+            <div class="gate proof">
+              <div>
+                <div class="canal-label">Gate 03</div>
+                <h3>Proof</h3>
+                <p>Benchmark is ready, but only becomes useful after engagement.</p>
+              </div>
+              <div class="gate-status">Hold</div>
+            </div>
+            <div class="gate ask">
+              <div>
+                <div class="canal-label">Gate 04</div>
+                <h3>Ask</h3>
+                <p>Meeting request stays below the waterline until proof earns it.</p>
+              </div>
+              <div class="gate-status">Locked</div>
+            </div>
+          </div>
+          <div class="lock-footer">
+            <strong>Next move: open usefulness, not the calendar.</strong>
+            <div class="command"><span class="orange">Draft comment</span><span class="blue">Watch reply</span><span class="green">Log motion</span></div>
+          </div>
+        </section>
+
+        <aside class="lock-dock">
+          <div class="dock-item"><div class="dock-dot"></div><div><div class="micro">What to do now</div><h3>Comment on the post.</h3><p>Use the signal as the subject, not the product.</p></div></div>
+          <div class="dock-item"><div class="dock-dot"></div><div><div class="micro">If they engage</div><h3>Give the proof.</h3><p>Send one useful benchmark before asking for time.</p></div></div>
+          <div class="dock-item"><div class="dock-dot"></div><div><div class="micro">If they ignore</div><h3>Do not chase.</h3><p>Let Outbound carry the next move while LinkedIn remains air cover.</p></div></div>
+          <div class="dock-item"><div class="dock-dot"></div><div><div class="micro">If they object</div><h3>Recover publicly.</h3><p>Thank the correction, narrow the point, then stop.</p></div></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

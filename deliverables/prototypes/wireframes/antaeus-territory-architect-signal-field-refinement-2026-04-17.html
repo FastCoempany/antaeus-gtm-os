@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Territory Architect Signal Field Refinement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0a1c40;
+      --ink: #10274f;
+      --soft: #617793;
+      --muted: #91a3bb;
+      --line: rgba(10, 28, 64, 0.10);
+      --paper: rgba(255,255,255,0.88);
+      --orange: #e6701e;
+      --blue: #2471e7;
+      --green: #2d7a4b;
+      --red: #c44739;
+      --shadow-soft: 0 18px 42px rgba(10, 28, 64, 0.08);
+      --shadow-hard: 0 28px 86px rgba(10, 28, 64, 0.12);
+      --radius-pill: 999px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+      padding: 28px 22px 90px;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, p { margin: 0; }
+    .page { max-width: 1600px; margin: 0 auto; display: grid; gap: 26px; }
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 0 6px;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .topline .accent { color: var(--orange); }
+    .board {
+      position: relative;
+      overflow: hidden;
+      min-height: 1080px;
+      padding: 30px 32px 34px;
+      border-radius: 40px;
+      border: 1px solid rgba(10, 28, 64, 0.06);
+      box-shadow: var(--shadow-hard);
+      background:
+        radial-gradient(circle at 88% 12%, rgba(230,112,30,0.06), transparent 22%),
+        radial-gradient(circle at 12% 0%, rgba(36,113,231,0.06), transparent 24%),
+        linear-gradient(180deg, rgba(253,254,255,0.98) 0%, rgba(242,246,252,0.98) 100%);
+    }
+    .board::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(10,28,64,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,28,64,0.03) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.42;
+      pointer-events: none;
+    }
+    .meta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 24px;
+      margin-bottom: 28px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .meta .accent { color: var(--orange); }
+    .meta .meaning {
+      max-width: 470px;
+      font-size: 14px;
+      line-height: 1.55;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 500;
+      color: var(--soft);
+      text-align: right;
+    }
+    .chrome {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .spine { display: grid; gap: 16px; align-content: start; padding-top: 6px; }
+    .brand { font-family: "Outfit", sans-serif; font-size: 18px; letter-spacing: 0.04em; color: var(--navy); }
+    .dot { width: 14px; height: 14px; border-radius: 50%; margin-left: 2px; background: var(--orange); box-shadow: 0 0 0 8px rgba(230,112,30,0.08); }
+    .rail { width: 1px; height: 280px; margin-left: 8px; background: linear-gradient(180deg, rgba(10,28,64,0.12), rgba(10,28,64,0)); }
+    .surface { display: grid; gap: 28px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(260px, 0.72fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .eyebrow { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--orange); font-weight: 700; margin-bottom: 10px; }
+    .hero-title {
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(60px, 7vw, 120px);
+      line-height: 0.9;
+      letter-spacing: -0.11em;
+      max-width: 8ch;
+    }
+    .hero-copy {
+      margin-top: 12px;
+      max-width: 56ch;
+      font-size: 17px;
+      line-height: 1.58;
+      color: var(--soft);
+    }
+    .hero-side {
+      display: grid;
+      gap: 14px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .micro-label,
+    .band-label,
+    .zone-label,
+    .legend-head,
+    .strip-label,
+    .footer-note .title {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .hero-side .headline {
+      font-size: 22px;
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+    .hero-side .copy {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--soft);
+    }
+    .kicker-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+    .pill {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 32px; padding: 0 12px;
+      border-radius: var(--radius-pill); border: 1px solid var(--line); background: rgba(255,255,255,0.76);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--muted);
+    }
+    .pill.orange { color: var(--orange); border-color: rgba(230,112,30,0.18); background: rgba(230,112,30,0.08); }
+    .pill.blue { color: var(--blue); border-color: rgba(36,113,231,0.18); background: rgba(36,113,231,0.08); }
+    .pill.green { color: var(--green); border-color: rgba(45,122,75,0.18); background: rgba(45,122,75,0.08); }
+    .pill.red { color: var(--red); border-color: rgba(196,71,57,0.18); background: rgba(196,71,57,0.08); }
+
+    .field-shell {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.34fr) minmax(0, 1fr) minmax(300px, 0.34fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .legend,
+    .read-dock {
+      display: grid;
+      gap: 16px;
+      padding: 24px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .legend-line,
+    .read-line {
+      display: grid;
+      gap: 6px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .legend-line:last-child,
+    .read-line:last-child { border-bottom: 0; padding-bottom: 0; }
+    .legend-line .headline,
+    .read-line .headline {
+      font-size: 20px;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+    }
+    .legend-line .copy,
+    .read-line .copy {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--soft);
+    }
+    .read-score {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .read-score .copy {
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+    .read-score .value {
+      font-family: "Outfit", sans-serif;
+      font-size: 64px;
+      line-height: 0.9;
+      letter-spacing: -0.09em;
+      color: var(--green);
+    }
+
+    .signal-map {
+      position: relative;
+      min-height: 720px;
+      border-radius: 40px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.68) 0%, rgba(255,255,255,0.88) 64%, rgba(248,251,255,0.96) 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--shadow-soft);
+      overflow: hidden;
+    }
+    .signal-map::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(10,28,64,0.05) 0 1px, transparent 1px) center/124px 124px,
+        linear-gradient(0deg, rgba(10,28,64,0.04) 1px, transparent 1px) center/100% 124px,
+        linear-gradient(90deg, rgba(10,28,64,0.04) 1px, transparent 1px) center/124px 100%;
+      opacity: 0.55;
+    }
+    .ring {
+      position: absolute;
+      border: 1px dashed rgba(10,28,64,0.14);
+      border-radius: 999px;
+    }
+    .ring.core { inset: 168px 174px 170px 174px; }
+    .ring.watch { inset: 96px 102px 98px 102px; }
+    .ring.false { inset: 28px 34px 28px 34px; }
+    .zone-tag {
+      position: absolute;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+      z-index: 2;
+    }
+    .zone-tag.core { top: 138px; left: 50%; transform: translateX(-50%); }
+    .zone-tag.watch { top: 58px; right: 64px; }
+    .zone-tag.false { bottom: 58px; left: 56px; }
+    .trace {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(10,28,64,0.04), rgba(10,28,64,0.16));
+      transform-origin: left center;
+      z-index: 1;
+    }
+    .trace.one { width: 178px; left: 236px; top: 214px; transform: rotate(-11deg); }
+    .trace.two { width: 140px; left: 468px; top: 232px; transform: rotate(19deg); }
+    .trace.three { width: 196px; left: 318px; top: 396px; transform: rotate(-19deg); }
+    .trace.four { width: 168px; left: 520px; top: 470px; transform: rotate(18deg); }
+    .node {
+      position: absolute;
+      display: grid;
+      gap: 5px;
+      min-width: 156px;
+      padding: 14px 16px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.92);
+      box-shadow: var(--shadow-soft);
+      z-index: 3;
+    }
+    .node .name { font-size: 17px; font-weight: 700; letter-spacing: -0.04em; }
+    .node .copy { font-size: 12px; line-height: 1.45; color: var(--soft); }
+    .node.orange { box-shadow: 0 16px 30px rgba(230,112,30,0.10); }
+    .node.blue { box-shadow: 0 16px 30px rgba(36,113,231,0.10); }
+    .node.green { box-shadow: 0 16px 30px rgba(45,122,75,0.10); }
+    .node.red { box-shadow: 0 16px 30px rgba(196,71,57,0.08); }
+    .node-a { top: 174px; left: 108px; }
+    .node-b { top: 188px; right: 110px; }
+    .node-c { top: 356px; left: 282px; }
+    .node-d { bottom: 150px; right: 158px; }
+    .node-e { bottom: 86px; left: 72px; }
+
+    .bottom-strips {
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .strip {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .strip:last-child { border-bottom: 0; }
+    .strip-copy { font-size: 15px; line-height: 1.45; color: var(--ink); }
+    .strip-state { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; white-space: nowrap; }
+    .strip-state.good { color: var(--green); }
+    .strip-state.warn { color: var(--orange); }
+    .strip-state.risk { color: var(--red); }
+
+    .footer-note {
+      display: grid;
+      gap: 8px;
+      width: fit-content;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+    .footer-note .copy { font-size: 14px; line-height: 1.55; color: var(--soft); max-width: 78ch; }
+
+    @media (max-width: 1320px) {
+      .field-shell { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 1220px) {
+      .chrome { grid-template-columns: 1fr; }
+      .spine { display: none; }
+      .hero { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 820px) {
+      .board { min-height: auto; padding: 26px 20px 28px; }
+      .meta { display: grid; gap: 10px; }
+      .meta .meaning { text-align: left; max-width: none; }
+      .hero-title { max-width: none; }
+      .strip { grid-template-columns: 1fr; }
+      .signal-map { min-height: 0; padding: 22px; display: grid; gap: 14px; }
+      .ring, .zone-tag, .trace { display: none; }
+      .node { position: relative; inset: auto !important; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <div><span class="accent">Territory Architect</span> Signal Field Refinement</div>
+      <div>Antaeus</div>
+    </div>
+
+    <section class="board">
+      <div class="meta">
+        <div><span class="accent">Variant 02</span> / Signal Field</div>
+        <div class="meaning">This refinement makes Territory Architect feel like live territory gravity. Accounts move inward when signal, owner, and urgency converge, and drift outward when they only sound strategically plausible.</div>
+      </div>
+      <div class="chrome">
+        <div class="spine"><div class="brand">ANTAEUS</div><div class="dot"></div><div class="rail"></div></div>
+        <div class="surface">
+          <div class="hero">
+            <div>
+              <div class="eyebrow">Signal field refinement</div>
+              <div class="hero-title">Let signal pull the territory into shape.</div>
+              <div class="hero-copy">This room should not ask the user to scroll through equal-looking accounts. It should show where gravity is strongest, where accounts are only hanging on by category fit, and where the field needs immediate replacement.</div>
+              <div class="kicker-row">
+                <span class="pill green">5 in the core</span>
+                <span class="pill blue">8 in watch ring</span>
+                <span class="pill red">3 false positives</span>
+              </div>
+            </div>
+            <aside class="hero-side">
+              <div class="micro-label">Active field thesis</div>
+              <div class="headline">Industrial operators with multi-site expansion and visible supplier resilience pressure.</div>
+              <div class="copy">The room should make it obvious that signal strength matters more than logo familiarity. Territory gets better when gravity is earned, not manually justified.</div>
+            </aside>
+          </div>
+
+          <div class="field-shell">
+            <aside class="legend">
+              <div class="legend-line">
+                <div class="legend-head">Pull inward</div>
+                <div class="headline">Live operator pressure.</div>
+                <div class="copy">New plant launches, supplier shocks, leadership ownership, and proof windows inside one quarter.</div>
+              </div>
+              <div class="legend-line">
+                <div class="legend-head">Hold in watch ring</div>
+                <div class="headline">Partial proof, incomplete ownership.</div>
+                <div class="copy">A real signal exists, but the account still needs a stronger human owner or clearer forcing event.</div>
+              </div>
+              <div class="legend-line">
+                <div class="legend-head">Eject</div>
+                <div class="headline">Category fit without active pressure.</div>
+                <div class="copy">If the account only belongs because it sounds like the thesis, it should visibly drift out of the field.</div>
+              </div>
+            </aside>
+
+            <div class="signal-map">
+              <div class="ring core"></div>
+              <div class="ring watch"></div>
+              <div class="ring false"></div>
+              <div class="zone-tag core">Core field</div>
+              <div class="zone-tag watch">Watch ring</div>
+              <div class="zone-tag false">False territory</div>
+
+              <div class="trace one"></div>
+              <div class="trace two"></div>
+              <div class="trace three"></div>
+              <div class="trace four"></div>
+
+              <div class="node orange node-a">
+                <div class="band-label">Core</div>
+                <div class="name">Meridian Industrial</div>
+                <div class="copy">New plant launch, supplier review underway, and an operator who owns the fallout.</div>
+              </div>
+              <div class="node blue node-b">
+                <div class="band-label">Watch</div>
+                <div class="name">Northstar Manufacturing</div>
+                <div class="copy">Signal exists, but ownership still sits one layer too far from the actual disruption.</div>
+              </div>
+              <div class="node green node-c">
+                <div class="band-label">Core</div>
+                <div class="name">VoltWorks</div>
+                <div class="copy">Operational proof is visible and the thesis fit is tight enough to work immediately.</div>
+              </div>
+              <div class="node red node-d">
+                <div class="band-label">Drift</div>
+                <div class="name">Apex Freight</div>
+                <div class="copy">No present forcing pressure. This account survives on narrative, not field evidence.</div>
+              </div>
+              <div class="node red node-e">
+                <div class="band-label">Drift</div>
+                <div class="name">Bluewater Transit</div>
+                <div class="copy">Broad thesis fit and nothing else. Familiarity is doing too much of the work.</div>
+              </div>
+            </div>
+
+            <aside class="read-dock">
+              <div class="read-score">
+                <div>
+                  <div class="micro-label">Field read</div>
+                  <div class="copy">Runnable</div>
+                </div>
+                <div class="value">71</div>
+              </div>
+              <div class="read-line">
+                <div class="micro-label">Main risk</div>
+                <div class="headline">Watch-ring accounts still look too comfortable.</div>
+                <div class="copy">If the middle ring does not feel unstable, the user will keep weak accounts alive for too long.</div>
+              </div>
+              <div class="read-line">
+                <div class="micro-label">Replacement pressure</div>
+                <div class="headline">Three cleaner replacements are needed this week.</div>
+                <div class="copy">The room should always show what enters the field when a drift account gets cut.</div>
+              </div>
+              <div class="read-line">
+                <div class="micro-label">Operator move</div>
+                <div class="headline">Promote only one account from watch ring.</div>
+                <div class="copy">The field should tighten, not balloon. Promotion should feel earned and visibly expensive.</div>
+              </div>
+            </aside>
+          </div>
+
+          <div class="bottom-strips">
+            <div class="strip">
+              <div class="strip-label">Signal rule</div>
+              <div class="strip-copy">Operational triggers outrank generic company news. Site expansion, supplier failure, and ownership change should pull harder than broad growth headlines.</div>
+              <div class="strip-state good">Locked</div>
+            </div>
+            <div class="strip">
+              <div class="strip-label">Replacement queue</div>
+              <div class="strip-copy">The room should always surface cleaner replacements waiting outside the field, so cutting a weak account feels decisive instead of risky.</div>
+              <div class="strip-state warn">Needs more depth</div>
+            </div>
+            <div class="strip">
+              <div class="strip-label">Downstream effect</div>
+              <div class="strip-copy">Sourcing inherits the watch-ring boundaries. Outbound inherits the core-field angles. Deal Workspace inherits a more believable first-priority account set.</div>
+              <div class="strip-state good">Clear</div>
+            </div>
+          </div>
+
+          <div class="footer-note">
+            <div class="title">What this face is solving</div>
+            <div class="copy">This version is for a room that should feel less like account management and more like territory intelligence. It makes signal proximity, drift, and replacement pressure visible without falling back into generic ranking cards.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

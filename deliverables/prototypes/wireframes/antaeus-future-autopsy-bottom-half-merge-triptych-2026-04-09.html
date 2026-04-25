@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Future Autopsy Bottom Half Merge Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--navy:#0a1c40;--soft:#5f7594;--muted:#8b9cb4;--orange:#e6701e;--blue:#2471e7;--green:#2d7a4b;--risk:#c44b45;--line:rgba(10,28,64,.08)}
+    *{box-sizing:border-box} html,body{margin:0;padding:0}
+    body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:var(--navy);background:linear-gradient(180deg,#fbfcff 0%,#f2f6fc 100%);padding:28px 22px 72px}
+    h1,h2,h3,h4,p{margin:0}
+    .page{max-width:1520px;margin:0 auto;display:grid;gap:28px}
+    .topline{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:0 6px}
+    .accent{color:var(--orange)}
+    .triptych{display:grid;gap:28px}
+    .variant{position:relative;overflow:hidden;border:1px solid rgba(10,28,64,.06);border-radius:40px;background:radial-gradient(circle at 16% 10%, rgba(36,113,231,.12), transparent 28%),radial-gradient(circle at 90% 86%, rgba(230,112,30,.1), transparent 26%),linear-gradient(180deg,#f8fbff 0%,#eef5fb 100%);box-shadow:0 30px 70px rgba(10,28,64,.1);padding:110px 34px 40px}
+    .variant:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(10,28,64,.03) 1px, transparent 1px),linear-gradient(90deg, rgba(10,28,64,.03) 1px, transparent 1px);background-size:32px 32px;opacity:.45;pointer-events:none}
+    .meta{position:absolute;top:24px;left:28px;right:28px;display:flex;justify-content:space-between;gap:18px;z-index:1}
+    .id{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
+    .name{font-family:"Outfit",sans-serif;font-size:34px;line-height:1;letter-spacing:-.05em;font-weight:700}
+    .meaning{max-width:460px;font-size:14px;line-height:1.55;color:var(--soft);text-align:right}
+    .shell{position:relative;z-index:1;display:grid;gap:24px}
+    .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .title{font-family:"DM Serif Display",Georgia,serif;font-size:50px;line-height:.92;letter-spacing:-.05em}
+    .copy{font-size:14px;line-height:1.65;color:var(--soft)}
+    .card{padding:24px;border-radius:30px;background:rgba(255,255,255,.74);border:1px solid var(--line);box-shadow:0 18px 42px rgba(10,28,64,.08)}
+    .tag,.pill,.chip{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+    .tag.orange,.pill.orange{background:rgba(230,112,30,.12);color:var(--orange)}
+    .tag.blue,.pill.blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .tag.green,.pill.green{background:rgba(45,122,75,.12);color:var(--green)}
+    .tag.red,.pill.red{background:rgba(196,75,69,.12);color:var(--risk)}
+    .room-link{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 14px;border-radius:14px;border:1px solid rgba(10,28,64,.1);font-size:12px;font-weight:700;text-decoration:none;color:#0a1c40;background:rgba(255,255,255,.76)}
+    .check{color:var(--green);font-weight:700}
+    .line{height:1px;background:var(--line)}
+
+    .v1-bands{display:grid;gap:22px}
+    .v1-stage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .v1-sign{display:grid;gap:10px}
+    .v1-verdict{display:grid;grid-template-columns:1fr 1px 1fr;gap:24px;align-items:start}
+    .divider{width:1px;background:var(--line);height:100%}
+    .v1-col{display:grid;gap:12px}
+    .v1-list{display:grid;gap:10px}
+    .v1-row{display:grid;grid-template-columns:18px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid rgba(10,28,64,.06)}
+    .v1-row:last-child{border-bottom:0}
+    .v1-actions{display:grid;gap:0}
+    .v1-action{display:grid;grid-template-columns:44px 1fr auto;gap:16px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+    .v1-action:first-child{border-top:0}
+    .idx{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(10,28,64,.06);font-size:12px;font-weight:700}
+    .v1-exit{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding-top:16px;border-top:1px solid rgba(196,75,69,.18)}
+
+    .v2-shell{display:grid;gap:20px}
+    .v2-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .v2-sign{display:grid;gap:10px;padding-bottom:12px;border-bottom:2px solid transparent}
+    .v2-sign.active{border-color:var(--orange)}
+    .v2-main{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:start}
+    .v2-verdict{display:grid;gap:18px}
+    .v2-head{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .v2-rail{display:grid;gap:0}
+    .v2-item{display:grid;grid-template-columns:20px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+    .v2-item:first-child{border-top:0}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--risk);box-shadow:0 0 0 6px rgba(196,75,69,.08);margin-top:7px}
+    .tick{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:rgba(45,122,75,.12);color:var(--green);font-weight:700;margin-top:2px}
+    .v2-work{display:grid;gap:0}
+    .v2-workitem{display:grid;grid-template-columns:84px 1fr auto;gap:18px;align-items:start;padding:16px 0;border-top:1px solid var(--line)}
+    .v2-workitem:first-child{border-top:0}
+    .v2-exit{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding-top:16px;border-top:1px solid rgba(196,75,69,.18)}
+
+    .v3-stack{display:grid;gap:20px}
+    .v3-block{display:grid;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+    .v3-block:last-child{border-bottom:0}
+    .v3-actions{display:grid;gap:0}
+    .v3-action{display:grid;grid-template-columns:60px 1fr auto;gap:16px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+    .v3-action:first-child{border-top:0}
+    .v3-exit{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding-top:16px;border-top:1px solid rgba(196,75,69,.18)}
+
+    @media (max-width:1180px){
+      .v1-stage,.v1-verdict,.v2-strip,.v2-main,.v2-head,.v1-action,.v1-exit,.v2-workitem,.v3-action,.v3-exit{grid-template-columns:1fr}
+      .meta{position:static;margin-bottom:18px}
+      .variant{padding-top:34px}
+      .divider{display:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline"><span class="accent">Future Autopsy</span><span>Merge Logic Variants</span></div>
+    <section class="triptych">
+      <article class="variant">
+        <div class="meta"><div><div class="id"><span class="accent">Variant 01</span> · Three Bands</div><div class="name">Stage, verdict, and action collapse into three clear bands.</div></div><div class="meaning">This is the direct expression of the first merge logic: stage comparison remains together, loss and recovery become one split verdict band, and countermeasures absorb exit pressure into one action band.</div></div>
+        <div class="shell v1-bands">
+          <section class="card"><div class="kicker">Stage signatures</div><div class="v1-stage" style="margin-top:16px;"><div class="v1-sign"><div class="tag orange">Discovery</div><strong>Interest without ownership</strong><div class="copy">Sounds warm, but nobody internal is carrying the deal.</div></div><div class="v1-sign"><div class="tag blue">PoC</div><strong>Activity without decision criteria</strong><div class="copy">The pilot moves, but no one owns the readout.</div></div><div class="v1-sign"><div class="tag green">Negotiation</div><strong>Paper process before control</strong><div class="copy">Process widens before authority is truly locked.</div></div></div></section>
+          <section class="card"><div class="kicker">Verdict</div><div class="v1-verdict" style="margin-top:16px;"><div class="v1-col"><div class="title" style="font-size:38px;">You lost quietly in committee.</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><span class="chip">no next step</span><span class="chip">stale thread</span><span class="chip">no champion</span></div><div class="copy">45 days later, you lost because urgency never became ownership.</div></div><div class="divider"></div><div class="v1-col"><div class="title" style="font-size:38px;">You win because you forced proof, early.</div><div class="v1-list"><div class="v1-row"><div class="check">✓</div><div>Dated next step is set and accepted by both sides.</div></div><div class="v1-row"><div class="check">✓</div><div>Champion role and accountability are explicit.</div></div><div class="v1-row"><div class="check">✓</div><div>Economic buyer joined and confirmed budget owner.</div></div></div></div></div></section>
+          <section class="card"><div class="kicker">Action</div><div class="title" style="font-size:42px;margin-top:8px;">Three work orders to restore the truth.</div><div class="v1-actions" style="margin-top:10px;"><div class="v1-action"><div class="idx">01</div><div><strong>Put a date on the next step</strong><div class="copy" style="margin-top:6px;">Proof: Calendar invite accepted with date/time.</div></div><a href="#" class="room-link">Open Deal</a></div><div class="v1-action"><div class="idx">02</div><div><strong>Write mutual action plan</strong><div class="copy" style="margin-top:6px;">Proof: Mutual plan doc with owners and dates.</div></div><a href="#" class="room-link">Open Deal</a></div><div class="v1-action"><div class="idx">03</div><div><strong>Engage 3+ stakeholders</strong><div class="copy" style="margin-top:6px;">Proof: 3+ contacts with defined roles and recent engagement.</div></div><a href="#" class="room-link">Open Call Planner</a></div></div><div class="v1-exit"><div class="pill red">Not recommended</div><div class="copy">Criteria not fully met for kill switch.</div><a href="#" class="room-link">Copy close-clean script</a></div></section>
+        </div>
+      </article>
+
+      <article class="variant">
+        <div class="meta"><div><div class="id"><span class="accent">Variant 02</span> · Stage Strip</div><div class="name">Stage examples shrink into a comparator strip so the real operating core can take over.</div></div><div class="meaning">This is the second merge logic: stage signatures stop competing as hero blocks, loss and recovery become the core, and the action area absorbs the exit decision rather than treating it like a detached footer.</div></div>
+        <div class="shell v2-shell">
+          <section><div class="kicker">Stage strip</div><div class="v2-strip" style="margin-top:14px;"><div class="v2-sign active"><div class="tag orange">Discovery</div><strong>Interest without ownership</strong><div class="copy">No dated next step. No internal carrier.</div></div><div class="v2-sign"><div class="tag blue">PoC</div><strong>Activity without criteria</strong><div class="copy">Proof exists, but nobody owns the readout.</div></div><div class="v2-sign"><div class="tag green">Negotiation</div><strong>Paper before control</strong><div class="copy">Legal widens before authority is locked.</div></div></div></section>
+          <section class="card v2-main"><div class="v2-verdict"><div class="kicker">What happens now</div><div class="v2-head"><div class="title" style="font-size:34px;">If left alone</div><div class="title" style="font-size:34px;">If corrected</div></div><div class="copy">The user doesn’t need two giant separate boxes. They need the consequence and the save path in one shared field.</div><div class="line"></div><div class="v2-item"><div class="dot"></div><div><strong>The thread goes polite, then silent.</strong><div class="copy" style="margin-top:6px;">No next step or champion means the deal dies procedurally.</div></div></div><div class="v2-item"><div class="tick">✓</div><div><strong>Calendar truth returns.</strong><div class="copy" style="margin-top:6px;">A dated step and explicit owner bring the opportunity back into reality.</div></div></div><div class="v2-item"><div class="dot"></div><div><strong>Budget owner stays abstract.</strong><div class="copy" style="margin-top:6px;">Activity never becomes authority.</div></div></div><div class="v2-item"><div class="tick">✓</div><div><strong>Decision process becomes visible.</strong><div class="copy" style="margin-top:6px;">The close path becomes controlled instead of hoped for.</div></div></div></div><div><div class="kicker">Intervention docket</div><div class="v2-work" style="margin-top:10px;"><div class="v2-workitem"><div class="pill orange">01</div><div><strong>Put a date on the next step</strong><div class="copy" style="margin-top:6px;">Proof: Calendar invite accepted with date/time.</div></div><a href="#" class="room-link">Open Deal</a></div><div class="v2-workitem"><div class="pill blue">02</div><div><strong>Write mutual action plan</strong><div class="copy" style="margin-top:6px;">Proof: Mutual plan doc with owners and dates.</div></div><a href="#" class="room-link">Open Deal</a></div><div class="v2-workitem"><div class="pill green">03</div><div><strong>Engage 3+ stakeholders</strong><div class="copy" style="margin-top:6px;">Proof: 3+ contacts with defined roles and recent engagement.</div></div><a href="#" class="room-link">Open Call Planner</a></div></div><div class="v2-exit"><div class="pill red">Exit pressure</div><div class="copy">Criteria not fully met for kill switch.</div><a href="#" class="room-link">Copy close-clean script</a></div></div></section>
+        </div>
+      </article>
+
+      <article class="variant">
+        <div class="meta"><div><div class="id"><span class="accent">Variant 03</span> · Narrative Stack</div><div class="name">Everything becomes one forensic narrative from signature to verdict to intervention to exit.</div></div><div class="meaning">This is the third merge logic: no parallel big boxes, no detached footer. The room becomes a single causal story the user reads top to bottom.</div></div>
+        <div class="shell v3-stack">
+          <section class="v3-block"><div class="kicker">Signature</div><div class="title" style="font-size:40px;">Discovery is still the active death pattern.</div><div class="copy">Interest sounds real, but nobody internal is carrying the deal and no dated next step exists. The polite stage story is already outrunning the real buying motion.</div></section>
+          <section class="v3-block"><div class="kicker">Collapse if ignored</div><div class="title" style="font-size:40px;">You lost quietly in committee.</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><span class="chip">no next step</span><span class="chip">stale thread</span><span class="chip">no champion</span><span class="chip">no eb</span></div><div class="copy">45 days later, the deal looks less like a loss and more like an evaporated process. That is exactly why this room exists.</div></section>
+          <section class="v3-block"><div class="kicker">Recovery if corrected</div><div class="title" style="font-size:40px;">You win because you forced proof, early.</div><div class="v1-list"><div class="v1-row"><div class="check">✓</div><div>Dated next step is set and accepted by both sides.</div></div><div class="v1-row"><div class="check">✓</div><div>Champion role and accountability are explicit.</div></div><div class="v1-row"><div class="check">✓</div><div>Economic buyer joined and confirmed budget owner.</div></div></div></section>
+          <section class="v3-block"><div class="kicker">Interventions</div><div class="v3-actions"><div class="v3-action"><div class="pill orange">01</div><div><strong>Put a date on the next step</strong><div class="copy" style="margin-top:6px;">Proof: Calendar invite accepted with date/time.</div></div><a href="#" class="room-link">Open Deal</a></div><div class="v3-action"><div class="pill blue">02</div><div><strong>Write mutual action plan</strong><div class="copy" style="margin-top:6px;">Proof: Mutual plan doc with owners and dates.</div></div><a href="#" class="room-link">Open Deal</a></div><div class="v3-action"><div class="pill green">03</div><div><strong>Engage 3+ stakeholders</strong><div class="copy" style="margin-top:6px;">Proof: 3+ contacts with defined roles and recent engagement.</div></div><a href="#" class="room-link">Open Call Planner</a></div></div></section>
+          <section class="v3-exit"><div class="pill red">Exit decision</div><div class="copy">Criteria not fully met for kill switch.</div><a href="#" class="room-link">Copy close-clean script</a></section>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,1024 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cold Call Studio | Antaeus GTM OS</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/app.css">
-    <style>
-
-:root{--bg:#07080a;--surface:#0f1117;--surface2:#161920;--surface3:#1c1f28;--border:#252830;--border-light:#2e3240;--text:#dfe1e6;--text-dim:#8b8fa3;--text-muted:#5c6073;--gold:#c99a2e;--gold-dim:#a07b24;--gold-glow:rgba(201,154,46,0.12);--blue:#4a9eff;--blue-dim:#2a6bbf;--green:#34d399;--green-dim:rgba(52,211,153,0.12);--red:#ef4444;--red-dim:rgba(239,68,68,0.1);--amber:#f59e0b;--amber-dim:rgba(245,158,11,0.1);--radius:8px;--radius-lg:12px;}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{font-size:15px;}
-body{font-family:'Public Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.55;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(201,154,46,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(201,154,46,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
-.topbar{position:sticky;top:var(--cold-call-shell-offset,0px);z-index:38;background:rgba(7,8,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px;min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-.topbar-left{display:flex;align-items:center;gap:14px;min-width:0;}
-.topbar-ctx{font-size:0.8rem;color:var(--text-dim);min-width:0;}
-.topbar-ctx strong{color:var(--text);font-weight:600;}
-.topbar-right{display:flex;align-items:center;gap:16px;flex-shrink:0;}
-.cold-shell-band{padding:18px 24px 0;border-bottom:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(15,17,23,0.7),rgba(15,17,23,0));}
-.cold-shell-band .shell-command-band{margin:0;}
-.timer{font-family:'Space Mono',monospace;font-size:1rem;color:var(--text-muted);min-width:60px;text-align:center;transition:color 0.3s;}
-.timer.on{color:var(--green);}.timer.warn{color:var(--amber);}.timer.danger{color:var(--red);animation:pulse 1s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.phases{display:flex;align-items:center;gap:4px;}
-.pdot{width:7px;height:7px;border-radius:50%;background:var(--border-light);transition:all 0.3s;}
-.pdot.active{background:var(--gold);box-shadow:0 0 6px var(--gold);}
-.pdot.done{background:var(--green);}
-.app{position:relative;z-index:1;display:grid;grid-template-columns:1fr 320px;gap:0;min-height:calc(100vh - 52px);}
-.main{padding:24px 28px 80px;overflow-y:auto;}
-.side{border-left:1px solid var(--border);background:var(--surface);padding:18px;overflow-y:auto;}
-.stage-phase{font-family:'Space Mono',monospace;font-size:0.65rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
-.stage-title{font-size:1.5rem;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:3px;}
-.stage-sub{font-size:0.85rem;color:var(--text-dim);margin-bottom:20px;}
-.script{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
-.script-lbl{font-family:'Space Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px;}
-.script-txt{font-size:1rem;line-height:1.7;color:var(--text);}
-.script-txt em{color:var(--gold);font-style:normal;font-weight:500;}
-.coach{background:rgba(74,158,255,0.04);border:1px solid rgba(74,158,255,0.12);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;}
-.coach-lbl{font-family:'Space Mono',monospace;font-size:0.58rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-dim);margin-bottom:6px;}
-.coach-txt{font-size:0.85rem;color:var(--text-dim);line-height:1.6;}
-.coach-txt strong{color:var(--text);font-weight:600;}
-.resp-section{margin-top:24px;}
-.resp-lbl{font-family:'Space Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;}
-.resp-grid{display:flex;flex-direction:column;gap:7px;}
-.resp-btn{display:flex;align-items:flex-start;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;cursor:pointer;transition:all 0.15s;text-align:left;color:var(--text);font-family:inherit;font-size:0.88rem;line-height:1.5;width:100%;}
-.resp-btn:hover{background:var(--surface3);border-color:var(--border-light);transform:translateX(3px);}
-.tone{width:7px;height:7px;border-radius:50%;margin-top:6px;flex-shrink:0;}
-.tone-g{background:var(--green);box-shadow:0 0 5px rgba(52,211,153,0.4);}
-.tone-a{background:var(--amber);box-shadow:0 0 5px rgba(245,158,11,0.4);}
-.tone-r{background:var(--red);box-shadow:0 0 5px rgba(239,68,68,0.4);}
-.resp-prospect{font-weight:500;}
-.resp-hint{font-size:0.75rem;color:var(--text-muted);margin-top:2px;}
-.counter{background:var(--surface);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:var(--radius);padding:20px;margin-top:12px;margin-bottom:12px;animation:slideIn 0.2s ease;}
-@keyframes slideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.counter-lbl{font-family:'Space Mono',monospace;font-size:0.58rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;}
-.counter-txt{font-size:0.98rem;line-height:1.7;color:var(--text);margin-bottom:12px;}
-.counter-txt em{color:var(--gold);font-style:normal;font-weight:500;}
-.counter-why{font-size:0.8rem;color:var(--text-dim);line-height:1.6;padding-top:10px;border-top:1px solid var(--border);}
-.counter-why strong{color:var(--blue);font-weight:600;}
-.adv-btn{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--bg);border:none;border-radius:var(--radius);padding:9px 18px;font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.15s;margin-top:8px;}
-.adv-btn:hover{background:#daa830;transform:translateY(-1px);}
-.adv-btn.sec{background:var(--surface3);color:var(--text);border:1px solid var(--border-light);}
-.adv-btn.sec:hover{background:var(--border);}
-.adv-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-/* Sidebar panels */
-.spanel{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px;}
-.spanel-title{font-family:'Space Mono',monospace;font-size:0.55rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px;}
-.spanel-title.blue{color:var(--blue-dim);}
-.spanel-title.green{color:rgba(52,211,153,0.7);}
-.spanel-title.red{color:rgba(239,68,68,0.7);}
-.srow{display:flex;justify-content:space-between;padding:4px 0;font-size:0.78rem;border-bottom:1px solid rgba(255,255,255,0.03);}
-.srow:last-child{border-bottom:none;}
-.srow-l{color:var(--text-dim);}.srow-v{color:var(--text);font-weight:600;font-family:'Space Mono',monospace;font-size:0.75rem;}
-.srow-v.gold{color:var(--gold);}.srow-v.green{color:var(--green);}
-.obj-chip{display:inline-block;background:var(--surface3);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:0.72rem;color:var(--text-dim);cursor:pointer;transition:all 0.15s;margin:2px;}
-.obj-chip:hover{border-color:var(--gold-dim);color:var(--gold);background:var(--gold-glow);}
-.nav-btn{text-align:left;background:transparent;border:1px solid transparent;color:var(--text-dim);padding:5px 9px;border-radius:5px;cursor:pointer;font-family:inherit;font-size:0.75rem;transition:all 0.15s;width:100%;display:block;}
-.nav-btn:hover{background:var(--surface3);}
-.nav-btn.cur{background:var(--gold-glow);border-color:var(--gold-dim);color:var(--gold);font-weight:600;}
-/* Overlay */
-.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);padding:52px 24px 24px;overflow-y:auto;}
-.overlay.on{display:block;}
-.modal{max-width:680px;margin:32px auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;animation:slideIn 0.2s ease;position:relative;}
-.modal-close{position:absolute;top:14px;right:14px;background:var(--surface3);border:1px solid var(--border);color:var(--text-dim);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;}
-.modal-close:hover{color:var(--text);background:var(--border);}
-/* Briefing */
-.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
-.brief-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
-.brief-title{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
-.brief-title.gold{color:var(--gold-dim);}.brief-title.blue{color:var(--blue-dim);}.brief-title.green{color:rgba(52,211,153,0.7);}.brief-title.red{color:rgba(239,68,68,0.7);}
-.brief-list{list-style:none;}
-.brief-list li{font-size:0.82rem;color:var(--text-dim);padding:3px 0 3px 12px;position:relative;line-height:1.5;}
-.brief-list li::before{content:'▸';position:absolute;left:0;color:var(--text-muted);}
-.brief-list li strong{color:var(--text);font-weight:500;}
-.brief-full{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
-.dial-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 20px;background:var(--gold);color:var(--bg);border:none;border-radius:var(--radius);font-family:inherit;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.15s;letter-spacing:0.04em;}
-.dial-btn:hover{background:#daa830;transform:translateY(-1px);box-shadow:0 4px 16px rgba(201,154,46,0.25);}
-.dial-btn.sec{background:var(--surface3);color:var(--text);border:1px solid var(--border-light);}
-.dial-btn.sec:hover{background:var(--border);box-shadow:none;}
-.cold-first-fold{padding:0 0 16px;border-bottom:1px solid rgba(255,255,255,0.05);background:linear-gradient(180deg,rgba(15,19,28,0.72) 0%,rgba(10,13,20,0.24) 100%);}
-.cold-first-fold .topbar{position:sticky;top:var(--cold-call-shell-offset,0px);border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(7,8,10,0.88);}
-.cold-first-fold .cold-shell-band{padding-top:16px;border-bottom:none;}
-.cold-first-fold #coldCallHealthPanel{padding:0 24px;margin-top:16px;}
-/* VM */
-.vm-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px;}
-/* Postcard */
-.postcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px;}
-.postcard-title{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:6px;}
-.email-tpl{font-family:'Space Mono',monospace;font-size:0.75rem;line-height:1.8;color:var(--text-dim);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;white-space:pre-wrap;margin-top:8px;}
-.mode-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:16px;}
-.mode-kicker{font-family:'Space Mono',monospace;font-size:0.58rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;}
-.mode-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:6px;}
-.mode-copy{font-size:0.82rem;color:var(--text-dim);line-height:1.6;}
-.mode-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.mode-pill{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;border:1px solid var(--border-light);font-size:0.68rem;font-weight:700;color:var(--text-dim);}
-.mode-pill.active{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-glow);}
-.mode-pill.live{color:var(--green);border-color:rgba(52,211,153,0.35);background:rgba(52,211,153,0.08);}
-.capture-grid{display:grid;gap:8px;}
-.capture-label{display:block;font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
-.capture-input,.capture-select,.capture-textarea{width:100%;padding:9px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:0.8rem;font-family:inherit;}
-.capture-textarea{min-height:72px;resize:vertical;line-height:1.5;}
-.capture-input:focus,.capture-select:focus,.capture-textarea:focus{outline:none;border-color:var(--gold-dim);}
-.feedback-card{background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.18);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;}
-.feedback-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:5px;}
-.feedback-copy{font-size:0.78rem;color:var(--text-dim);line-height:1.55;}
-.feedback-copy strong{color:var(--text);font-weight:600;}
-/* Outcome selector */
-.outcome-bar{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;}
-.outcome-btn{padding:8px 16px;border-radius:var(--radius);font-size:0.78rem;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);cursor:pointer;font-family:inherit;transition:all 0.12s;}
-.outcome-btn:hover{border-color:var(--border-light);color:var(--text);}
-.outcome-btn.sel{border-color:var(--gold);color:var(--gold);background:var(--gold-glow);}
-::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-@media(max-width:900px){.app{grid-template-columns:1fr;}.side{border-left:none;border-top:1px solid var(--border);max-height:none;}.brief-grid{grid-template-columns:1fr;}.topbar-ctx{display:none;}}
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cold Call Studio | Antaeus GTM OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    .room-cold-call-studio{--navy:#07183d;--ink:#142f5e;--soft:#647da0;--muted:#91a4c2;--line:rgba(7,24,61,.13);--line2:rgba(7,24,61,.08);--orange:#ee6f1d;--blue:#2f73e8;--green:#2f8b5b;--red:#c94943;--shadow:0 34px 90px rgba(7,24,61,.14);font-family:"Plus Jakarta Sans",sans-serif;color:var(--navy);background:#edf4fb}
+    .room-cold-call-studio .app-main{min-width:0;width:calc(100vw - 280px);overflow-x:hidden;background:radial-gradient(circle at 0 0,rgba(47,115,232,.08),transparent 24%),radial-gradient(circle at 100% 0,rgba(238,111,29,.07),transparent 26%),linear-gradient(180deg,#fbfdff 0,#edf4fb 100%);color:var(--navy)}
+    .room-cold-call-studio .app-header{padding:28px 42px 22px;border-bottom:1px solid rgba(7,24,61,.08);background:linear-gradient(90deg,rgba(255,255,255,.9),rgba(255,255,255,.72))}
+    .shell-header-meta{display:flex;gap:10px;align-items:center;margin-bottom:10px}.shell-header-kicker,.shell-header-state,.kicker,.micro,.thread-num,.field-label,.sheet-kicker{font-size:11px;line-height:1.1;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.shell-header-kicker,.kicker{color:var(--orange)}.shell-header-state{color:var(--blue);border:1px solid rgba(47,115,232,.22);border-radius:999px;padding:8px 13px;background:rgba(47,115,232,.05)}
+    .page-title{font-family:"DM Serif Display",serif;color:var(--navy);font-size:clamp(30px,3.2vw,48px);letter-spacing:-.045em;line-height:.95;margin:0}.page-subtitle{max-width:830px;color:var(--soft);font-size:16px;line-height:1.55;margin:10px 0 0}
+    .app-content{padding:30px 42px 88px}.cold-room{max-width:1600px;margin:0 auto;display:grid;gap:28px}
+    .talk-loom,.loom-sheet{position:relative;overflow:hidden;border:1px solid rgba(7,24,61,.08);border-radius:46px;background:radial-gradient(circle at 1% 0,rgba(47,115,232,.05),transparent 25%),radial-gradient(circle at 100% 0,rgba(238,111,29,.06),transparent 26%),linear-gradient(180deg,rgba(255,255,255,.98),rgba(244,248,255,.97));box-shadow:var(--shadow);padding:34px 38px 38px}
+    .talk-loom:before,.loom-sheet:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.24;background-image:linear-gradient(rgba(7,24,61,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(7,24,61,.035) 1px,transparent 1px);background-size:34px 34px}.talk-loom>*,.loom-sheet>*{position:relative;z-index:1}
+    .loom-head{display:grid;grid-template-columns:minmax(380px,680px) minmax(320px,560px);justify-content:space-between;gap:34px;margin-bottom:30px}.loom-title{margin-top:12px;max-width:10.4ch;font-family:"Outfit",sans-serif;font-size:clamp(54px,5.6vw,96px);line-height:.86;letter-spacing:-.085em;font-weight:900;color:var(--navy)}.loom-title span{color:var(--orange)}.loom-intro{justify-self:end;max-width:560px;color:var(--soft);line-height:1.62;font-size:15px;padding-top:8px}.loom-law{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:grid;grid-template-columns:104px 1fr;gap:18px;color:var(--navy);font-weight:900}.loom-law span:first-child{color:var(--muted)}
+    .account-row{display:grid;grid-template-columns:minmax(260px,430px) minmax(260px,1fr) auto;gap:12px;align-items:end;margin-bottom:28px}.field-label{display:block;color:var(--muted);margin-bottom:8px}.select-control,.input-control,.textarea-control{width:100%;border:1px solid rgba(7,24,61,.14);border-radius:999px;background:rgba(255,255,255,.85);color:var(--navy);font:800 14px "Plus Jakarta Sans",sans-serif;padding:13px 16px;outline:none}.textarea-control{border-radius:24px;min-height:92px;resize:vertical;line-height:1.5;font-weight:600}.select-control:focus,.input-control:focus,.textarea-control:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(47,115,232,.09)}
+    .command-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.loom-btn{border:1px solid currentColor;border-radius:999px;padding:12px 15px;background:rgba(255,255,255,.76);color:var(--blue);font:900 11px "Plus Jakarta Sans",sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;white-space:nowrap}.loom-btn.primary{color:#fff;background:var(--orange);border-color:var(--orange);box-shadow:0 16px 34px rgba(238,111,29,.22)}.loom-btn.green{color:var(--green)}.loom-btn.red{color:var(--red)}
+    .loom-grid{display:grid;grid-template-columns:minmax(620px,1fr) 360px;gap:34px;align-items:start}.loom-stage{position:relative;min-height:638px;padding:30px 0 34px}.loom-needle{position:absolute;left:44px;top:22px;width:2px;height:572px;background:rgba(7,24,61,.13)}.loom-rail{position:absolute;left:86px;right:10px;height:1px;background:rgba(7,24,61,.13)}.loom-rail.r1{top:78px}.loom-rail.r2{top:178px}.loom-rail.r3{top:278px}.loom-rail.r4{top:378px}.loom-rail.r5{top:478px}.loom-rail.r6{top:578px}
+    .thread{position:absolute;left:68px;right:0;min-height:74px;border:1px solid rgba(7,24,61,.12);border-radius:999px;background:rgba(255,255,255,.78);box-shadow:0 18px 60px rgba(7,24,61,.08);display:grid;grid-template-columns:126px 1fr 150px;align-items:center;gap:22px;padding:0 28px;color:var(--thread-color,var(--muted));cursor:pointer;text-align:left;font-family:inherit;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}.thread:before{content:"";position:absolute;left:-9px;width:18px;height:18px;border-radius:50%;border:4px solid currentColor;background:#fff}.thread:hover,.thread.active{background:#fff;box-shadow:0 26px 76px rgba(7,24,61,.13);transform:translateX(8px) rotate(0deg)!important;z-index:10}.thread.t1{top:40px;transform:rotate(-.9deg)}.thread.t2{top:140px;transform:rotate(.7deg)}.thread.t3{top:240px;transform:rotate(-.4deg)}.thread.t4{top:340px;transform:rotate(.9deg)}.thread.t5{top:440px;transform:rotate(-.7deg)}.thread.t6{top:540px;transform:rotate(.45deg)}.thread-num{color:var(--muted)}.thread h3{color:var(--navy);font-size:25px;line-height:1.02;letter-spacing:-.06em;margin:0 0 4px}.thread p{color:var(--soft);font-size:13px;line-height:1.42;margin:0}.thread b{text-transform:uppercase;letter-spacing:.16em;font-size:10px;color:currentColor}
+    .loom-read{padding-top:16px;border-top:1px solid var(--line)}.score{font-family:"Outfit",sans-serif;font-size:118px;line-height:.82;letter-spacing:-.1em;color:var(--orange);font-weight:900;margin:18px 0}.read-block{border-top:1px solid var(--line);padding:18px 0}.read-block h3{font-size:29px;line-height:1.03;letter-spacing:-.06em;margin:9px 0 0}.read-block p{color:var(--soft);font-size:14px;line-height:1.55;margin-top:10px}
+    .active-sheet{margin-top:22px;display:grid;grid-template-columns:minmax(360px,1.1fr) minmax(360px,1fr) minmax(280px,.78fr);gap:18px;align-items:stretch;border-top:1px solid var(--line);padding-top:22px}.say-line,.reply-strip,.capture-panel{border:1px solid rgba(7,24,61,.09);border-radius:30px;background:rgba(255,255,255,.78);box-shadow:0 18px 52px rgba(7,24,61,.08);padding:22px}.say-line h3{font-family:"Outfit",sans-serif;font-size:clamp(38px,3.8vw,68px);line-height:.9;letter-spacing:-.085em;margin:10px 0 14px}.say-line h3 span{color:var(--orange)}.say-line p,.reply-line p,.capture-panel p{color:var(--soft);font-size:14px;line-height:1.55}.reply-list{display:grid;gap:10px;margin-top:14px}.reply-line{border:0;border-top:1px solid var(--line2);background:transparent;padding:15px 0 0;text-align:left;font-family:inherit;cursor:pointer;color:var(--navy)}.reply-line strong{display:block;font-size:18px;line-height:1.1;letter-spacing:-.035em}.reply-line small{display:block;margin-top:5px;color:var(--soft);font-size:12px;line-height:1.4}.reply-line.active strong{color:var(--blue)}.response-box{margin-top:16px;border-top:1px solid var(--line);padding-top:16px}.response-box h4{margin:0 0 8px;font-size:21px;letter-spacing:-.045em}.capture-stack{display:grid;gap:12px;margin-top:14px}.outcome-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.outcome-btn{border:1px solid rgba(7,24,61,.14);border-radius:999px;background:#fff;color:var(--soft);padding:9px 12px;font:900 10px "Plus Jakarta Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}.outcome-btn:hover,.outcome-btn.active{color:#fff;background:var(--green);border-color:var(--green)}
+    .loom-sheet{border-radius:38px;padding:28px}.sheet-head{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:18px}.sheet-head h2{font-size:31px;line-height:1;letter-spacing:-.055em;margin:8px 0 0}.sheet-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px}.call-log{width:100%;border-collapse:collapse;font-size:13px}.call-log th{text-align:left;color:var(--muted);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:11px 8px;border-bottom:1px solid var(--line)}.call-log td{color:var(--ink);padding:12px 8px;border-bottom:1px solid var(--line2);vertical-align:top}.empty{min-height:128px;display:grid;place-items:center;border:1px dashed rgba(7,24,61,.16);border-radius:26px;color:var(--soft);font-weight:800}.method-list{display:grid;gap:14px}.method-line{border-top:1px solid var(--line2);padding-top:14px}.method-line h3{font-size:21px;line-height:1.08;letter-spacing:-.045em;margin:7px 0}.method-line p{color:var(--soft);font-size:13px;line-height:1.5}
+    .toast{position:fixed;right:18px;bottom:18px;z-index:1000;opacity:0;transform:translateY(8px);transition:.22s ease;pointer-events:none;border-radius:999px;background:#101827;color:#fff;padding:11px 16px;font-size:13px;font-weight:800}.toast.show{opacity:1;transform:none}
+    @media(max-width:1240px){.loom-head,.account-row,.loom-grid,.active-sheet,.sheet-grid{grid-template-columns:1fr}.loom-intro{justify-self:start}.command-row{justify-content:flex-start}.loom-stage{min-height:670px}.thread{grid-template-columns:102px 1fr}.thread b{display:none}}
+    @media(max-width:760px){.room-cold-call-studio .app-main{width:100vw}.app-header,.app-content{padding-left:18px;padding-right:18px}.talk-loom,.loom-sheet{border-radius:30px;padding:24px}.loom-title{font-size:48px}.thread{left:50px;right:0;padding:16px 20px;border-radius:28px;min-height:90px}.loom-needle{left:20px}.loom-rail{left:70px}.say-line h3{font-size:40px}}
+  </style>
 </head>
 <body class="room-wave2 room-cold-call-studio">
-        <script src="/js/app-auth-preflight.js"></script>
+<script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
-        <aside class="app-sidebar">
-            <script src="/js/analytics-site-config.js"></script>
+  <aside class="app-sidebar">
+    <script src="/js/analytics-site-config.js"></script>
     <script src="/js/analytics.js"></script>
-            <script src="/js/data-manager.js"></script>
-            <script src="/js/nav.js"></script>
-        </aside>
-        <main class="app-main" style="padding:0;overflow:hidden;">
-<header class="app-header module-header">
-    <div class="module-header-title">
+    <script src="/js/data-manager.js"></script>
+    <script src="/js/demo-storage-bootstrap.js"></script>
+    <script src="/js/workspace-guard.js"></script>
+    <script src="/js/nav.js"></script>
+  </aside>
+  <main class="app-main">
+    <header class="app-header module-header">
+      <div class="module-header-title">
         <div class="shell-header-meta">
-            <span class="shell-header-kicker">Calls family</span>
-            <span class="shell-header-state state-live">Live call system</span>
+          <span class="shell-header-kicker">Calls family</span>
+          <span class="shell-header-state" id="coldHeaderState">Talk loom</span>
         </div>
         <h1 class="page-title">Cold Call Studio</h1>
-        <p class="page-subtitle">Move from pre-call prep to live-call execution and post-call logging without losing the thread.</p>
+        <p class="page-subtitle">Route the live call through one thread at a time. No script archive, no CRM board, no loose monologue.</p>
+      </div>
+    </header>
+    <div class="app-content">
+      <div class="cold-room">
+        <div id="coldBootState"></div>
+        <section class="talk-loom" id="talkLoom" aria-label="Cold call talk loom"></section>
+        <section class="loom-sheet" aria-label="Cold call memory">
+          <div class="sheet-head">
+            <div>
+              <div class="kicker">Call memory</div>
+              <h2>Log the outcome before the thread goes cold.</h2>
+            </div>
+            <div class="command-row">
+              <a class="loom-btn green" id="handoffPlanner" href="/app/discovery-agenda/">Open Call Planner</a>
+              <a class="loom-btn" id="handoffDeal" href="/app/deal-workspace/">Open Deal Workspace</a>
+            </div>
+          </div>
+          <div class="sheet-grid">
+            <div id="callLogMount"></div>
+            <div class="method-list">
+              <div class="method-line"><div class="sheet-kicker">Give - get - give</div><h3>Never ask without giving a reason to stay.</h3><p>The call should trade useful context for one next commitment.</p></div>
+              <div class="method-line"><div class="sheet-kicker">Recovery</div><h3>If the buyer resists, shrink the ask.</h3><p>Recover by making one smaller claim, asking one narrower question, or exiting cleanly.</p></div>
+              <div class="method-line"><div class="sheet-kicker">Handoff</div><h3>Only earned truth leaves the loom.</h3><p>A meeting, callback, referral, or clear rejection should push into the next room with account context attached.</p></div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
-</header>
-<section class="cold-first-fold">
-<div class="topbar">
-    <div class="topbar-left">
-        <div class="topbar-ctx" id="topCtx">Select an account to begin</div>
-    </div>
-    <div class="topbar-right">
-        <div class="phases" id="phaseDots"></div>
-        <div class="timer" id="timer">0:00</div>
-    </div>
+  </main>
 </div>
-<div class="cold-shell-band" id="coldCallShellBand"></div>
-<div id="coldCallHealthPanel"></div>
-</section>
-<div class="app">
-    <div class="main" id="mainArea"></div>
-    <div class="side" id="sideArea"></div>
-</div>
-<div class="overlay" id="objOverlay" onclick="if(event.target===this)closeObj()">
-    <div class="modal" id="objModal"></div>
-</div>
-        </main>
-    </div>
-    <script src="/js/deal-health.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/js/require-auth.js"></script>
-    <script src="/js/module-boot-state.js"></script>
+<div class="toast" id="toast"></div>
+<script src="/js/deal-health.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/require-auth.js"></script>
+<script src="/js/module-boot-state.js"></script>
 <script>
-
 (function(){
-// ── UTILS ──
-function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
-function syncDocToCloud(key,data){
-    if(!(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'))return;
-    if(!window.gtmPersistence.docs.has(key))return;
-    window.gtmPersistence.docs.save(key,data).catch(function(error){console.error('Cold Call Studio sync failed for',key,error);});
-}
-function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));syncDocToCloud(k,v)}
-function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
-function buildColdCallRoomHref(href, focusObject, roomLabel){
+  var selectedAccount=null;
+  var accountData=null;
+  var signalConsoleAccounts=[];
+  var activeThread='opener';
+  var activeReply=null;
+  var draft={contactName:'',contactTitle:'',notes:''};
+  var THREADS=[
+    {id:'prep',num:'01',label:'Prep thread',verb:'hold',color:'var(--orange)',title:'Pick one real account before dialing.',copy:'The call cannot carry generic market language.',say:'Before you dial, name the account, the human, and the one pressure that makes this call worth interrupting.',coach:'No account means no call.',replies:[
+      {id:'ready',buyer:'Account and pressure are clear.',reply:'Good. Move into the permission opener and keep the first line narrow.',next:'opener'},
+      {id:'not-ready',buyer:'Still vague.',reply:'Do not dial yet. Open Signal Console and pick the account with the most concrete pressure.',next:'prep'}
+    ]},
+    {id:'opener',num:'02',label:'Opening thread',verb:'pull',color:'var(--blue)',title:'Earn permission in the first breath.',copy:'Own the interruption and give the buyer control.',say:'I know I am interrupting. Give me 20 seconds and you can decide if this is worth continuing.',coach:'Do not explain the company yet. The first win is permission.',replies:[
+      {id:'busy',buyer:'I am busy.',reply:'Fair. The short version: I am calling because [account] appears to be dealing with [pressure]. If I am wrong, I will disappear. If I am right, who owns it?',next:'pressure'},
+      {id:'who',buyer:'Who is this?',reply:'[Your name] with [company]. I am calling about [pressure] at [account], not to give you a product pitch. Worth 20 seconds?',next:'pressure'},
+      {id:'no-sales',buyer:'No sales calls.',reply:'Understood. I will skip the sales part. Is [pressure] already handled internally, or is it still creating noise?',next:'pressure'}
+    ]},
+    {id:'pressure',num:'03',label:'Pressure thread',verb:'tighten',color:'var(--green)',title:'Make the reason operational.',copy:'The call turns when the buyer hears their world, not your category.',say:'The reason I called is that [pressure] usually shows up as wasted time, unclear ownership, or delayed revenue before it shows up as a tool problem. Which of those is closest?',coach:'Force a concrete lane. Do not ask a big discovery question yet.',replies:[
+      {id:'pain',buyer:'It is definitely costing time.',reply:'That is the useful starting point. Roughly where does that time go: triage, handoffs, rework, or waiting on decisions?',next:'proof'},
+      {id:'soft',buyer:'It is not terrible.',reply:'That may be true. Is it harmless, or is it one of those things that stays tolerable until volume changes?',next:'proof'},
+      {id:'none',buyer:'Not a problem.',reply:'Good to know. I will not force it. If that changes after [trigger], I am easy to find. For now I will step back.',next:'exit'}
+    ]},
+    {id:'proof',num:'04',label:'Proof thread',verb:'trade',color:'var(--orange)',title:'Trade one proof point for one admission.',copy:'Proof should create permission, not become a deck.',say:'The pattern we usually see is [proof point]. When that shows up, teams either absorb it manually or redesign the workflow. Which is happening there?',coach:'One proof point. Then stop.',replies:[
+      {id:'manual',buyer:'We are absorbing it manually.',reply:'That is exactly where this becomes expensive. If I showed you a way to reduce that manual load without replacing the whole stack, would that be worth a short working session?',next:'ask'},
+      {id:'vendor',buyer:'We already have a vendor.',reply:'Good. I am not assuming replacement. The question is whether the current vendor removes the manual load or just gives it a place to live.',next:'ask'},
+      {id:'skeptical',buyer:'I do not believe that.',reply:'Fair. I would not either from a cold call. Let me make the claim smaller: can I send the benchmark and you tell me if it maps to your world?',next:'exit'}
+    ]},
+    {id:'ask',num:'05',label:'Ask thread',verb:'lock',color:'var(--green)',title:'Ask for the smallest real next move.',copy:'The ask should match what the call earned.',say:'It sounds specific enough to look at together. Would it make sense to spend 20 minutes this week mapping whether the same pattern applies to [account]?',coach:'Ask for time only after pressure and proof are both alive.',replies:[
+      {id:'yes',buyer:'Yes.',reply:'Good. I will send a calendar hold with a tight agenda: the pressure, where it shows up, and whether there is enough value to keep going.',next:'post'},
+      {id:'send',buyer:'Send me something.',reply:'I can. I will send one short benchmark, not a brochure. What day should I follow up if it is relevant?',next:'post'},
+      {id:'not-now',buyer:'Not now.',reply:'Understood. Is this a bad quarter, wrong owner, or just not a priority?',next:'exit'}
+    ]},
+    {id:'exit',num:'06',label:'Exit thread',verb:'release',color:'var(--red)',title:'Leave the room cleanly.',copy:'A clean exit keeps the route alive later.',say:'Makes sense. I will not force it. If [pressure] becomes visible again, I will send one useful note and stay out of your way.',coach:'The exit should preserve credibility, not beg for attention.',replies:[
+      {id:'callback',buyer:'Try me later.',reply:'I will. What is the right window, and what should I reference so this does not restart cold?',next:'post'},
+      {id:'referral',buyer:'Talk to someone else.',reply:'Appreciate it. Who is closest to this pressure, and can I mention you pointed me there?',next:'post'},
+      {id:'hard-no',buyer:'No.',reply:'Understood. I will close the loop here. Thanks for the direct answer.',next:'post'}
+    ]}
+  ];
+  function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
+  function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));syncDocToCloud(k,v)}
+  function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+  function toast(m){var t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
+  function currentThread(){return THREADS.find(function(t){return t.id===activeThread})||THREADS[1]}
+  function currentReply(){var t=currentThread();return t.replies.find(function(r){return r.id===activeReply})||t.replies[0]||null}
+  function accountName(){return selectedAccount||(accountData&&accountData.name)||'[account]'}
+  function pressureText(){if(accountData&&accountData.signals&&accountData.signals[0]&&accountData.signals[0].headline)return accountData.signals[0].headline;return 'a visible operating pressure'}
+  function companyName(){return(readLS('gtmos_playbook',{}).company)||'[your company]'}
+  function personalize(text){return String(text||'').replace(/\[account\]/g,accountName()).replace(/\[pressure\]/g,pressureText()).replace(/\[company\]/g,companyName())}
+  function buildRoomHref(href,focusObject,roomLabel){
     try{
-        var url=new URL(href, window.location.origin);
-        url.searchParams.set('returnTo','/app/cold-call-studio/');
-        url.searchParams.set('returnLabel','Back to Cold Call Studio');
-        if(focusObject)url.searchParams.set('focusObject',focusObject);
-        if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
-        url.searchParams.set('fromMode','room');
-        url.searchParams.set('fromSurface','cold-call-studio');
-        return url.pathname+url.search+url.hash;
-    }catch(error){
-        return href;
-    }
-}
-function uid(){return 'call_'+Date.now()+'_'+Math.random().toString(36).substr(2,5)}
-var signalConsoleAccounts=[];
-
-async function syncSignalConsoleAccounts(){
+      var url=new URL(href,window.location.origin);
+      url.searchParams.set('returnTo','/app/cold-call-studio/');
+      url.searchParams.set('returnLabel','Back to Cold Call Studio');
+      if(focusObject)url.searchParams.set('focusObject',focusObject);
+      if(roomLabel)url.searchParams.set('focusRoom',roomLabel);
+      url.searchParams.set('fromMode','room');
+      url.searchParams.set('fromSurface','cold-call-studio');
+      if(selectedAccount)url.searchParams.set('account',selectedAccount);
+      return url.pathname+url.search+url.hash;
+    }catch(e){return href}
+  }
+  function syncDocToCloud(key,data){
+    if(!(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'))return;
+    if(window.gtmPersistence.docs.has&&!window.gtmPersistence.docs.has(key))return;
+    window.gtmPersistence.docs.save(key,data).catch(function(error){console.error('Cold Call Studio sync failed for',key,error)});
+  }
+  async function syncSignalConsoleAccounts(){
     if(window.gtmPersistence&&window.gtmPersistence.signalConsole&&typeof window.gtmPersistence.signalConsole.load==='function'){
-        var loaded=await window.gtmPersistence.signalConsole.load();
-        if(loaded&&loaded.error)console.error('Signal Console load failed:',loaded.error);
-        if(loaded&&loaded.data&&Array.isArray(loaded.data.accounts)){
-            signalConsoleAccounts=loaded.data.accounts.slice();
-            return loaded;
-        }
+      var loaded=await window.gtmPersistence.signalConsole.load();
+      if(loaded&&loaded.data&&Array.isArray(loaded.data.accounts)){signalConsoleAccounts=loaded.data.accounts.slice();return}
     }
     var fallback=readLS('gtmos_sc_v4',{accounts:[]});
-    signalConsoleAccounts=(fallback.accounts||[]).slice();
-    return {data:{accounts:signalConsoleAccounts},error:null};
-}
-
-var PHASE_NAMES=['PREP','GATE','OPEN','HOOK','ENGAGE','VALUE','CLOSE','POST'];
-
-// ── ACCOUNT DATA ──
-var selectedAccount=null;
-var accountData=null;
-
-// ── DYNAMIC SCRIPT HELPERS ──
-function getCompanyName(){return(readLS('gtmos_playbook',{})).company||'[Your Company]'}
-function getAccountSignal(){
-    if(!accountData)return'';
-    return accountData.signals&&accountData.signals[0]?accountData.signals[0].headline:'';
-}
-function getProofPoints(){
-    // Read from playbook or use generic
-    var pb=readLS('gtmos_playbook',{});
-    return pb.proof_points||['companies at their scale','comparable organizations'];
-}
-function biz(n){var d=new Date();while(n>0){d.setDate(d.getDate()+1);if([0,6].indexOf(d.getDay())===-1)n--;}return new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric'}).format(d)}
-
-// ── CALL FLOW DATA ──
-// Dynamic — scripts reference account data via functions
-function buildFlow(){
-    var acctName=selectedAccount||'[Company]';
-    var signal=getAccountSignal()||'recent activity at '+acctName;
-    var co=getCompanyName();
-
-    return {
-pre_call:{phase:0,title:'Pre-Call Intel Brief',sub:'Study this. Then dial.',type:'briefing'},
-gatekeeper:{phase:1,title:'Gatekeeper',sub:'Get through — don\'t pitch the assistant',
-    script:'Hi — I\'m trying to reach <em>[Name]</em>. Is this the best line for them?',
-    coaching:'Be brief, be direct, sound like you belong. Don\'t explain why you\'re calling. Say "trying to reach" — not "looking to speak with."',
-    responses:[
-        {id:'gk1',label:'"Let me transfer you"',tone:'g',hint:'You\'re through',counter:'Great, thank you.',why:'<strong>Transition:</strong> Take a breath during the transfer. Reset energy. Stand up.',next:'opener'},
-        {id:'gk2',label:'"What is this regarding?"',tone:'a',hint:'Standard question',counter:'It\'s about a '+signal.toLowerCase().substring(0,40)+' project we\'re working on with a few companies in their space. They\'ll know — I\'ll be brief.',why:'<strong>Why:</strong> "Project" implies relationship. "They\'ll know" creates social pressure. "I\'ll be brief" preempts.',next:'opener'},
-        {id:'gk3',label:'"Not available"',tone:'a',hint:'Blocked, not hostile',counter:'Understood. Is there a better window — mornings or end of day? I\'ll try back then.',why:'Ask for their pattern, not access. If they give a time, call exactly then.',next:'voicemail'},
-        {id:'gk4',label:'"Send an email"',tone:'r',hint:'Deflection',counter:'Happy to — what\'s the best email? And just so I can reference it when I follow up, what\'s your name?',why:'Comply but collect intel — their name + the email. Call back in 48 hours.',next:'voicemail'},
-        {id:'gk5',label:'Voicemail',tone:'r',hint:'No live person',counter:null,next:'voicemail'}
-    ]
-},
-opener:{phase:2,title:'The Opener',sub:'First 8 seconds — earn permission to continue',
-    script:'Hey <em>[Name]</em>, this is [Your Name] with '+escH(co)+' — I know I\'m an interruption. Do you have 30 seconds so I can tell you why I called, and you can decide if it\'s worth continuing?',
-    coaching:'<strong>(1)</strong> First name — it\'s a cold call, not a board meeting. <strong>(2)</strong> "I know I\'m an interruption" disarms. <strong>(3)</strong> "You can decide" gives control. Medium pace, low tone. Sound worth listening to.',
-    responses:[
-        {id:'op1',label:'"Yeah, go ahead"',tone:'g',hint:'Green light',counter:null,next:'hook'},
-        {id:'op2',label:'"Who is this?"',tone:'a',hint:'Didn\'t catch it',counter:'[Your Name], calling from '+escH(co)+'. We help companies like '+escH(acctName)+' with '+signal.toLowerCase().substring(0,50)+'. That\'s the 10-second version. Worth another 30 seconds?',why:'Re-introduced AND micro-hooked in one breath.',next:'hook'},
-        {id:'op3',label:'"I\'m busy"',tone:'a',hint:'Time pressure, not rejection',counter:'Totally fair. I\'ll be direct — I\'m calling because '+escH(acctName)+' is dealing with '+signal.toLowerCase().substring(0,40)+' and we\'ve helped similar companies cut costs 20% in that area. If interesting, when should I call back — '+biz(1)+' or '+biz(3)+'?',why:'Respected time AND delivered value prop. Binary choice forces scheduling, not interest decision.',next:null},
-        {id:'op4',label:'"No sales calls"',tone:'r',hint:'Wall — they\'ve done this before',counter:'Respect that. I\'ll skip the sales part. One question: how does your team currently handle '+signal.toLowerCase().substring(0,30)+'? Because at most companies your size, the answer makes people uncomfortable.',why:'Reframes from sales to operational question. Impossible to ignore if the pain is real.',next:'hook_hostile'},
-        {id:'op5',label:'"How did you get this number?"',tone:'r',hint:'Defensive',counter:'LinkedIn and your company directory — no tricks, just research. I called you specifically because '+signal.toLowerCase().substring(0,40)+' and your role sits right at the center of it. 20 seconds?',why:'Honesty disarms. "Specifically called you" flatters without being sycophantic.',next:'hook'},
-        {id:'op6',label:'*Dead silence*',tone:'a',hint:'Waiting, not hanging up',counter:'I\'ll take the silence as a "make it quick" —',why:'Name the silence with confidence. Don\'t ask "are you there?" — that\'s weak.',next:'hook'}
-    ]
-},
-hook:{phase:3,title:'The Hook',sub:'15 seconds — create a reason to keep listening',
-    script:'Here\'s why I called you specifically. '+escH(acctName)+' is dealing with <em>'+escH(signal)+'</em> and we\'ve seen companies at your scale lose significant money because the systems aren\'t set up to handle it. We\'ve solved this for companies like yours — the question is whether it\'s worth 20 minutes to see if the same math works for '+escH(acctName)+'.',
-    coaching:'Hit: <strong>(1)</strong> You know their world — the signal is real. <strong>(2)</strong> Named the pain. <strong>(3)</strong> Social proof at scale. <strong>(4)</strong> Low-commitment ask. Deliver standing up, slightly slower than natural.',
-    responses:[
-        {id:'hk1',label:'"Tell me more"',tone:'g',hint:'Engaged — leaning in',counter:null,next:'engage'},
-        {id:'hk2',label:'"We handle that internally"',tone:'a',hint:'Status quo defense',counter:'Most companies your size do have systems for this. The question is whether those systems can do [specific capability your product offers] — because that\'s where the gap lives. Is that a gap you\'re seeing, or have you genuinely closed it?',why:'Validated their investment, then introduced a capability they don\'t have. Challenge wrapped in respect.',next:'engage'},
-        {id:'hk3',label:'"Not interested"',tone:'r',hint:'Brush-off — haven\'t hung up',counter:'Fair. Can I ask — not interested in the concept, or just another vendor call? Because if your team has already solved '+signal.toLowerCase().substring(0,30)+', I\'ll hang up. But if it\'s a gap, it\'s costing '+escH(acctName)+' real money.',why:'Separates reflexive from substantive rejection. The conditional bet is high-confidence.',next:'value_drop'},
-        {id:'hk4',label:'"We use [Competitor]"',tone:'a',hint:'Incumbent vendor',counter:'Good — you should keep using them. We don\'t replace that system. We sit on top. We make the data they store actually actionable in ways they can\'t today. Does your current setup do [specific capability]?',why:'"You should keep them" eliminates replacement threat. Then describe what they don\'t have.',next:'engage'},
-        {id:'hk5',label:'"I\'ve got 2 minutes"',tone:'a',hint:'Time constraint — respect it',counter:'Perfect, I\'ll fit in one. Here\'s the math: companies at your scale typically [key metric / savings]. We\'ve done it for [proof companies]. Same profile as '+escH(acctName)+'. Worth 20 minutes to see if the math applies?',why:'Compressed value with real numbers. Close is low-commitment.',next:'close'},
-        {id:'hk6',label:'"Send me an email"',tone:'r',hint:'Want off the phone',counter:'Happy to. But instead of a generic email, what if I send a one-page analysis specific to '+escH(acctName)+' and we schedule 15 minutes for me to walk through it? '+biz(2)+' or '+biz(4)+'?',why:'Upgraded from spam to value. Binary day forces scheduling, not interest decision.',next:'close'}
-    ]
-},
-hook_hostile:{phase:3,title:'Hook — Hostile Track',sub:'They said no to selling. You\'re having a conversation now.',
-    script:'You asked about '+signal.toLowerCase().substring(0,40)+'. Now listen. Whatever they answer, respond to THAT.',
-    coaching:'You are no longer selling. Match their energy. The goal is a 60-second peer conversation — not a pitch. The pitch comes later through the back door.',
-    responses:[
-        {id:'hh1',label:'"Too long" / "It depends" / "It\'s a mess"',tone:'g',hint:'Admitted the problem',counter:'That\'s exactly what we hear everywhere. We built something that fixes it — [1 sentence about your product]. Companies like [proof company] went from [before] to [after]. Look — I know you didn\'t sign up for a sales call. But if that resonated, I\'d rather come see the actual problem and tell you honestly if this applies. No slides. Just a working session. Would that be useful?',why:'Validated frustration. Specific proof. On-site framed as working session.',next:'close'},
-        {id:'hh2',label:'"It\'s fine, we have processes"',tone:'a',hint:'Deflection — unlikely true',counter:'If genuinely solved, that\'s rare and impressive. Quick litmus test: can your team do [specific capability] in under a minute today? If yes, I\'ll hang up.',why:'Compliments without sarcasm. Litmus test is impossible to say yes to.',next:'value_drop'},
-        {id:'hh3',label:'"Gotta go" / *click*',tone:'r',hint:'Call ended',counter:null,why:'<strong>What to do:</strong> Send a 3-line email within 1 hour: "I was the cold call you cut short. Here\'s why in two sentences: [value prop]. If timing is ever less terrible, I\'m at [number]." 2-week follow-up cadence.',next:'post_call'},
-        {id:'hh4',label:'"I\'m not the right person"',tone:'a',hint:'May be true',counter:'Appreciate that. Who on your side owns [the intersection relevant to your product]? If you can point me to them, I\'ll leave you alone and reference that you sent me.',why:'"Reference that you sent me" turns them into your internal sponsor.',next:'post_call'}
-    ]
-},
-engage:{phase:4,title:'Engage',sub:'Micro-discovery in 60 seconds — converse, don\'t interrogate',
-    script:'Let me give you the quick version and then ask one thing. '+escH(co)+' helps companies like '+escH(acctName)+' [1-2 sentences about what you do, specific to their signal/pain]. The one thing I\'d ask: <em>how is your team currently handling [core operational question related to signal]?</em>',
-    coaching:'You\'re not demoing. You\'re having a conversation. The question surfaces organizational pain. Whatever they answer, it\'s ammunition for the close.',
-    responses:[
-        {id:'en1',label:'They answer (any detail)',tone:'g',hint:'In the conversation',counter:null,next:'value_drop'},
-        {id:'en2',label:'"Can\'t share that"',tone:'a',hint:'Guarded but still on phone',counter:'Completely understand. Based on public info, '+escH(acctName)+' [publicly known fact]. At every company we\'ve worked with at that scale, [common pattern]. That\'s not a criticism — it\'s physics at scale. Does that directional math feel right, or is it higher?',why:'Proved you don\'t need their data. "Is it higher?" is a slight provocation.',next:'value_drop'},
-        {id:'en3',label:'"Sounds like a huge implementation"',tone:'a',hint:'Interested but worried',counter:'That\'s the normal assumption. Here\'s what surprised [proof company]: [specific implementation simplicity detail]. No IT project, no migration. That\'s why teams hit [adoption rate] in [timeframe].',why:'Named the fear, demolished it with specifics.',next:'value_drop'}
-    ]
-},
-value_drop:{phase:5,title:'Value Drop',sub:'Account-specific ROI — make the math undeniable',
-    script:'Let me give you the math that matters. At '+escH(acctName)+'\'s scale, here\'s what we typically see:\n\n<em>[Key metric 1]</em>: [current state] → [future state]. For a team your size, that\'s [quantified impact].\n\n<em>[Key metric 2]</em>: [proof company] found [specific savings]. Similar profile to '+escH(acctName)+'.\n\nThat\'s the case. The question is whether it applies to your specific [division/workflow/operation].',
-    coaching:'Drop specific names, numbers, and proof. If you\'ve researched a named executive at the prospect, reference them naturally.',
-    responses:[
-        {id:'vd1',label:'"How would this work for us?"',tone:'g',hint:'Strong buying signal — close',counter:null,next:'close'},
-        {id:'vd2',label:'"Impressive numbers"',tone:'g',hint:'Processing — it landed',counter:'They\'re real numbers from real companies. That\'s why I\'m pushing for a deeper look — I want to give you an honest assessment of whether the math is $X or $Y for '+escH(acctName)+'. Can we set that up?',why:'"Honest assessment" and "whether" signal you\'re investigating, not assuming.',next:'close'},
-        {id:'vd3',label:'"Sounds expensive"',tone:'a',hint:'Cost reflex',counter:'Relative to the savings, not even close. But I\'d be irresponsible quoting on a cold call. What I can say: ROI payback for our clients is typically under 6 months. The real question is what\'s the current cost of [their pain]? That\'s what you\'re paying today.',why:'Defer responsibly. Reframe from "your cost" to "the problem\'s cost."',next:'close'},
-        {id:'vd4',label:'"I\'d need to involve others"',tone:'g',hint:'Multi-threading — this is GOOD',counter:'Exactly right. The best version of a first meeting includes [relevant roles]. Who would you pull in? I\'ll make the conversation relevant to everyone from minute one.',why:'They just did your multi-threading for you.',next:'close'},
-        {id:'vd5',label:'"Every vendor says this"',tone:'r',hint:'Vendor fatigue',counter:'You should be skeptical. Here\'s what\'s different: [key differentiator in 1 sentence]. If it doesn\'t work on your actual data, you\'ll know in a pilot. I\'m asking for 20 minutes, not a commitment.',why:'"You should be skeptical" validates them. Bet on the product.',next:'close'}
-    ]
-},
-close:{phase:6,title:'The Close',sub:'Ask for the meeting. Specific. Direct.',
-    script:'Here\'s what I\'d suggest: I\'ll [come to your facility / set up a Zoom] with [relevant team member]. We\'ll spend 20 minutes looking at your [specific area], and give you an honest read on whether this applies. No slides unless you want them. <em>Does '+biz(2)+' or '+biz(4)+' work better?</em>',
-    coaching:'Binary choice avoids "let me check my calendar." On-site signals seriousness. "If not a fit, I\'ll stop calling" shows confidence.',
-    responses:[
-        {id:'cl1',label:'"Yeah, [day] works"',tone:'g',hint:'MEETING BOOKED',counter:null,next:'confirm'},
-        {id:'cl2',label:'"Let me think about it"',tone:'a',hint:'Soft stall',counter:'Totally understand. I\'ll send a one-page brief specific to '+escH(acctName)+' — take a look, and I\'ll follow up '+biz(3)+'. Sound fair?',why:'Value + specific follow-up date. "Sound fair?" is nearly impossible to refuse.',next:'post_call'},
-        {id:'cl3',label:'"Zoom first?"',tone:'a',hint:'Lower commitment — take it',counter:'Absolutely. 20 minutes, I\'ll show you [core demo/capability], and we can talk about a deeper look. '+biz(1)+' or '+biz(3)+' afternoon?',why:'Don\'t fight the Zoom. Take the meeting. The on-site comes later.',next:'confirm'},
-        {id:'cl4',label:'"Need to check with my team"',tone:'a',hint:'Multi-stakeholder',counter:'Makes sense. I\'ll put together a 2-minute summary your team can review — so you\'re not selling internally yourself. I\'ll follow up '+biz(5)+'. Who else would be in the room?',why:'Shareable artifact + specific date + multi-threading.',next:'post_call'},
-        {id:'cl5',label:'"Call me next quarter"',tone:'r',hint:'Delay tactic',counter:'I hear you. Two things: '+signal.toLowerCase().substring(0,30)+' isn\'t waiting for next quarter. And the companies who got the biggest wins started with a 20-minute assessment, not a 6-month project. What if we do the assessment now, and you decide timing after?',why:'External urgency + tiny ask reframe.',next:'post_call'},
-        {id:'cl6',label:'"No, not interested" (final)',tone:'r',hint:'Real no — respect it',counter:'Respect that. Last thing: if '+signal.toLowerCase().substring(0,25)+' ever becomes urgent — my number is [Your Name] at '+escH(co)+'. I\'ll send one email with my info. No follow-ups unless you reach out. Fair?',why:'Accepted no. Planted seeds for future recall. Differentiated from every vendor who ignores rejection.',next:'post_call'}
-    ]
-},
-confirm:{phase:6,title:'Confirm the Meeting',sub:'Lock details — they prevent ghosting',
-    script:'Great. Let me confirm: <em>[Day, Time]</em>. I\'ll bring [team member]. Can you tell me:\n\n<em>1.</em> Who else should be in the room?\n<em>2.</em> Visitor registration process?\n<em>3.</em> Best email for the calendar invite?\n\nI\'ll send confirmation today with a short agenda.',
-    coaching:'Every detail confirmed reduces no-show chance. "Who else" starts multi-threading. Send calendar invite within 1 hour.',
-    responses:[{id:'cf1',label:'Gives details / confirms',tone:'g',hint:'Meeting locked',counter:'Perfect. Looking forward to it. I know cold calls aren\'t anyone\'s favorite — I\'ll make sure the meeting is worth it.',why:'Self-aware, human, ends with a promise. Stop talking before they change their mind.',next:'post_call'}]
-},
-voicemail:{phase:1,title:'Voicemail',sub:'Under 25 seconds. Curiosity, not a pitch.',type:'voicemail'},
-post_call:{phase:7,title:'Post-Call',sub:'Next 60 minutes determine whether this sticks.',type:'postcall'}
-    };
-}
-
-// ── OBJECTIONS (generic, product-category aware via getCompanyName) ──
-var OBJECTIONS={
-not_interested:{label:'"Not interested"',response:'Not interested in the concept — or in a cold call? Because if your team has already solved [their pain], I have nothing to offer. But if it\'s a gap, the savings are real. Which is it?',why:'Separates reflexive from substantive rejection.'},
-send_email:{label:'"Send an email"',response:'Sure — what\'s the best email? I\'ll include a one-page analysis specific to your company, not a brochure. I\'ll follow up [specific day]. Fair?',why:'Comply but upgrade the content and set a callback date.'},
-too_busy:{label:'"Too busy"',response:'I can hear that. Companies your scale are losing [X]% because [pain]. We fix that without touching your existing systems. Worth exploring? Give me a day next week, or I\'ll disappear.',why:'Compressed value + respectful urgency.'},
-have_vendor:{label:'"Have a solution"',response:'Good. We don\'t replace it — we make it better. Can your current solution [specific capability]? If yes, I\'ll hang up.',why:'Complementary positioning + capability bet.'},
-cost:{label:'"What does it cost?"',response:'I\'d be doing you a disservice quoting on a cold call. ROI payback is typically under 6 months. The honest number requires seeing your operation. That\'s why I\'m suggesting 20 minutes.',why:'Defer responsibly, anchor on ROI.'},
-never_heard:{label:'"Never heard of you"',response:'That\'s fair — we\'ve been focused on building the product, not running ads. Our customers include [names]. [Award/validation]. We\'re not new — just focused.',why:'Credibility stack: customers, validation. Obscurity as virtue.'},
-tried_before:{label:'"Tried this before"',response:'What did you try? Because most [category] tools require [old approach]. We\'re architecturally different: [key differentiator]. The failure mode of the old approach is what we were built to solve.',why:'Diagnose past failure. Position as different architecture.'},
-wrong_person:{label:'"Wrong person"',response:'Appreciate that. Who owns [relevant intersection]? If you point me to them, I\'ll reference that you sent me.',why:'Specific role ask + referral currency.'},
-too_big:{label:'"We\'re too big for this"',response:'[Proof company at comparable scale] deployed in months. Scale is the advantage — more data = more savings. Size makes the math better, not worse.',why:'Peer reference. Reframe size as opportunity.'}
-};
-
-// ── STATE ──
-var S={stage:'pre_call',timerOn:false,timerStart:null,timerInterval:null,expanded:null,donePhases:new Set()};
-var FLOW={};
-var LAST_OUTCOME=null;
-
-function readCapture(){
-    var state=readLS('gtmos_cold_call_quick_capture',{});
-    return Object.assign({
-        accountName:'',
-        contactName:'',
-        contactTitle:'',
-        objectionKey:'',
-        callbackDate:'',
-        notes:''
-    },state||{});
-}
-
-function writeCapture(next){
-    localStorage.setItem('gtmos_cold_call_quick_capture',JSON.stringify(next||{}));
-}
-
-function syncCaptureAccount(){
-    var state=readCapture();
-    if(state.accountName!==selectedAccount){
-        state.accountName=selectedAccount||'';
-        state.contactName='';
-        state.contactTitle='';
-        state.objectionKey='';
-        state.callbackDate='';
-        state.notes='';
-        writeCapture(state);
-    }
-    return state;
-}
-
-function getStageMode(stageKey){
-    if(stageKey==='pre_call')return 'pre';
-    if(stageKey==='post_call')return 'post';
-    return 'live';
-}
-
-function getModeMeta(stageKey){
-    var mode=getStageMode(stageKey);
-    if(mode==='pre'){
-        return {
-            label:'Pre-call mode',
-            title:'Get the brief tight before you dial.',
-            copy:'Use this mode to pick the right account, understand the signal, and enter the call with a specific objective instead of generic courage.'
-        };
-    }
-    if(mode==='post'){
-        return {
-            label:'Post-call mode',
-            title:'Capture the truth while it is still fresh.',
-            copy:'What happened on the call should become the next move, not a vague memory. Log the outcome, note the objection, and decide the follow-up now.'
-        };
-    }
-    return {
-        label:'Live-call mode',
-        title:'Run the state machine without losing the room.',
-        copy:'Use the script as a track, not a monologue. Match the response, capture the signal, and move the call toward one concrete next step.'
-    };
-}
-
-function getRecentCallStats(){
+    signalConsoleAccounts=Array.isArray(fallback.accounts)?fallback.accounts.slice():[];
+  }
+  function getCallLog(){var data=readLS('gtmos_cold_call_log',{calls:[]})||{calls:[]};return Array.isArray(data.calls)?data.calls:[]}
+  function callStats(){
+    var calls=getCallLog();
+    return{total:calls.length,meetings:calls.filter(function(c){return c.outcome==='meeting_booked'}).length,callbacks:calls.filter(function(c){return c.outcome==='callback_scheduled'}).length,referrals:calls.filter(function(c){return c.outcome==='referral'}).length};
+  }
+  function loomScore(){var score=44;if(selectedAccount)score+=16;if(accountData&&Number(accountData._heat||0)>65)score+=12;if(activeThread==='proof'||activeThread==='ask')score+=10;if(activeReply)score+=5;return Math.min(92,score)}
+  function setHeader(){
+    var el=document.getElementById('coldHeaderState');
+    if(el)el.textContent=selectedAccount?'Talk loom - '+selectedAccount:'Talk loom';
+    var planner=document.getElementById('handoffPlanner');
+    var deal=document.getElementById('handoffDeal');
+    if(planner)planner.href=buildRoomHref('/app/discovery-agenda/',selectedAccount||'Cold call','Call Planner');
+    if(deal)deal.href=buildRoomHref('/app/deal-workspace/',selectedAccount||'Cold call','Deal Workspace');
+  }
+  function render(){setHeader();renderLoom();renderLog()}
+  function renderLoom(){
+    var mount=document.getElementById('talkLoom');
+    if(!mount)return;
+    var t=currentThread(),reply=currentReply(),stats=callStats(),score=loomScore();
+    var options=signalConsoleAccounts.map(function(a){return'<option value="'+escH(a.name)+'"'+(selectedAccount===a.name?' selected':'')+'>'+escH(a.name)+(a._heat?' - heat '+escH(String(a._heat)):'')+'</option>'}).join('');
+    var threadHtml=THREADS.map(function(item,i){
+      return '<button class="thread t'+(i+1)+(item.id===activeThread?' active':'')+'" type="button" data-thread="'+escH(item.id)+'" style="--thread-color:'+item.color+'"><span class="thread-num">'+escH(item.num)+' / '+escH(item.label)+'</span><span><h3>'+escH(item.title)+'</h3><p>'+escH(item.copy)+'</p></span><b>'+escH(item.verb)+'</b></button>';
+    }).join('');
+    var replyHtml=t.replies.map(function(r){
+      return '<button class="reply-line '+(r.id===activeReply?'active':'')+'" type="button" data-reply="'+escH(r.id)+'"><strong>'+escH(r.buyer)+'</strong><small>'+escH(r.reply)+'</small></button>';
+    }).join('');
+    var next=reply&&reply.next?THREADS.find(function(x){return x.id===reply.next}):null;
+    mount.innerHTML='<div class="loom-head"><div><div class="kicker">Talk loom</div><h2 class="loom-title"><span>Pull</span> one live thread at a time.</h2></div><div class="loom-intro">The call is not a script archive. It is a sequence of tension changes. The rep should know what to say now, what the buyer might say, and which thread to pull next.<div class="loom-law"><span>Room law</span><div>A cold call is won by narrowing pressure, not widening explanation.</div></div></div></div>'+
+      '<div class="account-row"><div><label class="field-label" for="accountSelect">Account</label><select class="select-control" id="accountSelect"><option value="">Select account...</option>'+options+'</select></div><div><label class="field-label" for="contactName">Human on line</label><input class="input-control" id="contactName" value="'+escH(draft.contactName||'')+'" placeholder="Name or role"></div><div class="command-row"><a class="loom-btn" href="'+buildRoomHref('/app/signal-console/',selectedAccount||'Cold call prep','Signal Console')+'">Open Signal</a><button class="loom-btn primary" type="button" data-action="log-prep">Log this call</button></div></div>'+
+      '<div class="loom-grid"><section class="loom-stage"><div class="loom-needle"></div><div class="loom-rail r1"></div><div class="loom-rail r2"></div><div class="loom-rail r3"></div><div class="loom-rail r4"></div><div class="loom-rail r5"></div><div class="loom-rail r6"></div>'+threadHtml+'</section><aside class="loom-read"><div class="micro">Loom read</div><div class="score">'+score+'</div><div class="read-block"><div class="micro">Current pull</div><h3>'+escH(t.title)+'</h3><p>'+escH(t.copy)+'</p></div><div class="read-block"><div class="micro">Weakest thread</div><h3>'+escH(selectedAccount?'Response path must become a dated move.':'No account selected. Do not dial generic.')+'</h3></div><div class="read-block"><div class="micro">Session count</div><h3>'+stats.total+' logged calls</h3><p>'+stats.meetings+' meetings, '+stats.callbacks+' callbacks, '+stats.referrals+' referrals.</p></div></aside></div>'+
+      '<div class="active-sheet"><article class="say-line"><div class="micro">Say this now</div><h3><span>'+escH(t.title.split(' ')[0])+'</span> '+escH(personalize(t.say))+'</h3><p>'+escH(t.coach)+'</p></article><article class="reply-strip"><div class="micro">Buyer might say</div><div class="reply-list">'+replyHtml+'</div></article><article class="capture-panel"><div class="micro">Say next</div><div class="response-box"><h4>'+escH(reply?personalize(reply.reply):'Choose the buyer response that just happened.')+'</h4><p>'+(next?'Next thread: '+escH(next.title):'Log the call and choose the next room.')+'</p>'+(next?'<button class="loom-btn green" type="button" data-next-thread="'+escH(next.id)+'">Pull next thread</button>':'')+'</div><div class="capture-stack"><label><span class="field-label">What actually happened</span><textarea class="textarea-control" id="callNotes" placeholder="Capture the real objection, signal, or next move.">'+escH(draft.notes||'')+'</textarea></label><div class="outcome-row">'+['meeting_booked','callback_scheduled','referral','voicemail','rejected','hung_up','no_answer'].map(function(o){return'<button class="outcome-btn" type="button" data-outcome="'+o+'">'+o.replace(/_/g,' ')+'</button>'}).join('')+'</div></div></article></div>';
+  }
+  async function logCall(outcome){
+    draft.contactName=(document.getElementById('contactName')||{}).value||draft.contactName||'';
+    draft.notes=(document.getElementById('callNotes')||{}).value||draft.notes||'';
     var data=readLS('gtmos_cold_call_log',{calls:[]})||{calls:[]};
-    var calls=Array.isArray(data.calls)?data.calls:[];
-    return {
-        total:calls.length,
-        booked:calls.filter(function(c){return c.outcome==='meeting_booked';}).length,
-        callbacks:calls.filter(function(c){return c.outcome==='callback_scheduled';}).length,
-        referrals:calls.filter(function(c){return c.outcome==='referral';}).length
-    };
-}
-
-function getOutcomeFeedback(outcome){
-    var map={
-        meeting_booked:{title:'Meeting booked',copy:'Move immediately into confirmation and agenda prep. The call worked because it produced a real next meeting, not vague interest.'},
-        callback_scheduled:{title:'Callback scheduled',copy:'Treat the callback like a real commitment. Lock the exact date, then bring a tighter angle or asset into the next touch.'},
-        referral:{title:'Referral earned',copy:'Reference the internal handoff quickly. This is how cold calling compounds into a warmer next thread.'},
-        voicemail:{title:'Voicemail only',copy:'The learning is still real. Decide the exact next email or second dial now while the account is still mentally active.'},
-        rejected:{title:'Hard no',copy:'Capture the objection honestly. The value now is pattern intelligence for the next account, not pretending this was a maybe.'},
-        hung_up:{title:'Hung up',copy:'Record what likely triggered resistance, then choose whether the next move is email, LinkedIn, or a later re-entry.'},
-        no_answer:{title:'No answer',copy:'No answer still belongs in the cadence. Use the note field to decide the next day and channel before you move on.'}
-    };
-    return map[outcome]||null;
-}
-
-function renderModeBridge(){
-    var meta=getModeMeta(S.stage);
-    var mode=getStageMode(S.stage);
-    return '<div class="mode-card"><div class="mode-kicker">'+meta.label+'</div><div class="mode-title">'+meta.title+'</div><div class="mode-copy">'+meta.copy+'</div><div class="mode-pills"><span class="mode-pill'+(mode==='pre'?' active':'')+'">Pre-call</span><span class="mode-pill'+(mode==='live'?' active live':'')+'">Live-call</span><span class="mode-pill'+(mode==='post'?' active':'')+'">Post-call</span></div></div>';
-}
-
-function renderColdCallShellBand(){
-    var node=document.getElementById('coldCallShellBand');
-    if(!node)return;
-    var stage=FLOW[S.stage];
-    var meta=getModeMeta(S.stage);
-    var mode=getStageMode(S.stage);
-    var signal=getAccountSignal()||'No live signal linked yet.';
-    var focus=selectedAccount?selectedAccount+(accountData&&accountData._heat?' · heat '+accountData._heat:''):'No account selected';
-    var nextMove=S.stage==='pre_call'
-        ? 'Select the account, study the brief, and decide whether the first route is prospect, assistant, or voicemail.'
-        : S.stage==='post_call'
-            ? 'Log the real outcome now while the call is fresh, then turn it into the next scheduled move.'
-            : 'Keep the live call moving. Use the response tree without losing the outcome you are trying to earn.';
-    var stateTone=selectedAccount?(mode==='live'?'live':'ready'):'thin';
-    var stateLabel=selectedAccount?(meta&&meta.label?meta.label:'Call mode'):'Needs account';
-    if(window.gtmShellChrome){
-        window.gtmShellChrome.renderCommandBand('#coldCallShellBand',{
-            kicker:'Live call system',
-            title:meta.title,
-            copy:meta.copy,
-            stateLabel:stateLabel,
-            stateTone:stateTone,
-            metrics:[
-                {label:'Focus account',value:focus},
-                {label:'Top signal',value:signal},
-                {label:'Call state',value:(stage&&stage.sub)||'Prep the next cold call.'},
-                {label:'Next move',value:nextMove}
-            ],
-            actions:[
-                {label:'Reset to Brief',action:'goTo("pre_call")',tone:'primary'},
-                {label:'Open Signal Console',href:buildColdCallRoomHref('/app/signal-console/',selectedAccount||'Cold call prep','Signal Console')}
-            ]
-        });
-        return;
-    }
-    node.innerHTML=renderModeBridge();
-}
-
-function syncColdCallShellOffset(){
-    var host=document.querySelector('.app-main');
-    var header=host&&host.querySelector('.app-header');
-    if(!host)return;
-    host.style.setProperty('--cold-call-shell-offset',header?(header.offsetHeight+'px'):'0px');
-}
-
-function initAccountSelector(){
-    var accounts=signalConsoleAccounts.slice().sort(function(a,b){return(b._heat||0)-(a._heat||0)});
-    // Render account selection in the pre-call brief
-    return accounts;
-}
-
-// ── TIMER ──
-function startTimer(){if(S.timerOn)return;S.timerOn=true;S.timerStart=Date.now();S.timerInterval=setInterval(tickTimer,1000)}
-function tickTimer(){if(!S.timerStart)return;var el=Math.floor((Date.now()-S.timerStart)/1000);var m=Math.floor(el/60);var s=el%60;var t=document.getElementById('timer');t.textContent=m+':'+String(s).padStart(2,'0');t.className='timer on';if(el>180)t.className='timer warn';if(el>300)t.className='timer danger'}
-function stopTimer(){clearInterval(S.timerInterval);S.timerOn=false}
-
-window.setCallCaptureField=function(field,value){
-    var state=syncCaptureAccount();
-    state[field]=value;
-    writeCapture(state);
-    renderSidebar();
-};
-
-// ── NAVIGATION ──
-function goTo(id){
-    if(!id||!FLOW[id])return;
-    var prev=FLOW[S.stage];if(prev)S.donePhases.add(prev.phase);
-    S.stage=id;S.expanded=null;
-    if(id!=='pre_call'&&id!=='voicemail'&&id!=='post_call')startTimer();
-    render();
-    document.querySelector('.main').scrollTo(0,0);
-}
-window.goTo=goTo;
-
-function toggleResp(rid){S.expanded=S.expanded===rid?null:rid;render()}
-window.toggleResp=toggleResp;
-
-function showObj(key){
-    var o=OBJECTIONS[key];if(!o)return;
-    document.getElementById('objModal').innerHTML='<button class="modal-close" onclick="closeObj()">✕</button><div class="stage-phase">OBJECTION HANDLER</div><div class="stage-title" style="font-size:1.15rem;margin-bottom:14px;">'+o.label+'</div><div class="script"><div class="script-lbl">YOUR RESPONSE</div><div class="script-txt">'+o.response+'</div></div><div class="coach"><div class="coach-lbl">WHY THIS WORKS</div><div class="coach-txt">'+o.why+'</div></div><button class="adv-btn sec" onclick="closeObj()">← Back to Call</button>';
-    document.getElementById('objOverlay').classList.add('on');
-}
-window.showObj=showObj;
-function closeObj(){document.getElementById('objOverlay').classList.remove('on')}
-window.closeObj=closeObj;
-
-// ── RENDER ──
-function renderColdCallShellBand(){
-    var node=document.getElementById('coldCallShellBand');
-    if(!node)return;
-    var stage=FLOW[S.stage];
-    var meta=getModeMeta(S.stage);
-    var mode=getStageMode(S.stage);
-    var signal=getAccountSignal()||'No live signal linked yet.';
-    var focus=selectedAccount?selectedAccount+(accountData&&accountData._heat?' · heat '+accountData._heat:''):'No account selected';
-    var nextMove=S.stage==='pre_call'
-        ? 'Select the account, study the brief, and decide whether the first route is prospect, assistant, or voicemail.'
-        : S.stage==='post_call'
-            ? 'Log the real outcome now while the call is fresh, then turn it into the next scheduled move.'
-            : 'Keep the live call moving. Use the response tree without losing the outcome you are trying to earn.';
-    var stateTone=selectedAccount?(mode==='live'?'live':'ready'):'thin';
-    var stateLabel=selectedAccount?(meta&&meta.label?meta.label:'Call mode'):'Needs account';
-    var stageHtml=
-        '<section class="shell-section anchor-stage">'+
-            '<div class="anchor-stage-grid">'+
-                '<div>'+
-                    '<div class="anchor-eyebrow">Call operating board</div>'+
-                    '<div class="anchor-headline">'+escH(meta.title)+'</div>'+
-                    '<div class="anchor-support">'+escH(meta.copy)+'</div>'+
-                    '<div class="anchor-chip-row">'+
-                        '<span class="anchor-chip'+(mode==='pre'?' active':'')+'">Pre-call</span>'+
-                        '<span class="anchor-chip'+(mode==='live'?' active':'')+'">Live-call</span>'+
-                        '<span class="anchor-chip'+(mode==='post'?' active':'')+'">Post-call</span>'+
-                        '<span class="anchor-chip">'+escH(stateLabel)+'</span>'+
-                    '</div>'+
-                    '<div class="anchor-primary-card">'+
-                        '<div class="anchor-primary-label">Focus account</div>'+
-                        '<div class="anchor-primary-title">'+escH(focus)+'</div>'+
-                        '<div class="anchor-primary-copy">'+escH(nextMove)+'</div>'+
-                        '<div class="anchor-primary-actions">'+
-                            '<button class="btn btn-primary" type="button" onclick="goTo(\'pre_call\')">Reset to brief</button>'+
-                            '<a class="btn btn-secondary" href="'+buildColdCallRoomHref('/app/signal-console/',selectedAccount||'Cold call prep','Signal Console')+'">Open Signal Console</a>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>'+
-                '<div class="anchor-mini-grid">'+
-                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Top signal</div><div class="anchor-mini-value">'+escH(signal)+'</div><div class="anchor-mini-copy">Enter the call with a specific reason, not generic courage.</div></div>'+
-                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Call state</div><div class="anchor-mini-value">'+escH((stage&&stage.sub)||'Prep the next cold call.')+'</div><div class="anchor-mini-copy">The mode should tell you what kind of behavior is needed now.</div></div>'+
-                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Outcome loop</div><div class="anchor-mini-value">'+(S.log||[]).length+' calls logged</div><div class="anchor-mini-copy">Logged outcomes should be shaping the next route.</div></div>'+
-                    '<div class="anchor-mini-card"><div class="anchor-mini-label">Next move</div><div class="anchor-mini-value">'+escH(nextMove)+'</div><div class="anchor-mini-copy">The call should always leave a concrete next action behind it.</div></div>'+
-                '</div>'+
-            '</div>'+
-        '</section>';
-    if(window.gtmShellChrome){
-        window.gtmShellChrome.renderCommandBand('#coldCallShellBand',{
-            kicker:'Live call system',
-            title:meta.title,
-            copy:meta.copy,
-            stateLabel:stateLabel,
-            stateTone:stateTone,
-            metrics:[
-                {label:'Focus account',value:focus},
-                {label:'Top signal',value:signal},
-                {label:'Call state',value:(stage&&stage.sub)||'Prep the next cold call.'},
-                {label:'Next move',value:nextMove}
-            ],
-            actions:[
-                {label:'Reset to Brief',action:'goTo("pre_call")',tone:'primary'},
-                {label:'Open Signal Console',href:buildColdCallRoomHref('/app/signal-console/',selectedAccount||'Cold call prep','Signal Console')}
-            ]
-        });
-        node.insertAdjacentHTML('beforeend',stageHtml);
-        return;
-    }
-    node.innerHTML=stageHtml;
-}
-
-function renderColdCallWorkspaceHealth(){
-    var node=document.getElementById('coldCallHealthPanel');
-    if(!node)return;
-    var stats=getRecentCallStats();
-    var capture=syncCaptureAccount();
-    var mode=getStageMode(S.stage);
-    var signal=getAccountSignal();
-    var compounded=[];
-    var weakLinks=[];
-    var accountCallCount=stats.total;
-    if(selectedAccount){
-        var data=readLS('gtmos_cold_call_log',{calls:[]})||{calls:[]};
-        var calls=Array.isArray(data.calls)?data.calls:[];
-        accountCallCount=calls.filter(function(call){return call.accountName===selectedAccount;}).length;
-    }
-
-    if(selectedAccount){
-        compounded.push('<div class="workspace-health-item"><strong>The call is anchored to a live account.</strong> '+escH(selectedAccount)+' is now the named operating target instead of a generic list pull.</div>');
-    }
-    if(accountData&&Number(accountData._heat||0)>=70){
-        compounded.push('<div class="workspace-health-item"><strong>The account already has temperature.</strong> Heat '+escH(String(accountData._heat))+' means the call is not entering a cold vacuum.</div>');
-    }
-    if(stats.booked>0||stats.callbacks>0||stats.referrals>0){
-        compounded.push('<div class="workspace-health-item"><strong>The outcome loop is teaching the room.</strong> '+escH(String(stats.booked))+' meetings, '+escH(String(stats.callbacks))+' callbacks, and '+escH(String(stats.referrals))+' referrals are shaping the next route.</div>');
-    }
-    if(accountCallCount>0){
-        compounded.push('<div class="workspace-health-item"><strong>This account already has call memory.</strong> '+escH(String(accountCallCount))+' logged call'+(accountCallCount===1?' is':'s are')+' keeping the next touch from starting from zero.</div>');
-    }
-    if(!compounded.length){
-        compounded.push('<div class="workspace-health-item"><strong>The room can already hold a live call state.</strong> The next gain is turning that state into a named account and real outcome loop.</div>');
-    }
-
-    if(!selectedAccount){
-        weakLinks.push('<div class="workspace-health-item"><strong>No account is selected yet.</strong> Cold Call Studio gets thin fast if the operator dials before the target is named.</div>');
-    }
-    if(selectedAccount&&!signal){
-        weakLinks.push('<div class="workspace-health-item"><strong>The signal anchor is still weak.</strong> The call is running on script discipline more than on live account evidence.</div>');
-    }
-    if(mode==='post'&&!LAST_OUTCOME){
-        weakLinks.push('<div class="workspace-health-item"><strong>The last call has not been logged.</strong> Post-call mode only compounds if the outcome is captured while it is still fresh.</div>');
-    }
-    if(selectedAccount&&capture&&capture.callbackDate&&!capture.notes){
-        weakLinks.push('<div class="workspace-health-item"><strong>The callback is not yet contextualized.</strong> Locking a date without a note still leaves the next touch underbuilt.</div>');
-    }
-    if(!weakLinks.length){
-        weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the outcome loop honest, but the call system is reading credibly.</div>');
-    }
-
-    node.innerHTML=
-        '<section class="shell-section shell-section--compact workspace-health">'+
-            '<div class="shell-section-header">'+
-                '<div class="shell-section-heading">'+
-                    '<div class="shell-section-kicker">Workspace health</div>'+
-                    '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
-                    '<div class="shell-section-copy workspace-health-copy">Cold Call Studio should show whether live call repetition is becoming a real operating loop or still resting on isolated scripts.</div>'+
-                '</div>'+
-            '</div>'+
-            '<div class="workspace-health-metrics">'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Call posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(mode==='pre'?'Prep mode':mode==='post'?'Post-call mode':'Live-call mode')+'</div><div class="workspace-health-subcopy">'+escH(selectedAccount||'Need account')+'</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Signal anchor</div><div class="workspace-health-value workspace-health-value--sans">'+escH(signal?'Live signal':'Thin')+'</div><div class="workspace-health-subcopy">'+escH(signal||'No live signal linked yet.')+'</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Calls logged</div><div class="workspace-health-value">'+escH(String(stats.total||0))+'</div><div class="workspace-health-subcopy">'+escH(String(accountCallCount||0))+' on this account.</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Outcome loop</div><div class="workspace-health-value workspace-health-value--sans">'+escH(stats.booked>0?'Live':'Forming')+'</div><div class="workspace-health-subcopy">'+escH(String(stats.booked))+' meetings, '+escH(String(stats.callbacks))+' callbacks.</div></div>'+
-            '</div>'+
-            '<div class="workspace-health-grid">'+
-                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
-                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
-            '</div>'+
-        '</section>';
-}
-
-function render(){
-    syncColdCallShellOffset();
-    renderPhases();
-    renderColdCallShellBand();
-    renderColdCallWorkspaceHealth();
-    var stage=FLOW[S.stage];if(!stage)return;
-    if(stage.type==='briefing')renderBriefing();
-    else if(stage.type==='voicemail')renderVoicemail();
-    else if(stage.type==='postcall')renderPostcall();
-    else renderStandard(stage);
-    renderSidebar();
-}
-
-function renderPhases(){
-    var stage=FLOW[S.stage];var cp=stage?stage.phase:0;
-    document.getElementById('phaseDots').innerHTML=PHASE_NAMES.map(function(p,i){
-        var cls='pdot';if(i<cp||S.donePhases.has(i))cls+=' done';if(i===cp)cls+=' active';
-        return '<div class="'+cls+'" title="'+p+'"></div>';
-    }).join('');
-}
-
-function renderBriefing(){
-    var accounts=initAccountSelector();
-    syncCaptureAccount();
-    var M=document.getElementById('mainArea');
-    var acctOptions=accounts.map(function(a){return '<option value="'+escH(a.name)+'"'+(selectedAccount===a.name?' selected':'')+'>'+escH(a.name)+(a._heat?' (heat '+a._heat+')':'')+'</option>'}).join('');
-
-    var briefHtml='';
-    if(accountData){
-        var signal=getAccountSignal();
-        briefHtml='<div class="brief-grid"><div class="brief-card"><div class="brief-title gold">TARGET</div><ul class="brief-list"><li><strong>Account:</strong> '+escH(selectedAccount)+'</li>'+(accountData.industry?'<li><strong>Industry:</strong> '+escH(accountData.industry)+'</li>':'')+'<li><strong>Heat Score:</strong> '+(accountData._heat||'—')+'</li>'+(signal?'<li><strong>Top Signal:</strong> '+escH(signal)+'</li>':'')+'</ul></div><div class="brief-card"><div class="brief-title blue">CALL OBJECTIVES</div><ul class="brief-list"><li><strong>Primary:</strong> Schedule a meeting</li><li><strong>Secondary:</strong> Get a referral to the right person</li><li><strong>Minimum:</strong> Permission to send a brief + locked follow-up date</li></ul></div></div>';
-        briefHtml+='<div class="brief-full"><div class="brief-title green">MENTAL FRAME</div><div style="font-size:0.85rem;color:var(--text-dim);line-height:1.7;">You are not selling software. You are an expert who has seen the inside of dozens of companies at this scale, offering to bring that pattern recognition to '+escH(selectedAccount)+'. Confident. Curious. Not desperate. A peer with relevant insight, not a vendor with a quota.</div></div>';
-    }
-
-    M.innerHTML='<div style="margin-bottom:20px;"><div class="stage-phase">PHASE 0 — PREP</div><div class="stage-title">Pre-Call Intel Brief</div><div class="stage-sub">Select an account and study the brief before you dial.</div></div><div style="margin-bottom:16px;"><label style="font-size:0.72rem;font-weight:600;color:var(--text-dim);display:block;margin-bottom:5px;">Account</label><select id="acctSel" onchange="selectAccount(this.value)" style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid #252830;border-radius:8px;color:#dfe1e6;font-size:0.88rem;font-family:inherit;"><option value="">Select account...</option>'+acctOptions+'</select></div>'+briefHtml+(accountData?'<div style="display:flex;gap:10px;margin-top:12px;"><button class="dial-btn" onclick="goTo(\'opener\')" style="flex:1;">☎ Dial — Prospect Answers</button><button class="dial-btn sec" onclick="goTo(\'gatekeeper\')" style="flex:0.4;">Assistant</button><button class="dial-btn sec" onclick="goTo(\'voicemail\')" style="flex:0.35;">Voicemail</button></div>':'<div style="padding:40px;text-align:center;color:var(--text-muted);">Select an account above to generate the call brief.</div>');
-}
-
-window.selectAccount=function(name){
-    selectedAccount=name;
-    accountData=signalConsoleAccounts.find(function(a){return a.name===name})||null;
-    document.getElementById('topCtx').innerHTML=name?'<strong>'+escH(name)+'</strong>'+(accountData&&accountData._heat?' · heat '+accountData._heat:''):'Select an account';
-    FLOW=buildFlow();
-    render();
-};
-
-function renderVoicemail(){
-    var acct=selectedAccount||'[Company]';
-    document.getElementById('mainArea').innerHTML='<div style="margin-bottom:20px;"><div class="stage-phase">VOICEMAIL</div><div class="stage-title">Leave a Message That Creates Curiosity</div><div class="stage-sub">Under 25 seconds. No pitch. Just a puzzle.</div></div><div class="vm-card"><div class="script-lbl">VERSION 1 — CURIOSITY</div><div class="script-txt">Hey <em>[Name]</em>, it\'s [Your Name] from '+escH(getCompanyName())+'. Quick message: I was looking at '+escH(acct)+'\'s operation and ran some numbers on patterns we typically see. Found something worth a conversation. My number is <em>[number]</em> — or I\'ll try you again <em>'+biz(2)+'</em>.</div></div><div class="vm-card"><div class="script-lbl">VERSION 2 — SOCIAL PROOF</div><div class="script-txt">Hey <em>[Name]</em>, [Your Name] with '+escH(getCompanyName())+'. We helped [proof company] [specific result]. Wondering if the same math applies to '+escH(acct)+'. I\'m at <em>[number]</em>. I\'ll follow up <em>'+biz(3)+'</em> either way.</div></div><div class="vm-card"><div class="script-lbl">VERSION 3 — PROVOCATION</div><div class="script-txt"><em>[Name]</em>, [Your Name], '+escH(getCompanyName())+'. Short question: how much time does your team spend on [core pain]? At most companies your scale, the answer makes people uncomfortable. If you\'re curious about the benchmark, I\'m at <em>[number]</em>.</div></div><div class="coach"><div class="coach-lbl">VOICEMAIL CADENCE</div><div class="coach-txt"><strong>Call 1:</strong> Version 1 (curiosity). Email within 1 hour.<br><strong>Call 2 (Day 3):</strong> Version 2 (proof). No email.<br><strong>Call 3 (Day 7):</strong> Version 3 (provocation). LinkedIn connect same day.<br><strong>Call 4 (Day 14):</strong> "Last voicemail" — no hard feelings, here if relevant.<br><strong>After:</strong> Monthly nurture, no asks.</div></div><div style="display:flex;gap:10px;margin-top:16px;"><button class="adv-btn sec" onclick="goTo(\'pre_call\')">← Intel Brief</button><button class="adv-btn" onclick="goTo(\'post_call\')">Post-Call →</button></div>';
-}
-
-function renderPostcall(){
-    stopTimer();
-    document.getElementById('mainArea').innerHTML='<div style="margin-bottom:20px;"><div class="stage-phase">POST-CALL</div><div class="stage-title">Next 60 Minutes</div><div class="stage-sub">What you do now determines whether this sticks.</div></div><div class="postcard"><div class="postcard-title">If Meeting Booked</div><div class="coach-txt"><strong>Within 15 min:</strong> Send calendar invite + agenda + LinkedIn.<br><strong>Within 1 hour:</strong> Send relevant case study as PDF.<br><strong>24 hours before:</strong> Confirmation email.<br><strong>Prepare:</strong> Account-specific brief with 3 questions for the meeting.</div></div><div class="postcard"><div class="postcard-title">If "Send Info" / "Call Back"</div><div class="coach-txt"><strong>Within 1 hour:</strong> Send the email below. Not tomorrow.<br><strong>Include:</strong> 1-page brief (not brochure) + 1 case study + specific ask with date.<br><strong>Follow up:</strong> Call on exact day promised.</div></div><div class="postcard"><div class="postcard-title">Follow-Up Email</div><div class="email-tpl">Subject: '+escH(selectedAccount||'[Company]')+' — quick follow-up\n\n[Name] —\n\nThanks for the time today. As promised, here\'s the quick version:\n\n[2-3 sentences about what you do, specific to their situation]\n\nThe results at comparable companies:\n• [Proof point 1]\n• [Proof point 2]\n• [Proof point 3]\n\nI\'d like [meeting type] for 20 minutes to give you\nan honest read on whether this applies to '+escH(selectedAccount||'[Company]')+'.\n\n'+biz(2)+' or '+biz(4)+' — what works?\n\n[Your Name]\n'+escH(getCompanyName())+'</div></div><div class="postcard"><div class="postcard-title">If Referral Given</div><div class="coach-txt"><strong>Immediately:</strong> Thank-you email to original contact.<br><strong>Within 24 hours:</strong> Call referral. Open with: "[Original Name] in [dept] suggested I reach out to you."</div></div><div class="postcard"><div class="postcard-title">If Hard No</div><div class="coach-txt"><strong>Same day:</strong> One email — contact info + one case study. Nothing else.<br><strong>Day 30:</strong> Value touch — relevant article, no ask.<br><strong>Day 60:</strong> Second value touch — new case study.<br><strong>Day 90:</strong> Final check-in: "Last note. If [trigger] resurfaces, I\'m here."</div></div><div class="postcard"><div class="postcard-title">Log This Call</div><div class="outcome-bar" id="outcomeBar">'+['meeting_booked','callback_scheduled','referral','voicemail','rejected','hung_up','no_answer'].map(function(o){return '<button class="outcome-btn" onclick="logCall(\''+o+'\')">'+o.replace(/_/g,' ')+'</button>'}).join('')+'</div></div><button class="adv-btn sec" onclick="goTo(\'pre_call\')" style="margin-top:12px;">← Reset</button>';
-}
-
-window.logCall=function(outcome){
-    var data=readLS('gtmos_cold_call_log',{calls:[]});
-    data.calls.push({
-        id:uid(),accountName:selectedAccount||'',contactName:'',contactTitle:'',
-        outcome:outcome,meetingDate:null,referralName:null,callbackDate:null,
-        phasesReached:Array.from(S.donePhases).map(function(i){return PHASE_NAMES[i]}),
-        objectionsHandled:[],
-        duration:S.timerStart?Math.floor((Date.now()-S.timerStart)/1000):0,
-        notes:'',dealId:null,createdAt:new Date().toISOString()
-    });
-    writeLS('gtmos_cold_call_log',data);
-    // Also merge into discovery stats
-    var disco=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
-    disco.totalCalls=(disco.totalCalls||0)+1;
-    if(outcome==='meeting_booked')disco.advancedCalls=(disco.advancedCalls||0)+1;
-    writeLS('gtmos_discovery_stats',disco);
-    // Highlight selected
-    document.querySelectorAll('.outcome-btn').forEach(function(b){b.classList.remove('sel')});
-    event.target.classList.add('sel');
-    // Prompt deal creation
-    if(outcome==='meeting_booked'&&selectedAccount){
-        if(confirm('Meeting booked! Create a deal for '+selectedAccount+'?')){
-            var deal={id:'deal_'+Date.now(),accountName:selectedAccount,value:0,stage:'prospect',nextStep:'First meeting',nextStepDate:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
-            if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.save==='function'){
-                window.gtmPersistence.deals.save(deal).catch(function(error){console.error('Cold Call Studio deal sync failed:',error);});
-            }else{
-                var deals=readLS('gtmos_deal_workspaces',[]);
-                deals.push(deal);
-                writeLS('gtmos_deal_workspaces',deals);
-            }
-            alert('Deal created in Deal Workspace.');
-        }
-    }
-};
-
-function renderStandard(stage){
-    var M=document.getElementById('mainArea');
-    var rhtml='';
-    if(stage.responses&&stage.responses.length){
-        rhtml='<div class="resp-section"><div class="resp-lbl">↓ WHAT THEY MIGHT SAY — click for your response</div><div class="resp-grid">';
-        stage.responses.forEach(function(r){
-            var exp=S.expanded===r.id;
-            var chtml='';
-            if(exp){
-                if(r.counter){
-                    chtml='<div class="counter"><div class="counter-lbl">YOUR RESPONSE</div><div class="counter-txt">'+r.counter+'</div>'+(r.why?'<div class="counter-why">'+r.why+'</div>':'')+(r.next?'<div class="adv-row"><button class="adv-btn" onclick="event.stopPropagation();goTo(\''+r.next+'\')">Continue → '+((FLOW[r.next]||{}).title||'Next')+'</button></div>':'')+'</div>';
-                } else if(r.why){
-                    chtml='<div class="counter"><div class="counter-txt">'+r.why+'</div>'+(r.next?'<div class="adv-row"><button class="adv-btn" onclick="event.stopPropagation();goTo(\''+r.next+'\')">Continue →</button></div>':'')+'</div>';
-                } else if(r.next){
-                    chtml='<div class="adv-row" style="margin-top:10px;"><button class="adv-btn" onclick="event.stopPropagation();goTo(\''+r.next+'\')">Continue → '+((FLOW[r.next]||{}).title||'Next')+'</button></div>';
-                }
-            }
-            rhtml+='<div><button class="resp-btn" onclick="toggleResp(\''+r.id+'\')" style="'+(exp?'border-color:var(--gold-dim);background:var(--surface3);':'')+'"><div class="tone tone-'+r.tone+'"></div><div><div class="resp-prospect">'+r.label+'</div>'+(r.hint?'<div class="resp-hint">'+r.hint+'</div>':'')+'</div></button>'+chtml+'</div>';
-        });
-        rhtml+='</div></div>';
-    }
-    M.innerHTML='<div style="margin-bottom:20px;"><div class="stage-phase">PHASE '+stage.phase+' — '+PHASE_NAMES[stage.phase]+'</div><div class="stage-title">'+stage.title+'</div><div class="stage-sub">'+stage.sub+'</div></div>'+(stage.script?'<div class="script"><div class="script-lbl">YOUR SCRIPT</div><div class="script-txt">'+stage.script.replace(/\n/g,'<br>')+'</div></div>':'')+(stage.coaching?'<div class="coach"><div class="coach-lbl">COACHING</div><div class="coach-txt">'+stage.coaching+'</div></div>':'')+rhtml;
-}
-
-function renderSidebar(){
-    var sb=document.getElementById('sideArea');
-    var acctPanel='';
-    if(accountData){
-        acctPanel='<div class="spanel"><div class="spanel-title">ACCOUNT INTEL</div>';
-        acctPanel+='<div class="srow"><span class="srow-l">Account</span><span class="srow-v">'+escH(selectedAccount)+'</span></div>';
-        if(accountData._heat)acctPanel+='<div class="srow"><span class="srow-l">Heat</span><span class="srow-v gold">'+accountData._heat+'</span></div>';
-        if(accountData.industry)acctPanel+='<div class="srow"><span class="srow-l">Industry</span><span class="srow-v">'+escH(accountData.industry)+'</span></div>';
-        if(accountData.signals&&accountData.signals.length){
-            acctPanel+='<div class="srow"><span class="srow-l">Signals</span><span class="srow-v">'+accountData.signals.length+'</span></div>';
-        }
-        acctPanel+='</div>';
-    }
-
-    var navHtml='<div class="spanel"><div class="spanel-title blue">CALL STAGES</div>';
-    Object.keys(FLOW).forEach(function(k){
-        var f=FLOW[k];
-        navHtml+='<button class="nav-btn'+(k===S.stage?' cur':'')+'" onclick="goTo(\''+k+'\')">'+f.title+'</button>';
-    });
-    navHtml+='</div>';
-
-    var objHtml='<div class="spanel"><div class="spanel-title red">OBJECTION LIBRARY</div><div style="display:flex;flex-wrap:wrap;gap:3px;">';
-    Object.keys(OBJECTIONS).forEach(function(k){objHtml+='<span class="obj-chip" onclick="showObj(\''+k+'\')">'+OBJECTIONS[k].label.replace(/"/g,'')+'</span>'});
-    objHtml+='</div></div>';
-
-    var rulesHtml='<div class="spanel"><div class="spanel-title gold">RULES</div><div style="font-size:0.75rem;color:var(--text-dim);line-height:1.6;"><div style="margin-bottom:5px;">1. <strong style="color:var(--text);">Never beg.</strong></div><div style="margin-bottom:5px;">2. <strong style="color:var(--text);">Ask, don\'t tell.</strong></div><div style="margin-bottom:5px;">3. <strong style="color:var(--text);">Name the elephant.</strong></div><div style="margin-bottom:5px;">4. <strong style="color:var(--text);">Match energy.</strong></div><div style="margin-bottom:5px;">5. <strong style="color:var(--text);">Close on time, not interest.</strong></div><div>6. <strong style="color:var(--text);">Leave before asked.</strong></div></div></div>';
-
-    sb.innerHTML=acctPanel+navHtml+objHtml+rulesHtml;
-}
-
-// ── BOOT ──
-renderBriefing=function(){
-    var accounts=initAccountSelector();
-    syncCaptureAccount();
-    var M=document.getElementById('mainArea');
-    var acctOptions=accounts.map(function(a){
-        return '<option value="'+escH(a.name)+'"'+(selectedAccount===a.name?' selected':'')+'>'+escH(a.name)+(a._heat?' (heat '+a._heat+')':'')+'</option>';
-    }).join('');
-    var briefHtml='';
-    if(accountData){
-        var signal=getAccountSignal();
-        briefHtml='<div class="brief-grid"><div class="brief-card"><div class="brief-title gold">TARGET</div><ul class="brief-list"><li><strong>Account:</strong> '+escH(selectedAccount)+'</li>'+(accountData.industry?'<li><strong>Industry:</strong> '+escH(accountData.industry)+'</li>':'')+'<li><strong>Heat Score:</strong> '+(accountData._heat||'-')+'</li>'+(signal?'<li><strong>Top Signal:</strong> '+escH(signal)+'</li>':'')+'</ul></div><div class="brief-card"><div class="brief-title blue">CALL OBJECTIVES</div><ul class="brief-list"><li><strong>Primary:</strong> Schedule a meeting</li><li><strong>Secondary:</strong> Get a referral to the right person</li><li><strong>Minimum:</strong> Permission to send a brief + locked follow-up date</li></ul></div></div>';
-        briefHtml+='<div class="brief-full"><div class="brief-title green">MENTAL FRAME</div><div style="font-size:0.85rem;color:var(--text-dim);line-height:1.7;">You are not selling software. You are an expert who has seen the inside of dozens of companies at this scale, offering to bring that pattern recognition to '+escH(selectedAccount)+'. Confident. Curious. Not desperate. A peer with relevant insight, not a vendor with a quota.</div></div>';
-    }
-    M.innerHTML='<div style="margin-bottom:20px;"><div class="stage-phase">PHASE 0 - PREP</div><div class="stage-title">Pre-Call Intel Brief</div><div class="stage-sub">Select an account and study the brief before you dial.</div></div><div style="margin-bottom:16px;"><label style="font-size:0.72rem;font-weight:600;color:var(--text-dim);display:block;margin-bottom:5px;">Account</label><select id="acctSel" onchange="selectAccount(this.value)" style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid #252830;border-radius:8px;color:#dfe1e6;font-size:0.88rem;font-family:inherit;"><option value="">Select account...</option>'+acctOptions+'</select></div>'+briefHtml+(accountData?'<div style="display:flex;gap:10px;margin-top:12px;"><button class="dial-btn" onclick="goTo(\'opener\')" style="flex:1;">Dial - Prospect Answers</button><button class="dial-btn sec" onclick="goTo(\'gatekeeper\')" style="flex:0.4;">Assistant</button><button class="dial-btn sec" onclick="goTo(\'voicemail\')" style="flex:0.35;">Voicemail</button></div>':'<div style="padding:40px;text-align:center;color:var(--text-muted);">Select an account above to generate the call brief.</div>');
-};
-
-window.selectAccount=function(name){
-    selectedAccount=name;
-    accountData=signalConsoleAccounts.find(function(a){return a.name===name})||null;
-    LAST_OUTCOME=null;
-    document.getElementById('topCtx').innerHTML=name?'<strong>'+escH(name)+'</strong>'+(accountData&&accountData._heat?' - heat '+accountData._heat:''):'Select an account';
-    syncCaptureAccount();
-    FLOW=buildFlow();
-    render();
-};
-
-renderVoicemail=function(){
-    var acct=selectedAccount||'[Company]';
-    document.getElementById('mainArea').innerHTML='<div style="margin-bottom:20px;"><div class="stage-phase">VOICEMAIL</div><div class="stage-title">Leave a Message That Creates Curiosity</div><div class="stage-sub">Under 25 seconds. No pitch. Just a puzzle.</div></div><div class="vm-card"><div class="script-lbl">VERSION 1 - CURIOSITY</div><div class="script-txt">Hey <em>[Name]</em>, it\'s [Your Name] from '+escH(getCompanyName())+'. Quick message: I was looking at '+escH(acct)+'\'s operation and ran some numbers on patterns we typically see. Found something worth a conversation. My number is <em>[number]</em> - or I\'ll try you again <em>'+biz(2)+'</em>.</div></div><div class="vm-card"><div class="script-lbl">VERSION 2 - SOCIAL PROOF</div><div class="script-txt">Hey <em>[Name]</em>, [Your Name] with '+escH(getCompanyName())+'. We helped [proof company] [specific result]. Wondering if the same math applies to '+escH(acct)+'. I\'m at <em>[number]</em>. I\'ll follow up <em>'+biz(3)+'</em> either way.</div></div><div class="vm-card"><div class="script-lbl">VERSION 3 - PROVOCATION</div><div class="script-txt"><em>[Name]</em>, [Your Name], '+escH(getCompanyName())+'. Short question: how much time does your team spend on [core pain]? At most companies your scale, the answer makes people uncomfortable. If you\'re curious about the benchmark, I\'m at <em>[number]</em>.</div></div><div class="coach"><div class="coach-lbl">VOICEMAIL CADENCE</div><div class="coach-txt"><strong>Call 1:</strong> Version 1 (curiosity). Email within 1 hour.<br><strong>Call 2 (Day 3):</strong> Version 2 (proof). No email.<br><strong>Call 3 (Day 7):</strong> Version 3 (provocation). LinkedIn connect same day.<br><strong>Call 4 (Day 14):</strong> "Last voicemail" - no hard feelings, here if relevant.<br><strong>After:</strong> Monthly nurture, no asks.</div></div><div style="display:flex;gap:10px;margin-top:16px;"><button class="adv-btn sec" onclick="goTo(\'pre_call\')">Back to Intel Brief</button><button class="adv-btn" onclick="goTo(\'post_call\')">Post-Call -></button></div>';
-};
-
-renderPostcall=function(){
-    stopTimer();
-    document.getElementById('mainArea').innerHTML='<div style="margin-bottom:20px;"><div class="stage-phase">POST-CALL</div><div class="stage-title">Next 60 Minutes</div><div class="stage-sub">What you do now determines whether this sticks.</div></div><div class="postcard"><div class="postcard-title">If Meeting Booked</div><div class="coach-txt"><strong>Within 15 min:</strong> Send calendar invite + agenda + LinkedIn.<br><strong>Within 1 hour:</strong> Send relevant case study as PDF.<br><strong>24 hours before:</strong> Confirmation email.<br><strong>Prepare:</strong> Account-specific brief with 3 questions for the meeting.</div></div><div class="postcard"><div class="postcard-title">If "Send Info" / "Call Back"</div><div class="coach-txt"><strong>Within 1 hour:</strong> Send the email below. Not tomorrow.<br><strong>Include:</strong> 1-page brief (not brochure) + 1 case study + specific ask with date.<br><strong>Follow up:</strong> Call on exact day promised.</div></div><div class="postcard"><div class="postcard-title">Follow-Up Email</div><div class="email-tpl">Subject: '+escH(selectedAccount||'[Company]')+' - quick follow-up\n\n[Name] -\n\nThanks for the time today. As promised, here\'s the quick version:\n\n[2-3 sentences about what you do, specific to their situation]\n\nThe results at comparable companies:\n- [Proof point 1]\n- [Proof point 2]\n- [Proof point 3]\n\nI\'d like [meeting type] for 20 minutes to give you\nan honest read on whether this applies to '+escH(selectedAccount||'[Company]')+'.\n\n'+biz(2)+' or '+biz(4)+' - what works?\n\n[Your Name]\n'+escH(getCompanyName())+'</div></div><div class="postcard"><div class="postcard-title">If Referral Given</div><div class="coach-txt"><strong>Immediately:</strong> Thank-you email to original contact.<br><strong>Within 24 hours:</strong> Call referral. Open with: "[Original Name] in [dept] suggested I reach out to you."</div></div><div class="postcard"><div class="postcard-title">If Hard No</div><div class="coach-txt"><strong>Same day:</strong> One email - contact info + one case study. Nothing else.<br><strong>Day 30:</strong> Value touch - relevant article, no ask.<br><strong>Day 60:</strong> Second value touch - new case study.<br><strong>Day 90:</strong> Final check-in: "Last note. If [trigger] resurfaces, I\'m here."</div></div><div class="postcard"><div class="postcard-title">Log This Call</div><div class="outcome-bar" id="outcomeBar">'+['meeting_booked','callback_scheduled','referral','voicemail','rejected','hung_up','no_answer'].map(function(o){return '<button class="outcome-btn" onclick="logCall(event,\''+o+'\')">'+o.replace(/_/g,' ')+'</button>'}).join('')+'</div></div><button class="adv-btn sec" onclick="goTo(\'pre_call\')" style="margin-top:12px;">Reset</button>';
-};
-
-window.logCall=function(event,outcome){
-    var capture=syncCaptureAccount();
-    var data=readLS('gtmos_cold_call_log',{calls:[]});
-    data.calls.push({
-        id:uid(),
-        accountName:selectedAccount||'',
-        contactName:capture.contactName||'',
-        contactTitle:capture.contactTitle||'',
-        outcome:outcome,
-        meetingDate:outcome==='meeting_booked'?new Date().toISOString():null,
-        referralName:outcome==='referral'?(capture.contactName||null):null,
-        callbackDate:capture.callbackDate||null,
-        phasesReached:Array.from(S.donePhases).map(function(i){return PHASE_NAMES[i]}),
-        objectionsHandled:capture.objectionKey?[capture.objectionKey]:[],
-        duration:S.timerStart?Math.floor((Date.now()-S.timerStart)/1000):0,
-        notes:capture.notes||'',
-        dealId:null,
-        createdAt:new Date().toISOString()
-    });
-    LAST_OUTCOME=outcome;
+    if(!Array.isArray(data.calls))data.calls=[];
+    var t=currentThread(),reply=currentReply();
+    data.calls.push({id:'call_'+Date.now(),accountName:selectedAccount||'',contactName:draft.contactName||'',contactTitle:draft.contactTitle||'',threadId:t.id,threadTitle:t.title,buyerResponse:reply?reply.buyer:'',recommendedResponse:reply?personalize(reply.reply):'',outcome:outcome||'logged',notes:draft.notes||'',source:'cold-call-studio-talk-loom',createdAt:new Date().toISOString()});
     writeLS('gtmos_cold_call_log',data);
     var disco=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
     disco.totalCalls=(disco.totalCalls||0)+1;
     if(outcome==='meeting_booked')disco.advancedCalls=(disco.advancedCalls||0)+1;
     writeLS('gtmos_discovery_stats',disco);
-    if(event&&event.currentTarget){
-        var buttons=document.querySelectorAll('.outcome-btn');
-        buttons.forEach(function(b){b.classList.remove('sel');});
-        event.currentTarget.classList.add('sel');
+    if(outcome==='meeting_booked'&&selectedAccount)createDealFromCall();
+    toast(outcome?('Logged '+outcome.replace(/_/g,' ')):'Call logged');
+    render();
+  }
+  function createDealFromCall(){
+    var deal={id:'deal_'+Date.now(),accountName:selectedAccount,value:0,stage:'prospect',nextStep:'First meeting from cold call',nextStepDate:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+    if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.save==='function'){
+      window.gtmPersistence.deals.save(deal).catch(function(error){console.error('Cold Call Studio deal sync failed:',error)});
+      return;
     }
-    renderSidebar();
-    if(outcome==='meeting_booked'&&selectedAccount){
-        if(confirm('Meeting booked! Create a deal for '+selectedAccount+'?')){
-            var deal={
-                id:'deal_'+Date.now(),
-                accountName:selectedAccount,
-                value:0,
-                stage:'prospect',
-                nextStep:'First meeting',
-                nextStepDate:capture.callbackDate||null,
-                primaryContact:capture.contactName||'',
-                created_at:new Date().toISOString(),
-                updated_at:new Date().toISOString()
-            };
-            if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.save==='function'){
-                window.gtmPersistence.deals.save(deal).catch(function(error){console.error('Cold Call Studio deal sync failed:',error);});
-            }else{
-                var deals=readLS('gtmos_deal_workspaces',[]);
-                deals.push(deal);
-                writeLS('gtmos_deal_workspaces',deals);
-            }
-            alert('Deal created in Deal Workspace.');
-        }
-    }
-};
-
-renderStandard=function(stage){
-    var M=document.getElementById('mainArea');
-    var rhtml='';
-    if(stage.responses&&stage.responses.length){
-        rhtml='<div class="resp-section"><div class="resp-lbl">What they might say - click for your response</div><div class="resp-grid">';
-        stage.responses.forEach(function(r){
-            var exp=S.expanded===r.id;
-            var chtml='';
-            if(exp){
-                if(r.counter){
-                    chtml='<div class="counter"><div class="counter-lbl">YOUR RESPONSE</div><div class="counter-txt">'+r.counter+'</div>'+(r.why?'<div class="counter-why">'+r.why+'</div>':'')+(r.next?'<div class="adv-row"><button class="adv-btn" onclick="event.stopPropagation();goTo(\''+r.next+'\')">Continue -> '+((FLOW[r.next]||{}).title||'Next')+'</button></div>':'')+'</div>';
-                } else if(r.why){
-                    chtml='<div class="counter"><div class="counter-txt">'+r.why+'</div>'+(r.next?'<div class="adv-row"><button class="adv-btn" onclick="event.stopPropagation();goTo(\''+r.next+'\')">Continue -></button></div>':'')+'</div>';
-                } else if(r.next){
-                    chtml='<div class="adv-row" style="margin-top:10px;"><button class="adv-btn" onclick="event.stopPropagation();goTo(\''+r.next+'\')">Continue -> '+((FLOW[r.next]||{}).title||'Next')+'</button></div>';
-                }
-            }
-            rhtml+='<div><button class="resp-btn" onclick="toggleResp(\''+r.id+'\')" style="'+(exp?'border-color:var(--gold-dim);background:var(--surface3);':'')+'"><div class="tone tone-'+r.tone+'"></div><div><div class="resp-prospect">'+r.label+'</div>'+(r.hint?'<div class="resp-hint">'+r.hint+'</div>':'')+'</div></button>'+chtml+'</div>';
-        });
-        rhtml+='</div></div>';
-    }
-    M.innerHTML='<div style="margin-bottom:20px;"><div class="stage-phase">PHASE '+stage.phase+' - '+PHASE_NAMES[stage.phase]+'</div><div class="stage-title">'+stage.title+'</div><div class="stage-sub">'+stage.sub+'</div></div>'+(stage.script?'<div class="script"><div class="script-lbl">YOUR SCRIPT</div><div class="script-txt">'+stage.script.replace(/\n/g,'<br>')+'</div></div>':'')+(stage.coaching?'<div class="coach"><div class="coach-lbl">COACHING</div><div class="coach-txt">'+stage.coaching+'</div></div>':'')+rhtml;
-};
-
-renderSidebar=function(){
-    var sb=document.getElementById('sideArea');
-    var capture=syncCaptureAccount();
-    var stats=getRecentCallStats();
-    var modeMeta=getModeMeta(S.stage);
-    var feedback=getOutcomeFeedback(LAST_OUTCOME);
-    var acctPanel='';
-    if(accountData){
-        acctPanel='<div class="spanel"><div class="spanel-title">ACCOUNT INTEL</div><div class="srow"><span class="srow-l">Account</span><span class="srow-v">'+escH(selectedAccount)+'</span></div>'+(accountData._heat?'<div class="srow"><span class="srow-l">Heat</span><span class="srow-v gold">'+accountData._heat+'</span></div>':'')+(accountData.industry?'<div class="srow"><span class="srow-l">Industry</span><span class="srow-v">'+escH(accountData.industry)+'</span></div>':'')+((accountData.signals&&accountData.signals.length)?'<div class="srow"><span class="srow-l">Signals</span><span class="srow-v">'+accountData.signals.length+'</span></div>':'')+'</div>';
-    }
-    var feedbackHtml=feedback?'<div class="feedback-card"><div class="feedback-title">'+feedback.title+'</div><div class="feedback-copy">'+feedback.copy+(capture.callbackDate?'<br><br><strong>Callback date:</strong> '+escH(capture.callbackDate):'')+'</div></div>':'';
-    var statsHtml='<div class="spanel"><div class="spanel-title green">OUTCOME LOOP</div><div class="srow"><span class="srow-l">Calls logged</span><span class="srow-v">'+stats.total+'</span></div><div class="srow"><span class="srow-l">Meetings</span><span class="srow-v green">'+stats.booked+'</span></div><div class="srow"><span class="srow-l">Callbacks</span><span class="srow-v">'+stats.callbacks+'</span></div><div class="srow"><span class="srow-l">Referrals</span><span class="srow-v">'+stats.referrals+'</span></div></div>';
-    var captureTitle=getStageMode(S.stage)==='pre'?'PRE-CALL CAPTURE':(getStageMode(S.stage)==='post'?'POST-CALL CAPTURE':'LIVE CALL CAPTURE');
-    var captureHtml='<div class="spanel"><div class="spanel-title blue">'+captureTitle+'</div><div style="font-size:0.76rem;color:var(--text-dim);line-height:1.55;margin-bottom:10px;">'+modeMeta.copy+'</div><div class="capture-grid"><div><label class="capture-label">Contact name</label><input class="capture-input" type="text" value="'+escH(capture.contactName||'')+'" oninput="setCallCaptureField(\'contactName\',this.value)" placeholder="Who picked up?"></div><div><label class="capture-label">Contact title</label><input class="capture-input" type="text" value="'+escH(capture.contactTitle||'')+'" oninput="setCallCaptureField(\'contactTitle\',this.value)" placeholder="Role or function"></div><div><label class="capture-label">Primary objection</label><select class="capture-select" onchange="setCallCaptureField(\'objectionKey\',this.value)"><option value="">Select objection...</option>'+Object.keys(OBJECTIONS).map(function(key){return '<option value="'+key+'"'+(capture.objectionKey===key?' selected':'')+'>'+escH(OBJECTIONS[key].label)+'</option>';}).join('')+'</select></div><div><label class="capture-label">Callback date</label><input class="capture-input" type="date" value="'+escH(capture.callbackDate||'')+'" onchange="setCallCaptureField(\'callbackDate\',this.value)"></div><div><label class="capture-label">What actually happened</label><textarea class="capture-textarea" oninput="setCallCaptureField(\'notes\',this.value)" placeholder="Capture the real objection, signal, and next move while it is fresh.">'+escH(capture.notes||'')+'</textarea></div></div></div>';
-    var navHtml='<div class="spanel"><div class="spanel-title blue">CALL STAGES</div>'+Object.keys(FLOW).map(function(k){var f=FLOW[k];return '<button class="nav-btn'+(k===S.stage?' cur':'')+'" onclick="goTo(\''+k+'\')">'+f.title+'</button>';}).join('')+'</div>';
-    var objHtml='<div class="spanel"><div class="spanel-title red">OBJECTION LIBRARY</div><div style="display:flex;flex-wrap:wrap;gap:3px;">'+Object.keys(OBJECTIONS).map(function(k){return '<span class="obj-chip" onclick="showObj(\''+k+'\')">'+OBJECTIONS[k].label.replace(/"/g,'')+'</span>';}).join('')+'</div></div>';
-    var rulesHtml='<div class="spanel"><div class="spanel-title gold">RULES</div><div style="font-size:0.75rem;color:var(--text-dim);line-height:1.6;"><div style="margin-bottom:5px;">1. <strong style="color:var(--text);">Never beg.</strong></div><div style="margin-bottom:5px;">2. <strong style="color:var(--text);">Ask, don\'t tell.</strong></div><div style="margin-bottom:5px;">3. <strong style="color:var(--text);">Name the elephant.</strong></div><div style="margin-bottom:5px;">4. <strong style="color:var(--text);">Match energy.</strong></div><div style="margin-bottom:5px;">5. <strong style="color:var(--text);">Close on time, not interest.</strong></div><div>6. <strong style="color:var(--text);">Leave before asked.</strong></div></div></div>';
-    sb.innerHTML=feedbackHtml+acctPanel+statsHtml+captureHtml+navHtml+objHtml+rulesHtml;
-};
-
-function showColdCallBootState(kind,title,text){
+    var deals=readLS('gtmos_deal_workspaces',[]);
+    if(Array.isArray(deals)){deals.push(deal);writeLS('gtmos_deal_workspaces',deals)}
+  }
+  function renderLog(){
+    var mount=document.getElementById('callLogMount');
+    if(!mount)return;
+    var calls=getCallLog().slice().reverse();
+    if(!calls.length){mount.innerHTML='<div class="empty">No cold call outcomes logged yet.</div>';return}
+    var html='<table class="call-log"><tr><th>Date</th><th>Account</th><th>Thread</th><th>Outcome</th></tr>';
+    calls.slice(0,8).forEach(function(c){
+      html+='<tr><td>'+escH(c.createdAt?new Date(c.createdAt).toLocaleDateString():'')+'</td><td>'+escH(c.accountName||'')+'<br><span style="color:var(--muted)">'+escH(c.contactName||'')+'</span></td><td>'+escH(c.threadTitle||'')+'<br><span style="color:var(--muted)">'+escH(c.buyerResponse||'')+'</span></td><td>'+escH(String(c.outcome||'').replace(/_/g,' '))+'</td></tr>';
+    });
+    mount.innerHTML=html+'</table>';
+  }
+  function captureDraft(){
+    var name=document.getElementById('contactName'),notes=document.getElementById('callNotes');
+    if(name)draft.contactName=name.value;
+    if(notes)draft.notes=notes.value;
+  }
+  function bindEvents(){
+    document.addEventListener('click',function(e){
+      var thread=e.target.closest('[data-thread]');
+      if(thread){captureDraft();activeThread=thread.getAttribute('data-thread');activeReply=null;render();return}
+      var reply=e.target.closest('[data-reply]');
+      if(reply){captureDraft();activeReply=reply.getAttribute('data-reply');render();return}
+      var next=e.target.closest('[data-next-thread]');
+      if(next){captureDraft();activeThread=next.getAttribute('data-next-thread');activeReply=null;render();return}
+      var outcome=e.target.closest('[data-outcome]');
+      if(outcome){logCall(outcome.getAttribute('data-outcome'));return}
+      var action=e.target.closest('[data-action="log-prep"]');
+      if(action){logCall('logged');return}
+    });
+    document.addEventListener('change',function(e){
+      if(e.target&&e.target.id==='accountSelect'){
+        selectedAccount=e.target.value||null;
+        accountData=signalConsoleAccounts.find(function(a){return a.name===selectedAccount})||null;
+        activeThread=selectedAccount?'opener':'prep';
+        activeReply=null;
+        render();
+      }
+    });
+    document.addEventListener('input',function(e){
+      if(e.target&&e.target.id==='contactName')draft.contactName=e.target.value;
+      if(e.target&&e.target.id==='callNotes')draft.notes=e.target.value;
+    });
+  }
+  function showBoot(kind,title,text){
     if(!window.gtmModuleBootState)return;
-    window.gtmModuleBootState.show('#mainArea',{
-        kind:kind,
-        title:title,
-        text:text,
-        retryLabel:'Retry Cold Call Studio',
-        retryAction:'retryColdCallBoot'
-    });
-}
-function onColdCallBootFailure(error){
+    window.gtmModuleBootState.show('#coldBootState',{kind:kind,title:title,text:text,retryLabel:'Retry Cold Call Studio',retryAction:'retryColdCallStudioBoot'});
+  }
+  function clearBoot(){
+    if(window.gtmModuleBootState)window.gtmModuleBootState.clear('#coldBootState');
+  }
+  function bootFailure(error){
     console.error('Cold Call Studio boot failed:',error);
-    document.getElementById('topCtx').textContent='Cold Call Studio failed to load';
-    document.getElementById('sideArea').innerHTML='';
-    showColdCallBootState(
-        'error',
-        'Cold Call Studio could not load.',
-        'The call workflow failed during startup, so Antaeus is showing the failure instead of a dead dial screen. Retry once. If it fails again, refresh the page and verify your workspace session is still healthy.'
-    );
-}
-window.retryColdCallBoot=function(){
-    bootColdCallStudio().catch(onColdCallBootFailure);
-};
-async function bootColdCallStudio(){
-    showColdCallBootState(
-        'loading',
-        'Loading Cold Call Studio',
-        'Pulling your current accounts, rebuilding the call flow, and preparing the live objection paths.'
-    );
+    showBoot('error','Cold Call Studio could not load.','The talk loom failed during startup. Retry once, then refresh if the workspace session is stale.');
+  }
+  window.retryColdCallStudioBoot=function(){boot().catch(bootFailure)};
+  async function boot(){
+    showBoot('loading','Loading Cold Call Studio','Pulling account pressure, call memory, and handoff routes.');
     if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
-        await window.gtmPersistence.docs.load({keys:['gtmos_cold_call_log']}).catch(function(error){console.error('Cold Call Studio docs preload failed:',error);});
+      await window.gtmPersistence.docs.load({keys:['gtmos_cold_call_log']}).catch(function(error){console.error('Cold Call Studio docs preload failed:',error)});
     }
     await syncSignalConsoleAccounts();
     var params=new URLSearchParams(window.location.search);
-    if(params.get('account')){
-        var match=signalConsoleAccounts.find(function(a){return a.name===params.get('account')});
-        if(match){selectedAccount=match.name;accountData=match;}
+    var requested=params.get('account')||params.get('focusObject');
+    if(requested){
+      var match=signalConsoleAccounts.find(function(a){return a.name===requested});
+      if(match){selectedAccount=match.name;accountData=match;activeThread='opener'}
+    }else if(signalConsoleAccounts.length){
+      signalConsoleAccounts.sort(function(a,b){return Number(b._heat||0)-Number(a._heat||0)});
+      selectedAccount=signalConsoleAccounts[0].name;
+      accountData=signalConsoleAccounts[0];
+      activeThread='opener';
+    }else{
+      activeThread='prep';
     }
-    FLOW=buildFlow();
     render();
-}
-
-if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-    window.requireAuthReady.then(bootColdCallStudio).catch(onColdCallBootFailure);
-}else if(window.__gtmosAuthGatePending){
-    showColdCallBootState(
-        'loading',
-        'Waiting for auth',
-        'Cold Call Studio is waiting for your authenticated workspace before it builds the call flow.'
-    );
-    window.addEventListener('gtmos:auth-ready',function(){bootColdCallStudio().catch(onColdCallBootFailure);},{once:true});
-}else{
-    bootColdCallStudio().catch(onColdCallBootFailure);
-}
-
-window.addEventListener('resize',syncColdCallShellOffset);
-syncColdCallShellOffset();
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeObj()});
-
+    clearBoot();
+  }
+  bindEvents();
+  if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
+    window.requireAuthReady.then(boot).catch(bootFailure);
+  }else if(window.__gtmosAuthGatePending){
+    showBoot('loading','Waiting for auth','Cold Call Studio is waiting for the authenticated workspace before it builds the talk loom.');
+    window.addEventListener('gtmos:auth-ready',function(){boot().catch(bootFailure)},{once:true});
+  }else{
+    boot().catch(bootFailure);
+  }
 })();
-
-    </script>
+</script>
 </body>
 </html>

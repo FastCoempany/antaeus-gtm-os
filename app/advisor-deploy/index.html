@@ -6,1240 +6,187 @@
     <title>Advisor Deploy | Antaeus GTM OS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@600;700;800;900&family=Public+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
-        .module-inner { max-width:880px; padding:0 0 80px; }
-        .module-header .page-title{font-family:var(--sans);font-size:clamp(1.55rem,1.9vw,1.9rem);margin-bottom:0;color:var(--text);}
-        .module-header .page-subtitle{max-width:72ch;color:var(--text3);}
-        .advisor-first-fold{margin-bottom:24px;padding:18px 18px 8px;border:1px solid rgba(255,255,255,0.06);border-radius:16px;background:linear-gradient(180deg,rgba(15,19,28,0.94) 0%,rgba(10,13,20,0.98) 100%);box-shadow:0 22px 48px rgba(0,0,0,0.18);}
-        .advisor-first-fold #advisorBootState{margin-bottom:14px;}
-        .advisor-first-fold #advisorShellBand{margin-bottom:16px;}
-        .advisor-first-fold .tabs{margin-bottom:0;border-bottom-color:rgba(255,255,255,0.06);}
-
-:root{--bg:#0a0e1a;--bg2:#10152a;--bg3:#161c34;--text:#e0ddd8;--text2:#b0ada6;--text3:#78756e;--muted:#4e4c47;--gold:#d4a574;--gold-bg:rgba(212,165,116,0.06);--gold-border:rgba(212,165,116,0.2);--border:rgba(255,255,255,0.06);--green:#22c55e;--green-bg:rgba(34,197,94,0.08);--amber:#f59e0b;--amber-bg:rgba(245,158,11,0.08);--red:#ef4444;--red-bg:rgba(239,68,68,0.06);--blue:#5b8def;--blue-bg:rgba(91,141,239,0.08);--r:8px;--rl:12px;--rf:999px;--serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',-apple-system,sans-serif;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);background:var(--bg);color:var(--text2);line-height:1.55;min-height:100vh;-webkit-font-smoothing:antialiased;}
-.shell{max-width:880px;margin:0 auto;padding:32px 24px 80px;}
-h1{font-family:var(--serif);font-size:1.5rem;color:var(--text);margin-bottom:4px;}
-.sub{font-size:0.82rem;color:var(--text3);margin-bottom:28px;}
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:24px;overflow-x:auto;}
-.tab{padding:10px 14px;font-size:0.72rem;font-weight:600;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:inherit;white-space:nowrap;transition:all 0.15s;}
-.tab:hover{color:var(--text3);}.tab.on{color:var(--gold);border-bottom-color:var(--gold);}
-.panel{display:none;}.panel.on{display:block;}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:20px;margin-bottom:16px;}
-.card-t{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:700;margin-bottom:12px;}
-.card-t.gold{color:var(--gold);}
-/* Stats ribbon */
-.stats{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px 0;margin-bottom:20px;}
-.stat{flex:1;text-align:center;border-right:1px solid var(--border);}.stat:last-child{border-right:none;}
-.stat-v{font-family:var(--serif);font-size:1.3rem;color:var(--text);}
-.stat-v.gold{color:var(--gold);}.stat-v.green{color:var(--green);}.stat-v.red{color:var(--red);}
-.stat-l{font-size:0.56rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:600;margin-top:2px;}
-/* Buttons */
-.btn{padding:9px 18px;border-radius:var(--r);font-size:0.78rem;font-weight:700;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;font-family:inherit;transition:all 0.15s;}
-.btn:hover{border-color:rgba(255,255,255,0.12);color:var(--text2);}
-.btn.gold{border-color:var(--gold-border);color:var(--gold);background:var(--gold-bg);}
-.btn.gold:hover{background:rgba(212,165,116,0.12);}
-.btn.primary{background:var(--gold);color:var(--bg);border-color:var(--gold);}
-.btn.sm{padding:5px 12px;font-size:0.7rem;}
-.btn.danger{border-color:rgba(239,68,68,0.2);color:var(--red);}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-/* Form */
-.field{margin-bottom:14px;}
-.field label{display:block;font-size:0.72rem;font-weight:600;color:var(--text3);margin-bottom:5px;}
-.field select,.field input,.field textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:0.85rem;font-family:inherit;}
-.field select:focus,.field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);}
-.field textarea{min-height:70px;resize:vertical;line-height:1.6;}
-.field .hint{font-size:0.65rem;color:var(--muted);margin-top:3px;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-/* Badges */
-.badge{display:inline-block;padding:3px 9px;border-radius:var(--rf);font-size:0.62rem;font-weight:700;}
-.badge.t1{background:rgba(212,165,116,0.1);color:var(--gold);}
-.badge.t2{background:var(--blue-bg);color:var(--blue);}
-.badge.t3{background:var(--amber-bg);color:var(--amber);}
-.badge.t4{background:var(--green-bg);color:var(--green);}
-.badge.active{background:var(--green-bg);color:var(--green);}
-.badge.warm{background:var(--amber-bg);color:var(--amber);}
-.badge.cold{background:rgba(255,255,255,0.06);color:var(--text3);}
-.badge.cooldown{background:var(--red-bg);color:var(--red);}
-.badge.available{background:var(--green-bg);color:var(--green);}
-/* Accord */
-.acc{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:10px;}
-.acc-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;background:var(--bg2);transition:background 0.15s;}
-.acc-head:hover{background:var(--bg3);}
-.acc-num{font-family:var(--serif);font-size:0.9rem;color:var(--gold);margin-right:10px;}
-.acc-title{font-weight:700;font-size:0.85rem;color:var(--text);}
-.acc-sub{font-size:0.72rem;color:var(--text3);margin-top:2px;}
-.acc-arrow{color:var(--muted);font-size:0.7rem;transition:transform 0.2s;}
-.acc.open .acc-arrow{transform:rotate(90deg);}
-.acc-body{display:none;padding:18px;background:var(--bg2);border-top:1px solid var(--border);font-size:0.82rem;color:var(--text3);line-height:1.65;}
-.acc.open .acc-body{display:block;}
-.acc-body strong{color:var(--text2);}
-.script-box{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--r);padding:14px 16px;margin:10px 0;font-size:0.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;position:relative;}
-.script-box .cp{position:absolute;top:8px;right:8px;padding:3px 8px;border-radius:var(--rf);font-size:0.6rem;font-weight:700;border:1px solid var(--gold-border);background:var(--gold-bg);color:var(--gold);cursor:pointer;}
-.script-box .cp:hover{background:rgba(212,165,116,0.12);}
-.section-lbl{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);font-weight:700;margin:12px 0 6px;}
-/* Registry list */
-.adv-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
-.adv-info{flex:1;}
-.adv-name{font-weight:700;font-size:0.88rem;color:var(--text);margin-bottom:3px;}
-.adv-meta{font-size:0.75rem;color:var(--text3);line-height:1.5;}
-.adv-actions{display:flex;gap:6px;align-items:center;}
-/* Matrix */
-.matrix-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03);align-items:center;font-size:0.82rem;}
-.matrix-row:last-child{border-bottom:none;}
-.matrix-deal{font-weight:600;color:var(--text);}
-.matrix-sub{font-size:0.72rem;color:var(--text3);}
-/* Wizard steps */
-.wizard-step{display:none;}.wizard-step.on{display:block;}
-.step-num{font-family:var(--serif);font-size:2rem;color:var(--gold);opacity:0.3;margin-bottom:6px;}
-.step-title{font-weight:700;font-size:1rem;color:var(--text);margin-bottom:4px;}
-.step-desc{font-size:0.82rem;color:var(--text3);margin-bottom:16px;}
-/* Output */
-.output{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--r);padding:16px 18px;font-size:0.85rem;color:var(--text);line-height:1.7;white-space:pre-wrap;margin-bottom:12px;}
-/* Deployment log */
-.dep-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:8px;}
-.dep-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.dep-deal{font-weight:600;color:var(--text);font-size:0.85rem;}
-.dep-meta{font-size:0.75rem;color:var(--text3);line-height:1.5;}
-.outcome-sel{padding:3px 8px;font-size:0.68rem;border-radius:var(--r);background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text2);font-family:inherit;}
-.empty{text-align:center;padding:40px;color:var(--muted);font-size:0.82rem;}
-.toast{position:fixed;right:16px;bottom:16px;background:#1f1a14;color:#fff;padding:10px 16px;border-radius:var(--r);font-size:0.82rem;font-weight:600;opacity:0;transform:translateY(6px);transition:0.25s;pointer-events:none;z-index:99;}
-.toast.show{opacity:1;transform:none;}
-@media(max-width:700px){.row2,.row3{grid-template-columns:1fr;}.stats{flex-wrap:wrap;}.stat{flex:1 1 50%;border-right:none;padding:4px 0;}.adv-card{flex-direction:column;}}
-
+        body.room-advisor-deploy{background:linear-gradient(rgba(47,115,232,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(47,115,232,.035) 1px,transparent 1px),radial-gradient(circle at 0 0,rgba(47,115,232,.09),transparent 28%),radial-gradient(circle at 100% 5%,rgba(237,107,31,.08),transparent 30%),#f5f8fc;color:#071735}
+        body.room-advisor-deploy .app-main,body.room-advisor-deploy .app-content{background:transparent}
+        body.room-advisor-deploy .app-content{max-width:none;padding:0}
+        .advisor-room{--ink:#071735;--night:#081225;--paper:#f5f8fc;--white:#fffdfa;--warm:#fbf1e5;--mist:#e8f1fa;--blue:#2f73e8;--orange:#ed6b1f;--green:#287c52;--red:#c94a43;--line:rgba(88,105,132,.2);--line2:rgba(88,105,132,.36);--muted:#647691;--shadow:0 36px 100px rgba(7,23,53,.15);--sans:"Public Sans",sans-serif;--display:"Outfit",sans-serif;--serif:"DM Serif Display",serif;--mono:"JetBrains Mono",monospace;min-height:100vh;padding:34px clamp(22px,3vw,54px) 96px;font-family:var(--sans);color:var(--ink)}
+        .advisor-room *{box-sizing:border-box}.advisor-room h1,.advisor-room h2,.advisor-room h3,.advisor-room p{margin:0}
+        .advisor-mast{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:0 auto 28px;max-width:1780px;font:900 11px/1 var(--mono);letter-spacing:.32em;text-transform:uppercase;color:#8190a8}.advisor-mast strong{color:var(--orange)}.advisor-topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+        .desk-btn,.desk-link,.desk-select,.desk-input,.desk-textarea{font-family:inherit}.desk-btn,.desk-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;border:1px solid rgba(88,105,132,.22);border-radius:999px;padding:10px 15px;background:rgba(255,255,255,.68);color:#5d6f89;font:900 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:.18s}.desk-btn:hover,.desk-link:hover{transform:translateY(-1px);border-color:rgba(237,107,31,.3);color:var(--ink);background:rgba(255,253,250,.94)}.desk-btn.primary,.desk-link.primary{border-color:rgba(237,107,31,.32);background:var(--orange);color:#fffdfa;box-shadow:0 16px 34px rgba(237,107,31,.16)}.desk-btn.green{border-color:rgba(40,124,82,.24);background:rgba(40,124,82,.08);color:var(--green)}.desk-btn.red{border-color:rgba(201,74,67,.25);background:rgba(201,74,67,.08);color:var(--red)}.desk-btn.blue{border-color:rgba(47,115,232,.25);background:rgba(47,115,232,.08);color:var(--blue)}.desk-btn:disabled{cursor:not-allowed;opacity:.46;transform:none}
+        .desk-board{position:relative;max-width:1780px;min-height:880px;margin:0 auto 26px;overflow:hidden;border-radius:56px;border:1px solid var(--line);background:radial-gradient(circle at 25% 12%,rgba(237,107,31,.08),transparent 24%),linear-gradient(180deg,rgba(255,255,255,.96),rgba(242,247,253,.93));box-shadow:var(--shadow);padding:clamp(28px,3vw,52px)}.desk-board:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(7,23,53,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(7,23,53,.028) 1px,transparent 1px);background-size:34px 34px;opacity:.8;pointer-events:none}.desk-board>*{position:relative;z-index:1}
+        .desk-hero{display:grid;grid-template-columns:minmax(520px,1fr) minmax(360px,.78fr);gap:clamp(28px,4vw,72px);align-items:end;margin-bottom:34px}.desk-kicker,.desk-label{font:900 10px/1 var(--mono);letter-spacing:.28em;text-transform:uppercase;color:#91a0b6}.desk-kicker{color:var(--orange);margin-bottom:12px}.desk-title{max-width:1040px;font-family:var(--display);font-size:clamp(58px,6vw,108px);line-height:.86;letter-spacing:-.09em;font-weight:900;color:var(--ink)}.desk-note{color:#536986;font-size:17px;line-height:1.62;max-width:620px;margin-top:22px}
+        .desk-read{justify-self:end;width:min(420px,100%);border-top:1px solid var(--line2);padding-top:18px}.desk-read-top{display:flex;align-items:start;justify-content:space-between;gap:18px}.desk-read-score{font-family:var(--display);font-size:clamp(62px,5vw,92px);line-height:.8;letter-spacing:-.08em;color:var(--green);font-weight:700}.desk-read h3{color:var(--ink);font:900 28px/.96 var(--display);letter-spacing:-.055em;margin-top:10px}.desk-read p{margin-top:13px;color:#637793;line-height:1.55;font-size:14px}
+        .desk-route{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:26px}.route-cell{min-width:0}.route-cell label,.field label{display:block;margin-bottom:7px;font:900 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:#91a0b6}.desk-select,.desk-input,.desk-textarea{width:100%;border:1px solid rgba(88,105,132,.22);border-radius:999px;background:rgba(255,255,255,.76);color:var(--ink);min-height:45px;padding:11px 16px;font-size:14px;font-weight:700;outline:none}.desk-textarea{min-height:94px;border-radius:18px;resize:vertical;line-height:1.5;font-weight:500}.desk-select:focus,.desk-input:focus,.desk-textarea:focus{border-color:rgba(237,107,31,.46);box-shadow:0 0 0 4px rgba(237,107,31,.08)}
+        .desktop{position:relative;min-height:590px;border-radius:40px;background:linear-gradient(115deg,rgba(251,241,229,.96),rgba(255,255,255,.82) 58%,rgba(232,241,250,.84));box-shadow:inset 0 0 0 1px rgba(88,105,132,.12),0 28px 90px rgba(7,23,53,.08);overflow:hidden}.proof-blotter{position:absolute;left:44px;top:44px;bottom:50px;width:min(320px,27%);border-radius:28px;background:rgba(7,23,53,.94);color:#fff;padding:30px;box-shadow:0 34px 90px rgba(7,23,53,.23);display:flex;flex-direction:column}.proof-blotter h3{margin-top:20px;color:#fffdfa;font:900 35px/.98 var(--display);letter-spacing:-.065em}.proof-blotter p{color:#bfd0e7;line-height:1.55;margin-top:16px;font-size:15px}.proof-chipline{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:22px}.proof-chip{border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:7px 10px;color:#c7d7ed;font:900 9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+        .rolodex{position:absolute;left:calc(44px + min(320px,27%) + 46px);top:72px;bottom:70px;width:min(360px,29%)}.contact-tab{width:100%;min-height:90px;margin-bottom:14px;border:0;border-left:8px solid currentColor;border-radius:0 26px 26px 0;background:rgba(255,255,255,.78);padding:17px 22px;box-shadow:0 18px 50px rgba(7,23,53,.08);text-align:left;color:var(--green);cursor:pointer;transform-origin:left center;transition:.18s}.contact-tab:nth-child(2){color:var(--orange);transform:rotate(1deg);margin-left:15px}.contact-tab:nth-child(3){color:var(--blue);transform:rotate(-.6deg);margin-left:3px}.contact-tab:nth-child(4){color:var(--red);transform:rotate(1.2deg);margin-left:24px}.contact-tab.is-active,.contact-tab:hover{transform:translateX(7px) rotate(0);background:#fffdfa;box-shadow:0 24px 58px rgba(7,23,53,.13)}.contact-tab h3{color:var(--ink);font:900 22px/1 var(--display);letter-spacing:-.055em;margin-bottom:7px}.contact-tab p,.contact-empty{color:#687c97;font-size:13px;line-height:1.35;margin:0}.contact-empty{border-radius:26px;padding:24px;background:rgba(255,255,255,.72);line-height:1.5}
+        .ask-sheet{position:absolute;right:52px;top:78px;width:min(520px,36%);min-height:340px;border-radius:12px;background:var(--white);box-shadow:0 36px 90px rgba(7,23,53,.14);padding:32px 34px;transform:rotate(-1.3deg)}.ask-sheet:before{content:"";position:absolute;left:50%;top:-20px;width:76px;height:38px;border-radius:40px 40px 0 0;transform:translateX(-50%);background:rgba(237,107,31,.16);border:1px solid rgba(237,107,31,.24)}.ask-sheet h3{margin-top:18px;color:var(--ink);font-family:var(--serif);font-size:clamp(34px,3.2vw,52px);line-height:.95;letter-spacing:-.052em}.ask-sheet p{margin-top:18px;color:#526783;line-height:1.6;font-size:15px}.ask-sheet textarea{margin-top:20px;min-height:110px;border-radius:18px;background:rgba(245,248,252,.9);font-size:13px;line-height:1.5}
+        .stamp-strip{position:absolute;right:58px;bottom:66px;display:flex;gap:16px;align-items:center}.stamp{width:116px;height:116px;border-radius:50%;display:grid;place-items:center;text-align:center;padding:16px;border:2px solid currentColor;background:rgba(255,255,255,.6);font:900 10px/1.28 var(--mono);letter-spacing:.16em;text-transform:uppercase;cursor:pointer}.stamp.send{color:var(--green)}.stamp.hold{color:var(--orange)}.stamp.reroute{color:var(--red)}
+        .desk-edge{position:absolute;left:48px;right:48px;bottom:30px;display:grid;grid-template-columns:repeat(4,1fr);gap:26px;border-top:1px solid var(--line2);padding-top:22px}.desk-edge h3{margin-top:8px;color:var(--ink);font:900 18px/1.05 var(--display);letter-spacing:-.035em}
+        .secondary-stack{max-width:1780px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:18px}.desk-sheet{border:1px solid var(--line);border-radius:32px;background:rgba(255,253,250,.84);box-shadow:0 18px 58px rgba(7,23,53,.07);overflow:hidden}.desk-sheet.wide{grid-column:1/-1}.sheet-head{width:100%;border:0;background:transparent;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 26px;color:var(--ink);cursor:pointer;text-align:left}.sheet-head h2{color:var(--ink);font:900 30px/.96 var(--display);letter-spacing:-.055em}.sheet-head p{margin-top:7px;color:#647691;font-size:14px;line-height:1.5}.sheet-head span{flex:0 0 auto;color:var(--orange);font:900 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase}.desk-sheet.is-open .sheet-head{border-bottom:1px solid var(--line)}.sheet-body{display:none;padding:24px 26px 28px}.desk-sheet.is-open .sheet-body{display:block}
+        .registry-grid{display:grid;grid-template-columns:minmax(300px,.78fr) minmax(420px,1fr);gap:24px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}.advisor-list,.deployment-list,.impact-list{display:grid;gap:10px}.ledger-row{display:grid;grid-template-columns:minmax(160px,1fr) minmax(120px,.6fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.ledger-row:last-child{border-bottom:0}.ledger-row strong{display:block;color:var(--ink);font:900 18px/1 var(--display);letter-spacing:-.035em}.ledger-row small,.ledger-row p{color:#647691;font-size:13px;line-height:1.45;margin:5px 0 0}
+        .pill{display:inline-flex;align-items:center;justify-content:center;min-height:28px;border-radius:999px;border:1px solid rgba(88,105,132,.2);padding:7px 10px;font:900 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#71839d;background:rgba(255,255,255,.64)}.pill.green{color:var(--green);border-color:rgba(40,124,82,.24);background:rgba(40,124,82,.08)}.pill.orange{color:var(--orange);border-color:rgba(237,107,31,.24);background:rgba(237,107,31,.08)}.pill.red{color:var(--red);border-color:rgba(201,74,67,.24);background:rgba(201,74,67,.08)}.pill.blue{color:var(--blue);border-color:rgba(47,115,232,.24);background:rgba(47,115,232,.08)}.outcome-select{min-height:36px;border-radius:999px;padding:8px 12px;border:1px solid rgba(88,105,132,.22);color:var(--ink);background:rgba(255,255,255,.72);font:800 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+        .impact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.impact-cell{border-top:1px solid var(--line2);padding-top:16px}.impact-cell strong{display:block;color:var(--ink);font:900 44px/.9 var(--display);letter-spacing:-.07em}.impact-cell span{display:block;margin-top:8px;color:#647691;font:900 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}.toast{position:fixed;right:24px;bottom:24px;z-index:200;padding:12px 16px;border-radius:999px;background:rgba(7,23,53,.94);color:#fffdfa;box-shadow:0 22px 60px rgba(7,23,53,.18);font:900 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:none}.empty-note{padding:22px;border-radius:24px;background:rgba(232,241,250,.72);color:#647691;line-height:1.55}
+        @media (max-width:1320px){.desk-hero,.secondary-stack,.registry-grid{grid-template-columns:1fr}.desk-read{justify-self:stretch}.desktop{min-height:960px;display:grid;gap:22px;padding:28px}.proof-blotter,.rolodex,.ask-sheet,.stamp-strip,.desk-edge{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:auto;margin:0;transform:none}.proof-blotter{min-height:260px}.rolodex{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.contact-tab{margin:0;transform:none!important;border-radius:0 24px 24px 0}.stamp-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));justify-items:center}.desk-edge{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media (max-width:860px){.advisor-room{padding:22px 14px 70px}.advisor-mast,.advisor-topbar,.desk-route,.impact-grid,.form-grid,.rolodex,.desk-edge{grid-template-columns:1fr}.advisor-mast{display:grid}.desk-board{border-radius:34px;padding:24px 18px}.desk-title{font-size:clamp(48px,18vw,76px)}.desktop{min-height:0;padding:18px;border-radius:28px}.proof-blotter,.ask-sheet,.desk-sheet{border-radius:24px}.stamp-strip{grid-template-columns:repeat(3,1fr)}.stamp{width:92px;height:92px;font-size:9px}.ledger-row{grid-template-columns:1fr}}
     </style>
 </head>
-<body class="room-wave2 room-advisor-deploy">
-        <script src="/js/app-auth-preflight.js"></script>
+<body class="room-advisor-deploy">
+<script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
-        <aside class="app-sidebar">
-            <script src="/js/analytics-site-config.js"></script>
-    <script src="/js/analytics.js"></script>
-            <script src="/js/data-manager.js"></script>
-            <script src="/js/nav.js"></script>
-        </aside>
-        <main class="app-main">
-            <div class="app-content">
-<div class="module-inner">
-    <header class="app-header module-header">
-        <div class="module-header-title">
-            <div class="shell-header-meta">
-                <span class="shell-header-kicker">Advisor family</span>
-                <span class="shell-header-state state-live">Influence deploy</span>
-            </div>
-            <h1 class="page-title">Advisor Deploy</h1>
-            <p class="page-subtitle">Deploy equity-invested relationships at the exact deal moments where their influence changes the outcome.</p>
+    <aside class="app-sidebar">
+        <script src="/js/analytics-site-config.js"></script>
+        <script src="/js/analytics.js"></script>
+        <script src="/js/data-manager.js"></script>
+        <script src="/js/demo-storage-bootstrap.js"></script>
+        <script src="/js/workspace-guard.js"></script>
+        <script src="/js/nav.js"></script>
+    </aside>
+    <main class="app-main">
+        <div class="app-content">
+            <section class="advisor-room" id="advisorRoom">
+                <div class="advisor-mast">
+                    <div><strong>Advisor Deploy</strong> / backchannel desk</div>
+                    <div class="advisor-topbar">
+                        <button class="desk-btn" type="button" data-action="reset-route">Reset route</button>
+                        <button class="desk-btn blue" type="button" data-action="copy-ask">Copy ask</button>
+                        <button class="desk-btn" type="button" data-action="export-pack">Export pack</button>
+                        <button class="desk-btn primary" type="button" data-action="log-send">Log send</button>
+                    </div>
+                </div>
+
+                <section class="desk-board" aria-labelledby="advisorDeskTitle">
+                    <div class="desk-hero">
+                        <div>
+                            <div class="desk-kicker">Private influence desk</div>
+                            <h1 class="desk-title" id="advisorDeskTitle">Prepare one backchannel ask before you spend trust.</h1>
+                            <p class="desk-note" id="deskNote">Choose the live deal, pick the carrier, and ship only the ask that is specific enough for an advisor to act on without interpreting the deal.</p>
+                        </div>
+                        <aside class="desk-read" id="deskRead"></aside>
+                    </div>
+
+                    <div class="desk-route" aria-label="Advisor route controls">
+                        <div class="route-cell">
+                            <label for="dealSelect">Deal</label>
+                            <select class="desk-select" id="dealSelect"></select>
+                        </div>
+                        <div class="route-cell">
+                            <label for="advisorSelect">Carrier</label>
+                            <select class="desk-select" id="advisorSelect"></select>
+                        </div>
+                        <div class="route-cell">
+                            <label for="momentSelect">Ask moment</label>
+                            <select class="desk-select" id="momentSelect"></select>
+                        </div>
+                    </div>
+
+                    <div class="desktop">
+                        <article class="proof-blotter" id="proofBlotter"></article>
+                        <div class="rolodex" id="advisorRolodex" aria-label="Advisor rolodex"></div>
+                        <article class="ask-sheet" id="askSheet"></article>
+                        <div class="stamp-strip" aria-label="Deployment outcome stamps">
+                            <button class="stamp send" type="button" data-action="log-send">Send</button>
+                            <button class="stamp hold" type="button" data-action="log-hold">Hold</button>
+                            <button class="stamp reroute" type="button" data-action="log-reroute">Reroute</button>
+                        </div>
+                        <div class="desk-edge" id="deskEdge"></div>
+                    </div>
+                </section>
+
+                <section class="secondary-stack" aria-label="Advisor secondary sheets">
+                    <article class="desk-sheet is-open" id="registrySheet">
+                        <button class="sheet-head" type="button" data-action="toggle-sheet" data-target="registrySheet">
+                            <div>
+                                <h2>Advisor registry</h2>
+                                <p>Add relationships, then attach them to the companies where they can actually carry weight.</p>
+                            </div>
+                            <span>edit carriers</span>
+                        </button>
+                        <div class="sheet-body">
+                            <div class="registry-grid">
+                                <form id="advisorForm" class="form-grid">
+                                    <div class="field">
+                                        <label for="advisorName">Name</label>
+                                        <input class="desk-input" id="advisorName" type="text" placeholder="Sarah Chen">
+                                    </div>
+                                    <div class="field">
+                                        <label for="advisorTitle">Role</label>
+                                        <input class="desk-input" id="advisorTitle" type="text" placeholder="Board member, operator, customer">
+                                    </div>
+                                    <div class="field">
+                                        <label for="advisorTier">Tier</label>
+                                        <select class="desk-select" id="advisorTier">
+                                            <option value="t1">Board / investor</option>
+                                            <option value="t2">Strategic advisor</option>
+                                            <option value="t3">Angel / portfolio</option>
+                                            <option value="t4">Customer reference</option>
+                                        </select>
+                                    </div>
+                                    <div class="field">
+                                        <label for="advisorExpertise">Expertise</label>
+                                        <input class="desk-input" id="advisorExpertise" type="text" placeholder="Enterprise SaaS, CX, procurement">
+                                    </div>
+                                    <div class="field full">
+                                        <label for="advisorCompanies">Companies</label>
+                                        <input class="desk-input" id="advisorCompanies" type="text" placeholder="Meridian Logistics, Northstar Financial">
+                                    </div>
+                                    <div class="field full">
+                                        <label for="advisorNotes">Notes</label>
+                                        <textarea class="desk-textarea" id="advisorNotes" placeholder="What kind of ask should this person carry?"></textarea>
+                                    </div>
+                                    <div class="field full">
+                                        <button class="desk-btn primary" type="submit">Save advisor</button>
+                                    </div>
+                                </form>
+                                <div class="advisor-list" id="advisorList"></div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="desk-sheet is-open" id="deploymentSheet">
+                        <button class="sheet-head" type="button" data-action="toggle-sheet" data-target="deploymentSheet">
+                            <div>
+                                <h2>Deployment loops</h2>
+                                <p>Every ask should return as a deal update, an advisor hold, or a reroute.</p>
+                            </div>
+                            <span>track results</span>
+                        </button>
+                        <div class="sheet-body">
+                            <div class="deployment-list" id="deploymentList"></div>
+                        </div>
+                    </article>
+
+                    <article class="desk-sheet wide is-open" id="impactSheet">
+                        <button class="sheet-head" type="button" data-action="toggle-sheet" data-target="impactSheet">
+                            <div>
+                                <h2>Desk read</h2>
+                                <p>The room should tell you whether outside leverage is mapped, justified, and returning evidence.</p>
+                            </div>
+                            <span>system health</span>
+                        </button>
+                        <div class="sheet-body">
+                            <div class="impact-grid" id="impactGrid"></div>
+                            <div class="impact-list" id="impactList" style="margin-top:18px;"></div>
+                            <div class="advisor-topbar" style="margin-top:18px;">
+                                <button class="desk-btn blue" type="button" data-action="open-deal">Open Deal Workspace</button>
+                                <button class="desk-btn" type="button" data-action="open-autopsy">Open Future Autopsy</button>
+                                <button class="desk-btn green" type="button" data-action="open-poc">Open PoC Framework</button>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+            </section>
+            <div class="toast" id="toast"></div>
         </div>
-    </header>
-    <section class="advisor-first-fold">
-    <div id="advisorBootState"></div>
-    <div id="advisorShellBand"></div>
-    <div id="advisorHealthPanel"></div>
-
-    <div class="tabs">
-        <button class="tab on" onclick="showTab('dashboard')">Dashboard</button>
-        <button class="tab" onclick="showTab('registry')">Registry</button>
-        <button class="tab" onclick="showTab('matrix')">Deal × Advisor</button>
-        <button class="tab" onclick="showTab('playbook')">Playbook</button>
-        <button class="tab" onclick="showTab('builder')">Ask Builder</button>
-        <button class="tab" onclick="showTab('impact')">Impact</button>
-    </div>
-    </section>
-
-    <!-- ===== DASHBOARD ===== -->
-    <div class="panel on" id="tab-dashboard">
-        <div class="stats" id="dashStats"></div>
-        <div id="dashContent"></div>
-    </div>
-
-    <!-- ===== REGISTRY ===== -->
-    <div class="panel" id="tab-registry">
-        <div class="card">
-            <div class="card-t gold">Add Advisor</div>
-            <div class="row2">
-                <div class="field"><label>Name</label><input type="text" id="rName" placeholder="e.g. Sarah Thompson"></div>
-                <div class="field"><label>Title / Role</label><input type="text" id="rTitle" placeholder="e.g. Board Member, Former VP Sales"></div>
-            </div>
-            <div class="row3">
-                <div class="field"><label>Tier</label><select id="rTier">
-                    <option value="t1">Tier 1 — Board / Lead Investor</option>
-                    <option value="t2">Tier 2 — Strategic Advisor</option>
-                    <option value="t3">Tier 3 — Angel / Portfolio</option>
-                    <option value="t4">Tier 4 — Customer Reference</option>
-                </select></div>
-                <div class="field"><label>Expertise / Domain</label><input type="text" id="rExpertise" placeholder="e.g. Enterprise Sales, Manufacturing"></div>
-                <div class="field"><label>Equity Position</label><input type="text" id="rEquity" placeholder="e.g. 0.5%, Board seat"></div>
-            </div>
-            <div class="field"><label>Connected Companies (comma-separated)</label><input type="text" id="rCompanies" placeholder="e.g. Meridian Logistics, Cascadia Health, Northstar Financial">
-                <div class="hint">Which prospect companies does this advisor have relationships with?</div>
-            </div>
-            <div class="btn-row"><button class="btn primary" onclick="addAdvisor()">Add Advisor</button></div>
-        </div>
-        <div id="registryList"></div>
-    </div>
-
-    <!-- ===== DEAL × ADVISOR MATRIX ===== -->
-    <div class="panel" id="tab-matrix">
-        <div id="matrixContent"></div>
-    </div>
-
-    <!-- ===== PLAYBOOK ===== -->
-    <div class="panel" id="tab-playbook">
-        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:16px;">The 10 moments where advisor deployment materially changes the probability of closing. Click to expand.</p>
-        <div id="playbookAccordions"></div>
-        <div class="card" style="margin-top:20px;">
-            <div class="card-t gold">The Ask Formula</div>
-            <div style="font-size:0.82rem;color:var(--text3);line-height:1.7;">
-                <strong style="color:var(--text);">1. Context</strong> (2 sentences): What's the deal, what stage, what happened.<br>
-                <strong style="color:var(--text);">2. What you've tried</strong> (1-2 sentences): Shows you're not lazy.<br>
-                <strong style="color:var(--text);">3. The specific ask</strong> (1 sentence): What you need them to do.<br>
-                <strong style="color:var(--text);">4. The draft</strong>: The script they can customize and send.<br>
-                <strong style="color:var(--text);">5. The stakes</strong> (1 sentence): Why it matters.
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-t">Psychology of the Ask</div>
-            <div style="font-size:0.82rem;color:var(--text3);line-height:1.7;">
-                <strong style="color:var(--text);">Fear of seeming weak →</strong> Every enterprise sales leader uses executive engagement. This is standard ops at scale.<br><br>
-                <strong style="color:var(--text);">Fear of burning the relationship →</strong> Most advisors feel underutilized, not overutilized.<br><br>
-                <strong style="color:var(--text);">Fear of looking desperate →</strong> Investors expect stalls. A surgical ask with a pre-drafted script is operational maturity.<br><br>
-                <strong style="color:var(--text);">Fear of the ask being too big →</strong> The ask isn't "make a call." It's "send this 3-line email I've already drafted." Cognitive load determines action.
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== ASK BUILDER ===== -->
-    <div class="panel" id="tab-builder">
-        <div id="wizardContainer"></div>
-    </div>
-
-    <!-- ===== IMPACT ===== -->
-    <div class="panel" id="tab-impact">
-        <div class="stats" id="impactStats"></div>
-        <div id="impactContent"></div>
-    </div>
+    </main>
 </div>
-<div class="toast" id="toast"></div>
-            </div>
-        </main>
-    </div>
-    <script src="/js/deal-health.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/js/require-auth.js"></script>
-    <script src="/js/module-boot-state.js"></script>
-<script>
-
-(function(){
-// ── UTILS ──
-function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
-function syncDocToCloud(key,data){
-    if(!(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.save==='function'))return;
-    if(!window.gtmPersistence.docs.has(key))return;
-    window.gtmPersistence.docs.save(key,data).catch(function(error){console.error('Advisor Deploy sync failed for',key,error);});
-}
-function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));syncDocToCloud(k,v)}
-function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
-function uid(){return 'dep_'+Date.now()+'_'+Math.random().toString(36).substr(2,5)}
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
-function cp(txt){if(navigator.clipboard)return navigator.clipboard.writeText(txt);var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();return Promise.resolve()}
-function daysSince(iso){if(!iso)return 999;return Math.floor((Date.now()-new Date(iso).getTime())/(86400000))}
-function buildAdvisorRoomHref(href, focusObject, roomLabel){
-    try{
-        var url=new URL(href, window.location.origin);
-        if(!url.searchParams.get('returnTo')){
-            url.searchParams.set('returnTo','/app/advisor-deploy/');
-            url.searchParams.set('returnLabel','Back to Advisor Deploy');
-            if(focusObject) url.searchParams.set('focusObject', focusObject);
-            if(roomLabel) url.searchParams.set('focusRoom', roomLabel);
-            url.searchParams.set('fromMode','room');
-            url.searchParams.set('fromSurface','advisor-deploy');
-        }
-        return url.pathname + url.search + url.hash;
-    }catch(error){
-        return href;
-    }
-}
-
-// ── TIER LABELS & COOLDOWN ──
-var TIERS={t1:{label:'Board / Investor',badge:'t1',perDeal:'quarter',maxActive:3,cooldownDays:90},t2:{label:'Strategic Advisor',badge:'t2',perDeal:'month',maxActive:5,cooldownDays:30},t3:{label:'Angel / Portfolio',badge:'t3',perDeal:'biweekly',maxActive:99,cooldownDays:14},t4:{label:'Customer Reference',badge:'t4',perDeal:'month',maxActive:99,cooldownDays:30}};
-
-// ── THE 10 DEPLOYMENT MOMENTS ──
-var MOMENTS=[
-{id:'intro',num:1,name:'The Introduction',dealState:'No deal exists. Target account identified.',tier:'Any (prefer T2-3)',
- ask:'Can you make a warm introduction to [specific person] at [company]? Here\'s a 2-sentence context you can use, and I\'ll take it from there.',
- framing:'Make the ask so specific and low-effort that the advisor can act in under 2 minutes. Don\'t say "do you know anyone at Acme?" Say "I\'m trying to reach [Name], [Title] at [Company]."',
- script:'Subject: Quick intro — [Founder Name] at [Startup]\n\n[Prospect Name] —\n\nI\'m an advisor/investor at [Startup] and wanted to connect you with [Founder Name], their founder. They\'ve built [1-sentence product description] and I think it\'s directly relevant to what your team is working on in [area].\n\n[Founder Name] — meet [Prospect Name]. I\'ll let you two take it from here.\n\n[Advisor Name]',
- success:'Introduction made, first meeting booked.',
- notWhen:'When you can get the meeting yourself. Save advisor intros for accounts where you\'ve tried and failed.'},
-{id:'eb_bridge',num:2,name:'Executive Sponsor Bridge',dealState:'Active deal, champion engaged, can\'t get to EB.',tier:'T1-T2',
- ask:'We have a strong champion at [Company] but I can\'t get to [EB Name/Title]. Would you be willing to make an introduction or join a 15-minute call to validate the business case?',
- framing:'The deal is real — champion confirmed pain, PoC exceeded criteria, team wants to move forward. The gap is executive visibility. Your relationship can bridge that gap in a way I can\'t from the outside.',
- script:'Subject: Worth 15 minutes — [Startup] + [Prospect Company]\n\n[Executive Name] —\n\nI\'m an investor in [Startup]. Your team at [division] has been evaluating their [product] and the results have been strong. I wanted to connect you directly with [Founder Name] because the business case is compelling and I think it warrants your visibility.\n\n[Founder Name] can give you the 5-minute version. Worth a quick call?\n\n[Advisor Name]',
- success:'Executive meeting booked, EB engaged.',
- notWhen:'When you haven\'t tried the direct path first (ask champion, LinkedIn, direct email to EB).'},
-{id:'poc_stall',num:3,name:'Post-PoC Stall (The Bregnan Problem)',dealState:'PoC completed successfully. Then silence.',tier:'Same advisor who made the intro',
- ask:'The PoC you helped initiate at [Company] exceeded their criteria. But we\'ve gone dark — no next step, no response in [X] days. I\'ve tried [what you tried]. Would you send a brief note asking where things stand?',
- framing:'This isn\'t about the intro not working — it worked perfectly. The product proved itself. The stall is internal prioritization, not product fit. Your voice carries weight mine doesn\'t. A 3-line email from you will get a response my fifth follow-up won\'t.',
- script:'Subject: Quick check — [Startup] PoC status\n\n[Champion/Executive Name] —\n\nI introduced your team to [Startup] a few months ago and heard the pilot went well. I\'m curious — is this moving forward?\n\n[Founder Name] is a portfolio company of mine and I want to make sure we\'re prioritizing the right things. If the timing isn\'t right, no worries — but if it is, I\'d hate to see the momentum from the pilot go to waste.\n\nHappy to jump on a quick call if useful.\n\n[Advisor Name]',
- success:'Champion re-engages, next step scheduled.',
- notWhen:'Before you\'ve made 3-4 direct follow-up attempts yourself.'},
-{id:'procurement',num:4,name:'The Procurement Slog',dealState:'Contract stuck in legal/procurement. Weeks passing.',tier:'T1 (top-down nudge) or T2 (tactical coaching)',
- ask:'The deal at [Company] is in procurement. [X] weeks, no movement. [Champion] can\'t give a timeline. Would you send a note to [Executive] asking about timing?',
- framing:'Not pressuring procurement directly. An investor signaling readiness to the executive creates implicit top-down urgency without the founder appearing desperate.',
- script:'Subject: [Startup] timing\n\n[Executive Name] —\n\n[Founder Name]\'s team tells me the deal at [Company] is working through procurement. I know these things take time — just wanted to flag that from our side, we\'re ready to support a fast implementation if the timing aligns with your plans.\n\nAny sense of where things stand?\n\n[Advisor Name]',
- success:'Procurement timeline provided, deal moves within 2 weeks.',
- notWhen:'If the delay is less than 2 weeks. Normal procurement takes time.'},
-{id:'competitor',num:5,name:'The Competitor Threat',dealState:'Active deal, competitor entered the evaluation.',tier:'T2 (credibility) or T4 (reference)',
- ask:'We\'re in a competitive evaluation at [Company] against [Competitor]. Would you take a 10-minute call with [Decision Maker] to share your perspective on why you backed us?',
- framing:'Not about pressure — about reframing the evaluation through third-party credibility. The advisor offers peer advice from the buyer\'s perspective.',
- script:'Subject: Perspective on [Startup] vs. alternatives\n\n[Prospect Name] —\n\n[Founder Name] mentioned you\'re evaluating options in [category]. I\'ve seen a lot of solutions in this space from the operator side — I ran [relevant function] at [Company] for [X] years. Happy to share my perspective on what actually matters in the evaluation if useful. No pitch — just pattern recognition.\n\n[Advisor Name]',
- success:'Prospect engages with advisor/reference, narrative shifts.',
- notWhen:'When your product can win on its own merits without outside help.'},
-{id:'champion_left',num:6,name:'Champion Departure',dealState:'Champion left company, got reassigned, or on leave.',tier:'Any with connections to prospect',
- ask:'Our champion at [Company] just left. The deal was at [stage] with [value]. Do you know anyone else there? I need to re-establish the thread before the initiative dies.',
- framing:'This is urgent. Window for saving the deal is 2-3 weeks. Speed matters more than precision. Also: the departed champion at their new company is a pre-sold opportunity.',
- script:'No formal script — this is a phone call or text to your advisor.\n\n"Hey [Advisor], quick situation: our champion [Name] at [Company] just left. We were at [stage] on a [value] deal. Do you know anyone else there I could reach out to? If you can point me to someone, I\'ll reference that you connected us."',
- success:'New internal contact established within 2 weeks.',
- notWhen:'If you have other threads in the account already.'},
-{id:'budget_kill',num:7,name:'The Budget Kill',dealState:'Budget cut, frozen, or reallocated.',tier:'T1 (executive conversation) or T2 (ROI reframing)',
- ask:'Budget got killed at [Company]. Initiative had executive support and PoC validation but lost the budget fight. Can you help reframe for [CFO/budget owner]?',
- framing:'Budget kills are prioritization decisions, not permanent rejections. The right person with the right reframe (cost of delay, sunk cost of PoC, competitive risk of waiting) can reopen the conversation.',
- script:'Subject: Re: [Startup] budget discussion\n\n[Executive Name] —\n\nI understand the budget constraints — every company is navigating those right now. One thing I\'d flag: the PoC already demonstrated [specific result]. The cost of restarting in 6 months — re-evaluation, re-piloting, re-negotiation — typically exceeds completing it now.\n\nWould it be worth a conversation about a phased approach that fits current constraints?\n\n[Advisor Name]',
- success:'Budget conversation reopened, phased structure explored.',
- notWhen:'If the budget issue is company-wide (layoffs, restructuring). Read the room.'},
-{id:'board_decision',num:8,name:'Board-Level Decision',dealState:'Final approval requires C-suite/board sign-off.',tier:'T1 ONLY',
- ask:'The deal at [Company] requires [CEO/board] approval. Would [Board Member] reach out to [their contact on prospect\'s board] to signal this is a serious, backed company?',
- framing:'Board-to-board signal. Not asking for a favor — one investor signaling to another that there\'s strategic alignment. Often informal: a mention during a dinner, a text, a golf course conversation.',
- script:'No formal email script — this is often an informal conversation between board members.\n\nThe ask to your investor: "Can you mention to [Contact] that one of your portfolio companies is working with [Prospect Company] and the fit is strong? A 2-minute mention in your next conversation would change the approval dynamic."',
- success:'C-suite/board approval secured.',
- notWhen:'Deals under $100K or routine approvals. Reserve for strategic accounts.'},
-{id:'reference',num:9,name:'Late-Stage Reference Validation',dealState:'Final decision maker wants independent validation.',tier:'T4 (customer) or T2 (advisor)',
- ask:'A prospect at [Company] is in final stages and needs a reference. Would you be available for a 15-20 minute call with their [title]?',
- framing:'Brief the reference: who they\'re talking to, what the prospect cares about, which results to emphasize. A prepped reference call is 3× more effective than ad-hoc.',
- script:'No email to prospect — the reference call is set up through you.\n\nTo the reference: "Thanks for doing this. You\'ll be talking to [Name], [Title] at [Company]. They care most about [specific concern]. The results that will resonate: [specific metrics]. Questions they\'ll likely ask: [list]. Call should be 15-20 minutes."',
- success:'Reference call completed, deal moves to signature.',
- notWhen:'If you have other referenceable customers closer to the prospect\'s profile.'},
-{id:'renewal',num:10,name:'Renewal / Expansion Accelerator',dealState:'Post-close. Renewal or expansion approaching.',tier:'T1-T2',
- ask:'Renewal at [Customer] is approaching. Would you reach out to [Executive] to reinforce the partnership and tee up the expansion conversation?',
- framing:'Advisor deployment isn\'t just for new deals. A well-timed touch from an investor reinforces the strategic relationship at renewal time.',
- script:'Subject: [Startup] + [Customer] — year two\n\n[Executive Name] —\n\nWanted to check in on how things are going with [Startup]. From what I\'ve seen, the results in year one have been strong. As we think about the next phase, [Founder Name] has ideas about expanding into [area] that I think are worth hearing.\n\nWould you be open to a brief conversation about what year two could look like?\n\n[Advisor Name]',
- success:'Renewal secured, expansion conversation initiated.',
- notWhen:'If the customer relationship is already strong and renewal is routine.'}
-];
-
-// ── TABS ──
-window.showTab=function(id){
-    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
-    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on')});
-    document.getElementById('tab-'+id).classList.add('on');
-    var labels={dashboard:'Dashboard',registry:'Registry',matrix:'Deal × Advisor',playbook:'Playbook',builder:'Ask Builder',impact:'Impact'};
-    document.querySelectorAll('.tab').forEach(function(t){if(t.textContent===labels[id])t.classList.add('on')});
-    renderAdvisorWorkspaceHealth();
-    if(id==='dashboard')renderDashboard();
-    if(id==='registry')renderRegistry();
-    if(id==='matrix')renderMatrix();
-    if(id==='builder')renderWizard();
-    if(id==='impact')renderImpact();
-};
-
-// ── DATA ACCESS ──
-function getAdvisors(){return readLS('gtmos_advisor_registry',{advisors:[]}).advisors||[]}
-function saveAdvisors(arr){writeLS('gtmos_advisor_registry',{advisors:arr})}
-function getDeployments(){return readLS('gtmos_advisor_deployments',{deployments:[]}).deployments||[]}
-function saveDeployments(arr){writeLS('gtmos_advisor_deployments',{deployments:arr})}
-function getDeals(){return readLS('gtmos_deal_workspaces',[])}
-function addDaysIso(days){var d=new Date();d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
-function stageLabel(stage){return({prospect:'Prospect',discovery:'Discovery',evaluation:'Evaluation',poc:'PoC',negotiation:'Negotiation',verbal:'Verbal','closed-won':'Closed Won','closed-lost':'Closed Lost'})[stage]||stage||'Prospect'}
-function dealName(deal){return deal?(deal.accountName||deal.account_name||'Unnamed'):'Unnamed'}
-function dealValue(deal){return Number(deal&&deal.value||0)}
-function normalizeName(name){return String(name||'').trim().toLowerCase()}
-function getDealById(id){return getDeals().find(function(d){return String(d&&d.id||'')===String(id||'')})||null}
-function findDealByName(name){return getDeals().find(function(d){return normalizeName(dealName(d))===normalizeName(name)})||null}
-function saveDeal(deal){
-    if(!deal||!deal.id)return;
-    var deals=getDeals().slice();
-    var idx=deals.findIndex(function(d){return String(d&&d.id||'')===String(deal.id)});
-    if(idx===-1)deals.push(deal);else deals[idx]=deal;
-    localStorage.setItem('gtmos_deal_workspaces',JSON.stringify(deals));
-    if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.save==='function'){
-        window.gtmPersistence.deals.save(deal).catch(function(error){console.error('Advisor Deploy deal sync failed:',error);});
-    }
-}
-function advisorsForDeal(deal){
-    var name=normalizeName(dealName(deal));
-    return getAdvisors().filter(function(a){
-        return Array.isArray(a.companies)&&a.companies.some(function(c){return normalizeName(c)===name;});
-    });
-}
-function dealPressure(deal){
-    if(!deal)return'No live deal linked yet.';
-    if(!deal.nextStepDate)return'No dated next step is holding the thread together.';
-    if(new Date(deal.nextStepDate)<new Date())return'Next step is overdue and momentum is decaying.';
-    if((deal.stage==='evaluation'||deal.stage==='poc'||deal.stage==='negotiation'||deal.stage==='verbal')&&!deal.decisionProcess)return'Decision process is still blurry for the current stage.';
-    if((deal.stage==='negotiation'||deal.stage==='verbal')&&!deal.economicBuyer)return'Economic buyer is still not explicit late in the deal.';
-    if((deal.stage==='evaluation'||deal.stage==='poc')&&!deal.champion)return'There is still no named internal driver carrying the evaluation.';
-    return'No urgent advisor pressure is visible right now.';
-}
-function activeDeploymentForDeal(deal){
-    return getDeployments().find(function(dep){
-        return (dep.dealId&&deal&&String(dep.dealId)===String(deal.id))||(!dep.dealId&&normalizeName(dep.dealName)===normalizeName(dealName(deal)));
-    })||null;
-}
-function recommendedMomentForDeal(deal){
-    if(!deal)return null;
-    var stage=deal.stage||'prospect';
-    var nextText=String(deal.nextStep||'').toLowerCase();
-    if(stage==='prospect')return 'intro';
-    if(stage==='discovery'&&!deal.economicBuyer)return 'eb_bridge';
-    if(stage==='discovery')return 'intro';
-    if(stage==='evaluation'||stage==='poc'){
-        if(!deal.nextStepDate||new Date(deal.nextStepDate)<new Date())return 'poc_stall';
-        return 'reference';
-    }
-    if(stage==='negotiation'||stage==='verbal'){
-        if(nextText.indexOf('procurement')!==-1||nextText.indexOf('legal')!==-1||nextText.indexOf('security')!==-1)return 'procurement';
-        if(!deal.decisionProcess||!deal.economicBuyer)return 'board_decision';
-        return 'reference';
-    }
-    if(stage==='closed-won')return 'renewal';
-    return 'intro';
-}
-function recommendedDeploymentForDeal(deal){
-    var momentId=recommendedMomentForDeal(deal);
-    var moment=MOMENTS.find(function(m){return m.id===momentId})||null;
-    var connected=advisorsForDeal(deal);
-    var available=connected.filter(function(a){return getCooldownStatus(a).ok});
-    var active=activeDeploymentForDeal(deal);
-    var state='prep';
-    var why='';
-    if(active&&(!active.outcome||active.outcome==='pending'||active.outcome==='engaged')){
-        state='active';
-        why='There is already a live advisor deployment on this deal. Update the outcome before launching another ask.';
-    }else if(!connected.length){
-        state='map';
-        why='This deal has no mapped advisor relationship yet, so the immediate job is connection design, not message drafting.';
-    }else if(!available.length){
-        state='cooldown';
-        why='You have advisors attached to the deal, but the best path is still cooling down.';
-    }else{
-        state='now';
-        why='There is an available advisor, a live deal, and a concrete moment where outside leverage can change the thread.';
-    }
-    return{
-        momentId:momentId,
-        moment:moment,
-        connected:connected,
-        advisor:available[0]||connected[0]||null,
-        active:active,
-        state:state,
-        pressure:dealPressure(deal),
-        why:why
-    };
-}
-function renderAdvisorWorkspaceHealth(){
-    var node=document.getElementById('advisorHealthPanel');
-    if(!node)return;
-    var advisors=getAdvisors();
-    var deps=getDeployments();
-    var deals=getDeals().filter(function(d){return d&&d.stage!=='closed-won'&&d.stage!=='closed-lost'});
-    var recommended=deals.map(function(deal){return {deal:deal,reco:recommendedDeploymentForDeal(deal)};});
-    var coveredCount=deals.filter(function(deal){return advisorsForDeal(deal).length>0;}).length;
-    var uncoveredCount=Math.max(0,deals.length-coveredCount);
-    var deployNowCount=recommended.filter(function(item){return item.reco&&item.reco.state==='now';}).length;
-    var activeCount=deps.filter(function(dep){return !dep.outcome||dep.outcome==='pending'||dep.outcome==='engaged';}).length;
-    var successfulCount=deps.filter(function(dep){return dep.outcome==='successful';}).length;
-    var impactRate=deps.length?Math.round(successfulCount/deps.length*100):0;
-    var cooldownCount=advisors.filter(function(a){return !getCooldownStatus(a).ok;}).length;
-    var compounded=[];
-    var weakLinks=[];
-    var posture=deployNowCount>0?'Deploy now':activeCount>0?'Follow-through':advisors.length&&deals.length?'Map next ask':'Registry first';
-
-    if(coveredCount>0){
-        compounded.push('<div class="workspace-health-item"><strong>Advisor coverage exists on live deals.</strong> '+coveredCount+' active deal'+(coveredCount===1?' has':'s have')+' at least one mapped relationship that can become real leverage.</div>');
-    }
-    if(deployNowCount>0){
-        compounded.push('<div class="workspace-health-item"><strong>There are justified deployment moments right now.</strong> '+deployNowCount+' live deal'+(deployNowCount===1?' is':'s are')+' currently has enough pressure and available coverage to justify an ask.</div>');
-    }
-    if(successfulCount>0){
-        compounded.push('<div class="workspace-health-item"><strong>Advisor leverage has already changed outcomes.</strong> '+successfulCount+' logged deployment'+(successfulCount===1?' has':'s have')+' produced a successful result the room can learn from.</div>');
-    }
-    if(!compounded.length){
-        compounded.push('<div class="workspace-health-item"><strong>The room has a usable starting point.</strong> Advisor Deploy can map leverage now, but the real proof still needs to accumulate on live deals.</div>');
-    }
-
-    if(!advisors.length){
-        weakLinks.push('<div class="workspace-health-item"><strong>No advisor registry exists yet.</strong> The room cannot create real leverage until relationships are mapped first.</div>');
-    }
-    if(uncoveredCount>0){
-        weakLinks.push('<div class="workspace-health-item"><strong>Coverage gaps are still visible.</strong> '+uncoveredCount+' live deal'+(uncoveredCount===1?' has':'s have')+' no mapped advisor relationship yet.</div>');
-    }
-    if(cooldownCount>0){
-        weakLinks.push('<div class="workspace-health-item"><strong>Some of the best paths are cooling down.</strong> '+cooldownCount+' advisor'+(cooldownCount===1?' is':'s are')+' is temporarily less usable for a fresh deployment.</div>');
-    }
-    if(deps.length===0){
-        weakLinks.push('<div class="workspace-health-item"><strong>No deployment loop is logged yet.</strong> Until one ask is sent and tracked, the room cannot prove that outside leverage is changing deals.</div>');
-    }else if(impactRate<40){
-        weakLinks.push('<div class="workspace-health-item"><strong>Impact quality is still mixed.</strong> Logged advisor activity exists, but the success rate is not yet strong enough to trust blindly.</div>');
-    }
-    if(!weakLinks.length){
-        weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the asks surgical, but the advisor system is behaving credibly right now.</div>');
-    }
-
-    node.innerHTML=
-        '<section class="shell-section shell-section--compact workspace-health">'+
-            '<div class="shell-section-header">'+
-                '<div class="shell-section-heading">'+
-                    '<div class="shell-section-kicker">Workspace health</div>'+
-                    '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
-                    '<div class="shell-section-copy workspace-health-copy">Advisor Deploy should show whether mapped relationships, justified moments, and logged asks are actually changing live deals.</div>'+
-                '</div>'+
-            '</div>'+
-            '<div class="workspace-health-metrics">'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Leverage posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(posture)+'</div><div class="workspace-health-subcopy">'+escH(deals.length+' active deal'+(deals.length===1?'':'s'))+'</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Covered deals</div><div class="workspace-health-value">'+coveredCount+'</div><div class="workspace-health-subcopy">Live deals with mapped advisor access.</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Deploy now</div><div class="workspace-health-value">'+deployNowCount+'</div><div class="workspace-health-subcopy">Deals with justified available leverage.</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Open loops</div><div class="workspace-health-value">'+activeCount+'</div><div class="workspace-health-subcopy">'+(deps.length?impactRate+'% impact rate.':'No logged deployments yet.')+'</div></div>'+
-            '</div>'+
-            '<div class="workspace-health-grid">'+
-                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
-                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
-            '</div>'+
-        '</section>';
-}
-function syncDeploymentToDeal(dep){
-    var deal=dep&&dep.dealId?getDealById(dep.dealId):findDealByName(dep&&dep.dealName);
-    if(!deal)return;
-    var advisor=getAdvisors().find(function(a){return a.id===dep.advisorId});
-    var moment=MOMENTS.find(function(m){return m.id===dep.momentId});
-    var history=Array.isArray(deal.advisorHistory)?deal.advisorHistory.slice():[];
-    var entry={
-        id:dep.id,
-        advisorId:dep.advisorId||'',
-        advisorName:advisor?advisor.name:'',
-        momentId:dep.momentId||'',
-        momentName:moment?moment.name:'',
-        outcome:dep.outcome||'pending',
-        createdAt:dep.createdAt,
-        outcomeDate:dep.outcomeDate||null
-    };
-    var idx=history.findIndex(function(item){return item&&item.id===dep.id});
-    if(idx===-1)history.push(entry);else history[idx]=entry;
-    deal.advisorHistory=history;
-    deal.lastAdvisorDeployment=entry;
-    deal.lastAdvisorDeploymentAt=dep.createdAt;
-    deal.lastAdvisorMoment=entry.momentName||deal.lastAdvisorMoment||'';
-    if(!deal.nextStep&&dep.outcome==='pending'){
-        deal.nextStep='Send advisor ask and book the follow-up thread';
-        deal.nextStepDate=deal.nextStepDate||addDaysIso(3);
-    }
-    if(dep.outcome==='engaged'||dep.outcome==='successful'){
-        deal.nextStep='Convert advisor momentum into the next stakeholder step';
-        deal.nextStepDate=addDaysIso(dep.outcome==='successful'?2:3);
-    }
-    if(dep.outcome==='declined'||dep.outcome==='no_response'){
-        deal.nextStep='Choose the next leverage path without waiting on this advisor thread';
-        deal.nextStepDate=addDaysIso(4);
-    }
-    saveDeal(deal);
-}
-
-function getCooldownStatus(advisor){
-    var tier=TIERS[advisor.tier]||TIERS.t2;
-    var deps=getDeployments().filter(function(d){return d.advisorId===advisor.id});
-    if(deps.length===0)return{ok:true,label:'Available',days:0};
-    var lastDep=deps.sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt)})[0];
-    var days=daysSince(lastDep.createdAt);
-    if(days<tier.cooldownDays)return{ok:false,label:'Cooldown ('+Math.ceil(tier.cooldownDays-days)+'d)',days:days};
-    return{ok:true,label:'Available',days:days};
-}
-
-// ── DASHBOARD ──
-function renderDashboard(){
-    var advisors=getAdvisors();
-    var deps=getDeployments();
-    var total=deps.length;
-    var successful=deps.filter(function(d){return d.outcome==='successful'}).length;
-    var pending=deps.filter(function(d){return!d.outcome||d.outcome==='pending'}).length;
-    var impactRate=total>0?Math.round(successful/total*100):0;
-
-    document.getElementById('dashStats').innerHTML=
-        '<div class="stat"><div class="stat-v">'+advisors.length+'</div><div class="stat-l">Advisors</div></div>'+
-        '<div class="stat"><div class="stat-v gold">'+total+'</div><div class="stat-l">Deployments</div></div>'+
-        '<div class="stat"><div class="stat-v green">'+successful+'</div><div class="stat-l">Successful</div></div>'+
-        '<div class="stat"><div class="stat-v'+(impactRate>=50?' green':'')+'">'+impactRate+'%</div><div class="stat-l">Impact Rate</div></div>'+
-        '<div class="stat"><div class="stat-v'+(pending>0?' amber':'')+'">'+pending+'</div><div class="stat-l">Pending</div></div>';
-
-    var html='';
-    // Active deployments
-    var active=deps.filter(function(d){return!d.outcome||d.outcome==='pending'});
-    if(active.length){
-        html+='<div class="card"><div class="card-t gold">Active Deployments</div>';
-        active.forEach(function(d){
-            var adv=advisors.find(function(a){return a.id===d.advisorId});
-            html+='<div class="dep-card"><div class="dep-top"><span class="dep-deal">'+escH(d.dealName)+' — '+(MOMENTS.find(function(m){return m.id===d.momentId})||{name:'Unknown'}).name+'</span><select class="outcome-sel" onchange="updateDepOutcome(\''+d.id+'\',this.value)"><option value="pending">Pending</option><option value="engaged">Engaged</option><option value="no_response">No Response</option><option value="declined">Declined</option><option value="successful">Successful</option></select></div><div class="dep-meta">'+(adv?escH(adv.name):'Unknown advisor')+' · '+daysSince(d.createdAt)+' days ago</div></div>';
-        });
-        html+='</div>';
-    }
-
-    // Cooldown warnings
-    var warnings=[];
-    advisors.forEach(function(a){
-        var s=getCooldownStatus(a);
-        if(!s.ok)warnings.push({name:a.name,label:s.label});
-    });
-    if(warnings.length){
-        html+='<div class="card"><div class="card-t" style="color:var(--amber);">Cooldown Warnings</div>';
-        warnings.forEach(function(w){html+='<div style="font-size:0.82rem;color:var(--text3);padding:4px 0;">'+escH(w.name)+' — <span class="badge cooldown">'+w.label+'</span></div>'});
-        html+='</div>';
-    }
-
-    // Quick actions
-    var deals=getDeals().filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost'});
-    if(deals.length&&advisors.length){
-        html+='<div class="card"><div class="card-t">Quick Deploy</div>';
-        html+='<div style="font-size:0.82rem;color:var(--text3);margin-bottom:10px;">Select a deal to start the Ask Builder:</div>';
-        deals.slice(0,5).forEach(function(d){
-            html+='<button class="btn sm" style="margin:2px;" onclick="showTab(\'builder\');prefillDeal(\''+escH(d.accountName||d.account_name||'')+'\')">'+escH(d.accountName||d.account_name||'')+' ('+escH(d.stage)+')</button>';
-        });
-        html+='</div>';
-    }
-
-    if(!html)html='<div class="empty">Add advisors in the Registry tab and start deploying them on deals.</div>';
-    document.getElementById('dashContent').innerHTML=html;
-}
-
-window.updateDepOutcome=function(depId,val){
-    var deps=getDeployments();
-    var d=deps.find(function(x){return x.id===depId});
-    if(d){d.outcome=val;d.outcomeDate=new Date().toISOString();saveDeployments(deps);renderDashboard();toast('Outcome updated')}
-};
-
-// ── REGISTRY ──
-window.addAdvisor=function(){
-    var name=document.getElementById('rName').value.trim();
-    if(!name){toast('Name required');return}
-    var advisors=getAdvisors();
-    advisors.push({
-        id:'adv_'+Date.now(),
-        name:name,
-        title:document.getElementById('rTitle').value.trim(),
-        tier:document.getElementById('rTier').value,
-        expertise:document.getElementById('rExpertise').value.trim(),
-        equity:document.getElementById('rEquity').value.trim(),
-        companies:document.getElementById('rCompanies').value.split(',').map(function(s){return s.trim()}).filter(Boolean),
-        relationship:'active',
-        createdAt:new Date().toISOString()
-    });
-    saveAdvisors(advisors);
-    renderAdvisorWorkspaceHealth();
-    ['rName','rTitle','rExpertise','rEquity','rCompanies'].forEach(function(id){document.getElementById(id).value=''});
-    toast('Advisor added');renderRegistry();
-};
-
-function renderRegistry(){
-    var advisors=getAdvisors();
-    if(!advisors.length){document.getElementById('registryList').innerHTML='<div class="empty">No advisors registered. Add your first advisor above.</div>';return}
-    var deps=getDeployments();
-    var html='';
-    advisors.forEach(function(a){
-        var tier=TIERS[a.tier]||TIERS.t2;
-        var cs=getCooldownStatus(a);
-        var depCount=deps.filter(function(d){return d.advisorId===a.id}).length;
-        html+='<div class="adv-card"><div class="adv-info"><div class="adv-name">'+escH(a.name)+' <span class="badge '+a.tier+'">'+tier.label+'</span> <span class="badge '+(cs.ok?'available':'cooldown')+'">'+cs.label+'</span></div><div class="adv-meta">';
-        if(a.title)html+=escH(a.title)+'<br>';
-        if(a.expertise)html+='Expertise: '+escH(a.expertise)+'<br>';
-        if(a.equity)html+='Equity: '+escH(a.equity)+'<br>';
-        if(a.companies&&a.companies.length)html+='Connections: '+a.companies.map(function(c){return escH(c)}).join(', ')+'<br>';
-        html+='Deployments: '+depCount+'</div></div><div class="adv-actions"><button class="btn sm" onclick="editAdvisor(\''+a.id+'\')">Edit</button><button class="btn sm danger" onclick="removeAdvisor(\''+a.id+'\')">×</button></div></div>';
-    });
-    document.getElementById('registryList').innerHTML=html;
-}
-
-window.removeAdvisor=function(id){
-    if(!confirm('Remove this advisor?'))return;
-    var advisors=getAdvisors().filter(function(a){return a.id!==id});
-    saveAdvisors(advisors);renderAdvisorWorkspaceHealth();renderRegistry();toast('Removed');
-};
-
-window.editAdvisor=function(id){
-    var advisors=getAdvisors();
-    var a=advisors.find(function(x){return x.id===id});
-    if(!a)return;
-    var newCompanies=prompt('Edit connected companies (comma-separated):',a.companies.join(', '));
-    if(newCompanies!==null){
-        a.companies=newCompanies.split(',').map(function(s){return s.trim()}).filter(Boolean);
-        saveAdvisors(advisors);renderAdvisorWorkspaceHealth();renderRegistry();toast('Updated');
-    }
-};
-
-// ── DEAL × ADVISOR MATRIX ──
-function renderMatrix(){
-    var deals=getDeals().filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost'});
-    var advisors=getAdvisors();
-    var deps=getDeployments();
-    if(!deals.length){document.getElementById('matrixContent').innerHTML='<div class="empty">No active deals in Deal Workspace.</div>';return}
-
-    var html='<div class="card"><div class="card-t gold">Active Deals × Available Advisors</div>';
-    deals.forEach(function(d){
-        var dealName=d.accountName||d.account_name||'Unnamed';
-        var connected=advisors.filter(function(a){return a.companies.some(function(c){return c.toLowerCase()===dealName.toLowerCase()})});
-        var deployed=deps.filter(function(dep){return dep.dealName===dealName});
-        html+='<div class="matrix-row"><div><div class="matrix-deal">'+escH(dealName)+'</div><div class="matrix-sub">'+escH(d.stage)+' · $'+((d.value||0)/1000).toFixed(0)+'K</div></div>';
-        html+='<div>';
-        if(connected.length){
-            connected.forEach(function(a){
-                var cs=getCooldownStatus(a);
-                html+='<span class="badge '+(cs.ok?'available':'cooldown')+'" style="margin:1px;">'+escH(a.name)+'</span>';
-            });
-        } else {
-            html+='<span style="font-size:0.72rem;color:var(--muted);">No advisor connections</span>';
-        }
-        html+='</div><div><span style="font-size:0.72rem;color:var(--text3);">'+deployed.length+' deployments</span></div></div>';
-    });
-    html+='</div>';
-
-    // Gap analysis
-    var noAdvisor=deals.filter(function(d){
-        var dealName=d.accountName||d.account_name||'';
-        return!advisors.some(function(a){return a.companies.some(function(c){return c.toLowerCase()===dealName.toLowerCase()})});
-    });
-    if(noAdvisor.length){
-        html+='<div class="card"><div class="card-t" style="color:var(--red);">Gap: Deals Without Advisor Connections</div>';
-        noAdvisor.forEach(function(d){
-            html+='<div style="font-size:0.82rem;color:var(--text3);padding:3px 0;">'+escH(d.accountName||d.account_name||'')+'  — '+escH(d.stage)+'</div>';
-        });
-        html+='<div style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Add advisor connections in the Registry to unlock deployment options for these deals.</div></div>';
-    }
-
-    document.getElementById('matrixContent').innerHTML=html;
-}
-
-// ── PLAYBOOK ──
-function renderPlaybook(){
-    var html='';
-    MOMENTS.forEach(function(m){
-        html+='<div class="acc" onclick="this.classList.toggle(\'open\')">';
-        html+='<div class="acc-head"><div><span class="acc-num">'+m.num+'</span><span class="acc-title">'+m.name+'</span><div class="acc-sub">'+escH(m.dealState)+'</div></div><div style="display:flex;align-items:center;gap:8px;"><span class="badge t2">'+m.tier+'</span><span class="acc-arrow">▸</span></div></div>';
-        html+='<div class="acc-body">';
-        html+='<div class="section-lbl">THE ASK</div><div>'+escH(m.ask)+'</div>';
-        html+='<div class="section-lbl">THE FRAMING</div><div>'+escH(m.framing)+'</div>';
-        html+='<div class="section-lbl">ADVISOR SCRIPT</div><div class="script-box"><button class="cp" onclick="event.stopPropagation();cp(document.getElementById(\'script-'+m.id+'\').textContent).then(function(){toast(\'Copied\')})">Copy</button><div id="script-'+m.id+'">'+escH(m.script)+'</div></div>';
-        html+='<div class="section-lbl">SUCCESS METRIC</div><div>'+escH(m.success)+'</div>';
-        if(m.notWhen){html+='<div class="section-lbl" style="color:var(--red);">WHEN NOT TO DEPLOY</div><div>'+escH(m.notWhen)+'</div>';}
-        html+='</div></div>';
-    });
-    document.getElementById('playbookAccordions').innerHTML=html;
-}
-
-// ── ASK BUILDER (WIZARD) ──
-var wizard={step:1,deal:null,moment:null,advisor:null};
-
-function renderWizard(){
-    var deals=getDeals().filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost'});
-    var advisors=getAdvisors();
-    var container=document.getElementById('wizardContainer');
-
-    if(wizard.step===1){
-        var html='<div class="step-num">01</div><div class="step-title">Select the Deal</div><div class="step-desc">Which deal needs advisor intervention?</div>';
-        if(!deals.length){html+='<div class="empty">No active deals. Create deals in Deal Workspace first.</div>';container.innerHTML=html;return}
-        html+='<div class="field"><select id="wDeal" style="font-size:0.9rem;padding:12px;">';
-        deals.forEach(function(d){html+='<option value="'+escH(d.accountName||d.account_name||'')+'">'+escH(d.accountName||d.account_name||'')+' — '+escH(d.stage)+' ($'+((d.value||0)/1000).toFixed(0)+'K)</option>'});
-        html+='</select></div><div class="btn-row"><button class="btn primary" onclick="wizardNext()">Next →</button></div>';
-        container.innerHTML=html;
-    } else if(wizard.step===2){
-        var html='<div class="step-num">02</div><div class="step-title">What\'s Happening?</div><div class="step-desc">Select the deployment moment that matches this deal\'s situation.</div>';
-        MOMENTS.forEach(function(m){
-            html+='<div style="padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:8px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor=\'rgba(212,165,116,0.3)\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.06)\'" onclick="wizard.moment=\''+m.id+'\';wizard.step=3;renderWizard()"><div style="font-weight:700;font-size:0.85rem;color:var(--text);">'+m.num+'. '+m.name+'</div><div style="font-size:0.75rem;color:var(--text3);margin-top:2px;">'+escH(m.dealState)+'</div></div>';
-        });
-        html+='<div class="btn-row"><button class="btn" onclick="wizard.step=1;renderWizard()">← Back</button></div>';
-        container.innerHTML=html;
-    } else if(wizard.step===3){
-        var dealName=wizard.deal;
-        var connected=advisors.filter(function(a){return a.companies.some(function(c){return c.toLowerCase()===dealName.toLowerCase()})});
-        var html='<div class="step-num">03</div><div class="step-title">Select Advisor</div><div class="step-desc">Who should be deployed on '+escH(dealName)+'?</div>';
-        if(connected.length){
-            html+='<div class="card-t" style="margin-bottom:8px;">Connected to '+escH(dealName)+':</div>';
-            connected.forEach(function(a){
-                var cs=getCooldownStatus(a);
-                html+='<div style="padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:8px;cursor:'+(cs.ok?'pointer':'not-allowed')+';opacity:'+(cs.ok?'1':'0.5')+';transition:border-color 0.15s;" '+(cs.ok?'onmouseover="this.style.borderColor=\'rgba(212,165,116,0.3)\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.06)\'" onclick="wizard.advisor=\''+a.id+'\';wizard.step=4;renderWizard()"':'')+'><div style="font-weight:700;font-size:0.85rem;color:var(--text);">'+escH(a.name)+' <span class="badge '+a.tier+'">'+TIERS[a.tier].label+'</span> <span class="badge '+(cs.ok?'available':'cooldown')+'">'+cs.label+'</span></div></div>';
-            });
-        }
-        html+='<div class="card-t" style="margin:12px 0 8px;">All advisors:</div>';
-        advisors.filter(function(a){return!connected.includes(a)}).forEach(function(a){
-            var cs=getCooldownStatus(a);
-            html+='<div style="padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:8px;cursor:'+(cs.ok?'pointer':'not-allowed')+';opacity:'+(cs.ok?'1':'0.5')+';transition:border-color 0.15s;" '+(cs.ok?'onmouseover="this.style.borderColor=\'rgba(255,255,255,0.12)\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.06)\'" onclick="wizard.advisor=\''+a.id+'\';wizard.step=4;renderWizard()"':'')+'><div style="font-weight:600;font-size:0.82rem;color:var(--text3);">'+escH(a.name)+' <span class="badge '+a.tier+'">'+TIERS[a.tier].label+'</span> <span class="badge '+(cs.ok?'available':'cooldown')+'">'+cs.label+'</span></div></div>';
-        });
-        if(!advisors.length)html+='<div class="empty">No advisors registered. Add them in the Registry tab first.</div>';
-        html+='<div class="btn-row"><button class="btn" onclick="wizard.step=2;renderWizard()">← Back</button></div>';
-        container.innerHTML=html;
-    } else if(wizard.step===4){
-        var moment=MOMENTS.find(function(m){return m.id===wizard.moment});
-        var advisor=advisors.find(function(a){return a.id===wizard.advisor});
-        var dealName=wizard.deal;
-        var pb=readLS('gtmos_playbook',{});
-        var co=pb.company||'[Your Company]';
-
-        // Generate the ask message (to send to advisor)
-        var askMsg='Hi '+escH(advisor?advisor.name:'[Advisor]')+',\n\n'+moment.ask.replace(/\[Company\]/g,dealName).replace(/\[Startup\]/g,co)+'\n\nHere\'s what I\'ve tried so far: [describe your attempts]\n\n'+moment.framing.replace(/\[Company\]/g,dealName)+'\n\nI\'ve drafted a message below that you can customize — should take less than 2 minutes.\n\nThis deal is worth $[value] and represents [why it matters].\n\nThanks,\n[Your Name]';
-
-        // Advisor script
-        var advisorScript=moment.script.replace(/\[Startup\]/g,co).replace(/\[Founder Name\]/g,'[Your Name]').replace(/\[Company\]/g,dealName).replace(/\[Prospect Company\]/g,dealName);
-
-        var html='<div class="step-num">04</div><div class="step-title">Review & Deploy</div><div class="step-desc">'+escH(moment.name)+' on '+escH(dealName)+' via '+escH(advisor?advisor.name:'—')+'</div>';
-
-        html+='<div class="card"><div class="card-t gold">Message to Advisor (copy and send)</div><div class="output" id="askOutput">'+escH(askMsg)+'</div><div class="btn-row"><button class="btn gold" onclick="cp(document.getElementById(\'askOutput\').textContent).then(function(){toast(\'Ask copied\')})">Copy Ask</button></div></div>';
-
-        html+='<div class="card"><div class="card-t">Advisor Script (for them to customize & send)</div><div class="output" id="scriptOutput">'+escH(advisorScript)+'</div><div class="btn-row"><button class="btn gold" onclick="cp(document.getElementById(\'scriptOutput\').textContent).then(function(){toast(\'Script copied\')})">Copy Script</button></div></div>';
-
-        html+='<div class="btn-row"><button class="btn" onclick="wizard.step=3;renderWizard()">← Back</button><button class="btn primary" onclick="logDeployment()">Log This Deployment</button></div>';
-        container.innerHTML=html;
-    }
-}
-
-window.wizardNext=function(){
-    if(wizard.step===1){
-        var sel=document.getElementById('wDeal');
-        wizard.deal=sel?sel.value:'';
-        wizard.step=2;
-        renderWizard();
-    }
-};
-
-window.prefillDeal=function(dealName){
-    wizard.deal=dealName;wizard.step=2;renderWizard();
-};
-
-window.logDeployment=function(){
-    var deps=getDeployments();
-    deps.push({
-        id:uid(),
-        dealName:wizard.deal||'',
-        momentId:wizard.moment||'',
-        advisorId:wizard.advisor||'',
-        outcome:'pending',
-        outcomeDate:null,
-        notes:'',
-        createdAt:new Date().toISOString()
-    });
-    saveDeployments(deps);
-    toast('Deployment logged');
-    wizard={step:1,deal:null,moment:null,advisor:null};
-    showTab('dashboard');
-};
-
-// ── IMPACT ──
-// Phase 38 overrides
-window.openDealFromDeployment=function(depId){
-    var dep=getDeployments().find(function(item){return item.id===depId});
-    if(!dep)return;
-    var deal=dep.dealId?getDealById(dep.dealId):findDealByName(dep.dealName);
-    var dealHref=deal&&deal.id?('/app/deal-workspace/?deal='+encodeURIComponent(deal.id)):'/app/deal-workspace/';
-    location.href=buildAdvisorRoomHref(dealHref, dep.dealName||'Advisor deployment', 'Deal Workspace');
-};
-
-function renderDashboard(){
-    renderAdvisorWorkspaceHealth();
-    var advisors=getAdvisors();
-    var deps=getDeployments();
-    var deals=getDeals().filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost'});
-    var total=deps.length;
-    var successful=deps.filter(function(d){return d.outcome==='successful'}).length;
-    var pending=deps.filter(function(d){return!d.outcome||d.outcome==='pending'}).length;
-    var impactRate=total>0?Math.round(successful/total*100):0;
-    var recommended=deals.map(function(d){return{deal:d,reco:recommendedDeploymentForDeal(d)}}).sort(function(a,b){
-        var order={now:0,active:1,cooldown:2,map:3,prep:4};
-        return (order[a.reco.state]||9)-(order[b.reco.state]||9);
-    });
-    var deployNowCount=recommended.filter(function(item){return item.reco.state==='now';}).length;
-    var mappedCount=recommended.filter(function(item){return item.reco.state==='active';}).length;
-    var stateLabel=deployNowCount>0?'Deploy now':advisors.length&&deals.length?'Map the next ask':'Registry first';
-    var stateTone=deployNowCount>0?'live':advisors.length&&deals.length?'ready':'risk';
-
-    if(window.gtmShellChrome){
-        window.gtmShellChrome.renderCommandBand('#advisorShellBand',{
-            kicker:'Relationship operating board',
-            title:'Deploy outside leverage only where it changes the deal.',
-            copy:'Advisor Deploy should tell you where the relationship matters now, what the exact ask is, and how the result feeds back into the pipeline instead of dying in side-channel memory.',
-            stateLabel:stateLabel,
-            stateTone:stateTone,
-            metrics:[
-                {label:'Deploy now',value:String(deployNowCount)},
-                {label:'Active asks',value:String(mappedCount || pending)},
-                {label:'Impact rate',value:impactRate+'%'},
-                {label:'One-session win',value:'Pick one live deal, one justified moment, and one advisor. Leave with the ask drafted.'}
-            ],
-            actions:[
-                {label:'Open Ask Builder',action:'showTab(\"builder\")',tone:'primary'},
-                {label:'View Deal × Advisor',action:'showTab(\"matrix\")'}
-            ]
-        });
-    }
-
-    document.getElementById('dashStats').innerHTML=
-        '<section class="shell-section shell-section--compact">'+
-            '<div class="shell-section-header"><div class="shell-section-heading"><div class="shell-section-kicker">Deployment pressure</div><div class="shell-section-title">Where advisor leverage belongs right now.</div><div class="shell-section-copy">Use outside relationships at access, executive compression, proof recovery, and procurement moments. Avoid vague “keep this warm” deployment.</div></div></div>'+
-            '<div class="anchor-lane-grid">'+
-                '<div class="anchor-lane"><div class="anchor-lane-state">Registry</div><div class="anchor-lane-title">'+advisors.length+' advisors mapped</div><div class="anchor-lane-copy">These are the relationships that can become real leverage. Connection quality matters more than advisor count.</div><div class="anchor-lane-meta"><span>'+successful+' successful</span><span>'+pending+' pending</span></div></div>'+
-                '<div class="anchor-lane"><div class="anchor-lane-state">Deploy now</div><div class="anchor-lane-title">'+deployNowCount+' live deal moments</div><div class="anchor-lane-copy">These deals have the clearest reason to use outside leverage now instead of waiting for generic slippage.</div><div class="anchor-lane-meta"><span>'+mappedCount+' already active</span><span>'+deals.length+' live deals</span></div></div>'+
-                '<div class="anchor-lane"><div class="anchor-lane-state">Feedback loop</div><div class="anchor-lane-title">'+impactRate+'% impact rate</div><div class="anchor-lane-copy">The point is not advisor activity. The point is whether the relationship changed access, timing, or decision momentum in the deal.</div><div class="anchor-lane-meta"><span>'+total+' deployments</span><span>'+(pending>0?pending+' still pending':'No open loops')+'</span></div></div>'+
-            '</div>'+
-        '</section>';
-
-    var html='';
-    html+='<div class="card"><div class="card-t gold">Advisor deployment model</div>'+
-        '<div style="font-size:0.82rem;color:var(--text3);line-height:1.7;">Use advisors as a live deal lever, not a vague safety blanket. <strong style="color:var(--text);">Registry</strong> is who you can credibly use. <strong style="color:var(--text);">Moment</strong> is why now. <strong style="color:var(--text);">Deployment</strong> is one specific ask on one live deal. <strong style="color:var(--text);">Outcome</strong> is what changed and what the deal now needs next.</div>'+
-        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px;">'+
-            '<div style="padding:12px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg2);"><div class="card-t" style="margin-bottom:4px;">When to deploy</div><div style="font-size:0.76rem;color:var(--text3);line-height:1.6;">Deploy when access, executive compression, proof recovery, procurement, or validation is the thing slowing a real deal.</div></div>'+
-            '<div style="padding:12px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg2);"><div class="card-t" style="margin-bottom:4px;">One-session win</div><div style="font-size:0.76rem;color:var(--text3);line-height:1.6;">Pick one live deal, one concrete moment, and one advisor. Leave with the ask already drafted, not an abstract reminder.</div></div>'+
-            '<div style="padding:12px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg2);"><div class="card-t" style="margin-bottom:4px;">Feedback loop</div><div style="font-size:0.76rem;color:var(--text3);line-height:1.6;">Every logged deployment lands back in the linked deal so the pipeline reflects outside leverage instead of losing it in a side log.</div></div>'+
-        '</div></div>';
-
-    if(recommended.length){
-        html+='<div class="card"><div class="card-t gold">Where to deploy now</div><div style="font-size:0.82rem;color:var(--text3);margin-bottom:12px;">These recommendations come from live deal stage, visible pressure, advisor connection coverage, and cooldown state.</div>';
-        recommended.slice(0,5).forEach(function(item){
-            var deal=item.deal;
-            var reco=item.reco;
-            var stateCls=reco.state==='now'?'available':reco.state==='active'?'warm':reco.state==='cooldown'?'cooldown':'cold';
-            html+='<div class="dep-card"><div class="dep-top"><span class="dep-deal">'+escH(dealName(deal))+' - '+escH(stageLabel(deal.stage))+'</span><span class="badge '+stateCls+'">'+(reco.state==='now'?'Deploy now':reco.state==='active'?'Active':reco.state==='cooldown'?'Cooldown':reco.state==='map'?'Map advisor':'Prep first')+'</span></div>'+
-                '<div class="dep-meta">'+escH(reco.pressure)+'</div>'+
-                '<div style="font-size:0.76rem;color:var(--text2);margin-top:8px;line-height:1.6;">'+escH(reco.why)+'</div>'+
-                '<div style="font-size:0.72rem;color:var(--text3);margin-top:8px;">Recommended moment: <strong style="color:var(--text);">'+escH(reco.moment?reco.moment.name:'Map relationship first')+'</strong>'+(reco.advisor?' - Suggested advisor: <strong style="color:var(--text);">'+escH(reco.advisor.name)+'</strong>':'')+'</div>'+
-                '<div class="btn-row" style="margin-top:10px;">'+
-                    '<button class="btn sm" onclick="showTab(\'builder\');prefillDeal(\''+escH(deal.id||'')+'\',\''+escH(reco.momentId||'')+'\',\''+escH(reco.advisor?reco.advisor.id:'')+'\')">'+(reco.state==='map'?'Map in Builder':'Build Ask')+'</button>'+
-                    '<button class="btn sm" onclick="location.href=\''+buildAdvisorRoomHref('/app/deal-workspace/?deal='+encodeURIComponent(deal.id||''), dealName(deal), 'Deal Workspace')+'\'">Open Deal</button>'+
-                '</div></div>';
-        });
-        html+='</div>';
-    }
-
-    var active=deps.filter(function(d){return!d.outcome||d.outcome==='pending'||d.outcome==='engaged'});
-    if(active.length){
-        html+='<div class="card"><div class="card-t gold">Active Deployments</div>';
-        active.forEach(function(d){
-            var adv=advisors.find(function(a){return a.id===d.advisorId});
-            var mom=MOMENTS.find(function(m){return m.id===d.momentId})||{name:'Unknown'};
-            html+='<div class="dep-card"><div class="dep-top"><span class="dep-deal">'+escH(d.dealName)+' - '+mom.name+'</span><select class="outcome-sel" onchange="updateDepOutcome(\''+d.id+'\',this.value)"><option value="pending"'+((!d.outcome||d.outcome==='pending')?' selected':'')+'>Pending</option><option value="engaged"'+(d.outcome==='engaged'?' selected':'')+'>Engaged</option><option value="no_response"'+(d.outcome==='no_response'?' selected':'')+'>No Response</option><option value="declined"'+(d.outcome==='declined'?' selected':'')+'>Declined</option><option value="successful"'+(d.outcome==='successful'?' selected':'')+'>Successful</option></select></div><div class="dep-meta">'+(adv?escH(adv.name):'Unknown advisor')+' - '+daysSince(d.createdAt)+' days ago'+(d.dealStage?' - '+escH(stageLabel(d.dealStage)):'')+'</div><div class="btn-row" style="margin-top:10px;"><button class="btn sm" onclick="openDealFromDeployment(\''+d.id+'\')">Open Linked Deal</button></div></div>';
-        });
-        html+='</div>';
-    }
-
-    var warnings=[];
-    advisors.forEach(function(a){
-        var s=getCooldownStatus(a);
-        if(!s.ok)warnings.push({name:a.name,label:s.label});
-    });
-    if(warnings.length){
-        html+='<div class="card"><div class="card-t" style="color:var(--amber);">Cooldown Warnings</div>';
-        warnings.forEach(function(w){html+='<div style="font-size:0.82rem;color:var(--text3);padding:4px 0;">'+escH(w.name)+' - <span class="badge cooldown">'+w.label+'</span></div>'});
-        html+='</div>';
-    }
-
-    if(deals.length&&advisors.length){
-        html+='<div class="card"><div class="card-t">Quick Deploy</div>';
-        html+='<div style="font-size:0.82rem;color:var(--text3);margin-bottom:10px;">Select a live deal to start the Ask Builder with linked context instead of a blank deployment.</div>';
-        deals.slice(0,5).forEach(function(d){
-            html+='<button class="btn sm" style="margin:2px;" onclick="showTab(\'builder\');prefillDeal(\''+escH(d.id||'')+'\')">'+escH(dealName(d))+' ('+escH(stageLabel(d.stage))+')</button>';
-        });
-        html+='</div>';
-    }
-
-    if(!html)html='<div class="empty">Add advisors in the Registry tab and start deploying them on deals.</div>';
-    document.getElementById('dashContent').innerHTML=html;
-}
-
-window.updateDepOutcome=function(depId,val){
-    var deps=getDeployments();
-    var d=deps.find(function(x){return x.id===depId});
-    if(d){
-        d.outcome=val;
-        d.outcomeDate=new Date().toISOString();
-        saveDeployments(deps);
-        syncDeploymentToDeal(d);
-        renderAdvisorWorkspaceHealth();
-        renderDashboard();
-        renderImpact();
-        toast('Outcome updated');
-    }
-};
-
-function renderMatrix(){
-    var deals=getDeals().filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost'});
-    var advisors=getAdvisors();
-    var deps=getDeployments();
-    if(!deals.length){document.getElementById('matrixContent').innerHTML='<div class="empty">No active deals in Deal Workspace.</div>';return}
-    var html='<div class="card"><div class="card-t gold">Active deals x available advisors</div><div style="font-size:0.8rem;color:var(--text3);margin-bottom:12px;">A deal needs a mapped relationship, a justified moment, and an advisor who is actually available.</div>';
-    deals.forEach(function(d){
-        var name=dealName(d);
-        var connected=advisorsForDeal(d);
-        var deployed=deps.filter(function(dep){return (dep.dealId&&String(dep.dealId)===String(d.id))||normalizeName(dep.dealName)===normalizeName(name)});
-        var reco=recommendedDeploymentForDeal(d);
-        html+='<div class="matrix-row"><div><div class="matrix-deal">'+escH(name)+'</div><div class="matrix-sub">'+escH(stageLabel(d.stage))+' - $'+(dealValue(d)/1000).toFixed(0)+'K - '+escH(reco.pressure)+'</div></div>';
-        html+='<div>';
-        if(connected.length){
-            connected.forEach(function(a){
-                var cs=getCooldownStatus(a);
-                html+='<span class="badge '+(cs.ok?'available':'cooldown')+'" style="margin:1px;">'+escH(a.name)+'</span>';
-            });
-        } else {
-            html+='<span style="font-size:0.72rem;color:var(--muted);">No advisor connections</span>';
-        }
-        html+='</div><div><div style="font-size:0.72rem;color:var(--text3);margin-bottom:6px;">'+deployed.length+' deployments</div><div style="font-size:0.72rem;color:var(--text2);margin-bottom:6px;">'+escH(reco.moment?reco.moment.name:'Map relationship first')+'</div><button class="btn sm" onclick="showTab(\'builder\');prefillDeal(\''+escH(d.id||'')+'\',\''+escH(reco.momentId||'')+'\',\''+escH(reco.advisor?reco.advisor.id:'')+'\')">'+(reco.state==='map'?'Map path':'Build ask')+'</button></div></div>';
-    });
-    html+='</div>';
-
-    var noAdvisor=deals.filter(function(d){return!advisorsForDeal(d).length;});
-    if(noAdvisor.length){
-        html+='<div class="card"><div class="card-t" style="color:var(--red);">Gap: deals without advisor coverage</div>';
-        noAdvisor.forEach(function(d){
-            html+='<div style="font-size:0.82rem;color:var(--text3);padding:3px 0;">'+escH(dealName(d))+' - '+escH(stageLabel(d.stage))+'</div>';
-        });
-        html+='<div style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Add advisor connections in the Registry so these deals can get a real deployment path instead of a generic hope.</div></div>';
-    }
-
-    document.getElementById('matrixContent').innerHTML=html;
-}
-
-wizard={step:1,dealId:null,dealName:null,moment:null,advisor:null};
-
-function renderWizard(){
-    var deals=getDeals().filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost'});
-    var advisors=getAdvisors();
-    var container=document.getElementById('wizardContainer');
-    var selectedDeal=wizard.dealId?getDealById(wizard.dealId):(wizard.dealName?findDealByName(wizard.dealName):null);
-    if(selectedDeal){
-        wizard.dealId=selectedDeal.id||'';
-        wizard.dealName=dealName(selectedDeal);
-    }
-
-    if(wizard.step===1){
-        var html='<div class="step-num">01</div><div class="step-title">Select the Deal</div><div class="step-desc">Which deal needs advisor intervention?</div>';
-        if(!deals.length){html+='<div class="empty">No active deals. Create deals in Deal Workspace first.</div>';container.innerHTML=html;return}
-        html+='<div class="field"><select id="wDeal" style="font-size:0.9rem;padding:12px;">';
-        deals.forEach(function(d){html+='<option value="'+escH(d.id||'')+'"'+(wizard.dealId&&String(wizard.dealId)===String(d.id)?' selected':'')+'>'+escH(dealName(d))+' - '+escH(stageLabel(d.stage))+' ($'+(dealValue(d)/1000).toFixed(0)+'K)</option>'});
-        html+='</select></div><div class="btn-row"><button class="btn primary" onclick="wizardNext()">Next -></button></div>';
-        container.innerHTML=html;
-    }else if(wizard.step===2){
-        var recommendation=selectedDeal?recommendedDeploymentForDeal(selectedDeal):null;
-        var html='<div class="step-num">02</div><div class="step-title">What\'s Happening?</div><div class="step-desc">Select the deployment moment that matches this deal\'s situation.</div>';
-        if(selectedDeal&&recommendation){
-            html+='<div class="card" style="margin-bottom:14px;"><div class="card-t gold">Deal context</div><div style="font-size:0.82rem;color:var(--text3);line-height:1.7;">'+escH(dealName(selectedDeal))+' is currently in '+escH(stageLabel(selectedDeal.stage))+'. '+escH(recommendation.pressure)+' Recommended path: <strong style="color:var(--text);">'+escH(recommendation.moment?recommendation.moment.name:'Map advisor coverage first')+'</strong>.</div></div>';
-        }
-        MOMENTS.forEach(function(m){
-            html+='<div style="padding:10px 14px;background:var(--bg2);border:1px solid '+(wizard.moment===m.id?'rgba(212,165,116,0.36)':'var(--border)')+';border-radius:var(--rl);margin-bottom:8px;cursor:pointer;" onclick="wizard.moment=\''+m.id+'\';wizard.step=3;renderWizard()"><div style="font-weight:700;font-size:0.85rem;color:var(--text);">'+m.num+'. '+m.name+(recommendation&&recommendation.momentId===m.id?' <span class="badge available">Recommended</span>':'')+'</div><div style="font-size:0.75rem;color:var(--text3);margin-top:2px;">'+escH(m.dealState)+'</div></div>';
-        });
-        html+='<div class="btn-row"><button class="btn" onclick="wizard.step=1;renderWizard()"><- Back</button></div>';
-        container.innerHTML=html;
-    }else if(wizard.step===3){
-        var currentDeal=selectedDeal;
-        var currentName=wizard.dealName||dealName(currentDeal);
-        var connected=advisorsForDeal(currentDeal||{accountName:currentName});
-        var recommendationForDeal=currentDeal?recommendedDeploymentForDeal(currentDeal):null;
-        var html='<div class="step-num">03</div><div class="step-title">Select Advisor</div><div class="step-desc">Who should be deployed on '+escH(currentName)+'?</div>';
-        if(recommendationForDeal&&recommendationForDeal.advisor){
-            html+='<div class="card" style="margin-bottom:14px;"><div class="card-t gold">Suggested deployment path</div><div style="font-size:0.82rem;color:var(--text3);line-height:1.7;">Best current fit: <strong style="color:var(--text);">'+escH(recommendationForDeal.advisor.name)+'</strong> on <strong style="color:var(--text);">'+escH(recommendationForDeal.moment?recommendationForDeal.moment.name:'relationship mapping')+'</strong>. '+escH(recommendationForDeal.why)+'</div></div>';
-        }
-        if(connected.length){
-            html+='<div class="card-t" style="margin-bottom:8px;">Connected to '+escH(currentName)+':</div>';
-            connected.forEach(function(a){
-                var cs=getCooldownStatus(a);
-                html+='<div style="padding:10px 14px;background:var(--bg2);border:1px solid '+(wizard.advisor===a.id?'rgba(212,165,116,0.36)':'var(--border)')+';border-radius:var(--rl);margin-bottom:8px;cursor:'+(cs.ok?'pointer':'not-allowed')+';opacity:'+(cs.ok?'1':'0.5')+';" '+(cs.ok?'onclick="wizard.advisor=\''+a.id+'\';wizard.step=4;renderWizard()"':'')+'><div style="font-weight:700;font-size:0.85rem;color:var(--text);">'+escH(a.name)+(recommendationForDeal&&recommendationForDeal.advisor&&recommendationForDeal.advisor.id===a.id?' <span class="badge available">Best fit</span>':'')+' <span class="badge '+a.tier+'">'+TIERS[a.tier].label+'</span> <span class="badge '+(cs.ok?'available':'cooldown')+'">'+cs.label+'</span></div></div>';
-            });
-        }
-        html+='<div class="card-t" style="margin:12px 0 8px;">All advisors:</div>';
-        advisors.filter(function(a){return!connected.includes(a)}).forEach(function(a){
-            var cs=getCooldownStatus(a);
-            html+='<div style="padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:8px;cursor:'+(cs.ok?'pointer':'not-allowed')+';opacity:'+(cs.ok?'1':'0.5')+';" '+(cs.ok?'onclick="wizard.advisor=\''+a.id+'\';wizard.step=4;renderWizard()"':'')+'><div style="font-weight:600;font-size:0.82rem;color:var(--text3);">'+escH(a.name)+' <span class="badge '+a.tier+'">'+TIERS[a.tier].label+'</span> <span class="badge '+(cs.ok?'available':'cooldown')+'">'+cs.label+'</span></div></div>';
-        });
-        if(!advisors.length)html+='<div class="empty">No advisors registered. Add them in the Registry tab first.</div>';
-        html+='<div class="btn-row"><button class="btn" onclick="wizard.step=2;renderWizard()"><- Back</button></div>';
-        container.innerHTML=html;
-    }else if(wizard.step===4){
-        var moment=MOMENTS.find(function(m){return m.id===wizard.moment});
-        var advisor=advisors.find(function(a){return a.id===wizard.advisor});
-        var currentDeal=selectedDeal;
-        var currentName=wizard.dealName||dealName(currentDeal);
-        var pb=readLS('gtmos_playbook',{});
-        var co=pb.company||'[Your Company]';
-        var askMsg='Hi '+escH(advisor?advisor.name:'[Advisor]')+',\n\n'+moment.ask.replace(/\[Company\]/g,currentName).replace(/\[Startup\]/g,co)+'\n\nHere\'s what I\'ve tried so far: [describe your attempts]\n\n'+moment.framing.replace(/\[Company\]/g,currentName)+'\n\nI\'ve drafted a message below that you can customize - should take less than 2 minutes.\n\nThis deal is worth $'+(currentDeal?dealValue(currentDeal):'[value]')+' and represents [why it matters].\n\nThanks,\n[Your Name]';
-        var advisorScript=moment.script.replace(/\[Startup\]/g,co).replace(/\[Founder Name\]/g,'[Your Name]').replace(/\[Company\]/g,currentName).replace(/\[Prospect Company\]/g,currentName);
-        var html='<div class="step-num">04</div><div class="step-title">Review & Deploy</div><div class="step-desc">'+escH(moment.name)+' on '+escH(currentName)+' via '+escH(advisor?advisor.name:'-')+'</div>';
-        if(currentDeal){
-            html+='<div class="card"><div class="card-t gold">Deal feedback loop</div><div style="font-size:0.82rem;color:var(--text3);line-height:1.7;">Logging this deployment will attach the advisor move to the live deal record. Updating the outcome later will rewrite the next move on the deal so the pipeline reflects what the outside leverage actually changed.</div></div>';
-        }
-        html+='<div class="card"><div class="card-t gold">Message to Advisor (copy and send)</div><div class="output" id="askOutput">'+escH(askMsg)+'</div><div class="btn-row"><button class="btn gold" onclick="cp(document.getElementById(\'askOutput\').textContent).then(function(){toast(\'Ask copied\')})">Copy Ask</button></div></div>';
-        html+='<div class="card"><div class="card-t">Advisor Script (for them to customize and send)</div><div class="output" id="scriptOutput">'+escH(advisorScript)+'</div><div class="btn-row"><button class="btn gold" onclick="cp(document.getElementById(\'scriptOutput\').textContent).then(function(){toast(\'Script copied\')})">Copy Script</button></div></div>';
-        html+='<div class="btn-row"><button class="btn" onclick="wizard.step=3;renderWizard()"><- Back</button><button class="btn primary" onclick="logDeployment()">Log This Deployment</button></div>';
-        container.innerHTML=html;
-    }
-}
-
-window.wizardNext=function(){
-    if(wizard.step===1){
-        var sel=document.getElementById('wDeal');
-        var deal=sel?getDealById(sel.value):null;
-        wizard.dealId=deal?deal.id:'';
-        wizard.dealName=deal?dealName(deal):'';
-        wizard.step=2;
-        renderWizard();
-    }
-};
-
-window.prefillDeal=function(dealId,momentId,advisorId){
-    var deal=getDealById(dealId)||findDealByName(dealId);
-    wizard.dealId=deal&&deal.id?deal.id:'';
-    wizard.dealName=deal?dealName(deal):String(dealId||'');
-    wizard.moment=momentId||null;
-    wizard.advisor=advisorId||null;
-    wizard.step=momentId?(advisorId?4:3):2;
-    renderWizard();
-};
-
-window.logDeployment=function(){
-    var currentDeal=wizard.dealId?getDealById(wizard.dealId):findDealByName(wizard.dealName);
-    var deps=getDeployments();
-    var dep={
-        id:uid(),
-        dealId:currentDeal&&currentDeal.id?currentDeal.id:'',
-        dealName:currentDeal?dealName(currentDeal):(wizard.dealName||''),
-        dealStage:currentDeal&&currentDeal.stage?currentDeal.stage:'',
-        dealValue:currentDeal?dealValue(currentDeal):0,
-        momentId:wizard.moment||'',
-        momentName:(MOMENTS.find(function(m){return m.id===wizard.moment})||{}).name||'',
-        advisorId:wizard.advisor||'',
-        advisorName:(getAdvisors().find(function(a){return a.id===wizard.advisor})||{}).name||'',
-        outcome:'pending',
-        outcomeDate:null,
-        notes:'',
-        createdAt:new Date().toISOString()
-    };
-    deps.push(dep);
-    saveDeployments(deps);
-    syncDeploymentToDeal(dep);
-    toast('Deployment logged and linked to deal');
-    renderAdvisorWorkspaceHealth();
-    wizard={step:1,dealId:null,dealName:null,moment:null,advisor:null};
-    showTab('dashboard');
-};
-
-function renderImpact(){
-    var advisors=getAdvisors();
-    var deps=getDeployments();
-    var total=deps.length;
-    var successful=deps.filter(function(d){return d.outcome==='successful'}).length;
-    var engaged=deps.filter(function(d){return d.outcome==='engaged'||d.outcome==='successful'}).length;
-    var declined=deps.filter(function(d){return d.outcome==='declined'}).length;
-    var responseRate=total>0?Math.round(engaged/total*100):0;
-    var impactRate=total>0?Math.round(successful/total*100):0;
-
-    document.getElementById('impactStats').innerHTML=
-        '<div class="stat"><div class="stat-v">'+total+'</div><div class="stat-l">Total Deployments</div></div>'+
-        '<div class="stat"><div class="stat-v green">'+successful+'</div><div class="stat-l">Successful</div></div>'+
-        '<div class="stat"><div class="stat-v'+(responseRate>=60?' green':'')+'">'+responseRate+'%</div><div class="stat-l">Response Rate</div></div>'+
-        '<div class="stat"><div class="stat-v gold">'+impactRate+'%</div><div class="stat-l">Deal Impact Rate</div></div>'+
-        '<div class="stat"><div class="stat-v'+(declined>0?' red':'')+'">'+declined+'</div><div class="stat-l">Declined</div></div>';
-
-    var html='';
-
-    // Per-advisor effectiveness
-    if(advisors.length&&deps.length){
-        html+='<div class="card"><div class="card-t gold">Advisor Effectiveness</div>';
-        advisors.forEach(function(a){
-            var aDeps=deps.filter(function(d){return d.advisorId===a.id});
-            if(!aDeps.length)return;
-            var aSuccess=aDeps.filter(function(d){return d.outcome==='successful'}).length;
-            var aRate=Math.round(aSuccess/aDeps.length*100);
-            var topMoment='';
-            var momentCounts={};
-            aDeps.forEach(function(d){momentCounts[d.momentId]=(momentCounts[d.momentId]||0)+1});
-            var topId=Object.keys(momentCounts).sort(function(a,b){return momentCounts[b]-momentCounts[a]})[0];
-            var topM=MOMENTS.find(function(m){return m.id===topId});
-            if(topM)topMoment=topM.name;
-
-            html+='<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center;"><div><div style="font-weight:600;color:var(--text);font-size:0.85rem;">'+escH(a.name)+'</div><div style="font-size:0.72rem;color:var(--text3);">'+aDeps.length+' deployments · Top: '+escH(topMoment)+'</div></div><div style="text-align:right;"><div style="font-family:var(--serif);font-size:1.1rem;color:'+(aRate>=50?'var(--green)':'var(--text3)')+';">'+aRate+'%</div><div style="font-size:0.6rem;color:var(--muted);text-transform:uppercase;">impact rate</div></div></div>';
-        });
-        html+='</div>';
-    }
-
-    // Deployment history
-    if(deps.length){
-        html+='<div class="card"><div class="card-t">Deployment History</div>';
-        deps.slice().reverse().forEach(function(d){
-            var adv=advisors.find(function(a){return a.id===d.advisorId});
-            var mom=MOMENTS.find(function(m){return m.id===d.momentId});
-            var outcomeBadge=d.outcome==='successful'?'available':d.outcome==='declined'?'cooldown':d.outcome==='engaged'?'warm':'cold';
-            html+='<div class="dep-card"><div class="dep-top"><span class="dep-deal">'+escH(d.dealName)+'</span><span class="badge '+outcomeBadge+'">'+(d.outcome||'pending')+'</span></div><div class="dep-meta">'+(adv?escH(adv.name):'—')+' · '+(mom?mom.name:'—')+' · '+daysSince(d.createdAt)+'d ago</div></div>';
-        });
-        html+='</div>';
-    }
-
-    if(!deps.length)html='<div class="empty">No deployments logged yet. Use the Ask Builder to deploy advisors on deals.</div>';
-    document.getElementById('impactContent').innerHTML=html;
-}
-
-// ── INIT ──
-function showAdvisorBootState(kind,title,text){
-    if(!window.gtmModuleBootState)return;
-    window.gtmModuleBootState.show('#advisorBootState',{
-        kind:kind,
-        title:title,
-        text:text,
-        retryLabel:'Retry Advisor Deploy',
-        retryAction:'retryAdvisorDeployBoot'
-    });
-}
-function clearAdvisorBootState(){
-    if(window.gtmModuleBootState)window.gtmModuleBootState.clear('#advisorBootState');
-}
-function onAdvisorDeployBootFailure(error){
-    console.error('Advisor Deploy boot failed:',error);
-    document.getElementById('dashStats').innerHTML='';
-    document.getElementById('dashContent').innerHTML='';
-    showAdvisorBootState(
-        'error',
-        'Advisor Deploy could not load.',
-        'Antaeus failed while rebuilding advisor registry, deployment history, or deal context. Retry once. If it fails again, refresh the page and verify your synced docs are still healthy.'
-    );
-}
-window.retryAdvisorDeployBoot=function(){
-    bootAdvisorDeploy().catch(onAdvisorDeployBootFailure);
-};
-async function bootAdvisorDeploy(){
-    showAdvisorBootState(
-        'loading',
-        'Loading Advisor Deploy',
-        'Pulling advisor registry, deployment history, and deal context before the module comes online.'
-    );
-    if(window.gtmPersistence&&window.gtmPersistence.docs&&typeof window.gtmPersistence.docs.load==='function'){
-        await window.gtmPersistence.docs.load({keys:['gtmos_advisor_registry','gtmos_advisor_deployments']}).catch(function(error){console.error('Advisor Deploy docs preload failed:',error);});
-    }
-    if(window.gtmPersistence&&window.gtmPersistence.deals&&typeof window.gtmPersistence.deals.load==='function'){
-        await window.gtmPersistence.deals.load().catch(function(error){console.error('Advisor Deploy deals preload failed:',error);});
-    }
-    renderPlaybook();
-    renderAdvisorWorkspaceHealth();
-    renderDashboard();
-    clearAdvisorBootState();
-}
-
-if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){
-    window.requireAuthReady.then(bootAdvisorDeploy).catch(onAdvisorDeployBootFailure);
-}else if(window.__gtmosAuthGatePending){
-    showAdvisorBootState(
-        'loading',
-        'Waiting for auth',
-        'Advisor Deploy is waiting for your authenticated workspace before it rebuilds registry and deal context.'
-    );
-    window.addEventListener('gtmos:auth-ready',function(){bootAdvisorDeploy().catch(onAdvisorDeployBootFailure);},{once:true});
-}else{
-    bootAdvisorDeploy().catch(onAdvisorDeployBootFailure);
-}
-
-})();
-
-    </script>
+<script src="/js/deal-health.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/require-auth.js"></script>
+<script src="/js/module-boot-state.js"></script>
+<script src="/js/advisor-deploy-backchannel.js"></script>
 </body>
 </html>

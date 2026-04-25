@@ -9,6 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
+        body.room-deal-workspace .app-main{background:radial-gradient(circle at 100% 0%, rgba(230,112,30,0.05), transparent 24%),radial-gradient(circle at 0% 0%, rgba(36,113,231,0.05), transparent 28%),linear-gradient(180deg,#fbfcff 0%,#f3f7fc 100%);}
+        body.room-deal-workspace .app-content{max-width:1240px;margin-inline:auto;}
+        .dw-app-content{display:grid;gap:22px;}
+        .dw-board-body{display:grid;gap:18px;}
+        .dw-lower-stack{display:grid;gap:18px;padding-bottom:18px;}
         .dw-bridge{background:linear-gradient(135deg, rgba(212,165,116,0.1), rgba(59,130,246,0.04));border:1px solid rgba(212,165,116,0.18);border-radius:var(--radius-xl);padding:22px;margin-bottom:var(--space-md);}
         .dw-bridge-k{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
         .dw-bridge-title{font-size:1.08rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
@@ -21,26 +26,95 @@
         .dw-bridge-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:var(--radius-full);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);font:inherit;font-size:0.75rem;font-weight:700;cursor:pointer;}
         .dw-bridge-btn:hover{border-color:var(--border-hover);}
         .dw-bridge-btn.primary{background:rgba(212,165,116,0.1);border-color:rgba(212,165,116,0.24);color:var(--brand-gold);}
-        .dw-surface-top{display:grid;gap:16px;margin-bottom:var(--space-lg);}
-        .dw-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-sm);margin-bottom:var(--space-md);}
-        .dw-stat{background:none;border:0;border-right:1px solid rgba(255,255,255,0.06);border-radius:0;padding:12px 14px;text-align:left;}
-        .dw-stat:last-child{border-right:0;}
-        .dw-stat-val{font-family:var(--font-serif);font-size:1.4rem;color:var(--text-primary);}
-        .dw-stat-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
-        .dw-recovery{background:linear-gradient(135deg, rgba(212,165,116,0.06), rgba(59,130,246,0.03));border:1px solid rgba(212,165,116,0.14);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:0;}
-        .dw-recovery-head{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);font-weight:700;margin-bottom:8px;}
-        .dw-recovery-title{font-size:0.96rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
-        .dw-recovery-copy{font-size:0.82rem;color:var(--text-tertiary);line-height:1.55;margin-bottom:12px;}
-        .dw-recovery-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid rgba(255,255,255,0.06);}
-        .dw-recovery-item{padding:14px 16px;border-radius:0;background:none;border:0;border-right:1px solid rgba(255,255,255,0.06);}
+        .dw-first-fold{display:grid;gap:18px;margin-bottom:var(--space-lg);}
+        .dw-diagnosis-stage{position:relative;overflow:hidden;display:grid;gap:18px;padding:30px 0 24px;border-bottom:1px solid rgba(10,28,64,0.08);}
+        .dw-diagnosis-stage::after{content:'';position:absolute;inset:auto 0 -120px auto;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle, rgba(230,112,30,0.08), rgba(230,112,30,0));pointer-events:none;}
+        .dw-diagnosis-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,0.82fr);gap:24px;align-items:start;position:relative;z-index:1;}
+        .dw-diagnosis-kicker{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--brand-gold);margin-bottom:12px;}
+        .dw-diagnosis-headline{font-size:clamp(2.8rem,5.6vw,5.4rem);line-height:0.92;letter-spacing:-0.05em;color:var(--text-primary);max-width:9ch;font-weight:500;}
+        .dw-diagnosis-copy{max-width:56ch;margin-top:14px;font-size:0.94rem;line-height:1.7;color:var(--text-secondary);}
+        .dw-diagnosis-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+        .dw-diagnosis-note{display:grid;gap:6px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(10,28,64,0.08);}
+        .dw-diagnosis-note-label{font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);}
+        .dw-diagnosis-note-copy{font-size:0.84rem;line-height:1.6;color:var(--text-secondary);max-width:56ch;}
+        .dw-diagnosis-dock{display:grid;gap:12px;}
+        .dw-diagnosis-target{display:grid;gap:10px;padding:16px 18px;border-radius:20px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.9);box-shadow:none;}
+        .dw-diagnosis-target-label{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--brand-gold);}
+        .dw-diagnosis-target-title{font-size:1.16rem;font-weight:700;line-height:1.3;color:var(--text-primary);}
+        .dw-diagnosis-target-copy{font-size:0.84rem;line-height:1.65;color:var(--text-secondary);}
+        .dw-diagnosis-target-meta{display:flex;gap:8px;flex-wrap:wrap;}
+        .dw-diagnosis-pill{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;border:1px solid rgba(10,28,64,0.08);background:rgba(248,250,252,0.96);font-size:0.68rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);}
+        .dw-diagnosis-pill.is-risk{border-color:rgba(230,112,30,0.2);color:#e6701e;background:rgba(230,112,30,0.08);}
+        .dw-diagnosis-register{display:grid;gap:0;padding:0 2px;}
+        .dw-diagnosis-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:end;padding:12px 0;border-bottom:1px solid rgba(10,28,64,0.08);}
+        .dw-diagnosis-row:first-child{padding-top:0;}
+        .dw-diagnosis-row:last-child{border-bottom:0;padding-bottom:0;}
+        .dw-diagnosis-row-label{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);}
+        .dw-diagnosis-row-copy{margin-top:4px;font-size:0.76rem;line-height:1.5;color:var(--text-tertiary);}
+        .dw-diagnosis-row-value{font-family:var(--font-serif);font-size:1.28rem;line-height:1;color:var(--text-primary);text-align:right;}
+        .dw-board-shell{display:grid;gap:14px;margin-bottom:var(--space-lg);}
+        .dw-board-bar{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;padding:4px 0 14px;border-bottom:1px solid rgba(10,28,64,0.08);}
+        .dw-board-bar-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+        .dw-board-kicker{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--brand-gold);}
+        .dw-board-filter{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.84);}
+        .dw-board-filter-label{font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);}
+        .dw-board-filter select{padding:0;border:0;background:transparent;color:var(--text-primary);font-size:0.86rem;font-weight:600;font-family:inherit;}
+        .dw-board-filter select:focus{outline:none;}
+        .dw-board-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+        .dw-filter-count{font-size:0.76rem;color:var(--text-muted);}
+        .dw-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding-bottom:2px;border-bottom:1px solid rgba(10,28,64,0.08);}
+        .dw-stat{display:grid;gap:4px;padding:0 18px 0 0;border-right:1px solid rgba(10,28,64,0.08);text-align:left;background:none;border-radius:0;}
+        .dw-stat:last-child{border-right:0;padding-right:0;}
+        .dw-stat-val{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-primary);line-height:1;}
+        .dw-stat-label{font-size:0.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;}
+        .dw-stat-copy{font-size:0.76rem;color:var(--text-tertiary);line-height:1.5;}
+        .dw-recovery{background:transparent;border:0;border-radius:0;padding:0;margin-bottom:0;}
+        .dw-recovery-head{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.24em;color:var(--brand-gold);font-weight:700;margin-bottom:6px;}
+        .dw-recovery-title{font-size:0.92rem;font-weight:700;color:var(--text-primary);margin-bottom:4px;}
+        .dw-recovery-copy{font-size:0.78rem;color:var(--text-tertiary);line-height:1.5;margin-bottom:10px;}
+        .dw-recovery-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+        .dw-recovery-item{padding:10px 12px;border-radius:16px;background:rgba(255,255,255,0.76);border:1px solid rgba(10,28,64,0.08);}
         .dw-recovery-item:last-child{border-right:0;}
         .dw-recovery-item-title{font-size:0.8rem;font-weight:700;color:var(--text-secondary);margin-bottom:4px;}
         .dw-recovery-item-copy{font-size:0.75rem;color:var(--text-muted);line-height:1.5;}
-        .dw-filter{margin-bottom:0;display:flex;gap:8px;align-items:center;justify-content:space-between;padding:0 4px 14px;border-bottom:1px solid rgba(255,255,255,0.06);}
-        .dw-filter select{padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.82rem;font-family:inherit;}
-        .dw-filter select:focus{outline:none;border-color:var(--brand-gold);}
-        .dw-filter-count{font-size:0.72rem;color:var(--text-muted);}
         .dw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:var(--space-md);}
+        .dw-intervention-board{display:grid;gap:16px;}
+        .dw-rail-shell{display:grid;gap:18px;padding:20px 0 14px;border-radius:0;border:0;background:transparent;box-shadow:none;}
+        .dw-rail-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end;padding-bottom:12px;border-bottom:1px solid rgba(10,28,64,0.08);}
+        .dw-rail-header-main{display:grid;gap:6px;}
+        .dw-rail-kicker{font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#e6701e;}
+        .dw-rail-title{font-size:1.32rem;line-height:1.05;letter-spacing:-0.04em;font-weight:700;color:#0a1c40;}
+        .dw-rail-copy{max-width:52ch;font-size:0.78rem;line-height:1.55;color:#5f7594;}
+        .dw-rail-readouts{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+        .dw-rail-pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:34px;padding:0 12px;border-radius:12px;background:transparent;border:1px solid rgba(10,28,64,0.12);font-weight:700;color:#0a1c40;}
+        .dw-rail-pill span{font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:#8b9cb4;font-weight:700;}
+        .dw-rail-layout{display:grid;gap:14px;}
+        .dw-rail-lane{display:grid;grid-template-columns:124px minmax(0,1fr);gap:16px;align-items:start;padding:10px 0;border-top:1px solid rgba(10,28,64,0.08);}
+        .dw-rail-lane:first-of-type{border-top:0;padding-top:0;}
+        .dw-rail-lane-label{display:grid;gap:6px;padding-top:8px;}
+        .dw-rail-lane-state{font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#e6701e;}
+        .dw-rail-lane-copy{font-size:0.74rem;line-height:1.5;color:#6b7f9a;}
+        .dw-ticket-stack{display:grid;gap:12px;}
+        .dw-rail-ticket{display:grid;grid-template-columns:6px minmax(0,1fr);gap:14px;align-items:start;padding:12px 14px;border-radius:16px;background:transparent;border:1px solid rgba(10,28,64,0.12);box-shadow:none;}
+        .dw-rail-ticket:hover{background:rgba(255,255,255,0.55);}
+        .dw-rail-ticket-edge{width:6px;height:100%;border-radius:999px;}
+        .dw-rail-ticket-edge.risk{background:#e6701e;}
+        .dw-rail-ticket-edge.proof{background:#2471e7;}
+        .dw-rail-ticket-edge.motion{background:#2d7a4b;}
+        .dw-rail-ticket-main{display:grid;gap:10px;}
+        .dw-rail-ticket-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;}
+        .dw-rail-ticket-name{font-size:1.05rem;line-height:1.05;letter-spacing:-0.04em;font-weight:700;color:#0a1c40;}
+        .dw-rail-ticket-value{font-family:var(--font-serif);font-size:1.32rem;line-height:1;color:#0a1c40;white-space:nowrap;}
+        .dw-rail-ticket-detail{display:flex;gap:10px;flex-wrap:wrap;}
+        .dw-rail-ticket-detail span{font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:#8b9cb4;font-weight:700;}
+        .dw-rail-ticket-copy{font-size:0.76rem;line-height:1.55;color:#10274f;}
+        .dw-rail-ticket-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:2px;}
+        .dw-rail-ticket-link,.dw-reserve-link{border:0;background:none;padding:0;font:inherit;color:#2471e7;font-weight:700;cursor:pointer;}
+        .dw-rail-ticket-ghost{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border-radius:12px;border:1px solid rgba(10,28,64,0.1);background:rgba(255,255,255,0.84);font:inherit;font-size:0.78rem;font-weight:700;color:#0a1c40;cursor:pointer;}
+        .dw-rail-reserve{display:flex;gap:8px;flex-wrap:wrap;padding:4px 0 0 142px;}
+        .dw-reserve-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:transparent;border:1px dashed rgba(10,28,64,0.16);font-size:0.7rem;font-weight:700;color:#0a1c40;cursor:pointer;}
+        .dw-reserve-tag span{font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#8b9cb4;font-weight:700;}
+        .dw-rail-empty{padding:26px 0 8px;font-size:0.94rem;line-height:1.6;color:#5f7594;}
         /* Card */
         .dw-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:20px;transition:all 0.2s;cursor:pointer;position:relative;}
         .dw-card:hover{border-color:var(--border-hover);transform:translateY(-2px);}
@@ -77,7 +151,7 @@
         .dw-card-qual.workable{background:rgba(245,158,11,0.08);color:#f59e0b;border-color:rgba(245,158,11,0.2);}
         .dw-card-qual.thin{background:rgba(239,68,68,0.08);color:#ef4444;border-color:rgba(239,68,68,0.2);}
         .dw-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
-        .dw-chip{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:600;}
+        .dw-chip{font-size:0.62rem;padding:2px 7px;border-radius:var(--radius-full);font-weight:600;border:0;font-family:inherit;cursor:pointer;}
         .dw-chip.filled{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2);}
         .dw-chip.empty{background:rgba(255,255,255,0.03);color:var(--text-muted);border:1px solid var(--border-default);cursor:pointer;}
         .dw-chip.empty:hover{border-color:var(--border-hover);}
@@ -100,7 +174,7 @@
         .dw-intel-section{margin-bottom:10px;}
         .dw-intel-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin-bottom:3px;}
         .dw-intel-value{font-size:0.8rem;color:var(--text-secondary);line-height:1.4;}
-        .dw-intel-edit{font-size:0.7rem;color:var(--brand-gold);cursor:pointer;text-decoration:none;float:right;}
+        .dw-intel-edit{font-size:0.7rem;color:var(--brand-gold);cursor:pointer;text-decoration:none;float:right;background:none;border:0;padding:0;font-family:inherit;}
         .dw-intel-edit:hover{text-decoration:underline;}
         .dw-empty{text-align:center;padding:60px 24px;color:var(--text-muted);}
         .dw-empty a{color:var(--brand-gold);}
@@ -150,8 +224,61 @@
         .dw-loss-notes textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;min-height:60px;resize:vertical;}
         .dw-loss-notes textarea:focus{outline:none;border-color:var(--brand-gold);}
         .dw-loss-actions{display:flex;justify-content:space-between;margin-top:20px;}
-        @media(max-width:1024px){.dw-bridge-grid,.dw-recovery-list{grid-template-columns:1fr 1fr;}.dw-stats{grid-template-columns:1fr 1fr;gap:0;}}
-        @media(max-width:700px){.dw-stats,.dw-bridge-grid,.dw-recovery-list{grid-template-columns:1fr;}.dw-grid{grid-template-columns:1fr;}.dw-modal-row,.dw-modal-row3{grid-template-columns:1fr;}.dw-sh-row{grid-template-columns:1fr;}.dw-stat,.dw-recovery-item{border-right:0;border-bottom:1px solid rgba(255,255,255,0.06);}.dw-stat:last-child,.dw-recovery-item:last-child{border-bottom:0;}.dw-filter{align-items:flex-start;flex-direction:column;}}
+        .dw-selected-bridge{display:grid;gap:20px;margin-bottom:6px;}
+        .dw-selected-stage{position:relative;overflow:hidden;display:grid;gap:18px;padding:8px 0 18px;border-radius:0;border:0;background:transparent;box-shadow:none;}
+        .dw-selected-stage::before{content:'';position:absolute;inset:-22% auto auto -14%;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle, rgba(36,113,231,0.05), rgba(36,113,231,0));pointer-events:none;}
+        .dw-selected-stage::after{content:'';position:absolute;inset:auto -12% -28% auto;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle, rgba(230,112,30,0.06), rgba(230,112,30,0));pointer-events:none;}
+        .dw-selected-stage-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,0.95fr) minmax(0,1.05fr);gap:24px;align-items:start;padding-bottom:14px;border-bottom:1px solid rgba(10,28,64,0.08);}
+        .dw-selected-hero{display:grid;gap:16px;align-content:start;max-width:560px;}
+        .dw-selected-eyebrow{font-size:0.7rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#e6701e;}
+        .dw-selected-hero h1{margin:0;font-family:"DM Serif Display",serif;font-size:clamp(3.1rem,5.1vw,5rem);line-height:0.94;letter-spacing:-0.06em;color:#0a1c40;max-width:8ch;}
+        .dw-selected-copy{font-size:0.92rem;line-height:1.7;color:#465d80;max-width:54ch;}
+        .dw-selected-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+        .dw-selected-folio{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start;padding:0 0 0 18px;border-left:1px solid rgba(10,28,64,0.08);background:transparent;box-shadow:none;}
+        .dw-selected-kicker{font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8b9cb4;margin-bottom:8px;}
+        .dw-selected-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:10px;}
+        .dw-selected-title{font-size:1.34rem;line-height:1.14;font-weight:700;color:#0a1c40;}
+        .dw-selected-value{font-family:"DM Serif Display",serif;font-size:1.74rem;line-height:1;color:#0a1c40;white-space:nowrap;}
+        .dw-selected-target-copy{font-size:0.86rem;line-height:1.6;color:#465d80;margin-bottom:10px;max-width:48ch;}
+        .dw-selected-signal-grid{display:grid;gap:0;}
+        .dw-selected-signal-row{display:grid;grid-template-columns:30px 76px 1fr;gap:12px;align-items:center;padding:10px 0;border-top:1px solid rgba(10,28,64,0.07);}
+        .dw-selected-signal-row:first-child{border-top:1px solid rgba(10,28,64,0.07);}
+        .dw-selected-signal-mark{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:1rem;font-weight:700;}
+        .dw-selected-signal-mark.risk{background:rgba(230,112,30,0.12);color:#e6701e;}
+        .dw-selected-signal-mark.proof{background:rgba(36,113,231,0.10);color:#2471e7;}
+        .dw-selected-signal-mark.motion{background:rgba(45,122,75,0.12);color:#2d7a4b;}
+        .dw-selected-signal-label{font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#7c8ea8;}
+        .dw-selected-signal-copy{font-size:0.82rem;line-height:1.5;color:#0f2f61;}
+        .dw-selected-folio-dock{display:none;}
+        .dw-selected-folio-tab{padding:10px 12px;border-radius:16px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.92);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#7c8ea8;font-weight:700;text-align:center;line-height:1.3;}
+        .dw-selected-folio-tab.is-risk{border-color:rgba(230,112,30,0.18);background:rgba(230,112,30,0.08);color:#e6701e;}
+        .dw-selected-micro-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;position:relative;z-index:1;}
+        .dw-selected-micro{display:grid;gap:6px;padding-top:12px;border-top:1px solid rgba(10,28,64,0.08);}
+        .dw-selected-micro-label{font-size:0.64rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8b9cb4;}
+        .dw-selected-micro-value{font-family:"DM Serif Display",serif;font-size:1.72rem;line-height:1;color:#0a1c40;letter-spacing:-0.05em;}
+        .dw-selected-micro-sub{font-size:0.8rem;line-height:1.55;color:#5f7594;}
+        .dw-selected-lane-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;position:relative;z-index:1;padding-top:2px;}
+        .dw-selected-lane{display:grid;gap:10px;padding:14px 0 0;border-radius:0;background:transparent;box-shadow:none;border-top:1px solid rgba(10,28,64,0.08);}
+        .dw-selected-lane-state{font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#e6701e;}
+        .dw-selected-lane-title{font-size:0.98rem;line-height:1.22;font-weight:700;color:#0a1c40;}
+        .dw-selected-lane-copy{font-size:0.84rem;line-height:1.6;color:#465d80;}
+        .dw-selected-lane-meta{display:flex;flex-wrap:wrap;gap:8px;}
+        .dw-selected-lane-meta span{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:transparent;box-shadow:inset 0 0 0 1px rgba(10,28,64,0.1);font-size:0.66rem;letter-spacing:0.08em;text-transform:uppercase;color:#7c8ea8;font-weight:700;}
+        .dw-selected-controls{display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap;padding-top:6px;border-top:1px solid rgba(10,28,64,0.08);position:relative;z-index:1;}
+        .dw-selected-filter-shell{display:inline-flex;align-items:center;gap:12px;padding:10px 14px;border-radius:999px;border:1px solid rgba(10,28,64,0.08);background:rgba(255,255,255,0.84);}
+        .dw-selected-filter-label{font-size:0.64rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8b9cb4;}
+        .dw-selected-filter-shell select{padding:0;border:0;background:transparent;font:inherit;font-size:0.98rem;font-weight:700;color:#0a1c40;}
+        .dw-selected-filter-shell select:focus{outline:none;}
+        .dw-selected-controls-right{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+        .dw-selected-filter-count{font-size:0.82rem;color:#6f83a2;}
+        .dw-selected-queue-btn,.dw-selected-ghost-btn,.dw-selected-link{border:0;background:none;font:inherit;padding:0;}
+        .dw-selected-queue-btn{min-height:54px;padding:0 24px;border-radius:18px;background:#e6701e;color:#fff;font-weight:700;box-shadow:0 14px 30px rgba(230,112,30,0.22);}
+        .dw-selected-ghost-btn{min-height:48px;padding:0 20px;border-radius:18px;background:rgba(255,255,255,0.84);border:1px solid rgba(10,28,64,0.12);color:#0a1c40;font-weight:700;}
+        .dw-selected-link{color:#2471e7;font-weight:700;}
+        @media(max-width:1024px){.dw-selected-stage-grid{grid-template-columns:1fr;}.dw-selected-folio{grid-template-columns:1fr;}.dw-selected-micro-grid,.dw-selected-lane-grid{grid-template-columns:1fr;}}
+        @media(max-width:1024px){.dw-diagnosis-grid,.dw-recovery-list{grid-template-columns:1fr;}.dw-stats{grid-template-columns:1fr 1fr;}}
+        @media(max-width:960px){.dw-rail-header,.dw-rail-lane{grid-template-columns:1fr;}.dw-rail-readouts{justify-content:flex-start;}.dw-rail-reserve{padding-left:0;}.dw-rail-ticket-top{flex-direction:column;align-items:flex-start;}}
+        @media(max-width:700px){.dw-stats,.dw-recovery-list{grid-template-columns:1fr;}.dw-grid{grid-template-columns:1fr;}.dw-modal-row,.dw-modal-row3{grid-template-columns:1fr;}.dw-sh-row{grid-template-columns:1fr;}.dw-stat,.dw-recovery-item{border-right:0;border-bottom:1px solid rgba(10,28,64,0.08);padding:0 0 14px;}.dw-stat:last-child,.dw-recovery-item:last-child{border-bottom:0;}.dw-board-bar{align-items:flex-start;}.dw-board-bar-left,.dw-board-actions{width:100%;}.dw-board-filter{width:100%;justify-content:space-between;}}
     </style>
 </head>
 <body class="room-wave2 room-deal-workspace">
@@ -161,43 +288,22 @@
             <script src="/js/analytics-site-config.js"></script>
     <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
+            <script src="/js/demo-storage-bootstrap.js"></script>
+<script src="/js/workspace-guard.js"></script>
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
-            <header class="app-header module-header">
-                <div class="module-header-title">
-                    <div class="shell-header-meta">
-                        <span class="shell-header-kicker">Pipeline family</span>
-                        <span class="shell-header-state state-live">Execution board</span>
-                    </div>
-                    <h1 class="page-title">Deal Workspace</h1>
-                    <p class="page-subtitle">Keep live opportunities honest, route pressure into the right room, and carry context forward without rebuilding it.</p>
-                </div>
-                <div class="header-actions">
-                    <button class="btn btn-primary btn-sm" onclick="openModal()">+ New Deal</button>
-                </div>
-            </header>
-            <div class="app-content">
+            <div class="app-content dw-app-content">
                 <div id="dwBootState"></div>
                 <div id="dwBridge"></div>
-                <div id="dealHealthPanel"></div>
-                <section class="dw-surface-top">
-                    <div class="dw-stats" id="dealStats"></div>
-                    <div class="dw-filter">
-                        <select id="viewFilter" onchange="render()">
-                            <option value="all">All Deals</option>
-                            <option value="active">Active Only</option>
-                            <option value="at-risk">At Risk</option>
-                            <option value="stalled">Stalled (7+ days quiet)</option>
-                            <option value="this-quarter">Close This Quarter</option>
-                            <option value="closed">Closed (Won + Lost)</option>
-                        </select>
-                        <span class="dw-filter-count" id="filterCount"></span>
-                    </div>
+                <div class="dw-board-body">
+                    <div class="dw-intervention-board" id="dealGrid"></div>
+                    <div id="dealEmpty"></div>
+                </div>
+                <div class="dw-lower-stack">
+                    <div id="dealHealthPanel"></div>
                     <div id="recoveryPanel"></div>
-                </section>
-                <div class="dw-grid" id="dealGrid"></div>
-                <div id="dealEmpty"></div>
+                </div>
             </div>
         </main>
     </div>
@@ -211,7 +317,7 @@
             <input type="hidden" id="editPrevStage">
             <div class="dw-modal-field"><label>Account Name *</label><input type="text" id="mAccount" placeholder="e.g. Globex Corp"></div>
             <div class="dw-modal-row">
-                <div class="dw-modal-field"><label>Deal Value ($)</label><input type="text" id="mValue" placeholder="50,000" oninput="fmtC(this)"></div>
+                <div class="dw-modal-field"><label>Deal Value ($)</label><input type="text" id="mValue" placeholder="50,000"></div>
                 <div class="dw-modal-field"><label>Stage</label>
                     <select id="mStage">
                         <option value="prospect">Prospect</option>
@@ -267,14 +373,14 @@
             <details class="dw-accordion">
                 <summary id="shSummary">Stakeholders (0/6 roles)</summary>
                 <div style="padding-top:8px;" id="shContainer"></div>
-                <button class="dw-sh-add" onclick="addStakeholder()">+ Add Stakeholder</button>
+                <button class="dw-sh-add" type="button" data-dw-action="add-stakeholder">+ Add Stakeholder</button>
             </details>
 
             <div class="dw-modal-actions">
-                <button class="dw-modal-btn ghost" onclick="closeModal()">Cancel</button>
+                <button class="dw-modal-btn ghost" type="button" data-dw-modal-action="close">Cancel</button>
                 <div style="display:flex;gap:8px;">
-                    <button class="dw-modal-btn danger" id="deleteBtn" style="display:none;" onclick="deleteDeal()">Delete</button>
-                    <button class="dw-modal-btn primary" onclick="saveDeal()">Save Deal</button>
+                    <button class="dw-modal-btn danger" id="deleteBtn" type="button" style="display:none;" data-dw-modal-action="delete">Delete</button>
+                    <button class="dw-modal-btn primary" type="button" data-dw-modal-action="save">Save Deal</button>
                 </div>
             </div>
         </div>
@@ -286,19 +392,19 @@
             <div class="dw-loss-title">Why did this deal close-lost?</div>
             <div class="dw-loss-sub">This feeds into your Playbook's loss pattern analysis.</div>
             <div id="lossOptions">
-                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                <label class="dw-loss-option" data-loss-option="competitor">
                     <input type="radio" name="lossReason" value="competitor"><span>Lost to Competitor</span>
                 </label>
-                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                <label class="dw-loss-option" data-loss-option="no_decision">
                     <input type="radio" name="lossReason" value="no_decision"><span>No Decision / Status Quo</span>
                 </label>
-                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                <label class="dw-loss-option" data-loss-option="budget">
                     <input type="radio" name="lossReason" value="budget"><span>Budget Killed</span>
                 </label>
-                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                <label class="dw-loss-option" data-loss-option="champion_left">
                     <input type="radio" name="lossReason" value="champion_left"><span>Champion Left / Reorg</span>
                 </label>
-                <label class="dw-loss-option" onclick="this.querySelector('input').checked=true;document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected')});this.classList.add('selected');">
+                <label class="dw-loss-option" data-loss-option="timing">
                     <input type="radio" name="lossReason" value="timing"><span>Timing / Not Now</span>
                 </label>
             </div>
@@ -306,8 +412,8 @@
                 <textarea id="lossNotes" placeholder="What would you do differently? (optional)"></textarea>
             </div>
             <div class="dw-loss-actions">
-                <button class="dw-modal-btn ghost" onclick="skipLossReason()">Skip</button>
-                <button class="dw-modal-btn primary" onclick="saveLossReason()">Save &amp; Close</button>
+                <button class="dw-modal-btn ghost" type="button" data-dw-loss-action="skip">Skip</button>
+                <button class="dw-modal-btn primary" type="button" data-dw-loss-action="save">Save &amp; Close</button>
             </div>
         </div>
     </div>
@@ -521,80 +627,7 @@
         function renderDealWorkspaceHealth(snapshot){
             var node=document.getElementById('dealHealthPanel');
             if(!node)return;
-            if(!snapshot||!snapshot.totalDeals){
-                node.innerHTML=
-                    '<section class="shell-section shell-section--compact workspace-health">'+
-                        '<div class="shell-section-header">'+
-                            '<div class="shell-section-heading">'+
-                                '<div class="shell-section-kicker">Workspace health</div>'+
-                                '<div class="shell-section-title">Health starts once one live deal exists.</div>'+
-                                '<div class="shell-section-copy workspace-health-copy">Create one real board object with stage, value, next step, and qualification truth.</div>'+
-                            '</div>'+
-                        '</div>'+
-                    '</section>';
-                return;
-            }
-
-            var compounded=[];
-            var weakLinks=[];
-
-            if(snapshot.weightedPipeline>0){
-                compounded.push('<div class="workspace-health-item"><strong>Weighted truth is live.</strong> '+escH(fmtN(snapshot.weightedPipeline))+' is now grounded in active deal state instead of raw pipeline vanity.</div>');
-            }
-            if(snapshot.topDealQualificationBand==='strong'||snapshot.topDealQualificationBand==='workable'){
-                compounded.push('<div class="workspace-health-item"><strong>The lead deal has usable qualification.</strong> '+escH(snapshot.topDealName||'The top deal')+' is reading as '+escH(snapshot.topDealQualificationBand)+', which means the board has real buying truth to work from.</div>');
-            }
-            if(Number(snapshot.topDealThreading||0)>=2){
-                compounded.push('<div class="workspace-health-item"><strong>Threading is no longer purely single-owner.</strong> '+escH(String(snapshot.topDealThreading))+' engaged stakeholders are visible on the current review target.</div>');
-            }
-            if(!compounded.length){
-                compounded.push('<div class="workspace-health-item"><strong>The room has truth to work with.</strong> Active deals exist, but compounding is still thin enough that the board should stay conservative.</div>');
-            }
-
-            if(Number(snapshot.recoveryCount||0)>0){
-                weakLinks.push('<div class="workspace-health-item"><strong>Recovery pressure is still visible.</strong> '+escH(String(snapshot.recoveryCount))+' deal'+(Number(snapshot.recoveryCount||0)===1?' needs':'s need')+' intervention before the board is honestly healthy.</div>');
-            }
-            if(snapshot.topDealMissingChampion){
-                weakLinks.push('<div class="workspace-health-item"><strong>Champion truth is still missing.</strong> The current review target has stage language without a named internal owner.</div>');
-            }
-            if(snapshot.topDealNeedsNextStep){
-                weakLinks.push('<div class="workspace-health-item"><strong>The next step is not anchored.</strong> This room should not let stage labels outrun a dated move.</div>');
-            }else if(snapshot.topDealNextStepOverdue){
-                weakLinks.push('<div class="workspace-health-item"><strong>The next step is already late.</strong> Execution drift is now visible on the review target.</div>');
-            }
-            if(snapshot.topDealProofThin){
-                weakLinks.push('<div class="workspace-health-item"><strong>Qualification is still thin.</strong> The board is carrying less proof than the stage is implying.</div>');
-            }
-            if(Number(snapshot.topDealThreading||0)>0&&Number(snapshot.topDealThreading||0)<2){
-                weakLinks.push('<div class="workspace-health-item"><strong>Threading is still narrow.</strong> One-thread deal ownership can make the board flatter than reality.</div>');
-            }
-            if(!weakLinks.length){
-                weakLinks.push('<div class="workspace-health-item"><strong>No immediate weak link is dominating the room.</strong> Keep the board honest, but the current posture is credible.</div>');
-            }
-
-            compounded=compounded.slice(0,2);
-            weakLinks=weakLinks.slice(0,2);
-
-            node.innerHTML=
-                '<section class="shell-section shell-section--compact workspace-health">'+
-                    '<div class="shell-section-header">'+
-                        '<div class="shell-section-heading">'+
-                            '<div class="shell-section-kicker">Workspace health</div>'+
-                            '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
-                            '<div class="shell-section-copy workspace-health-copy">This room should show whether pipeline truth is compounding or just being renamed through stage language.</div>'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="workspace-health-metrics">'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Board posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(snapshot.recoveryCount?'Recovery pressure':'Board believable')+'</div><div class="workspace-health-subcopy">'+escH(snapshot.activeDeals+' active deal'+(snapshot.activeDeals===1?'':'s'))+'</div></div>'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Weighted truth</div><div class="workspace-health-value">'+escH(fmtN(snapshot.weightedPipeline||0))+'</div><div class="workspace-health-subcopy">Grounded in live deal state.</div></div>'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Top threading</div><div class="workspace-health-value">'+escH(String(snapshot.topDealThreading||0))+'</div><div class="workspace-health-subcopy">'+escH(snapshot.topDealName||'No review target')+'</div></div>'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Recovery queue</div><div class="workspace-health-value">'+escH(String(snapshot.recoveryCount||0))+'</div><div class="workspace-health-subcopy">Deals making the board less honest.</div></div>'+
-                    '</div>'+
-                    '<div class="workspace-health-grid">'+
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.join('')+'</div></div>'+
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.join('')+'</div></div>'+
-                    '</div>'+
-                '</section>';
+            node.innerHTML='';
         }
 
         function renderDealQueueCard(card,index){
@@ -612,7 +645,7 @@
             '</div>';
         }
 
-        function buildDealLanes(allDeals,active,recovery,topDeal){
+        function buildDealLanes(active,recovery,topDeal){
             var stalled=active.filter(function(deal){return daysBetween(deal.updated_at||deal.created_at)>=7;}).length;
             var healthy=Math.max(0,active.length-recovery.length);
             var nextDatePressure=active.filter(function(deal){return !deal.nextStepDate||isOverdue(deal.nextStepDate);}).length;
@@ -621,272 +654,164 @@
                     state:'Now',
                     title:recovery.length?'Recover the weakest live thread':'Make one healthy deal heavier',
                     copy:recovery.length
-                        ? 'The board is only as honest as the deals with no dated next step, overdue motion, or thin qualification.'
-                        : 'You do not need more deal count first. You need one live deal with cleaner threading, pressure, and a dated move.',
-                    meta:[recovery.length+' recovery item'+(recovery.length===1?'':'s'),healthy+' healthy'],
-                    actions:[
-                        recovery.length
-                            ? '<button class="btn btn-primary" type="button" onclick="document.getElementById(\'viewFilter\').value=\'at-risk\';render();">Open recovery queue</button>'
-                            : '<button class="btn btn-primary" type="button" onclick="openModal()">Add deal</button>'
-                    ]
+                        ? 'Fix the case that is making the board lie first.'
+                        : 'Strengthen one real deal before adding more surface area.',
+                    meta:[recovery.length+' recovery item'+(recovery.length===1?'':'s'),healthy+' healthy']
                 },
                 {
                     state:'Next',
                     title:topDeal?'Tighten the best live opportunity':'Create the first review target',
                     copy:topDeal
-                        ? 'Use the top-valued live deal as the forcing function. If it cannot survive qualification pressure, the rest of the board is decorative.'
-                        : 'Once one real deal exists, the board can teach you where qualification and momentum are falling apart.',
-                    meta:[topDeal?(topDeal.accountName||'Unnamed deal'):'No active deal',topDeal?fmtN(topDeal.value||0):'No value yet'],
-                    actions:[
-                        topDeal
-                            ? '<a class="btn btn-secondary" href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id), topDeal.accountName, 'Future Autopsy')+'">Autopsy top deal</a>'
-                            : '<a class="btn btn-secondary" href="'+buildDealRoomHref('/app/signal-console/','Pipeline gap','Signal Console')+'">Find a signal</a>'
-                    ]
+                        ? 'Sharpen the best live case so the rest of the board has a truthful standard.'
+                        : 'Once one real deal exists, the board can start teaching instead of decorating.',
+                    meta:[topDeal?(topDeal.accountName||'Unnamed deal'):'No active deal',topDeal?fmtN(topDeal.value||0):'No value yet']
                 },
                 {
                     state:'Keep honest',
-                    title:nextDatePressure?'Stage labels are outrunning next-step truth':'The board is reading real motion',
+                    title:nextDatePressure?'Do not let stage outrun next-step truth':'Keep the board teaching reality',
                     copy:nextDatePressure
-                        ? 'A stage without a dated move is just optimism. Keep the close path, stakeholder map, and momentum in sync with reality.'
-                        : 'Keep watching stale days, threading depth, and qualification pressure so the board stays believable instead of becoming a forecast costume.',
-                    meta:[stalled+' stalled 7d+',nextDatePressure+' next-step gaps'],
-                    actions:[
-                        '<button class="btn btn-ghost" type="button" onclick="document.getElementById(\'viewFilter\').value=\'stalled\';render();">Show stalled</button>'
-                    ]
+                        ? 'Any stage without a dated move gets weaker every day.'
+                        : 'Watch stale days, threading, and qualification so the board stays believable.',
+                    meta:[nextDatePressure+' next-step gaps',stalled+' stalled 7d+']
                 }
             ];
         }
 
-        function renderDealTopMetrics(active,pipeline,weighted,won,lost){
-            var node=document.getElementById('dealStats');
-            if(!node)return;
-            node.innerHTML=
-                '<section class="shell-section shell-section--compact">'+
-                    '<div class="shell-section-header">'+
-                        '<div class="shell-section-heading">'+
-                            '<div class="shell-section-kicker">Board totals</div>'+
-                            '<div class="shell-section-title">Keep the top-line numbers honest.</div>'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="anchor-mini-grid">'+
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Active deals</div><div class="anchor-mini-value">'+active.length+'</div><div class="anchor-mini-copy">Live opportunities still under pressure.</div></div>'+
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Pipeline</div><div class="anchor-mini-value">'+fmtN(pipeline)+'</div><div class="anchor-mini-copy">Raw live value before stage probability.</div></div>'+
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Weighted</div><div class="anchor-mini-value">'+fmtN(weighted)+'</div><div class="anchor-mini-copy">What the current board is honestly worth.</div></div>'+
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Won vs lost</div><div class="anchor-mini-value">'+won.length+' / '+lost.length+'</div><div class="anchor-mini-copy">Closed truth keeps forecast language grounded.</div></div>'+
-                    '</div>'+
-                '</section>';
+        function buildDealTargetSignals(topDeal){
+            if(!topDeal){
+                return [
+                    {tone:'risk',mark:'!',label:'Risk',copy:'No live pressure selected'},
+                    {tone:'proof',mark:'=',label:'Proof',copy:'No qualification truth yet'},
+                    {tone:'motion',mark:'>',label:'Motion',copy:'No live owner or next step'}
+                ];
+            }
+            var recoveryReason=getRecoveryReason(topDeal);
+            var qualification=getQualification(topDeal);
+            var threading=threadingDepth(topDeal);
+            var hasChampion=!!String(topDeal.champion||'').trim();
+            var riskCopy='Pressure named';
+            if(recoveryReason==='No dated next step')riskCopy='No date on the next move';
+            else if(recoveryReason==='Next step overdue')riskCopy='Next move is already late';
+            else if(recoveryReason==='No movement in 14+ days')riskCopy='The thread has gone quiet';
+            else if(recoveryReason==='Qualification too thin for stage')riskCopy='Stage is ahead of proof';
+
+            var proofCopy=qualification.band==='thin'
+                ? 'Qualification is still thin'
+                : qualification.band==='workable'
+                    ? 'Buyer truth is visible'
+                    : 'Proof is strong enough to trust';
+
+            var motionCopy=(!hasChampion||threading.roles<2)
+                ? 'Internal carry is still weak'
+                : (!topDeal.nextStepDate||isOverdue(topDeal.nextStepDate))
+                    ? 'Reset the dated move'
+                    : 'Live carry is visible';
+
+            return [
+                {tone:'risk',mark:'!',label:'Risk',copy:riskCopy},
+                {tone:'proof',mark:'=',label:'Proof',copy:proofCopy},
+                {tone:'motion',mark:'>',label:'Motion',copy:motionCopy}
+            ];
         }
 
         function renderWorkspaceBridge(allDeals,active,pipeline,weighted){
             var node=document.getElementById('dwBridge');
             if(!node)return;
+            var currentFilter=document.getElementById('viewFilter')?document.getElementById('viewFilter').value:'all';
             var recovery=getRecoveryMoves(allDeals);
-            var topDeal=active.slice().sort(function(a,b){return Number(b.value||0)-Number(a.value||0);})[0];
-            var topDealLabel=topDeal?(topDeal.accountName+' · '+fmtN(topDeal.value||0)):'No active deal yet';
-            var oneSession=active.length===0
-                ? 'Create one real deal with account, value, stage, next step, and the first qualification truth.'
-                : 'Leave this page knowing which deal is healthiest, which deal is rotting, and what the next dated move is on both.';
-            var stateLabel=active.length===0?'Needs pipeline':(recovery.length?'Recovery pressure':'Board live');
-            var stateTone=active.length===0?'thin':(recovery.length?'risk':'live');
-            var nodeHtml=
-                '<div class="dw-bridge">'+
-                    '<div class="dw-bridge-k">Pipeline truth</div>'+
-                    '<div class="dw-bridge-title">Deal Workspace should be the place pipeline review gets sharper, not fuzzier.</div>'+
-                    '<div class="dw-bridge-copy">Use this board as the operating truth for live opportunities. A real deal record has qualification, threading, momentum, and a dated next step. If any of those are missing, the deal is weaker than the stage says.</div>'+
-                    '<div class="dw-bridge-grid">'+
-                        '<div class="dw-bridge-block"><div class="dw-bridge-label">One-session win</div><div class="dw-bridge-value">'+escH(oneSession)+'</div></div>'+
-                        '<div class="dw-bridge-block"><div class="dw-bridge-label">Current review target</div><div class="dw-bridge-value">'+escH(topDealLabel)+'</div></div>'+
-                        '<div class="dw-bridge-block"><div class="dw-bridge-label">Weighted truth</div><div class="dw-bridge-value">'+escH(fmtN(weighted))+' across '+active.length+' active deal'+(active.length===1?'':'s')+'.</div></div>'+
-                        '<div class="dw-bridge-block"><div class="dw-bridge-label">Recovery pressure</div><div class="dw-bridge-value">'+(recovery.length?escH(recovery.length+' deal'+(recovery.length===1?' needs':'s need')+' intervention now.'):'No urgent recovery items right now.')+'</div></div>'+
-                    '</div>'+
-                    '<div class="dw-bridge-actions">'+
-                        '<button class="dw-bridge-btn primary" type="button" onclick="openModal()">New Deal</button>'+
-                        '<button class="dw-bridge-btn" type="button" onclick="document.getElementById(\'viewFilter\').value=\'at-risk\';render();">Show At-Risk</button>'+
-                    '</div>'+
-                '</div>';
-            if(window.gtmShellChrome){
-                window.gtmShellChrome.applyHeader({
-                    family:'Pipeline',
-                    stateLabel:stateLabel,
-                    stateTone:stateTone
-                });
-                window.gtmShellChrome.renderCommandBand(node,{
-                    kicker:'Pipeline truth',
-                    title:'Deal Workspace should be the place pipeline review gets sharper, not fuzzier.',
-                    copy:'Use this board as the operating truth for live opportunities. A real deal record has qualification, threading, momentum, and a dated next step. If any of those are missing, the deal is weaker than the stage says.',
-                    stateLabel:stateLabel,
-                    stateTone:stateTone,
-                    metrics:[
-                        {label:'One-session win',value:oneSession},
-                        {label:'Current review target',value:topDealLabel},
-                        {label:'Weighted truth',value:fmtN(weighted)+' across '+active.length+' active deal'+(active.length===1?'':'s')+'.'},
-                        {label:'Recovery pressure',value:recovery.length?(recovery.length+' deal'+(recovery.length===1?' needs':'s need')+' intervention now.'):'No urgent recovery items right now.'}
-                    ],
-                    actions:[
-                        {label:'New Deal',action:'openModal()',tone:'primary'},
-                        {label:'Show At-Risk',action:'document.getElementById(\"viewFilter\").value=\"at-risk\";render();',tone:'secondary'}
-                    ]
-                });
-                return;
-            }
-            node.innerHTML=nodeHtml;
-        }
+            var won=allDeals.filter(function(d){return d.stage==='closed-won';});
+            var lost=allDeals.filter(function(d){return d.stage==='closed-lost';});
+            var topDeal=active.slice().sort(function(a,b){return Number(b.value||0)-Number(a.value||0);})[0]||null;
+            var targetSignals=buildDealTargetSignals(topDeal);
+            var lanes=buildDealLanes(active,recovery,topDeal);
+            var stressHref=topDeal
+                ? buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id), topDeal.accountName, 'Future Autopsy')
+                : buildDealRoomHref('/app/signal-console/','Pipeline gap','Signal Console');
 
-        function renderRecoveryPanel(allDeals){
-            var node=document.getElementById('recoveryPanel');
-            if(!node)return;
-            var recovery=getRecoveryMoves(allDeals);
-            if(!recovery.length){
-                node.innerHTML='';
-                return;
-            }
             node.innerHTML=
-                '<div class="dw-recovery">'+
-                    '<div class="dw-recovery-head">Recovery queue</div>'+
-                    '<div class="dw-recovery-title">These deals need intervention before you call the board healthy.</div>'+
-                    '<div class="dw-recovery-copy">Pipeline drift usually comes from one of four things: no dated next step, overdue next step, thin qualification, or silence. Fix the cause, not just the stage label.</div>'+
-                    '<div class="dw-recovery-list">'+
-                        recovery.map(function(item){
-                            return '<div class="dw-recovery-item">'+
-                                '<div class="dw-recovery-item-title">'+escH(item.account)+'</div>'+
-                                '<div class="dw-recovery-item-copy">'+escH(item.reason)+' — '+escH(item.move)+'</div>'+
-                            '</div>';
-                        }).join('')+
-                    '</div>'+
-                '</div>';
-        }
-
-        function renderWorkspaceBridge(allDeals,active,pipeline,weighted){
-            var node=document.getElementById('dwBridge');
-            if(!node)return;
-            var recovery=getRecoveryMoves(allDeals);
-            var topDeal=active.slice().sort(function(a,b){return Number(b.value||0)-Number(a.value||0);})[0];
-            var topDealLabel=topDeal?(topDeal.accountName+' · '+fmtN(topDeal.value||0)):'No active deal yet';
-            var oneSession=active.length===0
-                ? 'Create one real deal with account, value, stage, next step, and the first qualification truth.'
-                : 'Leave this page knowing which deal is healthiest, which deal is rotting, and what the next dated move is on both.';
-            var stateLabel=active.length===0?'Needs pipeline':(recovery.length?'Recovery pressure':'Board live');
-            var stateTone=active.length===0?'thin':(recovery.length?'risk':'live');
-            var lanes=buildDealLanes(allDeals,active,recovery,topDeal);
-            var stageHtml=
-                '<section class="shell-section anchor-stage">'+
-                    '<div class="anchor-stage-grid">'+
-                        '<div>'+
-                            '<div class="anchor-eyebrow">Pipeline operating view</div>'+
-                            '<div class="anchor-headline">'+escH(recovery.length?'Recover the deals that are lying about stage.':'Make one healthy deal heavier than the rest of the board.')+'</div>'+
-                            '<div class="anchor-support">'+escH(recovery.length
-                                ? 'When the board starts drifting, fix the no-date, overdue, or thin-thread deals before you trust forecast language.'
-                                : 'The job here is not to add decorative volume. It is to keep one live opportunity honest enough that the rest of the pipeline can learn from it.')+'</div>'+
-                            '<div class="anchor-chip-row">'+
-                                '<span class="anchor-chip">'+active.length+' active</span>'+
-                                '<span class="anchor-chip">'+fmtN(pipeline)+' pipeline</span>'+
-                                '<span class="anchor-chip">'+fmtN(weighted)+' weighted</span>'+
-                                '<span class="anchor-chip">'+recovery.length+' recovery item'+(recovery.length===1?'':'s')+'</span>'+
+                '<section class="dw-selected-bridge">'+
+                    '<section class="dw-selected-stage">'+
+                        '<div class="dw-selected-stage-grid">'+
+                            '<div class="dw-selected-hero">'+
+                                '<div class="dw-selected-eyebrow">Deal review</div>'+
+                                '<h1>'+escH(active.length===0?'Make the first live deal real.':'Start with the deal that can still change the board.')+'</h1>'+
+                                '<div class="dw-selected-copy">'+escH(active.length===0
+                                    ? 'Do not build forecast language before one real deal has stage, value, qualification, and a dated next step.'
+                                    : 'Do not scan '+active.length+' deals as if they are equal. Start where the current board is weakest.')+'</div>'+
+                                '<div class="dw-selected-actions">'+
+                                    '<button class="dw-selected-queue-btn" type="button" data-dw-action="queue" data-dw-scroll="1">'+escH(recovery.length?'Run intervention':'Open board')+'</button>'+
+                                    '<a class="dw-selected-ghost-btn" href="'+stressHref+'">'+escH(topDeal?'Autopsy top deal':'Find first signal')+'</a>'+
+                                    '<button class="dw-selected-link" type="button" data-dw-action="new-deal">'+escH(topDeal?'New deal':'Create first deal')+'</button>'+
+                                '</div>'+
                             '</div>'+
-                            '<div class="anchor-primary-card">'+
-                                '<div class="anchor-primary-label">Current review target</div>'+
-                                '<div class="anchor-primary-title">'+escH(topDeal?topDeal.accountName:'No active deal yet')+'</div>'+
-                                '<div class="anchor-primary-copy">'+escH(topDeal
-                                    ? 'Use the strongest live opportunity as the forcing function. If it cannot survive qualification and next-step pressure, the rest of the board is decorative.'
-                                    : 'Create one deal with real stage, value, next step, and qualification truth so the board can start reading reality.')+'</div>'+
-                                '<div class="anchor-primary-actions">'+
-                                    (topDeal
-                                        ? '<a class="btn btn-primary" href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(topDeal.id), topDeal.accountName, 'Future Autopsy')+'">Stress-test top deal</a>'
-                                        : '<button class="btn btn-primary" type="button" onclick="openModal()">Create first deal</button>')+
-                                    '<button class="btn btn-secondary" type="button" onclick="document.getElementById(\'viewFilter\').value=\'at-risk\';render();">Open recovery queue</button>'+
+                            '<div class="dw-selected-folio">'+
+                                '<div>'+
+                                    '<div class="dw-selected-kicker">Lead case</div>'+
+                                    '<div class="dw-selected-head">'+
+                                        '<div class="dw-selected-title">'+escH(topDeal?topDeal.accountName:'No active deal yet')+'</div>'+
+                                        '<div class="dw-selected-value">'+escH(topDeal?fmtN(topDeal.value||0):'$0')+'</div>'+
+                                    '</div>'+
+                                    '<div class="dw-selected-target-copy">'+escH(topDeal
+                                        ? 'This is the live case to sharpen first. If it cannot survive pressure, the rest of the board becomes decorative.'
+                                        : 'Create one real deal so the board has a live case to pressure-test instead of a decorative empty state.')+'</div>'+
+                                    '<div class="dw-selected-signal-grid">'+
+                                        targetSignals.map(function(item){
+                                            return '<div class="dw-selected-signal-row">'+
+                                                '<div class="dw-selected-signal-mark '+escH(item.tone)+'">'+escH(item.mark)+'</div>'+
+                                                '<div class="dw-selected-signal-label">'+escH(item.label)+'</div>'+
+                                                '<div class="dw-selected-signal-copy">'+escH(item.copy)+'</div>'+
+                                            '</div>';
+                                        }).join('')+
+                                    '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>'+
-                        '<div class="anchor-mini-grid">'+
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">One-session win</div><div class="anchor-mini-value">'+escH(oneSession)+'</div><div class="anchor-mini-copy">Leave this page with one honest intervention path.</div></div>'+
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Board posture</div><div class="anchor-mini-value">'+escH(stateLabel)+'</div><div class="anchor-mini-copy">'+escH(recovery.length?'The weakest live deals need intervention now.':'The live board is reading believable pipeline truth.')+'</div></div>'+
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Highest-value deal</div><div class="anchor-mini-value">'+escH(topDealLabel)+'</div><div class="anchor-mini-copy">Use value plus qualification pressure together, not in isolation.</div></div>'+
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Recovery pressure</div><div class="anchor-mini-value">'+escH(recovery.length?String(recovery.length):'0')+'</div><div class="anchor-mini-copy">'+escH(recovery.length?'The board is only as honest as the weakest next step.':'No urgent recovery queue is crowding the board right now.')+'</div></div>'+
+                        '<div class="dw-selected-micro-grid">'+
+                            '<div class="dw-selected-micro"><div class="dw-selected-micro-label">Active deals</div><div class="dw-selected-micro-value">'+active.length+'</div><div class="dw-selected-micro-sub">Live cases on the board.</div></div>'+
+                            '<div class="dw-selected-micro"><div class="dw-selected-micro-label">Pipeline</div><div class="dw-selected-micro-value">'+escH(fmtN(pipeline))+'</div><div class="dw-selected-micro-sub">Raw value in motion.</div></div>'+
+                            '<div class="dw-selected-micro"><div class="dw-selected-micro-label">Closed truth</div><div class="dw-selected-micro-value">'+won.length+' / '+lost.length+'</div><div class="dw-selected-micro-sub">Won versus lost.</div></div>'+
                         '</div>'+
-                    '</div>'+
-                '</section>'+
-                '<section class="shell-section shell-section--compact">'+
-                    '<div class="shell-section-header">'+
-                        '<div class="shell-section-heading">'+
-                            '<div class="shell-section-kicker">Operating lanes</div>'+
-                            '<div class="shell-section-title">Use one ranked intervention path instead of scanning the whole board at once.</div>'+
-                            '<div class="shell-section-copy">These lanes tell you what to do now, what to tighten next, and what must stay honest so the board keeps teaching instead of flattering.</div>'+
+                        '<div class="dw-selected-lane-grid">'+
+                            lanes.map(function(lane){
+                                return '<section class="dw-selected-lane">'+
+                                    '<div class="dw-selected-lane-state">'+escH(lane.state)+'</div>'+
+                                    '<div class="dw-selected-lane-title">'+escH(lane.title)+'</div>'+
+                                    '<div class="dw-selected-lane-copy">'+escH(lane.copy)+'</div>'+
+                                    '<div class="dw-selected-lane-meta">'+lane.meta.map(function(item){return '<span>'+escH(item)+'</span>';}).join('')+'</div>'+
+                                '</section>';
+                            }).join('')+
                         '</div>'+
-                    '</div>'+
-                    '<div class="anchor-lane-grid">'+
-                        lanes.map(function(lane){
-                            return '<section class="anchor-lane">'+
-                                '<div class="anchor-lane-state">'+escH(lane.state)+'</div>'+
-                                '<div class="anchor-lane-title">'+escH(lane.title)+'</div>'+
-                                '<div class="anchor-lane-copy">'+escH(lane.copy)+'</div>'+
-                                (lane.meta&&lane.meta.length?'<div class="anchor-lane-meta">'+lane.meta.map(function(item){return '<span>'+escH(item)+'</span>';}).join('')+'</div>':'')+
-                                (lane.actions&&lane.actions.length?'<div class="anchor-lane-actions">'+lane.actions.join('')+'</div>':'')+
-                            '</section>';
-                        }).join('')+
-                    '</div>'+
+                        '<div class="dw-selected-controls">'+
+                            '<label class="dw-selected-filter-shell">'+
+                                '<span class="dw-selected-filter-label">Filter</span>'+
+                                '<select id="viewFilter" data-dw-filter="1">'+
+                                    '<option value="all">All deals</option>'+
+                                    '<option value="active">Active only</option>'+
+                                    '<option value="at-risk">At risk</option>'+
+                                    '<option value="stalled">Stalled 7d+</option>'+
+                                    '<option value="this-quarter">Close this quarter</option>'+
+                                    '<option value="closed">Closed</option>'+
+                                '</select>'+
+                            '</label>'+
+                            '<div class="dw-selected-controls-right">'+
+                                '<span class="dw-selected-filter-count" id="filterCount"></span>'+
+                                '<button class="dw-selected-queue-btn" type="button" data-dw-action="queue">Open recovery queue</button>'+
+                                '<a class="dw-selected-ghost-btn" href="'+stressHref+'">'+escH(topDeal?'Autopsy top deal':'Find signal')+'</a>'+
+                                '<button class="dw-selected-link" type="button" data-dw-action="new-deal">New deal</button>'+
+                            '</div>'+
+                        '</div>'+
+                    '</section>'+
                 '</section>';
-            if(window.gtmShellChrome){
-                window.gtmShellChrome.applyHeader({
-                    family:'Pipeline',
-                    stateLabel:stateLabel,
-                    stateTone:stateTone
-                });
-                window.gtmShellChrome.renderCommandBand(node,{
-                    kicker:'Pipeline truth',
-                    title:'Deal Workspace should be the place pipeline review gets sharper, not fuzzier.',
-                    copy:'Use this board as the operating truth for live opportunities. A real deal record has qualification, threading, momentum, and a dated next step. If any of those are missing, the deal is weaker than the stage says.',
-                    stateLabel:stateLabel,
-                    stateTone:stateTone,
-                    metrics:[
-                        {label:'One-session win',value:oneSession},
-                        {label:'Current review target',value:topDealLabel},
-                        {label:'Weighted truth',value:fmtN(weighted)+' across '+active.length+' active deal'+(active.length===1?'':'s')+'.'},
-                        {label:'Recovery pressure',value:recovery.length?(recovery.length+' deal'+(recovery.length===1?' needs':'s need')+' intervention now.'):'No urgent recovery items right now.'}
-                    ],
-                    actions:[
-                        {label:'New Deal',action:'openModal()',tone:'primary'},
-                        {label:'Show At-Risk',action:'document.getElementById(\"viewFilter\").value=\"at-risk\";render();',tone:'secondary'}
-                    ]
-                });
-                node.insertAdjacentHTML('beforeend',stageHtml);
-                return;
+
+            if(document.getElementById('viewFilter')){
+                document.getElementById('viewFilter').value=currentFilter;
             }
-            node.innerHTML=stageHtml;
         }
 
         function renderRecoveryPanel(allDeals){
             var node=document.getElementById('recoveryPanel');
             if(!node)return;
-            var recovery=getRecoveryMoves(allDeals);
-            if(!recovery.length){
-                node.innerHTML='';
-                return;
-            }
-            node.innerHTML=
-                '<section class="shell-section">'+
-                    '<div class="shell-section-header">'+
-                        '<div class="shell-section-heading">'+
-                            '<div class="shell-section-kicker">Recovery queue</div>'+
-                            '<div class="shell-section-title">These are the deals making the board less believable.</div>'+
-                            '<div class="shell-section-copy">Pipeline drift usually comes from one of four things: no dated next step, overdue next step, thin qualification, or silence. Fix the cause, not the label.</div>'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="anchor-queue">'+
-                        recovery.map(function(item,index){
-                            return renderDealQueueCard({
-                                title:item.account,
-                                copy:item.move,
-                                badge:item.reason,
-                                badgeTone:'state-risk',
-                                meta:['Recovery item','Deal intervention'],
-                                actions:[
-                                    '<a class="btn btn-secondary" href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(item.id), item.account, 'Future Autopsy')+'">Open autopsy</a>',
-                                    '<button class="btn btn-ghost" type="button" onclick="openModal(\''+item.id+'\')">Edit deal</button>'
-                                ]
-                            },index);
-                        }).join('')+
-                    '</div>'+
-                '</section>';
+            node.innerHTML='';
         }
 
         function suggestNextStepByStage(stage){
@@ -921,7 +846,8 @@
 
         // --- Filter ---
         function filterDeals(deals){
-            var f=document.getElementById('viewFilter').value;
+            var filterControl=document.getElementById('viewFilter');
+            var f=filterControl?filterControl.value:'all';
             var now=new Date();
             return deals.filter(function(d){
                 var isClosed=d.stage==='closed-won'||d.stage==='closed-lost';
@@ -945,6 +871,189 @@
             });
         }
 
+        function getFilterLabel(filter){
+            return {
+                all:'All deals',
+                active:'Active only',
+                'at-risk':'At risk',
+                stalled:'Stalled 7d+',
+                'this-quarter':'Close this quarter',
+                closed:'Closed'
+            }[filter]||'All deals';
+        }
+
+        function scrollDealGridIntoView(){
+            var grid=document.getElementById('dealGrid');
+            if(grid&&grid.scrollIntoView){
+                grid.scrollIntoView({behavior:'smooth',block:'start'});
+            }
+        }
+
+        function setDealWorkspaceFilter(value,options){
+            var filterControl=document.getElementById('viewFilter');
+            if(filterControl)filterControl.value=value;
+            render();
+            if(options&&options.scrollToGrid)scrollDealGridIntoView();
+        }
+
+        function getDealPressureScore(deal){
+            var qual=getQualification(deal);
+            var recoveryReason=getRecoveryReason(deal);
+            var stale=daysBetween(deal.updated_at||deal.created_at);
+            var score=Number(deal.value||0)/1000;
+            if(recoveryReason==='No dated next step')score+=220;
+            else if(recoveryReason==='Next step overdue')score+=180;
+            else if(recoveryReason==='Qualification too thin for stage')score+=160;
+            else if(recoveryReason==='No movement in 14+ days')score+=120;
+            if(qual.band==='thin')score+=90;
+            else if(qual.band==='workable')score+=40;
+            if(!deal.champion)score+=32;
+            if(threadingDepth(deal).engaged<2)score+=24;
+            score+=Math.min(stale,60);
+            return score;
+        }
+
+        function getRailTone(deal){
+            var qual=getQualification(deal);
+            var recoveryReason=getRecoveryReason(deal);
+            if(recoveryReason||qual.band==='thin')return'risk';
+            if(computeMomentum(deal)==='strong')return'motion';
+            return'proof';
+        }
+
+        function getRailTokens(deal){
+            var qual=getQualification(deal);
+            var recoveryReason=getRecoveryReason(deal);
+            var stale=daysBetween(deal.updated_at||deal.created_at);
+            var riskToken='Tracked';
+            if(recoveryReason==='No dated next step')riskToken='No next step';
+            else if(recoveryReason==='Next step overdue')riskToken='Overdue';
+            else if(recoveryReason==='Qualification too thin for stage')riskToken='Stage drift';
+            else if(recoveryReason==='No movement in 14+ days')riskToken='Stalled';
+            else if(qual.band==='thin')riskToken='Thin qual';
+
+            var proofToken=qual.band==='strong'?'Proof locked':qual.band==='workable'?'Proof workable':'Proof thin';
+            var motionToken=deal.nextStepDate
+                ? (isOverdue(deal.nextStepDate)?'Late move':computeMomentum(deal)==='strong'?'Live move':stale+'d stale')
+                : 'Undated';
+
+            return [riskToken,proofToken,motionToken];
+        }
+
+        function getRailNarrative(deal){
+            var qual=getQualification(deal);
+            var recoveryReason=getRecoveryReason(deal);
+            if(recoveryReason==='No dated next step')return'Add a dated next step before trusting this stage.';
+            if(recoveryReason==='Next step overdue')return'Reset the thread and re-anchor the next move immediately.';
+            if(recoveryReason==='Qualification too thin for stage')return'Fill champion, buyer, and process before letting the board promote this case.';
+            if(recoveryReason==='No movement in 14+ days')return'This case has gone quiet long enough to distort the board.';
+            if(qual.band==='thin')return'Qualification is still softer than the stage story being told here.';
+            if(computeMomentum(deal)==='strong')return'There is live movement here, but it still needs disciplined follow-through.';
+            return'Keep the next move dated and the board stays believable.';
+        }
+
+        function renderInterventionTicket(deal,lane){
+            var tokens=getRailTokens(deal);
+            var tone=getRailTone(deal);
+            var matched=signalConsoleAccounts.find(function(a){return a.name&&deal.accountName&&a.name.toLowerCase()===deal.accountName.toLowerCase();});
+            var autopsyHref=buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(deal.id),deal.accountName,'Future Autopsy');
+            var signalHref=matched?buildDealRoomHref('/app/signal-console/',deal.accountName,'Signal Console'):'';
+            var actionLabel=lane==='Now'?'Recover now':lane==='Next'?'Stress-test':'Review';
+            return '<article class="dw-rail-ticket">'+
+                '<div class="dw-rail-ticket-edge '+escH(tone)+'"></div>'+
+                '<div class="dw-rail-ticket-main">'+
+                    '<div class="dw-rail-ticket-top">'+
+                        '<div>'+
+                            '<div class="dw-rail-ticket-name">'+escH(deal.accountName||'Unnamed deal')+'</div>'+
+                            '<div class="dw-rail-ticket-detail">'+tokens.map(function(token){return '<span>'+escH(token)+'</span>';}).join('')+'</div>'+
+                        '</div>'+
+                        '<div class="dw-rail-ticket-value">'+escH(fmtN(deal.value||0))+'</div>'+
+                    '</div>'+
+                    '<div class="dw-rail-ticket-copy">'+escH(getRailNarrative(deal))+'</div>'+
+                    '<div class="dw-rail-ticket-actions">'+
+                        '<a class="dw-rail-ticket-link" href="'+autopsyHref+'">'+escH(actionLabel)+'</a>'+
+                        '<button class="dw-rail-ticket-ghost" type="button" data-dw-action="edit-deal" data-deal-id="'+escH(deal.id)+'">Edit deal</button>'+
+                        (signalHref?'<a class="dw-rail-ticket-link" href="'+signalHref+'">Signal console</a>':'')+
+                    '</div>'+
+                '</div>'+
+            '</article>';
+        }
+
+        function renderReserveTag(deal){
+            var qual=getQualification(deal);
+            var recoveryReason=getRecoveryReason(deal);
+            var label='Reserve';
+            if(recoveryReason==='No dated next step')label='No next step';
+            else if(recoveryReason==='Next step overdue')label='Late move';
+            else if(recoveryReason==='Qualification too thin for stage'||qual.band==='thin')label='Thin proof';
+            else if(recoveryReason==='No movement in 14+ days')label='Stalled';
+            else if(computeMomentum(deal)==='strong')label='Live';
+            else label=STAGE_LABELS[deal.stage]||'Reserve';
+            return '<button class="dw-reserve-tag" type="button" data-dw-action="edit-deal" data-deal-id="'+escH(deal.id)+'"><span>'+escH(label)+'</span>'+escH(deal.accountName||'Unnamed deal')+'</button>';
+        }
+
+        function renderInterventionRail(deals,allDeals){
+            var filterControl=document.getElementById('viewFilter');
+            var currentFilter=filterControl?filterControl.value:'all';
+            var activePool=deals.filter(function(deal){return deal.stage!=='closed-won'&&deal.stage!=='closed-lost';});
+            var sourcePool=(activePool.length?activePool:deals).slice().sort(function(a,b){return getDealPressureScore(b)-getDealPressureScore(a);});
+            var now=sourcePool.filter(function(deal){return !!getRecoveryReason(deal);}).slice(0,2);
+            if(!now.length&&sourcePool.length)now=sourcePool.slice(0,1);
+            var usedIds=new Set(now.map(function(deal){return String(deal.id);}));
+            var next=sourcePool.filter(function(deal){return !usedIds.has(String(deal.id));}).slice(0,1);
+            next.forEach(function(deal){usedIds.add(String(deal.id));});
+            var reserve=deals.filter(function(deal){return !usedIds.has(String(deal.id));}).sort(function(a,b){return getDealPressureScore(b)-getDealPressureScore(a);});
+            var reserveVisible=reserve.slice(0,6);
+            var reserveHidden=Math.max(0,reserve.length-reserveVisible.length);
+            var filteredPipeline=activePool.reduce(function(sum,deal){return sum+Number(deal.value||0);},0);
+
+            return '<section class="dw-rail-shell">'+
+                '<div class="dw-rail-header">'+
+                    '<div class="dw-rail-header-main">'+
+                        '<div class="dw-rail-kicker">Board control</div>'+
+                        '<div class="dw-rail-title">Intervention rail</div>'+
+                        '<div class="dw-rail-copy">Only the cases that can change the week.</div>'+
+                    '</div>'+
+                    '<div class="dw-rail-readouts">'+
+                        '<div class="dw-rail-pill"><span>Filter</span>'+escH(getFilterLabel(currentFilter))+'</div>'+
+                        '<div class="dw-rail-pill"><span>Active</span>'+escH(String(now.length+next.length))+'</div>'+
+                        '<div class="dw-rail-pill"><span>Bench</span>'+escH(String(reserve.length))+'</div>'+
+                        '<div class="dw-rail-pill"><span>Pipeline</span>'+escH(fmtN(filteredPipeline))+'</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="dw-rail-layout">'+
+                    '<div class="dw-rail-lane">'+
+                        '<div class="dw-rail-lane-label">'+
+                            '<div class="dw-rail-lane-state">Now</div>'+
+                            '<div class="dw-rail-lane-copy">Fix now.</div>'+
+                        '</div>'+
+                        '<div class="dw-ticket-stack">'+
+                            (now.length?now.map(function(deal){return renderInterventionTicket(deal,'Now');}).join(''):'<div class="dw-rail-empty">No case is currently demanding immediate intervention under this filter.</div>')+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="dw-rail-lane">'+
+                        '<div class="dw-rail-lane-label">'+
+                            '<div class="dw-rail-lane-state">Next</div>'+
+                            '<div class="dw-rail-lane-copy">Second priority.</div>'+
+                        '</div>'+
+                        '<div class="dw-ticket-stack">'+
+                            (next.length?next.map(function(deal){return renderInterventionTicket(deal,'Next');}).join(''):'<div class="dw-rail-empty">No secondary case has earned the next slot yet.</div>')+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="dw-rail-lane">'+
+                        '<div class="dw-rail-lane-label">'+
+                            '<div class="dw-rail-lane-state">Keep honest</div>'+
+                            '<div class="dw-rail-lane-copy">Visible reserve.</div>'+
+                        '</div>'+
+                        '<div class="dw-rail-reserve">'+
+                            reserveVisible.map(function(deal){return renderReserveTag(deal);}).join('')+
+                            (reserveHidden?'<button class="dw-reserve-tag" type="button" data-dw-action="show-all"><span>More</span>+'+escH(String(reserveHidden))+' in reserve</button>':'')+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+            '</section>';
+        }
+
         // --- Render ---
         function render(){
             var allDeals=loadDeals();
@@ -958,10 +1067,11 @@
 
             renderWorkspaceBridge(allDeals,active,pipeline,weighted);
             renderDealWorkspaceHealth(workspaceHealth);
-            renderDealTopMetrics(active,pipeline,weighted,won,lost);
 
             var deals=filterDeals(allDeals);
-            document.getElementById('filterCount').textContent=deals.length+' of '+allDeals.length+' deals';
+            if(document.getElementById('filterCount')){
+                document.getElementById('filterCount').textContent=deals.length+' of '+allDeals.length+' deals';
+            }
 
             if(allDeals.length===0){
                 renderRecoveryPanel(allDeals);
@@ -997,7 +1107,7 @@
                 }
 
                 var chipsHtml=chips.map(function(c){
-                    return '<span class="dw-chip '+c.cls+'" onclick="event.stopPropagation();openModal(\''+d.id+'\')">'+escH(c.label)+'</span>';
+                    return '<button type="button" class="dw-chip '+c.cls+'" data-dw-action="edit-deal" data-deal-id="'+escH(d.id)+'">'+escH(c.label)+'</button>';
                 }).join('');
 
                 // Next step with date
@@ -1014,8 +1124,8 @@
                 // Linked badges
                 var badges='';
                 var matched=signalConsoleAccounts.find(function(a){return a.name&&d.accountName&&a.name.toLowerCase()===d.accountName.toLowerCase();});
-                if(matched)badges+='<a href="'+buildDealRoomHref('/app/signal-console/',d.accountName,'Signal Console')+'" class="dw-link-badge signal" onclick="event.stopPropagation()">Signal: heat '+(matched._heat||0)+'</a>';
-                badges+='<a href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(d.id),d.accountName,'Future Autopsy')+'" class="dw-link-badge autopsy" onclick="event.stopPropagation()">\ud83d\udd2c Autopsy</a>';
+                if(matched)badges+='<a href="'+buildDealRoomHref('/app/signal-console/',d.accountName,'Signal Console')+'" class="dw-link-badge signal">Signal: heat '+(matched._heat||0)+'</a>';
+                badges+='<a href="'+buildDealRoomHref('/app/future-autopsy/?deal='+encodeURIComponent(d.id),d.accountName,'Future Autopsy')+'" class="dw-link-badge autopsy">\ud83d\udd2c Autopsy</a>';
 
                 // Intel expand section
                 var intelHtml='<div class="dw-intel">';
@@ -1035,7 +1145,7 @@
                 }
                 if(d.lossReason)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Loss Reason</div><div class="dw-intel-value" style="color:#ef4444;">'+escH(LOSS_LABELS[d.lossReason]||d.lossReason)+'</div></div>';
                 if(d.lossNotes)intelHtml+='<div class="dw-intel-section"><div class="dw-intel-label">Loss Notes</div><div class="dw-intel-value">'+escH(d.lossNotes)+'</div></div>';
-                intelHtml+='<a class="dw-intel-edit" onclick="event.stopPropagation();openModal(\''+d.id+'\')">Edit deal &rarr;</a></div>';
+                intelHtml+='<button type="button" class="dw-intel-edit" data-dw-action="edit-deal" data-deal-id="'+escH(d.id)+'">Edit deal &rarr;</button></div>';
 
                 // Card meta row: stage + risk indicator (simplified for card face)
                 var metaHtml='<div class="dw-card-meta">';
@@ -1059,7 +1169,7 @@
                 detailHtml+='<div style="font-size:0.76rem;color:var(--text-muted);margin-top:8px;">Qualification next move: '+escH(qual.next)+'</div>';
                 detailHtml+='</div>';
 
-                return '<div class="dw-card'+(isClosed?' closed':'')+'" data-id="'+d.id+'" onclick="toggleCard(this)">'+
+                return '<div class="dw-card'+(isClosed?' closed':'')+'" data-id="'+d.id+'">'+
                     '<div class="dw-card-head"><div class="dw-card-name-row">'+(mom?'<span class="dw-momentum '+mom+'"></span>':'')+
                     '<div class="dw-card-name">'+escH(d.accountName||'Unnamed')+'</div></div>'+
                     '<div class="dw-card-value">'+fmtN(d.value||0)+'</div></div>'+
@@ -1072,7 +1182,157 @@
             }).join('');
         }
 
+        function render(){
+            var allDeals=loadDeals();
+            var active=allDeals.filter(function(d){return d.stage!=='closed-won'&&d.stage!=='closed-lost';});
+            var won=allDeals.filter(function(d){return d.stage==='closed-won';});
+            var lost=allDeals.filter(function(d){return d.stage==='closed-lost';});
+            var pipeline=active.reduce(function(s,d){return s+Number(d.value||0);},0);
+            var weighted=active.reduce(function(s,d){return s+Number(d.value||0)*(STAGE_PROB[d.stage]||0);},0);
+            var workspaceHealth=buildDealWorkspaceHealthSnapshot(allDeals,active,pipeline,weighted);
+            publishDealWorkspaceHealthSnapshot(workspaceHealth);
+
+            renderWorkspaceBridge(allDeals,active,pipeline,weighted);
+            renderDealWorkspaceHealth(workspaceHealth);
+
+            var deals=filterDeals(allDeals);
+            if(document.getElementById('filterCount')){
+                document.getElementById('filterCount').textContent=deals.length+' of '+allDeals.length+' deals';
+            }
+
+            if(allDeals.length===0){
+                renderRecoveryPanel(allDeals);
+                document.getElementById('dealGrid').innerHTML='';
+                document.getElementById('dealEmpty').innerHTML='<div class="dw-empty"><div style="font-size:2rem;margin-bottom:12px;">&#128188;</div><div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">No deals yet</div><div>Click <strong>+ New Deal</strong> to add your first deal, or <a href="'+buildDealRoomHref('/app/signal-console/','Pipeline gap','Signal Console')+'">find a signal</a> to start from.</div></div>';
+                return;
+            }
+
+            document.getElementById('dealEmpty').innerHTML='';
+            renderRecoveryPanel(allDeals);
+
+            if(!deals.length){
+                document.getElementById('dealGrid').innerHTML=
+                    '<section class="dw-rail-shell">'+
+                        '<div class="dw-rail-header">'+
+                            '<div class="dw-rail-header-main">'+
+                                '<div class="dw-rail-kicker">Board control</div>'+
+                                '<div class="dw-rail-title">Intervention rail</div>'+
+                                '<div class="dw-rail-copy">No cases match this filter right now. The board stays empty instead of inventing filler.</div>'+
+                            '</div>'+
+                            '<div class="dw-rail-readouts">'+
+                                '<div class="dw-rail-pill"><span>Filter</span>'+escH(getFilterLabel(document.getElementById('viewFilter')?document.getElementById('viewFilter').value:'all'))+'</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</section>';
+                return;
+            }
+
+            document.getElementById('dealGrid').innerHTML=renderInterventionRail(deals,allDeals);
+        }
+
         window.toggleCard=function(el){el.classList.toggle('expanded');var det=el.querySelector('.dw-card-detail');if(det)det.style.display=det.style.display==='none'?'block':'none';};
+
+        function bindDealWorkspaceUi(){
+            if(document.body.__dwUiBound)return;
+            document.body.__dwUiBound=true;
+
+            document.addEventListener('click',function(event){
+                var modalActionNode=event.target.closest('[data-dw-modal-action]');
+                if(modalActionNode){
+                    var modalAction=modalActionNode.getAttribute('data-dw-modal-action');
+                    if(modalAction==='close'){
+                        closeModal();
+                        return;
+                    }
+                    if(modalAction==='save'){
+                        saveDeal();
+                        return;
+                    }
+                    if(modalAction==='delete'){
+                        deleteDeal();
+                        return;
+                    }
+                }
+
+                var lossActionNode=event.target.closest('[data-dw-loss-action]');
+                if(lossActionNode){
+                    var lossAction=lossActionNode.getAttribute('data-dw-loss-action');
+                    if(lossAction==='skip'){
+                        skipLossReason();
+                        return;
+                    }
+                    if(lossAction==='save'){
+                        saveLossReason();
+                        return;
+                    }
+                }
+
+                var actionNode=event.target.closest('[data-dw-action]');
+                if(actionNode){
+                    var action=actionNode.getAttribute('data-dw-action');
+                    var dealId=actionNode.getAttribute('data-deal-id');
+                    if(action==='queue'){
+                        setDealWorkspaceFilter('at-risk',{scrollToGrid:actionNode.getAttribute('data-dw-scroll')==='1'});
+                        return;
+                    }
+                    if(action==='new-deal'){
+                        openModal();
+                        return;
+                    }
+                    if(action==='edit-deal'){
+                        openModal(dealId);
+                        return;
+                    }
+                    if(action==='show-all'){
+                        setDealWorkspaceFilter('all');
+                        return;
+                    }
+                    if(action==='add-stakeholder'){
+                        addStakeholder();
+                        return;
+                    }
+                    if(action==='remove-stakeholder'){
+                        removeStakeholder(Number(actionNode.getAttribute('data-sh-index')));
+                        return;
+                    }
+                }
+
+                var lossOptionNode=event.target.closest('.dw-loss-option[data-loss-option]');
+                if(lossOptionNode){
+                    syncLossOptionSelection(lossOptionNode.getAttribute('data-loss-option')||'');
+                    return;
+                }
+
+                var cardNode=event.target.closest('.dw-card[data-id]');
+                if(cardNode){
+                    if(event.target.closest('a,button,input,select,textarea,label'))return;
+                    window.toggleCard(cardNode);
+                }
+            });
+
+            document.addEventListener('change',function(event){
+                if(event.target&&event.target.matches('#viewFilter[data-dw-filter]')){
+                    render();
+                    return;
+                }
+                if(event.target&&event.target.matches('[data-sh-field][data-sh-index]')){
+                    var field=event.target.getAttribute('data-sh-field');
+                    var index=Number(event.target.getAttribute('data-sh-index'));
+                    var value=field==='engaged'?!!event.target.checked:event.target.value;
+                    updateStakeholderField(index,field,value);
+                    return;
+                }
+                if(event.target&&event.target.matches('input[name="lossReason"]')){
+                    syncLossOptionSelection(event.target.value||'');
+                }
+            });
+
+            document.addEventListener('input',function(event){
+                if(event.target&&event.target.id==='mValue'){
+                    fmtC(event.target);
+                }
+            });
+        }
 
         // --- Stakeholder UI in modal ---
         var tempStakeholders=[];
@@ -1083,24 +1343,30 @@
             document.getElementById('shSummary').textContent='Stakeholders ('+engaged+'/6 roles)';
             c.innerHTML=tempStakeholders.map(function(s,i){
                 return '<div class="dw-sh-row">'+
-                    '<input type="text" value="'+escH(s.name||'')+'" placeholder="Name" onchange="updateSH('+i+',\'name\',this.value)">'+
-                    '<select onchange="updateSH('+i+',\'role\',this.value)">'+
+                    '<input type="text" value="'+escH(s.name||'')+'" placeholder="Name" data-sh-field="name" data-sh-index="'+i+'">'+
+                    '<select data-sh-field="role" data-sh-index="'+i+'">'+
                         ROLES.map(function(r){return '<option value="'+r+'"'+(s.role===r?' selected':'')+'>'+ROLE_LABELS[r]+'</option>';}).join('')+
                     '</select>'+
-                    '<label class="dw-sh-engaged"><input type="checkbox" '+(s.engaged?'checked':'')+' onchange="updateSH('+i+',\'engaged\',this.checked)"> Engaged</label>'+
-                    '<button class="dw-sh-remove" onclick="removeSH('+i+')">&times;</button>'+
+                    '<label class="dw-sh-engaged"><input type="checkbox" '+(s.engaged?'checked':'')+' data-sh-field="engaged" data-sh-index="'+i+'"> Engaged</label>'+
+                    '<button class="dw-sh-remove" type="button" data-dw-action="remove-stakeholder" data-sh-index="'+i+'">&times;</button>'+
                 '</div>';
             }).join('');
         }
 
-        window.addStakeholder=function(){
+        function addStakeholder(){
             var usedRoles=new Set(tempStakeholders.map(function(s){return s.role;}));
             var nextRole=ROLES.find(function(r){return !usedRoles.has(r);})||'champion';
             tempStakeholders.push({name:'',title:'',role:nextRole,engaged:false});
             renderStakeholders();
-        };
-        window.updateSH=function(i,field,val){if(tempStakeholders[i])tempStakeholders[i][field]=val;renderStakeholders();};
-        window.removeSH=function(i){tempStakeholders.splice(i,1);renderStakeholders();};
+        }
+        function updateStakeholderField(i,field,val){
+            if(tempStakeholders[i])tempStakeholders[i][field]=val;
+            renderStakeholders();
+        }
+        function removeStakeholder(i){
+            tempStakeholders.splice(i,1);
+            renderStakeholders();
+        }
 
         // --- Open modal ---
         window.openModal=function(dealId){
@@ -1140,6 +1406,15 @@
 
         // --- Pending loss reason state ---
         var pendingLossDealId=null;
+
+        function syncLossOptionSelection(selectedValue){
+            document.querySelectorAll('.dw-loss-option').forEach(function(option){
+                var matches=option.getAttribute('data-loss-option')===selectedValue;
+                option.classList.toggle('selected',!!matches);
+                var input=option.querySelector('input[name="lossReason"]');
+                if(input)input.checked=!!matches;
+            });
+        }
 
         window.saveDeal=async function(){
             var account=document.getElementById('mAccount').value.trim();
@@ -1206,8 +1481,7 @@
             if(newStage==='closed-lost'&&prevStage!=='closed-lost'&&!deal.lossReason){
                 pendingLossDealId=deal.id;
                 document.getElementById('lossModal').classList.add('active');
-                document.querySelectorAll('.dw-loss-option').forEach(function(o){o.classList.remove('selected');});
-                document.querySelectorAll('input[name="lossReason"]').forEach(function(r){r.checked=false;});
+                syncLossOptionSelection('');
                 document.getElementById('lossNotes').value='';
             }
 
@@ -1262,6 +1536,7 @@
 
         // URL param: pre-open a deal
         var urlDeal=new URLSearchParams(window.location.search).get('deal');
+        bindDealWorkspaceUi();
         function showDealWorkspaceBootState(kind,title,text){
             if(!window.gtmModuleBootState)return;
             window.gtmModuleBootState.show('#dwBootState',{
@@ -1278,7 +1553,6 @@
         function onDealWorkspaceBootFailure(error){
             console.error('Deal Workspace boot failed:',error);
             document.getElementById('dwBridge').innerHTML='';
-            document.getElementById('dealStats').innerHTML='';
             document.getElementById('recoveryPanel').innerHTML='';
             document.getElementById('dealGrid').innerHTML='';
             document.getElementById('dealEmpty').innerHTML='';

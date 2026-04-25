@@ -3,6 +3,52 @@
 
     if (window.TourGuide && window.TourGuide.__gtmosPhase23) return;
 
+    function bootstrapQaMode() {
+        if (window.gtmQaMode && typeof window.gtmQaMode.bootstrap === 'function') {
+            return window.gtmQaMode.bootstrap({
+                search: window.location.search
+            });
+        }
+        try {
+            var params = new URLSearchParams(window.location.search || '');
+            var raw = String(params.get('qa') || '').toLowerCase();
+            if (raw === '1' || raw === 'true') sessionStorage.setItem('gtmos_qa_mode', '1');
+            if (raw === '0' || raw === 'false') sessionStorage.setItem('gtmos_qa_mode', '0');
+            return {
+                enabled: sessionStorage.getItem('gtmos_qa_mode') === '1'
+            };
+        } catch (e) {
+            return { enabled: false };
+        }
+    }
+
+    var qaMode = bootstrapQaMode();
+
+    function removeTourChrome() {
+        document.querySelectorAll('.tour-overlay, .tour-tooltip').forEach(function(el) { el.remove(); });
+        document.querySelectorAll('.tour-highlight').forEach(function(el) { el.classList.remove('tour-highlight'); });
+        document.querySelectorAll('.nav-tour-glow, [data-tour-button]').forEach(function(el) { el.remove(); });
+    }
+
+    if (qaMode.enabled) {
+        removeTourChrome();
+        window.TourGuide = {
+            __gtmosPhase23: true,
+            init: function() {},
+            launch: function() {},
+            resume: function() {},
+            pause: function() {},
+            beginPath: function() {},
+            next: function() {},
+            end: function() {},
+            removeFrame: removeTourChrome
+        };
+        window.addEventListener('gtmos:qa-mode-changed', function(event) {
+            if (event && event.detail && event.detail.enabled) removeTourChrome();
+        });
+        return;
+    }
+
     function esc(value) {
         var node = document.createElement('div');
         node.textContent = value == null ? '' : String(value);
@@ -128,11 +174,20 @@
             });
         },
 
+        shouldSuppressAutoLaunch: function() {
+            var path = String(window.location && window.location.pathname || '').replace(/\/+$/, '') || '/';
+            return path === '/app/discovery-studio';
+        },
+
         consumeAutoLaunch: function() {
             try {
                 var params = new URLSearchParams(window.location.search || '');
                 var queryFlag = params.get('tour') === '1';
                 var sessionFlag = sessionStorage.getItem(this.AUTO_TOUR_KEY) === '1';
+                if (this.shouldSuppressAutoLaunch()) {
+                    if (queryFlag || sessionFlag) sessionStorage.removeItem(this.AUTO_TOUR_KEY);
+                    return false;
+                }
                 if (queryFlag || sessionFlag) {
                     sessionStorage.removeItem(this.AUTO_TOUR_KEY);
                     return true;
@@ -231,6 +286,7 @@
         init: function() {
             this.ensureButton();
             this.syncButtons();
+            if (this.shouldSuppressAutoLaunch()) return;
             if (this.consumeAutoLaunch()) {
                 setTimeout(() => this.resumePendingOrState(), 900);
             } else if (!this.hasSeenTour() && !this.hasPromptedTour()) {

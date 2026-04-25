@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Future Autopsy Selector Drawer Triptych V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#0a1c40;
+      --ink:#10274f;
+      --soft:#5f7594;
+      --muted:#8b9cb4;
+      --orange:#e6701e;
+      --blue:#2471e7;
+      --green:#2d7a4b;
+      --paper:#fcfdff;
+      --shadow-soft:0 20px 48px rgba(10,28,64,.08);
+      --shadow-hard:0 34px 86px rgba(10,28,64,.14);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,.06), transparent 26%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,.05), transparent 24%),
+        linear-gradient(180deg,#fbfcff 0%,#f2f6fc 100%);
+      padding:28px 22px 72px;
+    }
+    h1,h2,h3,h4,p{margin:0}
+    .page{max-width:1520px;margin:0 auto;display:grid;gap:28px}
+    .topline{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+      padding:0 6px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+      color:var(--muted);font-weight:700;
+    }
+    .topline .accent{color:var(--orange)}
+    .triptych{display:grid;gap:26px}
+    .variant{
+      position:relative;
+      overflow:hidden;
+      min-height:790px;
+      border:1px solid rgba(10,28,64,.06);
+      border-radius:42px;
+      box-shadow:var(--shadow-hard);
+      background:
+        radial-gradient(circle at 16% 10%, rgba(36,113,231,.14), transparent 28%),
+        radial-gradient(circle at 90% 86%, rgba(230,112,30,.12), transparent 26%),
+        linear-gradient(180deg,#f8fbff 0%,#eef5fb 100%);
+      padding:106px 36px 40px;
+    }
+    .variant::before{
+      content:"";
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(10,28,64,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,28,64,.03) 1px, transparent 1px);
+      background-size:32px 32px;
+      pointer-events:none;
+      opacity:.45;
+    }
+    .variant-meta{
+      position:absolute;top:22px;left:28px;right:28px;z-index:2;
+      display:flex;justify-content:space-between;gap:18px;align-items:flex-start;
+    }
+    .variant-id{
+      font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;
+    }
+    .variant-id .accent{color:var(--orange)}
+    .variant-name{
+      font-family:"Outfit",sans-serif;font-size:34px;line-height:1;letter-spacing:-.05em;font-weight:700;color:var(--navy);
+    }
+    .variant-meaning{
+      max-width:430px;font-size:14px;line-height:1.55;color:var(--soft);text-align:right;
+    }
+    .stage{
+      position:relative;z-index:1;
+      display:grid;
+      grid-template-columns:minmax(400px, 560px) minmax(420px, 1fr);
+      gap:34px;align-items:start;
+      min-height:620px;
+    }
+    .pin-note{
+      position:relative;
+      min-height:300px;
+      padding:22px 24px 20px;
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(10,28,64,.08);
+      border-radius:28px;
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow-soft);
+      display:grid;
+      gap:12px;
+      align-content:start;
+    }
+    .pin-note::before{
+      content:"";
+      position:absolute;
+      width:18px;height:18px;border-radius:50%;
+      background:var(--orange);
+      top:-8px;left:22px;
+      box-shadow:0 0 0 6px rgba(230,112,30,.14);
+    }
+    .pin-label{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    }
+    .pin-title{
+      font-family:"Outfit",sans-serif;
+      font-size:31px;line-height:.94;letter-spacing:-.05em;font-weight:700;color:var(--navy);
+      margin-top:10px;max-width:10ch;
+    }
+    .pin-copy{font-size:14px;line-height:1.55;color:var(--soft);max-width:36ch}
+    .meta-row{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:2px;
+    }
+    .meta-pill{
+      min-height:34px;padding:0 12px;border-radius:999px;
+      border:1px solid rgba(10,28,64,.08);background:rgba(255,255,255,.52);
+      display:inline-flex;align-items:center;
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--soft);
+    }
+    .tiny-cap{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    }
+
+    .drawer-card{
+      padding:16px 14px 14px;
+      border-radius:24px;
+      background:rgba(255,255,255,.72);
+      border:1px solid rgba(10,28,64,.08);
+      box-shadow:var(--shadow-soft);
+      display:grid;gap:12px;
+    }
+    .drawer-stack{
+      display:grid;
+      gap:0;
+      background:rgba(255,255,255,.34);
+      border-radius:18px;
+      overflow:hidden;
+    }
+    .drawer-item{
+      min-height:48px;
+      padding:0 6px 0 10px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:center;
+      font-size:12px;
+      color:var(--soft);
+      border-bottom:1px solid rgba(10,28,64,.06);
+      box-shadow:0 10px 18px rgba(10,28,64,.025);
+      background:transparent;
+    }
+    .drawer-item:last-child{border-bottom:0}
+    .drawer-item.active{
+      color:var(--navy);
+      font-weight:700;
+      background:linear-gradient(90deg, rgba(36,113,231,.08), rgba(255,255,255,0));
+    }
+    .drawer-name{
+      display:flex;align-items:center;gap:10px;
+      min-width:0;
+    }
+    .drawer-name::before{
+      content:"";
+      width:8px;height:8px;border-radius:50%;
+      background:rgba(10,28,64,.16);
+      flex:0 0 auto;
+    }
+    .drawer-item.active .drawer-name::before{background:var(--orange)}
+    .drawer-amt{
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .drawer-foot{font-size:12px;color:var(--soft);line-height:1.45}
+
+    .control-zone{margin-top:20px;position:relative;z-index:2}
+    .rule-link{
+      color:#0a1c40;text-decoration:none;
+      font-size:14px;font-weight:700;
+      display:inline-flex;align-items:center;gap:10px;
+    }
+    .rule-link::before{
+      content:"";
+      width:22px;height:2px;border-radius:999px;background:rgba(10,28,64,.18);
+    }
+    .rule-link.primary{color:var(--orange)}
+    .rule-link.primary::before{background:var(--orange)}
+    .rule-link.blue{color:var(--blue)}
+    .rule-link.blue::before{background:var(--blue)}
+    .rule-link.soft{color:#5f7594}
+    .rule-link.soft::before{background:#8b9cb4}
+
+    .order-block{
+      padding:14px 18px 12px;
+      border-radius:20px;
+      background:rgba(255,255,255,.56);
+      border:1px solid rgba(10,28,64,.08);
+      box-shadow:var(--shadow-soft);
+      display:grid;gap:8px;
+    }
+    .order-block.primary{
+      background:rgba(230,112,30,.1);
+      border-color:rgba(230,112,30,.16);
+    }
+    .order-block .kicker{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    }
+    .order-block .line{
+      font-size:18px;line-height:1.15;letter-spacing:-.03em;font-weight:700;color:#0a1c40;
+    }
+    .order-block.primary .line{color:#0a1c40}
+
+    .command-rail{
+      display:grid;gap:14px;
+      align-content:start;
+      padding-top:4px;
+    }
+    .command-row{
+      display:grid;
+      grid-template-columns:22px 1fr;
+      gap:12px;align-items:start;
+      padding-bottom:12px;
+      border-bottom:1px solid rgba(10,28,64,.1);
+    }
+    .command-mark{
+      width:14px;height:14px;border-radius:50%;margin-top:4px;
+      background:rgba(10,28,64,.16);
+      box-shadow:0 0 0 5px rgba(10,28,64,.04);
+    }
+    .command-row.primary .command-mark{background:var(--orange);box-shadow:0 0 0 5px rgba(230,112,30,.12)}
+    .command-row.blue .command-mark{background:var(--blue);box-shadow:0 0 0 5px rgba(36,113,231,.1)}
+    .command-title{font-size:17px;line-height:1.15;letter-spacing:-.03em;font-weight:700;color:#0a1c40}
+    .command-copy{margin-top:4px;font-size:13px;line-height:1.45;color:var(--soft)}
+
+    .variant-a .control-zone{
+      display:grid;
+      grid-template-columns:220px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+      max-width:664px;
+    }
+    .variant-a .control-right{display:grid;gap:14px}
+    .variant-a .ledger-actions{
+      display:flex;gap:22px;flex-wrap:wrap;
+      padding-left:4px;
+    }
+
+    .variant-b .control-zone{
+      max-width:664px;
+      display:grid;gap:14px;
+    }
+    .variant-b .top-row{
+      display:grid;
+      grid-template-columns:220px minmax(0,1fr);
+      gap:16px;align-items:start;
+    }
+    .variant-b .orders{
+      display:grid;grid-template-columns:1.15fr .9fr .9fr;gap:12px;
+    }
+
+    .variant-c .control-zone{
+      max-width:700px;
+      display:grid;
+      grid-template-columns:220px minmax(0,1fr);
+      gap:18px;
+      align-items:start;
+    }
+    .variant-c .control-right{display:grid;gap:14px}
+
+    .stack-shell{
+      position:relative;
+      min-height:548px;
+      padding:40px 56px 0 32px;
+    }
+    .sheet{
+      position:absolute;
+      width:min(620px,calc(100% - 72px));
+      border-radius:30px;
+      background:rgba(255,255,255,.58);
+      border:1px solid rgba(10,28,64,.08);
+      backdrop-filter:blur(16px);
+      box-shadow:var(--shadow-soft);
+      padding:22px 24px;
+    }
+    .sheet-a{left:26px;top:12px;transform:rotate(-2.5deg)}
+    .sheet-b{left:88px;top:120px;transform:rotate(1.7deg)}
+    .sheet-c{left:50px;top:282px;transform:rotate(-1deg)}
+    .sheet-tab{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:30px;padding:0 10px;border-radius:999px;margin-bottom:12px;
+      font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    }
+    .orange{background:rgba(230,112,30,.12);color:var(--orange)}
+    .blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .green{background:rgba(45,122,75,.12);color:var(--green)}
+    .sheet-title{
+      font-family:"DM Serif Display",Georgia,serif;
+      font-size:44px;line-height:.94;letter-spacing:-.06em;max-width:8ch;margin-bottom:14px;
+    }
+    .sheet-row{
+      display:grid;
+      grid-template-columns:36px 88px 112px 1fr;
+      gap:12px;align-items:center;
+      padding:10px 0;border-top:1px solid rgba(10,28,64,.08);
+    }
+    .mark{
+      width:30px;height:30px;border-radius:50%;
+      display:grid;place-items:center;font-size:15px;font-weight:700;
+    }
+    .mark.orange{background:rgba(230,112,30,.14);color:var(--orange)}
+    .mark.blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .mark.green{background:rgba(45,122,75,.12);color:var(--green)}
+    .row-label,.row-value,.row-copy{font-size:13px}
+    .row-label{letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .row-value{font-weight:700}
+    .row-value.orange{color:var(--orange)}
+    .row-value.blue{color:var(--blue)}
+    .row-value.green{color:var(--green)}
+    .row-copy{line-height:1.45;color:var(--ink)}
+
+    @media (max-width:1180px){
+      .stage{grid-template-columns:1fr;min-height:0}
+      .stack-shell{padding:26px 18px 0}
+      .sheet{position:relative;width:100%;left:auto !important;top:auto !important;transform:none !important;margin-bottom:16px}
+      .variant-a .control-zone,
+      .variant-b .top-row,
+      .variant-c .control-zone,
+      .variant-b .orders{grid-template-columns:1fr}
+      .variant-meta{position:static;margin-bottom:18px}
+      .variant{padding-top:34px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Future Autopsy</span>
+      <span>Selector Drawer Variants</span>
+    </div>
+
+    <section class="triptych">
+      <article class="variant variant-a">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 01</span> · Drawer Ledger</div>
+            <div class="variant-name">The drawer stays explicit and the actions become ruled ledger commands.</div>
+          </div>
+          <div class="variant-meaning">The case universe is a compact drawer, the selected state lives only inside the active line, and the three actions become text-led commands with different signal weights instead of equal pills.</div>
+        </div>
+        <div class="stage">
+          <div>
+            <div class="pin-note">
+              <div class="pin-label">Pinned case</div>
+              <div class="pin-title">Apex Fintech</div>
+              <div class="pin-copy">$140,000 · qualification · risk 100/100</div>
+              <div class="meta-row">
+                <span class="meta-pill">Qual 0/18</span>
+                <span class="meta-pill">53d in stage</span>
+                <span class="meta-pill">Owner pending</span>
+              </div>
+            </div>
+            <div class="control-zone">
+              <div class="drawer-card">
+                <div class="tiny-cap">Pinned-case drawer · 6 live cases</div>
+                <div class="drawer-stack">
+                  <div class="drawer-item active"><span class="drawer-name">Apex Fintech</span><span class="drawer-amt">$140k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">Northstar Health</span><span class="drawer-amt">$180k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">VoltOps</span><span class="drawer-amt">$95k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">Meridian Logistics</span><span class="drawer-amt">$280k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">Cascadia Health</span><span class="drawer-amt">$120k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">Northstar Capital</span><span class="drawer-amt">$210k</span></div>
+                </div>
+                <div class="drawer-foot">Only the most real live cases belong in autopsy rotation.</div>
+              </div>
+              <div class="control-right">
+                <div class="ledger-actions">
+                  <a class="rule-link primary" href="#">Run selected</a>
+                  <a class="rule-link blue" href="#">Autopsy of day</a>
+                  <a class="rule-link soft" href="#">Copy brief</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stack-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row">
+                <div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row">
+                <div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row">
+                <div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant variant-b">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 02</span> · Order Bench</div>
+            <div class="variant-name">The actions become three separate orders, not chips.</div>
+          </div>
+          <div class="variant-meaning">The drawer stays explicit, the active line is the only selected state, and the controls become a command bench: one strong order to run, one comparative jump to autopsy of day, and one archival action for copy.</div>
+        </div>
+        <div class="stage">
+          <div>
+            <div class="pin-note">
+              <div class="pin-label">Pinned case</div>
+              <div class="pin-title">Apex Fintech</div>
+              <div class="pin-copy">$140,000 · qualification · risk 100/100</div>
+              <div class="meta-row">
+                <span class="meta-pill">Qual 0/18</span>
+                <span class="meta-pill">53d in stage</span>
+                <span class="meta-pill">Owner pending</span>
+              </div>
+            </div>
+            <div class="control-zone">
+              <div class="top-row">
+                <div class="drawer-card">
+                  <div class="tiny-cap">Pinned-case drawer · 6 live cases</div>
+                <div class="drawer-stack">
+                    <div class="drawer-item active"><span class="drawer-name">Apex Fintech</span><span class="drawer-amt">$140k</span></div>
+                    <div class="drawer-item"><span class="drawer-name">Northstar Health</span><span class="drawer-amt">$180k</span></div>
+                    <div class="drawer-item"><span class="drawer-name">VoltOps</span><span class="drawer-amt">$95k</span></div>
+                    <div class="drawer-item"><span class="drawer-name">Meridian Logistics</span><span class="drawer-amt">$280k</span></div>
+                    <div class="drawer-item"><span class="drawer-name">Cascadia Health</span><span class="drawer-amt">$120k</span></div>
+                    <div class="drawer-item"><span class="drawer-name">Northstar Capital</span><span class="drawer-amt">$210k</span></div>
+                  </div>
+                </div>
+                <div class="drawer-foot">Selected case stays implicit in the active drawer line.</div>
+              </div>
+              <div class="orders">
+                <div class="order-block primary">
+                  <div class="kicker">Selected case</div>
+                  <div class="line">Run this autopsy now.</div>
+                </div>
+                <div class="order-block">
+                  <div class="kicker">Comparison</div>
+                  <div class="line">Jump to autopsy of day.</div>
+                </div>
+                <div class="order-block">
+                  <div class="kicker">Archive</div>
+                  <div class="line">Copy the current brief.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stack-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row">
+                <div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row">
+                <div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row">
+                <div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant variant-c">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 03</span> · Command Rail</div>
+            <div class="variant-name">The drawer stays left and the actions become a vertical command rail.</div>
+          </div>
+          <div class="variant-meaning">This version separates selection from action completely. The drawer chooses the case, the active line confirms it, and the commands read like a forensic control rail rather than buttons.</div>
+        </div>
+        <div class="stage">
+          <div>
+            <div class="pin-note">
+              <div class="pin-label">Pinned case</div>
+              <div class="pin-title">Apex Fintech</div>
+              <div class="pin-copy">$140,000 · qualification · risk 100/100</div>
+              <div class="meta-row">
+                <span class="meta-pill">Qual 0/18</span>
+                <span class="meta-pill">53d in stage</span>
+                <span class="meta-pill">Owner pending</span>
+              </div>
+            </div>
+            <div class="control-zone">
+              <div class="drawer-card">
+                <div class="tiny-cap">Pinned-case drawer · 6 live cases</div>
+                <div class="drawer-stack">
+                  <div class="drawer-item active"><span class="drawer-name">Apex Fintech</span><span class="drawer-amt">$140k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">Northstar Health</span><span class="drawer-amt">$180k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">VoltOps</span><span class="drawer-amt">$95k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">Meridian Logistics</span><span class="drawer-amt">$280k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">Cascadia Health</span><span class="drawer-amt">$120k</span></div>
+                  <div class="drawer-item"><span class="drawer-name">Northstar Capital</span><span class="drawer-amt">$210k</span></div>
+                </div>
+              </div>
+              <div class="control-right">
+                <div class="command-rail">
+                  <div class="command-row primary">
+                    <div class="command-mark"></div>
+                    <div>
+                      <div class="command-title">Run selected</div>
+                      <div class="command-copy">Recompute the autopsy around the pinned case now.</div>
+                    </div>
+                  </div>
+                  <div class="command-row blue">
+                    <div class="command-mark"></div>
+                    <div>
+                      <div class="command-title">Autopsy of day</div>
+                      <div class="command-copy">Jump to the most urgent live case in the top-ten universe.</div>
+                    </div>
+                  </div>
+                  <div class="command-row">
+                    <div class="command-mark"></div>
+                    <div>
+                      <div class="command-title">Copy brief</div>
+                      <div class="command-copy">Export the current diagnosis as a portable summary.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stack-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row">
+                <div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row">
+                <div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div>
+              </div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row">
+                <div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

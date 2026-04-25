@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus LinkedIn Playbook Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#081a41;
+      --ink:#15315e;
+      --soft:#637fa3;
+      --muted:#91a8c7;
+      --line:rgba(8,26,65,.12);
+      --line-strong:rgba(8,26,65,.2);
+      --orange:#ed6f1e;
+      --blue:#2f72e8;
+      --green:#2e8b59;
+      --red:#c94d45;
+      --gold:#d9a86e;
+      --paper:#fbfdff;
+      --paper-2:#f2f6fc;
+      --shadow:0 34px 90px rgba(8,26,65,.13);
+      --softshadow:0 18px 42px rgba(8,26,65,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      padding:34px 24px 96px;
+      font-family:"Plus Jakarta Sans",sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 0 0, rgba(47,114,232,.07), transparent 24%),
+        radial-gradient(circle at 100% 3%, rgba(237,111,30,.07), transparent 25%),
+        linear-gradient(180deg,#fbfdff 0,#f0f5fc 100%);
+      -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3,h4,p{margin:0}
+    .page{max-width:1680px;margin:0 auto;display:grid;gap:30px}
+    .mast{
+      display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 8px;
+      font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:800;color:var(--muted)
+    }
+    .mast strong{color:var(--orange)}
+    .variant{
+      position:relative;overflow:hidden;border-radius:44px;border:1px solid rgba(8,26,65,.08);
+      background:
+        radial-gradient(circle at 0 0, rgba(47,114,232,.045), transparent 27%),
+        radial-gradient(circle at 100% 0, rgba(237,111,30,.05), transparent 26%),
+        linear-gradient(180deg,rgba(255,255,255,.98),rgba(244,248,255,.98));
+      box-shadow:var(--shadow);
+      padding:32px 36px 38px;
+      min-height:760px;
+    }
+    .variant:before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.28;
+      background-image:
+        linear-gradient(rgba(8,26,65,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,26,65,.035) 1px, transparent 1px);
+      background-size:36px 36px;
+    }
+    .variant > *{position:relative;z-index:1}
+    .variant-head{display:flex;justify-content:space-between;gap:28px;align-items:flex-start;margin-bottom:26px}
+    .meta{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+    .meta .accent{color:var(--orange)}
+    .title{
+      margin-top:10px;font-family:"Outfit",sans-serif;font-weight:800;letter-spacing:-.085em;
+      font-size:clamp(44px,4.8vw,82px);line-height:.9;max-width:10.8ch;color:var(--navy)
+    }
+    .title .orange{color:var(--orange)}
+    .title .blue{color:var(--blue)}
+    .title .green{color:var(--green)}
+    .title .red{color:var(--red)}
+    .desc{max-width:520px;text-align:right;font-size:15px;line-height:1.58;color:var(--soft)}
+    .why{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;line-height:1.55;color:var(--soft)}
+    .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:0 12px;border-radius:999px;
+      border:1px solid var(--line);background:rgba(255,255,255,.82);font-size:11px;letter-spacing:.14em;
+      text-transform:uppercase;font-weight:800;color:var(--muted)
+    }
+    .pill:before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.9}
+    .pill.orange{color:var(--orange)} .pill.blue{color:var(--blue)} .pill.green{color:var(--green)} .pill.red{color:var(--red)}
+    .micro{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+    .headline{font-size:24px;line-height:1.06;letter-spacing:-.055em;font-weight:800;color:var(--navy)}
+    .copy{font-size:14px;line-height:1.55;color:var(--soft)}
+    .serif{font-family:"DM Serif Display",serif;letter-spacing:-.04em}
+    .action{
+      display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:999px;
+      border:1px solid var(--line);background:#fff;color:var(--navy);font-weight:800;font-size:12px;letter-spacing:.05em;
+      text-transform:uppercase;box-shadow:0 10px 26px rgba(8,26,65,.06)
+    }
+    .action.primary{background:var(--orange);border-color:var(--orange);color:white}
+    .action.blue{color:var(--blue)} .action.green{color:var(--green)}
+
+    /* Variant 01: Signal Cinema */
+    .cinema-grid{display:grid;grid-template-columns:260px minmax(0,1fr) 320px;gap:26px;align-items:start}
+    .reel-stack{display:grid;gap:12px;padding-top:10px}
+    .reel{
+      min-height:116px;padding:18px;border-radius:26px;border:1px solid var(--line);
+      background:rgba(255,255,255,.85);box-shadow:var(--softshadow)
+    }
+    .reel.active{border-color:rgba(47,114,232,.32);box-shadow:inset 0 0 0 2px rgba(47,114,232,.1),var(--softshadow)}
+    .reel .headline{font-size:22px;margin-top:8px}
+    .reel .copy{font-size:13px;margin-top:8px}
+    .screen{
+      min-height:620px;border-radius:42px;background:linear-gradient(180deg,#0e1a3b,#09132d);
+      box-shadow:0 32px 74px rgba(8,26,65,.24);position:relative;overflow:hidden;padding:34px
+    }
+    .screen:before{
+      content:"";position:absolute;inset:0;opacity:.55;
+      background:
+        radial-gradient(circle at 20% 15%,rgba(47,114,232,.23),transparent 25%),
+        radial-gradient(circle at 78% 18%,rgba(237,111,30,.18),transparent 25%),
+        radial-gradient(circle at 54% 90%,rgba(46,139,89,.16),transparent 30%);
+    }
+    .screen-top{position:relative;display:flex;justify-content:space-between;gap:16px;align-items:center;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .screen-top .micro{color:#9fb3d2}
+    .beat-bars{display:flex;gap:6px;align-items:center;flex:1;max-width:520px}
+    .beat-bars span{height:4px;border-radius:999px;background:rgba(255,255,255,.14);flex:1}
+    .beat-bars span:nth-child(2n){background:rgba(47,114,232,.58)}
+    .beat-bars span:nth-child(3n){background:rgba(237,111,30,.58)}
+    .beat-bars span:nth-child(5n){background:rgba(46,139,89,.58)}
+    .active-cut{position:relative;margin-top:42px;max-width:760px;color:#f5f8ff}
+    .active-cut .micro{color:#9fb3d2}
+    .active-cut h3{margin-top:10px;font-family:"Outfit",sans-serif;font-size:clamp(42px,4.4vw,74px);line-height:.91;letter-spacing:-.075em}
+    .active-cut h3 .orange{color:#ff8a3d}
+    .reply-monitor{
+      position:absolute;left:34px;right:34px;bottom:34px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px
+    }
+    .reply-card{
+      min-height:112px;padding:16px;border-radius:22px;border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.06);color:#dbe7ff
+    }
+    .reply-card .micro{color:#8fa6ca}
+    .reply-card .headline{font-size:18px;color:#fff;margin-top:8px}
+    .reply-card .copy{font-size:12px;color:#aebfda;margin-top:7px}
+    .cinema-read{display:grid;gap:20px;padding-top:10px}
+    .read-block{padding-top:15px;border-top:1px solid var(--line)}
+    .read-block .headline{margin-top:7px}
+    .read-block .metric{font-size:70px;letter-spacing:-.08em;line-height:.88;font-weight:800;color:var(--green);margin-top:10px}
+    .cinema-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+    /* Variant 02: Influence Radar */
+    .radar-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:34px;align-items:start}
+    .radar-stage{
+      min-height:650px;position:relative;border-radius:44px;border:1px solid var(--line);
+      background:radial-gradient(circle at 50% 50%,rgba(47,114,232,.08),transparent 18%),rgba(255,255,255,.5);
+      box-shadow:var(--softshadow);overflow:hidden
+    }
+    .radar-ring{position:absolute;border:1px dashed rgba(8,26,65,.13);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
+    .ring-1{width:250px;height:250px}.ring-2{width:430px;height:430px}.ring-3{width:610px;height:610px}
+    .radar-axis{position:absolute;left:50%;top:40px;bottom:40px;width:1px;background:rgba(8,26,65,.08)}
+    .radar-axis.x{left:40px;right:40px;top:50%;bottom:auto;width:auto;height:1px}
+    .node{
+      position:absolute;width:156px;min-height:96px;padding:14px;border-radius:24px;border:1px solid var(--line);
+      background:rgba(255,255,255,.92);box-shadow:0 18px 42px rgba(8,26,65,.08)
+    }
+    .node:before{content:"";position:absolute;left:14px;top:14px;width:13px;height:13px;border-radius:50%;border:2px solid currentColor;background:#fff}
+    .node .micro{padding-left:24px}
+    .node .headline{font-size:18px;margin-top:8px}
+    .node .copy{font-size:12px;margin-top:7px}
+    .node.green{color:var(--green)}.node.blue{color:var(--blue)}.node.orange{color:var(--orange)}.node.red{color:var(--red)}
+    .node.account{left:50%;top:50%;transform:translate(-50%,-50%);width:220px;min-height:138px;color:var(--navy);box-shadow:0 28px 64px rgba(8,26,65,.12)}
+    .node.account .headline{font-size:25px}
+    .node.n1{left:12%;top:16%}.node.n2{right:10%;top:13%}.node.n3{left:10%;bottom:18%}.node.n4{right:12%;bottom:16%}.node.n5{left:43%;top:8%}
+    .route-line{position:absolute;height:4px;border-radius:999px;background:currentColor;opacity:.42;transform-origin:left center}
+    .route-line.a{left:37%;top:39%;width:184px;transform:rotate(-22deg);color:var(--blue)}
+    .route-line.b{left:49%;top:51%;width:210px;transform:rotate(27deg);color:var(--green)}
+    .route-line.c{left:32%;top:58%;width:230px;transform:rotate(156deg);color:var(--orange)}
+    .radar-console{display:grid;gap:18px}
+    .radar-console .panel{
+      padding:20px 0;border-top:1px solid var(--line)
+    }
+    .radar-console .panel .headline{margin-top:8px}
+    .radar-console .panel .copy{margin-top:10px}
+    .radar-score{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;padding:20px;border-radius:28px;background:rgba(255,255,255,.8);border:1px solid var(--line);box-shadow:var(--softshadow)}
+    .radar-score .num{font-size:76px;line-height:.88;letter-spacing:-.08em;color:var(--blue);font-weight:800}
+    .radar-legend{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .legend-chip{padding:12px 0;border-top:1px solid var(--line)}
+    .legend-chip .micro{font-size:10px}
+    .legend-chip .copy{font-size:13px;margin-top:5px}
+
+    /* Variant 03: Trust Loom */
+    .loom-grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:34px;align-items:start}
+    .loom-left{display:grid;gap:18px}
+    .loom-manifest{
+      padding:24px;border-radius:34px;background:#fff;border:1px solid var(--line);box-shadow:var(--softshadow)
+    }
+    .loom-manifest .headline{font-size:32px;margin-top:10px}
+    .loom-manifest .copy{margin-top:12px}
+    .queue-strip{display:grid;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .queue-row{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+    .queue-row:last-child{border-bottom:none}
+    .queue-row .dot{width:13px;height:13px;border-radius:50%;border:2px solid currentColor;background:#fff}
+    .queue-row .name{font-size:17px;font-weight:800;color:var(--navy)}
+    .queue-row .sub{font-size:12px;color:var(--soft);margin-top:3px}
+    .queue-row .state{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+    .loom-stage{
+      min-height:660px;position:relative;border-radius:44px;border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(245,249,255,.92));box-shadow:var(--shadow);
+      overflow:hidden;padding:34px 42px
+    }
+    .loom-thread{position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(47,114,232,.18),rgba(237,111,30,.24),transparent)}
+    .loom-thread.t1{left:18%}.loom-thread.t2{left:37%}.loom-thread.t3{left:56%}.loom-thread.t4{left:75%}
+    .loom-card{
+      position:relative;margin-left:auto;width:76%;min-height:108px;padding:18px 22px;border-radius:28px;
+      background:rgba(255,255,255,.9);border:1px solid var(--line);box-shadow:0 18px 44px rgba(8,26,65,.08)
+    }
+    .loom-card + .loom-card{margin-top:20px}
+    .loom-card:before{
+      content:"";position:absolute;left:-76px;top:50%;width:64px;height:3px;border-radius:999px;background:currentColor;opacity:.5
+    }
+    .loom-card.orange{color:var(--orange)}.loom-card.blue{color:var(--blue)}.loom-card.green{color:var(--green)}.loom-card.red{color:var(--red)}
+    .loom-card .headline{font-size:23px;margin-top:7px;color:var(--navy)}
+    .loom-card .copy{font-size:13px;margin-top:8px}
+    .loom-command{
+      position:absolute;left:42px;bottom:34px;right:42px;border-top:1px solid var(--line);padding-top:20px;
+      display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end
+    }
+    .loom-command .headline{font-size:38px;max-width:12ch}
+    .loom-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+
+    @media(max-width:1100px){
+      .variant-head,.cinema-grid,.radar-grid,.loom-grid{grid-template-columns:1fr;display:grid}
+      .desc{text-align:left}
+      .screen,.radar-stage,.loom-stage{min-height:auto}
+      .reply-monitor{position:relative;left:auto;right:auto;bottom:auto;margin-top:24px;grid-template-columns:1fr}
+      .cinema-read{grid-template-columns:1fr}
+      .loom-command{position:relative;left:auto;right:auto;bottom:auto;margin-top:28px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="mast"><span><strong>LinkedIn Playbook</strong> taste-test triptych</span><span>Antaeus</span></div>
+
+    <section class="variant">
+      <div class="variant-head">
+        <div>
+          <div class="meta"><span class="accent">Variant 01</span> / Signal Cinema</div>
+          <h1 class="title">Cut the channel before the buyer sees it.</h1>
+          <div class="pill-row">
+            <span class="pill blue">Reply monitor</span>
+            <span class="pill orange">Active cut</span>
+            <span class="pill green">Log motion</span>
+          </div>
+        </div>
+        <div class="desc">
+          LinkedIn behaves like an editing room. The rep sees the current play at full scale, the likely replies on the monitor, and the exact next cut before anything gets posted or sent.
+          <div class="why">Logic: best for reps who need LinkedIn to feel like a composed motion, not a list of templates. It preserves craft while forcing the user to pick one active cut.</div>
+        </div>
+      </div>
+
+      <div class="cinema-grid">
+        <div class="reel-stack">
+          <div class="reel active"><div class="micro">Take one</div><div class="headline">Comment before connect.</div><div class="copy">Warm the name before you ask to enter the network.</div></div>
+          <div class="reel"><div class="micro">Take two</div><div class="headline">Send the proof, not the pitch.</div><div class="copy">One useful asset beats three polished asks.</div></div>
+          <div class="reel"><div class="micro">Take three</div><div class="headline">DM only after the feed recognizes you.</div><div class="copy">No cold vendor arrival in the inbox.</div></div>
+        </div>
+
+        <div class="screen">
+          <div class="screen-top">
+            <div class="micro">Current cut / Meridian Logistics</div>
+            <div class="beat-bars">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="active-cut">
+            <div class="micro">Say this in the feed</div>
+            <h3><span class="orange">Their expansion</span> makes queue strain visible. Ask one operational question, then leave.</h3>
+          </div>
+          <div class="reply-monitor">
+            <div class="reply-card"><div class="micro">If they like</div><div class="headline">Wait 24h.</div><div class="copy">Do not DM immediately. Familiarity first.</div></div>
+            <div class="reply-card"><div class="micro">If they reply</div><div class="headline">Answer, then ask.</div><div class="copy">One concrete question, no pitch stack.</div></div>
+            <div class="reply-card"><div class="micro">If silent</div><div class="headline">Second comment.</div><div class="copy">Another useful touch before a request.</div></div>
+          </div>
+        </div>
+
+        <div class="cinema-read">
+          <div class="read-block"><div class="micro">Channel read</div><div class="headline">This account has outbound pressure but no social familiarity.</div><div class="metric">62</div></div>
+          <div class="read-block"><div class="micro">Operator move</div><div class="headline">Run the feed cut before the DM cut.</div><div class="copy">LinkedIn should warm the route Outbound already started.</div></div>
+          <div class="read-block"><div class="micro">Handoff</div><div class="headline">Save the comment as motion truth.</div><div class="cinema-actions"><span class="action primary">Log cut</span><span class="action blue">Open Outbound</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="variant">
+      <div class="variant-head">
+        <div>
+          <div class="meta"><span class="accent">Variant 02</span> / Influence Radar</div>
+          <h1 class="title">Find the person the channel can actually reach.</h1>
+          <div class="pill-row">
+            <span class="pill green">Warm orbit</span>
+            <span class="pill blue">Decision route</span>
+            <span class="pill red">Dead contact</span>
+          </div>
+        </div>
+        <div class="desc">
+          LinkedIn behaves like a relationship radar. The account is fixed in the center, and the room shows which humans, posts, proof paths, and reply routes are close enough to act on.
+          <div class="why">Logic: best when the rep does not know who to touch. It turns LinkedIn into channel intelligence, not content advice.</div>
+        </div>
+      </div>
+
+      <div class="radar-grid">
+        <div class="radar-stage">
+          <div class="radar-ring ring-1"></div>
+          <div class="radar-ring ring-2"></div>
+          <div class="radar-ring ring-3"></div>
+          <div class="radar-axis"></div>
+          <div class="radar-axis x"></div>
+          <div class="route-line a"></div>
+          <div class="route-line b"></div>
+          <div class="route-line c"></div>
+
+          <div class="node account"><div class="micro">Account center</div><div class="headline">Cascadia Health</div><div class="copy">Heat real. Owner not named. Social route can reveal the human path.</div></div>
+          <div class="node n1 blue"><div class="micro">Likely owner</div><div class="headline">RevOps VP</div><div class="copy">Posts on automation strain.</div></div>
+          <div class="node n2 green"><div class="micro">Warm path</div><div class="headline">Mutual peer</div><div class="copy">One comment away from entry.</div></div>
+          <div class="node n3 orange"><div class="micro">Proof path</div><div class="headline">Case angle</div><div class="copy">Use operations benchmark.</div></div>
+          <div class="node n4 red"><div class="micro">Dead route</div><div class="headline">Founder DM</div><div class="copy">Wrong altitude for first touch.</div></div>
+          <div class="node n5 blue"><div class="micro">Feed signal</div><div class="headline">Hiring post</div><div class="copy">Timely enough to comment.</div></div>
+        </div>
+
+        <div class="radar-console">
+          <div class="radar-score"><div><div class="micro">Reach score</div><div class="headline">Warm enough to enter through the feed, not the inbox.</div></div><div class="num">74</div></div>
+          <div class="panel"><div class="micro">Run now</div><div class="headline">Comment on the hiring post with an operating observation.</div><div class="copy">Do not request connection until one visible interaction lands.</div></div>
+          <div class="panel"><div class="micro">Buyer might do</div><div class="headline">Like, reply, ignore, or inspect profile.</div><div class="copy">Each response changes the next motion. No static template should survive here.</div></div>
+          <div class="radar-legend">
+            <div class="legend-chip"><div class="micro">Blue</div><div class="copy">Human route</div></div>
+            <div class="legend-chip"><div class="micro">Green</div><div class="copy">Warm path</div></div>
+            <div class="legend-chip"><div class="micro">Orange</div><div class="copy">Proof path</div></div>
+            <div class="legend-chip"><div class="micro">Red</div><div class="copy">Do not touch</div></div>
+          </div>
+          <div class="cinema-actions"><span class="action primary">Log route</span><span class="action blue">Open Signal</span><span class="action green">Open Outbound</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="variant">
+      <div class="variant-head">
+        <div>
+          <div class="meta"><span class="accent">Variant 03</span> / Trust Loom</div>
+          <h1 class="title">Thread trust before asking for time.</h1>
+          <div class="pill-row">
+            <span class="pill orange">Visible sequence</span>
+            <span class="pill blue">Touch ledger</span>
+            <span class="pill green">Earned ask</span>
+          </div>
+        </div>
+        <div class="desc">
+          LinkedIn behaves like a loom. Every action has to thread through attention, usefulness, proof, and ask. If a thread is missing, the ask cannot advance.
+          <div class="why">Logic: best when the channel needs discipline. It makes sequencing tactile and prevents reps from jumping straight to a DM.</div>
+        </div>
+      </div>
+
+      <div class="loom-grid">
+        <div class="loom-left">
+          <div class="loom-manifest"><div class="micro">Active account</div><div class="headline">Apex Fintech needs a social route before the next email.</div><div class="copy">Outbound already touched the account. LinkedIn should add familiarity, not repeat the pitch.</div></div>
+          <div class="queue-strip">
+            <div class="queue-row" style="color:var(--green)"><div class="dot"></div><div><div class="name">Comment</div><div class="sub">Respond to the public pain signal.</div></div><div class="state">Now</div></div>
+            <div class="queue-row" style="color:var(--blue)"><div class="dot"></div><div><div class="name">Connect</div><div class="sub">Only after a visible interaction.</div></div><div class="state">Earn</div></div>
+            <div class="queue-row" style="color:var(--orange)"><div class="dot"></div><div><div class="name">Send proof</div><div class="sub">Give one benchmark, no calendar ask.</div></div><div class="state">Next</div></div>
+            <div class="queue-row" style="color:var(--red)"><div class="dot"></div><div><div class="name">Ask for time</div><div class="sub">Locked until proof is received.</div></div><div class="state">Blocked</div></div>
+          </div>
+        </div>
+
+        <div class="loom-stage">
+          <div class="loom-thread t1"></div>
+          <div class="loom-thread t2"></div>
+          <div class="loom-thread t3"></div>
+          <div class="loom-thread t4"></div>
+          <div class="loom-card green"><div class="micro">Attention thread</div><div class="headline">They posted about a hiring spike.</div><div class="copy">Use the post as the entry point. Do not mention product.</div></div>
+          <div class="loom-card blue"><div class="micro">Usefulness thread</div><div class="headline">Add one operating observation.</div><div class="copy">Make the comment specific enough that a human can tell it was not automated.</div></div>
+          <div class="loom-card orange"><div class="micro">Proof thread</div><div class="headline">Benchmark only after they engage.</div><div class="copy">Send useful context before asking for time.</div></div>
+          <div class="loom-card red"><div class="micro">Ask thread</div><div class="headline">Meeting request is locked.</div><div class="copy">The ask opens only after attention and usefulness both exist.</div></div>
+          <div class="loom-command">
+            <div><div class="micro">Next stitch</div><div class="headline">Write the comment, then log the touch.</div></div>
+            <div class="loom-actions"><span class="action primary">Draft comment</span><span class="action green">Log touch</span><span class="action blue">Carry to Outbound</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

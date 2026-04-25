@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Future Autopsy First Fold Composite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#0a1c40;
+      --ink:#10274f;
+      --muted:#6b819f;
+      --blue:#2471e7;
+      --orange:#e6701e;
+      --green:#2d7a4b;
+      --red:#c44b45;
+      --line:rgba(10,28,64,.08);
+      --glass:rgba(255,255,255,.62);
+      --fieldA:#fbfdff;
+      --fieldB:#eef4fb;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Public Sans",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 9% 0%, rgba(36,113,231,.08), transparent 26%),
+        radial-gradient(circle at 100% 12%, rgba(230,112,30,.08), transparent 24%),
+        linear-gradient(180deg,var(--fieldA) 0%, var(--fieldB) 100%);
+    }
+    .page{
+      max-width:1500px;
+      margin:0 auto;
+      padding:28px 22px 54px;
+    }
+    .eyebrow{
+      font-size:.76rem;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--orange);
+      font-weight:700;
+      margin-bottom:12px;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0, 28ch) auto;
+      gap:28px;
+      align-items:start;
+      margin-bottom:22px;
+    }
+    .hero-title{
+      font-family:"Public Sans",sans-serif;
+      font-size:3.9rem;
+      line-height:.92;
+      letter-spacing:-.07em;
+      color:var(--navy);
+      font-weight:700;
+      max-width:9ch;
+    }
+    .hero-copy{
+      margin-top:14px;
+      max-width:46ch;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.65;
+    }
+    .selected-strip{
+      justify-self:end;
+      display:grid;
+      gap:6px;
+      align-content:start;
+      min-width:280px;
+      padding-top:14px;
+    }
+    .selected-label{
+      font-size:.62rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#8ea0ba;
+      font-weight:700;
+    }
+    .selected-title{
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:12px;
+      align-items:start;
+    }
+    .pulse{
+      position:relative;
+      width:18px;height:18px;border-radius:50%;
+      background:rgba(230,112,30,.16);
+      border:1px solid rgba(230,112,30,.24);
+      box-shadow:0 0 0 6px rgba(230,112,30,.08);
+      margin-top:3px;
+    }
+    .pulse::after{
+      content:"";
+      position:absolute; inset:-6px;
+      border-radius:50%;
+      border:1px solid rgba(230,112,30,.18);
+      animation:pulse 1.8s ease-out infinite;
+    }
+    @keyframes pulse{
+      0%{transform:scale(.9);opacity:.75}
+      70%{transform:scale(1.28);opacity:0}
+      100%{transform:scale(1.28);opacity:0}
+    }
+    .selected-name{
+      font-size:2.3rem;
+      line-height:.94;
+      letter-spacing:-.06em;
+      font-weight:700;
+      color:var(--navy);
+    }
+    .selected-meta{
+      font-size:1rem;
+      line-height:1.5;
+      color:var(--muted);
+    }
+    .frame{
+      position:relative;
+      overflow:hidden;
+      padding:24px 24px 28px;
+      border:1px solid rgba(10,28,64,.06);
+      border-radius:34px;
+      background:
+        radial-gradient(circle at 16% 10%, rgba(36,113,231,.14), transparent 28%),
+        radial-gradient(circle at 88% 86%, rgba(230,112,30,.12), transparent 26%),
+        linear-gradient(180deg,#f8fbff 0%,#edf4fb 100%);
+      box-shadow:0 26px 64px rgba(10,28,64,.1);
+    }
+    .frame::before{
+      content:"";
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(10,28,64,.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,28,64,.028) 1px, transparent 1px);
+      background-size:32px 32px;
+      opacity:.42;
+      pointer-events:none;
+    }
+    .frame > *{position:relative; z-index:1;}
+    .fold{
+      display:grid;
+      grid-template-columns:minmax(420px, .94fr) minmax(560px, 1.06fr);
+      gap:38px;
+      align-items:start;
+      min-height:770px;
+    }
+
+    .left{
+      display:grid;
+      align-content:center;
+      min-height:680px;
+    }
+    .ledger-shell{
+      width:min(100%, 640px);
+      display:grid;
+      gap:12px;
+    }
+    .ledger-head{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:18px;
+      padding-left:2px;
+    }
+    .ledger-title{
+      font-size:.56rem;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:#8ea0ba;
+      font-weight:700;
+    }
+    .ledger-note{
+      font-size:.74rem;
+      color:var(--muted);
+      max-width:28ch;
+      text-align:right;
+    }
+    .ledger{
+      border-top:1px solid rgba(10,28,64,.08);
+      background:transparent;
+    }
+    .ledger-row{
+      appearance:none;
+      width:100%;
+      border:0;
+      border-bottom:1px solid rgba(10,28,64,.08);
+      background:transparent;
+      padding:0;
+      display:grid;
+      grid-template-columns:18px minmax(0,1fr) 74px auto;
+      gap:14px;
+      align-items:center;
+      min-height:58px;
+      text-align:left;
+      cursor:pointer;
+      color:inherit;
+      font:inherit;
+      box-shadow:0 12px 18px -18px rgba(10,28,64,.22);
+    }
+    .ledger-row:last-child{border-bottom:0;}
+    .ledger-row:hover .name{color:var(--navy)}
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:rgba(10,28,64,.14);
+      box-shadow:0 0 0 7px rgba(10,28,64,.04);
+      margin-left:2px;
+    }
+    .ledger-row.active .dot{
+      background:var(--orange);
+      box-shadow:0 0 0 9px rgba(230,112,30,.1);
+    }
+    .name{
+      font-size:1.82rem;
+      line-height:.96;
+      letter-spacing:-.055em;
+      color:#7f91ad;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .ledger-row.active .name{
+      color:var(--navy);
+      font-weight:700;
+    }
+    .stage{
+      font-size:.68rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:#9aabc2;
+      text-align:right;
+    }
+    .value{
+      font-size:1rem;
+      letter-spacing:-.03em;
+      color:#8ca0bd;
+      white-space:nowrap;
+      padding-right:2px;
+    }
+    .ledger-row.active .value{color:#6d83a4;}
+    .commands{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:20px;
+      padding-top:14px;
+      margin-top:6px;
+      border-top:1px solid rgba(10,28,64,.08);
+    }
+    .cmd{
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:8px;
+      align-items:start;
+      min-height:62px;
+    }
+    .cmd-title{
+      font-size:.92rem;
+      line-height:1.05;
+      letter-spacing:-.03em;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .cmd-copy{
+      font-size:.72rem;
+      line-height:1.45;
+      color:var(--muted);
+      max-width:22ch;
+    }
+    .run .cmd-title{color:var(--green)}
+    .urgent .cmd-title{color:var(--red)}
+    .copy .cmd-title{color:#4d6f9d}
+    .sig{
+      position:relative;
+      width:20px;height:20px; margin-top:2px;
+    }
+    .sig-run::before{
+      content:""; position:absolute; inset:2px; border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, rgba(45,122,75,.14), rgba(45,122,75,.28));
+      border:1px solid rgba(45,122,75,.18);
+    }
+    .sig-run::after{
+      content:""; position:absolute; left:8px; top:5px;
+      width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:7px solid var(--green);
+    }
+    .sig-urgent::before{
+      content:""; position:absolute; left:2px; top:2px; width:16px; height:16px;
+      clip-path:polygon(50% 0%, 61% 28%, 92% 18%, 74% 49%, 100% 50%, 74% 52%, 92% 82%, 61% 72%, 50% 100%, 39% 72%, 8% 82%, 26% 52%, 0% 50%, 26% 49%, 8% 18%, 39% 28%);
+      background:rgba(196,75,69,.14); border:1px solid rgba(196,75,69,.16);
+    }
+    .sig-urgent::after{
+      content:""; position:absolute; left:9px; top:5px; width:3px; height:8px; border-radius:2px; background:var(--red); box-shadow:0 10px 0 -1px var(--red);
+    }
+    .sig-copy::before{
+      content:""; position:absolute; left:4px; top:4px; width:9px; height:11px; border-radius:3px; border:1px solid rgba(36,113,231,.24); background:rgba(255,255,255,.94);
+    }
+    .sig-copy::after{
+      content:""; position:absolute; left:7px; top:2px; width:9px; height:11px; border-radius:3px; border:1px solid rgba(36,113,231,.18); background:rgba(36,113,231,.08);
+    }
+
+    .right{
+      display:grid;
+      gap:10px;
+      align-content:start;
+      padding-top:10px;
+    }
+    .stack{
+      position:relative;
+      min-height:590px;
+      isolation:isolate;
+    }
+    .sheet{
+      position:absolute;
+      width:min(100%, 650px);
+      border-radius:30px;
+      padding:22px 24px;
+      background:rgba(255,255,255,.56);
+      border:1px solid rgba(10,28,64,.08);
+      backdrop-filter:blur(16px);
+      box-shadow:0 20px 48px rgba(10,28,64,.08);
+      cursor:pointer;
+      transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+    .sheet:hover{border-color:rgba(10,28,64,.14)}
+    .sheet:focus-visible{outline:2px solid rgba(36,113,231,.4);outline-offset:6px}
+    .tab{
+      display:inline-flex;
+      align-items:center;
+      min-height:30px;
+      padding:0 12px;
+      border-radius:999px;
+      font-size:.64rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:700;
+      margin-bottom:12px;
+    }
+    .tab.orange{background:rgba(230,112,30,.12);color:var(--orange)}
+    .tab.blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .tab.green{background:rgba(45,122,75,.12);color:var(--green)}
+    .sheet-title{
+      font-family:"DM Serif Display",serif;
+      font-size:2.55rem;
+      line-height:.92;
+      letter-spacing:-.06em;
+      color:var(--navy);
+      max-width:8ch;
+      margin-bottom:14px;
+    }
+    .row{
+      display:grid;
+      grid-template-columns:36px 86px 110px 1fr;
+      gap:12px;
+      align-items:center;
+      padding-top:12px;
+      border-top:1px solid rgba(10,28,64,.08);
+    }
+    .mark{
+      width:30px;height:30px;border-radius:50%;
+      display:grid;place-items:center;
+      font-size:15px;font-weight:700;
+    }
+    .mark.orange{background:rgba(230,112,30,.14);color:var(--orange)}
+    .mark.blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .mark.green{background:rgba(45,122,75,.12);color:var(--green)}
+    .row-label,.row-value,.row-copy{font-size:.82rem}
+    .row-label{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:#8b9cb4;
+      font-weight:700;
+    }
+    .row-value{font-weight:700}
+    .row-value.orange{color:var(--orange)}
+    .row-value.blue{color:var(--blue)}
+    .row-value.green{color:var(--green)}
+    .row-copy{
+      line-height:1.45;
+      color:var(--ink);
+      max-width:34ch;
+    }
+    .s-a{top:0; left:16px; transform:rotate(-1.1deg); z-index:1;}
+    .s-b{top:84px; left:42px; transform:rotate(.9deg); z-index:2;}
+    .s-c{top:168px; left:26px; transform:rotate(-.6deg); z-index:3;}
+    .stack.state-symptom .symptom,
+    .stack.state-proof .proof,
+    .stack.state-pattern .pattern{
+      z-index:3;
+      box-shadow:0 24px 56px rgba(10,28,64,.11);
+    }
+    .stack.state-symptom .symptom{top:8px;left:16px;transform:rotate(-.95deg)}
+    .stack.state-symptom .proof{top:88px;left:42px;transform:rotate(.8deg);z-index:2}
+    .stack.state-symptom .pattern{top:170px;left:26px;transform:rotate(-.55deg);z-index:1}
+    .stack.state-proof .proof{top:8px;left:16px;transform:rotate(-.75deg)}
+    .stack.state-proof .pattern{top:88px;left:42px;transform:rotate(.78deg);z-index:2}
+    .stack.state-proof .symptom{top:170px;left:26px;transform:rotate(-1deg);z-index:1}
+    .stack.state-pattern .pattern{top:8px;left:16px;transform:rotate(-.6deg)}
+    .stack.state-pattern .symptom{top:88px;left:42px;transform:rotate(-.95deg);z-index:2}
+    .stack.state-pattern .proof{top:170px;left:26px;transform:rotate(.78deg);z-index:1}
+
+    .emphasis{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) minmax(240px, .9fr);
+      gap:22px;
+      align-items:start;
+      padding-top:10px;
+    }
+    .emphasis-shell{
+      border-top:1px solid rgba(10,28,64,.08);
+      padding-top:14px;
+    }
+    .emphasis-label{
+      font-size:.62rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#8ea0ba;
+      font-weight:700;
+      margin-bottom:7px;
+    }
+    .emphasis-title{
+      font-size:1.12rem;
+      line-height:1.15;
+      letter-spacing:-.03em;
+      color:var(--navy);
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .emphasis-copy{
+      font-size:.86rem;
+      line-height:1.55;
+      color:var(--muted);
+      max-width:54ch;
+    }
+    .route-lines{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;
+      align-items:start;
+    }
+    .route{
+      padding-top:12px;
+      border-top:2px solid rgba(10,28,64,.12);
+    }
+    .route.orange{border-top-color:rgba(230,112,30,.7)}
+    .route.blue{border-top-color:rgba(36,113,231,.72)}
+    .route.green{border-top-color:rgba(45,122,75,.7)}
+    .route-label{
+      font-size:.62rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#8ea0ba;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+    .route-title{
+      font-size:1rem;
+      line-height:1.12;
+      letter-spacing:-.03em;
+      font-weight:700;
+      color:var(--navy);
+      margin-bottom:6px;
+    }
+    .route-copy{
+      font-size:.8rem;
+      line-height:1.45;
+      color:var(--muted);
+    }
+
+    @media (max-width:1260px){
+      .fold{grid-template-columns:1fr;}
+      .left{min-height:0}
+      .right{padding-top:0}
+      .selected-strip{justify-self:start}
+    }
+    @media (max-width:920px){
+      .hero{grid-template-columns:1fr}
+      .hero-title{font-size:2.8rem}
+      .ledger-row{grid-template-columns:16px minmax(0,1fr) auto}
+      .stage{display:none}
+      .name{font-size:1.2rem}
+      .commands,
+      .route-lines,
+      .emphasis{grid-template-columns:1fr}
+      .sheet,
+      .s-a,.s-b,.s-c,
+      .stack.state-symptom .symptom,
+      .stack.state-symptom .proof,
+      .stack.state-symptom .pattern,
+      .stack.state-proof .proof,
+      .stack.state-proof .pattern,
+      .stack.state-proof .symptom,
+      .stack.state-pattern .pattern,
+      .stack.state-pattern .symptom,
+      .stack.state-pattern .proof{
+        position:relative;
+        width:100%;
+        left:auto;
+        top:auto;
+        transform:none;
+      }
+      .stack{min-height:0;display:grid;gap:18px}
+      .row{grid-template-columns:36px 70px 90px 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="eyebrow">Future Autopsy · First Fold Composite</div>
+    <div class="hero">
+      <div>
+        <div class="hero-title">The deal is pinned as evidence.</div>
+        <div class="hero-copy">Worksheet Rail on the left. Lead Sheet Switcher on the right. The ledger chooses the case. The evidence stack chooses the interpretive lens.</div>
+      </div>
+      <div class="selected-strip">
+        <div class="selected-label">Pinned case</div>
+        <div class="selected-title">
+          <div class="pulse"></div>
+          <div>
+            <div id="selectedName" class="selected-name">Apex Fintech</div>
+            <div id="selectedMeta" class="selected-meta">$140,000 · qualification · Risk 100/100</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="frame">
+      <div class="fold">
+        <aside class="left">
+          <div class="ledger-shell">
+            <div class="ledger-head">
+              <div class="ledger-title">Pinned-case ledger · 6 live cases</div>
+              <div class="ledger-note">Only the most real live cases belong in autopsy rotation.</div>
+            </div>
+            <div id="ledger" class="ledger"></div>
+            <div class="commands">
+              <div class="cmd run">
+                <span class="sig sig-run"></span>
+                <div>
+                  <div class="cmd-title">Run selected</div>
+                  <div class="cmd-copy">Recompute the autopsy around the active ledger line.</div>
+                </div>
+              </div>
+              <div class="cmd urgent">
+                <span class="sig sig-urgent"></span>
+                <div>
+                  <div class="cmd-title">Urgent autopsy deal</div>
+                  <div class="cmd-copy">Jump to the most urgent live case in the six-case universe.</div>
+                </div>
+              </div>
+              <div class="cmd copy">
+                <span class="sig sig-copy"></span>
+                <div>
+                  <div class="cmd-title">Copy brief</div>
+                  <div class="cmd-copy">Export the current diagnosis as a portable summary.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="right">
+          <div id="stack" class="stack state-pattern">
+            <article class="sheet s-a symptom" data-sheet="symptom" tabindex="0">
+              <div class="tab orange">Visible symptom</div>
+              <div class="sheet-title">The calendar already broke before the close did.</div>
+              <div class="row">
+                <div class="mark orange">!</div>
+                <div class="row-label">Risk</div>
+                <div class="row-value orange">No next step</div>
+                <div class="row-copy">There was never a dated next step, so momentum decayed before the board admitted it.</div>
+              </div>
+            </article>
+
+            <article class="sheet s-b proof" data-sheet="proof" tabindex="0">
+              <div class="tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="row">
+                <div class="mark blue">P</div>
+                <div class="row-label">Proof</div>
+                <div class="row-value blue">No EB</div>
+                <div class="row-copy">Economic buyer never entered the thread, so apparent interest never converted into decision authority.</div>
+              </div>
+            </article>
+
+            <article class="sheet s-c pattern" data-sheet="pattern" tabindex="0">
+              <div class="tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="row">
+                <div class="mark green">→</div>
+                <div class="row-label">Motion</div>
+                <div class="row-value green">Drifting</div>
+                <div class="row-copy">The live thread still has motion, but not enough control to protect the stage from widening pressure.</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="emphasis">
+            <div class="emphasis-shell">
+              <div class="emphasis-label">Lead sheet effect</div>
+              <div id="emphasisTitle" class="emphasis-title">Failure pattern is currently leading the room.</div>
+              <div id="emphasisCopy" class="emphasis-copy">When this sheet comes forward, the room emphasizes the named mechanism you are actually correcting, not just the visible symptom or the underlying proof gap.</div>
+            </div>
+
+            <div class="route-lines">
+              <div class="route orange">
+                <div class="route-label">Corrective route</div>
+                <div id="routePrimary" class="route-title">Change the live deal truth</div>
+                <div id="routePrimaryCopy" class="route-copy">Open Deal Workspace to change dates, stage, and ownership immediately.</div>
+              </div>
+              <div class="route blue">
+                <div class="route-label">Then</div>
+                <div id="routeSecondary" class="route-title">Plan the forcing conversation</div>
+                <div id="routeSecondaryCopy" class="route-copy">Use Call Planner to force the missing champion and budget-owner truth into the next meeting.</div>
+              </div>
+              <div class="route green">
+                <div class="route-label">Parallel route</div>
+                <div id="routeTertiary" class="route-title">Carry the risk into execution</div>
+                <div id="routeTertiaryCopy" class="route-copy">Use Discovery Studio to pressure-test the failure theme live instead of keeping it theoretical.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const deals = [
+      { id:'a', name:'Apex Fintech', stage:'qualification', value:'$140,000', meta:'$140,000 · qualification · Risk 100/100' },
+      { id:'b', name:'Northstar Health', stage:'evaluation', value:'$180,000', meta:'$180,000 · evaluation · Risk 92/100' },
+      { id:'c', name:'VoltOps', stage:'qualification', value:'$95,000', meta:'$95,000 · qualification · Risk 88/100' },
+      { id:'d', name:'Meridian Logistics', stage:'negotiation', value:'$280,000', meta:'$280,000 · negotiation · Risk 84/100' },
+      { id:'e', name:'Cascadia Health', stage:'proposal', value:'$120,000', meta:'$120,000 · proposal · Risk 79/100' },
+      { id:'f', name:'Northstar Capital', stage:'negotiation', value:'$210,000', meta:'$210,000 · negotiation · Risk 76/100' }
+    ];
+
+    const sheetModes = {
+      symptom: {
+        emphasisTitle: 'Visible symptom is currently leading the room.',
+        emphasisCopy: 'This makes the autopsy read as immediate surface truth. The routes below emphasize the first intervention that stops obvious slippage before deeper diagnosis is ignored.',
+        primary: ['Force a dated next step', 'Change the deal record before the stage label outruns reality.'],
+        secondary: ['Pressure the next conversation', 'Use the next live touch to stop the thread from decaying further.'],
+        tertiary: ['Capture the proof gap', 'Log the missing evidence now so the board stops flattering the deal.']
+      },
+      proof: {
+        emphasisTitle: 'Underlying proof is currently leading the room.',
+        emphasisCopy: 'This makes the autopsy read as hidden cause structure. The routes below emphasize ownership, authority, and criteria rather than the visible symptom alone.',
+        primary: ['Tighten the proof design', 'Use the live deal to expose what success means and who owns the readout.'],
+        secondary: ['Bring authority into thread', 'Use the next conversation to surface the economic buyer and a real internal owner.'],
+        tertiary: ['Rebuild the stakeholder map', 'Carry the proof gap into Discovery so the room stops pretending consensus exists.']
+      },
+      pattern: {
+        emphasisTitle: 'Failure pattern is currently leading the room.',
+        emphasisCopy: 'This makes the autopsy read as a named mechanism. The routes below emphasize the structural correction required to stop the same failure pattern from widening.',
+        primary: ['Change the live deal truth', 'Open Deal Workspace to change dates, stage, and ownership immediately.'],
+        secondary: ['Plan the forcing conversation', 'Use Call Planner to force the missing champion and budget-owner truth into the next meeting.'],
+        tertiary: ['Carry the risk into execution', 'Use Discovery Studio to pressure-test the failure theme live instead of keeping it theoretical.']
+      }
+    };
+
+    const ledger = document.getElementById('ledger');
+    const stack = document.getElementById('stack');
+    const selectedName = document.getElementById('selectedName');
+    const selectedMeta = document.getElementById('selectedMeta');
+    const emphasisTitle = document.getElementById('emphasisTitle');
+    const emphasisCopy = document.getElementById('emphasisCopy');
+    const routePrimary = document.getElementById('routePrimary');
+    const routePrimaryCopy = document.getElementById('routePrimaryCopy');
+    const routeSecondary = document.getElementById('routeSecondary');
+    const routeSecondaryCopy = document.getElementById('routeSecondaryCopy');
+    const routeTertiary = document.getElementById('routeTertiary');
+    const routeTertiaryCopy = document.getElementById('routeTertiaryCopy');
+
+    let activeDeal = 'a';
+    let activeSheet = 'pattern';
+
+    function renderLedger(){
+      ledger.innerHTML = deals.map(d => `
+        <button class="ledger-row ${d.id===activeDeal ? 'active' : ''}" type="button" data-deal="${d.id}">
+          <span class="dot"></span>
+          <span class="name">${d.name}</span>
+          <span class="stage">${d.stage}</span>
+          <span class="value">${d.value}</span>
+        </button>
+      `).join('');
+      ledger.querySelectorAll('.ledger-row').forEach(row => {
+        row.addEventListener('click', () => {
+          activeDeal = row.dataset.deal;
+          const d = deals.find(x => x.id === activeDeal);
+          selectedName.textContent = d.name;
+          selectedMeta.textContent = d.meta;
+          renderLedger();
+        });
+      });
+    }
+
+    function applySheetMode(mode){
+      activeSheet = mode;
+      stack.className = `stack state-${mode}`;
+      const cfg = sheetModes[mode];
+      emphasisTitle.textContent = cfg.emphasisTitle;
+      emphasisCopy.textContent = cfg.emphasisCopy;
+      routePrimary.textContent = cfg.primary[0];
+      routePrimaryCopy.textContent = cfg.primary[1];
+      routeSecondary.textContent = cfg.secondary[0];
+      routeSecondaryCopy.textContent = cfg.secondary[1];
+      routeTertiary.textContent = cfg.tertiary[0];
+      routeTertiaryCopy.textContent = cfg.tertiary[1];
+    }
+
+    stack.querySelectorAll('.sheet').forEach(sheet => {
+      const activate = () => applySheetMode(sheet.dataset.sheet);
+      sheet.addEventListener('click', activate);
+      sheet.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          activate();
+        }
+      });
+    });
+
+    renderLedger();
+    applySheetMode(activeSheet);
+  </script>
+</body>
+</html>

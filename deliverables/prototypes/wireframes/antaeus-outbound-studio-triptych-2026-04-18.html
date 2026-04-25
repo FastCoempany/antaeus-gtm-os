@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Outbound Studio Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#0b1d46;
+      --ink:#18345f;
+      --soft:#6a84a3;
+      --muted:#93a9c4;
+      --line:rgba(11,29,70,.11);
+      --line-strong:rgba(11,29,70,.18);
+      --orange:#ea6f20;
+      --blue:#2f72e8;
+      --green:#2f8b59;
+      --red:#ca4d41;
+      --paper:#fbfdff;
+      --paper-2:#f3f7fd;
+      --shadow:0 30px 90px rgba(11,29,70,.11);
+      --softshadow:0 18px 42px rgba(11,29,70,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Plus Jakarta Sans",sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 0 0, rgba(47,114,232,.07), transparent 22%),
+        radial-gradient(circle at 100% 0, rgba(234,111,32,.07), transparent 24%),
+        linear-gradient(180deg,#fbfdff 0,#f2f6fc 100%);
+      padding:30px 22px 88px;
+      -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3,h4,p{margin:0}
+    .page{max-width:1660px;margin:0 auto;display:grid;gap:28px}
+    .top{
+      display:flex;justify-content:space-between;gap:20px;padding:0 6px;
+      font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--muted)
+    }
+    .accent{color:var(--orange)}
+    .variant{
+      position:relative;overflow:hidden;border-radius:42px;border:1px solid rgba(11,29,70,.07);
+      background:
+        radial-gradient(circle at 0 0, rgba(47,114,232,.05), transparent 24%),
+        radial-gradient(circle at 100% 0, rgba(234,111,32,.05), transparent 24%),
+        linear-gradient(180deg,rgba(255,255,255,.98) 0,rgba(245,249,255,.98) 100%);
+      box-shadow:var(--shadow);
+      padding:30px 34px 36px;
+    }
+    .variant:before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.28;
+      background-image:
+        linear-gradient(rgba(11,29,70,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11,29,70,.03) 1px, transparent 1px);
+      background-size:36px 36px;
+    }
+    .header,.footer{
+      position:relative;z-index:1;display:flex;justify-content:space-between;gap:28px;align-items:flex-start
+    }
+    .footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
+    .meta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+    .title{
+      margin-top:10px;font-family:"Outfit",sans-serif;font-size:clamp(42px,4vw,68px);
+      line-height:.92;letter-spacing:-.09em;max-width:11ch
+    }
+    .desc{margin-top:14px;max-width:62ch;font-size:16px;line-height:1.58;color:var(--soft)}
+    .meaning{max-width:430px;font-size:14px;line-height:1.56;color:var(--soft);text-align:right;padding-top:8px}
+    .pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .pill{
+      display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 12px;
+      border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.84);
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)
+    }
+    .pill.orange{color:var(--orange)} .pill.blue{color:var(--blue)} .pill.green{color:var(--green)} .pill.red{color:var(--red)}
+    .micro{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+    .headline{font-size:24px;line-height:1.06;letter-spacing:-.05em;font-weight:700}
+    .copy{font-size:14px;line-height:1.56;color:var(--soft)}
+    .serif{font-family:"DM Serif Display",serif;letter-spacing:-.04em}
+    .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+    .orange-dot{background:rgba(234,111,32,.14);border:2px solid rgba(234,111,32,.55)}
+    .blue-dot{background:rgba(47,114,232,.14);border:2px solid rgba(47,114,232,.55)}
+    .green-dot{background:rgba(47,139,89,.14);border:2px solid rgba(47,139,89,.55)}
+    .red-dot{background:rgba(202,77,65,.14);border:2px solid rgba(202,77,65,.55)}
+
+    /* Variant 01: Broadcast Booth */
+    .booth-board{
+      position:relative;z-index:1;display:grid;grid-template-columns:220px minmax(0,1fr) 300px;gap:28px;min-height:940px
+    }
+    .booth-track{
+      display:grid;align-content:start;gap:12px;padding-top:34px
+    }
+    .track-strip{
+      min-height:90px;padding:18px 16px;border-radius:22px 22px 14px 14px;
+      border:1px solid var(--line);background:rgba(255,255,255,.9);box-shadow:var(--softshadow)
+    }
+    .track-strip.active{box-shadow:inset 0 0 0 2px rgba(47,114,232,.18),var(--softshadow)}
+    .track-strip .headline{font-size:20px}
+    .track-strip .copy{margin-top:8px;font-size:13px}
+    .booth-stage{
+      position:relative;min-height:900px;padding-top:0
+    }
+    .booth-title{display:none}
+    .booth-title .orange{color:var(--orange)}
+    .booth-title .blue{color:var(--blue)}
+    .booth-room{
+      position:absolute;left:0;right:0;top:8px;bottom:38px;border-radius:42px;
+      background:linear-gradient(180deg,rgba(14,23,51,.98),rgba(10,16,34,.98));
+      box-shadow:0 26px 56px rgba(11,29,70,.2);
+      overflow:hidden;
+    }
+    .booth-room:before{
+      content:"";position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(47,114,232,.22), transparent 24%),
+        radial-gradient(circle at 80% 30%, rgba(234,111,32,.18), transparent 24%),
+        linear-gradient(180deg, transparent, rgba(255,255,255,.02));
+      pointer-events:none;
+    }
+    .booth-wave{
+      position:absolute;left:142px;right:46px;height:56px;border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)
+    }
+    .booth-wave:before{
+      content:"";position:absolute;left:22px;right:22px;top:50%;height:2px;transform:translateY(-50%);
+      background:
+        repeating-linear-gradient(90deg,
+          rgba(47,114,232,.55) 0 18px,
+          rgba(255,255,255,.18) 18px 28px,
+          rgba(234,111,32,.45) 28px 44px,
+          rgba(255,255,255,.18) 44px 58px,
+          rgba(47,139,89,.45) 58px 72px,
+          rgba(255,255,255,.18) 72px 86px);
+      border-radius:999px;
+      opacity:.9;
+    }
+    .booth-wave.top{top:42px}
+    .booth-wave.mid{top:166px}
+    .booth-wave.low{top:646px}
+    .booth-slate{
+      position:absolute;left:34px;right:34px;top:22px;display:grid;grid-template-columns:1fr auto;gap:14px;
+      align-items:center;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)
+    }
+    .slate-tags{display:flex;gap:10px;flex-wrap:wrap}
+    .slate-pill{
+      min-height:28px;padding:0 10px;border-radius:999px;border:1px solid rgba(255,255,255,.1);
+      display:inline-flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:.16em;
+      text-transform:uppercase;font-weight:700;color:#b6c5dc;background:rgba(255,255,255,.04)
+    }
+    .slate-pill.live{color:#7ad7a2}
+    .slate-pill.warn{color:#ffc28e}
+    .slate-pill.blue{color:#8fb6ff}
+    .slate-counter{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#8398b8}
+    .booth-meter{
+      position:absolute;left:34px;top:92px;bottom:30px;width:88px;border-radius:24px;
+      border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);padding:14px 10px;
+      display:grid;grid-template-rows:auto 1fr auto;gap:12px
+    }
+    .booth-meter .micro{color:#8aa2c6}
+    .meter-bars{display:grid;align-content:center;gap:10px}
+    .meter-bars span{
+      display:block;height:8px;border-radius:999px;background:rgba(255,255,255,.12);position:relative;overflow:hidden
+    }
+    .meter-bars span:before{
+      content:"";position:absolute;left:0;top:0;bottom:0;width:var(--fill,40%);
+      border-radius:999px;background:linear-gradient(90deg,rgba(47,114,232,.85),rgba(234,111,32,.9))
+    }
+    .meter-bars span.green:before{background:linear-gradient(90deg,rgba(47,139,89,.9),rgba(113,215,162,.9))}
+    .meter-bars span.red:before{background:linear-gradient(90deg,rgba(202,77,65,.9),rgba(255,162,133,.9))}
+    .meter-note{font-size:11px;line-height:1.45;color:#9cb3d0}
+    .booth-script{
+      position:absolute;left:54px;right:54px;top:214px;min-height:214px;padding:24px 28px 20px;
+      border-radius:32px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);
+      color:#f4f7ff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+    }
+    .booth-script .micro{color:#9cb3d0}
+    .booth-script .headline{font-size:36px;line-height:.94;letter-spacing:-.06em}
+    .booth-script .copy{margin-top:12px;color:#c9d7ea;max-width:42ch}
+    .booth-mic{
+      position:absolute;left:50%;top:534px;transform:translateX(-50%);
+      width:120px;height:120px;border-radius:50%;
+      border:2px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);
+      display:grid;place-items:center;
+      box-shadow:0 0 0 22px rgba(47,114,232,.06),0 0 0 54px rgba(234,111,32,.03);
+      color:#f4f7ff;font-size:48px;font-weight:700
+    }
+    .booth-mic:before{
+      content:"";position:absolute;left:50%;top:100%;width:2px;height:150px;transform:translateX(-50%);
+      background:rgba(255,255,255,.18)
+    }
+    .booth-panels{
+      position:absolute;left:52px;right:52px;bottom:136px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px
+    }
+    .booth-panel{
+      min-height:120px;padding:16px 18px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04)
+    }
+    .booth-panel .micro{color:#9cb3d0}
+    .booth-panel .headline{font-size:24px;color:#f4f7ff}
+    .booth-panel .copy{margin-top:8px;color:#c9d7ea}
+    .booth-console{
+      position:absolute;left:52px;right:52px;bottom:34px;min-height:84px;padding:18px 20px;border-radius:24px;
+      border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));gap:14px
+    }
+    .console-strip{
+      border-right:1px solid rgba(255,255,255,.08);padding-right:14px
+    }
+    .console-strip:last-child{border-right:none;padding-right:0}
+    .console-strip .headline{font-size:20px;color:#f4f7ff}
+    .console-strip .copy{margin-top:6px;color:#b9c9de;font-size:13px}
+    .booth-dock{display:grid;align-content:start;gap:18px;padding-top:34px}
+    .dock-block{padding:16px 0;border-top:1px solid var(--line)}
+    .dock-block:last-child{border-bottom:1px solid var(--line)}
+    .dock-block .headline{font-size:36px}
+    .dock-block .copy{margin-top:8px}
+    .dock-score{
+      display:flex;justify-content:space-between;align-items:flex-end;gap:16px
+    }
+    .dock-score .metric{
+      font-size:64px;line-height:.9;letter-spacing:-.08em;color:var(--green);font-weight:700
+    }
+
+    /* Variant 02: Edit Desk */
+    .edit-board{
+      position:relative;z-index:1;display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;min-height:940px
+    }
+    .edit-bins{display:grid;align-content:start;gap:14px;padding-top:34px}
+    .bin{
+      min-height:132px;padding:18px 18px 16px;border-radius:24px;border:1px solid var(--line);
+      background:rgba(255,255,255,.92);box-shadow:var(--softshadow)
+    }
+    .bin .headline{font-size:28px}
+    .bin .copy{margin-top:8px}
+    .edit-stage{
+      position:relative;min-height:900px;padding-top:0
+    }
+    .edit-title{display:none}
+    .edit-title .orange{color:var(--orange)}
+    .edit-title .green{color:var(--green)}
+    .desk{
+      position:absolute;left:0;right:0;top:8px;bottom:30px;border-radius:44px;
+      border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(246,249,255,.95));
+      box-shadow:var(--shadow);overflow:hidden
+    }
+    .desk-ruler{
+      position:absolute;left:38px;right:38px;top:28px;height:44px;border-radius:999px;
+      border:1px solid var(--line);background:rgba(255,255,255,.78);display:grid;grid-template-columns:repeat(4,minmax(0,1fr))
+    }
+    .desk-ruler span{
+      display:grid;place-items:center;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--muted)
+    }
+    .monitor{
+      position:absolute;left:36px;right:36px;top:88px;height:248px;border-radius:34px;
+      background:linear-gradient(180deg,rgba(14,24,54,.98),rgba(10,16,34,.98));
+      box-shadow:0 20px 40px rgba(11,29,70,.18);padding:30px 34px;color:#f4f7ff
+    }
+    .monitor .micro{color:#9cb3d0}
+    .monitor .headline{font-size:38px;line-height:.92;letter-spacing:-.07em;max-width:12ch}
+    .monitor .copy{margin-top:14px;color:#c9d7ea;max-width:44ch}
+    .monitor-badges{
+      position:absolute;right:32px;top:28px;display:grid;gap:10px
+    }
+    .monitor-badge{
+      min-height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
+      display:inline-flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700
+    }
+    .monitor-badge.green{color:#7ad7a2;background:rgba(47,139,89,.12)}
+    .monitor-badge.orange{color:#ffc28e;background:rgba(234,111,32,.12)}
+    .reel-shelf{
+      position:absolute;left:42px;right:42px;top:356px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px
+    }
+    .reel-slot{
+      min-height:74px;padding:14px 16px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.9);
+      box-shadow:var(--softshadow)
+    }
+    .reel-slot .headline{font-size:22px}
+    .reel-slot .copy{margin-top:6px;font-size:13px}
+    .timeline{
+      position:absolute;left:42px;right:42px;top:468px;display:grid;gap:18px
+    }
+    .timeline-row{
+      min-height:106px;border-radius:24px;background:rgba(255,255,255,.92);border:1px solid var(--line);
+      box-shadow:var(--softshadow);display:grid;grid-template-columns:140px minmax(0,1fr) 220px;gap:18px;align-items:center;padding:0 24px
+    }
+    .clip{
+      height:60px;border-radius:18px;border:1px solid var(--line);display:grid;place-items:center;
+      font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700
+    }
+    .clip.orange{background:rgba(234,111,32,.08);color:var(--orange)}
+    .clip.blue{background:rgba(47,114,232,.08);color:var(--blue)}
+    .clip.green{background:rgba(47,139,89,.08);color:var(--green)}
+    .timeline-row .headline{font-size:30px}
+    .timeline-row .copy{margin-top:6px}
+    .timeline-action{padding-left:16px;border-left:1px solid rgba(11,29,70,.08)}
+    .desk-stamp{
+      position:absolute;right:44px;bottom:30px;min-height:58px;padding:0 18px;border-radius:20px;
+      border:1px solid rgba(47,139,89,.28);background:rgba(47,139,89,.08);display:inline-flex;align-items:center;gap:12px;
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--green)
+    }
+    .desk-stamp strong{font-size:28px;letter-spacing:-.06em;text-transform:none}
+
+    /* Variant 03: Switchboard Loft */
+    .switch-board{
+      position:relative;z-index:1;display:grid;grid-template-columns:260px minmax(0,1fr) 260px;gap:28px;min-height:940px
+    }
+    .switch-left,.switch-right{display:grid;align-content:start;gap:18px;padding-top:34px}
+    .switch-center{
+      position:relative;min-height:900px;padding-top:0
+    }
+    .switch-title{display:none}
+    .switch-title .blue{color:var(--blue)}
+    .switch-title .orange{color:var(--orange)}
+    .switch-panel{
+      position:absolute;left:0;right:0;top:8px;bottom:28px;border-radius:42px;
+      border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(246,249,255,.95));
+      box-shadow:var(--shadow);padding:38px
+    }
+    .switch-bus{
+      display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin-bottom:24px
+    }
+    .switch-bus .bar{
+      height:8px;border-radius:999px;background:linear-gradient(90deg,rgba(47,114,232,.18),rgba(234,111,32,.22),rgba(47,139,89,.18))
+    }
+    .switch-bus .node{
+      min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.82);
+      display:inline-flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+      font-weight:700;color:var(--muted)
+    }
+    .jack-grid{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 36px
+    }
+    .jack-col{display:grid;gap:18px;align-content:start}
+    .jack{
+      min-height:104px;padding:16px 18px;border-radius:22px;border:1px solid var(--line);
+      background:rgba(255,255,255,.94);box-shadow:var(--softshadow);position:relative
+    }
+    .jack:before{
+      content:"";position:absolute;left:18px;top:18px;width:14px;height:14px;border-radius:50%;
+      border:2px solid currentColor;background:rgba(255,255,255,.9)
+    }
+    .jack.orange{color:var(--orange)}
+    .jack.blue{color:var(--blue)}
+    .jack.green{color:var(--green)}
+    .jack.red{color:var(--red)}
+    .jack .micro{padding-left:24px}
+    .jack .headline{font-size:24px;margin-top:8px}
+    .jack .copy{margin-top:6px}
+    .cable{
+      position:absolute;height:4px;border-radius:999px;background:currentColor;opacity:.55
+    }
+    .cable.orange{color:var(--orange)}
+    .cable.blue{color:var(--blue)}
+    .cable.green{color:var(--green)}
+    .cable.neutral{color:#7184a1}
+    .switch-law{padding-top:12px;border-top:1px solid var(--line)}
+    .route-checks{
+      margin-top:26px;padding-top:18px;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px
+    }
+    .route-check{
+      min-height:92px;padding:14px 16px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.9)
+    }
+    .route-check .headline{font-size:20px}
+    .route-check .copy{margin-top:6px;font-size:13px}
+
+    @media (max-width:1320px){
+      .booth-board,.edit-board,.switch-board{grid-template-columns:1fr}
+      .header,.footer{flex-direction:column}
+      .meaning{text-align:left;max-width:none}
+      .booth-track,.booth-dock,.edit-bins,.switch-left,.switch-right{padding-top:0}
+      .booth-room{top:8px}
+      .booth-panels,.booth-console,.reel-shelf,.route-checks,.timeline-row,.jack-grid{grid-template-columns:1fr}
+      .booth-script .headline,.monitor .headline{font-size:34px}
+      .timeline{top:560px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="top"><div><span class="accent">Outbound Studio</span> radical operating-studio triptych</div><div>Antaeus</div></div>
+
+    <section class="variant">
+      <div class="header">
+        <div>
+          <div class="meta"><span class="accent">Variant 01</span> / Broadcast booth</div>
+          <div class="title">The room should feel like a live outbound booth.</div>
+          <div class="desc">This version treats outbound as a performance surface. The rep walks into a booth, sees the active line at full scale, hears the likely reply in the side monitors, and works the correction panel before anything leaves the room.</div>
+          <div class="pill-row">
+            <span class="pill orange">1 active take</span>
+            <span class="pill blue">Reply monitor</span>
+            <span class="pill green">Send-ready cue</span>
+          </div>
+        </div>
+        <div class="meaning">Best if `Outbound Studio` should feel voice-led and immediate. This is the strongest “operating studio” interpretation: booth, monitors, mic, and live correction.</div>
+      </div>
+      <div class="booth-board">
+        <div class="booth-track">
+          <div class="track-strip active">
+            <div class="micro">Take one</div>
+            <div class="headline">Cold opener</div>
+            <div class="copy">Lead with the queue strain after expansion.</div>
+          </div>
+          <div class="track-strip">
+            <div class="micro">Take two</div>
+            <div class="headline">If they correct you</div>
+            <div class="copy">Narrow to one route and one operator title.</div>
+          </div>
+          <div class="track-strip">
+            <div class="micro">Take three</div>
+            <div class="headline">If they shrug</div>
+            <div class="copy">Go back to what widened first in the last two quarters.</div>
+          </div>
+        </div>
+        <div class="booth-stage">
+          <div class="booth-title"><span class="orange">Step</span> into the booth and record the first believable move.</div>
+          <div class="booth-room">
+            <div class="booth-slate">
+              <div class="slate-tags">
+                <span class="slate-pill live">Live take</span>
+                <span class="slate-pill blue">Reply monitor armed</span>
+                <span class="slate-pill warn">1 route still loose</span>
+              </div>
+              <div class="slate-counter">Booth 01 / outbound rehearsal</div>
+            </div>
+            <div class="booth-meter">
+              <div class="micro">Signal board</div>
+              <div class="meter-bars">
+                <span style="--fill:84%"></span>
+                <span style="--fill:66%"></span>
+                <span class="green" style="--fill:78%"></span>
+                <span class="red" style="--fill:34%"></span>
+                <span style="--fill:58%"></span>
+              </div>
+              <div class="meter-note">Owner title is the only meter still clipping red.</div>
+            </div>
+            <div class="booth-wave top"></div>
+            <div class="booth-wave mid"></div>
+            <div class="booth-script">
+              <div class="micro">Active take / say this first</div>
+              <div class="headline">Your rep follow-up likely widened after expansion and left regional ops carrying dead queue weight.</div>
+              <div class="copy">This should sound researched, not theatrical. The room exists to tighten the line until it survives first contact with a skeptical buyer.</div>
+            </div>
+            <div class="booth-mic">!</div>
+            <div class="booth-wave low"></div>
+            <div class="booth-panels">
+              <div class="booth-panel">
+                <div class="micro">Likely reply</div>
+                <div class="headline">“That is true in a few markets, not everywhere.”</div>
+                <div class="copy">Good. That reply gives you a narrowing handle instead of a polite dead end.</div>
+              </div>
+              <div class="booth-panel">
+                <div class="micro">Say next</div>
+                <div class="headline">Which market or route absorbs the strain first?</div>
+                <div class="copy">Move to one named zone before you offer a fix.</div>
+              </div>
+              <div class="booth-panel">
+                <div class="micro">Send gate</div>
+                <div class="headline">Hold until one operator title is visible.</div>
+                <div class="copy">The booth can bless a route, tighten it, or kill it before anything leaves the room.</div>
+              </div>
+            </div>
+            <div class="booth-console">
+              <div class="console-strip">
+                <div class="micro">Trigger lane</div>
+                <div class="headline">Expansion strain</div>
+                <div class="copy">Lead with what widened first.</div>
+              </div>
+              <div class="console-strip">
+                <div class="micro">Buyer lane</div>
+                <div class="headline">Regional ops</div>
+                <div class="copy">Human route must stay visible.</div>
+              </div>
+              <div class="console-strip">
+                <div class="micro">Proof lane</div>
+                <div class="headline">Queue decay</div>
+                <div class="copy">Enough proof to sound earned.</div>
+              </div>
+              <div class="console-strip">
+                <div class="micro">Recovery lane</div>
+                <div class="headline">Narrow the route</div>
+                <div class="copy">Recovery always stays live.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="booth-dock">
+          <div class="dock-block">
+            <div class="micro">Booth read</div>
+            <div class="dock-score">
+              <div>
+                <div class="headline">Sendable</div>
+                <div class="copy">One line is sharp enough to ship now. Two branches still need correction rehearsal.</div>
+              </div>
+              <div class="metric">78</div>
+            </div>
+          </div>
+          <div class="dock-block">
+            <div class="micro">Weakest note</div>
+            <div class="headline">The opener still needs one named human owner.</div>
+          </div>
+          <div class="dock-block">
+            <div class="micro">Studio law</div>
+            <div class="headline">If it cannot survive the first skeptical reply, it never leaves the booth.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="meta">Why this face fits</div>
+        <div class="copy">This room becomes a performance booth for outbound. The rep sees the live line, the likely response, and the correction path in one operating surface.</div>
+      </div>
+    </section>
+
+    <section class="variant">
+      <div class="header">
+        <div>
+          <div class="meta"><span class="accent">Variant 02</span> / Edit desk</div>
+          <div class="title">Outbound can behave like a cut table for first moves.</div>
+          <div class="desc">This version treats the room like an editing desk. Trigger reel, buyer reel, proof reel, and objection reel feed into one monitor. The operator cuts the sequence until the first line, first question, and first recovery branch lock together cleanly.</div>
+          <div class="pill-row">
+            <span class="pill blue">Reel bins</span>
+            <span class="pill orange">Monitor preview</span>
+            <span class="pill green">Timeline clips</span>
+          </div>
+        </div>
+        <div class="meaning">Best if `Outbound Studio` should feel crafted and editorial without becoming copy-heavy. It is still an operating desk, but the physical logic is cutting and sequencing.</div>
+      </div>
+      <div class="edit-board">
+        <div class="edit-bins">
+          <div class="bin">
+            <div class="micro">Trigger reel</div>
+            <div class="headline">Expansion strain after queue widening.</div>
+            <div class="copy">One forcing event. No background dump.</div>
+          </div>
+          <div class="bin">
+            <div class="micro">Buyer reel</div>
+            <div class="headline">VP Revenue Operations</div>
+            <div class="copy">Human owner stays visible through the whole cut.</div>
+          </div>
+          <div class="bin">
+            <div class="micro">Proof reel</div>
+            <div class="headline">Follow-up decay after territory expansion.</div>
+            <div class="copy">Enough proof to sound specific, not enough to over-explain.</div>
+          </div>
+        </div>
+        <div class="edit-stage">
+          <div class="edit-title"><span class="orange">Cut</span> the sequence until the first move holds.</div>
+          <div class="desk">
+            <div class="desk-ruler">
+              <span>Trigger</span>
+              <span>Buyer</span>
+              <span>Proof</span>
+              <span>Recovery</span>
+            </div>
+            <div class="monitor">
+              <div class="micro">Preview monitor / current cut</div>
+              <div class="headline">It looks like your rep follow-up widened after expansion and left RevOps cleaning up dead queue weight.</div>
+              <div class="copy">This is the current working cut. It should feel like a sentence a real operator would send, not a concept note.</div>
+              <div class="monitor-badges">
+                <div class="monitor-badge green">Clean open</div>
+                <div class="monitor-badge orange">Needs owner title</div>
+              </div>
+            </div>
+            <div class="reel-shelf">
+              <div class="reel-slot">
+                <div class="micro">Current assembly</div>
+                <div class="headline">Pain + owner are locked</div>
+                <div class="copy">Proof still lands broad.</div>
+              </div>
+              <div class="reel-slot">
+                <div class="micro">Next cut</div>
+                <div class="headline">Insert one operator title</div>
+                <div class="copy">The edit fails without it.</div>
+              </div>
+              <div class="reel-slot">
+                <div class="micro">Kill note</div>
+                <div class="headline">Delete generic value-prop</div>
+                <div class="copy">It muddies the first beat.</div>
+              </div>
+            </div>
+            <div class="timeline">
+              <div class="timeline-row">
+                <div class="clip orange">Opener clip</div>
+                <div>
+                  <div class="headline">Name the queue strain</div>
+                  <div class="copy">Lead with the failure point, not the product category.</div>
+                </div>
+                <div class="timeline-action">
+                  <div class="micro">Next cut</div>
+                  <div class="copy">Add one human owner before this is approved.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="clip blue">Reply clip</div>
+                <div>
+                  <div class="headline">Likely correction</div>
+                  <div class="copy">“That is true in a few teams, but not across the whole org.”</div>
+                </div>
+                <div class="timeline-action">
+                  <div class="micro">Use this next</div>
+                  <div class="copy">Which team or route slips first when the queue widens?</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="clip green">Recovery clip</div>
+                <div>
+                  <div class="headline">If they go vague</div>
+                  <div class="copy">Return to the first operating path that visibly broke after expansion.</div>
+                </div>
+                <div class="timeline-action">
+                  <div class="micro">Why it matters</div>
+                  <div class="copy">The room should never force the rep to improvise a rescue from scratch.</div>
+                </div>
+              </div>
+            </div>
+            <div class="desk-stamp"><span class="dot green-dot"></span> Approved cut <strong>01</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="meta">Why this face fits</div>
+        <div class="copy">This version makes the room feel like an editing desk where outbound is cut into sequence. It is useful if you want the rep to think in beats, clips, and corrections instead of drafts.</div>
+      </div>
+    </section>
+
+    <section class="variant">
+      <div class="header">
+        <div>
+          <div class="meta"><span class="accent">Variant 03</span> / Switchboard loft</div>
+          <div class="title">Outbound can look like a routed signal board.</div>
+          <div class="desc">This version treats the room like a switchboard. Account, buyer, trigger, strain, proof, and objection are separate jacks. The operator routes them into a send channel. Weak routing paths glow red, strong routes run green, and recovery channels stay on the same board.</div>
+          <div class="pill-row">
+            <span class="pill orange">Input jacks</span>
+            <span class="pill blue">Route channels</span>
+            <span class="pill green">Send line</span>
+          </div>
+        </div>
+        <div class="meaning">Best if `Outbound Studio` should feel technical, modular, and alive. This is the most radical option and the least document-like.</div>
+      </div>
+      <div class="switch-board">
+        <div class="switch-left">
+          <div class="switch-law">
+            <div class="micro">Input law</div>
+            <div class="headline">No send path without a named strain.</div>
+            <div class="copy" style="margin-top:8px">The operator cannot route generic category language into a live outbound channel.</div>
+          </div>
+          <div class="switch-law">
+            <div class="micro">Recovery law</div>
+            <div class="headline">Every route keeps a recovery cable on the same board.</div>
+          </div>
+        </div>
+        <div class="switch-center">
+          <div class="switch-title"><span class="blue">Route</span> the first move like a live outbound signal.</div>
+          <div class="switch-panel">
+            <div class="switch-bus">
+              <div class="bar"></div>
+              <div class="node">Main send bus</div>
+              <div class="bar"></div>
+            </div>
+            <div class="jack-grid">
+              <div class="jack-col">
+                <div class="jack orange">
+                  <div class="micro">Account jack</div>
+                  <div class="headline">NorthPeak Commerce</div>
+                  <div class="copy">The account enters the board already carrying sourcing pressure.</div>
+                </div>
+                <div class="jack blue">
+                  <div class="micro">Buyer jack</div>
+                  <div class="headline">VP Revenue Operations</div>
+                  <div class="copy">First human route is visible before any sentence is approved.</div>
+                </div>
+                <div class="jack red">
+                  <div class="micro">Objection jack</div>
+                  <div class="headline">“That is not a company-wide problem.”</div>
+                  <div class="copy">The recovery path stays cabled on the same board.</div>
+                </div>
+              </div>
+              <div class="jack-col">
+                <div class="jack green">
+                  <div class="micro">Strain jack</div>
+                  <div class="headline">Follow-up decay after expansion</div>
+                  <div class="copy">Operational failure point, not abstract value prop.</div>
+                </div>
+                <div class="jack orange">
+                  <div class="micro">Proof jack</div>
+                  <div class="headline">Queue widened faster than owner coverage</div>
+                  <div class="copy">Enough proof to sound researched, not encyclopedic.</div>
+                </div>
+                <div class="jack blue">
+                  <div class="micro">Question jack</div>
+                  <div class="headline">Which team absorbs that first?</div>
+                  <div class="copy">Next move appears on the board, not in a separate note panel.</div>
+                </div>
+              </div>
+              <div class="jack-col">
+                <div class="jack green">
+                  <div class="micro">Send channel</div>
+                  <div class="headline">Ready to ship</div>
+                  <div class="copy">Your follow-up widened after expansion and left RevOps carrying dead queue weight.</div>
+                </div>
+                <div class="jack orange">
+                  <div class="micro">Tighten channel</div>
+                  <div class="headline">Needs one owner title</div>
+                  <div class="copy">Add the first reachable operator before sending.</div>
+                </div>
+                <div class="jack red">
+                  <div class="micro">Kill channel</div>
+                  <div class="headline">“We help fast-growing SaaS teams improve productivity.”</div>
+                  <div class="copy">This route dies here. No strain, no route, no send.</div>
+                </div>
+              </div>
+            </div>
+            <div class="cable orange" style="left:240px;top:190px;width:250px;transform:rotate(7deg)"></div>
+            <div class="cable blue" style="left:252px;top:352px;width:258px;transform:rotate(-5deg)"></div>
+            <div class="cable green" style="left:534px;top:224px;width:212px;transform:rotate(8deg)"></div>
+            <div class="cable red" style="left:520px;top:420px;width:220px;transform:rotate(-6deg)"></div>
+            <div class="cable neutral" style="left:178px;top:510px;width:560px;transform:rotate(2deg)"></div>
+            <div class="route-checks">
+              <div class="route-check">
+                <div class="micro">Route validator</div>
+                <div class="headline">Owner is the only loose connector.</div>
+                <div class="copy">Every other jack is live enough to keep the send route intact.</div>
+              </div>
+              <div class="route-check">
+                <div class="micro">Recovery bus</div>
+                <div class="headline">Objection cable stays patched.</div>
+                <div class="copy">The board never hides recovery in another page or panel.</div>
+              </div>
+              <div class="route-check">
+                <div class="micro">Ship state</div>
+                <div class="headline">One green send, one tighten route, one dead route.</div>
+                <div class="copy">The operator sees exactly what can leave the loft right now.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="switch-right">
+          <div class="switch-law">
+            <div class="micro">Board read</div>
+            <div class="headline">One send route is green. Two are still cross-wired.</div>
+            <div class="copy" style="margin-top:8px">This face tells the rep what is actually connected before they hit send.</div>
+          </div>
+          <div class="switch-law">
+            <div class="micro">Operator move</div>
+            <div class="headline">Tighten the owner title, then route the reply question live.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="meta">Why this face fits</div>
+        <div class="copy">This version makes Outbound Studio feel like a routed signal board. It is the most radical and the least card-like while still staying inside the Antaeus visual system.</div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

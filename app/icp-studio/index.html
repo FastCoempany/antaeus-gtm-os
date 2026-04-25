@@ -9,46 +9,204 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
-        .studio-layout { display: grid; grid-template-columns: 1fr 340px; gap: var(--space-lg); min-height: calc(100vh - 140px); }
-        @media (max-width: 1200px) { .studio-layout { grid-template-columns: 1fr; } .analytics-panel { display: none; } }
+        body.room-icp-studio {
+            --bg-primary: #f4f7fb;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #eef3f9;
+            --bg-elevated: #ffffff;
+            --bg-shell: #f7f9fc;
+            --bg-shell-rail: rgba(255,255,255,0.92);
+            --bg-shell-glass: rgba(255,255,255,0.82);
+            --text-primary: #0a1c40;
+            --text-secondary: #27466f;
+            --text-tertiary: #5f7693;
+            --text-muted: #91a2b9;
+            --border-default: rgba(10, 28, 64, 0.1);
+            --shadow-sm: 0 1px 2px rgba(10, 28, 64, 0.06);
+            --shadow-md: 0 8px 24px rgba(10, 28, 64, 0.08);
+            --shadow-lg: 0 18px 44px rgba(10, 28, 64, 0.1);
+        }
+        body.room-icp-studio .app-main {
+            background:
+                radial-gradient(circle at 100% 0%, rgba(230,112,30,0.06), transparent 26%),
+                radial-gradient(circle at 0% 0%, rgba(36,113,231,0.06), transparent 24%),
+                linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+        }
+        body.room-icp-studio .app-content { background: transparent; padding-top: 22px; }
+        body.room-icp-studio .module-header,
+        body.room-icp-studio .app-header { display: none !important; }
+        .icp-room-topline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin: 2px 0 18px;
+            padding: 0 8px;
+        }
+        .icp-room-kicker {
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--brand-gold);
+        }
+        .icp-room-brand {
+            font-size: 11px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        .studio-layout { display: grid; grid-template-columns: 1fr; gap: 22px; min-height: auto; align-items: start; }
         
-        .builder-content { overflow-y: auto; padding-right: var(--space-md); }
-        .builder-content .anchor-stage { margin-bottom: var(--space-lg); }
-        .analytics-panel { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); position: relative; display: grid; gap: 16px; align-content: start; min-width: 0; overflow: visible; }
-        .analytics-panel > * { min-width: 0; }
+        .builder-content { overflow-y: auto; padding-right: 0; display: grid; gap: 22px; }
+        .builder-content .icp-ledger-stage { margin-bottom: 0; }
+        .analytics-panel {
+            position: relative;
+            display: grid;
+            gap: 0;
+            padding: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,251,255,0.94) 100%);
+            border: 1px solid rgba(10,28,64,0.06);
+            border-radius: 36px;
+            box-shadow: 0 18px 44px rgba(10,28,64,0.08);
+            overflow: hidden;
+        }
+        .analytics-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.08;
+            background-image:
+                linear-gradient(rgba(10,28,64,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10,28,64,0.03) 1px, transparent 1px);
+            background-size: 42px 42px;
+        }
+        .analytics-panel > * { min-width: 0; position: relative; z-index: 1; }
+        .analytics-panel .section-header,
+        .analytics-panel #libraryCards,
+        .analytics-panel #icpNextHint,
+        .analytics-panel .rail-block { padding-left: 24px; padding-right: 24px; }
+        .analytics-panel .section-header { padding-top: 22px; padding-bottom: 18px; margin-bottom: 0; }
+        .analytics-panel #libraryCards { padding-top: 4px; }
+        .analytics-panel .rail-block { padding-top: 16px; padding-bottom: 16px; }
         #icpShellRail.shell-context-rail { position: static; top: auto; gap: 16px; }
         #icpShellRail .shell-rail-list-item { white-space: normal; overflow-wrap: anywhere; }
+        #icpShellRail:empty { display: none; }
         
-        .builder-section { background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-lg); }
-        .section-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); }
-        .section-icon { font-size: 1.5rem; }
-        .section-title { font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary); }
-        .section-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+        .builder-section { position: relative; background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,251,255,0.94) 100%); border: 1px solid rgba(10,28,64,0.06); border-radius: 36px; padding: 20px 22px; margin-bottom: 0; box-shadow: 0 18px 44px rgba(10,28,64,0.08); overflow: hidden; }
+        .builder-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.11; background-image: linear-gradient(rgba(10,28,64,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(10,28,64,0.03) 1px, transparent 1px); background-size: 42px 42px; }
+        .builder-section > * { position: relative; z-index: 1; }
+        .wedge-worksheet { padding: 0; }
+        .wedge-worksheet::before { opacity: 0.08; }
+        .worksheet-band { padding: 22px 24px; }
+        .worksheet-band + .worksheet-band { border-top: 1px solid rgba(10,28,64,0.08); }
+        .worksheet-band .section-header { margin-bottom: 16px; }
+        .worksheet-band .role-toggle { margin-bottom: 18px; }
+        .worksheet-band .callout { margin-top: 12px; }
+        .worksheet-actions { display: grid; gap: 12px; }
+        .worksheet-note { font-size: 0.7rem; color: var(--text-muted); line-height: 1.45; }
+        .section-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
+        .section-icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 999px; background: rgba(230,112,30,0.08); color: var(--brand-gold); font-size: 0.64rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+        .section-title { font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 1.08rem; letter-spacing: -0.04em; color: var(--text-primary); }
+        .section-subtitle { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; line-height: 1.45; max-width: 46ch; }
         
-        .role-toggle { display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg); }
-        .role-btn { flex: 1; padding: var(--space-sm) var(--space-md); border: 1px solid var(--border-default); border-radius: var(--radius-md); background: transparent; color: var(--text-tertiary); font-weight: 600; cursor: pointer; transition: all var(--transition-fast); }
-        .role-btn:hover { border-color: var(--brand-gold); color: var(--text-secondary); }
-        .role-btn.active { background: rgba(212, 175, 55, 0.15); border-color: var(--brand-gold); color: var(--brand-gold); }
+        .role-toggle {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(140px, max-content)) minmax(0, 1fr);
+            gap: 12px 18px;
+            margin-bottom: var(--space-lg);
+            align-items: end;
+            padding-top: 12px;
+            border-top: 1px solid rgba(10,28,64,0.08);
+        }
+        .role-btn {
+            min-width: 0;
+            padding: 0 0 10px;
+            border: 0;
+            border-bottom: 1px solid rgba(10,28,64,0.12);
+            border-radius: 0;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-align: left;
+            cursor: pointer;
+            transition: color var(--transition-fast), border-color var(--transition-fast);
+            box-shadow: none;
+        }
+        .role-btn:hover { border-bottom-color: rgba(230,112,30,0.24); color: var(--text-primary); }
+        .role-btn.active {
+            background: transparent;
+            border-bottom: 2px solid rgba(230,112,30,0.42);
+            color: var(--brand-gold);
+            box-shadow: none;
+        }
+        .role-toggle-note {
+            justify-self: end;
+            padding-bottom: 10px;
+            font-size: 0.64rem;
+            color: var(--text-muted);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-align: right;
+        }
+        @media (max-width: 900px) {
+            .role-toggle { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .role-toggle-note { grid-column: 1 / -1; justify-self: start; text-align: left; }
+        }
         
         .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
         @media (max-width: 900px) { .input-grid { grid-template-columns: 1fr; } }
         .input-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
         @media (max-width: 900px) { .input-grid-2 { grid-template-columns: 1fr; } }
         
-        .input-group { display: flex; flex-direction: column; }
-        .input-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: var(--space-xs); }
-        .input-group select, .input-group input { width: 100%; padding: var(--space-sm) var(--space-md); background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; }
-        .input-group select:focus, .input-group input:focus { outline: none; border-color: var(--brand-gold); }
-        .input-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-xs); }
+        .input-group { display: flex; flex-direction: column; padding-top: 12px; border-top: 1px solid rgba(10,28,64,0.08); min-width: 0; }
+        .input-group label { display: flex; align-items: center; gap: 8px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 8px; }
+        .input-group label::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: rgba(230,112,30,0.34); flex: 0 0 auto; }
+        .input-group select, .input-group input {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 16px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,249,253,0.92) 100%);
+            border: 1px solid rgba(10,28,64,0.08);
+            border-radius: 18px;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            appearance: none;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+        }
+        .input-group select {
+            background-image:
+                linear-gradient(45deg, transparent 50%, rgba(95,118,147,0.9) 50%),
+                linear-gradient(135deg, rgba(95,118,147,0.9) 50%, transparent 50%),
+                linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,249,253,0.92) 100%);
+            background-position:
+                calc(100% - 18px) calc(50% - 2px),
+                calc(100% - 12px) calc(50% - 2px),
+                0 0;
+            background-size: 6px 6px, 6px 6px, 100% 100%;
+            background-repeat: no-repeat;
+            padding-right: 34px;
+        }
+        .input-group select:hover, .input-group input:hover { border-color: rgba(10,28,64,0.14); background: rgba(255,255,255,0.98); }
+        .input-group select:focus, .input-group input:focus { outline: none; border-color: rgba(230,112,30,0.28); box-shadow: 0 0 0 3px rgba(230,112,30,0.08); background: rgba(255,255,255,0.98); }
+        .input-hint { font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; line-height: 1.45; }
         
         .custom-input { display: none; margin-top: var(--space-xs); }
         .custom-input.visible { display: block; }
         
-        .callout { padding: var(--space-md); border-radius: var(--radius-md); margin-top: var(--space-md); }
-        .callout-amber { background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--accent-amber); }
-        .callout-red { background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red); }
-        .callout-green { background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--accent-green); }
-        .callout-blue { background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--accent-blue); }
+        .callout { padding: 14px 0 0; border-radius: 0; margin-top: var(--space-md); background: transparent; border-top: 1px solid rgba(10,28,64,0.08); }
+        .callout-amber { border-top-color: rgba(245, 158, 11, 0.32); }
+        .callout-red { border-top-color: rgba(239, 68, 68, 0.28); }
+        .callout-green { border-top-color: rgba(34, 197, 94, 0.28); }
+        .callout-blue { border-top-color: rgba(59, 130, 246, 0.28); }
         .callout-title { font-size: 0.8rem; font-weight: 700; color: inherit; margin-bottom: var(--space-xs); }
         .callout-amber .callout-title { color: var(--accent-amber); }
         .callout-red .callout-title { color: var(--accent-red); }
@@ -56,14 +214,12 @@
         .callout-blue .callout-title { color: var(--accent-blue); }
         .callout-text { font-size: 0.85rem; color: var(--text-tertiary); }
         
-        .output-box { background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-md); }
+        .output-box { background: transparent; border: 0; border-top: 1px solid rgba(10,28,64,0.08); border-radius: 0; padding: 15px 0 0; margin-bottom: 0; }
         .output-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--brand-gold); margin-bottom: var(--space-sm); }
         .output-statement { font-family: var(--font-serif); font-size: 1.1rem; color: var(--text-primary); line-height: 1.6; }
         .output-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: var(--space-sm); border-top: 1px solid var(--border-default); padding-top: var(--space-sm); }
         .output-copy { font-size: 0.94rem; color: var(--text-secondary); line-height: 1.65; }
         .hints-hidden .input-hint, .hints-hidden .output-hint { display:none; }
-        .hint-toggle { font-size:0.68rem; color:var(--text-muted); cursor:pointer; opacity:0.6; padding:2px 8px; border:1px solid var(--border-default); border-radius:var(--radius-full); background:transparent; font-family:inherit; margin-left:8px; }
-        .hint-toggle:hover { opacity:1; color:var(--brand-gold); border-color:rgba(212,165,116,0.3); }
         .output-list { list-style: none; padding: 0; margin: 0; }
         .output-list li { padding: var(--space-xs) 0; color: var(--text-secondary); font-size: 0.9rem; display: flex; align-items: flex-start; gap: var(--space-sm); }
         .output-list li::before { content: "•"; color: var(--accent-blue); font-weight: bold; }
@@ -72,8 +228,21 @@
         .output-list li.risk::before { content: "x"; color: var(--accent-red); }
         .impact-list li::before { content: "->"; color: var(--brand-gold); }
         
-        .output-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
-        @media (max-width: 900px) { .output-grid { grid-template-columns: 1fr; } }
+        .output-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; align-items: start; }
+        .output-grid > .output-box + .output-box { position: relative; }
+        .output-grid > .output-box + .output-box::before {
+            content: "";
+            position: absolute;
+            left: -14px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(10,28,64,0.08);
+        }
+        @media (max-width: 900px) {
+            .output-grid { grid-template-columns: 1fr; gap: 0; }
+            .output-grid > .output-box + .output-box::before { display: none; }
+        }
 
         .quality-summary { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-md); }
         .quality-score-wrap { min-width: 110px; text-align: right; }
@@ -91,86 +260,281 @@
         .quality-fill.fill-broad { background: linear-gradient(90deg, rgba(239, 68, 68, 0.75), rgba(245, 158, 11, 0.9)); }
         .output-copy strong { color: var(--text-primary); }
         
-        .scoring-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: var(--space-md); }
-        .scoring-table th { background: var(--bg-tertiary); padding: var(--space-sm); text-align: left; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-default); }
-        .scoring-table td { padding: var(--space-sm); border-bottom: 1px solid var(--border-default); color: var(--text-tertiary); }
-        .scoring-table tr:hover { background: rgba(59, 130, 246, 0.05); }
+        .scoring-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 6px; border-top: 1px solid rgba(10,28,64,0.08); }
+        .scoring-table th { background: transparent; padding: 14px 12px; text-align: left; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid rgba(10,28,64,0.08); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.64rem; }
+        .scoring-table td { padding: 14px 12px; border-bottom: 1px solid rgba(10,28,64,0.08); color: var(--text-secondary); vertical-align: top; }
+        .scoring-table tr:hover { background: transparent; }
         .score-0 { color: var(--accent-red); }
         .score-1 { color: var(--accent-amber); }
         .score-2 { color: var(--accent-green); }
         
-        .action-bar { display: flex; gap: var(--space-md); padding: var(--space-lg); background: var(--bg-secondary); border: 1px solid var(--border-default); border-radius: var(--radius-lg); margin-top: var(--space-lg); position: sticky; bottom: var(--space-md); }
-        .action-bar .btn { flex: 1; }
+        .action-bar { display: flex; gap: 14px 20px; padding: 18px 0 0; background: transparent; border: 0; border-top: 1px solid rgba(10,28,64,0.08); border-radius: 0; margin-top: 2px; position: static; box-shadow: none; align-items: center; flex-wrap: wrap; }
+        .action-bar .btn {
+            flex: 0 0 auto;
+            padding: 0 0 6px 14px;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            position: relative;
+        }
+        .action-bar .btn::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 8px;
+            height: 1px;
+            background: rgba(10,28,64,0.18);
+            transform: translateY(-50%);
+        }
+        .action-bar .btn:hover { color: var(--text-primary); transform: none; }
+        .action-bar .btn-secondary { color: var(--accent-blue); }
+        .action-bar .btn-secondary::before { background: rgba(59,130,246,0.42); }
+        .action-bar .btn-secondary:hover { color: #0a1c40; }
+        .action-bar .btn-ghost { color: var(--text-secondary); }
+        .action-bar .btn-ghost::before { background: rgba(95,118,147,0.34); }
+        .action-bar .btn-primary {
+            margin-left: auto;
+            padding: 10px 16px;
+            border: 1px solid rgba(230,112,30,0.18);
+            border-radius: 999px;
+            background: rgba(230,112,30,0.12);
+            color: #0a1c40;
+            box-shadow: 0 10px 22px rgba(230,112,30,0.10);
+            letter-spacing: 0.08em;
+        }
+        .action-bar .btn-primary::before { display: none; }
+        .action-bar .btn-primary:hover { color: #0a1c40; border-color: rgba(230,112,30,0.26); background: rgba(230,112,30,0.16); }
+        @media (max-width: 900px) {
+            .action-bar .btn-primary { margin-left: 0; }
+        }
+        .action-export { display: inline-flex; align-items: center; gap: 8px; position: relative; padding-left: 14px; }
+        .action-export::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 8px;
+            height: 1px;
+            background: rgba(10,28,64,0.18);
+            transform: translateY(-50%);
+        }
+        .action-export-label { font-size: 0.62rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; white-space: nowrap; letter-spacing: 0.12em; }
+        .action-export-select {
+            padding: 8px 30px 8px 12px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,249,253,0.92) 100%);
+            border: 1px solid rgba(10,28,64,0.08);
+            border-radius: 16px;
+            color: var(--text-secondary);
+            font-size: 0.74rem;
+            font-weight: 600;
+            appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, rgba(95,118,147,0.9) 50%), linear-gradient(135deg, rgba(95,118,147,0.9) 50%, transparent 50%), linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,249,253,0.92) 100%);
+            background-position: calc(100% - 13px) calc(50% - 1px), calc(100% - 8px) calc(50% - 1px), 0 0;
+            background-size: 5px 5px, 5px 5px, 100% 100%;
+            background-repeat: no-repeat;
+        }
+        .action-export-select:hover { border-color: rgba(10,28,64,0.14); }
+        .action-export-select:focus { outline: none; border-color: rgba(230,112,30,0.28); box-shadow: 0 0 0 3px rgba(230,112,30,0.08); }
+        .template-panel { margin-top: 10px; padding: 14px 16px 0; background: transparent; border: 0; border-top: 1px solid rgba(10,28,64,0.08); border-radius: 0; box-shadow: none; }
+        .template-panel-title { font-size: 0.7rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+        .template-panel-note { font-size: 0.72rem; color: var(--text-muted); margin-top: 8px; }
+        .template-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+        .template-button {
+            padding: 7px 12px;
+            border: 1px solid rgba(59,130,246,0.14);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.76);
+            color: var(--accent-blue);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .template-button:hover { border-color: rgba(59,130,246,0.24); color: #0a1c40; }
+        .worksheet-note.tight-note { margin-top: 8px; }
+        .rail-block { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid rgba(10,28,64,0.08); }
+        .rail-block:first-of-type { padding-top: 0; border-top: 0; }
+        .analytics-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--text-muted); margin-bottom: 0; display: flex; align-items: center; gap: var(--space-sm); }
+        .rail-kicker { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--text-muted); }
+        .icp-rail-note { font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); padding-top: 10px; border-top: 1px solid rgba(10,28,64,0.08); }
+        .library-ledger { display: grid; gap: 0; }
+        .library-ledger-row { display: grid; gap: 10px; padding: 16px 0; border-top: 1px solid rgba(10,28,64,0.08); cursor: pointer; transition: background 0.15s ease; }
+        .library-ledger-row:first-child { border-top: 0; }
+        .library-ledger-row:hover { background: rgba(255,255,255,0.28); }
+        .library-ledger-row.active-card { background: rgba(255,255,255,0.44); }
+        .library-ledger-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .library-ledger-name { font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 0.94rem; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+        .library-ledger-state { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; white-space: nowrap; }
+        .library-ledger-state.worked { color: var(--accent-green); }
+        .library-ledger-state.saved { color: var(--accent-blue); }
+        .library-ledger-state.draft { color: var(--brand-gold); }
+        .library-ledger-meta { font-size: 0.67rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+        .library-ledger-statement { font-size: 0.78rem; line-height: 1.45; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .library-ledger-summary { display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.66rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+        .library-ledger-bottom { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+        .library-ledger-actions { display: flex; gap: 12px; flex: 0 0 auto; }
+        .library-ledger-actions button { padding: 0; font-size: 0.68rem; font-weight: 700; border: 0; background: transparent; color: var(--text-muted); cursor: pointer; }
+        .library-ledger-actions button:hover { color: var(--text-primary); }
+        .library-ledger-actions .delete-btn:hover { color: var(--accent-red); }
+        .library-ledger-empty { font-size: 0.82rem; line-height: 1.55; color: var(--text-secondary); padding: 4px 0; }
+        .rail-action { display: inline-flex; align-items: center; justify-content: center; width: fit-content; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(10,28,64,0.08); background: rgba(255,255,255,0.76); color: var(--text-primary); font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+        .rail-action:hover { border-color: rgba(230,112,30,0.18); color: var(--brand-gold); }
+        .rail-summary-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid rgba(10,28,64,0.08); }
+        .rail-summary-row:first-of-type { border-top: 0; }
+        .rail-summary-label { font-size: 0.76rem; color: var(--text-secondary); }
+        .rail-summary-value { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-primary); }
+        .rail-summary-copy { font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); padding-top: 8px; border-top: 1px solid rgba(10,28,64,0.08); }
+        .icp-rail-score { display: grid; gap: 10px; }
+        .icp-rail-score-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .icp-rail-score-copy { font-size: 0.8rem; line-height: 1.45; color: var(--text-secondary); }
+        .rail-score-list { display: grid; gap: 10px; }
+        .rail-score-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding-top: 10px; border-top: 1px solid rgba(10,28,64,0.08); }
+        .rail-score-name { font-size: 0.8rem; font-weight: 700; color: var(--text-primary); }
+        .rail-score-meta { font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px; }
+        .rail-score-fit { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+        .rail-score-fit.good { color: var(--accent-green); }
+        .rail-score-fit.warn { color: var(--brand-gold); }
+        .rail-score-fit.risk { color: var(--text-muted); }
         
-        .lib-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 10px 12px; cursor: pointer; transition: all var(--transition-fast); }
-        .lib-card:hover { border-color: var(--brand-gold); background: rgba(212,165,116,0.05); }
-        .lib-card.active-card { border-color: var(--brand-gold); box-shadow: 0 0 0 1px var(--brand-gold); }
-        .lib-card-name { font-family: var(--font-serif); font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .lib-card-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 6px; }
-        .lib-card-statement { font-size: 0.75rem; color: var(--text-tertiary); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .lib-card-actions { display: flex; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-default); }
-        .lib-card-actions button { flex: 1; padding: 4px 8px; font-size: 0.65rem; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--border-default); background: transparent; color: var(--text-tertiary); transition: all 0.15s; }
-        .lib-card-actions button:hover { border-color: var(--brand-gold); color: var(--text-primary); }
-        .lib-card-actions button.delete-btn:hover { border-color: var(--accent-red); color: var(--accent-red); }
-        .lib-card-worked { display: inline-block; font-size: 0.6rem; padding: 2px 6px; border-radius: var(--radius-full); background: rgba(34,197,94,0.12); color: var(--accent-green); font-weight: 600; }
-        .lib-card-best { display: inline-block; font-size: 0.6rem; padding: 2px 6px; border-radius: var(--radius-full); background: rgba(245,158,11,0.15); color: var(--accent-amber); font-weight: 700; margin-left: 4px; }
-        .lib-card-completeness { display: inline-block; font-size: 0.62rem; padding: 2px 7px; border-radius: var(--radius-full); background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); font-weight: 700; margin-top: 4px; }
-        .lib-card-draft { display: inline-block; font-size: 0.62rem; padding: 2px 7px; border-radius: var(--radius-full); background: rgba(245,158,11,0.14); color: #f59e0b; border: 1px solid rgba(245,158,11,0.34); font-weight: 700; margin-left: 4px; margin-top: 4px; }
-        .lib-card-outcomes { margin-top: 6px; font-size: 0.7rem; color: #cbd5e1; line-height: 1.35; }
-        .lib-card-perf { margin-top: 4px; font-size: 0.68rem; color: var(--text-muted); line-height: 1.35; }
-        .lib-card-perf.good { color: #22c55e; }
-        .lib-card-perf.warn { color: #f59e0b; }
-        .lib-card-perf.bad { color: #ef4444; }
-        
-        .analytics-title { font-family: var(--font-serif); font-size: 1.1rem; color: var(--text-primary); margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-sm); }
-        .analytics-section { margin-bottom: var(--space-lg); }
-        .analytics-section-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: var(--space-sm); }
-        
-        .stat-row { display: flex; justify-content: space-between; align-items: center; padding: var(--space-sm) 0; border-bottom: 1px solid var(--border-default); }
-        .stat-row:last-child { border-bottom: none; }
-        .stat-label { font-size: 0.85rem; color: var(--text-tertiary); }
-        .stat-value { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-primary); }
-        .stat-value.good { color: var(--accent-green); }
-        
-        .top-items { margin-top: var(--space-md); }
-        .top-item { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: rgba(255, 255, 255, 0.02); border-radius: var(--radius-sm); margin-bottom: var(--space-xs); }
-        .top-item-name { font-size: 0.8rem; color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .top-item-count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-blue); }
-        
-        .worked-toggle { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-md); padding: var(--space-sm); background: rgba(34, 197, 94, 0.1); border-radius: var(--radius-md); cursor: pointer; }
+        .worked-toggle { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-md); padding: 14px 0 0; background: transparent; border-radius: 0; border-top: 1px solid rgba(34, 197, 94, 0.18); cursor: pointer; }
         .worked-toggle input { width: 18px; height: 18px; accent-color: var(--accent-green); }
         .worked-toggle label { font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
-        .worked-toggle:hover { background: rgba(34, 197, 94, 0.15); }
-        .icp-first-fold { margin-bottom: var(--space-lg); padding: 18px; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; background: linear-gradient(180deg, rgba(18,24,42,0.96) 0%, rgba(12,18,33,0.98) 100%); box-shadow: 0 22px 44px rgba(0,0,0,0.14); }
+        .worked-toggle:hover { background: transparent; }
+        .icp-first-fold { margin-bottom: 18px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
         .icp-first-fold #icpBootState { margin-bottom: 14px; }
-        .icp-first-fold #icpShellBand { margin-bottom: 0; }
-        .icp-first-fold #icpHealthPanel { margin-top: 16px; }
-        @media (max-width: 900px) { .icp-first-fold { padding: 14px; } }
+        .icp-first-fold #icpShellBand { display: none; margin-bottom: 0; }
+        .icp-first-fold #icpHealthPanel { margin-top: 0; }
+        .icp-variant-board {
+            position: relative; overflow: hidden; min-height: 980px; padding: 30px 32px 34px;
+            border-radius: 40px; border: 1px solid rgba(10, 28, 64, 0.06); box-shadow: 0 28px 86px rgba(10, 28, 64, 0.12);
+            background:
+                radial-gradient(circle at 86% 12%, rgba(230,112,30,0.06), transparent 22%),
+                radial-gradient(circle at 12% 0%, rgba(36,113,231,0.06), transparent 24%),
+                linear-gradient(180deg, rgba(253,254,255,0.98) 0%, rgba(242,246,252,0.98) 100%);
+        }
+        .icp-variant-board::before {
+            content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.42;
+            background-image:
+                linear-gradient(rgba(10,28,64,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10,28,64,0.03) 1px, transparent 1px);
+            background-size: 34px 34px;
+        }
+        .icp-variant-meta {
+            position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: start;
+            gap: 24px; margin-bottom: 26px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+            font-weight: 700; color: var(--text-muted);
+        }
+        .icp-variant-meta .accent { color: var(--brand-gold); }
+        .icp-variant-meaning {
+            max-width: 430px; font-size: 14px; line-height: 1.55; text-transform: none; letter-spacing: 0;
+            font-weight: 500; color: var(--text-secondary); text-align: right;
+        }
+        .icp-variant-chrome { position: relative; z-index: 1; display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 24px; align-items: start; }
+        .icp-variant-spine { display: grid; gap: 16px; align-content: start; padding-top: 6px; }
+        .icp-variant-brand { font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 18px; letter-spacing: 0.04em; color: #0a1c40; }
+        .icp-variant-dot { width: 14px; height: 14px; border-radius: 50%; margin-left: 2px; background: var(--brand-gold); box-shadow: 0 0 0 8px rgba(230,112,30,0.08); }
+        .icp-variant-rail { width: 1px; height: 260px; margin-left: 8px; background: linear-gradient(180deg, rgba(10,28,64,0.12), rgba(10,28,64,0)); }
+        .icp-variant-surface { display: grid; gap: 24px; }
+        @media (max-width: 900px) { .icp-variant-board { min-height: auto; padding: 26px 20px 28px; } }
+        @media (max-width: 820px) {
+          .icp-variant-meta { display: grid; gap: 10px; }
+          .icp-variant-meaning { text-align: left; max-width: none; }
+          .icp-variant-chrome { grid-template-columns: 1fr; }
+          .icp-variant-spine { display: none; }
+        }
+        .icp-ledger-stage { display: grid; gap: 22px; }
+        .icp-ledger-hero { display: grid; gap: 12px; max-width: 920px; }
+        .icp-ledger-eyebrow { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--brand-gold); font-weight: 700; }
+        .icp-ledger-title { font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: clamp(42px, 4.8vw, 72px); line-height: 0.92; letter-spacing: -0.09em; color: #0a1c40; max-width: 10ch; }
+        .icp-ledger-copy { max-width: 680px; font-size: 16px; line-height: 1.55; color: var(--text-secondary); }
+        .icp-ledger-kickers { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .icp-ledger-pill { display: inline-flex; align-items: center; justify-content: center; min-height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid rgba(10,28,64,0.08); background: rgba(255,255,255,0.76); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--text-muted); }
+        .icp-ledger-pill.green { color: var(--accent-green); border-color: rgba(34,197,94,0.18); background: rgba(34,197,94,0.08); }
+        .icp-ledger-pill.orange { color: var(--brand-gold); border-color: rgba(230,112,30,0.18); background: rgba(230,112,30,0.08); }
+        .icp-ledger-pill.blue { color: var(--accent-blue); border-color: rgba(59,130,246,0.18); background: rgba(59,130,246,0.08); }
+        .icp-ledger-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.88fr); gap: 24px; align-items: start; }
+        .icp-active-wedge { display: grid; gap: 14px; padding-top: 12px; border-top: 1px solid rgba(10,28,64,0.1); }
+        .icp-active-kicker { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .icp-active-line { font-family: "DM Serif Display", Georgia, serif; font-size: clamp(28px, 3.9vw, 56px); line-height: 0.98; letter-spacing: -0.05em; max-width: 10.5ch; color: #0a1c40; }
+        .icp-active-line .hot { color: var(--brand-gold); }
+        .icp-active-line .cool { color: var(--accent-blue); }
+        .icp-active-line .go { color: var(--accent-green); }
+        .icp-active-note { max-width: 660px; font-size: 16px; line-height: 1.55; color: var(--text-secondary); }
+        .icp-field-ledger { display: grid; gap: 0; border-top: 1px solid rgba(10,28,64,0.1); border-bottom: 1px solid rgba(10,28,64,0.1); }
+        .icp-field-row { display: grid; grid-template-columns: 32px 128px 1fr auto; gap: 14px; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(10,28,64,0.08); }
+        .icp-field-row:last-child { border-bottom: 0; }
+        .icp-field-mark { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: rgba(10,28,64,0.06); color: #0a1c40; }
+        .icp-field-mark.green { background: rgba(34,197,94,0.12); color: var(--accent-green); }
+        .icp-field-mark.orange { background: rgba(230,112,30,0.12); color: var(--brand-gold); }
+        .icp-field-mark.blue { background: rgba(59,130,246,0.12); color: var(--accent-blue); }
+        .icp-field-mark.red { background: rgba(239,68,68,0.12); color: var(--accent-red); }
+        .icp-field-label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .icp-field-copy { font-size: 15px; line-height: 1.45; color: var(--text-primary); }
+        .icp-field-state { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+        .icp-field-state.good { color: var(--accent-green); }
+        .icp-field-state.warn { color: var(--brand-gold); }
+        .icp-field-state.risk { color: var(--accent-red); }
+        .icp-run-docket { display: grid; gap: 18px; padding: 20px 22px; border-radius: 26px; border: 1px solid rgba(10,28,64,0.08); background: rgba(255,255,255,0.9); box-shadow: 0 16px 34px rgba(10,28,64,0.08); }
+        .icp-read-score { display: flex; justify-content: space-between; gap: 14px; align-items: end; padding-bottom: 14px; border-bottom: 1px solid rgba(10,28,64,0.08); }
+        .icp-read-title, .icp-docket-label, .icp-health-label, .icp-side-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .icp-read-copy { font-size: 24px; line-height: 1; font-weight: 700; letter-spacing: -0.05em; color: #0a1c40; }
+        .icp-read-value { font-family: "Outfit", "Plus Jakarta Sans", sans-serif; font-size: 48px; line-height: 0.9; color: var(--accent-green); letter-spacing: -0.08em; }
+        .icp-docket-stack { display: grid; gap: 14px; }
+        .icp-docket-row { display: grid; gap: 5px; padding-bottom: 12px; border-bottom: 1px solid rgba(10,28,64,0.08); }
+        .icp-docket-row:last-child { padding-bottom: 0; border-bottom: 0; }
+        .icp-docket-headline { font-size: 20px; line-height: 1.1; letter-spacing: -0.04em; font-weight: 700; color: #0a1c40; }
+        .icp-docket-copy { font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
+        .icp-health-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 2px; }
+        .icp-health-cell { display: grid; gap: 8px; padding: 18px 20px; border-radius: 24px; border: 1px solid rgba(10,28,64,0.08); background: rgba(255,255,255,0.7); }
+        .icp-health-headline { font-size: 22px; line-height: 1.05; letter-spacing: -0.04em; font-weight: 700; color: #0a1c40; }
+        .icp-health-copy { font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
+        .icp-library-brief { display: grid; gap: 12px; padding: 16px 0 4px; border-top: 1px solid rgba(10,28,64,0.08); border-bottom: 1px solid rgba(10,28,64,0.08); }
+        .icp-side-row { display: grid; gap: 4px; }
+        .icp-side-copy { font-size: 14px; line-height: 1.45; color: var(--text-secondary); }
+        .saved-wedge-sheet .worksheet-band { padding: 22px 24px 20px; }
+        .saved-wedge-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr); gap: 26px; align-items: start; }
+        .saved-wedge-read { display: grid; gap: 18px; }
+        .saved-wedge-read .rail-block + .rail-block { margin-top: -4px; }
+        @media (max-width: 1100px) { .saved-wedge-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 1200px) { .icp-ledger-grid, .icp-health-strip { grid-template-columns: 1fr; } }
+        @media (max-width: 820px) {
+          .icp-ledger-title { max-width: none; }
+          .icp-field-row { grid-template-columns: 26px 1fr; }
+          .icp-field-row > :nth-child(3), .icp-field-row > :nth-child(4) { grid-column: 2; }
+        }
     </style>
 </head>
-<body class="room-wave2 room-icp-studio">
+<body class="command-surface-page room-icp-studio">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics-site-config.js"></script>
     <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
+            <script src="/js/demo-storage-bootstrap.js"></script>
+<script src="/js/workspace-guard.js"></script>
             <script src="/js/nav.js"></script>
         </aside>
         
         <main class="app-main">
             <header class="app-header module-header">
                 <div class="module-header-title">
-                    <div class="shell-header-meta">
-                        <span class="shell-header-kicker">ICP family</span>
-                        <span class="shell-header-state state-ready">Decisive targeting</span>
-                    </div>
                     <h1 class="page-title">ICP Studio</h1>
-                    <p class="page-subtitle">Define a winnable 30-day slice, then run it hard. Stop selling to everyone.</p>
                 </div>
             </header>
             
-            <div class="app-content">
+            <div class="app-content hints-hidden">
+                <div class="icp-room-topline">
+                    <div class="icp-room-kicker">ICP studio</div>
+                    <div class="icp-room-brand">Antaeus</div>
+                </div>
                 <section class="icp-first-fold">
                 <div id="icpBootState"></div>
                 <div id="icpShellBand"></div>
@@ -179,10 +543,11 @@
                 <div class="studio-layout shell-context-layout">
                     <div class="builder-content shell-work-column">
                         <div id="icpOperatingBoard"></div>
+                        <section class="builder-section wedge-worksheet">
                         <!-- Inputs Section -->
-                        <div class="builder-section">
+                        <div class="worksheet-band">
                             <div class="section-header">
-                                <span class="section-icon">⚙️</span>
+                                <span class="section-icon">01</span>
                                 <div>
                                     <div class="section-title">Inputs</div>
                                     <div class="section-subtitle">Pick your slice. These inputs drive the statement and buying-group minimum.</div>
@@ -192,14 +557,14 @@
                             <div class="role-toggle">
                                 <button class="role-btn active" id="role_founder" onclick="setRole('founder')">Founder-led</button>
                                 <button class="role-btn" id="role_firstae" onclick="setRole('firstae')">First AE</button>
-                                <span style="font-size: 0.75rem; color: var(--text-muted); align-self: center;">Only affects recommended account focus</span>
+                                <span class="role-toggle-note">Changes the account-focus guidance only</span>
                             </div>
                             
                             <div class="input-grid">
                                 <div class="input-group">
                                     <label>Industry</label>
                                     <select id="in_industry" onchange="handleIndustryChange(); update();">
-                                        <option value="">Select</option>
+                                        <option value="">Choose wedge</option>
                                         <option value="Software (B2B SaaS)">Software (B2B SaaS)</option>
                                         <option value="Fintech">Fintech</option>
                                         <option value="Healthcare">Healthcare</option>
@@ -217,7 +582,7 @@
                                 <div class="input-group">
                                     <label>Company Size</label>
                                     <select id="in_size" onchange="update()">
-                                        <option value="">Select</option>
+                                        <option value="">Choose band</option>
                                         <option value="50-200 employees">50-200 employees</option>
                                         <option value="200-1,000 employees">200-1,000 employees</option>
                                         <option value="1,000-5,000 employees">1,000-5,000 employees</option>
@@ -229,7 +594,7 @@
                                 <div class="input-group">
                                     <label>Geography</label>
                                     <select id="in_geo" onchange="update()">
-                                        <option value="">Select</option>
+                                        <option value="">Choose zone</option>
                                         <option value="US">US</option>
                                         <option value="North America">North America</option>
                                         <option value="EMEA">EMEA</option>
@@ -244,7 +609,7 @@
                                 <div class="input-group">
                                     <label>Primary Buyer (Owner)</label>
                                     <select id="in_buyer" onchange="handleBuyerChange(); update();">
-                                        <option value="">Select</option>
+                                        <option value="">Choose owner</option>
                                         <option value="CFO">CFO</option>
                                         <option value="COO">COO</option>
                                         <option value="VP Operations">VP Operations</option>
@@ -261,7 +626,7 @@
                                 <div class="input-group">
                                     <label>Primary Pain <span class="ihelp">ℹ<span class="ihelp-tip">The problem the buyer lives with daily that your product solves. Must be felt pain, not theoretical.</span></span></label>
                                     <select id="in_pain" onchange="update()">
-                                        <option value="">Select</option>
+                                        <option value="">Choose pain</option>
                                         <option value="Cost control / spend leakage">Cost control / spend leakage</option>
                                         <option value="Risk & compliance exposure">Risk & compliance exposure</option>
                                         <option value="Time-to-launch / slow ops">Time-to-launch / slow ops</option>
@@ -275,7 +640,7 @@
                                 <div class="input-group">
                                     <label>Trigger (Evidence) <span class="ihelp">ℹ<span class="ihelp-tip">The event that makes the pain urgent enough to act on now. Without a trigger, pain stays tolerable. Examples: budget cycle, re-org, new exec, compliance deadline.</span></span></label>
                                     <select id="in_trigger" onchange="update()">
-                                        <option value="">Select</option>
+                                        <option value="">Choose trigger</option>
                                         <option value="Recent expansion (new regions, entities, acquisitions)">Recent expansion (new regions, entities, acquisitions)</option>
                                         <option value="Hiring spike / org change">Hiring spike / org change</option>
                                         <option value="Vendor consolidation initiative">Vendor consolidation initiative</option>
@@ -291,7 +656,7 @@
                                 <div class="input-group">
                                     <label>Proof Window</label>
                                     <select id="in_proof_window" onchange="update()">
-                                        <option value="">Select</option>
+                                        <option value="">Choose window</option>
                                         <option value="7 days">7 days</option>
                                         <option value="14 days">14 days</option>
                                         <option value="30 days">30 days</option>
@@ -313,9 +678,9 @@
                         </div>
                         
                         <!-- Outputs Section -->
-                        <div class="builder-section">
+                        <div class="worksheet-band">
                             <div class="section-header">
-                                <span class="section-icon">📤</span>
+                                <span class="section-icon">02</span>
                                 <div>
                                     <div class="section-title">Outputs</div>
                                     <div class="section-subtitle">Your Thin ICP statement, focus recommendation, and buying group minimum.</div>
@@ -386,14 +751,14 @@
                             
                             <div class="worked-toggle">
                                 <input type="checkbox" id="workedCheckbox">
-                                <label for="workedCheckbox">✓ This ICP definition led to qualified conversations</label>
+                                <label for="workedCheckbox">This ICP definition led to qualified conversations</label>
                             </div>
                         </div>
                         
                         <!-- Scoring Rubric Section -->
-                        <div class="builder-section">
+                        <div class="worksheet-band">
                             <div class="section-header">
-                                <span class="section-icon">📊</span>
+                                <span class="section-icon">03</span>
                                 <div>
                                     <div class="section-title">Account Scoring Rubric</div>
                                     <div class="section-subtitle">Score accounts quickly so you spend time on the right 20%.</div>
@@ -462,9 +827,9 @@
                         </div>
                         
                         <!-- Diagnostics Section -->
-                        <div class="builder-section">
+                        <div class="worksheet-band">
                             <div class="section-header">
-                                <span class="section-icon">⚠️</span>
+                                <span class="section-icon">04</span>
                                 <div>
                                     <div class="section-title">Diagnostics</div>
                                     <div class="section-subtitle">Quick checks to avoid common mistakes.</div>
@@ -509,116 +874,77 @@
                             
                             <div class="callout callout-red">
                                 <div class="callout-title">Failure modes (common)</div>
-                                <div class="callout-text">Broad ICP → generic messaging → low reply rate → you blame activity. Don't. Fix targeting first.</div>
+                                <div class="callout-text">Broad ICP becomes generic messaging, then low reply rate, then false blame on activity. Fix targeting first.</div>
                             </div>
                         </div>
                         
+                        </div>
+
                         <!-- Actions -->
-                        <div class="data-guide" id="icpDataGuide" style="margin-top:16px;margin-bottom:16px;">
-                            <div class="data-guide-header" onclick="document.getElementById('icpDataGuide').classList.toggle('open')" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:10px;">
-                                <span>💡</span>
-                                <span style="font-weight:700;font-size:0.85rem;color:var(--text-secondary);flex:1;">Where Does Your Data Go?</span>
-                                <span class="dg-chev" style="font-size:0.7rem;color:var(--text-muted);transition:transform 0.2s;">▼</span>
-                            </div>
-                            <div class="dg-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s;">
-                                <div style="padding:12px 16px;font-size:0.72rem;color:var(--text-tertiary);line-height:1.6;border:1px solid var(--border-default);border-top:none;border-radius:0 0 10px 10px;">
-                                    <span style="font-weight:600;color:var(--text-tertiary);">Save to ICP Library</span> stores this ICP and updates analytics.
-                                    <span style="font-weight:600;color:var(--text-tertiary);">Copy Statement</span> copies the targeting statement to clipboard.
-                                    <span style="font-weight:600;color:var(--text-tertiary);">Reset</span> clears current inputs — saved ICPs remain intact.
-                                </div>
-                            </div>
-                        </div>
-                        <style>.data-guide.open .dg-body{max-height:300px!important;}.data-guide.open .dg-chev{transform:rotate(180deg)!important;}</style>
-                        
-                        <div class="action-bar" style="flex-wrap:wrap;">
-                            <button class="btn btn-ghost" onclick="toggleTemplatePanel()">🧩 Start from template</button>
-                            <button class="btn btn-ghost" onclick="resetForm()">🔄 Reset</button>
-                            <button class="btn btn-secondary" onclick="copyStatement()">📋 Copy Statement</button>
-                            <span style="display:inline-flex;align-items:center;gap:4px;">
-                                <span style="font-size:0.62rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;white-space:nowrap;">Choose format:</span>
-                                <select id="icpExportFmt" style="padding:4px 8px;background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:var(--radius-sm);color:var(--text-secondary);font-size:0.75rem;">
+                        <div class="worksheet-band worksheet-actions"><div class="action-bar">
+                            <button class="btn btn-ghost" onclick="toggleTemplatePanel()">Load starter wedge</button>
+                            <button class="btn btn-ghost" onclick="resetForm()">Clear wedge</button>
+                            <button class="btn btn-secondary" onclick="copyStatement()">Copy wedge line</button>
+                            <span class="action-export">
+                                <span class="action-export-label">Export as</span>
+                                <select id="icpExportFmt" class="action-export-select">
                                     <option value="pdf">PDF</option>
                                     <option value="docx">DOCX</option>
                                     <option value="csv">CSV</option>
                                 </select>
                             </span>
-                            <button class="btn btn-secondary" onclick="exportICP()">📥 Export</button>
-                            <button class="btn btn-primary" onclick="saveICP()">💾 Save ICP</button>
+                            <button class="btn btn-secondary" onclick="exportICP()">Export sheet</button>
+                            <button class="btn btn-primary" onclick="saveICP()">Save wedge</button>
                         </div>
-                        <div id="templatePanel" class="hidden" style="margin-top:10px;padding:12px;background:rgba(15,23,42,0.55);border:1px solid rgba(59,130,246,0.22);border-radius:10px;">
-                            <div style="font-size:0.72rem;font-weight:700;color:#93c5fd;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Starter templates</div>
-                            <div id="templateButtons" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
-                            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:8px;">Each template pre-fills 6-8 fields. Edit to fit your market before saving.</div>
+                        <div id="templatePanel" class="template-panel hidden">
+                            <div class="template-panel-title">Starter wedges</div>
+                            <div id="templateButtons" class="template-buttons"></div>
+                            <div class="template-panel-note">Each starter wedge is a first cut. Tighten it before saving it to the ledger.</div>
                         </div>
-                        <div style="text-align:center;font-size:0.63rem;color:var(--text-muted);line-height:1.5;margin-top:6px;">
-                            <span style="font-weight:600;color:var(--text-tertiary);">Reset</span> clears current inputs — saved ICPs remain intact.
-                            <span style="font-weight:600;color:var(--text-tertiary);">Copy Statement</span> copies the targeting statement to clipboard.
-                            <span style="font-weight:600;color:var(--text-tertiary);">Export</span> downloads this ICP in your chosen format (PDF, DOCX, or CSV).
-                            <span style="font-weight:600;color:var(--text-tertiary);">Save to ICP Library</span> stores this ICP and updates analytics.
+                        <div class="worksheet-note tight-note">Only save wedges the rest of the system can run without translation.</div>
                         </div>
+                        </section>
                     </div>
                     
-                    <!-- ICP Library Panel -->
                     <div class="analytics-panel" id="libraryPanel">
-                        <div id="icpShellRail"></div>
-                        <div class="analytics-title" style="display:flex;justify-content:space-between;align-items:center;">
-                            <span>📚 ICP Library</span>
+                        <div class="section-header" style="margin-bottom:0;">
+                            <span class="section-icon">05</span>
+                            <div style="flex:1;">
+                                <div class="section-title">Saved wedges</div>
+                                <div class="section-subtitle">Keep the reusable slices here. Compare sharpness, delete the vague ones, and score the live fit without leaving the room.</div>
+                            </div>
                             <span style="font-size:0.7rem;color:var(--text-muted);font-family:var(--font-mono);" id="libraryCount">0 saved</span>
                         </div>
                         
-                        <div id="libraryCards" style="display:flex;flex-direction:column;gap:var(--space-sm);">
+                        <div id="libraryCards" class="library-ledger">
                             <div class="skeleton skeleton-card"></div>
                             <div class="skeleton skeleton-card"></div>
                         </div>
-                        <div id="icpNextHint" class="hidden" style="margin-top:12px;padding:12px 16px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius-lg);font-size:0.83rem;color:var(--text-secondary);display:flex;align-items:center;gap:10px;"></div>
-
-                        <div class="analytics-section" style="margin-top:var(--space-lg);border-top:1px solid var(--border-default);padding-top:var(--space-md);">
-                            <div class="analytics-section-title" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="document.getElementById('analyticsBody').classList.toggle('open')">
-                                <span>📈 Analytics</span>
-                                <span style="font-size:0.65rem;color:var(--text-muted);">▼</span>
+                        <div id="icpNextHint" class="icp-rail-note hidden"></div>
+                        <div class="rail-block">
+                            <div class="rail-kicker">Room read</div>
+                            <div class="rail-summary-row">
+                                <span class="rail-summary-label">Saved wedges</span>
+                                <span class="rail-summary-value" id="rail_saved_count">0</span>
                             </div>
-                            <div id="analyticsBody" class="collapsible-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s;">
-                                <div style="padding-top:var(--space-sm);">
-                                    <div class="stat-row">
-                                        <span class="stat-label">Session created</span>
-                                        <span class="stat-value" id="stat_session_created">0</span>
-                                    </div>
-                                    <div class="stat-row">
-                                        <span class="stat-label">Session worked</span>
-                                        <span class="stat-value" id="stat_session_worked">0</span>
-                                    </div>
-                                    <div class="stat-row">
-                                        <span class="stat-label">Total saved</span>
-                                        <span class="stat-value" id="stat_total_icps">0</span>
-                                    </div>
-                                    <div class="stat-row">
-                                        <span class="stat-label">Success rate</span>
-                                        <span class="stat-value good" id="stat_success_rate">-</span>
-                                    </div>
-                                    <div style="margin-top:var(--space-sm);">
-                                        <div class="analytics-section-title">Top Industries</div>
-                                        <div class="top-items" id="top_industries"><div style="color:var(--text-muted);font-size:0.85rem;">No data yet</div></div>
-                                    </div>
-                                    <div style="margin-top:var(--space-sm);">
-                                        <div class="analytics-section-title">Top Buyers</div>
-                                        <div class="top-items" id="top_buyers"><div style="color:var(--text-muted);font-size:0.85rem;">No data yet</div></div>
-                                    </div>
-                                    <div style="margin-top:var(--space-sm);">
-                                        <div class="analytics-section-title">Top Triggers</div>
-                                        <div class="top-items" id="top_triggers"><div style="color:var(--text-muted);font-size:0.85rem;">No data yet</div></div>
-                                    </div>
-                                </div>
+                            <div class="rail-summary-row">
+                                <span class="rail-summary-label">Worked live</span>
+                                <span class="rail-summary-value" id="rail_worked_count">0</span>
                             </div>
-                            <style>#analyticsBody.open{max-height:600px!important;}</style>
+                            <div class="rail-summary-row">
+                                <span class="rail-summary-label">Worked ratio</span>
+                                <span class="rail-summary-value" id="rail_success_rate">-</span>
+                            </div>
+                            <div class="rail-summary-copy" id="rail_best_pattern">No repeatable wedge yet. Save 2-3 real slices and compare them here.</div>
                         </div>
 
                         <!-- Signal Console Scoring -->
-                        <div style="margin-top:var(--space-lg);border-top:1px solid var(--border-default);padding-top:var(--space-md);">
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-                                <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--brand-gold);">Score Signal Console Accounts</div>
-                                <button onclick="scoreAccounts()" style="padding:6px 14px;border-radius:8px;font-size:0.75rem;font-weight:700;border:1px solid rgba(212,165,116,0.3);background:rgba(212,165,116,0.08);color:var(--brand-gold);cursor:pointer;font-family:inherit;">Score Accounts →</button>
+                        <div class="rail-block icp-rail-score">
+                            <div class="icp-rail-score-head">
+                                <div class="rail-kicker">Signal Console fit</div>
+                                <button onclick="scoreAccounts()" class="rail-action">Score accounts</button>
                             </div>
-                            <div id="scScoreResults" style="font-size:0.82rem;color:var(--text-muted);">Click to score your Signal Console accounts against your ICP rubric.</div>
+                            <div id="scScoreResults" class="icp-rail-score-copy">Run a quick check to see which live accounts fit the current wedge best.</div>
                         </div>
 
                     </div>
@@ -789,7 +1115,7 @@
             var container = byId('templateButtons');
             if (!container) return;
             container.innerHTML = icpTemplates.map(function(t) {
-                return '<button class="btn btn-secondary" style="font-size:0.72rem;padding:6px 10px;" onclick="applyTemplate(\'' + t.id + '\')">' + t.name + '</button>';
+                return '<button class="template-button" onclick="applyTemplate(\'' + t.id + '\')">' + t.name + '</button>';
             }).join('');
         }
 
@@ -1031,58 +1357,34 @@
             return { label: 'Too thin', tone: 'risk' };
         }
 
-        function renderIcpShellChrome(quality, industry, size, geo, buyer, trigger, activeAccounts) {
-            if (!window.gtmShellChrome) return;
-
-            var qualityState = qualityStateLabel(quality);
-            var downstream = buildDownstreamImpact(industry, size, geo, buyer, val('in_pain'), trigger, val('in_proof_window'), activeAccounts);
-            var risks = (quality && quality.checks ? quality.checks : []).filter(function(check) {
-                return check.tone !== 'good';
-            }).map(function(check) {
-                return check.text;
-            }).slice(0, 3);
-
-            window.gtmShellChrome.applyHeader({
-                family: 'Intelligence',
-                stateLabel: qualityState.label,
-                stateTone: qualityState.tone
-            });
-
-            window.gtmShellChrome.renderCommandBand('#icpShellBand', {
-                kicker: 'Targeting truth',
-                title: quality ? quality.label : 'Define one narrow wedge the system can trust.',
-                copy: quality ? quality.summary : 'This page should define one credible slice so territory, sourcing, outbound, and discovery stop operating on guesswork.',
-                stateLabel: qualityState.label,
-                stateTone: qualityState.tone,
-                metrics: [
-                    { label: 'Quality', value: (quality ? quality.score : 0) + '/100' },
-                    { label: 'Primary buyer', value: buyer || 'Choose one owner' },
-                    { label: 'Trigger', value: trigger || 'Name the visible why-now event' }
-                ]
-            });
-
-            window.gtmShellChrome.renderContextRail('#icpShellRail', {
-                cards: [
-                    {
-                        kicker: 'Current wedge',
-                        title: (industry || 'Industry') + (size ? ' · ' + size : ''),
-                        copy: geo ? 'Coverage: ' + geo + '.' : 'Add geography so territory does not stay abstract.'
-                    },
-                    {
-                        kicker: 'What this changes next',
-                        title: 'Downstream operating consequences',
-                        items: downstream.slice(0, 3)
-                    },
-                    {
-                        kicker: 'Pressure points',
-                        title: risks.length ? 'Tighten these before you scale the list.' : 'The wedge is clean enough to route downstream.',
-                        items: risks.length ? risks : ['Primary buyer, pain, trigger, and proof are specific enough to drive the rest of the system.']
-                    }
-                ]
-            });
+        function icpToneClass(tone) {
+            if (tone === 'ready' || tone === 'live') return 'green';
+            if (tone === 'risk') return 'red';
+            return 'orange';
         }
 
-        function renderIcpWorkspaceHealth(quality, buyer, trigger, proof, activeAccounts) {
+        function renderIcpShellChrome(quality, industry, size, geo, buyer, trigger, activeAccounts) {
+            var qualityState = qualityStateLabel(quality);
+
+            if (window.gtmShellChrome) {
+                window.gtmShellChrome.applyHeader({
+                    family: 'Intelligence',
+                    stateLabel: qualityState.label,
+                    stateTone: qualityState.tone
+                });
+            }
+
+            var shellBand = byId('icpShellBand');
+            if (shellBand) shellBand.innerHTML = '';
+
+            var shellRail = byId('icpShellRail');
+            if (!shellRail) return;
+
+            shellRail.className = '';
+            shellRail.innerHTML = '';
+        }
+
+        function renderIcpWorkspaceHealth(quality, buyer, trigger, proof, activeAccounts, statement, focus, examples, fields) {
             var node = byId('icpHealthPanel');
             if (!node) return;
 
@@ -1090,60 +1392,80 @@
             var savedCount = analytics.icps.length;
             var workedCount = analytics.totalWorked || 0;
             var qualityState = qualityStateLabel(quality);
-            var unmetChecks = (quality && quality.checks ? quality.checks : []).filter(function(check) {
+            var toneClass = icpToneClass(qualityState.tone);
+            var pressurePoints = (quality && quality.checks ? quality.checks : []).filter(function(check) {
                 return check.tone !== 'good';
-            });
-            var posture = qualityState.label;
-            var compounded = [];
-            var weakLinks = [];
-
-            if (quality && (quality.tier === 'sharp' || quality.tier === 'workable')) {
-                compounded.push('<div class="workspace-health-item"><strong>The wedge is specific enough to route downstream.</strong> The room has narrowed targeting into a slice the rest of the app can actually trust.</div>');
-            }
-            if (activeAccounts >= 20) {
-                compounded.push('<div class="workspace-health-item"><strong>There is enough account volume to pressure-test the wedge.</strong> ' + activeAccounts + ' active accounts is enough to stop the ICP from staying theoretical.</div>');
-            }
-            if (workedCount > 0) {
-                compounded.push('<div class="workspace-health-item"><strong>Saved work has already produced real learning loops.</strong> ' + workedCount + ' worked ICP' + (workedCount === 1 ? ' has' : 's have') + ' started turning targeting into evidence.</div>');
-            }
-            if (!compounded.length) {
-                compounded.push('<div class="workspace-health-item"><strong>The room has a usable starting point.</strong> The wedge can be improved here now, but downstream proof still needs to be earned.</div>');
-            }
-
-            if (!quality || quality.tier === 'too-thin' || quality.tier === 'forming') {
-                weakLinks.push('<div class="workspace-health-item"><strong>The wedge is still too broad to trust fully.</strong> Until the ICP gets sharper, the rest of the system will inherit generic targeting.</div>');
-            }
-            if (!buyer || !trigger || !proof) {
-                weakLinks.push('<div class="workspace-health-item"><strong>Critical operating fields are still missing.</strong> Buyer, trigger, and proof window are the minimum needed for downstream rooms to behave seriously.</div>');
-            }
-            if (activeAccounts < 20) {
-                weakLinks.push('<div class="workspace-health-item"><strong>Active-fit volume is still thin.</strong> The room needs enough accounts to test whether this wedge survives real territory pressure.</div>');
-            }
-            if (unmetChecks.length) {
-                weakLinks.push('<div class="workspace-health-item"><strong>The top targeting gap is still visible.</strong> ' + esc(unmetChecks[0].text) + '</div>');
-            }
-            if (!weakLinks.length) {
-                weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the wedge.</strong> Keep it narrow, but the ICP is behaving credibly right now.</div>');
-            }
-
+            }).map(function(check) {
+                return check.text;
+            }).slice(0, 3);
+            var weakest = pressurePoints[0] || 'The wedge is specific enough to route downstream.';
+            var downstream = buildDownstreamImpact(fields.industry, fields.size, fields.geo, fields.buyer, fields.pain, fields.trigger, fields.proof, fields.activeAccounts);
+            var fieldRows = [
+                { mark: '1', tone: fields.industry ? 'green' : 'red', label: 'Industry', copy: fields.industry ? fields.industry + ' is specific enough that a real list can exist.' : 'Choose one market slice, not a category cloud.', state: fields.industry ? 'Locked' : 'Missing', stateTone: fields.industry ? 'good' : 'risk' },
+                { mark: '2', tone: fields.buyer ? 'green' : 'red', label: 'Buyer', copy: fields.buyer ? fields.buyer + ' keeps authority human and obvious.' : 'Name the owner who feels the pain and can move the work.', state: fields.buyer ? 'Runnable' : 'Missing', stateTone: fields.buyer ? 'good' : 'risk' },
+                { mark: '3', tone: fields.size ? 'orange' : 'red', label: 'Size', copy: fields.size ? fields.size + ' is credible, but still needs one stronger lower bound for sourcing density.' : 'Choose one company-size band so downstream qualification stays believable.', state: fields.size ? 'Tighten' : 'Missing', stateTone: fields.size ? 'warn' : 'risk' },
+                { mark: '4', tone: fields.geo ? 'green' : 'red', label: 'Geo', copy: fields.geo ? fields.geo + ' keeps the territory real for a first 30-day run.' : 'Pick one geography you can actually cover right now.', state: fields.geo ? 'Good' : 'Missing', stateTone: fields.geo ? 'good' : 'risk' },
+                { mark: '5', tone: fields.pain ? 'orange' : 'red', label: 'Pain', copy: fields.pain ? '"' + fields.pain + '" is strong, but still needs to stay operational.' : 'Choose one felt pain. Multiple pains will blur the wedge.', state: fields.pain ? 'Thin' : 'Missing', stateTone: fields.pain ? 'warn' : 'risk' },
+                { mark: '6', tone: fields.trigger ? 'red' : 'red', label: 'Trigger', copy: fields.trigger ? fields.trigger + ' is visible, but pressure is still implied until the forcing event is explicit.' : 'No explicit forcing event yet. The room should not let a wedge look ready without one.', state: fields.trigger ? 'Watch' : 'Missing', stateTone: fields.trigger ? 'warn' : 'risk' },
+                { mark: '7', tone: fields.proof ? 'green' : 'red', label: 'Proof window', copy: fields.proof ? 'The buyer can see value inside ' + fields.proof + '. Good for outbound and discovery framing.' : 'Set the proof window so discovery and outbound know what they are promising.', state: fields.proof ? 'Clear' : 'Missing', stateTone: fields.proof ? 'good' : 'risk' }
+            ];
             node.innerHTML =
-                '<section class="shell-section shell-section--compact workspace-health">' +
-                    '<div class="shell-section-header">' +
-                        '<div class="shell-section-heading">' +
-                            '<div class="shell-section-kicker">Workspace health</div>' +
-                            '<div class="shell-section-title">See what is compounding and what is still weak.</div>' +
-                            '<div class="shell-section-copy workspace-health-copy">ICP Studio should show whether the current wedge is actually becoming specific enough to power the rest of the system.</div>' +
+                '<section class="icp-variant-board">' +
+                    '<div class="icp-variant-meta">' +
+                        '<div><span class="accent">Variant 01</span> / Wedge Ledger</div>' +
+                        '<div class="icp-variant-meaning">This room treats ICP like a run-read, not a worksheet. The room exists to tell the operator whether the slice is sharp enough to trust downstream.</div>' +
+                    '</div>' +
+                    '<div class="icp-variant-chrome">' +
+                        '<div class="icp-variant-spine"><div class="icp-variant-brand">ANTAEUS</div><div class="icp-variant-dot"></div><div class="icp-variant-rail"></div></div>' +
+                        '<div class="icp-variant-surface">' +
+                            '<div class="icp-ledger-stage">' +
+                                '<div class="icp-ledger-hero">' +
+                                    '<div class="icp-ledger-eyebrow">Variant 01 / Wedge ledger</div>' +
+                                    '<div class="icp-ledger-title">Choose one wedge the rest of the app can trust.</div>' +
+                                    '<div class="icp-ledger-copy">ICP Studio should not reward writing. It should force one specific market slice that Territory, Sourcing, Outbound, and Discovery can run without translation.</div>' +
+                                    '<div class="icp-ledger-kickers">' +
+                                        '<span class="icp-ledger-pill ' + toneClass + '">' + esc((quality ? quality.label : 'Needs definition') + ' ' + (quality ? quality.score : 0)) + '</span>' +
+                                        '<span class="icp-ledger-pill orange">30-day slice</span>' +
+                                        '<span class="icp-ledger-pill blue">' + esc(savedCount + ' saved wedges') + '</span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="icp-ledger-grid">' +
+                                    '<div>' +
+                                        '<div class="icp-active-wedge">' +
+                                            '<div class="icp-active-kicker">Active wedge</div>' +
+                                            '<div class="icp-active-line">' +
+                                                '<span class="hot">' + esc(fields.industry || 'Choose industry') + '</span>' +
+                                                (fields.size ? ' <span class="cool">' + esc(fields.size) + '</span>' : '') +
+                                                ' where <span class="go">' + esc(fields.pain || 'the pressure is still unnamed') + '</span>.' +
+                                            '</div>' +
+                                            '<div class="icp-active-note">' + esc(quality.summary) + ' ' + esc(focus) + '</div>' +
+                                        '</div>' +
+                                        '<div class="icp-field-ledger">' +
+                                            fieldRows.map(function(row) {
+                                                return '<div class="icp-field-row">' +
+                                                    '<div class="icp-field-mark ' + row.tone + '">' + esc(row.mark) + '</div>' +
+                                                    '<div class="icp-field-label">' + esc(row.label) + '</div>' +
+                                                    '<div class="icp-field-copy">' + esc(row.copy) + '</div>' +
+                                                    '<div class="icp-field-state ' + row.stateTone + '">' + esc(row.state) + '</div>' +
+                                                '</div>';
+                                            }).join('') +
+                                        '</div>' +
+                                        '<div class="footer-note"><div class="title">What this face is solving</div><div class="copy">This version is for a room that should feel like a targeting control ledger: one wedge in focus, one visible weak point, and one immediate sense of whether the rest of the system can trust it.</div></div>' +
+                                    '</div>' +
+                                    '<aside class="icp-run-docket">' +
+                                        '<div class="icp-read-score">' +
+                                            '<div><div class="icp-read-title">Run read</div><div class="icp-read-copy">' + esc(qualityState.label) + '</div></div>' +
+                                            '<div class="icp-read-value">' + esc(quality ? quality.score : 0) + '</div>' +
+                                        '</div>' +
+                                        '<div class="icp-docket-stack">' +
+                                            '<div class="icp-docket-row"><div class="icp-docket-label">Weakest field</div><div class="icp-docket-headline">' + esc(weakest) + '</div><div class="icp-docket-copy">Until the forcing event is named, the wedge is still half strategy and half hope.</div></div>' +
+                                            '<div class="icp-docket-row"><div class="icp-docket-label">Broad version to avoid</div><div class="icp-docket-headline">' + esc(examples.broad) + '</div><div class="icp-docket-copy">The room should visibly punish this kind of language.</div></div>' +
+                                            '<div class="icp-docket-row"><div class="icp-docket-label">Downstream changes</div><div class="icp-docket-copy">' + esc(downstream.slice(0, 3).join(' ')) + '</div></div>' +
+                                        '</div>' +
+                                    '</aside>' +
+                                '</div>' +
+                            '</div>' +
                         '</div>' +
-                    '</div>' +
-                    '<div class="workspace-health-metrics">' +
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Wedge posture</div><div class="workspace-health-value workspace-health-value--sans">' + esc(posture) + '</div><div class="workspace-health-subcopy">' + esc((quality ? quality.score : 0) + '/100 quality') + '</div></div>' +
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Active fit</div><div class="workspace-health-value">' + activeAccounts + '</div><div class="workspace-health-subcopy">Accounts available to pressure-test the wedge.</div></div>' +
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Saved proofs</div><div class="workspace-health-value">' + savedCount + '</div><div class="workspace-health-subcopy">Saved ICP patterns in the local library.</div></div>' +
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Worked loops</div><div class="workspace-health-value">' + workedCount + '</div><div class="workspace-health-subcopy">Saved wedges marked as actually worked.</div></div>' +
-                    '</div>' +
-                    '<div class="workspace-health-grid">' +
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">' + compounded.slice(0, 2).join('') + '</div></div>' +
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">' + weakLinks.slice(0, 2).join('') + '</div></div>' +
                     '</div>' +
                 '</section>';
         }
@@ -1151,52 +1473,7 @@
         function renderIcpOperatingBoard(quality, statement, focus, examples, fields) {
             var board = byId('icpOperatingBoard');
             if (!board) return;
-            var qualityState = qualityStateLabel(quality);
-            var pressurePoints = (quality && quality.checks ? quality.checks : []).filter(function(check) {
-                return check.tone !== 'good';
-            }).map(function(check) {
-                return check.text;
-            }).slice(0, 3);
-            var chips = [
-                currentRole === 'firstae' ? 'First AE lens' : 'Founder-led lens',
-                fields.industry || 'Choose industry',
-                fields.buyer || 'Choose buyer',
-                fields.trigger || 'Name the trigger'
-            ];
-            board.innerHTML =
-                '<section class="anchor-stage">' +
-                    '<div class="anchor-stage-grid">' +
-                        '<div>' +
-                            '<div class="anchor-eyebrow">Decision surface</div>' +
-                            '<div class="anchor-headline anchor-headline--wide">' + esc(statement.text) + '</div>' +
-                            '<div class="anchor-support">' + esc(quality.summary) + ' ' + esc(focus) + '</div>' +
-                            '<div class="anchor-chip-row">' + chips.filter(Boolean).map(function(item) {
-                                return '<div class="anchor-chip">' + esc(item) + '</div>';
-                            }).join('') + '</div>' +
-                            '<div class="anchor-primary-card">' +
-                                '<div class="anchor-primary-label">' + esc(qualityState.label) + '</div>' +
-                                '<div class="anchor-primary-title">' + esc(quality.label) + '</div>' +
-                                '<div class="anchor-primary-copy">' + esc(examples.strongHint) + '</div>' +
-                                '<div class="anchor-lane-meta">' +
-                                    '<span>' + esc((quality ? quality.score : 0) + '/100') + '</span>' +
-                                    '<span>' + esc(fields.proof || 'Proof window missing') + '</span>' +
-                                    '<span>' + esc(fields.activeAccounts ? fields.activeAccounts + ' active accounts' : 'No account count yet') + '</span>' +
-                                '</div>' +
-                                '<div class="anchor-primary-actions">' +
-                                    '<button class="btn btn-primary" onclick="saveICP()">Save ICP</button>' +
-                                    '<button class="btn btn-secondary" onclick="copyStatement()">Copy Statement</button>' +
-                                    '<button class="btn btn-ghost" onclick="exportICP()">Export</button>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="anchor-mini-grid">' +
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Quality</div><div class="anchor-mini-value">' + esc((quality ? quality.score : 0) + '/100') + '</div><div class="anchor-mini-copy">' + esc(quality.label) + '</div></div>' +
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Next consequence</div><div class="anchor-mini-value anchor-mini-value--sans">' + esc(qualityState.label) + '</div><div class="anchor-mini-copy">' + esc((pressurePoints[0] || 'The wedge is specific enough to route downstream.')) + '</div></div>' +
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Sharp version</div><div class="anchor-mini-copy">' + esc(examples.strong) + '</div></div>' +
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Broad version to avoid</div><div class="anchor-mini-copy">' + esc(examples.broad) + '</div></div>' +
-                        '</div>' +
-                    '</div>' +
-                '</section>';
+            board.innerHTML = '';
         }
 
         function buildExamples(industry, size, geo, buyer, pain, trigger, proof) {
@@ -1278,17 +1555,28 @@
             renderTaggedList(byId('out_quality_checks'), quality.checks);
 
             renderList(byId('out_downstream'), buildDownstreamImpact(industry, size, geo, buyer, pain, trigger, proof, activeAccounts));
-            renderIcpShellChrome(quality, industry, size, geo, buyer, trigger, activeAccounts);
-            renderIcpWorkspaceHealth(quality, buyer, trigger, proof, activeAccounts);
-
             var examples = buildExamples(industry, size, geo, buyer, pain, trigger, proof);
+            renderIcpShellChrome(quality, industry, size, geo, buyer, trigger, activeAccounts);
+            renderIcpWorkspaceHealth(quality, buyer, trigger, proof, activeAccounts, statement, buildFocus(activeAccounts), examples, {
+                industry: industry,
+                size: size,
+                geo: geo,
+                buyer: buyer,
+                pain: pain,
+                trigger: trigger,
+                proof: proof,
+                activeAccounts: activeAccounts
+            });
             byId('out_example').textContent = examples.strong;
             byId('out_example_hint').textContent = examples.strongHint;
             byId('out_anti_example').textContent = examples.broad;
             byId('out_anti_example_hint').textContent = examples.broadHint;
             renderIcpOperatingBoard(quality, statement, buildFocus(activeAccounts), examples, {
                 industry: industry,
+                size: size,
+                geo: geo,
                 buyer: buyer,
+                pain: pain,
                 trigger: trigger,
                 proof: proof,
                 activeAccounts: activeAccounts
@@ -1414,30 +1702,26 @@
         
         function updateAnalyticsPanel() {
             const analytics = getIcpAnalyticsState();
-            
-            byId('stat_session_created').textContent = sessionCreated;
-            byId('stat_session_worked').textContent = sessionWorked;
-            byId('stat_total_icps').textContent = analytics.icps.length;
-            
-            if (analytics.icps.length > 0) {
-                const successRate = Math.round((analytics.totalWorked / analytics.icps.length) * 100);
-                byId('stat_success_rate').textContent = successRate + '%';
+            const workedIcps = analytics.icps.filter(function(icp) { return !!icp.worked; });
+            const successRate = analytics.icps.length > 0
+                ? Math.round((analytics.totalWorked / analytics.icps.length) * 100)
+                : 0;
+
+            if (byId('rail_saved_count')) byId('rail_saved_count').textContent = analytics.icps.length;
+            if (byId('rail_worked_count')) byId('rail_worked_count').textContent = analytics.totalWorked || 0;
+            if (byId('rail_success_rate')) byId('rail_success_rate').textContent = analytics.icps.length > 0 ? (successRate + '%') : '-';
+
+            const patternNode = byId('rail_best_pattern');
+            if (patternNode) {
+                if (workedIcps.length > 0) {
+                    const lastWorked = workedIcps[workedIcps.length - 1];
+                    patternNode.textContent = libIcpName(lastWorked) + ' is the last wedge that held up in live use.';
+                } else if (analytics.icps.length > 0) {
+                    patternNode.textContent = 'No wedge has been marked worked yet. Compare the saved slices and graduate one into live use.';
+                } else {
+                    patternNode.textContent = 'No repeatable wedge yet. Save 2-3 real slices and compare them here.';
+                }
             }
-            
-            // Calculate top performers
-            const industryCounts = {};
-            const buyerCounts = {};
-            const triggerCounts = {};
-            
-            analytics.icps.filter(i => i.worked).forEach(icp => {
-                if (icp.industry) industryCounts[icp.industry] = (industryCounts[icp.industry] || 0) + 1;
-                if (icp.buyer) buyerCounts[icp.buyer] = (buyerCounts[icp.buyer] || 0) + 1;
-                if (icp.trigger) triggerCounts[icp.trigger] = (triggerCounts[icp.trigger] || 0) + 1;
-            });
-            
-            renderTopItems('top_industries', industryCounts);
-            renderTopItems('top_buyers', buyerCounts);
-            renderTopItems('top_triggers', triggerCounts);
         }
         
         function renderTopItems(containerId, counts) {
@@ -1592,12 +1876,14 @@
             const analytics = getIcpAnalyticsState();
             const container = byId('libraryCards');
             const countEl = byId('libraryCount');
+
             function hintDismissed() {
                 if (window.gtmLocalState && typeof window.gtmLocalState.get === 'function') {
                     return window.gtmLocalState.get('gtmos_icp_hint_dismissed', null, { scope: 'user' }) === '1';
                 }
                 return localStorage.getItem('gtmos_icp_hint_dismissed') === '1';
             }
+
             window.dismissIcpHint = function() {
                 if (window.gtmLocalState && typeof window.gtmLocalState.set === 'function') {
                     window.gtmLocalState.set('gtmos_icp_hint_dismissed', '1', { scope: 'user' });
@@ -1605,68 +1891,51 @@
                     localStorage.setItem('gtmos_icp_hint_dismissed', '1');
                 }
             };
-            
+
             countEl.textContent = analytics.icps.length + ' saved';
 
-            // Show next-step hint for 1-2 ICPs
             var hint = byId('icpNextHint');
             if (hint) {
                 if (analytics.icps.length >= 1 && analytics.icps.length <= 2 && !hintDismissed()) {
-                    hint.innerHTML = '<span>💡 ' + (analytics.icps.length === 1 ? 'Good start. Build 2 more ICPs to compare segments and unlock your market map.' : 'One more ICP and you can compare all three segments side by side.') + '</span><button onclick="this.parentElement.classList.add(\'hidden\');window.dismissIcpHint&&window.dismissIcpHint();" style="margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">✕</button>';
+                    hint.innerHTML = '<span>' + (analytics.icps.length === 1 ? 'One saved wedge is a draft. Build two more so you can compare which slice is actually usable.' : 'One more wedge and this rail starts behaving like a real comparison ledger.') + '</span><button onclick="this.parentElement.classList.add(\'hidden\');window.dismissIcpHint&&window.dismissIcpHint();" style="margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.9rem;font-weight:700;">Dismiss</button>';
                     hint.classList.remove('hidden');
                 } else {
                     hint.classList.add('hidden');
                 }
             }
-            
+
             if (analytics.icps.length === 0) {
-                container.innerHTML = '<div id="icpEmptyCard"></div><div style="margin-top:10px;padding:10px;border:1px solid rgba(59,130,246,0.25);border-radius:10px;background:rgba(59,130,246,0.08);"><div style="font-size:0.74rem;color:var(--text-tertiary);margin-bottom:8px;">Need a fast start?</div><button class="btn btn-secondary" style="width:100%;" onclick="openTemplateFromEmpty()">🧩 Start from template</button></div>'; if (typeof emptyState !== 'undefined') { emptyState.render('icpEmptyCard', { icon: '🎯', pitch: 'No ICPs saved yet.', why: 'Build your first ideal customer profile — it drives outbound targeting, discovery questions, and deal qualification.', cta: 'Build One Above ↑', ctaOnClick: "document.querySelector('.builder-section')&&document.querySelector('.builder-section').scrollIntoView({behavior:'smooth'})" }); }
+                container.innerHTML = '<div class="library-ledger-empty">No saved wedges yet. Build the first 30-day slice, save it, and this rail will turn into a real comparison surface.</div><button class="rail-action" style="margin-top:8px;" onclick="openTemplateFromEmpty()">Start from template</button>';
                 return;
             }
+
             var attribution = computeIcpOutcomeAttribution(analytics.icps);
-            var money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-            
             container.innerHTML = analytics.icps.map(function(icp, idx) {
                 var name = libIcpName(icp);
-                var workedBadge = icp.worked ? '<span class="lib-card-worked">✓ Worked</span>' : '';
-                var bestBadge = attribution.bestIndex === idx ? '<span class="lib-card-best">🏆 Best-performing ICP</span>' : '';
                 var completeness = countIcpCompleteness(icp);
-                var completenessBadge = '<span class="lib-card-completeness">' + completeness + '/8 fields filled</span>';
-                var qualityBadge = icp.qualityScore ? '<span class="lib-card-completeness">' + icp.qualityScore + '/100 quality</span>' : '';
-                var draftBadge = completeness < 3 ? '<span class="lib-card-draft">Draft</span>' : '';
                 var date = icp.timestamp ? new Date(icp.timestamp).toLocaleDateString() : '';
-                var stat = attribution.rows[idx] || { worked: 0, won: 0, lost: 0, open: 0, revenue: 0, closed: 0, winRate: 0 };
-                var outcomeLine = '';
-                var perfLine = '';
-                if (stat.worked > 0) {
-                    outcomeLine = '<div class="lib-card-outcomes">' +
-                        stat.worked + ' deals worked | ' +
-                        stat.won + ' won (' + money.format(stat.revenue || 0) + ') | ' +
-                        stat.lost + ' lost | ' +
-                        stat.open + ' open' +
-                        '</div>';
-                    if (stat.closed > 0 && attribution.overallClosed > 0) {
-                        var delta = stat.winRate - attribution.overallWinRate;
-                        var perfCls = delta >= 10 ? 'good' : (delta <= -10 ? 'bad' : 'warn');
-                        var deltaText = delta >= 0 ? ('+' + delta) : String(delta);
-                        perfLine = '<div class="lib-card-perf ' + perfCls + '">Win rate: ' + stat.winRate + '% vs overall ' + attribution.overallWinRate + '% (' + deltaText + ' pts)</div>';
-                    } else if (stat.closed > 0) {
-                        perfLine = '<div class="lib-card-perf">Win rate: ' + stat.winRate + '%</div>';
-                    }
-                }
-                return '<div class="lib-card" onclick="loadICP(' + idx + ')">' +
-                    '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
-                        '<div class="lib-card-name">' + escHtml(name) + '</div>' +
-                        (workedBadge + bestBadge) +
+                var stat = attribution.rows[idx] || { worked: 0 };
+                var stateClass = icp.worked ? 'worked' : (completeness < 3 ? 'draft' : 'saved');
+                var stateLabel = icp.worked ? 'Worked' : (completeness < 3 ? 'Draft' : 'Saved');
+                var summaryBits = [];
+
+                if (icp.qualityScore) summaryBits.push(icp.qualityScore + '/100 quality');
+                summaryBits.push(completeness + '/8 fields');
+                if (stat.worked > 0) summaryBits.push(stat.worked + ' deals touched');
+
+                return '<div class="library-ledger-row lib-card" onclick="loadICP(' + idx + ')">' +
+                    '<div class="library-ledger-top">' +
+                        '<div class="library-ledger-name">' + escHtml(name) + '</div>' +
+                        '<div class="library-ledger-state ' + stateClass + '">' + escHtml(stateLabel) + '</div>' +
                     '</div>' +
-                    '<div class="lib-card-meta">' + escHtml(icp.size || '') + ' · ' + escHtml(icp.geo || '') + (date ? ' · ' + date : '') + '</div>' +
-                    '<div>' + completenessBadge + qualityBadge + draftBadge + '</div>' +
-                    '<div class="lib-card-statement">' + escHtml(icp.statement || '') + '</div>' +
-                    outcomeLine +
-                    perfLine +
-                    '<div class="lib-card-actions">' +
-                        '<button onclick="event.stopPropagation();copyLibStatement(' + idx + ')">📋 Copy</button>' +
-                        '<button class="delete-btn" onclick="event.stopPropagation();deleteICP(' + idx + ')">🗑 Delete</button>' +
+                    '<div class="library-ledger-meta">' + escHtml(icp.size || 'Size missing') + ' · ' + escHtml(icp.geo || 'Geo missing') + (date ? ' · ' + date : '') + '</div>' +
+                    '<div class="library-ledger-statement">' + escHtml(icp.statement || 'Statement still forming.') + '</div>' +
+                    '<div class="library-ledger-bottom">' +
+                        '<div class="library-ledger-summary">' + summaryBits.map(escHtml).join(' · ') + '</div>' +
+                        '<div class="library-ledger-actions">' +
+                            '<button onclick="event.stopPropagation();copyLibStatement(' + idx + ')">Copy</button>' +
+                            '<button class="delete-btn" onclick="event.stopPropagation();deleteICP(' + idx + ')">Delete</button>' +
+                        '</div>' +
                     '</div>' +
                 '</div>';
             }).reverse().join('');
@@ -1764,7 +2033,7 @@
         // INIT
         // ============================================
         
-        if (window.saveIndicator) saveIndicator.mountAfter('.page-title');
+        if (window.saveIndicator) saveIndicator.mountAfter('.icp-room-topline');
         if (window.unsavedGuard) unsavedGuard.track('.app-main');
         
         // Track "worked" checkbox changes
@@ -1831,21 +2100,10 @@
                 console.error('ICP library failed to render:', error);
             }
 
-            (function(){
-                var icpData = getIcpAnalyticsState();
-                var container=document.querySelector('.app-content');
-                if(icpData.icps&&icpData.icps.length>=1&&container){
-                    container.classList.add('hints-hidden');
-                    var header=document.querySelector('.page-title');
-                    if(header && !document.querySelector('.hint-toggle')){
-                        var btn=document.createElement('button');
-                        btn.className='hint-toggle';
-                        btn.textContent='Show field hints';
-                        btn.onclick=function(){container.classList.toggle('hints-hidden');btn.textContent=container.classList.contains('hints-hidden')?'Show field hints':'Hide hints';};
-                        header.parentNode.insertBefore(btn,header.nextSibling);
-                    }
-                }
-            })();
+            if (window.unsavedGuard) {
+                unsavedGuard.watch('.builder-content');
+            }
+
             clearIcpBootState();
         }
 
@@ -1872,7 +2130,7 @@
             var analytics = JSON.parse(localStorage.getItem('gtmos_icp_analytics') || '{"icps":[]}');
             var icps = analytics.icps || [];
             if (icps.length === 0) {
-                document.getElementById('scScoreResults').innerHTML = '<div style="padding:12px;color:var(--text-muted);font-style:italic;">Save at least one ICP profile first.</div>';
+                document.getElementById('scScoreResults').innerHTML = '<div class="library-ledger-empty">Save at least one wedge first.</div>';
                 return;
             }
             var scData = { accounts: [] };
@@ -1889,7 +2147,7 @@
             }
             var accounts = scData.accounts || [];
             if (accounts.length === 0) {
-                document.getElementById('scScoreResults').innerHTML = '<div style="padding:12px;color:var(--text-muted);font-style:italic;">No accounts in Signal Console. <a href="/app/signal-console/" style="color:var(--brand-gold);">Add accounts →</a></div>';
+                document.getElementById('scScoreResults').innerHTML = '<div class="library-ledger-empty">No accounts in Signal Console yet. <a href="/app/signal-console/" style="color:var(--brand-gold);">Add accounts →</a></div>';
                 return;
             }
             // Score each account against first ICP
@@ -1919,14 +2177,14 @@
             });
             scored.sort(function(a, b) { return b.score - a.score; });
 
-            var html = '<div style="margin-top:8px;">';
-            scored.slice(0, 10).forEach(function(s) {
-                var color = s.score >= 70 ? '#22c55e' : s.score >= 40 ? '#f59e0b' : '#64748b';
+            var html = '<div class="rail-score-list">';
+            scored.slice(0, 6).forEach(function(s) {
+                var fitClass = s.score >= 70 ? 'good' : s.score >= 40 ? 'warn' : 'risk';
                 var label = s.score >= 70 ? 'Strong Fit' : s.score >= 40 ? 'Moderate' : 'Weak';
-                html += '<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);">';
-                html += '<div style="width:40px;height:40px;border-radius:8px;background:rgba(' + (s.score >= 70 ? '34,197,94' : s.score >= 40 ? '245,158,11' : '100,116,139') + ',0.1);display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;color:' + color + ';">' + s.score + '</div>';
-                html += '<div style="flex:1;"><div style="font-weight:600;font-size:0.85rem;color:var(--text-primary);">' + (s.name || 'Unknown') + '</div>';
-                html += '<div style="font-size:0.7rem;color:' + color + ';">' + label + ' · Heat: ' + s.heat + '</div></div></div>';
+                html += '<div class="rail-score-row">';
+                html += '<div><div class="rail-score-name">' + (s.name || 'Unknown') + '</div>';
+                html += '<div class="rail-score-meta">' + label + ' · Heat ' + s.heat + '</div></div>';
+                html += '<div class="rail-score-fit ' + fitClass + '">' + s.score + '</div></div>';
             });
             html += '</div>';
             document.getElementById('scScoreResults').innerHTML = html;
@@ -1934,3 +2192,5 @@
     </script>
 </body>
 </html>
+
+

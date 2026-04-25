@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumana Discovery Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080a;--s1:#111114;--s2:#18181c;--s3:#1f1f24;--s4:#27272e;--bd:#2a2a33;--bdh:#3d3d4a;--t1:#e4e4ea;--t2:#b0b0bc;--t3:#7a7a8a;--t4:#4e4e5c;--acc:#b8f000;--a10:rgba(184,240,0,.10);--a20:rgba(184,240,0,.20);--a40:rgba(184,240,0,.40);--blu:#5eaaef;--b10:rgba(94,170,239,.10);--b20:rgba(94,170,239,.18);--org:#f0a050;--o10:rgba(240,160,80,.10);--o20:rgba(240,160,80,.18);--red:#ef5f5f;--r10:rgba(239,95,95,.10);--r20:rgba(239,95,95,.18);--grn:#5fcf6f;--g10:rgba(95,207,111,.10);--g20:rgba(95,207,111,.18);--pur:#a78bfa;--p10:rgba(167,139,250,.10);--p20:rgba(167,139,250,.18);--cya:#67e8f9;--c10:rgba(103,232,249,.10);--mono:'JetBrains Mono',monospace;--sans:'DM Sans',sans-serif;--disp:'Fraunces',serif;--r:8px;--rl:12px}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--t1);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;font-size:14px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+
+/* === TOPBAR === */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,10,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--bd);padding:0 20px;height:50px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topbar-l{display:flex;align-items:center;gap:12px}
+.brand{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:2.5px;color:var(--acc);background:var(--a10);border:1px solid var(--a20);padding:4px 10px;border-radius:4px}
+.topbar h1{font-family:var(--disp);font-size:15px;font-weight:400;color:var(--t2)}
+.topbar-c{display:flex;align-items:center;gap:6px}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--s4);border:1px solid var(--bd);transition:all .3s}
+.pdot.hit{background:var(--acc);border-color:var(--acc);box-shadow:0 0 5px var(--a40)}
+.pdot.warn{background:var(--org);border-color:var(--org)}
+.pdot.over{background:var(--red);border-color:var(--red)}
+.topbar-r{display:flex;align-items:center;gap:8px}
+.pill{font-family:var(--mono);font-size:10px;color:var(--t3);background:var(--s2);border:1px solid var(--bd);padding:4px 10px;border-radius:20px}
+.tbtn{background:var(--s2);border:1px solid var(--bd);color:var(--t2);padding:5px 14px;border-radius:var(--r);font-family:var(--mono);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;min-width:64px;text-align:center}
+.tbtn.on{border-color:var(--acc);color:var(--acc);background:var(--a10)}
+.tbtn.tw{border-color:var(--org);color:var(--org);background:var(--o10)}
+.tbtn.to{border-color:var(--red);color:var(--red);background:var(--r10)}
+.embtn{background:var(--r10);border:1px solid var(--r20);color:var(--red);padding:5px 10px;border-radius:var(--r);font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .2s}
+.embtn.act{background:var(--red);color:var(--bg)}
+
+/* === EVAL STRIP === */
+.estrip{position:fixed;top:50px;left:0;right:0;z-index:90;background:rgba(8,8,10,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:5px 20px;display:flex;gap:6px}
+.etag{font-family:var(--mono);font-size:8px;letter-spacing:.8px;text-transform:uppercase;padding:3px 8px;border-radius:20px;white-space:nowrap;opacity:.3;transition:all .3s;border:1px solid transparent}
+.etag.lit{opacity:1}
+.etag[data-e="q"]{color:var(--blu);background:var(--b10)}.etag[data-e="q"].lit{border-color:var(--b20)}
+.etag[data-e="x"]{color:var(--pur);background:var(--p10)}.etag[data-e="x"].lit{border-color:var(--p20)}
+.etag[data-e="f"]{color:var(--org);background:var(--o10)}.etag[data-e="f"].lit{border-color:var(--o20)}
+.etag[data-e="p"]{color:var(--cya);background:var(--c10)}.etag[data-e="p"].lit{border-color:rgba(103,232,249,.2)}
+.etag[data-e="v"]{color:var(--acc);background:var(--a10)}.etag[data-e="v"].lit{border-color:var(--a20)}
+.etag[data-e="c"]{color:var(--grn);background:var(--g10)}.etag[data-e="c"].lit{border-color:var(--g20)}
+
+.embar{display:none;position:fixed;top:78px;left:0;right:0;z-index:89;background:var(--r10);border-bottom:1px solid var(--r20);padding:8px 20px;font-size:11px;color:var(--red)}.embar.show{display:flex;align-items:center;gap:8px}
+
+/* === 3-COL LAYOUT === */
+.layout{display:flex;margin-top:78px;min-height:calc(100vh - 78px)}
+
+/* LEFT NAV */
+.lnav{width:200px;min-width:200px;background:var(--s1);border-right:1px solid var(--bd);position:sticky;top:78px;height:calc(100vh - 78px);overflow-y:auto;padding:12px 0;flex-shrink:0}
+.lnav-item{display:flex;align-items:center;gap:8px;padding:8px 14px;cursor:pointer;transition:all .15s;border-left:2px solid transparent;font-size:12px;color:var(--t3)}
+.lnav-item:hover{color:var(--t2);background:var(--s2)}
+.lnav-item.active{color:var(--acc);border-left-color:var(--acc);background:var(--a10)}
+.lnav-item .num{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:1px;min-width:18px}
+.lnav-item .cnt{font-family:var(--mono);font-size:9px;color:var(--t4);margin-left:auto}
+
+/* CENTER */
+.center{flex:1;max-width:720px;padding:16px 20px 100px;min-width:0}
+
+/* RIGHT PANEL */
+.rpanel{width:300px;min-width:300px;background:var(--s1);border-left:1px solid var(--bd);position:sticky;top:78px;height:calc(100vh - 78px);overflow-y:auto;padding:14px;flex-shrink:0;transition:margin-right .3s}
+.rpanel.hidden{margin-right:-300px;min-width:0;width:0;padding:0;overflow:hidden}
+.rp-toggle{position:fixed;top:82px;right:8px;z-index:95;background:var(--s2);border:1px solid var(--bd);color:var(--t3);padding:4px 8px;border-radius:4px;font-family:var(--mono);font-size:9px;cursor:pointer;transition:all .2s}
+.rp-toggle:hover{color:var(--acc);border-color:var(--acc)}
+.rp-section{margin-bottom:16px}
+.rp-section h3{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--t4);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--bd)}
+.rp-section li{font-size:11.5px;color:var(--t3);line-height:1.5;margin-bottom:2px}
+.rp-section ul{padding-left:12px;list-style:disc}
+.rp-section li strong{color:var(--t1);font-weight:500}
+.rp-kv{display:grid;grid-template-columns:1fr;gap:4px}
+.rp-k{background:var(--s2);border-radius:4px;padding:6px 8px}
+.rp-k .l{font-family:var(--mono);font-size:8px;color:var(--t4);letter-spacing:.8px;text-transform:uppercase}
+.rp-k .v{font-size:11px;color:var(--t2);line-height:1.4;margin-top:2px}
+
+/* === NODES === */
+.nd{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);margin-bottom:8px;overflow:hidden;transition:border-color .2s;scroll-margin-top:100px}
+.nd:hover{border-color:var(--bdh)}.nd.ess{border-left:2px solid var(--red)}
+.ndh{padding:12px 14px;display:flex;align-items:flex-start;gap:8px}
+.nck{width:16px;height:16px;min-width:16px;border:1.5px solid var(--bdh);border-radius:3px;cursor:pointer;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:10px;color:transparent;font-weight:700}
+.nck.on{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+.nq{flex:1}
+.nt{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:inline-flex;align-items:center;gap:4px;flex-wrap:wrap}
+.nt.pr{color:var(--blu)}.nt.fu{color:var(--org)}.nt.ri{color:var(--red)}.nt.va{color:var(--acc)}.nt.cl{color:var(--grn)}
+.ntx{font-size:13px;line-height:1.5;color:var(--t1)}.ntx strong{color:#fff;font-weight:600}
+.nsb{font-size:11px;color:var(--t3);margin-top:4px;line-height:1.45}.nsb b{color:var(--t2);font-weight:500}
+
+.sil{font-family:var(--mono);font-size:8px;color:var(--red);background:var(--r10);padding:2px 6px;border-radius:3px}
+.echo{font-family:var(--mono);font-size:8px;color:var(--cya);background:var(--c10);padding:2px 6px;border-radius:3px}
+.esstag{font-family:var(--mono);font-size:8px;color:var(--red);background:var(--r10);padding:2px 6px;border-radius:3px}
+
+/* BRANCHES — better expand/collapse */
+.brs{border-top:1px solid var(--bd);background:rgba(0,0,0,.15)}
+.bt{padding:7px 14px;font-family:var(--mono);font-size:10px;color:var(--t4);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;user-select:none}
+.bt:hover{color:var(--t2);background:rgba(255,255,255,.02)}
+.bt .ar{transition:transform .2s;font-size:9px;color:var(--org)}
+.nd.xp .bt .ar{transform:rotate(90deg);color:var(--acc)}
+.nd.xp .bt{color:var(--t2);background:rgba(184,240,0,.03)}
+.bb{display:none;padding:6px 12px 12px}.nd.xp .bb{display:block}
+
+/* BRANCH ITEM */
+.b{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;transition:border-color .2s}.b:last-child{margin-bottom:0}.b:hover{border-color:var(--bdh)}
+.bh{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.btg{font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:.8px;padding:2px 6px;border-radius:3px;text-transform:uppercase}
+.btg.ly{color:var(--org);background:var(--o10)}.btg.fl{color:var(--red);background:var(--r10)}.btg.ob{color:var(--red);background:var(--r10)}.btg.pv{color:var(--pur);background:var(--p10)}
+.bs{font-size:12px;color:var(--t2);font-weight:500;margin-bottom:4px}
+.bx{font-size:12px;color:var(--t3);line-height:1.5}.bx strong{color:var(--t1);font-weight:500}
+
+/* LUMANA VALUE PLUG */
+.vplug{background:var(--a10);border:1px solid var(--a20);border-radius:6px;padding:7px 10px;margin-top:6px;font-size:11px;line-height:1.45;color:var(--acc);display:flex;align-items:flex-start;gap:6px}
+.vplug.hold{background:var(--s3);border-color:var(--bd);color:var(--t3)}
+.vplug .vl{font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:.8px;min-width:56px;margin-top:1px}
+.vplug .vl.now{color:var(--acc)}
+.vplug .vl.hold{color:var(--t4)}
+.vplug .vt{flex:1}
+
+/* INLINE TRANSITION */
+.itrans{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
+
+/* JUMP */
+.j{display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);font-size:10px;color:var(--acc);background:var(--a10);border:1px solid var(--a20);padding:3px 10px;border-radius:4px;cursor:pointer;text-decoration:none;transition:all .15s;white-space:nowrap}
+.j:hover{background:var(--a20);color:#fff}
+.j.red{color:var(--red);background:var(--r10);border-color:var(--r20)}
+.j.blu{color:var(--blu);background:var(--b10);border-color:var(--b20)}
+.j.grn{color:var(--grn);background:var(--g10);border-color:var(--g20)}
+.j.org{color:var(--org);background:var(--o10);border-color:var(--o20)}
+.j.pur{color:var(--pur);background:var(--p10);border-color:var(--p20)}
+
+/* PACE */
+.pm{background:var(--s3);border:1px solid var(--bd);border-radius:var(--r);padding:6px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--t3);flex-wrap:wrap}
+
+/* NOTES */
+textarea.n{width:100%;min-height:44px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:8px 12px;color:var(--t1);font-family:var(--sans);font-size:12px;resize:vertical;margin-top:8px;outline:none;transition:border-color .2s}
+textarea.n:focus{border-color:var(--acc)}textarea.n::placeholder{color:var(--t4)}
+
+/* SCORES */
+.sc{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:4px;margin-top:8px}
+.si{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:8px;text-align:center;cursor:pointer;transition:all .2s}
+.si:hover{border-color:var(--bdh)}.si.on{border-color:var(--acc);background:var(--a10)}
+.si .l{font-family:var(--mono);font-size:8px;letter-spacing:.6px;text-transform:uppercase;color:var(--t3);margin-bottom:2px}
+.si .v{font-size:16px;font-weight:700;color:var(--t3);font-family:var(--mono)}.si.on .v{color:var(--acc)}
+
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:14px;margin-bottom:8px;scroll-margin-top:100px}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.rpanel{display:none}.rp-toggle{display:none}.lnav{width:160px;min-width:160px}}
+@media(max-width:800px){.lnav{display:none}.center{padding:12px 10px 80px}.layout{margin-top:78px}}
+@media print{.topbar,.estrip,.lnav,.rpanel,.rp-toggle,.embar{display:none!important}.layout{display:block;margin-top:0}.bb{display:block!important}.center{max-width:100%;padding:10px}body{background:#fff;color:#111}}
+</style>
+</head>
+<body>
+
+<!-- === TOPBAR === -->
+<div class="topbar">
+<div class="topbar-l"><span class="brand">LUMANA</span><h1>Discovery Command Center</h1></div>
+<div class="topbar-c" id="pDots"><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span></div>
+<div class="topbar-r"><span class="pill" id="pp">0/0</span><button class="tbtn" id="tBtn" onclick="tglT()">00:00</button><button class="embtn" id="eBtn" onclick="tglE()">10-MIN</button></div>
+</div>
+<div class="estrip">
+<span class="etag" data-e="q">① Questions</span><span class="etag" data-e="x">② Extraction</span><span class="etag" data-e="f">③ Framing</span><span class="etag" data-e="p">④ Presence</span><span class="etag" data-e="v">⑤ Value</span><span class="etag" data-e="c">⑥ Closing</span>
+</div>
+<div class="embar" id="eBar"><strong>⚠ COMPRESS —</strong> Only ★ essentials. Tap 10-MIN again to restore.</div>
+<button class="rp-toggle" id="rpTgl" onclick="tglRP()">◧ PANEL</button>
+
+<!-- === 3-COL LAYOUT === -->
+<div class="layout">
+
+<!-- LEFT NAV -->
+<div class="lnav" id="lNav">
+<div class="lnav-item active" onclick="goP(1)"><span class="num">01</span>Opening<span class="cnt" data-lc="1"></span></div>
+<div class="lnav-item" onclick="goP(2)"><span class="num">02</span>Why Now<span class="cnt" data-lc="2"></span></div>
+<div class="lnav-item" onclick="goP(3)"><span class="num">03</span>Posture<span class="cnt" data-lc="3"></span></div>
+<div class="lnav-item" onclick="goP(4)"><span class="num">04</span>Impact<span class="cnt" data-lc="4"></span></div>
+<div class="lnav-item" onclick="goP(5)"><span class="num">05</span>Stakeholders<span class="cnt" data-lc="5"></span></div>
+<div class="lnav-item" onclick="goP(6)"><span class="num">06</span>Value Bridge<span class="cnt" data-lc="6"></span></div>
+<div class="lnav-item" onclick="goP(7)"><span class="num">07</span>Close<span class="cnt" data-lc="7"></span></div>
+<div class="lnav-item" onclick="goP(8)"><span class="num">08</span>Debrief</div>
+<div style="border-top:1px solid var(--bd);margin:10px 0"></div>
+<div class="lnav-item" onclick="go('n-compress')" style="color:var(--red)"><span class="num">★</span>5-Q Compress</div>
+<div class="lnav-item" onclick="go('n-skip')" style="color:var(--org)"><span class="num">⚡</span>Skip-Ahead Handlers</div>
+</div>
+
+<!-- CENTER CONTENT -->
+<div class="center">
+
+<!-- SKIP HANDLERS (always accessible) -->
+<div class="nd" id="n-skip" style="border-color:var(--o20);margin-bottom:16px">
+<div class="ndh"><div class="nq">
+<div class="nt" style="color:var(--org)">SKIP-AHEAD HANDLERS — USE ANYTIME</div>
+<div class="nsb">If they try to jump past discovery at any point, click open:</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> "Just show me a demo" / "What does it cost?" / "Send me info"</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg fl">"SHOW ME A DEMO"</span></div>
+<div class="bx"><strong>→</strong> "Absolutely — I want it to map to YOUR world, not a canned walkthrough. Let me ask 2-3 questions so it's relevant."</div>
+<div class="itrans"><a class="j blu" onclick="go('n-trigger')">→ Then: Why Now</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"WHAT DOES IT COST?"</span></div>
+<div class="bx"><strong>→</strong> "Pricing is based on camera count and scope — let me understand your footprint so I give you a real number, not a range."</div>
+<div class="itrans"><a class="j blu" onclick="go('n-cameras')">→ Then: Cameras</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"SEND ME INFO"</span></div>
+<div class="bx"><strong>→</strong> "Happy to — but I'd rather send something tailored. What are the 2-3 things that matter most to you?"</div>
+<div class="itrans"><a class="j blu" onclick="go('n-trigger')">→ Then: Why Now</a></div></div>
+</div></div></div>
+
+<!-- COMPRESS -->
+<div class="nd ess" data-ess id="n-compress" style="border-color:var(--r20);margin-bottom:16px;display:none">
+<div class="ndh"><div class="nq">
+<div class="nt ri">★ EMERGENCY 5-QUESTION COMPRESS</div>
+<div class="ntx">Only have 10 min? These five. Nothing else.</div>
+</div></div>
+<div style="padding:0 14px 12px;display:flex;flex-direction:column;gap:4px">
+<a class="j red" onclick="go('n-trigger')" style="justify-content:flex-start">★1 "What made evaluating a new approach worth your time?"</a>
+<a class="j red" onclick="go('n-afterhours')" style="justify-content:flex-start">★2 "What happens when an after-hours incident occurs?"</a>
+<a class="j red" onclick="go('n-inaction')" style="justify-content:flex-start">★3 "Nothing changes in 6-12 months — stabilize or worse?"</a>
+<a class="j red" onclick="go('n-decision')" style="justify-content:flex-start">★4 "What does the decision process look like?"</a>
+<a class="j red" onclick="go('n-demo')" style="justify-content:flex-start">★5 "30-min demo with your environment — worth it next week?"</a>
+</div></div>
+
+<!-- ═══════════════ PHASE 01: OPENING ═══════════════ -->
+<div id="p1" data-phase="1" data-ev="p,q" style="scroll-margin-top:90px">
+<div class="pm"><span>⏱</span> PHASE 01 · 0:00–2:00 · If past 2:00 → <a class="j org" onclick="go('n-trigger')">SKIP TO WHY NOW</a></div>
+
+<div class="nd ess" data-ess id="n-open">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr"><span class="esstag">★</span></div>
+<div class="ntx">"Appreciate you making time. I know you're running security across a distributed footprint, so I don't want to waste a minute. <strong>Would it be helpful if I laid out what I had in mind and you can steer?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">THEY SAY</span></div><div class="bs">"Sure, go ahead"</div>
+<div class="bx"><strong>→ Deliver the agenda:</strong></div>
+<div class="itrans"><a class="j" onclick="go('n-agenda')">→ Agenda Frame</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">THEY SAY</span></div><div class="bs">"Can I just tell you what we're dealing with?"</div>
+<div class="bx"><strong>→ LET THEM TALK. Gift.</strong> "I love that — please go ahead. I'll ask questions along the way."</div>
+<div class="itrans"><a class="j grn" onclick="go('n-trigger')">→ JUMP: Why Now (use what they give you)</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">THEY FLIP</span></div><div class="bs">"What does Lumana do?"</div>
+<div class="bx"><strong>→ 15-sec max:</strong> "AI video security that works with your existing cameras — no rip-and-replace. Turns them into intelligent sensors. But whether that matters depends entirely on your situation."</div>
+<div class="itrans"><a class="j" onclick="go('n-agenda')">→ Then: Agenda</a><a class="j grn" onclick="go('n-trigger')">→ Or: Skip to Why Now</a></div></div>
+</div></div></div>
+
+<div class="nd ess" data-ess id="n-agenda">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr"><span class="esstag">★</span></div>
+<div class="ntx">"I was thinking: spend the bulk of time understanding your world — what's working, what's not. Then if there's a fit, I'll share where we've helped similar orgs. <strong>If it doesn't make sense, I'll be the first to tell you — I'd rather save us both time. Fair?</strong>"</div>
+<div class="nsb"><b>Note:</b> Anti-pitch is folded in. One clean beat, not two.</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">THEY SAY</span></div><div class="bs">"Sounds good" / "Yeah works"</div>
+<div class="bx"><strong>→ Quick rapport beat, then transition.</strong></div>
+<div class="itrans"><a class="j" onclick="go('n-rapport')">→ Micro-Rapport</a><a class="j grn" onclick="go('n-trigger')">→ Or: Straight to Why Now</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"I only have 10 minutes"</span></div>
+<div class="bx"><strong>→</strong> "Respect that. Let me tighten up — I'll focus on the three things that matter most."</div>
+<div class="itrans"><a class="j red" onclick="tglE()">→ ACTIVATE 10-MIN MODE</a><a class="j red" onclick="go('n-trigger')">→ Then: ★ Trigger</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-rapport">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt fu">RAPPORT</div>
+<div class="ntx">"How long have you been in the security & risk seat at Horizon? 20+ sites — I imagine that keeps things interesting."</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">LONG TENURE</span></div><div class="bs">"About 3 years" / experienced</div>
+<div class="bx"><strong>→</strong> "So you've seen this evolve firsthand. That context is going to be really valuable for this conversation."</div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"Help me understand what's going on in your world right now —"</span> <a class="j grn" onclick="go('n-trigger')">→ Why Now</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">NEW IN ROLE</span></div><div class="bs">"Just started 6 months ago"</div>
+<div class="bx"><strong>→</strong> "Was improving the security infrastructure part of what brought you in?" <i>— if yes, they're on a mandate. Lean in.</i></div>
+<div class="itrans"><a class="j grn" onclick="go('n-trigger')">→ Why Now</a></div></div>
+</div></div></div>
+
+<textarea class="n" placeholder="Phase 1 notes — rapport hooks, their name, corrections..."></textarea>
+</div>
+
+<!-- ═══════════════ PHASE 02: WHY NOW ═══════════════ -->
+<div id="p2" data-phase="2" data-ev="q,x,f" style="scroll-margin-top:90px;margin-top:20px">
+<div class="pm"><span>⏱</span> PHASE 02 · 2:00–5:00 · If past 5:00 → <a class="j org" onclick="go('n-inaction')">Grab Inaction Q</a> then <a class="j org" onclick="go('n-cameras')">→ Phase 03</a></div>
+
+<div class="nd ess" data-ess id="n-trigger">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr"><span class="esstag">★</span> <span class="sil">🤫 WAIT</span></div>
+<div class="ntx">"<strong>What's happening right now that made evaluating a new approach worth your time?</strong>"</div>
+<div class="nsb"><b>Open, not leading. Whatever they say first = what hurts most. Let silence work.</b></div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+
+<div class="b"><div class="bh"><span class="btg ly">THEY SAY</span></div><div class="bs">"After-hours incidents — break-ins, theft"</div>
+<div class="bx"><strong>→</strong> "Walk me through a recent one — what happened, how did you find out?" <span class="echo">🔁 ECHO</span></div>
+<div class="vplug"><span class="vl hold">HOLD</span><span class="vt">Don't plug yet. Let them tell the story. This becomes your anchor for Phase 06.</span></div>
+<div class="itrans"><a class="j" onclick="go('n-deeper')">→ Dig Deeper</a><a class="j pur" onclick="go('n-afterhours')">→ Or Jump: After-Hours (P3)</a></div></div>
+
+<div class="b"><div class="bh"><span class="btg ly">THEY SAY</span></div><div class="bs">"VMS is falling apart / duct-taping it"</div>
+<div class="bx"><strong>→</strong> "Is that uptime, investigation speed, both? How much IT time keeping it alive?"</div>
+<div class="vplug"><span class="vl now">PLUG IF:</span><span class="vt">They mention cost: "That's something we hear a lot — legacy VMS becomes a hidden cost center. We'll come back to that."</span></div>
+<div class="itrans"><a class="j" onclick="go('n-deeper')">→ Dig Deeper</a><a class="j pur" onclick="go('n-vms')">→ Or Jump: VMS (P3)</a></div></div>
+
+<div class="b"><div class="bh"><span class="btg ly">THEY SAY</span></div><div class="bs">"CFO pushing modernization"</div>
+<div class="bx"><strong>→</strong> "'Figure it out' directive, or actual budget earmarked? Competing with other depts?"</div>
+<div class="itrans"><a class="j" onclick="go('n-cfo')">→ CFO Probe</a></div></div>
+
+<div class="b"><div class="bh"><span class="btg fl">LOW INTEREST</span></div><div class="bs">"My boss told me to take this call"</div>
+<div class="bx"><strong>→</strong> "Totally fair. Different question — in your day-to-day, what eats the most time or creates the most headaches?"</div>
+<div class="itrans"><a class="j" onclick="go('n-deeper')">→ If engaged: Dig Deeper</a><a class="j red" onclick="go('n-inaction')">→ Still cold: Inaction → qualify out</a></div></div>
+
+<div class="b"><div class="bh"><span class="btg fl">THEY FLIP</span></div><div class="bs">"What do you know about us?"</div>
+<div class="bx"><strong>→</strong> "Distributed footprint, 20-50 sites, mixed cameras, legacy VMS, modernization pressure. But I'd rather hear it from you — what am I right about, what am I missing?"</div>
+<div class="itrans"><a class="j" onclick="go('n-deeper')">→ Use their corrections to Dig Deeper</a></div></div>
+
+</div></div></div>
+
+<div class="nd" id="n-deeper">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt fu"><span class="echo">🔁 ECHO-BACK</span></div>
+<div class="ntx">"You said '<strong>[their exact words]</strong>.' Was there a <strong>specific incident that was the tipping point — or a slow burn</strong> that hit critical mass?"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">SPECIFIC INCIDENT</span></div><div class="bs">"There was one at [site] that was bad..."</div>
+<div class="bx"><strong>→ Mine it:</strong> "How did you find out? How long between event and awareness? What was the fallout?"</div>
+<div class="vplug"><span class="vl hold">HOLD</span><span class="vt">This story = your Phase 06 anchor. Don't sell into it. Just listen and capture.</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"That's a tough situation — and unfortunately not uncommon in distributed environments."</span> <a class="j" onclick="go('n-cfo')">→ CFO Probe</a><a class="j org" onclick="go('n-inaction')">→ Tight: Inaction</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">SLOW BURN</span></div><div class="bs">"Just can't ignore it anymore"</div>
+<div class="bx"><strong>→</strong> "What changed that turned 'can't ignore' into 'let's act'? Timeline you're working against?"</div>
+<div class="itrans"><a class="j" onclick="go('n-cfo')">→ CFO Probe</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-cfo">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt ri">CFO PRESSURE</div>
+<div class="ntx">"With the CFO pushing cost-efficient modernization — <strong>does that create more urgency for you, or more friction?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">"BOTH" / FRICTION</span></div>
+<div class="bx"><strong>→</strong> "Makes total sense."</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"One thing that tends to change that conversation: when the modernization doesn't require buying new hardware. That's a very different pitch to Finance. We'll come back to it."</span></div>
+<div class="itrans"><a class="j" onclick="go('n-inaction')">→ Risk of Inaction</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">CFO ON BOARD</span></div>
+<div class="bx"><strong>→</strong> "Great. Would it make sense to include Finance in a follow-up?"</div>
+<div class="itrans"><a class="j" onclick="go('n-inaction')">→ Inaction</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"HOW MUCH DOES IT COST?"</span></div>
+<div class="bx"><strong>→</strong> "Depends on camera count and scope. Let me understand the picture so I give you something real."</div>
+<div class="itrans"><a class="j" onclick="go('n-inaction')">→ Return: Inaction</a></div></div>
+</div></div></div>
+
+<div class="nd ess" data-ess id="n-inaction">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt ri"><span class="esstag">★</span> <span class="sil">🤫 WAIT</span></div>
+<div class="ntx">"<strong>If nothing changes in 6-12 months — stabilize or get worse?</strong>"</div>
+<div class="nsb"><b>Forces cost-of-nothing. "Gets worse" = urgency anchor. DO NOT fill silence.</b></div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">GETS WORSE</span></div>
+<div class="bx"><strong>→</strong> "That concerns me. Team stays flat, footprint grows — that's where things break." <i>Pause. Let them agree.</i></div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"That's exactly the kind of problem a scalable platform is built to solve — but let me understand the mechanics first."</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"Let me shift gears and get tactical — I want to understand what you're working with on the ground."</span> <a class="j grn" onclick="go('n-cameras')">→ Phase 03: Cameras</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">KEEP PATCHING</span></div>
+<div class="bx"><strong>→</strong> "What does patching cost — dollars, risk, bandwidth? Patching works until it doesn't."</div>
+<div class="itrans"><a class="j grn" onclick="go('n-cameras')">→ Phase 03</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">STABILIZE</span></div>
+<div class="bx"><strong>→ Gentle challenge:</strong> "Is that because problems go away, or the team absorbs them as the new normal?"</div>
+<div class="itrans"><a class="j grn" onclick="go('n-cameras')">→ Phase 03</a></div></div>
+</div></div></div>
+
+<textarea class="n" placeholder="Capture: Trigger, their exact words, urgency, CFO dynamics, inaction quote..."></textarea>
+</div>
+
+<!-- ═══════════════ PHASE 03: CURRENT STATE ═══════════════ -->
+<div id="p3" data-phase="3" data-ev="q,x,v" style="scroll-margin-top:90px;margin-top:20px">
+<div class="pm"><span>⏱</span> PHASE 03 · 5:00–9:00 · Densest. If past 9:00 → <a class="j org" onclick="go('n-investigation')">Investigation</a> + <a class="j org" onclick="go('n-afterhours')">After-Hours</a> then <a class="j org" onclick="go('n-invcost')">→ P4</a></div>
+
+<div class="nd" id="n-cameras">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr">CAMERAS</div>
+<div class="ntx">"Walk me through camera environment — Axis, Honeywell, OEMs — <strong>how many total? All IP or some analog?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">GIVE COUNT</span></div><div class="bs">"500-800, mostly IP, some analog"</div>
+<div class="bx"><strong>→</strong> "Analog ones — sites you'd bring in, or can they wait?"</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"Good news: everything IP works immediately. Analog just needs a simple encoder — inexpensive, keeps the camera. No hardware swap."</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"And on the VMS side —"</span> <a class="j" onclick="go('n-vms')">→ VMS</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"CAN LUMANA WORK WITH THESE?"</span></div>
+<div class="bx"><strong>→</strong> "Yes — camera-agnostic is the core design principle. Axis, Honeywell, OEMs, any IP. Analog needs a cheap encoder. Your hardware stays."</div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"What about on the VMS side?"</span> <a class="j" onclick="go('n-vms')">→ VMS</a></div></div>
+<div class="b"><div class="bh"><span class="btg pv">SHORT ANSWERS</span></div>
+<div class="bx"><strong>→ Skip technical, go to workflow.</strong> More engaging.</div>
+<div class="itrans"><a class="j org" onclick="go('n-investigation')">→ PIVOT: Investigation</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-vms">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr">VMS</div>
+<div class="ntx">"What VMS? When you say aging — <strong>software, hardware, or both?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">NAME + PAIN</span></div><div class="bs">"[Genetec/Milestone], maintenance headaches"</div>
+<div class="bx"><strong>→</strong> "What does it cost to maintain? Licensing, servers, IT time?"</div>
+<div class="vplug"><span class="vl hold">HOLD</span><span class="vt">File the VMS cost for Phase 04 ROI calc. Don't pitch replacement yet.</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"And when your team needs to pull footage —"</span> <a class="j" onclick="go('n-investigation')">→ Investigation</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"RIP OUT OUR VMS?"</span></div>
+<div class="bx"><strong>→</strong> "No. Core sits alongside it. Adds AI without disrupting what's running. Most keep existing system, some sunset later — zero pressure."</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"Think of it as an upgrade layer, not a replacement. Your investment in [their VMS] isn't wasted."</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"When your team pulls footage for an investigation — what does that look like?"</span> <a class="j" onclick="go('n-investigation')">→ Investigation</a></div></div>
+</div></div></div>
+
+<div class="nd ess" data-ess id="n-investigation">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr"><span class="esstag">★</span> INVESTIGATION WORKFLOW</div>
+<div class="ntx">"When your team pulls footage — <strong>what does that look like? How long from 'need to find' to 'found it'?</strong>"</div>
+<div class="nsb"><b>MONEY QUESTION.</b> Clock their answer.</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">HOURS / FULL DAY</span></div>
+<div class="bx"><strong>→</strong> "Someone's full day — just scrubbing footage. How many per week?" <span class="echo">🔁 ECHO "hours"</span></div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"That's one of the biggest shifts we see. AI indexes everything continuously — our customers go from hours to literally seconds. Type a description, get every matching clip across all sites."</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"That's a huge time sink. How does monitoring work day-to-day?"</span> <a class="j" onclick="go('n-monitoring')">→ Monitoring</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"HOW LONG WITH YOU?"</span></div>
+<div class="bx"><strong>→</strong> "Seconds. AI indexes continuously. Type 'person in red jacket, loading dock 3, Tuesday night' — every match, instantly, all sites."</div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"How many of those investigations per week across all sites?"</span> <a class="j" onclick="go('n-monitoring')">→ Then: Monitoring</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">NOT BAD — 30-45 MIN</span></div>
+<div class="bx"><strong>→ Multiply:</strong> "How many per week? Even at 30 min, if 10+/week that's a full headcount of investigation labor."</div>
+<div class="vplug"><span class="vl hold">HOLD</span><span class="vt">Don't plug yet at lower pain. File the number. Multiply in Phase 04.</span></div>
+<div class="itrans"><a class="j" onclick="go('n-monitoring')">→ Monitoring</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-monitoring">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr">MONITORING</div>
+<div class="ntx">"How does monitoring work day-to-day? <strong>Central SOC or site-by-site?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">SITE-BY-SITE</span></div>
+<div class="bx"><strong>→</strong> "So no centralized view? If something happens at Site 12, you rely on someone at 12 to catch it?"</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"That's a visibility gap we solve directly — single pane of glass, every site, any browser or mobile device. Your entire fleet in one view."</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"What about after hours —"</span> <a class="j" onclick="go('n-afterhours')">→ After-Hours</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">SMALL SOC</span></div><div class="bs">"2-3 people"</div>
+<div class="bx"><strong>→</strong> "2-3 watching how many cameras? After 20 min, detection drops to near zero."</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"That's monitoring fatigue — it's a human limitation. Our AI doesn't get tired. It monitors 24/7 with consistent accuracy and only escalates when something actually matters."</span></div>
+<div class="itrans"><a class="j" onclick="go('n-afterhours')">→ After-Hours</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"CENTRALIZE OUR FEEDS?"</span></div>
+<div class="bx"><strong>→</strong> "Yes — VMS+ cloud control center. Every camera, any browser/mobile. But real unlock: AI watches, team only pulled in when it matters."</div>
+<div class="itrans"><a class="j" onclick="go('n-afterhours')">→ "What about after hours?"</a></div></div>
+</div></div></div>
+
+<div class="nd ess" data-ess id="n-afterhours">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt ri"><span class="esstag">★</span> AFTER-HOURS</div>
+<div class="ntx">"After-hours incidents — <strong>coverage model when offices close? Any automated alerting, or all reactive?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">NOTHING / NEXT MORNING</span></div>
+<div class="bx"><strong>→</strong> "So 2 AM at Site 15 — nobody knows until 7 AM. That's a 5-hour window." <span class="echo">🔁 ECHO "next morning"</span></div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"That window is exactly what AI monitoring closes. Real-time alerts — SMS, email, app — the second something happens. Plus active deterrence: lights, audio. And auto-verification with dispatch for critical events. Your 5-hour gap goes to zero."</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"The blind spots you mentioned —"</span> <a class="j" onclick="go('n-blindspots')">→ Blind Spots</a><a class="j org" onclick="go('n-invcost')">→ Time tight? Phase 04</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">THIRD-PARTY / NOT GREAT</span></div>
+<div class="bx"><strong>→</strong> "What's not working — response time, false alarms, cost?"</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"A lot of orgs are moving off third-party monitoring because the cost-to-quality ratio doesn't work. AI-native alerting is faster, more accurate, and scales without adding headcount or monthly monitoring fees."</span></div>
+<div class="itrans"><a class="j" onclick="go('n-blindspots')">→ Blind Spots</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"HOW DOES LUMANA HANDLE THIS?"</span></div>
+<div class="bx"><strong>→</strong> "24/7 AI. Real threat → real-time alert (SMS/email/app). Active deterrence — lights, audio. Critical → auto-verification + emergency dispatch. Team only involved when human judgment is needed."</div>
+<div class="itrans"><a class="j" onclick="go('n-blindspots')">→ "Blind spots you mentioned — what type?"</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-blindspots">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr">BLIND SPOTS</div>
+<div class="ntx">"Blind spots — <strong>camera coverage gap, visibility gap (cameras exist but not connected), or both?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">BOTH</span></div>
+<div class="bx"><strong>→</strong> "Which is more painful — no cameras, or can't see the ones you have?"</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"The visibility gap we close immediately — centralized platform, all cameras unified. Coverage gaps are usually solved by adding a few cameras at key points, and our NDAA-compliant hardware deploys in minutes."</span></div>
+<div class="itrans"><a class="j" onclick="go('n-false')">→ False Alarms</a><a class="j org" onclick="go('n-invcost')">→ Time tight? Phase 04</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-false">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt fu">FALSE ALARMS</div>
+<div class="ntx">"How much noise? <strong>False alerts, motion triggers that aren't real?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">CONSTANT / TEAM IGNORES</span></div>
+<div class="bx"><strong>→</strong> "Most dangerous place — real alert buried in noise."</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"We reduce false alerts by up to 90%. Self-learning AI calibrates to your specific environment — it knows the difference between a delivery driver and an intruder. That signal-to-noise shift changes everything." <span class="sil">🤫 PAUSE</span></span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"Let me zoom out — I want to understand what all this costs you."</span> <a class="j grn" onclick="go('n-invcost')">→ Phase 04: Impact</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">NOT MUCH ALERTING</span></div>
+<div class="bx"><strong>→ Positive reframe:</strong> "Building from scratch is easier than fixing a noisy system."</div>
+<div class="itrans"><a class="j grn" onclick="go('n-invcost')">→ Phase 04</a></div></div>
+</div></div></div>
+
+<textarea class="n" placeholder="Capture: Camera count, VMS, investigation time (!!), monitoring model, after-hours, blind spots, false alarms..."></textarea>
+</div>
+
+<!-- ═══════════════ PHASE 04: IMPACT ═══════════════ -->
+<div id="p4" data-phase="4" data-ev="x,f,v" style="scroll-margin-top:90px;margin-top:20px">
+<div class="pm"><span>⏱</span> PHASE 04 · 9:00–12:00 · If past 12:00 → <a class="j org" onclick="go('n-invcost')">Inv Cost</a> + <a class="j org" onclick="go('n-inccost')">Inc Cost</a> then <a class="j org" onclick="go('n-decision')">→ P5</a></div>
+
+<div class="nd ess" data-ess id="n-invcost">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt ri"><span class="esstag">★</span> INVESTIGATION COST</div>
+<div class="ntx">"Investigations eat staff time. Ballpark — <strong>how many hrs/week? What does that cost factoring salary?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">DON'T KNOW EXACT</span></div>
+<div class="bx"><strong>→ Anchor:</strong> "More than 20 hrs/week? More than 40?"</div>
+<div class="itrans"><a class="j" onclick="go('n-inccost')">→ Incident Cost</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">30-40 HRS/WEEK</span></div>
+<div class="bx"><strong>→</strong> "Full-time employee just on investigations — reactive, not proactive."</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"When investigation time drops from hours to seconds — that FTE gets redeployed to proactive security work. That's how this pays for itself."</span></div>
+<div class="itrans"><a class="j" onclick="go('n-inccost')">→ Incident Cost</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"WHAT SAVINGS DO CUSTOMERS SEE?"</span></div>
+<div class="bx"><strong>→</strong> "Investigation time typically drops hours to minutes. Similar distributed org went from 3 hrs average to under 5 min with AI search. Bigger shift: reactive to proactive — system surfaces incidents before someone reports them."</div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"What about the incidents themselves — financial exposure?"</span> <a class="j" onclick="go('n-inccost')">→ Incident Cost</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-inccost">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt ri">INCIDENT COST</div>
+<div class="ntx">"After-hours incident — <strong>financial exposure? Shrinkage, damage, liability, insurance — all in.</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">GIVE A NUMBER</span></div>
+<div class="bx"><strong>→</strong> "How many per year? [X × $Y] — not a security problem, that's a P&L problem."</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"If we can prevent even a fraction of those — or cut response time from hours to minutes — the platform more than pays for itself. We typically see 100-300% ROI inside two years."</span></div>
+<div class="itrans"><a class="j" onclick="go('n-compliance')">→ Compliance</a><a class="j org" onclick="go('n-decision')">→ Tight? Phase 05</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">NO DOLLAR AMOUNT</span></div>
+<div class="bx"><strong>→ Proxy:</strong> "Directionally — bigger cost: direct losses, investigation labor, or VMS maintenance?"</div>
+<div class="itrans"><a class="j" onclick="go('n-compliance')">→ Compliance</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-compliance">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt ri">COMPLIANCE / LIABILITY</div>
+<div class="ntx">"Any <strong>compliance or liability exposure?</strong> Aging infrastructure creates gaps auditors/insurers flag."</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">INSURANCE ASKING QUESTIONS</span></div>
+<div class="bx"><strong>→</strong> "Modernizing could reduce premiums — partially self-funding."</div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"We're SOC 2 compliant, NDAA-compliant hardware, zero-trust architecture. That checks every box insurers and auditors look for. Several customers have used the deployment as leverage for premium reduction."</span></div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"Appreciate you getting into the numbers. Let me ask about the people side —"</span> <a class="j grn" onclick="go('n-decision')">→ Phase 05: Stakeholders</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">NOT AN ISSUE</span></div>
+<div class="itrans"><a class="j grn" onclick="go('n-decision')">→ Phase 05</a></div></div>
+</div></div></div>
+
+<textarea class="n" placeholder="Capture: Inv hrs/week, cost/incident, # incidents, VMS cost, compliance, insurance..."></textarea>
+</div>
+
+<!-- ═══════════════ PHASE 05: STAKEHOLDERS ═══════════════ -->
+<div id="p5" data-phase="5" data-ev="x,q" style="scroll-margin-top:90px;margin-top:20px">
+<div class="pm"><span>⏱</span> PHASE 05 · 12:00–15:00 · If tight → <a class="j org" onclick="go('n-decision')">Decision</a> + <a class="j org" onclick="go('n-champion')">Champion</a> then <a class="j org" onclick="go('n-recap')">→ P6</a></div>
+
+<div class="nd ess" data-ess id="n-decision">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr"><span class="esstag">★</span> DECISION PROCESS</div>
+<div class="ntx">"If worth pursuing — <strong>what does that process look like? You'd own it, or other groups involved?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">OWN REC, IT + FINANCE SIGN OFF</span></div>
+<div class="bx"><strong>→</strong> "You build case, IT validates, Finance approves? Anyone else? Has anything like this stalled before?"</div>
+<div class="itrans"><a class="j" onclick="go('n-it')">→ IT Relationship</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">NOT SURE</span></div>
+<div class="bx"><strong>→ Coach:</strong> "Usually it's Security owns rec, IT validates architecture, Finance approves budget. Track for Horizon?"</div>
+<div class="itrans"><a class="j" onclick="go('n-it')">→ IT</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"WHY DO YOU NEED TO KNOW?"</span></div>
+<div class="bx"><strong>→</strong> "I've seen deals stall because wrong people weren't looped in. Trying to protect your time as much as mine."</div>
+<div class="itrans"><a class="j" onclick="go('n-it')">→ IT</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-it">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr">IT</div>
+<div class="ntx">"Where does IT fit? <strong>Sign off on network, cloud, data security?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">IT NEEDS INVOLVEMENT</span></div>
+<div class="vplug"><span class="vl now">PLUG NOW</span><span class="vt">"Quick heads up for IT: zero-trust architecture, SOC 2, E2E encrypted, no port forwarding required. We've passed security reviews at Fortune 500s. Useful to bring your IT lead into the next call?"</span></div>
+<div class="itrans"><a class="j" onclick="go('n-champion')">→ Champion Test</a></div></div>
+<div class="b"><div class="bh"><span class="btg fl">"IS THIS CLOUD? IT HAS FEELINGS"</span></div>
+<div class="bx"><strong>→</strong> "Hybrid. Video records locally — footage stays on your network. Cloud handles management, remote access, AI. Not storage. That distinction changes the IT conversation."</div>
+<div class="itrans"><a class="j" onclick="go('n-champion')">→ Champion</a></div></div>
+</div></div></div>
+
+<div class="nd ess" data-ess id="n-champion">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt va"><span class="esstag">★</span> CHAMPION TEST</div>
+<div class="ntx">"If this looked like a fit — <strong>would you be the one championing it internally?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">YES</span></div>
+<div class="bx"><strong>→</strong> "Good. I want to make sure you have everything you need to make the case."</div>
+<div class="itrans"><a class="j" onclick="go('n-competition')">→ Competition</a><a class="j org" onclick="go('n-recap')">→ Tight? Value Bridge</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">HEDGE / UNSURE</span></div>
+<div class="bx"><strong>→</strong> "Who else would we want to get in front of? Sometimes it helps to multi-thread early."</div>
+<div class="itrans"><a class="j" onclick="go('n-competition')">→ Competition</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-competition">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt fu">COMPETITION</div>
+<div class="ntx">"Looking at other solutions, or <strong>more early exploration?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">TALKING TO OTHERS</span></div>
+<div class="bx"><strong>→ Plant differentiators:</strong> "Two things to pressure test: Do they require camera replacement? Is their AI actual ML or rules-based marketed as AI?"</div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"Let me take a step back and make sure I'm tracking —"</span> <a class="j grn" onclick="go('n-recap')">→ Phase 06: Value Bridge</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">JUST YOU / EARLY</span></div>
+<div class="itrans"><a class="j grn" onclick="go('n-recap')">→ Phase 06</a></div></div>
+</div></div></div>
+
+<textarea class="n" placeholder="Stakeholder map: Champion? Econ buyer? IT? Ops? Prior evals? Competition?"></textarea>
+</div>
+
+<!-- ═══════════════ PHASE 06: VALUE BRIDGE ═══════════════ -->
+<div id="p6" data-phase="6" data-ev="f,v,p" style="scroll-margin-top:90px;margin-top:20px">
+<div class="pm"><span>⏱</span> PHASE 06 · 15:00–17:00 · If past 17:00 → <a class="j org" onclick="go('n-recap')">Recap</a> + <a class="j org" onclick="go('n-bridge')">Bridge</a> then <a class="j org" onclick="go('n-align')">→ Close</a></div>
+
+<div class="nd ess" data-ess id="n-recap">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt va"><span class="esstag">★</span> <span class="echo">🔁 THEIR WORDS</span> RECAP</div>
+<div class="ntx">"Let me make sure I'm tracking. <strong>[X] facilities, mixed hardware, legacy VMS costing you in maintenance and investigation, after-hours gaps where [their words], CFO wants modernization that pencils.</strong> That right?"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">NAILED IT</span></div>
+<div class="itrans"><a class="j" onclick="go('n-bridge')">→ Architecture Bridge</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">CLOSE BUT ADD SOMETHING</span></div>
+<div class="bx"><strong>→</strong> "Good — glad you added that." Weave it in.</div>
+<div class="itrans"><a class="j" onclick="go('n-bridge')">→ Bridge (with new element)</a></div></div>
+</div></div></div>
+
+<div class="nd ess" data-ess id="n-bridge">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt va"><span class="esstag">★</span> ARCHITECTURE BRIDGE — 60 SEC MAX</div>
+<div class="ntx">"Here's why this is interesting. <strong>Camera-agnostic</strong> — Axis, Honeywell, OEMs stay. AI sits on top, turns cameras into intelligent sensors. <strong>24/7 monitoring, real alerts not noise, footage search in seconds not hours.</strong> And the CFO angle: no rip-and-replace — making existing cameras dramatically smarter. Modernization that Finance loves."</div>
+<div class="nsb">Then: "We're at 50K+ cameras — Meta, McDonald's, NYU. Not theoretical."</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> Then: Gut Check</div><div class="bb">
+<div class="b"><div class="bx">Immediately after bridge delivery:</div>
+<div class="itrans"><a class="j" onclick="go('n-gut')">→ Gut Check</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-gut">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt pr"><span class="sil">🤫 WAIT</span> GUT CHECK</div>
+<div class="ntx">"<strong>Does that resonate? Or am I missing something?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves + objections</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">POSITIVE</span></div><div class="bs">"Yeah, could work"</div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"Great — let me suggest a path forward."</span> <a class="j grn" onclick="go('n-align')">→ Close</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">NEED TO SEE IT</span></div><div class="bs">"Would need to see it working"</div>
+<div class="bx"><strong>→</strong> "That's the right call. Slides don't prove anything."</div>
+<div class="itrans"><a class="j grn" onclick="go('n-demo')">→ Demo Proposal</a></div></div>
+<div class="b"><div class="bh"><span class="btg ob">OBJ: AI HYPE</span></div>
+<div class="bx"><strong>→</strong> "Fair. 50K cameras with Meta — zero tolerance. Self-learning, calibrates to YOUR env. 90% false alert drop. Happy to prove with your feeds."</div>
+<div class="itrans"><a class="j grn" onclick="go('n-align')">→ Close</a></div></div>
+<div class="b"><div class="bh"><span class="btg ob">OBJ: BUDGET</span></div>
+<div class="bx"><strong>→</strong> "Already spending on VMS maintenance, investigation labor, incident losses. Lumana attacks all three. 100-300% ROI in 2 yrs. Story = lower total cost, not new expense. Build the case together?"</div>
+<div class="itrans"><a class="j grn" onclick="go('n-align')">→ Close</a></div></div>
+<div class="b"><div class="bh"><span class="btg ob">OBJ: IT / CLOUD</span></div>
+<div class="bx"><strong>→</strong> "Zero-trust, SOC 2, E2E, no port forwarding. Passed Fortune 500 reviews. Bring IT into next call?"</div>
+<div class="itrans"><a class="j grn" onclick="go('n-demo')">→ Demo (include IT)</a></div></div>
+<div class="b"><div class="bh"><span class="btg ob">OBJ: VMS RIP-OUT</span></div>
+<div class="bx"><strong>→</strong> "Don't have to. Core works alongside. Adds AI, doesn't touch what's running."</div>
+<div class="itrans"><a class="j grn" onclick="go('n-align')">→ Close</a></div></div>
+<div class="b"><div class="bh"><span class="btg ob">OBJ: COMPETITOR</span></div>
+<div class="bx"><strong>→</strong> "Good, you're serious. Two Q's: camera replacement required? Actual ML or rules-based?"</div>
+<div class="itrans"><a class="j grn" onclick="go('n-align')">→ Close</a></div></div>
+</div></div></div>
+
+<textarea class="n" placeholder="Reaction, what resonated, objections..."></textarea>
+</div>
+
+<!-- ═══════════════ PHASE 07: CLOSE ═══════════════ -->
+<div id="p7" data-phase="7" data-ev="c,p" style="scroll-margin-top:90px;margin-top:20px">
+<div class="pm"><span>⏱</span> PHASE 07 · 17:00–20:00 · <b style="color:var(--red)">MUST REACH. No next step = wasted call.</b></div>
+
+<div class="nd ess" data-ess id="n-align">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt cl"><span class="esstag">★</span> ALIGNMENT</div>
+<div class="ntx">"Based on everything we talked about — <strong>worth exploring further?</strong> I don't want to assume."</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">YES</span></div>
+<div class="itrans"><a class="j grn" onclick="go('n-demo')">→ Demo Proposal</a></div></div>
+<div class="b"><div class="bh"><span class="btg ob">HESITANT</span></div>
+<div class="bx"><strong>→</strong> "What would need to be true for this to be worth your team's time?" <span class="sil">🤫 WAIT</span></div>
+<div class="itrans"><a class="j" onclick="go('n-demo')">→ If criteria: Demo</a><a class="j" onclick="go('n-map')">→ If still soft: Action Plan</a></div></div>
+</div></div></div>
+
+<div class="nd ess" data-ess id="n-demo">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt cl"><span class="esstag">★</span> DEMO PROPOSAL</div>
+<div class="ntx">"<strong>30-minute demo, camera environments like yours</strong> — see exactly how AI handles your scenarios. Bring IT lead and anyone who'd evaluate. <strong>Make sense?</strong>"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> They respond — your moves</div><div class="bb">
+<div class="b"><div class="bh"><span class="btg ly">YES</span></div>
+<div class="bx"><strong>→ Lock it:</strong> "When — this week or next? You send invite, or I coordinate?"</div>
+<div class="itrans"><a class="j" onclick="go('n-map')">→ Action Plan</a></div></div>
+<div class="b"><div class="bh"><span class="btg ly">CHECK WITH TEAM</span></div>
+<div class="bx"><strong>→</strong> "Would a summary help — pain points, fit areas, demo agenda — something to share with [stakeholders]?"</div>
+<div class="itrans"><span style="font-size:11px;color:var(--t3);font-style:italic">"Can we pencil next week as placeholder? Easy to move."</span> <a class="j" onclick="go('n-map')">→ Action Plan</a></div></div>
+<div class="b"><div class="bh"><span class="btg ob">NOT READY</span></div>
+<div class="bx"><strong>→</strong> "What would need to be true?" <span class="sil">🤫 WAIT</span> Whatever they say = roadmap.</div>
+<div class="itrans"><a class="j" onclick="go('n-map')">→ Action Plan with criteria</a></div></div>
+</div></div></div>
+
+<div class="nd" id="n-map">
+<div class="ndh"><div class="nck" onclick="tc(this)">✓</div><div class="nq">
+<div class="nt cl">ACTION PLAN</div>
+<div class="ntx">"I'll send a summary — <strong>pain points, areas of fit, demo agenda.</strong> Something concrete for [stakeholders]. Fair?"</div>
+</div></div>
+<div class="brs"><div class="bt" onclick="tb(this)"><span class="ar">►</span> Close it out</div><div class="bb">
+<div class="b">
+<div class="bx"><strong>→ Warm close:</strong> "Know we're bumping on time. Thank you for being so open — I got a lot out of this and hope you did too. Looking forward to the next one."</div>
+<div class="vplug"><span class="vl hold">RAPPORT</span><span class="vt">If they shared something personal early on, callback: "And good luck with [thing they mentioned] — sounds like you've got a lot on your plate."</span></div>
+</div>
+</div></div></div>
+
+<textarea class="n" placeholder="Next step, date, attendees, what YOU send, risks..."></textarea>
+</div>
+
+<!-- ═══════════════ PHASE 08: DEBRIEF ═══════════════ -->
+<div id="p8" data-phase="8" data-ev="" style="scroll-margin-top:90px;margin-top:20px">
+<div class="card"><span class="cl" style="color:var(--org);background:var(--o10)">SELF-SCORE (1-5)</span>
+<div class="sc">
+<div class="si" onclick="cs(this)"><div class="l">Questions</div><div class="v">—</div></div>
+<div class="si" onclick="cs(this)"><div class="l">Extraction</div><div class="v">—</div></div>
+<div class="si" onclick="cs(this)"><div class="l">Framing</div><div class="v">—</div></div>
+<div class="si" onclick="cs(this)"><div class="l">Presence</div><div class="v">—</div></div>
+<div class="si" onclick="cs(this)"><div class="l">Value</div><div class="v">—</div></div>
+<div class="si" onclick="cs(this)"><div class="l">Close</div><div class="v">—</div></div>
+</div></div>
+<div class="card"><span class="cl" style="color:var(--pur);background:var(--p10)">MEDDPICC</span>
+<div class="sc">
+<div class="si" onclick="ts(this)"><div class="l">Metrics</div><div class="v">—</div></div>
+<div class="si" onclick="ts(this)"><div class="l">Econ Buyer</div><div class="v">—</div></div>
+<div class="si" onclick="ts(this)"><div class="l">Dec Criteria</div><div class="v">—</div></div>
+<div class="si" onclick="ts(this)"><div class="l">Dec Process</div><div class="v">—</div></div>
+<div class="si" onclick="ts(this)"><div class="l">Paper</div><div class="v">—</div></div>
+<div class="si" onclick="ts(this)"><div class="l">Pain</div><div class="v">—</div></div>
+<div class="si" onclick="ts(this)"><div class="l">Champion</div><div class="v">—</div></div>
+<div class="si" onclick="ts(this)"><div class="l">Competition</div><div class="v">—</div></div>
+</div>
+<textarea class="n" placeholder="MEDDPICC notes..."></textarea></div>
+<textarea class="n" placeholder="What went well?"></textarea>
+<textarea class="n" placeholder="What would you change?"></textarea>
+<textarea class="n" placeholder="Key quotes — exact words for follow-up"></textarea>
+<textarea class="n" placeholder="Intel gaps — what do you still need?"></textarea>
+</div>
+
+</div><!-- end center -->
+
+<!-- === RIGHT PANEL === -->
+<div class="rpanel" id="rPanel">
+
+<div class="rp-section">
+<h3>Horizon Dossier</h3>
+<div class="rp-kv">
+<div class="rp-k"><div class="l">Persona</div><div class="v">Director of Security & Risk</div></div>
+<div class="rp-k"><div class="l">Footprint</div><div class="v">20-50 facilities</div></div>
+<div class="rp-k"><div class="l">Cameras</div><div class="v">Axis, Honeywell, OEMs (mixed)</div></div>
+<div class="rp-k"><div class="l">VMS</div><div class="v">Legacy, aging</div></div>
+<div class="rp-k"><div class="l">Pain</div><div class="v">After-hours, blind spots, manual investigation</div></div>
+<div class="rp-k"><div class="l">CFO</div><div class="v">Cost-efficient modernization mandate</div></div>
+</div>
+</div>
+
+<div class="rp-section">
+<h3>Lumana Differentiators</h3>
+<ul>
+<li><strong>Camera agnostic</strong> — any IP, no rip-replace</li>
+<li><strong>VIA-1 AI</strong> — self-learning, near-human</li>
+<li><strong>90% false alert reduction</strong></li>
+<li><strong>Core device</strong> — plug-play, no port forward</li>
+<li><strong>Deploy in weeks</strong> — 3 phase</li>
+<li><strong>100-300% ROI</strong> in 2 yrs</li>
+<li><strong>AI search</strong> — hours → seconds</li>
+<li><strong>Active deterrence</strong> + auto dispatch</li>
+<li><strong>Hybrid cloud</strong> — local + cloud mgmt</li>
+</ul>
+</div>
+
+<div class="rp-section">
+<h3>Social Proof</h3>
+<ul>
+<li>50K+ cameras deployed</li>
+<li>$64M raised ($40M Series A)</li>
+<li>Meta, McDonald's, NYU, MN Twins</li>
+<li>SOC 2 · NDAA · Zero-trust · E2E</li>
+<li>Wing VC, Norwest, S Capital</li>
+</ul>
+</div>
+
+<div class="rp-section">
+<h3>Horizon Angles</h3>
+<ul>
+<li>Mixed cameras → agnostic</li>
+<li>Legacy VMS → Core overlay</li>
+<li>After-hours → 24/7 AI alerts</li>
+<li>Blind spots → single pane</li>
+<li>Manual inv → AI search seconds</li>
+<li>CFO → smarter existing, no new HW</li>
+<li>20-50 sites → unlimited scale</li>
+</ul>
+</div>
+
+<div class="rp-section">
+<h3>Deploy Model</h3>
+<ul>
+<li><strong>1:</strong> Assess — inventory, network</li>
+<li><strong>2:</strong> Deploy — Core, AI, calibrate</li>
+<li><strong>3:</strong> Optimize — tune, expand</li>
+<li>Analog → encoder (cheap)</li>
+</ul>
+</div>
+
+</div><!-- end rpanel -->
+
+</div><!-- end layout -->
+
+<script>
+function go(id){const el=document.getElementById(id);if(!el)return;const ph=el.closest('[data-phase]');if(ph){const pw=ph.closest('.phase');if(pw&&!pw.classList.contains('open'))pw.classList.add('open')}el.scrollIntoView({behavior:'smooth',block:'start'});el.style.borderColor='var(--acc)';setTimeout(()=>el.style.borderColor='',1500);ue();uLN()}
+
+function goP(n){const el=document.getElementById('p'+n);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});uLN()}}
+
+// TIMER
+let tOn=0,tS=0,tI;
+function tglT(){const b=document.getElementById('tBtn');if(tOn){clearInterval(tI);b.classList.remove('on','tw','to')}else{tI=setInterval(()=>{tS++;const m=String(Math.floor(tS/60)).padStart(2,'0'),s=String(tS%60).padStart(2,'0');b.textContent=m+':'+s;b.classList.remove('on','tw','to');b.classList.add(tS>=1200?'to':tS>=900?'tw':'on');uP()},1000)}tOn=!tOn}
+const pM=[0,120,300,540,720,900,1020,1200];
+function uP(){document.querySelectorAll('.pdot').forEach((d,i)=>{d.classList.remove('hit','warn','over');if(tS>=pM[i+1])d.classList.add(tS>pM[i+1]+60?'over':'hit');else if(tS>=pM[i])d.classList.add('hit')})}
+
+// PHASE (not used in flat layout but kept for compat)
+function tp(h){h.parentElement.classList.toggle('open');ue()}
+
+// CHECK
+function tc(e){e.classList.toggle('on');uPr();sC()}
+function uPr(){const t=document.querySelectorAll('.nck').length,c=document.querySelectorAll('.nck.on').length;document.getElementById('pp').textContent=c+'/'+t;
+// Left nav counts
+for(let i=1;i<=7;i++){const ph=document.getElementById('p'+i);if(!ph)continue;const pt=ph.querySelectorAll('.nck').length,pc=ph.querySelectorAll('.nck.on').length;const lc=document.querySelector(`[data-lc="${i}"]`);if(lc&&pt)lc.textContent=pc+'/'+pt}}
+
+// BRANCH — auto-close siblings
+function tb(e){const nd=e.closest('.nd');const wasOpen=nd.classList.contains('xp');nd.classList.toggle('xp');
+// Auto-close siblings — commented out to allow multiple open
+// if(!wasOpen){const parent=nd.parentElement;parent.querySelectorAll('.nd.xp').forEach(n=>{if(n!==nd)n.classList.remove('xp')})}
+}
+
+// SCORES
+const sv=['—','1','2','3','4','5'];
+function cs(e){const v=e.querySelector('.v');let i=sv.indexOf(v.textContent);i=(i+1)%sv.length;v.textContent=sv[i];e.classList.toggle('on',i>0)}
+function ts(e){e.classList.toggle('on');e.querySelector('.v').textContent=e.classList.contains('on')?'✓':'—'}
+
+// RIGHT PANEL
+function tglRP(){document.getElementById('rPanel').classList.toggle('hidden')}
+
+// EMERGENCY
+let eOn=0;
+function tglE(){eOn=!eOn;document.getElementById('eBtn').classList.toggle('act',eOn);document.getElementById('eBar').classList.toggle('show',eOn);
+const comp=document.getElementById('n-compress');if(comp)comp.style.display=eOn?'block':'none';
+document.querySelectorAll('.nd').forEach(n=>{if(n.id==='n-skip'||n.id==='n-compress')return;if(eOn)n.style.display=n.hasAttribute('data-ess')?'':'none';else n.style.display=''})}
+
+// EVAL
+function ue(){document.querySelectorAll('.etag').forEach(t=>t.classList.remove('lit'));
+// Light up based on scroll position
+const phases=document.querySelectorAll('[data-phase]');let active=null;phases.forEach(p=>{const r=p.getBoundingClientRect();if(r.top<300)active=p});
+if(active){(active.getAttribute('data-ev')||'').split(',').forEach(e=>{if(e)document.querySelector(`.etag[data-e="${e}"]`)?.classList.add('lit')})}}
+
+// LEFT NAV highlight
+function uLN(){const items=document.querySelectorAll('.lnav-item');const phases=[];for(let i=1;i<=8;i++){const el=document.getElementById('p'+i);if(el)phases.push({i,top:el.getBoundingClientRect().top})}
+let cur=1;phases.forEach(p=>{if(p.top<200)cur=p.i});
+items.forEach((it,idx)=>{it.classList.toggle('active',idx===cur-1)})}
+
+window.addEventListener('scroll',()=>{ue();uLN()},{passive:true});
+
+// AUTOSAVE
+document.querySelectorAll('textarea.n').forEach((t,i)=>{const k='ld4_'+i;try{const v=localStorage.getItem(k);if(v)t.value=v}catch(e){}t.addEventListener('input',()=>{try{localStorage.setItem(k,t.value)}catch(e){}})});
+function sC(){const s=[];document.querySelectorAll('.nck').forEach(e=>s.push(e.classList.contains('on')));try{localStorage.setItem('ld4_c',JSON.stringify(s))}catch(e){}}
+function lC(){try{const s=JSON.parse(localStorage.getItem('ld4_c'));if(s)document.querySelectorAll('.nck').forEach((e,i)=>{if(s[i])e.classList.add('on')});uPr()}catch(e){}}
+lC();ue();uLN();
+</script>
+</body>
+</html>

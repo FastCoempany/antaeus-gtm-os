@@ -16,6 +16,25 @@
 (function() {
     'use strict';
 
+    function bootstrapQaMode() {
+        if (window.gtmQaMode && typeof window.gtmQaMode.bootstrap === 'function') {
+            return window.gtmQaMode.bootstrap({
+                search: window.location.search
+            });
+        }
+        try {
+            var params = new URLSearchParams(window.location.search || '');
+            var raw = String(params.get('qa') || '').toLowerCase();
+            if (raw === '1' || raw === 'true') sessionStorage.setItem('gtmos_qa_mode', '1');
+            if (raw === '0' || raw === 'false') sessionStorage.setItem('gtmos_qa_mode', '0');
+            return {
+                enabled: sessionStorage.getItem('gtmos_qa_mode') === '1'
+            };
+        } catch (e) {
+            return { enabled: false };
+        }
+    }
+
     var THRESHOLD = 80;
     var DISMISS_KEY = 'gtmos_rail_dismissed';
 
@@ -37,6 +56,22 @@
     function removeExistingRail() {
         var existing = document.getElementById('guidedRail');
         if (existing) existing.remove();
+    }
+
+    var qaMode = bootstrapQaMode();
+    if (qaMode.enabled) {
+        removeExistingRail();
+        window.gtmGuidedRail = { dismiss: function() {} };
+        window.guidedRail = {
+            render: function() { removeExistingRail(); },
+            findGaps: function() { return []; },
+            preload: function() { return Promise.resolve(null); },
+            dismiss: function() {}
+        };
+        window.addEventListener('gtmos:qa-mode-changed', function(event) {
+            if (event && event.detail && event.detail.enabled) removeExistingRail();
+        });
+        return;
     }
 
     function readLS(key, fallback) {

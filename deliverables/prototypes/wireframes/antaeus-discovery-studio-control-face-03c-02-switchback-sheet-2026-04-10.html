@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery Studio Control Face 03C-02 - Switchback Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="./discovery-studio-control-face-03b-foundation-data-2026-04-10.js"></script>
+  <style>
+    :root{
+      --bg:#f5f8ff;--ink:#102a58;--muted:#7288ac;--line:rgba(16,42,88,.12);--line2:rgba(16,42,88,.22);
+      --blue:#2f70f0;--orange:#e87821;--green:#2f8755;--red:#c84d4d;--shadow:0 18px 48px rgba(16,42,88,.08);
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;color:var(--ink);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(47,112,240,.08), transparent 24%),
+        radial-gradient(circle at 82% 0%, rgba(232,120,33,.08), transparent 22%),
+        linear-gradient(180deg,#fbfdff 0%,var(--bg) 100%);
+      padding:26px 24px 44px;
+    }
+    button{font:inherit}
+    .page{max-width:1680px;margin:0 auto}
+    .mast{display:grid;grid-template-columns:280px minmax(0,1fr);gap:30px;align-items:end;padding-bottom:16px;border-bottom:1px solid var(--line2)}
+    .kicker,.mono,.micro{font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:700}
+    .kicker{color:var(--orange)}
+    .brand{margin-top:6px;font-family:"Outfit",sans-serif;font-size:24px;line-height:.94;letter-spacing:-.05em}
+    .intro{font-family:"Outfit",sans-serif;font-size:40px;line-height:.92;letter-spacing:-.06em;max-width:14ch}
+    .board{display:grid;grid-template-columns:260px minmax(0,1fr);gap:34px;margin-top:18px}
+    .palette{position:sticky;top:18px;align-self:start}
+    .mono{color:#97a8c2}
+    .frameworkPanel{padding:18px 18px 22px;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.82);box-shadow:var(--shadow)}
+    .frameworks,.responses{margin-top:14px;border-top:1px solid var(--line)}
+    .frameworkBtn,.replyBtn,.segmentBtn{width:100%;background:none;border:0;color:inherit;text-align:left;cursor:pointer}
+    .frameworkBtn{display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+    .dot,.replyDot,.toolDot,.segMark{width:12px;height:12px;border-radius:50%;border:1px solid rgba(16,42,88,.16);position:relative;flex:0 0 auto}
+    .dot::after,.replyDot::after,.toolDot::after,.segMark::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#d9e1ef}
+    .frameworkBtn.active .dot::after{background:var(--orange)}
+    .fwName{font-size:14px;line-height:1.3;color:#90a4bf;font-weight:700}
+    .frameworkBtn.active .fwName{color:var(--ink)}
+    .fwFooter{margin-top:18px;font-size:13px;line-height:1.62;color:var(--muted)}
+    .runway{display:grid;gap:18px}
+    .spine{display:grid;gap:12px}
+    .segmentCard{border-top:1px solid var(--line);padding-top:12px}
+    .segmentBtn{display:grid;grid-template-columns:12px 44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0}
+    .segmentCard.active .segMark::after{background:var(--blue)}
+    .segmentCard.start .segMark::after{background:var(--orange)}
+    .segNum{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .segTitle{font-family:"Outfit",sans-serif;font-size:30px;line-height:.96;letter-spacing:-.05em}
+    .segCue{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .segmentBody{display:none;padding:18px 0 6px 68px}
+    .segmentCard.active .segmentBody{display:grid;gap:18px}
+    .topRow{display:grid;grid-template-columns:minmax(0,1.15fr) 300px;gap:34px;align-items:start}
+    .lineText{font-family:"Outfit",sans-serif;font-size:56px;line-height:.91;letter-spacing:-.07em;max-width:15ch}
+    .nextBlock{padding-left:16px;border-left:1px solid var(--line)}
+    .nextLine{margin-top:10px;font-family:"Outfit",sans-serif;font-size:36px;line-height:.95;letter-spacing:-.06em;max-width:11ch}
+    .bottomRow{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:34px}
+    .replyBtn{display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+    .replyBtn:last-child{border-bottom:0}
+    .replyBtn.green .replyDot::after{background:var(--green)}
+    .replyBtn.orange .replyDot::after{background:var(--orange)}
+    .replyBtn.red .replyDot::after{background:var(--red)}
+    .replyMeta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9badc7;font-weight:700}
+    .replyQuote{margin-top:8px;font-size:28px;line-height:1.04;letter-spacing:-.04em;font-weight:700;max-width:23ch;opacity:.58;transition:opacity .16s ease}
+    .replyBtn.active .replyQuote{opacity:1}
+    .toolTabs{display:grid;gap:8px}
+    .toolBtn{display:flex;align-items:center;gap:10px;padding:0;background:none;border:0;color:#95a6c0;cursor:pointer;font-size:14px;font-weight:700}
+    .toolBtn.active{color:var(--ink)}
+    .toolBtn.facts .toolDot::after{background:var(--blue)}
+    .toolBtn.recover .toolDot::after{background:var(--red)}
+    .toolBtn.leave .toolDot::after{background:var(--orange)}
+    .toolPanel{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+    .toolTitle{font-family:"Outfit",sans-serif;font-size:24px;line-height:.96;letter-spacing:-.05em}
+    .toolList{display:grid;gap:10px;margin-top:12px}
+    .toolRow{font-size:14px;line-height:1.58;color:var(--muted)}
+    @media (max-width:1180px){
+      .mast,.board,.topRow,.bottomRow{grid-template-columns:1fr}
+      .palette{position:static}
+      .segmentBody{padding-left:0}
+      .nextBlock{padding-left:0;border-left:0;border-top:1px solid var(--line);padding-top:14px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="mast">
+      <div>
+        <div class="kicker">Discovery Studio / Control Face 03C / Variant 02</div>
+        <div class="brand">Switchback sheet.</div>
+      </div>
+      <div class="intro">The segment opens like a live sheet, not a page section.</div>
+    </div>
+
+    <div class="board">
+      <aside class="palette">
+        <div class="frameworkPanel">
+          <div class="mono">Framework lens</div>
+          <div class="frameworks" id="frameworks"></div>
+          <div class="fwFooter">The framework changes the call lens. The rep still works from the active sheet in the center.</div>
+        </div>
+      </aside>
+
+      <main class="runway">
+        <div class="stamp mono" id="frameworkStamp"></div>
+        <div class="spine" id="segments"></div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const foundation = window.DS_CONTROL_FACE_FOUNDATION;
+    let frameworkIndex = foundation.defaultFrameworkIndex;
+    let activeSegment = '2';
+    let activeReply = 0;
+    let activeTool = 'facts';
+
+    function renderFrameworks(){
+      document.getElementById('frameworkStamp').textContent = foundation.frameworks[frameworkIndex];
+      document.getElementById('frameworks').innerHTML = foundation.frameworks.map((f,i)=>`
+        <button class="frameworkBtn ${i===frameworkIndex?'active':''}" onclick="frameworkIndex=${i};render()">
+          <span class="dot"></span><span class="fwName">${f}</span>
+        </button>
+      `).join('');
+    }
+
+    function toolMarkup(segment){
+      const tools = {
+        facts:{title:'What we know so far', rows:segment.facts},
+        recover:{title:'If they push back', rows:segment.recover},
+        leave:{title:'Before you move on', rows:segment.leave}
+      };
+      const tool = tools[activeTool];
+      return `
+        <div class="toolTabs">
+          <button class="toolBtn facts ${activeTool==='facts'?'active':''}" onclick="setTool('facts')"><span class="toolDot"></span><span>What we know so far</span></button>
+          <button class="toolBtn recover ${activeTool==='recover'?'active':''}" onclick="setTool('recover')"><span class="toolDot"></span><span>If they push back</span></button>
+          <button class="toolBtn leave ${activeTool==='leave'?'active':''}" onclick="setTool('leave')"><span class="toolDot"></span><span>Before you move on</span></button>
+        </div>
+        <div class="toolPanel">
+          <div class="toolTitle">${tool.title}</div>
+          <div class="toolList">${tool.rows.map(row=>`<div class="toolRow">${row}</div>`).join('')}</div>
+        </div>
+      `;
+    }
+
+    function repliesMarkup(segment){
+      return segment.replies.map((reply,index)=>`
+        <button class="replyBtn ${reply.tone} ${index===activeReply?'active':''}" onclick="activeReply=${index};renderSegments()">
+          <span class="replyDot"></span>
+          <span><span class="replyMeta">${reply.meta}</span><span class="replyQuote">${reply.quote}</span></span>
+        </button>
+      `).join('');
+    }
+
+    function segmentMarkup(segment){
+      const nextIndex = Math.min(activeReply, segment.next.length - 1);
+      return `
+        <div class="segmentCard ${segment.id===activeSegment?'active':''} ${segment.id==='1'?'start':''}">
+          <button class="segmentBtn" onclick="activeSegment='${segment.id}';activeReply=0;activeTool='facts';renderSegments()">
+            <span class="segMark"></span>
+            <span class="segNum">${segment.n}</span>
+            <span class="segTitle">${segment.t}</span>
+            <span class="segCue">Live</span>
+          </button>
+          <div class="segmentBody">
+            <div class="topRow">
+              <div>
+                <div class="micro">Say this now</div>
+                <div class="lineText">${segment.say}</div>
+              </div>
+              <div class="nextBlock">
+                <div class="micro">Say next</div>
+                <div class="nextLine">${segment.next[nextIndex] || segment.next[0]}</div>
+              </div>
+            </div>
+            <div class="bottomRow">
+              <div>
+                <div class="micro">Buyer might say</div>
+                <div class="responses">${repliesMarkup(segment)}</div>
+              </div>
+              <div>${toolMarkup(segment)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSegments(){
+      document.getElementById('segments').innerHTML = foundation.segments.map(segmentMarkup).join('');
+    }
+
+    function setTool(tool){ activeTool = tool; renderSegments(); }
+    function render(){ renderFrameworks(); renderSegments(); }
+    render();
+  </script>
+</body>
+</html>

@@ -268,12 +268,24 @@ Not:
 
 ### Interior app
 
-The interior should stay:
+The interior should feel:
 
-- dark
-- serious
-- command-surface oriented
+- bright
+- severe
+- composed
+- authored
 - dense but calm
+
+Antaeus is no longer dark-first. The interior reads as a premium operating instrument on a bright, quiet field — not a dark founder-admin shell. Dark panels appear only where they earn their weight as inset evidence or focus surfaces, never as the default page fill.
+
+### Page and surface
+
+The base field should be:
+
+- a soft bright neutral (near-white with a cool cast)
+- quiet, not flat — restrained gradient air is allowed
+- paired with deep navy ink for authority
+- supported by subtle graph-paper or atmospheric texture only where it helps the room compose
 
 ### Typography
 
@@ -281,19 +293,36 @@ Lock:
 
 - serif for authority, emphasis, and consequence
 - modern sans for control surfaces and reading
-- mono only where operationally useful
+- mono for kickers, meters, and operational micro-labels only
+
+Authored serif headlines carry the thesis. Sans carries the work. Mono recedes.
 
 ### Color behavior
 
-Gold:
+Navy:
+
+- ink
+- authority
+- structural text
+
+Orange:
 
 - focus
-- authority
-- strategic emphasis
+- pressure
+- primary action
+- urgency
+- rationed, never decorative
+
+Blue:
+
+- system intelligence
+- information
+- secondary action
 
 Green:
 
 - healthy / ready / live
+- used sparingly for real completion or earned health
 
 Amber:
 
@@ -303,9 +332,13 @@ Red:
 
 - real risk / real failure / intervention needed
 
-Blue/teal:
+Gold:
 
-- system context, not generic optimism
+- earned emphasis only
+- reserved for premium or consequential states
+- never used as decoration or default accent
+
+Every color carries a semantic role.
 
 ### Motion
 

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antaeus Discovery Studio Implementation Bridge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --ink:#102956;
+            --muted:#6f86ab;
+            --faint:#a7b6cf;
+            --line:rgba(16,41,86,0.13);
+            --line-strong:rgba(16,41,86,0.22);
+            --paper:#f7fbff;
+            --white:#ffffff;
+            --gold:#e5721f;
+            --blue:#2f6df6;
+            --green:#2f8f5b;
+            --red:#c84d4d;
+        }
+        *{box-sizing:border-box}
+        html,body{margin:0;padding:0;background:
+            linear-gradient(180deg, rgba(47,109,246,0.05), transparent 24%),
+            linear-gradient(90deg, rgba(47,109,246,0.04) 1px, transparent 1px),
+            linear-gradient(180deg, rgba(16,41,86,0.04) 1px, transparent 1px),
+            var(--paper);
+            background-size:auto, 32px 32px, 32px 32px, auto;
+            color:var(--ink);
+            font-family:"Public Sans",sans-serif;
+        }
+        button{font:inherit}
+        .bridge-page{max-width:1760px;margin:0 auto;padding:28px 28px 48px}
+        .bridge-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;padding-bottom:22px;border-bottom:1px solid var(--line-strong)}
+        .bridge-kicker,.column-kicker,.bridge-stat-label,.segment-index,.body-label,.response-label,.mini-tool-label,.framework-state{font-size:11px;letter-spacing:0.24em;text-transform:uppercase;font-weight:700}
+        .bridge-kicker{font-size:12px;letter-spacing:0.34em;color:var(--gold)}
+        .bridge-title{margin-top:8px;font-family:"Outfit",sans-serif;font-size:48px;line-height:0.94;letter-spacing:-0.06em;max-width:14ch}
+        .bridge-sub,.body-copy,.recover-copy,.support-copy,.badge-text,.framework-note{font-size:14px;line-height:1.7;color:var(--muted)}
+        .bridge-sub{margin-top:12px;max-width:72ch;font-size:15px}
+        .bridge-meta{display:flex;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+        .meta-pill{padding:11px 14px;border:1px solid var(--line);border-radius:999px;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,0.62)}
+        .bridge-layout{display:grid;grid-template-columns:300px minmax(0,1fr) 320px;gap:28px;margin-top:22px}
+        .framework-rail,.recover-rail{position:sticky;top:24px;align-self:start}
+        .framework-list,.recover-list,.ledger-list,.worked-list,.docket-list,.segment-stack{margin-top:14px;border-top:1px solid var(--line-strong)}
+        .framework-row{display:grid;grid-template-columns:16px 1fr auto;gap:12px;align-items:center;width:100%;padding:14px 0;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;cursor:pointer;color:inherit}
+        .framework-row:disabled{cursor:default;opacity:0.52}
+        .framework-row.active{background:linear-gradient(90deg, rgba(229,114,31,0.08), rgba(229,114,31,0));}
+        .framework-dot,.response-mark,.ledger-bullet,.worked-bullet,.docket-bullet{width:16px;height:16px;border-radius:50%;border:1px solid var(--line);position:relative}
+        .framework-dot::after,.response-mark::after,.ledger-bullet::after,.worked-bullet::after,.docket-bullet::after{content:"";position:absolute;inset:4px;border-radius:50%;background:#d6dfea}
+        .framework-row.active .framework-dot{border-color:rgba(229,114,31,0.36)}
+        .framework-row.active .framework-dot::after{background:var(--gold)}
+        .framework-name{font-size:16px;line-height:1.28;letter-spacing:-0.03em;font-weight:700}
+        .framework-state,.column-kicker,.bridge-stat-label,.segment-index,.body-label,.response-label,.mini-tool-label{color:var(--faint)}
+        .framework-row.active .framework-state{color:var(--gold)}
+        .framework-note{margin-top:14px;font-size:13px}
+        .main-shell{min-width:0}
+        .bridge-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding:14px 0 18px;border-bottom:1px solid var(--line-strong)}
+        .bridge-stat-value{margin-top:8px;font-size:15px;line-height:1.5;color:var(--ink)}
+        .segment-row{border-bottom:1px solid var(--line)}
+        .segment-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:16px;align-items:center;width:100%;padding:18px 0;border:0;background:none;text-align:left;cursor:pointer;color:inherit}
+        .segment-title,.section-title{font-family:"Outfit",sans-serif;letter-spacing:-0.05em}
+        .segment-title{font-size:26px;line-height:0.96}
+        .section-title{font-size:22px;line-height:1.02}
+        .segment-status{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--faint);font-weight:700}
+        .segment-signal{font-size:13px;line-height:1.55;color:var(--muted);max-width:28ch}
+        .segment-head.active .segment-title{color:var(--gold)}
+        .segment-body{display:none;padding:0 0 22px 34px}
+        .segment-row.active .segment-body{display:grid;gap:18px}
+        .segment-grid{display:grid;grid-template-columns:190px minmax(0,1fr);gap:24px}
+        .body-label{padding-top:6px}
+        .say-line,.response-quote{font-family:"Outfit",sans-serif;letter-spacing:-0.06em}
+        .say-line{font-size:38px;line-height:0.94;max-width:28ch}
+        .response-list{display:grid;gap:0;border-top:1px solid var(--line)}
+        .response-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:start;padding:16px 0;border-bottom:1px solid var(--line)}
+        .response-row.green .response-mark::after{background:var(--green)}
+        .response-row.orange .response-mark::after{background:var(--gold)}
+        .response-row.red .response-mark::after{background:var(--red)}
+        .response-pick{padding:0;border:0;background:none;text-align:left;cursor:pointer;color:inherit}
+        .response-quote{margin-top:7px;font-size:22px;line-height:1.08;max-width:34ch;font-weight:700}
+        .response-meaning{margin-top:7px;font-size:14px;line-height:1.6;color:var(--muted);max-width:60ch}
+        .worked-btn,.tool-link{padding:0;border:0;background:none;cursor:pointer;font-weight:700;text-align:left}
+        .worked-btn{color:var(--muted);font-size:11px;letter-spacing:0.18em;text-transform:uppercase}
+        .worked-btn.active{color:var(--green)}
+        .mini-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;border-top:1px solid var(--line);padding-top:16px}
+        .mini-tool{display:grid;gap:6px}
+        .mini-tool-copy,.recover-title{font-size:14px;line-height:1.65;color:var(--ink)}
+        .tool-link{color:var(--blue);font-size:13px;letter-spacing:0.02em}
+        .support-band{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;padding-top:20px;margin-top:20px;border-top:1px solid var(--line-strong)}
+        .section-sub{font-size:13px;line-height:1.65;color:var(--muted);margin-top:8px}
+        .ledger-row,.worked-row,.docket-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+        .ledger-bullet.truth::after{background:var(--blue)}
+        .worked-bullet.success::after{background:var(--green)}
+        .docket-bullet.lock::after{background:var(--gold)}
+        .recover-row{display:grid;grid-template-columns:16px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+        .recover-glyph{position:relative;width:16px;height:16px}
+        .recover-glyph.loss::before,.recover-glyph.loss::after{content:"";position:absolute;left:3px;width:10px;height:2px;border-radius:999px;background:var(--red)}
+        .recover-glyph.loss::before{top:5px;transform:rotate(45deg)}
+        .recover-glyph.loss::after{top:9px;transform:rotate(-45deg)}
+        .recover-glyph.proof::before{content:"";position:absolute;left:1px;top:7px;width:8px;height:2px;background:var(--gold);border-radius:999px}
+        .recover-glyph.proof::after{content:"";position:absolute;right:0;top:4px;width:7px;height:7px;border-top:2px solid var(--gold);border-right:2px solid var(--gold);transform:rotate(45deg)}
+        .recover-glyph.branch{border-left:2px solid var(--blue)}
+        .recover-glyph.branch::before,.recover-glyph.branch::after{content:"";position:absolute;left:1px;width:10px;height:2px;background:var(--blue);border-radius:999px;transform-origin:left center}
+        .recover-glyph.branch::before{top:5px;transform:rotate(-35deg)}
+        .recover-glyph.branch::after{top:10px;transform:rotate(35deg)}
+        .recover-glyph.room::before,.recover-glyph.room::after{content:"";position:absolute;width:9px;height:11px;border-radius:4px;border:1px solid rgba(47,109,246,0.28)}
+        .recover-glyph.room::before{left:2px;top:4px;background:var(--white)}
+        .recover-glyph.room::after{left:5px;top:2px;background:rgba(47,109,246,0.08)}
+        @media (max-width: 1440px){
+            .bridge-layout{grid-template-columns:260px minmax(0,1fr)}
+            .recover-rail{grid-column:1 / -1;position:static}
+            .support-band{grid-template-columns:1fr}
+        }
+        @media (max-width: 1080px){
+            .bridge-layout{grid-template-columns:1fr}
+            .framework-rail{position:static}
+            .bridge-strip{grid-template-columns:1fr 1fr}
+            .segment-grid{grid-template-columns:1fr}
+            .segment-body{padding-left:0}
+            .mini-tools{grid-template-columns:1fr}
+        }
+        @media (max-width: 720px){
+            .bridge-page{padding:18px}
+            .bridge-header{grid-template-columns:1fr}
+            .bridge-title{font-size:36px}
+            .segment-head{grid-template-columns:auto minmax(0,1fr)}
+            .segment-status,.segment-signal{grid-column:2}
+            .say-line{font-size:30px}
+            .bridge-strip{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+    <div class="bridge-page">
+        <header class="bridge-header">
+            <div>
+                <div class="bridge-kicker">Discovery Studio Implementation Bridge</div>
+                <div class="bridge-title">Strict room skeleton between the new contract and the current codebase.</div>
+                <div class="bridge-sub">This is not a taste test. It is the operating bridge: locked framework rail, fixed ten-segment spine, one active live segment, sticky recovery, learned-truth capture, worked-memory state, and next-step lock. It is deliberately honest about where the current runtime can and cannot populate the room.</div>
+            </div>
+            <div class="bridge-meta" id="bridgeMeta"></div>
+        </header>
+
+        <div class="bridge-layout">
+            <aside class="framework-rail">
+                <div class="column-kicker">Locked framework rail</div>
+                <div class="framework-list" id="frameworkList"></div>
+                <div class="framework-note" id="frameworkNote"></div>
+            </aside>
+
+            <main class="main-shell">
+                <section class="bridge-strip" id="bridgeStrip"></section>
+                <section class="segment-stack" id="segmentStack"></section>
+                <section class="support-band">
+                    <div class="support-section">
+                        <div class="column-kicker">Learned truth rail</div>
+                        <div class="section-title">Earned facts, not notes.</div>
+                        <div class="section-sub">This rail only updates when a branch earns usable truth.</div>
+                        <div class="ledger-list" id="learnedLedger"></div>
+                    </div>
+                    <div class="support-section">
+                        <div class="column-kicker">Worked memory</div>
+                        <div class="section-title">Repeatable lines only.</div>
+                        <div class="section-sub">A line enters memory only if the rep explicitly marks it as worked.</div>
+                        <div class="worked-list" id="workedList"></div>
+                    </div>
+                    <div class="support-section">
+                        <div class="column-kicker">Next-step docket</div>
+                        <div class="section-title">The room should pull toward a real move.</div>
+                        <div class="section-sub">Lock the branch only when date, owner, and reason are clear.</div>
+                        <div class="docket-list" id="docketList"></div>
+                    </div>
+                </section>
+            </main>
+
+            <aside class="recover-rail">
+                <div class="column-kicker">Recover the call</div>
+                <div class="section-title">Always reachable rescue.</div>
+                <div class="section-sub">This rail stays visible while the rep scrolls the conversation spine.</div>
+                <div class="recover-list" id="recoverList"></div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="/js/discovery-frameworks.js"></script>
+    <script>
+        (function(){
+            const LOCKED_FRAMEWORKS = [
+                { id:'legal', label:'Legal / Legal Ops / Law Workflow', runtimeKey:'legal' },
+                { id:'recruiting', label:'Recruiting / Talent / HR / People Workflow', runtimeKey:null },
+                { id:'product-enablement', label:'Product / UX / Enablement / Knowledge Workflow', runtimeKey:null },
+                { id:'govtech-compliance', label:'GovTech / Compliance / Public-Sector Operations / Trust and Safety', runtimeKey:null },
+                { id:'customer-support', label:'Customer Support / Operations / Vertical Workflow Software', runtimeKey:'cxai' },
+                { id:'sales-revenue', label:'Sales / Revenue Intelligence', runtimeKey:'revintel' },
+                { id:'manufacturing-supply-chain', label:'Manufacturing / Supply Chain / Engineering', runtimeKey:null },
+                { id:'data-infrastructure', label:'Data / Intelligence Infrastructure', runtimeKey:null },
+                { id:'ai-native', label:'AI-Native Buyer Discovery Framework', runtimeKey:null }
+            ];
+
+            const FIXED_SEGMENTS = [
+                { id:'opening-frame', index:'01', label:'Opening frame', objective:'Earn the next thirty seconds and establish the hypothesis-led opening.', source:'bridged from entry contexts inside territory 1', time:'Minute 0-1' },
+                { id:'current-state-truth', index:'02', label:'Current-state truth', objective:'Understand how the workflow operates today.', source:'territory 1', time:'Minute 1-4' },
+                { id:'pain-and-consequence', index:'03', label:'Pain and consequence', objective:'Name the breakage, the frequency, and the cost.', source:'territory 2', time:'Minute 4-8' },
+                { id:'trigger-and-urgency', index:'04', label:'Trigger and urgency', objective:'Find out why now and whether urgency is real.', source:'territory 3', time:'Minute 8-11' },
+                { id:'stakeholder-and-ownership', index:'05', label:'Stakeholder and ownership', objective:'Map the owner, approver, blocker, and downstream operator.', source:'territory 5', time:'Minute 11-15' },
+                { id:'proof-threshold', index:'06', label:'Proof threshold', objective:'Surface what evidence they need before belief becomes movement.', source:'missing dedicated runtime block', time:'Minute 15-17' },
+                { id:'current-vendor-and-displacement', index:'07', label:'Current vendor and displacement', objective:'Understand the incumbent, workaround, and switching cost.', source:'partial via territory 4', time:'Minute 17-20' },
+                { id:'decision-architecture', index:'08', label:'Decision architecture', objective:'Make the budget path, committee logic, and gates explicit.', source:'partial via territories 5 and 6', time:'Minute 20-24' },
+                { id:'next-step-lock', index:'09', label:'Next-step lock', objective:'Secure the specific next move with date, owner, and reason.', source:'territory 7', time:'Minute 24-28' },
+                { id:'post-call-routing', index:'10', label:'Post-call routing', objective:'Package the truth into the next room without restatement.', source:'missing dedicated runtime block', time:'Minute 28+' }
+            ];
+
+            const RUNTIME_FRAMEWORKS = window.DISCOVERY_FRAMEWORKS || {};
+            const LEGACY_EXTRAS = Object.keys(RUNTIME_FRAMEWORKS).filter((key) => !['legal','cxai','revintel'].includes(key));
+            const SEGMENT_TO_TERRITORY = {
+                'current-state-truth':['current state'],
+                'pain-and-consequence':['pain'],
+                'trigger-and-urgency':['trigger'],
+                'stakeholder-and-ownership':['stakeholders'],
+                'current-vendor-and-displacement':['prior attempts'],
+                'decision-architecture':['stakeholders','budget','commercial'],
+                'next-step-lock':['close','next step']
+            };
+
+            const state = {
+                frameworkId:'customer-support',
+                activeSegment:'current-state-truth',
+                responseBySegment:{},
+                learnedTruths:[],
+                workedMemory:[],
+                docket:null
+            };
+
+            function esc(value){
+                const div = document.createElement('div');
+                div.textContent = value == null ? '' : String(value);
+                return div.innerHTML;
+            }
+
+            function findRuntimeFramework(){
+                const selected = LOCKED_FRAMEWORKS.find((item) => item.id === state.frameworkId) || LOCKED_FRAMEWORKS[0];
+                return selected && selected.runtimeKey ? RUNTIME_FRAMEWORKS[selected.runtimeKey] || null : null;
+            }
+
+            function findTerritory(framework, segmentId){
+                if(!framework || !Array.isArray(framework.territories)) return null;
+                const probes = SEGMENT_TO_TERRITORY[segmentId] || [];
+                if(!probes.length) return null;
+                return framework.territories.find((territory) => {
+                    const name = String(territory && territory.name || '').toLowerCase();
+                    return probes.some((probe) => name.indexOf(probe) > -1);
+                }) || null;
+            }
+
+            function getPreferredEntry(territory){
+                const entries = territory && Array.isArray(territory.entries) ? territory.entries : [];
+                if(!entries.length) return null;
+                return entries.find((entry) => {
+                    const probe = String((entry.context || '') + ' ' + (entry.label || '')).toLowerCase();
+                    return probe.indexOf('preferred') > -1 || probe.indexOf('hypothesis') > -1 || probe.indexOf('show your homework') > -1;
+                }) || entries[0];
+            }
+
+            function buildSegmentBridge(segment){
+                const framework = findRuntimeFramework();
+                const territory = findTerritory(framework, segment.id);
+                const currentStateTerritory = findTerritory(framework, 'current-state-truth');
+
+                if(segment.id === 'opening-frame'){
+                    const entry = getPreferredEntry(currentStateTerritory);
+                    const response = currentStateTerritory && Array.isArray(currentStateTerritory.responses) ? currentStateTerritory.responses[0] : null;
+                    return {
+                        status: entry ? 'bridged' : 'missing',
+                        headline: entry ? entry.text : 'No dedicated opener block exists in runtime yet.',
+                        signal: entry ? 'Hypothesis opener can be extracted from territory 1 entries.' : 'Requires dedicated opener segment.',
+                        objective: segment.objective,
+                        source: segment.source,
+                        responseSet: response ? [response] : [],
+                        nextLine: response && response.transition ? response.transition : 'Opening needs a dedicated next-branch route in the new schema.',
+                        listenFor: response && Array.isArray(response.listenFor) ? response.listenFor.map((item) => item.signal) : ['Agreement, correction, or pushback to the opener hypothesis.'],
+                        recovery:['If they interrupt immediately, reset to one concrete hypothesis and ask for correction.'],
+                        truth: response && response.meaning ? response.meaning : 'Need a first-class opener outcome model.'
+                    };
+                }
+
+                if(segment.id === 'proof-threshold'){
+                    return {
+                        status:'missing',
+                        headline:'No dedicated proof-threshold block exists in the current runtime.',
+                        signal:'The new room needs a first-class proof-threshold segment.',
+                        objective:segment.objective,
+                        source:segment.source,
+                        responseSet:[],
+                        nextLine:'Ask what evidence, benchmark, pilot, reference, or architecture review they would need before movement becomes real.',
+                        listenFor:['Demo ask', 'Pilot ask', 'Reference ask', 'Security or architecture ask'],
+                        recovery:['If proof shows up too early, park the asset and ask what belief they are trying to earn.'],
+                        truth:'Current runtime cannot answer proof-threshold cleanly.'
+                    };
+                }
+
+                if(segment.id === 'post-call-routing'){
+                    return {
+                        status:'missing',
+                        headline:'No dedicated post-call routing segment exists in the current runtime.',
+                        signal:'Handoff logic is renderer-side, not framework-side.',
+                        objective:segment.objective,
+                        source:segment.source,
+                        responseSet:[],
+                        nextLine:'Package the learned truth into Deal Workspace, Call Planner, or Future Autopsy.',
+                        listenFor:['Missing owner', 'Missing date', 'Unresolved proof gap'],
+                        recovery:['If the call ends thin, route the unresolved truth instead of pretending the room is complete.'],
+                        truth:'Post-call packaging must be added as a first-class framework object.'
+                    };
+                }
+
+                if(!territory){
+                    return {
+                        status:'missing',
+                        headline:'This segment has no current territory source.',
+                        signal:'New schema work required.',
+                        objective:segment.objective,
+                        source:segment.source,
+                        responseSet:[],
+                        nextLine:'No live runtime source is available for this segment.',
+                        listenFor:['No source territory found'],
+                        recovery:['Do not fake the segment. Build the missing framework block first.'],
+                        truth:'Runtime gap.'
+                    };
+                }
+
+                const entry = getPreferredEntry(territory) || (Array.isArray(territory.entries) ? territory.entries[0] : null);
+                const responses = Array.isArray(territory.responses) ? territory.responses.slice(0, 3) : [];
+                const response = responses[state.responseBySegment[segment.id] || 0] || responses[0] || null;
+                const status = segment.id === 'current-state-truth' || segment.id === 'pain-and-consequence' || segment.id === 'trigger-and-urgency'
+                    ? 'loaded'
+                    : segment.id === 'stakeholder-and-ownership' || segment.id === 'current-vendor-and-displacement' || segment.id === 'decision-architecture' || segment.id === 'next-step-lock'
+                        ? 'partial'
+                        : 'bridged';
+                return {
+                    status,
+                    headline: entry ? entry.text : territory.purpose,
+                    signal: territory.purpose || 'Legacy runtime territory mapped into the new segment grammar.',
+                    objective:segment.objective,
+                    source:territory.name || segment.source,
+                    responseSet:responses,
+                    nextLine: response && response.move && response.move.text ? response.move.text : response && response.transition ? response.transition : 'No dedicated next-line was found in the runtime source.',
+                    listenFor: response && Array.isArray(response.listenFor) && response.listenFor.length
+                        ? response.listenFor.map((item) => item.signal || item.action)
+                        : (territory.gateCriteria || []).slice(0, 3),
+                    recovery: [
+                        response && response.objection && response.objection.greatResponse ? response.objection.greatResponse : null,
+                        territory.transitions && territory.transitions.recovery ? territory.transitions.recovery : null,
+                        territory.transitions && territory.transitions.strong ? territory.transitions.strong : null
+                    ].filter(Boolean).slice(0, 3),
+                    truth: response && response.meaning ? response.meaning : territory.purpose || 'Legacy territory bridged into the segment rail.'
+                };
+            }
+
+            function buildRecoverRows(bridge){
+                return [
+                    {
+                        glyph:'loss',
+                        title:'If they answer vaguely',
+                        copy:'Trade one concrete hypothesis for one concrete correction. Do not ask a bigger open question.'
+                    },
+                    {
+                        glyph:'proof',
+                        title:'If they ask for proof too early',
+                        copy:'Ask what belief they are actually trying to earn, then choose the lightest proof that matches it.'
+                    },
+                    {
+                        glyph:'branch',
+                        title:'If they answer cleanly',
+                        copy:bridge.nextLine || 'Advance to the next earned branch.'
+                    },
+                    {
+                        glyph:'room',
+                        title:'If you need the next room',
+                        copy:'Carry only the earned truth, the missing truth, and the next-step condition.'
+                    }
+                ];
+            }
+
+            function addLearnedTruth(text, segment){
+                if(!text) return;
+                const id = segment.id + '::' + text;
+                if(state.learnedTruths.some((item) => item.id === id)) return;
+                state.learnedTruths.unshift({ id, label:segment.label, text });
+                state.learnedTruths = state.learnedTruths.slice(0, 6);
+            }
+
+            function toggleWorked(segment, bridge){
+                const itemId = segment.id + '::' + bridge.nextLine;
+                const exists = state.workedMemory.findIndex((item) => item.id === itemId);
+                if(exists > -1){
+                    state.workedMemory.splice(exists, 1);
+                }else{
+                    state.workedMemory.unshift({ id:itemId, segment:segment.label, text:bridge.nextLine });
+                    state.workedMemory = state.workedMemory.slice(0, 6);
+                }
+                render();
+            }
+
+            function lockDocket(segment, bridge){
+                state.docket = {
+                    move: segment.label,
+                    owner: segment.id === 'next-step-lock' ? 'Named buyer owner' : 'Still unearned',
+                    route: segment.id === 'post-call-routing'
+                        ? 'Route to next room'
+                        : segment.id === 'next-step-lock'
+                            ? 'Ready for Deal Workspace'
+                            : 'Stay in Discovery until owner and date are explicit',
+                    reason: bridge.truth
+                };
+                render();
+            }
+
+            function renderFrameworks(){
+                const loadedLocked = LOCKED_FRAMEWORKS.filter((item) => item.runtimeKey && RUNTIME_FRAMEWORKS[item.runtimeKey]).length;
+                document.getElementById('bridgeMeta').innerHTML =
+                    '<div class="meta-pill">Locked registry 9</div>' +
+                    '<div class="meta-pill">Runtime loaded ' + loadedLocked + ' / 9</div>' +
+                    '<div class="meta-pill">Renderer still bound to territories</div>';
+
+                document.getElementById('frameworkList').innerHTML = LOCKED_FRAMEWORKS.map((framework) => {
+                    const loaded = framework.runtimeKey && RUNTIME_FRAMEWORKS[framework.runtimeKey];
+                    const stateLabel = loaded ? 'runtime loaded' : 'runtime missing';
+                    return '<button class="framework-row' + (state.frameworkId === framework.id ? ' active' : '') + '" type="button" ' + (loaded ? 'onclick="window.__bridgeSelectFramework(\'' + esc(framework.id) + '\')"' : 'disabled') + '>' +
+                        '<span class="framework-dot"></span>' +
+                        '<span class="framework-name">' + esc(framework.label) + '</span>' +
+                        '<span class="framework-state">' + esc(stateLabel) + '</span>' +
+                    '</button>';
+                }).join('');
+
+                document.getElementById('frameworkNote').innerHTML =
+                    'Locked registry: <strong>9 frameworks</strong>.<br>' +
+                    'Runtime currently exposes <strong>' + Object.keys(RUNTIME_FRAMEWORKS).length + '</strong> keys.<br>' +
+                    'Legacy extras in the current codebase: <strong>' + esc(LEGACY_EXTRAS.join(', ') || 'none') + '</strong>.';
+            }
+
+            function renderBridgeStrip(){
+                const framework = LOCKED_FRAMEWORKS.find((item) => item.id === state.frameworkId);
+                const runtime = findRuntimeFramework();
+                const activeSegment = FIXED_SEGMENTS.find((segment) => segment.id === state.activeSegment) || FIXED_SEGMENTS[0];
+                document.getElementById('bridgeStrip').innerHTML =
+                    '<div class="bridge-stat"><div class="bridge-stat-label">Active locked framework</div><div class="bridge-stat-value">' + esc(framework ? framework.label : 'Unknown') + '</div></div>' +
+                    '<div class="bridge-stat"><div class="bridge-stat-label">Runtime source</div><div class="bridge-stat-value">' + esc(runtime ? runtime.label : 'No runtime framework loaded for this locked category') + '</div></div>' +
+                    '<div class="bridge-stat"><div class="bridge-stat-label">Active segment</div><div class="bridge-stat-value">' + esc(activeSegment.label + ' · ' + activeSegment.time) + '</div></div>' +
+                    '<div class="bridge-stat"><div class="bridge-stat-label">Contract mode</div><div class="bridge-stat-value">One open segment. Neighboring segments compressed. Sticky recovery. Earned truth only.</div></div>';
+            }
+
+            function renderSegments(){
+                document.getElementById('segmentStack').innerHTML = FIXED_SEGMENTS.map((segment) => {
+                    const bridge = buildSegmentBridge(segment);
+                    const active = state.activeSegment === segment.id;
+                    const responses = bridge.responseSet || [];
+                    const workedActive = state.workedMemory.some((item) => item.id === segment.id + '::' + bridge.nextLine);
+                    return '<section class="segment-row' + (active ? ' active' : '') + '">' +
+                        '<button class="segment-head' + (active ? ' active' : '') + '" type="button" onclick="window.__bridgeSelectSegment(\'' + esc(segment.id) + '\')">' +
+                            '<span class="segment-index">' + esc(segment.index) + '</span>' +
+                            '<span class="segment-title">' + esc(segment.label) + '</span>' +
+                            '<span class="segment-status">' + esc(bridge.status) + '</span>' +
+                            '<span class="segment-signal">' + esc(bridge.signal) + '</span>' +
+                        '</button>' +
+                        '<div class="segment-body">' +
+                            '<div class="segment-grid"><div class="body-label">Where they are in time</div><div class="body-copy">' + esc(segment.time + ' · ' + bridge.source) + '</div></div>' +
+                            '<div class="segment-grid"><div class="body-label">Objective</div><div class="body-copy">' + esc(bridge.objective) + '</div></div>' +
+                            '<div class="segment-grid"><div class="body-label">Say this now</div><div class="say-line">' + esc(bridge.headline) + '</div></div>' +
+                            '<div class="segment-grid"><div class="body-label">Buyer might say</div><div class="response-list">' +
+                                (responses.length ? responses.map((response, index) =>
+                                    '<div class="response-row ' + esc(response.flag || 'orange') + '">' +
+                                        '<span class="response-mark"></span>' +
+                                        '<button class="response-pick" type="button" onclick="window.__bridgePickResponse(\'' + esc(segment.id) + '\',' + index + ')">' +
+                                            '<span class="response-label">' + esc(response.label || response.type || 'Response branch') + '</span>' +
+                                            '<div class="response-quote">' + esc(response.text || 'No runtime quote loaded.') + '</div>' +
+                                            '<div class="response-meaning">' + esc(response.meaning || 'No branch meaning loaded.') + '</div>' +
+                                        '</button>' +
+                                        '<button class="worked-btn' + (workedActive ? ' active' : '') + '" type="button" onclick="window.__bridgeToggleWorked(\'' + esc(segment.id) + '\')">' + (workedActive ? 'worked' : 'mark worked') + '</button>' +
+                                    '</div>'
+                                ).join('') : '<div class="body-copy">No runtime buyer branches exist for this segment yet.</div>') +
+                            '</div></div>' +
+                            '<div class="segment-grid"><div class="body-label">Say next</div><div class="body-copy">' + esc(bridge.nextLine) + '</div></div>' +
+                            '<div class="segment-grid"><div class="body-label">Listen for</div><div class="body-copy">' + esc((bridge.listenFor || []).join(' · ')) + '</div></div>' +
+                            '<div class="mini-tools">' +
+                                '<div class="mini-tool"><div class="mini-tool-label">Earned truth</div><div class="mini-tool-copy">' + esc(bridge.truth) + '</div><button class="tool-link" type="button" onclick="window.__bridgeEarnTruth(\'' + esc(segment.id) + '\')">Add to learned truth rail</button></div>' +
+                                '<div class="mini-tool"><div class="mini-tool-label">Recovery source</div><div class="mini-tool-copy">' + esc((bridge.recovery || []).join(' · ') || 'No recovery language loaded yet.') + '</div></div>' +
+                                '<div class="mini-tool"><div class="mini-tool-label">Next-step lock</div><div class="mini-tool-copy">This segment can lock a move only if owner, date, and reason are now explicit.</div><button class="tool-link" type="button" onclick="window.__bridgeLockDocket(\'' + esc(segment.id) + '\')">Lock current branch</button></div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</section>';
+                }).join('');
+            }
+
+            function renderLedger(){
+                const node = document.getElementById('learnedLedger');
+                if(!state.learnedTruths.length){
+                    node.innerHTML = '<div class="ledger-row"><span class="ledger-bullet"></span><div class="badge-text">No earned truth yet. The rail should stay empty until a branch earns usable information.</div></div>';
+                    return;
+                }
+                node.innerHTML = state.learnedTruths.map((item) =>
+                    '<div class="ledger-row"><span class="ledger-bullet truth"></span><div><div class="badge-text"><strong>' + esc(item.label) + '</strong></div><div class="support-copy" style="margin-top:4px">' + esc(item.text) + '</div></div></div>'
+                ).join('');
+            }
+
+            function renderWorked(){
+                const node = document.getElementById('workedList');
+                if(!state.workedMemory.length){
+                    node.innerHTML = '<div class="worked-row"><span class="worked-bullet"></span><div class="badge-text">No worked lines stored. The room should never pretend memory exists until the rep marks a move as actually useful.</div></div>';
+                    return;
+                }
+                node.innerHTML = state.workedMemory.map((item) =>
+                    '<div class="worked-row"><span class="worked-bullet success"></span><div><div class="badge-text"><strong>' + esc(item.segment) + '</strong></div><div class="support-copy" style="margin-top:4px">' + esc(item.text) + '</div></div></div>'
+                ).join('');
+            }
+
+            function renderDocket(){
+                const node = document.getElementById('docketList');
+                if(!state.docket){
+                    node.innerHTML = '<div class="docket-row"><span class="docket-bullet"></span><div class="badge-text">No branch is locked yet. The docket should stay unresolved until a segment has earned a real owner, a real next action, and a real reason.</div></div>';
+                    return;
+                }
+                node.innerHTML =
+                    '<div class="docket-row"><span class="docket-bullet lock"></span><div><div class="badge-text"><strong>Move</strong></div><div class="support-copy" style="margin-top:4px">' + esc(state.docket.move) + '</div></div></div>' +
+                    '<div class="docket-row"><span class="docket-bullet lock"></span><div><div class="badge-text"><strong>Owner</strong></div><div class="support-copy" style="margin-top:4px">' + esc(state.docket.owner) + '</div></div></div>' +
+                    '<div class="docket-row"><span class="docket-bullet lock"></span><div><div class="badge-text"><strong>Route</strong></div><div class="support-copy" style="margin-top:4px">' + esc(state.docket.route) + '</div></div></div>' +
+                    '<div class="docket-row"><span class="docket-bullet lock"></span><div><div class="badge-text"><strong>Reason</strong></div><div class="support-copy" style="margin-top:4px">' + esc(state.docket.reason) + '</div></div></div>';
+            }
+
+            function renderRecover(){
+                const activeSegment = FIXED_SEGMENTS.find((segment) => segment.id === state.activeSegment) || FIXED_SEGMENTS[0];
+                const bridge = buildSegmentBridge(activeSegment);
+                document.getElementById('recoverList').innerHTML = buildRecoverRows(bridge).map((item) =>
+                    '<div class="recover-row"><span class="recover-glyph ' + esc(item.glyph) + '"></span><div><div class="recover-title">' + esc(item.title) + '</div><div class="recover-copy">' + esc(item.copy) + '</div></div></div>'
+                ).join('');
+            }
+
+            function render(){
+                renderFrameworks();
+                renderBridgeStrip();
+                renderSegments();
+                renderLedger();
+                renderWorked();
+                renderDocket();
+                renderRecover();
+            }
+
+            window.__bridgeSelectFramework = function(id){
+                state.frameworkId = id;
+                state.activeSegment = 'current-state-truth';
+                render();
+            };
+            window.__bridgeSelectSegment = function(id){
+                state.activeSegment = id;
+                render();
+            };
+            window.__bridgePickResponse = function(segmentId, index){
+                state.responseBySegment[segmentId] = index;
+                state.activeSegment = segmentId;
+                render();
+            };
+            window.__bridgeEarnTruth = function(segmentId){
+                const segment = FIXED_SEGMENTS.find((item) => item.id === segmentId);
+                const bridge = buildSegmentBridge(segment);
+                addLearnedTruth(bridge.truth, segment);
+                render();
+            };
+            window.__bridgeToggleWorked = function(segmentId){
+                const segment = FIXED_SEGMENTS.find((item) => item.id === segmentId);
+                const bridge = buildSegmentBridge(segment);
+                toggleWorked(segment, bridge);
+            };
+            window.__bridgeLockDocket = function(segmentId){
+                const segment = FIXED_SEGMENTS.find((item) => item.id === segmentId);
+                const bridge = buildSegmentBridge(segment);
+                lockDocket(segment, bridge);
+            };
+
+            render();
+        })();
+    </script>
+</body>
+</html>

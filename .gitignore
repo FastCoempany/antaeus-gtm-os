@@ -1,3 +1,16 @@
 .tmp/
 API Keys_anthropic/
 enrichment-server/node_modules/
+
+node_modules/
+tmp-*.png
+*.log
+dist/
+
+# Local environment files — never commit real credentials.
+# Use .env.example as the template.
+.env
+.env.local
+.env.*.local
+playwright-report/
+test-results/

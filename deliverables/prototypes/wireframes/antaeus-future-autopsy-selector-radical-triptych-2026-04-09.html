@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Future Autopsy Selector Radical Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#0a1c40;
+      --ink:#10274f;
+      --soft:#5f7594;
+      --muted:#8b9cb4;
+      --orange:#e6701e;
+      --blue:#2471e7;
+      --green:#2d7a4b;
+      --risk:#c44b45;
+      --line:rgba(10,28,64,.1);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(36,113,231,.06), transparent 26%),
+        radial-gradient(circle at 100% 0%, rgba(230,112,30,.05), transparent 24%),
+        linear-gradient(180deg,#fbfcff 0%,#f2f6fc 100%);
+      padding:28px 22px 72px;
+    }
+    h1,h2,h3,h4,p{margin:0}
+    .page{max-width:1520px;margin:0 auto;display:grid;gap:28px}
+    .topline{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+      padding:0 6px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+      color:var(--muted);font-weight:700;
+    }
+    .topline .accent{color:var(--orange)}
+    .triptych{display:grid;gap:26px}
+    .variant{
+      position:relative;
+      overflow:hidden;
+      min-height:780px;
+      border:1px solid rgba(10,28,64,.06);
+      border-radius:42px;
+      background:
+        radial-gradient(circle at 16% 10%, rgba(36,113,231,.14), transparent 28%),
+        radial-gradient(circle at 90% 86%, rgba(230,112,30,.12), transparent 26%),
+        linear-gradient(180deg,#f8fbff 0%,#eef5fb 100%);
+      box-shadow:0 34px 86px rgba(10,28,64,.14);
+      padding:108px 38px 42px;
+    }
+    .variant::before{
+      content:"";
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(10,28,64,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,28,64,.03) 1px, transparent 1px);
+      background-size:32px 32px;
+      pointer-events:none;
+      opacity:.45;
+    }
+    .variant-meta{
+      position:absolute;top:24px;left:28px;right:28px;z-index:2;
+      display:flex;justify-content:space-between;gap:18px;align-items:flex-start;
+    }
+    .variant-id{
+      font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;
+    }
+    .variant-id .accent{color:var(--orange)}
+    .variant-name{
+      font-family:"Outfit",sans-serif;font-size:34px;line-height:1;letter-spacing:-.05em;font-weight:700;color:var(--navy);
+    }
+    .variant-meaning{
+      max-width:430px;font-size:14px;line-height:1.55;color:var(--soft);text-align:right;
+    }
+    .stage{
+      position:relative;z-index:1;
+      display:grid;
+      grid-template-columns:minmax(420px, 620px) minmax(420px, 1fr);
+      gap:42px;
+      align-items:start;
+      min-height:620px;
+    }
+
+    .selector-title{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+      margin-bottom:14px;
+    }
+    .case-list{display:grid}
+    .case-row{
+      min-height:54px;
+      display:grid;
+      grid-template-columns:18px 1fr auto;
+      gap:12px;
+      align-items:center;
+      border-bottom:1px solid rgba(10,28,64,.08);
+      padding:0 0 0 2px;
+    }
+    .case-row:last-child{border-bottom:0}
+    .case-mark{
+      width:8px;height:8px;border-radius:50%;
+      background:rgba(10,28,64,.16);
+      box-shadow:0 0 0 7px rgba(10,28,64,.04);
+    }
+    .case-row.active .case-mark{background:var(--orange);box-shadow:0 0 0 7px rgba(230,112,30,.12)}
+    .case-name{font-size:18px;line-height:1.1;letter-spacing:-.02em;color:#587092}
+    .case-value{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .case-row.active .case-name{color:var(--navy);font-weight:700}
+    .case-note{margin-top:16px;font-size:13px;line-height:1.55;color:var(--soft);max-width:36ch}
+
+    .link-command{
+      display:inline-flex;align-items:center;gap:10px;
+      text-decoration:none;font-weight:700;font-size:17px;color:var(--navy);
+    }
+    .command-symbol{
+      position:relative;
+      width:28px;height:28px;flex:0 0 auto;
+      display:inline-block;
+    }
+    .command-symbol.run::before{
+      content:"";
+      position:absolute;inset:3px;
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, rgba(45,122,75,.1), rgba(45,122,75,.22));
+      border:1px solid rgba(45,122,75,.2);
+    }
+    .command-symbol.run::after{
+      content:"";
+      position:absolute;left:11px;top:8px;
+      width:0;height:0;
+      border-top:6px solid transparent;
+      border-bottom:6px solid transparent;
+      border-left:10px solid var(--green);
+      filter:drop-shadow(0 0 4px rgba(45,122,75,.18));
+    }
+    .command-symbol.urgent::before{
+      content:"";
+      position:absolute;left:4px;top:4px;
+      width:20px;height:20px;
+      background:radial-gradient(circle at center, rgba(196,75,69,.12) 0 38%, transparent 40%);
+      clip-path:polygon(50% 0%, 61% 28%, 92% 18%, 74% 49%, 100% 50%, 74% 52%, 92% 82%, 61% 72%, 50% 100%, 39% 72%, 8% 82%, 26% 52%, 0% 50%, 26% 49%, 8% 18%, 39% 28%);
+      border:1px solid rgba(196,75,69,.18);
+    }
+    .command-symbol.urgent::after{
+      content:"";
+      position:absolute;left:12px;top:7px;
+      width:4px;height:12px;border-radius:3px;
+      background:var(--risk);
+      box-shadow:0 15px 0 -1px var(--risk);
+    }
+    .command-symbol.copy::before{
+      content:"";
+      position:absolute;left:6px;top:7px;
+      width:12px;height:14px;border-radius:4px;
+      border:1px solid rgba(36,113,231,.28);
+      background:rgba(255,255,255,.92);
+      box-shadow:0 0 0 4px rgba(36,113,231,.06);
+    }
+    .command-symbol.copy::after{
+      content:"";
+      position:absolute;left:11px;top:5px;
+      width:12px;height:14px;border-radius:4px;
+      border:1px solid rgba(36,113,231,.22);
+      background:rgba(36,113,231,.08);
+    }
+    .link-command.run{color:var(--green)}
+    .link-command.urgent{color:var(--risk)}
+    .link-command.copy{color:#4d6f9d}
+    .subcopy{
+      margin-left:44px;
+      margin-top:6px;
+      font-size:13px;line-height:1.5;color:var(--soft);max-width:28ch;
+    }
+
+    .orders{display:grid;gap:12px}
+    .order{
+      display:grid;gap:8px;
+      padding-bottom:12px;
+      border-bottom:1px solid rgba(10,28,64,.1);
+    }
+    .order:last-child{border-bottom:0}
+    .order .kicker{
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    }
+    .order .title{
+      font-size:22px;line-height:1.08;letter-spacing:-.04em;font-weight:700;color:var(--navy);
+    }
+    .order.primary .title{color:var(--orange)}
+    .order.blue .title{color:var(--blue)}
+    .order .copy{font-size:13px;line-height:1.5;color:var(--soft);max-width:28ch}
+
+    .rail{display:grid;gap:18px}
+    .rail-row{
+      display:grid;
+      grid-template-columns:16px 1fr;
+      gap:14px;align-items:start;
+      padding-bottom:14px;
+      border-bottom:1px solid rgba(10,28,64,.1);
+    }
+    .rail-row:last-child{border-bottom:0}
+    .rail-dot{
+      width:12px;height:12px;border-radius:50%;
+      background:rgba(10,28,64,.16);
+      box-shadow:0 0 0 7px rgba(10,28,64,.04);
+      margin-top:4px;
+    }
+    .rail-row.primary .rail-dot{background:var(--orange);box-shadow:0 0 0 7px rgba(230,112,30,.12)}
+    .rail-row.blue .rail-dot{background:var(--blue);box-shadow:0 0 0 7px rgba(36,113,231,.1)}
+    .rail-title{font-size:22px;line-height:1.08;letter-spacing:-.04em;font-weight:700;color:var(--navy)}
+    .rail-copy{margin-top:6px;font-size:13px;line-height:1.5;color:var(--soft);max-width:28ch}
+
+    .right-shell{
+      position:relative;
+      min-height:560px;
+      padding:40px 56px 0 34px;
+    }
+    .sheet{
+      position:absolute;
+      width:min(620px,calc(100% - 72px));
+      border-radius:30px;
+      background:rgba(255,255,255,.58);
+      border:1px solid rgba(10,28,64,.08);
+      backdrop-filter:blur(16px);
+      box-shadow:0 20px 48px rgba(10,28,64,.08);
+      padding:22px 24px;
+    }
+    .sheet-a{left:28px;top:12px;transform:rotate(-2.4deg)}
+    .sheet-b{left:90px;top:124px;transform:rotate(1.8deg)}
+    .sheet-c{left:52px;top:286px;transform:rotate(-1deg)}
+    .sheet-tab{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:30px;padding:0 10px;border-radius:999px;margin-bottom:12px;
+      font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    }
+    .orange{background:rgba(230,112,30,.12);color:var(--orange)}
+    .blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .green{background:rgba(45,122,75,.12);color:var(--green)}
+    .sheet-title{
+      font-family:"Outfit",sans-serif;
+      font-size:34px;line-height:.95;letter-spacing:-.05em;font-weight:700;
+      max-width:8ch;margin-bottom:14px;color:var(--navy);
+    }
+    .sheet-row{
+      display:grid;
+      grid-template-columns:36px 88px 112px 1fr;
+      gap:12px;align-items:center;
+      padding:10px 0;border-top:1px solid rgba(10,28,64,.08);
+    }
+    .mark{
+      width:30px;height:30px;border-radius:50%;
+      display:grid;place-items:center;font-size:15px;font-weight:700;
+    }
+    .mark.orange{background:rgba(230,112,30,.14);color:var(--orange)}
+    .mark.blue{background:rgba(36,113,231,.12);color:var(--blue)}
+    .mark.green{background:rgba(45,122,75,.12);color:var(--green)}
+    .row-label,.row-value,.row-copy{font-size:13px}
+    .row-label{letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .row-value{font-weight:700}
+    .row-value.orange{color:var(--orange)}
+    .row-value.blue{color:var(--blue)}
+    .row-value.green{color:var(--green)}
+    .row-copy{line-height:1.45;color:var(--ink)}
+
+    .variant-a .left-shell{
+      display:grid;
+      grid-template-columns:260px minmax(0,1fr);
+      gap:32px;
+      align-items:start;
+      padding-top:8px;
+    }
+    .variant-a .action-stack{display:grid;gap:28px;align-content:start;padding-top:18px}
+
+    .variant-b .left-shell{
+      display:grid;
+      grid-template-columns:240px minmax(0,1fr);
+      gap:36px;
+      align-items:start;
+      padding-top:8px;
+    }
+    .variant-b .axis{
+      position:relative;
+      padding-top:6px;
+    }
+    .variant-b .axis::before{
+      content:"";
+      position:absolute;left:0;top:0;bottom:0;width:1px;background:rgba(10,28,64,.1);
+    }
+    .variant-b .orders{padding-left:22px}
+
+    .variant-c .left-shell{
+      display:grid;
+      grid-template-columns:240px minmax(0,1fr);
+      gap:38px;
+      align-items:start;
+      padding-top:8px;
+    }
+    .variant-c .rail{padding-top:6px}
+
+    @media (max-width:1180px){
+      .stage{grid-template-columns:1fr;min-height:0}
+      .variant-a .left-shell,
+      .variant-b .left-shell,
+      .variant-c .left-shell{grid-template-columns:1fr}
+      .right-shell{padding:26px 18px 0}
+      .sheet{position:relative;width:100%;left:auto !important;top:auto !important;transform:none !important;margin-bottom:16px}
+      .variant-meta{position:static;margin-bottom:18px}
+      .variant{padding-top:34px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <span class="accent">Future Autopsy</span>
+      <span>Selector + Command Radical Variants</span>
+    </div>
+
+    <section class="triptych">
+      <article class="variant variant-a">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 01</span> · Hanging Ledger</div>
+            <div class="variant-name">A freestanding case ledger with suspended command links.</div>
+          </div>
+          <div class="variant-meaning">The six-case universe becomes an open ledger with no enclosing box. Commands hang to the right as weighted links, so the whole area feels like a forensic register rather than software controls.</div>
+        </div>
+        <div class="stage">
+          <div class="left-shell">
+            <div>
+              <div class="selector-title">Pinned-case ledger · 6 live cases</div>
+              <div class="case-list">
+                <div class="case-row active"><div class="case-mark"></div><div class="case-name">Apex Fintech</div><div class="case-value">$140k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Northstar Health</div><div class="case-value">$180k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">VoltOps</div><div class="case-value">$95k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Meridian Logistics</div><div class="case-value">$280k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Cascadia Health</div><div class="case-value">$120k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Northstar Capital</div><div class="case-value">$210k</div></div>
+              </div>
+              <div class="case-note">Only the most real live cases belong in autopsy rotation.</div>
+            </div>
+            <div class="action-stack">
+              <div>
+                <a href="#" class="link-command run"><span class="command-symbol run"></span>Run selected</a>
+                <div class="subcopy">Recompute the autopsy around the active ledger line.</div>
+              </div>
+              <div>
+                <a href="#" class="link-command urgent"><span class="command-symbol urgent"></span>Urgent autopsy deal</a>
+                <div class="subcopy">Jump to the most urgent live case in the six-case universe.</div>
+              </div>
+              <div>
+                <a href="#" class="link-command copy"><span class="command-symbol copy"></span>Copy brief</a>
+                <div class="subcopy">Export the current diagnosis as a portable summary.</div>
+              </div>
+            </div>
+          </div>
+          <div class="right-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row"><div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div></div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row"><div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div></div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row"><div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant variant-b">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 02</span> · Axis Orders</div>
+            <div class="variant-name">The case list is a ruled register and the actions are three formal orders on one axis.</div>
+          </div>
+          <div class="variant-meaning">This one feels more ceremonial. There is still no enclosing card, but the action side becomes a vertical order axis: selected-case run, comparative jump, and archival export.</div>
+        </div>
+        <div class="stage">
+          <div class="left-shell">
+            <div>
+              <div class="selector-title">Pinned-case register · 6 live cases</div>
+              <div class="case-list">
+                <div class="case-row active"><div class="case-mark"></div><div class="case-name">Apex Fintech</div><div class="case-value">$140k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Northstar Health</div><div class="case-value">$180k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">VoltOps</div><div class="case-value">$95k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Meridian Logistics</div><div class="case-value">$280k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Cascadia Health</div><div class="case-value">$120k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Northstar Capital</div><div class="case-value">$210k</div></div>
+              </div>
+            </div>
+            <div class="axis">
+              <div class="orders">
+                <div class="order primary">
+                  <div class="kicker">Selected case</div>
+                  <div class="title">Run this autopsy now.</div>
+                  <div class="copy">Refresh the diagnosis around the active case line.</div>
+                </div>
+                <div class="order blue">
+                  <div class="kicker">Comparison</div>
+                  <div class="title">Jump to autopsy of day.</div>
+                  <div class="copy">Compare the chosen case to the room’s most urgent live thread.</div>
+                </div>
+                <div class="order">
+                  <div class="kicker">Archive</div>
+                  <div class="title">Copy the current brief.</div>
+                  <div class="copy">Carry the diagnosis into another room or a working note.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="right-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row"><div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div></div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row"><div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div></div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row"><div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant variant-c">
+        <div class="variant-meta">
+          <div>
+            <div class="variant-id"><span class="accent">Variant 03</span> · Switchboard Rail</div>
+            <div class="variant-name">The case list becomes one side of a switchboard and the commands become a live rail.</div>
+          </div>
+          <div class="variant-meaning">This is the most mechanical. The six-case selector is just a bare switchboard list, while the action side reads as a vertical control rail with each command explaining its operational consequence.</div>
+        </div>
+        <div class="stage">
+          <div class="left-shell">
+            <div>
+              <div class="selector-title">Pinned-case switchboard · 6 live cases</div>
+              <div class="case-list">
+                <div class="case-row active"><div class="case-mark"></div><div class="case-name">Apex Fintech</div><div class="case-value">$140k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Northstar Health</div><div class="case-value">$180k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">VoltOps</div><div class="case-value">$95k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Meridian Logistics</div><div class="case-value">$280k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Cascadia Health</div><div class="case-value">$120k</div></div>
+                <div class="case-row"><div class="case-mark"></div><div class="case-name">Northstar Capital</div><div class="case-value">$210k</div></div>
+              </div>
+              <div class="case-note">The active line is the pinned case. No separate button confirms it.</div>
+            </div>
+            <div class="rail">
+              <div class="rail-row primary">
+                <div class="rail-dot"></div>
+                <div>
+                  <div class="rail-title">Run selected</div>
+                  <div class="rail-copy">Recompute the autopsy around the pinned case now.</div>
+                </div>
+              </div>
+              <div class="rail-row blue">
+                <div class="rail-dot"></div>
+                <div>
+                  <div class="rail-title">Autopsy of day</div>
+                  <div class="rail-copy">Jump to the most urgent live case in this six-case universe.</div>
+                </div>
+              </div>
+              <div class="rail-row">
+                <div class="rail-dot"></div>
+                <div>
+                  <div class="rail-title">Copy brief</div>
+                  <div class="rail-copy">Export the current diagnosis as a portable summary.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="right-shell">
+            <div class="sheet sheet-a">
+              <div class="sheet-tab orange">Visible symptom</div>
+              <div class="sheet-title">Paper process widened before control did.</div>
+              <div class="sheet-row"><div class="mark orange">!</div><div class="row-label">Risk</div><div class="row-value orange">No next step</div><div class="row-copy">There was never a dated next step, so momentum decayed.</div></div>
+            </div>
+            <div class="sheet sheet-b">
+              <div class="sheet-tab blue">What sits underneath</div>
+              <div class="sheet-title">Proof looks alive, ownership does not.</div>
+              <div class="sheet-row"><div class="mark blue">P</div><div class="row-label">Proof</div><div class="row-value blue">No EB</div><div class="row-copy">Economic buyer never entered the thread.</div></div>
+            </div>
+            <div class="sheet sheet-c">
+              <div class="sheet-tab green">Failure pattern</div>
+              <div class="sheet-title">Pressure before clarity.</div>
+              <div class="sheet-row"><div class="mark green">→</div><div class="row-label">Motion</div><div class="row-value green">Drifting</div><div class="row-copy">The live thread kept moving without enough control to protect the close path.</div></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

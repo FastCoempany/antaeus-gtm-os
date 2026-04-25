@@ -223,29 +223,931 @@
 .sw-first-fold .sw-tabs{margin-bottom:0;}
 .sw-first-fold #swHealthPanel{margin-top:16px;}
 @media(max-width:900px){.sw-first-fold{padding:14px;}}
+
+/* ==================== TICKET LOOM REFACE ==================== */
+body.room-sourcing-workbench{
+    background:
+        radial-gradient(circle at 0 0, rgba(59,130,246,0.06), transparent 18%),
+        radial-gradient(circle at 100% 0, rgba(212,165,116,0.08), transparent 20%),
+        linear-gradient(180deg,#fbfdff 0,#f2f6fc 100%);
+    color:var(--navy);
+}
+body.room-sourcing-workbench .app-main{
+    background:transparent;
+    color:var(--navy);
+}
+body.room-sourcing-workbench .app-content{
+    max-width:1320px !important;
+    padding-top:24px;
+}
+body.room-sourcing-workbench .module-header{
+    background:transparent;
+    border-bottom:1px solid rgba(11,29,70,.08);
+    box-shadow:none;
+}
+body.room-sourcing-workbench .page-title{
+    color:var(--navy);
+    letter-spacing:-.04em;
+}
+body.room-sourcing-workbench .page-subtitle{
+    color:var(--soft);
+    max-width:58ch;
+}
+body.room-sourcing-workbench .shell-header-kicker{color:var(--orange);}
+body.room-sourcing-workbench .shell-header-state{
+    background:rgba(255,255,255,.86);
+    border:1px solid rgba(11,29,70,.1);
+    color:var(--navy);
+}
+body.room-sourcing-workbench .header-actions .btn{
+    background:rgba(255,255,255,.86);
+    color:var(--navy);
+    border-color:rgba(11,29,70,.12);
+}
+
+body.room-sourcing-workbench .sw-first-fold{
+    margin-bottom:28px;
+    padding:0;
+    border:none;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+}
+body.room-sourcing-workbench .sw-capacity{
+    background:transparent;
+    border:1px solid rgba(11,29,70,.08);
+    border-radius:999px;
+    padding:10px 14px;
+    font-size:0.8rem;
+}
+body.room-sourcing-workbench .sw-capacity-bar{background:rgba(11,29,70,.08)}
+body.room-sourcing-workbench .sw-capacity-text{
+    color:var(--navy);
+    font-family:"Outfit",sans-serif;
+    letter-spacing:-.04em;
+}
+body.room-sourcing-workbench .sw-capacity-label{color:var(--soft)}
+
+body.room-sourcing-workbench .sw-tabs{
+    gap:10px;
+    background:transparent;
+    border:none;
+    border-radius:0;
+    padding:0;
+    margin-top:18px;
+}
+body.room-sourcing-workbench .sw-tab{
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid rgba(11,29,70,.1);
+    background:rgba(255,255,255,.82);
+    color:var(--muted);
+    font-size:0.7rem;
+    letter-spacing:.12em;
+}
+body.room-sourcing-workbench .sw-tab.active{
+    background:rgba(255,255,255,.98);
+    color:var(--navy);
+    border-color:rgba(212,165,116,.4);
+    box-shadow:0 14px 30px rgba(11,29,70,.06);
+}
+body.room-sourcing-workbench .sw-tab:hover:not(.active){
+    color:var(--navy);
+    background:rgba(255,255,255,.92);
+}
+body.room-sourcing-workbench .sw-view{
+    padding-top:22px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+
+.sw-ticket-shell{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 250px;
+    gap:24px;
+    padding:26px 28px 20px;
+    border-radius:36px;
+    border:1px solid rgba(11,29,70,.08);
+    background:
+        radial-gradient(circle at 0 0, rgba(59,130,246,.05), transparent 25%),
+        radial-gradient(circle at 100% 0, rgba(234,111,32,.05), transparent 25%),
+        linear-gradient(180deg,rgba(255,255,255,.98) 0,rgba(246,249,255,.98) 100%);
+    box-shadow:0 24px 64px rgba(11,29,70,.1);
+}
+.sw-ticket-stage{position:relative;min-height:540px;padding-top:8px}
+.sw-ticket-stage:before{
+    content:"";
+    position:absolute;
+    left:80px;
+    right:80px;
+    top:46px;
+    height:4px;
+    border-radius:999px;
+    background:var(--navy);
+}
+.sw-ticket-stage:after{
+    content:"";
+    position:absolute;
+    left:96px;
+    right:96px;
+    top:42px;
+    height:10px;
+    border-radius:999px;
+    background:
+        linear-gradient(90deg,
+            rgba(47,139,89,.16) 0 22%,
+            rgba(47,139,89,0) 22% 26%,
+            rgba(47,114,232,.16) 26% 58%,
+            rgba(47,114,232,0) 58% 62%,
+            rgba(234,111,32,.18) 62% 100%);
+    pointer-events:none;
+}
+.sw-ticket-kicker{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--orange);
+}
+.sw-ticket-title{
+    margin-top:8px;
+    font-family:"Outfit",sans-serif;
+    font-size:clamp(48px,4.1vw,72px);
+    line-height:.92;
+    letter-spacing:-.11em;
+    max-width:11ch;
+    color:var(--navy);
+}
+.sw-ticket-copy{
+    margin-top:12px;
+    max-width:52ch;
+    font-size:14px;
+    line-height:1.56;
+    color:var(--soft);
+}
+.sw-ticket-pills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+}
+.sw-ticket-pill{
+    display:inline-flex;
+    align-items:center;
+    min-height:32px;
+    padding:0 12px;
+    border-radius:999px;
+    border:1px solid rgba(11,29,70,.1);
+    background:rgba(255,255,255,.86);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--muted);
+}
+.sw-ticket-pill .sw-mark{
+    margin-right:8px;
+}
+.sw-ticket-pill.ready{color:var(--green)}
+.sw-ticket-pill.review{color:var(--orange)}
+.sw-ticket-pill.sag{color:var(--red)}
+.sw-ticket-loom{
+    position:relative;
+    min-height:360px;
+    margin-top:16px;
+    padding-top:18px;
+}
+.sw-ticket-item{
+    position:absolute;
+    width:192px;
+}
+.sw-ticket-item:before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:-60px;
+    bottom:100%;
+    width:1px;
+    background:rgba(11,29,70,.18);
+}
+.sw-ticket-item:after{
+    content:"";
+    position:absolute;
+    left:calc(50% - 6px);
+    top:-64px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:rgba(255,255,255,.96);
+    border:1px solid rgba(11,29,70,.12);
+    box-shadow:0 8px 18px rgba(11,29,70,.08);
+}
+.sw-ticket-card{
+    position:relative;
+    border-radius:28px;
+    padding:16px 16px 18px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.98) 0, rgba(250,252,255,.96) 100%);
+    border:1px solid rgba(11,29,70,.1);
+    box-shadow:0 18px 40px rgba(11,29,70,.08);
+    transform:rotate(var(--tilt, 0deg));
+}
+.sw-ticket-card:after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:-12px;
+    transform:translateX(-50%);
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    border:1px solid rgba(11,29,70,.1);
+    background:#fbfdff;
+}
+.sw-ticket-card.ready{
+    background:linear-gradient(180deg, rgba(248,255,251,.98) 0, rgba(255,255,255,.95) 100%);
+    box-shadow:inset 0 0 0 2px rgba(47,139,89,.14),0 18px 40px rgba(11,29,70,.08)
+}
+.sw-ticket-card.review{
+    background:linear-gradient(180deg, rgba(255,249,243,.98) 0, rgba(255,255,255,.95) 100%);
+    box-shadow:inset 0 0 0 2px rgba(234,111,32,.14),0 18px 40px rgba(11,29,70,.08)
+}
+.sw-ticket-card.sag{
+    background:linear-gradient(180deg, rgba(255,247,246,.98) 0, rgba(255,255,255,.95) 100%);
+    box-shadow:inset 0 0 0 2px rgba(201,77,64,.16),0 18px 40px rgba(11,29,70,.08)
+}
+.sw-ticket-card.ready:after{border-color:rgba(47,139,89,.24);box-shadow:inset 0 0 0 5px rgba(47,139,89,.12)}
+.sw-ticket-card.review:after{border-color:rgba(234,111,32,.26);box-shadow:inset 0 0 0 5px rgba(234,111,32,.12)}
+.sw-ticket-card.sag:after{border-color:rgba(201,77,64,.28);box-shadow:inset 0 0 0 5px rgba(201,77,64,.12)}
+.sw-ticket-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:4px;
+}
+.sw-mark{
+    position:relative;
+    display:inline-flex;
+    width:18px;
+    height:18px;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    border:1px solid rgba(11,29,70,.14);
+    background:rgba(255,255,255,.92);
+    flex:0 0 auto;
+}
+.sw-mark:before{
+    content:"";
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:currentColor;
+}
+.sw-mark.ready{color:var(--green)}
+.sw-mark.review{color:var(--orange)}
+.sw-mark.sag{color:var(--red)}
+.sw-mark.review:before{
+    width:9px;
+    height:2px;
+    border-radius:999px;
+}
+.sw-mark.sag:before{
+    width:8px;
+    height:8px;
+    border-radius:0;
+    transform:rotate(45deg);
+}
+.sw-ticket-name{
+    font-size:22px;
+    line-height:1.02;
+    letter-spacing:-.05em;
+    font-weight:700;
+    color:var(--navy);
+}
+.sw-ticket-tag{
+    margin-top:8px;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--muted);
+}
+.sw-ticket-note{
+    margin-top:8px;
+    font-size:12px;
+    line-height:1.42;
+    color:var(--soft);
+}
+.sw-ticket-status{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px solid rgba(11,29,70,.08);
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+}
+.sw-ticket-status.ready{color:var(--green)}
+.sw-ticket-status.review{color:var(--orange)}
+.sw-ticket-status.sag{color:var(--red)}
+.sw-ticket-dock{
+    display:grid;
+    align-content:start;
+    gap:12px;
+    padding-top:82px;
+}
+.sw-ticket-read{
+    padding:14px 0;
+    border-top:1px solid rgba(11,29,70,.1);
+}
+.sw-ticket-read:last-child{border-bottom:1px solid rgba(11,29,70,.1)}
+.sw-ticket-read .micro{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.sw-ticket-read .headline{
+    font-size:22px;
+}
+.sw-ticket-read .copy{
+    font-size:13px;
+    line-height:1.55;
+}
+.sw-ticket-score{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:12px;
+}
+.sw-ticket-score .headline{
+    font-size:34px;
+}
+.sw-ticket-score-num{
+    font-family:"Outfit",sans-serif;
+    font-size:52px;
+    line-height:.9;
+    letter-spacing:-.08em;
+    color:var(--green);
+}
+.sw-ticket-rule{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.sw-ticket-rulebar{
+    width:28px;
+    height:3px;
+    border-radius:999px;
+    background:currentColor;
+    flex:0 0 auto;
+}
+.sw-ticket-rule.ready{color:var(--green)}
+.sw-ticket-rule.review{color:var(--orange)}
+.sw-ticket-rule.sag{color:var(--red)}
+.sw-ticket-laws{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:24px;
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+.sw-ticket-law{
+    padding-top:12px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+.sw-loom-support{
+    display:grid;
+    gap:12px;
+    margin-top:10px;
+}
+.sw-loom-strip{
+    display:grid;
+    grid-template-columns:150px minmax(0,1fr) 120px;
+    gap:16px;
+    align-items:start;
+    padding:14px 0;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+.sw-loom-strip:last-child{border-bottom:1px solid rgba(11,29,70,.08)}
+.sw-loom-strip .micro{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.sw-loom-state{
+    text-align:right;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+}
+
+body.room-sourcing-workbench .sw-qb-thesis-group,
+body.room-sourcing-workbench .sw-si-section{
+    position:relative;
+    padding:22px 0 18px 18px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+body.room-sourcing-workbench .sw-qb-thesis-group:before,
+body.room-sourcing-workbench .sw-si-section:before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:22px;
+    bottom:18px;
+    width:3px;
+    border-radius:999px;
+    background:linear-gradient(180deg,rgba(233,108,17,.52),rgba(11,29,70,.08));
+}
+body.room-sourcing-workbench .sw-qb-card,
+body.room-sourcing-workbench .sw-pp-card,
+body.room-sourcing-workbench .sw-pm-card,
+body.room-sourcing-workbench .sw-si-row,
+body.room-sourcing-workbench .sw-si-dist-card,
+body.room-sourcing-workbench .sw-modal,
+body.room-sourcing-workbench .sw-qb-empty,
+body.room-sourcing-workbench .sw-pm-empty,
+body.room-sourcing-workbench .sw-si-empty{
+    background:rgba(255,255,255,.94);
+    border:1px solid rgba(11,29,70,.1);
+    color:var(--navy);
+    box-shadow:0 18px 40px rgba(11,29,70,.06);
+}
+body.room-sourcing-workbench .sw-qb-card:hover,
+body.room-sourcing-workbench .sw-pp-card:hover,
+body.room-sourcing-workbench .sw-pm-card:hover{border-color:rgba(11,29,70,.18)}
+body.room-sourcing-workbench .sw-tabs{
+    gap:10px;
+    padding:12px 0 18px;
+    border-top:1px solid rgba(11,29,70,.08);
+    border-bottom:1px solid rgba(11,29,70,.08);
+}
+body.room-sourcing-workbench .sw-tab{
+    border-radius:999px 999px 12px 12px;
+    background:rgba(255,255,255,.9);
+    border:1px solid rgba(11,29,70,.1);
+    box-shadow:0 10px 22px rgba(11,29,70,.04);
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:11px;
+}
+body.room-sourcing-workbench .sw-tab.active{
+    background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,250,253,.94));
+    border-color:rgba(233,108,17,.26);
+    color:var(--navy);
+    box-shadow:0 14px 28px rgba(233,108,17,.08);
+}
+body.room-sourcing-workbench .sw-qb-empty,
+body.room-sourcing-workbench .sw-pm-empty,
+body.room-sourcing-workbench .sw-si-empty{
+    padding:34px 24px;
+    text-align:center;
+    color:var(--soft);
+}
+body.room-sourcing-workbench .sw-qb-empty .icon,
+body.room-sourcing-workbench .sw-pm-empty .icon,
+body.room-sourcing-workbench .sw-si-empty .icon{
+    width:42px;
+    height:42px;
+    margin:0 auto 12px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(233,108,17,.08);
+    border:1px solid rgba(233,108,17,.2);
+    color:var(--orange);
+    font-size:20px;
+}
+body.room-sourcing-workbench .sw-qb-card-btn,
+body.room-sourcing-workbench .sw-pp-card-btn,
+body.room-sourcing-workbench .sw-qb-add-card,
+body.room-sourcing-workbench .sw-pp-add,
+body.room-sourcing-workbench .sw-modal-btn.ghost{
+    background:rgba(255,255,255,.86);
+}
+body.room-sourcing-workbench .sw-qb-add-card,
+body.room-sourcing-workbench .sw-pp-add,
+body.room-sourcing-workbench .sw-pm-add-btn{
+    border-radius:999px 999px 12px 12px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    padding:8px 14px;
+    box-shadow:0 12px 24px rgba(233,108,17,.08);
+}
+body.room-sourcing-workbench .sw-modal{
+    border-radius:30px;
+}
+body.room-sourcing-workbench .sw-modal-title,
+body.room-sourcing-workbench .sw-qb-thesis-name,
+body.room-sourcing-workbench .sw-si-name,
+body.room-sourcing-workbench .sw-pm-card-title{
+    color:var(--navy);
+}
+body.room-sourcing-workbench .sw-modal-field input,
+body.room-sourcing-workbench .sw-modal-field select,
+body.room-sourcing-workbench .sw-modal-field textarea,
+body.room-sourcing-workbench .sw-pm-thesis-select select{
+    background:rgba(245,248,253,.95);
+    border:1px solid rgba(11,29,70,.1);
+    color:var(--navy);
+}
+body.room-sourcing-workbench .sw-pp-stat-val,
+body.room-sourcing-workbench .sw-si-dist-val{
+    color:var(--navy);
+}
+body.room-sourcing-workbench .sw-pp-stat-label,
+body.room-sourcing-workbench .sw-si-dist-label,
+body.room-sourcing-workbench .sw-qb-filter-row .label,
+body.room-sourcing-workbench .sw-card-days,
+body.room-sourcing-workbench .sw-modal-field .hint{
+    color:var(--muted);
+}
+body.room-sourcing-workbench .sw-pp-card-next{
+    background:rgba(244,248,254,.92);
+    border:1px solid rgba(11,29,70,.08);
+}
+body.room-sourcing-workbench .sw-si-rec{
+    background:rgba(212,165,116,.08);
+    border-color:rgba(212,165,116,.2);
+    color:var(--ink);
+}
+body.room-sourcing-workbench .sw-qb-thesis-header{
+    margin-bottom:18px;
+    padding-left:18px;
+    position:relative;
+}
+body.room-sourcing-workbench .sw-qb-thesis-header:before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:50%;
+    width:12px;
+    height:12px;
+    margin-top:-6px;
+    border-radius:50%;
+    border:2px solid rgba(233,108,17,.55);
+    background:rgba(233,108,17,.12);
+    box-shadow:0 0 0 6px rgba(233,108,17,.06);
+}
+body.room-sourcing-workbench .sw-qb-card{
+    overflow:hidden;
+    border-radius:24px 24px 16px 16px;
+    padding:26px 18px 16px;
+    background:linear-gradient(180deg,rgba(255,255,255,.985),rgba(247,250,253,.94));
+}
+body.room-sourcing-workbench .sw-qb-card:before{
+    content:'';
+    position:absolute;
+    left:18px;
+    right:18px;
+    top:10px;
+    height:4px;
+    border-radius:999px;
+    background:repeating-linear-gradient(90deg,rgba(233,108,17,.48) 0 14px,transparent 14px 22px);
+}
+body.room-sourcing-workbench .sw-qb-card.exhausted:before{
+    background:repeating-linear-gradient(90deg,rgba(214,48,49,.35) 0 14px,transparent 14px 22px);
+}
+body.room-sourcing-workbench .sw-qb-card:after{
+    content:'';
+    position:absolute;
+    right:18px;
+    top:16px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    border:2px solid rgba(11,29,70,.12);
+    background:rgba(255,255,255,.95);
+}
+body.room-sourcing-workbench .sw-qb-card-head{
+    padding-right:22px;
+    margin-bottom:14px;
+}
+body.room-sourcing-workbench .sw-qb-sourced{
+    padding:4px 9px;
+    border-radius:999px;
+    background:rgba(11,29,70,.04);
+    border:1px solid rgba(11,29,70,.06);
+}
+body.room-sourcing-workbench .sw-qb-filters{
+    display:grid;
+    gap:2px;
+}
+body.room-sourcing-workbench .sw-qb-filter-row{
+    padding:7px 0;
+    border-bottom:1px dotted rgba(11,29,70,.12);
+}
+body.room-sourcing-workbench .sw-qb-filter-row:last-child{border-bottom:none}
+body.room-sourcing-workbench .sw-qb-filter-row .label{
+    position:relative;
+    padding-left:12px;
+}
+body.room-sourcing-workbench .sw-qb-filter-row .label:before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:50%;
+    width:5px;
+    height:5px;
+    margin-top:-2px;
+    border-radius:50%;
+    background:rgba(59,130,246,.72);
+}
+body.room-sourcing-workbench .sw-qb-persona-hint{
+    border-radius:16px 16px 10px 10px;
+    padding:10px 12px 10px 34px;
+    background:linear-gradient(180deg,rgba(45,212,191,.08),rgba(45,212,191,.04));
+    position:relative;
+}
+body.room-sourcing-workbench .sw-qb-persona-hint:before{
+    content:'↗';
+    position:absolute;
+    left:12px;
+    top:9px;
+    font-weight:700;
+    color:var(--brand-teal);
+}
+body.room-sourcing-workbench .sw-qb-card-actions{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+body.room-sourcing-workbench .sw-qb-card-btn,
+body.room-sourcing-workbench .sw-pp-card-btn{
+    border-radius:999px 999px 10px 10px;
+    padding:7px 11px;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-weight:700;
+}
+body.room-sourcing-workbench .sw-qb-card-empty{
+    border-radius:22px;
+    padding:26px 22px;
+    background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(248,250,253,.92));
+}
+body.room-sourcing-workbench .sw-pp-header{
+    padding:14px 0 18px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+body.room-sourcing-workbench .sw-pp-stat{
+    min-width:88px;
+    padding:10px 12px;
+    background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,250,253,.92));
+    border:1px solid rgba(11,29,70,.08);
+    border-radius:16px 16px 10px 10px;
+    box-shadow:0 10px 24px rgba(11,29,70,.04);
+}
+body.room-sourcing-workbench .sw-pp-filter{
+    border-radius:999px 999px 10px 10px;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+body.room-sourcing-workbench .sw-pp-card{
+    overflow:hidden;
+    border-radius:22px 22px 14px 14px;
+    padding:24px 18px 16px;
+    background:linear-gradient(180deg,rgba(255,255,255,.985),rgba(247,250,253,.94));
+}
+body.room-sourcing-workbench .sw-pp-card:before{
+    content:'';
+    position:absolute;
+    left:16px;
+    right:16px;
+    top:10px;
+    height:4px;
+    border-radius:999px;
+    background:repeating-linear-gradient(90deg,rgba(11,29,70,.12) 0 14px,transparent 14px 22px);
+}
+body.room-sourcing-workbench .sw-pp-card.strong:before{background:repeating-linear-gradient(90deg,rgba(33,128,86,.58) 0 14px,transparent 14px 22px)}
+body.room-sourcing-workbench .sw-pp-card.workable:before{background:repeating-linear-gradient(90deg,rgba(59,130,246,.45) 0 14px,transparent 14px 22px)}
+body.room-sourcing-workbench .sw-pp-card.thin:before{background:repeating-linear-gradient(90deg,rgba(233,108,17,.45) 0 14px,transparent 14px 22px)}
+body.room-sourcing-workbench .sw-pp-card.brittle:before{background:repeating-linear-gradient(90deg,rgba(214,48,49,.38) 0 14px,transparent 14px 22px)}
+body.room-sourcing-workbench .sw-pp-card-head{
+    padding-right:6px;
+    margin-bottom:10px;
+}
+body.room-sourcing-workbench .sw-pp-card-meta{
+    margin-bottom:10px;
+}
+body.room-sourcing-workbench .sw-pp-card-next{
+    border-radius:16px 16px 10px 10px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
+}
+body.room-sourcing-workbench .sw-pp-card-actions{
+    margin-top:10px;
+    padding-top:12px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+body.room-sourcing-workbench .sw-pm-thesis-select{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 0 18px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+body.room-sourcing-workbench .sw-pm-priority-group{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    color:var(--muted);
+    font-weight:700;
+    margin:16px 0 10px 18px;
+}
+body.room-sourcing-workbench .sw-pm-grid{
+    gap:18px;
+}
+body.room-sourcing-workbench .sw-pm-card{
+    overflow:hidden;
+    border-radius:18px 24px 18px 18px;
+    padding:22px 18px 16px;
+    background:linear-gradient(180deg,rgba(255,255,255,.985),rgba(247,250,253,.94));
+}
+body.room-sourcing-workbench .sw-pm-card:before{
+    content:'';
+    position:absolute;
+    left:18px;
+    top:10px;
+    width:92px;
+    height:4px;
+    border-radius:999px;
+    background:repeating-linear-gradient(90deg,rgba(59,130,246,.42) 0 14px,transparent 14px 22px);
+}
+body.room-sourcing-workbench .sw-pm-card:after{
+    content:'';
+    position:absolute;
+    right:18px;
+    top:14px;
+    width:14px;
+    height:14px;
+    border-radius:6px;
+    border:1px solid rgba(59,130,246,.18);
+    background:rgba(59,130,246,.08);
+}
+body.room-sourcing-workbench .sw-pm-card-concern{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid rgba(11,29,70,.08);
+}
+body.room-sourcing-workbench .sw-pm-card-approach{
+    position:relative;
+    padding-left:16px;
+}
+body.room-sourcing-workbench .sw-pm-card-approach:before{
+    content:'↗';
+    position:absolute;
+    left:0;
+    top:0;
+    color:var(--accent-blue);
+    font-weight:700;
+}
+body.room-sourcing-workbench .sw-pm-card .remove{
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    border:1px solid rgba(214,48,49,.18);
+    background:rgba(214,48,49,.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+body.room-sourcing-workbench .sw-si-section-title{
+    position:relative;
+    padding-left:18px;
+    letter-spacing:.18em;
+}
+body.room-sourcing-workbench .sw-si-section-title:before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:50%;
+    width:8px;
+    height:8px;
+    margin-top:-4px;
+    border-radius:50%;
+    background:rgba(59,130,246,.65);
+}
+body.room-sourcing-workbench .sw-si-row{
+    position:relative;
+    overflow:hidden;
+    border-radius:18px 18px 12px 12px;
+    padding:16px 18px 16px 20px;
+}
+body.room-sourcing-workbench .sw-si-row:before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:14px;
+    bottom:14px;
+    width:3px;
+    border-radius:999px;
+    background:linear-gradient(180deg,rgba(59,130,246,.5),rgba(11,29,70,.06));
+}
+body.room-sourcing-workbench .sw-si-row.lead:before{background:linear-gradient(180deg,rgba(33,128,86,.62),rgba(11,29,70,.06))}
+body.room-sourcing-workbench .sw-si-row.warn:before{background:linear-gradient(180deg,rgba(233,108,17,.62),rgba(214,48,49,.18))}
+body.room-sourcing-workbench .sw-si-rank{
+    width:34px;
+    min-width:34px;
+    height:34px;
+    border-radius:50%;
+    background:rgba(11,29,70,.05);
+    border:1px solid rgba(11,29,70,.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:"Outfit",sans-serif;
+    font-size:12px;
+    font-weight:700;
+}
+body.room-sourcing-workbench .sw-si-rank.is-label{
+    width:auto;
+    min-width:0;
+    height:auto;
+    padding:7px 10px;
+    border-radius:12px 12px 8px 8px;
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+body.room-sourcing-workbench .sw-si-row.lead .sw-si-rank{
+    color:var(--green);
+    border-color:rgba(33,128,86,.18);
+    background:rgba(33,128,86,.08);
+}
+body.room-sourcing-workbench .sw-si-row.warn .sw-si-rank{
+    color:var(--orange);
+    border-color:rgba(233,108,17,.2);
+    background:rgba(233,108,17,.08);
+}
+body.room-sourcing-workbench .sw-si-dist-card{
+    position:relative;
+    overflow:hidden;
+    border-radius:18px 18px 12px 12px;
+    padding:22px 14px 14px;
+}
+body.room-sourcing-workbench .sw-si-dist-card:before{
+    content:'';
+    position:absolute;
+    left:14px;
+    right:14px;
+    top:10px;
+    height:4px;
+    border-radius:999px;
+    background:repeating-linear-gradient(90deg,rgba(59,130,246,.42) 0 14px,transparent 14px 22px);
+}
+body.room-sourcing-workbench .sw-si-rec{
+    position:relative;
+    border-radius:18px 18px 12px 12px;
+    padding:16px 18px 16px 44px;
+}
+body.room-sourcing-workbench .sw-si-rec:before{
+    content:'↗';
+    position:absolute;
+    left:18px;
+    top:16px;
+    font-weight:700;
+    color:var(--orange);
+}
+@media(max-width:1080px){
+    .sw-ticket-shell,.sw-ticket-laws{grid-template-columns:1fr}
+    .sw-ticket-dock{padding-top:0}
+    .sw-ticket-stage{min-height:700px}
+    .sw-ticket-item{width:184px}
+    .sw-ticket-stage:after{left:64px;right:64px}
+}
 </style>
 </head>
-<body class="room-wave2 room-sourcing-workbench">
+<body class="room-sourcing-workbench sourcing-ticket-room">
         <script src="/js/app-auth-preflight.js"></script>
 <div class="app-container">
         <aside class="app-sidebar">
             <script src="/js/analytics-site-config.js"></script>
     <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
+            <script src="/js/demo-storage-bootstrap.js"></script>
+<script src="/js/workspace-guard.js"></script>
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
             <header class="app-header module-header">
                 <div class="module-header-title">
                     <div class="shell-header-meta">
-                        <span class="shell-header-kicker">Market family</span>
-                        <span class="shell-header-state state-ready">Research queue</span>
+                        <span class="shell-header-kicker">Research loom</span>
+                        <span class="shell-header-state state-ready">Signal-ready sourcing</span>
                     </div>
                     <h1 class="page-title">Sourcing Workbench</h1>
-                    <p class="page-subtitle">Turn territory logic into a queue that is worth researching and pushing forward.</p>
+                    <p class="page-subtitle">Hang the week from one rail. Let weak names sag before they pollute downstream work.</p>
                 </div>
                 <div class="header-actions">
-                    <button class="btn btn-secondary btn-sm" onclick="exportWorkbench()">Export</button>
+                    <button class="btn btn-secondary btn-sm" onclick="exportWorkbench()">Export loom</button>
                 </div>
             </header>
             <div class="app-content" style="max-width:1100px;">
@@ -638,6 +1540,23 @@ function renderSimpleList(id,items){
     el.innerHTML=(items||[]).map(function(item){return '<li>'+esc(item)+'</li>';}).join('');
 }
 
+function getTopWorkbenchProspects(limit){
+    return getProspects()
+        .filter(function(p){return p.stage!=='rejected';})
+        .map(function(p){
+            return {
+                prospect:p,
+                quality:getProspectQuality(p),
+                thesis:(getTheses().find(function(t){return t.id===p.thesisId;})||null)
+            };
+        })
+        .sort(function(a,b){
+            if(b.quality.score!==a.quality.score)return b.quality.score-a.quality.score;
+            return String(b.prospect.createdAt||'').localeCompare(String(a.prospect.createdAt||''));
+        })
+        .slice(0,limit||5);
+}
+
 function renderBridge(){
     var el=document.getElementById('swShellBand');
     if(!el)return;
@@ -648,73 +1567,114 @@ function renderBridge(){
     var ready=prospects.filter(function(p){return getProspectQuality(p).recommendedStage==='ready'&&p.stage!=='pushed';}).length;
     var pushed=prospects.filter(function(p){return p.stage==='pushed';}).length;
     var researched=prospects.filter(function(p){return p.stage==='researched'||p.stage==='ready'||p.stage==='pushed';}).length;
-    var title='Turn territory logic into a working account queue.';
-    var desc='Sourcing Workbench exists to convert a thesis into accounts worth researching, then only move the ones with a believable entry point into live account work.';
-    var nextOutputs=[
-        'Build one query card per active thesis before adding more channels.',
-        'Research until each account has a named entry point and first approach.',
-        'Only push accounts that are ready for Signal Console, not just interesting.'
-    ];
+    var captured=prospects.filter(function(p){return p.stage==='captured';}).length;
+    var title='Hang the week from one rail and let weak names sag.';
+    var desc='Sourcing Workbench should feel tactile and judgmental. Strong names hang clean. Thin names droop, wobble, and either tighten or come off the rail before they poison downstream work.';
     if(ready){
-        title='You already have accounts ready for live work.';
-        desc='The workbench is doing its job when sourcing produces a bounded queue with a named entry point, a first angle, and a believable reason to keep the account.';
-        nextOutputs=[
-            'Push the best ready accounts into Territory Architect.',
-            'Open Signal Console to add timing and account temperature.',
-            'Park or reject thin accounts so the queue stays honest.'
-        ];
+        title='Three names are hanging cleanly enough to push.';
+        desc='The loom is working when the strongest tickets carry a real owner, a current forcing event, and a first touch that Signal Console can run immediately.';
     }else if(pushed){
-        title='Do not stop at pushed. Add live temperature next.';
-        desc='Once an account leaves the workbench, the next system is Signal Console. That is where a sourced name becomes a real account worth touching now.';
-        nextOutputs=[
-            'Open Signal Console and research the pushed accounts first.',
-            'Use source quality to double down on channels that create progression.',
-            'Keep the pushed queue smaller than the captured queue on purpose.'
-        ];
+        title='The strongest tickets have already left the rail.';
+        desc='Do not keep polishing the rail after a name is strong enough. Push it forward and let Signal Console add live timing and account heat.';
     }else if(cards.length&&!prospects.length){
-        title='You have sourcing logic. Now prove it produces accounts.';
-        desc='Query cards are only useful when they generate a small queue of accounts you can actually research, reject, or push.';
-        nextOutputs=[
-            'Capture the first five accounts from your best query card.',
-            'Research each one immediately instead of batching endlessly.',
-            'Reject the wrong fits fast so Territory stays bounded.'
-        ];
+        title='The rail exists. Now hang the first real names from it.';
+        desc='Query logic is only useful when it produces a small set of names that can survive contact with real research pressure.';
+    }else if(!theses.length){
+        title='No thesis is holding the rail yet.';
+        desc='Without an active thesis, the room has nothing to hang from. Territory Architect must define the wedge before Sourcing can judge names credibly.';
     }
 
     var icpSummary='No saved ICP yet.';
     if(icp){
-        icpSummary=(icp.buyer||'Buyer')+' | '+(icp.industry||'Market');
-        if(icp.qualityScore)icpSummary+=' | '+icp.qualityScore+'/100 quality';
+        icpSummary=(icp.industry||'Market')+' / '+(icp.buyer||'Buyer');
+        if(icp.qualityScore) icpSummary+=' / '+icp.qualityScore+'/100';
     }
-    var stateLabel = !theses.length ? 'Need thesis' : (ready ? 'Ready accounts live' : (pushed ? 'Signal handoff ready' : 'Build queue'));
+    var stateLabel = !theses.length ? 'Need thesis' : (ready ? 'Push-ready' : (pushed ? 'Signal handoff live' : 'Research loom'));
     var stateTone = !theses.length ? 'thin' : ((ready || pushed) ? 'live' : 'ready');
-    var bandCopy = desc + ' ' + nextOutputs[0];
-
-    if (window.gtmShellChrome) {
-        window.gtmShellChrome.applyHeader({
-            stateLabel: stateLabel,
-            stateTone: stateTone
-        });
-        window.gtmShellChrome.renderCommandBand('#swShellBand', {
-            kicker: 'Sourcing standard',
-            title: title,
-            copy: bandCopy,
-            stateLabel: stateLabel,
-            stateTone: stateTone,
-            metrics: [
-                { label: 'ICP wedge', value: icpSummary },
-                { label: 'Query cards', value: cards.length + ' active cards across ' + theses.length + ' theses.' },
-                { label: 'Research state', value: researched + ' researched, ' + ready + ' ready to push.' },
-                { label: 'Signal handoff', value: pushed + ' pushed accounts ready for live temperature.' }
-            ],
-            actions: [
-                { label: 'Open Query Builder', action: "swTab('queryBuilder')", tone: 'primary' },
-                { label: 'Open Signal Console', href: buildWorkbenchRoomHref('/app/signal-console/', 'Research handoff', 'Signal Console') }
-            ]
-        });
-    } else {
-        el.innerHTML = '<div class="sw-capacity"><span class="sw-capacity-label">' + esc(title) + '</span></div>';
+    if(window.gtmShellChrome){
+        window.gtmShellChrome.applyHeader({ stateLabel: stateLabel, stateTone: stateTone });
     }
+
+    var strongest = getTopWorkbenchProspects(5);
+    var hangs = strongest.length ? strongest : [{
+        prospect:{ name: theses[0] ? theses[0].name : 'No live names yet', createdAt:new Date().toISOString() },
+        thesis: theses[0] || null,
+        quality:{
+            score:0,
+            tier:'brittle',
+            nextReason: theses.length ? 'Build the first five accounts from your best query card before pretending the loom is full.' : 'Define one active thesis first. The room should not guess what to source.',
+            standard: theses.length ? 'No hanging ticket yet.' : 'No rail yet.',
+            recommendedStage:'captured'
+        },
+        placeholder:true
+    }];
+    var positions = [
+        { left:92, top:30, tilt:-3 },
+        { left:312, top:78, tilt:4 },
+        { left:548, top:18, tilt:-2 },
+        { left:180, top:248, tilt:6 },
+        { left:442, top:302, tilt:-7 }
+    ];
+    var ticketHtml = hangs.map(function(entry, idx){
+        var pos = positions[idx] || positions[positions.length-1];
+        var tone = entry.placeholder ? 'review' : (entry.quality.score>=72 ? 'ready' : (entry.quality.score>=50 ? 'review' : 'sag'));
+        var thesisName = entry.thesis && entry.thesis.name ? entry.thesis.name : 'No wedge attached';
+        var status = entry.placeholder ? 'Needs first real name' :
+            (tone==='ready' ? 'Ship to signal' : (tone==='review' ? 'Tighten before push' : 'Cut if no new evidence'));
+        return '<div class="sw-ticket-item" style="left:'+pos.left+'px;top:'+pos.top+'px;">'+
+            '<div class="sw-ticket-card '+tone+'" style="--tilt:'+pos.tilt+'deg">'+
+                '<div class="sw-ticket-head"><span class="sw-mark '+tone+'"></span><div class="micro">'+esc(tone==='ready'?'Ready to push':(tone==='review'?'Needs one pass':'Sagging'))+'</div></div>'+
+                '<div class="sw-ticket-name">'+esc(entry.prospect.name)+'</div>'+
+                '<div class="sw-ticket-tag">'+esc(thesisName)+'</div>'+
+                '<div class="sw-ticket-note">'+esc(entry.quality.nextReason || entry.quality.standard)+'</div>'+
+                '<div class="sw-ticket-status '+tone+'"><span class="sw-ticket-rulebar"></span>'+esc(status)+'</div>'+
+            '</div>'+
+        '</div>';
+    }).join('');
+
+    var topEntry = strongest[0] || null;
+    var weakestGap = null;
+    strongest.some(function(entry){
+        if(entry.quality && entry.quality.gaps && entry.quality.gaps.length){
+            weakestGap = entry.quality.gaps[0];
+            return true;
+        }
+        return false;
+    });
+    if(!weakestGap){
+        weakestGap = !prospects.length ? 'No live accounts are hanging from the rail yet.' : 'The next weak point is still naming the first reachable person faster.';
+    }
+
+    el.innerHTML =
+        '<section class="sw-ticket-shell">'+
+            '<div class="sw-ticket-stage">'+
+                '<div class="sw-ticket-kicker">Ticket loom</div>'+
+                '<div class="sw-ticket-title">'+esc(title)+'</div>'+
+                '<div class="sw-ticket-copy">'+esc(desc)+'</div>'+
+                '<div class="sw-ticket-pills">'+
+                    '<span class="sw-ticket-pill ready"><span class="sw-mark ready"></span>'+ready+' ready</span>'+
+                    '<span class="sw-ticket-pill review"><span class="sw-mark review"></span>'+researched+' researched</span>'+
+                    '<span class="sw-ticket-pill sag"><span class="sw-mark sag"></span>'+captured+' still hanging thin</span>'+
+                '</div>'+
+                '<div class="sw-ticket-loom">'+ticketHtml+'</div>'+
+            '</div>'+
+            '<aside class="sw-ticket-dock">'+
+                '<div class="sw-ticket-read">'+
+                    '<div class="micro"><span class="sw-mark ready"></span>Loom read</div>'+
+                    '<div class="sw-ticket-score"><div class="headline">Workable</div><div class="sw-ticket-score-num">'+(topEntry ? topEntry.quality.score : 0)+'</div></div>'+
+                '</div>'+
+                '<div class="sw-ticket-read">'+
+                    '<div class="micro"><span class="sw-mark review"></span>Weakest ticket</div>'+
+                    '<div class="headline">'+esc(weakestGap)+'</div>'+
+                    '<div class="copy" style="margin-top:8px">The room should make weak names sag visibly instead of hiding them in generic status labels.</div>'+
+                '</div>'+
+                '<div class="sw-ticket-read">'+
+                    '<div class="micro"><span class="sw-mark sag"></span>Rail law</div>'+
+                    '<div class="headline">Every ticket must hang from one real human route.</div>'+
+                    '<div class="copy" style="margin-top:8px">ICP wedge: '+esc(icpSummary)+'. Query cards: '+cards.length+'. Active theses: '+theses.length+'.</div>'+
+                '</div>'+
+            '</aside>'+
+        '</section>';
 }
 
 function renderWorkbenchHealth(){
@@ -737,63 +1697,27 @@ function renderWorkbenchHealth(){
             topQuality=quality;
         }
     });
-    var compounded=[];
-    var weakLinks=[];
-
-    if(theses.length>0 && cards.length>0){
-        compounded.push('<div class="workspace-health-item"><strong>The queue is thesis-led.</strong> '+esc(String(cards.length))+' query card'+(cards.length===1?' is':'s are')+' now working from '+esc(String(theses.length))+' active thesis'+(theses.length===1?'':'es')+'.</div>');
-    }
-    if(researched>0){
-        compounded.push('<div class="workspace-health-item"><strong>Research is turning capture into judgment.</strong> '+esc(String(researched))+' account'+(researched===1?' has':'s have')+' moved beyond raw capture into real evaluation.</div>');
-    }
-    if(ready>0 || pushed>0){
-        compounded.push('<div class="workspace-health-item"><strong>The room is producing handoffs.</strong> '+esc(String(ready))+' ready and '+esc(String(pushed))+' pushed account'+((ready+pushed)===1?' is':'s are')+' proving the queue can feed downstream work.</div>');
-    }
-    if(personas.length>0){
-        compounded.push('<div class="workspace-health-item"><strong>Buyer logic is attached.</strong> '+esc(String(personas.length))+' persona pattern'+(personas.length===1?' is':'s are')+' helping the queue avoid generic account selection.</div>');
-    }
-    if(!compounded.length){
-        compounded.push('<div class="workspace-health-item"><strong>The workbench has a sourcing skeleton.</strong> The next gain is turning more captured accounts into researched and ready ones.</div>');
-    }
-
-    if(!theses.length){
-        weakLinks.push('<div class="workspace-health-item"><strong>No thesis is driving the queue.</strong> Without an active thesis, the workbench slides back into account browsing.</div>');
-    }
-    if(cards.length && !prospects.length){
-        weakLinks.push('<div class="workspace-health-item"><strong>Query logic exists, but no accounts are captured yet.</strong> The room still needs a real queue to judge.</div>');
-    }
-    if(captured>researched){
-        weakLinks.push('<div class="workspace-health-item"><strong>The captured pile is outrunning research.</strong> '+esc(String(captured))+' captured vs '+esc(String(researched))+' researched means the queue may be widening faster than it is being judged.</div>');
-    }
-    if(prospects.length>0 && ready===0 && pushed===0){
-        weakLinks.push('<div class="workspace-health-item"><strong>No account is ready for the next room yet.</strong> The queue still needs a believable entry point before it earns a handoff.</div>');
-    }
-    if(topQuality && topQuality.gaps && topQuality.gaps.length){
-        weakLinks.push('<div class="workspace-health-item"><strong>The best prospect still has a truth gap.</strong> '+esc(topProspect&&topProspect.name?topProspect.name:'The lead account')+' is still carrying '+esc(topQuality.gaps[0])+'.</div>');
-    }
-    if(!weakLinks.length){
-        weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the room.</strong> Keep the queue bounded, but the sourcing system is reading credibly.</div>');
-    }
+    var compoundingLine = !theses.length
+        ? 'No active thesis is holding the loom yet.'
+        : cards.length
+            ? cards.length+' query cards are giving the rail a real sourcing frame.'
+            : 'The thesis exists, but the rail still needs active query cards.';
+    var weakLine = topQuality && topQuality.gaps && topQuality.gaps.length
+        ? (topProspect&&topProspect.name?topProspect.name:'The lead ticket')+' is still carrying '+topQuality.gaps[0]+'.'
+        : (!prospects.length ? 'No live names are hanging from the rail yet.' : 'No single weak ticket is dominating the room.');
+    var nextMove = ready>0
+        ? 'Push the cleanest tickets forward and stop polishing them here.'
+        : cards.length&&!prospects.length
+            ? 'Capture the first five names from the best query card before adding another channel.'
+            : captured>researched
+                ? 'Research is lagging capture. Tighten the hanging names before the rail widens.'
+                : 'Keep the rail bounded. Weak names should tighten or come off quickly.';
 
     node.innerHTML=
-        '<section class="shell-section shell-section--compact workspace-health">'+
-            '<div class="shell-section-header">'+
-                '<div class="shell-section-heading">'+
-                    '<div class="shell-section-kicker">Workspace health</div>'+
-                    '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
-                    '<div class="shell-section-copy workspace-health-copy">Sourcing Workbench should show whether thesis-led sourcing is producing a bounded queue worth researching and handing forward.</div>'+
-                '</div>'+
-            '</div>'+
-            '<div class="workspace-health-metrics">'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Queue posture</div><div class="workspace-health-value workspace-health-value--sans">'+esc(ready>0||pushed>0?'Handoff forming':cards.length?'Research heavy':'Need source logic')+'</div><div class="workspace-health-subcopy">'+esc(String(prospects.length))+' prospects in the room.</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Active theses</div><div class="workspace-health-value">'+esc(String(theses.length))+'</div><div class="workspace-health-subcopy">'+esc(String(cards.length))+' query cards live.</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Ready now</div><div class="workspace-health-value">'+esc(String(ready))+'</div><div class="workspace-health-subcopy">'+esc(String(pushed))+' already pushed forward.</div></div>'+
-                '<div class="workspace-health-metric"><div class="workspace-health-label">Lead account</div><div class="workspace-health-value workspace-health-value--sans">'+esc(topProspect&&topProspect.name?topProspect.name:'No lead yet')+'</div><div class="workspace-health-subcopy">'+esc(topQuality?topQuality.label:'Build the first believable lead.')+'</div></div>'+
-            '</div>'+
-            '<div class="workspace-health-grid">'+
-                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
-                '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
-            '</div>'+
+        '<section class="sw-loom-support">'+
+            '<div class="sw-loom-strip"><div class="micro"><span class="sw-mark ready"></span>What is holding</div><div class="headline" style="font-size:26px">'+esc(compoundingLine)+'</div><div class="sw-loom-state" style="color:var(--green)">'+esc(ready>0||pushed>0?'holding':'forming')+'</div></div>'+
+            '<div class="sw-loom-strip"><div class="micro"><span class="sw-mark review"></span>What is sagging</div><div class="headline" style="font-size:26px">'+esc(weakLine)+'</div><div class="sw-loom-state" style="color:var(--orange)">'+esc(captured>researched?'research lag':'watch')+'</div></div>'+
+            '<div class="sw-loom-strip"><div class="micro"><span class="sw-mark sag"></span>Operator move</div><div class="headline" style="font-size:26px">'+esc(nextMove)+'</div><div class="sw-loom-state" style="color:var(--navy)">'+esc('now')+'</div></div>'+
         '</section>';
 }
 
@@ -819,10 +1743,10 @@ function renderCapacity(){
     var pct=Math.round(cap.current/cap.max*100);
     var color=pct<70?'green':pct<90?'amber':'red';
     document.getElementById('swCapacity').innerHTML=
-        '<span class="sw-capacity-label">Territory Architect</span>'+
+        '<span class="sw-capacity-label">Territory slots</span>'+
         '<div class="sw-capacity-bar"><div class="sw-capacity-fill '+color+'" style="width:'+pct+'%"></div></div>'+
         '<span class="sw-capacity-text">'+cap.current+' / '+cap.max+'</span>'+
-        '<span class="sw-capacity-label">'+cap.available+' slots open</span>';
+        '<span class="sw-capacity-label">'+cap.available+' open for pushed tickets</span>';
 }
 
 window.swTab=function(tab){currentTab=tab;render();};
@@ -832,7 +1756,7 @@ function renderQueryBuilder(){
     var theses=getTheses();
     var cards=getQueryCards();
     if(!theses.length){
-        document.getElementById('qbContent').innerHTML='<div class="sw-qb-empty"><div class="icon">🗺️</div>No active theses found. Complete Territory Architect onboarding first to build your sourcing queries.</div>';
+        document.getElementById('qbContent').innerHTML='<div class="sw-qb-empty"><div class="icon">+</div>No active theses found. Complete Territory Architect onboarding first to build your sourcing queries.</div>';
         return;
     }
     var personas=getPersonas();
@@ -843,7 +1767,7 @@ function renderQueryBuilder(){
         html+='<div class="sw-qb-thesis-group">';
         html+='<div class="sw-qb-thesis-header"><div class="sw-qb-thesis-name">'+esc(thesis.name)+'</div><button class="sw-qb-add-card" onclick="openQueryCardModal(\''+thesis.id+'\')">+ Add Query Card</button></div>';
         if(!thesisCards.length){
-            html+='<div style="padding:20px;color:var(--text-muted);font-size:0.82rem;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);text-align:center;">No query cards yet. Create your first sourcing query for this thesis.</div>';
+            html+='<div class="sw-qb-card sw-qb-card-empty">No query cards yet. Create your first sourcing query for this thesis.</div>';
         } else {
             html+='<div class="sw-qb-cards">';
             thesisCards.forEach(function(card){
@@ -865,7 +1789,7 @@ function renderQueryBuilder(){
                 html+='</div>';
                 // Persona hint
                 if(thesisPersonas.length && (card.platform==='sales-nav'||card.platform==='zoominfo'||card.platform==='apollo')){
-                    html+='<div class="sw-qb-persona-hint">💡 Persona map suggests targeting: '+thesisPersonas.map(function(p){return esc(p.title);}).join(', ')+'</div>';
+                    html+='<div class="sw-qb-persona-hint">Persona map suggests targeting: '+thesisPersonas.map(function(p){return esc(p.title);}).join(', ')+'</div>';
                 }
                 html+='<div class="sw-qb-card-actions">';
                 html+='<button class="sw-qb-card-btn" onclick="editQueryCard(\''+card.id+'\')">Edit</button>';
@@ -998,7 +1922,7 @@ function renderPipeline(){
             if(qc) sourceLabel=(qc.platformLabel||qc.platform);
         }
         var stale=p.stage==='captured'&&daysSince(p.createdAt)>7;
-        var html='<div class="sw-pp-card '+(stale?'stale':'')+'">';
+        var html='<div class="sw-pp-card '+(stale?'stale ':'')+guidance.tier+'">';
         html+='<div class="sw-pp-card-head"><span class="sw-pp-card-name">'+esc(p.name)+'</span><span class="sw-pp-card-stage '+p.stage+'">'+p.stage+'</span></div>';
         html+='<div class="sw-pp-card-meta"><span class="sw-pp-card-tag thesis">'+(thesis?esc(thesis.name):'?')+'</span><span class="sw-pp-card-tag source">'+esc(sourceLabel)+'</span></div>';
         if(p.initialImpression) html+='<div class="sw-pp-card-impression">'+esc(p.initialImpression)+'</div>';
@@ -1333,7 +2257,7 @@ function renderPersonas(){
     var selectHtml='<select onchange="setPMThesis(this.value)">';
     theses.forEach(function(t){selectHtml+='<option value="'+t.id+'" '+(t.id===pmThesisId?'selected':'')+'>'+esc(t.name)+'</option>';});
     selectHtml+='</select>';
-    var html='<div class="sw-pm-thesis-select">'+selectHtml+' <button class="sw-qb-add-card" style="margin-left:12px;" onclick="openPersonaModal()">+ Add Persona</button></div>';
+    var html='<div class="sw-pm-thesis-select">'+selectHtml+' <button class="sw-pm-add-btn sw-qb-add-card" onclick="openPersonaModal()">+ Add Persona</button></div>';
     if(!personas.length){
         html+='<div class="sw-pm-empty">No personas mapped for this thesis yet. As you research accounts, capture the buying committee patterns you discover.</div>';
     } else {
@@ -1342,7 +2266,7 @@ function renderPersonas(){
         groups.forEach(function(g){
             var group=personas.filter(function(p){return p.priority===g.key;});
             if(!group.length)return;
-            html+='<div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:700;margin:var(--space-md) 0 var(--space-sm);">'+g.label+'</div>';
+            html+='<div class="sw-pm-priority-group">'+g.label+'</div>';
             html+='<div class="sw-pm-grid">';
             group.forEach(function(p){
                 var roleLabels={'decision-maker':'Decision Maker','influencer':'Influencer','champion':'Champion','blocker':'Blocker','economic-buyer':'Economic Buyer','end-user':'End User'};
@@ -1487,6 +2411,87 @@ function renderSourceIntel(){
             var labels={'sales-nav':'Sales Nav','zoominfo':'ZoomInfo','apollo':'Apollo','google-boolean':'Boolean','conference':'Conference','crm':'CRM','custom':c.platformLabel||'Custom'};
             var status=recentSourced===0&&sourced>=5?'⚠ Diminishing returns — consider refining or marking exhausted':sourced===0?'No prospects sourced yet':'Active — '+recentSourced+' sourced in last 14 days';
             html+='<div class="sw-si-row"><div class="sw-si-rank" style="font-size:0.8rem;">'+esc(labels[c.platform]||c.platform)+'</div><div class="sw-si-info"><div class="sw-si-name">'+esc((c.filters||{}).industry||'')+'</div><div class="sw-si-detail">'+status+'</div></div><div class="sw-si-metrics"><div class="sw-si-metric"><div class="sw-si-metric-val">'+sourced+'</div><div class="sw-si-metric-label">Total Sourced</div></div></div></div>';
+        });
+        html+='</div>';
+    }
+document.getElementById('siContent').innerHTML=html;
+}
+
+function renderSourceIntel(){
+    var prospects=getProspects();
+    var cards=getQueryCards();
+    if(!prospects.length){
+        document.getElementById('siContent').innerHTML='<div class="sw-si-empty"><div class="icon">+</div>Source intelligence builds as you capture and push prospects. Start sourcing to see which channels perform best.</div>';
+        return;
+    }
+    var sourceMap={};
+    prospects.forEach(function(p){
+        var key=p.sourceQueryCardId||p.sourceType;
+        if(!sourceMap[key]) sourceMap[key]={name:'',total:0,researched:0,pushed:0,rejected:0,parked:0,progression:0};
+        sourceMap[key].total++;
+        if(['researched','ready','pushed'].indexOf(p.stage)>=0) sourceMap[key].researched++;
+        if(p.stage==='pushed') sourceMap[key].pushed++;
+        if(p.stage==='rejected') sourceMap[key].rejected++;
+        if(p.stage==='parked') sourceMap[key].parked++;
+        if(p.sourceQueryCardId){
+            var qc=cards.find(function(c){return c.id===p.sourceQueryCardId;});
+            sourceMap[key].name=qc?((qc.platformLabel||qc.platform)+' - '+(((qc.filters||{}).industry)||'')).slice(0,40):'Query Card';
+        } else {
+            sourceMap[key].name=p.sourceType.charAt(0).toUpperCase()+p.sourceType.slice(1).replace(/-/g,' ');
+        }
+    });
+    var taDisps=readLS('gtmos_ta_dispositions',[]);
+    var taAccounts=readLS('gtmos_ta_accounts',[]);
+    prospects.filter(function(p){return p.stage==='pushed';}).forEach(function(p){
+        var taAcct=taAccounts.find(function(a){return a.name.toLowerCase()===p.name.toLowerCase();});
+        if(!taAcct)return;
+        var progs=taDisps.filter(function(d){return d.accountId===taAcct.id&&d.type==='progressing';}).length;
+        var key=p.sourceQueryCardId||p.sourceType;
+        if(sourceMap[key]) sourceMap[key].progression+=progs;
+    });
+    var sources=Object.keys(sourceMap).map(function(k){
+        var s=sourceMap[k];
+        s.pushRate=s.total?Math.round(s.pushed/s.total*100):0;
+        s.qualityScore=s.pushRate+(s.progression*5);
+        return s;
+    });
+    sources.sort(function(a,b){return b.qualityScore-a.qualityScore;});
+    var html='<div class="sw-si-section"><div class="sw-si-section-title">Source Ranking by Quality</div><div class="sw-si-ranking">';
+    sources.forEach(function(s,i){
+        var warn=s.pushRate>50&&s.progression===0&&s.pushed>=3;
+        html+='<div class="sw-si-row '+(i===0?'lead ':'')+(warn?'warn':'')+'">';
+        html+='<div class="sw-si-rank">'+(i+1)+'</div>';
+        html+='<div class="sw-si-info"><div class="sw-si-name">'+esc(s.name)+(warn?'<span class="sw-si-warn">High push, low conversion</span>':'')+'</div>';
+        html+='<div class="sw-si-detail">'+s.total+' captured · '+s.rejected+' rejected · '+s.pushed+' pushed</div></div>';
+        html+='<div class="sw-si-metrics">';
+        html+='<div class="sw-si-metric"><div class="sw-si-metric-val">'+s.pushRate+'%</div><div class="sw-si-metric-label">Push Rate</div></div>';
+        html+='<div class="sw-si-metric"><div class="sw-si-metric-val">'+(s.progression||0)+'</div><div class="sw-si-metric-label">TA Progressions</div></div>';
+        html+='</div></div>';
+    });
+    html+='</div></div>';
+    var totalPushed=prospects.filter(function(p){return p.stage==='pushed';}).length;
+    if(totalPushed>0){
+        html+='<div class="sw-si-section"><div class="sw-si-section-title">Source Distribution of Territory</div><div class="sw-si-dist">';
+        sources.filter(function(s){return s.pushed>0;}).forEach(function(s){
+            var pct=Math.round(s.pushed/totalPushed*100);
+            html+='<div class="sw-si-dist-card"><div class="sw-si-dist-val">'+pct+'%</div><div class="sw-si-dist-label">'+esc(s.name.slice(0,20))+'</div><div class="sw-si-dist-bar"><div class="sw-si-dist-fill" style="width:'+pct+'%"></div></div></div>';
+        });
+        html+='</div>';
+        var topPct=sources.length&&sources[0].pushed>0?Math.round(sources[0].pushed/totalPushed*100):0;
+        if(topPct>75){
+            html+='<div class="sw-si-rec">'+topPct+'% of your territory was sourced from <strong>'+esc(sources[0].name)+'</strong>. Diversifying your sources may uncover segments you\'re missing.</div>';
+        }
+        html+='</div>';
+    }
+    var activeCards=cards.filter(function(c){return c.status==='active';});
+    if(activeCards.length){
+        html+='<div class="sw-si-section"><div class="sw-si-section-title">Query Card Health</div>';
+        activeCards.forEach(function(c){
+            var sourced=prospects.filter(function(p){return p.sourceQueryCardId===c.id;}).length;
+            var recentSourced=prospects.filter(function(p){return p.sourceQueryCardId===c.id&&daysSince(p.createdAt)<=14;}).length;
+            var labels={'sales-nav':'Sales Nav','zoominfo':'ZoomInfo','apollo':'Apollo','google-boolean':'Boolean','conference':'Conference','crm':'CRM','custom':c.platformLabel||'Custom'};
+            var status=recentSourced===0&&sourced>=5?'Diminishing returns - consider refining or marking exhausted':sourced===0?'No prospects sourced yet':'Active - '+recentSourced+' sourced in last 14 days';
+            html+='<div class="sw-si-row '+(recentSourced===0&&sourced>=5?'warn':'')+'"><div class="sw-si-rank is-label">'+esc(labels[c.platform]||c.platform)+'</div><div class="sw-si-info"><div class="sw-si-name">'+esc((c.filters||{}).industry||'')+'</div><div class="sw-si-detail">'+status+'</div></div><div class="sw-si-metrics"><div class="sw-si-metric"><div class="sw-si-metric-val">'+sourced+'</div><div class="sw-si-metric-label">Total Sourced</div></div></div></div>';
         });
         html+='</div>';
     }

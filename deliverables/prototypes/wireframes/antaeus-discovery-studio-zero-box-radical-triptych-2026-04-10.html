@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antaeus Discovery Studio Zero-Box Radical Triptych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f2f6fc;
+      --paper:#fbfdff;
+      --ink:#0a1d43;
+      --muted:#7187a8;
+      --line:rgba(10,29,67,.12);
+      --line-strong:rgba(10,29,67,.22);
+      --blue:#256fe7;
+      --orange:#e5721f;
+      --green:#2f7b4d;
+      --red:#cd4f49;
+      --glow-blue:rgba(37,111,231,.12);
+      --glow-orange:rgba(229,114,31,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Public Sans",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(37,111,231,.09), transparent 26%),
+        radial-gradient(circle at 100% 12%, rgba(229,114,31,.09), transparent 24%),
+        linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+    }
+    button{
+      font:inherit;
+      color:inherit;
+      background:none;
+      border:0;
+      padding:0;
+      cursor:pointer;
+      appearance:none;
+      -webkit-appearance:none;
+    }
+    .page{
+      width:min(1560px, calc(100vw - 40px));
+      margin:0 auto;
+      padding:30px 0 70px;
+    }
+    .eyebrow{
+      font-size:11px;
+      letter-spacing:.34em;
+      text-transform:uppercase;
+      color:var(--orange);
+      font-weight:700;
+    }
+    .intro{
+      margin:10px 0 28px;
+      max-width:82ch;
+      font-size:14px;
+      line-height:1.7;
+      color:var(--muted);
+    }
+    .stack{
+      display:grid;
+      gap:42px;
+    }
+    .variant{
+      position:relative;
+      padding:18px 0 0;
+      border-top:1px solid var(--line-strong);
+    }
+    .variant::before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:220px;
+      background:
+        linear-gradient(90deg, rgba(37,111,231,.05), transparent 38%),
+        linear-gradient(270deg, rgba(229,114,31,.05), transparent 38%);
+      pointer-events:none;
+    }
+    .variant > *{
+      position:relative;
+      z-index:1;
+    }
+    .head{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:18px;
+      align-items:end;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--line);
+    }
+    .head h2{
+      margin:4px 0 0;
+      font-family:"Outfit",sans-serif;
+      font-size:26px;
+      line-height:.95;
+      letter-spacing:-.05em;
+    }
+    .head p{
+      margin:0;
+      max-width:72ch;
+      font-size:13px;
+      line-height:1.58;
+      color:var(--muted);
+    }
+    .headnote{
+      font-size:11px;
+      line-height:1.5;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--blue);
+      text-align:right;
+      white-space:nowrap;
+    }
+    .label{
+      font-size:11px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:#8ea0ba;
+    }
+    .note{
+      font-size:13px;
+      line-height:1.58;
+      color:var(--muted);
+    }
+    .say{
+      margin:8px 0 0;
+      font-family:"Outfit",sans-serif;
+      font-size:54px;
+      line-height:.92;
+      letter-spacing:-.07em;
+      max-width:12ch;
+    }
+    .say-next-line{
+      margin-top:8px;
+      font-family:"Outfit",sans-serif;
+      font-size:33px;
+      line-height:.96;
+      letter-spacing:-.055em;
+      max-width:16ch;
+    }
+    .rule{
+      border-top:1px solid var(--line);
+    }
+    .rule.tight{margin-top:12px}
+    .rule.spacious{margin-top:18px}
+
+    .glyph{
+      position:relative;
+      display:inline-block;
+      width:16px;
+      height:16px;
+      flex:0 0 auto;
+    }
+    .g-phase{
+      border-radius:50%;
+      border:1px solid rgba(229,114,31,.24);
+    }
+    .g-phase::before{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:50%;
+      background:var(--orange);
+    }
+    .g-live{
+      border-radius:50%;
+      border:1px solid rgba(47,123,77,.22);
+      box-shadow:0 0 0 6px rgba(47,123,77,.08);
+    }
+    .g-live::before{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:50%;
+      background:var(--green);
+    }
+    .g-alert{
+      border-radius:50%;
+      border:1px solid rgba(205,79,73,.22);
+      background:rgba(205,79,73,.06);
+    }
+    .g-alert::before{
+      content:"!";
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      color:var(--red);
+      font-size:11px;
+      font-weight:700;
+    }
+    .g-send::before{
+      content:"";
+      position:absolute;
+      left:1px;
+      top:7px;
+      width:8px;
+      height:2px;
+      border-radius:999px;
+      background:var(--orange);
+    }
+    .g-send::after{
+      content:"";
+      position:absolute;
+      right:0;
+      top:4px;
+      width:7px;
+      height:7px;
+      border-top:2px solid var(--orange);
+      border-right:2px solid var(--orange);
+      transform:rotate(45deg);
+    }
+    .g-copy::before,
+    .g-copy::after{
+      content:"";
+      position:absolute;
+      width:9px;
+      height:11px;
+      border-radius:4px;
+      border:1px solid rgba(37,111,231,.24);
+    }
+    .g-copy::before{
+      left:2px;
+      top:4px;
+      background:#fff;
+    }
+    .g-copy::after{
+      left:5px;
+      top:2px;
+      background:rgba(37,111,231,.08);
+    }
+    .g-recover::before,
+    .g-recover::after{
+      content:"";
+      position:absolute;
+      left:3px;
+      width:10px;
+      height:2px;
+      border-radius:999px;
+      background:var(--red);
+    }
+    .g-recover::before{top:5px;transform:rotate(45deg)}
+    .g-recover::after{top:9px;transform:rotate(-45deg)}
+    .g-branch{
+      border-left:2px solid var(--blue);
+    }
+    .g-branch::before,
+    .g-branch::after{
+      content:"";
+      position:absolute;
+      left:1px;
+      width:10px;
+      height:2px;
+      background:var(--blue);
+      border-radius:999px;
+      transform-origin:left center;
+    }
+    .g-branch::before{top:5px;transform:rotate(-35deg)}
+    .g-branch::after{top:10px;transform:rotate(35deg)}
+
+    .phase-list,
+    .response-list,
+    .recover-list,
+    .lane-list{
+      display:grid;
+      gap:0;
+    }
+    .phase-row,
+    .response-row,
+    .recover-row,
+    .lane-row{
+      display:grid;
+      grid-template-columns:18px 1fr;
+      gap:12px;
+      align-items:start;
+      padding:13px 0;
+      border-top:1px solid var(--line);
+    }
+    .phase-row:first-of-type,
+    .response-row:first-of-type,
+    .recover-row:first-of-type,
+    .lane-row:first-of-type{
+      margin-top:10px;
+    }
+    .phase-row strong,
+    .response-row strong,
+    .recover-row strong,
+    .lane-row strong{
+      display:block;
+      font-size:14px;
+      line-height:1.28;
+      letter-spacing:-.02em;
+    }
+    .phase-row em,
+    .response-row em,
+    .recover-row em,
+    .lane-row em{
+      display:block;
+      margin-top:4px;
+      font-style:normal;
+      font-size:12px;
+      line-height:1.52;
+      color:var(--muted);
+    }
+    .phase-row.active strong{color:var(--orange)}
+    .phase-row.active{
+      background:linear-gradient(90deg, rgba(229,114,31,.08), rgba(229,114,31,0));
+    }
+    .response-row{
+      width:100%;
+      text-align:left;
+      background:none;
+    }
+    .response-row.active{
+      background:
+        linear-gradient(90deg, rgba(37,111,231,.10), rgba(37,111,231,0) 76%);
+    }
+    .response-row strong{
+      font-size:20px;
+      line-height:1.04;
+      letter-spacing:-.05em;
+    }
+    .time-strip{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:22px;
+      padding:18px 0 14px;
+      border-bottom:1px solid var(--line);
+    }
+    .time-stop{
+      position:relative;
+      padding-top:16px;
+    }
+    .time-stop::before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:2px;
+      background:var(--line);
+    }
+    .time-stop.active::before{
+      background:linear-gradient(90deg, var(--orange), rgba(229,114,31,.18));
+    }
+    .time-stop .t{
+      display:block;
+      font-size:11px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:#8ea0ba;
+    }
+    .time-stop .d{
+      display:block;
+      margin-top:6px;
+      font-size:14px;
+      line-height:1.34;
+      letter-spacing:-.02em;
+      color:var(--ink);
+    }
+    .time-stop.active .d{color:var(--orange)}
+    .fork-rail{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+    }
+    .fork{
+      width:100%;
+      text-align:left;
+      border-top:2px solid var(--line);
+      padding-top:14px;
+    }
+    .fork.active{
+      border-top-color:var(--blue);
+    }
+    .fork strong{
+      display:block;
+      font-size:24px;
+      line-height:.98;
+      letter-spacing:-.06em;
+    }
+    .fork span{
+      display:block;
+      margin-top:7px;
+      font-size:13px;
+      line-height:1.55;
+      color:var(--muted);
+    }
+    .fork.active strong{color:var(--blue)}
+    .switchline{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 320px;
+      gap:26px;
+      align-items:start;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+    }
+    .script-grid{
+      display:grid;
+      grid-template-columns:190px minmax(0,1fr);
+      gap:22px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+    }
+    .script-grid .key{
+      font-size:11px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:#8ea0ba;
+      padding-top:6px;
+    }
+    .script-grid .value{
+      font-size:28px;
+      line-height:.98;
+      letter-spacing:-.05em;
+      font-family:"Outfit",sans-serif;
+      max-width:18ch;
+    }
+    .script-grid .value.small{
+      font-size:22px;
+      max-width:24ch;
+    }
+    .split-note{
+      display:grid;
+      gap:10px;
+      align-content:start;
+      padding-top:4px;
+    }
+    .split-note .line{
+      padding-top:12px;
+      border-top:1px solid var(--line);
+    }
+    .split-note strong{
+      display:block;
+      font-size:13px;
+      line-height:1.28;
+      letter-spacing:-.01em;
+    }
+    .split-note span{
+      display:block;
+      margin-top:4px;
+      font-size:12px;
+      line-height:1.5;
+      color:var(--muted);
+    }
+
+    .v1{
+      display:grid;
+      grid-template-columns:220px minmax(0,1fr) 320px;
+      gap:28px;
+      padding-top:18px;
+      min-height:720px;
+    }
+    .v2{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 320px;
+      gap:28px;
+      padding-top:18px;
+      min-height:700px;
+    }
+    .v3{
+      display:grid;
+      grid-template-columns:230px minmax(0,1fr) 300px;
+      gap:28px;
+      padding-top:18px;
+      min-height:700px;
+    }
+
+    @media (max-width:1380px){
+      .v1,.v2,.v3,.switchline,.fork-rail{grid-template-columns:1fr}
+    }
+    @media (max-width:960px){
+      .page{width:min(100vw - 22px, 100%)}
+      .head{grid-template-columns:1fr}
+      .headnote{text-align:left}
+      .say{font-size:40px}
+      .say-next-line{font-size:28px}
+      .script-grid{grid-template-columns:1fr}
+      .time-strip{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="eyebrow">Discovery Studio Zero-Box Radical Pass</div>
+    <p class="intro">Variant 01 stays the base logic, but the dead weight is gone: no call timer, no phase chips, no pace chips, no jump chips, no boxed panels. Buyer might say and Say next are live fork placeholders here only; in the real room they keep expanding as the branch engine advances and the conversation changes state.</p>
+
+    <section class="stack">
+      <article class="variant">
+        <header class="head">
+          <div>
+            <div class="eyebrow">Variant 01A - Spine Sheet</div>
+            <h2>Phase left. Live turn center. Recovery right.</h2>
+          </div>
+          <p>The strictest descendant of the original console idea. It still orients the rep in call-time, but every visible object is either a prompt, a buyer branch, or a recovery move.</p>
+          <div class="headnote">Where they are in time<br>What to say<br>How to recover</div>
+        </header>
+
+        <div class="v1">
+          <aside>
+            <div class="label">Where they are in time</div>
+            <div class="phase-list">
+              <div class="phase-row">
+                <span class="glyph g-phase"></span>
+                <span><strong>Open</strong><em>Permission and frame.</em></span>
+              </div>
+              <div class="phase-row">
+                <span class="glyph g-phase"></span>
+                <span><strong>Why now</strong><em>Name the disruption.</em></span>
+              </div>
+              <div class="phase-row active">
+                <span class="glyph g-phase"></span>
+                <span><strong>Current state</strong><em>How do they handle supplier risk today?</em></span>
+              </div>
+              <div class="phase-row">
+                <span class="glyph g-phase"></span>
+                <span><strong>Owner</strong><em>Who acts when the signal turns real?</em></span>
+              </div>
+              <div class="phase-row">
+                <span class="glyph g-phase"></span>
+                <span><strong>Close</strong><em>Book the next concrete review.</em></span>
+              </div>
+            </div>
+          </aside>
+
+          <main>
+            <div class="label">Say this now</div>
+            <div class="say">"When supplier risk moves, do you need earlier warning or a way to model the operational hit before it lands?"</div>
+
+            <div class="rule spacious"></div>
+
+            <div class="response-list" data-response-group="zra">
+              <div class="label">Buyer might say</div>
+              <button class="response-row active" data-response="zra-a">
+                <span class="glyph g-live"></span>
+                <span><strong>"We need earlier warning."</strong><em>Stay on monitoring truth and response ownership.</em></span>
+              </button>
+              <button class="response-row" data-response="zra-b">
+                <span class="glyph g-branch"></span>
+                <span><strong>"We need to model impact before it hits."</strong><em>Stay on scenario planning and operational consequence.</em></span>
+              </button>
+              <button class="response-row" data-response="zra-c">
+                <span class="glyph g-alert"></span>
+                <span><strong>"We need both."</strong><em>Force the first paid job instead of accepting platform blur.</em></span>
+              </button>
+            </div>
+
+            <div class="rule spacious"></div>
+
+            <div class="label">Say next</div>
+            <div class="say-next-line response-panel active" id="zra-a">"Then stay with warning quality for a second. When the alert turns real, who owns the response and what changes because they saw it earlier?"</div>
+            <div class="say-next-line response-panel" id="zra-b" hidden>"Then stay with planning. What operational decision gets better when you can run the disruption before it lands?"</div>
+            <div class="say-next-line response-panel" id="zra-c" hidden>"You may end up needing both. Which one would leadership fund first if budget only covered one starting point?"</div>
+
+            <div class="rule tight"></div>
+            <div class="note">Must learn before moving: which branch is actually real, monitoring-first or planning-first.</div>
+          </main>
+
+          <aside>
+            <div class="label">Recover the call</div>
+            <div class="recover-list">
+              <div class="recover-row">
+                <span class="glyph g-send"></span>
+                <span><strong>Demo now</strong><em>"I can show the right proof after one branch decision."</em></span>
+              </div>
+              <div class="recover-row">
+                <span class="glyph g-alert"></span>
+                <span><strong>Pricing</strong><em>"Price changes depending on whether this starts as monitoring or planning."</em></span>
+              </div>
+              <div class="recover-row">
+                <span class="glyph g-branch"></span>
+                <span><strong>Send info</strong><em>"I can send the right proof path once we choose the first job."</em></span>
+              </div>
+              <div class="recover-row">
+                <span class="glyph g-recover"></span>
+                <span><strong>Wrong person</strong><em>"Who owns this when procurement and operations disagree?"</em></span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </article>
+
+      <article class="variant">
+        <header class="head">
+          <div>
+            <div class="eyebrow">Variant 01B - Fork Rail</div>
+            <h2>The entire call sits on one branch rail.</h2>
+          </div>
+          <p>This is the least dashboard-like version. It behaves like one live rail: time across the top, branches across the middle, changing answer below, recovery to the side.</p>
+          <div class="headnote">Open to close<br>Three branch choices<br>One changing counter</div>
+        </header>
+
+        <div class="v2">
+          <main>
+            <div class="time-strip">
+              <div class="time-stop">
+                <span class="t">Open</span>
+                <span class="d">Permission and frame.</span>
+              </div>
+              <div class="time-stop active">
+                <span class="t">Current state</span>
+                <span class="d">Sort the first real job.</span>
+              </div>
+              <div class="time-stop">
+                <span class="t">Owner</span>
+                <span class="d">Name the responder or planner.</span>
+              </div>
+              <div class="time-stop">
+                <span class="t">Close</span>
+                <span class="d">Book the right next review.</span>
+              </div>
+            </div>
+
+            <div style="padding-top:20px">
+              <div class="label">Say this now</div>
+              <div class="say">"Is the bigger problem that you cannot see supplier risk early enough, or that you cannot model what it does to the business once you do?"</div>
+            </div>
+
+            <div class="fork-rail" data-response-group="zrb">
+              <button class="fork active" data-response="zrb-a">
+                <strong>"It starts with visibility."</strong>
+                <span>Push into signal trust and action ownership.</span>
+              </button>
+              <button class="fork" data-response="zrb-b">
+                <strong>"The issue is planning."</strong>
+                <span>Push into scenario review and operational consequence.</span>
+              </button>
+              <button class="fork" data-response="zrb-c">
+                <strong>"We need both."</strong>
+                <span>Force the first use case instead of accepting blur.</span>
+              </button>
+            </div>
+
+            <div class="switchline">
+              <div>
+                <div class="label">Say next</div>
+                <div class="say-next-line response-panel active" id="zrb-a">"Then what makes an alert credible enough that someone actually changes behavior because of it?"</div>
+                <div class="say-next-line response-panel" id="zrb-b" hidden>"Then what operational decision gets better when you can run the disruption before it lands?"</div>
+                <div class="say-next-line response-panel" id="zrb-c" hidden>"You may end up with both, but what would leadership buy first if only one starting point was funded?"</div>
+              </div>
+
+              <div class="split-note">
+                <div class="line">
+                  <strong>Must learn before moving</strong>
+                  <span>The first paid job. Do not let the buyer hide inside category language.</span>
+                </div>
+                <div class="line">
+                  <strong>Close standard</strong>
+                  <span>Book alert owner if visibility wins. Book procurement plus operations if planning wins.</span>
+                </div>
+              </div>
+            </div>
+          </main>
+
+          <aside>
+            <div class="label">Recover the call</div>
+            <div class="recover-list">
+              <div class="recover-row">
+                <span class="glyph g-send"></span>
+                <span><strong>Demo request</strong><em>"Yes, after one more branch so I do not demo the wrong proof."</em></span>
+              </div>
+              <div class="recover-row">
+                <span class="glyph g-alert"></span>
+                <span><strong>Pricing interrupt</strong><em>"I need the first paid job before pricing means anything."</em></span>
+              </div>
+              <div class="recover-row">
+                <span class="glyph g-recover"></span>
+                <span><strong>No time</strong><em>"Then give me the one side you would fix first: warning or planning."</em></span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </article>
+
+      <article class="variant">
+        <header class="head">
+          <div>
+            <div class="eyebrow">Variant 01C - Operator Ledger</div>
+            <h2>Say, hear, answer, recover as one worksheet.</h2>
+          </div>
+          <p>This is the most procedural version. Instead of a single big center composition, it turns the conversation into a line-ledger the rep can run top to bottom while staying on call.</p>
+          <div class="headnote">Procedural worksheet<br>Minimal reading drift<br>Recovery always visible</div>
+        </header>
+
+        <div class="v3">
+          <aside>
+            <div class="label">Where they are in time</div>
+            <div class="lane-list">
+              <div class="lane-row">
+                <span class="glyph g-phase"></span>
+                <span><strong>Open</strong><em>Permission and tension.</em></span>
+              </div>
+              <div class="lane-row active">
+                <span class="glyph g-phase"></span>
+                <span><strong>Current state</strong><em>Sort the first real problem before proving anything.</em></span>
+              </div>
+              <div class="lane-row">
+                <span class="glyph g-phase"></span>
+                <span><strong>Owner</strong><em>Name who acts when risk turns real.</em></span>
+              </div>
+              <div class="lane-row">
+                <span class="glyph g-phase"></span>
+                <span><strong>Next step</strong><em>Calendar the correct follow-up room.</em></span>
+              </div>
+            </div>
+          </aside>
+
+          <main>
+            <div class="script-grid">
+              <div class="key">Say this now</div>
+              <div class="value">"My read is that supplier risk is already visible, but your team still lacks a reliable way to act on it. Wrong?"</div>
+            </div>
+
+            <div class="script-grid" data-response-group="zrc">
+              <div class="key">Buyer might say</div>
+              <div>
+                <button class="response-row active" data-response="zrc-a">
+                  <span class="glyph g-live"></span>
+                  <span><strong>"Yes, we see it but do not act fast enough."</strong><em>Move toward owner, response timing, and escalation logic.</em></span>
+                </button>
+                <button class="response-row" data-response="zrc-b">
+                  <span class="glyph g-branch"></span>
+                  <span><strong>"No, the bigger issue is modeling the impact."</strong><em>Move toward simulation, scenario review, and financial consequence.</em></span>
+                </button>
+                <button class="response-row" data-response="zrc-c">
+                  <span class="glyph g-alert"></span>
+                  <span><strong>"It depends on the disruption."</strong><em>Force the first repeatable use case instead of accepting ambiguity.</em></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="script-grid">
+              <div class="key">Say next</div>
+              <div class="value small response-panel active" id="zrc-a">"Then who is supposed to move first when the signal turns real, and what actually changes because they saw it earlier?"</div>
+              <div class="value small response-panel" id="zrc-b" hidden>"Then what decision gets better when you can model the disruption before it lands, and who depends on that answer?"</div>
+              <div class="value small response-panel" id="zrc-c" hidden>"When this becomes urgent, which side hurts first: not seeing it soon enough or not knowing what to do once you do?"</div>
+            </div>
+
+            <div class="script-grid">
+              <div class="key">Must learn before moving</div>
+              <div class="note">Pick the first paid job, name the owner, and lock the correct next room before proving product.</div>
+            </div>
+          </main>
+
+          <aside>
+            <div class="label">Recover the call</div>
+            <div class="recover-list">
+              <div class="recover-row">
+                <span class="glyph g-send"></span>
+                <span><strong>Demo</strong><em>"I can show that after we decide whether this is response-first or planning-first."</em></span>
+              </div>
+              <div class="recover-row">
+                <span class="glyph g-alert"></span>
+                <span><strong>Price</strong><em>"That depends on which job you are actually buying first."</em></span>
+              </div>
+              <div class="recover-row">
+                <span class="glyph g-branch"></span>
+                <span><strong>Send something</strong><em>"I can send the right proof path once we choose the right branch."</em></span>
+              </div>
+              <div class="recover-row">
+                <span class="glyph g-copy"></span>
+                <span><strong>Park cleanly</strong><em>"Happy to park this until the response owner or planning owner is in the room."</em></span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-response-group]").forEach((group) => {
+      const buttons = group.querySelectorAll("[data-response]");
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const prefix = button.dataset.response.split("-")[0];
+          buttons.forEach((candidate) => candidate.classList.remove("active"));
+          button.classList.add("active");
+          document.querySelectorAll(".response-panel").forEach((panel) => {
+            if (!panel.id.startsWith(prefix + "-")) return;
+            const active = panel.id === button.dataset.response;
+            panel.hidden = !active;
+            panel.classList.toggle("active", active);
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

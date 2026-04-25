@@ -10,106 +10,36 @@
     'use strict';
 
     function bootstrapEnvironmentMode() {
-        if (window.__gtmosEnvBootstrapped) {
-            return window.gtmEnvironment || { mode: 'prod', isDemo: false };
+        if (window.gtmDemoStorageBootstrap && typeof window.gtmDemoStorageBootstrap.bootstrapEnvironmentMode === 'function') {
+            return window.gtmDemoStorageBootstrap.bootstrapEnvironmentMode({
+                search: window.location.search
+            });
         }
-        window.__gtmosEnvBootstrapped = true;
+        return window.gtmEnvironment || { mode: 'prod', isDemo: false };
+    }
 
-        var MODE_KEY = 'gtmos_env_mode';
-        var mode = 'prod';
+    function bootstrapQaMode() {
+        if (window.gtmQaMode && typeof window.gtmQaMode.bootstrap === 'function') {
+            return window.gtmQaMode.bootstrap({
+                search: window.location.search
+            });
+        }
         try {
             var params = new URLSearchParams(window.location.search || '');
-            var demoParam = (params.get('demo') || '').toLowerCase();
-            if (demoParam === '1' || demoParam === 'true') {
-                sessionStorage.setItem(MODE_KEY, 'demo');
-            } else if (demoParam === '0' || demoParam === 'false') {
-                sessionStorage.setItem(MODE_KEY, 'prod');
-            }
-            mode = sessionStorage.getItem(MODE_KEY) || 'prod';
+            var raw = String(params.get('qa') || '').toLowerCase();
+            if (raw === '1' || raw === 'true') sessionStorage.setItem('gtmos_qa_mode', '1');
+            if (raw === '0' || raw === 'false') sessionStorage.setItem('gtmos_qa_mode', '0');
+            var enabled = sessionStorage.getItem('gtmos_qa_mode') === '1';
+            document.documentElement.classList.toggle('qa-mode', enabled);
+            if (document.body) document.body.classList.toggle('qa-mode', enabled);
+            return { enabled: enabled };
         } catch (e) {
-            mode = 'prod';
+            return { enabled: false };
         }
-
-        var isDemo = mode === 'demo';
-        window.gtmEnvironment = {
-            mode: isDemo ? 'demo' : 'prod',
-            isDemo: isDemo
-        };
-
-        if (!isDemo || !window.localStorage) return window.gtmEnvironment;
-
-        var prefix = 'gtmos_demo__';
-        var storageProto = window.Storage && window.Storage.prototype;
-        if (!storageProto || storageProto.__gtmosDemoStoragePatch) return window.gtmEnvironment;
-        storageProto.__gtmosDemoStoragePatch = true;
-
-        var rawGetItem = storageProto.getItem;
-        var rawSetItem = storageProto.setItem;
-        var rawRemoveItem = storageProto.removeItem;
-        var rawKey = storageProto.key;
-        var rawClear = storageProto.clear;
-
-        function isDemoStorageMode() {
-            try { return sessionStorage.getItem(MODE_KEY) === 'demo'; }
-            catch (e) { return false; }
-        }
-
-        function shouldPatch(storageObj) {
-            return storageObj === window.localStorage && isDemoStorageMode();
-        }
-
-        function mapKey(key) {
-            var next = String(key || '');
-            if (next.indexOf('gtmos_') !== 0) return next;
-            if (next.indexOf(prefix) === 0) return next;
-            return prefix + next;
-        }
-
-        storageProto.getItem = function(key) {
-            if (shouldPatch(this)) return rawGetItem.call(this, mapKey(key));
-            return rawGetItem.call(this, key);
-        };
-
-        storageProto.setItem = function(key, value) {
-            if (shouldPatch(this)) return rawSetItem.call(this, mapKey(key), value);
-            return rawSetItem.call(this, key, value);
-        };
-
-        storageProto.removeItem = function(key) {
-            if (shouldPatch(this)) return rawRemoveItem.call(this, mapKey(key));
-            return rawRemoveItem.call(this, key);
-        };
-
-        storageProto.key = function(index) {
-            if (!shouldPatch(this)) return rawKey.call(this, index);
-            var demoKeys = [];
-            for (var i = 0; i < this.length; i++) {
-                var storageKey = rawKey.call(this, i);
-                if (storageKey && storageKey.indexOf(prefix) === 0) {
-                    demoKeys.push(storageKey.slice(prefix.length));
-                }
-            }
-            return demoKeys[index] || null;
-        };
-
-        storageProto.clear = function() {
-            if (!shouldPatch(this)) return rawClear.call(this);
-            var toDelete = [];
-            for (var i = 0; i < this.length; i++) {
-                var storageKey = rawKey.call(this, i);
-                if (storageKey && storageKey.indexOf(prefix) === 0) {
-                    toDelete.push(storageKey);
-                }
-            }
-            toDelete.forEach(function(storageKey) {
-                rawRemoveItem.call(window.localStorage, storageKey);
-            });
-        };
-
-        return window.gtmEnvironment;
     }
 
     bootstrapEnvironmentMode();
+    var qaMode = bootstrapQaMode();
 
     if (!document.querySelector('script[data-gtmos-input-sanitizer]')) {
         var sanitizerScript = document.createElement('script');
@@ -134,7 +64,15 @@
         document.head.appendChild(shellChromeScript);
     }
 
-    if (!document.querySelector('script[data-gtmos-tour-guide]')) {
+    if (!document.querySelector('script[data-gtmos-qa-mode]')) {
+        var qaModeScript = document.createElement('script');
+        qaModeScript.src = '/js/qa-mode.js';
+        qaModeScript.async = false;
+        qaModeScript.setAttribute('data-gtmos-qa-mode', 'true');
+        document.head.appendChild(qaModeScript);
+    }
+
+    if (!qaMode.enabled && !document.querySelector('script[data-gtmos-tour-guide]')) {
         var tourGuideScript = document.createElement('script');
         tourGuideScript.src = '/js/tour-guide.js';
         tourGuideScript.async = false;
@@ -151,29 +89,15 @@
         document.head.appendChild(weekOneScript);
     }
 
-    // Redirect to onboarding whenever onboarding is not completed.
-    var currentPath = window.location.pathname;
-
-    function redirectToOnboardingIfNeeded() {
-        if (currentPath.indexOf('/app/onboarding') !== -1) return false;
-        try {
-            var onboardingState = JSON.parse(localStorage.getItem('gtmos_onboarding') || 'null');
-            if (!onboardingState || onboardingState.completed !== true) {
-                window.location.replace('/app/onboarding/');
-                return true;
-            }
-        } catch (e) {
-            window.location.replace('/app/onboarding/');
-            return true;
-        }
-        return false;
-    }
+    var workspaceGuard = window.gtmWorkspaceGuard || null;
 
     if (window.__gtmosAuthGatePending) {
         window.addEventListener('gtmos:auth-ready', function() {
-            redirectToOnboardingIfNeeded();
+            if (workspaceGuard && typeof workspaceGuard.redirectToOnboardingIfNeeded === 'function') {
+                workspaceGuard.redirectToOnboardingIfNeeded();
+            }
         }, { once: true });
-    } else if (redirectToOnboardingIfNeeded()) {
+    } else if (workspaceGuard && typeof workspaceGuard.redirectToOnboardingIfNeeded === 'function' && workspaceGuard.redirectToOnboardingIfNeeded()) {
         return;
     }
 
@@ -237,12 +161,18 @@
         '<div class="sidebar-data-notice" id="sidebarDataNotice">Data is saved in this browser on this device.</div>' +
         '<div class="sidebar-footer-actions">' +
             '<button class="sidebar-action-btn" id="roleResetBtn" title="New Role Setup"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"23 4 23 10 17 10\"/><polyline points=\"1 20 1 14 7 14\"/><path d=\"M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15\"/></svg></button>' +
-            '<button class="btn btn-ghost btn-sm" style="flex:1;" onclick="handleSignOut()">Sign Out</button>' +
+            '<button class="btn btn-ghost btn-sm" style="flex:1;" id="sidebarSignOutBtn" type="button">Sign Out</button>' +
         '</div>' +
     '</div>';
 
     var sidebar = document.querySelector('.app-sidebar');
     if (sidebar) sidebar.innerHTML = NAV_HTML;
+    var sidebarSignOutBtn = sidebar && sidebar.querySelector('#sidebarSignOutBtn');
+    if (sidebarSignOutBtn) {
+        sidebarSignOutBtn.addEventListener('click', function() {
+            if (typeof handleSignOut === 'function') handleSignOut();
+        });
+    }
     var sidebarNav = sidebar && sidebar.querySelector('.sidebar-nav');
     var SIDEBAR_SCROLL_KEY = 'gtmos_sidebar_nav_scroll_top';
     var SIDEBAR_ACTIVE_KEY = 'gtmos_sidebar_active_nav';
@@ -1031,7 +961,7 @@
             console.error('Nav workspace-summary refresh failed:', error);
         });
         if (typeof window.gtmWeekOneLifecycle !== 'undefined' && footerEl) {
-            window.gtmWeekOneLifecycle.renderNavNudge({ footer: footerEl, currentPath: currentPath });
+            window.gtmWeekOneLifecycle.renderNavNudge({ footer: footerEl, currentPath: path });
         }
     });
 
@@ -1041,14 +971,16 @@
         var utilityList = sidebar.querySelector('#sidebarUtilityList');
         footerEl = footer;
         if (utilityList) {
-            var tourBtn = document.createElement('button');
-            tourBtn.className = 'sidebar-utility-link sidebar-utility-link--button';
-            tourBtn.onclick = function() {
-                if (typeof TourGuide !== 'undefined' && typeof TourGuide.launch === 'function') TourGuide.launch();
-                else if (typeof TourGuide !== 'undefined') TourGuide.start();
-            };
-            tourBtn.textContent = 'Tour the App';
-            utilityList.appendChild(tourBtn);
+            if (!qaMode.enabled) {
+                var tourBtn = document.createElement('button');
+                tourBtn.className = 'sidebar-utility-link sidebar-utility-link--button';
+                tourBtn.onclick = function() {
+                    if (typeof TourGuide !== 'undefined' && typeof TourGuide.launch === 'function') TourGuide.launch();
+                    else if (typeof TourGuide !== 'undefined') TourGuide.start();
+                };
+                tourBtn.textContent = 'Tour the App';
+                utilityList.appendChild(tourBtn);
+            }
             if (window.gtmEnvironment && window.gtmEnvironment.isDemo) {
                 var pricingBtn = document.createElement('button');
                 pricingBtn.className = 'sidebar-utility-link sidebar-utility-link--button';
@@ -1079,7 +1011,7 @@
                     window.location.href = '/app/dashboard/?mode=spotlight';
                 };
                 utilityList.appendChild(exitDemoBtn);
-            } else if (currentPath.indexOf('/app/welcome') === -1) {
+            } else if (path.indexOf('/app/welcome') === -1) {
                 var welcomeBtn = document.createElement('button');
                 welcomeBtn.className = 'sidebar-utility-link sidebar-utility-link--button';
                 welcomeBtn.textContent = 'Back to Week One';
@@ -1092,11 +1024,11 @@
         }
         if (footer) {
             if (typeof window.gtmWeekOneLifecycle !== 'undefined') {
-                window.gtmWeekOneLifecycle.renderNavNudge({ footer: footer, currentPath: currentPath });
+                window.gtmWeekOneLifecycle.renderNavNudge({ footer: footer, currentPath: path });
             } else if (weekOneScript) {
                 weekOneScript.addEventListener('load', function() {
                     if (window.gtmWeekOneLifecycle) {
-                        window.gtmWeekOneLifecycle.renderNavNudge({ footer: footer, currentPath: currentPath });
+                        window.gtmWeekOneLifecycle.renderNavNudge({ footer: footer, currentPath: path });
                     }
                 }, { once: true });
             }
@@ -1130,10 +1062,6 @@
         }
     }
 
-    if (window.gtmAnalytics) {
-        gtmAnalytics.page(appSlug || window.location.pathname);
-    }
-})();
     function setOpenFamily(familyKey, persist) {
         if (!sidebar) return;
         var next = familyKey ? String(familyKey) : '';
@@ -1163,3 +1091,8 @@
             });
         });
     }
+
+    if (window.gtmAnalytics) {
+        gtmAnalytics.page(appSlug || window.location.pathname);
+    }
+})();

@@ -6,7 +6,7 @@
     <title>Call Planner | Antaeus GTM OS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <style>
         .cp-search{display:flex;gap:12px;margin-bottom:var(--space-xl);align-items:flex-end;}
@@ -104,6 +104,354 @@
             .cp-outcome-btn{width:100%;}
             .cp-first-fold{padding:14px;}
         }
+        :root{
+            --cp-bg:#eef4fb;
+            --cp-panel:rgba(255,255,255,0.78);
+            --cp-panel-strong:rgba(255,255,255,0.92);
+            --cp-line:rgba(10,28,64,0.1);
+            --cp-line-strong:rgba(10,28,64,0.16);
+            --cp-text:#0a1c40;
+            --cp-muted:#6f84a5;
+            --cp-blue:#2471e7;
+            --cp-orange:#e6701e;
+            --cp-green:#2d7a4b;
+            --cp-red:#c44b45;
+            --cp-shadow:0 24px 64px rgba(10,28,64,0.09);
+        }
+        body.room-call-planner .app-main{
+            background:
+                radial-gradient(circle at 0% 0%, rgba(36,113,231,0.09), transparent 24%),
+                radial-gradient(circle at 100% 0%, rgba(230,112,30,0.07), transparent 20%),
+                linear-gradient(180deg,#fbfdff 0%, var(--cp-bg) 100%);
+        }
+        body.room-call-planner .module-header-title{max-width:900px;}
+        .cp-app-content{max-width:1520px;margin:0 auto;padding-bottom:40px;}
+        .cp-room{position:relative;display:grid;gap:24px;padding:12px 0 18px;}
+        .cp-boot-state{
+            display:none;
+            padding:16px 18px;
+            border-radius:22px;
+            border:1px solid var(--cp-line);
+            background:var(--cp-panel-strong);
+            box-shadow:var(--cp-shadow);
+        }
+        .cp-boot-state.visible{display:block;}
+        .cp-boot-state.loading{border-color:rgba(36,113,231,0.22);background:rgba(36,113,231,0.07);}
+        .cp-boot-state.error{border-color:rgba(196,75,69,0.24);background:rgba(196,75,69,0.06);}
+        .cp-boot-eyebrow{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.28em;font-weight:700;color:var(--cp-muted);margin-bottom:8px;}
+        .cp-boot-state.loading .cp-boot-eyebrow{color:var(--cp-blue);}
+        .cp-boot-state.error .cp-boot-eyebrow{color:var(--cp-red);}
+        .cp-boot-title{font-size:0.96rem;font-weight:700;color:var(--cp-text);margin-bottom:6px;}
+        .cp-boot-text{font-size:0.84rem;line-height:1.65;color:var(--cp-muted);}
+        .cp-boot-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+        .cp-boot-btn{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            padding:9px 14px;
+            border-radius:999px;
+            border:1px solid var(--cp-line);
+            background:#fff;
+            color:var(--cp-text);
+            font:inherit;
+            font-size:0.76rem;
+            font-weight:700;
+            cursor:pointer;
+        }
+        .cp-hero{
+            display:grid;
+            grid-template-columns:minmax(0,1fr) auto;
+            gap:20px;
+            align-items:end;
+            padding:4px 0 12px;
+            border-bottom:1px solid var(--cp-line);
+        }
+        .cp-hero-kicker{font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;font-weight:700;color:var(--cp-orange);margin-bottom:10px;}
+        .cp-hero-title{
+            margin:0;
+            font-size:clamp(2.8rem,5vw,5.4rem);
+            line-height:0.92;
+            letter-spacing:-0.08em;
+            font-family:"Outfit",sans-serif;
+            font-weight:700;
+            color:var(--cp-text);
+            max-width:10ch;
+        }
+        .cp-hero-copy{margin:14px 0 0;max-width:44ch;font-size:1rem;line-height:1.65;color:var(--cp-muted);}
+        .cp-hero-status{display:grid;gap:10px;justify-items:end;align-content:end;}
+        .cp-band{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-height:38px;
+            padding:0 14px;
+            border-radius:999px;
+            border:1px solid var(--cp-line);
+            background:rgba(255,255,255,0.82);
+            font-size:0.72rem;
+            letter-spacing:0.2em;
+            text-transform:uppercase;
+            font-weight:700;
+        }
+        .cp-band.credible{color:var(--cp-green);border-color:rgba(45,122,75,0.22);background:rgba(45,122,75,0.08);}
+        .cp-band.workable{color:var(--cp-orange);border-color:rgba(230,112,30,0.22);background:rgba(230,112,30,0.08);}
+        .cp-band.thin{color:var(--cp-red);border-color:rgba(196,75,69,0.22);background:rgba(196,75,69,0.08);}
+        .cp-hero-context{font-size:0.76rem;letter-spacing:0.22em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);}
+        .cp-pressure-shell{
+            display:grid;
+            grid-template-columns:minmax(290px,0.88fr) minmax(480px,1.18fr) minmax(300px,0.86fr);
+            gap:26px;
+            align-items:start;
+        }
+        .cp-witness-column,.cp-sequence-column,.cp-route-column{min-width:0;}
+        .cp-witness-panel{
+            display:grid;
+            gap:16px;
+            padding:22px;
+            border-radius:30px;
+            border:1px solid var(--cp-line);
+            background:var(--cp-panel-strong);
+            box-shadow:var(--cp-shadow);
+        }
+        .cp-dossier{display:grid;gap:16px;}
+        .cp-dossier-head{
+            display:grid;
+            grid-template-columns:minmax(0,1fr) auto;
+            gap:18px;
+            align-items:start;
+            padding-bottom:16px;
+            border-bottom:1px solid var(--cp-line);
+        }
+        .cp-dossier-kicker{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);margin-bottom:10px;}
+        .cp-dossier-name{
+            margin:0;
+            font-size:clamp(1.9rem,3vw,3.4rem);
+            line-height:0.94;
+            letter-spacing:-0.08em;
+            font-family:"Outfit",sans-serif;
+            font-weight:700;
+            color:var(--cp-text);
+        }
+        .cp-dossier-meta{margin-top:10px;font-size:0.92rem;line-height:1.55;color:var(--cp-muted);}
+        .cp-score-pill{
+            display:grid;
+            justify-items:center;
+            gap:4px;
+            min-width:84px;
+            padding:12px 10px;
+            border-radius:22px;
+            border:1px solid var(--cp-line);
+            background:#fff;
+        }
+        .cp-score-pill span{font-size:0.64rem;letter-spacing:0.22em;text-transform:uppercase;font-weight:700;}
+        .cp-score-pill strong{font-size:1.8rem;line-height:1;font-family:"Outfit",sans-serif;font-weight:700;}
+        .cp-score-pill.credible span,.cp-score-pill.credible strong{color:var(--cp-green);}
+        .cp-score-pill.workable span,.cp-score-pill.workable strong{color:var(--cp-orange);}
+        .cp-score-pill.thin span,.cp-score-pill.thin strong{color:var(--cp-red);}
+        .cp-dossier-lines{display:grid;gap:0;}
+        .cp-dossier-line{
+            display:grid;
+            grid-template-columns:110px minmax(0,1fr);
+            gap:14px;
+            align-items:start;
+            padding:11px 0;
+            border-bottom:1px solid var(--cp-line);
+        }
+        .cp-dossier-line:last-child{border-bottom:none;}
+        .cp-dossier-label{font-size:0.68rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);padding-top:3px;}
+        .cp-dossier-value{font-size:0.9rem;line-height:1.58;color:var(--cp-text);}
+        .cp-dossier-note{font-size:0.82rem;line-height:1.6;color:var(--cp-muted);padding-top:4px;border-top:1px solid var(--cp-line);}
+        .cp-field{display:grid;gap:7px;}
+        .cp-field-label{font-size:0.68rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);}
+        .cp-field input,.cp-field select,.cp-field textarea{
+            width:100%;
+            padding:13px 15px;
+            border-radius:18px;
+            border:1px solid var(--cp-line);
+            background:rgba(255,255,255,0.84);
+            color:var(--cp-text);
+            font:inherit;
+            font-size:0.96rem;
+        }
+        .cp-field textarea{min-height:96px;resize:vertical;}
+        .cp-field input:focus,.cp-field select:focus,.cp-field textarea:focus{
+            outline:none;
+            border-color:rgba(36,113,231,0.35);
+            box-shadow:0 0 0 4px rgba(36,113,231,0.08);
+        }
+        .cp-persona-pick{display:flex;flex-wrap:wrap;gap:8px;}
+        .cp-persona-btn{
+            padding:8px 14px;
+            border-radius:999px;
+            font-size:0.78rem;
+            font-weight:700;
+            letter-spacing:0.02em;
+            border:1px solid var(--cp-line);
+            background:rgba(255,255,255,0.78);
+            color:var(--cp-muted);
+            cursor:pointer;
+            transition:all 0.2s ease;
+        }
+        .cp-persona-btn:hover{border-color:var(--cp-line-strong);color:var(--cp-text);}
+        .cp-persona-btn.active{border-color:rgba(230,112,30,0.28);color:var(--cp-orange);background:rgba(230,112,30,0.08);}
+        .cp-agenda{
+            display:grid;
+            gap:0;
+            padding:22px 24px;
+            border-radius:32px;
+            border:1px solid var(--cp-line);
+            background:var(--cp-panel-strong);
+            box-shadow:var(--cp-shadow);
+        }
+        .cp-sequence-intro{display:grid;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--cp-line);}
+        .cp-sequence-kicker{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);}
+        .cp-sequence-title{font-size:1.52rem;line-height:1.1;letter-spacing:-0.05em;font-weight:700;color:var(--cp-text);max-width:18ch;}
+        .cp-sequence-copy{font-size:0.92rem;line-height:1.62;color:var(--cp-muted);max-width:58ch;}
+        .cp-sequence-next{font-size:0.84rem;line-height:1.55;color:var(--cp-orange);font-weight:700;}
+        .cp-gate-list{display:grid;gap:0;}
+        .cp-gate-row{
+            display:grid;
+            grid-template-columns:minmax(0,1fr) auto;
+            gap:12px;
+            align-items:start;
+            padding:12px 0;
+            border-bottom:1px solid var(--cp-line);
+        }
+        .cp-gate-row:last-child{border-bottom:none;}
+        .cp-gate-label{font-size:0.8rem;font-weight:700;color:var(--cp-text);margin-bottom:4px;}
+        .cp-gate-copy{font-size:0.78rem;line-height:1.55;color:var(--cp-muted);}
+        .cp-gate-state{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;font-weight:700;padding-top:3px;}
+        .cp-gate-row.met .cp-gate-state{color:var(--cp-green);}
+        .cp-gate-row.miss .cp-gate-state{color:var(--cp-red);}
+        .cp-strip{
+            display:grid;
+            grid-template-columns:34px 108px minmax(0,1fr);
+            gap:16px;
+            align-items:start;
+            padding:18px 0;
+            border-bottom:1px solid var(--cp-line);
+        }
+        .cp-strip:last-child{border-bottom:none;}
+        .cp-strip-label{padding-top:4px;font-size:0.68rem;letter-spacing:0.26em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);}
+        .cp-strip-body{min-width:0;}
+        .cp-strip-title{font-size:1.38rem;line-height:1.08;letter-spacing:-0.04em;font-weight:700;color:var(--cp-text);margin-bottom:8px;}
+        .cp-strip-copy{font-size:1rem;line-height:1.62;color:var(--cp-text);}
+        .cp-strip-note{margin-top:8px;font-size:0.82rem;line-height:1.58;color:var(--cp-muted);}
+        .cp-question-list{display:grid;gap:12px;}
+        .cp-question-row{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;align-items:start;}
+        .cp-question-num{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:var(--cp-blue);padding-top:3px;}
+        .cp-question-copy{font-size:0.98rem;line-height:1.58;color:var(--cp-text);}
+        .cp-route-column{display:grid;gap:18px;}
+        .cp-route-dock{
+            display:grid;
+            gap:0;
+            padding:20px 22px;
+            border-radius:28px;
+            border:1px solid var(--cp-line);
+            background:var(--cp-panel-strong);
+            box-shadow:var(--cp-shadow);
+        }
+        .cp-route-head{display:grid;gap:8px;padding-bottom:14px;border-bottom:1px solid var(--cp-line);margin-bottom:2px;}
+        .cp-route-kicker{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);}
+        .cp-route-title{font-size:1.24rem;line-height:1.14;letter-spacing:-0.04em;font-weight:700;color:var(--cp-text);}
+        .cp-route-copy{font-size:0.86rem;line-height:1.58;color:var(--cp-muted);}
+        .cp-route-row{
+            display:grid;
+            grid-template-columns:28px minmax(0,1fr) auto;
+            gap:14px;
+            align-items:start;
+            padding:16px 0;
+            border-bottom:1px solid var(--cp-line);
+        }
+        .cp-route-row:last-child{border-bottom:none;}
+        .cp-route-row-label{font-size:0.68rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);margin-bottom:6px;}
+        .cp-route-row-title{font-size:1rem;line-height:1.3;font-weight:700;color:var(--cp-text);margin-bottom:6px;}
+        .cp-route-row-copy{font-size:0.84rem;line-height:1.58;color:var(--cp-muted);}
+        .cp-route-action{
+            min-height:40px;
+            padding:0 14px;
+            border-radius:999px;
+            border:1px solid var(--cp-line);
+            background:#fff;
+            color:var(--cp-text);
+            font:inherit;
+            font-size:0.76rem;
+            font-weight:700;
+            cursor:pointer;
+            white-space:nowrap;
+        }
+        .cp-route-action.primary{border-color:rgba(45,122,75,0.22);background:rgba(45,122,75,0.08);color:var(--cp-green);}
+        .cp-outcome-panel{
+            display:grid;
+            gap:12px;
+            padding:20px 22px;
+            border-radius:28px;
+            border:1px solid var(--cp-line);
+            background:var(--cp-panel-strong);
+            box-shadow:var(--cp-shadow);
+        }
+        .cp-outcome-title{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);}
+        .cp-outcome-copy{font-size:0.86rem;line-height:1.58;color:var(--cp-muted);}
+        .cp-outcome{display:grid;gap:10px;}
+        .cp-outcome-btn{
+            width:100%;
+            min-height:48px;
+            padding:12px 16px;
+            border-radius:18px;
+            border:1px solid var(--cp-line);
+            background:#fff;
+            color:var(--cp-text);
+            font:inherit;
+            font-size:0.86rem;
+            font-weight:700;
+            text-align:left;
+            cursor:pointer;
+        }
+        .cp-outcome-btn.advance{border-color:rgba(45,122,75,0.22);background:rgba(45,122,75,0.08);color:var(--cp-green);}
+        .cp-outcome-btn.noadvance{border-color:rgba(196,75,69,0.22);background:rgba(196,75,69,0.08);color:var(--cp-red);}
+        .cp-outcome-btn.noshow{border-color:rgba(111,132,165,0.24);background:rgba(111,132,165,0.08);color:#58729a;}
+        .cp-customize{
+            padding:18px 22px 20px;
+            border-radius:28px;
+            border:1px solid var(--cp-line);
+            background:var(--cp-panel-strong);
+            box-shadow:var(--cp-shadow);
+        }
+        .cp-customize summary{cursor:pointer;list-style:none;font-size:0.72rem;letter-spacing:0.26em;text-transform:uppercase;font-weight:700;color:var(--cp-muted);}
+        .cp-customize summary::-webkit-details-marker{display:none;}
+        .cp-customize-body{display:grid;gap:14px;margin-top:14px;}
+        .cp-mark{width:22px;height:22px;position:relative;flex:0 0 auto;}
+        .cp-mark--person::before{content:"";position:absolute;left:5px;top:1px;width:10px;height:10px;border-radius:50%;border:2px solid var(--cp-blue);}
+        .cp-mark--person::after{content:"";position:absolute;left:3px;bottom:1px;width:14px;height:9px;border-radius:10px 10px 7px 7px;border:2px solid var(--cp-blue);border-top:0;}
+        .cp-mark--reason::before{content:"";position:absolute;inset:2px;border-radius:50%;background:rgba(230,112,30,0.12);border:1px solid rgba(230,112,30,0.18);}
+        .cp-mark--reason::after{content:"!";position:absolute;inset:0;display:grid;place-items:center;font-size:16px;font-weight:700;color:var(--cp-orange);}
+        .cp-mark--probe::before{content:"";position:absolute;left:10px;top:3px;width:2px;height:16px;background:var(--cp-blue);border-radius:999px;}
+        .cp-mark--probe::after{content:"";position:absolute;left:3px;top:10px;width:16px;height:2px;background:var(--cp-blue);border-radius:999px;}
+        .cp-mark--advance::before{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:5px;border:1px solid rgba(196,75,69,0.18);background:rgba(196,75,69,0.1);transform:rotate(14deg);}
+        .cp-mark--advance::after{content:"";position:absolute;left:10px;top:5px;width:2px;height:8px;background:var(--cp-red);box-shadow:0 10px 0 0 var(--cp-red);}
+        .cp-mark--route::before{content:"";position:absolute;left:4px;top:10px;width:13px;height:2px;background:var(--cp-green);border-radius:999px;}
+        .cp-mark--route::after{content:"";position:absolute;right:3px;top:6px;width:8px;height:8px;border-top:2px solid var(--cp-green);border-right:2px solid var(--cp-green);transform:rotate(45deg);}
+        .cp-mark--copy::before,.cp-mark--copy::after{content:"";position:absolute;border-radius:5px;border:1px solid rgba(36,113,231,0.24);width:12px;height:14px;}
+        .cp-mark--copy::before{left:4px;top:5px;background:#fff;}
+        .cp-mark--copy::after{left:8px;top:3px;background:rgba(36,113,231,0.08);}
+        @media (max-width: 1320px){
+            .cp-pressure-shell{grid-template-columns:minmax(280px,0.92fr) minmax(0,1.1fr);}
+            .cp-route-column{grid-column:1 / -1;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;}
+        }
+        @media (max-width: 980px){
+            .cp-pressure-shell{grid-template-columns:1fr;}
+            .cp-route-column{grid-template-columns:1fr;}
+            .cp-hero{grid-template-columns:1fr;}
+            .cp-hero-status{justify-items:start;}
+        }
+        @media (max-width: 720px){
+            .cp-app-content{padding-bottom:24px;}
+            .cp-agenda,.cp-witness-panel,.cp-route-dock,.cp-outcome-panel,.cp-customize{padding:18px;border-radius:24px;}
+            .cp-dossier-head,.cp-strip,.cp-route-row{grid-template-columns:1fr;}
+            .cp-score-pill{justify-self:start;}
+            .cp-dossier-line{grid-template-columns:1fr;gap:6px;}
+            .cp-strip-label{padding-top:0;}
+        }
     </style>
 </head>
 <body class="room-wave2 room-call-planner">
@@ -113,6 +461,8 @@
             <script src="/js/analytics-site-config.js"></script>
     <script src="/js/analytics.js"></script>
             <script src="/js/data-manager.js"></script>
+            <script src="/js/demo-storage-bootstrap.js"></script>
+<script src="/js/workspace-guard.js"></script>
             <script src="/js/nav.js"></script>
         </aside>
         <main class="app-main">
@@ -126,62 +476,91 @@
                     <p class="module-subtitle">Turn one contact, one reason now, and one path to advancement into a call that can actually move.</p>
                 </div>
             </header>
-            <div class="app-content" style="max-width:720px;">
-                <section class="cp-first-fold">
+            <div class="app-content cp-app-content">
+                <section class="cp-room">
                     <div class="cp-boot-state" id="bootState"></div>
                     <div id="plannerShellBand"></div>
-                    <div class="cp-search">
-                        <div class="cp-search-field">
-                            <label>Who are you calling?</label>
-                            <input type="text" id="searchInput" placeholder="Jane Smith or paste LinkedIn URL..." oninput="onSearch(this.value)">
-                        </div>
-                    </div>
-                    <div style="margin-bottom:var(--space-md);">
-                        <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:8px;">Persona</div>
-                        <div class="cp-persona-pick" id="personaPick">
-                            <button class="cp-persona-btn active" data-p="cxo" onclick="setPer(this)">C-Suite</button>
-                            <button class="cp-persona-btn" data-p="vp" onclick="setPer(this)">VP / Director</button>
-                            <button class="cp-persona-btn" data-p="ops" onclick="setPer(this)">Ops / Support</button>
-                            <button class="cp-persona-btn" data-p="it" onclick="setPer(this)">IT / Engineering</button>
-                            <button class="cp-persona-btn" data-p="finance" onclick="setPer(this)">Finance</button>
-                            <button class="cp-persona-btn" data-p="revops" onclick="setPer(this)">RevOps</button>
-                        </div>
-                    </div>
-                    <div id="plannerHealthPanel"></div>
-                </section>
+                    <div class="cp-pressure-shell">
+                        <aside class="cp-witness-column">
+                            <section class="cp-witness-panel">
+                                <div id="plannerHealthPanel"></div>
+                                <div class="cp-field">
+                                    <label class="cp-field-label" for="searchInput">Who are you calling?</label>
+                                    <input type="text" id="searchInput" placeholder="Jane Smith or paste LinkedIn URL..." oninput="onSearch(this.value)">
+                                </div>
+                                <div class="cp-field">
+                                    <div class="cp-field-label">Persona</div>
+                                    <div class="cp-persona-pick" id="personaPick">
+                                        <button class="cp-persona-btn active" data-p="cxo" onclick="setPer(this)">C-Suite</button>
+                                        <button class="cp-persona-btn" data-p="vp" onclick="setPer(this)">VP / Director</button>
+                                        <button class="cp-persona-btn" data-p="ops" onclick="setPer(this)">Ops / Support</button>
+                                        <button class="cp-persona-btn" data-p="it" onclick="setPer(this)">IT / Engineering</button>
+                                        <button class="cp-persona-btn" data-p="finance" onclick="setPer(this)">Finance</button>
+                                        <button class="cp-persona-btn" data-p="revops" onclick="setPer(this)">RevOps</button>
+                                    </div>
+                                </div>
+                                <div class="cp-field">
+                                    <label class="cp-field-label" for="linkDeal">Linked deal</label>
+                                    <select id="linkDeal" onchange="if(window.refreshCallPlanner)window.refreshCallPlanner()">
+                                        <option value="">-- No deal linked --</option>
+                                    </select>
+                                </div>
+                            </section>
+                        </aside>
 
-                <div class="cp-agenda" id="agenda">
-                    <section class="cp-agenda-top">
-                        <div class="cp-quality" id="qualityBlock"></div>
-                        <div class="cp-context" id="contextBlock"></div>
-                    </section>
-                    <div class="cp-section">
-                        <div class="cp-section-title"><span class="num">1</span> Suggested Opening</div>
-                        <div class="cp-opener" id="openerBlock"></div>
+                        <section class="cp-sequence-column">
+                            <div class="cp-agenda" id="agenda">
+                                <div id="qualityBlock"></div>
+                                <section class="cp-strip">
+                                    <div class="cp-mark cp-mark--person"></div>
+                                    <div class="cp-strip-label">Open</div>
+                                    <div class="cp-strip-body" id="openerBlock"></div>
+                                </section>
+                                <section class="cp-strip">
+                                    <div class="cp-mark cp-mark--reason"></div>
+                                    <div class="cp-strip-label">Reason now</div>
+                                    <div class="cp-strip-body" id="whyNowBlock"></div>
+                                </section>
+                                <section class="cp-strip">
+                                    <div class="cp-mark cp-mark--probe"></div>
+                                    <div class="cp-strip-label">Probe</div>
+                                    <div class="cp-strip-body" id="questionsBlock"></div>
+                                </section>
+                                <section class="cp-strip">
+                                    <div class="cp-mark cp-mark--advance"></div>
+                                    <div class="cp-strip-label">Advance ask</div>
+                                    <div class="cp-strip-body" id="advanceBlock"></div>
+                                </section>
+                            </div>
+                        </section>
+
+                        <aside class="cp-route-column">
+                            <div id="handoffBlock"></div>
+                            <section class="cp-outcome-panel">
+                                <div class="cp-outcome-title">After the call</div>
+                                <div class="cp-outcome-copy">Log what happened so the script does not die as a one-off prep page.</div>
+                                <div class="cp-outcome">
+                                    <button class="cp-outcome-btn advance" onclick="logOutcome('advanced')">Mark advanced</button>
+                                    <button class="cp-outcome-btn noadvance" onclick="logOutcome('no-advance')">Mark no advance</button>
+                                    <button class="cp-outcome-btn noshow" onclick="logOutcome('no-show')">Mark no show</button>
+                                </div>
+                            </section>
+                            <details class="cp-customize">
+                                <summary>Manual context</summary>
+                                <div class="cp-customize-body">
+                                    <div class="cp-field">
+                                        <label class="cp-field-label" for="linkedinUrl">LinkedIn URL</label>
+                                        <input type="text" id="linkedinUrl" placeholder="https://linkedin.com/in/..." oninput="if(window.refreshCallPlanner)window.refreshCallPlanner()">
+                                    </div>
+                                    <div class="cp-field">
+                                        <label class="cp-field-label" for="customNotes">Custom notes</label>
+                                        <textarea id="customNotes" placeholder="Add anything specific to this call..." oninput="if(window.refreshCallPlanner)window.refreshCallPlanner()"></textarea>
+                                    </div>
+                                </div>
+                            </details>
+                        </aside>
                     </div>
-                    <div class="cp-section">
-                        <div class="cp-section-title"><span class="num">2</span> Discovery Questions</div>
-                        <div id="questionsBlock"></div>
-                    </div>
-                    <div class="cp-section">
-                        <div class="cp-section-title"><span class="num">3</span> Why Now Angle</div>
-                        <div id="whyNowBlock"></div>
-                    </div>
-                    <div class="cp-handoff" id="handoffBlock"></div>
-                    <div class="cp-outcome">
-                        <button class="cp-outcome-btn advance" onclick="logOutcome('advanced')">&#10003; Advanced</button>
-                        <button class="cp-outcome-btn noadvance" onclick="logOutcome('no-advance')">&#10007; No Advance</button>
-                        <button class="cp-outcome-btn noshow" onclick="logOutcome('no-show')">&#8709; No Show</button>
-                    </div>
-                    <details class="cp-customize">
-                        <summary>Customize this agenda</summary>
-                        <div class="cp-field"><label>Custom notes</label><textarea id="customNotes" placeholder="Add anything specific to this call..." oninput="if(window.refreshCallPlanner)window.refreshCallPlanner()"></textarea></div>
-                        <div class="cp-field"><label>LinkedIn URL</label><input type="text" id="linkedinUrl" placeholder="https://linkedin.com/in/..." oninput="if(window.refreshCallPlanner)window.refreshCallPlanner()"></div>
-                        <div class="cp-field"><label>Link to deal</label>
-                            <select id="linkDeal" onchange="if(window.refreshCallPlanner)window.refreshCallPlanner()"><option value="">-- No deal linked --</option></select>
-                        </div>
-                    </details>
-                </div>
+                </section>
             </div>
         </main>
     </div>
@@ -343,42 +722,89 @@
             };
         }
 
+        function getCurrentCompany(quality){
+            return (matchedAccount&&matchedAccount.name)||(quality&&quality.linkedDeal&&(quality.linkedDeal.accountName||quality.linkedDeal.name))||'No account context yet';
+        }
+
+        function getTopSignalHeadline(){
+            return (matchedAccount&&matchedAccount.signals&&matchedAccount.signals[0]&&matchedAccount.signals[0].headline)||'';
+        }
+
+        function getAdvanceAsk(quality){
+            var linkedDeal=quality.linkedDeal;
+            var ask=linkedDeal
+                ? 'Leave with a dated next step and a named internal owner on '+(linkedDeal.accountName||'the linked deal')+'.'
+                : 'Leave with a dated next step and then attach the result to a real deal before the day ends.';
+            var note=quality.hasSignal
+                ? 'The live pressure is already visible. Convert it into an owned move.'
+                : (quality.notes.length>=20
+                    ? 'Manual context is doing the why-now work. Make the ask specific enough to survive the handoff.'
+                    : 'If the reason now is still vague, the advance ask will sound vague too.');
+            return {ask:ask,note:note};
+        }
+
+        function getAgendaBriefText(){
+            var quality=getAgendaQuality();
+            var company=getCurrentCompany(quality);
+            var topSignal=getTopSignalHeadline();
+            var advance=getAdvanceAsk(quality);
+            var qs=questionBank[persona]||questionBank.cxo;
+            var lines=[
+                'Call Planner Brief',
+                'Contact: '+(contactName||'No person selected'),
+                'Persona: '+(personaLabels[persona]||'No persona'),
+                'Company: '+company,
+                quality.linkedDeal ? 'Linked deal: '+(quality.linkedDeal.accountName||quality.linkedDeal.name||'Linked deal') : 'Linked deal: none',
+                '',
+                'Opener:',
+                (topSignal ? 'I noticed '+topSignal.toLowerCase()+' and wanted to understand how that is changing priorities on your side.' : 'Thanks for making time. I wanted to start with how your team is handling this workflow today and where the handoff is breaking.'),
+                '',
+                'Reason now:',
+                (topSignal || quality.notes || 'No durable why-now angle yet.'),
+                '',
+                'Probe questions:'
+            ];
+            qs.forEach(function(q,index){
+                lines.push((index+1)+'. '+q.replace(/^"|"$/g,''));
+            });
+            lines.push('');
+            lines.push('Advance ask:');
+            lines.push(advance.ask);
+            lines.push(advance.note);
+            return lines.join('\n');
+        }
+
         function renderPlannerBridge(){
             var node=document.getElementById('plannerShellBand');
             if(!node)return;
             var quality=getAgendaQuality();
-            var company=(matchedAccount&&matchedAccount.name)||'No signal-backed account matched yet';
-            var oneSessionWin=contactName.length>=2?'Leave this page with a real opener, three buyer-tuned questions, a why-now angle, and a next module to move into.':'Pick the person, set the persona, and link the call to a real deal before it happens.';
-            var downstream=quality.linkedDeal?'This agenda is attached to '+(quality.linkedDeal.accountName||'the linked deal')+' and can hand straight into Discovery Studio or Deal Workspace.':'This planner becomes truly durable once the call is linked to a live deal record.';
+            var company=getCurrentCompany(quality);
             var stateTone=quality.band==='credible'?'live':quality.band==='workable'?'ready':'risk';
-            var stateLabel=quality.bandLabel;
-            if(window.gtmShellChrome){
+            var heroTitle=contactName.length>=2
+                ? 'Build the call so '+contactName+' reveals the real pressure.'
+                : 'Choose the real person before you script the call.';
+            var heroCopy=contactName.length>=2
+                ? 'One person. One reason now. Three probes. One advance ask. Then route the truth forward.'
+                : 'The room should not build a generic meeting. Start with the actual human, then let the pressure script tighten around that witness.';
+            if(window.gtmShellChrome&&typeof window.gtmShellChrome.applyHeader==='function'){
                 window.gtmShellChrome.applyHeader({
                     family:'Calls',
-                    stateLabel:stateLabel,
+                    stateLabel:quality.bandLabel,
                     stateTone:stateTone
                 });
-                window.gtmShellChrome.renderCommandBand('#plannerShellBand',{
-                    kicker:'Call planner bridge',
-                    title:'A good agenda changes the next call, not just this page.',
-                    copy:'Use Call Planner to tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.',
-                    stateLabel:stateLabel,
-                    stateTone:stateTone,
-                    metrics:[
-                        {label:'Current context',value:company},
-                        {label:'One-session win',value:oneSessionWin},
-                        {label:'Good agenda means',value:'Real person. Real why now. Real path to advancement. No generic buyer theater.'},
-                        {label:'Downstream handshake',value:downstream}
-                    ],
-                    actions:[
-                        {label:'Open Discovery Studio',action:'openDiscoveryRun()',tone:'primary'},
-                        {label:(quality.linkedDeal?'Open Linked Deal':'Open Deal Workspace'),action:'openLinkedDealWorkspace()'}
-                    ]
-                });
-                return;
             }
             node.innerHTML=
-                '<div class="cp-bridge"><div class="cp-bridge-k">Call planner bridge</div><div class="cp-bridge-title">A good agenda changes the next call, not just this page.</div><div class="cp-bridge-copy">Use Call Planner to tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.</div><div class="cp-bridge-grid"><div class="cp-bridge-block"><div class="cp-bridge-label">Current context</div><div class="cp-bridge-value">'+escH(company)+'</div></div><div class="cp-bridge-block"><div class="cp-bridge-label">One-session win</div><div class="cp-bridge-value">'+escH(oneSessionWin)+'</div></div><div class="cp-bridge-block"><div class="cp-bridge-label">Good agenda means</div><div class="cp-bridge-value">Real person. Real why now. Real path to advancement. No generic buyer theater.</div></div><div class="cp-bridge-block"><div class="cp-bridge-label">Downstream handshake</div><div class="cp-bridge-value">'+escH(downstream)+'</div></div></div></div>';
+                '<section class="cp-hero">'+
+                    '<div>'+
+                        '<div class="cp-hero-kicker">Pressure script</div>'+
+                        '<h2 class="cp-hero-title">'+escH(heroTitle)+'</h2>'+
+                        '<p class="cp-hero-copy">'+escH(heroCopy)+'</p>'+
+                    '</div>'+
+                    '<div class="cp-hero-status">'+
+                        '<span class="cp-band '+quality.band+'">'+escH(quality.bandLabel)+' · '+quality.score+'/100</span>'+
+                        '<div class="cp-hero-context">'+escH(company)+'</div>'+
+                    '</div>'+
+                '</section>';
         }
 
         function renderAgendaQuality(){
@@ -386,163 +812,65 @@
             if(!node)return;
             var quality=getAgendaQuality();
             var gateHtml=quality.gates.map(function(gate){
-                return '<div class="cp-gate '+(gate.met?'met':'cp-gate-miss')+'">'+
-                    '<div class="cp-gate-title">'+escH(gate.label)+'</div>'+
-                    '<div class="cp-gate-copy">'+escH(gate.copy)+'</div>'+
+                return '<div class="cp-gate-row '+(gate.met?'met':'miss')+'">'+
+                    '<div>'+
+                        '<div class="cp-gate-label">'+escH(gate.label)+'</div>'+
+                        '<div class="cp-gate-copy">'+escH(gate.copy)+'</div>'+
+                    '</div>'+
+                    '<div class="cp-gate-state">'+(gate.met?'Met':'Missing')+'</div>'+
                 '</div>';
             }).join('');
             node.innerHTML=
-                '<div class="cp-quality-top">'+
-                    '<div class="cp-quality-head">'+
-                        '<div class="cp-quality-k">Agenda quality</div>'+
-                        '<div class="cp-quality-title">'+quality.score+'/100 · '+escH(quality.bandLabel)+'</div>'+
-                        '<div class="cp-quality-copy">Good agenda means the meeting can actually advance: the person is clear, the why-now is credible, and the result has somewhere durable to land.</div>'+
-                    '</div>'+
-                    '<div class="cp-band '+quality.band+'">'+quality.bandLabel+'</div>'+
-                '</div>'+
-                '<div class="cp-gates">'+gateHtml+'</div>'+
-                '<div class="cp-next">Next move: '+escH(quality.next)+'</div>';
+                '<div class="cp-sequence-intro">'+
+                    '<div class="cp-sequence-kicker">Pressure sequence</div>'+
+                    '<div class="cp-sequence-title">Interrogate in this order.</div>'+
+                    '<div class="cp-sequence-copy">Good agenda means the meeting can actually advance: the person is clear, the reason now is credible, and the result has somewhere durable to land.</div>'+
+                    '<div class="cp-sequence-next">Next move: '+escH(quality.next)+'</div>'+
+                    '<div class="cp-gate-list">'+gateHtml+'</div>'+
+                '</div>';
         }
 
         function renderAgendaHandoff(){
             var node=document.getElementById('handoffBlock');
             if(!node)return;
             var quality=getAgendaQuality();
-            var dealCopy=quality.linkedDeal
-                ? 'This agenda is linked to '+(quality.linkedDeal.accountName||'the selected deal')+'. Run the call, then use Discovery Studio to manage the live conversation and Deal Workspace to record what changed.'
-                : 'You can run this call from here, but linking a deal will make the next step durable. Discovery Studio can still pick up the agenda state immediately.';
-            var dealLabel=quality.linkedDeal?'Open Linked Deal':'Open Deal Workspace';
-            node.innerHTML=
-                '<div class="cp-handoff-head">Next module handshake</div>'+
-                '<div class="cp-handoff-title">Do not let the agenda die here.</div>'+
-                '<div class="cp-handoff-copy">'+escH(dealCopy)+'</div>'+
-                '<div class="cp-handoff-actions">'+
-                    '<button class="cp-handoff-btn primary" type="button" onclick="openDiscoveryRun()">Open Discovery Studio</button>'+
-                    '<button class="cp-handoff-btn" type="button" onclick="openLinkedDealWorkspace()">'+escH(dealLabel)+'</button>'+
-                '</div>';
-        }
-
-        function renderPlannerBridge(){
-            var node=document.getElementById('plannerShellBand');
-            if(!node)return;
-            var quality=getAgendaQuality();
-            var company=(matchedAccount&&matchedAccount.name)||'No signal-backed account matched yet';
-            var oneSessionWin=contactName.length>=2?'Leave this page with a real opener, three buyer-tuned questions, a why-now angle, and a next module to move into.':'Pick the person, set the persona, and link the call to a real deal before it happens.';
-            var downstream=quality.linkedDeal?'This agenda is attached to '+(quality.linkedDeal.accountName||'the linked deal')+' and can hand straight into Discovery Studio or Deal Workspace.':'This planner becomes truly durable once the call is linked to a live deal record.';
-            var stateTone=quality.band==='credible'?'live':quality.band==='workable'?'ready':'risk';
-            var stateLabel=quality.bandLabel;
-            var stageHtml=
-                '<section class="shell-section anchor-stage">'+
-                    '<div class="anchor-stage-grid">'+
-                        '<div>'+
-                            '<div class="anchor-eyebrow">Meeting prep board</div>'+
-                            '<div class="anchor-headline">'+escH(contactName.length>=2?'Build the meeting so the call can actually advance.':'Pick the real person before you build the call.')+'</div>'+
-                            '<div class="anchor-support">Call Planner should tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.</div>'+
-                            '<div class="anchor-chip-row">'+
-                                '<span class="anchor-chip">'+escH(stateLabel)+'</span>'+
-                                '<span class="anchor-chip">'+escH(persona||'No persona yet')+'</span>'+
-                                '<span class="anchor-chip">'+(quality.linkedDeal?'Deal-linked':'No deal linked')+'</span>'+
-                            '</div>'+
-                            '<div class="anchor-primary-card">'+
-                                '<div class="anchor-primary-label">Current context</div>'+
-                                '<div class="anchor-primary-title">'+escH(company)+'</div>'+
-                                '<div class="anchor-primary-copy">'+escH(downstream)+'</div>'+
-                                '<div class="anchor-primary-actions">'+
-                                    '<button class="btn btn-primary" type="button" onclick="openDiscoveryRun()">Open Discovery Studio</button>'+
-                                    '<button class="btn btn-secondary" type="button" onclick="openLinkedDealWorkspace()">'+escH(quality.linkedDeal?'Open linked deal':'Open Deal Workspace')+'</button>'+
-                                '</div>'+
-                            '</div>'+
-                        '</div>'+
-                        '<div class="anchor-mini-grid">'+
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">One-session win</div><div class="anchor-mini-value">'+escH(oneSessionWin)+'</div><div class="anchor-mini-copy">A good agenda earns the right next conversation.</div></div>'+
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Agenda score</div><div class="anchor-mini-value">'+quality.score+'/100</div><div class="anchor-mini-copy">'+escH(quality.bandLabel)+' agenda quality.</div></div>'+
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Good agenda means</div><div class="anchor-mini-value">Real person</div><div class="anchor-mini-copy">Real why now. Real path to advancement. No generic buyer theater.</div></div>'+
-                            '<div class="anchor-mini-card"><div class="anchor-mini-label">Downstream handshake</div><div class="anchor-mini-value">'+escH(quality.next)+'</div><div class="anchor-mini-copy">The agenda should already point to the next module.</div></div>'+
-                        '</div>'+
-                    '</div>'+
-                '</section>';
-            if(window.gtmShellChrome){
-                window.gtmShellChrome.applyHeader({
-                    family:'Calls',
-                    stateLabel:stateLabel,
-                    stateTone:stateTone
-                });
-                window.gtmShellChrome.renderCommandBand('#plannerShellBand',{
-                    kicker:'Call planner bridge',
-                    title:'A good agenda changes the next call, not just this page.',
-                    copy:'Use Call Planner to tighten who you are talking to, why now matters, and where the truth lands after the meeting. A thin agenda creates a thin discovery run.',
-                    stateLabel:stateLabel,
-                    stateTone:stateTone,
-                    metrics:[
-                        {label:'Current context',value:company},
-                        {label:'One-session win',value:oneSessionWin},
-                        {label:'Good agenda means',value:'Real person. Real why now. Real path to advancement. No generic buyer theater.'},
-                        {label:'Downstream handshake',value:downstream}
-                    ],
-                    actions:[
-                        {label:'Open Discovery Studio',action:'openDiscoveryRun()',tone:'primary'},
-                        {label:(quality.linkedDeal?'Open Linked Deal':'Open Deal Workspace'),action:'openLinkedDealWorkspace()'}
-                    ]
-                });
-                node.insertAdjacentHTML('beforeend',stageHtml);
-                return;
-            }
-            node.innerHTML=stageHtml;
-        }
-
-        function renderAgendaQuality(){
-            var node=document.getElementById('qualityBlock');
-            if(!node)return;
-            var quality=getAgendaQuality();
-            var gateHtml=quality.gates.map(function(gate,index){
-                return '<div class="anchor-queue-card">'+
-                    '<div class="anchor-queue-top">'+
-                        '<div style="display:flex;gap:12px;align-items:flex-start;">'+
-                            '<div class="anchor-queue-rank">'+String(index+1)+'</div>'+
-                            '<div><div class="anchor-queue-title">'+escH(gate.label)+'</div></div>'+
-                        '</div>'+
-                        '<span class="shell-state-pill '+(gate.met?'state-live':'state-risk')+'">'+(gate.met?'Met':'Missing')+'</span>'+
-                    '</div>'+
-                    '<div class="anchor-queue-copy">'+escH(gate.copy)+'</div>'+
-                '</div>';
-            }).join('');
-            node.innerHTML=
-                '<section class="shell-section">'+
-                    '<div class="shell-section-header">'+
-                        '<div class="shell-section-heading">'+
-                            '<div class="shell-section-kicker">Agenda quality</div>'+
-                            '<div class="shell-section-title">'+quality.score+'/100 · '+escH(quality.bandLabel)+'</div>'+
-                            '<div class="shell-section-copy">A good agenda means the meeting can actually advance: the person is clear, the why-now is credible, and the result has somewhere durable to land.</div>'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="anchor-mini-grid" style="margin-bottom:16px;">'+
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Band</div><div class="anchor-mini-value">'+escH(quality.bandLabel)+'</div><div class="anchor-mini-copy">The agenda should earn the next module, not hope for it.</div></div>'+
-                        '<div class="anchor-mini-card"><div class="anchor-mini-label">Next move</div><div class="anchor-mini-value">'+escH(quality.next)+'</div><div class="anchor-mini-copy">The score should always point to what to tighten.</div></div>'+
-                    '</div>'+
-                    '<div class="anchor-queue">'+gateHtml+'</div>'+
-                '</section>';
-        }
-
-        function renderAgendaHandoff(){
-            var node=document.getElementById('handoffBlock');
-            if(!node)return;
-            var quality=getAgendaQuality();
-            var dealCopy=quality.linkedDeal
-                ? 'This agenda is linked to '+(quality.linkedDeal.accountName||'the selected deal')+'. Run the call, then use Discovery Studio to manage the live conversation and Deal Workspace to record what changed.'
-                : 'You can run this call from here, but linking a deal will make the next step durable. Discovery Studio can still pick up the agenda state immediately.';
             var dealLabel=quality.linkedDeal?'Open linked deal':'Open Deal Workspace';
+            var dealCopy=quality.linkedDeal
+                ? 'Record the changed owner, dated next step, and proof on '+(quality.linkedDeal.accountName||'the linked deal')+'.'
+                : 'Create or attach the deal landing spot so the call does not die as notes.';
             node.innerHTML=
-                '<section class="shell-section shell-section--compact">'+
-                    '<div class="shell-section-header">'+
-                        '<div class="shell-section-heading">'+
-                            '<div class="shell-section-kicker">Next module handshake</div>'+
-                            '<div class="shell-section-title">Do not let the agenda die here.</div>'+
-                            '<div class="shell-section-copy">'+escH(dealCopy)+'</div>'+
+                '<section class="cp-route-dock">'+
+                    '<div class="cp-route-head">'+
+                        '<div class="cp-route-kicker">Route the truth forward</div>'+
+                        '<div class="cp-route-title">Do not let the script die in prep.</div>'+
+                        '<div class="cp-route-copy">The room should already know where the live conversation goes next, where the deal changes get written, and how the portable brief leaves the page.</div>'+
+                    '</div>'+
+                    '<div class="cp-route-row">'+
+                        '<div class="cp-mark cp-mark--route"></div>'+
+                        '<div>'+
+                            '<div class="cp-route-row-label">Discovery Studio</div>'+
+                            '<div class="cp-route-row-title">Run the live conversation.</div>'+
+                            '<div class="cp-route-row-copy">Carry the opener, the probes, and the pressure note straight into the room.</div>'+
                         '</div>'+
-                        '<div class="shell-section-actions">'+
-                            '<button class="btn btn-primary" type="button" onclick="openDiscoveryRun()">Open Discovery Studio</button>'+
-                            '<button class="btn btn-secondary" type="button" onclick="openLinkedDealWorkspace()">'+escH(dealLabel)+'</button>'+
+                        '<button class="cp-route-action primary" type="button" onclick="openDiscoveryRun()">Open Discovery</button>'+
+                    '</div>'+
+                    '<div class="cp-route-row">'+
+                        '<div class="cp-mark cp-mark--advance"></div>'+
+                        '<div>'+
+                            '<div class="cp-route-row-label">Deal Workspace</div>'+
+                            '<div class="cp-route-row-title">Record what changed in the deal.</div>'+
+                            '<div class="cp-route-row-copy">'+escH(dealCopy)+'</div>'+
                         '</div>'+
+                        '<button class="cp-route-action" type="button" onclick="openLinkedDealWorkspace()">'+escH(dealLabel)+'</button>'+
+                    '</div>'+
+                    '<div class="cp-route-row">'+
+                        '<div class="cp-mark cp-mark--copy"></div>'+
+                        '<div>'+
+                            '<div class="cp-route-row-label">Portable brief</div>'+
+                            '<div class="cp-route-row-title">Take the call script with you.</div>'+
+                            '<div class="cp-route-row-copy">Copy the current opener, reason-now angle, probes, and advance ask into wherever the meeting actually runs.</div>'+
+                        '</div>'+
+                        '<button class="cp-route-action" type="button" onclick="copyAgendaBrief()">Copy agenda</button>'+
                     '</div>'+
                 '</section>';
         }
@@ -551,64 +879,42 @@
             var node=document.getElementById('plannerHealthPanel');
             if(!node)return;
             var quality=getAgendaQuality();
-            var company=(matchedAccount&&matchedAccount.name)||(quality.linkedDeal&&(quality.linkedDeal.accountName||quality.linkedDeal.name))||'No account context yet';
-            var whyNowState=quality.hasSignal?'Signal-backed':quality.notes.length>=20?'Notes-backed':'Missing';
-            var posture=quality.bandLabel;
-            var compounded=[];
-            var weakLinks=[];
-
-            if(contactName.length>=2){
-                compounded.push('<div class="workspace-health-item"><strong>A real person is on the board.</strong> '+escH(contactName)+' is giving the call a concrete human target instead of a generic persona guess.</div>');
-            }
-            if(matchedAccount||quality.linkedin){
-                compounded.push('<div class="workspace-health-item"><strong>Account context is visible.</strong> The agenda is no longer detached from the account thread the call has to move.</div>');
-            }
-            if(quality.hasSignal||quality.notes.length>=20){
-                compounded.push('<div class="workspace-health-item"><strong>The why-now angle is explicit.</strong> This call now has enough trigger context to sound timely instead of generic.</div>');
-            }
-            if(quality.linkedDeal){
-                compounded.push('<div class="workspace-health-item"><strong>The call has somewhere durable to land.</strong> '+escH(quality.linkedDeal.accountName||'The linked deal')+' can carry the truth back into pipeline and discovery.</div>');
-            }
-            if(!compounded.length){
-                compounded.push('<div class="workspace-health-item"><strong>The room has a workable starting point.</strong> Call Planner can keep building, but the agenda still needs more live context before it becomes believable.</div>');
-            }
-
-            if(contactName.length<2){
-                weakLinks.push('<div class="workspace-health-item"><strong>The real person is still missing.</strong> Until the call targets a named human, the agenda will stay vague.</div>');
-            }
-            if(!(matchedAccount||quality.linkedin)){
-                weakLinks.push('<div class="workspace-health-item"><strong>Account context is still thin.</strong> Match the account in Signal Console or add LinkedIn context so the prep has something real to anchor on.</div>');
-            }
-            if(!(quality.hasSignal||quality.notes.length>=20)){
-                weakLinks.push('<div class="workspace-health-item"><strong>The why-now is still weak.</strong> The call needs a real trigger or enough custom context to justify the meeting.</div>');
-            }
-            if(!quality.linkedDeal){
-                weakLinks.push('<div class="workspace-health-item"><strong>The advancement path is still detached.</strong> Link the call to a live deal so the result does not die as notes.</div>');
-            }
-            if(!weakLinks.length){
-                weakLinks.push('<div class="workspace-health-item"><strong>No single weak link is dominating the prep.</strong> Keep the agenda honest, but the current call plan is reading credibly.</div>');
-            }
-
+            var company=getCurrentCompany(quality);
+            var linkedDeal=quality.linkedDeal;
+            var topSignal=getTopSignalHeadline();
+            var metaParts=[];
+            if(persona)metaParts.push(personaLabels[persona]);
+            if(company&&company!=='No account context yet')metaParts.push(company);
+            if(linkedDeal)metaParts.push('$'+Number(linkedDeal.value||0).toLocaleString()+' '+String(linkedDeal.stage||'prospect').replace(/-/g,' '));
+            var support=matchedAccount
+                ? 'Signal-backed account matched.'
+                : (quality.linkedin ? 'LinkedIn context is carrying the account layer.' : 'No signal-backed account matched yet.');
+            var linkLine=linkedDeal
+                ? (linkedDeal.accountName||linkedDeal.name||'Linked deal')+' is attached for the handoff.'
+                : 'No deal attached yet.';
+            var signalLine=topSignal
+                ? topSignal
+                : (quality.notes.length>=20 ? 'Using manual notes until a live signal is attached.' : 'No live reason-now signal is visible yet.');
+            var noteText=!matchedAccount&&!quality.linkedin
+                ? 'Match the account in Signal Console or add LinkedIn context so the script stops guessing.'
+                : 'The witness rail should know who the call is for, why now matters, and where the result lands.';
             node.innerHTML=
-                '<section class="shell-section shell-section--compact workspace-health">'+
-                    '<div class="shell-section-header">'+
-                        '<div class="shell-section-heading">'+
-                            '<div class="shell-section-kicker">Workspace health</div>'+
-                            '<div class="shell-section-title">See what is compounding and what is still weak.</div>'+
-                            '<div class="shell-section-copy workspace-health-copy">Call Planner should show whether live call prep can actually survive the handoff into Discovery Studio and Deal Workspace.</div>'+
+                '<div class="cp-dossier">'+
+                    '<div class="cp-dossier-head">'+
+                        '<div>'+
+                            '<div class="cp-dossier-kicker">Selected contact</div>'+
+                            '<h2 class="cp-dossier-name">'+escH(contactName||'Choose the human.')+'</h2>'+
+                            '<div class="cp-dossier-meta">'+escH(metaParts.join(' · ')||'The agenda becomes credible only after the actual witness is named.')+'</div>'+
                         '</div>'+
+                        '<div class="cp-score-pill '+quality.band+'"><span>'+escH(quality.bandLabel)+'</span><strong>'+quality.score+'</strong></div>'+
                     '</div>'+
-                    '<div class="workspace-health-metrics">'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Prep posture</div><div class="workspace-health-value workspace-health-value--sans">'+escH(posture)+'</div><div class="workspace-health-subcopy">'+escH(quality.score+'/100 agenda quality')+'</div></div>'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Current context</div><div class="workspace-health-value workspace-health-value--sans">'+escH(contactName||'No person yet')+'</div><div class="workspace-health-subcopy">'+escH(company)+'</div></div>'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Why now</div><div class="workspace-health-value workspace-health-value--sans">'+escH(whyNowState)+'</div><div class="workspace-health-subcopy">'+(quality.hasSignal?'Signal visible.':quality.notes.length>=20?'Custom context captured.':'No durable trigger yet.')+'</div></div>'+
-                        '<div class="workspace-health-metric"><div class="workspace-health-label">Deal linkage</div><div class="workspace-health-value workspace-health-value--sans">'+escH(quality.linkedDeal?'Attached':'Thin')+'</div><div class="workspace-health-subcopy">'+escH(quality.linkedDeal?(quality.linkedDeal.accountName||quality.linkedDeal.name||'Linked deal visible'):'No linked deal yet')+'</div></div>'+
+                    '<div class="cp-dossier-lines">'+
+                        '<div class="cp-dossier-line"><div class="cp-dossier-label">Account</div><div class="cp-dossier-value">'+escH(support)+'</div></div>'+
+                        '<div class="cp-dossier-line"><div class="cp-dossier-label">Reason now</div><div class="cp-dossier-value">'+escH(signalLine)+'</div></div>'+
+                        '<div class="cp-dossier-line"><div class="cp-dossier-label">Advance path</div><div class="cp-dossier-value">'+escH(linkLine)+'</div></div>'+
                     '</div>'+
-                    '<div class="workspace-health-grid">'+
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Compounding</div><div class="workspace-health-list">'+compounded.slice(0,2).join('')+'</div></div>'+
-                        '<div class="workspace-health-panel"><div class="workspace-health-panel-title">Still weak</div><div class="workspace-health-list">'+weakLinks.slice(0,2).join('')+'</div></div>'+
-                    '</div>'+
-                '</section>';
+                    '<div class="cp-dossier-note">'+escH(noteText)+'</div>'+
+                '</div>';
         }
 
         function getAgendaSnapshot(){
@@ -672,31 +978,24 @@
             document.querySelectorAll('.cp-persona-btn').forEach(function(b){b.classList.remove('active');});
             btn.classList.add('active');
             persona=btn.dataset.p;
-            if(contactName)buildAgenda();
-            else{renderPlannerBridge();renderPlannerWorkspaceHealth();}
+            buildAgenda();
         };
 
         window.onSearch=function(val){
             contactName=val.trim();
+            matchedAccount=null;
             if(contactName.length>=2){
-                // Check Signal Console for matching account
-                matchedAccount=null;
                 signalConsoleAccounts.forEach(function(a){
                     if(contactName.toLowerCase().indexOf(a.name.toLowerCase())!==-1 || a.name.toLowerCase().indexOf(contactName.toLowerCase())!==-1){
                         matchedAccount=a;
                     }
                 });
-                buildAgenda();
-            } else {
-                document.getElementById('agenda').classList.remove('visible');
-                renderPlannerBridge();
-                renderPlannerWorkspaceHealth();
             }
+            buildAgenda();
         };
 
         window.refreshCallPlanner=function(){
-            if(contactName)buildAgenda();
-            else{renderPlannerBridge();renderPlannerWorkspaceHealth();}
+            buildAgenda();
         };
 
         function buildAgenda(){
@@ -704,55 +1003,59 @@
             renderPlannerBridge();
             renderPlannerWorkspaceHealth();
             renderAgendaQuality();
-            var linkedDeal=getLinkedDeal();
-
-            // Context block
-            var ctx='<div class="cp-context-title">Account Context</div><div class="cp-context-row">';
-            ctx+='<div class="cp-context-item"><strong>Contact:</strong> '+escH(contactName)+'</div>';
-            ctx+='<div class="cp-context-item"><strong>Persona:</strong> '+personaLabels[persona]+'</div>';
-            if(matchedAccount){
-                ctx+='<div class="cp-context-item"><strong>Company:</strong> '+escH(matchedAccount.name)+'</div>';
-                if(matchedAccount.industry)ctx+='<div class="cp-context-item"><strong>Industry:</strong> '+escH(matchedAccount.industry)+'</div>';
-                if(linkedDeal)ctx+='<div class="cp-context-item"><strong>Linked Deal:</strong> '+escH(linkedDeal.accountName||'Selected deal')+' · '+escH((linkedDeal.stage||'prospect').replace('-',' '))+'</div>';
-                ctx+='</div>';
-                if(matchedAccount._heat){
-                    var heatClass=matchedAccount._heat>=91?'hot':matchedAccount._heat>=75?'warm':'med';
-                    ctx+='<div class="cp-signal-badge" style="background:rgba('+(heatClass==='hot'?'239,68,68':heatClass==='warm'?'245,158,11':'59,130,246')+',0.1);color:'+(heatClass==='hot'?'#ef4444':heatClass==='warm'?'#f59e0b':'#3b82f6')+';">Heat: '+matchedAccount._heat+'</div>';
-                }
-                if(matchedAccount.signals&&matchedAccount.signals.length>0){
-                    ctx+='<div style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);">Top signal: '+escH(matchedAccount.signals[0].headline)+'</div>';
-                }
-            } else {
-                if(linkedDeal)ctx+='<div class="cp-context-item"><strong>Linked Deal:</strong> '+escH(linkedDeal.accountName||'Selected deal')+' · '+escH((linkedDeal.stage||'prospect').replace('-',' '))+'</div>';
-                ctx+='</div><div style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);font-style:italic;">Not found in Signal Console. <a href="'+buildPlannerRoomHref('/app/signal-console/',contactName||'Call prep gap','Signal Console')+'" style="color:var(--brand-gold);">Add account &rarr;</a></div>';
-            }
-            document.getElementById('contextBlock').innerHTML=ctx;
-
-            // Opener
-            var opener='';
-            if(matchedAccount&&matchedAccount.signals&&matchedAccount.signals.length>0){
-                opener='"I noticed '+escH(matchedAccount.signals[0].headline.toLowerCase())+' \u2014 I\'m curious how that\'s impacting your team\'s priorities right now."';
-            } else {
-                opener='"Thanks for making time. I\'ve been doing some research on [company] and had a few questions about how your team is thinking about [area]. Mind if I jump in?"';
-            }
-            document.getElementById('openerBlock').innerHTML=opener;
-
-            // Questions
             var qs=questionBank[persona]||questionBank.cxo;
-            document.getElementById('questionsBlock').innerHTML=qs.map(function(q){
-                return '<div class="cp-question">'+q+'</div>';
-            }).join('');
+            var quality=getAgendaQuality();
+            var topSignal=getTopSignalHeadline();
+            var openerScript=topSignal
+                ? 'I noticed '+topSignal.toLowerCase()+' and wanted to understand how that is changing priorities on your side.'
+                : 'Thanks for making time. I wanted to start with how your team is handling this workflow today and where the handoff is breaking.';
+            document.getElementById('openerBlock').innerHTML=
+                '<div class="cp-strip-title">Open from the operating burden.</div>'+
+                '<div class="cp-strip-copy">'+escH(openerScript)+'</div>'+
+                '<div class="cp-strip-note">The opener should name a real burden fast enough that the meeting stops sounding generic.</div>';
 
-            // Why now
-            var whyNow='';
-            if(matchedAccount&&matchedAccount.signals&&matchedAccount.signals.length>0){
-                whyNow='<div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.5;padding:12px 16px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;">"Based on '+escH(matchedAccount.signals[0].headline)+', it seems like timing could be critical. What\'s driving the urgency on your end?"</div>';
-            } else {
-                whyNow='<div style="font-size:0.88rem;color:var(--text-tertiary);font-style:italic;">Add this account to Signal Console to auto-generate a "why now" angle from real signals.</div>';
-            }
-            document.getElementById('whyNowBlock').innerHTML=whyNow;
+            var whyNowTitle=topSignal
+                ? 'Live pressure is already visible.'
+                : (quality.notes.length>=20 ? 'Manual context is carrying the why-now.' : 'The why-now is still thin.');
+            var whyNowCopy=topSignal
+                ? topSignal
+                : (quality.notes.length>=20 ? quality.notes : 'Use Signal Console or manual notes to justify why this meeting should happen now, not vaguely later.');
+            var whyNowNote=topSignal
+                ? 'Use the signal, not abstract curiosity, to justify the meeting.'
+                : 'The call will stay soft until the reason now is concrete.';
+            document.getElementById('whyNowBlock').innerHTML=
+                '<div class="cp-strip-title">'+escH(whyNowTitle)+'</div>'+
+                '<div class="cp-strip-copy">'+escH(whyNowCopy)+'</div>'+
+                '<div class="cp-strip-note">'+escH(whyNowNote)+'</div>';
+
+            document.getElementById('questionsBlock').innerHTML=
+                '<div class="cp-strip-title">Ask only what the meeting can carry.</div>'+
+                '<div class="cp-strip-note">Three probes are enough if they surface ownership, authority, and timing.</div>'+
+                '<div class="cp-question-list">'+qs.map(function(q,index){
+                    return '<div class="cp-question-row"><div class="cp-question-num">0'+(index+1)+'</div><div class="cp-question-copy">'+escH(q.replace(/^\"|\"$/g,''))+'</div></div>';
+                }).join('')+'</div>';
+
+            var advance=getAdvanceAsk(quality);
+            document.getElementById('advanceBlock').innerHTML=
+                '<div class="cp-strip-title">Leave with a move the board can trust.</div>'+
+                '<div class="cp-strip-copy">'+escH(advance.ask)+'</div>'+
+                '<div class="cp-strip-note">'+escH(advance.note)+'</div>';
+
             renderAgendaHandoff();
         }
+
+        window.copyAgendaBrief=function(){
+            var briefText=getAgendaBriefText();
+            if(navigator.clipboard&&navigator.clipboard.writeText){
+                navigator.clipboard.writeText(briefText).then(function(){
+                    alert('Agenda brief copied.');
+                }).catch(function(){
+                    alert(briefText);
+                });
+                return;
+            }
+            alert(briefText);
+        };
 
         window.logOutcome=async function(type){
             var stats=readLS('gtmos_discovery_stats',{totalCalls:0,advancedCalls:0});
@@ -792,8 +1095,7 @@
             }
             await syncSignalConsoleAccounts();
             populateDealDropdown();
-            renderPlannerBridge();
-            renderPlannerWorkspaceHealth();
+            buildAgenda();
             clearBootState();
         }
 
