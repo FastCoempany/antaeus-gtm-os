@@ -2,29 +2,37 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
     __setFrameworkRegistryForTests,
     activeFramework,
+    activeInterrupt,
     activeNode,
     callClock,
     callDisposition,
+    clearInterrupt,
     compressionMode,
     essentialNodeSet,
     expandResponse,
     expandedResponse,
     frameworkRegistry,
+    getSegmentKeyForNode,
     inboundQuestionHandlers,
     learnedFacts,
     nextStepLock,
     objectionLibrary,
+    recordBranchInteraction,
     recordLearnedFact,
+    recordSignal,
     resetSession,
     responseSet,
     selectFramework,
     setActiveNode,
     setCompressionMode,
     setNextStepField,
+    signalLedger,
     skipAheadHandlers,
     startCallClock,
     stopCallClock,
     supportDossier,
+    triggerInterrupt,
+    workedNodeIds,
     type Framework
 } from "./state";
 
@@ -255,5 +263,144 @@ describe("state — computed signals", () => {
         activeFramework.value = "legal";
         expect(supportDossier.value).toEqual([]);
         expect(objectionLibrary.value).toEqual([]);
+    });
+});
+
+// ─── Wave 3 — interaction recording + lookups ───────────────────────────
+
+describe("state — Wave 3 interaction recording", () => {
+    it("recordSignal appends a tone-tagged ledger entry", () => {
+        recordSignal("of-1", 0, "grn");
+        expect(signalLedger.value).toHaveLength(1);
+        expect(signalLedger.value[0]?.nodeId).toBe("of-1");
+        expect(signalLedger.value[0]?.branchIndex).toBe(0);
+        expect(signalLedger.value[0]?.tone).toBe("grn");
+        expect(signalLedger.value[0]?.recordedAt).toMatch(
+            /^\d{4}-\d{2}-\d{2}T/
+        );
+    });
+
+    it("recordBranchInteraction records both signal and learned fact when branch has clear", () => {
+        const branch = {
+            tag: "audit",
+            cls: "grn" as const,
+            quote: "...",
+            move: "...",
+            clear: "Compliance event is the trigger."
+        };
+        recordBranchInteraction("of-1", 0, branch);
+
+        expect(signalLedger.value).toHaveLength(1);
+        expect(learnedFacts.value).toHaveLength(1);
+        expect(learnedFacts.value[0]?.fact).toBe(
+            "Compliance event is the trigger."
+        );
+    });
+
+    it("recordBranchInteraction records signal but NO learned fact when clear is empty", () => {
+        const branch = {
+            tag: "ambiguous",
+            cls: "blu" as const,
+            quote: "...",
+            move: "..."
+        };
+        recordBranchInteraction("of-1", 0, branch);
+
+        expect(signalLedger.value).toHaveLength(1);
+        expect(learnedFacts.value).toHaveLength(0);
+    });
+
+    it("recordBranchInteraction is idempotent — re-clicking same branch doesn't duplicate", () => {
+        const branch = {
+            tag: "audit",
+            cls: "grn" as const,
+            quote: "...",
+            move: "...",
+            clear: "Fact A"
+        };
+        recordBranchInteraction("of-1", 0, branch);
+        recordBranchInteraction("of-1", 0, branch);
+        recordBranchInteraction("of-1", 0, branch);
+
+        expect(signalLedger.value).toHaveLength(1);
+        expect(learnedFacts.value).toHaveLength(1);
+    });
+});
+
+describe("state — Wave 3 computed workedNodeIds", () => {
+    it("returns distinct node IDs from signalLedger", () => {
+        recordSignal("of-1", 0, "grn");
+        recordSignal("of-1", 1, "org"); // same node, different branch
+        recordSignal("cst-1", 0, "blu");
+
+        const ids = workedNodeIds.value;
+        expect(ids).toHaveLength(2);
+        expect(ids).toContain("of-1");
+        expect(ids).toContain("cst-1");
+    });
+
+    it("is empty when no signal entries exist", () => {
+        expect(workedNodeIds.value).toEqual([]);
+    });
+});
+
+describe("state — Wave 3 interrupt handling", () => {
+    it("triggerInterrupt sets activeInterrupt", () => {
+        const it = {
+            id: "demo",
+            label: "Demo request",
+            tone: "blu" as const,
+            recover: "Walk through how a demo would land..."
+        };
+        triggerInterrupt(it);
+        expect(activeInterrupt.value).toEqual(it);
+    });
+
+    it("clearInterrupt unsets activeInterrupt", () => {
+        triggerInterrupt({
+            id: "x",
+            label: "x",
+            tone: "blu",
+            recover: "x"
+        });
+        clearInterrupt();
+        expect(activeInterrupt.value).toBeNull();
+    });
+
+    it("resetSession clears activeInterrupt", () => {
+        triggerInterrupt({
+            id: "x",
+            label: "x",
+            tone: "blu",
+            recover: "x"
+        });
+        resetSession();
+        expect(activeInterrupt.value).toBeNull();
+    });
+});
+
+describe("state — Wave 3 getSegmentKeyForNode lookup", () => {
+    it("returns the segment key for a known node", () => {
+        __setFrameworkRegistryForTests([FIXTURE]);
+        selectFramework("legal");
+        expect(getSegmentKeyForNode("of-1")).toBe("opening-frame");
+        expect(getSegmentKeyForNode("cst-1")).toBe("current-state-truth");
+    });
+
+    it("returns null for an unknown node", () => {
+        __setFrameworkRegistryForTests([FIXTURE]);
+        selectFramework("legal");
+        expect(getSegmentKeyForNode("not-a-node")).toBeNull();
+    });
+
+    it("returns null when no framework is active", () => {
+        __setFrameworkRegistryForTests([FIXTURE]);
+        expect(getSegmentKeyForNode("of-1")).toBeNull();
+    });
+
+    it("returns null when active framework isn't in registry", () => {
+        __setFrameworkRegistryForTests([]);
+        activeFramework.value = "legal";
+        expect(getSegmentKeyForNode("of-1")).toBeNull();
     });
 });

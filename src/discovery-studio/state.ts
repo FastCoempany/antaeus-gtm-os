@@ -363,6 +363,36 @@ export const handoffPayload: Signal<{
     payload: Record<string, unknown>;
 } | null> = signal(null);
 
+// ─── Wave 3 interaction state ───────────────────────────────────────────
+
+/**
+ * activeInterrupt — Wave 3. The recover-the-call interrupt the user is
+ * currently displaying (clicked from RecoverRail). When set, the
+ * DiscoveryStudio shell renders the interrupt's recover copy in a
+ * prominent banner. Null = no interrupt active.
+ *
+ * Not one of the canonical 21 primitives (interrupts themselves live on
+ * the framework's `interrupts` array — a static catalog). This signal is
+ * just the "currently surfaced" projection, similar to expandedResponse
+ * for branches.
+ */
+export const activeInterrupt: Signal<Interrupt | null> = signal(null);
+
+/**
+ * workedNodeIds — Wave 3. Distinct node IDs the user has interacted
+ * with this session, derived from signalLedger. Drives the WorkedMemory
+ * rail's count + list.
+ */
+export const workedNodeIds: ReadonlySignal<ReadonlyArray<string>> = computed(
+    () => {
+        const seen = new Set<string>();
+        for (const entry of signalLedger.value) {
+            seen.add(entry.nodeId);
+        }
+        return Array.from(seen);
+    }
+);
+
 // ─── Action helpers ─────────────────────────────────────────────────────
 
 export function selectFramework(id: FrameworkId): void {
@@ -393,6 +423,72 @@ export function recordLearnedFact(
         ...learnedFacts.value,
         { nodeId, branchIndex, fact, recordedAt: new Date().toISOString() }
     ];
+}
+
+/**
+ * Append a SignalLedgerEntry. Tone-over-time log driven by branch
+ * interactions during the call. Wave 3 adds this; Wave 5+ may compute
+ * call-tone summaries from it for post-call routing.
+ */
+export function recordSignal(
+    nodeId: string,
+    branchIndex: number,
+    tone: BranchTone
+): void {
+    signalLedger.value = [
+        ...signalLedger.value,
+        { nodeId, branchIndex, tone, recordedAt: new Date().toISOString() }
+    ];
+}
+
+/**
+ * Convenience wrapper called by SegmentRail's BranchPicker on click.
+ * Records both the signal-ledger entry (always) and the learned fact
+ * (only when the branch carries a `clear` value — branches without one
+ * are buyer-tone signals without confirmable truth yet).
+ *
+ * Idempotency: if the same (nodeId, branchIndex) was already recorded,
+ * skip — toggling a branch open/closed shouldn't multiply the trace.
+ */
+export function recordBranchInteraction(
+    nodeId: string,
+    branchIndex: number,
+    branch: Branch
+): void {
+    const alreadyRecorded = signalLedger.value.some(
+        (e) => e.nodeId === nodeId && e.branchIndex === branchIndex
+    );
+    if (alreadyRecorded) return;
+    recordSignal(nodeId, branchIndex, branch.cls);
+    if (branch.clear && branch.clear.length > 0) {
+        recordLearnedFact(nodeId, branchIndex, branch.clear);
+    }
+}
+
+export function triggerInterrupt(it: Interrupt): void {
+    activeInterrupt.value = it;
+}
+
+export function clearInterrupt(): void {
+    activeInterrupt.value = null;
+}
+
+/**
+ * Find the segment key that owns the given node ID, in the active
+ * framework. Returns null if the framework isn't loaded or the node
+ * doesn't belong to it. Used by LearnedTruthLedger click-to-jump.
+ */
+export function getSegmentKeyForNode(nodeId: string): string | null {
+    const fid = activeFramework.value;
+    if (!fid) return null;
+    const fw = frameworkRegistry.value.find((f) => f.id === fid);
+    if (!fw) return null;
+    for (const seg of fw.segments) {
+        if (seg.nodes.some((n) => n.id === nodeId)) {
+            return seg.key;
+        }
+    }
+    return null;
 }
 
 export function setNextStepField<K extends keyof NextStepLock>(
@@ -435,6 +531,7 @@ export function resetSession(): void {
     callDisposition.value = "in-progress";
     postCallPackage.value = null;
     handoffPayload.value = null;
+    activeInterrupt.value = null;
 }
 
 export function __setFrameworkRegistryForTests(

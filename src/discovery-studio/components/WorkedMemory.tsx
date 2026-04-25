@@ -1,24 +1,26 @@
 import type { JSX } from "preact";
 import {
     activeFramework,
-    activeNode,
     essentialNodeSet,
-    frameworkRegistry
+    frameworkRegistry,
+    getSegmentKeyForNode,
+    setActiveNode,
+    workedNodeIds
 } from "../state";
 
 /**
- * WorkedMemory — Wave 1 skeleton.
+ * WorkedMemory — Wave 3.
  *
- * Shows which nodes have been touched (had at least one branch expanded
- * or been the active node). The visible signal that "this part of the
- * call has been covered."
+ * Shows which nodes have been touched via signalLedger. The visible
+ * marker that "this part of the call has been covered." Click any
+ * worked node to jump back to it.
  *
- * Wave 2 wires this to the signal ledger so the count + list reflect
- * actual call progress, not just the static node catalog.
+ * Progress denominator is essentialNodeSet — covered the room's
+ * essentials, not the entire 3x-larger node catalog.
  */
 export function WorkedMemory(): JSX.Element {
     const fid = activeFramework.value;
-    const node = activeNode.value;
+    const worked = workedNodeIds.value;
     const essentials = essentialNodeSet.value;
     const fw = fid
         ? frameworkRegistry.value.find((f) => f.id === fid)
@@ -35,20 +37,52 @@ export function WorkedMemory(): JSX.Element {
         );
     }
 
-    const totalEssentials = essentials.length;
-    const workedCount = node ? 1 : 0; // Wave 2: count from signalLedger
+    // Build a node-id → text map so we can render the worked nodes by their
+    // human-readable text without re-walking the framework on every render.
+    const nodeText: Record<string, string> = {};
+    for (const seg of fw.segments) {
+        for (const n of seg.nodes) {
+            nodeText[n.id] = n.text;
+        }
+    }
+
+    const workedEssentials = worked.filter((id) => essentials.includes(id));
+
+    const handleJump = (nodeId: string): void => {
+        const segmentKey = getSegmentKeyForNode(nodeId);
+        if (segmentKey) {
+            setActiveNode(segmentKey, nodeId);
+        }
+    };
 
     return (
         <section class="ds-worked-memory" aria-label="Worked memory">
             <header class="ds-worked-memory__header">
                 Worked memory
                 <span class="ds-worked-memory__progress">
-                    {workedCount} / {totalEssentials}
+                    {workedEssentials.length} / {essentials.length}
                 </span>
             </header>
-            <p class="ds-worked-memory__hint">
-                Wave 2 will list the nodes you've touched so far in this call.
-            </p>
+            {worked.length === 0 ? (
+                <p class="ds-worked-memory__empty">
+                    Touch any node's branches to start tracking covered ground.
+                </p>
+            ) : (
+                <ul class="ds-worked-memory__list">
+                    {worked.map((id) => (
+                        <li key={id}>
+                            <button
+                                type="button"
+                                class="ds-worked-memory__node"
+                                onClick={() => handleJump(id)}
+                                title="Jump to this node"
+                            >
+                                {nodeText[id] ?? id}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </section>
     );
 }

@@ -6,19 +6,25 @@ import { LearnedTruthLedger } from "./components/LearnedTruthLedger";
 import { WorkedMemory } from "./components/WorkedMemory";
 import { NextStepDocket } from "./components/NextStepDocket";
 import { SupportDossier } from "./components/SupportDossier";
-import { activeFramework, frameworkRegistry } from "./state";
+import {
+    activeFramework,
+    activeInterrupt,
+    clearInterrupt,
+    frameworkRegistry
+} from "./state";
 
 /**
- * DiscoveryStudio — Wave 1 root.
+ * DiscoveryStudio — Wave 3 root.
  *
- * Lays out the 7 binding global rails. Wave 1 is structurally complete
- * (every rail renders something) but visually unstyled — Wave 2 brings
- * the legacy room's visual fidelity.
+ * Lays out the 7 binding global rails plus a top-level interrupt
+ * banner that surfaces when the user clicks any RecoverRail item.
  *
  * Layout intent (matches the legacy `dsj-shell` three-column structure):
  *
  *   ┌──────────────────────────────────────────────┐
  *   │  Topbar: framework rail                      │
+ *   ├──────────────────────────────────────────────┤
+ *   │  [InterruptBanner — shown when active]       │
  *   ├────────────┬─────────────────┬───────────────┤
  *   │  Segment   │  Center work    │  Side dock:   │
  *   │  rail      │  area:          │  - Recover    │
@@ -27,19 +33,19 @@ import { activeFramework, frameworkRegistry } from "./state";
  *   │            │    docket       │  - Worked     │
  *   │            │                 │    memory     │
  *   ├────────────┴─────────────────┴───────────────┤
- *   │  Support dossier (drawer; always rendered    │
- *   │   in Wave 1, drawer in Wave 2)               │
+ *   │  Support dossier                             │
  *   └──────────────────────────────────────────────┘
  */
 export function DiscoveryStudio(): JSX.Element {
     const fid = activeFramework.value;
     const fwLoaded = frameworkRegistry.value.length > 0;
+    const interrupt = activeInterrupt.value;
 
     return (
         <div class="ds-shell">
             <header class="ds-topbar">
                 <p class="ds-topbar__kicker">
-                    DISCOVERY STUDIO · WAVE 2 · {fwLoaded
+                    DISCOVERY STUDIO · WAVE 3 · {fwLoaded
                         ? `${frameworkRegistry.value.length} frameworks loaded`
                         : "loading…"}
                 </p>
@@ -51,6 +57,30 @@ export function DiscoveryStudio(): JSX.Element {
                 </h1>
                 <FrameworkRail />
             </header>
+
+            {interrupt ? (
+                <section
+                    class={`ds-interrupt-banner ds-interrupt-banner--${interrupt.tone}`}
+                    aria-label="Active recover interrupt"
+                >
+                    <div class="ds-interrupt-banner__inner">
+                        <p class="ds-interrupt-banner__kicker">
+                            Recover · {interrupt.label}
+                        </p>
+                        <p class="ds-interrupt-banner__copy">
+                            {interrupt.recover}
+                        </p>
+                        <button
+                            type="button"
+                            class="ds-interrupt-banner__dismiss"
+                            onClick={clearInterrupt}
+                            aria-label="Dismiss interrupt"
+                        >
+                            Dismiss
+                        </button>
+                    </div>
+                </section>
+            ) : null}
 
             <main class="ds-main">
                 <aside class="ds-main__left">

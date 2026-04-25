@@ -7,6 +7,7 @@ import {
     expandResponse,
     expandedResponse,
     frameworkRegistry,
+    recordBranchInteraction,
     setActiveNode,
     type Branch,
     type SegmentNode
@@ -144,6 +145,7 @@ interface BranchPickerProps {
 
 function BranchPicker({ branches }: BranchPickerProps): JSX.Element {
     const expanded = expandedResponse.value;
+    const node = activeNode.value;
     if (branches.length === 0) {
         return (
             <p class="ds-branch-picker__empty">
@@ -155,6 +157,19 @@ function BranchPicker({ branches }: BranchPickerProps): JSX.Element {
         <div class="ds-branch-picker">
             {branches.map((b, i) => {
                 const isExpanded = expanded === i;
+                const handleClick = (): void => {
+                    if (isExpanded) {
+                        expandResponse(-1);
+                    } else {
+                        expandResponse(i);
+                        // Wave 3: record the branch interaction. This is
+                        // idempotent — re-clicking the same branch won't
+                        // duplicate the ledger entry.
+                        if (node) {
+                            recordBranchInteraction(node.nodeId, i, b);
+                        }
+                    }
+                };
                 return (
                     <button
                         key={i}
@@ -162,9 +177,7 @@ function BranchPicker({ branches }: BranchPickerProps): JSX.Element {
                         class={`ds-branch-picker__branch ds-branch-picker__branch--${b.cls}${
                             isExpanded ? " is-expanded" : ""
                         }`}
-                        onClick={() =>
-                            isExpanded ? expandResponse(-1) : expandResponse(i)
-                        }
+                        onClick={handleClick}
                     >
                         {b.tag ? (
                             <span class="ds-branch-picker__tag">{b.tag}</span>

@@ -121,6 +121,81 @@ button {
     margin: 0;
 }
 
+/* ─── Interrupt banner (Wave 3) ─────────────────────────────────────── */
+
+.ds-interrupt-banner {
+    border-bottom: 1px solid var(--ds-border);
+    background: var(--ds-field-raised);
+}
+
+.ds-interrupt-banner--red {
+    background: #fbeae8;
+    border-left: 3px solid var(--ds-accent-red);
+}
+.ds-interrupt-banner--org {
+    background: #fff3ec;
+    border-left: 3px solid var(--ds-accent-orange);
+}
+.ds-interrupt-banner--blu {
+    background: #eef3fb;
+    border-left: 3px solid var(--ds-accent-blue);
+}
+.ds-interrupt-banner--grn {
+    background: #ecf6ef;
+    border-left: 3px solid var(--ds-accent-green);
+}
+.ds-interrupt-banner--pur {
+    background: #f3eefb;
+    border-left: 3px solid #6c2bd9;
+}
+
+.ds-interrupt-banner__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 4px 16px;
+    align-items: center;
+}
+
+.ds-interrupt-banner__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ds-ink-70);
+    margin: 0;
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.ds-interrupt-banner__copy {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    color: var(--ds-ink);
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.ds-interrupt-banner__dismiss {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    background: transparent;
+    border: 1px solid var(--ds-border-strong);
+    color: var(--ds-ink);
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 2px;
+}
+
+.ds-interrupt-banner__dismiss:hover {
+    background: var(--ds-ink-15);
+}
+
 /* ─── Main 3-col layout ─────────────────────────────────────────────── */
 
 .ds-main {
@@ -410,6 +485,12 @@ button {
     border-left: 3px solid #6c2bd9;
 }
 
+.ds-recover-rail__btn.is-active {
+    background: var(--ds-ink);
+    color: #fff;
+    border-color: var(--ds-ink);
+}
+
 .ds-recover-rail__empty {
     font-size: 12px;
     color: var(--ds-ink-70);
@@ -448,10 +529,26 @@ button {
 }
 
 .ds-learned-truth-ledger__item {
+    padding: 0;
+}
+
+.ds-learned-truth-ledger__jump {
+    display: block;
+    width: 100%;
+    text-align: left;
     background: var(--ds-field);
+    border: 1px solid var(--ds-border);
     border-left: 2px solid var(--ds-accent-green);
     padding: 8px 12px;
     font-size: 13px;
+    color: var(--ds-ink);
+    border-radius: 2px;
+    line-height: 1.4;
+}
+
+.ds-learned-truth-ledger__jump:hover {
+    background: var(--ds-field-raised);
+    border-color: var(--ds-border-strong);
 }
 
 .ds-learned-truth-ledger__empty {
@@ -479,11 +576,37 @@ button {
     font-variant-numeric: tabular-nums;
 }
 
-.ds-worked-memory__hint,
 .ds-worked-memory__empty {
     font-size: 12px;
     color: var(--ds-ink-70);
     margin: 0;
+}
+
+.ds-worked-memory__list {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ds-worked-memory__node {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--ds-field);
+    border: 1px solid var(--ds-border);
+    color: var(--ds-ink);
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 2px;
+    line-height: 1.35;
+}
+
+.ds-worked-memory__node:hover {
+    background: var(--ds-field-raised);
+    border-color: var(--ds-border-strong);
 }
 
 /* ─── Next-step docket ──────────────────────────────────────────────── */
