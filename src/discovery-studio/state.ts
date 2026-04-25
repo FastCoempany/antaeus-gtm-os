@@ -200,6 +200,7 @@ export interface SignalLedgerEntry {
 
 export interface TiebackLedgerEntry {
     readonly nodeId: string;
+    readonly branchIndex: number;
     readonly fact: string;
     readonly status: "hold" | "deployed";
     readonly recordedAt: string;
@@ -471,6 +472,91 @@ export function triggerInterrupt(it: Interrupt): void {
 
 export function clearInterrupt(): void {
     activeInterrupt.value = null;
+}
+
+// ─── Wave 5 — tieback hold / deploy ────────────────────────────────────
+
+/**
+ * Mark a learned fact as "held" — it's been recorded but not yet
+ * deployed back into the conversation. Adds an entry to tiebackLedger
+ * if not already present, with status "hold".
+ *
+ * Idempotent: re-holding the same (nodeId, branchIndex) is a no-op
+ * and preserves any existing "deployed" status (don't downgrade).
+ */
+export function holdFact(nodeId: string, branchIndex: number): void {
+    const existing = tiebackLedger.value.find(
+        (e) => e.nodeId === nodeId && e.branchIndex === branchIndex
+    );
+    if (existing) return;
+
+    const fact = learnedFacts.value.find(
+        (f) => f.nodeId === nodeId && f.branchIndex === branchIndex
+    );
+    if (!fact) return;
+
+    tiebackLedger.value = [
+        ...tiebackLedger.value,
+        {
+            nodeId,
+            branchIndex,
+            fact: fact.fact,
+            status: "hold",
+            recordedAt: new Date().toISOString()
+        }
+    ];
+}
+
+/**
+ * Mark a held fact as deployed — the user has used it in the call.
+ * If the entry doesn't exist yet (user goes straight from learned to
+ * deployed without the hold step), it's created in deployed state.
+ */
+export function deployFact(nodeId: string, branchIndex: number): void {
+    const existing = tiebackLedger.value.find(
+        (e) => e.nodeId === nodeId && e.branchIndex === branchIndex
+    );
+    if (existing) {
+        if (existing.status === "deployed") return;
+        tiebackLedger.value = tiebackLedger.value.map((e) =>
+            e.nodeId === nodeId && e.branchIndex === branchIndex
+                ? { ...e, status: "deployed" as const }
+                : e
+        );
+        return;
+    }
+
+    const fact = learnedFacts.value.find(
+        (f) => f.nodeId === nodeId && f.branchIndex === branchIndex
+    );
+    if (!fact) return;
+
+    tiebackLedger.value = [
+        ...tiebackLedger.value,
+        {
+            nodeId,
+            branchIndex,
+            fact: fact.fact,
+            status: "deployed",
+            recordedAt: new Date().toISOString()
+        }
+    ];
+}
+
+/**
+ * Returns the tieback status for a (nodeId, branchIndex) pair:
+ *   - "deployed" if it's been used back in the conversation
+ *   - "hold"     if it's queued for tieback but not yet used
+ *   - null       if the fact has been recorded but not held/deployed
+ */
+export function factStatusFor(
+    nodeId: string,
+    branchIndex: number
+): "hold" | "deployed" | null {
+    const entry = tiebackLedger.value.find(
+        (e) => e.nodeId === nodeId && e.branchIndex === branchIndex
+    );
+    return entry?.status ?? null;
 }
 
 /**

@@ -8,11 +8,14 @@ import {
     callDisposition,
     clearInterrupt,
     compressionMode,
+    deployFact,
     essentialNodeSet,
     expandResponse,
     expandedResponse,
+    factStatusFor,
     frameworkRegistry,
     getSegmentKeyForNode,
+    holdFact,
     inboundQuestionHandlers,
     learnedFacts,
     nextStepLock,
@@ -31,6 +34,7 @@ import {
     startCallClock,
     stopCallClock,
     supportDossier,
+    tiebackLedger,
     triggerInterrupt,
     workedNodeIds,
     type Framework
@@ -376,6 +380,74 @@ describe("state — Wave 3 interrupt handling", () => {
         });
         resetSession();
         expect(activeInterrupt.value).toBeNull();
+    });
+});
+
+describe("state — Wave 5 tieback hold / deploy", () => {
+    it("holdFact records an entry with status 'hold'", () => {
+        recordLearnedFact("of-1", 0, "audit pressure");
+        holdFact("of-1", 0);
+        expect(tiebackLedger.value).toHaveLength(1);
+        expect(tiebackLedger.value[0]?.nodeId).toBe("of-1");
+        expect(tiebackLedger.value[0]?.branchIndex).toBe(0);
+        expect(tiebackLedger.value[0]?.status).toBe("hold");
+        expect(tiebackLedger.value[0]?.fact).toBe("audit pressure");
+    });
+
+    it("holdFact is idempotent — re-holding does not duplicate", () => {
+        recordLearnedFact("of-1", 0, "fact");
+        holdFact("of-1", 0);
+        holdFact("of-1", 0);
+        holdFact("of-1", 0);
+        expect(tiebackLedger.value).toHaveLength(1);
+    });
+
+    it("holdFact does nothing if the underlying fact doesn't exist", () => {
+        holdFact("nonexistent", 0);
+        expect(tiebackLedger.value).toHaveLength(0);
+    });
+
+    it("deployFact flips a held entry's status to 'deployed'", () => {
+        recordLearnedFact("of-1", 0, "fact");
+        holdFact("of-1", 0);
+        deployFact("of-1", 0);
+        expect(tiebackLedger.value).toHaveLength(1);
+        expect(tiebackLedger.value[0]?.status).toBe("deployed");
+    });
+
+    it("deployFact creates a deployed entry directly when no hold exists", () => {
+        recordLearnedFact("of-1", 0, "fact");
+        deployFact("of-1", 0);
+        expect(tiebackLedger.value).toHaveLength(1);
+        expect(tiebackLedger.value[0]?.status).toBe("deployed");
+    });
+
+    it("deployFact is idempotent on already-deployed entries", () => {
+        recordLearnedFact("of-1", 0, "fact");
+        deployFact("of-1", 0);
+        deployFact("of-1", 0);
+        expect(tiebackLedger.value).toHaveLength(1);
+        expect(tiebackLedger.value[0]?.status).toBe("deployed");
+    });
+
+    it("factStatusFor returns the status or null", () => {
+        recordLearnedFact("of-1", 0, "fact");
+        expect(factStatusFor("of-1", 0)).toBeNull();
+        holdFact("of-1", 0);
+        expect(factStatusFor("of-1", 0)).toBe("hold");
+        deployFact("of-1", 0);
+        expect(factStatusFor("of-1", 0)).toBe("deployed");
+    });
+
+    it("factStatusFor returns null for unknown facts", () => {
+        expect(factStatusFor("not-a-node", 0)).toBeNull();
+    });
+
+    it("resetSession clears tiebackLedger", () => {
+        recordLearnedFact("of-1", 0, "fact");
+        holdFact("of-1", 0);
+        resetSession();
+        expect(tiebackLedger.value).toHaveLength(0);
     });
 });
 
