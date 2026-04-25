@@ -43,7 +43,14 @@ export default defineConfig({
     ],
 
     webServer: {
-        command: "python3 -m http.server 4173 --bind 127.0.0.1",
+        // Serve dist/ — the combined Vite + legacy output produced by
+        // tools/deploy/build-cloudflare-assets.js. dist/ contains:
+        //   - legacy rooms at /app/<room>/index.html
+        //   - new-stack rooms at /<room>/index.html (e.g., /discovery-studio/)
+        //   - shared static (/js, /css, /demo-seed.html, /assets)
+        // The npm run test:e2e script runs build:cloudflare before invoking
+        // playwright, so dist/ is fresh when this webServer starts.
+        command: "python3 -m http.server 4173 --bind 127.0.0.1 --directory dist",
         url: "http://127.0.0.1:4173",
         reuseExistingServer: !process.env.CI,
         timeout: 30_000

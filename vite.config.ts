@@ -98,7 +98,17 @@ export default defineConfig({
                 // in both dev (via the src/data-migration/index.html entry) and
                 // prod (flattenSrcPages plugin rewrites dist/src/data-migration/
                 // → dist/data-migration/ after build).
-                "data-migration": resolve(__dirname, "src/data-migration/index.html")
+                "data-migration": resolve(__dirname, "src/data-migration/index.html"),
+
+                // Phase 3 Wave 1 — Discovery Studio Preact rebuild. Served at
+                // /discovery-studio/ via the same flattenSrcPages plugin.
+                // Behind Posthog feature flag `room_discovery_v2`; legacy
+                // `app/discovery-studio/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "discovery-studio": resolve(
+                    __dirname,
+                    "src/discovery-studio/index.html"
+                )
             }
         }
     },

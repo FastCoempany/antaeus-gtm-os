@@ -1,0 +1,619 @@
+/*
+ * Discovery Studio — Wave 1 baseline styles.
+ *
+ * Wave 1 ships a structurally complete, visually rough room. Layout works,
+ * everything renders, but the visual fidelity to the legacy room (and the
+ * canon-locked bright/severe posture) lands in Wave 2.
+ *
+ * Design posture per CLAUDE.md Part II §4.3 (Live Instrument family):
+ * live, tense, immediate, operational. Bright field per §1 direction lock.
+ */
+
+:root {
+    --ds-ink: #0a1c40;
+    --ds-ink-70: rgba(10, 28, 64, 0.7);
+    --ds-ink-40: rgba(10, 28, 64, 0.4);
+    --ds-ink-15: rgba(10, 28, 64, 0.15);
+    --ds-field: #f6f8fc;
+    --ds-field-raised: #ffffff;
+    --ds-accent-orange: #ff6b1c;
+    --ds-accent-blue: #2e5aac;
+    --ds-accent-green: #2e7d4c;
+    --ds-accent-amber: #b57500;
+    --ds-accent-red: #b4261f;
+    --ds-border: rgba(10, 28, 64, 0.1);
+    --ds-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--ds-field);
+    color: var(--ds-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ─── Shell ─────────────────────────────────────────────────────────── */
+
+.ds-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+/* ─── Topbar ────────────────────────────────────────────────────────── */
+
+.ds-topbar {
+    padding: 32px 40px 20px;
+    border-bottom: 1px solid var(--ds-border);
+    background: var(--ds-field-raised);
+}
+
+.ds-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ds-ink-70);
+    margin: 0 0 8px;
+    text-transform: uppercase;
+}
+
+.ds-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(28px, 3.5vw, 40px);
+    line-height: 1.1;
+    font-weight: 400;
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+}
+
+/* ─── Framework rail ────────────────────────────────────────────────── */
+
+.ds-framework-rail__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.ds-framework-rail__btn {
+    border: 1px solid var(--ds-border-strong);
+    background: var(--ds-field-raised);
+    color: var(--ds-ink);
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 2px;
+    transition: background 100ms ease, border-color 100ms ease;
+}
+
+.ds-framework-rail__btn:hover {
+    background: var(--ds-ink-15);
+}
+
+.ds-framework-rail__btn.is-active {
+    background: var(--ds-ink);
+    color: #fff;
+    border-color: var(--ds-ink);
+}
+
+.ds-framework-rail__empty {
+    color: var(--ds-ink-70);
+    font-size: 13px;
+    margin: 0;
+}
+
+/* ─── Main 3-col layout ─────────────────────────────────────────────── */
+
+.ds-main {
+    display: grid;
+    grid-template-columns: 280px 1fr 360px;
+    gap: 1px;
+    background: var(--ds-border);
+    border-bottom: 1px solid var(--ds-border);
+}
+
+.ds-main__left,
+.ds-main__center,
+.ds-main__right {
+    background: var(--ds-field-raised);
+    padding: 24px 28px;
+    overflow-y: auto;
+}
+
+/* ─── Segment rail ──────────────────────────────────────────────────── */
+
+.ds-segment-rail__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: segments;
+}
+
+.ds-segment-rail__segment {
+    margin-bottom: 24px;
+}
+
+.ds-segment-rail__segment--essential {
+    /* Future Wave 5 polish — visual marker for essentials */
+}
+
+.ds-segment-rail__segment-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.ds-segment-rail__segment-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ds-ink-40);
+}
+
+.ds-segment-rail__segment-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ds-ink);
+}
+
+.ds-segment-rail__segment-cue {
+    font-size: 12px;
+    color: var(--ds-ink-70);
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+
+.ds-segment-rail__nodes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ds-segment-rail__node {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    width: 100%;
+    text-align: left;
+    background: var(--ds-field);
+    border: 1px solid var(--ds-border);
+    color: var(--ds-ink);
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 2px;
+    transition: background 100ms ease, border-color 100ms ease;
+}
+
+.ds-segment-rail__node:hover {
+    background: var(--ds-field-raised);
+    border-color: var(--ds-border-strong);
+}
+
+.ds-segment-rail__node.is-active {
+    background: var(--ds-ink);
+    color: #fff;
+    border-color: var(--ds-ink);
+}
+
+.ds-segment-rail__node--grn {
+    border-left: 3px solid var(--ds-accent-green);
+}
+.ds-segment-rail__node--org {
+    border-left: 3px solid var(--ds-accent-orange);
+}
+.ds-segment-rail__node--red {
+    border-left: 3px solid var(--ds-accent-red);
+}
+.ds-segment-rail__node--blu {
+    border-left: 3px solid var(--ds-accent-blue);
+}
+.ds-segment-rail__node--pur {
+    border-left: 3px solid #6c2bd9;
+}
+
+.ds-segment-rail__node-badge {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-ink-70);
+}
+
+.ds-segment-rail__node.is-active .ds-segment-rail__node-badge {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.ds-segment-rail__node-text {
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.ds-segment-rail__node-note {
+    font-size: 11px;
+    color: var(--ds-ink-40);
+    line-height: 1.3;
+    margin-top: 2px;
+}
+
+.ds-segment-rail__node.is-active .ds-segment-rail__node-note {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.ds-segment-rail__empty {
+    color: var(--ds-ink-70);
+    font-size: 13px;
+    margin: 0;
+}
+
+/* ─── Branch picker (inline below active node) ─────────────────────── */
+
+.ds-branch-picker {
+    margin-top: 6px;
+    padding: 4px 0 0 12px;
+    border-left: 2px solid var(--ds-border-strong);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ds-branch-picker__branch {
+    text-align: left;
+    background: var(--ds-field-raised);
+    border: 1px solid var(--ds-border);
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    border-radius: 2px;
+    color: var(--ds-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.ds-branch-picker__branch:hover {
+    border-color: var(--ds-border-strong);
+}
+
+.ds-branch-picker__branch.is-expanded {
+    border-color: var(--ds-ink);
+}
+
+.ds-branch-picker__branch--grn {
+    border-left: 3px solid var(--ds-accent-green);
+}
+.ds-branch-picker__branch--org {
+    border-left: 3px solid var(--ds-accent-orange);
+}
+.ds-branch-picker__branch--red {
+    border-left: 3px solid var(--ds-accent-red);
+}
+.ds-branch-picker__branch--blu {
+    border-left: 3px solid var(--ds-accent-blue);
+}
+.ds-branch-picker__branch--pur {
+    border-left: 3px solid #6c2bd9;
+}
+
+.ds-branch-picker__tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-ink-70);
+}
+
+.ds-branch-picker__quote {
+    font-style: italic;
+    font-size: 12px;
+}
+
+.ds-branch-picker__detail {
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--ds-border-strong);
+    font-style: normal;
+}
+
+.ds-branch-picker__detail p {
+    margin: 0 0 4px;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.ds-branch-picker__detail strong {
+    font-weight: 600;
+    color: var(--ds-ink);
+}
+
+.ds-branch-picker__empty {
+    font-size: 12px;
+    color: var(--ds-ink-70);
+    margin: 4px 0 0 12px;
+    font-style: italic;
+}
+
+/* ─── Recover rail ──────────────────────────────────────────────────── */
+
+.ds-recover-rail {
+    margin-bottom: 24px;
+}
+
+.ds-recover-rail__header {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ds-ink-70);
+    margin-bottom: 12px;
+}
+
+.ds-recover-rail__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ds-recover-rail__btn {
+    width: 100%;
+    text-align: left;
+    background: var(--ds-field);
+    border: 1px solid var(--ds-border-strong);
+    color: var(--ds-ink);
+    padding: 8px 12px;
+    font-size: 13px;
+    border-radius: 2px;
+}
+
+.ds-recover-rail__btn--red {
+    border-left: 3px solid var(--ds-accent-red);
+}
+.ds-recover-rail__btn--org {
+    border-left: 3px solid var(--ds-accent-orange);
+}
+.ds-recover-rail__btn--blu {
+    border-left: 3px solid var(--ds-accent-blue);
+}
+.ds-recover-rail__btn--grn {
+    border-left: 3px solid var(--ds-accent-green);
+}
+.ds-recover-rail__btn--pur {
+    border-left: 3px solid #6c2bd9;
+}
+
+.ds-recover-rail__empty {
+    font-size: 12px;
+    color: var(--ds-ink-70);
+    margin: 0;
+}
+
+/* ─── Learned-truth ledger ──────────────────────────────────────────── */
+
+.ds-learned-truth-ledger {
+    margin-bottom: 24px;
+}
+
+.ds-learned-truth-ledger__header {
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ds-ink-70);
+    margin-bottom: 12px;
+}
+
+.ds-learned-truth-ledger__count {
+    color: var(--ds-ink);
+    font-weight: 600;
+}
+
+.ds-learned-truth-ledger__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ds-learned-truth-ledger__item {
+    background: var(--ds-field);
+    border-left: 2px solid var(--ds-accent-green);
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+.ds-learned-truth-ledger__empty {
+    font-size: 12px;
+    color: var(--ds-ink-70);
+    margin: 0;
+}
+
+/* ─── Worked memory ─────────────────────────────────────────────────── */
+
+.ds-worked-memory__header {
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ds-ink-70);
+    margin-bottom: 8px;
+}
+
+.ds-worked-memory__progress {
+    color: var(--ds-ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.ds-worked-memory__hint,
+.ds-worked-memory__empty {
+    font-size: 12px;
+    color: var(--ds-ink-70);
+    margin: 0;
+}
+
+/* ─── Next-step docket ──────────────────────────────────────────────── */
+
+.ds-next-step-docket {
+    border: 1px solid var(--ds-border-strong);
+    border-left-width: 3px;
+    border-radius: 2px;
+    padding: 20px 24px;
+    background: var(--ds-field);
+}
+
+.ds-next-step-docket.is-empty {
+    border-left-color: var(--ds-accent-orange);
+}
+.ds-next-step-docket.is-partial {
+    border-left-color: var(--ds-accent-amber);
+}
+.ds-next-step-docket.is-locked {
+    border-left-color: var(--ds-accent-green);
+}
+
+.ds-next-step-docket__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ds-ink-70);
+    margin-bottom: 16px;
+}
+
+.ds-next-step-docket__status {
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 600;
+}
+
+.ds-next-step-docket__status.is-empty {
+    color: var(--ds-accent-orange);
+}
+.ds-next-step-docket__status.is-partial {
+    color: var(--ds-accent-amber);
+}
+.ds-next-step-docket__status.is-locked {
+    color: var(--ds-accent-green);
+}
+
+.ds-next-step-docket__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+}
+
+.ds-next-step-docket__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ds-next-step-docket__field--wide {
+    grid-column: span 3;
+}
+
+.ds-next-step-docket__field-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ds-ink-40);
+}
+
+.ds-next-step-docket__field input {
+    width: 100%;
+    border: 1px solid var(--ds-border-strong);
+    background: var(--ds-field-raised);
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--ds-ink);
+    border-radius: 2px;
+}
+
+.ds-next-step-docket__field input:focus {
+    outline: 2px solid var(--ds-accent-blue);
+    outline-offset: -1px;
+}
+
+/* ─── Support dossier ───────────────────────────────────────────────── */
+
+.ds-footer {
+    padding: 24px 40px;
+    background: var(--ds-field-raised);
+}
+
+.ds-support-dossier__header {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ds-ink-70);
+    margin-bottom: 16px;
+}
+
+.ds-support-dossier__section {
+    margin-bottom: 20px;
+}
+
+.ds-support-dossier__section-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+.ds-support-dossier__topic h4 {
+    margin: 0 0 4px;
+    font-size: 13px;
+}
+
+.ds-support-dossier__topic ul {
+    margin: 0 0 12px;
+    padding-left: 20px;
+    font-size: 13px;
+    color: var(--ds-ink-70);
+}
+
+.ds-support-dossier__empty {
+    font-size: 12px;
+    color: var(--ds-ink-70);
+    margin: 0;
+}
