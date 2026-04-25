@@ -1,20 +1,27 @@
 import type { JSX } from "preact";
-import { activeFramework, frameworkRegistry } from "../state";
+import {
+    activeFramework,
+    activeInterrupt,
+    frameworkRegistry,
+    triggerInterrupt
+} from "../state";
 
 /**
- * RecoverRail — Wave 1 skeleton.
+ * RecoverRail — Wave 3.
  *
- * The "recover the call" rail surfaces interrupts the user can deploy
- * when the call goes sideways: demo request, pricing pressure, send-info
- * push, wrong-person redirect, time pressure. Each interrupt exists
- * outside the segment order — the user can click any of them mid-segment
- * to recover.
+ * Surfaces the framework's interrupts as one-click recovery moves: demo
+ * request, pricing pressure, send-info push, wrong-person redirect,
+ * time pressure. Clicking an interrupt sets `activeInterrupt`, which
+ * the DiscoveryStudio shell renders in a prominent banner with the
+ * recover copy + a dismiss button.
  *
- * Wave 2 wires up the actual click handler that injects recover copy
- * back into the active node.
+ * "Recover" is conceptually outside the segment order — the user can
+ * click any of these mid-segment to handle a buyer derailment without
+ * losing their segment context.
  */
 export function RecoverRail(): JSX.Element {
     const fid = activeFramework.value;
+    const active = activeInterrupt.value;
     const interrupts = fid
         ? frameworkRegistry.value.find((f) => f.id === fid)?.interrupts ?? []
         : [];
@@ -32,7 +39,11 @@ export function RecoverRail(): JSX.Element {
                         <li key={it.id}>
                             <button
                                 type="button"
-                                class={`ds-recover-rail__btn ds-recover-rail__btn--${it.tone}`}
+                                class={`ds-recover-rail__btn ds-recover-rail__btn--${it.tone}${
+                                    active?.id === it.id ? " is-active" : ""
+                                }`}
+                                aria-pressed={active?.id === it.id}
+                                onClick={() => triggerInterrupt(it)}
                             >
                                 {it.label}
                             </button>

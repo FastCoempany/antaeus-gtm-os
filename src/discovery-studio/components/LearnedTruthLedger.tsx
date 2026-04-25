@@ -1,17 +1,30 @@
 import type { JSX } from "preact";
-import { learnedFacts } from "../state";
+import {
+    getSegmentKeyForNode,
+    learnedFacts,
+    setActiveNode
+} from "../state";
 
 /**
- * LearnedTruthLedger — Wave 1 skeleton.
+ * LearnedTruthLedger — Wave 3.
  *
  * Running list of facts the buyer revealed during the call. Each fact
- * is keyed to the node + branch that surfaced it. The ledger is the
- * visible memory — what the user has heard so far in this conversation.
+ * is keyed to the node + branch that surfaced it. Clicking a fact jumps
+ * the active node back to its source so you can re-read context or
+ * deploy the fact in tieback.
  *
- * Wave 2 wires up the click-to-jump-back-to-source-node interaction.
+ * Wave 5 (guardian gaps) will add the hold/deploy distinction via the
+ * tiebackLedger primitive.
  */
 export function LearnedTruthLedger(): JSX.Element {
     const facts = learnedFacts.value;
+
+    const handleJump = (nodeId: string): void => {
+        const segmentKey = getSegmentKeyForNode(nodeId);
+        if (segmentKey) {
+            setActiveNode(segmentKey, nodeId);
+        }
+    };
 
     return (
         <section
@@ -33,9 +46,16 @@ export function LearnedTruthLedger(): JSX.Element {
                 <ul class="ds-learned-truth-ledger__list">
                     {facts.map((f, i) => (
                         <li key={i} class="ds-learned-truth-ledger__item">
-                            <span class="ds-learned-truth-ledger__fact">
-                                {f.fact}
-                            </span>
+                            <button
+                                type="button"
+                                class="ds-learned-truth-ledger__jump"
+                                onClick={() => handleJump(f.nodeId)}
+                                title="Jump to source node"
+                            >
+                                <span class="ds-learned-truth-ledger__fact">
+                                    {f.fact}
+                                </span>
+                            </button>
                         </li>
                     ))}
                 </ul>
