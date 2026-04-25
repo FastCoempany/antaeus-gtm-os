@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { BridgeStats } from "./components/BridgeStats";
 import { DealHealthModal } from "./components/DealHealthModal";
+import { FilterBar } from "./components/FilterBar";
 import { InterventionRail } from "./components/InterventionRail";
 import { LossReasonModal } from "./components/LossReasonModal";
 import { RecoveryQueue } from "./components/RecoveryQueue";
@@ -48,6 +49,7 @@ export function DealWorkspace(): JSX.Element {
 
             <BridgeStats />
             <RecoveryQueue />
+            <FilterBar />
             <InterventionRail />
 
             <DealHealthModal />

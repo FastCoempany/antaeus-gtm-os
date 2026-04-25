@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
-import { activeDeals } from "../state";
+import { activeDeals, dealFilter } from "../state";
 import { groupByLane, rankRecovery } from "../lib/recovery";
+import { filterAssessments } from "../lib/filters";
 import { DealCard } from "./DealCard";
 
 /**
@@ -22,8 +23,10 @@ const LANE_TITLES = {
 
 export function InterventionRail(): JSX.Element {
     const deals = activeDeals.value;
+    const filter = dealFilter.value;
     const ranked = rankRecovery(deals);
-    const lanes = groupByLane(ranked);
+    const filtered = filterAssessments(ranked, filter);
+    const lanes = groupByLane(filtered);
 
     if (deals.length === 0) {
         return (
@@ -31,6 +34,16 @@ export function InterventionRail(): JSX.Element {
                 <p class="dw-intervention__empty">
                     No active deals yet. Create your first deal to start
                     tracking pressure here.
+                </p>
+            </section>
+        );
+    }
+
+    if (filtered.length === 0) {
+        return (
+            <section class="dw-intervention" aria-label="Intervention board">
+                <p class="dw-intervention__empty">
+                    No deals match the current filter.
                 </p>
             </section>
         );

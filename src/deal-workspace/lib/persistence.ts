@@ -5,6 +5,19 @@ import { dbRowToDeal, dealToDbWrite, rowsToDeals } from "./deal-bridge";
 import type { Deal } from "./deal-shape";
 import { allDeals, removeDeal, setAllDeals, upsertDeal } from "../state";
 import { mirrorToLegacyStorage } from "./legacy-mirror";
+import { publishHealthSnapshot } from "./health-snapshot";
+
+/**
+ * Publish state changes to surfaces outside this room: the legacy
+ * gtmos_deal_workspaces array (read by Dashboard / Future Autopsy /
+ * Readiness pre-migration) + the gtmos_deal_workspace_health snapshot
+ * (read by Dashboard's command-intelligence rail). Both are
+ * best-effort; failures are swallowed inside the helpers.
+ */
+function publishExternalState(): void {
+    mirrorToLegacyStorage(allDeals.value);
+    publishHealthSnapshot(allDeals.value);
+}
 
 /**
  * Wave 2 — Deal Workspace persistence layer (read path).
@@ -65,7 +78,7 @@ export async function loadDeals(client: DataClient): Promise<void> {
         const rows = await client.deals.list({ limit: 500 });
         const deals = rowsToDeals(rows);
         setAllDeals(deals);
-        mirrorToLegacyStorage(deals);
+        publishExternalState();
     } catch (err) {
         reportError(err, { op: "loadDeals" });
         // Leave allDeals signal in its initial empty state.
@@ -85,7 +98,7 @@ export async function loadDeals(client: DataClient): Promise<void> {
  */
 export async function saveDealEdit(deal: Deal): Promise<Deal> {
     upsertDeal(deal);
-    mirrorToLegacyStorage(allDeals.value);
+    publishExternalState();
     if (!clientRef) {
         // Persistence not booted (Supabase env missing) — local-only.
         return deal;
@@ -98,7 +111,7 @@ export async function saveDealEdit(deal: Deal): Promise<Deal> {
             : await clientRef.deals.insert(write);
         const saved = dbRowToDeal(row);
         upsertDeal(saved);
-        mirrorToLegacyStorage(allDeals.value);
+        publishExternalState();
         trackEvent("deal_workspace_save", {
             mode: isUpdate ? "update" : "insert",
             stage: deal.stage,
@@ -138,7 +151,7 @@ export function applyRealtimePayload(payload: {
     if (payload.eventType === "DELETE") {
         if (payloadHasRow(payload.old)) {
             removeDeal(payload.old.id);
-            mirrorToLegacyStorage(allDeals.value);
+            publishExternalState();
         }
         return;
     }
@@ -146,7 +159,7 @@ export function applyRealtimePayload(payload: {
         if (payloadHasRow(payload.new)) {
             const deal = dbRowToDeal(payload.new);
             upsertDeal(deal);
-            mirrorToLegacyStorage(allDeals.value);
+            publishExternalState();
         }
     }
 }

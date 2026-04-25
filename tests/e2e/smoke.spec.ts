@@ -82,6 +82,7 @@ test.describe("room boot smoke tests", () => {
         );
         await expect(page.locator(".dw-bridge")).toBeAttached();
         await expect(page.locator(".dw-recovery")).toBeAttached();
+        await expect(page.locator(".dw-filter-bar")).toBeAttached();
         await expect(page.locator(".dw-intervention")).toBeAttached();
 
         expect(

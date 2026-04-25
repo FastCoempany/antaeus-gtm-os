@@ -233,6 +233,51 @@ button {
     font-size: 13px;
 }
 
+/* ─── Filter bar ───────────────────────────────────────────────────── */
+
+.dw-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.dw-filter-bar__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dw-ink-40);
+}
+
+.dw-filter-bar__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 6px;
+}
+
+.dw-filter-bar__chip {
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border-strong);
+    color: var(--dw-ink);
+    padding: 4px 12px;
+    font-size: 12px;
+    border-radius: 999px;
+    font-family: inherit;
+}
+
+.dw-filter-bar__chip:hover {
+    background: var(--dw-ink-15);
+}
+
+.dw-filter-bar__chip.is-active {
+    background: var(--dw-ink);
+    color: #fff;
+    border-color: var(--dw-ink);
+}
+
 /* ─── Intervention rail ────────────────────────────────────────────── */
 
 .dw-intervention {
