@@ -1,10 +1,13 @@
 import type { JSX } from "preact";
+import { CallClock } from "./components/CallClock";
+import { CompressionToggle } from "./components/CompressionToggle";
 import { FrameworkRail } from "./components/FrameworkRail";
 import { SegmentRail } from "./components/SegmentRail";
 import { RecoverRail } from "./components/RecoverRail";
 import { LearnedTruthLedger } from "./components/LearnedTruthLedger";
 import { WorkedMemory } from "./components/WorkedMemory";
 import { NextStepDocket } from "./components/NextStepDocket";
+import { SkipAheadTray } from "./components/SkipAheadTray";
 import { SupportDossier } from "./components/SupportDossier";
 import {
     activeFramework,
@@ -14,23 +17,32 @@ import {
 } from "./state";
 
 /**
- * DiscoveryStudio — Wave 3 root.
+ * DiscoveryStudio — Wave 5 root.
  *
- * Lays out the 7 binding global rails plus a top-level interrupt
- * banner that surfaces when the user clicks any RecoverRail item.
+ * Wave 5 adds the on-call control surfaces required by the Lumana
+ * on-call control lock guardian spec:
+ *   - Visible CallClock at the top of the topbar
+ *   - CompressionToggle for off/essentials/emergency mode
+ *   - SkipAheadTray exposing the active framework's skip-ahead handlers
+ *   - LearnedTruthLedger with hold/deploy buttons (tieback ledger)
+ *   - SegmentRail with per-segment minute hints (phase tempo guidance)
  *
- * Layout intent (matches the legacy `dsj-shell` three-column structure):
+ * Layout (matches the legacy `dsj-shell` three-column structure plus
+ * the new control band):
  *
  *   ┌──────────────────────────────────────────────┐
- *   │  Topbar: framework rail                      │
+ *   │  Topbar: kicker / title / framework rail     │
+ *   ├──────────────────────────────────────────────┤
+ *   │  Control band: CallClock + CompressionToggle │
  *   ├──────────────────────────────────────────────┤
  *   │  [InterruptBanner — shown when active]       │
  *   ├────────────┬─────────────────┬───────────────┤
  *   │  Segment   │  Center work    │  Side dock:   │
  *   │  rail      │  area:          │  - Recover    │
- *   │            │  - Active node  │  - Learned    │
- *   │            │  - Next-step    │    truth      │
- *   │            │    docket       │  - Worked     │
+ *   │            │  - Next-step    │  - Skip-ahead │
+ *   │            │    docket       │  - Learned    │
+ *   │            │                 │    truth      │
+ *   │            │                 │  - Worked     │
  *   │            │                 │    memory     │
  *   ├────────────┴─────────────────┴───────────────┤
  *   │  Support dossier                             │
@@ -45,7 +57,7 @@ export function DiscoveryStudio(): JSX.Element {
         <div class="ds-shell">
             <header class="ds-topbar">
                 <p class="ds-topbar__kicker">
-                    DISCOVERY STUDIO · WAVE 4 · {fwLoaded
+                    DISCOVERY STUDIO · WAVE 5 · {fwLoaded
                         ? `${frameworkRegistry.value.length} frameworks loaded`
                         : "loading…"}
                 </p>
@@ -57,6 +69,11 @@ export function DiscoveryStudio(): JSX.Element {
                 </h1>
                 <FrameworkRail />
             </header>
+
+            <div class="ds-control-band">
+                <CallClock />
+                <CompressionToggle />
+            </div>
 
             {interrupt ? (
                 <section
@@ -91,6 +108,7 @@ export function DiscoveryStudio(): JSX.Element {
                 </section>
                 <aside class="ds-main__right">
                     <RecoverRail />
+                    <SkipAheadTray />
                     <LearnedTruthLedger />
                     <WorkedMemory />
                 </aside>

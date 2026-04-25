@@ -14,6 +14,24 @@ import {
 } from "../state";
 
 /**
+ * Static tempo hints per segment key — guidance, not enforcement.
+ * 30-minute call distributed proportionally: pain + current-state get
+ * the most time, openers + post-call routing the least. Total ≈ 30.
+ */
+const TEMPO_HINTS: Record<string, number> = {
+    "opening-frame": 2,
+    "current-state-truth": 5,
+    "pain-and-consequence": 5,
+    "trigger-and-urgency": 3,
+    "stakeholder-and-ownership": 3,
+    "proof-threshold": 3,
+    "current-vendor-and-displacement": 3,
+    "decision-architecture": 3,
+    "next-step-lock": 2,
+    "post-call-routing": 1
+};
+
+/**
  * SegmentRail — Wave 2.
  *
  * The 10-stop spine, vertically stacked. Each segment shows its title +
@@ -60,6 +78,11 @@ export function SegmentRail(): JSX.Element {
                         filterNode(n.id)
                     );
                     if (visibleNodes.length === 0) return null;
+                    // Wave 5 — phase tempo hint. 30-min target divided
+                    // across 10 segments = 3 min per segment baseline. Pain
+                    // and current-state segments get extra weight, openers
+                    // and routing get less. Static hint, not enforced.
+                    const tempoMinutes = TEMPO_HINTS[seg.key] ?? 3;
                     return (
                         <li
                             key={seg.key}
@@ -75,6 +98,9 @@ export function SegmentRail(): JSX.Element {
                                 </span>
                                 <span class="ds-segment-rail__segment-title">
                                     {seg.title}
+                                </span>
+                                <span class="ds-segment-rail__segment-tempo">
+                                    ~{tempoMinutes}m
                                 </span>
                             </header>
                             {seg.cue ? (
