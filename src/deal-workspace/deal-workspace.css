@@ -1,0 +1,563 @@
+/*
+ * Deal Workspace — Wave 1 baseline styles.
+ *
+ * Diagnosis Table family per CLAUDE.md Part II §4.5: severe,
+ * investigative, consequence-aware. First-fold exposes pressure fast.
+ * Bright field per Part II §1 direction lock.
+ */
+
+:root {
+    --dw-ink: #0a1c40;
+    --dw-ink-70: rgba(10, 28, 64, 0.7);
+    --dw-ink-40: rgba(10, 28, 64, 0.4);
+    --dw-ink-15: rgba(10, 28, 64, 0.15);
+    --dw-field: #f6f8fc;
+    --dw-field-raised: #ffffff;
+    --dw-accent-orange: #ff6b1c;
+    --dw-accent-blue: #2e5aac;
+    --dw-accent-green: #2e7d4c;
+    --dw-accent-amber: #b57500;
+    --dw-accent-red: #b4261f;
+    --dw-border: rgba(10, 28, 64, 0.1);
+    --dw-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--dw-field);
+    color: var(--dw-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────── */
+
+.dw-shell {
+    min-height: 100vh;
+    padding: 32px 40px 80px;
+    max-width: 1480px;
+    margin: 0 auto;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────── */
+
+.dw-topbar {
+    margin-bottom: 28px;
+}
+
+.dw-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--dw-ink-70);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.dw-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    font-weight: 400;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+}
+
+.dw-topbar__sub {
+    font-size: 16px;
+    color: var(--dw-ink-70);
+    margin: 0;
+    max-width: 60ch;
+}
+
+/* ─── Bridge stats ─────────────────────────────────────────────────── */
+
+.dw-bridge {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) 2fr;
+    gap: 1px;
+    background: var(--dw-border);
+    border: 1px solid var(--dw-border);
+    border-radius: 2px;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.dw-bridge__cell {
+    background: var(--dw-field-raised);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dw-bridge__cell--wide {
+    grid-column: span 1;
+}
+
+.dw-bridge__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dw-ink-40);
+}
+
+.dw-bridge__value {
+    font-size: 22px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--dw-ink);
+}
+
+/* ─── Recovery queue ───────────────────────────────────────────────── */
+
+.dw-recovery {
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border-strong);
+    border-radius: 2px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}
+
+.dw-recovery__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+}
+
+.dw-recovery__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dw-ink-70);
+}
+
+.dw-recovery__hint {
+    font-size: 12px;
+    color: var(--dw-ink-40);
+}
+
+.dw-recovery__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dw-recovery__item--critical {
+    border-left: 3px solid var(--dw-accent-red);
+}
+.dw-recovery__item--at-risk {
+    border-left: 3px solid var(--dw-accent-amber);
+}
+
+.dw-recovery__btn {
+    width: 100%;
+    text-align: left;
+    background: var(--dw-field);
+    border: 1px solid var(--dw-border);
+    padding: 12px 14px;
+    border-radius: 2px;
+    color: var(--dw-ink);
+    font-family: inherit;
+    display: block;
+}
+
+.dw-recovery__btn:hover {
+    background: var(--dw-field-raised);
+    border-color: var(--dw-border-strong);
+}
+
+.dw-recovery__btn-header {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 6px;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.dw-recovery__account {
+    font-weight: 600;
+    flex: 1;
+}
+
+.dw-recovery__stage {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dw-ink-70);
+}
+
+.dw-recovery__value {
+    font-variant-numeric: tabular-nums;
+    color: var(--dw-ink-70);
+}
+
+.dw-recovery__causes {
+    font-size: 12px;
+    color: var(--dw-ink-70);
+    margin: 0 0 4px;
+    font-style: italic;
+}
+
+.dw-recovery__next-move {
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.dw-recovery__empty {
+    margin: 0;
+    color: var(--dw-ink-70);
+    font-size: 13px;
+}
+
+/* ─── Intervention rail ────────────────────────────────────────────── */
+
+.dw-intervention {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.dw-intervention__lane {
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border);
+    border-radius: 2px;
+    padding: 16px;
+}
+
+.dw-intervention__lane--critical {
+    border-top: 3px solid var(--dw-accent-red);
+}
+.dw-intervention__lane--at-risk {
+    border-top: 3px solid var(--dw-accent-amber);
+}
+.dw-intervention__lane--healthy {
+    border-top: 3px solid var(--dw-accent-green);
+}
+
+.dw-intervention__lane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+}
+
+.dw-intervention__lane-title {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dw-ink-70);
+}
+
+.dw-intervention__lane-count {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--dw-ink);
+}
+
+.dw-intervention__lane-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dw-intervention__lane-empty {
+    margin: 0;
+    color: var(--dw-ink-40);
+    font-size: 13px;
+    padding: 4px 0;
+}
+
+.dw-intervention__empty {
+    grid-column: 1 / -1;
+    background: var(--dw-field-raised);
+    border: 1px dashed var(--dw-border-strong);
+    border-radius: 2px;
+    padding: 32px;
+    text-align: center;
+    margin: 0;
+    color: var(--dw-ink-70);
+}
+
+/* ─── Deal card ────────────────────────────────────────────────────── */
+
+.dw-card {
+    width: 100%;
+    text-align: left;
+    background: var(--dw-field);
+    border: 1px solid var(--dw-border);
+    border-radius: 2px;
+    padding: 10px 12px;
+    color: var(--dw-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dw-card:hover {
+    background: var(--dw-field-raised);
+    border-color: var(--dw-border-strong);
+}
+
+.dw-card--critical {
+    border-left: 3px solid var(--dw-accent-red);
+}
+.dw-card--at-risk {
+    border-left: 3px solid var(--dw-accent-amber);
+}
+.dw-card--healthy {
+    border-left: 3px solid var(--dw-accent-green);
+}
+
+.dw-card__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.dw-card__account {
+    font-weight: 600;
+    flex: 1;
+}
+
+.dw-card__value {
+    font-variant-numeric: tabular-nums;
+    color: var(--dw-ink-70);
+}
+
+.dw-card__row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.dw-card__stage {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dw-ink-70);
+}
+
+.dw-card__momentum {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 2px;
+}
+
+.dw-card__momentum--strong {
+    background: #ecf6ef;
+    color: var(--dw-accent-green);
+}
+.dw-card__momentum--neutral {
+    background: var(--dw-ink-15);
+    color: var(--dw-ink-70);
+}
+.dw-card__momentum--stalling {
+    background: #fff3ec;
+    color: var(--dw-accent-orange);
+}
+
+.dw-card__next-step {
+    font-size: 12px;
+    margin: 0;
+    color: var(--dw-ink);
+    line-height: 1.4;
+}
+
+.dw-card__next-step--missing {
+    color: var(--dw-accent-orange);
+    font-style: italic;
+}
+
+.dw-card__next-step-label {
+    font-weight: 600;
+}
+
+.dw-card__next-step-date {
+    color: var(--dw-ink-70);
+}
+
+.dw-card__note {
+    font-size: 11px;
+    margin: 4px 0 0;
+    color: var(--dw-ink-70);
+    font-style: italic;
+}
+
+/* ─── Modal ────────────────────────────────────────────────────────── */
+
+.dw-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 28, 64, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    z-index: 100;
+}
+
+.dw-modal {
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border-strong);
+    border-radius: 4px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(10, 28, 64, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.dw-modal--loss {
+    max-width: 480px;
+}
+
+.dw-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--dw-border);
+}
+
+.dw-modal__title {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.dw-modal__close {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--dw-ink-70);
+    padding: 0 4px;
+    line-height: 1;
+}
+
+.dw-modal__body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dw-modal__field {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--dw-border);
+}
+
+.dw-modal__field:last-child {
+    border-bottom: none;
+}
+
+.dw-modal__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dw-ink-70);
+}
+
+.dw-modal__value {
+    color: var(--dw-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.dw-modal__hint {
+    font-size: 12px;
+    color: var(--dw-ink-70);
+    font-style: italic;
+    margin: 0;
+}
+
+.dw-modal__footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--dw-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.dw-modal__btn {
+    border: 1px solid var(--dw-border-strong);
+    background: var(--dw-field-raised);
+    color: var(--dw-ink);
+    padding: 8px 18px;
+    font-size: 13px;
+    border-radius: 2px;
+}
+
+.dw-modal__btn:hover {
+    background: var(--dw-ink-15);
+}
+
+.dw-loss-reasons {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dw-loss-reasons__option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--dw-field);
+    border: 1px solid var(--dw-border);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.dw-loss-reasons__option:hover {
+    background: var(--dw-field-raised);
+    border-color: var(--dw-border-strong);
+}
+
+@media (max-width: 980px) {
+    .dw-bridge {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .dw-intervention {
+        grid-template-columns: 1fr;
+    }
+}

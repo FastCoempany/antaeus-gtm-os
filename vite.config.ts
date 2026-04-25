@@ -108,6 +108,16 @@ export default defineConfig({
                 "discovery-studio": resolve(
                     __dirname,
                     "src/discovery-studio/index.html"
+                ),
+
+                // Phase 4 — Deal Workspace Preact rebuild. Served at
+                // /deal-workspace/ via the same flattenSrcPages plugin.
+                // Behind Posthog feature flag `room_deal_workspace_v2`;
+                // legacy `app/deal-workspace/index.html` redirects here when
+                // on (Wave 6 wires the redirect script).
+                "deal-workspace": resolve(
+                    __dirname,
+                    "src/deal-workspace/index.html"
                 )
             }
         }
