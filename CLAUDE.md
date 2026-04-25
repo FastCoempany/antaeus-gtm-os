@@ -76,6 +76,18 @@ If a lower authority conflicts with a higher one, the higher wins.
 
 **Deprioritized buyers:** teams shopping for a full CRM replacement; broad sales orgs needing territory/forecasting/admin first; generic SMB volume-automation buyers.
 
+### Audience + voice lock
+
+The product speaks to three audiences, sometimes the same person across roles: **founders**, **heads of sales**, and **account executives** (AEs). The voice is direct, severe, and operating-grade for all three.
+
+**Vocabulary discipline:**
+- Use **account executive** (or **AE** as abbreviation) for the seller role. Never `rep`. "Rep" is industry shorthand that flattens the audience and treats the seller as interchangeable, which contradicts the product's posture.
+- Use **founder** for the company-builder role. Never `solopreneur`, `founder-CEO`, or other softeners.
+- Use **head of sales** for the sales-leader role. Never `VP Sales` (too corporate-finance-coded) or `sales manager` (too tactical) unless the product explicitly addresses that distinction.
+- The app's own pages, in-product copy, comments, ADRs, and session log entries all honor this. Same for any voice-bearing artifact (commit messages, error strings, banners).
+
+This is not a marketing-positioning rule. It's a respect-the-audience rule. Three roles, three real working contexts; collapsing them into "rep" loses the strategic operating posture the product is built around.
+
 ### Emotional territory
 
 The user should feel:
