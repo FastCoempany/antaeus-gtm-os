@@ -78,15 +78,18 @@ If a lower authority conflicts with a higher one, the higher wins.
 
 ### Audience + voice lock
 
-The product speaks to three audiences, sometimes the same person across roles: **founders**, **heads of sales**, and **account executives** (AEs). The voice is direct, severe, and operating-grade for all three.
+The product speaks to four named audiences, often the same person across roles: **founders**, **heads of sales**, **account executives** (AEs), and **SDRs**. The voice is direct, severe, and operating-grade for all four.
 
 **Vocabulary discipline:**
-- Use **account executive** (or **AE** as abbreviation) for the seller role. Never `rep`. "Rep" is industry shorthand that flattens the audience and treats the seller as interchangeable, which contradicts the product's posture.
+- Use **account executive** (or **AE** as abbreviation) for the closer role. Never `rep`. "Rep" is industry shorthand that flattens the audience and treats the seller as interchangeable, which contradicts the product's posture.
+- Use **SDR** for the sales-development role. The acronym is the canonical term; do not expand it inline ("sales development rep" reintroduces the forbidden word).
 - Use **founder** for the company-builder role. Never `solopreneur`, `founder-CEO`, or other softeners.
 - Use **head of sales** for the sales-leader role. Never `VP Sales` (too corporate-finance-coded) or `sales manager` (too tactical) unless the product explicitly addresses that distinction.
 - The app's own pages, in-product copy, comments, ADRs, and session log entries all honor this. Same for any voice-bearing artifact (commit messages, error strings, banners).
 
-This is not a marketing-positioning rule. It's a respect-the-audience rule. Three roles, three real working contexts; collapsing them into "rep" loses the strategic operating posture the product is built around.
+**Rooms are role-agnostic, not role-locked.** Every room serves whichever named audience is sitting in front of it. Discovery Studio is run by founders early, by AEs in scaled motion, by SDRs in qualification calls, and by heads of sales when they join or coach. Cold Call Studio, Outbound Studio, LinkedIn Playbook all carry the same multi-role pattern. Per-room copy must not assume a single role; when the role context is genuinely ambiguous, prefer the most generic seller-neutral phrasing ("you" / "the call" / "the conversation") over role-specific naming. When role context IS available (e.g., from `profiles.role`), per-room copy may adapt to it — but the room's mind, primitives, and rails do not change by role.
+
+This is not a marketing-positioning rule. It's a respect-the-audience rule. Four roles, four real working contexts; collapsing them into "rep" loses the strategic operating posture the product is built around.
 
 ### Emotional territory
 
@@ -241,7 +244,7 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 ### 4.9 Cold Call Studio — Live Instrument
 
 - **Purpose:** narrow pressure thread-by-thread during a live cold call; turn script archives into one pulled thread at a time.
-- **Strategic logic:** six named threads (Prep → Opener → Pressure → Proof → Ask → Exit) each with buyer-might-say branches and recommended next lines. A cold call is won by narrowing pressure, not widening explanation. The rep lives in one thread at a time.
+- **Strategic logic:** six named threads (Prep → Opener → Pressure → Proof → Ask → Exit) each with buyer-might-say branches and recommended next lines. A cold call is won by narrowing pressure, not widening explanation. You live in one thread at a time.
 - **Primitives:** thread spine, buyer-response branches, say-next capture panel, outcome logging (meeting_booked, callback_scheduled, referral, etc.), score read, call memory table.
 - **Flows in:** signal account from Signal Console; ICP persona.
 - **Flows out:** on `meeting_booked`, creates a Deal record; call outcomes into Dashboard, Deal Workspace, Readiness, Handoff.
@@ -258,8 +261,8 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 
 ### 4.11 Call Planner — Live Instrument *(app path: `/app/discovery-agenda/`)*
 
-- **Purpose:** prepare the exact shape of the next call so the rep arrives with conviction, not hope.
-- **Strategic logic:** four-stop spine — Open / Reason now / Probe / Advance ask. The plan is not an agenda; it is the rep's pre-conviction. The plan must die in the call (get used), not die in the planner (go unused).
+- **Purpose:** prepare the exact shape of the next call so you arrive with conviction, not hope.
+- **Strategic logic:** four-stop spine — Open / Reason now / Probe / Advance ask. The plan is not an agenda; it is your pre-conviction. The plan must die in the call (get used), not die in the planner (go unused).
 - **Primitives:** account + persona + deal witness column; four agenda strips; outcome capture + customize sub-form; handoff actions.
 - **Flows in:** signal + account heat from Signal Console; deal state from Deal Workspace; ICP persona.
 - **Flows out:** `gtmos_call_handoff` payload into Discovery Studio; advance-ask intent into Deal Workspace.
@@ -269,8 +272,9 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 
 *See also the five 2026-04-10 guardian specs in `08-room-guardian-specs/`. Those are binding.*
 
-- **Purpose:** a live discovery operating console — the rep speaks, branches, recovers, locks the next move, and hands truth into the next room without restating.
-- **Strategic logic:** one vertical, collapsible, branch-driven call rail. The rep lives in one open segment at a time; everything else stays compressed but jumpable. Discovery is not a framework gallery, not a methodology viewer, not a notepad. The room answers live pressure with control, not density.
+- **Purpose:** a live discovery operating console — you speak, branch, recover, lock the next move, and hand truth into the next room without restating.
+- **Audience:** role-agnostic per Part I §1 audience+voice lock. Founders run discovery early, SDRs run qualification calls, AEs run discovery proper, heads of sales join + coach. Per-room copy must not assume a single role; default to seller-neutral phrasing.
+- **Strategic logic:** one vertical, collapsible, branch-driven call rail. You live in one open segment at a time; everything else stays compressed but jumpable. Discovery is not a framework gallery, not a methodology viewer, not a notepad. The room answers live pressure with control, not density.
 - **Primitives (21 per the runtime wiring sheet):** `frameworkRegistry` (9 frameworks), `activeFramework`, `callClock`, `phaseTempoPlan`, `activeNode`, `activeTrack`, `essentialNodeSet`, `skipAheadHandlers`, `responseSet`, `expandedResponse`, `learnedFacts`, `signalLedger`, `tiebackLedger`, `supportDossier`, `objectionLibrary`, `inboundQuestionHandlers`, `compressionMode`, `nextStepLock`, `callDisposition`, `postCallPackage`, `handoffPayload`.
 - **Fixed segment spine (10):** Opening frame → Current-state truth → Pain and consequence → Trigger and urgency → Stakeholder and ownership → Proof threshold → Current vendor and displacement → Decision architecture → Next-step lock → Post-call routing.
 - **Nine frameworks (locked):** Legal; Recruiting/Talent; Product/UX/Enablement; GovTech/Compliance; Customer Support/Operations; Sales/Revenue Intelligence; Manufacturing/Supply Chain/Engineering; Data/Intelligence Infrastructure; AI-Native Buyer.
