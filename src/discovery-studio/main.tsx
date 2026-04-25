@@ -1,22 +1,29 @@
 import { render } from "preact";
 import { DiscoveryStudio } from "./DiscoveryStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import { loadFrameworksIntoRegistry } from "./lib/load-frameworks";
+import { bootPersistence } from "./lib/persistence";
 
 /**
  * Entry point for the Discovery Studio Preact rebuild.
  *
  * Served at /discovery-studio/ in dev + prod. Behind Posthog feature
  * flag `room_discovery_v2`. Wave 6 will wire the legacy `app/discovery-
- * studio/index.html` flag-redirect; for now the room is reachable at
- * its URL even without the flag (Wave 1+2 are internal-test only).
+ * studio/index.html` flag-redirect.
  *
  * Boot order:
  *   1. initObservability — Sentry + Posthog
  *   2. loadFrameworksIntoRegistry — read window.DISCOVERY_SEGMENT_RUNTIME
- *      which the legacy <script> tags in index.html populated. Project
- *      into the typed Framework[] and push into the signal.
- *   3. render — Preact mounts; components read live signals.
+ *      (populated by the legacy <script> tags) into the typed registry
+ *   3. render — Preact mounts; components read live signals
+ *   4. bootPersistence (async) — load last session from Supabase or
+ *      unpack the Phase 2.3 migration blob, seed signals, start
+ *      auto-save. Persistence runs after first paint so the UI doesn't
+ *      block on a slow round-trip.
+ *
+ * Persistence failures don't block the room — bootPersistence catches
+ * everything and falls back to in-memory state.
  *
  * Ref: deliverables/adr/adr-002-phase-2-data-architecture-rescope-2026-04-24.md §6 Phase 3
  */
@@ -39,8 +46,25 @@ const flagOn = isFeatureEnabled("room_discovery_v2");
 if (!flagOn) {
     console.info(
         "[discovery-studio] Feature flag room_discovery_v2 is OFF for this user. " +
-            "Rendering anyway (Wave 1/2 are internal-test only)."
+            "Rendering anyway (Waves 1-4 are internal-test only)."
     );
 }
 
 render(<DiscoveryStudio />, root);
+
+// Wave 4: kick off persistence after first paint. Don't block render
+// on Supabase round-trip; if it fails, the room still works in-memory.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootPersistence(client);
+    } catch (err) {
+        // bootPersistence catches its own errors and reports via Sentry,
+        // but a missing env var (Supabase URL/key) throws synchronously
+        // from createDataClient. Catch + log so the room stays usable.
+        console.warn(
+            "[discovery-studio] Persistence layer disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();
