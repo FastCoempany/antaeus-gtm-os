@@ -12,6 +12,27 @@
     </head>
     <body>
         <div id="app"></div>
+
+        <!--
+            Wave 2: load the legacy framework runtime files as side-effect
+            scripts. These files attach data to window.DISCOVERY_SEGMENT_RUNTIME;
+            the Preact main module reads that global after init via
+            lib/load-frameworks.ts.
+
+            Order matters: the master runtime defines the shape; the 9
+            framework runtimes extend it. The master MUST run first.
+        -->
+        <script src="/js/discovery-segment-runtime.js"></script>
+        <script src="/js/discovery-segment-runtime-legal.js"></script>
+        <script src="/js/discovery-segment-runtime-recruiting.js"></script>
+        <script src="/js/discovery-segment-runtime-product-ux.js"></script>
+        <script src="/js/discovery-segment-runtime-govtech.js"></script>
+        <script src="/js/discovery-segment-runtime-customer-support.js"></script>
+        <script src="/js/discovery-segment-runtime-sales-revenue.js"></script>
+        <script src="/js/discovery-segment-runtime-manufacturing.js"></script>
+        <script src="/js/discovery-segment-runtime-data-intelligence.js"></script>
+        <script src="/js/discovery-segment-runtime-ai-native.js"></script>
+
         <script type="module" src="./main.tsx"></script>
     </body>
 </html>

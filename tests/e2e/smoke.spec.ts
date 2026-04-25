@@ -62,25 +62,24 @@ test.describe("room boot smoke tests", () => {
         expect(errors, `page errors during boot:\n${errors.join("\n")}`).toEqual([]);
     });
 
-    test("Phase 3 Wave 1 — /discovery-studio/ Preact rebuild boots cleanly", async ({
+    test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
         // The new Preact room at /discovery-studio/ (distinct from the
-        // legacy /app/discovery-studio/). Wave 1 ships a structurally
-        // complete shell — empty until the framework registry is loaded
-        // by Wave 2. Smoke test asserts: page loads without runtime
-        // errors, the topbar kicker is visible, and all 7 rail roots
-        // render in the DOM.
+        // legacy /app/discovery-studio/). Wave 2 loads the 9 legacy
+        // framework runtimes via <script> tags + projects them into the
+        // typed registry. Smoke test asserts: page loads without runtime
+        // errors, all 7 rail roots render, and the framework rail
+        // displays at least one button (proves loadFrameworks() ran).
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
         await page.goto("/discovery-studio/");
         await page.waitForLoadState("networkidle");
 
-        // Wave 1 markers — the rails render even with empty registry,
-        // they just show their empty-state copy.
+        // Wave 2 markers
         await expect(page.locator(".ds-topbar__kicker")).toContainText(
-            "DISCOVERY STUDIO · WAVE 1"
+            "DISCOVERY STUDIO · WAVE"
         );
         await expect(page.locator(".ds-framework-rail")).toBeAttached();
         await expect(page.locator(".ds-segment-rail")).toBeAttached();
@@ -89,6 +88,11 @@ test.describe("room boot smoke tests", () => {
         await expect(page.locator(".ds-worked-memory")).toBeAttached();
         await expect(page.locator(".ds-next-step-docket")).toBeAttached();
         await expect(page.locator(".ds-support-dossier")).toBeAttached();
+
+        // Wave 2: at least one framework button rendered (proves the
+        // legacy <script> tags loaded + loadFrameworks() projected the
+        // global into the typed registry). Expect 9 frameworks in prod.
+        await expect(page.locator(".ds-framework-rail__btn").first()).toBeVisible();
 
         expect(
             errors,

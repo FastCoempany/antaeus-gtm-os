@@ -4,18 +4,24 @@ import {
     activeNode,
     compressionMode,
     essentialNodeSet,
+    expandResponse,
+    expandedResponse,
     frameworkRegistry,
-    setActiveNode
+    setActiveNode,
+    type Branch,
+    type SegmentNode
 } from "../state";
 
 /**
- * SegmentRail — Wave 1 skeleton.
+ * SegmentRail — Wave 2.
  *
- * Vertical, collapsible list of segments. One open segment + one open node
- * at a time. Compression mode filters the visible nodes.
+ * The 10-stop spine, vertically stacked. Each segment shows its title +
+ * coaching cue, then its nodes. The active node renders its branch
+ * picker inline. Compression mode filters non-essential nodes.
  *
- * Wave 2 wires the proper expand/collapse interaction + the per-node
- * branch picker.
+ * Wave 3 will wire branch interactions (record fact, navigate to room,
+ * jump to next node). Wave 2 is read-only beyond the existing
+ * setActiveNode + expandResponse signals.
  */
 export function SegmentRail(): JSX.Element {
     const fid = activeFramework.value;
@@ -52,30 +58,46 @@ export function SegmentRail(): JSX.Element {
                     const visibleNodes = seg.nodes.filter((n) =>
                         filterNode(n.id)
                     );
+                    if (visibleNodes.length === 0) return null;
                     return (
-                        <li key={seg.id} class="ds-segment-rail__segment">
+                        <li
+                            key={seg.key}
+                            class={`ds-segment-rail__segment${
+                                seg.essential
+                                    ? " ds-segment-rail__segment--essential"
+                                    : ""
+                            }`}
+                        >
                             <header class="ds-segment-rail__segment-header">
-                                {seg.label}
+                                <span class="ds-segment-rail__segment-num">
+                                    {seg.num.toString().padStart(2, "0")}
+                                </span>
+                                <span class="ds-segment-rail__segment-title">
+                                    {seg.title}
+                                </span>
                             </header>
+                            {seg.cue ? (
+                                <p class="ds-segment-rail__segment-cue">
+                                    {seg.cue}
+                                </p>
+                            ) : null}
                             <ul class="ds-segment-rail__nodes">
                                 {visibleNodes.map((n) => {
                                     const isActive =
-                                        node?.segmentId === seg.id &&
+                                        node?.segmentKey === seg.key &&
                                         node?.nodeId === n.id;
                                     return (
                                         <li key={n.id}>
-                                            <button
-                                                type="button"
-                                                class={`ds-segment-rail__node${
-                                                    isActive ? " is-active" : ""
-                                                }`}
-                                                aria-pressed={isActive}
+                                            <NodeButton
+                                                node={n}
+                                                isActive={isActive}
                                                 onClick={() =>
-                                                    setActiveNode(seg.id, n.id)
+                                                    setActiveNode(seg.key, n.id)
                                                 }
-                                            >
-                                                {n.label}
-                                            </button>
+                                            />
+                                            {isActive ? (
+                                                <BranchPicker branches={n.branches} />
+                                            ) : null}
                                         </li>
                                     );
                                 })}
@@ -85,5 +107,92 @@ export function SegmentRail(): JSX.Element {
                 })}
             </ol>
         </section>
+    );
+}
+
+interface NodeButtonProps {
+    node: SegmentNode;
+    isActive: boolean;
+    onClick: () => void;
+}
+
+function NodeButton({ node, isActive, onClick }: NodeButtonProps): JSX.Element {
+    const tone = node.tone ?? "blu";
+    return (
+        <button
+            type="button"
+            class={`ds-segment-rail__node ds-segment-rail__node--${tone}${
+                isActive ? " is-active" : ""
+            }${node.essential ? " is-essential" : ""}`}
+            aria-pressed={isActive}
+            onClick={onClick}
+        >
+            {node.badge ? (
+                <span class="ds-segment-rail__node-badge">{node.badge}</span>
+            ) : null}
+            <span class="ds-segment-rail__node-text">{node.text}</span>
+            {node.note ? (
+                <span class="ds-segment-rail__node-note">{node.note}</span>
+            ) : null}
+        </button>
+    );
+}
+
+interface BranchPickerProps {
+    branches: ReadonlyArray<Branch>;
+}
+
+function BranchPicker({ branches }: BranchPickerProps): JSX.Element {
+    const expanded = expandedResponse.value;
+    if (branches.length === 0) {
+        return (
+            <p class="ds-branch-picker__empty">
+                No branches authored for this node yet.
+            </p>
+        );
+    }
+    return (
+        <div class="ds-branch-picker">
+            {branches.map((b, i) => {
+                const isExpanded = expanded === i;
+                return (
+                    <button
+                        key={i}
+                        type="button"
+                        class={`ds-branch-picker__branch ds-branch-picker__branch--${b.cls}${
+                            isExpanded ? " is-expanded" : ""
+                        }`}
+                        onClick={() =>
+                            isExpanded ? expandResponse(-1) : expandResponse(i)
+                        }
+                    >
+                        {b.tag ? (
+                            <span class="ds-branch-picker__tag">{b.tag}</span>
+                        ) : null}
+                        <span class="ds-branch-picker__quote">
+                            "{b.quote}"
+                        </span>
+                        {isExpanded ? (
+                            <div class="ds-branch-picker__detail">
+                                <p class="ds-branch-picker__move">
+                                    <strong>Say next:</strong> {b.move}
+                                </p>
+                                {b.clear ? (
+                                    <p class="ds-branch-picker__clear">
+                                        <strong>Clear:</strong> {b.clear}
+                                    </p>
+                                ) : null}
+                                {b.missing ? (
+                                    <p class="ds-branch-picker__missing">
+                                        <strong>Still missing:</strong>{" "}
+                                        {b.missing}
+                                    </p>
+                                ) : null}
+                            </div>
+                        ) : null}
+                    </button>
+                );
+            })}
+        </div>
     );
 }

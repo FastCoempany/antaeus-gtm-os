@@ -25,60 +25,68 @@ import {
     startCallClock,
     stopCallClock,
     supportDossier,
-    type Framework,
-    type SegmentId
+    type Framework
 } from "./state";
 
 /**
- * Phase 3 Wave 1 state-model tests.
- *
- * Cover the action helpers + computed signal correctness against a
- * minimal framework fixture. Wave 2 adds tests for the per-noun rail
- * components.
+ * State-model tests using a minimal Legal-framework fixture matching
+ * the legacy runtime shape exactly (see js/discovery-segment-runtime-
+ * legal.js).
  */
 
 const FIXTURE: Framework = {
     id: "legal",
     label: "Legal",
-    category: "legal",
+    short: "Legal",
+    storageKey: "legal",
     segments: [
         {
-            id: "opening-frame" as SegmentId,
-            label: "Opening frame",
+            key: "opening-frame",
+            num: 1,
+            title: "Opening frame",
+            cue: "Set the call.",
+            essential: true,
             nodes: [
                 {
                     id: "of-1",
-                    label: "Why now",
                     essential: true,
+                    tone: "blu",
+                    badge: "Why now",
+                    text: "What changed in the last 90 days?",
                     branches: [
                         {
-                            id: "of-1-b1",
-                            tone: "grn",
-                            label: "Buyer cites a recent compliance event",
+                            tag: "audit-finding",
+                            cls: "grn",
                             quote: "We just had an audit finding...",
-                            sayNext: "Walk me through what triggered the audit.",
-                            facts: [],
-                            recover: [],
-                            leave: []
+                            move: "Walk me through what triggered the audit.",
+                            clear: "Compliance event is the trigger.",
+                            missing: "Specific scope still unknown."
                         }
                     ]
                 },
                 {
                     id: "of-2",
-                    label: "Background",
                     essential: false,
+                    tone: "blu",
+                    badge: "Background",
+                    text: "Set baseline context.",
                     branches: []
                 }
             ]
         },
         {
-            id: "current-state-truth" as SegmentId,
-            label: "Current state truth",
+            key: "current-state-truth",
+            num: 2,
+            title: "Current state truth",
+            cue: "Surface the workflow as it is.",
+            essential: true,
             nodes: [
                 {
                     id: "cst-1",
-                    label: "Existing tooling",
                     essential: true,
+                    tone: "org",
+                    badge: "Tooling",
+                    text: "What's stitching the workflow together today?",
                     branches: []
                 }
             ]
@@ -87,21 +95,16 @@ const FIXTURE: Framework = {
     supportDossier: [
         {
             title: "Proof anchors",
-            items: [{ heading: "Harvey vs. in-house", body: "..." }]
+            items: ["Harvey vs. in-house", "Privilege story", "Hallucination ceiling"]
         }
     ],
-    objectionLibrary: [{ trigger: "Pricing", reply: "..." }],
+    objectionLibrary: [{ trigger: "Pricing", reply: "Frame around workflow cost." }],
     inboundQuestionHandlers: [
-        { question: "Will it integrate with iManage?", bridge: "..." }
+        { question: "Will it integrate with iManage?", bridge: "Depends — what's the pain?" }
     ],
-    skipAheadHandlers: [{ trigger: "...", reply: "..." }],
+    skipAheadHandlers: [{ trigger: "asks for pricing", reply: "Pricing follows fit." }],
     interrupts: [
-        {
-            id: "demo",
-            label: "Demo request",
-            tone: "blu",
-            recover: "..."
-        }
+        { id: "demo", label: "Demo request", tone: "blu", recover: "..." }
     ]
 };
 
@@ -113,7 +116,7 @@ afterEach(() => {
 describe("state — action helpers", () => {
     it("selectFramework sets activeFramework + clears node + expansion", () => {
         __setFrameworkRegistryForTests([FIXTURE]);
-        activeNode.value = { segmentId: "opening-frame", nodeId: "of-1" };
+        activeNode.value = { segmentKey: "opening-frame", nodeId: "of-1" };
         expandedResponse.value = 0;
 
         selectFramework("legal");
@@ -131,7 +134,7 @@ describe("state — action helpers", () => {
         setActiveNode("opening-frame", "of-1");
 
         expect(activeNode.value).toEqual({
-            segmentId: "opening-frame",
+            segmentKey: "opening-frame",
             nodeId: "of-1"
         });
         expect(expandedResponse.value).toBeNull();
@@ -185,7 +188,6 @@ describe("state — action helpers", () => {
         expect(activeNode.value).toBeNull();
         expect(learnedFacts.value).toHaveLength(0);
         expect(callDisposition.value).toBe("in-progress");
-        // registry preserved
         expect(frameworkRegistry.value.some((f) => f.id === "legal")).toBe(
             true
         );
@@ -250,10 +252,8 @@ describe("state — computed signals", () => {
 
     it("computed signals fall back to empty when framework not in registry", () => {
         __setFrameworkRegistryForTests([]);
-        // Force an active framework that isn't loaded
         activeFramework.value = "legal";
         expect(supportDossier.value).toEqual([]);
         expect(objectionLibrary.value).toEqual([]);
     });
 });
-

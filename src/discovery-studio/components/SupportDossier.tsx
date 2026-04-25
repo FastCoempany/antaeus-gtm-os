@@ -6,14 +6,19 @@ import {
 } from "../state";
 
 /**
- * SupportDossier — Wave 1 skeleton.
+ * SupportDossier — Wave 2.
  *
- * Slide-in drawer with reference content for the active framework: proof
- * + decision anchors, objection-handler library, inbound-question bridges.
+ * Three sections of reference content for the active framework:
+ *   - Proof + decision anchors (the supportDossier topics)
+ *   - Objection library (trigger → reply)
+ *   - Inbound question handlers (question → bridge)
  *
- * Wave 1 keeps this always-visible as a side panel for layout testing.
- * Wave 2 wires the toggleable drawer behavior + the framework-specific
- * topic content.
+ * Wave 2 keeps the dossier as an always-visible side panel for layout
+ * testing. Wave 5 (guardian gaps) makes it a slide-in drawer triggered
+ * by a topbar button, matching the legacy room's UX.
+ *
+ * Items in supportDossier topics can be either strings (terse) or
+ * {heading, body} objects (richer); renderer handles both.
  */
 export function SupportDossier(): JSX.Element {
     const dossier = supportDossier.value;
@@ -31,7 +36,7 @@ export function SupportDossier(): JSX.Element {
                     No dossier content for this framework.
                 </p>
             ) : (
-                <>
+                <div class="ds-support-dossier__sections">
                     {dossier.length > 0 ? (
                         <section class="ds-support-dossier__section">
                             <h3 class="ds-support-dossier__section-title">
@@ -43,8 +48,17 @@ export function SupportDossier(): JSX.Element {
                                     <ul>
                                         {topic.items.map((item, j) => (
                                             <li key={j}>
-                                                <strong>{item.heading}</strong>{" "}
-                                                — {item.body}
+                                                {typeof item === "string" ? (
+                                                    item
+                                                ) : (
+                                                    <>
+                                                        <strong>
+                                                            {item.heading}
+                                                        </strong>
+                                                        {" — "}
+                                                        {item.body}
+                                                    </>
+                                                )}
                                             </li>
                                         ))}
                                     </ul>
@@ -59,7 +73,7 @@ export function SupportDossier(): JSX.Element {
                             </h3>
                             <dl>
                                 {objections.map((o, i) => (
-                                    <div key={i}>
+                                    <div key={i} class="ds-support-dossier__pair">
                                         <dt>{o.trigger}</dt>
                                         <dd>{o.reply}</dd>
                                     </div>
@@ -74,7 +88,7 @@ export function SupportDossier(): JSX.Element {
                             </h3>
                             <dl>
                                 {inbound.map((h, i) => (
-                                    <div key={i}>
+                                    <div key={i} class="ds-support-dossier__pair">
                                         <dt>{h.question}</dt>
                                         <dd>{h.bridge}</dd>
                                     </div>
@@ -82,7 +96,7 @@ export function SupportDossier(): JSX.Element {
                             </dl>
                         </section>
                     ) : null}
-                </>
+                </div>
             )}
         </aside>
     );

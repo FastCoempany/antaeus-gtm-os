@@ -39,7 +39,7 @@ export function DiscoveryStudio(): JSX.Element {
         <div class="ds-shell">
             <header class="ds-topbar">
                 <p class="ds-topbar__kicker">
-                    DISCOVERY STUDIO · WAVE 1 · {fwLoaded
+                    DISCOVERY STUDIO · WAVE 2 · {fwLoaded
                         ? `${frameworkRegistry.value.length} frameworks loaded`
                         : "loading…"}
                 </p>

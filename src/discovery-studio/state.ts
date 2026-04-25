@@ -1,24 +1,24 @@
 import { signal, computed, type Signal, type ReadonlySignal } from "@preact/signals";
 
 /**
- * Discovery Studio state model — Phase 3 Wave 1.
+ * Discovery Studio state model — refactored Wave 2 to match the legacy
+ * runtime data shape exactly. The legacy framework files (js/discovery-
+ * segment-runtime-*.js) are the source of truth for field structure,
+ * since they carry months of authoring decisions per framework.
  *
- * The canonical 21 primitives from CLAUDE.md Part I §4.12 + the runtime
- * primitives wiring sheet at deliverables/design-principle-strict-bible/
- * 08-room-guardian-specs/runtime-primitives-wiring-sheet-2026-04-10.md.
+ * The 21 canonical primitives from CLAUDE.md Part I §4.12 are still
+ * present — they're conceptual primitives, not field-name locks.
  *
  * Each primitive is a Preact signal. Components subscribe only to what
- * they read. State mutations happen through small action helpers below
- * (preferred over direct .value = ... mutation in components, so the
- * mutation site is greppable + audit-friendly).
+ * they read. State mutations happen through the action helpers below
+ * (so the call site is greppable + audit-friendly).
  *
- * Persistence is intentionally NOT in this file — Wave 4 wires up
- * data.discoveryFrameworks reads/writes through the typed data-client.
+ * Persistence stays out of this file — Wave 4 wires up the data-client.
  *
  * Ref: deliverables/adr/adr-002-phase-2-data-architecture-rescope-2026-04-24.md §6 Phase 3
  */
 
-// ─── Static / structural shapes ─────────────────────────────────────────
+// ─── Static / structural shapes — match legacy runtime exactly ──────────
 
 /**
  * The nine frameworks locked by canon §4.12. Order matches the legacy
@@ -39,69 +39,89 @@ export const FRAMEWORK_IDS = [
 export type FrameworkId = (typeof FRAMEWORK_IDS)[number];
 
 /**
- * The 10-segment fixed spine. Same for every framework. Canon §4.12.
- */
-export const SEGMENT_IDS = [
-    "opening-frame",
-    "current-state-truth",
-    "pain-and-consequence",
-    "trigger-and-urgency",
-    "stakeholder-and-ownership",
-    "proof-threshold",
-    "current-vendor-and-displacement",
-    "decision-architecture",
-    "next-step-lock",
-    "post-call-routing"
-] as const;
-
-export type SegmentId = (typeof SEGMENT_IDS)[number];
-
-/**
- * Branch tone — the visual treatment that distinguishes a "buyer might
- * say this and it's good" from "buyer might say this and it's a risk."
- * Mapped to color tokens in CSS.
+ * Branch tone class — visual treatment for a branch.
+ * Legacy `cls` field; mapped to color tokens in CSS.
  */
 export type BranchTone = "grn" | "org" | "red" | "blu" | "pur";
 
-export interface Branch {
-    readonly id: string;
-    readonly tone: BranchTone;
+/**
+ * Action — a clickable target that may sit on a branch's `actions`
+ * array. Targets follow the legacy convention: "node:<segment>--<slug>"
+ * or "room:<roomId>".
+ */
+export interface Action {
     readonly label: string;
-    readonly quote: string;
-    readonly sayNext: string;
-    readonly facts: ReadonlyArray<{ title: string; copy: string }>;
-    readonly recover: ReadonlyArray<{ title: string; copy: string }>;
-    readonly leave: ReadonlyArray<{ title: string; copy: string }>;
+    readonly target: string;
+    readonly tone?: BranchTone;
 }
 
+/**
+ * Branch — one buyer-might-say + the recommended response. Legacy field
+ * names preserved verbatim.
+ *   tag   — short label / category
+ *   cls   — tone class (color)
+ *   quote — what the buyer might say
+ *   move  — your next move / what to say
+ *   actions — clickable jump targets (optional)
+ *   clear   — what truth this branch confirms (optional)
+ *   missing — what's still unanswered (optional)
+ */
+export interface Branch {
+    readonly tag: string;
+    readonly cls: BranchTone;
+    readonly quote: string;
+    readonly move: string;
+    readonly actions?: ReadonlyArray<Action>;
+    readonly clear?: string;
+    readonly missing?: string;
+}
+
+/**
+ * SegmentNode — one talking-point inside a segment. Legacy field names.
+ *   id        — globally unique within the framework
+ *   essential — true if shown in compression mode
+ *   tone      — color treatment for the node card
+ *   badge     — short label rendered next to the node
+ *   text      — the talking-point itself
+ *   note      — optional caveat / coaching note
+ */
 export interface SegmentNode {
     readonly id: string;
-    readonly label: string;
     readonly essential: boolean;
+    readonly tone: BranchTone;
+    readonly badge: string;
+    readonly text: string;
+    readonly note?: string;
     readonly branches: ReadonlyArray<Branch>;
 }
 
+/**
+ * Segment — one stop on the 10-stop spine. Legacy field names.
+ *   key       — segment identifier ("opening-frame", "current-state-truth", etc.)
+ *   num       — 1-based ordinal
+ *   title     — display title
+ *   cue       — short coaching cue under the title
+ *   essential — true if shown in compression mode
+ *   nodes     — talking-points in order
+ */
 export interface Segment {
-    readonly id: SegmentId;
-    readonly label: string;
+    readonly key: string;
+    readonly num: number;
+    readonly title: string;
+    readonly cue: string;
+    readonly essential: boolean;
     readonly nodes: ReadonlyArray<SegmentNode>;
 }
 
-export interface Framework {
-    readonly id: FrameworkId;
-    readonly label: string;
-    readonly category: string;
-    readonly segments: ReadonlyArray<Segment>;
-    readonly supportDossier: ReadonlyArray<DossierTopic>;
-    readonly objectionLibrary: ReadonlyArray<ObjectionEntry>;
-    readonly inboundQuestionHandlers: ReadonlyArray<InboundHandler>;
-    readonly skipAheadHandlers: ReadonlyArray<SkipAheadHandler>;
-    readonly interrupts: ReadonlyArray<Interrupt>;
-}
+/**
+ * DossierTopic.items can be either strings (terse) or {heading, body}
+ * objects (richer). The renderer handles both.
+ */
+export type DossierItem = string | { readonly heading: string; readonly body: string };
 
 export interface DossierTopic {
     readonly title: string;
-    readonly items: ReadonlyArray<{ heading: string; body: string }>;
+    readonly items: ReadonlyArray<DossierItem>;
 }
 
 export interface ObjectionEntry {
@@ -124,6 +144,19 @@ export interface Interrupt {
     readonly label: string;
     readonly tone: BranchTone;
     readonly recover: string;
+}
+
+export interface Framework {
+    readonly id: FrameworkId;
+    readonly label: string;
+    readonly short?: string;
+    readonly storageKey?: string;
+    readonly segments: ReadonlyArray<Segment>;
+    readonly supportDossier: ReadonlyArray<DossierTopic>;
+    readonly objectionLibrary: ReadonlyArray<ObjectionEntry>;
+    readonly inboundQuestionHandlers: ReadonlyArray<InboundHandler>;
+    readonly skipAheadHandlers: ReadonlyArray<SkipAheadHandler>;
+    readonly interrupts: ReadonlyArray<Interrupt>;
 }
 
 // ─── Runtime / per-session shapes ───────────────────────────────────────
@@ -154,7 +187,7 @@ export type CallDisposition =
     | "no-show";
 
 export interface PhaseTempoMark {
-    readonly segmentId: SegmentId;
+    readonly segmentKey: string;
     readonly minutesAllotted: number;
 }
 
@@ -186,49 +219,31 @@ export interface PostCallPackage {
 
 /**
  * 1. frameworkRegistry — the static catalog of all 9 frameworks. Loaded
- *    once at boot. Read-only after load. Wave 1 leaves this empty; Wave 2
- *    populates it from the legacy framework runtime modules.
+ *    once at boot from the legacy runtime via lib/load-frameworks.ts.
  */
 export const frameworkRegistry: Signal<ReadonlyArray<Framework>> = signal([]);
 
-/**
- * 2. activeFramework — the framework currently in use for this call.
- *    Switching frameworks is intentional + commits to a specific buyer
- *    type; not casual.
- */
+/** 2. activeFramework — currently chosen framework. */
 export const activeFramework: Signal<FrameworkId | null> = signal(null);
 
-/**
- * 3. callClock — wall-clock seconds since the call started. Drives the
- *    visible call timer + the phase-tempo guidance. Null = no live call.
- */
+/** 3. callClock — wall-clock since call start. Null = no live call. */
 export const callClock: Signal<{ startedAt: number } | null> = signal(null);
 
-/**
- * 4. phaseTempoPlan — recommended minute allocation per segment, derived
- *    from the active framework + call duration target. Wave 5 wires the
- *    UI; Wave 1 just reserves the signal.
- */
+/** 4. phaseTempoPlan — recommended minutes per segment. */
 export const phaseTempoPlan: Signal<ReadonlyArray<PhaseTempoMark>> = signal([]);
 
-/**
- * 5. activeNode — { segmentId, nodeId } the user is currently working
- *    inside. One open node at a time. Null = no open node yet.
- */
+/** 5. activeNode — { segmentKey, nodeId } currently open. Null = none. */
 export const activeNode: Signal<{
-    segmentId: SegmentId;
+    segmentKey: string;
     nodeId: string;
 } | null> = signal(null);
 
-/**
- * 6. activeTrack — which disposition track the call is currently
- *    favoring. Updates as the call progresses.
- */
+/** 6. activeTrack — call disposition being favored. */
 export const activeTrack: Signal<CallDisposition> = signal("in-progress");
 
 /**
- * 7. essentialNodeSet — the filtered subset of nodes visible in
- *    compression mode. Computed from activeFramework + compressionMode.
+ * 7. essentialNodeSet — node IDs visible in compression mode. Computed
+ *    from activeFramework. (Compression filtering itself is in components.)
  */
 export const essentialNodeSet: ReadonlySignal<ReadonlyArray<string>> = computed(
     () => {
@@ -246,23 +261,20 @@ export const essentialNodeSet: ReadonlySignal<ReadonlyArray<string>> = computed(
     }
 );
 
-/**
- * 8. skipAheadHandlers — current framework's skip-ahead handlers. Computed
- *    from activeFramework. (The static catalog lives on the framework;
- *    this is the live-display projection.)
- */
+/** 8. skipAheadHandlers — current framework's projection. */
 export const skipAheadHandlers: ReadonlySignal<
     ReadonlyArray<SkipAheadHandler>
 > = computed(() => {
     const fid = activeFramework.value;
     if (!fid) return [];
-    const fw = frameworkRegistry.value.find((f) => f.id === fid);
-    return fw?.skipAheadHandlers ?? [];
+    return (
+        frameworkRegistry.value.find((f) => f.id === fid)?.skipAheadHandlers ??
+        []
+    );
 });
 
 /**
- * 9. responseSet — the full set of branches available on the active node.
- *    Computed from activeFramework + activeNode.
+ * 9. responseSet — branches available on the active node.
  */
 export const responseSet: ReadonlySignal<ReadonlyArray<Branch>> = computed(
     () => {
@@ -271,48 +283,29 @@ export const responseSet: ReadonlySignal<ReadonlyArray<Branch>> = computed(
         if (!fid || !node) return [];
         const fw = frameworkRegistry.value.find((f) => f.id === fid);
         if (!fw) return [];
-        const seg = fw.segments.find((s) => s.id === node.segmentId);
+        const seg = fw.segments.find((s) => s.key === node.segmentKey);
         if (!seg) return [];
-        const n = seg.nodes.find((nn) => nn.id === node.nodeId);
-        return n?.branches ?? [];
+        return seg.nodes.find((nn) => nn.id === node.nodeId)?.branches ?? [];
     }
 );
 
-/**
- * 10. expandedResponse — which branch on the active node is currently
- *     expanded (showing facts/recover/leave). Index into responseSet.
- *     Null = nothing expanded yet.
- */
+/** 10. expandedResponse — index of the expanded branch on the active node. */
 export const expandedResponse: Signal<number | null> = signal(null);
 
-/**
- * 11. learnedFacts — running list of facts the buyer revealed during the
- *     call. Each fact is keyed to the node + branch that surfaced it,
- *     so the post-call package knows where each piece of truth came from.
- */
+/** 11. learnedFacts — facts the buyer revealed during the call. */
 export const learnedFacts: Signal<ReadonlyArray<LearnedFact>> = signal([]);
 
-/**
- * 12. signalLedger — running list of buyer-side signals (every branch
- *     toggle leaves a trace) so post-call analysis can read tone-over-time.
- */
+/** 12. signalLedger — buyer-side branch-toggle log for tone-over-time. */
 export const signalLedger: Signal<ReadonlyArray<SignalLedgerEntry>> = signal(
     []
 );
 
-/**
- * 13. tiebackLedger — facts the user has noted but not yet deployed back
- *     into the conversation. Hold/deploy distinction so the user can see
- *     what they could still tie back to vs. what they've already used.
- */
+/** 13. tiebackLedger — facts on hold vs. deployed back into conversation. */
 export const tiebackLedger: Signal<ReadonlyArray<TiebackLedgerEntry>> = signal(
     []
 );
 
-/**
- * 14. supportDossier — current framework's reference panels. Surface for
- *     proof + decision anchors that don't belong in the segment rail.
- */
+/** 14. supportDossier — current framework's reference panels. */
 export const supportDossier: ReadonlySignal<ReadonlyArray<DossierTopic>> =
     computed(() => {
         const fid = activeFramework.value;
@@ -323,9 +316,7 @@ export const supportDossier: ReadonlySignal<ReadonlyArray<DossierTopic>> =
         );
     });
 
-/**
- * 15. objectionLibrary — current framework's objection-handler entries.
- */
+/** 15. objectionLibrary — current framework's objection-handler entries. */
 export const objectionLibrary: ReadonlySignal<ReadonlyArray<ObjectionEntry>> =
     computed(() => {
         const fid = activeFramework.value;
@@ -336,10 +327,7 @@ export const objectionLibrary: ReadonlySignal<ReadonlyArray<ObjectionEntry>> =
         );
     });
 
-/**
- * 16. inboundQuestionHandlers — current framework's bridges for buyer
- *     questions that try to derail the agenda (pricing, timeline, etc.).
- */
+/** 16. inboundQuestionHandlers — current framework's bridges. */
 export const inboundQuestionHandlers: ReadonlySignal<
     ReadonlyArray<InboundHandler>
 > = computed(() => {
@@ -351,16 +339,10 @@ export const inboundQuestionHandlers: ReadonlySignal<
     );
 });
 
-/**
- * 17. compressionMode — whether the room is showing all nodes (off),
- *     just essentials (essentials), or only the current node (emergency).
- */
+/** 17. compressionMode — off | essentials | emergency. */
 export const compressionMode: Signal<CompressionMode> = signal("off");
 
-/**
- * 18. nextStepLock — the five required fields the user must fill before
- *     the call can hand off cleanly. Empty strings = unfilled.
- */
+/** 18. nextStepLock — five fields needed before clean handoff. */
 export const nextStepLock: Signal<NextStepLock> = signal({
     date: "",
     owner: "",
@@ -369,31 +351,19 @@ export const nextStepLock: Signal<NextStepLock> = signal({
     reason: ""
 });
 
-/**
- * 19. callDisposition — the final outcome of the call. Locked at
- *     post-call routing.
- */
+/** 19. callDisposition — final outcome at post-call routing. */
 export const callDisposition: Signal<CallDisposition> = signal("in-progress");
 
-/**
- * 20. postCallPackage — the structured handoff payload other rooms read.
- *     Computed from the runtime state at post-call-routing time.
- */
+/** 20. postCallPackage — full structured handoff record. */
 export const postCallPackage: Signal<PostCallPackage | null> = signal(null);
 
-/**
- * 21. handoffPayload — what we hand to the next room (typically Deal
- *     Workspace or Future Autopsy). Distinct from postCallPackage in
- *     that it's the *targeted* projection rather than the full record.
- */
+/** 21. handoffPayload — targeted projection for the next room. */
 export const handoffPayload: Signal<{
     targetRoom: string;
     payload: Record<string, unknown>;
 } | null> = signal(null);
 
 // ─── Action helpers ─────────────────────────────────────────────────────
-// Mutations go through these so the call site is greppable + auditable.
-// Components should not write `.value =` directly except in trivial hooks.
 
 export function selectFramework(id: FrameworkId): void {
     activeFramework.value = id;
@@ -401,8 +371,8 @@ export function selectFramework(id: FrameworkId): void {
     expandedResponse.value = null;
 }
 
-export function setActiveNode(segmentId: SegmentId, nodeId: string): void {
-    activeNode.value = { segmentId, nodeId };
+export function setActiveNode(segmentKey: string, nodeId: string): void {
+    activeNode.value = { segmentKey, nodeId };
     expandedResponse.value = null;
 }
 
@@ -444,13 +414,6 @@ export function stopCallClock(): void {
     callClock.value = null;
 }
 
-/**
- * Reset the per-session signals back to defaults. Used when the user
- * picks up a different call (different framework, different deal) so
- * old state doesn't bleed through.
- *
- * frameworkRegistry stays — it's static catalog, not session state.
- */
 export function resetSession(): void {
     activeFramework.value = null;
     callClock.value = null;
@@ -474,10 +437,6 @@ export function resetSession(): void {
     handoffPayload.value = null;
 }
 
-/**
- * Test hook — replace the framework registry with a fixture. Production
- * code uses loadFrameworks() from lib/load-frameworks.ts (Wave 2).
- */
 export function __setFrameworkRegistryForTests(
     fixtures: ReadonlyArray<Framework>
 ): void {
