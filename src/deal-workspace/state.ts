@@ -160,6 +160,19 @@ export function upsertDeal(deal: Deal): void {
 }
 
 /**
+ * Remove a deal from the local array. Wave 4's realtime subscription
+ * calls this when a DELETE event arrives from Supabase.
+ */
+export function removeDeal(id: string): void {
+    const existing = allDeals.value;
+    const idx = existing.findIndex((d) => d.id === id);
+    if (idx === -1) return;
+    const next = existing.slice();
+    next.splice(idx, 1);
+    allDeals.value = next;
+}
+
+/**
  * Reset session state — used at logout / workspace switch boundaries.
  * Does not delete from Supabase; just clears the in-memory cache.
  */

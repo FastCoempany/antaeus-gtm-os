@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     __getDataClientForTests,
     __setDataClientForTests,
+    applyRealtimePayload,
     looksLikePersistedId,
     saveDealEdit
 } from "./persistence";
@@ -143,6 +144,93 @@ describe("saveDealEdit", () => {
         expect(result.stage).toBe("negotiation");
         // Local upsert still happened so the operator sees their edit.
         expect(allDeals.value[0]?.stage).toBe("negotiation");
+    });
+});
+
+describe("applyRealtimePayload", () => {
+    beforeEach(() => {
+        __setAllDealsForTests([]);
+    });
+
+    it("upserts on INSERT", () => {
+        applyRealtimePayload({
+            eventType: "INSERT",
+            new: {
+                id: "550e8400-e29b-41d4-a716-446655440010",
+                account_name: "Cold-Call Origin",
+                stage: "discovery",
+                deal_value: 25000,
+                data: {}
+            },
+            old: {}
+        });
+        expect(allDeals.value).toHaveLength(1);
+        expect(allDeals.value[0]?.accountName).toBe("Cold-Call Origin");
+        expect(allDeals.value[0]?.stage).toBe("discovery");
+    });
+
+    it("updates an existing deal on UPDATE", () => {
+        __setAllDealsForTests([
+            {
+                id: "550e8400-e29b-41d4-a716-446655440011",
+                accountName: "Acme",
+                value: 50000,
+                stage: "discovery"
+            }
+        ]);
+        applyRealtimePayload({
+            eventType: "UPDATE",
+            new: {
+                id: "550e8400-e29b-41d4-a716-446655440011",
+                account_name: "Acme",
+                stage: "negotiation",
+                deal_value: 75000,
+                data: {}
+            },
+            old: {}
+        });
+        expect(allDeals.value).toHaveLength(1);
+        expect(allDeals.value[0]?.stage).toBe("negotiation");
+        expect(allDeals.value[0]?.value).toBe(75000);
+    });
+
+    it("removes on DELETE", () => {
+        __setAllDealsForTests([
+            {
+                id: "550e8400-e29b-41d4-a716-446655440012",
+                accountName: "Doomed",
+                value: 1000,
+                stage: "prospect"
+            }
+        ]);
+        applyRealtimePayload({
+            eventType: "DELETE",
+            new: {},
+            old: {
+                id: "550e8400-e29b-41d4-a716-446655440012"
+            }
+        });
+        expect(allDeals.value).toHaveLength(0);
+    });
+
+    it("ignores payloads without a usable row", () => {
+        __setAllDealsForTests([]);
+        applyRealtimePayload({
+            eventType: "INSERT",
+            new: null,
+            old: {}
+        });
+        applyRealtimePayload({
+            eventType: "INSERT",
+            new: { account_name: "no id" },
+            old: {}
+        });
+        applyRealtimePayload({
+            eventType: "DELETE",
+            new: {},
+            old: { not_id: "x" }
+        });
+        expect(allDeals.value).toHaveLength(0);
     });
 });
 
