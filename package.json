@@ -6,8 +6,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
+    "test:e2e": "npm run build:cloudflare && playwright test",
+    "test:e2e:headed": "npm run build:cloudflare && playwright test --headed",
     "build:cloudflare": "node tools/deploy/build-cloudflare-assets.js",
     "deploy:cloudflare": "npm run build:cloudflare && npx wrangler versions upload"
   },
