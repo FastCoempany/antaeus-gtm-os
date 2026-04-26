@@ -3,11 +3,15 @@ import {
     COMMAND_MODE_STORAGE_KEY,
     __resetForTests,
     commandMode,
+    commandSummary,
     focusedCommandId,
     resolveInitialMode,
     setCommandMode,
-    setFocusedCommand
+    setEngineInput,
+    setFocusedCommand,
+    spotlightObject
 } from "./state";
+import type { RawCommandCard } from "./lib/types";
 
 describe("resolveInitialMode", () => {
     it("prefers ?mode= over storage and default", () => {
@@ -98,5 +102,65 @@ describe("setFocusedCommand", () => {
         expect(focusedCommandId.value).toBe("acme-deal-1");
         setFocusedCommand(null);
         expect(focusedCommandId.value).toBeNull();
+    });
+});
+
+describe("commandSummary + spotlightObject", () => {
+    const riskCard: RawCommandCard = {
+        title: "Acme proposal stalled",
+        badge: "70",
+        meta: ["$250k", "stale 22"],
+        actions: [
+            { label: "Open deal", href: "/app/deal-workspace/", roomLabel: "Deal Workspace" }
+        ]
+    };
+    const moveCard: RawCommandCard = {
+        title: "Outbound to fintech wedge",
+        badge: "Now",
+        meta: ["heat 70"],
+        actions: [
+            { label: "Open Signal Console", href: "/app/signal-console/", roomLabel: "Signal Console" }
+        ]
+    };
+
+    beforeEach(() => __resetForTests());
+
+    it("returns null spotlight when input is empty", () => {
+        expect(commandSummary.value.ranked.length).toBe(0);
+        expect(spotlightObject.value).toBeNull();
+    });
+
+    it("derives the ranked summary from the engine input", () => {
+        setEngineInput({
+            riskCards: [riskCard],
+            moveCards: [moveCard],
+            healthSummaries: {}
+        });
+        expect(commandSummary.value.ranked.length).toBe(2);
+        expect(spotlightObject.value).toBe(commandSummary.value.spotlight);
+    });
+
+    it("honors a manual focus over the engine top", () => {
+        setEngineInput({
+            riskCards: [riskCard],
+            moveCards: [moveCard],
+            healthSummaries: {}
+        });
+        const ranked = commandSummary.value.ranked;
+        const second = ranked[1]!;
+        setFocusedCommand(second.id);
+        expect(spotlightObject.value?.id).toBe(second.id);
+    });
+
+    it("falls back to engine top if focused id is not in the ranked set", () => {
+        setEngineInput({
+            riskCards: [riskCard],
+            moveCards: [moveCard],
+            healthSummaries: {}
+        });
+        setFocusedCommand("does-not-exist");
+        expect(spotlightObject.value?.id).toBe(
+            commandSummary.value.spotlight?.id
+        );
     });
 });

@@ -1,9 +1,17 @@
-import { signal, type Signal } from "@preact/signals";
+import { computed, signal, type ReadonlySignal, type Signal } from "@preact/signals";
 import {
     COMMAND_MODES,
     DEFAULT_COMMAND_MODE,
-    type CommandMode
+    EMPTY_ENGINE_INPUT,
+    type CommandContextSummary,
+    type CommandEngineInput,
+    type CommandMode,
+    type CommandObject
 } from "./lib/types";
+import {
+    buildCommandObjects,
+    summarizeCommandContext
+} from "./lib/command-intelligence";
 
 /**
  * Phase 4 / Room 2 — Dashboard runtime state.
@@ -32,6 +40,39 @@ export const commandMode: Signal<CommandMode> = signal(DEFAULT_COMMAND_MODE);
 
 /** Focused command object id (drives Spotlight + sheet inspector). */
 export const focusedCommandId: Signal<string | null> = signal(null);
+
+/**
+ * Live engine input. Wave 3 leaves it as EMPTY_ENGINE_INPUT (the room
+ * renders an empty state); Wave 5 wires the real cross-room snapshot
+ * aggregator to push updates here.
+ */
+export const engineInput: Signal<CommandEngineInput> = signal(EMPTY_ENGINE_INPUT);
+
+/**
+ * Computed ranked summary derived from `engineInput`. Re-runs the
+ * ranking engine whenever the input changes; consumers (SpotlightView,
+ * QueueView, BriefView) read this directly without restating logic.
+ */
+export const commandSummary: ReadonlySignal<CommandContextSummary> = computed(() => {
+    const objects = buildCommandObjects(engineInput.value);
+    return summarizeCommandContext(objects);
+});
+
+/**
+ * Resolves the object the Spotlight view should show: the explicitly
+ * focused object if its id is in the ranked list, otherwise the
+ * top-ranked object (the engine's spotlight). Falls through to null
+ * when there are no ranked objects yet.
+ */
+export const spotlightObject: ReadonlySignal<CommandObject | null> = computed(() => {
+    const summary = commandSummary.value;
+    const focusedId = focusedCommandId.value;
+    if (focusedId) {
+        const match = summary.ranked.find((o) => o.id === focusedId);
+        if (match) return match;
+    }
+    return summary.spotlight;
+});
 
 function isCommandMode(v: unknown): v is CommandMode {
     return typeof v === "string" && (COMMAND_MODES as ReadonlyArray<string>).includes(v);
@@ -110,8 +151,18 @@ export function setFocusedCommand(id: string | null): void {
     focusedCommandId.value = id;
 }
 
+/**
+ * Replace the engine input. Wave 5's aggregator calls this each time a
+ * cross-room snapshot updates; tests use it to drive the ranking
+ * engine deterministically.
+ */
+export function setEngineInput(next: CommandEngineInput): void {
+    engineInput.value = next;
+}
+
 /** Test-only — reset signals between cases. */
 export function __resetForTests(): void {
     commandMode.value = DEFAULT_COMMAND_MODE;
     focusedCommandId.value = null;
+    engineInput.value = EMPTY_ENGINE_INPUT;
 }
