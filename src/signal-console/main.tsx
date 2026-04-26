@@ -1,6 +1,9 @@
 import { render } from "preact";
 import { SignalConsole } from "./SignalConsole";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { setAllAccounts, startExternalPublishing } from "./state";
+import { loadAccounts } from "./lib/persistence";
+import { publishHealthSnapshot } from "./lib/health-snapshot";
 
 /**
  * Entry point for the Signal Console Preact rebuild
@@ -35,5 +38,18 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+// Seed from gtmos_sc_v4 (legacy localStorage) before first render so
+// the grid renders with data instead of flashing the empty state.
+const seeded = loadAccounts();
+setAllAccounts(seeded);
+
+// Publish the health snapshot once on boot so Dashboard's aggregator
+// has fresh data even before the first edit.
+publishHealthSnapshot(seeded);
+
+// Wire the auto-publish loop: every subsequent allAccounts mutation
+// dual-writes to gtmos_sc_v4 + gtmos_signal_room_health.
+startExternalPublishing();
 
 render(<SignalConsole />, root);

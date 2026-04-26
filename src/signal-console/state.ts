@@ -1,5 +1,7 @@
-import { computed, signal, type ReadonlySignal, type Signal } from "@preact/signals";
+import { computed, effect, signal, type ReadonlySignal, type Signal } from "@preact/signals";
 import type { Account } from "./lib/types";
+import { saveAccounts } from "./lib/persistence";
+import { publishHealthSnapshot } from "./lib/health-snapshot";
 
 /**
  * Phase 4 / Room 3 — Signal Console runtime state.
@@ -96,4 +98,35 @@ export function resetSession(): void {
 export function __setAllAccountsForTests(accounts: ReadonlyArray<Account>): void {
     allAccounts.value = accounts;
     loaded.value = true;
+}
+
+let externalPublishStop: (() => void) | null = null;
+
+/**
+ * Wire the side-effect that mirrors every allAccounts change to
+ * localStorage (gtmos_sc_v4) and publishes a fresh health snapshot
+ * (gtmos_signal_room_health). Call once after persistence has booted
+ * so the initial load doesn't trigger a redundant write.
+ *
+ * Returns a stop() handle for tests / teardown.
+ */
+export function startExternalPublishing(): () => void {
+    if (externalPublishStop) return externalPublishStop;
+    let firstRun = true;
+    const dispose = effect(() => {
+        const accounts = allAccounts.value;
+        // Skip the first run — that's the boot-time seed and we don't
+        // want to write over fresh data with our own copy of it.
+        if (firstRun) {
+            firstRun = false;
+            return;
+        }
+        saveAccounts(accounts);
+        publishHealthSnapshot(accounts);
+    });
+    externalPublishStop = () => {
+        dispose();
+        externalPublishStop = null;
+    };
+    return externalPublishStop;
 }
