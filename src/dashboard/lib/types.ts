@@ -41,6 +41,8 @@ export interface CommandAction {
     readonly label: string;
     readonly href: string;
     readonly variant?: "primary" | "ghost";
+    readonly tone?: string;
+    readonly roomLabel?: string;
 }
 
 export interface CommandReason {
@@ -56,17 +58,40 @@ export interface CommandObject {
     readonly id: string;
     readonly title: string;
     readonly subtitle?: string;
+    readonly copy?: string;
+    readonly objectType: string;
     readonly commandFamily: CommandFamily;
-    readonly badge?: string;
-    readonly badgeTone?: string;
+    readonly badge: string;
+    readonly badgeTone: string;
+    readonly metricLabel: string;
+    readonly metricValue: string;
     readonly meta: ReadonlyArray<string>;
-    readonly score: number;
-    readonly scoreReasons: ReadonlyArray<string>;
     readonly actions: ReadonlyArray<CommandAction>;
-    /** Inferred destination room label (e.g. "Deal Workspace"). */
-    readonly roomLabel?: string;
-    /** Anchor href of the dominant move for cross-room handoff. */
+    readonly sheetKey: string;
+    readonly focusObject: string;
+    readonly focusRoom: string;
+    readonly stateKey: string;
+    readonly rankingSignals: Readonly<Record<string, unknown>> | null;
+    readonly score: number;
+    readonly baseScore: number;
+    readonly stabilityBonus: number;
+    readonly rankingConfidence: number;
+    readonly rankingConfidenceLabel: string;
+    readonly roomFamilyLabel: string;
+    readonly scoreReasons: ReadonlyArray<string>;
+    readonly truthDebtCount: number;
+    readonly nextStepOverdue: boolean;
+    readonly stageStuck: boolean;
+    readonly causeId: string;
+    readonly pressureType: string;
+    readonly readinessFragility: number;
+    readonly readinessIcpWeak: boolean;
+    readonly quotaPressureScore: number;
+    readonly signalRoomMotionReady: boolean;
+    /** Optional anchor href of the dominant move for cross-room handoff. */
     readonly primaryHref?: string;
+    /** Original raw input that produced this object (debug-only). */
+    readonly source?: unknown;
 }
 
 /**
@@ -97,23 +122,55 @@ export interface RawCommandCard {
     readonly rankingSignals?: Readonly<Record<string, unknown>>;
 }
 
+/**
+ * Optional fallback "primary" object — the legacy engine accepts a
+ * pre-rendered card to inject when there's no risk/move data yet.
+ */
+export interface PrimaryCard {
+    readonly title?: string;
+    readonly copy?: string;
+    readonly label?: string;
+    readonly tags?: ReadonlyArray<string>;
+    readonly actions?: ReadonlyArray<CommandAction>;
+    readonly sheetKey?: string;
+}
+
 /** Engine input bundle consumed by `buildCommandObjects` (Wave 2). */
 export interface CommandEngineInput {
     readonly riskCards: ReadonlyArray<RawCommandCard>;
-    readonly opportunityCards: ReadonlyArray<RawCommandCard>;
     readonly moveCards: ReadonlyArray<RawCommandCard>;
-    readonly advisorCards: ReadonlyArray<RawCommandCard>;
-    readonly icpCards: ReadonlyArray<RawCommandCard>;
-    readonly systemCards: ReadonlyArray<RawCommandCard>;
     readonly healthSummaries: HealthSummaries;
+    readonly shellContext?: Readonly<Record<string, unknown>>;
+    readonly dependencyWarnings?: ReadonlyArray<unknown>;
+    readonly primary?: PrimaryCard | null;
+}
+
+export interface EngineOptions {
+    readonly previousSnapshot?: {
+        readonly spotlightObjectId?: string;
+        readonly spotlightTitle?: string;
+        readonly topQueueIds?: ReadonlyArray<string>;
+        readonly topQueueTitles?: ReadonlyArray<string>;
+    } | null;
 }
 
 export const EMPTY_ENGINE_INPUT: CommandEngineInput = {
     riskCards: [],
-    opportunityCards: [],
     moveCards: [],
-    advisorCards: [],
-    icpCards: [],
-    systemCards: [],
     healthSummaries: {}
 };
+
+export interface CommandContextSummary {
+    readonly ranked: ReadonlyArray<CommandObject>;
+    readonly spotlight: CommandObject | null;
+    readonly queue: ReadonlyArray<CommandObject>;
+    readonly riskCards: ReadonlyArray<CommandObject>;
+    readonly moveCards: ReadonlyArray<CommandObject>;
+    readonly systemCards: ReadonlyArray<CommandObject>;
+}
+
+export interface CommandExplanation {
+    readonly label: string;
+    readonly title: string;
+    readonly copy: string;
+}
