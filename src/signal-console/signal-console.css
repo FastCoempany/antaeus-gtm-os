@@ -153,3 +153,222 @@ button {
     max-width: 60ch;
     text-align: center;
 }
+
+.sc-grid {
+    background: transparent;
+    border: none;
+    padding: 0;
+    min-height: unset;
+}
+
+.sc-grid--empty {
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border-strong);
+    border-radius: 4px;
+    padding: 32px;
+    min-height: 320px;
+}
+
+.sc-grid__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 14px;
+}
+
+/* ─── Account card ─────────────────────────────────────────────────── */
+
+.sc-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border);
+    border-radius: 4px;
+    padding: 16px 18px;
+}
+
+.sc-card[aria-expanded="true"] {
+    border-color: var(--sc-border-strong);
+}
+
+.sc-card__header {
+    background: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+}
+
+.sc-card__title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sc-card__name {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.sc-card__ticker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sc-ink-40);
+}
+
+.sc-card__meta {
+    margin: 0;
+    font-size: 12px;
+    color: var(--sc-ink-70);
+}
+
+.sc-card__signals {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sc-card__signal {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 8px;
+    background: var(--sc-field);
+    border-radius: 2px;
+    border-left: 2px solid var(--sc-border-strong);
+}
+
+.sc-card__signal-headline {
+    font-size: 13px;
+    color: var(--sc-ink);
+    line-height: 1.35;
+}
+
+.sc-card__signal-headline a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--sc-border-strong);
+}
+
+.sc-card__signal-headline a:hover {
+    color: var(--sc-accent-orange);
+    border-bottom-color: var(--sc-accent-orange);
+}
+
+.sc-card__signal-ai {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--sc-accent-blue);
+    text-transform: uppercase;
+}
+
+.sc-card__signal-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--sc-ink-40);
+    letter-spacing: 0.06em;
+}
+
+.sc-card__more-btn {
+    background: transparent;
+    border: 1px dashed var(--sc-border-strong);
+    color: var(--sc-ink-70);
+    padding: 4px 10px;
+    font-size: 11px;
+    border-radius: 2px;
+    width: 100%;
+}
+
+.sc-card__more-btn:hover {
+    background: var(--sc-ink-15);
+    color: var(--sc-ink);
+}
+
+.sc-card__empty {
+    margin: 0;
+    color: var(--sc-ink-40);
+    font-size: 12px;
+    font-style: italic;
+}
+
+.sc-card__footer {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--sc-border);
+    padding-top: 8px;
+}
+
+.sc-card__metric {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--sc-ink-70);
+    text-transform: uppercase;
+}
+
+/* ─── Heat badge ───────────────────────────────────────────────────── */
+
+.sc-heat {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 4px 12px;
+    border-radius: 2px;
+    min-width: 64px;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
+
+.sc-heat__score {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.sc-heat__band {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.sc-heat--h-hot {
+    background: var(--sc-accent-orange);
+    color: #fff;
+}
+
+.sc-heat--h-warm {
+    background: #fff3ec;
+    color: var(--sc-accent-orange);
+}
+
+.sc-heat--h-med {
+    background: var(--sc-ink-15);
+    color: var(--sc-ink);
+}
+
+.sc-heat--h-cool {
+    background: transparent;
+    color: var(--sc-ink-40);
+    border: 1px solid var(--sc-border);
+}

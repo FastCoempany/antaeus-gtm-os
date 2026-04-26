@@ -1,15 +1,15 @@
 import type { JSX } from "preact";
-import { visibleAccounts, allAccounts } from "../state";
+import { allAccounts, visibleAccounts } from "../state";
+import { rankByHeat } from "../lib/heat";
+import { AccountCard } from "./AccountCard";
 
 /**
- * AccountGrid — Wave 1 placeholder.
+ * AccountGrid — Wave 3 implementation.
  *
- * Per canon §4.7 the grid is the room's primary working surface:
- * accounts ranked by heat, each card showing signals + execution
- * context. Wave 3 wires the cards + heat sort + expand/collapse.
- *
- * Wave 1 renders the empty / no-match shells so layout + smoke test
- * land cleanly.
+ * Renders every visible account as a card, sorted by heat (descending,
+ * stable on ties). Per canon §4.7: heat ranking IS the room's
+ * organizing logic — no manual reorder, no drag handles, no manual
+ * column choice. Stage is not truth unless heat backs it up.
  */
 export function AccountGrid(): JSX.Element {
     const visible = visibleAccounts.value;
@@ -35,12 +35,17 @@ export function AccountGrid(): JSX.Element {
         );
     }
 
+    const ranked = rankByHeat(visible);
+
     return (
         <section class="sc-grid" aria-label="Account grid">
-            <p class="sc-grid__placeholder">
-                Wave 3 wires the account cards. {visible.length} account
-                {visible.length === 1 ? "" : "s"} would render here.
-            </p>
+            <ul class="sc-grid__list">
+                {ranked.map((a) => (
+                    <li key={a.id}>
+                        <AccountCard account={a} />
+                    </li>
+                ))}
+            </ul>
         </section>
     );
 }
