@@ -134,6 +134,16 @@ export default defineConfig({
                 "signal-console": resolve(
                     __dirname,
                     "src/signal-console/index.html"
+                ),
+
+                // Phase 4 / Room 4 — Future Autopsy Preact rebuild. Served
+                // at /future-autopsy/. Behind Posthog feature flag
+                // `room_future_autopsy_v2`; legacy
+                // `app/future-autopsy/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "future-autopsy": resolve(
+                    __dirname,
+                    "src/future-autopsy/index.html"
                 )
             }
         }
