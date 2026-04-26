@@ -1,7 +1,8 @@
 import { render } from "preact";
 import { Dashboard } from "./Dashboard";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { bootMode } from "./state";
+import { bootMode, setEngineInput } from "./state";
+import { bootSnapshotAggregator } from "./lib/snapshot-aggregator";
 
 /**
  * Entry point for the Dashboard Preact rebuild
@@ -43,3 +44,12 @@ if (!flagOn) {
 }
 
 render(<Dashboard />, root);
+
+// Wave 5 — start the cross-room snapshot aggregator after first
+// paint. It seeds engineInput synchronously (initial read) then
+// listens for storage events + a 10s visibility-aware refresh.
+bootSnapshotAggregator({
+    onUpdate: (input) => {
+        setEngineInput(input);
+    }
+});
