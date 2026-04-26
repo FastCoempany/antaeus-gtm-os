@@ -22,8 +22,11 @@ import type { Vitals } from "./types";
 export const DEFAULT_PREFS = {
     staleWarnDays: 7,
     stageStuckDays: 21,
+    staleCriticalDays: 30,
     highValueUSD: 75000,
-    coverageTarget: 3
+    killValueUSD: 25000,
+    coverageTarget: 3,
+    autopsyHorizonDays: 45
 } as const;
 
 export type Prefs = typeof DEFAULT_PREFS;

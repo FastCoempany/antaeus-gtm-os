@@ -7,6 +7,8 @@ import type {
     Vitals
 } from "./lib/types";
 import { MAX_LEDGER_CASES } from "./lib/types";
+import type { ComputedVitals } from "./lib/vitals";
+import { generateAutopsy, rankAutopsyUniverse } from "./lib/autopsy";
 
 /**
  * Phase 4 / Room 4 — Future Autopsy runtime state.
@@ -48,17 +50,14 @@ export const taskLog: Signal<TaskLog> = signal({});
 // ─── Derived projections ────────────────────────────────────────────────
 
 /**
- * Universe ranking — top N deals by autopsy urgency. Wave 3 will inject
- * the real ranker (`autopsyUniverseScore`); Wave 1 ranks by `riskScore`
- * as a placeholder so the ledger renders.
+ * Universe ranking — Wave 3 wires the real autopsyUniverseScore
+ * (2 × risk + min(stale, 60) + value/stage/qual amplifiers). Drops
+ * closed deals + caps at MAX_LEDGER_CASES.
  */
 export const autopsyUniverse: ReadonlySignal<ReadonlyArray<Vitals>> = computed(() => {
-    const open = allVitals.value.filter((v) => !v.isClosed);
-    const sorted = open.slice().sort((a, b) => {
-        if (b.riskScore !== a.riskScore) return b.riskScore - a.riskScore;
-        return (b.staleDays ?? 0) - (a.staleDays ?? 0);
+    return rankAutopsyUniverse(allVitals.value as ReadonlyArray<ComputedVitals>, {
+        limit: MAX_LEDGER_CASES
     });
-    return sorted.slice(0, MAX_LEDGER_CASES);
 });
 
 /**
@@ -79,10 +78,15 @@ export const selectedVitals: ReadonlySignal<Vitals | null> = computed(() => {
 });
 
 /**
- * Computed autopsy doc for the selected case. Wave 3 wires the
- * generator; Wave 1 returns null to keep the layout calm.
+ * Computed autopsy doc for the selected case. Re-runs the generator
+ * whenever selectedVitals changes — keeps the diagnosis honest as
+ * cross-room state shifts (e.g., Deal Workspace updates a stage).
  */
-export const currentAutopsy: Signal<AutopsyDoc | null> = signal(null);
+export const currentAutopsy: ReadonlySignal<AutopsyDoc | null> = computed(() => {
+    const v = selectedVitals.value as ComputedVitals | null;
+    if (!v) return null;
+    return generateAutopsy(v);
+});
 
 // ─── Actions ────────────────────────────────────────────────────────────
 
@@ -107,10 +111,6 @@ export function setTaskLog(next: TaskLog): void {
     taskLog.value = next;
 }
 
-export function setCurrentAutopsy(doc: AutopsyDoc | null): void {
-    currentAutopsy.value = doc;
-}
-
 export function resetSession(): void {
     allVitals.value = [];
     loaded.value = false;
@@ -118,7 +118,6 @@ export function resetSession(): void {
     currentVerdictMode.value = "left";
     currentForensicSheet.value = "pattern";
     taskLog.value = {};
-    currentAutopsy.value = null;
 }
 
 /** Test-only — seed the vitals list. */

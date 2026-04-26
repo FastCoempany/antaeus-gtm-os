@@ -138,6 +138,17 @@ export interface AutopsyDoc {
     readonly winConditions: ReadonlyArray<WinCondition>;
     readonly countermeasures: ReadonlyArray<CountermeasureTask>;
     readonly killSwitch: string;
+    /**
+     * Lose-side story — the "if left alone" narrative. Composed from
+     * stage + top cause variation; used by the verdict-mode "left"
+     * docket in Wave 4.
+     */
+    readonly loseStory: string;
+    /**
+     * Win-side story — the "if corrected" narrative. Composed from
+     * stage; used by the verdict-mode "corrected" docket.
+     */
+    readonly winStory: string;
 }
 
 /**
