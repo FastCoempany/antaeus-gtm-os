@@ -32,16 +32,31 @@ export type SignalType = (typeof SIGNAL_TYPES)[number];
 
 export interface Signal {
     readonly id: string;
-    readonly type: SignalType | string;
-    readonly title: string;
+    readonly type?: SignalType | string;
+    /** Legacy alias for type (the legacy room used `cat` for category). */
+    readonly cat?: string;
+    /** Headline / title — both names accepted to match legacy data. */
+    readonly headline?: string;
+    readonly title?: string;
     readonly source?: string;
     readonly url?: string;
-    readonly capturedAt: string;
-    /** Confidence 0..1 — high-confidence signals get heat bonus. */
+    /**
+     * When the signal happened in the world. Heat recency reads this
+     * first, then fetched_at, then capturedAt. Field names mirror the
+     * legacy `js`-side data so existing rows flow in without translation.
+     */
+    readonly published_date?: string;
+    /** When we captured the signal (enrichment fetch time). */
+    readonly fetched_at?: string;
+    /** Modern field — set on signals authored from the new room. */
+    readonly capturedAt?: string;
+    /** Confidence 0..1 — ≥0.9 gets +5 heat bonus. */
     readonly confidence?: number;
-    /** AI-detected signals weight higher in the heat formula. */
+    /** AI-detected signals weight 18 (vs 12 for non-AI). */
     readonly is_ai?: boolean;
-    /** Operator-flagged signal — excluded from heat. */
+    readonly ai?: boolean;
+    /** Operator-flagged signal — excluded from heat. Legacy uses status==='flagged'. */
+    readonly status?: string;
     readonly flagged?: boolean;
     readonly note?: string;
 }
