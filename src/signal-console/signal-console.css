@@ -1,0 +1,510 @@
+/*
+ * Signal Console — Wave 1 baseline styles.
+ *
+ * Live Instrument family per CLAUDE.md Part II §4.3: live, tense,
+ * immediate, operational. Top of page behaves like a working console,
+ * not a report. Bright field per Part II §1 direction lock.
+ *
+ * Named premium asset (Part II §5) — must not be genericized,
+ * casualized, or visually softened.
+ */
+
+:root {
+    --sc-ink: #0a1c40;
+    --sc-ink-70: rgba(10, 28, 64, 0.7);
+    --sc-ink-40: rgba(10, 28, 64, 0.4);
+    --sc-ink-15: rgba(10, 28, 64, 0.15);
+    --sc-field: #f6f8fc;
+    --sc-field-raised: #ffffff;
+    --sc-accent-orange: #ff6b1c;
+    --sc-accent-blue: #2e5aac;
+    --sc-accent-green: #2e7d4c;
+    --sc-accent-amber: #b57500;
+    --sc-accent-red: #b4261f;
+    --sc-border: rgba(10, 28, 64, 0.1);
+    --sc-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--sc-field);
+    color: var(--sc-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────── */
+
+.sc-shell {
+    min-height: 100vh;
+    padding: 32px 40px 80px;
+    max-width: 1480px;
+    margin: 0 auto;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────── */
+
+.sc-topbar {
+    margin-bottom: 28px;
+}
+
+.sc-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--sc-ink-70);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.sc-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(32px, 4vw, 50px);
+    line-height: 1.04;
+    font-weight: 400;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+}
+
+.sc-topbar__sub {
+    font-size: 16px;
+    color: var(--sc-ink-70);
+    margin: 0;
+    max-width: 60ch;
+}
+
+/* ─── Grid controls ────────────────────────────────────────────────── */
+
+.sc-grid-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.sc-grid-controls__search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 320px;
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border-strong);
+    border-radius: 2px;
+    padding: 6px 12px;
+}
+
+.sc-grid-controls__search-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--sc-ink-40);
+    text-transform: uppercase;
+}
+
+.sc-grid-controls__search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--sc-ink);
+    font: inherit;
+    outline: none;
+    padding: 4px 0;
+}
+
+/* ─── Account grid (Wave 1 placeholder) ────────────────────────────── */
+
+.sc-grid {
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border-strong);
+    border-radius: 4px;
+    padding: 32px;
+    min-height: 320px;
+}
+
+.sc-grid--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sc-grid__empty,
+.sc-grid__placeholder {
+    margin: 0;
+    color: var(--sc-ink-70);
+    font-style: italic;
+    font-size: 14px;
+    max-width: 60ch;
+    text-align: center;
+}
+
+.sc-grid {
+    background: transparent;
+    border: none;
+    padding: 0;
+    min-height: unset;
+}
+
+.sc-grid--empty {
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border-strong);
+    border-radius: 4px;
+    padding: 32px;
+    min-height: 320px;
+}
+
+.sc-grid__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 14px;
+}
+
+/* ─── Account card ─────────────────────────────────────────────────── */
+
+.sc-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border);
+    border-radius: 4px;
+    padding: 16px 18px;
+}
+
+.sc-card[aria-expanded="true"] {
+    border-color: var(--sc-border-strong);
+}
+
+.sc-card__header {
+    background: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+}
+
+.sc-card__title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sc-card__name {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.sc-card__ticker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sc-ink-40);
+}
+
+.sc-card__meta {
+    margin: 0;
+    font-size: 12px;
+    color: var(--sc-ink-70);
+}
+
+.sc-card__signals {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sc-card__signal {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 8px;
+    background: var(--sc-field);
+    border-radius: 2px;
+    border-left: 2px solid var(--sc-border-strong);
+}
+
+.sc-card__signal-headline {
+    font-size: 13px;
+    color: var(--sc-ink);
+    line-height: 1.35;
+}
+
+.sc-card__signal-headline a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--sc-border-strong);
+}
+
+.sc-card__signal-headline a:hover {
+    color: var(--sc-accent-orange);
+    border-bottom-color: var(--sc-accent-orange);
+}
+
+.sc-card__signal-ai {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--sc-accent-blue);
+    text-transform: uppercase;
+}
+
+.sc-card__signal-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--sc-ink-40);
+    letter-spacing: 0.06em;
+}
+
+.sc-card__more-btn {
+    background: transparent;
+    border: 1px dashed var(--sc-border-strong);
+    color: var(--sc-ink-70);
+    padding: 4px 10px;
+    font-size: 11px;
+    border-radius: 2px;
+    width: 100%;
+}
+
+.sc-card__more-btn:hover {
+    background: var(--sc-ink-15);
+    color: var(--sc-ink);
+}
+
+.sc-card__empty {
+    margin: 0;
+    color: var(--sc-ink-40);
+    font-size: 12px;
+    font-style: italic;
+}
+
+.sc-card__footer {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--sc-border);
+    padding-top: 8px;
+}
+
+.sc-card__metric {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--sc-ink-70);
+    text-transform: uppercase;
+}
+
+/* ─── Workspace health panel ───────────────────────────────────────── */
+
+.sc-health {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--sc-border);
+    border: 1px solid var(--sc-border);
+    border-radius: 2px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.sc-health__cell {
+    background: var(--sc-field-raised);
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sc-health__cell--wide {
+    grid-column: 1 / -1;
+}
+
+.sc-health__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sc-ink-40);
+}
+
+.sc-health__value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--sc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.sc-health__value--ready {
+    color: var(--sc-accent-green);
+}
+
+.sc-health__value--research {
+    color: var(--sc-accent-amber);
+}
+
+/* ─── Card temperature chip + CTAs ─────────────────────────────────── */
+
+.sc-card__sub {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.sc-card__temp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 2px;
+}
+
+.sc-card__temp--ice_cold {
+    background: var(--sc-ink-15);
+    color: var(--sc-ink-40);
+}
+
+.sc-card__temp--cool {
+    background: rgba(46, 90, 172, 0.14);
+    color: var(--sc-accent-blue);
+}
+
+.sc-card__temp--warm {
+    background: #fff3ec;
+    color: var(--sc-accent-amber);
+}
+
+.sc-card__temp--hot {
+    background: var(--sc-accent-red);
+    color: #fff;
+}
+
+.sc-card__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--sc-border);
+    padding-top: 10px;
+}
+
+.sc-card__metrics {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.sc-card__ctas {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.sc-card__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 2px;
+    text-decoration: none;
+    border: 1px solid var(--sc-border-strong);
+}
+
+.sc-card__cta--primary {
+    background: var(--sc-accent-orange);
+    color: #fff;
+    border-color: var(--sc-accent-orange);
+}
+
+.sc-card__cta--primary:hover {
+    background: #e25a10;
+    border-color: #e25a10;
+}
+
+.sc-card__cta--ghost {
+    background: var(--sc-field-raised);
+    color: var(--sc-ink);
+}
+
+.sc-card__cta--ghost:hover {
+    background: var(--sc-ink-15);
+}
+
+/* ─── Heat badge ───────────────────────────────────────────────────── */
+
+.sc-heat {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 4px 12px;
+    border-radius: 2px;
+    min-width: 64px;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
+
+.sc-heat__score {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.sc-heat__band {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.sc-heat--h-hot {
+    background: var(--sc-accent-orange);
+    color: #fff;
+}
+
+.sc-heat--h-warm {
+    background: #fff3ec;
+    color: var(--sc-accent-orange);
+}
+
+.sc-heat--h-med {
+    background: var(--sc-ink-15);
+    color: var(--sc-ink);
+}
+
+.sc-heat--h-cool {
+    background: transparent;
+    color: var(--sc-ink-40);
+    border: 1px solid var(--sc-border);
+}
