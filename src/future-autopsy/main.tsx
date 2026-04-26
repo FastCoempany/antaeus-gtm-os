@@ -1,6 +1,9 @@
 import { render } from "preact";
 import { FutureAutopsy } from "./FutureAutopsy";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { setAllVitals } from "./state";
+import { loadDealsFromMirror } from "./lib/deal-loader";
+import { computeVitalsForAll } from "./lib/vitals";
 
 /**
  * Entry point for the Future Autopsy Preact rebuild
@@ -34,5 +37,13 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+// Wave 2 — read deals from Phase 4 / Room 1's mirror + compute vitals
+// before first render so the ledger is populated immediately. The
+// legacy room re-runs this on storage events; Wave 5 will re-add that
+// listener loop.
+const deals = loadDealsFromMirror();
+const vitals = computeVitalsForAll(deals);
+setAllVitals(vitals);
 
 render(<FutureAutopsy />, root);
