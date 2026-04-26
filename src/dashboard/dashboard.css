@@ -1,0 +1,191 @@
+/*
+ * Dashboard — Wave 1 baseline styles.
+ *
+ * Command Chamber family per CLAUDE.md Part II §4.2: ranked, precise,
+ * calm under pressure, instrument-like. Bright field per Part II §1
+ * direction lock. The shell supports, does not dominate.
+ */
+
+:root {
+    --db-ink: #0a1c40;
+    --db-ink-70: rgba(10, 28, 64, 0.7);
+    --db-ink-40: rgba(10, 28, 64, 0.4);
+    --db-ink-15: rgba(10, 28, 64, 0.15);
+    --db-field: #f6f8fc;
+    --db-field-raised: #ffffff;
+    --db-accent-orange: #ff6b1c;
+    --db-accent-blue: #2e5aac;
+    --db-accent-green: #2e7d4c;
+    --db-accent-amber: #b57500;
+    --db-accent-red: #b4261f;
+    --db-border: rgba(10, 28, 64, 0.1);
+    --db-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--db-field);
+    color: var(--db-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────── */
+
+.db-shell {
+    min-height: 100vh;
+    padding: 32px 40px 80px;
+    max-width: 1480px;
+    margin: 0 auto;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────── */
+
+.db-topbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.db-topbar__lead {
+    flex: 1 1 540px;
+    min-width: 0;
+}
+
+.db-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--db-ink-70);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.db-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1.04;
+    font-weight: 400;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    max-width: 18ch;
+}
+
+.db-topbar__sub {
+    font-size: 16px;
+    color: var(--db-ink-70);
+    margin: 0;
+    max-width: 60ch;
+}
+
+/* ─── Mode switcher ────────────────────────────────────────────────── */
+
+.db-mode-switcher {
+    display: inline-flex;
+    background: var(--db-field-raised);
+    border: 1px solid var(--db-border-strong);
+    border-radius: 999px;
+    padding: 4px;
+    gap: 2px;
+    flex: 0 0 auto;
+}
+
+.db-mode-switcher__btn {
+    background: transparent;
+    border: none;
+    color: var(--db-ink-70);
+    padding: 6px 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 999px;
+}
+
+.db-mode-switcher__btn:hover {
+    color: var(--db-ink);
+}
+
+.db-mode-switcher__btn.is-active {
+    background: var(--db-ink);
+    color: #fff;
+}
+
+/* ─── Mode views (Wave 1 placeholders) ─────────────────────────────── */
+
+.db-spotlight,
+.db-brief,
+.db-queue {
+    background: var(--db-field-raised);
+    border: 1px solid var(--db-border-strong);
+    border-radius: 4px;
+    padding: 32px;
+    min-height: 320px;
+}
+
+.db-spotlight {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 32px;
+    align-items: start;
+}
+
+.db-spotlight__placeholder,
+.db-brief__placeholder,
+.db-queue__placeholder {
+    margin: 0;
+    color: var(--db-ink-70);
+    font-style: italic;
+    font-size: 14px;
+}
+
+.db-spotlight__rail {
+    border-left: 1px solid var(--db-border);
+    padding-left: 24px;
+}
+
+.db-spotlight__rail-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--db-ink-40);
+    margin: 0 0 8px;
+    text-transform: uppercase;
+}
+
+.db-spotlight__rail-empty {
+    margin: 0;
+    color: var(--db-ink-40);
+    font-size: 13px;
+}
+
+@media (max-width: 980px) {
+    .db-spotlight {
+        grid-template-columns: 1fr;
+    }
+
+    .db-spotlight__rail {
+        border-left: none;
+        border-top: 1px solid var(--db-border);
+        padding-left: 0;
+        padding-top: 24px;
+    }
+}

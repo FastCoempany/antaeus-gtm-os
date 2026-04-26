@@ -110,15 +110,21 @@ export default defineConfig({
                     "src/discovery-studio/index.html"
                 ),
 
-                // Phase 4 — Deal Workspace Preact rebuild. Served at
-                // /deal-workspace/ via the same flattenSrcPages plugin.
+                // Phase 4 / Room 1 — Deal Workspace Preact rebuild. Served
+                // at /deal-workspace/ via the same flattenSrcPages plugin.
                 // Behind Posthog feature flag `room_deal_workspace_v2`;
                 // legacy `app/deal-workspace/index.html` redirects here when
-                // on (Wave 6 wires the redirect script).
+                // on.
                 "deal-workspace": resolve(
                     __dirname,
                     "src/deal-workspace/index.html"
-                )
+                ),
+
+                // Phase 4 / Room 2 — Dashboard Preact rebuild. Served at
+                // /dashboard/. Behind Posthog feature flag
+                // `room_dashboard_v2`; legacy `app/dashboard/index.html`
+                // redirects here when on (Wave 6 wires the redirect script).
+                dashboard: resolve(__dirname, "src/dashboard/index.html")
             }
         }
     },

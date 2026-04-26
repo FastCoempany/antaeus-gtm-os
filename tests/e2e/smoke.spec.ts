@@ -91,6 +91,35 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 2 Wave 1 — /dashboard/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        // The new Preact Dashboard at /dashboard/ (distinct from the
+        // legacy /app/dashboard/). Wave 1 ships the structural shell
+        // — placeholder mode views, working ModeSwitcher, default
+        // mode = spotlight. Smoke test asserts: page loads without
+        // runtime errors, the topbar kicker reads DASHBOARD, the
+        // mode switcher attaches with all three buttons, and the
+        // default Spotlight view renders.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/dashboard/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".db-topbar__kicker")).toContainText(
+            "DASHBOARD"
+        );
+        await expect(page.locator(".db-mode-switcher")).toBeAttached();
+        await expect(page.locator(".db-mode-switcher__btn")).toHaveCount(3);
+        await expect(page.locator(".db-spotlight")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
