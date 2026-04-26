@@ -120,6 +120,33 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 3 Wave 1 — /signal-console/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        // The new Preact Signal Console at /signal-console/ (distinct
+        // from the legacy /app/signal-console/). Wave 1 ships the
+        // structural shell — empty account list shows the empty-state
+        // copy, all sections render. Smoke test asserts: page loads
+        // without runtime errors, the topbar kicker reads SIGNAL CONSOLE,
+        // grid controls + grid attach to the DOM.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/signal-console/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".sc-topbar__kicker")).toContainText(
+            "SIGNAL CONSOLE"
+        );
+        await expect(page.locator(".sc-grid-controls")).toBeAttached();
+        await expect(page.locator(".sc-grid")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {

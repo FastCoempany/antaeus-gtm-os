@@ -124,7 +124,17 @@ export default defineConfig({
                 // /dashboard/. Behind Posthog feature flag
                 // `room_dashboard_v2`; legacy `app/dashboard/index.html`
                 // redirects here when on (Wave 6 wires the redirect script).
-                dashboard: resolve(__dirname, "src/dashboard/index.html")
+                dashboard: resolve(__dirname, "src/dashboard/index.html"),
+
+                // Phase 4 / Room 3 — Signal Console Preact rebuild. Served
+                // at /signal-console/. Behind Posthog feature flag
+                // `room_signal_console_v2`; legacy
+                // `app/signal-console/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "signal-console": resolve(
+                    __dirname,
+                    "src/signal-console/index.html"
+                )
             }
         }
     },

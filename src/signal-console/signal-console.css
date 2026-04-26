@@ -1,0 +1,155 @@
+/*
+ * Signal Console — Wave 1 baseline styles.
+ *
+ * Live Instrument family per CLAUDE.md Part II §4.3: live, tense,
+ * immediate, operational. Top of page behaves like a working console,
+ * not a report. Bright field per Part II §1 direction lock.
+ *
+ * Named premium asset (Part II §5) — must not be genericized,
+ * casualized, or visually softened.
+ */
+
+:root {
+    --sc-ink: #0a1c40;
+    --sc-ink-70: rgba(10, 28, 64, 0.7);
+    --sc-ink-40: rgba(10, 28, 64, 0.4);
+    --sc-ink-15: rgba(10, 28, 64, 0.15);
+    --sc-field: #f6f8fc;
+    --sc-field-raised: #ffffff;
+    --sc-accent-orange: #ff6b1c;
+    --sc-accent-blue: #2e5aac;
+    --sc-accent-green: #2e7d4c;
+    --sc-accent-amber: #b57500;
+    --sc-accent-red: #b4261f;
+    --sc-border: rgba(10, 28, 64, 0.1);
+    --sc-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--sc-field);
+    color: var(--sc-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────── */
+
+.sc-shell {
+    min-height: 100vh;
+    padding: 32px 40px 80px;
+    max-width: 1480px;
+    margin: 0 auto;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────── */
+
+.sc-topbar {
+    margin-bottom: 28px;
+}
+
+.sc-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--sc-ink-70);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.sc-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(32px, 4vw, 50px);
+    line-height: 1.04;
+    font-weight: 400;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+}
+
+.sc-topbar__sub {
+    font-size: 16px;
+    color: var(--sc-ink-70);
+    margin: 0;
+    max-width: 60ch;
+}
+
+/* ─── Grid controls ────────────────────────────────────────────────── */
+
+.sc-grid-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.sc-grid-controls__search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 320px;
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border-strong);
+    border-radius: 2px;
+    padding: 6px 12px;
+}
+
+.sc-grid-controls__search-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--sc-ink-40);
+    text-transform: uppercase;
+}
+
+.sc-grid-controls__search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--sc-ink);
+    font: inherit;
+    outline: none;
+    padding: 4px 0;
+}
+
+/* ─── Account grid (Wave 1 placeholder) ────────────────────────────── */
+
+.sc-grid {
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border-strong);
+    border-radius: 4px;
+    padding: 32px;
+    min-height: 320px;
+}
+
+.sc-grid--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sc-grid__empty,
+.sc-grid__placeholder {
+    margin: 0;
+    color: var(--sc-ink-70);
+    font-style: italic;
+    font-size: 14px;
+    max-width: 60ch;
+    text-align: center;
+}
