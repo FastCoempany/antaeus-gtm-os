@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { Topbar } from "./components/Topbar";
+import { WorkspaceHealth } from "./components/WorkspaceHealth";
 import { GridControls } from "./components/GridControls";
 import { AccountGrid } from "./components/AccountGrid";
 
@@ -25,6 +26,7 @@ export function SignalConsole(): JSX.Element {
     return (
         <div class="sc-shell">
             <Topbar />
+            <WorkspaceHealth />
             <GridControls />
             <AccountGrid />
         </div>

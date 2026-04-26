@@ -2,6 +2,13 @@ import type { JSX } from "preact";
 import { useState } from "preact/hooks";
 import type { Account, Signal } from "../lib/types";
 import { heatMetrics, recency } from "../lib/heat";
+import {
+    hrefToColdCall,
+    hrefToDealWorkspace,
+    hrefToDiscoveryAgenda,
+    hrefToOutbound
+} from "../lib/handoff";
+import { getAccountExecutionContext } from "../lib/execution-context";
 import { HeatBadge } from "./HeatBadge";
 
 interface Props {
@@ -22,6 +29,7 @@ interface Props {
 export function AccountCard({ account, now }: Props): JSX.Element {
     const [expanded, setExpanded] = useState(false);
     const metrics = heatMetrics(account, now);
+    const exec = getAccountExecutionContext(account);
     const sigs = account.signals.filter((s) => s.status !== "flagged" && s.flagged !== true);
     const previewLimit = 3;
     const previewSigs = expanded ? sigs : sigs.slice(0, previewLimit);
@@ -37,9 +45,16 @@ export function AccountCard({ account, now }: Props): JSX.Element {
             >
                 <div class="sc-card__title-block">
                     <h3 class="sc-card__name">{account.name}</h3>
-                    {account.ticker ? (
-                        <span class="sc-card__ticker">{account.ticker}</span>
-                    ) : null}
+                    <div class="sc-card__sub">
+                        {account.ticker ? (
+                            <span class="sc-card__ticker">{account.ticker}</span>
+                        ) : null}
+                        <span
+                            class={`sc-card__temp sc-card__temp--${exec.temperature}`}
+                        >
+                            {exec.temperatureLabel}
+                        </span>
+                    </div>
                 </div>
                 <HeatBadge account={account} now={now} />
             </button>
@@ -80,12 +95,45 @@ export function AccountCard({ account, now }: Props): JSX.Element {
             )}
 
             <footer class="sc-card__footer">
-                <span class="sc-card__metric">
-                    {metrics.signalCount} signal{metrics.signalCount === 1 ? "" : "s"}
-                </span>
-                <span class="sc-card__metric">{metrics.highConfidenceCount} high-conf</span>
-                <span class="sc-card__metric">{metrics.aiCount} AI</span>
-                <span class="sc-card__metric">{metrics.recentCount} recent</span>
+                <div class="sc-card__metrics">
+                    <span class="sc-card__metric">
+                        {metrics.signalCount} signal{metrics.signalCount === 1 ? "" : "s"}
+                    </span>
+                    <span class="sc-card__metric">
+                        {metrics.highConfidenceCount} high-conf
+                    </span>
+                    <span class="sc-card__metric">{metrics.aiCount} AI</span>
+                    <span class="sc-card__metric">{metrics.recentCount} recent</span>
+                </div>
+                <div class="sc-card__ctas">
+                    {exec.hasActiveDeal ? (
+                        <a
+                            class="sc-card__cta sc-card__cta--primary"
+                            href={hrefToDealWorkspace(account.name)}
+                        >
+                            Open in Deal Workspace
+                        </a>
+                    ) : (
+                        <a
+                            class="sc-card__cta sc-card__cta--primary"
+                            href={hrefToOutbound(account.name, exec.temperature)}
+                        >
+                            Compose outbound
+                        </a>
+                    )}
+                    <a
+                        class="sc-card__cta sc-card__cta--ghost"
+                        href={hrefToDiscoveryAgenda(account.name)}
+                    >
+                        Plan call
+                    </a>
+                    <a
+                        class="sc-card__cta sc-card__cta--ghost"
+                        href={hrefToColdCall(account.name)}
+                    >
+                        Cold call
+                    </a>
+                </div>
             </footer>
         </article>
     );
