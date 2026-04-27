@@ -94,13 +94,20 @@ export interface QualityCheck {
     readonly text: string;
 }
 
-export type QualityBand = "credible" | "workable" | "thin";
+/**
+ * Quality tier — 4-band classifier from legacy `buildIcpQuality` (lines
+ * 1310-1326). Score thresholds: ≥85 sharp / ≥70 workable / ≥50 forming /
+ * else broad.
+ */
+export type QualityTier = "sharp" | "workable" | "forming" | "broad";
 
 export interface IcpQuality {
     readonly score: number;
-    readonly band: QualityBand;
-    readonly bandLabel: string;
-    readonly bandCopy: string;
+    readonly tier: QualityTier;
+    /** Display label e.g. "Sharp enough to run." */
+    readonly label: string;
+    /** One-sentence summary explaining what's blocking trust. */
+    readonly summary: string;
     readonly checks: ReadonlyArray<QualityCheck>;
 }
 
