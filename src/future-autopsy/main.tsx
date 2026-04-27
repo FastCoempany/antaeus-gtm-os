@@ -1,9 +1,10 @@
 import { render } from "preact";
 import { FutureAutopsy } from "./FutureAutopsy";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { setAllVitals } from "./state";
+import { setAllVitals, setTaskLog, startTaskLogPersistence } from "./state";
 import { loadDealsFromMirror } from "./lib/deal-loader";
 import { computeVitalsForAll } from "./lib/vitals";
+import { loadTaskLog } from "./lib/task-log";
 
 /**
  * Entry point for the Future Autopsy Preact rebuild
@@ -39,11 +40,15 @@ if (!flagOn) {
 }
 
 // Wave 2 — read deals from Phase 4 / Room 1's mirror + compute vitals
-// before first render so the ledger is populated immediately. The
-// legacy room re-runs this on storage events; Wave 5 will re-add that
-// listener loop.
+// before first render so the ledger is populated immediately.
 const deals = loadDealsFromMirror();
 const vitals = computeVitalsForAll(deals);
 setAllVitals(vitals);
+
+// Wave 5 — seed task-completion log from gtmos_autopsy_log_v1, then
+// wire the persistence loop. Subsequent toggleTaskDone calls write
+// back automatically.
+setTaskLog(loadTaskLog());
+startTaskLogPersistence();
 
 render(<FutureAutopsy />, root);

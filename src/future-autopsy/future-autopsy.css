@@ -515,3 +515,89 @@ button {
     margin-right: 10px;
     text-transform: uppercase;
 }
+
+/* ─── Docket task-toggle ───────────────────────────────────────────── */
+
+.fa-docket__check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.fa-docket__row.is-done {
+    background: rgba(46, 125, 76, 0.06);
+    border-color: rgba(46, 125, 76, 0.3);
+}
+
+.fa-docket__row.is-done .fa-docket__label {
+    text-decoration: line-through;
+    color: var(--fa-ink-70);
+}
+
+/* ─── Route rack ───────────────────────────────────────────────────── */
+
+.fa-route-rack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--fa-border);
+    padding-top: 16px;
+}
+
+.fa-route-rack__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fa-ink-70);
+}
+
+.fa-route-rack__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+}
+
+.fa-route-rack__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 2px;
+    text-decoration: none;
+    border: 1px solid var(--fa-border-strong);
+    background: var(--fa-field-raised);
+    color: var(--fa-ink);
+}
+
+.fa-route-rack__cta--primary {
+    background: var(--fa-accent-orange);
+    color: #fff;
+    border-color: var(--fa-accent-orange);
+}
+
+.fa-route-rack__cta--primary:hover {
+    background: #e25a10;
+    border-color: #e25a10;
+}
+
+.fa-route-rack__cta--secondary:hover,
+.fa-route-rack__cta--tertiary:hover {
+    background: var(--fa-field);
+}
+
+.fa-route-rack__label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.fa-route-rack__reason {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.fa-route-rack__cta--secondary .fa-route-rack__reason,
+.fa-route-rack__cta--tertiary .fa-route-rack__reason {
+    color: var(--fa-ink-70);
+}

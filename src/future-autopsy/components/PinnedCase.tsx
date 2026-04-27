@@ -1,7 +1,10 @@
 import type { JSX } from "preact";
-import { currentAutopsy, selectedVitals } from "../state";
+import { currentAutopsy, selectedVitals, taskLog, toggleTaskDone } from "../state";
+import { buildActionPlan } from "../lib/action-plan";
+import { isTaskDone } from "../lib/task-log";
 import { VerdictToggle } from "./VerdictToggle";
 import { ForensicSheets } from "./ForensicSheets";
+import { RouteRack } from "./RouteRack";
 
 function fmtMoney(n: number): string {
     if (!n) return "$0";
@@ -57,17 +60,30 @@ export function PinnedCase(): JSX.Element {
                         </span>
                     </header>
                     <ul class="fa-docket__list">
-                        {doc.countermeasures.map((t) => (
-                            <li key={t.taskId} class="fa-docket__row">
-                                <span class="fa-docket__label">{t.label}</span>
-                                <span class="fa-docket__why">{t.why}</span>
-                                {t.script ? (
-                                    <span class="fa-docket__script">
-                                        “{t.script(v)}”
-                                    </span>
-                                ) : null}
-                            </li>
-                        ))}
+                        {doc.countermeasures.map((t) => {
+                            const done = isTaskDone(taskLog.value, v.id, t.taskId);
+                            return (
+                                <li
+                                    key={t.taskId}
+                                    class={`fa-docket__row${done ? " is-done" : ""}`}
+                                >
+                                    <label class="fa-docket__check">
+                                        <input
+                                            type="checkbox"
+                                            checked={done}
+                                            onChange={() => toggleTaskDone(v.id, t.taskId)}
+                                        />
+                                        <span class="fa-docket__label">{t.label}</span>
+                                    </label>
+                                    <span class="fa-docket__why">{t.why}</span>
+                                    {t.script ? (
+                                        <span class="fa-docket__script">
+                                            “{t.script(v)}”
+                                        </span>
+                                    ) : null}
+                                </li>
+                            );
+                        })}
                     </ul>
                 </section>
             ) : null}
@@ -78,6 +94,8 @@ export function PinnedCase(): JSX.Element {
                     {doc.killSwitch}
                 </p>
             ) : null}
+
+            {doc ? <RouteRack plan={buildActionPlan(doc)} /> : null}
         </section>
     );
 }

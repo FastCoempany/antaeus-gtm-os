@@ -1,4 +1,4 @@
-import { computed, signal, type ReadonlySignal, type Signal } from "@preact/signals";
+import { computed, effect, signal, type ReadonlySignal, type Signal } from "@preact/signals";
 import type {
     AutopsyDoc,
     ForensicSheetKey,
@@ -9,6 +9,7 @@ import type {
 import { MAX_LEDGER_CASES } from "./lib/types";
 import type { ComputedVitals } from "./lib/vitals";
 import { generateAutopsy, rankAutopsyUniverse } from "./lib/autopsy";
+import { saveTaskLog, toggleTask as toggleTaskInLog } from "./lib/task-log";
 
 /**
  * Phase 4 / Room 4 — Future Autopsy runtime state.
@@ -120,8 +121,37 @@ export function resetSession(): void {
     taskLog.value = {};
 }
 
+export function toggleTaskDone(dealId: string, taskId: string): void {
+    taskLog.value = toggleTaskInLog(taskLog.value, dealId, taskId);
+}
+
 /** Test-only — seed the vitals list. */
 export function __setAllVitalsForTests(vitals: ReadonlyArray<Vitals>): void {
     allVitals.value = vitals;
     loaded.value = true;
+}
+
+let taskLogPublishStop: (() => void) | null = null;
+
+/**
+ * Wire the side-effect that mirrors every taskLog change to
+ * localStorage (gtmos_autopsy_log_v1). Skips the first run so a boot-
+ * time seed doesn't trigger a redundant write.
+ */
+export function startTaskLogPersistence(): () => void {
+    if (taskLogPublishStop) return taskLogPublishStop;
+    let firstRun = true;
+    const dispose = effect(() => {
+        const log = taskLog.value;
+        if (firstRun) {
+            firstRun = false;
+            return;
+        }
+        saveTaskLog(log);
+    });
+    taskLogPublishStop = () => {
+        dispose();
+        taskLogPublishStop = null;
+    };
+    return taskLogPublishStop;
 }
