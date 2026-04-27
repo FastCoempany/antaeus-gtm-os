@@ -8,12 +8,18 @@ import {
     recentDeployments,
     removeAdvisor,
     saveAdvisorFromDraft,
+    selectedDeal,
     updateDeploymentOutcome
 } from "../state";
 import { TIERS } from "../lib/tiers";
 import { findMoment } from "../lib/moments";
 import { getCooldownStatus, daysSince } from "../lib/cooldown";
 import { computeImpact } from "../lib/impact";
+import {
+    hrefToDealWorkspace,
+    hrefToFutureAutopsy,
+    hrefToPocFramework
+} from "../lib/handoff";
 import {
     DEPLOYMENT_OUTCOMES,
     DEPLOYMENT_OUTCOME_LABELS,
@@ -314,9 +320,38 @@ export function SecondaryStack(): JSX.Element {
                         </div>
                     ))}
                 </div>
-                <div class="ad-handoff" aria-hidden="true">
-                    {/* Wave 5 wires the 3-CTA cross-room handoff strip. */}
-                </div>
+                <nav class="ad-handoff" aria-label="Cross-room handoff">
+                    <a
+                        class="ad-btn ad-btn--blue"
+                        href={hrefToDealWorkspace(
+                            selectedDeal.value?.id ?? "",
+                            selectedDeal.value?.accountName ?? ""
+                        )}
+                        data-ad-handoff="deal-workspace"
+                    >
+                        Open Deal Workspace
+                    </a>
+                    <a
+                        class="ad-btn"
+                        href={hrefToFutureAutopsy(
+                            selectedDeal.value?.id ?? "",
+                            selectedDeal.value?.accountName ?? ""
+                        )}
+                        data-ad-handoff="future-autopsy"
+                    >
+                        Open Future Autopsy
+                    </a>
+                    <a
+                        class="ad-btn ad-btn--green"
+                        href={hrefToPocFramework(
+                            selectedDeal.value?.id ?? "",
+                            selectedDeal.value?.accountName ?? ""
+                        )}
+                        data-ad-handoff="poc-framework"
+                    >
+                        Open PoC Framework
+                    </a>
+                </nav>
             </article>
         </section>
     );

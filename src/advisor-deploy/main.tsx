@@ -3,11 +3,15 @@ import { AdvisorDeploy } from "./AdvisorDeploy";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import {
     setAdvisors,
+    setDealId,
+    setDealOptions,
     setDeployments,
     startAdvisorPersistence,
     startDeploymentPersistence
 } from "./state";
 import { loadAdvisors, loadDeployments } from "./lib/persistence";
+import { loadDeals } from "./lib/deal-loader";
+import { readInboundDealId } from "./lib/handoff";
 
 /**
  * Entry point for the Advisor Deploy Preact rebuild
@@ -47,6 +51,28 @@ if (!flagOn) {
 
 setAdvisors(loadAdvisors());
 setDeployments(loadDeployments());
+
+// Wave 5 — seed deal options from Phase 4 / Room 1's mirror, then
+// honor URL inbound (?deal= or fallback ?focusObject=). When the
+// inbound id matches a deal, point the desk at it; otherwise fall
+// back to the first active deal so the rep lands on a routeable
+// surface (legacy line 218: `getDealById || activeDeals[0] || null`).
+const deals = loadDeals();
+setDealOptions(deals);
+const inboundId = readInboundDealId();
+const inbound =
+    inboundId && deals.find((d) => d.id === inboundId)
+        ? inboundId
+        : null;
+if (inbound) {
+    setDealId(inbound);
+} else {
+    const firstActive = deals.find(
+        (d) => d.stage !== "closed-won" && d.stage !== "closed-lost"
+    );
+    if (firstActive) setDealId(firstActive.id);
+}
+
 startAdvisorPersistence();
 startDeploymentPersistence();
 

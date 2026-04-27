@@ -767,6 +767,27 @@ body {
     color: var(--ad-red);
 }
 
+.ad-btn--blue {
+    border-color: rgba(47, 115, 232, 0.25);
+    background: rgba(47, 115, 232, 0.08);
+    color: var(--ad-blue);
+}
+
+.ad-btn--green {
+    border-color: rgba(40, 124, 82, 0.24);
+    background: rgba(40, 124, 82, 0.08);
+    color: var(--ad-green);
+}
+
+.ad-handoff {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--ad-line2);
+}
+
 /* ─── List rows + pills + outcome select ───────────────────────────────── */
 
 .ad-list {

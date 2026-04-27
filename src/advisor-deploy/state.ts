@@ -18,6 +18,7 @@ import {
 import { findMoment } from "./lib/moments";
 import { buildAsk } from "./lib/ask-builder";
 import { saveAdvisors, saveDeployments, uid } from "./lib/persistence";
+import { syncDeploymentToDeal } from "./lib/sync-back";
 
 /**
  * Phase 4 / Room 10 — Advisor Deploy runtime state.
@@ -233,6 +234,10 @@ export function logDeployment(
             outcome === "pending" ? null : new Date(now).toISOString()
     };
     prependDeployment(dep);
+    // Wave 5 — mirror the deployment's effect onto the matching deal in
+    // gtmos_deal_workspaces (advisorHistory + nextStep + nextStepDate).
+    // Failure is silent — the deployment was already logged.
+    syncDeploymentToDeal(dep, now);
     return dep;
 }
 
@@ -257,6 +262,9 @@ export function updateDeploymentOutcome(
         updated = next;
         return next;
     });
+    // Wave 5 — mirror the updated outcome back to the deal so its
+    // advisorHistory entry + nextStep stay coherent with the latest state.
+    if (updated) syncDeploymentToDeal(updated, now);
     return updated;
 }
 
