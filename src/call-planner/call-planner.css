@@ -1,0 +1,380 @@
+/*
+ * Call Planner — Phase 4 / Room 9 styles.
+ *
+ * Per canon §4.11 (Live Instrument family) + Part II §1: bright field,
+ * navy ink, restrained gradient air. Layout uses a left witness rail
+ * + right work-column split per the canon's "witness column" mind:
+ * the rep should always see who the call is for.
+ */
+
+:root {
+    --cp-navy: #0a1d44;
+    --cp-ink: #1a3464;
+    --cp-soft: #6c83a4;
+    --cp-muted: #9caeca;
+    --cp-line: rgba(10, 29, 68, 0.13);
+    --cp-line2: rgba(10, 29, 68, 0.08);
+    --cp-orange: #ed6f1e;
+    --cp-blue: #2f72e8;
+    --cp-green: #2e8b59;
+    --cp-amber: #d39c1f;
+    --cp-red: #c94d45;
+    --cp-shadow: 0 34px 90px rgba(10, 29, 68, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--cp-navy);
+    background: #edf3fb;
+    background: radial-gradient(
+            circle at 0 0,
+            rgba(47, 114, 232, 0.08),
+            transparent 24%
+        ),
+        radial-gradient(
+            circle at 100% 0,
+            rgba(237, 111, 30, 0.07),
+            transparent 26%
+        ),
+        linear-gradient(180deg, #fbfdff 0, #edf3fb 100%);
+    min-height: 100vh;
+}
+
+/* ─── Shell ─────────────────────────────────────────────────────────────── */
+
+.cp-shell {
+    max-width: 1540px;
+    margin: 0 auto;
+    padding: 30px 42px 80px;
+    display: grid;
+    gap: 28px;
+}
+
+/* ─── Topbar ────────────────────────────────────────────────────────────── */
+
+.cp-topbar {
+    border-bottom: 1px solid var(--cp-line2);
+    padding-bottom: 22px;
+}
+
+.cp-topbar__kicker {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cp-orange);
+    margin: 0 0 10px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.cp-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(34px, 3.4vw, 54px);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    color: var(--cp-navy);
+    margin: 0;
+}
+
+.cp-topbar__subtitle {
+    color: var(--cp-soft);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 64ch;
+    margin: 10px 0 0;
+}
+
+.cp-topbar__meta {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.cp-topbar__state {
+    color: var(--cp-blue);
+    border: 1px solid rgba(47, 114, 232, 0.22);
+    border-radius: 999px;
+    padding: 6px 13px;
+    background: rgba(47, 114, 232, 0.05);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.cp-topbar__company {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--cp-muted);
+    letter-spacing: 0.02em;
+}
+
+/* ─── Stage (witness + main) ────────────────────────────────────────────── */
+
+.cp-stage {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 26px;
+    align-items: start;
+}
+
+.cp-stage__main {
+    display: grid;
+    gap: 26px;
+}
+
+/* ─── Witness rail ──────────────────────────────────────────────────────── */
+
+.cp-witness {
+    border: 1px solid var(--cp-line2);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 48px rgba(10, 29, 68, 0.08);
+    padding: 24px 26px;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    position: sticky;
+    top: 24px;
+}
+
+.cp-witness__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cp-muted);
+}
+
+.cp-witness__name {
+    font-family: "DM Serif Display", serif;
+    margin: 0;
+    font-size: clamp(24px, 2.2vw, 32px);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    color: var(--cp-navy);
+}
+
+.cp-witness__meta {
+    margin: 0;
+    color: var(--cp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.cp-witness__placeholder {
+    margin-top: 8px;
+    border: 1px dashed rgba(10, 29, 68, 0.18);
+    border-radius: 18px;
+    padding: 18px 16px;
+    background: rgba(255, 255, 255, 0.55);
+    color: var(--cp-soft);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.cp-witness__placeholder p {
+    margin: 0;
+}
+
+/* ─── Spine ─────────────────────────────────────────────────────────────── */
+
+.cp-spine {
+    border: 1px solid var(--cp-line2);
+    border-radius: 36px;
+    background: radial-gradient(
+            circle at 1% 0,
+            rgba(47, 114, 232, 0.05),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 100% 0,
+            rgba(237, 111, 30, 0.06),
+            transparent 26%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(244, 248, 255, 0.97)
+        );
+    box-shadow: var(--cp-shadow);
+    padding: 30px 36px 36px;
+}
+
+.cp-spine__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cp-orange);
+}
+
+.cp-spine__title {
+    font-family: "DM Serif Display", serif;
+    margin: 0;
+    font-size: clamp(28px, 2.6vw, 40px);
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+    color: var(--cp-navy);
+}
+
+.cp-spine__copy {
+    color: var(--cp-soft);
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 12px 0 22px;
+    max-width: 64ch;
+}
+
+.cp-spine__strips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+}
+
+.cp-strip {
+    border: 1px solid var(--cp-line2);
+    border-left: 4px solid var(--cp-orange);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 36px 140px 1fr;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.cp-strip[data-cp-strip="reason-now"] {
+    border-left-color: var(--cp-blue);
+}
+
+.cp-strip[data-cp-strip="probe"] {
+    border-left-color: var(--cp-green);
+}
+
+.cp-strip[data-cp-strip="advance"] {
+    border-left-color: var(--cp-amber);
+}
+
+.cp-strip__num {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    color: var(--cp-muted);
+    font-weight: 800;
+}
+
+.cp-strip__name {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    letter-spacing: -0.04em;
+    color: var(--cp-navy);
+}
+
+.cp-strip__copy {
+    margin: 0;
+    color: var(--cp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.cp-spine__placeholder {
+    margin: 22px 0 0;
+    color: var(--cp-soft);
+    font-size: 13px;
+    line-height: 1.55;
+    border-top: 1px solid var(--cp-line);
+    padding-top: 16px;
+    font-style: italic;
+}
+
+/* ─── Quality + Handoff (Wave 1 placeholders) ──────────────────────────── */
+
+.cp-quality,
+.cp-handoff {
+    border: 1px solid var(--cp-line2);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 48px rgba(10, 29, 68, 0.08);
+    padding: 28px 32px;
+}
+
+.cp-quality__kicker,
+.cp-handoff__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cp-orange);
+}
+
+.cp-quality__title,
+.cp-handoff__title {
+    font-family: "DM Serif Display", serif;
+    margin: 0 0 12px;
+    font-size: clamp(22px, 2vw, 32px);
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+    color: var(--cp-navy);
+}
+
+.cp-quality__placeholder,
+.cp-handoff__placeholder {
+    margin: 0;
+    color: var(--cp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.cp-handoff__placeholder code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    background: rgba(10, 29, 68, 0.05);
+    padding: 1px 6px;
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+@media (max-width: 1180px) {
+    .cp-stage {
+        grid-template-columns: 1fr;
+    }
+    .cp-witness {
+        position: static;
+    }
+}
+
+@media (max-width: 760px) {
+    .cp-shell {
+        padding: 22px 18px 64px;
+    }
+    .cp-spine,
+    .cp-quality,
+    .cp-handoff {
+        border-radius: 24px;
+        padding: 22px 20px;
+    }
+    .cp-strip {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+}

@@ -184,6 +184,17 @@ export default defineConfig({
                 "linkedin-playbook": resolve(
                     __dirname,
                     "src/linkedin-playbook/index.html"
+                ),
+
+                // Phase 4 / Room 9 — Call Planner Preact rebuild. Served at
+                // /call-planner/. Behind Posthog feature flag
+                // `room_call_planner_v2`; legacy
+                // `app/discovery-agenda/index.html` (note: legacy path
+                // differs from the canonical room name per canon §4.11)
+                // redirects here when on (Wave 6 wires the redirect script).
+                "call-planner": resolve(
+                    __dirname,
+                    "src/call-planner/index.html"
                 )
             }
         }
