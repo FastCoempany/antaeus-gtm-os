@@ -1,0 +1,178 @@
+/*
+ * PoC Framework — Wave 1 baseline styles.
+ *
+ * Decision Bench family with hybrid dark/light split per CLAUDE.md
+ * Part II §4.4 + §4.8: "dark hero band above a bright work area" /
+ * "dark forge / cream cast" — left half dark, right half cream.
+ *
+ * Forge = severe, dark, where the molds get shaped.
+ * Cast = bright, calm, where the proof gets carried.
+ */
+
+:root {
+    --poc-ink: #0a1c40;
+    --poc-ink-70: rgba(10, 28, 64, 0.7);
+    --poc-ink-40: rgba(10, 28, 64, 0.4);
+    --poc-ink-15: rgba(10, 28, 64, 0.15);
+    --poc-field: #f6f8fc;
+    --poc-field-raised: #ffffff;
+    --poc-cream: #f7f1e6;
+    --poc-cream-raised: #fdfaf3;
+    --poc-cream-border: rgba(82, 60, 28, 0.18);
+    --poc-forge-bg: #0a1c40;
+    --poc-forge-raised: #122a55;
+    --poc-forge-text: #e9eef8;
+    --poc-forge-text-70: rgba(233, 238, 248, 0.7);
+    --poc-forge-text-40: rgba(233, 238, 248, 0.4);
+    --poc-forge-border: rgba(255, 255, 255, 0.12);
+    --poc-accent-orange: #ff6b1c;
+    --poc-accent-blue: #2e5aac;
+    --poc-accent-green: #2e7d4c;
+    --poc-accent-amber: #b57500;
+    --poc-accent-red: #b4261f;
+    --poc-border: rgba(10, 28, 64, 0.1);
+    --poc-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--poc-field);
+    color: var(--poc-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────── */
+
+.poc-shell {
+    min-height: 100vh;
+    padding: 32px 40px 80px;
+    max-width: 1480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────── */
+
+.poc-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--poc-ink-70);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.poc-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.04;
+    font-weight: 400;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+}
+
+.poc-topbar__sub {
+    font-size: 16px;
+    color: var(--poc-ink-70);
+    margin: 0;
+    max-width: 60ch;
+}
+
+/* ─── Stage (split panel) ──────────────────────────────────────────── */
+
+.poc-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1px;
+    background: var(--poc-border);
+    border: 1px solid var(--poc-border);
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 480px;
+}
+
+.poc-forge,
+.poc-cast {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.poc-forge {
+    background: var(--poc-forge-bg);
+    color: var(--poc-forge-text);
+}
+
+.poc-cast {
+    background: var(--poc-cream);
+    color: var(--poc-ink);
+}
+
+.poc-forge__kicker,
+.poc-cast__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.poc-forge__kicker {
+    color: var(--poc-forge-text-70);
+}
+
+.poc-cast__kicker {
+    color: var(--poc-ink-70);
+}
+
+.poc-forge__title,
+.poc-cast__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(24px, 3vw, 36px);
+    line-height: 1.1;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.poc-forge__placeholder,
+.poc-cast__placeholder {
+    margin: 0;
+    font-style: italic;
+    font-size: 14px;
+    max-width: 56ch;
+}
+
+.poc-forge__placeholder {
+    color: var(--poc-forge-text-70);
+}
+
+.poc-cast__placeholder {
+    color: var(--poc-ink-70);
+}
+
+@media (max-width: 880px) {
+    .poc-stage {
+        grid-template-columns: 1fr;
+    }
+}

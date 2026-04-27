@@ -144,6 +144,16 @@ export default defineConfig({
                 "future-autopsy": resolve(
                     __dirname,
                     "src/future-autopsy/index.html"
+                ),
+
+                // Phase 4 / Room 5 — PoC Framework Preact rebuild. Served
+                // at /poc-framework/. Behind Posthog feature flag
+                // `room_poc_framework_v2`; legacy
+                // `app/poc-framework/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "poc-framework": resolve(
+                    __dirname,
+                    "src/poc-framework/index.html"
                 )
             }
         }
