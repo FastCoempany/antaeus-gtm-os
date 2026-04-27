@@ -3,12 +3,17 @@ import {
     __setAccountOptionsForTests,
     __setDealOptionsForTests,
     accountOptions,
+    buildAgendaSnapshot,
+    buildHandoffPayload,
     currentCompany,
     dealOptions,
     draft,
+    hydrateDraftFromSnapshot,
     linkedDeal,
+    logOutcome,
     matchedAccount,
     patchDraft,
+    persistAgendaState,
     resetDraft,
     resetSession,
     setAccountOptions,
@@ -236,5 +241,158 @@ describe("seed helpers + reset", () => {
         resetSession();
         expect(accountOptions.value).toHaveLength(0);
         expect(dealOptions.value).toHaveLength(0);
+    });
+});
+
+describe("buildAgendaSnapshot", () => {
+    beforeEach(() => resetSession());
+
+    it("packs current state into the AgendaSnapshot shape", () => {
+        // Account name matches the contact via legacy bidirectional
+        // substring match (contactName "Sarah at Acme" includes "Acme").
+        setAccountOptions([makeAccount({ name: "Acme", heat: 60 })]);
+        setDealOptions([
+            makeDeal({
+                id: "d-acme",
+                accountName: "Acme Robotics",
+                value: 50000,
+                stage: "demo"
+            })
+        ]);
+        setContactName("Sarah at Acme");
+        setPersona("vp");
+        setLinkedinUrl("https://linkedin.com/in/sarah");
+        setCustomNotes("They keep slipping on RevOps deadlines.");
+        setLinkedDealId("d-acme");
+        const snap = buildAgendaSnapshot(1746000000000);
+        expect(snap.contact).toBe("Sarah at Acme");
+        // matchedAccount.name beats linked-deal accountName per
+        // currentCompany precedence
+        expect(snap.company).toBe("Acme");
+        expect(snap.persona).toBe("vp");
+        expect(snap.linkedDeal).toBe("d-acme");
+        expect(snap.signalHeadline).toBe("Series B announced");
+        expect(snap.linkedinUrl).toBe("https://linkedin.com/in/sarah");
+        expect(snap.customNotes).toContain("RevOps");
+        expect(snap.gates).toHaveLength(5);
+        expect(snap.gates.every((g) => typeof g === "boolean")).toBe(true);
+        expect(snap.score).toBeGreaterThan(0);
+        expect(snap.preparedAt).toBe("2025-04-30T08:00:00.000Z");
+    });
+
+    it("uses linked deal accountName as company when no matched account", () => {
+        setDealOptions([makeDeal({ id: "d-1", accountName: "Beta" })]);
+        setLinkedDealId("d-1");
+        const snap = buildAgendaSnapshot();
+        expect(snap.company).toBe("Beta");
+    });
+
+    it("signalHeadline is empty when no top signal", () => {
+        setAccountOptions([
+            makeAccount({ name: "Acme", topSignal: null })
+        ]);
+        setContactName("Acme");
+        const snap = buildAgendaSnapshot();
+        expect(snap.signalHeadline).toBe("");
+    });
+});
+
+describe("buildHandoffPayload", () => {
+    beforeEach(() => resetSession());
+
+    it("builds a 'call_plan' payload when no outcome is supplied", () => {
+        setContactName("Sarah");
+        const snap = buildAgendaSnapshot(1746000000000);
+        const payload = buildHandoffPayload(null, snap, 1746000000000);
+        expect(payload.outcome).toBe("planned");
+        expect(payload.logType).toBe("call_plan");
+        expect(payload.summary).toBe("Discovery plan ready");
+        expect(payload.contact).toBe("Sarah");
+    });
+
+    it("builds a 'call_outcome' payload when an Outcome is supplied", () => {
+        setContactName("Sarah");
+        const snap = buildAgendaSnapshot(1746000000000);
+        const payload = buildHandoffPayload("advanced", snap, 1746000000000);
+        expect(payload.outcome).toBe("advanced");
+        expect(payload.logType).toBe("call_outcome");
+        expect(payload.summary).toBe("Discovery call - Advanced");
+    });
+
+    it("normalizes empty linkedDeal to null", () => {
+        const snap = buildAgendaSnapshot();
+        const payload = buildHandoffPayload(null, snap);
+        expect(payload.linkedDeal).toBeNull();
+    });
+
+    it("preserves linkedDeal id when present", () => {
+        setDealOptions([makeDeal({ id: "d-x" })]);
+        setLinkedDealId("d-x");
+        const snap = buildAgendaSnapshot();
+        const payload = buildHandoffPayload("stalled", snap);
+        expect(payload.linkedDeal).toBe("d-x");
+    });
+});
+
+describe("persistAgendaState + logOutcome", () => {
+    beforeEach(() => {
+        resetSession();
+        if (typeof localStorage !== "undefined") localStorage.clear();
+    });
+
+    it("persistAgendaState(null) writes snapshot + handoff but does NOT bump stats", () => {
+        setContactName("Sarah");
+        const result = persistAgendaState(null);
+        expect(result.handoff.outcome).toBe("planned");
+        expect(localStorage.getItem("gtmos_discovery_agenda")).not.toBeNull();
+        expect(localStorage.getItem("gtmos_call_handoff")).not.toBeNull();
+        expect(localStorage.getItem("gtmos_discovery_stats")).toBeNull();
+    });
+
+    it("persistAgendaState(outcome) bumps stats with totalCalls only on non-advanced", () => {
+        setContactName("Sarah");
+        persistAgendaState("stalled");
+        const stats = JSON.parse(
+            localStorage.getItem("gtmos_discovery_stats") as string
+        );
+        expect(stats).toEqual({ totalCalls: 1, advancedCalls: 0 });
+    });
+
+    it("logOutcome('advanced') bumps both totalCalls and advancedCalls", () => {
+        setContactName("Sarah");
+        logOutcome("advanced");
+        const stats = JSON.parse(
+            localStorage.getItem("gtmos_discovery_stats") as string
+        );
+        expect(stats).toEqual({ totalCalls: 1, advancedCalls: 1 });
+    });
+});
+
+describe("hydrateDraftFromSnapshot", () => {
+    beforeEach(() => resetSession());
+
+    it("restores draft fields from a stored snapshot", () => {
+        hydrateDraftFromSnapshot({
+            contact: "Sarah Chen",
+            company: "Acme Robotics",
+            persona: "ops",
+            linkedDeal: "deal-x",
+            gates: [],
+            gateDetails: [],
+            score: 70,
+            band: "Workable",
+            nextMove: "",
+            signalHeadline: "",
+            customNotes: "Manual context",
+            linkedinUrl: "https://linkedin.com/in/sarah",
+            preparedAt: "2026-04-27T18:00:00Z"
+        });
+        expect(draft.value.contactName).toBe("Sarah Chen");
+        expect(draft.value.persona).toBe("ops");
+        expect(draft.value.customNotes).toBe("Manual context");
+        expect(draft.value.linkedinUrl).toBe(
+            "https://linkedin.com/in/sarah"
+        );
+        expect(draft.value.linkedDealId).toBe("deal-x");
     });
 });

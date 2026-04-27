@@ -1,6 +1,8 @@
 import { render } from "preact";
 import { CallPlanner } from "./CallPlanner";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { hydrateDraftFromSnapshot, startAgendaAutosave } from "./state";
+import { loadAgendaSnapshot } from "./lib/persistence";
 
 /**
  * Entry point for the Call Planner Preact rebuild
@@ -11,12 +13,16 @@ import { initObservability, isFeatureEnabled } from "@/lib/observability";
  * `app/discovery-agenda/index.html` flag-redirect (note the legacy
  * path differs from the canonical room name per canon §4.11).
  *
- * Boot order (Wave 1):
+ * Boot order:
  *   1. initObservability — Sentry + Posthog
- *   2. render — Preact mounts the placeholder layout
+ *   2. resume the prior draft from `gtmos_discovery_agenda` so the
+ *      operator doesn't lose context across reloads
+ *   3. start the autosave effect (mirrors snapshot writes back)
+ *   4. render — Preact mounts the live planner
  *
- * Subsequent waves seed the account + deal options (Wave 5), wire
- * persistence (Wave 4), and honor URL inbound (Wave 5).
+ * Wave 5 adds the inbound `?account=` URL prefill + the account/deal
+ * loaders that populate the Witness's matchedAccount + linked-deal
+ * dropdown.
  *
  * Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
  */
@@ -37,5 +43,9 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+const prior = loadAgendaSnapshot();
+if (prior) hydrateDraftFromSnapshot(prior);
+startAgendaAutosave();
 
 render(<CallPlanner />, root);
