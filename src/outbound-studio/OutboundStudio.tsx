@@ -2,6 +2,8 @@ import type { JSX } from "preact";
 import { Topbar } from "./components/Topbar";
 import { Switchboard } from "./components/Switchboard";
 import { OutputPanel } from "./components/OutputPanel";
+import { TouchLog } from "./components/TouchLog";
+import { HandoffStrip } from "./components/HandoffStrip";
 
 /**
  * OutboundStudio — Wave 1 root.
@@ -32,6 +34,8 @@ export function OutboundStudio(): JSX.Element {
                 <Switchboard />
                 <OutputPanel />
             </div>
+            <TouchLog />
+            <HandoffStrip />
         </div>
     );
 }

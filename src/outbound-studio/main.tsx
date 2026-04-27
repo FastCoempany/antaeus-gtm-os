@@ -2,12 +2,16 @@ import { render } from "preact";
 import { OutboundStudio } from "./OutboundStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import {
+    patchRack,
+    setAccountOptions,
     setAllAngles,
     setAllTouches,
     startAnglePersistence,
     startTouchPersistence
 } from "./state";
 import { loadAngles, loadTouches } from "./lib/persistence";
+import { loadAccountOptions } from "./lib/account-loader";
+import { readInboundRack } from "./lib/handoff";
 
 /**
  * Entry point for the Outbound Studio Preact rebuild
@@ -49,5 +53,14 @@ setAllTouches(loadTouches());
 setAllAngles(loadAngles());
 startTouchPersistence();
 startAnglePersistence();
+
+// Wave 5 — load Signal Console accounts for the dropdown + honor
+// inbound URL params (?account=, ?temperature=, ?trigger=, ?persona=)
+// from cross-room handoffs.
+setAccountOptions(loadAccountOptions());
+const inbound = readInboundRack();
+if (Object.keys(inbound).length > 0) {
+    patchRack(inbound);
+}
 
 render(<OutboundStudio />, root);

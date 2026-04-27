@@ -341,3 +341,133 @@ button {
     color: var(--ob-accent-green);
     text-transform: uppercase;
 }
+
+/* ─── Touch log ────────────────────────────────────────────────────── */
+
+.ob-log {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--ob-field-raised);
+    border: 1px solid var(--ob-border);
+    border-radius: 4px;
+    padding: 18px 20px;
+}
+
+.ob-log__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.ob-log__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+    margin: 0;
+}
+
+.ob-log__count {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ob-ink-40);
+}
+
+.ob-log__empty {
+    margin: 0;
+    color: var(--ob-ink-70);
+    font-style: italic;
+    font-size: 13px;
+    max-width: 60ch;
+}
+
+.ob-log__table-wrap {
+    overflow-x: auto;
+}
+
+.ob-log__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.ob-log__table th,
+.ob-log__table td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--ob-border);
+}
+
+.ob-log__table th {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ob-ink-40);
+    font-weight: 600;
+}
+
+.ob-log__outcome {
+    font-family: inherit;
+    font-size: 12px;
+    background: var(--ob-field);
+    border: 1px solid var(--ob-border);
+    color: var(--ob-ink);
+    padding: 3px 6px;
+    border-radius: 2px;
+}
+
+/* ─── Handoff strip ────────────────────────────────────────────────── */
+
+.ob-handoff {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ob-handoff__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+}
+
+.ob-handoff__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+}
+
+.ob-handoff__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 2px;
+    text-decoration: none;
+    border: 1px solid var(--ob-border-strong);
+    background: var(--ob-field-raised);
+    color: var(--ob-ink);
+}
+
+.ob-handoff__cta:hover {
+    background: var(--ob-field);
+}
+
+.ob-handoff__cta.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.ob-handoff__label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.ob-handoff__sub {
+    font-size: 12px;
+    color: var(--ob-ink-70);
+}
