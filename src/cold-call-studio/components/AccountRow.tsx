@@ -6,13 +6,17 @@ import {
     selectedAccountName,
     setSelectedAccount
 } from "../state";
+import { hrefToSignalConsole } from "../lib/handoff";
 
 /**
- * AccountRow — Wave 1 placeholder.
+ * AccountRow — Wave 5 implementation.
  *
- * Renders the account selector + contact name input + ghost
- * "Open Signal" handoff. Wave 5 wires the handoff URL through
- * `lib/handoff.ts`. Until then the link is a stub anchor.
+ * Account select + contact name input + a single ghost CTA back to
+ * Signal Console (carries `?account=` so the operator lands on the
+ * same row they were on). The destination href is built via
+ * `hrefToSignalConsole(account)` so the canonical continuity params
+ * (returnTo / returnLabel / focusObject / focusRoom / fromMode /
+ * fromSurface) are preserved.
  */
 export function AccountRow(): JSX.Element {
     const options = accountOptions.value;
@@ -55,8 +59,14 @@ export function AccountRow(): JSX.Element {
                     }
                 />
             </label>
-            <div class="cc-account-row__actions" aria-hidden="true">
-                {/* Wave 5 wires the live handoff anchors. */}
+            <div class="cc-account-row__actions">
+                <a
+                    class="cc-handoff cc-handoff--ghost"
+                    href={hrefToSignalConsole(selected)}
+                    data-cc-handoff="signal-console"
+                >
+                    Open Signal
+                </a>
             </div>
         </section>
     );

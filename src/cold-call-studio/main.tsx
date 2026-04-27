@@ -2,11 +2,15 @@ import { render } from "preact";
 import { ColdCallStudio } from "./ColdCallStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import {
+    setAccountOptions,
     setCallLog,
     setCompanyName,
+    setSelectedAccount,
     startCallLogPersistence
 } from "./state";
 import { loadCallLog, loadCompanyName } from "./lib/persistence";
+import { loadAccountOptions } from "./lib/account-loader";
+import { readInboundAccount } from "./lib/handoff";
 
 /**
  * Entry point for the Cold Call Studio Preact rebuild
@@ -46,6 +50,24 @@ if (!flagOn) {
 
 setCallLog(loadCallLog());
 setCompanyName(loadCompanyName());
+
+// Wave 5 — seed Signal Console accounts + honor URL inbound. The
+// inbound parameter wins; otherwise auto-select the hottest account
+// (loadAccountOptions returns the list ranked by heat desc) so the
+// rep lands on a dialable surface.
+const accounts = loadAccountOptions();
+setAccountOptions(accounts);
+
+const requested = readInboundAccount();
+if (requested) {
+    const lower = requested.toLowerCase();
+    const match = accounts.find((a) => a.name.toLowerCase() === lower);
+    if (match) setSelectedAccount(match.name);
+} else if (accounts.length > 0) {
+    const top = accounts[0];
+    if (top) setSelectedAccount(top.name);
+}
+
 startCallLogPersistence();
 
 render(<ColdCallStudio />, root);

@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
-import { callLog } from "../state";
+import { callLog, selectedAccountName } from "../state";
 import { OUTCOME_LABELS } from "../lib/types";
+import { hrefToCallPlanner, hrefToDealWorkspace } from "../lib/handoff";
 
 /**
  * CallMemory — Wave 4 implementation.
@@ -23,14 +24,33 @@ function fmtDate(iso: string): string {
 
 export function CallMemory(): JSX.Element {
     const calls = callLog.value.slice().reverse().slice(0, 8);
+    const account = selectedAccountName.value ?? "";
 
     return (
         <section class="cc-memory" aria-label="Call memory">
             <header class="cc-memory__head">
-                <p class="cc-memory__kicker">CALL MEMORY</p>
-                <h2 class="cc-memory__title">
-                    Log the outcome before the thread goes cold.
-                </h2>
+                <div>
+                    <p class="cc-memory__kicker">CALL MEMORY</p>
+                    <h2 class="cc-memory__title">
+                        Log the outcome before the thread goes cold.
+                    </h2>
+                </div>
+                <nav class="cc-memory__handoff" aria-label="Cross-room handoff">
+                    <a
+                        class="cc-handoff cc-handoff--ghost"
+                        href={hrefToCallPlanner(account)}
+                        data-cc-handoff="call-planner"
+                    >
+                        Open Call Planner
+                    </a>
+                    <a
+                        class="cc-handoff cc-handoff--primary"
+                        href={hrefToDealWorkspace(account)}
+                        data-cc-handoff="deal-workspace"
+                    >
+                        Open Deal Workspace
+                    </a>
+                </nav>
             </header>
 
             {calls.length === 0 ? (

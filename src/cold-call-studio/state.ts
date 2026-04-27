@@ -21,6 +21,7 @@ import {
     incrementDiscoveryStats,
     saveCallLog
 } from "./lib/persistence";
+import { createDealFromCall } from "./lib/handoff";
 
 /**
  * Phase 4 / Room 7 — Cold Call Studio runtime state.
@@ -178,6 +179,13 @@ export function logCall(
     };
     appendCallEntry(entry);
     incrementDiscoveryStats(outcome);
+    if (outcome === "meeting_booked" && account) {
+        // Side-effect mirror into Phase 4 / Room 1's Deal Workspace —
+        // legacy parity with `createDealFromCall` (lines 212-220 of
+        // app/cold-call-studio/index.html). Failure does not block
+        // the call log write; createDealFromCall handles errors.
+        createDealFromCall(account.name, now);
+    }
     return entry;
 }
 
