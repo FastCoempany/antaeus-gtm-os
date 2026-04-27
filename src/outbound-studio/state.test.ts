@@ -20,6 +20,7 @@ import {
     setNextQuestion,
     setPersona,
     setTemperature,
+    saveAngleFromRack,
     setTouchOutcome,
     setTrigger,
     toggleNoAsk,
@@ -206,5 +207,47 @@ describe("accountOptions", () => {
         expect(accountOptions.value).toHaveLength(1);
         resetSession();
         expect(accountOptions.value).toHaveLength(0);
+    });
+});
+
+describe("saveAngleFromRack dedupe (legacy parity)", () => {
+    beforeEach(() => resetSession());
+
+    it("returns cannot_generate when rack has no account/contact", () => {
+        const result = saveAngleFromRack();
+        expect(result).toEqual({ saved: false, reason: "cannot_generate" });
+        expect(allAngles.value).toHaveLength(0);
+    });
+
+    it("inserts a fresh angle on first save", () => {
+        setAccount("Acme");
+        setContact("Sarah");
+        const result = saveAngleFromRack();
+        expect(result.saved).toBe(true);
+        expect(allAngles.value).toHaveLength(1);
+        expect(allAngles.value[0]?.company).toBe("Acme");
+    });
+
+    it("refuses to insert a duplicate (same company+trigger+persona+temp+email)", () => {
+        setAccount("Acme");
+        setContact("Sarah");
+        const first = saveAngleFromRack();
+        expect(first.saved).toBe(true);
+        const second = saveAngleFromRack();
+        expect(second.saved).toBe(false);
+        if (second.saved === false) {
+            expect(second.reason).toBe("duplicate");
+        }
+        expect(allAngles.value).toHaveLength(1);
+    });
+
+    it("inserts when persona/trigger/temperature differs", () => {
+        setAccount("Acme");
+        setContact("Sarah");
+        saveAngleFromRack();
+        setTrigger("vendor");
+        const result = saveAngleFromRack();
+        expect(result.saved).toBe(true);
+        expect(allAngles.value).toHaveLength(2);
     });
 });

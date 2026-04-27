@@ -161,17 +161,40 @@ export function logTouchFromRack(now: number = Date.now()): Touch | null {
 }
 
 /**
- * Save the current rack as an Angle (saved value proposition for
- * later reuse). Dedupes on company + trigger + persona by replacing
- * existing matching entry.
+ * Result of a save-angle attempt. Mirrors the legacy
+ * `persistCurrentAngle` shape: `saved` is true on a fresh insert,
+ * false when the current rack already has a matching saved angle,
+ * and null when the rack can't generate yet.
  */
-export function saveAngleFromRack(now: number = Date.now()): Angle | null {
-    if (!canGenerate.value) return null;
+export type SaveAngleResult =
+    | { saved: true; angle: Angle }
+    | { saved: false; reason: "duplicate"; existing: Angle }
+    | { saved: false; reason: "cannot_generate" };
+
+/**
+ * Save the current rack as an Angle (saved value proposition for
+ * later reuse). Dedupes per legacy parity (`app/outbound-studio/
+ * index.html` `persistCurrentAngle`) on company + trigger + persona
+ * + temperature + email — when a match exists the existing angle is
+ * left in place and a `duplicate` result is returned.
+ */
+export function saveAngleFromRack(now: number = Date.now()): SaveAngleResult {
+    if (!canGenerate.value) return { saved: false, reason: "cannot_generate" };
     const r = rack.value;
     const out = currentSendLine.value;
+    const company = r.accountName.trim();
+    const existing = allAngles.value.find(
+        (a) =>
+            a.company === company &&
+            a.trigger === r.trigger &&
+            a.persona === r.persona &&
+            a.temperature === r.temperature &&
+            a.email === out.content
+    );
+    if (existing) return { saved: false, reason: "duplicate", existing };
     const angle: Angle = {
         id: `angle_${now}_${Math.random().toString(36).slice(2, 8)}`,
-        company: r.accountName.trim(),
+        company,
         trigger: r.trigger,
         persona: r.persona,
         email: out.content,
@@ -185,7 +208,7 @@ export function saveAngleFromRack(now: number = Date.now()): Angle | null {
         savedAt: new Date(now).toISOString()
     };
     appendAngle(angle);
-    return angle;
+    return { saved: true, angle };
 }
 
 /** Update the outcome on an existing touch (drives Signal Console temp). */
