@@ -202,21 +202,307 @@ body {
     line-height: 1.45;
 }
 
-.lp-booth__placeholder {
-    margin-top: 22px;
-    border: 1px dashed rgba(8, 26, 65, 0.18);
-    border-radius: 22px;
-    padding: 30px 22px;
-    background: rgba(255, 255, 255, 0.55);
+.lp-booth__layout {
+    display: grid;
+    grid-template-columns: 240px minmax(520px, 1fr) 300px;
+    gap: 28px;
+    align-items: stretch;
 }
 
-.lp-booth__placeholder p {
-    margin: 0;
+/* ─── Cue strip (left rail) ────────────────────────────────────────────── */
+
+.lp-booth__strip {
+    display: grid;
+    align-content: start;
+    gap: 18px;
+    border-left: 1px solid var(--lp-line);
+    padding-left: 20px;
+}
+
+.lp-cue {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 0 0 14px;
+    border: 0;
+    border-bottom: 1px solid var(--lp-line2);
+    background: transparent;
+    color: var(--lp-cue-color, var(--lp-muted));
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.lp-cue__bulb {
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    margin-top: 4px;
+    background: #fff;
+    transition: 0.18s ease;
+}
+
+.lp-cue.is-done .lp-cue__bulb {
+    background: currentColor;
+}
+
+.lp-cue.is-active .lp-cue__bulb,
+.lp-cue:hover .lp-cue__bulb {
+    box-shadow: 0 0 0 9px rgba(255, 255, 255, 0.9), 0 0 32px currentColor;
+}
+
+.lp-cue__body {
+    display: grid;
+    gap: 5px;
+}
+
+.lp-cue__label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+}
+
+.lp-cue__name {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
     color: var(--lp-soft);
-    font-size: 14px;
-    line-height: 1.55;
+    font-weight: 500;
+}
+
+.lp-cue.is-active .lp-cue__name {
+    color: var(--lp-navy);
+}
+
+.lp-cue__copy {
+    color: var(--lp-soft);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+/* ─── Stage (dark center) ──────────────────────────────────────────────── */
+
+.lp-stage {
+    position: relative;
+    overflow: hidden;
+    min-height: 540px;
+    border-radius: 40px;
+    color: #fff;
+    background: radial-gradient(
+            circle at 50% 70%,
+            rgba(237, 111, 30, 0.26),
+            transparent 18%
+        ),
+        radial-gradient(
+            circle at 50% 22%,
+            rgba(47, 114, 232, 0.18),
+            transparent 34%
+        ),
+        linear-gradient(180deg, #101a34 0, #081126 100%);
+    box-shadow: 0 32px 78px rgba(8, 26, 65, 0.22);
+    padding: 32px 38px;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 22px;
+}
+
+.lp-stage:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(
+        ellipse at top,
+        rgba(255, 255, 255, 0.22),
+        rgba(255, 255, 255, 0.05) 42%,
+        transparent 70%
+    );
+    clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
+    pointer-events: none;
+}
+
+.lp-stage__script {
+    position: relative;
+    z-index: 1;
+    max-width: 660px;
+    margin: 28px auto 0;
     text-align: center;
 }
+
+.lp-stage__scene {
+    margin: 0 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 11px;
+    color: #9eb7e5;
+    font-weight: 800;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.lp-stage__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(40px, 4.2vw, 70px);
+    line-height: 0.92;
+    letter-spacing: -0.06em;
+    color: #fff;
+}
+
+.lp-stage__title span {
+    color: var(--lp-orange);
+}
+
+.lp-stage__line {
+    color: #b9c7df;
+    margin: 18px auto 0;
+    max-width: 540px;
+    line-height: 1.55;
+    font-size: 15.5px;
+}
+
+.lp-stage__console {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 22px;
+    padding-top: 18px;
+}
+
+.lp-stage__console > div {
+    color: #9eb7e5;
+}
+
+.lp-stage__console-label {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.lp-stage__console strong {
+    display: block;
+    margin-top: 6px;
+    color: #fff;
+    text-transform: none;
+    letter-spacing: -0.025em;
+    font-size: 16px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+/* ─── Booth read (right aside) ─────────────────────────────────────────── */
+
+.lp-read {
+    border: 1px solid var(--lp-line2);
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 14px 40px rgba(8, 26, 65, 0.06);
+    padding: 22px 24px;
+    display: grid;
+    gap: 14px;
+    align-content: start;
+}
+
+.lp-read__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+}
+
+.lp-read__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--lp-navy);
+}
+
+.lp-read__copy {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.lp-read__meter {
+    height: 6px;
+    width: 100%;
+    border-radius: 999px;
+    background: rgba(8, 26, 65, 0.08);
+    margin: 12px 0 6px;
+    position: relative;
+    overflow: visible;
+}
+
+.lp-read__meter:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--lp-score-pos, 58%);
+    border-radius: 999px;
+    background: var(--lp-green);
+}
+
+.lp-read__meter:after {
+    content: "";
+    position: absolute;
+    left: var(--lp-score-pos, 58%);
+    top: -7px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid var(--lp-green);
+    box-shadow: 0 10px 20px rgba(8, 26, 65, 0.15);
+    transform: translateX(-50%);
+}
+
+.lp-read__rule {
+    border-top: 1px solid var(--lp-line2);
+    padding-top: 12px;
+    display: grid;
+    gap: 4px;
+}
+
+.lp-read__rule-kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+}
+
+.lp-read__rule strong {
+    color: var(--lp-navy);
+    font-size: 16.5px;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+}
+
+/* ─── Method sheets ─────────────────────────────────────────────────────── */
 
 /* ─── Cue ledger ────────────────────────────────────────────────────────── */
 
@@ -396,16 +682,111 @@ body {
     max-width: 36ch;
 }
 
-.lp-method__placeholder {
+.lp-method__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.lp-sheet {
+    position: relative;
+    border: 1px solid var(--lp-line2);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.94);
+    padding: 18px 20px;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+}
+
+.lp-sheet__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+}
+
+.lp-sheet__heading {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--lp-navy);
+}
+
+.lp-sheet__small {
     margin: 0;
     color: var(--lp-soft);
-    font-size: 14px;
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.lp-sheet__body {
+    margin: 8px 0 4px;
+    padding-top: 10px;
+    border-top: 1px solid var(--lp-line2);
+    color: var(--lp-ink);
+    font-size: 13px;
     line-height: 1.55;
-    text-align: center;
-    padding: 30px 22px;
-    border: 1px dashed rgba(8, 26, 65, 0.18);
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.55);
+    white-space: pre-wrap;
+}
+
+.lp-sheet__body em {
+    color: var(--lp-orange);
+    font-style: normal;
+    font-weight: 800;
+}
+
+.lp-sheet__copy {
+    align-self: flex-start;
+    border: 1px solid rgba(47, 114, 232, 0.24);
+    border-radius: 999px;
+    background: rgba(47, 114, 232, 0.06);
+    color: var(--lp-blue);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.lp-sheet__copy:hover {
+    background: var(--lp-blue);
+    color: #fff;
+}
+
+.lp-sheet__toast {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    background: #101827;
+    color: #fff;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+@media (max-width: 1240px) {
+    .lp-booth__layout {
+        grid-template-columns: 1fr;
+    }
+    .lp-stage {
+        min-height: auto;
+    }
+    .lp-method__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 1180px) {
@@ -425,5 +806,12 @@ body {
     .lp-method {
         border-radius: 24px;
         padding: 22px 20px;
+    }
+    .lp-stage__console {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .lp-method__grid {
+        grid-template-columns: 1fr;
     }
 }
