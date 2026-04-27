@@ -1,6 +1,8 @@
 import { render } from "preact";
 import { PocFramework } from "./PocFramework";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { setAllProofs, startProofPersistence } from "./state";
+import { loadProofs } from "./lib/persistence";
 
 /**
  * Entry point for the PoC Framework Preact rebuild
@@ -34,5 +36,10 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+// Wave 4 — seed proofs from gtmos_poc_data, then wire the persistence
+// loop. Subsequent saveDraft/upsertProof calls write back automatically.
+setAllProofs(loadProofs());
+startProofPersistence();
 
 render(<PocFramework />, root);

@@ -1,12 +1,14 @@
-import { computed, signal, type ReadonlySignal, type Signal } from "@preact/signals";
+import { computed, effect, signal, type ReadonlySignal, type Signal } from "@preact/signals";
 import {
     EMPTY_DRAFT,
+    MAX_PROOF_HISTORY,
     type DurationDays,
     type LinkedDealSummary,
     type Outcome,
     type Proof,
     type ProofDraft
 } from "./lib/types";
+import { freezeDraftIntoProof, saveProofs } from "./lib/persistence";
 
 /**
  * Phase 4 / Room 5 — PoC Framework runtime state.
@@ -85,12 +87,33 @@ export function upsertProof(proof: Proof): void {
     const existing = allProofs.value;
     const idx = existing.findIndex((p) => p.id === proof.id);
     if (idx === -1) {
-        allProofs.value = [proof, ...existing];
+        allProofs.value = [proof, ...existing].slice(0, MAX_PROOF_HISTORY);
     } else {
         const next = existing.slice();
         next[idx] = proof;
         allProofs.value = next;
     }
+}
+
+/**
+ * Save the current draft as a Proof. Dedupes on account+vendor by
+ * reusing the existing id when one matches (matches legacy
+ * "single proof per account+vendor pair" behavior).
+ */
+export function saveDraft(now: number = Date.now()): Proof {
+    const drft = draft.value;
+    const linked = linkedDeal.value;
+    const existing = allProofs.value.find(
+        (p) =>
+            p.account.toLowerCase() === drft.account.toLowerCase() &&
+            p.vendor.toLowerCase() === (drft.vendor ?? "").toLowerCase()
+    );
+    const proof = freezeDraftIntoProof(drft, linked, {
+        now,
+        ...(existing ? { id: existing.id } : {})
+    });
+    upsertProof(proof);
+    return proof;
 }
 
 export function resetDraft(): void {
@@ -114,4 +137,30 @@ export function __setLinkedDealsForTests(
     deals: ReadonlyArray<LinkedDealSummary>
 ): void {
     linkedDeals.value = deals;
+}
+
+let proofPersistStop: (() => void) | null = null;
+
+/**
+ * Wire the side-effect that mirrors every allProofs change to
+ * localStorage (`gtmos_poc_data`). Skips the first run so the
+ * boot-time seed doesn't trigger a redundant write — same pattern as
+ * Phase 4 / Rooms 3 + 4.
+ */
+export function startProofPersistence(): () => void {
+    if (proofPersistStop) return proofPersistStop;
+    let firstRun = true;
+    const dispose = effect(() => {
+        const proofs = allProofs.value;
+        if (firstRun) {
+            firstRun = false;
+            return;
+        }
+        saveProofs(proofs);
+    });
+    proofPersistStop = () => {
+        dispose();
+        proofPersistStop = null;
+    };
+    return proofPersistStop;
 }

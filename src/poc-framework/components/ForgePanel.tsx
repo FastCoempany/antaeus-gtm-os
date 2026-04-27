@@ -4,6 +4,7 @@ import {
     linkedDeal,
     linkedDeals,
     patchDraft,
+    saveDraft,
     setDurationDays,
     setOutcome
 } from "../state";
@@ -132,6 +133,14 @@ export function ForgePanel(): JSX.Element {
                 <div class="poc-forge__row">
                     <DurationToggle value={drft.durationDays} />
                     <OutcomeSelect value={drft.outcome} />
+                    <button
+                        type="button"
+                        class="poc-forge__save"
+                        disabled={!drft.account.trim()}
+                        onClick={() => saveDraft()}
+                    >
+                        Cast proof
+                    </button>
                 </div>
             </div>
 
