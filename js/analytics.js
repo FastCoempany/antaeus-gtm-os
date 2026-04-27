@@ -252,6 +252,21 @@
                     person_profiles: 'identified_only'
                 });
                 posthogBooted = true;
+                // Notify any listeners (e.g. per-room flag-redirect scripts
+                // in app/<room>/index.html) that posthog.onFeatureFlags is
+                // now safe to register. The event also exposes the live
+                // posthog reference so listeners do not have to re-check
+                // window.posthog.
+                try {
+                    window.dispatchEvent(
+                        new CustomEvent('gtmos:posthog-ready', {
+                            detail: { posthog: window.posthog }
+                        })
+                    );
+                } catch (e) {
+                    // CustomEvent unsupported (very old browsers) — listeners
+                    // can fall through to the polling path on their end.
+                }
             } catch (e) {
                 // Keep local analytics even if PostHog init fails.
             }

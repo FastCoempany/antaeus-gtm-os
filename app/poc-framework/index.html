@@ -56,15 +56,23 @@
         if (qs.indexOf("demo=1") !== -1 || qs.indexOf("qa=1") !== -1) {
             return;
         }
-        if (typeof posthog === "undefined" || !posthog.onFeatureFlags) {
-            return;
-        }
-        posthog.onFeatureFlags(function () {
-            if (posthog.isFeatureEnabled("room_poc_framework_v2")) {
-                var hash = window.location.hash || "";
-                window.location.replace("/poc-framework/" + qs + hash);
+        function maybeRedirect() {
+            if (typeof posthog === "undefined" || !posthog.onFeatureFlags) {
+                return false;
             }
-        });
+            posthog.onFeatureFlags(function () {
+                if (posthog.isFeatureEnabled("room_poc_framework_v2")) {
+                    var hash = window.location.hash || "";
+                    window.location.replace("/poc-framework/" + qs + hash);
+                }
+            });
+            return true;
+        }
+        // Fast path — Posthog already loaded (warm cache, repeat visit).
+        if (maybeRedirect()) return;
+        // Cold path — wait for analytics.js to dispatch gtmos:posthog-ready
+        // after the Posthog SDK script's onload fires + posthog.init runs.
+        window.addEventListener("gtmos:posthog-ready", maybeRedirect, { once: true });
     })();
 </script>
 <script src="/js/data-manager.js"></script>

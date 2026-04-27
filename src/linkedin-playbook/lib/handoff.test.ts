@@ -89,16 +89,21 @@ describe("readInboundAccount", () => {
         expect(readInboundAccount("?account=Acme")).toBe("Acme");
     });
 
-    it("falls back to ?focusObject= when account is missing", () => {
-        expect(readInboundAccount("?focusObject=Beta")).toBe("Beta");
+    it("does NOT fall back to ?focusObject= (PR #23 Codex P2 fix)", () => {
+        // buildLinkedInRoomHref defaults focusObject to the placeholder
+        // "LinkedIn cue" when no real account is supplied; falling back to
+        // it here would prefill the cue ledger with that literal string
+        // on roundtrip and pollute the action log.
+        expect(readInboundAccount("?focusObject=LinkedIn+cue")).toBeNull();
+        expect(readInboundAccount("?focusObject=Beta")).toBeNull();
     });
 
-    it("returns null when neither is set", () => {
+    it("returns null when ?account= is not set", () => {
         expect(readInboundAccount("")).toBeNull();
         expect(readInboundAccount("?other=42")).toBeNull();
     });
 
-    it("prefers account over focusObject when both are set", () => {
+    it("ignores focusObject even when account is also set", () => {
         expect(readInboundAccount("?account=Acme&focusObject=Beta")).toBe(
             "Acme"
         );

@@ -67,9 +67,18 @@ export function hrefToOutboundStudio(account: string): string {
 // ─── URL inbound ──────────────────────────────────────────────────────
 
 /**
- * Read the inbound URL params (`?account=`, falling back to
- * `?focusObject=`) and return the account name to auto-select.
- * Returns null when neither is present.
+ * Read the inbound `?account=` URL param and return the account name to
+ * auto-select. Returns null when not present.
+ *
+ * NOTE: unlike most other Phase 4 rooms' inbound readers, we intentionally
+ * do NOT fall back to `?focusObject=` here. `buildLinkedInRoomHref` defaults
+ * `focusObject` to the literal string "LinkedIn cue" when no account is
+ * supplied (so the destination room shows a sensible focus label even when
+ * we have no real account yet). If this reader fell back to that field, a
+ * roundtrip through any cross-room handoff would prefill the cue ledger
+ * with the placeholder string and pollute the action log if the operator
+ * submitted without correcting it. `?account=` is the only field that
+ * carries a real account name and is the only field we trust here.
  */
 export function readInboundAccount(
     search: string = typeof window !== "undefined"
@@ -80,8 +89,6 @@ export function readInboundAccount(
         const p = new URLSearchParams(search);
         const account = p.get("account");
         if (account && account.length > 0) return account;
-        const focus = p.get("focusObject");
-        if (focus && focus.length > 0) return focus;
         return null;
     } catch {
         return null;
