@@ -1,8 +1,10 @@
 import { render } from "preact";
 import { PocFramework } from "./PocFramework";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { setAllProofs, startProofPersistence } from "./state";
+import { patchDraft, setAllProofs, setLinkedDeals, startProofPersistence } from "./state";
 import { loadProofs } from "./lib/persistence";
+import { loadDealsForLinking } from "./lib/deal-sync";
+import { readInboundDealId } from "./lib/handoff";
 
 /**
  * Entry point for the PoC Framework Preact rebuild
@@ -41,5 +43,14 @@ if (!flagOn) {
 // loop. Subsequent saveDraft/upsertProof calls write back automatically.
 setAllProofs(loadProofs());
 startProofPersistence();
+
+// Wave 5 — load Deal Workspace deals for the linked-deal dropdown +
+// honor inbound `?deal=<id>` URL param so a route-in from another room
+// auto-populates the form's linkedDealId.
+setLinkedDeals(loadDealsForLinking());
+const inboundDealId = readInboundDealId();
+if (inboundDealId) {
+    patchDraft({ linkedDealId: inboundDealId });
+}
 
 render(<PocFramework />, root);

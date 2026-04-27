@@ -9,6 +9,7 @@ import {
     type ProofDraft
 } from "./lib/types";
 import { freezeDraftIntoProof, saveProofs } from "./lib/persistence";
+import { syncProofIntoDeal } from "./lib/deal-sync";
 
 /**
  * Phase 4 / Room 5 — PoC Framework runtime state.
@@ -113,6 +114,9 @@ export function saveDraft(now: number = Date.now()): Proof {
         ...(existing ? { id: existing.id } : {})
     });
     upsertProof(proof);
+    // Wave 5 — write proof snapshot back into the linked deal so
+    // Deal Workspace + downstream readers see the proof state.
+    syncProofIntoDeal(proof);
     return proof;
 }
 

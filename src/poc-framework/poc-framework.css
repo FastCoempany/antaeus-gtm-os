@@ -568,3 +568,74 @@ button {
     max-height: 360px;
     overflow-y: auto;
 }
+
+/* ─── Route rack ───────────────────────────────────────────────────── */
+
+.poc-route-rack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--poc-cream-border);
+    padding-top: 16px;
+}
+
+.poc-route-rack__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--poc-ink-70);
+}
+
+.poc-route-rack__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+.poc-route-rack__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 2px;
+    text-decoration: none;
+    border: 1px solid var(--poc-cream-border);
+    background: var(--poc-cream-raised);
+    color: var(--poc-ink);
+}
+
+.poc-route-rack__cta--primary {
+    background: var(--poc-accent-orange);
+    color: #fff;
+    border-color: var(--poc-accent-orange);
+}
+
+.poc-route-rack__cta--primary:hover {
+    background: #e25a10;
+    border-color: #e25a10;
+}
+
+.poc-route-rack__cta--ghost:hover {
+    background: var(--poc-cream);
+}
+
+.poc-route-rack__cta.is-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.poc-route-rack__label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.poc-route-rack__reason {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.poc-route-rack__cta--ghost .poc-route-rack__reason {
+    color: var(--poc-ink-70);
+}

@@ -4,6 +4,7 @@ import { draft, linkedDeal } from "../state";
 import { computeQuality, deriveMolds } from "../lib/quality";
 import { generateDocs } from "../lib/docs";
 import type { ProofDocs } from "../lib/types";
+import { RouteRack } from "./RouteRack";
 
 const DOC_LABELS: Record<keyof ProofDocs, string> = {
     scope: "PoC scope",
@@ -63,6 +64,8 @@ export function CastPanel(): JSX.Element {
             </section>
 
             <DocsRack docs={docs} active={activeDoc} onSelect={setActiveDoc} />
+
+            <RouteRack />
         </section>
     );
 }
