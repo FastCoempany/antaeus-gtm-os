@@ -10,6 +10,7 @@ import {
     dealOptions,
     deployments,
     desk,
+    logDeployment,
     patchAdvisorDraft,
     patchDesk,
     prependDeployment,
@@ -18,6 +19,7 @@ import {
     resetAdvisorDraft,
     resetDesk,
     resetSession,
+    saveAdvisorFromDraft,
     selectedAdvisor,
     selectedDeal,
     setAdvisorId,
@@ -26,7 +28,8 @@ import {
     setDealId,
     setDealOptions,
     setDeployments,
-    setMomentId
+    setMomentId,
+    updateDeploymentOutcome
 } from "./state";
 import {
     EMPTY_ADVISOR_DRAFT,
@@ -240,5 +243,133 @@ describe("advisor draft", () => {
         patchAdvisorDraft({ name: "Sarah" });
         resetAdvisorDraft();
         expect(advisorDraft.value).toEqual(EMPTY_ADVISOR_DRAFT);
+    });
+});
+
+describe("saveAdvisorFromDraft", () => {
+    beforeEach(() => {
+        resetSession();
+        if (typeof localStorage !== "undefined") localStorage.clear();
+    });
+
+    it("returns null when name is blank", () => {
+        patchAdvisorDraft({ name: "   " });
+        expect(saveAdvisorFromDraft()).toBeNull();
+        expect(advisors.value).toHaveLength(0);
+    });
+
+    it("appends new advisor + points desk at it + resets draft", () => {
+        patchAdvisorDraft({
+            name: "Sarah Chen",
+            title: "Operator",
+            tier: "t1",
+            companies: "Acme, Beta",
+            notes: "Strategic"
+        });
+        const advisor = saveAdvisorFromDraft();
+        expect(advisor).not.toBeNull();
+        expect(advisors.value).toHaveLength(1);
+        expect(advisors.value[0]?.name).toBe("Sarah Chen");
+        expect(advisors.value[0]?.tier).toBe("t1");
+        expect(advisors.value[0]?.companies).toEqual(["Acme", "Beta"]);
+        expect(desk.value.advisorId).toBe(advisor!.id);
+        expect(advisorDraft.value).toEqual(EMPTY_ADVISOR_DRAFT);
+    });
+
+    it("trims whitespace from companies + filters empty entries", () => {
+        patchAdvisorDraft({
+            name: "Sarah",
+            companies: "  Acme , , Beta  ,"
+        });
+        const advisor = saveAdvisorFromDraft();
+        expect(advisor?.companies).toEqual(["Acme", "Beta"]);
+    });
+});
+
+describe("logDeployment + updateDeploymentOutcome", () => {
+    beforeEach(() => {
+        resetSession();
+        if (typeof localStorage !== "undefined") localStorage.clear();
+    });
+
+    function setupContext(): void {
+        __setDealOptionsForTests([
+            {
+                id: "deal-1",
+                accountName: "Meridian Logistics",
+                stage: "discovery",
+                value: 100000,
+                nextStep: "",
+                nextStepDate: null,
+                champion: "",
+                economicBuyer: "Pat Buyer",
+                primaryContact: "",
+                buyer: "",
+                decisionProcess: "",
+                advisorHistory: []
+            }
+        ]);
+        __setAdvisorsForTests([
+            {
+                id: "adv-1",
+                name: "Sarah Chen",
+                title: "Operator",
+                tier: "t2",
+                expertise: "",
+                equity: "",
+                companies: ["Meridian Logistics"],
+                notes: "",
+                relationship: "active",
+                createdAt: "2026-01-01T00:00:00Z"
+            }
+        ]);
+        setDealId("deal-1");
+        setAdvisorId("adv-1");
+        setMomentId("eb_bridge");
+    }
+
+    it("returns null when no deal is selected", () => {
+        expect(logDeployment("pending")).toBeNull();
+    });
+
+    it("freezes the live ctx into the deployment when both deal + advisor selected", () => {
+        setupContext();
+        const dep = logDeployment("pending");
+        expect(dep).not.toBeNull();
+        expect(dep?.dealId).toBe("deal-1");
+        expect(dep?.dealName).toBe("Meridian Logistics");
+        expect(dep?.advisorId).toBe("adv-1");
+        expect(dep?.advisorName).toBe("Sarah Chen");
+        expect(dep?.momentId).toBe("eb_bridge");
+        expect(dep?.outcome).toBe("pending");
+        expect(dep?.ask).toContain("Meridian Logistics");
+        expect(deployments.value).toHaveLength(1);
+    });
+
+    it("pending outcome leaves outcomeDate null; non-pending sets it", () => {
+        setupContext();
+        const pending = logDeployment("pending");
+        expect(pending?.outcomeDate).toBeNull();
+        const hold = logDeployment("hold");
+        expect(hold?.outcomeDate).toBeTruthy();
+    });
+
+    it("notes vary by outcome", () => {
+        setupContext();
+        expect(logDeployment("pending")?.notes).toContain("Ask sent");
+        expect(logDeployment("hold")?.notes).toContain("Held");
+        expect(logDeployment("reroute")?.notes).toContain("Rerouted");
+    });
+
+    it("updateDeploymentOutcome flips outcome + stamps outcomeDate", () => {
+        setupContext();
+        const dep = logDeployment("pending");
+        const updated = updateDeploymentOutcome(dep!.id, "successful");
+        expect(updated?.outcome).toBe("successful");
+        expect(updated?.outcomeDate).toBeTruthy();
+    });
+
+    it("updateDeploymentOutcome returns null on missing id", () => {
+        expect(updateDeploymentOutcome("ghost", "successful")).toBeNull();
     });
 });

@@ -1,8 +1,10 @@
 import type { JSX } from "preact";
 import {
+    activeDeals,
     advisors,
     deployments,
     desk,
+    logDeployment,
     selectedAdvisor,
     selectedDeal,
     setAdvisorId,
@@ -10,7 +12,7 @@ import {
     setDealId,
     setMomentId
 } from "../state";
-import { activeDeals } from "../state";
+import type { DeploymentOutcome } from "../lib/types";
 import { TIERS } from "../lib/tiers";
 import { MOMENTS, findMoment } from "../lib/moments";
 import { advisorsForDeal } from "../lib/recommend";
@@ -88,6 +90,10 @@ export function DeskBoard(): JSX.Element {
     const desktopNote = deal
         ? `The desk is pointed at ${stageLabel(deal.stage)}, ${fmtMoney(deal.value)}. ${dealPressure(deal)}`
         : "Add a live deal and at least one advisor before spending relationship capital.";
+
+    function stampOutcome(outcome: DeploymentOutcome): void {
+        logDeployment(outcome);
+    }
 
     // Top 4 advisors for the rolodex: exact matches first, then anyone else.
     const rolodexList = allAdvisors
@@ -272,7 +278,8 @@ export function DeskBoard(): JSX.Element {
                         type="button"
                         class="ad-stamp ad-stamp--send"
                         data-ad-stamp="pending"
-                        disabled
+                        disabled={!deal || !advisor}
+                        onClick={() => stampOutcome("pending")}
                     >
                         Send
                     </button>
@@ -280,7 +287,8 @@ export function DeskBoard(): JSX.Element {
                         type="button"
                         class="ad-stamp ad-stamp--hold"
                         data-ad-stamp="hold"
-                        disabled
+                        disabled={!deal || !advisor}
+                        onClick={() => stampOutcome("hold")}
                     >
                         Hold
                     </button>
@@ -288,7 +296,8 @@ export function DeskBoard(): JSX.Element {
                         type="button"
                         class="ad-stamp ad-stamp--reroute"
                         data-ad-stamp="reroute"
-                        disabled
+                        disabled={!deal || !advisor}
+                        onClick={() => stampOutcome("reroute")}
                     >
                         Reroute
                     </button>

@@ -1,5 +1,6 @@
 import {
     computed,
+    effect,
     signal,
     type ReadonlySignal,
     type Signal
@@ -11,8 +12,12 @@ import {
     type AdvisorDeal,
     type AdvisorDraft,
     type Deployment,
+    type DeploymentOutcome,
     type DeskState
 } from "./lib/types";
+import { findMoment } from "./lib/moments";
+import { buildAsk } from "./lib/ask-builder";
+import { saveAdvisors, saveDeployments, uid } from "./lib/persistence";
 
 /**
  * Phase 4 / Room 10 — Advisor Deploy runtime state.
@@ -145,6 +150,159 @@ export function resetSession(): void {
     desk.value = EMPTY_DESK_STATE;
     advisorDraft.value = EMPTY_ADVISOR_DRAFT;
     loaded.value = false;
+}
+
+// ─── High-level actions ────────────────────────────────────────────────
+
+/**
+ * Save the current advisor draft as a new Advisor. Returns null when
+ * the name is blank (legacy line 530 guard) — the caller should toast.
+ * Otherwise appends, points the desk at the new advisor, and resets
+ * the draft. Persistence side-effect mirrors via startAdvisorPersistence.
+ */
+export function saveAdvisorFromDraft(
+    now: number = Date.now()
+): Advisor | null {
+    const d = advisorDraft.value;
+    const name = d.name.trim();
+    if (!name) return null;
+    const advisor: Advisor = {
+        id: uid("adv", now),
+        name,
+        title: d.title.trim(),
+        tier: d.tier,
+        expertise: d.expertise.trim(),
+        equity: "",
+        companies: d.companies
+            .split(",")
+            .map((s) => s.trim())
+            .filter((s) => s.length > 0),
+        notes: d.notes.trim(),
+        relationship: "active",
+        createdAt: new Date(now).toISOString()
+    };
+    appendAdvisor(advisor);
+    desk.value = { ...desk.value, advisorId: advisor.id };
+    advisorDraft.value = EMPTY_ADVISOR_DRAFT;
+    return advisor;
+}
+
+/**
+ * Log a deployment with the given outcome. Freezes the live ctx
+ * (deal × advisor × moment + buildAsk output) into a Deployment.
+ * Returns null when no deal or no advisor is selected. Mirrors
+ * legacy `logDeployment(outcome)` (lines 459-476).
+ */
+export function logDeployment(
+    outcome: DeploymentOutcome,
+    now: number = Date.now()
+): Deployment | null {
+    const deal = selectedDeal.value;
+    const advisor = selectedAdvisor.value;
+    if (!deal) return null;
+    if (!advisor) return null;
+    const moment = findMoment(desk.value.momentId);
+    const generated = buildAsk({
+        deal,
+        advisor,
+        moment,
+        customAsk: desk.value.customAsk
+    });
+    const dep: Deployment = {
+        id: uid("dep", now),
+        dealId: deal.id,
+        dealName: deal.accountName,
+        dealStage: deal.stage,
+        advisorId: advisor.id,
+        advisorName: advisor.name,
+        momentId: moment.id,
+        momentName: moment.name,
+        ask: generated.ask,
+        forwardableNote: generated.forward,
+        outcome,
+        notes:
+            outcome === "pending"
+                ? "Ask sent from Backchannel Desk."
+                : outcome === "hold"
+                  ? "Held before spending advisor trust."
+                  : outcome === "reroute"
+                    ? "Rerouted before sending."
+                    : "",
+        createdAt: new Date(now).toISOString(),
+        outcomeDate:
+            outcome === "pending" ? null : new Date(now).toISOString()
+    };
+    prependDeployment(dep);
+    return dep;
+}
+
+/**
+ * Update the outcome on an existing deployment. Mirrors legacy
+ * `updateDeploymentOutcome`. Returns the updated deployment, or null
+ * when no row matches.
+ */
+export function updateDeploymentOutcome(
+    id: string,
+    outcome: DeploymentOutcome,
+    now: number = Date.now()
+): Deployment | null {
+    let updated: Deployment | null = null;
+    deployments.value = deployments.value.map((d) => {
+        if (d.id !== id) return d;
+        const next: Deployment = {
+            ...d,
+            outcome,
+            outcomeDate: new Date(now).toISOString()
+        };
+        updated = next;
+        return next;
+    });
+    return updated;
+}
+
+// ─── Persistence side-effects ──────────────────────────────────────────
+
+let advisorPersistStop: (() => void) | null = null;
+let deploymentPersistStop: (() => void) | null = null;
+
+/**
+ * Mirror advisors writes to localStorage. Skip first run to avoid
+ * redundant boot-time write — same pattern as Phase 4 / Rooms 3-9.
+ */
+export function startAdvisorPersistence(): () => void {
+    if (advisorPersistStop) return advisorPersistStop;
+    let firstRun = true;
+    const dispose = effect(() => {
+        const next = advisors.value;
+        if (firstRun) {
+            firstRun = false;
+            return;
+        }
+        saveAdvisors(next);
+    });
+    advisorPersistStop = () => {
+        dispose();
+        advisorPersistStop = null;
+    };
+    return advisorPersistStop;
+}
+
+export function startDeploymentPersistence(): () => void {
+    if (deploymentPersistStop) return deploymentPersistStop;
+    let firstRun = true;
+    const dispose = effect(() => {
+        const next = deployments.value;
+        if (firstRun) {
+            firstRun = false;
+            return;
+        }
+        saveDeployments(next);
+    });
+    deploymentPersistStop = () => {
+        dispose();
+        deploymentPersistStop = null;
+    };
+    return deploymentPersistStop;
 }
 
 // Test seed helpers ─────────────────────────────────────────────────────

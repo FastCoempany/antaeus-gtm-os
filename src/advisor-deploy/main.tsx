@@ -1,6 +1,13 @@
 import { render } from "preact";
 import { AdvisorDeploy } from "./AdvisorDeploy";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import {
+    setAdvisors,
+    setDeployments,
+    startAdvisorPersistence,
+    startDeploymentPersistence
+} from "./state";
+import { loadAdvisors, loadDeployments } from "./lib/persistence";
 
 /**
  * Entry point for the Advisor Deploy Preact rebuild
@@ -10,12 +17,13 @@ import { initObservability, isFeatureEnabled } from "@/lib/observability";
  * flag `room_advisor_deploy_v2`. Wave 6 wires the legacy
  * `app/advisor-deploy/index.html` flag-redirect.
  *
- * Boot order (Wave 1):
+ * Boot order:
  *   1. initObservability — Sentry + Posthog
- *   2. render — Preact mounts
+ *   2. seed advisors + deployments from localStorage
+ *   3. start the persistence loops (mirror writes back)
+ *   4. render — Preact mounts the live desk
  *
- * Subsequent waves seed advisor registry + deployments (Wave 4)
- * + the inbound cross-room context + URL `?deal=` (Wave 5).
+ * Wave 5 adds the inbound cross-room context loaders + URL `?deal=`.
  *
  * Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
  */
@@ -36,5 +44,10 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+setAdvisors(loadAdvisors());
+setDeployments(loadDeployments());
+startAdvisorPersistence();
+startDeploymentPersistence();
 
 render(<AdvisorDeploy />, root);
