@@ -201,6 +201,27 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 6 Wave 1 — /outbound-studio/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/outbound-studio/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ob-topbar__kicker")).toContainText(
+            "OUTBOUND STUDIO"
+        );
+        await expect(page.locator(".ob-switchboard")).toBeAttached();
+        await expect(page.locator(".ob-output")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {

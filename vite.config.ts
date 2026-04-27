@@ -154,6 +154,16 @@ export default defineConfig({
                 "poc-framework": resolve(
                     __dirname,
                     "src/poc-framework/index.html"
+                ),
+
+                // Phase 4 / Room 6 — Outbound Studio Preact rebuild.
+                // Served at /outbound-studio/. Behind Posthog feature flag
+                // `room_outbound_studio_v2`; legacy
+                // `app/outbound-studio/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "outbound-studio": resolve(
+                    __dirname,
+                    "src/outbound-studio/index.html"
                 )
             }
         }

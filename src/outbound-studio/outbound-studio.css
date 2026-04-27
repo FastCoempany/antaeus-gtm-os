@@ -1,0 +1,473 @@
+/*
+ * Outbound Studio — Wave 1 baseline styles.
+ *
+ * Live Instrument family per CLAUDE.md Part II §4.3: live, tense,
+ * immediate, operational. Bright field per Part II §1 direction lock.
+ * "Switchboard metaphor restrained" per Part V refacing notes.
+ */
+
+:root {
+    --ob-ink: #0a1c40;
+    --ob-ink-70: rgba(10, 28, 64, 0.7);
+    --ob-ink-40: rgba(10, 28, 64, 0.4);
+    --ob-ink-15: rgba(10, 28, 64, 0.15);
+    --ob-field: #f6f8fc;
+    --ob-field-raised: #ffffff;
+    --ob-accent-orange: #ff6b1c;
+    --ob-accent-blue: #2e5aac;
+    --ob-accent-green: #2e7d4c;
+    --ob-accent-amber: #b57500;
+    --ob-accent-red: #b4261f;
+    --ob-border: rgba(10, 28, 64, 0.1);
+    --ob-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--ob-field);
+    color: var(--ob-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────── */
+
+.ob-shell {
+    min-height: 100vh;
+    padding: 32px 40px 80px;
+    max-width: 1480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────── */
+
+.ob-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ob-ink-70);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.ob-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.04;
+    font-weight: 400;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+}
+
+.ob-topbar__sub {
+    font-size: 16px;
+    color: var(--ob-ink-70);
+    margin: 0;
+    max-width: 60ch;
+}
+
+/* ─── Stage (split) ────────────────────────────────────────────────── */
+
+.ob-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 14px;
+}
+
+.ob-switchboard,
+.ob-output {
+    background: var(--ob-field-raised);
+    border: 1px solid var(--ob-border-strong);
+    border-radius: 4px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 360px;
+}
+
+.ob-switchboard__kicker,
+.ob-output__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+    margin: 0;
+}
+
+.ob-switchboard__title,
+.ob-output__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.1;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.ob-switchboard__placeholder,
+.ob-output__placeholder {
+    margin: 0;
+    color: var(--ob-ink-70);
+    font-style: italic;
+    font-size: 14px;
+    max-width: 56ch;
+}
+
+@media (max-width: 880px) {
+    .ob-stage {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── Switchboard form ─────────────────────────────────────────────── */
+
+.ob-switchboard__header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ob-switchboard__form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.ob-switchboard__row {
+    grid-column: 1 / -1;
+}
+
+.ob-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ob-field__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+}
+
+.ob-field input,
+.ob-field select {
+    background: var(--ob-field);
+    border: 1px solid var(--ob-border);
+    color: var(--ob-ink);
+    padding: 8px 10px;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 14px;
+    width: 100%;
+}
+
+.ob-field input:focus,
+.ob-field select:focus {
+    outline: none;
+    border-color: var(--ob-accent-orange);
+    background: var(--ob-field-raised);
+}
+
+/* ─── No-ask toggle ────────────────────────────────────────────────── */
+
+.ob-noask {
+    width: 100%;
+    background: var(--ob-field);
+    border: 1px solid var(--ob-border-strong);
+    border-radius: 2px;
+    padding: 12px 14px;
+    text-align: left;
+    color: var(--ob-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: inherit;
+}
+
+.ob-noask:hover {
+    background: var(--ob-field-raised);
+}
+
+.ob-noask.is-active {
+    border-color: var(--ob-accent-orange);
+    background: rgba(255, 107, 28, 0.08);
+}
+
+.ob-noask__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ob-ink-70);
+}
+
+.ob-noask.is-active .ob-noask__label {
+    color: var(--ob-accent-orange);
+}
+
+.ob-noask__sub {
+    font-size: 13px;
+    color: var(--ob-ink);
+}
+
+/* ─── Output panel ─────────────────────────────────────────────────── */
+
+.ob-output__header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ob-output__chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ob-output__chip {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 4px 8px;
+    background: var(--ob-field);
+    border: 1px solid var(--ob-border);
+    border-radius: 2px;
+}
+
+.ob-output__chip-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ob-ink-40);
+}
+
+.ob-output__chip-value {
+    font-size: 12px;
+    color: var(--ob-ink);
+    font-weight: 600;
+}
+
+.ob-output__chip--ready { border-left: 2px solid var(--ob-accent-green); }
+.ob-output__chip--workable { border-left: 2px solid var(--ob-accent-orange); }
+.ob-output__chip--thin { border-left: 2px solid var(--ob-ink-40); }
+
+.ob-output__body {
+    margin: 0;
+    flex: 1;
+    background: var(--ob-field);
+    border: 1px solid var(--ob-border);
+    border-radius: 2px;
+    padding: 14px 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ob-ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 200px;
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.ob-output__actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-top: 1px solid var(--ob-border);
+    padding-top: 12px;
+}
+
+.ob-output__btn {
+    background: var(--ob-field-raised);
+    border: 1px solid var(--ob-border-strong);
+    color: var(--ob-ink);
+    padding: 7px 14px;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.ob-output__btn:hover {
+    background: var(--ob-field);
+}
+
+.ob-output__btn--primary {
+    background: var(--ob-accent-orange);
+    color: #fff;
+    border-color: var(--ob-accent-orange);
+}
+
+.ob-output__btn--primary:hover {
+    background: #e25a10;
+    border-color: #e25a10;
+}
+
+.ob-output__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ob-output__toast {
+    margin-left: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ob-accent-green);
+    text-transform: uppercase;
+}
+
+/* ─── Touch log ────────────────────────────────────────────────────── */
+
+.ob-log {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--ob-field-raised);
+    border: 1px solid var(--ob-border);
+    border-radius: 4px;
+    padding: 18px 20px;
+}
+
+.ob-log__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.ob-log__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+    margin: 0;
+}
+
+.ob-log__count {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ob-ink-40);
+}
+
+.ob-log__empty {
+    margin: 0;
+    color: var(--ob-ink-70);
+    font-style: italic;
+    font-size: 13px;
+    max-width: 60ch;
+}
+
+.ob-log__table-wrap {
+    overflow-x: auto;
+}
+
+.ob-log__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.ob-log__table th,
+.ob-log__table td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--ob-border);
+}
+
+.ob-log__table th {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ob-ink-40);
+    font-weight: 600;
+}
+
+.ob-log__outcome {
+    font-family: inherit;
+    font-size: 12px;
+    background: var(--ob-field);
+    border: 1px solid var(--ob-border);
+    color: var(--ob-ink);
+    padding: 3px 6px;
+    border-radius: 2px;
+}
+
+/* ─── Handoff strip ────────────────────────────────────────────────── */
+
+.ob-handoff {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ob-handoff__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+}
+
+.ob-handoff__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+}
+
+.ob-handoff__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 2px;
+    text-decoration: none;
+    border: 1px solid var(--ob-border-strong);
+    background: var(--ob-field-raised);
+    color: var(--ob-ink);
+}
+
+.ob-handoff__cta:hover {
+    background: var(--ob-field);
+}
+
+.ob-handoff__cta.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.ob-handoff__label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.ob-handoff__sub {
+    font-size: 12px;
+    color: var(--ob-ink-70);
+}
