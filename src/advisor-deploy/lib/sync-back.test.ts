@@ -123,7 +123,8 @@ describe("syncDeploymentToDeal", () => {
                 {
                     id: "deal-1",
                     accountName: "Acme",
-                    nextStep: "Existing step"
+                    nextStep: "Existing step",
+                    nextStepDate: "2026-05-15"
                 }
             ])
         );
@@ -132,11 +133,30 @@ describe("syncDeploymentToDeal", () => {
             s.getItem("gtmos_deal_workspaces") as string
         ) as Array<{ nextStep: string; nextStepDate: string }>;
         expect(arr[0]?.nextStep).toBe("Existing step");
-        // nextStepDate still gets stamped
-        expect(arr[0]?.nextStepDate).toBeTruthy();
     });
 
-    it("pending outcome fills default nextStep when empty", () => {
+    it("pending outcome preserves existing nextStepDate (PR #26 Codex P1 fix)", () => {
+        const s = new MemStorage();
+        s.seed(
+            "gtmos_deal_workspaces",
+            JSON.stringify([
+                {
+                    id: "deal-1",
+                    accountName: "Acme",
+                    nextStep: "Existing step",
+                    nextStepDate: "2026-05-15"
+                }
+            ])
+        );
+        syncDeploymentToDeal(makeDep({ outcome: "pending" }), NOW, s);
+        const arr = JSON.parse(
+            s.getItem("gtmos_deal_workspaces") as string
+        ) as Array<{ nextStepDate: string }>;
+        // Legacy parity: pending must NOT overwrite a planned deadline.
+        expect(arr[0]?.nextStepDate).toBe("2026-05-15");
+    });
+
+    it("pending outcome fills default nextStep + date when both empty", () => {
         const s = new MemStorage();
         s.seed(
             "gtmos_deal_workspaces",
@@ -145,8 +165,9 @@ describe("syncDeploymentToDeal", () => {
         syncDeploymentToDeal(makeDep({ outcome: "pending" }), NOW, s);
         const arr = JSON.parse(
             s.getItem("gtmos_deal_workspaces") as string
-        ) as Array<{ nextStep: string }>;
+        ) as Array<{ nextStep: string; nextStepDate: string }>;
         expect(arr[0]?.nextStep).toContain("Send advisor ask");
+        expect(arr[0]?.nextStepDate).toBeTruthy();
     });
 
     it("engaged + successful set the momentum nextStep", () => {
