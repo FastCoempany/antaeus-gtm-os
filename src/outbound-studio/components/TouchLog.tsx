@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import {
     allTouches,
+    rack,
     setTouchOutcome,
     touchesForRack
 } from "../state";
@@ -20,8 +21,11 @@ import {
  * 4 / Rooms 3 + 4); operator can update outcomes inline so
  * Signal Console's execution-context temperature stays accurate.
  *
- * When the rack has an account set, the log filters to that account.
- * Otherwise it shows the most recent touches across the workspace.
+ * When the rack has an account set, the log strictly filters to that
+ * account — empty state shows if the account has no touches yet, so
+ * outcome edits never mutate a touch belonging to a different account.
+ * Only when no account is scoped do we show the most recent touches
+ * across the workspace.
  */
 const PREVIEW_LIMIT = 12;
 
@@ -42,24 +46,24 @@ function fmtDate(s: string): string {
 export function TouchLog(): JSX.Element {
     const scoped = touchesForRack.value;
     const all = allTouches.value;
-    const list = (scoped.length > 0 ? scoped : all).slice(0, PREVIEW_LIMIT);
+    const hasRackScope = rack.value.accountName.trim().length > 0;
+    const list = (hasRackScope ? scoped : all).slice(0, PREVIEW_LIMIT);
+    const emptyMsg = hasRackScope
+        ? "No touches yet for the active account. The \"Log touch\" button on the send line writes here."
+        : "No touches logged yet. The \"Log touch\" button on the send line writes here. Phase 4 / Rooms 3 + 4 read this same table for execution-context temperature.";
 
     return (
         <section class="ob-log" aria-label="Touch log">
             <header class="ob-log__header">
                 <p class="ob-log__kicker">TOUCH LOG</p>
                 <span class="ob-log__count">
-                    {scoped.length > 0
+                    {hasRackScope
                         ? `${scoped.length} for active account`
                         : `${all.length} total`}
                 </span>
             </header>
             {list.length === 0 ? (
-                <p class="ob-log__empty">
-                    No touches logged yet. The "Log touch" button on the send
-                    line writes here. Phase 4 / Rooms 3 + 4 read this same
-                    table for execution-context temperature.
-                </p>
+                <p class="ob-log__empty">{emptyMsg}</p>
             ) : (
                 <div class="ob-log__table-wrap">
                     <table class="ob-log__table">

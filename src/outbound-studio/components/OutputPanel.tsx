@@ -27,13 +27,14 @@ export function OutputPanel(): JSX.Element {
     }
 
     function copy(): void {
-        if (typeof navigator === "undefined" || !navigator.clipboard) return;
-        try {
-            void navigator.clipboard.writeText(out.content);
-            flashToast("Copied.");
-        } catch {
-            flashToast("Copy failed — try selecting + Cmd-C.");
+        if (typeof navigator === "undefined" || !navigator.clipboard) {
+            flashToast("Copy unavailable — try selecting + Cmd-C.");
+            return;
         }
+        navigator.clipboard
+            .writeText(out.content)
+            .then(() => flashToast("Copied."))
+            .catch(() => flashToast("Copy failed — try selecting + Cmd-C."));
     }
 
     function logTouch(): void {
@@ -42,8 +43,12 @@ export function OutputPanel(): JSX.Element {
     }
 
     function saveAngle(): void {
-        const a = saveAngleFromRack();
-        if (a) flashToast("Angle saved.");
+        const result = saveAngleFromRack();
+        if (result.saved) {
+            flashToast("Angle saved.");
+        } else if (result.reason === "duplicate") {
+            flashToast("Angle already saved.");
+        }
     }
 
     return (
