@@ -25,12 +25,12 @@ export const PERSONA_KEYS: ReadonlyArray<PersonaKey> = [
 ];
 
 export const PERSONA_LABELS: Readonly<Record<PersonaKey, string>> = {
-    cxo: "C-suite / Founder",
+    cxo: "C-Suite Executive",
     vp: "VP / Director",
-    ops: "Ops / IC",
-    it: "IT / Security",
-    finance: "Finance / Procurement",
-    revops: "RevOps"
+    ops: "Operations Leader",
+    it: "IT / Engineering Leader",
+    finance: "Finance Leader",
+    revops: "RevOps Leader"
 };
 
 /** Outcome a call can land in; matches legacy `logOutcome(type)` keys. */
