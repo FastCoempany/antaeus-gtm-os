@@ -1,0 +1,369 @@
+/*
+ * Cold Call Studio — Phase 4 / Room 7 styles.
+ *
+ * Per canon §4.9 (Live Instrument family) + Part II §1: bright field,
+ * navy ink, restrained gradient air. Orange = focus / pressure /
+ * primary action. Wave 1 ships the shell + topbar + skeleton blocks
+ * for the loom + memory; Wave 3 + 4 + 5 fill the live surfaces.
+ */
+
+:root {
+    --cc-navy: #07183d;
+    --cc-ink: #142f5e;
+    --cc-soft: #647da0;
+    --cc-muted: #91a4c2;
+    --cc-line: rgba(7, 24, 61, 0.13);
+    --cc-line2: rgba(7, 24, 61, 0.08);
+    --cc-orange: #ee6f1d;
+    --cc-blue: #2f73e8;
+    --cc-green: #2f8b5b;
+    --cc-red: #c94943;
+    --cc-shadow: 0 34px 90px rgba(7, 24, 61, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--cc-navy);
+    background: #edf4fb;
+    background: radial-gradient(
+            circle at 0 0,
+            rgba(47, 115, 232, 0.08),
+            transparent 24%
+        ),
+        radial-gradient(
+            circle at 100% 0,
+            rgba(238, 111, 29, 0.07),
+            transparent 26%
+        ),
+        linear-gradient(180deg, #fbfdff 0, #edf4fb 100%);
+    min-height: 100vh;
+}
+
+/* ─── Shell ─────────────────────────────────────────────────────────────── */
+
+.cc-shell {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 30px 42px 80px;
+    display: grid;
+    gap: 28px;
+}
+
+/* ─── Topbar ────────────────────────────────────────────────────────────── */
+
+.cc-topbar {
+    border-bottom: 1px solid var(--cc-line2);
+    padding-bottom: 22px;
+}
+
+.cc-topbar__kicker {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cc-orange);
+    margin: 0 0 10px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.cc-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(34px, 3.4vw, 54px);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    color: var(--cc-navy);
+    margin: 0;
+}
+
+.cc-topbar__subtitle {
+    color: var(--cc-soft);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 64ch;
+    margin: 10px 0 0;
+}
+
+.cc-topbar__meta {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.cc-topbar__state {
+    color: var(--cc-blue);
+    border: 1px solid rgba(47, 115, 232, 0.22);
+    border-radius: 999px;
+    padding: 6px 13px;
+    background: rgba(47, 115, 232, 0.05);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.cc-topbar__count {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--cc-muted);
+    letter-spacing: 0.02em;
+}
+
+/* ─── Account row ──────────────────────────────────────────────────────── */
+
+.cc-account-row {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(240px, 1fr) auto;
+    gap: 18px;
+    align-items: end;
+    border: 1px solid var(--cc-line2);
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 14px 40px rgba(7, 24, 61, 0.06);
+    padding: 22px 24px;
+}
+
+.cc-field {
+    display: block;
+}
+
+.cc-field__label {
+    display: block;
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cc-muted);
+    margin-bottom: 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.cc-field__select,
+.cc-field__input {
+    width: 100%;
+    border: 1px solid rgba(7, 24, 61, 0.14);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--cc-navy);
+    font: 600 14px "Public Sans", sans-serif;
+    padding: 12px 16px;
+    outline: none;
+}
+
+.cc-field__select:focus,
+.cc-field__input:focus {
+    border-color: var(--cc-blue);
+    box-shadow: 0 0 0 4px rgba(47, 115, 232, 0.09);
+}
+
+/* ─── Talk loom (placeholder for Waves 1-2; live in Wave 3) ──────────── */
+
+.cc-loom {
+    border: 1px solid var(--cc-line2);
+    border-radius: 36px;
+    background: radial-gradient(
+            circle at 1% 0,
+            rgba(47, 115, 232, 0.05),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 100% 0,
+            rgba(238, 111, 29, 0.06),
+            transparent 26%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(244, 248, 255, 0.97)
+        );
+    box-shadow: var(--cc-shadow);
+    padding: 30px 36px 36px;
+}
+
+.cc-loom__head {
+    margin-bottom: 22px;
+}
+
+.cc-loom__kicker {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cc-orange);
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.cc-loom__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(38px, 4vw, 64px);
+    line-height: 0.94;
+    letter-spacing: -0.05em;
+    color: var(--cc-navy);
+}
+
+.cc-loom__title span {
+    color: var(--cc-orange);
+}
+
+.cc-loom__intro {
+    color: var(--cc-soft);
+    font-size: 15px;
+    line-height: 1.62;
+    margin: 14px 0 0;
+    max-width: 64ch;
+}
+
+.cc-loom__law {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--cc-line);
+    display: grid;
+    grid-template-columns: 104px 1fr;
+    gap: 18px;
+    color: var(--cc-navy);
+    font-weight: 700;
+}
+
+.cc-loom__law-kicker {
+    color: var(--cc-muted);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.cc-loom__law p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.cc-loom__placeholder {
+    margin-top: 22px;
+    border: 1px dashed rgba(7, 24, 61, 0.18);
+    border-radius: 22px;
+    padding: 30px 22px;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.cc-loom__placeholder-copy {
+    margin: 0;
+    color: var(--cc-soft);
+    font-size: 14px;
+    line-height: 1.55;
+    text-align: center;
+}
+
+/* ─── Call memory ─────────────────────────────────────────────────────── */
+
+.cc-memory {
+    border: 1px solid var(--cc-line2);
+    border-radius: 36px;
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 18px 52px rgba(7, 24, 61, 0.08);
+    padding: 28px 32px;
+}
+
+.cc-memory__head {
+    border-bottom: 1px solid var(--cc-line);
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+}
+
+.cc-memory__kicker {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cc-orange);
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.cc-memory__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(22px, 2vw, 32px);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    color: var(--cc-navy);
+}
+
+.cc-memory__empty {
+    margin: 0;
+    color: var(--cc-soft);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.cc-memory__empty code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    background: rgba(7, 24, 61, 0.05);
+    padding: 1px 6px;
+    border-radius: 6px;
+    margin: 0 4px;
+}
+
+.cc-memory__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.cc-memory__row {
+    display: grid;
+    grid-template-columns: minmax(140px, 1fr) minmax(220px, 2fr) auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--cc-line2);
+    color: var(--cc-ink);
+    font-size: 13.5px;
+}
+
+.cc-memory__row-account {
+    font-weight: 700;
+    color: var(--cc-navy);
+}
+
+.cc-memory__row-outcome {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cc-green);
+}
+
+@media (max-width: 1240px) {
+    .cc-account-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .cc-shell {
+        padding: 22px 18px 64px;
+    }
+
+    .cc-loom,
+    .cc-memory {
+        border-radius: 24px;
+        padding: 22px 20px;
+    }
+}

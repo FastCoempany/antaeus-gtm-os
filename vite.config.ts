@@ -164,6 +164,16 @@ export default defineConfig({
                 "outbound-studio": resolve(
                     __dirname,
                     "src/outbound-studio/index.html"
+                ),
+
+                // Phase 4 / Room 7 — Cold Call Studio Preact rebuild.
+                // Served at /cold-call-studio/. Behind Posthog feature flag
+                // `room_cold_call_v2`; legacy
+                // `app/cold-call-studio/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "cold-call-studio": resolve(
+                    __dirname,
+                    "src/cold-call-studio/index.html"
                 )
             }
         }
