@@ -147,6 +147,33 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 4 Wave 1 — /future-autopsy/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        // The new Preact Future Autopsy at /future-autopsy/ (distinct
+        // from the legacy /app/future-autopsy/). Wave 1 ships the
+        // structural shell — empty deal universe shows the empty state,
+        // all sections render. Smoke test asserts: page loads without
+        // runtime errors, the topbar kicker reads FUTURE AUTOPSY, the
+        // pinned-case panel + ledger attach to the DOM.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/future-autopsy/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".fa-topbar__kicker")).toContainText(
+            "FUTURE AUTOPSY"
+        );
+        await expect(page.locator(".fa-pinned")).toBeAttached();
+        await expect(page.locator(".fa-ledger")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
