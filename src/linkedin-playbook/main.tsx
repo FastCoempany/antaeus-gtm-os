@@ -1,8 +1,21 @@
 import { render } from "preact";
 import { LinkedinPlaybook } from "./LinkedinPlaybook";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { setActions, startActionsPersistence } from "./state";
+import {
+    patchDraft,
+    setActions,
+    setBestIcp,
+    setHottestAccount,
+    setLatestTouch,
+    startActionsPersistence
+} from "./state";
 import { loadActions } from "./lib/persistence";
+import {
+    loadBestIcp,
+    loadHottestAccount,
+    loadLatestTouch
+} from "./lib/context";
+import { readInboundAccount } from "./lib/handoff";
 
 /**
  * Entry point for the LinkedIn Playbook Preact rebuild
@@ -42,6 +55,21 @@ if (!flagOn) {
 }
 
 setActions(loadActions());
+
+// Wave 5 — seed the inbound cross-room context. Each loader reads a
+// specific Phase 4 mirror key (gtmos_icp_analytics / gtmos_sc_v4 /
+// gtmos_outbound_touches) and is defensively null-safe; missing keys
+// just leave the corresponding signal at null.
+setBestIcp(loadBestIcp());
+setHottestAccount(loadHottestAccount());
+setLatestTouch(loadLatestTouch());
+
+// Wave 5 — honor URL inbound. If `?account=` (or fallback `?focusObject=`)
+// is set, pre-fill the ledger draft so the rep can log a cue against
+// that account in one motion.
+const inbound = readInboundAccount();
+if (inbound) patchDraft({ accountName: inbound });
+
 startActionsPersistence();
 
 render(<LinkedinPlaybook />, root);

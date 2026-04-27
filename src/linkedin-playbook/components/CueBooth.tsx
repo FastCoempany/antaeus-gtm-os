@@ -10,6 +10,10 @@ import {
 import { CUES, findCue, resolveCueIndex } from "../lib/cues";
 import { deriveMotion } from "../lib/motion";
 import { cueScript } from "../lib/scripts";
+import {
+    hrefToOutboundStudio,
+    hrefToSignalConsole
+} from "../lib/handoff";
 import type { CueIndex } from "../lib/types";
 
 /**
@@ -160,6 +164,22 @@ export function CueBooth(): JSX.Element {
                         <p class="lp-read__rule-kicker">Channel standard</p>
                         <strong>{motion.thresholds}</strong>
                     </div>
+                    <nav class="lp-read__cta" aria-label="Cross-room handoff">
+                        <a
+                            class="lp-handoff lp-handoff--ghost"
+                            href={hrefToSignalConsole(motion.accountName)}
+                            data-lp-handoff="signal-console"
+                        >
+                            Open Signal
+                        </a>
+                        <a
+                            class="lp-handoff lp-handoff--primary"
+                            href={hrefToOutboundStudio(motion.accountName)}
+                            data-lp-handoff="outbound-studio"
+                        >
+                            Open Outbound
+                        </a>
+                    </nav>
                 </aside>
             </div>
         </section>
