@@ -244,6 +244,28 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 8 Wave 1 — /linkedin-playbook/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/linkedin-playbook/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".lp-topbar__kicker")).toContainText(
+            "OUTBOUND CHANNEL"
+        );
+        await expect(page.locator(".lp-booth")).toBeAttached();
+        await expect(page.locator(".lp-ledger")).toBeAttached();
+        await expect(page.locator(".lp-method")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {

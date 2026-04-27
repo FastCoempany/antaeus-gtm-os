@@ -1,0 +1,429 @@
+/*
+ * LinkedIn Playbook — Phase 4 / Room 8 styles.
+ *
+ * Per canon §4.10 (Live Instrument family) + Part II §1: bright field,
+ * navy ink, restrained gradient air. Stage panel goes dark per legacy
+ * (the cue itself feels live + cinematic). Wave 1 ships the shell +
+ * topbar + skeleton blocks; Wave 3+ fill the live surfaces.
+ */
+
+:root {
+    --lp-navy: #081a41;
+    --lp-ink: #16325d;
+    --lp-soft: #6c83a4;
+    --lp-muted: #9caeca;
+    --lp-line: rgba(8, 26, 65, 0.13);
+    --lp-line2: rgba(8, 26, 65, 0.08);
+    --lp-orange: #ed6f1e;
+    --lp-blue: #2f72e8;
+    --lp-green: #2e8b59;
+    --lp-red: #c94d45;
+    --lp-shadow: 0 34px 90px rgba(8, 26, 65, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--lp-navy);
+    background: #edf3fb;
+    background: radial-gradient(
+            circle at 0 0,
+            rgba(47, 114, 232, 0.08),
+            transparent 24%
+        ),
+        radial-gradient(
+            circle at 98% 0,
+            rgba(237, 111, 30, 0.075),
+            transparent 27%
+        ),
+        linear-gradient(180deg, #fbfdff 0, #edf3fb 100%);
+    min-height: 100vh;
+}
+
+/* ─── Shell ─────────────────────────────────────────────────────────────── */
+
+.lp-shell {
+    max-width: 1540px;
+    margin: 0 auto;
+    padding: 30px 42px 80px;
+    display: grid;
+    gap: 28px;
+}
+
+/* ─── Topbar ────────────────────────────────────────────────────────────── */
+
+.lp-topbar {
+    border-bottom: 1px solid var(--lp-line2);
+    padding-bottom: 22px;
+}
+
+.lp-topbar__kicker {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-orange);
+    margin: 0 0 10px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.lp-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(34px, 3.4vw, 54px);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    color: var(--lp-navy);
+    margin: 0;
+}
+
+.lp-topbar__subtitle {
+    color: var(--lp-soft);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 64ch;
+    margin: 10px 0 0;
+}
+
+.lp-topbar__meta {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.lp-topbar__state {
+    color: var(--lp-blue);
+    border: 1px solid rgba(47, 114, 232, 0.22);
+    border-radius: 999px;
+    padding: 6px 13px;
+    background: rgba(47, 114, 232, 0.05);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.lp-topbar__count {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--lp-muted);
+    letter-spacing: 0.02em;
+}
+
+/* ─── Cue booth ─────────────────────────────────────────────────────────── */
+
+.lp-booth {
+    border: 1px solid var(--lp-line2);
+    border-radius: 36px;
+    background: radial-gradient(
+            circle at 1% 0,
+            rgba(47, 114, 232, 0.05),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 100% 0,
+            rgba(237, 111, 30, 0.06),
+            transparent 26%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(244, 248, 255, 0.97)
+        );
+    box-shadow: var(--lp-shadow);
+    padding: 30px 36px 36px;
+}
+
+.lp-booth__head {
+    margin-bottom: 22px;
+}
+
+.lp-booth__kicker {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-orange);
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.lp-booth__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(38px, 4vw, 64px);
+    line-height: 0.94;
+    letter-spacing: -0.05em;
+    color: var(--lp-navy);
+}
+
+.lp-booth__title span {
+    color: var(--lp-orange);
+}
+
+.lp-booth__intro {
+    color: var(--lp-soft);
+    font-size: 15px;
+    line-height: 1.62;
+    margin: 14px 0 0;
+    max-width: 64ch;
+}
+
+.lp-booth__law {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--lp-line);
+    display: grid;
+    grid-template-columns: 104px 1fr;
+    gap: 18px;
+    color: var(--lp-navy);
+    font-weight: 700;
+}
+
+.lp-booth__law-kicker {
+    color: var(--lp-muted);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.lp-booth__law p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.lp-booth__placeholder {
+    margin-top: 22px;
+    border: 1px dashed rgba(8, 26, 65, 0.18);
+    border-radius: 22px;
+    padding: 30px 22px;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.lp-booth__placeholder p {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 14px;
+    line-height: 1.55;
+    text-align: center;
+}
+
+/* ─── Cue ledger ────────────────────────────────────────────────────────── */
+
+.lp-ledger {
+    display: grid;
+    grid-template-columns: minmax(520px, 1fr) minmax(360px, 520px);
+    gap: 22px;
+    align-items: start;
+}
+
+.lp-ledger__form-wrap,
+.lp-ledger__activity {
+    border: 1px solid var(--lp-line2);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 48px rgba(8, 26, 65, 0.08);
+    padding: 24px 26px;
+}
+
+.lp-ledger__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-orange);
+}
+
+.lp-ledger__title {
+    font-family: "DM Serif Display", serif;
+    margin: 0 0 8px;
+    font-size: clamp(22px, 2vw, 30px);
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+    color: var(--lp-navy);
+}
+
+.lp-ledger__copy {
+    margin: 0 0 16px;
+    color: var(--lp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.lp-ledger__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 180px auto;
+    gap: 12px;
+    align-items: end;
+    margin-top: 12px;
+}
+
+.lp-ledger__field {
+    display: block;
+}
+
+.lp-ledger__field-label {
+    display: block;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+    margin-bottom: 7px;
+}
+
+.lp-ledger__input,
+.lp-ledger__select {
+    width: 100%;
+    border: 1px solid rgba(8, 26, 65, 0.14);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--lp-navy);
+    font: 600 13px "Public Sans", sans-serif;
+    padding: 11px 14px;
+    outline: none;
+}
+
+.lp-ledger__input:focus,
+.lp-ledger__select:focus {
+    border-color: var(--lp-blue);
+    box-shadow: 0 0 0 4px rgba(47, 114, 232, 0.09);
+}
+
+.lp-ledger__submit {
+    border: 1px solid var(--lp-orange);
+    border-radius: 999px;
+    background: var(--lp-orange);
+    color: #fff;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding: 11px 16px;
+    cursor: pointer;
+    box-shadow: 0 16px 34px rgba(237, 111, 30, 0.22);
+    white-space: nowrap;
+}
+
+.lp-ledger__submit[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.lp-ledger__empty {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.lp-ledger__empty code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    background: rgba(8, 26, 65, 0.05);
+    padding: 1px 6px;
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+.lp-ledger__stats {
+    margin: 0;
+    color: var(--lp-ink);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+/* ─── Method sheets ─────────────────────────────────────────────────────── */
+
+.lp-method {
+    border: 1px solid var(--lp-line2);
+    border-radius: 36px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 48px rgba(8, 26, 65, 0.08);
+    padding: 28px 32px;
+}
+
+.lp-method__head {
+    border-bottom: 1px solid var(--lp-line);
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.lp-method__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-orange);
+}
+
+.lp-method__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(22px, 2vw, 32px);
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+    color: var(--lp-navy);
+}
+
+.lp-method__copy {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+    max-width: 36ch;
+}
+
+.lp-method__placeholder {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 14px;
+    line-height: 1.55;
+    text-align: center;
+    padding: 30px 22px;
+    border: 1px dashed rgba(8, 26, 65, 0.18);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 1180px) {
+    .lp-ledger {
+        grid-template-columns: 1fr;
+    }
+    .lp-ledger__form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .lp-shell {
+        padding: 22px 18px 64px;
+    }
+    .lp-booth,
+    .lp-method {
+        border-radius: 24px;
+        padding: 22px 20px;
+    }
+}

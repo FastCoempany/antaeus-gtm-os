@@ -174,6 +174,16 @@ export default defineConfig({
                 "cold-call-studio": resolve(
                     __dirname,
                     "src/cold-call-studio/index.html"
+                ),
+
+                // Phase 4 / Room 8 — LinkedIn Playbook Preact rebuild.
+                // Served at /linkedin-playbook/. Behind Posthog feature flag
+                // `room_linkedin_playbook_v2`; legacy
+                // `app/linkedin-playbook/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "linkedin-playbook": resolve(
+                    __dirname,
+                    "src/linkedin-playbook/index.html"
                 )
             }
         }
