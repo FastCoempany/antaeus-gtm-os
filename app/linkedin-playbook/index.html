@@ -35,6 +35,42 @@
   <aside class="app-sidebar">
     <script src="/js/analytics-site-config.js"></script>
     <script src="/js/analytics.js"></script>
+    <!--
+        Wave 6 — flag-based cutover to /linkedin-playbook/ Preact rebuild.
+        When the Posthog feature flag `room_linkedin_playbook_v2` is ON
+        for the current user, redirect to the new room (Waves 1-5: 5-cue
+        ladder + motion engine port, live cue rail + dark stage +
+        booth-read, cue logging + persistence + activity board, cross-
+        room handoff + URL inbound + context loaders). Otherwise the
+        legacy room renders normally.
+
+        Skip-redirect escape hatch: ?demo=1 or ?qa=1 in the URL keeps
+        the legacy room loading. Used by the CI Playwright smoke tests
+        + the demo-seed bootstrap path.
+
+        posthog.onFeatureFlags fires once after Posthog's flag fetch
+        returns. If the SDK didn't initialize, the callback never fires
+        and the legacy room renders normally.
+
+        Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
+    -->
+    <script>
+        (function(){
+            var qs = window.location.search || "";
+            if (qs.indexOf("demo=1") !== -1 || qs.indexOf("qa=1") !== -1) {
+                return;
+            }
+            if (typeof posthog === "undefined" || !posthog.onFeatureFlags) {
+                return;
+            }
+            posthog.onFeatureFlags(function () {
+                if (posthog.isFeatureEnabled("room_linkedin_playbook_v2")) {
+                    var hash = window.location.hash || "";
+                    window.location.replace("/linkedin-playbook/" + qs + hash);
+                }
+            });
+        })();
+    </script>
     <script src="/js/data-manager.js"></script>
     <script src="/js/demo-storage-bootstrap.js"></script>
     <script src="/js/workspace-guard.js"></script>

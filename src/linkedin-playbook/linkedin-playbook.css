@@ -1,0 +1,962 @@
+/*
+ * LinkedIn Playbook — Phase 4 / Room 8 styles.
+ *
+ * Per canon §4.10 (Live Instrument family) + Part II §1: bright field,
+ * navy ink, restrained gradient air. Stage panel goes dark per legacy
+ * (the cue itself feels live + cinematic). Wave 1 ships the shell +
+ * topbar + skeleton blocks; Wave 3+ fill the live surfaces.
+ */
+
+:root {
+    --lp-navy: #081a41;
+    --lp-ink: #16325d;
+    --lp-soft: #6c83a4;
+    --lp-muted: #9caeca;
+    --lp-line: rgba(8, 26, 65, 0.13);
+    --lp-line2: rgba(8, 26, 65, 0.08);
+    --lp-orange: #ed6f1e;
+    --lp-blue: #2f72e8;
+    --lp-green: #2e8b59;
+    --lp-red: #c94d45;
+    --lp-shadow: 0 34px 90px rgba(8, 26, 65, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--lp-navy);
+    background: #edf3fb;
+    background: radial-gradient(
+            circle at 0 0,
+            rgba(47, 114, 232, 0.08),
+            transparent 24%
+        ),
+        radial-gradient(
+            circle at 98% 0,
+            rgba(237, 111, 30, 0.075),
+            transparent 27%
+        ),
+        linear-gradient(180deg, #fbfdff 0, #edf3fb 100%);
+    min-height: 100vh;
+}
+
+/* ─── Shell ─────────────────────────────────────────────────────────────── */
+
+.lp-shell {
+    max-width: 1540px;
+    margin: 0 auto;
+    padding: 30px 42px 80px;
+    display: grid;
+    gap: 28px;
+}
+
+/* ─── Topbar ────────────────────────────────────────────────────────────── */
+
+.lp-topbar {
+    border-bottom: 1px solid var(--lp-line2);
+    padding-bottom: 22px;
+}
+
+.lp-topbar__kicker {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-orange);
+    margin: 0 0 10px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.lp-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(34px, 3.4vw, 54px);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    color: var(--lp-navy);
+    margin: 0;
+}
+
+.lp-topbar__subtitle {
+    color: var(--lp-soft);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 64ch;
+    margin: 10px 0 0;
+}
+
+.lp-topbar__meta {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.lp-topbar__state {
+    color: var(--lp-blue);
+    border: 1px solid rgba(47, 114, 232, 0.22);
+    border-radius: 999px;
+    padding: 6px 13px;
+    background: rgba(47, 114, 232, 0.05);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.lp-topbar__count {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--lp-muted);
+    letter-spacing: 0.02em;
+}
+
+/* ─── Cue booth ─────────────────────────────────────────────────────────── */
+
+.lp-booth {
+    border: 1px solid var(--lp-line2);
+    border-radius: 36px;
+    background: radial-gradient(
+            circle at 1% 0,
+            rgba(47, 114, 232, 0.05),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 100% 0,
+            rgba(237, 111, 30, 0.06),
+            transparent 26%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(244, 248, 255, 0.97)
+        );
+    box-shadow: var(--lp-shadow);
+    padding: 30px 36px 36px;
+}
+
+.lp-booth__head {
+    margin-bottom: 22px;
+}
+
+.lp-booth__kicker {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-orange);
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.lp-booth__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(38px, 4vw, 64px);
+    line-height: 0.94;
+    letter-spacing: -0.05em;
+    color: var(--lp-navy);
+}
+
+.lp-booth__title span {
+    color: var(--lp-orange);
+}
+
+.lp-booth__intro {
+    color: var(--lp-soft);
+    font-size: 15px;
+    line-height: 1.62;
+    margin: 14px 0 0;
+    max-width: 64ch;
+}
+
+.lp-booth__law {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--lp-line);
+    display: grid;
+    grid-template-columns: 104px 1fr;
+    gap: 18px;
+    color: var(--lp-navy);
+    font-weight: 700;
+}
+
+.lp-booth__law-kicker {
+    color: var(--lp-muted);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.lp-booth__law p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.lp-booth__layout {
+    display: grid;
+    grid-template-columns: 240px minmax(520px, 1fr) 300px;
+    gap: 28px;
+    align-items: stretch;
+}
+
+/* ─── Cue strip (left rail) ────────────────────────────────────────────── */
+
+.lp-booth__strip {
+    display: grid;
+    align-content: start;
+    gap: 18px;
+    border-left: 1px solid var(--lp-line);
+    padding-left: 20px;
+}
+
+.lp-cue {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 0 0 14px;
+    border: 0;
+    border-bottom: 1px solid var(--lp-line2);
+    background: transparent;
+    color: var(--lp-cue-color, var(--lp-muted));
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.lp-cue__bulb {
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    margin-top: 4px;
+    background: #fff;
+    transition: 0.18s ease;
+}
+
+.lp-cue.is-done .lp-cue__bulb {
+    background: currentColor;
+}
+
+.lp-cue.is-active .lp-cue__bulb,
+.lp-cue:hover .lp-cue__bulb {
+    box-shadow: 0 0 0 9px rgba(255, 255, 255, 0.9), 0 0 32px currentColor;
+}
+
+.lp-cue__body {
+    display: grid;
+    gap: 5px;
+}
+
+.lp-cue__label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+}
+
+.lp-cue__name {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--lp-soft);
+    font-weight: 500;
+}
+
+.lp-cue.is-active .lp-cue__name {
+    color: var(--lp-navy);
+}
+
+.lp-cue__copy {
+    color: var(--lp-soft);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+/* ─── Stage (dark center) ──────────────────────────────────────────────── */
+
+.lp-stage {
+    position: relative;
+    overflow: hidden;
+    min-height: 540px;
+    border-radius: 40px;
+    color: #fff;
+    background: radial-gradient(
+            circle at 50% 70%,
+            rgba(237, 111, 30, 0.26),
+            transparent 18%
+        ),
+        radial-gradient(
+            circle at 50% 22%,
+            rgba(47, 114, 232, 0.18),
+            transparent 34%
+        ),
+        linear-gradient(180deg, #101a34 0, #081126 100%);
+    box-shadow: 0 32px 78px rgba(8, 26, 65, 0.22);
+    padding: 32px 38px;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 22px;
+}
+
+.lp-stage:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(
+        ellipse at top,
+        rgba(255, 255, 255, 0.22),
+        rgba(255, 255, 255, 0.05) 42%,
+        transparent 70%
+    );
+    clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
+    pointer-events: none;
+}
+
+.lp-stage__script {
+    position: relative;
+    z-index: 1;
+    max-width: 660px;
+    margin: 28px auto 0;
+    text-align: center;
+}
+
+.lp-stage__scene {
+    margin: 0 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 11px;
+    color: #9eb7e5;
+    font-weight: 800;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.lp-stage__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(40px, 4.2vw, 70px);
+    line-height: 0.92;
+    letter-spacing: -0.06em;
+    color: #fff;
+}
+
+.lp-stage__title span {
+    color: var(--lp-orange);
+}
+
+.lp-stage__line {
+    color: #b9c7df;
+    margin: 18px auto 0;
+    max-width: 540px;
+    line-height: 1.55;
+    font-size: 15.5px;
+}
+
+.lp-stage__console {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 22px;
+    padding-top: 18px;
+}
+
+.lp-stage__console > div {
+    color: #9eb7e5;
+}
+
+.lp-stage__console-label {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.lp-stage__console strong {
+    display: block;
+    margin-top: 6px;
+    color: #fff;
+    text-transform: none;
+    letter-spacing: -0.025em;
+    font-size: 16px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+/* ─── Booth read (right aside) ─────────────────────────────────────────── */
+
+.lp-read {
+    border: 1px solid var(--lp-line2);
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 14px 40px rgba(8, 26, 65, 0.06);
+    padding: 22px 24px;
+    display: grid;
+    gap: 14px;
+    align-content: start;
+}
+
+.lp-read__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+}
+
+.lp-read__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--lp-navy);
+}
+
+.lp-read__copy {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.lp-read__meter {
+    height: 6px;
+    width: 100%;
+    border-radius: 999px;
+    background: rgba(8, 26, 65, 0.08);
+    margin: 12px 0 6px;
+    position: relative;
+    overflow: visible;
+}
+
+.lp-read__meter:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--lp-score-pos, 58%);
+    border-radius: 999px;
+    background: var(--lp-green);
+}
+
+.lp-read__meter:after {
+    content: "";
+    position: absolute;
+    left: var(--lp-score-pos, 58%);
+    top: -7px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid var(--lp-green);
+    box-shadow: 0 10px 20px rgba(8, 26, 65, 0.15);
+    transform: translateX(-50%);
+}
+
+.lp-read__rule {
+    border-top: 1px solid var(--lp-line2);
+    padding-top: 12px;
+    display: grid;
+    gap: 4px;
+}
+
+.lp-read__rule-kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+}
+
+.lp-read__rule strong {
+    color: var(--lp-navy);
+    font-size: 16.5px;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+}
+
+.lp-read__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.lp-handoff {
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 9px 14px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 800;
+    text-decoration: none;
+    color: var(--lp-blue);
+    background: rgba(255, 255, 255, 0.86);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+.lp-handoff:hover {
+    background: var(--lp-blue);
+    color: #fff;
+}
+
+.lp-handoff--primary {
+    color: #fff;
+    background: var(--lp-orange);
+    border-color: var(--lp-orange);
+    box-shadow: 0 14px 30px rgba(237, 111, 30, 0.22);
+}
+
+.lp-handoff--primary:hover {
+    background: #d35e10;
+    border-color: #d35e10;
+    color: #fff;
+}
+
+/* ─── Method sheets ─────────────────────────────────────────────────────── */
+
+/* ─── Cue ledger ────────────────────────────────────────────────────────── */
+
+.lp-ledger {
+    display: grid;
+    grid-template-columns: minmax(520px, 1fr) minmax(360px, 520px);
+    gap: 22px;
+    align-items: start;
+}
+
+.lp-ledger__form-wrap,
+.lp-ledger__activity {
+    border: 1px solid var(--lp-line2);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 48px rgba(8, 26, 65, 0.08);
+    padding: 24px 26px;
+}
+
+.lp-ledger__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-orange);
+}
+
+.lp-ledger__title {
+    font-family: "DM Serif Display", serif;
+    margin: 0 0 8px;
+    font-size: clamp(22px, 2vw, 30px);
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+    color: var(--lp-navy);
+}
+
+.lp-ledger__copy {
+    margin: 0 0 16px;
+    color: var(--lp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.lp-ledger__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 180px auto;
+    gap: 12px;
+    align-items: end;
+    margin-top: 12px;
+}
+
+.lp-ledger__field {
+    display: block;
+}
+
+.lp-ledger__field-label {
+    display: block;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+    margin-bottom: 7px;
+}
+
+.lp-ledger__input,
+.lp-ledger__select {
+    width: 100%;
+    border: 1px solid rgba(8, 26, 65, 0.14);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--lp-navy);
+    font: 600 13px "Public Sans", sans-serif;
+    padding: 11px 14px;
+    outline: none;
+}
+
+.lp-ledger__input:focus,
+.lp-ledger__select:focus {
+    border-color: var(--lp-blue);
+    box-shadow: 0 0 0 4px rgba(47, 114, 232, 0.09);
+}
+
+.lp-ledger__submit {
+    border: 1px solid var(--lp-orange);
+    border-radius: 999px;
+    background: var(--lp-orange);
+    color: #fff;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding: 11px 16px;
+    cursor: pointer;
+    box-shadow: 0 16px 34px rgba(237, 111, 30, 0.22);
+    white-space: nowrap;
+}
+
+.lp-ledger__submit[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.lp-ledger__empty {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.lp-ledger__empty code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    background: rgba(8, 26, 65, 0.05);
+    padding: 1px 6px;
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+.lp-ledger__stats {
+    margin: 0;
+    color: var(--lp-ink);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+/* ─── Stats grid ────────────────────────────────────────────────────────── */
+
+.lp-stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--lp-line2);
+    background: var(--lp-line2);
+    margin-bottom: 16px;
+}
+
+.lp-stat {
+    background: rgba(255, 255, 255, 0.92);
+    padding: 14px 12px;
+}
+
+.lp-stat__value {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    color: var(--lp-navy);
+}
+
+.lp-stat__value--green {
+    color: var(--lp-green);
+}
+
+.lp-stat__value--gold {
+    color: var(--lp-orange);
+}
+
+.lp-stat__label {
+    margin: 7px 0 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 9.5px;
+    color: var(--lp-muted);
+    font-weight: 800;
+}
+
+/* ─── Activity log table ────────────────────────────────────────────────── */
+
+.lp-log-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--lp-line2);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.lp-log-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+}
+
+.lp-log-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 800;
+    color: var(--lp-muted);
+    border-bottom: 1px solid var(--lp-line);
+}
+
+.lp-log-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--lp-line2);
+    color: var(--lp-ink);
+    vertical-align: top;
+}
+
+.lp-log-table td strong {
+    display: block;
+    color: var(--lp-navy);
+    font-weight: 700;
+}
+
+.lp-log-table td small {
+    display: block;
+    margin-top: 3px;
+    color: var(--lp-soft);
+    font-size: 11.5px;
+    line-height: 1.4;
+}
+
+.lp-outcome-select {
+    width: 100%;
+    border: 1px solid rgba(8, 26, 65, 0.12);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--lp-navy);
+    padding: 7px 10px;
+    font: 700 11px "Public Sans", sans-serif;
+}
+
+/* ─── Method sheets ─────────────────────────────────────────────────────── */
+
+.lp-method {
+    border: 1px solid var(--lp-line2);
+    border-radius: 36px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 48px rgba(8, 26, 65, 0.08);
+    padding: 28px 32px;
+}
+
+.lp-method__head {
+    border-bottom: 1px solid var(--lp-line);
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.lp-method__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-orange);
+}
+
+.lp-method__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(22px, 2vw, 32px);
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+    color: var(--lp-navy);
+}
+
+.lp-method__copy {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+    max-width: 36ch;
+}
+
+.lp-method__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.lp-sheet {
+    position: relative;
+    border: 1px solid var(--lp-line2);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.94);
+    padding: 18px 20px;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+}
+
+.lp-sheet__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--lp-muted);
+}
+
+.lp-sheet__heading {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--lp-navy);
+}
+
+.lp-sheet__small {
+    margin: 0;
+    color: var(--lp-soft);
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.lp-sheet__body {
+    margin: 8px 0 4px;
+    padding-top: 10px;
+    border-top: 1px solid var(--lp-line2);
+    color: var(--lp-ink);
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+}
+
+.lp-sheet__body em {
+    color: var(--lp-orange);
+    font-style: normal;
+    font-weight: 800;
+}
+
+.lp-sheet__copy {
+    align-self: flex-start;
+    border: 1px solid rgba(47, 114, 232, 0.24);
+    border-radius: 999px;
+    background: rgba(47, 114, 232, 0.06);
+    color: var(--lp-blue);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.lp-sheet__copy:hover {
+    background: var(--lp-blue);
+    color: #fff;
+}
+
+.lp-sheet__toast {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    background: #101827;
+    color: #fff;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+@media (max-width: 1240px) {
+    .lp-booth__layout {
+        grid-template-columns: 1fr;
+    }
+    .lp-stage {
+        min-height: auto;
+    }
+    .lp-method__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1180px) {
+    .lp-ledger {
+        grid-template-columns: 1fr;
+    }
+    .lp-ledger__form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .lp-shell {
+        padding: 22px 18px 64px;
+    }
+    .lp-booth,
+    .lp-method {
+        border-radius: 24px;
+        padding: 22px 20px;
+    }
+    .lp-stage__console {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .lp-method__grid {
+        grid-template-columns: 1fr;
+    }
+}
