@@ -266,6 +266,29 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 9 Wave 1 — /call-planner/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/call-planner/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".cp-topbar__kicker")).toContainText(
+            "CALLS FAMILY"
+        );
+        await expect(page.locator(".cp-witness")).toBeAttached();
+        await expect(page.locator(".cp-spine")).toBeAttached();
+        await expect(page.locator(".cp-quality")).toBeAttached();
+        await expect(page.locator(".cp-handoff")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
