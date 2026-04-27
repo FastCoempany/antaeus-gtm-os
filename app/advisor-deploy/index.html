@@ -39,6 +39,51 @@
     <aside class="app-sidebar">
         <script src="/js/analytics-site-config.js"></script>
         <script src="/js/analytics.js"></script>
+        <!--
+            Wave 6 — flag-based cutover to /advisor-deploy/ Preact rebuild.
+            When the Posthog feature flag `room_advisor_deploy_v2` is ON
+            for the current user, redirect to the new room. Otherwise the
+            legacy room renders normally.
+
+            Skip-redirect escape hatch: ?demo=1 or ?qa=1 keeps the
+            legacy room loading. Used by the CI Playwright smoke tests
+            + the demo-seed bootstrap path.
+
+            Uses the post-PR-#24 event-listener pattern:
+              1. Fast path: maybeRedirect runs immediately for warm-cache
+                 visits where Posthog SDK is already loaded.
+              2. Cold path: listens for the gtmos:posthog-ready event
+                 dispatched by js/analytics.js after the Posthog SDK
+                 script's onload + posthog.init runs.
+
+            Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
+        -->
+        <script>
+            (function () {
+                var qs = window.location.search || "";
+                if (qs.indexOf("demo=1") !== -1 || qs.indexOf("qa=1") !== -1) {
+                    return;
+                }
+                function maybeRedirect() {
+                    if (typeof posthog === "undefined" || !posthog.onFeatureFlags) {
+                        return false;
+                    }
+                    posthog.onFeatureFlags(function () {
+                        if (posthog.isFeatureEnabled("room_advisor_deploy_v2")) {
+                            var hash = window.location.hash || "";
+                            window.location.replace("/advisor-deploy/" + qs + hash);
+                        }
+                    });
+                    return true;
+                }
+                if (maybeRedirect()) return;
+                window.addEventListener(
+                    "gtmos:posthog-ready",
+                    maybeRedirect,
+                    { once: true }
+                );
+            })();
+        </script>
         <script src="/js/data-manager.js"></script>
         <script src="/js/demo-storage-bootstrap.js"></script>
         <script src="/js/workspace-guard.js"></script>
