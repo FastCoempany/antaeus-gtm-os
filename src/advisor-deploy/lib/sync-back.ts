@@ -63,18 +63,24 @@ function entryFromDeployment(dep: Deployment): DealAdvisorEntry {
 function nextStepFor(
     outcome: DeploymentOutcome,
     currentNextStep: string,
+    currentNextStepDate: string | null,
     now: number
 ): {
     readonly nextStep: string;
     readonly nextStepDate: string;
 } | null {
     if (outcome === "pending") {
-        // Only fill nextStep when it is currently empty (legacy line 500).
+        // PR #26 Codex P1 fix: legacy lines 500-501 fill BOTH nextStep
+        // and nextStepDate only when each is currently empty
+        // (`deal.nextStep = deal.nextStep || ...; deal.nextStepDate =
+        // deal.nextStepDate || addDaysIso(3)`). The previous version
+        // overwrote nextStepDate unconditionally, which silently
+        // corrupted any planned deadline. Preserve both when set.
         return {
             nextStep:
                 currentNextStep ||
                 "Send advisor ask and book the follow-up thread",
-            nextStepDate: addDaysIso(now, 3)
+            nextStepDate: currentNextStepDate || addDaysIso(now, 3)
         };
     }
     if (outcome === "engaged" || outcome === "successful") {
@@ -142,6 +148,9 @@ export function syncDeploymentToDeal(
         const update = nextStepFor(
             dep.outcome,
             String(deal["nextStep"] ?? ""),
+            typeof deal["nextStepDate"] === "string"
+                ? (deal["nextStepDate"] as string)
+                : null,
             now
         );
         if (update) {

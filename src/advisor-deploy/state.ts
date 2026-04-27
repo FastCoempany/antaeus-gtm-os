@@ -117,7 +117,17 @@ export function patchDesk(part: Partial<DeskState>): void {
 }
 
 export function setDealId(id: string): void {
-    patchDesk({ dealId: id });
+    // PR #26 Codex P1 fix: clear customAsk when the active deal
+    // changes. buildAsk prefers customAsk over the generated line
+    // when present; without this clear, an edited ask for Deal A
+    // would persist into Deal B and logDeployment would freeze it
+    // with the wrong account name. Only clear when the id actually
+    // changes — same-id no-ops keep the operator's edits.
+    if (desk.value.dealId !== id) {
+        patchDesk({ dealId: id, customAsk: "" });
+    } else {
+        patchDesk({ dealId: id });
+    }
 }
 
 export function setAdvisorId(id: string): void {

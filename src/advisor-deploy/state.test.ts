@@ -203,6 +203,24 @@ describe("desk routing", () => {
         });
     });
 
+    it("setDealId clears customAsk when dealId changes (PR #26 Codex P1 fix)", () => {
+        // An edited ask referencing Deal A would otherwise persist
+        // after switching to Deal B, and logDeployment would freeze
+        // it with the wrong account name.
+        setDealId("deal-1");
+        setCustomAsk("Hi Sarah, ask about Acme...");
+        setDealId("deal-2");
+        expect(desk.value.customAsk).toBe("");
+        expect(desk.value.dealId).toBe("deal-2");
+    });
+
+    it("setDealId preserves customAsk when dealId is the same", () => {
+        setDealId("deal-1");
+        setCustomAsk("My edited ask");
+        setDealId("deal-1");
+        expect(desk.value.customAsk).toBe("My edited ask");
+    });
+
     it("resetDesk restores EMPTY_DESK_STATE", () => {
         patchDesk({ dealId: "x", momentId: "renewal" });
         resetDesk();
