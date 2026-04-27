@@ -1,0 +1,298 @@
+/*
+ * ICP Studio — Phase 4 / Room 11 styles.
+ *
+ * Per Part II §4.8 the room is a Decision Bench hybrid: dark hero
+ * (carrying the strategic thesis) above a bright work area where the
+ * actual decision gets shaped. Wave 1 ships the shell + dark hero +
+ * skeleton work area + analytics placeholder. Wave 3 fills the live
+ * form + build outputs + quality readout.
+ */
+
+:root {
+    --icp-navy: #0a1c40;
+    --icp-ink: #142f5e;
+    --icp-soft: #647da0;
+    --icp-muted: #91a4c2;
+    --icp-line: rgba(10, 28, 64, 0.13);
+    --icp-line2: rgba(10, 28, 64, 0.08);
+    --icp-orange: #e6701e;
+    --icp-blue: #2471e7;
+    --icp-green: #287c52;
+    --icp-red: #c94a43;
+    --icp-shadow: 0 18px 44px rgba(10, 28, 64, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--icp-navy);
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(230, 112, 30, 0.06),
+            transparent 26%
+        ),
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(36, 113, 231, 0.06),
+            transparent 24%
+        ),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fc 100%);
+    min-height: 100vh;
+}
+
+.icp-shell {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 24px clamp(20px, 3vw, 48px) 80px;
+    display: grid;
+    gap: 22px;
+}
+
+/* ─── Dark hero (Decision Bench hybrid — Part II §4.8) ─────────────── */
+
+.icp-hero {
+    border-radius: 36px;
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(36, 113, 231, 0.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 100% 100%,
+            rgba(230, 112, 30, 0.16),
+            transparent 30%
+        ),
+        linear-gradient(180deg, #0a1c40 0, #0f2552 100%);
+    color: #fffdfa;
+    padding: clamp(32px, 4vw, 56px);
+    box-shadow: 0 32px 80px rgba(10, 28, 64, 0.18);
+    position: relative;
+    overflow: hidden;
+}
+
+.icp-hero:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 42px 42px;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.icp-hero__inner {
+    position: relative;
+    z-index: 1;
+}
+
+.icp-hero__kicker {
+    margin: 0 0 16px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--icp-orange);
+}
+
+.icp-hero__title {
+    margin: 0;
+    font-family: "DM Serif Display", "Outfit", serif;
+    font-size: clamp(40px, 4.4vw, 76px);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    color: #fffdfa;
+    max-width: 18ch;
+}
+
+.icp-hero__title span {
+    color: var(--icp-orange);
+}
+
+.icp-hero__note {
+    margin: 24px 0 0;
+    color: #b9c7df;
+    line-height: 1.6;
+    max-width: 60ch;
+    font-size: 16px;
+}
+
+.icp-hero__meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 26px;
+}
+
+.icp-hero__badge {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #c7d7ed;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* ─── Work area (bright per Part II §4.8) ──────────────────────────── */
+
+.icp-work {
+    border: 1px solid var(--icp-line2);
+    border-radius: 36px;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(248, 251, 255, 0.94) 100%
+    );
+    box-shadow: var(--icp-shadow);
+    padding: 28px clamp(24px, 3vw, 36px);
+    position: relative;
+    overflow: hidden;
+}
+
+.icp-work:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(rgba(10, 28, 64, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10, 28, 64, 0.03) 1px, transparent 1px);
+    background-size: 42px 42px;
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.icp-work > * {
+    position: relative;
+    z-index: 1;
+}
+
+.icp-work__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--icp-orange);
+}
+
+.icp-work__title {
+    margin: 0 0 18px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(24px, 2.4vw, 36px);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    color: var(--icp-navy);
+    max-width: 50ch;
+}
+
+.icp-work__placeholder {
+    margin: 0;
+    padding: 30px 24px;
+    border: 1px dashed rgba(10, 28, 64, 0.16);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.55);
+    color: var(--icp-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* ─── Analytics panel ──────────────────────────────────────────────── */
+
+.icp-analytics {
+    border: 1px solid var(--icp-line2);
+    border-radius: 36px;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(248, 251, 255, 0.94) 100%
+    );
+    box-shadow: var(--icp-shadow);
+    padding: 24px clamp(24px, 3vw, 32px);
+}
+
+.icp-analytics__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--icp-orange);
+}
+
+.icp-analytics__title {
+    margin: 0 0 18px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(20px, 2vw, 28px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--icp-navy);
+    max-width: 56ch;
+}
+
+.icp-analytics__empty {
+    margin: 0;
+    color: var(--icp-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.icp-analytics__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.icp-analytics__row {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) auto;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--icp-line2);
+    align-items: baseline;
+}
+
+.icp-analytics__row strong {
+    color: var(--icp-navy);
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    letter-spacing: -0.035em;
+    font-weight: 800;
+}
+
+.icp-analytics__row small {
+    color: var(--icp-muted);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+}
+
+@media (max-width: 760px) {
+    .icp-shell {
+        padding: 20px 16px 56px;
+    }
+    .icp-hero,
+    .icp-work,
+    .icp-analytics {
+        border-radius: 24px;
+        padding: 22px 18px;
+    }
+}

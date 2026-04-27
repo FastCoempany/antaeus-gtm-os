@@ -205,6 +205,16 @@ export default defineConfig({
                 "advisor-deploy": resolve(
                     __dirname,
                     "src/advisor-deploy/index.html"
+                ),
+
+                // Phase 4 / Room 11 — ICP Studio Preact rebuild.
+                // Served at /icp-studio/. Behind Posthog feature flag
+                // `room_icp_studio_v2`; legacy
+                // `app/icp-studio/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "icp-studio": resolve(
+                    __dirname,
+                    "src/icp-studio/index.html"
                 )
             }
         }

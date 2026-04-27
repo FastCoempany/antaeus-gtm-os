@@ -310,6 +310,28 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 11 Wave 1 — /icp-studio/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/icp-studio/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".icp-hero__kicker")).toContainText(
+            "ICP STUDIO"
+        );
+        await expect(page.locator(".icp-hero")).toBeAttached();
+        await expect(page.locator(".icp-work")).toBeAttached();
+        await expect(page.locator(".icp-analytics")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
