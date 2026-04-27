@@ -1,8 +1,17 @@
 import { render } from "preact";
 import { CallPlanner } from "./CallPlanner";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { hydrateDraftFromSnapshot, startAgendaAutosave } from "./state";
+import {
+    hydrateDraftFromSnapshot,
+    setAccountOptions,
+    setContactName,
+    setDealOptions,
+    startAgendaAutosave
+} from "./state";
 import { loadAgendaSnapshot } from "./lib/persistence";
+import { loadAccountOptions } from "./lib/account-loader";
+import { loadDealOptions } from "./lib/deal-loader";
+import { readInboundAccount } from "./lib/handoff";
 
 /**
  * Entry point for the Call Planner Preact rebuild
@@ -44,8 +53,21 @@ if (!flagOn) {
     );
 }
 
+// Seed cross-room context: Signal Console accounts (drives matched
+// account + dossier) + Deal Workspace deals (drives the linked-deal
+// dropdown). Both readers are defensive — null storage / missing key
+// → empty list.
+setAccountOptions(loadAccountOptions());
+setDealOptions(loadDealOptions());
+
+// Restore the prior draft (so reload returns to the same plan), then
+// honor URL `?account=` inbound. Inbound wins over the restored
+// contact name so a fresh deep-link from another room takes priority.
 const prior = loadAgendaSnapshot();
 if (prior) hydrateDraftFromSnapshot(prior);
+const inbound = readInboundAccount();
+if (inbound) setContactName(inbound);
+
 startAgendaAutosave();
 
 render(<CallPlanner />, root);

@@ -547,6 +547,73 @@ body {
     font-weight: 800;
 }
 
+/* ─── Route buttons (cross-room) ───────────────────────────────────────── */
+
+.cp-routes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 4px 0 14px;
+}
+
+.cp-route {
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 11px 16px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.86);
+    color: var(--cp-blue);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+.cp-route:hover {
+    background: var(--cp-blue);
+    color: #fff;
+}
+
+.cp-route--primary {
+    color: #fff;
+    background: var(--cp-orange);
+    border-color: var(--cp-orange);
+    box-shadow: 0 16px 34px rgba(237, 111, 30, 0.22);
+}
+
+.cp-route--primary:hover {
+    background: #d35e10;
+    border-color: #d35e10;
+}
+
+.cp-route--ghost {
+    color: var(--cp-soft);
+}
+
+.cp-route--ghost:hover {
+    background: var(--cp-soft);
+    color: #fff;
+}
+
+.cp-handoff__rule {
+    border: 0;
+    border-top: 1px solid var(--cp-line2);
+    margin: 12px 0 14px;
+}
+
+.cp-outcome-section__label {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cp-muted);
+}
+
 .cp-outcomes {
     display: flex;
     flex-wrap: wrap;
