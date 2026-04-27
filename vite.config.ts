@@ -195,6 +195,16 @@ export default defineConfig({
                 "call-planner": resolve(
                     __dirname,
                     "src/call-planner/index.html"
+                ),
+
+                // Phase 4 / Room 10 — Advisor Deploy Preact rebuild.
+                // Served at /advisor-deploy/. Behind Posthog feature flag
+                // `room_advisor_deploy_v2`; legacy
+                // `app/advisor-deploy/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "advisor-deploy": resolve(
+                    __dirname,
+                    "src/advisor-deploy/index.html"
                 )
             }
         }
