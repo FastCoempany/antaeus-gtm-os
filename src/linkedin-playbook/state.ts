@@ -1,5 +1,6 @@
 import {
     computed,
+    effect,
     signal,
     type ReadonlySignal,
     type Signal
@@ -14,8 +15,12 @@ import {
     type CueIndex,
     type Draft,
     type HottestAccount,
-    type LatestTouch
+    type LatestTouch,
+    type Outcome
 } from "./lib/types";
+import { findCue, resolveCueIndex } from "./lib/cues";
+import { deriveMotion } from "./lib/motion";
+import { saveActions } from "./lib/persistence";
 
 /**
  * Phase 4 / Room 8 — LinkedIn Playbook runtime state.
@@ -139,6 +144,102 @@ export function setLatestTouch(next: LatestTouch | null): void {
 
 export function resetDraft(): void {
     draft.value = EMPTY_DRAFT;
+}
+
+/**
+ * Log a cue from the current draft + active context. Freezes the
+ * motion + active cue into the entry so the activity board can show
+ * "what cue did I take" months later. Returns the new entry, or null
+ * when the form has neither account nor contact (legacy guard at
+ * line 115).
+ */
+export function logCue(now: number = Date.now()): ActionEntry | null {
+    const d = draft.value;
+    const account = d.accountName.trim();
+    const contact = d.contactName.trim();
+    if (!account && !contact) return null;
+
+    const ctx = {
+        icp: bestIcp.value,
+        hottestAccount: hottestAccount.value,
+        latestTouch: latestTouch.value,
+        stats: stats.value
+    };
+    const motion = deriveMotion(ctx);
+    const cueIdx = resolveCueIndex(activeCueIndex.value, motion.cueIndex);
+    const cue = findCue(cueIdx);
+
+    const entry: ActionEntry = {
+        id: `li_${now}_${Math.random().toString(36).slice(2, 8)}`,
+        accountName: account,
+        contactName: contact,
+        actionType: d.actionType,
+        temperature: "ice_cold",
+        content: "",
+        motionKey: motion.key,
+        motionLabel: motion.label,
+        cueLabel: cue.name,
+        whyNow: motion.whyNow,
+        recommendedNext: motion.nextMove,
+        outcome: null,
+        outcomeDate: null,
+        createdAt: new Date(now).toISOString()
+    };
+    appendAction(entry);
+    // Reset the form fields (account + contact) — keep the actionType
+    // selection so the operator can log a quick chain of similar cues.
+    draft.value = { ...EMPTY_DRAFT, actionType: d.actionType };
+    return entry;
+}
+
+/**
+ * Update the outcome on a logged action. Mirrors legacy `updateLiOutcome`
+ * (line 117). null clears outcome + outcomeDate; a valid Outcome stamps
+ * the current ISO timestamp. Returns the updated entry, or null when no
+ * row matches.
+ */
+export function updateOutcome(
+    id: string,
+    outcome: Outcome | null,
+    now: number = Date.now()
+): ActionEntry | null {
+    let updated: ActionEntry | null = null;
+    actions.value = actions.value.map((a) => {
+        if (a.id !== id) return a;
+        const next: ActionEntry = {
+            ...a,
+            outcome,
+            outcomeDate: outcome ? new Date(now).toISOString() : null
+        };
+        updated = next;
+        return next;
+    });
+    return updated;
+}
+
+let actionsPersistStop: (() => void) | null = null;
+
+/**
+ * Wire the side-effect that mirrors actions writes to localStorage.
+ * Skip first run to avoid a redundant boot-time write — same pattern as
+ * Phase 4 / Rooms 3-7.
+ */
+export function startActionsPersistence(): () => void {
+    if (actionsPersistStop) return actionsPersistStop;
+    let firstRun = true;
+    const dispose = effect(() => {
+        const next = actions.value;
+        if (firstRun) {
+            firstRun = false;
+            return;
+        }
+        saveActions(next);
+    });
+    actionsPersistStop = () => {
+        dispose();
+        actionsPersistStop = null;
+    };
+    return actionsPersistStop;
 }
 
 export function resetSession(): void {

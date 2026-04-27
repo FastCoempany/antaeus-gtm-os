@@ -1,6 +1,8 @@
 import { render } from "preact";
 import { LinkedinPlaybook } from "./LinkedinPlaybook";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { setActions, startActionsPersistence } from "./state";
+import { loadActions } from "./lib/persistence";
 
 /**
  * Entry point for the LinkedIn Playbook Preact rebuild
@@ -10,12 +12,14 @@ import { initObservability, isFeatureEnabled } from "@/lib/observability";
  * flag `room_linkedin_playbook_v2`. Wave 6 wires the legacy
  * `app/linkedin-playbook/index.html` flag-redirect.
  *
- * Boot order (Wave 1):
+ * Boot order:
  *   1. initObservability — Sentry + Posthog
- *   2. render — Preact mounts
+ *   2. seed action log from `gtmos_linkedin_log`
+ *   3. start the actions persistence loop (mirrors writes back)
+ *   4. render — Preact mounts the live booth + ledger
  *
- * Subsequent waves seed the action log (Wave 4) + the inbound cross-
- * room context (Wave 5).
+ * Wave 5 adds the inbound cross-room context loaders + URL `?account=`
+ * pickup.
  *
  * Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
  */
@@ -36,5 +40,8 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+setActions(loadActions());
+startActionsPersistence();
 
 render(<LinkedinPlaybook />, root);

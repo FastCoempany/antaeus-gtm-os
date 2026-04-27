@@ -11,6 +11,7 @@ import {
     draft,
     hottestAccount,
     latestTouch,
+    logCue,
     patchDraft,
     resetDraft,
     resetSession,
@@ -20,7 +21,8 @@ import {
     setDraftActionType,
     setHottestAccount,
     setLatestTouch,
-    stats
+    stats,
+    updateOutcome
 } from "./state";
 import { EMPTY_DRAFT, type ActionEntry } from "./lib/types";
 
@@ -239,5 +241,102 @@ describe("stats computed", () => {
         ]);
         expect(stats.value.connections).toBe(1);
         expect(stats.value.byAccount).toEqual({});
+    });
+});
+
+describe("logCue + updateOutcome", () => {
+    beforeEach(() => {
+        resetSession();
+        if (typeof localStorage !== "undefined") localStorage.clear();
+    });
+
+    it("returns null when account + contact are both blank (legacy guard)", () => {
+        expect(logCue()).toBeNull();
+        expect(actions.value).toHaveLength(0);
+    });
+
+    it("logs an entry when only account is set", () => {
+        patchDraft({ accountName: "Acme" });
+        const entry = logCue();
+        expect(entry).not.toBeNull();
+        expect(entry?.accountName).toBe("Acme");
+        expect(entry?.contactName).toBe("");
+        expect(actions.value).toHaveLength(1);
+    });
+
+    it("logs an entry when only contact is set", () => {
+        patchDraft({ contactName: "Sarah" });
+        const entry = logCue();
+        expect(entry).not.toBeNull();
+        expect(entry?.contactName).toBe("Sarah");
+    });
+
+    it("freezes the active cue label + motion fields into the entry", () => {
+        __setHottestAccountForTests({ name: "Acme", heat: 80 });
+        patchDraft({ accountName: "Acme", contactName: "Sarah" });
+        const entry = logCue();
+        // Default motion derived from hottest=Acme, no prior actions
+        // → warm_signal_account, cueIndex 1 → Cue 02 "Comment with one
+        // operating read".
+        expect(entry?.motionKey).toBe("warm_signal_account");
+        expect(entry?.cueLabel).toContain("Comment");
+    });
+
+    it("respects a pinned active cue when freezing the entry", () => {
+        patchDraft({ accountName: "Acme", contactName: "Sarah" });
+        // Pin cue 4 (Ask)
+        setActiveCue(4);
+        const entry = logCue();
+        expect(entry?.cueLabel).toContain("Ask");
+    });
+
+    it("clears account + contact draft fields after logCue (preserves actionType)", () => {
+        patchDraft({
+            accountName: "Acme",
+            contactName: "Sarah",
+            actionType: "dm"
+        });
+        logCue();
+        expect(draft.value.accountName).toBe("");
+        expect(draft.value.contactName).toBe("");
+        expect(draft.value.actionType).toBe("dm");
+    });
+
+    it("trims whitespace from account + contact before storing", () => {
+        patchDraft({
+            accountName: "  Acme  ",
+            contactName: "  Sarah  "
+        });
+        const entry = logCue();
+        expect(entry?.accountName).toBe("Acme");
+        expect(entry?.contactName).toBe("Sarah");
+    });
+
+    it("updateOutcome sets outcome + outcomeDate on the matching id", () => {
+        __setActionsForTests([
+            makeAction({ id: "a", outcome: null }),
+            makeAction({ id: "b", outcome: null })
+        ]);
+        updateOutcome("a", "accepted");
+        expect(actions.value[0]?.outcome).toBe("accepted");
+        expect(actions.value[0]?.outcomeDate).toBeTruthy();
+        expect(actions.value[1]?.outcome).toBeNull();
+    });
+
+    it("updateOutcome with null clears outcome + outcomeDate", () => {
+        __setActionsForTests([
+            makeAction({
+                id: "a",
+                outcome: "accepted",
+                outcomeDate: "2026-04-27T00:00:00Z"
+            })
+        ]);
+        updateOutcome("a", null);
+        expect(actions.value[0]?.outcome).toBeNull();
+        expect(actions.value[0]?.outcomeDate).toBeNull();
+    });
+
+    it("updateOutcome returns null when no row matches", () => {
+        expect(updateOutcome("missing", "accepted")).toBeNull();
     });
 });

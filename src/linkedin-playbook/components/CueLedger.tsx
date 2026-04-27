@@ -1,18 +1,94 @@
 import type { JSX } from "preact";
-import { actions, draft, patchDraft, stats } from "../state";
-import { ACTION_TYPES, ACTION_LABELS, type ActionType } from "../lib/types";
+import {
+    actions,
+    draft,
+    logCue,
+    patchDraft,
+    stats,
+    updateOutcome
+} from "../state";
+import {
+    ACTION_LABELS,
+    ACTION_TYPES,
+    OUTCOMES,
+    OUTCOME_LABELS,
+    type ActionType,
+    type Outcome
+} from "../lib/types";
 
 /**
- * CueLedger — Wave 1 placeholder.
+ * CueLedger — Wave 4 implementation.
  *
- * Wave 4 wires the form submit handler into `logCue(action)` and
- * persists to `gtmos_linkedin_log`. Wave 1 surfaces the form shape +
- * the activity board placeholder so the page lays out.
+ * Renders the ledger form (account / contact / cue type → submit) on the
+ * left + the activity board (5-stat bar + most-recent activity table)
+ * on the right. The form binds to `draft` via patchDraft; submitting
+ * calls `logCue()` which freezes the active motion + cue into the entry
+ * and persists via the side-effect wired in main.tsx. Outcome dropdown
+ * on each row drives `updateOutcome()` for live accept/reply rate
+ * recompute.
  */
+
+const STAT_PRIMARY: ReadonlyArray<{
+    readonly key: keyof StatsView;
+    readonly label: string;
+    readonly accent?: "green" | "gold";
+}> = [
+    { key: "total", label: "Actions" },
+    { key: "connections", label: "Requests" },
+    { key: "acceptRate", label: "Accept", accent: "green" },
+    { key: "dms", label: "DMs" },
+    { key: "replyRate", label: "Reply", accent: "gold" }
+];
+
+interface StatsView {
+    readonly total: number;
+    readonly connections: number;
+    readonly acceptRate: number;
+    readonly dms: number;
+    readonly replyRate: number;
+}
+
+function fmtDate(iso: string): string {
+    if (!iso) return "—";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "—";
+    return new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric"
+    }).format(d);
+}
+
+function StatPill({
+    value,
+    label,
+    accent
+}: {
+    readonly value: number | string;
+    readonly label: string;
+    readonly accent?: "green" | "gold";
+}): JSX.Element {
+    const accentClass = accent ? ` lp-stat__value--${accent}` : "";
+    return (
+        <div class="lp-stat">
+            <p class={`lp-stat__value${accentClass}`}>{value}</p>
+            <p class="lp-stat__label">{label}</p>
+        </div>
+    );
+}
+
 export function CueLedger(): JSX.Element {
     const d = draft.value;
     const s = stats.value;
-    const list = actions.value;
+    const list = actions.value.slice().reverse();
+    const view: StatsView = {
+        total: s.total,
+        connections: s.connections,
+        acceptRate: s.acceptRate,
+        dms: s.dms,
+        replyRate: s.replyRate
+    };
+    const hasContext = (d.accountName + d.contactName).trim().length > 0;
+
     return (
         <section class="lp-ledger" aria-label="Cue ledger and activity">
             <div class="lp-ledger__form-wrap">
@@ -29,7 +105,7 @@ export function CueLedger(): JSX.Element {
                     class="lp-ledger__form"
                     onSubmit={(e) => {
                         e.preventDefault();
-                        // Wave 4 wires logCue here.
+                        logCue();
                     }}
                 >
                     <label class="lp-ledger__field">
@@ -39,6 +115,7 @@ export function CueLedger(): JSX.Element {
                             class="lp-ledger__input"
                             placeholder="Company name"
                             value={d.accountName}
+                            autoComplete="off"
                             onInput={(e) =>
                                 patchDraft({
                                     accountName: (
@@ -55,6 +132,7 @@ export function CueLedger(): JSX.Element {
                             class="lp-ledger__input"
                             placeholder="Person name"
                             value={d.contactName}
+                            autoComplete="off"
                             onInput={(e) =>
                                 patchDraft({
                                     contactName: (
@@ -87,7 +165,7 @@ export function CueLedger(): JSX.Element {
                     <button
                         type="submit"
                         class="lp-ledger__submit"
-                        disabled
+                        disabled={!hasContext}
                     >
                         Log cue
                     </button>
@@ -95,18 +173,92 @@ export function CueLedger(): JSX.Element {
             </div>
             <div class="lp-ledger__activity">
                 <p class="lp-ledger__kicker">CHANNEL MEMORY</p>
+                <div class="lp-stats" aria-label="Channel stats">
+                    {STAT_PRIMARY.map((stat) => {
+                        const value = view[stat.key];
+                        const display =
+                            stat.key === "acceptRate" ||
+                            stat.key === "replyRate"
+                                ? `${value}%`
+                                : value;
+                        return (
+                            <StatPill
+                                key={stat.key}
+                                value={display}
+                                label={stat.label}
+                                {...(stat.accent
+                                    ? { accent: stat.accent }
+                                    : {})}
+                            />
+                        );
+                    })}
+                </div>
                 {list.length === 0 ? (
                     <p class="lp-ledger__empty">
-                        No LinkedIn cue activity logged yet. Wave 4 wires
-                        the activity table over{" "}
+                        No LinkedIn cue activity logged yet. Submit the
+                        form above to write to{" "}
                         <code>gtmos_linkedin_log</code>.
                     </p>
                 ) : (
-                    <p class="lp-ledger__stats" aria-label="Channel stats">
-                        {s.total} actions · {s.connections} requests ·{" "}
-                        {s.acceptRate}% accept · {s.dms} DMs ·{" "}
-                        {s.replyRate}% reply
-                    </p>
+                    <div class="lp-log-table-wrap">
+                        <table class="lp-log-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Account</th>
+                                    <th scope="col">Human</th>
+                                    <th scope="col">Cue</th>
+                                    <th scope="col">Outcome</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {list.slice(0, 10).map((a) => (
+                                    <tr key={a.id}>
+                                        <td>{fmtDate(a.createdAt)}</td>
+                                        <td>{a.accountName || "—"}</td>
+                                        <td>{a.contactName || "—"}</td>
+                                        <td>
+                                            <strong>
+                                                {a.cueLabel ||
+                                                    ACTION_LABELS[
+                                                        a.actionType
+                                                    ]}
+                                            </strong>
+                                            {a.recommendedNext ? (
+                                                <small>
+                                                    {a.recommendedNext}
+                                                </small>
+                                            ) : null}
+                                        </td>
+                                        <td>
+                                            <select
+                                                class="lp-outcome-select"
+                                                value={a.outcome ?? ""}
+                                                onChange={(e) => {
+                                                    const v = (
+                                                        e.currentTarget as HTMLSelectElement
+                                                    ).value;
+                                                    updateOutcome(
+                                                        a.id,
+                                                        v.length === 0
+                                                            ? null
+                                                            : (v as Outcome)
+                                                    );
+                                                }}
+                                            >
+                                                <option value="">—</option>
+                                                {OUTCOMES.map((o) => (
+                                                    <option key={o} value={o}>
+                                                        {OUTCOME_LABELS[o]}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
         </section>
