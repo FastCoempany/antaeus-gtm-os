@@ -137,3 +137,95 @@ button {
         grid-template-columns: 1fr;
     }
 }
+
+/* ─── Switchboard form ─────────────────────────────────────────────── */
+
+.ob-switchboard__header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ob-switchboard__form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.ob-switchboard__row {
+    grid-column: 1 / -1;
+}
+
+.ob-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ob-field__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+}
+
+.ob-field input,
+.ob-field select {
+    background: var(--ob-field);
+    border: 1px solid var(--ob-border);
+    color: var(--ob-ink);
+    padding: 8px 10px;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 14px;
+    width: 100%;
+}
+
+.ob-field input:focus,
+.ob-field select:focus {
+    outline: none;
+    border-color: var(--ob-accent-orange);
+    background: var(--ob-field-raised);
+}
+
+/* ─── No-ask toggle ────────────────────────────────────────────────── */
+
+.ob-noask {
+    width: 100%;
+    background: var(--ob-field);
+    border: 1px solid var(--ob-border-strong);
+    border-radius: 2px;
+    padding: 12px 14px;
+    text-align: left;
+    color: var(--ob-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: inherit;
+}
+
+.ob-noask:hover {
+    background: var(--ob-field-raised);
+}
+
+.ob-noask.is-active {
+    border-color: var(--ob-accent-orange);
+    background: rgba(255, 107, 28, 0.08);
+}
+
+.ob-noask__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ob-ink-70);
+}
+
+.ob-noask.is-active .ob-noask__label {
+    color: var(--ob-accent-orange);
+}
+
+.ob-noask__sub {
+    font-size: 13px;
+    color: var(--ob-ink);
+}
