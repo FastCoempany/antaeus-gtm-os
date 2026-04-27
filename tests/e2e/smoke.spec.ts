@@ -222,6 +222,28 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 7 Wave 1 — /cold-call-studio/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/cold-call-studio/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".cc-topbar__kicker")).toContainText(
+            "CALLS FAMILY"
+        );
+        await expect(page.locator(".cc-account-row")).toBeAttached();
+        await expect(page.locator(".cc-loom")).toBeAttached();
+        await expect(page.locator(".cc-memory")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
