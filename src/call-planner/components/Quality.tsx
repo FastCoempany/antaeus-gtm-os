@@ -1,25 +1,55 @@
 import type { JSX } from "preact";
+import { draft, linkedDeal, matchedAccount } from "../state";
+import { evaluateQuality } from "../lib/quality";
 
 /**
- * Quality — Wave 1 placeholder for the 5-gate breakdown.
+ * Quality — Wave 3 implementation.
  *
- * Wave 2 ports the legacy `getAgendaQuality()` that scores against
- * 5 weighted gates (Real person 20 + Persona 10 + Account context 20
- * + Why-now 25 + Advancement linked 25, +5 bonus if heat ≥ 85). Wave
- * 3 will render the gate-list + score band + next-move copy here.
+ * Renders the 5-gate breakdown + score band + nextMove copy. The
+ * quality projection is recomputed every render off the live draft +
+ * matchedAccount + linkedDeal state.
  */
 export function Quality(): JSX.Element {
+    const q = evaluateQuality({
+        draft: draft.value,
+        matchedAccount: matchedAccount.value,
+        linkedDeal: linkedDeal.value
+    });
+
     return (
         <section class="cp-quality" aria-label="Agenda quality">
-            <p class="cp-quality__kicker">QUALITY</p>
-            <h2 class="cp-quality__title">
-                Each gate must hold before the meeting.
-            </h2>
-            <p class="cp-quality__placeholder">
-                Wave 2 wires the 5-gate scoring + Wave 3 renders the
-                gate list + band pill (credible / workable / thin) + next
-                move copy.
+            <header class="cp-quality__head">
+                <div>
+                    <p class="cp-quality__kicker">QUALITY</p>
+                    <h2 class="cp-quality__title">
+                        Each gate must hold before the meeting.
+                    </h2>
+                </div>
+                <div class="cp-quality__band-wrap" aria-label="Score band">
+                    <span class={`cp-quality__band cp-quality__band--${q.band}`}>
+                        {q.bandLabel} · {q.score}/100
+                    </span>
+                </div>
+            </header>
+            <p class="cp-quality__next">
+                <strong>Next move:</strong> {q.nextMove}
             </p>
+            <ul class="cp-quality__gates">
+                {q.gates.map((g) => (
+                    <li
+                        key={g.key}
+                        class={`cp-gate-row${g.met ? " is-met" : " is-miss"}`}
+                    >
+                        <div class="cp-gate-row__body">
+                            <p class="cp-gate-row__label">{g.label}</p>
+                            <p class="cp-gate-row__copy">{g.copy}</p>
+                        </div>
+                        <span class="cp-gate-row__state">
+                            {g.met ? "Met" : "Missing"}
+                        </span>
+                    </li>
+                ))}
+            </ul>
         </section>
     );
 }
