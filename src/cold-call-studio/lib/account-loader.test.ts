@@ -79,6 +79,27 @@ describe("loadAccountOptions", () => {
         expect(out[0]?.heat).toBe(70);
     });
 
+    it("respects an explicit `heat: 0` even when `_heat` is also present", () => {
+        // PR #21 Codex P2 regression — `heat || _heat` treats 0 as falsy and
+        // silently falls through to a stale `_heat`, mis-ranking accounts.
+        // Fix: presence-check `heat` so the new payload always wins.
+        const s = new MemStorage();
+        s.seed(
+            "gtmos_sc_v4",
+            JSON.stringify({
+                accounts: [
+                    { id: "1", name: "ColdAccount", heat: 0, _heat: 80 },
+                    { id: "2", name: "WarmAccount", heat: 50 }
+                ]
+            })
+        );
+        const out = loadAccountOptions(s);
+        const cold = out.find((a) => a.name === "ColdAccount");
+        expect(cold?.heat).toBe(0);
+        // ranking: WarmAccount (50) before ColdAccount (0)
+        expect(out.map((a) => a.name)).toEqual(["WarmAccount", "ColdAccount"]);
+    });
+
     it("drops rows missing id or name", () => {
         const s = new MemStorage();
         s.seed(

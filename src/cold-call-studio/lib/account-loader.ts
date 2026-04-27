@@ -69,8 +69,11 @@ export function loadAccountOptions(
             const name = asString(o["name"]);
             if (!id || !name) continue;
             // Heat may be stored as `heat` (Phase 4 / Room 3) or `_heat`
-            // (legacy Signal Console). Read both, prefer `heat`.
-            const heat = asNumber(o["heat"]) || asNumber(o["_heat"]);
+            // (legacy Signal Console). Prefer `heat` whenever it is *present*
+            // (including an explicit zero) so the new payload always wins
+            // over a stale legacy `_heat` in mixed-payload rows.
+            const heat =
+                "heat" in o ? asNumber(o["heat"]) : asNumber(o["_heat"]);
             const topSignal = topSignalHeadline(o);
             out.push({ id, name, heat, topSignal });
         }
