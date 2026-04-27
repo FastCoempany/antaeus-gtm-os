@@ -3,6 +3,10 @@ import {
     activeReply,
     activeThread,
     callStats,
+    companyName,
+    draft,
+    logCall,
+    patchDraft,
     selectedAccount,
     setActiveReply,
     setActiveThread
@@ -18,7 +22,13 @@ import {
     personalize,
     weakestThreadCopy
 } from "../lib/personalize";
-import type { Thread, ThreadId } from "../lib/types";
+import {
+    OUTCOMES,
+    OUTCOME_LABELS,
+    type Outcome,
+    type Thread,
+    type ThreadId
+} from "../lib/types";
 
 /**
  * TalkLoom — Wave 3 implementation.
@@ -83,8 +93,9 @@ export function TalkLoom(): JSX.Element {
     const ctx = {
         accountName: account?.name ?? "",
         topSignal: account?.topSignal ?? "",
-        companyName: ""
+        companyName: companyName.value
     };
+    const d = draft.value;
 
     const score = loomScore({
         hasAccount,
@@ -214,6 +225,45 @@ export function TalkLoom(): JSX.Element {
                             Choose the buyer response that just happened.
                         </p>
                     )}
+
+                    <label class="cc-notes">
+                        <span class="cc-notes__label">
+                            What actually happened
+                        </span>
+                        <textarea
+                            class="cc-notes__field"
+                            placeholder="Capture the real objection, signal, or next move."
+                            value={d.notes}
+                            onInput={(e) =>
+                                patchDraft({
+                                    notes: (
+                                        e.currentTarget as HTMLTextAreaElement
+                                    ).value
+                                })
+                            }
+                        />
+                    </label>
+
+                    <div class="cc-outcomes" role="group" aria-label="Outcome">
+                        {OUTCOMES.map((o: Outcome) => (
+                            <button
+                                key={o}
+                                type="button"
+                                class={`cc-outcome cc-outcome--${o}`}
+                                onClick={() => logCall(o)}
+                                data-cc-outcome={o}
+                            >
+                                {OUTCOME_LABELS[o]}
+                            </button>
+                        ))}
+                    </div>
+                    <button
+                        type="button"
+                        class="cc-outcome cc-outcome--logged"
+                        onClick={() => logCall("logged")}
+                    >
+                        Log this call
+                    </button>
                 </article>
             </div>
         </section>

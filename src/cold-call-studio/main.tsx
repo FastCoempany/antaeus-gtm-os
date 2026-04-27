@@ -1,6 +1,12 @@
 import { render } from "preact";
 import { ColdCallStudio } from "./ColdCallStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import {
+    setCallLog,
+    setCompanyName,
+    startCallLogPersistence
+} from "./state";
+import { loadCallLog, loadCompanyName } from "./lib/persistence";
 
 /**
  * Entry point for the Cold Call Studio Preact rebuild
@@ -10,12 +16,13 @@ import { initObservability, isFeatureEnabled } from "@/lib/observability";
  * flag `room_cold_call_v2`. Wave 6 will wire the legacy
  * `app/cold-call-studio/index.html` flag-redirect.
  *
- * Boot order (Wave 1):
+ * Boot order:
  *   1. initObservability — Sentry + Posthog
- *   2. render — Preact mounts; Wave 1 renders the empty layout
+ *   2. seed call log + company name from localStorage
+ *   3. start the call-log persistence loop (mirrors writes back)
+ *   4. render — Preact mounts the live console
  *
- * Subsequent waves seed account options (Wave 5), the call log
- * (Wave 4), and honor URL inbound params (Wave 5).
+ * Wave 5 will seed accountOptions + honor URL inbound params.
  *
  * Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
  */
@@ -36,5 +43,9 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+setCallLog(loadCallLog());
+setCompanyName(loadCompanyName());
+startCallLogPersistence();
 
 render(<ColdCallStudio />, root);

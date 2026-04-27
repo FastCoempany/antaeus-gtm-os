@@ -551,6 +551,169 @@ body {
     line-height: 1.55;
 }
 
+/* ─── Notes + outcome buttons ─────────────────────────────────────────── */
+
+.cc-notes {
+    display: block;
+    margin-top: 6px;
+}
+
+.cc-notes__label {
+    display: block;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--cc-muted);
+    margin-bottom: 6px;
+}
+
+.cc-notes__field {
+    width: 100%;
+    border: 1px solid rgba(7, 24, 61, 0.14);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--cc-navy);
+    font: 500 13.5px "Public Sans", sans-serif;
+    line-height: 1.5;
+    padding: 11px 13px;
+    min-height: 78px;
+    resize: vertical;
+    outline: none;
+}
+
+.cc-notes__field:focus {
+    border-color: var(--cc-blue);
+    box-shadow: 0 0 0 4px rgba(47, 115, 232, 0.09);
+}
+
+.cc-outcomes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.cc-outcome {
+    border: 1px solid rgba(7, 24, 61, 0.14);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--cc-soft);
+    padding: 7px 11px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.cc-outcome:hover {
+    color: #fff;
+    background: var(--cc-green);
+    border-color: var(--cc-green);
+}
+
+.cc-outcome--meeting_booked:hover {
+    background: var(--cc-orange);
+    border-color: var(--cc-orange);
+}
+
+.cc-outcome--rejected:hover,
+.cc-outcome--hung_up:hover,
+.cc-outcome--no_answer:hover {
+    background: var(--cc-red);
+    border-color: var(--cc-red);
+}
+
+.cc-outcome--logged {
+    margin-top: 8px;
+    align-self: flex-start;
+}
+
+/* ─── Memory table ────────────────────────────────────────────────────── */
+
+.cc-memory__table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--cc-line2);
+    border-radius: 18px;
+    background: #fff;
+}
+
+.cc-memory__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.cc-memory__table th {
+    text-align: left;
+    color: var(--cc-muted);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--cc-line);
+    background: rgba(255, 255, 255, 0.94);
+}
+
+.cc-memory__table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--cc-line2);
+    vertical-align: top;
+    color: var(--cc-ink);
+}
+
+.cc-memory__table td strong {
+    display: block;
+    color: var(--cc-navy);
+    font-weight: 700;
+}
+
+.cc-memory__table td small {
+    display: block;
+    margin-top: 3px;
+    color: var(--cc-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.cc-memory__outcome {
+    display: inline-block;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(7, 24, 61, 0.06);
+    color: var(--cc-soft);
+}
+
+.cc-memory__outcome--meeting_booked {
+    background: rgba(238, 111, 29, 0.12);
+    color: var(--cc-orange);
+}
+
+.cc-memory__outcome--callback_scheduled,
+.cc-memory__outcome--referral {
+    background: rgba(47, 139, 91, 0.12);
+    color: var(--cc-green);
+}
+
+.cc-memory__outcome--rejected,
+.cc-memory__outcome--hung_up,
+.cc-memory__outcome--no_answer {
+    background: rgba(201, 73, 67, 0.1);
+    color: var(--cc-red);
+}
+
 /* ─── Call memory ─────────────────────────────────────────────────────── */
 
 .cc-memory {

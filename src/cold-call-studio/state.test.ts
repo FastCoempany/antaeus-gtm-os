@@ -8,8 +8,10 @@ import {
     appendCallEntry,
     callLog,
     callStats,
+    companyName,
     draft,
     loaded,
+    logCall,
     patchDraft,
     resetSession,
     selectedAccount,
@@ -18,6 +20,7 @@ import {
     setActiveReply,
     setActiveThread,
     setCallLog,
+    setCompanyName,
     setSelectedAccount
 } from "./state";
 import { EMPTY_DRAFT, type CallLogEntry } from "./lib/types";
@@ -181,5 +184,82 @@ describe("accountOptions seeding", () => {
         expect(accountOptions.value).toHaveLength(1);
         resetSession();
         expect(accountOptions.value).toHaveLength(0);
+    });
+});
+
+describe("companyName + logCall", () => {
+    beforeEach(() => {
+        resetSession();
+        // happy-dom provides a real localStorage in the test env; clear it
+        // so each test starts from a known state.
+        if (typeof localStorage !== "undefined") localStorage.clear();
+    });
+
+    it("setCompanyName updates the signal", () => {
+        setCompanyName("Antaeus");
+        expect(companyName.value).toBe("Antaeus");
+    });
+
+    it("logCall appends an entry with the current rack frozen in", () => {
+        __setAccountOptionsForTests([
+            { id: "1", name: "Acme", topSignal: "Funding raise", heat: 80 }
+        ]);
+        setSelectedAccount("Acme");
+        setActiveThread("opener");
+        setActiveReply("busy");
+        patchDraft({ contactName: "Sarah", notes: "Mentioned roadmap." });
+        setCompanyName("Antaeus");
+
+        const entry = logCall("meeting_booked");
+
+        expect(entry).not.toBeNull();
+        expect(entry?.outcome).toBe("meeting_booked");
+        expect(entry?.threadId).toBe("opener");
+        expect(entry?.threadTitle).toBe("Earn permission in the first breath.");
+        expect(entry?.buyerResponse).toBe("I am busy.");
+        expect(entry?.recommendedResponse).toContain("Acme");
+        expect(entry?.recommendedResponse).toContain("Funding raise");
+        expect(entry?.accountName).toBe("Acme");
+        expect(entry?.contactName).toBe("Sarah");
+        expect(entry?.notes).toBe("Mentioned roadmap.");
+        expect(entry?.source).toBe("cold-call-studio-talk-loom");
+        expect(callLog.value).toHaveLength(1);
+    });
+
+    it("logCall works without an account or reply (manual log-this-call)", () => {
+        const entry = logCall("logged");
+        expect(entry).not.toBeNull();
+        expect(entry?.threadId).toBe("prep");
+        expect(entry?.accountName).toBe("");
+        expect(entry?.buyerResponse).toBe("");
+        expect(entry?.recommendedResponse).toBe("");
+    });
+
+    it("logCall trims contactName + contactTitle but preserves notes verbatim", () => {
+        patchDraft({
+            contactName: "  Sarah  ",
+            contactTitle: "  VP Eng  ",
+            notes: "  trailing whitespace stays  "
+        });
+        const entry = logCall("voicemail");
+        expect(entry?.contactName).toBe("Sarah");
+        expect(entry?.contactTitle).toBe("VP Eng");
+        expect(entry?.notes).toBe("  trailing whitespace stays  ");
+    });
+
+    it("logCall bumps gtmos_discovery_stats — totalCalls always, advancedCalls only on meeting_booked", () => {
+        logCall("voicemail");
+        let raw = globalThis.localStorage.getItem("gtmos_discovery_stats");
+        expect(raw).not.toBeNull();
+        expect(JSON.parse(raw as string)).toEqual({
+            totalCalls: 1,
+            advancedCalls: 0
+        });
+        logCall("meeting_booked");
+        raw = globalThis.localStorage.getItem("gtmos_discovery_stats");
+        expect(JSON.parse(raw as string)).toEqual({
+            totalCalls: 2,
+            advancedCalls: 1
+        });
     });
 });

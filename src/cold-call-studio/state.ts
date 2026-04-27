@@ -1,5 +1,6 @@
 import {
     computed,
+    effect,
     signal,
     type ReadonlySignal,
     type Signal
@@ -11,8 +12,15 @@ import {
     type CallLogEntry,
     type CallStats,
     type Draft,
+    type Outcome,
     type ThreadId
 } from "./lib/types";
+import { findReply, findThread } from "./lib/threads";
+import { personalize } from "./lib/personalize";
+import {
+    incrementDiscoveryStats,
+    saveCallLog
+} from "./lib/persistence";
 
 /**
  * Phase 4 / Room 7 — Cold Call Studio runtime state.
@@ -48,8 +56,16 @@ export const accountOptions: Signal<ReadonlyArray<AccountSummary>> = signal(
 /** Draft fields (contact name, title, notes) the operator types into. */
 export const draft: Signal<Draft> = signal(EMPTY_DRAFT);
 
-/** Persistent call log (mirrored to `gtmos_cold_call_log` in Wave 4). */
+/** Persistent call log (mirrored to `gtmos_cold_call_log`). */
 export const callLog: Signal<ReadonlyArray<CallLogEntry>> = signal([]);
+
+/**
+ * Operator's company name (drives [company] substitution in
+ * personalize). Sourced from `gtmos_playbook.company` at boot;
+ * empty string when missing — personalize() then falls back to
+ * its default "[your company]" placeholder.
+ */
+export const companyName: Signal<string> = signal("");
 
 /** Indicates whether the boot sequence has finished seeding state. */
 export const loaded: Signal<boolean> = signal(false);
@@ -121,6 +137,50 @@ export function appendCallEntry(entry: CallLogEntry): void {
     callLog.value = [...callLog.value, entry];
 }
 
+export function setCompanyName(name: string): void {
+    companyName.value = name;
+}
+
+/**
+ * Log a call from the current rack — freezes thread + reply +
+ * draft into a CallLogEntry, appends it to the call log, and bumps
+ * `gtmos_discovery_stats`. Returns the new entry (or null when no
+ * thread is active, which shouldn't be possible since prep is the
+ * default). The Wave 5 follow-up wires the meeting_booked → Deal
+ * write at the call site.
+ */
+export function logCall(
+    outcome: Outcome,
+    now: number = Date.now()
+): CallLogEntry | null {
+    const t = findThread(activeThread.value);
+    const r = findReply(t, activeReply.value);
+    const account = selectedAccount.value;
+    const ctx = {
+        accountName: account?.name ?? "",
+        topSignal: account?.topSignal ?? "",
+        companyName: companyName.value
+    };
+    const d = draft.value;
+    const entry: CallLogEntry = {
+        id: `call_${now}_${Math.random().toString(36).slice(2, 8)}`,
+        accountName: account?.name ?? "",
+        contactName: d.contactName.trim(),
+        contactTitle: d.contactTitle.trim(),
+        threadId: t.id,
+        threadTitle: t.title,
+        buyerResponse: r ? r.buyer : "",
+        recommendedResponse: r ? personalize(r.reply, ctx) : "",
+        outcome,
+        notes: d.notes,
+        source: "cold-call-studio-talk-loom",
+        createdAt: new Date(now).toISOString()
+    };
+    appendCallEntry(entry);
+    incrementDiscoveryStats(outcome);
+    return entry;
+}
+
 export function resetSession(): void {
     activeThread.value = "prep";
     activeReply.value = null;
@@ -128,6 +188,7 @@ export function resetSession(): void {
     accountOptions.value = [];
     draft.value = EMPTY_DRAFT;
     callLog.value = [];
+    companyName.value = "";
     loaded.value = false;
 }
 
@@ -142,4 +203,29 @@ export function __setCallLogForTests(
     entries: ReadonlyArray<CallLogEntry>
 ): void {
     callLog.value = entries;
+}
+
+let callLogPersistStop: (() => void) | null = null;
+
+/**
+ * Wire the side-effect that mirrors call log writes to localStorage.
+ * Skip the first run to avoid a redundant boot-time write — same
+ * pattern as Phase 4 / Rooms 3-6.
+ */
+export function startCallLogPersistence(): () => void {
+    if (callLogPersistStop) return callLogPersistStop;
+    let firstRun = true;
+    const dispose = effect(() => {
+        const next = callLog.value;
+        if (firstRun) {
+            firstRun = false;
+            return;
+        }
+        saveCallLog(next);
+    });
+    callLogPersistStop = () => {
+        dispose();
+        callLogPersistStop = null;
+    };
+    return callLogPersistStop;
 }
