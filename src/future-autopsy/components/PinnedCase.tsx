@@ -1,27 +1,33 @@
 import type { JSX } from "preact";
-import { selectedVitals } from "../state";
+import { currentAutopsy, selectedVitals } from "../state";
+import { VerdictToggle } from "./VerdictToggle";
+import { ForensicSheets } from "./ForensicSheets";
+
+function fmtMoney(n: number): string {
+    if (!n) return "$0";
+    if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 1_000) return `$${Math.round(n / 1_000)}k`;
+    return `$${Math.round(n)}`;
+}
 
 /**
- * PinnedCase — Wave 1 placeholder for the active pinned-case panel.
+ * PinnedCase — Wave 4 implementation.
  *
- * Per canon §4.14 this is the forensic light-table: causal pattern
- * narrative + intervention options + command row + route rack.
- * Wave 3 wires the autopsy generator; Wave 4 fills out the sheet
- * tabs + verdict toggle; Wave 5 wires the route rack.
- *
- * Wave 1 surfaces the selected case's basics so layout + smoke land
- * cleanly.
+ * Per canon §4.14 the room is a forensic light-table. The pinned-case
+ * panel shows: who's pinned, the verdict toggle, the forensic sheet
+ * stack, and a compact countermeasure docket. Wave 5 wires the route
+ * rack across the bottom.
  */
 export function PinnedCase(): JSX.Element {
     const v = selectedVitals.value;
+    const doc = currentAutopsy.value;
 
     if (!v) {
         return (
             <section class="fa-pinned fa-pinned--empty" aria-label="Pinned case">
                 <p class="fa-pinned__empty">
                     No case pinned. Pick a row from the ledger to load the
-                    autopsy. Wave 3 generates the diagnosis, Wave 4 fills the
-                    sheet tabs + verdict toggle, Wave 5 wires the route rack.
+                    autopsy.
                 </p>
             </section>
         );
@@ -33,15 +39,45 @@ export function PinnedCase(): JSX.Element {
                 <p class="fa-pinned__kicker">PINNED CASE</p>
                 <h2 class="fa-pinned__name">{v.name}</h2>
                 <p class="fa-pinned__sub">
-                    Stage {v.stage} · {v.staleDays}d since last activity ·
-                    risk {v.riskScore} · qual {v.qualScore}/14
+                    {v.stage} · {fmtMoney(v.value)} · {v.staleDays}d since last
+                    activity · risk {v.riskScore} · qual {v.qualScore}/18
                 </p>
             </header>
-            <p class="fa-pinned__placeholder">
-                Wave 3 generates the causal-pattern narrative + intervention
-                options for this case. Wave 4 wires the docket toggle and
-                forensic sheets.
-            </p>
+
+            <VerdictToggle />
+            <ForensicSheets />
+
+            {doc && doc.countermeasures.length > 0 ? (
+                <section class="fa-docket" aria-label="Countermeasure docket">
+                    <header class="fa-docket__header">
+                        <span class="fa-docket__kicker">COUNTERMEASURES</span>
+                        <span class="fa-docket__count">
+                            {doc.countermeasures.length} task
+                            {doc.countermeasures.length === 1 ? "" : "s"}
+                        </span>
+                    </header>
+                    <ul class="fa-docket__list">
+                        {doc.countermeasures.map((t) => (
+                            <li key={t.taskId} class="fa-docket__row">
+                                <span class="fa-docket__label">{t.label}</span>
+                                <span class="fa-docket__why">{t.why}</span>
+                                {t.script ? (
+                                    <span class="fa-docket__script">
+                                        “{t.script(v)}”
+                                    </span>
+                                ) : null}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            ) : null}
+
+            {doc?.killSwitch ? (
+                <p class="fa-kill" aria-label="Kill switch verdict">
+                    <span class="fa-kill__label">KILL SWITCH</span>
+                    {doc.killSwitch}
+                </p>
+            ) : null}
         </section>
     );
 }
