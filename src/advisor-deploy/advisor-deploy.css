@@ -1,0 +1,300 @@
+/*
+ * Advisor Deploy — Phase 4 / Room 10 styles.
+ *
+ * Per canon §4.16 (Live Instrument family — "private influence desk")
+ * + Part II §1: bright field, navy ink, restrained gradient air.
+ * Wave 1 ships the shell + topbar + skeleton blocks; Waves 3 + 4 fill
+ * the live desk surfaces + secondary stack.
+ */
+
+:root {
+    --ad-ink: #071735;
+    --ad-night: #081225;
+    --ad-paper: #f5f8fc;
+    --ad-white: #fffdfa;
+    --ad-warm: #fbf1e5;
+    --ad-mist: #e8f1fa;
+    --ad-blue: #2f73e8;
+    --ad-orange: #ed6b1f;
+    --ad-green: #287c52;
+    --ad-red: #c94a43;
+    --ad-line: rgba(88, 105, 132, 0.2);
+    --ad-line2: rgba(88, 105, 132, 0.36);
+    --ad-muted: #647691;
+    --ad-soft: #5d6f89;
+    --ad-shadow: 0 36px 100px rgba(7, 23, 53, 0.15);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ad-ink);
+    background:
+        linear-gradient(rgba(47, 115, 232, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(47, 115, 232, 0.035) 1px, transparent 1px),
+        radial-gradient(
+            circle at 0 0,
+            rgba(47, 115, 232, 0.09),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 100% 5%,
+            rgba(237, 107, 31, 0.08),
+            transparent 30%
+        ),
+        var(--ad-paper);
+    min-height: 100vh;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────────── */
+
+.ad-shell {
+    max-width: 1780px;
+    margin: 0 auto;
+    padding: 34px clamp(22px, 3vw, 54px) 96px;
+    display: grid;
+    gap: 26px;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────────── */
+
+.ad-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.ad-topbar__mast {
+    display: grid;
+    gap: 6px;
+}
+
+.ad-topbar__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #8190a8;
+}
+
+.ad-topbar__kicker strong {
+    color: var(--ad-orange);
+    font-weight: 800;
+}
+
+.ad-topbar__count {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    color: var(--ad-muted);
+    letter-spacing: 0.04em;
+}
+
+.ad-topbar__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ─── Desk board ───────────────────────────────────────────────────────── */
+
+.ad-desk {
+    position: relative;
+    overflow: hidden;
+    border-radius: 56px;
+    border: 1px solid var(--ad-line);
+    background:
+        radial-gradient(
+            circle at 25% 12%,
+            rgba(237, 107, 31, 0.08),
+            transparent 24%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.96),
+            rgba(242, 247, 253, 0.93)
+        );
+    box-shadow: var(--ad-shadow);
+    padding: clamp(28px, 3vw, 52px);
+}
+
+.ad-desk:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(rgba(7, 23, 53, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(7, 23, 53, 0.028) 1px, transparent 1px);
+    background-size: 34px 34px;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.ad-desk > * {
+    position: relative;
+    z-index: 1;
+}
+
+.ad-desk__hero {
+    display: grid;
+    grid-template-columns: minmax(520px, 1fr) minmax(320px, 0.78fr);
+    gap: clamp(28px, 4vw, 60px);
+    align-items: end;
+    margin-bottom: 30px;
+}
+
+.ad-desk__kicker {
+    margin: 0 0 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ad-orange);
+}
+
+.ad-desk__title {
+    margin: 0;
+    font-family: "Outfit", "DM Serif Display", serif;
+    font-size: clamp(50px, 5vw, 92px);
+    line-height: 0.9;
+    letter-spacing: -0.08em;
+    font-weight: 800;
+    color: var(--ad-ink);
+}
+
+.ad-desk__note {
+    color: #536986;
+    font-size: 16.5px;
+    line-height: 1.6;
+    max-width: 620px;
+    margin: 22px 0 0;
+}
+
+.ad-desk__read {
+    justify-self: end;
+    width: min(420px, 100%);
+    border-top: 1px solid var(--ad-line2);
+    padding-top: 18px;
+}
+
+.ad-desk__read-kicker {
+    margin: 0 0 10px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ad-muted);
+}
+
+.ad-desk__read-state {
+    margin: 0;
+    color: var(--ad-muted);
+    font-size: 14px;
+    font-style: italic;
+}
+
+.ad-desk__placeholder {
+    margin-top: 22px;
+    border: 1px dashed rgba(7, 23, 53, 0.16);
+    border-radius: 28px;
+    padding: 30px 24px;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.ad-desk__placeholder p {
+    margin: 0;
+    color: var(--ad-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* ─── Secondary stack ─────────────────────────────────────────────────── */
+
+.ad-secondary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.ad-sheet {
+    border: 1px solid var(--ad-line);
+    border-radius: 32px;
+    background: rgba(255, 253, 250, 0.84);
+    box-shadow: 0 18px 58px rgba(7, 23, 53, 0.07);
+    padding: 24px 26px;
+}
+
+.ad-sheet--wide {
+    grid-column: 1 / -1;
+}
+
+.ad-sheet__head {
+    border-bottom: 1px solid var(--ad-line);
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+}
+
+.ad-sheet__kicker {
+    margin: 0 0 6px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ad-orange);
+}
+
+.ad-sheet__title {
+    margin: 0;
+    font-family: "Outfit", "DM Serif Display", serif;
+    font-size: clamp(22px, 2vw, 30px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    color: var(--ad-ink);
+}
+
+.ad-sheet__placeholder {
+    margin: 0;
+    color: var(--ad-muted);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+@media (max-width: 1320px) {
+    .ad-desk__hero,
+    .ad-secondary {
+        grid-template-columns: 1fr;
+    }
+    .ad-desk__read {
+        justify-self: stretch;
+    }
+}
+
+@media (max-width: 760px) {
+    .ad-shell {
+        padding: 24px 16px 64px;
+    }
+    .ad-desk {
+        border-radius: 32px;
+        padding: 24px 20px;
+    }
+    .ad-sheet {
+        border-radius: 24px;
+        padding: 20px 18px;
+    }
+}

@@ -289,6 +289,27 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 10 Wave 1 — /advisor-deploy/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/advisor-deploy/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ad-topbar__kicker")).toContainText(
+            "Advisor Deploy"
+        );
+        await expect(page.locator(".ad-desk")).toBeAttached();
+        await expect(page.locator(".ad-secondary")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
