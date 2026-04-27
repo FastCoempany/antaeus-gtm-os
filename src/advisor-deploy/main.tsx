@@ -54,16 +54,30 @@ setDeployments(loadDeployments());
 
 // Wave 5 — seed deal options from Phase 4 / Room 1's mirror, then
 // honor URL inbound (?deal= or fallback ?focusObject=). When the
-// inbound id matches a deal, point the desk at it; otherwise fall
-// back to the first active deal so the rep lands on a routeable
-// surface (legacy line 218: `getDealById || activeDeals[0] || null`).
+// inbound value matches a deal, point the desk at it; otherwise
+// fall back to the first active deal so the rep lands on a routeable
+// surface (legacy lines 218 + 228-230: try-id-then-name).
+//
+// PR #26 Codex P2 fix: cross-room handoffs (e.g. PoC Framework →
+// Advisor Deploy) thread account name in `?focusObject=` without a
+// `deal=` param. Resolve by id first, then by accountName
+// (case-insensitive) so those handoffs land on the right deal
+// instead of falling through to "first active".
 const deals = loadDeals();
 setDealOptions(deals);
-const inboundId = readInboundDealId();
-const inbound =
-    inboundId && deals.find((d) => d.id === inboundId)
-        ? inboundId
-        : null;
+const inboundValue = readInboundDealId();
+function resolveInboundDeal(value: string | null): string | null {
+    if (!value) return null;
+    const byId = deals.find((d) => d.id === value);
+    if (byId) return byId.id;
+    const lower = value.trim().toLowerCase();
+    if (!lower) return null;
+    const byName = deals.find(
+        (d) => d.accountName.trim().toLowerCase() === lower
+    );
+    return byName ? byName.id : null;
+}
+const inbound = resolveInboundDeal(inboundValue);
 if (inbound) {
     setDealId(inbound);
 } else {
