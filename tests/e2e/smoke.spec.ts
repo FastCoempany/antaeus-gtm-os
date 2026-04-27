@@ -174,6 +174,54 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 5 Wave 1 — /poc-framework/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        // The new Preact PoC Framework at /poc-framework/ (distinct
+        // from the legacy /app/poc-framework/). Wave 1 ships the
+        // structural shell — empty proof list, dark forge / cream cast
+        // split stage. Smoke test asserts: page loads without runtime
+        // errors, the topbar kicker reads POC FRAMEWORK, both forge
+        // and cast panels attach to the DOM.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/poc-framework/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".poc-topbar__kicker")).toContainText(
+            "POC FRAMEWORK"
+        );
+        await expect(page.locator(".poc-forge")).toBeAttached();
+        await expect(page.locator(".poc-cast")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
+    test("Phase 4 / Room 6 Wave 1 — /outbound-studio/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/outbound-studio/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ob-topbar__kicker")).toContainText(
+            "OUTBOUND STUDIO"
+        );
+        await expect(page.locator(".ob-switchboard")).toBeAttached();
+        await expect(page.locator(".ob-output")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
