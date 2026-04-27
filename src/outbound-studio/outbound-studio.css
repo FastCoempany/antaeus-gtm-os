@@ -1,0 +1,139 @@
+/*
+ * Outbound Studio — Wave 1 baseline styles.
+ *
+ * Live Instrument family per CLAUDE.md Part II §4.3: live, tense,
+ * immediate, operational. Bright field per Part II §1 direction lock.
+ * "Switchboard metaphor restrained" per Part V refacing notes.
+ */
+
+:root {
+    --ob-ink: #0a1c40;
+    --ob-ink-70: rgba(10, 28, 64, 0.7);
+    --ob-ink-40: rgba(10, 28, 64, 0.4);
+    --ob-ink-15: rgba(10, 28, 64, 0.15);
+    --ob-field: #f6f8fc;
+    --ob-field-raised: #ffffff;
+    --ob-accent-orange: #ff6b1c;
+    --ob-accent-blue: #2e5aac;
+    --ob-accent-green: #2e7d4c;
+    --ob-accent-amber: #b57500;
+    --ob-accent-red: #b4261f;
+    --ob-border: rgba(10, 28, 64, 0.1);
+    --ob-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--ob-field);
+    color: var(--ob-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────── */
+
+.ob-shell {
+    min-height: 100vh;
+    padding: 32px 40px 80px;
+    max-width: 1480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────── */
+
+.ob-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ob-ink-70);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.ob-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.04;
+    font-weight: 400;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+}
+
+.ob-topbar__sub {
+    font-size: 16px;
+    color: var(--ob-ink-70);
+    margin: 0;
+    max-width: 60ch;
+}
+
+/* ─── Stage (split) ────────────────────────────────────────────────── */
+
+.ob-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 14px;
+}
+
+.ob-switchboard,
+.ob-output {
+    background: var(--ob-field-raised);
+    border: 1px solid var(--ob-border-strong);
+    border-radius: 4px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 360px;
+}
+
+.ob-switchboard__kicker,
+.ob-output__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+    margin: 0;
+}
+
+.ob-switchboard__title,
+.ob-output__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.1;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.ob-switchboard__placeholder,
+.ob-output__placeholder {
+    margin: 0;
+    color: var(--ob-ink-70);
+    font-style: italic;
+    font-size: 14px;
+    max-width: 56ch;
+}
+
+@media (max-width: 880px) {
+    .ob-stage {
+        grid-template-columns: 1fr;
+    }
+}
