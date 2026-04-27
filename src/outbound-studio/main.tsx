@@ -1,6 +1,13 @@
 import { render } from "preact";
 import { OutboundStudio } from "./OutboundStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import {
+    setAllAngles,
+    setAllTouches,
+    startAnglePersistence,
+    startTouchPersistence
+} from "./state";
+import { loadAngles, loadTouches } from "./lib/persistence";
 
 /**
  * Entry point for the Outbound Studio Preact rebuild
@@ -34,5 +41,13 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+// Wave 4 — seed touches + angles from localStorage, then start the
+// persistence loops. Subsequent log-touch / save-angle calls write
+// back automatically.
+setAllTouches(loadTouches());
+setAllAngles(loadAngles());
+startTouchPersistence();
+startAnglePersistence();
 
 render(<OutboundStudio />, root);
