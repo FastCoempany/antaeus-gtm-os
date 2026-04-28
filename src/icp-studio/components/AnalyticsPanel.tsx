@@ -1,6 +1,12 @@
 import type { JSX } from "preact";
 import { recentIcps, removeSavedIcp, totalWorked } from "../state";
 import type { QualityTier } from "../lib/types";
+import {
+    hrefToOutboundStudio,
+    hrefToSignalConsole,
+    hrefToSourcingWorkbench,
+    hrefToTerritoryArchitect
+} from "../lib/handoff";
 
 /**
  * AnalyticsPanel — Wave 4 implementation.
@@ -144,6 +150,36 @@ export function AnalyticsPanel(): JSX.Element {
                         feeds the readiness score + the export package.
                     </li>
                 </ul>
+                <nav class="icp-handoffs" aria-label="Cross-room handoff">
+                    <a
+                        class="icp-handoff"
+                        href={hrefToTerritoryArchitect(
+                            recent[0]?.industry ?? ""
+                        )}
+                    >
+                        Open Territory Architect
+                    </a>
+                    <a
+                        class="icp-handoff"
+                        href={hrefToSourcingWorkbench(
+                            recent[0]?.industry ?? ""
+                        )}
+                    >
+                        Open Sourcing Workbench
+                    </a>
+                    <a
+                        class="icp-handoff"
+                        href={hrefToSignalConsole(recent[0]?.industry ?? "")}
+                    >
+                        Open Signal Console
+                    </a>
+                    <a
+                        class="icp-handoff"
+                        href={hrefToOutboundStudio(recent[0]?.industry ?? "")}
+                    >
+                        Open Outbound Studio
+                    </a>
+                </nav>
             </footer>
         </section>
     );
