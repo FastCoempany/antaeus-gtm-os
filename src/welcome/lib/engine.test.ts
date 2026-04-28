@@ -72,6 +72,36 @@ describe("buildActions", () => {
     });
 });
 
+describe("buildActions URL safety", () => {
+    it("quota + backup actions point at legacy /app/ routes", () => {
+        // These rooms (Quota Workback / Settings) are still in open
+        // PRs at the time Welcome migrated. The legacy `/app/<room>/`
+        // pages always exist and Wave 6 flag-redirects forward to the
+        // new room when the Posthog flag is on. Pointing at the new
+        // /<room>/ path directly produces a 404 for anyone whose flag
+        // is off + on whatever environments haven't deployed the new
+        // room yet.
+        const list = buildActions(EMPTY_COUNTS);
+        const quota = list.find((a) => a.key === "quota");
+        const backup = list.find((a) => a.key === "backup");
+        if (quota) expect(quota.href).toBe("/app/quota-workback/");
+        if (backup) expect(backup.href).toBe("/app/settings/");
+    });
+
+    it("rooms already merged on main use the new-stack /<room>/ path", () => {
+        // ICP Studio is also still in open PR #28, but my Welcome
+        // engine intentionally uses /app/icp-studio/ for the same
+        // reason. The other actions point at rooms already merged
+        // (signal-console / deal-workspace / outbound-studio /
+        // call-planner / dashboard) so they use the new-stack paths.
+        const list = buildActions(counts({ icps: 1, accounts: 1, deals: 1 }));
+        const dashboard = list.find((a) => a.key === "dashboard");
+        if (dashboard) expect(dashboard.href).toBe("/dashboard/");
+        const planner = list.find((a) => a.key === "planner");
+        if (planner) expect(planner.href).toBe("/call-planner/");
+    });
+});
+
 describe("prettyRole", () => {
     it("title-cases hyphenated/underscored values", () => {
         expect(prettyRole("founder_ceo")).toBe("Founder Ceo");
