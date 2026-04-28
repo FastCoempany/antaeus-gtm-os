@@ -226,6 +226,16 @@ export default defineConfig({
                     "src/territory-architect/index.html"
                 ),
 
+                // Phase 4 / Room 13 — Sourcing Workbench Preact rebuild.
+                // Served at /sourcing-workbench/. Behind Posthog feature
+                // flag `room_sourcing_workbench_v2`; legacy
+                // `app/sourcing-workbench/index.html` redirects here when
+                // on.
+                "sourcing-workbench": resolve(
+                    __dirname,
+                    "src/sourcing-workbench/index.html"
+                ),
+
                 // Phase 4 / Room 16 — Welcome Preact rebuild. Served at
                 // /welcome/. Behind Posthog feature flag
                 // `room_welcome_v2`; legacy `app/welcome/index.html`
