@@ -15,10 +15,15 @@
     --icp-muted: #91a4c2;
     --icp-line: rgba(10, 28, 64, 0.13);
     --icp-line2: rgba(10, 28, 64, 0.08);
+    /* Canonical bright palette per founder directive 2026-04-28 + the
+       Command Chamber wireframe sample. orange + navy unchanged from
+       legacy; blue + green bumped to brighter saturated tones; red +
+       amber added at canonical values. */
     --icp-orange: #e6701e;
-    --icp-blue: #2471e7;
-    --icp-green: #287c52;
-    --icp-red: #c94a43;
+    --icp-blue: #2563eb;
+    --icp-green: #22c55e;
+    --icp-red: #ef4444;
+    --icp-amber: #f59e0b;
     --icp-shadow: 0 18px 44px rgba(10, 28, 64, 0.1);
 }
 
