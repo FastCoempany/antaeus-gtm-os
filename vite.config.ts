@@ -215,7 +215,19 @@ export default defineConfig({
                 "icp-studio": resolve(
                     __dirname,
                     "src/icp-studio/index.html"
-                )
+                ),
+
+                // Phase 4 / Room 16 — Welcome Preact rebuild. Served at
+                // /welcome/. Behind Posthog feature flag
+                // `room_welcome_v2`; legacy `app/welcome/index.html`
+                // redirects here when on.
+                welcome: resolve(__dirname, "src/welcome/index.html"),
+
+                // Phase 4 / Room 17 — Onboarding Preact rebuild (greenfield;
+                // not a port). Served at /onboarding/. Behind Posthog
+                // feature flag `room_onboarding_v2`; legacy
+                // `app/onboarding/index.html` redirects here when on.
+                onboarding: resolve(__dirname, "src/onboarding/index.html")
             }
         }
     },
