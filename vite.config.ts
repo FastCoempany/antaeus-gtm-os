@@ -236,6 +236,15 @@ export default defineConfig({
                     "src/sourcing-workbench/index.html"
                 ),
 
+                // Phase 4 / Room 14 — Quota Workback Preact rebuild.
+                // Served at /quota-workback/. Behind Posthog feature flag
+                // `room_quota_workback_v2`; legacy
+                // `app/quota-workback/index.html` redirects here when on.
+                "quota-workback": resolve(
+                    __dirname,
+                    "src/quota-workback/index.html"
+                ),
+
                 // Phase 4 / Room 15 — Settings Preact rebuild. Served at
                 // /settings/. Behind Posthog feature flag
                 // `room_settings_v2`; legacy `app/settings/index.html`
