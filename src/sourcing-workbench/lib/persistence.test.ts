@@ -145,6 +145,167 @@ describe("saveAll", () => {
     });
 });
 
+describe("legacy shape compatibility", () => {
+    let store: FakeStorage;
+    beforeEach(() => {
+        store = new FakeStorage();
+    });
+
+    it("accepts legacy query card with filters object + no top-level query", () => {
+        // Shape from app/sourcing-workbench/index.html lines 1846-1869.
+        const legacy = [
+            {
+                id: "qc_legacy_1",
+                thesisId: "thesis_a",
+                platform: "sales-nav",
+                filters: {
+                    industry: "Logistics",
+                    companySize: "50-2,000",
+                    geography: "EU",
+                    personaTitles: "VP Operations",
+                    booleanString: '"VP Operations" AND "logistics"',
+                    customNotes: "Watch for Series C raises.",
+                    exclusions: "Companies <2 yrs old"
+                },
+                status: "active",
+                createdAt: "2025-12-01T00:00:00Z",
+                updatedAt: "2025-12-01T00:00:00Z"
+            }
+        ];
+        store.setItem("gtmos_sw_query_cards", JSON.stringify(legacy));
+        const out = loadQueryCards(store);
+        expect(out).toHaveLength(1);
+        expect(out[0]!.id).toBe("qc_legacy_1");
+        expect(out[0]!.platform).toBe("linkedin"); // sales-nav → linkedin
+        // booleanString wins as the highest-fidelity query source
+        expect(out[0]!.query).toBe('"VP Operations" AND "logistics"');
+        expect(out[0]!.intent).toContain("VP Operations");
+        expect(out[0]!.intent).toContain("Logistics");
+        expect(out[0]!.targetIcp).toBe("Logistics");
+        expect(out[0]!.notes).toContain("Series C");
+        expect(out[0]!.notes).toContain("Exclude:");
+    });
+
+    it("derives query from personas+industry when booleanString is empty", () => {
+        const legacy = [
+            {
+                id: "qc_legacy_2",
+                platform: "google-boolean",
+                filters: { industry: "Freight", personaTitles: "Director Compliance" },
+                status: "active"
+            }
+        ];
+        store.setItem("gtmos_sw_query_cards", JSON.stringify(legacy));
+        const out = loadQueryCards(store);
+        expect(out).toHaveLength(1);
+        expect(out[0]!.platform).toBe("search"); // google-boolean → search
+        expect(out[0]!.query).toBe("Director Compliance / Freight");
+    });
+
+    it("falls back to behavioralSignal when industry+personas missing", () => {
+        const legacy = [
+            {
+                id: "qc_legacy_3",
+                platform: "zoominfo",
+                filters: { behavioralSignal: "International expansion last 24 months" },
+                status: "active"
+            }
+        ];
+        store.setItem("gtmos_sw_query_cards", JSON.stringify(legacy));
+        const out = loadQueryCards(store);
+        expect(out).toHaveLength(1);
+        expect(out[0]!.platform).toBe("intent");
+        expect(out[0]!.query).toContain("International expansion");
+    });
+
+    it("drops legacy query card with no usable filter content", () => {
+        const legacy = [{ id: "qc_legacy_empty", platform: "sales-nav", filters: {} }];
+        store.setItem("gtmos_sw_query_cards", JSON.stringify(legacy));
+        expect(loadQueryCards(store)).toEqual([]);
+    });
+
+    it("maps every legacy platform onto the new enum", () => {
+        const legacy = [
+            { id: "a", platform: "sales-nav", filters: { industry: "x" } },
+            { id: "b", platform: "google-boolean", filters: { industry: "x" } },
+            { id: "c", platform: "zoominfo", filters: { industry: "x" } },
+            { id: "d", platform: "apollo", filters: { industry: "x" } },
+            { id: "e", platform: "conference", filters: { industry: "x" } },
+            { id: "f", platform: "crm", filters: { industry: "x" } },
+            { id: "g", platform: "custom", filters: { industry: "x" } }
+        ];
+        store.setItem("gtmos_sw_query_cards", JSON.stringify(legacy));
+        const out = loadQueryCards(store);
+        expect(out.map((c) => c.platform)).toEqual([
+            "linkedin",
+            "search",
+            "intent",
+            "intent",
+            "signals",
+            "list",
+            "list"
+        ]);
+    });
+
+    it("accepts legacy prospect with `name` instead of accountName", () => {
+        // Shape from app/sourcing-workbench/index.html lines 2049-2058.
+        const legacy = [
+            {
+                id: "pr_legacy_1",
+                name: "Meridian Logistics",
+                thesisId: "thesis_a",
+                sourceType: "query-card",
+                sourceQueryCardId: "qc_legacy_1",
+                initialImpression: "New CTO from competitor, just raised Series C",
+                stage: "captured",
+                research: null,
+                tier: null,
+                pushedToTA: false,
+                pushedAt: null,
+                createdAt: "2026-04-01T00:00:00Z",
+                updatedAt: "2026-04-01T00:00:00Z"
+            }
+        ];
+        store.setItem("gtmos_sw_prospects", JSON.stringify(legacy));
+        const out = loadProspects(store);
+        expect(out).toHaveLength(1);
+        expect(out[0]!.accountName).toBe("Meridian Logistics");
+        expect(out[0]!.sourceQueryId).toBe("qc_legacy_1");
+        expect(out[0]!.notes).toContain("Series C");
+    });
+
+    it("folds legacy stages parked + rejected into dropped", () => {
+        const legacy = [
+            { id: "a", name: "Acme", stage: "parked" },
+            { id: "b", name: "Beta", stage: "rejected" }
+        ];
+        store.setItem("gtmos_sw_prospects", JSON.stringify(legacy));
+        const out = loadProspects(store);
+        expect(out).toHaveLength(2);
+        expect(out[0]!.stage).toBe("dropped");
+        expect(out[1]!.stage).toBe("dropped");
+    });
+
+    it("new-stack field wins when both new + legacy fields are present", () => {
+        const mixed = [
+            {
+                id: "x",
+                accountName: "NewName",
+                name: "OldName",
+                sourceQueryId: "new_qc",
+                sourceQueryCardId: "old_qc",
+                notes: "new notes",
+                initialImpression: "old notes"
+            }
+        ];
+        store.setItem("gtmos_sw_prospects", JSON.stringify(mixed));
+        const out = loadProspects(store);
+        expect(out[0]!.accountName).toBe("NewName");
+        expect(out[0]!.sourceQueryId).toBe("new_qc");
+        expect(out[0]!.notes).toBe("new notes");
+    });
+});
+
 describe("roundtrip", () => {
     let store: FakeStorage;
     beforeEach(() => {
