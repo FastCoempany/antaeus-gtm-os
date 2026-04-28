@@ -1,9 +1,13 @@
 import { render } from "preact";
 import { QuotaWorkback } from "./QuotaWorkback";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { setCoverage, setInputs, startPersistence } from "./state";
+import {
+    refreshCoverage,
+    setInputs,
+    startCoverageRecompute,
+    startPersistence
+} from "./state";
 import { loadInputs } from "./lib/persistence";
-import { computeCoverage } from "./lib/coverage";
 
 /**
  * Entry point for the Quota Workback Preact rebuild
@@ -15,9 +19,14 @@ import { computeCoverage } from "./lib/coverage";
  * Boot order:
  *   1. initObservability — Sentry + Posthog
  *   2. seed inputs from gtmos_qw_inputs (or gtmos_outbound_seed fallback)
- *   3. compute live coverage from gtmos_deal_workspaces
- *   4. start the persistence effect (mirrors writes back)
- *   5. render
+ *   3. refresh coverage from gtmos_deal_workspaces using the current
+ *      benchmark target multiple (so `needed` and the panel agree)
+ *   4. start the coverage-recompute effect (re-fires when quota or
+ *      benchmark.coverage changes; also installs a cross-tab storage
+ *      listener so deal edits in Deal Workspace land here live)
+ *   5. start the persistence effect (mirrors writes back, with an
+ *      explicit initial save so downstream snapshots aren't stale)
+ *   6. render
  */
 
 initObservability();
@@ -39,8 +48,9 @@ if (!flagOn) {
 
 const seeded = loadInputs();
 setInputs(seeded);
-setCoverage(computeCoverage(seeded.quota));
+refreshCoverage();
 
+startCoverageRecompute();
 startPersistence();
 
 render(<QuotaWorkback />, root);

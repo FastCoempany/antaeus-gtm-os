@@ -85,7 +85,20 @@ function loadDealRows(s?: StorageLike | null): ReadonlyArray<unknown> {
 
 export function computeCoverage(
     quota: number,
-    s?: StorageLike | null
+    s?: StorageLike | null,
+    /**
+     * Coverage target multiple from the active benchmark (e.g., 3.5x
+     * for Mid-Market). Without it, `needed` was reported as
+     * `quota - weighted`, which contradicted the panel comparing
+     * `ratio` against `benchmark.coverage` (panel said "1.2x / 3.5x
+     * needed" while gap reported `On target` once weighted reached
+     * 1x quota). Pass the benchmark multiple so the gap matches the
+     * threshold the panel + scoring engine enforce.
+     *
+     * Defaults to 1 to preserve the pre-fix behavior at the unit-
+     * test boundary; main.tsx now passes the benchmark multiple.
+     */
+    targetMultiple = 1
 ): CoverageSnapshot {
     const rows = loadDealRows(s);
     if (!quota || quota <= 0 || rows.length === 0) {
@@ -112,7 +125,8 @@ export function computeCoverage(
     }
 
     const ratio = Math.round((weighted / quota) * 10) / 10;
-    const needed = Math.max(0, quota - weighted);
+    const target = Math.max(0, quota * Math.max(0, targetMultiple));
+    const needed = Math.max(0, target - weighted);
 
     return {
         ratio,

@@ -60,7 +60,7 @@ describe("computeCoverage", () => {
         expect(c.needed).toBe(0); // weighted is over quota? no, weighted=120k vs quota=100k → no gap
     });
 
-    it("computes gap when weighted < quota", () => {
+    it("computes gap when weighted < quota (default targetMultiple = 1)", () => {
         store.setItem(
             "gtmos_deal_workspaces",
             JSON.stringify([{ value: 100_000, stage: "discovery" }])
@@ -68,6 +68,44 @@ describe("computeCoverage", () => {
         const c = computeCoverage(100_000, store);
         expect(c.weighted).toBe(30_000);
         expect(c.needed).toBe(70_000);
+    });
+
+    it("targetMultiple compares against quota * multiple, not just quota", () => {
+        // Mid-Market benchmark = 3.5x. Weighted hits 1.2x of quota →
+        // panel says "1.2x / 3.5x needed" so the gap should be
+        // (3.5 * 100k) - 120k = 230k, not 0.
+        store.setItem(
+            "gtmos_deal_workspaces",
+            JSON.stringify([
+                { value: 100_000, stage: "prospect" },
+                { value: 100_000, stage: "discovery" },
+                { value: 100_000, stage: "negotiation" }
+            ])
+        );
+        const c = computeCoverage(100_000, store, 3.5);
+        expect(c.weighted).toBe(120_000);
+        expect(c.ratio).toBe(1.2);
+        expect(c.needed).toBe(230_000);
+    });
+
+    it("on-target reads zero gap only when weighted ≥ quota * targetMultiple", () => {
+        store.setItem(
+            "gtmos_deal_workspaces",
+            JSON.stringify([{ value: 500_000, stage: "negotiation" }])
+        );
+        const c = computeCoverage(100_000, store, 3.5);
+        expect(c.weighted).toBe(400_000);
+        expect(c.needed).toBe(0);
+    });
+
+    it("targetMultiple of 1 reproduces the default behavior", () => {
+        store.setItem(
+            "gtmos_deal_workspaces",
+            JSON.stringify([{ value: 100_000, stage: "discovery" }])
+        );
+        const a = computeCoverage(100_000, store);
+        const b = computeCoverage(100_000, store, 1);
+        expect(a).toEqual(b);
     });
 
     it("supports object-of-deals shape", () => {
