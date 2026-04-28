@@ -33,6 +33,31 @@ function categoryLabel(key: CategoryKey): string {
     return opt ? opt.label : "";
 }
 
+/**
+ * Read + parse a JSON value from storage. Returns null on absent or
+ * malformed values. Used so we can MERGE seeded items into pre-
+ * existing collections instead of overwriting them — re-running
+ * onboarding should not silently erase ICPs or accounts the operator
+ * already has.
+ */
+function readJson<T = unknown>(
+    store: StorageLike,
+    key: string
+): T | null {
+    try {
+        const raw = store.getItem(key);
+        if (!raw) return null;
+        return JSON.parse(raw) as T;
+    } catch (err) {
+        reportError(err, { op: "onboarding.readJson", key });
+        return null;
+    }
+}
+
+function asArray<T>(v: unknown): T[] {
+    return Array.isArray(v) ? (v as T[]) : [];
+}
+
 export interface SeedResult {
     /** True if any keys were written. */
     readonly seeded: boolean;
@@ -82,7 +107,17 @@ export function seedFromDraft(
     }
 
     if (draft.category) {
-        trySet(store, "gtmos_product_category", draft.category);
+        // Legacy readers (`app/settings/index.html`, `js/data-manager.js`,
+        // `js/discovery-studio-segment-jump-room.js`) all use `JSON.parse`
+        // on this key. Writing a bare string causes JSON.parse to throw
+        // and they fall back to "cxai", masking the seeded category. The
+        // canonical legacy convention (set by `app/settings/index.html`
+        // line 514 and `js/demo-seed-runtime.js`) is JSON.stringify.
+        trySet(
+            store,
+            "gtmos_product_category",
+            JSON.stringify(draft.category)
+        );
         items.push("Product category");
     }
 
@@ -99,10 +134,31 @@ export function seedFromDraft(
             updatedAt: iso,
             source: "onboarding-v2"
         };
+        // Merge into the existing ICP collection so re-running
+        // onboarding does not silently erase prior workspace truth.
+        // Codex P1 — the original implementation replaced the entire
+        // gtmos_icp_analytics payload with a single-item array.
+        const existing = readJson<Record<string, unknown>>(
+            store,
+            "gtmos_icp_analytics"
+        );
+        const existingIcps = asArray<Record<string, unknown>>(
+            existing?.["icps"]
+        );
+        const merged = [
+            ...existingIcps.filter(
+                (x) => typeof x === "object" && x !== null && x["id"] !== id
+            ),
+            icp
+        ];
         trySet(
             store,
             "gtmos_icp_analytics",
-            JSON.stringify({ icps: [icp], updatedAt: iso })
+            JSON.stringify({
+                ...(existing ?? {}),
+                icps: merged,
+                updatedAt: iso
+            })
         );
         items.push("First ICP");
     }
@@ -134,10 +190,33 @@ export function seedFromDraft(
             source: "onboarding-v2",
             capturedAt: iso
         };
+        // Same merge pattern as ICPs — preserve existing accounts so
+        // a re-run doesn't wipe out the operator's signal-console
+        // history. Match by case-insensitive name to dedupe re-entries
+        // of the same company.
+        const existing = readJson<Record<string, unknown>>(
+            store,
+            "gtmos_sc_v4"
+        );
+        const existingAccounts = asArray<Record<string, unknown>>(
+            existing?.["accounts"]
+        );
+        const lowerName = acc.name.toLowerCase();
+        const merged = [
+            ...existingAccounts.filter((x) => {
+                const n = typeof x?.["name"] === "string" ? (x["name"] as string) : "";
+                return n.toLowerCase() !== lowerName;
+            }),
+            acc
+        ];
         trySet(
             store,
             "gtmos_sc_v4",
-            JSON.stringify({ accounts: [acc], updatedAt: iso })
+            JSON.stringify({
+                ...(existing ?? {}),
+                accounts: merged,
+                updatedAt: iso
+            })
         );
         items.push("First account in Signal Console");
     }
@@ -183,11 +262,32 @@ export function seedFromDraft(
         items.push("Quota target seeded");
     }
 
+    // Codex P1 — `js/workspace-guard.js` and `js/supabase-config.js`
+    // both gate routes on `gtmos_onboarding.completed === true`.
+    // Without writing the canonical shape, a user who finishes the
+    // new flow could still be redirected back to /app/onboarding/
+    // by the legacy guard on the very next page load. Mirror the
+    // shape `js/demo-seed-runtime.js` lines 819-820 use so all
+    // downstream readers detect the user as activated.
     trySet(
         store,
-        "gtmos_onboarding_completed_at",
-        iso
+        "gtmos_onboarding",
+        JSON.stringify({
+            completed: true,
+            completedAt: iso,
+            answers: {
+                companyName: draft.companyName.trim() || null,
+                role: draft.role,
+                productCategory: draft.category,
+                quota: draft.annualQuota || null,
+                acv: draft.avgDealSize || null,
+                icpStatement: draft.icpStatement.trim() || null,
+                firstAccount: draft.firstAccountName.trim() || null
+            },
+            source: "onboarding-v2"
+        })
     );
+    trySet(store, "gtmos_onboarding_completed_at", iso);
 
     return { seeded: items.length > 0, items };
 }
@@ -195,13 +295,21 @@ export function seedFromDraft(
 /**
  * Best-effort completeness probe. Used by the Welcome + Dashboard
  * smoke test bootstrap to decide whether to send a returning user
- * back through onboarding.
+ * back through onboarding. Checks both the new marker and the
+ * canonical legacy `gtmos_onboarding.completed` shape so an operator
+ * who finished onboarding via the legacy flow doesn't get sent back
+ * through the new one.
  */
 export function isOnboardingComplete(s?: StorageLike | null): boolean {
     const store = getStorage(s);
     if (!store) return false;
     try {
-        return store.getItem("gtmos_onboarding_completed_at") !== null;
+        if (store.getItem("gtmos_onboarding_completed_at")) return true;
+        const legacy = readJson<Record<string, unknown>>(
+            store,
+            "gtmos_onboarding"
+        );
+        return legacy?.["completed"] === true;
     } catch (err) {
         reportError(err, { op: "onboarding.isComplete" });
         return false;

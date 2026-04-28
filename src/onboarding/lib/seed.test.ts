@@ -48,7 +48,8 @@ describe("seedFromDraft", () => {
             now: NOW,
             storage: s
         });
-        expect(s.getItem("gtmos_product_category")).toBe("legal");
+        // JSON-encoded per legacy app/settings/index.html convention.
+        expect(s.getItem("gtmos_product_category")).toBe('"legal"');
         const ctx = JSON.parse(s.getItem("gtmos_activation_context") ?? "{}");
         expect(ctx.categoryLabel).toBe("Legal AI");
     });
@@ -138,6 +139,124 @@ describe("seedFromDraft", () => {
         const data = JSON.parse(s.getItem("gtmos_icp_analytics") ?? "{}");
         expect(ctx.company).toBe("Antaeus");
         expect(data.icps[0].statement).toBe("Mid-market.");
+    });
+
+    it("writes the canonical gtmos_onboarding shape so legacy guards detect completion", () => {
+        seedFromDraft(
+            makeDraft({
+                companyName: "Antaeus",
+                role: "founder",
+                category: "revenue",
+                icpStatement: "Mid-market freight forwarders.",
+                annualQuota: 1_200_000,
+                avgDealSize: 50_000
+            }),
+            { now: NOW, storage: s }
+        );
+        const ob = JSON.parse(s.getItem("gtmos_onboarding") ?? "{}");
+        // js/workspace-guard.js line 33 checks .completed === true
+        // js/supabase-config.js line 139 checks the same shape
+        expect(ob.completed).toBe(true);
+        expect(typeof ob.completedAt).toBe("string");
+        expect(ob.answers.companyName).toBe("Antaeus");
+        expect(ob.answers.role).toBe("founder");
+        expect(ob.answers.productCategory).toBe("revenue");
+    });
+
+    it("category is JSON-encoded so legacy JSON.parse readers can decode", () => {
+        seedFromDraft(makeDraft({ category: "legal" }), {
+            now: NOW,
+            storage: s
+        });
+        const raw = s.getItem("gtmos_product_category");
+        // Legacy app/settings/index.html line 514 + js/demo-seed-runtime.js
+        // line 823 both use JSON.stringify; readers use JSON.parse.
+        expect(raw).toBe('"legal"');
+        expect(JSON.parse(raw ?? "")).toBe("legal");
+    });
+
+    it("merges new ICP into existing collection rather than overwriting", () => {
+        // Pre-seed an existing ICP from a prior session.
+        s.setItem(
+            "gtmos_icp_analytics",
+            JSON.stringify({
+                icps: [
+                    {
+                        id: "old_icp",
+                        name: "Existing thesis",
+                        statement: "Existing thesis",
+                        qualityBand: "ready"
+                    }
+                ],
+                totalWorked: 1
+            })
+        );
+        seedFromDraft(
+            makeDraft({ icpStatement: "New thesis from onboarding rerun." }),
+            { now: NOW, storage: s }
+        );
+        const data = JSON.parse(s.getItem("gtmos_icp_analytics") ?? "{}");
+        const ids = data.icps.map((i: { id: string }) => i.id);
+        expect(ids).toContain("old_icp");
+        expect(data.icps).toHaveLength(2);
+        // Existing collection metadata preserved.
+        expect(data.totalWorked).toBe(1);
+    });
+
+    it("merges new account into existing collection rather than overwriting", () => {
+        s.setItem(
+            "gtmos_sc_v4",
+            JSON.stringify({
+                accounts: [
+                    { id: "old_acc", name: "Existing Co", heat: 90, signals: [] }
+                ],
+                mode: "complex"
+            })
+        );
+        seedFromDraft(
+            makeDraft({ firstAccountName: "Brand New Co" }),
+            { now: NOW, storage: s }
+        );
+        const sc = JSON.parse(s.getItem("gtmos_sc_v4") ?? "{}");
+        expect(sc.accounts).toHaveLength(2);
+        const names = sc.accounts.map((a: { name: string }) => a.name);
+        expect(names).toContain("Existing Co");
+        expect(names).toContain("Brand New Co");
+        // Existing envelope metadata preserved.
+        expect(sc.mode).toBe("complex");
+    });
+
+    it("dedupes accounts by case-insensitive name on re-run", () => {
+        s.setItem(
+            "gtmos_sc_v4",
+            JSON.stringify({
+                accounts: [
+                    { id: "old_acc", name: "Meridian Logistics", heat: 60 }
+                ]
+            })
+        );
+        seedFromDraft(
+            makeDraft({ firstAccountName: "meridian logistics" }),
+            { now: NOW, storage: s }
+        );
+        const sc = JSON.parse(s.getItem("gtmos_sc_v4") ?? "{}");
+        expect(sc.accounts).toHaveLength(1);
+        // The new (onboarding-v2) row replaces the old entry on name match.
+        expect(sc.accounts[0].source).toBe("onboarding-v2");
+    });
+
+    it("isOnboardingComplete recognises the legacy gtmos_onboarding shape", () => {
+        // Simulates a user who finished onboarding via the legacy flow
+        // (or via demo-seed) — they should not be sent back through the
+        // new flow.
+        s.setItem(
+            "gtmos_onboarding",
+            JSON.stringify({
+                completed: true,
+                completedAt: "2026-04-01T00:00:00Z"
+            })
+        );
+        expect(isOnboardingComplete(s)).toBe(true);
     });
 });
 
