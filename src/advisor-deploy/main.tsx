@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { AdvisorDeploy } from "./AdvisorDeploy";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import {
     setAdvisors,
     setDealId,
@@ -12,6 +13,7 @@ import {
 import { loadAdvisors, loadDeployments } from "./lib/persistence";
 import { loadDeals } from "./lib/deal-loader";
 import { readInboundDealId } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 /**
  * Entry point for the Advisor Deploy Preact rebuild
@@ -91,3 +93,19 @@ startAdvisorPersistence();
 startDeploymentPersistence();
 
 render(<AdvisorDeploy />, root);
+
+// Async cloud load for deployment history. Doesn't block first paint.
+// Replaces local deployments if cloud has rows; migrates local up if
+// cloud is empty. Advisor REGISTRY stays in localStorage in this batch
+// (deployments carry advisor_name + advisor_tier denormalized).
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[advisor-deploy] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

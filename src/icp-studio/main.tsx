@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { IcpStudio } from "./IcpStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
 import {
     patchDraft,
@@ -9,6 +10,7 @@ import {
     startAnalyticsPersistence
 } from "./state";
 import { loadAnalytics } from "./lib/persistence";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 initObservability();
 
@@ -27,6 +29,10 @@ if (!flagOn) {
     );
 }
 
+// Step 1 — synchronous seed from localStorage so the room renders
+// instantly with the operator's last-known ICP library instead of
+// flashing an empty state. This is the OFFLINE FALLBACK; cloud load
+// below replaces it once Supabase resolves.
 const seed = loadAnalytics();
 setSavedIcps(seed.icps);
 setTotalWorked(seed.totalWorked);
@@ -41,3 +47,21 @@ if (ctx.focusObject) {
 }
 
 render(<IcpStudio />, root);
+
+// Step 2 — async cloud load. Doesn't block first paint. If cloud has
+// rows, replace local state (cloud is canonical). If cloud is empty
+// AND localStorage seeded data, push the seed up (one-time migration).
+// If Supabase env vars are missing or the network is hostile, the
+// room stays usable with whatever localStorage seeded — no degradation,
+// just no cross-device sync until the next session retries.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[icp-studio] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

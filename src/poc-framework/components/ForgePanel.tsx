@@ -10,6 +10,7 @@ import {
 } from "../state";
 import { OUTCOMES, type DurationDays, type Outcome } from "../lib/types";
 import { computeQuality } from "../lib/quality";
+import { saveProof } from "../lib/cloud-persistence";
 import { HeatLedger } from "./HeatLedger";
 
 const OUTCOME_LABELS: Record<Outcome, string> = {
@@ -137,7 +138,10 @@ export function ForgePanel(): JSX.Element {
                         type="button"
                         class="poc-forge__save"
                         disabled={!drft.account.trim()}
-                        onClick={() => saveDraft()}
+                        onClick={() => {
+                            const proof = saveDraft();
+                            void saveProof(proof);
+                        }}
                     >
                         Cast proof
                     </button>

@@ -19,6 +19,7 @@ import { advisorsForDeal } from "../lib/recommend";
 import { getCooldownStatus } from "../lib/cooldown";
 import { buildAsk, dealPressure } from "../lib/ask-builder";
 import { computeSpendRead } from "../lib/score";
+import { saveDeployment } from "../lib/cloud-persistence";
 import type { MomentId } from "../lib/types";
 
 /**
@@ -92,7 +93,8 @@ export function DeskBoard(): JSX.Element {
         : "Add a live deal and at least one advisor before spending relationship capital.";
 
     function stampOutcome(outcome: DeploymentOutcome): void {
-        logDeployment(outcome);
+        const dep = logDeployment(outcome);
+        if (dep) void saveDeployment(dep);
     }
 
     // Top 4 advisors for the rolodex: exact matches first, then anyone else.

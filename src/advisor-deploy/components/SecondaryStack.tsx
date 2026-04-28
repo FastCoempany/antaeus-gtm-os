@@ -20,6 +20,7 @@ import {
     hrefToFutureAutopsy,
     hrefToPocFramework
 } from "../lib/handoff";
+import { saveDeployment } from "../lib/cloud-persistence";
 import {
     DEPLOYMENT_OUTCOMES,
     DEPLOYMENT_OUTCOME_LABELS,
@@ -264,14 +265,16 @@ export function SecondaryStack(): JSX.Element {
                                         <select
                                             class="ad-outcome"
                                             value={d.outcome}
-                                            onChange={(e) =>
-                                                updateDeploymentOutcome(
+                                            onChange={(e) => {
+                                                const updated = updateDeploymentOutcome(
                                                     d.id,
                                                     (
                                                         e.currentTarget as HTMLSelectElement
                                                     ).value as DeploymentOutcome
-                                                )
-                                            }
+                                                );
+                                                if (updated)
+                                                    void saveDeployment(updated);
+                                            }}
                                         >
                                             {DEPLOYMENT_OUTCOMES.map((o) => (
                                                 <option key={o} value={o}>

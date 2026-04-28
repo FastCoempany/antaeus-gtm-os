@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { PocFramework } from "./PocFramework";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
 import {
     linkedDeals,
@@ -12,6 +13,7 @@ import {
 import { loadProofs } from "./lib/persistence";
 import { loadDealsForLinking } from "./lib/deal-sync";
 import { readInboundDealId } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 /**
  * Entry point for the PoC Framework Preact rebuild
@@ -76,3 +78,17 @@ if (inboundDealId) {
 }
 
 render(<PocFramework />, root);
+
+// Async cloud load — replaces local proof state if cloud has rows,
+// or migrates local up if cloud is empty. Doesn't block first paint.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[poc-framework] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

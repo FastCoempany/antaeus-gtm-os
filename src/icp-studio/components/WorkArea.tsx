@@ -25,6 +25,7 @@ import {
     buildStatement
 } from "../lib/builders";
 import { buildIcpQuality } from "../lib/quality";
+import { saveIcp } from "../lib/cloud-persistence";
 import type { RoleKey } from "../lib/types";
 
 /**
@@ -470,6 +471,8 @@ function SaveBar(): JSX.Element {
             return;
         }
         flash(`Saved · ${icp.industry} (${icp.qualityScore}/100).`);
+        // Fire-and-forget cloud sync; errors are reported through Sentry.
+        void saveIcp(icp);
     }
 
     return (
