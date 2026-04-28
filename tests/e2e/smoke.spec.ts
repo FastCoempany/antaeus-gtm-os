@@ -332,6 +332,29 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 13 Wave 1 — /sourcing-workbench/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/sourcing-workbench/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".sw-topbar__kicker")).toContainText(
+            "Research loom"
+        );
+        await expect(page.locator(".sw-querystudio")).toBeAttached();
+        await expect(page.locator(".sw-prospect-composer")).toBeAttached();
+        await expect(page.locator(".sw-kanban")).toBeAttached();
+        await expect(page.locator(".sw-handoff")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 15 Wave 1 — /settings/ Preact rebuild boots cleanly", async ({
         page
     }) => {
