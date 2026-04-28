@@ -379,6 +379,27 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 15 Wave 1 — /settings/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/settings/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".st-topbar__kicker")).toContainText(
+            "Trust + recovery"
+        );
+        await expect(page.locator(".st-grid")).toBeAttached();
+        await expect(page.locator(".st-card")).toHaveCount(4);
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 16 Wave 1 — /welcome/ Preact rebuild boots cleanly", async ({
         page
     }) => {

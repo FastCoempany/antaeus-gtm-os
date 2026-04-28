@@ -245,6 +245,34 @@
     <script src="/js/guided-rail.js"></script>
     <script src="/js/analytics-site-config.js"></script>
     <script src="/js/analytics.js"></script>
+    <!--
+        Phase 4 / Room 15 Wave 6 — flag-based cutover to /settings/ Preact
+        rebuild. Behind Posthog flag `room_settings_v2`. ?demo=1 / ?qa=1
+        skip the redirect.
+        Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
+    -->
+    <script>
+        (function(){
+            var qs = window.location.search || "";
+            if (qs.indexOf("demo=1") !== -1 || qs.indexOf("qa=1") !== -1) {
+                return;
+            }
+            function maybeRedirect() {
+                if (typeof posthog === "undefined" || !posthog.onFeatureFlags) {
+                    return false;
+                }
+                posthog.onFeatureFlags(function () {
+                    if (posthog.isFeatureEnabled("room_settings_v2")) {
+                        var hash = window.location.hash || "";
+                        window.location.replace("/settings/" + qs + hash);
+                    }
+                });
+                return true;
+            }
+            if (maybeRedirect()) return;
+            window.addEventListener("gtmos:posthog-ready", maybeRedirect, { once: true });
+        })();
+    </script>
     <script>
         function toast(msg) {
             var el = document.getElementById('settingsToast');

@@ -245,6 +245,12 @@ export default defineConfig({
                     "src/quota-workback/index.html"
                 ),
 
+                // Phase 4 / Room 15 — Settings Preact rebuild. Served at
+                // /settings/. Behind Posthog feature flag
+                // `room_settings_v2`; legacy `app/settings/index.html`
+                // redirects here when on.
+                settings: resolve(__dirname, "src/settings/index.html"),
+
                 // Phase 4 / Room 16 — Welcome Preact rebuild. Served at
                 // /welcome/. Behind Posthog feature flag
                 // `room_welcome_v2`; legacy `app/welcome/index.html`
