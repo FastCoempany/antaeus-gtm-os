@@ -1,0 +1,429 @@
+/*
+ * Welcome — Phase 4 / Room 16 styles.
+ *
+ * Per canon §4.1 (Threshold family) + Part II §1: bright field,
+ * navy ink, invitational. Founder directive 2026-04-27: bright only.
+ */
+
+:root {
+    --wel-navy: #0a1c40;
+    --wel-ink: #142f5e;
+    --wel-soft: #647da0;
+    --wel-muted: #91a4c2;
+    --wel-line: rgba(10, 28, 64, 0.13);
+    --wel-line2: rgba(10, 28, 64, 0.07);
+    --wel-orange: #e6701e;
+    --wel-blue: #2563eb;
+    --wel-green: #22c55e;
+    --wel-cream: #fdf9f3;
+    --wel-shadow: 0 28px 70px rgba(10, 28, 64, 0.10);
+    --wel-shadow-sm: 0 12px 28px rgba(10, 28, 64, 0.07);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0; padding: 0;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--wel-navy);
+    background: #eef3fa;
+    background:
+        radial-gradient(circle at 4% 0%, rgba(37, 99, 235, 0.10), transparent 32%),
+        radial-gradient(circle at 96% 0%, rgba(230, 112, 30, 0.08), transparent 30%),
+        linear-gradient(180deg, #fbfdff 0, #eef3fa 100%);
+    min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.wel-shell {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+    display: grid;
+    gap: 36px;
+}
+
+.wel-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 24px;
+}
+
+@media (max-width: 1000px) {
+    .wel-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Hero ──────────────────────────────────────────────────────────── */
+
+.wel-hero {
+    padding-bottom: 8px;
+}
+
+.wel-hero__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--wel-orange);
+    margin: 0 0 14px;
+}
+
+.wel-hero__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(40px, 5vw, 76px);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    color: var(--wel-navy);
+    margin: 0 0 14px;
+    max-width: 18ch;
+}
+
+.wel-hero__subtitle {
+    color: var(--wel-soft);
+    font-size: 17px;
+    line-height: 1.55;
+    max-width: 70ch;
+    margin: 0;
+}
+
+.wel-hero__chips {
+    list-style: none;
+    margin: 22px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.wel-chip {
+    background: #fff;
+    border: 1px solid var(--wel-line2);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--wel-ink);
+    font-weight: 600;
+    box-shadow: var(--wel-shadow-sm);
+}
+
+.wel-hero__progress {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    gap: 12px;
+    max-width: 540px;
+}
+
+.wel-hero__progress-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--wel-soft);
+}
+
+.wel-hero__progress-count {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    color: var(--wel-orange);
+    line-height: 1;
+}
+
+.wel-hero__progress-bar {
+    height: 8px;
+    background: rgba(10, 28, 64, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.wel-hero__progress-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--wel-orange), #f59e0b);
+    transition: width 240ms ease;
+}
+
+/* ─── Section heads ─────────────────────────────────────────────────── */
+
+.wel-section__head { margin-bottom: 14px; }
+
+.wel-section__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--wel-orange);
+    margin: 0 0 6px;
+}
+
+.wel-section__title {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--wel-navy);
+    margin: 0;
+}
+
+.wel-section__sub {
+    color: var(--wel-soft);
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 6px 0 0;
+    max-width: 56ch;
+}
+
+/* ─── Ladder ────────────────────────────────────────────────────────── */
+
+.wel-ladder {
+    background: #fff;
+    border: 1px solid var(--wel-line2);
+    border-left: 4px solid var(--wel-blue);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--wel-shadow);
+}
+
+.wel-ladder__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+}
+
+.wel-ms {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--wel-line2);
+    align-items: start;
+}
+
+.wel-ms:first-child {
+    padding-top: 4px;
+    border-top: 0;
+}
+
+.wel-ms__mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(10, 28, 64, 0.06);
+    color: var(--wel-muted);
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.wel-ms--done .wel-ms__mark {
+    background: rgba(34, 197, 94, 0.14);
+    color: #15803d;
+}
+
+.wel-ms--next .wel-ms__mark {
+    background: rgba(230, 112, 30, 0.13);
+    color: var(--wel-orange);
+    border: 2px solid var(--wel-orange);
+}
+
+.wel-ms__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.wel-ms__label {
+    font-size: 14.5px;
+    color: var(--wel-navy);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.wel-ms__copy {
+    font-size: 13px;
+    color: var(--wel-soft);
+    line-height: 1.5;
+}
+
+.wel-ms__status {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--wel-muted);
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.wel-ms--done .wel-ms__status { color: #15803d; }
+.wel-ms--next .wel-ms__status { color: var(--wel-orange); }
+
+/* ─── Action stack ──────────────────────────────────────────────────── */
+
+.wel-actions {
+    background: #fff;
+    border: 1px solid var(--wel-line2);
+    border-left: 4px solid var(--wel-orange);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--wel-shadow);
+}
+
+.wel-actions__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.wel-action {
+    background: var(--wel-cream);
+    border: 1px solid var(--wel-line2);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wel-action.is-dominant {
+    background: #fff;
+    border: 1px solid rgba(230, 112, 30, 0.30);
+    box-shadow: 0 18px 36px rgba(230, 112, 30, 0.12);
+    padding: 22px;
+}
+
+.wel-action__head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.wel-action__state {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(100, 125, 160, 0.13);
+    color: var(--wel-soft);
+}
+
+.wel-action__state--now {
+    background: var(--wel-orange);
+    color: #fff;
+}
+
+.wel-action__state--next {
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--wel-blue);
+}
+
+.wel-action__title {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    color: var(--wel-navy);
+    margin: 0;
+    line-height: 1.1;
+}
+
+.wel-action.is-dominant .wel-action__title {
+    font-size: 26px;
+}
+
+.wel-action__body {
+    color: var(--wel-ink);
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.wel-action__meta {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.wel-action__meta li {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--wel-soft);
+    background: #fff;
+    border: 1px solid var(--wel-line2);
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-weight: 600;
+}
+
+.wel-action__why,
+.wel-action__unlocks {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--wel-soft);
+    line-height: 1.5;
+}
+
+.wel-mono {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--wel-orange);
+    font-weight: 700;
+    margin-right: 6px;
+}
+
+.wel-btn {
+    align-self: flex-start;
+    font: inherit;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 120ms ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.wel-btn--primary {
+    background: var(--wel-orange);
+    color: #fff;
+}
+
+.wel-btn--primary:hover { background: #d4621a; }
+
+.wel-btn--ghost {
+    background: #fff;
+    border-color: var(--wel-line);
+    color: var(--wel-navy);
+}
+
+.wel-btn--ghost:hover {
+    border-color: var(--wel-orange);
+    color: var(--wel-orange);
+}
