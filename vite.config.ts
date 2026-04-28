@@ -207,6 +207,25 @@ export default defineConfig({
                     "src/advisor-deploy/index.html"
                 ),
 
+                // Phase 4 / Room 11 — ICP Studio Preact rebuild.
+                // Served at /icp-studio/. Behind Posthog feature flag
+                // `room_icp_studio_v2`; legacy
+                // `app/icp-studio/index.html` redirects here when on
+                // (Wave 6 wires the redirect script).
+                "icp-studio": resolve(
+                    __dirname,
+                    "src/icp-studio/index.html"
+                ),
+
+                // Phase 4 / Room 12 — Territory Architect Preact rebuild.
+                // Served at /territory-architect/. Behind Posthog flag
+                // `room_territory_architect_v2`; legacy
+                // `app/territory-architect/index.html` redirects here.
+                "territory-architect": resolve(
+                    __dirname,
+                    "src/territory-architect/index.html"
+                ),
+
                 // Phase 4 / Room 14 — Quota Workback Preact rebuild.
                 // Served at /quota-workback/. Behind Posthog feature flag
                 // `room_quota_workback_v2`; legacy

@@ -310,6 +310,28 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 11 Wave 1 — /icp-studio/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/icp-studio/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".icp-hero__kicker")).toContainText(
+            "ICP STUDIO"
+        );
+        await expect(page.locator(".icp-hero")).toBeAttached();
+        await expect(page.locator(".icp-work")).toBeAttached();
+        await expect(page.locator(".icp-analytics")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 14 Wave 1 — /quota-workback/ Preact rebuild boots cleanly", async ({
         page
     }) => {
@@ -406,6 +428,27 @@ test.describe("room boot smoke tests", () => {
         // legacy <script> tags loaded + loadFrameworks() projected the
         // global into the typed registry). Expect 9 frameworks in prod.
         await expect(page.locator(".ds-framework-rail__btn").first()).toBeVisible();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
+    test("Phase 4 / Room 12 Wave 1 — /territory-architect/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/territory-architect/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ta-hero__kicker")).toContainText(
+            "TERRITORY ARCHITECT"
+        );
+        await expect(page.locator(".ta-hero")).toBeAttached();
+        await expect(page.locator(".ta-block").first()).toBeAttached();
 
         expect(
             errors,
