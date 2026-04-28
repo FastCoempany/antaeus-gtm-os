@@ -1,12 +1,14 @@
 /*
  * PoC Framework — Wave 1 baseline styles.
  *
- * Decision Bench family with hybrid dark/light split per CLAUDE.md
- * Part II §4.4 + §4.8: "dark hero band above a bright work area" /
- * "dark forge / cream cast" — left half dark, right half cream.
+ * Decision Bench family. Bright-only per founder directive
+ * 2026-04-27. Forge is now a bright surface with a strong orange
+ * left-rule (where the molds get shaped); cast remains cream-tinted
+ * (where the proof gets carried). The forge/cast contrast survives
+ * as warm-rule + cool-base, not dark + light.
  *
- * Forge = severe, dark, where the molds get shaped.
- * Cast = bright, calm, where the proof gets carried.
+ * Forge = bright + orange-ruled, severe by typography + accent.
+ * Cast = bright + cream-tinted, calm + carry-ready.
  */
 
 :root {
@@ -19,17 +21,24 @@
     --poc-cream: #f7f1e6;
     --poc-cream-raised: #fdfaf3;
     --poc-cream-border: rgba(82, 60, 28, 0.18);
-    --poc-forge-bg: #0a1c40;
-    --poc-forge-raised: #122a55;
-    --poc-forge-text: #e9eef8;
-    --poc-forge-text-70: rgba(233, 238, 248, 0.7);
-    --poc-forge-text-40: rgba(233, 238, 248, 0.4);
-    --poc-forge-border: rgba(255, 255, 255, 0.12);
-    --poc-accent-orange: #ff6b1c;
-    --poc-accent-blue: #2e5aac;
-    --poc-accent-green: #2e7d4c;
-    --poc-accent-amber: #b57500;
-    --poc-accent-red: #b4261f;
+    /*
+     * Forge tokens — bright surface, navy ink. Originally the dark
+     * "forge" panel from the §4.8 hybrid pattern; the canon's bright-
+     * only directive (founder, 2026-04-27) collapses the forge into a
+     * white panel with an orange left-rule. The token names are kept
+     * so the existing rule selectors don't have to be retargeted.
+     */
+    --poc-forge-bg: #ffffff;
+    --poc-forge-raised: #f6f8fc;
+    --poc-forge-text: #0a1c40;
+    --poc-forge-text-70: rgba(10, 28, 64, 0.7);
+    --poc-forge-text-40: rgba(10, 28, 64, 0.4);
+    --poc-forge-border: rgba(10, 28, 64, 0.13);
+    --poc-accent-orange: #e6701e;
+    --poc-accent-blue: #2563eb;
+    --poc-accent-green: #22c55e;
+    --poc-accent-amber: #f59e0b;
+    --poc-accent-red: #ef4444;
     --poc-border: rgba(10, 28, 64, 0.1);
     --poc-border-strong: rgba(10, 28, 64, 0.25);
 }
@@ -121,6 +130,13 @@ button {
 .poc-forge {
     background: var(--poc-forge-bg);
     color: var(--poc-forge-text);
+    /*
+     * Orange left-rule carries the "severe forge" signature now that
+     * the panel is bright. Mirrors the Decision Bench convention used
+     * by Sourcing Workbench's QueryStudio (orange) vs ProspectComposer
+     * (blue) so PoC stays family-consistent.
+     */
+    border-left: 4px solid var(--poc-accent-orange);
 }
 
 .poc-cast {
@@ -317,7 +333,12 @@ button {
 
 .poc-heat__bar {
     height: 8px;
-    background: rgba(255, 255, 255, 0.08);
+    /*
+     * Track tint flipped from rgba(255,255,255,0.08) (faint white on
+     * dark forge) to rgba(10,28,64,0.10) (faint navy on bright forge)
+     * when the forge collapsed to bright per founder directive.
+     */
+    background: rgba(10, 28, 64, 0.10);
     border-radius: 999px;
     overflow: hidden;
 }
