@@ -43,9 +43,9 @@ describe("buildSourcingHref", () => {
 });
 
 describe("convenience builders", () => {
-    it("Territory Architect goes to legacy /app/ path", () => {
+    it("Territory Architect targets new-stack path", () => {
         const url = hrefToTerritoryArchitect();
-        expect(url.startsWith("/app/territory-architect/?")).toBe(true);
+        expect(url.startsWith("/territory-architect/?")).toBe(true);
     });
 
     it("Signal Console encodes account into both focusObject + account", () => {

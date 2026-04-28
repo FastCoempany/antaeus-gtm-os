@@ -6,7 +6,7 @@
  * `app/future-autopsy/index.html`). Builds the deep-link URL into the
  * destination room with the canonical continuity params:
  *
- *   returnTo     = /app/future-autopsy/   (where to come back)
+ *   returnTo     = /future-autopsy/   (where to come back)
  *   returnLabel  = "Back to Future Autopsy"
  *   focusObject  = the deal name           (what to highlight)
  *   focusRoom    = the destination room label
@@ -33,7 +33,7 @@ export function buildFutureAutopsyRoomHref({
 }: HandoffOptions): string {
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
-    params.set("returnTo", "/app/future-autopsy/");
+    params.set("returnTo", "/future-autopsy/");
     params.set("returnLabel", "Back to Future Autopsy");
     if (focusObject) params.set("focusObject", focusObject);
     if (roomLabel) params.set("focusRoom", roomLabel);
@@ -56,7 +56,7 @@ export function buildFutureAutopsyRoomHref({
 
 export function hrefToDealWorkspace(accountName: string, dealId?: string): string {
     return buildFutureAutopsyRoomHref({
-        href: "/app/deal-workspace/",
+        href: "/deal-workspace/",
         focusObject: accountName,
         roomLabel: "Deal Workspace",
         ...(dealId ? { extra: { deal: dealId } } : {})
@@ -65,7 +65,7 @@ export function hrefToDealWorkspace(accountName: string, dealId?: string): strin
 
 export function hrefToCallPlanner(accountName: string): string {
     return buildFutureAutopsyRoomHref({
-        href: "/app/discovery-agenda/",
+        href: "/call-planner/",
         focusObject: accountName,
         roomLabel: "Call Planner",
         extra: { account: accountName }
@@ -74,7 +74,7 @@ export function hrefToCallPlanner(accountName: string): string {
 
 export function hrefToPoC(accountName: string): string {
     return buildFutureAutopsyRoomHref({
-        href: "/app/poc-framework/",
+        href: "/poc-framework/",
         focusObject: accountName,
         roomLabel: "PoC Framework"
     });
@@ -82,7 +82,7 @@ export function hrefToPoC(accountName: string): string {
 
 export function hrefToDiscoveryStudio(accountName: string): string {
     return buildFutureAutopsyRoomHref({
-        href: "/app/discovery-studio/",
+        href: "/discovery-studio/",
         focusObject: accountName,
         roomLabel: "Discovery Studio",
         extra: { account: accountName }

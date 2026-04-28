@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import {
     draft,
     effectiveBuyer,
@@ -56,6 +57,7 @@ export function DarkHero(): JSX.Element {
     return (
         <section class="icp-hero" aria-label="ICP Studio hero">
             <div class="icp-hero__inner">
+                <BackButton />
                 <p class="icp-hero__kicker">DECISION BENCH · ICP STUDIO</p>
                 <h1 class="icp-hero__title">
                     Sharpen <span>one</span> wedge before scale compounds the

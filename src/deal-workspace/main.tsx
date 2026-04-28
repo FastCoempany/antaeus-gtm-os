@@ -1,8 +1,10 @@
 import { render } from "preact";
 import { DealWorkspace } from "./DealWorkspace";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { readContinuity } from "@/lib/continuity";
 import { createDataClient } from "@/lib/data-client";
 import { bootPersistence } from "./lib/persistence";
+import { allDeals, openDealEditor } from "./state";
 
 /**
  * Entry point for the Deal Workspace Preact rebuild (Phase 4).
@@ -55,5 +57,22 @@ void (async (): Promise<void> => {
             "[deal-workspace] Persistence layer disabled:",
             err instanceof Error ? err.message : String(err)
         );
+    }
+
+    // Cross-room handoff: if a caller passed `?focusObject=` (or
+    // `?deal=` historically), auto-open the deal-health modal once
+    // deals have loaded. Match by id first, then by case-insensitive
+    // accountName so PoC / Future Autopsy / Advisor handoffs all work
+    // (some thread the deal id, others thread the account name).
+    const ctx = readContinuity();
+    const focus = ctx.focusObject;
+    if (focus) {
+        const lower = focus.toLowerCase();
+        const match = allDeals.value.find(
+            (d) =>
+                d.id === focus ||
+                d.accountName.toLowerCase() === lower
+        );
+        if (match) openDealEditor(match);
     }
 })();

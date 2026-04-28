@@ -33,7 +33,7 @@ export function buildOutboundRoomHref({
 }: HandoffOptions): string {
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
-    params.set("returnTo", "/app/outbound-studio/");
+    params.set("returnTo", "/outbound-studio/");
     params.set("returnLabel", "Back to Outbound Studio");
     if (focusObject) params.set("focusObject", focusObject);
     if (roomLabel) params.set("focusRoom", roomLabel);
@@ -49,7 +49,7 @@ export function buildOutboundRoomHref({
 
 export function hrefToSignalConsole(focus: string): string {
     return buildOutboundRoomHref({
-        href: "/app/signal-console/",
+        href: "/signal-console/",
         focusObject: focus,
         roomLabel: "Signal Console"
     });
@@ -57,7 +57,7 @@ export function hrefToSignalConsole(focus: string): string {
 
 export function hrefToLinkedInPlaybook(focus: string): string {
     return buildOutboundRoomHref({
-        href: "/app/linkedin-playbook/",
+        href: "/linkedin-playbook/",
         focusObject: focus,
         roomLabel: "LinkedIn Playbook"
     });
@@ -65,7 +65,7 @@ export function hrefToLinkedInPlaybook(focus: string): string {
 
 export function hrefToColdCallStudio(focus: string): string {
     return buildOutboundRoomHref({
-        href: "/app/cold-call-studio/",
+        href: "/cold-call-studio/",
         focusObject: focus,
         roomLabel: "Cold Call Studio"
     });

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { BridgeStats } from "./components/BridgeStats";
 import { DealHealthModal } from "./components/DealHealthModal";
 import { FilterBar } from "./components/FilterBar";
@@ -32,6 +33,7 @@ export function DealWorkspace(): JSX.Element {
     return (
         <div class="dw-shell">
             <header class="dw-topbar">
+                <BackButton />
                 <p class="dw-topbar__kicker">
                     DEAL WORKSPACE · WAVE 1 ·{" "}
                     {dealCount > 0

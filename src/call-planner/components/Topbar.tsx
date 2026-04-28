@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { currentCompany, draft } from "../state";
 
 /**
@@ -17,6 +18,7 @@ export function Topbar(): JSX.Element {
         : "Pressure script";
     return (
         <header class="cp-topbar" aria-label="Call Planner header">
+            <BackButton />
             <p class="cp-topbar__kicker">CALLS FAMILY</p>
             <h1 class="cp-topbar__title">Call Planner</h1>
             <p class="cp-topbar__subtitle">

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { allAccounts } from "../state";
 
 /**
@@ -12,6 +13,7 @@ export function Topbar(): JSX.Element {
     const count = allAccounts.value.length;
     return (
         <header class="sc-topbar">
+            <BackButton />
             <p class="sc-topbar__kicker">
                 SIGNAL CONSOLE · WAVE 1 ·{" "}
                 {count > 0

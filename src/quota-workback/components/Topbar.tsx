@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { benchmark, metrics, quality } from "../state";
 
 /**
@@ -16,6 +17,7 @@ export function Topbar(): JSX.Element {
     const hasPlan = m.monthlyTarget > 0;
     return (
         <header class="qw-topbar" aria-label="Quota Workback header">
+            <BackButton />
             <p class="qw-topbar__kicker">Phase 4 / Planning board</p>
             <h1 class="qw-topbar__title">Quota Workback</h1>
             <p class="qw-topbar__subtitle">

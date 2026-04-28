@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { advisors, recentDeployments, selectedDeal } from "../state";
 
 /**
@@ -16,6 +17,7 @@ export function Topbar(): JSX.Element {
     const deal = selectedDeal.value;
     return (
         <header class="ad-topbar" aria-label="Advisor Deploy header">
+            <BackButton />
             <div class="ad-topbar__mast">
                 <p class="ad-topbar__kicker">
                     <strong>Advisor Deploy</strong> · backchannel desk

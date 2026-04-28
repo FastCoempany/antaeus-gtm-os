@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { allTouches } from "../state";
 
 /**
@@ -13,6 +14,7 @@ export function Topbar(): JSX.Element {
     const touchLabel = count === 1 ? "touch" : "touches";
     return (
         <header class="ob-topbar">
+            <BackButton />
             <p class="ob-topbar__kicker">
                 OUTBOUND STUDIO · WAVE 1 ·{" "}
                 {count > 0

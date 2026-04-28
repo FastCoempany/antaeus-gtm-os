@@ -14,12 +14,12 @@ function params(url: string): URLSearchParams {
 describe("buildOutboundRoomHref", () => {
     it("attaches the canonical continuity params", () => {
         const url = buildOutboundRoomHref({
-            href: "/app/signal-console/",
+            href: "/signal-console/",
             focusObject: "Acme",
             roomLabel: "Signal Console"
         });
         const p = params(url);
-        expect(p.get("returnTo")).toBe("/app/outbound-studio/");
+        expect(p.get("returnTo")).toBe("/outbound-studio/");
         expect(p.get("returnLabel")).toBe("Back to Outbound Studio");
         expect(p.get("focusObject")).toBe("Acme");
         expect(p.get("focusRoom")).toBe("Signal Console");
@@ -29,7 +29,7 @@ describe("buildOutboundRoomHref", () => {
 
     it("preserves existing query params", () => {
         const url = buildOutboundRoomHref({
-            href: "/app/cold-call-studio/?account=Beta",
+            href: "/cold-call-studio/?account=Beta",
             focusObject: "Beta",
             roomLabel: "Cold Call Studio"
         });
@@ -38,7 +38,7 @@ describe("buildOutboundRoomHref", () => {
 
     it("merges in extra params", () => {
         const url = buildOutboundRoomHref({
-            href: "/app/signal-console/",
+            href: "/signal-console/",
             focusObject: "Acme",
             roomLabel: "Signal Console",
             extra: { custom: "value" }
@@ -48,21 +48,21 @@ describe("buildOutboundRoomHref", () => {
 });
 
 describe("convenience builders", () => {
-    it("hrefToSignalConsole targets /app/signal-console/", () => {
-        expect(hrefToSignalConsole("Acme").startsWith("/app/signal-console/?")).toBe(
+    it("hrefToSignalConsole targets /signal-console/", () => {
+        expect(hrefToSignalConsole("Acme").startsWith("/signal-console/?")).toBe(
             true
         );
     });
 
-    it("hrefToLinkedInPlaybook targets /app/linkedin-playbook/", () => {
+    it("hrefToLinkedInPlaybook targets /linkedin-playbook/", () => {
         expect(
-            hrefToLinkedInPlaybook("Acme").startsWith("/app/linkedin-playbook/?")
+            hrefToLinkedInPlaybook("Acme").startsWith("/linkedin-playbook/?")
         ).toBe(true);
     });
 
-    it("hrefToColdCallStudio targets /app/cold-call-studio/", () => {
+    it("hrefToColdCallStudio targets /cold-call-studio/", () => {
         expect(
-            hrefToColdCallStudio("Acme").startsWith("/app/cold-call-studio/?")
+            hrefToColdCallStudio("Acme").startsWith("/cold-call-studio/?")
         ).toBe(true);
     });
 });

@@ -71,7 +71,7 @@ describe("buildActionPlan", () => {
         const v = computeVitals(deal({}), { now: NOW, storage: null });
         const plan = buildActionPlan(generateAutopsy(v));
         const url = new URL("https://x.com" + plan.primary!.href);
-        expect(url.searchParams.get("returnTo")).toBe("/app/future-autopsy/");
+        expect(url.searchParams.get("returnTo")).toBe("/future-autopsy/");
         expect(url.searchParams.get("focusObject")).toBe("Acme");
     });
 

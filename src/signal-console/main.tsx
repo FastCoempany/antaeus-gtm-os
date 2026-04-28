@@ -1,7 +1,12 @@
 import { render } from "preact";
 import { SignalConsole } from "./SignalConsole";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { setAllAccounts, startExternalPublishing } from "./state";
+import { readContinuity } from "@/lib/continuity";
+import {
+    selectAccount,
+    setAllAccounts,
+    startExternalPublishing
+} from "./state";
 import { loadAccounts } from "./lib/persistence";
 import { publishHealthSnapshot } from "./lib/health-snapshot";
 
@@ -43,6 +48,20 @@ if (!flagOn) {
 // the grid renders with data instead of flashing the empty state.
 const seeded = loadAccounts();
 setAllAccounts(seeded);
+
+// Honor cross-room handoff: if a caller passed `?account=Acme` or
+// `?focusObject=Acme`, auto-select that account so the operator
+// lands on the focused card instead of the default top-of-grid.
+// Match by id first, then by case-insensitive name.
+const ctx = readContinuity();
+const focus = ctx.focusObject;
+if (focus) {
+    const lower = focus.toLowerCase();
+    const matched = seeded.find(
+        (a) => a.id === focus || a.name.toLowerCase() === lower
+    );
+    if (matched) selectAccount(matched.id);
+}
 
 // Publish the health snapshot once on boot so Dashboard's aggregator
 // has fresh data even before the first edit.

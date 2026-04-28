@@ -27,11 +27,11 @@ class MemStorage {
 describe("buildColdCallHref", () => {
     it("appends the canonical continuity params", () => {
         const url = buildColdCallHref({
-            href: "/app/signal-console/",
+            href: "/signal-console/",
             focusObject: "Acme",
             roomLabel: "Signal Console"
         });
-        expect(url).toContain("returnTo=%2Fapp%2Fcold-call-studio%2F");
+        expect(url).toContain("returnTo=%2Fcold-call-studio%2F");
         expect(url).toContain("returnLabel=Back+to+Cold+Call+Studio");
         expect(url).toContain("focusObject=Acme");
         expect(url).toContain("focusRoom=Signal+Console");
@@ -41,17 +41,17 @@ describe("buildColdCallHref", () => {
 
     it("preserves any pre-existing query params on the href", () => {
         const url = buildColdCallHref({
-            href: "/app/deal-workspace/?stage=prospect",
+            href: "/deal-workspace/?stage=prospect",
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
         expect(url).toContain("stage=prospect");
-        expect(url).toContain("returnTo=%2Fapp%2Fcold-call-studio%2F");
+        expect(url).toContain("returnTo=%2Fcold-call-studio%2F");
     });
 
     it("includes ?account= when supplied", () => {
         const url = buildColdCallHref({
-            href: "/app/deal-workspace/",
+            href: "/deal-workspace/",
             focusObject: "Acme",
             roomLabel: "Deal Workspace",
             account: "Acme"
@@ -61,7 +61,7 @@ describe("buildColdCallHref", () => {
 
     it("merges extra params, ignoring blanks", () => {
         const url = buildColdCallHref({
-            href: "/app/poc-framework/",
+            href: "/poc-framework/",
             focusObject: "Acme",
             roomLabel: "PoC",
             extra: { thread: "ask", blank: "" }
@@ -73,9 +73,9 @@ describe("buildColdCallHref", () => {
 
 describe("hrefToSignalConsole / hrefToCallPlanner / hrefToDealWorkspace", () => {
     it("send to the right path with the focus object", () => {
-        expect(hrefToSignalConsole("Acme")).toContain("/app/signal-console/");
-        expect(hrefToCallPlanner("Acme")).toContain("/app/discovery-agenda/");
-        expect(hrefToDealWorkspace("Acme")).toContain("/app/deal-workspace/");
+        expect(hrefToSignalConsole("Acme")).toContain("/signal-console/");
+        expect(hrefToCallPlanner("Acme")).toContain("/call-planner/");
+        expect(hrefToDealWorkspace("Acme")).toContain("/deal-workspace/");
     });
 
     it("fall back to a sensible focus object when account is empty", () => {
