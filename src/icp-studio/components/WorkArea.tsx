@@ -1,9 +1,11 @@
 import type { JSX } from "preact";
+import { useState } from "preact/hooks";
 import {
     draft,
     effectiveBuyer,
     effectiveIndustry,
     patchDraft,
+    saveDraftAsIcp,
     setRole
 } from "../state";
 import {
@@ -448,6 +450,51 @@ function QualityReadout(): JSX.Element {
     );
 }
 
+function SaveBar(): JSX.Element {
+    const [toast, setToast] = useState<string>("");
+    const d = draft.value;
+    const industry = effectiveIndustry.value;
+    const buyer = effectiveBuyer.value;
+    const canSave =
+        industry.length > 0 && d.size.length > 0 && buyer.length > 0;
+
+    function flash(msg: string): void {
+        setToast(msg);
+        setTimeout(() => setToast(""), 2200);
+    }
+
+    function onSave(): void {
+        const icp = saveDraftAsIcp();
+        if (!icp) {
+            flash("Need at least industry + size + buyer to save.");
+            return;
+        }
+        flash(`Saved · ${icp.industry} (${icp.qualityScore}/100).`);
+    }
+
+    return (
+        <div class="icp-savebar" aria-label="Save ICP">
+            <button
+                type="button"
+                class="icp-save-btn"
+                disabled={!canSave}
+                onClick={onSave}
+            >
+                Save ICP to library
+            </button>
+            <p class="icp-save-hint">
+                The saved ICP becomes the Match score every downstream room
+                inherits.
+            </p>
+            {toast ? (
+                <span class="icp-save-toast" role="status">
+                    {toast}
+                </span>
+            ) : null}
+        </div>
+    );
+}
+
 export function WorkArea(): JSX.Element {
     return (
         <section class="icp-work" aria-label="ICP work surface">
@@ -461,6 +508,7 @@ export function WorkArea(): JSX.Element {
             <FormFields />
             <Outputs />
             <QualityReadout />
+            <SaveBar />
         </section>
     );
 }

@@ -13,6 +13,7 @@ import {
     replaceSavedIcp,
     resetDraft,
     resetSession,
+    saveDraftAsIcp,
     savedIcps,
     setRole,
     setSavedIcps,
@@ -189,6 +190,74 @@ describe("totalWorked counter", () => {
         expect(totalWorked.value).toBe(5);
         bumpTotalWorked(-99);
         expect(totalWorked.value).toBe(0);
+    });
+});
+
+describe("saveDraftAsIcp", () => {
+    beforeEach(() => {
+        resetSession();
+        if (typeof localStorage !== "undefined") localStorage.clear();
+    });
+
+    it("returns null when industry / size / buyer is missing", () => {
+        patchDraft({ industry: "Logistics", size: "", buyer: "VP Operations" });
+        expect(saveDraftAsIcp()).toBeNull();
+        patchDraft({
+            industry: "Logistics",
+            size: "200-1,000 employees",
+            buyer: ""
+        });
+        expect(saveDraftAsIcp()).toBeNull();
+        patchDraft({ industry: "" });
+        expect(saveDraftAsIcp()).toBeNull();
+        expect(savedIcps.value).toHaveLength(0);
+    });
+
+    it("saves with full inputs + bumps totalWorked", () => {
+        patchDraft({
+            industry: "Logistics",
+            size: "200-1,000 employees",
+            geo: "US",
+            buyer: "VP Operations",
+            pain: "Cost control / spend leakage",
+            trigger: "Hiring spike / org change",
+            proofWindow: "14 days",
+            engineActive: "80"
+        });
+        const icp = saveDraftAsIcp();
+        expect(icp).not.toBeNull();
+        expect(icp?.industry).toBe("Logistics");
+        expect(icp?.engineActive).toBe(80);
+        expect(icp?.qualityScore).toBeGreaterThan(0);
+        expect(savedIcps.value).toHaveLength(1);
+        expect(totalWorked.value).toBe(1);
+    });
+
+    it("uses the custom industry/buyer when 'custom' selected", () => {
+        patchDraft({
+            industry: "custom",
+            industryCustom: "AdTech",
+            size: "50-200 employees",
+            buyer: "custom",
+            buyerCustom: "Head of RevOps"
+        });
+        const icp = saveDraftAsIcp();
+        expect(icp?.industry).toBe("AdTech");
+        expect(icp?.buyer).toBe("Head of RevOps");
+    });
+
+    it("freezes the qualityChecks list at save time", () => {
+        patchDraft({
+            industry: "Logistics",
+            size: "200-1,000 employees",
+            geo: "US",
+            buyer: "VP Operations",
+            pain: "Cost control / spend leakage",
+            trigger: "Hiring spike / org change",
+            proofWindow: "14 days"
+        });
+        const icp = saveDraftAsIcp();
+        expect(icp?.qualityChecks.length).toBeGreaterThan(0);
     });
 });
 

@@ -1,26 +1,12 @@
 import { render } from "preact";
 import { IcpStudio } from "./IcpStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-
-/**
- * Entry point for the ICP Studio Preact rebuild
- * (Phase 4 / Room 11 per ADR-001 §6).
- *
- * Served at /icp-studio/ in dev + prod. Behind Posthog feature flag
- * `room_icp_studio_v2`. Wave 6 wires the legacy
- * `app/icp-studio/index.html` flag-redirect.
- *
- * Boot order (Wave 1):
- *   1. initObservability — Sentry + Posthog
- *   2. render — Preact mounts
- *
- * Wave 4 will seed savedIcps + totalWorked from
- * `gtmos_icp_analytics`. Wave 5 will publish ICP match scoring to
- * downstream rooms (Territory / Sourcing / Signal Console / Outbound
- * / Discovery / Readiness / Handoff).
- *
- * Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
- */
+import {
+    setSavedIcps,
+    setTotalWorked,
+    startAnalyticsPersistence
+} from "./state";
+import { loadAnalytics } from "./lib/persistence";
 
 initObservability();
 
@@ -38,5 +24,10 @@ if (!flagOn) {
             "Rendering anyway (Waves 1-5 are internal-test only)."
     );
 }
+
+const seed = loadAnalytics();
+setSavedIcps(seed.icps);
+setTotalWorked(seed.totalWorked);
+startAnalyticsPersistence();
 
 render(<IcpStudio />, root);

@@ -1,5 +1,6 @@
 import {
     computed,
+    effect,
     signal,
     type ReadonlySignal,
     type Signal
@@ -10,6 +11,9 @@ import {
     type RoleKey,
     type SavedIcp
 } from "./lib/types";
+import { buildStatement } from "./lib/builders";
+import { buildIcpQuality } from "./lib/quality";
+import { saveAnalytics, uid } from "./lib/persistence";
 
 /**
  * Phase 4 / Room 11 — ICP Studio runtime state.
@@ -111,6 +115,104 @@ export function resetSession(): void {
     savedIcps.value = [];
     totalWorked.value = 0;
     loaded.value = false;
+}
+
+// ─── High-level actions ────────────────────────────────────────────────
+
+/**
+ * Effective industry / buyer applying the custom-fallback rule. Pure —
+ * mirrors the computed signals but takes the draft explicitly so tests
+ * + saveDraftAsIcp can reuse the same logic.
+ */
+function effective(value: string, custom: string): string {
+    return value === "custom" ? custom.trim() : value;
+}
+
+/**
+ * Save the current draft as a SavedIcp. Returns the new SavedIcp or
+ * null when the minimum (industry + size + buyer) is missing — same
+ * legacy guard as line 1665.
+ */
+export function saveDraftAsIcp(
+    now: number = Date.now()
+): SavedIcp | null {
+    const d = draft.value;
+    const industry = effective(d.industry, d.industryCustom);
+    const size = d.size;
+    const buyer = effective(d.buyer, d.buyerCustom);
+    if (!industry || !size || !buyer) return null;
+
+    const statement = buildStatement({
+        industry,
+        size,
+        geo: d.geo,
+        buyer,
+        pain: d.pain,
+        trigger: d.trigger,
+        proofWindow: d.proofWindow
+    });
+    const engineActiveNum =
+        Number(d.engineActive) > 0 ? Math.floor(Number(d.engineActive)) : 0;
+    const quality = buildIcpQuality({
+        role: d.role,
+        industry,
+        size,
+        geo: d.geo,
+        buyer,
+        pain: d.pain,
+        trigger: d.trigger,
+        proofWindow: d.proofWindow,
+        activeAccounts: engineActiveNum
+    });
+    const iso = new Date(now).toISOString();
+    const icp: SavedIcp = {
+        id: uid("icp", now),
+        statement: statement.text,
+        role: d.role,
+        industry,
+        size,
+        geo: d.geo,
+        buyer,
+        pain: d.pain,
+        trigger: d.trigger,
+        proofWindow: d.proofWindow,
+        engineActive: engineActiveNum,
+        qualityScore: quality.score,
+        qualityChecks: quality.checks,
+        createdAt: iso,
+        updatedAt: iso
+    };
+    appendSavedIcp(icp);
+    bumpTotalWorked(1);
+    return icp;
+}
+
+// ─── Persistence side-effect ───────────────────────────────────────────
+
+let analyticsPersistStop: (() => void) | null = null;
+
+/**
+ * Mirror savedIcps + totalWorked writes to localStorage. Skips first
+ * run to avoid redundant boot-time write — same pattern as Phase 4 /
+ * Rooms 3-10.
+ */
+export function startAnalyticsPersistence(): () => void {
+    if (analyticsPersistStop) return analyticsPersistStop;
+    let firstRun = true;
+    const dispose = effect(() => {
+        const icps = savedIcps.value;
+        const worked = totalWorked.value;
+        if (firstRun) {
+            firstRun = false;
+            return;
+        }
+        saveAnalytics({ icps, totalWorked: worked });
+    });
+    analyticsPersistStop = () => {
+        dispose();
+        analyticsPersistStop = null;
+    };
+    return analyticsPersistStop;
 }
 
 // Test-only seed helpers ───────────────────────────────────────────────
