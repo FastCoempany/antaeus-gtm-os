@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { activation, model, roleLabel } from "../state";
 
 /**
@@ -13,6 +14,7 @@ export function Hero(): JSX.Element {
     const chips = buildChips(ctx, role, m);
     return (
         <header class="wel-hero">
+            <BackButton />
             <p class="wel-hero__kicker">Threshold</p>
             <h1 class="wel-hero__title">{m.headline}</h1>
             <p class="wel-hero__subtitle">{m.body}</p>

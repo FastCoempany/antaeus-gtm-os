@@ -1,7 +1,9 @@
 import { render } from "preact";
 import { IcpStudio } from "./IcpStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { readContinuity } from "@/lib/continuity";
 import {
+    patchDraft,
     setSavedIcps,
     setTotalWorked,
     startAnalyticsPersistence
@@ -29,5 +31,13 @@ const seed = loadAnalytics();
 setSavedIcps(seed.icps);
 setTotalWorked(seed.totalWorked);
 startAnalyticsPersistence();
+
+// Cross-room handoff: if a caller passed `?focusObject=<industry>`,
+// pre-fill the industry-custom field so the operator lands with
+// their thesis already partially shaped.
+const ctx = readContinuity();
+if (ctx.focusObject) {
+    patchDraft({ industry: "custom", industryCustom: ctx.focusObject });
+}
 
 render(<IcpStudio />, root);

@@ -1,7 +1,13 @@
 import { render } from "preact";
 import { FutureAutopsy } from "./FutureAutopsy";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { setAllVitals, setTaskLog, startTaskLogPersistence } from "./state";
+import { readContinuity } from "@/lib/continuity";
+import {
+    selectDeal,
+    setAllVitals,
+    setTaskLog,
+    startTaskLogPersistence
+} from "./state";
 import { loadDealsFromMirror } from "./lib/deal-loader";
 import { computeVitalsForAll } from "./lib/vitals";
 import { loadTaskLog } from "./lib/task-log";
@@ -50,5 +56,19 @@ setAllVitals(vitals);
 // back automatically.
 setTaskLog(loadTaskLog());
 startTaskLogPersistence();
+
+// Cross-room handoff: if a caller passed `?focusObject=<deal id or
+// account name>`, auto-pin that case. Match deal id first, then
+// case-insensitive name so both Deal Workspace handoffs (id-based)
+// and PoC / Advisor handoffs (account-name-based) work.
+const ctx = readContinuity();
+const focus = ctx.focusObject;
+if (focus) {
+    const lower = focus.toLowerCase();
+    const match = vitals.find(
+        (v) => v.id === focus || v.name.toLowerCase() === lower
+    );
+    if (match) selectDeal(match.id);
+}
 
 render(<FutureAutopsy />, root);

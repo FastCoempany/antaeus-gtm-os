@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { allProofs } from "../state";
 
 /**
@@ -13,6 +14,7 @@ export function Topbar(): JSX.Element {
     const proofLabel = count === 1 ? "proof" : "proofs";
     return (
         <header class="poc-topbar">
+            <BackButton />
             <p class="poc-topbar__kicker">
                 POC FRAMEWORK · WAVE 1 ·{" "}
                 {count > 0 ? `${count} ${proofLabel} cast` : "no proofs cast yet"}

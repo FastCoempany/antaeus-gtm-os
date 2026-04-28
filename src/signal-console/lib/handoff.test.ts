@@ -15,12 +15,12 @@ function params(url: string): URLSearchParams {
 describe("buildSignalRoomHref", () => {
     it("attaches the canonical continuity params", () => {
         const url = buildSignalRoomHref({
-            href: "/app/deal-workspace/",
+            href: "/deal-workspace/",
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
         const p = params(url);
-        expect(p.get("returnTo")).toBe("/app/signal-console/");
+        expect(p.get("returnTo")).toBe("/signal-console/");
         expect(p.get("returnLabel")).toBe("Back to Signal Console");
         expect(p.get("focusObject")).toBe("Acme");
         expect(p.get("focusRoom")).toBe("Deal Workspace");
@@ -30,7 +30,7 @@ describe("buildSignalRoomHref", () => {
 
     it("preserves existing query params on the destination href", () => {
         const url = buildSignalRoomHref({
-            href: "/app/outbound-studio/?account=Acme&temperature=warm",
+            href: "/outbound-studio/?account=Acme&temperature=warm",
             focusObject: "Acme",
             roomLabel: "Outbound Studio"
         });
@@ -42,7 +42,7 @@ describe("buildSignalRoomHref", () => {
 
     it("merges in extra params when provided", () => {
         const url = buildSignalRoomHref({
-            href: "/app/discovery-agenda/",
+            href: "/call-planner/",
             focusObject: "Acme",
             roomLabel: "Call Planner",
             extra: { account: "Acme", custom: "value" }
@@ -61,9 +61,9 @@ describe("convenience builders", () => {
         expect(p.get("focusRoom")).toBe("Outbound Studio");
     });
 
-    it("hrefToDealWorkspace targets /app/deal-workspace/", () => {
+    it("hrefToDealWorkspace targets /deal-workspace/", () => {
         const url = hrefToDealWorkspace("Gamma");
-        expect(url.startsWith("/app/deal-workspace/?")).toBe(true);
+        expect(url.startsWith("/deal-workspace/?")).toBe(true);
         expect(params(url).get("focusRoom")).toBe("Deal Workspace");
     });
 

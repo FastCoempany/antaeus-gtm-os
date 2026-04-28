@@ -31,7 +31,7 @@ export function buildLinkedInRoomHref({
 }: HandoffOptions): string {
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
-    params.set("returnTo", "/app/linkedin-playbook/");
+    params.set("returnTo", "/linkedin-playbook/");
     params.set("returnLabel", "Back to LinkedIn Playbook");
     params.set("focusObject", focusObject || "LinkedIn cue");
     params.set("focusRoom", roomLabel || "LinkedIn Playbook");
@@ -48,7 +48,7 @@ export function buildLinkedInRoomHref({
 
 export function hrefToSignalConsole(account: string): string {
     return buildLinkedInRoomHref({
-        href: "/app/signal-console/",
+        href: "/signal-console/",
         focusObject: account || "LinkedIn cue",
         roomLabel: "Signal Console",
         account
@@ -57,7 +57,7 @@ export function hrefToSignalConsole(account: string): string {
 
 export function hrefToOutboundStudio(account: string): string {
     return buildLinkedInRoomHref({
-        href: "/app/outbound-studio/",
+        href: "/outbound-studio/",
         focusObject: account || "LinkedIn cue",
         roomLabel: "Outbound Studio",
         account

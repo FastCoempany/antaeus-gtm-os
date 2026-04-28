@@ -10,11 +10,11 @@ import {
 describe("buildIcpStudioHref", () => {
     it("appends the canonical continuity params", () => {
         const url = buildIcpStudioHref({
-            href: "/app/territory-architect/",
+            href: "/territory-architect/",
             focusObject: "Logistics",
             roomLabel: "Territory Architect"
         });
-        expect(url).toContain("returnTo=%2Fapp%2Ficp-studio%2F");
+        expect(url).toContain("returnTo=%2Ficp-studio%2F");
         expect(url).toContain("returnLabel=Back+to+ICP+Studio");
         expect(url).toContain("focusObject=Logistics");
         expect(url).toContain("focusRoom=Territory+Architect");
@@ -24,12 +24,12 @@ describe("buildIcpStudioHref", () => {
 
     it("preserves pre-existing query params", () => {
         const url = buildIcpStudioHref({
-            href: "/app/sourcing-workbench/?tier=t1",
+            href: "/sourcing-workbench/?tier=t1",
             focusObject: "Logistics",
             roomLabel: "Sourcing Workbench"
         });
         expect(url).toContain("tier=t1");
-        expect(url).toContain("returnTo=%2Fapp%2Ficp-studio%2F");
+        expect(url).toContain("returnTo=%2Ficp-studio%2F");
     });
 
     it("does not overwrite an existing returnTo on the href", () => {
@@ -39,23 +39,23 @@ describe("buildIcpStudioHref", () => {
             roomLabel: "X"
         });
         expect(url).toContain("returnTo=%2Fother%2F");
-        expect(url).not.toContain("returnTo=%2Fapp%2Ficp-studio%2F");
+        expect(url).not.toContain("returnTo=%2Ficp-studio%2F");
     });
 });
 
 describe("convenience builders", () => {
     it("send to the right paths with industry as focus", () => {
         expect(hrefToTerritoryArchitect("Logistics")).toContain(
-            "/app/territory-architect/"
+            "/territory-architect/"
         );
         expect(hrefToSourcingWorkbench("Logistics")).toContain(
-            "/app/sourcing-workbench/"
+            "/sourcing-workbench/"
         );
         expect(hrefToSignalConsole("Logistics")).toContain(
-            "/app/signal-console/"
+            "/signal-console/"
         );
         expect(hrefToOutboundStudio("Logistics")).toContain(
-            "/app/outbound-studio/"
+            "/outbound-studio/"
         );
     });
 

@@ -14,12 +14,12 @@ function params(url: string): URLSearchParams {
 describe("buildPocRoomHref", () => {
     it("attaches the canonical continuity params", () => {
         const url = buildPocRoomHref({
-            href: "/app/deal-workspace/",
+            href: "/deal-workspace/",
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
         const p = params(url);
-        expect(p.get("returnTo")).toBe("/app/poc-framework/");
+        expect(p.get("returnTo")).toBe("/poc-framework/");
         expect(p.get("returnLabel")).toBe("Back to PoC Framework");
         expect(p.get("focusObject")).toBe("Acme");
         expect(p.get("focusRoom")).toBe("Deal Workspace");
@@ -29,7 +29,7 @@ describe("buildPocRoomHref", () => {
 
     it("preserves existing query params", () => {
         const url = buildPocRoomHref({
-            href: "/app/deal-workspace/?deal=existing",
+            href: "/deal-workspace/?deal=existing",
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
@@ -38,7 +38,7 @@ describe("buildPocRoomHref", () => {
 
     it("merges in extra params", () => {
         const url = buildPocRoomHref({
-            href: "/app/deal-workspace/",
+            href: "/deal-workspace/",
             focusObject: "Acme",
             roomLabel: "Deal Workspace",
             extra: { deal: "d-1" }
@@ -52,14 +52,14 @@ describe("convenience builders", () => {
         expect(params(hrefToDealWorkspace("Acme", "d-1")).get("deal")).toBe("d-1");
     });
 
-    it("hrefToFutureAutopsy targets /app/future-autopsy/", () => {
-        expect(hrefToFutureAutopsy("Acme").startsWith("/app/future-autopsy/?")).toBe(
+    it("hrefToFutureAutopsy targets /future-autopsy/", () => {
+        expect(hrefToFutureAutopsy("Acme").startsWith("/future-autopsy/?")).toBe(
             true
         );
     });
 
-    it("hrefToAdvisorDeploy targets /app/advisor-deploy/", () => {
-        expect(hrefToAdvisorDeploy("Acme").startsWith("/app/advisor-deploy/?")).toBe(
+    it("hrefToAdvisorDeploy targets /advisor-deploy/", () => {
+        expect(hrefToAdvisorDeploy("Acme").startsWith("/advisor-deploy/?")).toBe(
             true
         );
     });

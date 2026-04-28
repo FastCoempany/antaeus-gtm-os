@@ -10,11 +10,11 @@ import {
 describe("buildPlannerHref", () => {
     it("appends the canonical continuity params", () => {
         const url = buildPlannerHref({
-            href: "/app/discovery-studio/",
+            href: "/discovery-studio/",
             focusObject: "Sarah Chen",
             roomLabel: "Discovery Studio"
         });
-        expect(url).toContain("returnTo=%2Fapp%2Fdiscovery-agenda%2F");
+        expect(url).toContain("returnTo=%2Fcall-planner%2F");
         expect(url).toContain("returnLabel=Back+to+Call+Planner");
         expect(url).toContain("focusObject=Sarah+Chen");
         expect(url).toContain("focusRoom=Discovery+Studio");
@@ -24,7 +24,7 @@ describe("buildPlannerHref", () => {
 
     it("includes ?account= when supplied", () => {
         const url = buildPlannerHref({
-            href: "/app/signal-console/",
+            href: "/signal-console/",
             focusObject: "Sarah",
             roomLabel: "Signal Console",
             account: "Acme"
@@ -34,7 +34,7 @@ describe("buildPlannerHref", () => {
 
     it("includes ?deal= when supplied", () => {
         const url = buildPlannerHref({
-            href: "/app/deal-workspace/",
+            href: "/deal-workspace/",
             focusObject: "Sarah",
             roomLabel: "Deal Workspace",
             deal: "deal-123"
@@ -44,17 +44,17 @@ describe("buildPlannerHref", () => {
 
     it("preserves any pre-existing query params on the href", () => {
         const url = buildPlannerHref({
-            href: "/app/discovery-studio/?stage=opening",
+            href: "/discovery-studio/?stage=opening",
             focusObject: "Sarah",
             roomLabel: "Discovery Studio"
         });
         expect(url).toContain("stage=opening");
-        expect(url).toContain("returnTo=%2Fapp%2Fdiscovery-agenda%2F");
+        expect(url).toContain("returnTo=%2Fcall-planner%2F");
     });
 
     it("merges extra params, ignoring blanks", () => {
         const url = buildPlannerHref({
-            href: "/app/poc-framework/",
+            href: "/poc-framework/",
             focusObject: "Sarah",
             roomLabel: "PoC",
             extra: { mood: "tense", blank: "" }
@@ -76,13 +76,13 @@ describe("buildPlannerHref", () => {
 describe("hrefToDiscoveryStudio / hrefToDealWorkspace / hrefToSignalConsole", () => {
     it("send to the right destination paths", () => {
         expect(hrefToDiscoveryStudio("Sarah", "Acme")).toContain(
-            "/app/discovery-studio/"
+            "/discovery-studio/"
         );
         expect(hrefToDealWorkspace("Sarah", "Acme", "")).toContain(
-            "/app/deal-workspace/"
+            "/deal-workspace/"
         );
         expect(hrefToSignalConsole("Sarah", "Acme")).toContain(
-            "/app/signal-console/"
+            "/signal-console/"
         );
     });
 

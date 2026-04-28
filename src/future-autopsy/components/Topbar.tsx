@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { autopsyUniverse } from "../state";
 import { DEFAULT_HORIZON_DAYS } from "../lib/types";
 
@@ -16,6 +17,7 @@ export function Topbar(): JSX.Element {
     const dealLabel = count === 1 ? "deal" : "deals";
     return (
         <header class="fa-topbar">
+            <BackButton />
             <p class="fa-topbar__kicker">
                 FUTURE AUTOPSY · WAVE 1 · {DEFAULT_HORIZON_DAYS} days out ·{" "}
                 {count > 0 ? `${count} ${dealLabel} pinned` : "no deals pinned"}

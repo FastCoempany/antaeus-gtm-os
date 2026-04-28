@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { ModeSwitcher } from "./ModeSwitcher";
 
 /**
@@ -11,6 +12,7 @@ import { ModeSwitcher } from "./ModeSwitcher";
 export function Topbar(): JSX.Element {
     return (
         <header class="db-topbar">
+            <BackButton />
             <div class="db-topbar__lead">
                 <p class="db-topbar__kicker">DASHBOARD · WAVE 1</p>
                 <h1 class="db-topbar__title">What is under the most pressure right now.</h1>

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { callStats, selectedAccountName } from "../state";
 
 /**
@@ -14,6 +15,7 @@ export function Topbar(): JSX.Element {
     const account = selectedAccountName.value;
     return (
         <header class="cc-topbar" aria-label="Cold Call Studio header">
+            <BackButton />
             <p class="cc-topbar__kicker">CALLS FAMILY</p>
             <h1 class="cc-topbar__title">Cold Call Studio</h1>
             <p class="cc-topbar__subtitle">
