@@ -410,4 +410,25 @@ test.describe("room boot smoke tests", () => {
             `page errors during boot:\n${errors.join("\n")}`
         ).toEqual([]);
     });
+
+    test("Phase 4 / Room 12 Wave 1 — /territory-architect/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/territory-architect/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ta-hero__kicker")).toContainText(
+            "TERRITORY ARCHITECT"
+        );
+        await expect(page.locator(".ta-hero")).toBeAttached();
+        await expect(page.locator(".ta-block").first()).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
 });

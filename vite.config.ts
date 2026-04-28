@@ -217,6 +217,15 @@ export default defineConfig({
                     "src/icp-studio/index.html"
                 ),
 
+                // Phase 4 / Room 12 — Territory Architect Preact rebuild.
+                // Served at /territory-architect/. Behind Posthog flag
+                // `room_territory_architect_v2`; legacy
+                // `app/territory-architect/index.html` redirects here.
+                "territory-architect": resolve(
+                    __dirname,
+                    "src/territory-architect/index.html"
+                ),
+
                 // Phase 4 / Room 16 — Welcome Preact rebuild. Served at
                 // /welcome/. Behind Posthog feature flag
                 // `room_welcome_v2`; legacy `app/welcome/index.html`
