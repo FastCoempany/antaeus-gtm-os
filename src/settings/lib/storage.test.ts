@@ -57,40 +57,66 @@ describe("loadCategory / saveCategory", () => {
     });
 });
 
+class FakeSession {
+    private map = new Map<string, string>();
+    getItem(k: string): string | null {
+        return this.map.has(k) ? (this.map.get(k) ?? null) : null;
+    }
+    setItem(k: string, v: string): void {
+        this.map.set(k, v);
+    }
+    removeItem(k: string): void {
+        this.map.delete(k);
+    }
+}
+
 describe("loadDemoState / exitDemoMode", () => {
     let s: FakeStorage;
+    let session: FakeSession;
     beforeEach(() => {
         s = new FakeStorage();
+        session = new FakeSession();
     });
 
-    it("inactive when nothing stored", () => {
-        const d = loadDemoState(s);
+    it("inactive when sessionStorage gtmos_env_mode is missing", () => {
+        const d = loadDemoState({ storage: s, session });
         expect(d.active).toBe(false);
         expect(d.seededAt).toBeNull();
         expect(d.scenario).toBeNull();
     });
 
-    it("active when gtmos_demo_active is 1", () => {
-        s.setItem("gtmos_demo_active", "1");
+    it("inactive when env_mode is `prod`", () => {
+        session.setItem("gtmos_env_mode", "prod");
+        const d = loadDemoState({ storage: s, session });
+        expect(d.active).toBe(false);
+    });
+
+    it("active when sessionStorage gtmos_env_mode is `demo`", () => {
+        session.setItem("gtmos_env_mode", "demo");
         s.setItem("gtmos_demo_scenario", "mm");
         s.setItem("gtmos_demo_seeded_at", "2026-04-28T00:00:00Z");
-        const d = loadDemoState(s);
+        const d = loadDemoState({ storage: s, session });
         expect(d.active).toBe(true);
         expect(d.scenario).toBe("mm");
         expect(d.seededAt).toBe("2026-04-28T00:00:00Z");
     });
 
-    it("active when gtmos_demo_active is true", () => {
-        s.setItem("gtmos_demo_active", "true");
-        expect(loadDemoState(s).active).toBe(true);
+    it("ignores legacy gtmos_demo_active localStorage key (Wave 1 mistake)", () => {
+        // Wave 1 wrote `gtmos_demo_active` to localStorage; nothing in
+        // the rest of the app actually wrote that key. Make sure we no
+        // longer accidentally pick it up as authoritative — env_mode
+        // remains the canonical flag.
+        s.setItem("gtmos_demo_active", "1");
+        const d = loadDemoState({ storage: s, session });
+        expect(d.active).toBe(false);
     });
 
-    it("exitDemoMode removes all 3 demo keys", () => {
-        s.setItem("gtmos_demo_active", "1");
+    it("exitDemoMode removes the env_mode session flag + scenario localStorage", () => {
+        session.setItem("gtmos_env_mode", "demo");
         s.setItem("gtmos_demo_scenario", "ent");
         s.setItem("gtmos_demo_seeded_at", "x");
-        exitDemoMode(s);
-        expect(s.getItem("gtmos_demo_active")).toBeNull();
+        exitDemoMode({ storage: s, session });
+        expect(session.getItem("gtmos_env_mode")).toBeNull();
         expect(s.getItem("gtmos_demo_scenario")).toBeNull();
         expect(s.getItem("gtmos_demo_seeded_at")).toBeNull();
     });
@@ -116,6 +142,15 @@ describe("buildBackup", () => {
         s.setItem("ignored", "x");
         const snap = buildBackup(new Date(), s);
         expect(snap.data).toEqual({});
+    });
+
+    it("excludes gtmos_demo__-prefixed keys from real-mode backup", () => {
+        s.setItem("gtmos_real", "real-value");
+        s.setItem("gtmos_demo__gtmos_real", "demo-value");
+        s.setItem("gtmos_demo__gtmos_other", "demo-other");
+        const snap = buildBackup(new Date(), s);
+        // Backup only captures real-mode data; demo namespace is left alone.
+        expect(Object.keys(snap.data)).toEqual(["gtmos_real"]);
     });
 });
 
@@ -183,6 +218,20 @@ describe("clearWorkspace", () => {
         expect(removed).toBe(2);
         expect(s.getItem("gtmos_a")).toBeNull();
         expect(s.getItem("non_gtmos")).toBe("stay");
+    });
+
+    it("preserves gtmos_demo__-prefixed keys (sibling demo workspace)", () => {
+        // Simulates a user in real mode pressing Clear with a sibling
+        // demo workspace seeded into localStorage. Without the
+        // demo-namespace skip, every demo key would also be deleted.
+        s.setItem("gtmos_real", "1");
+        s.setItem("gtmos_demo__gtmos_real", "shadow-1");
+        s.setItem("gtmos_demo__gtmos_other", "shadow-2");
+        const removed = clearWorkspace(s);
+        expect(removed).toBe(1);
+        expect(s.getItem("gtmos_real")).toBeNull();
+        expect(s.getItem("gtmos_demo__gtmos_real")).toBe("shadow-1");
+        expect(s.getItem("gtmos_demo__gtmos_other")).toBe("shadow-2");
     });
 });
 
