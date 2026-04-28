@@ -205,7 +205,13 @@ export default defineConfig({
                 "advisor-deploy": resolve(
                     __dirname,
                     "src/advisor-deploy/index.html"
-                )
+                ),
+
+                // Phase 4 / Room 15 — Settings Preact rebuild. Served at
+                // /settings/. Behind Posthog feature flag
+                // `room_settings_v2`; legacy `app/settings/index.html`
+                // redirects here when on.
+                settings: resolve(__dirname, "src/settings/index.html")
             }
         }
     },
