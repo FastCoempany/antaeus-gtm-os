@@ -205,7 +205,13 @@ export default defineConfig({
                 "advisor-deploy": resolve(
                     __dirname,
                     "src/advisor-deploy/index.html"
-                )
+                ),
+
+                // Phase 4 / Room 16 — Welcome Preact rebuild. Served at
+                // /welcome/. Behind Posthog feature flag
+                // `room_welcome_v2`; legacy `app/welcome/index.html`
+                // redirects here when on.
+                welcome: resolve(__dirname, "src/welcome/index.html")
             }
         }
     },
