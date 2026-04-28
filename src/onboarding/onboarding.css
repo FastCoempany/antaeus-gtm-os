@@ -1,0 +1,372 @@
+/*
+ * Onboarding — Phase 4 / Room 17 styles.
+ *
+ * Per canon §4.3 (Threshold family) + Part III §5 + founder directive
+ * 2026-04-27: bright field, invitational, low-friction, one dominant
+ * move per surface.
+ */
+
+:root {
+    --ob-navy: #0a1c40;
+    --ob-ink: #142f5e;
+    --ob-soft: #647da0;
+    --ob-muted: #91a4c2;
+    --ob-line: rgba(10, 28, 64, 0.13);
+    --ob-line2: rgba(10, 28, 64, 0.07);
+    --ob-orange: #e6701e;
+    --ob-blue: #2563eb;
+    --ob-green: #22c55e;
+    --ob-cream: #fdf9f3;
+    --ob-shadow: 0 28px 70px rgba(10, 28, 64, 0.10);
+    --ob-shadow-sm: 0 12px 28px rgba(10, 28, 64, 0.07);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0; padding: 0;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ob-navy);
+    background: #eef3fa;
+    background:
+        radial-gradient(circle at 4% 0%, rgba(37, 99, 235, 0.10), transparent 32%),
+        radial-gradient(circle at 96% 0%, rgba(230, 112, 30, 0.08), transparent 30%),
+        linear-gradient(180deg, #fbfdff 0, #eef3fa 100%);
+    min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.ob-shell {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 36px 32px 80px;
+    display: grid;
+    gap: 32px;
+}
+
+/* ─── Progress rail ─────────────────────────────────────────────────── */
+
+.ob-progress { display: grid; gap: 12px; }
+
+.ob-progress__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+}
+
+.ob-progress__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--ob-orange);
+}
+
+.ob-progress__pct {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    color: var(--ob-navy);
+    line-height: 1;
+}
+
+.ob-progress__bar {
+    height: 8px;
+    background: rgba(10, 28, 64, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.ob-progress__fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--ob-orange), #f59e0b);
+    transition: width 240ms ease;
+}
+
+.ob-progress__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.ob-step-tag {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ob-muted);
+    background: #fff;
+    border: 1px solid var(--ob-line2);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-weight: 600;
+}
+
+.ob-step-tag.is-current {
+    color: var(--ob-orange);
+    border-color: rgba(230, 112, 30, 0.30);
+    background: rgba(230, 112, 30, 0.06);
+}
+
+.ob-step-tag.is-done {
+    color: #15803d;
+    border-color: rgba(34, 197, 94, 0.20);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+/* ─── Stage + step ──────────────────────────────────────────────────── */
+
+.ob-stage { display: grid; }
+
+.ob-step {
+    background: #fff;
+    border: 1px solid var(--ob-line2);
+    border-left: 4px solid var(--ob-orange);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--ob-shadow);
+    display: grid;
+    gap: 20px;
+}
+
+.ob-step__head { display: grid; gap: 6px; }
+
+.ob-step__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--ob-orange);
+    margin: 0;
+}
+
+.ob-step__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(28px, 3.6vw, 44px);
+    line-height: 1.0;
+    letter-spacing: -0.035em;
+    color: var(--ob-navy);
+    margin: 0;
+    max-width: 22ch;
+}
+
+.ob-step__sub {
+    color: var(--ob-soft);
+    font-size: 15.5px;
+    line-height: 1.55;
+    max-width: 64ch;
+    margin: 0;
+}
+
+.ob-step__body {
+    display: grid;
+    gap: 14px;
+}
+
+.ob-step__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* ─── Form fields ───────────────────────────────────────────────────── */
+
+.ob-field { display: grid; gap: 6px; }
+
+.ob-field__label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ob-ink);
+    font-weight: 700;
+}
+
+.ob-field__hint {
+    font-size: 12px;
+    color: var(--ob-muted);
+}
+
+.ob-input {
+    width: 100%;
+    border: 1px solid var(--ob-line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--ob-navy);
+    background: #fff;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.ob-input:focus {
+    outline: none;
+    border-color: var(--ob-orange);
+    box-shadow: 0 0 0 3px rgba(230, 112, 30, 0.15);
+}
+
+textarea.ob-input { resize: vertical; min-height: 60px; line-height: 1.5; }
+
+.ob-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 600px) {
+    .ob-form-row { grid-template-columns: 1fr; }
+}
+
+.ob-coach {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.22);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #b45309;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 8px 0 0;
+}
+
+/* ─── Option pickers ────────────────────────────────────────────────── */
+
+.ob-options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.ob-options--grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 600px) {
+    .ob-options--grid { grid-template-columns: 1fr; }
+}
+
+.ob-option {
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    border: 1px solid var(--ob-line);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 120ms ease;
+    display: grid;
+    gap: 6px;
+    font: inherit;
+    color: var(--ob-navy);
+}
+
+.ob-option:hover {
+    border-color: var(--ob-orange);
+}
+
+.ob-option.is-selected {
+    border-color: var(--ob-orange);
+    background: rgba(230, 112, 30, 0.05);
+    box-shadow: 0 0 0 1px var(--ob-orange);
+}
+
+.ob-option__label {
+    font-size: 15px;
+    line-height: 1.2;
+    color: var(--ob-navy);
+}
+
+.ob-option__copy {
+    font-size: 13px;
+    color: var(--ob-soft);
+    line-height: 1.5;
+}
+
+.ob-option--compact {
+    padding: 12px 14px;
+}
+
+.ob-option--compact .ob-option__label {
+    font-size: 14px;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────── */
+
+.ob-btn {
+    font: inherit;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 12px 22px;
+    cursor: pointer;
+    transition: all 120ms ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.ob-btn--primary { background: var(--ob-orange); color: #fff; }
+.ob-btn--primary:hover:not(:disabled) { background: #d4621a; }
+
+.ob-btn--ghost {
+    background: #fff;
+    border-color: var(--ob-line);
+    color: var(--ob-navy);
+}
+.ob-btn--ghost:hover:not(:disabled) {
+    border-color: var(--ob-orange);
+    color: var(--ob-orange);
+}
+
+.ob-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ─── Thesis step ───────────────────────────────────────────────────── */
+
+.ob-thesis__points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+}
+
+.ob-thesis__points li {
+    background: var(--ob-cream);
+    border: 1px solid var(--ob-line2);
+    border-left: 3px solid var(--ob-blue);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--ob-ink);
+}
+
+.ob-thesis__points strong {
+    color: var(--ob-navy);
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* ─── Complete ──────────────────────────────────────────────────────── */
+
+.ob-complete__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
