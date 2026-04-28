@@ -205,6 +205,16 @@ export default defineConfig({
                 "advisor-deploy": resolve(
                     __dirname,
                     "src/advisor-deploy/index.html"
+                ),
+
+                // Phase 4 / Room 13 — Sourcing Workbench Preact rebuild.
+                // Served at /sourcing-workbench/. Behind Posthog feature
+                // flag `room_sourcing_workbench_v2`; legacy
+                // `app/sourcing-workbench/index.html` redirects here when
+                // on.
+                "sourcing-workbench": resolve(
+                    __dirname,
+                    "src/sourcing-workbench/index.html"
                 )
             }
         }
