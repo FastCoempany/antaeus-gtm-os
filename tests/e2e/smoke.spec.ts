@@ -355,6 +355,30 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 14 Wave 1 — /quota-workback/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/quota-workback/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".qw-topbar__kicker")).toContainText(
+            "Planning board"
+        );
+        await expect(page.locator(".qw-cov")).toBeAttached();
+        await expect(page.locator(".qw-health")).toBeAttached();
+        await expect(page.locator(".qw-form")).toBeAttached();
+        await expect(page.locator(".qw-plan")).toBeAttached();
+        await expect(page.locator(".qw-handoff")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 16 Wave 1 — /welcome/ Preact rebuild boots cleanly", async ({
         page
     }) => {
