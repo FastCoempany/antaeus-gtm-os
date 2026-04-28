@@ -205,7 +205,13 @@ export default defineConfig({
                 "advisor-deploy": resolve(
                     __dirname,
                     "src/advisor-deploy/index.html"
-                )
+                ),
+
+                // Phase 4 / Room 17 — Onboarding Preact rebuild (greenfield;
+                // not a port). Served at /onboarding/. Behind Posthog
+                // feature flag `room_onboarding_v2`; legacy
+                // `app/onboarding/index.html` redirects here when on.
+                onboarding: resolve(__dirname, "src/onboarding/index.html")
             }
         }
     },

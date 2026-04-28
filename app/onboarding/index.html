@@ -212,6 +212,33 @@
 <script src="/js/require-auth.js"></script>
 <script src="/js/analytics-site-config.js"></script>
 <script src="/js/analytics.js"></script>
+<!--
+    Phase 4 / Room 17 Wave 6 — flag-based cutover to /onboarding/ Preact
+    rebuild (greenfield; not a port). Behind Posthog flag
+    `room_onboarding_v2`. ?demo=1 / ?qa=1 skip the redirect.
+-->
+<script>
+    (function(){
+        var qs = window.location.search || "";
+        if (qs.indexOf("demo=1") !== -1 || qs.indexOf("qa=1") !== -1) {
+            return;
+        }
+        function maybeRedirect() {
+            if (typeof posthog === "undefined" || !posthog.onFeatureFlags) {
+                return false;
+            }
+            posthog.onFeatureFlags(function () {
+                if (posthog.isFeatureEnabled("room_onboarding_v2")) {
+                    var hash = window.location.hash || "";
+                    window.location.replace("/onboarding/" + qs + hash);
+                }
+            });
+            return true;
+        }
+        if (maybeRedirect()) return;
+        window.addEventListener("gtmos:posthog-ready", maybeRedirect, { once: true });
+    })();
+</script>
 <script>
 var step=0;
 var lastTrackedStep=null;

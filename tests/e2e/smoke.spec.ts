@@ -310,6 +310,25 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 4 / Room 17 Wave 1 — /onboarding/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/onboarding/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ob-progress__kicker")).toBeAttached();
+        await expect(page.locator(".ob-step__title")).toBeVisible();
+        await expect(page.locator(".ob-step__kicker")).toContainText("Welcome");
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 3 Wave 2 — /discovery-studio/ Preact rebuild boots and loads frameworks", async ({
         page
     }) => {
