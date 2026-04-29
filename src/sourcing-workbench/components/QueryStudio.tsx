@@ -11,6 +11,10 @@ import {
     saveQueryCardFromDraft,
     removeQueryCard
 } from "../state";
+import {
+    deleteArtifactInCloud,
+    saveQueryCard
+} from "../lib/cloud-persistence";
 
 /**
  * QueryStudio — query card composer + ledger.
@@ -26,7 +30,8 @@ export function QueryStudio(): JSX.Element {
 
     function onSubmit(e: Event): void {
         e.preventDefault();
-        saveQueryCardFromDraft();
+        const c = saveQueryCardFromDraft();
+        if (c) void saveQueryCard(c);
     }
 
     return (
@@ -154,7 +159,10 @@ export function QueryStudio(): JSX.Element {
                                 <button
                                     type="button"
                                     class="sw-btn sw-btn--ghost-sm"
-                                    onClick={() => removeQueryCard(card.id)}
+                                    onClick={() => {
+                                        removeQueryCard(card.id);
+                                        void deleteArtifactInCloud(card.id);
+                                    }}
                                     aria-label={`Remove ${card.intent || card.query}`}
                                 >
                                     Remove

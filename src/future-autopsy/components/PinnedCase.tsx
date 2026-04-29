@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import { currentAutopsy, selectedVitals, taskLog, toggleTaskDone } from "../state";
 import { buildActionPlan } from "../lib/action-plan";
 import { isTaskDone } from "../lib/task-log";
+import { saveTaskLogToCloud } from "../lib/cloud-persistence";
 import { VerdictToggle } from "./VerdictToggle";
 import { ForensicSheets } from "./ForensicSheets";
 import { RouteRack } from "./RouteRack";
@@ -71,7 +72,12 @@ export function PinnedCase(): JSX.Element {
                                         <input
                                             type="checkbox"
                                             checked={done}
-                                            onChange={() => toggleTaskDone(v.id, t.taskId)}
+                                            onChange={() => {
+                                                toggleTaskDone(v.id, t.taskId);
+                                                void saveTaskLogToCloud(
+                                                    taskLog.value
+                                                );
+                                            }}
                                         />
                                         <span class="fa-docket__label">{t.label}</span>
                                     </label>

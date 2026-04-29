@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { SourcingWorkbench } from "./SourcingWorkbench";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import {
     patchProspectDraft,
     setProspects,
@@ -9,6 +10,7 @@ import {
 } from "./state";
 import { loadProspects, loadQueryCards } from "./lib/persistence";
 import { readInboundAccount } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 /**
  * Entry point for the Sourcing Workbench Preact rebuild
@@ -55,3 +57,16 @@ if (inboundAccount) {
 startPersistence();
 
 render(<SourcingWorkbench />, root);
+
+// Async cloud load. Doesn't block first paint.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[sourcing-workbench] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

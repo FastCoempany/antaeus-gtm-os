@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { FutureAutopsy } from "./FutureAutopsy";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
 import {
     selectDeal,
@@ -11,6 +12,7 @@ import {
 import { loadDealsFromMirror } from "./lib/deal-loader";
 import { computeVitalsForAll } from "./lib/vitals";
 import { loadTaskLog } from "./lib/task-log";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 /**
  * Entry point for the Future Autopsy Preact rebuild
@@ -72,3 +74,18 @@ if (focus) {
 }
 
 render(<FutureAutopsy />, root);
+
+// Async cloud load. Doesn't block first paint. Replaces local task log
+// if cloud has a row; migrates local up if cloud is empty + local has
+// data.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[future-autopsy] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();
