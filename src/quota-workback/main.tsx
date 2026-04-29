@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { QuotaWorkback } from "./QuotaWorkback";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import {
     refreshCoverage,
     setInputs,
@@ -8,6 +9,10 @@ import {
     startPersistence
 } from "./state";
 import { loadInputs } from "./lib/persistence";
+import {
+    bootCloudPersistence,
+    startCloudAutoSave
+} from "./lib/cloud-persistence";
 
 /**
  * Entry point for the Quota Workback Preact rebuild
@@ -54,3 +59,20 @@ startCoverageRecompute();
 startPersistence();
 
 render(<QuotaWorkback />, root);
+
+// Async cloud load. If the cloud has saved inputs, hydrate from them
+// (cross-device "same plan everywhere"). If cloud is empty + local
+// has non-default inputs, push them up. Then wire the auto-save
+// effect — every input mutation mirrors to cloud (debounced).
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+        startCloudAutoSave();
+    } catch (err) {
+        console.warn(
+            "[quota-workback] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();
