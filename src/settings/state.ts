@@ -1,4 +1,5 @@
 import { signal, type Signal } from "@preact/signals";
+import { createDataClient } from "@/lib/data-client";
 import {
     DEMO_INACTIVE,
     type BackupReadout,
@@ -16,6 +17,13 @@ import {
     recordExport,
     saveCategory
 } from "./lib/storage";
+import {
+    checkCloudConnection,
+    EMPTY_COUNTS,
+    loadCloudRowCounts,
+    type CloudConnectionState,
+    type CloudRowCounts
+} from "./lib/cloud-sync";
 
 export type ToastTone = "good" | "warn" | "bad" | "info";
 
@@ -34,6 +42,16 @@ export const backup: Signal<BackupReadout> = signal({
 });
 export const toast: Signal<Toast | null> = signal(null);
 export const isWorking: Signal<boolean> = signal(false);
+
+export const cloudConnection: Signal<CloudConnectionState> = signal({
+    status: "no-credentials",
+    userEmail: null,
+    workspace: null,
+    errorMessage: null
+});
+export const cloudCounts: Signal<CloudRowCounts> = signal(EMPTY_COUNTS);
+export const isVerifyingCloud: Signal<boolean> = signal(false);
+export const cloudVerifiedAt: Signal<string | null> = signal(null);
 
 let toastTimer: number | null = null;
 
@@ -158,6 +176,30 @@ export function dismissToast(): void {
     toast.value = null;
 }
 
+/**
+ * Probe + refresh the cloud sync status. Called on mount and on
+ * "Verify cloud" button press. Surfaces connection state, workspace
+ * info, and per-noun row counts so the operator can confirm the
+ * cross-device sync is actually working.
+ */
+export async function refreshCloudStatus(): Promise<void> {
+    isVerifyingCloud.value = true;
+    try {
+        const connection = await checkCloudConnection(createDataClient);
+        cloudConnection.value = connection;
+        if (connection.status === "connected") {
+            const counts = await loadCloudRowCounts(createDataClient);
+            cloudCounts.value = counts;
+            cloudVerifiedAt.value = new Date().toISOString();
+        } else {
+            cloudCounts.value = EMPTY_COUNTS;
+            cloudVerifiedAt.value = null;
+        }
+    } finally {
+        isVerifyingCloud.value = false;
+    }
+}
+
 // Test seeds
 export function __setCategoryForTests(next: ProductCategory): void {
     category.value = next;
@@ -178,4 +220,22 @@ export function __resetForTests(): void {
     };
     toast.value = null;
     isWorking.value = false;
+    cloudConnection.value = {
+        status: "no-credentials",
+        userEmail: null,
+        workspace: null,
+        errorMessage: null
+    };
+    cloudCounts.value = EMPTY_COUNTS;
+    isVerifyingCloud.value = false;
+    cloudVerifiedAt.value = null;
+}
+
+export function __setCloudConnectionForTests(
+    next: CloudConnectionState
+): void {
+    cloudConnection.value = next;
+}
+export function __setCloudCountsForTests(next: CloudRowCounts): void {
+    cloudCounts.value = next;
 }

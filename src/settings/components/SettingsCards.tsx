@@ -8,11 +8,16 @@ import {
     backup,
     category,
     clearAll,
+    cloudConnection,
+    cloudCounts,
+    cloudVerifiedAt,
     demo,
     exitDemo,
     exportBackup,
     importBackupFromFile,
+    isVerifyingCloud,
     isWorking,
+    refreshCloudStatus,
     setCategory
 } from "../state";
 
@@ -31,11 +36,152 @@ import {
 export function SettingsCards(): JSX.Element {
     return (
         <div class="st-grid">
+            <CloudSyncCard />
             <BackupCard />
             <CategoryCard />
             <DemoCard />
             <RoleCard />
         </div>
+    );
+}
+
+function CloudSyncCard(): JSX.Element {
+    const conn = cloudConnection.value;
+    const counts = cloudCounts.value;
+    const verifying = isVerifyingCloud.value;
+    const verifiedAt = cloudVerifiedAt.value;
+
+    const statusLabel: Record<typeof conn.status, string> = {
+        connected: "Connected",
+        "no-credentials": "Not configured",
+        "auth-missing": "Signed out",
+        error: "Error"
+    };
+    const statusTone: Record<typeof conn.status, string> = {
+        connected: "good",
+        "no-credentials": "warn",
+        "auth-missing": "warn",
+        error: "bad"
+    };
+
+    const totalRows =
+        counts.icps +
+        counts.deals +
+        counts.proofs +
+        counts.advisorDeployments +
+        counts.signalConsoleAccounts +
+        counts.sequences +
+        counts.discoveryCallLogs +
+        counts.studioArtifacts +
+        counts.pipelineSettings;
+
+    const helpCopy: Record<typeof conn.status, string> = {
+        connected:
+            "Each room saves to Supabase as you work. The list below is a per-noun row count from the cloud — your real cross-device truth.",
+        "no-credentials":
+            "Supabase env vars are missing. The app will run on local storage only; cross-device sync is disabled until VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.",
+        "auth-missing":
+            "The cloud SDK loaded but no user is signed in. Sign in to the workspace to enable cross-device sync.",
+        error:
+            "Cloud check failed. Sentry should have a report; the room will keep working from local storage in the meantime."
+    };
+
+    return (
+        <article class="st-card">
+            <header class="st-card__head">
+                <span class="st-scope st-scope--workspace">
+                    Workspace-level
+                </span>
+                <h2 class="st-card__title">Cloud sync</h2>
+            </header>
+            <p class="st-card__desc">{helpCopy[conn.status]}</p>
+            <ul class="st-status-list">
+                <li>
+                    <span>Connection</span>
+                    <strong class={`st-cloud__status st-cloud__status--${statusTone[conn.status]}`}>
+                        {statusLabel[conn.status]}
+                    </strong>
+                </li>
+                <li>
+                    <span>Signed in as</span>
+                    <strong>{conn.userEmail || "—"}</strong>
+                </li>
+                <li>
+                    <span>Workspace</span>
+                    <strong>{conn.workspace?.name || "—"}</strong>
+                </li>
+                <li>
+                    <span>Total cloud rows</span>
+                    <strong>
+                        {conn.status === "connected" ? totalRows : "—"}
+                    </strong>
+                </li>
+                <li>
+                    <span>Last verified</span>
+                    <strong>
+                        {verifiedAt ? new Date(verifiedAt).toLocaleString() : "—"}
+                    </strong>
+                </li>
+            </ul>
+            {conn.status === "connected" && totalRows > 0 ? (
+                <details class="st-cloud__breakdown">
+                    <summary>Per-noun breakdown</summary>
+                    <ul class="st-cloud__counts">
+                        <li>
+                            <span>ICPs</span>
+                            <strong>{counts.icps}</strong>
+                        </li>
+                        <li>
+                            <span>Deals</span>
+                            <strong>{counts.deals}</strong>
+                        </li>
+                        <li>
+                            <span>Proofs</span>
+                            <strong>{counts.proofs}</strong>
+                        </li>
+                        <li>
+                            <span>Advisor deployments</span>
+                            <strong>{counts.advisorDeployments}</strong>
+                        </li>
+                        <li>
+                            <span>Signal accounts</span>
+                            <strong>{counts.signalConsoleAccounts}</strong>
+                        </li>
+                        <li>
+                            <span>Sequences (outbound + LinkedIn + angles)</span>
+                            <strong>{counts.sequences}</strong>
+                        </li>
+                        <li>
+                            <span>Call logs (cold call + planner)</span>
+                            <strong>{counts.discoveryCallLogs}</strong>
+                        </li>
+                        <li>
+                            <span>
+                                Studio artifacts (territory + sourcing + autopsy + advisor profiles)
+                            </span>
+                            <strong>{counts.studioArtifacts}</strong>
+                        </li>
+                        <li>
+                            <span>Pipeline settings (quota workback)</span>
+                            <strong>{counts.pipelineSettings}</strong>
+                        </li>
+                    </ul>
+                </details>
+            ) : null}
+            <div class="st-card__actions">
+                <button
+                    type="button"
+                    class="st-btn st-btn--primary"
+                    onClick={() => void refreshCloudStatus()}
+                    disabled={verifying}
+                >
+                    {verifying ? "Verifying…" : "Verify cloud sync"}
+                </button>
+            </div>
+            {conn.errorMessage ? (
+                <p class="st-cloud__error">{conn.errorMessage}</p>
+            ) : null}
+        </article>
     );
 }
 

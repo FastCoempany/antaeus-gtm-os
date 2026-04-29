@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import {
     __setAllAccountsForTests,
     allAccounts,
+    buildManualAccount,
     removeAccount,
     resetSession,
     searchQuery,
@@ -109,5 +110,55 @@ describe("resetSession", () => {
         expect(allAccounts.value).toHaveLength(0);
         expect(selectedAccountId.value).toBeNull();
         expect(searchQuery.value).toBe("");
+    });
+});
+
+describe("buildManualAccount", () => {
+    it("trims name + applies a legacy-style id", () => {
+        const a = buildManualAccount({
+            name: "  Acme Industries  ",
+            now: 1700000000000
+        });
+        expect(a.name).toBe("Acme Industries");
+        expect(a.id).toMatch(/^acc_1700000000000_[a-z0-9]{6}$/);
+        expect(a.signals).toEqual([]);
+    });
+
+    it("normalizes domain to lowercase + ticker to uppercase", () => {
+        const a = buildManualAccount({
+            name: "Acme",
+            domain: "ACME.COM",
+            ticker: "acme"
+        });
+        expect(a.domain).toBe("acme.com");
+        expect(a.ticker).toBe("ACME");
+    });
+
+    it("omits blank optional fields", () => {
+        const a = buildManualAccount({
+            name: "Acme",
+            domain: "  ",
+            ticker: "",
+            industry: "",
+            hq: "",
+            notes: ""
+        });
+        expect(a.domain).toBeUndefined();
+        expect(a.ticker).toBeUndefined();
+        expect(a.industry).toBeUndefined();
+        expect(a.hq).toBeUndefined();
+        expect(a.notes).toBeUndefined();
+    });
+
+    it("preserves filled optional fields trimmed", () => {
+        const a = buildManualAccount({
+            name: "Acme",
+            industry: "  Logistics  ",
+            hq: " SF ",
+            notes: " Active prospect "
+        });
+        expect(a.industry).toBe("Logistics");
+        expect(a.hq).toBe("SF");
+        expect(a.notes).toBe("Active prospect");
     });
 });
