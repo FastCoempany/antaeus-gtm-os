@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { SignalConsole } from "./SignalConsole";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
 import {
     selectAccount,
@@ -8,6 +9,7 @@ import {
     startExternalPublishing
 } from "./state";
 import { loadAccounts } from "./lib/persistence";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 import { publishHealthSnapshot } from "./lib/health-snapshot";
 
 /**
@@ -44,8 +46,10 @@ if (!flagOn) {
     );
 }
 
-// Seed from gtmos_sc_v4 (legacy localStorage) before first render so
-// the grid renders with data instead of flashing the empty state.
+// Step 1 — synchronous seed from localStorage so the grid renders
+// instantly with the operator's last-known accounts instead of
+// flashing an empty state. This is the OFFLINE FALLBACK; cloud
+// load below replaces it once Supabase resolves.
 const seeded = loadAccounts();
 setAllAccounts(seeded);
 
@@ -67,8 +71,33 @@ if (focus) {
 // has fresh data even before the first edit.
 publishHealthSnapshot(seeded);
 
-// Wire the auto-publish loop: every subsequent allAccounts mutation
-// dual-writes to gtmos_sc_v4 + gtmos_signal_room_health.
+// Step 2 — wire the legacy mirror: every subsequent allAccounts
+// mutation dual-writes to gtmos_sc_v4 + gtmos_signal_room_health.
+// Legacy consumers (Dashboard's command-intelligence rail, Outbound
+// Studio's persona match, Welcome's anchor count) keep working
+// transparently throughout the cloud-sync rollout.
 startExternalPublishing();
 
 render(<SignalConsole />, root);
+
+// Step 3 — async cloud load. Doesn't block first paint. If the
+// cloud has rows, replace local state (cloud is canonical). If the
+// cloud is empty AND localStorage seeded data, push the seed up
+// (one-time migration). If Supabase env vars are missing or the
+// network is hostile, the room stays usable with whatever
+// localStorage seeded — no degradation, just no cross-device sync
+// until the next session retries.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        // Synchronous throw from createDataClient (env-var missing) —
+        // surface a plain warning, not a Sentry report, since this is
+        // expected in dev without Supabase configured.
+        console.warn(
+            "[signal-console] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();
