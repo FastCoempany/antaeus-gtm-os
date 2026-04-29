@@ -65,7 +65,7 @@ describe("buildPlannerHref", () => {
 
     it("omits focusObject when blank", () => {
         const url = buildPlannerHref({
-            href: "/app/x/",
+            href: "/x/",
             focusObject: "",
             roomLabel: "X"
         });

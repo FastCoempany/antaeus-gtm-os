@@ -1,176 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkedIn Playbook | Antaeus GTM OS</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/app.css">
-  <style>
-    .room-linkedin-playbook{--navy:#081a41;--ink:#16325d;--soft:#6c83a4;--muted:#9caeca;--line:rgba(8,26,65,.13);--line2:rgba(8,26,65,.08);--orange:#ed6f1e;--blue:#2f72e8;--green:#2e8b59;--red:#c94d45;--shadow:0 34px 90px rgba(8,26,65,.14);font-family:"Plus Jakarta Sans",sans-serif;color:var(--navy);background:#edf3fb}
-    .room-linkedin-playbook .app-main{min-width:0;width:calc(100vw - 280px);overflow-x:hidden;background:radial-gradient(circle at 0 0,rgba(47,114,232,.08),transparent 24%),radial-gradient(circle at 98% 0,rgba(237,111,30,.075),transparent 27%),linear-gradient(180deg,#fbfdff 0,#edf3fb 100%);color:var(--navy)}
-    .room-linkedin-playbook .app-header{padding:28px 42px 22px;border-bottom:1px solid rgba(8,26,65,.08);background:linear-gradient(90deg,rgba(255,255,255,.88),rgba(255,255,255,.7))}
-    .shell-header-meta{display:flex;gap:10px;align-items:center;margin-bottom:10px}.shell-header-kicker,.shell-header-state,.kicker,.micro,.cue-label,.sheet-kicker{font-size:11px;line-height:1.1;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.shell-header-kicker,.kicker{color:var(--orange)}.shell-header-state{color:var(--blue);border:1px solid rgba(47,114,232,.22);border-radius:999px;padding:8px 13px;background:rgba(47,114,232,.05)}
-    .page-title{font-family:"DM Serif Display",serif;color:var(--navy);font-size:clamp(30px,3.2vw,48px);letter-spacing:-.045em;line-height:.95;margin:0}.page-subtitle{max-width:780px;color:var(--soft);font-size:16px;line-height:1.55;margin:10px 0 0}
-    .app-content{padding:30px 42px 88px}.li-room{max-width:1540px;margin:0 auto;display:grid;gap:28px}
-    .cue-booth,.method-zone{position:relative;overflow:hidden;border:1px solid rgba(8,26,65,.08);border-radius:46px;background:radial-gradient(circle at 1% 0,rgba(47,114,232,.05),transparent 25%),radial-gradient(circle at 100% 0,rgba(237,111,30,.06),transparent 26%),linear-gradient(180deg,rgba(255,255,255,.98),rgba(244,248,255,.97));box-shadow:var(--shadow);padding:34px 38px 38px}
-    .cue-booth:before,.method-zone:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.24;background-image:linear-gradient(rgba(8,26,65,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(8,26,65,.035) 1px,transparent 1px);background-size:34px 34px}.cue-booth>*,.method-zone>*{position:relative;z-index:1}
-    .cue-head{display:grid;grid-template-columns:minmax(320px,560px) minmax(280px,520px);justify-content:space-between;gap:28px;margin-bottom:30px}.cue-title{margin-top:12px;font-family:"Outfit",sans-serif;font-size:clamp(52px,5vw,88px);line-height:.88;letter-spacing:-.082em;max-width:10.6ch;font-weight:900;color:var(--navy)}.cue-title span{color:var(--orange)}.cue-intro{justify-self:end;max-width:530px;color:var(--soft);line-height:1.62;font-size:15px;padding-top:8px}.cue-law{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:grid;grid-template-columns:106px 1fr;gap:18px;color:var(--navy);font-weight:800}.cue-law span:first-child{color:var(--muted);text-transform:uppercase;letter-spacing:.18em;font-size:10px}
-    .cue-layout{display:grid;grid-template-columns:260px minmax(560px,1fr) 320px;gap:30px;align-items:stretch}.cue-strip{border-left:1px solid var(--line);padding-left:22px;display:grid;align-content:start;gap:20px}.cue-item{display:grid;grid-template-columns:26px 1fr;gap:13px;align-items:start;padding:0 0 17px;border:0;border-bottom:1px solid var(--line2);background:transparent;color:var(--cue-color,var(--muted));text-align:left;cursor:pointer;font-family:inherit}.cue-bulb{width:18px;height:18px;border:2px solid currentColor;border-radius:50%;margin-top:4px;background:#fff;transition:.18s ease}.cue-item.done .cue-bulb{background:currentColor}.cue-item.active .cue-bulb,.cue-item:hover .cue-bulb{box-shadow:0 0 0 9px rgba(255,255,255,.9),0 0 34px currentColor}.cue-label{display:block;color:var(--muted);margin-bottom:8px}.cue-name{display:block;font-size:19px;line-height:1.1;letter-spacing:-.045em;color:var(--soft);font-weight:900}.cue-item.active .cue-name{color:var(--navy)}.cue-copy{display:block;margin-top:7px;color:var(--soft);font-size:13px;line-height:1.48}
-    .stage{position:relative;min-height:590px;overflow:hidden;border-radius:42px;background:radial-gradient(circle at 50% 72%,rgba(237,111,30,.26),transparent 18%),radial-gradient(circle at 50% 22%,rgba(47,114,232,.18),transparent 34%),linear-gradient(180deg,#101a34 0,#081126 100%);color:#fff;box-shadow:0 34px 80px rgba(8,26,65,.22);padding:34px 42px}.stage:before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:70%;height:72%;background:radial-gradient(ellipse at top,rgba(255,255,255,.22),rgba(255,255,255,.05) 42%,transparent 70%);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);pointer-events:none}    .script{position:relative;z-index:1;max-width:720px;margin:36px auto 0;text-align:center}.scene{text-transform:uppercase;letter-spacing:.22em;font-size:11px;color:#9eb7e5;font-weight:900;margin-bottom:18px}.script h2{font-family:"Outfit",sans-serif;font-size:clamp(48px,4.7vw,84px);line-height:.9;letter-spacing:-.08em;color:#fff;font-weight:900}.script h2 span{color:var(--orange)}.script p{color:#b9c7df;margin:22px auto 0;max-width:580px;line-height:1.6}.cue-console{position:absolute;left:40px;right:40px;bottom:34px;border-top:1px solid rgba(255,255,255,.14);display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;padding-top:20px}.cue-console div{color:#9eb7e5;text-transform:uppercase;letter-spacing:.16em;font-size:10px;font-weight:900}.cue-console strong{display:block;margin-top:8px;color:#fff;text-transform:none;letter-spacing:-.035em;font-size:20px;line-height:1.1}
-    .booth-read{padding-top:20px;border-top:1px solid var(--line)}.booth-read h3{font-size:30px;line-height:1.08;letter-spacing:-.055em;margin:10px 0 12px}.small,.booth-copy{color:var(--soft);line-height:1.55;font-size:13px}.cue-meter{height:6px;width:100%;border-radius:999px;background:rgba(8,26,65,.08);margin:22px 0;position:relative;overflow:visible}.cue-meter:before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--score-pos,58%);border-radius:999px;background:var(--green)}.cue-meter:after{content:"";position:absolute;left:var(--score-pos,58%);top:-7px;width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--green);box-shadow:0 10px 20px rgba(8,26,65,.15);transform:translateX(-50%)}.booth-rule{padding:17px 0;border-bottom:1px solid var(--line)}.booth-rule strong{display:block;margin-top:8px;font-size:20px;line-height:1.15;letter-spacing:-.035em;color:var(--navy)}
-    .command-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.li-btn{border:1px solid currentColor;border-radius:999px;padding:11px 15px;background:rgba(255,255,255,.72);color:var(--blue);font-family:inherit;font-weight:900;font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer}.li-btn.primary{color:#fff;background:var(--orange);border-color:var(--orange);box-shadow:0 16px 34px rgba(237,111,30,.22)}.li-btn.green{color:var(--green)}
-    .cue-ledger{display:grid;grid-template-columns:minmax(520px,1fr) minmax(360px,520px);gap:22px;align-items:start}.cue-log,.activity-board,.sheet-panel{border:1px solid rgba(8,26,65,.08);border-radius:28px;background:rgba(255,255,255,.82);box-shadow:0 18px 48px rgba(8,26,65,.08);padding:24px}.sheet-title{font-size:30px;letter-spacing:-.055em;line-height:1;margin:8px 0 10px}.log-form{display:grid;grid-template-columns:1fr 1fr 190px auto;gap:12px;align-items:end;margin-top:16px}.log-form label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.18em;font-weight:900;color:var(--muted);margin-bottom:7px}.log-form input,.log-form select{width:100%;border:1px solid rgba(8,26,65,.14);border-radius:999px;background:#fff;color:var(--navy);font:600 13px "Plus Jakarta Sans",sans-serif;padding:12px 14px;outline:none}.log-form input:focus,.log-form select:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(47,114,232,.09)}
-    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;overflow:hidden;border-radius:20px;border:1px solid rgba(8,26,65,.08);background:rgba(8,26,65,.08);margin-bottom:18px}.stat{background:rgba(255,255,255,.82);padding:14px 12px}.stat-v{font-family:"Outfit",sans-serif;font-size:28px;line-height:.95;letter-spacing:-.06em;color:var(--navy);font-weight:700}.stat-v.green{color:var(--green)}.stat-v.gold{color:var(--orange)}.stat-l{margin-top:7px;text-transform:uppercase;letter-spacing:.16em;font-size:9px;color:var(--muted);font-weight:900}.log-table{width:100%;border-collapse:collapse;font-size:12px}.log-table th{text-align:left;padding:10px 8px;font-size:9px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);border-bottom:1px solid var(--line)}.log-table td{padding:10px 8px;border-bottom:1px solid var(--line2);color:var(--ink);vertical-align:top}.log-sub{display:block;color:var(--soft);font-size:11px;margin-top:3px;line-height:1.35}.outcome-sel{width:100%;border:1px solid rgba(8,26,65,.12);border-radius:999px;background:#fff;color:var(--navy);padding:7px 8px;font:700 11px "Plus Jakarta Sans",sans-serif}.log-empty{min-height:130px;display:grid;place-items:center;color:var(--soft);border:1px dashed rgba(8,26,65,.16);border-radius:22px;font-weight:700}
-    .method-zone{border-radius:38px;padding:28px}.method-head{display:flex;justify-content:space-between;gap:22px;align-items:flex-end;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:18px}.method-head h2{font-size:30px;letter-spacing:-.055em;line-height:1}.sheet-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.sheet-panel{box-shadow:none;padding:18px;border-radius:24px}.sheet-panel h3{margin:8px 0 12px;font-size:22px;line-height:1.05;letter-spacing:-.045em}.tpl{position:relative;border-top:1px solid var(--line);padding:15px 0 0;margin-top:14px;color:var(--ink);font-size:13px;line-height:1.55;white-space:pre-wrap}.tpl em{color:var(--orange);font-style:normal;font-weight:800}.copy-btn{margin-top:12px;border:1px solid rgba(47,114,232,.24);border-radius:999px;background:rgba(47,114,232,.06);color:var(--blue);font:900 10px "Plus Jakarta Sans",sans-serif;letter-spacing:.16em;text-transform:uppercase;padding:8px 11px;cursor:pointer}
-    .toast{position:fixed;right:18px;bottom:18px;background:#101827;color:#fff;border-radius:999px;padding:11px 16px;font-size:13px;font-weight:800;opacity:0;transform:translateY(8px);transition:.22s ease;pointer-events:none;z-index:1000}.toast.show{opacity:1;transform:none}
-    @media(max-width:1180px){.cue-head,.cue-layout,.cue-ledger{grid-template-columns:1fr}.cue-intro{justify-self:start}.stage{min-height:640px}.sheet-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:760px){.room-linkedin-playbook .app-main{width:100vw}.app-header,.app-content{padding-left:18px;padding-right:18px}.cue-booth{border-radius:30px;padding:24px}.cue-title{font-size:48px}.cue-console,.log-form,.stats,.sheet-grid{grid-template-columns:1fr}.cue-console{position:relative;left:auto;right:auto;bottom:auto;margin-top:36px}.stage{min-height:auto}.script{margin-top:18px}}
-  </style>
-</head>
-<body class="room-wave2 room-linkedin-playbook">
-<script src="/js/app-auth-preflight.js"></script>
-<div class="app-container">
-  <aside class="app-sidebar">
-    <script src="/js/analytics-site-config.js"></script>
-    <script src="/js/analytics.js"></script>
-    <!--
-        Wave 6 — flag-based cutover to /linkedin-playbook/ Preact rebuild.
-        When the Posthog feature flag `room_linkedin_playbook_v2` is ON
-        for the current user, redirect to the new room (Waves 1-5: 5-cue
-        ladder + motion engine port, live cue rail + dark stage +
-        booth-read, cue logging + persistence + activity board, cross-
-        room handoff + URL inbound + context loaders). Otherwise the
-        legacy room renders normally.
-
-        Skip-redirect escape hatch: ?demo=1 or ?qa=1 in the URL keeps
-        the legacy room loading. Used by the CI Playwright smoke tests
-        + the demo-seed bootstrap path.
-
-        posthog.onFeatureFlags fires once after Posthog's flag fetch
-        returns. If the SDK didn't initialize, the callback never fires
-        and the legacy room renders normally.
-
-        Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
-    -->
-    <script>
-        (function(){
-            var qs = window.location.search || "";
-            if (qs.indexOf("demo=1") !== -1 || qs.indexOf("qa=1") !== -1) {
-                return;
-            }
-            function maybeRedirect() {
-                if (typeof posthog === "undefined" || !posthog.onFeatureFlags) {
-                    return false;
-                }
-                posthog.onFeatureFlags(function () {
-                    if (posthog.isFeatureEnabled("room_linkedin_playbook_v2")) {
-                        var hash = window.location.hash || "";
-                        window.location.replace("/linkedin-playbook/" + qs + hash);
-                    }
-                });
-                return true;
-            }
-            // Fast path — Posthog already loaded (warm cache, repeat visit).
-            if (maybeRedirect()) return;
-            // Cold path — wait for analytics.js to dispatch gtmos:posthog-ready
-            // after the Posthog SDK script's onload fires + posthog.init runs.
-            window.addEventListener("gtmos:posthog-ready", maybeRedirect, { once: true });
-        })();
-    </script>
-    <script src="/js/data-manager.js"></script>
-    <script src="/js/demo-storage-bootstrap.js"></script>
-    <script src="/js/workspace-guard.js"></script>
-    <script src="/js/nav.js"></script>
-  </aside>
-  <main class="app-main">
-    <header class="app-header module-header">
-      <div class="module-header-title">
-        <div class="shell-header-meta">
-          <span class="shell-header-kicker">Outbound channel</span>
-          <span class="shell-header-state" id="liHeaderState">Cue booth</span>
-        </div>
-        <h1 class="page-title">LinkedIn Playbook</h1>
-        <p class="page-subtitle">Use LinkedIn as live channel air cover for real account motion. Watch the cue, take the public touch, then log what actually happened.</p>
-      </div>
-    </header>
-    <div class="app-content">
-      <div class="li-room">
-        <div id="linkedinBootState"></div>
-        <section class="cue-booth" id="cueBooth" aria-label="LinkedIn cue booth"></section>
-        <section class="cue-ledger" aria-label="Cue ledger and activity">
-          <div class="cue-log">
-            <div class="kicker">Cue ledger</div>
-            <h2 class="sheet-title">Log the touch while the cue is still fresh.</h2>
-            <p class="small">Signal Console points the account, Outbound reinforces the angle, and this ledger proves whether LinkedIn is compounding or stalling.</p>
-            <form class="log-form" id="liLogForm">
-              <div><label for="liAccount">Account</label><input id="liAccount" autocomplete="off" placeholder="Company name"></div>
-              <div><label for="liContact">Human</label><input id="liContact" autocomplete="off" placeholder="Person name"></div>
-              <div><label for="liAction">Cue taken</label><select id="liAction"><option value="content_engage">Public comment</option><option value="connection_request">Connection request</option><option value="dm">Direct message</option><option value="content_share">Content share</option><option value="inmail">InMail</option></select></div>
-              <button class="li-btn primary" type="submit">Log cue</button>
-            </form>
-          </div>
-          <div class="activity-board">
-            <div class="kicker">Channel memory</div>
-            <div id="liStats"></div>
-            <div id="liTable"></div>
-          </div>
-        </section>
-        <section class="method-zone" aria-label="LinkedIn method sheets">
-          <div class="method-head"><div><div class="kicker">Secondary method sheets</div><h2>Reference stays below the booth.</h2></div><p class="small">These support the cue. They do not organize the room.</p></div>
-          <div class="sheet-grid">
-            <article class="sheet-panel"><div class="sheet-kicker">Connection</div><h3>Request only after recognition.</h3><p class="small">A blank request is channel debt.</p><div class="tpl" id="tpl-connect">Hi <em>[Name]</em>, I saw your point on <em>[topic]</em>. The part about <em>[specific strain]</em> stood out. Would be useful to stay connected as this develops.</div><button class="copy-btn" type="button" data-copy="tpl-connect">Copy line</button></article>
-            <article class="sheet-panel"><div class="sheet-kicker">Public cue</div><h3>Comment with one operating read.</h3><p class="small">Do not pitch in the comments.</p><div class="tpl" id="tpl-comment">This tends to show up first in <em>[operating pressure]</em> before it shows up in tooling. Curious where the strain is most visible right now.</div><button class="copy-btn" type="button" data-copy="tpl-comment">Copy line</button></article>
-            <article class="sheet-panel"><div class="sheet-kicker">Give-first</div><h3>Send proof before asking.</h3><p class="small">The give must help whether or not they buy.</p><div class="tpl" id="tpl-give"><em>[Name]</em>, saw this and thought it matched the pattern you mentioned: <em>[benchmark/resource]</em>. No ask - just seemed relevant to what your team is navigating.</div><button class="copy-btn" type="button" data-copy="tpl-give">Copy line</button></article>
-            <article class="sheet-panel"><div class="sheet-kicker">Ask</div><h3>Ask only when earned.</h3><p class="small">The calendar request comes after familiarity and proof.</p><div class="tpl" id="tpl-ask">Based on what you shared about <em>[pressure]</em>, I think there is a concrete conversation worth having. Would <em>[day]</em> or <em>[day]</em> work for 15 minutes?</div><button class="copy-btn" type="button" data-copy="tpl-ask">Copy line</button></article>
-          </div>
-        </section>
-      </div>
-      <div class="toast" id="toast"></div>
-    </div>
-  </main>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/js/supabase-config.js"></script>
-<script src="/js/require-auth.js"></script>
-<script src="/js/module-boot-state.js"></script>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex" />
+<meta http-equiv="refresh" content="0; url=/linkedin-playbook/" />
+<title>Redirecting to /linkedin-playbook/</title>
+<link rel="canonical" href="/linkedin-playbook/" />
 <script>
-(function(){
-  var ACTIVE_CUE_INDEX=null;
-  function readLS(k,fb){try{return JSON.parse(localStorage.getItem(k))||fb}catch(e){return fb}}
-  function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
-  function escH(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
-  function buildLinkedInRoomHref(href,focusObject,roomLabel){try{var url=new URL(href,window.location.origin);url.searchParams.set('returnTo','/app/linkedin-playbook/');url.searchParams.set('returnLabel','Back to LinkedIn Playbook');url.searchParams.set('focusObject',focusObject||'LinkedIn cue');url.searchParams.set('focusRoom',roomLabel||'LinkedIn Playbook');url.searchParams.set('fromMode','room');url.searchParams.set('fromSurface','linkedin-playbook');if(focusObject)url.searchParams.set('account',focusObject);return url.pathname+url.search}catch(e){return href}}
-  function toast(m){var t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
-  async function syncLinkedInLog(data){if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.saveDocument==='function'){var saved=await window.gtmPersistence.sequences.saveDocument('linkedin_log','LinkedIn Activity Log',data);if(saved&&saved.error)console.error('LinkedIn log sync failed:',saved.error);return saved}return{data:null,error:null}}
-  function getLinkedInActions(){var data=readLS('gtmos_linkedin_log',{actions:[]})||{actions:[]};return Array.isArray(data.actions)?data.actions:[]}
-  function getBestIcp(){var analytics=readLS('gtmos_icp_analytics',{icps:[]})||{icps:[]};var icps=Array.isArray(analytics.icps)?analytics.icps.slice():[];icps.sort(function(a,b){return Number(b.qualityScore||0)-Number(a.qualityScore||0)});return icps[0]||null}
-  function getHottestSignalAccount(){var sc=readLS('gtmos_sc_v4',{accounts:[]})||{accounts:[]};var accounts=Array.isArray(sc.accounts)?sc.accounts.slice():[];accounts.sort(function(a,b){return Number(b._heat||0)-Number(a._heat||0)});return accounts[0]||null}
-  function getLatestOutboundTouch(){var touches=readLS('gtmos_outbound_touches',{touches:[]})||{touches:[]};var rows=Array.isArray(touches.touches)?touches.touches.slice():[];rows.sort(function(a,b){return new Date(b.createdAt||b.savedAt||0).getTime()-new Date(a.createdAt||a.savedAt||0).getTime()});return rows[0]||null}
-  function getStats(){var actions=getLinkedInActions();var conn=actions.filter(function(a){return a.actionType==='connection_request'}).length;var accepted=actions.filter(function(a){return a.actionType==='connection_request'&&a.outcome==='accepted'}).length;var dms=actions.filter(function(a){return a.actionType==='dm'}).length;var replied=actions.filter(function(a){return a.actionType==='dm'&&a.outcome==='replied'}).length;var byAccount={};actions.forEach(function(a){var key=String(a.accountName||'').trim().toLowerCase();if(!key)return;if(!byAccount[key])byAccount[key]={connection_request:0,dm:0,content_engage:0};if(byAccount[key][a.actionType]!=null)byAccount[key][a.actionType]+=1});return{actions:actions,total:actions.length,connections:conn,accepted:accepted,dms:dms,replies:replied,acceptRate:conn?Math.round(accepted/conn*100):0,replyRate:dms?Math.round(replied/dms*100):0,byAccount:byAccount}}
-  function ctx(){var stats=getStats();return{icp:getBestIcp(),hottestAccount:getHottestSignalAccount(),latestTouch:getLatestOutboundTouch(),stats:stats}}
-  function getMotion(c){var hottest=c.hottestAccount,touch=c.latestTouch,stats=c.stats;var key=hottest&&hottest.name?String(hottest.name).toLowerCase():'';var acct=key?(stats.byAccount[key]||{connection_request:0,dm:0,content_engage:0}):{connection_request:0,dm:0,content_engage:0};var m={key:'credibility',label:'Build name familiarity before you ask for anything.',actionType:'content_engage',whyNow:'LinkedIn should warm the name and give outbound more credibility instead of replacing every other channel.',oneSession:'Leave two thoughtful comments on one target account and log the touch.',nextMove:'After two meaningful engagements, send one specific connection request.',thresholds:'35%+ acceptance and 15%+ DM reply after warming.',accountName:hottest&&hottest.name?hottest.name:(touch&&touch.accountName?touch.accountName:''),context:'No live signal is being worked yet. Use LinkedIn to create air cover.',cueIndex:1};if(hottest&&acct.connection_request===0){m.key='warm_signal_account';m.label='Use the public cue before the request.';m.whyNow='A real signal exists on '+hottest.name+', but LinkedIn trust is still cold. Make the account recognize your name before you ask for access.';m.oneSession='Engage with one post, leave one smart comment, then queue a signal-led connection request.';m.nextMove='After one or two visible engagements, send one request tied to the active signal.';m.context='Signal Console says '+hottest.name+' is hot right now'+(hottest._heat?' (heat '+hottest._heat+')':'')+'.';m.cueIndex=acct.content_engage>0?2:1}else if(hottest&&acct.connection_request>0&&acct.dm===0){m.key='convert_connection';m.label='Convert the accepted route into a conversation.';m.actionType='dm';m.whyNow='The connection motion has already started on '+hottest.name+'. The next useful move is a rapport DM or give-first follow-up.';m.oneSession='Send one rapport DM or give-first note that references their world, not your product.';m.nextMove='If there is no reply after 3-5 days, send one give-first resource before asking for time.';m.context='LinkedIn already has an opening on '+hottest.name+'. Use it.';m.cueIndex=3}else if(touch&&touch.accountName){m.key='add_air_cover';m.label='Add LinkedIn air cover to the outbound motion already in flight.';m.actionType='content_share';m.whyNow='Outbound is already working '+touch.accountName+'. LinkedIn should reinforce that motion so the prospect sees your name in more than one place.';m.oneSession='Engage with their content or share one relevant insight, then log the action.';m.nextMove='Return to the next outbound touch after the LinkedIn action is logged.';m.accountName=touch.accountName;m.context='Latest outbound motion exists for '+touch.accountName+'.';m.cueIndex=1}return m}
-  function cues(){return[{name:'Watch the public signal',label:'Cue 01',color:'var(--orange)',action:'content_engage',title:'Find the post that makes timing real.',copy:'The first cue is usually public. Do not enter the inbox before permission exists.',console:'Read the post. Name the pressure. Do not mention product.'},{name:'Comment with one operating read',label:'Cue 02',color:'var(--blue)',action:'content_engage',title:'Make the public answer feel inevitable.',copy:'Add one useful operating observation, then leave. No cheerleading and no pitch.',console:'Say one specific thing the buyer can recognize from their own world.'},{name:'Connect after recognition',label:'Cue 03',color:'var(--green)',action:'connection_request',title:'Ask to enter only after your name is warm.',copy:'The request should feel like a continuation, not an interruption.',console:'Reference the public thread and keep the note short.'},{name:'Give proof before asking',label:'Cue 04',color:'var(--orange)',action:'dm',title:'Send the useful thing before the calendar ask.',copy:'Give a benchmark, resource, or operating read that helps even if they never buy.',console:'No meeting ask until the give-first touch lands.'},{name:'Ask only when earned',label:'Cue 05',color:'var(--red)',action:'dm',title:'The calendar ask is the last cue.',copy:'If attention and usefulness are missing, the ask is a cold pitch wearing a social mask.',console:'Ask for 15 minutes only when there is a reason they can repeat.'}]}
-  function cueScript(cue,m){if(cue.action==='connection_request')return'Hi [Name], your point on [specific pressure] was useful. I work around that pattern and would be glad to stay connected.';if(cue.action==='dm')return cue.name.indexOf('Ask')>=0?'Based on what you shared about [pressure], I think there is a concrete conversation worth having. Would [day] or [day] work for 15 minutes?':'[Name], saw this and thought it matched the pattern you mentioned: [benchmark]. No ask - just seemed relevant to what your team is navigating.';return m.key==='add_air_cover'?'This is the kind of pressure that usually shows up in the queue before it shows up in the forecast. Curious where it is most visible right now.':'That pressure usually shows up first in response time before it shows up in tooling. Curious where the strain is most visible right now.'}
-  function renderCueBooth(){var el=document.getElementById('cueBooth');if(!el)return;var c=ctx(),m=getMotion(c),list=cues();var active=Math.max(0,Math.min(list.length-1,ACTIVE_CUE_INDEX!=null?ACTIVE_CUE_INDEX:m.cueIndex));var cue=list[active];var h=document.getElementById('liHeaderState');if(h)h.textContent=m.accountName?'Cue booth - '+m.accountName:'Cue booth';var cueHtml=list.map(function(x,i){var cls=i<active?'done':i===active?'active':'';return'<button type="button" class="cue-item '+cls+'" data-cue-index="'+i+'" style="--cue-color:'+x.color+'"><span class="cue-bulb"></span><span><span class="cue-label">'+x.label+'</span><span class="cue-name">'+escH(x.name)+'</span><span class="cue-copy">'+escH(x.copy)+'</span></span></button>'}).join('');var focus=m.accountName||'LinkedIn cue';var score=Math.max(28,Math.min(86,(c.stats.acceptRate||0)+40));el.innerHTML='<div class="cue-head"><div><div class="kicker">Cue booth</div><h2 class="cue-title"><span>Enter</span> only when the room gives a cue.</h2></div><div class="cue-intro">'+escH(m.whyNow)+'<div class="cue-law"><span>Room law</span><div>The inbox is not the opening scene. The first visible cue usually happens in public.</div></div></div></div><div class="cue-layout"><aside class="cue-strip">'+cueHtml+'</aside><section class="stage"><div class="script"><div class="scene">Live cue / '+escH(m.accountName||'No account selected')+'</div><h2><span>'+escH(cue.name.split(' ')[0])+'</span> '+escH(cue.title)+'</h2><p>'+escH(cueScript(cue,m))+'</p></div><div class="cue-console"><div>Say first<strong>'+escH(cue.console)+'</strong></div><div>If they engage<strong>'+escH(m.nextMove)+'</strong></div><div>If silent<strong>Do not chase. Let Outbound carry the next move while LinkedIn stays visible.</strong></div></div></section><aside class="booth-read"><div class="micro">Booth read</div><h3>'+escH(m.label)+'</h3><p class="booth-copy">'+escH(m.context)+'</p><div class="cue-meter" style="--score-pos:'+score+'%"></div><div class="booth-rule"><div class="micro">Current cue</div><strong>'+escH(cue.name)+'</strong></div><div class="booth-rule"><div class="micro">One-session win</div><strong>'+escH(m.oneSession)+'</strong></div><div class="booth-rule"><div class="micro">Channel standard</div><strong>'+escH(m.thresholds)+'</strong></div><div class="command-row"><button class="li-btn primary" type="button" data-action="use-current-cue">Use current cue</button><a class="li-btn green" href="'+buildLinkedInRoomHref('/app/signal-console/',focus,'Signal Console')+'">Open Signal</a><a class="li-btn" href="'+buildLinkedInRoomHref('/app/outbound-studio/',focus,'Outbound Studio')+'">Open Outbound</a></div></aside></div>'}
-  function activeCueIndex(m){return ACTIVE_CUE_INDEX==null?(m.cueIndex||1):ACTIVE_CUE_INDEX}
-  function useCurrentCue(){var c=ctx(),m=getMotion(c),cue=cues()[activeCueIndex(m)];var a=document.getElementById('liAccount'),s=document.getElementById('liAction');if(a&&!a.value&&m.accountName)a.value=m.accountName;if(s&&cue)s.value=cue.action;toast('Cue loaded into ledger')}
-  async function logAction(){var data=readLS('gtmos_linkedin_log',{actions:[]});if(!Array.isArray(data.actions))data.actions=[];var c=ctx(),m=getMotion(c),cue=cues()[activeCueIndex(m)];var account=document.getElementById('liAccount').value.trim(),contact=document.getElementById('liContact').value.trim(),action=document.getElementById('liAction').value;if(!account&&!contact){toast('Enter account or human');return}data.actions.push({id:'li_'+Date.now(),accountName:account,contactName:contact,actionType:action,temperature:'ice_cold',content:'',motionKey:m.key,motionLabel:m.label,cueLabel:cue?cue.name:'Cue taken',whyNow:m.whyNow,recommendedNext:m.nextMove,outcome:null,outcomeDate:null,createdAt:new Date().toISOString()});writeLS('gtmos_linkedin_log',data);await syncLinkedInLog(data);document.getElementById('liAccount').value='';document.getElementById('liContact').value='';renderCueBooth();renderActivity();toast('Cue logged')}
-  function renderActivity(){var stats=getStats(),actions=stats.actions||[],se=document.getElementById('liStats'),te=document.getElementById('liTable');if(se)se.innerHTML='<div class="stats"><div class="stat"><div class="stat-v">'+stats.total+'</div><div class="stat-l">Actions</div></div><div class="stat"><div class="stat-v">'+stats.connections+'</div><div class="stat-l">Requests</div></div><div class="stat"><div class="stat-v '+(stats.acceptRate>=35?'green':'')+'">'+stats.acceptRate+'%</div><div class="stat-l">Accept</div></div><div class="stat"><div class="stat-v">'+stats.dms+'</div><div class="stat-l">DMs</div></div><div class="stat"><div class="stat-v gold">'+stats.replyRate+'%</div><div class="stat-l">Reply</div></div></div>';if(!te)return;if(!actions.length){te.innerHTML='<div class="log-empty">No LinkedIn cue activity logged yet.</div>';return}var labels={connection_request:'Connect',dm:'DM',inmail:'InMail',content_engage:'Public',content_share:'Share'};var html='<table class="log-table"><tr><th>Date</th><th>Account</th><th>Human</th><th>Cue</th><th>Outcome</th></tr>';actions.slice().reverse().forEach(function(a,i){var idx=actions.length-1-i;html+='<tr><td>'+(a.createdAt?new Date(a.createdAt).toLocaleDateString():'')+'</td><td>'+escH(a.accountName)+'</td><td>'+escH(a.contactName)+'</td><td>'+escH(a.cueLabel||labels[a.actionType]||a.actionType)+'<span class="log-sub">'+escH(a.recommendedNext||a.motionLabel||'')+'</span></td><td><select class="outcome-sel" data-outcome-index="'+idx+'"><option value="">-</option>'+['accepted','replied','no_response','declined'].map(function(o){return'<option value="'+o+'"'+(a.outcome===o?' selected':'')+'>'+o.replace(/_/g,' ')+'</option>'}).join('')+'</select></td></tr>'});te.innerHTML=html+'</table>'}
-  async function updateLiOutcome(idx,val){var data=readLS('gtmos_linkedin_log',{actions:[]});if(data.actions&&data.actions[idx]){data.actions[idx].outcome=val||null;data.actions[idx].outcomeDate=val?new Date().toISOString():null;writeLS('gtmos_linkedin_log',data);await syncLinkedInLog(data);renderCueBooth();renderActivity();toast('Updated')}}
-  function fallbackCopy(text){var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copied')}catch(e){toast('Copy unavailable')}document.body.removeChild(ta)}
-  function copyText(id){var el=document.getElementById(id);if(!el)return;var text=el.textContent.trim();if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){toast('Copied')}).catch(function(){fallbackCopy(text)});return}fallbackCopy(text)}
-  function bootState(kind,title,text){if(!window.gtmModuleBootState)return;window.gtmModuleBootState.show('#linkedinBootState',{kind:kind,title:title,text:text,retryLabel:'Retry LinkedIn Playbook',retryAction:'retryLinkedInPlaybookBoot'})}
-  function clearBoot(){if(window.gtmModuleBootState)window.gtmModuleBootState.clear('#linkedinBootState')}
-  function bootFail(error){console.error('LinkedIn Playbook boot failed:',error);bootState('error','LinkedIn Playbook could not finish loading.','Retry once. If it fails again, refresh and check the current auth session or synced sequence data.')}
-  window.retryLinkedInPlaybookBoot=function(){boot().catch(bootFail)}
-  async function boot(){bootState('loading','Loading LinkedIn Playbook...','Antaeus is rebuilding your LinkedIn activity log and channel guidance.');if(window.gtmPersistence&&window.gtmPersistence.sequences&&typeof window.gtmPersistence.sequences.load==='function'){var loaded=await window.gtmPersistence.sequences.load();if(loaded&&loaded.error)console.error('Sequence load failed:',loaded.error)}renderCueBooth();renderActivity();clearBoot()}
-  document.addEventListener('click',function(e){var cueButton=e.target.closest('[data-cue-index]');if(cueButton){ACTIVE_CUE_INDEX=Number(cueButton.getAttribute('data-cue-index'));renderCueBooth();return}var action=e.target.closest('[data-action]');if(action&&action.getAttribute('data-action')==='use-current-cue'){useCurrentCue();return}var copy=e.target.closest('[data-copy]');if(copy)copyText(copy.getAttribute('data-copy'))});
-  document.addEventListener('change',function(e){var outcome=e.target.closest('[data-outcome-index]');if(outcome)updateLiOutcome(Number(outcome.getAttribute('data-outcome-index')),outcome.value)});
-  var form=document.getElementById('liLogForm');if(form)form.addEventListener('submit',function(e){e.preventDefault();logAction()});
-  if(window.__gtmosAuthGatePending&&window.requireAuthReady&&typeof window.requireAuthReady.then==='function'){bootState('loading','Waiting for auth','LinkedIn Playbook is waiting for your authenticated workspace.');window.requireAuthReady.then(boot).catch(bootFail)}else if(window.__gtmosAuthGatePending){bootState('loading','Waiting for auth','LinkedIn Playbook is waiting for your authenticated workspace.');window.addEventListener('gtmos:auth-ready',function(){boot().catch(bootFail)},{once:true})}else{boot().catch(bootFail)}
+// Phase 4 deletion sweep: this legacy path was retired in PR #45.
+// Operators land on the canonical room. Keep the stub so old bookmarks
+// + emailed links don't 404.
+(function () {
+  try {
+    var qs = window.location.search || "";
+    var hash = window.location.hash || "";
+    window.location.replace("/linkedin-playbook/" + qs + hash);
+  } catch (e) {
+    /* meta-refresh handles the fallback */
+  }
 })();
 </script>
+</head>
+<body>
+<p>Redirecting to <a href="/linkedin-playbook/">/linkedin-playbook/</a>…</p>
 </body>
 </html>

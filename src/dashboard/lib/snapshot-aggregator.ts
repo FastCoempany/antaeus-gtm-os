@@ -148,7 +148,7 @@ function signalSnapshotToMoveCards(
                 actions: [
                     {
                         label: "Open Signal Console",
-                        href: "/app/signal-console/",
+                        href: "/signal-console/",
                         roomLabel: "Signal Console"
                     }
                 ],

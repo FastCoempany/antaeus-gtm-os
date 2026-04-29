@@ -84,8 +84,8 @@ describe("buildActions URL safety", () => {
         const list = buildActions(EMPTY_COUNTS);
         const quota = list.find((a) => a.key === "quota");
         const backup = list.find((a) => a.key === "backup");
-        if (quota) expect(quota.href).toBe("/app/quota-workback/");
-        if (backup) expect(backup.href).toBe("/app/settings/");
+        if (quota) expect(quota.href).toBe("/quota-workback/");
+        if (backup) expect(backup.href).toBe("/settings/");
     });
 
     it("rooms already merged on main use the new-stack /<room>/ path", () => {

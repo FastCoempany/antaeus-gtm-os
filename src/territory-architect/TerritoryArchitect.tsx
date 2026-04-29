@@ -660,13 +660,13 @@ function AccountTable(): JSX.Element {
 function HandoffStrip(): JSX.Element {
     return (
         <nav class="ta-handoffs" aria-label="Cross-room handoff">
-            <a class="ta-handoff" href="/app/icp-studio/">
+            <a class="ta-handoff" href="/icp-studio/">
                 Open ICP Studio
             </a>
-            <a class="ta-handoff" href="/app/sourcing-workbench/">
+            <a class="ta-handoff" href="/sourcing-workbench/">
                 Open Sourcing Workbench
             </a>
-            <a class="ta-handoff" href="/app/signal-console/">
+            <a class="ta-handoff" href="/signal-console/">
                 Open Signal Console
             </a>
         </nav>

@@ -18,10 +18,14 @@ test.describe("room boot smoke tests", () => {
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
-        const returnPath = encodeURIComponent("/app/dashboard/?demo=1&qa=1");
+        // Phase 4 deletion sweep retired /app/dashboard/ in PR #45 —
+        // legacy path now redirects to /dashboard/. Demo seed flows
+        // through the redirect stub, then the new Preact Dashboard
+        // boots from /dashboard/.
+        const returnPath = encodeURIComponent("/dashboard/?demo=1&qa=1");
         await page.goto(`/demo-seed.html?demo=1&autoseed=mm&return=${returnPath}`);
 
-        await page.waitForURL(/\/app\/dashboard\//, { timeout: 20_000 });
+        await page.waitForURL(/\/dashboard\//, { timeout: 20_000 });
         await page.waitForLoadState("networkidle");
 
         // Dashboard must not have thrown any runtime errors during boot.
@@ -32,10 +36,10 @@ test.describe("room boot smoke tests", () => {
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
-        const returnPath = encodeURIComponent("/app/discovery-studio/?demo=1&qa=1");
+        const returnPath = encodeURIComponent("/discovery-studio/?demo=1&qa=1");
         await page.goto(`/demo-seed.html?demo=1&autoseed=mm&return=${returnPath}`);
 
-        await page.waitForURL(/\/app\/discovery-studio\//, { timeout: 20_000 });
+        await page.waitForURL(/\/discovery-studio\//, { timeout: 20_000 });
         await page.waitForLoadState("networkidle");
 
         // Core Discovery Studio contract rails must be present in the DOM.
@@ -53,10 +57,10 @@ test.describe("room boot smoke tests", () => {
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
-        const returnPath = encodeURIComponent("/app/deal-workspace/?demo=1&qa=1");
+        const returnPath = encodeURIComponent("/deal-workspace/?demo=1&qa=1");
         await page.goto(`/demo-seed.html?demo=1&autoseed=mm&return=${returnPath}`);
 
-        await page.waitForURL(/\/app\/deal-workspace\//, { timeout: 20_000 });
+        await page.waitForURL(/\/deal-workspace\//, { timeout: 20_000 });
         await page.waitForLoadState("networkidle");
 
         expect(errors, `page errors during boot:\n${errors.join("\n")}`).toEqual([]);

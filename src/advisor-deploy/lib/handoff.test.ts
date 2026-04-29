@@ -44,7 +44,7 @@ describe("buildAdvisorRoomHref", () => {
 
     it("merges extra params, ignoring blanks", () => {
         const url = buildAdvisorRoomHref({
-            href: "/app/foo/",
+            href: "/foo/",
             focusObject: "Acme",
             roomLabel: "Foo",
             extra: { stage: "demo", blank: "" }

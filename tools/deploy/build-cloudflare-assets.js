@@ -64,18 +64,20 @@ for (const item of include) {
   copyRecursive(path.join(root, item), path.join(dist, item));
 }
 
-// 3. Root index.html = the legacy welcome redirect. If Vite ever emits a root
-//    index.html for a new-stack entry, that collision would need to be
-//    resolved explicitly — but no current entry does.
+// 3. Root index.html = redirect into the canonical Welcome room. Was
+//    pointing at /app/welcome/ pre-Phase-4-deletion-sweep; now points
+//    directly at /welcome/ (the new Preact entry). The legacy
+//    /app/welcome/ stub still exists as a 301-style meta-refresh so
+//    bookmarks don't 404.
 const indexHtml = `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="refresh" content="0; url=/app/welcome/" />
+    <meta http-equiv="refresh" content="0; url=/welcome/" />
     <title>Antaeus GTM OS</title>
   </head>
   <body>
-    <a href="/app/welcome/">Open Antaeus GTM OS</a>
+    <a href="/welcome/">Open Antaeus GTM OS</a>
   </body>
 </html>
 `;
