@@ -13,6 +13,7 @@ import {
     hrefToDealWorkspace,
     hrefToDiscoveryStudio
 } from "../lib/handoff";
+import { saveAgendaSnapshotToCloud } from "../lib/cloud-persistence";
 import {
     matchedAccount,
     dealOptions
@@ -49,6 +50,7 @@ export function Handoff(): JSX.Element {
         flash(
             `Logged ${OUTCOME_LABELS[o].toLowerCase()} (score ${result.snapshot.score}/100).`
         );
+        void saveAgendaSnapshotToCloud(result.snapshot);
     }
 
     const d = draft.value;
@@ -81,7 +83,8 @@ export function Handoff(): JSX.Element {
     function openDiscovery(): void {
         // Persist as a call_plan first so Discovery Studio reads the
         // current agenda from gtmos_call_handoff on its boot.
-        persistAgendaState(null);
+        const result = persistAgendaState(null);
+        void saveAgendaSnapshotToCloud(result.snapshot);
         if (typeof window === "undefined") return;
         window.location.href = hrefToDiscoveryStudio(
             focusLabel,
@@ -93,6 +96,7 @@ export function Handoff(): JSX.Element {
         // Same persist-then-route. Thread ?deal=<id> so Deal Workspace
         // jumps to the linked deal directly.
         const result = persistAgendaState(null);
+        void saveAgendaSnapshotToCloud(result.snapshot);
         if (typeof window === "undefined") return;
         const dealId = result.snapshot.linkedDeal || "";
         window.location.href = hrefToDealWorkspace(

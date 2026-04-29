@@ -12,6 +12,7 @@ import {
     TOUCH_OUTCOME_LABELS,
     type TouchOutcome
 } from "../lib/types";
+import { saveTouch } from "../lib/cloud-persistence";
 
 /**
  * TouchLog — Wave 5 implementation.
@@ -96,12 +97,15 @@ export function TouchLog(): JSX.Element {
                                                 const v = (
                                                     e.currentTarget as HTMLSelectElement
                                                 ).value;
-                                                setTouchOutcome(
-                                                    t.id,
+                                                const next =
                                                     v.length === 0
                                                         ? null
-                                                        : (v as TouchOutcome)
+                                                        : (v as TouchOutcome);
+                                                setTouchOutcome(t.id, next);
+                                                const updated = allTouches.value.find(
+                                                    (row) => row.id === t.id
                                                 );
+                                                if (updated) void saveTouch(updated);
                                             }}
                                         >
                                             <option value="">— Pending —</option>
