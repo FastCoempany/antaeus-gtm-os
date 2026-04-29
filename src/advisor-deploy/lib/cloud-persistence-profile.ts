@@ -1,7 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import type { Row } from "@/lib/database.types";
+import type { Json, Row } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     advisorToInsert,
     advisorToUpdate,
@@ -145,6 +146,16 @@ export async function saveAdvisor(advisor: Advisor): Promise<Advisor> {
             op: "advisor-deploy.saveAdvisor",
             advisorId: advisor.id
         });
+        const isUpdate = looksLikePersistedId(advisor.id);
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? advisor.id : null,
+            payload: (isUpdate
+                ? advisorToUpdate(advisor)
+                : advisorToInsert(advisor)) as unknown as Json,
+            source: "advisor-deploy.saveAdvisor"
+        });
         return advisor;
     }
 }
@@ -158,6 +169,12 @@ export async function deleteAdvisorInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "advisor-deploy.deleteAdvisorInCloud",
             advisorId: id
+        });
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: "delete",
+            rowId: id,
+            source: "advisor-deploy.deleteAdvisorInCloud"
         });
     }
 }

@@ -14,6 +14,7 @@ import {
     startCloudAutoSave
 } from "./lib/cloud-persistence";
 import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Quota Workback Preact rebuild
@@ -71,6 +72,7 @@ void (async (): Promise<void> => {
         const result = await bootCloudPersistence(client);
         notifyBootResult({ room: "Quota Workback" }, result);
         startCloudAutoSave();
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[quota-workback] Cloud sync disabled:",

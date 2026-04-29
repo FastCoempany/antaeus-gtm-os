@@ -12,6 +12,7 @@ import { loadAccounts } from "./lib/persistence";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
 import { publishHealthSnapshot } from "./lib/health-snapshot";
 import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Signal Console Preact rebuild
@@ -96,6 +97,7 @@ void (async (): Promise<void> => {
             { room: "Signal Console", rowCount: result.accountCount },
             result
         );
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         // Synchronous throw from createDataClient (env-var missing) —
         // surface a plain warning, not a Sentry report, since this is

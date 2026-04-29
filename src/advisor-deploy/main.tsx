@@ -16,6 +16,7 @@ import { readInboundDealId } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
 import { bootAdvisorProfileCloudPersistence } from "./lib/cloud-persistence-profile";
 import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Advisor Deploy Preact rebuild
@@ -122,6 +123,7 @@ void (async (): Promise<void> => {
             },
             profileResult
         );
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[advisor-deploy] Cloud sync disabled:",

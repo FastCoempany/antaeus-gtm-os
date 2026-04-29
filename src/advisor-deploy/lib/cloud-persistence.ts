@@ -1,6 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { Json } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     deploymentToInsert,
     deploymentToUpdate,
@@ -166,6 +168,17 @@ export async function saveDeployment(deployment: Deployment): Promise<Deployment
             op: "advisor-deploy.saveDeployment",
             deploymentId: deployment.id
         });
+        const isUpdate = looksLikePersistedId(deployment.id);
+        const tier = tierForDeployment(deployment);
+        enqueueRetry({
+            table: "advisor_deployments",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? deployment.id : null,
+            payload: (isUpdate
+                ? deploymentToUpdate(deployment, tier)
+                : deploymentToInsert(deployment, tier)) as unknown as Json,
+            source: "advisor-deploy.saveDeployment"
+        });
         return deployment;
     }
 }
@@ -179,6 +192,12 @@ export async function deleteDeploymentInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "advisor-deploy.deleteDeploymentInCloud",
             deploymentId: id
+        });
+        enqueueRetry({
+            table: "advisor_deployments",
+            op: "delete",
+            rowId: id,
+            source: "advisor-deploy.deleteDeploymentInCloud"
         });
     }
 }

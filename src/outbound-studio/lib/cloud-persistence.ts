@@ -1,6 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { Json } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     angleToInsert,
     angleToUpdate,
@@ -200,6 +202,16 @@ export async function saveTouch(touch: Touch): Promise<Touch> {
             op: "outbound-studio.saveTouch",
             touchId: touch.id
         });
+        const isUpdate = looksLikePersistedId(touch.id);
+        enqueueRetry({
+            table: "sequences",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? touch.id : null,
+            payload: (isUpdate
+                ? touchToUpdate(touch)
+                : touchToInsert(touch)) as unknown as Json,
+            source: "outbound-studio.saveTouch"
+        });
         return touch;
     }
 }
@@ -213,6 +225,12 @@ export async function deleteTouchInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "outbound-studio.deleteTouchInCloud",
             touchId: id
+        });
+        enqueueRetry({
+            table: "sequences",
+            op: "delete",
+            rowId: id,
+            source: "outbound-studio.deleteTouchInCloud"
         });
     }
 }
@@ -252,6 +270,16 @@ export async function saveAngle(angle: Angle): Promise<Angle> {
             op: "outbound-studio.saveAngle",
             angleId: angle.id
         });
+        const isUpdate = looksLikePersistedId(angle.id);
+        enqueueRetry({
+            table: "sequences",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? angle.id : null,
+            payload: (isUpdate
+                ? angleToUpdate(angle)
+                : angleToInsert(angle)) as unknown as Json,
+            source: "outbound-studio.saveAngle"
+        });
         return angle;
     }
 }
@@ -265,6 +293,12 @@ export async function deleteAngleInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "outbound-studio.deleteAngleInCloud",
             angleId: id
+        });
+        enqueueRetry({
+            table: "sequences",
+            op: "delete",
+            rowId: id,
+            source: "outbound-studio.deleteAngleInCloud"
         });
     }
 }

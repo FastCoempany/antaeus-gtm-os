@@ -15,6 +15,7 @@ import { loadDealsForLinking } from "./lib/deal-sync";
 import { readInboundDealId } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
 import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the PoC Framework Preact rebuild
@@ -90,6 +91,7 @@ void (async (): Promise<void> => {
             { room: "PoC Framework", rowCount: result.proofCount },
             result
         );
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[poc-framework] Cloud sync disabled:",

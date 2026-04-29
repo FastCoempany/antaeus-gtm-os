@@ -1,7 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import type { Row } from "@/lib/database.types";
+import type { Json, Row } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     KIND_PROSPECT,
     KIND_QUERY_CARD,
@@ -172,6 +173,16 @@ export async function saveQueryCard(card: QueryCard): Promise<QueryCard> {
             op: "sourcing-workbench.saveQueryCard",
             id: card.id
         });
+        const isUpdate = looksLikePersistedId(card.id);
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? card.id : null,
+            payload: (isUpdate
+                ? queryCardToUpdate(card)
+                : queryCardToInsert(card)) as unknown as Json,
+            source: "sourcing-workbench.saveQueryCard"
+        });
         return card;
     }
 }
@@ -215,6 +226,16 @@ export async function saveProspect(prospect: Prospect): Promise<Prospect> {
             op: "sourcing-workbench.saveProspect",
             id: prospect.id
         });
+        const isUpdate = looksLikePersistedId(prospect.id);
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? prospect.id : null,
+            payload: (isUpdate
+                ? prospectToUpdate(prospect)
+                : prospectToInsert(prospect)) as unknown as Json,
+            source: "sourcing-workbench.saveProspect"
+        });
         return prospect;
     }
 }
@@ -228,6 +249,12 @@ export async function deleteArtifactInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "sourcing-workbench.deleteArtifactInCloud",
             id
+        });
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: "delete",
+            rowId: id,
+            source: "sourcing-workbench.deleteArtifactInCloud"
         });
     }
 }

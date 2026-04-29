@@ -15,6 +15,7 @@ import { loadDealOptions } from "./lib/deal-loader";
 import { readInboundAccount } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
 import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Call Planner Preact rebuild
@@ -83,6 +84,7 @@ void (async (): Promise<void> => {
         const client = createDataClient();
         const result = await bootCloudPersistence(client);
         notifyBootResult({ room: "Call Planner" }, result);
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[call-planner] Cloud sync disabled:",

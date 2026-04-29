@@ -1,6 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { Json } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     actionToInsert,
     actionToUpdate,
@@ -116,6 +118,16 @@ export async function saveAction(entry: ActionEntry): Promise<ActionEntry> {
             op: "linkedin-playbook.saveAction",
             actionId: entry.id
         });
+        const isUpdate = looksLikePersistedId(entry.id);
+        enqueueRetry({
+            table: "sequences",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? entry.id : null,
+            payload: (isUpdate
+                ? actionToUpdate(entry)
+                : actionToInsert(entry)) as unknown as Json,
+            source: "linkedin-playbook.saveAction"
+        });
         return entry;
     }
 }
@@ -129,6 +141,12 @@ export async function deleteActionInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "linkedin-playbook.deleteActionInCloud",
             actionId: id
+        });
+        enqueueRetry({
+            table: "sequences",
+            op: "delete",
+            rowId: id,
+            source: "linkedin-playbook.deleteActionInCloud"
         });
     }
 }

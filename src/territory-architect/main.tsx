@@ -19,6 +19,7 @@ import {
 } from "./lib/persistence";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
 import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 initObservability();
 
@@ -66,6 +67,7 @@ void (async (): Promise<void> => {
             { room: "Territory Architect", rowCount: total },
             result
         );
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[territory-architect] Cloud sync disabled:",

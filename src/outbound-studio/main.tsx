@@ -15,6 +15,7 @@ import { loadAccountOptions } from "./lib/account-loader";
 import { readInboundRack } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
 import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Outbound Studio Preact rebuild
@@ -80,6 +81,7 @@ void (async (): Promise<void> => {
             { room: "Outbound Studio", rowCount: total },
             result
         );
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[outbound-studio] Cloud sync disabled:",

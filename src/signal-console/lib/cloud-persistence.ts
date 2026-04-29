@@ -1,6 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { Json } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     accountToInsert,
     accountToUpdate,
@@ -183,6 +185,16 @@ export async function saveAccount(account: Account): Promise<Account> {
             op: "signal-console.saveAccount",
             accountId: account.id
         });
+        const isUpdate = looksLikePersistedId(account.id);
+        enqueueRetry({
+            table: "signal_console_accounts",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? account.id : null,
+            payload: (isUpdate
+                ? accountToUpdate(account)
+                : accountToInsert(account)) as unknown as Json,
+            source: "signal-console.saveAccount"
+        });
         return account;
     }
 }
@@ -204,6 +216,12 @@ export async function deleteAccountInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "signal-console.deleteAccountInCloud",
             accountId: id
+        });
+        enqueueRetry({
+            table: "signal_console_accounts",
+            op: "delete",
+            rowId: id,
+            source: "signal-console.deleteAccountInCloud"
         });
     }
 }

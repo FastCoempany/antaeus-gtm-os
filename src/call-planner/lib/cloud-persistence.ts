@@ -1,6 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { Json } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     LOG_TYPE_DISCOVERY_AGENDA,
     rowToSnapshot,
@@ -90,6 +92,13 @@ export async function saveAgendaSnapshotToCloud(
         return typeof row.id === "string" ? row.id : null;
     } catch (err) {
         reportError(err, { op: "call-planner.saveAgendaSnapshotToCloud" });
+        enqueueRetry({
+            table: "discovery_call_logs",
+            op: "insert",
+            rowId: null,
+            payload: snapshotToInsert(snapshot) as unknown as Json,
+            source: "call-planner.saveAgendaSnapshotToCloud"
+        });
         return null;
     }
 }

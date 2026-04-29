@@ -1,7 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import type { Row } from "@/lib/database.types";
+import type { Json, Row } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     accountToInsert,
     accountToUpdate,
@@ -235,6 +236,16 @@ export async function saveThesis(thesis: Thesis): Promise<Thesis> {
             op: "territory-architect.saveThesis",
             id: thesis.id
         });
+        const isUpdate = looksLikePersistedId(thesis.id);
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? thesis.id : null,
+            payload: (isUpdate
+                ? thesisToUpdate(thesis)
+                : thesisToInsert(thesis)) as unknown as Json,
+            source: "territory-architect.saveThesis"
+        });
         return thesis;
     }
 }
@@ -277,6 +288,16 @@ export async function saveApproach(approach: Approach): Promise<Approach> {
         reportError(err, {
             op: "territory-architect.saveApproach",
             id: approach.id
+        });
+        const isUpdate = looksLikePersistedId(approach.id);
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? approach.id : null,
+            payload: (isUpdate
+                ? approachToUpdate(approach)
+                : approachToInsert(approach)) as unknown as Json,
+            source: "territory-architect.saveApproach"
         });
         return approach;
     }
@@ -321,6 +342,16 @@ export async function saveAccount(
             op: "territory-architect.saveAccount",
             id: account.id
         });
+        const isUpdate = looksLikePersistedId(account.id);
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? account.id : null,
+            payload: (isUpdate
+                ? accountToUpdate(account)
+                : accountToInsert(account)) as unknown as Json,
+            source: "territory-architect.saveAccount"
+        });
         return account;
     }
 }
@@ -334,6 +365,12 @@ export async function deleteArtifactInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "territory-architect.deleteArtifactInCloud",
             id
+        });
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: "delete",
+            rowId: id,
+            source: "territory-architect.deleteArtifactInCloud"
         });
     }
 }
