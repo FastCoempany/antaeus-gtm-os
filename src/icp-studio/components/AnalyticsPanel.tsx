@@ -7,6 +7,7 @@ import {
     hrefToSourcingWorkbench,
     hrefToTerritoryArchitect
 } from "../lib/handoff";
+import { deleteIcpInCloud } from "../lib/cloud-persistence";
 
 /**
  * AnalyticsPanel — Wave 4 implementation.
@@ -115,7 +116,10 @@ export function AnalyticsPanel(): JSX.Element {
                                 <button
                                     type="button"
                                     class="icp-library__remove"
-                                    onClick={() => removeSavedIcp(icp.id)}
+                                    onClick={() => {
+                                        removeSavedIcp(icp.id);
+                                        void deleteIcpInCloud(icp.id);
+                                    }}
                                     aria-label={`Remove ${icp.industry}`}
                                 >
                                     Remove
