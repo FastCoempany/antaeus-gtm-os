@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { TerritoryArchitect } from "./TerritoryArchitect";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
 import {
     patchThesisDraft,
@@ -16,6 +17,7 @@ import {
     loadTerritoryState,
     loadTheses
 } from "./lib/persistence";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 initObservability();
 
@@ -48,3 +50,19 @@ if (ctx.focusObject) {
 }
 
 render(<TerritoryArchitect />, root);
+
+// Async cloud load for theses + approaches + accounts. Doesn't block
+// first paint. Replaces local state if cloud has rows; migrates local
+// up if cloud is empty. Realtime keeps cross-tab + cross-device
+// mutations flowing.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[territory-architect] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

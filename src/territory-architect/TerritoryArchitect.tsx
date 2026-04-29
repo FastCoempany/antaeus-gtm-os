@@ -29,6 +29,12 @@ import {
     type DispositionState,
     type TierId
 } from "./lib/types";
+import {
+    deleteArtifactInCloud,
+    saveAccount,
+    saveApproach,
+    saveThesis
+} from "./lib/cloud-persistence";
 
 /**
  * TerritoryArchitect — Wave 1+2 root.
@@ -113,7 +119,8 @@ function ThesisStudio(): JSX.Element {
                 class="ta-form ta-form--thesis"
                 onSubmit={(e) => {
                     e.preventDefault();
-                    saveThesisFromDraft();
+                    const t = saveThesisFromDraft();
+                    if (t) void saveThesis(t);
                 }}
             >
                 <label class="ta-field">
@@ -236,7 +243,10 @@ function ThesisStudio(): JSX.Element {
                                 <button
                                     type="button"
                                     class="ta-remove"
-                                    onClick={() => removeThesis(t.id)}
+                                    onClick={() => {
+                                        removeThesis(t.id);
+                                        void deleteArtifactInCloud(t.id);
+                                    }}
                                 >
                                     Remove
                                 </button>
@@ -267,7 +277,8 @@ function ApproachLedger(): JSX.Element {
                 class="ta-form"
                 onSubmit={(e) => {
                     e.preventDefault();
-                    saveApproachFromDraft();
+                    const a = saveApproachFromDraft();
+                    if (a) void saveApproach(a);
                 }}
             >
                 <label class="ta-field">
@@ -389,7 +400,10 @@ function ApproachLedger(): JSX.Element {
                             <button
                                 type="button"
                                 class="ta-remove"
-                                onClick={() => removeApproach(a.id)}
+                                onClick={() => {
+                                    removeApproach(a.id);
+                                    void deleteArtifactInCloud(a.id);
+                                }}
                             >
                                 Remove
                             </button>
@@ -432,7 +446,8 @@ function AccountTable(): JSX.Element {
                 class="ta-form"
                 onSubmit={(e) => {
                     e.preventDefault();
-                    saveAccountFromDraft();
+                    const a = saveAccountFromDraft();
+                    if (a) void saveAccount(a);
                 }}
             >
                 <label class="ta-field">
@@ -574,14 +589,18 @@ function AccountTable(): JSX.Element {
                                     <select
                                         class="ta-tier-pick"
                                         value={acct.tier}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                             retierAccount(
                                                 acct.id,
                                                 (
                                                     e.currentTarget as HTMLSelectElement
                                                 ).value as TierId
-                                            )
-                                        }
+                                            );
+                                            const updated = accounts.value.find(
+                                                (x) => x.id === acct.id
+                                            );
+                                            if (updated) void saveAccount(updated);
+                                        }}
                                     >
                                         {TIER_IDS.map((t) => (
                                             <option key={t} value={t}>
@@ -595,14 +614,18 @@ function AccountTable(): JSX.Element {
                                     <select
                                         class="ta-disp-pick"
                                         value={acct.disposition}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                             setAccountDisposition(
                                                 acct.id,
                                                 (
                                                     e.currentTarget as HTMLSelectElement
                                                 ).value as DispositionState
-                                            )
-                                        }
+                                            );
+                                            const updated = accounts.value.find(
+                                                (x) => x.id === acct.id
+                                            );
+                                            if (updated) void saveAccount(updated);
+                                        }}
                                     >
                                         {Object.entries(
                                             DISPOSITION_LABELS
@@ -617,7 +640,10 @@ function AccountTable(): JSX.Element {
                                     <button
                                         type="button"
                                         class="ta-remove"
-                                        onClick={() => removeAccount(acct.id)}
+                                        onClick={() => {
+                                            removeAccount(acct.id);
+                                            void deleteArtifactInCloud(acct.id);
+                                        }}
                                     >
                                         Remove
                                     </button>

@@ -7,7 +7,16 @@ import {
     type ProspectStage
 } from "../lib/types";
 import { getProspectQuality } from "../lib/quality";
-import { prospectsByStage, removeProspect, setProspectStage } from "../state";
+import {
+    prospects,
+    prospectsByStage,
+    removeProspect,
+    setProspectStage
+} from "../state";
+import {
+    deleteArtifactInCloud,
+    saveProspect
+} from "../lib/cloud-persistence";
 
 const COLUMN_ORDER: ReadonlyArray<ProspectStage> = PROSPECT_STAGES;
 
@@ -124,7 +133,13 @@ function Card({ prospect }: { readonly prospect: Prospect }): JSX.Element {
                     <button
                         type="button"
                         class="sw-btn sw-btn--ghost-sm"
-                        onClick={() => setProspectStage(prospect.id, prev)}
+                        onClick={() => {
+                            setProspectStage(prospect.id, prev);
+                            const updated = prospects.value.find(
+                                (x) => x.id === prospect.id
+                            );
+                            if (updated) void saveProspect(updated);
+                        }}
                     >
                         ← {STAGE_LABELS[prev]}
                     </button>
@@ -136,9 +151,13 @@ function Card({ prospect }: { readonly prospect: Prospect }): JSX.Element {
                         <button
                             type="button"
                             class="sw-btn sw-btn--ghost-sm"
-                            onClick={() =>
-                                setProspectStage(prospect.id, "dropped")
-                            }
+                            onClick={() => {
+                                setProspectStage(prospect.id, "dropped");
+                                const updated = prospects.value.find(
+                                    (x) => x.id === prospect.id
+                                );
+                                if (updated) void saveProspect(updated);
+                            }}
                         >
                             Drop
                         </button>
@@ -146,7 +165,10 @@ function Card({ prospect }: { readonly prospect: Prospect }): JSX.Element {
                         <button
                             type="button"
                             class="sw-btn sw-btn--ghost-sm"
-                            onClick={() => removeProspect(prospect.id)}
+                            onClick={() => {
+                                removeProspect(prospect.id);
+                                void deleteArtifactInCloud(prospect.id);
+                            }}
                         >
                             Remove
                         </button>
@@ -155,7 +177,13 @@ function Card({ prospect }: { readonly prospect: Prospect }): JSX.Element {
                         <button
                             type="button"
                             class="sw-btn sw-btn--primary-sm"
-                            onClick={() => setProspectStage(prospect.id, next)}
+                            onClick={() => {
+                                setProspectStage(prospect.id, next);
+                                const updated = prospects.value.find(
+                                    (x) => x.id === prospect.id
+                                );
+                                if (updated) void saveProspect(updated);
+                            }}
                         >
                             {STAGE_LABELS[next]} →
                         </button>

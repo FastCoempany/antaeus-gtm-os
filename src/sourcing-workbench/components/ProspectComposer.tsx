@@ -11,6 +11,7 @@ import {
     patchProspectDraft,
     saveProspectFromDraft
 } from "../state";
+import { saveProspect } from "../lib/cloud-persistence";
 
 const LEVERAGE_KEYS: ReadonlyArray<LeverageKey> = [
     "network-connection",
@@ -31,7 +32,8 @@ export function ProspectComposer(): JSX.Element {
 
     function onSubmit(e: Event): void {
         e.preventDefault();
-        saveProspectFromDraft();
+        const p = saveProspectFromDraft();
+        if (p) void saveProspect(p);
     }
 
     return (
