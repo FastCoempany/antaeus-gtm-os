@@ -22,6 +22,7 @@ import {
     personalize,
     weakestThreadCopy
 } from "../lib/personalize";
+import { saveCallEntry } from "../lib/cloud-persistence";
 import {
     OUTCOMES,
     OUTCOME_LABELS,
@@ -250,7 +251,10 @@ export function TalkLoom(): JSX.Element {
                                 key={o}
                                 type="button"
                                 class={`cc-outcome cc-outcome--${o}`}
-                                onClick={() => logCall(o)}
+                                onClick={() => {
+                                    const entry = logCall(o);
+                                    if (entry) void saveCallEntry(entry);
+                                }}
                                 data-cc-outcome={o}
                             >
                                 {OUTCOME_LABELS[o]}
@@ -260,7 +264,10 @@ export function TalkLoom(): JSX.Element {
                     <button
                         type="button"
                         class="cc-outcome cc-outcome--logged"
-                        onClick={() => logCall("logged")}
+                        onClick={() => {
+                            const entry = logCall("logged");
+                            if (entry) void saveCallEntry(entry);
+                        }}
                     >
                         Log this call
                     </button>

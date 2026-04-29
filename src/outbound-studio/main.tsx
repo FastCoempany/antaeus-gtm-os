@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { OutboundStudio } from "./OutboundStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import {
     patchRack,
     setAccountOptions,
@@ -12,6 +13,7 @@ import {
 import { loadAngles, loadTouches } from "./lib/persistence";
 import { loadAccountOptions } from "./lib/account-loader";
 import { readInboundRack } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 /**
  * Entry point for the Outbound Studio Preact rebuild
@@ -64,3 +66,18 @@ if (Object.keys(inbound).length > 0) {
 }
 
 render(<OutboundStudio />, root);
+
+// Async cloud load for touch history. Doesn't block first paint.
+// Replaces local touches if cloud has rows; migrates local up if cloud
+// is empty. Saved angles stay local-only (operator-personal templates).
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[outbound-studio] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

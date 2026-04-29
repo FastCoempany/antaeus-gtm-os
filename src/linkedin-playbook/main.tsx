@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { LinkedinPlaybook } from "./LinkedinPlaybook";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import {
     patchDraft,
     setActions,
@@ -16,6 +17,7 @@ import {
     loadLatestTouch
 } from "./lib/context";
 import { readInboundAccount } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 /**
  * Entry point for the LinkedIn Playbook Preact rebuild
@@ -73,3 +75,16 @@ if (inbound) patchDraft({ accountName: inbound });
 startActionsPersistence();
 
 render(<LinkedinPlaybook />, root);
+
+// Async cloud load for action history. Doesn't block first paint.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[linkedin-playbook] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

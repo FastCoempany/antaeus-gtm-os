@@ -15,6 +15,7 @@ import {
     type ActionType,
     type Outcome
 } from "../lib/types";
+import { saveAction } from "../lib/cloud-persistence";
 
 /**
  * CueLedger — Wave 4 implementation.
@@ -105,7 +106,8 @@ export function CueLedger(): JSX.Element {
                     class="lp-ledger__form"
                     onSubmit={(e) => {
                         e.preventDefault();
-                        logCue();
+                        const entry = logCue();
+                        if (entry) void saveAction(entry);
                     }}
                 >
                     <label class="lp-ledger__field">
@@ -238,12 +240,15 @@ export function CueLedger(): JSX.Element {
                                                     const v = (
                                                         e.currentTarget as HTMLSelectElement
                                                     ).value;
-                                                    updateOutcome(
-                                                        a.id,
+                                                    const next =
                                                         v.length === 0
                                                             ? null
-                                                            : (v as Outcome)
+                                                            : (v as Outcome);
+                                                    updateOutcome(a.id, next);
+                                                    const updated = actions.value.find(
+                                                        (row) => row.id === a.id
                                                     );
+                                                    if (updated) void saveAction(updated);
                                                 }}
                                             >
                                                 <option value="">—</option>

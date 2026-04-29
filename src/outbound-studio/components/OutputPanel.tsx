@@ -8,6 +8,7 @@ import {
 } from "../state";
 import { ASSET_LABELS, CTA_LABELS } from "../lib/data";
 import { CHANNEL_LABELS } from "../lib/types";
+import { saveTouch } from "../lib/cloud-persistence";
 
 /**
  * OutputPanel — Wave 4 implementation.
@@ -39,7 +40,10 @@ export function OutputPanel(): JSX.Element {
 
     function logTouch(): void {
         const t = logTouchFromRack();
-        if (t) flashToast("Touch logged.");
+        if (t) {
+            flashToast("Touch logged.");
+            void saveTouch(t);
+        }
     }
 
     function saveAngle(): void {

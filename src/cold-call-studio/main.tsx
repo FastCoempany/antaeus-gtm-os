@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { ColdCallStudio } from "./ColdCallStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import {
     setAccountOptions,
     setCallLog,
@@ -11,6 +12,7 @@ import {
 import { loadCallLog, loadCompanyName } from "./lib/persistence";
 import { loadAccountOptions } from "./lib/account-loader";
 import { readInboundAccount } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 /**
  * Entry point for the Cold Call Studio Preact rebuild
@@ -71,3 +73,16 @@ if (requested) {
 startCallLogPersistence();
 
 render(<ColdCallStudio />, root);
+
+// Async cloud load for call log. Doesn't block first paint.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[cold-call-studio] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

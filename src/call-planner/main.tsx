@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { CallPlanner } from "./CallPlanner";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import {
     hydrateDraftFromSnapshot,
     setAccountOptions,
@@ -12,6 +13,7 @@ import { loadAgendaSnapshot } from "./lib/persistence";
 import { loadAccountOptions } from "./lib/account-loader";
 import { loadDealOptions } from "./lib/deal-loader";
 import { readInboundAccount } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
 
 /**
  * Entry point for the Call Planner Preact rebuild
@@ -71,3 +73,18 @@ if (inbound) setContactName(inbound);
 startAgendaAutosave();
 
 render(<CallPlanner />, root);
+
+// Async cloud load. If the cloud has a recent agenda saved from
+// another device, hydrate the draft from it (cloud is canonical
+// for cross-device "what was I planning?" continuity).
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[call-planner] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();
