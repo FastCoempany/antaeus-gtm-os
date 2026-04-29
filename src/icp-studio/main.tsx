@@ -11,6 +11,7 @@ import {
 } from "./state";
 import { loadAnalytics } from "./lib/persistence";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
 
 initObservability();
 
@@ -57,7 +58,11 @@ render(<IcpStudio />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        notifyBootResult(
+            { room: "ICP Studio", rowCount: result.icpCount },
+            result
+        );
     } catch (err) {
         console.warn(
             "[icp-studio] Cloud sync disabled:",

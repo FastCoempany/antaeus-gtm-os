@@ -18,6 +18,7 @@ import {
     loadTheses
 } from "./lib/persistence";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
 
 initObservability();
 
@@ -58,7 +59,13 @@ render(<TerritoryArchitect />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        const total =
+            result.thesesCount + result.approachesCount + result.accountsCount;
+        notifyBootResult(
+            { room: "Territory Architect", rowCount: total },
+            result
+        );
     } catch (err) {
         console.warn(
             "[territory-architect] Cloud sync disabled:",

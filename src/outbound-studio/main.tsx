@@ -14,6 +14,7 @@ import { loadAngles, loadTouches } from "./lib/persistence";
 import { loadAccountOptions } from "./lib/account-loader";
 import { readInboundRack } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
 
 /**
  * Entry point for the Outbound Studio Preact rebuild
@@ -73,7 +74,12 @@ render(<OutboundStudio />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        const total = result.touchCount + result.angleCount;
+        notifyBootResult(
+            { room: "Outbound Studio", rowCount: total },
+            result
+        );
     } catch (err) {
         console.warn(
             "[outbound-studio] Cloud sync disabled:",

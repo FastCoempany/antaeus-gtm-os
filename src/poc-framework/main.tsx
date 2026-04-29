@@ -14,6 +14,7 @@ import { loadProofs } from "./lib/persistence";
 import { loadDealsForLinking } from "./lib/deal-sync";
 import { readInboundDealId } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
 
 /**
  * Entry point for the PoC Framework Preact rebuild
@@ -84,7 +85,11 @@ render(<PocFramework />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        notifyBootResult(
+            { room: "PoC Framework", rowCount: result.proofCount },
+            result
+        );
     } catch (err) {
         console.warn(
             "[poc-framework] Cloud sync disabled:",

@@ -18,6 +18,7 @@ import {
 } from "./lib/context";
 import { readInboundAccount } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
 
 /**
  * Entry point for the LinkedIn Playbook Preact rebuild
@@ -80,7 +81,11 @@ render(<LinkedinPlaybook />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        notifyBootResult(
+            { room: "LinkedIn Playbook", rowCount: result.actionCount },
+            result
+        );
     } catch (err) {
         console.warn(
             "[linkedin-playbook] Cloud sync disabled:",
