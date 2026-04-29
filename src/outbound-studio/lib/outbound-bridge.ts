@@ -5,6 +5,7 @@ import type {
     UpdateRow
 } from "@/lib/database.types";
 import type {
+    Angle,
     Asset,
     Channel,
     CtaKey,
@@ -35,6 +36,7 @@ const UUID_RE =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export const SEQUENCE_KEY_OUTBOUND = "outbound";
+export const SEQUENCE_KEY_OUTBOUND_ANGLE = "outbound-angle";
 
 export function looksLikePersistedId(id: string): boolean {
     return UUID_RE.test(id);
@@ -225,5 +227,91 @@ export function touchToUpdate(touch: Touch): UpdateRow<"sequences"> {
         name: touch.accountName || null,
         title: deriveTitle(touch.content),
         data: extractDataBlob(touch) as Json
+    };
+}
+
+// ─── Angle (saved value-prop template) ─────────────────────────────────
+
+/**
+ * Hydrate an Angle from a `sequences` row tagged
+ * sequence_key='outbound-angle'. Returns null when the row is wrong
+ * kind / malformed.
+ */
+export function rowToAngle(
+    row:
+        | Row<"sequences">
+        | { id?: unknown; data?: unknown }
+        | null
+        | undefined
+): Angle | null {
+    if (!row || typeof row !== "object") return null;
+    const r = row as Row<"sequences">;
+    const id = typeof r.id === "string" && r.id.length > 0 ? r.id : null;
+    if (!id) return null;
+    if (r.sequence_key !== SEQUENCE_KEY_OUTBOUND_ANGLE) return null;
+    const data = asObject(r.data) ?? {};
+    const company = asString(r.name) || asString(data["company"]);
+    const savedAt = asString(r.created_at) || new Date().toISOString();
+    return {
+        id,
+        company,
+        trigger: asTrigger(data["trigger"]),
+        persona: asPersona(data["persona"]),
+        email: asString(r.title) || asString(data["email"]),
+        temperature: asTemperature(data["temperature"]),
+        channel: asChannel(data["channel"]),
+        ctaType: asCta(data["ctaType"]),
+        assetUsed: asAsset(data["assetUsed"]),
+        qualityScore: asNumber(data["qualityScore"]),
+        motionBand: asString(data["motionBand"]),
+        nextMove: asString(data["nextMove"]),
+        savedAt
+    };
+}
+
+export function rowsToAngles(
+    rows: ReadonlyArray<Row<"sequences">>
+): ReadonlyArray<Angle> {
+    return rows.map(rowToAngle).filter((a): a is Angle => a !== null);
+}
+
+export function extractAngleDataBlob(angle: Angle): Record<string, unknown> {
+    return {
+        company: angle.company,
+        trigger: angle.trigger,
+        persona: angle.persona,
+        email: angle.email,
+        temperature: angle.temperature,
+        channel: angle.channel,
+        ctaType: angle.ctaType,
+        assetUsed: angle.assetUsed,
+        qualityScore: angle.qualityScore,
+        motionBand: angle.motionBand,
+        nextMove: angle.nextMove
+    };
+}
+
+function deriveAngleTitle(email: string): string {
+    const trimmed = email.trim();
+    if (!trimmed) return "Saved angle";
+    const firstLine = trimmed.split(/\r?\n/)[0]?.trim() ?? "";
+    return firstLine.slice(0, 200) || "Saved angle";
+}
+
+export function angleToInsert(angle: Angle): InsertRow<"sequences"> {
+    return {
+        sequence_key: SEQUENCE_KEY_OUTBOUND_ANGLE,
+        name: angle.company || null,
+        title: deriveAngleTitle(angle.email),
+        data: extractAngleDataBlob(angle) as Json
+    };
+}
+
+export function angleToUpdate(angle: Angle): UpdateRow<"sequences"> {
+    return {
+        sequence_key: SEQUENCE_KEY_OUTBOUND_ANGLE,
+        name: angle.company || null,
+        title: deriveAngleTitle(angle.email),
+        data: extractAngleDataBlob(angle) as Json
     };
 }

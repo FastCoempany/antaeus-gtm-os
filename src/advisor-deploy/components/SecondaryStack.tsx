@@ -22,6 +22,10 @@ import {
 } from "../lib/handoff";
 import { saveDeployment } from "../lib/cloud-persistence";
 import {
+    deleteAdvisorInCloud,
+    saveAdvisor
+} from "../lib/cloud-persistence-profile";
+import {
     DEPLOYMENT_OUTCOMES,
     DEPLOYMENT_OUTCOME_LABELS,
     TIER_IDS,
@@ -61,7 +65,8 @@ export function SecondaryStack(): JSX.Element {
 
     function onSubmit(e: Event): void {
         e.preventDefault();
-        saveAdvisorFromDraft();
+        const advisor = saveAdvisorFromDraft();
+        if (advisor) void saveAdvisor(advisor);
     }
 
     return (
@@ -218,7 +223,10 @@ export function SecondaryStack(): JSX.Element {
                                         <button
                                             type="button"
                                             class="ad-btn ad-btn--red"
-                                            onClick={() => removeAdvisor(a.id)}
+                                            onClick={() => {
+                                                removeAdvisor(a.id);
+                                                void deleteAdvisorInCloud(a.id);
+                                            }}
                                         >
                                             Remove
                                         </button>

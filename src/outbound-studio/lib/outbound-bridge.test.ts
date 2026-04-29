@@ -1,12 +1,18 @@
 import { describe, expect, it } from "vitest";
 import type { Row } from "@/lib/database.types";
-import type { Touch } from "./types";
+import type { Angle, Touch } from "./types";
 import {
+    angleToInsert,
+    angleToUpdate,
+    extractAngleDataBlob,
     extractDataBlob,
     looksLikePersistedId,
+    rowToAngle,
     rowToTouch,
+    rowsToAngles,
     rowsToTouches,
     SEQUENCE_KEY_OUTBOUND,
+    SEQUENCE_KEY_OUTBOUND_ANGLE,
     touchToInsert,
     touchToUpdate
 } from "./outbound-bridge";
@@ -207,5 +213,138 @@ describe("touchToUpdate", () => {
         expect(update.sequence_key).toBe(SEQUENCE_KEY_OUTBOUND);
         expect(update.name).toBe("Acme");
         expect(update.title).toBe("Hi Jane,");
+    });
+});
+
+const FULL_ANGLE: Angle = {
+    id: "angle_1730000000_abc",
+    company: "Acme",
+    trigger: "funding",
+    persona: "vp",
+    email: "Hi Jane,\nFollowing your Series B...",
+    temperature: "warm",
+    channel: "email",
+    ctaType: "meeting_request",
+    assetUsed: "case_study",
+    qualityScore: 76,
+    motionBand: "ready",
+    nextMove: "Send pricing.",
+    savedAt: "2026-04-02T12:00:00Z"
+};
+
+describe("rowToAngle", () => {
+    it("hydrates a populated row", () => {
+        const row: Row<"sequences"> = {
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            user_id: "u",
+            workspace_id: "w",
+            sequence_key: "outbound-angle",
+            name: "Acme",
+            title: "Hi Jane,",
+            data: {
+                company: "Acme",
+                trigger: "funding",
+                persona: "vp",
+                email: FULL_ANGLE.email,
+                temperature: "warm",
+                channel: "email",
+                ctaType: "meeting_request",
+                assetUsed: "case_study",
+                qualityScore: 76,
+                motionBand: "ready",
+                nextMove: "Send pricing."
+            },
+            created_at: "2026-04-02T12:00:00Z",
+            updated_at: "2026-04-02T12:00:00Z"
+        };
+        const a = rowToAngle(row);
+        expect(a).not.toBeNull();
+        expect(a!.company).toBe("Acme");
+        expect(a!.persona).toBe("vp");
+        expect(a!.qualityScore).toBe(76);
+    });
+
+    it("returns null for non-angle sequence_key", () => {
+        const row: Row<"sequences"> = {
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            user_id: "u",
+            workspace_id: "w",
+            sequence_key: "outbound",
+            name: "Acme",
+            title: null,
+            data: {},
+            created_at: "2026-04-02T12:00:00Z",
+            updated_at: "2026-04-02T12:00:00Z"
+        };
+        expect(rowToAngle(row)).toBeNull();
+    });
+
+    it("returns null on missing id / null", () => {
+        expect(rowToAngle({ id: "" } as unknown as Row<"sequences">)).toBeNull();
+        expect(rowToAngle(null)).toBeNull();
+    });
+});
+
+describe("rowsToAngles", () => {
+    it("filters non-angle + malformed rows", () => {
+        const rows = [
+            {
+                id: "550e8400-e29b-41d4-a716-446655440000",
+                user_id: "u",
+                workspace_id: "w",
+                sequence_key: "outbound-angle",
+                name: "Acme",
+                title: null,
+                data: {},
+                created_at: "2026-04-02T12:00:00Z",
+                updated_at: "2026-04-02T12:00:00Z"
+            },
+            {
+                id: "550e8400-e29b-41d4-a716-446655440001",
+                user_id: "u",
+                workspace_id: "w",
+                sequence_key: "outbound",
+                name: "Acme",
+                title: null,
+                data: {},
+                created_at: "2026-04-02T12:00:00Z",
+                updated_at: "2026-04-02T12:00:00Z"
+            }
+        ];
+        expect(rowsToAngles(rows as Row<"sequences">[])).toHaveLength(1);
+    });
+});
+
+describe("extractAngleDataBlob", () => {
+    it("packs every non-top-level field", () => {
+        const blob = extractAngleDataBlob(FULL_ANGLE);
+        expect(blob["trigger"]).toBe("funding");
+        expect(blob["persona"]).toBe("vp");
+        expect(blob["nextMove"]).toBe("Send pricing.");
+    });
+});
+
+describe("angleToInsert / angleToUpdate", () => {
+    it("packs sequence_key=outbound-angle + name + title", () => {
+        const insert = angleToInsert(FULL_ANGLE);
+        expect(insert.sequence_key).toBe(SEQUENCE_KEY_OUTBOUND_ANGLE);
+        expect(insert.name).toBe("Acme");
+        expect(insert.title).toBe("Hi Jane,");
+    });
+
+    it("clears name when company blank", () => {
+        const insert = angleToInsert({ ...FULL_ANGLE, company: "" });
+        expect(insert.name).toBeNull();
+    });
+
+    it("falls back title to 'Saved angle' for blank email", () => {
+        const insert = angleToInsert({ ...FULL_ANGLE, email: "" });
+        expect(insert.title).toBe("Saved angle");
+    });
+
+    it("update has the same shape", () => {
+        const update = angleToUpdate(FULL_ANGLE);
+        expect(update.sequence_key).toBe(SEQUENCE_KEY_OUTBOUND_ANGLE);
+        expect(update.name).toBe("Acme");
     });
 });

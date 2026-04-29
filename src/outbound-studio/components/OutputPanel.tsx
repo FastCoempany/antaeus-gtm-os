@@ -8,7 +8,7 @@ import {
 } from "../state";
 import { ASSET_LABELS, CTA_LABELS } from "../lib/data";
 import { CHANNEL_LABELS } from "../lib/types";
-import { saveTouch } from "../lib/cloud-persistence";
+import { saveAngle, saveTouch } from "../lib/cloud-persistence";
 
 /**
  * OutputPanel — Wave 4 implementation.
@@ -46,10 +46,11 @@ export function OutputPanel(): JSX.Element {
         }
     }
 
-    function saveAngle(): void {
+    function onSaveAngle(): void {
         const result = saveAngleFromRack();
         if (result.saved) {
             flashToast("Angle saved.");
+            void saveAngle(result.angle);
         } else if (result.reason === "duplicate") {
             flashToast("Angle already saved.");
         }
@@ -117,7 +118,7 @@ export function OutputPanel(): JSX.Element {
                     type="button"
                     class="ob-output__btn"
                     disabled={!enabled}
-                    onClick={saveAngle}
+                    onClick={onSaveAngle}
                 >
                     Save angle
                 </button>
