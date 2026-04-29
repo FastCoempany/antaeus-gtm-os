@@ -30,7 +30,7 @@ export function buildAdvisorRoomHref({
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
     if (!params.get("returnTo")) {
-        params.set("returnTo", "/app/advisor-deploy/");
+        params.set("returnTo", "/advisor-deploy/");
         params.set("returnLabel", "Back to Advisor Deploy");
         if (focusObject) params.set("focusObject", focusObject);
         if (roomLabel) params.set("focusRoom", roomLabel);

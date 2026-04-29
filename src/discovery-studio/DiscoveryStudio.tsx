@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { CallClock } from "./components/CallClock";
 import { CompressionToggle } from "./components/CompressionToggle";
 import { FrameworkRail } from "./components/FrameworkRail";
@@ -56,6 +57,7 @@ export function DiscoveryStudio(): JSX.Element {
     return (
         <div class="ds-shell">
             <header class="ds-topbar">
+                <BackButton />
                 <p class="ds-topbar__kicker">
                     DISCOVERY STUDIO · WAVE 5 · {fwLoaded
                         ? `${frameworkRegistry.value.length} frameworks loaded`

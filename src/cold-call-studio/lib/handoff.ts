@@ -34,7 +34,7 @@ export function buildColdCallHref({
 }: HandoffOptions): string {
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
-    params.set("returnTo", "/app/cold-call-studio/");
+    params.set("returnTo", "/cold-call-studio/");
     params.set("returnLabel", "Back to Cold Call Studio");
     if (focusObject) params.set("focusObject", focusObject);
     if (roomLabel) params.set("focusRoom", roomLabel);
@@ -51,7 +51,7 @@ export function buildColdCallHref({
 
 export function hrefToSignalConsole(account: string): string {
     return buildColdCallHref({
-        href: "/app/signal-console/",
+        href: "/signal-console/",
         focusObject: account || "Cold call prep",
         roomLabel: "Signal Console",
         account
@@ -60,7 +60,7 @@ export function hrefToSignalConsole(account: string): string {
 
 export function hrefToCallPlanner(account: string): string {
     return buildColdCallHref({
-        href: "/app/discovery-agenda/",
+        href: "/call-planner/",
         focusObject: account || "Cold call",
         roomLabel: "Call Planner",
         account
@@ -69,7 +69,7 @@ export function hrefToCallPlanner(account: string): string {
 
 export function hrefToDealWorkspace(account: string): string {
     return buildColdCallHref({
-        href: "/app/deal-workspace/",
+        href: "/deal-workspace/",
         focusObject: account || "Cold call",
         roomLabel: "Deal Workspace",
         account

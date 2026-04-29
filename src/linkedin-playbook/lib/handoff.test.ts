@@ -9,11 +9,11 @@ import {
 describe("buildLinkedInRoomHref", () => {
     it("appends the canonical continuity params", () => {
         const url = buildLinkedInRoomHref({
-            href: "/app/signal-console/",
+            href: "/signal-console/",
             focusObject: "Acme",
             roomLabel: "Signal Console"
         });
-        expect(url).toContain("returnTo=%2Fapp%2Flinkedin-playbook%2F");
+        expect(url).toContain("returnTo=%2Flinkedin-playbook%2F");
         expect(url).toContain("returnLabel=Back+to+LinkedIn+Playbook");
         expect(url).toContain("focusObject=Acme");
         expect(url).toContain("focusRoom=Signal+Console");
@@ -23,7 +23,7 @@ describe("buildLinkedInRoomHref", () => {
 
     it("falls back to default focusObject + roomLabel when blank", () => {
         const url = buildLinkedInRoomHref({
-            href: "/app/signal-console/",
+            href: "/signal-console/",
             focusObject: "",
             roomLabel: ""
         });
@@ -33,17 +33,17 @@ describe("buildLinkedInRoomHref", () => {
 
     it("preserves any pre-existing query params on the href", () => {
         const url = buildLinkedInRoomHref({
-            href: "/app/outbound-studio/?temp=warm",
+            href: "/outbound-studio/?temp=warm",
             focusObject: "Acme",
             roomLabel: "Outbound Studio"
         });
         expect(url).toContain("temp=warm");
-        expect(url).toContain("returnTo=%2Fapp%2Flinkedin-playbook%2F");
+        expect(url).toContain("returnTo=%2Flinkedin-playbook%2F");
     });
 
     it("includes ?account= when supplied", () => {
         const url = buildLinkedInRoomHref({
-            href: "/app/signal-console/",
+            href: "/signal-console/",
             focusObject: "Acme",
             roomLabel: "Signal Console",
             account: "Acme"
@@ -53,7 +53,7 @@ describe("buildLinkedInRoomHref", () => {
 
     it("merges extra params, ignoring blanks", () => {
         const url = buildLinkedInRoomHref({
-            href: "/app/poc-framework/",
+            href: "/poc-framework/",
             focusObject: "Acme",
             roomLabel: "PoC",
             extra: { stage: "demo", blank: "" }
@@ -66,10 +66,10 @@ describe("buildLinkedInRoomHref", () => {
 describe("hrefToSignalConsole / hrefToOutboundStudio", () => {
     it("send to the right path with the focus object", () => {
         expect(hrefToSignalConsole("Acme")).toContain(
-            "/app/signal-console/"
+            "/signal-console/"
         );
         expect(hrefToOutboundStudio("Acme")).toContain(
-            "/app/outbound-studio/"
+            "/outbound-studio/"
         );
     });
 

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { stats } from "../state";
 
 /**
@@ -12,6 +13,7 @@ export function Topbar(): JSX.Element {
     const s = stats.value;
     return (
         <header class="sw-topbar" aria-label="Sourcing Workbench header">
+            <BackButton />
             <p class="sw-topbar__kicker">Phase 4 / Research loom</p>
             <h1 class="sw-topbar__title">Sourcing Workbench</h1>
             <p class="sw-topbar__subtitle">

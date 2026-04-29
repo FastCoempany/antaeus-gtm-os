@@ -1,7 +1,14 @@
 import { render } from "preact";
 import { PocFramework } from "./PocFramework";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { patchDraft, setAllProofs, setLinkedDeals, startProofPersistence } from "./state";
+import { readContinuity } from "@/lib/continuity";
+import {
+    linkedDeals,
+    patchDraft,
+    setAllProofs,
+    setLinkedDeals,
+    startProofPersistence
+} from "./state";
 import { loadProofs } from "./lib/persistence";
 import { loadDealsForLinking } from "./lib/deal-sync";
 import { readInboundDealId } from "./lib/handoff";
@@ -51,6 +58,21 @@ setLinkedDeals(loadDealsForLinking());
 const inboundDealId = readInboundDealId();
 if (inboundDealId) {
     patchDraft({ linkedDealId: inboundDealId });
+} else {
+    // Fall back to the canonical `?focusObject=<account name>` pattern
+    // some upstream rooms thread (Future Autopsy / Advisor Deploy /
+    // Signal Console all pass an account name when the deal id isn't
+    // known to the source). Resolve the account name to a deal id by
+    // case-insensitive match against the loaded linked-deal list.
+    const ctx = readContinuity();
+    const focus = ctx.focusObject;
+    if (focus) {
+        const lower = focus.toLowerCase();
+        const match = linkedDeals.value.find(
+            (d) => d.accountName.toLowerCase() === lower
+        );
+        if (match) patchDraft({ linkedDealId: match.id });
+    }
 }
 
 render(<PocFramework />, root);

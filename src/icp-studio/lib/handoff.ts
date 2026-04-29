@@ -24,7 +24,7 @@ export function buildIcpStudioHref({
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
     if (!params.get("returnTo")) {
-        params.set("returnTo", "/app/icp-studio/");
+        params.set("returnTo", "/icp-studio/");
         params.set("returnLabel", "Back to ICP Studio");
         if (focusObject) params.set("focusObject", focusObject);
         if (roomLabel) params.set("focusRoom", roomLabel);
@@ -43,7 +43,7 @@ const FOCUS_FALLBACK = "ICP wedge";
 
 export function hrefToTerritoryArchitect(industry: string): string {
     return buildIcpStudioHref({
-        href: "/app/territory-architect/",
+        href: "/territory-architect/",
         focusObject: industry || FOCUS_FALLBACK,
         roomLabel: "Territory Architect"
     });
@@ -51,7 +51,7 @@ export function hrefToTerritoryArchitect(industry: string): string {
 
 export function hrefToSourcingWorkbench(industry: string): string {
     return buildIcpStudioHref({
-        href: "/app/sourcing-workbench/",
+        href: "/sourcing-workbench/",
         focusObject: industry || FOCUS_FALLBACK,
         roomLabel: "Sourcing Workbench"
     });
@@ -59,7 +59,7 @@ export function hrefToSourcingWorkbench(industry: string): string {
 
 export function hrefToSignalConsole(industry: string): string {
     return buildIcpStudioHref({
-        href: "/app/signal-console/",
+        href: "/signal-console/",
         focusObject: industry || FOCUS_FALLBACK,
         roomLabel: "Signal Console"
     });
@@ -67,7 +67,7 @@ export function hrefToSignalConsole(industry: string): string {
 
 export function hrefToOutboundStudio(industry: string): string {
     return buildIcpStudioHref({
-        href: "/app/outbound-studio/",
+        href: "/outbound-studio/",
         focusObject: industry || FOCUS_FALLBACK,
         roomLabel: "Outbound Studio"
     });

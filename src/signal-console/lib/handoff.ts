@@ -6,7 +6,7 @@
  * Builds the deep-link URL into the destination room with the canonical
  * continuity params:
  *
- *   returnTo     = /app/signal-console/   (where to come back)
+ *   returnTo     = /signal-console/   (where to come back)
  *   returnLabel  = "Back to Signal Console"
  *   focusObject  = the account name        (what to highlight)
  *   focusRoom    = the destination room label
@@ -33,7 +33,7 @@ export function buildSignalRoomHref({
 }: HandoffOptions): string {
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
-    params.set("returnTo", "/app/signal-console/");
+    params.set("returnTo", "/signal-console/");
     params.set("returnLabel", "Back to Signal Console");
     if (focusObject) params.set("focusObject", focusObject);
     if (roomLabel) params.set("focusRoom", roomLabel);
@@ -56,7 +56,7 @@ export function buildSignalRoomHref({
  */
 export function hrefToOutbound(accountName: string, temperature?: string): string {
     return buildSignalRoomHref({
-        href: "/app/outbound-studio/",
+        href: "/outbound-studio/",
         focusObject: accountName,
         roomLabel: "Outbound Studio",
         ...(temperature ? { extra: { account: accountName, temperature } } : { extra: { account: accountName } })
@@ -65,7 +65,7 @@ export function hrefToOutbound(accountName: string, temperature?: string): strin
 
 export function hrefToDealWorkspace(accountName: string): string {
     return buildSignalRoomHref({
-        href: "/app/deal-workspace/",
+        href: "/deal-workspace/",
         focusObject: accountName,
         roomLabel: "Deal Workspace"
     });
@@ -73,7 +73,7 @@ export function hrefToDealWorkspace(accountName: string): string {
 
 export function hrefToDiscoveryAgenda(accountName: string): string {
     return buildSignalRoomHref({
-        href: "/app/discovery-agenda/",
+        href: "/call-planner/",
         focusObject: accountName,
         roomLabel: "Call Planner",
         extra: { account: accountName }
@@ -82,7 +82,7 @@ export function hrefToDiscoveryAgenda(accountName: string): string {
 
 export function hrefToColdCall(accountName: string): string {
     return buildSignalRoomHref({
-        href: "/app/cold-call-studio/",
+        href: "/cold-call-studio/",
         focusObject: accountName,
         roomLabel: "Cold Call Studio",
         extra: { account: accountName }

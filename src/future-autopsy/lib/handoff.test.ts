@@ -14,12 +14,12 @@ function params(url: string): URLSearchParams {
 describe("buildFutureAutopsyRoomHref", () => {
     it("attaches the canonical continuity params", () => {
         const url = buildFutureAutopsyRoomHref({
-            href: "/app/deal-workspace/",
+            href: "/deal-workspace/",
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
         const p = params(url);
-        expect(p.get("returnTo")).toBe("/app/future-autopsy/");
+        expect(p.get("returnTo")).toBe("/future-autopsy/");
         expect(p.get("returnLabel")).toBe("Back to Future Autopsy");
         expect(p.get("focusObject")).toBe("Acme");
         expect(p.get("focusRoom")).toBe("Deal Workspace");
@@ -29,7 +29,7 @@ describe("buildFutureAutopsyRoomHref", () => {
 
     it("preserves existing query params", () => {
         const url = buildFutureAutopsyRoomHref({
-            href: "/app/discovery-agenda/?account=Acme",
+            href: "/call-planner/?account=Acme",
             focusObject: "Acme",
             roomLabel: "Call Planner"
         });
@@ -40,7 +40,7 @@ describe("buildFutureAutopsyRoomHref", () => {
 
     it("merges in extra params", () => {
         const url = buildFutureAutopsyRoomHref({
-            href: "/app/deal-workspace/",
+            href: "/deal-workspace/",
             focusObject: "Acme",
             roomLabel: "Deal Workspace",
             extra: { deal: "deal-1" }
@@ -56,15 +56,15 @@ describe("convenience builders", () => {
         );
     });
 
-    it("hrefToCallPlanner targets discovery-agenda + carries account", () => {
+    it("hrefToCallPlanner targets call-planner + carries account", () => {
         const url = hrefToCallPlanner("Acme");
-        expect(url.startsWith("/app/discovery-agenda/?")).toBe(true);
+        expect(url.startsWith("/call-planner/?")).toBe(true);
         expect(params(url).get("account")).toBe("Acme");
         expect(params(url).get("focusRoom")).toBe("Call Planner");
     });
 
     it("hrefToPoC targets poc-framework", () => {
-        expect(hrefToPoC("Acme").startsWith("/app/poc-framework/?")).toBe(true);
+        expect(hrefToPoC("Acme").startsWith("/poc-framework/?")).toBe(true);
     });
 
     it("hrefToDiscoveryStudio targets discovery-studio + carries account", () => {

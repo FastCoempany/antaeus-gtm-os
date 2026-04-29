@@ -44,7 +44,7 @@ export function hrefToTerritoryArchitect(opts?: {
     readonly focusObject?: string;
 }): string {
     return buildSourcingHref({
-        href: "/app/territory-architect/",
+        href: "/territory-architect/",
         focusObject: opts?.focusObject,
         roomLabel: "Territory Architect"
     });

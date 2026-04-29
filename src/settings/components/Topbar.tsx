@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { backup, demo } from "../state";
 
 /**
@@ -13,6 +14,7 @@ export function Topbar(): JSX.Element {
         : "Never exported";
     return (
         <header class="st-topbar">
+            <BackButton />
             <p class="st-topbar__kicker">Trust + recovery</p>
             <h1 class="st-topbar__title">Settings</h1>
             <p class="st-topbar__subtitle">

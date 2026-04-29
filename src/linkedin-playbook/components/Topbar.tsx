@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { BackButton } from "@/lib/back-button";
 import { hottestAccount, stats } from "../state";
 
 /**
@@ -16,6 +17,7 @@ export function Topbar(): JSX.Element {
         : "Cue booth";
     return (
         <header class="lp-topbar" aria-label="LinkedIn Playbook header">
+            <BackButton />
             <p class="lp-topbar__kicker">OUTBOUND CHANNEL</p>
             <h1 class="lp-topbar__title">LinkedIn Playbook</h1>
             <p class="lp-topbar__subtitle">

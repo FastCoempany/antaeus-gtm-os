@@ -34,7 +34,7 @@ export function buildPlannerHref({
 }: HandoffOptions): string {
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
-    params.set("returnTo", "/app/discovery-agenda/");
+    params.set("returnTo", "/call-planner/");
     params.set("returnLabel", "Back to Call Planner");
     if (focusObject) params.set("focusObject", focusObject);
     if (roomLabel) params.set("focusRoom", roomLabel);
@@ -52,7 +52,7 @@ export function buildPlannerHref({
 
 export function hrefToDiscoveryStudio(focus: string, account: string): string {
     return buildPlannerHref({
-        href: "/app/discovery-studio/",
+        href: "/discovery-studio/",
         focusObject: focus || "Call Planner",
         roomLabel: "Discovery Studio",
         account
@@ -65,7 +65,7 @@ export function hrefToDealWorkspace(
     deal: string
 ): string {
     return buildPlannerHref({
-        href: "/app/deal-workspace/",
+        href: "/deal-workspace/",
         focusObject: focus || "Call Planner",
         roomLabel: "Deal Workspace",
         account,
@@ -75,7 +75,7 @@ export function hrefToDealWorkspace(
 
 export function hrefToSignalConsole(focus: string, account: string): string {
     return buildPlannerHref({
-        href: "/app/signal-console/",
+        href: "/signal-console/",
         focusObject: focus || "Call Planner",
         roomLabel: "Signal Console",
         account

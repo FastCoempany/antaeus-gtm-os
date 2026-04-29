@@ -10,11 +10,11 @@ import {
 describe("buildAdvisorRoomHref", () => {
     it("appends the canonical continuity params", () => {
         const url = buildAdvisorRoomHref({
-            href: "/app/deal-workspace/",
+            href: "/deal-workspace/",
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
-        expect(url).toContain("returnTo=%2Fapp%2Fadvisor-deploy%2F");
+        expect(url).toContain("returnTo=%2Fadvisor-deploy%2F");
         expect(url).toContain("returnLabel=Back+to+Advisor+Deploy");
         expect(url).toContain("focusObject=Acme");
         expect(url).toContain("focusRoom=Deal+Workspace");
@@ -24,22 +24,22 @@ describe("buildAdvisorRoomHref", () => {
 
     it("preserves any pre-existing query params on the href", () => {
         const url = buildAdvisorRoomHref({
-            href: "/app/deal-workspace/?deal=d1",
+            href: "/deal-workspace/?deal=d1",
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
         expect(url).toContain("deal=d1");
-        expect(url).toContain("returnTo=%2Fapp%2Fadvisor-deploy%2F");
+        expect(url).toContain("returnTo=%2Fadvisor-deploy%2F");
     });
 
     it("does not overwrite returnTo when href already has one (legacy parity)", () => {
         const url = buildAdvisorRoomHref({
-            href: "/app/deal-workspace/?returnTo=%2Felsewhere%2F",
+            href: "/deal-workspace/?returnTo=%2Felsewhere%2F",
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
         expect(url).toContain("returnTo=%2Felsewhere%2F");
-        expect(url).not.toContain("returnTo=%2Fapp%2Fadvisor-deploy%2F");
+        expect(url).not.toContain("returnTo=%2Fadvisor-deploy%2F");
     });
 
     it("merges extra params, ignoring blanks", () => {
@@ -74,7 +74,7 @@ describe("hrefToDealWorkspace / hrefToFutureAutopsy / hrefToPocFramework", () =>
     it("falls back to the room root when dealId is empty", () => {
         const url = hrefToDealWorkspace("", "Acme");
         expect(url).not.toContain("deal=");
-        expect(url).toContain("/app/deal-workspace/");
+        expect(url).toContain("/deal-workspace/");
     });
 
     it("uses 'Advisor deployment' fallback when accountName is blank", () => {

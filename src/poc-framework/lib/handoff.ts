@@ -5,7 +5,7 @@
  * `app/poc-framework/index.html`). Builds the deep-link URL into the
  * destination room with the canonical continuity params:
  *
- *   returnTo     = /app/poc-framework/   (where to come back)
+ *   returnTo     = /poc-framework/   (where to come back)
  *   returnLabel  = "Back to PoC Framework"
  *   focusObject  = the account name      (what to highlight)
  *   focusRoom    = the destination room label
@@ -32,7 +32,7 @@ export function buildPocRoomHref({
 }: HandoffOptions): string {
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
-    params.set("returnTo", "/app/poc-framework/");
+    params.set("returnTo", "/poc-framework/");
     params.set("returnLabel", "Back to PoC Framework");
     if (focusObject) params.set("focusObject", focusObject);
     if (roomLabel) params.set("focusRoom", roomLabel);
@@ -55,7 +55,7 @@ export function hrefToDealWorkspace(
     dealId?: string
 ): string {
     return buildPocRoomHref({
-        href: "/app/deal-workspace/",
+        href: "/deal-workspace/",
         focusObject: accountName,
         roomLabel: "Deal Workspace",
         ...(dealId ? { extra: { deal: dealId } } : {})
@@ -64,7 +64,7 @@ export function hrefToDealWorkspace(
 
 export function hrefToFutureAutopsy(accountName: string): string {
     return buildPocRoomHref({
-        href: "/app/future-autopsy/",
+        href: "/future-autopsy/",
         focusObject: accountName,
         roomLabel: "Future Autopsy"
     });
@@ -72,7 +72,7 @@ export function hrefToFutureAutopsy(accountName: string): string {
 
 export function hrefToAdvisorDeploy(accountName: string): string {
     return buildPocRoomHref({
-        href: "/app/advisor-deploy/",
+        href: "/advisor-deploy/",
         focusObject: accountName,
         roomLabel: "Advisor Deploy"
     });
