@@ -1,8 +1,18 @@
 import { render } from "preact";
 import { FoundingGtm } from "./FoundingGtm";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { setSectionsInput } from "./state";
+import {
+    authoredSections,
+    setCeremonyEvent,
+    setSectionsInput
+} from "./state";
 import { loadSectionsInput } from "./lib/cross-room";
+import { startHealthPublishing } from "./lib/health-publisher";
+import { bootCeremonyMoment } from "./lib/ceremony";
+import { countReady } from "./lib/sections";
+import { createDataClient } from "@/lib/data-client";
+import { VERDICT_LABEL } from "@/lib/readiness";
+import { openCeremony } from "./state";
 
 /**
  * Entry point for the Founding GTM Preact rebuild
@@ -52,3 +62,41 @@ if (typeof window !== "undefined") {
 }
 
 render(<FoundingGtm />, root);
+
+// Wave 4 — section-readiness publisher. Writes
+// `gtmos_founding_gtm_health` to localStorage on every section
+// status change. Phase 5.A's readiness aggregator reads this for
+// the proof dimension; the §4.17 "Hire-ready, repeatable" gate
+// requires sections_ready ≥ 5.
+startHealthPublishing();
+
+// Wave 4 — ceremony moment subscriber. Queries the latest
+// readiness_snapshots row and fires the set-piece overlay if it
+// represents the first upward transition into `inheritable_with_
+// guardrails` for this workspace. Idempotent via localStorage flag.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCeremonyMoment({
+            client,
+            onFire: (transition) => {
+                const counts = countReady(authoredSections.value);
+                setCeremonyEvent({
+                    fromLabel: VERDICT_LABEL[transition.from],
+                    toLabel: VERDICT_LABEL[transition.to],
+                    // The "before" count approximation: the moment the
+                    // verdict moved up, the kit was probably one
+                    // section behind its current state. If we have ≥1
+                    // section ready, attribute one of those to the
+                    // transition; otherwise show same-as-current.
+                    sectionsBefore: Math.max(0, counts.ready - 1),
+                    sectionsAfter: counts.ready
+                });
+                openCeremony();
+            }
+        });
+    } catch {
+        // No-op when cloud sync isn't configured (env-var-missing).
+        // The room still renders + the publisher still writes locally.
+    }
+})();

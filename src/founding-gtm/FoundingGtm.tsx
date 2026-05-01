@@ -1,7 +1,12 @@
 import type { JSX } from "preact";
-import { authoredSections } from "./state";
+import {
+    authoredSections,
+    ceremonyEvent,
+    ceremonyOpen
+} from "./state";
 import { Topbar } from "./components/Topbar";
 import { SectionFrame } from "./components/SectionFrame";
+import { CeremonyOverlay } from "./components/CeremonyOverlay";
 import { SECTION_IDS } from "./lib/types";
 
 /**
@@ -30,6 +35,9 @@ export function FoundingGtm(): JSX.Element {
         (s) => s.status === "partial"
     ).length;
 
+    const showCeremony = ceremonyOpen.value;
+    const event = ceremonyEvent.value;
+
     return (
         <div class="fg-shell">
             <Topbar
@@ -43,6 +51,14 @@ export function FoundingGtm(): JSX.Element {
                     return <SectionFrame id={id} section={section} key={id} />;
                 })}
             </main>
+            {showCeremony && event && (
+                <CeremonyOverlay
+                    fromLabel={event.fromLabel}
+                    toLabel={event.toLabel}
+                    sectionsBefore={event.sectionsBefore}
+                    sectionsAfter={event.sectionsAfter}
+                />
+            )}
         </div>
     );
 }
