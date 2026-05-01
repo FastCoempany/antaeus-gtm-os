@@ -12,6 +12,12 @@ import {
     buildCommandObjects,
     summarizeCommandContext
 } from "./lib/command-intelligence";
+import {
+    EMPTY_READINESS_INPUT,
+    evaluateReadiness,
+    type ReadinessInput,
+    type ReadinessSummary
+} from "@/lib/readiness";
 
 /**
  * Phase 4 / Room 2 — Dashboard runtime state.
@@ -160,9 +166,40 @@ export function setEngineInput(next: CommandEngineInput): void {
     engineInput.value = next;
 }
 
+// ─── Readiness (Phase 5.A) ─────────────────────────────────────────────
+
+/** Live readiness input. Aggregated from cloud-mirrored localStorage. */
+export const readinessInput: Signal<ReadinessInput> =
+    signal(EMPTY_READINESS_INPUT);
+
+/**
+ * Computed readiness summary — re-runs the gate evaluator on every
+ * input change. Anchor + Drawer read from here directly.
+ */
+export const readinessSummary: ReadonlySignal<ReadinessSummary> = computed(
+    () => evaluateReadiness(readinessInput.value)
+);
+
+/** Drawer open/closed. UI-only — not persisted. */
+export const readinessDrawerOpen: Signal<boolean> = signal(false);
+
+export function setReadinessInput(next: ReadinessInput): void {
+    readinessInput.value = next;
+}
+
+export function openReadinessDrawer(): void {
+    readinessDrawerOpen.value = true;
+}
+
+export function closeReadinessDrawer(): void {
+    readinessDrawerOpen.value = false;
+}
+
 /** Test-only — reset signals between cases. */
 export function __resetForTests(): void {
     commandMode.value = DEFAULT_COMMAND_MODE;
     focusedCommandId.value = null;
     engineInput.value = EMPTY_ENGINE_INPUT;
+    readinessInput.value = EMPTY_READINESS_INPUT;
+    readinessDrawerOpen.value = false;
 }

@@ -1,9 +1,15 @@
 import type { JSX } from "preact";
-import { commandMode } from "./state";
+import {
+    closeReadinessDrawer,
+    commandMode,
+    readinessDrawerOpen,
+    readinessSummary
+} from "./state";
 import { Topbar } from "./components/Topbar";
 import { SpotlightView } from "./components/SpotlightView";
 import { BriefView } from "./components/BriefView";
 import { QueueView } from "./components/QueueView";
+import { ReadinessDrawer } from "./components/ReadinessDrawer";
 
 /**
  * Dashboard — Wave 1 root.
@@ -23,12 +29,19 @@ import { QueueView } from "./components/QueueView";
  */
 export function Dashboard(): JSX.Element {
     const mode = commandMode.value;
+    const drawerOpen = readinessDrawerOpen.value;
     return (
         <div class="db-shell">
             <Topbar />
             {mode === "spotlight" ? <SpotlightView /> : null}
             {mode === "brief" ? <BriefView /> : null}
             {mode === "queue" ? <QueueView /> : null}
+            {drawerOpen ? (
+                <ReadinessDrawer
+                    summary={readinessSummary.value}
+                    onClose={closeReadinessDrawer}
+                />
+            ) : null}
         </div>
     );
 }

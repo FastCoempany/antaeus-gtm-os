@@ -1,8 +1,10 @@
 import { render } from "preact";
 import { Dashboard } from "./Dashboard";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { bootMode, setEngineInput } from "./state";
+import { bootMode, setEngineInput, setReadinessInput } from "./state";
 import { bootSnapshotAggregator } from "./lib/snapshot-aggregator";
+import { aggregateReadinessInput } from "./lib/readiness-aggregator";
+import { bootReadinessHistory } from "./lib/readiness-history";
 
 /**
  * Entry point for the Dashboard Preact rebuild
@@ -53,3 +55,27 @@ bootSnapshotAggregator({
         setEngineInput(input);
     }
 });
+
+// Phase 5.A Wave 3 — readiness aggregator. Reads cloud-mirrored
+// localStorage from every cloud-synced room and builds a
+// ReadinessInput. Seeds once synchronously; refreshes on the same
+// storage events the snapshot aggregator listens to.
+setReadinessInput(aggregateReadinessInput());
+if (typeof window !== "undefined") {
+    window.addEventListener("storage", () => {
+        setReadinessInput(aggregateReadinessInput());
+    });
+    // Same-tab updates from sibling rooms fire on visibilitychange too,
+    // because the user typically returns to the Dashboard tab.
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+            setReadinessInput(aggregateReadinessInput());
+        }
+    });
+}
+
+// Phase 5.A Wave 3 — verdict-history persister. Subscribes to the
+// readiness summary signal; writes a row to readiness_snapshots
+// (cloud) on every verdict transition. Idempotent: skips no-op
+// transitions and re-runs.
+bootReadinessHistory();

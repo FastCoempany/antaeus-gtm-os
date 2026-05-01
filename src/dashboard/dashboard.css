@@ -96,6 +96,16 @@ button {
     max-width: 60ch;
 }
 
+/* ─── Topbar rail (anchor + mode switcher) ─────────────────────────── */
+
+.db-topbar__rail {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+}
+
 /* ─── Mode switcher ────────────────────────────────────────────────── */
 
 .db-mode-switcher {
