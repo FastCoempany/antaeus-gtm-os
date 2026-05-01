@@ -261,7 +261,15 @@ export default defineConfig({
                 // not a port). Served at /onboarding/. Behind Posthog
                 // feature flag `room_onboarding_v2`; legacy
                 // `app/onboarding/index.html` redirects here when on.
-                onboarding: resolve(__dirname, "src/onboarding/index.html")
+                onboarding: resolve(__dirname, "src/onboarding/index.html"),
+
+                // Phase 5.B — Founding GTM rebuild (greenfield; not a
+                // port — the legacy room was an aggregator, the rebuild
+                // is authored opinion + cross-room synthesis per canon
+                // §4.19). Served at /founding-gtm/. Behind Posthog
+                // feature flag `room_founding_gtm_v2`; legacy
+                // `app/founding-gtm/index.html` redirects here when on.
+                "founding-gtm": resolve(__dirname, "src/founding-gtm/index.html")
             }
         }
     },

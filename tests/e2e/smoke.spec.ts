@@ -488,6 +488,33 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 5.B Wave 1 — /founding-gtm/ Preact rebuild boots cleanly", async ({
+        page
+    }) => {
+        // The new Preact Founding GTM at /founding-gtm/ (distinct from
+        // the legacy /app/founding-gtm/ aggregator). Wave 1 ships the
+        // structural shell — seven section frames with canonical
+        // titles + empty-state copy. Smoke test asserts: page loads
+        // without runtime errors, the topbar kicker reads FOUNDING GTM,
+        // the maturity band attaches, and all 7 sections render.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/founding-gtm/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".fg-topbar__kicker")).toContainText(
+            "FOUNDING GTM"
+        );
+        await expect(page.locator(".fg-maturity")).toBeAttached();
+        await expect(page.locator(".fg-section")).toHaveCount(7);
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 12 Wave 1 — /territory-architect/ Preact rebuild boots cleanly", async ({
         page
     }) => {
