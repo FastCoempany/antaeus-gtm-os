@@ -1,5 +1,6 @@
 import { computed, signal, type ReadonlySignal, type Signal } from "@preact/signals";
 import type { AuthoredSection, SectionsInput } from "./lib/types";
+import { authorAllSections } from "./lib/sections";
 
 /**
  * Founding GTM runtime state.
@@ -32,15 +33,11 @@ export const sectionsInput: Signal<SectionsInput> = signal({
 });
 
 /**
- * Computed authored sections. Wave 1 returns an empty placeholder for
- * each id; Wave 3 wires the real authoring engines.
+ * Computed authored sections — Wave 3 wires the real authoring engines
+ * (lib/sections.ts) over the live sectionsInput signal.
  */
 export const authoredSections: ReadonlySignal<ReadonlyArray<AuthoredSection>> =
-    computed(() => {
-        // Wave 1 placeholder — Wave 3 replaces with the real
-        // section authoring engines.
-        return [];
-    });
+    computed(() => authorAllSections(sectionsInput.value));
 
 /** Share-link composer overlay (Wave 4 wires send action). */
 export const shareComposerOpen: Signal<boolean> = signal(false);
