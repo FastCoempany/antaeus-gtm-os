@@ -14,6 +14,7 @@ import { loadAdvisors, loadDeployments } from "./lib/persistence";
 import { loadDeals } from "./lib/deal-loader";
 import { readInboundDealId } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { bootAdvisorProfileCloudPersistence } from "./lib/cloud-persistence-profile";
 
 /**
  * Entry point for the Advisor Deploy Preact rebuild
@@ -94,14 +95,18 @@ startDeploymentPersistence();
 
 render(<AdvisorDeploy />, root);
 
-// Async cloud load for deployment history. Doesn't block first paint.
-// Replaces local deployments if cloud has rows; migrates local up if
-// cloud is empty. Advisor REGISTRY stays in localStorage in this batch
-// (deployments carry advisor_name + advisor_tier denormalized).
+// Async cloud load for both deployment history (advisor_deployments
+// table) and the advisor REGISTRY rolodex (studio_artifacts with
+// kind='advisor.profile'). Both run in parallel so first paint isn't
+// blocked. Each handles its own cloud / migrated / empty / local-only
+// path independently.
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        await Promise.all([
+            bootCloudPersistence(client),
+            bootAdvisorProfileCloudPersistence(client)
+        ]);
     } catch (err) {
         console.warn(
             "[advisor-deploy] Cloud sync disabled:",

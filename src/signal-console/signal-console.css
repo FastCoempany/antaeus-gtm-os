@@ -508,3 +508,154 @@ button {
     color: var(--sc-ink-40);
     border: 1px solid var(--sc-border);
 }
+
+/* ─── Add-account form (A3 cloud-sync gap closer) ────────────────── */
+
+.sc-add-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sc-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    border: 1px solid var(--sc-rule);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--sc-navy);
+    font-family: "Public Sans", "Plus Jakarta Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.sc-add-btn:hover {
+    border-color: var(--sc-orange);
+    color: var(--sc-orange);
+}
+
+.sc-add-btn--primary {
+    background: var(--sc-orange);
+    border-color: var(--sc-orange);
+    color: #fff;
+}
+.sc-add-btn--primary:hover { background: #c95a18; border-color: #c95a18; color: #fff; }
+.sc-add-btn--primary:disabled { background: rgba(230, 112, 30, 0.4); border-color: transparent; cursor: not-allowed; }
+
+.sc-add-btn--ghost {
+    background: transparent;
+}
+
+.sc-add-toast {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--sc-green);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.sc-add-form {
+    grid-column: 1 / -1;
+    margin-top: 12px;
+    padding: 18px 20px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--sc-rule);
+    border-radius: 14px;
+    box-shadow: 0 12px 24px -20px rgba(10, 28, 64, 0.14);
+}
+
+.sc-add-form__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.sc-add-form__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--sc-muted);
+}
+
+.sc-add-form__close {
+    background: none;
+    border: 0;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--sc-muted);
+    cursor: pointer;
+    padding: 0 6px;
+}
+.sc-add-form__close:hover { color: var(--sc-navy); }
+
+.sc-add-form__hint {
+    margin: 0 0 12px;
+    font-size: 12px;
+    color: var(--sc-muted);
+    line-height: 1.5;
+}
+
+.sc-add-form__hint code {
+    font-family: "JetBrains Mono", monospace;
+    background: rgba(10, 28, 64, 0.05);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.sc-add-form__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px 14px;
+}
+
+.sc-add-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.sc-add-form__field--wide {
+    grid-column: 1 / -1;
+}
+
+.sc-add-form__field span {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--sc-muted);
+}
+
+.sc-add-form__field input,
+.sc-add-form__field textarea {
+    padding: 8px 10px;
+    border: 1px solid var(--sc-rule);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--sc-navy);
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.sc-add-form__field input:focus,
+.sc-add-form__field textarea:focus {
+    outline: 2px solid var(--sc-orange);
+    outline-offset: 1px;
+    border-color: var(--sc-orange);
+}
+
+.sc-add-form__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+}

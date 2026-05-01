@@ -1,11 +1,13 @@
 import type { JSX } from "preact";
 import { searchQuery, setSearchQuery } from "../state";
+import { AddAccountForm } from "./AddAccountForm";
 
 /**
- * GridControls — search input + sort affordance row above the grid.
+ * GridControls — search input + manual-add trigger above the grid.
  *
- * Wave 1 ships search only. Wave 5 will add the workspace-health
- * panel and enrich-all CTA.
+ * Wave 1 shipped search only. The cloud-sync gap closer (A3) added
+ * the AddAccountForm so the new room isn't read-only — manual adds
+ * persist through cloud-persistence and sync cross-device.
  */
 export function GridControls(): JSX.Element {
     return (
@@ -23,6 +25,7 @@ export function GridControls(): JSX.Element {
                     }
                 />
             </label>
+            <AddAccountForm />
         </nav>
     );
 }

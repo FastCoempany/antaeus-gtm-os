@@ -335,3 +335,56 @@ code {
 }
 
 .st-toast__dismiss:hover { color: var(--st-navy); }
+
+/* ─── Cloud sync card ────────────────────────────────────────────── */
+
+.st-cloud__status--good { color: var(--st-green); }
+.st-cloud__status--warn { color: var(--st-amber); }
+.st-cloud__status--bad  { color: var(--st-red); }
+
+.st-cloud__breakdown {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--st-rule);
+}
+.st-cloud__breakdown summary {
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--st-muted);
+    padding: 4px 0;
+}
+.st-cloud__breakdown summary:hover { color: var(--st-navy); }
+
+.st-cloud__counts {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+}
+.st-cloud__counts li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--st-rule);
+    color: var(--st-muted);
+}
+.st-cloud__counts li:last-child { border-bottom: 0; }
+.st-cloud__counts strong { color: var(--st-navy); }
+
+.st-cloud__error {
+    margin: 12px 0 0;
+    padding: 10px 12px;
+    background: rgba(239, 68, 68, 0.06);
+    border-left: 3px solid var(--st-red);
+    color: var(--st-red);
+    font-size: 13px;
+    line-height: 1.4;
+    font-family: "JetBrains Mono", monospace;
+}

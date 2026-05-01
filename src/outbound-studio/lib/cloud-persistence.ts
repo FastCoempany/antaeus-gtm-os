@@ -2,17 +2,25 @@ import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { reportError, trackEvent } from "@/lib/observability";
 import {
+    angleToInsert,
+    angleToUpdate,
     looksLikePersistedId,
+    rowToAngle,
     rowToTouch,
+    rowsToAngles,
     rowsToTouches,
     SEQUENCE_KEY_OUTBOUND,
+    SEQUENCE_KEY_OUTBOUND_ANGLE,
     touchToInsert,
     touchToUpdate
 } from "./outbound-bridge";
-import type { Touch } from "./types";
+import type { Angle, Touch } from "./types";
 import {
+    allAngles,
     allTouches,
+    appendAngle,
     appendTouch,
+    setAllAngles,
     setAllTouches
 } from "../state";
 
@@ -44,6 +52,7 @@ export function __getDataClientForTests(): DataClient | null {
 export interface BootResult {
     readonly mode: "cloud" | "migrated" | "local-only" | "empty";
     readonly touchCount: number;
+    readonly angleCount: number;
 }
 
 export async function bootCloudPersistence(
@@ -51,59 +60,109 @@ export async function bootCloudPersistence(
 ): Promise<BootResult> {
     clientRef = client;
     try {
-        const rows = await client.sequences.list({
-            where: { sequence_key: SEQUENCE_KEY_OUTBOUND },
-            limit: 500
-        });
-        if (rows.length > 0) {
-            const touches = rowsToTouches(rows);
-            setAllTouches(touches);
+        // Fetch touches + angles in parallel — both live in `sequences`,
+        // discriminated by sequence_key.
+        const [touchRows, angleRows] = await Promise.all([
+            client.sequences.list({
+                where: { sequence_key: SEQUENCE_KEY_OUTBOUND },
+                limit: 500
+            }),
+            client.sequences.list({
+                where: { sequence_key: SEQUENCE_KEY_OUTBOUND_ANGLE },
+                limit: 200
+            })
+        ]);
+
+        const touchesCloud = rowsToTouches(touchRows);
+        const anglesCloud = rowsToAngles(angleRows);
+        const cloudHasData = touchesCloud.length + anglesCloud.length > 0;
+
+        if (cloudHasData) {
+            setAllTouches(touchesCloud);
+            setAllAngles(anglesCloud);
             subscribeRealtime(client);
             trackEvent("outbound_studio_boot", {
                 mode: "cloud",
-                count: touches.length
+                touchCount: touchesCloud.length,
+                angleCount: anglesCloud.length
             });
-            return { mode: "cloud", touchCount: touches.length };
+            return {
+                mode: "cloud",
+                touchCount: touchesCloud.length,
+                angleCount: anglesCloud.length
+            };
         }
-        const local = allTouches.value;
-        if (local.length > 0) {
-            await migrateLocalToCloud(client, local);
+        const localTouches = allTouches.value;
+        const localAngles = allAngles.value;
+        const localHasData = localTouches.length + localAngles.length > 0;
+        if (localHasData) {
+            await migrateLocalToCloud(client, localTouches, localAngles);
             subscribeRealtime(client);
             trackEvent("outbound_studio_boot", {
                 mode: "migrated",
-                count: local.length
+                touchCount: localTouches.length,
+                angleCount: localAngles.length
             });
-            return { mode: "migrated", touchCount: local.length };
+            return {
+                mode: "migrated",
+                touchCount: localTouches.length,
+                angleCount: localAngles.length
+            };
         }
         subscribeRealtime(client);
-        trackEvent("outbound_studio_boot", { mode: "empty", count: 0 });
-        return { mode: "empty", touchCount: 0 };
+        trackEvent("outbound_studio_boot", {
+            mode: "empty",
+            touchCount: 0,
+            angleCount: 0
+        });
+        return { mode: "empty", touchCount: 0, angleCount: 0 };
     } catch (err) {
         reportError(err, { op: "outbound-studio.bootCloudPersistence" });
-        return { mode: "local-only", touchCount: allTouches.value.length };
+        return {
+            mode: "local-only",
+            touchCount: allTouches.value.length,
+            angleCount: allAngles.value.length
+        };
     }
 }
 
 async function migrateLocalToCloud(
     client: DataClient,
-    localTouches: ReadonlyArray<Touch>
+    localTouches: ReadonlyArray<Touch>,
+    localAngles: ReadonlyArray<Angle>
 ): Promise<void> {
-    const next: Touch[] = [];
+    const nextTouches: Touch[] = [];
     for (const touch of localTouches) {
         try {
             const insert = touchToInsert(touch);
             const row = await client.sequences.insert(insert);
             const hydrated = rowToTouch(row);
-            next.push(hydrated ?? touch);
+            nextTouches.push(hydrated ?? touch);
         } catch (err) {
             reportError(err, {
-                op: "outbound-studio.migrateLocalToCloud",
+                op: "outbound-studio.migrateLocalToCloud.touch",
                 touchId: touch.id
             });
-            next.push(touch);
+            nextTouches.push(touch);
         }
     }
-    setAllTouches(next);
+    setAllTouches(nextTouches);
+
+    const nextAngles: Angle[] = [];
+    for (const angle of localAngles) {
+        try {
+            const row = await client.sequences.insert(angleToInsert(angle));
+            const hydrated = rowToAngle(row);
+            nextAngles.push(hydrated ?? angle);
+        } catch (err) {
+            reportError(err, {
+                op: "outbound-studio.migrateLocalToCloud.angle",
+                angleId: angle.id
+            });
+            nextAngles.push(angle);
+        }
+    }
+    setAllAngles(nextAngles);
 }
 
 /**
@@ -158,6 +217,58 @@ export async function deleteTouchInCloud(id: string): Promise<void> {
     }
 }
 
+/**
+ * Persist an Angle create/update. Optimistic — `appendAngle` already
+ * happened in the caller; this routes to insert vs update based on
+ * the id shape.
+ */
+export async function saveAngle(angle: Angle): Promise<Angle> {
+    if (!clientRef) return angle;
+    try {
+        const isUpdate = looksLikePersistedId(angle.id);
+        const row = isUpdate
+            ? await clientRef.sequences.update(angle.id, angleToUpdate(angle))
+            : await clientRef.sequences.insert(angleToInsert(angle));
+        const saved = rowToAngle(row);
+        if (saved) {
+            if (!isUpdate && saved.id !== angle.id) {
+                const without = allAngles.value.filter(
+                    (a) => a.id !== angle.id
+                );
+                setAllAngles([saved, ...without]);
+            } else {
+                setAllAngles(
+                    allAngles.value.map((a) => (a.id === saved.id ? saved : a))
+                );
+            }
+            trackEvent("outbound_studio_save_angle", {
+                mode: isUpdate ? "update" : "insert"
+            });
+            return saved;
+        }
+        return angle;
+    } catch (err) {
+        reportError(err, {
+            op: "outbound-studio.saveAngle",
+            angleId: angle.id
+        });
+        return angle;
+    }
+}
+
+export async function deleteAngleInCloud(id: string): Promise<void> {
+    if (!clientRef) return;
+    if (!looksLikePersistedId(id)) return;
+    try {
+        await clientRef.sequences.remove(id);
+    } catch (err) {
+        reportError(err, {
+            op: "outbound-studio.deleteAngleInCloud",
+            angleId: id
+        });
+    }
+}
+
 function payloadHasRow(value: unknown): value is { id: string; sequence_key?: unknown } {
     return (
         !!value &&
@@ -175,20 +286,26 @@ export function applyRealtimePayload(payload: {
     if (payload.eventType === "DELETE") {
         if (payloadHasRow(payload.old)) {
             const id = payload.old.id;
-            setAllTouches(allTouches.value.filter((t) => t.id !== id));
+            // Drop by id from whichever list contains it. Cheap because both
+            // are small.
+            if (allTouches.value.some((t) => t.id === id)) {
+                setAllTouches(allTouches.value.filter((t) => t.id !== id));
+            } else if (allAngles.value.some((a) => a.id === id)) {
+                setAllAngles(allAngles.value.filter((a) => a.id !== id));
+            }
         }
         return;
     }
     if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
-        if (payloadHasRow(payload.new)) {
-            // Filter to outbound rows only — sequences holds linkedin too.
-            const newRow = payload.new as { sequence_key?: unknown };
-            if (
-                typeof newRow.sequence_key === "string" &&
-                newRow.sequence_key !== SEQUENCE_KEY_OUTBOUND
-            ) {
-                return;
-            }
+        if (!payloadHasRow(payload.new)) return;
+        // Route by sequence_key. sequences holds outbound + outbound-angle +
+        // linkedin; only the first two are ours.
+        const newRow = payload.new as { sequence_key?: unknown };
+        const key =
+            typeof newRow.sequence_key === "string"
+                ? newRow.sequence_key
+                : null;
+        if (key === SEQUENCE_KEY_OUTBOUND) {
             const touch = rowToTouch(payload.new);
             if (!touch) return;
             const exists = allTouches.value.some((t) => t.id === touch.id);
@@ -201,7 +318,21 @@ export function applyRealtimePayload(payload: {
             } else {
                 appendTouch(touch);
             }
+        } else if (key === SEQUENCE_KEY_OUTBOUND_ANGLE) {
+            const angle = rowToAngle(payload.new);
+            if (!angle) return;
+            const exists = allAngles.value.some((a) => a.id === angle.id);
+            if (exists) {
+                setAllAngles(
+                    allAngles.value.map((a) =>
+                        a.id === angle.id ? angle : a
+                    )
+                );
+            } else {
+                appendAngle(angle);
+            }
         }
+        // else: linkedin or other key — ignore.
     }
 }
 

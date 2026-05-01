@@ -1,7 +1,7 @@
 import { render } from "preact";
 import { Settings } from "./Settings";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { refreshAll } from "./state";
+import { refreshAll, refreshCloudStatus } from "./state";
 
 initObservability();
 
@@ -22,3 +22,8 @@ if (!flagOn) {
 refreshAll();
 
 render(<Settings />, root);
+
+// Async cloud probe — runs after first paint so the card never blocks
+// render. Surfaces connection state + per-noun row counts the operator
+// can use to confirm the cross-device sync is healthy.
+void refreshCloudStatus();

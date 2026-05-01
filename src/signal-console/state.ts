@@ -94,6 +94,44 @@ export function resetSession(): void {
     searchQuery.value = "";
 }
 
+/**
+ * Build a fresh Account from a manual-add form. The id starts as a
+ * legacy-style string; cloud-persistence's saveAccount will swap it
+ * for a server-generated uuid on insert.
+ */
+export function buildManualAccount(input: {
+    readonly name: string;
+    readonly domain?: string;
+    readonly ticker?: string;
+    readonly industry?: string;
+    readonly hq?: string;
+    readonly notes?: string;
+    readonly now?: number;
+}): Account {
+    const now = input.now ?? Date.now();
+    const id = `acc_${now}_${Math.random().toString(36).slice(2, 8)}`;
+    return {
+        id,
+        name: input.name.trim(),
+        ...(input.domain && input.domain.trim()
+            ? { domain: input.domain.trim().toLowerCase() }
+            : {}),
+        ...(input.ticker && input.ticker.trim()
+            ? { ticker: input.ticker.trim().toUpperCase() }
+            : {}),
+        ...(input.industry && input.industry.trim()
+            ? { industry: input.industry.trim() }
+            : {}),
+        ...(input.hq && input.hq.trim() ? { hq: input.hq.trim() } : {}),
+        ...(input.notes && input.notes.trim()
+            ? { notes: input.notes.trim() }
+            : {}),
+        signals: [],
+        created_at: new Date(now).toISOString(),
+        updated_at: new Date(now).toISOString()
+    };
+}
+
 /** Test-only — seed the accounts list. */
 export function __setAllAccountsForTests(accounts: ReadonlyArray<Account>): void {
     allAccounts.value = accounts;
