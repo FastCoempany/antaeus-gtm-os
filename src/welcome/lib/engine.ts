@@ -89,7 +89,7 @@ const ACTION_ICP: Omit<NextAction, "state"> = {
     key: "icp",
     title: "Create your first ICP",
     body: "Start with one sharp wedge. Once one ICP exists, Signal Console, outbound, and discovery stop operating on memory.",
-    href: "/app/icp-studio/",
+    href: "/icp-studio/",
     cta: "Open ICP Studio",
     meta: ["highest leverage", "targeting truth"],
     why: "The rest of the app compounds off targeting truth before it compounds off activity.",
@@ -139,12 +139,7 @@ const ACTION_QUOTA: Omit<NextAction, "state"> = {
     key: "quota",
     title: "Dial in quota and targets",
     body: "Put your quota math and ACV into the system so good stops staying subjective.",
-    // Legacy `/app/` path so this works whether or not the Quota
-    // Workback Preact rebuild (PR #31) has merged. The legacy room's
-    // Wave 6 flag-redirect forwards to `/quota-workback/` when
-    // `room_quota_workback_v2` is enabled, so flagged users still
-    // land in the new room transparently.
-    href: "/app/quota-workback/",
+    href: "/quota-workback/",
     cta: "Open Quota Workback",
     meta: ["system math", "benchmarks"],
     why: "The app becomes more credible when activity and readiness are anchored to actual revenue pressure.",
@@ -154,10 +149,7 @@ const ACTION_BACKUP: Omit<NextAction, "state"> = {
     key: "backup",
     title: "Export the first backup",
     body: "Make the workspace durable outside this one browser before the first week gets messy.",
-    // Same legacy-first pattern as ACTION_QUOTA above. The legacy
-    // /app/settings/ Wave 6 redirect forwards to /settings/ when
-    // `room_settings_v2` is enabled (PR #32).
-    href: "/app/settings/",
+    href: "/settings/",
     cta: "Open Settings",
     meta: ["durability", "trust"],
     why: "Week one is not complete until the workspace can survive refresh, re-login, and a bad decision.",

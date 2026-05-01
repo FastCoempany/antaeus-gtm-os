@@ -397,10 +397,10 @@ function RoleCard(): JSX.Element {
                 path.
             </p>
             <div class="st-card__actions">
-                <a class="st-btn st-btn--ghost" href="/app/onboarding/">
+                <a class="st-btn st-btn--ghost" href="/onboarding/">
                     Re-run onboarding
                 </a>
-                <a class="st-btn st-btn--ghost" href="/app/welcome/">
+                <a class="st-btn st-btn--ghost" href="/welcome/">
                     Visit Welcome
                 </a>
             </div>

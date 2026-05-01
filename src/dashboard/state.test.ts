@@ -111,7 +111,7 @@ describe("commandSummary + spotlightObject", () => {
         badge: "70",
         meta: ["$250k", "stale 22"],
         actions: [
-            { label: "Open deal", href: "/app/deal-workspace/", roomLabel: "Deal Workspace" }
+            { label: "Open deal", href: "/deal-workspace/", roomLabel: "Deal Workspace" }
         ]
     };
     const moveCard: RawCommandCard = {
@@ -119,7 +119,7 @@ describe("commandSummary + spotlightObject", () => {
         badge: "Now",
         meta: ["heat 70"],
         actions: [
-            { label: "Open Signal Console", href: "/app/signal-console/", roomLabel: "Signal Console" }
+            { label: "Open Signal Console", href: "/signal-console/", roomLabel: "Signal Console" }
         ]
     };
 

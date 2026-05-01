@@ -34,7 +34,7 @@ describe("buildIcpStudioHref", () => {
 
     it("does not overwrite an existing returnTo on the href", () => {
         const url = buildIcpStudioHref({
-            href: "/app/x/?returnTo=%2Fother%2F",
+            href: "/x/?returnTo=%2Fother%2F",
             focusObject: "Logistics",
             roomLabel: "X"
         });

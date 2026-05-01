@@ -21,7 +21,7 @@ const acmeRiskCard: RawCommandCard = {
     badge: "70",
     meta: ["$250k", "stale 22"],
     actions: [
-        { label: "Open deal", href: "/app/deal-workspace/", roomLabel: "Deal Workspace" }
+        { label: "Open deal", href: "/deal-workspace/", roomLabel: "Deal Workspace" }
     ]
 };
 
@@ -29,7 +29,7 @@ const coverageMoveCard: RawCommandCard = {
     title: "Outbound to fintech wedge",
     badge: "Now",
     meta: ["heat 70"],
-    actions: [{ label: "Open Signal Console", href: "/app/signal-console/", roomLabel: "Signal Console" }],
+    actions: [{ label: "Open Signal Console", href: "/signal-console/", roomLabel: "Signal Console" }],
     rankingSignals: { causeId: "coverage_gap", highConfidenceCount: 3 }
 };
 
@@ -201,13 +201,13 @@ describe("stability bonus (re-rank smoothing)", () => {
             title: "Acme proposal stalled",
             badge: "60",
             meta: ["$120k", "stale 14"],
-            actions: [{ label: "Open deal", href: "/app/deal-workspace/", roomLabel: "Deal Workspace" }]
+            actions: [{ label: "Open deal", href: "/deal-workspace/", roomLabel: "Deal Workspace" }]
         };
         const cardB: RawCommandCard = {
             title: "Beta proposal stalled",
             badge: "60",
             meta: ["$120k", "stale 14"],
-            actions: [{ label: "Open deal", href: "/app/deal-workspace/", roomLabel: "Deal Workspace" }]
+            actions: [{ label: "Open deal", href: "/deal-workspace/", roomLabel: "Deal Workspace" }]
         };
 
         const noPrev = rankCommandObjects(

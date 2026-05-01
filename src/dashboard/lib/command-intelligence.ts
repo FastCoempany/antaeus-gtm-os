@@ -236,13 +236,13 @@ function buildSystemObject(
             meta: ["local fallback"],
             actions: [
                 {
-                    href: "/app/settings/",
+                    href: "/settings/",
                     label: "Open Settings",
                     tone: "btn-secondary",
                     roomLabel: "Settings"
                 },
                 {
-                    href: "/app/dashboard/?mode=spotlight",
+                    href: "/dashboard/?mode=spotlight",
                     label: "Refresh view",
                     tone: "btn-secondary",
                     roomLabel: "Dashboard"
@@ -275,7 +275,7 @@ function buildIcpObject(
             meta: ["missing ICP", "targeting layer"],
             actions: [
                 {
-                    href: "/app/icp-studio/",
+                    href: "/icp-studio/",
                     label: "Open ICP Studio",
                     roomLabel: "ICP Studio"
                 }

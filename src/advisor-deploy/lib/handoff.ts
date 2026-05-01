@@ -50,8 +50,8 @@ export function hrefToDealWorkspace(
     accountName: string
 ): string {
     const path = dealId
-        ? `/app/deal-workspace/?deal=${encodeURIComponent(dealId)}`
-        : "/app/deal-workspace/";
+        ? `/deal-workspace/?deal=${encodeURIComponent(dealId)}`
+        : "/deal-workspace/";
     return buildAdvisorRoomHref({
         href: path,
         focusObject: accountName || "Advisor deployment",
@@ -64,8 +64,8 @@ export function hrefToFutureAutopsy(
     accountName: string
 ): string {
     const path = dealId
-        ? `/app/future-autopsy/?deal=${encodeURIComponent(dealId)}`
-        : "/app/future-autopsy/";
+        ? `/future-autopsy/?deal=${encodeURIComponent(dealId)}`
+        : "/future-autopsy/";
     return buildAdvisorRoomHref({
         href: path,
         focusObject: accountName || "Advisor deployment",
@@ -78,8 +78,8 @@ export function hrefToPocFramework(
     accountName: string
 ): string {
     const path = dealId
-        ? `/app/poc-framework/?deal=${encodeURIComponent(dealId)}`
-        : "/app/poc-framework/";
+        ? `/poc-framework/?deal=${encodeURIComponent(dealId)}`
+        : "/poc-framework/";
     return buildAdvisorRoomHref({
         href: path,
         focusObject: accountName || "Advisor deployment",

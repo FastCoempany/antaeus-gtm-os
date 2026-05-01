@@ -1,90 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discovery Studio | Antaeus GTM OS</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/discovery-studio-segment-jump.css">
+<meta charset="utf-8" />
+<meta name="robots" content="noindex" />
+<meta http-equiv="refresh" content="0; url=/discovery-studio/" />
+<title>Redirecting to /discovery-studio/</title>
+<link rel="canonical" href="/discovery-studio/" />
+<script>
+// Phase 4 deletion sweep: this legacy path was retired in PR #45.
+// Operators land on the canonical room. Keep the stub so old bookmarks
+// + emailed links don't 404.
+(function () {
+  try {
+    var qs = window.location.search || "";
+    var hash = window.location.hash || "";
+    window.location.replace("/discovery-studio/" + qs + hash);
+  } catch (e) {
+    /* meta-refresh handles the fallback */
+  }
+})();
+</script>
 </head>
-<body class="room-discovery-studio">
-    <script src="/js/app-auth-preflight.js"></script>
-    <div class="app-container">
-        <aside class="app-sidebar">
-            <script src="/js/analytics-site-config.js"></script>
-            <script src="/js/analytics.js"></script>
-            <!--
-                Wave 6 — flag-based cutover to /discovery-studio/ Preact rebuild.
-                When the Posthog feature flag `room_discovery_v2` is ON for the
-                current user, redirect to the new room (which carries Wave 1-5
-                visual fidelity, persistence, and on-call controls). Otherwise
-                continue rendering the legacy room as-is.
-
-                Skip-redirect escape hatch: ?demo=1 or ?qa=1 in the URL keeps
-                the legacy room loading. Used by the CI Playwright smoke
-                tests + the demo-seed bootstrap path, neither of which should
-                jump into the new room.
-
-                posthog.onFeatureFlags fires once after Posthog's flag fetch
-                returns. If the SDK didn't initialize (env vars missing,
-                anonymous browser, etc.) the callback never fires and the
-                legacy room renders normally.
-
-                Ref: deliverables/adr/adr-002-phase-2-data-architecture-rescope-2026-04-24.md §6 Phase 3
-            -->
-            <script>
-                (function(){
-                    var qs = window.location.search || "";
-                    if (qs.indexOf("demo=1") !== -1 || qs.indexOf("qa=1") !== -1) {
-                        return;
-                    }
-                    function maybeRedirect() {
-                        if (typeof posthog === "undefined" || !posthog.onFeatureFlags) {
-                            return false;
-                        }
-                        posthog.onFeatureFlags(function () {
-                            if (posthog.isFeatureEnabled("room_discovery_v2")) {
-                                var hash = window.location.hash || "";
-                                window.location.replace("/discovery-studio/" + qs + hash);
-                            }
-                        });
-                        return true;
-                    }
-                    // Fast path — Posthog already loaded (warm cache, repeat visit).
-                    if (maybeRedirect()) return;
-                    // Cold path — wait for analytics.js to dispatch gtmos:posthog-ready
-                    // after the Posthog SDK script's onload fires + posthog.init runs.
-                    window.addEventListener("gtmos:posthog-ready", maybeRedirect, { once: true });
-                })();
-            </script>
-            <script src="/js/data-manager.js"></script>
-            <script src="/js/demo-storage-bootstrap.js"></script>
-<script src="/js/workspace-guard.js"></script>
-            <script src="/js/nav.js"></script>
-        </aside>
-        <main class="app-main">
-            <div class="app-content">
-                <div id="dsjRoot" class="dsj-app"></div>
-            </div>
-        </main>
-    </div>
-
-    <script src="/js/discovery-segment-runtime.js"></script>
-    <script src="/js/discovery-segment-runtime-customer-support.js"></script>
-    <script src="/js/discovery-segment-runtime-sales-revenue.js"></script>
-    <script src="/js/discovery-segment-runtime-manufacturing.js"></script>
-    <script src="/js/discovery-segment-runtime-data-intelligence.js"></script>
-    <script src="/js/discovery-segment-runtime-legal.js"></script>
-    <script src="/js/discovery-segment-runtime-recruiting.js"></script>
-    <script src="/js/discovery-segment-runtime-product-ux.js"></script>
-    <script src="/js/discovery-segment-runtime-govtech.js"></script>
-    <script src="/js/discovery-segment-runtime-ai-native.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/js/require-auth.js"></script>
-    <script src="/js/discovery-studio-segment-jump-room.js"></script>
+<body>
+<p>Redirecting to <a href="/discovery-studio/">/discovery-studio/</a>…</p>
 </body>
 </html>
