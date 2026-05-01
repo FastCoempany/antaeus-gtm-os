@@ -43,12 +43,15 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         // Core Discovery Studio contract rails must be present in the DOM.
-        // These are the invariants Waves 1-4 established; smoke test ensures
-        // they don't silently disappear as other refactors happen.
-        await expect(page.locator(".dsj-framework-btn").first()).toBeVisible();
-        await expect(page.locator(".dsj-jump-btn").first()).toBeVisible();
-        await expect(page.locator("#dsjNextStepDocket")).toBeVisible();
-        await expect(page.locator("#dsjLedgerStrip")).toBeVisible();
+        // These are the invariants the Phase 3 rebuild established; smoke
+        // test ensures they don't silently disappear as other refactors
+        // happen. PR #45 retired the legacy `/app/discovery-studio/` (which
+        // exposed `dsj-*` markers) and routes through the new Preact room
+        // at `/discovery-studio/` whose markers use the `ds-*` prefix.
+        await expect(page.locator(".ds-framework-rail__btn").first()).toBeVisible();
+        await expect(page.locator(".ds-segment-rail")).toBeVisible();
+        await expect(page.locator(".ds-next-step-docket")).toBeVisible();
+        await expect(page.locator(".ds-learned-truth-ledger")).toBeVisible();
 
         expect(errors, `page errors during boot:\n${errors.join("\n")}`).toEqual([]);
     });
