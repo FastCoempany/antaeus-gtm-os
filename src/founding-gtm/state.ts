@@ -42,8 +42,26 @@ export const authoredSections: ReadonlySignal<ReadonlyArray<AuthoredSection>> =
 /** Share-link composer overlay (Wave 4 wires send action). */
 export const shareComposerOpen: Signal<boolean> = signal(false);
 
-/** Ceremony moment overlay state (Wave 4 wires the trigger + dismiss). */
+/** Ceremony moment overlay state — set by Wave 4's ceremony subscriber. */
 export const ceremonyOpen: Signal<boolean> = signal(false);
+
+/**
+ * Optional snapshot the ceremony overlay reads. Wave 4 sets this via
+ * the ceremony subscriber. Keeping it on its own signal so the
+ * overlay re-renders cleanly when the trigger fires.
+ */
+export interface CeremonyEvent {
+    readonly fromLabel: string;
+    readonly toLabel: string;
+    readonly sectionsBefore: number;
+    readonly sectionsAfter: number;
+}
+
+export const ceremonyEvent: Signal<CeremonyEvent | null> = signal(null);
+
+export function setCeremonyEvent(e: CeremonyEvent | null): void {
+    ceremonyEvent.value = e;
+}
 
 export function setSectionsInput(next: SectionsInput): void {
     sectionsInput.value = next;
@@ -83,4 +101,5 @@ export function __resetForTests(): void {
     };
     shareComposerOpen.value = false;
     ceremonyOpen.value = false;
+    ceremonyEvent.value = null;
 }

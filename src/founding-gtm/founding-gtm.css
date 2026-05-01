@@ -297,3 +297,138 @@ button { font-family: inherit; cursor: pointer; }
     .fg-section { padding: 24px 22px; }
     .fg-topbar__rail { align-items: flex-start; }
 }
+
+/* ─── Ceremony overlay (Wave 4 set-piece) ──────────────────────────── */
+
+.fg-ceremony {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    animation: fg-ceremony-in 320ms ease-out;
+}
+
+@keyframes fg-ceremony-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.fg-ceremony__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 28, 64, 0.78);
+    backdrop-filter: blur(8px);
+}
+
+.fg-ceremony__panel {
+    position: relative;
+    max-width: 560px;
+    width: 100%;
+    background: var(--fg-cream);
+    border: 1px solid var(--fg-border-strong);
+    border-radius: 8px;
+    padding: 48px 44px;
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(10, 28, 64, 0.4);
+    animation: fg-ceremony-rise 360ms ease-out;
+}
+
+@keyframes fg-ceremony-rise {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+.fg-ceremony__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--fg-accent-orange);
+    margin: 0 0 14px;
+    text-transform: uppercase;
+}
+
+.fg-ceremony__headline {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(32px, 4.5vw, 48px);
+    line-height: 1.1;
+    color: var(--fg-ink);
+    margin: 0 0 16px;
+    font-weight: 400;
+}
+
+.fg-ceremony__sub {
+    color: var(--fg-ink-70);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 0 28px;
+}
+
+.fg-ceremony__sub strong {
+    color: var(--fg-ink);
+}
+
+.fg-ceremony__counts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    margin: 0 0 32px;
+}
+
+.fg-ceremony__count-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.fg-ceremony__count-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 36px;
+    color: var(--fg-ink-40);
+    line-height: 1;
+}
+
+.fg-ceremony__count-cell--after .fg-ceremony__count-num {
+    color: var(--fg-accent-orange);
+}
+
+.fg-ceremony__count-cap {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--fg-ink-70);
+    text-transform: uppercase;
+}
+
+.fg-ceremony__arrow {
+    font-size: 28px;
+    color: var(--fg-ink-40);
+}
+
+.fg-ceremony__actions {
+    display: flex;
+    justify-content: center;
+}
+
+.fg-ceremony__btn {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 120ms ease;
+}
+
+.fg-ceremony__btn--primary {
+    background: var(--fg-accent-orange);
+    color: #fff;
+}
+
+.fg-ceremony__btn--primary:hover {
+    background: #d05f12;
+}
