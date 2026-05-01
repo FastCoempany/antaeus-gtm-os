@@ -1,6 +1,8 @@
 import { render } from "preact";
 import { FoundingGtm } from "./FoundingGtm";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { setSectionsInput } from "./state";
+import { loadSectionsInput } from "./lib/cross-room";
 
 /**
  * Entry point for the Founding GTM Preact rebuild
@@ -32,6 +34,21 @@ if (!flagOn) {
         "[founding-gtm] Feature flag room_founding_gtm_v2 is OFF for this user. " +
             "Rendering anyway (Waves 1-4 are internal-test only)."
     );
+}
+
+// Wave 2 + 3 — load cross-room data from cloud-mirrored localStorage,
+// then re-aggregate on storage events + visibility change so the room
+// reflects sibling-room writes without a refresh.
+setSectionsInput(loadSectionsInput());
+if (typeof window !== "undefined") {
+    window.addEventListener("storage", () => {
+        setSectionsInput(loadSectionsInput());
+    });
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+            setSectionsInput(loadSectionsInput());
+        }
+    });
 }
 
 render(<FoundingGtm />, root);
