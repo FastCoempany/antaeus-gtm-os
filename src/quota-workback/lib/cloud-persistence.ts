@@ -1,8 +1,9 @@
 import { effect } from "@preact/signals";
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import type { Row } from "@/lib/database.types";
+import type { Json, Row } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     inputsToInsert,
     inputsToUpdate,
@@ -126,6 +127,15 @@ export async function saveInputsToCloud(
         return next;
     } catch (err) {
         reportError(err, { op: "quota-workback.saveInputsToCloud" });
+        enqueueRetry({
+            table: "pipeline_settings",
+            op: cloudRowId ? "update" : "insert",
+            rowId: cloudRowId,
+            payload: (cloudRowId
+                ? inputsToUpdate(next)
+                : inputsToInsert(next)) as unknown as Json,
+            source: "quota-workback.saveInputsToCloud"
+        });
         return next;
     }
 }

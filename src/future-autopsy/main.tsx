@@ -13,6 +13,8 @@ import { loadDealsFromMirror } from "./lib/deal-loader";
 import { computeVitalsForAll } from "./lib/vitals";
 import { loadTaskLog } from "./lib/task-log";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Future Autopsy Preact rebuild
@@ -81,7 +83,9 @@ render(<FutureAutopsy />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        notifyBootResult({ room: "Future Autopsy" }, result);
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[future-autopsy] Cloud sync disabled:",

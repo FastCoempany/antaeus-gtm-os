@@ -13,6 +13,8 @@ import { loadCallLog, loadCompanyName } from "./lib/persistence";
 import { loadAccountOptions } from "./lib/account-loader";
 import { readInboundAccount } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Cold Call Studio Preact rebuild
@@ -78,7 +80,12 @@ render(<ColdCallStudio />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        notifyBootResult(
+            { room: "Cold Call Studio", rowCount: result.callCount },
+            result
+        );
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[cold-call-studio] Cloud sync disabled:",

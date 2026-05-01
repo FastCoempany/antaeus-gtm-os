@@ -1,6 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { Json } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     icpToInsert,
     icpToUpdate,
@@ -161,6 +163,16 @@ export async function saveIcp(icp: SavedIcp): Promise<SavedIcp> {
         return icp;
     } catch (err) {
         reportError(err, { op: "icp-studio.saveIcp", icpId: icp.id });
+        const isUpdate = looksLikePersistedId(icp.id);
+        enqueueRetry({
+            table: "icps",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? icp.id : null,
+            payload: (isUpdate
+                ? icpToUpdate(icp)
+                : icpToInsert(icp)) as unknown as Json,
+            source: "icp-studio.saveIcp"
+        });
         return icp;
     }
 }
@@ -179,6 +191,12 @@ export async function deleteIcpInCloud(id: string): Promise<void> {
         await clientRef.icps.remove(id);
     } catch (err) {
         reportError(err, { op: "icp-studio.deleteIcpInCloud", icpId: id });
+        enqueueRetry({
+            table: "icps",
+            op: "delete",
+            rowId: id,
+            source: "icp-studio.deleteIcpInCloud"
+        });
     }
 }
 

@@ -1,6 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { Json } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     looksLikePersistedId,
     proofToInsert,
@@ -137,6 +139,16 @@ export async function saveProof(proof: Proof): Promise<Proof> {
         return proof;
     } catch (err) {
         reportError(err, { op: "poc-framework.saveProof", proofId: proof.id });
+        const isUpdate = looksLikePersistedId(proof.id);
+        enqueueRetry({
+            table: "proofs",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? proof.id : null,
+            payload: (isUpdate
+                ? proofToUpdate(proof)
+                : proofToInsert(proof)) as unknown as Json,
+            source: "poc-framework.saveProof"
+        });
         return proof;
     }
 }
@@ -150,6 +162,12 @@ export async function deleteProofInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "poc-framework.deleteProofInCloud",
             proofId: id
+        });
+        enqueueRetry({
+            table: "proofs",
+            op: "delete",
+            rowId: id,
+            source: "poc-framework.deleteProofInCloud"
         });
     }
 }

@@ -1,7 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import type { Row } from "@/lib/database.types";
+import type { Json, Row } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     KIND_TASK_LOG,
     rowKind,
@@ -115,6 +116,16 @@ export async function saveTaskLogToCloud(
         return log;
     } catch (err) {
         reportError(err, { op: "future-autopsy.saveTaskLogToCloud" });
+        // Singleton: insert if no rowId tracked, update otherwise.
+        enqueueRetry({
+            table: "studio_artifacts",
+            op: cloudRowId ? "update" : "insert",
+            rowId: cloudRowId,
+            payload: (cloudRowId
+                ? taskLogToUpdate(log)
+                : taskLogToInsert(log)) as unknown as Json,
+            source: "future-autopsy.saveTaskLogToCloud"
+        });
         return log;
     }
 }

@@ -11,6 +11,8 @@ import {
 import { loadProspects, loadQueryCards } from "./lib/persistence";
 import { readInboundAccount } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Sourcing Workbench Preact rebuild
@@ -62,7 +64,13 @@ render(<SourcingWorkbench />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        const total = result.queryCardsCount + result.prospectsCount;
+        notifyBootResult(
+            { room: "Sourcing Workbench", rowCount: total },
+            result
+        );
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[sourcing-workbench] Cloud sync disabled:",

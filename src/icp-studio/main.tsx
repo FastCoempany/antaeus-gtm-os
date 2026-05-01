@@ -11,6 +11,8 @@ import {
 } from "./state";
 import { loadAnalytics } from "./lib/persistence";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 initObservability();
 
@@ -57,7 +59,15 @@ render(<IcpStudio />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const result = await bootCloudPersistence(client);
+        notifyBootResult(
+            { room: "ICP Studio", rowCount: result.icpCount },
+            result
+        );
+        // Wire the offline retry queue: on online / visibilitychange /
+        // every 30s, flush any saves that failed during a hostile-network
+        // window. Idempotent; safe to call once per page load.
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[icp-studio] Cloud sync disabled:",

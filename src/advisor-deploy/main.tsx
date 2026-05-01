@@ -15,6 +15,8 @@ import { loadDeals } from "./lib/deal-loader";
 import { readInboundDealId } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
 import { bootAdvisorProfileCloudPersistence } from "./lib/cloud-persistence-profile";
+import { notifyBootResult } from "@/lib/cloud-sync-notify";
+import { bootRetryAutoFlush } from "@/lib/cloud-sync-queue";
 
 /**
  * Entry point for the Advisor Deploy Preact rebuild
@@ -103,10 +105,25 @@ render(<AdvisorDeploy />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await Promise.all([
+        const [deployResult, profileResult] = await Promise.all([
             bootCloudPersistence(client),
             bootAdvisorProfileCloudPersistence(client)
         ]);
+        notifyBootResult(
+            {
+                room: "Advisor Deploy (deployments)",
+                rowCount: deployResult.deploymentCount
+            },
+            deployResult
+        );
+        notifyBootResult(
+            {
+                room: "Advisor Deploy (registry)",
+                rowCount: profileResult.advisorCount
+            },
+            profileResult
+        );
+        bootRetryAutoFlush(() => createDataClient());
     } catch (err) {
         console.warn(
             "[advisor-deploy] Cloud sync disabled:",

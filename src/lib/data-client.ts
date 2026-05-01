@@ -30,6 +30,22 @@ import { reportError, trackEvent } from "./observability";
  * Same for INSERTs: the table's DEFAULT on workspace_id calls
  * public.current_user_default_workspace_id() server-side.
  *
+ * ─── Attribution convention ──────────────────────────────────────────────
+ *
+ * Every cloud-synced table has server-side defaults for attribution:
+ *   - user_id      DEFAULT auth.uid()
+ *   - created_by   DEFAULT auth.uid()  (on tables that have this column)
+ *   - workspace_id DEFAULT current_user_default_workspace_id()
+ *
+ * Bridges MUST NOT set these columns explicitly in their insert/update
+ * payloads. If a bridge sets `user_id: null` or `created_by: null`, the
+ * server default does NOT fire and the row lands without attribution.
+ *
+ * `src/lib/attribution-audit.test.ts` is the single audit point that
+ * walks every bridge's insert/update factories and asserts none of
+ * those columns appear in the payload. If a future bridge regresses,
+ * the audit fails before the regression ships.
+ *
  * ─── Error handling ──────────────────────────────────────────────────────
  * All methods throw on error (don't return a {data, error} tuple). Callers
  * use try/catch. Every thrown error is also reported through reportError().

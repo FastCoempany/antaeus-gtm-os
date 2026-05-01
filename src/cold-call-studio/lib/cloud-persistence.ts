@@ -1,6 +1,8 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { Json } from "@/lib/database.types";
 import { reportError, trackEvent } from "@/lib/observability";
+import { enqueueRetry } from "@/lib/cloud-sync-queue";
 import {
     callEntryToInsert,
     callEntryToUpdate,
@@ -121,6 +123,16 @@ export async function saveCallEntry(entry: CallLogEntry): Promise<CallLogEntry> 
             op: "cold-call-studio.saveCallEntry",
             callId: entry.id
         });
+        const isUpdate = looksLikePersistedId(entry.id);
+        enqueueRetry({
+            table: "discovery_call_logs",
+            op: isUpdate ? "update" : "insert",
+            rowId: isUpdate ? entry.id : null,
+            payload: (isUpdate
+                ? callEntryToUpdate(entry)
+                : callEntryToInsert(entry)) as unknown as Json,
+            source: "cold-call-studio.saveCallEntry"
+        });
         return entry;
     }
 }
@@ -134,6 +146,12 @@ export async function deleteCallInCloud(id: string): Promise<void> {
         reportError(err, {
             op: "cold-call-studio.deleteCallInCloud",
             callId: id
+        });
+        enqueueRetry({
+            table: "discovery_call_logs",
+            op: "delete",
+            rowId: id,
+            source: "cold-call-studio.deleteCallInCloud"
         });
     }
 }
