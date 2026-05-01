@@ -1,7 +1,12 @@
 import { render } from "preact";
 import { Dashboard } from "./Dashboard";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { bootMode, setEngineInput, setReadinessInput } from "./state";
+import {
+    bootMode,
+    openReadinessDrawer,
+    setEngineInput,
+    setReadinessInput
+} from "./state";
 import { bootSnapshotAggregator } from "./lib/snapshot-aggregator";
 import { aggregateReadinessInput } from "./lib/readiness-aggregator";
 import { bootReadinessHistory } from "./lib/readiness-history";
@@ -79,3 +84,17 @@ if (typeof window !== "undefined") {
 // (cloud) on every verdict transition. Idempotent: skips no-op
 // transitions and re-runs.
 bootReadinessHistory();
+
+// Phase 5.A Wave 4 — `?readiness=1` URL hint auto-opens the drawer.
+// Used by the legacy /app/readiness/ redirect stub so old bookmarks
+// land on the Dashboard with the verdict surface already open.
+try {
+    if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("readiness") === "1") {
+            openReadinessDrawer();
+        }
+    }
+} catch {
+    // ignore URL parse errors
+}
