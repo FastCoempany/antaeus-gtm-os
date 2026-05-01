@@ -1,0 +1,434 @@
+/*
+ * Founding GTM — Phase 5.B baseline styles.
+ *
+ * System Ledger family per CLAUDE.md Part II §4.6 — but bright per
+ * the §1 direction lock (the "bright-only" amendment retired the dark
+ * exception). Synthesis weight comes from typography + accent rules,
+ * not luminosity.
+ *
+ * The room is the **culmination** (canon §4.19) — the high point of
+ * the workspace. Authored opinion + cross-room synthesis. Severe.
+ * Calm. Confident.
+ */
+
+:root {
+    --fg-ink: #0a1c40;
+    --fg-ink-70: rgba(10, 28, 64, 0.7);
+    --fg-ink-40: rgba(10, 28, 64, 0.4);
+    --fg-ink-15: rgba(10, 28, 64, 0.15);
+    --fg-ink-08: rgba(10, 28, 64, 0.08);
+    --fg-field: #f6f8fc;
+    --fg-field-raised: #ffffff;
+    --fg-cream: #fdf6e9;
+    --fg-accent-orange: #e6701e;
+    --fg-accent-blue: #2563eb;
+    --fg-accent-green: #22c55e;
+    --fg-accent-amber: #f59e0b;
+    --fg-accent-red: #ef4444;
+    --fg-accent-gold: #b07d10;
+    --fg-border: rgba(10, 28, 64, 0.1);
+    --fg-border-strong: rgba(10, 28, 64, 0.25);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+    background: var(--fg-field);
+    color: var(--fg-ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+        radial-gradient(circle at 12% 8%, rgba(37, 99, 235, 0.045), transparent 28%),
+        radial-gradient(circle at 88% 96%, rgba(230, 112, 30, 0.04), transparent 28%);
+}
+
+button { font-family: inherit; cursor: pointer; }
+
+/* ─── Shell ────────────────────────────────────────────────────────── */
+
+.fg-shell {
+    min-height: 100vh;
+    padding: 32px 40px 80px;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────────── */
+
+.fg-topbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 56px;
+    flex-wrap: wrap;
+}
+
+.fg-topbar__lead { flex: 1 1 540px; min-width: 0; }
+
+.fg-topbar__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--fg-ink-70);
+    margin: 0 0 14px;
+    text-transform: uppercase;
+}
+
+.fg-topbar__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(38px, 5.5vw, 64px);
+    line-height: 1.04;
+    font-weight: 400;
+    margin: 0 0 14px;
+    letter-spacing: -0.01em;
+    max-width: 18ch;
+}
+
+.fg-topbar__sub {
+    font-size: 16px;
+    color: var(--fg-ink-70);
+    margin: 0;
+    max-width: 60ch;
+}
+
+.fg-topbar__rail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    flex: 0 0 auto;
+}
+
+.fg-maturity {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--fg-field-raised);
+    border: 1px solid var(--fg-border-strong);
+    border-radius: 4px;
+}
+
+.fg-maturity__count {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    color: var(--fg-ink);
+}
+
+.fg-maturity__partial {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--fg-accent-amber);
+    letter-spacing: 0.06em;
+}
+
+.fg-readiness-tag {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 1px solid var(--fg-border);
+    border-radius: 999px;
+    background: var(--fg-field-raised);
+}
+
+.fg-readiness-tag__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--fg-ink-40);
+    text-transform: uppercase;
+}
+
+.fg-readiness-tag__label {
+    font-family: "DM Serif Display", serif;
+    font-size: 13px;
+    color: var(--fg-ink);
+}
+
+/* ─── Section stack ────────────────────────────────────────────────── */
+
+.fg-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.fg-section {
+    background: var(--fg-field-raised);
+    border: 1px solid var(--fg-border);
+    border-radius: 6px;
+    padding: 32px 36px;
+    position: relative;
+}
+
+.fg-section--ready    { border-left: 4px solid var(--fg-accent-green); }
+.fg-section--partial  { border-left: 4px solid var(--fg-accent-amber); }
+.fg-section--empty    { border-left: 4px solid var(--fg-ink-15); }
+
+.fg-section__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    gap: 16px;
+}
+
+.fg-section__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--fg-ink-70);
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.fg-section__status {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+}
+
+.fg-section__status--ready   { color: var(--fg-accent-green); }
+.fg-section__status--partial { color: var(--fg-accent-amber); }
+.fg-section__status--empty   { color: var(--fg-ink-40); }
+
+.fg-section__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(24px, 2.6vw, 32px);
+    line-height: 1.15;
+    font-weight: 400;
+    margin: 0 0 18px;
+    letter-spacing: -0.005em;
+}
+
+.fg-section__body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 64ch;
+    margin-bottom: 16px;
+}
+
+.fg-section__para {
+    margin: 0;
+    color: var(--fg-ink);
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.fg-section__empty {
+    color: var(--fg-ink-40);
+    font-style: italic;
+    font-size: 14px;
+    margin: 0 0 16px;
+}
+
+.fg-section__evidence {
+    list-style: none;
+    margin: 0 0 18px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fg-section__evidence-row {
+    background: var(--fg-field);
+    border: 1px solid var(--fg-border);
+    border-radius: 3px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--fg-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ─── Surprise callout ─────────────────────────────────────────────── */
+
+.fg-surprise {
+    margin-top: 16px;
+    padding: 18px 20px;
+    border-radius: 4px;
+    background: var(--fg-cream);
+    border: 1px solid var(--fg-border);
+    border-left: 4px solid var(--fg-accent-orange);
+    max-width: 64ch;
+}
+
+.fg-surprise--corrective { border-left-color: var(--fg-accent-orange); }
+.fg-surprise--affirming  { border-left-color: var(--fg-accent-green); }
+.fg-surprise--neutral    { border-left-color: var(--fg-accent-blue); }
+
+.fg-surprise__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--fg-ink-70);
+    margin: 0 0 8px;
+    text-transform: uppercase;
+}
+
+.fg-surprise__headline {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.25;
+    margin: 0 0 8px;
+    color: var(--fg-ink);
+    font-weight: 400;
+}
+
+.fg-surprise__body {
+    margin: 0;
+    color: var(--fg-ink-70);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+    .fg-shell { padding: 24px 20px 60px; }
+    .fg-section { padding: 24px 22px; }
+    .fg-topbar__rail { align-items: flex-start; }
+}
+
+/* ─── Ceremony overlay (Wave 4 set-piece) ──────────────────────────── */
+
+.fg-ceremony {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    animation: fg-ceremony-in 320ms ease-out;
+}
+
+@keyframes fg-ceremony-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.fg-ceremony__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 28, 64, 0.78);
+    backdrop-filter: blur(8px);
+}
+
+.fg-ceremony__panel {
+    position: relative;
+    max-width: 560px;
+    width: 100%;
+    background: var(--fg-cream);
+    border: 1px solid var(--fg-border-strong);
+    border-radius: 8px;
+    padding: 48px 44px;
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(10, 28, 64, 0.4);
+    animation: fg-ceremony-rise 360ms ease-out;
+}
+
+@keyframes fg-ceremony-rise {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+.fg-ceremony__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--fg-accent-orange);
+    margin: 0 0 14px;
+    text-transform: uppercase;
+}
+
+.fg-ceremony__headline {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(32px, 4.5vw, 48px);
+    line-height: 1.1;
+    color: var(--fg-ink);
+    margin: 0 0 16px;
+    font-weight: 400;
+}
+
+.fg-ceremony__sub {
+    color: var(--fg-ink-70);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 0 28px;
+}
+
+.fg-ceremony__sub strong {
+    color: var(--fg-ink);
+}
+
+.fg-ceremony__counts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    margin: 0 0 32px;
+}
+
+.fg-ceremony__count-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.fg-ceremony__count-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 36px;
+    color: var(--fg-ink-40);
+    line-height: 1;
+}
+
+.fg-ceremony__count-cell--after .fg-ceremony__count-num {
+    color: var(--fg-accent-orange);
+}
+
+.fg-ceremony__count-cap {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--fg-ink-70);
+    text-transform: uppercase;
+}
+
+.fg-ceremony__arrow {
+    font-size: 28px;
+    color: var(--fg-ink-40);
+}
+
+.fg-ceremony__actions {
+    display: flex;
+    justify-content: center;
+}
+
+.fg-ceremony__btn {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 120ms ease;
+}
+
+.fg-ceremony__btn--primary {
+    background: var(--fg-accent-orange);
+    color: #fff;
+}
+
+.fg-ceremony__btn--primary:hover {
+    background: #d05f12;
+}
