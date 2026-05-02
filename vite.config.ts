@@ -269,7 +269,15 @@ export default defineConfig({
                 // §4.19). Served at /founding-gtm/. Behind Posthog
                 // feature flag `room_founding_gtm_v2`; legacy
                 // `app/founding-gtm/index.html` redirects here when on.
-                "founding-gtm": resolve(__dirname, "src/founding-gtm/index.html")
+                "founding-gtm": resolve(__dirname, "src/founding-gtm/index.html"),
+
+                // Phase 3 of ADR-003 — Negotiation rebuild (greenfield
+                // from canon §4.16b placeholder). Served at /negotiation/.
+                // Behind Posthog flag `room_negotiation_v2`. Carries
+                // forward procurement + finance scripts seeded from the
+                // legacy `antaeus_studio_cfo_v2` localStorage shape
+                // retired in the architecture-reset.
+                negotiation: resolve(__dirname, "src/negotiation/index.html")
             }
         }
     },

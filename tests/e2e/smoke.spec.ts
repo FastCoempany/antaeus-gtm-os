@@ -496,6 +496,35 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase 3 of ADR-003 — /negotiation/ Preact greenfield boots cleanly", async ({
+        page
+    }) => {
+        // The new Negotiation room (canon §4.16b → live room). Greenfield
+        // from rewritten mind. Smoke test asserts: page loads without
+        // runtime errors, the topbar kicker reads "Negotiation desk",
+        // route rack + position rack + ladder + pushback sheet + outcome
+        // rack all attach.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/negotiation/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ng-topbar__kicker")).toContainText(
+            "Negotiation desk"
+        );
+        await expect(page.locator(".ng-route-rack")).toBeAttached();
+        await expect(page.locator(".ng-positions")).toBeAttached();
+        await expect(page.locator(".ng-ladder")).toBeAttached();
+        await expect(page.locator(".ng-pushbacks")).toBeAttached();
+        await expect(page.locator(".ng-outcome")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 5.B Wave 1 — /founding-gtm/ Preact rebuild boots cleanly", async ({
         page
     }) => {
