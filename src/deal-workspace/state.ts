@@ -95,6 +95,47 @@ export type DealFilter = "all" | "at-risk" | "stalled" | "this-quarter";
 /** Active filter for the intervention board. */
 export const dealFilter: Signal<DealFilter> = signal("all");
 
+// ─── Target folio state (Phase 2 rework, variant-B "Intervention Desk") ─
+
+/**
+ * The pinned "commissioned case" — the single deal the operator is
+ * sharpening first. Drives the right column of the stage-grid.
+ *
+ * Auto-resolves to the highest-pressure active deal when null. The
+ * operator can pin a different deal via folio interactions.
+ */
+export const focusedDealId: Signal<string | null> = signal(null);
+
+/** Folio dock tabs per variant-B. */
+export type FolioTab = "drags" | "win" | "weighted" | "queue";
+
+export const folioTab: Signal<FolioTab> = signal("drags");
+
+/** Resolved focused Deal — explicit pin first, otherwise weakest active. */
+export const focusedDeal: ReadonlySignal<Deal | null> = computed(() => {
+    const id = focusedDealId.value;
+    const all = allDeals.value;
+    if (id) {
+        const pinned = all.find((d) => d.id === id);
+        if (pinned) return pinned;
+    }
+    // Auto-focus: highest-value active deal as the commissioned case.
+    let top: Deal | null = null;
+    for (const d of all) {
+        if (isClosed(d.stage)) continue;
+        if (!top || (d.value || 0) > (top.value || 0)) top = d;
+    }
+    return top;
+});
+
+export function setFocusedDealId(id: string | null): void {
+    focusedDealId.value = id;
+}
+
+export function setFolioTab(tab: FolioTab): void {
+    folioTab.value = tab;
+}
+
 // ─── Actions ────────────────────────────────────────────────────────────
 
 export function openDealEditor(deal: Deal): void {

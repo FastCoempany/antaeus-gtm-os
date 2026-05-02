@@ -45,19 +45,71 @@ button {
     cursor: pointer;
 }
 
-/* ─── Shell ────────────────────────────────────────────────────────── */
+/* ─── Shell (Phase 2 rework: spine + surface) ──────────────────────── */
 
 .dw-shell {
     min-height: 100vh;
-    padding: 32px 40px 80px;
-    max-width: 1480px;
+    padding: 28px 22px 80px;
+    max-width: 1600px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 22px;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(36, 113, 231, 0.05), transparent 26%),
+        radial-gradient(circle at 100% 0%, rgba(230, 112, 30, 0.04), transparent 24%),
+        var(--dw-field);
+}
+
+/* ─── Spine ────────────────────────────────────────────────────────── */
+
+.dw-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 12px;
+    gap: 14px;
+    user-select: none;
+}
+
+.dw-spine__brand {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.32em;
+    color: var(--dw-ink-40);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.dw-spine__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--dw-accent-orange);
+    box-shadow: 0 0 0 4px rgba(230, 112, 30, 0.12);
+}
+
+.dw-spine__rail {
+    width: 1px;
+    flex: 1;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 28, 64, 0.18) 0%,
+        rgba(10, 28, 64, 0.04) 100%
+    );
+}
+
+/* ─── Surface ──────────────────────────────────────────────────────── */
+
+.dw-surface {
+    min-width: 0;
+    padding: 6px 8px;
 }
 
 /* ─── Topbar ───────────────────────────────────────────────────────── */
 
 .dw-topbar {
-    margin-bottom: 28px;
+    margin-bottom: 22px;
 }
 
 .dw-topbar__kicker {
@@ -785,4 +837,527 @@ button {
     .dw-intervention {
         grid-template-columns: 1fr;
     }
+}
+
+/* ─── Stage grid (Phase 2 rework) ──────────────────────────────────── */
+
+.dw-stage-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr);
+    gap: 26px;
+    align-items: stretch;
+    margin-bottom: 26px;
+}
+
+@media (max-width: 1200px) {
+    .dw-stage-grid {
+        grid-template-columns: 1fr;
+    }
+    .dw-shell {
+        grid-template-columns: 1fr;
+    }
+    .dw-spine {
+        display: none;
+    }
+}
+
+/* ─── Hero (left col of stage-grid) ────────────────────────────────── */
+
+.dw-hero {
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border);
+    border-radius: 18px;
+    padding: 28px 30px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dw-hero__eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--dw-accent-orange);
+    text-transform: uppercase;
+    margin: 0;
+    font-weight: 700;
+}
+
+.dw-hero__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(30px, 3.5vw, 44px);
+    line-height: 1.05;
+    font-weight: 400;
+    color: var(--dw-ink);
+    margin: 0;
+    letter-spacing: -0.01em;
+    max-width: 16ch;
+}
+
+.dw-hero__sub {
+    color: var(--dw-ink-70);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 50ch;
+}
+
+.dw-hero__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.dw-hero__btn {
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease;
+}
+
+.dw-hero__btn--primary {
+    background: var(--dw-accent-orange);
+    color: #fff;
+}
+
+.dw-hero__btn--primary:hover {
+    background: #d05f12;
+}
+
+.dw-hero__btn--ghost {
+    background: var(--dw-field-raised);
+    border-color: var(--dw-border-strong);
+    color: var(--dw-ink);
+}
+
+.dw-hero__btn--ghost:hover {
+    border-color: var(--dw-ink);
+}
+
+.dw-hero__btn--link {
+    background: transparent;
+    color: var(--dw-ink-70);
+    padding: 9px 6px;
+}
+
+.dw-hero__btn--link:hover {
+    color: var(--dw-ink);
+}
+
+/* ─── Target folio (right col of stage-grid) ───────────────────────── */
+
+.dw-target-folio {
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border);
+    border-radius: 18px;
+    padding: 24px 26px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.dw-target-folio--empty {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 280px;
+}
+
+.dw-target-folio__empty {
+    color: var(--dw-ink-40);
+    font-style: italic;
+}
+
+.dw-target-folio__head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--dw-border);
+}
+
+.dw-target-folio__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--dw-ink-40);
+    text-transform: uppercase;
+    margin: 0;
+    font-weight: 700;
+}
+
+.dw-target-folio__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.dw-target-folio__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(22px, 2.4vw, 30px);
+    line-height: 1.1;
+    font-weight: 400;
+    margin: 0;
+    color: var(--dw-ink);
+}
+
+.dw-target-folio__value {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 16px;
+    color: var(--dw-ink);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.dw-target-folio__copy {
+    color: var(--dw-ink-70);
+    font-size: 13px;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 50ch;
+}
+
+.dw-target-folio__detail-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dw-target-folio__open-detail {
+    background: transparent;
+    border: 1px solid var(--dw-border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--dw-ink-70);
+    cursor: pointer;
+}
+
+.dw-target-folio__open-detail:hover {
+    border-color: var(--dw-ink);
+    color: var(--dw-ink);
+}
+
+/* ─── Signal grid (3 rows: Risk / Proof / Motion) ──────────────────── */
+
+.dw-signal-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dw-signal-row {
+    display: grid;
+    grid-template-columns: 28px 80px 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--dw-field);
+    border: 1px solid var(--dw-border);
+    border-radius: 8px;
+}
+
+.dw-signal__mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #fff;
+    font-size: 14px;
+}
+
+.dw-signal__mark--risk { background: var(--dw-accent-red); }
+.dw-signal__mark--proof { background: var(--dw-accent-blue); }
+.dw-signal__mark--motion { background: var(--dw-accent-orange); }
+
+.dw-signal__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--dw-ink-40);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.dw-signal__copy {
+    font-size: 13px;
+    color: var(--dw-ink);
+    line-height: 1.4;
+}
+
+/* ─── Folio dock (4 tabs) ──────────────────────────────────────────── */
+
+.dw-folio-dock {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    border-top: 1px solid var(--dw-border);
+    border-bottom: 1px solid var(--dw-border);
+    padding: 8px 0;
+}
+
+.dw-folio-dock__tab {
+    background: transparent;
+    border: none;
+    padding: 8px 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dw-ink-40);
+    cursor: pointer;
+    border-radius: 6px;
+    text-align: left;
+}
+
+.dw-folio-dock__tab:hover {
+    color: var(--dw-ink-70);
+}
+
+.dw-folio-dock__tab.is-active {
+    color: var(--dw-ink);
+    background: var(--dw-field);
+}
+
+.dw-folio-dock__tab.is-risk {
+    color: var(--dw-accent-red);
+    font-weight: 700;
+}
+
+.dw-folio-dock__tab.is-risk.is-active {
+    background: rgba(180, 38, 31, 0.08);
+}
+
+/* ─── Folio panel (per-tab content) ────────────────────────────────── */
+
+.dw-folio-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 140px;
+}
+
+.dw-folio-panel__count {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--dw-ink-70);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.dw-folio-panel__lead {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    color: var(--dw-ink);
+    margin: 0;
+}
+
+.dw-folio-panel__copy {
+    color: var(--dw-ink-70);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.dw-folio-panel__empty {
+    color: var(--dw-ink-40);
+    font-style: italic;
+    font-size: 13px;
+    margin: 0;
+}
+
+.dw-folio-panel__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dw-folio-panel__row {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1.2fr) minmax(0, 1.5fr);
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: var(--dw-field);
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.dw-folio-panel__badge {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.dw-folio-panel__badge--critical {
+    background: rgba(180, 38, 31, 0.12);
+    color: var(--dw-accent-red);
+}
+
+.dw-folio-panel__badge--at-risk {
+    background: rgba(181, 117, 0, 0.12);
+    color: var(--dw-accent-amber);
+}
+
+.dw-folio-panel__badge--healthy {
+    background: rgba(46, 125, 76, 0.12);
+    color: var(--dw-accent-green);
+}
+
+.dw-folio-panel__name {
+    color: var(--dw-ink);
+    font-weight: 600;
+}
+
+.dw-folio-panel__cause {
+    color: var(--dw-ink-70);
+    font-size: 12px;
+}
+
+/* ─── Micro grid (3 stat tiles) ────────────────────────────────────── */
+
+.dw-micro-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    padding: 18px 0 6px;
+    border-top: 1px solid var(--dw-border);
+    margin-bottom: 22px;
+}
+
+@media (max-width: 900px) {
+    .dw-micro-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
+
+.dw-micro {
+    display: grid;
+    gap: 6px;
+}
+
+.dw-micro__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--dw-ink-40);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0;
+}
+
+.dw-micro__value {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--dw-ink);
+    margin: 0;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.dw-micro__sub {
+    font-size: 12px;
+    color: var(--dw-ink-70);
+    line-height: 1.45;
+    margin: 0;
+    max-width: 32ch;
+}
+
+/* ─── Lane grid (3 lanes) ──────────────────────────────────────────── */
+
+.dw-lane-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+@media (max-width: 900px) {
+    .dw-lane-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dw-lane {
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dw-lane__state {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--dw-accent-orange);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0;
+}
+
+.dw-lane__headline {
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--dw-ink);
+    margin: 0;
+}
+
+.dw-lane__copy {
+    font-size: 12.5px;
+    color: var(--dw-ink-70);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.dw-lane__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 4px 0 0;
+    font-size: 11px;
+    color: var(--dw-ink-70);
+}
+
+.dw-lane__meta span {
+    background: var(--dw-field);
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--dw-border);
+}
+
+/* ─── Controls strip ───────────────────────────────────────────────── */
+
+.dw-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0 0;
+    border-top: 1px solid var(--dw-border);
 }
