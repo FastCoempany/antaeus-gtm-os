@@ -16,7 +16,7 @@ export function Topbar(): JSX.Element {
         <header class="ob-topbar">
             <BackButton />
             <p class="ob-topbar__kicker">
-                OUTBOUND STUDIO · WAVE 1 ·{" "}
+                OUTBOUND STUDIO ·{" "}
                 {count > 0
                     ? `${count} ${touchLabel} logged`
                     : "no touches yet"}

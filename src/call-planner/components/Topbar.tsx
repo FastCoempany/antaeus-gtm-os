@@ -19,12 +19,13 @@ export function Topbar(): JSX.Element {
     return (
         <header class="cp-topbar" aria-label="Call Planner header">
             <BackButton />
-            <p class="cp-topbar__kicker">CALLS FAMILY</p>
-            <h1 class="cp-topbar__title">Call Planner</h1>
+            <p class="cp-topbar__kicker">Calls family · Live instrument</p>
+            <h1 class="cp-topbar__title">
+                Walk into the call with conviction, not hope.
+            </h1>
             <p class="cp-topbar__subtitle">
-                Build the call so the actual human reveals the real
-                pressure. One person. One reason now. Three probes. One
-                advance ask.
+                One person. One reason now. Three probes. One advance ask.
+                The plan must die in the call — not in the planner.
             </p>
             <div class="cp-topbar__meta" role="status">
                 <span class="cp-topbar__state">{stateLabel}</span>

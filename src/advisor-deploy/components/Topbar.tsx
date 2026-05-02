@@ -20,8 +20,11 @@ export function Topbar(): JSX.Element {
             <BackButton />
             <div class="ad-topbar__mast">
                 <p class="ad-topbar__kicker">
-                    <strong>Advisor Deploy</strong> · backchannel desk
+                    Live instrument · Backchannel desk
                 </p>
+                <h1 class="ad-topbar__title">
+                    Influence is an asset. Spend it precisely.
+                </h1>
                 <p class="ad-topbar__count">
                     {advisorCount} {advisorCount === 1 ? "advisor" : "advisors"}{" "}
                     · {deploymentCount}{" "}

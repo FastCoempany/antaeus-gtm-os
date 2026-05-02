@@ -16,10 +16,13 @@ export function Topbar(): JSX.Element {
     return (
         <header class="cc-topbar" aria-label="Cold Call Studio header">
             <BackButton />
-            <p class="cc-topbar__kicker">CALLS FAMILY</p>
-            <h1 class="cc-topbar__title">Cold Call Studio</h1>
+            <p class="cc-topbar__kicker">Calls family · Live instrument</p>
+            <h1 class="cc-topbar__title">
+                Weave opener, objection, proof, and ask into one live route.
+            </h1>
             <p class="cc-topbar__subtitle">
-                Route the live call through one thread at a time.
+                Six threads. Pull one at a time. The call is won by
+                narrowing pressure, not widening explanation.
             </p>
             <div class="cc-topbar__meta" role="status">
                 <span class="cc-topbar__state">

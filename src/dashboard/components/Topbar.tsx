@@ -20,7 +20,7 @@ export function Topbar(): JSX.Element {
         <header class="db-topbar">
             <BackButton />
             <div class="db-topbar__lead">
-                <p class="db-topbar__kicker">DASHBOARD · WAVE 1</p>
+                <p class="db-topbar__kicker">DASHBOARD</p>
                 <h1 class="db-topbar__title">What is under the most pressure right now.</h1>
                 <p class="db-topbar__sub">
                     One ranked object. One dominant move. Three density modes —

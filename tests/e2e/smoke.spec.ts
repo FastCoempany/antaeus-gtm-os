@@ -239,7 +239,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".cc-topbar__kicker")).toContainText(
-            "CALLS FAMILY"
+            "Calls family"
         );
         await expect(page.locator(".cc-account-row")).toBeAttached();
         await expect(page.locator(".cc-loom")).toBeAttached();
@@ -261,7 +261,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".lp-topbar__kicker")).toContainText(
-            "OUTBOUND CHANNEL"
+            "Outbound channel"
         );
         await expect(page.locator(".lp-booth")).toBeAttached();
         await expect(page.locator(".lp-ledger")).toBeAttached();
@@ -283,7 +283,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".cp-topbar__kicker")).toContainText(
-            "CALLS FAMILY"
+            "Calls family"
         );
         await expect(page.locator(".cp-witness")).toBeAttached();
         await expect(page.locator(".cp-spine")).toBeAttached();
@@ -306,7 +306,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".ad-topbar__kicker")).toContainText(
-            "Advisor Deploy"
+            "Backchannel desk"
         );
         await expect(page.locator(".ad-desk")).toBeAttached();
         await expect(page.locator(".ad-secondary")).toBeAttached();

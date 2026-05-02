@@ -16,7 +16,7 @@ export function Topbar(): JSX.Element {
         <header class="poc-topbar">
             <BackButton />
             <p class="poc-topbar__kicker">
-                POC FRAMEWORK · WAVE 1 ·{" "}
+                POC FRAMEWORK ·{" "}
                 {count > 0 ? `${count} ${proofLabel} cast` : "no proofs cast yet"}
             </p>
             <h1 class="poc-topbar__title">

@@ -14,11 +14,14 @@ export function Topbar(): JSX.Element {
     return (
         <header class="sw-topbar" aria-label="Sourcing Workbench header">
             <BackButton />
-            <p class="sw-topbar__kicker">Phase 4 / Research loom</p>
-            <h1 class="sw-topbar__title">Sourcing Workbench</h1>
+            <p class="sw-topbar__kicker">Decision bench · Research loom</p>
+            <h1 class="sw-topbar__title">
+                Push only the names the territory will respect.
+            </h1>
             <p class="sw-topbar__subtitle">
                 Turn theses into named, pushable prospects. Polish belongs
-                downstream — this room is for picking the names worth pushing.
+                downstream — this room picks who Signal Console is allowed
+                to spend attention on.
             </p>
             <div class="sw-topbar__stats" role="group" aria-label="Workbench stats">
                 <Stat label="Captured" value={s.captured} />

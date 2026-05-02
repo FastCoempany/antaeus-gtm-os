@@ -18,12 +18,12 @@ export function Topbar(): JSX.Element {
     return (
         <header class="qw-topbar" aria-label="Quota Workback header">
             <BackButton />
-            <p class="qw-topbar__kicker">Phase 4 / Planning board</p>
-            <h1 class="qw-topbar__title">Quota Workback</h1>
+            <p class="qw-topbar__kicker">System ledger · Planning board</p>
+            <h1 class="qw-topbar__title">Make the math feel daily.</h1>
             <p class="qw-topbar__subtitle">
                 Translate quota into the week the team actually has to run.
-                If the math is not believable, the rest of the app is steering
-                from a wrong map.
+                If the math isn't believable, the rest of the app is
+                steering from a wrong map.
             </p>
             <div class="qw-topbar__hero">
                 <div class="qw-hero">
