@@ -19,14 +19,14 @@ export function Topbar(): JSX.Element {
         <header class="fa-topbar">
             <BackButton />
             <p class="fa-topbar__kicker">
-                FUTURE AUTOPSY · WAVE 1 · {DEFAULT_HORIZON_DAYS} days out ·{" "}
+                FUTURE AUTOPSY · {DEFAULT_HORIZON_DAYS} days out ·{" "}
                 {count > 0 ? `${count} ${dealLabel} pinned` : "no deals pinned"}
             </p>
-            <h1 class="fa-topbar__title">Pin the deal as evidence.</h1>
-            <p class="fa-topbar__sub">
-                Pre-mortem the deal before it dies. Pattern, intervention,
-                route. Stage is not truth unless next-step truth backs it
-                up.
+            <h1 class="fa-topbar__title">The deal is pinned as evidence.</h1>
+            <p class="fa-topbar__thesis">
+                This room behaves like a lit evidence surface, not a page.
+                Bring one failure pattern into focus before any corrective
+                route earns legitimacy.
             </p>
         </header>
     );

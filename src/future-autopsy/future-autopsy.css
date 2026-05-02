@@ -601,3 +601,149 @@ button {
 .fa-route-rack__cta--tertiary .fa-route-rack__reason {
     color: var(--fa-ink-70);
 }
+
+/* ─── Phase 2 rework — stacked forensic sheets + thesis line ──────── */
+
+/*
+ * Variant 01 "Forensic Light Table" (canon §4.14): all three sheets
+ * render simultaneously on the pinned case. Reader walks them top-to-
+ * bottom; each adds a layer of evidence on the same case.
+ *
+ * Sentence-shaped sheet titles replace the legacy "pattern / proof /
+ * symptom" categorical tabs.
+ */
+
+.fa-topbar__thesis {
+    font-size: 15px;
+    color: var(--fa-ink-70);
+    margin: 8px 0 0;
+    max-width: 56ch;
+    line-height: 1.55;
+    font-style: italic;
+}
+
+.fa-sheet--stacked {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.fa-stack-sheet {
+    background: var(--fa-field-raised);
+    border: 1px solid var(--fa-border);
+    border-left: 4px solid var(--fa-ink-15);
+    border-radius: 6px;
+    padding: 18px 22px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-left-color 200ms ease;
+}
+
+.fa-sheet--corrected .fa-stack-sheet {
+    border-left-color: var(--fa-accent-green, #2e7d4c);
+}
+
+.fa-sheet--left_alone .fa-stack-sheet {
+    border-left-color: var(--fa-accent-red, #b4261f);
+}
+
+.fa-stack-sheet__head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--fa-border);
+}
+
+.fa-stack-sheet__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--fa-ink-40);
+    text-transform: uppercase;
+    font-weight: 700;
+    flex: 0 0 auto;
+}
+
+.fa-stack-sheet__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(18px, 2vw, 22px);
+    line-height: 1.25;
+    font-weight: 400;
+    color: var(--fa-ink);
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.fa-stack-sheet__copy,
+.fa-stack-sheet__story {
+    font-size: 14px;
+    color: var(--fa-ink-70);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.fa-stack-sheet__story {
+    font-style: italic;
+    border-left: 2px solid var(--fa-ink-15);
+    padding-left: 12px;
+    margin: 4px 0 8px;
+}
+
+.fa-stack-sheet__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fa-stack-sheet__row {
+    display: grid;
+    grid-template-columns: minmax(110px, max-content) 1fr;
+    gap: 12px;
+    padding: 6px 0;
+    align-items: baseline;
+    font-size: 13px;
+}
+
+.fa-stack-sheet__row--evidence {
+    border-bottom: 1px dashed var(--fa-border);
+    padding-bottom: 6px;
+}
+
+.fa-stack-sheet__row-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--fa-ink-40);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.fa-stack-sheet__row-text {
+    color: var(--fa-ink);
+    line-height: 1.5;
+}
+
+.fa-stack-sheet__proof {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fa-sheet__empty {
+    color: var(--fa-ink-40);
+    font-style: italic;
+    font-size: 13px;
+    margin: 0;
+    padding: 24px;
+    text-align: center;
+}
