@@ -15,7 +15,7 @@ export function Topbar(): JSX.Element {
         <header class="sc-topbar">
             <BackButton />
             <p class="sc-topbar__kicker">
-                SIGNAL CONSOLE · WAVE 1 ·{" "}
+                SIGNAL CONSOLE ·{" "}
                 {count > 0
                     ? `${count} account${count === 1 ? "" : "s"} loaded`
                     : "no accounts yet"}

@@ -18,12 +18,14 @@ export function Topbar(): JSX.Element {
     return (
         <header class="lp-topbar" aria-label="LinkedIn Playbook header">
             <BackButton />
-            <p class="lp-topbar__kicker">OUTBOUND CHANNEL</p>
-            <h1 class="lp-topbar__title">LinkedIn Playbook</h1>
+            <p class="lp-topbar__kicker">Outbound channel · Live instrument</p>
+            <h1 class="lp-topbar__title">
+                Enter only when the room gives a cue.
+            </h1>
             <p class="lp-topbar__subtitle">
-                Use LinkedIn as live channel air cover for real account
-                motion. Watch the cue, take the public touch, then log what
-                actually happened.
+                Five cues, ladder-ordered: watch, comment, connect,
+                give-first, ask. The inbox is never the opening scene —
+                the public cue is.
             </p>
             <div class="lp-topbar__meta" role="status">
                 <span class="lp-topbar__state">{headerState}</span>

@@ -25,7 +25,7 @@ export function Topbar(props: TopbarProps): JSX.Element {
         <header class="fg-topbar">
             <BackButton fallbackLabel="Back to Dashboard" />
             <div class="fg-topbar__lead">
-                <p class="fg-topbar__kicker">FOUNDING GTM · WAVE 1</p>
+                <p class="fg-topbar__kicker">FOUNDING GTM</p>
                 <h1 class="fg-topbar__title">
                     What your first hire opens on day one.
                 </h1>

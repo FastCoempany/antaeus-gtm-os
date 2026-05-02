@@ -93,6 +93,17 @@ body {
     font-weight: 800;
 }
 
+.ad-topbar__title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: clamp(28px, 3.4vw, 38px);
+    line-height: 1.1;
+    font-weight: 400;
+    color: var(--ad-ink, #0a1c40);
+    margin: 6px 0 0;
+    letter-spacing: -0.005em;
+    max-width: 24ch;
+}
+
 .ad-topbar__count {
     margin: 0;
     font-family: "JetBrains Mono", ui-monospace, monospace;
