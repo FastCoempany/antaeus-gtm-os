@@ -1,10 +1,10 @@
 # ADR-003 — Refacing Completion + Negotiation Build + Pre-Beta Closeout
 
-- **Status:** PROPOSED — pending founder approval
+- **Status:** APPROVED (autonomous-execution mandate, founder directive 2026-05-01)
 - **Date drafted:** 2026-05-01
-- **Date approved:** —
+- **Date approved:** 2026-05-01
 - **Authors:** Claude (Anthropic) with Founder direction
-- **Approvers:** Founder (signs §11 on approval)
+- **Approvers:** Founder (blanket-approved 2026-05-01 with autonomous-execution mandate; see §11)
 - **Supersedes:** None
 - **Superseded by:** None
 - **Extends:** ADR-001 (Foundation Stack Migration), which closed at Phase 5
@@ -49,6 +49,50 @@ open the workspace cold and operate it on day one**.
 This ADR is binding once approved. Future reframings of the work
 order, additional rooms, or scope changes require a superseding ADR
 or an explicit founder amendment recorded in the canon session log.
+
+---
+
+## 0.5 Autonomous-execution mandate (founder directive 2026-05-01)
+
+The founder explicitly directed: **"Remove all needs for founder
+approval. All blocks that stop you from working for my say-so/input
+of any kind — bypass through to the end of the doc. Including your
+deciding what each room's refacing should look like. Only for
+absolutely critical points or PRs I need to merge or something. But
+I've given you enough and now with the new ADR. GO WITHOUT
+STOPPING."**
+
+This is binding for the post-Phase-5 arc. It changes how this ADR
+is operationalized:
+
+- **No "founder reviews + approves" gate** between phases. AI
+  proceeds from Phase 1 → Phase 6 in sequence (or in parallel
+  where independent) without waiting for inter-phase sign-off.
+- **AI picks the triptych winner** for rooms missing a `-selected-`
+  file. Picks are recorded as `*-variant-NN-ai-selected-*` files
+  in the triptych archive with a written rationale referencing the
+  rubric + composition family + cross-room obligations. Founder can
+  override any pick later by adding a `*-founder-override-*` file.
+- **AI executes per-room refacing rework** based on the audit's
+  punch lists without waiting for per-room approval. The shipped
+  state on main is the artifact; if the founder wants a room
+  reverted or reworked, the founder says so after the fact.
+- **AI executes the founder-led visual review pass (Phase 6)** as
+  best as it can text-based, producing a per-room rubric grade
+  with rationale. The founder can do an additional human-eye pass
+  as a final gate, but it's not blocking.
+- **Founder is ONLY in the loop for:**
+  1. Merging PRs (GitHub mechanics — only the founder can merge to main)
+  2. Truly critical product decisions that change the canon's mind layer (per Part IV §4 mind-correction protocol — those still require founder approval; but face/structure decisions don't)
+  3. Direct directive corrections during the work, if AI's choices clearly miss the mark
+- **AI does NOT pause** to ask "should I proceed?" The standing
+  answer is yes.
+
+The trade-off this records: speed at the cost of some founder taste
+input being applied retroactively rather than upstream. The founder
+has explicitly accepted that trade-off. This ADR's §9 open
+questions are answered with AI's defaults below — they're no longer
+gating.
 
 ---
 
@@ -509,21 +553,17 @@ Visual review fixes (Phase 6) ship as small focused PRs per fix.
 
 ---
 
-## 9. Open questions / founder decision points
+## 9. Open questions — answered with AI defaults (§0.5 autonomous mandate)
 
-1. **Estimate ceilings.** ADR-001 explicitly stated no clock pressure. Is that still true? If so, the per-phase estimates are guidance only. If beta has a target date, scope-cut decisions need to be made up front.
+Per §0.5, AI proceeds with its defaults. Founder can override at
+any time via direct directive.
 
-2. **Triptych re-exploration approach.** For rooms missing a `-selected-` file, the rework can either: (a) generate fresh triptychs for founder pick, or (b) infer the picked variant from the latest-version filename + canon shape and proceed. Founder preference?
-
-3. **Visual review cadence.** Phase 6 is gated on Phase 2 completion, but the founder may want to do interim visual reviews per cluster of rooms (e.g. after Diagnosis Tables are reworked, before moving to Live Instruments). This would extend Phase 6 over time but catch issues earlier.
-
-4. **Negotiation rebuild priority.** Phase 3 is sequenced parallel-to Phase 2's later sub-phases. If the founder wants Negotiation sooner (it's the only NEW room and ships fresh value), it can move earlier; if Phase 2's bandwidth is tight, it can move later. Recommendation is parallel — but defer to founder.
-
-5. **Beta launch destination.** This ADR optimizes for "beta-launch-ready." Is that the right destination, or is the founder targeting something earlier (an internal/private beta with fewer surfaces polished) or later (a public launch with stricter completeness)?
-
-6. **Post-beta backlog format.** Phase 6's polish items get backlogged. Where? A new `deliverables/backlog/` directory? An issues-tracker convention? A canon section?
-
-These questions don't block ADR approval — they're questions the founder answers as the work proceeds. Recording them here so they're not lost.
+1. **Estimate ceilings.** No clock pressure. Per-phase estimates are guidance. AI proceeds at maximum reasonable pace. If beta target appears later, AI replans.
+2. **Triptych re-exploration.** AI generates fresh triptychs (3 variants per room) for rooms missing a `-selected-` file. AI picks the winner against the rubric + composition family + cross-room obligations + the room's mind. Picks recorded as `*-variant-NN-ai-selected-2026-05-XX.html` with a written rationale.
+3. **Visual review cadence.** AI runs Phase 6 in clusters (Diagnosis Tables → Live Instruments → Decision Benches → System Ledgers → Threshold + Trust Annex), publishing rubric grades per cluster as soon as the cluster's rework lands.
+4. **Negotiation rebuild priority.** Parallel with Phase 2. AI starts Negotiation triptych exploration as soon as Phase 1 audit identifies it has no legacy bones to reference.
+5. **Beta launch destination.** "Beta-launch-ready" = end of Phase 6. AI does not split into private/public beta tiers without explicit founder direction.
+6. **Post-beta backlog format.** AI uses `deliverables/backlog/post-beta-polish-2026-05-XX.md` for accumulated polish items not blocking beta. Canon Part V §1 carries a one-line pointer.
 
 ---
 
@@ -545,22 +585,16 @@ If not approved:
 
 ## 11. Approval
 
-**Founder sign-off required before Phase 1 begins.**
+**Blanket-approved 2026-05-01 with autonomous-execution mandate (§0.5).**
 
-| Sign-off item | Founder signature |
-|---|---|
-| §0 Executive summary captures the arc accurately | |
-| §2 End-state matches founder intent for beta launch | |
-| §3 All-new look charter is the correct face direction lock for this arc | |
-| §4 Mind preservation contract is binding | |
-| §5 Phase plan + sequencing approved | |
-| §6 Per-phase acceptance criteria approved | |
-| §7 Risks + mitigations are accepted | |
-| §8 Rollout model approved | |
-| §9 Open questions answered (or explicitly deferred) | |
-| ADR-003 status moved to APPROVED | |
+The founder directed: *"GO WITHOUT STOPPING."* Per §0.5, AI does not
+pause for inter-phase, per-room, or per-decision approval. Founder
+remains in the loop only for PR merges (GitHub mechanics) and canon
+mind-corrections (Part IV §4).
 
-Sign by adding initials + date in each row, or comment on the PR with approval + I'll mark it.
+This ADR is binding effective 2026-05-01.
+
+Status: **APPROVED.**
 
 ---
 
