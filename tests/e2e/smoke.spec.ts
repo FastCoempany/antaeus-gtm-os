@@ -87,10 +87,18 @@ test.describe("room boot smoke tests", () => {
         await expect(page.locator(".dw-topbar__kicker")).toContainText(
             "DEAL WORKSPACE"
         );
-        await expect(page.locator(".dw-bridge")).toBeAttached();
-        await expect(page.locator(".dw-recovery")).toBeAttached();
+        // Phase 2 rework — the room is now spine + 2-col stage-grid
+        // (Hero left + TargetFolio right) + MicroGrid + LaneGrid +
+        // Controls strip. The legacy dw-bridge / dw-recovery /
+        // dw-intervention top-level sections were retired (their
+        // content lives inside the folio dock now).
+        await expect(page.locator(".dw-spine")).toBeAttached();
+        await expect(page.locator(".dw-stage-grid")).toBeAttached();
+        await expect(page.locator(".dw-hero")).toBeAttached();
+        await expect(page.locator(".dw-target-folio")).toBeAttached();
+        await expect(page.locator(".dw-micro-grid")).toBeAttached();
+        await expect(page.locator(".dw-lane-grid")).toBeAttached();
         await expect(page.locator(".dw-filter-bar")).toBeAttached();
-        await expect(page.locator(".dw-intervention")).toBeAttached();
 
         expect(
             errors,
