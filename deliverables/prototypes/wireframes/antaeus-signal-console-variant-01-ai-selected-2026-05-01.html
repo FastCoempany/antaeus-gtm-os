@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Antaeus Signal Console · Variant 01 (AI-selected)</title>
+<style>
+:root{--ink:#0a1c40;--ink-70:rgba(10,28,64,0.7);--ink-40:rgba(10,28,64,0.4);--field:#f6f8fc;--paper:#fff;--orange:#e6701e;--blue:#2563eb;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--line:rgba(10,28,64,0.1)}
+*{box-sizing:border-box}body{margin:0;padding:32px;font-family:"Public Sans",sans-serif;background:var(--field);color:var(--ink)}
+.frame{max-width:1280px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:32px}
+.kicker{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.18em;color:var(--ink-70);text-transform:uppercase;margin:0 0 14px}
+h1{font-family:"DM Serif Display",serif;font-size:48px;line-height:1.04;font-weight:400;margin:0 0 12px;letter-spacing:-0.01em;max-width:18ch}
+.thesis{font-size:16px;color:var(--ink-70);margin:0 0 32px;max-width:60ch;line-height:1.55;font-style:italic}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px;display:grid;gap:8px}
+.card.is-hot{border-left:4px solid var(--red)}
+.card.is-active{border-left:4px solid var(--orange)}
+.card.is-watch{border-left:4px solid var(--amber)}
+.heat{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700}
+.heat--hot{color:var(--red)}.heat--active{color:var(--orange)}.heat--watch{color:var(--amber)}
+.name{font-family:"DM Serif Display",serif;font-size:22px;font-weight:400;margin:0;line-height:1.15}
+.signal{font-size:12.5px;color:var(--ink-70);line-height:1.45}
+.action{display:flex;gap:8px;margin-top:6px}
+.btn{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);cursor:pointer;font-weight:600}
+.btn--primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.posture{display:flex;gap:24px;padding:18px 0;margin:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.posture__cell{display:grid;gap:4px}
+.posture__label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.16em;color:var(--ink-40);text-transform:uppercase}
+.posture__value{font-family:"DM Serif Display",serif;font-size:24px;color:var(--ink)}
+.rationale{margin-top:32px;padding:18px;background:#fdf6e9;border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:4px}
+.rationale h3{font-family:"DM Serif Display",serif;font-size:18px;margin:0 0 8px;font-weight:400}
+.rationale p{margin:0 0 8px;font-size:14px;line-height:1.55;color:var(--ink-70)}
+.rationale strong{color:var(--ink)}
+</style></head>
+<body>
+<div class="frame">
+<p class="kicker">Live instrument · Signal Console · Variant 01 — AI-selected 2026-05-01</p>
+<h1>Where account heat becomes real work.</h1>
+<p class="thesis">Signals are time-limited events. Heat ranks them. Motion comes from the account ledger — not from research piling up. The room must read as a live radar, not a passive timeline.</p>
+
+<div class="posture">
+  <div class="posture__cell"><span class="posture__label">Posture</span><span class="posture__value">Motion-ready</span></div>
+  <div class="posture__cell"><span class="posture__label">Active</span><span class="posture__value">12</span></div>
+  <div class="posture__cell"><span class="posture__label">Hot ≥ 75</span><span class="posture__value">3</span></div>
+  <div class="posture__cell"><span class="posture__label">Top heat</span><span class="posture__value">94</span></div>
+</div>
+
+<div class="grid">
+  <article class="card is-hot">
+    <span class="heat heat--hot">HOT · 94</span>
+    <h2 class="name">Northstar Health</h2>
+    <p class="signal">CFO churn announced 4d ago. Procurement reorg in motion. Deal mirror shows ice_cold — touched on email only.</p>
+    <div class="action"><button class="btn btn--primary">Compose outbound</button><button class="btn">Plan call</button></div>
+  </article>
+  <article class="card is-hot">
+    <span class="heat heat--hot">HOT · 88</span>
+    <h2 class="name">Apex Fintech</h2>
+    <p class="signal">Series-B announcement 6d ago + Director of Ops hire posted. Deal mirror: post-prospect (warm); needs follow-through.</p>
+    <div class="action"><button class="btn btn--primary">Open in Deal Workspace</button><button class="btn">Plan call</button></div>
+  </article>
+  <article class="card is-active">
+    <span class="heat heat--active">ACTIVE · 78</span>
+    <h2 class="name">Meridian Logistics</h2>
+    <p class="signal">Earnings call last week mentioned "operational drag" twice. No outbound this month. Cool temperature.</p>
+    <div class="action"><button class="btn btn--primary">Compose outbound</button><button class="btn">Cold call</button></div>
+  </article>
+</div>
+
+<div class="rationale">
+  <h3>AI-pick rationale (per ADR-003 §0.5 + §9 Q2)</h3>
+  <p>Signal Console had no triptych in the archive — notable gap given canon §5 named-asset protection. The shipped shape (heat-ranked account grid + execution-context temperature + workspace-health pulse) is rubric-defensible and matches canon §4.7's mind directly. AI confirms this as the de-facto pick post-exploration.</p>
+  <p><strong>What this variant captures:</strong> the room as a live radar — heat is the dominant rank, not a count. Per-card execution context (ice_cold / cool / warm / hot temperature ladder from outbound + deal mirrors) appears as a single dominant CTA that changes by state. Workspace-health pulse renders as compact posture line, not summary essay (canon Part III §3 Rule 7).</p>
+  <p><strong>Why not "passive timeline" or "signal feed":</strong> those framings would invert the canon's account-to-motion logic. The room ranks accounts and exposes signals as evidence; it doesn't rank signals and treat accounts as folders.</p>
+</div>
+</div>
+</body></html>

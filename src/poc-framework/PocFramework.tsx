@@ -2,31 +2,30 @@ import type { JSX } from "preact";
 import { Topbar } from "./components/Topbar";
 import { ForgePanel } from "./components/ForgePanel";
 import { CastPanel } from "./components/CastPanel";
+import { StageStrip } from "./components/StageStrip";
 
 /**
- * PocFramework — Wave 1 root.
+ * PocFramework — Phase 2 rework against AI-picked v3 thesis
+ * "Proof is not a page. It is a forced event."
  *
- * Per canon §4.15 (Decision Bench) + Part II §4.8 (dark hero hybrid):
+ * Per canon §4.15 (Decision Bench), bright per Part II §1
+ * (the §4.8 hybrid retired 2026-04-27).
  *
- *   ┌─────────────────────────────────────────────────────────────────┐
- *   │  Topbar: kicker + serif thesis + dynamic count                  │
- *   ├──────────────────────────────────┬──────────────────────────────┤
- *   │  ForgePanel (dark "forge" half)  │  CastPanel (cream "cast")    │
- *   │  - proof form                    │  - weakest-mold              │
- *   │  - heat ledger                   │  - generated documents       │
- *   │                                  │  - route rack                │
- *   └──────────────────────────────────┴──────────────────────────────┘
- *
- * Wave 1 ships structural completeness. Wave 2 ports the heat +
- * weakest-mold + quality engines. Wave 3 wires the forge form. Wave 4
- * wires the cast docs + persistence. Wave 5 wires cross-room handoff
- * + URL ?deal= inbound + sync-back into the deal record. Wave 6
- * adds the legacy flag-redirect cutover.
+ *   ┌───────────────────────────────────────────────────────────┐
+ *   │  Topbar: kicker + thesis + dynamic count                  │
+ *   ├───────────────────────────────────────────────────────────┤
+ *   │  StageStrip: forge → cast → readout (temporal flow)       │
+ *   ├──────────────────────────────────┬────────────────────────┤
+ *   │  ForgePanel                      │  CastPanel             │
+ *   │  - proof form                    │  - weakest-mold        │
+ *   │  - heat ledger                   │  - documents + routes  │
+ *   └──────────────────────────────────┴────────────────────────┘
  */
 export function PocFramework(): JSX.Element {
     return (
         <div class="poc-shell">
             <Topbar />
+            <StageStrip />
             <div class="poc-stage">
                 <ForgePanel />
                 <CastPanel />

@@ -660,3 +660,71 @@ button {
 .poc-route-rack__cta--ghost .poc-route-rack__reason {
     color: var(--poc-ink-70);
 }
+
+/* ─── Stage strip (Phase 2 rework — v3 "forced event" thesis) ──────── */
+
+.poc-stage-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 18px 0 22px;
+    padding: 14px 0;
+    border-top: 1px solid var(--poc-border, rgba(10, 28, 64, 0.1));
+    border-bottom: 1px solid var(--poc-border, rgba(10, 28, 64, 0.1));
+}
+
+.poc-stage-strip__step {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: baseline;
+    column-gap: 12px;
+    row-gap: 4px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background 200ms ease;
+}
+
+.poc-stage-strip__step--current {
+    background: rgba(230, 112, 30, 0.05);
+}
+
+.poc-stage-strip__step--complete .poc-stage-strip__index,
+.poc-stage-strip__step--complete .poc-stage-strip__label {
+    color: var(--poc-green, #2e7d4c);
+}
+
+.poc-stage-strip__step--ahead {
+    opacity: 0.42;
+}
+
+.poc-stage-strip__index {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--poc-orange, #e6701e);
+    font-weight: 700;
+}
+
+.poc-stage-strip__step--ahead .poc-stage-strip__index {
+    color: var(--poc-ink-40, rgba(10, 28, 64, 0.4));
+}
+
+.poc-stage-strip__label {
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+    color: var(--poc-ink, #0a1c40);
+    font-weight: 400;
+}
+
+.poc-stage-strip__thesis {
+    grid-column: 1 / -1;
+    font-size: 12px;
+    color: var(--poc-ink-70, rgba(10, 28, 64, 0.7));
+    line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+    .poc-stage-strip {
+        grid-template-columns: 1fr;
+    }
+}
