@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - Antaeus GTM OS</title>
+    <title>Create the workspace · Antaeus</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -121,11 +121,11 @@
             }
 
             if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
-                window.location.href = '/app/onboarding/';
+                window.location.href = '/onboarding/';
                 return;
             }
 
-            window.location.href = '/app/dashboard/';
+            window.location.href = '/dashboard/';
         }
 
         document.addEventListener('DOMContentLoaded', async () => {

@@ -46,7 +46,7 @@
           (profile && profile.onboarding_completed === true) ||
           (onboarding && onboarding.completed === true)
         );
-        var route = !completed ? '/app/onboarding/' : ((seen === '1' || seen === 'true') ? '/app/dashboard/' : '/app/welcome/');
+        var route = !completed ? '/onboarding/' : ((seen === '1' || seen === 'true') ? '/dashboard/' : '/welcome/');
         window.location.replace(route);
       } catch (e) {}
     })();
