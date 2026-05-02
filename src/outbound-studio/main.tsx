@@ -1,9 +1,12 @@
 import { render } from "preact";
+import { computed } from "@preact/signals";
 import { OutboundStudio } from "./OutboundStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
+import { startUnsavedGuard } from "@/lib/unsaved-guard";
 import {
     patchRack,
+    rack,
     setAccountOptions,
     setAllAngles,
     setAllTouches,
@@ -66,6 +69,21 @@ if (Object.keys(inbound).length > 0) {
 }
 
 render(<OutboundStudio />, root);
+
+// Phase 5 of ADR-003 (pre-beta hygiene §5.5.1) — wire unsaved-changes
+// guard. Operator rack draft (account / contact / persona / temperature
+// / trigger / nextQuestion) is unsaved until the operator clicks
+// "Log touch" or "Save angle". The guard fires beforeunload only when
+// rack carries meaningful content.
+const rackDirty = computed(() => {
+    const r = rack.value;
+    return (
+        (r.accountName ?? "").trim().length > 0 ||
+        (r.contactName ?? "").trim().length > 0 ||
+        (r.nextQuestion ?? "").trim().length > 0
+    );
+});
+startUnsavedGuard(rackDirty, "Outbound Studio");
 
 // Async cloud load for touch history. Doesn't block first paint.
 // Replaces local touches if cloud has rows; migrates local up if cloud
