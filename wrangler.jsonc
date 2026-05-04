@@ -1,6 +1,9 @@
 {
   "name": "autumn-water-148a",
   "compatibility_date": "2026-04-21",
+  "build": {
+    "command": "npm run build:cloudflare"
+  },
   "assets": {
     "directory": "./dist",
     "html_handling": "auto-trailing-slash",
