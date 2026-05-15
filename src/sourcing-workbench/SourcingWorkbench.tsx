@@ -5,6 +5,7 @@ import { ProspectComposer } from "./components/ProspectComposer";
 import { ProspectKanban } from "./components/ProspectKanban";
 import { HandoffStrip } from "./components/HandoffStrip";
 
+import { Wordmark } from "@/lib/wordmark";
 /**
  * SourcingWorkbench — Phase 4 / Room 13 root.
  *
@@ -26,6 +27,9 @@ import { HandoffStrip } from "./components/HandoffStrip";
 export function SourcingWorkbench(): JSX.Element {
     return (
         <div class="sw-shell">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="SOURCING WORKBENCH" />
+            </div>
             <Topbar />
             <div class="sw-bench-grid">
                 <QueryStudio />

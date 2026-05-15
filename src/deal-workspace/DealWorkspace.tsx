@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { BackButton } from "@/lib/back-button";
+import { Wordmark } from "@/lib/wordmark";
 import { FilterBar } from "./components/FilterBar";
 import { Hero } from "./components/Hero";
 import { LaneGrid } from "./components/LaneGrid";
@@ -39,6 +40,9 @@ export function DealWorkspace(): JSX.Element {
 
     return (
         <div class="dw-shell">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="DEAL WORKSPACE" />
+            </div>
             <Spine />
             <div class="dw-surface">
                 <header class="dw-topbar">

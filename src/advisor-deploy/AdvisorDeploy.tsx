@@ -3,6 +3,7 @@ import { Topbar } from "./components/Topbar";
 import { DeskBoard } from "./components/DeskBoard";
 import { SecondaryStack } from "./components/SecondaryStack";
 
+import { Wordmark } from "@/lib/wordmark";
 /**
  * AdvisorDeploy — Wave 1 root.
  *
@@ -29,6 +30,9 @@ import { SecondaryStack } from "./components/SecondaryStack";
 export function AdvisorDeploy(): JSX.Element {
     return (
         <div class="ad-shell">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="ADVISOR DEPLOY" />
+            </div>
             <Topbar />
             <DeskBoard />
             <SecondaryStack />
