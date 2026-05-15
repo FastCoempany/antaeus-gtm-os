@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
-import { dealFilter, setDealFilter, type DealFilter } from "../state";
+import { allDeals, dealFilter, setDealFilter, type DealFilter } from "../state";
+import { exportDealsCsv } from "../lib/export-csv";
 
 /**
  * FilterBar — Wave 5.
@@ -28,6 +29,7 @@ const CHIPS: ReadonlyArray<ChipDef> = [
 
 export function FilterBar(): JSX.Element {
     const active = dealFilter.value;
+    const count = allDeals.value.length;
     return (
         <nav class="dw-filter-bar" aria-label="Deal filter">
             <span class="dw-filter-bar__label">Filter</span>
@@ -50,6 +52,19 @@ export function FilterBar(): JSX.Element {
                     );
                 })}
             </ul>
+            <button
+                type="button"
+                class="dw-filter-bar__export"
+                onClick={() => exportDealsCsv(allDeals.value)}
+                disabled={count === 0}
+                title={
+                    count === 0
+                        ? "No deals to export"
+                        : `Export ${count} deal${count === 1 ? "" : "s"} as CSV`
+                }
+            >
+                Export CSV
+            </button>
         </nav>
     );
 }

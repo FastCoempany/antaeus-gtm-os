@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { useEffect } from "preact/hooks";
 import type { ReadinessSummary, Verdict } from "@/lib/readiness";
+import { exportReadinessJson } from "../lib/readiness-export";
 
 /**
  * Readiness Drawer — single-fold overlay (canon §4.17).
@@ -55,6 +56,12 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
 
     const tone = VERDICT_TONE[props.summary.verdict];
     const subtitle = VERDICT_SUBTITLE[props.summary.verdict];
+
+    function handleExport(): void {
+        // Fire-and-forget. Multiple rapid clicks would only queue
+        // duplicate downloads; the typical use is one click.
+        void exportReadinessJson(props.summary);
+    }
 
     return (
         <div
@@ -164,6 +171,17 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                         )}
                     </section>
                 )}
+
+                <footer class="db-readiness-drawer__footer">
+                    <button
+                        type="button"
+                        class="db-readiness-drawer__export"
+                        onClick={handleExport}
+                        title="Download the verdict + dimensions + history as JSON"
+                    >
+                        Export verdict + history
+                    </button>
+                </footer>
             </aside>
         </div>
     );

@@ -330,6 +330,28 @@ button {
     border-color: var(--dw-ink);
 }
 
+.dw-filter-bar__export {
+    margin-left: auto;
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border-strong);
+    color: var(--dw-ink);
+    padding: 5px 14px;
+    font-size: 12px;
+    border-radius: 999px;
+    font-family: inherit;
+    transition: background 140ms ease, border-color 140ms ease;
+}
+
+.dw-filter-bar__export:hover:not(:disabled) {
+    background: rgba(10, 28, 64, 0.08);
+    border-color: var(--dw-ink);
+}
+
+.dw-filter-bar__export:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
 /* ─── Intervention rail ────────────────────────────────────────────── */
 
 .dw-intervention {
