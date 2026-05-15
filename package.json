@@ -3,7 +3,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "npm run build:cloudflare && playwright test",
@@ -12,6 +12,7 @@
     "deploy:cloudflare": "npm run build:cloudflare && npx wrangler versions upload"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260515.1",
     "@playwright/test": "^1.59.1",
     "@preact/preset-vite": "^2.10.5",
     "@testing-library/preact": "^3.2.4",

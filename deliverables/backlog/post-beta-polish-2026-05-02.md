@@ -115,6 +115,28 @@ Currently a single-line headline ("Your first go-to-market hire
 just became more predictable.") on a dark gradient. Real marketing
 landing is post-beta work.
 
+Note (2026-05-15): an unlock-code form was added to this page in
+PR #65 (pre-beta gate). The marketing rewrite that eventually
+replaces this page should preserve the unlock form (or move it
+behind tighter access control) until beta launches.
+
+### Pre-beta gate — shipped in PR #65 (2026-05-15)
+
+`worker/index.ts` (Cloudflare Worker middleware) bounces every
+visitor to `coming-soon.html` unless they have the `antaeus_gate`
+cookie. The cookie is set via `/_gate/unlock?code=<code>` when the
+code matches the configured `GATE_CODE` (currently `741407`).
+
+Operating notes:
+- To disable the gate later, set `GATE_ENABLED=false` in
+  `wrangler.jsonc` `vars` and redeploy. No code change required.
+- To rotate the code, update `GATE_CODE` in `vars` and redeploy.
+  Existing unlocked sessions invalidate immediately (cookie value
+  is compared against the live env var).
+- Static assets under `/css/`, `/js/`, `/fonts/`, `/assets/` pass
+  through ungated so `coming-soon.html` can render cleanly without
+  authentication.
+
 ### `marketing-landing-preview.html`
 Currently a preview file. Decide pre-launch whether it becomes
 the production landing or stays archived.
