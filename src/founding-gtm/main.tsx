@@ -1,10 +1,12 @@
 import { render } from "preact";
 import { FoundingGtm } from "./FoundingGtm";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { startUnsavedGuard } from "@/lib/unsaved-guard";
 import {
     authoredSections,
     setCeremonyEvent,
-    setSectionsInput
+    setSectionsInput,
+    shareComposerOpen
 } from "./state";
 import { loadSectionsInput } from "./lib/cross-room";
 import { startHealthPublishing } from "./lib/health-publisher";
@@ -62,6 +64,15 @@ if (typeof window !== "undefined") {
 }
 
 render(<FoundingGtm />, root);
+
+// Unsaved-changes guard — when the share-link composer is open, the
+// operator may be mid-typing the recipient email or note. Bounce them
+// to confirm on nav-away. The composer's draft form state isn't yet
+// hoisted into a signal (Wave 4 will), so we approximate with the
+// composer-open signal — false positives only fire when the user
+// opens the composer and immediately navigates away, which is rare
+// and the browser confirm is cheap to dismiss.
+startUnsavedGuard(shareComposerOpen, "Founding GTM");
 
 // Wave 4 — section-readiness publisher. Writes
 // `gtmos_founding_gtm_health` to localStorage on every section

@@ -1,9 +1,11 @@
 import { render } from "preact";
-import { effect } from "@preact/signals";
+import { computed, effect } from "@preact/signals";
 import { Negotiation } from "./Negotiation";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { startUnsavedGuard } from "@/lib/unsaved-guard";
 import {
     allNegotiations,
+    draft,
     learnings,
     setAllNegotiations,
     setDealId,
@@ -71,3 +73,21 @@ const initialLearnings = loadLearnings();
 if (initialLearnings.length > 0) {
     learnings.value = initialLearnings;
 }
+
+// Unsaved-changes guard — fire beforeunload if the draft carries
+// meaningful operator content that hasn't been frozen into a saved
+// negotiation. counterparty + counterpartyName + startingPosition +
+// walkawayPosition + openingLine + notes are the operator-authored
+// fields; presence of any non-empty trimmed value is dirty.
+const draftDirty = computed(() => {
+    const d = draft.value;
+    if (d.status === "closed") return false;
+    return (
+        (d.counterpartyName ?? "").trim().length > 0 ||
+        (d.startingPosition ?? "").trim().length > 0 ||
+        (d.walkawayPosition ?? "").trim().length > 0 ||
+        (d.openingLine ?? "").trim().length > 0 ||
+        (d.notes ?? "").trim().length > 0
+    );
+});
+startUnsavedGuard(draftDirty, "Negotiation");

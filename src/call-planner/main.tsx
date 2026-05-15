@@ -1,8 +1,11 @@
 import { render } from "preact";
+import { computed } from "@preact/signals";
 import { CallPlanner } from "./CallPlanner";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
+import { startUnsavedGuard } from "@/lib/unsaved-guard";
 import {
+    draft,
     hydrateDraftFromSnapshot,
     setAccountOptions,
     setContactName,
@@ -71,6 +74,20 @@ const inbound = readInboundAccount();
 if (inbound) setContactName(inbound);
 
 startAgendaAutosave();
+
+// Unsaved-changes guard — autosave already writes drafts to
+// localStorage as the operator types, but mid-typing the operator may
+// have rich context not yet snapshotted. Fire beforeunload if any
+// operator-authored field carries content.
+const witnessDirty = computed(() => {
+    const d = draft.value;
+    return (
+        (d.contactName ?? "").trim().length > 0 ||
+        (d.customNotes ?? "").trim().length > 0 ||
+        (d.linkedinUrl ?? "").trim().length > 0
+    );
+});
+startUnsavedGuard(witnessDirty, "Call Planner");
 
 render(<CallPlanner />, root);
 
