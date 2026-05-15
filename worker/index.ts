@@ -111,21 +111,6 @@ function isSafeNextPath(next: string): boolean {
     return true;
 }
 
-/**
- * Fetch the coming-soon HTML from the assets binding, regardless of
- * which coming-soon path variant the visitor typed. CF's
- * html_handling: "auto-trailing-slash" only resolves directory paths
- * to `index.html`, so /coming-soon and /coming-soon/ would 404
- * because the file is at /coming-soon.html. We rewrite to the
- * canonical .html path before handing to env.ASSETS.fetch.
- */
-function fetchComingSoon(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
-    url.pathname = COMING_SOON_PATH;
-    const rewritten = new Request(url.toString(), request);
-    return env.ASSETS.fetch(rewritten);
-}
-
 export default {
     async fetch(request: Request, env: Env): Promise<Response> {
         const url = new URL(request.url);
@@ -143,36 +128,37 @@ export default {
             return makeUnlockResponse(code, safeNext, gateCode(env), url.origin);
         }
 
-        // Already unlocked → pass through. We special-case the
-        // coming-soon paths even when unlocked so an explicitly typed
-        // `/coming-soon` URL still resolves (otherwise the assets
-        // handler 404s on the missing trailing-.html).
+        // Already unlocked → pass through. CF's html_handling
+        // resolves /coming-soon to coming-soon.html natively; the
+        // Worker does NOT rewrite (an earlier rewrite to .html caused
+        // a redirect loop with auto-trailing-slash bouncing back to
+        // /coming-soon).
         const cookieHeader = request.headers.get("Cookie");
         const cookieVal = parseCookie(cookieHeader, COOKIE_NAME);
         if (cookieVal === gateCode(env)) {
-            if (isComingSoonPath(url.pathname)) {
-                return fetchComingSoon(request, env);
-            }
             return env.ASSETS.fetch(request);
         }
 
         // Coming-soon page itself must be reachable when locked —
-        // otherwise we'd loop or render a blank page. Rewrite to the
-        // canonical .html path so /coming-soon and /coming-soon/ both
-        // serve the file (CF's auto-trailing-slash only resolves
-        // index.html, not .html siblings).
+        // otherwise we'd loop. Pass through unchanged; CF's
+        // html_handling: "auto-trailing-slash" resolves /coming-soon
+        // to coming-soon.html in the dist root.
         if (isComingSoonPath(url.pathname)) {
-            return fetchComingSoon(request, env);
+            return env.ASSETS.fetch(request);
         }
         if (isStaticAssetPath(url.pathname)) {
             return env.ASSETS.fetch(request);
         }
 
-        // Everything else → bounce to coming-soon with the original path
-        // preserved in ?next= for round-trip after unlock.
+        // Everything else → bounce to coming-soon with the original
+        // path preserved in ?next= for round-trip after unlock. We
+        // redirect to /coming-soon (without .html) because CF's
+        // auto-trailing-slash normalizes .html URLs back to bare
+        // paths anyway — sending .html here would force an extra
+        // 301 hop in the browser.
         const next = encodeURIComponent(url.pathname + url.search);
         return Response.redirect(
-            `${url.origin}${COMING_SOON_PATH}?next=${next}`,
+            `${url.origin}/coming-soon?next=${next}`,
             302
         );
     }
