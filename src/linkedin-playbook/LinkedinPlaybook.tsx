@@ -4,6 +4,7 @@ import { CueBooth } from "./components/CueBooth";
 import { CueLedger } from "./components/CueLedger";
 import { MethodSheets } from "./components/MethodSheets";
 
+import { Wordmark } from "@/lib/wordmark";
 /**
  * LinkedinPlaybook — Wave 1 root.
  *
@@ -30,6 +31,9 @@ import { MethodSheets } from "./components/MethodSheets";
 export function LinkedinPlaybook(): JSX.Element {
     return (
         <div class="lp-shell">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="LINKEDIN PLAYBOOK" />
+            </div>
             <Topbar />
             <CueBooth />
             <CueLedger />

@@ -5,6 +5,7 @@ import { OutputPanel } from "./components/OutputPanel";
 import { TouchLog } from "./components/TouchLog";
 import { HandoffStrip } from "./components/HandoffStrip";
 
+import { Wordmark } from "@/lib/wordmark";
 /**
  * OutboundStudio — Wave 1 root.
  *
@@ -29,6 +30,9 @@ import { HandoffStrip } from "./components/HandoffStrip";
 export function OutboundStudio(): JSX.Element {
     return (
         <div class="ob-shell">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="OUTBOUND STUDIO" />
+            </div>
             <Topbar />
             <div class="ob-stage">
                 <Switchboard />

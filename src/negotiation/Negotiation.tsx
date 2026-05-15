@@ -6,6 +6,7 @@ import { ConcessionLadder } from "./components/ConcessionLadder";
 import { PushbackSheet } from "./components/PushbackSheet";
 import { OutcomeRack } from "./components/OutcomeRack";
 
+import { Wordmark } from "@/lib/wordmark";
 /**
  * Negotiation — Phase 3 of ADR-003 (canon §4.16b).
  *
@@ -31,6 +32,9 @@ import { OutcomeRack } from "./components/OutcomeRack";
 export function Negotiation(): JSX.Element {
     return (
         <div class="ng-shell">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="NEGOTIATION" />
+            </div>
             <Topbar />
             <RouteRack />
             <PositionRack />

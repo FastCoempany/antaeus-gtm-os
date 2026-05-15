@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { BackButton } from "@/lib/back-button";
+import { Wordmark } from "@/lib/wordmark";
 import {
     accountDraft,
     accounts,
@@ -61,6 +62,9 @@ function HeroBand(): JSX.Element {
     const thesisCount = theses.value.length;
     return (
         <section class="ta-hero" aria-label="Territory hero">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="TERRITORY ARCHITECT" />
+            </div>
             <BackButton />
             <p class="ta-hero__kicker">DECISION BENCH · TERRITORY ARCHITECT</p>
             <h1 class="ta-hero__title">

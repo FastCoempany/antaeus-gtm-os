@@ -60,3 +60,20 @@
 .ant-wordmark--dark .ant-wordmark__workspace {
     color: rgba(246, 248, 252, 0.5);
 }
+
+/* Room chrome — consistent top-left mounting point for the wordmark
+   across every operating room. Sits above whatever each room's
+   existing topbar/header is (rooms keep their own topbar; this is the
+   global brand strip). */
+.ant-room-chrome {
+    padding: 18px 28px 0;
+    margin-bottom: -4px; /* let the wordmark visually anchor near the topbar */
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 720px) {
+    .ant-room-chrome {
+        padding: 14px 18px 0;
+    }
+}

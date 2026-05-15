@@ -3,6 +3,7 @@ import { Topbar } from "./components/Topbar";
 import { PinnedCase } from "./components/PinnedCase";
 import { Ledger } from "./components/Ledger";
 
+import { Wordmark } from "@/lib/wordmark";
 /**
  * FutureAutopsy — Wave 1 root.
  *
@@ -25,6 +26,9 @@ import { Ledger } from "./components/Ledger";
 export function FutureAutopsy(): JSX.Element {
     return (
         <div class="fa-shell">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="FUTURE AUTOPSY" />
+            </div>
             <Topbar />
             <PinnedCase />
             <Ledger />

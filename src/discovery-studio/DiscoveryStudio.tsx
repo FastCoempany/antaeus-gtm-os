@@ -10,6 +10,7 @@ import { WorkedMemory } from "./components/WorkedMemory";
 import { NextStepDocket } from "./components/NextStepDocket";
 import { SkipAheadTray } from "./components/SkipAheadTray";
 import { SupportDossier } from "./components/SupportDossier";
+import { Wordmark } from "@/lib/wordmark";
 import {
     activeFramework,
     activeInterrupt,
@@ -56,6 +57,9 @@ export function DiscoveryStudio(): JSX.Element {
 
     return (
         <div class="ds-shell">
+            <div class="ant-room-chrome">
+                <Wordmark kicker="DISCOVERY STUDIO" />
+            </div>
             <header class="ds-topbar">
                 <BackButton />
                 <p class="ds-topbar__kicker">
