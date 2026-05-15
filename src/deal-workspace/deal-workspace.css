@@ -645,6 +645,79 @@ button {
     cursor: not-allowed;
 }
 
+/* ─── Inline folio form (Phase 6 — replaces DealHealthModal) ─────────── */
+
+.dw-target-folio--editing {
+    border-color: var(--dw-accent-orange);
+}
+
+.dw-folio-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    border-top: 1px solid var(--dw-border);
+}
+
+.dw-folio-form__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 8px;
+}
+
+.dw-folio-form__footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    margin-top: 16px;
+    padding: 12px 0 4px;
+    background: linear-gradient(
+        to bottom,
+        rgba(246, 248, 252, 0) 0%,
+        var(--dw-field-bg, #f6f8fc) 30%,
+        var(--dw-field-bg, #f6f8fc) 100%
+    );
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid var(--dw-border);
+}
+
+.dw-folio-form__btn {
+    border: 1px solid var(--dw-border-strong);
+    background: var(--dw-field-raised);
+    color: var(--dw-ink);
+    padding: 8px 18px;
+    font-size: 13px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 140ms ease;
+}
+
+.dw-folio-form__btn:hover {
+    background: var(--dw-ink-15);
+}
+
+.dw-folio-form__btn--ghost {
+    background: transparent;
+}
+
+.dw-folio-form__btn--primary {
+    background: var(--dw-ink);
+    border-color: var(--dw-ink);
+    color: #fff;
+}
+
+.dw-folio-form__btn--primary:hover {
+    background: var(--dw-accent-orange);
+    border-color: var(--dw-accent-orange);
+}
+
+.dw-folio-form__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* ─── Form ─────────────────────────────────────────────────────────── */
 
 .dw-form-section {

@@ -192,11 +192,14 @@ export function buildActions(
     if (counts.touches + counts.calls === 0) push(ACTION_MOTION);
 
     if (actions.length < 4 && counts.deals > 0) push(ACTION_PLANNER);
-    if (actions.length < 5) push(ACTION_QUOTA);
-    if (actions.length < 5) push(ACTION_BACKUP);
-    if (actions.length < 5) push(ACTION_DASHBOARD);
+    if (actions.length < 4) push(ACTION_QUOTA);
+    if (actions.length < 4) push(ACTION_BACKUP);
+    if (actions.length < 4) push(ACTION_DASHBOARD);
 
-    return actions.slice(0, 5).map((action, i) => ({
+    // Phase 6 polish (canon §4.1): cap at 1 primary + 3 ghost per the
+    // "one dominant move per surface" rule. Five equal-weight CTAs read
+    // as a hallway, not a ranked next-action stack.
+    return actions.slice(0, 4).map((action, i) => ({
         ...action,
         state: i === 0 ? "now" : i === 1 ? "next" : "ready"
     })) as ReadonlyArray<NextAction>;

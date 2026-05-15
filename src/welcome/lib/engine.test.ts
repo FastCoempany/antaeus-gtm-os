@@ -47,9 +47,9 @@ describe("buildActions", () => {
         expect(list[1]!.state).toBe("next");
     });
 
-    it("returns at most 5 actions", () => {
+    it("returns at most 4 actions (1 primary + 3 ghost per canon §4.1)", () => {
         const list = buildActions(EMPTY_COUNTS);
-        expect(list.length).toBeLessThanOrEqual(5);
+        expect(list.length).toBeLessThanOrEqual(4);
     });
 
     it("skips ICP action when one already exists", () => {
