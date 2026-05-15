@@ -6,55 +6,68 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Antaeus</title>
   <script>
+    /**
+     * Smart router — fires AFTER the Cloudflare Worker has admitted the
+     * visitor through the access-code gate (cookie `antaeus_gate`).
+     *
+     * Branches on auth state:
+     *   - Supabase session + onboarding done + welcome seen → /dashboard/
+     *   - Supabase session + onboarding done + welcome NOT seen → /welcome/
+     *   - Supabase session + onboarding NOT done → /onboarding/
+     *   - No session → /start.html (marketing landing — the operator-
+     *     facing "what is this" surface a visitor sees first after
+     *     unlocking the gate).
+     *
+     * On any parse error, we fail safe to /start.html so the visitor
+     * always lands somewhere intentional rather than a blank index page.
+     */
     (function () {
-      try {
-        var raw = window.localStorage.getItem('antaeus-auth-token');
-        if (raw) {
+      function safeRoute() {
+        try {
+          var raw = window.localStorage.getItem('antaeus-auth-token');
+          if (!raw) return '/start.html';
+
           var parsed = JSON.parse(raw);
           var hasSession = !!(
             (parsed && parsed.access_token) ||
             (parsed && parsed.refresh_token) ||
-            (parsed &&
-              parsed.currentSession &&
+            (parsed && parsed.currentSession &&
               (parsed.currentSession.access_token || parsed.currentSession.refresh_token)) ||
-            (parsed &&
-              parsed.session &&
+            (parsed && parsed.session &&
               (parsed.session.access_token || parsed.session.refresh_token))
           );
-          if (hasSession) {
-            var profileRaw = window.localStorage.getItem('gtmos_profile_cache');
-            var onboardingRaw = window.localStorage.getItem('gtmos_onboarding');
-            var profile = profileRaw ? JSON.parse(profileRaw) : null;
-            var onboarding = onboardingRaw ? JSON.parse(onboardingRaw) : null;
-            var profileId = profile && profile.id ? String(profile.id).trim() : '';
-            var welcomeKey = profileId ? ('gtmos_welcome_seen__user_' + profileId) : 'gtmos_welcome_seen';
-            var seen = window.localStorage.getItem(welcomeKey);
-            if (profileId && welcomeKey !== 'gtmos_welcome_seen' && (seen !== '1' && seen !== 'true')) {
-              var legacySeen = window.localStorage.getItem('gtmos_welcome_seen');
-              if (legacySeen === '1' || legacySeen === 'true') seen = legacySeen;
-            }
+          if (!hasSession) return '/start.html';
 
-            var completed = !!(
-              (profile && profile.onboarding_completed === true) ||
-              (onboarding && onboarding.completed === true)
-            );
-            var route = !completed ? '/onboarding/' : ((seen === '1' || seen === 'true') ? '/dashboard/' : '/welcome/');
-            window.location.replace(route);
-            return;
+          var profileRaw = window.localStorage.getItem('gtmos_profile_cache');
+          var onboardingRaw = window.localStorage.getItem('gtmos_onboarding');
+          var profile = profileRaw ? JSON.parse(profileRaw) : null;
+          var onboarding = onboardingRaw ? JSON.parse(onboardingRaw) : null;
+          var profileId = profile && profile.id ? String(profile.id).trim() : '';
+          var welcomeKey = profileId ? ('gtmos_welcome_seen__user_' + profileId) : 'gtmos_welcome_seen';
+          var seen = window.localStorage.getItem(welcomeKey);
+          if (profileId && welcomeKey !== 'gtmos_welcome_seen' && (seen !== '1' && seen !== 'true')) {
+            var legacy = window.localStorage.getItem('gtmos_welcome_seen');
+            if (legacy === '1' || legacy === 'true') seen = legacy;
           }
-        }
 
-        window.location.replace('/coming-soon.html');
-      } catch (e) {
-        window.location.replace('/coming-soon.html');
+          var completed = !!(
+            (profile && profile.onboarding_completed === true) ||
+            (onboarding && onboarding.completed === true)
+          );
+          if (!completed) return '/onboarding/';
+          return (seen === '1' || seen === 'true') ? '/dashboard/' : '/welcome/';
+        } catch (e) {
+          return '/start.html';
+        }
       }
+      window.location.replace(safeRoute());
     })();
   </script>
 </head>
 <body>
   <noscript>
-    <meta http-equiv="refresh" content="0; url=/coming-soon.html" />
-    <p><a href="/coming-soon.html">Continue to Antaeus</a></p>
+    <meta http-equiv="refresh" content="0; url=/start.html" />
+    <p><a href="/start.html">Continue to Antaeus</a></p>
   </noscript>
 </body>
 </html>

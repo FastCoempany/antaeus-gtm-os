@@ -60,6 +60,16 @@ a { color: inherit; text-decoration: none; }
     padding-bottom: 8px;
 }
 
+/* Chrome rail above the hero — global wordmark (top-left), brought in
+   by the first-90-seconds audit. Mounts before the serif title so it
+   reads as page chrome, not part of the headline. */
+.wel-hero__chrome {
+    margin-bottom: 28px;
+}
+
+/* Retained for upstream-compatibility (re-shown in higher-completion
+   states the audit didn't touch). Visually nothing in the empty-state
+   uses this anymore. */
 .wel-hero__kicker {
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 11px;

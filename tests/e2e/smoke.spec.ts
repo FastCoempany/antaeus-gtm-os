@@ -426,8 +426,11 @@ test.describe("room boot smoke tests", () => {
         await page.goto("/welcome/");
         await page.waitForLoadState("networkidle");
 
-        await expect(page.locator(".wel-hero__kicker")).toContainText(
-            "Threshold"
+        // First-90-seconds audit retired the "Threshold" kicker
+        // (internal architecture language). Wordmark chrome replaces
+        // it; assert the brand mark is mounted instead.
+        await expect(page.locator(".ant-wordmark__mark")).toContainText(
+            "ANTAEUS"
         );
         await expect(page.locator(".wel-ladder")).toBeAttached();
         await expect(page.locator(".wel-actions")).toBeAttached();

@@ -11,7 +11,10 @@ describe("buildActivationModel", () => {
         const m = buildActivationModel(EMPTY_COUNTS);
         expect(m.completed).toBe(0);
         expect(m.total).toBe(4);
-        expect(m.headline).toMatch(/needs first operating truth/);
+        // First-90-seconds audit: empty-state copy now names the unit
+        // (wedge) and the verb (set up). Was: "needs first operating
+        // truth" — too meta.
+        expect(m.headline).toMatch(/wedge/);
         expect(m.nextMilestone?.key).toBe("icp");
     });
 
@@ -39,17 +42,22 @@ describe("buildActivationModel", () => {
 });
 
 describe("buildActions", () => {
-    it("empty workspace prioritizes the 4 zero-to-one moves first", () => {
+    it("truly empty workspace returns exactly 1 action (the ICP wedge)", () => {
+        // First-90-seconds audit: on a zero-data workspace the operator
+        // doesn't need a menu — they need exactly one move. The cap
+        // lifts to 4 the moment any anchor exists (see next test).
         const list = buildActions(EMPTY_COUNTS);
-        const keys = list.map((a) => a.key);
-        expect(keys.slice(0, 4)).toEqual(["icp", "signal", "deal", "motion"]);
+        expect(list).toHaveLength(1);
+        expect(list[0]!.key).toBe("icp");
         expect(list[0]!.state).toBe("now");
-        expect(list[1]!.state).toBe("next");
     });
 
-    it("returns at most 4 actions (1 primary + 3 ghost per canon §4.1)", () => {
-        const list = buildActions(EMPTY_COUNTS);
+    it("non-empty workspace returns up to 4 actions (1 primary + 3 ghost)", () => {
+        const list = buildActions(counts({ icps: 1 }));
         expect(list.length).toBeLessThanOrEqual(4);
+        expect(list.length).toBeGreaterThan(1);
+        expect(list[0]!.state).toBe("now");
+        expect(list[1]!.state).toBe("next");
     });
 
     it("skips ICP action when one already exists", () => {
