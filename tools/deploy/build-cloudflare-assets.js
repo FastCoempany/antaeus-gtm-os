@@ -30,9 +30,23 @@ const include = [
   "auth",
   "css",
   "js",
+  // Auth flow (canonical perimeter pages — they share /css/auth.css
+  // per PR #67). All four are required for the password-recovery
+  // round-trip + the signup-confirmation handoff.
   "login.html",
   "signup.html",
-  "demo-seed.html"
+  "forgot-password.html",
+  "reset-password.html",
+  // Demo lane (the `?demo=1` bootstrap path used by Playwright +
+  // tools/qa/capture-demo-room.js).
+  "demo-seed.html",
+  // Pre-beta gate (PR #65). The Cloudflare Worker rewrites
+  // /coming-soon → /coming-soon.html so this file MUST be in dist.
+  // Without it, env.ASSETS.fetch 404s and the gate is unreachable.
+  "coming-soon.html",
+  // Legal pages — required for footer links and signup flow.
+  "privacy.html",
+  "terms.html"
 ];
 
 function copyRecursive(src, dest) {
