@@ -1,10 +1,12 @@
 import { render } from "preact";
+import { computed } from "@preact/signals";
 import { DealWorkspace } from "./DealWorkspace";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { readContinuity } from "@/lib/continuity";
 import { createDataClient } from "@/lib/data-client";
+import { startUnsavedGuard } from "@/lib/unsaved-guard";
 import { bootPersistence } from "./lib/persistence";
-import { allDeals, openDealEditor } from "./state";
+import { allDeals, editingDeal, openDealEditor } from "./state";
 
 /**
  * Entry point for the Deal Workspace Preact rebuild (Phase 4).
@@ -42,6 +44,14 @@ if (!flagOn) {
 }
 
 render(<DealWorkspace />, root);
+
+// Unsaved-changes guard — fire beforeunload while the inline deal-
+// health form is open (editingDeal !== null). The form's draft state
+// lives inside the DealHealthForm component, so we can't observe
+// exact field-level dirtiness from here; "editor open" is a safe
+// approximation that prevents accidental nav-away mid-edit.
+const editorOpen = computed(() => editingDeal.value !== null);
+startUnsavedGuard(editorOpen, "Deal Workspace");
 
 // Wave 2: kick off persistence after first paint. Don't block render
 // on Supabase round-trip — the room shows empty state until deals load.
