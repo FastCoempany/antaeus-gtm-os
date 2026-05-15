@@ -2,7 +2,13 @@ import type { JSX } from "preact";
 import { BackButton } from "@/lib/back-button";
 import { ModeSwitcher } from "./ModeSwitcher";
 import { ReadinessAnchor } from "./ReadinessAnchor";
-import { openReadinessDrawer, readinessSummary } from "../state";
+import {
+    commandMode,
+    commandSummary,
+    openReadinessDrawer,
+    readinessSummary
+} from "../state";
+import { exportCommandCenterJson } from "../lib/command-export";
 
 /**
  * Topbar — kicker + title + mode switcher + readiness anchor.
@@ -16,6 +22,13 @@ import { openReadinessDrawer, readinessSummary } from "../state";
  */
 export function Topbar(): JSX.Element {
     const summary = readinessSummary.value;
+    const cmd = commandSummary.value;
+    const rankedCount = cmd.ranked.length;
+
+    function handleExport(): void {
+        exportCommandCenterJson(cmd, commandMode.value);
+    }
+
     return (
         <header class="db-topbar">
             <BackButton />
@@ -34,6 +47,21 @@ export function Topbar(): JSX.Element {
                     onOpen={openReadinessDrawer}
                 />
                 <ModeSwitcher />
+                <button
+                    type="button"
+                    class="db-topbar__export"
+                    onClick={handleExport}
+                    disabled={rankedCount === 0}
+                    title={
+                        rankedCount === 0
+                            ? "No ranked objects to export"
+                            : `Export ${rankedCount} ranked object${
+                                  rankedCount === 1 ? "" : "s"
+                              } as JSON`
+                    }
+                >
+                    Export snapshot
+                </button>
             </div>
         </header>
     );
