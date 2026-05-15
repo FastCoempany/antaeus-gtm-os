@@ -44,6 +44,15 @@ const include = [
   // /coming-soon → /coming-soon.html so this file MUST be in dist.
   // Without it, env.ASSETS.fetch 404s and the gate is unreachable.
   "coming-soon.html",
+  // Post-gate marketing landing (entry-foundation PR). First surface
+  // an unauthenticated visitor sees after unlocking the access-code
+  // gate. The smart router in index.html sends no-session visitors
+  // here.
+  "start.html",
+  // Smart router at /. Branches by auth state — authenticated users
+  // go to /dashboard/ etc; unauthenticated users go to /start.html.
+  // Must NOT be overwritten by this script's prior meta-refresh stub.
+  "index.html",
   // Legal pages — required for footer links and signup flow.
   "privacy.html",
   "terms.html"
@@ -78,23 +87,9 @@ for (const item of include) {
   copyRecursive(path.join(root, item), path.join(dist, item));
 }
 
-// 3. Root index.html = redirect into the canonical Welcome room. Was
-//    pointing at /app/welcome/ pre-Phase-4-deletion-sweep; now points
-//    directly at /welcome/ (the new Preact entry). The legacy
-//    /app/welcome/ stub still exists as a 301-style meta-refresh so
-//    bookmarks don't 404.
-const indexHtml = `<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="refresh" content="0; url=/welcome/" />
-    <title>Antaeus GTM OS</title>
-  </head>
-  <body>
-    <a href="/welcome/">Open Antaeus GTM OS</a>
-  </body>
-</html>
-`;
-
-fs.writeFileSync(path.join(dist, "index.html"), indexHtml);
+// Note: this script USED to overwrite dist/index.html with a dumb
+// meta-refresh to /welcome/. That stub broke the auth-aware smart
+// router that lives in the source index.html — every visitor landed
+// on /welcome/ regardless of state. Removed in the entry-foundation
+// PR; the smart router now ships intact via the include list above.
 console.log(`Built combined Vite + legacy assets into ${dist}`);

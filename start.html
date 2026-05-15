@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Antaeus turns founder-led revenue into something a first hire can inherit." />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Antaeus · Operator preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #0f172a;
+      --brand-gold: #d4a574;
+      --brand-gold-light: #e8c9a8;
+      --accent-orange: #e6701e;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.72);
+      --text-tertiary: rgba(255, 255, 255, 0.5);
+      --border-soft: rgba(255, 255, 255, 0.1);
+      --font-serif: 'DM Serif Display', Georgia, serif;
+      --font-sans: 'Public Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(212, 165, 116, 0.12), transparent 28%),
+        radial-gradient(circle at 86% 78%, rgba(45, 212, 191, 0.10), transparent 26%),
+        linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 50%, #070b14 100%);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 28px 28px 60px;
+      display: grid;
+      gap: 60px;
+    }
+
+    /* ── Chrome ───────────────────────────────────────────────────── */
+
+    .chrome {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      line-height: 1;
+    }
+
+    .wordmark__mark {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      letter-spacing: 0.16em;
+      color: var(--text-primary);
+    }
+
+    .wordmark__divider {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.32);
+    }
+
+    .wordmark__kicker {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    .chrome__aux {
+      display: inline-flex;
+      gap: 18px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+    }
+
+    .chrome__aux a {
+      transition: color 140ms ease;
+    }
+
+    .chrome__aux a:hover {
+      color: var(--brand-gold-light);
+    }
+
+    /* ── Hero ─────────────────────────────────────────────────────── */
+
+    .hero {
+      padding-top: 24px;
+      max-width: 880px;
+    }
+
+    .hero__kicker {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brand-gold-light);
+      margin-bottom: 24px;
+    }
+
+    .hero__title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.6rem, 5.4vw, 5.2rem);
+      line-height: 0.98;
+      letter-spacing: -0.022em;
+      margin-bottom: 28px;
+      max-width: 18ch;
+      text-wrap: balance;
+    }
+
+    .hero__title em {
+      font-style: italic;
+      color: var(--brand-gold-light);
+    }
+
+    .hero__sub {
+      font-size: 1.08rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      max-width: 60ch;
+      margin-bottom: 38px;
+    }
+
+    .hero__ctas {
+      display: inline-flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 0.96rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 140ms ease;
+      border: 1px solid transparent;
+      line-height: 1;
+    }
+
+    .btn--primary {
+      background: var(--accent-orange);
+      color: #fff;
+      border-color: var(--accent-orange);
+    }
+
+    .btn--primary:hover {
+      background: #d0621a;
+      border-color: #d0621a;
+      box-shadow: 0 6px 18px rgba(230, 112, 30, 0.32);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .btn--ghost:hover {
+      border-color: rgba(255, 255, 255, 0.48);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* ── Anchors (3-cell strip) ──────────────────────────────────── */
+
+    .anchors {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--border-soft);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .anchor {
+      background: rgba(15, 23, 42, 0.82);
+      padding: 28px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .anchor__kicker {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--brand-gold-light);
+    }
+
+    .anchor__title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      line-height: 1.15;
+      color: var(--text-primary);
+    }
+
+    .anchor__copy {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text-tertiary);
+    }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
+
+    .foot {
+      padding-top: 32px;
+      border-top: 1px solid var(--border-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+    }
+
+    .foot__links {
+      display: inline-flex;
+      gap: 18px;
+    }
+
+    .foot__links a {
+      transition: color 140ms ease;
+    }
+
+    .foot__links a:hover {
+      color: var(--brand-gold-light);
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 22px 20px 48px;
+        gap: 44px;
+      }
+      .anchors {
+        grid-template-columns: 1fr;
+      }
+      .chrome__aux,
+      .foot__links {
+        gap: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="chrome">
+      <a href="/start.html" class="wordmark" aria-label="Antaeus — home">
+        <span class="wordmark__mark">ANTAEUS</span>
+        <span class="wordmark__divider" aria-hidden="true">·</span>
+        <span class="wordmark__kicker">Operator preview</span>
+      </a>
+      <nav class="chrome__aux" aria-label="Account">
+        <a href="/login.html">Sign in</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="hero__kicker">For founders and the first GTM hire</p>
+      <h1 class="hero__title">
+        Turn founder-led revenue into something a first hire can <em>actually</em> inherit.
+      </h1>
+      <p class="hero__sub">
+        Antaeus is the operating room behind the motion you built in your head.
+        Signals, deals, proof, advisor leverage, readiness — one ranked,
+        pressure-aware system that survives the handoff before scale compounds
+        the wrong things.
+      </p>
+      <div class="hero__ctas">
+        <a class="btn btn--primary" href="/signup.html">Create workspace</a>
+        <a class="btn btn--ghost" href="/login.html">Sign in</a>
+      </div>
+    </section>
+
+    <section class="anchors" aria-label="What Antaeus does">
+      <article class="anchor">
+        <span class="anchor__kicker">See what's real</span>
+        <h2 class="anchor__title">The system surfaces what's under pressure right now.</h2>
+        <p class="anchor__copy">
+          No scrolling through reports. One ranked object, one dominant move,
+          one reason. Designed to be the first thing you open on Monday and
+          the last thing you check on Friday.
+        </p>
+      </article>
+      <article class="anchor">
+        <span class="anchor__kicker">Harder to fool</span>
+        <h2 class="anchor__title">Every claim gets weight-checked against evidence, not optimism.</h2>
+        <p class="anchor__copy">
+          Deals, proof, readiness — each one rated by what's actually
+          documented, not what you wish were true. Founders stop self-coaching
+          past weak spots; the system names them.
+        </p>
+      </article>
+      <article class="anchor">
+        <span class="anchor__kicker">Built for handoff</span>
+        <h2 class="anchor__title">Every move compounds toward something a hire can pick up.</h2>
+        <p class="anchor__copy">
+          The first serious GTM hire shouldn't inherit confusion. Every
+          discovery note, every kill rule, every advisor deployment lands
+          in a kit they can read top-to-bottom on day one.
+        </p>
+      </article>
+    </section>
+
+    <footer class="foot">
+      <span>© 2026 Antaeus · Operator preview</span>
+      <nav class="foot__links" aria-label="Legal">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <a href="mailto:founders@antaeus.app">Contact</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script src="/js/analytics-site-config.js"></script>
+  <script src="/js/analytics.js"></script>
+</body>
+</html>

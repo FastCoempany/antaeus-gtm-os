@@ -1,0 +1,62 @@
+/* ============================================
+   ANTAEUS · Wordmark (global chrome)
+   ============================================ */
+
+.ant-wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    text-decoration: none;
+    line-height: 1;
+    color: inherit;
+    user-select: none;
+    transition: opacity 140ms ease;
+}
+
+.ant-wordmark:hover {
+    opacity: 0.78;
+}
+
+.ant-wordmark__mark {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.16em;
+    color: #0a1c40;
+    line-height: 1;
+}
+
+.ant-wordmark__divider {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.72rem;
+    color: rgba(10, 28, 64, 0.32);
+}
+
+.ant-wordmark__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(10, 28, 64, 0.62);
+}
+
+.ant-wordmark__workspace {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    color: rgba(10, 28, 64, 0.48);
+}
+
+/* Dark-surface variant (e.g. marketing landing, gate page). */
+.ant-wordmark--dark .ant-wordmark__mark {
+    color: #f6f8fc;
+}
+.ant-wordmark--dark .ant-wordmark__divider {
+    color: rgba(246, 248, 252, 0.32);
+}
+.ant-wordmark--dark .ant-wordmark__kicker {
+    color: rgba(246, 248, 252, 0.65);
+}
+.ant-wordmark--dark .ant-wordmark__workspace {
+    color: rgba(246, 248, 252, 0.5);
+}

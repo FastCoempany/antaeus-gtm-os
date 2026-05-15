@@ -61,9 +61,12 @@ export function buildActivationModel(
     let headline: string;
     let body: string;
     if (completed === 0) {
-        headline = "The workspace exists, but it still needs first operating truth.";
+        // First-90-seconds audit: replaced the meta-prose original
+        // ("...needs first operating truth") with an operator-direct
+        // line that names the unit (a wedge — one ICP) and the verb.
+        headline = "Set up one wedge before the system starts briefing you.";
         body =
-            "Start with one ICP, then add either a live signal or a real deal so the app stops briefing an empty system.";
+            "An ICP in Antaeus is one sharp wedge — who you sell to, what they're feeling, why now. Define one and the rest of the rooms compound off it: signals get smarter, outbound gets specific, deals stop drifting.";
     } else if (completed < milestones.length) {
         headline = "You are moving from setup into a real operating system.";
         body = next
@@ -196,10 +199,22 @@ export function buildActions(
     if (actions.length < 4) push(ACTION_BACKUP);
     if (actions.length < 4) push(ACTION_DASHBOARD);
 
-    // Phase 6 polish (canon §4.1): cap at 1 primary + 3 ghost per the
-    // "one dominant move per surface" rule. Five equal-weight CTAs read
-    // as a hallway, not a ranked next-action stack.
-    return actions.slice(0, 4).map((action, i) => ({
+    // First-90-seconds audit: on a TRULY EMPTY workspace (no ICPs, no
+    // accounts, no signals, no deals, no motion), the operator doesn't
+    // need a menu of four options — they need exactly one. Four equal-
+    // weight "Create your first…" cards flatten the ranking; the
+    // dominant move IS the first ICP. Once any anchor lands, the stack
+    // grows back to 1 primary + 3 ghost (canon §4.1).
+    const isTrulyEmpty =
+        counts.icps === 0 &&
+        counts.accounts === 0 &&
+        counts.signals === 0 &&
+        counts.deals === 0 &&
+        counts.touches === 0 &&
+        counts.calls === 0;
+    const cap = isTrulyEmpty ? 1 : 4;
+
+    return actions.slice(0, cap).map((action, i) => ({
         ...action,
         state: i === 0 ? "now" : i === 1 ? "next" : "ready"
     })) as ReadonlyArray<NextAction>;
