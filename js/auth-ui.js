@@ -10,22 +10,47 @@
     function normalizeAuthError(error, context) {
         var raw = getMessageText(error);
         var text = raw.toLowerCase();
+
+        // Default: Trust Annex voice — plain, calm, with a recovery move.
+        // Canon Part II §4.7. We deliberately don't echo the raw Supabase
+        // error string unless we couldn't find a specific match — those
+        // strings often leak internal architecture language ("JWT",
+        // "PKCE", "grant_type"), which violates the Trust Annex laws.
         var result = {
-            message: raw || 'Something went wrong. Please try again.',
+            message: 'Something stopped that from working. Please try again.',
             actionHref: '',
             actionLabel: '',
             actionCopy: ''
         };
 
-        if (!raw) return result;
+        // No error info at all → use the calm default + a recovery move
+        // so the user is never stuck on a dead page.
+        if (!raw) {
+            result.actionHref = '/login.html';
+            result.actionLabel = 'Back to sign in';
+            result.actionCopy = 'Start over:';
+            return result;
+        }
 
         if (/timed out|network|failed to fetch|unable to connect|fetch failed|networkerror/.test(text)) {
-            result.message = 'Unable to connect. Check your internet connection and try again.';
+            result.message = 'We could not reach the workspace just now. Check your connection and try again.';
+            return result;
+        }
+
+        // Session expired / refresh failures. Supabase returns these as
+        // "jwt expired", "invalid refresh token", "user not found",
+        // "session_not_found", etc. when the session has aged out or the
+        // token store was cleared in another tab.
+        if (/jwt expired|invalid refresh token|refresh token not found|session_not_found|session not found|user from sub claim|missing session|no session/.test(text)) {
+            result.message = 'Your session timed out. Sign in again to pick up where you left off.';
+            result.actionHref = '/login.html';
+            result.actionLabel = 'Sign in';
+            result.actionCopy = '';
             return result;
         }
 
         if (/email rate limit exceeded|over_email_send_rate_limit|rate limit/.test(text) && /email|otp|confirmation|reset/.test(text)) {
-            result.message = 'Too many auth emails were requested recently. Wait a minute, then try again.';
+            result.message = 'Too many auth emails were requested in a short window. Wait a minute, then try again.';
             return result;
         }
 
@@ -46,22 +71,22 @@
         }
 
         if (/email not confirmed|signup disabled|not_confirmed/.test(text)) {
-            result.message = 'Check your inbox and confirm your email before signing in.';
+            result.message = 'Confirm your email before signing in — the link is in the inbox we just sent to.';
             result.actionHref = '/signup.html';
-            result.actionLabel = 'Create account again';
+            result.actionLabel = 'Resend confirmation';
             result.actionCopy = 'Need a fresh confirmation email?';
             return result;
         }
 
         if (/otp expired|expired|invalid.*token|token.*invalid|link expired|email link is invalid|email link is expired/.test(text)) {
             if (context === 'reset' || context === 'callback') {
-                result.message = 'This link is expired, invalid, or already used.';
+                result.message = 'This link is expired or already used. Request a fresh one to continue.';
                 result.actionHref = '/forgot-password.html';
                 result.actionLabel = 'Request a new link';
                 result.actionCopy = 'Try again with a fresh email:';
                 return result;
             }
-            result.message = 'This confirmation link is expired, invalid, or already used.';
+            result.message = 'This confirmation link is expired or already used.';
             result.actionHref = '/login.html';
             result.actionLabel = 'Back to sign in';
             result.actionCopy = 'Return to auth:';
@@ -73,6 +98,32 @@
             return result;
         }
 
+        // OAuth callback fallback. When a sign-in provider hands us back
+        // an error we don't specifically match, the raw string is
+        // usually unhelpful ("server_error", "access_denied",
+        // "interaction_required"). Show a calm message and route the
+        // user back to login rather than echoing the protocol code.
+        if (context === 'callback') {
+            if (/access_denied|cancelled|user_cancelled/.test(text)) {
+                result.message = 'Sign-in was cancelled. Try again when you are ready.';
+                result.actionHref = '/login.html';
+                result.actionLabel = 'Back to sign in';
+                result.actionCopy = '';
+                return result;
+            }
+            result.message = 'Sign-in did not complete. We will return you to the login screen.';
+            result.actionHref = '/login.html';
+            result.actionLabel = 'Back to sign in';
+            result.actionCopy = '';
+            return result;
+        }
+
+        // Last-resort fallback. Keep the raw Supabase string OUT of the
+        // user-facing message (it reads as internal architecture
+        // language). Offer a recovery move so the user is never stranded.
+        result.actionHref = '/login.html';
+        result.actionLabel = 'Back to sign in';
+        result.actionCopy = 'Start over:';
         return result;
     }
 
