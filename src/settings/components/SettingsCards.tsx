@@ -1,4 +1,4 @@
-import { useRef } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import type { JSX } from "preact";
 import {
     PRODUCT_CATEGORIES,
@@ -11,12 +11,15 @@ import {
     cloudConnection,
     cloudCounts,
     cloudVerifiedAt,
+    deleteCloudData,
     demo,
     exitDemo,
     exportBackup,
     importBackupFromFile,
+    isDeletingCloud,
     isVerifyingCloud,
     isWorking,
+    lastCloudDelete,
     refreshCloudStatus,
     setCategory
 } from "../state";
@@ -41,7 +44,112 @@ export function SettingsCards(): JSX.Element {
             <CategoryCard />
             <DemoCard />
             <RoleCard />
+            <DeleteCloudDataCard />
         </div>
+    );
+}
+
+const CONFIRM_PHRASE = "delete my data";
+
+function DeleteCloudDataCard(): JSX.Element {
+    const [phrase, setPhrase] = useState("");
+    const deleting = isDeletingCloud.value;
+    const last = lastCloudDelete.value;
+    const counts = cloudCounts.value;
+    const totalCloudRows =
+        counts.icps +
+        counts.deals +
+        counts.proofs +
+        counts.advisorDeployments +
+        counts.signalConsoleAccounts +
+        counts.sequences +
+        counts.discoveryCallLogs +
+        counts.studioArtifacts +
+        counts.pipelineSettings;
+
+    const phraseMatches = phrase.trim().toLowerCase() === CONFIRM_PHRASE;
+    const canDelete = phraseMatches && !deleting;
+
+    async function handleDelete(): Promise<void> {
+        if (!canDelete) return;
+        const ok =
+            typeof window === "undefined"
+                ? true
+                : window.confirm(
+                      "Final confirmation: this permanently deletes every row " +
+                          "in your workspace data tables. This action cannot be " +
+                          "undone. Continue?"
+                  );
+        if (!ok) return;
+        await deleteCloudData();
+        setPhrase("");
+    }
+
+    return (
+        <article class="st-card st-card--danger">
+            <header class="st-card__head">
+                <span class="st-scope st-scope--workspace">Workspace-level</span>
+                <h2 class="st-card__title">Delete my data</h2>
+            </header>
+            <p class="st-card__desc">
+                Permanently delete every row in your workspace data tables
+                — ICPs, deals, proofs, signals, advisor deployments,
+                discovery logs, studio artifacts, pipeline settings,
+                readiness snapshots, handoff artifacts. Your account
+                itself stays intact; you can keep signing in. This action
+                is irreversible and is not synced to a backup — export
+                first if you want a copy.
+            </p>
+            <ul class="st-status-list">
+                <li>
+                    <span>Cloud rows in scope</span>
+                    <strong>{totalCloudRows}</strong>
+                </li>
+                {last ? (
+                    <li>
+                        <span>Last delete</span>
+                        <strong>
+                            {last.totalDeleted} rows
+                            {last.errors.length > 0
+                                ? ` · ${last.errors.length} errors`
+                                : ""}
+                        </strong>
+                    </li>
+                ) : null}
+            </ul>
+            <label class="st-confirm">
+                <span class="st-confirm__label">
+                    Type <code>{CONFIRM_PHRASE}</code> to enable the
+                    destroy button:
+                </span>
+                <input
+                    type="text"
+                    class="st-confirm__input"
+                    value={phrase}
+                    placeholder={CONFIRM_PHRASE}
+                    autoComplete="off"
+                    spellcheck={false}
+                    onInput={(e) =>
+                        setPhrase((e.currentTarget as HTMLInputElement).value)
+                    }
+                />
+            </label>
+            <div class="st-card__actions">
+                <button
+                    type="button"
+                    class="st-btn st-btn--danger"
+                    onClick={handleDelete}
+                    disabled={!canDelete}
+                >
+                    {deleting ? "Deleting…" : "Delete cloud data"}
+                </button>
+            </div>
+            <p class="st-card__help">
+                What survives: your account, your workspace shell,
+                workspace membership. Re-signing in after deletion lands
+                you in an empty workspace, identical to a fresh signup.
+            </p>
+        </article>
     );
 }
 

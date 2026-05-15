@@ -19,9 +19,11 @@ import {
 } from "./lib/storage";
 import {
     checkCloudConnection,
+    deleteCloudWorkspace,
     EMPTY_COUNTS,
     loadCloudRowCounts,
     type CloudConnectionState,
+    type CloudDeleteResult,
     type CloudRowCounts
 } from "./lib/cloud-sync";
 
@@ -52,6 +54,8 @@ export const cloudConnection: Signal<CloudConnectionState> = signal({
 export const cloudCounts: Signal<CloudRowCounts> = signal(EMPTY_COUNTS);
 export const isVerifyingCloud: Signal<boolean> = signal(false);
 export const cloudVerifiedAt: Signal<string | null> = signal(null);
+export const isDeletingCloud: Signal<boolean> = signal(false);
+export const lastCloudDelete: Signal<CloudDeleteResult | null> = signal(null);
 
 let toastTimer: number | null = null;
 
@@ -174,6 +178,65 @@ export function clearAll(): void {
 
 export function dismissToast(): void {
     toast.value = null;
+}
+
+/**
+ * Permanently delete every row in the workspace's data tables. Trust
+ * Annex action — the operator opts into a destructive cloud-side wipe.
+ *
+ * Scope: every noun table (icps, deals, proofs, advisor_deployments,
+ * signal_console_accounts, sequences, discovery_call_logs,
+ * studio_artifacts, pipeline_settings, discovery_frameworks,
+ * readiness_snapshots, handoff_artifacts). Does NOT delete the
+ * workspaces row, workspace_members, or the user's profile — those
+ * are identity surfaces.
+ *
+ * After cloud wipe, also clears the local `gtmos_*` cache + refreshes
+ * the cloud-counts readout so the operator sees the result.
+ *
+ * The UI gates this behind a typed-phrase confirmation; this function
+ * trusts its caller to have collected that consent.
+ */
+export async function deleteCloudData(): Promise<CloudDeleteResult> {
+    isDeletingCloud.value = true;
+    try {
+        const result = await deleteCloudWorkspace(createDataClient);
+        lastCloudDelete.value = result;
+
+        // Mirror to local: wipe gtmos_* so the room doesn't keep
+        // showing stale state. Refresh derived signals + cloud counts.
+        clearWorkspace();
+        backup.value = readBackup();
+        category.value = loadCategory();
+        demo.value = loadDemoState();
+
+        if (result.errors.length === 0) {
+            flashToast(
+                "warn",
+                `Cloud data deleted. ${result.totalDeleted} row${
+                    result.totalDeleted === 1 ? "" : "s"
+                } removed across ${
+                    Object.keys(result.perTable).length
+                } tables.`
+            );
+        } else {
+            flashToast(
+                "bad",
+                `Cloud delete completed with ${result.errors.length} error${
+                    result.errors.length === 1 ? "" : "s"
+                }. ${result.totalDeleted} rows removed. See console.`
+            );
+            console.warn("[settings] cloud delete errors:", result.errors);
+        }
+
+        // Re-probe cloud counts so the row-count card shows zeros (or
+        // surfaces any rows that survived the wipe).
+        await refreshCloudStatus();
+
+        return result;
+    } finally {
+        isDeletingCloud.value = false;
+    }
 }
 
 /**

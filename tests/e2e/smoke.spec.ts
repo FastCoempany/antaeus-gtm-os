@@ -407,9 +407,9 @@ test.describe("room boot smoke tests", () => {
             "Trust + recovery"
         );
         await expect(page.locator(".st-grid")).toBeAttached();
-        // Five cards: CloudSync (added 2026-05-01 in PR #43) + Backup +
-        // Category + Demo + Role.
-        await expect(page.locator(".st-card")).toHaveCount(5);
+        // Six cards: CloudSync (PR #43) + Backup + Category + Demo + Role
+        // + DeleteCloudData (PR #69, 2026-05-15).
+        await expect(page.locator(".st-card")).toHaveCount(6);
 
         expect(
             errors,

@@ -275,6 +275,65 @@ code {
 
 .st-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
+/* ─── Danger zone ("Delete my data") ────────────────────────────────── */
+
+.st-card--danger {
+    border-color: rgba(239, 68, 68, 0.24);
+    background:
+        linear-gradient(180deg, rgba(239, 68, 68, 0.025), rgba(239, 68, 68, 0)) ,
+        var(--st-card-bg, #ffffff);
+}
+
+.st-card--danger .st-card__title {
+    color: #b91c1c;
+}
+
+.st-confirm {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 12px;
+}
+
+.st-confirm__label {
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    color: rgba(10, 28, 64, 0.7);
+    margin-bottom: 6px;
+}
+
+.st-confirm__label code {
+    background: rgba(239, 68, 68, 0.08);
+    color: #b91c1c;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+}
+
+.st-confirm__input {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(239, 68, 68, 0.32);
+    border-radius: 8px;
+    color: #b91c1c;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.st-confirm__input:focus {
+    outline: none;
+    border-color: rgba(239, 68, 68, 0.55);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.st-confirm__input::placeholder {
+    color: rgba(239, 68, 68, 0.32);
+}
+
 /* ─── Select ────────────────────────────────────────────────────────── */
 
 .st-select {
