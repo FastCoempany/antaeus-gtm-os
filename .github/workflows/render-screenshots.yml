@@ -1,0 +1,98 @@
+# render-screenshots.yml — Antaeus GTM OS full-room screenshot capture
+#
+# Captures a screenshot of every canon room (20 rooms — Readiness is
+# an overlay drawer per §4.17, not a route). Uploads the set as a
+# workflow artifact so reviewers can download a zip of "what every
+# room looks like right now."
+#
+# Triggers:
+#   - workflow_dispatch: manual button in the Actions tab. Use this
+#     after a structural PR lands and you want a visual diff against
+#     what shipped.
+#   - push to main: opt-in via [skip-screenshots] in the commit message
+#     to bypass (this job adds ~3 minutes to the post-merge pipeline).
+#
+# Artifact retention: 30 days. Long enough to compare against the
+# previous main run, short enough not to bloat storage.
+#
+# See deliverables/backlog/post-beta-polish-2026-05-02.md §"Render-screenshot capture in CI".
+
+name: Render screenshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "Demo scenario (mm = mid-market, ent = enterprise)"
+        required: false
+        default: "mm"
+        type: choice
+        options:
+          - mm
+          - ent
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render-screenshots-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    name: Capture all rooms
+    runs-on: ubuntu-latest
+    # Allow opt-out via [skip-screenshots] in the commit message —
+    # useful for doc-only commits that don't change the rendered UI.
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      !contains(github.event.head_commit.message, '[skip-screenshots]')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Build assets
+        run: npm run build:cloudflare
+
+      - name: Start static server
+        run: |
+          # Mirror the playwright.config.ts webServer: python's http.server
+          # serves dist/ on 4173, matching what every other tool expects.
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist &
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -sf http://127.0.0.1:4173/ > /dev/null; then
+              echo "Server up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Static server failed to start"
+          exit 1
+
+      - name: Capture screenshots
+        run: |
+          node tools/qa/capture-all-rooms.js \
+            --output ./screenshots \
+            --base-url http://127.0.0.1:4173 \
+            --scenario ${{ github.event.inputs.scenario || 'mm' }}
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ github.sha }}
+          path: screenshots/
+          retention-days: 30
