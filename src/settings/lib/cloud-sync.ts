@@ -177,3 +177,169 @@ export async function loadCloudRowCounts(
         return EMPTY_COUNTS;
     }
 }
+
+// ─── Cloud-delete (Trust Annex: "delete my data") ─────────────────────
+
+export interface CloudDeleteResult {
+    readonly totalDeleted: number;
+    readonly perTable: Readonly<Record<string, number>>;
+    readonly errors: ReadonlyArray<string>;
+    readonly cancelled: boolean;
+}
+
+const EMPTY_DELETE_RESULT: CloudDeleteResult = {
+    totalDeleted: 0,
+    perTable: {},
+    errors: [],
+    cancelled: false
+};
+
+/**
+ * Wipe every row in the workspace's data tables for the current user.
+ * Returns a per-table delete count + any errors.
+ *
+ * Scope: every "noun" table the operator authors content into.
+ * Excludes `workspaces`, `workspace_members`, `profiles` — those are
+ * identity surfaces, not workspace content, and deleting them would
+ * also delete the user's ability to sign in (per RLS).
+ *
+ * RLS gates the deletes to the operator's workspace, so a Worker-side
+ * call could only ever touch rows the operator already owns — the
+ * fan-out is safe even without explicit workspace_id filtering.
+ *
+ * The data-client doesn't expose batch delete; we list, then delete
+ * one-by-one. Typical workspace size is < 200 rows total, so the
+ * loop completes in a couple of seconds.
+ */
+export async function deleteCloudWorkspace(
+    factory: () => DataClient
+): Promise<CloudDeleteResult> {
+    let client: DataClient;
+    try {
+        client = factory();
+    } catch (err) {
+        reportError(err, { op: "settings.deleteCloudWorkspace.factory" });
+        return {
+            ...EMPTY_DELETE_RESULT,
+            cancelled: true,
+            errors: [
+                err instanceof Error ? err.message : String(err) || "no-client"
+            ]
+        };
+    }
+
+    const tables: Array<{
+        readonly label: string;
+        readonly fetch: () => Promise<ReadonlyArray<{ readonly id: string }>>;
+        readonly remove: (id: string) => Promise<unknown>;
+    }> = [
+        {
+            label: "icps",
+            fetch: () => client.icps.list({ limit: 5000 }),
+            remove: (id) => client.icps.remove(id)
+        },
+        {
+            label: "deals",
+            fetch: () => client.deals.list({ limit: 5000 }),
+            remove: (id) => client.deals.remove(id)
+        },
+        {
+            label: "proofs",
+            fetch: () => client.proofs.list({ limit: 5000 }),
+            remove: (id) => client.proofs.remove(id)
+        },
+        {
+            label: "advisor_deployments",
+            fetch: () => client.advisorDeployments.list({ limit: 5000 }),
+            remove: (id) => client.advisorDeployments.remove(id)
+        },
+        {
+            label: "signal_console_accounts",
+            fetch: () => client.signalConsoleAccounts.list({ limit: 5000 }),
+            remove: (id) => client.signalConsoleAccounts.remove(id)
+        },
+        {
+            label: "sequences",
+            fetch: () => client.sequences.list({ limit: 5000 }),
+            remove: (id) => client.sequences.remove(id)
+        },
+        {
+            label: "discovery_call_logs",
+            fetch: () => client.discoveryCallLogs.list({ limit: 5000 }),
+            remove: (id) => client.discoveryCallLogs.remove(id)
+        },
+        {
+            label: "studio_artifacts",
+            fetch: () => client.studioArtifacts.list({ limit: 5000 }),
+            remove: (id) => client.studioArtifacts.remove(id)
+        },
+        {
+            label: "pipeline_settings",
+            fetch: () => client.pipelineSettings.list({ limit: 100 }),
+            remove: (id) => client.pipelineSettings.remove(id)
+        },
+        {
+            label: "discovery_frameworks",
+            fetch: () => client.discoveryFrameworks.list({ limit: 5000 }),
+            remove: (id) => client.discoveryFrameworks.remove(id)
+        },
+        {
+            label: "readiness_snapshots",
+            fetch: () => client.readinessSnapshots.list({ limit: 5000 }),
+            remove: (id) => client.readinessSnapshots.remove(id)
+        },
+        {
+            label: "handoff_artifacts",
+            fetch: () => client.handoffArtifacts.list({ limit: 5000 }),
+            remove: (id) => client.handoffArtifacts.remove(id)
+        }
+    ];
+
+    const perTable: Record<string, number> = {};
+    const errors: string[] = [];
+    let totalDeleted = 0;
+
+    for (const t of tables) {
+        try {
+            const rows = await t.fetch();
+            let deleted = 0;
+            for (const row of rows) {
+                try {
+                    await t.remove(row.id);
+                    deleted += 1;
+                } catch (err) {
+                    errors.push(
+                        `${t.label}: ${
+                            err instanceof Error ? err.message : String(err)
+                        }`
+                    );
+                    reportError(err, {
+                        op: "settings.deleteCloudWorkspace.remove",
+                        table: t.label,
+                        id: row.id
+                    });
+                }
+            }
+            perTable[t.label] = deleted;
+            totalDeleted += deleted;
+        } catch (err) {
+            errors.push(
+                `${t.label} (list): ${
+                    err instanceof Error ? err.message : String(err)
+                }`
+            );
+            perTable[t.label] = 0;
+            reportError(err, {
+                op: "settings.deleteCloudWorkspace.list",
+                table: t.label
+            });
+        }
+    }
+
+    return {
+        totalDeleted,
+        perTable,
+        errors,
+        cancelled: false
+    };
+}
