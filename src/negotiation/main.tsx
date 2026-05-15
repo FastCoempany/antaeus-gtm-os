@@ -2,6 +2,7 @@ import { render } from "preact";
 import { computed, effect } from "@preact/signals";
 import { Negotiation } from "./Negotiation";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
 import { startUnsavedGuard } from "@/lib/unsaved-guard";
 import {
     allNegotiations,
@@ -21,6 +22,10 @@ import {
     loadDealsForLinking,
     readInboundDealId
 } from "./lib/cross-room";
+import {
+    bootCloudPersistence,
+    startCloudAutoSave
+} from "./lib/cloud-persistence";
 
 initObservability();
 
@@ -38,10 +43,9 @@ if (!flagOn) {
     );
 }
 
-// Phase 3 boot — seed cross-room linked deals + saved negotiations
-// + lessons learned from localStorage (cloud-sync follows as a Phase 5
-// hygiene PR, mirroring to a Supabase studio_artifacts row with
-// kind='negotiation').
+// Seed cross-room linked deals + saved negotiations + lessons learned
+// from localStorage. Cloud boot below replaces these with canonical
+// cloud state when it returns.
 setLinkedDeals(loadDealsForLinking());
 setAllNegotiations(loadNegotiations());
 
@@ -91,3 +95,21 @@ const draftDirty = computed(() => {
     );
 });
 startUnsavedGuard(draftDirty, "Negotiation");
+
+// Async cloud boot — replaces local state if cloud has rows; migrates
+// local up if cloud is empty. Auto-save effect starts after boot
+// settles so the first cloud write doesn't double-fire from the
+// migration insert + the effect's first run.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[negotiation] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    } finally {
+        startCloudAutoSave();
+    }
+})();

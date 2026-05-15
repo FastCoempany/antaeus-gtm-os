@@ -1,6 +1,5 @@
 import type { JSX } from "preact";
 import { BackButton } from "@/lib/back-button";
-import { DealHealthModal } from "./components/DealHealthModal";
 import { FilterBar } from "./components/FilterBar";
 import { Hero } from "./components/Hero";
 import { LaneGrid } from "./components/LaneGrid";
@@ -30,9 +29,10 @@ import { allDeals } from "./state";
  *   │           └───────────────────────────────────────────────────┘
  *   └───────────┘
  *
- * DealHealthModal is no longer the primary detail surface — it's the
- * "Open 9-field detail" full-screen expansion accessible from the
- * folio. LossReasonModal still triggers on the closed-lost transition.
+ * Deal detail editing is now inline inside TargetFolio (Phase 6 polish
+ * — replaced the residual full-screen DealHealthModal overlay).
+ * LossReasonModal stays as a modal because it's a one-shot prompt
+ * triggered by a closed-lost transition, not a primary editing surface.
  */
 export function DealWorkspace(): JSX.Element {
     const dealCount = allDeals.value.length;
@@ -64,7 +64,6 @@ export function DealWorkspace(): JSX.Element {
                 </div>
             </div>
 
-            <DealHealthModal />
             <LossReasonModal />
         </div>
     );

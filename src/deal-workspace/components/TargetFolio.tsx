@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import {
     activeDeals,
+    editingDeal,
     folioTab,
     focusedDeal,
     openDealEditor,
@@ -9,6 +10,7 @@ import {
 } from "../state";
 import { assessDeal, rankRecovery } from "../lib/recovery";
 import { FolioDock } from "./FolioDock";
+import { DealHealthForm } from "./DealHealthForm";
 
 /**
  * TargetFolio — right column of the stage-grid per variant-B.
@@ -20,9 +22,11 @@ import { FolioDock } from "./FolioDock";
  *   - signal-grid (3 rows: Risk / Proof / Motion)
  *   - folio-dock (4 tabs that rotate the lower content)
  *
- * Deal detail lives HERE, not in a full-screen modal. The
- * DealHealthModal is still accessible via "Open detail" for the
- * 9-field health form, but the operator works the deal inline first.
+ * Deal detail lives HERE — Phase 6 polish (post-PR-#63) replaced the
+ * residual DealHealthModal overlay with an inline expand. Clicking
+ * "Open 9-field detail" swaps the dock+panel area for the full
+ * DealHealthForm in the same plane; save or "back" returns to the
+ * dock view.
  */
 
 const TAB_LABEL: Record<FolioTab, string> = {
@@ -54,10 +58,12 @@ export function TargetFolio(): JSX.Element {
 
     const assessment = assessDeal(deal);
     const tab = folioTab.value;
+    const isEditing =
+        editingDeal.value !== null && editingDeal.value.id === deal.id;
 
     return (
         <section
-            class="dw-target-folio"
+            class={`dw-target-folio${isEditing ? " dw-target-folio--editing" : ""}`}
             aria-label={`Commissioned case: ${deal.accountName}`}
         >
             <div class="dw-target-folio__head">
@@ -105,18 +111,27 @@ export function TargetFolio(): JSX.Element {
                 </li>
             </ul>
 
-            <div class="dw-target-folio__detail-actions">
-                <button
-                    type="button"
-                    class="dw-target-folio__open-detail"
-                    onClick={() => openDealEditor(deal)}
-                >
-                    Open 9-field detail →
-                </button>
-            </div>
-
-            <FolioDock active={tab} onChange={setFolioTab} label={TAB_LABEL} />
-            <FolioPanel tab={tab} />
+            {isEditing ? (
+                <DealHealthForm />
+            ) : (
+                <>
+                    <div class="dw-target-folio__detail-actions">
+                        <button
+                            type="button"
+                            class="dw-target-folio__open-detail"
+                            onClick={() => openDealEditor(deal)}
+                        >
+                            Open 9-field detail →
+                        </button>
+                    </div>
+                    <FolioDock
+                        active={tab}
+                        onChange={setFolioTab}
+                        label={TAB_LABEL}
+                    />
+                    <FolioPanel tab={tab} />
+                </>
+            )}
         </section>
     );
 }
