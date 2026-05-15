@@ -139,6 +139,11 @@ export function setFolioTab(tab: FolioTab): void {
 // ─── Actions ────────────────────────────────────────────────────────────
 
 export function openDealEditor(deal: Deal): void {
+    // Editing now happens inline inside TargetFolio (Phase 6 polish —
+    // replaces the residual DealHealthModal overlay). Focusing the deal
+    // first ensures the form renders against the same case the user is
+    // already looking at, not a different one.
+    focusedDealId.value = deal.id;
     editingDeal.value = deal;
     editingPrevStage.value = deal.stage;
 }
