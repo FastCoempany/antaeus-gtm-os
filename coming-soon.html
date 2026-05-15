@@ -13,43 +13,13 @@
     rel="stylesheet"
   />
   <script>
-    (function () {
-      try {
-        var raw = window.localStorage.getItem('antaeus-auth-token');
-        if (!raw) return;
-        var parsed = JSON.parse(raw);
-        var hasSession = !!(
-          (parsed && parsed.access_token) ||
-          (parsed && parsed.refresh_token) ||
-          (parsed &&
-            parsed.currentSession &&
-            (parsed.currentSession.access_token || parsed.currentSession.refresh_token)) ||
-          (parsed &&
-            parsed.session &&
-            (parsed.session.access_token || parsed.session.refresh_token))
-        );
-        if (!hasSession) return;
-
-        var profileRaw = window.localStorage.getItem('gtmos_profile_cache');
-        var onboardingRaw = window.localStorage.getItem('gtmos_onboarding');
-        var profile = profileRaw ? JSON.parse(profileRaw) : null;
-        var onboarding = onboardingRaw ? JSON.parse(onboardingRaw) : null;
-        var profileId = profile && profile.id ? String(profile.id).trim() : '';
-        var welcomeKey = profileId ? ('gtmos_welcome_seen__user_' + profileId) : 'gtmos_welcome_seen';
-        var seen = window.localStorage.getItem(welcomeKey);
-        if (profileId && welcomeKey !== 'gtmos_welcome_seen' && (seen !== '1' && seen !== 'true')) {
-          var legacySeen = window.localStorage.getItem('gtmos_welcome_seen');
-          if (legacySeen === '1' || legacySeen === 'true') seen = legacySeen;
-        }
-
-        var completed = !!(
-          (profile && profile.onboarding_completed === true) ||
-          (onboarding && onboarding.completed === true)
-        );
-        var route = !completed ? '/onboarding/' : ((seen === '1' || seen === 'true') ? '/dashboard/' : '/welcome/');
-        window.location.replace(route);
-      } catch (e) {}
-    })();
+    // Note: the legacy auth-aware auto-redirect that used to live here
+    // was removed when the pre-beta gate (worker/index.ts) shipped.
+    // With the gate enabled, the Worker bounces unauthorized visitors
+    // here regardless of whether they have a Supabase session. Once
+    // the gate is disabled (set GATE_ENABLED=false in wrangler.jsonc),
+    // restore the auth-redirect logic if you want logged-in visitors
+    // to skip the marketing splash.
   </script>
   <style>
     :root {
@@ -188,14 +158,128 @@
         line-height: 0.98;
       }
     }
+
+    /* ─── Pre-beta gate form ─────────────────────────────────────── */
+
+    .gate {
+      margin: 36px auto 0;
+      width: min(360px, 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gate__kicker {
+      font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.48);
+      margin: 0;
+    }
+
+    .gate__row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .gate__input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+      font-size: 1rem;
+      letter-spacing: 0.16em;
+      text-align: center;
+    }
+
+    .gate__input:focus {
+      outline: none;
+      border-color: var(--brand-gold);
+      box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.16);
+    }
+
+    .gate__input::placeholder {
+      color: rgba(255, 255, 255, 0.32);
+      letter-spacing: 0.16em;
+    }
+
+    .gate__submit {
+      background: var(--brand-gold);
+      border: 1px solid var(--brand-gold);
+      color: #0a0e1a;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 140ms ease;
+    }
+
+    .gate__submit:hover {
+      opacity: 0.88;
+    }
+
+    .gate__error {
+      margin: 0;
+      font-size: 0.82rem;
+      color: #fca5a5;
+      text-align: center;
+      min-height: 1.2em;
+    }
   </style>
 </head>
 <body>
   <div class="rings" aria-hidden="true"></div>
 
   <main class="page">
-    <h1>Your first go-to-market hire just became more <span class="pulse-word">predictable.</span></h1>
+    <div>
+      <h1>Your first go-to-market hire just became more <span class="pulse-word">predictable.</span></h1>
+
+      <form class="gate" method="get" action="/_gate/unlock" autocomplete="off">
+        <p class="gate__kicker">Beta access</p>
+        <div class="gate__row">
+          <input
+            class="gate__input"
+            type="text"
+            name="code"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            placeholder="• • • • • •"
+            aria-label="Access code"
+            required
+          />
+          <button class="gate__submit" type="submit">Enter</button>
+        </div>
+        <p class="gate__error" id="gate-error" role="alert"></p>
+        <input type="hidden" name="next" id="gate-next" value="/" />
+      </form>
+    </div>
   </main>
+
+  <script>
+    // Surface ?error=1 inline + carry ?next= through the unlock POST.
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search || '');
+        if (params.get('error') === '1') {
+          var err = document.getElementById('gate-error');
+          if (err) err.textContent = 'That code does not unlock anything yet. Try again.';
+        }
+        var next = params.get('next');
+        if (next && next.charAt(0) === '/' && next.charAt(1) !== '/') {
+          var nextInput = document.getElementById('gate-next');
+          if (nextInput) nextInput.value = next;
+        }
+      } catch (e) {}
+    })();
+  </script>
 
   <script src="/js/analytics-site-config.js"></script>
   <script src="/js/analytics.js"></script>

@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Worker runtime exposes Cloudflare types alongside standard
+    // service-worker globals. Override the DOM/node lib choice from
+    // the parent (room build) — the Worker runs in a Workers isolate,
+    // not the browser, and shouldn't pull DOM types it'll never have.
+    "lib": ["ES2022", "WebWorker"],
+    "types": ["@cloudflare/workers-types"],
+    "jsx": "preserve",
+    "noEmit": true
+  },
+  "include": ["worker/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
