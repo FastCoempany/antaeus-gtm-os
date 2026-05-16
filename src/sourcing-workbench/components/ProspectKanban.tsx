@@ -46,11 +46,11 @@ export function ProspectKanban(): JSX.Element {
     return (
         <section class="sw-kanban" aria-label="Prospect lifecycle">
             <header class="sw-section__head">
-                <p class="sw-section__kicker">Pipeline</p>
-                <h2 class="sw-section__title">Prospect lifecycle</h2>
+                <p class="sw-section__kicker">PIPELINE</p>
+                <h2 class="sw-section__title">Walk names across the board.</h2>
                 <p class="sw-section__sub">
-                    Walk names left-to-right as they harden. The board is
-                    the discipline; the score is the gate.
+                    Each column hardens the name a step further. Push only
+                    when the entry can carry the meeting.
                 </p>
             </header>
             <div class="sw-kanban__grid" role="list">

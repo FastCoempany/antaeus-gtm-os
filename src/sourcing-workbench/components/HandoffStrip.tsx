@@ -17,8 +17,8 @@ export function HandoffStrip(): JSX.Element {
     return (
         <section class="sw-handoff" aria-label="Cross-room handoff">
             <header class="sw-section__head">
-                <p class="sw-section__kicker">Carry it forward</p>
-                <h2 class="sw-section__title">Push to the next room</h2>
+                <p class="sw-section__kicker">CARRY THE WORK FORWARD</p>
+                <h2 class="sw-section__title">Hand the names off.</h2>
                 <p class="sw-section__sub">
                     {ready === 0
                         ? "Nothing is push-ready yet. Sharpen a name to ready before routing."
@@ -32,7 +32,7 @@ export function HandoffStrip(): JSX.Element {
                     Refine the territory
                 </a>
                 <a class="sw-btn sw-btn--primary" href={hrefToSignalConsole()}>
-                    Open Signal Console
+                    Rank live signals
                 </a>
                 <a class="sw-btn sw-btn--ghost" href={hrefToOutboundStudio()}>
                     Compose outbound

@@ -37,11 +37,11 @@ export function QueryStudio(): JSX.Element {
     return (
         <section class="sw-querystudio" aria-label="Query studio">
             <header class="sw-section__head">
-                <p class="sw-section__kicker">Query studio</p>
-                <h2 class="sw-section__title">Cast a query</h2>
+                <p class="sw-section__kicker">QUERY CARDS</p>
+                <h2 class="sw-section__title">Build a search query.</h2>
                 <p class="sw-section__sub">
-                    One platform, one query string, one intent. Reproducible
-                    rails for the names that come next.
+                    One platform, one query, one intent — saved so you can
+                    re-run it as the territory shifts.
                 </p>
             </header>
 
@@ -143,8 +143,8 @@ export function QueryStudio(): JSX.Element {
 
             {cards.length === 0 ? (
                 <p class="sw-empty">
-                    No query cards yet. Write the first one above — it becomes
-                    the source rail for the prospects you push next.
+                    No query cards yet. Save one above to source the
+                    prospects you push next.
                 </p>
             ) : (
                 <ul class="sw-qs-list" aria-label="Saved query cards">

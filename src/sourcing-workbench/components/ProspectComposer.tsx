@@ -39,12 +39,12 @@ export function ProspectComposer(): JSX.Element {
     return (
         <section class="sw-prospect-composer" aria-label="Add prospect">
             <header class="sw-section__head">
-                <p class="sw-section__kicker">Push a name</p>
-                <h2 class="sw-section__title">Add prospect</h2>
+                <p class="sw-section__kicker">PROSPECTS</p>
+                <h2 class="sw-section__title">Add a prospect.</h2>
                 <p class="sw-section__sub">
-                    Stage advances automatically when the entry is strong
-                    enough — leverage, contact, entry point, approach all
-                    compound.
+                    The stronger the entry — contact, leverage, entry
+                    point, approach — the further along the board it
+                    lands.
                 </p>
             </header>
 
@@ -175,7 +175,7 @@ export function ProspectComposer(): JSX.Element {
                     <textarea
                         class="sw-field__control"
                         rows={3}
-                        placeholder="What did the research turn up? At least 40 chars unlocks the full quality bonus."
+                        placeholder="What did the research turn up? A real paragraph here advances the prospect further."
                         value={draft.notes}
                         onInput={(e) =>
                             patchProspectDraft({
