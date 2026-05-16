@@ -49,9 +49,13 @@ export function TouchLog(): JSX.Element {
     const all = allTouches.value;
     const hasRackScope = rack.value.accountName.trim().length > 0;
     const list = (hasRackScope ? scoped : all).slice(0, PREVIEW_LIMIT);
+    // Outbound Studio audit (2026-05): empty-state copy rewritten —
+    // the previous wording leaked internal architecture language
+    // ("Phase 4 / Rooms 3 + 4 read this same table for execution-
+    // context temperature").
     const emptyMsg = hasRackScope
-        ? "No touches yet for the active account. The \"Log touch\" button on the send line writes here."
-        : "No touches logged yet. The \"Log touch\" button on the send line writes here. Phase 4 / Rooms 3 + 4 read this same table for execution-context temperature.";
+        ? "No touches yet for this account. Click \"Log touch\" on the send line to start the trail."
+        : "No touches logged yet. Every touch you log here flows into the account's heat score and the dashboard's ranking.";
 
     return (
         <section class="ob-log" aria-label="Touch log">

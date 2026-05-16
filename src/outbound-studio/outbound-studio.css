@@ -67,15 +67,20 @@ button {
 }
 
 .ob-topbar__title {
+    /* Outbound Studio audit (2026-05): demoted from clamp(36,5vw,56)
+       hero weight. The OutputPanel send line is the page's working
+       hero. */
     font-family: "DM Serif Display", serif;
-    font-size: clamp(36px, 5vw, 56px);
-    line-height: 1.04;
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.18;
     font-weight: 400;
-    margin: 0 0 12px;
-    letter-spacing: -0.01em;
-    max-width: 22ch;
+    margin: 0;
+    letter-spacing: -0.005em;
+    max-width: 40ch;
+    color: var(--ob-ink);
 }
 
+/* .ob-topbar__sub retired — design-documentation paragraph removed. */
 .ob-topbar__sub {
     font-size: 16px;
     color: var(--ob-ink-70);
@@ -276,21 +281,35 @@ button {
 .ob-output__chip--thin { border-left: 2px solid var(--ob-ink-40); }
 
 .ob-output__body {
+    /* Outbound Studio audit (2026-05): was monospace pre-styled,
+       reading as a code block. Switched to operator's reading font
+       (Public Sans, paragraph weight) so the line looks like email
+       the way the recipient will see it. */
     margin: 0;
     flex: 1;
     background: var(--ob-field);
     border: 1px solid var(--ob-border);
-    border-radius: 2px;
-    padding: 14px 16px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 12.5px;
-    line-height: 1.55;
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
     color: var(--ob-ink);
     white-space: pre-wrap;
     word-break: break-word;
     min-height: 200px;
     max-height: 360px;
     overflow-y: auto;
+}
+
+/* Context row below the H2 — names the buyer + persona so the
+   operator can sanity-check addressing without re-reading the
+   switchboard. */
+.ob-output__context {
+    margin: 4px 0 14px;
+    font-size: 13px;
+    color: var(--ob-ink-70);
+    font-style: italic;
 }
 
 .ob-output__actions {
