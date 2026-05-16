@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import { Wordmark } from "@/lib/wordmark";
 import {
     accountDraft,
@@ -57,16 +56,25 @@ const DISPOSITION_LABELS: Readonly<Record<DispositionState, string>> = {
     reroute: "Reroute"
 };
 
+const STATUS_LABELS: Readonly<Record<"headroom" | "at-cap" | "over", string>> = {
+    "headroom": "Room to add",
+    "at-cap": "At cap",
+    "over": "Over cap"
+};
+
 function HeroBand(): JSX.Element {
     const a = allocation.value;
     const thesisCount = theses.value.length;
+    const kicker =
+        thesisCount > 0
+            ? `TERRITORY ARCHITECT · ${thesisCount} ${thesisCount === 1 ? "thesis" : "theses"} · ${a.total}/${a.ceiling} accounts`
+            : "TERRITORY ARCHITECT";
     return (
         <section class="ta-hero" aria-label="Territory hero">
             <div class="ant-room-chrome">
                 <Wordmark kicker="TERRITORY ARCHITECT" />
             </div>
-            <BackButton />
-            <p class="ta-hero__kicker">DECISION BENCH · TERRITORY ARCHITECT</p>
+            <p class="ta-hero__kicker">{kicker}</p>
             <h1 class="ta-hero__title">
                 <span>One territory.</span> One ceiling. Real bets.
             </h1>
@@ -85,9 +93,7 @@ function HeroBand(): JSX.Element {
                             {t.count}
                             <small>/{t.target}</small>
                         </p>
-                        <p class="ta-stat__label">
-                            {TIER_LABELS[t.tier].split(" ")[0]}
-                        </p>
+                        <p class="ta-stat__label">{TIER_LABELS[t.tier]}</p>
                     </div>
                 ))}
                 <div
@@ -98,7 +104,9 @@ function HeroBand(): JSX.Element {
                         {a.total}
                         <small>/{a.ceiling}</small>
                     </p>
-                    <p class="ta-stat__label">Total · {a.status}</p>
+                    <p class="ta-stat__label">
+                        Accounts · {STATUS_LABELS[a.status] ?? a.status}
+                    </p>
                 </div>
             </div>
         </section>
@@ -113,10 +121,9 @@ function ThesisStudio(): JSX.Element {
     return (
         <section class="ta-block" aria-label="Thesis studio">
             <header class="ta-block__head">
-                <p class="ta-block__kicker">THESIS STUDIO</p>
+                <p class="ta-block__kicker">THESES</p>
                 <h2 class="ta-block__title">
-                    Each thesis is one strategic bet — pressure, segment,
-                    why-us, tier.
+                    Each thesis is one strategic bet on a segment.
                 </h2>
             </header>
             <form
@@ -193,7 +200,7 @@ function ThesisStudio(): JSX.Element {
                     />
                 </label>
                 <label class="ta-field ta-field--full">
-                    <span class="ta-field__label">Why us (the angle)</span>
+                    <span class="ta-field__label">Why we win</span>
                     <textarea
                         class="ta-textarea"
                         placeholder="Why this team is the right seller for this thesis"
@@ -218,8 +225,8 @@ function ThesisStudio(): JSX.Element {
 
             {list.length === 0 ? (
                 <p class="ta-empty">
-                    No theses yet. Each saved thesis carries a tier + a list
-                    of approaches + the accounts tagged with it.
+                    No theses yet. Save one above to start building the
+                    territory.
                 </p>
             ) : (
                 <ul class="ta-thesis-list">
@@ -272,9 +279,9 @@ function ApproachLedger(): JSX.Element {
     return (
         <section class="ta-block" aria-label="Approach ledger">
             <header class="ta-block__head">
-                <p class="ta-block__kicker">APPROACH LEDGER</p>
+                <p class="ta-block__kicker">APPROACHES</p>
                 <h2 class="ta-block__title">
-                    Each approach is a reusable script for one thesis.
+                    Reusable talk-tracks, one per thesis.
                 </h2>
             </header>
             <form
@@ -326,7 +333,7 @@ function ApproachLedger(): JSX.Element {
                     <input
                         class="ta-input"
                         type="text"
-                        placeholder="Trigger or scenario this approach fits"
+                        placeholder="The trigger that makes this approach fit"
                         value={d.trigger}
                         onInput={(e) =>
                             patchApproachDraft({
@@ -338,10 +345,10 @@ function ApproachLedger(): JSX.Element {
                     />
                 </label>
                 <label class="ta-field ta-field--full">
-                    <span class="ta-field__label">Script</span>
+                    <span class="ta-field__label">Talk-track</span>
                     <textarea
                         class="ta-textarea"
-                        placeholder="The send-line / talk-track skeleton"
+                        placeholder="The send-line / opening line skeleton"
                         value={d.script}
                         onInput={(e) =>
                             patchApproachDraft({
@@ -353,10 +360,10 @@ function ApproachLedger(): JSX.Element {
                     />
                 </label>
                 <label class="ta-field ta-field--full">
-                    <span class="ta-field__label">Bridge phrasing</span>
+                    <span class="ta-field__label">Objection bridge</span>
                     <textarea
                         class="ta-textarea"
-                        placeholder="Objection-handling bridge"
+                        placeholder="How to bridge past the most common pushback"
                         value={d.bridge}
                         onInput={(e) =>
                             patchApproachDraft({
@@ -433,10 +440,9 @@ function AccountTable(): JSX.Element {
     return (
         <section class="ta-block" aria-label="Account table">
             <header class="ta-block__head">
-                <p class="ta-block__kicker">ACCOUNT TABLE</p>
+                <p class="ta-block__kicker">ACCOUNTS</p>
                 <h2 class="ta-block__title">
-                    300-account ceiling. Each row is a strategic bet, not an
-                    intent score.
+                    Each row is a strategic bet — kept under the 300 ceiling.
                 </h2>
                 <p class="ta-block__note">
                     {a.remaining > 0
@@ -663,17 +669,20 @@ function AccountTable(): JSX.Element {
 
 function HandoffStrip(): JSX.Element {
     return (
-        <nav class="ta-handoffs" aria-label="Cross-room handoff">
-            <a class="ta-handoff" href="/icp-studio/">
-                Open ICP Studio
-            </a>
-            <a class="ta-handoff" href="/sourcing-workbench/">
-                Open Sourcing Workbench
-            </a>
-            <a class="ta-handoff" href="/signal-console/">
-                Open Signal Console
-            </a>
-        </nav>
+        <section class="ta-handoff-strip" aria-label="Carry the territory forward">
+            <p class="ta-handoff-strip__kicker">CARRY THE TERRITORY FORWARD</p>
+            <nav class="ta-handoffs" aria-label="Cross-room handoff">
+                <a class="ta-handoff" href="/sourcing-workbench/">
+                    Source named prospects
+                </a>
+                <a class="ta-handoff" href="/signal-console/">
+                    Rank live signals
+                </a>
+                <a class="ta-handoff" href="/icp-studio/">
+                    Sharpen the ICP
+                </a>
+            </nav>
+        </section>
     );
 }
 
