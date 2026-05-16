@@ -5,9 +5,14 @@ import { groupByLane, rankRecovery } from "../lib/recovery";
 /**
  * LaneGrid — 3-lane summary strip per variant-B.
  *
- * Now / Next / Keep honest. Each lane is sentence-shaped — a state
- * label + headline + copy + meta count pair. This is the room's
- * read of the board's three operating moments at a glance.
+ * Now / Next / Keep honest. Each lane is a labeled count the
+ * operator can read in 1 second.
+ *
+ * Deal Workspace audit (2026-05): the philosophy paragraphs under
+ * each lane were beautiful but they were design documentation. A CRO
+ * reading "The board is only as honest as the deals with no dated
+ * next step…" doesn't get information. Replaced with terse
+ * counts + a single-line headline.
  */
 export function LaneGrid(): JSX.Element {
     const all = activeDeals.value;
@@ -27,17 +32,15 @@ export function LaneGrid(): JSX.Element {
         if (r.causes.some((c) => /stalled|days/i.test(c))) stalledCount += 1;
     }
 
+    const gapsCount = all.filter(
+        (d) => !d.nextStep || !d.nextStep.trim()
+    ).length;
+
     return (
         <section class="dw-lane-grid" aria-label="Three operating moments">
             <div class="dw-lane">
                 <p class="dw-lane__state">Now</p>
-                <p class="dw-lane__headline">
-                    Recover the weakest live thread
-                </p>
-                <p class="dw-lane__copy">
-                    The board is only as honest as the deals with no dated
-                    next step, overdue motion, or thin qualification.
-                </p>
+                <p class="dw-lane__headline">Recover the weakest live thread</p>
                 <p class="dw-lane__meta">
                     <span>
                         {recoveryItems} recovery{" "}
@@ -48,14 +51,7 @@ export function LaneGrid(): JSX.Element {
             </div>
             <div class="dw-lane">
                 <p class="dw-lane__state">Next</p>
-                <p class="dw-lane__headline">
-                    Tighten the best live opportunity
-                </p>
-                <p class="dw-lane__copy">
-                    Use the top-valued live deal as the forcing function.
-                    If it can't survive qualification pressure, the rest of
-                    the board is decorative.
-                </p>
+                <p class="dw-lane__headline">Tighten the best live opportunity</p>
                 <p class="dw-lane__meta">
                     <span>{topActive?.accountName ?? "—"}</span>
                     <span>
@@ -67,18 +63,10 @@ export function LaneGrid(): JSX.Element {
             </div>
             <div class="dw-lane">
                 <p class="dw-lane__state">Keep honest</p>
-                <p class="dw-lane__headline">
-                    Don't let stage outrun next-step truth
-                </p>
-                <p class="dw-lane__copy">
-                    A stage without a dated move is just optimism. Keep the
-                    close path and stakeholder map in sync with reality.
-                </p>
+                <p class="dw-lane__headline">Don't let stage outrun next-step truth</p>
                 <p class="dw-lane__meta">
                     <span>
-                        {all.filter((d) => !d.nextStep || !d.nextStep.trim())
-                            .length}{" "}
-                        next-step gaps
+                        {gapsCount} next-step gap{gapsCount === 1 ? "" : "s"}
                     </span>
                     <span>{stalledCount} stalled 7d+</span>
                 </p>

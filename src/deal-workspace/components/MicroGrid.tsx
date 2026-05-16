@@ -7,13 +7,12 @@ import {
 } from "../state";
 
 /**
- * MicroGrid — 3-cell stat grid below the stage-grid per variant-B.
+ * MicroGrid — 3-cell stat strip below the stage-grid.
  *
- * Replaces the earlier BridgeStats horizontal stat row. The micro
- * shape (label + value + sub) renders the workspace's three sources
- * of truth: active count, raw pipeline, closed truth (won/lost).
- *
- * Sentence-shaped sub-line per micro keeps the room authored.
+ * Deal Workspace audit (2026-05): kept but tightened. Was three
+ * stat tiles each with a sentence-shaped sub-line that re-stated
+ * what the value already conveyed. Now: label + value, full stop.
+ * Operator reads the row in 2 seconds.
  */
 
 function fmtMoney(n: number): string {
@@ -32,26 +31,15 @@ export function MicroGrid(): JSX.Element {
             <div class="dw-micro">
                 <p class="dw-micro__label">Active deals</p>
                 <p class="dw-micro__value">{active}</p>
-                <p class="dw-micro__sub">
-                    Live opportunities still under pressure.
-                </p>
             </div>
             <div class="dw-micro">
-                <p class="dw-micro__label">Pipeline</p>
-                <p class="dw-micro__value">
-                    {fmtMoney(pipelineValue.value)}
-                </p>
-                <p class="dw-micro__sub">
-                    Raw value before stage probability.
-                </p>
+                <p class="dw-micro__label">Pipeline value</p>
+                <p class="dw-micro__value">{fmtMoney(pipelineValue.value)}</p>
             </div>
             <div class="dw-micro">
-                <p class="dw-micro__label">Closed truth</p>
+                <p class="dw-micro__label">Won / lost (closed)</p>
                 <p class="dw-micro__value">
                     {won} / {lost}
-                </p>
-                <p class="dw-micro__sub">
-                    Won versus lost keeps forecast language grounded.
                 </p>
             </div>
         </section>
