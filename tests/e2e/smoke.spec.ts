@@ -458,7 +458,9 @@ test.describe("room boot smoke tests", () => {
 
         await expect(page.locator(".ob-progress__kicker")).toBeAttached();
         await expect(page.locator(".ob-step__title")).toBeVisible();
-        await expect(page.locator(".ob-step__kicker")).toContainText("Welcome");
+        // Onboarding audit (2026-05) normalized step kickers to ALL-CAPS
+        // with explicit step-of-total framing (e.g. "STEP 1 OF 7 — WELCOME").
+        await expect(page.locator(".ob-step__kicker")).toContainText("STEP 1");
 
         expect(
             errors,

@@ -25,9 +25,9 @@ import { StepShell } from "./StepShell";
 export function ThesisStep(): JSX.Element {
     return (
         <StepShell
-            kicker="Welcome"
+            kicker="STEP 1 OF 7 — WELCOME"
             title="The system that turns founder revenue work into operating truth."
-            subtitle="Antaeus is a pressure-and-truth system for commercial work — not a CRM, not an enablement library. Six small steps and the workspace will already be live."
+            subtitle="Antaeus is a pressure-and-truth system for commercial work — not a CRM, not an enablement library. Six quick answers and the workspace will already be live."
             onNext={() => nextStep()}
             nextLabel="Begin"
             hideBack
@@ -59,9 +59,9 @@ export function CompanyStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="Step 1 — A name"
+            kicker="STEP 2 OF 7 — COMPANY"
             title="What should the system call you?"
-            subtitle="The lowest-friction question first. Just the company name — everything else stays optional below."
+            subtitle="Lowest-friction question first. Just the company name — everything else stays optional below."
             onNext={() => nextStep()}
             onBack={() => prevStep()}
         >
@@ -93,9 +93,9 @@ export function RoleStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="Step 2 — A lens"
+            kicker="STEP 3 OF 7 — ROLE"
             title="Which seat are you in?"
-            subtitle="Role drives which downstream room is centered first. You can change this anytime from Settings."
+            subtitle="Role decides which surface the Dashboard centers first. You can change this anytime from Settings."
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.role === null}
@@ -124,9 +124,9 @@ export function CategoryStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="Step 3 — A frame"
+            kicker="STEP 4 OF 7 — CATEGORY"
             title="What category are you selling into?"
-            subtitle="Category shapes which discovery framework appears in Discovery Studio + which copy variants surface elsewhere."
+            subtitle="Category shapes which discovery framework loads when you run a live call."
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.category === null}
@@ -154,9 +154,9 @@ export function IcpStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="Step 4 — The wedge"
+            kicker="STEP 5 OF 7 — ICP"
             title="Write one sharp ICP."
-            subtitle="One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases. The system compounds off this."
+            subtitle="One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the wedge every downstream room targets against."
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.icpStatement.trim().length === 0}
@@ -200,9 +200,9 @@ export function AccountStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="Step 5 — One real account"
+            kicker="STEP 6 OF 7 — FIRST ACCOUNT"
             title="Pick one company that fits the ICP."
-            subtitle="The system gets visibly more real after the first named account. Optional, but high-leverage."
+            subtitle="Optional, but the workspace feels real once a named account lands in Signal Console."
             onNext={() => nextStep()}
             onBack={() => prevStep()}
         >
@@ -254,9 +254,9 @@ export function QuotaStep(): JSX.Element {
     }
     return (
         <StepShell
-            kicker="Step 6 — Pressure"
+            kicker="STEP 7 OF 7 — QUOTA"
             title="What revenue does the year owe?"
-            subtitle="Quota Workback uses these to translate revenue into a weekly execution plan. Optional — you can fill it later."
+            subtitle="Quota Workback turns these into a weekly execution plan. Optional — you can fill it later."
             onNext={() => {
                 const result = finishAndSeed();
                 if (!result.items.length) {
@@ -295,10 +295,9 @@ export function QuotaStep(): JSX.Element {
             </div>
             {validation.value.missingRequired.length > 0 ? (
                 <p class="ob-coach">
-                    Soft coaching:{" "}
-                    {validation.value.missingRequired.join(" · ")}. None of
-                    these block finishing — but each one makes the Dashboard
-                    wake up sharper.
+                    Worth filling: {validation.value.missingRequired.join(" · ")}.
+                    None of these block finishing — they just make the
+                    Dashboard land with sharper context.
                 </p>
             ) : null}
         </StepShell>
@@ -309,7 +308,7 @@ export function CompleteStep(): JSX.Element {
     const ok = seeded.value;
     return (
         <StepShell
-            kicker="Onboarding complete"
+            kicker="ONBOARDING COMPLETE"
             title="The workspace is live."
             subtitle={
                 ok
@@ -322,17 +321,17 @@ export function CompleteStep(): JSX.Element {
                 <ul class="ob-complete__list">
                     <li>
                         <a class="ob-btn ob-btn--primary" href="/welcome/">
-                            Open Welcome
+                            Start the first move
                         </a>
                     </li>
                     <li>
                         <a class="ob-btn ob-btn--ghost" href="/dashboard/">
-                            Open Dashboard (Spotlight)
+                            See the live Dashboard
                         </a>
                     </li>
                     <li>
                         <a class="ob-btn ob-btn--ghost" href="/quota-workback/">
-                            Open Quota Workback
+                            Plan the weekly math
                         </a>
                     </li>
                     <li>
