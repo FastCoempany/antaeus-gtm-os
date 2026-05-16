@@ -54,12 +54,14 @@ export function CallMemory(): JSX.Element {
             </header>
 
             {calls.length === 0 ? (
+                // Cold Call Studio audit (2026-05): rewrote the empty
+                // state — the previous copy mentioned "Phase 4 / Room 1"
+                // and `gtmos_cold_call_log`, both internal architecture.
                 <p class="cc-memory__empty">
-                    No cold call outcomes logged yet. The outcome buttons in
-                    the talk loom write here, and Phase 4 / Room 1 (Deal
-                    Workspace) reads from <code>gtmos_cold_call_log</code>
-                    on{" "}
-                    <code>meeting_booked</code> outcomes.
+                    No outcomes logged yet. After each call, hit the
+                    outcome button below the thread sheet — every entry
+                    here flows into the dashboard's ranking and, on
+                    "meeting booked," creates a new deal automatically.
                 </p>
             ) : (
                 <div class="cc-memory__table-wrap">
