@@ -45,16 +45,15 @@ button {
     cursor: pointer;
 }
 
-/* ─── Shell (Phase 2 rework: spine + surface) ──────────────────────── */
-
+/* ─── Shell ────────────────────────────────────────────────────────── */
+/* Deal Workspace audit (2026-05): Spine left rail removed; layout
+   collapsed from two-column (56px + 1fr) to single column with the
+   wordmark in the global room-chrome strip carrying brand presence. */
 .dw-shell {
     min-height: 100vh;
     padding: 28px 22px 80px;
     max-width: 1600px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 22px;
     background:
         radial-gradient(circle at 0% 0%, rgba(36, 113, 231, 0.05), transparent 26%),
         radial-gradient(circle at 100% 0%, rgba(230, 112, 30, 0.04), transparent 24%),
@@ -979,23 +978,19 @@ button {
 }
 
 .dw-hero__title {
+    /* Deal Workspace audit (2026-05): demoted from clamp(30,3.5vw,44)
+       hero weight. The DealList table is the page's working hero. */
     font-family: "DM Serif Display", serif;
-    font-size: clamp(30px, 3.5vw, 44px);
-    line-height: 1.05;
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.18;
     font-weight: 400;
     color: var(--dw-ink);
-    margin: 0;
-    letter-spacing: -0.01em;
-    max-width: 16ch;
+    margin: 0 0 16px;
+    letter-spacing: -0.005em;
+    max-width: 28ch;
 }
 
-.dw-hero__sub {
-    color: var(--dw-ink-70);
-    font-size: 15px;
-    line-height: 1.55;
-    margin: 0;
-    max-width: 50ch;
-}
+/* .dw-hero__sub retired — design-documentation paragraph removed. */
 
 .dw-hero__actions {
     display: flex;
@@ -1455,4 +1450,199 @@ button {
     gap: 16px;
     padding: 16px 0 0;
     border-top: 1px solid var(--dw-border);
+}
+
+/* ============================================
+   Deal Workspace audit (2026-05) — DealList
+   ============================================ */
+
+.dw-deal-list {
+    margin-top: 24px;
+    background: var(--dw-field-raised);
+    border: 1px solid var(--dw-border);
+    border-radius: 6px;
+    padding: 18px 20px 14px;
+}
+
+.dw-deal-list__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.dw-deal-list__title {
+    font-family: "DM Serif Display", serif;
+    font-size: 1.1rem;
+    line-height: 1.2;
+    font-weight: 400;
+    margin: 0;
+    color: var(--dw-ink);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.dw-deal-list__count {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--dw-ink-70);
+    font-weight: 700;
+}
+
+.dw-deal-list__search {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 1 320px;
+}
+
+.dw-deal-list__search-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--dw-ink-40);
+}
+
+.dw-deal-list__search input {
+    flex: 1;
+    border: 1px solid var(--dw-border);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--dw-ink);
+    background: var(--dw-field);
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.dw-deal-list__search input:focus {
+    outline: none;
+    border-color: var(--dw-border-strong);
+    box-shadow: 0 0 0 3px rgba(10, 28, 64, 0.06);
+}
+
+.dw-deal-list__empty {
+    margin: 0;
+    padding: 12px 0;
+    color: var(--dw-ink-70);
+    font-size: 13px;
+    font-style: italic;
+}
+
+.dw-deal-list__clear {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--dw-accent-orange, #e6701e);
+    cursor: pointer;
+    text-decoration: underline;
+    font: inherit;
+    font-style: italic;
+}
+
+.dw-deal-list__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dw-deal-row {
+    width: 100%;
+    background: var(--dw-field);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 10px 14px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) 110px 100px minmax(0, 2fr) 80px;
+    gap: 14px;
+    align-items: center;
+    text-align: left;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--dw-ink);
+    cursor: pointer;
+    transition: background 140ms ease, border-color 140ms ease;
+}
+
+.dw-deal-row:hover {
+    background: rgba(10, 28, 64, 0.04);
+    border-color: var(--dw-border);
+}
+
+.dw-deal-row.is-focused {
+    background: rgba(230, 112, 30, 0.06);
+    border-color: rgba(230, 112, 30, 0.32);
+}
+
+.dw-deal-row__name {
+    font-weight: 600;
+    color: var(--dw-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dw-deal-row__stage {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dw-ink-70);
+}
+
+.dw-deal-row__value {
+    font-variant-numeric: tabular-nums;
+    color: var(--dw-ink-70);
+}
+
+.dw-deal-row__nextstep {
+    color: var(--dw-ink-70);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-style: italic;
+}
+
+.dw-deal-row__lane {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    justify-self: end;
+}
+
+.dw-deal-row__lane--critical {
+    background: rgba(180, 38, 31, 0.10);
+    color: var(--dw-accent-red, #b4261f);
+}
+
+.dw-deal-row__lane--at-risk {
+    background: rgba(181, 117, 0, 0.10);
+    color: var(--dw-accent-amber, #b57500);
+}
+
+.dw-deal-row__lane--healthy {
+    background: rgba(46, 125, 76, 0.10);
+    color: var(--dw-accent-green, #2e7d4c);
+}
+
+@media (max-width: 840px) {
+    .dw-deal-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        padding: 12px 14px;
+    }
+    .dw-deal-row__lane {
+        justify-self: start;
+    }
 }

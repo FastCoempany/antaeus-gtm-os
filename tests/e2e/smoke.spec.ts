@@ -87,12 +87,11 @@ test.describe("room boot smoke tests", () => {
         await expect(page.locator(".dw-topbar__kicker")).toContainText(
             "DEAL WORKSPACE"
         );
-        // Phase 2 rework — the room is now spine + 2-col stage-grid
-        // (Hero left + TargetFolio right) + MicroGrid + LaneGrid +
-        // Controls strip. The legacy dw-bridge / dw-recovery /
-        // dw-intervention top-level sections were retired (their
-        // content lives inside the folio dock now).
-        await expect(page.locator(".dw-spine")).toBeAttached();
+        // Deal Workspace audit (2026-05) retired the Spine left rail
+        // (pure decoration). Room is now single-column: chrome
+        // (wordmark) + topbar + stage-grid (Hero + TargetFolio) +
+        // MicroGrid + LaneGrid + FilterBar. DealList renders below
+        // FilterBar when there are deals.
         await expect(page.locator(".dw-stage-grid")).toBeAttached();
         await expect(page.locator(".dw-hero")).toBeAttached();
         await expect(page.locator(".dw-target-folio")).toBeAttached();
