@@ -1,17 +1,25 @@
 import type { JSX } from "preact";
-import { searchQuery, setSearchQuery } from "../state";
+import { allAccounts, searchQuery, setSearchQuery } from "../state";
 import { AddAccountForm } from "./AddAccountForm";
 
 /**
- * GridControls — search input + manual-add trigger above the grid.
+ * GridControls — Add + search row above the grid.
  *
- * Wave 1 shipped search only. The cloud-sync gap closer (A3) added
- * the AddAccountForm so the new room isn't read-only — manual adds
- * persist through cloud-persistence and sync cross-device.
+ * Signal Console audit (2026-05): on an empty workspace the search
+ * box is meaningless (nothing to search). The Add Account form lives
+ * inline in the EmptyState card instead, so this row hides entirely
+ * until at least one account exists.
+ *
+ * On non-empty, the Add button moves to the LEFT of search — "add"
+ * is the primary verb, search is the filter.
  */
-export function GridControls(): JSX.Element {
+export function GridControls(): JSX.Element | null {
+    const total = allAccounts.value.length;
+    if (total === 0) return null;
+
     return (
         <nav class="sc-grid-controls" aria-label="Account list controls">
+            <AddAccountForm />
             <label class="sc-grid-controls__search">
                 <span class="sc-grid-controls__search-label">FILTER</span>
                 <input
@@ -25,7 +33,6 @@ export function GridControls(): JSX.Element {
                     }
                 />
             </label>
-            <AddAccountForm />
         </nav>
     );
 }

@@ -73,21 +73,20 @@ button {
 }
 
 .sc-topbar__title {
+    /* Signal Console audit (2026-05): demoted from clamp(32,4vw,50)
+       hero weight. The thesis is a confident declaration; the account
+       grid below is the visual hero. */
     font-family: "DM Serif Display", serif;
-    font-size: clamp(32px, 4vw, 50px);
-    line-height: 1.04;
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.18;
     font-weight: 400;
-    margin: 0 0 12px;
-    letter-spacing: -0.01em;
-    max-width: 22ch;
+    margin: 0;
+    letter-spacing: -0.005em;
+    max-width: 36ch;
+    color: var(--sc-ink);
 }
 
-.sc-topbar__sub {
-    font-size: 16px;
-    color: var(--sc-ink-70);
-    margin: 0;
-    max-width: 60ch;
-}
+/* .sc-topbar__sub retired — design-documentation copy removed. */
 
 /* ─── Grid controls ────────────────────────────────────────────────── */
 
@@ -658,4 +657,222 @@ button {
     align-items: center;
     gap: 12px;
     margin-top: 14px;
+}
+
+/* ============================================
+   Signal Console audit (2026-05) additions
+   ============================================ */
+
+/* Standalone "Motion ready" / "Research heavy" verdict chip — replaces
+   the old labeled "Posture" cell. */
+.sc-health__verdict {
+    align-self: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: var(--sc-field-raised);
+    grid-column: 1 / -1;
+    text-align: center;
+}
+
+.sc-health__verdict--ready {
+    color: var(--sc-accent-green);
+    border: 1px solid rgba(34, 197, 94, 0.32);
+    background: rgba(34, 197, 94, 0.06);
+}
+
+.sc-health__verdict--research {
+    color: var(--sc-accent-amber);
+    border: 1px solid rgba(245, 158, 11, 0.32);
+    background: rgba(245, 158, 11, 0.06);
+}
+
+/* Empty-state hero card (replaces dev-narration placeholder). */
+.sc-empty {
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border);
+    border-radius: 10px;
+    padding: 32px 36px;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sc-empty__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.55);
+    margin: 0;
+}
+
+.sc-empty__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(22px, 2.6vw, 30px);
+    line-height: 1.18;
+    font-weight: 400;
+    margin: 0;
+    color: var(--sc-ink);
+    max-width: 36ch;
+    letter-spacing: -0.005em;
+}
+
+.sc-empty__body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(10, 28, 64, 0.7);
+    max-width: 62ch;
+    margin: 0 0 8px;
+}
+
+/* Embedded form variant (mounts inside the empty-state hero). No
+   modal header / close button; form is always open. */
+.sc-add-form--embedded {
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.sc-add-form__expand {
+    background: transparent;
+    border: none;
+    color: rgba(10, 28, 64, 0.55);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 0;
+    margin: 0;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: color 140ms ease;
+}
+
+.sc-add-form__expand:hover {
+    color: var(--sc-accent-orange, #e6701e);
+}
+
+/* Heat-band explainer banner (dismissable, first non-empty load). */
+.sc-heat-banner {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 18px;
+    background: var(--sc-field-raised);
+    border: 1px solid var(--sc-border);
+    border-left: 3px solid var(--sc-accent-orange, #e6701e);
+    border-radius: 4px;
+    margin-bottom: 16px;
+}
+
+.sc-heat-banner__body {
+    flex: 1;
+}
+
+.sc-heat-banner__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sc-accent-orange, #e6701e);
+    margin: 0 0 6px;
+    font-weight: 700;
+}
+
+.sc-heat-banner__copy {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: rgba(10, 28, 64, 0.78);
+    margin: 0 0 10px;
+}
+
+.sc-heat-banner__bands {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: rgba(10, 28, 64, 0.7);
+}
+
+.sc-heat-banner__bands li {
+    line-height: 1.5;
+}
+
+.sc-heat-banner__chip {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 3px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-right: 4px;
+}
+
+.sc-heat-banner__chip--hot {
+    background: rgba(180, 38, 31, 0.10);
+    color: var(--sc-accent-red, #b4261f);
+}
+.sc-heat-banner__chip--active {
+    background: rgba(230, 112, 30, 0.10);
+    color: var(--sc-accent-orange, #e6701e);
+}
+.sc-heat-banner__chip--watch {
+    background: rgba(46, 90, 172, 0.10);
+    color: var(--sc-accent-blue, #2e5aac);
+}
+.sc-heat-banner__chip--low {
+    background: rgba(10, 28, 64, 0.06);
+    color: rgba(10, 28, 64, 0.55);
+}
+
+.sc-heat-banner__close {
+    background: transparent;
+    border: none;
+    color: rgba(10, 28, 64, 0.4);
+    font-size: 20px;
+    line-height: 1;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: color 140ms ease;
+}
+
+.sc-heat-banner__close:hover {
+    color: var(--sc-ink, #0a1c40);
+}
+
+/* ICP-match chip in card header (right of ticker + engagement). */
+.sc-card__icp {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.sc-card__icp--fit {
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--sc-accent-green, #2e7d4c);
+}
+.sc-card__icp--loose {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--sc-accent-amber, #b57500);
+}
+.sc-card__icp--off {
+    background: rgba(10, 28, 64, 0.06);
+    color: rgba(10, 28, 64, 0.5);
 }

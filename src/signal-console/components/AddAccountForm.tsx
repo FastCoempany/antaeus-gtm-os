@@ -6,18 +6,36 @@ import { saveAccount } from "../lib/cloud-persistence";
 /**
  * AddAccountForm — manual "add account" composer.
  *
- * Per A3 of the cloud-sync gap closer: the legacy enrichment flow at
- * `/app/signal-console/` writes through to the cloud already, but the
- * new Preact room had no manual-add surface. This minimal form lets
- * the operator type in an account by hand and persist it through the
- * same cloud-persistence pipeline (saveAccount), so cross-device sync
- * + realtime work from the moment of creation.
+ * Per A3 of the cloud-sync gap closer + Signal Console audit (2026-05):
+ * the operator adds an account in TWO steps:
+ *   1) Type the name → save (one-field commit)
+ *   2) Optionally expand to add domain / ticker / industry / hq / notes
  *
- * The legacy bulk CSV + AI enrichment flow stays at /app/signal-console/
- * for now; it's a separate larger port.
+ * Six fields at once was too heavy for what's typically a fast "drop
+ * this on the radar" action. A CRO adds an account the way they add
+ * a contact in their phone — name first, fill in the rest later.
+ *
+ * Variants:
+ *   - `embedded` (default false) — when true, renders as the dominant
+ *     CTA inside the empty-state card (no toggle, form always open).
+ *
+ * TODO (post-beta scaling cliff): bulk import via CSV paste + AI
+ * enrichment lives at /app/signal-console/ on the legacy stack. A CRO
+ * with 40 prospects in a spreadsheet will need this within five
+ * minutes of first use. Tracked in the post-beta polish backlog.
  */
-export function AddAccountForm(): JSX.Element {
-    const [open, setOpen] = useState(false);
+export interface AddAccountFormProps {
+    readonly embedded?: boolean;
+}
+
+export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
+    const embedded = props.embedded === true;
+    // In embedded mode, the form is always open. Otherwise it toggles.
+    const [open, setOpen] = useState(embedded);
+    // Expand state: name-only by default; expands when operator clicks
+    // "Add details" or after first successful save (so they're invited
+    // to enrich without losing context).
+    const [expanded, setExpanded] = useState(false);
     const [name, setName] = useState("");
     const [domain, setDomain] = useState("");
     const [ticker, setTicker] = useState("");
@@ -39,6 +57,7 @@ export function AddAccountForm(): JSX.Element {
         setIndustry("");
         setHq("");
         setNotes("");
+        setExpanded(false);
     }
 
     async function onSubmit(e: Event): Promise<void> {
@@ -58,25 +77,24 @@ export function AddAccountForm(): JSX.Element {
                 hq,
                 notes
             });
-            // Optimistic local upsert first so the grid lights up
-            // immediately. saveAccount round-trips and will replace
-            // the legacy id with a server uuid on success.
             upsertAccount(account);
             await saveAccount(account);
             flash(`Saved · ${trimmed}`);
             reset();
-            setOpen(false);
+            // Embedded: stay open for fast-add of next account.
+            // Toggled: close so the operator returns to the grid view.
+            if (!embedded) setOpen(false);
         } finally {
             setWorking(false);
         }
     }
 
-    if (!open) {
+    if (!embedded && !open) {
         return (
             <div class="sc-add-trigger">
                 <button
                     type="button"
-                    class="sc-add-btn"
+                    class="sc-add-btn sc-add-btn--primary"
                     onClick={() => setOpen(true)}
                 >
                     + Add account
@@ -91,126 +109,144 @@ export function AddAccountForm(): JSX.Element {
     }
 
     return (
-        <form class="sc-add-form" onSubmit={onSubmit}>
-            <header class="sc-add-form__head">
-                <p class="sc-add-form__kicker">ADD ACCOUNT</p>
+        <form
+            class={`sc-add-form${embedded ? " sc-add-form--embedded" : ""}`}
+            onSubmit={onSubmit}
+        >
+            {!embedded ? (
+                <header class="sc-add-form__head">
+                    <p class="sc-add-form__kicker">ADD ACCOUNT</p>
+                    <button
+                        type="button"
+                        class="sc-add-form__close"
+                        onClick={() => {
+                            reset();
+                            setOpen(false);
+                        }}
+                        aria-label="Close add-account form"
+                    >
+                        ×
+                    </button>
+                </header>
+            ) : null}
+
+            <label class="sc-add-form__field sc-add-form__field--wide">
+                <span>Account name</span>
+                <input
+                    type="text"
+                    value={name}
+                    autoFocus
+                    onInput={(e) =>
+                        setName((e.currentTarget as HTMLInputElement).value)
+                    }
+                    placeholder="e.g. Acme Robotics"
+                />
+            </label>
+
+            {expanded ? (
+                <div class="sc-add-form__grid">
+                    <label class="sc-add-form__field">
+                        <span>Domain</span>
+                        <input
+                            type="text"
+                            value={domain}
+                            onInput={(e) =>
+                                setDomain(
+                                    (e.currentTarget as HTMLInputElement)
+                                        .value
+                                )
+                            }
+                            placeholder="acme.com"
+                        />
+                    </label>
+                    <label class="sc-add-form__field">
+                        <span>Ticker</span>
+                        <input
+                            type="text"
+                            value={ticker}
+                            onInput={(e) =>
+                                setTicker(
+                                    (e.currentTarget as HTMLInputElement)
+                                        .value
+                                )
+                            }
+                            placeholder="ACME"
+                        />
+                    </label>
+                    <label class="sc-add-form__field">
+                        <span>Industry</span>
+                        <input
+                            type="text"
+                            value={industry}
+                            onInput={(e) =>
+                                setIndustry(
+                                    (e.currentTarget as HTMLInputElement)
+                                        .value
+                                )
+                            }
+                            placeholder="Logistics"
+                        />
+                    </label>
+                    <label class="sc-add-form__field">
+                        <span>HQ</span>
+                        <input
+                            type="text"
+                            value={hq}
+                            onInput={(e) =>
+                                setHq(
+                                    (e.currentTarget as HTMLInputElement)
+                                        .value
+                                )
+                            }
+                            placeholder="San Francisco, CA"
+                        />
+                    </label>
+                    <label class="sc-add-form__field sc-add-form__field--wide">
+                        <span>Why this account's on the radar</span>
+                        <textarea
+                            rows={2}
+                            value={notes}
+                            onInput={(e) =>
+                                setNotes(
+                                    (e.currentTarget as HTMLTextAreaElement)
+                                        .value
+                                )
+                            }
+                            placeholder="One sentence. Trigger, conversation, or signal that brought them up."
+                        />
+                    </label>
+                </div>
+            ) : (
                 <button
                     type="button"
-                    class="sc-add-form__close"
-                    onClick={() => {
-                        reset();
-                        setOpen(false);
-                    }}
-                    aria-label="Close add-account form"
+                    class="sc-add-form__expand"
+                    onClick={() => setExpanded(true)}
                 >
-                    ×
+                    + Add details (optional)
                 </button>
-            </header>
-            <p class="sc-add-form__hint">
-                Name is required. Everything else helps the room reason
-                about heat + persona match. Bulk CSV + AI enrichment live
-                at <code>/app/signal-console/</code>.
-            </p>
-            <div class="sc-add-form__grid">
-                <label class="sc-add-form__field">
-                    <span>Account name *</span>
-                    <input
-                        type="text"
-                        value={name}
-                        autoFocus
-                        onInput={(e) =>
-                            setName(
-                                (e.currentTarget as HTMLInputElement).value
-                            )
-                        }
-                        placeholder="e.g. Acme Industries"
-                    />
-                </label>
-                <label class="sc-add-form__field">
-                    <span>Domain</span>
-                    <input
-                        type="text"
-                        value={domain}
-                        onInput={(e) =>
-                            setDomain(
-                                (e.currentTarget as HTMLInputElement).value
-                            )
-                        }
-                        placeholder="acme.com"
-                    />
-                </label>
-                <label class="sc-add-form__field">
-                    <span>Ticker</span>
-                    <input
-                        type="text"
-                        value={ticker}
-                        onInput={(e) =>
-                            setTicker(
-                                (e.currentTarget as HTMLInputElement).value
-                            )
-                        }
-                        placeholder="ACME"
-                    />
-                </label>
-                <label class="sc-add-form__field">
-                    <span>Industry</span>
-                    <input
-                        type="text"
-                        value={industry}
-                        onInput={(e) =>
-                            setIndustry(
-                                (e.currentTarget as HTMLInputElement).value
-                            )
-                        }
-                        placeholder="Logistics"
-                    />
-                </label>
-                <label class="sc-add-form__field">
-                    <span>HQ</span>
-                    <input
-                        type="text"
-                        value={hq}
-                        onInput={(e) =>
-                            setHq(
-                                (e.currentTarget as HTMLInputElement).value
-                            )
-                        }
-                        placeholder="San Francisco, CA"
-                    />
-                </label>
-                <label class="sc-add-form__field sc-add-form__field--wide">
-                    <span>Notes</span>
-                    <textarea
-                        rows={2}
-                        value={notes}
-                        onInput={(e) =>
-                            setNotes(
-                                (e.currentTarget as HTMLTextAreaElement).value
-                            )
-                        }
-                        placeholder="Why this account is on the radar"
-                    />
-                </label>
-            </div>
+            )}
+
             <div class="sc-add-form__actions">
                 <button
                     type="submit"
                     class="sc-add-btn sc-add-btn--primary"
                     disabled={working || name.trim().length === 0}
                 >
-                    {working ? "Saving…" : "Save to cloud"}
+                    {working ? "Saving…" : "Add account"}
                 </button>
-                <button
-                    type="button"
-                    class="sc-add-btn sc-add-btn--ghost"
-                    onClick={() => {
-                        reset();
-                        setOpen(false);
-                    }}
-                    disabled={working}
-                >
-                    Cancel
-                </button>
+                {!embedded ? (
+                    <button
+                        type="button"
+                        class="sc-add-btn sc-add-btn--ghost"
+                        onClick={() => {
+                            reset();
+                            setOpen(false);
+                        }}
+                        disabled={working}
+                    >
+                        Cancel
+                    </button>
+                ) : null}
                 {toast ? (
                     <span class="sc-add-toast" role="status">
                         {toast}

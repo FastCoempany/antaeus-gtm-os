@@ -2,14 +2,22 @@ import type { JSX } from "preact";
 import { allAccounts, visibleAccounts } from "../state";
 import { rankByHeat } from "../lib/heat";
 import { AccountCard } from "./AccountCard";
+import { AddAccountForm } from "./AddAccountForm";
+import { HeatBandBanner } from "./HeatBandBanner";
 
 /**
- * AccountGrid — Wave 3 implementation.
+ * AccountGrid — heat-ranked account cards.
  *
- * Renders every visible account as a card, sorted by heat (descending,
- * stable on ties). Per canon §4.7: heat ranking IS the room's
- * organizing logic — no manual reorder, no drag handles, no manual
- * column choice. Stage is not truth unless heat backs it up.
+ * Per canon §4.7: heat ranking IS the room's organizing logic. No
+ * manual reorder, no drag handles, no manual column choice. Stage is
+ * not truth unless heat backs it up.
+ *
+ * Signal Console audit (2026-05) deltas:
+ *   - Empty state rewritten to operator-direct prose with the Add
+ *     form embedded as the dominant CTA (was: developer narration
+ *     mentioning "Wave 4", "gtmos_sc_v4", and "empty shell").
+ *   - HeatBandBanner shows above the grid on first non-empty load
+ *     (dismissable, once per workspace).
  */
 export function AccountGrid(): JSX.Element {
     const visible = visibleAccounts.value;
@@ -17,12 +25,20 @@ export function AccountGrid(): JSX.Element {
 
     if (total === 0) {
         return (
-            <section class="sc-grid sc-grid--empty" aria-label="Account grid">
-                <p class="sc-grid__empty">
-                    No accounts yet. Wave 4 wires persistence so accounts load
-                    from `gtmos_sc_v4` (legacy) or the Phase 2.3 migration
-                    blob; until then the room renders this empty shell.
-                </p>
+            <section class="sc-grid sc-grid--empty" aria-label="Get started">
+                <div class="sc-empty">
+                    <p class="sc-empty__kicker">No accounts on the radar yet</p>
+                    <h2 class="sc-empty__title">
+                        Drop in the first one — anything you've been watching.
+                    </h2>
+                    <p class="sc-empty__body">
+                        A customer mentioned them. An exec from the company
+                        posted something. You saw them in a competitor's
+                        case study. Whatever caught your attention. The room
+                        starts ranking heat the moment one account is in.
+                    </p>
+                    <AddAccountForm embedded />
+                </div>
             </section>
         );
     }
@@ -38,14 +54,17 @@ export function AccountGrid(): JSX.Element {
     const ranked = rankByHeat(visible);
 
     return (
-        <section class="sc-grid" aria-label="Account grid">
-            <ul class="sc-grid__list">
-                {ranked.map((a) => (
-                    <li key={a.id}>
-                        <AccountCard account={a} />
-                    </li>
-                ))}
-            </ul>
-        </section>
+        <>
+            <HeatBandBanner />
+            <section class="sc-grid" aria-label="Account grid">
+                <ul class="sc-grid__list">
+                    {ranked.map((a) => (
+                        <li key={a.id}>
+                            <AccountCard account={a} />
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </>
     );
 }

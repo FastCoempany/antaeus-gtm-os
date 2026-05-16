@@ -3,12 +3,12 @@ import { useState } from "preact/hooks";
 import type { Account, Signal } from "../lib/types";
 import { heatMetrics, recency } from "../lib/heat";
 import {
-    hrefToColdCall,
     hrefToDealWorkspace,
     hrefToDiscoveryAgenda,
     hrefToOutbound
 } from "../lib/handoff";
 import { getAccountExecutionContext } from "../lib/execution-context";
+import { matchAccountToIcp } from "../lib/icp-match";
 import { HeatBadge } from "./HeatBadge";
 
 interface Props {
@@ -30,6 +30,10 @@ export function AccountCard({ account, now }: Props): JSX.Element {
     const [expanded, setExpanded] = useState(false);
     const metrics = heatMetrics(account, now);
     const exec = getAccountExecutionContext(account);
+    // Signal Console audit (2026-05): ICP match chip on every card so
+    // operator can tell wrong-target heat from on-target heat at a
+    // glance. Returns null when no ICP is saved yet → chip is hidden.
+    const icpMatch = matchAccountToIcp(account);
     const sigs = account.signals.filter((s) => s.status !== "flagged" && s.flagged !== true);
     const previewLimit = 3;
     const previewSigs = expanded ? sigs : sigs.slice(0, previewLimit);
@@ -54,6 +58,14 @@ export function AccountCard({ account, now }: Props): JSX.Element {
                         >
                             {exec.temperatureLabel}
                         </span>
+                        {icpMatch ? (
+                            <span
+                                class={`sc-card__icp sc-card__icp--${icpMatch.band}`}
+                                title={`Industry / geo overlap against your saved ICP (score ${icpMatch.score})`}
+                            >
+                                {icpMatch.label}
+                            </span>
+                        ) : null}
                     </div>
                 </div>
                 <HeatBadge account={account} now={now} />
@@ -106,6 +118,14 @@ export function AccountCard({ account, now }: Props): JSX.Element {
                     <span class="sc-card__metric">{metrics.recentCount} recent</span>
                 </div>
                 <div class="sc-card__ctas">
+                    {/*
+                      Signal Console audit (2026-05): trimmed from 3 CTAs to 2.
+                      "Cold Call" was redundant with "Plan call" — they're
+                      sequential (plan first, then call), and Cold Call Studio
+                      is reachable from inside the call plan. One primary
+                      (state-driven) + one secondary keeps the dominant move
+                      visually loud.
+                    */}
                     {exec.hasActiveDeal ? (
                         <a
                             class="sc-card__cta sc-card__cta--primary"
@@ -126,12 +146,6 @@ export function AccountCard({ account, now }: Props): JSX.Element {
                         href={hrefToDiscoveryAgenda(account.name)}
                     >
                         Plan call
-                    </a>
-                    <a
-                        class="sc-card__cta sc-card__cta--ghost"
-                        href={hrefToColdCall(account.name)}
-                    >
-                        Cold call
                     </a>
                 </div>
             </footer>
