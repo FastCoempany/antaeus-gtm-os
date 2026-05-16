@@ -1,6 +1,8 @@
 import type { JSX } from "preact";
 import { useEffect } from "preact/hooks";
 import type { ReadinessSummary, Verdict } from "@/lib/readiness";
+import { commandMode, commandSummary } from "../state";
+import { exportCommandCenterJson } from "../lib/command-export";
 import { exportReadinessJson } from "../lib/readiness-export";
 
 /**
@@ -57,11 +59,20 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
     const tone = VERDICT_TONE[props.summary.verdict];
     const subtitle = VERDICT_SUBTITLE[props.summary.verdict];
 
-    function handleExport(): void {
+    function handleExportReadiness(): void {
         // Fire-and-forget. Multiple rapid clicks would only queue
         // duplicate downloads; the typical use is one click.
         void exportReadinessJson(props.summary);
     }
+
+    function handleExportSnapshot(): void {
+        // Dashboard audit moved this off the topbar rail into the
+        // drawer footer. Verdict + ranked-objects snapshot are
+        // conceptually paired — both are "what was the state of the
+        // motion on day X."
+        exportCommandCenterJson(commandSummary.value, commandMode.value);
+    }
+    const rankedCount = commandSummary.value.ranked.length;
 
     return (
         <div
@@ -176,7 +187,22 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                     <button
                         type="button"
                         class="db-readiness-drawer__export"
-                        onClick={handleExport}
+                        onClick={handleExportSnapshot}
+                        disabled={rankedCount === 0}
+                        title={
+                            rankedCount === 0
+                                ? "No ranked objects to export yet"
+                                : `Export ${rankedCount} ranked object${
+                                      rankedCount === 1 ? "" : "s"
+                                  } as JSON`
+                        }
+                    >
+                        Export today's snapshot
+                    </button>
+                    <button
+                        type="button"
+                        class="db-readiness-drawer__export"
+                        onClick={handleExportReadiness}
                         title="Download the verdict + dimensions + history as JSON"
                     >
                         Export verdict + history

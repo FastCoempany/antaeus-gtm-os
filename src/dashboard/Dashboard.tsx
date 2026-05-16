@@ -3,6 +3,7 @@ import { Wordmark } from "@/lib/wordmark";
 import {
     closeReadinessDrawer,
     commandMode,
+    commandSummary,
     readinessDrawerOpen,
     readinessSummary
 } from "./state";
@@ -10,6 +11,7 @@ import { Topbar } from "./components/Topbar";
 import { SpotlightView } from "./components/SpotlightView";
 import { BriefView } from "./components/BriefView";
 import { QueueView } from "./components/QueueView";
+import { EmptyDashboard } from "./components/EmptyDashboard";
 import { ReadinessDrawer } from "./components/ReadinessDrawer";
 
 /**
@@ -31,15 +33,27 @@ import { ReadinessDrawer } from "./components/ReadinessDrawer";
 export function Dashboard(): JSX.Element {
     const mode = commandMode.value;
     const drawerOpen = readinessDrawerOpen.value;
+    // Empty workspace → orientation surface replaces every mode view.
+    // Dashboard audit (2026-05): the silent empty Dashboard read as
+    // "I have nothing for you. Welcome." — sin of presence. The
+    // 3-path EmptyDashboard surface gives the operator concrete moves
+    // into the families of data that feed the ranking engine.
+    const isEmpty = commandSummary.value.ranked.length === 0;
     return (
         <div class="db-shell">
             <div class="ant-room-chrome">
                 <Wordmark kicker="DASHBOARD" />
             </div>
             <Topbar />
-            {mode === "spotlight" ? <SpotlightView /> : null}
-            {mode === "brief" ? <BriefView /> : null}
-            {mode === "queue" ? <QueueView /> : null}
+            {isEmpty ? (
+                <EmptyDashboard />
+            ) : (
+                <>
+                    {mode === "spotlight" ? <SpotlightView /> : null}
+                    {mode === "brief" ? <BriefView /> : null}
+                    {mode === "queue" ? <QueueView /> : null}
+                </>
+            )}
             {drawerOpen ? (
                 <ReadinessDrawer
                     summary={readinessSummary.value}

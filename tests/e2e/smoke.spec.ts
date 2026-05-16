@@ -109,13 +109,14 @@ test.describe("room boot smoke tests", () => {
     test("Phase 4 / Room 2 Wave 1 — /dashboard/ Preact rebuild boots cleanly", async ({
         page
     }) => {
-        // The new Preact Dashboard at /dashboard/ (distinct from the
-        // legacy /app/dashboard/). Wave 1 ships the structural shell
-        // — placeholder mode views, working ModeSwitcher, default
-        // mode = spotlight. Smoke test asserts: page loads without
-        // runtime errors, the topbar kicker reads DASHBOARD, the
-        // mode switcher attaches with all three buttons, and the
-        // default Spotlight view renders.
+        // Dashboard audit (2026-05) changed this surface materially:
+        //   - First-time default mode is now "brief" (was "spotlight").
+        //   - On a truly empty workspace, every mode view is replaced
+        //     by the EmptyDashboard orientation surface (3 paths into
+        //     Sourcing / Signal Console / Deal Workspace).
+        // Smoke test asserts: page loads cleanly, topbar kicker reads
+        // DASHBOARD, the mode switcher mounts with all 3 buttons, and
+        // the empty-state orientation surface attaches.
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
@@ -127,7 +128,8 @@ test.describe("room boot smoke tests", () => {
         );
         await expect(page.locator(".db-mode-switcher")).toBeAttached();
         await expect(page.locator(".db-mode-switcher__btn")).toHaveCount(3);
-        await expect(page.locator(".db-spotlight")).toBeAttached();
+        await expect(page.locator(".db-empty")).toBeAttached();
+        await expect(page.locator(".db-empty__path")).toHaveCount(3);
 
         expect(
             errors,

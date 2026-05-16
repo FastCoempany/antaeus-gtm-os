@@ -1,67 +1,57 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import { ModeSwitcher } from "./ModeSwitcher";
 import { ReadinessAnchor } from "./ReadinessAnchor";
-import {
-    commandMode,
-    commandSummary,
-    openReadinessDrawer,
-    readinessSummary
-} from "../state";
-import { exportCommandCenterJson } from "../lib/command-export";
+import { openReadinessDrawer, readinessSummary } from "../state";
 
 /**
- * Topbar — kicker + title + mode switcher + readiness anchor.
+ * Topbar — thesis + mode switcher + readiness anchor.
  *
  * Per canon §4.2 (Command Chamber family): "the dashboard is where the
  * hallway dies." The topbar is the only navigation surface in this
  * room; everything else is the ranked work itself.
  *
- * The Readiness Anchor (canon §4.17) sits in the topbar at all times.
- * Verdict label + chevron, max 1 line. Click → opens overlay drawer.
+ * Dashboard audit (2026-05) deltas applied here:
+ *   - BackButton removed. Dashboard is the operator's home; "back"
+ *     leads nowhere coherent. The global wordmark in the room-chrome
+ *     strip provides the home link.
+ *   - Thesis H1 demoted (was clamp(40,5vw,76)px — hero-marketing
+ *     weight). The ranked spotlight is now the visual hero; the
+ *     thesis is a confident kicker, not a headline.
+ *   - Subtitle line ("One ranked object. One dominant move…") removed
+ *     entirely. That was design documentation, not work.
+ *   - Export snapshot moved off the topbar rail and into the
+ *     Readiness drawer footer (verdict + snapshot are conceptually
+ *     paired; export is a low-frequency action that doesn't belong
+ *     next to a high-frequency mode switch).
+ *   - Readiness Anchor suppressed when the workspace is empty (no
+ *     ranked objects yet) — the "You are the system" verdict is
+ *     gibberish without context; the anchor returns the moment any
+ *     dimension has data.
  */
 export function Topbar(): JSX.Element {
     const summary = readinessSummary.value;
-    const cmd = commandSummary.value;
-    const rankedCount = cmd.ranked.length;
-
-    function handleExport(): void {
-        exportCommandCenterJson(cmd, commandMode.value);
-    }
+    // The anchor needs SOMETHING to anchor against. On a truly empty
+    // workspace every dimension is zero and the verdict reads as a
+    // meaningless label. Suppress until at least one dimension has data.
+    const showAnchor = summary.dimensions.some((d) => d.score > 0);
 
     return (
         <header class="db-topbar">
-            <BackButton />
             <div class="db-topbar__lead">
                 <p class="db-topbar__kicker">DASHBOARD</p>
-                <h1 class="db-topbar__title">What is under the most pressure right now.</h1>
-                <p class="db-topbar__sub">
-                    One ranked object. One dominant move. Three density modes —
-                    same ranking, different surface.
-                </p>
+                <h1 class="db-topbar__title">
+                    What is under the most pressure right now.
+                </h1>
             </div>
             <div class="db-topbar__rail">
-                <ReadinessAnchor
-                    verdict={summary.verdict}
-                    verdictLabel={summary.verdictLabel}
-                    onOpen={openReadinessDrawer}
-                />
+                {showAnchor ? (
+                    <ReadinessAnchor
+                        verdict={summary.verdict}
+                        verdictLabel={summary.verdictLabel}
+                        onOpen={openReadinessDrawer}
+                    />
+                ) : null}
                 <ModeSwitcher />
-                <button
-                    type="button"
-                    class="db-topbar__export"
-                    onClick={handleExport}
-                    disabled={rankedCount === 0}
-                    title={
-                        rankedCount === 0
-                            ? "No ranked objects to export"
-                            : `Export ${rankedCount} ranked object${
-                                  rankedCount === 1 ? "" : "s"
-                              } as JSON`
-                    }
-                >
-                    Export snapshot
-                </button>
             </div>
         </header>
     );

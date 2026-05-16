@@ -29,28 +29,29 @@ describe("resolveInitialMode", () => {
     });
 
     it("returns default when neither URL nor storage has a value", () => {
+        // Dashboard audit (2026-05): first-time default flipped to "brief".
         const fakeStorage = {
             getItem: () => null
         };
-        expect(resolveInitialMode("", fakeStorage)).toBe("spotlight");
+        expect(resolveInitialMode("", fakeStorage)).toBe("brief");
     });
 
     it("ignores garbage values from URL or storage", () => {
         const fakeStorage = {
             getItem: () => "garbage"
         };
-        expect(resolveInitialMode("?mode=evil", fakeStorage)).toBe("spotlight");
+        expect(resolveInitialMode("?mode=evil", fakeStorage)).toBe("brief");
     });
 
     it("survives a malformed search string", () => {
         const fakeStorage = {
             getItem: () => null
         };
-        expect(resolveInitialMode("?%", fakeStorage)).toBe("spotlight");
+        expect(resolveInitialMode("?%", fakeStorage)).toBe("brief");
     });
 
     it("survives a null storage", () => {
-        expect(resolveInitialMode("", null)).toBe("spotlight");
+        expect(resolveInitialMode("", null)).toBe("brief");
     });
 });
 
