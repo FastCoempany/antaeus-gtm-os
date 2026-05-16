@@ -1,29 +1,27 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import { backup, demo } from "../state";
 
 /**
  * Topbar — kicker + thesis + 3-stat anchor (keys captured / last
- * export / demo mode). Per canon §4.20: calm, plainspoken utility.
+ * backup / demo mode). Per canon §4.20: calm, plainspoken utility.
  */
 export function Topbar(): JSX.Element {
     const b = backup.value;
     const d = demo.value;
-    const lastExport = b.capturedAt
+    const lastBackup = b.capturedAt
         ? new Date(b.capturedAt).toLocaleString()
-        : "Never exported";
+        : "Never";
     return (
         <header class="st-topbar">
-            <BackButton />
-            <p class="st-topbar__kicker">Trust + recovery</p>
+            <p class="st-topbar__kicker">SETTINGS</p>
             <h1 class="st-topbar__title">Settings</h1>
             <p class="st-topbar__subtitle">
-                Manage workspace trust, recovery, category framing, and
-                browser-specific controls without breaking durable GTM truth.
+                Backup, restore, category, demo mode, and cloud sync —
+                the controls that keep the workspace safe.
             </p>
             <div class="st-topbar__stats">
                 <Stat label="Keys on this device" value={String(b.keyCount)} />
-                <Stat label="Last backup" value={lastExport} muted />
+                <Stat label="Last backup" value={lastBackup} muted />
                 <Stat
                     label="Mode"
                     value={d.active ? "Demo workspace" : "Real workspace"}

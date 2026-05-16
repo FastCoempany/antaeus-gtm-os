@@ -92,13 +92,11 @@ function DeleteCloudDataCard(): JSX.Element {
                 <h2 class="st-card__title">Delete my data</h2>
             </header>
             <p class="st-card__desc">
-                Permanently delete every row in your workspace data tables
-                — ICPs, deals, proofs, signals, advisor deployments,
-                discovery logs, studio artifacts, pipeline settings,
-                readiness snapshots, handoff artifacts. Your account
-                itself stays intact; you can keep signing in. This action
-                is irreversible and is not synced to a backup — export
-                first if you want a copy.
+                Permanently delete every row in your workspace — ICPs,
+                deals, proofs, signals, advisor deployments, discovery
+                call logs, and supporting artifacts. Your account stays
+                intact; you can keep signing in. This action is
+                irreversible. Export a backup first if you want a copy.
             </p>
             <ul class="st-status-list">
                 <li>
@@ -185,13 +183,13 @@ function CloudSyncCard(): JSX.Element {
 
     const helpCopy: Record<typeof conn.status, string> = {
         connected:
-            "Each room saves to Supabase as you work. The list below is a per-noun row count from the cloud — your real cross-device truth.",
+            "Each room saves to the cloud as you work. The breakdown below shows what's stored cross-device — your durable workspace.",
         "no-credentials":
-            "Supabase env vars are missing. The app will run on local storage only; cross-device sync is disabled until VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.",
+            "Cloud sync isn't configured for this build. The app will run from local storage only.",
         "auth-missing":
-            "The cloud SDK loaded but no user is signed in. Sign in to the workspace to enable cross-device sync.",
+            "You're not signed in. Sign in to your workspace to enable cross-device sync.",
         error:
-            "Cloud check failed. Sentry should have a report; the room will keep working from local storage in the meantime."
+            "Cloud check failed. Settings reported the issue; the workspace keeps working from local storage in the meantime."
     };
 
     return (
@@ -328,9 +326,9 @@ function BackupCard(): JSX.Element {
             </header>
             <p class="st-card__desc">
                 Export every <code>gtmos_*</code> key on this device into a
-                JSON backup file. Import to overwrite the local view from a
-                previous backup. Clear empties the local cache only — cloud
-                sync still owns durable workspace truth.
+                JSON backup file. Import to restore from a previous backup.
+                Clear empties the local cache on this device only — cloud
+                sync is unaffected.
             </p>
             <ul class="st-status-list">
                 <li>
@@ -402,9 +400,8 @@ function CategoryCard(): JSX.Element {
                 <h2 class="st-card__title">Product category</h2>
             </header>
             <p class="st-card__desc">
-                Pick the category that matches what you sell. This drives
-                which discovery framework appears in the live call navigator
-                and which copy variants surface across rooms.
+                Pick the category that matches what you sell. This loads
+                the matching discovery framework for live calls.
             </p>
             <select
                 class="st-select"
@@ -419,8 +416,8 @@ function CategoryCard(): JSX.Element {
                 ))}
             </select>
             <p class="st-card__help">
-                Category is workspace-scoped because it shapes downstream
-                discovery and call guidance — not just the local UI.
+                Workspace-scoped — switching the category re-routes
+                discovery and call guidance across the workspace.
             </p>
         </article>
     );
@@ -482,10 +479,9 @@ function DemoCard(): JSX.Element {
                 </button>
             </div>
             <p class="st-card__help">
-                Demo state lives in localStorage on this browser. Exiting
-                clears the demo flags but does not touch the keys those flags
-                refer to — use Backup → Clear if you want to wipe the local
-                cache entirely.
+                Demo state lives on this browser only. Exit clears the
+                demo flag — to also wipe the demo data, use Backup →
+                Clear local data.
             </p>
         </article>
     );
@@ -513,9 +509,8 @@ function RoleCard(): JSX.Element {
                 </a>
             </div>
             <p class="st-card__help">
-                Role setup belongs to your signed-in account and activation
-                path. Re-running onboarding should retune the workspace
-                without deleting workspace-scoped data.
+                Re-running onboarding retunes the workspace without
+                deleting your ICPs, deals, signals, or motions.
             </p>
         </article>
     );
