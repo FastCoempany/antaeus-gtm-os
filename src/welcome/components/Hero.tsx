@@ -26,7 +26,7 @@ export function Hero(): JSX.Element {
         <header class="wel-hero">
             <div class="wel-hero__chrome">
                 <Wordmark
-                    kicker="WORKSPACE"
+                    kicker="WELCOME"
                     workspace={ctx.companyName ?? null}
                 />
             </div>
@@ -70,8 +70,8 @@ function buildChips(
 ): string[] {
     const out: string[] = [];
     if (ctx.companyName) out.push(ctx.companyName);
-    out.push(`${role} activation`);
+    out.push(`${role}`);
     if (ctx.categoryLabel) out.push(ctx.categoryLabel);
-    out.push(`${m.completed}/${m.total} anchors`);
+    out.push(`${m.completed}/${m.total} anchors live`);
     return out.slice(0, 4);
 }

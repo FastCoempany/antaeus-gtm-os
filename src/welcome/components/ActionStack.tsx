@@ -12,11 +12,11 @@ export function ActionStack(): JSX.Element {
     return (
         <section class="wel-actions" aria-label="Next moves">
             <header class="wel-section__head">
-                <p class="wel-section__kicker">What to do next</p>
-                <h2 class="wel-section__title">Pick the move that compounds</h2>
+                <p class="wel-section__kicker">NEXT MOVES</p>
+                <h2 class="wel-section__title">Pick the move that compounds.</h2>
                 <p class="wel-section__sub">
-                    The first card is the highest-leverage move from where you
-                    are. The rest stay ready, in order.
+                    The first card is the strongest move from where you
+                    are. The rest stay queued, in order.
                 </p>
             </header>
             <ol class="wel-actions__list">
