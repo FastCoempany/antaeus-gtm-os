@@ -30,8 +30,8 @@ export function PinnedCase(): JSX.Element {
         return (
             <section class="fa-pinned fa-pinned--empty" aria-label="Pinned case">
                 <p class="fa-pinned__empty">
-                    No case pinned. Pick a row from the ledger to load the
-                    autopsy.
+                    No case pinned. Pick a deal from the ledger below to
+                    start the autopsy.
                 </p>
             </section>
         );
@@ -44,7 +44,8 @@ export function PinnedCase(): JSX.Element {
                 <h2 class="fa-pinned__name">{v.name}</h2>
                 <p class="fa-pinned__sub">
                     {v.stage} · {fmtMoney(v.value)} · {v.staleDays}d since last
-                    activity · risk {v.riskScore} · qual {v.qualScore}/18
+                    activity · Risk {v.riskScore}/100 · Qualification{" "}
+                    {v.qualScore}/18
                 </p>
             </header>
 
