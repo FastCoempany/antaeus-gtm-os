@@ -22,12 +22,16 @@ import {
 import { TRIGGERS } from "../lib/data";
 
 /**
- * Switchboard — Wave 3 implementation. Operator rack form.
+ * Switchboard — operator rack form.
  *
- * Per canon §4.8: "no send path without a named strain." The five
- * inputs (account / contact / persona / temperature / trigger) +
- * no-ask toggle drive the generator. The account input is a
- * datalist so Signal Console accounts auto-suggest.
+ * Per canon §4.8: "no send path without a named angle." Five inputs
+ * (account / contact / persona / temperature / trigger) + no-ask
+ * toggle drive the generator. The account input is a datalist so
+ * Signal Console accounts auto-suggest.
+ *
+ * Outbound Studio audit (2026-05): "Set the strain" rewritten to
+ * "Pick the angle" — operator-direct vocabulary. "Strain" was
+ * internal language with no industry equivalent.
  */
 export function Switchboard(): JSX.Element {
     const r = rack.value;
@@ -37,7 +41,7 @@ export function Switchboard(): JSX.Element {
         <section class="ob-switchboard" aria-label="Operator switchboard">
             <header class="ob-switchboard__header">
                 <p class="ob-switchboard__kicker">SWITCHBOARD</p>
-                <h2 class="ob-switchboard__title">Set the strain.</h2>
+                <h2 class="ob-switchboard__title">Pick the angle.</h2>
             </header>
 
             <div class="ob-switchboard__form">
@@ -132,11 +136,13 @@ export function Switchboard(): JSX.Element {
                         class={`ob-noask${r.noAsk ? " is-active" : ""}`}
                         aria-pressed={r.noAsk}
                         onClick={toggleNoAsk}
-                        title="Strip the CTA — generate a value-only touch."
+                        title="When on, the generated line gives something useful without asking for anything in return — no meeting request, no demo ask."
                     >
-                        <span class="ob-noask__label">NO-ASK MODE</span>
+                        <span class="ob-noask__label">No-ask mode</span>
                         <span class="ob-noask__sub">
-                            {r.noAsk ? "ON · value-only touch" : "OFF · CTA included"}
+                            {r.noAsk
+                                ? "On — give value, don't ask for anything"
+                                : "Off — include a CTA"}
                         </span>
                     </button>
                 </div>
