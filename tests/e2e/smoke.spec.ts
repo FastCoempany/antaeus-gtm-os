@@ -273,8 +273,11 @@ test.describe("room boot smoke tests", () => {
         await page.goto("/linkedin-playbook/");
         await page.waitForLoadState("networkidle");
 
+        // LinkedIn Playbook audit (2026-05): kicker changed from
+        // "Outbound channel · Live instrument" (internal arch language)
+        // to the standard "LINKEDIN PLAYBOOK · N cues logged" pattern.
         await expect(page.locator(".lp-topbar__kicker")).toContainText(
-            "Outbound channel"
+            "LINKEDIN PLAYBOOK"
         );
         await expect(page.locator(".lp-booth")).toBeAttached();
         await expect(page.locator(".lp-ledger")).toBeAttached();

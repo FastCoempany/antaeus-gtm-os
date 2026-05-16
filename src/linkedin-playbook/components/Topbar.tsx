@@ -1,39 +1,46 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import { hottestAccount, stats } from "../state";
 
 /**
- * Topbar — Wave 1.
+ * Topbar — kicker + thesis (demoted) + a single status line.
  *
- * Per canon §4.10: "the inbox is not the opening scene." The topbar
- * carries the kicker + thesis + a live "actions logged this session"
- * count. The cue booth + ledger live below.
+ * LinkedIn Playbook audit (2026-05):
+ *   - BackButton removed — primary destination.
+ *   - "Outbound channel · Live instrument" kicker (internal arch
+ *     language) replaced with the standard operator-facing pattern
+ *     every other room uses.
+ *   - H1 demoted from hero weight — the cue booth is the page's
+ *     working hero.
+ *   - Subtitle paragraph ("Five cues, ladder-ordered…") retired —
+ *     was design documentation. The 5-cue ladder visible below
+ *     conveys this on render.
+ *   - Meta line simplified: "Cue booth · Acme" → "On the radar:
+ *     Acme" (when an account is hottest); count + acceptance moved
+ *     into the kicker.
  */
 export function Topbar(): JSX.Element {
     const s = stats.value;
     const acct = hottestAccount.value;
-    const headerState = acct
-        ? `Cue booth · ${acct.name}`
-        : "Cue booth";
     return (
         <header class="lp-topbar" aria-label="LinkedIn Playbook header">
-            <BackButton />
-            <p class="lp-topbar__kicker">Outbound channel · Live instrument</p>
+            <p class="lp-topbar__kicker">
+                LINKEDIN PLAYBOOK ·{" "}
+                {s.total > 0
+                    ? `${s.total} ${s.total === 1 ? "cue" : "cues"} logged${
+                          s.acceptRate > 0
+                              ? ` · ${s.acceptRate}% accepted`
+                              : ""
+                      }`
+                    : "no cues yet"}
+            </p>
             <h1 class="lp-topbar__title">
                 Enter only when the room gives a cue.
             </h1>
-            <p class="lp-topbar__subtitle">
-                Five cues, ladder-ordered: watch, comment, connect,
-                give-first, ask. The inbox is never the opening scene —
-                the public cue is.
-            </p>
-            <div class="lp-topbar__meta" role="status">
-                <span class="lp-topbar__state">{headerState}</span>
-                <span class="lp-topbar__count">
-                    {s.total} {s.total === 1 ? "cue" : "cues"} logged
-                    {s.total > 0 ? ` · accept ${s.acceptRate}%` : ""}
-                </span>
-            </div>
+            {acct ? (
+                <p class="lp-topbar__on-radar" role="status">
+                    On the radar: <strong>{acct.name}</strong>
+                </p>
+            ) : null}
         </header>
     );
 }

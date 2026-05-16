@@ -196,10 +196,13 @@ export function CueLedger(): JSX.Element {
                     })}
                 </div>
                 {list.length === 0 ? (
+                    // LinkedIn Playbook audit (2026-05): empty-state
+                    // copy rewritten — previous version referenced
+                    // gtmos_linkedin_log (internal architecture leak).
                     <p class="lp-ledger__empty">
-                        No LinkedIn cue activity logged yet. Submit the
-                        form above to write to{" "}
-                        <code>gtmos_linkedin_log</code>.
+                        No cues logged yet. Submit the form on the left
+                        to start the trail — accept rate, reply rate, and
+                        account-by-account memory live here.
                     </p>
                 ) : (
                     <div class="lp-log-table-wrap">
