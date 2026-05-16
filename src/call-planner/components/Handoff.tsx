@@ -128,9 +128,9 @@ export function Handoff(): JSX.Element {
         >
             <header class="cp-handoff__head">
                 <div>
-                    <p class="cp-handoff__kicker">ROUTE THE TRUTH FORWARD</p>
+                    <p class="cp-handoff__kicker">HAND OFF</p>
                     <h2 class="cp-handoff__title">
-                        Do not let the script die in prep.
+                        Carry the agenda into the call.
                     </h2>
                     <p class="cp-handoff__copy">{readinessHint}</p>
                 </div>

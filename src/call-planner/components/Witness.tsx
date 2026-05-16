@@ -39,17 +39,17 @@ export function Witness(): JSX.Element {
     const supportLine = account
         ? "Signal-backed account matched."
         : d.linkedinUrl.trim().length > 0
-          ? "LinkedIn context is carrying the account layer."
+          ? "LinkedIn URL is carrying the account layer."
           : "No signal-backed account matched yet.";
 
     return (
         <aside class="cp-witness" aria-label="Witness rail">
-            <p class="cp-witness__kicker">SELECTED CONTACT</p>
+            <p class="cp-witness__kicker">CONTACT</p>
             <h2 class="cp-witness__name">
-                {d.contactName.trim() || "Choose the human."}
+                {d.contactName.trim() || "Add a contact."}
             </h2>
             <p class="cp-witness__meta">
-                {company || "The agenda becomes credible only after the actual witness is named."}
+                {company || "Name the contact to start the agenda."}
                 {linked
                     ? ` · $${Number(linked.value || 0).toLocaleString()} ${(linked.stage || "prospect").replace(/-/g, " ")}`
                     : null}
@@ -138,7 +138,7 @@ export function Witness(): JSX.Element {
                 </select>
                 {deals.length === 0 ? (
                     <small class="cp-field__hint">
-                        Wave 5 wires the deal options from the Deal Workspace mirror.
+                        No active deals yet — link one from Deal Workspace once it exists.
                     </small>
                 ) : null}
             </label>

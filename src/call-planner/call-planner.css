@@ -84,38 +84,16 @@ body {
     margin: 0;
 }
 
-.cp-topbar__subtitle {
+.cp-topbar__on-radar {
     color: var(--cp-soft);
-    font-size: 16px;
-    line-height: 1.55;
-    max-width: 64ch;
-    margin: 10px 0 0;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 14px 0 0;
 }
 
-.cp-topbar__meta {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    margin-top: 16px;
-    flex-wrap: wrap;
-}
-
-.cp-topbar__state {
-    color: var(--cp-blue);
-    border: 1px solid rgba(47, 114, 232, 0.22);
-    border-radius: 999px;
-    padding: 6px 13px;
-    background: rgba(47, 114, 232, 0.05);
-    font-size: 12px;
+.cp-topbar__on-radar strong {
+    color: var(--cp-navy);
     font-weight: 700;
-    letter-spacing: 0.02em;
-}
-
-.cp-topbar__company {
-    font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 12px;
-    color: var(--cp-muted);
-    letter-spacing: 0.02em;
 }
 
 /* ─── Stage (witness + main) ────────────────────────────────────────────── */
@@ -355,17 +333,9 @@ body {
     color: var(--cp-navy);
 }
 
-.cp-spine__copy {
-    color: var(--cp-soft);
-    font-size: 14.5px;
-    line-height: 1.6;
-    margin: 12px 0 22px;
-    max-width: 64ch;
-}
-
 .cp-spine__strips {
     list-style: none;
-    margin: 0;
+    margin: 22px 0 0;
     padding: 0;
     display: grid;
     gap: 14px;

@@ -296,7 +296,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".cp-topbar__kicker")).toContainText(
-            "Calls family"
+            "CALL PLANNER"
         );
         await expect(page.locator(".cp-witness")).toBeAttached();
         await expect(page.locator(".cp-spine")).toBeAttached();
