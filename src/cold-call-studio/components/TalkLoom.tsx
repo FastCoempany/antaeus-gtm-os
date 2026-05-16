@@ -77,7 +77,7 @@ function ThreadRow({
                 {thread.verb}
             </span>
             <span class="cc-thread__index" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
+                {index + 1}.
             </span>
         </button>
     );
@@ -109,24 +109,19 @@ export function TalkLoom(): JSX.Element {
     const replyPersonalized = reply ? personalize(reply.reply, ctx) : "";
 
     return (
-        <section class="cc-loom" aria-label="Talk loom">
+        <section class="cc-loom" aria-label="Live call threads">
+            {/*
+              Cold Call Studio audit (2026-05): cc-loom__intro
+              paragraph and cc-loom__law "Room law" block retired.
+              Both were design-philosophy text Sarah doesn't have
+              time to read during a live call. The thread rail
+              itself + the say/reply/say-next sheet do the work.
+            */}
             <div class="cc-loom__head">
-                <p class="cc-loom__kicker">TALK LOOM</p>
+                <p class="cc-loom__kicker">LIVE CALL THREADS</p>
                 <h2 class="cc-loom__title">
-                    Pull <span>one</span> live thread at a time.
+                    Pull <span>one</span> thread at a time.
                 </h2>
-                <p class="cc-loom__intro">
-                    The call is not a script archive. It is a sequence of
-                    tension changes. The rep should know what to say now,
-                    what the buyer might say, and which thread to pull next.
-                </p>
-                <div class="cc-loom__law">
-                    <span class="cc-loom__law-kicker">Room law</span>
-                    <p>
-                        A cold call is won by narrowing pressure, not
-                        widening explanation.
-                    </p>
-                </div>
             </div>
 
             <div class="cc-loom__grid">

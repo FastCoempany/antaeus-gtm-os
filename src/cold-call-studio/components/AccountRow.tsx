@@ -45,12 +45,12 @@ export function AccountRow(): JSX.Element {
                 </select>
             </label>
             <label class="cc-field">
-                <span class="cc-field__label">Human on line</span>
+                <span class="cc-field__label">Contact</span>
                 <input
                     class="cc-field__input"
                     type="text"
                     value={d.contactName}
-                    placeholder="Name or role"
+                    placeholder="Name or role on the line"
                     onInput={(e) =>
                         patchDraft({
                             contactName: (e.currentTarget as HTMLInputElement)
@@ -65,7 +65,7 @@ export function AccountRow(): JSX.Element {
                     href={hrefToSignalConsole(selected)}
                     data-cc-handoff="signal-console"
                 >
-                    Open Signal
+                    Back to Signal Console
                 </a>
             </div>
         </section>

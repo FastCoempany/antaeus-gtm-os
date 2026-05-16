@@ -248,8 +248,12 @@ test.describe("room boot smoke tests", () => {
         await page.goto("/cold-call-studio/");
         await page.waitForLoadState("networkidle");
 
+        // Cold Call Studio audit (2026-05): kicker copy changed
+        // from "Calls family · Live instrument" (internal arch
+        // language) to the standard "COLD CALL STUDIO · N calls
+        // logged" pattern.
         await expect(page.locator(".cc-topbar__kicker")).toContainText(
-            "Calls family"
+            "COLD CALL STUDIO"
         );
         await expect(page.locator(".cc-account-row")).toBeAttached();
         await expect(page.locator(".cc-loom")).toBeAttached();
