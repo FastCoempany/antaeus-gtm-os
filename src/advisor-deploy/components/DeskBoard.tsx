@@ -87,10 +87,10 @@ export function DeskBoard(): JSX.Element {
 
     const desktopTitle = deal
         ? `${deal.accountName} needs ${moment.name.toLowerCase()}.`
-        : "Prepare one backchannel ask before you spend trust.";
+        : "Prepare one backchannel ask before you make it.";
     const desktopNote = deal
         ? `The desk is pointed at ${stageLabel(deal.stage)}, ${fmtMoney(deal.value)}. ${dealPressure(deal)}`
-        : "Add a live deal and at least one advisor before spending relationship capital.";
+        : "Add a live deal and at least one advisor to start routing asks.";
 
     function stampOutcome(outcome: DeploymentOutcome): void {
         const dep = logDeployment(outcome);
@@ -221,8 +221,8 @@ export function DeskBoard(): JSX.Element {
                 <div class="ad-rolodex" aria-label="Advisor rolodex">
                     {rolodexList.length === 0 ? (
                         <p class="ad-rolodex__empty">
-                            No advisors registered yet. Add one below before
-                            this room can spend outside trust.
+                            No advisors registered yet. Add one in the
+                            registry below to start routing asks.
                         </p>
                     ) : (
                         rolodexList.map((a) => {

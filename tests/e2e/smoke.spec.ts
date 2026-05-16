@@ -319,7 +319,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".ad-topbar__kicker")).toContainText(
-            "Backchannel desk"
+            "ADVISOR DEPLOY"
         );
         await expect(page.locator(".ad-desk")).toBeAttached();
         await expect(page.locator(".ad-secondary")).toBeAttached();

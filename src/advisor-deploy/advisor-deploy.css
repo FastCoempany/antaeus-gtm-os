@@ -104,20 +104,6 @@ body {
     max-width: 24ch;
 }
 
-.ad-topbar__count {
-    margin: 0;
-    font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 11.5px;
-    color: var(--ad-muted);
-    letter-spacing: 0.04em;
-}
-
-.ad-topbar__actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
 /* ─── Desk board ───────────────────────────────────────────────────────── */
 
 .ad-desk {
@@ -790,13 +776,22 @@ body {
     color: var(--ad-green);
 }
 
+.ad-handoff__kicker {
+    margin: 18px 0 10px;
+    padding-top: 18px;
+    border-top: 1px solid var(--ad-line2);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ad-orange);
+}
+
 .ad-handoff {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 18px;
-    padding-top: 18px;
-    border-top: 1px solid var(--ad-line2);
 }
 
 /* ─── List rows + pills + outcome select ───────────────────────────────── */
