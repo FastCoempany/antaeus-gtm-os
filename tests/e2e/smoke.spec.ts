@@ -140,12 +140,11 @@ test.describe("room boot smoke tests", () => {
     test("Phase 4 / Room 3 Wave 1 — /signal-console/ Preact rebuild boots cleanly", async ({
         page
     }) => {
-        // The new Preact Signal Console at /signal-console/ (distinct
-        // from the legacy /app/signal-console/). Wave 1 ships the
-        // structural shell — empty account list shows the empty-state
-        // copy, all sections render. Smoke test asserts: page loads
-        // without runtime errors, the topbar kicker reads SIGNAL CONSOLE,
-        // grid controls + grid attach to the DOM.
+        // Signal Console audit (2026-05) reshaped the empty state:
+        //   - Empty workspace hides WorkspaceHealth + GridControls
+        //   - Empty-state hero card (.sc-empty) mounts with embedded
+        //     AddAccountForm as dominant CTA
+        //   - BackButton + subtitle retired
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
@@ -155,8 +154,9 @@ test.describe("room boot smoke tests", () => {
         await expect(page.locator(".sc-topbar__kicker")).toContainText(
             "SIGNAL CONSOLE"
         );
-        await expect(page.locator(".sc-grid-controls")).toBeAttached();
         await expect(page.locator(".sc-grid")).toBeAttached();
+        await expect(page.locator(".sc-empty")).toBeAttached();
+        await expect(page.locator(".sc-add-form--embedded")).toBeAttached();
 
         expect(
             errors,

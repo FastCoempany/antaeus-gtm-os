@@ -79,11 +79,17 @@ function isClosed(stage: string | undefined): boolean {
     return stage === "closed-won" || stage === "closed-lost";
 }
 
+// Signal Console audit (2026-05): renamed from temperature-ish labels
+// (Ice Cold / Cool / Warm / Hot) which read as visual contradictions
+// next to the actual heat badge. New labels name the engagement state
+// in operator vocabulary — has touch happened, has the buyer replied,
+// is there an active deal. Internal Temperature keys stay the same so
+// no callers break.
 const TEMP_LABEL: Record<Temperature, string> = {
-    ice_cold: "Ice Cold",
-    cool: "Cool",
-    warm: "Warm",
-    hot: "Hot"
+    ice_cold: "Untouched",
+    cool: "Touched",
+    warm: "Replied",
+    hot: "In deal"
 };
 
 export function getAccountExecutionContext(
