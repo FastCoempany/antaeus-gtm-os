@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import { allProofs } from "../state";
 
 /**
@@ -14,18 +13,16 @@ export function Topbar(): JSX.Element {
     const proofLabel = count === 1 ? "proof" : "proofs";
     return (
         <header class="poc-topbar">
-            <BackButton />
             <p class="poc-topbar__kicker">
                 POC FRAMEWORK ·{" "}
-                {count > 0 ? `${count} ${proofLabel} cast` : "no proofs cast yet"}
+                {count > 0 ? `${count} ${proofLabel} saved` : "no proofs yet"}
             </p>
             <h1 class="poc-topbar__title">
                 Cast one decision-grade proof.
             </h1>
             <p class="poc-topbar__sub">
-                Raw interest is not proof until it can be carried. Forge the
-                claim, the owner, the metric, and the kill rule before the
-                pilot starts.
+                Raw interest is not proof. Pin the claim, the owner, the
+                metric, and the kill rule before the pilot starts.
             </p>
         </header>
     );

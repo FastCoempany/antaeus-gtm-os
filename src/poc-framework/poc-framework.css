@@ -580,8 +580,8 @@ button {
     border: 1px solid var(--poc-cream-border);
     border-radius: 2px;
     padding: 14px 16px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 12px;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13.5px;
     line-height: 1.55;
     color: var(--poc-ink);
     white-space: pre-wrap;

@@ -55,10 +55,11 @@ export function ForgePanel(): JSX.Element {
                     />
                 </Field>
 
-                <Field label="Vendor (your product)">
+                <Field label="Vendor">
                     <input
                         type="text"
                         value={drft.vendor}
+                        placeholder="Your product"
                         onInput={(e) =>
                             patchDraft({
                                 vendor: (e.currentTarget as HTMLInputElement).value
@@ -105,7 +106,7 @@ export function ForgePanel(): JSX.Element {
                     <textarea
                         rows={4}
                         value={drft.successCriteria}
-                        placeholder={"3+ pass/fail criteria the buyer agrees to.\nEach should be measurable."}
+                        placeholder="3+ pass/fail criteria the buyer agrees to."
                         onInput={(e) =>
                             patchDraft({
                                 successCriteria: (
@@ -120,7 +121,7 @@ export function ForgePanel(): JSX.Element {
                     <textarea
                         rows={3}
                         value={drft.boundaries}
-                        placeholder={"2+ stop conditions.\nWhen does this PoC end without a sale?"}
+                        placeholder="2+ stop conditions — when does the pilot end without a sale?"
                         onInput={(e) =>
                             patchDraft({
                                 boundaries: (
