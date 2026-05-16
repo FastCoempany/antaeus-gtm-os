@@ -80,21 +80,21 @@ button {
 }
 
 .db-topbar__title {
+    /* Dashboard audit (2026-05): demoted from clamp(36,5vw,60) hero
+       weight. The thesis is now a confident kicker; the ranked
+       spotlight is the page's visual hero. */
     font-family: "DM Serif Display", serif;
-    font-size: clamp(36px, 5vw, 60px);
-    line-height: 1.04;
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.15;
     font-weight: 400;
-    margin: 0 0 12px;
-    letter-spacing: -0.01em;
-    max-width: 18ch;
+    margin: 0;
+    letter-spacing: -0.005em;
+    max-width: 56ch;
+    color: var(--db-ink);
 }
 
-.db-topbar__sub {
-    font-size: 16px;
-    color: var(--db-ink-70);
-    margin: 0;
-    max-width: 60ch;
-}
+/* .db-topbar__sub retired — Dashboard audit removed the meta-description
+   subtitle entirely. */
 
 /* ─── Topbar rail (anchor + mode switcher) ─────────────────────────── */
 
@@ -894,5 +894,151 @@ button {
     color: var(--db-ink-70);
     font-size: 13px;
     margin: 0 0 16px;
+    font-style: italic;
+}
+
+/* ─── Mode switcher hint (Dashboard audit 2026-05) ─────────────────── */
+
+.db-mode {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.db-mode__hint {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: rgba(10, 28, 64, 0.5);
+    margin: 0;
+    text-align: right;
+    max-width: 36ch;
+    line-height: 1.4;
+}
+
+/* ─── Empty Dashboard (Dashboard audit 2026-05) ────────────────────── */
+
+.db-empty {
+    margin-top: 24px;
+    padding: 32px;
+    background: var(--db-field-raised);
+    border: 1px solid var(--db-border);
+    border-radius: 12px;
+    max-width: 920px;
+}
+
+.db-empty__head {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--db-border);
+}
+
+.db-empty__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.55);
+    margin: 0 0 10px;
+}
+
+.db-empty__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(22px, 2.6vw, 30px);
+    line-height: 1.18;
+    font-weight: 400;
+    margin: 0 0 12px;
+    color: var(--db-ink);
+    max-width: 36ch;
+    letter-spacing: -0.005em;
+}
+
+.db-empty__sub {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(10, 28, 64, 0.7);
+    max-width: 62ch;
+    margin: 0;
+}
+
+.db-empty__paths {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 880px) {
+    .db-empty__paths {
+        grid-template-columns: 1fr;
+    }
+}
+
+.db-empty__path {
+    padding: 20px 22px;
+    border: 1px solid var(--db-border);
+    border-radius: 10px;
+    background: rgba(10, 28, 64, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 140ms ease, background 140ms ease;
+}
+
+.db-empty__path:hover {
+    border-color: rgba(230, 112, 30, 0.42);
+    background: rgba(230, 112, 30, 0.03);
+}
+
+.db-empty__path-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--db-orange, #e6701e);
+    margin: 0;
+}
+
+.db-empty__path-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 1.05rem;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--db-ink);
+    margin: 0;
+}
+
+.db-empty__path-body {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: rgba(10, 28, 64, 0.66);
+    margin: 0;
+}
+
+.db-empty__path-cta {
+    margin-top: auto;
+    padding-top: 4px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--db-orange, #e6701e);
+    text-decoration: none;
+    transition: opacity 140ms ease;
+}
+
+.db-empty__path-cta:hover {
+    opacity: 0.78;
+}
+
+.db-empty__foot {
+    margin: 24px 0 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: rgba(10, 28, 64, 0.42);
     font-style: italic;
 }

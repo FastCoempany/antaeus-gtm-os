@@ -19,8 +19,24 @@
 export const COMMAND_MODES = ["brief", "spotlight", "queue"] as const;
 export type CommandMode = (typeof COMMAND_MODES)[number];
 
-/** Default mode if neither URL nor localStorage has a value. */
-export const DEFAULT_COMMAND_MODE: CommandMode = "spotlight";
+// Operator-facing labels. Internal keys stay as brief/spotlight/queue
+// (cross-tab localStorage preserves the user's saved preference); only
+// the visible string changes. Per Dashboard audit decisions (2026-05):
+//   brief → Read     (narrative; the first-time default)
+//   spotlight → Focus (single dominant object)
+//   queue → Triage   (ranked list)
+export const COMMAND_MODE_LABELS: Record<CommandMode, string> = {
+    brief: "Read",
+    spotlight: "Focus",
+    queue: "Triage"
+};
+
+// Dashboard audit: first-time default flipped from spotlight → brief.
+// A CRO opening a sales dashboard expects to read first ("here's what's
+// happening today, in 2-3 sentences") before drilling into a single
+// focal object. Operators who prefer Focus can switch and the choice
+// persists via gtmos_dashboard_command_mode.
+export const DEFAULT_COMMAND_MODE: CommandMode = "brief";
 
 /**
  * Family classifies a command object's source. Drives ranking weight
