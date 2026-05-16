@@ -334,14 +334,14 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label="Engine active accounts (optional)"
+                label="Active accounts (optional)"
                 hint="If you enter this, the recommended focus becomes precise."
             >
                 <input
                     class="icp-input"
                     type="number"
                     min="0"
-                    placeholder="Paste from Engine"
+                    placeholder="e.g. 47"
                     value={d.engineActive}
                     onInput={(e) =>
                         patchDraft({
@@ -486,8 +486,8 @@ function SaveBar(): JSX.Element {
                 Save ICP to library
             </button>
             <p class="icp-save-hint">
-                The saved ICP becomes the Match score every downstream room
-                inherits.
+                Saved ICPs power the Match score on every account, deal,
+                and outreach line.
             </p>
             {toast ? (
                 <span class="icp-save-toast" role="status">
@@ -501,10 +501,9 @@ function SaveBar(): JSX.Element {
 export function WorkArea(): JSX.Element {
     return (
         <section class="icp-work" aria-label="ICP work surface">
-            <p class="icp-work__kicker">WORK SURFACE</p>
+            <p class="icp-work__kicker">BUILD THE ICP</p>
             <h2 class="icp-work__title">
-                Compose the wedge — one industry, one size, one geo, one
-                buyer, one pain, one trigger, one proof window.
+                One industry. One buyer. One pain. One trigger.
             </h2>
             <RoleToggle />
             <TemplatePanel />

@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import {
     draft,
     effectiveBuyer,
@@ -54,19 +53,22 @@ export function DarkHero(): JSX.Element {
     const saved = recentIcps.value.length;
     const placeholder = statement.text.startsWith("Fill the inputs");
 
+    const kicker =
+        saved > 0
+            ? `ICP STUDIO · ${saved} ${saved === 1 ? "ICP" : "ICPs"} saved`
+            : "ICP STUDIO";
+
     return (
         <section class="icp-hero" aria-label="ICP Studio hero">
             <div class="icp-hero__inner">
-                <BackButton />
-                <p class="icp-hero__kicker">DECISION BENCH · ICP STUDIO</p>
+                <p class="icp-hero__kicker">{kicker}</p>
                 <h1 class="icp-hero__title">
                     Sharpen <span>one</span> wedge before scale compounds the
                     wrong things.
                 </h1>
                 <p class="icp-hero__note">
-                    The ICP is the filter that becomes "ICP Match" scoring on
-                    every Account everywhere. Thin means fewer assumptions,
-                    fewer personas, fewer use cases.
+                    A thin ICP — one industry, one buyer, one pain — is what
+                    every downstream room targets against.
                 </p>
                 {!placeholder ? (
                     <p class="icp-hero__statement">{statement.text}</p>
@@ -74,12 +76,9 @@ export function DarkHero(): JSX.Element {
                 <div class="icp-hero__meta" role="status">
                     <span
                         class={`icp-hero__chip icp-hero__chip--${quality.tier}`}
-                        aria-label={`Quality score ${quality.score}, tier ${quality.tier}`}
+                        aria-label={`Quality score ${quality.score} of 100, ${quality.label}`}
                     >
                         {quality.score} · {quality.label}
-                    </span>
-                    <span class="icp-hero__badge">
-                        {saved} {saved === 1 ? "ICP" : "ICPs"} saved
                     </span>
                     <span class="icp-hero__badge">
                         {worked} {worked === 1 ? "session" : "sessions"} worked
