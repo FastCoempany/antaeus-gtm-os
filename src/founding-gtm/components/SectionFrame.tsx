@@ -65,8 +65,8 @@ export function SectionFrame(props: SectionFrameProps): JSX.Element {
                 </div>
             ) : (
                 <p class="fg-section__empty">
-                    Not yet authored. Returns content as soon as the
-                    workspace has the underlying evidence.
+                    Not yet authored. This section fills in once the
+                    underlying rooms have real evidence to draw from.
                 </p>
             )}
 

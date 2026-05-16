@@ -37,15 +37,14 @@ export function CeremonyOverlay(props: CeremonyOverlayProps): JSX.Element {
         <div class="fg-ceremony" role="dialog" aria-modal="true">
             <div class="fg-ceremony__backdrop" aria-hidden="true" />
             <div class="fg-ceremony__panel">
-                <p class="fg-ceremony__kicker">CEREMONY</p>
+                <p class="fg-ceremony__kicker">MILESTONE</p>
                 <h2 class="fg-ceremony__headline">
                     The kit just became real.
                 </h2>
                 <p class="fg-ceremony__sub">
                     Readiness moved from <strong>{props.fromLabel}</strong>{" "}
-                    to <strong>{props.toLabel}</strong>. The Founding GTM
-                    is no longer a frame waiting for evidence — it's an
-                    artifact a hire could open on day one.
+                    to <strong>{props.toLabel}</strong>. This kit is now
+                    something a first hire could actually open on day one.
                 </p>
                 <div class="fg-ceremony__counts">
                     <div class="fg-ceremony__count-cell">
