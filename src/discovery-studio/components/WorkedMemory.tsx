@@ -31,7 +31,7 @@ export function WorkedMemory(): JSX.Element {
             <section class="ds-worked-memory" aria-label="Worked memory">
                 <header class="ds-worked-memory__header">Worked memory</header>
                 <p class="ds-worked-memory__empty">
-                    Select a framework to see worked-memory progress.
+                    Pick a framework to start tracking covered ground.
                 </p>
             </section>
         );
@@ -65,7 +65,8 @@ export function WorkedMemory(): JSX.Element {
             </header>
             {worked.length === 0 ? (
                 <p class="ds-worked-memory__empty">
-                    Touch any node's branches to start tracking covered ground.
+                    Open a buyer-response in any segment to start tracking
+                    covered ground.
                 </p>
             ) : (
                 <ul class="ds-worked-memory__list">

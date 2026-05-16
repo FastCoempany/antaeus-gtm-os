@@ -481,9 +481,13 @@ test.describe("room boot smoke tests", () => {
         await page.goto("/discovery-studio/");
         await page.waitForLoadState("networkidle");
 
-        // Wave 2 markers
+        // Discovery Studio audit (2026-05) retired the "WAVE 5" marker
+        // from the kicker — it was migration-phase leak, not operator
+        // copy. Kicker now reads "DISCOVERY STUDIO" (idle), "DISCOVERY
+        // STUDIO · {framework label}" (active), or "DISCOVERY STUDIO ·
+        // loading…" (cold load before frameworks attach).
         await expect(page.locator(".ds-topbar__kicker")).toContainText(
-            "DISCOVERY STUDIO · WAVE"
+            "DISCOVERY STUDIO"
         );
         await expect(page.locator(".ds-framework-rail")).toBeAttached();
         await expect(page.locator(".ds-segment-rail")).toBeAttached();

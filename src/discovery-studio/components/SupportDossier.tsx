@@ -33,7 +33,8 @@ export function SupportDossier(): JSX.Element {
             <header class="ds-support-dossier__header">Dossier</header>
             {!hasContent ? (
                 <p class="ds-support-dossier__empty">
-                    No dossier content for this framework.
+                    Pick a framework above to load its proof, objection,
+                    and inbound-question dossier.
                 </p>
             ) : (
                 <div class="ds-support-dossier__sections">

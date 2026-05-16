@@ -31,7 +31,7 @@ export function RecoverRail(): JSX.Element {
             <header class="ds-recover-rail__header">Recover</header>
             {interrupts.length === 0 ? (
                 <p class="ds-recover-rail__empty">
-                    No interrupts loaded for this framework yet.
+                    No recovery moves loaded for this framework.
                 </p>
             ) : (
                 <ul class="ds-recover-rail__list">

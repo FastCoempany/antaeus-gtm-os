@@ -19,7 +19,9 @@ export function FrameworkRail(): JSX.Element {
     return (
         <nav class="ds-framework-rail" aria-label="Discovery framework selector">
             {frameworks.length === 0 ? (
-                <p class="ds-framework-rail__empty">No frameworks loaded.</p>
+                <p class="ds-framework-rail__empty">
+                    Loading frameworks…
+                </p>
             ) : (
                 <ul class="ds-framework-rail__list">
                     {frameworks.map((fw) => (

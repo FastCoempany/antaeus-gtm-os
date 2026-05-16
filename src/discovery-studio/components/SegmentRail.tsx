@@ -52,7 +52,7 @@ export function SegmentRail(): JSX.Element {
         return (
             <section class="ds-segment-rail" aria-label="Discovery segments">
                 <p class="ds-segment-rail__empty">
-                    Select a framework to see its segment spine.
+                    Pick a framework above to load its discovery segments.
                 </p>
             </section>
         );
@@ -62,7 +62,9 @@ export function SegmentRail(): JSX.Element {
     if (!fw) {
         return (
             <section class="ds-segment-rail" aria-label="Discovery segments">
-                <p class="ds-segment-rail__empty">Framework not loaded.</p>
+                <p class="ds-segment-rail__empty">
+                    Framework is still loading — try reselecting.
+                </p>
             </section>
         );
     }
@@ -175,7 +177,7 @@ function BranchPicker({ branches }: BranchPickerProps): JSX.Element {
     if (branches.length === 0) {
         return (
             <p class="ds-branch-picker__empty">
-                No branches authored for this node yet.
+                No buyer-response branches loaded for this prompt.
             </p>
         );
     }
