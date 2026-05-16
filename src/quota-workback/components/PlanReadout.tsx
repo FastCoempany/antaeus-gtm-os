@@ -24,12 +24,11 @@ export function PlanReadout(): JSX.Element {
     return (
         <section class="qw-plan" aria-label="Operating plan">
             <header class="qw-section__head">
-                <p class="qw-section__kicker">Operating plan</p>
-                <h2 class="qw-section__title">What the team has to run every week</h2>
+                <p class="qw-section__kicker">OPERATING PLAN</p>
+                <h2 class="qw-section__title">What the team has to run every week.</h2>
                 <p class="qw-section__sub">
-                    Each card is a pressure number, not a report. If any of
-                    them feels unrealistic, the upstream assumption needs to
-                    change — not the team's stamina.
+                    Each card is a pressure number. If one feels
+                    unrealistic, change the upstream assumption.
                 </p>
             </header>
 

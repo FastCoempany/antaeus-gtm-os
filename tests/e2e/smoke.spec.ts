@@ -385,7 +385,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".qw-topbar__kicker")).toContainText(
-            "Planning board"
+            "QUOTA WORKBACK"
         );
         await expect(page.locator(".qw-cov")).toBeAttached();
         await expect(page.locator(".qw-health")).toBeAttached();

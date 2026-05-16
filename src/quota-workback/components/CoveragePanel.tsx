@@ -17,14 +17,14 @@ export function CoveragePanel(): JSX.Element {
         return (
             <section class="qw-cov" aria-label="Pipeline coverage">
                 <header class="qw-cov__head">
-                    <span class="qw-cov__title">Pipeline coverage</span>
+                    <span class="qw-cov__title">PIPELINE COVERAGE</span>
                     <span class="qw-cov__ratio is-muted">
                         Set quota to see live coverage
                     </span>
                 </header>
                 <p class="qw-cov__empty">
-                    Coverage compares your weighted open pipeline against the
-                    quota target the room is running.
+                    Coverage compares weighted open pipeline against the
+                    quota target.
                 </p>
             </section>
         );
@@ -34,14 +34,14 @@ export function CoveragePanel(): JSX.Element {
         return (
             <section class="qw-cov" aria-label="Pipeline coverage">
                 <header class="qw-cov__head">
-                    <span class="qw-cov__title">Pipeline coverage</span>
+                    <span class="qw-cov__title">PIPELINE COVERAGE</span>
                     <span class="qw-cov__ratio is-muted">
-                        No open deals in workspace yet
+                        No open deals yet
                     </span>
                 </header>
                 <p class="qw-cov__empty">
-                    Add open opportunities in Deal Workspace and the coverage
-                    bar wakes up automatically.
+                    Add open opportunities in Deal Workspace and coverage
+                    lights up automatically.
                 </p>
             </section>
         );
@@ -58,7 +58,7 @@ export function CoveragePanel(): JSX.Element {
     return (
         <section class="qw-cov" aria-label="Pipeline coverage">
             <header class="qw-cov__head">
-                <span class="qw-cov__title">Pipeline coverage</span>
+                <span class="qw-cov__title">PIPELINE COVERAGE</span>
                 <span class={`qw-cov__ratio is-${tone}`}>
                     {c.ratio}x / {target}x needed
                 </span>

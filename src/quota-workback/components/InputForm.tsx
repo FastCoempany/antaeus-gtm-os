@@ -25,12 +25,11 @@ export function InputForm(): JSX.Element {
     return (
         <section class="qw-form" aria-label="Plan inputs">
             <header class="qw-section__head">
-                <p class="qw-section__kicker">Your targets</p>
-                <h2 class="qw-section__title">What is the quarter actually asking for</h2>
+                <p class="qw-section__kicker">YOUR TARGETS</p>
+                <h2 class="qw-section__title">What is the quarter actually asking for?</h2>
                 <p class="qw-section__sub">
-                    The plan compounds: quota → deals → opps → meetings →
-                    touches → daily activity. Tighten the inputs that matter,
-                    then read what they imply downstream.
+                    Quota → deals → opps → meetings → touches → daily
+                    activity. Tighten the inputs that matter most.
                 </p>
             </header>
 

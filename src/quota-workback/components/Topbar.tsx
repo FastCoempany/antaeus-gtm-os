@@ -1,29 +1,28 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import { benchmark, metrics, quality } from "../state";
 
 /**
  * Topbar — kicker + thesis + 4 anchor metrics + planning-quality pill.
  *
- * Per canon §4.18 the room is a System Ledger but founder directive
- * (2026-04-27) overrides §4.8: every surface stays bright. The topbar
- * carries the dominant pressure number (touches/day) so the operator
- * lands feeling the weekly weight before scrolling to the form.
+ * Per canon §4.18 the room is a System Ledger (bright per founder
+ * directive 2026-04-27). The topbar carries the dominant pressure
+ * number (touches/day) so the operator lands feeling the weekly
+ * weight before scrolling to the form.
  */
 export function Topbar(): JSX.Element {
     const m = metrics.value;
     const b = benchmark.value;
     const q = quality.value;
     const hasPlan = m.monthlyTarget > 0;
+    const kicker = hasPlan
+        ? `QUOTA WORKBACK · $${m.monthlyTarget.toLocaleString()}/mo · ${b.label} posture`
+        : "QUOTA WORKBACK";
     return (
         <header class="qw-topbar" aria-label="Quota Workback header">
-            <BackButton />
-            <p class="qw-topbar__kicker">System ledger · Planning board</p>
+            <p class="qw-topbar__kicker">{kicker}</p>
             <h1 class="qw-topbar__title">Make the math feel daily.</h1>
             <p class="qw-topbar__subtitle">
-                Translate quota into the week the team actually has to run.
-                If the math isn't believable, the rest of the app is
-                steering from a wrong map.
+                Turn quota into the week the team actually has to run.
             </p>
             <div class="qw-topbar__hero">
                 <div class="qw-hero">
@@ -42,7 +41,6 @@ export function Topbar(): JSX.Element {
                 <Stat label="Monthly target" value={`$${m.monthlyTarget.toLocaleString()}`} />
                 <Stat label="Touches / week" value={m.touchesWeek.toLocaleString()} />
                 <Stat label="Coverage goal" value={`${b.coverage}x`} />
-                <Stat label="Posture" value={b.label} muted />
             </div>
         </header>
     );
@@ -51,15 +49,13 @@ export function Topbar(): JSX.Element {
 function Stat({
     label,
     value,
-    accent,
-    muted
+    accent
 }: {
     readonly label: string;
     readonly value: string | number;
     readonly accent?: boolean;
-    readonly muted?: boolean;
 }): JSX.Element {
-    const cls = `qw-stat${accent ? " is-accent" : ""}${muted ? " is-muted" : ""}`;
+    const cls = `qw-stat${accent ? " is-accent" : ""}`;
     return (
         <div class={cls}>
             <span class="qw-stat__label">{label}</span>
