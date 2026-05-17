@@ -60,8 +60,8 @@ export function CompanyStep(): JSX.Element {
     return (
         <StepShell
             kicker="STEP 2 OF 7 — COMPANY"
-            title="What should the system call you?"
-            subtitle="Lowest-friction question first. Just the company name — everything else stays optional below."
+            title="Your company name?"
+            subtitle="Lowest-friction question first. Everything else stays optional."
             onNext={() => nextStep()}
             onBack={() => prevStep()}
         >
@@ -312,34 +312,24 @@ export function CompleteStep(): JSX.Element {
             title="The workspace is live."
             subtitle={
                 ok
-                    ? "Every answer above turned into a real Brief item. The Dashboard is no longer empty."
+                    ? "Your answers seeded an ICP, an account, and a quota plan. Welcome will guide the next real moves."
                     : "Nothing was seeded — but the workspace is yours. You can come back anytime."
             }
             hideBack
         >
             <div class="ob-complete">
-                <ul class="ob-complete__list">
-                    <li>
-                        <a class="ob-btn ob-btn--primary" href="/welcome/">
-                            Start the first move
-                        </a>
-                    </li>
-                    <li>
-                        <a class="ob-btn ob-btn--ghost" href="/dashboard/">
-                            See the live Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a class="ob-btn ob-btn--ghost" href="/quota-workback/">
-                            Plan the weekly math
-                        </a>
-                    </li>
-                    <li>
-                        <a class="ob-btn ob-btn--ghost" href="/settings/">
-                            Open Settings
-                        </a>
-                    </li>
-                </ul>
+                <a
+                    class="ob-btn ob-btn--primary ob-complete__primary"
+                    href="/welcome/?returnTo=%2Fonboarding%2F&returnLabel=Back%20to%20setup&fromMode=threshold&fromSurface=onboarding-complete"
+                >
+                    Start the first move
+                </a>
+                <p class="ob-complete__alt">
+                    Or jump straight to{" "}
+                    <a href="/dashboard/">the Dashboard</a>,{" "}
+                    <a href="/quota-workback/">Quota Workback</a>, or{" "}
+                    <a href="/settings/">Settings</a>.
+                </p>
             </div>
         </StepShell>
     );
