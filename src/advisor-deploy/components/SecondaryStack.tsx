@@ -74,9 +74,9 @@ export function SecondaryStack(): JSX.Element {
             <article class="ad-sheet">
                 <header class="ad-sheet__head">
                     <div>
-                        <p class="ad-sheet__kicker">ADVISOR REGISTRY</p>
+                        <p class="ad-sheet__kicker">ADVISORS</p>
                         <h2 class="ad-sheet__title">
-                            Add relationships, attach them to companies.
+                            Register the people whose trust you can deploy.
                         </h2>
                     </div>
                 </header>
@@ -195,8 +195,8 @@ export function SecondaryStack(): JSX.Element {
                 <div class="ad-list">
                     {advisorList.length === 0 ? (
                         <p class="ad-empty">
-                            No advisor registry yet. Add the people whose
-                            trust should be spent carefully.
+                            No advisors yet. Save one above to start the
+                            registry.
                         </p>
                     ) : (
                         advisorList.map((a) => {
@@ -241,7 +241,7 @@ export function SecondaryStack(): JSX.Element {
             <article class="ad-sheet">
                 <header class="ad-sheet__head">
                     <div>
-                        <p class="ad-sheet__kicker">DEPLOYMENT LOOPS</p>
+                        <p class="ad-sheet__kicker">ASK LOG</p>
                         <h2 class="ad-sheet__title">
                             Every ask should return as a deal update.
                         </h2>
@@ -250,8 +250,8 @@ export function SecondaryStack(): JSX.Element {
                 <div class="ad-list">
                     {recent.length === 0 ? (
                         <p class="ad-empty">
-                            No advisor asks logged yet. When you Send,
-                            Hold, or Reroute, the loop appears here.
+                            No asks logged yet. Send, Hold, or Reroute on
+                            the desk above and the loop appears here.
                         </p>
                     ) : (
                         recent.map((d) => {
@@ -303,7 +303,7 @@ export function SecondaryStack(): JSX.Element {
                     <div>
                         <p class="ad-sheet__kicker">DESK READ</p>
                         <h2 class="ad-sheet__title">
-                            System health for outside leverage.
+                            How outside leverage is paying off.
                         </h2>
                     </div>
                 </header>
@@ -331,6 +331,7 @@ export function SecondaryStack(): JSX.Element {
                         </div>
                     ))}
                 </div>
+                <p class="ad-handoff__kicker">CARRY THE ASK FORWARD</p>
                 <nav class="ad-handoff" aria-label="Cross-room handoff">
                     <a
                         class="ad-btn ad-btn--blue"
@@ -340,7 +341,7 @@ export function SecondaryStack(): JSX.Element {
                         )}
                         data-ad-handoff="deal-workspace"
                     >
-                        Open Deal Workspace
+                        Update the deal
                     </a>
                     <a
                         class="ad-btn"
@@ -350,7 +351,7 @@ export function SecondaryStack(): JSX.Element {
                         )}
                         data-ad-handoff="future-autopsy"
                     >
-                        Open Future Autopsy
+                        Pre-mortem the deal
                     </a>
                     <a
                         class="ad-btn ad-btn--green"
@@ -360,7 +361,7 @@ export function SecondaryStack(): JSX.Element {
                         )}
                         data-ad-handoff="poc-framework"
                     >
-                        Open PoC Framework
+                        Forge a proof
                     </a>
                 </nav>
             </article>
