@@ -11,17 +11,19 @@ describe("buildActivationModel", () => {
         const m = buildActivationModel(EMPTY_COUNTS);
         expect(m.completed).toBe(0);
         expect(m.total).toBe(4);
-        // First-90-seconds audit: empty-state copy now names the unit
-        // (wedge) and the verb (set up). Was: "needs first operating
-        // truth" — too meta.
-        expect(m.headline).toMatch(/wedge/);
+        // Phase 2.1 audit: empty-state copy now names the unit (ICP)
+        // and the verb (define). Was: "Set up one wedge before the
+        // system starts briefing you" — "wedge" was internal canon.
+        expect(m.headline).toMatch(/define one sharp icp/i);
         expect(m.nextMilestone?.key).toBe("icp");
     });
 
     it("partial workspace surfaces the next missing anchor", () => {
         const m = buildActivationModel(counts({ icps: 1, accounts: 1, signals: 3 }));
         expect(m.completed).toBe(2);
-        expect(m.headline).toMatch(/moving from setup/);
+        // Phase 2.1 audit: replaced "moving from setup into a real operating
+        // system" (canon-doc voice) with "Next move: {next-anchor}."
+        expect(m.headline).toMatch(/next move/i);
         expect(m.nextMilestone?.key).toBe("deal");
     });
 
@@ -31,7 +33,7 @@ describe("buildActivationModel", () => {
         );
         expect(m.completed).toBe(4);
         expect(m.nextMilestone).toBeNull();
-        expect(m.headline).toMatch(/anchors are live/);
+        expect(m.headline).toMatch(/all four anchors are live/i);
     });
 
     it("calls also count toward the motion anchor", () => {

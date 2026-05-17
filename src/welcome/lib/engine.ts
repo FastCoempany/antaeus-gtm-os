@@ -61,21 +61,20 @@ export function buildActivationModel(
     let headline: string;
     let body: string;
     if (completed === 0) {
-        // First-90-seconds audit: replaced the meta-prose original
-        // ("...needs first operating truth") with an operator-direct
-        // line that names the unit (a wedge — one ICP) and the verb.
-        headline = "Set up one wedge before the system starts briefing you.";
+        headline = "Define one sharp ICP to start.";
         body =
-            "An ICP in Antaeus is one sharp wedge — who you sell to, what they're feeling, why now. Define one and the rest of the rooms compound off it: signals get smarter, outbound gets specific, deals stop drifting.";
+            "One wedge — who you sell to, what they're feeling, why now. Everything downstream targets against it: signals, outbound, deals.";
     } else if (completed < milestones.length) {
-        headline = "You are moving from setup into a real operating system.";
+        headline = next
+            ? `Next move: ${next.label.toLowerCase()}.`
+            : "One more anchor and the workspace is fully live.";
         body = next
-            ? `Next missing anchor: ${next.label}. Once that is live, the dashboard and downstream modules get more believable fast.`
-            : "The remaining work is about depth, not setup.";
+            ? `Land this and the Dashboard sharpens around it.`
+            : "The remaining work is depth, not setup.";
     } else {
-        headline = "The activation anchors are live. Now the job is to keep the system honest.";
+        headline = "All four anchors are live.";
         body =
-            "Use dashboard, deal review, proof, and handoff as operating rhythm, not just setup confirmation.";
+            "The workspace is operating. Run the daily rhythm from the Dashboard.";
     }
 
     return {
@@ -90,83 +89,83 @@ export function buildActivationModel(
 
 const ACTION_ICP: Omit<NextAction, "state"> = {
     key: "icp",
-    title: "Create your first ICP",
-    body: "Start with one sharp wedge. Once one ICP exists, Signal Console, outbound, and discovery stop operating on memory.",
+    title: "Define your first ICP.",
+    body: "One sharp wedge: who you sell to, what they're feeling, why now. Everything downstream targets against it.",
     href: "/icp-studio/",
-    cta: "Open ICP Studio",
+    cta: "Sharpen the wedge",
     meta: ["highest leverage", "targeting truth"],
-    why: "The rest of the app compounds off targeting truth before it compounds off activity.",
-    unlocks: "Sharper signal research, better sourcing, cleaner outbound, and a more credible dashboard brief."
+    why: "Targeting truth compounds before activity does.",
+    unlocks: "Sharper signals, cleaner outbound, and a credible Dashboard brief."
 };
 const ACTION_SIGNAL: Omit<NextAction, "state"> = {
     key: "signal",
-    title: "Research one live account",
-    body: "Add or enrich one real company so the workspace starts reflecting external evidence instead of setup answers.",
+    title: "Add one live account.",
+    body: "One real company gets the radar warm. Heat, recent signals, next-move guidance all start firing once an account is in.",
     href: "/signal-console/",
-    cta: "Open Signal Console",
+    cta: "Add the account",
     meta: ["real account", "deep research"],
-    why: "You need one live account before the signal layer can behave like a real intelligence system.",
-    unlocks: "Heat logic, next-move guidance, and better context for sourcing and outbound."
+    why: "The signal layer needs one live account to behave like an intelligence system.",
+    unlocks: "Heat scoring, next-move guidance, and context for sourcing + outbound."
 };
 const ACTION_DEAL: Omit<NextAction, "state"> = {
     key: "deal",
-    title: "Create the first live deal",
-    body: "One real opportunity activates pipeline review, proof planning, and the Monday command stack.",
+    title: "Add your first live deal.",
+    body: "One real opportunity wakes up the recovery board, PoC planning, and the Dashboard's risk rail.",
     href: "/deal-workspace/",
-    cta: "Open Deal Workspace",
+    cta: "Add the deal",
     meta: ["pipeline truth", "dashboard unlock"],
-    why: "Without a real deal, too many later modules are still briefing hypothetical work.",
-    unlocks: "Future autopsy, PoC framework, advisor deployment, and a more honest dashboard."
+    why: "Without a real deal, the downstream rooms are briefing hypothetical work.",
+    unlocks: "Future Autopsy, PoC Framework, Advisor Deploy, and a more honest Dashboard."
 };
 const ACTION_MOTION: Omit<NextAction, "state"> = {
     key: "motion",
-    title: "Log the first live motion",
-    body: "Capture one outbound touch or one real call so the system starts storing operating memory.",
+    title: "Log the first motion.",
+    body: "One outbound touch or one real call so the workspace starts holding operating memory.",
     href: "/outbound-studio/",
-    cta: "Open Outbound Studio",
+    cta: "Log a motion",
     meta: ["activity trail", "week one"],
-    why: "Week one should include at least one motion so the workspace stops being only configuration plus objects.",
-    unlocks: "Readiness evidence, better dashboard state, and a clearer operating rhythm."
+    why: "Week one is incomplete until at least one motion has run through the system.",
+    unlocks: "Readiness evidence and a clearer operating rhythm."
 };
 const ACTION_PLANNER: Omit<NextAction, "state"> = {
     key: "planner",
-    title: "Prep the next discovery call",
-    body: "Use Call Planner to turn an active deal into a structured conversation, not a loose note.",
+    title: "Prep the next discovery call.",
+    body: "Turn an active deal into a structured conversation — not a loose note.",
     href: "/call-planner/",
-    cta: "Open Call Planner",
+    cta: "Plan the call",
     meta: ["call quality", "active deal"],
-    why: "You already have enough deal truth to make the next call more deliberate.",
-    unlocks: "A stronger discovery agenda and a cleaner handoff into Discovery Studio."
+    why: "You have enough deal truth to make the next call deliberate.",
+    unlocks: "A stronger agenda and a clean handoff into Discovery Studio."
 };
 const ACTION_QUOTA: Omit<NextAction, "state"> = {
     key: "quota",
-    title: "Dial in quota and targets",
-    body: "Put your quota math and ACV into the system so good stops staying subjective.",
+    title: "Set quota and targets.",
+    body: "Put your quota math and ACV in. The Dashboard starts speaking in revenue pressure, not just activity.",
     href: "/quota-workback/",
-    cta: "Open Quota Workback",
+    cta: "Set the targets",
     meta: ["system math", "benchmarks"],
-    why: "The app becomes more credible when activity and readiness are anchored to actual revenue pressure.",
-    unlocks: "Better weekly targets, clearer benchmarks, and stronger readiness logic."
+    why: "Readiness gets credible when activity is anchored to actual revenue pressure.",
+    unlocks: "Weekly touch targets, coverage math, and a sharper Dashboard."
 };
 const ACTION_BACKUP: Omit<NextAction, "state"> = {
     key: "backup",
-    title: "Export the first backup",
-    body: "Make the workspace durable outside this one browser before the first week gets messy.",
+    title: "Export the first backup.",
+    body: "Make the workspace durable outside this browser before week one gets messy.",
     href: "/settings/",
-    cta: "Open Settings",
+    cta: "Export now",
     meta: ["durability", "trust"],
-    why: "Week one is not complete until the workspace can survive refresh, re-login, and a bad decision.",
-    unlocks: "Safer experimentation and a system that feels durable instead of lucky."
+    why: "Week one isn't complete until the workspace survives a refresh and a bad decision.",
+    unlocks: "Safer experimentation and a workspace that feels durable, not lucky."
 };
 const ACTION_DASHBOARD: Omit<NextAction, "state"> = {
     key: "dashboard",
-    title: "Return to Spotlight",
-    body: "Use the command stack as the place where the system tells you what matters next.",
+    title: "Return to the Dashboard.",
+    body: "Run the daily rhythm from the ranked command stack.",
     href: "/dashboard/",
-    cta: "Open Spotlight",
+    cta: "Open the Dashboard",
     meta: ["operating rhythm", "daily command stack"],
-    why: "By this point the app should start behaving like a morning operating room, not a collection of tools.",
-    unlocks: "Faster daily resets, clearer next moves, and stronger week-one rhythm."
+    why: "The app should now behave like a morning operating room.",
+    unlocks: "Faster daily resets and a clearer week-one rhythm."
 };
 
 /**

@@ -219,6 +219,50 @@ export function seedFromDraft(
             })
         );
         items.push("First account in Signal Console");
+
+        // Phase 2.1 — also publish a Signal Console health snapshot
+        // matching the schema Dashboard's snapshot aggregator reads
+        // (`gtmos_signal_room_health`, with `hot_accounts[]`).
+        //
+        // Without this, the seeded account doesn't surface as a
+        // ranked move card on Dashboard until Sarah visits Signal
+        // Console for the first time — which contradicts Onboarding's
+        // promise that "the Dashboard is no longer empty." Onboarding
+        // is the only flow that seeds SC data without booting the
+        // Signal Console room, so the snapshot publish has to happen
+        // here too.
+        //
+        // Schema kept minimal — Dashboard's `signalSnapshotToMoveCards`
+        // reader needs `hot_accounts[]` entries with `name` + `heat`.
+        // Other fields (recentSignals, highConfidenceSignals, cause)
+        // are absent — Dashboard handles the absences cleanly.
+        const signalCount = acc.signals.length;
+        const heat = acc.heat;
+        const snapshot = {
+            capturedAt: iso,
+            accountCount: merged.length,
+            signalCount,
+            readyCount: heat >= 75 ? 1 : 0,
+            topName: acc.name,
+            topHeat: heat,
+            topSignalCount: signalCount,
+            topHighConfidenceCount: 0,
+            topRecentCount: signalCount,
+            hot_accounts: [
+                {
+                    id: acc.id,
+                    name: acc.name,
+                    heat,
+                    recentSignals: signalCount,
+                    highConfidenceSignals: 0
+                }
+            ]
+        };
+        trySet(
+            store,
+            "gtmos_signal_room_health",
+            JSON.stringify(snapshot)
+        );
     }
 
     if (draft.annualQuota > 0) {

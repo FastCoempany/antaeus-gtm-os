@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { actions } from "../state";
+import { hrefForActionDestination } from "../lib/handoff";
 
 /**
  * ActionStack — the ranked next-action picker. The first card is the
@@ -59,7 +60,7 @@ export function ActionStack(): JSX.Element {
                                     ? "wel-btn wel-btn--primary"
                                     : "wel-btn wel-btn--ghost"
                             }
-                            href={a.href}
+                            href={hrefForActionDestination(a.href)}
                         >
                             {a.cta}
                         </a>
