@@ -39,7 +39,7 @@ export function RouteRack(): JSX.Element {
                     aria-disabled={!hasAccount}
                 >
                     <span class="poc-route-rack__label">
-                        Open in Deal Workspace
+                        Open the deal
                     </span>
                     <span class="poc-route-rack__reason">
                         {linked
@@ -54,7 +54,7 @@ export function RouteRack(): JSX.Element {
                     href={autopsyHref}
                     aria-disabled={!hasAccount}
                 >
-                    <span class="poc-route-rack__label">Pre-mortem in Future Autopsy</span>
+                    <span class="poc-route-rack__label">Pre-mortem this deal</span>
                     <span class="poc-route-rack__reason">
                         Stress-test what would kill this proof.
                     </span>
@@ -66,7 +66,7 @@ export function RouteRack(): JSX.Element {
                     href={advisorHref}
                     aria-disabled={!hasAccount}
                 >
-                    <span class="poc-route-rack__label">Carry to Advisor Deploy</span>
+                    <span class="poc-route-rack__label">Carry to an advisor</span>
                     <span class="poc-route-rack__reason">
                         Portable evidence for backchannel asks.
                     </span>

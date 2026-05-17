@@ -2,12 +2,14 @@ import type { JSX } from "preact";
 import { Wordmark } from "@/lib/wordmark";
 import { DealList } from "./components/DealList";
 import { FilterBar } from "./components/FilterBar";
+import { HandoffStrip } from "./components/HandoffStrip";
 import { Hero } from "./components/Hero";
 import { LaneGrid } from "./components/LaneGrid";
 import { LossReasonModal } from "./components/LossReasonModal";
 import { MicroGrid } from "./components/MicroGrid";
 import { TargetFolio } from "./components/TargetFolio";
-import { allDeals } from "./state";
+import { activeDeals, allDeals } from "./state";
+import { groupByLane, rankRecovery } from "./lib/recovery";
 
 /**
  * DealWorkspace — Phase 2 rework against picked variant-B
@@ -48,6 +50,22 @@ import { allDeals } from "./state";
 export function DealWorkspace(): JSX.Element {
     const dealCount = allDeals.value.length;
 
+    // Phase 2.6 — contextual kicker tail surfaces recovery pressure
+    // counts (was just "{n} deals on the board"). Sarah lands and
+    // sees in one glance whether the board has actionable risk.
+    let kicker = "DEAL WORKSPACE · no deals yet";
+    if (dealCount > 0) {
+        const lanes = groupByLane(rankRecovery(activeDeals.value));
+        const critical = lanes.critical.length;
+        const atRisk = lanes["at-risk"].length;
+        const pieces = [
+            `${dealCount} deal${dealCount === 1 ? "" : "s"}`
+        ];
+        if (critical > 0) pieces.push(`${critical} critical`);
+        else if (atRisk > 0) pieces.push(`${atRisk} at risk`);
+        kicker = `DEAL WORKSPACE · ${pieces.join(" · ")}`;
+    }
+
     return (
         <div class="dw-shell">
             <div class="ant-room-chrome">
@@ -55,12 +73,7 @@ export function DealWorkspace(): JSX.Element {
             </div>
             <div class="dw-surface">
                 <header class="dw-topbar">
-                    <p class="dw-topbar__kicker">
-                        DEAL WORKSPACE ·{" "}
-                        {dealCount > 0
-                            ? `${dealCount} deal${dealCount === 1 ? "" : "s"} on the board`
-                            : "no deals yet"}
-                    </p>
+                    <p class="dw-topbar__kicker">{kicker}</p>
                 </header>
 
                 <div class="dw-stage-grid">
@@ -76,6 +89,8 @@ export function DealWorkspace(): JSX.Element {
                 </div>
 
                 <DealList />
+
+                <HandoffStrip />
             </div>
 
             <LossReasonModal />

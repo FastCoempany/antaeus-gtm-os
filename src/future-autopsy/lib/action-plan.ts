@@ -49,7 +49,7 @@ function buildRoute(
     switch (target) {
         case "deal":
             return {
-                label: "Open in Deal Workspace",
+                label: "Open the deal",
                 href: hrefToDealWorkspace(accountName, dealId),
                 roomLabel: "Deal Workspace",
                 tone,
@@ -65,7 +65,7 @@ function buildRoute(
             };
         case "poc":
             return {
-                label: "Open the PoC frame",
+                label: "Forge a proof",
                 href: hrefToPoC(accountName),
                 roomLabel: "PoC Framework",
                 tone,
@@ -73,7 +73,7 @@ function buildRoute(
             };
         case "discovery":
             return {
-                label: "Re-enter Discovery Studio",
+                label: "Run discovery again",
                 href: hrefToDiscoveryStudio(accountName),
                 roomLabel: "Discovery Studio",
                 tone,

@@ -1646,3 +1646,76 @@ button {
         justify-self: start;
     }
 }
+
+/* ─── HandoffStrip (Phase 2.6) ─────────────────────────────────────── */
+
+.dw-handoff {
+    margin-top: 36px;
+    padding-top: 26px;
+    border-top: 1px solid rgba(10, 28, 64, 0.13);
+}
+
+.dw-handoff__head {
+    margin-bottom: 16px;
+}
+
+.dw-handoff__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: #e6701e;
+}
+
+.dw-handoff__title {
+    margin: 0 0 6px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(20px, 1.8vw, 28px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #0a1c40;
+}
+
+.dw-handoff__sub {
+    margin: 0;
+    font-size: 13.5px;
+    color: rgba(10, 28, 64, 0.7);
+}
+
+.dw-handoff__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dw-handoff__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 11px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    border: 1px solid rgba(10, 28, 64, 0.25);
+    background: #ffffff;
+    color: #0a1c40;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.15s;
+}
+
+.dw-handoff__cta:hover {
+    transform: translateY(-1px);
+    border-color: #e6701e;
+}
+
+.dw-handoff__cta--primary {
+    background: #e6701e;
+    border-color: #e6701e;
+    color: #fff;
+}
+
+.dw-handoff__cta--primary:hover {
+    background: #d65f0f;
+    border-color: #d65f0f;
+}
