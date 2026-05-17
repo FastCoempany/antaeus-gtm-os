@@ -31,17 +31,17 @@ const STAGES: ReadonlyArray<StageDef> = [
     {
         key: "forge",
         label: "Forge",
-        thesis: "Shape the molds: claim, owner, metric, kill rule."
+        thesis: "Shape the claim, owner, metric, and kill rule."
     },
     {
         key: "cast",
         label: "Cast",
-        thesis: "Freeze the proof. The pilot starts a forced event."
+        thesis: "Freeze the proof. The pilot starts on a clock."
     },
     {
         key: "readout",
         label: "Readout",
-        thesis: "Carry the proof forward. The decision earns legitimacy."
+        thesis: "Carry the proof into the decision room."
     }
 ];
 
@@ -96,7 +96,7 @@ export function StageStrip(): JSX.Element {
                         class={`poc-stage-strip__step poc-stage-strip__step--${state}`}
                     >
                         <span class="poc-stage-strip__index">
-                            {String(i + 1).padStart(2, "0")}
+                            {i + 1}.
                         </span>
                         <span class="poc-stage-strip__label">{s.label}</span>
                         <span class="poc-stage-strip__thesis">{s.thesis}</span>

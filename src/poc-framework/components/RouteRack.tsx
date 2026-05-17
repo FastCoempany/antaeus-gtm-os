@@ -56,7 +56,7 @@ export function RouteRack(): JSX.Element {
                 >
                     <span class="poc-route-rack__label">Pre-mortem in Future Autopsy</span>
                     <span class="poc-route-rack__reason">
-                        Test what kills this PoC.
+                        Stress-test what would kill this proof.
                     </span>
                 </a>
                 <a

@@ -7,7 +7,7 @@ import type { ProofDocs } from "../lib/types";
 import { RouteRack } from "./RouteRack";
 
 const DOC_LABELS: Record<keyof ProofDocs, string> = {
-    scope: "PoC scope",
+    scope: "Pilot scope",
     kickoff: "Kickoff agenda",
     readout: "Readout agenda",
     email: "Proposal email"
