@@ -23,9 +23,13 @@ export function FocalObject({ object }: Props): JSX.Element {
     return (
         <article class="db-focal" aria-labelledby={`focal-${object.id}`}>
             <header class="db-focal__header">
-                <p class="db-focal__kicker">
-                    {object.roomFamilyLabel} · score {object.score}
-                </p>
+                {/*
+                 * Phase 2.2 audit — dropped the raw "score {n}" tail.
+                 * Sarah doesn't care that the engine scored this 100;
+                 * she cares what kind of move it is. Family label
+                 * carries that semantic content alone.
+                 */}
+                <p class="db-focal__kicker">{object.roomFamilyLabel}</p>
                 <h2 id={`focal-${object.id}`} class="db-focal__title">
                     {object.title}
                 </h2>

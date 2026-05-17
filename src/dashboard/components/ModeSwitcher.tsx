@@ -29,31 +29,32 @@ const MODE_DESCRIPTIONS: Record<CommandMode, string> = {
 export function ModeSwitcher(): JSX.Element {
     const active = commandMode.value;
     return (
-        <div class="db-mode">
-            <nav class="db-mode-switcher" aria-label="Command mode">
-                {COMMAND_MODES.map((mode) => {
-                    const isActive = mode === active;
-                    return (
-                        <button
-                            key={mode}
-                            type="button"
-                            class={`db-mode-switcher__btn${
-                                isActive ? " is-active" : ""
-                            }`}
-                            aria-pressed={isActive}
-                            onClick={() => setCommandMode(mode)}
-                            title={MODE_DESCRIPTIONS[mode]}
-                        >
-                            {COMMAND_MODE_LABELS[mode]}
-                        </button>
-                    );
-                })}
-            </nav>
-            <p class="db-mode__hint">
-                Density: {COMMAND_MODE_LABELS.brief} (narrative),{" "}
-                {COMMAND_MODE_LABELS.spotlight} (one object),{" "}
-                {COMMAND_MODE_LABELS.queue} (list).
-            </p>
-        </div>
+        <nav class="db-mode-switcher" aria-label="Command mode">
+            {/*
+             * Phase 2.2 audit — retired the "Density: Read
+             * (narrative), Focus (one object), Triage (list)." hint
+             * caption that lived under the mode buttons. Redundant
+             * with the button labels + their tooltips; visually
+             * cluttered the topbar rail. The MODE_DESCRIPTIONS map
+             * still backs the tooltips below.
+             */}
+            {COMMAND_MODES.map((mode) => {
+                const isActive = mode === active;
+                return (
+                    <button
+                        key={mode}
+                        type="button"
+                        class={`db-mode-switcher__btn${
+                            isActive ? " is-active" : ""
+                        }`}
+                        aria-pressed={isActive}
+                        onClick={() => setCommandMode(mode)}
+                        title={MODE_DESCRIPTIONS[mode]}
+                    >
+                        {COMMAND_MODE_LABELS[mode]}
+                    </button>
+                );
+            })}
+        </nav>
     );
 }

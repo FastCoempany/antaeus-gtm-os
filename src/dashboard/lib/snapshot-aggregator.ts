@@ -3,6 +3,12 @@ import type {
     HealthSummaries,
     RawCommandCard
 } from "./types";
+import {
+    hrefToDealForDeal,
+    hrefToFutureAutopsyForDeal,
+    hrefToOutboundForAccount,
+    hrefToSignalForAccount
+} from "./handoff";
 
 /**
  * Wave 5 — workspace-health snapshot aggregator.
@@ -85,23 +91,40 @@ function dealSnapshotToRiskCards(
         .map((entry) => {
             const e = asObject(entry);
             if (!e) return null;
-            const accountName = String(e.accountName ?? "").trim();
-            if (!accountName) return null;
-            const score = Number(e.score ?? 0);
-            const cause = String(e.cause ?? "").trim();
+            // The snapshot's top_pressure rows carry the deal's name
+            // under either `accountName` (the Phase 4 Deal Workspace
+            // snapshot) or `name` (the Phase 2.2 walk seed + the
+            // Tuesday-morning hand-seeded shape). Read both, with
+            // accountName winning for backward compatibility.
+            const rawName = String(e.accountName ?? e.name ?? "").trim();
+            if (!rawName) return null;
+            // `score` (legacy) and `riskScore` (Phase 2.2 seed) carry
+            // the same value; accept either.
+            const score = Number(e.score ?? e.riskScore ?? 0);
+            const cause = String(e.cause ?? e.causeId ?? "").trim();
             const id = String(e.id ?? "").trim();
             const stage = String(e.stage ?? "").trim();
             const card: RawCommandCard = {
                 ...(id ? { id } : {}),
-                title: accountName,
+                title: rawName,
                 ...(cause ? { subtitle: cause } : {}),
                 badge: String(Math.round(score)),
                 meta: stage ? [stage] : [],
+                // Sarah's hand-reach intent on a risk card is to OPEN
+                // the deal at the gate that's broken. Primary action
+                // = open the deal. Secondary = pre-mortem in Future
+                // Autopsy. Continuity wraps via buildDashboardHref so
+                // the destination back-affordance points at Dashboard.
                 actions: [
                     {
-                        label: "Open Deal Workspace",
-                        href: `/deal-workspace/${id ? `?focusObject=${encodeURIComponent(id)}` : ""}`,
+                        label: "Open the deal",
+                        href: hrefToDealForDeal(id, rawName),
                         roomLabel: "Deal Workspace"
+                    },
+                    {
+                        label: "Pre-mortem the deal",
+                        href: hrefToFutureAutopsyForDeal(id, rawName),
+                        roomLabel: "Future Autopsy"
                     }
                 ],
                 rankingSignals: {
@@ -145,10 +168,22 @@ function signalSnapshotToMoveCards(
                 title: `Outbound to ${name}`,
                 badge: "Now",
                 meta: [`heat ${Math.round(heat)}`],
+                // Sarah's hand-reach intent on a "Outbound to X" card
+                // is to COMPOSE outbound — so the dominant CTA lands
+                // in Outbound Studio with the account already in the
+                // operator rack, not in Signal Console where she'd
+                // have to re-pick. Continuity wraps via
+                // buildDashboardHref. Secondary = look at the live
+                // signals that drove the heat in Signal Console.
                 actions: [
                     {
-                        label: "Open Signal Console",
-                        href: "/signal-console/",
+                        label: "Compose outbound",
+                        href: hrefToOutboundForAccount(name),
+                        roomLabel: "Outbound Studio"
+                    },
+                    {
+                        label: "Check the signals",
+                        href: hrefToSignalForAccount(name),
                         roomLabel: "Signal Console"
                     }
                 ],

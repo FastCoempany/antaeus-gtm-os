@@ -56,10 +56,15 @@ describe("buildBriefNarrative", () => {
         expect(n.insight.length).toBeGreaterThan(0);
     });
 
-    it("the first sentence references the spotlight family + title", () => {
+    it("the first sentence references the spotlight title", () => {
+        // Phase 2.2 audit: the lead sentence is now sentence-shaped
+        // ("{title} is the morning's top move.") and dropped the
+        // explicit family-label prefix ("Pipeline pressure is leading:
+        // {title}.") — Sarah parses the title alone; the family adds
+        // canon-doc voice.
         const summary = summarize({ riskCards: [riskCard] });
         const n = buildBriefNarrative(summary);
-        expect(n.sentences[0]).toContain(summary.spotlight!.roomFamilyLabel);
+        expect(n.sentences[0]).toContain(summary.spotlight!.title);
     });
 
     it("composition sentence pluralizes correctly", () => {
