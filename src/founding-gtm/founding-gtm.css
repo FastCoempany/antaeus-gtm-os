@@ -103,29 +103,6 @@ button { font-family: inherit; cursor: pointer; }
     flex: 0 0 auto;
 }
 
-.fg-maturity {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 10px;
-    padding: 10px 16px;
-    background: var(--fg-field-raised);
-    border: 1px solid var(--fg-border-strong);
-    border-radius: 4px;
-}
-
-.fg-maturity__count {
-    font-family: "DM Serif Display", serif;
-    font-size: 18px;
-    color: var(--fg-ink);
-}
-
-.fg-maturity__partial {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
-    color: var(--fg-accent-amber);
-    letter-spacing: 0.06em;
-}
-
 .fg-readiness-tag {
     display: inline-flex;
     align-items: baseline;
