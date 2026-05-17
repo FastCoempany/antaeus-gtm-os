@@ -59,8 +59,14 @@ describe("convenience builders", () => {
         );
     });
 
-    it("uses fallback focus when industry is empty", () => {
+    it("omits focusObject when industry is empty (no placeholder)", () => {
+        // Phase 2.3 audit — retired the "ICP wedge" placeholder per
+        // continuity-params Invariant 8. Empty focusObject = no
+        // param written. Same fix as LinkedIn Playbook P2 earlier.
         const url = hrefToTerritoryArchitect("");
-        expect(url).toContain("focusObject=ICP+wedge");
+        expect(url).not.toContain("focusObject=");
+        // Continuity still present.
+        expect(url).toContain("returnTo=%2Ficp-studio%2F");
+        expect(url).toContain("fromMode=room");
     });
 });

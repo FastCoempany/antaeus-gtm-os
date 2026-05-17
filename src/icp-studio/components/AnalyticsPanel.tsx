@@ -132,17 +132,18 @@ export function AnalyticsPanel(): JSX.Element {
             <footer class="icp-outflow" aria-label="Use this ICP">
                 <p class="icp-outflow__kicker">USE THIS ICP</p>
                 <p class="icp-outflow__copy">
-                    Carry the wedge into the next room to build a tiered
-                    territory, queue named prospects, or rank live signals.
+                    {recent[0]?.industry
+                        ? `Take ${recent[0].industry} downstream — territory, prospects, live signals, or outbound.`
+                        : "Save your first ICP above to start handing it off."}
                 </p>
                 <nav class="icp-handoffs" aria-label="Cross-room handoff">
                     <a
-                        class="icp-handoff"
+                        class="icp-handoff icp-handoff--primary"
                         href={hrefToTerritoryArchitect(
                             recent[0]?.industry ?? ""
                         )}
                     >
-                        Open Territory Architect
+                        Build the territory
                     </a>
                     <a
                         class="icp-handoff"
@@ -150,19 +151,19 @@ export function AnalyticsPanel(): JSX.Element {
                             recent[0]?.industry ?? ""
                         )}
                     >
-                        Open Sourcing Workbench
+                        Source named prospects
                     </a>
                     <a
                         class="icp-handoff"
                         href={hrefToSignalConsole(recent[0]?.industry ?? "")}
                     >
-                        Open Signal Console
+                        Rank live signals
                     </a>
                     <a
                         class="icp-handoff"
                         href={hrefToOutboundStudio(recent[0]?.industry ?? "")}
                     >
-                        Open Outbound Studio
+                        Compose outbound
                     </a>
                 </nav>
             </footer>

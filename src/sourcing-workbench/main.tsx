@@ -2,7 +2,9 @@ import { render } from "preact";
 import { SourcingWorkbench } from "./SourcingWorkbench";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
+import { readContinuity } from "@/lib/continuity";
 import {
+    inboundFocus,
     patchProspectDraft,
     setProspects,
     setQueryCards,
@@ -52,6 +54,15 @@ setProspects(loadProspects());
 const inboundAccount = readInboundAccount(window.location.search);
 if (inboundAccount) {
     patchProspectDraft({ accountName: inboundAccount });
+}
+
+// Phase 2.3 — Strategy flow inbound focus. ICP Studio / Territory
+// Architect pass `?focusObject=<industry>` when handing off; we
+// surface it in the topbar kicker + propagate through outbound
+// handoffs so the next room (Signal Console) also lands focused.
+const ctx = readContinuity();
+if (ctx.focusObject) {
+    inboundFocus.value = ctx.focusObject;
 }
 
 startPersistence();

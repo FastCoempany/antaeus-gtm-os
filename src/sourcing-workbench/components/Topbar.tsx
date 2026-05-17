@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { stats } from "../state";
+import { inboundFocus, stats } from "../state";
 
 /**
  * Topbar — kicker + thesis title + workbench stats.
@@ -10,10 +10,17 @@ import { stats } from "../state";
  */
 export function Topbar(): JSX.Element {
     const s = stats.value;
-    const kicker =
+    const focus = inboundFocus.value;
+    // Phase 2.3 — inbound focus from ICP Studio / Territory Architect
+    // appended as kicker tail so the operator sees which wedge the
+    // workbench is sourcing against.
+    const baseKicker =
         s.total > 0
             ? `SOURCING WORKBENCH · ${s.total} ${s.total === 1 ? "prospect" : "prospects"} · ${s.ready} ready`
             : "SOURCING WORKBENCH";
+    const kicker = focus
+        ? `${baseKicker} · sourcing against: ${focus}`
+        : baseKicker;
     return (
         <header class="sw-topbar" aria-label="Sourcing Workbench header">
             <p class="sw-topbar__kicker">{kicker}</p>

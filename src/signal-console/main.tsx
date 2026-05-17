@@ -4,6 +4,7 @@ import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
 import {
+    inboundFocus,
     selectAccount,
     setAllAccounts,
     startExternalPublishing
@@ -64,7 +65,14 @@ if (focus) {
     const matched = seeded.find(
         (a) => a.id === focus || a.name.toLowerCase() === lower
     );
-    if (matched) selectAccount(matched.id);
+    if (matched) {
+        selectAccount(matched.id);
+    } else {
+        // Phase 2.3 — no matching account yet. Stash the inbound
+        // focus so AccountGrid's empty-state surface can show what
+        // wedge the radar is targeting against.
+        inboundFocus.value = focus;
+    }
 }
 
 // Publish the health snapshot once on boot so Dashboard's aggregator
