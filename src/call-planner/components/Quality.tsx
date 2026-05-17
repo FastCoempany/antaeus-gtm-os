@@ -20,9 +20,9 @@ export function Quality(): JSX.Element {
         <section class="cp-quality" aria-label="Agenda quality">
             <header class="cp-quality__head">
                 <div>
-                    <p class="cp-quality__kicker">QUALITY</p>
+                    <p class="cp-quality__kicker">AGENDA QUALITY</p>
                     <h2 class="cp-quality__title">
-                        Each gate must hold before the meeting.
+                        Five gates the meeting has to clear.
                     </h2>
                 </div>
                 <div class="cp-quality__band-wrap" aria-label="Score band">

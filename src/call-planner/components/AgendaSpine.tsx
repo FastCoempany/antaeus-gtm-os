@@ -51,16 +51,11 @@ export function AgendaSpine(): JSX.Element {
 
     return (
         <section class="cp-spine" aria-label="Agenda spine">
-            <p class="cp-spine__kicker">PRESSURE SEQUENCE</p>
-            <h2 class="cp-spine__title">Interrogate in this order.</h2>
-            <p class="cp-spine__copy">
-                Good agenda means the meeting can actually advance: the
-                person is clear, the reason now is credible, and the
-                result has somewhere durable to land.
-            </p>
+            <p class="cp-spine__kicker">AGENDA</p>
+            <h2 class="cp-spine__title">Run the call in this order.</h2>
             <ol class="cp-spine__strips">
                 <li class="cp-strip" data-cp-strip="open">
-                    <p class="cp-strip__num">01</p>
+                    <p class="cp-strip__num">1.</p>
                     <p class="cp-strip__name">Open</p>
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">Open from the operating burden.</p>
@@ -73,7 +68,7 @@ export function AgendaSpine(): JSX.Element {
                 </li>
 
                 <li class="cp-strip" data-cp-strip="reason-now">
-                    <p class="cp-strip__num">02</p>
+                    <p class="cp-strip__num">2.</p>
                     <p class="cp-strip__name">Reason now</p>
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">{whyNowTitle}</p>
@@ -83,7 +78,7 @@ export function AgendaSpine(): JSX.Element {
                 </li>
 
                 <li class="cp-strip" data-cp-strip="probe">
-                    <p class="cp-strip__num">03</p>
+                    <p class="cp-strip__num">3.</p>
                     <p class="cp-strip__name">Probe</p>
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">
@@ -97,7 +92,7 @@ export function AgendaSpine(): JSX.Element {
                             {probes.map((q, i) => (
                                 <li key={i} class="cp-probes__row">
                                     <span class="cp-probes__num">
-                                        {String(i + 1).padStart(2, "0")}
+                                        {i + 1}.
                                     </span>
                                     <span class="cp-probes__copy">
                                         {unquoteQuestion(q)}
@@ -109,7 +104,7 @@ export function AgendaSpine(): JSX.Element {
                 </li>
 
                 <li class="cp-strip" data-cp-strip="advance">
-                    <p class="cp-strip__num">04</p>
+                    <p class="cp-strip__num">4.</p>
                     <p class="cp-strip__name">Advance ask</p>
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">
