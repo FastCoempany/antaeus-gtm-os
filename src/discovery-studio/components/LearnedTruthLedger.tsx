@@ -52,8 +52,8 @@ export function LearnedTruthLedger(): JSX.Element {
             </header>
             {facts.length === 0 ? (
                 <p class="ds-learned-truth-ledger__empty">
-                    No facts captured yet. Click a branch in the segment rail
-                    to record what you've heard.
+                    No facts captured yet. Tap a buyer-response above to
+                    log what you heard.
                 </p>
             ) : (
                 <ul class="ds-learned-truth-ledger__list">

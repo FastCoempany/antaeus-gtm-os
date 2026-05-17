@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import { CallClock } from "./components/CallClock";
 import { CompressionToggle } from "./components/CompressionToggle";
 import { FrameworkRail } from "./components/FrameworkRail";
@@ -54,6 +53,14 @@ export function DiscoveryStudio(): JSX.Element {
     const fid = activeFramework.value;
     const fwLoaded = frameworkRegistry.value.length > 0;
     const interrupt = activeInterrupt.value;
+    const activeFw = fid
+        ? frameworkRegistry.value.find((f) => f.id === fid)
+        : null;
+    const kicker = activeFw
+        ? `DISCOVERY STUDIO · ${activeFw.label}`
+        : fwLoaded
+          ? "DISCOVERY STUDIO"
+          : "DISCOVERY STUDIO · loading…";
 
     return (
         <div class="ds-shell">
@@ -61,16 +68,10 @@ export function DiscoveryStudio(): JSX.Element {
                 <Wordmark kicker="DISCOVERY STUDIO" />
             </div>
             <header class="ds-topbar">
-                <BackButton />
-                <p class="ds-topbar__kicker">
-                    DISCOVERY STUDIO · WAVE 5 · {fwLoaded
-                        ? `${frameworkRegistry.value.length} frameworks loaded`
-                        : "loading…"}
-                </p>
+                <p class="ds-topbar__kicker">{kicker}</p>
                 <h1 class="ds-topbar__title">
-                    {fid
-                        ? frameworkRegistry.value.find((f) => f.id === fid)
-                              ?.label ?? "Live discovery"
+                    {activeFw
+                        ? activeFw.label
                         : "Choose your framework to begin."}
                 </h1>
                 <FrameworkRail />
