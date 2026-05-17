@@ -20,7 +20,7 @@ export function RouteRack({ plan }: Props): JSX.Element {
     if (visible.length === 0) return <></>;
     return (
         <nav class="fa-route-rack" aria-label="Action plan">
-            <span class="fa-route-rack__kicker">ROUTES</span>
+            <span class="fa-route-rack__kicker">INTERVENE</span>
             <div class="fa-route-rack__list">
                 {visible.map((route) => (
                     <a

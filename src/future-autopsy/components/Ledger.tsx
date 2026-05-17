@@ -28,8 +28,8 @@ export function Ledger(): JSX.Element {
         return (
             <section class="fa-ledger fa-ledger--empty" aria-label="Pinned-case ledger">
                 <p class="fa-ledger__empty">
-                    No deals pinned. Wave 2 wires deal-loading from the Deal
-                    Workspace mirror; until then the ledger is dormant.
+                    No deals pinned yet. Open Deal Workspace and push one
+                    here to start the autopsy.
                 </p>
             </section>
         );
@@ -55,7 +55,7 @@ export function Ledger(): JSX.Element {
                                 onClick={() => selectDeal(v.id)}
                             >
                                 <span class="fa-ledger__rank">
-                                    {String(i + 1).padStart(2, "0")}
+                                    {i + 1}.
                                 </span>
                                 <span class="fa-ledger__name">{v.name}</span>
                                 <span class="fa-ledger__stage">{v.stage}</span>
@@ -63,7 +63,7 @@ export function Ledger(): JSX.Element {
                                     {fmtMoney(v.value)}
                                 </span>
                                 <span class="fa-ledger__risk">
-                                    risk {v.riskScore}
+                                    Risk {v.riskScore}/100
                                 </span>
                             </button>
                         </li>
