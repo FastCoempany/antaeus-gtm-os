@@ -365,7 +365,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".sw-topbar__kicker")).toContainText(
-            "Research loom"
+            "SOURCING WORKBENCH"
         );
         await expect(page.locator(".sw-querystudio")).toBeAttached();
         await expect(page.locator(".sw-prospect-composer")).toBeAttached();
