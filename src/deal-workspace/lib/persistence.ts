@@ -1,7 +1,12 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { reportError, trackEvent } from "@/lib/observability";
-import { dbRowToDeal, dealToDbWrite, rowsToDeals } from "./deal-bridge";
+import {
+    dbRowToDeal,
+    dealToDbWrite,
+    legacyDealToDeal,
+    rowsToDeals
+} from "./deal-bridge";
 import type { Deal } from "./deal-shape";
 import { allDeals, removeDeal, setAllDeals, upsertDeal } from "../state";
 import { mirrorToLegacyStorage } from "./legacy-mirror";
@@ -74,14 +79,57 @@ export function looksLikePersistedId(id: string): boolean {
 }
 
 export async function loadDeals(client: DataClient): Promise<void> {
+    let supabaseDealCount = 0;
     try {
         const rows = await client.deals.list({ limit: 500 });
         const deals = rowsToDeals(rows);
-        setAllDeals(deals);
-        publishExternalState();
+        supabaseDealCount = deals.length;
+        if (supabaseDealCount > 0) {
+            setAllDeals(deals);
+            publishExternalState();
+            return;
+        }
+        // Supabase returned 0 — fall through to legacy mirror so
+        // demo-seed flows + dev walks aren't stranded on empty grid.
     } catch (err) {
         reportError(err, { op: "loadDeals" });
-        // Leave allDeals signal in its initial empty state.
+        // Fall through to localStorage fallback.
+    }
+
+    // Phase 2.6 — graceful degradation. When Supabase returns 0 rows
+    // (unauthenticated session, RLS-empty workspace) OR throws,
+    // seed from the legacy `gtmos_deal_workspaces` mirror so demo-
+    // seed flows + dev walks populate the room. Same pattern
+    // Onboarding established when it seeds `gtmos_signal_room_health`
+    // so Dashboard wakes up. Supabase remains canonical when it
+    // returns rows — this is the cold/empty fallback only.
+    loadFromLegacyMirror();
+}
+
+/**
+ * Phase 2.6 — exported so main.tsx can call it from the
+ * env-missing-throws path (where createDataClient throws before
+ * bootPersistence ever runs, so the in-loadDeals fallback never
+ * fires).
+ */
+export function loadFromLegacyMirror(): void {
+    if (typeof localStorage === "undefined") return;
+    try {
+        const raw = localStorage.getItem("gtmos_deal_workspaces");
+        if (!raw) return;
+        const parsed: unknown = JSON.parse(raw);
+        if (!Array.isArray(parsed) || parsed.length === 0) return;
+        const deals: Deal[] = parsed.map((item, idx) =>
+            legacyDealToDeal(item, `legacy_${idx}`)
+        );
+        setAllDeals(deals);
+        // Don't re-publish to the legacy mirror — that's what we
+        // just read from. But the health snapshot doesn't exist yet
+        // (we're in the no-Supabase case), so publish it so the
+        // Dashboard can rank against the mirrored deals.
+        publishHealthSnapshot(allDeals.value);
+    } catch (err) {
+        reportError(err, { op: "loadDeals.fromLegacyMirror" });
     }
 }
 

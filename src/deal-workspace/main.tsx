@@ -5,7 +5,7 @@ import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { readContinuity } from "@/lib/continuity";
 import { createDataClient } from "@/lib/data-client";
 import { startUnsavedGuard } from "@/lib/unsaved-guard";
-import { bootPersistence } from "./lib/persistence";
+import { bootPersistence, loadFromLegacyMirror } from "./lib/persistence";
 import { allDeals, editingDeal, openDealEditor } from "./state";
 
 /**
@@ -67,6 +67,10 @@ void (async (): Promise<void> => {
             "[deal-workspace] Persistence layer disabled:",
             err instanceof Error ? err.message : String(err)
         );
+        // Phase 2.6 — when env-missing throws BEFORE bootPersistence
+        // runs, the in-loadDeals fallback never fires. Seed from the
+        // legacy mirror here so demo + dev walks populate the room.
+        loadFromLegacyMirror();
     }
 
     // Cross-room handoff: if a caller passed `?focusObject=` (or
