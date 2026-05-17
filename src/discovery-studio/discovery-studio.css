@@ -994,6 +994,81 @@ button {
 .ds-footer {
     padding: 24px 40px;
     background: var(--ds-field-raised);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ─── HandoffStrip (Phase 2.5) ──────────────────────────────────────── */
+
+.ds-handoff {
+    border-top: 1px solid var(--ds-line, rgba(10, 28, 64, 0.13));
+    padding-top: 22px;
+}
+
+.ds-handoff__head {
+    margin-bottom: 14px;
+}
+
+.ds-handoff__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ds-orange, #e6701e);
+}
+
+.ds-handoff__title {
+    margin: 0 0 6px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(20px, 1.8vw, 28px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ds-ink, #0a1c40);
+}
+
+.ds-handoff__sub {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ds-ink-70, rgba(10, 28, 64, 0.7));
+}
+
+.ds-handoff__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ds-handoff__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 11px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    border: 1px solid var(--ds-border-strong, rgba(10, 28, 64, 0.25));
+    background: var(--ds-field-raised, #ffffff);
+    color: var(--ds-ink, #0a1c40);
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.15s;
+}
+
+.ds-handoff__cta:hover {
+    transform: translateY(-1px);
+    border-color: var(--ds-orange, #e6701e);
+}
+
+.ds-handoff__cta--primary {
+    background: var(--ds-orange, #e6701e);
+    border-color: var(--ds-orange, #e6701e);
+    color: #fff;
+}
+
+.ds-handoff__cta--primary:hover {
+    background: #d65f0f;
+    border-color: #d65f0f;
 }
 
 .ds-support-dossier__header {

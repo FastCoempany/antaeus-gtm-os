@@ -2,8 +2,10 @@ import { render } from "preact";
 import { DiscoveryStudio } from "./DiscoveryStudio";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
+import { readContinuity } from "@/lib/continuity";
 import { loadFrameworksIntoRegistry } from "./lib/load-frameworks";
 import { bootPersistence } from "./lib/persistence";
+import { focusedAccount } from "./state";
 
 /**
  * Entry point for the Discovery Studio Preact rebuild.
@@ -41,6 +43,24 @@ const loaded = loadFrameworksIntoRegistry();
 console.info(
     `[discovery-studio] Loaded ${loaded} framework(s) from window.DISCOVERY_SEGMENT_RUNTIME`
 );
+
+// Phase 2.5 — read inbound cross-room handoff. Call Planner /
+// Dashboard / Cold Call pass `?focusObject=<account>` (or `?account=`)
+// telling Discovery which account this call is with. Surfaces in the
+// kicker tail + propagates through outbound handoffs so Deal
+// Workspace / Future Autopsy / Call Planner land focused.
+const ctx = readContinuity();
+const inboundParams =
+    typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search)
+        : null;
+const inboundAccount =
+    ctx.focusObject ||
+    (inboundParams ? inboundParams.get("account") : null) ||
+    "";
+if (inboundAccount) {
+    focusedAccount.value = inboundAccount;
+}
 
 const flagOn = isFeatureEnabled("room_discovery_v2");
 if (!flagOn) {

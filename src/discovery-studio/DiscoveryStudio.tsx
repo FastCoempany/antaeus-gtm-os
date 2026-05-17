@@ -9,11 +9,13 @@ import { WorkedMemory } from "./components/WorkedMemory";
 import { NextStepDocket } from "./components/NextStepDocket";
 import { SkipAheadTray } from "./components/SkipAheadTray";
 import { SupportDossier } from "./components/SupportDossier";
+import { HandoffStrip } from "./components/HandoffStrip";
 import { Wordmark } from "@/lib/wordmark";
 import {
     activeFramework,
     activeInterrupt,
     clearInterrupt,
+    focusedAccount,
     frameworkRegistry
 } from "./state";
 
@@ -56,11 +58,15 @@ export function DiscoveryStudio(): JSX.Element {
     const activeFw = fid
         ? frameworkRegistry.value.find((f) => f.id === fid)
         : null;
-    const kicker = activeFw
-        ? `DISCOVERY STUDIO · ${activeFw.label}`
-        : fwLoaded
-          ? "DISCOVERY STUDIO"
-          : "DISCOVERY STUDIO · loading…";
+    const account = focusedAccount.value;
+    // Phase 2.5 — kicker carries inbound account when Call Planner /
+    // Dashboard / Cold Call hands it off, then the active framework
+    // once Sarah picks one.
+    const kickerParts: string[] = ["DISCOVERY STUDIO"];
+    if (account) kickerParts.push(`with ${account}`);
+    if (activeFw) kickerParts.push(activeFw.label);
+    if (!fwLoaded) kickerParts.push("loading…");
+    const kicker = kickerParts.join(" · ");
 
     return (
         <div class="ds-shell">
@@ -123,6 +129,7 @@ export function DiscoveryStudio(): JSX.Element {
 
             <footer class="ds-footer">
                 <SupportDossier />
+                <HandoffStrip />
             </footer>
         </div>
     );

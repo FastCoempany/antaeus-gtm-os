@@ -224,6 +224,16 @@ export interface PostCallPackage {
  */
 export const frameworkRegistry: Signal<ReadonlyArray<Framework>> = signal([]);
 
+/**
+ * Phase 2.5 — focused account from cross-room handoff. Call Planner,
+ * Dashboard, or any upstream room passes `?focusObject=<account>` or
+ * `?account=<account>` to tell Discovery which account this call is
+ * with. Surfaces in the kicker tail + propagates through the
+ * Discovery → Deal Workspace / Future Autopsy / Call Planner handoff
+ * URLs so destinations land focused. Empty = no inbound.
+ */
+export const focusedAccount: Signal<string> = signal("");
+
 /** 2. activeFramework — currently chosen framework. */
 export const activeFramework: Signal<FrameworkId | null> = signal(null);
 
