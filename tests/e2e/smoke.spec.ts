@@ -412,7 +412,7 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".st-topbar__kicker")).toContainText(
-            "Trust + recovery"
+            "SETTINGS"
         );
         await expect(page.locator(".st-grid")).toBeAttached();
         // Six cards: CloudSync (PR #43) + Backup + Category + Demo + Role
