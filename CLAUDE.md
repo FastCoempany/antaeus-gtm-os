@@ -1234,7 +1234,62 @@ Add entries here when a session meaningfully shifts doctrine or state, so the ne
 | 2026-04-24 | Phase 2 Subphase 2.1 applied end-to-end | **Schema extension live in production.** Founder walked the `supabase/README.md` §Founder handoff, surfacing three real-world issues that are now documented for next time: (1) Supabase CLI migration filenames require `<14-digit-timestamp>_<name>.sql` format — short `000N_` prefixes are silently ignored and `supabase migration list` returns an empty LOCAL column; renamed all 5 files to `20260424170000`–`20260424170004` (commit `c16c005`). (2) PostgreSQL rejects subqueries in column DEFAULT expressions — `default (select auth.uid())` errored; fixed to `default auth.uid()` on the 4 new tables' `created_by` columns (commit `6b40472`). (3) Supabase Branches' merge-request "Update branch" step fails with "multiple primary keys for table deals" when the preview branch has *additively* diverged from main (our case — we only add schema, never modify main's) because the rebase re-applies main's schema snapshot on top of preview's existing tables. Documented fallback: bypass the merge-request UI and push directly to main via `supabase db push --db-url <main-pooler-url>`. All 5 migrations applied cleanly to main in the end. Verification on main: all 4 real auth users have `owned_workspaces = 1` and `memberships = 1` (migration 0002 backfilled correctly — `tanyala74@gmail.com` / `jimmybarnas7@gmail.com` / `antaeus.coe@gmail.com` / `mrcoe7@gmail.com` each own one workspace and are the sole `owner` member). `is_workspace_member()` + `current_user_default_workspace_id()` both exist. 12 tables have `_workspace` policies (11 × 4 CRUD + 1 × 2 append-only for `readiness_snapshots`). Also upgraded to Supabase Pro during session to enable Branches. Next: Phase 2.2 (typed data client at `src/lib/data-client.ts`). Housekeeping owed: rotate both branch db passwords (shared in screenshots during session); delete the failed merge request and orphaned preview branch state; update `supabase/README.md` §Troubleshooting with the three gotchas above. |
 | 2026-04-21 | ADR-001 foundation stack migration — approved + Phase 1 shipped | **Major architectural commitment.** Founder approved ADR-001 adopting Preact + TypeScript + Vite + Supabase (extended for data, not just auth) + Vitest + Playwright Test runner + Sentry + Posthog + GitHub Actions CI/CD as the permanent foundation for Antaeus. Scale target set to ~2,500 concurrent users initially (not 100K). Desktop-only product confirmed — mobile CSS may be deleted during migration. SPA routing and SSR both deferred with documented assessments. Phase 1 (Foundation) shipped in a single session: `00d723b` build tooling (Vite + TS + Preact + Vitest), `98bb3f6` testing infrastructure (Playwright Test runner + canonical templates + three boot smoke tests that assert no pageerror on dashboard / discovery-studio / deal-workspace AND the four Discovery Studio contract rails are visible), `de0539b` GitHub Actions (ci.yml + deploy.yml + pr-preview.yml + `.github/README.md` documenting required secrets and branch-protection setup), `026c419` observability (@sentry/browser + posthog-js + wrappers at src/lib/observability.ts + typed `import.meta.env` + `.env.example`). Canon updated: new Part II.5 (Component + Data Architecture) summarizes the stack and conventions; Part V §1 reflects foundation-in-progress; §2 already references `deliverables/adr/`. No room migrated yet — Phase 2 (data architecture) begins next session. All existing static rooms continue to work unchanged. |
 
-## 7. Closing: the bar
+## 7. Navigation Intelligence audit method (Phase 2 of the 2026-05 roadmap)
+
+**Authority:** Locked 2026-05-17 (founder). The repeatable test method for every Phase 2 audit PR in the navigation-intelligence arc.
+
+The Sarah-the-CRO copy sweep (#83–#96) is closed. It audited **rooms**. The next arc audits **clicks** — the connective tissue between rooms, the seams where the next move either feels inevitable or arbitrary. The unit of measurement is the click-sequence, not the room.
+
+### The three artifacts that govern this work
+
+1. **Sarah Chen persona** — `deliverables/audit/sarah-persona-2026-05.md`. The specific person every PR is tested against. Series A, $94M ARR, AI-native global contractor management platform, head of sales + first AE, the three calibrated walks (first 90 seconds / Tuesday 8:47 AM week 4 / handoff Tuesday week 12).
+2. **Navigation-audit rubric** — `deliverables/audit/navigation-rubric-2026-05.md`. The three tests (hand-reach / inevitability / seam) + the four cuts (decorative buttons / missing buttons / surviving designer-voice copy / structural drift). Defines finding tags `[STRUCTURAL]` / `[SEAM]` / `[COPY]` / `[CANON]`.
+3. **Continuity-param invariants** — `deliverables/audit/continuity-params-2026-05.md`. The eight testable invariants every cross-room seam must hold. The six canonical params (`returnTo` / `returnLabel` / `focusObject` / `focusRoom` / `fromMode` / `fromSurface`) with their readers (`src/lib/continuity.ts`) and per-room writers (`src/<room>/lib/handoff.ts`).
+
+### The phase plan that this anchors
+
+```
+Phase 0  ──  Gate up (coming-soon)
+Phase 1  ──  Method lock  ← this section + the three artifacts above
+Phase 2  ──  Navigation Intelligence pass (10 sub-PRs, rigid sequence)
+              2.1   Foundation: new-account flow      (Onboarding → Welcome → Dashboard seams)
+              2.2   Foundation: Tuesday-morning flow  (Dashboard structural rework)
+              2.3   Strategy flow                     (ICP → Territory → Sourcing → Signal Console)
+              2.4   Outbound flow                     (Signal Console → Outbound → LinkedIn → Cold Call → Call Planner)
+              2.5   Discovery flow                    (Call Planner → Discovery Studio → Deal Workspace seams)
+              2.6   Recovery flow                     (Deal Workspace → Future Autopsy → PoC → Advisor)
+              2.7   Synthesis flow                    (Quota Workback → Founding GTM)
+              2.8   Readiness Score slice             (Anchor + Drawer + verdict-transition ceremony)
+              2.9   Trust flow                        (Settings)
+              2.10  Integration walk                  (Playwright full-day Sarah simulation)
+Phase 3  ──  Auth-UX standalone hardening (single PR)
+Phase 4  ──  Negotiation room rebuild              (inherits Phase 2.6 + Phase 3)
+Phase 5  ──  Static public face                    (landing / auth / privacy / category framing)
+              ↓
+              Gate down → beta
+```
+
+**Rigid ordering** throughout. No parallel work. Phase 2 sub-PRs land in numeric order. Phase 3 ships only after Phase 2.10 closes. Phase 5 ships only after Phase 4 closes.
+
+### Per-PR cadence
+
+**Grouped by user journey** (not per-room, not per-seam). Each Phase 2 PR walks Sarah through one flow she experiences as a continuous sequence. The walkthrough doc is the PR description; code follows. Per-flow PR contents: per-room structural changes + per-seam continuity fixes + per-flow Playwright walk.
+
+### Supersession protocol for already-audited rooms
+
+Phase 2 PRs supersede prior copy audits (#83–#96) **to the extent structural change forces, while maintaining copy standards.** PR description names superseded copy-audit PRs in a `## Supersedes` section. Copy untouched by structural rework stays as-shipped from the copy audit. Copy that must change because a button moved / a section reshaped / a CTA repurposed gets new copy that passes the Sarah-CRO rubric on top of the new structure.
+
+### What "done" looks like
+
+The Phase 2 closeout gate is the integration walk (2.10): a Playwright test that scripts Sarah's full day end-to-end — first 90 seconds + Tuesday morning + one each of strategy/outbound/discovery/recovery/synthesis flows. The walk is the proof that the seams hold across flow PR boundaries.
+
+### What this method explicitly is NOT
+
+- Not "another copy audit." Copy is one of four finding types; the other three (structural, seam, canon) are typically larger.
+- Not per-room. Rooms are the unit of code; flows are the unit of analysis.
+- Not optional taste. Without the persona + rubric + invariants, the audits are subjective; with them, every finding is testable.
+
+## 8. Closing: the bar
 
 Antaeus is not trying to be friendlier, broader, or more generic. It is trying to be:
 
