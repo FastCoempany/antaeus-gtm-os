@@ -461,32 +461,31 @@ button {
 }
 
 .ob-handoff__cta {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 12px 14px;
-    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 999px;
     text-decoration: none;
     border: 1px solid var(--ob-border-strong);
     background: var(--ob-field-raised);
     color: var(--ob-ink);
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.15s;
 }
 
 .ob-handoff__cta:hover {
     background: var(--ob-field);
+    transform: translateY(-1px);
 }
 
-.ob-handoff__cta.is-disabled {
-    opacity: 0.5;
-    pointer-events: none;
+.ob-handoff__cta--primary {
+    background: var(--ob-orange, #e6701e);
+    border-color: var(--ob-orange, #e6701e);
+    color: #fff;
 }
 
-.ob-handoff__label {
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.ob-handoff__sub {
-    font-size: 12px;
-    color: var(--ob-ink-70);
+.ob-handoff__cta--primary:hover {
+    background: #d65f0f;
+    border-color: #d65f0f;
 }

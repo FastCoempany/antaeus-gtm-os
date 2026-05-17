@@ -14,10 +14,13 @@ export function Topbar(): JSX.Element {
     const d = draft.value;
     const company = currentCompany.value;
     const contact = d.contactName.trim();
-    const kicker =
-        contact.length >= 2
-            ? `CALL PLANNER · for ${contact}`
-            : "CALL PLANNER";
+    // Phase 2.4 audit — kicker tail reflects what the planner is
+    // pointed at (company + contact when known). Was just
+    // "CALL PLANNER" with no contextual signal.
+    const parts: string[] = ["CALL PLANNER"];
+    if (company) parts.push(`for ${company}`);
+    if (contact.length >= 2) parts.push(contact);
+    const kicker = parts.join(" · ");
     return (
         <header class="cp-topbar" aria-label="Call Planner header">
             <p class="cp-topbar__kicker">{kicker}</p>
