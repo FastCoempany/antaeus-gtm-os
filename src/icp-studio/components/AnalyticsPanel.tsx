@@ -55,10 +55,9 @@ export function AnalyticsPanel(): JSX.Element {
     return (
         <section class="icp-analytics" aria-label="ICP analytics">
             <header class="icp-analytics__head">
-                <p class="icp-analytics__kicker">SAVED LIBRARY</p>
+                <p class="icp-analytics__kicker">SAVED ICPS</p>
                 <h2 class="icp-analytics__title">
-                    Each saved ICP becomes the filter every downstream room
-                    inherits.
+                    Your saved wedges, sharpest first.
                 </h2>
             </header>
 
@@ -87,8 +86,8 @@ export function AnalyticsPanel(): JSX.Element {
 
             {recent.length === 0 ? (
                 <p class="icp-analytics__empty">
-                    No saved ICPs yet. Compose the wedge above and click
-                    "Save ICP to library" to populate this list.
+                    No saved ICPs yet. Fill in the inputs above and click
+                    "Save ICP to library" to start the library.
                 </p>
             ) : (
                 <ul class="icp-library">
@@ -130,30 +129,12 @@ export function AnalyticsPanel(): JSX.Element {
                 </ul>
             )}
 
-            <footer class="icp-outflow" aria-label="Downstream uses">
-                <p class="icp-outflow__kicker">DOWNSTREAM USES</p>
-                <ul class="icp-outflow__list">
-                    <li>
-                        <strong>Territory Architect:</strong> tiers + theses
-                        match against this ICP's industry/buyer/pain.
-                    </li>
-                    <li>
-                        <strong>Sourcing Workbench:</strong> query cards filter
-                        by industry + size + geo from this wedge.
-                    </li>
-                    <li>
-                        <strong>Signal Console:</strong> account heat
-                        prioritizes ICP-match accounts first.
-                    </li>
-                    <li>
-                        <strong>Outbound Studio + Discovery Studio:</strong>{" "}
-                        persona + trigger context flows through.
-                    </li>
-                    <li>
-                        <strong>Readiness + Handoff:</strong> ICP sharpness
-                        feeds the readiness score + the export package.
-                    </li>
-                </ul>
+            <footer class="icp-outflow" aria-label="Use this ICP">
+                <p class="icp-outflow__kicker">USE THIS ICP</p>
+                <p class="icp-outflow__copy">
+                    Carry the wedge into the next room to build a tiered
+                    territory, queue named prospects, or rank live signals.
+                </p>
                 <nav class="icp-handoffs" aria-label="Cross-room handoff">
                     <a
                         class="icp-handoff"
