@@ -455,12 +455,23 @@ body {
     cursor: pointer;
 }
 
-/* Handoffs */
+/* Handoff strip */
+.ta-handoff-strip {
+    padding: 18px 0 0;
+}
+.ta-handoff-strip__kicker {
+    margin: 0 0 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ta-orange);
+}
 .ta-handoffs {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    padding: 18px 0;
 }
 .ta-handoff {
     border: 1px solid var(--ta-line);
