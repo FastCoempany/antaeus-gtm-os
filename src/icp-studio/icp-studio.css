@@ -860,6 +860,17 @@ body {
     border-color: rgba(37, 99, 235, 0.42);
 }
 
+.icp-handoff--primary {
+    background: var(--icp-orange, #e6701e);
+    color: #fff;
+    border-color: var(--icp-orange, #e6701e);
+}
+
+.icp-handoff--primary:hover {
+    background: #d65f0f;
+    border-color: #d65f0f;
+}
+
 /* ─── Analytics panel ──────────────────────────────────────────────── */
 
 .icp-analytics {

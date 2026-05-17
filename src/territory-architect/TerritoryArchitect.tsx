@@ -35,6 +35,12 @@ import {
     saveApproach,
     saveThesis
 } from "./lib/cloud-persistence";
+import {
+    hrefToIcpStudio,
+    hrefToSignalConsole,
+    hrefToSourcingWorkbench
+} from "./lib/handoff";
+import { focusedIcp } from "./state";
 
 /**
  * TerritoryArchitect — Wave 1+2 root.
@@ -65,10 +71,17 @@ const STATUS_LABELS: Readonly<Record<"headroom" | "at-cap" | "over", string>> = 
 function HeroBand(): JSX.Element {
     const a = allocation.value;
     const thesisCount = theses.value.length;
-    const kicker =
+    const focus = focusedIcp.value;
+    // Phase 2.3 — inbound focus from ICP Studio (or any upstream room
+    // passing `?focusObject=`) surfaces in the kicker tail so the
+    // operator sees the ICP context the room is building against.
+    const baseKicker =
         thesisCount > 0
             ? `TERRITORY ARCHITECT · ${thesisCount} ${thesisCount === 1 ? "thesis" : "theses"} · ${a.total}/${a.ceiling} accounts`
             : "TERRITORY ARCHITECT";
+    const kicker = focus
+        ? `${baseKicker} · building around: ${focus}`
+        : baseKicker;
     return (
         <section class="ta-hero" aria-label="Territory hero">
             <div class="ant-room-chrome">
@@ -79,8 +92,8 @@ function HeroBand(): JSX.Element {
                 <span>One territory.</span> One ceiling. Real bets.
             </h1>
             <p class="ta-hero__note">
-                The territory is a map of strategic bets, not a list. Hold
-                the 300-account ceiling and each row earns its place.
+                The territory is a map of strategic bets, not a list.
+                Hold the 300-account ceiling; every row should be worth it.
             </p>
             <div class="ta-hero__stats" aria-label="Territory stats">
                 <div class="ta-stat">
@@ -668,17 +681,24 @@ function AccountTable(): JSX.Element {
 }
 
 function HandoffStrip(): JSX.Element {
+    const focus = focusedIcp.value;
     return (
         <section class="ta-handoff-strip" aria-label="Carry the territory forward">
             <p class="ta-handoff-strip__kicker">CARRY THE TERRITORY FORWARD</p>
             <nav class="ta-handoffs" aria-label="Cross-room handoff">
-                <a class="ta-handoff" href="/sourcing-workbench/">
+                <a
+                    class="ta-handoff ta-handoff--primary"
+                    href={hrefToSourcingWorkbench(focus)}
+                >
                     Source named prospects
                 </a>
-                <a class="ta-handoff" href="/signal-console/">
+                <a
+                    class="ta-handoff"
+                    href={hrefToSignalConsole(focus)}
+                >
                     Rank live signals
                 </a>
-                <a class="ta-handoff" href="/icp-studio/">
+                <a class="ta-handoff" href={hrefToIcpStudio(focus)}>
                     Sharpen the ICP
                 </a>
             </nav>

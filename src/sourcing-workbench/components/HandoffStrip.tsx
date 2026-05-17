@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { stats } from "../state";
+import { inboundFocus, stats } from "../state";
 import {
     hrefToOutboundStudio,
     hrefToSignalConsole,
@@ -11,9 +11,15 @@ import {
  * pushes qualified accounts into Signal Console (downstream) and
  * inherits thesis vocabulary from Territory Architect (upstream).
  * Outbound Studio is the third route once a name is push-ready.
+ *
+ * Phase 2.3 — inbound focusObject from ICP Studio / Territory
+ * Architect propagates through to the destination room's
+ * focusObject. The territory/icp link gets the inbound focus; signal
+ * console + outbound get the focus too (re-piping the wedge label).
  */
 export function HandoffStrip(): JSX.Element {
     const ready = stats.value.ready;
+    const focus = inboundFocus.value || undefined;
     return (
         <section class="sw-handoff" aria-label="Cross-room handoff">
             <header class="sw-section__head">
@@ -28,13 +34,22 @@ export function HandoffStrip(): JSX.Element {
                 </p>
             </header>
             <div class="sw-handoff__row">
-                <a class="sw-btn sw-btn--ghost" href={hrefToTerritoryArchitect()}>
+                <a
+                    class="sw-btn sw-btn--ghost"
+                    href={hrefToTerritoryArchitect({ focusObject: focus })}
+                >
                     Refine the territory
                 </a>
-                <a class="sw-btn sw-btn--primary" href={hrefToSignalConsole()}>
+                <a
+                    class="sw-btn sw-btn--primary"
+                    href={hrefToSignalConsole({ account: focus })}
+                >
                     Rank live signals
                 </a>
-                <a class="sw-btn sw-btn--ghost" href={hrefToOutboundStudio()}>
+                <a
+                    class="sw-btn sw-btn--ghost"
+                    href={hrefToOutboundStudio({ account: focus })}
+                >
                     Compose outbound
                 </a>
             </div>

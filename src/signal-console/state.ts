@@ -33,6 +33,15 @@ export const selectedAccountId: Signal<string | null> = signal(null);
 
 export const searchQuery: Signal<string> = signal("");
 
+/**
+ * Phase 2.3 — inbound focus from upstream Strategy-flow rooms
+ * (ICP Studio / Territory Architect / Sourcing Workbench passing
+ * `?focusObject=<industry>`). Surfaces in the empty-state copy when
+ * no accounts exist yet, so Sarah lands knowing which wedge the
+ * radar is targeting against. Empty = no inbound focus.
+ */
+export const inboundFocus: Signal<string> = signal("");
+
 // ─── Derived projections ────────────────────────────────────────────────
 
 export const visibleAccounts: ReadonlySignal<ReadonlyArray<Account>> = computed(() => {

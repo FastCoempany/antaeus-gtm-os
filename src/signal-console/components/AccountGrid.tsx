@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { allAccounts, visibleAccounts } from "../state";
+import { allAccounts, inboundFocus, visibleAccounts } from "../state";
 import { rankByHeat } from "../lib/heat";
 import { AccountCard } from "./AccountCard";
 import { AddAccountForm } from "./AddAccountForm";
@@ -24,18 +24,28 @@ export function AccountGrid(): JSX.Element {
     const total = allAccounts.value.length;
 
     if (total === 0) {
+        // Phase 2.3 — if upstream (ICP Studio / Territory / Sourcing)
+        // handed us a focusObject, surface it in the empty state so
+        // the operator sees the ICP context the radar is targeting
+        // against, and the inbound account hint is acknowledged.
+        const focus = inboundFocus.value;
         return (
             <section class="sc-grid sc-grid--empty" aria-label="Get started">
                 <div class="sc-empty">
-                    <p class="sc-empty__kicker">No accounts on the radar yet</p>
+                    <p class="sc-empty__kicker">
+                        {focus
+                            ? `TARGETING: ${focus}`
+                            : "NO ACCOUNTS ON THE RADAR YET"}
+                    </p>
                     <h2 class="sc-empty__title">
-                        Drop in the first one — anything you've been watching.
+                        {focus
+                            ? `Add the first ${focus.toLowerCase().includes("freight") || focus.toLowerCase().includes("logistics") ? "company" : "account"} that fits the wedge.`
+                            : "Drop in the first one — anything you've been watching."}
                     </h2>
                     <p class="sc-empty__body">
-                        A customer mentioned them. An exec from the company
-                        posted something. You saw them in a competitor's
-                        case study. Whatever caught your attention. The room
-                        starts ranking heat the moment one account is in.
+                        {focus
+                            ? `Anything you've been watching that matches the ICP. Once one account is in, the heat engine starts ranking against the wedge.`
+                            : "A customer mentioned them. An exec from the company posted something. You saw them in a competitor's case study. The radar starts ranking heat the moment one account is in."}
                     </p>
                     <AddAccountForm embedded />
                 </div>
