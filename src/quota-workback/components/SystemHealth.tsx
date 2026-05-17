@@ -70,11 +70,11 @@ export function SystemHealth(): JSX.Element {
     return (
         <section class="qw-health" aria-label="System health">
             <header class="qw-section__head">
-                <p class="qw-section__kicker">System health</p>
-                <h2 class="qw-section__title">What is holding and what is still fragile</h2>
+                <p class="qw-section__kicker">SYSTEM HEALTH</p>
+                <h2 class="qw-section__title">What is holding and what is still fragile.</h2>
                 <p class="qw-section__sub">
-                    Quota Workback should expose whether the math can be run,
-                    not just whether the spreadsheet technically closes.
+                    Whether this math can actually be run — not just whether
+                    the spreadsheet closes.
                 </p>
             </header>
 

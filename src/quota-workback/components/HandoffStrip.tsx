@@ -26,46 +26,50 @@ export function HandoffStrip(): JSX.Element {
     return (
         <section class="qw-handoff" aria-label="Downstream handoffs">
             <header class="qw-section__head">
-                <p class="qw-section__kicker">Carry the pressure forward</p>
-                <h2 class="qw-section__title">Where the plan lives next</h2>
+                <p class="qw-section__kicker">CARRY THE PRESSURE FORWARD</p>
+                <h2 class="qw-section__title">Where the plan lives next.</h2>
                 <p class="qw-section__sub">
-                    Quota Workback only matters if the next room inherits the
-                    weekly pressure number, not just an ambitious total.
+                    The weekly pressure number has to land in the rooms
+                    that actually create pipeline.
                 </p>
             </header>
             <div class="qw-handoff__grid">
                 <Card
                     title="Outbound Studio"
                     metric={`${fmt(m.touchesWeek)} / week`}
-                    body="Turn quota into repeatable motion. The standard is enough touches, enough active accounts, enough meetings created."
+                    body="Turn the weekly touch count into actual sends. Enough touches, enough active accounts, enough meetings created."
                     meta={`${fmt(m.activeAccounts)} active accounts · ${pct(m.touchToMeetingRaw)} touch→meeting · ${fmt(m.touchesMonth)} touches/month.`}
                     href={hrefToOutboundStudio()}
+                    cta="Compose outbound"
                     primary
                 />
                 <Card
                     title="Cold Call Studio"
                     metric={`${fmt(m.meetingPushesWeek)} meeting pushes / week`}
-                    body="Use calls when the plan needs faster conversation density. Live conversation pressure is what makes the meeting target believable."
+                    body="Calls when the plan needs faster conversation density."
                     meta={`${m.touchesDay} touches/day floor · ${pct(m.showRateRaw)} show rate · ${pct(m.meetingToOppRaw)} meeting→opp.`}
                     href={hrefToColdCallStudio()}
+                    cta="Run a call"
                 />
                 <Card
                     title="Dashboard"
                     metric={money(m.pipelineNeeded)}
-                    body="The Dashboard should now hold you accountable to coverage, recovery pressure, and whether the workspace can support quota."
+                    body="Hold yourself accountable to coverage, recovery pressure, and whether the workspace supports the quota."
                     meta={
                         c.ratio > 0
                             ? `Current coverage: ${c.ratio}x against ${b.coverage}x target.`
                             : "Set quota and load deals to see live coverage pressure."
                     }
                     href={hrefToDashboard()}
+                    cta="Check coverage"
                 />
                 <Card
                     title="Deal Workspace"
                     metric={`${fmt(m.dealsQuarter)} deals / quarter`}
-                    body="The intervention board for the live pipeline. Open weak deals and decide which corrective move serves the plan."
+                    body="Open weak deals and decide which corrective move serves the plan."
                     meta={`${fmt(m.oppsQuarter)} opportunities required to make the quarter believable.`}
                     href={hrefToDealWorkspace()}
+                    cta="Work the pipeline"
                 />
             </div>
         </section>
@@ -78,6 +82,7 @@ function Card({
     body,
     meta,
     href,
+    cta,
     primary
 }: {
     readonly title: string;
@@ -85,6 +90,7 @@ function Card({
     readonly body: string;
     readonly meta: string;
     readonly href: string;
+    readonly cta: string;
     readonly primary?: boolean;
 }): JSX.Element {
     return (
@@ -97,7 +103,7 @@ function Card({
                 class={primary ? "qw-btn qw-btn--primary" : "qw-btn qw-btn--ghost"}
                 href={href}
             >
-                Open {title}
+                {cta}
             </a>
         </article>
     );
