@@ -64,19 +64,17 @@ export function CueBooth(): JSX.Element {
 
     return (
         <section class="lp-booth" aria-label="LinkedIn cue booth">
+            {/*
+              LinkedIn Playbook audit (2026-05):
+                - Duplicate H2 ("Enter only when the room gives a cue.")
+                  retired — the room's H1 already carries this thesis.
+                - "Room law" philosophy block ("The inbox is not the
+                  opening scene…") retired. The 5-cue ladder below renders
+                  the discipline visually.
+            */}
             <div class="lp-booth__head">
-                <p class="lp-booth__kicker">CUE BOOTH</p>
-                <h2 class="lp-booth__title">
-                    <span>Enter</span> only when the room gives a cue.
-                </h2>
+                <p class="lp-booth__kicker">CUE BOOTH · {motion.label}</p>
                 <p class="lp-booth__intro">{motion.whyNow}</p>
-                <div class="lp-booth__law">
-                    <span class="lp-booth__law-kicker">Room law</span>
-                    <p>
-                        The inbox is not the opening scene. The first
-                        visible cue usually happens in public.
-                    </p>
-                </div>
             </div>
 
             <div class="lp-booth__layout">
