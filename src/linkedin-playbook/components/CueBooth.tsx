@@ -168,14 +168,14 @@ export function CueBooth(): JSX.Element {
                             href={hrefToSignalConsole(motion.accountName)}
                             data-lp-handoff="signal-console"
                         >
-                            Open Signal
+                            Check the signals
                         </a>
                         <a
                             class="lp-handoff lp-handoff--primary"
                             href={hrefToOutboundStudio(motion.accountName)}
                             data-lp-handoff="outbound-studio"
                         >
-                            Open Outbound
+                            Compose outbound
                         </a>
                     </nav>
                 </aside>

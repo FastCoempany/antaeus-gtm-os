@@ -41,14 +41,14 @@ export function CallMemory(): JSX.Element {
                         href={hrefToCallPlanner(account)}
                         data-cc-handoff="call-planner"
                     >
-                        Open Call Planner
+                        Plan the next call
                     </a>
                     <a
                         class="cc-handoff cc-handoff--primary"
                         href={hrefToDealWorkspace(account)}
                         data-cc-handoff="deal-workspace"
                     >
-                        Open Deal Workspace
+                        Open the deal
                     </a>
                 </nav>
             </header>

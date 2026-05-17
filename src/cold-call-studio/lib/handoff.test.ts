@@ -78,9 +78,13 @@ describe("hrefToSignalConsole / hrefToCallPlanner / hrefToDealWorkspace", () => 
         expect(hrefToDealWorkspace("Acme")).toContain("/deal-workspace/");
     });
 
-    it("fall back to a sensible focus object when account is empty", () => {
+    it("omits focusObject when account is empty (Invariant 8)", () => {
+        // Phase 2.4 audit retired the "Cold call" / "Cold call prep"
+        // placeholders. Empty focus = no param written.
         const url = hrefToSignalConsole("");
-        expect(url).toContain("focusObject=Cold+call+prep");
+        expect(url).not.toContain("focusObject=");
+        // Continuity still present.
+        expect(url).toContain("returnTo=%2Fcold-call-studio%2F");
     });
 });
 

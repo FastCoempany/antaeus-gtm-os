@@ -1,16 +1,15 @@
 /**
- * Phase 4 / Room 8 Wave 5 — cross-room handoff helpers.
+ * LinkedIn Playbook cross-room handoff helpers.
  *
- * Faithful TypeScript port of the legacy `buildLinkedInRoomHref(href,
- * focusObject, roomLabel)` from `app/linkedin-playbook/index.html` line
- * 100. Carries the canonical continuity params per CLAUDE.md §2 ("the
- * continuity plumbing — do not break them") plus an `?account=`
- * pass-through so destination rooms can pre-select.
+ * Carries the canonical continuity params per CLAUDE.md §2 plus an
+ * `?account=` pass-through so destination rooms can auto-select.
  *
- * Convenience builders for the two booth-read CTAs (Open Signal,
- * Open Outbound). `readInboundAccount(search)` resolves the URL inbound
- * using `?account=` then `?focusObject=` — same precedence as the rest
- * of Phase 4.
+ * Phase 2.4 audit — retired the "LinkedIn cue" focusObject placeholder
+ * per `deliverables/audit/continuity-params-2026-05.md` Invariant 8.
+ * Was: `focusObject: account || "LinkedIn cue"` propagated the literal
+ * string into the destination's focus, polluting any roundtrip that
+ * came back through `readInboundAccount`. Now empty focus = no param
+ * written.
  */
 
 export interface HandoffOptions {
@@ -33,7 +32,9 @@ export function buildLinkedInRoomHref({
     const params = new URLSearchParams(existingQs ?? "");
     params.set("returnTo", "/linkedin-playbook/");
     params.set("returnLabel", "Back to LinkedIn Playbook");
-    params.set("focusObject", focusObject || "LinkedIn cue");
+    if (focusObject && focusObject.trim().length > 0) {
+        params.set("focusObject", focusObject.trim());
+    }
     params.set("focusRoom", roomLabel || "LinkedIn Playbook");
     params.set("fromMode", "room");
     params.set("fromSurface", "linkedin-playbook");
@@ -49,7 +50,7 @@ export function buildLinkedInRoomHref({
 export function hrefToSignalConsole(account: string): string {
     return buildLinkedInRoomHref({
         href: "/signal-console/",
-        focusObject: account || "LinkedIn cue",
+        focusObject: account,
         roomLabel: "Signal Console",
         account
     });
@@ -58,7 +59,7 @@ export function hrefToSignalConsole(account: string): string {
 export function hrefToOutboundStudio(account: string): string {
     return buildLinkedInRoomHref({
         href: "/outbound-studio/",
-        focusObject: account || "LinkedIn cue",
+        focusObject: account,
         roomLabel: "Outbound Studio",
         account
     });

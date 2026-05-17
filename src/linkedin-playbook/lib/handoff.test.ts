@@ -21,13 +21,18 @@ describe("buildLinkedInRoomHref", () => {
         expect(url).toContain("fromSurface=linkedin-playbook");
     });
 
-    it("falls back to default focusObject + roomLabel when blank", () => {
+    it("omits focusObject when blank + falls back roomLabel", () => {
+        // Phase 2.4 audit — Invariant 8: empty focus = no param.
+        // The "LinkedIn cue" placeholder was retired (it leaked into
+        // the destination's focused-object slot on every cold cross-
+        // room handoff). roomLabel still defaults to "LinkedIn
+        // Playbook" since it's a label, not user data.
         const url = buildLinkedInRoomHref({
             href: "/signal-console/",
             focusObject: "",
             roomLabel: ""
         });
-        expect(url).toContain("focusObject=LinkedIn+cue");
+        expect(url).not.toContain("focusObject=");
         expect(url).toContain("focusRoom=LinkedIn+Playbook");
     });
 
@@ -78,9 +83,12 @@ describe("hrefToSignalConsole / hrefToOutboundStudio", () => {
         expect(hrefToOutboundStudio("Acme")).toContain("account=Acme");
     });
 
-    it("falls back to LinkedIn-cue focus when account is empty", () => {
+    it("omits focusObject when account is empty (Invariant 8)", () => {
+        // Phase 2.4 audit retired the "LinkedIn cue" placeholder.
         const url = hrefToSignalConsole("");
-        expect(url).toContain("focusObject=LinkedIn+cue");
+        expect(url).not.toContain("focusObject=");
+        // Continuity still present.
+        expect(url).toContain("returnTo=%2Flinkedin-playbook%2F");
     });
 });
 

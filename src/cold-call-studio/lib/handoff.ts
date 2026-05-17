@@ -36,7 +36,9 @@ export function buildColdCallHref({
     const params = new URLSearchParams(existingQs ?? "");
     params.set("returnTo", "/cold-call-studio/");
     params.set("returnLabel", "Back to Cold Call Studio");
-    if (focusObject) params.set("focusObject", focusObject);
+    if (focusObject && focusObject.trim().length > 0) {
+        params.set("focusObject", focusObject.trim());
+    }
     if (roomLabel) params.set("focusRoom", roomLabel);
     params.set("fromMode", "room");
     params.set("fromSurface", "cold-call-studio");
@@ -49,10 +51,15 @@ export function buildColdCallHref({
     return `${path}?${params.toString()}`;
 }
 
+// Phase 2.4 audit — retired "Cold call" / "Cold call prep" focus
+// placeholders. Per continuity-params Invariant 8, empty focus = no
+// focusObject param written. Prevents roundtrip pollution of the
+// destination room's focused-object slot.
+
 export function hrefToSignalConsole(account: string): string {
     return buildColdCallHref({
         href: "/signal-console/",
-        focusObject: account || "Cold call prep",
+        focusObject: account,
         roomLabel: "Signal Console",
         account
     });
@@ -61,7 +68,7 @@ export function hrefToSignalConsole(account: string): string {
 export function hrefToCallPlanner(account: string): string {
     return buildColdCallHref({
         href: "/call-planner/",
-        focusObject: account || "Cold call",
+        focusObject: account,
         roomLabel: "Call Planner",
         account
     });
@@ -70,7 +77,7 @@ export function hrefToCallPlanner(account: string): string {
 export function hrefToDealWorkspace(account: string): string {
     return buildColdCallHref({
         href: "/deal-workspace/",
-        focusObject: account || "Cold call",
+        focusObject: account,
         roomLabel: "Deal Workspace",
         account
     });

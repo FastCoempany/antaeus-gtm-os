@@ -148,7 +148,7 @@ export function Handoff(): JSX.Element {
                     onClick={openDiscovery}
                     data-cp-route="discovery-studio"
                 >
-                    Open Discovery
+                    Run the discovery call
                 </button>
                 <button
                     type="button"
@@ -156,7 +156,7 @@ export function Handoff(): JSX.Element {
                     onClick={openDealWorkspace}
                     data-cp-route="deal-workspace"
                 >
-                    {linked ? "Open linked deal" : "Open Deal Workspace"}
+                    {linked ? "Open the deal" : "Open Deal Workspace"}
                 </button>
                 <button
                     type="button"
