@@ -432,18 +432,21 @@ function explainLeadCopy(
     because: string
 ): string {
     const confidenceLabel = tx(object.rankingConfidenceLabel);
+    // Phase 2.2 audit — retired "It is in the light because…" /
+    // "The lead is stable because…" canon-doc voice. Sarah parses
+    // those as code comments. Plain operator phrasing now.
     if (mode === "queue") {
         if (confidenceLabel === "stable lead")
-            return "The order is stable because " + because + ".";
+            return "Ranked here because " + because + ".";
         if (confidenceLabel === "supported")
-            return "The order is supported because " + because + ".";
-        return "This stays visible because " + because + ".";
+            return "Ranked here because " + because + ".";
+        return "Visible because " + because + ".";
     }
     if (confidenceLabel === "stable lead")
-        return "The lead is stable because " + because + ".";
+        return "At the top because " + because + ".";
     if (confidenceLabel === "supported")
-        return "It is in the light because " + because + ".";
-    return "It stays in the light because " + because + ".";
+        return "At the top because " + because + ".";
+    return "At the top because " + because + ".";
 }
 
 function explainTitleForObject(
@@ -463,69 +466,73 @@ function explainTitleForObject(
     const readinessFragility = Number(object.readinessFragility ?? 0);
     const readinessIcpWeak = !!object.readinessIcpWeak;
 
+    // Phase 2.2 audit — rewritten in operator voice. Was canon-doc
+    // ("Signal density makes this move real" / "The live room says
+    // this deal needs intervention" / "Targeting truth still anchors
+    // the rest"). Sarah reads these now without canon fluency.
     if (mode === "queue") {
         if (family === "risk") {
-            if (linkedRoomTop) return "The live room says this deal needs intervention.";
-            if (truthDebtCount >= 2) return "Truth debt is dragging this deal down.";
-            if (quotaPressureScore >= 60) return "Quota pressure is exposing deal weakness.";
-            if (nextStepOverdue || stageStuck) return "Execution drift is visible now.";
-            return "Recovery is ahead of expansion.";
+            if (linkedRoomTop) return "Deal Workspace flagged this for intervention.";
+            if (truthDebtCount >= 2) return "Qualification gaps are real here.";
+            if (quotaPressureScore >= 60) return "Quota pressure is showing up as deal weakness.";
+            if (nextStepOverdue || stageStuck) return "Next step is overdue.";
+            return "Worth recovering before chasing new pipeline.";
         }
-        if (family === "advisor") return "Leverage is earned here, not decorative.";
+        if (family === "advisor") return "An advisor ask would actually move this.";
         if ((family === "opportunity" || family === "move") && quotaPressureScore >= 60) {
-            return "Quota pressure makes this motion real.";
+            return "The week's pipeline math needs this move.";
         }
         if ((family === "opportunity" || family === "move") && hasReplies) {
-            return "This thread has earned the next motion.";
+            return "The thread is warm — push the next touch now.";
         }
         if (family === "opportunity" && highConfidenceCount >= 2) {
-            return "Signal density makes this move real.";
+            return "Multiple high-confidence signals make this real.";
         }
         if (family === "opportunity" && causeId === "coverage_gap") {
-            return "Coverage pressure makes this move real.";
+            return "Coverage gap needs more open opportunities.";
         }
         if (family === "opportunity" || family === "move") {
-            return "This is the next move with leverage.";
+            return "Highest-leverage next move on the radar.";
         }
         if (family === "icp" && readinessIcpWeak) {
-            return "Targeting truth is the weakest dimension.";
+            return "ICP sharpness needs another round.";
         }
-        if (family === "icp") return "Targeting truth still anchors the rest.";
-        if (readinessFragility >= 45) return "System trust still needs reinforcement.";
-        if (quotaPressureScore >= 60) return "The plan is still more fragile than believable.";
-        return "This keeps the command surface honest.";
+        if (family === "icp") return "ICP shapes how everything below ranks.";
+        if (readinessFragility >= 45) return "Workspace maturity needs another anchor.";
+        if (quotaPressureScore >= 60) return "Plan math is still ahead of execution.";
+        return "Visible so the system stays honest.";
     }
 
     if (family === "risk") {
-        if (linkedRoomTop) return "The live room says this deal is slipping.";
-        if (truthDebtCount >= 2) return "This deal is weak where it matters.";
-        if (quotaPressureScore >= 60) return "Quota pressure is exposing deal weakness.";
-        if (nextStepOverdue || stageStuck) return "This deal is drifting in the open.";
-        return "The week is drifting through this object.";
+        if (linkedRoomTop) return "Deal Workspace flagged this deal as slipping.";
+        if (truthDebtCount >= 2) return "Qualification gaps are real here.";
+        if (quotaPressureScore >= 60) return "Quota pressure is showing up as deal weakness.";
+        if (nextStepOverdue || stageStuck) return "Next step is overdue and the stage is stuck.";
+        return "Worth recovering before chasing new pipeline.";
     }
-    if (family === "advisor") return "Leverage is earned here, not decorative.";
+    if (family === "advisor") return "An advisor ask would actually move this.";
     if ((family === "opportunity" || family === "move") && quotaPressureScore >= 60) {
-        return "Quota pressure makes this motion real.";
+        return "The week's pipeline math needs this move.";
     }
     if ((family === "opportunity" || family === "move") && hasReplies) {
-        return "This thread has earned the next motion.";
+        return "The thread is warm — push the next touch now.";
     }
     if (family === "opportunity" && highConfidenceCount >= 2) {
-        return "Signal density makes this move real.";
+        return "Multiple high-confidence signals make this real.";
     }
     if (family === "opportunity" && causeId === "coverage_gap") {
-        return "Coverage pressure makes this move real.";
+        return "Coverage gap needs more open opportunities.";
     }
     if (family === "opportunity" || family === "move") {
-        return "This is the highest-leverage move right now.";
+        return "Highest-leverage move available right now.";
     }
     if (family === "icp" && readinessIcpWeak) {
-        return "Readiness still says targeting truth is weakest.";
+        return "ICP sharpness needs another round.";
     }
-    if (family === "icp") return "Targeting truth is still upstream of everything else.";
-    if (readinessFragility >= 45) return "System fragility is still visible in readiness.";
-    if (quotaPressureScore >= 60) return "The plan is still more fragile than believable.";
-    return "System trust is affecting the rest of the stack.";
+    if (family === "icp") return "ICP shapes how everything below ranks.";
+    if (readinessFragility >= 45) return "Workspace maturity needs another anchor.";
+    if (quotaPressureScore >= 60) return "Plan math is still ahead of execution.";
+    return "Visible so the rest of the system stays honest.";
 }
 
 export function explainCommandObject(

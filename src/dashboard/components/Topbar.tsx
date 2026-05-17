@@ -1,7 +1,11 @@
 import type { JSX } from "preact";
 import { ModeSwitcher } from "./ModeSwitcher";
 import { ReadinessAnchor } from "./ReadinessAnchor";
-import { openReadinessDrawer, readinessSummary } from "../state";
+import {
+    commandSummary,
+    openReadinessDrawer,
+    readinessSummary
+} from "../state";
 
 /**
  * Topbar — thesis + mode switcher + readiness anchor.
@@ -30,15 +34,26 @@ import { openReadinessDrawer, readinessSummary } from "../state";
  */
 export function Topbar(): JSX.Element {
     const summary = readinessSummary.value;
+    const cmd = commandSummary.value;
     // The anchor needs SOMETHING to anchor against. On a truly empty
     // workspace every dimension is zero and the verdict reads as a
     // meaningless label. Suppress until at least one dimension has data.
     const showAnchor = summary.dimensions.some((d) => d.score > 0);
 
+    // Phase 2.2 audit — kicker carries contextual workspace tail
+    // (parity with the kicker-tail pattern used across the audited
+    // rooms). Was just "DASHBOARD" — duplicated the wordmark.
+    const riskCount = cmd.riskCards.length;
+    const moveCount = cmd.moveCards.length;
+    const kickerTail =
+        riskCount + moveCount > 0
+            ? `${cmd.ranked.length} ranked · ${riskCount} ${riskCount === 1 ? "deal" : "deals"} at risk · ${moveCount} ${moveCount === 1 ? "move" : "moves"} queued`
+            : "no live pressure";
+
     return (
         <header class="db-topbar">
             <div class="db-topbar__lead">
-                <p class="db-topbar__kicker">DASHBOARD</p>
+                <p class="db-topbar__kicker">DASHBOARD · {kickerTail}</p>
                 <h1 class="db-topbar__title">
                     What is under the most pressure right now.
                 </h1>

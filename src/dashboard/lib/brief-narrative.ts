@@ -23,8 +23,8 @@ export interface BriefNarrative {
 const EMPTY_NARRATIVE: BriefNarrative = {
     headline: "Nothing under pressure right now.",
     sentences: [
-        "No active deals, signals, or recovery moves are publishing into the command surface.",
-        "Once Discovery Studio, Deal Workspace, Signal Console, or Readiness publish a snapshot, the morning brief composes from live data."
+        "No active deals, signals, or recovery moves to triage yet.",
+        "Add an account in Signal Console or load a live deal in Deal Workspace — the morning brief fills in immediately."
     ],
     insight: ""
 };
@@ -53,37 +53,43 @@ export function buildBriefNarrative(
 
     const sentences: string[] = [];
 
-    // Sentence 1 — what's at the top.
+    // Phase 2.2 audit — rewritten in plain operator voice. Was:
+    //   "Motion pressure is leading: Outbound to Meridian Logistics."
+    //   "The queue holds 4 moves ready."
+    //   "The ranking is supported — same object likely tomorrow unless
+    //    the live snapshot moves."
+    //   "Right behind it: Outbound to Northstar Financial (Motion)."
+    // All canon-doc voice that survived the Sarah-CRO sweep.
+
+    // Sentence 1 — what's at the top (sentence-shaped, not card-shaped).
     sentences.push(
-        `${spotlight.roomFamilyLabel} pressure is leading: ${spotlight.title.replace(/\.$/, "")}.`
+        `${spotlight.title.replace(/\.$/, "")} is the morning's top move.`
     );
 
     // Sentence 2 — composition of the queue.
     const compositionParts: string[] = [];
     if (riskCount) compositionParts.push(pluralize(riskCount, "deal", "deals") + " in recovery");
-    if (moveCount) compositionParts.push(pluralize(moveCount, "move", "moves") + " ready");
+    if (moveCount) compositionParts.push(pluralize(moveCount, "move", "moves") + " queued");
     if (systemCount) compositionParts.push(pluralize(systemCount, "system", "system") + " note");
     if (compositionParts.length) {
-        sentences.push(`The queue holds ${joinList(compositionParts)}.`);
+        sentences.push(`${joinList(compositionParts).replace(/^\w/, (c) => c.toUpperCase())} behind it.`);
     }
 
     // Sentence 3 — confidence on the lead, if interesting.
     const label = spotlight.rankingConfidenceLabel;
-    if (label === "stable lead" || label === "supported") {
-        sentences.push(
-            `The ranking is ${label} — same object likely tomorrow unless the live snapshot moves.`
-        );
+    if (label === "stable lead") {
+        sentences.push("The ranking is stable — this should still be the top move tomorrow.");
+    } else if (label === "supported") {
+        sentences.push("The ranking is well-supported by the live signals.");
     } else if (label === "mixed signal") {
-        sentences.push(
-            "Ranking confidence is mixed — re-check after the next snapshot before committing the day."
-        );
+        sentences.push("Ranking confidence is mixed — worth re-checking after lunch.");
     }
 
     // Sentence 4 — closest follow-on, if there is one.
     const second = ranked[1];
     if (second && second.id !== spotlight.id) {
         sentences.push(
-            `Right behind it: ${second.title.replace(/\.$/, "")} (${second.roomFamilyLabel}).`
+            `Next up: ${second.title.replace(/\.$/, "")}.`
         );
     }
 
