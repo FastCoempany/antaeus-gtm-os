@@ -12,11 +12,11 @@ export function MilestoneLadder(): JSX.Element {
     return (
         <section class="wel-ladder" aria-label="Activation anchors">
             <header class="wel-section__head">
-                <p class="wel-section__kicker">Anchors</p>
-                <h2 class="wel-section__title">What week one is asking for</h2>
+                <p class="wel-section__kicker">ANCHORS</p>
+                <h2 class="wel-section__title">What week one is asking for.</h2>
                 <p class="wel-section__sub">
-                    Each anchor unlocks downstream rooms. Hit them in order
-                    and the system gets visibly more useful.
+                    Each anchor lights up another part of the workspace.
+                    Hit them in order; the system gets sharper as you go.
                 </p>
             </header>
             <ol class="wel-ladder__list">
