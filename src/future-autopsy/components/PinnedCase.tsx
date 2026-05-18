@@ -47,62 +47,78 @@ export function PinnedCase(): JSX.Element {
                     activity · Risk {v.riskScore}/100 · Qualification{" "}
                     {v.qualScore}/18
                 </p>
+                <VerdictToggle />
             </header>
 
-            <VerdictToggle />
-            <ForensicSheets />
+            {/*
+             * Program 6 / PR 7 — 2-col layout per Variant 01 / Forensic
+             * Light Table. Sheets + countermeasure docket live in the
+             * left column (the "lit evidence surface"); RouteRack
+             * mounts in the right column so the corrective route stays
+             * visible alongside the sheets. Drops to single column at
+             * 1160px so the rotation + 2-col both disable in concert.
+             */}
+            <div class="fa-pinned__light-grid">
+                <div class="fa-pinned__stack-zone">
+                    <ForensicSheets />
 
-            {doc && doc.countermeasures.length > 0 ? (
-                <section class="fa-docket" aria-label="Countermeasure docket">
-                    <header class="fa-docket__header">
-                        <span class="fa-docket__kicker">COUNTERMEASURES</span>
-                        <span class="fa-docket__count">
-                            {doc.countermeasures.length} task
-                            {doc.countermeasures.length === 1 ? "" : "s"}
-                        </span>
-                    </header>
-                    <ul class="fa-docket__list">
-                        {doc.countermeasures.map((t) => {
-                            const done = isTaskDone(taskLog.value, v.id, t.taskId);
-                            return (
-                                <li
-                                    key={t.taskId}
-                                    class={`fa-docket__row${done ? " is-done" : ""}`}
-                                >
-                                    <label class="fa-docket__check">
-                                        <input
-                                            type="checkbox"
-                                            checked={done}
-                                            onChange={() => {
-                                                toggleTaskDone(v.id, t.taskId);
-                                                void saveTaskLogToCloud(
-                                                    taskLog.value
-                                                );
-                                            }}
-                                        />
-                                        <span class="fa-docket__label">{t.label}</span>
-                                    </label>
-                                    <span class="fa-docket__why">{t.why}</span>
-                                    {t.script ? (
-                                        <span class="fa-docket__script">
-                                            “{t.script(v)}”
-                                        </span>
-                                    ) : null}
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </section>
-            ) : null}
+                    {doc && doc.countermeasures.length > 0 ? (
+                        <section class="fa-docket" aria-label="Countermeasure docket">
+                            <header class="fa-docket__header">
+                                <span class="fa-docket__kicker">COUNTERMEASURES</span>
+                                <span class="fa-docket__count">
+                                    {doc.countermeasures.length} task
+                                    {doc.countermeasures.length === 1 ? "" : "s"}
+                                </span>
+                            </header>
+                            <ul class="fa-docket__list">
+                                {doc.countermeasures.map((t) => {
+                                    const done = isTaskDone(taskLog.value, v.id, t.taskId);
+                                    return (
+                                        <li
+                                            key={t.taskId}
+                                            class={`fa-docket__row${done ? " is-done" : ""}`}
+                                        >
+                                            <label class="fa-docket__check">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={done}
+                                                    onChange={() => {
+                                                        toggleTaskDone(v.id, t.taskId);
+                                                        void saveTaskLogToCloud(
+                                                            taskLog.value
+                                                        );
+                                                    }}
+                                                />
+                                                <span class="fa-docket__label">{t.label}</span>
+                                            </label>
+                                            <span class="fa-docket__why">{t.why}</span>
+                                            {t.script ? (
+                                                <span class="fa-docket__script">
+                                                    “{t.script(v)}”
+                                                </span>
+                                            ) : null}
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </section>
+                    ) : null}
 
-            {doc?.killSwitch ? (
-                <p class="fa-kill" aria-label="Kill switch verdict">
-                    <span class="fa-kill__label">KILL SWITCH</span>
-                    {doc.killSwitch}
-                </p>
-            ) : null}
+                    {doc?.killSwitch ? (
+                        <p class="fa-kill" aria-label="Kill switch verdict">
+                            <span class="fa-kill__label">KILL SWITCH</span>
+                            {doc.killSwitch}
+                        </p>
+                    ) : null}
+                </div>
 
-            {doc ? <RouteRack plan={buildActionPlan(doc)} /> : null}
+                {doc ? (
+                    <aside class="fa-pinned__route" aria-label="Corrective route">
+                        <RouteRack plan={buildActionPlan(doc)} />
+                    </aside>
+                ) : null}
+            </div>
         </section>
     );
 }
