@@ -487,12 +487,11 @@ test.describe("room boot smoke tests", () => {
         await page.waitForLoadState("networkidle");
 
         // Discovery Studio audit (2026-05) retired the "WAVE 5" marker
-        // from the kicker — it was migration-phase leak, not operator
-        // copy. Kicker now reads "DISCOVERY STUDIO" (idle), "DISCOVERY
-        // STUDIO · {framework label}" (active), or "DISCOVERY STUDIO ·
-        // loading…" (cold load before frameworks attach).
-        await expect(page.locator(".ds-topbar__kicker")).toContainText(
-            "DISCOVERY STUDIO"
+        // from the kicker. Program 6 / PR 4 (Ledger Spine Canonical
+        // refacing) moved the kicker from .ds-topbar__kicker into the
+        // mast band: "Discovery Studio · Canonical Control Face".
+        await expect(page.locator(".ds-mast__kicker")).toContainText(
+            /discovery studio/i
         );
         await expect(page.locator(".ds-framework-rail")).toBeAttached();
         await expect(page.locator(".ds-segment-rail")).toBeAttached();

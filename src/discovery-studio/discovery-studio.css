@@ -1107,3 +1107,336 @@ button {
     color: var(--ds-ink-70);
     margin: 0;
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Program 6 / PR 4 — Ledger Spine Canonical layout
+   ───────────────────────────────────────────────────────────────── */
+
+/* ─── Mast (top strip) ─────────────────────────────────────────── */
+
+.ds-mast {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 20px;
+    padding: 0 0 18px;
+    margin: 0 0 18px;
+    border-bottom: 1px solid var(--ds-border, rgba(10, 28, 64, 0.16));
+}
+
+.ds-mast__lead {
+    display: grid;
+    gap: 6px;
+}
+
+.ds-mast__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ds-orange, #e6701e);
+}
+
+.ds-mast__brand {
+    margin: 0;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: clamp(22px, 2.6vw, 30px);
+    line-height: 0.94;
+    letter-spacing: -0.04em;
+    color: var(--ds-ink, #0a1c40);
+}
+
+.ds-mast__stamp {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(10, 28, 64, 0.42);
+    white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+    .ds-mast {
+        flex-direction: column;
+        align-items: start;
+        gap: 10px;
+    }
+}
+
+/* ─── Board (3-col layout with vertical framework rail on left) ── */
+
+.ds-board {
+    display: grid;
+    grid-template-columns: 206px minmax(0, 1fr) 320px;
+    gap: 24px;
+    align-items: start;
+    padding-top: 12px;
+    /* The old .ds-main grid produced a heavy 3-col layout with hairline
+       seams; the board treatment lets the rail breathe + sets a quieter
+       seam between columns. */
+}
+
+.ds-board__rail {
+    position: sticky;
+    top: 18px;
+    align-self: start;
+    padding: 18px 16px 20px;
+    border: 1px solid rgba(10, 28, 64, 0.08);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.84);
+    box-shadow: 0 14px 32px rgba(10, 28, 64, 0.06);
+}
+
+.ds-board__rail-kicker {
+    margin: 0 0 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(10, 28, 64, 0.42);
+}
+
+.ds-board__rail-note {
+    margin: 14px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(10, 28, 64, 0.08);
+    font-size: 12px;
+    line-height: 1.55;
+    color: rgba(10, 28, 64, 0.62);
+}
+
+.ds-board__main {
+    display: grid;
+    gap: 18px;
+}
+
+.ds-board__main-title {
+    margin: 0;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: clamp(20px, 2.4vw, 28px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    color: var(--ds-ink, #0a1c40);
+}
+
+.ds-board__dock {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    /* Side dock collects Wave 5 + canon §4.12 required rails that don't
+       fit inside the expandable-segment surface — SkipAhead, Worked
+       Memory, Learned-Truth Ledger, Recover. The dock is sticky so they
+       stay in view as Sarah scrolls the segment stack. */
+    position: sticky;
+    top: 18px;
+}
+
+@media (max-width: 1200px) {
+    .ds-board {
+        grid-template-columns: 1fr;
+    }
+    .ds-board__rail,
+    .ds-board__dock {
+        position: static;
+    }
+}
+
+/* ─── Vertical framework rail buttons ──────────────────────────── */
+
+.ds-framework-rail__list {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+.ds-framework-rail__btn {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    padding: 11px 0;
+    border: 0;
+    border-bottom: 1px solid rgba(10, 28, 64, 0.08);
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: color 140ms ease;
+}
+
+.ds-framework-rail__list li:last-child .ds-framework-rail__btn {
+    border-bottom: 0;
+}
+
+.ds-framework-rail__btn:hover {
+    background: transparent;
+}
+
+.ds-framework-rail__btn:hover .ds-framework-rail__name {
+    color: rgba(10, 28, 64, 0.84);
+}
+
+.ds-framework-rail__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(10, 28, 64, 0.16);
+    position: relative;
+    flex: 0 0 auto;
+    background: transparent;
+}
+
+.ds-framework-rail__dot::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: rgba(10, 28, 64, 0.14);
+    transition: background 140ms ease;
+}
+
+.ds-framework-rail__btn.is-active .ds-framework-rail__dot::after {
+    background: var(--ds-orange, #e6701e);
+}
+
+.ds-framework-rail__name {
+    font-size: 13px;
+    line-height: 1.3;
+    color: rgba(10, 28, 64, 0.52);
+    font-weight: 700;
+    transition: color 140ms ease;
+}
+
+.ds-framework-rail__btn.is-active .ds-framework-rail__name {
+    color: var(--ds-ink, #0a1c40);
+}
+
+.ds-framework-rail__empty {
+    font-size: 13px;
+    color: rgba(10, 28, 64, 0.5);
+    margin: 0;
+}
+
+/* ─── Expandable-segment model ─────────────────────────────────── */
+
+.ds-segment-rail__list {
+    display: grid;
+    gap: 0;
+    /* Reset any pre-existing list-style/gap from the Wave 2 rules so the
+       expandable model reads as a single stacked column with subtle
+       between-segment dividers. */
+}
+
+.ds-segment-rail__segment {
+    border-bottom: 1px solid rgba(10, 28, 64, 0.10);
+}
+
+.ds-segment-rail__segment.is-segment-active {
+    border-bottom-color: transparent;
+    padding-bottom: 16px;
+}
+
+.ds-segment-rail__segment-header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 12px 44px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 4px 14px 2px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: opacity 140ms ease;
+}
+
+.ds-segment-rail__segment.is-segment-collapsed .ds-segment-rail__segment-header {
+    opacity: 0.84;
+}
+
+.ds-segment-rail__segment-header:hover {
+    opacity: 1;
+}
+
+.ds-segment-rail__segment-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(10, 28, 64, 0.16);
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.ds-segment-rail__segment-dot::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: rgba(10, 28, 64, 0.14);
+}
+
+.ds-segment-rail__segment.is-segment-active .ds-segment-rail__segment-dot::after {
+    background: var(--ds-orange, #e6701e);
+}
+
+.ds-segment-rail__segment-num {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.52);
+    font-weight: 700;
+}
+
+.ds-segment-rail__segment-title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: clamp(18px, 2vw, 24px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ds-ink, #0a1c40);
+}
+
+.ds-segment-rail__segment-tempo {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.42);
+    font-weight: 700;
+}
+
+.ds-segment-rail__segment-cue {
+    margin: 0 0 12px;
+    padding: 0 4px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: rgba(10, 28, 64, 0.7);
+}
+
+.ds-segment-rail__nodes {
+    margin: 0;
+    padding: 0 4px;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+}
+
+@media (max-width: 760px) {
+    .ds-segment-rail__segment-header {
+        grid-template-columns: 12px 34px minmax(0, 1fr);
+    }
+    .ds-segment-rail__segment-tempo {
+        display: none;
+    }
+}

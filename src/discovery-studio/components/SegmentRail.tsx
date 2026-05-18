@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import {
     activeFramework,
     activeNode,
+    clearActiveNode,
     compressionMode,
     essentialNodeSet,
     expandResponse,
@@ -32,21 +33,36 @@ const TEMPO_HINTS: Record<string, number> = {
 };
 
 /**
- * SegmentRail — Wave 2.
+ * SegmentRail — Program 6 / PR 4 refacing.
  *
- * The 10-stop spine, vertically stacked. Each segment shows its title +
- * coaching cue, then its nodes. The active node renders its branch
- * picker inline. Compression mode filters non-essential nodes.
+ * The 10-stop spine, vertically stacked. Adopts the Ledger Spine
+ * Canonical expandable-segment model: only ONE segment is open at a
+ * time. Non-active segments collapse to dot + num + title (compressed
+ * header only). The active segment expands inline with its nodes +
+ * branch picker.
  *
- * Wave 3 will wire branch interactions (record fact, navigate to room,
- * jump to next node). Wave 2 is read-only beyond the existing
- * setActiveNode + expandResponse signals.
+ * "Active" is derived from `activeNode.segmentKey` — clicking a
+ * compressed segment header selects its first visible node, which
+ * makes the segment expand. Clicking the expanded segment's header
+ * again collapses it (clears activeNode).
+ *
+ * Compression mode still filters NODES inside the active segment;
+ * segments themselves are not hidden by compression mode (they're
+ * always 10 rows, just compressed when not active).
+ *
+ * Previous (Wave 2) model showed every segment with all visible
+ * nodes + branches inline at once — that read as a long scrolling
+ * document, not a focused work surface. The Ledger Spine wireframe
+ * picked one-segment-at-a-time for exactly that focus discipline.
  */
 export function SegmentRail(): JSX.Element {
     const fid = activeFramework.value;
     const node = activeNode.value;
     const mode = compressionMode.value;
     const essentials = essentialNodeSet.value;
+    // Which segment is currently expanded? Derived from activeNode;
+    // null means every segment is collapsed.
+    const activeSegmentKey: string | null = node?.segmentKey ?? null;
 
     if (!fid) {
         return (
@@ -85,6 +101,20 @@ export function SegmentRail(): JSX.Element {
                     // and current-state segments get extra weight, openers
                     // and routing get less. Static hint, not enforced.
                     const tempoMinutes = TEMPO_HINTS[seg.key] ?? 3;
+                    // Ledger Spine: one segment expanded at a time.
+                    const isSegmentActive = activeSegmentKey === seg.key;
+                    // Clicking a collapsed segment header selects its
+                    // first visible node (which marks the segment as
+                    // active, causing it to expand). Clicking an
+                    // already-expanded segment header collapses it
+                    // (clears activeNode).
+                    const handleHeaderClick = (): void => {
+                        if (isSegmentActive) {
+                            clearActiveNode();
+                        } else if (visibleNodes[0]) {
+                            setActiveNode(seg.key, visibleNodes[0].id);
+                        }
+                    };
                     return (
                         <li
                             key={seg.key}
@@ -92,9 +122,15 @@ export function SegmentRail(): JSX.Element {
                                 seg.essential
                                     ? " ds-segment-rail__segment--essential"
                                     : ""
-                            }`}
+                            }${isSegmentActive ? " is-segment-active" : " is-segment-collapsed"}`}
                         >
-                            <header class="ds-segment-rail__segment-header">
+                            <button
+                                type="button"
+                                class="ds-segment-rail__segment-header"
+                                aria-expanded={isSegmentActive}
+                                onClick={handleHeaderClick}
+                            >
+                                <span class="ds-segment-rail__segment-dot" aria-hidden="true" />
                                 <span class="ds-segment-rail__segment-num">
                                     {seg.num.toString().padStart(2, "0")}
                                 </span>
@@ -104,12 +140,13 @@ export function SegmentRail(): JSX.Element {
                                 <span class="ds-segment-rail__segment-tempo">
                                     ~{tempoMinutes}m
                                 </span>
-                            </header>
-                            {seg.cue ? (
+                            </button>
+                            {isSegmentActive && seg.cue ? (
                                 <p class="ds-segment-rail__segment-cue">
                                     {seg.cue}
                                 </p>
                             ) : null}
+                            {isSegmentActive ? (
                             <ul class="ds-segment-rail__nodes">
                                 {visibleNodes.map((n) => {
                                     const isActive =
@@ -131,6 +168,7 @@ export function SegmentRail(): JSX.Element {
                                     );
                                 })}
                             </ul>
+                            ) : null}
                         </li>
                     );
                 })}
