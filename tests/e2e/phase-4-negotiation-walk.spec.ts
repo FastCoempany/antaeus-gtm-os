@@ -153,8 +153,15 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
             await page.waitForTimeout(600);
 
             // Click into Meridian to make it the focal deal.
+            // Program 6 / PR 6 retired the .dw-deal-row table for the
+            // InterventionRail .dw-rail__ticket / .dw-rail__reserve-tag
+            // model. Meridian may render as either a ticket or a
+            // reserve tag depending on its recovery lane; query both.
             const meridianRow = page
-                .locator(".dw-deal-row", { hasText: "Meridian Logistics" })
+                .locator(
+                    ".dw-rail__ticket, .dw-rail__reserve-tag"
+                )
+                .filter({ hasText: "Meridian Logistics" })
                 .first();
             await meridianRow.click();
             await page.waitForTimeout(200);

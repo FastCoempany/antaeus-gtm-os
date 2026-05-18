@@ -1,10 +1,8 @@
 import type { JSX } from "preact";
 import { RoomChrome } from "@/lib/room-chrome";
-import { DealList } from "./components/DealList";
-import { FilterBar } from "./components/FilterBar";
 import { HandoffStrip } from "./components/HandoffStrip";
 import { Hero } from "./components/Hero";
-import { LaneGrid } from "./components/LaneGrid";
+import { InterventionRail } from "./components/InterventionRail";
 import { LossReasonModal } from "./components/LossReasonModal";
 import { MicroGrid } from "./components/MicroGrid";
 import { TargetFolio } from "./components/TargetFolio";
@@ -12,47 +10,44 @@ import { activeDeals, allDeals } from "./state";
 import { groupByLane, rankRecovery } from "./lib/recovery";
 
 /**
- * DealWorkspace — Phase 2 rework against picked variant-B
- * "Intervention Desk" (canon §4.13 Diagnosis Table).
+ * DealWorkspace — Program 6 / PR 6 refacing.
  *
- * Layout (post Deal Workspace audit 2026-05):
+ * Per canon §4.13 (Deal Workspace — Diagnosis Table) + the picked-
+ * winner Variant 02 / Intervention Desk + the founder lock note
+ * "lower board rebuilt from Intervention Rail."
+ *
+ * Layout:
  *
  *   ┌─────────────────────────────────────────────────────────────────┐
- *   │  Chrome (wordmark)                                              │
+ *   │  Chrome (RoomChrome — wordmark + back-pill + ⌘K palette)        │
  *   ├─────────────────────────────────────────────────────────────────┤
- *   │  Topbar kicker                                                  │
+ *   │  Topbar kicker (contextual: deal count + critical/at-risk count)│
  *   ├─────────────────────────────────────────────────────────────────┤
  *   │  Stage-grid (2-col): Hero (left) + TargetFolio (right)          │
  *   ├─────────────────────────────────────────────────────────────────┤
  *   │  MicroGrid (3 stat tiles)                                       │
  *   ├─────────────────────────────────────────────────────────────────┤
- *   │  LaneGrid (Now / Next / Keep honest)                            │
+ *   │  InterventionRail (replaces LaneGrid + FilterBar + DealList     │
+ *   │     trio). Toolbar with search + Now/Next/Reserve pills + "Run  │
+ *   │     intervention" CTA → 3 rail rows: Now (full tickets) / Next  │
+ *   │     (full tickets) / Keep honest (compact reserve tags).        │
  *   ├─────────────────────────────────────────────────────────────────┤
- *   │  FilterBar (filter chips + export)                              │
- *   ├─────────────────────────────────────────────────────────────────┤
- *   │  DealList (NEW — searchable, click-to-pin focal case)           │
+ *   │  HandoffStrip (cross-room: Future Autopsy / PoC / Negotiation / │
+ *   │     Advisor)                                                    │
  *   └─────────────────────────────────────────────────────────────────┘
  *
- * Audit deltas applied here:
- *   - Spine left rail retired — decoration without operating value.
- *     Wordmark in the room-chrome strip provides brand presence.
- *   - BackButton removed from topbar — Deal Workspace is a primary
- *     destination.
- *   - DealList added below FilterBar — the room had NO list affordance
- *     before this. A CRO with 30 deals needed a searchable table +
- *     a click-to-pin mechanism for the focal case.
- *   - FilterBar moved above DealList (filter chips now scope BOTH the
- *     TargetFolio's lane and the list rendering — single mental model).
+ * 2026-05-01 bootstrap punch list closeout:
+ *   ✓ 2-col stage-grid (closed in Phase 2.6)
+ *   ✓ Target-folio with inline tabbed detail (closed in Phase 6 polish)
+ *   ✓ Spine retired (Phase 2.6 — decoration without operating value)
+ *   ✓ Lower board rebuilt from Intervention Rail (THIS PR)
  *
  * LossReasonModal stays as a modal because it's a one-shot prompt
- * triggered by a closed-lost transition, not a primary editing surface.
+ * triggered by a closed-lost transition, not a primary surface.
  */
 export function DealWorkspace(): JSX.Element {
     const dealCount = allDeals.value.length;
 
-    // Phase 2.6 — contextual kicker tail surfaces recovery pressure
-    // counts (was just "{n} deals on the board"). Sarah lands and
-    // sees in one glance whether the board has actionable risk.
     let kicker = "DEAL WORKSPACE · no deals yet";
     if (dealCount > 0) {
         const lanes = groupByLane(rankRecovery(activeDeals.value));
@@ -80,13 +75,8 @@ export function DealWorkspace(): JSX.Element {
                 </div>
 
                 <MicroGrid />
-                <LaneGrid />
 
-                <div class="dw-controls">
-                    <FilterBar />
-                </div>
-
-                <DealList />
+                <InterventionRail />
 
                 <HandoffStrip />
             </div>

@@ -88,16 +88,16 @@ test.describe("room boot smoke tests", () => {
             "DEAL WORKSPACE"
         );
         // Deal Workspace audit (2026-05) retired the Spine left rail
-        // (pure decoration). Room is now single-column: chrome
-        // (wordmark) + topbar + stage-grid (Hero + TargetFolio) +
-        // MicroGrid + LaneGrid + FilterBar. DealList renders below
-        // FilterBar when there are deals.
+        // (pure decoration). Program 6 / PR 6 (lower board rebuild
+        // from Intervention Rail) retired LaneGrid + FilterBar +
+        // DealList — combined into the InterventionRail (.dw-rail).
+        // Room is now: chrome + topbar + stage-grid (Hero +
+        // TargetFolio) + MicroGrid + InterventionRail.
         await expect(page.locator(".dw-stage-grid")).toBeAttached();
         await expect(page.locator(".dw-hero")).toBeAttached();
         await expect(page.locator(".dw-target-folio")).toBeAttached();
         await expect(page.locator(".dw-micro-grid")).toBeAttached();
-        await expect(page.locator(".dw-lane-grid")).toBeAttached();
-        await expect(page.locator(".dw-filter-bar")).toBeAttached();
+        await expect(page.locator(".dw-rail")).toBeAttached();
 
         expect(
             errors,
