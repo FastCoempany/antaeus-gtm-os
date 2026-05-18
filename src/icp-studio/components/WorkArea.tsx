@@ -24,9 +24,10 @@ import {
     buildFocus,
     buildStatement
 } from "../lib/builders";
-import { buildIcpQuality } from "../lib/quality";
 import { saveIcp } from "../lib/cloud-persistence";
 import type { RoleKey } from "../lib/types";
+import { WedgeLedger } from "./WedgeLedger";
+import { RunDocket } from "./RunDocket";
 
 /**
  * WorkArea — Wave 3 implementation.
@@ -407,49 +408,9 @@ function Outputs(): JSX.Element {
     );
 }
 
-function QualityReadout(): JSX.Element {
-    const d = draft.value;
-    const quality = buildIcpQuality({
-        role: d.role,
-        industry: effectiveIndustry.value,
-        size: d.size,
-        geo: d.geo,
-        buyer: effectiveBuyer.value,
-        pain: d.pain,
-        trigger: d.trigger,
-        proofWindow: d.proofWindow,
-        activeAccounts: parseActiveAccounts(d.engineActive)
-    });
-
-    return (
-        <article
-            class={`icp-quality icp-quality--${quality.tier}`}
-            aria-label="ICP quality readout"
-        >
-            <header class="icp-quality__head">
-                <p class="icp-quality__kicker">QUALITY READOUT</p>
-                <p
-                    class={`icp-quality__score icp-quality__score--${quality.tier}`}
-                    aria-label={`ICP score ${quality.score} of 100`}
-                >
-                    {quality.score}
-                </p>
-                <p class="icp-quality__label">{quality.label}</p>
-                <p class="icp-quality__summary">{quality.summary}</p>
-            </header>
-            <ul class="icp-quality__checks">
-                {quality.checks.map((check, i) => (
-                    <li
-                        key={i}
-                        class={`icp-quality__check icp-quality__check--${check.tone}`}
-                    >
-                        {check.text}
-                    </li>
-                ))}
-            </ul>
-        </article>
-    );
-}
+// QualityReadout retired in Program 6 / PR 5 (Wedge Ledger refacing).
+// Replaced by the WedgeLedger + RunDocket pair which carry the same
+// quality data in the canonical Variant 01 visual shape.
 
 function SaveBar(): JSX.Element {
     const [toast, setToast] = useState<string>("");
@@ -509,7 +470,10 @@ export function WorkArea(): JSX.Element {
             <TemplatePanel />
             <FormFields />
             <Outputs />
-            <QualityReadout />
+            <div class="icp-work__readout">
+                <WedgeLedger />
+                <RunDocket />
+            </div>
             <SaveBar />
         </section>
     );
