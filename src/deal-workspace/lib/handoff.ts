@@ -88,3 +88,23 @@ export function hrefToCallPlanner(accountName?: string): string {
         ...(accountName ? { focusObject: accountName, extra: { account: accountName } } : {})
     });
 }
+
+/**
+ * Phase 4 — Negotiation handoff. When a focal deal is selected, the
+ * deal id threads through as `?deal=` so Negotiation's URL-inbound
+ * auto-selects it; account name lands as focusObject for the topbar
+ * kicker.
+ */
+export function hrefToNegotiation(
+    dealId?: string,
+    accountName?: string
+): string {
+    const path = dealId
+        ? `/negotiation/?deal=${encodeURIComponent(dealId)}`
+        : "/negotiation/";
+    return buildDealWorkspaceHref({
+        href: path,
+        roomLabel: "Negotiation",
+        ...(accountName ? { focusObject: accountName } : {})
+    });
+}

@@ -118,6 +118,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .ng-route-rack__cell { display: flex; flex-direction: column; gap: 6px; }
+.ng-route-rack__cell--full { grid-column: 1 / -1; }
 
 .ng-cell__label {
     font-family: "JetBrains Mono", monospace;
@@ -141,7 +142,7 @@ button { font-family: inherit; cursor: pointer; }
 
 .ng-role-strip {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 4px;
     padding: 4px;
     background: var(--ng-field);
@@ -207,7 +208,7 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 900px) {
     .ng-positions__grid { grid-template-columns: 1fr; }
     .ng-route-rack { grid-template-columns: 1fr; }
-    .ng-role-strip { grid-template-columns: repeat(2, 1fr); }
+    .ng-role-strip { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ─── Twin: ladder + pushbacks ─────────────────────────────────────── */
@@ -507,3 +508,82 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .ng-handoff__btn--primary:hover { background: #d05f12; }
+
+/* ─── HandoffStrip — Phase 4 cross-room handoff band ──────────────── */
+
+.ng-outcome__freeze {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--ng-border);
+}
+
+.ng-handoff {
+    margin-top: 32px;
+    padding: 24px 22px 22px;
+    background: var(--ng-field-raised);
+    border: 1px solid var(--ng-border);
+    border-radius: 12px;
+}
+
+.ng-handoff__head { margin-bottom: 16px; }
+
+.ng-handoff__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ng-orange);
+}
+
+.ng-handoff__title {
+    margin: 0 0 6px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(20px, 1.8vw, 26px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ng-ink);
+}
+
+.ng-handoff__sub {
+    margin: 0;
+    font-size: 13.5px;
+    color: rgba(10, 28, 64, 0.7);
+}
+
+.ng-handoff__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ng-handoff__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 11px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    border: 1px solid rgba(10, 28, 64, 0.25);
+    background: #ffffff;
+    color: var(--ng-ink);
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.15s;
+}
+
+.ng-handoff__cta:hover {
+    transform: translateY(-1px);
+    border-color: var(--ng-orange);
+}
+
+.ng-handoff__cta--primary {
+    background: var(--ng-orange);
+    border-color: var(--ng-orange);
+    color: #fff;
+}
+
+.ng-handoff__cta--primary:hover {
+    background: #d05f12;
+    border-color: #d05f12;
+}

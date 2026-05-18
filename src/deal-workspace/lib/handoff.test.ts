@@ -4,6 +4,7 @@ import {
     hrefToAdvisorDeploy,
     hrefToCallPlanner,
     hrefToFutureAutopsy,
+    hrefToNegotiation,
     hrefToPocFramework
 } from "./handoff";
 
@@ -83,5 +84,21 @@ describe("convenience builders", () => {
         expect(new URL(hrefToPocFramework(), "http://x").searchParams.get("focusObject")).toBeNull();
         expect(new URL(hrefToAdvisorDeploy(), "http://x").searchParams.get("focusObject")).toBeNull();
         expect(new URL(hrefToCallPlanner(), "http://x").searchParams.get("focusObject")).toBeNull();
+    });
+
+    it("hrefToNegotiation threads ?deal= and focusObject for the negotiation room", () => {
+        const u = new URL(hrefToNegotiation("deal-123", "Meridian"), "http://x");
+        expect(u.pathname).toBe("/negotiation/");
+        expect(u.searchParams.get("deal")).toBe("deal-123");
+        expect(u.searchParams.get("focusObject")).toBe("Meridian");
+        expect(u.searchParams.get("focusRoom")).toBe("Negotiation");
+        expect(u.searchParams.get("returnTo")).toBe("/deal-workspace/");
+    });
+
+    it("hrefToNegotiation Invariant-8 — omits focusObject + ?deal= when both args missing", () => {
+        const u = new URL(hrefToNegotiation(), "http://x");
+        expect(u.pathname).toBe("/negotiation/");
+        expect(u.searchParams.has("deal")).toBe(false);
+        expect(u.searchParams.has("focusObject")).toBe(false);
     });
 });

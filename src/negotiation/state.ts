@@ -6,13 +6,18 @@ import {
 } from "@preact/signals";
 import {
     EMPTY_NEGOTIATION,
+    type AskMoment,
     type CounterpartyRole,
     type LearningEntry,
     type LinkedDealSummary,
     type Negotiation,
     type NegotiationOutcome
 } from "./lib/types";
-import { seedPushbacksFor, SEED_LADDER_DEFAULT } from "./lib/seed-scripts";
+import {
+    ASK_MOMENT_OPENINGS,
+    SEED_LADDER_DEFAULT,
+    seedPushbacksFor
+} from "./lib/seed-scripts";
 
 /**
  * Negotiation runtime state — Phase 3 of ADR-003.
@@ -64,6 +69,26 @@ export function setCounterparty(role: CounterpartyRole): void {
         ...draft.value,
         counterparty: role,
         pushbacks: seedPushbacksFor(role),
+        updatedAt: nowIso()
+    };
+}
+
+export function setAskMoment(moment: AskMoment): void {
+    // Switching the ask-moment refreshes the opening-line suggestion
+    // when the operator hasn't authored their own yet. Once they've
+    // typed an opening line, we leave it alone — the moment is a hint,
+    // not an override.
+    const d = draft.value;
+    const currentOpening = (d.openingLine ?? "").trim();
+    const previousSuggestion = ASK_MOMENT_OPENINGS[d.askMoment];
+    const isStillSuggestion =
+        currentOpening.length === 0 || currentOpening === previousSuggestion;
+    draft.value = {
+        ...d,
+        askMoment: moment,
+        openingLine: isStillSuggestion
+            ? ASK_MOMENT_OPENINGS[moment]
+            : d.openingLine,
         updatedAt: nowIso()
     };
 }

@@ -1,8 +1,14 @@
 import type { LinkedDealSummary } from "./types";
 
 /**
- * Cross-room readers + handoff helpers — Negotiation ↔ Deal Workspace
- * ↔ Advisor Deploy triangle per canon §4.16b.
+ * Cross-room reader for the Deal Workspace mirror + URL inbound for
+ * `?deal=` per Phase 4 (the 2026-05 navigation-intelligence roadmap).
+ *
+ * The handoff writers (buildNegotiationHref + hrefToDealWorkspace +
+ * hrefToFutureAutopsy + hrefToAdvisorDeploy + hrefToPocFramework)
+ * moved to `lib/handoff.ts` per Phase 4 to match the canonical
+ * Phase 2 pattern + adopt Invariant 8 (no placeholder strings for
+ * focusObject). This file is now the read-side only.
  */
 
 interface StorageLike {
@@ -67,69 +73,6 @@ export function loadDealsForLinking(
             };
         })
         .filter((d): d is LinkedDealSummary => d !== null);
-}
-
-interface ContinuityParams {
-    readonly returnTo?: string;
-    readonly returnLabel?: string;
-    readonly focusObject?: string;
-    readonly focusRoom?: string;
-    readonly fromMode?: string;
-    readonly fromSurface?: string;
-    readonly extra?: Record<string, string>;
-}
-
-/**
- * Build a cross-room href with the canonical continuity params per
- * canon §2 ("the continuity plumbing — do not break them").
- */
-export function buildNegotiationHref(
-    href: string,
-    params: ContinuityParams = {}
-): string {
-    try {
-        const url = new URL(href, "https://antaeus.app");
-        if (params.returnTo) url.searchParams.set("returnTo", params.returnTo);
-        if (params.returnLabel)
-            url.searchParams.set("returnLabel", params.returnLabel);
-        if (params.focusObject)
-            url.searchParams.set("focusObject", params.focusObject);
-        if (params.focusRoom)
-            url.searchParams.set("focusRoom", params.focusRoom);
-        if (params.fromMode) url.searchParams.set("fromMode", params.fromMode);
-        if (params.fromSurface)
-            url.searchParams.set("fromSurface", params.fromSurface);
-        if (params.extra) {
-            for (const [k, v] of Object.entries(params.extra)) {
-                url.searchParams.set(k, v);
-            }
-        }
-        return url.pathname + url.search + url.hash;
-    } catch {
-        return href;
-    }
-}
-
-export function hrefToDealWorkspace(dealId: string): string {
-    return buildNegotiationHref("/deal-workspace/", {
-        returnTo: "/negotiation/",
-        returnLabel: "Back to Negotiation",
-        focusObject: dealId,
-        focusRoom: "deal-workspace",
-        fromSurface: "negotiation",
-        extra: { deal: dealId }
-    });
-}
-
-export function hrefToAdvisorDeploy(dealId: string): string {
-    return buildNegotiationHref("/advisor-deploy/", {
-        returnTo: "/negotiation/",
-        returnLabel: "Back to Negotiation",
-        focusObject: dealId,
-        focusRoom: "advisor-deploy",
-        fromSurface: "negotiation",
-        extra: { deal: dealId }
-    });
 }
 
 /** Read inbound `?deal=` URL param so a Deal-Workspace-initiated handoff lands on the right deal. */

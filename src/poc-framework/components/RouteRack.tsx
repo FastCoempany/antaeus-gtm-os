@@ -3,7 +3,8 @@ import { draft, linkedDeal } from "../state";
 import {
     hrefToAdvisorDeploy,
     hrefToDealWorkspace,
-    hrefToFutureAutopsy
+    hrefToFutureAutopsy,
+    hrefToNegotiation
 } from "../lib/handoff";
 
 /**
@@ -26,6 +27,9 @@ export function RouteRack(): JSX.Element {
         : "#";
     const autopsyHref = hasAccount ? hrefToFutureAutopsy(account) : "#";
     const advisorHref = hasAccount ? hrefToAdvisorDeploy(account) : "#";
+    const negotiationHref = hasAccount
+        ? hrefToNegotiation(account, linked?.id)
+        : "#";
 
     return (
         <nav class="poc-route-rack" aria-label="Route rack">
@@ -69,6 +73,18 @@ export function RouteRack(): JSX.Element {
                     <span class="poc-route-rack__label">Carry to an advisor</span>
                     <span class="poc-route-rack__reason">
                         Portable evidence for backchannel asks.
+                    </span>
+                </a>
+                <a
+                    class={`poc-route-rack__cta poc-route-rack__cta--ghost${
+                        hasAccount ? "" : " is-disabled"
+                    }`}
+                    href={negotiationHref}
+                    aria-disabled={!hasAccount}
+                >
+                    <span class="poc-route-rack__label">Rehearse the negotiation</span>
+                    <span class="poc-route-rack__reason">
+                        Carry proof state into a pricing or terms conversation.
                     </span>
                 </a>
             </div>

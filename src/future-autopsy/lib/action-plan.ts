@@ -3,6 +3,7 @@ import {
     hrefToCallPlanner,
     hrefToDealWorkspace,
     hrefToDiscoveryStudio,
+    hrefToNegotiation,
     hrefToPoC
 } from "./handoff";
 
@@ -40,7 +41,7 @@ const PRIMARY_BY_CAUSE: Readonly<Record<CauseId, "deal" | "call" | "poc" | "disc
 };
 
 function buildRoute(
-    target: "deal" | "call" | "poc" | "discovery",
+    target: "deal" | "call" | "poc" | "discovery" | "negotiation",
     accountName: string,
     dealId: string,
     tone: ActionRoute["tone"],
@@ -79,6 +80,14 @@ function buildRoute(
                 tone,
                 reason
             };
+        case "negotiation":
+            return {
+                label: "Rehearse the negotiation",
+                href: hrefToNegotiation(accountName, dealId),
+                roomLabel: "Negotiation",
+                tone,
+                reason
+            };
     }
 }
 
@@ -89,10 +98,19 @@ export function buildActionPlan(doc: AutopsyDoc): ActionPlan {
     const topCause = doc.causes[0]?.id ?? null;
 
     // Primary: derived from top cause, with stage overrides for late-stage
-    // / PoC contexts.
-    let primaryTarget: "deal" | "call" | "poc" | "discovery" = "deal";
+    // / PoC contexts. Phase 4: negotiation / verbal-yes stages route to
+    // the Negotiation desk per canon §4.16b — the deal's pressure shifts
+    // from qualification to terms once we're past evaluation.
+    let primaryTarget: "deal" | "call" | "poc" | "discovery" | "negotiation" =
+        "deal";
     let primaryReason = "Most-direct intervention for this deal's pressure.";
-    if (stageRaw === "poc") {
+    if (stageRaw === "negotiation" || stageRaw === "verbal-yes") {
+        primaryTarget = "negotiation";
+        primaryReason =
+            stageRaw === "verbal-yes"
+                ? "Verbal-yes stage — terms are now the live conversation."
+                : "Negotiation stage — rehearse before pricing or terms land.";
+    } else if (stageRaw === "poc") {
         primaryTarget = "poc";
         primaryReason = "PoC stage — frame success criteria first.";
     } else if (topCause && topCause in PRIMARY_BY_CAUSE) {

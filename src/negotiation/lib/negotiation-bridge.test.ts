@@ -15,6 +15,7 @@ const SAMPLE_NEGOTIATION: Negotiation = {
     id: "neg_1",
     counterparty: "cfo",
     counterpartyName: "Acme CFO",
+    askMoment: "pricing_position",
     dealId: "deal_42",
     status: "drafting",
     outcome: null,

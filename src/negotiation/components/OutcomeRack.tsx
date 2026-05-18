@@ -8,7 +8,6 @@ import {
     setNotes
 } from "../state";
 import { OUTCOME_LABEL, type NegotiationOutcome } from "../lib/types";
-import { hrefToAdvisorDeploy, hrefToDealWorkspace } from "../lib/cross-room";
 
 const OUTCOMES: ReadonlyArray<NegotiationOutcome> = [
     "held_position",
@@ -20,12 +19,13 @@ const OUTCOMES: ReadonlyArray<NegotiationOutcome> = [
 
 /**
  * OutcomeRack — capture what actually happened + lessons-learned log
- * + cross-room handoff CTAs.
+ * + freeze-into-history affordance.
  *
- * Per canon §4.16b: "rehearsal outcomes + concession ledger into
- * Deal Workspace; loss-pattern feedback into Future Autopsy; patterns
- * into Founding GTM §6 ('Why we win')." Outcomes feed back into
- * the Deal Workspace deal record; loss patterns reach Future Autopsy.
+ * Cross-room handoff lives in HandoffStrip (rendered below this
+ * section in Negotiation.tsx) per Phase 4 — keeping outcome capture
+ * separate from cross-room navigation matches the Phase 2 pattern
+ * (Deal Workspace + Discovery Studio both render HandoffStrip as
+ * the bottom-of-room band).
  */
 export function OutcomeRack(): JSX.Element {
     const d = draft.value;
@@ -83,7 +83,7 @@ export function OutcomeRack(): JSX.Element {
                 )}
             </div>
 
-            <div class="ng-outcome__handoff">
+            <div class="ng-outcome__freeze">
                 <button
                     type="button"
                     class="ng-handoff__btn ng-handoff__btn--primary"
@@ -91,22 +91,6 @@ export function OutcomeRack(): JSX.Element {
                 >
                     Freeze this negotiation
                 </button>
-                {d.dealId && (
-                    <>
-                        <a
-                            class="ng-handoff__btn"
-                            href={hrefToDealWorkspace(d.dealId)}
-                        >
-                            Push outcome to Deal Workspace
-                        </a>
-                        <a
-                            class="ng-handoff__btn"
-                            href={hrefToAdvisorDeploy(d.dealId)}
-                        >
-                            Get advisor air cover
-                        </a>
-                    </>
-                )}
             </div>
         </section>
     );

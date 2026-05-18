@@ -79,6 +79,24 @@ export function hrefToAdvisorDeploy(accountName: string): string {
 }
 
 /**
+ * Phase 4 — Negotiation handoff per canon §4.16b. Proof state +
+ * negotiation rehearsal sit next to each other on a high-pressure
+ * deal; the new builder lets the operator carry the focus account +
+ * the deal id straight into the Negotiation desk.
+ */
+export function hrefToNegotiation(
+    accountName: string,
+    dealId?: string
+): string {
+    return buildPocRoomHref({
+        href: "/negotiation/",
+        focusObject: accountName,
+        roomLabel: "Negotiation",
+        ...(dealId ? { extra: { deal: dealId } } : {})
+    });
+}
+
+/**
  * Read inbound URL param `?deal=<id>` for auto-populating the linked
  * deal dropdown. Pure: accepts the search string for tests.
  */

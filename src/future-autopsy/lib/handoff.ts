@@ -88,3 +88,21 @@ export function hrefToDiscoveryStudio(accountName: string): string {
         extra: { account: accountName }
     });
 }
+
+/**
+ * Phase 4 — Negotiation handoff per canon §4.16b. If pre-mortem
+ * surfaces a pricing/terms risk, the corrective move is to rehearse
+ * the negotiation before the conversation lands. Carries the focus
+ * account + the linked deal id forward.
+ */
+export function hrefToNegotiation(
+    accountName: string,
+    dealId?: string
+): string {
+    return buildFutureAutopsyRoomHref({
+        href: "/negotiation/",
+        focusObject: accountName,
+        roomLabel: "Negotiation",
+        ...(dealId ? { extra: { deal: dealId } } : {})
+    });
+}
