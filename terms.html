@@ -3,189 +3,389 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Terms of Use - Antaeus</title>
+<title>Terms of Use · Antaeus</title>
 <meta name="description" content="Terms of Use for Antaeus.">
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#06080d;--bg2:#0a0e15;--bg3:#0f1319;
-  --accent:#c07850;--accent2:#d4a574;--accent-dim:rgba(192,120,80,0.08);--accent-line:rgba(192,120,80,0.15);
-  --tx:#e8e4df;--tx2:#a09a92;--tx3:#605c56;--tx4:#3a3632;
-  --serif:'DM Serif Display',Georgia,serif;--sans:'Instrument Sans',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;
+/*
+ * Phase 5.3 of the 2026-05 navigation-intelligence roadmap.
+ * Re-skinned from dark navy + brand-gold to canon Part II §1
+ * (bright field + navy ink + serif headlines + orange accent).
+ * Tested against the visitor-face rubric Test 5 (trust test).
+ */
+:root {
+    --bg-field: #f6f8fc;
+    --bg-raised: #ffffff;
+    --bg-soft: #f0f3f9;
+    --ink: #0a1c40;
+    --ink-70: rgba(10, 28, 64, 0.7);
+    --ink-50: rgba(10, 28, 64, 0.5);
+    --ink-25: rgba(10, 28, 64, 0.25);
+    --ink-10: rgba(10, 28, 64, 0.10);
+    --accent-orange: #e6701e;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --font-sans: 'Public Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;line-height:1.65}
-body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 30% 25%,rgba(192,120,80,0.04) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 75% 70%,rgba(90,143,192,0.03) 0%,transparent 60%)}
-.page{position:relative;z-index:1}
-.container{max-width:960px;margin:0 auto;padding:0 24px}
-.nav{position:sticky;top:0;z-index:20;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,8,13,0.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.04)}
-.nav-brand{font-family:var(--serif);font-size:1.15rem;color:var(--tx);text-decoration:none}.nav-brand em{font-style:normal;color:var(--accent)}
-.nav-link{font-family:var(--mono);font-size:0.72rem;color:var(--tx2);text-decoration:none}
-.hero{padding:72px 0 28px}
-.hero h1{font-family:var(--serif);font-size:clamp(2rem,5vw,3rem);line-height:1.1;margin-bottom:12px}
-.hero p{max-width:720px;color:var(--tx2);font-size:0.98rem}
-.hero-meta{margin-top:18px;font-family:var(--mono);font-size:0.68rem;color:var(--tx3);letter-spacing:0.05em}
-.panel{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:28px}
-.section{padding:18px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-.section:last-child{border-bottom:none}
-.section h2{font-family:var(--serif);font-size:1.35rem;line-height:1.2;margin-bottom:10px}
-.section p,.section li{color:var(--tx2);font-size:0.95rem}
-.section ul{padding-left:20px;margin-top:10px}
-.section li+li{margin-top:8px}
-.inline-code{font-family:var(--mono);font-size:0.88em;color:var(--accent2)}
-.footer{padding:36px 0 52px;text-align:center}
-.footer-links{font-family:var(--mono);font-size:0.62rem;color:var(--tx4);display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-.footer-links a{color:var(--tx4);text-decoration:none}.footer-links a:hover{color:var(--tx2)}
-.footer-copy{font-family:var(--mono);font-size:0.56rem;color:var(--tx4);margin-top:16px}
-@media(max-width:700px){.nav{padding:14px 18px}.hero{padding-top:52px}.panel{padding:22px}}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-sans);
+    background: var(--bg-field);
+    background-image:
+        radial-gradient(circle at 8% 0%, rgba(37, 99, 235, 0.04), transparent 26%),
+        radial-gradient(circle at 92% 0%, rgba(230, 112, 30, 0.03), transparent 24%);
+    color: var(--ink);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Chrome (aligned with /start.html + auth pages) ─────────── */
+
+.chrome {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(246, 248, 252, 0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--ink-10);
+}
+
+.chrome__inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    line-height: 1;
+}
+
+.wordmark__mark {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.16em;
+    color: var(--ink);
+}
+
+.wordmark__divider {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-25);
+}
+
+.wordmark__kicker {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-50);
+}
+
+.chrome__back {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-50);
+    transition: color 140ms ease;
+}
+.chrome__back:hover { color: var(--accent-orange); }
+
+/* ── Page ────────────────────────────────────────────────────── */
+
+.container {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
+.hero {
+    padding: 56px 0 28px;
+}
+
+.hero__kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-orange);
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.hero h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    color: var(--ink);
+}
+
+.hero p {
+    max-width: 60ch;
+    color: var(--ink-70);
+    font-size: 1.04rem;
+    line-height: 1.6;
+}
+
+.hero-meta {
+    margin-top: 22px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--ink-50);
+    letter-spacing: 0.06em;
+}
+
+/* ── Panel + sections ────────────────────────────────────────── */
+
+.panel {
+    background: var(--bg-raised);
+    border: 1px solid var(--ink-10);
+    border-radius: 18px;
+    padding: 28px 32px 22px;
+    margin-bottom: 60px;
+    box-shadow: 0 4px 18px rgba(10, 28, 64, 0.04);
+}
+
+.section {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--ink-10);
+}
+.section:last-child { border-bottom: none; padding-bottom: 8px; }
+
+.section h2 {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+
+.section p, .section li {
+    color: var(--ink-70);
+    font-size: 0.96rem;
+    line-height: 1.65;
+}
+
+.section p + p { margin-top: 10px; }
+
+.section ul {
+    padding-left: 22px;
+    margin-top: 10px;
+}
+
+.section li + li { margin-top: 8px; }
+
+.section strong { color: var(--ink); font-weight: 600; }
+
+.inline-code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    color: var(--accent-orange);
+    background: rgba(230, 112, 30, 0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+
+.footer {
+    padding: 24px 0 56px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-50);
+}
+
+.footer-links {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.footer-links a {
+    color: var(--ink-50);
+    transition: color 140ms ease;
+}
+.footer-links a:hover { color: var(--accent-orange); }
+
+.footer-copy {
+    color: var(--ink-50);
+}
+
+@media (max-width: 700px) {
+    .chrome__inner { padding: 14px 20px; }
+    .container { padding: 0 22px; }
+    .hero { padding-top: 40px; }
+    .panel { padding: 22px 22px 18px; }
+}
 </style>
 </head>
 <body>
-<div class="page">
-  <nav class="nav">
-    <a href="/" class="nav-brand">antaeus<em>.</em></a>
-    <a href="/privacy.html" class="nav-link">Privacy</a>
-  </nav>
+<header class="chrome">
+    <div class="chrome__inner">
+        <a href="/start.html" class="wordmark" aria-label="Antaeus — home">
+            <span class="wordmark__mark">ANTAEUS</span>
+            <span class="wordmark__divider" aria-hidden="true">·</span>
+            <span class="wordmark__kicker">Operator preview</span>
+        </a>
+        <a href="/start.html" class="chrome__back" aria-label="Back to operator preview">← Back to preview</a>
+    </div>
+</header>
 
-  <main class="container">
+<main class="container">
     <header class="hero">
-      <h1>Terms of Use</h1>
-      <p>These Terms govern your access to and use of the Antaeus website, product surfaces, and related services available at <span class="inline-code">antaeus.app</span>.</p>
-      <div class="hero-meta">LAST UPDATED: MARCH 22, 2026</div>
+        <p class="hero__kicker">LEGAL · TERMS</p>
+        <h1>Terms of Use</h1>
+        <p>These Terms govern your access to and use of the Antaeus website, product surfaces, and related services available at <span class="inline-code">antaeus.app</span>.</p>
+        <div class="hero-meta">LAST UPDATED: MARCH 22, 2026</div>
     </header>
 
     <section class="panel">
-      <div class="section">
-        <h2>1. Who these Terms are with</h2>
-        <p>These Terms are between you and the operator of Antaeus ("Antaeus," "we," "us," or "our"). If you need to contact us about these Terms, email <strong>hello@antaeus.app</strong>.</p>
-      </div>
+        <div class="section">
+            <h2>1. Who these Terms are with</h2>
+            <p>These Terms are between you and the operator of Antaeus ("Antaeus," "we," "us," or "our"). If you need to contact us about these Terms, email <strong>hello@antaeus.app</strong>.</p>
+        </div>
 
-      <div class="section">
-        <h2>2. What Antaeus is</h2>
-        <p>Antaeus is software and related content designed to help founders and GTM operators define ICPs, manage pipeline work, structure discovery, capture operating knowledge, and export a stronger hiring or handoff package. Antaeus is a workflow and decision-support product. It is not legal, tax, accounting, recruiting, employment, or investment advice.</p>
-      </div>
+        <div class="section">
+            <h2>2. What Antaeus is</h2>
+            <p>Antaeus is software and related content designed to help founders and GTM operators define ICPs, manage pipeline work, structure discovery, capture operating knowledge, and export a stronger hiring or handoff package. Antaeus is a workflow and decision-support product. It is not legal, tax, accounting, recruiting, employment, or investment advice.</p>
+        </div>
 
-      <div class="section">
-        <h2>3. Acceptance</h2>
-        <p>By visiting the site, creating an account, using the product, or purchasing access when checkout is enabled, you agree to these Terms and our Privacy Policy. If you do not agree, do not use the service.</p>
-      </div>
+        <div class="section">
+            <h2>3. Acceptance</h2>
+            <p>By visiting the site, creating an account, using the product, or purchasing access when checkout is enabled, you agree to these Terms and our Privacy Policy. If you do not agree, do not use the service.</p>
+        </div>
 
-      <div class="section">
-        <h2>4. Eligibility and accounts</h2>
-        <ul>
-          <li>You must be at least 18 years old and able to enter into a binding agreement.</li>
-          <li>You are responsible for maintaining the confidentiality of your credentials and for activity under your account.</li>
-          <li>You must provide accurate information and keep it reasonably current.</li>
-          <li>You may not share paid access in a way that exceeds the scope of the plan or arrangement you purchased.</li>
-        </ul>
-      </div>
+        <div class="section">
+            <h2>4. Eligibility and accounts</h2>
+            <ul>
+                <li>You must be at least 18 years old and able to enter into a binding agreement.</li>
+                <li>You are responsible for maintaining the confidentiality of your credentials and for activity under your account.</li>
+                <li>You must provide accurate information and keep it reasonably current.</li>
+                <li>You may not share paid access in a way that exceeds the scope of the plan or arrangement you purchased.</li>
+            </ul>
+        </div>
 
-      <div class="section">
-        <h2>5. Your license to use the service</h2>
-        <p>Subject to these Terms and any applicable fees, we grant you a limited, non-exclusive, non-transferable, revocable license to access and use Antaeus for your own internal business use.</p>
-        <ul>
-          <li>Unless a separate scope is clearly offered, access is licensed per user.</li>
-          <li>You may use the outputs you create inside Antaeus for your own company or client work.</li>
-          <li>You do not acquire ownership of the software, product logic, templates, or branded materials themselves.</li>
-        </ul>
-      </div>
+        <div class="section">
+            <h2>5. Your license to use the service</h2>
+            <p>Subject to these Terms and any applicable fees, we grant you a limited, non-exclusive, non-transferable, revocable license to access and use Antaeus for your own internal business use.</p>
+            <ul>
+                <li>Unless a separate scope is clearly offered, access is licensed per user.</li>
+                <li>You may use the outputs you create inside Antaeus for your own company or client work.</li>
+                <li>You do not acquire ownership of the software, product logic, templates, or branded materials themselves.</li>
+            </ul>
+        </div>
 
-      <div class="section">
-        <h2>6. What you may not do</h2>
-        <ul>
-          <li>Copy, resell, sublicense, rent, or commercially exploit the software itself unless we explicitly allow it in writing.</li>
-          <li>Reverse engineer, probe, interfere with, or attempt unauthorized access to the site, product, or supporting systems.</li>
-          <li>Use the service to violate law or the rights of others.</li>
-          <li>Upload malware, abuse the service, or attempt to bypass technical restrictions.</li>
-          <li>Remove proprietary notices, branding, or attribution embedded in the product.</li>
-        </ul>
-      </div>
+        <div class="section">
+            <h2>6. What you may not do</h2>
+            <ul>
+                <li>Copy, resell, sublicense, rent, or commercially exploit the software itself unless we explicitly allow it in writing.</li>
+                <li>Reverse engineer, probe, interfere with, or attempt unauthorized access to the site, product, or supporting systems.</li>
+                <li>Use the service to violate law or the rights of others.</li>
+                <li>Upload malware, abuse the service, or attempt to bypass technical restrictions.</li>
+                <li>Remove proprietary notices, branding, or attribution embedded in the product.</li>
+            </ul>
+        </div>
 
-      <div class="section">
-        <h2>7. User content and data</h2>
-        <p>You retain ownership of the notes, lists, account data, prompts, exports, and other content you enter into the product ("User Content"). You grant us a limited right to host, process, transmit, and use that content as needed to operate, secure, support, and improve the service, consistent with our Privacy Policy.</p>
-        <p>Antaeus currently uses a mixed storage model. Some durable workspace data syncs through our cloud persistence layer. Some UI preferences, session state, draft state, demo data, or browser-specific values may still be stored locally in your browser. Clearing storage, switching browsers, or changing devices can affect locally stored values unless they are exported or synced.</p>
-      </div>
+        <div class="section">
+            <h2>7. User content and data</h2>
+            <p>You retain ownership of the notes, lists, account data, prompts, exports, and other content you enter into the product ("User Content"). You grant us a limited right to host, process, transmit, and use that content as needed to operate, secure, support, and improve the service, consistent with our Privacy Policy.</p>
+            <p>Antaeus currently uses a mixed storage model. Some durable workspace data syncs through our cloud persistence layer. Some UI preferences, session state, draft state, demo data, or browser-specific values may still be stored locally in your browser. Clearing storage, switching browsers, or changing devices can affect locally stored values unless they are exported or synced.</p>
+        </div>
 
-      <div class="section">
-        <h2>8. Purchases and billing</h2>
-        <p>When paid access is offered, the price, billing cadence, and included scope shown at checkout govern the transaction. Payments are processed by a third-party payment provider, not by us directly.</p>
-        <ul>
-          <li>If checkout is not configured or not offered, no purchase is completed through the site.</li>
-          <li>If checkout is enabled, the billing terms shown at checkout control for that purchase.</li>
-          <li>If renewal, cancellation, or refund terms are displayed at checkout or in a separate order flow, those terms control for that transaction.</li>
-        </ul>
-      </div>
+        <div class="section">
+            <h2>8. Purchases and billing</h2>
+            <p>When paid access is offered, the price, billing cadence, and included scope shown at checkout govern the transaction. Payments are processed by a third-party payment provider, not by us directly.</p>
+            <ul>
+                <li>If checkout is not configured or not offered, no purchase is completed through the site.</li>
+                <li>If checkout is enabled, the billing terms shown at checkout control for that purchase.</li>
+                <li>If renewal, cancellation, or refund terms are displayed at checkout or in a separate order flow, those terms control for that transaction.</li>
+            </ul>
+        </div>
 
-      <div class="section">
-        <h2>9. Product changes and availability</h2>
-        <p>We may update, improve, suspend, or discontinue any part of the service at any time. We do not promise that every feature will remain available forever in the same form. We may also impose reasonable limits for security, maintenance, abuse prevention, or product quality reasons.</p>
-      </div>
+        <div class="section">
+            <h2>9. Product changes and availability</h2>
+            <p>We may update, improve, suspend, or discontinue any part of the service at any time. We do not promise that every feature will remain available forever in the same form. We may also impose reasonable limits for security, maintenance, abuse prevention, or product quality reasons.</p>
+        </div>
 
-      <div class="section">
-        <h2>10. Beta features and no outcome guarantee</h2>
-        <p>Some features may be early, beta, or experimental. They may be less stable than mature parts of the product. Antaeus helps structure decisions and operating discipline; it does not guarantee revenue, hiring success, response rates, pipeline outcomes, or business results.</p>
-      </div>
+        <div class="section">
+            <h2>10. Beta features and no outcome guarantee</h2>
+            <p>Some features may be early, beta, or experimental. They may be less stable than mature parts of the product. Antaeus helps structure decisions and operating discipline; it does not guarantee revenue, hiring success, response rates, pipeline outcomes, or business results.</p>
+        </div>
 
-      <div class="section">
-        <h2>11. Intellectual property</h2>
-        <p>Antaeus, including the software, designs, product logic, scoring systems, templates, graphics, copy, videos, and documentation, is owned by us or our licensors and protected by applicable intellectual property laws. Except for the limited license above, we reserve all rights.</p>
-      </div>
+        <div class="section">
+            <h2>11. Intellectual property</h2>
+            <p>Antaeus, including the software, designs, product logic, scoring systems, templates, graphics, copy, videos, and documentation, is owned by us or our licensors and protected by applicable intellectual property laws. Except for the limited license above, we reserve all rights.</p>
+        </div>
 
-      <div class="section">
-        <h2>12. Third-party services</h2>
-        <p>The service may rely on third-party providers such as Cloudflare, Supabase, Resend, analytics providers, and payment processors when checkout is enabled. Their own terms and policies may apply to your use of those services. We are not responsible for third-party services we do not control.</p>
-      </div>
+        <div class="section">
+            <h2>12. Third-party services</h2>
+            <p>The service may rely on third-party providers such as Cloudflare, Supabase, Resend, analytics providers, and payment processors when checkout is enabled. Their own terms and policies may apply to your use of those services. We are not responsible for third-party services we do not control.</p>
+        </div>
 
-      <div class="section">
-        <h2>13. Disclaimers</h2>
-        <p>To the fullest extent permitted by law, the service is provided "as is" and "as available." We disclaim all warranties, express or implied, including implied warranties of merchantability, fitness for a particular purpose, title, and non-infringement. We do not warrant that the service will be uninterrupted, error-free, secure, or suitable for every use case.</p>
-      </div>
+        <div class="section">
+            <h2>13. Disclaimers</h2>
+            <p>To the fullest extent permitted by law, the service is provided "as is" and "as available." We disclaim all warranties, express or implied, including implied warranties of merchantability, fitness for a particular purpose, title, and non-infringement. We do not warrant that the service will be uninterrupted, error-free, secure, or suitable for every use case.</p>
+        </div>
 
-      <div class="section">
-        <h2>14. Limitation of liability</h2>
-        <p>To the fullest extent permitted by law, Antaeus and its owners, operators, contractors, and affiliates will not be liable for indirect, incidental, special, consequential, exemplary, or punitive damages, or for lost profits, lost revenue, lost data, lost goodwill, or business interruption arising out of or related to your use of the service.</p>
-        <p>To the fullest extent permitted by law, our total liability for any claim relating to the service will not exceed the greater of <strong>(a) the amount you paid us in the 12 months before the claim arose</strong> or <strong>(b) US $100</strong>.</p>
-      </div>
+        <div class="section">
+            <h2>14. Limitation of liability</h2>
+            <p>To the fullest extent permitted by law, Antaeus and its owners, operators, contractors, and affiliates will not be liable for indirect, incidental, special, consequential, exemplary, or punitive damages, or for lost profits, lost revenue, lost data, lost goodwill, or business interruption arising out of or related to your use of the service.</p>
+            <p>To the fullest extent permitted by law, our total liability for any claim relating to the service will not exceed the greater of <strong>(a) the amount you paid us in the 12 months before the claim arose</strong> or <strong>(b) US $100</strong>.</p>
+        </div>
 
-      <div class="section">
-        <h2>15. Indemnification</h2>
-        <p>You agree to defend, indemnify, and hold harmless Antaeus and its affiliates, personnel, and representatives from and against claims, liabilities, damages, judgments, losses, and expenses arising out of your misuse of the service, your violation of these Terms, or your violation of law or another party's rights.</p>
-      </div>
+        <div class="section">
+            <h2>15. Indemnification</h2>
+            <p>You agree to defend, indemnify, and hold harmless Antaeus and its affiliates, personnel, and representatives from and against claims, liabilities, damages, judgments, losses, and expenses arising out of your misuse of the service, your violation of these Terms, or your violation of law or another party's rights.</p>
+        </div>
 
-      <div class="section">
-        <h2>16. Termination</h2>
-        <p>We may suspend or terminate your access if you violate these Terms, create risk for us or others, fail to pay amounts due when billing is enabled, or misuse the service. You may stop using the service at any time. Sections that by their nature should survive termination will survive, including ownership, disclaimers, limitations of liability, and dispute-related provisions.</p>
-      </div>
+        <div class="section">
+            <h2>16. Termination</h2>
+            <p>We may suspend or terminate your access if you violate these Terms, create risk for us or others, fail to pay amounts due when billing is enabled, or misuse the service. You may stop using the service at any time. Sections that by their nature should survive termination will survive, including ownership, disclaimers, limitations of liability, and dispute-related provisions.</p>
+        </div>
 
-      <div class="section">
-        <h2>17. Governing law</h2>
-        <p>These Terms are governed by the laws of the State of Illinois, without regard to conflict-of-law principles. Unless applicable law requires otherwise, disputes arising out of or relating to these Terms or the service will be resolved in the state or federal courts located in Cook County, Illinois, and each party consents to that venue and jurisdiction.</p>
-      </div>
+        <div class="section">
+            <h2>17. Governing law</h2>
+            <p>These Terms are governed by the laws of the State of Illinois, without regard to conflict-of-law principles. Unless applicable law requires otherwise, disputes arising out of or relating to these Terms or the service will be resolved in the state or federal courts located in Cook County, Illinois, and each party consents to that venue and jurisdiction.</p>
+        </div>
 
-      <div class="section">
-        <h2>18. Changes to these Terms</h2>
-        <p>We may update these Terms from time to time. If we make material changes, we may post the updated version on this page and update the "Last Updated" date. Your continued use of the service after the revised Terms take effect constitutes acceptance of the updated Terms.</p>
-      </div>
+        <div class="section">
+            <h2>18. Changes to these Terms</h2>
+            <p>We may update these Terms from time to time. If we make material changes, we may post the updated version on this page and update the "Last Updated" date. Your continued use of the service after the revised Terms take effect constitutes acceptance of the updated Terms.</p>
+        </div>
 
-      <div class="section">
-        <h2>19. Contact</h2>
-        <p>Questions about these Terms can be sent to <strong>hello@antaeus.app</strong>.</p>
-      </div>
+        <div class="section">
+            <h2>19. Contact</h2>
+            <p>Questions about these Terms can be sent to <strong>hello@antaeus.app</strong>.</p>
+        </div>
     </section>
 
     <footer class="footer">
-      <div class="footer-links">
-        <a href="/">Home</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="mailto:hello@antaeus.app">Contact</a>
-      </div>
-      <div class="footer-copy">Copyright 2026 Antaeus. All rights reserved.</div>
+        <div class="footer-links">
+            <a href="/start.html">Home</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="mailto:hello@antaeus.app">Contact</a>
+        </div>
+        <div class="footer-copy">© 2026 Antaeus · Operator preview</div>
     </footer>
-  </main>
-</div>
+</main>
 </body>
 </html>
