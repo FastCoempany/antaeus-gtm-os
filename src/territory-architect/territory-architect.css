@@ -120,6 +120,149 @@ body {
     border-color: var(--ta-orange);
     background: rgba(230, 112, 30, 0.06);
 }
+
+/* ─── Hero grid (Program 6 / PR 12 — Signal Field) ─────────────────── */
+
+/*
+ * Two-col hero per the picked-winner Variant 02 / Signal Field
+ * refinement: the existing thesis/stat lead on the left, the new
+ * interpretive Field Read aside on the right. Collapses to single
+ * column under 1080px so dense mobile/tablet keeps the lead full
+ * width.
+ */
+.ta-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 28px;
+    align-items: start;
+    margin-top: 4px;
+}
+
+@media (max-width: 1080px) {
+    .ta-hero__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── Field Read aside ─────────────────────────────────────────────── */
+
+.ta-field-read {
+    border: 1px solid var(--ta-line2);
+    border-left: 3px solid var(--ta-muted);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 12px 32px rgba(10, 28, 64, 0.06);
+}
+
+.ta-field-read--runnable {
+    border-left-color: var(--ta-green);
+}
+.ta-field-read--tight {
+    border-left-color: var(--ta-blue);
+}
+.ta-field-read--loose {
+    border-left-color: var(--ta-orange);
+}
+.ta-field-read--empty {
+    border-left-color: var(--ta-amber);
+}
+
+.ta-field-read__score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ta-line2);
+}
+
+.ta-field-read__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ta-muted);
+}
+
+.ta-field-read__band {
+    margin: 6px 0 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--ta-navy);
+}
+
+.ta-field-read__score {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 48px;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    color: var(--ta-navy);
+}
+
+.ta-field-read--runnable .ta-field-read__score {
+    color: var(--ta-green);
+}
+.ta-field-read--tight .ta-field-read__score {
+    color: var(--ta-blue);
+}
+.ta-field-read--loose .ta-field-read__score {
+    color: var(--ta-orange);
+}
+.ta-field-read--empty .ta-field-read__score {
+    color: var(--ta-amber);
+}
+
+.ta-field-read__line {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ta-field-read__line-label {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ta-muted);
+}
+
+.ta-field-read__line-copy {
+    margin: 0;
+    color: var(--ta-navy);
+    font-size: 13.5px;
+    line-height: 1.4;
+}
+
+/*
+ * Operator move gets the orange accent — it's the prescribed next
+ * action so it should read as the dominant line in the aside.
+ */
+.ta-field-read__line--move {
+    background: rgba(230, 112, 30, 0.06);
+    border-left: 2px solid var(--ta-orange);
+    border-radius: 0 4px 4px 0;
+    padding: 8px 12px;
+    margin: 4px -4px 0;
+}
+
+.ta-field-read__line--move .ta-field-read__line-label {
+    color: var(--ta-orange);
+}
+
+.ta-field-read__line--move .ta-field-read__line-copy {
+    font-weight: 600;
+}
 .ta-stat--over {
     border-color: var(--ta-red);
     background: rgba(239, 68, 68, 0.06);
