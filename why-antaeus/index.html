@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why Antaeus · For founders writing the first GTM hire's job description</title>
+<meta name="description" content="Antaeus is the operating system the founder's revenue motion becomes before a hire inherits it. Not a CRM. Not an AI copilot. The system the new hire actually walks into.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/*
+ * Phase 5.4 of the 2026-05 navigation-intelligence roadmap.
+ * The public-facing positioning page. Marcus Reed lands here from
+ * /start.html's "What this actually is" link when he wants more
+ * than the 90-second scan but isn't ready to sign up yet. Closes
+ * Phase 5 + sets up the gate-down decision.
+ *
+ * Tested against the visitor-face rubric Test 4 (category test).
+ * Canon Part II §1 (bright field + navy ink + serif headlines +
+ * orange accent).
+ */
+:root {
+    --bg-field: #f6f8fc;
+    --bg-raised: #ffffff;
+    --bg-soft: #f0f3f9;
+    --bg-cream: #fdf6e9;
+    --ink: #0a1c40;
+    --ink-70: rgba(10, 28, 64, 0.7);
+    --ink-50: rgba(10, 28, 64, 0.5);
+    --ink-25: rgba(10, 28, 64, 0.25);
+    --ink-10: rgba(10, 28, 64, 0.10);
+    --accent-orange: #e6701e;
+    --accent-orange-dark: #d05f12;
+    --accent-blue: #2563eb;
+    --accent-green: #22c55e;
+    --accent-red: #ef4444;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --font-sans: 'Public Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-sans);
+    background: var(--bg-field);
+    background-image:
+        radial-gradient(circle at 8% 0%, rgba(37, 99, 235, 0.05), transparent 28%),
+        radial-gradient(circle at 92% 0%, rgba(230, 112, 30, 0.04), transparent 26%);
+    color: var(--ink);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Chrome (aligned with /start.html, auth, legal) ─────────── */
+
+.chrome {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(246, 248, 252, 0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--ink-10);
+}
+
+.chrome__inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wordmark { display: inline-flex; align-items: baseline; gap: 10px; line-height: 1; }
+.wordmark__mark { font-family: var(--font-serif); font-size: 1.05rem; letter-spacing: 0.16em; color: var(--ink); }
+.wordmark__divider { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-25); }
+.wordmark__kicker { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--ink-50); }
+
+.chrome__aux {
+    display: inline-flex;
+    gap: 18px;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+}
+.chrome__back { color: var(--ink-50); transition: color 140ms ease; }
+.chrome__back:hover { color: var(--accent-orange); }
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 140ms ease;
+    border: 1px solid transparent;
+    line-height: 1;
+}
+.btn--primary { background: var(--accent-orange); color: #fff; border-color: var(--accent-orange); }
+.btn--primary:hover { background: var(--accent-orange-dark); border-color: var(--accent-orange-dark); }
+
+/* ── Page ────────────────────────────────────────────────────── */
+
+.page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
+/* ── Hero ────────────────────────────────────────────────────── */
+
+.hero { padding: 72px 0 48px; max-width: 880px; }
+
+.hero__kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-orange);
+    font-weight: 700;
+    margin-bottom: 22px;
+}
+
+.hero__title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.6rem, 5.4vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.022em;
+    margin-bottom: 26px;
+    max-width: 20ch;
+    text-wrap: balance;
+    color: var(--ink);
+}
+.hero__title em { font-style: italic; color: var(--accent-orange); }
+
+.hero__sub {
+    font-size: 1.12rem;
+    line-height: 1.65;
+    color: var(--ink-70);
+    max-width: 62ch;
+}
+
+/* ── Sections ─────────────────────────────────────────────────── */
+
+.section {
+    padding: 56px 0;
+    border-top: 1px solid var(--ink-10);
+}
+
+.section__kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-orange);
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.section__title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.018em;
+    margin-bottom: 22px;
+    max-width: 22ch;
+    color: var(--ink);
+}
+
+.section__lede {
+    font-size: 1.04rem;
+    line-height: 1.65;
+    color: var(--ink-70);
+    max-width: 60ch;
+    margin-bottom: 28px;
+}
+
+.section__body p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink-70);
+    max-width: 60ch;
+    margin-bottom: 14px;
+}
+
+.section__body p strong { color: var(--ink); font-weight: 600; }
+
+/* ── What it is / what it's not ─────────────────────────────── */
+
+.boundary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.boundary__col {
+    background: var(--bg-raised);
+    border: 1px solid var(--ink-10);
+    border-radius: 14px;
+    padding: 24px 26px;
+}
+.boundary__col--is { border-left: 4px solid var(--accent-green); }
+.boundary__col--is-not { border-left: 4px solid var(--accent-red); }
+
+.boundary__kicker {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.boundary__col--is .boundary__kicker { color: var(--accent-green); }
+.boundary__col--is-not .boundary__kicker { color: var(--accent-red); }
+
+.boundary__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.boundary__list li {
+    font-size: 0.96rem;
+    line-height: 1.55;
+    color: var(--ink);
+    padding-left: 22px;
+    position: relative;
+}
+.boundary__col--is .boundary__list li::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent-green);
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+.boundary__col--is-not .boundary__list li::before {
+    content: '×';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent-red);
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+@media (max-width: 720px) {
+    .boundary { grid-template-columns: 1fr; }
+}
+
+/* ── Sacred nouns rail (the loop) ────────────────────────────── */
+
+.loop {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.loop__step {
+    background: var(--bg-raised);
+    border: 1px solid var(--ink-10);
+    border-radius: 12px;
+    padding: 22px 20px;
+    position: relative;
+}
+.loop__num {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    color: var(--accent-orange);
+    margin-bottom: 10px;
+}
+.loop__name {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    color: var(--ink);
+}
+.loop__copy {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--ink-70);
+}
+
+@media (max-width: 900px) {
+    .loop { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+    .loop { grid-template-columns: 1fr; }
+}
+
+/* ── Buyer-lock panel ────────────────────────────────────────── */
+
+.buyer {
+    background: var(--bg-cream);
+    border: 1px solid rgba(230, 112, 30, 0.18);
+    border-left: 4px solid var(--accent-orange);
+    border-radius: 14px;
+    padding: 30px 32px;
+    margin-top: 24px;
+}
+
+.buyer__rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+}
+
+.buyer__cell-label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent-orange);
+    margin-bottom: 8px;
+}
+
+.buyer__cell-text {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--ink);
+}
+.buyer__cell-text strong { font-weight: 600; }
+
+@media (max-width: 720px) {
+    .buyer__rows { grid-template-columns: 1fr; gap: 18px; }
+}
+
+/* ── Closing CTA ─────────────────────────────────────────────── */
+
+.closing {
+    padding: 72px 0 80px;
+    text-align: center;
+    border-top: 1px solid var(--ink-10);
+}
+
+.closing__title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    line-height: 1.06;
+    letter-spacing: -0.018em;
+    margin-bottom: 16px;
+    color: var(--ink);
+    max-width: 22ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.closing__sub {
+    font-size: 1.04rem;
+    line-height: 1.6;
+    color: var(--ink-70);
+    max-width: 56ch;
+    margin: 0 auto 30px;
+}
+
+.closing__ctas {
+    display: inline-flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn--lg {
+    padding: 14px 24px;
+    font-size: 0.96rem;
+    border-radius: 10px;
+}
+
+.btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink-25);
+}
+.btn--ghost:hover { border-color: var(--accent-orange); background: var(--bg-raised); }
+
+.closing__note {
+    margin-top: 22px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-50);
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+
+.foot {
+    border-top: 1px solid var(--ink-10);
+    padding: 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-50);
+}
+.foot__links { display: inline-flex; gap: 18px; }
+.foot__links a { transition: color 140ms ease; }
+.foot__links a:hover { color: var(--accent-orange); }
+</style>
+</head>
+<body>
+<header class="chrome">
+    <div class="chrome__inner">
+        <a href="/start.html" class="wordmark" aria-label="Antaeus — home">
+            <span class="wordmark__mark">ANTAEUS</span>
+            <span class="wordmark__divider" aria-hidden="true">·</span>
+            <span class="wordmark__kicker">Operator preview</span>
+        </a>
+        <nav class="chrome__aux" aria-label="Account">
+            <a href="/start.html" class="chrome__back">← Back to preview</a>
+            <a href="/signup.html" class="btn btn--primary">Create your workspace</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+
+    <section class="hero">
+        <p class="hero__kicker">CATEGORY · WHAT THIS ACTUALLY IS</p>
+        <h1 class="hero__title">
+            The operating system the founder's motion <em>becomes</em> before a hire takes it over.
+        </h1>
+        <p class="hero__sub">
+            You already have a CRM. You don't need another sales tool, another AI copilot, or another dashboard. You need the layer that captures the motion you run from memory — the calls you trust, the deals you push, the proof you carry — so the first serious GTM hire walks into a working system instead of an inheritance of confusion.
+        </p>
+    </section>
+
+    <section class="section">
+        <p class="section__kicker">WHY THIS EXISTS</p>
+        <h2 class="section__title">Most founder-led revenue dies in the handoff, not the motion.</h2>
+        <p class="section__lede">
+            The founder runs the first $2M from memory. The motion works because they've been on every call, written every follow-up, decided every concession. Then they sign a hire — and the hire inherits no system, no ranked next move, no record of what made the founder right. By month three, the founder is back to running the motion themselves, and the new hire is being "ramped" for the second time.
+        </p>
+        <div class="section__body">
+            <p>
+                The pattern is so common it has a category: <strong>founder-to-first-operator handoff failure.</strong> CRMs don't fix it because CRMs store what gets typed in, not how the founder thinks. AI copilots don't fix it because the copilot doesn't know which deals are real. Dashboards don't fix it because they describe the motion, they don't <em>run</em> it.
+            </p>
+            <p>
+                Antaeus is built around one decision: the founder's motion should be a system the hire can walk into. Not export. Not a handoff doc. The workspace itself, sharpened by what the founder did this quarter, ready to inherit.
+            </p>
+        </div>
+    </section>
+
+    <section class="section">
+        <p class="section__kicker">CATEGORY · WHAT THIS IS AND ISN'T</p>
+        <h2 class="section__title">A pressure-and-truth system for commercial work.</h2>
+        <p class="section__lede">
+            Antaeus operates on objects, not tabs. It ranks pressure across signals, deals, proofs, and motions — and tells you which move clears the most weight. Below is what that means in plain language, plus the categories Antaeus is explicitly not.
+        </p>
+        <div class="boundary">
+            <div class="boundary__col boundary__col--is">
+                <p class="boundary__kicker">ANTAEUS IS</p>
+                <ul class="boundary__list">
+                    <li>A founder-to-first-operator revenue operating system</li>
+                    <li>A pressure-and-truth system for commercial work</li>
+                    <li>A handoff machine that turns founder memory into durable operating context</li>
+                    <li>A ranked decision environment, not a storage environment</li>
+                    <li>Object-based, not tab-based</li>
+                    <li>Command-first, not nav-first</li>
+                    <li>Behaviorally engineered, not behaviorally decorated</li>
+                </ul>
+            </div>
+            <div class="boundary__col boundary__col--is-not">
+                <p class="boundary__kicker">ANTAEUS IS NOT</p>
+                <ul class="boundary__list">
+                    <li>A CRM (you already have one)</li>
+                    <li>A sales engagement platform</li>
+                    <li>A generic AI copilot</li>
+                    <li>A dashboard bundle</li>
+                    <li>An enablement content library</li>
+                    <li>A polished filing cabinet</li>
+                    <li>A psychologically optimized engagement machine</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <p class="section__kicker">HOW IT WORKS</p>
+        <h2 class="section__title">A four-step loop the founder runs, the hire inherits.</h2>
+        <p class="section__lede">
+            Every move on this loop compounds. Signal becomes motion, motion becomes a deal, a deal becomes proof, proof becomes the kit the next operator inherits. The loop is the product; the rooms are just where each step is shaped.
+        </p>
+        <div class="loop">
+            <article class="loop__step">
+                <p class="loop__num">STEP 01</p>
+                <h3 class="loop__name">Signal</h3>
+                <p class="loop__copy">A time-limited event implying a commercial opportunity. Ranked by heat, source, recency, and ICP match — surfaced as ranked accounts to act on, not a passive timeline.</p>
+            </article>
+            <article class="loop__step">
+                <p class="loop__num">STEP 02</p>
+                <h3 class="loop__name">Motion</h3>
+                <p class="loop__copy">A specific outbound move with route and intent. Composed in Outbound Studio, Cold Call Studio, or LinkedIn Playbook — never templated spam, always account × buyer × temperature × trigger.</p>
+            </article>
+            <article class="loop__step">
+                <p class="loop__num">STEP 03</p>
+                <h3 class="loop__name">Deal + Proof</h3>
+                <p class="loop__copy">An opportunity tracked by stage, value, and pressure — diagnosed in Deal Workspace, pre-mortemed in Future Autopsy, anchored by decision-grade Proof when stakes get serious.</p>
+            </article>
+            <article class="loop__step">
+                <p class="loop__num">STEP 04</p>
+                <h3 class="loop__name">Handoff</h3>
+                <p class="loop__copy">Seven authored sections the first hire opens on day one: who hits and who misses, the rails that worked, the questions that earned the next meeting, where deals are won and where they leak.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section">
+        <p class="section__kicker">BUYER LOCK · WHO THIS IS FOR</p>
+        <h2 class="section__title">Founder-led B2B teams, or the first serious operator entering one.</h2>
+        <p class="section__lede">
+            Antaeus is sharpened for one shape of buyer. If you're not in this shape, the product won't feel like it was built for you — because it wasn't.
+        </p>
+        <div class="buyer">
+            <div class="buyer__rows">
+                <div>
+                    <p class="buyer__cell-label">PRIMARY BUYER</p>
+                    <p class="buyer__cell-text">Founder-led B2B team, or the <strong>first serious GTM operator</strong> entering a founder-built motion.</p>
+                </div>
+                <div>
+                    <p class="buyer__cell-label">PRIMARY FEAR</p>
+                    <p class="buyer__cell-text">The first real hire will <strong>inherit confusion, not a system</strong>.</p>
+                </div>
+                <div>
+                    <p class="buyer__cell-label">PRIMARY ASPIRATION</p>
+                    <p class="buyer__cell-text">Make the motion <strong>legible, pressure-tested, repeatable, and transferable</strong> before scale compounds the wrong things.</p>
+                </div>
+            </div>
+        </div>
+        <div class="section__body" style="margin-top:32px;">
+            <p>
+                <strong>Deprioritized buyers:</strong> teams shopping for a CRM replacement; broad sales orgs needing territory/forecasting/admin first; generic SMB volume-automation buyers. Antaeus isn't worse for those buyers — it just isn't shaped for them.
+            </p>
+        </div>
+    </section>
+
+    <section class="closing">
+        <h2 class="closing__title">
+            If this sounds like the system you've been running in your head, walk in.
+        </h2>
+        <p class="closing__sub">
+            Signup takes a few minutes. Onboarding sharpens your first ICP and seeds your first ranked Brief. By the end of setup you're not browsing features — you're already using the system.
+        </p>
+        <div class="closing__ctas">
+            <a class="btn btn--primary btn--lg" href="/signup.html">Create your workspace</a>
+            <a class="btn btn--ghost btn--lg" href="/login.html">Sign in</a>
+        </div>
+        <p class="closing__note">Free during operator preview · no card</p>
+    </section>
+
+    <footer class="foot">
+        <span>© 2026 Antaeus · Operator preview</span>
+        <nav class="foot__links" aria-label="Legal">
+            <a href="/start.html">Home</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
+            <a href="mailto:founders@antaeus.app">Contact</a>
+        </nav>
+    </footer>
+</main>
+
+<script src="/js/analytics-site-config.js"></script>
+<script src="/js/analytics.js"></script>
+</body>
+</html>

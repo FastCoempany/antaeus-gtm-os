@@ -55,7 +55,12 @@ const include = [
   "index.html",
   // Legal pages — required for footer links and signup flow.
   "privacy.html",
-  "terms.html"
+  "terms.html",
+  // Phase 5.4 — public-facing positioning page. The "more than the
+  // landing provides" surface a visitor lands on when they want to
+  // understand the category before signing up. Linked from
+  // start.html "What this actually is" CTA.
+  "why-antaeus"
 ];
 
 function copyRecursive(src, dest) {
