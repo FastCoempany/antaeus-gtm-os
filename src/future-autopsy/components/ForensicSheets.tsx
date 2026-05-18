@@ -42,28 +42,52 @@ export function ForensicSheets(): JSX.Element {
             class={`fa-sheet fa-sheet--stacked fa-sheet--${mode}`}
             aria-label="Forensic sheets"
         >
-            {/* Sheet 1 — Risk: causal pattern */}
-            <article class="fa-stack-sheet" aria-label="Risk sheet">
+            {/*
+             * Program 6 / PR 7 — each sheet carries a tone-colored tab
+             * pill (orange / blue / green) and gets a slight rotation
+             * applied via :nth-child CSS rules (-2.8° / +1.9° / -1.1°)
+             * for the "lit evidence surface, not a page" tactility per
+             * Variant 01 / Forensic Light Table. Rotations disable at
+             * narrow widths so mobile/sub-1160px gets clean stacking.
+             */}
+
+            {/* Sheet 1 — Visible symptom (orange tab) */}
+            <article
+                class="fa-stack-sheet fa-stack-sheet--risk"
+                aria-label="Visible symptom sheet"
+            >
                 <header class="fa-stack-sheet__head">
-                    <span class="fa-stack-sheet__label">Risk</span>
+                    <span class="fa-stack-sheet__label fa-stack-sheet__label--orange">
+                        Visible symptom
+                    </span>
                     <h3 class="fa-stack-sheet__title">{titles.risk}</h3>
                 </header>
                 <PatternBody doc={doc} />
             </article>
 
-            {/* Sheet 2 — Proof: ownership + decision evidence */}
-            <article class="fa-stack-sheet" aria-label="Proof sheet">
+            {/* Sheet 2 — What sits underneath (blue tab) */}
+            <article
+                class="fa-stack-sheet fa-stack-sheet--proof"
+                aria-label="What sits underneath sheet"
+            >
                 <header class="fa-stack-sheet__head">
-                    <span class="fa-stack-sheet__label">Proof</span>
+                    <span class="fa-stack-sheet__label fa-stack-sheet__label--blue">
+                        What sits underneath
+                    </span>
                     <h3 class="fa-stack-sheet__title">{titles.proof}</h3>
                 </header>
                 <ProofBody doc={doc} mode={mode} />
             </article>
 
-            {/* Sheet 3 — Motion: live thread state */}
-            <article class="fa-stack-sheet" aria-label="Motion sheet">
+            {/* Sheet 3 — Failure pattern (green tab) */}
+            <article
+                class="fa-stack-sheet fa-stack-sheet--motion"
+                aria-label="Failure pattern sheet"
+            >
                 <header class="fa-stack-sheet__head">
-                    <span class="fa-stack-sheet__label">Motion</span>
+                    <span class="fa-stack-sheet__label fa-stack-sheet__label--green">
+                        Failure pattern
+                    </span>
                     <h3 class="fa-stack-sheet__title">{titles.motion}</h3>
                 </header>
                 <SymptomBody doc={doc} />

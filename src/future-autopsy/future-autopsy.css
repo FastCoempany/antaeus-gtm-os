@@ -747,3 +747,103 @@ button {
     padding: 24px;
     text-align: center;
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Program 6 / PR 7 — Forensic Light Table polish
+   (tone pills + tilted sheets + 2-col stack/route layout)
+   ───────────────────────────────────────────────────────────────── */
+
+/* ─── 2-col light-grid inside PinnedCase ─────────────────────── */
+
+.fa-pinned__light-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 24px;
+    align-items: start;
+    margin-top: 18px;
+}
+
+@media (max-width: 1160px) {
+    .fa-pinned__light-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.fa-pinned__stack-zone {
+    display: grid;
+    gap: 14px;
+}
+
+.fa-pinned__route {
+    display: block;
+    position: sticky;
+    top: 18px;
+}
+
+@media (max-width: 1160px) {
+    .fa-pinned__route {
+        position: static;
+    }
+}
+
+/* ─── Tone-colored tab pills ─────────────────────────────────── */
+
+.fa-stack-sheet__label--orange,
+.fa-stack-sheet__label--blue,
+.fa-stack-sheet__label--green {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.fa-stack-sheet__label--orange {
+    background: rgba(230, 112, 30, 0.12);
+    color: #b6571a;
+}
+
+.fa-stack-sheet__label--blue {
+    background: rgba(37, 99, 235, 0.12);
+    color: #1f4cb6;
+}
+
+.fa-stack-sheet__label--green {
+    background: rgba(45, 122, 75, 0.12);
+    color: #1f6940;
+}
+
+/* ─── Slight rotations on each sheet (Forensic Light Table tactility)
+       The light-grid is wide enough that slight rotations land within
+       the left column without clipping. Disable on narrow widths so
+       small viewports get clean stacking. ───────────────────────── */
+
+@media (min-width: 1161px) {
+    .fa-sheet--stacked .fa-stack-sheet:nth-child(1) {
+        transform: rotate(-1.6deg);
+        transform-origin: top left;
+    }
+    .fa-sheet--stacked .fa-stack-sheet:nth-child(2) {
+        transform: rotate(1.1deg);
+        transform-origin: top right;
+        margin-left: 18px;
+    }
+    .fa-sheet--stacked .fa-stack-sheet:nth-child(3) {
+        transform: rotate(-0.7deg);
+        transform-origin: top left;
+    }
+    .fa-sheet--stacked .fa-stack-sheet {
+        transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+    /* Lift the sheet slightly on hover/focus — the "you can lift the
+       paper" affordance that distinguishes a light table from a list. */
+    .fa-sheet--stacked .fa-stack-sheet:hover {
+        transform: rotate(0deg) translateY(-1px);
+        box-shadow: 0 14px 32px rgba(10, 28, 64, 0.10);
+        z-index: 2;
+    }
+}
