@@ -13,16 +13,27 @@
     rel="stylesheet"
   />
   <style>
+    /*
+     * Phase 5.1 of the 2026-05 navigation-intelligence roadmap.
+     * Re-skinned from dark navy + gold to canon Part II §1 (bright
+     * field + navy ink + serif headlines + orange accent). The dark
+     * exception was retired 2026-04-27; this landing was the last
+     * holdout on the dark direction.
+     *
+     * Tested against the Marcus Reed visitor persona +
+     * walks A / B / C documented in
+     * deliverables/audit/visitor-persona-2026-05.md.
+     */
     :root {
-      --bg-primary: #0a0e1a;
-      --bg-secondary: #0f172a;
-      --brand-gold: #d4a574;
-      --brand-gold-light: #e8c9a8;
+      --bg-field: #f6f8fc;
+      --bg-raised: #ffffff;
+      --ink: #0a1c40;
+      --ink-70: rgba(10, 28, 64, 0.7);
+      --ink-50: rgba(10, 28, 64, 0.5);
+      --ink-25: rgba(10, 28, 64, 0.25);
+      --ink-10: rgba(10, 28, 64, 0.10);
       --accent-orange: #e6701e;
-      --text-primary: #ffffff;
-      --text-secondary: rgba(255, 255, 255, 0.72);
-      --text-tertiary: rgba(255, 255, 255, 0.5);
-      --border-soft: rgba(255, 255, 255, 0.1);
+      --accent-orange-dark: #d05f12;
       --font-serif: 'DM Serif Display', Georgia, serif;
       --font-sans: 'Public Sans', system-ui, -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -32,11 +43,11 @@
 
     html, body {
       min-height: 100%;
-      background:
-        radial-gradient(circle at 14% 18%, rgba(212, 165, 116, 0.12), transparent 28%),
-        radial-gradient(circle at 86% 78%, rgba(45, 212, 191, 0.10), transparent 26%),
-        linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 50%, #070b14 100%);
-      color: var(--text-primary);
+      background: var(--bg-field);
+      background-image:
+        radial-gradient(circle at 8% 0%, rgba(37, 99, 235, 0.05), transparent 28%),
+        radial-gradient(circle at 92% 0%, rgba(230, 112, 30, 0.04), transparent 26%);
+      color: var(--ink);
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
     }
@@ -61,7 +72,7 @@
       justify-content: space-between;
       align-items: center;
       padding-bottom: 18px;
-      border-bottom: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--ink-10);
     }
 
     .wordmark {
@@ -75,13 +86,13 @@
       font-family: var(--font-serif);
       font-size: 1.05rem;
       letter-spacing: 0.16em;
-      color: var(--text-primary);
+      color: var(--ink);
     }
 
     .wordmark__divider {
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      color: rgba(255, 255, 255, 0.32);
+      color: var(--ink-25);
     }
 
     .wordmark__kicker {
@@ -90,7 +101,7 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.62);
+      color: var(--ink-50);
     }
 
     .chrome__aux {
@@ -99,7 +110,7 @@
       font-family: var(--font-mono);
       font-size: 0.72rem;
       letter-spacing: 0.06em;
-      color: var(--text-tertiary);
+      color: var(--ink-50);
     }
 
     .chrome__aux a {
@@ -107,7 +118,7 @@
     }
 
     .chrome__aux a:hover {
-      color: var(--brand-gold-light);
+      color: var(--accent-orange);
     }
 
     /* ── Hero ─────────────────────────────────────────────────────── */
@@ -122,7 +133,8 @@
       font-size: 0.7rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--brand-gold-light);
+      color: var(--accent-orange);
+      font-weight: 700;
       margin-bottom: 24px;
     }
 
@@ -134,17 +146,18 @@
       margin-bottom: 28px;
       max-width: 18ch;
       text-wrap: balance;
+      color: var(--ink);
     }
 
     .hero__title em {
       font-style: italic;
-      color: var(--brand-gold-light);
+      color: var(--accent-orange);
     }
 
     .hero__sub {
       font-size: 1.08rem;
       line-height: 1.65;
-      color: var(--text-secondary);
+      color: var(--ink-70);
       max-width: 60ch;
       margin-bottom: 38px;
     }
@@ -153,6 +166,15 @@
       display: inline-flex;
       gap: 12px;
       flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .hero__cta-note {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-50);
+      margin-left: 4px;
     }
 
     .btn {
@@ -178,20 +200,20 @@
     }
 
     .btn--primary:hover {
-      background: #d0621a;
-      border-color: #d0621a;
-      box-shadow: 0 6px 18px rgba(230, 112, 30, 0.32);
+      background: var(--accent-orange-dark);
+      border-color: var(--accent-orange-dark);
+      box-shadow: 0 6px 18px rgba(230, 112, 30, 0.22);
     }
 
     .btn--ghost {
       background: transparent;
-      color: var(--text-primary);
-      border-color: rgba(255, 255, 255, 0.22);
+      color: var(--ink);
+      border-color: var(--ink-25);
     }
 
     .btn--ghost:hover {
-      border-color: rgba(255, 255, 255, 0.48);
-      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--accent-orange);
+      background: var(--bg-raised);
     }
 
     /* ── Anchors (3-cell strip) ──────────────────────────────────── */
@@ -200,14 +222,14 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1px;
-      background: var(--border-soft);
-      border: 1px solid var(--border-soft);
+      background: var(--ink-10);
+      border: 1px solid var(--ink-10);
       border-radius: 16px;
       overflow: hidden;
     }
 
     .anchor {
-      background: rgba(15, 23, 42, 0.82);
+      background: var(--bg-raised);
       padding: 28px 26px;
       display: flex;
       flex-direction: column;
@@ -220,27 +242,27 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       font-weight: 700;
-      color: var(--brand-gold-light);
+      color: var(--accent-orange);
     }
 
     .anchor__title {
       font-family: var(--font-serif);
       font-size: 1.5rem;
       line-height: 1.15;
-      color: var(--text-primary);
+      color: var(--ink);
     }
 
     .anchor__copy {
       font-size: 0.92rem;
       line-height: 1.6;
-      color: var(--text-tertiary);
+      color: var(--ink-70);
     }
 
     /* ── Footer ──────────────────────────────────────────────────── */
 
     .foot {
       padding-top: 32px;
-      border-top: 1px solid var(--border-soft);
+      border-top: 1px solid var(--ink-10);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -249,7 +271,7 @@
       font-family: var(--font-mono);
       font-size: 0.72rem;
       letter-spacing: 0.06em;
-      color: var(--text-tertiary);
+      color: var(--ink-50);
     }
 
     .foot__links {
@@ -262,7 +284,7 @@
     }
 
     .foot__links a:hover {
-      color: var(--brand-gold-light);
+      color: var(--accent-orange);
     }
 
     @media (max-width: 720px) {
@@ -294,48 +316,64 @@
     </header>
 
     <section class="hero">
-      <p class="hero__kicker">For founders and the first GTM hire</p>
+      <p class="hero__kicker">For founders writing the first GTM hire's job description</p>
       <h1 class="hero__title">
-        Turn founder-led revenue into something a first hire can <em>actually</em> inherit.
+        Turn the motion you run from memory into something a hire can <em>actually</em> inherit.
       </h1>
       <p class="hero__sub">
-        Antaeus is the operating room behind the motion you built in your head.
-        Signals, deals, proof, advisor leverage, readiness — one ranked,
-        pressure-aware system that survives the handoff before scale compounds
-        the wrong things.
+        Antaeus is the operating system the founder's revenue motion becomes
+        before a hire takes it over. One ranked workspace that captures
+        signals, deals, proof, and advisor leverage as you run them — so
+        the first serious GTM hire walks into a working machine, not your
+        memory.
       </p>
       <div class="hero__ctas">
-        <a class="btn btn--primary" href="/signup.html">Create workspace</a>
-        <a class="btn btn--ghost" href="/login.html">Sign in</a>
+        <a class="btn btn--primary" href="/signup.html" data-cta="signup">
+          Create your workspace
+        </a>
+        <a class="btn btn--ghost" href="/login.html" data-cta="login">
+          Sign in
+        </a>
+        <span class="hero__cta-note">Free during operator preview · no card</span>
       </div>
     </section>
 
     <section class="anchors" aria-label="What Antaeus does">
       <article class="anchor">
-        <span class="anchor__kicker">See what's real</span>
-        <h2 class="anchor__title">The system surfaces what's under pressure right now.</h2>
+        <span class="anchor__kicker">SEES WHAT'S REAL</span>
+        <h2 class="anchor__title">
+          Surfaces the one deal under the most pressure, with the reason it's first.
+        </h2>
         <p class="anchor__copy">
-          No scrolling through reports. One ranked object, one dominant move,
-          one reason. Designed to be the first thing you open on Monday and
-          the last thing you check on Friday.
+          No browsing through dashboards looking for problems. The system
+          ranks pressure across every deal, signal, and proof in your
+          workspace — and tells you which move clears the most weight.
+          The first thing you open on Monday, the last thing you check on
+          Friday.
         </p>
       </article>
       <article class="anchor">
-        <span class="anchor__kicker">Harder to fool</span>
-        <h2 class="anchor__title">Every claim gets weight-checked against evidence, not optimism.</h2>
+        <span class="anchor__kicker">HARDER TO FOOL</span>
+        <h2 class="anchor__title">
+          Weight-checks every claim against the evidence you actually have.
+        </h2>
         <p class="anchor__copy">
-          Deals, proof, readiness — each one rated by what's actually
-          documented, not what you wish were true. Founders stop self-coaching
-          past weak spots; the system names them.
+          Deals stop carrying stages they haven't earned. Proofs stop
+          carrying claims nobody owns. Readiness stops being a number you
+          wish were true. The system names the weak spots out loud so you
+          stop self-coaching past them.
         </p>
       </article>
       <article class="anchor">
-        <span class="anchor__kicker">Built for handoff</span>
-        <h2 class="anchor__title">Every move compounds toward something a hire can pick up.</h2>
+        <span class="anchor__kicker">BUILT FOR HANDOFF</span>
+        <h2 class="anchor__title">
+          Every move compounds toward something the first hire can read top-to-bottom.
+        </h2>
         <p class="anchor__copy">
-          The first serious GTM hire shouldn't inherit confusion. Every
-          discovery note, every kill rule, every advisor deployment lands
-          in a kit they can read top-to-bottom on day one.
+          Every discovery note, every kill rule, every advisor deployment
+          lands in a kit your hire opens on day one. Not an export. Not a
+          handoff document. The workspace itself, sharpened by what you
+          did this quarter, ready to inherit.
         </p>
       </article>
     </section>
