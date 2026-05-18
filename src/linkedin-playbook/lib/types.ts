@@ -93,6 +93,16 @@ export interface Motion {
     readonly accountName: string;
     readonly context: string;
     readonly cueIndex: CueIndex;
+    /**
+     * Program 6 / PR 11 — recovery cue.
+     *
+     * Per canon §4.8 ("Every route keeps a recovery cable on the
+     * same board") and the picked-winner Variant 02 / Cue Booth
+     * wireframe — the rep needs a "what to do when corrected"
+     * rule alongside the current-cue + one-session-win rules.
+     * Surfaces in the booth-read aside as the Recovery cue rule.
+     */
+    readonly recovery: string;
 }
 
 /** Read-only inbound context the motion engine consumes. */

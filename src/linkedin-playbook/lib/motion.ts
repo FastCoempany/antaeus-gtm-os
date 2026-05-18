@@ -58,7 +58,9 @@ export function deriveMotion(ctx: MotionContext): Motion {
         accountName: hottest?.name ?? touch?.accountName ?? "",
         context:
             "No live signal is being worked yet. Use LinkedIn to create air cover.",
-        cueIndex: 1
+        cueIndex: 1,
+        recovery:
+            "If the comment lands flat, do not double down. Watch one more post and try again with a narrower read."
     };
 
     // Branch 1 — hottest signal account exists, no connection_request to it yet.
@@ -74,7 +76,8 @@ export function deriveMotion(ctx: MotionContext): Motion {
             nextMove:
                 "After one or two visible engagements, send one request tied to the active signal.",
             context: `Signal Console says ${hottest.name} is hot right now${heatSuffix}.`,
-            cueIndex: (acct.content_engage > 0 ? 2 : 1) as CueIndex
+            cueIndex: (acct.content_engage > 0 ? 2 : 1) as CueIndex,
+            recovery: `If they correct your read on ${hottest.name}, thank them and narrow — the signal interpretation just got sharper.`
         };
         return motion;
     }
@@ -92,7 +95,9 @@ export function deriveMotion(ctx: MotionContext): Motion {
             nextMove:
                 "If there is no reply after 3-5 days, send one give-first resource before asking for time.",
             context: `LinkedIn already has an opening on ${hottest.name}. Use it.`,
-            cueIndex: 3
+            cueIndex: 3,
+            recovery:
+                "If the DM stalls, do not chase. Give-first once, then hand the next touch back to Outbound."
         };
         return motion;
     }
@@ -111,7 +116,8 @@ export function deriveMotion(ctx: MotionContext): Motion {
                 "Return to the next outbound touch after the LinkedIn action is logged.",
             accountName: touch.accountName,
             context: `Latest outbound motion exists for ${touch.accountName}.`,
-            cueIndex: 1
+            cueIndex: 1,
+            recovery: `If the engagement reads as performative, drop it and let Outbound carry ${touch.accountName} without LinkedIn cover this week.`
         };
         return motion;
     }
