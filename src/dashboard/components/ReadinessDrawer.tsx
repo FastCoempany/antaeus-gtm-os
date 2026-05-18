@@ -90,9 +90,15 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                 <header
                     class={`db-readiness-drawer__hero db-readiness-drawer__hero--${tone}`}
                 >
-                    <p class="db-readiness-drawer__kicker">
-                        READINESS · {props.summary.totalScore}/100
-                    </p>
+                    {/*
+                     * Phase 2.8 audit — kicker no longer shows the
+                     * raw totalScore. Per canon §4.17 the verdict is
+                     * the value; the score is internal math. The
+                     * per-dimension scores below remain (with their
+                     * /20 caps) since they're operator-readable
+                     * progress markers, not the headline.
+                     */}
+                    <p class="db-readiness-drawer__kicker">READINESS</p>
                     <h2 class="db-readiness-drawer__verdict">
                         {props.summary.verdictLabel}
                     </h2>

@@ -100,9 +100,13 @@ describe("evaluateReadiness — gate-based verdicts", () => {
             discoveryAdvancedCalls: 6
         });
         expect(r.verdict).not.toBe<Verdict>("hire_ready");
+        // Phase 2.8 audit — blocker copy rewritten in behavior-shape.
+        // Was "No closed-won deals yet"; now "Close-won a deal" (no
+        // hyphen) phrasing. Match the verb to avoid coupling to exact
+        // wording.
         expect(
             r.gateBlockers.some((b) =>
-                b.toLowerCase().includes("closed-won")
+                /close.{0,2}won/i.test(b)
             )
         ).toBe(true);
     });
@@ -128,18 +132,23 @@ describe("evaluateReadiness — gate-based verdicts", () => {
         });
         expect(r.verdict).not.toBe<Verdict>("hire_ready_repeatable");
         expect(
-            r.gateBlockers.some((b) => b.toLowerCase().includes("win/loss"))
+            r.gateBlockers.some((b) =>
+                /win\/loss|win.loss balance/i.test(b)
+            )
         ).toBe(true);
     });
 
     it("blockers describe the NEXT unmet gate, not the current one", () => {
         const r = evaluateReadiness(inheritableInput());
-        // Verdict is inheritable; blockers should describe what's missing
-        // for hire_ready (closed-won, autopsies, etc.).
+        // Verdict is inheritable; blockers should describe what's
+        // missing for hire_ready (close-won, autopsies, etc.).
+        // Phase 2.8 — blocker copy is behavior-shape ("Close-won a
+        // deal." etc.), no longer the older "No closed-won deals yet"
+        // descriptor. Match via verb pattern.
         expect(r.gateBlockers.length).toBeGreaterThan(0);
         expect(
             r.gateBlockers.some((b) =>
-                b.toLowerCase().includes("closed-won")
+                /close.{0,2}won/i.test(b)
             )
         ).toBe(true);
     });

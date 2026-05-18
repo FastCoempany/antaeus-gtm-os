@@ -37,21 +37,36 @@ function gateHireReadyRepeatable(
 ): GateResult {
     const blockers: string[] = [];
 
+    // Phase 2.8 audit — blocker copy rewritten in behavior-shape
+    // operator voice. Was internal math vocab ("X below 14/20" /
+    // "Need 2+ dimensions above 8/20") — Sarah doesn't read 14/20
+    // as a behavior; she reads it as a score she doesn't know how
+    // to move. Now each blocker names the action that would clear
+    // it.
+
     const minScore = Math.min(...dimensions.map((d) => d.score));
     if (minScore < 14) {
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
-            blockers.push(`${weak.label} below 14/20`);
+            blockers.push(
+                `Tighten ${weak.label.toLowerCase()} — it's the weakest dimension.`
+            );
         }
     }
 
-    if (input.closedWonDeals < 1) blockers.push("No closed-won deals yet");
-    if (input.futureAutopsiesRun < 1) {
-        blockers.push("No Future Autopsies run");
+    if (input.closedWonDeals < 1) {
+        blockers.push("Close-won a deal so the kit has a real proof point.");
     }
-    if (input.castProofs < 1) blockers.push("No cast proofs");
+    if (input.futureAutopsiesRun < 1) {
+        blockers.push("Run a Future Autopsy — even on a still-open deal.");
+    }
+    if (input.castProofs < 1) {
+        blockers.push("Cast a proof in PoC Framework.");
+    }
     if (input.advisorDeployments < 1) {
-        blockers.push("No advisor deployments");
+        blockers.push(
+            "Deploy an advisor — backchannel ask on a real deal."
+        );
     }
 
     const winLossRatio =
@@ -61,12 +76,14 @@ function gateHireReadyRepeatable(
                 : 0
             : input.closedWonDeals / input.closedLostDealsAnalyzed;
     if (winLossRatio < 1) {
-        blockers.push("Win/loss ratio below 1:1");
+        blockers.push(
+            "Bring win/loss balance to 1:1 or better."
+        );
     }
 
     if (input.handoffSectionsReady < 5) {
         blockers.push(
-            `Founding GTM at ${input.handoffSectionsReady}/7 sections — need 5+`
+            `Fill in Founding GTM to 5/7 sections (currently ${input.handoffSectionsReady}/7).`
         );
     }
 
@@ -84,15 +101,21 @@ function gateHireReady(
     if (minScore < 14) {
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
-            blockers.push(`${weak.label} below 14/20`);
+            blockers.push(
+                `Tighten ${weak.label.toLowerCase()} — it's holding the gate.`
+            );
         }
     }
 
-    if (input.closedWonDeals < 1) blockers.push("No closed-won deals yet");
-    if (input.futureAutopsiesRun < 1) {
-        blockers.push("No Future Autopsies run");
+    if (input.closedWonDeals < 1) {
+        blockers.push("Close-won a deal.");
     }
-    if (input.castProofs < 1) blockers.push("No cast proofs");
+    if (input.futureAutopsiesRun < 1) {
+        blockers.push("Run a Future Autopsy.");
+    }
+    if (input.castProofs < 1) {
+        blockers.push("Cast a proof in PoC Framework.");
+    }
 
     return { passed: blockers.length === 0, blockers };
 }
@@ -108,16 +131,22 @@ function gateInheritable(
     if (minScore < 10) {
         const weak = dimensions.find((d) => d.score < 10);
         if (weak) {
-            blockers.push(`${weak.label} below 10/20`);
+            blockers.push(
+                `Strengthen ${weak.label.toLowerCase()} — every dimension needs to clear the bar.`
+            );
         }
     }
 
     const maxScore = Math.max(...dimensions.map((d) => d.score));
     if (maxScore < 16) {
-        blockers.push("No dimension at 16+/20 yet (need a strong suit)");
+        blockers.push(
+            "Make one dimension a strong suit — work outbound, discovery, or deal motion until something stands out."
+        );
     }
 
-    if (input.castProofs < 1) blockers.push("No cast proofs");
+    if (input.castProofs < 1) {
+        blockers.push("Cast a proof in PoC Framework.");
+    }
 
     return { passed: blockers.length === 0, blockers };
 }
@@ -128,7 +157,9 @@ function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
 
     const aboveEight = dimensions.filter((d) => d.score >= 8).length;
     if (aboveEight < 2) {
-        blockers.push("Need 2+ dimensions above 8/20");
+        blockers.push(
+            "Get two dimensions warming up — start with an ICP + the first outbound touches."
+        );
     }
 
     return { passed: blockers.length === 0, blockers };

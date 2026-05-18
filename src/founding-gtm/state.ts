@@ -42,6 +42,14 @@ export const authoredSections: ReadonlySignal<ReadonlyArray<AuthoredSection>> =
 /** Share-link composer overlay (Wave 4 wires send action). */
 export const shareComposerOpen: Signal<boolean> = signal(false);
 
+/**
+ * Phase 2.8 — Readiness verdict label from `gtmos_readiness_last_verdict`
+ * (written by Dashboard's readiness-history publisher). Surfaces in the
+ * Founding GTM topbar's readiness rail. Empty = not yet computed (no
+ * Dashboard visit yet in this session).
+ */
+export const readinessVerdictLabel: Signal<string | null> = signal(null);
+
 /** Ceremony moment overlay state — set by Wave 4's ceremony subscriber. */
 export const ceremonyOpen: Signal<boolean> = signal(false);
 
