@@ -18,6 +18,7 @@ import { computeImpact } from "../lib/impact";
 import {
     hrefToDealWorkspace,
     hrefToFutureAutopsy,
+    hrefToNegotiation,
     hrefToPocFramework
 } from "../lib/handoff";
 import { saveDeployment } from "../lib/cloud-persistence";
@@ -362,6 +363,16 @@ export function SecondaryStack(): JSX.Element {
                         data-ad-handoff="poc-framework"
                     >
                         Forge a proof
+                    </a>
+                    <a
+                        class="ad-btn"
+                        href={hrefToNegotiation(
+                            selectedDeal.value?.id ?? "",
+                            selectedDeal.value?.accountName ?? ""
+                        )}
+                        data-ad-handoff="negotiation"
+                    >
+                        Rehearse the negotiation
                     </a>
                 </nav>
             </article>

@@ -87,6 +87,25 @@ export function hrefToPocFramework(
     });
 }
 
+/**
+ * Phase 4 — Negotiation handoff per canon §4.16b (the Deal Workspace
+ * ↔ Negotiation ↔ Advisor Deploy triangle). Invariant-8 compliant:
+ * no placeholder string for focusObject when accountName is empty.
+ */
+export function hrefToNegotiation(
+    dealId: string,
+    accountName: string
+): string {
+    const path = dealId
+        ? `/negotiation/?deal=${encodeURIComponent(dealId)}`
+        : "/negotiation/";
+    return buildAdvisorRoomHref({
+        href: path,
+        focusObject: accountName, // empty string → no param (buildAdvisorRoomHref skips falsy)
+        roomLabel: "Negotiation"
+    });
+}
+
 // ─── URL inbound ──────────────────────────────────────────────────────
 
 /**

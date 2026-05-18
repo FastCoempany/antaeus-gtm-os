@@ -3,6 +3,7 @@ import { allDeals, focusedDeal } from "../state";
 import {
     hrefToAdvisorDeploy,
     hrefToFutureAutopsy,
+    hrefToNegotiation,
     hrefToPocFramework
 } from "../lib/handoff";
 
@@ -15,9 +16,13 @@ import {
  * she was browsing the recovery board generally. Added in the
  * Recovery flow audit.
  *
- * Three verb-shape sales moves with continuity wrap:
+ * Four verb-shape sales moves with continuity wrap (Phase 4 added
+ * Negotiation as the fourth — that triangle Deal Workspace ↔
+ * Negotiation ↔ Advisor Deploy is now lit on the high-pressure
+ * phase of a deal per canon §4.16b):
  *   - Pre-mortem this deal (primary)   → /future-autopsy/
  *   - Forge a proof                    → /poc-framework/
+ *   - Rehearse the negotiation         → /negotiation/
  *   - Deploy an advisor                → /advisor-deploy/
  *
  * When a focal deal is pinned (focusedDeal signal), focusObject =
@@ -28,6 +33,7 @@ export function HandoffStrip(): JSX.Element {
     const focal = focusedDeal.value;
     // `focal` is the computed signal value — either a deal or null.
     const focusName = focal?.accountName.trim() || undefined;
+    const focusId = focal?.id || undefined;
     const dealCount = allDeals.value.length;
     if (dealCount === 0) {
         // No deals = no recovery to push. Skip the strip; the empty
@@ -64,6 +70,13 @@ export function HandoffStrip(): JSX.Element {
                     data-dw-handoff="poc-framework"
                 >
                     Forge a proof
+                </a>
+                <a
+                    class="dw-handoff__cta"
+                    href={hrefToNegotiation(focusId, focusName)}
+                    data-dw-handoff="negotiation"
+                >
+                    Rehearse the negotiation
                 </a>
                 <a
                     class="dw-handoff__cta"

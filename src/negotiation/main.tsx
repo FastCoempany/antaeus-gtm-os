@@ -4,6 +4,7 @@ import { Negotiation } from "./Negotiation";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { startUnsavedGuard } from "@/lib/unsaved-guard";
+import { readContinuity } from "@/lib/continuity";
 import {
     allNegotiations,
     draft,
@@ -49,10 +50,30 @@ if (!flagOn) {
 setLinkedDeals(loadDealsForLinking());
 setAllNegotiations(loadNegotiations());
 
-// Honor `?deal=<id>` URL inbound for the Deal Workspace handoff.
+// Phase 4 — honor full continuity context, not just `?deal=`. If
+// Sarah lands here from Deal Workspace's HandoffStrip, focusObject
+// carries the account name and `?deal=` carries the id; we use the
+// id (canonical pointer) to auto-select. focusObject is informational
+// only — RouteRack reads from the deal record once setDealId resolves.
 if (typeof window !== "undefined") {
-    const inboundDealId = readInboundDealId(window.location.search);
-    if (inboundDealId) setDealId(inboundDealId);
+    const search = window.location.search;
+    const inboundDealId = readInboundDealId(search);
+    if (inboundDealId) {
+        setDealId(inboundDealId);
+    } else {
+        // Fall back to focusObject when the source room didn't thread
+        // a deal id (Settings or Welcome handoffs, hypothetically).
+        const continuity = readContinuity(search);
+        if (continuity.focusObject) {
+            // No id, just a name — match against linkedDeals by name.
+            const match = loadDealsForLinking().find(
+                (d) =>
+                    d.accountName.toLowerCase() ===
+                    continuity.focusObject!.toLowerCase()
+            );
+            if (match) setDealId(match.id);
+        }
+    }
 }
 
 render(<Negotiation />, root);

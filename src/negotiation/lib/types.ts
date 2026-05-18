@@ -1,24 +1,75 @@
 /**
- * Negotiation room types — Phase 3 of ADR-003 (canon §4.16b).
+ * Negotiation room types — Phase 4 of the 2026-05 navigation-
+ * intelligence roadmap (canon §4.16b).
  *
  * Brings back the legacy "CFO Negotiation" room as **Negotiation** —
  * Live Instrument family, post-evaluation pre-close. Treats each
- * negotiation as a routed ask (deal × counterparty × ask × concession
- * ladder) the same way Advisor Deploy treats backchannel asks.
+ * negotiation as a routed ask (deal × counterparty × ask-moment ×
+ * concession ladder) the same way Advisor Deploy treats backchannel
+ * asks.
  *
  * The legacy `antaeus_studio_cfo_v2` localStorage shape held
  * procurement + finance scripts — those are the seed templates this
- * room carries forward.
+ * room carries forward. Phase 4 expands the surface to six
+ * counterparties (founder directive 2026-05-18) and ten ask-moments
+ * inferred from the Discovery Studio framework families.
  */
 
-/** The four counterparty roles a founder/operator typically faces. */
-export type CounterpartyRole = "cfo" | "procurement" | "legal" | "gc";
+/**
+ * The six counterparty roles a founder/operator typically faces in
+ * the post-evaluation negotiation window. CFO + Procurement + Legal
+ * + GC are the legacy four; VP Finance + Infosec are the founder-
+ * directed additions for AI-native B2B (security review is now a
+ * routine post-eval gate).
+ */
+export type CounterpartyRole =
+    | "cfo"
+    | "vp_finance"
+    | "procurement"
+    | "legal"
+    | "gc"
+    | "infosec";
 
 export const COUNTERPARTY_LABEL: Record<CounterpartyRole, string> = {
     cfo: "CFO / Finance",
+    vp_finance: "VP Finance",
     procurement: "Procurement",
     legal: "Legal",
-    gc: "General Counsel"
+    gc: "General Counsel",
+    infosec: "InfoSec / Security"
+};
+
+/**
+ * The ten ask-moments that shape what the operator is actually
+ * walking in to ask for. Inferred from Discovery Studio's nine
+ * framework families' decision-architecture segments — these are
+ * the recurring shapes the negotiation conversation lands on in
+ * the post-eval window. Picking one routes which seed pushbacks
+ * + which opening line the room recommends.
+ */
+export type AskMoment =
+    | "pricing_position"
+    | "discount_request"
+    | "terms_and_payment"
+    | "contract_length"
+    | "auto_renewal"
+    | "indemnification"
+    | "security_review"
+    | "rampup_schedule"
+    | "expansion_commitment"
+    | "decision_deadline";
+
+export const ASK_MOMENT_LABEL: Record<AskMoment, string> = {
+    pricing_position: "Pricing position",
+    discount_request: "Discount request",
+    terms_and_payment: "Payment terms",
+    contract_length: "Contract length",
+    auto_renewal: "Auto-renewal",
+    indemnification: "Indemnification carve-outs",
+    security_review: "Security review",
+    rampup_schedule: "Ramp-up schedule",
+    expansion_commitment: "Expansion commitment",
+    decision_deadline: "Decision deadline"
 };
 
 /** A single concession step on the ladder. */
@@ -45,6 +96,7 @@ export interface Negotiation {
     readonly dealId: string | null; // links to gtmos_deal_workspaces
     readonly counterparty: CounterpartyRole;
     readonly counterpartyName: string; // person on the other side
+    readonly askMoment: AskMoment; // what we're walking in to ask for
     readonly startingPosition: string; // our opening
     readonly walkawayPosition: string; // the line we won't cross
     readonly openingLine: string; // the actual first words
@@ -88,6 +140,7 @@ export const EMPTY_NEGOTIATION: Omit<
     dealId: null,
     counterparty: "cfo",
     counterpartyName: "",
+    askMoment: "pricing_position",
     startingPosition: "",
     walkawayPosition: "",
     openingLine: "",
