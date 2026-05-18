@@ -417,6 +417,17 @@ export function setActiveNode(segmentKey: string, nodeId: string): void {
     expandedResponse.value = null;
 }
 
+/**
+ * clearActiveNode — collapse every segment (no active segment, no
+ * expanded branch). Used by the Ledger Spine expandable-segment
+ * model in SegmentRail when Sarah clicks the header of an already-
+ * expanded segment.
+ */
+export function clearActiveNode(): void {
+    activeNode.value = null;
+    expandedResponse.value = null;
+}
+
 export function expandResponse(branchIndex: number): void {
     expandedResponse.value = branchIndex;
 }

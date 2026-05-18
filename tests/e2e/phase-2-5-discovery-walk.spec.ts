@@ -25,13 +25,15 @@ test.describe("Phase 2.5 — Discovery flow", () => {
             );
             await page.waitForTimeout(400);
 
-            // Phase 2.5 finding: kicker now reads
-            // "DISCOVERY STUDIO · with Meridian Logistics · {framework?}"
-            // instead of bare "DISCOVERY STUDIO".
+            // Phase 2.5 finding: kicker carries the inbound focused
+            // account ("Discovery Studio · Canonical Control Face ·
+            // with Meridian Logistics"). Program 6 / PR 4 moved the
+            // kicker from .ds-topbar__kicker to .ds-mast__kicker as
+            // part of the Ledger Spine Canonical mast treatment.
             const kicker = await page
-                .locator(".ds-topbar__kicker")
+                .locator(".ds-mast__kicker")
                 .textContent();
-            expect(kicker).toContain("DISCOVERY STUDIO");
+            expect(kicker?.toLowerCase()).toContain("discovery studio");
             expect(kicker).toContain(ACCOUNT);
         } finally {
             await ctx.close();
