@@ -775,3 +775,148 @@ body {
         gap: 6px;
     }
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Program 6 / PR 8 — Pressure Script V01 polish
+   (2-col board + scripted-quote lines + credibility chip)
+   ───────────────────────────────────────────────────────────────── */
+
+/* ─── 2-col board (witness+spine+quality | handoff aside) ────── */
+
+.cp-board {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 28px;
+    align-items: start;
+    margin-top: 8px;
+}
+
+.cp-board__main {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+}
+
+.cp-board__aside {
+    display: block;
+    position: sticky;
+    top: 18px;
+}
+
+@media (max-width: 1100px) {
+    .cp-board {
+        grid-template-columns: 1fr;
+    }
+    .cp-board__aside {
+        position: static;
+    }
+}
+
+/* ─── Witness head (dossier with credibility chip) ──────────── */
+
+.cp-witness__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.cp-witness__head-lead {
+    display: grid;
+    gap: 4px;
+}
+
+.cp-witness__credibility {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(10, 28, 64, 0.12);
+    background: rgba(255, 255, 255, 0.82);
+    white-space: nowrap;
+}
+
+.cp-witness__credibility-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(10, 28, 64, 0.55);
+    line-height: 1;
+}
+
+.cp-witness__credibility-score {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.4rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--cp-ink, #0a1c40);
+}
+
+.cp-witness__credibility--credible {
+    border-color: rgba(34, 197, 94, 0.38);
+    background: rgba(34, 197, 94, 0.08);
+}
+.cp-witness__credibility--credible .cp-witness__credibility-label {
+    color: #1f6940;
+}
+.cp-witness__credibility--credible .cp-witness__credibility-score {
+    color: #1f6940;
+}
+
+.cp-witness__credibility--workable {
+    border-color: rgba(37, 99, 235, 0.34);
+    background: rgba(37, 99, 235, 0.08);
+}
+.cp-witness__credibility--workable .cp-witness__credibility-label {
+    color: #1f4cb6;
+}
+.cp-witness__credibility--workable .cp-witness__credibility-score {
+    color: #1f4cb6;
+}
+
+.cp-witness__credibility--thin {
+    border-color: rgba(245, 158, 11, 0.36);
+    background: rgba(245, 158, 11, 0.08);
+}
+.cp-witness__credibility--thin .cp-witness__credibility-label {
+    color: #b67310;
+}
+.cp-witness__credibility--thin .cp-witness__credibility-score {
+    color: #b67310;
+}
+
+/* ─── Scripted-quote line in agenda strips ───────────────────── */
+
+.cp-strip__quote {
+    display: block;
+    margin: 8px 0;
+    padding: 12px 16px;
+    border-left: 3px solid var(--cp-orange, #e6701e);
+    background: rgba(230, 112, 30, 0.04);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    font-size: 0.96rem;
+    line-height: 1.55;
+    color: var(--cp-ink, #0a1c40);
+    font-weight: 500;
+}
+
+.cp-strip[data-cp-strip="reason-now"] .cp-strip__quote {
+    border-left-color: var(--cp-blue, #2563eb);
+    background: rgba(37, 99, 235, 0.04);
+}
+
+.cp-strip[data-cp-strip="probe"] .cp-strip__quote {
+    border-left-color: var(--cp-green, #22c55e);
+    background: rgba(34, 197, 94, 0.04);
+}
+
+.cp-strip[data-cp-strip="advance"] .cp-strip__quote {
+    border-left-color: var(--cp-orange, #e6701e);
+    background: rgba(230, 112, 30, 0.06);
+}

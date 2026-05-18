@@ -17,16 +17,20 @@ import {
     PERSONA_LABELS,
     type PersonaKey
 } from "../lib/types";
+import { evaluateQuality } from "../lib/quality";
 
 /**
- * Witness — Wave 3 implementation.
+ * Witness — Program 6 / PR 8 (Pressure Script V01 refacing).
  *
  * The witness column IS the planner's form. Inputs flow through
  * patchDraft + the dedicated setters so the agenda spine + quality
  * recompute live as the operator types.
  *
- * Sticky to the top of the stage so the rep keeps the witness visible
- * while scrolling the agenda.
+ * V01 added: the credibility chip in the dossier head — a glanceable
+ * "Credible · 86" pill pulled from the live quality band + score so
+ * the operator sees the agenda's run-read posture inline with the
+ * contact info (the full breakdown still lives in the separate Quality
+ * block below).
  */
 export function Witness(): JSX.Element {
     const d = draft.value;
@@ -35,6 +39,11 @@ export function Witness(): JSX.Element {
     const linked = linkedDeal.value;
     const top = topSignalHeadline.value;
     const deals = dealOptions.value;
+    const quality = evaluateQuality({
+        draft: d,
+        matchedAccount: account,
+        linkedDeal: linked
+    });
 
     const supportLine = account
         ? "Signal-backed account matched."
@@ -44,16 +53,31 @@ export function Witness(): JSX.Element {
 
     return (
         <aside class="cp-witness" aria-label="Witness rail">
-            <p class="cp-witness__kicker">CONTACT</p>
-            <h2 class="cp-witness__name">
-                {d.contactName.trim() || "Add a contact."}
-            </h2>
-            <p class="cp-witness__meta">
-                {company || "Name the contact to start the agenda."}
-                {linked
-                    ? ` · $${Number(linked.value || 0).toLocaleString()} ${(linked.stage || "prospect").replace(/-/g, " ")}`
-                    : null}
-            </p>
+            <div class="cp-witness__head">
+                <div class="cp-witness__head-lead">
+                    <p class="cp-witness__kicker">CONTACT</p>
+                    <h2 class="cp-witness__name">
+                        {d.contactName.trim() || "Add a contact."}
+                    </h2>
+                    <p class="cp-witness__meta">
+                        {company || "Name the contact to start the agenda."}
+                        {linked
+                            ? ` · $${Number(linked.value || 0).toLocaleString()} ${(linked.stage || "prospect").replace(/-/g, " ")}`
+                            : null}
+                    </p>
+                </div>
+                <span
+                    class={`cp-witness__credibility cp-witness__credibility--${quality.band}`}
+                    aria-label={`Agenda quality ${quality.bandLabel} ${quality.score} of 100`}
+                >
+                    <span class="cp-witness__credibility-label">
+                        {quality.bandLabel}
+                    </span>
+                    <strong class="cp-witness__credibility-score">
+                        {quality.score}
+                    </strong>
+                </span>
+            </div>
 
             <label class="cp-field">
                 <span class="cp-field__label">Contact</span>

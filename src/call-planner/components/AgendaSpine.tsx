@@ -49,6 +49,21 @@ export function AgendaSpine(): JSX.Element {
         ? "Use the signal, not abstract curiosity, to justify the meeting."
         : "The call will stay soft until the reason now is concrete.";
 
+    // Pressure Script V01 — scripted-quote lines per strip. The
+    // operator should be able to say each <em> line out loud and
+    // have it land. Authored sentences, not directorial commentary.
+    const openerQuote = openerScript;
+    const reasonNowQuote = top
+        ? `Saw the ${top.toLowerCase()} signal land — wanted to understand how that's reshaping priorities on your side, before it shows up in the quarterly review.`
+        : d.customNotes.trim().length >= 20
+          ? `I'm bringing this conversation now because ${d.customNotes.trim().slice(0, 140)}${d.customNotes.trim().length > 140 ? "…" : ""}`
+          : "Help me name the why-now in your words — what's changed since last quarter that makes this meeting worth holding?";
+    const firstProbe = probes[0] ? unquoteQuestion(probes[0]) : "";
+    const probeQuote = firstProbe.length > 0
+        ? firstProbe
+        : "Walk me through how this works today — where does the handoff break, and who owns the cleanup?";
+    const advanceQuote = advance.ask;
+
     return (
         <section class="cp-spine" aria-label="Agenda spine">
             <p class="cp-spine__kicker">AGENDA</p>
@@ -60,6 +75,7 @@ export function AgendaSpine(): JSX.Element {
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">Open from the operating burden.</p>
                         <p class="cp-strip__copy">{openerScript}</p>
+                        <em class="cp-strip__quote">"{openerQuote}"</em>
                         <p class="cp-strip__note">
                             The opener should name a real burden fast enough
                             that the meeting stops sounding generic.
@@ -73,6 +89,7 @@ export function AgendaSpine(): JSX.Element {
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">{whyNowTitle}</p>
                         <p class="cp-strip__copy">{whyNowCopy}</p>
+                        <em class="cp-strip__quote">"{reasonNowQuote}"</em>
                         <p class="cp-strip__note">{whyNowNote}</p>
                     </div>
                 </li>
@@ -88,6 +105,7 @@ export function AgendaSpine(): JSX.Element {
                             Three probes are enough if they surface ownership,
                             authority, and timing.
                         </p>
+                        <em class="cp-strip__quote">"{probeQuote}"</em>
                         <ol class="cp-probes">
                             {probes.map((q, i) => (
                                 <li key={i} class="cp-probes__row">
@@ -111,6 +129,7 @@ export function AgendaSpine(): JSX.Element {
                             Leave with a move the board can trust.
                         </p>
                         <p class="cp-strip__copy">{advance.ask}</p>
+                        <em class="cp-strip__quote">"{advanceQuote}"</em>
                         <p class="cp-strip__note">{advance.note}</p>
                     </div>
                 </li>
