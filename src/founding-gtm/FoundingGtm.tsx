@@ -7,6 +7,7 @@ import {
 import { Topbar } from "./components/Topbar";
 import { SectionFrame } from "./components/SectionFrame";
 import { CeremonyOverlay } from "./components/CeremonyOverlay";
+import { HandoffStrip } from "./components/HandoffStrip";
 import { SECTION_IDS } from "./lib/types";
 
 import { Wordmark } from "@/lib/wordmark";
@@ -55,6 +56,7 @@ export function FoundingGtm(): JSX.Element {
                     return <SectionFrame id={id} section={section} key={id} />;
                 })}
             </main>
+            <HandoffStrip />
             {showCeremony && event && (
                 <CeremonyOverlay
                     fromLabel={event.fromLabel}

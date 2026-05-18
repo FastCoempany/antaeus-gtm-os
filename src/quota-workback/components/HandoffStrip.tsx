@@ -4,6 +4,7 @@ import {
     hrefToColdCallStudio,
     hrefToDashboard,
     hrefToDealWorkspace,
+    hrefToFoundingGtm,
     hrefToOutboundStudio
 } from "../lib/handoff";
 
@@ -70,6 +71,14 @@ export function HandoffStrip(): JSX.Element {
                     meta={`${fmt(m.oppsQuarter)} opportunities required to make the quarter believable.`}
                     href={hrefToDealWorkspace()}
                     cta="Work the pipeline"
+                />
+                <Card
+                    title="Founding GTM"
+                    metric="Day-one operating rhythm"
+                    body="The quota math feeds Section 7 — the prescriptive weekly cadence your first AE inherits."
+                    meta="The day-one operating rhythm is what the kit promises a first hire."
+                    href={hrefToFoundingGtm()}
+                    cta="Open the kit"
                 />
             </div>
         </section>
