@@ -18,7 +18,10 @@ describe("ReadinessDrawer", () => {
         expect(getByText("You are the system")).toBeTruthy();
     });
 
-    it("renders the totalScore in the kicker", () => {
+    it("renders the kicker as just 'READINESS' (no totalScore)", () => {
+        // Phase 2.8 audit — kicker no longer shows totalScore. Per
+        // canon §4.17 the verdict is the value; the score is
+        // internal math.
         const { container } = render(
             <ReadinessDrawer
                 summary={makeSummary()}
@@ -28,7 +31,7 @@ describe("ReadinessDrawer", () => {
         const kicker = container.querySelector(
             ".db-readiness-drawer__kicker"
         );
-        expect(kicker?.textContent).toMatch(/0\/100/);
+        expect(kicker?.textContent?.trim()).toBe("READINESS");
     });
 
     it("renders all 5 dimensions", () => {

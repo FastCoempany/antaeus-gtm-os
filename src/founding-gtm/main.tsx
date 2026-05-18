@@ -4,6 +4,7 @@ import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { startUnsavedGuard } from "@/lib/unsaved-guard";
 import {
     authoredSections,
+    readinessVerdictLabel,
     setCeremonyEvent,
     setSectionsInput,
     shareComposerOpen
@@ -13,8 +14,28 @@ import { startHealthPublishing } from "./lib/health-publisher";
 import { bootCeremonyMoment } from "./lib/ceremony";
 import { countReady } from "./lib/sections";
 import { createDataClient } from "@/lib/data-client";
-import { VERDICT_LABEL } from "@/lib/readiness";
+import { VERDICT_LABEL, type Verdict } from "@/lib/readiness";
 import { openCeremony } from "./state";
+
+const VERDICT_KEYS: ReadonlyArray<Verdict> = [
+    "you_are_the_system",
+    "building",
+    "inheritable_with_guardrails",
+    "hire_ready",
+    "hire_ready_repeatable"
+];
+
+function readReadinessVerdictLabel(): string | null {
+    if (typeof localStorage === "undefined") return null;
+    try {
+        const raw = localStorage.getItem("gtmos_readiness_last_verdict");
+        if (!raw) return null;
+        if (!(VERDICT_KEYS as readonly string[]).includes(raw)) return null;
+        return VERDICT_LABEL[raw as Verdict];
+    } catch {
+        return null;
+    }
+}
 
 /**
  * Entry point for the Founding GTM Preact rebuild
@@ -52,13 +73,16 @@ if (!flagOn) {
 // then re-aggregate on storage events + visibility change so the room
 // reflects sibling-room writes without a refresh.
 setSectionsInput(loadSectionsInput());
+readinessVerdictLabel.value = readReadinessVerdictLabel();
 if (typeof window !== "undefined") {
     window.addEventListener("storage", () => {
         setSectionsInput(loadSectionsInput());
+        readinessVerdictLabel.value = readReadinessVerdictLabel();
     });
     document.addEventListener("visibilitychange", () => {
         if (!document.hidden) {
             setSectionsInput(loadSectionsInput());
+            readinessVerdictLabel.value = readReadinessVerdictLabel();
         }
     });
 }

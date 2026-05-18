@@ -2,7 +2,8 @@ import type { JSX } from "preact";
 import {
     authoredSections,
     ceremonyEvent,
-    ceremonyOpen
+    ceremonyOpen,
+    readinessVerdictLabel
 } from "./state";
 import { Topbar } from "./components/Topbar";
 import { SectionFrame } from "./components/SectionFrame";
@@ -48,7 +49,7 @@ export function FoundingGtm(): JSX.Element {
             <Topbar
                 sectionsReady={sectionsReady}
                 sectionsPartial={sectionsPartial}
-                verdictLabel={null}
+                verdictLabel={readinessVerdictLabel.value}
             />
             <main class="fg-stack">
                 {SECTION_IDS.map((id) => {
