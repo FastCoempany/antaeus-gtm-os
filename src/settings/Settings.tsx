@@ -3,7 +3,7 @@ import { Topbar } from "./components/Topbar";
 import { SettingsCards } from "./components/SettingsCards";
 import { Toast } from "./components/Toast";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * Settings — Phase 4 / Room 15 root.
  *
@@ -13,9 +13,7 @@ import { Wordmark } from "@/lib/wordmark";
 export function Settings(): JSX.Element {
     return (
         <div class="st-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="SETTINGS" />
-            </div>
+            <RoomChrome kicker="SETTINGS"/>
             <Topbar />
             <SettingsCards />
             <Toast />

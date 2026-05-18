@@ -6,7 +6,7 @@ import { PlanReadout } from "./components/PlanReadout";
 import { SystemHealth } from "./components/SystemHealth";
 import { HandoffStrip } from "./components/HandoffStrip";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * QuotaWorkback — Phase 4 / Room 14 root.
  *
@@ -30,9 +30,7 @@ import { Wordmark } from "@/lib/wordmark";
 export function QuotaWorkback(): JSX.Element {
     return (
         <div class="qw-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="QUOTA WORKBACK" />
-            </div>
+            <RoomChrome kicker="QUOTA WORKBACK"/>
             <Topbar />
             <CoveragePanel />
             <SystemHealth />

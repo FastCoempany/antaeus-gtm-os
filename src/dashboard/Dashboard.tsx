@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 import {
     closeReadinessDrawer,
     commandMode,
@@ -41,9 +41,7 @@ export function Dashboard(): JSX.Element {
     const isEmpty = commandSummary.value.ranked.length === 0;
     return (
         <div class="db-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="DASHBOARD" />
-            </div>
+            <RoomChrome kicker="DASHBOARD"/>
             <Topbar />
             {isEmpty ? (
                 <EmptyDashboard />

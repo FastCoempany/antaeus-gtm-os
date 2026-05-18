@@ -10,7 +10,7 @@ import { NextStepDocket } from "./components/NextStepDocket";
 import { SkipAheadTray } from "./components/SkipAheadTray";
 import { SupportDossier } from "./components/SupportDossier";
 import { HandoffStrip } from "./components/HandoffStrip";
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 import {
     activeFramework,
     activeInterrupt,
@@ -70,9 +70,7 @@ export function DiscoveryStudio(): JSX.Element {
 
     return (
         <div class="ds-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="DISCOVERY STUDIO" />
-            </div>
+            <RoomChrome kicker="DISCOVERY STUDIO"/>
             <header class="ds-topbar">
                 <p class="ds-topbar__kicker">{kicker}</p>
                 <h1 class="ds-topbar__title">

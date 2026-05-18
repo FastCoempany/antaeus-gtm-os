@@ -7,7 +7,7 @@ import { PushbackSheet } from "./components/PushbackSheet";
 import { OutcomeRack } from "./components/OutcomeRack";
 import { HandoffStrip } from "./components/HandoffStrip";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * Negotiation — Phase 4 of the 2026-05 navigation-intelligence
  * roadmap (canon §4.16b).
@@ -36,9 +36,7 @@ import { Wordmark } from "@/lib/wordmark";
 export function Negotiation(): JSX.Element {
     return (
         <div class="ng-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="NEGOTIATION" />
-            </div>
+            <RoomChrome kicker="NEGOTIATION"/>
             <Topbar />
             <RouteRack />
             <PositionRack />

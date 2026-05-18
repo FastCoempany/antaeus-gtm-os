@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 import {
     accountDraft,
     accounts,
@@ -84,9 +84,7 @@ function HeroBand(): JSX.Element {
         : baseKicker;
     return (
         <section class="ta-hero" aria-label="Territory hero">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="TERRITORY ARCHITECT" />
-            </div>
+            <RoomChrome kicker="TERRITORY ARCHITECT"/>
             <p class="ta-hero__kicker">{kicker}</p>
             <h1 class="ta-hero__title">
                 <span>One territory.</span> One ceiling. Real bets.

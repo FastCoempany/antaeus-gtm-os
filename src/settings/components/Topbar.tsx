@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { backup, demo, inboundReturn } from "../state";
+import { backup, demo } from "../state";
 
 /**
  * Topbar — kicker + thesis + 3-stat anchor (keys captured / last
@@ -9,15 +9,17 @@ import { backup, demo, inboundReturn } from "../state";
  *   - Kicker carries contextual workspace-state tail (parity with
  *     audited rooms) — "SETTINGS · demo workspace" / "SETTINGS · N
  *     keys captured" — was just "SETTINGS".
- *   - Back affordance renders when inbound continuity present (was:
- *     no back-link rendered even when returnTo + returnLabel were
- *     passed in). main.tsx routes the path through safeReturnTo
- *     before it ever lands in the inboundReturn signal.
+ *
+ * Program 6 / PR 1: the inboundReturn back-pill that lived here was
+ * hoisted into the canonical RoomChrome (top-of-room, right side)
+ * so back-affordance renders consistently across all 20 rooms. The
+ * inboundReturn signal in state.ts is retired in favor of the
+ * shared BackButton component (which reads continuity params via
+ * readContinuity() the same way inboundReturn used to).
  */
 export function Topbar(): JSX.Element {
     const b = backup.value;
     const d = demo.value;
-    const back = inboundReturn.value;
     const lastBackup = b.capturedAt
         ? new Date(b.capturedAt).toLocaleString()
         : "Never";
@@ -31,11 +33,6 @@ export function Topbar(): JSX.Element {
 
     return (
         <header class="st-topbar">
-            {back ? (
-                <a class="st-topbar__back" href={back.path}>
-                    ← {back.label}
-                </a>
-            ) : null}
             <p class="st-topbar__kicker">{kicker}</p>
             <h1 class="st-topbar__title">Settings</h1>
             <p class="st-topbar__subtitle">

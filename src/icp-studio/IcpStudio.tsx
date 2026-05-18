@@ -3,7 +3,7 @@ import { DarkHero } from "./components/DarkHero";
 import { WorkArea } from "./components/WorkArea";
 import { AnalyticsPanel } from "./components/AnalyticsPanel";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * IcpStudio — Wave 1 root.
  *
@@ -28,9 +28,7 @@ import { Wordmark } from "@/lib/wordmark";
 export function IcpStudio(): JSX.Element {
     return (
         <div class="icp-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="ICP STUDIO" />
-            </div>
+            <RoomChrome kicker="ICP STUDIO"/>
             <DarkHero />
             <WorkArea />
             <AnalyticsPanel />

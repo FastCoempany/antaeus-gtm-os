@@ -5,7 +5,7 @@ import { AgendaSpine } from "./components/AgendaSpine";
 import { Quality } from "./components/Quality";
 import { Handoff } from "./components/Handoff";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * CallPlanner — Wave 1 root.
  *
@@ -36,9 +36,7 @@ import { Wordmark } from "@/lib/wordmark";
 export function CallPlanner(): JSX.Element {
     return (
         <div class="cp-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="CALL PLANNER" />
-            </div>
+            <RoomChrome kicker="CALL PLANNER"/>
             <Topbar />
             <div class="cp-stage">
                 <Witness />

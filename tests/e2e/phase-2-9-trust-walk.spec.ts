@@ -29,8 +29,10 @@ test.describe("Phase 2.9 — Trust flow", () => {
             // On a fresh workspace (no keys, no demo) the kicker is
             // plain "SETTINGS" — no contextual tail to surface.
             expect(kicker?.trim()).toBe("SETTINGS");
-            // No back affordance when no inbound continuity.
-            await expect(page.locator(".st-topbar__back")).toHaveCount(0);
+            // No back affordance when no inbound continuity. (Selector
+            // moved from .st-topbar__back to the canonical .c-back in
+            // Program 6 / PR 1.)
+            await expect(page.locator(".c-back")).toHaveCount(0);
         } finally {
             await ctx.close();
         }
@@ -49,16 +51,17 @@ test.describe("Phase 2.9 — Trust flow", () => {
             );
             await page.waitForTimeout(300);
 
-            // Phase 2.9 finding: back-affordance now renders with the
-            // inbound returnLabel. Was: no back-link rendered at all
-            // even when continuity params were present.
-            await expect(page.locator(".st-topbar__back")).toBeAttached();
-            const text = await page
-                .locator(".st-topbar__back")
-                .textContent();
+            // Phase 2.9 wired the back affordance via a custom
+            // `.st-topbar__back` in the Settings Topbar. Program 6 / PR 1
+            // hoisted that into the canonical RoomChrome BackButton
+            // (`.c-back`) so every room renders back-affordance the same
+            // way. Continuity contract is unchanged — only the selector
+            // moved.
+            await expect(page.locator(".c-back")).toBeAttached();
+            const text = await page.locator(".c-back").textContent();
             expect(text).toContain("Back to Dashboard");
             const href = await page
-                .locator(".st-topbar__back")
+                .locator(".c-back")
                 .getAttribute("href");
             expect(href).toBe("/dashboard/");
         } finally {

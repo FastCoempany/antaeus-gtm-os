@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 import { activation, model, roleLabel } from "../state";
 
 /**
@@ -7,14 +7,17 @@ import { activation, model, roleLabel } from "../state";
  *
  * Post first-90-seconds audit:
  *   - Threshold kicker removed (internal architecture language).
- *   - BackButton removed (Welcome is the threshold; there's nothing
- *     coherent to navigate back to from here).
- *   - Wordmark added in the top-left chrome (global brand presence;
- *     also gives the operator a reliable home link).
  *   - Chips are suppressed on the empty state — they were
  *     decorative when there's nothing to summarize. They return as
  *     soon as the workspace has any context (company name, role,
  *     completed anchors > 0).
+ *
+ * Program 6 / PR 1: chrome strip now goes through the shared
+ * RoomChrome component. Welcome is normally the threshold, but the
+ * back-pill still appears when Sarah arrives via a sibling room
+ * with continuity params (e.g. Settings → "Re-run onboarding" loops
+ * her through Welcome). Continuity-aware → renders only when there
+ * is somewhere coherent to return to.
  */
 export function Hero(): JSX.Element {
     const m = model.value;
@@ -25,7 +28,7 @@ export function Hero(): JSX.Element {
     return (
         <header class="wel-hero">
             <div class="wel-hero__chrome">
-                <Wordmark
+                <RoomChrome
                     kicker="WELCOME"
                     workspace={ctx.companyName ?? null}
                 />
