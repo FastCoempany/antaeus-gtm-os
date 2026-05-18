@@ -60,44 +60,6 @@ button {
         var(--dw-field);
 }
 
-/* ─── Spine ────────────────────────────────────────────────────────── */
-
-.dw-spine {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 12px;
-    gap: 14px;
-    user-select: none;
-}
-
-.dw-spine__brand {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 9px;
-    letter-spacing: 0.32em;
-    color: var(--dw-ink-40);
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-}
-
-.dw-spine__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    background: var(--dw-accent-orange);
-    box-shadow: 0 0 0 4px rgba(230, 112, 30, 0.12);
-}
-
-.dw-spine__rail {
-    width: 1px;
-    flex: 1;
-    background: linear-gradient(
-        180deg,
-        rgba(10, 28, 64, 0.18) 0%,
-        rgba(10, 28, 64, 0.04) 100%
-    );
-}
-
 /* ─── Surface ──────────────────────────────────────────────────────── */
 
 .dw-surface {
@@ -134,403 +96,6 @@ button {
     color: var(--dw-ink-70);
     margin: 0;
     max-width: 60ch;
-}
-
-/* ─── Bridge stats ─────────────────────────────────────────────────── */
-
-.dw-bridge {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr) 2fr;
-    gap: 1px;
-    background: var(--dw-border);
-    border: 1px solid var(--dw-border);
-    border-radius: 2px;
-    margin-bottom: 24px;
-    overflow: hidden;
-}
-
-.dw-bridge__cell {
-    background: var(--dw-field-raised);
-    padding: 16px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.dw-bridge__cell--wide {
-    grid-column: span 1;
-}
-
-.dw-bridge__label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--dw-ink-40);
-}
-
-.dw-bridge__value {
-    font-size: 22px;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    color: var(--dw-ink);
-}
-
-/* ─── Recovery queue ───────────────────────────────────────────────── */
-
-.dw-recovery {
-    background: var(--dw-field-raised);
-    border: 1px solid var(--dw-border-strong);
-    border-radius: 2px;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-}
-
-.dw-recovery__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 16px;
-}
-
-.dw-recovery__kicker {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--dw-ink-70);
-}
-
-.dw-recovery__hint {
-    font-size: 12px;
-    color: var(--dw-ink-40);
-}
-
-.dw-recovery__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.dw-recovery__item--critical {
-    border-left: 3px solid var(--dw-accent-red);
-}
-.dw-recovery__item--at-risk {
-    border-left: 3px solid var(--dw-accent-amber);
-}
-
-.dw-recovery__btn {
-    width: 100%;
-    text-align: left;
-    background: var(--dw-field);
-    border: 1px solid var(--dw-border);
-    padding: 12px 14px;
-    border-radius: 2px;
-    color: var(--dw-ink);
-    font-family: inherit;
-    display: block;
-}
-
-.dw-recovery__btn:hover {
-    background: var(--dw-field-raised);
-    border-color: var(--dw-border-strong);
-}
-
-.dw-recovery__btn-header {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 6px;
-    align-items: baseline;
-    flex-wrap: wrap;
-}
-
-.dw-recovery__account {
-    font-weight: 600;
-    flex: 1;
-}
-
-.dw-recovery__stage {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--dw-ink-70);
-}
-
-.dw-recovery__value {
-    font-variant-numeric: tabular-nums;
-    color: var(--dw-ink-70);
-}
-
-.dw-recovery__causes {
-    font-size: 12px;
-    color: var(--dw-ink-70);
-    margin: 0 0 4px;
-    font-style: italic;
-}
-
-.dw-recovery__next-move {
-    font-size: 13px;
-    margin: 0;
-    line-height: 1.4;
-}
-
-.dw-recovery__empty {
-    margin: 0;
-    color: var(--dw-ink-70);
-    font-size: 13px;
-}
-
-/* ─── Filter bar ───────────────────────────────────────────────────── */
-
-.dw-filter-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.dw-filter-bar__label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dw-ink-40);
-}
-
-.dw-filter-bar__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 6px;
-}
-
-.dw-filter-bar__chip {
-    background: var(--dw-field-raised);
-    border: 1px solid var(--dw-border-strong);
-    color: var(--dw-ink);
-    padding: 4px 12px;
-    font-size: 12px;
-    border-radius: 999px;
-    font-family: inherit;
-}
-
-.dw-filter-bar__chip:hover {
-    background: var(--dw-ink-15);
-}
-
-.dw-filter-bar__chip.is-active {
-    background: var(--dw-ink);
-    color: #fff;
-    border-color: var(--dw-ink);
-}
-
-.dw-filter-bar__export {
-    margin-left: auto;
-    background: var(--dw-field-raised);
-    border: 1px solid var(--dw-border-strong);
-    color: var(--dw-ink);
-    padding: 5px 14px;
-    font-size: 12px;
-    border-radius: 999px;
-    font-family: inherit;
-    transition: background 140ms ease, border-color 140ms ease;
-}
-
-.dw-filter-bar__export:hover:not(:disabled) {
-    background: rgba(10, 28, 64, 0.08);
-    border-color: var(--dw-ink);
-}
-
-.dw-filter-bar__export:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-}
-
-/* ─── Intervention rail ────────────────────────────────────────────── */
-
-.dw-intervention {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.dw-intervention__lane {
-    background: var(--dw-field-raised);
-    border: 1px solid var(--dw-border);
-    border-radius: 2px;
-    padding: 16px;
-}
-
-.dw-intervention__lane--critical {
-    border-top: 3px solid var(--dw-accent-red);
-}
-.dw-intervention__lane--at-risk {
-    border-top: 3px solid var(--dw-accent-amber);
-}
-.dw-intervention__lane--healthy {
-    border-top: 3px solid var(--dw-accent-green);
-}
-
-.dw-intervention__lane-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 12px;
-}
-
-.dw-intervention__lane-title {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--dw-ink-70);
-}
-
-.dw-intervention__lane-count {
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    color: var(--dw-ink);
-}
-
-.dw-intervention__lane-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.dw-intervention__lane-empty {
-    margin: 0;
-    color: var(--dw-ink-40);
-    font-size: 13px;
-    padding: 4px 0;
-}
-
-.dw-intervention__empty {
-    grid-column: 1 / -1;
-    background: var(--dw-field-raised);
-    border: 1px dashed var(--dw-border-strong);
-    border-radius: 2px;
-    padding: 32px;
-    text-align: center;
-    margin: 0;
-    color: var(--dw-ink-70);
-}
-
-/* ─── Deal card ────────────────────────────────────────────────────── */
-
-.dw-card {
-    width: 100%;
-    text-align: left;
-    background: var(--dw-field);
-    border: 1px solid var(--dw-border);
-    border-radius: 2px;
-    padding: 10px 12px;
-    color: var(--dw-ink);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.dw-card:hover {
-    background: var(--dw-field-raised);
-    border-color: var(--dw-border-strong);
-}
-
-.dw-card--critical {
-    border-left: 3px solid var(--dw-accent-red);
-}
-.dw-card--at-risk {
-    border-left: 3px solid var(--dw-accent-amber);
-}
-.dw-card--healthy {
-    border-left: 3px solid var(--dw-accent-green);
-}
-
-.dw-card__header {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-}
-
-.dw-card__account {
-    font-weight: 600;
-    flex: 1;
-}
-
-.dw-card__value {
-    font-variant-numeric: tabular-nums;
-    color: var(--dw-ink-70);
-}
-
-.dw-card__row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.dw-card__stage {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--dw-ink-70);
-}
-
-.dw-card__momentum {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 1px 6px;
-    border-radius: 2px;
-}
-
-.dw-card__momentum--strong {
-    background: #ecf6ef;
-    color: var(--dw-accent-green);
-}
-.dw-card__momentum--neutral {
-    background: var(--dw-ink-15);
-    color: var(--dw-ink-70);
-}
-.dw-card__momentum--stalling {
-    background: #fff3ec;
-    color: var(--dw-accent-orange);
-}
-
-.dw-card__next-step {
-    font-size: 12px;
-    margin: 0;
-    color: var(--dw-ink);
-    line-height: 1.4;
-}
-
-.dw-card__next-step--missing {
-    color: var(--dw-accent-orange);
-    font-style: italic;
-}
-
-.dw-card__next-step-label {
-    font-weight: 600;
-}
-
-.dw-card__next-step-date {
-    color: var(--dw-ink-70);
-}
-
-.dw-card__note {
-    font-size: 11px;
-    margin: 4px 0 0;
-    color: var(--dw-ink-70);
-    font-style: italic;
 }
 
 /* ─── Modal ────────────────────────────────────────────────────────── */
@@ -1374,279 +939,6 @@ button {
     max-width: 32ch;
 }
 
-/* ─── Lane grid (3 lanes) ──────────────────────────────────────────── */
-
-.dw-lane-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-    margin-bottom: 22px;
-}
-
-@media (max-width: 900px) {
-    .dw-lane-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.dw-lane {
-    background: var(--dw-field-raised);
-    border: 1px solid var(--dw-border);
-    border-radius: 14px;
-    padding: 16px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.dw-lane__state {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    color: var(--dw-accent-orange);
-    text-transform: uppercase;
-    font-weight: 700;
-    margin: 0;
-}
-
-.dw-lane__headline {
-    font-family: "DM Serif Display", serif;
-    font-size: 16px;
-    line-height: 1.2;
-    font-weight: 400;
-    color: var(--dw-ink);
-    margin: 0;
-}
-
-.dw-lane__copy {
-    font-size: 12.5px;
-    color: var(--dw-ink-70);
-    line-height: 1.5;
-    margin: 0;
-}
-
-.dw-lane__meta {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    margin: 4px 0 0;
-    font-size: 11px;
-    color: var(--dw-ink-70);
-}
-
-.dw-lane__meta span {
-    background: var(--dw-field);
-    padding: 4px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--dw-border);
-}
-
-/* ─── Controls strip ───────────────────────────────────────────────── */
-
-.dw-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 16px 0 0;
-    border-top: 1px solid var(--dw-border);
-}
-
-/* ============================================
-   Deal Workspace audit (2026-05) — DealList
-   ============================================ */
-
-.dw-deal-list {
-    margin-top: 24px;
-    background: var(--dw-field-raised);
-    border: 1px solid var(--dw-border);
-    border-radius: 6px;
-    padding: 18px 20px 14px;
-}
-
-.dw-deal-list__head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-}
-
-.dw-deal-list__title {
-    font-family: "DM Serif Display", serif;
-    font-size: 1.1rem;
-    line-height: 1.2;
-    font-weight: 400;
-    margin: 0;
-    color: var(--dw-ink);
-    display: inline-flex;
-    align-items: baseline;
-    gap: 10px;
-}
-
-.dw-deal-list__count {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--dw-ink-70);
-    font-weight: 700;
-}
-
-.dw-deal-list__search {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    flex: 0 1 320px;
-}
-
-.dw-deal-list__search-label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    color: var(--dw-ink-40);
-}
-
-.dw-deal-list__search input {
-    flex: 1;
-    border: 1px solid var(--dw-border);
-    border-radius: 4px;
-    padding: 6px 10px;
-    font: inherit;
-    font-size: 13px;
-    color: var(--dw-ink);
-    background: var(--dw-field);
-    transition: border-color 140ms ease, box-shadow 140ms ease;
-}
-
-.dw-deal-list__search input:focus {
-    outline: none;
-    border-color: var(--dw-border-strong);
-    box-shadow: 0 0 0 3px rgba(10, 28, 64, 0.06);
-}
-
-.dw-deal-list__empty {
-    margin: 0;
-    padding: 12px 0;
-    color: var(--dw-ink-70);
-    font-size: 13px;
-    font-style: italic;
-}
-
-.dw-deal-list__clear {
-    background: transparent;
-    border: none;
-    padding: 0;
-    color: var(--dw-accent-orange, #e6701e);
-    cursor: pointer;
-    text-decoration: underline;
-    font: inherit;
-    font-style: italic;
-}
-
-.dw-deal-list__rows {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.dw-deal-row {
-    width: 100%;
-    background: var(--dw-field);
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding: 10px 14px;
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) 110px 100px minmax(0, 2fr) 80px;
-    gap: 14px;
-    align-items: center;
-    text-align: left;
-    font-family: inherit;
-    font-size: 13px;
-    color: var(--dw-ink);
-    cursor: pointer;
-    transition: background 140ms ease, border-color 140ms ease;
-}
-
-.dw-deal-row:hover {
-    background: rgba(10, 28, 64, 0.04);
-    border-color: var(--dw-border);
-}
-
-.dw-deal-row.is-focused {
-    background: rgba(230, 112, 30, 0.06);
-    border-color: rgba(230, 112, 30, 0.32);
-}
-
-.dw-deal-row__name {
-    font-weight: 600;
-    color: var(--dw-ink);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.dw-deal-row__stage {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--dw-ink-70);
-}
-
-.dw-deal-row__value {
-    font-variant-numeric: tabular-nums;
-    color: var(--dw-ink-70);
-}
-
-.dw-deal-row__nextstep {
-    color: var(--dw-ink-70);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-style: italic;
-}
-
-.dw-deal-row__lane {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 999px;
-    justify-self: end;
-}
-
-.dw-deal-row__lane--critical {
-    background: rgba(180, 38, 31, 0.10);
-    color: var(--dw-accent-red, #b4261f);
-}
-
-.dw-deal-row__lane--at-risk {
-    background: rgba(181, 117, 0, 0.10);
-    color: var(--dw-accent-amber, #b57500);
-}
-
-.dw-deal-row__lane--healthy {
-    background: rgba(46, 125, 76, 0.10);
-    color: var(--dw-accent-green, #2e7d4c);
-}
-
-@media (max-width: 840px) {
-    .dw-deal-row {
-        grid-template-columns: 1fr;
-        gap: 4px;
-        padding: 12px 14px;
-    }
-    .dw-deal-row__lane {
-        justify-self: start;
-    }
-}
-
 /* ─── HandoffStrip (Phase 2.6) ─────────────────────────────────────── */
 
 .dw-handoff {
@@ -1718,4 +1010,421 @@ button {
 .dw-handoff__cta--primary:hover {
     background: #d65f0f;
     border-color: #d65f0f;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Program 6 / PR 6 — Intervention Rail (lower board rebuild)
+   ───────────────────────────────────────────────────────────────── */
+
+.dw-rail {
+    background: rgba(255, 255, 255, 0.74);
+    border: 1px solid rgba(10, 28, 64, 0.08);
+    border-radius: 18px;
+    box-shadow: 0 14px 32px rgba(10, 28, 64, 0.05);
+    padding: 22px 24px 20px;
+    margin: 28px 0;
+    display: grid;
+    gap: 18px;
+}
+
+.dw-rail--empty {
+    padding: 28px;
+}
+
+.dw-rail__empty {
+    margin: 0;
+    text-align: center;
+    color: rgba(10, 28, 64, 0.55);
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+
+/* ─── Toolbar ────────────────────────────────────────────────── */
+
+.dw-rail__toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) auto auto;
+    gap: 16px;
+    align-items: center;
+}
+
+@media (max-width: 900px) {
+    .dw-rail__toolbar {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+.dw-rail__search {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(10, 28, 64, 0.04);
+    border: 1px solid rgba(10, 28, 64, 0.08);
+    border-radius: 999px;
+}
+
+.dw-rail__search-icon {
+    color: rgba(10, 28, 64, 0.5);
+    font-size: 14px;
+}
+
+.dw-rail__search-input {
+    border: 0;
+    background: transparent;
+    outline: none;
+    font: inherit;
+    color: var(--dw-ink, #0a1c40);
+    padding: 0;
+}
+
+.dw-rail__search-input::placeholder {
+    color: rgba(10, 28, 64, 0.45);
+}
+
+.dw-rail__pills {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    gap: 6px;
+}
+
+.dw-rail__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 28, 64, 0.12);
+    background: transparent;
+    color: var(--dw-ink, #0a1c40);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 120ms ease;
+}
+
+.dw-rail__pill:hover {
+    border-color: rgba(230, 112, 30, 0.35);
+}
+
+.dw-rail__pill.is-active {
+    background: rgba(230, 112, 30, 0.10);
+    border-color: rgba(230, 112, 30, 0.42);
+    color: #b6571a;
+}
+
+.dw-rail__pill-label {
+    line-height: 1;
+}
+
+.dw-rail__pill-count {
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: -0.02em;
+    color: inherit;
+    text-transform: none;
+}
+
+.dw-rail__primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 18px;
+    background: var(--dw-orange, #e6701e);
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 120ms ease;
+    white-space: nowrap;
+}
+
+.dw-rail__primary:hover {
+    background: #d05f12;
+}
+
+/* ─── Filter strip ───────────────────────────────────────────── */
+
+.dw-rail__filter-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 14px;
+    padding: 10px 12px;
+    background: rgba(10, 28, 64, 0.03);
+    border-radius: 10px;
+}
+
+.dw-rail__filter-shell {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.dw-rail__filter-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(10, 28, 64, 0.5);
+}
+
+.dw-rail__filter-value {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--dw-ink, #0a1c40);
+}
+
+.dw-rail__filter-copy {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(10, 28, 64, 0.62);
+    font-style: italic;
+}
+
+/* ─── Rail rows ──────────────────────────────────────────────── */
+
+.dw-rail__layout {
+    display: grid;
+    gap: 16px;
+}
+
+.dw-rail__row {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(10, 28, 64, 0.08);
+}
+
+.dw-rail__row:first-child {
+    border-top: 0;
+    padding-top: 4px;
+}
+
+@media (max-width: 900px) {
+    .dw-rail__row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+
+.dw-rail__label {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+}
+
+.dw-rail__state {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--dw-orange, #e6701e);
+}
+
+.dw-rail__row-copy {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: rgba(10, 28, 64, 0.65);
+}
+
+.dw-rail__row-empty {
+    margin: 0;
+    padding: 12px 0;
+    color: rgba(10, 28, 64, 0.5);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    font-style: italic;
+}
+
+/* ─── Ticket (Now / Next rows) ───────────────────────────────── */
+
+.dw-rail__tickets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.dw-rail__ticket-item {
+    display: block;
+}
+
+.dw-rail__ticket {
+    display: grid;
+    grid-template-columns: 6px minmax(0, 1fr) auto auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 18px 14px 0;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(10, 28, 64, 0.08);
+    border-radius: 14px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: all 120ms ease;
+}
+
+.dw-rail__ticket:hover {
+    border-color: rgba(10, 28, 64, 0.18);
+    transform: translateY(-1px);
+}
+
+.dw-rail__ticket.is-focused {
+    border-color: rgba(230, 112, 30, 0.4);
+    box-shadow: 0 0 0 1px rgba(230, 112, 30, 0.32);
+}
+
+.dw-rail__ticket-edge {
+    align-self: stretch;
+    background: rgba(10, 28, 64, 0.2);
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+.dw-rail__ticket-edge--risk { background: var(--dw-red, #ef4444); }
+.dw-rail__ticket-edge--motion { background: var(--dw-blue, #2563eb); }
+.dw-rail__ticket-edge--healthy { background: var(--dw-green, #22c55e); }
+
+.dw-rail__ticket-body {
+    display: grid;
+    gap: 4px;
+    padding-left: 6px;
+}
+
+.dw-rail__ticket-name {
+    margin: 0;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.1rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--dw-ink, #0a1c40);
+}
+
+.dw-rail__ticket-detail {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 0.78rem;
+    color: rgba(10, 28, 64, 0.6);
+}
+
+.dw-rail__ticket-detail li::after {
+    content: "·";
+    margin-left: 10px;
+    color: rgba(10, 28, 64, 0.25);
+}
+
+.dw-rail__ticket-detail li:last-child::after {
+    content: "";
+    margin-left: 0;
+}
+
+.dw-rail__ticket-value {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.05rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--dw-ink, #0a1c40);
+    white-space: nowrap;
+}
+
+.dw-rail__ticket-action {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dw-orange, #e6701e);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+    .dw-rail__ticket {
+        grid-template-columns: 6px minmax(0, 1fr);
+        gap: 10px;
+    }
+    .dw-rail__ticket-value,
+    .dw-rail__ticket-action {
+        grid-column: 2;
+        font-size: 0.78rem;
+    }
+}
+
+/* ─── Reserve tags (Keep honest row) ─────────────────────────── */
+
+.dw-rail__reserve {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dw-rail__reserve-tag {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(10, 28, 64, 0.10);
+    color: var(--dw-ink, #0a1c40);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 120ms ease;
+}
+
+.dw-rail__reserve-tag:hover {
+    border-color: rgba(10, 28, 64, 0.25);
+    transform: translateY(-1px);
+}
+
+.dw-rail__reserve-tag-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.55);
+    font-weight: 700;
+}
+
+.dw-rail__reserve-tag-name {
+    font-weight: 600;
+    color: var(--dw-ink, #0a1c40);
+}
+
+.dw-rail__reserve-more {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.55);
+    font-weight: 700;
 }
