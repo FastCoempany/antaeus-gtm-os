@@ -1,6 +1,22 @@
 (function () {
     'use strict';
 
+    /*
+     * IMPORTANT — this file mirrors src/lib/auth-ui.ts (the typed
+     * canonical implementation, Phase 3 of the 2026-05 navigation-
+     * intelligence roadmap). Until the auth HTML pages migrate to
+     * the Preact stack (Phase 5), this vanilla-JS copy is what the
+     * static pages load. The TS module is the source of truth —
+     * comprehensive vitest coverage lives there; if you change a
+     * branch here, mirror the change in src/lib/auth-ui.ts + extend
+     * src/lib/auth-ui.test.ts.
+     *
+     * Trust Annex laws (canon Part II §4.7) — raw Supabase error
+     * strings ("JWT", "PKCE", "grant_type", "server_error") never
+     * appear in user-facing copy. Every branch returns a recovery
+     * action so the user is never stranded.
+     */
+
     function getMessageText(error) {
         if (!error) return '';
         if (typeof error === 'string') return error;
