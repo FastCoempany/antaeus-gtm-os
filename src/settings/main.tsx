@@ -1,8 +1,7 @@
 import { render } from "preact";
 import { Settings } from "./Settings";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
-import { readContinuity, safeReturnTo } from "@/lib/continuity";
-import { inboundReturn, refreshAll, refreshCloudStatus } from "./state";
+import { refreshAll, refreshCloudStatus } from "./state";
 
 initObservability();
 
@@ -22,15 +21,11 @@ if (!flagOn) {
 
 refreshAll();
 
-// Phase 2.9 — read inbound continuity. When Sarah arrives from a
-// sibling room with `?returnTo=&returnLabel=`, surface a back
-// affordance in the Topbar so her path back stays honest.
-// safeReturnTo prevents open-redirect (paths only, no //).
-const ctx = readContinuity();
-const safe = safeReturnTo(ctx.returnTo);
-if (safe && ctx.returnLabel) {
-    inboundReturn.value = { path: safe, label: ctx.returnLabel };
-}
+// Phase 2.9 introduced an inboundReturn signal to surface the back
+// affordance when Sarah arrived from a sibling room. Program 6 / PR 1
+// retired that signal in favor of the canonical RoomChrome +
+// BackButton pair — same continuity-param read, same safeReturnTo
+// guard, applied uniformly to every room.
 
 render(<Settings />, root);
 

@@ -4,7 +4,7 @@ import { ForgePanel } from "./components/ForgePanel";
 import { CastPanel } from "./components/CastPanel";
 import { StageStrip } from "./components/StageStrip";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * PocFramework — Phase 2 rework against AI-picked v3 thesis
  * "Proof is not a page. It is a forced event."
@@ -25,9 +25,7 @@ import { Wordmark } from "@/lib/wordmark";
 export function PocFramework(): JSX.Element {
     return (
         <div class="poc-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="POC FRAMEWORK" />
-            </div>
+            <RoomChrome kicker="POC FRAMEWORK"/>
             <Topbar />
             <StageStrip />
             <div class="poc-stage">

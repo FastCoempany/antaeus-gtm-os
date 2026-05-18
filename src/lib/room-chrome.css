@@ -1,0 +1,67 @@
+/*
+ * Room chrome layout. PR 1 (Program 6) made this a flex container so
+ * the back-pill (and future palette trigger) can mount on the right.
+ *
+ * Reuses the `.ant-room-chrome` selector that already exists in
+ * wordmark.css for backwards-compatibility — every room's CSS
+ * already accounted for the wrapper's padding + z-index, so changing
+ * the layout family here doesn't disturb room-level CSS.
+ */
+
+.ant-room-chrome {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.ant-room-chrome__aux {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Cmd+K palette discoverability — mouse-first affordance for the
+   keyboard-summoned palette. Quiet, recessive; the keyboard is the
+   primary way in, this is just the visible reminder it exists. */
+.ant-room-chrome__palette-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 28, 64, 0.15);
+    background: transparent;
+    color: rgba(10, 28, 64, 0.7);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 120ms ease;
+}
+
+.ant-room-chrome__palette-hint:hover {
+    border-color: rgba(230, 112, 30, 0.35);
+    color: #e6701e;
+    background: rgba(230, 112, 30, 0.06);
+}
+
+.ant-room-chrome__palette-hint-icon {
+    font-weight: 700;
+    line-height: 1;
+}
+
+.ant-room-chrome__palette-hint-label {
+    line-height: 1;
+}
+
+@media (max-width: 560px) {
+    .ant-room-chrome__palette-hint-label {
+        display: none;
+    }
+    .ant-room-chrome__palette-hint {
+        padding: 6px 10px;
+    }
+}

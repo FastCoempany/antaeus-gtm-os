@@ -534,14 +534,14 @@ test.describe("Phase 2.10 — Integration walk (Sarah's full day)", () => {
             await page.waitForTimeout(300);
 
             // Phase 2.9 — Back-pill renders when inbound continuity present.
-            await expect(page.locator(".st-topbar__back")).toBeAttached();
+            await expect(page.locator(".c-back")).toBeAttached();
             const backText = await page
-                .locator(".st-topbar__back")
+                .locator(".c-back")
                 .textContent();
             expect(backText).toContain("Back to Dashboard");
 
             // Phase 2.9 — Click the back-pill, land on Dashboard.
-            await page.locator(".st-topbar__back").click();
+            await page.locator(".c-back").click();
             await page.waitForLoadState("networkidle");
             expect(new URL(page.url()).pathname).toBe("/dashboard/");
 

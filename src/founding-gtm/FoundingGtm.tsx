@@ -11,7 +11,7 @@ import { CeremonyOverlay } from "./components/CeremonyOverlay";
 import { HandoffStrip } from "./components/HandoffStrip";
 import { SECTION_IDS } from "./lib/types";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * Founding GTM root — Wave 1.
  *
@@ -43,9 +43,7 @@ export function FoundingGtm(): JSX.Element {
 
     return (
         <div class="fg-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="FOUNDING GTM" />
-            </div>
+            <RoomChrome kicker="FOUNDING GTM"/>
             <Topbar
                 sectionsReady={sectionsReady}
                 sectionsPartial={sectionsPartial}

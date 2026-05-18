@@ -4,7 +4,7 @@ import { AccountRow } from "./components/AccountRow";
 import { TalkLoom } from "./components/TalkLoom";
 import { CallMemory } from "./components/CallMemory";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * ColdCallStudio — Wave 1 root.
  *
@@ -32,9 +32,7 @@ import { Wordmark } from "@/lib/wordmark";
 export function ColdCallStudio(): JSX.Element {
     return (
         <div class="cc-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="COLD CALL STUDIO" />
-            </div>
+            <RoomChrome kicker="COLD CALL STUDIO"/>
             <Topbar />
             <AccountRow />
             <TalkLoom />

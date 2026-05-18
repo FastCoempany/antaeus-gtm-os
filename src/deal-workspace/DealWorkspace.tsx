@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 import { DealList } from "./components/DealList";
 import { FilterBar } from "./components/FilterBar";
 import { HandoffStrip } from "./components/HandoffStrip";
@@ -68,9 +68,7 @@ export function DealWorkspace(): JSX.Element {
 
     return (
         <div class="dw-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="DEAL WORKSPACE" />
-            </div>
+            <RoomChrome kicker="DEAL WORKSPACE"/>
             <div class="dw-surface">
                 <header class="dw-topbar">
                     <p class="dw-topbar__kicker">{kicker}</p>

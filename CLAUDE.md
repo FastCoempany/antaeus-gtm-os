@@ -395,13 +395,16 @@ The full matrix lives in `03-facial-architecture/antaeus-phase-7-preflight-behav
 - **Discovery Studio** feeds Deal Workspace, Handoff, Readiness.
 - **Deal Workspace** feeds Future Autopsy, PoC, Advisor, Dashboard, Readiness, Handoff.
 - **Future Autopsy** feeds Deal Workspace, Call Planner, Discovery Studio, PoC (reroute logic).
-- **PoC Framework** feeds Deal Workspace, Dashboard, Handoff.
-- **Advisor Deploy** feeds Deal Workspace, Dashboard, Handoff.
+- **PoC Framework** feeds Deal Workspace, Dashboard, Handoff, Negotiation (proof state into terms conversations).
+- **Advisor Deploy** feeds Deal Workspace, Dashboard, Handoff, Negotiation (carry-to-advisor before pricing rehearsal).
+- **Negotiation** feeds Deal Workspace (rehearsal outcomes + concession ledger), Future Autopsy (loss-pattern feedback), Advisor Deploy (backchannel air cover on terms), PoC Framework (proof state during rehearsal). The Deal Workspace ↔ Negotiation ↔ Advisor Deploy triangle is the high-pressure phase of a deal per canon §4.16b.
 - **Quota Workback** feeds Dashboard, Outbound, Cold Call, Deal, Readiness.
-- **Readiness** feeds Dashboard, Welcome, Handoff (`gtmos_readiness_snapshot`).
+- **Readiness** feeds Dashboard, Welcome, Handoff (`gtmos_readiness_snapshot`); verdict transitions trigger the Founding GTM ceremony moment.
 - **Handoff Kit** feeds Readiness, Dashboard, future launch readiness.
 
 **Preserved continuity params (do not break):** `returnTo`, `returnLabel`, `focusObject`, `focusRoom`, `fromMode`, `fromSurface`, room-entry bridge, pinned context, stable command selection on return.
+
+**Birdseye navigation** (Program 6 / PR 1): every room mounts the canonical `RoomChrome` (wordmark + back-pill + cmd+K palette trigger). The palette (`src/lib/palette/`) is the "summoned room access" affordance Part II §5 implies — registry of all 20 rooms with family grouping + keyword filter; cmd+K toggle from any surface; back-pill reads the same continuity params HandoffStrips write. Closes the regression where 18 of 20 destination rooms silently dropped the back-affordance Phase 2 wrote into URLs.
 
 ---
 

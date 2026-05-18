@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { currentStep } from "./state";
 import { ProgressRail } from "./components/ProgressRail";
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 import {
     AccountStep,
     CategoryStep,
@@ -28,9 +28,7 @@ import {
 export function Onboarding(): JSX.Element {
     return (
         <div class="ob-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="ONBOARDING" />
-            </div>
+            <RoomChrome kicker="ONBOARDING"/>
             <ProgressRail />
             <main class="ob-stage">
                 <StepRouter />

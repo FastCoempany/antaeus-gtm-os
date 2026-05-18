@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { BackButton } from "@/lib/back-button";
 import { allNegotiations, draft, draftDeal } from "../state";
 import { ASK_MOMENT_LABEL, COUNTERPARTY_LABEL } from "../lib/types";
 
@@ -10,6 +9,10 @@ import { ASK_MOMENT_LABEL, COUNTERPARTY_LABEL } from "../lib/types";
  * {counterparty} · {ask-moment}) so Sarah can see, before her eyes
  * have left the topbar, which deal she's preparing against. Same
  * pattern Settings + Dashboard adopted in Phase 2.
+ *
+ * Program 6 / PR 1: the room-level BackButton was hoisted into the
+ * RoomChrome strip (top-of-room, right side) so every room renders
+ * the back-pill consistently. Topbar no longer owns it.
  */
 export function Topbar(): JSX.Element {
     const count = allNegotiations.value.length;
@@ -26,7 +29,6 @@ export function Topbar(): JSX.Element {
 
     return (
         <header class="ng-topbar">
-            <BackButton />
             <p class="ng-topbar__kicker">{kickerParts.join(" · ")}</p>
             <h1 class="ng-topbar__title">
                 Every concession is a deliberate move, not a reflex.

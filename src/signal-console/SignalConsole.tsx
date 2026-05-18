@@ -4,7 +4,7 @@ import { WorkspaceHealth } from "./components/WorkspaceHealth";
 import { GridControls } from "./components/GridControls";
 import { AccountGrid } from "./components/AccountGrid";
 
-import { Wordmark } from "@/lib/wordmark";
+import { RoomChrome } from "@/lib/room-chrome";
 /**
  * SignalConsole — Wave 1 root.
  *
@@ -26,9 +26,7 @@ import { Wordmark } from "@/lib/wordmark";
 export function SignalConsole(): JSX.Element {
     return (
         <div class="sc-shell">
-            <div class="ant-room-chrome">
-                <Wordmark kicker="SIGNAL CONSOLE" />
-            </div>
+            <RoomChrome kicker="SIGNAL CONSOLE"/>
             <Topbar />
             <WorkspaceHealth />
             <GridControls />
