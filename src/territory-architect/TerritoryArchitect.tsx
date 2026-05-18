@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { computed } from "@preact/signals";
 import { RoomChrome } from "@/lib/room-chrome";
 import {
     accountDraft,
@@ -41,6 +42,24 @@ import {
     hrefToSourcingWorkbench
 } from "./lib/handoff";
 import { focusedIcp } from "./state";
+import { computeFieldRead } from "./lib/field-read";
+
+/**
+ * Program 6 / PR 12 — live field read for the Signal Field hero.
+ *
+ * The wireframe's read-dock surfaces score + main risk + replacement
+ * + operator move. We compute that off the live signals so the hero
+ * tells the operator what the territory is saying, not just how
+ * many rows exist.
+ */
+const fieldRead = computed(() =>
+    computeFieldRead({
+        accounts: accounts.value,
+        theses: theses.value,
+        approaches: approaches.value,
+        allocation: allocation.value
+    })
+);
 
 /**
  * TerritoryArchitect — Wave 1+2 root.
@@ -72,6 +91,7 @@ function HeroBand(): JSX.Element {
     const a = allocation.value;
     const thesisCount = theses.value.length;
     const focus = focusedIcp.value;
+    const read = fieldRead.value;
     // Phase 2.3 — inbound focus from ICP Studio (or any upstream room
     // passing `?focusObject=`) surfaces in the kicker tail so the
     // operator sees the ICP context the room is building against.
@@ -84,41 +104,86 @@ function HeroBand(): JSX.Element {
         : baseKicker;
     return (
         <section class="ta-hero" aria-label="Territory hero">
-            <RoomChrome kicker="TERRITORY ARCHITECT"/>
+            <RoomChrome kicker="TERRITORY ARCHITECT" />
             <p class="ta-hero__kicker">{kicker}</p>
-            <h1 class="ta-hero__title">
-                <span>One territory.</span> One ceiling. Real bets.
-            </h1>
-            <p class="ta-hero__note">
-                The territory is a map of strategic bets, not a list.
-                Hold the 300-account ceiling; every row should be worth it.
-            </p>
-            <div class="ta-hero__stats" aria-label="Territory stats">
-                <div class="ta-stat">
-                    <p class="ta-stat__value">{thesisCount}</p>
-                    <p class="ta-stat__label">Theses</p>
-                </div>
-                {a.perTier.map((t) => (
-                    <div class="ta-stat" key={t.tier}>
-                        <p class="ta-stat__value">
-                            {t.count}
-                            <small>/{t.target}</small>
-                        </p>
-                        <p class="ta-stat__label">{TIER_LABELS[t.tier]}</p>
+            <div class="ta-hero__grid">
+                <div class="ta-hero__lead">
+                    <h1 class="ta-hero__title">
+                        <span>One territory.</span> One ceiling. Real bets.
+                    </h1>
+                    <p class="ta-hero__note">
+                        The territory is a map of strategic bets, not a list.
+                        Hold the 300-account ceiling; every row should be
+                        worth it.
+                    </p>
+                    <div class="ta-hero__stats" aria-label="Territory stats">
+                        <div class="ta-stat">
+                            <p class="ta-stat__value">{thesisCount}</p>
+                            <p class="ta-stat__label">Theses</p>
+                        </div>
+                        {a.perTier.map((t) => (
+                            <div class="ta-stat" key={t.tier}>
+                                <p class="ta-stat__value">
+                                    {t.count}
+                                    <small>/{t.target}</small>
+                                </p>
+                                <p class="ta-stat__label">
+                                    {TIER_LABELS[t.tier]}
+                                </p>
+                            </div>
+                        ))}
+                        <div
+                            class={`ta-stat ta-stat--${a.status}`}
+                            aria-label="Territory ceiling"
+                        >
+                            <p class="ta-stat__value">
+                                {a.total}
+                                <small>/{a.ceiling}</small>
+                            </p>
+                            <p class="ta-stat__label">
+                                Accounts · {STATUS_LABELS[a.status] ?? a.status}
+                            </p>
+                        </div>
                     </div>
-                ))}
-                <div
-                    class={`ta-stat ta-stat--${a.status}`}
-                    aria-label="Territory ceiling"
-                >
-                    <p class="ta-stat__value">
-                        {a.total}
-                        <small>/{a.ceiling}</small>
-                    </p>
-                    <p class="ta-stat__label">
-                        Accounts · {STATUS_LABELS[a.status] ?? a.status}
-                    </p>
                 </div>
+                {/*
+                  Program 6 / PR 12 — Field Read aside.
+                  Per the picked-winner Variant 02 / Signal Field
+                  refinement the hero should INTERPRET the territory,
+                  not just count rows. Score + Main risk + Replacement
+                  pressure + Operator move from the live field-read
+                  engine.
+                */}
+                <aside
+                    class={`ta-field-read ta-field-read--${read.band}`}
+                    aria-label="Field read"
+                >
+                    <div class="ta-field-read__score-row">
+                        <div>
+                            <p class="ta-field-read__kicker">FIELD READ</p>
+                            <p class="ta-field-read__band">{read.bandLabel}</p>
+                        </div>
+                        <p class="ta-field-read__score">{read.score}</p>
+                    </div>
+                    <div class="ta-field-read__line">
+                        <p class="ta-field-read__line-label">Main risk</p>
+                        <p class="ta-field-read__line-copy">{read.mainRisk}</p>
+                    </div>
+                    <div class="ta-field-read__line">
+                        <p class="ta-field-read__line-label">
+                            Replacement pressure
+                        </p>
+                        <p class="ta-field-read__line-copy">
+                            {read.replacement}
+                        </p>
+                    </div>
+                    <div class="ta-field-read__line ta-field-read__line--move">
+                        <p class="ta-field-read__line-label">Operator move</p>
+                        <p class="ta-field-read__line-copy">
+                            {read.operatorMove}
+                        </p>
+                    </div>
+                </aside>
             </div>
         </section>
     );
