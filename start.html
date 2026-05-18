@@ -258,6 +258,54 @@
       color: var(--ink-70);
     }
 
+    /* ── Deeper read (Phase 5.4 link to /why-antaeus/) ──────────── */
+
+    .deeper {
+      display: block;
+    }
+
+    .deeper__link {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 22px 26px;
+      background: var(--bg-raised);
+      border: 1px solid var(--ink-10);
+      border-left: 4px solid var(--accent-orange);
+      border-radius: 12px;
+      transition: all 140ms ease;
+      cursor: pointer;
+    }
+
+    .deeper__link:hover {
+      border-color: var(--accent-orange);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(10, 28, 64, 0.06);
+    }
+
+    .deeper__kicker {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent-orange);
+    }
+
+    .deeper__title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      line-height: 1.15;
+      color: var(--ink);
+    }
+
+    .deeper__sub {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: var(--ink-70);
+      max-width: 60ch;
+    }
+
     /* ── Footer ──────────────────────────────────────────────────── */
 
     .foot {
@@ -311,6 +359,7 @@
         <span class="wordmark__kicker">Operator preview</span>
       </a>
       <nav class="chrome__aux" aria-label="Account">
+        <a href="/why-antaeus/">Why Antaeus</a>
         <a href="/login.html">Sign in</a>
       </nav>
     </header>
@@ -376,6 +425,14 @@
           did this quarter, ready to inherit.
         </p>
       </article>
+    </section>
+
+    <section class="deeper" aria-label="Read more about Antaeus">
+      <a href="/why-antaeus/" class="deeper__link" data-cta="why-antaeus">
+        <span class="deeper__kicker">WHAT THIS ACTUALLY IS</span>
+        <span class="deeper__title">Read the longer answer →</span>
+        <span class="deeper__sub">Category, the loop, who it's for, what it's not. A few minutes if you want more than the 90-second scan.</span>
+      </a>
     </section>
 
     <footer class="foot">
