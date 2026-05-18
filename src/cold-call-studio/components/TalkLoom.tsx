@@ -20,6 +20,7 @@ import {
 import {
     loomScore,
     personalize,
+    requiredCorrectionCopy,
     weakestThreadCopy
 } from "../lib/personalize";
 import { saveCallEntry } from "../lib/cloud-persistence";
@@ -142,6 +143,15 @@ export function TalkLoom(): JSX.Element {
                     <p class="cc-loom__score" aria-label="Loom score">
                         {score}
                     </p>
+                    {/*
+                      Program 6 / PR 10 — score thesis line. Gives
+                      the giant number interpretive weight without
+                      re-introducing the retired "Room law" paragraph.
+                    */}
+                    <p class="cc-loom__score-thesis">
+                        Six threads are enough if each one carries
+                        its own pressure.
+                    </p>
                     <div class="cc-loom__read-block">
                         <p class="cc-loom__read-label">Current pull</p>
                         <p class="cc-loom__read-title">{t.title}</p>
@@ -151,6 +161,22 @@ export function TalkLoom(): JSX.Element {
                         <p class="cc-loom__read-label">Weakest thread</p>
                         <p class="cc-loom__read-title">
                             {weakestThreadCopy(hasAccount)}
+                        </p>
+                        {/*
+                          Program 6 / PR 10 — required-correction
+                          prescription pairs with the diagnosis above.
+                          Per the picked-winner Variant 02 / Talk Loom
+                          wireframe, the side aside surfaces both what's
+                          loose AND the actual move — not just the
+                          diagnosis.
+                        */}
+                        <p class="cc-loom__read-correction">
+                            <span class="cc-loom__read-correction-label">
+                                Required correction
+                            </span>
+                            <span class="cc-loom__read-correction-copy">
+                                {requiredCorrectionCopy(hasAccount, t.id)}
+                            </span>
                         </p>
                     </div>
                     <div class="cc-loom__read-block">

@@ -429,6 +429,24 @@ body {
     margin: 0;
 }
 
+/*
+ * Program 6 / PR 10 — score thesis line.
+ *
+ * Sits directly under the giant score number so the number carries
+ * interpretive weight at a glance. Replaces the retired "Room law"
+ * paragraph with a single line the rep can read without breaking
+ * mid-call concentration.
+ */
+.cc-loom__score-thesis {
+    margin: 6px 0 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 17px;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--cc-navy);
+    max-width: 28ch;
+}
+
 .cc-loom__read-block {
     border-top: 1px solid var(--cc-line2);
     padding-top: 14px;
@@ -460,6 +478,42 @@ body {
     color: var(--cc-soft);
     font-size: 13.5px;
     line-height: 1.55;
+}
+
+/*
+ * Program 6 / PR 10 — required-correction prescription.
+ *
+ * Pairs with the weakest-thread diagnosis above it. Per the picked-
+ * winner Variant 02 / Talk Loom wireframe, the rep needs both the
+ * diagnosis (what's loose) AND the prescription (the actual next
+ * move) — not just the diagnosis.
+ */
+.cc-loom__read-correction {
+    margin: 8px 0 0;
+    padding: 8px 12px;
+    background: rgba(255, 107, 28, 0.06);
+    border-left: 2px solid var(--cc-orange);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cc-loom__read-correction-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cc-orange);
+    font-weight: 800;
+}
+
+.cc-loom__read-correction-copy {
+    font-family: "DM Serif Display", serif;
+    font-size: 15px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--cc-navy);
 }
 
 /* ─── Active sheet (say-line / replies / capture) ─────────────────────── */
