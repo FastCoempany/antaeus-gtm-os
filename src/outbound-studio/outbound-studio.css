@@ -489,3 +489,129 @@ button {
     background: #d65f0f;
     border-color: #d65f0f;
 }
+
+/* ─── Loft (Program 6 / PR 9 — Switchboard Loft V03) ──────────────── */
+
+/*
+ * The loft wraps the stage in two narrow side rails:
+ *   - left rail: SwitchLaws (static operating doctrine)
+ *   - center  : ob-stage (Switchboard + OutputPanel — unchanged)
+ *   - right rail: SwitchReads (live board read + operator move)
+ *
+ * At < 1200px the rails fold under the stage so the center column
+ * keeps its working room on narrower viewports.
+ */
+.ob-loft {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 220px;
+    gap: 18px;
+    align-items: start;
+}
+
+.ob-loft__center {
+    min-width: 0;
+}
+
+@media (max-width: 1200px) {
+    .ob-loft {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── Switch laws (left rail) ──────────────────────────────────────── */
+
+.ob-loft__laws {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ob-law {
+    background: var(--ob-field-raised);
+    border: 1px solid var(--ob-border);
+    border-left: 3px solid var(--ob-ink-15);
+    border-radius: 3px;
+    padding: 14px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ob-law__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+    margin: 0;
+}
+
+.ob-law__title {
+    font-family: "DM Serif Display", serif;
+    font-size: 17px;
+    line-height: 1.22;
+    color: var(--ob-ink);
+    margin: 0;
+}
+
+.ob-law__copy {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--ob-ink-70);
+    margin: 0;
+}
+
+/* ─── Switch reads (right rail) ────────────────────────────────────── */
+
+.ob-loft__reads {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ob-read {
+    background: var(--ob-field-raised);
+    border: 1px solid var(--ob-border);
+    border-left: 3px solid var(--ob-ink-15);
+    border-radius: 3px;
+    padding: 14px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ob-read--ready {
+    border-left-color: var(--ob-accent-green);
+}
+
+.ob-read--tighten {
+    border-left-color: var(--ob-accent-orange);
+}
+
+.ob-read--loose {
+    border-left-color: var(--ob-accent-amber);
+}
+
+.ob-read__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-ink-70);
+    margin: 0;
+}
+
+.ob-read__title {
+    font-family: "DM Serif Display", serif;
+    font-size: 17px;
+    line-height: 1.22;
+    color: var(--ob-ink);
+    margin: 0;
+}
+
+.ob-read__copy {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--ob-ink-70);
+    margin: 0;
+}
