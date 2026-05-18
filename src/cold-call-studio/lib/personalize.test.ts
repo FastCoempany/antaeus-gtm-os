@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { loomScore, personalize, weakestThreadCopy } from "./personalize";
+import {
+    loomScore,
+    personalize,
+    requiredCorrectionCopy,
+    weakestThreadCopy
+} from "./personalize";
 
 describe("personalize", () => {
     it("substitutes [account] / [pressure] / [company] from the context", () => {
@@ -147,5 +152,43 @@ describe("weakestThreadCopy", () => {
 
     it("warns when an account is set but the call has no dated move yet", () => {
         expect(weakestThreadCopy(true)).toContain("dated move");
+    });
+});
+
+describe("requiredCorrectionCopy", () => {
+    it("prescribes naming the strain when no account is selected", () => {
+        expect(requiredCorrectionCopy(false, "prep")).toContain(
+            "Name the business strain"
+        );
+        expect(requiredCorrectionCopy(false, "ask")).toContain(
+            "Name the business strain"
+        );
+    });
+
+    it("prescribes forcing the strain on prep/opener threads", () => {
+        expect(requiredCorrectionCopy(true, "prep")).toContain(
+            "Force the strain"
+        );
+        expect(requiredCorrectionCopy(true, "opener")).toContain(
+            "Force the strain"
+        );
+    });
+
+    it("prescribes trade-proof-for-admission on pressure/proof threads", () => {
+        expect(requiredCorrectionCopy(true, "pressure")).toContain(
+            "Trade one proof point"
+        );
+        expect(requiredCorrectionCopy(true, "proof")).toContain(
+            "Trade one proof point"
+        );
+    });
+
+    it("prescribes locking the dated move on ask/exit threads", () => {
+        expect(requiredCorrectionCopy(true, "ask")).toContain(
+            "Lock the dated move"
+        );
+        expect(requiredCorrectionCopy(true, "exit")).toContain(
+            "Lock the dated move"
+        );
     });
 });

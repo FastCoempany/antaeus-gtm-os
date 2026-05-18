@@ -74,3 +74,36 @@ export function weakestThreadCopy(hasAccount: boolean): string {
         ? "Response path must become a dated move."
         : "No account selected. Do not dial generic.";
 }
+
+/**
+ * Returns the required-correction copy — the prescription paired with
+ * `weakestThreadCopy`'s diagnosis. Per the picked-winner Variant 02 /
+ * Talk Loom wireframe (line 268), the loom side aside surfaces both
+ * the weakest-thread diagnosis ("what's loose") AND the required
+ * correction ("the actual move") so the rep has a prescription, not
+ * just a diagnosis.
+ *
+ * Thread-aware:
+ *   - no account: priority correction is naming the strain first
+ *   - pre-pressure (prep/opener): correction is forcing the strain
+ *     before talking product
+ *   - mid-pressure (pressure/proof): correction is trading proof
+ *     for admission
+ *   - post-pressure (ask/exit): correction is locking the dated
+ *     move with owner + reason
+ */
+export function requiredCorrectionCopy(
+    hasAccount: boolean,
+    threadId: ThreadId
+): string {
+    if (!hasAccount) {
+        return "Name the business strain before naming the company.";
+    }
+    if (threadId === "prep" || threadId === "opener") {
+        return "Force the strain before talking product.";
+    }
+    if (threadId === "pressure" || threadId === "proof") {
+        return "Trade one proof point for one admission.";
+    }
+    return "Lock the dated move with owner and reason.";
+}
