@@ -191,3 +191,48 @@ describe("deriveMotion — branch precedence", () => {
         expect(m.key).toBe("convert_connection");
     });
 });
+
+describe("deriveMotion — recovery cue (Program 6 / PR 11)", () => {
+    it("credibility motion carries a recovery cue copy", () => {
+        const m = deriveMotion(baseCtx);
+        expect(m.recovery).toBeTruthy();
+        expect(m.recovery.toLowerCase()).toContain("narrower");
+    });
+
+    it("warm_signal_account recovery names the account", () => {
+        const m = deriveMotion({
+            ...baseCtx,
+            hottestAccount: { name: "Cascadia Health", heat: 84 }
+        });
+        expect(m.recovery).toContain("Cascadia Health");
+        expect(m.recovery.toLowerCase()).toContain("narrow");
+    });
+
+    it("convert_connection recovery hands the next touch back to Outbound", () => {
+        const m = deriveMotion({
+            ...baseCtx,
+            hottestAccount: { name: "Acme", heat: 80 },
+            stats: statsWith({
+                acme: {
+                    content_engage: 0,
+                    connection_request: 1,
+                    dm: 0
+                }
+            })
+        });
+        expect(m.key).toBe("convert_connection");
+        expect(m.recovery.toLowerCase()).toContain("outbound");
+    });
+
+    it("add_air_cover recovery names the outbound account", () => {
+        const m = deriveMotion({
+            ...baseCtx,
+            latestTouch: {
+                accountName: "Beta Robotics",
+                createdAt: "2026-04-27T00:00:00Z"
+            }
+        });
+        expect(m.key).toBe("add_air_cover");
+        expect(m.recovery).toContain("Beta Robotics");
+    });
+});

@@ -520,6 +520,27 @@ body {
     font-weight: 700;
 }
 
+/*
+ * Program 6 / PR 11 — Recovery cue accent.
+ *
+ * Per canon §4.8 the recovery cable is the always-present
+ * fallback. Tint the recovery rule with the room's amber accent
+ * so the rep can find it instantly when something just went
+ * sideways mid-cue, without disturbing the other rules' weight.
+ */
+.lp-read__rule--recovery {
+    background: rgba(237, 111, 30, 0.06);
+    border-top-color: var(--lp-orange);
+    border-left: 2px solid var(--lp-orange);
+    padding: 12px 12px 12px 14px;
+    margin: 0 -4px;
+    border-radius: 0 4px 4px 0;
+}
+
+.lp-read__rule--recovery .lp-read__rule-kicker {
+    color: var(--lp-orange);
+}
+
 .lp-read__cta {
     display: flex;
     flex-wrap: wrap;

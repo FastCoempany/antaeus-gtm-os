@@ -154,6 +154,17 @@ export function CueBooth(): JSX.Element {
                         <p class="lp-read__rule-kicker">Current cue</p>
                         <strong>{cue.name}</strong>
                     </div>
+                    {/*
+                      Program 6 / PR 11 — Recovery cue rule. Per the
+                      picked-winner Variant 02 / Cue Booth wireframe
+                      (line 713) the rep needs a "what to do when
+                      corrected" rule alongside Current cue. Maps to
+                      canon §4.8 recovery principle.
+                    */}
+                    <div class="lp-read__rule lp-read__rule--recovery">
+                        <p class="lp-read__rule-kicker">Recovery cue</p>
+                        <strong>{motion.recovery}</strong>
+                    </div>
                     <div class="lp-read__rule">
                         <p class="lp-read__rule-kicker">One-session win</p>
                         <strong>{motion.oneSession}</strong>
