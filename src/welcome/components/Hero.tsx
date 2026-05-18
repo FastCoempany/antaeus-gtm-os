@@ -1,6 +1,6 @@
 import type { JSX } from "preact";
 import { RoomChrome } from "@/lib/room-chrome";
-import { activation, model, roleLabel } from "../state";
+import { activation, model, roleLabel, stamp } from "../state";
 
 /**
  * Hero — threshold serif headline + activation chrome.
@@ -18,11 +18,17 @@ import { activation, model, roleLabel } from "../state";
  * with continuity params (e.g. Settings → "Re-run onboarding" loops
  * her through Welcome). Continuity-aware → renders only when there
  * is somewhere coherent to return to.
+ *
+ * Program 6 / PR 3: gained the Launch Folio · Commission Lock
+ * stamp affordance ("Week N · Day N"). Sits quietly in the top-
+ * right of the hero, gives the surface temporal presence + the
+ * "this file has been live since…" feeling the wireframe carried.
  */
 export function Hero(): JSX.Element {
     const m = model.value;
     const ctx = activation.value;
     const role = roleLabel.value;
+    const stampVal = stamp.value;
     const isEmptyState = m.completed === 0;
     const chips = isEmptyState ? [] : buildChips(ctx, role, m);
     return (
@@ -33,7 +39,12 @@ export function Hero(): JSX.Element {
                     workspace={ctx.companyName ?? null}
                 />
             </div>
-            <h1 class="wel-hero__title">{m.headline}</h1>
+            <div class="wel-hero__head">
+                <h1 class="wel-hero__title">{m.headline}</h1>
+                <span class="wel-hero__stamp" aria-label="Workspace age">
+                    {stampVal.label}
+                </span>
+            </div>
             <p class="wel-hero__subtitle">{m.body}</p>
             {chips.length > 0 ? (
                 <ul class="wel-hero__chips" aria-label="Activation context">

@@ -18,9 +18,15 @@ import {
     type ActivationModel
 } from "./lib/engine";
 import { loadActivationContext, loadCounts } from "./lib/loader";
+import { loadStamp, type StampValue } from "./lib/stamp";
 
 export const counts: Signal<WorkspaceCounts> = signal(EMPTY_COUNTS);
 export const activation: Signal<ActivationContext> = signal(EMPTY_ACTIVATION);
+export const stamp: Signal<StampValue> = signal({
+    week: 1,
+    day: 1,
+    label: "Week 1 · Day 1"
+});
 export const loaded: Signal<boolean> = signal(false);
 
 export const model: ReadonlySignal<ActivationModel> = computed(() =>
@@ -46,6 +52,7 @@ export function setActivation(next: ActivationContext): void {
 export function refreshFromStorage(): void {
     counts.value = loadCounts();
     activation.value = loadActivationContext();
+    stamp.value = loadStamp();
     loaded.value = true;
 }
 
