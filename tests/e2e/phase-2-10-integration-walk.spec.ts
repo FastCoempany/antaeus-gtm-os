@@ -263,11 +263,17 @@ test.describe("Phase 2.10 — Integration walk (Sarah's full day)", () => {
                 .click();
             await page.waitForTimeout(150);
 
-            const focalTitle = await page
-                .locator(".db-focal__title")
+            // Program 6 / PR 2 (Slice 01 Soft Cut): focal card is in
+            // the right rail as .db-slice--focal. Title + primary
+            // CTA selectors moved from .db-focal__* to .db-slice__*.
+            const focalSlice = page.locator(".db-slice--focal");
+            const focalTitle = await focalSlice
+                .locator(".db-slice__title")
+                .first()
                 .textContent();
-            const focalHref = await page
-                .locator(".db-focal__cta--primary")
+            const focalHref = await focalSlice
+                .locator(".db-slice__cta")
+                .first()
                 .getAttribute("href");
             expect(focalHref).not.toBeNull();
             const focalUrl = new URL(focalHref!, "http://x");
@@ -282,7 +288,7 @@ test.describe("Phase 2.10 — Integration walk (Sarah's full day)", () => {
             expect(focalUrl.searchParams.get("focusObject")).toBeTruthy();
             expect(focalUrl.searchParams.get("fromSurface")).toBe("dashboard");
 
-            await page.locator(".db-focal__cta--primary").click();
+            await focalSlice.locator(".db-slice__cta").first().click();
             await page.waitForLoadState("networkidle");
             // Destination loaded with continuity preserved.
             const destSearch = new URL(page.url()).searchParams;

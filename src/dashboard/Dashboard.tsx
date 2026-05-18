@@ -8,49 +8,60 @@ import {
     readinessSummary
 } from "./state";
 import { Topbar } from "./components/Topbar";
-import { SpotlightView } from "./components/SpotlightView";
-import { BriefView } from "./components/BriefView";
-import { QueueView } from "./components/QueueView";
+import { MainColumn } from "./components/MainColumn";
+import { SliceRail } from "./components/SliceRail";
 import { EmptyDashboard } from "./components/EmptyDashboard";
 import { ReadinessDrawer } from "./components/ReadinessDrawer";
 
 /**
- * Dashboard — Wave 1 root.
+ * Dashboard — Program 6 / PR 2 refacing.
  *
- * Per canon §4.2 (Command Chamber family):
+ * Per canon §4.2 (Command Chamber family) + the Slice 01 Soft Cut
+ * picked-winner wireframe (`deliverables/prototypes/wireframes/
+ * dashboard-softcut-canonical.html`). Layout:
  *
- *   ┌─────────────────────────────────────────────────────────────────┐
- *   │  Topbar: kicker + title + ModeSwitcher                          │
- *   ├─────────────────────────────────────────────────────────────────┤
- *   │  Active mode view (Spotlight / Brief / Queue)                   │
- *   └─────────────────────────────────────────────────────────────────┘
+ *   ┌──────────────────────────────────────────────────────────────┐
+ *   │  RoomChrome (wordmark + back-pill + ⌘K palette)              │
+ *   ├──────────────────────────────────────────────────────────────┤
+ *   │  Topbar (kicker + thesis + ReadinessAnchor + ModeSwitcher)   │
+ *   ├─────────────────────────────────┬────────────────────────────┤
+ *   │  MainColumn                     │  SliceRail                 │
+ *   │   • SignalLine chip row         │   • header (MOST PRESSURE) │
+ *   │   • Mode-specific content       │   • stacked Slice cards    │
+ *   │     - brief: narrative          │     (one per ranked        │
+ *   │     - spotlight: pointer        │      CommandObject;        │
+ *   │     - queue: meta read          │      first is focal in     │
+ *   │                                 │      spotlight mode)       │
+ *   └─────────────────────────────────┴────────────────────────────┘
  *
- * Wave 1 ships structural completeness. Wave 2 ports the ranking
- * engine. Wave 3 fills Spotlight. Wave 4 fills Brief + Queue. Wave 5
- * adds workspace-health aggregation + cross-room realtime. Wave 6
- * adds the legacy flag-redirect cutover.
+ * Mind preserved (canon §4.2): three modes, command-intelligence
+ * ranking, ReadinessAnchor + Drawer, EmptyDashboard, one-dominant-
+ * move semantic. Structure adopts the Soft Cut 2-column shape +
+ * Slice docket cards per the Program 6 / PR 2 audit.
+ *
+ * What this PR did NOT change (per canon evolution log):
+ *   - Phase 2.2 H1 demote stays (ranked slices are the visual hero)
+ *   - Phase 2.2 family vocabulary stays (risk/move/advisor/...)
+ *   - Phase 5.A ReadinessAnchor + Drawer stays (post-triptych canon)
+ *   - Flat 3-button ModeSwitcher stays (Phase 2.2 retired the 3D
+ *     carousel hint)
  */
 export function Dashboard(): JSX.Element {
     const mode = commandMode.value;
     const drawerOpen = readinessDrawerOpen.value;
-    // Empty workspace → orientation surface replaces every mode view.
-    // Dashboard audit (2026-05): the silent empty Dashboard read as
-    // "I have nothing for you. Welcome." — sin of presence. The
-    // 3-path EmptyDashboard surface gives the operator concrete moves
-    // into the families of data that feed the ranking engine.
-    const isEmpty = commandSummary.value.ranked.length === 0;
+    const summary = commandSummary.value;
+    const isEmpty = summary.ranked.length === 0;
     return (
         <div class="db-shell">
-            <RoomChrome kicker="DASHBOARD"/>
+            <RoomChrome kicker="DASHBOARD" />
             <Topbar />
             {isEmpty ? (
                 <EmptyDashboard />
             ) : (
-                <>
-                    {mode === "spotlight" ? <SpotlightView /> : null}
-                    {mode === "brief" ? <BriefView /> : null}
-                    {mode === "queue" ? <QueueView /> : null}
-                </>
+                <div class="db-grid">
+                    <MainColumn mode={mode} />
+                    <SliceRail objects={summary.ranked} mode={mode} />
+                </div>
             )}
             {drawerOpen ? (
                 <ReadinessDrawer

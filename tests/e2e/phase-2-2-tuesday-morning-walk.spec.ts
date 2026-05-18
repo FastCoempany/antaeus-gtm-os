@@ -110,10 +110,11 @@ test.describe("Phase 2.2 — Tuesday-morning Dashboard", () => {
 
             // ─── Read mode (default) ────────────────────────────────
             // Phase 2.2 finding: narrative copy rewritten without
-            // canon-doc voice ("Motion pressure is leading…" → "X is
-            // the morning's top move.").
+            // canon-doc voice. Brief narrative moved to MainColumn
+            // .db-main__brief block in Program 6 / PR 2 (Slice 01 Soft
+            // Cut layout).
             const briefText = await page
-                .locator(".db-brief")
+                .locator(".db-main__brief")
                 .textContent();
             expect(briefText).toMatch(/morning's top move/i);
             // Designer phrases retired.
@@ -128,20 +129,25 @@ test.describe("Phase 2.2 — Tuesday-morning Dashboard", () => {
                 .click();
             await page.waitForTimeout(150);
 
-            // Phase 2.2 finding: focal kicker no longer surfaces raw
-            // "score {n}" — just the family label.
-            const focalKicker = await page
-                .locator(".db-focal__kicker")
+            // Program 6 / PR 2 (Slice 01 Soft Cut): focal card is now
+            // .db-slice--focal in the right rail. Family is shown as
+            // .db-slice__family (no raw "score {n}" tail; Phase 2.2
+            // dropped that). Primary CTA is .db-slice__cta on the
+            // focal slice.
+            const focalSlice = page.locator(".db-slice--focal");
+            const focalFamily = await focalSlice
+                .locator(".db-slice__family")
+                .first()
                 .textContent();
-            expect(focalKicker).not.toMatch(/score \d+/i);
+            expect(focalFamily).not.toMatch(/score \d+/i);
 
-            // Phase 2.2 finding: dominant CTA on a "Outbound to {X}"
-            // card now routes to Outbound Studio (was Signal Console).
-            const focalTitle = await page
-                .locator(".db-focal__title")
+            const focalTitle = await focalSlice
+                .locator(".db-slice__title")
+                .first()
                 .textContent();
-            const focalPrimaryHref = await page
-                .locator(".db-focal__cta--primary")
+            const focalPrimaryHref = await focalSlice
+                .locator(".db-slice__cta")
+                .first()
                 .getAttribute("href");
             expect(focalPrimaryHref).not.toBeNull();
             const focalPrimaryUrl = new URL(focalPrimaryHref!, "http://x");
@@ -177,7 +183,7 @@ test.describe("Phase 2.2 — Tuesday-morning Dashboard", () => {
             );
 
             // ─── Seam test — click and verify destination loads with focus
-            await page.locator(".db-focal__cta--primary").click();
+            await focalSlice.locator(".db-slice__cta").first().click();
             await page.waitForLoadState("networkidle");
             const destSearch = new URL(page.url()).searchParams;
             expect(destSearch.get("returnTo")).toBe("/dashboard/");
