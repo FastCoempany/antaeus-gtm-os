@@ -437,3 +437,181 @@ a { color: inherit; text-decoration: none; }
     border-color: var(--wel-orange);
     color: var(--wel-orange);
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Program 6 / PR 3 — Launch Folio · Commission Lock
+   ───────────────────────────────────────────────────────────────── */
+
+/* Hero head row — title + stamp affordance side-by-side. */
+
+.wel-hero__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 18px;
+    margin-bottom: 14px;
+}
+
+.wel-hero__title {
+    /* The grid handles spacing; the .wel-hero__title block already had
+       a margin-bottom from existing CSS. Keep that as is so the
+       subtitle still sits right below the title in cold-start states.
+       The grid layout takes effect when both children render. */
+}
+
+.wel-hero__stamp {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 28, 64, 0.14);
+    background: rgba(255, 255, 255, 0.78);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(10, 28, 64, 0.62);
+    white-space: nowrap;
+    margin-top: 8px;
+}
+
+@media (max-width: 720px) {
+    .wel-hero__head {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .wel-hero__stamp {
+        margin-top: 0;
+    }
+}
+
+/* Launch Folio mandate panel. */
+
+.wel-folio {
+    background: linear-gradient(180deg, rgba(255, 245, 238, 0.86) 0%, rgba(255, 255, 255, 0.94) 100%);
+    border: 1px solid rgba(10, 28, 64, 0.10);
+    border-radius: 20px;
+    padding: 28px 30px 26px;
+    box-shadow: 0 18px 54px rgba(10, 28, 64, 0.06);
+    margin-bottom: 32px;
+}
+
+.wel-folio__head {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 22px;
+    max-width: 64ch;
+}
+
+.wel-folio__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #e6701e;
+}
+
+.wel-folio__title {
+    margin: 0;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: #0a1c40;
+}
+
+.wel-folio__support {
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.55;
+    color: rgba(10, 28, 64, 0.7);
+    max-width: 60ch;
+}
+
+.wel-folio__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+@media (max-width: 720px) {
+    .wel-folio__grid {
+        grid-template-columns: 1fr;
+    }
+    .wel-folio {
+        padding: 22px 22px 20px;
+    }
+}
+
+.wel-folio__cell {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(10, 28, 64, 0.08);
+    border-radius: 12px;
+    padding: 16px 18px 14px;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    transition: border-color 140ms ease;
+}
+
+.wel-folio__cell--locked {
+    /* The "Commission Lock" signature — one cell reads as the
+       unresolved gap forcing the next anchor. Orange left rule +
+       cream wash + the cell title gets a quiet padlock affordance
+       via the lock kicker treatment. */
+    background: linear-gradient(180deg, rgba(255, 238, 220, 0.78) 0%, rgba(255, 247, 238, 0.92) 100%);
+    border-color: rgba(230, 112, 30, 0.32);
+    border-left: 4px solid #e6701e;
+    padding-left: 16px;
+}
+
+.wel-folio__cell-label {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(10, 28, 64, 0.5);
+}
+
+.wel-folio__cell--locked .wel-folio__cell-label {
+    color: #b6571a;
+}
+
+.wel-folio__cell-label::before {
+    content: "";
+    display: inline-block;
+    width: 0;
+}
+
+.wel-folio__cell--locked .wel-folio__cell-label::before {
+    content: "⌬ ";
+    display: inline-block;
+    margin-right: 4px;
+    color: #e6701e;
+    font-size: 0.85rem;
+    transform: translateY(1px);
+}
+
+.wel-folio__cell-value {
+    margin: 0;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.15rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: #0a1c40;
+}
+
+.wel-folio__cell-note {
+    margin: 0;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: rgba(10, 28, 64, 0.62);
+}
