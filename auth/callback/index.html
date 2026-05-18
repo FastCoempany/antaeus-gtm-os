@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/auth.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../../js/supabase-config.js"></script>
@@ -19,14 +19,22 @@
 
   <body class="auth-page">
     <div class="auth-status-shell">
+      <header class="auth-chrome">
+        <a href="/start.html" class="auth-chrome__wordmark" aria-label="Antaeus — home">
+          <span class="auth-chrome__mark">ANTAEUS</span>
+          <span class="auth-chrome__divider" aria-hidden="true">·</span>
+          <span class="auth-chrome__kicker">Operator preview</span>
+        </a>
+        <a href="/login.html" class="auth-chrome__back" aria-label="Back to sign in">← Back to sign in</a>
+      </header>
       <section class="auth-status-card">
         <div class="auth-kicker">Auth callback</div>
         <h1 class="auth-status-title">Finishing sign-in.</h1>
         <p class="auth-status-copy">
-          This handoff should be brief. If the session resolves cleanly, Antaeus routes you into the right post-auth surface. If it fails, the page should tell you plainly and return you to login.
+          One last handoff. If the session resolves, you land in the right post-auth surface. If anything fails, this page tells you plainly and routes you back to sign in.
         </p>
         <div class="auth-status-line" id="callbackStatusLine">
-          Verifying the current session and resolving the post-auth route now.
+          Verifying the current session and resolving where to land you next.
         </div>
       </section>
     </div>

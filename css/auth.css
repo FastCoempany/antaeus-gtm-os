@@ -89,10 +89,60 @@ a:hover { opacity: 0.78; }
 .auth-container {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 48px 28px;
+    gap: 24px;
 }
+
+/* ────────────────────────────────────────────────
+   Chrome (Phase 5.2 — wordmark + back-pill aligned
+   with /start.html chrome). Always sits at the top
+   of the page above the shell.
+   ──────────────────────────────────────────────── */
+
+.auth-chrome {
+    width: min(1120px, 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+}
+
+.auth-chrome__wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    line-height: 1;
+    color: var(--ink-primary);
+}
+
+.auth-chrome__mark {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.16em;
+    color: var(--ink-primary);
+}
+
+.auth-chrome__divider {
+    color: var(--ink-tertiary);
+}
+
+.auth-chrome__kicker {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-tertiary);
+}
+
+.auth-chrome__back {
+    color: var(--ink-tertiary);
+    transition: color var(--t-fast);
+}
+.auth-chrome__back:hover { color: var(--accent-orange); opacity: 1; }
 
 .auth-shell {
     width: min(1120px, 100%);
@@ -285,9 +335,11 @@ a:hover { opacity: 0.78; }
 .auth-status-shell {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 48px 28px;
+    gap: 24px;
 }
 
 .auth-status-card {
