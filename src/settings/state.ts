@@ -57,6 +57,20 @@ export const cloudVerifiedAt: Signal<string | null> = signal(null);
 export const isDeletingCloud: Signal<boolean> = signal(false);
 export const lastCloudDelete: Signal<CloudDeleteResult | null> = signal(null);
 
+/**
+ * Phase 2.9 — inbound back affordance from cross-room handoff.
+ * Carries `{path, label}` when the inbound URL has continuity params
+ * (returnTo + returnLabel); null otherwise. Surfaces as a back-link
+ * in the Topbar so Sarah's path back to the workspace stays honest
+ * when she lands on Settings from a sibling room (Dashboard,
+ * Onboarding-complete, Welcome action stack).
+ */
+export interface InboundReturn {
+    readonly path: string;
+    readonly label: string;
+}
+export const inboundReturn: Signal<InboundReturn | null> = signal(null);
+
 let toastTimer: number | null = null;
 
 function flashToast(tone: ToastTone, message: string): void {
