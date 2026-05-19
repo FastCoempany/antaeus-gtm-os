@@ -8,17 +8,17 @@ import type {
     Approach,
     DispositionState,
     TerritoryAccount,
-    Thesis,
+    Focus,
     TierId
 } from "./types";
 
 /**
  * Territory Architect ↔ Supabase row bridge.
  *
- * Three entity kinds (theses, approaches, accounts) all live in the
+ * Three entity kinds (focuses, approaches, accounts) all live in the
  * `studio_artifacts` table, discriminated by the `data.kind` field:
  *
- *   data.kind = "territory.thesis"   — strategic bet
+ *   data.kind = "territory.focus"   — strategic bet
  *   data.kind = "territory.approach" — talk-track template
  *   data.kind = "territory.account"  — tagged account
  *
@@ -28,7 +28,7 @@ import type {
  * Territory because none of the 3 kinds have natural top-level columns
  * other rooms would join on.
  *
- * Convention: a Thesis/Approach/Account.id IS the row id (uuid) once
+ * Convention: a Focus/Approach/Account.id IS the row id (uuid) once
  * cloud-synced. Legacy localStorage rows have non-uuid ids; on first
  * sync they're inserted (Supabase generates uuid) and the in-memory
  * id is rewritten before save resolves.
@@ -37,7 +37,7 @@ import type {
 const UUID_RE =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export const KIND_THESIS = "territory.thesis";
+export const KIND_THESIS = "territory.focus";
 export const KIND_APPROACH = "territory.approach";
 export const KIND_ACCOUNT = "territory.account";
 export type TerritoryKind =
@@ -90,7 +90,7 @@ export function rowKind(row: Row<"studio_artifacts">): string | null {
     return asString(data["kind"]) || null;
 }
 
-// ─── Thesis ────────────────────────────────────────────────────────────
+// ─── Focus ────────────────────────────────────────────────────────────
 
 export function rowToThesis(
     row:
@@ -98,7 +98,7 @@ export function rowToThesis(
         | { id?: unknown; data?: unknown }
         | null
         | undefined
-): Thesis | null {
+): Focus | null {
     if (!row || typeof row !== "object") return null;
     const r = row as Row<"studio_artifacts">;
     const id = typeof r.id === "string" && r.id.length > 0 ? r.id : null;
@@ -123,30 +123,30 @@ export function rowToThesis(
     };
 }
 
-export function thesisToInsert(thesis: Thesis): InsertRow<"studio_artifacts"> {
+export function focusToInsert(focus: Focus): InsertRow<"studio_artifacts"> {
     return {
         data: {
             kind: KIND_THESIS,
-            title: thesis.title,
-            pressure: thesis.pressure,
-            segment: thesis.segment,
-            whyUs: thesis.whyUs,
-            tier: thesis.tier,
-            accountIds: thesis.accountIds
+            title: focus.title,
+            pressure: focus.pressure,
+            segment: focus.segment,
+            whyUs: focus.whyUs,
+            tier: focus.tier,
+            accountIds: focus.accountIds
         } as unknown as Json
     };
 }
 
-export function thesisToUpdate(thesis: Thesis): UpdateRow<"studio_artifacts"> {
+export function focusToUpdate(focus: Focus): UpdateRow<"studio_artifacts"> {
     return {
         data: {
             kind: KIND_THESIS,
-            title: thesis.title,
-            pressure: thesis.pressure,
-            segment: thesis.segment,
-            whyUs: thesis.whyUs,
-            tier: thesis.tier,
-            accountIds: thesis.accountIds
+            title: focus.title,
+            pressure: focus.pressure,
+            segment: focus.segment,
+            whyUs: focus.whyUs,
+            tier: focus.tier,
+            accountIds: focus.accountIds
         } as unknown as Json
     };
 }
@@ -175,7 +175,7 @@ export function rowToApproach(
         trigger: asString(data["trigger"]),
         script: asString(data["script"]),
         bridge: asString(data["bridge"]),
-        thesisId: asString(data["thesisId"]),
+        focusId: asString(data["focusId"]),
         createdAt,
         updatedAt
     };
@@ -191,7 +191,7 @@ export function approachToInsert(
             trigger: approach.trigger,
             script: approach.script,
             bridge: approach.bridge,
-            thesisId: approach.thesisId
+            focusId: approach.focusId
         } as unknown as Json
     };
 }
@@ -206,7 +206,7 @@ export function approachToUpdate(
             trigger: approach.trigger,
             script: approach.script,
             bridge: approach.bridge,
-            thesisId: approach.thesisId
+            focusId: approach.focusId
         } as unknown as Json
     };
 }
@@ -233,7 +233,7 @@ export function rowToAccount(
         id,
         name: asString(data["name"]),
         tier: asTier(data["tier"]),
-        thesisId: asString(data["thesisId"]),
+        focusId: asString(data["focusId"]),
         approachId: asString(data["approachId"]),
         disposition: asDisposition(data["disposition"]),
         notes: asString(data["notes"]),
@@ -250,7 +250,7 @@ export function accountToInsert(
             kind: KIND_ACCOUNT,
             name: account.name,
             tier: account.tier,
-            thesisId: account.thesisId,
+            focusId: account.focusId,
             approachId: account.approachId,
             disposition: account.disposition,
             notes: account.notes
@@ -266,7 +266,7 @@ export function accountToUpdate(
             kind: KIND_ACCOUNT,
             name: account.name,
             tier: account.tier,
-            thesisId: account.thesisId,
+            focusId: account.focusId,
             approachId: account.approachId,
             disposition: account.disposition,
             notes: account.notes
@@ -277,7 +277,7 @@ export function accountToUpdate(
 // ─── Multi-kind partitioner ────────────────────────────────────────────
 
 export interface PartitionedRows {
-    readonly theses: ReadonlyArray<Thesis>;
+    readonly focuses: ReadonlyArray<Focus>;
     readonly approaches: ReadonlyArray<Approach>;
     readonly accounts: ReadonlyArray<TerritoryAccount>;
 }
@@ -289,14 +289,14 @@ export interface PartitionedRows {
 export function partitionTerritoryRows(
     rows: ReadonlyArray<Row<"studio_artifacts">>
 ): PartitionedRows {
-    const theses: Thesis[] = [];
+    const focuses: Focus[] = [];
     const approaches: Approach[] = [];
     const accounts: TerritoryAccount[] = [];
     for (const row of rows) {
         const kind = rowKind(row);
         if (kind === KIND_THESIS) {
             const t = rowToThesis(row);
-            if (t) theses.push(t);
+            if (t) focuses.push(t);
         } else if (kind === KIND_APPROACH) {
             const a = rowToApproach(row);
             if (a) approaches.push(a);
@@ -305,5 +305,5 @@ export function partitionTerritoryRows(
             if (a) accounts.push(a);
         }
     }
-    return { theses, approaches, accounts };
+    return { focuses, approaches, accounts };
 }

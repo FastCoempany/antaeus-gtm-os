@@ -9,14 +9,14 @@ import {
     setAccounts,
     setApproaches,
     setTerritoryState,
-    setTheses,
+    setFocuses,
     startPersistence
 } from "./state";
 import {
     loadAccounts,
     loadApproaches,
     loadTerritoryState,
-    loadTheses
+    loadFocuses
 } from "./lib/persistence";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
 
@@ -36,14 +36,14 @@ if (!flagOn) {
     );
 }
 
-setTheses(loadTheses());
+setFocuses(loadFocuses());
 setApproaches(loadApproaches());
 setAccounts(loadAccounts());
 setTerritoryState(loadTerritoryState());
 startPersistence();
 
 // Cross-room handoff: if a caller passed `?focusObject=<industry>`,
-// prefill the segment field of the new-thesis draft + surface the
+// prefill the segment field of the new-focus draft + surface the
 // inbound focus in the hero kicker so the operator sees the ICP
 // context immediately. Phase 2.3 — focusedIcp also propagates into
 // outbound handoff URLs so Sourcing / Signal Console land focused.
@@ -55,7 +55,7 @@ if (ctx.focusObject) {
 
 render(<TerritoryArchitect />, root);
 
-// Async cloud load for theses + approaches + accounts. Doesn't block
+// Async cloud load for focuses + approaches + accounts. Doesn't block
 // first paint. Replaces local state if cloud has rows; migrates local
 // up if cloud is empty. Realtime keeps cross-tab + cross-device
 // mutations flowing.

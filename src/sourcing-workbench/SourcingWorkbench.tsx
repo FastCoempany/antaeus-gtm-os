@@ -11,11 +11,11 @@ import { RoomChrome } from "@/lib/room-chrome";
  * SourcingWorkbench — Program 6 / PR 13 (Ticket Loom refacing).
  *
  * Per canon §4.6 (Decision Bench) + the picked-winner Variant 02 /
- * Ticket Loom wireframe. The room turns theses into named, pushable
+ * Ticket Loom wireframe. The room turns focuses into named, pushable
  * prospects. Layout:
  *
  *   ┌──────────────────────────────────────────────┐
- *   │  Topbar: kicker + thesis + 5-stat counter    │
+ *   │  Topbar: kicker + focus + 5-stat counter    │
  *   ├──────────────────────────────────────────────┤
  *   │  LoomRead: live posture (Week read + Move)   │
  *   ├──────────────────────────────────────────────┤

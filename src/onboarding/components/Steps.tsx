@@ -22,7 +22,7 @@ import { StepShell } from "./StepShell";
  * to the draft on input so a refresh mid-flow does not lose work.
  */
 
-export function ThesisStep(): JSX.Element {
+export function IntroStep(): JSX.Element {
     return (
         <StepShell
             kicker="STEP 1 OF 7 — WELCOME"

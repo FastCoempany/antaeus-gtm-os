@@ -8,7 +8,7 @@ import {
     type Approach,
     type DispositionState,
     type TerritoryAccount,
-    type Thesis,
+    type Focus,
     type TierId
 } from "./types";
 
@@ -32,7 +32,7 @@ function makeAllocation(
 
 const ISO = "2026-05-18T00:00:00Z";
 
-function thesis(id: string, title: string = id): Thesis {
+function focus(id: string, title: string = id): Focus {
     return {
         id,
         title,
@@ -46,10 +46,10 @@ function thesis(id: string, title: string = id): Thesis {
     };
 }
 
-function approach(id: string, thesisId: string): Approach {
+function approach(id: string, focusId: string): Approach {
     return {
         id,
-        thesisId,
+        focusId,
         name: id,
         trigger: "",
         script: "",
@@ -68,7 +68,7 @@ function account(
         id,
         name: id,
         tier,
-        thesisId: "th-1",
+        focusId: "th-1",
         approachId: "",
         notes: "",
         disposition,
@@ -78,22 +78,22 @@ function account(
 }
 
 describe("computeFieldRead — empty board", () => {
-    it("returns empty band when no theses exist", () => {
+    it("returns empty band when no focuses exist", () => {
         const r = computeFieldRead({
             accounts: [],
-            theses: [],
+            focuses: [],
             approaches: [],
             allocation: makeAllocation()
         });
         expect(r.band).toBe("empty");
-        expect(r.mainRisk.toLowerCase()).toContain("no theses");
-        expect(r.operatorMove.toLowerCase()).toContain("start with one thesis");
+        expect(r.mainRisk.toLowerCase()).toContain("no focuses");
+        expect(r.operatorMove.toLowerCase()).toContain("start with one focus");
     });
 
-    it("returns empty band when theses exist but no active accounts", () => {
+    it("returns empty band when focuses exist but no active accounts", () => {
         const r = computeFieldRead({
             accounts: [],
-            theses: [thesis("th-1")],
+            focuses: [focus("th-1")],
             approaches: [],
             allocation: makeAllocation()
         });
@@ -106,7 +106,7 @@ describe("computeFieldRead — next-move priority chain", () => {
     it("prescribes approaches before adding accounts", () => {
         const r = computeFieldRead({
             accounts: [account("a-1", "active")],
-            theses: [thesis("th-1")],
+            focuses: [focus("th-1")],
             approaches: [],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
@@ -118,7 +118,7 @@ describe("computeFieldRead — next-move priority chain", () => {
             accounts: Array.from({ length: 5 }, (_, i) =>
                 account(`a-${i}`, "active")
             ),
-            theses: [thesis("th-1")],
+            focuses: [focus("th-1")],
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({
                 total: 305,
@@ -137,7 +137,7 @@ describe("computeFieldRead — next-move priority chain", () => {
                 account("l-2", "closed-lost"),
                 account("l-3", "closed-lost")
             ],
-            theses: [thesis("th-1")],
+            focuses: [focus("th-1")],
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
@@ -146,14 +146,14 @@ describe("computeFieldRead — next-move priority chain", () => {
 });
 
 describe("computeFieldRead — what-is-loose priority chain", () => {
-    it("flags single-thesis monoculture", () => {
+    it("flags single-focus monoculture", () => {
         const r = computeFieldRead({
             accounts: [account("a-1", "active")],
-            theses: [thesis("th-1")],
+            focuses: [focus("th-1")],
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
-        expect(r.mainRisk.toLowerCase()).toContain("single thesis");
+        expect(r.mainRisk.toLowerCase()).toContain("single focus");
     });
 
     it("flags watch-ring (>=5 paused) when no higher risk fires", () => {
@@ -167,7 +167,7 @@ describe("computeFieldRead — what-is-loose priority chain", () => {
                 account("p-4", "paused"),
                 account("p-5", "paused")
             ],
-            theses: [thesis("th-1"), thesis("th-2")],
+            focuses: [focus("th-1"), focus("th-2")],
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 2, remaining: 298 })
         });
@@ -179,7 +179,7 @@ describe("computeFieldRead — replacement pressure", () => {
     it("returns the no-backfill copy when nothing is in drift", () => {
         const r = computeFieldRead({
             accounts: [account("a-1", "active"), account("a-2", "active")],
-            theses: [thesis("th-1")],
+            focuses: [focus("th-1")],
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 2, remaining: 298 })
         });
@@ -196,7 +196,7 @@ describe("computeFieldRead — replacement pressure", () => {
                 account("p-3", "paused"),
                 account("p-4", "paused")
             ],
-            theses: [thesis("th-1")],
+            focuses: [focus("th-1")],
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation()
         });
@@ -209,7 +209,7 @@ describe("computeFieldRead — score bands", () => {
     it("scores empty board near 30 floor and bands empty", () => {
         const r = computeFieldRead({
             accounts: [],
-            theses: [],
+            focuses: [],
             approaches: [],
             allocation: makeAllocation()
         });
@@ -224,7 +224,7 @@ describe("computeFieldRead — score bands", () => {
         }
         const r = computeFieldRead({
             accounts,
-            theses: [thesis("th-1"), thesis("th-2"), thesis("th-3")],
+            focuses: [focus("th-1"), focus("th-2"), focus("th-3")],
             approaches: [
                 approach("ap-1", "th-1"),
                 approach("ap-2", "th-2"),

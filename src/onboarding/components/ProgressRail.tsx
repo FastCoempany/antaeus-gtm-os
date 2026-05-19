@@ -3,7 +3,7 @@ import { progress, stepIndex } from "../state";
 import { STEP_ORDER, type StepId } from "../lib/types";
 
 const STEP_LABELS: Readonly<Record<StepId, string>> = {
-    thesis: "Thesis",
+    intro: "Intro",
     company: "Company",
     role: "Role",
     category: "Category",

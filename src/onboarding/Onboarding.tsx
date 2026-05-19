@@ -10,7 +10,7 @@ import {
     IcpStep,
     QuotaStep,
     RoleStep,
-    ThesisStep
+    IntroStep
 } from "./components/Steps";
 
 /**
@@ -39,8 +39,8 @@ export function Onboarding(): JSX.Element {
 
 function StepRouter(): JSX.Element {
     switch (currentStep.value) {
-        case "thesis":
-            return <ThesisStep />;
+        case "intro":
+            return <IntroStep />;
         case "company":
             return <CompanyStep />;
         case "role":

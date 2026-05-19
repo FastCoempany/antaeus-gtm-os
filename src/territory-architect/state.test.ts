@@ -15,13 +15,13 @@ import {
     saveApproachFromDraft,
     saveThesisFromDraft,
     setAccountDisposition,
-    theses,
-    thesisDraft,
+    focuses,
+    focusDraft,
     __setAccountsForTests
 } from "./state";
 import {
     ACCOUNT_CEILING,
-    EMPTY_THESIS_DRAFT,
+    EMPTY_FOCUS_DRAFT,
     type TerritoryAccount
 } from "./lib/types";
 
@@ -30,7 +30,7 @@ function makeAccount(p: Partial<TerritoryAccount>): TerritoryAccount {
         id: p.id ?? "acct-1",
         name: p.name ?? "Acme",
         tier: p.tier ?? "t2",
-        thesisId: p.thesisId ?? "th-1",
+        focusId: p.focusId ?? "th-1",
         approachId: p.approachId ?? "",
         disposition: p.disposition ?? "active",
         notes: p.notes ?? "",
@@ -43,10 +43,10 @@ describe("initial state", () => {
     beforeEach(() => resetSession());
 
     it("starts empty", () => {
-        expect(theses.value).toHaveLength(0);
+        expect(focuses.value).toHaveLength(0);
         expect(approaches.value).toHaveLength(0);
         expect(accounts.value).toHaveLength(0);
-        expect(thesisDraft.value).toEqual(EMPTY_THESIS_DRAFT);
+        expect(focusDraft.value).toEqual(EMPTY_FOCUS_DRAFT);
     });
 
     it("allocation is 0/300 with headroom on empty state", () => {
@@ -56,13 +56,13 @@ describe("initial state", () => {
     });
 });
 
-describe("thesis save", () => {
+describe("focus save", () => {
     beforeEach(() => resetSession());
 
     it("returns null when title blank", () => {
         patchThesisDraft({ title: "  " });
         expect(saveThesisFromDraft()).toBeNull();
-        expect(theses.value).toHaveLength(0);
+        expect(focuses.value).toHaveLength(0);
     });
 
     it("appends + resets draft", () => {
@@ -74,25 +74,25 @@ describe("thesis save", () => {
         const t = saveThesisFromDraft();
         expect(t?.title).toBe("Procurement consolidation");
         expect(t?.tier).toBe("t1");
-        expect(theses.value).toHaveLength(1);
-        expect(thesisDraft.value).toEqual(EMPTY_THESIS_DRAFT);
+        expect(focuses.value).toHaveLength(1);
+        expect(focusDraft.value).toEqual(EMPTY_FOCUS_DRAFT);
     });
 });
 
 describe("approach save", () => {
     beforeEach(() => resetSession());
 
-    it("requires both name + thesisId", () => {
-        patchApproachDraft({ name: "Intro", thesisId: "" });
+    it("requires both name + focusId", () => {
+        patchApproachDraft({ name: "Intro", focusId: "" });
         expect(saveApproachFromDraft()).toBeNull();
-        patchApproachDraft({ name: "", thesisId: "th-1" });
+        patchApproachDraft({ name: "", focusId: "th-1" });
         expect(saveApproachFromDraft()).toBeNull();
     });
 
-    it("saves + indexes by thesis", () => {
+    it("saves + indexes by focus", () => {
         patchThesisDraft({ title: "T1" });
         const t = saveThesisFromDraft();
-        patchApproachDraft({ name: "Approach 1", thesisId: t!.id });
+        patchApproachDraft({ name: "Approach 1", focusId: t!.id });
         const a = saveApproachFromDraft();
         expect(a?.name).toBe("Approach 1");
         expect(approachesByThesis.value[t!.id]).toHaveLength(1);
@@ -102,10 +102,10 @@ describe("approach save", () => {
 describe("account save + ceiling", () => {
     beforeEach(() => resetSession());
 
-    it("requires name + thesisId", () => {
-        patchAccountDraft({ name: "Acme", thesisId: "" });
+    it("requires name + focusId", () => {
+        patchAccountDraft({ name: "Acme", focusId: "" });
         expect(saveAccountFromDraft()).toBeNull();
-        patchAccountDraft({ name: "", thesisId: "th-1" });
+        patchAccountDraft({ name: "", focusId: "th-1" });
         expect(saveAccountFromDraft()).toBeNull();
     });
 
@@ -116,7 +116,7 @@ describe("account save + ceiling", () => {
         }
         __setAccountsForTests(seed);
         expect(allocation.value.status).toBe("at-cap");
-        patchAccountDraft({ name: "Overflow", thesisId: "th-1" });
+        patchAccountDraft({ name: "Overflow", focusId: "th-1" });
         expect(saveAccountFromDraft()).toBeNull();
     });
 
@@ -149,8 +149,8 @@ describe("retier + disposition + accountsByThesis", () => {
 
     it("accountsByThesis ignores closed accounts", () => {
         __setAccountsForTests([
-            makeAccount({ id: "a", thesisId: "x", disposition: "active" }),
-            makeAccount({ id: "b", thesisId: "x", disposition: "closed-won" })
+            makeAccount({ id: "a", focusId: "x", disposition: "active" }),
+            makeAccount({ id: "b", focusId: "x", disposition: "closed-won" })
         ]);
         expect(accountsByThesis.value["x"]).toBe(1);
     });
@@ -159,17 +159,17 @@ describe("retier + disposition + accountsByThesis", () => {
 describe("removeThesis cascades", () => {
     beforeEach(() => resetSession());
 
-    it("removes thesis + its approaches + its accounts", () => {
+    it("removes focus + its approaches + its accounts", () => {
         patchThesisDraft({ title: "T1" });
         const t = saveThesisFromDraft()!;
-        patchApproachDraft({ name: "A1", thesisId: t.id });
+        patchApproachDraft({ name: "A1", focusId: t.id });
         saveApproachFromDraft();
-        patchAccountDraft({ name: "Acct1", thesisId: t.id });
+        patchAccountDraft({ name: "Acct1", focusId: t.id });
         saveAccountFromDraft();
         expect(approaches.value).toHaveLength(1);
         expect(accounts.value).toHaveLength(1);
         removeThesis(t.id);
-        expect(theses.value).toHaveLength(0);
+        expect(focuses.value).toHaveLength(0);
         expect(approaches.value).toHaveLength(0);
         expect(accounts.value).toHaveLength(0);
     });

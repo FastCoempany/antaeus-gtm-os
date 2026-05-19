@@ -20,8 +20,8 @@ import {
     saveApproachFromDraft,
     saveThesisFromDraft,
     setAccountDisposition,
-    theses,
-    thesisDraft
+    focuses,
+    focusDraft
 } from "./state";
 import {
     ACCOUNT_CEILING,
@@ -55,7 +55,7 @@ import { computeFieldRead } from "./lib/field-read";
 const fieldRead = computed(() =>
     computeFieldRead({
         accounts: accounts.value,
-        theses: theses.value,
+        focuses: focuses.value,
         approaches: approaches.value,
         allocation: allocation.value
     })
@@ -65,10 +65,10 @@ const fieldRead = computed(() =>
  * TerritoryArchitect — Wave 1+2 root.
  *
  * Per canon §4.5 (Decision Bench, bright per founder directive):
- *   ┌─ HeroBand: thesis count, allocation summary, ceiling read
- *   ├─ ThesisStudio: form + thesis cards (each carries approaches +
+ *   ┌─ HeroBand: focus count, allocation summary, ceiling read
+ *   ├─ FocusStudio: form + focus cards (each carries approaches +
  *   │  account count)
- *   ├─ ApproachLedger: form + approach list (per thesis)
+ *   ├─ ApproachLedger: form + approach list (per focus)
  *   ├─ AccountTable: form + ranked list with retier + disposition
  *   └─ HandoffStrip
  */
@@ -89,15 +89,15 @@ const STATUS_LABELS: Readonly<Record<"headroom" | "at-cap" | "over", string>> = 
 
 function HeroBand(): JSX.Element {
     const a = allocation.value;
-    const thesisCount = theses.value.length;
+    const focusCount = focuses.value.length;
     const focus = focusedIcp.value;
     const read = fieldRead.value;
     // Phase 2.3 — inbound focus from ICP Studio (or any upstream room
     // passing `?focusObject=`) surfaces in the kicker tail so the
     // operator sees the ICP context the room is building against.
     const baseKicker =
-        thesisCount > 0
-            ? `TERRITORY ARCHITECT · ${thesisCount} ${thesisCount === 1 ? "thesis" : "theses"} · ${a.total}/${a.ceiling} accounts`
+        focusCount > 0
+            ? `TERRITORY ARCHITECT · ${focusCount} ${focusCount === 1 ? "focus" : "focuses"} · ${a.total}/${a.ceiling} accounts`
             : "TERRITORY ARCHITECT";
     const kicker = focus
         ? `${baseKicker} · building around: ${focus}`
@@ -118,8 +118,8 @@ function HeroBand(): JSX.Element {
                     </p>
                     <div class="ta-hero__stats" aria-label="Territory stats">
                         <div class="ta-stat">
-                            <p class="ta-stat__value">{thesisCount}</p>
-                            <p class="ta-stat__label">Theses</p>
+                            <p class="ta-stat__value">{focusCount}</p>
+                            <p class="ta-stat__label">Focuses</p>
                         </div>
                         {a.perTier.map((t) => (
                             <div class="ta-stat" key={t.tier}>
@@ -188,21 +188,21 @@ function HeroBand(): JSX.Element {
     );
 }
 
-function ThesisStudio(): JSX.Element {
-    const d = thesisDraft.value;
-    const list = theses.value;
+function FocusStudio(): JSX.Element {
+    const d = focusDraft.value;
+    const list = focuses.value;
     const counts = accountsByThesis.value;
     const byThesis = approachesByThesis.value;
     return (
-        <section class="ta-block" aria-label="Thesis studio">
+        <section class="ta-block" aria-label="Focus studio">
             <header class="ta-block__head">
                 <p class="ta-block__kicker">THESES</p>
                 <h2 class="ta-block__title">
-                    Each thesis is one strategic bet on a segment.
+                    Each focus is one strategic bet on a segment.
                 </h2>
             </header>
             <form
-                class="ta-form ta-form--thesis"
+                class="ta-form ta-form--focus"
                 onSubmit={(e) => {
                     e.preventDefault();
                     const t = saveThesisFromDraft();
@@ -278,7 +278,7 @@ function ThesisStudio(): JSX.Element {
                     <span class="ta-field__label">Why we win</span>
                     <textarea
                         class="ta-textarea"
-                        placeholder="Why this team is the right seller for this thesis"
+                        placeholder="Why this team is the right seller for this focus"
                         value={d.whyUs}
                         onInput={(e) =>
                             patchThesisDraft({
@@ -294,21 +294,21 @@ function ThesisStudio(): JSX.Element {
                     class="ta-save-btn"
                     disabled={d.title.trim().length === 0}
                 >
-                    Save thesis
+                    Save focus
                 </button>
             </form>
 
             {list.length === 0 ? (
                 <p class="ta-empty">
-                    No theses yet. Save one above to start building the
+                    No focuses yet. Save one above to start building the
                     territory.
                 </p>
             ) : (
-                <ul class="ta-thesis-list">
+                <ul class="ta-focus-list">
                     {list.map((t) => (
                         <li
                             key={t.id}
-                            class={`ta-thesis ta-thesis--${t.tier}`}
+                            class={`ta-focus ta-focus--${t.tier}`}
                         >
                             <header class="ta-thesis__head">
                                 <strong>{t.title}</strong>
@@ -348,7 +348,7 @@ function ThesisStudio(): JSX.Element {
 function ApproachLedger(): JSX.Element {
     const d = approachDraft.value;
     const list = approaches.value;
-    const ts = theses.value;
+    const ts = focuses.value;
     const titleById: Record<string, string> = {};
     for (const t of ts) titleById[t.id] = t.title;
     return (
@@ -356,7 +356,7 @@ function ApproachLedger(): JSX.Element {
             <header class="ta-block__head">
                 <p class="ta-block__kicker">APPROACHES</p>
                 <h2 class="ta-block__title">
-                    Reusable talk-tracks, one per thesis.
+                    Reusable talk-tracks, one per focus.
                 </h2>
             </header>
             <form
@@ -383,19 +383,19 @@ function ApproachLedger(): JSX.Element {
                     />
                 </label>
                 <label class="ta-field">
-                    <span class="ta-field__label">Thesis</span>
+                    <span class="ta-field__label">Focus</span>
                     <select
                         class="ta-select"
-                        value={d.thesisId}
+                        value={d.focusId}
                         onChange={(e) =>
                             patchApproachDraft({
-                                thesisId: (
+                                focusId: (
                                     e.currentTarget as HTMLSelectElement
                                 ).value
                             })
                         }
                     >
-                        <option value="">Choose thesis…</option>
+                        <option value="">Choose focus…</option>
                         {ts.map((t) => (
                             <option key={t.id} value={t.id}>
                                 {t.title}
@@ -453,7 +453,7 @@ function ApproachLedger(): JSX.Element {
                     type="submit"
                     class="ta-save-btn"
                     disabled={
-                        d.name.trim().length === 0 || !d.thesisId
+                        d.name.trim().length === 0 || !d.focusId
                     }
                 >
                     Save approach
@@ -462,7 +462,7 @@ function ApproachLedger(): JSX.Element {
 
             {list.length === 0 ? (
                 <p class="ta-empty">
-                    No approaches yet. Save a thesis first, then attach an
+                    No approaches yet. Save a focus first, then attach an
                     approach to it.
                 </p>
             ) : (
@@ -472,7 +472,7 @@ function ApproachLedger(): JSX.Element {
                             <header>
                                 <strong>{a.name}</strong>
                                 <small>
-                                    {titleById[a.thesisId] ?? "Unattached"}
+                                    {titleById[a.focusId] ?? "Unattached"}
                                 </small>
                             </header>
                             {a.trigger ? (
@@ -504,13 +504,13 @@ function ApproachLedger(): JSX.Element {
 function AccountTable(): JSX.Element {
     const d = accountDraft.value;
     const list = accounts.value;
-    const ts = theses.value;
+    const ts = focuses.value;
     const ap = approaches.value;
     const a = allocation.value;
     const titleById: Record<string, string> = {};
     for (const t of ts) titleById[t.id] = t.title;
-    const approachOptions = d.thesisId
-        ? ap.filter((x) => x.thesisId === d.thesisId)
+    const approachOptions = d.focusId
+        ? ap.filter((x) => x.focusId === d.focusId)
         : ap;
     return (
         <section class="ta-block" aria-label="Account table">
@@ -571,20 +571,20 @@ function AccountTable(): JSX.Element {
                     </select>
                 </label>
                 <label class="ta-field">
-                    <span class="ta-field__label">Thesis</span>
+                    <span class="ta-field__label">Focus</span>
                     <select
                         class="ta-select"
-                        value={d.thesisId}
+                        value={d.focusId}
                         onChange={(e) =>
                             patchAccountDraft({
-                                thesisId: (
+                                focusId: (
                                     e.currentTarget as HTMLSelectElement
                                 ).value,
                                 approachId: ""
                             })
                         }
                     >
-                        <option value="">Choose thesis…</option>
+                        <option value="">Choose focus…</option>
                         {ts.map((t) => (
                             <option key={t.id} value={t.id}>
                                 {t.title}
@@ -634,7 +634,7 @@ function AccountTable(): JSX.Element {
                     class="ta-save-btn"
                     disabled={
                         d.name.trim().length === 0 ||
-                        !d.thesisId ||
+                        !d.focusId ||
                         a.status === "at-cap" ||
                         a.status === "over"
                     }
@@ -644,7 +644,7 @@ function AccountTable(): JSX.Element {
             </form>
             {list.length === 0 ? (
                 <p class="ta-empty">
-                    No accounts yet. Save a thesis, then add accounts that
+                    No accounts yet. Save a focus, then add accounts that
                     belong to it.
                 </p>
             ) : (
@@ -653,7 +653,7 @@ function AccountTable(): JSX.Element {
                         <tr>
                             <th>Account</th>
                             <th>Tier</th>
-                            <th>Thesis</th>
+                            <th>Focus</th>
                             <th>Disposition</th>
                             <th aria-label="actions" />
                         </tr>
@@ -694,7 +694,7 @@ function AccountTable(): JSX.Element {
                                         ))}
                                     </select>
                                 </td>
-                                <td>{titleById[acct.thesisId] ?? "—"}</td>
+                                <td>{titleById[acct.focusId] ?? "—"}</td>
                                 <td>
                                     <select
                                         class="ta-disp-pick"
@@ -772,7 +772,7 @@ export function TerritoryArchitect(): JSX.Element {
     return (
         <div class="ta-shell">
             <HeroBand />
-            <ThesisStudio />
+            <FocusStudio />
             <ApproachLedger />
             <AccountTable />
             <HandoffStrip />

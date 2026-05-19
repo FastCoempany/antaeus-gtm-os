@@ -2,7 +2,7 @@ import type {
     AllocationReadout,
     Approach,
     TerritoryAccount,
-    Thesis
+    Focus
 } from "./types";
 
 /**
@@ -19,7 +19,7 @@ import type {
  *   - What should come in to replace what's drifting off
  *   - The one prescribed next step
  *
- * Pure: takes accounts + theses + approaches + allocation explicitly
+ * Pure: takes accounts + focuses + approaches + allocation explicitly
  * so tests can probe every branch.
  */
 
@@ -36,7 +36,7 @@ export interface FieldRead {
 
 export interface FieldReadInputs {
     readonly accounts: ReadonlyArray<TerritoryAccount>;
-    readonly theses: ReadonlyArray<Thesis>;
+    readonly focuses: ReadonlyArray<Focus>;
     readonly approaches: ReadonlyArray<Approach>;
     readonly allocation: AllocationReadout;
 }
@@ -53,7 +53,7 @@ const BAND_LABELS: Readonly<Record<FieldReadBand, string>> = {
 };
 
 export function computeFieldRead(input: FieldReadInputs): FieldRead {
-    const { accounts, theses, approaches, allocation } = input;
+    const { accounts, focuses, approaches, allocation } = input;
 
     // Active = accounts still in the field (not closed). Drift =
     // closed-lost rows still occupying the strategic memory but no
@@ -65,20 +65,20 @@ export function computeFieldRead(input: FieldReadInputs): FieldRead {
     const won = accounts.filter((a) => a.disposition === "closed-won");
 
     const score = computeScore({
-        thesisCount: theses.length,
+        focusCount: focuses.length,
         approachCount: approaches.length,
         activeCount: active.length,
         wonCount: won.length,
         allocation
     });
-    const band = scoreToBand(score, theses.length, active.length);
+    const band = scoreToBand(score, focuses.length, active.length);
 
     return {
         score,
         band,
         bandLabel: BAND_LABELS[band],
         mainRisk: pickMainRisk({
-            theses,
+            focuses,
             allocation,
             paused,
             lost,
@@ -86,7 +86,7 @@ export function computeFieldRead(input: FieldReadInputs): FieldRead {
         }),
         replacement: pickReplacement({ paused, lost }),
         operatorMove: pickOperatorMove({
-            theses,
+            focuses,
             approaches,
             allocation,
             lost,
@@ -96,7 +96,7 @@ export function computeFieldRead(input: FieldReadInputs): FieldRead {
 }
 
 interface ScoreInputs {
-    readonly thesisCount: number;
+    readonly focusCount: number;
     readonly approachCount: number;
     readonly activeCount: number;
     readonly wonCount: number;
@@ -105,8 +105,8 @@ interface ScoreInputs {
 
 function computeScore(s: ScoreInputs): number {
     let score = 30;
-    if (s.thesisCount >= 1) score += 8;
-    if (s.thesisCount >= 3) score += 12;
+    if (s.focusCount >= 1) score += 8;
+    if (s.focusCount >= 3) score += 12;
     if (s.approachCount >= 1) score += 6;
     if (s.approachCount >= 3) score += 10;
     if (s.activeCount >= 5) score += 8;
@@ -119,17 +119,17 @@ function computeScore(s: ScoreInputs): number {
 
 function scoreToBand(
     score: number,
-    thesisCount: number,
+    focusCount: number,
     activeCount: number
 ): FieldReadBand {
-    if (thesisCount === 0 || activeCount === 0) return "empty";
+    if (focusCount === 0 || activeCount === 0) return "empty";
     if (score >= 75) return "runnable";
     if (score >= 55) return "tight";
     return "loose";
 }
 
 interface RiskInputs {
-    readonly theses: ReadonlyArray<Thesis>;
+    readonly focuses: ReadonlyArray<Focus>;
     readonly allocation: AllocationReadout;
     readonly paused: ReadonlyArray<TerritoryAccount>;
     readonly lost: ReadonlyArray<TerritoryAccount>;
@@ -137,11 +137,11 @@ interface RiskInputs {
 }
 
 function pickMainRisk(s: RiskInputs): string {
-    if (s.theses.length === 0) {
-        return "No theses defined. The territory has no strategic bets to organize around.";
+    if (s.focuses.length === 0) {
+        return "No focuses defined. The territory has no strategic bets to organize around.";
     }
-    if (s.theses.length === 1) {
-        return "A single thesis covers the whole territory. One miss sinks the field.";
+    if (s.focuses.length === 1) {
+        return "A single focus covers the whole territory. One miss sinks the field.";
     }
     if (s.allocation.status === "over") {
         return `Field is over the ${s.allocation.ceiling} ceiling. Retier or close to come back inside.`;
@@ -175,7 +175,7 @@ function pickReplacement(s: ReplacementInputs): string {
 }
 
 interface OperatorMoveInputs {
-    readonly theses: ReadonlyArray<Thesis>;
+    readonly focuses: ReadonlyArray<Focus>;
     readonly approaches: ReadonlyArray<Approach>;
     readonly allocation: AllocationReadout;
     readonly lost: ReadonlyArray<TerritoryAccount>;
@@ -183,11 +183,11 @@ interface OperatorMoveInputs {
 }
 
 function pickOperatorMove(s: OperatorMoveInputs): string {
-    if (s.theses.length === 0) {
-        return "Start with one thesis. Name the strategic bet.";
+    if (s.focuses.length === 0) {
+        return "Start with one focus. Name the strategic bet.";
     }
     if (s.approaches.length === 0) {
-        return "Add an approach for each thesis. Approaches are the talk-tracks the field needs.";
+        return "Add an approach for each focus. Approaches are the talk-tracks the field needs.";
     }
     if (s.allocation.status === "over") {
         return "Retier or close enough accounts to bring the total back under the ceiling.";
@@ -198,5 +198,5 @@ function pickOperatorMove(s: OperatorMoveInputs): string {
     if (s.paused.length >= 3) {
         return "Promote one watch-ring account or eject — the middle should feel unstable.";
     }
-    return "Add the next high-conviction Tier 1, or sharpen an existing thesis.";
+    return "Add the next high-conviction Tier 1, or sharpen an existing focus.";
 }

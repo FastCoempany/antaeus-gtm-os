@@ -31,7 +31,7 @@ describe("initial state", () => {
 
     it("starts at step 0 (thesis)", () => {
         expect(stepIndex.value).toBe(0);
-        expect(currentStep.value).toBe("thesis");
+        expect(currentStep.value).toBe("intro");
     });
 
     it("draft is empty", () => {
@@ -71,7 +71,7 @@ describe("step navigation", () => {
         expect(currentStep.value).toBe("company");
         prevStep();
         prevStep();
-        expect(currentStep.value).toBe("thesis");
+        expect(currentStep.value).toBe("intro");
     });
 
     it("jumpTo lands on the named step", () => {

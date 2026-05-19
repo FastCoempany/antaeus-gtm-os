@@ -2,10 +2,10 @@
  * Phase 4 / Room 12 — Territory Architect types.
  *
  * Per canon §4.5 the room turns the ICP into a tiered territory with
- * theses, approaches, and a hard 300-account ceiling that forces
- * strategic ownership. The territory is a map of strategic bets, not
- * a list. Per founder directive (2026-04-28) the room is bright (no
- * dark surfaces).
+ * focuses, approaches, and a hard 300-account ceiling that forces
+ * strategic ownership. The territory is a map of focused groups of
+ * buyers, not a list. Per founder directive (2026-04-28) the room is
+ * bright (no dark surfaces).
  */
 
 export type TierId = "t1" | "t2" | "t3" | "t4";
@@ -56,11 +56,11 @@ export const EMPTY_TERRITORY_STATE: TerritoryState = {
     createdAt: null
 };
 
-// ─── Thesis + Approach ─────────────────────────────────────────────────
+// ─── Focus + Approach ──────────────────────────────────────────────────
 
-export interface Thesis {
+export interface Focus {
     readonly id: string;
-    /** Strategic bet name e.g. "Procurement consolidation Q2". */
+    /** Focus name e.g. "Procurement consolidation Q2". */
     readonly title: string;
     /** Pressure / why-now narrative. */
     readonly pressure: string;
@@ -69,7 +69,7 @@ export interface Thesis {
     /** Why this team is the right seller. */
     readonly whyUs: string;
     readonly tier: TierId;
-    /** Account ids tagged with this thesis. */
+    /** Account ids tagged with this focus. */
     readonly accountIds: ReadonlyArray<string>;
     readonly createdAt: string;
     readonly updatedAt: string;
@@ -85,7 +85,7 @@ export interface Approach {
     readonly script: string;
     /** Bridge phrasing for objection handling. */
     readonly bridge: string;
-    readonly thesisId: string;
+    readonly focusId: string;
     readonly createdAt: string;
     readonly updatedAt: string;
 }
@@ -103,7 +103,7 @@ export interface TerritoryAccount {
     readonly id: string;
     readonly name: string;
     readonly tier: TierId;
-    readonly thesisId: string;
+    readonly focusId: string;
     readonly approachId: string;
     readonly disposition: DispositionState;
     readonly notes: string;
@@ -113,7 +113,7 @@ export interface TerritoryAccount {
 
 // ─── Drafts (form state) ───────────────────────────────────────────────
 
-export interface ThesisDraft {
+export interface FocusDraft {
     readonly title: string;
     readonly pressure: string;
     readonly segment: string;
@@ -121,7 +121,7 @@ export interface ThesisDraft {
     readonly tier: TierId;
 }
 
-export const EMPTY_THESIS_DRAFT: ThesisDraft = {
+export const EMPTY_FOCUS_DRAFT: FocusDraft = {
     title: "",
     pressure: "",
     segment: "",
@@ -134,7 +134,7 @@ export interface ApproachDraft {
     readonly trigger: string;
     readonly script: string;
     readonly bridge: string;
-    readonly thesisId: string;
+    readonly focusId: string;
 }
 
 export const EMPTY_APPROACH_DRAFT: ApproachDraft = {
@@ -142,13 +142,13 @@ export const EMPTY_APPROACH_DRAFT: ApproachDraft = {
     trigger: "",
     script: "",
     bridge: "",
-    thesisId: ""
+    focusId: ""
 };
 
 export interface AccountDraft {
     readonly name: string;
     readonly tier: TierId;
-    readonly thesisId: string;
+    readonly focusId: string;
     readonly approachId: string;
     readonly notes: string;
 }
@@ -156,7 +156,7 @@ export interface AccountDraft {
 export const EMPTY_ACCOUNT_DRAFT: AccountDraft = {
     name: "",
     tier: "t2",
-    thesisId: "",
+    focusId: "",
     approachId: "",
     notes: ""
 };

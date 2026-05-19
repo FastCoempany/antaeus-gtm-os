@@ -8,7 +8,7 @@ import {
 } from "../state";
 
 /**
- * Topbar — thesis + mode switcher + readiness anchor.
+ * Topbar — focus + mode switcher + readiness anchor.
  *
  * Per canon §4.2 (Command Chamber family): "the dashboard is where the
  * hallway dies." The topbar is the only navigation surface in this
@@ -18,9 +18,9 @@ import {
  *   - BackButton removed. Dashboard is the operator's home; "back"
  *     leads nowhere coherent. The global wordmark in the room-chrome
  *     strip provides the home link.
- *   - Thesis H1 demoted (was clamp(40,5vw,76)px — hero-marketing
+ *   - Focus H1 demoted (was clamp(40,5vw,76)px — hero-marketing
  *     weight). The ranked spotlight is now the visual hero; the
- *     thesis is a confident kicker, not a headline.
+ *     focus is a confident kicker, not a headline.
  *   - Subtitle line ("One ranked object. One dominant move…") removed
  *     entirely. That was design documentation, not work.
  *   - Export snapshot moved off the topbar rail and into the
