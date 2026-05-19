@@ -25,18 +25,18 @@ export function buildRiskReasons(
     if (profile.staleDays) pushReason(reasons, profile.staleDays + "d stale");
     if (profile.nextStepOverdue) pushReason(reasons, "next step overdue");
     if (profile.proofThin) pushReason(reasons, "proof thin");
-    if (profile.truthDebtCount >= 2) pushReason(reasons, "truth debt");
-    if (profile.recoveryCount) pushReason(reasons, "recovery queue");
-    if (profile.missingChampion) pushReason(reasons, "champion unproven");
-    if (profile.weakChampion) pushReason(reasons, "champion weak");
-    if (profile.missingNextStep) pushReason(reasons, "next step missing");
+    if (profile.truthDebtCount >= 2) pushReason(reasons, "qualification gaps");
+    if (profile.recoveryCount) pushReason(reasons, "in the recovery queue");
+    if (profile.missingChampion) pushReason(reasons, "no champion yet");
+    if (profile.weakChampion) pushReason(reasons, "champion is weak");
+    if (profile.missingNextStep) pushReason(reasons, "no next step set");
     if (profile.threadingRisk) pushReason(reasons, "single-threaded");
-    if (profile.stageStuck) pushReason(reasons, "stage stuck");
-    if (profile.dealRoomPressureScore >= 60) pushReason(reasons, "room pressure high");
-    if (profile.readinessDealsWeak) pushReason(reasons, "deals weakest dimension");
+    if (profile.stageStuck) pushReason(reasons, "stuck at this stage");
+    if (profile.dealRoomPressureScore >= 60) pushReason(reasons, "Deal Workspace under pressure");
+    if (profile.readinessDealsWeak) pushReason(reasons, "deals is the weakest dimension");
     if (profile.quotaPressureScore >= 60) pushReason(reasons, "quota pressure");
-    if (profile.linkedRoomTop) pushReason(reasons, "room lead");
-    if (profile.hasAutopsy) pushReason(reasons, "failure mode exposed");
+    if (profile.linkedRoomTop) pushReason(reasons, "top of its room");
+    if (profile.hasAutopsy) pushReason(reasons, "past failure on the record");
     const meta = Array.isArray(card?.meta) ? card!.meta : [];
     for (const item of meta) {
         if (/\$/.test(item)) continue;
@@ -58,26 +58,26 @@ export function buildMoveReasons(
     if (profile.coveragePressure) pushReason(reasons, "coverage pressure");
     if (profile.highConfidenceCount >= 2) pushReason(reasons, "high-conf cluster");
     if (profile.recentCount >= 2) pushReason(reasons, "fresh signals");
-    if (profile.truthDebtCount >= 2) pushReason(reasons, "truth debt");
+    if (profile.truthDebtCount >= 2) pushReason(reasons, "qualification gaps");
     if (profile.proofThin) pushReason(reasons, "proof thin");
     if (profile.nextStepOverdue) pushReason(reasons, "next step overdue");
-    if (profile.missingNextStep) pushReason(reasons, "next step missing");
+    if (profile.missingNextStep) pushReason(reasons, "no next step set");
     if (profile.quotaPressureScore >= 60) pushReason(reasons, "quota pressure");
     if (profile.signalRoomMotionReady) pushReason(reasons, "signal room ready");
     if (profile.signalRoomEvidenceThin) pushReason(reasons, "evidence still thin");
-    if (profile.readinessOutreachWeak) pushReason(reasons, "outreach weakest link");
-    if (profile.readinessDiscoveryWeak) pushReason(reasons, "discovery weakest link");
+    if (profile.readinessOutreachWeak) pushReason(reasons, "outreach is the weakest dimension");
+    if (profile.readinessDiscoveryWeak) pushReason(reasons, "discovery is the weakest dimension");
     if (profile.readinessPlaybookWeak && family === "advisor") {
-        pushReason(reasons, "playbook weakest link");
+        pushReason(reasons, "playbook is the weakest dimension");
     }
-    if (profile.hasReplies) pushReason(reasons, "reply path");
-    if (family === "advisor" || profile.hasAdvisor) pushReason(reasons, "advisor leverage");
-    if (family === "opportunity" || profile.hasSignalConsole) pushReason(reasons, "market motion");
-    if (profile.linkedRoomTop) pushReason(reasons, "room lead");
-    if (profile.roomReadiness >= 2) pushReason(reasons, "room ready");
+    if (profile.hasReplies) pushReason(reasons, "the prospect replied");
+    if (family === "advisor" || profile.hasAdvisor) pushReason(reasons, "advisor available");
+    if (family === "opportunity" || profile.hasSignalConsole) pushReason(reasons, "signals are live");
+    if (profile.linkedRoomTop) pushReason(reasons, "top of its room");
+    if (profile.roomReadiness >= 2) pushReason(reasons, "room is ready");
     if (!reasons.length && profile.risk) pushReason(reasons, "risk " + profile.risk);
-    if (!reasons.length && profile.hasOpenDeal) pushReason(reasons, "room ready");
-    if (!reasons.length) pushReason(reasons, "next move ready");
+    if (!reasons.length && profile.hasOpenDeal) pushReason(reasons, "room is ready");
+    if (!reasons.length) pushReason(reasons, "next move is ready");
     return reasons.slice(0, 4);
 }
 
@@ -105,15 +105,15 @@ export function buildSystemReasons(profile: SignalProfile): string[] {
 
 export function buildIcpReasons(profile: SignalProfile): string[] {
     const reasons: string[] = [];
-    if (profile.readinessIcpWeak) pushReason(reasons, "ICP weakest dimension");
-    pushReason(reasons, "targeting truth missing");
+    if (profile.readinessIcpWeak) pushReason(reasons, "ICP is the weakest dimension");
+    pushReason(reasons, "no saved ICP yet");
     if (profile.quotaPressureScore >= 60) {
-        pushReason(reasons, "quota pressure is downstream");
+        pushReason(reasons, "quota pressure depends on it");
     }
     if (profile.contextSignals || profile.contextAccounts) {
-        pushReason(reasons, "market layer already live");
+        pushReason(reasons, "signals + accounts already live");
     }
-    if (profile.contextDeals) pushReason(reasons, "deal layer depends on ICP");
+    if (profile.contextDeals) pushReason(reasons, "deals depend on ICP");
     return reasons.slice(0, 4);
 }
 

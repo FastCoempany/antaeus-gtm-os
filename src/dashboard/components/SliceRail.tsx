@@ -41,7 +41,7 @@ export function SliceRail({ objects, mode }: Props): JSX.Element {
                     <p class="db-rail__title">What needs you</p>
                 </header>
                 <p class="db-rail__empty">
-                    No ranked items yet. Sibling rooms publish snapshots; the rail lights up the moment any of them does.
+                    No ranked items yet. The other rooms haven't sent anything for the dashboard to rank — the list lights up the moment one of them does.
                 </p>
             </aside>
         );
