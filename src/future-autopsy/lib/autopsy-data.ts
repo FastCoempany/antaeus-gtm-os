@@ -66,7 +66,7 @@ export const WTEXT: Readonly<Record<string, string>> = {
     usecase_clarified: "Use case is clear and scoped.",
     poc_success_criteria_locked:
         "PoC success criteria and readout owner are defined.",
-    competition_named: "Competitor/status quo and wedge are explicit.",
+    competition_named: "Competitor + status quo + our angle are explicit.",
     thread_reactivated: "Silence ended with a concrete exchange.",
     champion_strengthened: "Champion gained authority and internal pull.",
     multi_threaded:

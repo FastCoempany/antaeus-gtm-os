@@ -134,25 +134,25 @@ export function InterventionRail(): JSX.Element {
             <div class="dw-rail__layout">
                 <RailRow
                     state="Now"
-                    copy="Immediate correction. These are actively corrupting the board if left untouched."
+                    copy="Fix these today. If you leave them, they're going to drag the rest of the board down."
                     items={groups.now}
                     focused={focused}
                     onPin={setFocusedDealId}
                     mode="ticket"
-                    emptyCopy="No critical-lane deals — the board is intact for now."
+                    emptyCopy="No deals in the critical lane right now — the board is clean."
                 />
                 <RailRow
                     state="Next"
-                    copy="Tighten one live opportunity only after the emergency cases are handled."
+                    copy="Tighten one live opportunity, but only after the critical-lane deals are handled."
                     items={groups.next}
                     focused={focused}
                     onPin={setFocusedDealId}
                     mode="ticket"
-                    emptyCopy="No at-risk-lane deal nominated — keep the Now row clean first."
+                    emptyCopy="Nothing in the at-risk lane yet — keep the Now row clean first."
                 />
                 <RailRow
                     state="Keep honest"
-                    copy="The reserve is visible as signals, not as repeated deal cards."
+                    copy="The reserve shows up here as signals, not as full deal cards — so the room doesn't repeat itself."
                     items={groups.keepHonest}
                     focused={focused}
                     onPin={setFocusedDealId}
@@ -271,14 +271,14 @@ function FilterStrip(props: { readonly filter: Filter }): JSX.Element {
         copy = "Showing only deals in the critical lane.";
     } else if (props.filter === "stalled") {
         mode = "Next scope";
-        copy = "Showing the next-up tightening targets.";
+        copy = "Showing the deals worth tightening next.";
     } else if (props.filter === "this-quarter") {
         mode = "Reserve scope";
-        copy = "Showing only deals in the keep-honest reserve.";
+        copy = "Showing only the deals in the keep-honest reserve.";
     } else {
         mode = "Intervention rail";
         copy =
-            "Ordered by the work you do to the board, not by pipeline stage.";
+            "Sorted by what needs your attention next, not by pipeline stage.";
     }
     return (
         <div class="dw-rail__filter-strip">

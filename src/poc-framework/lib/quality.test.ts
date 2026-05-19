@@ -219,7 +219,7 @@ describe("computeQuality", () => {
         );
         expect(ready.band).toBe("ready");
         expect(ready.bandLabel).toBe("Cast");
-        expect(ready.title).toMatch(/decision-grade/i);
+        expect(ready.title).toMatch(/buyer's boss could act/i);
 
         const workable = computeQuality(
             draft({
@@ -305,7 +305,7 @@ describe("buildIngotRead (Program 6 / PR 14)", () => {
         expect(r.toLowerCase()).toContain("still empty");
     });
 
-    it("returns decision-grade copy when all molds are locked", () => {
+    it("returns ready-to-carry copy when all molds are locked", () => {
         const molds = [
             mold("Claim", "cast"),
             mold("Baseline", "cast"),
@@ -314,7 +314,7 @@ describe("buildIngotRead (Program 6 / PR 14)", () => {
             mold("Kill", "cast")
         ];
         const r = buildIngotRead(molds);
-        expect(r.toLowerCase()).toContain("decision-grade");
+        expect(r.toLowerCase()).toContain("ready");
         expect(r.toLowerCase()).toContain("locked");
     });
 

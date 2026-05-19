@@ -99,12 +99,12 @@
             modules: [
                 { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'compile what the first AE should inherit instead of rediscover' },
                 { href: '/app/readiness/', label: 'Readiness', reason: 'show where the system is still too thin for a safe handoff' },
-                { href: '/app/dashboard/', label: 'Dashboard', reason: 'turn handoff into a daily operating rhythm, not a PDF event' }
+                { href: '/app/dashboard/', label: 'Dashboard', reason: 'turn handoff into a daily weekly rhythm, not a PDF event' }
             ],
             outputs: [
                 'A clearer inherited playbook instead of a rep-sized blank space.',
                 'Visible handoff risk before the hire compounds it.',
-                'A better link between daily operating truth and first-rep coaching.'
+                'A better link between daily what is actually happening and first-rep coaching.'
             ],
             related: [
                 { href: '/methodology/when-to-hire-first-sales-person-startup.html', label: 'When to hire your first salesperson' },
@@ -382,7 +382,7 @@
                 '<h3>Methodology should route into live product behavior, not stop at agreement.</h3>' +
                 '<p>Read here. Prove it in the sample lane. Move into a real workspace when you want the system to start carrying the work for you.</p>' +
                 '<div class="cta-actions">' + renderActions(buildStandardActions('hub_bottom')) + '</div>' +
-                '<div class="bridge-note">Ten pages are live now. The goal is not content volume for its own sake; it is a cleaner bridge from public belief into operating truth.</div>';
+                '<div class="bridge-note">Ten pages are live now. The goal is not content volume for its own sake; it is a cleaner bridge from public belief into what is actually happening.</div>';
         }
 
         track('methodology_hub_rendered', { page_type: 'index', page_count: 10 });

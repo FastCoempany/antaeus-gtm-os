@@ -81,7 +81,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 - **Picked artifact:** none recorded with `-selected-`. Two triptych files exist: `welcome-launch-folio-triptych-2026-04-08.html` (3 variants all titled "Open the live mandate.") and `welcome-gamification-triptych-2026-04-08.html` (3 variants: "Bring the system online." / "Fly the first week forward." / "Earn the first proof set.").
 - **AI pick:** **gamification variant 1 — "Bring the first system online."** Rationale: matches Threshold family doctrine (invitational, composed, transitional) without the anxiety register the launch-folio set carries. The first-system-online thesis sits between confidence-building and progress-without-gamification per canon Part II §4.1. The ladder/anchor pattern in this variant maps cleanly to the four canon milestones (ICP, signal/account, deal, motion).
 - **Shipped (`src/welcome/`):** `wel-shell` → `wel-hero` (with `__progress-bar`, `__chips`) + `wel-actions__list` + `wel-grid`. Reads as a hero + actions stack.
-- **Verdict:** **partial.** Hero + actions are right Threshold posture. Sentence-shaped thesis exists in topbar. Drift: shipped progress-bar fills the hero; the picked variant's "ladder anchored to a first system" is more authored. Action cards are functional but lack the calm composition the Threshold family wants.
+- **Verdict:** **partial.** Hero + actions match the Threshold family treatment from canon Part II. Sentence-shaped thesis exists in the topbar. Drift: the shipped progress-bar fills the hero; the picked variant's "ladder anchored to a first system" reads as more authored. The action cards work but they lack the calm composition the Threshold family asks for.
 - **Punch list:**
   1. Re-author hero copy to match "Bring the first system online." register
   2. Replace progress-bar with the 4-anchor ladder (ICP / Signal / Deal / Motion); each anchor is its own micro-zone with state (locked / live / done)
@@ -113,10 +113,10 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 
 ## Room: ICP Studio (Decision Bench)
 
-- **Picked artifact:** none recorded. Triptych file has 3 variants: A ("Choose one wedge the rest of the app can trust."), B ("Stop saving six wedges that all mean maybe."), C ("Build the wedge on the left. See what it changes on the right.").
-- **AI pick:** **variant C — "Build the wedge on the left. See what it changes on the right."** Rationale: Decision Bench family demands the object being sharpened be visually central. C's "build left, see right" 2-col split makes the ICP object the operating surface and the analytics panel the immediate consequence — the strongest expression of canon §4.4 + Part II §4.4.
+- **Picked artifact:** none recorded. Triptych file has 3 variants: A (one-sharp-definition framing), B (anti-blurry-multi-version framing), C (build-left-see-right 2-col working surface). *Variant titles paraphrased; the wireframes themselves will be rewritten in the wireframes archive sweep.*
+- **AI pick:** **variant C — the build-left-see-right working surface.** Rationale: Decision Bench family demands the object being sharpened be visually central. C's 2-col split makes the ICP object the operating surface and the analytics panel the immediate consequence — the strongest expression of canon §4.4 + Part II §4.4.
 - **Shipped (`src/icp-studio/`):** `icp-hero` (kicker + statement + meta + badge) → `icp-form` (build) → `icp-analytics` (right). The 2-col left/right split exists.
-- **Verdict:** **match.** Variant C's 2-col build-left-see-right structure shipped. Hero is bright cream-gradient with orange left-rule per Phase 4 close. Analytics panel reflects the chosen wedge's consequences.
+- **Verdict:** **match.** Variant C's 2-col build-left-see-right structure shipped. Hero is bright cream-gradient with orange left-rule per Phase 4 close. Analytics panel reflects the chosen ICP's consequences.
 - **Punch list:**
   1. Rename `icp-hero__statement` content to match variant C's authored thesis register
   2. Verify `icp-analytics` updates live as the form is edited (the "see what it changes on the right" promise) — render-pass check
@@ -147,10 +147,10 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 
 ---
 
-## Room: Signal Console (Live Instrument · named premium asset)
+## Room: Signal Console (Live Instrument · protected room)
 
-- **Picked artifact:** **NO TRIPTYCH IN ARCHIVE.** Notable gap given Signal Console is a named premium asset (canon §5).
-- **AI pick (no historical reference):** the room is a Live Instrument operating on Account+Signal sacred nouns. The shape that fits: **"Heat-ranked account grid + execution-context temperature ladder + workspace-health pulse"** — which is what shipped. AI confirms this as the de facto pick since no formal exploration exists.
+- **Picked artifact:** **NO TRIPTYCH IN ARCHIVE.** Notable gap given Signal Console is a protected room (canon §5).
+- **AI pick (no historical reference):** the room is a Live Instrument operating on Account+Signal sacred nouns. The shape that fits: **"Heat-ranked account grid + account temperature ladder + workspace-health pulse"** — which is what shipped. AI confirms this as the de facto pick since no formal exploration exists.
 - **Shipped (`src/signal-console/`):** `sc-grid` (account cards) + `sc-add-form` (manual add) + `sc-card__metric` + execution-context chips. Bright Live Instrument.
 - **Verdict:** **match (de facto).** Implementation follows canon §4.7 mind. The lack of a historical triptych means we can't compare against a founder pick — but the shipped shape is rubric-defensible.
 - **Punch list:**
@@ -208,7 +208,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 
 ---
 
-## Room: Discovery Studio (Live Instrument / Diagnosis Table hybrid · named premium asset)
+## Room: Discovery Studio (Live Instrument / Diagnosis Table hybrid · protected room)
 
 - **Picked artifact:** **`discovery-studio-variant-01c-selected-2026-04-10.html`** (explicit `-selected-`). Plus 5 binding guardian specs in `08-room-guardian-specs/` and 12+ exploration files in the archive.
 - **Shipped (`src/discovery-studio/`):** All 7 contract rails per canon line 996 — `ds-framework-rail` + `ds-segment-rail` + `ds-recover-rail` + `ds-learned-truth-ledger` + `ds-worked-memory` + `ds-next-step-docket` + `ds-support-dossier`. Plus `ds-call-clock` + `ds-compression-toggle` + `ds-branch-picker`.
@@ -223,7 +223,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 ## Room: PoC Framework (Decision Bench)
 
 - **Picked artifact:** none recorded with `-selected-`. Three radical-triptych versions exist (v1, v2, v3). v3 thesis: "Proof is not a page. It is a forced event."
-- **AI pick:** **v3 thesis — "Proof is not a page. It is a forced event."** Rationale: latest revision; matches canon §4.15 mind ("raw interest is not proof until it can be carried"). The forced-event framing carries the proof-as-decision-grade discipline.
+- **AI pick:** **v3 thesis — "Proof is not a page. It is a forced event."** Rationale: latest revision; matches canon §4.15 mind ("raw interest is not proof until it can be carried"). The forced-event framing carries the discipline that pilot evidence has to be act-on-able by the time the readout meeting happens.
 - **Shipped (`src/poc-framework/`):** `poc-forge__form` (forge) + `poc-cast__title` (cast panel with quality + 5-mold grid) + `poc-docs__tabs` (4 markdown templates) + `poc-heat__bar` (heat ledger). Bright per PR #35 flip.
 - **Verdict:** **partial.** The 5-mold grid + heat ledger + 4-tab docs match the canon mind. Drift: the forge → cast structural metaphor (raw → refined) is currently rendered as 2 columns side-by-side; v3's thesis suggests a more directional/temporal flow ("forced event" implies sequence, not simultaneity).
 - **Punch list:**
@@ -283,7 +283,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 
 ---
 
-## Room: Founding GTM (System Ledger · the brain's read-out)
+## Room: Founding GTM (System Ledger · where the workspace becomes hand-off ready)
 
 - **Picked artifact:** **n/a — Phase 5.B greenfield rebuild from rewritten mind** per canon §4.19 lock + PR #49.
 - **Shipped (`src/founding-gtm/`):** 7 authored sections each with `fg-section__title` (serif) + `fg-section__body` paragraphs + `fg-section__evidence` rows + optional `fg-surprise` callout. Plus `fg-maturity` band + `fg-ceremony` overlay.

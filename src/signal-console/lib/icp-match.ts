@@ -1,5 +1,5 @@
 /**
- * ICP match — score how well an Account fits the operator's ICP wedge.
+ * ICP match — score how well an Account fits the operator's ICP ICP.
  *
  * Per canon Part I §4.4: the ICP filter "manifests as ICP Match scoring
  * on every Account everywhere." This is the Signal Console version —

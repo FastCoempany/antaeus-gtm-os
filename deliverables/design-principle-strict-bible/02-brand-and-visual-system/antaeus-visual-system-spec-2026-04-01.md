@@ -35,7 +35,7 @@ This spec directly governs:
 
 ## 2. Executive System Position
 
-Antaeus is a bright, modern, behaviorally disciplined operating instrument.
+Antaeus is a bright, modern, behaviorally disciplined tool the operator actually uses.
 
 It is not:
 

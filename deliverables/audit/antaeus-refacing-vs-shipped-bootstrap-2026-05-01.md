@@ -164,7 +164,7 @@ list at once.
 What carried over from the triptych:
 - ✅ Recovery-queue idea (the room exposes which deals are weakest)
 - ✅ Filter chip surface (`.dw-filter-bar` ≈ `.filter-shell`)
-- ✅ Bright field + Diagnosis Table family posture
+- ✅ Bright field + the Diagnosis Table family treatment from canon Part II
 - ✅ Phase 7 nav: BackButton, no sidebar, no Dashboard rail link
 - ✅ Mind: deal mirror to localStorage, continuity params, snapshot
   publishing all wired
@@ -230,7 +230,7 @@ arc behind a feature flag.
 
 ---
 
-## Room 2: Future Autopsy (Diagnosis Table, named premium asset)
+## Room 2: Future Autopsy (Diagnosis Table, protected room)
 
 - **Picked artifact:** `antaeus-future-autopsy-variant-01-selected-2026-04-09.html`
   (titled "Variant 01 · Forensic Light Table")
@@ -297,7 +297,7 @@ What carried over from the triptych:
 - ✅ Forensic Light Table concept (room-as-evidence-surface)
 - ✅ Pinned case as the central object
 - ✅ Route rack preserved as a separate aside (`.fa-route-rack`)
-- ✅ Bright field, Diagnosis Table posture, mind + nav correct
+- ✅ Bright field, the Diagnosis Table family treatment, mind + nav correct
 
 What did NOT carry from the triptych:
 - ❌ **Sheets render as TABS, not a STACK.** Triptych shows all 3
@@ -393,7 +393,7 @@ adjust before the audit scales.
 | ICP Studio | triptych 2026-04-17 (no `-selected-`) | low — single triptych |
 | Territory Architect | triptych 2026-04-17 | low |
 | Sourcing Workbench | triptych 2026-04-17 | low |
-| Signal Console | NO TRIPTYCH found | flag — named premium asset, missing artifact is a question |
+| Signal Console | NO TRIPTYCH found | flag — protected room, missing artifact is a question |
 | Outbound Studio | triptych 2026-04-18 | low |
 | Cold Call Studio | radical-triptych 2026-04-19 | low |
 | LinkedIn Playbook | radical-triptych + base 2026-04-19 | low |
@@ -414,7 +414,7 @@ For rooms WITHOUT a `-selected-` filename, the next move is:
   proceed
 
 For rooms with NO triptych at all (Signal Console, Quota Workback):
-- these are notable gaps. Signal Console is a named premium asset;
+- these are notable gaps. Signal Console is a protected room;
   shipping it without a triptych pass means whatever shape it
   carries is either inherited from legacy or designed in-line during
   the rebuild without exploration

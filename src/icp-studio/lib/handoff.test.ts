@@ -60,7 +60,7 @@ describe("convenience builders", () => {
     });
 
     it("omits focusObject when industry is empty (no placeholder)", () => {
-        // Phase 2.3 audit — retired the "ICP wedge" placeholder per
+        // Phase 2.3 audit — retired the "ICP ICP" placeholder per
         // continuity-params Invariant 8. Empty focusObject = no
         // param written. Same fix as LinkedIn Playbook P2 earlier.
         const url = hrefToTerritoryArchitect("");

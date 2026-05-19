@@ -93,8 +93,7 @@ function QueueMeta(): JSX.Element {
             <p class="db-main__queue-kicker">QUEUE MODE</p>
             <p class="db-main__queue-copy">
                 {summary.ranked.length} ranked item
-                {summary.ranked.length === 1 ? "" : "s"} — equal weight,
-                work the pile.
+                {summary.ranked.length === 1 ? "" : "s"} — work down the list.
             </p>
         </article>
     );

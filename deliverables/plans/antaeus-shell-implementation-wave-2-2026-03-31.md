@@ -30,8 +30,8 @@ Move the next shell-critical surfaces onto the shared shell primitives introduce
 
 ### Territory Architect
 - Replaced the bespoke territory bridge shell with the shared command band component.
-- Moved wedge, thesis, territory, and next-move summaries into shared shell metrics.
-- Added shared header state logic for wedge / battlefield progression.
+- Moved ICP, thesis, territory, and next-move summaries into shared shell metrics.
+- Added shared header state logic for ICP / battlefield progression.
 
 ### Sourcing Workbench
 - Replaced the bespoke sourcing bridge shell with the shared command band component.

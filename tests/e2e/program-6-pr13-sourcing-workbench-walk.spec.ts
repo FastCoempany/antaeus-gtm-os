@@ -64,8 +64,8 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
                 .locator(".sw-loom-read__line-label")
                 .allTextContents();
             const lower = labels.map((l) => l.trim().toLowerCase());
-            expect(lower).toContain("week read");
-            expect(lower).toContain("operator move");
+            expect(lower).toContain("this week");
+            expect(lower).toContain("next move");
         } finally {
             await ctx.close();
         }
@@ -102,7 +102,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
         }
     });
 
-    test("Operator move line carries the orange-accent variant", async ({
+    test("Next-move line carries the orange-accent variant", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -122,7 +122,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
         }
     });
 
-    test("Empty-board operator move prescribes the first capture", async ({
+    test("Empty-board next-move prescribes the first capture", async ({
         browser
     }) => {
         const ctx = await browser.newContext();

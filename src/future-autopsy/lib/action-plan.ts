@@ -103,16 +103,16 @@ export function buildActionPlan(doc: AutopsyDoc): ActionPlan {
     // from qualification to terms once we're past evaluation.
     let primaryTarget: "deal" | "call" | "poc" | "discovery" | "negotiation" =
         "deal";
-    let primaryReason = "Most-direct intervention for this deal's pressure.";
+    let primaryReason = "The most direct way to act on what's hurting this deal.";
     if (stageRaw === "negotiation" || stageRaw === "verbal-yes") {
         primaryTarget = "negotiation";
         primaryReason =
             stageRaw === "verbal-yes"
-                ? "Verbal-yes stage — terms are now the live conversation."
-                : "Negotiation stage — rehearse before pricing or terms land.";
+                ? "Verbal-yes stage — terms are the live conversation now."
+                : "Negotiation stage — rehearse what you'll say before pricing or terms land.";
     } else if (stageRaw === "poc") {
         primaryTarget = "poc";
-        primaryReason = "PoC stage — frame success criteria first.";
+        primaryReason = "PoC stage — write down what you're proving before going further.";
     } else if (topCause && topCause in PRIMARY_BY_CAUSE) {
         primaryTarget = PRIMARY_BY_CAUSE[topCause as keyof typeof PRIMARY_BY_CAUSE];
         const causeLabel = doc.causes[0]?.label ?? topCause;
@@ -126,8 +126,8 @@ export function buildActionPlan(doc: AutopsyDoc): ActionPlan {
         primaryTarget === "deal" ? "discovery" : "deal";
     const secondaryReason =
         secondaryTarget === "deal"
-            ? "Reflect the autopsy back into the deal record."
-            : "Sharpen qualification before the next move.";
+            ? "Write the autopsy findings back into the deal record."
+            : "Tighten qualification before the next move.";
 
     // Tertiary: PoC Framework if we haven't already routed there +
     // there's any proof concern; otherwise Call Planner as a backstop.
@@ -135,10 +135,10 @@ export function buildActionPlan(doc: AutopsyDoc): ActionPlan {
         (c) => c.id === "poc_no_criteria" || stageRaw === "poc"
     );
     let tertiaryTarget: "poc" | "call" = "call";
-    let tertiaryReason = "Backstop: get the next conversation on the calendar.";
+    let tertiaryReason = "Worst case, get the next conversation on the calendar.";
     if (hasPoCConcern && primaryTarget !== "poc") {
         tertiaryTarget = "poc";
-        tertiaryReason = "Proof concern still open — frame it.";
+        tertiaryReason = "There's still an open question about what you're proving — write it down.";
     }
 
     return {

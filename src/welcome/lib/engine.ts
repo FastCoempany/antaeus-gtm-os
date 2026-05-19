@@ -17,25 +17,25 @@ export function buildMilestones(counts: WorkspaceCounts): ReadonlyArray<Mileston
         {
             key: "icp",
             label: "First ICP saved",
-            copy: "Targeting truth exists for the rest of the system to compound from.",
+            copy: "The rest of the app now has a real target to work against.",
             done: counts.icps > 0
         },
         {
             key: "signal",
             label: "First live signal or account saved",
-            copy: "Signal Console now has real external context to work from.",
+            copy: "Signal Console now has a real account to read against.",
             done: counts.accounts > 0 || counts.signals > 0
         },
         {
             key: "deal",
             label: "First real deal created",
-            copy: "Dashboard, pipeline review, and downstream proof now have something real to brief.",
+            copy: "The Dashboard, the recovery board, and the pilot framework all have something real to work with now.",
             done: counts.deals > 0
         },
         {
             key: "motion",
             label: "First motion logged",
-            copy: "Calls, touches, or LinkedIn actions are being captured instead of living in memory.",
+            copy: "Calls, touches, and LinkedIn actions are being captured in the app instead of in your head.",
             done: motionCount > 0
         }
     ];
@@ -63,7 +63,7 @@ export function buildActivationModel(
     if (completed === 0) {
         headline = "Define one sharp ICP to start.";
         body =
-            "One wedge — who you sell to, what they're feeling, why now. Everything downstream targets against it: signals, outbound, deals.";
+            "Pick one definition of who you sell to, what they're dealing with, and why they have to act now. Everything else in the app — signals, outbound, deals — runs against that definition.";
     } else if (completed < milestones.length) {
         headline = next
             ? `Next move: ${next.label.toLowerCase()}.`
@@ -90,21 +90,21 @@ export function buildActivationModel(
 const ACTION_ICP: Omit<NextAction, "state"> = {
     key: "icp",
     title: "Define your first ICP.",
-    body: "One sharp wedge: who you sell to, what they're feeling, why now. Everything downstream targets against it.",
+    body: "One sharp definition: who you sell to, what they're dealing with, and why they have to act now. The rest of the app runs against that definition.",
     href: "/icp-studio/",
-    cta: "Sharpen the wedge",
-    meta: ["highest leverage", "targeting truth"],
-    why: "Targeting truth compounds before activity does.",
+    cta: "Sharpen the ICP",
+    meta: ["highest leverage", "first input"],
+    why: "An ICP this clear pays back across every other room.",
     unlocks: "Sharper signals, cleaner outbound, and a credible Dashboard brief."
 };
 const ACTION_SIGNAL: Omit<NextAction, "state"> = {
     key: "signal",
     title: "Add one live account.",
-    body: "One real company gets the radar warm. Heat, recent signals, next-move guidance all start firing once an account is in.",
+    body: "One real company gets Signal Console warm. Heat, recent signals, and next-move guidance all start firing once a real account is in there.",
     href: "/signal-console/",
     cta: "Add the account",
     meta: ["real account", "deep research"],
-    why: "The signal layer needs one live account to behave like an intelligence system.",
+    why: "Signal Console can't do its job without one real account to read against.",
     unlocks: "Heat scoring, next-move guidance, and context for sourcing + outbound."
 };
 const ACTION_DEAL: Omit<NextAction, "state"> = {
@@ -113,19 +113,19 @@ const ACTION_DEAL: Omit<NextAction, "state"> = {
     body: "One real opportunity wakes up the recovery board, PoC planning, and the Dashboard's risk rail.",
     href: "/deal-workspace/",
     cta: "Add the deal",
-    meta: ["pipeline truth", "dashboard unlock"],
-    why: "Without a real deal, the downstream rooms are briefing hypothetical work.",
+    meta: ["real pipeline", "dashboard unlock"],
+    why: "Without a real deal, the rooms downstream are working on hypothetical pipeline.",
     unlocks: "Future Autopsy, PoC Framework, Advisor Deploy, and a more honest Dashboard."
 };
 const ACTION_MOTION: Omit<NextAction, "state"> = {
     key: "motion",
     title: "Log the first motion.",
-    body: "One outbound touch or one real call so the workspace starts holding operating memory.",
+    body: "One outbound touch or one real call so the app starts holding the activity in its own memory instead of yours.",
     href: "/outbound-studio/",
     cta: "Log a motion",
     meta: ["activity trail", "week one"],
-    why: "Week one is incomplete until at least one motion has run through the system.",
-    unlocks: "Readiness evidence and a clearer operating rhythm."
+    why: "Week one isn't complete until at least one real motion has run through the app.",
+    unlocks: "Real Readiness evidence and a clearer weekly rhythm."
 };
 const ACTION_PLANNER: Omit<NextAction, "state"> = {
     key: "planner",
@@ -134,13 +134,13 @@ const ACTION_PLANNER: Omit<NextAction, "state"> = {
     href: "/call-planner/",
     cta: "Plan the call",
     meta: ["call quality", "active deal"],
-    why: "You have enough deal truth to make the next call deliberate.",
+    why: "You have enough deal context to make the next call a deliberate one.",
     unlocks: "A stronger agenda and a clean handoff into Discovery Studio."
 };
 const ACTION_QUOTA: Omit<NextAction, "state"> = {
     key: "quota",
     title: "Set quota and targets.",
-    body: "Put your quota math and ACV in. The Dashboard starts speaking in revenue pressure, not just activity.",
+    body: "Put your quota number and your average deal size in. The Dashboard starts pointing at the revenue gap, not just activity.",
     href: "/quota-workback/",
     cta: "Set the targets",
     meta: ["system math", "benchmarks"],
@@ -154,17 +154,17 @@ const ACTION_BACKUP: Omit<NextAction, "state"> = {
     href: "/settings/",
     cta: "Export now",
     meta: ["durability", "trust"],
-    why: "Week one isn't complete until the workspace survives a refresh and a bad decision.",
+    why: "Week one isn't complete until the workspace can survive a refresh and a bad decision.",
     unlocks: "Safer experimentation and a workspace that feels durable, not lucky."
 };
 const ACTION_DASHBOARD: Omit<NextAction, "state"> = {
     key: "dashboard",
     title: "Return to the Dashboard.",
-    body: "Run the daily rhythm from the ranked command stack.",
+    body: "Run the daily rhythm from the ranked list of what needs you most.",
     href: "/dashboard/",
     cta: "Open the Dashboard",
-    meta: ["operating rhythm", "daily command stack"],
-    why: "The app should now behave like a morning operating room.",
+    meta: ["daily rhythm", "ranked work"],
+    why: "The app should now act like a morning briefing for what to work on first.",
     unlocks: "Faster daily resets and a clearer week-one rhythm."
 };
 

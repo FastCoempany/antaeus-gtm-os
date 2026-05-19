@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 /**
  * Phase 2.3 — Strategy flow Playwright walk.
  *
- * Sarah Chen builds the wedge → tiers the territory → sources named
+ * Sarah Chen builds the ICP → tiers the territory → sources named
  * prospects → ranks live signals. Tests every seam on the path:
  *
  *   ICP Studio → Territory Architect (focusObject propagation)
@@ -18,7 +18,7 @@ import { test, expect } from "@playwright/test";
 const WEDGE = "Mid-market freight forwarders";
 
 test.describe("Phase 2.3 — Strategy flow", () => {
-    test("ICP Studio → Territory carries the wedge focus", async ({ browser }) => {
+    test("ICP Studio → Territory carries the ICP focus", async ({ browser }) => {
         const ctx = await browser.newContext({ viewport: { width: 1440, height: 2400 } });
         const page = await ctx.newPage();
         try {
@@ -27,14 +27,14 @@ test.describe("Phase 2.3 — Strategy flow", () => {
 
             // Seed a saved ICP so the AnalyticsPanel renders handoff CTAs.
             await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
-            await page.evaluate((wedge) => {
+            await page.evaluate((ICP) => {
                 localStorage.setItem(
                     "gtmos_icp_analytics",
                     JSON.stringify({
                         icps: [
                             {
                                 id: "icp_demo",
-                                industry: wedge,
+                                industry: ICP,
                                 buyer: "VP Operations",
                                 pain: "Compliance prep is a manual scramble",
                                 qualityScore: 78,
@@ -67,7 +67,7 @@ test.describe("Phase 2.3 — Strategy flow", () => {
             expect(primaryUrl.searchParams.get("focusObject")).toBe(WEDGE);
             expect(primaryUrl.searchParams.get("returnTo")).toBe("/icp-studio/");
 
-            // Click and verify Territory surfaces the inbound wedge.
+            // Click and verify Territory surfaces the inbound ICP.
             await page.locator(".icp-handoff--primary").click();
             await page.waitForLoadState("networkidle");
 
@@ -135,7 +135,7 @@ test.describe("Phase 2.3 — Strategy flow", () => {
             await page.waitForTimeout(200);
 
             // Phase 2.3 finding: when focusObject arrives + no matching
-            // account, empty state shows "TARGETING: {wedge}" instead
+            // account, empty state shows "TARGETING: {ICP}" instead
             // of the generic "no accounts yet" kicker.
             const emptyKicker = await page
                 .locator(".sc-empty__kicker")
@@ -159,7 +159,7 @@ test.describe("Phase 2.3 — Strategy flow", () => {
         const page = await ctx.newPage();
         try {
             // Fresh workspace — no saved ICP. Phase 2.3 finding:
-            // hrefTo* helpers no longer pass "ICP wedge" placeholder.
+            // hrefTo* helpers no longer pass "ICP ICP" placeholder.
             await page.goto("/icp-studio/", { waitUntil: "networkidle" });
             await page.waitForTimeout(200);
 

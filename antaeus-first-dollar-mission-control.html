@@ -836,10 +836,10 @@ var P=[
 {id:'t256',t:'Avoid generic startup platitudes, fake urgency, discount-first selling, and sending the wrong persona pitch to the wrong role.'}]},
 {id:'s12.16',n:'12.16',title:'Measure success with leading and lagging indicators',time:'30 min',tags:['plan'],deps:['12.11'],subs:[
 {id:'t257',t:'Track reply rate, meeting-booked rate, positive-response rate, referral rate, pilot-interest rate, and quote capture rate.'},
-{id:'t258',t:'Track lagging indicators: pilots started, paying users, portfolio introductions, repeatable conversion path, and strongest wedge identified.'}]},
+{id:'t258',t:'Track lagging indicators: pilots started, paying users, portfolio introductions, repeatable conversion path, and strongest path identified.'}]},
 {id:'s12.17',n:'12.17',title:'Close the phase with clear exit criteria',time:'30 min',tags:['test'],deps:['12.16'],subs:[
 {id:'t259',t:'Confirm the universe, messaging, assets, waves, follow-up system, proof capture, and learning loop all exist and have been used.'},
-{id:'t260',t:'Exit with a clear answer on the strongest wedge: boutique VC firms, founding AEs, SDRs, or selective founders.'},
+{id:'t260',t:'Exit with a clear answer on the strongest path: boutique VC firms, founding AEs, SDRs, or selective founders.'},
 {id:'t261',t:'Preserve the required outputs: universe, messaging matrix, outreach docs, follow-up system, pilot rubric, and weekly learning loop.'}]}
 ]},
 {id:'p13',n:13,name:'Launch Sequence',timeline:'Days 21-28',sub:'The coordinated moment.',steps:[
@@ -1452,8 +1452,8 @@ function p12Days(){var arr=[];for(var d=10;d<=37;d++)arr.push(d);return arr}
 function p12Weeks(){return[
   {id:1,label:'Week 1',start:10,end:16,theme:'Universe, segmentation, messaging, and first VC wave',objective:'Build the strategic warm universe, score it, create the persona matrix, and send the first boutique VC wave.',focus:'Universe + VC prep',metric:'Universe complete + VC wave sent'},
   {id:2,label:'Week 2',start:17,end:23,theme:'VC follow-up, founding AE wave, proof, and pilot criteria',objective:'Convert early VC signal into portfolio conversations and use founding AE outreach to sharpen module pull and proof.',focus:'VC + AE',metric:'Meetings + proof'},
-  {id:3,label:'Week 3',start:24,end:30,theme:'SDR wave, selective founders, and channel extension',objective:'Test the operator wedge further, add selective founders only where fit is strong, and open adjacent warm channels without losing precision.',focus:'SDR + founder selectivity',metric:'Usage + referrals'},
-  {id:4,label:'Week 4',start:31,end:37,theme:'Second-wave iteration, portfolio strategy, offers, and exit review',objective:'Double down on the strongest wedge, formalize offers and pilot logic, and end the phase with a clear winner.',focus:'Iteration + exit decision',metric:'Strongest wedge identified'}
+  {id:3,label:'Week 3',start:24,end:30,theme:'SDR wave, selective founders, and channel extension',objective:'Test the operator path further, add selective founders only where fit is strong, and open adjacent warm channels without losing precision.',focus:'SDR + founder selectivity',metric:'Usage + referrals'},
+  {id:4,label:'Week 4',start:31,end:37,theme:'Second-wave iteration, portfolio strategy, offers, and exit review',objective:'Double down on the strongest path, formalize offers and pilot logic, and end the phase with a clear winner.',focus:'Iteration + exit decision',metric:'Strongest path identified'}
 ]}
 function p12WeekMeta(day){var weeks=p12Weeks();for(var i=0;i<weeks.length;i++){if(day>=weeks[i].start&&day<=weeks[i].end)return weeks[i]}return weeks[0]}
 function p12WeekDays(day){var wk=p12WeekMeta(day),arr=[];for(var d=wk.start;d<=wk.end;d++)arr.push(d);return arr}
@@ -1465,7 +1465,7 @@ function p12SetWeek(id){var wk=p12Weeks().find(function(x){return x.id===id});if
 function p12Personas(){return[
   {id:'all',label:'All Personas',tier:'All',why:'See the whole distribution engine at once.'},
   {id:'vc',label:'P1 VC / Platform',tier:'P1',why:'Highest leverage distribution node. Prioritize repeatability, portfolio relevance, and operator credibility.'},
-  {id:'ae',label:'P2 Founding AE',tier:'P2',why:'Most practical direct-user wedge. Immediate pain around process, diagnosis, and operating structure.'},
+  {id:'ae',label:'P2 Founding AE',tier:'P2',why:'Most practical direct-user path. Immediate pain around process, diagnosis, and operating structure.'},
   {id:'sdr',label:'P3 SDR / BDR',tier:'P3',why:'Daily pain around targeting, outbound discipline, and workflow coherence. Optimize for usage and advocacy.'},
   {id:'founder',label:'P4 Founder',tier:'P4',why:'Deprioritized unless urgency, trust, or expansion value is unusually high.'},
   {id:'ops',label:'Ops / System',tier:'Ops',why:'Keeps the outreach engine measurable, comparable, and reusable.'}
@@ -1547,7 +1547,7 @@ function p12DayTasks(day){
     case 21:return[
       p12Task(day,'sdr-list','sdr','universe','Build the SDR / BDR target list','Bias toward operators who care about targeting, sequence logic, and workflow discipline.'),
       p12Task(day,'sdr-framing','sdr','messaging','Write the SDR positioning spine','Make the promise practical: cleaner execution, targeting, and self-coaching.'),
-      p12Task(day,'compare-vc-ae','ops','review','Compare P1 vs P2 response quality','Which wedge creates stronger intent, sharper pain, or faster motion?')
+      p12Task(day,'compare-vc-ae','ops','review','Compare P1 vs P2 response quality','Which path creates stronger intent, sharper pain, or faster motion?')
     ];
     case 22:return[
       p12Task(day,'sdr-wave-a','sdr','outreach','Send SDR / BDR wave A','Optimize for usage, advocacy, and tactical resonance.'),
@@ -1562,7 +1562,7 @@ function p12DayTasks(day){
     case 24:return[
       p12Task(day,'founder-wave','founder','outreach','Run the selective founder wave','Send to 5-10 founders only if they meet the elevated-priority criteria.'),
       p12Task(day,'vc-portfolio-questions','vc','followup','Ask the first portfolio-level questions','Which portfolio companies feel this pain most? Who is the right role fit?'),
-      p12Task(day,'wedge-hypothesis','ops','review','State the current wedge hypothesis','VC distribution node, founding AE direct user, SDR advocacy, or selective founder fit?')
+      p12Task(day,'path-hypothesis','ops','review','State the current path hypothesis','VC distribution node, founding AE direct user, SDR advocacy, or selective founder fit?')
     ];
     case 25:return[
       p12Task(day,'sdr-followup-1','sdr','followup','Send follow-up 1 to the SDR wave','Add a lower-friction ask or tactical module example.'),
@@ -1575,14 +1575,14 @@ function p12DayTasks(day){
       p12Task(day,'offer-draft','ops','messaging','Draft the first offer ladders','Separate VC/platform, founding AE, SDR, and founder next-step offers.')
     ];
     case 27:return[
-      p12Task(day,'second-wave-build','ops','outreach','Build the second-wave list around the strongest wedge','Double down on the persona and angle with the cleanest signal.'),
+      p12Task(day,'second-wave-build','ops','outreach','Build the second-wave list around the strongest path','Double down on the persona and angle with the cleanest signal.'),
       p12Task(day,'objection-board','ops','review','Refresh the objection and confusion board','What still creates friction? What wording needs to die?'),
       p12Task(day,'vc-workshop-offer','vc','pilot','Draft the portfolio workshop / cohort offer','Make it clear how a boutique VC firm would use this across multiple startups.')
     ];
     case 28:return[
       p12Task(day,'second-wave-send','ops','outreach','Send the second-wave iteration','Use one meaningful improvement, not ten tweaks at once.'),
       p12Task(day,'followup-refresh','ops','followup','Refresh all open follow-up clocks','No live opportunity should be missing a dated next touch.'),
-      p12Task(day,'week-3-summary','ops','review','Write the week 3 summary','State what changed, which wedge strengthened, and what is no longer worth attention.')
+      p12Task(day,'week-3-summary','ops','review','Write the week 3 summary','State what changed, which path strengthened, and what is no longer worth attention.')
     ];
     case 29:return[
       p12Task(day,'followup-2','ops','followup','Send second follow-ups where warranted','Add clarity, specificity, or a lower-friction CTA. Do not re-send the same note.'),
@@ -1610,7 +1610,7 @@ function p12DayTasks(day){
       p12Task(day,'expansion-scan','vc','pilot','Scan for expansion potential','Which warm VC / platform threads could open multiple portfolio introductions?')
     ];
     case 34:return[
-      p12Task(day,'referral-wave','ops','outreach','Send the referral / adjacent-warm wave','Use the strongest proof and wedge from the prior three weeks.'),
+      p12Task(day,'referral-wave','ops','outreach','Send the referral / adjacent-warm wave','Use the strongest proof and path from the prior three weeks.'),
       p12Task(day,'metrics-board','ops','review','Update the success-metrics board','Reply rate, meeting-booked rate, positive rate, referral rate, pilot interest, and quote capture.'),
       p12Task(day,'offer-fit-check','ops','pilot','Check offer fit by persona','Make sure the ask matches the role instead of forcing one universal offer.')
     ];
@@ -1621,7 +1621,7 @@ function p12DayTasks(day){
     ];
     case 36:return[
       p12Task(day,'exit-audit','ops','review','Run the exit criteria audit','Universe, messaging, assets, waves, follow-up system, proof capture, and learning loop must all be real.'),
-      p12Task(day,'wedge-decision','ops','review','Make the wedge decision explicit','Name the strongest path: boutique VC, founding AE, SDR, or selective founder.'),
+      p12Task(day,'path-decision','ops','review','Make the path decision explicit','Name the strongest path: boutique VC, founding AE, SDR, or selective founder.'),
       p12Task(day,'required-outputs','ops','review','Check the required output set','Universe sheet, messaging matrix, outreach docs, follow-up system, pilot rubric, and learning loop all need owners.')
     ];
     case 37:return[
@@ -1639,7 +1639,7 @@ function p12WeekProgress(week){var tasks=[];for(var d=week.start;d<=week.end;d++
 function p12DayHeadline(day){var tasks=p12DayTasks(day).filter(function(t){return t.persona!=='ops'});if(!tasks.length)tasks=p12DayTasks(day);return tasks.length?tasks[0].title:'Review the room'}
 function p12UniverseTargets(){return[
   {persona:'Boutique VC / platform',target:'20-30',why:'Distribution node, repeat exposure, and portfolio leverage.'},
-  {persona:'Founding AE / early GTM',target:'25-40',why:'Most practical direct-user wedge with deep process pain.'},
+  {persona:'Founding AE / early GTM',target:'25-40',why:'Most practical direct-user path with deep process pain.'},
   {persona:'SDR / BDR / managers',target:'20-30',why:'Immediate workflow pain, fast usage proof, and advocacy potential.'},
   {persona:'Founders',target:'10-20',why:'Selective only - keep this as the trailing audience.'}
 ]}
@@ -1661,8 +1661,8 @@ function p12SuccessMetrics(){return[
   {kind:'Leading',metric:'Meeting-booked rate by angle',why:'Tells you which CTA actually creates motion.'},
   {kind:'Leading',metric:'Pilot-interest rate',why:'Separates curiosity from real willingness to test.'},
   {kind:'Lagging',metric:'Pilots started',why:'Real behavior beats positive language.'},
-  {kind:'Lagging',metric:'Paying users / teams',why:'Confirms the wedge can monetize.'},
-  {kind:'Strategic',metric:'Strongest wedge identified',why:'The phase should end with a clear winner, not a vague feeling.'}
+  {kind:'Lagging',metric:'Paying users / teams',why:'Confirms the path can monetize.'},
+  {kind:'Strategic',metric:'Strongest path identified',why:'The phase should end with a clear winner, not a vague feeling.'}
 ]}
 function p12Outputs(){return[
   'PHASE-12-OUTREACH-UNIVERSE.csv',
@@ -1710,7 +1710,7 @@ function renderWarmOutreachPhase(p){
   h+='<div class="wo-grid">';
   h+='<div class="wo-panel"><div class="wo-directive-head"><div><h3>Today\'s directives</h3><div class="wo-panel-sub">The exact work for '+esc(p12DayLabel(st.day))+'. Filter by persona and lane to turn the room into the right execution board for the day.</div></div><div class="wo-kpi">'+todayDone+'/'+today.length+' done</div></div><div class="wo-callout"><strong>Week objective:</strong> '+esc(week.objective)+'<br><strong>Persona context:</strong> '+esc(activePersona.why)+'<br><strong>Lane rule:</strong> '+esc(activeLane.rule)+'</div>';
   if(today.length){h+='<div class="wo-task-list">'+today.map(function(t){var td=isDone(t.id);return '<div class="wo-task"><div class="wo-check'+(td?' checked':'')+'" onclick="toggle(\''+t.id+'\')"></div><div><div class="wo-task-meta"><span class="wo-tag wo-tag-'+t.persona+'">'+esc(p12PersonaInfo(t.persona).label)+'</span><span class="wo-tag wo-tag-'+t.lane+'">'+esc(t.lane)+'</span></div><div class="wo-task-title">'+esc(t.title)+'</div><div class="wo-task-detail">'+esc(t.detail)+'</div></div></div>';}).join('')+'</div>';}else{h+='<div class="wo-empty">No directives match the current persona/lane filter for this day. Switch back to <strong>All Personas</strong> or <strong>All Lanes</strong> to restore the full queue.</div>'}
-  h+='<div class="wo-note-box"><div class="wo-note-label">Day log</div><textarea placeholder="Log sent messages, replies, angles that landed, follow-up dates, and which wedge got stronger today..." onblur="saveNote(\'p12day-'+st.day+'\',this.value)">'+esc(S.notes['p12day-'+st.day]||'')+'</textarea></div></div>';
+  h+='<div class="wo-note-box"><div class="wo-note-label">Day log</div><textarea placeholder="Log sent messages, replies, angles that landed, follow-up dates, and which path got stronger today..." onblur="saveNote(\'p12day-'+st.day+'\',this.value)">'+esc(S.notes['p12day-'+st.day]||'')+'</textarea></div></div>';
   h+='<div class="wo-panel"><h3>Week strip</h3><div class="wo-panel-sub">Click a day to move the room. Each card shows the main move and progress for the filtered view.</div><div class="wo-day-grid">'+weekDays.map(function(day){var tasks=p12FilterTasks(p12DayTasks(day));var done=p12DoneCount(tasks);return '<div class="wo-day-card'+(day===st.day?' active':'')+'" onclick="p12SetDay('+day+')"><div class="wo-day-top"><div><div class="wo-day-name">'+esc(p12DayName(day))+'</div><div class="wo-day-num">Day '+day+'</div></div><span class="wo-tag">'+done+'/'+tasks.length+'</span></div><div class="wo-day-focus">'+esc(p12DayHeadline(day))+'</div><div class="wo-day-progress">'+esc(p12WeekMeta(day).theme)+'</div></div>';}).join('')+'</div><div class="wo-note-box" style="margin-top:14px"><div class="wo-note-label">Weekly learning loop</div><textarea placeholder="What worked this week by persona, angle, CTA, and module pull? What changes next week?" onblur="saveNote(\'p12week-'+week.id+'\',this.value)">'+esc(S.notes['p12week-'+week.id]||'')+'</textarea></div></div>';
   h+='<div class="wo-panel"><h3>Active persona context</h3><div class="wo-panel-sub">This keeps the room honest about who you are talking to and why.</div><div class="wo-callout"><strong>Selected persona:</strong> '+esc(activePersona.label)+'<br><strong>Priority:</strong> '+esc(activePersona.tier)+'<br><strong>Why:</strong> '+esc(activePersona.why)+'</div><div class="wo-note-box" style="margin-top:14px"><div class="wo-note-label">Persona note</div><textarea placeholder="Role-specific proof, objections, open loops, and who belongs in the next wave..." onblur="saveNote(\'p12persona-'+st.persona+'\',this.value)">'+esc(S.notes['p12persona-'+st.persona]||'')+'</textarea></div><div class="wo-note-box" style="margin-top:14px"><div class="wo-note-label">Pilot / design partner board</div><textarea placeholder="List warm candidates, rubric score, role fit, urgency, leverage, and next step..." onblur="saveNote(\'p12pilot\',this.value)">'+esc(S.notes['p12pilot']||'')+'</textarea></div><div class="wo-note-box" style="margin-top:14px"><div class="wo-note-label">Proof capture queue</div><textarea placeholder="Drop quotes, anonymous role framing, module pull statements, and before/after lines here as they happen..." onblur="saveNote(\'p12proof\',this.value)">'+esc(S.notes['p12proof']||'')+'</textarea></div></div>';
   h+='</div>';

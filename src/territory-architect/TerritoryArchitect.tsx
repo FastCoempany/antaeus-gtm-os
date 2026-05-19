@@ -45,12 +45,12 @@ import { focusedIcp } from "./state";
 import { computeFieldRead } from "./lib/field-read";
 
 /**
- * Program 6 / PR 12 — live field read for the Signal Field hero.
+ * Program 6 / PR 12 — live read of the territory for the hero panel.
  *
- * The wireframe's read-dock surfaces score + main risk + replacement
- * + operator move. We compute that off the live signals so the hero
- * tells the operator what the territory is saying, not just how
- * many rows exist.
+ * The wireframe's dock surfaces score + what's loose right now + what
+ * to backfill + what to do next. We compute that off the live signals
+ * so the hero tells the operator what the territory is saying, not
+ * just how many rows exist.
  */
 const fieldRead = computed(() =>
     computeFieldRead({
@@ -149,36 +149,35 @@ function HeroBand(): JSX.Element {
                 {/*
                   Program 6 / PR 12 — Field Read aside.
                   Per the picked-winner Variant 02 / Signal Field
-                  refinement the hero should INTERPRET the territory,
-                  not just count rows. Score + Main risk + Replacement
-                  pressure + Operator move from the live field-read
-                  engine.
+                  refinement the hero should interpret the territory,
+                  not just count rows. Score + what's loose + what
+                  to backfill + next move from the live engine.
                 */}
                 <aside
                     class={`ta-field-read ta-field-read--${read.band}`}
-                    aria-label="Field read"
+                    aria-label="Where the territory stands"
                 >
                     <div class="ta-field-read__score-row">
                         <div>
-                            <p class="ta-field-read__kicker">FIELD READ</p>
+                            <p class="ta-field-read__kicker">WHERE THE TERRITORY STANDS</p>
                             <p class="ta-field-read__band">{read.bandLabel}</p>
                         </div>
                         <p class="ta-field-read__score">{read.score}</p>
                     </div>
                     <div class="ta-field-read__line">
-                        <p class="ta-field-read__line-label">Main risk</p>
+                        <p class="ta-field-read__line-label">What's loose right now</p>
                         <p class="ta-field-read__line-copy">{read.mainRisk}</p>
                     </div>
                     <div class="ta-field-read__line">
                         <p class="ta-field-read__line-label">
-                            Replacement pressure
+                            What to backfill
                         </p>
                         <p class="ta-field-read__line-copy">
                             {read.replacement}
                         </p>
                     </div>
                     <div class="ta-field-read__line ta-field-read__line--move">
-                        <p class="ta-field-read__line-label">Operator move</p>
+                        <p class="ta-field-read__line-label">Next move</p>
                         <p class="ta-field-read__line-copy">
                             {read.operatorMove}
                         </p>

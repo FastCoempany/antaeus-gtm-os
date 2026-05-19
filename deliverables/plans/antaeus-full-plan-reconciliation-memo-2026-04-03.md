@@ -22,7 +22,7 @@ What happened is narrower:
 
 So the current repo state is:
 - **interior architecture reset:** largely complete
-- **command intelligence / workspace health:** complete enough as accepted subordinate programs
+- **command ranking / workspace health:** complete enough as accepted subordinate programs
 - **full beta-stretch / public-perimeter / launch-readiness reconciliation:** still incomplete
 
 ## Governing backbone
@@ -111,7 +111,7 @@ Evidence:
 - command ranking engine added
 - explainable command surfaces added
 - ranking quality v2 implemented and accepted
-- room/system health now feeds Dashboard command intelligence
+- room/system health now feeds Dashboard command ranking
 
 Key evidence files:
 - `js/command-intelligence.js`
@@ -248,7 +248,7 @@ Why:
 - shared headers
 - shared continuity
 - workspace/system health
-- command intelligence + room-fed truth
+- command ranking + room-fed truth
 
 Gap:
 - this is functionally strong

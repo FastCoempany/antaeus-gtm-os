@@ -16,10 +16,10 @@ export function PlanReadout(): JSX.Element {
 
     const summary =
         m.qualityScore >= 82
-            ? "The math is believable. Now make sure Dashboard coverage and Outbound execution stay in sync with it."
+            ? "The math is believable. Make sure Dashboard coverage and Outbound execution stay in sync with it."
             : m.qualityScore >= 68
-              ? "The math is workable, but one weak conversion assumption can break the quarter. Tighten the weakest assumption before trusting the plan."
-              : "The math is too thin to trust yet. Improve conversion assumptions or reduce target ambition before using this as operating truth.";
+              ? "The math is workable, but one weak conversion assumption can break the quarter. Tighten the weakest assumption before you trust the plan."
+              : "The math is too thin to trust yet. Improve the conversion assumptions or pull the target back before you bet on this plan.";
 
     return (
         <section class="qw-plan" aria-label="Operating plan">

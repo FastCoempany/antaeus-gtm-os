@@ -10,7 +10,7 @@ ICP Studio already had strong raw structure, but it still depended too much on t
 
 - whether the current ICP was sharp enough to trust
 - what was still too broad
-- what the selected wedge would change downstream
+- what the selected ICP would change downstream
 - what a strong version sounded like versus a vague one
 
 Phase 27 closes that gap by making the module more self-explanatory and more judgeable in-session.
@@ -28,7 +28,7 @@ That read now gives the user:
   - `workable`
   - `forming`
   - `broad`
-- a short summary explaining whether the wedge is ready to run
+- a short summary explaining whether the ICP is ready to run
 - the highest-priority fixes or strengths
 
 This replaces a lot of previously implicit judgment that the user had to supply alone.
@@ -45,7 +45,7 @@ The quality read now calls out common failure points directly, including:
 This makes the module less founder-dependent and more honest about whether the ICP is operational yet.
 
 ### 3. Added Downstream Impact Guidance
-ICP Studio now shows what the current wedge changes in:
+ICP Studio now shows what the current ICP changes in:
 
 - Territory Architect
 - Sourcing Workbench
@@ -73,7 +73,7 @@ The library view also surfaces the quality score so the sharpness judgment persi
 ## Exit Criteria Read
 
 ### Met locally
-- the module now makes wedge quality more legible
+- the module now makes ICP quality more legible
 - the user gets stronger guidance on what is still too broad
 - the user can see what the ICP changes downstream
 - the builder now contrasts sharp targeting with vague targeting directly

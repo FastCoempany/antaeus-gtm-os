@@ -22,8 +22,8 @@ import {
  */
 const MODE_DESCRIPTIONS: Record<CommandMode, string> = {
     brief: "Narrative — what's happening today",
-    spotlight: "One object — the dominant move",
-    queue: "Ranked list — work the pile"
+    spotlight: "One object — what to act on first",
+    queue: "Ranked list — work down the list"
 };
 
 export function ModeSwitcher(): JSX.Element {

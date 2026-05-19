@@ -104,7 +104,7 @@ export function OutputPanel(): JSX.Element {
                     </li>
                     <li
                         class="ob-output__chip"
-                        title="The proof artifact this touch should carry — a case, a benchmark, a forwardable insight."
+                        title="What this touch should carry — a case, a benchmark, or something the buyer would forward to someone else."
                     >
                         <span class="ob-output__chip-label">Asset</span>
                         <span class="ob-output__chip-value">

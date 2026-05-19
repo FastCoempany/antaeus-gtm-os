@@ -9,7 +9,7 @@ import { test, expect, type Page } from "@playwright/test";
  *   2. Tuesday morning — return to a live workspace, scan ranked
  *      pressure, click into the dominant move
  *   3. Strategy flow — sharpen ICP, hand off into Territory with
- *      the wedge propagating
+ *      the ICP propagating
  *   4. Outbound flow — Signal Console → Outbound Studio with focus
  *      preserved
  *   5. Discovery flow — Discovery Studio handoff exists (was missing

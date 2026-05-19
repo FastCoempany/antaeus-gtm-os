@@ -35,7 +35,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         }
     });
 
-    test("Loom-read aside shows the diagnosis + prescription pairing", async ({
+    test("Where-the-call-stands aside shows the diagnosis + prescription pairing", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -54,7 +54,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
             ).toBeAttached();
             await expect(
                 page.locator(".cc-loom__read-correction-label")
-            ).toContainText(/required correction/i);
+            ).toContainText(/what to do about it/i);
             await expect(
                 page.locator(".cc-loom__read-correction-copy")
             ).toBeAttached();
@@ -63,7 +63,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         }
     });
 
-    test("Required correction is thread-aware", async ({ browser }) => {
+    test("What-to-do-about-it copy is thread-aware", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {

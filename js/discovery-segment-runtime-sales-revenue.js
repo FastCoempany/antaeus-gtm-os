@@ -191,7 +191,7 @@
           branch("SOFT IMPROVEMENT","ly","\"We mostly want to tighten what already exists.\"","\"Tighten where first: forecast calls, deal reviews, rep discipline, or CRM trust?\"",[
             jumpNode("Map the current motion", "current-state-truth", "rep-behavior", "org"),
             jumpNode("Test urgency", "trigger-and-urgency", "soft-trigger", "blu")
-          ],"There is directional interest, but the wedge is still soft.","You still need the highest-value pressure point."),
+          ],"There is directional interest, but the scope is still soft.","You still need the highest-value pressure point."),
           branch("JUST INFORMING","fl","\"Nothing urgent. We are just staying informed.\"","\"That is workable. What would have to happen before revenue leadership treated this like a real priority?\"",[
             jumpNode("Keep it exploratory", "trigger-and-urgency", "exploratory", "red"),
             jumpNode("Name the proof bar", "proof-threshold", "live-proof", "blu")
@@ -283,7 +283,7 @@
           branch("TRUST ONLY","fl","\"Time is not the issue. Trust is.\"","\"That is enough. Then stay with trust. Where does the number stop feeling believable?\"",[
             jumpNode("Return to forecast miss", "pain-and-consequence", "forecast-gap", "red"),
             jumpNode("Inspect one deal", "current-state-truth", "deal-review", "blu")
-          ],"Trust is the real wedge, not calendar load.","You still need the moment trust breaks.")
+          ],"Trust is the real scope, not calendar load.","You still need the moment trust breaks.")
         ])
       ]),
       segment("trigger-and-urgency","04","Trigger and urgency","Find why this matters now.",true,[
@@ -309,7 +309,7 @@
           branch("NUMBER MOVED LATE","ly","\"The number changed late because the risk showed up too late.\"","\"What should have surfaced that risk earlier?\"",[
             jumpNode("Inspect the stack", "current-vendor-and-displacement", "tool-stack", "org"),
             jumpNode("Set dashboard proof", "proof-threshold", "dashboard-proof", "blu")
-          ],"The timing of risk detection is part of the wedge.","You still need the missing leading indicator."),
+          ],"The timing of risk detection is part of the scope.","You still need the missing leading indicator."),
           branch("NOTHING SPECIFIC","fl","\"It is more general unease than one call.\"","\"What pattern keeps repeating often enough that the team stopped trusting the number?\"",[
             jumpNode("Return to forecast pain", "pain-and-consequence", "forecast-gap", "red"),
             jumpNode("Use softer trigger", "trigger-and-urgency", "soft-trigger", "blu")
@@ -455,17 +455,17 @@
           branch("BUILD GOOD ENOUGH","fl","\"Honestly, the internal motion is mostly working.\"","\"Then what still made this meeting worth taking?\"",[
             jumpNode("Return to trigger", "trigger-and-urgency", "board-pressure", "red"),
             jumpNode("Keep it exploratory", "trigger-and-urgency", "exploratory", "blu")
-          ],"The incumbent may still be winning.","You still need the live wedge or an honest no.")
+          ],"The incumbent may still be winning.","You still need the live scope or an honest no.")
         ]),
         node("current-vendor-and-displacement","switch-risk","va","Test switching risk","\"What would make changing this stack feel dangerous: rep adoption, forecast disruption, RevOps load, or leadership trust?\"","Use this to expose the real displacement blocker.",false,[
           branch("ADOPTION RISK","ok","\"If reps or managers do not use it, it dies fast.\"","\"Then the next review has to prove workflow fit, not just signal quality.\"",[
             jumpNode("Set behavior proof", "proof-threshold", "behavior-shift", "grn"),
             jumpNode("Lock the live review", "next-step-lock", "live-review", "blu")
           ],"Adoption risk is central to the decision.","You still need the behavior that proves fit."),
-          branch("FORECAST RISK","ly","\"We cannot risk destabilizing the number mid-quarter.\"","\"Then the proof bar is simple: show one safe, narrow inspection wedge before broad rollout.\"",[
+          branch("FORECAST RISK","ly","\"We cannot risk destabilizing the number mid-quarter.\"","\"Then the proof bar is simple: show one safe, narrow inspection scope before broad rollout.\"",[
             jumpNode("Choose the deal set", "next-step-lock", "deal-set", "org"),
             jumpNode("Set the live proof", "proof-threshold", "live-proof", "blu")
-          ],"Rollout risk is constraining the motion.","You still need the smallest safe wedge."),
+          ],"Rollout risk is constraining the motion.","You still need the smallest safe scope."),
           branch("INERTIA","fl","\"It is mostly just inertia.\"","\"Inertia usually means the pain or sponsor is still too weak. Which one is true here?\"",[
             jumpNode("Return to sponsor", "stakeholder-and-ownership", "sponsor", "red"),
             jumpNode("Return to pain", "pain-and-consequence", "forecast-gap", "blu")
@@ -495,7 +495,7 @@
           branch("FINANCE OR IT","ly","\"Finance or IT can slow it if the value or implementation sounds fuzzy.\"","\"What would they need first: economic clarity, rollout safety, or limited scope?\"",[
             jumpNode("Test switching risk", "current-vendor-and-displacement", "switch-risk", "org"),
             jumpNode("Choose the deal set", "next-step-lock", "deal-set", "blu")
-          ],"The blocker may be control or economics, not sales skepticism.","You still need the right wedge to lower that risk."),
+          ],"The blocker may be control or economics, not sales skepticism.","You still need the right scope to lower that risk."),
           branch("ATTENTION RISK","fl","\"Nothing formal kills it. It just loses oxygen.\"","\"Then the next step has to be concrete enough that it cannot hide in polite interest.\"",[
             jumpNode("Lock a real meeting", "next-step-lock", "live-review", "red"),
             jumpNode("Return to trigger", "trigger-and-urgency", "board-pressure", "blu")
@@ -522,7 +522,7 @@
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"The proving ground is concrete.","You still need the exact attendees and calendar hold."),
-          branch("ONE MANAGER SET","ly","\"Start with one manager's inspection set before going broader.\"","\"That is a strong first wedge. Which manager has enough pain to make the session honest?\"",[
+          branch("ONE MANAGER SET","ly","\"Start with one manager's inspection set before going broader.\"","\"That is a strong first scope. Which manager has enough pain to make the session honest?\"",[
             jumpNode("Return to manager owner", "stakeholder-and-ownership", "manager-owner", "org"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"A narrower proving set may be safer.","You still need the right manager and the date."),
@@ -580,7 +580,7 @@
             jumpRoom("Open Call Planner", "call-planner", "grn"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The next room is conversational and tactical.","You still need the forcing question in plain language."),
-          branch("DEAL WORKSPACE","ly","\"There is already a live opportunity path here.\"","\"Then attach the operating truth to the live deal immediately before the forecast story drifts again.\"",[
+          branch("DEAL WORKSPACE","ly","\"There is already a live opportunity path here.\"","\"Then attach the what is actually happening to the live deal immediately before the forecast story drifts again.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "org"),
             jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
           ],"The truth belongs with a live pipeline object.","You still need the top risk to carry with it."),

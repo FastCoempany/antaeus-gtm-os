@@ -434,7 +434,7 @@ describe("authorSection6 — Why we win", () => {
 
 // ─── §7 ────────────────────────────────────────────────────────────────
 
-describe("authorSection7 — Day-one operating rhythm", () => {
+describe("authorSection7 — What the first week looks like", () => {
     it("is empty with no quota", () => {
         const s = authorSection7(empty);
         expect(s.status).toBe("empty");

@@ -102,7 +102,7 @@ describe("computeFieldRead — empty board", () => {
     });
 });
 
-describe("computeFieldRead — operator move priority chain", () => {
+describe("computeFieldRead — next-move priority chain", () => {
     it("prescribes approaches before adding accounts", () => {
         const r = computeFieldRead({
             accounts: [account("a-1", "active")],
@@ -145,7 +145,7 @@ describe("computeFieldRead — operator move priority chain", () => {
     });
 });
 
-describe("computeFieldRead — main risk priority chain", () => {
+describe("computeFieldRead — what-is-loose priority chain", () => {
     it("flags single-thesis monoculture", () => {
         const r = computeFieldRead({
             accounts: [account("a-1", "active")],

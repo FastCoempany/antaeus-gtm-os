@@ -44,7 +44,7 @@ describe("buildIcpQuality — empty input", () => {
 });
 
 describe("buildIcpQuality — full sharp input", () => {
-    it("scores >=85 on a sharp wedge (founder, tight geo, 14d proof, 80 accounts)", () => {
+    it("scores >=85 on a sharp ICP (founder, tight geo, 14d proof, 80 accounts)", () => {
         const r = buildIcpQuality(FULL_INPUT);
         expect(r.score).toBeGreaterThanOrEqual(85);
         expect(r.tier).toBe("sharp");

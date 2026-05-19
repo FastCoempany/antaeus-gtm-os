@@ -114,22 +114,22 @@ function sentenceTitlesFor(doc: AutopsyDoc): {
     const risk = topCause?.label
         ? `${topCause.label}.`
         : v.staleDays >= 14
-        ? `Stage outruns truth — ${v.staleDays} days quiet.`
-        : "The board reads healthy. Confirm before forecasting.";
+        ? `Stage is moving but the deal isn't — ${v.staleDays} days since anything happened.`
+        : "The board looks healthy. Confirm before you forecast on it.";
 
     const proof = !v.economicBuyer
-        ? "Proof looks alive, ownership does not."
+        ? "There's pilot evidence, but no one with authority owns it."
         : !v.champion
-        ? "Buyer is identified; the carrier inside is not."
+        ? "The buyer is identified, but no one inside their company is carrying this forward."
         : v.qualScore < 10
-        ? "Qualification is thin — proof can't be carried yet."
-        : "Owner + carrier are named. Proof is portable.";
+        ? "Qualification is thin — the buyer can't take the pilot results to their boss yet."
+        : "Owner and inside carrier are both named. The pilot results can be carried into the room.";
 
     const motion = !v.hasNextStep
-        ? "Process before control — no dated next step."
+        ? "There's no dated next step — the process is running ahead of any control."
         : v.staleDays >= 30
-        ? "The thread moved early; no one's controlling the close path now."
-        : "The live thread is moving. Confirm the close path tracks the move.";
+        ? "The thread moved early in the cycle; no one is steering the close path now."
+        : "The thread is alive. Confirm the close path still tracks what's actually happening.";
 
     return { risk, proof, motion };
 }

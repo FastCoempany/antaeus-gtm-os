@@ -47,7 +47,7 @@ The primary action list now behaves more like an activation queue:
 ### 4. Reduced Conceptual Overload
 The right-side support area now makes the distinction explicit:
 
-- entering real operating truth is the core job
+- entering real what is actually happening is the core job
 - methodology, demo lane, and settings are support surfaces, not substitutes
 
 ### 5. Better Welcome Telemetry

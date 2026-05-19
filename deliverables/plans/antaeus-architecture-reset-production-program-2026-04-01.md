@@ -647,7 +647,7 @@ Graph is:
 - remove legacy shell chrome conflicts
 - align sheet, workspace, and command language
 - clean remaining panel soup wherever it survives
-- confirm the product feels like one operating instrument
+- confirm the product feels like one tool the operator actually uses
 
 ### 16.4 Acceptance gate
 
@@ -768,7 +768,7 @@ The architecture reset production program is complete only when all of the follo
 7. Future Autopsy remains a named premium asset and one of the strongest surfaces in the product
 8. the product no longer feels like a hallway of modules
 9. the product no longer feels like sticky-note panel soup
-10. the product feels visually like one bright, modern, behaviorally intentional operating instrument
+10. the product feels visually like one bright, modern, behaviorally intentional tool the operator actually uses
 
 ---
 

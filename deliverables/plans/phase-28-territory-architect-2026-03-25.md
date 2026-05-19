@@ -55,7 +55,7 @@ Territory Architect now looks for the best saved ICP and uses it in the bridge s
 
 That summary now surfaces:
 
-- the current wedge
+- the current ICP
 - thesis count
 - active territory count
 - the next recommended move
@@ -67,7 +67,7 @@ The bridge now directly explains that sourcing before territory design becomes l
 
 It now makes the core sequence more explicit:
 
-- sharpen the wedge
+- sharpen the ICP
 - define the hypotheses
 - allocate account slots
 - then source and enrich against that bounded battlefield

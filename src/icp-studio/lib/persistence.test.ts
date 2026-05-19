@@ -30,7 +30,7 @@ function makeIcp(p: Partial<SavedIcp>): SavedIcp {
         engineActive: p.engineActive ?? 80,
         qualityScore: p.qualityScore ?? 85,
         qualityChecks: p.qualityChecks ?? [
-            { tone: "good", text: "Industry wedge is defined." }
+            { tone: "good", text: "Industry is defined." }
         ],
         createdAt: p.createdAt ?? "2026-04-27T00:00:00Z",
         updatedAt: p.updatedAt ?? "2026-04-27T00:00:00Z"

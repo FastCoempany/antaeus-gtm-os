@@ -139,7 +139,7 @@ function buildWhatsMissing(
     if (!m.nextMilestone) {
         return {
             value: "First ICP.",
-            note: "Targeting truth is the first commissioned cell."
+            note: "The first thing the rest of the app needs is a clear definition of who you sell to."
         };
     }
     const lead = isCold ? "First ICP." : `${m.nextMilestone.label}.`;

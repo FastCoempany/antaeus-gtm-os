@@ -104,19 +104,19 @@ function laneFromScore(score: number): RecoveryLane {
 function suggestedNextMove(deal: Deal, lane: RecoveryLane): string {
     if (lane === "critical") {
         if (!deal.nextStep) {
-            return "Lock a real next step today — anything specific advances this.";
+            return "Lock a real next step today — anything specific moves this forward.";
         }
-        return "Reinitiate the next step — the deal is stalling.";
+        return "Restart the next step — the deal is going stale.";
     }
     if (lane === "at-risk") {
         if (!deal.nextStep) return "Set a concrete next step with a date.";
-        if (!deal.champion) return "Confirm the champion before more activity.";
-        return "Tighten the next-step pressure with the buyer.";
+        if (!deal.champion) return "Confirm who the champion is before more activity.";
+        return "Tighten the next step with the buyer.";
     }
     if (deal.stage === "prospect" || deal.stage === "discovery") {
-        return "Push toward a proof-threshold conversation.";
+        return "Push toward a conversation about what the buyer needs to see to say yes.";
     }
-    return "Maintain pace; check next-step quality next session.";
+    return "Keep the pace. Check the quality of the next step the next time you log in.";
 }
 
 export function assessDeal(deal: Deal): RecoveryAssessment | null {

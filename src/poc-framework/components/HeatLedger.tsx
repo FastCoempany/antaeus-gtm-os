@@ -14,14 +14,14 @@ const LABELS: Record<keyof HeatLedgerData, string> = {
 /**
  * HeatLedger — three heat bars in the forge panel.
  *
- * Per canon §4.15 the three dimensions (claim heat / owner heat /
- * kill heat) are the live read on whether the proof is castable. Bar
- * width = value/100, color = HeatReading.color.
+ * Per canon §4.15 the three dimensions (claim / owner / kill) are
+ * the live read on whether the proof is ready. Bar width = value/100,
+ * color = HeatReading.color.
  */
 export function HeatLedger({ ledger }: Props): JSX.Element {
     return (
-        <section class="poc-heat" aria-label="Heat ledger">
-            <p class="poc-heat__kicker">HEAT LEDGER</p>
+        <section class="poc-heat" aria-label="How strong each piece is">
+            <p class="poc-heat__kicker">HOW STRONG EACH PIECE IS</p>
             <ul class="poc-heat__list">
                 {(Object.keys(LABELS) as Array<keyof HeatLedgerData>).map((key) => (
                     <HeatRow key={key} label={LABELS[key]} reading={ledger[key]} />

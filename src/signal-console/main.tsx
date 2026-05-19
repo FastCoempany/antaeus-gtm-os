@@ -70,7 +70,7 @@ if (focus) {
     } else {
         // Phase 2.3 — no matching account yet. Stash the inbound
         // focus so AccountGrid's empty-state surface can show what
-        // wedge the radar is targeting against.
+        // ICP the radar is targeting against.
         inboundFocus.value = focus;
     }
 }

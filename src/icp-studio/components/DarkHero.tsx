@@ -63,7 +63,7 @@ export function DarkHero(): JSX.Element {
             <div class="icp-hero__inner">
                 <p class="icp-hero__kicker">{kicker}</p>
                 <h1 class="icp-hero__title">
-                    Sharpen <span>one</span> wedge before scale compounds the
+                    Sharpen <span>one</span> ICP before scale compounds the
                     wrong things.
                 </h1>
                 <p class="icp-hero__note">

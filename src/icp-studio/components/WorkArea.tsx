@@ -157,7 +157,7 @@ function FormFields(): JSX.Element {
                         })
                     }
                 >
-                    <option value="">Choose wedge</option>
+                    <option value="">Choose industry</option>
                     {INDUSTRY_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
                             {o.label}

@@ -300,7 +300,7 @@ Reject any wireframe that does any of the following:
 - relies on card accumulation as the main ordering system
 - uses internal architecture language as visible product copy
 - uses green, blue, and orange as decorative candy rather than semantic roles
-- makes the product feel more like a generic dashboard than a premium operating instrument
+- makes the product feel more like a generic dashboard than a tool the operator actually uses
 - achieves calm by erasing pressure
 - achieves beauty by flattening module substance
 - rewrites the mind instead of the face

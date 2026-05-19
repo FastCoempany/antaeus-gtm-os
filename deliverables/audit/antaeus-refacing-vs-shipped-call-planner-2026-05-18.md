@@ -23,19 +23,19 @@ No mind drift.
 
 ## Structural drift — partial; targeted unforced drift
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
-| Pressure Script wireframe | Shipped (post-evolution) | Justifying evolution |
+| Pressure Script wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
 | Display-only state | **Editable form** (Witness contact name + persona buttons + LinkedIn URL + custom notes + deal-link `<select>`) | Phase 4 / Room 9 — room must accept input, not just display |
 | No explicit Quality block | **Quality component** with 5-gate breakdown + band-tinted pill + nextMove copy | Phase 4 / Room 9 — quality engine port; the V01 had only an implicit credibility chip |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Pressure Script wireframe | Shipped | Severity |
 |---|---|---|
-| **2-col layout: witness+cues (left) + handoff routes (right)** — "one person on the left, one pressure sequence down the middle, and the handoff routes on the right" | **`cp-stage` is 2-col Witness + AgendaSpine; Handoff is a full-width band BELOW** — handoff routes don't sit alongside the agenda; reader scrolls to find them | 🟡 MED — the variant's signature is having the routes visible while reading the agenda. Currently they're below the fold. |
-| **Scripted-quote lines** in each cue body — V01 carries an `<em>scripted line</em>` per cue ("You own the workflow after the rep leaves the call. Where does the handoff break most often?") that reads as an *actual opener line* the operator would speak | **`cp-strip__copy`** is a generic descriptive sentence; **`cp-strip__note`** is editorial commentary about the cue. Neither reads as a scripted line. | 🟡 MED — the scripted-quote treatment is what makes Pressure Script feel like a "procedural and disciplined" script, not a meeting agenda. |
+| **2-col layout: witness+cues (left) + handoff routes (right)** — "one person on the left, one pressure sequence down the middle, and the handoff routes on the right" | **`cp-stage` is 2-col Witness + AgendaSpine; Handoff is a full-width band BELOW** — the handoff routes don't sit alongside the agenda; the reader has to scroll to find them | 🟡 MED — what makes this variant work is having the routes visible while the rep reads the agenda. Right now they're below the fold. |
+| **Scripted-quote lines** in each cue body — V01 carries an `<em>scripted line</em>` per cue ("You own the workflow after the rep leaves the call. Where does the handoff break most often?") that reads as an *actual line the rep would speak* | **`cp-strip__copy`** is a generic descriptive sentence; **`cp-strip__note`** is editorial commentary about the cue. Neither reads as a line the rep would actually say. | 🟡 MED — the scripted-quote treatment is what makes Pressure Script feel like a script the rep is running, not a meeting agenda they're reading. |
 | **Credibility chip in the witness dossier** — V01 has a `<span>credible</span><strong>86</strong>` chip pulling the quality band + score | Witness has no inline chip; the quality score lives in a separate Quality block | 🟢 LOW — quality score is reachable, just not co-located with the contact info |
 
 ---
@@ -70,7 +70,7 @@ Bucket B drift gets these specific fixes:
    - **Probe** — first persona question framed as a spoken line
    - **Advance ask** — the advance ask line in spoken voice
 
-3. **Credibility chip** in Witness — small inline chip showing the quality band + score (e.g., "Credible · 86"). Reads as the V01 dossier signature without duplicating the Quality block (the chip is a glanceable summary; Quality is the breakdown).
+3. **Credibility chip** in Witness — small inline chip showing the quality band + score (e.g., "Credible · 86"). Matches the V01 dossier's at-a-glance read without duplicating the Quality block — the chip is a one-second summary, Quality is the breakdown.
 
 ### What this PR does NOT change
 

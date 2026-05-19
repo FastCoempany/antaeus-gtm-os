@@ -30,7 +30,7 @@ export const ROLE_OPTIONS: ReadonlyArray<{
     {
         key: "founder",
         label: "Founder",
-        copy: "You are still the chief revenue surface. The system is your second brain."
+        copy: "You are still the one selling. Antaeus is the system holding everything you can't keep in your head."
     },
     {
         key: "first-gtm-hire",

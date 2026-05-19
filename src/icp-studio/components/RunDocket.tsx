@@ -8,7 +8,7 @@ import {
 import { buildIcpQuality } from "../lib/quality";
 
 /**
- * RunDocket — Variant 01 / Wedge Ledger right-aside.
+ * RunDocket — Variant 01 / ICP Ledger right-aside.
  *
  * Sits to the right of the WedgeLedger. Three blocks:
  *
@@ -22,13 +22,13 @@ import { buildIcpQuality } from "../lib/quality";
  *   ├─────────────────────────────────┤
  *   │ Downstream changes              │
  *   │ — what other rooms will adopt   │
- *   │   once this wedge is saved      │
+ *   │   once this ICP is saved      │
  *   └─────────────────────────────────┘
  *
  * Derives:
  *   - Score + label from buildIcpQuality
  *   - Weakest field: first input that's empty or thin
- *   - Broad version: opposite-of-wedge sentence the system rejects
+ *   - Broad version: opposite-of-ICP sentence the system rejects
  *   - Downstream changes: which rooms will sharpen + how
  */
 
@@ -47,43 +47,43 @@ function findWeakest(): WeakestField | null {
     if (effectiveIndustry.value.trim().length === 0) {
         return {
             headline: "Industry is unset.",
-            copy: "Without one named industry, no real list exists. The ICP is half-strategy."
+            copy: "Without one named industry, you can't build a real list. The ICP is half a strategy."
         };
     }
     if (effectiveBuyer.value.trim().length === 0) {
         return {
             headline: "Buyer is unset.",
-            copy: "Pick the buyer role. Authority has to be specific or outbound is guessing."
+            copy: "Pick the buyer role. If you don't name who has authority, outbound is guessing."
         };
     }
     if (d.trigger.trim().length === 0) {
         return {
             headline: "Trigger is still implied.",
-            copy: "Until the forcing event is named, the wedge is still half strategy and half hope."
+            copy: "Until you name the event that's forcing the buyer to act, the ICP is still half a strategy and half hope."
         };
     }
     if (d.pain.trim().length === 0) {
         return {
             headline: "Pain is not named.",
-            copy: "Operator-voice pain a buyer would say out loud. Not a category label."
+            copy: "Write the pain the way a buyer would say it out loud, not as a category label."
         };
     }
     if (d.pain.trim().length < 24) {
         return {
             headline: "Pain reads as a category.",
-            copy: "Make the pain operational — the line a real buyer would speak, not the slide deck."
+            copy: "Write the pain the way a real buyer would speak it, not the way a slide deck would phrase it."
         };
     }
     if (d.size.trim().length === 0) {
         return {
             headline: "Size band is unset.",
-            copy: "Pick a size range. Density of the list depends on it."
+            copy: "Pick a size range. How big or small the list ends up depends on it."
         };
     }
     if (d.proofWindow.trim().length === 0) {
         return {
             headline: "Proof window is unset.",
-            copy: "Pick a window the buyer can hold in their head. Quarterly is the operating range."
+            copy: "Pick a window the buyer can hold in their head. Something like a quarter is the right size."
         };
     }
     return null;
@@ -120,11 +120,11 @@ export function RunDocket(): JSX.Element {
             <article class="icp-docket__block">
                 <p class="icp-docket__block-label">Weakest field</p>
                 <p class="icp-docket__block-headline">
-                    {weakest?.headline ?? "Wedge holds together."}
+                    {weakest?.headline ?? "The ICP holds together."}
                 </p>
                 <p class="icp-docket__block-copy">
                     {weakest?.copy ??
-                        "No obviously weak field. The wedge is in shape; revisit the trigger if pressure shifts."}
+                        "No obviously weak field. Revisit the trigger if the pressure on the buyer shifts."}
                 </p>
             </article>
 
@@ -134,25 +134,21 @@ export function RunDocket(): JSX.Element {
                     "B2B companies needing more pipeline."
                 </p>
                 <p class="icp-docket__block-copy">
-                    The room should visibly punish this kind of language. A
-                    sentence anyone can write is a sentence the system can't
-                    target against.
+                    The room should visibly punish this kind of language. A sentence anyone could write is a sentence the rest of the app can't target against.
                 </p>
             </article>
 
             <article class="icp-docket__block">
                 <p class="icp-docket__block-label">Downstream changes</p>
                 <p class="icp-docket__block-copy">
-                    Territory narrows to a real geography. Sourcing looks for
-                    the specific buyer role. Outbound stops writing generic
-                    productivity language. Discovery opens on the named pain.
+                    Territory narrows to a real geography. Sourcing looks for the specific buyer role. Outbound stops writing generic productivity language. Discovery opens on the named pain.
                 </p>
             </article>
 
             <p class="icp-docket__foot">
                 {savedCount > 0
-                    ? `${savedCount} wedge${savedCount === 1 ? "" : "s"} saved in this workspace.`
-                    : "No wedge saved yet. The score becomes the run-read once you commit."}
+                    ? `${savedCount} ICP${savedCount === 1 ? "" : "s"} saved in this workspace.`
+                    : "No ICP saved yet. The score becomes the read once you save."}
             </p>
         </aside>
     );

@@ -87,7 +87,7 @@ The market wants:
 - stronger defaults
 - more visible next-step logic
 - faster confidence
-- clearer operating truth
+- clearer what is actually happening
 
 The current best B2B apps tend to succeed visually when they combine:
 
@@ -164,7 +164,7 @@ Least resistance does **not** mean:
 
 - fewer controls at all costs
 - oversimplifying serious work
-- hiding operating truth
+- hiding what is actually happening
 
 Least resistance means:
 

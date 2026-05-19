@@ -16,11 +16,12 @@ import type {
  * `app/poc-framework/index.html`). No behavioral changes — same
  * inputs produce identical outputs.
  *
- * The room shapes one decision-grade proof. Quality is derived from
- * field completeness (account / vendor / owner / success criteria /
- * kill rules / linked deal). Heat splits that into three dimensions
- * (claim / owner / kill). Weakest-mold picks the first failing
- * gate so the operator knows the next move.
+ * The room shapes one piece of pilot evidence the buyer's boss can
+ * act on. Quality is derived from field completeness (account /
+ * vendor / owner / success criteria / kill rules / linked deal).
+ * Heat splits that into three dimensions (claim / owner / kill).
+ * Weakest-mold picks the first failing gate so the operator knows
+ * the next move.
  */
 
 // ─── Helpers ──────────────────────────────────────────────────────────
@@ -148,9 +149,9 @@ export function weakestMold(inputs: WeakestInputs): MoldDiagnosis {
 // ─── Quality score + band ─────────────────────────────────────────────
 
 const BAND_TITLE: Record<QualityBand, string> = {
-    ready: "Decision-grade proof is cast.",
-    workable: "Proof is hot, but not portable.",
-    thin: "Raw interest is still not proof."
+    ready: "The proof is ready. The buyer's boss could act on this.",
+    workable: "The proof is hot, but the buyer can't carry it into the room yet.",
+    thin: "There's interest, but you can't take this to the buyer's boss yet."
 };
 
 const BAND_LABEL: Record<QualityBand, string> = {
@@ -319,9 +320,9 @@ export function buildIngotRead(molds: ReadonlyArray<MoldRow>): string {
     const cold = molds.filter((m) => m.state === "cold");
     const red = molds.filter((m) => m.state === "red");
 
-    // All locked → decision-grade proof.
+    // All locked → ready to carry.
     if (cast.length === molds.length) {
-        return "All five molds are locked. The proof is decision-grade.";
+        return "All five molds are locked. The proof is ready — the buyer's boss could act on this.";
     }
     // Nothing started → empty foundry.
     if (cast.length === 0 && hot.length === 0) {

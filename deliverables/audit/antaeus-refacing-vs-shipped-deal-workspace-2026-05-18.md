@@ -13,7 +13,7 @@
 |---|---|
 | Vertical stack of sections | ✅ **Closed** — Phase 2.6 audit added the 2-col `dw-stage-grid` (Hero + TargetFolio); MicroGrid + LaneGrid + controls remain stacked but match the wireframe's same below-stage-grid arrangement. |
 | Overlay modal where wireframe wanted inline tabbed detail | ✅ **Closed** — Phase 6 polish (post-PR-#63) replaced the residual DealHealthModal overlay with inline DealHealthForm rendered inside the TargetFolio. `dw-target-folio--editing` swaps the dock+panel area in place. |
-| Spine missing | ✅ **Closed by retirement** — Phase 2.6 explicitly retired the spine rail as "decoration without operating value." Wordmark in `ant-room-chrome` provides brand presence. |
+| Spine missing | ✅ **Closed by retirement** — Phase 2.6 explicitly retired the spine rail as "decoration without operating value." The wordmark in `ant-room-chrome` keeps the Antaeus name visible. |
 | Lower board rebuild from Intervention Rail | 🔴 **OPEN** — the lower board is still the Phase 2.6 LaneGrid (summary cards) + FilterBar + DealList (table) trio. The founder's lock note says "lower board rebuilt from Intervention Rail." This is the one piece of the 2026-04-08 lock that hasn't shipped. **This PR closes it.** |
 
 ---
@@ -22,7 +22,7 @@
 
 Canon §4.13 (Deal Workspace — Diagnosis Table) preserved end-to-end:
 
-- ✅ Recovery board with intervention-first posture ("not a Kanban").
+- ✅ Recovery-first board that surfaces what to intervene on, not a Kanban of stages.
 - ✅ 9-field deal-health detail (champion, EB, use case, pain, competition, process, notes, forecast, momentum).
 - ✅ Recovery queue + deal-health panel.
 - ✅ Cross-room flows: deal pressure into Future Autopsy, PoC, Advisor; loss patterns into Founding GTM §6.
@@ -33,9 +33,9 @@ No mind drift.
 
 ## Structural drift — only one item remains
 
-### A. Canon-aligned evolution + already-closed (KEEP)
+### A. Things the shipped room evolved past the wireframe + already-closed (KEEP)
 
-| Variant 02 / Intervention Desk wireframe | Shipped | Justifying evolution |
+| Variant 02 / Intervention Desk wireframe | Shipped | Why the evolution is right |
 |---|---|---|
 | 2-col stage-grid (Hero + TargetFolio) | ✅ `.dw-stage-grid` | Phase 2.6 audit |
 | Target-folio with signal-grid + folio-dock 4 tabs + inline tabbed detail | ✅ `dw-target-folio` + signal-grid + FolioDock + DealHealthForm inline | Phase 2.6 + Phase 6 polish |
@@ -46,7 +46,7 @@ No mind drift.
 | Lane summary (Now / Next / Keep honest with state + headline + copy + meta) | ✅ Matches wireframe Variant 02's `lane-grid` |
 | Controls strip with filter + actions | ✅ FilterBar |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Intervention Rail wireframe (founder-locked lower board) | Shipped | Severity |
 |---|---|---|

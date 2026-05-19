@@ -15,7 +15,7 @@ import {
  * Phase 2.3 — inbound focusObject from ICP Studio / Territory
  * Architect propagates through to the destination room's
  * focusObject. The territory/icp link gets the inbound focus; signal
- * console + outbound get the focus too (re-piping the wedge label).
+ * console + outbound get the focus too (re-piping the ICP label).
  */
 export function HandoffStrip(): JSX.Element {
     const ready = stats.value.ready;

@@ -82,11 +82,11 @@ export function buildIcpQuality(input: QualityInput): IcpQuality {
     if (industry.trim()) {
         good(
             15,
-            "Industry wedge is defined. A real target list can exist."
+            "Industry is defined. A real target list can exist."
         );
     } else {
         risk(
-            "Choose one industry wedge. If a list does not exist, the ICP is not real yet."
+            "Choose one industry. If a list does not exist, the ICP is not real yet."
         );
     }
 
@@ -155,7 +155,7 @@ export function buildIcpQuality(input: QualityInput): IcpQuality {
             "Primary pain is explicit. Copy and discovery can stay centered on one problem."
         );
     } else {
-        risk("Choose one felt pain. Multiple pains will blur the wedge.");
+        risk("Choose one felt pain. Listing more than one blurs the ICP.");
     }
 
     // Trigger
@@ -244,12 +244,12 @@ export function buildIcpQuality(input: QualityInput): IcpQuality {
         tier = "workable";
         label = "Workable, but tighten one more thing.";
         summary =
-            "The wedge is real. Tighten the remaining pressure point before scaling the list or message.";
+            "The ICP is real. Tighten the remaining pressure point before scaling the list or message.";
     } else if (score >= 50) {
         tier = "forming";
         label = "Borderline. Tighten before you trust it.";
         summary =
-            "You have the outline of a wedge, but the user still has to infer too much downstream.";
+            "You have the outline of an ICP, but the user still has to infer too much downstream.";
     }
 
     return { score, tier, label, summary, checks };

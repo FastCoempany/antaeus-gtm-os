@@ -93,7 +93,7 @@ export function setCategory(next: ProductCategory): void {
 export function exitDemo(): void {
     exitDemoMode();
     demo.value = loadDemoState();
-    flashToast("info", "Demo mode exited. Reload to see real workspace truth.");
+    flashToast("info", "Demo mode exited. Reload to switch back to your real workspace data.");
 }
 
 export function exportBackup(): void {

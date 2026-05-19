@@ -203,7 +203,7 @@ Five changes, in build order. Source: `gtm-os-v22-improvement-plan.md` with foun
 **What was built:**
 - **Sidebar card** with live readiness gate: shows current Readiness Score, progress bar toward 56-point unlock threshold, and locked/unlocked state. Recomputes readiness using same algorithm as `/app/readiness/` page.
 - **Modal** with 6 auto-populated sections compiled from real app data:
-  1. Who We Sell To — from GTM Playbook fields (target buyer, segmentation, wedge), Thin ICP profiles, Account Planning intel
+  1. Who We Sell To — from GTM Playbook fields (target buyer, segmentation, target), Thin ICP profiles, Account Planning intel
   2. How We Find Them — from Quota Workback targets, Signal Play angles + reply tracking, Content Builder assets, GTM motion/entry
   3. How We Run Discovery — from Discovery Studio call stats + advance rate, Discovery Agenda gates + focus
   4. How We Close — from qual scores (avg across deals), competition/differentiation/pricing fields, win triggers + "what worked" quotes

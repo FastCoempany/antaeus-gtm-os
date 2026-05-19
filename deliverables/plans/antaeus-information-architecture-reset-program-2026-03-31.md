@@ -238,7 +238,7 @@ Current sources:
 
 Reset direction:
 
-- Dashboard becomes the home of ranked operating truth
+- Dashboard becomes the home of ranked what is actually happening
 - Signal Console feeds the command layer as the signal engine
 - Readiness feeds quality and pressure scoring
 - Welcome remains an activation command layer for new users

@@ -74,13 +74,13 @@ This memo freezes:
 This memo does not freeze:
 - room-native metric wording
 - specific threshold tuning
-- how normalized health summaries feed Dashboard command intelligence
+- how normalized health summaries feed Dashboard command ranking
 
 ## Next Intelligence Move
 The next leverage is not more blind rollout. It is feedback integration:
 
 1. normalize room and system health summaries
-2. feed them back into Dashboard command intelligence
+2. feed them back into Dashboard command ranking
 3. make `Brief / Spotlight / Queue` react to live room/system health, not just room-local display
 
 ## Why This Is Next

@@ -31,7 +31,7 @@ The thread moved through these major arcs:
    - pinned context
    - return continuity
    - nav re-architecture
-   - command intelligence
+   - command ranking
    - workspace/system health rollout
 
 2. Recognition that the visible product had not converged:

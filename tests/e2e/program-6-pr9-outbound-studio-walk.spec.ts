@@ -75,7 +75,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         }
     });
 
-    test("SwitchReads renders Board read + Operator move", async ({
+    test("SwitchReads renders state-of-the-line + next-move cards", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -92,8 +92,8 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
             const kickers = await page
                 .locator(".ob-loft__reads .ob-read__kicker")
                 .allTextContents();
-            expect(kickers).toContain("BOARD READ");
-            expect(kickers).toContain("OPERATOR MOVE");
+            expect(kickers).toContain("WHERE THE LINE STANDS");
+            expect(kickers).toContain("NEXT MOVE");
         } finally {
             await ctx.close();
         }
@@ -110,8 +110,8 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
             });
             await page.waitForTimeout(300);
 
-            // First read card is BOARD READ; with an empty rack it
-            // should carry the loose tone variant.
+            // First read card is the state-of-the-line; with an empty
+            // rack it should carry the loose tone variant.
             const firstRead = page.locator(".ob-loft__reads .ob-read").first();
             const cls = await firstRead.getAttribute("class");
             expect(cls).toContain("ob-read--loose");

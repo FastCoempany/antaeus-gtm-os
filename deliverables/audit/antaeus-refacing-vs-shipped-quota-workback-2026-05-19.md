@@ -24,27 +24,27 @@ No mind drift.
 
 ## Most of the refacing is already in
 
-Phase 4 / Room 14 shipped against the winner's thesis directly. The Topbar already carries the winner's H1 verbatim ("Make the math feel daily.") + the touches/day hero number + the planning-quality posture pill. The CoveragePanel / SystemHealth / InputForm / PlanReadout below all map to the winner's expanded operating surfaces.
+Phase 4 / Room 14 shipped against the winner's thesis directly. The Topbar already carries the winner's H1 verbatim ("Make the math feel daily.") + the touches/day hero number + a pill naming how trustable the math is. The CoveragePanel / SystemHealth / InputForm / PlanReadout below all map to what the wireframe spells out further down.
 
 ---
 
 ## Structural drift — narrow
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
-| Variant 01 wireframe | Shipped (post-evolution) | Justifying evolution |
+| Variant 01 wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
 | Static example "12 touches/day across 23 accounts to hit $500K/month" | **Live `metrics.touchesDay` hero** computed from the operator's inputs | Phase 4 / Room 14 — operator builds the math live |
 | Single coverage bar with hardcoded 62%/2.5x | **`CoveragePanel` reading `gtmos_deal_workspaces` mirror** with live ratio + raw + weighted + gap copy | Cross-room compounding per canon §6 |
 | Wireframe lacks downstream handoff | **HandoffStrip with 4 destinations** | Canon §6 compounding |
 | Rationale callout below grid | Not surfaced (wireframe annotation) | Correct |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Variant 01 wireframe | Shipped | Severity |
 |---|---|---|
-| **4-stat row of PLAN INPUTS** — Annual quota / Avg ACV / Win rate / Cycle, each with an interpretive sub-note ("75 deals to hit number", "~340 opps needed", "Mid-market enterprise") | The shipped Topbar surfaces 3 DERIVED OUTPUTS — Monthly target / Touches/week / Coverage goal. These duplicate the hero + CoveragePanel + PlanReadout below | 🟡 MED — duplicate-output stats add visual noise without adding signal; the wireframe's input-anchor stats let the operator see WHAT produced the hero number at a glance |
-| Each stat has a sub-note context line | No sub-notes on the shipped stats | 🟢 LOW — interpretive context per stat |
+| A 4-stat row showing the operator's plan inputs — annual quota, average ACV, win rate, sales cycle — each with a one-line sub note that gives the number context (e.g. "75 deals to hit number", "~340 opps needed", "mid-market enterprise") | The shipped Topbar surfaces 3 derived outputs — monthly target, touches per week, coverage goal. Each of those is already shown in the hero, the CoveragePanel, or the PlanReadout below | 🟡 MED — surfacing the same outputs twice adds visual noise without adding signal. The wireframe's plan-input row lets the operator see at a glance what produced the hero number. |
+| Each stat has a sub-note line giving it context | No sub-notes on the shipped stats | 🟢 LOW — one line of context per stat |
 
 ### Explicitly deferred
 
@@ -76,8 +76,8 @@ Phase 4 / Room 14 shipped against the winner's thesis directly. The Topbar alrea
 - Topbar surfaces 4 stats: Annual quota / Avg ACV / Win rate / Cycle.
 - Each stat carries a sub-note below its value.
 - With default inputs (quota = 0), the stats render "—" with "Not set" / "Set X to see Y" subs instead of erroring.
-- With realistic inputs ($6M / $80K / 22% / 62d), the stats show formatted values + their interpretive sub-notes.
+- With realistic inputs ($6M / $80K / 22% / 62d), the stats show formatted values + their context sub-notes.
 - "Make the math feel daily." H1 still renders verbatim.
-- The hero touches/day number + posture pill still render.
+- The hero touches/day number + the pill naming how trustable the math is still render.
 - The CoveragePanel / SystemHealth / InputForm / PlanReadout / HandoffStrip below all render unchanged.
 - Mobile width still collapses the stats grid (existing breakpoint).

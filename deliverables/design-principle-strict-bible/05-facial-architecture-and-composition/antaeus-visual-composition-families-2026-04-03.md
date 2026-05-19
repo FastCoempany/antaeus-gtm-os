@@ -211,7 +211,7 @@ Visible laws:
 - first-visible zone should expose pressure fast
 - risk and truth are legible before long explanation
 - corrective route is obvious
-- health language should feel like operating truth, not analytics theater
+- health language should feel like what is actually happening, not analytics theater
 
 Avoid:
 

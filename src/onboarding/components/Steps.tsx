@@ -26,8 +26,8 @@ export function ThesisStep(): JSX.Element {
     return (
         <StepShell
             kicker="STEP 1 OF 7 — WELCOME"
-            title="The system that turns founder revenue work into operating truth."
-            subtitle="Antaeus is a pressure-and-truth system for commercial work — not a CRM, not an enablement library. Six quick answers and the workspace will already be live."
+            title="Antaeus turns the revenue work a founder is doing into a clear picture of what's actually happening."
+            subtitle="It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live."
             onNext={() => nextStep()}
             nextLabel="Begin"
             hideBack
@@ -41,8 +41,8 @@ export function ThesisStep(): JSX.Element {
                     </li>
                     <li>
                         <strong>You can skip any step except the first.</strong>{" "}
-                        The first ask is a one-line ICP — that is the wedge
-                        the rest of the system compounds off of.
+                        The first ask is a one-line ICP — everything else
+                        the system does compounds off of it.
                     </li>
                     <li>
                         <strong>Nothing is sent anywhere.</strong> Everything
@@ -156,7 +156,7 @@ export function IcpStep(): JSX.Element {
         <StepShell
             kicker="STEP 5 OF 7 — ICP"
             title="Write one sharp ICP."
-            subtitle="One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the wedge every downstream room targets against."
+            subtitle="One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the definition every other room in the app runs against."
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.icpStatement.trim().length === 0}

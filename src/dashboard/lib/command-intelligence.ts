@@ -226,9 +226,9 @@ function buildSystemObject(
     return finalizeCommandObject(
         {
             id: "system-trust",
-            title: "Repair trust in the command surface.",
+            title: "The dashboard is showing stale data right now.",
             copy:
-                "Some synced inputs fell back to local state. Rebuild trust before you over-read the current ordering.",
+                "Some inputs didn't sync from the cloud and fell back to the copy stored on this device. Don't over-trust the ordering until the sync recovers.",
             badge: "Risk",
             badgeTone: "state-risk",
             metricLabel: "System pressure",
@@ -248,7 +248,7 @@ function buildSystemObject(
                     roomLabel: "Dashboard"
                 }
             ],
-            focusObject: "Command surface trust",
+            focusObject: "Dashboard out of sync",
             focusRoom: "Settings",
             stateKey: "system"
         },
@@ -267,8 +267,8 @@ function buildIcpObject(
             id: "icp-truth",
             title: "Save one ICP before the week drifts.",
             copy:
-                "Market signals or deals exist, but targeting truth is still missing. The system is carrying that ambiguity everywhere else.",
-            badge: "Truth gap",
+                "You have signals and deals, but no saved ICP. The rest of the app is having to guess who you're selling to. Save one in ICP Studio and the other rooms tighten up.",
+            badge: "Missing ICP",
             badgeTone: "state-ready",
             metricLabel: "ICP pressure",
             metricValue: "",
@@ -280,7 +280,7 @@ function buildIcpObject(
                     roomLabel: "ICP Studio"
                 }
             ],
-            focusObject: "ICP truth",
+            focusObject: "No saved ICP",
             focusRoom: "ICP Studio",
             stateKey: "icp"
         },

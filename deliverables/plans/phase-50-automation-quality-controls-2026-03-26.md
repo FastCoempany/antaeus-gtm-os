@@ -346,7 +346,7 @@ Examples:
 If the user explicitly sets:
 
 - stage
-- ICP wedge
+- ICP
 - proof boundary
 - readout owner
 - next-step owner

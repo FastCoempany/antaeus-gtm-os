@@ -23,7 +23,7 @@ import { exportReadinessJson } from "../lib/readiness-export";
 
 const VERDICT_SUBTITLE: Record<Verdict, string> = {
     you_are_the_system:
-        "The motion lives in your head. A new hire would have nothing to inherit.",
+        "Right now the system only lives in your head. A new hire would have nothing to inherit on day one.",
     building:
         "Activity is real, but a hire would still be improvising the system on day one.",
     inheritable_with_guardrails:
@@ -31,7 +31,7 @@ const VERDICT_SUBTITLE: Record<Verdict, string> = {
     hire_ready:
         "The motion would survive a 2-week founder vacation.",
     hire_ready_repeatable:
-        "Multiple wins, multiple losses analyzed, advisor leverage lit, kit composed."
+        "The system has earned the right to be repeated — multiple wins on the board, multiple losses worth learning from, advisors lit up, and the handoff kit is composed."
 };
 
 const VERDICT_TONE: Record<Verdict, string> = {
@@ -171,8 +171,7 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                         </h3>
                         {props.summary.gateBlockers.length === 0 ? (
                             <p class="db-readiness-drawer__no-blockers">
-                                Everything for the next gate is in place.
-                                Re-run the workspace to refresh.
+                                Everything the next gate needs is in place. The verdict will refresh the next time you save a change in any room.
                             </p>
                         ) : (
                             <ul class="db-readiness-blockers">

@@ -33,6 +33,8 @@ If a lower authority conflicts with a higher one, the higher wins.
 
 **If you are a Claude session:** read this top to bottom before touching anything. The canon is long on purpose. Skimming will produce drift.
 
+**Voice rule before you write anything.** Don't use a single noun to do the work of a sentence — no "wedge", "verdict", "the move", "decision-grade". Write the sentence out. Don't write manifesto fragments. Write like you'd say it out loud. The full rule lives in Part III §11; read it before generating any user-facing copy, audit prose, or PR description.
+
 **If you are the founder:** this is your working contract. When you make a decision that changes doctrine (direction shift, room-mind correction, new principle), update the relevant Part here and commit it with a short rationale. Stale canon is worse than no canon.
 
 **Rendered visibility:** the app is static HTML. To see what a room actually looks like, start the Python server and use the capture script — see Part V for the workflow. Never audit a room from DOM or CSS alone; my own early audits were wrong because of this.
@@ -43,7 +45,7 @@ If a lower authority conflicts with a higher one, the higher wins.
 
 ## 1. What Antaeus Is
 
-**One-line:** The system that turns founder-led revenue motion into visible operating truth before the first serious go-to-market hire inherits it.
+**One-line:** Antaeus turns the work a founder is doing on revenue into a clear picture of what's actually happening, so the first serious go-to-market hire can pick it up and run it without restating anything.
 
 **Beta-era product sentence:** Antaeus helps founders and early operators see what is real, what is weak, what should happen next, and what a first serious hire would actually inherit.
 
@@ -107,13 +109,13 @@ These are the objects the system is built around. They are protected. Every room
 
 | Noun | What it is | Lives / moves |
 |---|---|---|
-| **ICP** | the wedge — one sharp definition of who the motion is for | defined in ICP Studio; filters every downstream room |
+| **ICP** | the one sharp definition of who the motion is for | defined in ICP Studio; filters every downstream room |
 | **Account** | a named target organization with thesis, tier, signals, heat | shaped in Territory Architect + Sourcing Workbench; ranked in Signal Console |
 | **Signal** | a time-limited event implying commercial opportunity | captured into Signal Console; converted into Motion |
 | **Motion** | a specific outbound move (email, call, LinkedIn touch) with route and intent | crafted in Outbound Studio / Cold Call Studio / LinkedIn Playbook |
 | **Call** | a planned or live conversation attached to an account/deal | prepared in Call Planner; run in Discovery Studio |
 | **Deal** | an opportunity with stage, value, pressure, and qualification truth | tracked in Deal Workspace; diagnosed in Future Autopsy |
-| **Proof** | a decision-grade evidence object built around claim/owner/metric/kill-rule | forged in PoC Framework |
+| **Proof** | the evidence from a pilot — a claim, an owner who signs off, a metric, and a rule for when to stop. The buyer's boss can act on it without you in the room. | forged in PoC Framework |
 | **Advisor deployment** | an ask routed through external leverage (investor, advisor, customer) | composed in Advisor Deploy |
 | **Readiness** | the multi-dimension synthesis of whether the motion is hire-ready | calculated in Readiness Score |
 | **Handoff artifact** | the exportable package a first hire would actually inherit | produced in Founding GTM / Handoff Kit |
@@ -166,11 +168,11 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 ### 4.2 Dashboard — Command Chamber
 
 - **Purpose:** show the user the one ranked object under the most pressure right now, with one dominant next move, without browsing.
-- **Strategic logic:** the dashboard is where the hallway dies. It ranks pressure across all objects, exposes the reason a specific object is first, and offers one compressed act-or-inspect move. Three density modes (Brief / Spotlight / Queue) support different cognitive states; all three preserve ranking. Graph reward + workspace-health view belong here.
-- **Primitives:** ranked object list, Brief narrative, Spotlight focus object, Queue triage flow, command intelligence ranking inputs (signal heat, deal pressure, staleness, value, downstream impact), graph reward, workspace health summary.
+- **Strategic logic:** the Dashboard is where the user stops being asked to choose between modules and starts being told which deal, signal, or proof to act on first. It ranks everything under pressure, explains why a specific object came up first, and offers one compressed act-or-inspect move. Three density modes (Brief / Spotlight / Queue) support different cognitive states; all three keep the ranking. Graph reward + workspace-health view belong here.
+- **Primitives:** ranked object list, Brief narrative, Spotlight focus object, Queue triage flow, the ranking inputs the Dashboard uses to decide what comes first (how hot the signals are on an account, how much pressure a deal is under, how long it's been stale, dollar value, what changes downstream if you act), graph reward, workspace health summary.
 - **Flows in:** workspace health summaries from every deep room; system-health variant from Readiness + Quota Workback; signal heat from Signal Console; deal pressure from Deal Workspace.
 - **Flows out:** one-click routing into whichever room owns the ranked object (with `focusObject`, `returnTo` preserved).
-- **Must never be flattened:** Brief/Spotlight/Queue as distinct modes; the room-browsing rail does not belong center stage; command intelligence must stay reasoned, not decorative.
+- **Must never be flattened:** Brief/Spotlight/Queue as distinct modes; the room-browsing rail does not belong center stage; the Dashboard's ranking must keep showing its reasoning — never reduced to decorative scores.
 
 ### 4.3 Onboarding — Threshold
 
@@ -183,7 +185,7 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 
 ### 4.4 ICP Studio — Decision Bench
 
-- **Purpose:** sharpen one strategic wedge so downstream rooms have real targeting truth to inherit.
+- **Purpose:** sharpen the one definition of who you sell to so every downstream room can work against a real target.
 - **Strategic logic:** the ICP object is the thing being sharpened; it is the central authored surface, not a form output. "Thin means fewer assumptions, fewer personas, fewer use cases." The ICP is the filter that manifests as "ICP Match" scoring on every Account everywhere.
 - **Primitives:** ICP statement, buying-group minimum, focus recommendation, owner/pain/trigger/proof-window inputs, match histogram.
 - **Flows in:** Onboarding activation; founder conviction.
@@ -202,13 +204,13 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 ### 4.6 Sourcing Workbench — Decision Bench
 
 - **Purpose:** turn theses into named, pushable prospects; prevent the territory from sitting as a blank ceiling.
-- **Strategic logic:** a prospect-push engine tied to thesis. Query Cards make platform-specific search reproducible. Research on a prospect converts it into a qualified account. The room's north star is pushing clean prospects forward and *not* polishing them here.
+- **Strategic logic:** a prospect-push engine tied to thesis. Query Cards make platform-specific search reproducible. Research on a prospect converts it into a qualified account. The room is here to push clean prospects forward — not to keep polishing them in place.
 - **Primitives:** query cards (per platform), prospect records, research modal (match/entry-point/approach), pipeline tabs, persona guidance.
 - **Flows in:** Territory Architect (thesis, tier, approach vocabulary).
 - **Flows out:** qualified accounts into Signal Console; push decisions carry thesis + approach context forward.
 - **Must never be flattened:** the discipline that accounts must pass thesis match before they reach Signal Console.
 
-### 4.7 Signal Console — Live Instrument (*named premium asset*)
+### 4.7 Signal Console — Live Instrument (*protected room*)
 
 - **Purpose:** convert signals into ranked motion; the live radar where account heat becomes real work.
 - **Strategic logic:** signals are time-limited events. Heat = signal count × type weight × source credibility × recency decay. Research on a qualified account may justify motion; research without motion is collection theater. Account heat feeds Dashboard command ranking.
@@ -287,7 +289,7 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 
 ### 4.15 PoC Framework — Decision Bench
 
-- **Purpose:** cast one decision-grade proof object so pilots stop becoming optimism theater.
+- **Purpose:** turn one pilot into a piece of evidence the buyer's boss can read and act on, so the pilot becomes something the deal can use instead of background noise.
 - **Strategic logic:** "raw interest is not proof until it can be carried." The room forges four molds — Claim, Owner, Metric, Kill rule — plus linked deal and readout owner. The dark/light split stage visually encodes raw → refined.
 - **Primitives:** linked deal, vendor, account, readout owner, success criteria (pass/fail), boundaries/kill rules, outcome state, duration toggle (7d/14d), proof pack (docs), heat ledger (claim heat / owner heat / kill heat), weakest-mold diagnosis.
 - **Flows in:** deal from Deal Workspace.
@@ -343,7 +345,7 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 ### 4.19 Founding GTM / Handoff Kit — System Ledger
 
 - **Purpose:** be the **living onboarding surface** the first hire opens on day one — the room where the founder's tacit GTM memory becomes a transferable artifact. *Not* an export; the workspace itself is the durable artifact post cloud-sync. The kit's job is **authored opinion + cross-room synthesis**, not aggregation.
-- **Strategic logic:** the export framing was vestigial — cloud sync makes the workspace itself the inheritance vehicle. What the kit DOES is what the workspace cannot: render the founder's hard-won GTM truth as **prescriptive, surprising, specific** content the hire can read top-to-bottom on day one. Specificity comes from authored opinion (not bullet aggregation) and from cross-room reads that no single room could surface alone. The room is the **culmination**, the high point — UI/UX thesis Rule F: handoff-readiness should feel like a north star, and this is where the north star is rendered.
+- **Strategic logic:** the export framing was vestigial — cloud sync makes the workspace itself the inheritance vehicle. What the kit does is what the workspace cannot: render the founder's hard-won GTM understanding as **prescriptive, surprising, specific** content the hire can read top-to-bottom on day one. Specificity comes from authored opinion (not bullet aggregation) and from cross-room reads that no single room could surface alone. The room is the culmination — UI/UX thesis Rule F: getting the workspace ready to hand off should feel like the thing every other room is pointing toward, and this is where that finally happens.
 - **Seven sections (replacing the legacy six):**
   1. **Who hits, who misses, why** — ICPs + closed-won pattern (which ICP × persona × trigger combos actually closed) vs closed-lost pattern. *Surprise:* call out when the operator's stated ICP doesn't match the actual close pattern.
   2. **The rails that worked** — the specific message template + persona + trigger of touches that converted to meetings, ranked by conversion rate. Channel breakdown for THIS workspace. *Surprise:* a "rails-not-yet-tried" callout — channels the operator's ICP-matched accounts haven't been touched on yet.
@@ -368,15 +370,15 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 
 ---
 
-## 5. Named premium assets (protected)
+## 5. Protected rooms
 
-These rooms carry named-asset protection: they may not be genericized, renamed, folded into other rooms, or casualized.
+These rooms get extra protection: they may not be made generic, renamed, folded into other rooms, or watered down.
 
 - **Signal Console**
 - **Future Autopsy**
 - **Discovery Studio** *(by virtue of the 2026-04-10 strict room contract and the five guardian specs)*
 
-A face pass may tighten how these rooms look. A face pass may not reduce what they know.
+A face pass may tighten how these rooms look. It may not reduce what they know.
 
 ---
 
@@ -416,7 +418,7 @@ Antaeus is no longer dark-first. The current direction — confirmed by the visu
 
 **bright · severe · composed · authored · dense but calm**
 
-The interior reads as a premium operating instrument rendered on a bright, quiet field. Not a dark founder-admin shell. Not a generic SaaS pastel. Not a trend-chasing clean-design kit.
+The interior reads as a tool the operator actually trusts, rendered on a bright, quiet field. Not a dark founder-admin shell. Not a generic SaaS pastel. Not a trend-chasing clean-design kit.
 
 ### Bright-only — the dark exception is retired (2026-04-27)
 
@@ -519,7 +521,7 @@ No room invents its own family. If a new room doesn't map cleanly, update this d
 ### 4.5 Diagnosis Table (intervention)
 - **Rooms:** Deal Workspace, Future Autopsy
 - **Feel:** severe, investigative, consequence-aware, corrective
-- **Laws:** first-visible zone exposes pressure fast; risk and truth are legible before long explanation; corrective route is obvious; health language feels like operating truth, not analytics theater
+- **Laws:** first-visible zone shows where the work is decaying fast; risk and what's actually happening are legible before any long explanation; the corrective route is obvious; health language reads like what an honest operator would say, not an analytics dashboard
 - **Avoid:** abstract diagnosis without corrective motion; dramatic narrative copy at the top; boxed warning-board clutter
 
 ### 4.6 System Ledger (synthesis)
@@ -562,7 +564,7 @@ Any surface that does any of these fails:
 - Relies on card accumulation as the main ordering system
 - Uses internal architecture language as visible product copy
 - Uses green, blue, and orange as decorative candy rather than semantic roles
-- Makes the product feel more like a generic dashboard than a premium operating instrument
+- Makes the product feel more like a generic dashboard than a tool the operator actually trusts
 - Achieves calm by erasing pressure
 - Achieves beauty by flattening module substance
 - Rewrites the mind instead of the face
@@ -689,7 +691,7 @@ That means:
 - the app reduces branch decisions wherever possible
 - every page either produces something or routes the user to the thing that will
 
-Least resistance does NOT mean: fewer controls at all costs, oversimplifying serious work, hiding operating truth. It means: less friction to *meaningful* action, less drift into low-value behavior, less room for ambiguous wandering.
+Least resistance does NOT mean: fewer controls at all costs, oversimplifying serious work, or hiding what's actually happening in the motion. It means: less friction to *meaningful* action, less drift into low-value behavior, less room for ambiguous wandering.
 
 ## 3. The seven behavioral design rules
 
@@ -843,6 +845,54 @@ The product's state vocabulary is specific. Use these, not their softer cousins.
 - 6 rooms intentionally get **neither** (Dashboard, Welcome, Onboarding, Settings, Founding GTM, LinkedIn Playbook). Reasons are in the closeout memo.
 
 Future rooms must justify their health treatment through product leverage, not coverage vanity.
+
+---
+
+## 11. Voice — write what you mean, not a word that points at it
+
+This rule governs every sentence in the product, in canon, in audit docs, in PR descriptions, in wireframes, and in conversations with Claude sessions. It works alongside §10 (State language lock) — §10 gives you the verbs and state vocabulary; this gives you the sentence shape that carries them.
+
+**The rule:** stop reaching for a single noun to do the work of a sentence. When the urge to write "the wedge" or "the verdict" or "the move" hits, write the sentence out instead.
+
+- Bad: "That's the wedge."
+- Better: "That's where Antaeus does something Apollo can't."
+- Bad: "Cast a decision-grade proof."
+- Better: "Make the pilot evidence clear enough that the buyer's boss can act on it without you in the room."
+
+**Manifesto fragments are out.** Sentences in series with no subject continuity ("Signals are time-limited. Heat ranks them. Motion comes from the account ledger.") read like a copywriter trying too hard. Write normal sentences with subjects.
+
+**Plainness target.** Write like you would say it out loud to the operator sitting next to you. If a sentence wouldn't sound natural spoken, it's not plain enough yet.
+
+Worked example for an operator-facing summary panel:
+
+- Before:
+  > FIELD READ — Runnable · 71
+  > MAIN RISK: Watch-ring accounts still look too comfortable.
+  > REPLACEMENT PRESSURE: Three cleaner replacements should land this week.
+  > OPERATOR MOVE: Promote only one account from watch ring.
+
+- After:
+  > You're at 71 out of 100.
+  > Two of the accounts you're working are sitting idle — they should probably come off the list.
+  > Three new ones need to land this week to replace them.
+  > Today, promote one of the accounts on your watchlist.
+
+No kickers, no labels, just sentences someone could say out loud.
+
+**What stays.**
+
+- Domain words the product genuinely operates on: account, deal, signal, contact, proof, advisor, call, plus the room names themselves. These aren't invented startup-language; they're what the product is about. They stay — but in prose they need context. "Proof" bare doesn't anchor to anything; "the pilot results" or "what the pilot measured" does.
+- Code identifiers (function names, variable names, file names, CSS class names): `computeHeat`, `topHeat`, `verdictLevel`, `computeFieldRead`, `.lp-read__rule--recovery`. These are programmatic, not user-facing. Renaming them is a giant refactor with no user payoff. New code follows the new voice in UI strings and comments, but existing identifiers stay.
+
+**What needs to go.**
+
+- Single-word abstractions the product invented to feel important: "wedge", "verdict", "pressure score", "decision-grade", "operating truth", "command intelligence", "field read", "loom read", "ingot read", "recovery cue", "output ingot", "required correction", "operator move", "do not use", "main risk", "replacement pressure".
+- Every aphoristic three-sentence-fragment thesis paragraph written in that style.
+- Decorative compound nouns of the form `<adjective>-<noun>` when they're trying to feel like Special Industry Terms™ — "decision-grade proof", "execution-context temperature", "intervention board".
+
+**The test for any sentence.** Read it out loud. If you can't imagine yourself saying it to the operator across the table, it isn't plain enough yet. Rewrite until it sounds like normal speech.
+
+This rule was canonized on 2026-05-19 and applies retroactively across all canon prose, audit docs, UI copy, wireframes, and conversational responses. See the deep-clean sweep landing in branch `claude/voice-deep-clean` for the retroactive application.
 
 ---
 
@@ -1299,15 +1349,15 @@ The Phase 2 closeout gate is the integration walk (2.10): a Playwright test that
 - Not per-room. Rooms are the unit of code; flows are the unit of analysis.
 - Not optional taste. Without the persona + rubric + invariants, the audits are subjective; with them, every finding is testable.
 
-## 8. Closing: the bar
+## 8. Closing: what we're aiming for
 
 Antaeus is not trying to be friendlier, broader, or more generic. It is trying to be:
 
 - more specific
 - more severe
 - more operational
-- more pressure-aware
-- more transfer-ready
+- more aware of where the work is decaying
+- more ready for the founder to hand off
 
 The redesign succeeds when the user thinks:
 - *"I know what this is."*
@@ -1317,4 +1367,4 @@ The redesign succeeds when the user thinks:
 - *"This system sees what is actually happening."*
 - *"This is something my first hire could actually inherit."*
 
-If a change moves the product away from that bar, revert it. If it moves toward it, ship it.
+If a change moves the product away from that, revert it. If it moves toward it, ship it.

@@ -98,7 +98,7 @@ Greenfield rebuild built to spec. All axes pass except B1 (completion screen has
 
 ### 4.4 ICP Studio (Decision Bench) — 19/19
 
-Variant C "Build the wedge on the left. See what it changes on the right." shipped cleanly. All axes pass. Beta-ready.
+Variant C "Build the ICP on the left. See what it changes on the right." shipped cleanly. All axes pass. Beta-ready.
 
 ### 4.5 Territory Architect (Decision Bench) — 19/19
 
@@ -110,7 +110,7 @@ Sentence-shaped thesis "One territory. One ceiling. Real bets." with tier-tinted
 
 ### 4.7 Signal Console (Live Instrument · named premium) — 18/19
 
-Heat-ranked grid + execution-context temperature ladder + workspace-health pulse. AI-selected triptych retroactively recorded (PR #56) closing the named-asset gap. B1 partial: hot-account cards have multiple co-equal CTAs (Open Signal / Compose outbound / Plan call); recommend one primary per card with state-driven choice.
+Heat-ranked grid + account temperature ladder + workspace-health pulse. AI-selected triptych retroactively recorded (PR #56) closing the named-asset gap. B1 partial: hot-account cards have multiple co-equal CTAs (Open Signal / Compose outbound / Plan call); recommend one primary per card with state-driven choice.
 
 ### 4.8 Outbound Studio (Live Instrument) — 19/19
 

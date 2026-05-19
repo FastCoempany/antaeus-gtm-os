@@ -188,16 +188,16 @@ export function summaryText(bag: Bag, key: string, fallback: string): string {
 export function formatCauseLabel(causeId: string): string {
     const label = tx(causeId).replace(/_/g, " ");
     if (!label) return "";
-    if (label === "no nextstep") return "next step missing";
-    if (label === "stale thread") return "thread stale";
-    if (label === "no champion") return "champion missing";
-    if (label === "champion weak") return "champion weak";
-    if (label === "no eb") return "economic buyer missing";
-    if (label === "no process") return "process unclear";
-    if (label === "impact not real") return "impact vague";
-    if (label === "usecase blurry") return "use case blurry";
+    if (label === "no nextstep") return "no next step set";
+    if (label === "stale thread") return "thread has gone stale";
+    if (label === "no champion") return "no champion identified";
+    if (label === "champion weak") return "champion is weak";
+    if (label === "no eb") return "no economic buyer identified";
+    if (label === "no process") return "decision process is unclear";
+    if (label === "impact not real") return "impact still vague";
+    if (label === "usecase blurry") return "use case is blurry";
     if (label === "single threaded") return "single-threaded";
-    if (label === "next step overdue") return "next step overdue";
+    if (label === "next step overdue") return "next step is overdue";
     return label;
 }
 

@@ -22,32 +22,32 @@ No mind drift.
 
 ---
 
-## Structural drift — partial; the loft's distinctive visual signatures are owed
+## Structural drift — partial; the loft's distinctive visual treatment is owed
 
-The Variant 03 wireframe says explicitly: *"This is the most radical option and the least document-like."* A full Switchboard Loft visual rebuild (cables, 3-col jack-grid, decorative connectors) would be 600+ lines. Scope this PR to the **most-distinctive structural pieces** that close the bootstrap-style drift without overscoping.
+The Variant 03 wireframe says explicitly: *"This is the most radical option and the least document-like."* A full visual rebuild of the loft (cables, 3-col jack-grid, decorative connectors) would be 600+ lines. Scope this PR to the most-distinctive structural pieces that close the bootstrap-style drift without overscoping.
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
-| Switchboard Loft wireframe | Shipped (post-evolution) | Justifying evolution |
+| Wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
-| Display-only jacks with static example content | **Editable form inputs** (Switchboard fields) | Phase 4 / Room 6 — operator must type values, not just look at example jacks |
-| Generated send line baked inline with jacks | **OutputPanel separated** as its own column | The generated line + Copy / Log touch / Save angle actions need their own breathing room; integrating them with the jack-grid would crowd both |
+| Display-only jacks with static example content | Editable form inputs (Switchboard fields) | Phase 4 / Room 6 — the operator types values; they don't look at example jacks |
+| Generated send line baked inline with jacks | OutputPanel separated as its own column | The generated line + Copy / Log touch / Save angle actions need their own breathing room; integrating them with the jack-grid would crowd both |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
-| Switchboard Loft wireframe | Shipped | Severity |
+| Wireframe | Shipped | Severity |
 |---|---|---|
-| **3-col loft layout: switch-laws (left) + switch-center (work) + switch-reads (right)** | 2-col `ob-stage` (Switchboard + OutputPanel) — no laws column, no reads column | 🟡 MED — the laws + reads are the loft's interpretive frame. Without them the room reads as a form, not a switchboard. |
-| **Switch-law cards** — left column carries 2 static doctrinal cards: "Input law" ("No send path without a named strain") + "Recovery law" ("Every route keeps a recovery cable on the same board") | Doctrine lives in the generator's behavior, not surfaced in the UI | 🟡 MED — canon §4.8 doctrine should be visible at the input surface |
-| **Switch-read cards** — right column carries 2 dynamic interpretive cards: "Board read" (current rack legibility) + "Operator move" (next-step recommendation) | OutputPanel surfaces the generated line but not the meta-read | 🟡 MED — the operator needs a glanceable "what's connected / what's loose / what to fix first" board read; today they have to infer it |
-| **Tone-colored jacks** — each input renders with a tone-colored micro-label kicker (orange account / blue buyer / green strain / orange proof / red objection) | Switchboard form fields render with a generic kicker; no tone differentiation | 🟢 LOW — visual signature; functional behavior unchanged |
+| 3-col loft layout: doctrinal cards (left) + work area (center) + live reads (right) | 2-col `ob-stage` (Switchboard + OutputPanel) — no doctrinal column, no live-reads column | 🟡 MED — the left and right columns are what tell the operator what's going on; without them the room reads as a form, not a switchboard |
+| Two static doctrinal cards in the left column: "No send path without a named strain" + "Every route keeps a recovery cable on the same board" | Doctrine lives in the generator's behavior, not surfaced in the UI | 🟡 MED — canon §4.8 doctrine should be visible at the input surface |
+| Two live cards in the right column: one names whether the rack is loose / tightening / ready, and one names what to do next based on which input is still loose | OutputPanel surfaces the generated line but not the live read of the rack | 🟡 MED — the operator needs a glanceable read of what's connected and what to fix first; today they have to infer it from the form state |
+| Tone-colored jack micro-labels (orange account / blue buyer / green strain / orange proof / red objection) | Switchboard fields render with a generic kicker; no tone differentiation | 🟢 LOW — small visual detail; functional behavior unchanged |
 
 ### Explicitly deferred (in audit doc, not shipped this PR)
 
 | Element | Why deferred |
 |---|---|
-| **Decorative cables** between jacks (CSS-positioned rotated lines) | Aesthetic flourish without functional value; 200+ lines of positioning math for diminishing return |
-| **3-col jack-grid** inside the center column | Would conflict with shipped Switchboard's form-field semantics; jacks-as-display is a different data model than jacks-as-inputs |
+| Decorative cables between jacks (CSS-positioned rotated lines) | Aesthetic flourish without functional value; 200+ lines of positioning math for diminishing return |
+| 3-col jack-grid inside the center column | Would conflict with the shipped Switchboard's form-field semantics; jacks-as-display is a different data model than jacks-as-inputs |
 
 ---
 
@@ -65,19 +65,21 @@ The Variant 03 wireframe says explicitly: *"This is the most radical option and 
    ob-loft (grid: 200px | 1fr | 200px):
      LEFT:  <SwitchLaws /> — 2 doctrinal cards
      CENTER: <Switchboard /> + <OutputPanel />
-     RIGHT: <SwitchReads /> — 2 derived interpretive cards
+     RIGHT: <SwitchReads /> — 2 live-read cards
    ```
    Drops to single column at 1200px.
 
 2. **`SwitchLaws.tsx` (new)** — 2 static cards:
-   - "Input law": "No send path without a named strain."
-   - "Recovery law": "Every route keeps a recovery cable on the same board."
+   - "No send path without a named strain."
+   - "Every route keeps a recovery cable on the same board."
 
-3. **`SwitchReads.tsx` (new)** — 2 derived cards reading the live rack + generated output:
-   - "Board read": classifies the rack as "Ready", "Tighten", or "Loose" by counting filled inputs.
-   - "Operator move": names the first loose input ("Add an account first" / "Pick a persona" / etc.) or "Ship the line." when ready.
+3. **`SwitchReads.tsx` (new)** — 2 live cards reading the rack + the generated output:
+   - One classifies the rack as "Ready", "Tightening", or "Loose" by counting filled inputs.
+   - One names what to do next — which input is still loose, or "Ship the line." when ready.
 
-4. **Tone-colored kickers** on Switchboard fields — each field's label gets a tone class (`ob-jack__kicker--orange` / `--blue` / `--green`) so the inputs read as a wired switchboard.
+4. **Tone-colored kickers** on Switchboard fields — each label gets a tone class (`ob-jack__kicker--orange` / `--blue` / `--green`) so the inputs read as a wired switchboard.
+
+> Note: code identifiers like `SwitchReads.tsx`, `SwitchLaws.tsx`, `.ob-jack__kicker--*` were named under the old voice and stay as-is per canon Part III §11. New UI copy follows the new voice; the cards read as plain sentences.
 
 ### What this PR does NOT change
 
@@ -88,11 +90,11 @@ The Variant 03 wireframe says explicitly: *"This is the most radical option and 
 
 ---
 
-## Acceptance — Sarah routing a send
+## Acceptance walk — Sarah routing a send
 
-1. Sarah opens `/outbound-studio/`. Eye lands on the **3-col loft**:
-   - Left: 2 doctrinal cards ("No send path without a named strain.")
-   - Center: Switchboard form (5 fields now styled as tone-colored jacks) + OutputPanel
-   - Right: live "Board read" pill (Loose / Tighten / Ready) + "Operator move" copy
-2. As she fills the rack, the right column's reads update live — "Board read: Tighten · Operator move: Add a persona" → eventually "Board read: Ready · Ship the line."
-3. The room now reads as a routed signal board, not a generic form.
+1. Sarah opens `/outbound-studio/`. Her eye lands on the 3-col loft:
+   - Left: 2 doctrinal cards.
+   - Center: Switchboard form (5 fields now styled as tone-colored jacks) + OutputPanel.
+   - Right: live pill naming whether the rack is loose / tightening / ready + line naming what to do next.
+2. As she fills the rack, the right column updates live — "Tightening · Add a persona" → eventually "Ready · Ship the line."
+3. The room now reads as a wired switchboard — laws on one side, work in the middle, live read on the other — not a generic form with a button.

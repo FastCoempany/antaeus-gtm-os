@@ -33,9 +33,9 @@ export function CastPanel(): JSX.Element {
     const [activeDoc, setActiveDoc] = useState<keyof ProofDocs>("scope");
 
     return (
-        <section class="poc-cast" aria-label="Proof cast">
+        <section class="poc-cast" aria-label="The proof, finished">
             <header class="poc-cast__header">
-                <p class="poc-cast__kicker">OUTPUT INGOT</p>
+                <p class="poc-cast__kicker">WHAT THE BUYER'S BOSS WILL SEE</p>
                 <h2 class="poc-cast__title">{quality.title}</h2>
                 <p class="poc-cast__sub">
                     Quality {quality.score}/100 ·{" "}
@@ -44,19 +44,18 @@ export function CastPanel(): JSX.Element {
                     </span>
                 </p>
                 {/*
-                  Program 6 / PR 14 — ingot synthesis line. Per the
-                  picked-winner Variant 03 / Proof Foundry wireframe,
-                  the cast surfaces a single-glance read of which
-                  molds are locked vs hot vs broken so the operator
-                  doesn't have to scan all five rows to know where
-                  the proof actually stands.
+                  Program 6 / PR 14 — one-line read of where the proof
+                  actually stands. Per the picked-winner Variant 03 /
+                  Proof Foundry wireframe, the cast surfaces a single-
+                  glance read so the operator doesn't have to scan all
+                  five rows.
                 */}
-                <p class="poc-cast__ingot-read" aria-label="Ingot read">
+                <p class="poc-cast__ingot-read" aria-label="Where the proof stands">
                     {ingotRead}
                 </p>
             </header>
 
-            <ul class="poc-mold-grid" aria-label="Mold grid">
+            <ul class="poc-mold-grid" aria-label="The five molds">
                 {molds.map((m) => (
                     <li
                         key={m.label}
@@ -69,7 +68,7 @@ export function CastPanel(): JSX.Element {
                 ))}
             </ul>
 
-            <section class="poc-weakest" aria-label="Weakest mold">
+            <section class="poc-weakest" aria-label="The weakest mold and next move">
                 <p class="poc-weakest__kicker">WEAKEST MOLD · NEXT MOVE</p>
                 <p class="poc-weakest__title">{quality.weakest.title}</p>
                 <p class="poc-weakest__copy">{quality.weakest.copy}</p>

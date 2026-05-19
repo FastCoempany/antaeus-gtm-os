@@ -692,7 +692,7 @@ const DISCOVERY_FRAMEWORKS = {
                         move: {
                             label: 'Find the Gap',
                             text: '"\'Fine\' is interesting—it means it\'s not failing, but it\'s not amazing either. What\'s the gap? What would \'great\' look like versus what you have now?"',
-                            subtext: 'You need to find the wedge to displace the incumbent.'
+                            subtext: 'You need to find the scope to displace the incumbent.'
                         },
                         listenFor: [
                             { signal: 'Specific limitation of current tool', action: '🟢 Build your pitch around that gap.' },

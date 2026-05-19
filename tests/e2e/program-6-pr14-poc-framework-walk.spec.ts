@@ -15,7 +15,7 @@ import { test, expect } from "@playwright/test";
  */
 
 test.describe("Program 6 / PR 14 — PoC Framework refacing (Proof Foundry V03)", () => {
-    test("Cast header carries OUTPUT INGOT kicker", async ({ browser }) => {
+    test("Cast header carries the what-the-buyers-boss-will-see kicker", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
@@ -27,7 +27,7 @@ test.describe("Program 6 / PR 14 — PoC Framework refacing (Proof Foundry V03)"
             const kicker = await page
                 .locator(".poc-cast__kicker")
                 .textContent();
-            expect(kicker?.toLowerCase()).toContain("output ingot");
+            expect(kicker?.toLowerCase()).toContain("what the buyer's boss will see");
         } finally {
             await ctx.close();
         }

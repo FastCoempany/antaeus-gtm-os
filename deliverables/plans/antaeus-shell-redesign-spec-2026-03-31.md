@@ -379,7 +379,7 @@ Required changes in demo mode:
 
 ## 7. Top Bar Rules
 
-### 7.1 Every page gets one sentence of operating truth
+### 7.1 Every page gets one sentence of what is actually happening
 
 This sentence should answer:
 
@@ -387,7 +387,7 @@ This sentence should answer:
 
 Examples:
 
-- "Define the wedge the rest of the system should operate from."
+- "Define the ICP the rest of the system should operate from."
 - "Turn account evidence into the next believable motion."
 - "Pressure-test this deal before time does."
 

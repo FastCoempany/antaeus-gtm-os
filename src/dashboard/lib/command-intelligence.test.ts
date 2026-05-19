@@ -26,7 +26,7 @@ const acmeRiskCard: RawCommandCard = {
 };
 
 const coverageMoveCard: RawCommandCard = {
-    title: "Outbound to fintech wedge",
+    title: "Outbound to fintech ICP",
     badge: "Now",
     meta: ["heat 70"],
     actions: [{ label: "Open Signal Console", href: "/signal-console/", roomLabel: "Signal Console" }],
@@ -53,7 +53,7 @@ describe("buildCommandObjects", () => {
         const out = buildCommandObjects(
             input({
                 moveCards: [
-                    { title: "Outbound to fintech wedge" },
+                    { title: "Outbound to fintech ICP" },
                     { title: "Advisor warm intro for Beta Co" },
                     { title: "Tighten next-step lock" }
                 ]

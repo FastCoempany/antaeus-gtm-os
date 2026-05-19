@@ -724,7 +724,7 @@ This framework must explicitly separate proactive resilience modeling from react
 - Supplier network is too simple or too low-risk to justify a dedicated intelligence layer
 - No access to enough supplier or operational data to create a credible system
 - No executive owner for resilience, supplier risk, or procurement transformation
-- Prospect only wants a cosmetic dashboard, not a decision-grade operating layer
+- Prospect only wants a cosmetic dashboard, not a act-on-able operating layer
 - No live trigger, no material downside, and no willingness to change the current review process
 
 ---

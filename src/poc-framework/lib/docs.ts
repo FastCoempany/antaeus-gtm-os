@@ -104,7 +104,7 @@ If the readout owner is not present, the PoC does not count as decision proof.`;
     const kickoff = `POC KICKOFF AGENDA - ${account}
 
 1. Confirm the proof claim.
-"The purpose of this PoC is to prove whether ${vendor} can create a decision-grade outcome for ${account}, not to explore every possible feature."
+"The purpose of this PoC is to prove whether ${vendor} can produce an outcome ${account}'s decision-makers can act on, not to explore every possible feature."
 
 2. Confirm the success criteria.
 ${success}
@@ -145,7 +145,7 @@ Hi team,
 
 Here is the proposed ${drft.durationDays}-day PoC structure for ${vendor} and ${account}.
 
-The goal is not to run an open-ended trial. The goal is to produce decision-grade proof against the criteria below:
+The goal is not to run an open-ended trial. The goal is to produce evidence the buyer's boss can act on, against the criteria below:
 
 ${success}
 

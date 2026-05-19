@@ -134,7 +134,7 @@ Antaeus should look like:
 
 The key phrase is:
 
-**premium operating instrument**
+**tool the operator actually uses**
 
 Not:
 
@@ -816,4 +816,4 @@ The visual identity truth was not.
 
 This memo corrects that.
 
-Antaeus is now locked to move toward a bright, high-conviction, semantically structured, behaviorally disciplined visual identity that feels like a premium operating instrument, not a dressed-up version of the old app shell.
+Antaeus is now locked to move toward a bright, high-conviction, semantically structured, behaviorally disciplined visual identity that feels like a tool the operator actually uses, not a dressed-up version of the old app shell.

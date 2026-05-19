@@ -3,7 +3,7 @@
 Date: 2026-03-22
 
 ## Objective
-Replace anecdotal debugging with product-native telemetry so launch decisions can be based on operating truth instead of memory, console luck, or manually reproduced failures.
+Replace anecdotal debugging with product-native telemetry so launch decisions can be based on what is actually happening instead of memory, console luck, or manually reproduced failures.
 
 ## Why This Phase Ran Now
 Phases 13-17 hardened:

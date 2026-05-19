@@ -177,8 +177,8 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "ICP Studio",
         href: "/icp-studio/",
         family: "decision-bench",
-        keywords: ["wedge", "persona", "fit", "targeting"],
-        description: "Sharpen one strategic wedge — the ICP every room inherits."
+        keywords: ["icp", "persona", "fit", "targeting"],
+        description: "Sharpen the ICP every room inherits."
     },
     {
         id: "territory-architect",
@@ -205,7 +205,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/poc-framework/",
         family: "decision-bench",
         keywords: ["proof", "claim", "kill-rule", "metric"],
-        description: "Cast one decision-grade proof — claim / owner / metric / kill."
+        description: "Turn a pilot into something the buyer's boss can act on — claim, owner, metric, kill rule."
     },
 
     // ── Diagnosis Table ──────────────────────────────────────────

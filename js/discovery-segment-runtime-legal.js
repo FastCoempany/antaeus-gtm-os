@@ -165,7 +165,7 @@
             jumpNode("Map the human loop", "proof-threshold", "human-loop", "blu")
           ],"Risk is the first objection, not the whole objection.","You still need the safest workflow boundary.")
         ]),
-        node("opening-frame","workflow-wedge","fu","Start from one workflow","\"Pick one workflow that still drags more than it should. Which path would the GC or legal ops owner fix first if they could?\"","Use this when the room is already operational.",false,[
+        node("opening-frame","workflow-scope","fu","Start from one workflow","\"Pick one workflow that still drags more than it should. Which path would the GC or legal ops owner fix first if they could?\"","Use this when the room is already operational.",false,[
           branch("WORKFLOW READY","ok","\"Commercial contracts and redlines are the obvious one.\"","\"What part of that workflow still burns the most expensive time: first pass, fallback review, turnaround, or approvals?\"",[
             jumpNode("Map the workflow break", "current-state-truth", "workflow-break", "grn"),
             jumpNode("Name the cycle-time pain", "pain-and-consequence", "cycle-time", "blu")
@@ -223,11 +223,11 @@
           branch("SPEND CLEAR","ok","\"We send too much repetitive work out because the internal team cannot absorb it cleanly.\"","\"What kind of work should stay inside if the workflow were more controlled?\"",[
             jumpNode("Inspect outside counsel status quo", "current-vendor-and-displacement", "outside-counsel-status-quo", "grn"),
             jumpNode("Lock the scoped review", "next-step-lock", "scoped-review", "blu")
-          ],"Outside counsel spend is a real wedge.","You still need the workflow class that drives it."),
+          ],"Outside counsel spend is a real scope.","You still need the workflow class that drives it."),
           branch("NOT MATERIAL","fl","\"Outside counsel is not the main issue here.\"","\"Understood. Then stay with internal burden. Where is the repetitive work still slowing your own team down?\"",[
             jumpNode("Return to lawyer burden", "pain-and-consequence", "lawyer-time", "red"),
             jumpNode("Return to workflow break", "current-state-truth", "workflow-break", "blu")
-          ],"Spend is not the primary wedge.","You still need the internal burden that is.")
+          ],"Spend is not the primary scope.","You still need the internal burden that is.")
         ])
       ]),
       segment("trigger-and-urgency","04","Trigger and urgency","Find the forcing event.",true,[

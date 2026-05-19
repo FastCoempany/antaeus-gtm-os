@@ -130,17 +130,17 @@ export function DeskBoard(): JSX.Element {
                     </h1>
                     <p class="ad-desk__note">{desktopNote}</p>
                 </div>
-                <aside class="ad-desk__read" aria-label="Spend read">
+                <aside class="ad-desk__read" aria-label="Is the ask ready">
                     <div class="ad-desk__read-top">
                         <div>
-                            <p class="ad-desk__read-kicker">SPEND READ</p>
+                            <p class="ad-desk__read-kicker">IS THE ASK READY</p>
                             <h3 class="ad-desk__read-band">
                                 {spend.bandLabel}
                             </h3>
                         </div>
                         <p
                             class={`ad-desk__read-score ad-desk__read-score--${spend.band}`}
-                            aria-label={`Spend read score ${spend.score}`}
+                            aria-label={`Ask-ready score ${spend.score}`}
                         >
                             {spend.score}
                         </p>
@@ -267,10 +267,10 @@ export function DeskBoard(): JSX.Element {
                     {doNotUse ? (
                         <article
                             class={`ad-rolodex__antitab ad-rolodex__antitab--${doNotUse.cost}`}
-                            aria-label="Do not use this carrier"
+                            aria-label="Don't use this carrier yet"
                         >
                             <p class="ad-rolodex__antitab-kicker">
-                                DO NOT USE
+                                DON'T USE YET
                             </p>
                             <h3>{doNotUse.advisor.name}</h3>
                             <p>{doNotUse.reason}</p>

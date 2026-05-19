@@ -79,7 +79,7 @@ export const THREADS: ReadonlyArray<Thread> = [
         label: "Pressure thread",
         verb: "tighten",
         color: "var(--cc-green)",
-        title: "Make the reason operational.",
+        title: "Make the reason concrete.",
         copy: "The call turns when the buyer hears their world, not your category.",
         say: "The reason I called is that [pressure] usually shows up as wasted time, unclear ownership, or delayed revenue before it shows up as a tool problem. Which of those is closest?",
         coach: "Force a concrete lane. Do not ask a big discovery question yet.",

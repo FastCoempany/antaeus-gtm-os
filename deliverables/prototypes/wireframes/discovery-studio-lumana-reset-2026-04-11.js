@@ -68,7 +68,7 @@
       nextRoom:'Deal Workspace or Future Autopsy',
       prompt:'The rep is proving whether the pipeline is real enough to trust.',
       differentiators:[
-        'Turns vague pipeline talk into operating truth',
+        'Turns vague pipeline talk into picture of what's happening',
         'Keeps every move tied to a live deal',
         'Routes quickly into deal pressure if the buyer gets specific'
       ],
@@ -111,7 +111,7 @@
       target:'Real-time external data, retrieval, and platform fit',
       platform:'Search APIs, news feeds, internal retrieval layers',
       pain:'Teams say they need live data but can’t define what “live” changes',
-      why:'Need to know whether this is infrastructure, feature fuel, or a platform wedge',
+      why:'Need to know whether this is infrastructure, feature fuel, or a platform ICP',
       proof:'One production use case with freshness requirement and owner',
       nextRoom:'Call Planner or Deal Workspace',
       prompt:'The rep is finding the real production dependency on external data.',
@@ -228,7 +228,7 @@
       name:'AI-Native Buyer Discovery Framework',
       short:'AI-Native',
       persona:'Founding GTM lead',
-      target:'Product wedge, workflow insertion, and proof burden',
+      target:'Product ICP, workflow insertion, and proof burden',
       platform:'Agent, assistant, workflow layer, or API stack',
       pain:'The buyer likes the concept but the insertion point is still fuzzy',
       why:'Need to learn where the product becomes indispensable rather than interesting',
@@ -311,7 +311,7 @@
       ],
       'post-call-routing':[
         { tag:'CALL PLANNER', cls:'ok', say:'“Next call needs to force the real question.”', move:'“Route this to Call Planner with the missing truth and the decision owner.”', jumps:[['→ Call Planner handoff','#route-call-planner','grn']]},
-        { tag:'DEAL PRESSURE', cls:'ly', say:'“There is already a live evaluation or deal around this.”', move:'“Route this to Deal Workspace so the operating truth stays attached to the deal.”', jumps:[['→ Deal Workspace handoff','#route-deal-workspace','org']]},
+        { tag:'DEAL PRESSURE', cls:'ly', say:'“There is already a live evaluation or deal around this.”', move:'“Route this to Deal Workspace so the picture of what's happening stays attached to the deal.”', jumps:[['→ Deal Workspace handoff','#route-deal-workspace','org']]},
         { tag:'AUTOPSY', cls:'fl', say:'“This smells like drift or decorative activity.”', move:'“Route this to Future Autopsy so the failure pattern gets named before the deal ages out.”', jumps:[['→ Future Autopsy handoff','#route-future-autopsy','red']]}
       ]
     };
@@ -686,7 +686,7 @@
       </div>
       <div class="quick-grid" style="margin-top:12px">
         <div class="qcard" id="route-call-planner"><h4>Call Planner</h4><p>Use when the next conversation needs a forced question and a tighter owner path.</p></div>
-        <div class="qcard" id="route-deal-workspace"><h4>Deal Workspace</h4><p>Use when a live deal already exists and the operating truth has to stay attached to that deal.</p></div>
+        <div class="qcard" id="route-deal-workspace"><h4>Deal Workspace</h4><p>Use when a live deal already exists and the picture of what's happening has to stay attached to that deal.</p></div>
         <div class="qcard" id="route-future-autopsy"><h4>Future Autopsy</h4><p>Use when the signal smells like decorative motion, drift, or late-stage failure risk.</p></div>
       </div>
     `;

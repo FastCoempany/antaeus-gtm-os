@@ -155,7 +155,7 @@
         playbook.fields = playbook.fields || {};
         playbook.fields['market-who'] = icpLine;
         playbook.fields['market-segment'] = 'Mid-market software';
-        playbook.fields['market-wedge'] = 'Teams with 5-20 quota carriers';
+        playbook.fields['market-scope'] = 'Teams with 5-20 quota carriers';
         playbook.fields['motion-channel'] = 'Email + LinkedIn + phone';
         playbook.fields['disco-patterns'] = 'Champion-led opportunities close faster than committee-led deals.';
         playbook.fields['win-patterns'] = 'Deals move when there is a quantified cost of delay and a weekly owner.';

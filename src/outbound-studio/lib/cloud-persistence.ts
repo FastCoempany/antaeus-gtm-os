@@ -35,7 +35,7 @@ import {
  * The Outbound ANGLES library (saved value props) stays in localStorage
  * — angles are operator-personal templates, not cross-device shared
  * data. Touches are the cross-device-relevant data because Phase 4 /
- * Rooms 3 + 4 read them for execution-context temperature.
+ * Rooms 3 + 4 read them for account temperature (ice cold → cool → warm → hot).
  */
 
 let clientRef: DataClient | null = null;

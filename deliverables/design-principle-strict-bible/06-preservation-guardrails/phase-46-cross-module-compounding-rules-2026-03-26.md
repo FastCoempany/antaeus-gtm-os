@@ -175,7 +175,7 @@ When multiple suggestions are possible, rank them in this order:
 
 1. unblock a missing prerequisite
 2. rescue a live deal
-3. create the next piece of operating truth
+3. create the next piece of what is actually happening
 4. deepen planning or synthesis
 
 That keeps the app from recommending nice-to-have work ahead of urgent real work.

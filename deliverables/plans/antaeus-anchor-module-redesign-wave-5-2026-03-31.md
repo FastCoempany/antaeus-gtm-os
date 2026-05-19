@@ -95,7 +95,7 @@ Wave 5 completes the anchor-family redesign sweep across the app’s synthesis s
 The top of each module now answers:
 
 - what this surface is for
-- what the current operating truth is
+- what the current what is actually happening is
 - what the next move should be
 
 before the user drops into the deeper local mechanics.
