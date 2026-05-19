@@ -20,7 +20,7 @@ import { saveTouch } from "../lib/cloud-persistence";
  * Per canon §4.8: "every route keeps a recovery cable on the same
  * board." Touches log to `gtmos_outbound_touches` (consumed by Phase
  * 4 / Rooms 3 + 4); operator can update outcomes inline so
- * Signal Console's execution-context temperature stays accurate.
+ * Signal Console's account temperature (ice cold → cool → warm → hot) stays accurate.
  *
  * When the rack has an account set, the log strictly filters to that
  * account — empty state shows if the account has no touches yet, so

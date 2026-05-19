@@ -150,7 +150,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 ## Room: Signal Console (Live Instrument · protected room)
 
 - **Picked artifact:** **NO TRIPTYCH IN ARCHIVE.** Notable gap given Signal Console is a protected room (canon §5).
-- **AI pick (no historical reference):** the room is a Live Instrument operating on Account+Signal sacred nouns. The shape that fits: **"Heat-ranked account grid + execution-context temperature ladder + workspace-health pulse"** — which is what shipped. AI confirms this as the de facto pick since no formal exploration exists.
+- **AI pick (no historical reference):** the room is a Live Instrument operating on Account+Signal sacred nouns. The shape that fits: **"Heat-ranked account grid + account temperature ladder + workspace-health pulse"** — which is what shipped. AI confirms this as the de facto pick since no formal exploration exists.
 - **Shipped (`src/signal-console/`):** `sc-grid` (account cards) + `sc-add-form` (manual add) + `sc-card__metric` + execution-context chips. Bright Live Instrument.
 - **Verdict:** **match (de facto).** Implementation follows canon §4.7 mind. The lack of a historical triptych means we can't compare against a founder pick — but the shipped shape is rubric-defensible.
 - **Punch list:**

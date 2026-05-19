@@ -8,7 +8,7 @@ Accepted.
 - `Pressure + stability scoring`
 - `Evidence-aware ranking expansion`
 - `Room-fed ranking inputs`
-- health-fed command intelligence after workspace-health closeout
+- health-fed command ranking after workspace-health closeout
 
 ## Acceptance checks
 
@@ -47,7 +47,7 @@ Passed.
 
 What was verified:
 - Dashboard inline scripts parse cleanly
-- command intelligence builds and ranks without breaking
+- command ranking builds and ranks without breaking
 - `Inspect`
 - room entry
 - return path

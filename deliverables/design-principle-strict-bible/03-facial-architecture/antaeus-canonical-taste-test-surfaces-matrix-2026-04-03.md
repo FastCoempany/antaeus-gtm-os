@@ -80,7 +80,7 @@ What it must not lose:
 - Brief / Spotlight / Queue
 - sheet path
 - graph reward
-- command intelligence
+- command ranking
 
 ### Surface 3: Signal Console
 

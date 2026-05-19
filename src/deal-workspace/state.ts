@@ -9,7 +9,7 @@ import {
  * Deal Workspace — runtime state.
  *
  * Per canon §4.13, the room's primitives are:
- *   - intervention board (dealGrid)
+ *   - the board where deals you should step into get surfaced (dealGrid)
  *   - 9-field deal-health modal
  *   - recovery queue panel
  *   - deal-health panel
@@ -92,7 +92,7 @@ export const lossReasonTarget: Signal<{
 
 export type DealFilter = "all" | "at-risk" | "stalled" | "this-quarter";
 
-/** Active filter for the intervention board. */
+/** Active filter for the recovery-queue board. */
 export const dealFilter: Signal<DealFilter> = signal("all");
 
 // ─── Target folio state (Phase 2 rework, variant-B "Intervention Desk") ─

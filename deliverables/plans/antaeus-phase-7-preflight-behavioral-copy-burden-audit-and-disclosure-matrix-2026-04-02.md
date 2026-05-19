@@ -60,7 +60,7 @@ Earlier phases let us:
 - preserve room-entry continuity
 - align the room family
 - demote the old nav without deleting it
-- harden command intelligence
+- harden command ranking
 
 Phase 7 is different because it changes the shell itself. That means it is the exact phase where the following failures become likely if not explicitly forbidden:
 

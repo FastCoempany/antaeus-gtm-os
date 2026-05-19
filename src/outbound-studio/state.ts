@@ -129,7 +129,7 @@ export function appendAngle(angle: Angle): void {
 /**
  * Log a touch from the current rack — freezes the generator output,
  * appends to allTouches (which Phase 4 / Rooms 3 + 4 read for
- * execution-context temperature), persists to localStorage on the
+ * account temperature (ice cold → cool → warm → hot)), persists to localStorage on the
  * next effect tick.
  */
 export function logTouchFromRack(now: number = Date.now()): Touch | null {

@@ -18,7 +18,7 @@ This is a ranking-quality wave, not a shell wave and not a methodology rewrite.
 ## Why now
 The restructure program is complete enough that the next leverage point is ranking quality.
 
-Current command intelligence is functional and explainable, but it still has first-pass limitations:
+Current command ranking is functional and explainable, but it still has first-pass limitations:
 
 - pressure signals are relatively shallow
 - ranking can shift too easily when nearby objects are close
