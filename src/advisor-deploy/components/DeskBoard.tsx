@@ -20,6 +20,7 @@ import { getCooldownStatus } from "../lib/cooldown";
 import { buildAsk, dealPressure } from "../lib/ask-builder";
 import { computeSpendRead } from "../lib/score";
 import { saveDeployment } from "../lib/cloud-persistence";
+import { findDoNotUseCandidate } from "../lib/deploy-cost";
 import type { MomentId } from "../lib/types";
 
 /**
@@ -106,6 +107,18 @@ export function DeskBoard(): JSX.Element {
             return bExact - aExact;
         })
         .slice(0, 4);
+
+    // Program 6 / PR 15 — "Do not use" anti-tab. Per the picked-winner
+    // Backchannel Desk wireframe, the rolodex surfaces an advisor that
+    // would be the WRONG carrier for the current ask (canon §4.16:
+    // "Trust is spent, not spent"). Skipped if no cost-flagged advisor
+    // exists in the registry — the anti-tab is a discipline cue, not a
+    // permanent fixture.
+    const doNotUse = findDoNotUseCandidate(
+        allAdvisors,
+        desk.value.momentId,
+        advisor?.id ?? null
+    );
 
     return (
         <section class="ad-desk" aria-labelledby="adDeskTitle">
@@ -251,6 +264,18 @@ export function DeskBoard(): JSX.Element {
                             );
                         })
                     )}
+                    {doNotUse ? (
+                        <article
+                            class={`ad-rolodex__antitab ad-rolodex__antitab--${doNotUse.cost}`}
+                            aria-label="Do not use this carrier"
+                        >
+                            <p class="ad-rolodex__antitab-kicker">
+                                DO NOT USE
+                            </p>
+                            <h3>{doNotUse.advisor.name}</h3>
+                            <p>{doNotUse.reason}</p>
+                        </article>
+                    ) : null}
                 </div>
 
                 <article class="ad-asksheet" aria-label="Forwardable note">
