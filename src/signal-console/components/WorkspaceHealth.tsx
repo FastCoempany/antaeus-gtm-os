@@ -35,12 +35,18 @@ export function WorkspaceHealth(): JSX.Element | null {
                 <span class="sc-health__value">{snapshot.accountCount}</span>
             </div>
             <div class="sc-health__cell">
-                <span class="sc-health__label">Total signals</span>
-                <span class="sc-health__value">{snapshot.signalCount}</span>
-            </div>
-            <div class="sc-health__cell">
-                <span class="sc-health__label">Ready (heat ≥75)</span>
+                <span class="sc-health__label">Hot ≥ 75</span>
                 <span class="sc-health__value">{snapshot.readyCount}</span>
+            </div>
+            {/*
+              Program 6 / PR 16 — Top heat cell per the picked-winner
+              Variant 01 wireframe's 4-cell posture row. The max heat
+              score is a single-glance pressure read; the previous
+              "Total signals" was inventory, not pressure.
+            */}
+            <div class="sc-health__cell">
+                <span class="sc-health__label">Top heat</span>
+                <span class="sc-health__value">{snapshot.topHeat}</span>
             </div>
         </aside>
     );

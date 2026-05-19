@@ -86,7 +86,22 @@ button {
     color: var(--sc-ink);
 }
 
-/* .sc-topbar__sub retired — design-documentation copy removed. */
+/*
+ * Program 6 / PR 16 — Topbar thesis line (Signal Console V01).
+ *
+ * Italic one-sentence mental-model line beneath the H1. Replaces
+ * the retired sc-topbar__sub which was design-documentation; this
+ * compressed line is the operator's mental model, kept tight per
+ * canon Part III §9 copy-burden discipline.
+ */
+.sc-topbar__thesis {
+    margin: 10px 0 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--sc-ink-70);
+    font-style: italic;
+    max-width: 60ch;
+}
 
 /* ─── Grid controls ────────────────────────────────────────────────── */
 
