@@ -84,7 +84,7 @@ test.describe("Program 6 / PR 15 — Advisor Deploy refacing (Backchannel Desk V
             const kicker = await page
                 .locator(".ad-rolodex__antitab-kicker")
                 .textContent();
-            expect(kicker?.toLowerCase()).toContain("do not use");
+            expect(kicker?.toLowerCase()).toContain("don't use yet");
         } finally {
             await ctx.close();
         }

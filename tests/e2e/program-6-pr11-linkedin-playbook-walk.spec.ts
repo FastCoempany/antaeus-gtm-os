@@ -16,7 +16,7 @@ import { test, expect } from "@playwright/test";
  */
 
 test.describe("Program 6 / PR 11 — LinkedIn Playbook refacing (Cue Booth V02)", () => {
-    test("Booth-read shows a Recovery cue rule with the recovery variant", async ({
+    test("Booth-read shows an if-they-push-back rule with the recovery variant", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -31,14 +31,14 @@ test.describe("Program 6 / PR 11 — LinkedIn Playbook refacing (Cue Booth V02)"
             await expect(recovery).toBeAttached();
             await expect(
                 recovery.locator(".lp-read__rule-kicker")
-            ).toContainText(/recovery cue/i);
+            ).toContainText(/if they push back/i);
             await expect(recovery.locator("strong")).toBeAttached();
         } finally {
             await ctx.close();
         }
     });
 
-    test("Booth-read rule order: Current cue → Recovery cue → One-session win → Channel standard", async ({
+    test("Booth-read rule order: Current cue → If they push back → One-session win → Channel standard", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -55,7 +55,7 @@ test.describe("Program 6 / PR 11 — LinkedIn Playbook refacing (Cue Booth V02)"
             const lower = kickers.map((k) => k.trim().toLowerCase());
 
             const currentIdx = lower.indexOf("current cue");
-            const recoveryIdx = lower.indexOf("recovery cue");
+            const recoveryIdx = lower.indexOf("if they push back");
             const oneSessionIdx = lower.indexOf("one-session win");
             const channelIdx = lower.indexOf("channel standard");
 

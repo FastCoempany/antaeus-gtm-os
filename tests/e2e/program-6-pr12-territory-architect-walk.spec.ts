@@ -16,7 +16,7 @@ import { test, expect } from "@playwright/test";
  */
 
 test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field V02)", () => {
-    test("Hero is a 2-col grid: lead + Field Read aside", async ({
+    test("Hero is a 2-col grid: lead + where-the-territory-stands aside", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -35,7 +35,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("Field Read aside surfaces score + band + 3 interpretive lines", async ({
+    test("Where-the-territory-stands aside surfaces score + band + 3 interpretive lines", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -53,9 +53,9 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
                 .locator(".ta-field-read__line-label")
                 .allTextContents();
             const lower = labels.map((l) => l.trim().toLowerCase());
-            expect(lower).toContain("main risk");
-            expect(lower).toContain("replacement pressure");
-            expect(lower).toContain("operator move");
+            expect(lower).toContain("what's loose right now");
+            expect(lower).toContain("what to backfill");
+            expect(lower).toContain("next move");
         } finally {
             await ctx.close();
         }
@@ -93,7 +93,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("Field Read updates after a thesis is saved", async ({
+    test("The territory read updates after a thesis is saved", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -125,7 +125,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
             // priority chain advances to single-thesis monoculture.
             const risk = await page
                 .locator(".ta-field-read__line")
-                .filter({ hasText: /main risk/i })
+                .filter({ hasText: /what's loose right now/i })
                 .locator(".ta-field-read__line-copy")
                 .textContent();
             expect(risk?.toLowerCase()).not.toContain("no theses");
@@ -135,7 +135,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("Operator move line carries the orange-accent variant", async ({
+    test("Next-move line carries the orange-accent variant", async ({
         browser
     }) => {
         const ctx = await browser.newContext();

@@ -192,8 +192,8 @@ describe("deriveMotion — branch precedence", () => {
     });
 });
 
-describe("deriveMotion — recovery cue (Program 6 / PR 11)", () => {
-    it("credibility motion carries a recovery cue copy", () => {
+describe("deriveMotion — recovery line (Program 6 / PR 11)", () => {
+    it("credibility motion carries a recovery-line copy", () => {
         const m = deriveMotion(baseCtx);
         expect(m.recovery).toBeTruthy();
         expect(m.recovery.toLowerCase()).toContain("narrower");

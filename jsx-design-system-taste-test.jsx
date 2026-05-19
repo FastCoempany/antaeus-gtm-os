@@ -269,7 +269,7 @@ const SCENARIOS = {
       fallback: "Draft first motion",
       gaps: ["Angle not locked", "Primary owner unclear", "Channel not chosen"],
       next: "Once the angle tightens, the next loop becomes channel choice across outbound, LinkedIn, or cold call.",
-      connections: ["ICP: Healthcare IT wedge", "Motion: unsent", "Call path: undefined", "Territory: strong fit"],
+      connections: ["ICP: Healthcare IT ICP", "Motion: unsent", "Call path: undefined", "Territory: strong fit"],
       lenses: ["Overview", "Signals", "Outbound", "LinkedIn", "Cold Call"],
     },
     {
@@ -279,12 +279,12 @@ const SCENARIOS = {
       state: "healthy",
       metric: "84",
       metricLabel: "quality score",
-      title: "Healthcare IT wedge",
-      brief: "The wedge is real enough to drive sourcing and territory, but geography and trigger language can still sharpen before scale.",
+      title: "Healthcare IT ICP",
+      brief: "The ICP is real enough to drive sourcing and territory, but geography and trigger language can still sharpen before scale.",
       primary: "Refine ICP",
       fallback: "Map accounts",
       gaps: ["Geography still broad", "Trigger phrasing still generic"],
-      next: "A tighter wedge raises the credibility of every downstream account, motion, and discovery conversation.",
+      next: "A tighter ICP raises the credibility of every downstream account, motion, and discovery conversation.",
       connections: ["Territory: seeded", "Sourcing: live", "Accounts mapped: 16", "Readiness: benefiting"],
       lenses: ["Definition", "Territory", "Sourcing"],
     },
@@ -997,7 +997,7 @@ function renderSection(name, context) {
   if (name === "Command Surface") {
     return (
       <>
-        <SectionHeader eyebrow="Command" title="Brief, Grid, and Queue are three densities of the same operating truth." copy="The user should never wonder what to do next. The command surface ranks pressure and offers one dominant move while keeping the object identity intact." />
+        <SectionHeader eyebrow="Command" title="Brief, Grid, and Queue are three densities of the same picture of what's happening." copy="The user should never wonder what to do next. The command surface ranks pressure and offers one dominant move while keeping the object identity intact." />
         <Surface radius={PRIMITIVE.radius.surfaceLg} shadow={PRIMITIVE.shadow.lg} padding={PRIMITIVE.space[6]}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: PRIMITIVE.space[4], flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ display: "grid", gap: PRIMITIVE.space[2] }}>

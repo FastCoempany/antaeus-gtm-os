@@ -155,14 +155,14 @@ export function CueBooth(): JSX.Element {
                         <strong>{cue.name}</strong>
                     </div>
                     {/*
-                      Program 6 / PR 11 — Recovery cue rule. Per the
-                      picked-winner Variant 02 / Cue Booth wireframe
-                      (line 713) the rep needs a "what to do when
-                      corrected" rule alongside Current cue. Maps to
+                      Program 6 / PR 11 — what to do if they push back.
+                      Per the picked-winner Variant 02 / Cue Booth
+                      wireframe (line 713) the rep needs a recovery
+                      line alongside the current-cue rule. Maps to
                       canon §4.8 recovery principle.
                     */}
                     <div class="lp-read__rule lp-read__rule--recovery">
-                        <p class="lp-read__rule-kicker">Recovery cue</p>
+                        <p class="lp-read__rule-kicker">If they push back</p>
                         <strong>{motion.recovery}</strong>
                     </div>
                     <div class="lp-read__rule">

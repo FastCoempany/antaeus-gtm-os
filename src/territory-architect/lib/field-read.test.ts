@@ -145,7 +145,7 @@ describe("computeFieldRead — next-move priority chain", () => {
     });
 });
 
-describe("computeFieldRead — main risk priority chain", () => {
+describe("computeFieldRead — what-is-loose priority chain", () => {
     it("flags single-thesis monoculture", () => {
         const r = computeFieldRead({
             accounts: [account("a-1", "active")],
