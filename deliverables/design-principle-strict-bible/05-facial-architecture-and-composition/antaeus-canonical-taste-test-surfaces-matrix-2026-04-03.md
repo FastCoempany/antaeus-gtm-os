@@ -225,7 +225,7 @@ Every variant must answer:
 4. how much box structure is actually necessary
 5. how much shell is actually necessary
 6. what can disappear without harming substance
-7. does this feel like a premium operating instrument
+7. does this feel like a tool the operator actually uses
 
 ---
 

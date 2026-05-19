@@ -151,7 +151,7 @@ Its job is not to store customer records.
 
 Its job is to:
 
-- turn fuzzy founder motion into visible operating truth
+- turn fuzzy founder motion into visible what is actually happening
 - surface the next commercially important action
 - pressure-test deals before they rot
 - turn proof, signals, discovery, and handoff into one compounding system
@@ -189,7 +189,7 @@ Define:
 Current strongest territory:
 
 - severe clarity
-- operating truth
+- what is actually happening
 - founder honesty
 - handoff readiness
 - pressure over vanity
@@ -614,7 +614,7 @@ Founder input needed:
 
 - the core premise that this is not a CRM
 - the module families themselves
-- the emphasis on handoff, pressure, proof, and operating truth
+- the emphasis on handoff, pressure, proof, and what is actually happening
 - the dark, serious, command-surface character of the app interior
 
 ---

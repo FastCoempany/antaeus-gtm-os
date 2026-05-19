@@ -37,7 +37,7 @@ It should **not** be designed as:
 
 The center of gravity should stay:
 
-- shared operating truth
+- shared what is actually happening
 
 with:
 
@@ -142,7 +142,7 @@ Restrictions:
 - cannot change seat model or account-level admin settings
 
 Important note:
-Core operators should be able to change real operating truth.
+Core operators should be able to change real what is actually happening.
 
 Antaeus should not cripple the first AE into read-only mode.
 
@@ -215,7 +215,7 @@ Advisor access should be packet-based and scoped, not “here is a full seat.”
 ### Core Operator
 - execution authority
 - should not be blocked from doing real work
-- should be trusted with live operating truth
+- should be trusted with live what is actually happening
 
 ### Advisor
 - contextual guest
@@ -246,7 +246,7 @@ These should be workspace-shared:
 
 Why:
 
-- these are operating truth
+- these are what is actually happening
 - the system should feel like one team workspace
 
 ### Personal until explicitly saved
@@ -405,7 +405,7 @@ Use a workspace-first model with:
 - workspace admin
 - advisor guest
 
-Keep operating truth shared.
+Keep what is actually happening shared.
 Keep personal overlays light.
 Keep advisor access scoped.
 

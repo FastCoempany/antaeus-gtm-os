@@ -35,7 +35,7 @@ Dashboard now supports three explicit command modes:
 - `Grid`
 - `Queue`
 
-Those modes all read the same operating truth, but with different behavioral jobs:
+Those modes all read the same what is actually happening, but with different behavioral jobs:
 
 ### Brief
 

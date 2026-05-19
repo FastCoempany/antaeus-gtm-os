@@ -52,7 +52,7 @@ If accepted, this becomes the truth layer that governs:
 
 ### Core product sentence
 
-Antaeus turns founder-led revenue motion into visible operating truth before the first serious go-to-market hire inherits it.
+Antaeus turns founder-led revenue motion into visible what is actually happening before the first serious go-to-market hire inherits it.
 
 ### Beta-era product sentence
 
@@ -165,7 +165,7 @@ Avoid:
 
 ### Brand vocabulary to prefer
 
-- operating truth
+- what is actually happening
 - next move
 - pressure
 - handoff
@@ -276,7 +276,7 @@ The interior should feel:
 - authored
 - dense but calm
 
-Antaeus is no longer dark-first. The interior reads as a premium operating instrument on a bright, quiet field — not a dark founder-admin shell. Dark panels appear only where they earn their weight as inset evidence or focus surfaces, never as the default page fill.
+Antaeus is no longer dark-first. The interior reads as a tool the operator actually uses on a bright, quiet field — not a dark founder-admin shell. Dark panels appear only where they earn their weight as inset evidence or focus surfaces, never as the default page fill.
 
 ### Page and surface
 

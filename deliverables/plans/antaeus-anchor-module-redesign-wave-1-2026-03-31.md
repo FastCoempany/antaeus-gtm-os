@@ -50,7 +50,7 @@ The goal is not cosmetic polish. The goal is to make each page answer:
 
 - Added a new top operating board so the user sees the decision outcome before the long builder.
 - The top of the page now shows:
-  - the current wedge statement
+  - the current ICP statement
   - quality state
   - next consequence
   - sharp vs broad contrast

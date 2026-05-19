@@ -130,7 +130,7 @@ Decision:
 
 Specific burden risks:
 - legends and recommendation explanation in `Signal Console`
-- wedge/thesis explanation in `ICP Studio` and `Territory Architect`
+- ICP/thesis explanation in `ICP Studio` and `Territory Architect`
 - push/research utility explanation in `Sourcing Workbench`
 
 ## 6.2 Motion Family

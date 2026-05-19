@@ -119,7 +119,7 @@
       {
         id:"we-live-in-erp",
         label:"Everything already sits in ERP",
-        reply:"ERP gives record. It usually does not give decision-grade visibility across risk, consequence, and response timing. Where does the picture still need manual stitching?",
+        reply:"ERP gives record. It usually does not give the visibility a decision actually needs across risk, consequence, and response timing. Where does the picture still need manual stitching?",
         actions:[
           jumpNode("Map the current stitching", "current-state-truth", "stitching", "blu"),
           jumpNode("Find the blind spot", "pain-and-consequence", "network-blindness", "org")
@@ -191,7 +191,7 @@
           branch("GENERAL IMPROVEMENT","ly","\"We mostly want better visibility than we have today.\"","\"Visibility into what exactly: supplier health, line-down risk, scenario impact, or procurement diligence?\"",[
             jumpNode("Map the current review", "current-state-truth", "supplier-review", "org"),
             jumpNode("Name the consequence", "pain-and-consequence", "operational-consequence", "blu")
-          ],"There is directional interest, but the wedge is still broad.","You still need the first use case that matters."),
+          ],"There is directional interest, but the scope is still broad.","You still need the first use case that matters."),
           branch("NOTHING URGENT","fl","\"Nothing is urgent. We are just exploring.\"","\"That is workable. What would have to happen before this became a live operating priority?\"",[
             jumpNode("Keep it exploratory", "trigger-and-urgency", "exploratory", "red"),
             jumpNode("Set the proof bar", "proof-threshold", "real-proof", "blu")
@@ -367,7 +367,7 @@
           branch("PLANT OR PROGRAM FIRST","ly","\"A plant leader or program owner probably needs to go first.\"","\"Fine. Then the next review should pressure-test one local path before broad executive escalation.\"",[
             jumpNode("Choose the path", "next-step-lock", "scope-path", "org"),
             jumpNode("Lock the review", "next-step-lock", "live-review", "blu")
-          ],"A smaller proving wedge may come first.","You still need the exact plant, program, or supplier path."),
+          ],"A smaller proving scope may come first.","You still need the exact plant, program, or supplier path."),
           branch("NO IDEA","fl","\"I am not sure who that should be.\"","\"Then the fastest question is simple: who gets blamed first when the current picture is wrong late?\"",[
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "red"),
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "blu")
@@ -459,17 +459,17 @@
           branch("GOOD ENOUGH","fl","\"The current process is mostly working.\"","\"Then what still made this meeting worth taking?\"",[
             jumpNode("Return to trigger", "trigger-and-urgency", "recent-event", "red"),
             jumpNode("Keep it exploratory", "trigger-and-urgency", "exploratory", "blu")
-          ],"The incumbent may still be winning.","You still need the live wedge or an honest no.")
+          ],"The incumbent may still be winning.","You still need the live scope or an honest no.")
         ]),
         node("current-vendor-and-displacement","switch-risk","va","Test switching risk","\"What would make changing this motion feel dangerous: supplier onboarding, data normalization, trust in the model, or changing the planning cadence?\"","Use this to expose the real blocker.",false,[
           branch("DATA TRUST RISK","ok","\"If the data or model is wrong, the team will stop trusting it fast.\"","\"Then the next review has to prove trust on live suppliers or a real scenario path.\"",[
             jumpNode("Set risk proof", "proof-threshold", "risk-proof", "grn"),
             jumpNode("Lock the review", "next-step-lock", "live-review", "blu")
           ],"Trust in the data or model is the key blocker.","You still need the benchmark they will trust."),
-          branch("WORKFLOW CHANGE RISK","ly","\"Changing the planning or response cadence is the bigger risk.\"","\"Then we need the smallest proving wedge that changes one real decision without destabilizing the rest.\"",[
+          branch("WORKFLOW CHANGE RISK","ly","\"Changing the planning or response cadence is the bigger risk.\"","\"Then we need the smallest proving scope that changes one real decision without destabilizing the rest.\"",[
             jumpNode("Choose the path", "next-step-lock", "scope-path", "org"),
             jumpNode("Set workflow proof", "proof-threshold", "workflow-proof", "blu")
-          ],"Adoption risk sits in operating rhythm, not just data.","You still need the narrowest safe wedge."),
+          ],"Adoption risk sits in operating rhythm, not just data.","You still need the narrowest safe scope."),
           branch("INERTIA","fl","\"Mostly it is inertia.\"","\"Inertia usually means the pain or sponsor is still too weak. Which one is true here?\"",[
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "red"),
             jumpNode("Return to consequence", "pain-and-consequence", "operational-consequence", "blu")
@@ -499,7 +499,7 @@
           branch("PROCUREMENT OR IT","ly","\"Procurement process or IT overhead will slow it down.\"","\"Then what has to be true in the next review so that overhead feels justified?\"",[
             jumpNode("Choose the path", "next-step-lock", "scope-path", "org"),
             jumpNode("Set workflow proof", "proof-threshold", "workflow-proof", "blu")
-          ],"The blocker may be process overhead rather than disbelief.","You still need the wedge that justifies escalation."),
+          ],"The blocker may be process overhead rather than disbelief.","You still need the scope that justifies escalation."),
           branch("ATTENTION RISK","fl","\"Nothing formal kills it. It just loses oxygen.\"","\"Then the next step has to be concrete enough that it cannot hide in polite interest.\"",[
             jumpNode("Lock the review", "next-step-lock", "live-review", "red"),
             jumpNode("Return to trigger", "trigger-and-urgency", "recent-event", "blu")
@@ -509,11 +509,11 @@
           branch("HIGH GOVERNANCE","ok","\"Yes. Governance and trust thresholds are higher here.\"","\"Then the next review has to prove not just insight, but whether the operating model is safe enough to trust.\"",[
             jumpNode("Return to real proof", "proof-threshold", "real-proof", "grn"),
             jumpNode("Shape the attendees", "next-step-lock", "attendee-shape", "blu")
-          ],"Governance burden is part of the buying path.","You still need the first safe proving wedge."),
+          ],"Governance burden is part of the buying path.","You still need the first safe proving scope."),
           branch("NORMAL ENTERPRISE","ly","\"Not really. It is still mostly a normal enterprise buying path.\"","\"Good. Then do not overcomplicate the next review. Keep it operational and narrow.\"",[
             jumpNode("Choose the path", "next-step-lock", "scope-path", "org"),
             jumpNode("Lock the review", "next-step-lock", "live-review", "blu")
-          ],"Governance does not dominate the path.","You still need the right narrow wedge."),
+          ],"Governance does not dominate the path.","You still need the right narrow scope."),
           branch("UNKNOWN","fl","\"We have not thought that far ahead.\"","\"That is fine. Then the immediate job is simpler: earn one serious review with the right operator and proof path.\"",[
             jumpNode("Lock the review", "next-step-lock", "live-review", "red"),
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "blu")
@@ -540,7 +540,7 @@
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"The proving ground is concrete.","You still need the exact attendees and calendar hold."),
-          branch("PLANT OR PROGRAM","ly","\"Start with one plant, program, or sourcing path before going broader.\"","\"That is a strong first wedge. Who owns that path enough to make the session honest?\"",[
+          branch("PLANT OR PROGRAM","ly","\"Start with one plant, program, or sourcing path before going broader.\"","\"That is a strong first scope. Who owns that path enough to make the session honest?\"",[
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "org"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"A narrower proving path may be safer.","You still need the right owner and the date."),
@@ -612,7 +612,7 @@
             jumpRoom("Open Call Planner", "call-planner", "grn"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The next room is conversational and tactical.","You still need the forcing question in plain language."),
-          branch("DEAL WORKSPACE","ly","\"There is already a live supplier, program, or sourcing path here.\"","\"Then attach the operating truth to that path immediately before the story drifts again.\"",[
+          branch("DEAL WORKSPACE","ly","\"There is already a live supplier, program, or sourcing path here.\"","\"Then attach the what is actually happening to that path immediately before the story drifts again.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "org"),
             jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
           ],"The truth belongs with a live operating object.","You still need the top risk to carry with it."),

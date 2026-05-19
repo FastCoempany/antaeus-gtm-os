@@ -165,7 +165,7 @@
             jumpNode("Map the live req", "current-state-truth", "live-req", "blu")
           ],"Judgment is the first objection, not the only objection.","You still need the safe part of the workflow.")
         ]),
-        node("opening-frame","req-wedge","fu","Start from one req","\"Pick one open role that still feels heavier than it should. Where is that req slowing down or demanding too much recruiter intervention?\"","Use this when the room is already operational.",false,[
+        node("opening-frame","req-scope","fu","Start from one req","\"Pick one open role that still feels heavier than it should. Where is that req slowing down or demanding too much recruiter intervention?\"","Use this when the room is already operational.",false,[
           branch("REQ READY","ok","\"Screening and scheduling are eating too much recruiter time on one of our priority roles.\"","\"Good. Which part hurts more first: candidate quality, recruiter bandwidth, or hiring-manager frustration?\"",[
             jumpNode("Open live req", "current-state-truth", "live-req", "grn"),
             jumpNode("Open funnel pain", "pain-and-consequence", "funnel-break", "blu")
@@ -227,17 +227,17 @@
           branch("QUALITY FINE","fl","\"Quality is mostly fine. The issue is speed.\"","\"Then stay with speed. Where is the human rescue work still slowing the req down?\"",[
             jumpNode("Return to funnel break", "pain-and-consequence", "funnel-break", "red"),
             jumpNode("Return to live req", "current-state-truth", "live-req", "blu")
-          ],"Quality is not the main wedge.","You still need the operational drag.")
+          ],"Quality is not the main scope.","You still need the operational drag.")
         ]),
         node("pain-and-consequence","candidate-drop","fu","Name candidate drop-off","\"Where do strong candidates leak out today: slow response, weak experience, too many steps, or poor close coordination?\"","Use this when the pain shows up later in the funnel.",false,[
           branch("DROP CLEAR","ok","\"Strong candidates cool off because the process drags and communication gets uneven.\"","\"What part of that should improve first: response speed, manager follow-through, or process simplicity?\"",[
             jumpNode("Return to owner map", "stakeholder-and-ownership", "hiring-manager", "grn"),
             jumpNode("Set the proof bar", "proof-threshold", "quality-bar", "blu")
-          ],"Candidate loss is a real late-stage wedge.","You still need the first fix that would reduce it."),
+          ],"Candidate loss is a real late-stage scope.","You still need the first fix that would reduce it."),
           branch("NOT MAIN ISSUE","fl","\"Candidate drop-off is secondary. The bigger issue is earlier in the funnel.\"","\"Then stay there. Where does the rescue work still start?\"",[
             jumpNode("Return to live req", "current-state-truth", "live-req", "red"),
             jumpNode("Return to funnel break", "pain-and-consequence", "funnel-break", "blu")
-          ],"Candidate loss is not the dominant wedge.","You still need the earlier funnel bottleneck.")
+          ],"Candidate loss is not the dominant scope.","You still need the earlier funnel bottleneck.")
         ])
       ]),
       segment("trigger-and-urgency","04","Trigger and urgency","Find the forcing event.",true,[
@@ -321,7 +321,7 @@
           branch("EVERYTHING HUMAN","fl","\"We want humans touching everything important.\"","\"Then which part of the workflow still creates pain even if final judgment never moves?\"",[
             jumpNode("Return to live req", "current-state-truth", "live-req", "red"),
             jumpNode("Return to funnel pain", "pain-and-consequence", "funnel-break", "blu")
-          ],"The safe zone is narrower than the buyer first wants.","You still need the non-judgment workflow wedge.")
+          ],"The safe zone is narrower than the buyer first wants.","You still need the non-judgment workflow scope.")
         ]),
         node("proof-threshold","pilot-req","fu","Choose the pilot req","\"What is the safest meaningful req to test first: one role family, one hiring team, one workflow step, and one proof bar for quality and speed?\"","Use this when the buyer is open but needs a narrow start.",false,[
           branch("REQ CLEAR","ok","\"One priority req class with a cooperative hiring team would be the cleanest place to start.\"","\"Good. Then who needs to join the review so that req becomes a real test, not a theory deck?\"",[
@@ -349,7 +349,7 @@
           branch("AGENCY CLEAR","ok","\"We use agencies when speed and volume outrun the internal team.\"","\"What would have to improve in the funnel for that dependence to fall?\"",[
             jumpNode("Return to bottleneck", "pain-and-consequence", "funnel-break", "grn"),
             jumpNode("Lock the req review", "next-step-lock", "req-review", "blu")
-          ],"Agency reliance is a real wedge.","You still need the internal workflow improvement behind it."),
+          ],"Agency reliance is a real scope.","You still need the internal workflow improvement behind it."),
           branch("NOT ABOUT AGENCIES","fl","\"Agency spend is not the main issue.\"","\"Then what is the harder status quo to break: manager behavior, recruiter load, or candidate quality?\"",[
             jumpNode("Return to owner map", "stakeholder-and-ownership", "hiring-manager", "red"),
             jumpNode("Return to pain", "pain-and-consequence", "quality-break", "blu")

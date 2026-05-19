@@ -98,7 +98,7 @@ Greenfield rebuild built to spec. All axes pass except B1 (completion screen has
 
 ### 4.4 ICP Studio (Decision Bench) — 19/19
 
-Variant C "Build the wedge on the left. See what it changes on the right." shipped cleanly. All axes pass. Beta-ready.
+Variant C "Build the ICP on the left. See what it changes on the right." shipped cleanly. All axes pass. Beta-ready.
 
 ### 4.5 Territory Architect (Decision Bench) — 19/19
 

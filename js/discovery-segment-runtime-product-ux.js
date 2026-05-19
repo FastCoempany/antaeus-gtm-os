@@ -169,7 +169,7 @@
             jumpNode("Open the trigger", "trigger-and-urgency", "miss-or-pressure", "blu")
           ],"The motion may be immature, not over-tooled.","You still need the highest-cost absence of process.")
         ]),
-        node("opening-frame","decision-wedge","fu","Start from one live decision","\"Pick one feature, release, onboarding flow, or enablement motion that is moving right now. Where is that decision running with thinner signal than it should?\"","Use this when the room is already operational.",false,[
+        node("opening-frame","decision-scope","fu","Start from one live decision","\"Pick one feature, release, onboarding flow, or enablement motion that is moving right now. Where is that decision running with thinner signal than it should?\"","Use this when the room is already operational.",false,[
           branch("DECISION READY","ok","\"We have a release decision moving without enough usable evidence.\"","\"Good. What is missing most: user signal, product adoption read, internal alignment, or enablement readiness?\"",[
             jumpNode("Open live decision", "current-state-truth", "live-decision", "grn"),
             jumpNode("Open signal pain", "pain-and-consequence", "signal-gap", "blu")
@@ -189,7 +189,7 @@
           branch("ADOPTION BLIND","ly","\"The bigger issue is we do not know if teams actually adopt or use what we ship.\"","\"Then where does that blind spot hurt most: release validation, onboarding, expansion, or enablement?\"",[
             jumpNode("Open adoption blind spot", "pain-and-consequence", "adoption-blind", "org"),
             jumpNode("Set the proof bar", "proof-threshold", "live-cycle-proof", "blu")
-          ],"Adoption visibility may be the dominant wedge.","You still need the decision it blocks."),
+          ],"Adoption visibility may be the dominant scope.","You still need the decision it blocks."),
           branch("ENABLEMENT DRAG","fl","\"CS and enablement keep rebuilding context after product ships.\"","\"Then what gets lost in the handoff: feature intent, use cases, workflow guidance, or measurement?\"",[
             jumpNode("Open enablement drag", "pain-and-consequence", "enablement-drag", "red"),
             jumpNode("Find the cross-functional owner", "stakeholder-and-ownership", "cross-functional-owner", "blu")
@@ -203,7 +203,7 @@
           branch("CONTENT SPRAWL","ly","\"The issue is more docs and knowledge sprawl than pure research debt.\"","\"Then what is the damage: slower onboarding, inconsistent execution, or teams ignoring what exists?\"",[
             jumpNode("Open enablement drag", "pain-and-consequence", "enablement-drag", "org"),
             jumpNode("Inspect the current stack", "current-vendor-and-displacement", "tool-sprawl", "blu")
-          ],"Knowledge fragmentation may be the main wedge.","You still need the user-facing or team-facing cost."),
+          ],"Knowledge fragmentation may be the main scope.","You still need the user-facing or team-facing cost."),
           branch("LOW MATURITY","fl","\"We do not really have a formal process here yet.\"","\"Then where does that lack of process create the most repeated work right now?\"",[
             jumpNode("Open signal pain", "pain-and-consequence", "signal-gap", "red"),
             jumpNode("Test small-team reality", "trigger-and-urgency", "small-team-check", "blu")
@@ -235,11 +235,11 @@
           branch("BLIND SPOT CLEAR","ok","\"We cannot tell fast enough whether usage is real or just anecdotal.\"","\"What should that visibility change first: roadmap decisions, enablement action, or customer follow-through?\"",[
             jumpNode("Set the proof bar", "proof-threshold", "live-cycle-proof", "grn"),
             jumpNode("Find the owner", "stakeholder-and-ownership", "product-owner", "blu")
-          ],"Adoption visibility is a real wedge.","You still need the decision it should change."),
+          ],"Adoption visibility is a real scope.","You still need the decision it should change."),
           branch("NOT MAIN ISSUE","fl","\"Adoption is not the main issue. It is more about synthesis and alignment.\"","\"Then stay with that. Where does the team still re-stitch the same truth manually?\"",[
             jumpNode("Return to signal gap", "pain-and-consequence", "signal-gap", "red"),
             jumpNode("Return to live decision", "current-state-truth", "live-decision", "blu")
-          ],"Adoption is secondary here.","You still need the actual repeated-work wedge.")
+          ],"Adoption is secondary here.","You still need the actual repeated-work scope.")
         ])
       ]),
       segment("trigger-and-urgency","04","Trigger and urgency","Find the forcing event.",true,[
@@ -251,7 +251,7 @@
           branch("LEADERSHIP ASK","ly","\"Leadership just wants cleaner visibility and evidence now.\"","\"What decision are they currently struggling to make with confidence?\"",[
             jumpNode("Return to live decision", "current-state-truth", "live-decision", "org"),
             jumpNode("Open the signal gap", "pain-and-consequence", "signal-gap", "blu")
-          ],"Executive demand is the frame, not the whole wedge.","You still need the concrete decision."),
+          ],"Executive demand is the frame, not the whole scope.","You still need the concrete decision."),
           branch("SOFT INTEREST","fl","\"Nothing broke. We just know we need to get better.\"","\"Then what would have to happen before this becomes a real workflow priority instead of a nice-to-have?\"",[
             jumpNode("Test the small-team reality", "trigger-and-urgency", "small-team-check", "red"),
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")

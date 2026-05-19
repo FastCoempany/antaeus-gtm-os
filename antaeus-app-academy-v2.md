@@ -55,7 +55,7 @@ Antaeus is not:
 
 The point is not to store everything.
 
-The point is to create the operating truth a founder or first AE needs in order to stop running sales from memory.
+The point is to create the what is actually happening a founder or first AE needs in order to stop running sales from memory.
 
 ## Current Product Map
 
@@ -103,7 +103,7 @@ The real first-session flow is:
 3. Land in Welcome, not straight in Dashboard.
 4. Use Welcome to understand the first ranked next move.
 5. Optionally run the tour or open the demo lane.
-6. Start creating operating truth in the first real module.
+6. Start creating what is actually happening in the first real module.
 7. Return to Dashboard and Welcome as the system becomes more real.
 
 This is important.
@@ -167,7 +167,7 @@ Move on when:
 - the top-ranked next action makes sense
 - the user can get to a real module cleanly
 
-## Stage 2: Define the market and the wedge
+## Stage 2: Define the market and the ICP
 
 ### Goal
 
@@ -190,7 +190,7 @@ The user defines:
 - trigger
 - proof window
 
-Then they begin to test that wedge against live accounts and live signals.
+Then they begin to test that ICP against live accounts and live signals.
 
 ### What good looks like
 
@@ -418,7 +418,7 @@ Make the system transferable.
 
 The user exports a handoff artifact that shows:
 
-- targeting truth
+- a clear target
 - motion truth
 - discovery truth
 - deal truth
@@ -552,7 +552,7 @@ By the end of Stage 8, the user should have:
 
 **Purpose:** define who is actually worth selling to.
 
-**Best used when:** the team needs a sharp wedge instead of generic “mid-market” thinking.
+**Best used when:** the team needs a sharp ICP instead of generic “mid-market” thinking.
 
 **Primary input:** industry, size, geography, buyer, pain, trigger, proof window.
 
@@ -562,7 +562,7 @@ By the end of Stage 8, the user should have:
 
 ### Territory Architect
 
-**Purpose:** convert the wedge into a territory model.
+**Purpose:** convert the ICP into a territory model.
 
 **Best used when:** the team knows the ICP but needs a practical account-priority structure.
 
@@ -758,7 +758,7 @@ It is complete when another human could inherit the motion with much less founde
 
 ## Rule 5: The app should not pretend to be a CRM
 
-The point is operating truth, not record hoarding.
+The point is what is actually happening, not record hoarding.
 
 ## Rule 6: Settings should increase trust, not fear
 

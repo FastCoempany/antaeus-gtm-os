@@ -63,7 +63,7 @@ Compounding signals should be derived from:
 - buyer / trigger / proof specificity
 
 Weak-link signals should be derived from:
-- low-quality or forming wedge state
+- low-quality or forming ICP state
 - no active-account volume
 - missing buyer / trigger / proof specificity
 - top quality checks that still fail

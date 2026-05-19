@@ -37,7 +37,7 @@ Use this when:
 
 Examples:
 
-- choosing the real ICP wedge
+- choosing the real ICP
 - deciding whether a deal is actually real
 - selecting a proof boundary in PoC
 - confirming destructive workspace actions
@@ -104,7 +104,7 @@ Examples:
 | Welcome | first move selection, orientation | none | top-ranked next actions | activation context, week-one state, role, current maturity | milestone map, action ranking, workspace focus summary |
 | Dashboard | none in normal use | none | next action emphasis, recovery queue order | workspace summary, active stage, risk pressure, readiness snapshot | command brief, maturity stage, Monday view, weak-source warnings |
 | Settings | export/import/delete intent, category change | export/import/delete confirmation, role-reset confirmation | safer recovery path, next backup timing | current sync source, backup status, current mode | trust grid, scope labeling, source-state readout |
-| ICP Studio | industry, size, geo, primary buyer, pain, trigger, proof window | final wedge choice, primary pain, primary trigger | standardized option sets, next ICP refinement | role/category/stage context, company, quota band | ICP quality score, ambiguity warnings, sharp-vs-broad contrast, downstream impact |
+| ICP Studio | industry, size, geo, primary buyer, pain, trigger, proof window | final ICP choice, primary pain, primary trigger | standardized option sets, next ICP refinement | role/category/stage context, company, quota band | ICP quality score, ambiguity warnings, sharp-vs-broad contrast, downstream impact |
 | Territory Architect | thesis, account grouping, territory edits | thesis edits, intentional tier changes | next thesis to build, account clustering, tier recommendation | best saved ICP, current territory gaps | territory bridge, object-model guidance, next-output logic |
 | Sourcing Workbench | prospect seed, account choice, manual notes | final prospect inclusion, confidence override | first approach, territory tier, push-to-territory recommendation | ICP fit, account context, contact context when available | sourcing score, readiness band, research summary, next move |
 | Signal Console | account to research, account keep/discard | final keep/discard decision | next account to research, suggested play | linked ICP, territory tier, recent signals, related account context | heat score, research state, next-move explanation, freshness logic |
@@ -168,14 +168,14 @@ It should not auto-generate:
 ### 4. Keep Channel Logging Human
 Cold call, LinkedIn, outbound, and discovery still need manual truth capture.
 
-The system can help frame and prefill, but the actual operating truth should remain human-entered unless and until real integrations exist.
+The system can help frame and prefill, but the actual what is actually happening should remain human-entered unless and until real integrations exist.
 
 ## What This Phase Intentionally Leaves Manual
 
 These should stay manual even after later automation phases:
 
 - destructive actions in Settings
-- final ICP wedge choice
+- final ICP choice
 - final deal stage truth
 - proof boundaries in PoC
 - advisor ask nuance

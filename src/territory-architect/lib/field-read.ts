@@ -147,7 +147,7 @@ function pickMainRisk(s: RiskInputs): string {
         return `Field is over the ${s.allocation.ceiling} ceiling. Retier or close to come back inside.`;
     }
     if (s.lost.length >= s.active.length && s.lost.length >= 3) {
-        return "Drift accounts outnumber active wins. The field is full of ghosts.";
+        return "More accounts have dropped off than are active. The territory is full of names that aren't going anywhere.";
     }
     if (s.paused.length >= 5) {
         return "Watch-ring accounts still look too comfortable. Promote one or eject.";

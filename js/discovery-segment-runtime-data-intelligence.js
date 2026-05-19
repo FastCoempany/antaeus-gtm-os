@@ -191,7 +191,7 @@
           branch("GENERAL IMPROVEMENT","ly","\"We mostly want better coverage or freshness than we have now.\"","\"Coverage or freshness for what exactly: a model, a monitor, a risk workflow, or an analyst team?\"",[
             jumpNode("Map the dependency", "current-state-truth", "downstream-use", "org"),
             jumpNode("Name the downstream cost", "pain-and-consequence", "downstream-cost", "blu")
-          ],"There is directional interest, but the wedge is still broad.","You still need the live consuming workflow."),
+          ],"There is directional interest, but the scope is still broad.","You still need the live consuming workflow."),
           branch("NOTHING URGENT","fl","\"Nothing urgent. We are just exploring.\"","\"That is workable. What would have to happen before the data layer itself became a real priority instead of a nice-to-have?\"",[
             jumpNode("Keep it exploratory", "trigger-and-urgency", "exploratory", "red"),
             jumpNode("Set the proof bar", "proof-threshold", "real-proof", "blu")
@@ -367,7 +367,7 @@
           branch("ENGINEER FIRST","ly","\"An engineer or platform lead probably needs to go first.\"","\"Fine. Then the next review should pressure-test one live dependency before we widen it.\"",[
             jumpNode("Choose the proving path", "next-step-lock", "scope-path", "org"),
             jumpNode("Lock the review", "next-step-lock", "live-review", "blu")
-          ],"A smaller technical proving wedge may come first.","You still need the exact dependency path."),
+          ],"A smaller technical proving scope may come first.","You still need the exact dependency path."),
           branch("NO IDEA","fl","\"I am not sure who that should be.\"","\"Then the fastest question is simple: who gets blamed first when the current layer is wrong late?\"",[
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "red"),
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "blu")
@@ -415,7 +415,7 @@
           branch("NO BUILD PAIN","fl","\"Build and maintenance are manageable. We just want better results.\"","\"Then stay on results. What downstream result needs to get better before this matters?\"",[
             jumpNode("Return to real proof", "proof-threshold", "real-proof", "red"),
             jumpNode("Return to downstream cost", "pain-and-consequence", "downstream-cost", "blu")
-          ],"Build-vs-buy is not the main wedge.","You still need the outcome buyer cares about.")
+          ],"Build-vs-buy is not the main scope.","You still need the outcome buyer cares about.")
         ]),
         node("proof-threshold","governance-proof","va","If proof is about rights or control","\"What has to be true around rights, licensing, citations, or reproducibility before the team would trust this in production?\"","Use this when governance is the loudest concern.",false,[
           branch("CLEAR GOVERNANCE BAR","ok","\"We know the specific trust and rights conditions we would need.\"","\"Good. Then the next review should prove those conditions on the exact use case that matters.\"",[
@@ -429,7 +429,7 @@
           branch("GOVERNANCE SECONDARY","fl","\"Governance matters, but downstream usefulness matters more.\"","\"Fine. Then keep governance in view, but let the next review prove the live dependency first.\"",[
             jumpNode("Return to real proof", "proof-threshold", "real-proof", "red"),
             jumpNode("Lock the review", "next-step-lock", "live-review", "blu")
-          ],"Governance is not the first proving wedge.","You still need the live dependency path.")
+          ],"Governance is not the first proving scope.","You still need the live dependency path.")
         ])
       ]),
       segment("current-vendor-and-displacement","07","Current vendor and displacement","Test why the current layer still wins.",false,[
@@ -465,7 +465,7 @@
           branch("DOWNSTREAM BREAKAGE RISK","ok","\"We cannot risk weakening the downstream system while we change the feed layer.\"","\"Then the next review has to prove one narrow dependency path without disturbing the rest.\"",[
             jumpNode("Choose the proving path", "next-step-lock", "scope-path", "grn"),
             jumpNode("Set implementation proof", "proof-threshold", "implementation-proof", "blu")
-          ],"Change risk is tied to downstream continuity.","You still need the smallest safe proving wedge."),
+          ],"Change risk is tied to downstream continuity.","You still need the smallest safe proving scope."),
           branch("RIGHTS OR GOVERNANCE RISK","ly","\"Rights, governance, or reproducibility could slow this down.\"","\"Then what has to be true in the next review so that risk feels manageable?\"",[
             jumpNode("Set governance proof", "proof-threshold", "governance-proof", "org"),
             jumpNode("Map the rights gate", "decision-architecture", "rights-gate", "blu")
@@ -540,7 +540,7 @@
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"The proving ground is concrete.","You still need the exact attendees and calendar hold."),
-          branch("ONE TEAM FIRST","ly","\"Start with one team or one model before going broader.\"","\"That is a strong first wedge. Which owner has enough pain to make that session honest?\"",[
+          branch("ONE TEAM FIRST","ly","\"Start with one team or one model before going broader.\"","\"That is a strong first scope. Which owner has enough pain to make that session honest?\"",[
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "org"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"A narrower proving path may be safer.","You still need the right owner and date."),
@@ -612,7 +612,7 @@
             jumpRoom("Open Call Planner", "call-planner", "grn"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The next room is conversational and tactical.","You still need the forcing question in plain language."),
-          branch("DEAL WORKSPACE","ly","\"There is already a live product, risk, or monitoring path here.\"","\"Then attach the operating truth to that path immediately before the story drifts again.\"",[
+          branch("DEAL WORKSPACE","ly","\"There is already a live product, risk, or monitoring path here.\"","\"Then attach the what is actually happening to that path immediately before the story drifts again.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "org"),
             jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
           ],"The truth belongs with a live dependency path.","You still need the top risk to carry with it."),

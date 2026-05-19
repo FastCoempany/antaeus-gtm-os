@@ -110,7 +110,7 @@
         branch("BROAD","ly","\"We have a pretty standard " + seed.shortFlow + " setup.\"","\"Standard is fine. Walk me through where a human still has to rescue the workflow.\"",[
           jumpNode("Use workflow walk", "current-state-truth", "workflow", "org"),
           jumpNode("Use example follow-up", "current-state-truth", "example", "blu")
-        ],"The buyer gave setup shape, not operating truth.","You still need a recent example or the human takeover point."),
+        ],"The buyer gave setup shape, not what is actually happening.","You still need a recent example or the human takeover point."),
         branch("PUSHBACK","fl","\"Can you just show the product?\"","\"I can, but I want it to map to your world first. Give me one branch of the workflow so the product tour is not generic.\"",[
           jumpNode("Use workflow walk", "current-state-truth", "workflow", "blu"),
           jumpNode("Use proof rescue", "proof-threshold", "early-demo", "pur")
@@ -417,10 +417,10 @@
           jumpNode("Set the proof step", "proof-threshold", "first-gate", "grn"),
           jumpNode("Lock the next review", "next-step-lock", "exact-shape", "blu")
         ],"The displacement burden is now explicit.","You still need the smallest credible proof step."),
-        branch("RIP AND REPLACE OFF TABLE","ly","\"We are not looking to rip anything out.\"","\"That is fine. What one narrow wedge would still matter if it worked?\"",[
+        branch("RIP AND REPLACE OFF TABLE","ly","\"We are not looking to rip anything out.\"","\"That is fine. What one narrow scope would still matter if it worked?\"",[
           jumpNode("Lock the next review", "next-step-lock", "exact-shape", "org"),
           jumpNode("Return to pain", "pain-and-consequence", "pressure", "blu")
-        ],"A wedge path may be more realistic than full replacement.","You still need the beachhead use case."),
+        ],"A scope path may be more realistic than full replacement.","You still need the beachhead use case."),
         branch("NOT WORTH MOVING","fl","\"Nothing here feels painful enough to justify migration.\"","\"Then we should treat that honestly. What would have to change before moving became rational?\"",[
           jumpNode("Keep the call exploratory", "trigger-and-urgency", "exploratory", "red"),
           jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
@@ -558,7 +558,7 @@
           jumpRoom("Open Call Planner", "call-planner", "grn"),
           jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
         ],"The next room is conversational and tactical.","You still need the forcing question."),
-        branch("DEAL WORKSPACE","ly","\"There is already a live deal or evaluation here.\"","\"Then attach the operating truth to the deal immediately so it does not get separated from the opportunity.\"",[
+        branch("DEAL WORKSPACE","ly","\"There is already a live deal or evaluation here.\"","\"Then attach the what is actually happening to the deal immediately so it does not get separated from the opportunity.\"",[
           jumpRoom("Open Deal Workspace", "deal-workspace", "org"),
           jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
         ],"The truth belongs with a live opportunity.","You still need the most important risk to carry with it."),

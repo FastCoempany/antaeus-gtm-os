@@ -444,7 +444,7 @@ These are guardrails, not absolute law, but Phase 7 should bias toward them.
 | Call Planner | Agenda quality, call readiness, link to Discovery and Deal | Compress intro text, gate persona/method explanation | Turning it into a plain agenda form or losing quality framing |
 | PoC Framework | Proof design, proof weakness visibility, linkage back to deal state | Compress first-fold setup copy, move doctrine deeper | Reducing proof logic to a checklist, weakening proof-to-deal compounding |
 | Advisor Deploy | Advisor leverage logic, why/how advisors are used, deal-linked consequence | Tighten first-fold explanations, move rationale deeper | Turning advisor use into a side log, weakening deal linkage |
-| ICP Studio | ICP sharpness, targeting truth, downstream default context | Compress explanatory framing, gate methodological doctrine | Weakening ICP seriousness, making it a generic persona form |
+| ICP Studio | ICP sharpness, a clear target, downstream default context | Compress explanatory framing, gate methodological doctrine | Weakening ICP seriousness, making it a generic persona form |
 | Territory Architect | Tiering, account theses, territory structure | Compress explanatory top matter, move doctrine deeper | Reducing it to a list builder, losing strategic tier logic |
 | Sourcing Workbench | Prospect push logic, territory continuity, signal handoff | Tighten setup framing, reduce repeated utility copy | Turning pushes into detached records, weakening next-action continuity |
 | Outbound Studio | Motion craft, channel strategy, anti-spam seriousness | Compress top explanations, gate teaching copy | Reducing it to template spam or generic copy generation |
