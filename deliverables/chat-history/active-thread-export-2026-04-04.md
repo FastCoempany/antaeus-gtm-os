@@ -139,7 +139,7 @@ The user repeatedly insisted that no redesign should flatten:
 - module substance
 - methodology
 - strategic seriousness
-- product thesis
+- product argument
 - room brains
 
 This remained a non-negotiable throughout the thread.

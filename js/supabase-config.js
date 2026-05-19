@@ -1754,7 +1754,7 @@ var DURABLE_SEQUENCE_DOCUMENTS = {
     gtmos_poc_data: { sequenceKey: 'poc_data', title: 'POC Framework Data', defaultValue: { pocs: [] } },
     gtmos_cold_call_log: { sequenceKey: 'cold_call_log', title: 'Cold Call Log', defaultValue: { calls: [] } },
     gtmos_territory: { sequenceKey: 'territory_state', title: 'Territory State', defaultValue: { healthScore: 100, lastPulse: null, pulseSkips: 0, salesCycle: '', createdAt: null } },
-    gtmos_ta_theses: { sequenceKey: 'ta_theses', title: 'Territory Theses', defaultValue: [] },
+    gtmos_ta_focuses: { sequenceKey: 'ta_focuses', title: 'Territory Focuses', defaultValue: [] },
     gtmos_ta_approaches: { sequenceKey: 'ta_approaches', title: 'Territory Approaches', defaultValue: [] },
     gtmos_ta_accounts: { sequenceKey: 'ta_accounts', title: 'Territory Accounts', defaultValue: [] },
     gtmos_ta_dispositions: { sequenceKey: 'ta_dispositions', title: 'Territory Dispositions', defaultValue: [] },

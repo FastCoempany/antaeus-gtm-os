@@ -38,7 +38,7 @@ The modernization is successful when:
 
 This master program governs and consolidates the following documents:
 
-- [antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md)
+- [antaeus-ui-ux-design-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-and-system-rules-2026-03-31.md)
 - [antaeus-shell-redesign-spec-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-shell-redesign-spec-2026-03-31.md)
 - [antaeus-shell-implementation-wave-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-shell-implementation-wave-2026-03-31.md)
 - [antaeus-shell-implementation-wave-2-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-shell-implementation-wave-2-2026-03-31.md)
@@ -105,7 +105,7 @@ The product now has:
 - redesigned public/commercial perimeter
 - a converged exterior family
 
-What remains is not another big design thesis. What remains is:
+What remains is not another big design rules. What remains is:
 
 - final consistency QA
 - minor cleanup
@@ -119,7 +119,7 @@ What remains is not another big design thesis. What remains is:
 
 #### Program item 01
 Document:
-- [antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md)
+- [antaeus-ui-ux-design-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-and-system-rules-2026-03-31.md)
 
 Job:
 - define the emotional, behavioral, and visual laws of the redesign
@@ -535,7 +535,7 @@ The best next move is:
 That is the correct closeout sequence.
 
 Not another doctrine doc.
-Not another shell thesis.
+Not another shell argument.
 Not another broad redesign wave.
 
 Just:

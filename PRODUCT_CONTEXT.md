@@ -12,7 +12,7 @@ A browser-based GTM operating system for founding AEs and founder-sellers at ear
 
 **One-line pitch:** The system that makes your first sales hire succeed instead of fail.
 
-**Core thesis:** Founders hire salespeople before the system is ready. The hire inherits chaos, not process, and fails within 5 months. The GTM OS solves this by turning the founder's selling activity into a documented, scorable, exportable playbook — so they know when they're ready to hire, and the hire has something real to run from day one.
+**Core argument:** Founders hire salespeople before the system is ready. The hire inherits chaos, not process, and fails within 5 months. The GTM OS solves this by turning the founder's selling activity into a documented, scorable, exportable playbook — so they know when they're ready to hire, and the hire has something real to run from day one.
 
 ---
 

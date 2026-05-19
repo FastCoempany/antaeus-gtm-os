@@ -4,7 +4,7 @@
 **Winner:** `antaeus-quota-workback-variant-01-ai-selected-2026-05-01.html` — Variant 01 (AI-selected)
 **Auditor:** Claude (Program 6 / PR 17)
 
-> **Note on the winner.** Quota Workback has no founder-hand-picked triptych. AI-generated Variant 01 was retrospectively elevated as canonical (same PR #56 as Signal Console). Thesis: "Make the math feel daily."
+> **Note on the winner.** Quota Workback has no founder-hand-picked triptych. AI-generated Variant 01 was retrospectively elevated as canonical (same PR #56 as Signal Console). Headline: "Make the math feel daily."
 
 ---
 
@@ -24,7 +24,7 @@ No mind drift.
 
 ## Most of the refacing is already in
 
-Phase 4 / Room 14 shipped against the winner's thesis directly. The Topbar already carries the winner's H1 verbatim ("Make the math feel daily.") + the touches/day hero number + a pill naming how trustable the math is. The CoveragePanel / SystemHealth / InputForm / PlanReadout below all map to what the wireframe spells out further down.
+Phase 4 / Room 14 shipped against the winner's headline directly. The Topbar already carries the winner's H1 verbatim ("Make the math feel daily.") + the touches/day hero number + a pill naming how trustable the math is. The CoveragePanel / SystemHealth / InputForm / PlanReadout below all map to what the wireframe spells out further down.
 
 ---
 

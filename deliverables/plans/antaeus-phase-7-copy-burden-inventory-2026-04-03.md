@@ -31,7 +31,7 @@ Important rule:
 |---|---|---|---|
 | `Welcome` page title and short subtitle | low | keep | Necessary orientation for first-session re-entry. |
 | activation corridor summary | medium | compress | Useful, but should stay concise and not behave like a second hero. |
-| primary card thesis and CTA explanation | medium | keep | This is the main “what now” driver on Welcome. |
+| primary card headline and CTA explanation | medium | keep | This is the main “what now” driver on Welcome. |
 | operating lanes intro copy | medium | compress | Good structure, but should stay one layer above execution, not become a mini-methodology lecture. |
 | lane copy on immediate move / follow-through / keep honest | medium | keep | This is command-grade guidance. |
 | queue card body copy | medium-high | compress | Some queue cards repeat rationale that can be shorter. |
@@ -47,7 +47,7 @@ Important rule:
 | Surface zone | Current burden | Decision | Why |
 |---|---|---|---|
 | `Dashboard` title and subtitle | low | keep | Core command orientation. |
-| command stack intro thesis (`The dashboard is now reading a real operating system.`) | medium | compress | Useful, but likely one sentence too long once Phase 7 shell is stronger. |
+| command stack intro headline (`The dashboard is now reading a real operating system.`) | medium | compress | Useful, but likely one sentence too long once Phase 7 shell is stronger. |
 | mode explanations for `Brief / Spotlight / Queue` | medium | keep | These are command-mode definitions, not fluff. They should remain but stay concise. |
 | `What changed since ...` block in Brief | medium | keep | Correct command-layer delta logic. |
 | `Spotlight` explainer (`Put one object in the light`) | medium | keep | This is core to the command mental model. |
@@ -130,7 +130,7 @@ Decision:
 
 Specific burden risks:
 - legends and recommendation explanation in `Signal Console`
-- ICP/thesis explanation in `ICP Studio` and `Territory Architect`
+- ICP/focus explanation in `ICP Studio` and `Territory Architect`
 - push/research utility explanation in `Sourcing Workbench`
 
 ## 6.2 Motion Family
@@ -175,7 +175,7 @@ Surfaces:
 Decision:
 - keep severity and pressure visible
 - keep room-entry and pinned context strong
-- compress explanatory top matter that repeats the room thesis
+- compress explanatory top matter that repeats the room argument
 - move doctrine deeper
 
 Specific burden risks:

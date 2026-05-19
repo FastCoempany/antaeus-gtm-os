@@ -62,7 +62,7 @@ These all stay. They each carry canonical authority that supersedes the Ledger S
 ## Cross-cutting drift signals (per 2026-05-01 bootstrap)
 
 - **Modal-overlay pattern** → Discovery Studio has SupportDossier as a drawer overlay (Wave 4 added this). Per canon §4.12 the dossier IS a required rail; rendering it as a drawer is justified — it's a deep-reference surface, not core operating space. ✅ JUSTIFIED.
-- **Sentence-shaped thesis headers** → The active framework label currently serves as the H1 — operational, not sentence-shaped. The Ledger Spine had "Open one segment. Run the call from there." as a sentence-shaped section title. 🟡 MED — could be improved.
+- **Sentence-shaped headlines** → The active framework label currently serves as the H1 — operational, not sentence-shaped. The Ledger Spine had "Open one segment. Run the call from there." as a sentence-shaped section title. 🟡 MED — could be improved.
 
 ---
 

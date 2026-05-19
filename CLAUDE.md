@@ -668,7 +668,7 @@ This gives a future session the trail from any commit back to its governing deci
 
 The product is engineered around behavior. Every rule here exists because there is evidence — usually a replicated effect at d ≥ 0.5 — that says it works on real users. Behavioral doctrine is the spine connecting mind and face; this part is how we defend the user's attention, confidence, and follow-through.
 
-The canonical source for this part is `03-research-backbone/antaeus-architecture-restructure-research-brief-source-2026-03-31.md` (the 40-source research synthesis) and `01-charter-and-laws/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md` (the seven behavioral rules).
+The canonical source for this part is `03-research-backbone/antaeus-architecture-restructure-research-brief-source-2026-03-31.md` (the 40-source research synthesis) and `01-charter-and-laws/antaeus-ui-ux-design-and-system-rules-2026-03-31.md` (the seven behavioral rules).
 
 ## 1. The three resistances
 

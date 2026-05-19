@@ -295,7 +295,7 @@ Lock:
 - modern sans for control surfaces and reading
 - mono for kickers, meters, and operational micro-labels only
 
-Authored serif headlines carry the thesis. Sans carries the work. Mono recedes.
+Authored serif headlines carry the argument. Sans carries the work. Mono recedes.
 
 ### Color behavior
 

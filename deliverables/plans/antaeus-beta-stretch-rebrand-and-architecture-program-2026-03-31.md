@@ -143,7 +143,7 @@ Implication for Antaeus:
 
 ---
 
-## 3. Core Product Thesis For Beta
+## 3. Core Product Argument For Beta
 
 Antaeus is a founder-to-first-operator revenue operating system.
 
@@ -249,7 +249,7 @@ So the brand does not fracture at the boundary.
 
 ---
 
-## 5. Module Architecture Thesis
+## 5. Module Architecture Argument
 
 Every module should stop behaving like a page and start behaving like an operating board.
 

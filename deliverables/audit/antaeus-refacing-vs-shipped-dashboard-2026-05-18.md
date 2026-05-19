@@ -31,7 +31,7 @@ These deltas are deliberate, traceable to canon updates that post-date the Soft 
 
 | Soft Cut wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
-| Huge hero (Outfit clamp 68–114px) | Compact serif H1 (clamp 22–32px) | **Phase 2.2 audit (PR #99)** — "thesis H1 demoted; the ranked spotlight is now the visual hero." Mind-correction landed 2026-05-XX. The triptych pre-dated this. |
+| Huge hero (Outfit clamp 68–114px) | Compact serif H1 (clamp 22–32px) | **Phase 2.2 audit (PR #99)** — "headline H1 demoted; the ranked spotlight is now the visual hero." Mind-correction landed 2026-05-XX. The triptych pre-dated this. |
 | 3D perspective mode carousel | Flat 3-button ModeSwitcher | **Phase 2.2 audit (PR #99)** retired the carousel hint in favor of the simpler tab strip. Carousel was striking but reduced information density. |
 | No Readiness affordance | ReadinessAnchor in topbar + ReadinessDrawer overlay | **Phase 5.A (PR #47)** added Readiness Score as the dashboard topbar anchor per canon §4.17 mind-rewrite. The triptych pre-dated this entirely. |
 | Tone vocabulary (hot/warm/live/cold) | Family vocabulary (risk/move/advisor/opportunity/icp/system) | **Phase 2.2 audit** locked the family vocabulary as the canonical way of naming ranked items. Family tells the operator which room the item belongs to and what kind of move it is; Soft Cut's tone vocabulary just described how it felt. |
@@ -57,7 +57,7 @@ These deltas have no canonical justification and represent honest structural dri
 Checked against the two cross-cutting patterns the bootstrap flagged:
 
 - **Modal-overlay pattern** → Dashboard's ReadinessDrawer IS an overlay, but it's a synthesis-layer overlay (verdict + math), not a structural surface drift. ✅ JUSTIFIED.
-- **Sentence-shaped thesis headers** → The H1 "What is under the most pressure right now." is sentence-shaped. Soft Cut's hero was sentence-shaped too but rendered at much larger size. The shape is correct; the weight has been demoted (per Phase 2.2 evolution). ✅ JUSTIFIED.
+- **Sentence-shaped headlines** → The H1 "What is under the most pressure right now." is sentence-shaped. Soft Cut's hero was sentence-shaped too but rendered at much larger size. The shape is correct; the weight has been demoted (per Phase 2.2 evolution). ✅ JUSTIFIED.
 
 Neither bootstrap drift signal applies to Dashboard.
 

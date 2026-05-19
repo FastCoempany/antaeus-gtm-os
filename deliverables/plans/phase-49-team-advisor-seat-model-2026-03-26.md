@@ -53,7 +53,7 @@ The workspace is the main object.
 That means the important GTM truth should primarily belong to the workspace:
 
 - ICPs
-- territory theses
+- territory focuses
 - sourced accounts
 - signal research
 - deals
@@ -228,7 +228,7 @@ These should be workspace-shared:
 
 - onboarding activation context
 - ICPs
-- territory theses
+- territory focuses
 - sourced prospects once saved
 - signal research once saved
 - outbound logs and motion history

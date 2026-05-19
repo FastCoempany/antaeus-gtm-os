@@ -1,4 +1,4 @@
-# Antaeus UI/UX Design Thesis And System Rules
+# Antaeus UI/UX Design and System Rules
 
 Date: 2026-03-31
 
@@ -8,7 +8,7 @@ Purpose: define how Antaeus should feel, behave, prioritize attention, and moder
 
 ---
 
-## 1. Core Design Thesis
+## 1. Core Design Rules
 
 Antaeus should feel like a **high-conviction operating room for founder-led sales**, not a software museum of dashboards, cards, and controls.
 
@@ -270,7 +270,7 @@ Escalate visual intensity only when:
 
 ---
 
-## 7. Visual Design Thesis
+## 7. Visual Design Rules
 
 The visual system should communicate **quiet authority**.
 
@@ -726,7 +726,7 @@ The redesign is successful when:
 
 ## 18. Immediate Next Design Deliverables
 
-After this thesis, the next useful artifacts should be:
+After this argument, the next useful artifacts should be:
 
 1. shell redesign spec
 2. component behavior inventory

@@ -874,7 +874,7 @@ That order attacks the biggest blockers first:
 
 ---
 
-## 8. Final Program Thesis
+## 8. Final Program Argument
 
 Antaeus does **not** need more breadth right now.
 

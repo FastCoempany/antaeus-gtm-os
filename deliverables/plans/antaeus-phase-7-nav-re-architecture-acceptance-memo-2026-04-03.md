@@ -105,7 +105,7 @@ Evidence:
   - onboarding
   - sheet
   - room-entry shell
-- the room rail now supports access instead of acting like the product thesis
+- the room rail now supports access instead of acting like the product argument
 
 ## 3. Scope Completed
 

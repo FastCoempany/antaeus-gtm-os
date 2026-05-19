@@ -10,8 +10,8 @@
 
 Canon §4.5 (Territory Architect — Decision Bench) preserved end-to-end:
 
-- ✅ Theses as strategic bets (`title` + `pressure` + `segment` + `whyUs`).
-- ✅ Approach ledger per thesis (talk-track + trigger + bridge).
+- ✅ Focuses as strategic bets (`title` + `pressure` + `segment` + `whyUs`).
+- ✅ Approach ledger per focus (talk-track + trigger + bridge).
 - ✅ 4-tier model with TIER_DEFAULTS allocation.
 - ✅ 300-account ceiling with headroom / at-cap / over status.
 - ✅ Per-account disposition state (active / paused / closed-won / closed-lost / reroute).
@@ -27,7 +27,7 @@ No mind drift.
 
 | Wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
-| Static example nodes ("Meridian Industrial", "VoltWorks") on a 3-ring map | Editable thesis / approach / account forms + ranked table | Canon §4.5 — the operator builds the territory; they don't look at a demo of one |
+| Static example nodes ("Meridian Industrial", "VoltWorks") on a 3-ring map | Editable focus / approach / account forms + ranked table | Canon §4.5 — the operator builds the territory; they don't look at a demo of one |
 | Ring metaphor (core / watch ring / false territory) | 4-tier model (T1/T2/T3/T4) per canon §4.5 | Tiers are the canonical resource-allocation commitment; ring labels were a visual conceit on top of tiers |
 | 5 named account nodes scattered in space | Allocation table with retier + disposition selectors | The room exists for the operator to act, not display |
 | Three doctrine "bottom strips" | Doctrine lives in canon and the operating laws, not as static cards in the surface | Phase 4 / Room 12 — doctrine moved out of the visible surface so the working area dominates |
@@ -52,7 +52,7 @@ No mind drift.
 
 ## Fix scope (this PR)
 
-1. **`lib/field-read.ts`** (new) — pure function `computeFieldRead({accounts, theses, approaches, allocation})` returning `{score, band, bandLabel, mainRisk, replacement, operatorMove}`. Score is a 0-92 derived posture; band is one of `empty / loose / tight / runnable`. Priority chains for the risk and the next-action line so the wording is always specific.
+1. **`lib/field-read.ts`** (new) — pure function `computeFieldRead({accounts, focuses, approaches, allocation})` returning `{score, band, bandLabel, mainRisk, replacement, operatorMove}`. Score is a 0-92 derived posture; band is one of `empty / loose / tight / runnable`. Priority chains for the risk and the next-action line so the wording is always specific.
 2. **`lib/field-read.test.ts`** (new) — covers the empty board, the priority chains for next-action and risk, the backfill counter, and the score bands.
 3. **`TerritoryArchitect.tsx`** — wraps the hero in a 2-col `ta-hero__grid` (lead + the new right-side aside); the aside reads off a `computed` over the existing state signals and renders the score + the three plain-language lines.
 4. **`territory-architect.css`** — `.ta-hero__grid` 2-col layout (collapses to single column under 1080px) + full `.ta-field-read*` aside with band-tinted left rule + an orange-accented line for the prescribed next action (the dominant treatment goes to "what to do today").
@@ -61,8 +61,8 @@ No mind drift.
 
 ## Acceptance walk
 
-- An empty room shows the `EMPTY` band with a "Start with one thesis" next-action line.
-- Adding a thesis lifts the risk line off the no-theses copy.
+- An empty room shows the `EMPTY` band with a "Start with one focus" next-action line.
+- Adding a focus lifts the risk line off the no-focuses copy.
 - The aside renders all four lines (score / risk / backfill / next action) and the next-action line carries the orange accent variant.
-- Existing HeroBand stats (theses count + 4 tier counts + ceiling status) still render unchanged.
+- Existing HeroBand stats (focuses count + 4 tier counts + ceiling status) still render unchanged.
 - Mobile width (< 1080px) collapses the 2-col hero to a single column.

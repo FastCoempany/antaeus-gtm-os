@@ -76,20 +76,20 @@ Placement:
 
 Metrics:
 - `Territory posture`
-- `Active theses`
+- `Active focuses`
 - `Live accounts`
 - `Progression`
 
 Compounding signals should be derived from:
-- active theses
+- active focuses
 - active approaches
 - active accounts
 - signals and progressing dispositions
-- thesis progression rate
+- focus progression rate
 
 Weak-link signals should be derived from:
 - no saved ICP anchor
-- no theses or no approaches
+- no focuses or no approaches
 - thin account count
 - poor progression rate
 - no signals or stale battlefield evidence

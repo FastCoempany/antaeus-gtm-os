@@ -24,7 +24,7 @@ No mind drift.
 
 The 2026-05-02 PR #56 partial rework already landed:
 
-- `StageStrip` (forge → cast → readout temporal flow) — matches the v3 thesis "Proof is not a page. It is a forced event."
+- `StageStrip` (forge → cast → readout temporal flow) — matches the v3 headline "Proof is not a page. It is a forced event."
 - Bright forge (post-PR-#35 doctrine flip) — retired the dark/light split.
 - Topbar already carries "Raw interest is not proof" framing copy.
 
@@ -47,7 +47,7 @@ The 5-mold grid + weakest-mold callout + heat ledger + docs rack + route rack al
 
 | Wireframe | Shipped | Severity |
 |---|---|---|
-| The ingot block carries a 2-3 clause sentence that compresses what's hot, what's usable, and what's empty across the 5 molds into one line the operator reads at a glance | The 5-mold grid surfaces state visually via mold state classes (cast/hot/cold/red), but there's no sentence summarizing what the picture says — the operator has to scan all 5 mold rows to know what's locked vs hot vs broken | 🟡 MED — without the synthesis line the cast reads as a status grid, not a summary of where the proof stands |
+| The ingot block carries a 2-3 clause sentence that compresses what's hot, what's usable, and what's empty across the 5 molds into one line the operator reads at a glance | The 5-mold grid surfaces state visually via mold state classes (cast/hot/cold/red), but there's no sentence summarizing what the picture says — the operator has to scan all 5 mold rows to know what's locked vs hot vs broken | 🟡 MED — without the synheadline line the cast reads as a status grid, not a summary of where the proof stands |
 
 ### Explicitly deferred
 
@@ -63,10 +63,10 @@ The 5-mold grid + weakest-mold callout + heat ledger + docs rack + route rack al
 
 1. **`lib/quality.ts`** — add `buildIngotRead(molds)` that returns a 1-3 clause sentence naming the strongest molds (locked / hot) and the weakest one (broken preferred over empty). Empty-board and all-locked cases get their own copy.
 2. **`lib/quality.test.ts`** — 5 cases: empty foundry / all locked / mixed synthesis / empty mold list / red-over-cold preference.
-3. **`CastPanel.tsx`** — renders the new synthesis line inside the header, beneath the title + score sub. Reads off `buildIngotRead(molds)` so it stays in sync as the operator forges.
+3. **`CastPanel.tsx`** — renders the new synheadline line inside the header, beneath the title + score sub. Reads off `buildIngotRead(molds)` so it stays in sync as the operator forges.
 4. **`poc-framework.css`** — `.poc-cast__ingot-read` styled as a serif statement with a recessive left-rule, between the score sub and the mold grid.
 
-> Note: code identifiers like `buildIngotRead` and `.poc-cast__ingot-read` were named under the old voice and stay as-is per canon Part III §11. New UI copy follows the new voice; the synthesis line reads as a normal sentence.
+> Note: code identifiers like `buildIngotRead` and `.poc-cast__ingot-read` were named under the old voice and stay as-is per canon Part III §11. New UI copy follows the new voice; the synheadline line reads as a normal sentence.
 
 ## Acceptance walk
 

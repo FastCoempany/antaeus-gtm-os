@@ -121,7 +121,7 @@ Top to bottom, left rail to right:
                              to mark the diagnosis is live)
 .stage-grid (2-col,         (the operational split — left = the
    ~0.98fr / 1.02fr)         workspace, right = the target folio)
-  .hero                     (h1 thesis line + hero-actions)
+  .hero                     (h1 headline line + hero-actions)
   .signal-grid              (compact row of stat tiles — what's
                              under pressure right now)
   .target-folio
@@ -133,7 +133,7 @@ Top to bottom, left rail to right:
 .filter-shell               (filter state, recessive)
 ```
 
-The thesis line in B is *"Make the board confess where it is weak."*
+The headline line in B is *"Make the board confess where it is weak."*
 The folio metaphor frames each deal as a folder pulled out and
 opened — the operator works one folder at a time, not the whole
 list at once.
@@ -218,7 +218,7 @@ called for.
 4. Move the 9-field health form into the folio detail surface;
    retire `DealHealthModal` (or repurpose as "expand to fullscreen"
    action only)
-5. Add `.dw-hero` zone with the thesis h1 + hero-actions row
+5. Add `.dw-hero` zone with the headline h1 + hero-actions row
 6. Add `.dw-micro-grid` per-stage stat tiles + `.dw-lane-grid`
    above the recovery queue
 7. Tone-tinted `queue-badge` on each row to match the variant B
@@ -248,7 +248,7 @@ arc behind a feature flag.
   .concept-meta
     .concept-id             (the variant label)
     .concept-name (h1)      ("The deal is pinned as evidence.")
-  .concept-meaning          (1-line thesis: "This room behaves like
+  .concept-meaning          (1-line headline: "This room behaves like
                              a lit evidence surface, not a page. The
                              user must bring one failure pattern into
                              focus before a corrective route earns
@@ -313,8 +313,8 @@ What did NOT carry from the triptych:
   control."). Shipped uses bare nouns ("pattern", "proof",
   "symptom"). The triptych's labels carry the diagnosis; the
   shipped labels are categories the diagnosis fits into.
-- ❌ **No `.concept-meaning` thesis line.** The triptych puts a
-  1-line thesis ("This room behaves like a lit evidence surface…")
+- ❌ **No `.concept-meaning` headline line.** The triptych puts a
+  1-line headline ("This room behaves like a lit evidence surface…")
   directly under the h1. Shipped has only the topbar title.
 - ❌ **Stage-strip refinement appears to live elsewhere.** The
   refinement file is a control-strip pattern that should sit at the
@@ -355,7 +355,7 @@ revisited.
    triptych's tone (the actual lines should be generated from the
    same diagnosis math the room already runs — the engine has the
    inputs).
-3. **Add `.fa-thesis` — a one-line concept-meaning under the h1.**
+3. **Add `.fa-headline. — a one-line concept-meaning under the h1.**
    This is the room's authored declaration of what it does. Pulls
    directly from the triptych's `.concept-meaning` paragraph or a
    shorter rewrite.
@@ -448,7 +448,7 @@ This bootstrap is the sanity-check on the format.
   Workspace, stacked sheets in Future Autopsy). The overlay pattern
   is a legacy reflex; the triptychs explicitly wanted detail and
   context to coexist. Remaining rooms likely show similar drift.
-- **Sentence-shaped thesis copy is missing.** Both triptychs had
+- **Sentence-shaped headline copy is missing.** Both triptychs had
   authored sentence-shaped headers (variant B's *"Make the board
   confess where it is weak."* / variant 01's *"The deal is pinned
   as evidence."*). Both shipped rooms use category-shaped topbar

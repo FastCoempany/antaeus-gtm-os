@@ -22,7 +22,7 @@ Phase 7 is not allowed to change, dilute, flatten, or casualize:
 - module substance
 - methodology
 - strategic seriousness
-- product thesis
+- product argument
 - cross-module compounding rules
 - named premium assets
 - the core logic inside `Signal Console`, `Future Autopsy`, `Discovery Studio`, `PoC Framework`, `Advisor Deploy`, and the rest of the deep rooms
@@ -36,7 +36,7 @@ This preflight is subordinate to and derived from the following repo authorities
 - [antaeus-full-restructure-blueprint-2026-04-02.md](./antaeus-full-restructure-blueprint-2026-04-02.md)
 - [antaeus-architecture-reset-production-program-2026-04-01.md](./antaeus-architecture-reset-production-program-2026-04-01.md)
 - [antaeus-ui-ux-modernization-program-2026-03-31.md](./antaeus-ui-ux-modernization-program-2026-03-31.md)
-- [antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md](./antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md)
+- [antaeus-ui-ux-design-and-system-rules-2026-03-31.md](./antaeus-ui-ux-design-and-system-rules-2026-03-31.md)
 - [antaeus-visual-identity-lock-memo-2026-04-01.md](./antaeus-visual-identity-lock-memo-2026-04-01.md)
 - [antaeus-visual-system-spec-2026-04-01.md](./antaeus-visual-system-spec-2026-04-01.md)
 - [phase-46-cross-module-compounding-rules-2026-03-26.md](./phase-46-cross-module-compounding-rules-2026-03-26.md)
@@ -77,7 +77,7 @@ This preflight exists so that does not happen.
 
 The following are hard constraints.
 
-### 4.1 Product Thesis Protection
+### 4.1 Product Argument Protection
 
 Antaeus must remain:
 - a GTM operating system
@@ -160,7 +160,7 @@ The methodology may not be:
 - deleted because it is “too much text”
 - replaced with generic productivity language
 - softened into vague encouragement
-- rewritten in a way that weakens the strategic thesis
+- rewritten in a way that weakens the strategic argument
 
 ## 5. Behavioral Psychology Requirements
 
@@ -225,7 +225,7 @@ Forbidden outcome:
 - panel soup
 - decorative badges replacing real prioritization
 
-## 6. Copy Burden Audit Thesis
+## 6. Copy Burden Audit Argument
 
 The copy problem is not “too much text” in the abstract.
 
@@ -407,7 +407,7 @@ These are guardrails, not absolute law, but Phase 7 should bias toward them.
 
 ### 9.1 Command Surface Budget
 
-- 1 primary headline or section thesis
+- 1 primary headline or section headline
 - 1 concise rationale sentence per major zone
 - 0-3 bullets, tags, or reasons per selected object
 - no visible paragraph longer than 2 sentences in the core command area
@@ -445,7 +445,7 @@ These are guardrails, not absolute law, but Phase 7 should bias toward them.
 | PoC Framework | Proof design, proof weakness visibility, linkage back to deal state | Compress first-fold setup copy, move doctrine deeper | Reducing proof logic to a checklist, weakening proof-to-deal compounding |
 | Advisor Deploy | Advisor leverage logic, why/how advisors are used, deal-linked consequence | Tighten first-fold explanations, move rationale deeper | Turning advisor use into a side log, weakening deal linkage |
 | ICP Studio | ICP sharpness, a clear target, downstream default context | Compress explanatory framing, gate methodological doctrine | Weakening ICP seriousness, making it a generic persona form |
-| Territory Architect | Tiering, account theses, territory structure | Compress explanatory top matter, move doctrine deeper | Reducing it to a list builder, losing strategic tier logic |
+| Territory Architect | Tiering, account focuses, territory structure | Compress explanatory top matter, move doctrine deeper | Reducing it to a list builder, losing strategic tier logic |
 | Sourcing Workbench | Prospect push logic, territory continuity, signal handoff | Tighten setup framing, reduce repeated utility copy | Turning pushes into detached records, weakening next-action continuity |
 | Outbound Studio | Motion craft, channel strategy, anti-spam seriousness | Compress top explanations, gate teaching copy | Reducing it to template spam or generic copy generation |
 | Cold Call Studio | Live-call seriousness, motion truth logging, downstream update value | Tighten entry copy, move instructions into progressive help | Weakening live-call consequence or turning it into a generic script page |
@@ -453,7 +453,7 @@ These are guardrails, not absolute law, but Phase 7 should bias toward them.
 | Quota Workback | Quota math as execution pressure, not isolated planning | Compress board explanation, move some method copy deeper | Turning quota into disconnected planning math |
 | Readiness | System truth, readiness credibility, handoff confidence | Compress score-story framing, move explanatory copy deeper | Turning readiness into decorative scoring |
 | Founding GTM / Handoff Kit | Exported truth, transfer credibility, section completeness | Compress support copy, gate guidance | Weakening handoff seriousness or reducing exported system truth |
-| Welcome / Dashboard / Command | Ranked system pressure, re-entry, next move, object continuity | Compress supporting side copy, move explanation to sheet, tighten command text | Reverting to hallway logic, replacing command thesis with generic dashboards |
+| Welcome / Dashboard / Command | Ranked system pressure, re-entry, next move, object continuity | Compress supporting side copy, move explanation to sheet, tighten command text | Reverting to hallway logic, replacing command argument with generic dashboards |
 
 ## 11. Connective Tissue Protection Matrix
 
@@ -463,7 +463,7 @@ The following compounding logic is protected and must survive any shell/disclosu
 |---|---|---|
 | Onboarding | Welcome, Dashboard, Settings, ICP framing, Discovery framing, Quota framing | `gtmos_activation_context` |
 | ICP Studio | Territory, Sourcing, Signal Console, Outbound, Discovery, Readiness, Handoff | shared targeting defaults |
-| Territory Architect | Sourcing, Signal Console | territory tiering and theses |
+| Territory Architect | Sourcing, Signal Console | territory tiering and focuses |
 | Sourcing Workbench | Signal Console, Territory | pushed prospect continuity |
 | Signal Console | Outbound, LinkedIn, Dashboard, Readiness, Handoff | account heat and motion context |
 | Outbound Studio | Dashboard, LinkedIn, Signal Console, Readiness, Handoff | shared motion truth |
@@ -531,7 +531,7 @@ The following categories should be scrutinized aggressively before Phase 7 execu
 Examples:
 - repeated “what this product is” copy across command surfaces
 - repeated posture/recovery/Week One side explanation blocks
-- repeated command-thesis text that users only need occasionally
+- repeated command-argument text that users only need occasionally
 
 Likely action:
 - compress
@@ -541,7 +541,7 @@ Likely action:
 ### 13.2 Room Intro Paragraphs
 
 Examples:
-- top-of-room explanation blocks that restate the room thesis every visit
+- top-of-room explanation blocks that restate the room argument every visit
 - methodology copy visible before action starts
 
 Likely action:
@@ -663,7 +663,7 @@ while simultaneously protecting:
 - the module substance
 - the methodology
 - the strategic seriousness
-- the product thesis
+- the product argument
 - the compounding rules that make the app intelligent
 
 The shell may get cleaner.  

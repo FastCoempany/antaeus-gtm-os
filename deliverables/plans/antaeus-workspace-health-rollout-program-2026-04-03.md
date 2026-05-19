@@ -4,7 +4,7 @@ Status: Active
 Owner: Codex / Antaeus post-restructure product wave
 
 ## Purpose
-Carry the `Workspace health` thesis out of Dashboard and into selected deep rooms without changing:
+Carry the `Workspace health headline out of Dashboard and into selected deep rooms without changing:
 
 - GTM frameworks
 - module substance
@@ -38,7 +38,7 @@ So the next leverage point is making deep rooms show:
 
 without forcing the user to go back to Dashboard for every health read.
 
-## Product thesis
+## Product argument
 Each serious room should be able to say:
 
 - what is alive here

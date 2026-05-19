@@ -8,7 +8,7 @@ Purpose: define how the Antaeus application shell should be redesigned so every 
 
 Source anchors:
 
-- [deliverables/plans/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md)
+- [deliverables/plans/antaeus-ui-ux-design-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-and-system-rules-2026-03-31.md)
 - [css/app.css](/c:/AppDev/v1AntaeusApp/Appv2_290126/css/app.css)
 - [js/nav.js](/c:/AppDev/v1AntaeusApp/Appv2_290126/js/nav.js)
 - [app/welcome/index.html](/c:/AppDev/v1AntaeusApp/Appv2_290126/app/welcome/index.html)
@@ -76,7 +76,7 @@ The redesign must make the shell express the compounding system that already exi
 
 ---
 
-## 3. Shell Redesign Thesis
+## 3. Shell Redesign Argument
 
 Antaeus Shell v2 should feel like:
 

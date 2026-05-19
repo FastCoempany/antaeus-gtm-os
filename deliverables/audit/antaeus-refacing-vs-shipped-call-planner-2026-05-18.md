@@ -43,7 +43,7 @@ No mind drift.
 ## Cross-cutting drift signals (per 2026-05-01 bootstrap)
 
 - **Modal-overlay pattern** → Call Planner has no modals. ✅ N/A.
-- **Sentence-shaped thesis headers** → AgendaSpine title is sentence-shaped ("Run the call in this order."). ✅ JUSTIFIED.
+- **Sentence-shaped headlines** → AgendaSpine title is sentence-shaped ("Run the call in this order."). ✅ JUSTIFIED.
 
 ---
 
