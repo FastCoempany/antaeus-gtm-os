@@ -38,11 +38,11 @@ const BAND_LABELS: Readonly<Record<SpendBand, string>> = {
 
 const BAND_COPY: Readonly<Record<SpendBand, string>> = {
     ask_ready:
-        "Specific enough to send, but still small enough not to burn trust.",
+        "Specific enough to send, and small enough that it won't cost you trust with the advisor.",
     narrow_first:
         "A path exists. Tighten the buyer or proof line before sending.",
     not_ready:
-        "Do not spend advisor capital until the deal and ask are clearer."
+        "Don't ask an advisor for help yet — the deal and the ask still aren't clear enough."
 };
 
 export interface SpendReadInput {

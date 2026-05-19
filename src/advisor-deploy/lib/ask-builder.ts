@@ -37,11 +37,11 @@ function chooseBuyer(deal: AdvisorDeal | null): string {
 export function dealPressure(deal: AdvisorDeal | null): string {
     if (!deal) return "No live deal linked yet.";
     if (!deal.nextStepDate) {
-        return "No dated next step is holding the thread together.";
+        return "There's no dated next step keeping the conversation alive.";
     }
     const nextDate = Date.parse(deal.nextStepDate);
     if (Number.isFinite(nextDate) && nextDate < Date.now()) {
-        return "Next step is overdue and momentum is decaying.";
+        return "The next step is overdue and the deal is going stale.";
     }
     const stage = deal.stage;
     if (
@@ -51,16 +51,16 @@ export function dealPressure(deal: AdvisorDeal | null): string {
             stage === "verbal") &&
         !deal.decisionProcess
     ) {
-        return "Decision process is still blurry for the current stage.";
+        return "We still don't know how the buyer is going to make this decision.";
     }
     if (
         (stage === "negotiation" || stage === "verbal") &&
         !deal.economicBuyer
     ) {
-        return "Economic buyer is still not explicit late in the deal.";
+        return "We're this late in the deal and we still haven't identified who has signing authority.";
     }
     if ((stage === "evaluation" || stage === "poc") && !deal.champion) {
-        return "There is still no named internal driver carrying the evaluation.";
+        return "Nobody inside the buyer's team is carrying this forward.";
     }
     return "The ask must be precise enough to justify outside trust.";
 }

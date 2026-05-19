@@ -103,10 +103,10 @@ function pickWeekRead(s: WeekReadInputs): string {
     // before the general "any captured with nothing researched" rule
     // so the heavier-debt case gets the targeted prescription.
     if (s.stats.captured >= 5 && s.stats.researched === 0) {
-        return "Names are piling up but nothing is hardening. Tighten the research bar before adding more captures.";
+        return "Names are piling up but nothing has been researched yet. Tighten the bar before you capture more.";
     }
     if (s.stats.ready === 0 && s.stats.captured > 0 && s.stats.researched === 0) {
-        return "Captured names with nothing researched. Names cost nothing — research costs everything.";
+        return "Names are captured but none has been researched. Capturing is cheap; research is what actually moves them forward.";
     }
     if (s.dropped > 0 && s.dropped >= s.stats.total) {
         return "More drops than keeps. The sourcing thesis may be off — review the query cards before more captures.";

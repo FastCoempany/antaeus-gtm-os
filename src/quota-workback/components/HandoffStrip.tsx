@@ -74,9 +74,9 @@ export function HandoffStrip(): JSX.Element {
                 />
                 <Card
                     title="Founding GTM"
-                    metric="Day-one operating rhythm"
-                    body="The quota math feeds Section 7 — the prescriptive weekly cadence your first AE inherits."
-                    meta="The day-one operating rhythm is what the kit promises a first hire."
+                    metric="Day-one weekly cadence"
+                    body="The quota math feeds Section 7 — the weekly cadence your first AE inherits."
+                    meta="The cadence a first hire opens on day one is the thing the kit promises them."
                     href={hrefToFoundingGtm()}
                     cta="Open the kit"
                 />

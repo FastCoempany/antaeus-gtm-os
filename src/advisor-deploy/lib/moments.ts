@@ -16,9 +16,9 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     {
         id: "intro",
         name: "Warm introduction",
-        short: "No meeting yet. One exact human can open the room.",
+        short: "No meeting yet. One trusted person can open the door for us.",
         ask: "Can you make a warm introduction to [buyer] at [company]? I drafted the two-line context below so this stays easy.",
-        proof: "The account fits our wedge, but the first trusted path is still missing.",
+        proof: "The account fits what we're going after, but we don't have a way in yet.",
         advisorLine: "You only need to open the door. I will carry the actual sale.",
         outcome: "First meeting booked from a credible source."
     },

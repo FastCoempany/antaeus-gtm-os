@@ -42,7 +42,7 @@ describe("dealPressure", () => {
 
     it("flags missing nextStepDate", () => {
         expect(dealPressure(makeDeal({ nextStepDate: null }))).toContain(
-            "No dated next step"
+            "no dated next step"
         );
     });
 
@@ -61,7 +61,7 @@ describe("dealPressure", () => {
                     decisionProcess: ""
                 })
             )
-        ).toContain("Decision process is still blurry");
+        ).toContain("how the buyer is going to make this decision");
     });
 
     it("flags missing EB late in the deal", () => {
@@ -74,7 +74,7 @@ describe("dealPressure", () => {
                     economicBuyer: ""
                 })
             )
-        ).toContain("Economic buyer");
+        ).toContain("signing authority");
     });
 
     it("flags missing champion in evaluation/poc", () => {
@@ -87,7 +87,7 @@ describe("dealPressure", () => {
                     champion: ""
                 })
             )
-        ).toContain("internal driver");
+        ).toContain("Nobody inside the buyer");
     });
 
     it("returns the precise-ask copy when nothing is wrong", () => {

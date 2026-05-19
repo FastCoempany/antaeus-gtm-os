@@ -39,13 +39,13 @@ export function AccountGrid(): JSX.Element {
                     </p>
                     <h2 class="sc-empty__title">
                         {focus
-                            ? `Add the first ${focus.toLowerCase().includes("freight") || focus.toLowerCase().includes("logistics") ? "company" : "account"} that fits the wedge.`
+                            ? `Add the first ${focus.toLowerCase().includes("freight") || focus.toLowerCase().includes("logistics") ? "company" : "account"} that fits the ICP.`
                             : "Drop in the first one — anything you've been watching."}
                     </h2>
                     <p class="sc-empty__body">
                         {focus
-                            ? `Anything you've been watching that matches the ICP. Once one account is in, the heat engine starts ranking against the wedge.`
-                            : "A customer mentioned them. An exec from the company posted something. You saw them in a competitor's case study. The radar starts ranking heat the moment one account is in."}
+                            ? `Anything you've been watching that matches the ICP. Once one account is in, the room starts ranking accounts by how hot their signals are.`
+                            : "A customer mentioned them. An exec from the company posted something. You saw them in a competitor's case study. The room starts ranking accounts by signal strength the moment one account is in."}
                     </p>
                     <AddAccountForm embedded />
                 </div>

@@ -104,7 +104,7 @@ If the readout owner is not present, the PoC does not count as decision proof.`;
     const kickoff = `POC KICKOFF AGENDA - ${account}
 
 1. Confirm the proof claim.
-"The purpose of this PoC is to prove whether ${vendor} can create a decision-grade outcome for ${account}, not to explore every possible feature."
+"The purpose of this PoC is to prove whether ${vendor} can produce an outcome ${account}'s decision-makers can act on, not to explore every possible feature."
 
 2. Confirm the success criteria.
 ${success}

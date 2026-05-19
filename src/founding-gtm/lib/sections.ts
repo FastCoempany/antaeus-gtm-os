@@ -154,13 +154,13 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
         surprise = {
             tone: "corrective",
             headline: "Your stated ICP doesn't match who actually closes.",
-            body: `${off}% of closed-won deals don't match any of your named ICPs. The wedge you're naming and the wedge that's working are different shapes. Worth resharpening before the hire inherits the wrong target.`
+            body: `${off}% of closed-won deals don't match any of your named ICPs. The buyer you say you're going after and the buyer who actually buys are two different shapes. Worth sharpening before the new hire inherits the wrong target.`
         };
     } else if (matchRatio >= 0.8) {
         surprise = {
             tone: "affirming",
             headline: "Your stated ICP is also your actual ICP.",
-            body: `Closed-won deals match the ICPs you've named. The hire inherits a sharp wedge — keep it sharp.`
+            body: `Closed-won deals match the ICPs you've named. The hire inherits a clear target — keep it that way.`
         };
     }
 

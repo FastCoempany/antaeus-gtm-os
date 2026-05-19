@@ -51,13 +51,13 @@ export const METHOD_TEMPLATES: ReadonlyArray<MethodTemplate> = [
         key: "connect",
         kicker: "Connection",
         heading: "Request only after recognition.",
-        small: "A blank request is channel debt.",
+        small: "A blank request you send to someone who doesn't know you yet costs you trust on the channel.",
         body: "Hi [Name], I saw your point on [topic]. The part about [specific strain] stood out. Would be useful to stay connected as this develops."
     },
     {
         key: "comment",
         kicker: "Public cue",
-        heading: "Comment with one operating read.",
+        heading: "Comment with one observation that adds value.",
         small: "Do not pitch in the comments.",
         body: "This tends to show up first in [operating pressure] before it shows up in tooling. Curious where the strain is most visible right now."
     },

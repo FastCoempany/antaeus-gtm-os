@@ -155,7 +155,7 @@ export function buildIcpQuality(input: QualityInput): IcpQuality {
             "Primary pain is explicit. Copy and discovery can stay centered on one problem."
         );
     } else {
-        risk("Choose one felt pain. Multiple pains will blur the wedge.");
+        risk("Choose one felt pain. Listing more than one blurs the ICP.");
     }
 
     // Trigger

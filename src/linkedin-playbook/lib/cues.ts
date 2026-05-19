@@ -25,12 +25,12 @@ export const CUES: ReadonlyArray<Cue> = [
     },
     {
         index: 1,
-        name: "Comment with one operating read",
+        name: "Comment with one useful observation",
         label: "Cue 02",
         color: "var(--lp-blue)",
         action: "content_engage",
         title: "Make the public answer feel inevitable.",
-        copy: "Add one useful operating observation, then leave. No cheerleading and no pitch.",
+        copy: "Add one useful observation the buyer would recognize from their own day, then leave. No cheerleading and no pitch.",
         console: "Say one specific thing the buyer can recognize from their own world."
     },
     {

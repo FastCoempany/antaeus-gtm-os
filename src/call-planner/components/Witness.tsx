@@ -46,10 +46,10 @@ export function Witness(): JSX.Element {
     });
 
     const supportLine = account
-        ? "Signal-backed account matched."
+        ? "Matched to an account that has live signals."
         : d.linkedinUrl.trim().length > 0
-          ? "LinkedIn URL is carrying the account layer."
-          : "No signal-backed account matched yet.";
+          ? "LinkedIn URL is standing in for the account record."
+          : "No matching account with live signals yet.";
 
     return (
         <aside class="cp-witness" aria-label="Witness rail">

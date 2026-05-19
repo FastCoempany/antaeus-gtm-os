@@ -141,16 +141,16 @@ function buildLedger(): ReadonlyArray<LedgerRow> {
             field: "Pain",
             state: paneState(d.pain),
             copy: nonEmpty(d.pain)
-                ? `${labelFor(d.pain, PAIN_OPTIONS)} — operational pain a buyer would name out loud.`
-                : "Name the pain. Operator-voice, not board-room copy."
+                ? `${labelFor(d.pain, PAIN_OPTIONS)} — pain a buyer would actually say out loud.`
+                : "Name the pain. Write it the way a buyer would speak it, not the way a slide deck would."
         },
         {
             num: 6,
             field: "Trigger",
             state: nonEmpty(d.trigger) ? "good" : "missing",
             copy: nonEmpty(d.trigger)
-                ? `${labelFor(d.trigger, TRIGGER_OPTIONS)} — the forcing event that makes now-not-later real.`
-                : "No forcing event yet. A wedge without a trigger is half hope."
+                ? `${labelFor(d.trigger, TRIGGER_OPTIONS)} — the event that's forcing the buyer to act now, not later.`
+                : "No forcing event named yet. Without one, the ICP is half hope."
         },
         {
             num: 7,

@@ -28,32 +28,32 @@ export function SystemHealth(): JSX.Element {
 
     if (m.qualityScore >= 82) {
         compounding.push(
-            "The planning math is currently believable. Assumptions, coverage posture, and weekly pressure are close enough to operating truth to guide real behavior."
+            "The planning math is believable right now. The assumptions, the coverage, and the weekly pressure are close enough to reality that you can act on them."
         );
     }
     if ((c.ratio || 0) >= b.coverage) {
         compounding.push(
-            "Coverage is already supporting the target. Pipeline volume is at or above the benchmark the quota plan expects."
+            "Coverage is already where it needs to be. The pipeline is at or above what the quota plan calls for."
         );
     } else if (fitCount >= 2) {
         compounding.push(
-            "Most core assumptions still fit the band. The weekly plan is not fully proven yet, but the model is anchored to credible operating ranges."
+            "Most assumptions still fit the typical range. The weekly plan isn't fully proven yet, but the underlying math is anchored to numbers that hold up."
         );
     }
     if (compounding.length === 0) {
         compounding.push(
-            "The room has a usable pressure model. Quota Workback can already show the right questions, but the plan still needs harder proof before it should be trusted blindly."
+            "The room is asking the right questions about the plan. The plan itself still needs harder proof before you should bet the quarter on it."
         );
     }
 
     if ((c.ratio || 0) < b.coverage) {
         fragile.push(
-            "Coverage is still below plan. Until pipeline support catches up, the math remains more aspiration than operating truth."
+            "Coverage is still below where the plan needs it. Until the pipeline catches up, the math is more aspiration than reality."
         );
     }
     if (fitCount < 2) {
         fragile.push(
-            "Too many assumptions have drifted away from benchmark reality. Custom math can be right, but it needs stronger proof before it should run the quarter."
+            "Too many of the assumptions have drifted away from typical ranges. Custom numbers can be right, but they need stronger proof before they should run the quarter."
         );
     }
     if (m.touchesDay > 25 || m.activeAccounts > 250) {
