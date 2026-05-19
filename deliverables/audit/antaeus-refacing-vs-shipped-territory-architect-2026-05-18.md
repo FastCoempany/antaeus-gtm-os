@@ -23,44 +23,46 @@ No mind drift.
 
 ## Structural drift — partial
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
-| Signal Field wireframe | Shipped (post-evolution) | Justifying evolution |
+| Wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
-| Static example nodes ("Meridian Industrial", "VoltWorks") on a 3-ring map | **Editable thesis / approach / account forms + ranked table** | Canon §4.5 — operator must build the territory, not look at a demo of one |
-| Ring metaphor (core / watch ring / false territory) | **4-tier model (T1/T2/T3/T4) per canon §4.5** | Tiers are the canonical resource-allocation commitment; ring labels are a visual conceit on top of tiers |
-| 5 named account nodes scattered in space | **Allocation table with retier + disposition selectors** | Operator action surface, not display |
-| Three doctrine "bottom strips" (Signal rule / Replacement queue / Downstream effect) | Doctrine lives in canon + the operating laws, not surfaced as static cards | Phase 4 / Room 12 — doctrine moved out of the visible surface so the working area dominates |
+| Static example nodes ("Meridian Industrial", "VoltWorks") on a 3-ring map | Editable thesis / approach / account forms + ranked table | Canon §4.5 — the operator builds the territory; they don't look at a demo of one |
+| Ring metaphor (core / watch ring / false territory) | 4-tier model (T1/T2/T3/T4) per canon §4.5 | Tiers are the canonical resource-allocation commitment; ring labels were a visual conceit on top of tiers |
+| 5 named account nodes scattered in space | Allocation table with retier + disposition selectors | The room exists for the operator to act, not display |
+| Three doctrine "bottom strips" | Doctrine lives in canon and the operating laws, not as static cards in the surface | Phase 4 / Room 12 — doctrine moved out of the visible surface so the working area dominates |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
-| Signal Field wireframe | Shipped | Severity |
+| Wireframe | Shipped | Severity |
 |---|---|---|
-| **Read-dock surfaces score + 3 interpretive lines** (Main risk / Replacement pressure / Operator move) | The hero shows tier counts + allocation status but does not INTERPRET the territory — operator gets numbers, not a read | 🟠 HIGH — this is the wireframe's most distinctive substantive contribution; without it the room reads as a CRUD table instead of a strategic instrument |
-| **Field read score with a band label** (Runnable / Tight / Loose / Empty) | No score surface; only `at-cap` / `over` / `headroom` ceiling status | 🟡 MED — the score gives the operator a single-glance posture |
+| A read-dock on the right side of the hero that names what shape the territory is in right now and what to do about it (score + three labeled lines) | The hero shows tier counts and allocation status, but it doesn't say what's happening or what to do — the operator gets numbers, not a read of the picture | 🟠 HIGH — without it the room is a CRUD table, not a working instrument |
+| The same read-dock also names a score and a band label (Runnable / Tight / Loose / Empty) so the operator gets a single-glance posture | No score; only `at-cap` / `over` / `headroom` ceiling status | 🟡 MED — the score gives a one-second read of where the territory stands |
 
 ### Explicitly deferred
 
 | Element | Why deferred |
 |---|---|
-| Signal-map ring visualization (3 concentric rings + scattered named nodes) | Drift-mode "Metaphor ornament" — the tier model + disposition state already encodes the same information without theater |
-| Bottom strips (3 doctrine cards) | Per Phase 4 / Room 12 doctrine sweep, doctrine was moved out of the visible surface; re-adding it would revive Part IV §3 "Doctrine in the first fold" drift |
-| Decorative "trace" lines + "ring" rings | Aesthetic flourish; no functional value |
-| Hero kicker pill row (5 in core / 8 in watch ring / 3 false positives) | Tier stats already surface this information per-tier; pill row would be a redundant summary |
+| Signal-map ring visualization (3 concentric rings + scattered named nodes) | Drift-mode "Metaphor ornament" — the tier model + disposition state already carries the same information without theater |
+| Bottom doctrine strips | Per the Phase 4 / Room 12 doctrine sweep, doctrine was moved out of the visible surface; adding it back here would revive Part IV §3 "Doctrine in the first fold" drift |
+| Decorative "trace" lines and ring outlines | Aesthetic flourish; no functional value |
+| Hero kicker pill row (5 in core / 8 in watch ring / 3 false positives) | Tier stats already carry this; a pill row would be a redundant summary |
 
 ---
 
 ## Fix scope (this PR)
 
-1. **`lib/field-read.ts`** (new) — pure function `computeFieldRead({accounts, theses, approaches, allocation})` returning `{score, band, bandLabel, mainRisk, replacement, operatorMove}`. Score is a 0-92 derived posture; band is one of `empty / loose / tight / runnable`. Priority chains for mainRisk + operatorMove so the prescription is always specific.
-2. **`lib/field-read.test.ts`** (new) — covers empty board / operator-move priority / main-risk priority / replacement pressure / score bands.
-3. **`TerritoryArchitect.tsx`** — wraps the hero in a 2-col `ta-hero__grid` (lead + Field Read aside); the aside surfaces score + 3 interpretive lines via a `computed` over the existing state signals.
-4. **`territory-architect.css`** — `.ta-hero__grid` 2-col layout (collapses single-col at < 1080px) + full `.ta-field-read*` aside with band-tinted left rule + orange-accented Operator move line (the prescribed next action gets the dominant treatment).
+1. **`lib/field-read.ts`** (new) — pure function `computeFieldRead({accounts, theses, approaches, allocation})` returning `{score, band, bandLabel, mainRisk, replacement, operatorMove}`. Score is a 0-92 derived posture; band is one of `empty / loose / tight / runnable`. Priority chains for the risk and the next-action line so the wording is always specific.
+2. **`lib/field-read.test.ts`** (new) — covers the empty board, the priority chains for next-action and risk, the backfill counter, and the score bands.
+3. **`TerritoryArchitect.tsx`** — wraps the hero in a 2-col `ta-hero__grid` (lead + the new right-side aside); the aside reads off a `computed` over the existing state signals and renders the score + the three plain-language lines.
+4. **`territory-architect.css`** — `.ta-hero__grid` 2-col layout (collapses to single column under 1080px) + full `.ta-field-read*` aside with band-tinted left rule + an orange-accented line for the prescribed next action (the dominant treatment goes to "what to do today").
+
+> Note: code identifiers like `computeFieldRead` and `.ta-field-read` were named under the old voice and stay as-is per canon Part III §11. New UI copy follows the new voice; the panel itself reads as plain sentences.
 
 ## Acceptance walk
 
-- Empty room shows `EMPTY` band with the "Start with one thesis" operator move.
-- Adding a thesis lifts mainRisk off the no-theses copy.
-- The aside renders all four lines (score / risk / replacement / move) and the operator-move line carries the orange accent variant.
+- An empty room shows the `EMPTY` band with a "Start with one thesis" next-action line.
+- Adding a thesis lifts the risk line off the no-theses copy.
+- The aside renders all four lines (score / risk / backfill / next action) and the next-action line carries the orange accent variant.
 - Existing HeroBand stats (theses count + 4 tier counts + ceiling status) still render unchanged.
 - Mobile width (< 1080px) collapses the 2-col hero to a single column.

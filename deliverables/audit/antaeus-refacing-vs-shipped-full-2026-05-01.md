@@ -113,10 +113,10 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 
 ## Room: ICP Studio (Decision Bench)
 
-- **Picked artifact:** none recorded. Triptych file has 3 variants: A ("Choose one wedge the rest of the app can trust."), B ("Stop saving six wedges that all mean maybe."), C ("Build the wedge on the left. See what it changes on the right.").
-- **AI pick:** **variant C — "Build the wedge on the left. See what it changes on the right."** Rationale: Decision Bench family demands the object being sharpened be visually central. C's "build left, see right" 2-col split makes the ICP object the operating surface and the analytics panel the immediate consequence — the strongest expression of canon §4.4 + Part II §4.4.
+- **Picked artifact:** none recorded. Triptych file has 3 variants: A (one-sharp-definition framing), B (anti-blurry-multi-version framing), C (build-left-see-right 2-col working surface). *Variant titles paraphrased; the wireframes themselves will be rewritten in the wireframes archive sweep.*
+- **AI pick:** **variant C — the build-left-see-right working surface.** Rationale: Decision Bench family demands the object being sharpened be visually central. C's 2-col split makes the ICP object the operating surface and the analytics panel the immediate consequence — the strongest expression of canon §4.4 + Part II §4.4.
 - **Shipped (`src/icp-studio/`):** `icp-hero` (kicker + statement + meta + badge) → `icp-form` (build) → `icp-analytics` (right). The 2-col left/right split exists.
-- **Verdict:** **match.** Variant C's 2-col build-left-see-right structure shipped. Hero is bright cream-gradient with orange left-rule per Phase 4 close. Analytics panel reflects the chosen wedge's consequences.
+- **Verdict:** **match.** Variant C's 2-col build-left-see-right structure shipped. Hero is bright cream-gradient with orange left-rule per Phase 4 close. Analytics panel reflects the chosen ICP's consequences.
 - **Punch list:**
   1. Rename `icp-hero__statement` content to match variant C's authored thesis register
   2. Verify `icp-analytics` updates live as the form is edited (the "see what it changes on the right" promise) — render-pass check
@@ -223,7 +223,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 ## Room: PoC Framework (Decision Bench)
 
 - **Picked artifact:** none recorded with `-selected-`. Three radical-triptych versions exist (v1, v2, v3). v3 thesis: "Proof is not a page. It is a forced event."
-- **AI pick:** **v3 thesis — "Proof is not a page. It is a forced event."** Rationale: latest revision; matches canon §4.15 mind ("raw interest is not proof until it can be carried"). The forced-event framing carries the proof-as-decision-grade discipline.
+- **AI pick:** **v3 thesis — "Proof is not a page. It is a forced event."** Rationale: latest revision; matches canon §4.15 mind ("raw interest is not proof until it can be carried"). The forced-event framing carries the discipline that pilot evidence has to be act-on-able by the time the readout meeting happens.
 - **Shipped (`src/poc-framework/`):** `poc-forge__form` (forge) + `poc-cast__title` (cast panel with quality + 5-mold grid) + `poc-docs__tabs` (4 markdown templates) + `poc-heat__bar` (heat ledger). Bright per PR #35 flip.
 - **Verdict:** **partial.** The 5-mold grid + heat ledger + 4-tab docs match the canon mind. Drift: the forge → cast structural metaphor (raw → refined) is currently rendered as 2 columns side-by-side; v3's thesis suggests a more directional/temporal flow ("forced event" implies sequence, not simultaneity).
 - **Punch list:**
