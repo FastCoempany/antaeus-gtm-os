@@ -1,9 +1,9 @@
 /**
  * Phase 4 / Room 11 — ICP Studio types.
  *
- * Per canon §4.4 the room sharpens one strategic wedge so downstream
- * rooms have real targeting truth to inherit. The ICP object is the
- * thing being sharpened — central authored surface, not a form output.
+ * Per canon §4.4 the room sharpens one ICP so the rest of the system
+ * has a real target to inherit. The ICP object is the thing being
+ * sharpened — central authored surface, not a form output.
  *
  * Per Part II §4.8 ICP Studio is a Decision Bench hybrid: dark hero
  * (carrying the strategic thesis) above a bright work area (where the

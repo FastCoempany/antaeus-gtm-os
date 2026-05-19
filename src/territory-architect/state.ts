@@ -53,7 +53,7 @@ export const loaded: Signal<boolean> = signal(false);
 /**
  * Phase 2.3 — inbound focus from cross-room handoff. ICP Studio,
  * Dashboard, and other upstream rooms can pass `?focusObject=…` to
- * tell Territory Architect what wedge it's building against. Surfaces
+ * tell Territory Architect what ICP it's building against. Surfaces
  * in the hero kicker + flows through into outbound handoffs so
  * Sourcing / Signal Console land focused too. Empty = no inbound.
  */

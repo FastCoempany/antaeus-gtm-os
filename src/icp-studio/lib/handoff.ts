@@ -9,14 +9,14 @@
  *
  * Per `deliverables/audit/continuity-params-2026-05.md` Invariant 8:
  * an empty focusObject is NOT written. The previous
- * `FOCUS_FALLBACK = "ICP wedge"` placeholder propagated a literal
+ * `FOCUS_FALLBACK = "ICP ICP"` placeholder propagated a literal
  * string into destination rooms — caught earlier in the LinkedIn
  * Playbook P2 fix. Phase 2.3 retires it here for the same reason.
  */
 
 export interface HandoffOptions {
     readonly href: string;
-    /** ICP industry/wedge to propagate. Empty string = no focusObject written. */
+    /** ICP industry/ICP to propagate. Empty string = no focusObject written. */
     readonly focusObject: string;
     readonly roomLabel: string;
     readonly extra?: Readonly<Record<string, string>>;

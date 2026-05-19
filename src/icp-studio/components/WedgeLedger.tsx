@@ -175,11 +175,11 @@ function paneState(pain: string): LedgerState {
 export function WedgeLedger(): JSX.Element {
     const rows = buildLedger();
     return (
-        <section class="icp-ledger" aria-label="Wedge ledger">
+        <section class="icp-ledger" aria-label="ICP ledger">
             <header class="icp-ledger__head">
-                <p class="icp-ledger__kicker">WEDGE LEDGER</p>
+                <p class="icp-ledger__kicker">ICP LEDGER</p>
                 <h2 class="icp-ledger__title">
-                    Seven fields. One wedge the rest of the system can trust.
+                    Seven fields. One ICP the rest of the system can trust.
                 </h2>
             </header>
             <ol class="icp-ledger__rows">

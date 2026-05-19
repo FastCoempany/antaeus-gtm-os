@@ -41,8 +41,8 @@ export function ThesisStep(): JSX.Element {
                     </li>
                     <li>
                         <strong>You can skip any step except the first.</strong>{" "}
-                        The first ask is a one-line ICP — that is the wedge
-                        the rest of the system compounds off of.
+                        The first ask is a one-line ICP — everything else
+                        the system does compounds off of it.
                     </li>
                     <li>
                         <strong>Nothing is sent anywhere.</strong> Everything

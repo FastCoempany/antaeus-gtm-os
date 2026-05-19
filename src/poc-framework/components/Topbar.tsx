@@ -4,9 +4,9 @@ import { allProofs } from "../state";
 /**
  * Topbar — kicker + serif thesis + dynamic count.
  *
- * Per canon §4.15 the room shapes "one decision-grade proof object."
- * The topbar is calm; the work is the dark forge / cream cast split
- * stage below.
+ * Per canon §4.15 the room shapes one pilot's evidence so the buyer's
+ * boss can act on it. The topbar is calm; the work is the dark forge
+ * / cream cast split stage below.
  */
 export function Topbar(): JSX.Element {
     const count = allProofs.value.length;
@@ -18,10 +18,10 @@ export function Topbar(): JSX.Element {
                 {count > 0 ? `${count} ${proofLabel} saved` : "no proofs yet"}
             </p>
             <h1 class="poc-topbar__title">
-                Cast one decision-grade proof.
+                Make the pilot results clear enough that the buyer's boss can act on them.
             </h1>
             <p class="poc-topbar__sub">
-                Raw interest is not proof. Pin the claim, the owner, the
+                Raw interest isn't enough. Pin the claim, the owner, the
                 metric, and the kill rule before the pilot starts.
             </p>
         </header>

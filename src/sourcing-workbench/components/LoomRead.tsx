@@ -8,9 +8,10 @@ import { computeLoomRead } from "../lib/loom-read";
  *
  * Per the picked-winner Variant 02 / Ticket Loom wireframe
  * (deliverables/prototypes/wireframes/antaeus-sourcing-workbench-
- * triptych-2026-04-17.html line 348+), the workbench's loom-dock
- * aside surfaces a Week read + Operator move so the operator sees
- * what the workbench is saying, not just what it contains.
+ * triptych-2026-04-17.html line 348+), the panel that sits beside
+ * the bench tells the operator what the week looks like and what
+ * to do next — so the workbench reads back what it's saying, not
+ * just what it contains.
  *
  * This component mounts beneath the Topbar (which carries numeric
  * stats) and above the bench grid. It reads the live prospect list
@@ -30,21 +31,21 @@ export function LoomRead(): JSX.Element {
     return (
         <aside
             class={`sw-loom-read sw-loom-read--${read.band}`}
-            aria-label="Loom read"
+            aria-label="Sourcing week read"
         >
             <div class="sw-loom-read__score-row">
                 <div>
-                    <p class="sw-loom-read__kicker">LOOM READ</p>
+                    <p class="sw-loom-read__kicker">SOURCING THIS WEEK</p>
                     <p class="sw-loom-read__band">{read.bandLabel}</p>
                 </div>
                 <p class="sw-loom-read__score">{read.score}</p>
             </div>
             <div class="sw-loom-read__line">
-                <p class="sw-loom-read__line-label">Week read</p>
+                <p class="sw-loom-read__line-label">This week</p>
                 <p class="sw-loom-read__line-copy">{read.weekRead}</p>
             </div>
             <div class="sw-loom-read__line sw-loom-read__line--move">
-                <p class="sw-loom-read__line-label">Operator move</p>
+                <p class="sw-loom-read__line-label">Next move</p>
                 <p class="sw-loom-read__line-copy">{read.operatorMove}</p>
             </div>
         </aside>

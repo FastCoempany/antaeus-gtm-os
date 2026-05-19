@@ -145,7 +145,7 @@ Hi team,
 
 Here is the proposed ${drft.durationDays}-day PoC structure for ${vendor} and ${account}.
 
-The goal is not to run an open-ended trial. The goal is to produce decision-grade proof against the criteria below:
+The goal is not to run an open-ended trial. The goal is to produce evidence the buyer's boss can act on, against the criteria below:
 
 ${success}
 

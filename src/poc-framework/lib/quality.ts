@@ -16,11 +16,12 @@ import type {
  * `app/poc-framework/index.html`). No behavioral changes — same
  * inputs produce identical outputs.
  *
- * The room shapes one decision-grade proof. Quality is derived from
- * field completeness (account / vendor / owner / success criteria /
- * kill rules / linked deal). Heat splits that into three dimensions
- * (claim / owner / kill). Weakest-mold picks the first failing
- * gate so the operator knows the next move.
+ * The room shapes one piece of pilot evidence the buyer's boss can
+ * act on. Quality is derived from field completeness (account /
+ * vendor / owner / success criteria / kill rules / linked deal).
+ * Heat splits that into three dimensions (claim / owner / kill).
+ * Weakest-mold picks the first failing gate so the operator knows
+ * the next move.
  */
 
 // ─── Helpers ──────────────────────────────────────────────────────────

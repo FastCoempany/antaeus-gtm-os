@@ -14,8 +14,9 @@ import { syncProofIntoDeal } from "./lib/deal-sync";
 /**
  * Phase 4 / Room 5 — PoC Framework runtime state.
  *
- * Per canon §4.15 the room shapes one decision-grade proof object at
- * a time. Working draft lives on the forge panel; saved proofs live
+ * Per canon §4.15 the room shapes one piece of pilot evidence the
+ * buyer's boss can act on, one at a time. Working draft lives on
+ * the forge panel; saved proofs live
  * in the room ledger. Signals here mirror that:
  *
  *   - allProofs   — saved proof history (max 20)

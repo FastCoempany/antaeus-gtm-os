@@ -13,7 +13,7 @@
  *   4. Where deals are won + where they leak
  *   5. The losses we paid for
  *   6. Why we win
- *   7. Day-one operating rhythm
+ *   7. What the first week looks like
  *
  * Each renders as its own AuthoredSection with status, body
  * paragraphs, and a single SURPRISE callout (the cross-room read).
@@ -55,7 +55,7 @@ export const SECTION_TITLE: Record<SectionId, string> = {
     won_and_leaked: "Where deals are won + where they leak",
     losses_paid_for: "The losses we paid for",
     why_we_win: "Why we win",
-    day_one_rhythm: "Day-one operating rhythm"
+    day_one_rhythm: "What the first week looks like"
 };
 
 /** Per-section status. Drives the §1-§7 status badges + total count. */

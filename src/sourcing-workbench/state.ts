@@ -33,7 +33,7 @@ export const loaded: Signal<boolean> = signal(false);
 /**
  * Phase 2.3 — inbound focus from cross-room handoff. ICP Studio,
  * Territory Architect, or other upstream rooms pass `?focusObject=`
- * to tell Sourcing what wedge it's sourcing against. Surfaces in
+ * to tell Sourcing what ICP it's sourcing against. Surfaces in
  * the topbar kicker; propagates through outbound handoffs.
  */
 export const inboundFocus: Signal<string> = signal("");

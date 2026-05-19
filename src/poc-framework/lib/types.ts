@@ -3,8 +3,8 @@
  *
  * Per CLAUDE.md §4.15 the PoC Framework is a Decision Bench family
  * room with a hybrid dark/light split (canon Part II §4.8). Mind:
- * "cast one decision-grade proof object so pilots stop becoming
- * optimism theater."
+ * "shape one piece of pilot evidence the buyer's boss can act on,
+ * so pilots stop becoming optimism theater."
  *
  * Field names mirror the legacy `app/poc-framework/index.html`
  * runtime so existing data flows in without translation.

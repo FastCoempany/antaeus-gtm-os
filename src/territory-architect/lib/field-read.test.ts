@@ -102,7 +102,7 @@ describe("computeFieldRead — empty board", () => {
     });
 });
 
-describe("computeFieldRead — operator move priority chain", () => {
+describe("computeFieldRead — next-move priority chain", () => {
     it("prescribes approaches before adding accounts", () => {
         const r = computeFieldRead({
             accounts: [account("a-1", "active")],

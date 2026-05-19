@@ -636,7 +636,7 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
     return frame(id, "ready", body, evidence, surprise);
 }
 
-// ─── §7 Day-one operating rhythm ──────────────────────────────────────
+// ─── §7 What the first week looks like ────────────────────────────────
 
 export function authorSection7(input: SectionsInput): AuthoredSection {
     const id: SectionId = "day_one_rhythm";
@@ -700,7 +700,7 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
         surprise = {
             tone: "corrective",
             headline: `The math says ${touchesPerDay}/day. Nothing has been logged this week.`,
-            body: `The cadence is theoretical until it's daily. The hire shouldn't inherit a planning artifact disguised as an operating rhythm — get one full week on the board first.`
+            body: `The plan is theoretical until it's daily. The hire shouldn't inherit a planning artifact disguised as a real week — get one full week on the board first.`
         };
     }
 

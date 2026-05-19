@@ -36,7 +36,7 @@ function clampScore(n: number): number {
 }
 
 /**
- * ICP & targeting — sharpened wedge + a real, populated territory.
+ * ICP & targeting — sharpened ICP + a real, populated territory.
  *
  *   ICP exists                +6 (saturated at 1 ICP)
  *   ICP quality score         up to +6 (best ICP qualityScore / 100 * 6)

@@ -94,13 +94,13 @@ export interface Motion {
     readonly context: string;
     readonly cueIndex: CueIndex;
     /**
-     * Program 6 / PR 11 — recovery cue.
+     * Program 6 / PR 11 — what to do when the rep is corrected.
      *
      * Per canon §4.8 ("Every route keeps a recovery cable on the
      * same board") and the picked-winner Variant 02 / Cue Booth
      * wireframe — the rep needs a "what to do when corrected"
      * rule alongside the current-cue + one-session-win rules.
-     * Surfaces in the booth-read aside as the Recovery cue rule.
+     * Surfaces in the booth-read aside as the recovery rule.
      */
     readonly recovery: string;
 }

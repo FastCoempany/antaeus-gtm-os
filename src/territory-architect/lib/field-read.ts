@@ -6,18 +6,18 @@ import type {
 } from "./types";
 
 /**
- * Program 6 / PR 12 — Field Read engine.
+ * Program 6 / PR 12 — engine that reads the territory back to the operator.
  *
  * Per the picked-winner Variant 02 / Signal Field refinement
  * (deliverables/prototypes/wireframes/antaeus-territory-architect-
  * signal-field-refinement-2026-04-17.html line 453+), the room's
- * top-of-page should not just count rows — it should INTERPRET the
- * territory. Three lines + a score:
+ * top-of-page should not just count rows — it should interpret what
+ * the territory is saying. Three lines + a score:
  *
- *   - Field read score (Runnable / Tight / Loose / Empty)
- *   - Main risk      — what's loose about the territory right now
- *   - Replacement    — what should come in to backfill drift
- *   - Operator move  — the one prescribed next-step
+ *   - A score (Runnable / Tight / Loose / Empty)
+ *   - What's loose about the territory right now
+ *   - What should come in to replace what's drifting off
+ *   - The one prescribed next step
  *
  * Pure: takes accounts + theses + approaches + allocation explicitly
  * so tests can probe every branch.

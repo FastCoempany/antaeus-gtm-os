@@ -116,7 +116,7 @@ describe("commandSummary + spotlightObject", () => {
         ]
     };
     const moveCard: RawCommandCard = {
-        title: "Outbound to fintech wedge",
+        title: "Outbound to fintech ICP",
         badge: "Now",
         meta: ["heat 70"],
         actions: [

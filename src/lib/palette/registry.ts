@@ -177,8 +177,8 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "ICP Studio",
         href: "/icp-studio/",
         family: "decision-bench",
-        keywords: ["wedge", "persona", "fit", "targeting"],
-        description: "Sharpen one strategic wedge — the ICP every room inherits."
+        keywords: ["icp", "persona", "fit", "targeting"],
+        description: "Sharpen the ICP every room inherits."
     },
     {
         id: "territory-architect",

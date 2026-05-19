@@ -12,8 +12,8 @@ describe("buildActivationModel", () => {
         expect(m.completed).toBe(0);
         expect(m.total).toBe(4);
         // Phase 2.1 audit: empty-state copy now names the unit (ICP)
-        // and the verb (define). Was: "Set up one wedge before the
-        // system starts briefing you" — "wedge" was internal canon.
+        // and the verb (define). Was: "Set up one ICP before the
+        // system starts briefing you" — "ICP" was internal canon.
         expect(m.headline).toMatch(/define one sharp icp/i);
         expect(m.nextMilestone?.key).toBe("icp");
     });
@@ -44,7 +44,7 @@ describe("buildActivationModel", () => {
 });
 
 describe("buildActions", () => {
-    it("truly empty workspace returns exactly 1 action (the ICP wedge)", () => {
+    it("truly empty workspace returns exactly 1 action (the ICP ICP)", () => {
         // First-90-seconds audit: on a zero-data workspace the operator
         // doesn't need a menu — they need exactly one move. The cap
         // lifts to 4 the moment any anchor exists (see next test).

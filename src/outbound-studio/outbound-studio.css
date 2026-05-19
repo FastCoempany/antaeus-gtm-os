@@ -496,7 +496,7 @@ button {
  * The loft wraps the stage in two narrow side rails:
  *   - left rail: SwitchLaws (static operating doctrine)
  *   - center  : ob-stage (Switchboard + OutputPanel — unchanged)
- *   - right rail: SwitchReads (live board read + operator move)
+ *   - right rail: SwitchReads (live read of the line + next move)
  *
  * At < 1200px the rails fold under the stage so the center column
  * keeps its working room on narrower viewports.

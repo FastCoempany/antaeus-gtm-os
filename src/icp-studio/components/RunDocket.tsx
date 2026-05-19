@@ -8,7 +8,7 @@ import {
 import { buildIcpQuality } from "../lib/quality";
 
 /**
- * RunDocket — Variant 01 / Wedge Ledger right-aside.
+ * RunDocket — Variant 01 / ICP Ledger right-aside.
  *
  * Sits to the right of the WedgeLedger. Three blocks:
  *
@@ -22,13 +22,13 @@ import { buildIcpQuality } from "../lib/quality";
  *   ├─────────────────────────────────┤
  *   │ Downstream changes              │
  *   │ — what other rooms will adopt   │
- *   │   once this wedge is saved      │
+ *   │   once this ICP is saved      │
  *   └─────────────────────────────────┘
  *
  * Derives:
  *   - Score + label from buildIcpQuality
  *   - Weakest field: first input that's empty or thin
- *   - Broad version: opposite-of-wedge sentence the system rejects
+ *   - Broad version: opposite-of-ICP sentence the system rejects
  *   - Downstream changes: which rooms will sharpen + how
  */
 

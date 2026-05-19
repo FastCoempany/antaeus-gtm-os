@@ -12,7 +12,7 @@ export function Topbar(): JSX.Element {
     const s = stats.value;
     const focus = inboundFocus.value;
     // Phase 2.3 — inbound focus from ICP Studio / Territory Architect
-    // appended as kicker tail so the operator sees which wedge the
+    // appended as kicker tail so the operator sees which ICP the
     // workbench is sourcing against.
     const baseKicker =
         s.total > 0

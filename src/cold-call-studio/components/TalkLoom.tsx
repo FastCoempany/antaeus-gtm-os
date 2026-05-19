@@ -138,9 +138,9 @@ export function TalkLoom(): JSX.Element {
                     ))}
                 </div>
 
-                <aside class="cc-loom__read" aria-label="Loom read">
-                    <p class="cc-loom__read-kicker">LOOM READ</p>
-                    <p class="cc-loom__score" aria-label="Loom score">
+                <aside class="cc-loom__read" aria-label="Where the call stands">
+                    <p class="cc-loom__read-kicker">WHERE THE CALL STANDS</p>
+                    <p class="cc-loom__score" aria-label="Call score">
                         {score}
                     </p>
                     {/*
@@ -172,7 +172,7 @@ export function TalkLoom(): JSX.Element {
                         */}
                         <p class="cc-loom__read-correction">
                             <span class="cc-loom__read-correction-label">
-                                Required correction
+                                What to do about it
                             </span>
                             <span class="cc-loom__read-correction-copy">
                                 {requiredCorrectionCopy(hasAccount, t.id)}

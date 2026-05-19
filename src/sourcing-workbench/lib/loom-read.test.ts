@@ -58,7 +58,7 @@ describe("computeLoomRead — empty board", () => {
     });
 });
 
-describe("computeLoomRead — operator move priority chain", () => {
+describe("computeLoomRead — next-move priority chain", () => {
     it("prescribes pushing when a ready prospect exists", () => {
         const prospects = [prospect("a-1", "ready")];
         const r = computeLoomRead({

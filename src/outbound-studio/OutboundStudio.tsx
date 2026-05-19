@@ -16,22 +16,22 @@ import { RoomChrome } from "@/lib/room-chrome";
  * (deliverables/prototypes/wireframes/antaeus-outbound-studio-
  * triptych-2026-04-18.html line 628+) the loft is a 3-column
  * surface — operating laws on the left, the switchboard + output
- * in the center, the live board read on the right:
+ * in the center, the live read of the line on the right:
  *
  *   ┌────────────────────────────────────────────────────────────┐
  *   │  Topbar: kicker + thesis + dynamic touch count             │
  *   ├──────────┬───────────────────────────────────┬─────────────┤
- *   │  Laws    │  Switchboard (operator rack)      │  Board read │
- *   │  (left)  │  OutputPanel (send line)          │  Op move    │
- *   │          │  (center, ob-stage)               │  (right)    │
+ *   │  Laws    │  Switchboard (operator rack)      │  Where the  │
+ *   │  (left)  │  OutputPanel (send line)          │  line stands│
+ *   │          │  (center, ob-stage)               │  + next move│
  *   ├──────────┴───────────────────────────────────┴─────────────┤
  *   │  TouchLog + cross-room handoff strip                       │
  *   └────────────────────────────────────────────────────────────┘
  *
  * SwitchLaws (left) is static doctrine — the two operating laws
- * the rack enforces. SwitchReads (right) is the live interpretive
- * readout that compresses what the operator just patched into a
- * board read + next move. The center (`ob-stage`) is unchanged
+ * the rack enforces. SwitchReads (right) is the live read that
+ * compresses what the operator just patched into a one-line state
+ * + the next move. The center (`ob-stage`) is unchanged
  * structurally — Switchboard + OutputPanel keep their existing
  * shape from Wave 3-5.
  */
