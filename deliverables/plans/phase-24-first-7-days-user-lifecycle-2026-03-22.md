@@ -6,7 +6,7 @@ Define the first week after signup.
 ## Why This Phase Exists
 Welcome and tour now make the first session more credible, but activation still needs continuity after that first hit of clarity.
 
-Phase 24 turns week one into an in-product operating rhythm:
+Phase 24 turns week one into an in-product weekly rhythm:
 - dashboard becomes the home for first-week guidance
 - the shell reminds the user to come back to dashboard while activation is still fragile
 - first-value milestones are explicit instead of implied

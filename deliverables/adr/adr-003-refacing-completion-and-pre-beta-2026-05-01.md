@@ -168,7 +168,7 @@ What "done" looks like, by perspective.
 - The user's work **carries forward across rooms** — continuity params honored, focus preserved, no restate-the-context.
 - The user's mistakes are **recoverable** — unsaved guard catches accidental nav-aways, auth failures explain themselves, exports work.
 - The user reads the room and feels: *severe, calm, ranked, intelligent, authored* — the canon Part I emotional territory, not generic SaaS optimism.
-- A hire opening the workspace cold reads Founding GTM top to bottom and walks into Monday morning with a real operating rhythm — not a blank kit, not a bullet aggregation.
+- A hire opening the workspace cold reads Founding GTM top to bottom and walks into Monday morning with a real weekly rhythm — not a blank kit, not a bullet aggregation.
 
 ### 2.3 Founder ("the visual review checks out")
 

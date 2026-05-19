@@ -99,7 +99,7 @@
             modules: [
                 { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'compile what the first AE should inherit instead of rediscover' },
                 { href: '/app/readiness/', label: 'Readiness', reason: 'show where the system is still too thin for a safe handoff' },
-                { href: '/app/dashboard/', label: 'Dashboard', reason: 'turn handoff into a daily operating rhythm, not a PDF event' }
+                { href: '/app/dashboard/', label: 'Dashboard', reason: 'turn handoff into a daily weekly rhythm, not a PDF event' }
             ],
             outputs: [
                 'A clearer inherited playbook instead of a rep-sized blank space.',

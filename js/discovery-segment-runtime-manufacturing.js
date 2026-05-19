@@ -469,7 +469,7 @@
           branch("WORKFLOW CHANGE RISK","ly","\"Changing the planning or response cadence is the bigger risk.\"","\"Then we need the smallest proving scope that changes one real decision without destabilizing the rest.\"",[
             jumpNode("Choose the path", "next-step-lock", "scope-path", "org"),
             jumpNode("Set workflow proof", "proof-threshold", "workflow-proof", "blu")
-          ],"Adoption risk sits in operating rhythm, not just data.","You still need the narrowest safe scope."),
+          ],"Adoption risk sits in weekly rhythm, not just data.","You still need the narrowest safe scope."),
           branch("INERTIA","fl","\"Mostly it is inertia.\"","\"Inertia usually means the pain or sponsor is still too weak. Which one is true here?\"",[
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "red"),
             jumpNode("Return to consequence", "pain-and-consequence", "operational-consequence", "blu")

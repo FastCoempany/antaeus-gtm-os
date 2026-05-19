@@ -453,7 +453,7 @@ Points earned across Level 3
 Level 4: Stress-Test & Leverage (65 → 80)
 
 Goal: Pressure-test your pipeline, deploy advisory relationships, and
-establish the Dashboard as your weekly operating rhythm. This is where
+establish the Dashboard as your weekly weekly rhythm. This is where
 the system’s compound effect becomes visible — every module is now
 feeding every other module.
 
@@ -526,7 +526,7 @@ Steps
 102. **Step 5:** Click “Autopsy Riskiest Deal” to go directly to the
      highest-risk deal’s Future Autopsy.
 
-103. **Step 6:** Repeat weekly. This is the operating rhythm the system
+103. **Step 6:** Repeat weekly. This is the weekly rhythm the system
      is designed to create.
 
 Points earned across Level 4

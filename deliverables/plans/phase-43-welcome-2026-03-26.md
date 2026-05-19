@@ -44,7 +44,7 @@ That lets the hero reflect:
 This makes the page feel tuned to the user instead of generic.
 
 ### 3. Connected Welcome to the First-Week Lifecycle
-Welcome now reads the shared week-one lifecycle engine and adds a dedicated `First-week operating rhythm` panel when the user is still inside days 1-7.
+Welcome now reads the shared week-one lifecycle engine and adds a dedicated `First-week weekly rhythm` panel when the user is still inside days 1-7.
 
 That panel shows:
 

@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
  * Phase 2.7 — Synthesis flow Playwright walk.
  *
  * Sarah Chen tightens her quota math in Quota Workback, then walks
- * into Founding GTM to see how the day-one operating rhythm reads
+ * into Founding GTM to see how the day-one weekly rhythm reads
  * for her first AE. Two rooms; synthesis is the cluster Phase 2.7
  * owns. (Readiness Score gets its own 2.8 slice.)
  *

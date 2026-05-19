@@ -850,7 +850,7 @@ function renderSection(name, context) {
       <>
         <SectionHeader
           eyebrow="System Position"
-          title="Antaeus should read like a premium operating instrument, not a stacked SaaS dashboard."
+          title="Antaeus should read like a premium tool the operator actually uses, not a stacked SaaS dashboard."
           copy="This lab exists to prove the visual truth before more production work drifts back toward the old shell. The aim is attraction before instruction, clarity before explanation, and consequence before decoration."
         />
         <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: PRIMITIVE.space[5] }}>
