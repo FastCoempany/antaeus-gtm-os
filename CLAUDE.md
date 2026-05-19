@@ -33,6 +33,8 @@ If a lower authority conflicts with a higher one, the higher wins.
 
 **If you are a Claude session:** read this top to bottom before touching anything. The canon is long on purpose. Skimming will produce drift.
 
+**Voice rule before you write anything.** Don't use a single noun to do the work of a sentence — no "wedge", "verdict", "the move", "decision-grade". Write the sentence out. Don't write manifesto fragments. Write like you'd say it out loud. The full rule lives in Part III §11; read it before generating any user-facing copy, audit prose, or PR description.
+
 **If you are the founder:** this is your working contract. When you make a decision that changes doctrine (direction shift, room-mind correction, new principle), update the relevant Part here and commit it with a short rationale. Stale canon is worse than no canon.
 
 **Rendered visibility:** the app is static HTML. To see what a room actually looks like, start the Python server and use the capture script — see Part V for the workflow. Never audit a room from DOM or CSS alone; my own early audits were wrong because of this.
@@ -843,6 +845,54 @@ The product's state vocabulary is specific. Use these, not their softer cousins.
 - 6 rooms intentionally get **neither** (Dashboard, Welcome, Onboarding, Settings, Founding GTM, LinkedIn Playbook). Reasons are in the closeout memo.
 
 Future rooms must justify their health treatment through product leverage, not coverage vanity.
+
+---
+
+## 11. Voice — write what you mean, not a word that points at it
+
+This rule governs every sentence in the product, in canon, in audit docs, in PR descriptions, in wireframes, and in conversations with Claude sessions. It works alongside §10 (State language lock) — §10 gives you the verbs and state vocabulary; this gives you the sentence shape that carries them.
+
+**The rule:** stop reaching for a single noun to do the work of a sentence. When the urge to write "the wedge" or "the verdict" or "the move" hits, write the sentence out instead.
+
+- Bad: "That's the wedge."
+- Better: "That's where Antaeus does something Apollo can't."
+- Bad: "Cast a decision-grade proof."
+- Better: "Make the pilot evidence clear enough that the buyer's boss can act on it without you in the room."
+
+**Manifesto fragments are out.** Sentences in series with no subject continuity ("Signals are time-limited. Heat ranks them. Motion comes from the account ledger.") read like a copywriter trying too hard. Write normal sentences with subjects.
+
+**Plainness target.** Write like you would say it out loud to the operator sitting next to you. If a sentence wouldn't sound natural spoken, it's not plain enough yet.
+
+Worked example for an operator-facing summary panel:
+
+- Before:
+  > FIELD READ — Runnable · 71
+  > MAIN RISK: Watch-ring accounts still look too comfortable.
+  > REPLACEMENT PRESSURE: Three cleaner replacements should land this week.
+  > OPERATOR MOVE: Promote only one account from watch ring.
+
+- After:
+  > You're at 71 out of 100.
+  > Two of the accounts you're working are sitting idle — they should probably come off the list.
+  > Three new ones need to land this week to replace them.
+  > Today, promote one of the accounts on your watchlist.
+
+No kickers, no labels, just sentences someone could say out loud.
+
+**What stays.**
+
+- Domain words the product genuinely operates on: account, deal, signal, contact, proof, advisor, call, plus the room names themselves. These aren't invented startup-language; they're what the product is about. They stay — but in prose they need context. "Proof" bare doesn't anchor to anything; "the pilot results" or "what the pilot measured" does.
+- Code identifiers (function names, variable names, file names, CSS class names): `computeHeat`, `topHeat`, `verdictLevel`, `computeFieldRead`, `.lp-read__rule--recovery`. These are programmatic, not user-facing. Renaming them is a giant refactor with no user payoff. New code follows the new voice in UI strings and comments, but existing identifiers stay.
+
+**What needs to go.**
+
+- Single-word abstractions the product invented to feel important: "wedge", "verdict", "pressure score", "decision-grade", "operating truth", "command intelligence", "field read", "loom read", "ingot read", "recovery cue", "output ingot", "required correction", "operator move", "do not use", "main risk", "replacement pressure".
+- Every aphoristic three-sentence-fragment thesis paragraph written in that style.
+- Decorative compound nouns of the form `<adjective>-<noun>` when they're trying to feel like Special Industry Terms™ — "decision-grade proof", "execution-context temperature", "intervention board".
+
+**The test for any sentence.** Read it out loud. If you can't imagine yourself saying it to the operator across the table, it isn't plain enough yet. Rewrite until it sounds like normal speech.
+
+This rule was canonized on 2026-05-19 and applies retroactively across all canon prose, audit docs, UI copy, wireframes, and conversational responses. See the deep-clean sweep landing in branch `claude/voice-deep-clean` for the retroactive application.
 
 ---
 
