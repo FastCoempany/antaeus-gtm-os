@@ -456,6 +456,66 @@ body {
     line-height: 1.4;
 }
 
+/*
+ * Program 6 / PR 15 — Do-not-use anti-tab. Per the picked-winner
+ * Backchannel Desk wireframe, the rolodex surfaces an explicit
+ * "Do not use" card naming an advisor that would be the wrong
+ * carrier for the current ask. The anti-tab is rendered diagonally
+ * across the rolodex grid (intentionally NOT clickable) so the
+ * operator can't accidentally deploy the wrong carrier.
+ */
+.ad-rolodex__antitab {
+    border-radius: 18px;
+    padding: 14px 16px;
+    background: rgba(201, 74, 67, 0.06);
+    border: 1px dashed var(--ad-red);
+    color: var(--ad-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ad-rolodex__antitab--underpowered {
+    background: rgba(237, 107, 31, 0.06);
+    border-color: var(--ad-orange);
+}
+
+.ad-rolodex__antitab-kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ad-red);
+}
+
+.ad-rolodex__antitab--underpowered .ad-rolodex__antitab-kicker {
+    color: var(--ad-orange);
+}
+
+.ad-rolodex__antitab h3 {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 19px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--ad-ink);
+    text-decoration: line-through;
+    text-decoration-color: rgba(201, 74, 67, 0.55);
+}
+
+.ad-rolodex__antitab--underpowered h3 {
+    text-decoration-color: rgba(237, 107, 31, 0.55);
+}
+
+.ad-rolodex__antitab p {
+    margin: 0;
+    color: var(--ad-soft);
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
 .ad-rolodex__empty {
     border-radius: 22px;
     padding: 22px;
