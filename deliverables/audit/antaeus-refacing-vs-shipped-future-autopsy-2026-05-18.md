@@ -15,7 +15,7 @@
 
 ## Mind preservation — PASS
 
-Canon §4.14 (Future Autopsy — Diagnosis Table named premium asset) preserved:
+Canon §4.14 (Future Autopsy — Diagnosis Table, protected room) preserved:
 
 - ✅ The deal is pinned as evidence (PinnedCase header surfaces the focal case).
 - ✅ Forensic light-table posture (sheets stacked simultaneously, not behind tabs).
@@ -31,7 +31,7 @@ No mind drift.
 
 ## Structural drift — only the visual signatures of Variant 01 remain
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
 | Variant 01 wireframe | Shipped | Justifying evolution |
 |---|---|---|
@@ -39,7 +39,7 @@ No mind drift.
 | Static 3 route cards | Dynamic `buildActionPlan(doc)` → primary/secondary/tertiary derived from autopsy data | Wave 5 — engine-driven routing is canon evolution |
 | Sentence-shaped concept-meaning paragraph | Topbar carries the kicker + thesis; not the full "concept-meaning" treatment | Topbar shape is the canon room pattern |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Variant 01 wireframe | Shipped | Severity |
 |---|---|---|

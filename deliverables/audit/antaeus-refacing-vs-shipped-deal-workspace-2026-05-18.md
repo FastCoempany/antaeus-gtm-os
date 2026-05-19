@@ -33,7 +33,7 @@ No mind drift.
 
 ## Structural drift — only one item remains
 
-### A. Canon-aligned evolution + already-closed (KEEP)
+### A. Things the shipped room evolved past the wireframe + already-closed (KEEP)
 
 | Variant 02 / Intervention Desk wireframe | Shipped | Justifying evolution |
 |---|---|---|
@@ -46,7 +46,7 @@ No mind drift.
 | Lane summary (Now / Next / Keep honest with state + headline + copy + meta) | ✅ Matches wireframe Variant 02's `lane-grid` |
 | Controls strip with filter + actions | ✅ FilterBar |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Intervention Rail wireframe (founder-locked lower board) | Shipped | Severity |
 |---|---|---|

@@ -230,7 +230,7 @@ arc behind a feature flag.
 
 ---
 
-## Room 2: Future Autopsy (Diagnosis Table, named premium asset)
+## Room 2: Future Autopsy (Diagnosis Table, protected room)
 
 - **Picked artifact:** `antaeus-future-autopsy-variant-01-selected-2026-04-09.html`
   (titled "Variant 01 · Forensic Light Table")
@@ -393,7 +393,7 @@ adjust before the audit scales.
 | ICP Studio | triptych 2026-04-17 (no `-selected-`) | low — single triptych |
 | Territory Architect | triptych 2026-04-17 | low |
 | Sourcing Workbench | triptych 2026-04-17 | low |
-| Signal Console | NO TRIPTYCH found | flag — named premium asset, missing artifact is a question |
+| Signal Console | NO TRIPTYCH found | flag — protected room, missing artifact is a question |
 | Outbound Studio | triptych 2026-04-18 | low |
 | Cold Call Studio | radical-triptych 2026-04-19 | low |
 | LinkedIn Playbook | radical-triptych + base 2026-04-19 | low |
@@ -414,7 +414,7 @@ For rooms WITHOUT a `-selected-` filename, the next move is:
   proceed
 
 For rooms with NO triptych at all (Signal Console, Quota Workback):
-- these are notable gaps. Signal Console is a named premium asset;
+- these are notable gaps. Signal Console is a protected room;
   shipping it without a triptych pass means whatever shape it
   carries is either inherited from legacy or designed in-line during
   the rebuild without exploration

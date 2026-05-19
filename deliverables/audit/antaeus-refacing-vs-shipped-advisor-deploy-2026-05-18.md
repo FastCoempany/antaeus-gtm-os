@@ -29,32 +29,32 @@ Advisor Deploy is the most-faithful-to-winner room in the set. Phase 4 / Room 10
 
 ## Structural drift — narrow
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
 | Backchannel Desk wireframe | Shipped (post-evolution) | Justifying evolution |
 |---|---|---|
 | Static example tabs ("Maya Chen", "Rafi Mehta", "Elena Park") | **Live rolodex of top-4 registered advisors, ranked by exact-match** | Phase 4 / Room 10 — the room must work over the operator's actual advisor registry |
-| Static "82" spend-read number | **Live `computeSpendRead` 30-92 score with band** | Decision-grade signal, not display |
+| Static "82" spend-read number | **Live `computeSpendRead` 30-92 score with band** | The score has to react to the deal + advisor + ask the operator is actually routing, not a static number |
 | No URL inbound | **`?deal=` inbound + auto-select by id or accountName** | Cross-room handoff plumbing per canon §6 |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Backchannel Desk wireframe | Shipped | Severity |
 |---|---|---|
-| **Rolodex carries an explicit "Do not use" anti-tab** ("Board member is too expensive for this ask.") | The rolodex surfaces top-4 advisors but never makes COST visible. A T1 board member shown alongside a T3 angel reads as equally available — no warning that deploying the T1 burns capital that should be saved for a higher-stakes signal | 🟡 MED — canon §4.16's "trust is spent, not spent" is invisible at the routing surface; the anti-tab is the discipline cue the wireframe specifically calls out |
+| **Rolodex carries an explicit "Do not use" card** ("Board member is too expensive for this ask.") | The rolodex shows the top-4 advisors but never tells the operator that one of them would be wrong to use. A T1 board member sits next to a T3 angel as if they're equivalent — the cost of pulling the T1 (which is meant for higher-stakes asks) isn't visible | 🟡 MED — canon §4.16 says "trust is spent, not spent." If the operator can't see when they're about to waste a board favor on a routine intro, that principle is invisible. The wireframe's "do not use" card is what makes the cost legible. |
 
 ### Explicitly deferred
 
 | Element | Why deferred |
 |---|---|
 | Rotated paper sheets / textured surfaces | Already shipped — the cream ask-sheet + dark blotter give the tactile feel |
-| Multiple "Do not use" cards | The wireframe shows a single anti-tab; one cost cue is enough discipline |
+| Multiple "Do not use" cards | The wireframe shows a single card; one is enough — more would clutter without adding signal |
 
 ---
 
 ## Fix scope (this PR)
 
-1. **`lib/deploy-cost.ts`** (new) — pure `deployCost(advisor, momentId)` returning `"too-expensive"` (T1 on low-stakes intro/reference/renewal) | `"underpowered"` (T4 on high-stakes board_decision/eb_bridge/budget_kill) | `null`. Plus `findDoNotUseCandidate(advisors, momentId, activeAdvisorId)` that picks the single most relevant cost-flagged advisor for the current moment (prefers too-expensive over underpowered; skips the active advisor since the operator picked them deliberately).
+1. **`lib/deploy-cost.ts`** (new) — pure `deployCost(advisor, momentId)` returning `"too-expensive"` (T1 on low-stakes intro/reference/renewal), `"underpowered"` (T4 on high-stakes board_decision/eb_bridge/budget_kill), or `null` when the match is fine. Plus `findDoNotUseCandidate(advisors, momentId, activeAdvisorId)` picking the single advisor most worth warning about (prefers too-expensive over underpowered; skips the currently-active advisor since the operator picked them deliberately).
 2. **`lib/deploy-cost.test.ts`** (new) — covers both branches + middle-tier null + registry candidate selection + active-advisor skip + preference order + reason copy.
 3. **`DeskBoard.tsx`** — computes `doNotUse` candidate and renders an `.ad-rolodex__antitab` article at the end of the rolodex grid when a cost flag fires.
 4. **`advisor-deploy.css`** — full `.ad-rolodex__antitab*` styling: dashed red border (too-expensive) or dashed orange border (underpowered), strike-through advisor name, `DO NOT USE` kicker. Anti-tab is intentionally NOT a button so the operator can't accidentally deploy it.

@@ -30,7 +30,7 @@ Phase 4 / Room 14 shipped against the winner's thesis directly. The Topbar alrea
 
 ## Structural drift — narrow
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
 | Variant 01 wireframe | Shipped (post-evolution) | Justifying evolution |
 |---|---|---|
@@ -39,11 +39,11 @@ Phase 4 / Room 14 shipped against the winner's thesis directly. The Topbar alrea
 | Wireframe lacks downstream handoff | **HandoffStrip with 4 destinations** | Canon §6 compounding |
 | Rationale callout below grid | Not surfaced (wireframe annotation) | Correct |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Variant 01 wireframe | Shipped | Severity |
 |---|---|---|
-| **4-stat row of PLAN INPUTS** — Annual quota / Avg ACV / Win rate / Cycle, each with an interpretive sub-note ("75 deals to hit number", "~340 opps needed", "Mid-market enterprise") | The shipped Topbar surfaces 3 DERIVED OUTPUTS — Monthly target / Touches/week / Coverage goal. These duplicate the hero + CoveragePanel + PlanReadout below | 🟡 MED — duplicate-output stats add visual noise without adding signal; the wireframe's input-anchor stats let the operator see WHAT produced the hero number at a glance |
+| A 4-stat row showing the operator's plan inputs — annual quota, average ACV, win rate, sales cycle — each with a one-line sub note that gives the number context (e.g. "75 deals to hit number", "~340 opps needed", "mid-market enterprise") | The shipped Topbar surfaces 3 derived outputs — monthly target, touches per week, coverage goal. Each of those is already shown in the hero, the CoveragePanel, or the PlanReadout below | 🟡 MED — surfacing the same outputs twice adds visual noise without adding signal. The wireframe's plan-input row lets the operator see at a glance what produced the hero number. |
 | Each stat has a sub-note context line | No sub-notes on the shipped stats | 🟢 LOW — interpretive context per stat |
 
 ### Explicitly deferred

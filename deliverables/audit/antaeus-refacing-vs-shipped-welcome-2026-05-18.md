@@ -23,7 +23,7 @@ No mind drift.
 
 ## Structural drift — partial; some forced by canon evolution
 
-### A. Canon-aligned evolution (KEEP — don't revert)
+### A. Things the shipped room evolved past the wireframe (KEEP — don't revert)
 
 | Launch Folio wireframe | Shipped (post-evolution) | Justifying evolution |
 |---|---|---|
@@ -32,7 +32,7 @@ No mind drift.
 | "What is missing" cell as the single locked cell forcing mechanic | MilestoneLadder's "next" state highlights the next anchor + ActionStack's "now" state highlights the dominant move | **Phase 4** picked the explicit milestone + ranked action picker over the implicit "one locked cell" — better discoverability for first-time users. |
 | 3-leaf stack (Layer 01 / Layer 02 / Active mandate) | Hero progress bar (`{completed} / {total} anchors live`) + MilestoneLadder rows with done/next/pending state | Same semantic content (which layers are live, which are pending), shipped more readably. |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Launch Folio wireframe | Shipped | Severity |
 |---|---|---|

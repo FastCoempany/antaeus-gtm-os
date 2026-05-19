@@ -32,7 +32,7 @@ The shipped Discovery Studio is the result of TWO layers of canonical work:
 
 The two layers don't fully align. The Ledger Spine envisioned a single-column expandable-segment work surface; the Wave 5 + canon §4.12 work added 7 required global rails that don't fit in a single column.
 
-### A. Canon-aligned evolution (KEEP — don't revert)
+### A. Things the shipped room evolved past the wireframe (KEEP — don't revert)
 
 | Ledger Spine wireframe | Shipped (post-evolution) | Justifying evolution |
 |---|---|---|
@@ -48,7 +48,7 @@ The two layers don't fully align. The Ledger Spine envisioned a single-column ex
 
 These all stay. They each carry canonical authority that supersedes the Ledger Spine wireframe.
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Ledger Spine wireframe | Shipped | Severity |
 |---|---|---|

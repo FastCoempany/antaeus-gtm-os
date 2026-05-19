@@ -10,7 +10,7 @@
 
 ## Mind preservation — PASS
 
-Canon §4.7 (Signal Console — Live Instrument, named premium asset) preserved end-to-end:
+Canon §4.7 (Signal Console — Live Instrument, protected room) preserved end-to-end:
 
 - ✅ Heat-ranked account grid (cards ordered by score).
 - ✅ Per-account signal records (with AI flag, confidence, recency).
@@ -31,7 +31,7 @@ Phase 4 / Room 3 + the 2026-05 Sarah-CRO audit already brought this room close t
 
 ## Structural drift — narrow
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
 | Variant 01 wireframe | Shipped (post-evolution) | Justifying evolution |
 |---|---|---|
@@ -40,7 +40,7 @@ Phase 4 / Room 3 + the 2026-05 Sarah-CRO audit already brought this room close t
 | Card body: one signal blurb with execution-context tag | **Top-3 signal preview + expand + "+ N more"** | Phase 4 / Room 3 — operator scans more than one signal per account |
 | Rationale callout below grid | Not surfaced (it's wireframe documentation) | Correct — wireframe annotation, not operator surface |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Variant 01 wireframe | Shipped | Severity |
 |---|---|---|

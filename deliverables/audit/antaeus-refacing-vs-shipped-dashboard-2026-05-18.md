@@ -11,7 +11,7 @@
 The shipped Dashboard preserves canon §4.2 (Command Chamber family) end-to-end:
 
 - ✅ Three density modes (Brief / Spotlight / Queue per canon)
-- ✅ Command-intelligence ranking engine (892-line port from legacy)
+- ✅ The ranking engine (892-line port from legacy)
 - ✅ Workspace-health snapshot consumption from sibling rooms (`gtmos_deal_workspace_health` / `gtmos_signal_room_health` / `gtmos_readiness_snapshot` / `gtmos_quota_targets`)
 - ✅ EmptyDashboard orientation surface
 - ✅ One dominant move per surface (FocalObject)
@@ -25,7 +25,7 @@ No mind drift. The room knows the right things; the question is structural fidel
 
 Compared against the Slice 01 Soft Cut canonical wireframe, two distinct categories of drift:
 
-### A. Canon-aligned evolution (KEEP — don't revert)
+### A. Things the shipped room evolved past the wireframe (KEEP — don't revert)
 
 These deltas are deliberate, traceable to canon updates that post-date the Soft Cut wireframe (which was locked 2026-04-04):
 
@@ -38,7 +38,7 @@ These deltas are deliberate, traceable to canon updates that post-date the Soft 
 
 These all stay.
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 These deltas have no canonical justification and represent honest structural drift from the picked winner:
 

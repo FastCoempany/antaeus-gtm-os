@@ -147,9 +147,9 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 
 ---
 
-## Room: Signal Console (Live Instrument · named premium asset)
+## Room: Signal Console (Live Instrument · protected room)
 
-- **Picked artifact:** **NO TRIPTYCH IN ARCHIVE.** Notable gap given Signal Console is a named premium asset (canon §5).
+- **Picked artifact:** **NO TRIPTYCH IN ARCHIVE.** Notable gap given Signal Console is a protected room (canon §5).
 - **AI pick (no historical reference):** the room is a Live Instrument operating on Account+Signal sacred nouns. The shape that fits: **"Heat-ranked account grid + execution-context temperature ladder + workspace-health pulse"** — which is what shipped. AI confirms this as the de facto pick since no formal exploration exists.
 - **Shipped (`src/signal-console/`):** `sc-grid` (account cards) + `sc-add-form` (manual add) + `sc-card__metric` + execution-context chips. Bright Live Instrument.
 - **Verdict:** **match (de facto).** Implementation follows canon §4.7 mind. The lack of a historical triptych means we can't compare against a founder pick — but the shipped shape is rubric-defensible.
@@ -208,7 +208,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 
 ---
 
-## Room: Discovery Studio (Live Instrument / Diagnosis Table hybrid · named premium asset)
+## Room: Discovery Studio (Live Instrument / Diagnosis Table hybrid · protected room)
 
 - **Picked artifact:** **`discovery-studio-variant-01c-selected-2026-04-10.html`** (explicit `-selected-`). Plus 5 binding guardian specs in `08-room-guardian-specs/` and 12+ exploration files in the archive.
 - **Shipped (`src/discovery-studio/`):** All 7 contract rails per canon line 996 — `ds-framework-rail` + `ds-segment-rail` + `ds-recover-rail` + `ds-learned-truth-ledger` + `ds-worked-memory` + `ds-next-step-docket` + `ds-support-dossier`. Plus `ds-call-clock` + `ds-compression-toggle` + `ds-branch-picker`.

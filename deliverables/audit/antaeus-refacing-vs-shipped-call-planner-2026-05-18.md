@@ -23,14 +23,14 @@ No mind drift.
 
 ## Structural drift — partial; targeted unforced drift
 
-### A. Canon-aligned evolution (KEEP)
+### A. Things the shipped room evolved past the wireframe (KEEP)
 
 | Pressure Script wireframe | Shipped (post-evolution) | Justifying evolution |
 |---|---|---|
 | Display-only state | **Editable form** (Witness contact name + persona buttons + LinkedIn URL + custom notes + deal-link `<select>`) | Phase 4 / Room 9 — room must accept input, not just display |
 | No explicit Quality block | **Quality component** with 5-gate breakdown + band-tinted pill + nextMove copy | Phase 4 / Room 9 — quality engine port; the V01 had only an implicit credibility chip |
 
-### B. Unforced drift (FIX in this PR)
+### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
 | Pressure Script wireframe | Shipped | Severity |
 |---|---|---|
