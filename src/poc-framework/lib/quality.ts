@@ -283,3 +283,82 @@ export function deriveMolds(
         }
     ];
 }
+
+// ─── Ingot read (Program 6 / PR 14 — Proof Foundry V03) ───────────────
+
+/**
+ * buildIngotRead — synthesize the 5-mold state into a 2-3 clause
+ * read so the operator gets a single-glance view of what's hot vs
+ * what's empty, mirroring the picked-winner Variant 03 / Proof
+ * Foundry wireframe sentence: "The buyer pain is hot. The metric
+ * mold is usable. The authority mold is empty."
+ *
+ * Pure: takes the mold rows and returns one string of 1-3 clauses
+ * separated by sentences. Never throws; returns the empty-board
+ * copy when no molds have advanced past `cold`.
+ *
+ * State → reading word:
+ *   cast → "locked"
+ *   hot  → "hot"
+ *   cold → "empty"
+ *   red  → "broken"
+ */
+const STATE_WORD: Readonly<Record<MoldState, string>> = {
+    cast: "locked",
+    hot: "hot",
+    cold: "empty",
+    red: "broken"
+};
+
+export function buildIngotRead(molds: ReadonlyArray<MoldRow>): string {
+    if (molds.length === 0) {
+        return "No molds yet — start the forge.";
+    }
+    const cast = molds.filter((m) => m.state === "cast");
+    const hot = molds.filter((m) => m.state === "hot");
+    const cold = molds.filter((m) => m.state === "cold");
+    const red = molds.filter((m) => m.state === "red");
+
+    // All locked → decision-grade proof.
+    if (cast.length === molds.length) {
+        return "All five molds are locked. The proof is decision-grade.";
+    }
+    // Nothing started → empty foundry.
+    if (cast.length === 0 && hot.length === 0) {
+        return "All five molds are still empty. The proof has not been forged yet.";
+    }
+
+    const clauses: string[] = [];
+
+    // Lead with the strongest molds (locked + hot), then the weakest
+    // (broken + empty). Cap at 3 clauses to keep the read scannable.
+    if (cast.length >= 2) {
+        const names = cast.slice(0, 2).map((m) => m.label.toLowerCase());
+        clauses.push(`${capitalize(names.join(" and "))} molds are locked.`);
+    } else if (cast.length === 1) {
+        clauses.push(`The ${cast[0]!.label.toLowerCase()} mold is locked.`);
+    }
+
+    if (hot.length === 1) {
+        clauses.push(`The ${hot[0]!.label.toLowerCase()} mold is hot.`);
+    } else if (hot.length >= 2) {
+        const names = hot.slice(0, 2).map((m) => m.label.toLowerCase());
+        clauses.push(`${capitalize(names.join(" and "))} molds are hot.`);
+    }
+
+    // Add ONE weakness clause — the broken / empty mold the operator
+    // most needs to harden next. Prefer red (broken) over cold (empty).
+    const weakest = red[0] ?? cold[0] ?? null;
+    if (weakest && clauses.length < 3) {
+        clauses.push(
+            `The ${weakest.label.toLowerCase()} mold is ${STATE_WORD[weakest.state]}.`
+        );
+    }
+
+    return clauses.join(" ");
+}
+
+function capitalize(s: string): string {
+    if (s.length === 0) return s;
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}

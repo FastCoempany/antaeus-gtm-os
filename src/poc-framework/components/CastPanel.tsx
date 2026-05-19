@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
 import { draft, linkedDeal } from "../state";
-import { computeQuality, deriveMolds } from "../lib/quality";
+import { buildIngotRead, computeQuality, deriveMolds } from "../lib/quality";
 import { generateDocs } from "../lib/docs";
 import type { ProofDocs } from "../lib/types";
 import { RouteRack } from "./RouteRack";
@@ -28,19 +28,31 @@ export function CastPanel(): JSX.Element {
     const linked = linkedDeal.value;
     const quality = computeQuality(drft, linked);
     const molds = deriveMolds(drft, quality);
+    const ingotRead = buildIngotRead(molds);
     const docs = generateDocs(drft, linked);
     const [activeDoc, setActiveDoc] = useState<keyof ProofDocs>("scope");
 
     return (
         <section class="poc-cast" aria-label="Proof cast">
             <header class="poc-cast__header">
-                <p class="poc-cast__kicker">CAST</p>
+                <p class="poc-cast__kicker">OUTPUT INGOT</p>
                 <h2 class="poc-cast__title">{quality.title}</h2>
                 <p class="poc-cast__sub">
                     Quality {quality.score}/100 ·{" "}
                     <span class={`poc-cast__band poc-cast__band--${quality.band}`}>
                         {quality.bandLabel}
                     </span>
+                </p>
+                {/*
+                  Program 6 / PR 14 — ingot synthesis line. Per the
+                  picked-winner Variant 03 / Proof Foundry wireframe,
+                  the cast surfaces a single-glance read of which
+                  molds are locked vs hot vs broken so the operator
+                  doesn't have to scan all five rows to know where
+                  the proof actually stands.
+                */}
+                <p class="poc-cast__ingot-read" aria-label="Ingot read">
+                    {ingotRead}
                 </p>
             </header>
 
