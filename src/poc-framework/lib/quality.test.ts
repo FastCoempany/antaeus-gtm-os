@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+    buildIngotRead,
     computeHeat,
     computeQuality,
     countBulletLines,
@@ -8,6 +9,7 @@ import {
     heatLabel,
     weakestMold
 } from "./quality";
+import type { MoldRow } from "./quality";
 import type { ProofDraft } from "./types";
 import { EMPTY_DRAFT } from "./types";
 
@@ -283,5 +285,73 @@ describe("deriveMolds", () => {
         const ownerRow = deriveMolds(d, q).find((m) => m.label === "Owner");
         expect(ownerRow?.value).toBe("Sarah Chen");
         expect(ownerRow?.state).toBe("cast");
+    });
+});
+
+describe("buildIngotRead (Program 6 / PR 14)", () => {
+    function mold(label: string, state: MoldRow["state"]): MoldRow {
+        return { label, value: "", state };
+    }
+
+    it("returns empty-foundry copy when nothing has started", () => {
+        const molds = [
+            mold("Claim", "cold"),
+            mold("Baseline", "cold"),
+            mold("Owner", "cold"),
+            mold("Metric", "cold"),
+            mold("Kill", "cold")
+        ];
+        const r = buildIngotRead(molds);
+        expect(r.toLowerCase()).toContain("still empty");
+    });
+
+    it("returns decision-grade copy when all molds are locked", () => {
+        const molds = [
+            mold("Claim", "cast"),
+            mold("Baseline", "cast"),
+            mold("Owner", "cast"),
+            mold("Metric", "cast"),
+            mold("Kill", "cast")
+        ];
+        const r = buildIngotRead(molds);
+        expect(r.toLowerCase()).toContain("decision-grade");
+        expect(r.toLowerCase()).toContain("locked");
+    });
+
+    it("synthesizes locked + hot + broken molds into clauses", () => {
+        const molds = [
+            mold("Claim", "cast"),
+            mold("Baseline", "hot"),
+            mold("Owner", "red"),
+            mold("Metric", "hot"),
+            mold("Kill", "red")
+        ];
+        const r = buildIngotRead(molds);
+        // Has a locked clause naming the claim mold.
+        expect(r.toLowerCase()).toContain("claim");
+        expect(r.toLowerCase()).toContain("locked");
+        // Has a hot clause naming at least one hot mold.
+        expect(r.toLowerCase()).toMatch(/baseline|metric/);
+        expect(r.toLowerCase()).toContain("hot");
+        // Has a broken clause naming the weakest red mold.
+        expect(r.toLowerCase()).toContain("broken");
+    });
+
+    it("returns empty-board fallback for an empty mold list", () => {
+        expect(buildIngotRead([])).toMatch(/start the forge/i);
+    });
+
+    it("prefers red over cold for the weakness clause", () => {
+        const molds = [
+            mold("Claim", "cast"),
+            mold("Baseline", "cold"),
+            mold("Owner", "red"),
+            mold("Metric", "cast"),
+            mold("Kill", "cold")
+        ];
+        const r = buildIngotRead(molds);
+        // Owner (red) should be named, not Baseline or Kill (cold).
+        expect(r.toLowerCase()).toContain("owner");
+        expect(r.toLowerCase()).toContain("broken");
     });
 });
