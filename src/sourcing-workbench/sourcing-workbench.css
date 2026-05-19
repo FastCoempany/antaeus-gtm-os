@@ -618,3 +618,136 @@ textarea.sw-field__control {
     flex-wrap: wrap;
     margin-top: 6px;
 }
+
+/* ─── Loom Read aside (Program 6 / PR 13 — Ticket Loom V02) ───────── */
+
+/*
+ * Per the picked-winner Variant 02 / Ticket Loom wireframe, the
+ * workbench should INTERPRET the prospect pile — what the week
+ * looks like + the prescribed next move — instead of just counting
+ * rows. This aside replaces the wireframe's tactile hanging-ticket
+ * metaphor with the actual interpretive substance.
+ */
+.sw-loom-read {
+    border: 1px solid var(--sw-line2);
+    border-left: 3px solid var(--sw-muted);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 20px 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    box-shadow: var(--sw-shadow-sm);
+}
+
+@media (max-width: 880px) {
+    .sw-loom-read {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sw-loom-read--shipping {
+    border-left-color: var(--sw-green);
+}
+.sw-loom-read--working {
+    border-left-color: var(--sw-blue);
+}
+.sw-loom-read--loose {
+    border-left-color: var(--sw-orange);
+}
+.sw-loom-read--empty {
+    border-left-color: var(--sw-amber);
+}
+
+.sw-loom-read__score-row {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--sw-line2);
+}
+
+.sw-loom-read__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--sw-muted);
+}
+
+.sw-loom-read__band {
+    margin: 6px 0 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--sw-navy);
+}
+
+.sw-loom-read__score {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 48px;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    color: var(--sw-navy);
+}
+
+.sw-loom-read--shipping .sw-loom-read__score {
+    color: var(--sw-green);
+}
+.sw-loom-read--working .sw-loom-read__score {
+    color: var(--sw-blue);
+}
+.sw-loom-read--loose .sw-loom-read__score {
+    color: var(--sw-orange);
+}
+.sw-loom-read--empty .sw-loom-read__score {
+    color: var(--sw-amber);
+}
+
+.sw-loom-read__line {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sw-loom-read__line-label {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--sw-muted);
+}
+
+.sw-loom-read__line-copy {
+    margin: 0;
+    color: var(--sw-navy);
+    font-size: 13.5px;
+    line-height: 1.45;
+}
+
+/*
+ * Operator move gets the orange accent — it's the prescribed next
+ * action so it should read as the dominant line in the aside.
+ */
+.sw-loom-read__line--move {
+    background: rgba(230, 112, 30, 0.06);
+    border-left: 2px solid var(--sw-orange);
+    border-radius: 0 4px 4px 0;
+    padding: 8px 12px;
+}
+
+.sw-loom-read__line--move .sw-loom-read__line-label {
+    color: var(--sw-orange);
+}
+
+.sw-loom-read__line--move .sw-loom-read__line-copy {
+    font-weight: 600;
+}
