@@ -22,7 +22,7 @@ No mind drift.
 
 ---
 
-## Structural drift — partial; the loft's distinctive visual signatures are owed
+## Structural drift — partial; the loft's distinctive visual treatment is owed
 
 The Variant 03 wireframe says explicitly: *"This is the most radical option and the least document-like."* A full visual rebuild of the loft (cables, 3-col jack-grid, decorative connectors) would be 600+ lines. Scope this PR to the most-distinctive structural pieces that close the bootstrap-style drift without overscoping.
 
@@ -37,10 +37,10 @@ The Variant 03 wireframe says explicitly: *"This is the most radical option and 
 
 | Wireframe | Shipped | Severity |
 |---|---|---|
-| 3-col loft layout: doctrinal cards (left) + work area (center) + live reads (right) | 2-col `ob-stage` (Switchboard + OutputPanel) — no doctrinal column, no live-reads column | 🟡 MED — the left and right columns are what give the loft its interpretive frame; without them the room reads as a form, not a switchboard |
+| 3-col loft layout: doctrinal cards (left) + work area (center) + live reads (right) | 2-col `ob-stage` (Switchboard + OutputPanel) — no doctrinal column, no live-reads column | 🟡 MED — the left and right columns are what tell the operator what's going on; without them the room reads as a form, not a switchboard |
 | Two static doctrinal cards in the left column: "No send path without a named strain" + "Every route keeps a recovery cable on the same board" | Doctrine lives in the generator's behavior, not surfaced in the UI | 🟡 MED — canon §4.8 doctrine should be visible at the input surface |
 | Two live cards in the right column: one names whether the rack is loose / tightening / ready, and one names what to do next based on which input is still loose | OutputPanel surfaces the generated line but not the live read of the rack | 🟡 MED — the operator needs a glanceable read of what's connected and what to fix first; today they have to infer it from the form state |
-| Tone-colored jack micro-labels (orange account / blue buyer / green strain / orange proof / red objection) | Switchboard fields render with a generic kicker; no tone differentiation | 🟢 LOW — visual signature; functional behavior unchanged |
+| Tone-colored jack micro-labels (orange account / blue buyer / green strain / orange proof / red objection) | Switchboard fields render with a generic kicker; no tone differentiation | 🟢 LOW — small visual detail; functional behavior unchanged |
 
 ### Explicitly deferred (in audit doc, not shipped this PR)
 
@@ -97,4 +97,4 @@ The Variant 03 wireframe says explicitly: *"This is the most radical option and 
    - Center: Switchboard form (5 fields now styled as tone-colored jacks) + OutputPanel.
    - Right: live pill naming whether the rack is loose / tightening / ready + line naming what to do next.
 2. As she fills the rack, the right column updates live — "Tightening · Add a persona" → eventually "Ready · Ship the line."
-3. The room now reads as a routed signal board, not a generic form.
+3. The room now reads as a wired switchboard — laws on one side, work in the middle, live read on the other — not a generic form with a button.

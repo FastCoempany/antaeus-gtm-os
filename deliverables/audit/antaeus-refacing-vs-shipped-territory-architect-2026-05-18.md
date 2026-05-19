@@ -36,8 +36,8 @@ No mind drift.
 
 | Wireframe | Shipped | Severity |
 |---|---|---|
-| A read-dock on the right side of the hero that names what shape the territory is in right now and what to do about it (score + three labeled lines) | The hero shows tier counts and allocation status, but it doesn't say what's happening or what to do — the operator gets numbers, not a read of the picture | 🟠 HIGH — without it the room is a CRUD table, not a working instrument |
-| The same read-dock also names a score and a band label (Runnable / Tight / Loose / Empty) so the operator gets a single-glance posture | No score; only `at-cap` / `over` / `headroom` ceiling status | 🟡 MED — the score gives a one-second read of where the territory stands |
+| A right-side panel in the hero that names what shape the territory is in right now and what to do about it (a score + three plain-language lines) | The hero shows tier counts and the ceiling status, but it doesn't say what the picture means or what to do next — the operator gets numbers, not a sense of where the territory stands | 🟠 HIGH — without this the room is a table of rows, not a place that tells the operator anything |
+| The same panel also names a score and a band label (Runnable / Tight / Loose / Empty) so the operator gets a one-second read of where the territory stands | No score; only `at-cap` / `over` / `headroom` ceiling status | 🟡 MED — the score gives a one-second read |
 
 ### Explicitly deferred
 

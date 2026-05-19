@@ -14,7 +14,7 @@ Canon §4.7 (Signal Console — Live Instrument, protected room) preserved end-t
 
 - ✅ Heat-ranked account grid (cards ordered by score).
 - ✅ Per-account signal records (with AI flag, confidence, recency).
-- ✅ Workspace-health posture line (motion-ready vs research-heavy).
+- ✅ Workspace-health line naming whether the room is set up to act on signals or still piling up research.
 - ✅ Cross-room handoff (Deal Workspace / Outbound / Discovery Agenda).
 - ✅ ICP match chip per card.
 - ✅ Execution-context temperature ladder per card (ice_cold / cool / warm / hot).
@@ -25,7 +25,7 @@ No mind drift.
 
 ## Most of the refacing is already in
 
-Phase 4 / Room 3 + the 2026-05 Sarah-CRO audit already brought this room close to the winner. The shipped Topbar carries the wireframe's H1 verbatim ("Where account heat becomes real work."). The grid + per-card heat badge + state-driven primary CTA + workspace-health posture chip all map directly. What remains narrow.
+Phase 4 / Room 3 + the 2026-05 Sarah-CRO audit already brought this room close to the winner. The shipped Topbar carries the wireframe's H1 verbatim ("Where account heat becomes real work."). The grid + per-card heat badge + state-driven primary CTA + workspace-health chip all map directly. What remains is narrow.
 
 ---
 
@@ -33,7 +33,7 @@ Phase 4 / Room 3 + the 2026-05 Sarah-CRO audit already brought this room close t
 
 ### A. Things the shipped room evolved past the wireframe (KEEP)
 
-| Variant 01 wireframe | Shipped (post-evolution) | Justifying evolution |
+| Variant 01 wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
 | Static example cards (Northstar Health, Apex Fintech, Meridian Logistics) | **Live heat-ranked account grid** | Phase 4 / Room 3 — operator works the actual workspace |
 | Single primary CTA per card | **State-driven primary CTA** (`Open in Deal Workspace` if `hasActiveDeal`, else `Compose outbound` with `?temperature=`) | Phase 4 / Room 3 — the dominant move follows the execution context |

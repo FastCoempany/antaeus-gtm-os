@@ -48,8 +48,8 @@ What remains is narrow.
 
 | Wireframe | Shipped | Severity |
 |---|---|---|
-| Side aside pairs the diagnosis with the prescription — two lines: what's loose right now AND what to actually do about it | Only the diagnosis is surfaced; the prescription is absent | 🟡 MED — the rep needs the prescription, not just the diagnosis |
-| Giant score number carries a one-line interpretive thesis beneath it ("Five moves are enough if each move knows what pressure it carries") | The score number is rendered large but stands alone with no line giving it meaning at a glance | 🟢 LOW — copy-level signature add |
+| The side panel pairs two lines — one names what's loose right now, the other names what to actually do about it | Only the "what's loose" line is shown; the "what to do" line is absent | 🟡 MED — the rep needs to be told what to do, not just what's wrong |
+| The giant score number carries one line beneath it that says what the number means at a glance ("Five moves are enough if each move knows what pressure it carries") | The score number is rendered large but stands alone, with nothing telling the rep what it means | 🟢 LOW — copy-level add |
 | Color-coded indicator dot on each thread row (`.thread:before` 16px circle) | Thread rows already carry a 4px left-edge color border (`border-left: 4px solid var(--cc-thread-color)`) — the color anchor is present, just as a band instead of a dot | ⚪ NONE — already covered |
 
 ### Explicitly deferred
@@ -64,18 +64,18 @@ What remains is narrow.
 
 ## Fix scope (this PR)
 
-1. **`personalize.ts`** — add `requiredCorrectionCopy(hasAccount, threadId)` returning the prescription that pairs with `weakestThreadCopy`'s diagnosis. Thread-aware so the prescription is specific to where the rep is.
-2. **`TalkLoom.tsx`** — render the prescription line as a second copy line in the diagnosis block (mirrors the wireframe's two-line pairing).
-3. **`TalkLoom.tsx`** — render a one-line interpretive thesis under the score (`cc-loom__score-thesis`) so the giant number has weight at a glance without re-introducing the retired "Room law" paragraph.
-4. **`cold-call-studio.css`** — style the score-thesis line + the new prescription line so the side aside reads as the wireframe's diagnostic + prescriptive surface.
+1. **`personalize.ts`** — add `requiredCorrectionCopy(hasAccount, threadId)` returning the "what to do" line that pairs with `weakestThreadCopy`'s "what's loose" line. Thread-aware so the line names something specific to where the rep is.
+2. **`TalkLoom.tsx`** — render the "what to do" line as a second copy line in the same block (mirrors the wireframe's two-line pairing).
+3. **`TalkLoom.tsx`** — render a one-line statement under the score (`cc-loom__score-thesis`) so the giant number has weight at a glance, without re-introducing the retired "Room law" paragraph.
+4. **`cold-call-studio.css`** — style the score-thesis line + the new "what to do" line so the side panel reads as a paired "what's wrong / what to do" surface.
 
 > Note: code identifiers like `requiredCorrectionCopy` and `.cc-loom__score-thesis` were named under the old voice and stay as-is per canon Part III §11. New UI copy follows the new voice; the panel reads as plain sentences.
 
 ## Acceptance walk
 
-- The side aside shows both the diagnosis and the prescription.
-- The prescription text differs between no-account and account-set states.
-- The prescription text differs between proof/ask threads (where the call is mid-pressure) and prep/opener threads (where it hasn't earned pressure yet).
+- The side panel shows both lines — "what's loose" and "what to do".
+- The "what to do" text differs between no-account and account-set states.
+- The "what to do" text differs between proof/ask threads (where the call is mid-pressure) and prep/opener threads (where it hasn't earned pressure yet).
 - The giant score number carries a one-line thesis underneath it.
 - Each thread row shows the color anchor (via the existing left-edge border) tinted with the thread's accent color.
 - Existing live-thread navigation, branch picker, capture panel, outcome buttons, and persistence remain unchanged.

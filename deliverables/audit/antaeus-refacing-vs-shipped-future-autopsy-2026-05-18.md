@@ -9,7 +9,7 @@
 | Bootstrap finding | Status (this audit) |
 |---|---|
 | Tabbed forensic sheets where variant 01 called for stacked sentence-titled sheets | ✅ **Closed (Phase 2 rework, pre-PR-#74).** `ForensicSheets.tsx` renders 3 stacked sheets simultaneously (Risk / Proof / Motion) with sentence-shaped titles derived from `sentenceTitlesFor(doc)`. The legacy 3-tab rack is retired. |
-| Variant 01 visual signatures (tilted sheets, tone-colored tab pills, 2-col stack + route layout) | 🟡 **Open — closes in this PR.** The structure is right but the "lit evidence surface, not a page" tactility is missing. |
+| Variant 01's distinctive visual treatment (tilted sheets, tone-colored tab pills, 2-col stack + route layout) | 🟡 **Open — closes in this PR.** The structure is right but the "lit evidence surface, not a page" tactility is missing. |
 
 ---
 
@@ -18,7 +18,7 @@
 Canon §4.14 (Future Autopsy — Diagnosis Table, protected room) preserved:
 
 - ✅ The deal is pinned as evidence (PinnedCase header surfaces the focal case).
-- ✅ Forensic light-table posture (sheets stacked simultaneously, not behind tabs).
+- ✅ The "forensic light-table" feel from canon — sheets stacked simultaneously, not hidden behind tabs.
 - ✅ Six-pinned-case ledger (Ledger component selects which case to autopsy).
 - ✅ Verdict toggle (left-alone / corrected).
 - ✅ Countermeasure docket with task-completion log persistence.
@@ -29,11 +29,11 @@ No mind drift.
 
 ---
 
-## Structural drift — only the visual signatures of Variant 01 remain
+## Structural drift — only Variant 01's distinctive visual treatment remains
 
 ### A. Things the shipped room evolved past the wireframe (KEEP)
 
-| Variant 01 wireframe | Shipped | Justifying evolution |
+| Variant 01 wireframe | Shipped | Why the evolution is right |
 |---|---|---|
 | Single pinned case ("Meridian Logistics Global · $280k") | Multi-case Ledger below the pinned case lets Sarah switch | Wave 1 / canon §4.14 — Ledger is one of the 7 required global rails |
 | Static 3 route cards | Dynamic `buildActionPlan(doc)` → primary/secondary/tertiary derived from autopsy data | Wave 5 — engine-driven routing is canon evolution |

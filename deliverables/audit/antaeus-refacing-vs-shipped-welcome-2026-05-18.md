@@ -25,7 +25,7 @@ No mind drift.
 
 ### A. Things the shipped room evolved past the wireframe (KEEP — don't revert)
 
-| Launch Folio wireframe | Shipped (post-evolution) | Justifying evolution |
+| Launch Folio wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
 | Single central artifact (stacked leaves with mandate grid on front leaf) | Two side-by-side artifacts (MilestoneLadder + ActionStack) | **Phase 4 / Room 16 (PR #33)** + **first-90-seconds audit** picked the side-by-side composition for higher information density + clearer action affordance. The stacked-leaves was cinematic but slower to scan. |
 | Static thesis title "Open the live mandate." | Engine-driven dynamic headline (varies per activation state) | The dynamic headline gives Sarah a state-aware first read. The wireframe's static thesis was a hint about voice, not a hardcoded string. |
@@ -36,9 +36,9 @@ No mind drift.
 
 | Launch Folio wireframe | Shipped | Severity |
 |---|---|---|
-| **2×2 mandate grid** (Where you are / What's missing / What unlocks next / Return behavior) — the distinctive Commission Lock signature: an authored, file-like read on the workspace's current commissioned state | Absent. MilestoneLadder + ActionStack carry similar info but lose the "authored dossier" feeling. | 🟡 MED — the variant is *named* after this lock mechanic; without it the "Commission Lock" choice doesn't carry. |
-| **Stamp affordance** (e.g. "Week 1 / Day 4") on the front leaf giving the file temporal presence | Absent. No temporal anchor. | 🟢 LOW — small but signature; the wireframe used it as the "this isn't a generic welcome screen" marker. |
-| **"Open the live mandate." voice** on cold-start hero | Engine fallback copy ("Welcome to the workspace. Let's set up the first anchor.") | 🟡 MED — the wireframe's voice is more mandate-feeling, less product-onboarding-friendly. Shipping closer to that voice on the cold-start state matches canon §1 emotional territory ("severe, calm under pressure, authored"). |
+| **2×2 mandate grid** (Where you are / What's missing / What unlocks next / Return behavior) — the file-like 4-cell panel that makes the variant feel like opening a commissioned file | Absent. MilestoneLadder + ActionStack carry similar info but read as a product onboarding flow, not an authored file. | 🟡 MED — the variant is *named* after this lock mechanic; without it the "Commission Lock" choice doesn't come through. |
+| **Stamp affordance** (e.g. "Week 1 / Day 4") on the front leaf giving the file temporal presence | Absent. No temporal anchor. | 🟢 LOW — small detail, but it's what the wireframe used to mark "this isn't a generic welcome screen." |
+| **"Open the live mandate." voice** on cold-start hero | Engine fallback copy ("Welcome to the workspace. Let's set up the first anchor.") | 🟡 MED — the wireframe's voice reads as authored, not as product onboarding. Shifting the cold-start copy toward that voice matches canon §1 emotional territory ("severe, calm under pressure, authored"). |
 | **`folio-grid cell-lock` visual** — one cell visually different from the other three, reading as the unresolved gap | Absent (because the entire mandate grid is absent) | Same as the 2×2 grid above |
 
 ---

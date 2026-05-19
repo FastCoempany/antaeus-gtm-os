@@ -81,7 +81,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 - **Picked artifact:** none recorded with `-selected-`. Two triptych files exist: `welcome-launch-folio-triptych-2026-04-08.html` (3 variants all titled "Open the live mandate.") and `welcome-gamification-triptych-2026-04-08.html` (3 variants: "Bring the system online." / "Fly the first week forward." / "Earn the first proof set.").
 - **AI pick:** **gamification variant 1 — "Bring the first system online."** Rationale: matches Threshold family doctrine (invitational, composed, transitional) without the anxiety register the launch-folio set carries. The first-system-online thesis sits between confidence-building and progress-without-gamification per canon Part II §4.1. The ladder/anchor pattern in this variant maps cleanly to the four canon milestones (ICP, signal/account, deal, motion).
 - **Shipped (`src/welcome/`):** `wel-shell` → `wel-hero` (with `__progress-bar`, `__chips`) + `wel-actions__list` + `wel-grid`. Reads as a hero + actions stack.
-- **Verdict:** **partial.** Hero + actions are right Threshold posture. Sentence-shaped thesis exists in topbar. Drift: shipped progress-bar fills the hero; the picked variant's "ladder anchored to a first system" is more authored. Action cards are functional but lack the calm composition the Threshold family wants.
+- **Verdict:** **partial.** Hero + actions match the Threshold family treatment from canon Part II. Sentence-shaped thesis exists in the topbar. Drift: the shipped progress-bar fills the hero; the picked variant's "ladder anchored to a first system" reads as more authored. The action cards work but they lack the calm composition the Threshold family asks for.
 - **Punch list:**
   1. Re-author hero copy to match "Bring the first system online." register
   2. Replace progress-bar with the 4-anchor ladder (ICP / Signal / Deal / Motion); each anchor is its own micro-zone with state (locked / live / done)
@@ -283,7 +283,7 @@ This is a much smaller arc than feared — most rooms shipped to spec.
 
 ---
 
-## Room: Founding GTM (System Ledger · the brain's read-out)
+## Room: Founding GTM (System Ledger · where the workspace becomes hand-off ready)
 
 - **Picked artifact:** **n/a — Phase 5.B greenfield rebuild from rewritten mind** per canon §4.19 lock + PR #49.
 - **Shipped (`src/founding-gtm/`):** 7 authored sections each with `fg-section__title` (serif) + `fg-section__body` paragraphs + `fg-section__evidence` rows + optional `fg-surprise` callout. Plus `fg-maturity` band + `fg-ceremony` overlay.

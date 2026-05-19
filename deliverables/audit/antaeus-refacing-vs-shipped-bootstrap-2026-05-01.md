@@ -164,7 +164,7 @@ list at once.
 What carried over from the triptych:
 - ✅ Recovery-queue idea (the room exposes which deals are weakest)
 - ✅ Filter chip surface (`.dw-filter-bar` ≈ `.filter-shell`)
-- ✅ Bright field + Diagnosis Table family posture
+- ✅ Bright field + the Diagnosis Table family treatment from canon Part II
 - ✅ Phase 7 nav: BackButton, no sidebar, no Dashboard rail link
 - ✅ Mind: deal mirror to localStorage, continuity params, snapshot
   publishing all wired
@@ -297,7 +297,7 @@ What carried over from the triptych:
 - ✅ Forensic Light Table concept (room-as-evidence-surface)
 - ✅ Pinned case as the central object
 - ✅ Route rack preserved as a separate aside (`.fa-route-rack`)
-- ✅ Bright field, Diagnosis Table posture, mind + nav correct
+- ✅ Bright field, the Diagnosis Table family treatment, mind + nav correct
 
 What did NOT carry from the triptych:
 - ❌ **Sheets render as TABS, not a STACK.** Triptych shows all 3

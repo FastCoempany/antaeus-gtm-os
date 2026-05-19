@@ -34,7 +34,7 @@ The two layers don't fully align. The Ledger Spine envisioned a single-column ex
 
 ### A. Things the shipped room evolved past the wireframe (KEEP — don't revert)
 
-| Ledger Spine wireframe | Shipped (post-evolution) | Justifying evolution |
+| Ledger Spine wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
 | No CallClock | CallClock in topbar | **Wave 5 / Lumana guardian spec** — required visible call clock |
 | No CompressionToggle | Compression toggle (off / essentials / emergency) | **Wave 5** — required by canon §4.12 |
@@ -52,8 +52,8 @@ These all stay. They each carry canonical authority that supersedes the Ledger S
 
 | Ledger Spine wireframe | Shipped | Severity |
 |---|---|---|
-| **Vertical framework rail** (206px wide, left side) — 9 frameworks stacked vertically with name + dot | **Horizontal framework rail** in topbar (pill buttons wrapping) | 🟡 MED — the vertical rail is the Ledger Spine's signature affordance. Always-visible scan of the 9 frameworks. |
-| **Expandable-segment model** — only ONE segment is open at a time; the rest compressed to dot + num + title only | **All segments inline** — SegmentRail shows every segment with all visible nodes + branches stacked vertically at once | 🔴 HIGH — this is the Ledger Spine's structural signature. The shipped surface reads as a long scrolling document; the wireframe wanted a focused work surface where Sarah is in one segment at a time. |
+| **Vertical framework rail** (206px wide, left side) — 9 frameworks stacked vertically with name + dot | **Horizontal framework rail** in topbar (pill buttons wrapping) | 🟡 MED — the vertical rail is what made Ledger Spine work: the rep can always scan the 9 frameworks in their peripheral vision. |
+| **Expandable-segment model** — only ONE segment is open at a time; the rest compressed to dot + num + title only | **All segments inline** — SegmentRail shows every segment with all visible nodes + branches stacked vertically at once | 🔴 HIGH — this is what makes the Ledger Spine structurally different from a long form. The shipped surface reads as a long scrolling document; the wireframe wanted a focused work surface where the rep is in one segment at a time. |
 | **Mast** at top (kicker + serif "Ledger spine." brand + active framework stamp) — clean, gallery-like top strip | **Topbar** with kicker + serif title (active framework label) + horizontal framework rail | 🟢 LOW — the mast treatment is cleaner; the shipped is denser but functional. |
 | **3-col grid inside expanded segment** (Say now / Buyer might say / Command col with say-next + tool tabs facts/recover/leave) | **Inline nodes + branches** inside the SegmentRail; no segment-level work surface | 🟡 MED — the 3-col grid is data-shape-dependent (winner uses segment-level `say`+`replies`+`next`+tool data; shipped uses node-and-branches). Reorganizing the data shape is a multi-PR arc; this drift is documented for follow-up. |
 
@@ -77,7 +77,7 @@ Bucket B drift gets these specific fixes, prioritized by severity:
    - Active segment: expanded with nodes + branches + node-level interactions, exactly as today. Only one segment is "expanded" at a time.
    - The signal driving this is the `activeNode.segmentKey` — already in state.
 
-3. **Mast-style topbar refinement** — replace the dense topbar with a mast (kicker + serif "Ledger spine." brand-style title + active framework stamp on the right). The "Open one segment. Run the call from there." sentence becomes the section title above the segments.
+3. **Mast-style topbar refinement** — replace the dense topbar with a mast (kicker + serif "Ledger spine." title + active framework stamp on the right). The "Open one segment. Run the call from there." sentence becomes the section title above the segments.
 
 ### What this PR does NOT change
 

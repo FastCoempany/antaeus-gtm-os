@@ -35,8 +35,8 @@ No mind drift.
 
 | Wireframe | Shipped | Severity |
 |---|---|---|
-| A right-side aside that names what shape the workbench is in this week and what the operator should do today (a score + two labeled lines) | The Topbar shows 5 numeric stats (captured / researched / ready / pushed / total) but says nothing about whether the workbench is producing or stalling — the operator gets counts, not a read of the picture | 🟠 HIGH — same problem as Territory Architect had before PR 12: the room counts but doesn't read |
-| The same aside also names a score and a band label (e.g. "Shipping", "Working") so the operator gets a one-second read | No board-level posture; only individual quality bands per card | 🟡 MED — the score gives a one-second read of how the workbench is doing |
+| A right-side panel that names what shape the workbench is in this week and what to do today (a score + two plain-language lines) | The Topbar shows 5 numeric stats (captured / researched / ready / pushed / total) but doesn't say whether the workbench is producing or stalling — the operator gets counts, not a sense of where the work stands | 🟠 HIGH — same problem Territory Architect had before PR 12: the room counts but doesn't say anything about what the counts mean |
+| The same panel also names a score and a band label (e.g. "Shipping", "Working") so the operator gets a one-second read of how the workbench is doing | No board-level read; only individual quality bands per card | 🟡 MED — the score gives a one-second read |
 
 ### Explicitly deferred
 

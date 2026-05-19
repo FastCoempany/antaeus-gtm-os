@@ -31,7 +31,7 @@ Advisor Deploy is the most-faithful-to-winner room in the set. Phase 4 / Room 10
 
 ### A. Things the shipped room evolved past the wireframe (KEEP)
 
-| Backchannel Desk wireframe | Shipped (post-evolution) | Justifying evolution |
+| Backchannel Desk wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
 | Static example tabs ("Maya Chen", "Rafi Mehta", "Elena Park") | **Live rolodex of top-4 registered advisors, ranked by exact-match** | Phase 4 / Room 10 — the room must work over the operator's actual advisor registry |
 | Static "82" spend-read number | **Live `computeSpendRead` 30-92 score with band** | The score has to react to the deal + advisor + ask the operator is actually routing, not a static number |
@@ -47,7 +47,7 @@ Advisor Deploy is the most-faithful-to-winner room in the set. Phase 4 / Room 10
 
 | Element | Why deferred |
 |---|---|
-| Rotated paper sheets / textured surfaces | Already shipped — the cream ask-sheet + dark blotter give the tactile feel |
+| Rotated paper sheets / textured surfaces | Already shipped — the cream ask-sheet on top of the dark blotter does the "this is a desk, not a CRM" work without the rotations |
 | Multiple "Do not use" cards | The wireframe shows a single card; one is enough — more would clutter without adding signal |
 
 ---
@@ -56,13 +56,15 @@ Advisor Deploy is the most-faithful-to-winner room in the set. Phase 4 / Room 10
 
 1. **`lib/deploy-cost.ts`** (new) — pure `deployCost(advisor, momentId)` returning `"too-expensive"` (T1 on low-stakes intro/reference/renewal), `"underpowered"` (T4 on high-stakes board_decision/eb_bridge/budget_kill), or `null` when the match is fine. Plus `findDoNotUseCandidate(advisors, momentId, activeAdvisorId)` picking the single advisor most worth warning about (prefers too-expensive over underpowered; skips the currently-active advisor since the operator picked them deliberately).
 2. **`lib/deploy-cost.test.ts`** (new) — covers both branches + middle-tier null + registry candidate selection + active-advisor skip + preference order + reason copy.
-3. **`DeskBoard.tsx`** — computes `doNotUse` candidate and renders an `.ad-rolodex__antitab` article at the end of the rolodex grid when a cost flag fires.
-4. **`advisor-deploy.css`** — full `.ad-rolodex__antitab*` styling: dashed red border (too-expensive) or dashed orange border (underpowered), strike-through advisor name, `DO NOT USE` kicker. Anti-tab is intentionally NOT a button so the operator can't accidentally deploy it.
+3. **`DeskBoard.tsx`** — computes the `doNotUse` candidate and renders an `.ad-rolodex__antitab` article at the end of the rolodex grid when the helper returns a candidate.
+4. **`advisor-deploy.css`** — full `.ad-rolodex__antitab*` styling: dashed red border (too-expensive) or dashed orange border (underpowered), strike-through advisor name, "DO NOT USE" kicker. The card is intentionally not a button so the operator can't accidentally deploy it.
+
+> Note: the CSS class name `.ad-rolodex__antitab` was authored under the old voice and stays as a code identifier per canon Part III §11. In the audit prose the element is called "the do-not-use card" to match the wireframe.
 
 ## Acceptance walk
 
-- With a T1 advisor in the registry and `intro` selected as ask moment, an anti-tab renders naming the T1 advisor with "Save board capital" reason copy.
-- Switching to `board_decision` (high-stakes) hides the anti-tab on T1 (no longer too-expensive) and shows it on T4 instead if a T4 is registered.
-- The anti-tab is NOT clickable (no `<button>`).
+- With a T1 advisor in the registry and `intro` selected as the ask moment, the do-not-use card renders naming the T1 advisor with a "Save board capital" reason line.
+- Switching to `board_decision` (high-stakes) hides the card on T1 (no longer too-expensive) and shows it on T4 instead if a T4 is registered.
+- The card is not clickable (no `<button>`).
 - The 4 active rolodex tabs still render and remain clickable.
 - The hero + 3-cell route + blotter + ask sheet + stamps + desk edge all render unchanged.
