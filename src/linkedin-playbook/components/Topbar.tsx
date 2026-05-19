@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { hottestAccount, stats } from "../state";
 
 /**
- * Topbar — kicker + thesis (demoted) + a single status line.
+ * Topbar — kicker + headline (demoted) + a single status line.
  *
  * LinkedIn Playbook audit (2026-05):
  *   - BackButton removed — primary destination.

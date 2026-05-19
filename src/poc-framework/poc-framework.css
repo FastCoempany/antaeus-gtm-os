@@ -682,7 +682,7 @@ button {
     color: var(--poc-ink-70);
 }
 
-/* ─── Stage strip (Phase 2 rework — v3 "forced event" thesis) ──────── */
+/* ─── Stage strip (Phase 2 rework — v3 "forced event" design) ──────── */
 
 .poc-stage-strip {
     display: grid;
@@ -737,7 +737,7 @@ button {
     font-weight: 400;
 }
 
-.poc-stage-strip__thesis {
+.poc-stage-strip__headline {
     grid-column: 1 / -1;
     font-size: 12px;
     color: var(--poc-ink-70, rgba(10, 28, 64, 0.7));

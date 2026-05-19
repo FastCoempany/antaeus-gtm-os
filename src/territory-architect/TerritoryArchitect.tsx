@@ -310,7 +310,7 @@ function FocusStudio(): JSX.Element {
                             key={t.id}
                             class={`ta-focus ta-focus--${t.tier}`}
                         >
-                            <header class="ta-thesis__head">
+                            <header class="ta-focus__head">
                                 <strong>{t.title}</strong>
                                 <span class={`ta-tier ta-tier--${t.tier}`}>
                                     {TIER_LABELS[t.tier]}
@@ -318,9 +318,9 @@ function FocusStudio(): JSX.Element {
                             </header>
                             {t.pressure ? <p>{t.pressure}</p> : null}
                             {t.segment ? (
-                                <p class="ta-thesis__segment">{t.segment}</p>
+                                <p class="ta-focus__segment">{t.segment}</p>
                             ) : null}
-                            <footer class="ta-thesis__foot">
+                            <footer class="ta-focus__foot">
                                 <span>
                                     {(byThesis[t.id] ?? []).length}{" "}
                                     approaches

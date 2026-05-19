@@ -430,14 +430,14 @@ body {
 }
 
 /*
- * Program 6 / PR 10 — score thesis line.
+ * Program 6 / PR 10 — score headline line.
  *
  * Sits directly under the giant score number so the number carries
  * interpretive weight at a glance. Replaces the retired "Room law"
  * paragraph with a single line the rep can read without breaking
  * mid-call concentration.
  */
-.cc-loom__score-thesis {
+.cc-loom__score-headline {
     margin: 6px 0 0;
     font-family: "DM Serif Display", serif;
     font-size: 17px;

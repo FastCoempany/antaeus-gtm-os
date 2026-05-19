@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { allTouches } from "../state";
 
 /**
- * Topbar — kicker + thesis (demoted) + dynamic touch count.
+ * Topbar — kicker + headline (demoted) + dynamic touch count.
  *
  * Outbound Studio audit (2026-05):
  *   - BackButton removed. Room is a primary destination.

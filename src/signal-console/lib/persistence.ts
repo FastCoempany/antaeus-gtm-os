@@ -98,7 +98,12 @@ function parseAccount(raw: unknown): Account | null {
         ...(asString(o.industry) ? { industry: asString(o.industry) } : {}),
         ...(asString(o.hq) ? { hq: asString(o.hq) } : {}),
         ...(asString(o.employees) ? { employees: asString(o.employees) } : {}),
-        ...(asString(o.thesis) ? { thesis: asString(o.thesis) } : {}),
+        // Read canonical `focus`, falling back to legacy `thesis` for
+        // existing user data persisted before the 2026-05-19 rename.
+        ...((): { focus?: string } => {
+            const value = asString(o.focus) || asString(o.thesis);
+            return value ? { focus: value } : {};
+        })(),
         ...(asNumberMaybe(o.tier) !== undefined &&
         [1, 2, 3, 4].includes(asNumberMaybe(o.tier)!)
             ? { tier: asNumberMaybe(o.tier) as 1 | 2 | 3 | 4 }

@@ -9,7 +9,7 @@ import {
     approachToUpdate,
     KIND_ACCOUNT,
     KIND_APPROACH,
-    KIND_THESIS,
+    KIND_FOCUS,
     looksLikePersistedId,
     partitionTerritoryRows,
     rowKind,
@@ -376,7 +376,7 @@ export function applyRealtimePayload(payload: {
         if (!payloadHasRow(payload.new)) return;
         const row = payload.new as Row<"studio_artifacts">;
         const kind = rowKind(row);
-        if (kind === KIND_THESIS) {
+        if (kind === KIND_FOCUS) {
             const t = rowToThesis(row);
             if (!t) return;
             const exists = focuses.value.some((x) => x.id === t.id);

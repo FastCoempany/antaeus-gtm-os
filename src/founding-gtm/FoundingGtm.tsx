@@ -18,7 +18,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  * Layout per canon §4.19:
  *
  *   ┌───────────────────────────────────────────────────────────┐
- *   │  Topbar — kicker + thesis + maturity band                 │
+ *   │  Topbar — kicker + headline + maturity band                 │
  *   ├───────────────────────────────────────────────────────────┤
  *   │  Section §1                                               │
  *   │  Section §2                                               │

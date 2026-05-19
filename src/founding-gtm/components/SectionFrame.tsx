@@ -12,7 +12,7 @@ import { SECTION_KICKER, SECTION_TITLE } from "../lib/types";
  * Layout (canon §4.19):
  *   ┌─────────────────────────────────────────────────────────┐
  *   │  KICKER · §N             [status badge]                  │
- *   │  Serif title (the section's thesis)                      │
+ *   │  Serif title (the section's headline)                      │
  *   │                                                          │
  *   │  Body paragraphs (1-3, authored prose, NOT bullets)      │
  *   │  Concrete evidence list (deal names, ICP labels)         │

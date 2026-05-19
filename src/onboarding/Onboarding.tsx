@@ -21,7 +21,7 @@ import {
  * Greenfield rebuild — not a migration. Bright field per founder
  * directive.
  *
- * 7-step flow (thesis → company → role → category → ICP → account →
+ * 7-step flow (intro → company → role → category → ICP → account →
  * quota) with one dominant move per surface, hide-able back button,
  * and a final completion screen routing to Welcome / Dashboard.
  */

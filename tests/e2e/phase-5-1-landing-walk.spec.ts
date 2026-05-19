@@ -26,7 +26,7 @@ test.describe("Phase 5.1 — Landing (start.html)", () => {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
 
             // What — hero title must mention "inherit" (the operator-
-            // facing thesis from canon §1).
+            // facing headline from canon §1).
             const heroTitle = await page.locator(".hero__title").textContent();
             expect(heroTitle?.toLowerCase()).toContain("inherit");
 

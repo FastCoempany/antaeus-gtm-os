@@ -8,7 +8,7 @@ import {
     approachToUpdate,
     KIND_ACCOUNT,
     KIND_APPROACH,
-    KIND_THESIS,
+    KIND_FOCUS,
     looksLikePersistedId,
     partitionTerritoryRows,
     rowKind,
@@ -270,10 +270,10 @@ describe("insert/update factories tag with the right kind", () => {
         const insert = focusToInsert(FULL_THESIS);
         const update = focusToUpdate(FULL_THESIS);
         expect((insert.data as Record<string, unknown>)["kind"]).toBe(
-            KIND_THESIS
+            KIND_FOCUS
         );
         expect((update.data as Record<string, unknown>)["kind"]).toBe(
-            KIND_THESIS
+            KIND_FOCUS
         );
     });
 

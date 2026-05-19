@@ -11,7 +11,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  * Per canon §4.10 (Live Instrument family — disciplined air cover):
  *
  *   ┌────────────────────────────────────────────────────────────────┐
- *   │  Topbar: kicker + thesis + live cue count                      │
+ *   │  Topbar: kicker + headline + live cue count                      │
  *   ├────────────────────────────────────────────────────────────────┤
  *   │  CueBooth: 5-cue ladder + dark stage + booth-read aside        │
  *   │  (Wave 3 wires the live console; Wave 5 wires the handoffs)    │

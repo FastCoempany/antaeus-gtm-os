@@ -97,7 +97,7 @@ function pickWeekRead(s: WeekReadInputs): string {
         return "No prospects in the workbench yet. The territory has nothing pushable.";
     }
     if (s.stats.total === 0 && s.dropped > 0) {
-        return "Every prospect has dropped off the bench. Reset the thesis before adding more.";
+        return "Every prospect has dropped off the bench. Reset the focus before adding more.";
     }
     // Stricter pile-up signal (5+ captures with no research) fires
     // before the general "any captured with nothing researched" rule
@@ -109,7 +109,7 @@ function pickWeekRead(s: WeekReadInputs): string {
         return "Names are captured but none has been researched. Capturing is cheap; research is what actually moves them forward.";
     }
     if (s.dropped > 0 && s.dropped >= s.stats.total) {
-        return "More drops than keeps. The sourcing thesis may be off — review the query cards before more captures.";
+        return "More drops than keeps. The sourcing focus may be off — review the query cards before more captures.";
     }
     if (s.stats.ready >= 3) {
         return `${s.stats.ready} ready to push. The workbench is producing this week.`;

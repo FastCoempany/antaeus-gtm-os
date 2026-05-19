@@ -67,7 +67,7 @@ export function CueBooth(): JSX.Element {
             {/*
               LinkedIn Playbook audit (2026-05):
                 - Duplicate H2 ("Enter only when the room gives a cue.")
-                  retired — the room's H1 already carries this thesis.
+                  retired — the room's H1 already carries this headline.
                 - "Room law" philosophy block ("The inbox is not the
                   opening scene…") retired. The 5-cue ladder below renders
                   the discipline visually.

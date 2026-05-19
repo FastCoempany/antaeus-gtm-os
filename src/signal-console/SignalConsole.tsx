@@ -11,7 +11,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  * Per canon §4.7 (Live Instrument family + named premium asset):
  *
  *   ┌─────────────────────────────────────────────────────────────────┐
- *   │  Topbar: kicker + thesis + account count                        │
+ *   │  Topbar: kicker + headline + account count                        │
  *   ├─────────────────────────────────────────────────────────────────┤
  *   │  GridControls: search filter (Wave 5: + workspace health)       │
  *   ├─────────────────────────────────────────────────────────────────┤

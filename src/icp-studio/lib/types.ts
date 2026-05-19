@@ -6,7 +6,7 @@
  * sharpened — central authored surface, not a form output.
  *
  * Per Part II §4.8 ICP Studio is a Decision Bench hybrid: dark hero
- * (carrying the strategic thesis) above a bright work area (where the
+ * (carrying the strategic headline) above a bright work area (where the
  * actual decision gets shaped). Wave 3 wires that visual split.
  *
  * Wave 1 captures the typed shapes. Wave 2 ports the build/quality/

@@ -14,7 +14,7 @@ import { ActionStack } from "./components/ActionStack";
  *
  * Layout:
  *   ┌──────────────────────────────────────────────────────────────┐
- *   │  Hero: thesis headline + Week N · Day N stamp + chips        │
+ *   │  Hero: headline + Week N · Day N stamp + chips        │
  *   ├──────────────────────────────────────────────────────────────┤
  *   │  LaunchFolio: 2×2 mandate panel — "Open the live mandate."   │
  *   │   • Where you are       • What is missing (LOCKED cell)      │

@@ -183,8 +183,8 @@ describe("seedFromDraft", () => {
                 icps: [
                     {
                         id: "old_icp",
-                        name: "Existing thesis",
-                        statement: "Existing thesis",
+                        name: "Existing ICP",
+                        statement: "Existing ICP",
                         qualityBand: "ready"
                     }
                 ],
@@ -192,7 +192,7 @@ describe("seedFromDraft", () => {
             })
         );
         seedFromDraft(
-            makeDraft({ icpStatement: "New thesis from onboarding rerun." }),
+            makeDraft({ icpStatement: "New ICP from onboarding rerun." }),
             { now: NOW, storage: s }
         );
         const data = JSON.parse(s.getItem("gtmos_icp_analytics") ?? "{}");

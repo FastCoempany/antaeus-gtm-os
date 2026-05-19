@@ -10,7 +10,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  * Per canon §4.14 (Diagnosis Table family + named premium asset):
  *
  *   ┌─────────────────────────────────────────────────────────────────┐
- *   │  Topbar: kicker + thesis + horizon + dynamic count              │
+ *   │  Topbar: kicker + headline + horizon + dynamic count              │
  *   ├─────────────────────────────────────────────────────────────────┤
  *   │  PinnedCase: causal pattern + intervention + route rack         │
  *   ├─────────────────────────────────────────────────────────────────┤

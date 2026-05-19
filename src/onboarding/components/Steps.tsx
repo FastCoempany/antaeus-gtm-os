@@ -32,8 +32,8 @@ export function IntroStep(): JSX.Element {
             nextLabel="Begin"
             hideBack
         >
-            <div class="ob-thesis">
-                <ul class="ob-thesis__points">
+            <div class="ob-intro">
+                <ul class="ob-intro__points">
                     <li>
                         <strong>The dashboard wakes up live.</strong> Every
                         answer here turns into a real Brief item before you

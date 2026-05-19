@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { allAccounts } from "../state";
 
 /**
- * Topbar — kicker + thesis title + room mental-model line.
+ * Topbar — kicker + headline title + room mental-model line.
  *
  * Per canon §4.7 (Live Instrument family) + the picked-winner
  * Signal Console Variant 01 (AI-selected, 2026-05-01): the title
@@ -32,7 +32,7 @@ export function Topbar(): JSX.Element {
             <h1 class="sc-topbar__title">
                 Where account heat becomes real work.
             </h1>
-            <p class="sc-topbar__thesis">
+            <p class="sc-topbar__headline">
                 Signals are time-limited. Heat ranks them. Motion comes
                 from the account ledger — not from research piling up.
             </p>

@@ -352,6 +352,7 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
             "gtmos_quota_targets",
             "gtmos_territory",
             "gtmos_ta_setup",
+            "gtmos_ta_focuses",
             "gtmos_ta_theses",
             "gtmos_ta_approaches",
             "gtmos_ta_accounts",

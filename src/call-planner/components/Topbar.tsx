@@ -6,7 +6,7 @@ import { currentCompany, draft } from "../state";
  *
  * Per canon §4.11 the room prepares the shape of the next call. The
  * topbar carries a contextual kicker (focused contact when one is set)
- * plus the room thesis line. The state pill shows the company link so
+ * plus the room headline line. The state pill shows the company link so
  * the operator can confirm at a glance which account the agenda is
  * pointed at.
  */

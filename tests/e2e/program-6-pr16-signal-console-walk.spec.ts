@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
  * Program 6 / PR 16 — Signal Console refacing walk.
  *
  * Verifies the Variant 01 (AI-selected) refacing additions:
- *   - Italic thesis line renders below the H1
+ *   - Italic headline line renders below the H1
  *   - WorkspaceHealth posture row has 4 cells: verdict + Active +
  *     Hot ≥ 75 + Top heat
  *   - Top heat cell shows the snapshot's max heat score
@@ -63,7 +63,7 @@ const ACCOUNT_REGISTRY = JSON.stringify({
 });
 
 test.describe("Program 6 / PR 16 — Signal Console refacing (Variant 01 AI-selected)", () => {
-    test("Italic thesis line renders below the H1", async ({ browser }) => {
+    test("Italic headline line renders below the H1", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
@@ -72,16 +72,16 @@ test.describe("Program 6 / PR 16 — Signal Console refacing (Variant 01 AI-sele
             });
             await page.waitForTimeout(300);
 
-            await expect(page.locator(".sc-topbar__thesis")).toBeAttached();
+            await expect(page.locator(".sc-topbar__headline")).toBeAttached();
             const text = await page
-                .locator(".sc-topbar__thesis")
+                .locator(".sc-topbar__headline")
                 .textContent();
             expect(text?.toLowerCase()).toContain("heat");
             expect(text?.toLowerCase()).toContain("ledger");
 
             // Confirm it's italic.
             const fontStyle = await page
-                .locator(".sc-topbar__thesis")
+                .locator(".sc-topbar__headline")
                 .evaluate((el) => getComputedStyle(el).fontStyle);
             expect(fontStyle).toBe("italic");
         } finally {

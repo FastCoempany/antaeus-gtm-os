@@ -37,11 +37,11 @@ import type {
 const UUID_RE =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export const KIND_THESIS = "territory.focus";
+export const KIND_FOCUS = "territory.focus";
 export const KIND_APPROACH = "territory.approach";
 export const KIND_ACCOUNT = "territory.account";
 export type TerritoryKind =
-    | typeof KIND_THESIS
+    | typeof KIND_FOCUS
     | typeof KIND_APPROACH
     | typeof KIND_ACCOUNT;
 
@@ -104,7 +104,7 @@ export function rowToThesis(
     const id = typeof r.id === "string" && r.id.length > 0 ? r.id : null;
     if (!id) return null;
     const data = asObject(r.data) ?? {};
-    if (data["kind"] !== KIND_THESIS) return null;
+    if (data["kind"] !== KIND_FOCUS) return null;
     const createdAt = asString(r.created_at) || new Date().toISOString();
     const updatedAt =
         asString(r.updated_at) || asString(r.created_at) || createdAt;
@@ -126,7 +126,7 @@ export function rowToThesis(
 export function focusToInsert(focus: Focus): InsertRow<"studio_artifacts"> {
     return {
         data: {
-            kind: KIND_THESIS,
+            kind: KIND_FOCUS,
             title: focus.title,
             pressure: focus.pressure,
             segment: focus.segment,
@@ -140,7 +140,7 @@ export function focusToInsert(focus: Focus): InsertRow<"studio_artifacts"> {
 export function focusToUpdate(focus: Focus): UpdateRow<"studio_artifacts"> {
     return {
         data: {
-            kind: KIND_THESIS,
+            kind: KIND_FOCUS,
             title: focus.title,
             pressure: focus.pressure,
             segment: focus.segment,
@@ -294,7 +294,7 @@ export function partitionTerritoryRows(
     const accounts: TerritoryAccount[] = [];
     for (const row of rows) {
         const kind = rowKind(row);
-        if (kind === KIND_THESIS) {
+        if (kind === KIND_FOCUS) {
             const t = rowToThesis(row);
             if (t) focuses.push(t);
         } else if (kind === KIND_APPROACH) {

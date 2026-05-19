@@ -9,7 +9,7 @@ import {
 /**
  * HandoffStrip — bottom-of-room handoff. Per canon §4.6, the room
  * pushes qualified accounts into Signal Console (downstream) and
- * inherits thesis vocabulary from Territory Architect (upstream).
+ * inherits focus vocabulary from Territory Architect (upstream).
  * Outbound Studio is the third route once a name is push-ready.
  *
  * Phase 2.3 — inbound focusObject from ICP Studio / Territory

@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { allProofs } from "../state";
 
 /**
- * Topbar — kicker + serif thesis + dynamic count.
+ * Topbar — kicker + serif headline + dynamic count.
  *
  * Per canon §4.15 the room shapes one pilot's evidence so the buyer's
  * boss can act on it. The topbar is calm; the work is the dark forge

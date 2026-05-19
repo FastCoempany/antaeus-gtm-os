@@ -6,10 +6,10 @@ import { test, expect } from "@playwright/test";
  * Verifies the Signal Field V02 structural addition:
  *   - 2-col hero grid with ta-hero__lead + ta-field-read aside
  *   - Field Read aside renders score + band + 3 interpretive lines
- *     (Main risk / Replacement pressure / Operator move)
- *   - Field read updates when the operator adds a thesis
+ *     (What's loose / What to backfill / Next move)
+ *   - Field read updates when the operator adds a focus
  *   - Operator move line carries the orange-accent variant
- *   - HeroBand stats (theses + 4 tiers + accounts) still render
+ *   - HeroBand stats (focuses + 4 tiers + accounts) still render
  *
  * Audit reference:
  *   deliverables/audit/antaeus-refacing-vs-shipped-territory-architect-2026-05-18.md
@@ -61,13 +61,13 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("Empty board reads as 'Empty' band with no-theses risk copy", async ({
+    test("Empty board reads as 'Empty' band with no-focuses risk copy", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            // Fresh storage — no theses, no accounts.
+            // Fresh storage — no focuses, no accounts.
             await page.addInitScript(() => {
                 try {
                     localStorage.clear();
@@ -93,7 +93,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("The territory read updates after a thesis is saved", async ({
+    test("The territory read updates after a focus is saved", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -111,25 +111,25 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
             });
             await page.waitForTimeout(300);
 
-            // Save one thesis via the form.
-            const thesisTitle = page
-                .locator(".ta-form--thesis .ta-input")
+            // Save one focus via the form.
+            const focusTitle = page
+                .locator(".ta-form--focus .ta-input")
                 .first();
-            await thesisTitle.fill("Procurement consolidation Q2");
+            await focusTitle.fill("Procurement consolidation Q2");
             await page
-                .locator(".ta-form--thesis .ta-save-btn")
+                .locator(".ta-form--focus .ta-save-btn")
                 .click();
             await page.waitForTimeout(250);
 
-            // Risk copy should no longer say "no theses" — the
-            // priority chain advances to single-thesis monoculture.
+            // Risk copy should no longer say "no focuses" — the
+            // priority chain advances to single-focus monoculture.
             const risk = await page
                 .locator(".ta-field-read__line")
                 .filter({ hasText: /what's loose right now/i })
                 .locator(".ta-field-read__line-copy")
                 .textContent();
-            expect(risk?.toLowerCase()).not.toContain("no theses");
-            expect(risk?.toLowerCase()).toContain("single thesis");
+            expect(risk?.toLowerCase()).not.toContain("no focuses");
+            expect(risk?.toLowerCase()).toContain("single focus");
         } finally {
             await ctx.close();
         }
@@ -157,7 +157,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("HeroBand stats (theses + tiers + ceiling) still render", async ({
+    test("HeroBand stats (focuses + tiers + ceiling) still render", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -169,7 +169,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
             await page.waitForTimeout(300);
 
             const statCount = await page.locator(".ta-hero__stats .ta-stat").count();
-            // 1 theses stat + 4 tier stats + 1 ceiling stat = 6.
+            // 1 focuses stat + 4 tier stats + 1 ceiling stat = 6.
             expect(statCount).toBeGreaterThanOrEqual(6);
         } finally {
             await ctx.close();

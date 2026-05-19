@@ -2,7 +2,7 @@
  * Phase 4 / Room 13 — Sourcing Workbench cross-room handoff.
  *
  * Per canon §4.6 the Sourcing Workbench feeds qualified accounts into
- * Signal Console (downstream) and consumes thesis + tier vocabulary
+ * Signal Console (downstream) and consumes focus + tier vocabulary
  * from Territory Architect (upstream). This module owns the URL-builder
  * helpers that thread the canonical continuity params per CLAUDE.md §2:
  *

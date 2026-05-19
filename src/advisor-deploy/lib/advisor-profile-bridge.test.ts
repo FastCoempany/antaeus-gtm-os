@@ -80,7 +80,7 @@ describe("rowToAdvisor", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
-            data: { kind: "territory.thesis" },
+            data: { kind: "territory.focus" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
         };
@@ -152,7 +152,7 @@ describe("rowsToAdvisors", () => {
                 id: "550e8400-e29b-41d4-a716-446655440002",
                 user_id: "u",
                 workspace_id: "w",
-                data: { kind: "territory.thesis" },
+                data: { kind: "territory.focus" },
                 created_at: "2026-04-02T12:00:00Z",
                 updated_at: "2026-04-02T12:00:00Z"
             }

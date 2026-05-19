@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { callStats, selectedAccountName } from "../state";
 
 /**
- * Topbar — kicker + thesis (demoted) + a single live meta line.
+ * Topbar — kicker + headline (demoted) + a single live meta line.
  *
  * Cold Call Studio audit (2026-05):
  *   - BackButton removed — primary destination.

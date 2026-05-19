@@ -11,7 +11,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  * Per canon §4.9 (Live Instrument family):
  *
  *   ┌────────────────────────────────────────────────────────────────┐
- *   │  Topbar: kicker + thesis + live call count                     │
+ *   │  Topbar: kicker + headline + live call count                     │
  *   ├────────────────────────────────────────────────────────────────┤
  *   │  AccountRow: account select + contact name + handoff buttons   │
  *   ├────────────────────────────────────────────────────────────────┤

@@ -29,7 +29,7 @@ describe("initial state", () => {
         resetSession();
     });
 
-    it("starts at step 0 (thesis)", () => {
+    it("starts at step 0 (intro)", () => {
         expect(stepIndex.value).toBe(0);
         expect(currentStep.value).toBe("intro");
     });

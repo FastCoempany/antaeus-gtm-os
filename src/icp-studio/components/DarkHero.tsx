@@ -12,7 +12,7 @@ import { buildIcpQuality } from "../lib/quality";
 /**
  * DarkHero — Wave 3 implementation.
  *
- * Per Part II §4.8 the dark hero carries the strategic thesis above
+ * Per Part II §4.8 the dark hero carries the strategic headline above
  * the bright work area. Wave 3 fills it with:
  *   - kicker + serif title + canon-anchored note
  *   - live Thin ICP statement preview (or the placeholder)

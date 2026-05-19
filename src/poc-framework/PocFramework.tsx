@@ -6,14 +6,14 @@ import { StageStrip } from "./components/StageStrip";
 
 import { RoomChrome } from "@/lib/room-chrome";
 /**
- * PocFramework — Phase 2 rework against AI-picked v3 thesis
+ * PocFramework — Phase 2 rework against AI-picked v3 design
  * "Proof is not a page. It is a forced event."
  *
  * Per canon §4.15 (Decision Bench), bright per Part II §1
  * (the §4.8 hybrid retired 2026-04-27).
  *
  *   ┌───────────────────────────────────────────────────────────┐
- *   │  Topbar: kicker + thesis + dynamic count                  │
+ *   │  Topbar: kicker + headline + dynamic count                  │
  *   ├───────────────────────────────────────────────────────────┤
  *   │  StageStrip: forge → cast → readout (temporal flow)       │
  *   ├──────────────────────────────────┬────────────────────────┤
