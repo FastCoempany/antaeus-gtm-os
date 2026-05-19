@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Antaeus — birdseye control system concepts (2026-05-19)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --ink:#0a1c40;
+    --ink-70:rgba(10,28,64,0.7);
+    --ink-40:rgba(10,28,64,0.4);
+    --ink-15:rgba(10,28,64,0.15);
+    --ink-08:rgba(10,28,64,0.08);
+    --field:#f6f8fc;
+    --paper:#fff;
+    --orange:#e6701e;
+    --blue:#2563eb;
+    --green:#22c55e;
+    --amber:#f59e0b;
+    --red:#ef4444;
+    --gold:#b08020;
+    --line:rgba(10,28,64,0.1);
+    --line-2:rgba(10,28,64,0.06);
+    --shadow:0 18px 44px rgba(10,28,64,0.08);
+    --shadow-sm:0 8px 20px rgba(10,28,64,0.05);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+    background:var(--field);
+    color:var(--ink);
+    font-family:"Public Sans",system-ui,sans-serif;
+    font-size:14px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+}
+
+.page{max-width:1280px;margin:0 auto;padding:48px 32px 96px}
+
+/* page header */
+.page-head{margin-bottom:56px;max-width:64ch}
+.page-kicker{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--ink-40);
+    font-weight:700;
+    margin:0 0 18px;
+}
+.page-title{
+    font-family:"DM Serif Display",serif;
+    font-size:56px;
+    line-height:1.04;
+    font-weight:400;
+    letter-spacing:-0.025em;
+    margin:0 0 16px;
+}
+.page-lede{
+    font-size:16px;
+    color:var(--ink-70);
+    line-height:1.6;
+    margin:0;
+}
+
+/* concept block */
+.concept{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:36px 36px 0;
+    margin-bottom:40px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+.concept__head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:24px;
+    align-items:start;
+    margin-bottom:28px;
+}
+.concept__id{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--orange);
+    font-weight:700;
+    padding:6px 12px;
+    background:rgba(230,112,30,0.08);
+    border-radius:99px;
+    align-self:start;
+}
+.concept__name{
+    font-family:"DM Serif Display",serif;
+    font-size:32px;
+    line-height:1.1;
+    font-weight:400;
+    letter-spacing:-0.02em;
+    margin:0 0 8px;
+}
+.concept__copy{
+    font-size:14px;
+    color:var(--ink-70);
+    line-height:1.55;
+    margin:0;
+    max-width:62ch;
+}
+.concept__copy strong{color:var(--ink)}
+
+.concept__tradeoff{
+    margin-top:10px;
+    padding:10px 14px;
+    background:rgba(10,28,64,0.03);
+    border-left:2px solid var(--ink-15);
+    border-radius:0 4px 4px 0;
+    font-size:13px;
+    color:var(--ink-70);
+    max-width:62ch;
+}
+.concept__tradeoff strong{color:var(--ink);font-weight:600}
+
+/* the mockup canvas - simulates a room frame */
+.mockup{
+    position:relative;
+    margin:0 -36px;
+    border-top:1px solid var(--line);
+    background:var(--field);
+    overflow:hidden;
+}
+
+/* shared "fake room behind the chrome" */
+.room{
+    position:relative;
+    padding:32px 36px 60px;
+    min-height:340px;
+}
+.room__kicker{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ink-70);
+    font-weight:700;
+    margin:0 0 12px;
+}
+.room__title{
+    font-family:"DM Serif Display",serif;
+    font-size:34px;
+    line-height:1.08;
+    font-weight:400;
+    letter-spacing:-0.02em;
+    margin:0 0 6px;
+    max-width:18ch;
+}
+.room__thesis{
+    font-size:15px;
+    font-style:italic;
+    color:var(--ink-70);
+    margin:0 0 24px;
+    max-width:54ch;
+}
+
+/* signal console card grid mock */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+}
+.card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 18px;
+    display:grid;
+    gap:8px;
+    box-shadow:var(--shadow-sm);
+}
+.card.is-hot{border-left:4px solid var(--red)}
+.card.is-active{border-left:4px solid var(--orange)}
+.card.is-watch{border-left:4px solid var(--amber)}
+.card__heat{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:700;
+}
+.card__heat--hot{color:var(--red)}
+.card__heat--active{color:var(--orange)}
+.card__heat--watch{color:var(--amber)}
+.card__name{
+    font-family:"DM Serif Display",serif;
+    font-size:20px;
+    line-height:1.15;
+    font-weight:400;
+    margin:0;
+}
+.card__signal{
+    font-size:12.5px;
+    color:var(--ink-70);
+    line-height:1.45;
+    margin:0;
+}
+.card__cta{
+    margin-top:4px;
+    font-size:12px;
+    color:var(--orange);
+    font-weight:600;
+}
+
+/* ─── Concept A: Pressure Deck ───────────────────────────────────────── */
+
+.pd-deck{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:24px;
+    padding:10px 24px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    min-height:44px;
+}
+.pd-focus{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.pd-focus__label{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ink-40);
+    font-weight:700;
+}
+.pd-focus__chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:5px 11px;
+    background:rgba(239,68,68,0.06);
+    border:1px solid rgba(239,68,68,0.2);
+    border-radius:99px;
+    font-size:12.5px;
+    color:var(--ink);
+}
+.pd-focus__chip strong{font-weight:600}
+.pd-focus__chip .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--red);
+}
+.pd-focus__chip .meta{
+    color:var(--ink-70);
+    font-size:11.5px;
+}
+.pd-verdict{
+    justify-self:center;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.pd-verdict__pill{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10.5px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--blue);
+    padding:5px 11px;
+    background:rgba(37,99,235,0.08);
+    border-radius:99px;
+}
+.pd-verdict__count{
+    font-size:11px;
+    color:var(--ink-70);
+    font-family:"JetBrains Mono",monospace;
+    letter-spacing:0.04em;
+}
+.pd-dots{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+.pd-dots__label{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ink-40);
+    font-weight:700;
+}
+.pd-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    cursor:pointer;
+    box-shadow:0 0 0 3px rgba(255,255,255,1),0 0 0 4px var(--ink-15);
+}
+.pd-dot--red{background:var(--red)}
+.pd-dot--orange{background:var(--orange)}
+.pd-dot--blue{background:var(--blue)}
+.pd-dot--amber{background:var(--amber)}
+.pd-dot--green{background:var(--green)}
+
+/* ─── Concept B: Pressure Compass ────────────────────────────────────── */
+
+.pc-wrap{
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 56px;
+}
+.pc-room{padding-right:0}
+.pc-sliver{
+    border-left:1px solid var(--line);
+    background:var(--paper);
+    padding:24px 12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    min-height:340px;
+}
+.pc-sliver__kicker{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9px;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--ink-40);
+    font-weight:700;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    margin-bottom:6px;
+}
+.pc-pill{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    padding:6px 4px;
+    border-radius:99px;
+    cursor:pointer;
+    min-width:32px;
+}
+.pc-pill__dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+}
+.pc-pill__num{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;
+    font-weight:700;
+    color:var(--ink);
+}
+.pc-pill.is-focus{
+    background:rgba(10,28,64,0.05);
+    box-shadow:0 0 0 1px var(--ink-15);
+}
+
+.pc-tooltip{
+    position:absolute;
+    right:74px;
+    top:96px;
+    background:var(--ink);
+    color:#fff;
+    padding:10px 14px;
+    border-radius:6px;
+    font-size:12.5px;
+    line-height:1.4;
+    box-shadow:var(--shadow);
+    max-width:240px;
+}
+.pc-tooltip::after{
+    content:"";
+    position:absolute;
+    right:-6px;
+    top:14px;
+    width:0;
+    height:0;
+    border-top:6px solid transparent;
+    border-bottom:6px solid transparent;
+    border-left:6px solid var(--ink);
+}
+.pc-tooltip__kicker{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.6);
+    margin:0 0 4px;
+}
+.pc-tooltip__name{
+    font-family:"DM Serif Display",serif;
+    font-size:16px;
+    margin:0 0 4px;
+}
+.pc-tooltip__meta{
+    color:rgba(255,255,255,0.75);
+    font-size:11.5px;
+    margin:0;
+}
+
+/* ─── Concept C: Verdict Anchor + Recovery Bar ───────────────────────── */
+
+.vc-anchor{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:24px;
+    padding:8px 24px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    min-height:36px;
+    font-size:12px;
+}
+.vc-anchor__verdict{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.vc-anchor__verdict-label{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ink-40);
+    font-weight:700;
+}
+.vc-anchor__verdict-pill{
+    font-family:"DM Serif Display",serif;
+    font-size:14px;
+    color:var(--blue);
+    letter-spacing:-0.01em;
+}
+.vc-anchor__verdict-pill::after{
+    content:"˅";
+    margin-left:6px;
+    color:var(--ink-40);
+    font-size:10px;
+}
+.vc-anchor__breath{
+    justify-self:center;
+    display:flex;
+    gap:18px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10.5px;
+    color:var(--ink-70);
+    letter-spacing:0.05em;
+}
+.vc-anchor__breath strong{color:var(--ink);font-weight:700;margin-right:4px}
+.vc-anchor__hint{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;
+    color:var(--ink-40);
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+}
+.vc-anchor__hint kbd{
+    background:var(--ink-08);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:1px 6px;
+    font-family:inherit;
+    font-size:10px;
+    color:var(--ink);
+    margin-right:4px;
+}
+
+.vc-recovery{
+    border-top:1px solid var(--line);
+    background:rgba(255,255,255,0.6);
+    padding:10px 24px;
+    min-height:42px;
+    display:flex;
+    align-items:center;
+}
+.vc-recovery--empty{color:var(--ink-40);font-size:12px;font-style:italic}
+.vc-recovery--lit{
+    background:rgba(230,112,30,0.05);
+    border-top:1px solid rgba(230,112,30,0.18);
+}
+.vc-recovery__event{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+.vc-recovery__event-tag{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--orange);
+    font-weight:700;
+}
+.vc-recovery__event-copy{
+    font-family:"DM Serif Display",serif;
+    font-size:15px;
+    letter-spacing:-0.005em;
+    color:var(--ink);
+}
+.vc-recovery__event-cta{
+    margin-left:auto;
+    font-size:11.5px;
+    color:var(--orange);
+    font-weight:600;
+}
+
+/* ─── Concept D: Ambient HUD ─────────────────────────────────────────── */
+
+.hud-wrap{
+    position:relative;
+}
+.hud{
+    position:absolute;
+    top:18px;
+    right:24px;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--paper);
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:2;
+}
+.hud__core{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+}
+.hud--calm .hud__core{background:var(--ink-15)}
+.hud--watch .hud__core{background:var(--blue)}
+.hud--watch::after{
+    content:"2";
+    position:absolute;
+    top:-2px;
+    right:-2px;
+    width:18px;
+    height:18px;
+    background:var(--blue);
+    border-radius:50%;
+    color:#fff;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid #fff;
+}
+.hud--urgent .hud__core{
+    background:var(--orange);
+    box-shadow:0 0 0 4px rgba(230,112,30,0.18);
+    animation:pulse 1.8s ease-in-out infinite;
+}
+.hud--urgent::after{
+    content:"1";
+    position:absolute;
+    top:-2px;
+    right:-2px;
+    width:18px;
+    height:18px;
+    background:var(--orange);
+    border-radius:50%;
+    color:#fff;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid #fff;
+}
+@keyframes pulse{
+    0%,100%{box-shadow:0 0 0 4px rgba(230,112,30,0.18)}
+    50%{box-shadow:0 0 0 10px rgba(230,112,30,0)}
+}
+
+.hud-triptych{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+}
+.hud-triptych > div{
+    position:relative;
+    background:var(--field);
+    min-height:200px;
+    padding:24px;
+}
+.hud-tag{
+    position:absolute;
+    bottom:14px;
+    left:24px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:9.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ink-40);
+    font-weight:700;
+}
+
+/* ─── Recommended Combination ────────────────────────────────────────── */
+
+.rec-wrap{
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 56px;
+}
+
+/* call-out for the recommendation */
+.concept--recommended{
+    border:2px solid var(--orange);
+    box-shadow:0 24px 60px rgba(230,112,30,0.12);
+}
+.concept--recommended .concept__id{
+    background:var(--orange);
+    color:#fff;
+}
+
+/* footer */
+.foot{
+    margin-top:32px;
+    font-size:13px;
+    color:var(--ink-40);
+    text-align:center;
+    line-height:1.6;
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+<header class="page-head">
+    <p class="page-kicker">Antaeus · Birdseye control system · concept mockups · 2026-05-19</p>
+    <h1 class="page-title">An always-present control surface that doesn't revive the hallway.</h1>
+    <p class="page-lede">
+        The reference apps (Apollo, Figma, Salesforce, PowerBI, Linear, Notion) all build the same shell:
+        left-rail module list, top bar, contextual right rail. Canon forbids that — a left rail of 20 rooms
+        would dissolve what Antaeus argues. These four concepts hold the always-present feeling while
+        keeping the shape pressure-shaped, not destination-shaped.
+    </p>
+</header>
+
+
+<!-- ─── Concept A ─────────────────────────────────────────────────────── -->
+
+<section class="concept">
+    <div class="concept__head">
+        <span class="concept__id">Concept A</span>
+        <div>
+            <h2 class="concept__name">The Pressure Deck</h2>
+            <p class="concept__copy">
+                A thin always-on strip across the top of every room. Three regions, left to right:
+                <strong>focus chip</strong> (the object you're operating on right now),
+                <strong>workspace verdict</strong> (readiness band + section-readiness),
+                <strong>pressure dots</strong> (4 highest-pressure objects elsewhere — color-coded by family,
+                hover for context, click to jump).
+            </p>
+            <p class="concept__tradeoff">
+                <strong>Tradeoff:</strong> very canon-aligned (object-first, ranked, no destinations) but
+                adds vertical chrome to every room.
+            </p>
+        </div>
+    </div>
+
+    <div class="mockup">
+        <div class="pd-deck">
+            <div class="pd-focus">
+                <span class="pd-focus__label">Focus</span>
+                <span class="pd-focus__chip">
+                    <span class="dot"></span>
+                    <strong>Northstar Health</strong>
+                    <span class="meta">heat 94 · 3d stale</span>
+                </span>
+            </div>
+            <div class="pd-verdict">
+                <span class="pd-verdict__pill">Inheritable · 3/7 ready</span>
+                <span class="pd-verdict__count">↑ verdict</span>
+            </div>
+            <div class="pd-dots">
+                <span class="pd-dots__label">Pressure elsewhere</span>
+                <span class="pd-dot pd-dot--red" title="Apex Fintech · deal stalled 6d"></span>
+                <span class="pd-dot pd-dot--orange" title="Meridian Logistics · proof readout overdue"></span>
+                <span class="pd-dot pd-dot--blue" title="Cascadia · advisor ask unstamped"></span>
+                <span class="pd-dot pd-dot--amber" title="Voltworks · signal heat dropped 18 pts"></span>
+            </div>
+        </div>
+        <div class="room">
+            <p class="room__kicker">Signal Console · 12 accounts on the radar</p>
+            <h3 class="room__title">Where account heat becomes real work.</h3>
+            <p class="room__thesis">Signals are time-limited. Heat ranks them. Motion comes from the account ledger — not from research piling up.</p>
+            <div class="cards">
+                <article class="card is-hot">
+                    <span class="card__heat card__heat--hot">Hot · 94</span>
+                    <h4 class="card__name">Northstar Health</h4>
+                    <p class="card__signal">CFO churn announced 4d ago. Procurement reorg in motion.</p>
+                    <span class="card__cta">Compose outbound →</span>
+                </article>
+                <article class="card is-hot">
+                    <span class="card__heat card__heat--hot">Hot · 88</span>
+                    <h4 class="card__name">Apex Fintech</h4>
+                    <p class="card__signal">Series-B announcement 6d ago + Director of Ops hire posted.</p>
+                    <span class="card__cta">Open in Deal Workspace →</span>
+                </article>
+                <article class="card is-active">
+                    <span class="card__heat card__heat--active">Active · 78</span>
+                    <h4 class="card__name">Meridian Logistics</h4>
+                    <p class="card__signal">Earnings call mentioned "operational drag" twice. No outbound this month.</p>
+                    <span class="card__cta">Compose outbound →</span>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ─── Concept B ─────────────────────────────────────────────────────── -->
+
+<section class="concept">
+    <div class="concept__head">
+        <span class="concept__id">Concept B</span>
+        <div>
+            <h2 class="concept__name">The Pressure Compass</h2>
+            <p class="concept__copy">
+                A vertical sliver running the full right edge with 4–6 dots stacked top-to-bottom — each is
+                a top-pressure object across families (top deal, top signal, top proof, top ask, top
+                recovery). Spatial logic: <strong>vertical position = pressure rank</strong>, color = family.
+                Hover expands a tooltip with current state. Click jumps to that object in its native room.
+            </p>
+            <p class="concept__tradeoff">
+                <strong>Tradeoff:</strong> zero competition with the work surface, very distinctive — but
+                customers expecting a left rail may need a moment to find it.
+            </p>
+        </div>
+    </div>
+
+    <div class="mockup">
+        <div class="pc-wrap">
+            <div class="room pc-room">
+                <p class="room__kicker">Deal Workspace · 8 active · 2 critical</p>
+                <h3 class="room__title">Recover the deals you're about to lose.</h3>
+                <p class="room__thesis">Stage is not truth unless next-step truth backs it up. The board ranks pressure; you act on it.</p>
+                <div class="cards" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+                    <article class="card is-hot">
+                        <span class="card__heat card__heat--hot">Critical · 7d</span>
+                        <h4 class="card__name">Apex Fintech · $180K</h4>
+                        <p class="card__signal">Stalled at proposal for 7d. Champion gone quiet. No next step on calendar.</p>
+                        <span class="card__cta">Pre-mortem the deal →</span>
+                    </article>
+                    <article class="card is-active">
+                        <span class="card__heat card__heat--active">At-risk · 3d</span>
+                        <h4 class="card__name">Meridian · $94K</h4>
+                        <p class="card__signal">Discovery done. EB hasn't been named. Risk-fix lens recommended.</p>
+                        <span class="card__cta">Sharpen the proof →</span>
+                    </article>
+                </div>
+            </div>
+
+            <aside class="pc-sliver">
+                <span class="pc-sliver__kicker">Pressure</span>
+                <div class="pc-pill is-focus">
+                    <span class="pc-pill__dot" style="background:var(--red)"></span>
+                    <span class="pc-pill__num">94</span>
+                </div>
+                <div class="pc-pill">
+                    <span class="pc-pill__dot" style="background:var(--orange)"></span>
+                    <span class="pc-pill__num">88</span>
+                </div>
+                <div class="pc-pill">
+                    <span class="pc-pill__dot" style="background:var(--blue)"></span>
+                    <span class="pc-pill__num">72</span>
+                </div>
+                <div class="pc-pill">
+                    <span class="pc-pill__dot" style="background:var(--amber)"></span>
+                    <span class="pc-pill__num">61</span>
+                </div>
+                <div class="pc-pill">
+                    <span class="pc-pill__dot" style="background:var(--green)"></span>
+                    <span class="pc-pill__num">54</span>
+                </div>
+            </aside>
+
+            <div class="pc-tooltip">
+                <p class="pc-tooltip__kicker">Signal Console · pressure 94</p>
+                <p class="pc-tooltip__name">Northstar Health</p>
+                <p class="pc-tooltip__meta">CFO churn + procurement reorg. 3d since last touch. Click to compose outbound.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ─── Concept C ─────────────────────────────────────────────────────── -->
+
+<section class="concept">
+    <div class="concept__head">
+        <span class="concept__id">Concept C</span>
+        <div>
+            <h2 class="concept__name">Verdict Anchor + Recovery Bar</h2>
+            <p class="concept__copy">
+                Two paired thin strips. <strong>Top:</strong> the Readiness verdict anchor (already built
+                for Dashboard, extended to every room) + workspace breath stats + ⌘K hint.
+                <strong>Bottom:</strong> a recovery bar that stays empty except when a pressure event
+                needs a touch — sentence-shaped, click to jump and recover. Both surfaces never branch;
+                they show state and one move.
+            </p>
+            <p class="concept__tradeoff">
+                <strong>Tradeoff:</strong> most directly "control system feeling" — it literally looks
+                like a topbar + statusbar — but adds two chrome strips per room.
+            </p>
+        </div>
+    </div>
+
+    <div class="mockup">
+        <div class="vc-anchor">
+            <div class="vc-anchor__verdict">
+                <span class="vc-anchor__verdict-label">Verdict</span>
+                <span class="vc-anchor__verdict-pill">Inheritable with guardrails</span>
+            </div>
+            <div class="vc-anchor__breath">
+                <span><strong>47</strong>active</span>
+                <span><strong>5</strong>hot</span>
+                <span><strong>3/7</strong>handoff ready</span>
+                <span><strong>2.5x</strong>coverage</span>
+            </div>
+            <div class="vc-anchor__hint">
+                <kbd>⌘K</kbd>palette
+            </div>
+        </div>
+        <div class="room">
+            <p class="room__kicker">PoC Framework · 1 proof in cast</p>
+            <h3 class="room__title">Cast one decision-grade proof.</h3>
+            <p class="room__thesis">Raw interest is not proof. Pin the claim, the owner, the metric, and the kill rule before the pilot starts.</p>
+            <p style="color:var(--ink-40);font-size:13px;margin:0">— forge + cast panels render here —</p>
+        </div>
+        <div class="vc-recovery vc-recovery--empty">
+            No pressure events on the bar. The workspace is breathing.
+        </div>
+    </div>
+
+    <div class="mockup" style="margin-top:24px">
+        <div class="vc-anchor">
+            <div class="vc-anchor__verdict">
+                <span class="vc-anchor__verdict-label">Verdict</span>
+                <span class="vc-anchor__verdict-pill" style="color:var(--orange)">Building</span>
+            </div>
+            <div class="vc-anchor__breath">
+                <span><strong>47</strong>active</span>
+                <span><strong>5</strong>hot</span>
+                <span><strong>3/7</strong>handoff ready</span>
+                <span><strong>2.5x</strong>coverage</span>
+            </div>
+            <div class="vc-anchor__hint">
+                <kbd>⌘K</kbd>palette
+            </div>
+        </div>
+        <div class="room">
+            <p class="room__kicker">PoC Framework · 1 proof in cast</p>
+            <h3 class="room__title">Cast one decision-grade proof.</h3>
+            <p class="room__thesis">Same room — but a pressure event just lit the recovery bar below.</p>
+            <p style="color:var(--ink-40);font-size:13px;margin:0">— forge + cast panels render here —</p>
+        </div>
+        <div class="vc-recovery vc-recovery--lit">
+            <div class="vc-recovery__event">
+                <span class="vc-recovery__event-tag">Recovery</span>
+                <span class="vc-recovery__event-copy">Proof readout overdue on Acme PoC — 2d past kickoff.</span>
+                <span class="vc-recovery__event-cta">Open the cast →</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ─── Concept D ─────────────────────────────────────────────────────── -->
+
+<section class="concept">
+    <div class="concept__head">
+        <span class="concept__id">Concept D</span>
+        <div>
+            <h2 class="concept__name">The Ambient HUD</h2>
+            <p class="concept__copy">
+                A single 44px corner indicator (top-right) that pulses with workspace state — calm when
+                nothing needs attention, blue with a count when something material changed, orange and
+                pulsing when intervention is needed. Click → palette opens <strong>pre-filtered</strong>
+                to whatever caused the pulse.
+            </p>
+            <p class="concept__tradeoff">
+                <strong>Tradeoff:</strong> lightest footprint, most canon-pure ("summoned" not central) —
+                but lowest control-system feeling. Closest to "trust me, you don't need a nav."
+            </p>
+        </div>
+    </div>
+
+    <div class="mockup">
+        <div class="hud-triptych">
+            <div class="hud-wrap">
+                <div class="hud hud--calm"><div class="hud__core"></div></div>
+                <p class="room__kicker" style="font-size:9px;letter-spacing:0.2em">Discovery Studio</p>
+                <p style="font-family:'DM Serif Display',serif;font-size:18px;line-height:1.15;margin:6px 0 0;max-width:18ch">Live call running — workspace is calm.</p>
+                <span class="hud-tag">State: calm</span>
+            </div>
+            <div class="hud-wrap">
+                <div class="hud hud--watch"><div class="hud__core"></div></div>
+                <p class="room__kicker" style="font-size:9px;letter-spacing:0.2em">Discovery Studio</p>
+                <p style="font-family:'DM Serif Display',serif;font-size:18px;line-height:1.15;margin:6px 0 0;max-width:18ch">Two signals just lit on accounts you're not in.</p>
+                <span class="hud-tag">State: watching · 2</span>
+            </div>
+            <div class="hud-wrap">
+                <div class="hud hud--urgent"><div class="hud__core"></div></div>
+                <p class="room__kicker" style="font-size:9px;letter-spacing:0.2em">Discovery Studio</p>
+                <p style="font-family:'DM Serif Display',serif;font-size:18px;line-height:1.15;margin:6px 0 0;max-width:18ch">Apex Fintech proof just went 2d overdue.</p>
+                <span class="hud-tag">State: urgent · 1</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ─── Recommended combination ───────────────────────────────────────── -->
+
+<section class="concept concept--recommended">
+    <div class="concept__head">
+        <span class="concept__id">Recommended</span>
+        <div>
+            <h2 class="concept__name">A + B layered, with C's recovery bar reserved for breach events.</h2>
+            <p class="concept__copy">
+                The Pressure Deck (A) gives Sarah the constant orientation customers expect — "where am I,
+                what's hot, what's the system doing." The Pressure Compass (B) on the right edge gives her
+                always-visible cross-room state without enumerating rooms. C's recovery bar appears
+                <strong>only on pressure breach</strong> — overdue, leaked, decayed — so it never reads as
+                ambient chrome. D's HUD is folded into A's verdict pill (the pill pulses when D would have
+                fired).
+            </p>
+            <p class="concept__tradeoff">
+                What this beats in the reference apps: Apollo shows you 20 modules and asks you to pick.
+                Antaeus shows you the 5 objects under most pressure and lets you act. That's what Sarah
+                notices on day one.
+            </p>
+        </div>
+    </div>
+
+    <div class="mockup">
+        <div class="pd-deck">
+            <div class="pd-focus">
+                <span class="pd-focus__label">Focus</span>
+                <span class="pd-focus__chip">
+                    <span class="dot"></span>
+                    <strong>Northstar Health</strong>
+                    <span class="meta">heat 94 · 3d stale</span>
+                </span>
+            </div>
+            <div class="pd-verdict">
+                <span class="pd-verdict__pill">Inheritable · 3/7 ready</span>
+                <span class="pd-verdict__count">↑ verdict</span>
+            </div>
+            <div class="pd-dots">
+                <span class="pd-dots__label">Pressure elsewhere</span>
+                <span class="pd-dot pd-dot--red"></span>
+                <span class="pd-dot pd-dot--orange"></span>
+                <span class="pd-dot pd-dot--blue"></span>
+                <span class="pd-dot pd-dot--amber"></span>
+            </div>
+        </div>
+
+        <div class="rec-wrap">
+            <div class="room pc-room">
+                <p class="room__kicker">Signal Console · 12 accounts on the radar</p>
+                <h3 class="room__title">Where account heat becomes real work.</h3>
+                <p class="room__thesis">Signals are time-limited. Heat ranks them. Motion comes from the account ledger — not from research piling up.</p>
+                <div class="cards">
+                    <article class="card is-hot">
+                        <span class="card__heat card__heat--hot">Hot · 94</span>
+                        <h4 class="card__name">Northstar Health</h4>
+                        <p class="card__signal">CFO churn announced 4d ago. Procurement reorg in motion.</p>
+                        <span class="card__cta">Compose outbound →</span>
+                    </article>
+                    <article class="card is-hot">
+                        <span class="card__heat card__heat--hot">Hot · 88</span>
+                        <h4 class="card__name">Apex Fintech</h4>
+                        <p class="card__signal">Series-B announcement 6d ago + Director of Ops hire posted.</p>
+                        <span class="card__cta">Open in Deal Workspace →</span>
+                    </article>
+                    <article class="card is-active">
+                        <span class="card__heat card__heat--active">Active · 78</span>
+                        <h4 class="card__name">Meridian Logistics</h4>
+                        <p class="card__signal">Earnings call mentioned "operational drag" twice.</p>
+                        <span class="card__cta">Compose outbound →</span>
+                    </article>
+                </div>
+            </div>
+            <aside class="pc-sliver">
+                <span class="pc-sliver__kicker">Pressure</span>
+                <div class="pc-pill is-focus">
+                    <span class="pc-pill__dot" style="background:var(--red)"></span>
+                    <span class="pc-pill__num">94</span>
+                </div>
+                <div class="pc-pill">
+                    <span class="pc-pill__dot" style="background:var(--orange)"></span>
+                    <span class="pc-pill__num">88</span>
+                </div>
+                <div class="pc-pill">
+                    <span class="pc-pill__dot" style="background:var(--blue)"></span>
+                    <span class="pc-pill__num">72</span>
+                </div>
+                <div class="pc-pill">
+                    <span class="pc-pill__dot" style="background:var(--amber)"></span>
+                    <span class="pc-pill__num">61</span>
+                </div>
+                <div class="pc-pill">
+                    <span class="pc-pill__dot" style="background:var(--green)"></span>
+                    <span class="pc-pill__num">54</span>
+                </div>
+            </aside>
+        </div>
+
+        <div class="vc-recovery vc-recovery--lit">
+            <div class="vc-recovery__event">
+                <span class="vc-recovery__event-tag">Recovery</span>
+                <span class="vc-recovery__event-copy">Proof readout overdue on Acme PoC — 2d past kickoff.</span>
+                <span class="vc-recovery__event-cta">Open the cast →</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<p class="foot">
+    Mockups for ideation only — not implementation. Push back on any of these; the goal is to find the
+    shape that holds the always-present feeling without reviving the hallway.
+</p>
+
+</main>
+</body>
+</html>
