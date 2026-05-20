@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Antaeus birdseye — focused-object trail · 2026-05-19</title>
+<style>
+  :root {
+    --ink: #0a1c40;
+    --ink-70: rgba(10, 28, 64, 0.7);
+    --ink-50: rgba(10, 28, 64, 0.5);
+    --ink-30: rgba(10, 28, 64, 0.3);
+    --ink-10: rgba(10, 28, 64, 0.1);
+    --field: #f6f8fc;
+    --raised: #ffffff;
+    --cream: #f7f1e6;
+    --orange: #e6701e;
+    --orange-soft: rgba(230, 112, 30, 0.12);
+    --blue: #2563eb;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", "Plus Jakarta Sans", -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .doc {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 40px 96px;
+  }
+  .doc-head {
+    margin-bottom: 64px;
+  }
+  .doc-head .kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-70);
+    margin: 0 0 16px;
+  }
+  .doc-head h1 {
+    font-family: "DM Serif Display", "Georgia", serif;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.04;
+    font-weight: 400;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+  }
+  .doc-head .lede {
+    font-size: 17px;
+    color: var(--ink-70);
+    margin: 0;
+    max-width: 64ch;
+  }
+
+  /* ─── Section ─────────────────────────────────────────────────── */
+  .section { margin-top: 72px; }
+  .section-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 0 0 8px;
+  }
+  .section h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 400;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .section .note {
+    font-size: 15px;
+    color: var(--ink-70);
+    margin: 0 0 24px;
+    max-width: 64ch;
+  }
+
+  /* ─── Room stage (the actual room behind the strip) ───────────── */
+  .room-stage {
+    background: var(--raised);
+    border: 1px solid var(--ink-10);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(10, 28, 64, 0.03);
+  }
+
+  /* ─── The strip — always-visible bird's-eye at the top of a room ─ */
+  .birdseye-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(82, 60, 28, 0.18);
+    padding: 11px 20px;
+    font-size: 13px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 120ms;
+  }
+  .birdseye-strip:hover { background: #f3ead9; }
+  .birdseye-strip__name {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .birdseye-strip__sep {
+    color: var(--ink-30);
+    font-weight: 400;
+    user-select: none;
+  }
+  .birdseye-strip__line {
+    color: var(--ink-70);
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .birdseye-strip__hint {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ink-50);
+    background: rgba(10, 28, 64, 0.06);
+    border-radius: 3px;
+    padding: 3px 6px;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  /* The mock room body — illustrates that the strip lives ABOVE the
+     existing RoomChrome / topbar, not replacing it. */
+  .room-body {
+    padding: 28px 32px 40px;
+  }
+  .room-body__chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--ink-10);
+    margin-bottom: 24px;
+  }
+  .room-body__back {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-70);
+    text-decoration: none;
+    padding: 6px 10px;
+    border: 1px solid var(--ink-10);
+    border-radius: 999px;
+  }
+  .room-body__palette {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ink-50);
+  }
+  .room-body__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-70);
+    margin: 0 0 8px;
+  }
+  .room-body__title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 400;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+    max-width: 24ch;
+  }
+  .room-body__sub {
+    color: var(--ink-70);
+    font-size: 15px;
+    margin: 0;
+    max-width: 60ch;
+  }
+  .room-body__placeholder {
+    margin-top: 32px;
+    padding: 60px 24px;
+    background: var(--field);
+    border: 1px dashed var(--ink-10);
+    border-radius: 4px;
+    text-align: center;
+    color: var(--ink-30);
+    font-style: italic;
+    font-size: 13px;
+  }
+
+  /* ─── Expanded trail (state 2 — click expands) ─────────────────── */
+  .trail-shell {
+    background: var(--raised);
+    border: 1px solid var(--ink-10);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(10, 28, 64, 0.08);
+  }
+  .trail-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 22px 28px 18px;
+    border-bottom: 1px solid var(--ink-10);
+  }
+  .trail-head__name {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .trail-head__close {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ink-50);
+    background: transparent;
+    border: 1px solid var(--ink-10);
+    border-radius: 3px;
+    padding: 4px 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .trail-rows { padding: 8px 0 12px; }
+  .trail-row {
+    display: grid;
+    grid-template-columns: 184px 1fr;
+    gap: 24px;
+    padding: 16px 28px;
+    border-bottom: 1px solid rgba(10, 28, 64, 0.05);
+    cursor: pointer;
+    transition: background 100ms;
+  }
+  .trail-row:last-child { border-bottom: none; }
+  .trail-row:hover { background: rgba(10, 28, 64, 0.025); }
+  .trail-row--here {
+    background: var(--orange-soft);
+  }
+  .trail-row--here:hover { background: var(--orange-soft); }
+  .trail-row__room {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-70);
+    padding-top: 2px;
+    align-self: start;
+  }
+  .trail-row--here .trail-row__room {
+    color: var(--orange);
+    font-weight: 600;
+  }
+  .trail-row__copy {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .trail-row__copy strong { font-weight: 600; }
+  .trail-row__here-tag {
+    display: inline-block;
+    margin-left: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(230, 112, 30, 0.18);
+    padding: 2px 6px;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+  .trail-row__sub {
+    margin-top: 6px;
+    font-size: 13.5px;
+    color: var(--ink-70);
+  }
+  .trail-row__sub li {
+    list-style: none;
+    padding-left: 14px;
+    position: relative;
+  }
+  .trail-row__sub li::before {
+    content: "↳";
+    position: absolute;
+    left: 0;
+    color: var(--ink-30);
+  }
+  .trail-foot {
+    padding: 14px 28px 18px;
+    border-top: 1px solid var(--ink-10);
+    font-size: 12.5px;
+    color: var(--ink-50);
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Workspace-fallback strip (state 3 — no focus) ────────────── */
+  .birdseye-strip--workspace {
+    background: var(--field);
+  }
+  .birdseye-strip--workspace .birdseye-strip__name {
+    font-style: italic;
+    color: var(--ink-50);
+    font-weight: 400;
+  }
+
+  /* ─── Workspace-fallback expanded ──────────────────────────────── */
+  .workspace-trail-head .trail-head__name {
+    font-size: 22px;
+    color: var(--ink-70);
+    font-style: italic;
+  }
+  .workspace-account {
+    cursor: pointer;
+  }
+  .workspace-account__line {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .workspace-account__name {
+    font-weight: 600;
+  }
+  .workspace-account__copy {
+    color: var(--ink-70);
+    font-size: 13.5px;
+  }
+  .workspace-account__chevron {
+    color: var(--ink-30);
+    font-size: 12px;
+  }
+
+  /* ─── Annotation labels for the mockup ─────────────────────────── */
+  .anno {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin-top: 14px;
+    padding-left: 12px;
+    border-left: 2px solid var(--orange);
+  }
+  .principles {
+    margin-top: 96px;
+    padding: 32px 36px;
+    background: var(--cream);
+    border-radius: 4px;
+    border-left: 4px solid var(--orange);
+  }
+  .principles h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin: 0 0 12px;
+  }
+  .principles ul {
+    margin: 0;
+    padding-left: 22px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .principles li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <header class="doc-head">
+    <p class="kicker">BIRDSEYE CONTROL · MOCKUP · 2026-05-19</p>
+    <h1>The focused account, read back across the whole system.</h1>
+    <p class="lede">A thin strip lives at the top of every room. It names the account the operator is working on and reads back what's actually happening to that account everywhere it lives. Click it (or hit Ctrl+K) to see the full trail. When no account is focused, it falls back to a workspace-level read.</p>
+  </header>
+
+  <!-- ─── STATE 1: STRIP ONLY (default — always visible) ──────── -->
+  <section class="section">
+    <p class="section-label">State 1 — always-visible default</p>
+    <h2>The strip, sitting above the room it's helping the operator inside.</h2>
+    <p class="note">The strip is one quiet line. It carries the focused account, three glanceable reads, and a hint to expand. The room beneath it is unchanged — RoomChrome (back-pill + palette hint) and the room's own topbar still do their normal work.</p>
+
+    <div class="room-stage" role="img" aria-label="Deal Workspace with the birdseye strip on top">
+      <div class="birdseye-strip">
+        <span class="birdseye-strip__name">MERIDIAN LOGISTICS</span>
+        <span class="birdseye-strip__sep">·</span>
+        <span class="birdseye-strip__line">active week — Series C closed Friday, hiring 8 ops roles, new CTO announced  ·  $50K in evaluation, decision-maker confirmed for Wednesday  ·  pilot results not ready to present to leadership yet</span>
+        <span class="birdseye-strip__hint">Ctrl+K to expand</span>
+      </div>
+      <div class="room-body">
+        <div class="room-body__chrome">
+          <a href="#" class="room-body__back">← Back to Dashboard</a>
+          <span class="room-body__palette">Ctrl+K · jump to any room</span>
+        </div>
+        <p class="room-body__kicker">DEAL WORKSPACE · 6 active deals · 2 at risk this week</p>
+        <h2 class="room-body__title">Where the deals are decaying.</h2>
+        <p class="room-body__sub">Six live deals. Two are stuck this week. The recovery queue ranks them by what'll close-lost fastest if you do nothing.</p>
+        <div class="room-body__placeholder">[ recovery queue + intervention rail render here — unchanged from today ]</div>
+      </div>
+    </div>
+    <p class="anno">The room (Deal Workspace) is unchanged. The strip is the only new surface.</p>
+  </section>
+
+  <!-- ─── STATE 2: EXPANDED TRAIL (after click or Ctrl+K) ──────── -->
+  <section class="section">
+    <p class="section-label">State 2 — expanded after click or Ctrl+K</p>
+    <h2>Every room Meridian lives in, reading what's actually happening.</h2>
+    <p class="note">Click any row to teleport into that room with Meridian pre-focused. The room you're already in gets the orange tag so the operator never loses their place.</p>
+
+    <div class="trail-shell">
+      <div class="trail-head">
+        <p class="trail-head__name">Meridian Logistics</p>
+        <button type="button" class="trail-head__close">Esc · close</button>
+      </div>
+      <div class="trail-rows">
+
+        <div class="trail-row">
+          <p class="trail-row__room">Signal Console</p>
+          <div>
+            <div class="trail-row__copy">A lot going on this week.</div>
+            <ul class="trail-row__sub">
+              <li>Series C closed Friday</li>
+              <li>8 ops roles posted on LinkedIn</li>
+              <li>new CTO announced in TechCrunch</li>
+              <li>last reached out 2 days ago</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="trail-row">
+          <p class="trail-row__room">Outbound Studio</p>
+          <div class="trail-row__copy">You've sent 4 emails to Meridian. Last reply was 5 days ago.</div>
+        </div>
+
+        <div class="trail-row">
+          <p class="trail-row__room">Cold Call Studio</p>
+          <div class="trail-row__copy">1 meeting booked from a cold call. You've written prep notes.</div>
+        </div>
+
+        <div class="trail-row">
+          <p class="trail-row__room">LinkedIn Playbook</p>
+          <div class="trail-row__copy">2 public comments left on Meridian's CTO's posts. No connection request sent yet.</div>
+        </div>
+
+        <div class="trail-row">
+          <p class="trail-row__room">Call Planner</p>
+          <div class="trail-row__copy">Agenda written for Wednesday's call. You haven't decided what to ask them to commit to by the end.</div>
+        </div>
+
+        <div class="trail-row">
+          <p class="trail-row__room">Discovery Studio</p>
+          <div class="trail-row__copy">3 questions from the last call still don't have answers — current state, decision process, and what the CTO needs to see.</div>
+        </div>
+
+        <div class="trail-row trail-row--here">
+          <p class="trail-row__room">Deal Workspace<span class="trail-row__here-tag">You're here</span></p>
+          <div>
+            <div class="trail-row__copy"><strong>$50K deal in evaluation.</strong> The decision-maker confirmed she'll be in the room Wednesday. Your inside advocate is the VP of Operations.</div>
+          </div>
+        </div>
+
+        <div class="trail-row">
+          <p class="trail-row__room">Future Autopsy</p>
+          <div class="trail-row__copy">You haven't pressure-tested what could go wrong on this deal yet.</div>
+        </div>
+
+        <div class="trail-row">
+          <p class="trail-row__room">PoC Framework</p>
+          <div class="trail-row__copy">The pilot results aren't ready to share with Meridian's decision-maker yet — no one at Meridian has agreed to present them.</div>
+        </div>
+
+        <div class="trail-row">
+          <p class="trail-row__room">Advisor Deploy</p>
+          <div class="trail-row__copy">No warm intro from an advisor in play yet. Two of your advisors know people at Meridian.</div>
+        </div>
+
+      </div>
+      <div class="trail-foot">CLICK ANY ROW TO JUMP THERE WITH MERIDIAN PRE-FOCUSED · ESC TO CLOSE</div>
+    </div>
+    <p class="anno">Sacred room names anchor each row. The descriptive line on the right is what's actually happening — no scores, no jargon, no “their boss / readout / pre-mortem” shorthand. Plain English Sarah would say to a peer.</p>
+  </section>
+
+  <!-- ─── STATE 3: NO FOCUS (workspace fallback) ──────────────── -->
+  <section class="section">
+    <p class="section-label">State 3 — fallback when no account is focused</p>
+    <h2>What the strip looks like when the operator hasn't picked anything yet.</h2>
+    <p class="note">If the operator is on the Dashboard or has navigated without focusing a specific account, the strip falls back to a workspace-level read. Names the most-active account in prose. Click expands to a list of accounts under pressure this week.</p>
+
+    <div class="room-stage" role="img" aria-label="Dashboard with the workspace-fallback strip">
+      <div class="birdseye-strip birdseye-strip--workspace">
+        <span class="birdseye-strip__name">No account focused —</span>
+        <span class="birdseye-strip__line">Meridian Logistics is your most active this week. Acme is second. Riverbend hasn't moved in 3 weeks.</span>
+        <span class="birdseye-strip__hint">Ctrl+K to see the full week</span>
+      </div>
+      <div class="room-body">
+        <div class="room-body__chrome">
+          <a href="#" class="room-body__back">← Back to Dashboard</a>
+          <span class="room-body__palette">Ctrl+K · jump to any room</span>
+        </div>
+        <p class="room-body__kicker">DASHBOARD · 23 active accounts · 6 deals at risk this week</p>
+        <h2 class="room-body__title">What's under the most pressure right now.</h2>
+        <p class="room-body__sub">Ranked by what'll go quiet, decay, or close-lost fastest if you don't act this week.</p>
+        <div class="room-body__placeholder">[ ranked spotlight + queue render here — unchanged from today ]</div>
+      </div>
+    </div>
+    <p class="anno">No invented terms. No “command intelligence rail” or “pressure score.” Just the workspace's most active account named in prose.</p>
+  </section>
+
+  <!-- ─── STATE 3b: workspace-fallback expanded ─────────────────── -->
+  <section class="section">
+    <p class="section-label">State 3b — workspace fallback expanded</p>
+    <h2>The top accounts under pressure this week, in prose.</h2>
+    <p class="note">Click any account to focus it (the strip then collapses to State 1 for that account). Same trail-shell as the focused state, but reading workspace-wide.</p>
+
+    <div class="trail-shell">
+      <div class="trail-head workspace-trail-head">
+        <p class="trail-head__name">No account focused — accounts under pressure this week</p>
+        <button type="button" class="trail-head__close">Esc · close</button>
+      </div>
+      <div class="trail-rows">
+
+        <div class="trail-row workspace-account">
+          <div class="workspace-account__line"><span class="workspace-account__name">Meridian Logistics</span><span class="workspace-account__chevron">→</span></div>
+          <div class="workspace-account__copy">Series C closed Friday, hiring 8 ops roles, new CTO. $50K deal in evaluation Wednesday.</div>
+        </div>
+
+        <div class="trail-row workspace-account">
+          <div class="workspace-account__line"><span class="workspace-account__name">Acme Co</span><span class="workspace-account__chevron">→</span></div>
+          <div class="workspace-account__copy">Q3 earnings missed estimates two weeks ago. Layoff news Monday. $80K deal in proposal.</div>
+        </div>
+
+        <div class="trail-row workspace-account">
+          <div class="workspace-account__line"><span class="workspace-account__name">Pioneer Health</span><span class="workspace-account__chevron">→</span></div>
+          <div class="workspace-account__copy">RFP went live Wednesday. New VP Ops started Monday. No deal yet — pilot conversation Friday.</div>
+        </div>
+
+        <div class="trail-row workspace-account">
+          <div class="workspace-account__line"><span class="workspace-account__name">NorthBridge Hospitality</span><span class="workspace-account__chevron">→</span></div>
+          <div class="workspace-account__copy">CDO hired from Marriott. $120K deal in discovery. Champion is still indirect.</div>
+        </div>
+
+        <div class="trail-row workspace-account">
+          <div class="workspace-account__line"><span class="workspace-account__name">Riverbend Systems</span><span class="workspace-account__chevron">→</span></div>
+          <div class="workspace-account__copy">Hasn't moved in 3 weeks. Last touch was a LinkedIn comment. $40K deal stalled in evaluation.</div>
+        </div>
+
+      </div>
+      <div class="trail-foot">CLICK AN ACCOUNT TO FOCUS · ESC TO CLOSE</div>
+    </div>
+    <p class="anno">Names the events that are actually pulling. Series C, layoffs, RFP, new exec — concrete, plain, would-say-to-a-peer language.</p>
+  </section>
+
+  <!-- ─── PRINCIPLES THE MOCKUP IS DEFENDING ─────────────────── -->
+  <aside class="principles">
+    <h3>What this mockup is defending</h3>
+    <ul>
+      <li><strong>Object-first, not room-first.</strong> The strip carries an <em>account</em>, not a room or a score. Canon §3 architectural truth #1 (object-first, not tab-first) made visible.</li>
+      <li><strong>Plain English, no jargon.</strong> No "heat", "motion", "readout", "backchannel", "EB", "pre-mortem", "advance ask", "their boss". Every line is something Sarah would say to a peer at another company.</li>
+      <li><strong>The system reads itself back to the operator.</strong> Each row is the room writing what's actually happening to this account, in its own voice but plain.</li>
+      <li><strong>Sacred names anchor.</strong> Room names (Signal Console, Deal Workspace, etc.) stay — they're the navigation handles. The descriptive line is what's new.</li>
+      <li><strong>Click teleports with focus preserved.</strong> Continuity params (canon §6) already exist; the trail just exposes them.</li>
+      <li><strong>The number doesn't headline.</strong> Where ranking matters (workspace fallback), it's prose: "Meridian is your most active, Acme is second" — not "Meridian 67 / Acme 54".</li>
+      <li><strong>Ctrl+K, not ⌘K.</strong> The hint matches the OS the operator is on (already handled by the palette's `metaKey || ctrlKey` listener; the rendered hint just needs to follow).</li>
+    </ul>
+  </aside>
+
+</div>
+</body>
+</html>
