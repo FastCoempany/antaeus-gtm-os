@@ -67,11 +67,6 @@ jobs:
             --project-ref "$PROJECT_REF" -o json)
           # Filter to branches named `pr-<num>-run-<id>`. Everything else is
           # left alone (main, preview, any founder-created branches).
-          echo "$ALL_BRANCHES" | python3 <<'PY' > candidates.json
-          import json, sys, re, os
-          branches = json.load(open('/dev/stdin')) if False else json.loads(open('/proc/self/fd/0').read())
-          PY
-          # Easier — just pipe via python -c
           echo "$ALL_BRANCHES" | python3 -c "
           import sys, json, re
           branches = json.load(sys.stdin)
