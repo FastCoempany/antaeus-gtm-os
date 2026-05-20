@@ -23,18 +23,39 @@ supabase functions deploy heartbeat --no-verify-jwt
 
 ## Schedule (pg_cron)
 
-The cron schedule lives in `supabase/migrations/20260519180002_heartbeat_schedule.sql`. After deploying the function, the migration registers a pg_cron job that POSTs to the function URL every 30 minutes.
+The cron schedule lives in `supabase/migrations/20260519180002_heartbeat_schedule.sql`. After the function is deployed, the founder uncomments the `select cron.schedule(...)` block in the migration's comment and runs it directly in the Supabase SQL Editor. The result is a pg_cron job that POSTs to the function URL every 30 minutes.
 
-The migration is commented out by default — the founder uncomments the `select cron.schedule(...)` line and applies the migration AFTER:
+Two prerequisites before enabling the cron:
 
-1. The function is deployed (so the URL resolves).
-2. The `app.heartbeat_url` and `app.service_role_key` database settings are set:
-   ```sql
-   alter database postgres set app.heartbeat_url = 'https://<project-ref>.supabase.co/functions/v1/heartbeat';
-   alter database postgres set app.service_role_key = '<service_role_key>';
+1. **Deploy the function** (so the URL resolves):
+   ```bash
+   supabase functions deploy heartbeat --no-verify-jwt
    ```
 
+2. **Store the service-role key in Supabase Vault** (the cron reads it at execution time):
+   ```sql
+   select vault.create_secret(
+     '<service-role-key>',
+     'antaeus_service_role_key',
+     'Bearer token for the antaeus-heartbeat pg_cron job'
+   );
+   ```
+   Save the returned UUID — it's how you rotate the key later via `vault.update_secret`.
+
+Then uncomment the migration's `select cron.schedule(...)` block and run it in the SQL Editor. The block hardcodes the function URL (not a secret — the function is publicly invokable; authorization is what protects it) and reads the bearer token from `vault.decrypted_secrets`.
+
 This two-step pattern keeps the cron from invoking a missing function during initial rollout.
+
+**Why Vault and not `alter database postgres set app.*`?** An earlier draft of the migration used `current_setting('app.heartbeat_url')` + `current_setting('app.service_role_key')` and relied on the founder running `alter database postgres set app.* = ...` from the SQL Editor. That doesn't work on Supabase — the `postgres` role exposed via the SQL Editor lacks the superuser privilege required to alter database-level parameters (error `42501: permission denied to set parameter`). Vault is Supabase's canonical pattern for a secret a pg_cron job needs to read at execution time.
+
+**Rotating the service-role key.** The cron reads from Vault on every fire, so a rotation is just:
+```sql
+select vault.update_secret(
+  '<secret-uuid-from-vault.create_secret>',
+  '<new-service-role-key>'
+);
+```
+No re-scheduling required.
 
 ## Manual invocation (testing)
 
