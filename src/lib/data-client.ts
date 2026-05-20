@@ -12,6 +12,10 @@ import type {
 } from "./database.types";
 import { getSupabaseClient, type AntaeusSupabaseClient } from "./supabase-client";
 import { reportError, trackEvent } from "./observability";
+import {
+    isDemoModeActive,
+    makeDemoLocalNounAccessor
+} from "./data-client-demo-local";
 
 /**
  * Antaeus data client — typed, workspace-aware wrappers over the raw Supabase client.
@@ -119,8 +123,43 @@ export interface DataClient {
     observations: NounAccessor<"observations">;
 }
 
-export function createDataClient(client?: AntaeusSupabaseClient): DataClient {
-    const sb = client ?? getSupabaseClient();
+/**
+ * Mode hint for the data client. "supabase" (default) returns the real
+ * network-backed client. "demo-local" returns localStorage-backed accessors
+ * that mirror the same shape but never hit the network. "auto" picks
+ * "demo-local" when `sessionStorage.gtmos_env_mode === "demo"` and
+ * "supabase" otherwise — matching the Phase 4.5 demo mode boundary
+ * (ADR-005).
+ */
+export type DataClientMode = "supabase" | "demo-local" | "auto";
+
+export interface CreateDataClientOptions {
+    readonly client?: AntaeusSupabaseClient;
+    readonly mode?: DataClientMode;
+}
+
+export function createDataClient(
+    options: CreateDataClientOptions | AntaeusSupabaseClient = {}
+): DataClient {
+    // Back-compat: createDataClient(supabaseClient) still works.
+    const opts: CreateDataClientOptions =
+        options && typeof options === "object" && "from" in options
+            ? { client: options as AntaeusSupabaseClient }
+            : (options as CreateDataClientOptions);
+
+    const requestedMode = opts.mode ?? "auto";
+    const resolvedMode: "supabase" | "demo-local" =
+        requestedMode === "auto"
+            ? isDemoModeActive()
+                ? "demo-local"
+                : "supabase"
+            : requestedMode;
+
+    if (resolvedMode === "demo-local") {
+        return makeDemoLocalDataClient();
+    }
+
+    const sb = opts.client ?? getSupabaseClient();
 
     return {
         client: sb,
@@ -144,6 +183,39 @@ export function createDataClient(client?: AntaeusSupabaseClient): DataClient {
         // ─── Phase A orchestration layer (ADR-004) ─────────────────
         workspaceSessions: makeNounAccessor(sb, "workspace_sessions"),
         observations: makeNounAccessor(sb, "observations")
+    };
+}
+
+// ─── Demo-local data client (ADR-005 §"Demo mode boundary") ─────────────
+
+function makeDemoLocalDataClient(): DataClient {
+    // The demo-local client does not need a real Supabase client. We expose
+    // a stub on `.client` so the DataClient type stays exact — callers that
+    // reach for `.client` directly are doing something the demo shape doesn't
+    // support and should refactor through the accessor interface.
+    const stubClient = {} as AntaeusSupabaseClient;
+
+    return {
+        client: stubClient,
+        currentUserId: async () => "demo-user",
+        currentWorkspace: async () => null,
+        workspaces: makeDemoLocalNounAccessor("workspaces"),
+        workspaceMembers: makeDemoLocalNounAccessor("workspace_members"),
+        icps: makeDemoLocalNounAccessor("icps"),
+        deals: makeDemoLocalNounAccessor("deals"),
+        sequences: makeDemoLocalNounAccessor("sequences"),
+        signalConsoleAccounts: makeDemoLocalNounAccessor("signal_console_accounts"),
+        discoveryFrameworks: makeDemoLocalNounAccessor("discovery_frameworks"),
+        discoveryCallLogs: makeDemoLocalNounAccessor("discovery_call_logs"),
+        pipelineSettings: makeDemoLocalNounAccessor("pipeline_settings"),
+        profiles: makeDemoLocalNounAccessor("profiles"),
+        studioArtifacts: makeDemoLocalNounAccessor("studio_artifacts"),
+        proofs: makeDemoLocalNounAccessor("proofs"),
+        advisorDeployments: makeDemoLocalNounAccessor("advisor_deployments"),
+        readinessSnapshots: makeDemoLocalNounAccessor("readiness_snapshots"),
+        handoffArtifacts: makeDemoLocalNounAccessor("handoff_artifacts"),
+        workspaceSessions: makeDemoLocalNounAccessor("workspace_sessions"),
+        observations: makeDemoLocalNounAccessor("observations")
     };
 }
 

@@ -1,0 +1,223 @@
+# data-parity-ci.yml — per-PR ephemeral Supabase branch for Phase 4.5
+# retrofit PRs.
+#
+# Triggers on PRs that touch schema (supabase/migrations/**), the typed
+# client surface (src/lib/database.types.ts, src/lib/data-client.ts), or
+# this workflow itself. Also triggers on PRs labeled "data-parity" so the
+# founder can opt in manually for PRs that exercise the live data path
+# without modifying schema files (e.g. Step 4 flip-read PRs that don't
+# add migrations).
+#
+# Provisions a fresh Supabase branch named pr-<num>-run-<id>, runs migrations
+# against it, runs realtime-sensitive Playwright tests pointed at the
+# branch's DB URL, then tears the branch down on completion (always).
+#
+# Stranded branches from cancelled CI runs are cleaned up by the daily
+# janitor at .github/workflows/data-parity-branch-janitor.yml.
+#
+# Required GitHub Actions secrets:
+#   SUPABASE_CI_PAT     — Personal access token for ci@antaeus.app
+#                         (Supabase service account). Permissions:
+#                         branches:write on the antaeus-gtm-os project.
+#
+# Required GitHub Actions variables (not secrets):
+#   SUPABASE_PROJECT_REF — production project ref (e.g. wjdqmgxwulqxxxnyuzyl).
+#                         Branches are created under this project.
+#
+# See: deliverables/adr/adr-005-data-layer-parity-2026-05-20.md §"CI gate"
+# See: docs/founder-data-parity-ci-setup.md for the click-by-click setup.
+
+name: Data Parity CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    paths:
+      - "supabase/migrations/**"
+      - "src/lib/data-client.ts"
+      - "src/lib/data-client-demo-local.ts"
+      - "src/lib/database.types.ts"
+      - "src/lib/data-parity-flags.ts"
+      - ".github/workflows/data-parity-ci.yml"
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  # Cancel in-progress data-parity runs when a new commit lands on the same
+  # PR. Branch teardown still runs because of the `if: always()` guard on
+  # the teardown job — every cancelled run still cleans up its branch.
+  group: data-parity-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # Gate: only run the rest of this workflow when the PR is opted in. Either
+  # the path filter triggered automatically (the on.pull_request.paths block
+  # above) or the PR carries the "data-parity" label.
+  should-run:
+    name: Should run data-parity CI?
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+    steps:
+      - id: gate
+        run: |
+          if [ "${{ github.event.action }}" = "labeled" ]; then
+            if [ "${{ github.event.label.name }}" = "data-parity" ]; then
+              echo "run=true" >> $GITHUB_OUTPUT
+            else
+              echo "run=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            # Path filter on pull_request triggered this run; any non-label
+            # event that reaches here was matched by the paths block above.
+            echo "run=true" >> $GITHUB_OUTPUT
+          fi
+
+  provision-branch:
+    name: Provision Supabase branch
+    needs: should-run
+    if: needs.should-run.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.create.outputs.branch_name }}
+      db_url: ${{ steps.create.outputs.db_url }}
+      api_url: ${{ steps.create.outputs.api_url }}
+      anon_key: ${{ steps.create.outputs.anon_key }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - id: create
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_CI_PAT }}
+          PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+        run: |
+          set -euo pipefail
+          BRANCH_NAME="pr-${{ github.event.pull_request.number }}-run-${{ github.run_id }}"
+          echo "Creating branch $BRANCH_NAME under project $PROJECT_REF"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+          # Create the branch. `--experimental` is required while branches
+          # are still flagged in the Supabase CLI.
+          supabase --experimental branches create "$BRANCH_NAME" \
+            --project-ref "$PROJECT_REF" \
+            --region us-east-1
+
+          # Poll until the branch reaches a usable state. Branches typically
+          # provision in 30-90 seconds; budget 5 minutes worst-case.
+          for attempt in $(seq 1 30); do
+            STATUS=$(supabase --experimental branches list \
+              --project-ref "$PROJECT_REF" -o json 2>/dev/null \
+              | python3 -c "import sys,json; \
+                d=json.load(sys.stdin); \
+                print(next((b['status'] for b in d if b['name']=='$BRANCH_NAME'), 'NOT_FOUND'))" \
+              || echo "QUERY_FAILED")
+            echo "Attempt $attempt: status=$STATUS"
+            if [ "$STATUS" = "FUNCTIONS_DEPLOYED" ] || [ "$STATUS" = "ACTIVE_HEALTHY" ]; then
+              break
+            fi
+            sleep 10
+          done
+
+          if [ "$STATUS" != "FUNCTIONS_DEPLOYED" ] && [ "$STATUS" != "ACTIVE_HEALTHY" ]; then
+            echo "::error::Branch $BRANCH_NAME never reached a usable state (last seen: $STATUS)"
+            exit 1
+          fi
+
+          # Resolve connection details
+          BRANCH_JSON=$(supabase --experimental branches get "$BRANCH_NAME" \
+            --project-ref "$PROJECT_REF" -o json)
+          DB_URL=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('db_url',''))")
+          API_URL=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('api_url',''))")
+          ANON_KEY=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('anon_key',''))")
+
+          if [ -z "$DB_URL" ] || [ -z "$API_URL" ] || [ -z "$ANON_KEY" ]; then
+            echo "::error::Branch $BRANCH_NAME returned incomplete connection details"
+            exit 1
+          fi
+
+          # Mask the secrets in the log
+          echo "::add-mask::$DB_URL"
+          echo "::add-mask::$ANON_KEY"
+
+          echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
+          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          echo "anon_key=$ANON_KEY" >> $GITHUB_OUTPUT
+
+      - name: Apply migrations
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_CI_PAT }}
+          PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+        run: |
+          # supabase db push against the new branch. The CLI auto-detects the
+          # active branch from `supabase branches switch`.
+          supabase --experimental branches switch "${{ steps.create.outputs.branch_name }}" \
+            --project-ref "$PROJECT_REF"
+          supabase db push --linked --yes
+
+  realtime-tests:
+    name: Realtime cross-tab tests
+    needs: provision-branch
+    if: needs.provision-branch.result == 'success'
+    runs-on: ubuntu-latest
+    env:
+      VITE_SUPABASE_URL: ${{ needs.provision-branch.outputs.api_url }}
+      VITE_SUPABASE_ANON_KEY: ${{ needs.provision-branch.outputs.anon_key }}
+      VITE_APP_ENV: preview
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run cross-tab realtime suite
+        # This script is added per-retrofit-PR; in Checkpoint 1 it runs no
+        # tests yet but must succeed (the runner asserts the script is
+        # present and the env vars wire through).
+        run: npm run test:realtime
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: realtime-playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  teardown-branch:
+    name: Teardown Supabase branch
+    needs: [provision-branch, realtime-tests]
+    # Run on success AND failure of upstream jobs so we never leak branches.
+    # The daily janitor catches anything this guard misses.
+    if: always() && needs.provision-branch.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Delete branch
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_CI_PAT }}
+          PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+        run: |
+          BRANCH_NAME="${{ needs.provision-branch.outputs.branch_name }}"
+          echo "Tearing down branch $BRANCH_NAME"
+          # `|| true` so teardown never fails the workflow — the janitor
+          # will catch anything that's still stranded.
+          supabase --experimental branches delete "$BRANCH_NAME" \
+            --project-ref "$PROJECT_REF" -y || true

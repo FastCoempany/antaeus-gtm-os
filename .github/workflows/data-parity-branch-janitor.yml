@@ -1,0 +1,177 @@
+# data-parity-branch-janitor.yml — daily cleanup of stranded Supabase
+# branches created by the data-parity-ci.yml workflow.
+#
+# Branches with names matching `pr-<num>-run-<id>` are linked to a PR run.
+# The teardown step in data-parity-ci.yml runs on `if: always()` and should
+# delete the branch when a run completes (success or failure). But:
+#
+#   - Cancelled workflows may abort before teardown runs
+#   - Teardown step itself can fail (network, Supabase API hiccup) and uses
+#     `|| true` to never block the workflow
+#   - GitHub Actions runner OOMs / hardware failures
+#
+# So we run a daily cron that walks every branch under the production
+# project, parses the `pr-<num>-run-<id>` name, looks up the PR's state,
+# and deletes branches whose linked PR is closed (merged or not) OR whose
+# linked workflow run is older than 24 hours regardless of PR state.
+#
+# Safety rails:
+#   - Never touches the persistent `preview` branch
+#   - Never touches `main`
+#   - Never touches branches that don't match the `pr-<num>-run-<id>` pattern
+#     (in case someone manually created a branch for unrelated work)
+#   - Logs every decision; failed deletions don't fail the workflow
+#
+# See: deliverables/adr/adr-005-data-layer-parity-2026-05-20.md §"CI gate"
+
+name: Data Parity Branch Janitor
+
+on:
+  schedule:
+    # Daily at 03:00 UTC — chosen so the janitor runs after most US-timezone
+    # PR activity has wound down and the persistent preview branch isn't
+    # busy with active migrations.
+    - cron: "0 3 * * *"
+  # Manual dispatch for emergencies (e.g. branch quota hit; founder needs
+  # a sweep).
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: data-parity-janitor
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    name: Sweep stranded branches
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: List + filter branches
+        id: candidates
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_CI_PAT }}
+          PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+        run: |
+          set -euo pipefail
+          ALL_BRANCHES=$(supabase --experimental branches list \
+            --project-ref "$PROJECT_REF" -o json)
+          # Filter to branches named `pr-<num>-run-<id>`. Everything else is
+          # left alone (main, preview, any founder-created branches).
+          echo "$ALL_BRANCHES" | python3 <<'PY' > candidates.json
+          import json, sys, re, os
+          branches = json.load(open('/dev/stdin')) if False else json.loads(open('/proc/self/fd/0').read())
+          PY
+          # Easier — just pipe via python -c
+          echo "$ALL_BRANCHES" | python3 -c "
+          import sys, json, re
+          branches = json.load(sys.stdin)
+          pattern = re.compile(r'^pr-(\d+)-run-(\d+)$')
+          matched = []
+          for b in branches:
+              m = pattern.match(b.get('name', ''))
+              if not m: continue
+              matched.append({
+                  'name': b['name'],
+                  'pr': int(m.group(1)),
+                  'run_id': int(m.group(2)),
+                  'created_at': b.get('created_at', '')
+              })
+          print(json.dumps(matched))
+          " > candidates.json
+          cat candidates.json
+
+      - name: Evaluate + delete
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_CI_PAT }}
+          PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ ! -s candidates.json ] || [ "$(cat candidates.json)" = "[]" ]; then
+            echo "No data-parity branches to evaluate."
+            exit 0
+          fi
+
+          # Use the GitHub REST API directly via curl (no gh CLI in this
+          # runner by default; github.token works for repo-public read access).
+          REPO="${{ github.repository }}"
+
+          python3 <<PYTHON
+          import json, os, subprocess, sys, urllib.request, urllib.error
+          from datetime import datetime, timezone, timedelta
+
+          REPO = "${{ github.repository }}"
+          GH_TOKEN = os.environ.get("GH_TOKEN", "")
+          PROJECT_REF = os.environ["PROJECT_REF"]
+
+          with open("candidates.json") as f:
+              candidates = json.load(f)
+
+          now = datetime.now(timezone.utc)
+          delete_list = []
+
+          for c in candidates:
+              name = c["name"]
+              pr_num = c["pr"]
+              run_id = c["run_id"]
+              created_at = c.get("created_at", "")
+
+              # Rule 1: branch older than 24h gets deleted regardless of PR state
+              try:
+                  if created_at:
+                      created = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+                      age = now - created
+                      if age > timedelta(hours=24):
+                          print(f"  {name}: age={age} > 24h -> DELETE")
+                          delete_list.append(name)
+                          continue
+              except Exception as e:
+                  print(f"  {name}: couldn't parse created_at={created_at}: {e}")
+
+              # Rule 2: branch's linked PR is closed -> delete
+              req = urllib.request.Request(
+                  f"https://api.github.com/repos/{REPO}/pulls/{pr_num}",
+                  headers={
+                      "Accept": "application/vnd.github+json",
+                      "Authorization": f"Bearer {GH_TOKEN}" if GH_TOKEN else ""
+                  }
+              )
+              try:
+                  with urllib.request.urlopen(req) as resp:
+                      pr = json.load(resp)
+                      state = pr.get("state")
+                      print(f"  {name}: PR #{pr_num} state={state}")
+                      if state == "closed":
+                          delete_list.append(name)
+              except urllib.error.HTTPError as e:
+                  print(f"  {name}: PR #{pr_num} lookup failed (HTTP {e.code})")
+                  if e.code == 404:
+                      # PR doesn't exist — definitely orphaned
+                      delete_list.append(name)
+              except Exception as e:
+                  print(f"  {name}: PR #{pr_num} lookup error: {e}")
+
+          print(f"\nDeleting {len(delete_list)} stranded branches:")
+          for name in delete_list:
+              print(f"  -> {name}")
+              try:
+                  subprocess.run(
+                      [
+                          "supabase", "--experimental", "branches", "delete",
+                          name, "--project-ref", PROJECT_REF, "-y"
+                      ],
+                      check=False
+                  )
+              except Exception as e:
+                  print(f"  -> delete failed: {e} (will retry next sweep)")
+          PYTHON
