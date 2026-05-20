@@ -54,3 +54,6 @@ Every ADR requires founder approval before moving from `PROPOSED` to `APPROVED`.
 |---|---|---|
 | 001 | [Foundation Stack Migration](./adr-001-foundation-stack-migration-2026-04-21.md) | APPROVED 2026-04-21 |
 | 002 | [Phase 2 Data Architecture Rescope — Supabase Branches + Existing Schema Adoption](./adr-002-phase-2-data-architecture-rescope-2026-04-24.md) | APPROVED 2026-04-24. Supersedes ADR-001 §9 Q2 + rescopes ADR-001 §6 Phase 2. |
+| 003 | [Refacing Completion and Pre-Beta](./adr-003-refacing-completion-and-pre-beta-2026-05-01.md) | APPROVED 2026-05-01 |
+| 004 | [Orchestration Layer Foundation](./adr-004-orchestration-layer-foundation-2026-05-19.md) | APPROVED 2026-05-19 |
+| 005 | [Data Layer Parity (Phase 4.5)](./adr-005-data-layer-parity-2026-05-20.md) | PROPOSED 2026-05-20. Depends on ADR-001/002/003/004. |
