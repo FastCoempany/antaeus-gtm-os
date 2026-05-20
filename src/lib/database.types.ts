@@ -665,6 +665,88 @@ export interface Database {
                     created_at?: string;
                 };
             };
+
+            // ─── Phase A orchestration layer (ADR-004) ──────────────────
+            workspace_sessions: {
+                Row: {
+                    id: string;
+                    workspace_id: string;
+                    focused_object_type: string | null;
+                    focused_object_id: string | null;
+                    focused_object_name: string | null;
+                    focused_object_room: string | null;
+                    recent_actions: Json;
+                    created_at: string;
+                    updated_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    workspace_id: string;
+                    focused_object_type?: string | null;
+                    focused_object_id?: string | null;
+                    focused_object_name?: string | null;
+                    focused_object_room?: string | null;
+                    recent_actions?: Json;
+                    created_at?: string;
+                    updated_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    workspace_id?: string;
+                    focused_object_type?: string | null;
+                    focused_object_id?: string | null;
+                    focused_object_name?: string | null;
+                    focused_object_room?: string | null;
+                    recent_actions?: Json;
+                    created_at?: string;
+                    updated_at?: string;
+                };
+            };
+
+            observations: {
+                Row: {
+                    id: string;
+                    workspace_id: string;
+                    written_at: string;
+                    observation_text: string;
+                    related_object_type: string | null;
+                    related_object_id: string | null;
+                    source_generator: string;
+                    confidence: string | null;
+                    status: string;
+                    superseded_by: string | null;
+                    dismissed_at: string | null;
+                    dismissed_reason: string | null;
+                };
+                Insert: {
+                    id?: string;
+                    workspace_id: string;
+                    written_at?: string;
+                    observation_text: string;
+                    related_object_type?: string | null;
+                    related_object_id?: string | null;
+                    source_generator: string;
+                    confidence?: string | null;
+                    status?: string;
+                    superseded_by?: string | null;
+                    dismissed_at?: string | null;
+                    dismissed_reason?: string | null;
+                };
+                Update: {
+                    id?: string;
+                    workspace_id?: string;
+                    written_at?: string;
+                    observation_text?: string;
+                    related_object_type?: string | null;
+                    related_object_id?: string | null;
+                    source_generator?: string;
+                    confidence?: string | null;
+                    status?: string;
+                    superseded_by?: string | null;
+                    dismissed_at?: string | null;
+                    dismissed_reason?: string | null;
+                };
+            };
         };
 
         Views: {
@@ -684,6 +766,15 @@ export interface Database {
                 Returns: string;
             };
             update_updated_at_column: {
+                Args: Record<string, never>;
+                Returns: unknown;
+            };
+            // ─── Phase A orchestration layer (ADR-004) ──────────────────
+            dismiss_observation: {
+                Args: { obs_id: string; reason: string | null };
+                Returns: void;
+            };
+            touch_workspace_session_updated_at: {
                 Args: Record<string, never>;
                 Returns: unknown;
             };
@@ -720,3 +811,6 @@ export type AdvisorDeployment = Row<"advisor_deployments">;
 export type ReadinessSnapshot = Row<"readiness_snapshots">;
 export type HandoffArtifact = Row<"handoff_artifacts">;
 export type WaitlistSignup = Row<"waitlist_signups">;
+// ─── Phase A orchestration layer (ADR-004) ──────────────────────────────
+export type WorkspaceSession = Row<"workspace_sessions">;
+export type Observation = Row<"observations">;

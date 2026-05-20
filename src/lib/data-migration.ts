@@ -630,7 +630,14 @@ function toAccessorName(table: TableName): string {
         advisor_deployments: "advisorDeployments",
         readiness_snapshots: "readinessSnapshots",
         handoff_artifacts: "handoffArtifacts",
-        waitlist_signups: "waitlistSignups"
+        waitlist_signups: "waitlistSignups",
+        // Phase A orchestration layer (ADR-004). These tables are
+        // populated server-side (heartbeat Edge Function for
+        // observations, runtime mutation for workspace_sessions) and
+        // are NOT part of the localStorage → Supabase migration tool.
+        // Listed here only to satisfy the exhaustive Record type.
+        workspace_sessions: "workspaceSessions",
+        observations: "observations"
     };
     return MAP[table];
 }

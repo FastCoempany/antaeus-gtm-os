@@ -114,6 +114,9 @@ export interface DataClient {
     advisorDeployments: NounAccessor<"advisor_deployments">;
     readinessSnapshots: NounAccessor<"readiness_snapshots">;
     handoffArtifacts: NounAccessor<"handoff_artifacts">;
+    // ─── Phase A orchestration layer (ADR-004) ─────────────────────
+    workspaceSessions: NounAccessor<"workspace_sessions">;
+    observations: NounAccessor<"observations">;
 }
 
 export function createDataClient(client?: AntaeusSupabaseClient): DataClient {
@@ -137,7 +140,10 @@ export function createDataClient(client?: AntaeusSupabaseClient): DataClient {
         proofs: makeNounAccessor(sb, "proofs"),
         advisorDeployments: makeNounAccessor(sb, "advisor_deployments"),
         readinessSnapshots: makeNounAccessor(sb, "readiness_snapshots"),
-        handoffArtifacts: makeNounAccessor(sb, "handoff_artifacts")
+        handoffArtifacts: makeNounAccessor(sb, "handoff_artifacts"),
+        // ─── Phase A orchestration layer (ADR-004) ─────────────────
+        workspaceSessions: makeNounAccessor(sb, "workspace_sessions"),
+        observations: makeNounAccessor(sb, "observations")
     };
 }
 
