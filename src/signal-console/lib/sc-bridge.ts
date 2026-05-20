@@ -115,7 +115,7 @@ function rowToSignal(raw: unknown): Signal | null {
 /**
  * Translate a Supabase row → in-memory Account. Pulls top-level
  * columns, then unpacks the `data` jsonb blob for everything else
- * (signals + tier + persona + thesis + approach + notes).
+ * (signals + tier + persona + focus + approach + notes).
  *
  * Returns null when the row is malformed (missing id or name) so
  * callers can `.filter(Boolean)` instead of guarding per-row.
@@ -149,9 +149,12 @@ export function rowToAccount(
         ...(asString(data["employees"])
             ? { employees: asString(data["employees"]) }
             : {}),
-        ...(asString(data["thesis"])
-            ? { thesis: asString(data["thesis"]) }
-            : {}),
+        // Read canonical `focus`, falling back to legacy `thesis` for
+        // Supabase rows persisted before the 2026-05-19 rename.
+        ...((): { focus?: string } => {
+            const value = asString(data["focus"]) || asString(data["thesis"]);
+            return value ? { focus: value } : {};
+        })(),
         ...(tier !== undefined && [1, 2, 3, 4].includes(tier)
             ? { tier: tier as 1 | 2 | 3 | 4 }
             : {}),
@@ -231,7 +234,7 @@ export function extractDataBlob(account: Account): Record<string, unknown> {
     const blob: Record<string, unknown> = {};
     if (account.hq) blob["hq"] = account.hq;
     if (account.employees) blob["employees"] = account.employees;
-    if (account.thesis) blob["thesis"] = account.thesis;
+    if (account.focus) blob["focus"] = account.focus;
     if (account.tier !== undefined) blob["tier"] = account.tier;
     if (account.approach) blob["approach"] = account.approach;
     if (account.persona) blob["persona"] = account.persona;

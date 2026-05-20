@@ -10,7 +10,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  * Per Part II §4.8 ICP Studio is a Decision Bench hybrid:
  *
  *   ┌────────────────────────────────────────────────────────────────┐
- *   │  DarkHero — strategic thesis (dark navy band, serif title)      │
+ *   │  DarkHero — strategic headline (dark navy band, serif title)      │
  *   │  Wave 3 fills with live statement preview + quality readout    │
  *   ├────────────────────────────────────────────────────────────────┤
  *   │  WorkArea — bright work surface (form + build outputs)         │

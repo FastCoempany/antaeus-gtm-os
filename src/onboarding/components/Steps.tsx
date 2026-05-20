@@ -22,7 +22,7 @@ import { StepShell } from "./StepShell";
  * to the draft on input so a refresh mid-flow does not lose work.
  */
 
-export function ThesisStep(): JSX.Element {
+export function IntroStep(): JSX.Element {
     return (
         <StepShell
             kicker="STEP 1 OF 7 — WELCOME"
@@ -32,8 +32,8 @@ export function ThesisStep(): JSX.Element {
             nextLabel="Begin"
             hideBack
         >
-            <div class="ob-thesis">
-                <ul class="ob-thesis__points">
+            <div class="ob-intro">
+                <ul class="ob-intro__points">
                     <li>
                         <strong>The dashboard wakes up live.</strong> Every
                         answer here turns into a real Brief item before you

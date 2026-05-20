@@ -22,7 +22,7 @@ launch but is not blocking.
 - **A3** Beauty — composed, premium, rendered with discipline
 - **B1** Dominant move clarity — one move per surface
 - **B2** Object clarity — sacred noun visible before controls
-- **B3** Copy burden — sentence-shaped thesis, no decorative paragraphs
+- **B3** Copy burden — sentence-shaped headline, no decorative paragraphs
 - **B4** Plane count — ≤3 dominant planes in first fold
 - **B5** Box count — composition not card-pile
 - **C1** Hallway suppression — command-first, no equal-weight rooms
@@ -30,7 +30,7 @@ launch but is not blocking.
 - **C3** Pressure legibility — risk + state read fast
 - **C4** Progressive disclosure — methodology gated, not sprayed
 - **D1** Color discipline — semantic roles only, orange rationed
-- **D2** Typography — serif thesis / sans control / mono kicker
+- **D2** Typography — serif headline / sans control / mono kicker
 - **D3** Container discipline — bright field, no dark exception
 - **D4** Surface discipline — no decorative ornament
 - **E1** Module-brain preservation — sacred nouns + flows intact
@@ -52,7 +52,7 @@ Grades: ✅ pass / ⚠ partial / ❌ fail. Score = pass count / 19.
 | A3 beauty | ⚠ | progress-bar fills hero; ladder per AI-pick triptych is owed |
 | B1 dominant move | ⚠ | `wel-actions__list` has too many equal-weight CTAs |
 | B2 object | ✅ | Activation-state object central |
-| B3 copy | ✅ | Sentence-shaped thesis |
+| B3 copy | ✅ | Sentence-shaped headline |
 | B4 planes | ✅ | Hero + actions + grid (3) |
 | B5 boxes | ✅ | Action cards composed, not piled |
 | C1 hallway | ✅ | No equal-weight nav |
@@ -102,11 +102,11 @@ Variant C "Build the ICP on the left. See what it changes on the right." shipped
 
 ### 4.5 Territory Architect (Decision Bench) — 19/19
 
-Sentence-shaped thesis "One territory. One ceiling. Real bets." with tier-tinted cards. All axes pass.
+Sentence-shaped headline "One territory. One ceiling. Real bets." with tier-tinted cards. All axes pass.
 
 ### 4.6 Sourcing Workbench (Decision Bench) — 19/19
 
-5-stage Kanban with QueryStudio + ProspectComposer split. Sentence-shaped thesis "Push only the names the territory will respect." (PR #55). All axes pass.
+5-stage Kanban with QueryStudio + ProspectComposer split. Sentence-shaped headline "Push only the names the territory will respect." (PR #55). All axes pass.
 
 ### 4.7 Signal Console (Live Instrument · named premium) — 18/19
 
@@ -114,19 +114,19 @@ Heat-ranked grid + account temperature ladder + workspace-health pulse. AI-selec
 
 ### 4.8 Outbound Studio (Live Instrument) — 19/19
 
-Switchboard rack + send-line generator. Sentence-shaped thesis carried. Unsaved-changes guard now wired (PR #59).
+Switchboard rack + send-line generator. Sentence-shaped headline carried. Unsaved-changes guard now wired (PR #59).
 
 ### 4.9 Cold Call Studio (Live Instrument) — 19/19
 
-TalkLoom 6-thread spine with sentence-shaped thesis "Weave opener, objection, proof, and ask into one live route." (PR #55). All axes pass.
+TalkLoom 6-thread spine with sentence-shaped headline "Weave opener, objection, proof, and ask into one live route." (PR #55). All axes pass.
 
 ### 4.10 LinkedIn Playbook (Live Instrument) — 19/19
 
-5-cue ladder + bright stage panel post-flip (PR #56). Sentence-shaped thesis "Enter only when the room gives a cue." All axes pass.
+5-cue ladder + bright stage panel post-flip (PR #56). Sentence-shaped headline "Enter only when the room gives a cue." All axes pass.
 
 ### 4.11 Call Planner (Live Instrument) — 19/19
 
-4-stop spine with quality gates + sentence thesis "Walk into the call with conviction, not hope." (PR #55). All axes pass.
+4-stop spine with quality gates + sentence headline "Walk into the call with conviction, not hope." (PR #55). All axes pass.
 
 ### 4.12 Discovery Studio (Live Instrument / Diagnosis hybrid · named premium) — 19/19
 
@@ -138,11 +138,11 @@ Variant-B "Intervention Desk" structural rework shipped (PR #53): spine + 2-col 
 
 ### 4.14 Future Autopsy (Diagnosis Table · named premium) — 19/19
 
-Stacked sentence-titled sheets shipped (PR #54). Concept-meaning thesis line + variant 01 "Forensic Light Table" structure. All axes pass.
+Stacked sentence-titled sheets shipped (PR #54). Concept-meaning headline line + variant 01 "Forensic Light Table" structure. All axes pass.
 
 ### 4.15 PoC Framework (Decision Bench) — 19/19
 
-Forge → Cast bright (post PR #35 + PR #56 stage-strip). Sentence thesis "Proof is not a page. It is a forced event." 3-step temporal flow visible. All axes pass.
+Forge → Cast bright (post PR #35 + PR #56 stage-strip). Sentence headline "Proof is not a page. It is a forced event." 3-step temporal flow visible. All axes pass.
 
 ### 4.16 Advisor Deploy (Live Instrument) — 19/19
 
@@ -150,7 +150,7 @@ Desk-board metaphor + serif h1 "Influence is an asset. Spend it precisely." (PR 
 
 ### 4.16b Negotiation (Live Instrument · placeholder → shipped) — 19/19
 
-Greenfield room shipped (PR #57). Route rack + position rack + ladder + pushback sheet + outcome rack. Sentence-shaped thesis "Every concession is a deliberate move, not a reflex." Procurement + finance + legal seed scripts carried forward. All axes pass.
+Greenfield room shipped (PR #57). Route rack + position rack + ladder + pushback sheet + outcome rack. Sentence-shaped headline "Every concession is a deliberate move, not a reflex." Procurement + finance + legal seed scripts carried forward. All axes pass.
 
 ### 4.17 Readiness Score (System Ledger drawer) — 19/19
 

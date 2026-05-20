@@ -1,7 +1,7 @@
-# Antaeus Core Thesis: The Deal Health Diagnostics Engine
+# Antaeus Core Argument: The Deal Health Diagnostics Engine
 
 Date: 2026-04-05
-Status: Canonical Architecture Thesis
+Status: Canonical Architecture Argument
 Subject: Why `deal-health.js` is a contrarian, high-conviction approach to revenue software
 
 ---

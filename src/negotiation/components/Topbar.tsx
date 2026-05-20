@@ -3,7 +3,7 @@ import { allNegotiations, draft, draftDeal } from "../state";
 import { ASK_MOMENT_LABEL, COUNTERPARTY_LABEL } from "../lib/types";
 
 /**
- * Topbar — kicker + thesis + active counterparty/deal context.
+ * Topbar — kicker + headline + active counterparty/deal context.
  *
  * Phase 4: gained a contextual kicker tail (NEGOTIATION · {deal} ·
  * {counterparty} · {ask-moment}) so Sarah can see, before her eyes

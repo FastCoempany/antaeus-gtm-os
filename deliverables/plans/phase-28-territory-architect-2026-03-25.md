@@ -9,7 +9,7 @@ Make Territory Architect feel like the obvious bridge from ICP truth into a targ
 Territory Architect already had substantial mechanics:
 
 - onboarding
-- thesis setup
+- focus setup
 - approaches
 - tiering
 - territory slots
@@ -43,7 +43,7 @@ This makes the module less likely to feel like setup theater.
 The bridge now explicitly teaches the user the model:
 
 - ICP
-- theses
+- focuses
 - tiered accounts
 - approaches
 - dispositions / re-tiering
@@ -56,7 +56,7 @@ Territory Architect now looks for the best saved ICP and uses it in the bridge s
 That summary now surfaces:
 
 - the current ICP
-- thesis count
+- focus count
 - active territory count
 - the next recommended move
 
@@ -78,7 +78,7 @@ The module now shows more explicit next-output guidance depending on current sta
 Examples include:
 
 - no saved ICP yet
-- no theses yet
+- no focuses yet
 - no approaches yet
 - no accounts yet
 - ready for cockpit execution

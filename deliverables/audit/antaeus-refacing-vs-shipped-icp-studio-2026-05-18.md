@@ -42,7 +42,7 @@ No mind drift.
 ## Cross-cutting drift signals
 
 - **Modal-overlay pattern** → ICP Studio has no modals/overlays. ✅ N/A.
-- **Sentence-shaped thesis headers** → Hero H1 is sentence-shaped ✅; the ICP statement is sentence-shaped ✅.
+- **Sentence-shaped headlines** → Hero H1 is sentence-shaped ✅; the ICP statement is sentence-shaped ✅.
 
 ---
 

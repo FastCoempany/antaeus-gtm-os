@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { draft, allProofs } from "../state";
 
 /**
- * StageStrip — Phase 2 rework per AI-picked v3 thesis.
+ * StageStrip — Phase 2 rework per AI-picked v3 design.
  *
  * The room frames proof as a forced EVENT (temporal sequence), not
  * a page. The strip lights up each stage as the operator advances:
@@ -24,24 +24,24 @@ type StageState = "current" | "complete" | "ahead";
 interface StageDef {
     readonly key: "forge" | "cast" | "readout";
     readonly label: string;
-    readonly thesis: string;
+    readonly headline: string;
 }
 
 const STAGES: ReadonlyArray<StageDef> = [
     {
         key: "forge",
         label: "Forge",
-        thesis: "Shape the claim, owner, metric, and kill rule."
+        headline: "Shape the claim, owner, metric, and kill rule."
     },
     {
         key: "cast",
         label: "Cast",
-        thesis: "Freeze the proof. The pilot starts on a clock."
+        headline: "Freeze the proof. The pilot starts on a clock."
     },
     {
         key: "readout",
         label: "Readout",
-        thesis: "Carry the proof into the decision room."
+        headline: "Carry the proof into the decision room."
     }
 ];
 
@@ -99,7 +99,7 @@ export function StageStrip(): JSX.Element {
                             {i + 1}.
                         </span>
                         <span class="poc-stage-strip__label">{s.label}</span>
-                        <span class="poc-stage-strip__thesis">{s.thesis}</span>
+                        <span class="poc-stage-strip__headline">{s.headline}</span>
                     </div>
                 );
             })}

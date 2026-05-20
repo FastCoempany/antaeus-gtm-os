@@ -107,7 +107,7 @@ So every compounding rule should be judged partly by:
 | Source | Fills / Influences | Rule |
 |---|---|---|
 | ICP Studio | Territory Architect, Sourcing Workbench, Signal Console, Outbound Studio, Discovery surfaces, Readiness, Handoff Kit | The best saved ICP should be the default targeting context everywhere else unless the user overrides it. |
-| Territory Architect | Sourcing Workbench, Signal Console | Territory tiering and theses should shape sourcing and account-priority suggestions. |
+| Territory Architect | Sourcing Workbench, Signal Console | Territory tiering and focuses should shape sourcing and account-priority suggestions. |
 | Sourcing Workbench | Signal Console, Territory Architect | Pushed prospects should arrive with tier recommendation and next Signal Console action, not as detached records. |
 | Signal Console | Outbound Studio, LinkedIn Playbook, Dashboard, Readiness, Handoff Kit | Hottest accounts and strongest signals should become default outbound context and alter dashboard urgency. |
 

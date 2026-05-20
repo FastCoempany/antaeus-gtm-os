@@ -50,7 +50,7 @@ That standard now shows up in the module instead of living only in the user's he
 Each prospect now gets a derived quality read based on evidence already in the module, including:
 
 - source quality
-- thesis match
+- focus match
 - named entry point
 - chosen approach
 - leverage type

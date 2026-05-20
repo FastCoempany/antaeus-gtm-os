@@ -3,7 +3,7 @@ import { autopsyUniverse } from "../state";
 import { DEFAULT_HORIZON_DAYS } from "../lib/types";
 
 /**
- * Topbar — kicker + serif thesis title + horizon tag + dynamic count.
+ * Topbar — kicker + serif headline + horizon tag + dynamic count.
  *
  * Per canon §4.14 (Diagnosis Table): forensic light-table posture.
  * The topbar is calm; the work is the pinned-case ledger below it.

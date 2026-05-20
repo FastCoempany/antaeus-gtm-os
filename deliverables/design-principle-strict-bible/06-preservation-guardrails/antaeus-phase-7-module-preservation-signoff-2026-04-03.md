@@ -43,7 +43,7 @@ Not signed off for Phase 7:
 | PoC Framework | proof operating logic, proof weakness visibility, back-propagation to deal state | shell changes, first-fold compression, deeper doctrine relocation | reducing proof to checklist mechanics, severing proof-to-deal compounding |
 | Advisor Deploy | advisor leverage logic, deal-linked consequence, execution seriousness | shell changes, top-fold compression, rationale movement deeper | turning it into generic advice logging, breaking deal linkage |
 | ICP Studio | ICP sharpness, a clear target, downstream targeting defaults | shell changes, top-fold compression, methodology gating | reducing it to generic persona copy, weakening downstream targeting role |
-| Territory Architect | tiering logic, territory theses, strategic account structure | shell changes, compression of top explanation | reducing it to list management, removing tier-thesis seriousness |
+| Territory Architect | tiering logic, territory focuses, strategic account structure | shell changes, compression of top explanation | reducing it to list management, removing tier-focus seriousness |
 | Sourcing Workbench | research/push continuity, territory linkage, next Signal Console consequence | shell changes, top-fold compression, utility tightening | turning pushed prospects into detached records, weakening next-move continuity |
 | Outbound Studio | motion craft, channel strategy, shared motion truth | shell changes, intro compression, progressive disclosure for guidance | reducing it to template spam or pure copy generation |
 | Cold Call Studio | live-call operating behavior, call outcome truth, downstream update value | shell changes, top-fold compression, guidance gating | turning it into a script archive or weakening live outcome consequence |
@@ -68,7 +68,7 @@ Phase 7 may not:
 - bury them beneath vague family labels
 - reduce their perceived seriousness to make the shell feel lighter
 
-## 5. Protected Product-Thesis Signoff
+## 5. Protected Product-Argument Signoff
 
 Explicit signoff:
 

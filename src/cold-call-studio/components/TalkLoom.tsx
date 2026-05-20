@@ -144,11 +144,11 @@ export function TalkLoom(): JSX.Element {
                         {score}
                     </p>
                     {/*
-                      Program 6 / PR 10 — score thesis line. Gives
+                      Program 6 / PR 10 — score headline line. Gives
                       the giant number interpretive weight without
                       re-introducing the retired "Room law" paragraph.
                     */}
-                    <p class="cc-loom__score-thesis">
+                    <p class="cc-loom__score-headline">
                         Six threads are enough if each one carries
                         its own pressure.
                     </p>

@@ -170,7 +170,7 @@ export function extractDataBlob(proof: Proof): Record<string, unknown> {
 /**
  * Build a one-line claim from the proof's success criteria. Used as
  * the top-level `claim` column so a SQL listing can show the proof's
- * thesis without unpacking the JSON.
+ * headline without unpacking the JSON.
  */
 function deriveClaim(
     successCriteria: string,

@@ -19,7 +19,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  * in the center, the live read of the line on the right:
  *
  *   ┌────────────────────────────────────────────────────────────┐
- *   │  Topbar: kicker + thesis + dynamic touch count             │
+ *   │  Topbar: kicker + headline + dynamic touch count             │
  *   ├──────────┬───────────────────────────────────┬─────────────┤
  *   │  Laws    │  Switchboard (operator rack)      │  Where the  │
  *   │  (left)  │  OutputPanel (send line)          │  line stands│

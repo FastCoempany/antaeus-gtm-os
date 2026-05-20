@@ -3,7 +3,7 @@
  *
  * Per CLAUDE.md §4.7 the Signal Console is a Live Instrument family
  * room and a named premium asset. Its sacred nouns:
- *   - Account: a named target organization with thesis, tier, signals, heat
+ *   - Account: a named target organization with focus, tier, signals, heat
  *   - Signal: a time-limited event implying commercial opportunity
  *
  * Heat is computed (not stored) — these types lock the source-of-truth
@@ -72,7 +72,7 @@ export interface Account {
     readonly industry?: string;
     readonly hq?: string;
     readonly employees?: string;
-    readonly thesis?: string;
+    readonly focus?: string;
     readonly tier?: AccountTier;
     readonly approach?: string;
     readonly persona?: string;

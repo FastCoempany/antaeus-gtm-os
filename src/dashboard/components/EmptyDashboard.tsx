@@ -5,7 +5,7 @@ import type { JSX } from "preact";
  * the workspace has no ranked objects yet.
  *
  * Per the Dashboard audit (2026-05): a brand-new workspace produced a
- * silent empty dashboard. The room's thesis-line ("What is under the
+ * silent empty dashboard. The room's headline-line ("What is under the
  * most pressure right now") asked a question that nothing on the page
  * answered. The Command Chamber sat empty.
  *

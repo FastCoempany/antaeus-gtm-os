@@ -9,7 +9,7 @@ import {
     ACCOUNT_CEILING,
     EMPTY_ACCOUNT_DRAFT,
     EMPTY_APPROACH_DRAFT,
-    EMPTY_THESIS_DRAFT,
+    EMPTY_FOCUS_DRAFT,
     EMPTY_TERRITORY_STATE,
     TIER_DEFAULTS,
     TIER_IDS,
@@ -20,8 +20,8 @@ import {
     type DispositionState,
     type TerritoryAccount,
     type TerritoryState,
-    type Thesis,
-    type ThesisDraft,
+    type Focus,
+    type FocusDraft,
     type TierAllocation,
     type TierId
 } from "./lib/types";
@@ -30,20 +30,20 @@ import { saveAll } from "./lib/persistence";
 /**
  * Phase 4 / Room 12 — Territory Architect runtime state.
  *
- * Source signals: theses, approaches, accounts, territory health, +
- * 3 form drafts. Computed: allocation by tier (vs ceiling), thesis
- * accountCount, approach-by-thesis index. Persistence side-effect
+ * Source signals: focuses, approaches, accounts, territory health, +
+ * 3 form drafts. Computed: allocation by tier (vs ceiling), focus
+ * accountCount, approach-by-focus index. Persistence side-effect
  * mirrors all 4 lists to localStorage with first-run skip.
  */
 
 // ─── Source of truth ────────────────────────────────────────────────────
 
-export const theses: Signal<ReadonlyArray<Thesis>> = signal([]);
+export const focuses: Signal<ReadonlyArray<Focus>> = signal([]);
 export const approaches: Signal<ReadonlyArray<Approach>> = signal([]);
 export const accounts: Signal<ReadonlyArray<TerritoryAccount>> = signal([]);
 export const territory: Signal<TerritoryState> = signal(EMPTY_TERRITORY_STATE);
 
-export const thesisDraft: Signal<ThesisDraft> = signal(EMPTY_THESIS_DRAFT);
+export const focusDraft: Signal<FocusDraft> = signal(EMPTY_FOCUS_DRAFT);
 export const approachDraft: Signal<ApproachDraft> =
     signal(EMPTY_APPROACH_DRAFT);
 export const accountDraft: Signal<AccountDraft> = signal(EMPTY_ACCOUNT_DRAFT);
@@ -87,20 +87,20 @@ export const allocation: ReadonlySignal<AllocationReadout> = computed(() => {
     };
 });
 
-/** Approaches indexed by thesisId. */
+/** Approaches indexed by focusId. */
 export const approachesByThesis: ReadonlySignal<
     Readonly<Record<string, ReadonlyArray<Approach>>>
 > = computed(() => {
     const out: Record<string, Approach[]> = {};
     for (const a of approaches.value) {
-        if (!a.thesisId) continue;
-        if (!out[a.thesisId]) out[a.thesisId] = [];
-        out[a.thesisId]!.push(a);
+        if (!a.focusId) continue;
+        if (!out[a.focusId]) out[a.focusId] = [];
+        out[a.focusId]!.push(a);
     }
     return out;
 });
 
-/** Account counts per thesis. */
+/** Account counts per focus. */
 export const accountsByThesis: ReadonlySignal<
     Readonly<Record<string, number>>
 > = computed(() => {
@@ -108,16 +108,16 @@ export const accountsByThesis: ReadonlySignal<
     for (const a of accounts.value) {
         if (a.disposition === "closed-won" || a.disposition === "closed-lost")
             continue;
-        if (!out[a.thesisId]) out[a.thesisId] = 0;
-        out[a.thesisId] = out[a.thesisId]! + 1;
+        if (!out[a.focusId]) out[a.focusId] = 0;
+        out[a.focusId] = out[a.focusId]! + 1;
     }
     return out;
 });
 
 // ─── Mutations ─────────────────────────────────────────────────────────
 
-export function setTheses(next: ReadonlyArray<Thesis>): void {
-    theses.value = next;
+export function setFocuses(next: ReadonlyArray<Focus>): void {
+    focuses.value = next;
 }
 export function setApproaches(next: ReadonlyArray<Approach>): void {
     approaches.value = next;
@@ -129,8 +129,8 @@ export function setTerritoryState(next: TerritoryState): void {
     territory.value = next;
 }
 
-export function patchThesisDraft(part: Partial<ThesisDraft>): void {
-    thesisDraft.value = { ...thesisDraft.value, ...part } as ThesisDraft;
+export function patchThesisDraft(part: Partial<FocusDraft>): void {
+    focusDraft.value = { ...focusDraft.value, ...part } as FocusDraft;
 }
 export function patchApproachDraft(part: Partial<ApproachDraft>): void {
     approachDraft.value = { ...approachDraft.value, ...part } as ApproachDraft;
@@ -143,12 +143,12 @@ function uid(prefix: string, now: number = Date.now()): string {
     return `${prefix}_${now}_${Math.random().toString(36).slice(2, 7)}`;
 }
 
-export function saveThesisFromDraft(now: number = Date.now()): Thesis | null {
-    const d = thesisDraft.value;
+export function saveThesisFromDraft(now: number = Date.now()): Focus | null {
+    const d = focusDraft.value;
     const title = d.title.trim();
     if (!title) return null;
     const iso = new Date(now).toISOString();
-    const t: Thesis = {
+    const t: Focus = {
         id: uid("th", now),
         title,
         pressure: d.pressure.trim(),
@@ -159,8 +159,8 @@ export function saveThesisFromDraft(now: number = Date.now()): Thesis | null {
         createdAt: iso,
         updatedAt: iso
     };
-    theses.value = [...theses.value, t];
-    thesisDraft.value = EMPTY_THESIS_DRAFT;
+    focuses.value = [...focuses.value, t];
+    focusDraft.value = EMPTY_FOCUS_DRAFT;
     return t;
 }
 
@@ -169,7 +169,7 @@ export function saveApproachFromDraft(
 ): Approach | null {
     const d = approachDraft.value;
     const name = d.name.trim();
-    if (!name || !d.thesisId) return null;
+    if (!name || !d.focusId) return null;
     const iso = new Date(now).toISOString();
     const a: Approach = {
         id: uid("ap", now),
@@ -177,7 +177,7 @@ export function saveApproachFromDraft(
         trigger: d.trigger.trim(),
         script: d.script.trim(),
         bridge: d.bridge.trim(),
-        thesisId: d.thesisId,
+        focusId: d.focusId,
         createdAt: iso,
         updatedAt: iso
     };
@@ -191,7 +191,7 @@ export function saveAccountFromDraft(
 ): TerritoryAccount | null {
     const d = accountDraft.value;
     const name = d.name.trim();
-    if (!name || !d.thesisId) return null;
+    if (!name || !d.focusId) return null;
     // Block if at or over ceiling.
     const current = allocation.value.total;
     if (current >= ACCOUNT_CEILING) return null;
@@ -200,7 +200,7 @@ export function saveAccountFromDraft(
         id: uid("acct", now),
         name,
         tier: d.tier,
-        thesisId: d.thesisId,
+        focusId: d.focusId,
         approachId: d.approachId,
         disposition: "active",
         notes: d.notes.trim(),
@@ -208,7 +208,7 @@ export function saveAccountFromDraft(
         updatedAt: iso
     };
     accounts.value = [...accounts.value, acct];
-    accountDraft.value = { ...EMPTY_ACCOUNT_DRAFT, thesisId: d.thesisId };
+    accountDraft.value = { ...EMPTY_ACCOUNT_DRAFT, focusId: d.focusId };
     return acct;
 }
 
@@ -231,9 +231,9 @@ export function retierAccount(id: string, tier: TierId): void {
 }
 
 export function removeThesis(id: string): void {
-    theses.value = theses.value.filter((t) => t.id !== id);
-    approaches.value = approaches.value.filter((a) => a.thesisId !== id);
-    accounts.value = accounts.value.filter((a) => a.thesisId !== id);
+    focuses.value = focuses.value.filter((t) => t.id !== id);
+    approaches.value = approaches.value.filter((a) => a.focusId !== id);
+    accounts.value = accounts.value.filter((a) => a.focusId !== id);
 }
 
 export function removeApproach(id: string): void {
@@ -245,11 +245,11 @@ export function removeAccount(id: string): void {
 }
 
 export function resetSession(): void {
-    theses.value = [];
+    focuses.value = [];
     approaches.value = [];
     accounts.value = [];
     territory.value = EMPTY_TERRITORY_STATE;
-    thesisDraft.value = EMPTY_THESIS_DRAFT;
+    focusDraft.value = EMPTY_FOCUS_DRAFT;
     approachDraft.value = EMPTY_APPROACH_DRAFT;
     accountDraft.value = EMPTY_ACCOUNT_DRAFT;
     loaded.value = false;
@@ -263,7 +263,7 @@ export function startPersistence(): () => void {
     if (persistStop) return persistStop;
     let firstRun = true;
     const dispose = effect(() => {
-        const t = theses.value;
+        const t = focuses.value;
         const a = approaches.value;
         const ac = accounts.value;
         const territoryState = territory.value;
@@ -272,7 +272,7 @@ export function startPersistence(): () => void {
             return;
         }
         saveAll({
-            theses: t,
+            focuses: t,
             approaches: a,
             accounts: ac,
             territory: territoryState
@@ -286,8 +286,8 @@ export function startPersistence(): () => void {
 }
 
 // Test seeds
-export function __setThesesForTests(next: ReadonlyArray<Thesis>): void {
-    theses.value = next;
+export function __setFocusesForTests(next: ReadonlyArray<Focus>): void {
+    focuses.value = next;
 }
 export function __setAccountsForTests(
     next: ReadonlyArray<TerritoryAccount>

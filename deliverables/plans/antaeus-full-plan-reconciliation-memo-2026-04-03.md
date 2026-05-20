@@ -48,7 +48,7 @@ Authoritative and still valid:
 - `deliverables/plans/antaeus-visual-system-spec-2026-04-01.md`
 
 What these lock:
-- the brand thesis
+- the brand argument
 - public/interior coherence requirement
 - bright, high-conviction visual identity
 - anti-card-soup / anti-old-shell rules

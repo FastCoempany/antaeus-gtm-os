@@ -10,7 +10,7 @@ import {
     IcpStep,
     QuotaStep,
     RoleStep,
-    ThesisStep
+    IntroStep
 } from "./components/Steps";
 
 /**
@@ -21,7 +21,7 @@ import {
  * Greenfield rebuild — not a migration. Bright field per founder
  * directive.
  *
- * 7-step flow (thesis → company → role → category → ICP → account →
+ * 7-step flow (intro → company → role → category → ICP → account →
  * quota) with one dominant move per surface, hide-able back button,
  * and a final completion screen routing to Welcome / Dashboard.
  */
@@ -39,8 +39,8 @@ export function Onboarding(): JSX.Element {
 
 function StepRouter(): JSX.Element {
     switch (currentStep.value) {
-        case "thesis":
-            return <ThesisStep />;
+        case "intro":
+            return <IntroStep />;
         case "company":
             return <CompanyStep />;
         case "role":

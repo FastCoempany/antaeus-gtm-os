@@ -126,7 +126,7 @@ Examples:
 
 - suggested next move
 - suggested advisor moment
-- suggested thesis / tier
+- suggested focus / tier
 - suggested follow-up lane
 
 Release rule:

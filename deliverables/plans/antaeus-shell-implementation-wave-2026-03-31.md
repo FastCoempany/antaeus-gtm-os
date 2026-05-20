@@ -4,11 +4,11 @@ Date: 2026-03-31
 
 Status: foundation shipped
 
-Purpose: record the first real shell implementation wave derived from the design thesis and shell redesign spec.
+Purpose: record the first real shell implementation wave derived from the design rules and shell redesign spec.
 
 Related documents:
 
-- [deliverables/plans/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md)
+- [deliverables/plans/antaeus-ui-ux-design-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-and-system-rules-2026-03-31.md)
 - [deliverables/plans/antaeus-shell-redesign-spec-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-shell-redesign-spec-2026-03-31.md)
 
 ---

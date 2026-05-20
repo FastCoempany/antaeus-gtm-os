@@ -28,7 +28,7 @@ No mind drift.
 | Launch Folio wireframe | Shipped (post-evolution) | Why the evolution is right |
 |---|---|---|
 | Single central artifact (stacked leaves with mandate grid on front leaf) | Two side-by-side artifacts (MilestoneLadder + ActionStack) | **Phase 4 / Room 16 (PR #33)** + **first-90-seconds audit** picked the side-by-side composition for higher information density + clearer action affordance. The stacked-leaves was cinematic but slower to scan. |
-| Static thesis title "Open the live mandate." | Engine-driven dynamic headline (varies per activation state) | The dynamic headline gives Sarah a state-aware first read. The wireframe's static thesis was a hint about voice, not a hardcoded string. |
+| Static headline "Open the live mandate." | Engine-driven dynamic headline (varies per activation state) | The dynamic headline gives Sarah a state-aware first read. The wireframe's static headline was a hint about voice, not a hardcoded string. |
 | "What is missing" cell as the single locked cell forcing mechanic | MilestoneLadder's "next" state highlights the next anchor + ActionStack's "now" state highlights the dominant move | **Phase 4** picked the explicit milestone + ranked action picker over the implicit "one locked cell" — better discoverability for first-time users. |
 | 3-leaf stack (Layer 01 / Layer 02 / Active mandate) | Hero progress bar (`{completed} / {total} anchors live`) + MilestoneLadder rows with done/next/pending state | Same semantic content (which layers are live, which are pending), shipped more readably. |
 
@@ -46,7 +46,7 @@ No mind drift.
 ## Cross-cutting drift signals (per 2026-05-01 bootstrap)
 
 - **Modal-overlay pattern** → Welcome has no overlays. ✅ N/A.
-- **Sentence-shaped thesis headers** → Engine-driven headlines ARE sentence-shaped per state. ✅ JUSTIFIED.
+- **Sentence-shaped headlines** → Engine-driven headlines ARE sentence-shaped per state. ✅ JUSTIFIED.
 
 Neither cross-cutting drift pattern applies.
 

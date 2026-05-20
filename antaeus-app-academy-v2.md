@@ -225,7 +225,7 @@ Turn target logic into a prioritized working universe.
 
 The user converts market logic into:
 
-- territory theses
+- territory focuses
 - account tiers
 - sourced prospects
 - research-backed account priority
@@ -236,7 +236,7 @@ This is where the app should stop feeling like strategy and start feeling like o
 
 By the end of Stage 3, the user should have:
 
-- a thesis-backed territory
+- a focus-backed territory
 - accounts or prospects worth working
 - account priority informed by signal, not just instinct
 
@@ -566,7 +566,7 @@ By the end of Stage 8, the user should have:
 
 **Best used when:** the team knows the ICP but needs a practical account-priority structure.
 
-**Primary input:** theses, account candidates, tiering logic, territory choices.
+**Primary input:** focuses, account candidates, tiering logic, territory choices.
 
 **One-session output:** a more deliberate account universe.
 

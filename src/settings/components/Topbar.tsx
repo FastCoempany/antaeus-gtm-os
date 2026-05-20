@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { backup, demo } from "../state";
 
 /**
- * Topbar — kicker + thesis + 3-stat anchor (keys captured / last
+ * Topbar — kicker + headline + 3-stat anchor (keys captured / last
  * backup / demo mode). Per canon §4.20: calm, plainspoken utility.
  *
  * Phase 2.9 audit:

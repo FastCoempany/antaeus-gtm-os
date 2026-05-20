@@ -22,7 +22,7 @@ It is not generic design inspiration. It is a real architecture argument:
 - queue/triage instead of flat work surfaces
 - psychology tied to architecture instead of psychology used as decoration
 
-The central thesis is directionally right:
+The central argument is directionally right:
 
 - Antaeus should behave like an operating system for commercial work
 - not like a CRM

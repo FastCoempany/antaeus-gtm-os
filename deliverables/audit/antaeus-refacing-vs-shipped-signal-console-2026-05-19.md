@@ -44,7 +44,7 @@ Phase 4 / Room 3 + the 2026-05 Sarah-CRO audit already brought this room close t
 
 | Variant 01 wireframe | Shipped | Severity |
 |---|---|---|
-| **Italic thesis line below the H1** — one-sentence mental model: "Signals are time-limited events. Heat ranks them. Motion comes from the account ledger — not from research piling up." | The 2026-05 audit removed the prior subtitle as "design documentation" and the line was never restored. The H1 stands alone with no mental-model anchor | 🟡 MED — the thesis is the operator's mental model, not design documentation; the wireframe's italic compression honors canon Part III §9 copy-burden discipline |
+| **Italic headline line below the H1** — one-sentence mental model: "Signals are time-limited events. Heat ranks them. Motion comes from the account ledger — not from research piling up." | The 2026-05 audit removed the prior subtitle as "design documentation" and the line was never restored. The H1 stands alone with no mental-model anchor | 🟡 MED — the headline is the operator's mental model, not design documentation; the wireframe's italic compression honors canon Part III §9 copy-burden discipline |
 | **Posture row fourth cell is "Top heat" (94)** — the max heat score across the grid as a single-glance pressure read | The shipped WorkspaceHealth has a fourth cell labeled "Total signals" — inventory, not pressure | 🟡 MED — Top heat is what the operator actually needs to glance; total-signal inventory was a less-actionable number |
 
 ### Explicitly deferred
@@ -58,13 +58,13 @@ Phase 4 / Room 3 + the 2026-05 Sarah-CRO audit already brought this room close t
 
 ## Fix scope (this PR)
 
-1. **`components/Topbar.tsx`** — restores a single-sentence italic thesis line under the H1. Compressed from the wireframe's four-sentence framing. Tight (60ch max) per the 2026-05 audit's copy-burden constraint — this is the operator's mental model, not subtitle filler.
+1. **`components/Topbar.tsx`** — restores a single-sentence italic headline line under the H1. Compressed from the wireframe's four-sentence framing. Tight (60ch max) per the 2026-05 audit's copy-burden constraint — this is the operator's mental model, not subtitle filler.
 2. **`components/WorkspaceHealth.tsx`** — swaps the fourth cell from "Total signals" (inventory) to "Top heat" (pressure). `snapshot.topHeat` is already computed by `buildSignalRoomHealthSnapshot` so this is a wiring fix, not a new derivation. Also relabels the third cell from "Ready (heat ≥75)" to the wireframe's tighter "Hot ≥ 75" framing.
 3. **`signal-console.css`** — `.sc-topbar__thesis` styled as a 15px italic, ink-70, 60ch sentence between H1 and the workspace-health strip. Replaces the retired `.sc-topbar__sub` comment with the live selector.
 
 ## Acceptance walk
 
-- The Topbar renders an italic thesis line below the H1 referencing "heat" and "ledger".
+- The Topbar renders an italic headline line below the H1 referencing "heat" and "ledger".
 - The WorkspaceHealth panel surfaces 4 cells: verdict + Active accounts + Hot ≥ 75 + Top heat.
 - The Top heat cell reads the snapshot's `topHeat` value (the max heat score across the workspace).
 - All existing grid surfaces (cards, badges, ICP chip, signal previews, expand/collapse, CTAs) still render unchanged.

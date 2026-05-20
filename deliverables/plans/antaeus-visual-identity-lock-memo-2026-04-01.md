@@ -165,7 +165,7 @@ This is now explicitly rejected.
 
 ---
 
-## 4. Visual Design Thesis
+## 4. Visual Design Rules
 
 Antaeus should feel like a strategic operating room for founder-led sales, rendered in a bright, high-conviction visual language where urgency, confidence, and compounding are legible at a glance.
 

@@ -2,9 +2,9 @@ import type { JSX } from "preact";
 import { inboundFocus, stats } from "../state";
 
 /**
- * Topbar — kicker + thesis title + workbench stats.
+ * Topbar — kicker + focus title + workbench stats.
  *
- * Per canon §4.6 the room turns theses into named, pushable prospects.
+ * Per canon §4.6 the room turns focuses into named, pushable prospects.
  * The topbar carries one ranked numeric line (the workbench count) so
  * the operator lands knowing whether the territory is full or hollow.
  */

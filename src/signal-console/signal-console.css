@@ -74,7 +74,7 @@ button {
 
 .sc-topbar__title {
     /* Signal Console audit (2026-05): demoted from clamp(32,4vw,50)
-       hero weight. The thesis is a confident declaration; the account
+       hero weight. The headline is a confident declaration; the account
        grid below is the visual hero. */
     font-family: "DM Serif Display", serif;
     font-size: clamp(22px, 2.6vw, 32px);
@@ -87,14 +87,14 @@ button {
 }
 
 /*
- * Program 6 / PR 16 — Topbar thesis line (Signal Console V01).
+ * Program 6 / PR 16 — Topbar headline line (Signal Console V01).
  *
  * Italic one-sentence mental-model line beneath the H1. Replaces
  * the retired sc-topbar__sub which was design-documentation; this
  * compressed line is the operator's mental model, kept tight per
  * canon Part III §9 copy-burden discipline.
  */
-.sc-topbar__thesis {
+.sc-topbar__headline {
     margin: 10px 0 0;
     font-size: 15px;
     line-height: 1.5;

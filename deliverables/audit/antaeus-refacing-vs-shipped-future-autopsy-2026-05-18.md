@@ -37,7 +37,7 @@ No mind drift.
 |---|---|---|
 | Single pinned case ("Meridian Logistics Global · $280k") | Multi-case Ledger below the pinned case lets Sarah switch | Wave 1 / canon §4.14 — Ledger is one of the 7 required global rails |
 | Static 3 route cards | Dynamic `buildActionPlan(doc)` → primary/secondary/tertiary derived from autopsy data | Wave 5 — engine-driven routing is canon evolution |
-| Sentence-shaped concept-meaning paragraph | Topbar carries the kicker + thesis; not the full "concept-meaning" treatment | Topbar shape is the canon room pattern |
+| Sentence-shaped concept-meaning paragraph | Topbar carries the kicker + headline; not the full "concept-meaning" treatment | Topbar shape is the canon room pattern |
 
 ### B. Where the shipped room is still drifting from the wireframe (FIX in this PR)
 
@@ -52,7 +52,7 @@ No mind drift.
 ## Cross-cutting drift signals (per 2026-05-01 bootstrap)
 
 - **Modal-overlay pattern** → Future Autopsy uses NO modals. ✅ N/A.
-- **Sentence-shaped thesis headers** → Sheet titles ARE sentence-shaped per `sentenceTitlesFor` (Phase 2 rework). ✅ JUSTIFIED.
+- **Sentence-shaped headlines** → Sheet titles ARE sentence-shaped per `sentenceTitlesFor` (Phase 2 rework). ✅ JUSTIFIED.
 
 ---
 

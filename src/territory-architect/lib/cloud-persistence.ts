@@ -9,37 +9,37 @@ import {
     approachToUpdate,
     KIND_ACCOUNT,
     KIND_APPROACH,
-    KIND_THESIS,
+    KIND_FOCUS,
     looksLikePersistedId,
     partitionTerritoryRows,
     rowKind,
     rowToAccount,
     rowToApproach,
     rowToThesis,
-    thesisToInsert,
-    thesisToUpdate
+    focusToInsert,
+    focusToUpdate
 } from "./territory-bridge";
-import type { Approach, TerritoryAccount, Thesis } from "./types";
+import type { Approach, TerritoryAccount, Focus } from "./types";
 import {
     accounts,
     approaches,
     setAccounts,
     setApproaches,
-    setTheses,
-    theses
+    setFocuses,
+    focuses
 } from "../state";
 
 /**
  * Territory Architect cloud persistence.
  *
- * Three entity kinds (theses, approaches, accounts) live in
+ * Three entity kinds (focuses, approaches, accounts) live in
  * studio_artifacts discriminated by data.kind. studio_artifacts has
  * no top-level filterable column for this discriminator, so boot
  * fetches every row owned by the workspace and partitions client-side.
  *
  * Boot flow:
  *   1. Fetch all studio_artifacts rows for the workspace
- *   2. Partition into theses / approaches / accounts (drops other kinds)
+ *   2. Partition into focuses / approaches / accounts (drops other kinds)
  *   3. If any partition has cloud rows → cloud is canonical → replace
  *      local state for that partition
  *   4. If cloud is fully empty + localStorage has data → migrate
@@ -73,29 +73,29 @@ export async function bootCloudPersistence(
         const rows = await client.studioArtifacts.list({ limit: 1000 });
         const partitioned = partitionTerritoryRows(rows);
         const cloudHasData =
-            partitioned.theses.length +
+            partitioned.focuses.length +
                 partitioned.approaches.length +
                 partitioned.accounts.length >
             0;
         if (cloudHasData) {
-            setTheses(partitioned.theses);
+            setFocuses(partitioned.focuses);
             setApproaches(partitioned.approaches);
             setAccounts(partitioned.accounts);
             subscribeRealtime(client);
             trackEvent("territory_architect_boot", {
                 mode: "cloud",
-                theses: partitioned.theses.length,
+                focuses: partitioned.focuses.length,
                 approaches: partitioned.approaches.length,
                 accounts: partitioned.accounts.length
             });
             return {
                 mode: "cloud",
-                thesesCount: partitioned.theses.length,
+                thesesCount: partitioned.focuses.length,
                 approachesCount: partitioned.approaches.length,
                 accountsCount: partitioned.accounts.length
             };
         }
-        const localTheses = theses.value;
+        const localTheses = focuses.value;
         const localApproaches = approaches.value;
         const localAccounts = accounts.value;
         const localHasData =
@@ -111,7 +111,7 @@ export async function bootCloudPersistence(
             subscribeRealtime(client);
             trackEvent("territory_architect_boot", {
                 mode: "migrated",
-                theses: localTheses.length,
+                focuses: localTheses.length,
                 approaches: localApproaches.length,
                 accounts: localAccounts.length
             });
@@ -134,7 +134,7 @@ export async function bootCloudPersistence(
         reportError(err, { op: "territory-architect.bootCloudPersistence" });
         return {
             mode: "local-only",
-            thesesCount: theses.value.length,
+            thesesCount: focuses.value.length,
             approachesCount: approaches.value.length,
             accountsCount: accounts.value.length
         };
@@ -143,22 +143,22 @@ export async function bootCloudPersistence(
 
 async function migrateLocalToCloud(
     client: DataClient,
-    localTheses: ReadonlyArray<Thesis>,
+    localTheses: ReadonlyArray<Focus>,
     localApproaches: ReadonlyArray<Approach>,
     localAccounts: ReadonlyArray<TerritoryAccount>
 ): Promise<void> {
-    const newTheses: Thesis[] = [];
+    const newFocuses: Focus[] = [];
     for (const t of localTheses) {
         try {
-            const row = await client.studioArtifacts.insert(thesisToInsert(t));
+            const row = await client.studioArtifacts.insert(focusToInsert(t));
             const hydrated = rowToThesis(row);
-            newTheses.push(hydrated ?? t);
+            newFocuses.push(hydrated ?? t);
         } catch (err) {
             reportError(err, {
-                op: "territory-architect.migrateLocalToCloud.thesis",
+                op: "territory-architect.migrateLocalToCloud.focus",
                 id: t.id
             });
-            newTheses.push(t);
+            newFocuses.push(t);
         }
     }
     const newApproaches: Approach[] = [];
@@ -193,49 +193,49 @@ async function migrateLocalToCloud(
             newAccounts.push(a);
         }
     }
-    setTheses(newTheses);
+    setFocuses(newFocuses);
     setApproaches(newApproaches);
     setAccounts(newAccounts);
 }
 
 // ─── Per-kind save helpers ─────────────────────────────────────────────
 
-export async function saveThesis(thesis: Thesis): Promise<Thesis> {
-    if (!clientRef) return thesis;
+export async function saveThesis(focus: Focus): Promise<Focus> {
+    if (!clientRef) return focus;
     try {
-        const isUpdate = looksLikePersistedId(thesis.id);
+        const isUpdate = looksLikePersistedId(focus.id);
         const row = isUpdate
             ? await clientRef.studioArtifacts.update(
-                  thesis.id,
-                  thesisToUpdate(thesis)
+                  focus.id,
+                  focusToUpdate(focus)
               )
-            : await clientRef.studioArtifacts.insert(thesisToInsert(thesis));
+            : await clientRef.studioArtifacts.insert(focusToInsert(focus));
         const saved = rowToThesis(row);
         if (saved) {
-            if (!isUpdate && saved.id !== thesis.id) {
-                setTheses(
-                    theses.value
-                        .filter((t) => t.id !== thesis.id)
+            if (!isUpdate && saved.id !== focus.id) {
+                setFocuses(
+                    focuses.value
+                        .filter((t) => t.id !== focus.id)
                         .concat(saved)
                 );
             } else {
-                setTheses(
-                    theses.value.map((t) => (t.id === saved.id ? saved : t))
+                setFocuses(
+                    focuses.value.map((t) => (t.id === saved.id ? saved : t))
                 );
             }
             trackEvent("territory_architect_save", {
-                kind: "thesis",
+                kind: "focus",
                 mode: isUpdate ? "update" : "insert"
             });
             return saved;
         }
-        return thesis;
+        return focus;
     } catch (err) {
         reportError(err, {
             op: "territory-architect.saveThesis",
-            id: thesis.id
+            id: focus.id
         });
-        return thesis;
+        return focus;
     }
 }
 
@@ -359,8 +359,8 @@ export function applyRealtimePayload(payload: {
         const id = payload.old.id;
         // Search every list — id uniqueness across kinds is not enforced
         // by the schema, so a deleted row could be in any of the three.
-        if (theses.value.some((t) => t.id === id)) {
-            setTheses(theses.value.filter((t) => t.id !== id));
+        if (focuses.value.some((t) => t.id === id)) {
+            setFocuses(focuses.value.filter((t) => t.id !== id));
             return;
         }
         if (approaches.value.some((a) => a.id === id)) {
@@ -376,14 +376,14 @@ export function applyRealtimePayload(payload: {
         if (!payloadHasRow(payload.new)) return;
         const row = payload.new as Row<"studio_artifacts">;
         const kind = rowKind(row);
-        if (kind === KIND_THESIS) {
+        if (kind === KIND_FOCUS) {
             const t = rowToThesis(row);
             if (!t) return;
-            const exists = theses.value.some((x) => x.id === t.id);
-            setTheses(
+            const exists = focuses.value.some((x) => x.id === t.id);
+            setFocuses(
                 exists
-                    ? theses.value.map((x) => (x.id === t.id ? t : x))
-                    : [...theses.value, t]
+                    ? focuses.value.map((x) => (x.id === t.id ? t : x))
+                    : [...focuses.value, t]
             );
         } else if (kind === KIND_APPROACH) {
             const a = rowToApproach(row);

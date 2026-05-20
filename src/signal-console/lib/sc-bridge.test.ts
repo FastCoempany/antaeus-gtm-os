@@ -89,7 +89,7 @@ describe("rowToAccount", () => {
                 tier: 2,
                 approach: "warm intro",
                 persona: "VP Ops",
-                thesis: "Expansion-driven",
+                focus: "Expansion-driven",
                 notes: "great fit",
                 signals: [
                     {
@@ -210,7 +210,7 @@ describe("extractDataBlob", () => {
                 hq: "NY",
                 employees: "10-50",
                 tier: 1,
-                thesis: "Expansion",
+                focus: "Expansion",
                 approach: "Cold",
                 persona: "VP",
                 notes: "x",
@@ -221,7 +221,7 @@ describe("extractDataBlob", () => {
             hq: "NY",
             employees: "10-50",
             tier: 1,
-            thesis: "Expansion",
+            focus: "Expansion",
             approach: "Cold",
             persona: "VP",
             notes: "x",

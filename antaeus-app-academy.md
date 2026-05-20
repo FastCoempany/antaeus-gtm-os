@@ -231,7 +231,7 @@ Steps
 28. **Step 3:** Switch to the Territory tab. Add accounts from Signal
     Console using the account selector.
 
-29. **Step 4:** Define Theses (why you’re targeting specific segments)
+29. **Step 4:** Define Focuses (why you’re targeting specific segments)
     and Approaches (how you’ll reach them).
 
 30. **Step 5:** Tier your accounts: Tier 1 (strategic, high-value), Tier
@@ -869,7 +869,7 @@ Territory Architect
 |                      |                                                                                                                                                                                                          |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Location**         | Territory → Territory Architect                                                                                                                                                                          |
-| **Purpose**          | Account territory management with tiered prioritization, thesis/approach definitions, daily cockpit, and swap mechanics.                                                                                 |
+| **Purpose**          | Account territory management with tiered prioritization, focus/approach definitions, daily cockpit, and swap mechanics.                                                                                 |
 | **Tabs / Views**     | Daily Cockpit (command center) · Territory (account list with tiers and status) · Intelligence (signal-driven prioritization) · Manage (swap mechanics, re-tiering, calibration history).                |
 | **Reads from**       | gtmos_sc_v4 (Signal Console accounts)                                                                                                                                                                    |
 | **Writes to**        | gtmos_territory, gtmos_ta_theses, gtmos_ta_approaches, gtmos_ta_accounts, gtmos_ta_dispositions, gtmos_ta_signals, gtmos_ta_swap_history, gtmos_ta_retier_history, gtmos_ta_calibrations, gtmos_ta_setup |

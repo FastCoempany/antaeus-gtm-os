@@ -84,7 +84,7 @@ The following rules are hard constraints for all Phase 7 work.
 - module substance
 - methodology
 - strategic seriousness
-- product thesis
+- product argument
 - compounding rules
 - room-internal decision logic unless strictly required for continuity safety
 

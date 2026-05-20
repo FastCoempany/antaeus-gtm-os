@@ -19,7 +19,7 @@ This is the right next wave because the restructure is now complete enough to su
 
 So the next wave should stop changing shell behavior and start making the system smarter.
 
-## 2. The Core Thesis
+## 2. The Core Argument
 
 Antaeus should now get meaningfully better at two things:
 

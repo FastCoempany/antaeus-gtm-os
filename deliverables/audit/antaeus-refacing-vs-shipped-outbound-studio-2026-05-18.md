@@ -54,7 +54,7 @@ The Variant 03 wireframe says explicitly: *"This is the most radical option and 
 ## Cross-cutting drift signals (per 2026-05-01 bootstrap)
 
 - **Modal-overlay pattern** → Outbound Studio has no modals. ✅ N/A.
-- **Sentence-shaped thesis headers** → Switchboard kicker reads "Pick the angle." ✅ JUSTIFIED.
+- **Sentence-shaped headlines** → Switchboard kicker reads "Pick the angle." ✅ JUSTIFIED.
 
 ---
 

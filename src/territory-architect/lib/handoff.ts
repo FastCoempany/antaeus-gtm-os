@@ -10,7 +10,7 @@
  * Per `deliverables/audit/continuity-params-2026-05.md`:
  *   returnTo     = /territory-architect/
  *   returnLabel  = "Back to Territory Architect"
- *   focusObject  = focused-ICP industry or thesis title (when known)
+ *   focusObject  = focused-ICP industry or headline (when known)
  *   focusRoom    = destination room display label
  *   fromMode     = "room"
  *   fromSurface  = "territory-architect"

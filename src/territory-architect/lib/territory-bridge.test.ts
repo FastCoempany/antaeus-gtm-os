@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Row } from "@/lib/database.types";
-import type { Approach, TerritoryAccount, Thesis } from "./types";
+import type { Approach, TerritoryAccount, Focus } from "./types";
 import {
     accountToInsert,
     accountToUpdate,
@@ -8,18 +8,18 @@ import {
     approachToUpdate,
     KIND_ACCOUNT,
     KIND_APPROACH,
-    KIND_THESIS,
+    KIND_FOCUS,
     looksLikePersistedId,
     partitionTerritoryRows,
     rowKind,
     rowToAccount,
     rowToApproach,
     rowToThesis,
-    thesisToInsert,
-    thesisToUpdate
+    focusToInsert,
+    focusToUpdate
 } from "./territory-bridge";
 
-const FULL_THESIS: Thesis = {
+const FULL_THESIS: Focus = {
     id: "th_1",
     title: "Procurement consolidation Q2",
     pressure: "Audit + cost pressure",
@@ -37,7 +37,7 @@ const FULL_APPROACH: Approach = {
     trigger: "Vendor consolidation memo",
     script: "Open with the savings line.",
     bridge: "Yes-and the audit comment.",
-    thesisId: "th_1",
+    focusId: "th_1",
     createdAt: "2026-04-02T12:00:00Z",
     updatedAt: "2026-04-02T12:00:00Z"
 };
@@ -46,7 +46,7 @@ const FULL_ACCOUNT: TerritoryAccount = {
     id: "acct_1",
     name: "Acme Legal",
     tier: "t1",
-    thesisId: "th_1",
+    focusId: "th_1",
     approachId: "ap_1",
     disposition: "active",
     notes: "Live in 30 days.",
@@ -69,11 +69,11 @@ describe("rowKind", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
-            data: { kind: "territory.thesis" },
+            data: { kind: "territory.focus" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
         };
-        expect(rowKind(row)).toBe("territory.thesis");
+        expect(rowKind(row)).toBe("territory.focus");
     });
 
     it("returns null for missing data", () => {
@@ -90,13 +90,13 @@ describe("rowKind", () => {
 });
 
 describe("rowToThesis", () => {
-    it("hydrates a thesis row", () => {
+    it("hydrates a focus row", () => {
         const row: Row<"studio_artifacts"> = {
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: {
-                kind: "territory.thesis",
+                kind: "territory.focus",
                 title: FULL_THESIS.title,
                 pressure: FULL_THESIS.pressure,
                 segment: FULL_THESIS.segment,
@@ -138,7 +138,7 @@ describe("rowToThesis", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
-            data: { kind: "territory.thesis", tier: "garbage" },
+            data: { kind: "territory.focus", tier: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
         };
@@ -158,7 +158,7 @@ describe("rowToApproach", () => {
                 trigger: FULL_APPROACH.trigger,
                 script: FULL_APPROACH.script,
                 bridge: FULL_APPROACH.bridge,
-                thesisId: FULL_APPROACH.thesisId
+                focusId: FULL_APPROACH.focusId
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
@@ -173,7 +173,7 @@ describe("rowToApproach", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
-            data: { kind: "territory.thesis" },
+            data: { kind: "territory.focus" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
         };
@@ -191,7 +191,7 @@ describe("rowToAccount", () => {
                 kind: "territory.account",
                 name: FULL_ACCOUNT.name,
                 tier: "t1",
-                thesisId: FULL_ACCOUNT.thesisId,
+                focusId: FULL_ACCOUNT.focusId,
                 approachId: FULL_ACCOUNT.approachId,
                 disposition: "active",
                 notes: FULL_ACCOUNT.notes
@@ -225,7 +225,7 @@ describe("partitionTerritoryRows", () => {
                 user_id: "u",
                 workspace_id: "w",
                 data: {
-                    kind: "territory.thesis",
+                    kind: "territory.focus",
                     title: "T",
                     tier: "t1",
                     accountIds: []
@@ -259,21 +259,21 @@ describe("partitionTerritoryRows", () => {
             }
         ];
         const out = partitionTerritoryRows(rows);
-        expect(out.theses).toHaveLength(1);
+        expect(out.focuses).toHaveLength(1);
         expect(out.approaches).toHaveLength(1);
         expect(out.accounts).toHaveLength(1);
     });
 });
 
 describe("insert/update factories tag with the right kind", () => {
-    it("thesisToInsert / thesisToUpdate", () => {
-        const insert = thesisToInsert(FULL_THESIS);
-        const update = thesisToUpdate(FULL_THESIS);
+    it("focusToInsert / focusToUpdate", () => {
+        const insert = focusToInsert(FULL_THESIS);
+        const update = focusToUpdate(FULL_THESIS);
         expect((insert.data as Record<string, unknown>)["kind"]).toBe(
-            KIND_THESIS
+            KIND_FOCUS
         );
         expect((update.data as Record<string, unknown>)["kind"]).toBe(
-            KIND_THESIS
+            KIND_FOCUS
         );
     });
 

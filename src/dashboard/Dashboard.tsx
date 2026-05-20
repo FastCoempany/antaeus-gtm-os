@@ -23,7 +23,7 @@ import { ReadinessDrawer } from "./components/ReadinessDrawer";
  *   ┌──────────────────────────────────────────────────────────────┐
  *   │  RoomChrome (wordmark + back-pill + ⌘K palette)              │
  *   ├──────────────────────────────────────────────────────────────┤
- *   │  Topbar (kicker + thesis + ReadinessAnchor + ModeSwitcher)   │
+ *   │  Topbar (kicker + headline + ReadinessAnchor + ModeSwitcher)   │
  *   ├─────────────────────────────────┬────────────────────────────┤
  *   │  MainColumn                     │  SliceRail                 │
  *   │   • SignalLine chip row         │   • header (MOST PRESSURE) │

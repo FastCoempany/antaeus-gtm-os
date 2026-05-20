@@ -1,7 +1,7 @@
 /**
  * Phase 4 / Room 13 — Sourcing Workbench types.
  *
- * Per canon §4.6 the room turns theses into named, pushable prospects;
+ * Per canon §4.6 the room turns focuses into named, pushable prospects;
  * prevents the territory from sitting as a blank ceiling. Bright per
  * founder directive.
  */

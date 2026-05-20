@@ -81,7 +81,7 @@ export const CATEGORY_OPTIONS: ReadonlyArray<{
 ];
 
 export type StepId =
-    | "thesis"
+    | "intro"
     | "company"
     | "role"
     | "category"
@@ -91,7 +91,7 @@ export type StepId =
     | "complete";
 
 export const STEP_ORDER: ReadonlyArray<StepId> = [
-    "thesis",
+    "intro",
     "company",
     "role",
     "category",

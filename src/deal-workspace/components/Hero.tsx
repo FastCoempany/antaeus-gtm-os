@@ -17,7 +17,7 @@ import { setDealFilter, setFolioTab } from "../state";
  */
 export function Hero(): JSX.Element {
     return (
-        <section class="dw-hero" aria-label="Deal workspace thesis">
+        <section class="dw-hero" aria-label="Deal workspace headline">
             <p class="dw-hero__eyebrow">Deal review</p>
             <h1 class="dw-hero__title">
                 Make the board confess where it is weak.

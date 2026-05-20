@@ -19,7 +19,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  *   ┌────────────────────────────────────────────────────────────────┐
  *   │ RoomChrome (wordmark + back-pill + ⌘K palette)                 │
  *   ├────────────────────────────────────────────────────────────────┤
- *   │ Topbar: kicker + thesis + state pill                           │
+ *   │ Topbar: kicker + headline + state pill                           │
  *   ├──────────────────────────────────────────┬─────────────────────┤
  *   │ LEFT (wide):                             │ RIGHT (320px,       │
  *   │   Witness (contact form + credibility   │ sticky):            │

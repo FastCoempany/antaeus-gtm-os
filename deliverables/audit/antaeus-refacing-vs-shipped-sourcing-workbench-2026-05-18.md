@@ -14,7 +14,7 @@ Canon §4.6 (Sourcing Workbench — Decision Bench) preserved end-to-end:
 - ✅ Prospect records with leverage / entry-point / approach.
 - ✅ Research surface (ProspectComposer shipped).
 - ✅ Pipeline tabs (5-stage Kanban shipped: captured → researched → ready → pushed → dropped).
-- ✅ Discipline: a prospect must pass thesis match before reaching Signal Console (HandoffStrip CTAs respect quality band).
+- ✅ Discipline: a prospect must pass focus match before reaching Signal Console (HandoffStrip CTAs respect quality band).
 
 No mind drift.
 

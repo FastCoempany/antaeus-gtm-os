@@ -365,7 +365,7 @@ function QuietFrame({ onGraph }) {
         <p style={monoStyle(11, ROLE.link)}>quiet frame</p>
         <h2 style={displayStyle(28, ROLE.textPrimary, 800)}>Open on pressure, not on places.</h2>
         <p style={textStyle(14, ROLE.textSecondary, 500)}>
-          This column exists to settle the eye and hold the operating thesis. It should feel like a calm frame around the ranked work, not a stack of side widgets.
+          This column exists to settle the eye and hold the operating argument. It should feel like a calm frame around the ranked work, not a stack of side widgets.
         </p>
       </div>
 

@@ -186,7 +186,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "Territory Architect",
         href: "/territory-architect/",
         family: "decision-bench",
-        keywords: ["tier", "thesis", "approach", "300-cap"],
+        keywords: ["tier", "focus", "approach", "300-cap"],
         description: "Turn the ICP into a tiered territory of strategic bets."
     },
     {

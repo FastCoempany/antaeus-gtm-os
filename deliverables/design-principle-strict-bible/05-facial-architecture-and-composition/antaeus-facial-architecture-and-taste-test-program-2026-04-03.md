@@ -27,7 +27,7 @@ It is the visible-expression program that should now govern wireframing, taste t
 
 This program is subordinate to:
 
-- [antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-thesis-and-system-rules-2026-03-31.md)
+- [antaeus-ui-ux-design-and-system-rules-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-design-and-system-rules-2026-03-31.md)
 - [antaeus-ui-ux-modernization-program-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-ui-ux-modernization-program-2026-03-31.md)
 - [antaeus-rebrand-truth-lock-memo-2026-03-31.md](/c:/AppDev/v1AntaeusApp/Appv2_290126/deliverables/plans/antaeus-rebrand-truth-lock-memo-2026-03-31.md)
 - [antaeus-architecture-truth-memo-2026-04-01.md](/c:/AppDev/v1AntaeusApp\Appv2_290126/deliverables/plans/antaeus-architecture-truth-memo-2026-04-01.md)
@@ -176,7 +176,7 @@ It may not dilute:
 - strategic seriousness
 - named premium assets
 - cross-module compounding logic
-- product thesis
+- product argument
 - room-level intellectual depth
 
 The hallway is allowed to disappear.
@@ -255,7 +255,7 @@ Not in scope for this document.
 
 ### 8.1 Beauty is not optional
 
-Beauty is part of the product thesis because it affects:
+Beauty is part of the product argument because it affects:
 
 - receptivity
 - trust

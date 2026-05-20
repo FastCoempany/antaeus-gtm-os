@@ -16,7 +16,7 @@ import { RoomChrome } from "@/lib/room-chrome";
  * every concession a deliberate move, not a reflex.
  *
  *   ┌─────────────────────────────────────────────────────────────┐
- *   │  Topbar: contextual kicker + thesis + active counterparty   │
+ *   │  Topbar: contextual kicker + headline + active counterparty   │
  *   ├─────────────────────────────────────────────────────────────┤
  *   │  RouteRack: Deal × Counterparty × Person × Ask-moment       │
  *   ├─────────────────────────────────────────────────────────────┤

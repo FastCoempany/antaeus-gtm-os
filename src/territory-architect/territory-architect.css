@@ -125,7 +125,7 @@ body {
 
 /*
  * Two-col hero per the picked-winner Variant 02 / Signal Field
- * refinement: the existing thesis/stat lead on the left, the new
+ * refinement: the existing focus/stat lead on the left, the new
  * interpretive Field Read aside on the right. Collapses to single
  * column under 1080px so dense mobile/tablet keeps the lead full
  * width.
@@ -313,7 +313,7 @@ body {
     gap: 12px;
 }
 @media (min-width: 900px) {
-    .ta-form--thesis {
+    .ta-form--focus {
         grid-template-columns: 1fr 200px;
     }
 }
@@ -385,15 +385,15 @@ body {
     box-shadow: none;
 }
 
-/* Thesis cards */
-.ta-thesis-list {
+/* Focus cards */
+.ta-focus-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     gap: 12px;
 }
-.ta-thesis {
+.ta-focus {
     border: 1px solid var(--ta-line2);
     border-left-width: 3px;
     border-radius: 16px;
@@ -402,18 +402,18 @@ body {
     display: grid;
     gap: 8px;
 }
-.ta-thesis--t1 { border-left-color: var(--ta-orange); }
-.ta-thesis--t2 { border-left-color: var(--ta-blue); }
-.ta-thesis--t3 { border-left-color: var(--ta-green); }
-.ta-thesis--t4 { border-left-color: var(--ta-muted); }
+.ta-focus--t1 { border-left-color: var(--ta-orange); }
+.ta-focus--t2 { border-left-color: var(--ta-blue); }
+.ta-focus--t3 { border-left-color: var(--ta-green); }
+.ta-focus--t4 { border-left-color: var(--ta-muted); }
 
-.ta-thesis__head {
+.ta-focus__head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
 }
-.ta-thesis__head strong {
+.ta-focus__head strong {
     font-family: "DM Serif Display", serif;
     font-size: 18px;
     letter-spacing: -0.035em;
@@ -442,17 +442,17 @@ body {
     background: rgba(34, 197, 94, 0.12);
     color: var(--ta-green);
 }
-.ta-thesis p {
+.ta-focus p {
     margin: 0;
     color: var(--ta-soft);
     font-size: 13.5px;
     line-height: 1.55;
 }
-.ta-thesis__segment {
+.ta-focus__segment {
     color: var(--ta-ink);
     font-style: italic;
 }
-.ta-thesis__foot {
+.ta-focus__foot {
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
@@ -643,7 +643,7 @@ body {
         padding: 22px 18px;
     }
     .ta-form,
-    .ta-form--thesis {
+    .ta-form--focus {
         grid-template-columns: 1fr;
     }
     .ta-table {

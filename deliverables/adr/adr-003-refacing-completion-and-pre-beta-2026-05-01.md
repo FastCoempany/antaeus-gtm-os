@@ -26,7 +26,7 @@ Phase 7 nav doctrine) but did NOT consistently land the
 **operational shape** the founder-picked triptych winners specified
 for each room. The shipped rooms are bright + on the new stack +
 correctly wired, but the room-level structure (zones, modals,
-detail surfaces, sentence-shaped thesis copy) drifted toward
+detail surfaces, sentence-shaped headline copy) drifted toward
 legacy bones in at least the 2 rooms audited so far. The remaining
 ~18 are unaudited.
 
@@ -41,7 +41,7 @@ to **beta-launch-ready**. Six phases, in priority order:
 6. Founder-led visual review pass against the rubric room by room
 
 The end state: a beta-launchable workspace where every surface is on
-the all-new look (bright + serif-thesis + ranked + severe + authored),
+the all-new look (bright + serif-headline + ranked + severe + authored),
 every cross-room flow is lit and tested, and the brain (Readiness +
 Founding GTM) renders verdict + inheritance such that **a hire could
 open the workspace cold and operate it on day one**.
@@ -107,7 +107,7 @@ State at 2026-05-01:
 - **Visual direction:** bright per Part II §1, dark exception retired 2026-04-27, every room now ships bright with a navy ink + accent-color rationing system.
 - **Nav doctrine:** Phase 7 nav re-architecture accepted (`antaeus-phase-7-nav-re-architecture-acceptance-memo-2026-04-03.md`) — command-first / room-rail-second / utilities-third, BackButton on every room, no sidebar competing with the work.
 - **The brain:** Readiness Score lives as a Dashboard topbar drawer with verdict-as-gates evaluation; Founding GTM lives at `/founding-gtm/` with 7 authored sections + cross-room SURPRISE callouts; ceremony moment on first upward verdict transition into Inheritable-with-guardrails.
-- **The audit bootstrap:** Deal Workspace + Future Autopsy compared against their picked triptychs. Both shipped rooms preserve mind + nav + bright direction but drift on operational shape (modal-overlay where the triptych picked inline detail; categorical labels where the triptych picked sentence-shaped thesis copy; rendering model mismatches).
+- **The audit bootstrap:** Deal Workspace + Future Autopsy compared against their picked triptychs. Both shipped rooms preserve mind + nav + bright direction but drift on operational shape (modal-overlay where the triptych picked inline detail; categorical labels where the triptych picked sentence-shaped headline copy; rendering model mismatches).
 
 What's still owed at the end of Phase 5:
 
@@ -162,7 +162,7 @@ What "done" looks like, by perspective.
 
 ### 2.2 User-facing ("the founder/operator/hire experiences it")
 
-- The user opens any room and reads its **thesis** (a sentence-shaped serif headline) before the controls.
+- The user opens any room and reads its **headline** (a sentence-shaped serif statement) before the controls.
 - The user sees **one dominant move per surface**, never two competing.
 - The user navigates by **command, not nav** — Dashboard's command-intelligence rail is the front door.
 - The user's work **carries forward across rooms** — continuity params honored, focus preserved, no restate-the-context.
@@ -176,7 +176,7 @@ What "done" looks like, by perspective.
 - Every room has been **graded against the rubric** (`deliverables/design-principle-strict-bible/05-facial-architecture-and-composition/`) — A1-A3 distinctiveness/emotion/beauty, B1-B5 dominant-move/object/copy/plane/box, C1-C4 hallway/continuity/pressure/disclosure, D1-D4 color/typography/container/surface, E1-E3 module-brain/seriousness/methodology.
 - Every room has been **judged against its picked triptych** (or the new triptych winner if one was generated this arc).
 - The founder has signed off, room by room, that the room is **beta-launch-ready**.
-- The drift modes flagged in the audit bootstrap (modal-overlay, missing sentence-thesis, etc.) have been checked across all rooms and corrected where they appear.
+- The drift modes flagged in the audit bootstrap (modal-overlay, missing sentence-headline, etc.) have been checked across all rooms and corrected where they appear.
 
 ---
 
@@ -193,7 +193,7 @@ implemented correctly across every room.
 The shape of it, expressed as binding rules for this arc:
 
 - **Bright field, navy ink, accent-rationed.** Field tone `#F6F8FC` territory, navy `#0a1c40`, restrained gradient air (radial blue + radial orange, both very low opacity), optional graph-paper undertexture at very low alpha. Never stark white as the field.
-- **Authored serif headlines carry the thesis of every room.** DM Serif Display, large (`clamp(36px, 5vw, 60px)` for room thesis lines, `clamp(24px, 2.6vw, 32px)` for section titles). Sentence-shaped, not category-labeled. *"Make the board confess where it is weak."* not "Deals at risk." *"The deal is pinned as evidence."* not "Pinned cases."
+- **Authored serif headlines carry the argument of every room.** DM Serif Display, large (`clamp(36px, 5vw, 60px)` for room headline lines, `clamp(24px, 2.6vw, 32px)` for section titles). Sentence-shaped, not category-labeled. *"Make the board confess where it is weak."* not "Deals at risk." *"The deal is pinned as evidence."* not "Pinned cases."
 - **Sans for control + work.** Public Sans, 14-16px body, 13px secondary. Buttons + inputs + reading material.
 - **Mono for kickers + meters only.** JetBrains Mono, 10-11px, letter-spaced, uppercase. Section codes, score readouts, time stamps. **Never body text. Never decorative.**
 - **One dominant move per surface, in orange.** `#e6701e` family. The orange is rationed — used once per surface, on the primary action. Everything else recedes to neutral or ghost.
@@ -201,7 +201,7 @@ The shape of it, expressed as binding rules for this arc:
 - **Plane discipline:** ≤3 dominant visual planes in the first visible zone of any surface. Card accumulation as the main ordering system is a hard reject.
 - **Composition family per canon §II §4.** Every room maps to exactly one of: Threshold, Command Chamber, Live Instrument, Decision Bench, Diagnosis Table, System Ledger, Trust Annex. The room's first-fold reads as its family before it reads as its title.
 - **Inline detail beats overlay modal.** Where the picked triptych put detail in a folio / panel / sheet adjacent to the work, the implementation must do the same. Full-screen overlays steal context; the triptychs almost universally reject them.
-- **Thesis copy + state vocabulary lock.** Per canon Part III §10: `Ready now`, `Workable`, `Thin`, `Operating`, `Needs intervention`, `At risk`, `Handoff-ready`, `Partial`, `Compounding`, `Still weak`. Not vague-positivity copy. Not gamification pops.
+- **Headline copy + state vocabulary lock.** Per canon Part III §10: `Ready now`, `Workable`, `Thin`, `Operating`, `Needs intervention`, `At risk`, `Handoff-ready`, `Partial`, `Compounding`, `Still weak`. Not vague-positivity copy. Not gamification pops.
 - **Motion is sparse, consequential, and state-based.** Reserved for first-load staging, focus shifts, state-change confirmation, ranked action emphasis, important transition continuity. Never hover theater.
 - **Every save visibly matters.** Per canon Part III §3 Rule 5. Saves shift a score, advance a milestone, change the dashboard, strengthen the kit. If nothing changes visibly, the app feels fake.
 
@@ -235,7 +235,7 @@ A binding contract for every PR landing in this arc:
 **No flow named in canon §6 may regress.** If a PR touches a room that participates in a §6 flow, the PR's CI must include a test that asserts the flow still works. This applies to:
 
 - ICP Studio → Territory / Sourcing / Signal Console / Outbound / Discovery / Readiness / Handoff (shared targeting defaults)
-- Territory → Sourcing / Signal Console (tiers + theses)
+- Territory → Sourcing / Signal Console (tiers + focuses)
 - Signal Console → Outbound / LinkedIn / Dashboard / Readiness / Handoff (account heat + motion context)
 - Outbound / LinkedIn / Cold Call → Dashboard / Readiness / Handoff
 - Cold Call → Deal Workspace (creates Deals on `meeting_booked`)
@@ -274,7 +274,7 @@ Six phases. Sequencing is gated where dependencies require it; otherwise phases 
 
 **Output:** `deliverables/audit/antaeus-refacing-vs-shipped-full-2026-05-XX.md` superseding the bootstrap.
 
-**Cross-cutting findings consolidation:** drift modes likely show up across multiple rooms. The audit names patterns (modal-overlay drift, missing sentence-thesis, categorical-vs-sentence labels, sheet-rendering model mismatches) and tallies them.
+**Cross-cutting findings consolidation:** drift modes likely show up across multiple rooms. The audit names patterns (modal-overlay drift, missing sentence-headline, categorical-vs-sentence labels, sheet-rendering model mismatches) and tallies them.
 
 **For rooms with NO triptych on file** (Signal Console, Quota Workback, Settings, possibly others — the audit confirms): mark them as "owes triptych exploration." These rooms get explored in Phase 2's first sub-phase before rework.
 
@@ -331,7 +331,7 @@ After all rework PRs land, re-run the audit on every reworked room. Confirm verd
 **Acceptance:**
 - Every room's audit verdict is "match" (post-rework)
 - No canon §6 flow regressed (CI proves this)
-- Cross-cutting drift patterns flagged in the audit are resolved across all rooms (modal-overlay → inline detail, categorical labels → sentence thesis, etc.)
+- Cross-cutting drift patterns flagged in the audit are resolved across all rooms (modal-overlay → inline detail, categorical labels → sentence headline, etc.)
 - Visual smoke screenshots committed per room, founder reviews them
 - Phase 2 closes with a session-log entry summarizing the rework + a count of rooms moved from drift→match
 
@@ -374,7 +374,7 @@ After all rework PRs land, re-run the audit on every reworked room. Confirm verd
 
 - Audit current state of static pages (which already use the bright direction vs which are still legacy)
 - Decide per page: stay as static HTML with new CSS, or migrate to a Vite entry
-- Authoring pass on copy: thesis-shaped serif headlines per page, mono kickers, sentence-shaped trust signals on auth pages
+- Authoring pass on copy: argument-shaped serif headlines per page, mono kickers, sentence-shaped trust signals on auth pages
 - Match the room family discipline where applicable: landing reads like a Threshold room (invitational, bright, composed); auth reads like a Trust Annex (calm, plainspoken, no drama); privacy reads like a Trust Annex with longer-form authored reading
 - "Data stored locally" and similar trust signals visible where appropriate
 - Mobile responsiveness only where it serves trust (auth pages should be readable on mobile; landing should not actively break)

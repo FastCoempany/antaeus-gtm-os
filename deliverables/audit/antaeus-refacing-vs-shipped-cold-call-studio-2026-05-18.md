@@ -66,16 +66,16 @@ What remains is narrow.
 
 1. **`personalize.ts`** — add `requiredCorrectionCopy(hasAccount, threadId)` returning the "what to do" line that pairs with `weakestThreadCopy`'s "what's loose" line. Thread-aware so the line names something specific to where the rep is.
 2. **`TalkLoom.tsx`** — render the "what to do" line as a second copy line in the same block (mirrors the wireframe's two-line pairing).
-3. **`TalkLoom.tsx`** — render a one-line statement under the score (`cc-loom__score-thesis`) so the giant number has weight at a glance, without re-introducing the retired "Room law" paragraph.
-4. **`cold-call-studio.css`** — style the score-thesis line + the new "what to do" line so the side panel reads as a paired "what's wrong / what to do" surface.
+3. **`TalkLoom.tsx`** — render a one-line statement under the score (`cc-loom__score-headline`) so the giant number has weight at a glance, without re-introducing the retired "Room law" paragraph.
+4. **`cold-call-studio.css`** — style the score-headline line + the new "what to do" line so the side panel reads as a paired "what's wrong / what to do" surface.
 
-> Note: code identifiers like `requiredCorrectionCopy` and `.cc-loom__score-thesis` were named under the old voice and stay as-is per canon Part III §11. New UI copy follows the new voice; the panel reads as plain sentences.
+> Note: code identifiers like `requiredCorrectionCopy` and `.cc-loom__score-headline` were named under the old voice and stay as-is per canon Part III §11. New UI copy follows the new voice; the panel reads as plain sentences.
 
 ## Acceptance walk
 
 - The side panel shows both lines — "what's loose" and "what to do".
 - The "what to do" text differs between no-account and account-set states.
 - The "what to do" text differs between proof/ask threads (where the call is mid-pressure) and prep/opener threads (where it hasn't earned pressure yet).
-- The giant score number carries a one-line thesis underneath it.
+- The giant score number carries a one-line headline underneath it.
 - Each thread row shows the color anchor (via the existing left-edge border) tinted with the thread's accent color.
 - Existing live-thread navigation, branch picker, capture panel, outcome buttons, and persistence remain unchanged.

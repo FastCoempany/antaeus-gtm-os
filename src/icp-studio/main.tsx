@@ -40,7 +40,7 @@ startAnalyticsPersistence();
 
 // Cross-room handoff: if a caller passed `?focusObject=<industry>`,
 // pre-fill the industry-custom field so the operator lands with
-// their thesis already partially shaped.
+// their ICP already partially shaped.
 const ctx = readContinuity();
 if (ctx.focusObject) {
     patchDraft({ industry: "custom", industryCustom: ctx.focusObject });

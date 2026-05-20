@@ -55,7 +55,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
             await page.reload({ waitUntil: "networkidle" });
             await page.waitForTimeout(400);
 
-            // Topbar present with thesis.
+            // Topbar present with headline.
             const title = await page.locator(".ng-topbar__title").textContent();
             expect(title).toContain("deliberate move");
 

@@ -2,7 +2,7 @@
  * ICP Studio — Phase 4 / Room 11 styles.
  *
  * Per Part II §4.8 the room is a Decision Bench hybrid: dark hero
- * (carrying the strategic thesis) above a bright work area where the
+ * (carrying the strategic headline) above a bright work area where the
  * actual decision gets shaped. Wave 1 ships the shell + dark hero +
  * skeleton work area + analytics placeholder. Wave 3 fills the live
  * form + build outputs + quality readout.
@@ -60,9 +60,9 @@ body {
     gap: 22px;
 }
 
-/* ─── Bright hero (Decision Bench thesis band) ──────────────────────
+/* ─── Bright hero (Decision Bench headline band) ──────────────────────
  * Per founder directive 2026-04-28: no dark backgrounds. The hero
- * carries the strategic thesis on the same bright field as the rest
+ * carries the strategic headline on the same bright field as the rest
  * of the room. The orange left-rule + serif title still earn the
  * "decision bench" weight without the navy panel.
  */

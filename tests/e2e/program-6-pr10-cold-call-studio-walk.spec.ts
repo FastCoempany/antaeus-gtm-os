@@ -8,7 +8,7 @@ import { test, expect } from "@playwright/test";
  *     diagnosis in the loom-read aside
  *   - Required-correction copy is thread-aware (changes when the rep
  *     pulls a different thread)
- *   - Score thesis line sits under the giant score number
+ *   - Score headline line sits under the giant score number
  *   - Six-thread spine still renders (canon §4.9 — not the wireframe's 5)
  *   - Live navigation + branch picker + capture sheet still mount
  *
@@ -102,7 +102,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         }
     });
 
-    test("Score thesis line sits under the giant score number", async ({
+    test("Score headline line sits under the giant score number", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -115,10 +115,10 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
 
             await expect(page.locator(".cc-loom__score")).toBeAttached();
             await expect(
-                page.locator(".cc-loom__score-thesis")
+                page.locator(".cc-loom__score-headline")
             ).toBeAttached();
             const thesisText = await page
-                .locator(".cc-loom__score-thesis")
+                .locator(".cc-loom__score-headline")
                 .textContent();
             expect(thesisText?.toLowerCase()).toContain("threads");
         } finally {

@@ -1,10 +1,10 @@
 import type { JSX } from "preact";
 
 /**
- * Founding GTM topbar — kicker + serif thesis title + maturity band.
+ * Founding GTM topbar — kicker + serif headline + maturity band.
  *
  * Per canon §4.19: "the room is the culmination, the high point —
- * UI/UX thesis Rule F: handoff-readiness should feel like a north
+ * UI/UX argument Rule F: handoff-readiness should feel like a north
  * star, and this is where the north star is rendered."
  *
  * The kicker carries the section-readiness tail. A separate rail

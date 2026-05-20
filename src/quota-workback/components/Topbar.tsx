@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { benchmark, inputs, metrics, quality } from "../state";
 
 /**
- * Topbar — kicker + thesis + hero touches/day + plan-input anchors.
+ * Topbar — kicker + headline + hero touches/day + plan-input anchors.
  *
  * Per canon §4.18 the room is a System Ledger (bright per founder
  * directive 2026-04-27). Per the picked-winner Variant 01 (AI-
