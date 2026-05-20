@@ -1,7 +1,7 @@
 # ADR-005 — Data Layer Parity (Phase 4.5)
 
 **Date:** 2026-05-20
-**Status:** Proposed
+**Status:** Approved
 **Supersedes:** None
 **Depends on:** ADR-001 (Foundation Stack), ADR-002 (Phase 2 Data Architecture), ADR-003 (Refacing Completion), ADR-004 (Orchestration Layer Foundation)
 
@@ -303,22 +303,28 @@ Parallel workstream throughout: session focus tracking (`setFocusedObject` calls
 
 ## Approval
 
-**Status:** Proposed pending founder review.
+**Status:** Approved 2026-05-20.
 
-**Open questions for the founder before APPROVED status:**
+### Resolutions on the four open questions
 
-1. **Tier 1 ordering inside the trio.** This ADR proposes Signal Console first, then Deal Workspace, then Outbound Studio. The signal-decay generator needs all three, so order within the trio is flexibility. Recommendation: Signal Console first because it has the most complex schema (accounts + nested signals) and we want to derisk that early; Deal Workspace second because Future Autopsy + Quota Workback both read from it (so its retrofit unlocks indirect benefits even before Phase B); Outbound Studio third.
+1. **Tier 1 ordering inside the trio.** Approved as proposed: Signal Console → Deal Workspace → Outbound Studio. Signal Console first to derisk the most complex schema (accounts + nested signals) early; Deal Workspace second because Future Autopsy + Quota Workback both read from it, so its retrofit unlocks indirect benefits even before Phase B; Outbound Studio third.
 
-2. **Schema-types regeneration cadence.** Every Step 2 regenerates `src/lib/database.types.ts`. Should that file be hand-committable with cleanups, or strictly machine-generated? Recommendation: machine-generated, committed verbatim. Hand-edits are a Phase 2.2 emergency-only pattern (see CLAUDE.md Part II.5 §2).
+2. **Schema-types regeneration cadence.** Locked as machine-generated only. Every Step 2 regenerates `src/lib/database.types.ts` via `supabase gen types typescript --linked > src/lib/database.types.ts` and commits the output verbatim. No hand-edits. The Phase 2.2 bootstrap hand-edit pattern (see CLAUDE.md Part II.5 §2) is retired going forward.
 
-3. **Service account email.** `ci@antaeus.app` proposed but not yet created. Founder owns Supabase account management.
+3. **Service account email.** `ci@antaeus.app` confirmed. Founder owns Supabase account creation + initial PAT generation. PAT stored in GitHub Actions secrets as `SUPABASE_CI_PAT`. Rotation pattern: every 6 months or on any team change.
 
-4. **Should this ADR retroactively cover the cloud-sync gap-closer PRs (#43, #44)?** Those landed pre-Phase-A and partially closed the data-parity gap for Outbound angles + Advisor registry + Signal Console manual-add. Recommendation: yes — those PRs become "Tier 1 partial dual-write" with explicit Step 4 + 5 still owed.
+4. **PRs #43 + #44 (2026-05-01 cloud-sync gap-closers) and the retrofit.** Resolved to **option (a) — fresh, complete dual-write pass.** Each affected room (Outbound Studio, Advisor Deploy, Signal Console) gets a full ADR-005-conformant Step 3 covering all of the room's state. The legacy PR #43 + #44 code paths get retired during Step 5 (drop legacy). Rationale:
+   - **Clean code.** PR #43 + #44 were gap-closers, not designed against a per-room lifecycle. Mixed code paths (PR #43 patterns alongside ADR-005 patterns) would be harder to reason about and test.
+   - **Audit clarity.** Step 1 (audit) produces a clean shape — "every mutation in the room and where it lands." Crediting partial coverage muddies that doc.
+   - **The work isn't wasted.** PR #43 + #44 proved the patterns work end-to-end against production Supabase, surfaced the offline retry queue as a real-world resilience need, and validated the per-noun table schemas. That foundation knowledge informs the ADR-005 retrofit even when the specific code gets replaced.
+   - **Cost:** roughly one extra PR per affected room (~3 PRs total) covering the slice PR #43 already handled. Acceptable for the clarity gain.
 
-**Founder approval block** (filled in at approval):
+### Founder approval block
 
-- Date approved:
-- Conditions / amendments:
-- Signed:
+- Date approved: 2026-05-20
+- Conditions / amendments: none beyond the four resolutions above
+- Signed: founder (mrcoe7@gmail.com)
+
+---
 
 ---
