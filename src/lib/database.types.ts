@@ -771,7 +771,7 @@ export interface Database {
             };
             // ─── Phase A orchestration layer (ADR-004) ──────────────────
             dismiss_observation: {
-                Args: { obs_id: string; reason?: string | null };
+                Args: { obs_id: string; reason: string | null };
                 Returns: void;
             };
             touch_workspace_session_updated_at: {
