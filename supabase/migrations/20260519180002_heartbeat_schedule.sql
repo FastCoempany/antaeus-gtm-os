@@ -44,9 +44,32 @@
 -- ============================================================
 
 -- Enable pg_cron + pg_net extensions if not already enabled. Both
--- are part of Supabase's default extension set; this is idempotent.
-create extension if not exists pg_cron with schema extensions;
-create extension if not exists pg_net with schema extensions;
+-- are part of Supabase's default extension set on the main project,
+-- but preview branches don't grant the superuser privilege required
+-- to install them. We wrap each CREATE EXTENSION in a DO ... EXCEPTION
+-- block so the migration succeeds on branches even when the
+-- extensions can't be installed; main + persistent branches still
+-- get them via the underlying CREATE EXTENSION IF NOT EXISTS.
+--
+-- This is idempotent on main: if the extension is already installed,
+-- CREATE EXTENSION IF NOT EXISTS is a no-op. If a future production
+-- environment is restored from a clean snapshot, the extensions
+-- install cleanly via the same path.
+do $$
+begin
+  create extension if not exists pg_cron with schema extensions;
+exception
+  when insufficient_privilege or feature_not_supported then
+    raise notice 'pg_cron extension not available on this database — skipping (expected on Supabase preview branches where superuser is unavailable).';
+end $$;
+
+do $$
+begin
+  create extension if not exists pg_net with schema extensions;
+exception
+  when insufficient_privilege or feature_not_supported then
+    raise notice 'pg_net extension not available on this database — skipping (expected on Supabase preview branches where superuser is unavailable).';
+end $$;
 
 -- ============================================================
 -- Heartbeat schedule (UNCOMMENT and run in the SQL Editor after
@@ -128,5 +151,18 @@ create extension if not exists pg_net with schema extensions;
 --   select count(*), max(written_at) from public.observations;
 -- ============================================================
 
-comment on extension pg_cron is
-    'Used by ADR-004 orchestration layer to schedule the heartbeat Edge Function. See supabase/migrations/20260519180002_heartbeat_schedule.sql for the (commented-out) schedule call + deployment notes.';
+-- Comment on the extension — only valid when pg_cron actually got
+-- installed (i.e. on main + persistent branches). Wrapped in a guard
+-- so the migration still succeeds on preview branches where pg_cron
+-- isn't present.
+do $$
+begin
+  if exists (
+    select 1 from pg_extension where extname = 'pg_cron'
+  ) then
+    execute $cmt$
+      comment on extension pg_cron is
+        'Used by ADR-004 orchestration layer to schedule the heartbeat Edge Function. See supabase/migrations/20260519180002_heartbeat_schedule.sql for the (commented-out) schedule call + deployment notes.'
+    $cmt$;
+  end if;
+end $$;
