@@ -201,26 +201,41 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_CI_PAT }}
           PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
         run: |
-          # Switch CLI scope to operate on the newly-created branch.
-          supabase --experimental branches switch "${{ steps.create.outputs.branch_name }}" \
-            --project-ref "$PROJECT_REF"
-
-          # Try to apply the migration chain via `supabase db push --linked
-          # --yes`. This is non-fatal because:
-          #   - Checkpoint 1 verification has 0 @realtime-tagged Playwright
-          #     tests, so the Realtime tests step passes regardless.
-          #   - On a MIGRATIONS_FAILED branch the push may fail for reasons
-          #     we can't fully diagnose from CI (e.g. partial schema state
-          #     left by Supabase's failed auto-migration).
-          #   - Tier 1 retrofit PRs (Step 4) will need this step to actually
-          #     work because they add @realtime tests that require a live
-          #     branch DB. We'll diagnose any deeper issue then, with real
-          #     tests gating the workflow.
-          if supabase db push --linked --yes; then
-            echo "::notice::supabase db push --linked --yes succeeded — branch DB is fully populated."
-          else
-            echo "::warning::supabase db push --linked --yes failed. Non-fatal for Checkpoint 1 verification (no @realtime tests run yet). Tier 1 retrofit PRs will need this to succeed."
-          fi
+          # This step is intentionally a NO-OP for Checkpoint 1 verification.
+          #
+          # Why: pushing migrations to a Supabase preview branch via the CLI
+          # requires switching the linked context to the branch. The CLI
+          # exposes branches via: list / create / get / update / pause /
+          # unpause / delete — but there is NO `branches switch`
+          # subcommand. Alternative paths all require setup we don't have:
+          #   - `supabase link --project-ref <branch_ref>` requires a DB
+          #     password we don't pass in env.
+          #   - `supabase db push --db-url <branch_db_url>` requires the
+          #     branch to have published its endpoints, which doesn't
+          #     happen on a MIGRATIONS_FAILED branch.
+          #   - The Supabase Management API can apply migrations directly
+          #     but requires JSON-RPC scaffolding we haven't built.
+          #
+          # For Checkpoint 1 verification this is fine: no @realtime-tagged
+          # Playwright tests exist yet (Tier 1 retrofit PRs add them), so
+          # the Realtime tests step passes via --pass-with-no-tests
+          # regardless of whether the branch DB has the schema applied.
+          #
+          # Tier 1 retrofit (per ADR-005 §"Per-room retrofit pattern") will
+          # need to solve this before Step 4 (flip-read) PRs land their
+          # cross-tab realtime walks. The most likely path is one of:
+          #   (a) Pass DB_URL_PASSWORD as a GitHub Actions secret + run
+          #       `supabase link --project-ref <branch_ref>
+          #       --password $DB_URL_PASSWORD` here.
+          #   (b) Wait for the branch to transition out of MIGRATIONS_FAILED
+          #       (somehow) so db_url is published, then use --db-url.
+          #   (c) Build a small Node script that calls the Supabase
+          #       Management API directly.
+          #
+          # Until then, Checkpoint 1's job is just to prove the workflow
+          # plumbing exists, the secret + variable are wired up, and the
+          # branch lifecycle (create + teardown) completes cleanly.
+          echo "::notice::Apply migrations is a no-op for Checkpoint 1. Tier 1 retrofit PRs must implement the actual migration-application strategy. See the comment block in .github/workflows/data-parity-ci.yml for the three candidate paths."
 
   realtime-tests:
     name: Realtime cross-tab tests
