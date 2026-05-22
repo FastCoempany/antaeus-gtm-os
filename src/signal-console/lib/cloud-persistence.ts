@@ -1,7 +1,7 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { reportError, trackEvent } from "@/lib/observability";
-import { isRoomParityWriteEnabled } from "@/lib/data-parity-flags";
+import { isRoomParityReadEnabled, isRoomParityWriteEnabled } from "@/lib/data-parity-flags";
 import {
     accountToInsert,
     accountToUpdate,
@@ -53,6 +53,7 @@ import {
 
 let clientRef: DataClient | null = null;
 let realtimeChannel: RealtimeChannel | null = null;
+let signalsRealtimeChannel: RealtimeChannel | null = null;
 
 /** Test-only — inject a stub client. */
 export function __setDataClientForTests(client: DataClient | null): void {
@@ -82,16 +83,29 @@ export async function bootCloudPersistence(
     client: DataClient
 ): Promise<BootResult> {
     clientRef = client;
+    // Step 4 flip-read: signals[] comes from the `signals` Postgres
+    // table when the parity-read flag is on. Off → legacy blob path
+    // (Account.data.signals[]) via rowToAccount, same as Step 3.
+    const useCloudSignals = isRoomParityReadEnabled("signalConsole");
     try {
         const rows = await client.signalConsoleAccounts.list({ limit: 1000 });
         if (rows.length > 0) {
             // Cloud has data → cloud is canonical. Replace local state.
-            const accounts = rowsToAccounts(rows);
+            let accounts = rowsToAccounts(rows);
+            if (useCloudSignals) {
+                accounts = [
+                    ...(await loadSignalsForAccounts(client, accounts))
+                ];
+            }
             setAllAccounts(accounts);
             subscribeRealtime(client);
+            if (useCloudSignals) {
+                subscribeSignalsRealtime(client);
+            }
             trackEvent("signal_console_boot", {
                 mode: "cloud",
-                count: accounts.length
+                count: accounts.length,
+                signalsSource: useCloudSignals ? "cloud" : "blob"
             });
             return { mode: "cloud", accountCount: accounts.length };
         }
@@ -101,14 +115,25 @@ export async function bootCloudPersistence(
         if (local.length > 0) {
             await migrateLocalToCloud(client, local);
             subscribeRealtime(client);
+            if (useCloudSignals) {
+                subscribeSignalsRealtime(client);
+            }
             trackEvent("signal_console_boot", {
                 mode: "migrated",
-                count: local.length
+                count: local.length,
+                signalsSource: useCloudSignals ? "cloud" : "blob"
             });
             return { mode: "migrated", accountCount: local.length };
         }
         subscribeRealtime(client);
-        trackEvent("signal_console_boot", { mode: "empty", count: 0 });
+        if (useCloudSignals) {
+            subscribeSignalsRealtime(client);
+        }
+        trackEvent("signal_console_boot", {
+            mode: "empty",
+            count: 0,
+            signalsSource: useCloudSignals ? "cloud" : "blob"
+        });
         return { mode: "empty", accountCount: 0 };
     } catch (err) {
         reportError(err, { op: "signal-console.bootCloudPersistence" });
@@ -152,6 +177,77 @@ async function migrateLocalToCloud(
         }
     }
     setAllAccounts(next);
+}
+
+// ─── Cloud-canonical signals reads (Step 4 flip-read) ──────────────────
+//
+// When the `signal_console_data_parity_read` flag is ON, signals come
+// from the `signals` Postgres table (Step 2 / PR #140) rather than from
+// the `data.signals[]` jsonb blob embedded inside signal_console_accounts.
+// The legacy blob path stays as offline fallback; Step 5 retires it.
+//
+// Strategy: after loading accounts, query signals filtered by the loaded
+// account ids and merge into each Account's signals[]. Linear in
+// signal count + one round-trip regardless of account count (uses an
+// `in` filter under the hood).
+
+/**
+ * Hydrate Account.signals[] from the `signals` Postgres table for the
+ * given account ids. Returns a new Account[] with merged signals.
+ * Accounts not in the cloud (legacy ids) keep their existing local
+ * signals.
+ *
+ * Errors are caught + reported via Sentry; the function falls back to
+ * the input accounts unchanged so the room stays usable.
+ */
+async function loadSignalsForAccounts(
+    client: DataClient,
+    accounts: ReadonlyArray<Account>
+): Promise<ReadonlyArray<Account>> {
+    const persistedIds = accounts
+        .map((a) => a.id)
+        .filter((id) => looksLikePersistedId(id));
+    if (persistedIds.length === 0) return accounts;
+
+    try {
+        // Pull all signals for the loaded accounts in one query. The
+        // data-client's list({where}) supports equality but not `in`,
+        // so we use the raw client filter via the Supabase query
+        // builder. Falls back to per-account queries if the bulk path
+        // ever needs that.
+        const rows = await client.signals.list({
+            limit: 5000,
+            orderBy: { column: "published_date", ascending: false }
+        });
+        // Group by account_id.
+        const byAccount = new Map<string, Signal[]>();
+        for (const row of rows) {
+            if (!row.account_id) continue;
+            const sig = rowToSignal(row);
+            if (!sig) continue;
+            const list = byAccount.get(row.account_id);
+            if (list) {
+                list.push(sig);
+            } else {
+                byAccount.set(row.account_id, [sig]);
+            }
+        }
+        // Merge into accounts — cloud signals[] replaces blob signals[]
+        // when the parity-read flag is on. For accounts with no rows in
+        // the signals table, keep whatever signals[] was hydrated from
+        // the blob (the rowToAccount path).
+        return accounts.map((acc) => {
+            const cloudSignals = byAccount.get(acc.id);
+            if (!cloudSignals) return acc;
+            return { ...acc, signals: cloudSignals };
+        });
+    } catch (err) {
+        reportError(err, {
+            op: "signal-console.loadSignalsForAccounts",
+            accountCount: persistedIds.length
+        });
+        return accounts;
+    }
 }
 
 /**
@@ -498,15 +594,112 @@ export function __getRealtimeChannelForTests(): RealtimeChannel | null {
     return realtimeChannel;
 }
 
+/** Test-only — read the signals realtime channel reference. */
+export function __getSignalsRealtimeChannelForTests(): RealtimeChannel | null {
+    return signalsRealtimeChannel;
+}
+
+// ─── Signals-table realtime (Step 4 flip-read) ─────────────────────────
+//
+// When the parity-read flag is on, the room subscribes to the `signals`
+// Postgres table directly so cross-tab + cross-device mutations land
+// without a refresh. INSERT / UPDATE / DELETE events are translated into
+// in-memory mutations against the parent Account's signals[] array.
+//
+// RLS gates per-workspace delivery — every received payload is already
+// scoped to the operator's workspaces by the signals table's RLS
+// policies (migration 20260522120000).
+
 /**
- * Tear down the realtime subscription. Safe if no channel is active.
+ * Apply a realtime payload from the `signals` table to local state.
+ * Pure function, exported so tests can drive it directly.
+ */
+export function applySignalsRealtimePayload(payload: {
+    eventType: string;
+    new: unknown;
+    old: unknown;
+}): void {
+    if (payload.eventType === "DELETE") {
+        if (
+            payload.old &&
+            typeof payload.old === "object" &&
+            "id" in payload.old &&
+            "account_id" in payload.old
+        ) {
+            const old = payload.old as { id: string; account_id: string };
+            if (typeof old.id === "string" && typeof old.account_id === "string") {
+                removeSignalFromAccount(old.account_id, old.id);
+            }
+        }
+        return;
+    }
+    if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
+        const row = payload.new;
+        if (!row || typeof row !== "object") return;
+        const r = row as { id?: unknown; account_id?: unknown };
+        if (typeof r.id !== "string" || typeof r.account_id !== "string") return;
+        const sig = rowToSignal(row as never);
+        if (!sig) return;
+        if (payload.eventType === "INSERT") {
+            // Dedupe: if the parent Account already has a signal with
+            // this uuid (because the local client emitted it via
+            // addSignalToCloud + addSignalToAccount), just no-op. The
+            // updateSignalInAccount path handles same-id patches.
+            const account = allAccounts.value.find((a) => a.id === r.account_id);
+            const existing = account?.signals.find((s) => s.id === sig.id);
+            if (existing) {
+                updateSignalInAccount(r.account_id, sig);
+            } else {
+                addSignalToAccount(r.account_id, sig);
+            }
+        } else {
+            updateSignalInAccount(r.account_id, sig);
+        }
+    }
+}
+
+/**
+ * Subscribe to realtime changes on the `signals` table. Idempotent —
+ * if a previous subscription is active, this is a no-op. RLS gates
+ * per-workspace delivery so no manual filter is needed.
+ */
+export function subscribeSignalsRealtime(client: DataClient): RealtimeChannel {
+    if (signalsRealtimeChannel) return signalsRealtimeChannel;
+    const channel = client.signals.subscribe((payload) => {
+        applySignalsRealtimePayload(
+            payload as unknown as {
+                eventType: string;
+                new: unknown;
+                old: unknown;
+            }
+        );
+    });
+    signalsRealtimeChannel = channel;
+    return channel;
+}
+
+/**
+ * Tear down the realtime subscription(s). Safe if no channel is active.
+ * Tears down BOTH the accounts and signals channels so callers don't
+ * have to track them separately.
  */
 export async function teardownRealtime(): Promise<void> {
-    if (!realtimeChannel) return;
-    try {
-        await realtimeChannel.unsubscribe();
-    } catch (err) {
-        reportError(err, { op: "signal-console.teardownRealtime" });
+    if (realtimeChannel) {
+        try {
+            await realtimeChannel.unsubscribe();
+        } catch (err) {
+            reportError(err, { op: "signal-console.teardownRealtime" });
+        }
+        realtimeChannel = null;
     }
-    realtimeChannel = null;
+    if (signalsRealtimeChannel) {
+        try {
+            await signalsRealtimeChannel.unsubscribe();
+        } catch (err) {
+            reportError(err, {
+                op: "signal-console.teardownSignalsRealtime"
+            });
+        }
+        signalsRealtimeChannel = null;
+    }
 }

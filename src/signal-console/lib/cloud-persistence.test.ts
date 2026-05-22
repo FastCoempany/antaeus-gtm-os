@@ -430,3 +430,115 @@ describe("replaceAccountSignals (orchestrator)", () => {
         expect(account.signals.find((s) => s.id === "stale")).toBeUndefined();
     });
 });
+
+// ─── applySignalsRealtimePayload (Step 4 flip-read) ─────────────────
+
+import {
+    applySignalsRealtimePayload,
+    subscribeSignalsRealtime,
+    __getSignalsRealtimeChannelForTests,
+    teardownRealtime
+} from "./cloud-persistence";
+
+describe("applySignalsRealtimePayload", () => {
+    it("INSERT adds the signal to the parent account", () => {
+        __setAllAccountsForTests([
+            { id: ACCOUNT_UUID, name: "Acme", signals: [] }
+        ]);
+        applySignalsRealtimePayload({
+            eventType: "INSERT",
+            new: makeRow({ headline: "New signal from another tab" }),
+            old: null
+        });
+        const account = allAccounts.value.find((a) => a.id === ACCOUNT_UUID)!;
+        expect(account.signals).toHaveLength(1);
+        expect(account.signals[0]!.headline).toBe("New signal from another tab");
+    });
+
+    it("INSERT de-dupes when the signal already exists (own-tab echo)", () => {
+        __setAllAccountsForTests([
+            {
+                id: ACCOUNT_UUID,
+                name: "Acme",
+                signals: [{ id: SIGNAL_UUID, headline: "Already here" }]
+            }
+        ]);
+        applySignalsRealtimePayload({
+            eventType: "INSERT",
+            new: makeRow({ headline: "Already here" }),
+            old: null
+        });
+        const account = allAccounts.value.find((a) => a.id === ACCOUNT_UUID)!;
+        expect(account.signals).toHaveLength(1);
+    });
+
+    it("UPDATE patches the matching signal by id", () => {
+        __setAllAccountsForTests([
+            {
+                id: ACCOUNT_UUID,
+                name: "Acme",
+                signals: [
+                    { id: SIGNAL_UUID, headline: "old", flagged: false }
+                ]
+            }
+        ]);
+        applySignalsRealtimePayload({
+            eventType: "UPDATE",
+            new: makeRow({ flagged: true, headline: "old" }),
+            old: makeRow({ flagged: false, headline: "old" })
+        });
+        const account = allAccounts.value.find((a) => a.id === ACCOUNT_UUID)!;
+        expect(account.signals[0]!.flagged).toBe(true);
+    });
+
+    it("DELETE removes the signal from the account's signals[]", () => {
+        __setAllAccountsForTests([
+            {
+                id: ACCOUNT_UUID,
+                name: "Acme",
+                signals: [
+                    { id: SIGNAL_UUID, headline: "to delete" },
+                    { id: "other", headline: "stays" }
+                ]
+            }
+        ]);
+        applySignalsRealtimePayload({
+            eventType: "DELETE",
+            new: null,
+            old: { id: SIGNAL_UUID, account_id: ACCOUNT_UUID }
+        });
+        const account = allAccounts.value.find((a) => a.id === ACCOUNT_UUID)!;
+        expect(account.signals).toHaveLength(1);
+        expect(account.signals[0]!.id).toBe("other");
+    });
+
+    it("ignores malformed events without throwing", () => {
+        applySignalsRealtimePayload({
+            eventType: "UPDATE",
+            new: null,
+            old: null
+        });
+        applySignalsRealtimePayload({
+            eventType: "DELETE",
+            new: null,
+            old: null
+        });
+        applySignalsRealtimePayload({
+            eventType: "INSERT",
+            new: { not_an_account_signal: true },
+            old: null
+        });
+        // No assertion needed — just must not throw.
+    });
+});
+
+describe("subscribeSignalsRealtime", () => {
+    it("subscribes once + is idempotent", async () => {
+        const mock = makeMockClient();
+        const ch1 = subscribeSignalsRealtime(mock.client);
+        const ch2 = subscribeSignalsRealtime(mock.client);
+        expect(ch1).toBe(ch2);
+        await teardownRealtime();
+        expect(__getSignalsRealtimeChannelForTests()).toBeNull();
+    });
+});
