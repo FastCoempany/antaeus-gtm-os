@@ -32,10 +32,16 @@ let sentryInitialized = false;
 let posthogInitialized = false;
 
 export function initObservability(): ObservabilityStatus {
-    return {
+    const status = {
         sentry: initSentry(),
         posthog: initPosthog()
     };
+    // Fire-and-forget: bridge Supabase auth state → Posthog identify +
+    // Sentry user. Sets `email` as a person property so feature-flag
+    // filters and cohort analyses can target users by email. Failures
+    // are silent (no auth client / no session / etc).
+    void bootIdentifyFromAuth();
+    return status;
 }
 
 function initSentry(): ObservabilityStatus["sentry"] {
@@ -186,4 +192,92 @@ export function onFeatureFlagsReady(callback: () => void): () => void {
         return () => undefined;
     }
     return posthog.onFeatureFlags(callback);
+}
+
+// ─── Auth → identify bridge ────────────────────────────────────────────
+//
+// Posthog and Sentry are most useful when they know WHO a session belongs
+// to. Without identify, every flag filter degrades to "all users 100%",
+// every cohort analysis is anonymous, and Sentry errors can't be grouped
+// per-user. This bridge listens for Supabase auth state changes and
+// translates them into identifyUser / clearUser calls.
+//
+// Triggered automatically by initObservability(). No room-level wiring
+// needed.
+
+/**
+ * Subscribe to Supabase auth state changes + identify the current
+ * session if any. Fire-and-forget; failures are silent. Idempotent —
+ * the subscription is set up once per page load, mirroring posthog +
+ * sentry's one-init-per-load contract.
+ *
+ * Why dynamic-import the supabase-client: keeps observability.ts from
+ * statically depending on Supabase env vars. Rooms without auth (the
+ * static landing page, etc.) still call initObservability() cleanly.
+ */
+let identifyBridgeMounted = false;
+
+async function bootIdentifyFromAuth(): Promise<void> {
+    if (identifyBridgeMounted) return;
+    if (!posthogInitialized && !sentryInitialized) return;
+    try {
+        const mod = await import("./supabase-client");
+        const client = mod.getSupabaseClient();
+        identifyBridgeMounted = true;
+
+        // Handle the current session (page refresh keeps the JWT).
+        const { data } = await client.auth.getSession();
+        if (data.session?.user) {
+            identifyFromUser(data.session.user);
+        }
+
+        // Subscribe to subsequent changes (sign-in, sign-out, token
+        // refresh — all flow through this listener).
+        client.auth.onAuthStateChange((event, session) => {
+            if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+                if (session?.user) identifyFromUser(session.user);
+            } else if (event === "SIGNED_OUT") {
+                clearUser();
+            }
+        });
+    } catch {
+        // Supabase env vars missing, or client init failed. Silent —
+        // analytics work fine without identify, just anonymous.
+    }
+}
+
+/**
+ * Identify the current user across Posthog + Sentry, deriving the
+ * email + workspace info from the Supabase auth user record.
+ */
+function identifyFromUser(user: {
+    id: string;
+    email?: string;
+    user_metadata?: Record<string, unknown>;
+}): void {
+    const traits: Record<string, unknown> = {};
+    if (user.email) traits.email = user.email;
+    // Surface user_metadata fields if present (set during sign-up flow).
+    if (user.user_metadata) {
+        const meta = user.user_metadata;
+        if (typeof meta.full_name === "string") traits.name = meta.full_name;
+        if (typeof meta.workspace_id === "string") {
+            traits.workspace_id = meta.workspace_id;
+        }
+    }
+    identifyUser(user.id, traits);
+}
+
+/**
+ * Test-only — read the bridge-mounted flag. Tests reset between cases.
+ */
+export function __isIdentifyBridgeMountedForTests(): boolean {
+    return identifyBridgeMounted;
+}
+
+/**
+ * Test-only — reset the bridge state between cases.
+ */
+export function __resetIdentifyBridgeForTests(): void {
+    identifyBridgeMounted = false;
 }
