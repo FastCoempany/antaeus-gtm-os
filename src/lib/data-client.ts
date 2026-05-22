@@ -109,6 +109,8 @@ export interface DataClient {
     deals: NounAccessor<"deals">;
     sequences: NounAccessor<"sequences">;
     signalConsoleAccounts: NounAccessor<"signal_console_accounts">;
+    // ─── Phase 4.5 / Tier 1 Signal Console Step 2 (ADR-005) ─────
+    signals: NounAccessor<"signals">;
     discoveryFrameworks: NounAccessor<"discovery_frameworks">;
     discoveryCallLogs: NounAccessor<"discovery_call_logs">;
     pipelineSettings: NounAccessor<"pipeline_settings">;
@@ -171,6 +173,7 @@ export function createDataClient(
         deals: makeNounAccessor(sb, "deals"),
         sequences: makeNounAccessor(sb, "sequences"),
         signalConsoleAccounts: makeNounAccessor(sb, "signal_console_accounts"),
+        signals: makeNounAccessor(sb, "signals"),
         discoveryFrameworks: makeNounAccessor(sb, "discovery_frameworks"),
         discoveryCallLogs: makeNounAccessor(sb, "discovery_call_logs"),
         pipelineSettings: makeNounAccessor(sb, "pipeline_settings"),
@@ -205,6 +208,7 @@ function makeDemoLocalDataClient(): DataClient {
         deals: makeDemoLocalNounAccessor("deals"),
         sequences: makeDemoLocalNounAccessor("sequences"),
         signalConsoleAccounts: makeDemoLocalNounAccessor("signal_console_accounts"),
+        signals: makeDemoLocalNounAccessor("signals"),
         discoveryFrameworks: makeDemoLocalNounAccessor("discovery_frameworks"),
         discoveryCallLogs: makeDemoLocalNounAccessor("discovery_call_logs"),
         pipelineSettings: makeDemoLocalNounAccessor("pipeline_settings"),

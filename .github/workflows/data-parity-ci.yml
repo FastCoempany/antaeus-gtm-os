@@ -102,6 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       branch_name: ${{ steps.create.outputs.branch_name }}
+      branch_ref: ${{ steps.create.outputs.branch_ref }}
       db_url: ${{ steps.create.outputs.db_url }}
       api_url: ${{ steps.create.outputs.api_url }}
       anon_key: ${{ steps.create.outputs.anon_key }}
@@ -171,30 +172,37 @@ jobs:
             echo "::warning::Branch reached MIGRATIONS_FAILED state — this is expected when GitHub Automatic branching is OFF (per ADR-005 doctrine). Apply migrations step will run the documented no-op until a Tier 1 retrofit PR picks one of the three candidate strategies."
           fi
 
-          # Resolve connection details. On MIGRATIONS_FAILED branches,
-          # Supabase hasn't published API endpoints yet, so db_url /
-          # api_url / anon_key may all come back empty. That's not a
-          # hard failure — the Apply migrations step is a no-op until
-          # Tier 1 lands a real strategy, and the Realtime tests step
-          # passes via --pass-with-no-tests until @realtime-tagged tests
-          # exist (Step 4 retrofit work).
+          # Resolve connection details + the branch's project_ref.
+          # On MIGRATIONS_FAILED branches, Supabase hasn't published API
+          # endpoints yet, so db_url / api_url / anon_key may all come
+          # back empty. That's not a hard failure — Apply migrations
+          # uses branch_ref + SUPABASE_DB_PASSWORD (which doesn't need
+          # the endpoint URLs), and Realtime tests pass via
+          # --pass-with-no-tests until @realtime-tagged tests exist
+          # (Step 4 retrofit work).
           BRANCH_JSON=$(supabase --experimental branches get "$BRANCH_NAME" \
             --project-ref "$PROJECT_REF" -o json)
+          BRANCH_REF=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('id',''))")
           DB_URL=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('db_url',''))")
           API_URL=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('api_url',''))")
           ANON_KEY=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('anon_key',''))")
+
+          if [ -z "$BRANCH_REF" ]; then
+            echo "::warning::Branch $BRANCH_NAME returned no project_ref (id field empty). Apply migrations will be skipped — without a project_ref we can't link to the branch."
+          fi
 
           if [ -z "$DB_URL" ] || [ -z "$API_URL" ] || [ -z "$ANON_KEY" ]; then
             DB_STATUS=$([ -n "$DB_URL" ] && echo present || echo missing)
             API_STATUS=$([ -n "$API_URL" ] && echo present || echo missing)
             ANON_STATUS=$([ -n "$ANON_KEY" ] && echo present || echo missing)
-            echo "::warning::Branch $BRANCH_NAME returned incomplete connection details (status=$STATUS): db_url=$DB_STATUS, api_url=$API_STATUS, anon_key=$ANON_STATUS. Continuing — Realtime tests pass with 0 tests via --pass-with-no-tests; Apply migrations is a no-op pending Tier 1 strategy decision."
+            echo "::warning::Branch $BRANCH_NAME returned incomplete connection details (status=$STATUS): db_url=$DB_STATUS, api_url=$API_STATUS, anon_key=$ANON_STATUS. Continuing — Apply migrations uses link + DB password (doesn't need URLs); Realtime tests pass with 0 tests via --pass-with-no-tests."
           fi
 
           # Mask whatever secrets we have (no-op if empty)
           [ -n "$DB_URL" ] && echo "::add-mask::$DB_URL" || true
           [ -n "$ANON_KEY" ] && echo "::add-mask::$ANON_KEY" || true
 
+          echo "branch_ref=$BRANCH_REF" >> $GITHUB_OUTPUT
           echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
           echo "api_url=$API_URL" >> $GITHUB_OUTPUT
           echo "anon_key=$ANON_KEY" >> $GITHUB_OUTPUT
@@ -202,40 +210,52 @@ jobs:
       - name: Apply migrations
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_CI_PAT }}
-          PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          BRANCH_REF: ${{ steps.create.outputs.branch_ref }}
+          BRANCH_NAME: ${{ steps.create.outputs.branch_name }}
         run: |
-          # This step is intentionally a NO-OP until a Tier 1 retrofit PR
-          # picks an Apply migrations strategy and ships it.
+          # Apply migrations to the freshly-created preview branch.
           #
-          # Why: pushing migrations to a Supabase preview branch via the CLI
-          # requires switching the linked context to the branch. The CLI
-          # exposes branches via: list / create / get / update / pause /
-          # unpause / delete — but there is NO `branches switch`
-          # subcommand. Alternative paths all require setup we don't have:
-          #   (a) `supabase link --project-ref <branch_ref> --password
-          #       <db_password>` works but needs a DB password we don't
-          #       pass in env. Adding a DB_URL_PASSWORD secret to GitHub
-          #       Actions is the most likely path — Step 2 (Signal Console
-          #       schema migration) decides this.
-          #   (b) `supabase db push --db-url <branch_db_url>` requires the
-          #       branch to have published its endpoints. MIGRATIONS_FAILED
-          #       branches don't publish them. Would require waiting for
-          #       branch to transition out of MIGRATIONS_FAILED somehow
-          #       (Automatic branching ON might do this — but that conflicts
-          #       with ADR-005 doctrine).
-          #   (c) The Supabase Management API can apply migrations directly
-          #       but requires JSON-RPC scaffolding we haven't built.
+          # Strategy: option (a) from the audit doc + Step 0 comment
+          # block — supabase link --project-ref <branch_ref>
+          # --password $SUPABASE_DB_PASSWORD + db push --linked --yes.
           #
-          # Until a strategy is picked, this step logs a notice and
-          # proceeds. Pre-Tier-1 PRs (audits, ADRs, infra-only changes that
-          # touch the data-parity workflow path filter) still go through
-          # the full pipeline; they just don't have migrations to apply
-          # so the no-op is exactly right.
+          # Why option (a):
+          #   - (b) supabase db push --db-url <branch_db_url> needs the
+          #     branch to publish its db_url. On MIGRATIONS_FAILED
+          #     branches (our default state) endpoints aren't published.
+          #   - (c) Supabase Management API direct call needs JSON-RPC
+          #     scaffolding we haven't built.
+          #   - (a) uses CLI commands that already exist + just one new
+          #     GitHub secret (SUPABASE_DB_PASSWORD).
           #
-          # Tier 1 Signal Console Step 2 PR will replace this with the
-          # picked strategy. See:
-          #   deliverables/audit/data-parity-signal-console-2026-05-21.md §"Step 2"
-          echo "::notice::Apply migrations is a no-op until Signal Console Step 2 picks an Apply migrations strategy. See the comment block in .github/workflows/data-parity-ci.yml for the three candidate paths."
+          # Locked by founder direction during Signal Console Step 1
+          # audit approval (2026-05-21).
+
+          if [ -z "$BRANCH_REF" ]; then
+            echo "::warning::No branch_ref available — skipping Apply migrations. Provision step couldn't extract the branch's project_ref. Without it we can't link to the branch."
+            exit 0
+          fi
+
+          if [ -z "$SUPABASE_DB_PASSWORD" ]; then
+            echo "::warning::SUPABASE_DB_PASSWORD secret not set — skipping Apply migrations. Founder must populate this secret per docs/founder-data-parity-ci-setup.md before retrofit PRs can apply migrations to branches."
+            exit 0
+          fi
+
+          echo "Linking CLI context to branch project_ref=$BRANCH_REF (branch_name=$BRANCH_NAME)"
+
+          # supabase link writes to ./supabase/.temp/ to record the
+          # linked project_ref. The --password flag sets the DB
+          # password for the linked context. --yes accepts the
+          # confirmation prompt.
+          supabase link --project-ref "$BRANCH_REF" --password "$SUPABASE_DB_PASSWORD"
+
+          # Push migrations from this checkout's supabase/migrations/
+          # against the linked branch. --linked uses the project_ref
+          # we just linked above. --yes accepts confirmation prompts.
+          supabase db push --linked --yes
+
+          echo "::notice::supabase db push --linked --yes succeeded — branch DB has migration chain applied."
 
   realtime-tests:
     name: Realtime cross-tab tests

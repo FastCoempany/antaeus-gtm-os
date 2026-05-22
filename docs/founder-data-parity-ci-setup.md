@@ -85,6 +85,31 @@ Should return `false` (or `undefined` if Posthog hasn't loaded yet — wait a fe
 
 ---
 
+## Step 5.5 — Add SUPABASE_DB_PASSWORD as a GitHub Actions secret
+
+Added 2026-05-22 as part of Signal Console Step 2 (ADR-005 Apply migrations strategy decision). The data-parity CI workflow needs the Supabase project's DB password to link the CLI context to ephemeral preview branches and push migrations against them.
+
+1. Visit [supabase.com/dashboard/project/wjdqmgxwulqxxxnyuzyl/settings/database](https://supabase.com/dashboard/project/wjdqmgxwulqxxxnyuzyl/settings/database).
+2. Scroll to the **"Database password"** section.
+3. If you have the existing password saved, skip to step 5. Otherwise:
+   - Click **"Reset database password"** (or "Generate new password" — Supabase's button label varies).
+   - Either generate a strong password yourself (32+ chars, mixed) or use Supabase's auto-generate button.
+   - **Copy the password immediately** — Supabase only shows it once.
+   - Click **"Update password"** / **"Save"** to confirm.
+   - Stash the password in your password manager.
+4. Resetting the DB password is **safe for the app** — `VITE_SUPABASE_ANON_KEY` is unaffected (it's a JWT, separate from the DB password). The only thing it breaks is any direct Postgres connections, which we don't have.
+5. Visit [github.com/FastCoempany/antaeus-gtm-os/settings/secrets/actions](https://github.com/FastCoempany/antaeus-gtm-os/settings/secrets/actions).
+6. Click **"New repository secret"**.
+7. **Name:** `SUPABASE_DB_PASSWORD` (exact spelling — the workflow references this name).
+8. **Secret:** paste the password from step 3 (or your saved password).
+9. Click **"Add secret"**.
+
+After this, the data-parity workflow's Apply migrations step can run `supabase link --project-ref <branch_ref> --password $SUPABASE_DB_PASSWORD && supabase db push --linked --yes` against each PR's ephemeral branch.
+
+**Caveat on branch password inheritance:** Supabase preview branches *should* inherit the main project's DB password. If a future workflow run fails with an auth error at the `supabase link` step, the branch may have its own password and we'll need to fetch it from `supabase branches get` output instead. Not blocking until we see it.
+
+---
+
 ## Step 6 — Verify the workflow can provision a branch
 
 This step proves the whole chain works end-to-end before the first real retrofit PR opens.

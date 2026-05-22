@@ -240,6 +240,7 @@ export interface Database {
                     industry: string | null;
                     sector: string | null;
                     heat: number;
+                    heat_computed_at: string | null;
                     last_enriched_at: string | null;
                     data: Json;
                     created_at: string;
@@ -256,6 +257,7 @@ export interface Database {
                     industry?: string | null;
                     sector?: string | null;
                     heat?: number;
+                    heat_computed_at?: string | null;
                     last_enriched_at?: string | null;
                     data?: Json;
                     created_at?: string;
@@ -272,7 +274,69 @@ export interface Database {
                     industry?: string | null;
                     sector?: string | null;
                     heat?: number;
+                    heat_computed_at?: string | null;
                     last_enriched_at?: string | null;
+                    data?: Json;
+                    created_at?: string;
+                    updated_at?: string;
+                };
+            };
+
+            // ─── Phase 4.5 / Tier 1 Signal Console Step 2 (ADR-005) ─────
+            signals: {
+                Row: {
+                    id: string;
+                    account_id: string;
+                    workspace_id: string;
+                    signal_type: string | null;
+                    headline: string | null;
+                    source: string | null;
+                    url: string | null;
+                    published_date: string | null;
+                    fetched_at: string | null;
+                    captured_at: string | null;
+                    confidence: number | null;
+                    is_ai: boolean;
+                    flagged: boolean;
+                    note: string | null;
+                    data: Json;
+                    created_at: string;
+                    updated_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    account_id: string;
+                    workspace_id?: string;
+                    signal_type?: string | null;
+                    headline?: string | null;
+                    source?: string | null;
+                    url?: string | null;
+                    published_date?: string | null;
+                    fetched_at?: string | null;
+                    captured_at?: string | null;
+                    confidence?: number | null;
+                    is_ai?: boolean;
+                    flagged?: boolean;
+                    note?: string | null;
+                    data?: Json;
+                    created_at?: string;
+                    updated_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    account_id?: string;
+                    workspace_id?: string;
+                    signal_type?: string | null;
+                    headline?: string | null;
+                    source?: string | null;
+                    url?: string | null;
+                    published_date?: string | null;
+                    fetched_at?: string | null;
+                    captured_at?: string | null;
+                    confidence?: number | null;
+                    is_ai?: boolean;
+                    flagged?: boolean;
+                    note?: string | null;
                     data?: Json;
                     created_at?: string;
                     updated_at?: string;
@@ -801,6 +865,46 @@ export type Icp = Row<"icps">;
 export type Deal = Row<"deals">;
 export type Sequence = Row<"sequences">;
 export type SignalConsoleAccount = Row<"signal_console_accounts">;
+// ─── Phase 4.5 / Tier 1 Signal Console Step 2 (ADR-005) ─────────────────
+export type SignalRow = Row<"signals">;
+/**
+ * The signals_with_account Postgres view (audit doc §Delta 3). Joins
+ * signal rows with their parent signal_console_accounts row inline so
+ * generators can query signal-decay patterns + account context in one
+ * SQL statement. RLS is inherited from the signals table's
+ * workspace_id policy.
+ *
+ * NOTE: Views aren't part of the auto-generated Database['public']['Tables']
+ * map, so this alias is hand-authored. After Step 2's migration applies,
+ * a `supabase gen types typescript --linked` regen will produce a
+ * Database['public']['Views'] entry; we'll reconcile + replace this alias
+ * with the machine-generated version then.
+ */
+export interface SignalsWithAccountRow {
+    id: string;
+    account_id: string;
+    workspace_id: string;
+    signal_type: string | null;
+    headline: string | null;
+    source: string | null;
+    url: string | null;
+    published_date: string | null;
+    fetched_at: string | null;
+    captured_at: string | null;
+    confidence: number | null;
+    is_ai: boolean;
+    flagged: boolean;
+    note: string | null;
+    data: Json;
+    created_at: string;
+    updated_at: string;
+    account_name: string | null;
+    domain: string | null;
+    ticker: string | null;
+    industry: string | null;
+    account_heat: number;
+    account_heat_computed_at: string | null;
+}
 export type DiscoveryFramework = Row<"discovery_frameworks">;
 export type DiscoveryCallLog = Row<"discovery_call_logs">;
 export type PipelineSettings = Row<"pipeline_settings">;
