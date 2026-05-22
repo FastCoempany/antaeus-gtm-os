@@ -2,7 +2,7 @@ import type {
     RealtimeChannel,
     RealtimePostgresChangesPayload
 } from "@supabase/supabase-js";
-import type { InsertRow, Row, TableName, UpdateRow } from "./database.types";
+import type { InsertRow, Row, TableName, UpdateRow } from "./database-helpers";
 import type { ListOptions, NounAccessor } from "./data-client";
 
 /**

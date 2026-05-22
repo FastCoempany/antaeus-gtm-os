@@ -1,5 +1,6 @@
 import type { Deal, StageId, Stakeholder, StakeholderRole, Momentum, LossReason } from "./deal-shape";
 import { STAGE_IDS, LOSS_REASONS, STAKEHOLDER_ROLES } from "./deal-shape";
+import type { InsertRow, Json } from "@/lib/database-helpers";
 
 /**
  * Bridge between Supabase row shapes (and the Phase 2.3 migration
@@ -209,8 +210,13 @@ export function rowsToDeals(rows: ReadonlyArray<unknown>): ReadonlyArray<Deal> {
 /**
  * Convert a Deal back into the column + jsonb shape that
  * data.deals.insert / .update expects. Wave 3 uses this on save.
+ *
+ * Return type is InsertRow<"deals"> so callers get strict typecheck
+ * against the regen-typed Insert shape. Insert is a superset of
+ * Update (Update widens every column to optional), so the same value
+ * works for both .insert() and .update() calls.
  */
-export function dealToDbWrite(deal: Deal): Record<string, unknown> {
+export function dealToDbWrite(deal: Deal): InsertRow<"deals"> {
     const blob: Record<string, unknown> = {};
     if (deal.nextStep !== undefined) blob.nextStep = deal.nextStep;
     if (deal.momentum !== undefined) blob.momentum = deal.momentum;
@@ -231,7 +237,7 @@ export function dealToDbWrite(deal: Deal): Record<string, unknown> {
         next_step_date: deal.nextStepDate ?? null,
         forecast_category: deal.forecastCategory ?? null,
         loss_reason: deal.lossReason ?? null,
-        data: blob
+        data: blob as Json
     };
 }
 

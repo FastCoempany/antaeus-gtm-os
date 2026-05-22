@@ -9,7 +9,7 @@ import type {
     TableName,
     UpdateRow,
     Workspace
-} from "./database.types";
+} from "./database-helpers";
 import { getSupabaseClient, type AntaeusSupabaseClient } from "./supabase-client";
 import { reportError, trackEvent } from "./observability";
 import {

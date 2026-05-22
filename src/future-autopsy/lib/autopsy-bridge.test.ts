@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { TaskLog } from "./types";
 import {
     KIND_TASK_LOG,
@@ -9,6 +9,7 @@ import {
     taskLogToInsert,
     taskLogToUpdate
 } from "./autopsy-bridge";
+import { buildStudioArtifactRow } from "@/lib/test-helpers/row-builders";
 
 const FULL_LOG: TaskLog = {
     deal_1: {
@@ -36,21 +37,21 @@ describe("looksLikePersistedId", () => {
 
 describe("rowKind", () => {
     it("reads kind", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "future-autopsy.taskLog" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowKind(row)).toBe("future-autopsy.taskLog");
     });
 });
 
 describe("rowToTaskLog", () => {
     it("hydrates a populated row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -60,7 +61,7 @@ describe("rowToTaskLog", () => {
             } as never,
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const log = rowToTaskLog(row);
         expect(log).not.toBeNull();
         expect(log!["deal_1"]?.lastRunAt).toBe("2026-04-02T12:00:00Z");
@@ -72,14 +73,14 @@ describe("rowToTaskLog", () => {
     });
 
     it("returns null for wrong kind", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "territory.focus" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToTaskLog(row)).toBeNull();
     });
 
@@ -88,19 +89,19 @@ describe("rowToTaskLog", () => {
     });
 
     it("returns empty {} when log blob missing", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "future-autopsy.taskLog" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToTaskLog(row)).toEqual({});
     });
 
     it("filters malformed task entries", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -118,7 +119,7 @@ describe("rowToTaskLog", () => {
             } as never,
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const log = rowToTaskLog(row)!;
         expect(Object.keys(log["deal_1"]?.tasks ?? {})).toEqual(["t_good"]);
     });

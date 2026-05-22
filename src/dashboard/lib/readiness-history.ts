@@ -8,7 +8,7 @@ import type {
     VerdictTransition
 } from "@/lib/readiness";
 import { detectTransition } from "@/lib/readiness";
-import type { Json, ReadinessVerdict } from "@/lib/database.types";
+import type { Json, ReadinessVerdict } from "@/lib/database-helpers";
 
 /**
  * Verdict-history persister.

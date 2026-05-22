@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { Approach, TerritoryAccount, Focus } from "./types";
 import {
     accountToInsert,
@@ -18,6 +18,7 @@ import {
     focusToInsert,
     focusToUpdate
 } from "./territory-bridge";
+import { buildStudioArtifactRow } from "@/lib/test-helpers/row-builders";
 
 const FULL_THESIS: Focus = {
     id: "th_1",
@@ -65,33 +66,33 @@ describe("looksLikePersistedId", () => {
 
 describe("rowKind", () => {
     it("reads kind from data blob", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "territory.focus" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowKind(row)).toBe("territory.focus");
     });
 
     it("returns null for missing data", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: null as never,
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowKind(row)).toBeNull();
     });
 });
 
 describe("rowToThesis", () => {
     it("hydrates a focus row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -106,7 +107,7 @@ describe("rowToThesis", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const t = rowToThesis(row);
         expect(t).not.toBeNull();
         expect(t!.title).toBe(FULL_THESIS.title);
@@ -115,14 +116,14 @@ describe("rowToThesis", () => {
     });
 
     it("returns null on wrong kind", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "territory.approach" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToThesis(row)).toBeNull();
     });
 
@@ -134,21 +135,21 @@ describe("rowToThesis", () => {
     });
 
     it("normalizes invalid tier to t1", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "territory.focus", tier: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToThesis(row)!.tier).toBe("t1");
     });
 });
 
 describe("rowToApproach", () => {
     it("hydrates an approach row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -162,28 +163,28 @@ describe("rowToApproach", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const a = rowToApproach(row);
         expect(a).not.toBeNull();
         expect(a!.name).toBe(FULL_APPROACH.name);
     });
 
     it("returns null on wrong kind", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "territory.focus" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToApproach(row)).toBeNull();
     });
 });
 
 describe("rowToAccount", () => {
     it("hydrates an account row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -198,21 +199,21 @@ describe("rowToAccount", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const a = rowToAccount(row);
         expect(a).not.toBeNull();
         expect(a!.name).toBe(FULL_ACCOUNT.name);
     });
 
     it("normalizes invalid disposition to active", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "territory.account", disposition: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAccount(row)!.disposition).toBe("active");
     });
 });
@@ -220,7 +221,7 @@ describe("rowToAccount", () => {
 describe("partitionTerritoryRows", () => {
     it("buckets rows by kind, drops non-territory", () => {
         const rows: Row<"studio_artifacts">[] = [
-            {
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440001",
                 user_id: "u",
                 workspace_id: "w",
@@ -232,31 +233,31 @@ describe("partitionTerritoryRows", () => {
                 },
                 created_at: "2026-04-02T12:00:00Z",
                 updated_at: "2026-04-02T12:00:00Z"
-            },
-            {
+            }),
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440002",
                 user_id: "u",
                 workspace_id: "w",
                 data: { kind: "territory.approach", name: "A" },
                 created_at: "2026-04-02T12:00:00Z",
                 updated_at: "2026-04-02T12:00:00Z"
-            },
-            {
+            }),
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440003",
                 user_id: "u",
                 workspace_id: "w",
                 data: { kind: "territory.account", name: "Acme" },
                 created_at: "2026-04-02T12:00:00Z",
                 updated_at: "2026-04-02T12:00:00Z"
-            },
-            {
+            }),
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440004",
                 user_id: "u",
                 workspace_id: "w",
                 data: { kind: "sourcing.prospect" },
                 created_at: "2026-04-02T12:00:00Z",
                 updated_at: "2026-04-02T12:00:00Z"
-            }
+            })
         ];
         const out = partitionTerritoryRows(rows);
         expect(out.focuses).toHaveLength(1);

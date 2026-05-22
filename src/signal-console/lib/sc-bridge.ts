@@ -3,7 +3,7 @@ import type {
     Json,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type { Account, Signal } from "./types";
 
 /**

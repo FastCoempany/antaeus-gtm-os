@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { SavedIcp } from "./types";
 import {
     extractDataBlob,
@@ -9,6 +9,7 @@ import {
     rowToIcp,
     rowsToIcps
 } from "./icp-bridge";
+import { buildIcpRow } from "@/lib/test-helpers/row-builders";
 
 const FULL: SavedIcp = {
     id: "icp_1730000000_abc",
@@ -50,7 +51,7 @@ describe("looksLikePersistedId", () => {
 
 describe("rowToIcp", () => {
     it("hydrates from a fully populated row", () => {
-        const row: Row<"icps"> = {
+        const row: Row<"icps"> = buildIcpRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "user_1",
             workspace_id: "ws_1",
@@ -75,7 +76,7 @@ describe("rowToIcp", () => {
             },
             created_at: "2026-04-01T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const icp = rowToIcp(row);
         expect(icp).not.toBeNull();
         expect(icp!.id).toBe("550e8400-e29b-41d4-a716-446655440000");
@@ -97,7 +98,7 @@ describe("rowToIcp", () => {
     });
 
     it("falls back from summary to data.statement when summary blank", () => {
-        const row: Row<"icps"> = {
+        const row: Row<"icps"> = buildIcpRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -107,12 +108,12 @@ describe("rowToIcp", () => {
             data: { statement: "from-data-blob", industry: "legal" },
             created_at: "2026-04-01T12:00:00Z",
             updated_at: "2026-04-01T12:00:00Z"
-        };
+        });
         expect(rowToIcp(row)!.statement).toBe("from-data-blob");
     });
 
     it("normalizes invalid role to founder", () => {
-        const row: Row<"icps"> = {
+        const row: Row<"icps"> = buildIcpRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -122,12 +123,12 @@ describe("rowToIcp", () => {
             data: { role: "intern", industry: "legal" },
             created_at: "2026-04-01T12:00:00Z",
             updated_at: "2026-04-01T12:00:00Z"
-        };
+        });
         expect(rowToIcp(row)!.role).toBe("founder");
     });
 
     it("filters malformed quality checks", () => {
-        const row: Row<"icps"> = {
+        const row: Row<"icps"> = buildIcpRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -144,14 +145,14 @@ describe("rowToIcp", () => {
             },
             created_at: "2026-04-01T12:00:00Z",
             updated_at: "2026-04-01T12:00:00Z"
-        };
+        });
         const icp = rowToIcp(row)!;
         expect(icp.qualityChecks).toHaveLength(2);
         expect(icp.qualityChecks[1]?.tone).toBe("warn");
     });
 
     it("handles missing timestamps with sensible fallbacks", () => {
-        const row: Row<"icps"> = {
+        const row: Row<"icps"> = buildIcpRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -161,7 +162,7 @@ describe("rowToIcp", () => {
             data: {},
             created_at: "",
             updated_at: ""
-        };
+        });
         const icp = rowToIcp(row)!;
         expect(icp.createdAt).toBeTruthy();
         expect(icp.updatedAt).toBeTruthy();

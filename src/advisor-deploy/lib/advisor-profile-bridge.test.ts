@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { Advisor } from "./types";
 import {
     advisorToInsert,
@@ -11,6 +11,7 @@ import {
     rowToAdvisor,
     rowsToAdvisors
 } from "./advisor-profile-bridge";
+import { buildStudioArtifactRow } from "@/lib/test-helpers/row-builders";
 
 const FULL: Advisor = {
     id: "adv_1",
@@ -36,21 +37,21 @@ describe("looksLikePersistedId", () => {
 
 describe("rowKind", () => {
     it("reads kind", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "advisor.profile" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowKind(row)).toBe("advisor.profile");
     });
 });
 
 describe("rowToAdvisor", () => {
     it("hydrates a populated row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -67,7 +68,7 @@ describe("rowToAdvisor", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const a = rowToAdvisor(row);
         expect(a).not.toBeNull();
         expect(a!.name).toBe("Sarah Chen");
@@ -76,14 +77,14 @@ describe("rowToAdvisor", () => {
     });
 
     it("returns null for wrong kind", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "territory.focus" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAdvisor(row)).toBeNull();
     });
 
@@ -95,31 +96,31 @@ describe("rowToAdvisor", () => {
     });
 
     it("normalizes invalid tier to t2", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "advisor.profile", tier: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAdvisor(row)!.tier).toBe("t2");
     });
 
     it("normalizes invalid relationship to active", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "advisor.profile", relationship: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAdvisor(row)!.relationship).toBe("active");
     });
 
     it("filters non-string companies", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -129,7 +130,7 @@ describe("rowToAdvisor", () => {
             } as never,
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAdvisor(row)!.companies).toEqual([
             "Meridian",
             "Northstar"
@@ -139,27 +140,17 @@ describe("rowToAdvisor", () => {
 
 describe("rowsToAdvisors", () => {
     it("filters non-advisor.profile rows", () => {
-        const rows = [
-            {
+        const rows: Row<"studio_artifacts">[] = [
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440001",
-                user_id: "u",
-                workspace_id: "w",
-                data: { kind: "advisor.profile", name: "A" },
-                created_at: "2026-04-02T12:00:00Z",
-                updated_at: "2026-04-02T12:00:00Z"
-            },
-            {
+                data: { kind: "advisor.profile", name: "A" }
+            }),
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440002",
-                user_id: "u",
-                workspace_id: "w",
-                data: { kind: "territory.focus" },
-                created_at: "2026-04-02T12:00:00Z",
-                updated_at: "2026-04-02T12:00:00Z"
-            }
+                data: { kind: "territory.focus" }
+            })
         ];
-        expect(
-            rowsToAdvisors(rows as Row<"studio_artifacts">[])
-        ).toHaveLength(1);
+        expect(rowsToAdvisors(rows)).toHaveLength(1);
     });
 });
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { Angle, Touch } from "./types";
 import {
     angleToInsert,
@@ -16,6 +16,7 @@ import {
     touchToInsert,
     touchToUpdate
 } from "./outbound-bridge";
+import { buildSequenceRow } from "@/lib/test-helpers/row-builders";
 
 const FULL: Touch = {
     id: "touch_1730000000_abc",
@@ -53,7 +54,7 @@ describe("looksLikePersistedId", () => {
 
 describe("rowToTouch", () => {
     it("hydrates from a populated row", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -80,7 +81,7 @@ describe("rowToTouch", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const t = rowToTouch(row);
         expect(t).not.toBeNull();
         expect(t!.accountName).toBe("Acme");
@@ -90,7 +91,7 @@ describe("rowToTouch", () => {
     });
 
     it("returns null for non-outbound sequence_key", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -100,7 +101,7 @@ describe("rowToTouch", () => {
             data: {},
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToTouch(row)).toBeNull();
     });
 
@@ -112,7 +113,7 @@ describe("rowToTouch", () => {
     });
 
     it("normalizes invalid persona to vp", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -122,12 +123,12 @@ describe("rowToTouch", () => {
             data: { persona: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToTouch(row)!.persona).toBe("vp");
     });
 
     it("normalizes invalid outcome to null", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -137,7 +138,7 @@ describe("rowToTouch", () => {
             data: { outcome: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToTouch(row)!.outcome).toBeNull();
     });
 });
@@ -191,9 +192,12 @@ describe("touchToInsert", () => {
         expect(typeof insert.data).toBe("object");
     });
 
-    it("clears name when accountName blank", () => {
+    it("falls back to title when accountName blank", () => {
+        // sequences.name is NOT NULL in the schema; bridge falls back
+        // to the derived title rather than emitting null.
         const insert = touchToInsert({ ...FULL, accountName: "" });
-        expect(insert.name).toBeNull();
+        expect(insert.name).toBe(insert.title);
+        expect(typeof insert.name).toBe("string");
     });
 
     it("falls back to 'Outbound touch' for blank content", () => {
@@ -234,7 +238,7 @@ const FULL_ANGLE: Angle = {
 
 describe("rowToAngle", () => {
     it("hydrates a populated row", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -256,7 +260,7 @@ describe("rowToAngle", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const a = rowToAngle(row);
         expect(a).not.toBeNull();
         expect(a!.company).toBe("Acme");
@@ -265,7 +269,7 @@ describe("rowToAngle", () => {
     });
 
     it("returns null for non-angle sequence_key", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -275,7 +279,7 @@ describe("rowToAngle", () => {
             data: {},
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAngle(row)).toBeNull();
     });
 
@@ -332,9 +336,12 @@ describe("angleToInsert / angleToUpdate", () => {
         expect(insert.title).toBe("Hi Jane,");
     });
 
-    it("clears name when company blank", () => {
+    it("falls back to title when company blank", () => {
+        // sequences.name is NOT NULL in the schema; bridge falls back
+        // to the derived title rather than emitting null.
         const insert = angleToInsert({ ...FULL_ANGLE, company: "" });
-        expect(insert.name).toBeNull();
+        expect(insert.name).toBe(insert.title);
+        expect(typeof insert.name).toBe("string");
     });
 
     it("falls back title to 'Saved angle' for blank email", () => {

@@ -11,7 +11,7 @@ import {
     isSessionLoaded,
     session
 } from "./state";
-import type { Json, Workspace } from "@/lib/database.types";
+import type { Json, Workspace } from "@/lib/database-helpers";
 import type { DataClient, NounAccessor } from "@/lib/data-client";
 
 // ─── Mock DataClient ──────────────────────────────────────────────

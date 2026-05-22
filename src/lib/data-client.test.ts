@@ -5,7 +5,7 @@ import {
     __setSupabaseClientForTests,
     type AntaeusSupabaseClient
 } from "./supabase-client";
-import type { Deal } from "./database.types";
+import type { Deal } from "./database-helpers";
 
 /**
  * Phase 2.2 data-client tests.
@@ -215,11 +215,17 @@ describe("NounAccessor — get/insert/update/remove", () => {
         mock.setNextResult({ data: row, error: null });
         const data = createDataClient(mock.client);
 
-        const result = await data.deals.insert({ stage: "prospect" });
+        const result = await data.deals.insert({
+            account_name: "Test",
+            stage: "prospect"
+        });
         expect(result).toEqual(row);
 
         const insert = mock.calls.find((c) => c.op === "insert");
-        expect(insert?.args[0]).toEqual({ stage: "prospect" });
+        expect(insert?.args[0]).toEqual({
+            account_name: "Test",
+            stage: "prospect"
+        });
     });
 
     it("update() patches by id and returns the updated row", async () => {

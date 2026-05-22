@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { Prospect, QueryCard } from "./types";
 import {
     KIND_PROSPECT,
@@ -14,6 +14,7 @@ import {
     rowToProspect,
     rowToQueryCard
 } from "./sourcing-bridge";
+import { buildStudioArtifactRow } from "@/lib/test-helpers/row-builders";
 
 const FULL_CARD: QueryCard = {
     id: "qc_1",
@@ -52,21 +53,21 @@ describe("looksLikePersistedId", () => {
 
 describe("rowKind", () => {
     it("reads kind from data blob", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "sourcing.queryCard" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowKind(row)).toBe("sourcing.queryCard");
     });
 });
 
 describe("rowToQueryCard", () => {
     it("hydrates a query-card row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -80,7 +81,7 @@ describe("rowToQueryCard", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const c = rowToQueryCard(row);
         expect(c).not.toBeNull();
         expect(c!.platform).toBe("linkedin");
@@ -88,33 +89,33 @@ describe("rowToQueryCard", () => {
     });
 
     it("returns null on wrong kind", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "sourcing.prospect" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToQueryCard(row)).toBeNull();
     });
 
     it("normalizes invalid platform to linkedin", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "sourcing.queryCard", platform: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToQueryCard(row)!.platform).toBe("linkedin");
     });
 });
 
 describe("rowToProspect", () => {
     it("hydrates a prospect row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -132,7 +133,7 @@ describe("rowToProspect", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const p = rowToProspect(row);
         expect(p).not.toBeNull();
         expect(p!.accountName).toBe(FULL_PROSPECT.accountName);
@@ -140,26 +141,26 @@ describe("rowToProspect", () => {
     });
 
     it("normalizes invalid stage to captured", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "sourcing.prospect", stage: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToProspect(row)!.stage).toBe("captured");
     });
 
     it("normalizes invalid leverage to cold", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "sourcing.prospect", leverage: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToProspect(row)!.leverage).toBe("cold");
     });
 });
@@ -167,30 +168,30 @@ describe("rowToProspect", () => {
 describe("partitionSourcingRows", () => {
     it("buckets rows by kind, drops other kinds", () => {
         const rows: Row<"studio_artifacts">[] = [
-            {
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440001",
                 user_id: "u",
                 workspace_id: "w",
                 data: { kind: "sourcing.queryCard", platform: "linkedin" },
                 created_at: "2026-04-02T12:00:00Z",
                 updated_at: "2026-04-02T12:00:00Z"
-            },
-            {
+            }),
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440002",
                 user_id: "u",
                 workspace_id: "w",
                 data: { kind: "sourcing.prospect" },
                 created_at: "2026-04-02T12:00:00Z",
                 updated_at: "2026-04-02T12:00:00Z"
-            },
-            {
+            }),
+            buildStudioArtifactRow({
                 id: "550e8400-e29b-41d4-a716-446655440003",
                 user_id: "u",
                 workspace_id: "w",
                 data: { kind: "territory.focus" },
                 created_at: "2026-04-02T12:00:00Z",
                 updated_at: "2026-04-02T12:00:00Z"
-            }
+            })
         ];
         const out = partitionSourcingRows(rows);
         expect(out.queryCards).toHaveLength(1);

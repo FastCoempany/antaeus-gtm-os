@@ -3,7 +3,7 @@ import type {
     Json,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type { LearningEntry, Negotiation } from "./types";
 
 /**
@@ -100,6 +100,9 @@ export function bagToInsert(
     bag: NegotiationWorkspaceBag
 ): InsertRow<"studio_artifacts"> {
     return {
+        studio: "negotiation",
+        artifact_type: "workspace",
+        title: "Negotiation workspace",
         data: {
             kind: KIND_NEGOTIATION_WORKSPACE,
             negotiations: bag.negotiations,

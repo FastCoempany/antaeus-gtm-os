@@ -10,7 +10,7 @@
  * supabase/migrations/20260519180000_workspace_sessions.sql
  */
 
-import type { Json } from "@/lib/database.types";
+import type { Json } from "@/lib/database-helpers";
 
 /**
  * The set of objects an operator can focus. Maps to canon §2 sacred

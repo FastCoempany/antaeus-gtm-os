@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { AgendaSnapshot } from "./types";
 import {
     extractDataBlob,
@@ -8,6 +8,7 @@ import {
     rowsToSnapshots,
     snapshotToInsert
 } from "./planner-bridge";
+import { buildDiscoveryCallLogRow } from "@/lib/test-helpers/row-builders";
 
 const FULL: AgendaSnapshot = {
     contact: "Jane",
@@ -33,7 +34,7 @@ const FULL: AgendaSnapshot = {
 
 describe("rowToSnapshot", () => {
     it("hydrates a populated row", () => {
-        const row: Row<"discovery_call_logs"> = {
+        const row: Row<"discovery_call_logs"> = buildDiscoveryCallLogRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -42,7 +43,7 @@ describe("rowToSnapshot", () => {
             data: extractDataBlob(FULL) as never,
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const snap = rowToSnapshot(row);
         expect(snap).not.toBeNull();
         expect(snap!.contact).toBe("Jane");
@@ -53,7 +54,7 @@ describe("rowToSnapshot", () => {
     });
 
     it("returns null for non-discovery-agenda log_type", () => {
-        const row: Row<"discovery_call_logs"> = {
+        const row: Row<"discovery_call_logs"> = buildDiscoveryCallLogRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -62,7 +63,7 @@ describe("rowToSnapshot", () => {
             data: {},
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToSnapshot(row)).toBeNull();
     });
 
@@ -76,7 +77,7 @@ describe("rowToSnapshot", () => {
     });
 
     it("normalizes invalid persona to cxo", () => {
-        const row: Row<"discovery_call_logs"> = {
+        const row: Row<"discovery_call_logs"> = buildDiscoveryCallLogRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -85,12 +86,12 @@ describe("rowToSnapshot", () => {
             data: { persona: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToSnapshot(row)!.persona).toBe("cxo");
     });
 
     it("falls back preparedAt to created_at when blob blank", () => {
-        const row: Row<"discovery_call_logs"> = {
+        const row: Row<"discovery_call_logs"> = buildDiscoveryCallLogRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -99,7 +100,7 @@ describe("rowToSnapshot", () => {
             data: {},
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToSnapshot(row)!.preparedAt).toBe("2026-04-02T12:00:00Z");
     });
 });
