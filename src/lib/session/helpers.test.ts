@@ -113,6 +113,7 @@ function makeMockDataClient(opts: {
         deals: {} as never,
         sequences: {} as never,
         signalConsoleAccounts: {} as never,
+        signals: {} as never,
         discoveryFrameworks: {} as never,
         discoveryCallLogs: {} as never,
         pipelineSettings: {} as never,

@@ -621,6 +621,11 @@ function toAccessorName(table: TableName): string {
         deals: "deals",
         sequences: "sequences",
         signal_console_accounts: "signalConsoleAccounts",
+        // Phase 4.5 Signal Console Step 2 (ADR-005). New signals table
+        // has no 2026-04-24 migration-blob counterpart — it ships
+        // empty and gets populated by Step 3 dual-write + future
+        // generator writes.
+        signals: "signals",
         discovery_frameworks: "discoveryFrameworks",
         discovery_call_logs: "discoveryCallLogs",
         pipeline_settings: "pipelineSettings",
