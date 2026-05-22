@@ -23,6 +23,23 @@
     --sc-accent-red: #b4261f;
     --sc-border: rgba(10, 28, 64, 0.1);
     --sc-border-strong: rgba(10, 28, 64, 0.25);
+
+    /* Aliases for legacy variable names referenced throughout this
+     * file (--sc-orange / --sc-rule / --sc-navy). Without these
+     * aliases, the var() lookups fall through to invalid CSS, which
+     * silently strips background + border declarations on
+     * .sc-add-btn--primary. That rendered the "+ Add account" button
+     * as white text on transparent background — nearly invisible on
+     * the cream field. Latent since the button shipped; surfaced
+     * 2026-05-22 when Step 3 / Wave 5 added the Enrich-All button
+     * next to it and the contrast became obvious.
+     *
+     * Future CSS cleanup can rename the references in place; for now
+     * these aliases restore the intended rendering without touching
+     * the existing rule selectors. */
+    --sc-orange: var(--sc-accent-orange);
+    --sc-rule: var(--sc-border);
+    --sc-navy: var(--sc-ink);
 }
 
 * {
