@@ -1,6 +1,7 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { reportError, trackEvent } from "@/lib/observability";
+import { isRoomParityWriteEnabled } from "@/lib/data-parity-flags";
 import {
     accountToInsert,
     accountToUpdate,
@@ -8,8 +9,23 @@ import {
     rowToAccount,
     rowsToAccounts
 } from "./sc-bridge";
-import type { Account } from "./types";
-import { allAccounts, removeAccount, setAllAccounts, upsertAccount } from "../state";
+import {
+    looksLikePersistedSignalId,
+    rowToSignal,
+    signalToInsert,
+    signalToUpdate
+} from "./signals-bridge";
+import type { Account, Signal } from "./types";
+import {
+    addSignalToAccount,
+    allAccounts,
+    removeAccount,
+    removeSignalFromAccount,
+    setAccountSignals,
+    setAllAccounts,
+    updateSignalInAccount,
+    upsertAccount
+} from "../state";
 
 /**
  * Signal Console cloud persistence (Supabase + realtime + first-sync
@@ -206,6 +222,222 @@ export async function deleteAccountInCloud(id: string): Promise<void> {
             accountId: id
         });
     }
+}
+
+// ─── Account delete dual-write ─────────────────────────────────────────
+
+/**
+ * Delete an Account end-to-end: drops the local state copy AND
+ * propagates to Supabase. The user-facing "Remove from radar" action
+ * routes here. Safe on legacy ids (the cloud call is a no-op when the
+ * row was never synced).
+ */
+export async function deleteAccount(id: string): Promise<void> {
+    removeAccount(id);
+    await deleteAccountInCloud(id);
+    trackEvent("signal_console_account_delete", { accountId: id });
+}
+
+// ─── Signal CRUD (Step 3 dual-write) ───────────────────────────────────
+//
+// Operator-facing signal mutations (add / flag / unflag / remove) dual-
+// write to the `signals` Postgres table when the parity flag is on.
+// When off, callers stay on the legacy `account.data.signals[]` blob
+// path. The in-memory `Account.signals[]` is still the read source
+// until Step 4 flips reads.
+//
+// Each function:
+//   - Checks the feature flag — no-op if off
+//   - Checks the account id is a uuid — no-op for legacy-only accounts
+//     that never reached the cloud (they only have data.signals[]
+//     entries until the parent account is upserted)
+//   - Catches + reports via Sentry; never throws
+
+/**
+ * Insert a Signal into the cloud `signals` table, FK-linked to its
+ * parent account. Returns the persisted Signal (with server-minted
+ * uuid for inputs that had a legacy id), or null when the write was
+ * skipped or failed.
+ *
+ * Called from state actions that add a signal to an account (manual
+ * add, enrich-all). Local upsert into Account.signals[] happens
+ * first; this propagates to Supabase.
+ */
+export async function addSignalToCloud(
+    accountId: string,
+    signal: Signal
+): Promise<Signal | null> {
+    if (!clientRef) return null;
+    if (!isRoomParityWriteEnabled("signalConsole")) return null;
+    if (!looksLikePersistedId(accountId)) {
+        // Parent account hasn't synced to cloud yet — the signals row
+        // would fail the FK constraint. Skip cleanly; the signal still
+        // lives in account.data.signals[] locally.
+        return null;
+    }
+    try {
+        const row = await clientRef.signals.insert(
+            signalToInsert(signal, accountId)
+        );
+        const persisted = rowToSignal(row);
+        if (persisted) {
+            trackEvent("signal_console_signal_insert", {
+                accountId,
+                type: persisted.type ?? null,
+                is_ai: persisted.is_ai === true
+            });
+            return persisted;
+        }
+        return null;
+    } catch (err) {
+        reportError(err, {
+            op: "signal-console.addSignalToCloud",
+            accountId,
+            signalId: signal.id
+        });
+        return null;
+    }
+}
+
+/**
+ * Patch an existing Signal in the cloud. Used by operator-facing
+ * flag / note edits. Returns the updated Signal or null on failure.
+ *
+ * No-op for legacy-id Signals (never synced) — those edits stay
+ * local until the next bulk migrate.
+ */
+export async function updateSignalInCloud(
+    signal: Signal
+): Promise<Signal | null> {
+    if (!clientRef) return null;
+    if (!isRoomParityWriteEnabled("signalConsole")) return null;
+    if (!looksLikePersistedSignalId(signal.id)) return null;
+    try {
+        const row = await clientRef.signals.update(
+            signal.id,
+            signalToUpdate(signal)
+        );
+        const persisted = rowToSignal(row);
+        if (persisted) {
+            trackEvent("signal_console_signal_update", {
+                signalId: signal.id,
+                flagged: persisted.flagged === true
+            });
+            return persisted;
+        }
+        return null;
+    } catch (err) {
+        reportError(err, {
+            op: "signal-console.updateSignalInCloud",
+            signalId: signal.id
+        });
+        return null;
+    }
+}
+
+/**
+ * Delete a Signal from the cloud. Local removal from
+ * account.signals[] already happened; this propagates to Supabase.
+ *
+ * No-op for legacy-id Signals.
+ */
+export async function deleteSignalFromCloud(signalId: string): Promise<void> {
+    if (!clientRef) return;
+    if (!isRoomParityWriteEnabled("signalConsole")) return;
+    if (!looksLikePersistedSignalId(signalId)) return;
+    try {
+        await clientRef.signals.remove(signalId);
+        trackEvent("signal_console_signal_delete", { signalId });
+    } catch (err) {
+        reportError(err, {
+            op: "signal-console.deleteSignalFromCloud",
+            signalId
+        });
+    }
+}
+
+// ─── Operator-facing signal orchestrators (local + cloud) ──────────────
+//
+// Compose the local state primitive with the cloud write. UI calls
+// these; legacy data.signals[] readers stay consistent because the
+// in-memory Account.signals[] is updated synchronously before the
+// cloud round-trip resolves.
+//
+// On cloud success, if the server minted a new uuid for the signal
+// (because the input had a legacy id), the local entry is swapped to
+// the persisted Signal so subsequent updates can target the uuid.
+
+/**
+ * Add a Signal to an account — local + cloud.
+ *
+ * Returns the persisted Signal (with uuid) on cloud success, or the
+ * original input when cloud is skipped/fails. Local state is updated
+ * either way.
+ */
+export async function addSignal(
+    accountId: string,
+    signal: Signal
+): Promise<Signal> {
+    addSignalToAccount(accountId, signal);
+    const persisted = await addSignalToCloud(accountId, signal);
+    if (persisted && persisted.id !== signal.id) {
+        // Swap the local id for the server-minted uuid.
+        removeSignalFromAccount(accountId, signal.id);
+        addSignalToAccount(accountId, persisted);
+        return persisted;
+    }
+    return signal;
+}
+
+/**
+ * Patch a Signal in-place (typically operator-flagged or note edits).
+ * Updates local first, then propagates to the cloud.
+ */
+export async function patchSignal(
+    accountId: string,
+    signal: Signal
+): Promise<Signal> {
+    updateSignalInAccount(accountId, signal);
+    const persisted = await updateSignalInCloud(signal);
+    if (persisted) {
+        updateSignalInAccount(accountId, persisted);
+        return persisted;
+    }
+    return signal;
+}
+
+/**
+ * Remove a Signal from an account — local + cloud.
+ */
+export async function deleteSignal(
+    accountId: string,
+    signalId: string
+): Promise<void> {
+    removeSignalFromAccount(accountId, signalId);
+    await deleteSignalFromCloud(signalId);
+}
+
+/**
+ * Replace an account's signals[] wholesale and dual-write each new
+ * signal. Used by the enrich-all flow (Wave 4): a fresh enrichment
+ * call returns a complete signals list, we swap them in locally and
+ * fire bulk inserts to the cloud.
+ *
+ * Returns the resolved Signal[] with any server-minted uuids in
+ * place. Skipped/failed cloud writes leave the local entry as-is.
+ */
+export async function replaceAccountSignals(
+    accountId: string,
+    signals: ReadonlyArray<Signal>
+): Promise<ReadonlyArray<Signal>> {
+    setAccountSignals(accountId, signals);
+    const resolved: Signal[] = [];
+    for (const sig of signals) {
+        const persisted = await addSignalToCloud(accountId, sig);
+        resolved.push(persisted ?? sig);
+    }
+    setAccountSignals(accountId, resolved);
+    return resolved;
 }
 
 /**

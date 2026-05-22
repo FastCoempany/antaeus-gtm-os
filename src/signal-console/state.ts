@@ -1,5 +1,5 @@
 import { computed, effect, signal, type ReadonlySignal, type Signal } from "@preact/signals";
-import type { Account } from "./lib/types";
+import type { Account, Signal as ScSignal } from "./lib/types";
 import { saveAccounts } from "./lib/persistence";
 import { publishHealthSnapshot } from "./lib/health-snapshot";
 
@@ -93,6 +93,97 @@ export function removeAccount(id: string): void {
     if (idx === -1) return;
     const next = existing.slice();
     next.splice(idx, 1);
+    allAccounts.value = next;
+}
+
+// ─── Local signal mutations ─────────────────────────────────────────────
+// These are pure local primitives that mutate the in-memory
+// Account.signals[] array. The cloud-write orchestrators in
+// cloud-persistence.ts call these alongside their Supabase writes.
+
+/**
+ * Add a Signal to an account's signals[] array (newest first).
+ * Local-only. Use addSignal (in cloud-persistence) for the dual-write
+ * orchestrator.
+ *
+ * No-op when the account isn't found (caller error; the UI should
+ * never address a deleted account).
+ */
+export function addSignalToAccount(accountId: string, signal: ScSignal): void {
+    const existing = allAccounts.value;
+    const idx = existing.findIndex((a) => a.id === accountId);
+    if (idx === -1) return;
+    const account = existing[idx]!;
+    const next = existing.slice();
+    next[idx] = {
+        ...account,
+        signals: [signal, ...account.signals]
+    };
+    allAccounts.value = next;
+}
+
+/**
+ * Patch a Signal in an account's signals[] array by id. Common patch:
+ * `{ flagged: true }`, `{ note: "operator note" }`. Caller passes the
+ * full updated Signal; this replaces in place.
+ *
+ * No-op when account or signal isn't found.
+ */
+export function updateSignalInAccount(
+    accountId: string,
+    signal: ScSignal
+): void {
+    const existing = allAccounts.value;
+    const aIdx = existing.findIndex((a) => a.id === accountId);
+    if (aIdx === -1) return;
+    const account = existing[aIdx]!;
+    const sIdx = account.signals.findIndex((s) => s.id === signal.id);
+    if (sIdx === -1) return;
+    const nextSignals = account.signals.slice();
+    nextSignals[sIdx] = signal;
+    const next = existing.slice();
+    next[aIdx] = { ...account, signals: nextSignals };
+    allAccounts.value = next;
+}
+
+/**
+ * Remove a Signal from an account's signals[] array. No-op when not
+ * found.
+ */
+export function removeSignalFromAccount(
+    accountId: string,
+    signalId: string
+): void {
+    const existing = allAccounts.value;
+    const aIdx = existing.findIndex((a) => a.id === accountId);
+    if (aIdx === -1) return;
+    const account = existing[aIdx]!;
+    const sIdx = account.signals.findIndex((s) => s.id === signalId);
+    if (sIdx === -1) return;
+    const nextSignals = account.signals.slice();
+    nextSignals.splice(sIdx, 1);
+    const next = existing.slice();
+    next[aIdx] = { ...account, signals: nextSignals };
+    allAccounts.value = next;
+}
+
+/**
+ * Replace an account's `signals[]` wholesale. Used by the enrich-all
+ * flow to swap in a fresh enrichment result without per-signal
+ * splicing.
+ *
+ * No-op when account isn't found.
+ */
+export function setAccountSignals(
+    accountId: string,
+    signals: ReadonlyArray<ScSignal>
+): void {
+    const existing = allAccounts.value;
+    const idx = existing.findIndex((a) => a.id === accountId);
+    if (idx === -1) return;
+    const account = existing[idx]!;
+    const next = existing.slice();
+    next[idx] = { ...account, signals };
     allAccounts.value = next;
 }
 
