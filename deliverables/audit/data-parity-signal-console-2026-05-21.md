@@ -3,7 +3,7 @@
 **Date:** 2026-05-21
 **Phase:** 4.5 / Tier 1 / Room 1 of 17 (per ADR-005 §"Room priority order")
 **Step:** 1 — Audit (per ADR-005 §"Per-room retrofit pattern")
-**Status:** Draft pending founder review
+**Status:** Approved 2026-05-21
 
 This is the Step 1 deliverable that ADR-005 requires before any code lands. It maps every legacy `gtmos_*` localStorage key the Signal Console reads or writes to the corresponding `data.<noun>` accessor, identifies schema deltas that Step 2 will need to ship, and documents the existing partial cloud-sync (PR #43 from 2026-05-01) that Step 3+ will supersede.
 
@@ -293,35 +293,57 @@ Every place in `src/signal-console/` that mutates state and needs a correspondin
 | 4 | `state.ts:setAllAccounts(...)` | Bulk replace (rare; used in boot + import flows) | ❌ localStorage only | Decide: cloud bulk-insert OR refuse (this is a destructive op) |
 | 5 | Signal additions (currently only via `data.signals[]` mutation through `upsertAccount`) | Add signal to account | ❌ localStorage only | Cleanest path: write to new `signals` table (Delta 1) directly, not as part of the account's data blob |
 | 6 | Heat recomputes | Update `signal_console_accounts.heat` snapshot | ❌ localStorage only (and not really needed — see Delta 2) | Optional: write `heat` + `heat_computed_at` on save |
-| 7 | Enrichment results | Add enrichment data | ❌ enrich-all flow is deferred per CLAUDE.md | Out of scope for Signal Console retrofit; revisit when enrichment service migrates |
+| 7 | Enrichment results (enrich-all flow) | Add new signals + enriched account fields | ❌ legacy room is currently the only path; new room doesn't have it wired | **IN SCOPE.** Wire the enrich-all flow into the new room as part of Step 3. Enrichment results write signals to the new `signals` table (Delta 1) and update account fields (last_enriched_at, ticker, domain, etc.) via `data.signalConsoleAccounts.update`. The external enrichment service itself stays where it is (`enrichment-server/`); only the persistence path changes. |
 
 ---
 
 ## Step ordering recommendation
 
-Refining the ADR-005 5-step lifecycle for Signal Console specifically:
+Refining the ADR-005 5-step lifecycle for Signal Console specifically, plus a prerequisite workflow-hardening PR per founder direction:
+
+### Step 0 — Workflow hardening (separate PR, lands before Step 2)
+**Why this is now its own PR:** PR #137 verification surfaced four real bugs in `data-parity-ci.yml` that we patched on a throwaway branch. Those fixes weren't merged to main. The first retrofit PR to land a real migration (Step 2 below) would re-discover all of them. Better to land the resilience fixes once, on their own focused PR, and have Step 2 be the first PR that exercises a *working* workflow.
+
+**Scope:**
+- Carry forward from the test-branch fixes (preserved in this session's history):
+  - `data-parity-ci.yml`: accept `MIGRATIONS_FAILED` as a "proceed past polling" state (with workflow-level warning)
+  - `data-parity-ci.yml`: connection-details extraction is non-fatal — emit `::warning::` listing which fields are missing, continue
+  - `data-parity-ci.yml`: Apply migrations step is a documented no-op with three candidate paths called out in inline comments (link-with-password / db-url / Management API)
+  - `supabase/migrations/20260519180002_heartbeat_schedule.sql`: wrap `create extension pg_cron / pg_net` in `DO ... EXCEPTION` blocks that catch `insufficient_privilege` / `feature_not_supported` and emit a notice instead of failing (preview branches lack superuser)
+
+**Not in scope (deferred to Signal Console Step 2 when it's actually needed):**
+- Solving the "how do we actually apply migrations to a branch" problem. Step 2 picks one of the three candidate paths and ships it.
+
+**Estimated PR size:** small (workflow YAML + one migration file edit + commit).
 
 ### Step 1 — Audit (this doc)
-**Status:** drafting. PR-only doc deliverable.
+**Status:** approved 2026-05-21. PR-only doc deliverable.
 
 ### Step 2 — Schema additions
 **Scope:**
-- New migration `<timestamp>_signal_console_signals_table.sql` adding the `signals` table + indexes + RLS policies + realtime publication
-- Optional: `heat_computed_at` companion column on `signal_console_accounts` with annotation
-- Regenerate `src/lib/database.types.ts` via `supabase gen types typescript --linked`
-- Update `lib/sc-bridge.ts` to handle the new `signals` table shape (back-compat reads from data.signals[] AND new table)
-- This PR also lands the workflow fixes (pg_cron EXCEPTION guards + MIGRATIONS_FAILED tolerance + non-fatal extraction + the alternative Apply migrations strategy) that we identified during PR #137 verification — the first retrofit PR is what actually exercises the workflow end-to-end with real schema changes, so it's the right PR to harden the workflow against the realities we discovered.
+- New migration `<timestamp>_signal_console_signals_table.sql` adding the `signals` table + indexes + RLS policies + realtime publication (per Delta 1)
+- Optional companion column `heat_computed_at` on `signal_console_accounts` with comment annotation (per Delta 2)
+- New view `signals_with_account` joining account context inline (per "deliberately doesn't decide" §3 — approved)
+- Regenerate `src/lib/database.types.ts` via `supabase gen types typescript --linked > src/lib/database.types.ts` (machine-generated only per ADR-005 resolution 2)
+- Update `lib/sc-bridge.ts` to handle the new `signals` table shape (back-compat reads from data.signals[] AND new table; writes still go to data.signals[] during Step 3 dual-write)
+- This PR is the first one that actually exercises the data-parity workflow end-to-end with real schema changes. With Step 0 already landed, this PR's workflow run should green out at the new "MIGRATIONS_FAILED accepted + Apply migrations no-op" state and the founder confirms the workflow is now durable.
+- Decide and ship the actual Apply migrations strategy (one of the three candidate paths from Step 0's comment block). Most likely: pass `DB_URL_PASSWORD` as a GitHub Actions secret + run `supabase link --project-ref <branch_ref> --password $DB_URL_PASSWORD` before `db push --linked --yes`.
 
-**Estimated PR size:** medium (migration + schema-types regen + bridge update + 3-5 tests + workflow hardening).
+**Estimated PR size:** medium (migration + schema-types regen + bridge update + 3-5 tests + Apply migrations strategy).
 
 ### Step 3 — Dual-write
 **Scope:**
-- Layer cloud writes onto every mutation site in the inventory above (sites 2-5 of the table; site 1 is already done; sites 6-7 are out of scope or optional)
+- Layer cloud writes onto every mutation site in the inventory above:
+  - Site 2 (state.ts `upsertAccount`) → `data.signalConsoleAccounts` upsert
+  - Site 3 (state.ts `removeAccount`) → call `deleteAccountInCloud` (already exists in cloud-persistence.ts, just not wired)
+  - Site 4 (state.ts `setAllAccounts`) → decision point (cloud bulk-insert OR refuse; see audit "Mutation site inventory")
+  - Site 5 (signal additions) → `data.signals.insert` to the new table from Step 2 Delta 1
+  - Site 7 (**enrich-all flow**) → folded in per founder direction: wire enrich-all results into the new room, write enriched signals to `data.signals.insert` + account fields via `data.signalConsoleAccounts.update`. The external enrichment service (`enrichment-server/`) stays as-is; only the persistence destination changes.
 - Feature flag `signal_console_data_parity_write` from `data-parity-flags.ts` registry gates the new write path
-- New tests assert that every localStorage write also produces a `data.signalConsoleAccounts.*` call (or `data.signals.*` for signal additions)
+- New tests assert that every localStorage write also produces a `data.signalConsoleAccounts.*` or `data.signals.*` call
 - Health snapshot publishing continues to write to `gtmos_signal_room_health` (Dashboard Step 5 retires this)
 
-**Estimated PR size:** medium.
+**Estimated PR size:** medium-large (enrich-all wiring adds material complexity vs. a bare retrofit).
 
 ### Step 4 — Flip-read
 **Scope:**
@@ -340,10 +362,11 @@ Refining the ADR-005 5-step lifecycle for Signal Console specifically:
 - Coordinate with Dashboard Step 5 to retire `gtmos_signal_room_health` (or land Signal Console's Step 5 first and have Dashboard's snapshot-aggregator gracefully tolerate the key going away)
 - Both retrofit flags retired from Posthog
 - Update `data-parity-flags.ts` registry to mark Signal Console at parity
+- Retire `gtmos_sc_v4` mapping from the data-migration tool's per-noun mappers (per "deliberately doesn't decide" §4 — approved)
 
 **Estimated PR size:** small.
 
-**Total estimated retrofit:** ~5 PRs over ~2 weeks of founder-paced shipping. PR #43's prior work shaves probably 2-3 days off vs. starting greenfield.
+**Total estimated retrofit:** ~6 PRs over ~2-3 weeks of founder-paced shipping (Step 0 + 5 steps; enrich-all wiring in Step 3 adds material complexity vs. the original ~5-PR / 2-week estimate). PR #43's prior work still shaves ~2-3 days off vs. starting greenfield.
 
 ---
 
@@ -365,20 +388,27 @@ These four questions need a sentence-each answer from the founder before Step 2 
 
 ## Approval
 
-**Status:** Draft pending founder review.
+**Status:** Approved 2026-05-21.
 
-Open questions for founder before APPROVED status:
+### Resolutions on the four open questions
 
-1. Do you accept the four "deliberately doesn't decide" items above with my recommendations? (Or push back on any.)
-2. Step 2 PR will also include the workflow hardening (carry-forward of fixes we identified during PR #137 verification). Should those land in Step 2 or as a separate "data-parity-ci hardening" PR first? My recommendation: bundle into Step 2, since Step 2's migration is the first PR that actually triggers the data-parity workflow with real schema. Hardening it within the same PR keeps the verification + fix in one place.
-3. The `signals` table will hold 100s of signals per workspace × multiple workspaces. Are you OK with that growth pattern under the Supabase Pro tier's row/connection limits? My read: yes, well within budget at our scale. But surfacing for explicit confirmation since this is the first new table since the Phase A orchestration layer.
-4. Should this audit doc reference the legacy `enrich-all` flow as a future-Step concern, or is enrichment a separate phase entirely? My recommendation: separate phase. Enrichment is an external API integration with its own lifecycle; folding it into the per-room retrofit muddies both. ADR-005 didn't mention enrichment; I propose we add a future ADR-006 (or whatever number) specifically for "enrichment service migration" post-Phase-4.5.
+1. **"Deliberately doesn't decide" items.** All four recommendations approved as proposed:
+   - Heat stays in `lib/heat.ts` (no Postgres generated column).
+   - `signals` table uses `flagged: boolean` for soft dismissal (no separate archive column).
+   - Ship `signals_with_account` Postgres view as part of Step 2 so generators query joined context inline.
+   - Retire `gtmos_sc_v4` from the data-migration tool's `gtmos_*` mappings during Step 5 cleanup.
 
-**Founder approval block** (filled in at approval):
+2. **Workflow hardening location.** Separate PR (Step 0 above) lands BEFORE Step 2. Resilience fixes get their own focused PR; Step 2 inherits a working workflow and only has to solve the still-open "actually apply migrations" question.
 
-- Date approved:
-- Conditions / amendments:
-- Signed:
+3. **`signals` table at scale.** Confirmed fine within the Supabase Pro tier budget. Proceed.
+
+4. **`enrich-all` migration.** Folded into Signal Console's per-room retrofit (Step 3), NOT a separate future ADR. Enrich-all wiring lands when Step 3's cloud writes ship, with enrichment results writing signals to the new `signals` table from Step 2. The external enrichment service (`enrichment-server/`) stays where it is; only the persistence destination changes.
+
+### Founder approval block
+
+- Date approved: 2026-05-21
+- Conditions / amendments: none beyond the four resolutions above
+- Signed: founder (mrcoe7@gmail.com)
 
 ---
 
