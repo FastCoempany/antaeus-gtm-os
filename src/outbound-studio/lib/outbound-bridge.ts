@@ -3,7 +3,7 @@ import type {
     Json,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type {
     Angle,
     Asset,
@@ -213,19 +213,21 @@ function deriveTitle(content: string): string {
 }
 
 export function touchToInsert(touch: Touch): InsertRow<"sequences"> {
+    const title = deriveTitle(touch.content);
     return {
         sequence_key: SEQUENCE_KEY_OUTBOUND,
-        name: touch.accountName || null,
-        title: deriveTitle(touch.content),
+        name: touch.accountName || title,
+        title,
         data: extractDataBlob(touch) as Json
     };
 }
 
 export function touchToUpdate(touch: Touch): UpdateRow<"sequences"> {
+    const title = deriveTitle(touch.content);
     return {
         sequence_key: SEQUENCE_KEY_OUTBOUND,
-        name: touch.accountName || null,
-        title: deriveTitle(touch.content),
+        name: touch.accountName || title,
+        title,
         data: extractDataBlob(touch) as Json
     };
 }
@@ -299,19 +301,21 @@ function deriveAngleTitle(email: string): string {
 }
 
 export function angleToInsert(angle: Angle): InsertRow<"sequences"> {
+    const title = deriveAngleTitle(angle.email);
     return {
         sequence_key: SEQUENCE_KEY_OUTBOUND_ANGLE,
-        name: angle.company || null,
-        title: deriveAngleTitle(angle.email),
+        name: angle.company || title,
+        title,
         data: extractAngleDataBlob(angle) as Json
     };
 }
 
 export function angleToUpdate(angle: Angle): UpdateRow<"sequences"> {
+    const title = deriveAngleTitle(angle.email);
     return {
         sequence_key: SEQUENCE_KEY_OUTBOUND_ANGLE,
-        name: angle.company || null,
-        title: deriveAngleTitle(angle.email),
+        name: angle.company || title,
+        title,
         data: extractAngleDataBlob(angle) as Json
     };
 }

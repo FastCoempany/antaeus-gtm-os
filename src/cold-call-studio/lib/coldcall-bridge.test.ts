@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { CallLogEntry } from "./types";
 import {
     callEntryToInsert,
@@ -10,6 +10,7 @@ import {
     rowToCallEntry,
     rowsToCallEntries
 } from "./coldcall-bridge";
+import { buildDiscoveryCallLogRow } from "@/lib/test-helpers/row-builders";
 
 const FULL: CallLogEntry = {
     id: "call_1730000000_abc",
@@ -37,7 +38,7 @@ describe("looksLikePersistedId", () => {
 
 describe("rowToCallEntry", () => {
     it("hydrates a populated row", () => {
-        const row: Row<"discovery_call_logs"> = {
+        const row: Row<"discovery_call_logs"> = buildDiscoveryCallLogRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -57,7 +58,7 @@ describe("rowToCallEntry", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const entry = rowToCallEntry(row);
         expect(entry).not.toBeNull();
         expect(entry!.accountName).toBe("Acme");
@@ -66,7 +67,7 @@ describe("rowToCallEntry", () => {
     });
 
     it("returns null for non-cold-call log_type", () => {
-        const row: Row<"discovery_call_logs"> = {
+        const row: Row<"discovery_call_logs"> = buildDiscoveryCallLogRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -75,7 +76,7 @@ describe("rowToCallEntry", () => {
             data: {},
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToCallEntry(row)).toBeNull();
     });
 
@@ -89,7 +90,7 @@ describe("rowToCallEntry", () => {
     });
 
     it("normalizes invalid threadId to prep", () => {
-        const row: Row<"discovery_call_logs"> = {
+        const row: Row<"discovery_call_logs"> = buildDiscoveryCallLogRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -98,12 +99,12 @@ describe("rowToCallEntry", () => {
             data: { threadId: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToCallEntry(row)!.threadId).toBe("prep");
     });
 
     it("normalizes invalid outcome to logged", () => {
-        const row: Row<"discovery_call_logs"> = {
+        const row: Row<"discovery_call_logs"> = buildDiscoveryCallLogRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -112,7 +113,7 @@ describe("rowToCallEntry", () => {
             data: { outcome: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToCallEntry(row)!.outcome).toBe("logged");
     });
 });

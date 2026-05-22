@@ -2,7 +2,7 @@ import type {
     InsertRow,
     Json,
     Row
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type { AgendaSnapshot, PersonaKey } from "./types";
 
 /**

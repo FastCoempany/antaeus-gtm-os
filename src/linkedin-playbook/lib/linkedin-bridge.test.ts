@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import type { ActionEntry } from "./types";
 import {
     actionToInsert,
@@ -10,6 +10,7 @@ import {
     rowsToActions,
     SEQUENCE_KEY_LINKEDIN
 } from "./linkedin-bridge";
+import { buildSequenceRow } from "@/lib/test-helpers/row-builders";
 
 const FULL: ActionEntry = {
     id: "li_1730000000_abc",
@@ -39,7 +40,7 @@ describe("looksLikePersistedId", () => {
 
 describe("rowToAction", () => {
     it("hydrates a populated row", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -62,7 +63,7 @@ describe("rowToAction", () => {
             },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         const a = rowToAction(row);
         expect(a).not.toBeNull();
         expect(a!.accountName).toBe("Acme");
@@ -71,7 +72,7 @@ describe("rowToAction", () => {
     });
 
     it("returns null for non-linkedin sequence_key", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -81,12 +82,12 @@ describe("rowToAction", () => {
             data: {},
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAction(row)).toBeNull();
     });
 
     it("normalizes invalid actionType to content_engage", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -96,12 +97,12 @@ describe("rowToAction", () => {
             data: { actionType: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAction(row)!.actionType).toBe("content_engage");
     });
 
     it("normalizes invalid outcome to null", () => {
-        const row: Row<"sequences"> = {
+        const row: Row<"sequences"> = buildSequenceRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -111,7 +112,7 @@ describe("rowToAction", () => {
             data: { outcome: "garbage" },
             created_at: "2026-04-02T12:00:00Z",
             updated_at: "2026-04-02T12:00:00Z"
-        };
+        });
         expect(rowToAction(row)!.outcome).toBeNull();
     });
 
@@ -179,8 +180,11 @@ describe("actionToInsert / actionToUpdate", () => {
         expect(update.name).toBe("Acme");
     });
 
-    it("clears name when accountName blank", () => {
+    it("falls back to title when accountName blank", () => {
+        // sequences.name is NOT NULL in the schema; bridge falls back
+        // to the derived title rather than emitting null.
         const insert = actionToInsert({ ...FULL, accountName: "" });
-        expect(insert.name).toBeNull();
+        expect(insert.name).toBe(insert.title);
+        expect(typeof insert.name).toBe("string");
     });
 });

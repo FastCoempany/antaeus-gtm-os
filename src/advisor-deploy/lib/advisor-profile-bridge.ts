@@ -3,7 +3,7 @@ import type {
     Json,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type { Advisor, RelationshipState, TierId } from "./types";
 
 /**
@@ -123,6 +123,9 @@ export function advisorToInsert(
     advisor: Advisor
 ): InsertRow<"studio_artifacts"> {
     return {
+        studio: "advisor",
+        artifact_type: "profile",
+        title: advisor.name?.trim() || "Untitled advisor",
         data: extractDataBlob(advisor) as unknown as Json
     };
 }

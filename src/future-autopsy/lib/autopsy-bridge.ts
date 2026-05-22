@@ -3,7 +3,7 @@ import type {
     Json,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type { TaskLog, TaskLogPerDeal } from "./types";
 
 /**
@@ -89,6 +89,9 @@ export function rowToTaskLog(
 
 export function taskLogToInsert(log: TaskLog): InsertRow<"studio_artifacts"> {
     return {
+        studio: "autopsy",
+        artifact_type: "task_log",
+        title: "Autopsy task log",
         data: {
             kind: KIND_TASK_LOG,
             log

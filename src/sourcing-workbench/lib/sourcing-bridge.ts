@@ -3,7 +3,7 @@ import type {
     Json,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type {
     LeverageKey,
     Platform,
@@ -124,6 +124,9 @@ export function queryCardToInsert(
     card: QueryCard
 ): InsertRow<"studio_artifacts"> {
     return {
+        studio: "sourcing",
+        artifact_type: "queryCard",
+        title: card.query?.trim() || "Query card",
         data: {
             kind: KIND_QUERY_CARD,
             platform: card.platform,
@@ -188,6 +191,9 @@ export function prospectToInsert(
     prospect: Prospect
 ): InsertRow<"studio_artifacts"> {
     return {
+        studio: "sourcing",
+        artifact_type: "prospect",
+        title: prospect.accountName?.trim() || "Untitled prospect",
         data: {
             kind: KIND_PROSPECT,
             accountName: prospect.accountName,

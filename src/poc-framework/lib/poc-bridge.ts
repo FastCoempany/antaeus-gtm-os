@@ -4,7 +4,7 @@ import type {
     ProofOutcomeState,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type {
     DurationDays,
     LinkedDealSummary,
@@ -71,8 +71,16 @@ export function outcomeToState(o: Outcome): ProofOutcomeState {
     return "open";
 }
 
-/** Supabase ProofOutcomeState → in-memory Outcome. */
-export function stateToOutcome(s: ProofOutcomeState | null | undefined): Outcome {
+/** Supabase ProofOutcomeState → in-memory Outcome.
+ *
+ * Accepts `string | null | undefined` because the regen types
+ * outcome_state as a plain `string` (the DB column is text, not a
+ * Postgres enum). Unknown values fall through to "not_started" so
+ * malformed rows from a future schema change don't throw.
+ */
+export function stateToOutcome(
+    s: ProofOutcomeState | string | null | undefined
+): Outcome {
     if (s === "passed") return "converted";
     if (s === "failed") return "failed";
     if (s === "abandoned") return "failed";

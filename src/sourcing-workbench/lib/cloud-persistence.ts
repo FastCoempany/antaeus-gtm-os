@@ -1,6 +1,6 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import { reportError, trackEvent } from "@/lib/observability";
 import {
     KIND_PROSPECT,

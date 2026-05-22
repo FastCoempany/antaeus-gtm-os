@@ -3,7 +3,7 @@ import type {
     Json,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type {
     Approach,
     DispositionState,
@@ -125,6 +125,9 @@ export function rowToThesis(
 
 export function focusToInsert(focus: Focus): InsertRow<"studio_artifacts"> {
     return {
+        studio: "territory",
+        artifact_type: "focus",
+        title: focus.title?.trim() || "Untitled focus",
         data: {
             kind: KIND_FOCUS,
             title: focus.title,
@@ -185,6 +188,9 @@ export function approachToInsert(
     approach: Approach
 ): InsertRow<"studio_artifacts"> {
     return {
+        studio: "territory",
+        artifact_type: "approach",
+        title: approach.name?.trim() || "Untitled approach",
         data: {
             kind: KIND_APPROACH,
             name: approach.name,
@@ -246,6 +252,9 @@ export function accountToInsert(
     account: TerritoryAccount
 ): InsertRow<"studio_artifacts"> {
     return {
+        studio: "territory",
+        artifact_type: "account",
+        title: account.name?.trim() || "Untitled account",
         data: {
             kind: KIND_ACCOUNT,
             name: account.name,

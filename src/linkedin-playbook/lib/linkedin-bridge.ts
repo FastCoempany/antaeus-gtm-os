@@ -3,7 +3,7 @@ import type {
     Json,
     Row,
     UpdateRow
-} from "@/lib/database.types";
+} from "@/lib/database-helpers";
 import type {
     ActionEntry,
     ActionType,
@@ -169,10 +169,11 @@ function deriveTitle(motionLabel: string, actionType: ActionType): string {
 export function actionToInsert(
     entry: ActionEntry
 ): InsertRow<"sequences"> {
+    const title = deriveTitle(entry.motionLabel, entry.actionType);
     return {
         sequence_key: SEQUENCE_KEY_LINKEDIN,
-        name: entry.accountName || null,
-        title: deriveTitle(entry.motionLabel, entry.actionType),
+        name: entry.accountName || title,
+        title,
         data: extractDataBlob(entry) as Json
     };
 }
@@ -180,10 +181,11 @@ export function actionToInsert(
 export function actionToUpdate(
     entry: ActionEntry
 ): UpdateRow<"sequences"> {
+    const title = deriveTitle(entry.motionLabel, entry.actionType);
     return {
         sequence_key: SEQUENCE_KEY_LINKEDIN,
-        name: entry.accountName || null,
-        title: deriveTitle(entry.motionLabel, entry.actionType),
+        name: entry.accountName || title,
+        title,
         data: extractDataBlob(entry) as Json
     };
 }

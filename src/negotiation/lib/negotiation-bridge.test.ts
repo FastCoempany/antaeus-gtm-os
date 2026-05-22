@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Row } from "@/lib/database.types";
+import type { Row } from "@/lib/database-helpers";
 import {
     bagToInsert,
     bagToUpdate,
@@ -10,6 +10,7 @@ import {
     type NegotiationWorkspaceBag
 } from "./negotiation-bridge";
 import type { LearningEntry, Negotiation } from "./types";
+import { buildStudioArtifactRow } from "@/lib/test-helpers/row-builders";
 
 const SAMPLE_NEGOTIATION: Negotiation = {
     id: "neg_1",
@@ -52,33 +53,33 @@ describe("looksLikePersistedId", () => {
 
 describe("rowKind", () => {
     it("reads kind discriminator", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: KIND_NEGOTIATION_WORKSPACE },
             created_at: "2026-05-04T12:00:00Z",
             updated_at: "2026-05-04T12:00:00Z"
-        };
+        });
         expect(rowKind(row)).toBe(KIND_NEGOTIATION_WORKSPACE);
     });
 
     it("returns null for missing data", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: null as never,
             created_at: "2026-05-04T12:00:00Z",
             updated_at: "2026-05-04T12:00:00Z"
-        };
+        });
         expect(rowKind(row)).toBe(null);
     });
 });
 
 describe("rowToWorkspaceBag", () => {
     it("hydrates a populated row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -89,7 +90,7 @@ describe("rowToWorkspaceBag", () => {
             } as never,
             created_at: "2026-05-04T12:00:00Z",
             updated_at: "2026-05-04T12:00:00Z"
-        };
+        });
         const bag = rowToWorkspaceBag(row);
         expect(bag).not.toBe(null);
         expect(bag?.negotiations).toHaveLength(1);
@@ -99,32 +100,32 @@ describe("rowToWorkspaceBag", () => {
     });
 
     it("returns null for wrong kind", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: "future-autopsy.taskLog" } as never,
             created_at: "2026-05-04T12:00:00Z",
             updated_at: "2026-05-04T12:00:00Z"
-        };
+        });
         expect(rowToWorkspaceBag(row)).toBe(null);
     });
 
     it("returns empty bag for kind-only row", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: { kind: KIND_NEGOTIATION_WORKSPACE } as never,
             created_at: "2026-05-04T12:00:00Z",
             updated_at: "2026-05-04T12:00:00Z"
-        };
+        });
         const bag = rowToWorkspaceBag(row);
         expect(bag).toEqual({ negotiations: [], learnings: [] });
     });
 
     it("drops malformed entries (missing id)", () => {
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
@@ -141,7 +142,7 @@ describe("rowToWorkspaceBag", () => {
             } as never,
             created_at: "2026-05-04T12:00:00Z",
             updated_at: "2026-05-04T12:00:00Z"
-        };
+        });
         const bag = rowToWorkspaceBag(row);
         expect(bag?.negotiations).toHaveLength(1);
         expect(bag?.learnings).toHaveLength(1);
@@ -181,14 +182,14 @@ describe("bagToInsert / bagToUpdate", () => {
 describe("roundtrip", () => {
     it("rowToWorkspaceBag(bagToInsert(b)) preserves shape", () => {
         const insert = bagToInsert(FULL_BAG);
-        const row: Row<"studio_artifacts"> = {
+        const row: Row<"studio_artifacts"> = buildStudioArtifactRow({
             id: "550e8400-e29b-41d4-a716-446655440000",
             user_id: "u",
             workspace_id: "w",
             data: insert.data as never,
             created_at: "2026-05-04T12:00:00Z",
             updated_at: "2026-05-04T12:00:00Z"
-        };
+        });
         const hydrated = rowToWorkspaceBag(row);
         expect(hydrated?.negotiations).toEqual(FULL_BAG.negotiations);
         expect(hydrated?.learnings).toEqual(FULL_BAG.learnings);

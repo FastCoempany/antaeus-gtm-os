@@ -1,6 +1,6 @@
 import type { DataClient } from "./data-client";
 import { createDataClient } from "./data-client";
-import type { TableName } from "./database.types";
+import type { TableName } from "./database-helpers";
 import { isFeatureEnabled, reportError, trackEvent } from "./observability";
 
 /**
