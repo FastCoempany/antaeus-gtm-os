@@ -1,20 +1,24 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import {
     __setAllAccountsForTests,
+    addSignalToAccount,
     allAccounts,
     buildManualAccount,
     removeAccount,
+    removeSignalFromAccount,
     resetSession,
     searchQuery,
     selectAccount,
     selectedAccount,
     selectedAccountId,
+    setAccountSignals,
     setAllAccounts,
     setSearchQuery,
+    updateSignalInAccount,
     upsertAccount,
     visibleAccounts
 } from "./state";
-import type { Account } from "./lib/types";
+import type { Account, Signal as ScSignal } from "./lib/types";
 
 function makeAccount(partial: Partial<Account>): Account {
     return {
@@ -160,5 +164,129 @@ describe("buildManualAccount", () => {
         expect(a.industry).toBe("Logistics");
         expect(a.hq).toBe("SF");
         expect(a.notes).toBe("Active prospect");
+    });
+});
+
+// ─── Local signal mutations (Wave 3) ──────────────────────────────────
+
+function makeSignal(partial: Partial<ScSignal> = {}): ScSignal {
+    return { id: "sig_1", ...partial };
+}
+
+describe("addSignalToAccount", () => {
+    beforeEach(() => __setAllAccountsForTests([]));
+
+    it("prepends a signal to the account's signals (newest first)", () => {
+        __setAllAccountsForTests([
+            makeAccount({
+                id: "a1",
+                signals: [makeSignal({ id: "older" })]
+            })
+        ]);
+        addSignalToAccount("a1", makeSignal({ id: "newer", headline: "x" }));
+        const account = allAccounts.value.find((a) => a.id === "a1")!;
+        expect(account.signals).toHaveLength(2);
+        expect(account.signals[0]!.id).toBe("newer");
+        expect(account.signals[1]!.id).toBe("older");
+    });
+
+    it("no-ops when account not found", () => {
+        __setAllAccountsForTests([makeAccount({ id: "a1" })]);
+        addSignalToAccount("missing", makeSignal({ id: "new" }));
+        expect(allAccounts.value[0]!.signals).toHaveLength(0);
+    });
+});
+
+describe("updateSignalInAccount", () => {
+    beforeEach(() => __setAllAccountsForTests([]));
+
+    it("replaces a signal in-place by id", () => {
+        __setAllAccountsForTests([
+            makeAccount({
+                id: "a1",
+                signals: [
+                    makeSignal({ id: "s1", flagged: false }),
+                    makeSignal({ id: "s2" })
+                ]
+            })
+        ]);
+        updateSignalInAccount("a1", makeSignal({ id: "s1", flagged: true }));
+        const account = allAccounts.value.find((a) => a.id === "a1")!;
+        expect(account.signals[0]!.flagged).toBe(true);
+        // Position preserved
+        expect(account.signals[0]!.id).toBe("s1");
+        expect(account.signals[1]!.id).toBe("s2");
+    });
+
+    it("no-ops when signal not found", () => {
+        __setAllAccountsForTests([
+            makeAccount({ id: "a1", signals: [makeSignal({ id: "s1" })] })
+        ]);
+        updateSignalInAccount("a1", makeSignal({ id: "missing", flagged: true }));
+        const account = allAccounts.value.find((a) => a.id === "a1")!;
+        expect(account.signals[0]!.flagged).toBeUndefined();
+    });
+});
+
+describe("removeSignalFromAccount", () => {
+    beforeEach(() => __setAllAccountsForTests([]));
+
+    it("removes the matching signal", () => {
+        __setAllAccountsForTests([
+            makeAccount({
+                id: "a1",
+                signals: [
+                    makeSignal({ id: "s1" }),
+                    makeSignal({ id: "s2" })
+                ]
+            })
+        ]);
+        removeSignalFromAccount("a1", "s1");
+        const account = allAccounts.value.find((a) => a.id === "a1")!;
+        expect(account.signals).toHaveLength(1);
+        expect(account.signals[0]!.id).toBe("s2");
+    });
+
+    it("no-ops on missing signal", () => {
+        __setAllAccountsForTests([
+            makeAccount({ id: "a1", signals: [makeSignal({ id: "s1" })] })
+        ]);
+        removeSignalFromAccount("a1", "missing");
+        expect(allAccounts.value[0]!.signals).toHaveLength(1);
+    });
+});
+
+describe("setAccountSignals", () => {
+    beforeEach(() => __setAllAccountsForTests([]));
+
+    it("replaces the whole signals array", () => {
+        __setAllAccountsForTests([
+            makeAccount({
+                id: "a1",
+                signals: [makeSignal({ id: "s1" })]
+            })
+        ]);
+        setAccountSignals("a1", [
+            makeSignal({ id: "n1", headline: "Fresh" }),
+            makeSignal({ id: "n2" })
+        ]);
+        const account = allAccounts.value.find((a) => a.id === "a1")!;
+        expect(account.signals).toHaveLength(2);
+        expect(account.signals[0]!.id).toBe("n1");
+        expect(account.signals[0]!.headline).toBe("Fresh");
+    });
+
+    it("can clear signals to empty array", () => {
+        __setAllAccountsForTests([
+            makeAccount({ id: "a1", signals: [makeSignal({ id: "s1" })] })
+        ]);
+        setAccountSignals("a1", []);
+        expect(allAccounts.value[0]!.signals).toHaveLength(0);
+    });
+
+    it("no-ops when account not found", () => {
+        __setAllAccountsForTests([makeAccount({ id: "a1" })]);
+        setAccountSignals("missing", [makeSignal({ id: "x" })]);
+        expect(allAccounts.value[0]!.signals).toHaveLength(0);
     });
 });

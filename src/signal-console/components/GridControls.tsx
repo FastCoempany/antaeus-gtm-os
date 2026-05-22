@@ -1,9 +1,10 @@
 import type { JSX } from "preact";
 import { allAccounts, searchQuery, setSearchQuery } from "../state";
 import { AddAccountForm } from "./AddAccountForm";
+import { EnrichAllButton } from "./EnrichAllButton";
 
 /**
- * GridControls — Add + search row above the grid.
+ * GridControls — Add + Enrich + search row above the grid.
  *
  * Signal Console audit (2026-05): on an empty workspace the search
  * box is meaningless (nothing to search). The Add Account form lives
@@ -11,7 +12,9 @@ import { AddAccountForm } from "./AddAccountForm";
  * until at least one account exists.
  *
  * On non-empty, the Add button moves to the LEFT of search — "add"
- * is the primary verb, search is the filter.
+ * is the primary verb, search is the filter. The Enrich-all button
+ * sits between Add and Filter as the bulk-action handle (Phase 4.5 /
+ * Tier 1 / Signal Console Step 3 — Wave 5).
  */
 export function GridControls(): JSX.Element | null {
     const total = allAccounts.value.length;
@@ -20,6 +23,7 @@ export function GridControls(): JSX.Element | null {
     return (
         <nav class="sc-grid-controls" aria-label="Account list controls">
             <AddAccountForm />
+            <EnrichAllButton />
             <label class="sc-grid-controls__search">
                 <span class="sc-grid-controls__search-label">FILTER</span>
                 <input

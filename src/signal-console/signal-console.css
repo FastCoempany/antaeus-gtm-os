@@ -891,3 +891,41 @@ button {
     background: rgba(10, 28, 64, 0.06);
     color: rgba(10, 28, 64, 0.5);
 }
+
+/* ─── Enrich-All button (Phase 4.5 / Signal Console Step 3 / Wave 5) ─── */
+
+.sc-enrich-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    border: 1px solid var(--sc-rule);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--sc-navy);
+    font-family: "Public Sans", "Plus Jakarta Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.sc-enrich-btn:hover {
+    border-color: var(--sc-orange);
+    color: var(--sc-orange);
+}
+
+/* Running state: orange-tinted secondary so Cancel reads as the action.
+ * Steady (not flashing) — operators need a calm signal that the room
+ * is in progress, not an attention-stealing pulse. */
+.sc-enrich-btn--cancel {
+    background: rgba(230, 112, 30, 0.08);
+    border-color: var(--sc-orange);
+    color: var(--sc-orange);
+    font-variant-numeric: tabular-nums;
+}
+
+.sc-enrich-btn--cancel:hover {
+    background: var(--sc-orange);
+    color: #fff;
+}
