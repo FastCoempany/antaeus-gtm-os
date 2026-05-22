@@ -45,6 +45,55 @@ function asObject(v: unknown): Record<string, unknown> | null {
 }
 
 /**
+ * Normalize a date-ish string to a Postgres-acceptable `timestamptz`
+ * value, or return undefined when the input is unusable.
+ *
+ * The enrichment server emits `published_date` as a year-month string
+ * (e.g. "2025-10") when the source data doesn't provide a full date —
+ * that's how `enrichment-server/enrich-server.js mapSignalsToConsole`
+ * falls back to `now.slice(0, 7)`. Postgres rejects partial ISO dates
+ * for `timestamptz` columns with error 22007 ("invalid input syntax
+ * for type timestamp with time zone").
+ *
+ * Handles:
+ *   "2025"                    → "2025-01-01T00:00:00.000Z"
+ *   "2025-10"                 → "2025-10-01T00:00:00.000Z"
+ *   "2025-10-15"              → "2025-10-15T00:00:00.000Z"
+ *   "2025-10-15T12:30:00Z"    → passed through verbatim (valid)
+ *   "2025-10-15 12:30:00"     → expanded via Date parsing
+ *   anything else / invalid   → undefined (caller omits the field)
+ *
+ * Discovered: 2026-05-22 during Step 3 verification. The enrichment
+ * server emits `"2025-10"` for signals where the published date can't
+ * be parsed off the source page, and every insert to `signals` failed
+ * with 22007. Latent because PR #142 dual-write was off by default;
+ * surfaced the first time the feature flag flipped on.
+ */
+export function normalizeTimestamptz(value: unknown): string | undefined {
+    if (typeof value !== "string") return undefined;
+    const trimmed = value.trim();
+    if (!trimmed) return undefined;
+
+    // Year only: "YYYY" → "YYYY-01-01T00:00:00.000Z"
+    if (/^\d{4}$/.test(trimmed)) {
+        return `${trimmed}-01-01T00:00:00.000Z`;
+    }
+    // Year-month: "YYYY-MM" → "YYYY-MM-01T00:00:00.000Z"
+    if (/^\d{4}-\d{2}$/.test(trimmed)) {
+        return `${trimmed}-01T00:00:00.000Z`;
+    }
+    // Year-month-day: "YYYY-MM-DD" → "YYYY-MM-DDT00:00:00.000Z"
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+        return `${trimmed}T00:00:00.000Z`;
+    }
+    // Anything fuller: trust Date parsing. Catches "2025-10-15T12:30:00Z",
+    // "2025-10-15 12:30:00", RFC2822, etc. Invalid → NaN → undefined.
+    const parsed = Date.parse(trimmed);
+    if (Number.isNaN(parsed)) return undefined;
+    return new Date(parsed).toISOString();
+}
+
+/**
  * Translate a signals-table Row → in-memory Signal. Returns null on
  * malformed rows (missing id) so callers can `.filter(Boolean)`.
  *
@@ -134,6 +183,14 @@ export function signalToInsert(
     }
     if (signal.ai === true && signal.is_ai !== true) dataBlob["ai"] = true;
 
+    // Normalize timestamptz fields — the enrichment server emits
+    // partial ISO strings like "2025-10" that Postgres rejects with
+    // error 22007. normalizeTimestamptz returns undefined for unusable
+    // inputs so we omit the field cleanly when it can't be parsed.
+    const publishedDate = normalizeTimestamptz(signal.published_date);
+    const fetchedAt = normalizeTimestamptz(signal.fetched_at);
+    const capturedAt = normalizeTimestamptz(signal.capturedAt);
+
     return {
         // id intentionally omitted — Supabase generates a uuid.
         // If the in-memory Signal already has a uuid id, the caller
@@ -146,11 +203,9 @@ export function signalToInsert(
         ...(headline ? { headline } : {}),
         ...(signal.source ? { source: signal.source } : {}),
         ...(signal.url ? { url: signal.url } : {}),
-        ...(signal.published_date
-            ? { published_date: signal.published_date }
-            : {}),
-        ...(signal.fetched_at ? { fetched_at: signal.fetched_at } : {}),
-        ...(signal.capturedAt ? { captured_at: signal.capturedAt } : {}),
+        ...(publishedDate ? { published_date: publishedDate } : {}),
+        ...(fetchedAt ? { fetched_at: fetchedAt } : {}),
+        ...(capturedAt ? { captured_at: capturedAt } : {}),
         ...(typeof signal.confidence === "number"
             ? { confidence: signal.confidence }
             : {}),
@@ -174,20 +229,20 @@ export function signalToUpdate(signal: Signal): UpdateRow<"signals"> {
     const flagged =
         signal.flagged === true ||
         (typeof signal.status === "string" && signal.status === "flagged");
+    // Normalize timestamptz fields (same reasoning as signalToInsert).
+    const publishedDate = normalizeTimestamptz(signal.published_date);
+    const fetchedAt = normalizeTimestamptz(signal.fetched_at);
+    const capturedAt = normalizeTimestamptz(signal.capturedAt);
     return {
         ...(signalType !== undefined ? { signal_type: signalType } : {}),
         ...(headline !== undefined ? { headline } : {}),
         ...(signal.source !== undefined ? { source: signal.source } : {}),
         ...(signal.url !== undefined ? { url: signal.url } : {}),
-        ...(signal.published_date !== undefined
-            ? { published_date: signal.published_date }
+        ...(publishedDate !== undefined
+            ? { published_date: publishedDate }
             : {}),
-        ...(signal.fetched_at !== undefined
-            ? { fetched_at: signal.fetched_at }
-            : {}),
-        ...(signal.capturedAt !== undefined
-            ? { captured_at: signal.capturedAt }
-            : {}),
+        ...(fetchedAt !== undefined ? { fetched_at: fetchedAt } : {}),
+        ...(capturedAt !== undefined ? { captured_at: capturedAt } : {}),
         ...(typeof signal.confidence === "number"
             ? { confidence: signal.confidence }
             : {}),

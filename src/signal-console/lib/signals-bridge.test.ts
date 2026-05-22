@@ -227,3 +227,106 @@ describe("signalToUpdate", () => {
         expect(patch.flagged).toBe(false);
     });
 });
+
+// ─── normalizeTimestamptz (2026-05-22 fix) ─────────────────────────────
+
+import { normalizeTimestamptz } from "./signals-bridge";
+
+describe("normalizeTimestamptz", () => {
+    it("expands a year-only string to a January 1st ISO", () => {
+        expect(normalizeTimestamptz("2025")).toBe("2025-01-01T00:00:00.000Z");
+    });
+
+    it("expands a year-month string to the 1st of that month", () => {
+        // The bug: enrichment server emits "2025-10" → Postgres 22007.
+        expect(normalizeTimestamptz("2025-10")).toBe(
+            "2025-10-01T00:00:00.000Z"
+        );
+    });
+
+    it("expands a year-month-day to midnight UTC", () => {
+        expect(normalizeTimestamptz("2025-10-15")).toBe(
+            "2025-10-15T00:00:00.000Z"
+        );
+    });
+
+    it("preserves a full ISO timestamp verbatim (via Date round-trip)", () => {
+        const iso = "2025-10-15T12:30:00.000Z";
+        expect(normalizeTimestamptz(iso)).toBe(iso);
+    });
+
+    it("normalizes 'YYYY-MM-DD HH:MM:SS' (space-separated) to ISO", () => {
+        const out = normalizeTimestamptz("2025-10-15 12:30:00");
+        // Output exact format depends on system TZ; check it's a valid ISO
+        // and represents the same instant after parsing back.
+        expect(typeof out).toBe("string");
+        const parsed = Date.parse(out as string);
+        expect(Number.isNaN(parsed)).toBe(false);
+    });
+
+    it("returns undefined for non-strings", () => {
+        expect(normalizeTimestamptz(null)).toBeUndefined();
+        expect(normalizeTimestamptz(undefined)).toBeUndefined();
+        expect(normalizeTimestamptz(123)).toBeUndefined();
+        expect(normalizeTimestamptz({})).toBeUndefined();
+    });
+
+    it("returns undefined for empty / whitespace strings", () => {
+        expect(normalizeTimestamptz("")).toBeUndefined();
+        expect(normalizeTimestamptz("   ")).toBeUndefined();
+    });
+
+    it("returns undefined for unparseable garbage", () => {
+        expect(normalizeTimestamptz("not a date")).toBeUndefined();
+        expect(normalizeTimestamptz("Unknown")).toBeUndefined();
+        expect(normalizeTimestamptz("Q3 2025")).toBeUndefined();
+    });
+
+    it("trims whitespace before parsing", () => {
+        expect(normalizeTimestamptz("  2025-10  ")).toBe(
+            "2025-10-01T00:00:00.000Z"
+        );
+    });
+});
+
+// ─── signalToInsert: timestamp normalization (regression coverage) ─────
+
+describe("signalToInsert — timestamptz normalization", () => {
+    it("normalizes a year-month published_date instead of passing it through", () => {
+        // This is the exact payload shape from the enrichment server that
+        // caused Postgres 22007 errors during Step 3 verification.
+        const sig: Signal = {
+            id: "enr_local_1",
+            cat: "trigger_event",
+            headline: "ENDRA launches digital asset treasury strategy",
+            confidence: 0.9,
+            published_date: "2025-10",
+            fetched_at: "2026-05-22T20:12:28.205Z"
+        };
+        const insert = signalToInsert(sig, ACCOUNT_UUID);
+        expect(insert.published_date).toBe("2025-10-01T00:00:00.000Z");
+        expect(insert.fetched_at).toBe("2026-05-22T20:12:28.205Z");
+    });
+
+    it("omits published_date when it can't be normalized", () => {
+        const sig: Signal = {
+            id: "x",
+            headline: "y",
+            published_date: "Unknown"
+        };
+        const insert = signalToInsert(sig, ACCOUNT_UUID);
+        expect("published_date" in insert).toBe(false);
+    });
+});
+
+describe("signalToUpdate — timestamptz normalization", () => {
+    it("normalizes timestamps on patch payloads", () => {
+        const sig: Signal = {
+            id: SIGNAL_UUID,
+            published_date: "2025-10",
+            flagged: true
+        };
+        const patch = signalToUpdate(sig);
+        expect(patch.published_date).toBe("2025-10-01T00:00:00.000Z");
+    });
+});
