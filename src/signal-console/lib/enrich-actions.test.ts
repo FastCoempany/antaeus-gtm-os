@@ -31,7 +31,7 @@ vi.mock("@/lib/observability", () => ({
     trackEvent: vi.fn()
 }));
 
-import { enrichAccount } from "./enrichment";
+import { enrichAccount, enrichmentSignalsToSignals } from "./enrichment";
 import { saveAccount, replaceAccountSignals } from "./cloud-persistence";
 
 function makeAccount(id: string, overrides: Partial<Account> = {}): Account {
@@ -61,15 +61,49 @@ describe("enrichAccountAndApply", () => {
                 name: "x",
                 domain: null,
                 info: {},
-                signals: [],
+                signals: [
+                    { id: "enr_1", headline: "Acme raised $20M" }
+                ] as never,
                 enrichedAt: "now"
             }
         });
+        // Override the default empty-array mock for this happy-path test so
+        // the new empty-enrich-no-op guard doesn't short-circuit the call.
+        vi.mocked(enrichmentSignalsToSignals).mockReturnValueOnce([
+            { id: "enr_1", headline: "Acme raised $20M" }
+        ]);
         const result = await enrichAccountAndApply(account);
         expect(result.status).toBe("ok");
         expect(enrichmentStatusByAccount.value["a1"]).toBe("done");
         expect(saveAccount).toHaveBeenCalledOnce();
         expect(replaceAccountSignals).toHaveBeenCalledOnce();
+    });
+
+    it("does NOT replace signals[] when server returns empty (preserves prior enrichment)", async () => {
+        // The 2026-05-22 Step 3 verification surfaced this bug: re-enriching
+        // an account that previously had signals, with a transient empty
+        // server response, wiped the existing signals via replaceAccountSignals.
+        // Fix: skip replace entirely on empty.
+        const account = makeAccount("a1");
+        __setAllAccountsForTests([account]);
+        vi.mocked(enrichAccount).mockResolvedValue({
+            status: "ok",
+            response: {
+                name: "test accout",
+                domain: null,
+                info: {},
+                signals: [], // ← the empty case
+                enrichedAt: "2026-05-22T20:42:34Z"
+            }
+        });
+        await enrichAccountAndApply(account);
+        // Account patch still applies (saveAccount called for enrichedAt etc.)
+        expect(saveAccount).toHaveBeenCalledOnce();
+        // But replaceAccountSignals MUST NOT have been called — that would
+        // have wiped any prior signals[].
+        expect(replaceAccountSignals).not.toHaveBeenCalled();
+        // Status still done — empty enrich is not an error.
+        expect(enrichmentStatusByAccount.value["a1"]).toBe("done");
     });
 
     it("marks error + records message on error response", async () => {

@@ -170,11 +170,35 @@ export async function enrichAccountAndApply(
             result.response.signals,
             result.response.enrichedAt
         );
-        // replaceAccountSignals operates on the (possibly uuid-swapped)
-        // current account id. saveAccount may have minted a new uuid
-        // for a previously-legacy id; look it up from state.
-        const currentId = findCurrentAccountId(patched);
-        await replaceAccountSignals(currentId, signals);
+        // Guard against destructive empty replace.
+        //
+        // The enrichment server returns `signals: []` when it can't find
+        // anything for an account — placeholder/typo'd names, rate-limit
+        // backoffs, transient source-data gaps. Wholesale-replacing
+        // local + cloud signals with the empty array would wipe ALL
+        // prior enrichment work for that account, including signals
+        // captured by completely separate prior runs that succeeded.
+        //
+        // Discovered: 2026-05-22 during Step 3 verification. Founder
+        // re-enriched a workspace containing a previously-enriched
+        // account ("test taeus" — 3 ENDRA signals); the new run
+        // returned `signals: []` for it, and replaceAccountSignals
+        // wiped the 3 signals.
+        //
+        // Policy: when the server returns empty, leave the existing
+        // signals[] untouched. The account patch (industry, employees,
+        // enrichedAt timestamp) still applies — the operator gets a
+        // fresh "last enriched" timestamp + any newly-detected
+        // company-info fields, but their prior signal history is
+        // preserved.
+        if (signals.length > 0) {
+            // replaceAccountSignals operates on the (possibly
+            // uuid-swapped) current account id. saveAccount may have
+            // minted a new uuid for a previously-legacy id; look it
+            // up from state.
+            const currentId = findCurrentAccountId(patched);
+            await replaceAccountSignals(currentId, signals);
+        }
         setStatus(account.id, "done");
         return result;
     } catch (err) {
