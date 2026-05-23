@@ -106,6 +106,7 @@ jobs:
       db_url: ${{ steps.create.outputs.db_url }}
       api_url: ${{ steps.create.outputs.api_url }}
       anon_key: ${{ steps.create.outputs.anon_key }}
+      service_role_key: ${{ steps.create.outputs.service_role_key }}
     steps:
       - uses: actions/checkout@v4
 
@@ -186,6 +187,11 @@ jobs:
           DB_URL=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('db_url',''))")
           API_URL=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('api_url',''))")
           ANON_KEY=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('anon_key',''))")
+          # Service-role key — needed by the @realtime Playwright suite
+          # for test-user / workspace / account seeding via Supabase Auth
+          # Admin + RLS bypass. May not be present in all branches
+          # output formats; the realtime suite skips cleanly when absent.
+          SERVICE_ROLE_KEY=$(echo "$BRANCH_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin).get('service_role_key',''))")
 
           if [ -z "$BRANCH_REF" ]; then
             echo "::warning::Branch $BRANCH_NAME returned no project_ref (id field empty). Apply migrations will be skipped — without a project_ref we can't link to the branch."
@@ -201,11 +207,13 @@ jobs:
           # Mask whatever secrets we have (no-op if empty)
           [ -n "$DB_URL" ] && echo "::add-mask::$DB_URL" || true
           [ -n "$ANON_KEY" ] && echo "::add-mask::$ANON_KEY" || true
+          [ -n "$SERVICE_ROLE_KEY" ] && echo "::add-mask::$SERVICE_ROLE_KEY" || true
 
           echo "branch_ref=$BRANCH_REF" >> $GITHUB_OUTPUT
           echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
           echo "api_url=$API_URL" >> $GITHUB_OUTPUT
           echo "anon_key=$ANON_KEY" >> $GITHUB_OUTPUT
+          echo "service_role_key=$SERVICE_ROLE_KEY" >> $GITHUB_OUTPUT
 
       - name: Apply migrations
         env:
@@ -265,6 +273,10 @@ jobs:
     env:
       VITE_SUPABASE_URL: ${{ needs.provision-branch.outputs.api_url }}
       VITE_SUPABASE_ANON_KEY: ${{ needs.provision-branch.outputs.anon_key }}
+      # Service-role key for @realtime test fixtures (user seeding via
+      # Supabase Auth Admin + RLS-bypass writes). When empty, the
+      # @realtime suite skips cleanly via hasRealtimeFixturesEnv().
+      SUPABASE_SERVICE_ROLE_KEY: ${{ needs.provision-branch.outputs.service_role_key }}
       VITE_APP_ENV: preview
     steps:
       - uses: actions/checkout@v4
