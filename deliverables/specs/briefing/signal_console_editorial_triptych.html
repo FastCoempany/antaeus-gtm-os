@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1500">
+<title>Signal Console — Editorial Triptych (Variants of Mockup C)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Fraunces:opsz,wght,SOFT@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;1,400&family=Inter+Tight:wght@400;500;600;700&family=Playfair+Display+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────
+   SIGNAL CONSOLE — EDITORIAL TRIPTYCH
+   Three rhetorical postures for the same Briefing
+   ───────────────────────────────────────────────────────── */
+
+:root{
+  --bg:#06080c;
+  --surf:#0a0d14;
+  --surf-2:#10141c;
+  --surf-3:#161b25;
+  --bdr:#1a1f2b;
+  --bdr-2:#252b39;
+  --bdr-3:#33394a;
+  --bdr-gold:#3d3424;
+  --tx:#e8eaef;
+  --tx-2:#a4abb8;
+  --tx-3:#6b7281;
+  --tx-4:#454c5a;
+  --gold:#d4a96a;
+  --gold-2:#b8915a;
+  --gold-dim:#9a7d4f;
+  --gold-deep:#5a4a30;
+  --hot:#ff5d5d;
+  --warm:#ffbe55;
+  --med:#5dafff;
+  --fresh:#7ee787;
+  --claim-fact:#9ecbff;
+  --claim-pattern:#ffbe55;
+  --claim-inference:#c4a8ff;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+  background:var(--bg);
+  color:var(--tx);
+  font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+body{
+  background:
+    radial-gradient(1100px 700px at 10% -5%,rgba(212,169,106,0.045),transparent 60%),
+    radial-gradient(900px 700px at 95% 8%,rgba(93,175,255,0.025),transparent 60%),
+    var(--bg);
+  min-height:100vh;
+  padding:48px 24px 80px;
+}
+
+/* ──────────────────────── PAGE HEADER ──────────────────────── */
+.page-head{max-width:1480px;margin:0 auto 40px}
+.page-eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:14px;display:flex;align-items:center;gap:14px;
+}
+.page-eyebrow::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--bdr-2),transparent)}
+.page-title{
+  font-family:'Fraunces';font-weight:400;font-size:2.55rem;letter-spacing:-0.022em;line-height:1.05;margin-bottom:14px;
+}
+.page-title em{font-style:italic;color:var(--gold)}
+.page-sub{color:var(--tx-2);max-width:820px;font-size:0.96rem;line-height:1.55}
+.page-sub strong{color:var(--tx);font-weight:500}
+
+/* ──────────────────────── TRIPTYCH GRID ──────────────────────── */
+.triptych{
+  max-width:1480px;margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+  align-items:stretch;
+}
+
+.variant{
+  background:var(--surf);
+  border:1px solid var(--bdr);
+  border-radius:8px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  position:relative;
+  isolation:isolate;
+}
+.variant::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0.022),transparent 14%);
+  pointer-events:none;z-index:0;
+}
+
+/* Variant tag header */
+.var-tag{
+  padding:18px 22px 16px;
+  border-bottom:1px solid var(--bdr);
+  background:linear-gradient(180deg,var(--surf-2),var(--surf));
+  position:relative;z-index:1;
+}
+.var-tag .badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.24em;color:var(--gold);font-weight:500;
+  display:block;margin-bottom:5px;
+}
+.var-tag .badge::before{content:"V";color:var(--tx-4)}
+.var-tag .name{
+  font-family:'Bricolage Grotesque';font-weight:600;font-size:1.3rem;letter-spacing:-0.01em;
+  margin-bottom:5px;
+}
+.var-tag .register{
+  font-style:italic;color:var(--tx-2);font-size:0.86rem;line-height:1.45;
+}
+.var-tag .reference{
+  margin-top:8px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;color:var(--tx-3);text-transform:uppercase;
+}
+
+.var-body{
+  position:relative;z-index:1;flex:1;
+}
+
+/* ════════════════════════════════════════════════════════════
+   VARIANT 1 — NEWSPAPER OF RECORD
+   Institutional authority. Dense. Decorative. FT/WSJ register.
+   ════════════════════════════════════════════════════════════ */
+
+.v1{background:linear-gradient(180deg,#0a0c12,#06080c)}
+
+.v1 .body{padding:24px 24px 28px}
+
+.v1 .masthead{
+  border-top:3px double var(--gold-dim);
+  border-bottom:1px solid var(--bdr-2);
+  padding:14px 0 12px;
+  text-align:center;
+  margin-bottom:18px;
+}
+.v1 .masthead .title{
+  font-family:'Playfair Display SC',serif;font-weight:700;
+  font-size:1.6rem;letter-spacing:0.04em;line-height:1;
+  color:var(--tx);
+  margin-bottom:6px;
+}
+.v1 .masthead .title em{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;color:var(--gold)}
+.v1 .masthead-meta{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.16em;
+  color:var(--tx-3);text-transform:uppercase;padding-top:6px;
+}
+
+.v1 .standfirst{
+  font-family:'Source Serif 4',serif;font-style:italic;font-weight:300;
+  font-size:0.86rem;color:var(--tx-2);line-height:1.55;
+  text-align:center;padding:14px 8px 16px;
+  border-bottom:1px solid var(--bdr);
+  margin-bottom:18px;
+}
+
+.v1 .lede {
+  font-family:'Playfair Display',serif;
+  font-weight:500;font-size:1.45rem;letter-spacing:-0.012em;line-height:1.15;
+  margin-bottom:8px;
+}
+.v1 .lede em{font-style:italic;color:var(--gold)}
+
+.v1 .dek{
+  font-family:'Source Serif 4',serif;font-style:italic;
+  font-size:0.96rem;color:var(--tx-2);line-height:1.45;margin-bottom:12px;
+}
+
+.v1 .byline{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--tx-3);
+  padding-bottom:14px;margin-bottom:16px;
+  border-bottom:1px solid var(--bdr);
+  display:flex;justify-content:space-between;
+}
+.v1 .byline .right{color:var(--gold-dim)}
+
+.v1 .editorial{
+  font-family:'Source Serif 4',serif;
+  font-weight:400;font-size:0.94rem;line-height:1.55;color:var(--tx);
+  margin-bottom:18px;
+}
+.v1 .editorial::first-letter{
+  font-family:'Playfair Display',serif;font-weight:700;font-size:3.1rem;
+  float:left;line-height:0.85;margin:6px 8px 0 0;color:var(--gold);
+}
+
+.v1 .ornament{
+  text-align:center;color:var(--gold-dim);font-size:1.1rem;
+  margin:20px 0 16px;letter-spacing:0.4em;
+}
+
+.v1 .section-label{
+  font-family:'Playfair Display SC',serif;font-weight:700;
+  font-size:0.72rem;letter-spacing:0.18em;color:var(--gold);
+  border-bottom:1px solid var(--bdr-2);padding-bottom:6px;margin-bottom:12px;
+}
+
+.v1 .six-q{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+.v1 .six-q .q{
+  font-family:'Source Serif 4',serif;
+  font-size:0.86rem;line-height:1.5;color:var(--tx);
+}
+.v1 .six-q .q b{
+  font-family:'Playfair Display SC',serif;font-weight:700;
+  font-size:0.66rem;letter-spacing:0.14em;color:var(--gold-dim);
+  display:inline;margin-right:4px;
+}
+
+.v1 .evidence{
+  background:rgba(212,169,106,0.04);
+  border:1px solid rgba(212,169,106,0.18);
+  padding:11px 13px;margin-bottom:16px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;line-height:1.6;color:var(--tx-2);
+}
+.v1 .evidence b{color:var(--gold)}
+
+.v1 .moves{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.v1 .move{
+  font-family:'Source Serif 4',serif;font-size:0.88rem;line-height:1.45;
+  padding-left:18px;position:relative;
+}
+.v1 .move::before{
+  content:"§";position:absolute;left:0;top:1px;
+  color:var(--gold);font-family:'Playfair Display',serif;font-weight:500;
+}
+.v1 .move .dest{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.06em;color:var(--tx-3);margin-top:2px;
+}
+
+.v1 .sidebar{
+  border-top:1px solid var(--bdr);
+  margin-top:24px;padding-top:18px;
+}
+.v1 .sidebar .head{
+  font-family:'Playfair Display SC',serif;font-weight:700;
+  font-size:0.62rem;letter-spacing:0.2em;color:var(--tx-3);margin-bottom:8px;
+}
+.v1 .sidebar .lede {font-size:1.05rem;margin-bottom:6px}
+.v1 .sidebar .dek{font-size:0.84rem;margin-bottom:10px}
+.v1 .sidebar .body-text{
+  font-family:'Source Serif 4',serif;font-size:0.84rem;line-height:1.5;color:var(--tx-2);
+}
+
+.v1 .footer{
+  margin-top:24px;padding-top:14px;
+  border-top:3px double var(--gold-dim);
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;
+  letter-spacing:0.16em;text-transform:uppercase;color:var(--tx-3);
+  display:flex;justify-content:space-between;
+}
+.v1 .footer .gold{color:var(--gold-dim)}
+
+/* ════════════════════════════════════════════════════════════
+   VARIANT 2 — LITERARY MAGAZINE
+   Atlantic / New Yorker register. Generous. Asymmetric. Restrained.
+   ════════════════════════════════════════════════════════════ */
+
+.v2{background:#06080c}
+
+.v2 .body{padding:30px 28px 32px}
+
+.v2 .meta-top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--tx-3);
+  margin-bottom:30px;
+}
+.v2 .meta-top .vol{color:var(--gold)}
+
+.v2 .hero-quote{
+  font-family:'Fraunces';font-weight:400;font-style:italic;
+  font-size:2.05rem;letter-spacing:-0.025em;line-height:1.1;
+  color:var(--tx);
+  padding-bottom:22px;margin-bottom:24px;
+  border-bottom:1px solid var(--bdr);
+}
+.v2 .hero-quote em{color:var(--gold);font-style:italic}
+.v2 .hero-quote::after{
+  content:'';display:block;margin-top:16px;
+  width:46px;height:1px;background:var(--gold-dim);
+}
+
+.v2 .article-meta{
+  font-family:'Inter Tight',sans-serif;font-weight:500;
+  font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--tx-3);margin-bottom:18px;
+}
+.v2 .article-meta .gold{color:var(--gold)}
+
+.v2 .headline{
+  font-family:'Fraunces';font-weight:500;font-size:1.65rem;letter-spacing:-0.018em;line-height:1.12;
+  margin-bottom:14px;
+}
+
+.v2 .body-text{
+  font-family:'Fraunces';font-weight:300;font-size:0.99rem;line-height:1.65;color:var(--tx);
+  margin-bottom:22px;
+}
+.v2 .body-text::first-letter{
+  font-family:'Fraunces';font-weight:500;font-size:2.6rem;font-style:normal;
+  float:left;line-height:0.9;margin:5px 7px 0 0;color:var(--gold);
+}
+
+.v2 .pull-quote{
+  font-family:'Fraunces';font-style:italic;font-weight:400;
+  font-size:1.25rem;letter-spacing:-0.01em;line-height:1.3;
+  color:var(--tx);
+  padding:18px 24px 18px 26px;
+  margin:6px 0 24px 18px;
+  border-left:2px solid var(--gold);
+  position:relative;
+}
+.v2 .pull-quote::before{
+  content:'';position:absolute;left:-2px;top:0;width:2px;height:14px;background:var(--bg);
+}
+.v2 .pull-quote::after{
+  content:'';position:absolute;left:-2px;bottom:0;width:2px;height:14px;background:var(--bg);
+}
+
+.v2 .six-q{
+  display:flex;flex-direction:column;gap:14px;margin-bottom:24px;
+  padding:18px 0;
+  border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);
+}
+.v2 .six-q .q{display:flex;gap:18px;align-items:baseline}
+.v2 .six-q .q .l{
+  font-family:'Inter Tight',sans-serif;font-weight:500;
+  font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--tx-3);
+  min-width:92px;flex-shrink:0;
+}
+.v2 .six-q .q .v{
+  font-family:'Fraunces';font-weight:300;font-size:0.94rem;line-height:1.45;
+  color:var(--tx);
+}
+
+.v2 .moves{display:flex;flex-direction:column;gap:11px;margin-bottom:20px}
+.v2 .moves-label{
+  font-family:'Inter Tight',sans-serif;font-weight:600;
+  font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:6px;
+}
+.v2 .move{
+  font-family:'Fraunces';font-weight:400;font-size:0.95rem;line-height:1.45;
+  padding-left:0;
+}
+.v2 .move .dest{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.04em;color:var(--tx-3);margin-top:3px;
+}
+
+.v2 .divider{
+  text-align:center;letter-spacing:0.6em;color:var(--gold-dim);
+  font-size:1rem;margin:32px 0 28px;font-family:'Fraunces';
+}
+
+.v2 .second{
+  padding-top:0;
+}
+.v2 .second .headline{font-size:1.25rem;line-height:1.18}
+.v2 .second .body-text{font-size:0.92rem;margin-bottom:14px}
+.v2 .second .body-text::first-letter{font-size:1.6rem;color:var(--tx)}
+
+.v2 .footer{
+  margin-top:28px;padding-top:14px;
+  border-top:1px solid var(--bdr);
+  font-family:'Inter Tight',sans-serif;font-size:0.66rem;
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--tx-3);
+  text-align:center;
+}
+
+/* ════════════════════════════════════════════════════════════
+   VARIANT 3 — OPERATOR BRIEFING MEMO
+   Internal memo register. Tight. Document-like. Insider intimacy.
+   ════════════════════════════════════════════════════════════ */
+
+.v3{background:#06080c}
+
+.v3 .body{padding:24px 26px 28px;font-family:'IBM Plex Sans',sans-serif}
+
+.v3 .memo-head{
+  font-family:'IBM Plex Mono',monospace;font-size:0.72rem;line-height:1.85;color:var(--tx-2);
+  padding-bottom:14px;border-bottom:1px solid var(--bdr);margin-bottom:22px;
+}
+.v3 .memo-head .row{display:flex;gap:14px}
+.v3 .memo-head .row .label{
+  color:var(--tx-3);width:64px;flex-shrink:0;letter-spacing:0.06em;
+}
+.v3 .memo-head .row .val{color:var(--tx)}
+.v3 .memo-head .row .val.gold{color:var(--gold)}
+
+.v3 .memo-classification{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;
+  color:var(--gold);text-transform:uppercase;text-align:right;margin-bottom:12px;
+}
+
+.v3 .summary-block{
+  background:var(--surf-2);
+  border-left:2px solid var(--gold);
+  padding:14px 16px;margin-bottom:24px;
+}
+.v3 .summary-block .h{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:6px;
+}
+.v3 .summary-block .body-text{
+  font-family:'IBM Plex Serif',serif;font-weight:400;
+  font-size:1rem;line-height:1.5;color:var(--tx);
+}
+.v3 .summary-block .body-text em{font-style:italic;color:var(--tx)}
+
+.v3 .item{margin-bottom:24px;padding-bottom:24px;border-bottom:1px dashed var(--bdr-2)}
+.v3 .item:last-of-type{border-bottom:none;margin-bottom:8px}
+
+.v3 .item-num{
+  font-family:'IBM Plex Mono',monospace;font-weight:500;
+  font-size:0.66rem;letter-spacing:0.16em;color:var(--gold);text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.v3 .item-head{
+  font-family:'IBM Plex Serif',serif;font-weight:500;
+  font-size:1.18rem;letter-spacing:-0.008em;line-height:1.22;
+  margin-bottom:6px;
+}
+
+.v3 .item-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.08em;color:var(--tx-3);
+  display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap;
+}
+.v3 .item-meta .gold{color:var(--gold-dim)}
+
+.v3 .item-body{
+  font-family:'IBM Plex Serif',serif;font-weight:400;
+  font-size:0.94rem;line-height:1.55;color:var(--tx);
+  margin-bottom:14px;
+}
+
+.v3 .item-attrs{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px 22px;
+  padding:11px 14px;background:var(--surf-2);border:1px solid var(--bdr);border-radius:3px;
+  margin-bottom:14px;
+}
+.v3 .item-attrs .attr{
+  display:flex;flex-direction:column;gap:2px;
+}
+.v3 .item-attrs .attr .l{
+  font-family:'IBM Plex Mono',monospace;font-size:0.56rem;letter-spacing:0.16em;
+  color:var(--tx-3);text-transform:uppercase;
+}
+.v3 .item-attrs .attr .v{
+  font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:0.82rem;color:var(--tx);
+}
+
+.v3 .actions{margin-top:8px}
+.v3 .actions-label{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;
+  letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;
+}
+.v3 .action{
+  font-family:'IBM Plex Sans',sans-serif;font-weight:400;font-size:0.88rem;line-height:1.45;
+  display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;
+}
+.v3 .action .arr{
+  font-family:'IBM Plex Mono',monospace;color:var(--gold);flex-shrink:0;padding-top:2px;font-size:0.78rem;
+}
+.v3 .action .body-text-action{flex:1}
+.v3 .action .body-text-action strong{font-weight:500}
+.v3 .action .body-text-action .dest{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.04em;color:var(--tx-3);margin-top:1px;
+}
+
+.v3 .sig{
+  margin-top:8px;padding-top:14px;border-top:1px solid var(--bdr);
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;line-height:1.7;
+  color:var(--tx-3);letter-spacing:0.04em;
+}
+.v3 .sig .right{text-align:right;color:var(--gold-dim);margin-top:8px}
+
+/* ──────────────────────── COMPARE FOOTER ──────────────────────── */
+.compare{
+  max-width:1480px;margin:48px auto 0;
+  background:var(--surf);border:1px solid var(--bdr);border-radius:8px;
+  padding:30px 36px;
+}
+.compare h3{
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.26em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:22px;display:flex;align-items:center;gap:14px;
+}
+.compare h3::after{content:"";flex:1;height:1px;background:var(--bdr-2)}
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+.compare-col h4{
+  font-family:'Bricolage Grotesque';font-weight:600;font-size:1rem;margin-bottom:10px;
+  display:flex;align-items:baseline;gap:8px;
+}
+.compare-col h4 .letter{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--gold);letter-spacing:0.18em}
+.compare-col ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.compare-col ul li{font-size:0.86rem;color:var(--tx-2);line-height:1.5;padding-left:14px;position:relative}
+.compare-col ul li::before{content:"›";position:absolute;left:0;color:var(--gold-dim);font-family:'IBM Plex Mono',monospace}
+.compare-col .verdict{
+  font-family:'Fraunces';font-style:italic;font-size:0.88rem;color:var(--tx);
+  padding:12px 14px;background:var(--surf-2);border-left:2px solid var(--gold);border-radius:0 4px 4px 0;line-height:1.55;
+}
+.compare-col .verdict::before{
+  content:"Best for: ";font-family:'IBM Plex Mono',monospace;font-style:normal;
+  font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);
+  display:block;margin-bottom:3px;font-weight:500;
+}
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="page-eyebrow">Signal Console · Editorial Triptych · 17 May 26</div>
+  <h1 class="page-title">Three rhetorical postures for the same <em>Briefing</em>.</h1>
+  <p class="page-sub">
+    All three variants present the same data — Maya's Monday-morning Briefing from the Phase 6 walkthrough — in three different editorial registers. What changes is not the content; it is the <strong>tone of voice the surface itself adopts</strong>. Newspaper carries institutional gravity. Magazine carries literary breath. Memo carries insider directness. Pick the posture before locking the visual system.
+  </p>
+</header>
+
+<main class="triptych">
+
+  <!-- ════════════════════════════════════════════════════════════
+       VARIANT 1 — NEWSPAPER OF RECORD
+       ════════════════════════════════════════════════════════════ -->
+  <section class="variant v1">
+    <div class="var-tag">
+      <span class="badge">1</span>
+      <div class="name">Newspaper of Record</div>
+      <div class="register">Institutional authority — dense, ornamental, columnar.</div>
+      <div class="reference">Reference: Financial Times · Wall Street Journal</div>
+    </div>
+
+    <div class="var-body body">
+
+      <!-- Masthead -->
+      <div class="masthead">
+        <div class="title">The Signal <em>Console</em></div>
+        <div class="masthead-meta">
+          <span>17 May 2026</span>
+          <span>Briefing №. 19</span>
+          <span>Est. 2026</span>
+        </div>
+      </div>
+
+      <div class="standfirst">A weekly read of what is emerging in the categories you compete in — synthesized, evidence-anchored, routed into action.</div>
+
+      <!-- Lede -->
+      <div class="lede">The CDP entry floor went to <em>zero</em>.</div>
+      <div class="dek">Reposition Discovery before your deals feel it.</div>
+      <div class="byline">
+        <span>Syndicated from 4 sources · 4 items</span>
+        <span class="right">Confidence 0.76 · Rising</span>
+      </div>
+
+      <p class="editorial">Two independent CDP competitors — Segment and Hightouch — launched zero-cost entry tiers within the same week. Twilio, Segment's parent, released an open-source CDP in parallel, suggesting the move is being treated as a defensible strategic position rather than an opportunistic experiment. The synchronized timing across the category is significant: active deals at Vector Analytics, Pulse Insights, and Atlas Data sit in evaluation, negotiation, and decision — exactly the stages where "we'll pilot the free option first" becomes a load-bearing objection.</p>
+
+      <div class="ornament">❦ &nbsp; ❦ &nbsp; ❦</div>
+
+      <div class="section-label">The Six Questions</div>
+      <div class="six-q">
+        <div class="q"><b>What changed.</b> Segment launched Free for Devs (1,000 MTU at no cost); Hightouch added a Hightouch Free tier; Twilio released an open-source CDP — all within 7 days.</div>
+        <div class="q"><b>Evidence.</b> 4 items, 4 sources (TechCrunch, Hightouch pricing-page diff, HN Show HN, Wikipedia Pageviews). Weighted evidence: 3.43.</div>
+        <div class="q"><b>Why it matters.</b> Sub-$50K POCs are no longer un-contested. Expect "pilot the free option first" to enter all three active deals within 14 days.</div>
+        <div class="q"><b>Who needs to know.</b> Maya. Marcus (founding AE). The board narrative if the reset persists.</div>
+        <div class="q"><b>What next.</b> Refresh Discovery Phase 04 to anchor orchestration depth ahead of pricing. Pre-stage an objection handler before Wednesday's Pulse Insights call.</div>
+      </div>
+
+      <div class="evidence">
+        <b>EVIDENCE</b> · Segment "Free for Devs" launch · Hightouch Free tier (page diff) · Twilio open-source CDP (HN) · Wikipedia "Customer data platform" pageviews +50% over 30d
+      </div>
+
+      <div class="section-label">Recommended Moves</div>
+      <div class="moves">
+        <div class="move">
+          Refresh Discovery Phase 04 (Pricing &amp; Procurement) to anchor orchestration depth ahead of pricing conversations.
+          <span class="dest">→ Discovery Studio · Phase 04 · refresh existing</span>
+        </div>
+        <div class="move">
+          Draft new objection handler: "We'll pilot the free option first."
+          <span class="dest">→ Call Planner · Objection Bank · new</span>
+        </div>
+        <div class="move">
+          Update Segment battlecard with Free for Devs context and "data plane only" positioning angle.
+          <span class="dest">→ Asset Builder · Battlecard · Segment · refresh existing</span>
+        </div>
+      </div>
+
+      <!-- Sidebar / second article -->
+      <div class="sidebar">
+        <div class="head">Also Today</div>
+        <div class="lede">"Agentic" and "Reverse ETL" are crowding <em>"CDP"</em>.</div>
+        <div class="dek">Position before the rename solidifies.</div>
+        <div class="body-text">The category vocabulary is shifting in two directions: "reverse ETL" reframing the data-out problem (Wikipedia pageviews +71%) and "agentic CDP" reframing the data-in problem in operator content. Threadline's positioning page hasn't moved. The window is probably 60 days.</div>
+      </div>
+
+      <div class="footer">
+        <span>BRIEFING №. 19</span>
+        <span class="gold">CONTINUED ON THE WATCHLIST TRIGGERS PAGE</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       VARIANT 2 — LITERARY MAGAZINE
+       ════════════════════════════════════════════════════════════ -->
+  <section class="variant v2">
+    <div class="var-tag">
+      <span class="badge">2</span>
+      <div class="name">Literary Magazine</div>
+      <div class="register">Literary depth — generous, asymmetric, restrained.</div>
+      <div class="reference">Reference: The Atlantic · The New Yorker</div>
+    </div>
+
+    <div class="var-body body">
+
+      <div class="meta-top">
+        <span>The Signal Console</span>
+        <span class="vol">Vol. 19 · May 2026</span>
+      </div>
+
+      <div class="hero-quote">
+        The floor of your TAM is being <em>contested</em>.
+      </div>
+
+      <div class="article-meta"><span class="gold">Essay One</span> &nbsp; · &nbsp; <span>CDP Category</span> &nbsp; · &nbsp; <span>Confidence 0.76</span></div>
+
+      <div class="headline">The CDP entry floor went to zero. Reposition Discovery before your deals feel it.</div>
+
+      <div class="body-text">Two independent CDP competitors — Segment and Hightouch — launched zero-cost entry tiers within the same week. Twilio, Segment's parent, released an open-source CDP in parallel, suggesting the move is being treated as a defensible strategic position rather than an opportunistic experiment. The synchronized timing across the category is significant.</div>
+
+      <div class="pull-quote">
+        Expect "we'll pilot the free option first" to enter Vector, Pulse, and Atlas within fourteen days.
+      </div>
+
+      <div class="body-text">Your active deals at Vector Analytics, Pulse Insights, and Atlas Data all sit in evaluation, negotiation, or decision — exactly the stages where the free-option objection becomes load-bearing. The Pulse Insights call this Wednesday is the most exposed: a negotiation-stage deal against Segment and RudderStack, with no existing objection handler in Call Planner for the new pricing framing.</div>
+
+      <div class="six-q">
+        <div class="q"><span class="l">What changed</span><span class="v">Two free-tier launches plus an open-source release inside one week, all in the CDP category.</span></div>
+        <div class="q"><span class="l">Evidence</span><span class="v">4 items, 4 sources. Direct page diffs, primary press, community discussion, search-interest signal.</span></div>
+        <div class="q"><span class="l">Why it matters</span><span class="v">Sub-$50K POCs are no longer un-contested. The "wait and pilot" objection becomes default.</span></div>
+        <div class="q"><span class="l">Who needs to know</span><span class="v">You. Marcus. The board if the reset persists past Q3.</span></div>
+        <div class="q"><span class="l">What next</span><span class="v">Refresh Discovery Phase 04 before Wednesday's Pulse Insights call.</span></div>
+      </div>
+
+      <div class="moves">
+        <div class="moves-label">Recommended Moves</div>
+        <div class="move">
+          Refresh Discovery Phase 04 to anchor orchestration depth before pricing surfaces.
+          <span class="dest">Discovery Studio · Phase 04 · refresh existing</span>
+        </div>
+        <div class="move">
+          Draft objection handler: "We'll pilot the free option first."
+          <span class="dest">Call Planner · Objection Bank · new</span>
+        </div>
+        <div class="move">
+          Update Segment battlecard tile with new pricing reality.
+          <span class="dest">Asset Builder · Battlecard · Segment · refresh existing</span>
+        </div>
+      </div>
+
+      <div class="divider">· · ·</div>
+
+      <div class="second">
+        <div class="article-meta"><span class="gold">Essay Two</span> &nbsp; · &nbsp; <span>Category Vocabulary</span> &nbsp; · &nbsp; <span>Confidence 0.68</span></div>
+        <div class="headline">"Agentic" and "Reverse ETL" are crowding "CDP".</div>
+        <div class="body-text">The category vocabulary is shifting in two directions simultaneously. "Reverse ETL" is reframing the data-out problem; "agentic CDP" is reframing the data-in problem. Threadline's positioning page anchors on the old vocabulary. Operators who think in the new terms will increasingly evaluate competitors who match the vocabulary first.</div>
+      </div>
+
+      <div class="footer">Continued in the Watchlist · 3 trigger fires today</div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       VARIANT 3 — OPERATOR BRIEFING MEMO
+       ════════════════════════════════════════════════════════════ -->
+  <section class="variant v3">
+    <div class="var-tag">
+      <span class="badge">3</span>
+      <div class="name">Operator Briefing Memo</div>
+      <div class="register">Insider intimacy — tight, document-like, signaled.</div>
+      <div class="reference">Reference: Bridgewater Morning Brief · Private Investment Letter</div>
+    </div>
+
+    <div class="var-body body">
+
+      <div class="memo-classification">PRIVATE · OPERATOR-EYES-ONLY</div>
+
+      <div class="memo-head">
+        <div class="row"><span class="label">TO</span><span class="val">Maya Chen</span></div>
+        <div class="row"><span class="label">FROM</span><span class="val">Signal Console</span></div>
+        <div class="row"><span class="label">DATE</span><span class="val">17 May 2026 · 06:00 UTC</span></div>
+        <div class="row"><span class="label">RE</span><span class="val gold">Weekly briefing — CDP category</span></div>
+      </div>
+
+      <div class="summary-block">
+        <div class="h">The read this week</div>
+        <div class="body-text">The CDP category just had its <em>pricing floor reset to zero</em>. Two patterns to act on. Three trigger fires. Three active deals affected. Plan accordingly.</div>
+      </div>
+
+      <!-- Item 1 -->
+      <div class="item">
+        <div class="item-num">Item 01 — Pattern</div>
+        <div class="item-head">The CDP entry floor went to zero. Reposition Discovery before your deals feel it.</div>
+        <div class="item-meta">
+          <span class="gold">RISING</span>
+          <span>4 items / 4 sources</span>
+          <span>conf 0.76</span>
+        </div>
+
+        <div class="item-body">Two independent CDP competitors — Segment and Hightouch — launched zero-cost entry tiers within the same week. Twilio (Segment's parent) released an open-source CDP in parallel. The synchronized timing suggests deliberate strategic positioning, not coincidence. Vector Analytics, Pulse Insights, and Atlas Data all sit in stages where "pilot the free option first" becomes a load-bearing objection.</div>
+
+        <div class="item-attrs">
+          <div class="attr"><span class="l">What changed</span><span class="v">3 free-tier moves in 7 days</span></div>
+          <div class="attr"><span class="l">Trajectory</span><span class="v">Rising, fast</span></div>
+          <div class="attr"><span class="l">Affected deals</span><span class="v">Vector · Pulse · Atlas</span></div>
+          <div class="attr"><span class="l">Risk window</span><span class="v">14 days</span></div>
+        </div>
+
+        <div class="actions">
+          <div class="actions-label">Move on this</div>
+          <div class="action">
+            <span class="arr">→</span>
+            <div class="body-text-action">
+              <strong>Refresh Discovery Phase 04</strong> — anchor orchestration depth ahead of pricing.
+              <span class="dest">Discovery Studio · Phase 04 · refresh existing</span>
+            </div>
+          </div>
+          <div class="action">
+            <span class="arr">→</span>
+            <div class="body-text-action">
+              <strong>Draft objection handler</strong> — "We'll pilot the free option first." Before Wednesday's Pulse Insights call.
+              <span class="dest">Call Planner · Objection Bank · new</span>
+            </div>
+          </div>
+          <div class="action">
+            <span class="arr">→</span>
+            <div class="body-text-action">
+              <strong>Update Segment battlecard</strong> — Free for Devs context + "data plane only" positioning.
+              <span class="dest">Asset Builder · Battlecard · Segment · refresh existing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="item">
+        <div class="item-num">Item 02 — Pattern</div>
+        <div class="item-head">"Agentic" and "Reverse ETL" are crowding "CDP" in operator vocabulary.</div>
+        <div class="item-meta">
+          <span class="gold">RISING</span>
+          <span>4 items / 3 sources</span>
+          <span>conf 0.68</span>
+        </div>
+
+        <div class="item-body">Category vocabulary shifting in two directions — "reverse ETL" reframing data-out; "agentic CDP" reframing data-in. Threadline's positioning hasn't moved. Window to reposition is probably 60 days before the rename solidifies around someone else.</div>
+
+        <div class="actions">
+          <div class="actions-label">Move on this</div>
+          <div class="action">
+            <span class="arr">→</span>
+            <div class="body-text-action">
+              <strong>Rewrite positioning page hero</strong> within 30 days.
+              <span class="dest">Asset Builder · Executive One-Pager</span>
+            </div>
+          </div>
+          <div class="action">
+            <span class="arr">→</span>
+            <div class="body-text-action">
+              <strong>Draft category essay</strong> — "What we mean by agentic, and what we don't."
+              <span class="dest">Asset Builder · Executive One-Pager</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sig">
+        — Signal Console v0.3 · briefing 19 of 2026<br>
+        17 items processed · 14 enriched · 2 patterns surfaced<br>
+        3 triggers fired · 7 deal alerts · cost this week $0.34<br>
+        <div class="right">Continued in attached: Triggers · Deal-Watch · Watch List</div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ─────────────────── COMPARE FOOTER ─────────────────── -->
+<footer class="compare">
+  <h3>How to choose between the three</h3>
+  <div class="compare-grid">
+
+    <div class="compare-col">
+      <h4><span class="letter">1</span> Newspaper</h4>
+      <ul>
+        <li>Carries institutional gravity. The product reads like a publication of record.</li>
+        <li>Strongest for founders who want the Briefing to feel like an asset they could quote at a board meeting.</li>
+        <li>Dense, ornamental, traditional typography. Most "premium" feel of the three.</li>
+        <li>Risk: ornament can read as performative if synthesis isn't tight. Voice document must do heavy lifting.</li>
+      </ul>
+      <div class="verdict">The founder who wants their CI to feel like the FT delivered every Monday.</div>
+    </div>
+
+    <div class="compare-col">
+      <h4><span class="letter">2</span> Magazine</h4>
+      <ul>
+        <li>Carries literary depth. The Briefing reads like an essay rather than a dashboard.</li>
+        <li>Generous whitespace makes long-form synthesis breathe; pull quotes earn their punch.</li>
+        <li>Most restrained of the three — lets the writing carry the weight without ornament.</li>
+        <li>Risk: at small Pattern counts (1-2 surfaced), can feel under-filled. Best when Briefings are routinely 2-3 Patterns deep.</li>
+      </ul>
+      <div class="verdict">The founder who reads Stratechery and wants their own Briefing to live in that register.</div>
+    </div>
+
+    <div class="compare-col">
+      <h4><span class="letter">3</span> Memo</h4>
+      <ul>
+        <li>Carries insider directness. The Briefing reads like an internal document, not a publication.</li>
+        <li>Most action-oriented of the three. Items numbered, moves numbered, signed off at the bottom.</li>
+        <li>Tightest density — most information per square inch. Best for operators who skim before they read.</li>
+        <li>Risk: less differentiated visually. Can read as "another internal tool" if the synthesis isn't sharp.</li>
+      </ul>
+      <div class="verdict">The founder who runs on action items and wants the Briefing to feel like a directive.</div>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
