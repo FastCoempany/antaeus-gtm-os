@@ -316,6 +316,18 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
         }
     },
     {
+        // Signal Console hit Step 5 (drop legacy) on 2026-05-23. The
+        // room is now cloud-native from day one — operators sign in and
+        // accounts/signals flow through `signal_console_accounts` +
+        // `signals` tables directly. No localStorage seeding required
+        // for fresh accounts.
+        //
+        // The keys array stays for one final purpose: migrating the
+        // Phase 2.3 (2026-04-24) seed-blob row for users whose legacy
+        // data was captured during that one-shot migration. Once the
+        // master `data_layer_parity_complete` flag flips on and the
+        // 2026-04-24 blob is archived, this entry can be removed
+        // entirely.
         table: "signal_console_accounts",
         keys: [
             "gtmos_sc_v4",

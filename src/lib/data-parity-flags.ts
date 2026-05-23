@@ -31,11 +31,22 @@ export function isDataLayerParityComplete(): boolean {
 }
 
 // ─── Per-room flag keys ─────────────────────────────────────────────────
+//
+// Rooms that have completed Step 5 (drop legacy) no longer reference
+// their flags in code — the cloud paths are unconditional. The flag
+// keys stay here as an inventory + so the founder knows which Posthog
+// flags can be safely deleted from the dashboard.
+//
+// "Retired" rooms (Step 5 closed):
+//   - signal_console — Step 5 shipped 2026-05-23; flags can be deleted
+//     from Posthog. Per-room code no longer calls isRoomParity*Enabled.
 
 export const DATA_PARITY_FLAGS = {
     signalConsole: {
         write: "signal_console_data_parity_write",
         read: "signal_console_data_parity_read"
+        // RETIRED at Step 5 (2026-05-23). Code no longer references
+        // these keys. Safe to delete from Posthog at any time.
     },
     dealWorkspace: {
         write: "deal_workspace_data_parity_write",

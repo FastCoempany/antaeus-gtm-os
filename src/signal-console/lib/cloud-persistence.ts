@@ -1,7 +1,6 @@
 import type { DataClient } from "@/lib/data-client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { reportError, trackEvent } from "@/lib/observability";
-import { isRoomParityReadEnabled, isRoomParityWriteEnabled } from "@/lib/data-parity-flags";
 import {
     accountToInsert,
     accountToUpdate,
@@ -83,56 +82,47 @@ export async function bootCloudPersistence(
     client: DataClient
 ): Promise<BootResult> {
     clientRef = client;
-    // Step 4 flip-read: signals[] comes from the `signals` Postgres
-    // table when the parity-read flag is on. Off → legacy blob path
-    // (Account.data.signals[]) via rowToAccount, same as Step 3.
-    const useCloudSignals = isRoomParityReadEnabled("signalConsole");
+    // Step 5 (drop legacy): cloud is now unconditionally canonical.
+    // signals[] always comes from the `signals` Postgres table; the
+    // accounts list always comes from `signal_console_accounts`.
+    // The Step 4 `signal_console_data_parity_read` flag has retired —
+    // the flag check that used to gate this code path is gone.
     try {
         const rows = await client.signalConsoleAccounts.list({ limit: 1000 });
         if (rows.length > 0) {
             // Cloud has data → cloud is canonical. Replace local state.
-            let accounts = rowsToAccounts(rows);
-            if (useCloudSignals) {
-                accounts = [
-                    ...(await loadSignalsForAccounts(client, accounts))
-                ];
-            }
+            const accounts = await loadSignalsForAccounts(
+                client,
+                rowsToAccounts(rows)
+            );
             setAllAccounts(accounts);
             subscribeRealtime(client);
-            if (useCloudSignals) {
-                subscribeSignalsRealtime(client);
-            }
+            subscribeSignalsRealtime(client);
             trackEvent("signal_console_boot", {
                 mode: "cloud",
-                count: accounts.length,
-                signalsSource: useCloudSignals ? "cloud" : "blob"
+                count: accounts.length
             });
             return { mode: "cloud", accountCount: accounts.length };
         }
-        // Cloud is empty. If localStorage was already seeded, push
-        // those rows up — first-time cloud sync for this user.
+        // Cloud is empty. If localStorage was already seeded (legacy
+        // offline-recovery path), push those rows up — first-time cloud
+        // sync for this user.
         const local = allAccounts.value;
         if (local.length > 0) {
             await migrateLocalToCloud(client, local);
             subscribeRealtime(client);
-            if (useCloudSignals) {
-                subscribeSignalsRealtime(client);
-            }
+            subscribeSignalsRealtime(client);
             trackEvent("signal_console_boot", {
                 mode: "migrated",
-                count: local.length,
-                signalsSource: useCloudSignals ? "cloud" : "blob"
+                count: local.length
             });
             return { mode: "migrated", accountCount: local.length };
         }
         subscribeRealtime(client);
-        if (useCloudSignals) {
-            subscribeSignalsRealtime(client);
-        }
+        subscribeSignalsRealtime(client);
         trackEvent("signal_console_boot", {
             mode: "empty",
-            count: 0,
-            signalsSource: useCloudSignals ? "cloud" : "blob"
+            count: 0
         });
         return { mode: "empty", accountCount: 0 };
     } catch (err) {
@@ -364,7 +354,8 @@ export async function addSignalToCloud(
     signal: Signal
 ): Promise<Signal | null> {
     if (!clientRef) return null;
-    if (!isRoomParityWriteEnabled("signalConsole")) return null;
+    // Step 5 (drop legacy): the parity-write flag check has retired.
+    // Cloud writes happen unconditionally now.
     if (!looksLikePersistedId(accountId)) {
         // Parent account hasn't synced to cloud yet — the signals row
         // would fail the FK constraint. Skip cleanly; the signal still
@@ -406,7 +397,7 @@ export async function updateSignalInCloud(
     signal: Signal
 ): Promise<Signal | null> {
     if (!clientRef) return null;
-    if (!isRoomParityWriteEnabled("signalConsole")) return null;
+    // Step 5: parity-write flag retired; always unconditional.
     if (!looksLikePersistedSignalId(signal.id)) return null;
     try {
         const row = await clientRef.signals.update(
@@ -439,7 +430,7 @@ export async function updateSignalInCloud(
  */
 export async function deleteSignalFromCloud(signalId: string): Promise<void> {
     if (!clientRef) return;
-    if (!isRoomParityWriteEnabled("signalConsole")) return;
+    // Step 5: parity-write flag retired; always unconditional.
     if (!looksLikePersistedSignalId(signalId)) return;
     try {
         await clientRef.signals.remove(signalId);
