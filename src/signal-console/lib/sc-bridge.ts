@@ -228,7 +228,19 @@ export function accountToUpdate(
 
 /**
  * Build the `data` jsonb blob — everything that isn't a top-level
- * column. Pure function, exported for tests.
+ * column.
+ *
+ * Step 5 (drop legacy): signals are NOT included in this blob
+ * anymore. Step 2 added the `signals` Postgres table; Step 3 dual-wrote
+ * to both the table and the blob; Step 4 flipped reads to the table.
+ * The blob copy was redundant + bloating the row size; Step 5 drops it.
+ *
+ * Backward compatibility: rowToAccount still reads `data.signals[]`
+ * for legacy rows that were written before Step 5. Old data is
+ * gracefully ignored (the signals[] field is just empty when reading
+ * a fresh-Step-5 row), so the room stays usable across deploys.
+ *
+ * Pure function, exported for tests.
  */
 export function extractDataBlob(account: Account): Record<string, unknown> {
     const blob: Record<string, unknown> = {};
@@ -239,6 +251,5 @@ export function extractDataBlob(account: Account): Record<string, unknown> {
     if (account.approach) blob["approach"] = account.approach;
     if (account.persona) blob["persona"] = account.persona;
     if (account.notes) blob["notes"] = account.notes;
-    blob["signals"] = account.signals;
     return blob;
 }

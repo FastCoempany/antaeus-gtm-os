@@ -164,7 +164,7 @@ describe("accountToInsert", () => {
         expect((ins as { ticker?: string }).ticker).toBeUndefined();
     });
 
-    it("packs editorial fields into data jsonb", () => {
+    it("packs editorial fields into data jsonb (signals omitted post-Step 5)", () => {
         const ins = accountToInsert(
             makeAccount({
                 name: "Y",
@@ -173,10 +173,11 @@ describe("accountToInsert", () => {
                 signals: [{ id: "s1", headline: "hi" }]
             })
         );
+        // Step 5 dropped signals from the blob — they live in the
+        // `signals` Postgres table now (Step 2 / PR #140 schema).
         expect(ins.data).toEqual({
             tier: 3,
-            approach: "back-channel",
-            signals: [{ id: "s1", headline: "hi" }]
+            approach: "back-channel"
         });
     });
 });
@@ -199,11 +200,14 @@ describe("accountToUpdate", () => {
 });
 
 describe("extractDataBlob", () => {
-    it("only includes set fields + always includes signals", () => {
+    // Step 5 (drop legacy): signals are NO LONGER included in the
+    // data blob — they live in the `signals` Postgres table now
+    // (canonical since Step 2 / PR #140). Tests updated below.
+    it("includes only set fields; signals are NOT in the blob anymore", () => {
         const blob = extractDataBlob(makeAccount({ name: "X" }));
-        expect(blob).toEqual({ signals: [] });
+        expect(blob).toEqual({});
     });
-    it("includes every set editorial field", () => {
+    it("includes every set editorial field (signals omitted)", () => {
         const blob = extractDataBlob(
             makeAccount({
                 name: "X",
@@ -214,7 +218,7 @@ describe("extractDataBlob", () => {
                 approach: "Cold",
                 persona: "VP",
                 notes: "x",
-                signals: [{ id: "s1" }]
+                signals: [{ id: "s1" }] // still present in-memory but dropped from blob
             })
         );
         expect(blob).toEqual({
@@ -224,14 +228,15 @@ describe("extractDataBlob", () => {
             focus: "Expansion",
             approach: "Cold",
             persona: "VP",
-            notes: "x",
-            signals: [{ id: "s1" }]
+            notes: "x"
+            // signals intentionally absent — they live in the
+            // `signals` Postgres table, not in this jsonb blob.
         });
     });
 });
 
 describe("rowToAccount roundtrip", () => {
-    it("preserves the operationally meaningful fields through insert→hydrate", () => {
+    it("preserves account fields through insert→hydrate (signals now live in `signals` table, post-Step 5)", () => {
         const original = makeAccount({
             id: "acc_legacy",
             name: "Meridian",
@@ -265,7 +270,37 @@ describe("rowToAccount roundtrip", () => {
         expect(back!.industry).toBe("Logistics");
         expect(back!.tier).toBe(2);
         expect(back!.persona).toBe("VP Ops");
+        // Step 5: signals no longer roundtrip via the blob — extractDataBlob
+        // doesn't include them. The signals[] array is hydrated separately
+        // from the `signals` table via loadSignalsForAccounts at boot.
+        // For accounts written under the new code, the blob has no
+        // `signals` key → in-memory signals[] is empty.
+        expect(back!.signals).toEqual([]);
+    });
+
+    it("STILL hydrates signals from a legacy blob row (back-compat for pre-Step 5 data)", () => {
+        // Legacy rows written before Step 5 have signals nested under
+        // data.signals[]. rowToAccount keeps reading them so the room
+        // works across the deploy boundary.
+        const legacyRow = {
+            id: "uuid",
+            account_key: "meridian",
+            account_name: "Meridian",
+            domain: null,
+            ticker: null,
+            industry: null,
+            sector: null,
+            heat: 0,
+            last_enriched_at: null,
+            data: {
+                tier: 2,
+                signals: [{ id: "s1", headline: "Pre-Step-5 signal" }]
+            },
+            created_at: NOW,
+            updated_at: NOW
+        };
+        const back = rowToAccount(legacyRow as never);
         expect(back!.signals).toHaveLength(1);
-        expect(back!.signals[0]!.headline).toBe("EU expansion");
+        expect(back!.signals[0]!.headline).toBe("Pre-Step-5 signal");
     });
 });

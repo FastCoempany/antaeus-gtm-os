@@ -153,16 +153,23 @@ describe("addSignalToCloud", () => {
         expect(result).toBeNull();
     });
 
-    it("no-ops when parity-write flag is off", async () => {
+    it("writes unconditionally — parity-write flag check retired in Step 5", async () => {
+        // Step 5 removed the isRoomParityWriteEnabled gate from
+        // addSignalToCloud. The mock for that helper is still set up
+        // at the top of this file (other tests rely on it), but the
+        // production code no longer references it. Even if the mock
+        // returns false, the write still goes through.
         vi.mocked(isRoomParityWriteEnabled).mockReturnValue(false);
         const mock = makeMockClient();
         __setDataClientForTests(mock.client);
+        mock.setNextResult(makeRow({ headline: "Test" }));
         const result = await addSignalToCloud(ACCOUNT_UUID, {
             id: "sig_1",
             headline: "Test"
         });
-        expect(result).toBeNull();
-        expect(mock.calls).toHaveLength(0);
+        expect(result).not.toBeNull();
+        expect(mock.calls).toHaveLength(1);
+        expect(mock.calls[0]!.op).toBe("insert");
     });
 
     it("no-ops when account id is legacy (would fail FK)", async () => {
@@ -344,17 +351,24 @@ describe("addSignal (orchestrator)", () => {
         expect(account.signals[0]!.id).toBe(SIGNAL_UUID);
     });
 
-    it("keeps local id when cloud write is skipped (flag off)", async () => {
-        vi.mocked(isRoomParityWriteEnabled).mockReturnValue(false);
+    it("keeps local id when cloud write fails (graceful fallback)", async () => {
+        // Step 5: the parity-write flag check is gone, so we can't
+        // disable cloud writes with the flag mock anymore. To
+        // exercise the local-only fallback path, we trigger a cloud
+        // error — addSignalToCloud catches it and returns null, which
+        // routes addSignal to keep the local id.
         seedAccount(ACCOUNT_UUID);
         const mock = makeMockClient();
         __setDataClientForTests(mock.client);
+        mock.setNextError(new Error("RLS deny / network blip"));
         const out = await addSignal(ACCOUNT_UUID, {
             id: "sig_local_1",
             headline: "Local"
         });
         expect(out.id).toBe("sig_local_1");
-        expect(mock.calls).toHaveLength(0);
+        // Cloud write was attempted (and failed) — call count is 1,
+        // not 0 like the pre-Step-5 flag-skipped variant.
+        expect(mock.calls).toHaveLength(1);
     });
 });
 
