@@ -654,7 +654,18 @@ function toAccessorName(table: TableName): string {
         // are NOT part of the localStorage → Supabase migration tool.
         // Listed here only to satisfy the exhaustive Record type.
         workspace_sessions: "workspaceSessions",
-        observations: "observations"
+        observations: "observations",
+        // Briefing room foundation (ADR-006, B.0a). Populated
+        // server-side by the Briefing pipeline Edge Function — no
+        // legacy localStorage data to migrate from. Listed here only
+        // to satisfy the exhaustive Record type.
+        briefing_runs: "briefingRuns",
+        briefing_raw_items: "briefingRawItems",
+        briefing_enriched_items: "briefingEnrichedItems",
+        briefing_clusters: "briefingClusters",
+        briefing_patterns: "briefingPatterns",
+        briefing_audit_envelopes: "briefingAuditEnvelopes",
+        briefing_pattern_feedback: "briefingPatternFeedback"
     };
     return MAP[table];
 }

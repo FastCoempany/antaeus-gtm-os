@@ -73,6 +73,19 @@ export type WaitlistSignup = Row<"waitlist_signups">;
 export type WorkspaceSession = Row<"workspace_sessions">;
 export type Observation = Row<"observations">;
 
+// ─── Briefing room (ADR-006) ───────────────────────────────────────────
+// The seven tables added by migration 20260523180000. Per the build
+// phase plan §B.0, these are the foundation tables Briefing B.0 → B.2
+// requires. Triggers (B.3) + Periphery (B.4) tables land later.
+
+export type BriefingRun = Row<"briefing_runs">;
+export type BriefingRawItem = Row<"briefing_raw_items">;
+export type BriefingEnrichedItem = Row<"briefing_enriched_items">;
+export type BriefingCluster = Row<"briefing_clusters">;
+export type BriefingPattern = Row<"briefing_patterns">;
+export type BriefingAuditEnvelope = Row<"briefing_audit_envelopes">;
+export type BriefingPatternFeedback = Row<"briefing_pattern_feedback">;
+
 // ─── Views ─────────────────────────────────────────────────────────────
 // Views show up in Database["public"]["Views"] rather than Tables. The
 // generator emits every view column as `T | null` because views don't

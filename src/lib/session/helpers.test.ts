@@ -124,7 +124,14 @@ function makeMockDataClient(opts: {
         readinessSnapshots: {} as never,
         handoffArtifacts: {} as never,
         workspaceSessions,
-        observations: {} as never
+        observations: {} as never,
+        briefingRuns: {} as never,
+        briefingRawItems: {} as never,
+        briefingEnrichedItems: {} as never,
+        briefingClusters: {} as never,
+        briefingPatterns: {} as never,
+        briefingAuditEnvelopes: {} as never,
+        briefingPatternFeedback: {} as never
     };
 
     return {

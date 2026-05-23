@@ -107,7 +107,14 @@ function makeDataClient(opts: {
         readinessSnapshots: {} as never,
         handoffArtifacts: {} as never,
         workspaceSessions: {} as never,
-        observations
+        observations,
+        briefingRuns: {} as never,
+        briefingRawItems: {} as never,
+        briefingEnrichedItems: {} as never,
+        briefingClusters: {} as never,
+        briefingPatterns: {} as never,
+        briefingAuditEnvelopes: {} as never,
+        briefingPatternFeedback: {} as never
     };
 
     return { data, inserts, updates, storedRows };
