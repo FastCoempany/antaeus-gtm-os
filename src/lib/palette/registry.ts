@@ -247,6 +247,30 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         keywords: ["handoff", "kit", "hire", "inherit", "synthesis"],
         description: "The living onboarding surface a first hire opens on day one."
     },
+    // Briefing is a new composition family per canon §4.21 — an
+    // intelligence surface, not a System Ledger. Until the family
+    // taxonomy is formally extended (waits on face work hardening per
+    // canon §4.21 "Face direction TBD"), it sits here as the closest
+    // neighbor by intent: a weekly synthesis the operator reads, not
+    // a live instrument or a diagnosis surface.
+    {
+        id: "briefing",
+        kicker: "BRIEFING",
+        label: "Briefing",
+        href: "/briefing/",
+        family: "system-ledger",
+        keywords: [
+            "briefing",
+            "weekly",
+            "read",
+            "intelligence",
+            "patterns",
+            "periphery",
+            "contrarian",
+            "synthesis"
+        ],
+        description: "Weekly read of what's moving — and where your assumptions stop agreeing with the data."
+    },
 
     // ── Trust Annex ──────────────────────────────────────────────
     {

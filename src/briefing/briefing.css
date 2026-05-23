@@ -1,0 +1,154 @@
+/* Briefing room — B.0b scaffold.
+ *
+ * Bright field per canon Part II §1 + §4.21. The room is the
+ * intelligence surface that reads from every other room's getState()
+ * contract via the Recipe Layer pipeline; B.0b ships the structural
+ * shell only. Patterns, periphery, contrarian readout, and audit
+ * envelopes land in B.2 through B.6.
+ *
+ * Visual posture: severe + composed + authored. Deep navy ink on the
+ * cool-bright base; orange reserved for the one dominant move per
+ * surface (B.0b has none yet — empty state); serif headline carries
+ * the room's argument.
+ *
+ * Naming: .bf-* prefix matches the convention every other Phase 4 +
+ * Phase 5 room follows.
+ */
+
+:root {
+    --bf-bg: #f6f8fc;
+    --bf-ink: #0f1f3d;
+    --bf-ink-soft: rgba(15, 31, 61, 0.7);
+    --bf-ink-quiet: rgba(15, 31, 61, 0.5);
+    --bf-rule: rgba(15, 31, 61, 0.12);
+    --bf-rule-soft: rgba(15, 31, 61, 0.06);
+    --bf-orange: #e6701e;
+    --bf-blue: #2563eb;
+    --bf-card: #ffffff;
+    --bf-card-tint: rgba(15, 31, 61, 0.02);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bf-bg);
+    color: var(--bf-ink);
+    font-family: "Public Sans", system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.bf-room {
+    flex: 1;
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 40px 80px;
+}
+
+/* ── Topbar ───────────────────────────────────────────────────── */
+
+.bf-topbar {
+    padding: 24px 0 32px;
+    border-bottom: 1px solid var(--bf-rule);
+    margin-bottom: 40px;
+}
+
+.bf-topbar__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bf-ink-soft);
+    margin: 0 0 14px;
+}
+
+.bf-topbar__title {
+    font-family: "DM Serif Display", "Times New Roman", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--bf-ink);
+    margin: 0 0 18px;
+    max-width: 16ch;
+}
+
+.bf-topbar__sub {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--bf-ink-soft);
+    margin: 0;
+    max-width: 62ch;
+}
+
+/* ── Empty state ──────────────────────────────────────────────── */
+
+.bf-empty {
+    margin-top: 8px;
+    padding: 40px 48px;
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-left: 3px solid var(--bf-orange);
+    border-radius: 2px;
+}
+
+.bf-empty__label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bf-orange);
+    margin: 0 0 12px;
+}
+
+.bf-empty__headline {
+    font-family: "DM Serif Display", "Times New Roman", serif;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.2;
+    color: var(--bf-ink);
+    margin: 0 0 16px;
+    max-width: 24ch;
+}
+
+.bf-empty__body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--bf-ink-soft);
+    margin: 0 0 12px;
+    max-width: 60ch;
+}
+
+.bf-empty__body:last-child {
+    margin-bottom: 0;
+}
+
+.bf-empty__footnote {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--bf-rule-soft);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--bf-ink-quiet);
+}

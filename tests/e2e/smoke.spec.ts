@@ -594,4 +594,36 @@ test.describe("room boot smoke tests", () => {
             `page errors during boot:\n${errors.join("\n")}`
         ).toEqual([]);
     });
+
+    test("Briefing B.0b — /briefing/ scaffold boots cleanly", async ({
+        page
+    }) => {
+        // The new Briefing room (canon §4.21 + ADR-006). B.0b ships
+        // the structural shell only — RoomChrome + topbar with the
+        // thesis headline + empty-state card. Patterns + periphery +
+        // contrarian readout land in B.2 through B.5.
+        //
+        // Smoke test asserts: page loads without runtime errors, the
+        // RoomChrome kicker reads BRIEFING, topbar headline renders,
+        // and the empty-state card attaches.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/briefing/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ant-room-chrome")).toBeAttached();
+        await expect(page.locator(".bf-topbar__kicker")).toContainText(
+            "Briefing"
+        );
+        await expect(page.locator(".bf-topbar__title")).toContainText(
+            "What the system saw this week."
+        );
+        await expect(page.locator(".bf-empty")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
 });
