@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { ALL_ROOMS } from "@/lib/palette/registry";
 
 /**
  * Program 6 / PR 1 — palette + back-pill end-to-end walk.
@@ -170,9 +171,15 @@ test.describe("Program 6 / PR 1 — back-pill regression closed", () => {
 });
 
 test.describe("Program 6 / PR 1 — cmd+K palette", () => {
-    test("palette opens via cmd+K, lists all 20 rooms, filters, navigates", async ({
+    test("palette opens via cmd+K, lists every registered room, filters, navigates", async ({
         browser
     }) => {
+        // Total derives from the palette registry — bumps automatically
+        // when a new room lands (e.g. Briefing B.0b: 20 → 21). Keeps the
+        // count assertion in lockstep with registry.ts so each new room
+        // doesn't have to remember to bump this file.
+        const totalRooms = ALL_ROOMS.length;
+
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
@@ -188,13 +195,13 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
             await page.waitForTimeout(150);
             await expect(page.locator(".ant-palette")).toBeAttached();
 
-            // Count shows all 20 rooms initially.
+            // Count shows every registered room initially.
             const count = await page.locator(".ant-palette__count").textContent();
-            expect(count).toContain("20 / 20");
+            expect(count).toContain(`${totalRooms} / ${totalRooms}`);
 
-            // Result rows render — at least one for every family.
+            // Result rows render — one per registered room.
             const results = page.locator(".ant-palette__result");
-            expect(await results.count()).toBe(20);
+            expect(await results.count()).toBe(totalRooms);
 
             // Filter to "negotiation" — single result.
             await page.fill(".ant-palette__input", "negotiation");
