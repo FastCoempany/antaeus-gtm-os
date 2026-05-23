@@ -144,9 +144,11 @@ jobs:
           #     need to apply migrations manually via `supabase db push` in
           #     the next step (when Tier 1 retrofit PRs add an actual strategy
           #     — Step 0 leaves Apply migrations as a no-op for now).
-          # Branches typically provision in 30-90 seconds; budget 5 minutes
-          # worst-case.
-          for attempt in $(seq 1 30); do
+          # Branches typically provision in 30-90 seconds, but Supabase
+          # provisioning latency is highly variable — observed up to 10+
+          # minutes in CREATING_PROJECT state under load (PR #154 hit
+          # 5 min and never advanced). Budget 15 minutes worst-case.
+          for attempt in $(seq 1 90); do
             STATUS=$(supabase --experimental branches list \
               --project-ref "$PROJECT_REF" -o json 2>/dev/null \
               | python3 -c "import sys,json; \
@@ -308,9 +310,12 @@ jobs:
   teardown-branch:
     name: Teardown Supabase branch
     needs: [provision-branch, realtime-tests]
-    # Run on success AND failure of upstream jobs so we never leak branches.
-    # The daily janitor catches anything this guard misses.
-    if: always() && needs.provision-branch.result == 'success'
+    # Run whenever a branch name was emitted — including when provision
+    # itself failed mid-flight (e.g. polling timeout while Supabase was
+    # still in CREATING_PROJECT). The branch was created on the Supabase
+    # side even if our poll loop gave up, so we have to tear it down or
+    # we leak. The daily janitor catches anything this guard misses.
+    if: always() && needs.provision-branch.outputs.branch_name != ''
     runs-on: ubuntu-latest
     steps:
       - name: Install Supabase CLI
