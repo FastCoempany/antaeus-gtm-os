@@ -99,18 +99,6 @@ export type Database = {
           },
         ]
       }
-      // ─── Briefing room B.0a — HAND-AUTHORED PENDING REGEN ──────────
-      // The seven tables below were added by migration 20260523180000.
-      // These hand-authored stubs let the Briefing room scaffolding
-      // (B.0b/B.0c sub-PRs) reference Row<"briefing_runs"> etc. in a
-      // type-safe way before the founder regen runs.
-      //
-      // Replace this block with the output of `supabase gen types
-      // typescript --linked` after the migration applies to production.
-      // The regen should produce the same shape; if it differs in
-      // nullability or column ordering, the regen wins.
-      //
-      // Ref: deliverables/specs/briefing/01-build-phase-plan.md §B.0
       briefing_audit_envelopes: {
         Row: {
           cluster_snapshot: Json
@@ -154,7 +142,22 @@ export type Database = {
           user_actions?: Json
           workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "briefing_audit_envelopes_pattern_id_fkey"
+            columns: ["pattern_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_patterns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_audit_envelopes_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       briefing_clusters: {
         Row: {
@@ -196,7 +199,29 @@ export type Database = {
           weighted_evidence?: number
           workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "briefing_clusters_parent_cluster_id_fkey"
+            columns: ["parent_cluster_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_clusters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_clusters_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_clusters_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       briefing_enriched_items: {
         Row: {
@@ -265,7 +290,29 @@ export type Database = {
           what_changed?: string | null
           workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "briefing_enriched_items_raw_item_id_fkey"
+            columns: ["raw_item_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_raw_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_enriched_items_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_enriched_items_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       briefing_pattern_feedback: {
         Row: {
@@ -295,7 +342,22 @@ export type Database = {
           user_id?: string
           workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "briefing_pattern_feedback_pattern_id_fkey"
+            columns: ["pattern_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_patterns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_pattern_feedback_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       briefing_patterns: {
         Row: {
@@ -364,7 +426,29 @@ export type Database = {
           trajectory?: string | null
           workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "briefing_patterns_cluster_id_fkey"
+            columns: ["cluster_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_clusters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_patterns_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_patterns_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       briefing_raw_items: {
         Row: {
@@ -409,7 +493,22 @@ export type Database = {
           url?: string | null
           workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "briefing_raw_items_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_raw_items_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       briefing_runs: {
         Row: {
@@ -451,9 +550,16 @@ export type Database = {
           updated_at?: string
           workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "briefing_runs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      // ─── End Briefing room B.0a hand-authored stubs ────────────────
       deals: {
         Row: {
           account_name: string
