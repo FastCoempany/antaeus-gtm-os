@@ -277,7 +277,17 @@ export default defineConfig({
                 // forward procurement + finance scripts seeded from the
                 // legacy `antaeus_studio_cfo_v2` localStorage shape
                 // retired in the architecture-reset.
-                negotiation: resolve(__dirname, "src/negotiation/index.html")
+                negotiation: resolve(__dirname, "src/negotiation/index.html"),
+
+                // Briefing B.0b — intelligence surface scaffold per canon
+                // §4.21 + ADR-006. Served at /briefing/. Behind Posthog
+                // feature flag `room_briefing_v2`; no legacy room to
+                // redirect from (the existing /signal-console/ stays in
+                // place as the data substrate per ADR-006 path C — the
+                // Briefing reads from it, not the other way around).
+                // B.0b ships the structural shell only; B.1+ wires the
+                // Recipe Layer pipeline that produces Patterns.
+                briefing: resolve(__dirname, "src/briefing/index.html")
             }
         }
     },

@@ -8,8 +8,11 @@ import {
 } from "./registry";
 
 describe("ALL_ROOMS — registry shape", () => {
-    it("contains all 20 canonical rooms", () => {
-        expect(ALL_ROOMS).toHaveLength(20);
+    it("contains all 21 canonical rooms", () => {
+        // 20 rooms per canon §4 plus Briefing (canon §4.21 + ADR-006).
+        // Briefing sits under system-ledger as the closest neighbor
+        // until the intelligence-surface family lands formally.
+        expect(ALL_ROOMS).toHaveLength(21);
     });
 
     it("every entry has the required fields", () => {
