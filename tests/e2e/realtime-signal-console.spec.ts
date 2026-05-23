@@ -1,79 +1,123 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type BrowserContext } from "@playwright/test";
+import {
+    createAdminClient,
+    hasRealtimeFixturesEnv
+} from "./helpers/realtime-supabase";
+import {
+    setupRealtimeFixtures,
+    type RealtimeFixtures
+} from "./helpers/realtime-fixtures";
+import { createSignedInContext } from "./helpers/realtime-auth-context";
 
 /**
- * First @realtime-tagged Playwright walk (Step 4 / Tier 1 / Signal
- * Console flip-read per ADR-005).
+ * Realtime end-to-end walk (Step 4 / Tier 1 / Signal Console).
  *
- * The data-parity CI workflow (`.github/workflows/data-parity-ci.yml`)
- * runs `npm run test:realtime` against a per-PR ephemeral Supabase
- * branch with `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` set in
- * the workflow env. Tests tagged `@realtime` get picked up by the
- * `playwright test --grep @realtime` filter.
+ * Verifies the full realtime path:
+ *   1. Test user + workspace + account are seeded via Auth Admin +
+ *      service-role writes
+ *   2. Browser context boots /signal-console/ with the test user's
+ *      JWT pre-injected into localStorage
+ *   3. cloud-persistence subscribes to `signals` table realtime
+ *   4. Direct INSERT into `signals` via the service-role client
+ *      (simulates "another tab" / heartbeat / external write)
+ *   5. The subscribed page's DOM updates within 5 seconds — proving
+ *      the realtime channel + applySignalsRealtimePayload + state
+ *      mutators + render path all work end-to-end
  *
- * Until this PR, no `@realtime` tests existed — the workflow ran
- * `--pass-with-no-tests` and skipped silently. This file is the
- * first occupant of that surface.
- *
- * What this test does today (Step 4 minimum):
- *   - Boot the Signal Console room with demo data
- *   - Assert the room renders without runtime errors
- *   - Assert no errors fire during the 5-second realtime-window grace
- *     period (a regression on subscribe wiring would surface as a
- *     console error or pageerror during this window)
- *
- * What this test will do later (Step 4 / Wave 2 follow-up):
- *   - Spin up two browser contexts authenticated as the same user
- *   - Insert a row into `signals` table via the data-client in tab A
- *   - Assert the new signal appears in tab B's DOM within 5 seconds
- *
- * The auth + per-PR-branch row-seeding scaffolding for the full
- * cross-tab walk is its own follow-up — gathering credentials, RLS
- * policies on the ephemeral branch, etc. Tracked as a follow-up
- * issue. The skeleton here greens out the CI workflow and proves the
- * `@realtime` tag picks up tests so subsequent retrofit rooms can
- * copy the pattern.
+ * Skips cleanly when the realtime env vars aren't set (local dev
+ * without Supabase, or any branch where SUPABASE_SERVICE_ROLE_KEY
+ * hasn't been wired). The data-parity CI workflow sets all three
+ * required env vars from the ephemeral branch's connection details.
  *
  * Ref: deliverables/audit/data-parity-signal-console-2026-05-21.md §"Step 4"
  * Ref: .github/workflows/data-parity-ci.yml §"Realtime cross-tab tests"
+ * Ref: PR #147 (Step 4 — the code path this test exercises)
  */
 
-test.describe("Signal Console — realtime cross-tab @realtime", () => {
-    test("@realtime signal-console boots without subscribe-time errors", async ({
-        page
-    }) => {
-        const errors: string[] = [];
-        page.on("pageerror", (err) => errors.push(err.message));
-        page.on("console", (msg) => {
-            if (msg.type() === "error") errors.push(msg.text());
-        });
+const HAS_ENV = hasRealtimeFixturesEnv();
 
-        const returnPath = encodeURIComponent("/signal-console/?demo=1&qa=1");
-        await page.goto(`/demo-seed.html?demo=1&autoseed=mm&return=${returnPath}`);
+test.describe("Signal Console — realtime @realtime", () => {
+    let fixtures: RealtimeFixtures | null = null;
+    let ctx: BrowserContext | null = null;
 
-        await page.waitForURL(/\/signal-console\//, { timeout: 20_000 });
+    test.skip(!HAS_ENV, "realtime env vars not set (skipping)");
+
+    test.beforeAll(async ({ browser }) => {
+        if (!HAS_ENV) return;
+        fixtures = await setupRealtimeFixtures();
+        ctx = await createSignedInContext(browser, fixtures.user);
+    });
+
+    test.afterAll(async () => {
+        if (ctx) {
+            await ctx.close();
+            ctx = null;
+        }
+        if (fixtures) {
+            await fixtures.cleanup();
+            fixtures = null;
+        }
+    });
+
+    test("signal inserted via service-role appears in the room within 5s", async () => {
+        if (!fixtures || !ctx) {
+            throw new Error("fixtures not initialized");
+        }
+
+        const page = await ctx.newPage();
+        const pageErrors: string[] = [];
+        page.on("pageerror", (err) => pageErrors.push(err.message));
+
+        // Boot the room. Flag-redirect for room_signal_console_v2 is
+        // honored — if your test branch hasn't enabled it, the legacy
+        // path renders. Either way, the realtime subscriptions are
+        // wired by main.tsx → bootCloudPersistence.
+        await page.goto("/signal-console/?qa=1");
         await page.waitForLoadState("networkidle");
 
-        // Give the realtime subscriptions a 5-second window to fail. If
-        // `subscribeSignalsRealtime` or the accounts channel throws on
-        // subscribe (RLS misconfiguration, missing publication, env-var
-        // mismatch), the error surfaces inside this window — typically
-        // as an unhandled rejection from the @supabase/supabase-js
-        // realtime channel state machine.
-        await page.waitForTimeout(5_000);
+        // Give the cloud-persistence boot a moment to:
+        //   - list signal_console_accounts (sees the seeded account)
+        //   - subscribe to signals realtime
+        // bootCloudPersistence is fire-and-forget after render, so we
+        // wait for the seeded account name to appear in the DOM as the
+        // proxy signal that boot completed.
+        await expect(page.getByText(fixtures.accountName)).toBeVisible({
+            timeout: 15_000
+        });
 
-        // Filter known noise from the demo-seed boot flow. In CI's
-        // ephemeral-branch environment with no rows + no auth, some
-        // expected warnings fire (no Supabase session, no workspace) —
-        // those are not realtime failures.
-        const realtimeErrors = errors.filter(
-            (e) =>
-                !e.includes("VITE_SUPABASE") &&
-                !e.includes("Failed to load resource") &&
-                !e.includes("[signal-console] Cloud sync disabled")
-        );
+        // Insert a signal directly via service-role. This simulates a
+        // mutation from another tab / from the heartbeat generator —
+        // anything that's NOT the local client's own dual-write. The
+        // realtime channel should deliver it.
+        const admin = createAdminClient(fixtures.env);
+        const uniqueHeadline = `Realtime probe ${Date.now()}`;
+        const { error: insertErr } = await admin.from("signals").insert({
+            account_id: fixtures.accountId,
+            workspace_id: fixtures.workspaceId,
+            headline: uniqueHeadline,
+            signal_type: "trigger_event",
+            confidence: 0.85,
+            is_ai: false,
+            flagged: false,
+            published_date: new Date().toISOString(),
+            fetched_at: new Date().toISOString()
+        });
+        expect(insertErr, `signals insert failed: ${insertErr?.message}`).toBeNull();
+
+        // The cloud-persistence subscriber listens on
+        // client.signals.subscribe(...). The INSERT payload routes
+        // through applySignalsRealtimePayload → addSignalToAccount →
+        // allAccounts signal updates → preact re-renders the account
+        // card. The signal headline shows up in the DOM.
+        await expect(page.getByText(uniqueHeadline)).toBeVisible({
+            timeout: 5_000
+        });
+
         expect(
-            realtimeErrors,
-            `realtime-window errors during boot:\n${realtimeErrors.join("\n")}`
+            pageErrors,
+            `page errors during realtime walk:\n${pageErrors.join("\n")}`
         ).toEqual([]);
+
+        await page.close();
     });
 });
