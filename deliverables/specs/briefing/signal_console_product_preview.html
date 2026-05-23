@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600">
+<title>Signal Console — Briefing · 17 May 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ─────────────────────────────────────────────────────────
+   SIGNAL CONSOLE — Product Preview
+   17 May 2026 · Maya Chen / Threadline
+   ───────────────────────────────────────────────────────── */
+
+:root{
+  --bg:#06080c;
+  --surf:#0a0d14;
+  --surf-2:#10141c;
+  --surf-3:#161b25;
+  --surf-4:#1d2330;
+  --bdr:#1a1f2b;
+  --bdr-2:#252b39;
+  --bdr-3:#33394a;
+  --bdr-gold:#3d3424;
+  --tx:#e8eaef;
+  --tx-2:#a4abb8;
+  --tx-3:#6b7281;
+  --tx-4:#454c5a;
+  --gold:#d4a96a;
+  --gold-2:#b8915a;
+  --gold-dim:#9a7d4f;
+  --gold-deep:#5a4a30;
+  --hot:#ff5d5d;
+  --hot-dim:#cc4949;
+  --warm:#ffbe55;
+  --warm-dim:#cc9744;
+  --med:#5dafff;
+  --inbound:#7ee787;
+  --outbound:#ffbe55;
+  --cross:#c4a8ff;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+  background:var(--bg);
+  color:var(--tx);
+  font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+body{
+  background:
+    radial-gradient(1200px 700px at 10% -5%,rgba(212,169,106,0.035),transparent 60%),
+    radial-gradient(900px 700px at 95% 8%,rgba(93,175,255,0.022),transparent 60%),
+    var(--bg);
+  min-height:100vh;
+}
+
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Fraunces',serif}
+
+/* ────────────────── TOP NAV ────────────────── */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(6,8,12,0.92);
+  backdrop-filter:saturate(140%) blur(14px);
+  border-bottom:1px solid var(--bdr);
+}
+.topnav-inner{
+  max-width:1560px;margin:0 auto;
+  display:flex;align-items:center;gap:34px;
+  padding:14px 28px;
+}
+.brand{
+  display:flex;align-items:center;gap:11px;
+  font-family:'Bricolage Grotesque';font-weight:600;font-size:1.04rem;letter-spacing:-0.005em;
+}
+.brand .glyph{
+  width:22px;height:22px;border-radius:5px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+  display:grid;place-items:center;
+  font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--bg);font-size:0.66rem;letter-spacing:0;
+}
+.brand .ver{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--tx-3);
+  letter-spacing:0.14em;text-transform:uppercase;margin-left:8px;
+}
+
+.nav{
+  display:flex;align-items:center;gap:2px;flex:1;margin-left:8px;
+}
+.nav a{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 12px;border-radius:5px;
+  font-family:'Bricolage Grotesque';font-weight:500;font-size:0.85rem;
+  color:var(--tx-2);text-decoration:none;letter-spacing:-0.002em;
+  border:1px solid transparent;
+  transition:all 120ms ease;
+}
+.nav a:hover{background:var(--surf-2);color:var(--tx)}
+.nav a.active{
+  background:var(--surf-2);
+  border-color:var(--bdr-gold);
+  color:var(--tx);
+}
+.nav a.active::before{
+  content:"";width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(212,169,106,0.6);
+}
+.nav .badge{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  padding:1px 5px;border-radius:3px;font-weight:600;letter-spacing:0.04em;line-height:1.4;
+}
+.nav .badge.hot{
+  background:rgba(255,93,93,0.16);color:var(--hot);
+  border:1px solid rgba(255,93,93,0.3);
+}
+.nav .badge.warm{
+  background:rgba(255,190,85,0.12);color:var(--warm);
+  border:1px solid rgba(255,190,85,0.28);
+}
+.nav .badge.muted{
+  background:rgba(196,168,255,0.1);color:var(--cross);
+  border:1px solid rgba(196,168,255,0.22);
+}
+
+.nav-right{display:flex;align-items:center;gap:8px}
+.search-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 12px;border-radius:5px;
+  background:var(--surf-2);border:1px solid var(--bdr);
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--tx-3);
+  letter-spacing:0.06em;cursor:pointer;
+}
+.search-btn:hover{border-color:var(--bdr-2);color:var(--tx-2)}
+.search-btn .kbd{
+  background:var(--surf);border:1px solid var(--bdr-2);border-radius:3px;
+  padding:1px 5px;font-size:0.62rem;color:var(--tx-3);
+}
+.user-pill{
+  display:flex;align-items:center;gap:9px;
+  padding:5px 12px 5px 5px;border-radius:30px;
+  background:var(--surf-2);border:1px solid var(--bdr);
+  font-size:0.78rem;color:var(--tx-2);
+}
+.user-pill .av{
+  width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold-deep));
+  display:grid;place-items:center;color:var(--bg);
+  font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:0.66rem;
+}
+
+/* ─────────────── NOTIFICATION STRIP ─────────────── */
+.notif-strip{
+  background:linear-gradient(90deg,rgba(255,93,93,0.04),rgba(255,190,85,0.04));
+  border-bottom:1px solid var(--bdr);
+}
+.notif-inner{
+  max-width:1560px;margin:0 auto;
+  padding:9px 28px;
+  display:flex;align-items:center;gap:24px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.72rem;
+  letter-spacing:0.04em;
+}
+.notif-inner .pill{
+  display:flex;align-items:center;gap:7px;
+  color:var(--tx-2);
+}
+.notif-inner .pill .dot{width:6px;height:6px;border-radius:50%}
+.notif-inner .pill.hot .dot{background:var(--hot);box-shadow:0 0 8px rgba(255,93,93,0.7)}
+.notif-inner .pill.warm .dot{background:var(--warm);box-shadow:0 0 8px rgba(255,190,85,0.55)}
+.notif-inner .pill.cool .dot{background:var(--med)}
+.notif-inner .pill b{color:var(--tx);font-weight:500}
+.notif-inner .ts{
+  margin-left:auto;color:var(--tx-3);font-size:0.66rem;letter-spacing:0.1em;
+}
+
+/* ────────────────── MAIN GRID ────────────────── */
+.page{
+  max-width:1560px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 380px;gap:32px;
+  padding:36px 28px 24px;
+  align-items:start;
+}
+
+/* ────────────────── BRIEFING MAIN ────────────────── */
+.briefing{
+  background:var(--surf);
+  border:1px solid var(--bdr);
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.brief-classification{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.24em;
+  color:var(--gold);text-transform:uppercase;
+  padding:11px 32px;
+  border-bottom:1px solid var(--bdr);
+  background:rgba(212,169,106,0.04);
+  display:flex;justify-content:space-between;
+}
+.brief-classification .right{color:var(--tx-3)}
+
+.brief-header{padding:30px 32px 22px;border-bottom:1px solid var(--bdr)}
+.brief-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:0.74rem;line-height:1.9;color:var(--tx-2);
+  margin-bottom:6px;
+}
+.brief-meta .row{display:flex;gap:14px}
+.brief-meta .row .label{color:var(--tx-3);width:70px;flex-shrink:0;letter-spacing:0.06em}
+.brief-meta .row .val{color:var(--tx)}
+.brief-meta .row .val.gold{color:var(--gold)}
+
+.brief-lead{
+  margin-top:22px;
+  padding:18px 22px;
+  background:var(--surf-2);
+  border-left:2px solid var(--gold);
+  border-radius:0 5px 5px 0;
+}
+.brief-lead .h{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:8px;
+}
+.brief-lead .body-text{
+  font-family:'Fraunces';font-weight:400;font-size:1.18rem;letter-spacing:-0.01em;line-height:1.42;
+  color:var(--tx);
+}
+.brief-lead .body-text em{font-style:italic;color:var(--gold)}
+
+/* Pattern blocks */
+.pattern{
+  padding:30px 32px;
+  border-bottom:1px solid var(--bdr);
+}
+.pattern:last-child{border-bottom:none}
+
+.pattern-num{
+  font-family:'IBM Plex Mono',monospace;font-weight:500;
+  font-size:0.66rem;letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;
+  margin-bottom:8px;
+  display:flex;align-items:center;gap:10px;
+}
+.pattern-num::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--bdr-2),transparent);max-width:120px}
+.pattern-num .trigger-link{
+  margin-left:auto;
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  color:var(--hot);letter-spacing:0.04em;
+  text-decoration:none;border:1px solid rgba(255,93,93,0.28);
+  background:rgba(255,93,93,0.07);
+  padding:2px 7px;border-radius:3px;
+}
+
+.pattern-title{
+  font-family:'IBM Plex Serif',serif;font-weight:500;
+  font-size:1.4rem;letter-spacing:-0.012em;line-height:1.22;
+  margin-bottom:10px;
+}
+
+.pattern-meta-strip{
+  font-family:'IBM Plex Mono',monospace;font-size:0.66rem;
+  letter-spacing:0.06em;color:var(--tx-3);
+  display:flex;gap:18px;margin-bottom:18px;flex-wrap:wrap;align-items:center;
+}
+.pattern-meta-strip .label{color:var(--tx-3)}
+.pattern-meta-strip .val{color:var(--tx-2)}
+.pattern-meta-strip .gold{color:var(--gold-dim)}
+.pattern-meta-strip .rising{
+  color:var(--inbound);font-weight:500;
+}
+.pattern-meta-strip .rising::before{content:"↗ ";color:var(--inbound)}
+
+.pattern-body{
+  font-family:'IBM Plex Serif',serif;font-weight:400;
+  font-size:0.98rem;line-height:1.62;color:var(--tx);
+  margin-bottom:20px;
+}
+
+/* Attribute grid */
+.attrs{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--bdr);border:1px solid var(--bdr);border-radius:5px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.attrs .attr{
+  padding:11px 14px;background:var(--surf-2);
+  display:flex;flex-direction:column;gap:3px;
+}
+.attrs .attr .l{
+  font-family:'IBM Plex Mono',monospace;font-size:0.55rem;letter-spacing:0.16em;
+  color:var(--tx-3);text-transform:uppercase;
+}
+.attrs .attr .v{
+  font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:0.86rem;color:var(--tx);
+}
+
+/* Six questions inline */
+.six-q{
+  display:flex;flex-direction:column;gap:13px;
+  padding:18px 0 20px;
+  border-top:1px dashed var(--bdr-2);
+  margin-bottom:20px;
+}
+.six-q .q{display:flex;gap:18px;align-items:baseline}
+.six-q .q .l{
+  font-family:'IBM Plex Mono',monospace;font-weight:500;
+  font-size:0.56rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--tx-3);
+  min-width:108px;flex-shrink:0;padding-top:2px;
+}
+.six-q .q .v{
+  font-family:'IBM Plex Serif',serif;font-weight:400;font-size:0.92rem;line-height:1.5;
+  color:var(--tx);flex:1;
+}
+
+/* Moves */
+.moves{margin-bottom:14px}
+.moves-h{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:500;
+}
+.move{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:11px 14px;margin-bottom:7px;
+  background:var(--surf-2);border:1px solid var(--bdr);border-radius:5px;
+  transition:border-color 120ms ease;
+}
+.move:hover{border-color:var(--bdr-2)}
+.move .arr{
+  font-family:'IBM Plex Mono',monospace;color:var(--gold);
+  font-size:0.86rem;flex-shrink:0;padding-top:1px;
+}
+.move .b{flex:1}
+.move .b strong{font-weight:500;color:var(--tx);font-family:'IBM Plex Sans',sans-serif;font-size:0.9rem;line-height:1.4;display:block;margin-bottom:3px}
+.move .b .dest{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  color:var(--tx-3);letter-spacing:0.04em;
+}
+.move .apply{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;
+  background:transparent;border:1px solid var(--gold-deep);border-radius:4px;
+  padding:5px 11px;cursor:pointer;align-self:center;
+  transition:all 120ms ease;
+}
+.move .apply:hover{background:rgba(212,169,106,0.08);border-color:var(--gold-dim)}
+
+/* Pattern footer (feedback + show-your-work) */
+.pattern-footer{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr);
+  display:flex;align-items:center;gap:12px;
+}
+.pattern-footer .fb{
+  display:flex;gap:6px;
+}
+.pattern-footer .fb-btn{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.1em;text-transform:uppercase;font-weight:500;
+  padding:5px 10px;border-radius:3px;
+  background:transparent;border:1px solid var(--bdr-2);
+  color:var(--tx-3);cursor:pointer;
+  transition:all 120ms ease;
+}
+.pattern-footer .fb-btn:hover{border-color:var(--bdr-3);color:var(--tx-2)}
+.pattern-footer .fb-btn.used:hover{border-color:var(--inbound);color:var(--inbound)}
+.pattern-footer .fb-btn.met:hover{border-color:var(--med);color:var(--med)}
+.pattern-footer .fb-btn.noise:hover{border-color:var(--tx-3);color:var(--tx-2)}
+
+.pattern-footer .sw-toggle{
+  margin-left:auto;
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--gold-dim);font-weight:500;cursor:pointer;
+  background:transparent;border:none;
+  display:flex;align-items:center;gap:6px;
+}
+.pattern-footer .sw-toggle:hover{color:var(--gold)}
+
+/* Show your work — audit envelope made visible */
+.sw{
+  margin-top:18px;padding:18px 18px 20px;
+  background:var(--surf-2);border:1px solid var(--bdr);border-radius:5px;
+  border-left:2px solid var(--gold);
+}
+.sw .sw-h{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;
+  color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:500;
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.sw .sw-h .right{color:var(--tx-3);font-weight:400}
+.sw .sw-section{margin-bottom:16px}
+.sw .sw-section:last-child{margin-bottom:0}
+.sw .sw-section .l{
+  font-family:'IBM Plex Mono',monospace;font-size:0.54rem;letter-spacing:0.2em;
+  color:var(--tx-3);text-transform:uppercase;font-weight:500;margin-bottom:6px;
+}
+.sw .sw-list{
+  font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--tx-2);line-height:1.7;
+}
+.sw .sw-list .id{color:var(--gold-dim);margin-right:8px}
+.sw .sw-stage{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:8px 12px;background:var(--surf);border-radius:3px;margin-bottom:5px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.72rem;
+}
+.sw .sw-stage .arr{color:var(--gold);flex-shrink:0}
+.sw .sw-stage .stg{
+  color:var(--tx);font-weight:500;letter-spacing:0.04em;text-transform:uppercase;
+  font-size:0.62rem;letter-spacing:0.14em;min-width:80px;
+}
+.sw .sw-stage .det{color:var(--tx-2);flex:1;font-size:0.7rem;line-height:1.55}
+.sw .sw-stage .det .flag{
+  display:block;color:var(--warm);margin-top:2px;
+}
+.sw .sw-stage .cost{color:var(--tx-3);flex-shrink:0;font-size:0.66rem}
+.sw .gate{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:5px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--tx-2);
+}
+.sw .gate .item{display:flex;gap:8px;align-items:center}
+.sw .gate .item .chk{color:var(--inbound)}
+.sw .gate .item .lbl{color:var(--tx-3)}
+.sw .sw-total{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr);
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--tx-2);
+  display:flex;justify-content:space-between;
+}
+.sw .sw-total .v{color:var(--gold-dim);font-weight:500}
+
+/* Pattern 2 — slightly more compact */
+.pattern.condensed .pattern-body{margin-bottom:14px}
+.pattern.condensed .attrs{margin-bottom:14px}
+.pattern.condensed .six-q{padding:14px 0 14px}
+
+/* ────────────────── RIGHT RAIL ────────────────── */
+.rail{
+  display:flex;flex-direction:column;gap:18px;
+  position:sticky;top:118px;
+}
+
+.rail-card{
+  background:var(--surf);
+  border:1px solid var(--bdr);
+  border-radius:8px;
+  overflow:hidden;
+}
+.rail-card .head{
+  padding:12px 16px;
+  border-bottom:1px solid var(--bdr);
+  background:var(--surf-2);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--tx-3);font-weight:500;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.rail-card .head .count{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0;
+  background:var(--bg);border:1px solid var(--bdr-2);
+  padding:1px 7px;border-radius:3px;color:var(--tx-2);
+}
+.rail-card .head .count.hot{color:var(--hot);border-color:rgba(255,93,93,0.28);background:rgba(255,93,93,0.06)}
+.rail-card .head .count.warm{color:var(--warm);border-color:rgba(255,190,85,0.28);background:rgba(255,190,85,0.06)}
+
+.rail-card .item{
+  padding:11px 16px;border-bottom:1px solid var(--bdr);
+  font-size:0.84rem;line-height:1.42;
+}
+.rail-card .item:last-child{border-bottom:none}
+.rail-card .item .title{
+  color:var(--tx);font-weight:500;letter-spacing:-0.005em;font-size:0.85rem;
+  margin-bottom:3px;display:flex;align-items:flex-start;gap:7px;
+}
+.rail-card .item .marker{
+  font-size:0.86rem;flex-shrink:0;line-height:1.3;
+}
+.rail-card .item .desc{
+  font-family:'IBM Plex Mono',monospace;font-size:0.64rem;color:var(--tx-3);
+  letter-spacing:0.04em;line-height:1.5;margin-top:1px;
+}
+.rail-card .item .desc .gold{color:var(--gold-dim)}
+.rail-card .item .actions{
+  margin-top:7px;display:flex;gap:5px;
+}
+.rail-card .item .actions button{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;
+  text-transform:uppercase;font-weight:500;
+  padding:3px 8px;border-radius:3px;
+  background:transparent;border:1px solid var(--bdr-2);color:var(--tx-2);cursor:pointer;
+}
+.rail-card .item .actions button:hover{border-color:var(--gold-dim);color:var(--gold)}
+.rail-card .item .actions button.dismiss:hover{border-color:var(--bdr-3);color:var(--tx-3)}
+
+.rail-card .item.deal{
+  display:flex;align-items:center;gap:11px;
+}
+.rail-card .item.deal .stage{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.16em;
+  color:var(--tx-3);text-transform:uppercase;flex-shrink:0;
+}
+.rail-card .item.deal .body-deal{flex:1;min-width:0}
+.rail-card .item.deal .body-deal .name{
+  font-weight:500;color:var(--tx);font-size:0.84rem;margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rail-card .item.deal .body-deal .info{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--tx-3);letter-spacing:0.04em;
+}
+.rail-card .item.deal .sev{
+  font-size:1rem;flex-shrink:0;
+}
+
+.rail-card .view-all{
+  display:block;text-align:center;padding:8px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--gold-dim);text-decoration:none;font-weight:500;
+  background:var(--surf-2);
+  border-top:1px solid var(--bdr);
+}
+.rail-card .view-all:hover{color:var(--gold)}
+
+/* Contrarian indicator */
+.rail-card.contrarian{
+  border-color:rgba(196,168,255,0.18);
+  background:linear-gradient(180deg,rgba(196,168,255,0.04),var(--surf));
+}
+.rail-card.contrarian .head{color:var(--cross);border-bottom-color:rgba(196,168,255,0.18)}
+.rail-card.contrarian .cb-body-text{
+  padding:14px 16px;font-family:'Fraunces';font-style:italic;font-size:0.86rem;line-height:1.5;color:var(--tx-2);
+}
+.rail-card.contrarian .cb-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;
+  color:var(--tx-3);padding:0 16px 12px;display:flex;justify-content:space-between;
+}
+.rail-card.contrarian .cb-meta .next{color:var(--cross)}
+
+/* Periphery candidate */
+.rail-card.periphery .item .scores{
+  margin-top:5px;
+  display:flex;gap:6px;flex-wrap:wrap;
+}
+.rail-card.periphery .item .scores .ch{
+  font-family:'IBM Plex Mono',monospace;font-size:0.56rem;letter-spacing:0.06em;
+  background:var(--surf-2);border:1px solid var(--bdr);border-radius:3px;
+  padding:1px 6px;color:var(--tx-3);
+}
+.rail-card.periphery .item .scores .ch .v{color:var(--gold-dim);margin-left:4px;font-weight:500}
+
+/* ────────────────── FOOTER ────────────────── */
+.foot{
+  border-top:1px solid var(--bdr);
+  background:rgba(6,8,12,0.92);
+  margin-top:18px;
+}
+.foot-inner{
+  max-width:1560px;margin:0 auto;
+  padding:14px 28px;
+  display:flex;align-items:center;gap:24px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.66rem;
+  color:var(--tx-3);letter-spacing:0.06em;
+}
+.foot-inner .pill-foot{display:flex;align-items:center;gap:7px}
+.foot-inner .pill-foot .dot{width:5px;height:5px;border-radius:50%}
+.foot-inner .pill-foot .dot.green{background:var(--inbound);box-shadow:0 0 6px rgba(126,231,135,0.4)}
+.foot-inner .pill-foot .dot.dim{background:var(--tx-4)}
+.foot-inner .pill-foot b{color:var(--tx-2);font-weight:500}
+.foot-inner .cost-bar{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surf-2);border:1px solid var(--bdr);border-radius:4px;
+  padding:4px 11px;
+}
+.foot-inner .cost-bar .b{
+  width:80px;height:5px;background:var(--bdr-2);border-radius:2px;overflow:hidden;
+}
+.foot-inner .cost-bar .b::before{
+  content:"";display:block;height:100%;width:18%;
+  background:linear-gradient(90deg,var(--gold-dim),var(--gold));
+}
+.foot-inner .settings{margin-left:auto;display:flex;gap:18px}
+.foot-inner .settings a{color:var(--tx-3);text-decoration:none}
+.foot-inner .settings a:hover{color:var(--tx-2)}
+
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     TOP NAV
+     ════════════════════════════════════════════════════════════ -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <div class="glyph">SC</div>
+      <span>Signal Console</span>
+      <span class="ver">v0.4 · briefing 19</span>
+    </div>
+
+    <div class="nav">
+      <a href="#" class="active">Briefing</a>
+      <a href="#">Triggers <span class="badge hot">3</span></a>
+      <a href="#">Deal-Watch <span class="badge warm">7</span></a>
+      <a href="#">Watch List <span class="badge">6</span></a>
+      <a href="#">Contrarian <span class="badge muted">monthly</span></a>
+      <a href="#">Sources</a>
+    </div>
+
+    <div class="nav-right">
+      <button class="search-btn">
+        <span>Search</span>
+        <span class="kbd">⌘K</span>
+      </button>
+      <div class="user-pill">
+        <div class="av">MC</div>
+        <span>Maya · Threadline</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════
+     NOTIFICATION STRIP
+     ════════════════════════════════════════════════════════════ -->
+<div class="notif-strip">
+  <div class="notif-inner">
+    <span class="pill hot">
+      <span class="dot"></span>
+      <b>3 trigger fires today</b>
+      <span>· Segment pricing · 3+ CDP enterprise · Hightouch activity</span>
+    </span>
+    <span class="pill warm">
+      <span class="dot"></span>
+      <b>3 deals at risk</b>
+      <span>· Pulse Insights call Wednesday</span>
+    </span>
+    <span class="ts">PIPELINE 17 MAY 06:00 UTC · NEXT RUN MON 06:00</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     MAIN GRID
+     ════════════════════════════════════════════════════════════ -->
+<main class="page">
+
+  <!-- ─────────── BRIEFING MAIN ─────────── -->
+  <section class="briefing">
+
+    <div class="brief-classification">
+      <span>PRIVATE · OPERATOR-EYES-ONLY</span>
+      <span class="right">BRIEFING №. 19 — 17 MAY 2026</span>
+    </div>
+
+    <div class="brief-header">
+      <div class="brief-meta">
+        <div class="row"><span class="label">TO</span><span class="val">Maya Chen — Threadline</span></div>
+        <div class="row"><span class="label">FROM</span><span class="val">Signal Console</span></div>
+        <div class="row"><span class="label">DATE</span><span class="val">17 May 2026 · 06:00 UTC</span></div>
+        <div class="row"><span class="label">RE</span><span class="val gold">Weekly briefing — CDP category</span></div>
+      </div>
+
+      <div class="brief-lead">
+        <div class="h">The Read This Week</div>
+        <div class="body-text">The CDP category just had its <em>pricing floor reset to zero</em>. Two patterns to act on, three trigger fires, three active deals affected. Plan accordingly.</div>
+      </div>
+    </div>
+
+    <!-- Pattern 01 -->
+    <article class="pattern">
+      <div class="pattern-num">
+        Item 01 — Pattern
+        <a href="#" class="trigger-link">⤵ Triggered: trg_001</a>
+      </div>
+      <h2 class="pattern-title">The CDP entry floor went to zero. Reposition Discovery before your deals feel it.</h2>
+      <div class="pattern-meta-strip">
+        <span class="rising">Rising</span>
+        <span><span class="label">EVIDENCE</span> <span class="val">4 items · 4 sources</span></span>
+        <span><span class="label">CONF</span> <span class="val">0.69</span></span>
+        <span><span class="label">CLAIM</span> <span class="val">pattern</span></span>
+        <span class="gold">↺ FRESH · surfaced 06:00 today</span>
+      </div>
+
+      <p class="pattern-body">Two independent CDP competitors — Segment and Hightouch — launched zero-cost entry tiers within the same week. Twilio (Segment's parent) released an open-source CDP in parallel, suggesting the move is being treated as a defensible strategic position rather than an opportunistic experiment. The synchronized timing across the category is significant: your active deals at Vector Analytics, Pulse Insights, and Atlas Data all sit in stages where "we'll pilot the free option first" becomes a load-bearing objection.</p>
+
+      <div class="attrs">
+        <div class="attr"><span class="l">What changed</span><span class="v">3 free-tier moves in 7d</span></div>
+        <div class="attr"><span class="l">Trajectory</span><span class="v">Rising · fast</span></div>
+        <div class="attr"><span class="l">Affected deals</span><span class="v">Vector · Pulse · Atlas</span></div>
+        <div class="attr"><span class="l">Risk window</span><span class="v">14 days</span></div>
+      </div>
+
+      <div class="six-q">
+        <div class="q"><span class="l">What changed</span><span class="v">Segment launched Free for Devs (1,000 MTU); Hightouch added Hightouch Free tier; Twilio released an open-source CDP — all within 7 days.</span></div>
+        <div class="q"><span class="l">Evidence</span><span class="v">4 items, 4 sources (TechCrunch, Hightouch pricing-page diff, HN Show HN, Wikipedia Pageviews). Weighted evidence: 3.43.</span></div>
+        <div class="q"><span class="l">Why it matters</span><span class="v">Your sub-$50K POCs are no longer un-contested. Expect "pilot the free option first" to enter Vector, Pulse, and Atlas within 14 days.</span></div>
+        <div class="q"><span class="l">Who needs to know</span><span class="v">You. Marcus (founding AE). The board narrative if the reset persists past Q3.</span></div>
+        <div class="q"><span class="l">What next</span><span class="v">Refresh Discovery Phase 04 before Wednesday's Pulse Insights call. Pre-stage objection handler for the new pricing reality.</span></div>
+      </div>
+
+      <div class="moves">
+        <div class="moves-h">Move on this</div>
+        <div class="move">
+          <span class="arr">→</span>
+          <div class="b">
+            <strong>Refresh Discovery Phase 04 (Pricing &amp; Procurement) to anchor orchestration depth ahead of pricing.</strong>
+            <span class="dest">Discovery Studio · Phase 04 · refresh existing</span>
+          </div>
+          <button class="apply">Apply</button>
+        </div>
+        <div class="move">
+          <span class="arr">→</span>
+          <div class="b">
+            <strong>Draft new objection handler: "We'll pilot the free option first."</strong>
+            <span class="dest">Call Planner · Objection Bank · new</span>
+          </div>
+          <button class="apply">Apply</button>
+        </div>
+        <div class="move">
+          <span class="arr">→</span>
+          <div class="b">
+            <strong>Update Segment battlecard with Free for Devs context and "data plane only" angle.</strong>
+            <span class="dest">Asset Builder · Battlecard · Segment · refresh existing</span>
+          </div>
+          <button class="apply">Apply</button>
+        </div>
+      </div>
+
+      <div class="pattern-footer">
+        <div class="fb">
+          <button class="fb-btn used">✓ Acted on</button>
+          <button class="fb-btn met">○ Met</button>
+          <button class="fb-btn noise">× Noise</button>
+        </div>
+        <button class="sw-toggle">▾ Hide your work</button>
+      </div>
+
+      <!-- ─── SHOW YOUR WORK · audit envelope made visible ─── -->
+      <div class="sw">
+        <div class="sw-h">
+          <span>Audit Envelope · ae_5f3a2b1c</span>
+          <span class="right">Immutable · captured 17 May 06:00:08 UTC</span>
+        </div>
+
+        <div class="sw-section">
+          <div class="l">Cluster (4 items, weighted_evidence 3.43)</div>
+          <div class="sw-list">
+            <div><span class="id">itm_005</span>Segment "Free for Devs" — TechCrunch (14 May)</div>
+            <div><span class="id">itm_015</span>Hightouch Free tier added — Tier B page diff (14 May)</div>
+            <div><span class="id">itm_001</span>Open-source CDP — HN Show HN (16 May)</div>
+            <div><span class="id">itm_009</span>Wikipedia "Customer_data_platform" pageviews +50% (16 May)</div>
+          </div>
+        </div>
+
+        <div class="sw-section">
+          <div class="l">Hydrated Context (snapshot at synthesis)</div>
+          <div class="sw-list">
+            <div>ICP Studio v3.2 · last modified 10 May · Series A-B B2B SaaS, CRO under 12mo</div>
+            <div>Voice Document v0.1 · banned vocab + 5 exemplars + structural rules</div>
+            <div>Active deals: 3 (Vector · Pulse · Atlas, all with Segment in competitive set)</div>
+            <div>Watchlist Triggers: 5 active (trg_001 fired on this cluster)</div>
+          </div>
+        </div>
+
+        <div class="sw-section">
+          <div class="l">Synthesis Path</div>
+          <div class="sw-stage">
+            <span class="arr">→</span><span class="stg">Draft</span>
+            <span class="det">Opus 4.7 + extended thinking · 2,847 in / 412 out · model_v hash a3c8</span>
+            <span class="cost">$0.041</span>
+          </div>
+          <div class="sw-stage">
+            <span class="arr">→</span><span class="stg">Critique</span>
+            <span class="det">Sonnet 4.6 · 3,200 in / 380 out
+              <span class="flag">⚠ Flagged: "deliberate strategic move" overclaim · Twilio/Segment ownership factual gap</span>
+            </span>
+            <span class="cost">$0.018</span>
+          </div>
+          <div class="sw-stage">
+            <span class="arr">→</span><span class="stg">Revise</span>
+            <span class="det">Opus 4.7 · applied critique · 3,100 in / 401 out</span>
+            <span class="cost">$0.038</span>
+          </div>
+          <div class="sw-stage">
+            <span class="arr">→</span><span class="stg">Gate</span>
+            <span class="det">All checks passed (banned vocab clean · 87 words · 4/4 evidence IDs valid · 1 hedging adverb)</span>
+            <span class="cost">$0.00</span>
+          </div>
+        </div>
+
+        <div class="sw-section">
+          <div class="l">Quality Gate Decisions</div>
+          <div class="gate">
+            <div class="item"><span class="chk">✓</span><span class="lbl">banned_vocabulary</span></div>
+            <div class="item"><span class="chk">✓</span><span class="lbl">length_bounds</span></div>
+            <div class="item"><span class="chk">✓</span><span class="lbl">evidence_validation</span></div>
+            <div class="item"><span class="chk">✓</span><span class="lbl">structural_compliance</span></div>
+            <div class="item"><span class="chk">✓</span><span class="lbl">hedging_density</span></div>
+            <div class="item"><span class="chk">✓</span><span class="lbl">marketing_soup</span></div>
+          </div>
+        </div>
+
+        <div class="sw-total">
+          <span>TOTAL SYNTHESIS COST</span>
+          <span class="v">$0.097</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Pattern 02 — condensed -->
+    <article class="pattern condensed">
+      <div class="pattern-num">Item 02 — Pattern</div>
+      <h2 class="pattern-title">"Agentic" and "Reverse ETL" are crowding "CDP" in operator vocabulary.</h2>
+      <div class="pattern-meta-strip">
+        <span class="rising">Rising</span>
+        <span><span class="label">EVIDENCE</span> <span class="val">4 items · 3 sources</span></span>
+        <span><span class="label">CONF</span> <span class="val">0.68</span></span>
+        <span><span class="label">CLAIM</span> <span class="val">pattern</span></span>
+        <span class="gold">↺ FRESH</span>
+      </div>
+
+      <p class="pattern-body">Category vocabulary shifting in two directions simultaneously — "reverse ETL" reframing the data-out problem (Wikipedia pageviews +71% over 30d) and "agentic CDP" reframing the data-in problem in operator content. Threadline's positioning page anchors on the old vocabulary. Window to reposition is probably 60 days before the rename solidifies around a competitor.</p>
+
+      <div class="attrs">
+        <div class="attr"><span class="l">Window</span><span class="v">60 days</span></div>
+        <div class="attr"><span class="l">Trajectory</span><span class="v">Rising</span></div>
+        <div class="attr"><span class="l">Sources</span><span class="v">Substack · HN · Wiki</span></div>
+        <div class="attr"><span class="l">Risk</span><span class="v">Category-narrative loss</span></div>
+      </div>
+
+      <div class="moves">
+        <div class="moves-h">Move on this</div>
+        <div class="move">
+          <span class="arr">→</span>
+          <div class="b">
+            <strong>Rewrite positioning page hero to incorporate agentic framing within 30 days.</strong>
+            <span class="dest">Asset Builder · Executive One-Pager</span>
+          </div>
+          <button class="apply">Apply</button>
+        </div>
+        <div class="move">
+          <span class="arr">→</span>
+          <div class="b">
+            <strong>Draft a category essay: "What we mean by agentic, and what we don't."</strong>
+            <span class="dest">Asset Builder · Executive One-Pager</span>
+          </div>
+          <button class="apply">Apply</button>
+        </div>
+      </div>
+
+      <div class="pattern-footer">
+        <div class="fb">
+          <button class="fb-btn used">✓ Acted on</button>
+          <button class="fb-btn met">○ Met</button>
+          <button class="fb-btn noise">× Noise</button>
+        </div>
+        <button class="sw-toggle">▸ Show your work</button>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ─────────── RIGHT RAIL ─────────── -->
+  <aside class="rail">
+
+    <!-- Triggers fired today -->
+    <div class="rail-card">
+      <div class="head">
+        <span>Triggers fired today</span>
+        <span class="count hot">3</span>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--hot)">●</span>
+          <span>Segment changed pricing</span>
+        </div>
+        <div class="desc">Single-event · "Alert me when Segment adds a free tier" · linked to Pattern 01</div>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--hot)">●</span>
+          <span>3+ CDP enterprise mentions in 7d</span>
+        </div>
+        <div class="desc">Aggregation · 4 hits in window · <span class="gold">cohort emerging</span></div>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--hot)">●</span>
+          <span>Hightouch activity</span>
+        </div>
+        <div class="desc">Adjacency digest · 2 items: CFO hire + Free tier</div>
+      </div>
+      <a href="#" class="view-all">View all triggers · 5 armed</a>
+    </div>
+
+    <!-- Deal-Watch alerts -->
+    <div class="rail-card">
+      <div class="head">
+        <span>Deal-Watch alerts</span>
+        <span class="count warm">7</span>
+      </div>
+      <div class="item deal">
+        <span class="sev" style="color:var(--hot)">⚠</span>
+        <div class="body-deal">
+          <div class="name">Vector Analytics</div>
+          <div class="info">2 HIGH · pricing pressure</div>
+        </div>
+        <span class="stage">EVAL</span>
+      </div>
+      <div class="item deal">
+        <span class="sev" style="color:var(--hot)">⚠</span>
+        <div class="body-deal">
+          <div class="name">Pulse Insights</div>
+          <div class="info">1 HIGH · Wednesday call</div>
+        </div>
+        <span class="stage">NEGO</span>
+      </div>
+      <div class="item deal">
+        <span class="sev" style="color:var(--hot)">⚠</span>
+        <div class="body-deal">
+          <div class="name">Atlas Data Co</div>
+          <div class="info">1 HIGH · decision stage</div>
+        </div>
+        <span class="stage">DECI</span>
+      </div>
+      <a href="#" class="view-all">View all deal alerts</a>
+    </div>
+
+    <!-- Contrarian next surface -->
+    <div class="rail-card contrarian">
+      <div class="head">
+        <span>Contrarian Briefing</span>
+        <span class="count">monthly</span>
+      </div>
+      <div class="cb-body-text">No challenges this week. The data is consistent with your stated assumptions across ICP, competitive set, and value prop.</div>
+      <div class="cb-meta">
+        <span>Last surfaced 02 May</span>
+        <span class="next">Next 03 Jun</span>
+      </div>
+    </div>
+
+    <!-- Watch List -->
+    <div class="rail-card">
+      <div class="head">
+        <span>Watch List · emerging</span>
+        <span class="count">4</span>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--warm)">◐</span>
+          <span>Bruce Felt → Hightouch CFO</span>
+        </div>
+        <div class="desc">Exec move · single-source · awaiting corroboration</div>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--warm)">◐</span>
+          <span>RudderStack motion intensifying</span>
+        </div>
+        <div class="desc">Company cluster · 2 items · below threshold</div>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--tx-3)">○</span>
+          <span>Segment trust narrative weakening</span>
+        </div>
+        <div class="desc">Outage + XSS disclosure · 2 items</div>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--tx-3)">○</span>
+          <span>Census layoffs in go-to-market</span>
+        </div>
+        <div class="desc">Disqualifier event · 1 item · 30% GTM cut</div>
+      </div>
+      <a href="#" class="view-all">View archived patterns</a>
+    </div>
+
+    <!-- Periphery candidates -->
+    <div class="rail-card periphery">
+      <div class="head">
+        <span>Periphery · consider watching</span>
+        <span class="count">2</span>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--cross)">◇</span>
+          <span>Cube Cloud</span>
+        </div>
+        <div class="desc">Co-occurs with Snowflake (14/17 items) · shares Sequoia w/ Hightouch · vocabulary match</div>
+        <div class="scores">
+          <span class="ch">co-occ <span class="v">0.85</span></span>
+          <span class="ch">invest <span class="v">1.0</span></span>
+          <span class="ch">vocab <span class="v">0.72</span></span>
+        </div>
+        <div class="actions">
+          <button>+ Add to watchlist</button>
+          <button class="dismiss">Snooze</button>
+          <button class="dismiss">Dismiss</button>
+        </div>
+      </div>
+      <div class="item">
+        <div class="title">
+          <span class="marker" style="color:var(--cross)">◇</span>
+          <span>dbt Labs</span>
+        </div>
+        <div class="desc">Recurring in operator Substacks on reverse-ETL · shares investor with RudderStack</div>
+        <div class="scores">
+          <span class="ch">co-occ <span class="v">0.62</span></span>
+          <span class="ch">vocab <span class="v">0.81</span></span>
+          <span class="ch">buyer <span class="v">0.55</span></span>
+        </div>
+        <div class="actions">
+          <button>+ Add to watchlist</button>
+          <button class="dismiss">Snooze</button>
+          <button class="dismiss">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════════
+     FOOTER · health + cost telemetry
+     ════════════════════════════════════════════════════════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <span class="pill-foot">
+      <span class="dot green"></span>
+      <b>Pipeline healthy</b> · last run 06:00 UTC · 14/14 sources OK
+    </span>
+    <span class="pill-foot">
+      <span class="dot dim"></span>
+      17 items processed · 14 enriched · 2 patterns · 3 triggers · 7 deal alerts
+    </span>
+    <div class="cost-bar">
+      <span>Cost this week</span>
+      <span><b style="color:var(--tx)">$0.54</b> / $3.00</span>
+      <span class="b"></span>
+    </div>
+    <div class="settings">
+      <a href="#">Voice document</a>
+      <a href="#">Active deals</a>
+      <a href="#">Cost &amp; ceilings</a>
+      <a href="#">Diagnostics</a>
+      <a href="#">Settings</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Toggle show-your-work for any pattern
+  document.querySelectorAll('.sw-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sw = btn.closest('.pattern').querySelector('.sw');
+      if (!sw) {
+        // Pattern 02 has no SW block built — leave indication only
+        btn.textContent = btn.textContent.includes('Show') 
+          ? '▾ (audit envelope available)' 
+          : '▸ Show your work';
+        return;
+      }
+      const expanded = sw.style.display !== 'none';
+      sw.style.display = expanded ? 'none' : '';
+      btn.textContent = expanded ? '▸ Show your work' : '▾ Hide your work';
+    });
+  });
+</script>
+
+</body>
+</html>

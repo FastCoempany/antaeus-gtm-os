@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1500">
+<title>Signal Console — Information Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06080c;
+  --surf:#0a0d14;
+  --surf-2:#10141c;
+  --surf-3:#161b25;
+  --surf-4:#1d2330;
+  --bdr:#1a1f2b;
+  --bdr-2:#252b39;
+  --bdr-3:#33394a;
+  --bdr-gold:#3d3424;
+  --tx:#e8eaef;
+  --tx-2:#a4abb8;
+  --tx-3:#6b7281;
+  --tx-4:#454c5a;
+  --gold:#d4a96a;
+  --gold-2:#b8915a;
+  --gold-dim:#9a7d4f;
+  --gold-deep:#5a4a30;
+  --hot:#ff5d5d;
+  --warm:#ffbe55;
+  --med:#5dafff;
+  --inbound:#7ee787;
+  --outbound:#ffbe55;
+  --cross:#c4a8ff;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+  background:var(--bg);
+  color:var(--tx);
+  font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+body{
+  background:
+    radial-gradient(1100px 700px at 10% -5%,rgba(212,169,106,0.04),transparent 60%),
+    radial-gradient(900px 700px at 95% 8%,rgba(93,175,255,0.025),transparent 60%),
+    var(--bg);
+  min-height:100vh;
+  padding:48px 24px 80px;
+}
+
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Fraunces',serif}
+
+/* ──────────────── PAGE HEADER ──────────────── */
+.page-head{max-width:1480px;margin:0 auto 44px}
+.page-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.28em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:14px;display:flex;align-items:center;gap:14px;
+}
+.page-eyebrow::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--bdr-2),transparent)}
+.page-title{
+  font-family:'Fraunces';font-weight:400;font-size:2.55rem;letter-spacing:-0.022em;line-height:1.05;margin-bottom:14px;
+}
+.page-title em{font-style:italic;color:var(--gold)}
+.page-sub{color:var(--tx-2);max-width:840px;font-size:0.96rem;line-height:1.55}
+.page-sub strong{color:var(--tx);font-weight:500}
+
+/* ──────────────── SECTION SHELL ──────────────── */
+.section{max-width:1480px;margin:0 auto 56px}
+.section-head{
+  display:flex;align-items:baseline;gap:14px;margin-bottom:24px;
+}
+.section-num{
+  font-family:'IBM Plex Mono',monospace;font-size:0.66rem;letter-spacing:0.24em;
+  color:var(--gold);text-transform:uppercase;font-weight:500;
+}
+.section-title{
+  font-family:'Bricolage Grotesque';font-weight:500;font-size:1.5rem;letter-spacing:-0.015em;
+}
+.section-rule{flex:1;height:1px;background:linear-gradient(90deg,var(--bdr-2) 0%,transparent 100%)}
+.section-sub{color:var(--tx-2);font-size:0.92rem;line-height:1.55;max-width:760px;margin-bottom:24px}
+
+/* ──────────────── PRIMARY SURFACES GRID ──────────────── */
+.primary-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
+}
+
+.surface{
+  background:var(--surf-2);
+  border:1px solid var(--bdr-2);
+  border-radius:8px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+
+.surface.primary{
+  border-color:var(--gold-dim);
+  background:linear-gradient(180deg,rgba(212,169,106,0.04),var(--surf-2));
+}
+
+.surface.home{
+  border-color:var(--gold);
+  background:linear-gradient(180deg,rgba(212,169,106,0.08),var(--surf-2));
+  box-shadow:0 0 0 1px rgba(212,169,106,0.1),0 8px 24px rgba(0,0,0,0.3);
+}
+
+.surface-head{
+  padding:14px 14px 12px;
+  border-bottom:1px solid var(--bdr);
+  display:flex;flex-direction:column;gap:5px;
+}
+.surface-head .nav-key{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;
+  color:var(--tx-3);text-transform:uppercase;
+}
+.surface-head .nav-key.gold{color:var(--gold)}
+.surface-head .name{
+  font-family:'Bricolage Grotesque';font-weight:600;font-size:1.08rem;letter-spacing:-0.005em;
+  display:flex;align-items:center;gap:8px;
+}
+.surface-head .home-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:0.52rem;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--bg);background:var(--gold);
+  padding:2px 6px;border-radius:2px;font-weight:600;
+}
+.surface-head .tagline{
+  color:var(--tx-3);font-size:0.78rem;line-height:1.4;font-style:italic;
+}
+
+.surface-body{padding:12px 14px;flex:1;display:flex;flex-direction:column;gap:8px}
+
+.sub-surface{
+  background:var(--surf);
+  border:1px solid var(--bdr);
+  border-radius:4px;
+  padding:9px 10px;
+  font-size:0.8rem;
+}
+.sub-surface .sub-name{
+  font-weight:500;color:var(--tx);
+  font-size:0.84rem;margin-bottom:2px;display:flex;align-items:center;gap:6px;
+}
+.sub-surface .sub-note{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--tx-3);
+  letter-spacing:0.04em;line-height:1.4;
+}
+.sub-surface.deep{
+  background:transparent;border:1px dashed var(--bdr-2);
+  margin-left:14px;
+}
+
+.sub-surface .badge-fire{
+  font-family:'IBM Plex Mono',monospace;font-size:0.5rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--hot);
+  border:1px solid rgba(255,93,93,0.35);background:rgba(255,93,93,0.1);
+  padding:1px 5px;border-radius:2px;font-weight:600;
+}
+.sub-surface .badge-arm{
+  font-family:'IBM Plex Mono',monospace;font-size:0.5rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--inbound);
+  border:1px solid rgba(126,231,135,0.35);background:rgba(126,231,135,0.08);
+  padding:1px 5px;border-radius:2px;
+}
+.sub-surface .badge-emerging{
+  font-family:'IBM Plex Mono',monospace;font-size:0.5rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--warm);
+  border:1px solid rgba(255,190,85,0.35);background:rgba(255,190,85,0.08);
+  padding:1px 5px;border-radius:2px;
+}
+
+/* ──────────────── CROSS-CUTTING UI ──────────────── */
+.cross-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+}
+.cross-card{
+  background:var(--surf-2);
+  border:1px solid var(--bdr);
+  border-radius:8px;
+  padding:18px 20px;
+  border-left:3px solid var(--cross);
+}
+.cross-card .head{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;
+  color:var(--cross);text-transform:uppercase;font-weight:500;margin-bottom:8px;
+}
+.cross-card .name{
+  font-family:'Bricolage Grotesque';font-weight:600;font-size:1rem;margin-bottom:6px;
+}
+.cross-card .desc{
+  color:var(--tx-2);font-size:0.84rem;line-height:1.5;
+}
+.cross-card .where{
+  margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  color:var(--tx-3);letter-spacing:0.08em;
+}
+.cross-card .where::before{content:"APPEARS ON · ";color:var(--tx-4)}
+
+/* ──────────────── SETTINGS CLUSTER ──────────────── */
+.settings-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+}
+.settings-card{
+  background:var(--surf-2);
+  border:1px solid var(--bdr);
+  border-radius:6px;
+  padding:14px 16px;
+}
+.settings-card .head{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;
+  color:var(--tx-3);text-transform:uppercase;margin-bottom:6px;
+}
+.settings-card .name{
+  font-family:'Bricolage Grotesque';font-weight:500;font-size:0.95rem;margin-bottom:5px;
+}
+.settings-card .desc{
+  color:var(--tx-3);font-size:0.78rem;line-height:1.45;
+}
+
+/* ──────────────── INTEGRATION TOPOLOGY ──────────────── */
+.topology{
+  background:var(--surf-2);
+  border:1px solid var(--bdr);
+  border-radius:10px;
+  padding:32px;
+  position:relative;
+  overflow:hidden;
+}
+
+.topo-layout{
+  display:grid;
+  grid-template-columns:1fr 280px 1fr;
+  gap:36px;
+  align-items:center;
+}
+
+.topo-side{display:flex;flex-direction:column;gap:11px}
+
+.topo-side .col-head{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--tx-3);
+  display:flex;align-items:center;gap:8px;margin-bottom:6px;
+}
+
+.topo-side.reads .col-head{color:var(--inbound)}
+.topo-side.writes .col-head{color:var(--outbound)}
+
+.topo-side .col-head::before{
+  content:"";width:10px;height:10px;border-radius:50%;background:currentColor;
+}
+
+.topo-module{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;
+  background:var(--surf);
+  border:1px solid var(--bdr);
+  border-radius:6px;
+  position:relative;
+}
+
+.topo-module .arrow{
+  font-family:'IBM Plex Mono',monospace;font-size:0.95rem;font-weight:500;
+}
+.topo-side.reads .topo-module .arrow{color:var(--inbound)}
+.topo-side.writes .topo-module .arrow{color:var(--outbound)}
+
+.topo-module .body{flex:1;display:flex;flex-direction:column;gap:2px}
+.topo-module .body .name{
+  font-family:'Bricolage Grotesque';font-weight:500;font-size:0.92rem;color:var(--tx);
+}
+.topo-module .body .note{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--tx-3);letter-spacing:0.04em;line-height:1.4;
+}
+
+.topo-center{
+  background:linear-gradient(180deg,rgba(212,169,106,0.08),rgba(212,169,106,0.02));
+  border:2px solid var(--gold);
+  border-radius:10px;
+  padding:24px 22px;
+  text-align:center;
+  box-shadow:0 0 0 6px rgba(212,169,106,0.03),0 16px 36px rgba(0,0,0,0.4);
+}
+.topo-center .badge{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:8px;
+}
+.topo-center .name{
+  font-family:'Fraunces';font-weight:500;font-size:1.5rem;letter-spacing:-0.015em;line-height:1.1;margin-bottom:8px;
+}
+.topo-center .role{
+  font-family:'Fraunces';font-weight:300;font-style:italic;font-size:0.88rem;color:var(--tx-2);line-height:1.45;
+}
+.topo-center .surfaces{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr-gold);
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--tx-3);letter-spacing:0.08em;line-height:1.7;
+}
+.topo-center .surfaces b{color:var(--gold-dim);font-weight:500}
+
+.legend{
+  margin-top:24px;padding-top:18px;border-top:1px solid var(--bdr);
+  display:flex;gap:24px;justify-content:center;flex-wrap:wrap;
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--tx-3);
+}
+.legend .item{display:flex;align-items:center;gap:8px}
+.legend .item::before{content:"";width:14px;height:2px;border-radius:1px;background:var(--inbound)}
+.legend .item.writes::before{background:var(--outbound)}
+.legend .item.cross::before{background:var(--cross)}
+
+/* ──────────────── USER FLOWS ──────────────── */
+.flows-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:18px;
+}
+
+.flow{
+  background:var(--surf-2);
+  border:1px solid var(--bdr);
+  border-radius:8px;
+  padding:18px 20px;
+}
+.flow .head{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:4px;
+}
+.flow .name{
+  font-family:'Bricolage Grotesque';font-weight:600;font-size:1.05rem;margin-bottom:14px;
+}
+.flow .steps{display:flex;flex-direction:column;gap:8px}
+.flow .step{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:9px 11px;
+  background:var(--surf);border:1px solid var(--bdr);border-radius:4px;
+  font-size:0.83rem;line-height:1.4;
+}
+.flow .step .num{
+  font-family:'IBM Plex Mono',monospace;font-size:0.66rem;color:var(--gold);
+  font-weight:500;flex-shrink:0;padding-top:1px;
+}
+.flow .step .body{flex:1}
+.flow .step .body strong{font-weight:500;color:var(--tx)}
+.flow .step .body .surf{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  color:var(--tx-3);letter-spacing:0.04em;margin-top:2px;
+}
+.flow .arrow-down{
+  text-align:center;color:var(--gold-dim);font-size:0.7rem;font-family:'IBM Plex Mono',monospace;
+  height:6px;line-height:6px;
+}
+
+/* ──────────────── KEY/LEGEND ──────────────── */
+.key-strip{
+  max-width:1480px;margin:48px auto 0;
+  background:var(--surf-2);border:1px solid var(--bdr);border-radius:8px;
+  padding:18px 24px;
+  display:flex;flex-wrap:wrap;gap:24px;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--tx-3);letter-spacing:0.08em;
+}
+.key-strip .item{display:flex;align-items:center;gap:8px}
+.key-strip .swatch{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.key-strip .swatch.home{background:linear-gradient(180deg,rgba(212,169,106,0.4),rgba(212,169,106,0.1));border:1px solid var(--gold)}
+.key-strip .swatch.primary{background:linear-gradient(180deg,rgba(212,169,106,0.15),rgba(212,169,106,0.05));border:1px solid var(--gold-dim)}
+.key-strip .swatch.standard{background:var(--surf-2);border:1px solid var(--bdr-2)}
+.key-strip .swatch.cross{background:var(--surf-2);border:1px solid var(--bdr);border-left:3px solid var(--cross)}
+
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="page-eyebrow">Signal Console · Information Architecture · 17 May 26</div>
+  <h1 class="page-title">Where every surface <em>lives</em>, and how they relate.</h1>
+  <p class="page-sub">
+    Across the seven design phases the product grew from a single Briefing surface into a constellation of related surfaces: <strong>Watchlist Triggers</strong>, <strong>Deal-Watch</strong>, <strong>Watch List</strong>, <strong>Sources &amp; Health</strong>, plus configuration and integration paths to the rest of the GTM OS. This document maps it.
+  </p>
+</header>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 1 — PRIMARY SURFACES
+     ════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">01 · Surfaces</span>
+    <h2 class="section-title">The five primary surfaces.</h2>
+    <span class="section-rule"></span>
+  </div>
+  <p class="section-sub">Top-level navigation. Briefing is home — the default view on every visit. The other four are sibling tabs reachable from a persistent nav bar.</p>
+
+  <div class="primary-grid">
+
+    <!-- BRIEFING (HOME) -->
+    <div class="surface home">
+      <div class="surface-head">
+        <span class="nav-key gold">B</span>
+        <div class="name">
+          Briefing
+          <span class="home-badge">Home</span>
+        </div>
+        <div class="tagline">The weekly editorial read.</div>
+      </div>
+      <div class="surface-body">
+        <div class="sub-surface">
+          <div class="sub-name">Patterns surface</div>
+          <div class="sub-note">Top 5 by confidence × trajectory. Editorial layout.</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Pattern detail</div>
+          <div class="sub-note">Six questions · evidence · recommended moves</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Apply move flow</div>
+          <div class="sub-note">Routes to GTM OS module; user confirms before save</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Feedback (Used / Met / Noise)</div>
+          <div class="sub-note">Closes the loop · feeds historical_snr</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRIGGERS -->
+    <div class="surface primary">
+      <div class="surface-head">
+        <span class="nav-key gold">T</span>
+        <div class="name">Triggers</div>
+        <div class="tagline">Your standing orders.</div>
+      </div>
+      <div class="surface-body">
+        <div class="sub-surface">
+          <div class="sub-name">Fired today <span class="badge-fire">3 fires</span></div>
+          <div class="sub-note">Highlighted at top · linked to evidence</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Armed triggers <span class="badge-arm">5 armed</span></div>
+          <div class="sub-note">Active, monitoring · per-trigger status</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">New trigger flow</div>
+          <div class="sub-note">Natural language → parsed → confirm</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Trigger detail / edit</div>
+          <div class="sub-note">View parsed query · edit · disable · delete</div>
+        </div>
+        <div class="sub-surface deep">
+          <div class="sub-note">Dormant · disabled triggers (collapsed)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEAL-WATCH -->
+    <div class="surface primary">
+      <div class="surface-head">
+        <span class="nav-key gold">D</span>
+        <div class="name">Deal-Watch</div>
+        <div class="tagline">Per-deal loss prediction.</div>
+      </div>
+      <div class="surface-body">
+        <div class="sub-surface">
+          <div class="sub-name">Active deals list</div>
+          <div class="sub-note">Per deal: stage · competitive set · severity</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Per-deal alert feed</div>
+          <div class="sub-note">⚠️ High · 🟡 Medium · informational</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Add / edit deal</div>
+          <div class="sub-note">Account · competitive set · watch_for tags</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Apply alert flow</div>
+          <div class="sub-note">One-click route to Call Planner / Asset Builder</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WATCH LIST -->
+    <div class="surface primary">
+      <div class="surface-head">
+        <span class="nav-key gold">W</span>
+        <div class="name">Watch List</div>
+        <div class="tagline">Below-threshold, still watching.</div>
+      </div>
+      <div class="surface-body">
+        <div class="sub-surface">
+          <div class="sub-name">Emerging patterns <span class="badge-emerging">4</span></div>
+          <div class="sub-note">Below Briefing threshold · gathering evidence</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Pattern detail (preview)</div>
+          <div class="sub-note">Why not yet Briefing-Main · what's missing</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Manual promote</div>
+          <div class="sub-note">User can force a pattern to Briefing Main</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Archive</div>
+          <div class="sub-note">Decayed patterns · queryable for retrospective</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOURCES & HEALTH -->
+    <div class="surface primary">
+      <div class="surface-head">
+        <span class="nav-key gold">S</span>
+        <div class="name">Sources &amp; Health</div>
+        <div class="tagline">What's feeding the pipeline.</div>
+      </div>
+      <div class="surface-body">
+        <div class="sub-surface">
+          <div class="sub-name">Configured sources</div>
+          <div class="sub-note">14 active · per-source health · cadence</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Source health log</div>
+          <div class="sub-note">Last fetch · errors · degraded states</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Add / remove source</div>
+          <div class="sub-note">Tier S · A · B per audit</div>
+        </div>
+        <div class="sub-surface">
+          <div class="sub-name">Source suggestions</div>
+          <div class="sub-note">System-detected candidate sources</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 2 — CROSS-CUTTING UI
+     ════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">02 · Always-on</span>
+    <h2 class="section-title">Cross-cutting UI elements.</h2>
+    <span class="section-rule"></span>
+  </div>
+  <p class="section-sub">Persistent on every primary surface. Three of these. They don't change content per surface — they reflect global state.</p>
+
+  <div class="cross-grid">
+
+    <div class="cross-card">
+      <div class="head">Top Nav Bar</div>
+      <div class="name">Primary surface navigation + badges</div>
+      <div class="desc">
+        Five-tab nav: Briefing · Triggers · Deal-Watch · Watch List · Sources. Badges on Triggers (fire count) and Deal-Watch (alert count). Cmd+K opens global search.
+      </div>
+      <div class="where">Every surface, top</div>
+    </div>
+
+    <div class="cross-card">
+      <div class="head">Notification Strip</div>
+      <div class="name">Today's fires + high-severity alerts</div>
+      <div class="desc">
+        Dismissable strip below the nav. Shows today's trigger fires and high-severity Deal-Watch alerts as a quick-glance summary. Click-through to relevant surface.
+      </div>
+      <div class="where">Briefing · Triggers · Deal-Watch (collapsible)</div>
+    </div>
+
+    <div class="cross-card">
+      <div class="head">Footer Strip</div>
+      <div class="name">Pipeline health + cost telemetry</div>
+      <div class="desc">
+        Persistent footer. Pipeline last-run timestamp · sources healthy / total · cost this week / ceiling · settings link. Quiet but always visible.
+      </div>
+      <div class="where">Every surface, bottom</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 3 — SETTINGS & CONFIGURATION
+     ════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">03 · Configuration</span>
+    <h2 class="section-title">Settings cluster.</h2>
+    <span class="section-rule"></span>
+  </div>
+  <p class="section-sub">Accessed from the footer or via Cmd+K. Not primary surfaces — these are where the user configures the system, not where they read intelligence.</p>
+
+  <div class="settings-grid">
+
+    <div class="settings-card">
+      <div class="head">SETTINGS · VOICE</div>
+      <div class="name">Voice Document editor</div>
+      <div class="desc">Edit exemplars, anti-exemplars, banned vocabulary, structural rules, hedging rules. Versioned with diff view.</div>
+    </div>
+
+    <div class="settings-card">
+      <div class="head">SETTINGS · CONTEXT</div>
+      <div class="name">ICP &amp; behavioral profile</div>
+      <div class="desc">Connects to ICP Studio · read-only here. Surfaces "last updated" timestamp + suggestions for refinement.</div>
+    </div>
+
+    <div class="settings-card">
+      <div class="head">SETTINGS · DEALS</div>
+      <div class="name">Active Deals register management</div>
+      <div class="desc">Bulk add / edit / close deals. Same data as Deal-Watch but a management view rather than alert view.</div>
+    </div>
+
+    <div class="settings-card">
+      <div class="head">SETTINGS · COST</div>
+      <div class="name">Cost ceilings &amp; usage</div>
+      <div class="desc">Weekly / daily ceiling configuration. Per-source cost breakdown. Override toggle. Historical cost log.</div>
+    </div>
+
+    <div class="settings-card">
+      <div class="head">SETTINGS · FEEDBACK</div>
+      <div class="name">Behavioral feedback log</div>
+      <div class="desc">Audit of every Used / Met / Noise mark. Reset weights option. Quarterly review prompt.</div>
+    </div>
+
+    <div class="settings-card">
+      <div class="head">SETTINGS · TELEMETRY</div>
+      <div class="name">Pipeline diagnostics</div>
+      <div class="desc">Hydrated-context logs · per-stage timing · enrichment-cost-per-source · evaluation-harness regression flags.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 4 — INTEGRATION TOPOLOGY
+     ════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">04 · Topology</span>
+    <h2 class="section-title">GTM OS read / write topology.</h2>
+    <span class="section-rule"></span>
+  </div>
+  <p class="section-sub">Signal Console is the intelligence layer. It reads from every relevant GTM OS module at the start of every pipeline run, and writes back via user-confirmed recommended-moves routing. Reads are continuous; writes require explicit approval.</p>
+
+  <div class="topology">
+    <div class="topo-layout">
+
+      <!-- Reads (in) -->
+      <div class="topo-side reads">
+        <div class="col-head">Reads from</div>
+
+        <div class="topo-module">
+          <span class="arrow">→</span>
+          <div class="body">
+            <div class="name">ICP Studio</div>
+            <div class="note">ICP definition · criteria · disqualifiers</div>
+          </div>
+        </div>
+        <div class="topo-module">
+          <span class="arrow">→</span>
+          <div class="body">
+            <div class="name">Discovery Studio</div>
+            <div class="note">Active framework · phases · questions</div>
+          </div>
+        </div>
+        <div class="topo-module">
+          <span class="arrow">→</span>
+          <div class="body">
+            <div class="name">Call Planner</div>
+            <div class="note">Objection bank · call brief templates</div>
+          </div>
+        </div>
+        <div class="topo-module">
+          <span class="arrow">→</span>
+          <div class="body">
+            <div class="name">Outbound Studio</div>
+            <div class="note">Hook library · signal triggers · sequences</div>
+          </div>
+        </div>
+        <div class="topo-module">
+          <span class="arrow">→</span>
+          <div class="body">
+            <div class="name">Asset Builder</div>
+            <div class="note">Battlecard tiles · executive pages</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center -->
+      <div class="topo-center">
+        <div class="badge">Intelligence Layer</div>
+        <div class="name">Signal Console</div>
+        <div class="role">Reads the GTM OS state. Monitors the external world. Synthesizes patterns. Routes moves back into the modules the user already uses.</div>
+        <div class="surfaces">
+          <b>Briefing</b> &nbsp;·&nbsp; <b>Triggers</b><br>
+          <b>Deal-Watch</b> &nbsp;·&nbsp; <b>Watch List</b><br>
+          <b>Sources &amp; Health</b>
+        </div>
+      </div>
+
+      <!-- Writes (out) -->
+      <div class="topo-side writes">
+        <div class="col-head">Writes to (user-confirmed)</div>
+
+        <div class="topo-module">
+          <div class="body">
+            <div class="name">Discovery Studio</div>
+            <div class="note">New questions · phase refreshes</div>
+          </div>
+          <span class="arrow">→</span>
+        </div>
+        <div class="topo-module">
+          <div class="body">
+            <div class="name">Call Planner</div>
+            <div class="note">New objection handlers · refreshes</div>
+          </div>
+          <span class="arrow">→</span>
+        </div>
+        <div class="topo-module">
+          <div class="body">
+            <div class="name">Asset Builder</div>
+            <div class="note">Battlecard refreshes · executive one-pagers</div>
+          </div>
+          <span class="arrow">→</span>
+        </div>
+        <div class="topo-module">
+          <div class="body">
+            <div class="name">Outbound Studio</div>
+            <div class="note">New hooks · signal-triggered sequences</div>
+          </div>
+          <span class="arrow">→</span>
+        </div>
+        <div class="topo-module">
+          <div class="body">
+            <div class="name">ICP Studio</div>
+            <div class="note">Competitive risk flags · ICP refinement</div>
+          </div>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="legend">
+      <div class="item">Reads — continuous, every pipeline run</div>
+      <div class="item writes">Writes — user-confirmed, never auto-publish</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 5 — KEY USER FLOWS
+     ════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-num">05 · Flows</span>
+    <h2 class="section-title">Four user flows the IA must support.</h2>
+    <span class="section-rule"></span>
+  </div>
+  <p class="section-sub">These are the paths users will walk most often. If any of them feels awkward in the IA above, the IA is wrong.</p>
+
+  <div class="flows-grid">
+
+    <!-- Flow 1: Monday morning -->
+    <div class="flow">
+      <div class="head">Flow 01</div>
+      <div class="name">Monday morning Briefing routine</div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <div class="body">User opens Signal Console.<br>
+            <span class="surf">Briefing (home)</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <div class="body">Reads top Pattern in editorial layout.<br>
+            <span class="surf">Briefing · Patterns surface</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <div class="body">Clicks "Apply move" on highest-leverage recommended_move.<br>
+            <span class="surf">Briefing → Apply move flow</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <div class="body">Reviews draft in destination module · saves.<br>
+            <span class="surf">→ Discovery Studio / Call Planner / Asset Builder</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">05</span>
+          <div class="body">Returns to Briefing · marks Pattern "Acted on".<br>
+            <span class="surf">Briefing · Feedback</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flow 2: Creating a trigger -->
+    <div class="flow">
+      <div class="head">Flow 02</div>
+      <div class="name">Creating a Watchlist Trigger</div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <div class="body">User navigates to Triggers · clicks "New trigger".<br>
+            <span class="surf">Triggers · New trigger flow</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <div class="body">Types natural-language trigger statement.<br>
+            <span class="surf">"Alert me when Snowflake adds a free tier"</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <div class="body">System parses · shows rephrased confirmation · structured fields.<br>
+            <span class="surf">parse_confidence ≥ 0.7 → commit; below → clarifying questions</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <div class="body">User confirms or edits structured form.<br>
+            <span class="surf">Triggers · Armed</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">05</span>
+          <div class="body">Trigger goes live on next pipeline run.<br>
+            <span class="surf">Status: Armed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flow 3: Reacting to a fire -->
+    <div class="flow">
+      <div class="head">Flow 03</div>
+      <div class="name">Reacting to a Trigger fire</div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <div class="body">Notification strip on Briefing shows fire badge.<br>
+            <span class="surf">Cross-cutting · Notification Strip</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <div class="body">Click navigates to Triggers · Fired today.<br>
+            <span class="surf">Triggers · Fired today</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <div class="body">Reads fire detail · evidence items · associated Pattern.<br>
+            <span class="surf">Trigger detail view</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <div class="body">Marks "Useful fire" or "False fire".<br>
+            <span class="surf">Behavioral feedback → trigger refinement</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">05</span>
+          <div class="body">If useful · routes to relevant Apply-move flow.<br>
+            <span class="surf">→ Discovery Studio / Call Planner</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flow 4: Deal-Watch alert -->
+    <div class="flow">
+      <div class="head">Flow 04</div>
+      <div class="name">Acting on a Deal-Watch alert</div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <div class="body">High-severity alert appears in Notification Strip.<br>
+            <span class="surf">Cross-cutting · Notification Strip</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <div class="body">Click navigates to Deal-Watch · specific deal.<br>
+            <span class="surf">Deal-Watch · Per-deal alert feed</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <div class="body">Reads alert: severity, why, recommended pre-emptive move.<br>
+            <span class="surf">Alert detail view</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <div class="body">One-click apply: refresh objection handler before call.<br>
+            <span class="surf">→ Call Planner · Objection Bank · refresh</span>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">05</span>
+          <div class="body">After deal closes, marks alert "Helped me" or "Didn't apply".<br>
+            <span class="surf">Behavioral feedback</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     KEY / LEGEND STRIP
+     ════════════════════════════════════════════════════════════ -->
+<div class="key-strip">
+  <div class="item"><span class="swatch home"></span>HOME · default surface on entry</div>
+  <div class="item"><span class="swatch primary"></span>PRIMARY · sibling tab in top nav</div>
+  <div class="item"><span class="swatch standard"></span>SUB-SURFACE · reachable from a primary surface</div>
+  <div class="item"><span class="swatch cross"></span>CROSS-CUTTING · persistent across all primary surfaces</div>
+</div>
+
+</body>
+</html>
