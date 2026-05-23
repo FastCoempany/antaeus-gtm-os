@@ -99,6 +99,361 @@ export type Database = {
           },
         ]
       }
+      // ─── Briefing room B.0a — HAND-AUTHORED PENDING REGEN ──────────
+      // The seven tables below were added by migration 20260523180000.
+      // These hand-authored stubs let the Briefing room scaffolding
+      // (B.0b/B.0c sub-PRs) reference Row<"briefing_runs"> etc. in a
+      // type-safe way before the founder regen runs.
+      //
+      // Replace this block with the output of `supabase gen types
+      // typescript --linked` after the migration applies to production.
+      // The regen should produce the same shape; if it differs in
+      // nullability or column ordering, the regen wins.
+      //
+      // Ref: deliverables/specs/briefing/01-build-phase-plan.md §B.0
+      briefing_audit_envelopes: {
+        Row: {
+          cluster_snapshot: Json
+          created_at: string
+          critique_record: Json | null
+          draft_record: Json | null
+          gate_decisions: Json
+          hydrated_context_snapshot: Json
+          id: string
+          pattern_id: string
+          revise_record: Json | null
+          total_cost: number
+          user_actions: Json
+          workspace_id: string
+        }
+        Insert: {
+          cluster_snapshot: Json
+          created_at?: string
+          critique_record?: Json | null
+          draft_record?: Json | null
+          gate_decisions?: Json
+          hydrated_context_snapshot: Json
+          id?: string
+          pattern_id: string
+          revise_record?: Json | null
+          total_cost?: number
+          user_actions?: Json
+          workspace_id?: string
+        }
+        Update: {
+          cluster_snapshot?: Json
+          created_at?: string
+          critique_record?: Json | null
+          draft_record?: Json | null
+          gate_decisions?: Json
+          hydrated_context_snapshot?: Json
+          id?: string
+          pattern_id?: string
+          revise_record?: Json | null
+          total_cost?: number
+          user_actions?: Json
+          workspace_id?: string
+        }
+        Relationships: []
+      }
+      briefing_clusters: {
+        Row: {
+          anchor: string
+          cluster_type: string
+          created_at: string
+          data: Json
+          id: string
+          item_ids: string[]
+          parent_cluster_id: string | null
+          run_id: string
+          trajectory: string | null
+          weighted_evidence: number
+          workspace_id: string
+        }
+        Insert: {
+          anchor: string
+          cluster_type: string
+          created_at?: string
+          data?: Json
+          id?: string
+          item_ids?: string[]
+          parent_cluster_id?: string | null
+          run_id: string
+          trajectory?: string | null
+          weighted_evidence?: number
+          workspace_id?: string
+        }
+        Update: {
+          anchor?: string
+          cluster_type?: string
+          created_at?: string
+          data?: Json
+          id?: string
+          item_ids?: string[]
+          parent_cluster_id?: string | null
+          run_id?: string
+          trajectory?: string | null
+          weighted_evidence?: number
+          workspace_id?: string
+        }
+        Relationships: []
+      }
+      briefing_enriched_items: {
+        Row: {
+          affects_deals: string[]
+          claim_type: string | null
+          created_at: string
+          data: Json
+          enrichment_cost: number
+          entities: Json
+          event_category: string | null
+          exec_move: Json | null
+          id: string
+          is_noise: boolean
+          matches_triggers: string[]
+          model_v_hash: string | null
+          pain_tags: string[]
+          raw_item_id: string
+          run_id: string
+          summary: string
+          topic_tags: string[]
+          user_relevance_score: number | null
+          what_changed: string | null
+          workspace_id: string
+        }
+        Insert: {
+          affects_deals?: string[]
+          claim_type?: string | null
+          created_at?: string
+          data?: Json
+          enrichment_cost?: number
+          entities?: Json
+          event_category?: string | null
+          exec_move?: Json | null
+          id?: string
+          is_noise?: boolean
+          matches_triggers?: string[]
+          model_v_hash?: string | null
+          pain_tags?: string[]
+          raw_item_id: string
+          run_id: string
+          summary: string
+          topic_tags?: string[]
+          user_relevance_score?: number | null
+          what_changed?: string | null
+          workspace_id?: string
+        }
+        Update: {
+          affects_deals?: string[]
+          claim_type?: string | null
+          created_at?: string
+          data?: Json
+          enrichment_cost?: number
+          entities?: Json
+          event_category?: string | null
+          exec_move?: Json | null
+          id?: string
+          is_noise?: boolean
+          matches_triggers?: string[]
+          model_v_hash?: string | null
+          pain_tags?: string[]
+          raw_item_id?: string
+          run_id?: string
+          summary?: string
+          topic_tags?: string[]
+          user_relevance_score?: number | null
+          what_changed?: string | null
+          workspace_id?: string
+        }
+        Relationships: []
+      }
+      briefing_pattern_feedback: {
+        Row: {
+          id: string
+          mark: string
+          marked_at: string
+          note: string | null
+          pattern_id: string
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          id?: string
+          mark: string
+          marked_at?: string
+          note?: string | null
+          pattern_id: string
+          user_id: string
+          workspace_id?: string
+        }
+        Update: {
+          id?: string
+          mark?: string
+          marked_at?: string
+          note?: string | null
+          pattern_id?: string
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: []
+      }
+      briefing_patterns: {
+        Row: {
+          affects_deals: string[]
+          attribute_grid: Json
+          audit_envelope_id: string | null
+          body: string
+          cluster_id: string | null
+          confidence: number
+          created_at: string
+          data: Json
+          evidence_count: number
+          id: string
+          matches_triggers: string[]
+          pattern_type: string
+          recommended_moves: Json
+          run_id: string
+          six_questions: Json
+          source_count: number
+          surfaced_at: string
+          title: string
+          trajectory: string | null
+          workspace_id: string
+        }
+        Insert: {
+          affects_deals?: string[]
+          attribute_grid?: Json
+          audit_envelope_id?: string | null
+          body: string
+          cluster_id?: string | null
+          confidence: number
+          created_at?: string
+          data?: Json
+          evidence_count?: number
+          id?: string
+          matches_triggers?: string[]
+          pattern_type: string
+          recommended_moves?: Json
+          run_id: string
+          six_questions?: Json
+          source_count?: number
+          surfaced_at?: string
+          title: string
+          trajectory?: string | null
+          workspace_id?: string
+        }
+        Update: {
+          affects_deals?: string[]
+          attribute_grid?: Json
+          audit_envelope_id?: string | null
+          body?: string
+          cluster_id?: string | null
+          confidence?: number
+          created_at?: string
+          data?: Json
+          evidence_count?: number
+          id?: string
+          matches_triggers?: string[]
+          pattern_type?: string
+          recommended_moves?: Json
+          run_id?: string
+          six_questions?: Json
+          source_count?: number
+          surfaced_at?: string
+          title?: string
+          trajectory?: string | null
+          workspace_id?: string
+        }
+        Relationships: []
+      }
+      briefing_raw_items: {
+        Row: {
+          body: string | null
+          created_at: string
+          data: Json
+          external_id: string
+          fetched_at: string
+          id: string
+          published_date: string | null
+          run_id: string
+          source_id: string
+          title: string
+          url: string | null
+          workspace_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          data?: Json
+          external_id: string
+          fetched_at?: string
+          id?: string
+          published_date?: string | null
+          run_id: string
+          source_id: string
+          title: string
+          url?: string | null
+          workspace_id?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          data?: Json
+          external_id?: string
+          fetched_at?: string
+          id?: string
+          published_date?: string | null
+          run_id?: string
+          source_id?: string
+          title?: string
+          url?: string | null
+          workspace_id?: string
+        }
+        Relationships: []
+      }
+      briefing_runs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          data: Json
+          error: string | null
+          id: string
+          stage_log: Json
+          started_at: string
+          status: string
+          total_cost: number
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          data?: Json
+          error?: string | null
+          id?: string
+          stage_log?: Json
+          started_at?: string
+          status?: string
+          total_cost?: number
+          updated_at?: string
+          workspace_id?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          data?: Json
+          error?: string | null
+          id?: string
+          stage_log?: Json
+          started_at?: string
+          status?: string
+          total_cost?: number
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: []
+      }
+      // ─── End Briefing room B.0a hand-authored stubs ────────────────
       deals: {
         Row: {
           account_name: string

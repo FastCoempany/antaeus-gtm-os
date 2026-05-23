@@ -123,6 +123,14 @@ export interface DataClient {
     // ─── Phase A orchestration layer (ADR-004) ─────────────────────
     workspaceSessions: NounAccessor<"workspace_sessions">;
     observations: NounAccessor<"observations">;
+    // ─── Briefing room foundation (ADR-006, B.0a) ──────────────────
+    briefingRuns: NounAccessor<"briefing_runs">;
+    briefingRawItems: NounAccessor<"briefing_raw_items">;
+    briefingEnrichedItems: NounAccessor<"briefing_enriched_items">;
+    briefingClusters: NounAccessor<"briefing_clusters">;
+    briefingPatterns: NounAccessor<"briefing_patterns">;
+    briefingAuditEnvelopes: NounAccessor<"briefing_audit_envelopes">;
+    briefingPatternFeedback: NounAccessor<"briefing_pattern_feedback">;
 }
 
 /**
@@ -185,7 +193,15 @@ export function createDataClient(
         handoffArtifacts: makeNounAccessor(sb, "handoff_artifacts"),
         // ─── Phase A orchestration layer (ADR-004) ─────────────────
         workspaceSessions: makeNounAccessor(sb, "workspace_sessions"),
-        observations: makeNounAccessor(sb, "observations")
+        observations: makeNounAccessor(sb, "observations"),
+        // ─── Briefing room foundation (ADR-006, B.0a) ──────────────
+        briefingRuns: makeNounAccessor(sb, "briefing_runs"),
+        briefingRawItems: makeNounAccessor(sb, "briefing_raw_items"),
+        briefingEnrichedItems: makeNounAccessor(sb, "briefing_enriched_items"),
+        briefingClusters: makeNounAccessor(sb, "briefing_clusters"),
+        briefingPatterns: makeNounAccessor(sb, "briefing_patterns"),
+        briefingAuditEnvelopes: makeNounAccessor(sb, "briefing_audit_envelopes"),
+        briefingPatternFeedback: makeNounAccessor(sb, "briefing_pattern_feedback")
     };
 }
 
@@ -219,7 +235,15 @@ function makeDemoLocalDataClient(): DataClient {
         readinessSnapshots: makeDemoLocalNounAccessor("readiness_snapshots"),
         handoffArtifacts: makeDemoLocalNounAccessor("handoff_artifacts"),
         workspaceSessions: makeDemoLocalNounAccessor("workspace_sessions"),
-        observations: makeDemoLocalNounAccessor("observations")
+        observations: makeDemoLocalNounAccessor("observations"),
+        // ─── Briefing room foundation (ADR-006, B.0a) ──────────────
+        briefingRuns: makeDemoLocalNounAccessor("briefing_runs"),
+        briefingRawItems: makeDemoLocalNounAccessor("briefing_raw_items"),
+        briefingEnrichedItems: makeDemoLocalNounAccessor("briefing_enriched_items"),
+        briefingClusters: makeDemoLocalNounAccessor("briefing_clusters"),
+        briefingPatterns: makeDemoLocalNounAccessor("briefing_patterns"),
+        briefingAuditEnvelopes: makeDemoLocalNounAccessor("briefing_audit_envelopes"),
+        briefingPatternFeedback: makeDemoLocalNounAccessor("briefing_pattern_feedback")
     };
 }
 
