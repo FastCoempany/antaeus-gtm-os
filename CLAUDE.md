@@ -212,11 +212,11 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 
 ### 4.7 Signal Console — Live Instrument (*protected room*)
 
-- **Purpose:** convert signals into ranked motion; the live radar where account heat becomes real work.
-- **Strategic logic:** signals are time-limited events. Heat = signal count × type weight × source credibility × recency decay. Research on a qualified account may justify motion; research without motion is collection theater. Account heat feeds Dashboard command ranking.
+- **Purpose:** the room where the operator tracks the named accounts they're watching, the signals attached to each, and the next move on each. Accounts come in by hand or from enrichment, signals stack up against them, the operator decides what to act on. Cross-room handoffs route the act-on decision into Outbound, Call Planner, Cold Call, and the Deal Workspace.
+- **Strategic logic:** signals are time-limited events. Heat = signal count × type weight × source credibility × recency decay. Research on a qualified account may justify motion; research without motion is collection theater. Account heat feeds Dashboard command ranking. Post-ADR-006: Signal Console is also the **data substrate** the Briefing room reads from — accounts + signals live in the `signal_console_accounts` + `signals` Postgres tables this room owns. Briefing reads; never writes back.
 - **Primitives:** account list, signal records, heat score per account, morning brief, research posture ("motion ready" vs "research heavy"), workspace-health block (compounding vs still weak), enrich-all flow.
 - **Flows in:** accounts from Sourcing Workbench + Territory Architect; ICP match score.
-- **Flows out:** ranked accounts into Outbound Studio, Cold Call Studio, LinkedIn Playbook; heat + readiness into Dashboard; heat + motion state into Handoff Kit.
+- **Flows out:** ranked accounts into Outbound Studio, Cold Call Studio, LinkedIn Playbook; heat + readiness into Dashboard; heat + motion state into Handoff Kit; accounts + signals into the Briefing room (read-only substrate per ADR-006).
 - **Must never be flattened:** signal interpretation, account-to-motion logic, account priority meaning. Never reduce to a badge list or passive timeline.
 
 ### 4.8 Outbound Studio — Live Instrument
