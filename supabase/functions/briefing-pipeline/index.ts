@@ -7,10 +7,10 @@
  * Subsequent stages (3.3 Enrich, 3.4 Cluster, 3.5 Synthesize, …)
  * graduate in B.2 and beyond.
  *
- * Source registry: populated by B.1b. Five fetchers active —
- * HN Algolia, TechCrunch RSS, PR Newswire personnel, Wikipedia
- * pageviews, GitHub releases atom. The sixth (HTML diff) ships
- * in B.1c with its own snapshot-store decision.
+ * Source registry: populated by B.1b + B.1c. All six fetchers
+ * active — HN Algolia, TechCrunch RSS, PR Newswire personnel,
+ * Wikipedia pageviews, GitHub releases atom, and HTML diff (B.1c
+ * added the sixth with its own snapshot table briefing_html_snapshots).
  *
  * Context hydration: server-side stub returns "uninitialized" for
  * every module today — mirroring the client adapter shells from
@@ -237,9 +237,17 @@ interface FetchResult {
 
 interface SourceFetcher {
     readonly id: string;
+    /**
+     * The optional `sb` arg lets stateful fetchers (HTML diff is the
+     * only one today) read + write their own state tables. Pure HTTP
+     * fetchers ignore it. TypeScript treats `(ctx, now) => ...` as
+     * assignable to `(ctx, now, sb?) => ...` so existing fetchers
+     * don't need a signature change.
+     */
     readonly fetch: (
         ctx: HydratedContext,
-        now: string
+        now: string,
+        sb?: SupabaseClient
     ) => Promise<FetchResult>;
 }
 
@@ -274,7 +282,7 @@ async function runIngest(
 
     const results = await Promise.allSettled(
         SOURCE_REGISTRY.map(async (source) => {
-            const fetchResult = await source.fetch(ctx, now);
+            const fetchResult = await source.fetch(ctx, now, sb);
             return {
                 source: source.id,
                 items: fetchResult.items,

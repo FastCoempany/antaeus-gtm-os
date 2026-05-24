@@ -2,7 +2,7 @@
 
 The orchestrator for the Briefing Recipe Layer pipeline. Wakes up on the weekly cron (Monday 06:00 UTC) or a manual POST, enumerates active workspaces, and runs each one through Stages 3.0 → 3.1 → 3.2.
 
-Source registry: **populated by B.1b**. Five fetchers active — HN Algolia, TechCrunch RSS, PR Newswire personnel, Wikipedia pageviews, GitHub releases atom. The sixth (HTML diff) ships in B.1c with its own snapshot-store decision.
+Source registry: **populated by B.1b + B.1c**. All six fetchers active — HN Algolia, TechCrunch RSS, PR Newswire personnel, Wikipedia pageviews, GitHub releases atom, and HTML diff (B.1c added the sixth backed by the new `briefing_html_snapshots` table).
 
 Context hydration: server-side stub returns `"uninitialized"` for every module — mirroring the client adapter shells from B.0c. Each per-room adapter graduates to a real read (Supabase row query) as that room hits ADR-005 Step 5 (or grows a legacy localStorage → Supabase mirror). Until then, the three watchlist-driven fetchers (HN Algolia, Wikipedia pageviews, GitHub releases atom) gracefully return zero items because the HydratedContext carries no query terms / articles / repos to act on. The two firehose-style fetchers (TechCrunch RSS, PR Newswire) return real items every run regardless of HydratedContext.
 
@@ -156,9 +156,9 @@ Supabase Edge Functions run in Deno; the `src/` tree is built for Node. URL impo
 
 B.1a — skeleton orchestrator + Stage 3.0 / 3.1 / 3.2 + cron schedule.
 
-B.1b — five source fetchers + the registry (this round). Every Monday's run now fetches real items from TechCrunch + PR Newswire even when the HydratedContext is empty.
+B.1b — five source fetchers + the registry. Every Monday's run fetches real items from TechCrunch + PR Newswire even when the HydratedContext is empty.
 
-B.1c — sixth source fetcher (HTML diff / page snapshot). Deferred from B.1b because it needs a snapshot-store decision (new table vs Wayback Machine as external store).
+B.1c — sixth source fetcher (HTML diff / page snapshot) backed by the new `briefing_html_snapshots` table. Three-way semantics per URL per run: first-time fetch establishes baseline silently; matching hash bumps `last_seen_at`; differing hash updates the snapshot AND emits a `briefing_raw_items` row with the diff context. URLs to watch come from `HydratedContext.tracked_urls` — a reserved adapter slot that's empty today, so the fetcher no-ops in production until an adapter graduates to populate it.
 
 B.2 — Stage 3.3 Enrich (first LLM call) + Stage 3.4 Cluster + Stage 3.5 Synthesize. The pipeline starts producing Patterns the briefing room can render.
 

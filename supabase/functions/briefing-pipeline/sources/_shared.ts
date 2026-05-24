@@ -210,3 +210,48 @@ const PERSONNEL_PATTERNS: ReadonlyArray<RegExp> = [
 export function isPersonnelTitle(title: string): boolean {
     return PERSONNEL_PATTERNS.some((re) => re.test(title));
 }
+
+// ─── HTML → text + SHA-256 (mirrored from src/briefing/lib/parsers/html-strip.ts) ─
+
+const ENTITIES: Readonly<Record<string, string>> = {
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "&quot;": '"',
+    "&apos;": "'",
+    "&#39;": "'",
+    "&nbsp;": " ",
+    "&copy;": "(c)",
+    "&reg;": "(R)",
+    "&trade;": "(tm)",
+    "&mdash;": "-",
+    "&ndash;": "-",
+    "&hellip;": "..."
+};
+
+export function stripHtmlToText(html: string): string {
+    if (typeof html !== "string" || html.length === 0) return "";
+    let text = html;
+    text = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ");
+    text = text.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ");
+    text = text.replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, " ");
+    text = text.replace(/<!--[\s\S]*?-->/g, " ");
+    text = text.replace(/<[^>]+>/g, " ");
+    text = text.replace(/&[a-zA-Z]+;|&#39;|&#\d+;/g, (m) => {
+        if (m in ENTITIES) return ENTITIES[m] ?? " ";
+        return " ";
+    });
+    text = text.replace(/\s+/g, " ");
+    return text.trim();
+}
+
+export async function sha256Hex(input: string): Promise<string> {
+    const data = new TextEncoder().encode(input);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const bytes = new Uint8Array(hashBuffer);
+    let hex = "";
+    for (const b of bytes) {
+        hex += b.toString(16).padStart(2, "0");
+    }
+    return hex;
+}
