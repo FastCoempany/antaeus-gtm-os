@@ -32,6 +32,11 @@ interface RawItem {
     readonly data: Record<string, unknown>;
 }
 
+interface FetchResult {
+    readonly items: ReadonlyArray<RawItem>;
+    readonly error: string | null;
+}
+
 interface HydratedContext {
     readonly icp: any;
     readonly watchlist_companies: ReadonlyArray<string>;
@@ -47,9 +52,11 @@ export const hnAlgoliaSource = {
     fetch: async (
         ctx: HydratedContext,
         nowIso: string
-    ): Promise<ReadonlyArray<RawItem>> => {
+    ): Promise<FetchResult> => {
         const terms = buildQueryTerms(ctx);
-        if (terms.length === 0) return [];
+        if (terms.length === 0) {
+            return { items: [], error: null };
+        }
 
         const sinceUnix = Math.floor(
             (new Date(nowIso).getTime() - WINDOW_DAYS * 24 * 60 * 60 * 1000) /
@@ -62,15 +69,34 @@ export const hnAlgoliaSource = {
 
         const out: RawItem[] = [];
         const seen = new Set<string>();
+        const errors: string[] = [];
         for (const result of perTerm) {
-            if (result.status !== "fulfilled") continue;
-            for (const item of result.value) {
+            if (result.status === "rejected") {
+                errors.push(
+                    result.reason instanceof Error
+                        ? result.reason.message
+                        : String(result.reason)
+                );
+                continue;
+            }
+            if (result.value.error !== null) {
+                errors.push(result.value.error);
+            }
+            for (const item of result.value.items) {
                 if (seen.has(item.external_id)) continue;
                 seen.add(item.external_id);
                 out.push(item);
             }
         }
-        return out;
+        // Roll per-term errors up into a single string. If every term
+        // failed AND we got no items, error is non-null. If any term
+        // succeeded with items, error is null even if some terms
+        // failed — the run is partially-successful.
+        const error =
+            out.length === 0 && errors.length > 0
+                ? errors.slice(0, 3).join("; ")
+                : null;
+        return { items: out, error };
     }
 };
 
@@ -100,26 +126,25 @@ function buildQueryTerms(ctx: HydratedContext): ReadonlyArray<string> {
 async function fetchForTerm(
     term: string,
     sinceUnix: number
-): Promise<ReadonlyArray<RawItem>> {
+): Promise<FetchResult> {
     const url = buildUrl(term, sinceUnix);
     const result = await httpGet(url, { Accept: "application/json" });
     if (!result.ok) {
-        console.warn("[hn-algolia] HTTP failure:", {
-            term,
-            status: result.status,
-            error: result.error
-        });
-        return [];
+        return {
+            items: [],
+            error: `term=${term}: ${result.error ?? `HTTP ${result.status}`}`
+        };
     }
     let body: { hits?: ReadonlyArray<Record<string, unknown>> };
     try {
         body = JSON.parse(result.text);
     } catch (err) {
-        console.warn("[hn-algolia] JSON parse failed:", {
-            term,
-            error: err instanceof Error ? err.message : String(err)
-        });
-        return [];
+        return {
+            items: [],
+            error: `term=${term}: JSON parse failed: ${
+                err instanceof Error ? err.message : String(err)
+            }`
+        };
     }
     const hits = Array.isArray(body.hits) ? body.hits : [];
     const items: RawItem[] = [];
@@ -147,7 +172,7 @@ async function fetchForTerm(
             }
         });
     }
-    return items;
+    return { items, error: null };
 }
 
 function buildUrl(query: string, sinceUnix: number): string {

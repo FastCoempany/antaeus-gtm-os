@@ -32,24 +32,28 @@ interface RawItem {
     readonly data: Record<string, unknown>;
 }
 
+interface FetchResult {
+    readonly items: ReadonlyArray<RawItem>;
+    readonly error: string | null;
+}
+
 const SOURCE_ID = "techcrunch_rss";
 const FEED_URL = "https://techcrunch.com/tag/funding/feed/";
 
 export const techcrunchRssSource = {
     id: SOURCE_ID,
-    fetch: async (): Promise<ReadonlyArray<RawItem>> => {
+    fetch: async (): Promise<FetchResult> => {
         const result = await httpGet(FEED_URL, {
             Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8"
         });
         if (!result.ok) {
-            console.warn("[techcrunch-rss] HTTP failure:", {
-                status: result.status,
-                error: result.error
-            });
-            return [];
+            return {
+                items: [],
+                error: result.error ?? `HTTP ${result.status}`
+            };
         }
         const entries = parseRss(result.text);
-        return entries.map((entry) => ({
+        const items = entries.map((entry) => ({
             source_id: SOURCE_ID,
             external_id: `tc_${entry.external_id}`,
             title: entry.title,
@@ -61,5 +65,6 @@ export const techcrunchRssSource = {
                 feed_external_id: entry.external_id
             }
         }));
+        return { items, error: null };
     }
 };

@@ -16,8 +16,13 @@
 
 // deno-lint-ignore-file no-explicit-any
 
+// User-Agent must be ASCII (Fetch spec requires header values to be
+// ByteString). An earlier draft used an em-dash separator — Deno's
+// fetch rejected the request before it left the function, with a
+// "headers of RequestInit (Argument 2) is not a valid ByteString"
+// error. Hyphen is safe.
 export const USER_AGENT =
-    "Antaeus GTM OS / Briefing pipeline — antaeus@antaeus.app";
+    "Antaeus GTM OS / Briefing pipeline - antaeus@antaeus.app";
 export const FETCH_TIMEOUT_MS = 10_000;
 
 // ─── HTTP GET helper ───────────────────────────────────────────

@@ -39,6 +39,11 @@ interface RawItem {
     readonly data: Record<string, unknown>;
 }
 
+interface FetchResult {
+    readonly items: ReadonlyArray<RawItem>;
+    readonly error: string | null;
+}
+
 interface HydratedContext {
     readonly icp: any;
     readonly watchlist_companies: ReadonlyArray<string>;
@@ -55,9 +60,11 @@ export const wikipediaPageviewsSource = {
     fetch: async (
         ctx: HydratedContext,
         nowIso: string
-    ): Promise<ReadonlyArray<RawItem>> => {
+    ): Promise<FetchResult> => {
         const articles = buildArticleList(ctx);
-        if (articles.length === 0) return [];
+        if (articles.length === 0) {
+            return { items: [], error: null };
+        }
 
         const now = new Date(nowIso);
         const endDate = new Date(
@@ -75,14 +82,35 @@ export const wikipediaPageviewsSource = {
         );
 
         const out: RawItem[] = [];
+        const errors: string[] = [];
         for (const result of perArticle) {
-            if (result.status === "fulfilled" && result.value !== null) {
-                out.push(result.value);
+            if (result.status === "rejected") {
+                errors.push(
+                    result.reason instanceof Error
+                        ? result.reason.message
+                        : String(result.reason)
+                );
+                continue;
+            }
+            if (result.value.error !== null) {
+                errors.push(result.value.error);
+            }
+            if (result.value.item !== null) {
+                out.push(result.value.item);
             }
         }
-        return out;
+        const error =
+            out.length === 0 && errors.length > 0
+                ? errors.slice(0, 3).join("; ")
+                : null;
+        return { items: out, error };
     }
 };
+
+interface ArticleFetchResult {
+    readonly item: RawItem | null;
+    readonly error: string | null;
+}
 
 function buildArticleList(ctx: HydratedContext): ReadonlyArray<string> {
     const articles: string[] = [];
@@ -112,35 +140,35 @@ async function fetchArticle(
     startDate: Date,
     endDate: Date,
     nowIso: string
-): Promise<RawItem | null> {
+): Promise<ArticleFetchResult> {
     const url = pageviewsUrl(article, startDate, endDate);
     const result = await httpGet(url, { Accept: "application/json" });
     if (!result.ok) {
         // 404 is expected for articles Wikipedia doesn't carry; not
-        // worth logging every time. Other failures are real.
-        if (result.status !== 404) {
-            console.warn("[wikipedia-pageviews] HTTP failure:", {
-                article,
-                status: result.status,
-                error: result.error
-            });
+        // an error signal. Other failures are real.
+        if (result.status === 404) {
+            return { item: null, error: null };
         }
-        return null;
+        return {
+            item: null,
+            error: `article=${article}: ${result.error ?? `HTTP ${result.status}`}`
+        };
     }
 
     let body: { items?: Array<{ timestamp?: string; views?: number }> };
     try {
         body = JSON.parse(result.text);
     } catch (err) {
-        console.warn("[wikipedia-pageviews] JSON parse failed:", {
-            article,
-            error: err instanceof Error ? err.message : String(err)
-        });
-        return null;
+        return {
+            item: null,
+            error: `article=${article}: JSON parse failed: ${
+                err instanceof Error ? err.message : String(err)
+            }`
+        };
     }
 
     const items = Array.isArray(body.items) ? body.items : [];
-    if (items.length < WINDOW_DAYS * 2) return null;
+    if (items.length < WINDOW_DAYS * 2) return { item: null, error: null };
 
     const sorted = [...items].sort((a, b) =>
         String(a.timestamp ?? "").localeCompare(String(b.timestamp ?? ""))
@@ -159,16 +187,18 @@ async function fetchArticle(
         priorAvg < ABSOLUTE_MIN_BASELINE &&
         recentAvg < ABSOLUTE_MIN_BASELINE
     ) {
-        return null;
+        return { item: null, error: null };
     }
 
     const deltaPct =
         priorAvg === 0 ? (recentAvg > 0 ? 999 : 0) : (recentAvg - priorAvg) / priorAvg;
-    if (Math.abs(deltaPct) < RELATIVE_THRESHOLD) return null;
+    if (Math.abs(deltaPct) < RELATIVE_THRESHOLD) {
+        return { item: null, error: null };
+    }
 
     const direction = deltaPct > 0 ? "up" : "down";
     const articleSlug = article.replace(/ /g, "_");
-    return {
+    const item: RawItem = {
         source_id: SOURCE_ID,
         external_id: `wp_${articleSlug}_${endDate.toISOString().slice(0, 10)}`,
         title: `Wikipedia pageviews ${direction} for "${article}" (${Math.round(deltaPct * 100)}% w/w)`,
@@ -184,6 +214,7 @@ async function fetchArticle(
             direction
         }
     };
+    return { item, error: null };
 }
 
 function pageviewsUrl(article: string, startDate: Date, endDate: Date): string {

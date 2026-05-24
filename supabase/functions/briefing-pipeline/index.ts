@@ -109,6 +109,14 @@ interface StageLogEntry {
     readonly duration_ms: number;
     readonly outcome: "ok" | "error";
     readonly notes: string;
+    /**
+     * Optional per-stage detail. Currently used by the ingest stage
+     * to surface `perSource[]` with per-fetcher status (fetched
+     * count + error message if any). Lets the founder diagnose
+     * per-source failures from the curl response without diving
+     * into Edge Function logs.
+     */
+    readonly data?: Record<string, unknown>;
 }
 
 // ─── Stage 3.0 — Context Hydration (server-side stub) ──────────
@@ -210,12 +218,29 @@ interface RawItem {
     readonly data: Record<string, unknown>;
 }
 
+/**
+ * Each source's fetch returns an envelope, not a bare array, so per-
+ * source failures surface upstream as structured data instead of
+ * console.warn'd into the void. `error` is null when the fetch
+ * succeeded (even if the result was an intentional empty array, e.g.
+ * a watchlist-driven fetcher with no watchlist terms to act on);
+ * `error` is a string when the fetcher saw a non-200 HTTP response,
+ * parse failure, or other recoverable problem. If a fetcher throws,
+ * Promise.allSettled in the dispatch captures it as a rejection +
+ * the orchestrator records its own error message — that's reserved
+ * for truly unexpected failures.
+ */
+interface FetchResult {
+    readonly items: ReadonlyArray<RawItem>;
+    readonly error: string | null;
+}
+
 interface SourceFetcher {
     readonly id: string;
     readonly fetch: (
         ctx: HydratedContext,
         now: string
-    ) => Promise<ReadonlyArray<RawItem>>;
+    ) => Promise<FetchResult>;
 }
 
 /**
@@ -248,10 +273,14 @@ async function runIngest(
     }
 
     const results = await Promise.allSettled(
-        SOURCE_REGISTRY.map(async (source) => ({
-            source: source.id,
-            items: await source.fetch(ctx, now)
-        }))
+        SOURCE_REGISTRY.map(async (source) => {
+            const fetchResult = await source.fetch(ctx, now);
+            return {
+                source: source.id,
+                items: fetchResult.items,
+                error: fetchResult.error
+            };
+        })
     );
 
     const perSource: Array<{
@@ -266,25 +295,44 @@ async function runIngest(
         const source = SOURCE_REGISTRY[i];
         if (!result || !source) continue;
         if (result.status === "fulfilled") {
+            // The fetcher's own error (HTTP failure, parse failure)
+            // surfaces here. items may still be empty + error
+            // populated — that's the canonical "fetcher ran but
+            // failed" shape.
             perSource.push({
                 source: source.id,
                 fetched: result.value.items.length,
-                error: null
+                error: result.value.error
             });
+            if (result.value.error !== null) {
+                console.warn("[briefing-pipeline] source reported error:", {
+                    source: source.id,
+                    workspaceId,
+                    error: result.value.error
+                });
+            }
             for (const item of result.value.items) {
                 allItems.push({ source: source.id, item });
             }
         } else {
+            // Promise rejection — the fetcher threw an unhandled
+            // exception. Distinct from a reported error in the
+            // resolved value because it indicates the fetcher
+            // didn't follow the contract.
             const message =
                 result.reason instanceof Error
                     ? result.reason.message
                     : String(result.reason);
-            console.error("[briefing-pipeline] source failed:", {
+            console.error("[briefing-pipeline] source threw:", {
                 source: source.id,
                 workspaceId,
                 error: message
             });
-            perSource.push({ source: source.id, fetched: 0, error: message });
+            perSource.push({
+                source: source.id,
+                fetched: 0,
+                error: `unhandled: ${message}`
+            });
         }
     }
 
@@ -547,7 +595,15 @@ async function runWorkspacePipeline(
             notes:
                 SOURCE_REGISTRY.length === 0
                     ? "Source registry is empty — no items fetched."
-                    : `Fetched ${ingestResult.fetched} items across ${ingestResult.perSource.length} sources (${ingestResult.inserted} inserted, ${ingestResult.deduped} deduped).`
+                    : `Fetched ${ingestResult.fetched} items across ${ingestResult.perSource.length} sources (${ingestResult.inserted} inserted, ${ingestResult.deduped} deduped).`,
+            // Surface per-source status so per-fetcher failures show
+            // up in the curl response + briefing_runs.stage_log
+            // jsonb. Each entry carries { source, fetched, error }
+            // — error is null on success, a string when the fetcher
+            // returned a non-200 or threw.
+            data: {
+                perSource: ingestResult.perSource
+            }
         };
         stages.push(ingestEntry);
         await recordStage(sb, runId, ingestEntry, "filtering");
