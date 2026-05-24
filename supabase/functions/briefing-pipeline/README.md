@@ -15,11 +15,27 @@ Context hydration: server-side stub returns `"uninitialized"` for every module �
 - Stage 3.1 dispatches the five active source fetchers in parallel via `Promise.allSettled`. TC + PR Newswire return real items every run; the three watchlist-driven sources return zero until the HydratedContext carries config to act on. Per-source failures are caught and reported in the response without failing the run.
 - Stage 3.2 evaluates filter rules over the fetched items (pass-through in B.1b — rules graduate alongside the ICP adapter's first real read) and records the decisions.
 
+## Required secrets
+
+The pipeline reads two env vars at runtime:
+
+- `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` — auto-injected by Supabase. No action needed.
+- `ANTHROPIC_API_KEY` — set by you. **Required since B.2a (Stage 3.3 Enrich).** Without it, the enrich stage skips every item with a "no API key" error and the pipeline still completes — but no `briefing_enriched_items` rows land.
+
+```bash
+# Set the Anthropic key as a function secret. Get a key from
+# https://console.anthropic.com → Settings → API Keys.
+supabase secrets set ANTHROPIC_API_KEY=sk-ant-api03-...
+
+# Verify (lists secret names only — never logs values):
+supabase secrets list
+```
+
 ## Deployment
 
 ```bash
-# 1. Deploy the function. --no-verify-jwt because pg_cron invokes it
-#    with the service-role key in Authorization, not a user JWT.
+# Deploy the function. --no-verify-jwt because pg_cron invokes it
+# with the service-role key in Authorization, not a user JWT.
 supabase functions deploy briefing-pipeline --no-verify-jwt
 ```
 
@@ -159,6 +175,8 @@ B.1a — skeleton orchestrator + Stage 3.0 / 3.1 / 3.2 + cron schedule.
 B.1b — five source fetchers + the registry. Every Monday's run fetches real items from TechCrunch + PR Newswire even when the HydratedContext is empty.
 
 B.1c — sixth source fetcher (HTML diff / page snapshot) backed by the new `briefing_html_snapshots` table. Three-way semantics per URL per run: first-time fetch establishes baseline silently; matching hash bumps `last_seen_at`; differing hash updates the snapshot AND emits a `briefing_raw_items` row with the diff context. URLs to watch come from `HydratedContext.tracked_urls` — a reserved adapter slot that's empty today, so the fetcher no-ops in production until an adapter graduates to populate it.
+
+B.2a — Stage 3.3 Enrich. First LLM call lands. For every un-enriched raw item in the workspace (oldest first, capped at 50/run), Haiku 4.5 produces structured enrichment: entities, exec_move, event_category, topic_tags, pain_tags, claim_type, summary, what_changed, user_relevance_score, matches_triggers, affects_deals, is_noise. Rows land in `briefing_enriched_items`. Per-item cost recorded; rolled up to `briefing_runs.total_cost`. `model_v_hash` recorded for B.6 audit envelopes. Cost per run typically $0.02–$0.05 (50 items × ~$0.001/item). Cross-run scope: the first run after deploy catches up on items already in the table from prior B.1+ runs.
 
 B.2 — Stage 3.3 Enrich (first LLM call) + Stage 3.4 Cluster + Stage 3.5 Synthesize. The pipeline starts producing Patterns the briefing room can render.
 
