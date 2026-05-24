@@ -78,6 +78,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 // @ts-ignore - Deno URL import; resolved at deploy time
 import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { ALL_SOURCES } from "./sources/index.ts";
+import { runEnrich } from "./llm/enrich.ts";
 
 // ─── Run-lifecycle status enum ─────────────────────────────────
 
@@ -103,7 +104,7 @@ type RunStatus =
     | "aborted";
 
 interface StageLogEntry {
-    readonly stage: "hydrate" | "ingest" | "filter";
+    readonly stage: "hydrate" | "ingest" | "filter" | "enrich";
     readonly started_at: string;
     readonly ended_at: string;
     readonly duration_ms: number;
@@ -477,6 +478,10 @@ interface WorkspaceRunReport {
         readonly deduped: number;
         readonly kept: number;
         readonly rejected: number;
+        readonly enriched: number;
+        readonly enrich_noise: number;
+        readonly enrich_errored: number;
+        readonly enrich_cost_usd: number;
     };
     readonly error: string | null;
 }
@@ -531,7 +536,17 @@ async function runWorkspacePipeline(
     workspaceId: string
 ): Promise<WorkspaceRunReport> {
     const stages: StageLogEntry[] = [];
-    const counts = { fetched: 0, inserted: 0, deduped: 0, kept: 0, rejected: 0 };
+    const counts = {
+        fetched: 0,
+        inserted: 0,
+        deduped: 0,
+        kept: 0,
+        rejected: 0,
+        enriched: 0,
+        enrich_noise: 0,
+        enrich_errored: 0,
+        enrich_cost_usd: 0
+    };
     const now = (): string => new Date().toISOString();
 
     // Create the run row up-front so any subsequent failure has a
@@ -631,7 +646,30 @@ async function runWorkspacePipeline(
             notes: `Evaluated ${filterResult.evaluated} items; ${filterResult.kept} kept, ${filterResult.rejected} rejected. Pass-through in B.1a (rules graduate with ICP adapter).`
         };
         stages.push(filterEntry);
-        await recordStage(sb, runId, filterEntry, "complete");
+        await recordStage(sb, runId, filterEntry, "enriching");
+
+        // ── Stage 3.3 Enrich (B.2a — first LLM call) ──
+        const enrichStart = now();
+        const enrichT0 = Date.now();
+        const enrichResult = await runEnrich(sb, runId, workspaceId, ctx, enrichStart);
+        counts.enriched = enrichResult.enriched;
+        counts.enrich_noise = enrichResult.noise;
+        counts.enrich_errored = enrichResult.errored;
+        counts.enrich_cost_usd = enrichResult.total_cost_usd;
+        const enrichEntry: StageLogEntry = {
+            stage: "enrich",
+            started_at: enrichStart,
+            ended_at: now(),
+            duration_ms: Date.now() - enrichT0,
+            outcome: enrichResult.errored > 0 && enrichResult.enriched === 0 ? "error" : "ok",
+            notes: `Attempted ${enrichResult.attempted} items; ${enrichResult.enriched} enriched, ${enrichResult.noise} flagged noise, ${enrichResult.errored} errored. Cost: $${enrichResult.total_cost_usd.toFixed(4)}.`,
+            data: {
+                perItem: enrichResult.perItem
+            }
+        };
+        stages.push(enrichEntry);
+        await recordStage(sb, runId, enrichEntry, "complete");
+
         await updateRun(sb, runId, {
             completed_at: now(),
             data: {
@@ -731,6 +769,10 @@ interface PipelineReport {
         deduped: number;
         kept: number;
         rejected: number;
+        enriched: number;
+        enrich_noise: number;
+        enrich_errored: number;
+        enrich_cost_usd: number;
     };
     perWorkspace: ReadonlyArray<WorkspaceRunReport>;
 }
@@ -756,7 +798,11 @@ async function runPipeline(
         inserted: 0,
         deduped: 0,
         kept: 0,
-        rejected: 0
+        rejected: 0,
+        enriched: 0,
+        enrich_noise: 0,
+        enrich_errored: 0,
+        enrich_cost_usd: 0
     };
     const perWorkspace: WorkspaceRunReport[] = [];
 
@@ -768,6 +814,10 @@ async function runPipeline(
         totals.deduped += report.counts.deduped;
         totals.kept += report.counts.kept;
         totals.rejected += report.counts.rejected;
+        totals.enriched += report.counts.enriched;
+        totals.enrich_noise += report.counts.enrich_noise;
+        totals.enrich_errored += report.counts.enrich_errored;
+        totals.enrich_cost_usd += report.counts.enrich_cost_usd;
     }
 
     return {
