@@ -30,25 +30,29 @@ interface RawItem {
     readonly data: Record<string, unknown>;
 }
 
+interface FetchResult {
+    readonly items: ReadonlyArray<RawItem>;
+    readonly error: string | null;
+}
+
 const SOURCE_ID = "pr_newswire_personnel";
 const FEED_URL = "https://www.prnewswire.com/rss/news-releases-list.rss";
 
 export const prNewswireSource = {
     id: SOURCE_ID,
-    fetch: async (): Promise<ReadonlyArray<RawItem>> => {
+    fetch: async (): Promise<FetchResult> => {
         const result = await httpGet(FEED_URL, {
             Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8"
         });
         if (!result.ok) {
-            console.warn("[pr-newswire] HTTP failure:", {
-                status: result.status,
-                error: result.error
-            });
-            return [];
+            return {
+                items: [],
+                error: result.error ?? `HTTP ${result.status}`
+            };
         }
         const entries = parseRss(result.text);
         const personnel = entries.filter((entry) => isPersonnelTitle(entry.title));
-        return personnel.map((entry) => ({
+        const items = personnel.map((entry) => ({
             source_id: SOURCE_ID,
             external_id: `prn_${entry.external_id}`,
             title: entry.title,
@@ -61,5 +65,6 @@ export const prNewswireSource = {
                 feed_external_id: entry.external_id
             }
         }));
+        return { items, error: null };
     }
 };

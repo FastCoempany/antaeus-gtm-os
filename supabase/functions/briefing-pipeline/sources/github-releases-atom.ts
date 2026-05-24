@@ -36,6 +36,16 @@ interface RawItem {
     readonly data: Record<string, unknown>;
 }
 
+interface FetchResult {
+    readonly items: ReadonlyArray<RawItem>;
+    readonly error: string | null;
+}
+
+interface RepoFetchResult {
+    readonly items: ReadonlyArray<RawItem>;
+    readonly error: string | null;
+}
+
 interface HydratedContext {
     /** Reserved extension slot for repo lists; not yet populated by adapters. */
     readonly github_repos?: ReadonlyArray<string>;
@@ -46,21 +56,37 @@ const MAX_REPOS = 20;
 
 export const githubReleasesAtomSource = {
     id: SOURCE_ID,
-    fetch: async (ctx: HydratedContext): Promise<ReadonlyArray<RawItem>> => {
+    fetch: async (ctx: HydratedContext): Promise<FetchResult> => {
         const repos = buildRepoList(ctx);
-        if (repos.length === 0) return [];
+        if (repos.length === 0) {
+            return { items: [], error: null };
+        }
 
         const perRepo = await Promise.allSettled(
             repos.map(async (repo) => fetchRepo(repo))
         );
 
         const out: RawItem[] = [];
+        const errors: string[] = [];
         for (const result of perRepo) {
-            if (result.status === "fulfilled") {
-                out.push(...result.value);
+            if (result.status === "rejected") {
+                errors.push(
+                    result.reason instanceof Error
+                        ? result.reason.message
+                        : String(result.reason)
+                );
+                continue;
             }
+            if (result.value.error !== null) {
+                errors.push(result.value.error);
+            }
+            out.push(...result.value.items);
         }
-        return out;
+        const error =
+            out.length === 0 && errors.length > 0
+                ? errors.slice(0, 3).join("; ")
+                : null;
+        return { items: out, error };
     }
 };
 
@@ -76,26 +102,26 @@ function buildRepoList(ctx: HydratedContext): ReadonlyArray<string> {
     return Array.from(new Set(cleaned)).slice(0, MAX_REPOS);
 }
 
-async function fetchRepo(repo: string): Promise<ReadonlyArray<RawItem>> {
+async function fetchRepo(repo: string): Promise<RepoFetchResult> {
     const url = `https://github.com/${repo}/releases.atom`;
     const result = await httpGet(url, {
         Accept: "application/atom+xml, application/xml;q=0.9, */*;q=0.8"
     });
     if (!result.ok) {
-        if (result.status !== 404) {
-            console.warn("[github-atom] HTTP failure:", {
-                repo,
-                status: result.status,
-                error: result.error
-            });
+        // 404 = repo missing or no releases; not a runtime error.
+        if (result.status === 404) {
+            return { items: [], error: null };
         }
-        return [];
+        return {
+            items: [],
+            error: `repo=${repo}: ${result.error ?? `HTTP ${result.status}`}`
+        };
     }
     const entries = parseAtom(result.text);
-    return entries.map((entry) => ({
+    const items = entries.map((entry) => ({
         source_id: SOURCE_ID,
         external_id: `gh_${repo}_${entry.external_id}`,
-        title: `${repo} — ${entry.title}`,
+        title: `${repo} - ${entry.title}`,
         body: entry.summary,
         url: entry.link,
         published_date: entry.published_date,
@@ -104,4 +130,5 @@ async function fetchRepo(repo: string): Promise<ReadonlyArray<RawItem>> {
             release_external_id: entry.external_id
         }
     }));
+    return { items, error: null };
 }
