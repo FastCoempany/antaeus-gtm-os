@@ -2,19 +2,18 @@
 
 The orchestrator for the Briefing Recipe Layer pipeline. Wakes up on the weekly cron (Monday 06:00 UTC) or a manual POST, enumerates active workspaces, and runs each one through Stages 3.0 → 3.1 → 3.2.
 
-B.1a ships this as a **skeleton in two ways**:
+Source registry: **populated by B.1b**. Five fetchers active — HN Algolia, TechCrunch RSS, PR Newswire personnel, Wikipedia pageviews, GitHub releases atom. The sixth (HTML diff) ships in B.1c with its own snapshot-store decision.
 
-1. The source registry (Stage 3.1 input) is **empty**. Every B.1a run ingests zero raw items. B.1b registers six tier-A free sources and the pipeline starts moving real data.
-2. Server-side context hydration returns `"uninitialized"` for every module — mirroring the client adapter shells from B.0c. Each per-room adapter graduates to a real read (Supabase row query) as that room hits ADR-005 Step 5 (or grows a legacy localStorage → Supabase mirror); the contract surface stays stable across either path.
+Context hydration: server-side stub returns `"uninitialized"` for every module — mirroring the client adapter shells from B.0c. Each per-room adapter graduates to a real read (Supabase row query) as that room hits ADR-005 Step 5 (or grows a legacy localStorage → Supabase mirror). Until then, the three watchlist-driven fetchers (HN Algolia, Wikipedia pageviews, GitHub releases atom) gracefully return zero items because the HydratedContext carries no query terms / articles / repos to act on. The two firehose-style fetchers (TechCrunch RSS, PR Newswire) return real items every run regardless of HydratedContext.
 
-## What B.1a verifies end-to-end
+## What the pipeline verifies end-to-end
 
 - The function authenticates with the service-role key (same pattern as the heartbeat).
 - Active workspaces are enumerated by recent session **or** observation activity (canonical 7-day window).
 - A `briefing_runs` row is created per workspace per invocation. It transitions through `pending → hydrating → ingesting → filtering → complete`, with a per-stage entry in `stage_log` (or terminates as `failed` with the error captured).
 - Stage 3.0 produces a `HydratedContext` (all uninitialized today).
-- Stage 3.1 dispatches the empty source registry, returns zero raw items.
-- Stage 3.2 evaluates filter rules over zero items (vacuously true) and records the (empty) decisions.
+- Stage 3.1 dispatches the five active source fetchers in parallel via `Promise.allSettled`. TC + PR Newswire return real items every run; the three watchlist-driven sources return zero until the HydratedContext carries config to act on. Per-source failures are caught and reported in the response without failing the run.
+- Stage 3.2 evaluates filter rules over the fetched items (pass-through in B.1b — rules graduate alongside the ICP adapter's first real read) and records the decisions.
 
 ## Deployment
 
@@ -82,19 +81,19 @@ curl -X POST \
   https://<project-ref>.supabase.co/functions/v1/briefing-pipeline
 ```
 
-Expected B.1a response shape:
+Expected response shape (with 5 active sources, uninitialized context):
 
 ```json
 {
   "ok": true,
   "startedAt": "2026-05-24T06:00:00.000Z",
-  "endedAt":   "2026-05-24T06:00:01.234Z",
-  "durationMs": 1234,
+  "endedAt":   "2026-05-24T06:00:03.456Z",
+  "durationMs": 3456,
   "workspaces": 1,
-  "sources": 0,
+  "sources": 5,
   "totals": {
-    "fetched": 0, "inserted": 0, "deduped": 0,
-    "kept": 0, "rejected": 0
+    "fetched": 12, "inserted": 12, "deduped": 0,
+    "kept": 12, "rejected": 0
   },
   "perWorkspace": [
     {
@@ -103,15 +102,17 @@ Expected B.1a response shape:
       "status": "complete",
       "stages": [
         { "stage": "hydrate", "outcome": "ok", "notes": "Hydrated context for 9 modules; all uninitialized in B.1a." },
-        { "stage": "ingest",  "outcome": "ok", "notes": "Source registry empty in B.1a — no items fetched. B.1b registers six tier-A sources." },
-        { "stage": "filter",  "outcome": "ok", "notes": "Evaluated 0 items; 0 kept, 0 rejected. Pass-through in B.1a." }
+        { "stage": "ingest",  "outcome": "ok", "notes": "Fetched 12 items across 5 sources (12 inserted, 0 deduped)." },
+        { "stage": "filter",  "outcome": "ok", "notes": "Evaluated 12 items; 12 kept, 0 rejected. Pass-through in B.1a (rules graduate with ICP adapter)." }
       ],
-      "counts": { "fetched": 0, "inserted": 0, "deduped": 0, "kept": 0, "rejected": 0 },
+      "counts": { "fetched": 12, "inserted": 12, "deduped": 0, "kept": 12, "rejected": 0 },
       "error": null
     }
   ]
 }
 ```
+
+Item counts vary per run — TechCrunch funding feed runs ~5-15/day, PR Newswire personnel-filtered output is more variable. On a quiet news day you may see 5-10 total; on an active day 20-40. The three watchlist-driven sources (HN Algolia, Wikipedia pageviews, GitHub releases atom) contribute zero until the HydratedContext carries config to act on.
 
 ## Useful queries
 
@@ -153,9 +154,11 @@ Supabase Edge Functions run in Deno; the `src/` tree is built for Node. URL impo
 
 ## Phasing
 
-B.1a (this PR) — skeleton orchestrator + Stage 3.0 / 3.1 / 3.2 + cron schedule.
+B.1a — skeleton orchestrator + Stage 3.0 / 3.1 / 3.2 + cron schedule.
 
-B.1b — six source fetchers + the registry. After B.1b, every Monday's run actually fetches ~10-30 items per workspace.
+B.1b — five source fetchers + the registry (this round). Every Monday's run now fetches real items from TechCrunch + PR Newswire even when the HydratedContext is empty.
+
+B.1c — sixth source fetcher (HTML diff / page snapshot). Deferred from B.1b because it needs a snapshot-store decision (new table vs Wayback Machine as external store).
 
 B.2 — Stage 3.3 Enrich (first LLM call) + Stage 3.4 Cluster + Stage 3.5 Synthesize. The pipeline starts producing Patterns the briefing room can render.
 

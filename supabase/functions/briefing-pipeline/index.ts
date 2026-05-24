@@ -7,16 +7,21 @@
  * Subsequent stages (3.3 Enrich, 3.4 Cluster, 3.5 Synthesize, …)
  * graduate in B.2 and beyond.
  *
- * B.1a ships this as a SKELETON in two ways:
- *   1. The source registry (Stage 3.1 input) is EMPTY. Every B.1a run
- *      ingests zero raw items. B.1b registers six source fetchers
- *      (HN, TechCrunch RSS, PR Newswire, Wikipedia pageviews, GitHub
- *      releases, page-diff) and the pipeline starts moving real data.
- *   2. Server-side context hydration returns "uninitialized" for every
- *      module — mirroring the client-side adapter shells from B.0c.
- *      Each per-room adapter graduates to a real read (Supabase row
- *      query) as that room hits ADR-005 Step 5; the contract surface
- *      stays stable.
+ * Source registry: populated by B.1b. Five fetchers active —
+ * HN Algolia, TechCrunch RSS, PR Newswire personnel, Wikipedia
+ * pageviews, GitHub releases atom. The sixth (HTML diff) ships
+ * in B.1c with its own snapshot-store decision.
+ *
+ * Context hydration: server-side stub returns "uninitialized" for
+ * every module today — mirroring the client adapter shells from
+ * B.0c. Each per-room adapter graduates to a real read (Supabase
+ * row query) as that room hits ADR-005 Step 5; the contract surface
+ * stays stable. Until then, the three watchlist-driven fetchers
+ * (HN Algolia, Wikipedia pageviews, GitHub releases atom) gracefully
+ * return zero items because the HydratedContext carries no query
+ * terms / articles / repos to act on. The two firehose-style
+ * fetchers (TechCrunch RSS, PR Newswire) return real items every
+ * run regardless of HydratedContext.
  *
  * What B.1a verifies end-to-end:
  *   - The function authenticates with the service-role key (same
@@ -72,6 +77,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 // @ts-ignore - Deno URL import; resolved at deploy time
 import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { ALL_SOURCES } from "./sources/index.ts";
 
 // ─── Run-lifecycle status enum ─────────────────────────────────
 
@@ -213,21 +219,17 @@ interface SourceFetcher {
 }
 
 /**
- * B.1a registry is empty. B.1b registers the six tier-A free sources:
- *   - hn-algolia
- *   - techcrunch-rss
- *   - pr-newswire-personnel
- *   - wikipedia-pageviews
- *   - github-releases-atom
- *   - tier-b-html-diff
+ * Source registry — populated by B.1b. Each fetcher is registered in
+ * supabase/functions/briefing-pipeline/sources/index.ts. The HTML
+ * diff source (sixth on the original B.1 list) ships in a B.1c
+ * follow-up — it needs a schema decision about where to store prior
+ * snapshots that's out of B.1b scope.
  *
- * Adding a source: write a file under supabase/functions/briefing-
- * pipeline/sources/, import + register here. Each source's fetch()
- * is called once per pipeline run, in parallel with the others.
+ * Each source's fetch() is called once per pipeline run, in parallel
+ * with the others via Promise.allSettled (per-source failures don't
+ * fail the pipeline).
  */
-const SOURCE_REGISTRY: ReadonlyArray<SourceFetcher> = [
-    // B.1b lands the actual fetchers.
-];
+const SOURCE_REGISTRY: ReadonlyArray<SourceFetcher> = ALL_SOURCES;
 
 async function runIngest(
     sb: SupabaseClient,
@@ -544,7 +546,7 @@ async function runWorkspacePipeline(
             outcome: "ok",
             notes:
                 SOURCE_REGISTRY.length === 0
-                    ? "Source registry empty in B.1a — no items fetched. B.1b registers six tier-A sources."
+                    ? "Source registry is empty — no items fetched."
                     : `Fetched ${ingestResult.fetched} items across ${ingestResult.perSource.length} sources (${ingestResult.inserted} inserted, ${ingestResult.deduped} deduped).`
         };
         stages.push(ingestEntry);
