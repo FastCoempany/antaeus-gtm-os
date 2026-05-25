@@ -79,6 +79,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { ALL_SOURCES } from "./sources/index.ts";
 import { runEnrich } from "./llm/enrich.ts";
+import { runCluster } from "./cluster/cluster.ts";
 
 // ─── Run-lifecycle status enum ─────────────────────────────────
 
@@ -104,7 +105,7 @@ type RunStatus =
     | "aborted";
 
 interface StageLogEntry {
-    readonly stage: "hydrate" | "ingest" | "filter" | "enrich";
+    readonly stage: "hydrate" | "ingest" | "filter" | "enrich" | "cluster";
     readonly started_at: string;
     readonly ended_at: string;
     readonly duration_ms: number;
@@ -482,6 +483,9 @@ interface WorkspaceRunReport {
         readonly enrich_noise: number;
         readonly enrich_errored: number;
         readonly enrich_cost_usd: number;
+        readonly clusters_considered: number;
+        readonly clusters_qualified: number;
+        readonly clusters_persisted: number;
     };
     readonly error: string | null;
 }
@@ -545,7 +549,10 @@ async function runWorkspacePipeline(
         enriched: 0,
         enrich_noise: 0,
         enrich_errored: 0,
-        enrich_cost_usd: 0
+        enrich_cost_usd: 0,
+        clusters_considered: 0,
+        clusters_qualified: 0,
+        clusters_persisted: 0
     };
     const now = (): string => new Date().toISOString();
 
@@ -668,7 +675,28 @@ async function runWorkspacePipeline(
             }
         };
         stages.push(enrichEntry);
-        await recordStage(sb, runId, enrichEntry, "complete");
+        await recordStage(sb, runId, enrichEntry, "clustering");
+
+        // ── Stage 3.4 Cluster (B.2b) ──
+        const clusterStart = now();
+        const clusterT0 = Date.now();
+        const clusterResult = await runCluster(sb, runId, workspaceId, ctx, clusterStart);
+        counts.clusters_considered = clusterResult.considered;
+        counts.clusters_qualified = clusterResult.qualified;
+        counts.clusters_persisted = clusterResult.persisted;
+        const clusterEntry: StageLogEntry = {
+            stage: "cluster",
+            started_at: clusterStart,
+            ended_at: now(),
+            duration_ms: Date.now() - clusterT0,
+            outcome: "ok",
+            notes: `Considered ${clusterResult.considered} candidate clusters; ${clusterResult.qualified} qualified, ${clusterResult.persisted} persisted.`,
+            data: {
+                perCluster: clusterResult.perCluster
+            }
+        };
+        stages.push(clusterEntry);
+        await recordStage(sb, runId, clusterEntry, "complete");
 
         await updateRun(sb, runId, {
             completed_at: now(),
@@ -773,6 +801,9 @@ interface PipelineReport {
         enrich_noise: number;
         enrich_errored: number;
         enrich_cost_usd: number;
+        clusters_considered: number;
+        clusters_qualified: number;
+        clusters_persisted: number;
     };
     perWorkspace: ReadonlyArray<WorkspaceRunReport>;
 }
@@ -802,7 +833,10 @@ async function runPipeline(
         enriched: 0,
         enrich_noise: 0,
         enrich_errored: 0,
-        enrich_cost_usd: 0
+        enrich_cost_usd: 0,
+        clusters_considered: 0,
+        clusters_qualified: 0,
+        clusters_persisted: 0
     };
     const perWorkspace: WorkspaceRunReport[] = [];
 
@@ -818,6 +852,9 @@ async function runPipeline(
         totals.enrich_noise += report.counts.enrich_noise;
         totals.enrich_errored += report.counts.enrich_errored;
         totals.enrich_cost_usd += report.counts.enrich_cost_usd;
+        totals.clusters_considered += report.counts.clusters_considered;
+        totals.clusters_qualified += report.counts.clusters_qualified;
+        totals.clusters_persisted += report.counts.clusters_persisted;
     }
 
     return {
