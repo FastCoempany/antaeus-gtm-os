@@ -123,6 +123,8 @@ export interface DataClient {
     // ─── Phase A orchestration layer (ADR-004) ─────────────────────
     workspaceSessions: NounAccessor<"workspace_sessions">;
     observations: NounAccessor<"observations">;
+    // ─── Commercial identity layer (ADR-007) ───────────────────────
+    workspaceProfile: NounAccessor<"workspace_profile">;
     // ─── Briefing room foundation (ADR-006, B.0a) ──────────────────
     briefingRuns: NounAccessor<"briefing_runs">;
     briefingRawItems: NounAccessor<"briefing_raw_items">;
@@ -192,6 +194,7 @@ export function createDataClient(
         readinessSnapshots: makeNounAccessor(sb, "readiness_snapshots"),
         handoffArtifacts: makeNounAccessor(sb, "handoff_artifacts"),
         // ─── Phase A orchestration layer (ADR-004) ─────────────────
+        workspaceProfile: makeNounAccessor(sb, "workspace_profile"),
         workspaceSessions: makeNounAccessor(sb, "workspace_sessions"),
         observations: makeNounAccessor(sb, "observations"),
         // ─── Briefing room foundation (ADR-006, B.0a) ──────────────
@@ -234,6 +237,7 @@ function makeDemoLocalDataClient(): DataClient {
         advisorDeployments: makeDemoLocalNounAccessor("advisor_deployments"),
         readinessSnapshots: makeDemoLocalNounAccessor("readiness_snapshots"),
         handoffArtifacts: makeDemoLocalNounAccessor("handoff_artifacts"),
+        workspaceProfile: makeDemoLocalNounAccessor("workspace_profile"),
         workspaceSessions: makeDemoLocalNounAccessor("workspace_sessions"),
         observations: makeDemoLocalNounAccessor("observations"),
         // ─── Briefing room foundation (ADR-006, B.0a) ──────────────
