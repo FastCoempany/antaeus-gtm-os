@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
-import type { Account, Signal } from "../lib/types";
+import type { Account, RelationshipType, Signal } from "../lib/types";
+import { RELATIONSHIP_LABEL, RELATIONSHIP_TYPES } from "../lib/types";
 import { heatMetrics, recency } from "../lib/heat";
 import {
     hrefToDealWorkspace,
@@ -9,6 +10,7 @@ import {
 } from "../lib/handoff";
 import { getAccountExecutionContext } from "../lib/execution-context";
 import { matchAccountToIcp } from "../lib/icp-match";
+import { setAccountRelationship } from "../lib/cloud-persistence";
 import { HeatBadge } from "./HeatBadge";
 
 interface Props {
@@ -81,6 +83,33 @@ export function AccountCard({ account, now }: Props): JSX.Element {
                     .filter(Boolean)
                     .join(" · ") || "—"}
             </p>
+
+            {/* Relationship type (ADR-007). A 'competitor' flag here is
+                what the Briefing reads to drive category-specific
+                source queries. Default prospect. */}
+            <div class="sc-card__relationship" role="group" aria-label="Relationship">
+                {RELATIONSHIP_TYPES.map((rt) => {
+                    const active = (account.relationshipType ?? "prospect") === rt;
+                    return (
+                        <button
+                            key={rt}
+                            type="button"
+                            class={`sc-card__rel-chip ${
+                                active ? "is-active" : ""
+                            } sc-card__rel-chip--${rt}`}
+                            aria-pressed={active}
+                            onClick={() =>
+                                void setAccountRelationship(
+                                    account.id,
+                                    rt as RelationshipType
+                                )
+                            }
+                        >
+                            {RELATIONSHIP_LABEL[rt]}
+                        </button>
+                    );
+                })}
+            </div>
 
             {sigs.length === 0 ? (
                 <p class="sc-card__empty">No signals captured yet.</p>

@@ -124,6 +124,31 @@ describe("rowToAccount", () => {
         expect(acc!.tier).toBeUndefined();
     });
 
+    it("reads relationship_type from the real column (ADR-007)", () => {
+        const row = {
+            id: "x",
+            account_name: "Acme",
+            relationship_type: "competitor",
+            data: {}
+        };
+        expect(rowToAccount(row as never)!.relationshipType).toBe("competitor");
+    });
+
+    it("defaults relationship_type to prospect when missing", () => {
+        const row = { id: "x", account_name: "Acme", data: {} };
+        expect(rowToAccount(row as never)!.relationshipType).toBe("prospect");
+    });
+
+    it("defaults relationship_type to prospect when invalid", () => {
+        const row = {
+            id: "x",
+            account_name: "Acme",
+            relationship_type: "frenemy",
+            data: {}
+        };
+        expect(rowToAccount(row as never)!.relationshipType).toBe("prospect");
+    });
+
     it("hydrates with empty signals array when data.signals missing", () => {
         const row = { id: "x", account_name: "Acme", data: {} };
         const acc = rowToAccount(row as never);
@@ -164,6 +189,17 @@ describe("accountToInsert", () => {
         expect((ins as { ticker?: string }).ticker).toBeUndefined();
     });
 
+    it("sets relationship_type (defaults prospect) on insert (ADR-007)", () => {
+        expect(accountToInsert(makeAccount({ name: "X" })).relationship_type).toBe(
+            "prospect"
+        );
+        expect(
+            accountToInsert(
+                makeAccount({ name: "X", relationshipType: "competitor" })
+            ).relationship_type
+        ).toBe("competitor");
+    });
+
     it("packs editorial fields into data jsonb (signals omitted post-Step 5)", () => {
         const ins = accountToInsert(
             makeAccount({
@@ -196,6 +232,17 @@ describe("accountToUpdate", () => {
             makeAccount({ name: "Z", industry: "FinTech" })
         );
         expect(up.industry).toBe("FinTech");
+    });
+
+    it("sets relationship_type on update, defaulting prospect (ADR-007)", () => {
+        expect(accountToUpdate(makeAccount({ name: "Z" })).relationship_type).toBe(
+            "prospect"
+        );
+        expect(
+            accountToUpdate(
+                makeAccount({ name: "Z", relationshipType: "partner" })
+            ).relationship_type
+        ).toBe("partner");
     });
 });
 

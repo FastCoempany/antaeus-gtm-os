@@ -1,5 +1,5 @@
 import { computed, effect, signal, type ReadonlySignal, type Signal } from "@preact/signals";
-import type { Account, Signal as ScSignal } from "./lib/types";
+import type { Account, RelationshipType, Signal as ScSignal } from "./lib/types";
 import { saveAccounts } from "./lib/persistence";
 import { publishHealthSnapshot } from "./lib/health-snapshot";
 
@@ -94,6 +94,29 @@ export function removeAccount(id: string): void {
     const next = existing.slice();
     next.splice(idx, 1);
     allAccounts.value = next;
+}
+
+/**
+ * Set an account's relationship type (ADR-007). Updates the in-memory
+ * account; returns the updated Account (or null if not found) so the
+ * caller can route it to the cloud save. The cloud write is the
+ * caller's concern — keeps this module free of the Supabase client,
+ * mirroring the signal-mutation primitives above.
+ */
+export function setAccountRelationshipLocal(
+    id: string,
+    relationshipType: RelationshipType
+): Account | null {
+    const existing = allAccounts.value;
+    const idx = existing.findIndex((a) => a.id === id);
+    if (idx === -1) return null;
+    const current = existing[idx];
+    if (!current) return null;
+    const updated: Account = { ...current, relationshipType };
+    const next = existing.slice();
+    next[idx] = updated;
+    allAccounts.value = next;
+    return updated;
 }
 
 // ─── Local signal mutations ─────────────────────────────────────────────

@@ -8,6 +8,7 @@ import {
     removeSignalFromAccount,
     resetSession,
     searchQuery,
+    setAccountRelationshipLocal,
     selectAccount,
     selectedAccount,
     selectedAccountId,
@@ -49,6 +50,35 @@ describe("setAllAccounts / upsertAccount / removeAccount", () => {
         setAllAccounts([makeAccount({ id: "a" }), makeAccount({ id: "b" })]);
         removeAccount("a");
         expect(allAccounts.value.map((x) => x.id)).toEqual(["b"]);
+    });
+});
+
+describe("setAccountRelationshipLocal (ADR-007)", () => {
+    beforeEach(() => resetSession());
+
+    it("flags an account's relationship + returns the updated account", () => {
+        setAllAccounts([makeAccount({ id: "a", name: "Rival Inc" })]);
+        const updated = setAccountRelationshipLocal("a", "competitor");
+        expect(updated?.relationshipType).toBe("competitor");
+        expect(allAccounts.value[0]?.relationshipType).toBe("competitor");
+    });
+
+    it("returns null + no-ops when the account isn't found", () => {
+        setAllAccounts([makeAccount({ id: "a" })]);
+        expect(setAccountRelationshipLocal("missing", "partner")).toBeNull();
+        expect(allAccounts.value[0]?.relationshipType).toBeUndefined();
+    });
+
+    it("preserves other account fields when flipping relationship", () => {
+        setAllAccounts([
+            makeAccount({ id: "a", name: "Keep", industry: "FinTech", tier: 2 })
+        ]);
+        setAccountRelationshipLocal("a", "customer");
+        const a = allAccounts.value[0];
+        expect(a?.name).toBe("Keep");
+        expect(a?.industry).toBe("FinTech");
+        expect(a?.tier).toBe(2);
+        expect(a?.relationshipType).toBe("customer");
     });
 });
 
