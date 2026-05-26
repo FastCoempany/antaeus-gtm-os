@@ -946,3 +946,53 @@ button {
     background: var(--sc-orange);
     color: #fff;
 }
+
+/* ─── Relationship type chips (ADR-007) ────────────────────────────────
+ * Per-account prospect | competitor | partner | customer. A competitor
+ * flag is what the Briefing reads to drive category-specific source
+ * queries, so the active competitor state gets a distinct (red) tint to
+ * make it legible at a glance.
+ */
+.sc-card__relationship {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0 4px;
+}
+
+.sc-card__rel-chip {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--sc-ink-40);
+    background: transparent;
+    border: 1px solid var(--sc-border);
+    border-radius: 999px;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+
+.sc-card__rel-chip:hover {
+    border-color: var(--sc-border-strong);
+    color: var(--sc-ink-70);
+}
+
+.sc-card__rel-chip.is-active {
+    color: var(--sc-field-raised);
+    background: var(--sc-ink);
+    border-color: var(--sc-ink);
+}
+
+/* Competitor active state — red, the relationship the Briefing keys on. */
+.sc-card__rel-chip--competitor.is-active {
+    background: var(--sc-accent-red);
+    border-color: var(--sc-accent-red);
+}
+
+/* Customer active state — green (earned). */
+.sc-card__rel-chip--customer.is-active {
+    background: var(--sc-accent-green);
+    border-color: var(--sc-accent-green);
+}

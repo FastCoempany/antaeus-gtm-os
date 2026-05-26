@@ -64,6 +64,28 @@ export interface Signal {
 export const ACCOUNT_TIERS = [1, 2, 3, 4] as const;
 export type AccountTier = (typeof ACCOUNT_TIERS)[number];
 
+/**
+ * Relationship type (ADR-007). A competitor is an account flagged
+ * 'competitor' — the competitive set is a view over flagged accounts,
+ * not a separate table. The Briefing reads competitor-flagged accounts
+ * to drive category-specific source queries. Default 'prospect' (every
+ * tracked account is a prospect/target unless told otherwise).
+ */
+export const RELATIONSHIP_TYPES = [
+    "prospect",
+    "competitor",
+    "partner",
+    "customer"
+] as const;
+export type RelationshipType = (typeof RELATIONSHIP_TYPES)[number];
+
+export const RELATIONSHIP_LABEL: Record<RelationshipType, string> = {
+    prospect: "Prospect",
+    competitor: "Competitor",
+    partner: "Partner",
+    customer: "Customer"
+};
+
 export interface Account {
     readonly id: string;
     readonly name: string;
@@ -74,6 +96,8 @@ export interface Account {
     readonly employees?: string;
     readonly focus?: string;
     readonly tier?: AccountTier;
+    /** ADR-007: prospect (default) | competitor | partner | customer. */
+    readonly relationshipType?: RelationshipType;
     readonly approach?: string;
     readonly persona?: string;
     readonly enrichedAt?: string;

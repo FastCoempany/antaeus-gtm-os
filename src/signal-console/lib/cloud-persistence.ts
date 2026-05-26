@@ -14,12 +14,13 @@ import {
     signalToInsert,
     signalToUpdate
 } from "./signals-bridge";
-import type { Account, Signal } from "./types";
+import type { Account, RelationshipType, Signal } from "./types";
 import {
     addSignalToAccount,
     allAccounts,
     removeAccount,
     removeSignalFromAccount,
+    setAccountRelationshipLocal,
     setAccountSignals,
     setAllAccounts,
     updateSignalInAccount,
@@ -287,6 +288,22 @@ export async function saveAccount(account: Account): Promise<Account> {
         });
         return account;
     }
+}
+
+/**
+ * Set an account's relationship type (ADR-007) + persist. Optimistic:
+ * the local mutation lands immediately; the cloud write follows. A
+ * competitor flag here is what the Briefing reads to drive
+ * category-specific source queries. No-op (returns null) when the
+ * account isn't found.
+ */
+export async function setAccountRelationship(
+    id: string,
+    relationshipType: RelationshipType
+): Promise<Account | null> {
+    const updated = setAccountRelationshipLocal(id, relationshipType);
+    if (!updated) return null;
+    return saveAccount(updated);
 }
 
 /**

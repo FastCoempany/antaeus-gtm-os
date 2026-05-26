@@ -4,7 +4,19 @@ import type {
     Row,
     UpdateRow
 } from "@/lib/database-helpers";
-import type { Account, Signal } from "./types";
+import type { Account, RelationshipType, Signal } from "./types";
+import { RELATIONSHIP_TYPES } from "./types";
+
+/** Coerce a DB relationship_type value to the typed union, default prospect. */
+function normalizeRelationship(value: unknown): RelationshipType {
+    if (
+        typeof value === "string" &&
+        (RELATIONSHIP_TYPES as ReadonlyArray<string>).includes(value)
+    ) {
+        return value as RelationshipType;
+    }
+    return "prospect";
+}
 
 /**
  * Signal Console ↔ Supabase row bridge.
@@ -158,6 +170,9 @@ export function rowToAccount(
         ...(tier !== undefined && [1, 2, 3, 4].includes(tier)
             ? { tier: tier as 1 | 2 | 3 | 4 }
             : {}),
+        // ADR-007 relationship_type is a real column (not in the blob).
+        // Default 'prospect' when absent / unrecognized.
+        relationshipType: normalizeRelationship(r.relationship_type),
         ...(asString(data["approach"])
             ? { approach: asString(data["approach"]) }
             : {}),
@@ -204,6 +219,7 @@ export function accountToInsert(
         ...(account.industry ? { industry: account.industry } : {}),
         // sector intentionally omitted — not in the in-memory shape
         ...(account.enrichedAt ? { last_enriched_at: account.enrichedAt } : {}),
+        relationship_type: account.relationshipType ?? "prospect",
         data: extractDataBlob(account) as Json
     };
 }
@@ -222,6 +238,7 @@ export function accountToUpdate(
         ticker: account.ticker ?? null,
         industry: account.industry ?? null,
         last_enriched_at: account.enrichedAt ?? null,
+        relationship_type: account.relationshipType ?? "prospect",
         data: extractDataBlob(account) as Json
     };
 }
