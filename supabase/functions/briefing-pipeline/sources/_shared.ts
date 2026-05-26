@@ -255,3 +255,82 @@ export async function sha256Hex(input: string): Promise<string> {
     }
     return hex;
 }
+
+// ─── Signal Console → Briefing evidence (mirror of
+//     src/briefing/lib/parsers/signal-console.ts) ──────────────────
+
+export interface SignalConsoleSignal {
+    readonly id: string;
+    readonly headline: string | null;
+    readonly source: string | null;
+    readonly url: string | null;
+    readonly published_date: string | null;
+    readonly fetched_at: string | null;
+    readonly captured_at: string | null;
+    readonly signal_type: string | null;
+    readonly note: string | null;
+    readonly confidence: number | null;
+    readonly is_ai: boolean | null;
+    readonly flagged: boolean | null;
+    readonly account_name: string | null;
+    readonly relationship_type: string | null;
+}
+
+export interface SignalRawItem {
+    readonly source_id: string;
+    readonly external_id: string;
+    readonly title: string;
+    readonly body: string | null;
+    readonly url: string | null;
+    readonly published_date: string | null;
+    readonly data: Record<string, unknown>;
+}
+
+export function normalizeSignalSource(source: string | null | undefined): string {
+    const raw = typeof source === "string" ? source.trim().toLowerCase() : "";
+    const slug = raw.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return `sc:${slug.length > 0 ? slug : "unknown"}`;
+}
+
+export function mapSignalToRawItem(
+    signal: SignalConsoleSignal
+): SignalRawItem | null {
+    if (signal.flagged === true) return null;
+    const title = (signal.headline ?? "").trim();
+    if (title.length === 0) return null;
+
+    const account = (signal.account_name ?? "").trim();
+    const bodyParts: string[] = [];
+    if (account.length > 0) {
+        bodyParts.push(`Account: ${account} (competitor in the operator's watchlist).`);
+    }
+    if (signal.signal_type && signal.signal_type.trim().length > 0) {
+        bodyParts.push(`Signal type: ${signal.signal_type.trim()}.`);
+    }
+    if (signal.note && signal.note.trim().length > 0) {
+        bodyParts.push(signal.note.trim());
+    }
+    const body = bodyParts.length > 0 ? bodyParts.join(" ") : null;
+
+    const published =
+        signal.published_date ?? signal.fetched_at ?? signal.captured_at ?? null;
+
+    return {
+        source_id: normalizeSignalSource(signal.source),
+        external_id: `signal:${signal.id}`,
+        title,
+        body,
+        url: signal.url && signal.url.trim().length > 0 ? signal.url.trim() : null,
+        published_date: published,
+        data: {
+            signal_id: signal.id,
+            account_name: account.length > 0 ? account : null,
+            signal_type: signal.signal_type ?? null,
+            editorial_source: signal.source ?? null,
+            confidence: typeof signal.confidence === "number" ? signal.confidence : null,
+            is_ai: signal.is_ai === true,
+            relationship_type: signal.relationship_type ?? null,
+            origin: "signal_console"
+        }
+    };
+}
