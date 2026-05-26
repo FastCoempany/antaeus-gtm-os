@@ -11,6 +11,7 @@ const MINIMAL: EnrichPromptInputs = {
     title: "Acme launches new product",
     body: "Acme Industries today announced a new product.",
     published_date: "2026-05-23T14:00:00Z",
+    commercial_profile: null,
     watchlist_companies: [],
     competitive_set: [],
     active_deals: [],
@@ -22,6 +23,39 @@ const MINIMAL: EnrichPromptInputs = {
 describe("PROMPT_VERSION", () => {
     it("is set", () => {
         expect(PROMPT_VERSION).toBe("enrich-1.0");
+    });
+});
+
+describe("buildEnrichPrompt — commercial profile (ADR-007)", () => {
+    it("renders the operator's product category + value prop when set", () => {
+        const prompt = buildEnrichPrompt({
+            ...MINIMAL,
+            commercial_profile: {
+                product_category: "founder-to-first-operator revenue OS",
+                value_prop: "make the motion inheritable"
+            }
+        });
+        expect(prompt).toContain(
+            "Operator's product category (what THEY sell): founder-to-first-operator revenue OS"
+        );
+        expect(prompt).toContain("Operator's value proposition: make the motion inheritable");
+        expect(prompt).toContain("Relevance is anchored on this category");
+        // With a profile set, the empty-context fallback must NOT fire.
+        expect(prompt).not.toContain("Workspace has not yet declared");
+    });
+
+    it("omits the category line when product_category is null", () => {
+        const prompt = buildEnrichPrompt({
+            ...MINIMAL,
+            commercial_profile: { product_category: null, value_prop: "x" }
+        });
+        expect(prompt).not.toContain("product category (what THEY sell)");
+        expect(prompt).toContain("Operator's value proposition: x");
+    });
+
+    it("still fires the empty-context fallback when profile is null AND all else empty", () => {
+        const prompt = buildEnrichPrompt(MINIMAL);
+        expect(prompt).toContain("Workspace has not yet declared");
     });
 });
 
