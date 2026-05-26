@@ -319,21 +319,34 @@ export function seedFromDraft(
         JSON.stringify({
             completed: true,
             completedAt: iso,
-            answers: {
-                companyName: draft.companyName.trim() || null,
-                role: draft.role,
-                productCategory: draft.category,
-                quota: draft.annualQuota || null,
-                acv: draft.avgDealSize || null,
-                icpStatement: draft.icpStatement.trim() || null,
-                firstAccount: draft.firstAccountName.trim() || null
-            },
+            answers: buildOnboardingAnswers(draft),
             source: "onboarding-v2"
         })
     );
     trySet(store, "gtmos_onboarding_completed_at", iso);
 
     return { seeded: items.length > 0, items };
+}
+
+/**
+ * The onboarding answers object — the durable record of what the
+ * operator entered. Extracted so the localStorage seed (above) and the
+ * cloud write (lib/cloud.ts → workspace_profile.onboarding_answers)
+ * use ONE definition. Single source of truth for the answer shape
+ * (ADR-007): change it here and both persistence paths follow.
+ */
+export function buildOnboardingAnswers(
+    draft: OnboardingDraft
+): Record<string, unknown> {
+    return {
+        companyName: draft.companyName.trim() || null,
+        role: draft.role,
+        productCategory: draft.category,
+        quota: draft.annualQuota || null,
+        acv: draft.avgDealSize || null,
+        icpStatement: draft.icpStatement.trim() || null,
+        firstAccount: draft.firstAccountName.trim() || null
+    };
 }
 
 /**

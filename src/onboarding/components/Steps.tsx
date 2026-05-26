@@ -15,6 +15,8 @@ import {
     validation
 } from "../state";
 import { StepShell } from "./StepShell";
+import { createDataClient } from "@/lib/data-client";
+import { persistOnboardingToCloud } from "../lib/cloud";
 
 /**
  * Individual step contents. Each step is intentionally narrow — one
@@ -258,12 +260,23 @@ export function QuotaStep(): JSX.Element {
             title="What revenue does the year owe?"
             subtitle="Quota Workback turns these into a weekly execution plan. Optional — you can fill it later."
             onNext={() => {
-                const result = finishAndSeed();
-                if (!result.items.length) {
-                    // nothing to seed — still advance so the operator
-                    // sees the completion screen
-                    finishAndSeed();
-                }
+                finishAndSeed();
+                // ADR-007: mirror completion + answers to the cloud
+                // (workspace_profile.onboarding_*) so the operator isn't
+                // re-onboarded on another device. Fire-and-forget — the
+                // synchronous localStorage seed above is the immediate
+                // path; the cloud write is best-effort + self-reporting.
+                void (async (): Promise<void> => {
+                    try {
+                        await persistOnboardingToCloud(
+                            createDataClient(),
+                            draft.value
+                        );
+                    } catch {
+                        // persistOnboardingToCloud already reports; the
+                        // localStorage seed covers this session regardless.
+                    }
+                })();
             }}
             onBack={() => prevStep()}
             nextLabel="Finish onboarding"
