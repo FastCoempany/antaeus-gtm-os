@@ -267,18 +267,27 @@ export async function saveAccount(account: Account): Promise<Account> {
               );
         const saved = rowToAccount(row);
         if (saved) {
+            // Signals live in the `signals` table (Step 5), not the
+            // account row's data blob — so rowToAccount(row) always
+            // returns signals: []. Carry the input account's signals
+            // forward so a metadata-only save (relationship_type, tier,
+            // persona, …) doesn't wipe the card's intel + zero its heat.
+            const merged =
+                saved.signals.length === 0 && account.signals.length > 0
+                    ? { ...saved, signals: account.signals }
+                    : saved;
             // If we just inserted a previously-legacy account, the
             // id changed (uuid replaces "acc_…"). Drop the old id
             // before upserting the new one so we don't keep both.
             if (!isUpdate && saved.id !== account.id) {
                 removeAccount(account.id);
             }
-            upsertAccount(saved);
+            upsertAccount(merged);
             trackEvent("signal_console_save", {
                 mode: isUpdate ? "update" : "insert",
-                signalCount: saved.signals.length
+                signalCount: merged.signals.length
             });
-            return saved;
+            return merged;
         }
         return account;
     } catch (err) {
@@ -573,8 +582,25 @@ export function applyRealtimePayload(payload: {
     }
     if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
         if (payloadHasRow(payload.new)) {
-            const account = rowToAccount(payload.new);
-            if (account) upsertAccount(account);
+            const incoming = rowToAccount(payload.new);
+            if (incoming) {
+                // The account row carries no signals (Step 5 — they
+                // live in the signals table). A row echo with empty
+                // signals must not wipe an existing card's intel:
+                // preserve the in-memory account's signals when the
+                // incoming row has none. (Signal changes arrive on the
+                // separate signals-table subscription, not here.)
+                const existing = allAccounts.value.find(
+                    (a) => a.id === incoming.id
+                );
+                const merged =
+                    incoming.signals.length === 0 &&
+                    existing &&
+                    existing.signals.length > 0
+                        ? { ...incoming, signals: existing.signals }
+                        : incoming;
+                upsertAccount(merged);
+            }
         }
     }
 }
