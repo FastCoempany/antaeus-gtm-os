@@ -13,6 +13,8 @@ import {
     deleteSignalFromCloud,
     patchSignal,
     replaceAccountSignals,
+    saveAccount,
+    setAccountRelationship,
     updateSignalInCloud
 } from "./cloud-persistence";
 import { __setAllAccountsForTests, allAccounts } from "../state";
@@ -554,5 +556,107 @@ describe("subscribeSignalsRealtime", () => {
         expect(ch1).toBe(ch2);
         await teardownRealtime();
         expect(__getSignalsRealtimeChannelForTests()).toBeNull();
+    });
+});
+
+// ─── ADR-007 relationship save must NOT wipe signals (regression) ──────
+//
+// Bug: flagging an account a competitor zeroed its signals + heat. Root
+// cause — the account ROW carries no signals post-Step-5 (they live in
+// the signals table), so rowToAccount(updatedRow) returns signals: [],
+// and the save echo + realtime echo each replaced the in-memory account
+// with that signals-less copy. Both paths now preserve signals.
+
+function makeAccountRow(
+    overrides: Record<string, unknown> = {}
+): Record<string, unknown> {
+    return {
+        id: ACCOUNT_UUID,
+        user_id: "u",
+        workspace_id: "w",
+        account_key: "rival-inc",
+        account_name: "Rival Inc",
+        domain: null,
+        ticker: null,
+        industry: null,
+        sector: null,
+        heat: 0,
+        heat_computed_at: null,
+        last_enriched_at: null,
+        relationship_type: "competitor",
+        created_at: "2026-05-26T00:00:00Z",
+        updated_at: "2026-05-26T00:00:00Z",
+        // Post-Step-5: NO signals in the data blob.
+        data: {},
+        ...overrides
+    };
+}
+
+const SIG = {
+    id: "sig-1",
+    headline: "Rival ships a competing feature",
+    confidence: 0.9,
+    published_date: "2026-05-25T00:00:00Z"
+};
+
+describe("setAccountRelationship — preserves signals (ADR-007 regression)", () => {
+    it("flagging competitor keeps the account's signals + does not zero the card", async () => {
+        __setAllAccountsForTests([
+            { id: ACCOUNT_UUID, name: "Rival Inc", relationshipType: "prospect", signals: [SIG] }
+        ] as unknown as Account[]);
+        const mock = makeMockClient();
+        // The account.update round-trip returns a row WITHOUT signals.
+        (mock.client.signalConsoleAccounts.update as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+            makeAccountRow()
+        );
+        __setDataClientForTests(mock.client);
+
+        const result = await setAccountRelationship(ACCOUNT_UUID, "competitor");
+
+        expect(result?.relationshipType).toBe("competitor");
+        // The signal must survive the round-trip.
+        expect(result?.signals).toHaveLength(1);
+        const inState = allAccounts.value.find((a) => a.id === ACCOUNT_UUID);
+        expect(inState?.signals).toHaveLength(1);
+        expect(inState?.relationshipType).toBe("competitor");
+    });
+});
+
+describe("saveAccount — preserves signals on metadata-only save", () => {
+    it("carries input signals forward when the saved row has none", async () => {
+        __setAllAccountsForTests([]);
+        const mock = makeMockClient();
+        (mock.client.signalConsoleAccounts.update as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+            makeAccountRow()
+        );
+        __setDataClientForTests(mock.client);
+
+        const saved = await saveAccount({
+            id: ACCOUNT_UUID,
+            name: "Rival Inc",
+            relationshipType: "competitor",
+            signals: [SIG]
+        } as unknown as Account);
+
+        expect(saved.signals).toHaveLength(1);
+    });
+});
+
+describe("applyRealtimePayload — UPDATE echo preserves signals", () => {
+    it("an account-row echo with no signals does not wipe the in-memory signals", () => {
+        __setAllAccountsForTests([
+            { id: ACCOUNT_UUID, name: "Rival Inc", relationshipType: "prospect", signals: [SIG] }
+        ] as unknown as Account[]);
+
+        applyRealtimePayload({
+            eventType: "UPDATE",
+            new: makeAccountRow(),
+            old: null
+        });
+
+        const inState = allAccounts.value.find((a) => a.id === ACCOUNT_UUID);
+        expect(inState?.signals).toHaveLength(1);
+        // The relationship change from the echo still applies.
+        expect(inState?.relationshipType).toBe("competitor");
     });
 });
