@@ -11,6 +11,7 @@ import {
 } from "./state";
 import { loadAnalytics } from "./lib/persistence";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { bootProfile } from "./lib/profile-persistence";
 
 initObservability();
 
@@ -57,7 +58,13 @@ render(<IcpStudio />, root);
 void (async (): Promise<void> => {
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        // ICP rows + the commercial profile share one client + boot
+        // window. Profile (ADR-007) loads in parallel with the ICP
+        // rows; neither blocks first paint.
+        await Promise.all([
+            bootCloudPersistence(client),
+            bootProfile(client)
+        ]);
     } catch (err) {
         console.warn(
             "[icp-studio] Cloud sync disabled:",

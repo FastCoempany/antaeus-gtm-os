@@ -345,6 +345,11 @@ test.describe("room boot smoke tests", () => {
         await expect(page.locator(".icp-hero__kicker")).toContainText(
             "ICP STUDIO"
         );
+        // ADR-007 commercial-profile banner, pinned above the ICP work.
+        await expect(page.locator(".icp-profile")).toBeAttached();
+        await expect(page.locator(".icp-profile__title")).toContainText(
+            "What you sell."
+        );
         await expect(page.locator(".icp-hero")).toBeAttached();
         await expect(page.locator(".icp-work")).toBeAttached();
         await expect(page.locator(".icp-analytics")).toBeAttached();
