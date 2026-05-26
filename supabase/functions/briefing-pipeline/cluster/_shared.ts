@@ -48,8 +48,23 @@ export const DEFAULT_SOURCE_CONFIG: SourceConfig = {
     historical_snr: 0.6
 };
 
+// Operator-curated Signal Console intelligence (source_id `sc:<outlet>`):
+// low volume + high reliability. Mirror of core.ts.
+export const SIGNAL_CONSOLE_SOURCE_CONFIG: SourceConfig = {
+    src_conf: 0.82,
+    baseline_volume_per_day: 0.6,
+    historical_snr: 0.75
+};
+
+export const SIGNAL_CONSOLE_SOURCE_PREFIX = "sc:";
+
 export function sourceConfig(sourceId: string): SourceConfig {
-    return SOURCE_CONFIG[sourceId] ?? DEFAULT_SOURCE_CONFIG;
+    const exact = SOURCE_CONFIG[sourceId];
+    if (exact) return exact;
+    if (sourceId.startsWith(SIGNAL_CONSOLE_SOURCE_PREFIX)) {
+        return SIGNAL_CONSOLE_SOURCE_CONFIG;
+    }
+    return DEFAULT_SOURCE_CONFIG;
 }
 
 const VOLUME_FACTOR_MIN = 0.35;

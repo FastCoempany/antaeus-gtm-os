@@ -30,6 +30,7 @@ export { prNewswireSource } from "./pr-newswire-rss.ts";
 export { wikipediaPageviewsSource } from "./wikipedia-pageviews.ts";
 export { githubReleasesAtomSource } from "./github-releases-atom.ts";
 export { htmlDiffSource } from "./html-diff.ts";
+export { signalConsoleSource } from "./signal-console.ts";
 
 import { hnAlgoliaSource } from "./hn-algolia.ts";
 import { techcrunchRssSource } from "./techcrunch-rss.ts";
@@ -37,6 +38,7 @@ import { prNewswireSource } from "./pr-newswire-rss.ts";
 import { wikipediaPageviewsSource } from "./wikipedia-pageviews.ts";
 import { githubReleasesAtomSource } from "./github-releases-atom.ts";
 import { htmlDiffSource } from "./html-diff.ts";
+import { signalConsoleSource } from "./signal-console.ts";
 
 export const ALL_SOURCES = [
     hnAlgoliaSource,
@@ -44,5 +46,6 @@ export const ALL_SOURCES = [
     prNewswireSource,
     wikipediaPageviewsSource,
     githubReleasesAtomSource,
-    htmlDiffSource
+    htmlDiffSource,
+    signalConsoleSource
 ] as const;

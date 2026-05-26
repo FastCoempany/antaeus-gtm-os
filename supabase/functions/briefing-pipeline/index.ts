@@ -568,10 +568,19 @@ async function runIngest(
     let inserted = 0;
     let deduped = 0;
     for (const { source, item } of allItems) {
+        // Use the item's own source_id when set (the Signal Console
+        // source stamps a per-outlet `sc:<outlet>` id so corroboration
+        // counts per outlet); fall back to the fetcher id. Existing
+        // HTTP fetchers set item.source_id === their fetcher id, so this
+        // is a no-op for them.
+        const itemSourceId =
+            typeof item.source_id === "string" && item.source_id.length > 0
+                ? item.source_id
+                : source;
         const insert = await sb.from("briefing_raw_items").insert({
             run_id: runId,
             workspace_id: workspaceId,
-            source_id: source,
+            source_id: itemSourceId,
             external_id: item.external_id,
             title: item.title,
             body: item.body,

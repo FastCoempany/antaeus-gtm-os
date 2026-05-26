@@ -38,6 +38,16 @@ describe("sourceConfig", () => {
     it("falls back to default for unknown sources", () => {
         expect(sourceConfig("nonexistent").src_conf).toBe(0.6);
     });
+
+    it("routes sc:<outlet> source ids to the curated high-confidence config", () => {
+        expect(sourceConfig("sc:reuters").src_conf).toBe(0.82);
+        expect(sourceConfig("sc:reuters").baseline_volume_per_day).toBe(0.6);
+        expect(sourceConfig("sc:techcrunch")).toBe(sourceConfig("sc:bloomberg"));
+        // A recent curated signal carries strong weight: three of them
+        // clear the Σ≥3.0 pain/narrative evidence gate.
+        const cfg = sourceConfig("sc:pe-hub");
+        expect(cfg.src_conf).toBeGreaterThan(0.7);
+    });
 });
 
 describe("inverseVolumeFactor", () => {
