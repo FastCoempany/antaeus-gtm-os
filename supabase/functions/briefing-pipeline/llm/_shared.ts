@@ -122,6 +122,10 @@ export interface EnrichPromptInputs {
     readonly title: string;
     readonly body: string | null;
     readonly published_date: string | null;
+    readonly commercial_profile: {
+        readonly product_category: string | null;
+        readonly value_prop: string | null;
+    } | null;
     readonly watchlist_companies: ReadonlyArray<string>;
     readonly competitive_set: ReadonlyArray<string>;
     readonly active_deals: ReadonlyArray<{
@@ -157,6 +161,18 @@ export function buildEnrichPrompt(inputs: EnrichPromptInputs): string {
     lines.push("");
     lines.push("USER CONTEXT");
     lines.push("============");
+    if (inputs.commercial_profile) {
+        const cp = inputs.commercial_profile;
+        if (cp.product_category) {
+            lines.push(`Operator's product category (what THEY sell): ${cp.product_category}`);
+        }
+        if (cp.value_prop) {
+            lines.push(`Operator's value proposition: ${cp.value_prop}`);
+        }
+        lines.push(
+            "Relevance is anchored on this category — score user_relevance_score by how much the item touches the operator's space, competitors, or buyers."
+        );
+    }
     if (inputs.watchlist_companies.length > 0) {
         lines.push(`Watchlist companies: ${JSON.stringify(inputs.watchlist_companies)}`);
     }
@@ -180,6 +196,7 @@ export function buildEnrichPrompt(inputs: EnrichPromptInputs): string {
         lines.push(`Available pain tags: ${JSON.stringify(inputs.available_pain_tags)}`);
     }
     if (
+        inputs.commercial_profile === null &&
         inputs.watchlist_companies.length === 0 &&
         inputs.competitive_set.length === 0 &&
         inputs.active_deals.length === 0 &&

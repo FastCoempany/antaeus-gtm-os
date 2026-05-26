@@ -67,6 +67,10 @@ interface HydratedContextLike {
     readonly icp?: any;
     readonly active_deals?: any;
     readonly watchlist_triggers?: any;
+    readonly commercial_profile?: {
+        product_category?: string | null;
+        value_prop?: string | null;
+    } | null;
 }
 
 export async function runEnrich(
@@ -377,7 +381,18 @@ function sharedPromptInputs(
         }
     }
 
+    // ADR-007: the operator's commercial identity anchors relevance.
+    const cp = ctx.commercial_profile ?? null;
+    const commercial_profile =
+        cp && (cp.product_category || cp.value_prop)
+            ? {
+                  product_category: cp.product_category ?? null,
+                  value_prop: cp.value_prop ?? null
+              }
+            : null;
+
     return {
+        commercial_profile,
         watchlist_companies: Array.from(new Set(watchlist)),
         competitive_set: Array.from(new Set(competitiveSet)),
         active_deals: activeDeals,

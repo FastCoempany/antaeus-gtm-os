@@ -161,6 +161,12 @@ interface HydratedContext {
     readonly watchlist_triggers: unknown;
     readonly voice_document: unknown;
     readonly behavioral_feedback: unknown;
+    /** ADR-007 commercial identity — what we sell. Seeds category relevance. */
+    readonly commercial_profile: {
+        product_category: string | null;
+        what_we_sell: string | null;
+        value_prop: string | null;
+    } | null;
     readonly watchlist_companies: ReadonlyArray<string>;
     readonly pain_lib: ReadonlyArray<unknown>;
 }
@@ -177,16 +183,118 @@ const MODULES: ReadonlyArray<ModuleReadResult["module"]> = [
     "behavioral_feedback"
 ];
 
-function hydrateContext(workspaceId: string, now: string): HydratedContext {
-    const modules_read: ModuleReadResult[] = MODULES.map((module) => ({
-        module,
-        read_at: now,
-        health: "uninitialized",
-        schema_version: "1.0",
-        last_modified_at: null,
-        read_duration_ms: 0,
-        error_message: null
-    }));
+/**
+ * Stage 3.0 Context Hydration (ADR-007, PR 5 — real reads).
+ *
+ * Reads the commercial-identity layer from Supabase and derives the
+ * seed the pipeline acts on:
+ *   - workspace_profile  → commercial profile (what we sell)
+ *   - icps               → ICP body (industries, buyers)
+ *   - signal_console_accounts WHERE relationship_type='competitor'
+ *                        → competitor names
+ *
+ * watchlist_companies = competitors + ICP industries, which is what
+ * the watchlist-driven sources (HN Algolia, Wikipedia, GitHub) query
+ * on. With real data here, those sources activate + enrichment becomes
+ * category-specific.
+ *
+ * The derivation mirrors src/briefing/lib/seed-derivation.ts (the
+ * vitest-tested canonical reference). The reads run with the service
+ * role, so each query filters by workspace_id explicitly (RLS is
+ * bypassed cross-workspace).
+ *
+ * Modules still unwired server-side (Discovery, Call Planner, Outbound,
+ * Asset Builder, Watchlist Triggers, Voice Document, Behavioral
+ * Feedback) report uninitialized. Discovery's objection library lives
+ * in client-side framework runtime data, not Supabase — a future sync
+ * path (ADR-007 §4) brings it server-side. Never throws; a failed read
+ * degrades that slice to empty + the run proceeds.
+ */
+async function hydrateContext(
+    sb: SupabaseClient,
+    workspaceId: string,
+    now: string
+): Promise<HydratedContext> {
+    let profileRow: {
+        product_category: string | null;
+        what_we_sell: string | null;
+        value_prop: string | null;
+    } | null = null;
+    let icpRows: Array<{
+        industry: string | null;
+        primary_buyer: string | null;
+        statement: string | null;
+        company_size: string | null;
+        geography: string | null;
+        pain_point: string | null;
+    }> = [];
+    let competitorNames: string[] = [];
+    const errors: Record<string, string> = {};
+
+    try {
+        const res = await sb
+            .from("workspace_profile")
+            .select("product_category, what_we_sell, value_prop")
+            .eq("workspace_id", workspaceId)
+            .limit(1);
+        if (res.error) errors["workspace_profile"] = res.error.message;
+        else if (res.data && res.data[0]) profileRow = res.data[0] as any;
+    } catch (err) {
+        errors["workspace_profile"] = err instanceof Error ? err.message : String(err);
+    }
+
+    try {
+        const res = await sb
+            .from("icps")
+            .select("industry, primary_buyer, statement, company_size, geography, pain_point")
+            .eq("workspace_id", workspaceId);
+        if (res.error) errors["icps"] = res.error.message;
+        else icpRows = (res.data ?? []) as any[];
+    } catch (err) {
+        errors["icps"] = err instanceof Error ? err.message : String(err);
+    }
+
+    try {
+        const res = await sb
+            .from("signal_console_accounts")
+            .select("account_name")
+            .eq("workspace_id", workspaceId)
+            .eq("relationship_type", "competitor");
+        if (res.error) errors["competitors"] = res.error.message;
+        else {
+            competitorNames = (res.data ?? [])
+                .map((r: any) => (typeof r.account_name === "string" ? r.account_name : null))
+                .filter((n: string | null): n is string => !!n && n.trim().length > 0);
+        }
+    } catch (err) {
+        errors["competitors"] = err instanceof Error ? err.message : String(err);
+    }
+
+    const seed = deriveBriefingSeed({ profile: profileRow, icpRows, competitorNames });
+
+    const modules_read: ModuleReadResult[] = MODULES.map((module) => {
+        // icp_studio reflects the commercial profile + ICP rows we just
+        // read; everything else stays uninitialized until wired.
+        const health =
+            module === "icp_studio"
+                ? seed.icp_health === "ok" || seed.profile_health === "ok"
+                    ? "ok"
+                    : "uninitialized"
+                : "uninitialized";
+        const errMsg =
+            module === "icp_studio"
+                ? errors["workspace_profile"] ?? errors["icps"] ?? null
+                : null;
+        return {
+            module,
+            read_at: now,
+            health: errMsg ? "error" : (health as ModuleReadResult["health"]),
+            schema_version: "1.0",
+            last_modified_at: null,
+            read_duration_ms: 0,
+            error_message: errMsg
+        };
+    });
 
     return {
         context_id: `ctx_${crypto.randomUUID()}`,
@@ -194,7 +302,7 @@ function hydrateContext(workspaceId: string, now: string): HydratedContext {
         workspace_id: workspaceId,
         hydrated_at: now,
         modules_read,
-        icp: null,
+        icp: seed.icp,
         discovery: null,
         call_planner: null,
         outbound: null,
@@ -203,8 +311,108 @@ function hydrateContext(workspaceId: string, now: string): HydratedContext {
         watchlist_triggers: null,
         voice_document: null,
         behavioral_feedback: null,
-        watchlist_companies: [],
+        commercial_profile: seed.commercial_profile,
+        watchlist_companies: seed.watchlist_companies,
         pain_lib: []
+    };
+}
+
+// ─── Briefing seed derivation (mirror of src/briefing/lib/seed-derivation.ts) ─
+
+interface SeedInput {
+    profile: {
+        product_category: string | null;
+        what_we_sell: string | null;
+        value_prop: string | null;
+    } | null;
+    icpRows: ReadonlyArray<{
+        industry: string | null;
+        primary_buyer: string | null;
+        statement: string | null;
+        company_size: string | null;
+        geography: string | null;
+        pain_point: string | null;
+    }>;
+    competitorNames: ReadonlyArray<string>;
+}
+
+function deriveBriefingSeed(input: SeedInput): {
+    commercial_profile: {
+        product_category: string | null;
+        what_we_sell: string | null;
+        value_prop: string | null;
+    } | null;
+    icp: {
+        icp_summary: string;
+        target_industries: string[];
+        decision_maker_titles: string[];
+        geographies: string[];
+        pains: string[];
+    } | null;
+    watchlist_companies: string[];
+    icp_health: "ok" | "uninitialized";
+    profile_health: "ok" | "uninitialized";
+} {
+    const clean = (v: string | null | undefined): string | null => {
+        if (typeof v !== "string") return null;
+        const t = v.trim();
+        return t.length > 0 ? t : null;
+    };
+    const uniqueNonEmpty = (values: ReadonlyArray<string | null>): string[] => {
+        const seen = new Set<string>();
+        const out: string[] = [];
+        for (const v of values) {
+            const c = clean(v);
+            if (c === null) continue;
+            const key = c.toLowerCase();
+            if (seen.has(key)) continue;
+            seen.add(key);
+            out.push(c);
+        }
+        return out;
+    };
+
+    const pc = clean(input.profile?.product_category);
+    const ws = clean(input.profile?.what_we_sell);
+    const vp = clean(input.profile?.value_prop);
+    const hasProfile = pc !== null || ws !== null || vp !== null;
+    const commercial_profile = hasProfile
+        ? { product_category: pc, what_we_sell: ws, value_prop: vp }
+        : null;
+
+    const industries = uniqueNonEmpty(input.icpRows.map((r) => r.industry));
+    const buyers = uniqueNonEmpty(input.icpRows.map((r) => r.primary_buyer));
+    const geographies = uniqueNonEmpty(input.icpRows.map((r) => r.geography));
+    const pains = uniqueNonEmpty(input.icpRows.map((r) => r.pain_point));
+    const statements = uniqueNonEmpty(input.icpRows.map((r) => r.statement));
+    const icpSummary =
+        statements[0] ??
+        (industries.length > 0
+            ? `B2B ${industries[0]}${buyers.length > 0 ? ` selling to ${buyers[0]}` : ""}`
+            : "");
+    const hasIcp =
+        industries.length > 0 || buyers.length > 0 || icpSummary.length > 0;
+    const icp = hasIcp
+        ? {
+              icp_summary: icpSummary,
+              target_industries: industries,
+              decision_maker_titles: buyers,
+              geographies,
+              pains
+          }
+        : null;
+
+    const watchlist_companies = uniqueNonEmpty([
+        ...input.competitorNames,
+        ...industries
+    ]);
+
+    return {
+        commercial_profile,
+        icp,
+        watchlist_companies,
+        icp_health: hasIcp ? "ok" : "uninitialized",
+        profile_health: hasProfile ? "ok" : "uninitialized"
     };
 }
 
@@ -594,14 +802,19 @@ async function runWorkspacePipeline(
         const hydrateStart = now();
         const hydrateT0 = Date.now();
         await updateRun(sb, runId, { status: "hydrating" });
-        const ctx = hydrateContext(workspaceId, hydrateStart);
+        const ctx = await hydrateContext(sb, workspaceId, hydrateStart);
         const hydrateEntry: StageLogEntry = {
             stage: "hydrate",
             started_at: hydrateStart,
             ended_at: now(),
             duration_ms: Date.now() - hydrateT0,
             outcome: "ok",
-            notes: `Hydrated context for ${ctx.modules_read.length} modules; all uninitialized in B.1a.`
+            notes: `Hydrated context: ${ctx.watchlist_companies.length} watchlist terms (competitors + ICP industries), commercial profile ${ctx.commercial_profile ? "set" : "unset"}, ICP ${ctx.icp ? "set" : "unset"}.`,
+            data: {
+                watchlist_companies: ctx.watchlist_companies,
+                commercial_profile: ctx.commercial_profile,
+                icp_health: ctx.modules_read.find((m) => m.module === "icp_studio")?.health ?? "unknown"
+            }
         };
         stages.push(hydrateEntry);
         await recordStage(sb, runId, hydrateEntry, "ingesting");
