@@ -1302,6 +1302,7 @@ export type Database = {
           id: string
           industry: string | null
           last_enriched_at: string | null
+          relationship_type: string
           sector: string | null
           ticker: string | null
           updated_at: string
@@ -1319,6 +1320,7 @@ export type Database = {
           id?: string
           industry?: string | null
           last_enriched_at?: string | null
+          relationship_type?: string
           sector?: string | null
           ticker?: string | null
           updated_at?: string
@@ -1336,6 +1338,7 @@ export type Database = {
           id?: string
           industry?: string | null
           last_enriched_at?: string | null
+          relationship_type?: string
           sector?: string | null
           ticker?: string | null
           updated_at?: string
@@ -1542,6 +1545,54 @@ export type Database = {
             foreignKeyName: "workspace_members_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspace_profile: {
+        // HAND-AUTHORED PENDING REGEN (ADR-007). Replaced by
+        // `supabase gen types typescript --linked` after migration
+        // 20260526000000 applies to production. Same regen-flip
+        // pattern as the briefing tables (PR #153 → #154).
+        Row: {
+          created_at: string
+          data: Json
+          onboarding_answers: Json
+          onboarding_completed: boolean
+          product_category: string | null
+          updated_at: string
+          value_prop: string | null
+          what_we_sell: string | null
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          onboarding_answers?: Json
+          onboarding_completed?: boolean
+          product_category?: string | null
+          updated_at?: string
+          value_prop?: string | null
+          what_we_sell?: string | null
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          onboarding_answers?: Json
+          onboarding_completed?: boolean
+          product_category?: string | null
+          updated_at?: string
+          value_prop?: string | null
+          what_we_sell?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_profile_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: true
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },

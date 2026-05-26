@@ -71,6 +71,7 @@ export type ReadinessSnapshot = Row<"readiness_snapshots">;
 export type HandoffArtifact = Row<"handoff_artifacts">;
 export type WaitlistSignup = Row<"waitlist_signups">;
 export type WorkspaceSession = Row<"workspace_sessions">;
+export type WorkspaceProfile = Row<"workspace_profile">;
 export type Observation = Row<"observations">;
 
 // ─── Briefing room (ADR-006) ───────────────────────────────────────────

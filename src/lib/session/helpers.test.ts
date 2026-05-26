@@ -124,6 +124,7 @@ function makeMockDataClient(opts: {
         readinessSnapshots: {} as never,
         handoffArtifacts: {} as never,
         workspaceSessions,
+        workspaceProfile: {} as never,
         observations: {} as never,
         briefingRuns: {} as never,
         briefingRawItems: {} as never,

@@ -655,6 +655,11 @@ function toAccessorName(table: TableName): string {
         // Listed here only to satisfy the exhaustive Record type.
         workspace_sessions: "workspaceSessions",
         observations: "observations",
+        // Commercial identity layer (ADR-007). Authored in ICP Studio
+        // (profile) + Signal Console (relationship flags), not migrated
+        // from localStorage. Listed here only to satisfy the exhaustive
+        // Record type.
+        workspace_profile: "workspaceProfile",
         // Briefing room foundation (ADR-006, B.0a). Populated
         // server-side by the Briefing pipeline Edge Function — no
         // legacy localStorage data to migrate from. Listed here only

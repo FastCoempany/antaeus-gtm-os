@@ -107,6 +107,7 @@ function makeDataClient(opts: {
         readinessSnapshots: {} as never,
         handoffArtifacts: {} as never,
         workspaceSessions: {} as never,
+        workspaceProfile: {} as never,
         observations,
         briefingRuns: {} as never,
         briefingRawItems: {} as never,
