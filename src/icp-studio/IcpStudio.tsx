@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { CommercialProfileBanner } from "./components/CommercialProfileBanner";
 import { DarkHero } from "./components/DarkHero";
 import { WorkArea } from "./components/WorkArea";
 import { AnalyticsPanel } from "./components/AnalyticsPanel";
@@ -29,6 +30,7 @@ export function IcpStudio(): JSX.Element {
     return (
         <div class="icp-shell">
             <RoomChrome kicker="ICP STUDIO"/>
+            <CommercialProfileBanner />
             <DarkHero />
             <WorkArea />
             <AnalyticsPanel />

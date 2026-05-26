@@ -14,6 +14,10 @@ import {
 import { buildStatement } from "./lib/builders";
 import { buildIcpQuality } from "./lib/quality";
 import { saveAnalytics, uid } from "./lib/persistence";
+import {
+    EMPTY_COMMERCIAL_PROFILE,
+    type CommercialProfile
+} from "./lib/commercial-profile";
 
 /**
  * Phase 4 / Room 11 — ICP Studio runtime state.
@@ -37,6 +41,57 @@ export const savedIcps: Signal<ReadonlyArray<SavedIcp>> = signal([]);
 export const totalWorked: Signal<number> = signal(0);
 
 export const loaded: Signal<boolean> = signal(false);
+
+// ─── Commercial profile (ADR-007) ───────────────────────────────────────
+// The operator's own selling identity — what WE sell, distinct from the
+// ICP rows (who we sell to). One per workspace; persisted to the
+// workspace_profile table. The Briefing reads product_category +
+// value_prop to anchor category-specific intelligence.
+
+/** The saved commercial profile (cloud-canonical once bootProfile runs). */
+export const commercialProfile: Signal<CommercialProfile> = signal(
+    EMPTY_COMMERCIAL_PROFILE
+);
+
+/** Live edits to the profile, before the operator hits Save. */
+export const profileDraft: Signal<CommercialProfile> = signal(
+    EMPTY_COMMERCIAL_PROFILE
+);
+
+/** True once the profile load has resolved (loaded row or confirmed empty). */
+export const profileLoaded: Signal<boolean> = signal(false);
+
+/** Whether a workspace_profile row already exists (update vs insert). */
+export const profileRowExists: Signal<boolean> = signal(false);
+
+/** Profile draft differs from the saved profile — drives the Save state. */
+export const profileDirty: ReadonlySignal<boolean> = computed(() => {
+    const draftP = profileDraft.value;
+    const saved = commercialProfile.value;
+    return (
+        draftP.productCategory !== saved.productCategory ||
+        draftP.whatWeSell !== saved.whatWeSell ||
+        draftP.valueProp !== saved.valueProp
+    );
+});
+
+export function setCommercialProfile(profile: CommercialProfile): void {
+    commercialProfile.value = profile;
+    // Saved value is the new baseline — sync the draft so dirty resets.
+    profileDraft.value = profile;
+}
+
+export function patchProfileDraft(patch: Partial<CommercialProfile>): void {
+    profileDraft.value = { ...profileDraft.value, ...patch };
+}
+
+export function setProfileLoaded(value: boolean): void {
+    profileLoaded.value = value;
+}
+
+export function setProfileRowExists(value: boolean): void {
+    profileRowExists.value = value;
+}
 
 // ─── Derived projections ───────────────────────────────────────────────
 
