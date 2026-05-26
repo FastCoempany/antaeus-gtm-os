@@ -80,6 +80,7 @@ import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-
 import { ALL_SOURCES } from "./sources/index.ts";
 import { runEnrich } from "./llm/enrich.ts";
 import { runCluster } from "./cluster/cluster.ts";
+import { runSynthesis } from "./llm/synthesis.ts";
 
 // ─── Run-lifecycle status enum ─────────────────────────────────
 
@@ -105,7 +106,13 @@ type RunStatus =
     | "aborted";
 
 interface StageLogEntry {
-    readonly stage: "hydrate" | "ingest" | "filter" | "enrich" | "cluster";
+    readonly stage:
+        | "hydrate"
+        | "ingest"
+        | "filter"
+        | "enrich"
+        | "cluster"
+        | "synthesize";
     readonly started_at: string;
     readonly ended_at: string;
     readonly duration_ms: number;
@@ -694,6 +701,9 @@ interface WorkspaceRunReport {
         readonly clusters_considered: number;
         readonly clusters_qualified: number;
         readonly clusters_persisted: number;
+        readonly patterns_synthesized: number;
+        readonly patterns_gated_out: number;
+        readonly synth_cost_usd: number;
     };
     readonly error: string | null;
 }
@@ -760,7 +770,10 @@ async function runWorkspacePipeline(
         enrich_cost_usd: 0,
         clusters_considered: 0,
         clusters_qualified: 0,
-        clusters_persisted: 0
+        clusters_persisted: 0,
+        patterns_synthesized: 0,
+        patterns_gated_out: 0,
+        synth_cost_usd: 0
     };
     const now = (): string => new Date().toISOString();
 
@@ -909,7 +922,45 @@ async function runWorkspacePipeline(
             }
         };
         stages.push(clusterEntry);
-        await recordStage(sb, runId, clusterEntry, "complete");
+        await recordStage(sb, runId, clusterEntry, "synthesizing");
+
+        // ── Stage 3.5 Synthesize (B.2c — Draft / Critique / Revise / Gate) ──
+        const synthStart = now();
+        const synthT0 = Date.now();
+        const synthResult = await runSynthesis(sb, runId, workspaceId, ctx);
+        counts.patterns_synthesized = synthResult.synthesized;
+        counts.patterns_gated_out = synthResult.gated_out;
+        counts.synth_cost_usd = synthResult.total_cost_usd;
+        const synthEntry: StageLogEntry = {
+            stage: "synthesize",
+            started_at: synthStart,
+            ended_at: now(),
+            duration_ms: Date.now() - synthT0,
+            outcome:
+                synthResult.errored > 0 && synthResult.synthesized === 0 && synthResult.clusters > 0
+                    ? "error"
+                    : "ok",
+            notes: `Synthesized ${synthResult.synthesized} patterns from ${synthResult.clusters} qualified clusters (${synthResult.gated_out} gated out, ${synthResult.errored} errored). Cost: $${synthResult.total_cost_usd.toFixed(4)}.`,
+            data: {
+                perCluster: synthResult.perCluster
+            }
+        };
+        stages.push(synthEntry);
+        await recordStage(sb, runId, synthEntry, "complete");
+
+        // Roll synthesis cost into the run total (enrich already bumped it).
+        if (synthResult.total_cost_usd > 0) {
+            const cur = await sb
+                .from("briefing_runs")
+                .select("total_cost")
+                .eq("id", runId)
+                .single();
+            const priorCost =
+                typeof cur.data?.total_cost === "number" ? cur.data.total_cost : 0;
+            await updateRun(sb, runId, {
+                total_cost: priorCost + synthResult.total_cost_usd
+            });
+        }
 
         await updateRun(sb, runId, {
             completed_at: now(),
@@ -1049,7 +1100,10 @@ async function runPipeline(
         enrich_cost_usd: 0,
         clusters_considered: 0,
         clusters_qualified: 0,
-        clusters_persisted: 0
+        clusters_persisted: 0,
+        patterns_synthesized: 0,
+        patterns_gated_out: 0,
+        synth_cost_usd: 0
     };
     const perWorkspace: WorkspaceRunReport[] = [];
 
@@ -1068,6 +1122,9 @@ async function runPipeline(
         totals.clusters_considered += report.counts.clusters_considered;
         totals.clusters_qualified += report.counts.clusters_qualified;
         totals.clusters_persisted += report.counts.clusters_persisted;
+        totals.patterns_synthesized += report.counts.patterns_synthesized;
+        totals.patterns_gated_out += report.counts.patterns_gated_out;
+        totals.synth_cost_usd += report.counts.synth_cost_usd;
     }
 
     return {
