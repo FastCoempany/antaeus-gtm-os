@@ -49,6 +49,20 @@ export interface CallAnthropicInputs {
     readonly user_prompt: string;
     readonly max_tokens?: number;
     readonly temperature?: number;
+    /**
+     * Overrides the prompt-version component of the model_v_hash.
+     * Defaults to PROMPT_VERSION (enrich). Synthesis passes
+     * SYNTHESIS_PROMPT_VERSION so its patterns stay attributable to the
+     * prompt that produced them.
+     */
+    readonly prompt_version?: string;
+    /**
+     * When set, enables extended thinking with this token budget. The
+     * Messages API requires temperature = 1 with thinking enabled and
+     * max_tokens > budget; both are enforced here. Thinking blocks are
+     * dropped from the returned text (we only keep the text blocks).
+     */
+    readonly thinking_budget_tokens?: number;
 }
 
 export interface CallAnthropicResult {
@@ -74,8 +88,14 @@ export async function callAnthropic(
     inputs: CallAnthropicInputs
 ): Promise<CallAnthropicResult> {
     const pricing = MODELS[inputs.model];
-    const maxTokens = inputs.max_tokens ?? 1024;
-    const temperature = inputs.temperature ?? 0;
+    const thinkingEnabled =
+        typeof inputs.thinking_budget_tokens === "number" &&
+        inputs.thinking_budget_tokens > 0;
+    // Thinking needs room for the reasoning budget plus the answer.
+    const maxTokens = inputs.max_tokens ?? (thinkingEnabled ? 4096 : 1024);
+    // The Messages API requires temperature = 1 when thinking is on.
+    const temperature = thinkingEnabled ? 1 : inputs.temperature ?? 0;
+    const promptVersion = inputs.prompt_version ?? PROMPT_VERSION;
 
     // Compute model_v_hash up-front so it's available even on failure.
     // Audit envelopes record attempted calls, not just successful ones.
@@ -85,7 +105,7 @@ export async function callAnthropic(
         user_prompt: inputs.user_prompt,
         temperature,
         max_tokens: maxTokens,
-        prompt_version: PROMPT_VERSION
+        prompt_version: promptVersion
     });
 
     // @ts-ignore - Deno.env; resolved at deploy time
@@ -117,6 +137,14 @@ export async function callAnthropic(
                 model: pricing.api_id,
                 max_tokens: maxTokens,
                 temperature,
+                ...(thinkingEnabled
+                    ? {
+                          thinking: {
+                              type: "enabled",
+                              budget_tokens: inputs.thinking_budget_tokens
+                          }
+                      }
+                    : {}),
                 system: inputs.system_prompt,
                 messages: [{ role: "user", content: inputs.user_prompt }]
             }),
