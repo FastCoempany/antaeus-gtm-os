@@ -50,8 +50,8 @@ export const MODELS = {
     opus_4_7: {
         api_id: "claude-opus-4-7",
         label: "Opus 4.7",
-        input_per_million_usd: 15.0,
-        output_per_million_usd: 75.0
+        input_per_million_usd: 5.0,
+        output_per_million_usd: 25.0
     }
 } as const satisfies Readonly<Record<string, ModelPricing>>;
 

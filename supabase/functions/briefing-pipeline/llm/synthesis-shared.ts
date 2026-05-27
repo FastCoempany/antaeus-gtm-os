@@ -687,6 +687,35 @@ export const REVISE_SYSTEM_PROMPT = `You are the reviser — the original drafte
 
 Respond with ONLY valid JSON matching the Pattern schema. First character '{', last character '}'.`;
 
+export const GATE_REPAIR_SYSTEM_PROMPT = `You are fixing a Pattern that failed mechanical formatting checks. Make the smallest edits that satisfy the listed failures — do not rewrite the read, change the claim, or touch fields the failures don't mention. Stay in the house voice.
+
+Respond with ONLY the corrected Pattern as JSON (same schema). First character '{', last character '}'.`;
+
+export function buildGateRepairPrompt(
+    pattern: DraftPattern,
+    failures: ReadonlyArray<string>
+): string {
+    const lines: string[] = [];
+    lines.push("PATTERN THAT FAILED THE QUALITY GATE");
+    lines.push("=====================================");
+    lines.push(JSON.stringify(pattern, null, 2));
+    lines.push("");
+    lines.push("GATE FAILURES TO FIX");
+    lines.push("====================");
+    for (const f of failures) lines.push(`- ${f}`);
+    lines.push("");
+    lines.push(VOICE_REGISTER);
+    lines.push("");
+    lines.push(BANNED_LINE);
+    lines.push("");
+    lines.push("TASK");
+    lines.push("====");
+    lines.push(
+        "Fix exactly the failures listed above with the smallest possible edits. Common fixes: trim the name to ≤12 words while keeping it a declarative read ending in a period; cut recommended_moves to the 3 highest-leverage; remove banned vocabulary or hedge constructions; tighten the analysis to 60–240 words. Keep the claim, the evidence_item_ids, and every field the failures don't mention unchanged. Return the full corrected Pattern as JSON with the same schema."
+    );
+    return lines.join("\n");
+}
+
 export function buildRevisePrompt(
     input: SynthesisInput,
     draft: DraftPattern,

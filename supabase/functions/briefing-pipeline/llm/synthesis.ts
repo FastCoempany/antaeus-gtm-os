@@ -31,10 +31,12 @@ import {
     type SynthesisInput,
     CRITIQUE_SYSTEM_PROMPT,
     DRAFT_SYSTEM_PROMPT,
+    GATE_REPAIR_SYSTEM_PROMPT,
     REVISE_SYSTEM_PROMPT,
     SYNTHESIS_PROMPT_VERSION,
     buildCritiquePrompt,
     buildDraftPrompt,
+    buildGateRepairPrompt,
     buildRevisePrompt,
     parseCritiqueResponse,
     parseDraftResponse,
@@ -236,19 +238,30 @@ interface SynthesizeOne {
     gate: GateResult;
     error: string | null;
     cost_usd: number;
-    costs: { draft: number; critique: number; revise: number };
-    modelVHashes: { draft: string; critique: string; revise: string | null };
+    costs: { draft: number; critique: number; revise: number; repair: number };
+    modelVHashes: {
+        draft: string;
+        critique: string;
+        revise: string | null;
+        repair: string | null;
+    };
     critiqueSummary: string;
 }
 
 const EMPTY_GATE: GateResult = { passes: false, checks: [], failures: ["not evaluated"] };
 
 async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
-    const costs = { draft: 0, critique: 0, revise: 0 };
-    const modelVHashes: { draft: string; critique: string; revise: string | null } = {
+    const costs = { draft: 0, critique: 0, revise: 0, repair: 0 };
+    const modelVHashes: {
+        draft: string;
+        critique: string;
+        revise: string | null;
+        repair: string | null;
+    } = {
         draft: "",
         critique: "",
-        revise: null
+        revise: null,
+        repair: null
     };
 
     // ── 5a Draft ──
@@ -319,8 +332,44 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
 
     // ── 5d Quality Gate ──
     const validIds = input.evidence.map((e) => e.enriched_id);
-    const gate = runQualityGate(current, validIds);
-    const totalCost = costs.draft + costs.critique + costs.revise;
+    let gate = runQualityGate(current, validIds);
+
+    // ── 5d.1 Gate repair (one shot) ──
+    // The gate rejects on mechanical violations (name too long, > 3
+    // moves, a stray hedge construction). Rather than discard an
+    // otherwise-good Pattern, send it back once for a minimal fix, then
+    // re-gate. Skipped when the only failure is fabricated evidence ids
+    // (a content problem the model can't honestly repair).
+    const repairable =
+        !gate.passes &&
+        gate.checks.some(
+            (c) => !c.pass && c.name !== "evidence_ids_valid"
+        );
+    if (repairable) {
+        const repairCall = await callAnthropic({
+            model: "opus_4_7",
+            system_prompt: GATE_REPAIR_SYSTEM_PROMPT,
+            user_prompt: buildGateRepairPrompt(current, gate.failures),
+            max_tokens: REVISE_MAX_TOKENS,
+            prompt_version: SYNTHESIS_PROMPT_VERSION
+        });
+        costs.repair = repairCall.cost_usd;
+        modelVHashes.repair = repairCall.model_v_hash;
+        if (repairCall.ok) {
+            const repairedParse = parseDraftResponse(repairCall.text);
+            if (repairedParse.pattern) {
+                const repairedGate = runQualityGate(repairedParse.pattern, validIds);
+                // Only adopt the repair if it actually passes — never
+                // regress to a worse pattern.
+                if (repairedGate.passes) {
+                    current = repairedParse.pattern;
+                    gate = repairedGate;
+                }
+            }
+        }
+    }
+
+    const totalCost = costs.draft + costs.critique + costs.revise + costs.repair;
 
     return {
         pattern: current,
@@ -342,8 +391,13 @@ async function persistPattern(
     pattern: DraftPattern,
     gate: GateResult,
     critiqueSummary: string,
-    costs: { draft: number; critique: number; revise: number },
-    modelVHashes: { draft: string; critique: string; revise: string | null }
+    costs: { draft: number; critique: number; revise: number; repair: number },
+    modelVHashes: {
+        draft: string;
+        critique: string;
+        revise: string | null;
+        repair: string | null;
+    }
 ): Promise<boolean> {
     const trajectory = pattern.trajectory ?? input.trajectory;
     const insert = await sb.from("briefing_patterns").insert({
@@ -382,7 +436,11 @@ async function persistPattern(
                 draft: costs.draft,
                 critique: costs.critique,
                 revise: costs.revise,
-                total: Math.round((costs.draft + costs.critique + costs.revise) * 10000) / 10000
+                repair: costs.repair,
+                total:
+                    Math.round(
+                        (costs.draft + costs.critique + costs.revise + costs.repair) * 10000
+                    ) / 10000
             },
             model_v_hashes: modelVHashes,
             critique_summary: critiqueSummary,
