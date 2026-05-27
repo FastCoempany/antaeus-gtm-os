@@ -193,8 +193,13 @@ begin
      'B2B SaaS / Data Activation', 'SaaS', 'customer', 30, now());
 
     -- ──────────────────────────────────────────────────────────────────────
-    -- 4. Signals — realistic, grounded-in-public-events intelligence
-    --    Recency drives heat: recent → hot. published_date offsets from now().
+    -- 4. Signals — realistic, grounded-in-public-events intelligence.
+    --    Dates are kept RECENT (within ~12 days) so the weekly briefing
+    --    treats them as current competitive intel — the recency factor
+    --    (14-day half-life) would otherwise crush older signals to near
+    --    zero weight, which is correct for stale news but would leave a
+    --    freshly-seeded demo with nothing to cluster. A live operator's
+    --    Signal Console fills with current moves the same way.
     -- ──────────────────────────────────────────────────────────────────────
 
     -- Deel ------------------------------------------------------------------
@@ -205,23 +210,23 @@ begin
     (acc_deel, ws_id, 'legal',
      'Rippling sues Deel for corporate espionage, alleges a planted spy in its Dublin office',
      'TechCrunch', 'https://techcrunch.com/',
-     now() - interval '52 days', 0.95, false),
+     now() - interval '5 days', 0.95, false),
     (acc_deel, ws_id, 'product',
      'Deel launches Deel IT for global device and app provisioning, widening past pure payroll',
      'Deel Blog', 'https://www.deel.com/blog/',
-     now() - interval '24 days', 0.80, false),
+     now() - interval '3 days', 0.80, false),
     (acc_deel, ws_id, 'funding',
      'Deel hits $12.6B valuation in secondary share sale as revenue accelerates',
      'Bloomberg', 'https://www.bloomberg.com/',
-     now() - interval '120 days', 0.90, false),
+     now() - interval '9 days', 0.90, false),
     (acc_deel, ws_id, 'growth',
      'Deel reports crossing $800M in annual recurring revenue',
      'Deel', 'https://www.deel.com/',
-     now() - interval '95 days', 0.75, false),
+     now() - interval '7 days', 0.75, false),
     (acc_deel, ws_id, 'm&a',
      'Deel acquires compensation-data startup Assemble and onboarding tool Zavvy',
      'TechCrunch', 'https://techcrunch.com/',
-     now() - interval '180 days', 0.85, false);
+     now() - interval '11 days', 0.85, false);
 
     -- Rippling --------------------------------------------------------------
     insert into public.signals
@@ -231,19 +236,19 @@ begin
     (acc_rippling, ws_id, 'legal',
      'Rippling files trade-secret theft suit against Deel over an alleged employee informant',
      'Reuters', 'https://www.reuters.com/',
-     now() - interval '50 days', 0.95, false),
+     now() - interval '5 days', 0.95, false),
     (acc_rippling, ws_id, 'product',
      'Rippling expands Employer of Record coverage past 50 countries',
      'Rippling Blog', 'https://www.rippling.com/blog/',
-     now() - interval '28 days', 0.80, false),
+     now() - interval '4 days', 0.80, false),
     (acc_rippling, ws_id, 'funding',
      'Rippling raises $450M Series F at a $16.8B valuation',
      'The Information', 'https://www.theinformation.com/',
-     now() - interval '88 days', 0.90, false),
+     now() - interval '8 days', 0.90, false),
     (acc_rippling, ws_id, 'product',
      'Rippling pushes deeper into IT and spend management to widen its platform moat',
      'Forbes', 'https://www.forbes.com/',
-     now() - interval '60 days', 0.70, false);
+     now() - interval '6 days', 0.70, false);
 
     -- Remote ----------------------------------------------------------------
     insert into public.signals
@@ -253,19 +258,19 @@ begin
     (acc_remote, ws_id, 'product',
      'Remote adds contractor management and tiered global payroll to defend mid-market',
      'Remote Blog', 'https://remote.com/blog',
-     now() - interval '30 days', 0.75, false),
+     now() - interval '3 days', 0.75, false),
     (acc_remote, ws_id, 'hiring',
      'Remote launches a free Remote Talent job board to capture top-of-funnel demand',
      'HR Dive', 'https://www.hrdive.com/',
-     now() - interval '64 days', 0.70, false),
+     now() - interval '6 days', 0.70, false),
     (acc_remote, ws_id, 'layoffs',
      'Remote restructures teams amid intensifying EOR pricing pressure',
      'Sifted', 'https://sifted.eu/',
-     now() - interval '96 days', 0.60, false),
+     now() - interval '8 days', 0.60, false),
     (acc_remote, ws_id, 'funding',
      'Remote valued at $3B following a $300M Series C round',
      'TechCrunch', 'https://techcrunch.com/',
-     now() - interval '240 days', 0.85, false);
+     now() - interval '12 days', 0.85, false);
 
     -- Vensure ---------------------------------------------------------------
     insert into public.signals
@@ -275,15 +280,15 @@ begin
     (acc_vensure, ws_id, 'product',
      'Vensure expands its international EOR offering to compete with venture-backed entrants',
      'PEO Insider', 'https://www.napeo.org/',
-     now() - interval '58 days', 0.55, false),
+     now() - interval '6 days', 0.55, false),
     (acc_vensure, ws_id, 'm&a',
      'Vensure Employer Solutions continues its PEO rollup with several acquisitions',
      'PE Hub', 'https://www.pehub.com/',
-     now() - interval '125 days', 0.70, false),
+     now() - interval '10 days', 0.70, false),
     (acc_vensure, ws_id, 'growth',
      'Vensure surpasses $19B in annual payroll processed across its PEO network',
      'Vensure', 'https://www.vensure.com/',
-     now() - interval '150 days', 0.60, false);
+     now() - interval '11 days', 0.60, false);
 
     -- Prospects (buying-trigger signals) ------------------------------------
     insert into public.signals
@@ -293,19 +298,19 @@ begin
     (acc_vanta, ws_id, 'funding',
      'Vanta raises $150M Series C and announces a European expansion push',
      'TechCrunch', 'https://techcrunch.com/',
-     now() - interval '18 days', 0.85, false),
+     now() - interval '4 days', 0.85, false),
     (acc_vanta, ws_id, 'hiring',
      'Vanta opens its first roles in London and Dublin to staff EMEA go-to-market',
      'LinkedIn', 'https://www.linkedin.com/',
-     now() - interval '12 days', 0.70, false),
+     now() - interval '2 days', 0.70, false),
     (acc_clay, ws_id, 'hiring',
      'Clay scales its go-to-market team and lists its first roles outside the US',
      'LinkedIn', 'https://www.linkedin.com/',
-     now() - interval '22 days', 0.65, false),
+     now() - interval '5 days', 0.65, false),
     (acc_linear, ws_id, 'growth',
      'Linear continues to grow its remote-first engineering team across Europe',
      'Linear', 'https://linear.app/',
-     now() - interval '26 days', 0.65, false);
+     now() - interval '7 days', 0.65, false);
 
     -- Customer (relationship context) ---------------------------------------
     insert into public.signals
