@@ -81,6 +81,15 @@ import { ALL_SOURCES } from "./sources/index.ts";
 import { runEnrich } from "./llm/enrich.ts";
 import { runCluster } from "./cluster/cluster.ts";
 import { runSynthesis } from "./llm/synthesis.ts";
+import { runTriggers } from "./triggers/runner.ts";
+import { callAnthropic } from "./llm/anthropic.ts";
+import {
+    TRIGGER_PARSE_PROMPT_VERSION,
+    TRIGGER_PARSE_SYSTEM_PROMPT,
+    buildTriggerParsePrompt,
+    parseDisposition,
+    parseTriggerResponse
+} from "./triggers/_shared.ts";
 
 // ─── Run-lifecycle status enum ─────────────────────────────────
 
@@ -111,6 +120,7 @@ interface StageLogEntry {
         | "ingest"
         | "filter"
         | "enrich"
+        | "triggers"
         | "cluster"
         | "synthesize";
     readonly started_at: string;
@@ -713,6 +723,8 @@ interface WorkspaceRunReport {
         readonly patterns_synthesized: number;
         readonly patterns_gated_out: number;
         readonly synth_cost_usd: number;
+        readonly triggers_evaluated: number;
+        readonly triggers_fired: number;
     };
     readonly error: string | null;
 }
@@ -782,7 +794,9 @@ async function runWorkspacePipeline(
         clusters_persisted: 0,
         patterns_synthesized: 0,
         patterns_gated_out: 0,
-        synth_cost_usd: 0
+        synth_cost_usd: 0,
+        triggers_evaluated: 0,
+        triggers_fired: 0
     };
     const now = (): string => new Date().toISOString();
 
@@ -911,6 +925,26 @@ async function runWorkspacePipeline(
         };
         stages.push(enrichEntry);
         await recordStage(sb, runId, enrichEntry, "clustering");
+
+        // ── Stage 3.3.5 Watchlist Triggers (B.3a) ──
+        const triggerStart = now();
+        const triggerT0 = Date.now();
+        const triggerResult = await runTriggers(sb, runId, workspaceId, triggerStart);
+        counts.triggers_evaluated = triggerResult.evaluated;
+        counts.triggers_fired = triggerResult.fired;
+        const triggerEntry: StageLogEntry = {
+            stage: "triggers",
+            started_at: triggerStart,
+            ended_at: now(),
+            duration_ms: Date.now() - triggerT0,
+            outcome: "ok",
+            notes: `Evaluated ${triggerResult.evaluated} armed triggers; ${triggerResult.fired} fired, ${triggerResult.skipped} skipped.`,
+            data: {
+                perTrigger: triggerResult.perTrigger
+            }
+        };
+        stages.push(triggerEntry);
+        await recordStage(sb, runId, triggerEntry, "clustering");
 
         // ── Stage 3.4 Cluster (B.2b) ──
         const clusterStart = now();
@@ -1084,6 +1118,69 @@ interface PipelineReport {
 interface PipelineRequestBody {
     /** Optional — target one workspace instead of every active workspace. */
     readonly workspaceId?: string;
+    /** When "parse_trigger", parse natural_language into a trigger query. */
+    readonly action?: string;
+    /** Natural-language trigger text (for action=parse_trigger). */
+    readonly natural_language?: string;
+}
+
+/**
+ * Parse a natural-language Watchlist Trigger (B.3a). Hydrates the
+ * workspace's context for reference resolution, runs the parser
+ * (Sonnet 4.6), and returns the structured parse + disposition. The
+ * Watch List UI (B.3b) calls this, shows the rephrasing for
+ * confirmation, then inserts the armed trigger directly (RLS-gated).
+ */
+async function parseTriggerAction(
+    sb: SupabaseClient,
+    workspaceId: string,
+    naturalLanguage: string
+): Promise<Record<string, unknown>> {
+    const ctx = await hydrateContext(sb, workspaceId, new Date().toISOString());
+    const watchlist = Array.isArray(ctx.watchlist_companies)
+        ? (ctx.watchlist_companies as string[])
+        : [];
+    const icp = ctx.icp as { target_industries?: unknown } | null;
+    const icpCategories =
+        icp && Array.isArray(icp.target_industries)
+            ? (icp.target_industries as unknown[]).filter((x): x is string => typeof x === "string")
+            : [];
+
+    // Existing armed triggers, for the parser's de-dup awareness.
+    const existing = await sb
+        .from("briefing_watchlist_triggers")
+        .select("natural_language")
+        .eq("workspace_id", workspaceId)
+        .neq("status", "disabled")
+        .limit(20);
+    const activeTriggers = (existing.data ?? [])
+        .map((r: any) => (typeof r.natural_language === "string" ? r.natural_language : ""))
+        .filter((s: string) => s.length > 0);
+
+    const prompt = buildTriggerParsePrompt({
+        natural_language: naturalLanguage,
+        watchlist_companies: watchlist,
+        competitors: watchlist,
+        icp_categories: icpCategories,
+        active_triggers_summary: activeTriggers
+    });
+    const call = await callAnthropic({
+        model: "sonnet_4_6",
+        system_prompt: TRIGGER_PARSE_SYSTEM_PROMPT,
+        user_prompt: prompt,
+        max_tokens: 1500,
+        prompt_version: TRIGGER_PARSE_PROMPT_VERSION
+    });
+    if (!call.ok) {
+        return { ok: false, error: `parser call failed: ${call.error}` };
+    }
+    const result = parseTriggerResponse(call.text);
+    return {
+        ok: true,
+        parse: result,
+        disposition: parseDisposition(result),
+        cost_usd: call.cost_usd
+    };
 }
 
 async function runPipeline(
@@ -1112,7 +1209,9 @@ async function runPipeline(
         clusters_persisted: 0,
         patterns_synthesized: 0,
         patterns_gated_out: 0,
-        synth_cost_usd: 0
+        synth_cost_usd: 0,
+        triggers_evaluated: 0,
+        triggers_fired: 0
     };
     const perWorkspace: WorkspaceRunReport[] = [];
 
@@ -1134,6 +1233,8 @@ async function runPipeline(
         totals.patterns_synthesized += report.counts.patterns_synthesized;
         totals.patterns_gated_out += report.counts.patterns_gated_out;
         totals.synth_cost_usd += report.counts.synth_cost_usd;
+        totals.triggers_evaluated += report.counts.triggers_evaluated;
+        totals.triggers_fired += report.counts.triggers_fired;
     }
 
     return {
@@ -1193,6 +1294,36 @@ serve(async (req: Request): Promise<Response> => {
     const sb = createClient(supabaseUrl, serviceRoleKey, {
         auth: { autoRefreshToken: false, persistSession: false }
     });
+
+    // Trigger-parse action (B.3a) — distinct from a pipeline run.
+    if (body.action === "parse_trigger") {
+        const ws = body.workspaceId ?? "";
+        const nl = (body.natural_language ?? "").trim();
+        if (ws.length === 0 || nl.length === 0) {
+            return new Response(
+                JSON.stringify({
+                    ok: false,
+                    error: "parse_trigger requires workspaceId + natural_language"
+                }),
+                { status: 400, headers: { "content-type": "application/json" } }
+            );
+        }
+        try {
+            const out = await parseTriggerAction(sb, ws, nl);
+            return new Response(JSON.stringify(out), {
+                status: out.ok === false ? 502 : 200,
+                headers: { "content-type": "application/json" }
+            });
+        } catch (err) {
+            return new Response(
+                JSON.stringify({
+                    ok: false,
+                    error: err instanceof Error ? err.message : String(err)
+                }),
+                { status: 500, headers: { "content-type": "application/json" } }
+            );
+        }
+    }
 
     try {
         const report = await runPipeline(sb, body);
