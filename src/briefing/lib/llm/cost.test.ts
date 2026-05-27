@@ -43,13 +43,13 @@ describe("computeCost", () => {
         expect(cost).toBeCloseTo(0.0035, 6);
     });
 
-    it("Opus 4.7: 1000 in + 500 out = $0.0525", () => {
-        // 1000/1M * $15 + 500/1M * $75 = 0.015 + 0.0375 = 0.0525
+    it("Opus 4.7: 1000 in + 500 out = $0.0175", () => {
+        // 1000/1M * $5 + 500/1M * $25 = 0.005 + 0.0125 = 0.0175
         const cost = computeCost("opus_4_7", {
             input_tokens: 1000,
             output_tokens: 500
         });
-        expect(cost).toBeCloseTo(0.0525, 6);
+        expect(cost).toBeCloseTo(0.0175, 6);
     });
 
     it("zero tokens = zero cost", () => {

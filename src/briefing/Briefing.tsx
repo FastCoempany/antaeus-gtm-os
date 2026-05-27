@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { RoomChrome } from "@/lib/room-chrome";
 import { Topbar } from "./components/Topbar";
-import { EmptyState } from "./components/EmptyState";
+import { PatternList } from "./components/PatternList";
 
 /**
  * Briefing — root component for the intelligence-surface room
@@ -31,7 +31,7 @@ export function Briefing(): JSX.Element {
             <RoomChrome kicker="BRIEFING" />
             <main class="bf-room">
                 <Topbar />
-                <EmptyState />
+                <PatternList />
             </main>
         </>
     );

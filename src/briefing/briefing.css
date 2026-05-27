@@ -152,3 +152,210 @@ body {
     letter-spacing: 0.06em;
     color: var(--bf-ink-quiet);
 }
+
+/* ── Loading ──────────────────────────────────────────────────── */
+
+.bf-loading {
+    margin-top: 8px;
+    padding: 40px 48px;
+}
+
+.bf-loading__label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin: 0;
+}
+
+/* ── Patterns ─────────────────────────────────────────────────── */
+
+.bf-patterns {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.bf-patterns__count {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bf-ink-soft);
+    margin: 0 0 4px;
+}
+
+.bf-pattern {
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-left: 3px solid var(--bf-ink);
+    border-radius: 2px;
+    padding: 28px 32px 30px;
+}
+
+.bf-pattern__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.bf-traj {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+}
+
+.bf-traj--rising {
+    color: var(--bf-orange);
+    background: rgba(230, 112, 30, 0.1);
+}
+
+.bf-traj--declining {
+    color: var(--bf-blue);
+    background: rgba(37, 99, 235, 0.1);
+}
+
+.bf-traj--stable,
+.bf-traj--none {
+    color: var(--bf-ink-soft);
+    background: var(--bf-card-tint);
+}
+
+.bf-pattern__conf,
+.bf-pattern__evidence {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--bf-ink-quiet);
+}
+
+.bf-pattern__title {
+    font-family: "DM Serif Display", "Times New Roman", serif;
+    font-weight: 400;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--bf-ink);
+    margin: 0 0 16px;
+    max-width: 26ch;
+}
+
+.bf-pattern__analysis {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--bf-ink);
+    margin: 0 0 26px;
+    max-width: 70ch;
+}
+
+/* Six-question block */
+
+.bf-pattern__questions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 36px;
+    margin: 0 0 26px;
+    padding: 22px 0 0;
+    border-top: 1px solid var(--bf-rule-soft);
+}
+
+@media (max-width: 760px) {
+    .bf-pattern__questions {
+        grid-template-columns: 1fr;
+    }
+}
+
+.bf-pattern__qrow {
+    margin: 0;
+}
+
+.bf-pattern__qlabel {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin: 0 0 5px;
+}
+
+.bf-pattern__qval {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--bf-ink-soft);
+    margin: 0;
+}
+
+/* Recommended moves */
+
+.bf-pattern__moves {
+    padding: 22px 0 0;
+    border-top: 1px solid var(--bf-rule-soft);
+}
+
+.bf-pattern__moves-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bf-orange);
+    margin: 0 0 14px;
+}
+
+.bf-moves {
+    list-style: none;
+    counter-reset: bf-move;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.bf-move {
+    counter-increment: bf-move;
+    position: relative;
+    padding-left: 28px;
+}
+
+.bf-move::before {
+    content: counter(bf-move);
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bf-orange);
+}
+
+.bf-move__label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--bf-ink);
+    margin: 0 0 3px;
+}
+
+.bf-move__why {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--bf-ink-soft);
+    margin: 0 0 4px;
+}
+
+.bf-move__dest {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--bf-blue);
+    margin: 0;
+}

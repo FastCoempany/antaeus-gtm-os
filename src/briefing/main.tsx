@@ -1,5 +1,6 @@
 import { render } from "preact";
 import { Briefing } from "./Briefing";
+import { bootPatterns } from "./state";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 
 initObservability();
@@ -24,3 +25,7 @@ if (!flagOn) {
 }
 
 render(<Briefing />, root);
+
+// Load the latest run's Patterns after first paint. Defensive inside
+// loadStandardPatterns — failures degrade to the empty state.
+void bootPatterns();
