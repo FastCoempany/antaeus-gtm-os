@@ -29,10 +29,12 @@ import {
     type MatchableItem,
     type SingleEventQuery,
     type TriggerParsedQuery,
+    type TriggerType,
     aggregationFires,
     aggregationItemMatches,
     matchAdjacency,
     matchSingleEvent,
+    normalizeParsedQuery,
     withinWindow
 } from "./_shared.ts";
 
@@ -88,7 +90,9 @@ export async function runTriggers(
     let skipped = 0;
 
     for (const t of triggers) {
-        const q = t.parsed_query;
+        // Re-normalize the stored query to the canonical, matcher-conformant
+        // shape — defensive against hand-inserted rows + parser variants.
+        const q = normalizeParsedQuery(t.parsed_query, t.trigger_type as TriggerType);
         if (!q || typeof q !== "object") {
             skipped += 1;
             perTrigger.push({ trigger_id: t.id, trigger_type: t.trigger_type, outcome: "skipped", detail: "no parsed_query" });
