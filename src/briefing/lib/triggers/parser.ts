@@ -16,10 +16,19 @@
  */
 
 import {
-    type ParseDisposition,
+    EVENT_CATEGORIES,
+    type AdjacencyQuery,
+    type AggregationFilters,
+    type AggregationQuery,
+    type EventCategory,
     type ParseAmbiguity,
+    type ParseDisposition,
+    type SilenceQuery,
+    type SingleEventQuery,
+    type ThresholdQuery,
     type TriggerParseResult,
     type TriggerParsedQuery,
+    type TriggerTarget,
     type TriggerType
 } from "./types";
 
@@ -91,6 +100,21 @@ export function buildTriggerParsePrompt(inputs: TriggerParseInputs): string {
     lines.push("7. Reject anti-CRM asks (trial signups, customer churn, internal metrics) — those aren't publicly observable. Reject pure-vague asks (\"anything important\", \"when things change\").");
     lines.push("8. Compound inputs (\"X AND Y\") can't be one trigger — set suggested_split and parse_succeeded=false.");
     lines.push("9. rephrased_for_confirmation: plain English of exactly what the system will watch for, so the operator can verify the parse.");
+    lines.push("");
+    lines.push("PARSED_QUERY SCHEMA BY TYPE (use these EXACT field names)");
+    lines.push("========================================================");
+    lines.push("A target is always one of:");
+    lines.push('  {"type":"company","name":string}');
+    lines.push('  {"type":"companies","names":string[],"logic":"any"|"all"}');
+    lines.push('  {"type":"category","category_descriptor":string}');
+    lines.push('  {"type":"any"}');
+    lines.push("Resolve named companies into a target — do NOT put them in filters.");
+    lines.push("");
+    lines.push('single_event: {"type":"single_event","event":{"category":<category>,"qualifier"?:string},"target":<target>,"fire_once":boolean,"cooldown_days"?:number}');
+    lines.push('aggregation:  {"type":"aggregation","event":{"category":<category>,"qualifier"?:string},"min_count":number,"window_days":number,"window_type":"rolling"|"calendar","filters":{"role_pattern"?:string,"exclude_companies"?:string[]},"target"?:<target>,"fire_once_per_window":boolean}');
+    lines.push('threshold:    {"type":"threshold","metric":{"source":string,"target":string,"metric_type":"raw_count"|"growth_pct"|"ratio_vs_baseline"},"comparison":"greater_than_or_equal"|"less_than"|...,"value":number,"window_days":number,"baseline":{"type":"previous_window","window_days":number}}');
+    lines.push('adjacency:    {"type":"adjacency","target":<target>,"relevance_threshold":number,"scope"?:{"topics"?:string[],"categories"?:<category>[]},"exclude_event_categories"?:<category>[],"digest_mode":boolean}');
+    lines.push('silence:      {"type":"silence","target":{"type":"source","source_type":string,"company"?:string},"silence_days":number,"reset_on_activity":boolean}');
     lines.push("");
     lines.push("OUTPUT FORMAT");
     lines.push("=============");
@@ -244,15 +268,279 @@ export function parseTriggerResponse(raw: string): TriggerParseResult {
  * validation is deferred — the matcher reads defensively and the
  * structured-form editor (B.3b) lets the operator correct fields.
  */
-function normalizeParsedQuery(
+/**
+ * Canonicalize a parsed_query into the exact shape the matchers read,
+ * regardless of which near-miss field names the model emitted. This is
+ * the parser↔matcher contract: the LLM is smart but improvises field
+ * names (event_category vs event.category, resolved_targets vs target),
+ * and a slightly-off shape would crash or no-op the matcher. Run on
+ * every parse + again in the matcher runner (defensive for hand-inserted
+ * rows). Exported so the Deno runner shares the exact logic.
+ */
+export function normalizeParsedQuery(
     v: unknown,
     triggerType: TriggerType | null
 ): TriggerParsedQuery | null {
     if (!v || typeof v !== "object" || Array.isArray(v) || triggerType === null) return null;
-    const o = { ...(v as Record<string, unknown>) };
-    // Force the discriminant to agree with trigger_type.
-    o["type"] = triggerType;
-    return o as unknown as TriggerParsedQuery;
+    const o = v as Record<string, unknown>;
+    switch (triggerType) {
+        case "single_event":
+            return normSingleEvent(o);
+        case "aggregation":
+            return normAggregation(o);
+        case "adjacency":
+            return normAdjacency(o);
+        case "threshold":
+            return normThreshold(o);
+        case "silence":
+            return normSilence(o);
+        default:
+            return null;
+    }
+}
+
+function obj(v: unknown): Record<string, unknown> {
+    return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
+}
+
+function num(v: unknown, fallback: number): number {
+    if (typeof v === "number" && Number.isFinite(v)) return v;
+    if (typeof v === "string") {
+        const p = Number.parseFloat(v);
+        if (Number.isFinite(p)) return p;
+    }
+    return fallback;
+}
+
+function strArray(v: unknown): string[] {
+    if (typeof v === "string") return v.trim().length > 0 ? [v.trim()] : [];
+    if (!Array.isArray(v)) return [];
+    return v
+        .map((x) => {
+            if (typeof x === "string") return x.trim();
+            // Tolerate [{name:"X"}] / [{company:"X"}] shapes.
+            const xo = obj(x);
+            const n = (xo["name"] ?? xo["company"] ?? xo["company_name"]) as unknown;
+            return typeof n === "string" ? n.trim() : "";
+        })
+        .filter((s) => s.length > 0);
+}
+
+function normCategory(v: unknown): EventCategory {
+    if (typeof v === "string") {
+        const lc = v.trim().toLowerCase();
+        const hit = EVENT_CATEGORIES.find((c) => c === lc);
+        if (hit) return hit;
+    }
+    return "any";
+}
+
+function normCategoryArray(v: unknown): EventCategory[] {
+    if (!Array.isArray(v)) return [];
+    return v.map(normCategory).filter((c) => c !== "any" || true); // keep order
+}
+
+/** Pull the event {category, subcategory, qualifier} from many shapes. */
+function normEvent(o: Record<string, unknown>): { category: EventCategory; subcategory?: string; qualifier?: string } {
+    const e = obj(o["event"]);
+    const category = normCategory(
+        e["category"] ?? o["event_category"] ?? o["category"]
+    );
+    const subRaw = (e["subcategory"] ?? o["subcategory"]) as unknown;
+    const qualRaw = (e["qualifier"] ?? o["qualifier"]) as unknown;
+    const out: { category: EventCategory; subcategory?: string; qualifier?: string } = { category };
+    if (typeof subRaw === "string" && subRaw.trim().length > 0) out.subcategory = subRaw.trim();
+    if (typeof qualRaw === "string" && qualRaw.trim().length > 0) out.qualifier = qualRaw.trim();
+    return out;
+}
+
+/** Coerce any target-ish value into a canonical TriggerTarget. */
+function normTarget(v: unknown, extraNames?: unknown): TriggerTarget {
+    // Loose: a bare string or array.
+    if (typeof v === "string") {
+        const n = v.trim();
+        if (n.length === 0) return { type: "any" };
+        return { type: "company", name: n };
+    }
+    if (Array.isArray(v)) {
+        const names = strArray(v);
+        return names.length > 0 ? { type: "companies", names, logic: "any" } : { type: "any" };
+    }
+    const t = obj(v);
+    const tType = typeof t["type"] === "string" ? (t["type"] as string) : "";
+    if (tType === "company" && typeof t["name"] === "string") {
+        const aliases = strArray(t["aliases"]);
+        return aliases.length > 0
+            ? { type: "company", name: (t["name"] as string).trim(), aliases }
+            : { type: "company", name: (t["name"] as string).trim() };
+    }
+    if (tType === "companies" || Array.isArray(t["names"])) {
+        const names = strArray(t["names"] ?? extraNames);
+        const logic = t["logic"] === "all" ? "all" : "any";
+        if (names.length > 0) return { type: "companies", names, logic };
+    }
+    if (tType === "category" || typeof t["category_descriptor"] === "string") {
+        const desc = (t["category_descriptor"] ?? t["descriptor"] ?? t["category"]) as unknown;
+        if (typeof desc === "string" && desc.trim().length > 0) {
+            return { type: "category", category_descriptor: desc.trim() };
+        }
+    }
+    if (tType === "any") return { type: "any" };
+    // Single name field, or fall through to extraNames (resolved_targets).
+    if (typeof t["name"] === "string" && (t["name"] as string).trim().length > 0) {
+        return { type: "company", name: (t["name"] as string).trim() };
+    }
+    const extra = strArray(extraNames);
+    if (extra.length === 1) return { type: "company", name: extra[0]! };
+    if (extra.length > 1) return { type: "companies", names: extra, logic: "any" };
+    return { type: "any" };
+}
+
+function normFilters(o: Record<string, unknown>): AggregationFilters {
+    const f = obj(o["filters"]);
+    const out: AggregationFilters = {};
+    const role = (f["role_pattern"] ?? f["role"]) as unknown;
+    if (typeof role === "string" && role.trim().length > 0) (out as { role_pattern?: string }).role_pattern = role.trim();
+    const exclude = strArray(f["exclude_companies"]);
+    if (exclude.length > 0) (out as { exclude_companies?: string[] }).exclude_companies = exclude;
+    const stage = strArray(f["company_funding_stage"]);
+    if (stage.length > 0) (out as { company_funding_stage?: string[] }).company_funding_stage = stage;
+    const cat = strArray(f["company_category"]);
+    if (cat.length > 0) (out as { company_category?: string[] }).company_category = cat;
+    const geo = strArray(f["company_geography"]);
+    if (geo.length > 0) (out as { company_geography?: string[] }).company_geography = geo;
+    return out;
+}
+
+function normSingleEvent(o: Record<string, unknown>): SingleEventQuery {
+    const out: SingleEventQuery = {
+        type: "single_event",
+        event: normEvent(o),
+        target: normTarget(o["target"], pickNames(o)),
+        fire_once: o["fire_once"] === true
+    };
+    const cd = o["cooldown_days"];
+    if (typeof cd === "number" && cd > 0) (out as { cooldown_days?: number }).cooldown_days = cd;
+    return out;
+}
+
+function normAggregation(o: Record<string, unknown>): AggregationQuery {
+    const wt = o["window_type"] === "calendar" ? "calendar" : "rolling";
+    return {
+        type: "aggregation",
+        event: normEvent(o),
+        min_count: Math.max(1, Math.round(num(o["min_count"], 1))),
+        window_days: Math.max(1, Math.round(num(o["window_days"], 30))),
+        window_type: wt,
+        filters: normFilters(o),
+        target: normTarget(o["target"], pickNames(o)),
+        fire_once_per_window: o["fire_once_per_window"] !== false
+    };
+}
+
+function normAdjacency(o: Record<string, unknown>): AdjacencyQuery {
+    const out: AdjacencyQuery = {
+        type: "adjacency",
+        target: normTarget(o["target"], pickNames(o)),
+        relevance_threshold: clamp01(num(o["relevance_threshold"], 0.6)),
+        digest_mode: o["digest_mode"] !== false
+    };
+    const scopeRaw = obj(o["scope"]);
+    const topics = strArray(scopeRaw["topics"]);
+    const cats = normCategoryArray(scopeRaw["categories"]);
+    const context = typeof scopeRaw["context"] === "string" ? scopeRaw["context"].trim() : "";
+    if (topics.length > 0 || cats.length > 0 || context.length > 0) {
+        const scope: { context?: string; topics?: string[]; categories?: EventCategory[] } = {};
+        if (context.length > 0) scope.context = context;
+        if (topics.length > 0) scope.topics = topics;
+        if (cats.length > 0) scope.categories = cats;
+        (out as { scope?: typeof scope }).scope = scope;
+    }
+    const excl = normCategoryArray(o["exclude_event_categories"]);
+    if (excl.length > 0) (out as { exclude_event_categories?: EventCategory[] }).exclude_event_categories = excl;
+    return out;
+}
+
+function normThreshold(o: Record<string, unknown>): ThresholdQuery {
+    const m = obj(o["metric"]);
+    const validMetricTypes = ["raw_count", "growth_rate", "growth_pct", "ratio_vs_baseline", "percentile"];
+    const mtRaw = (m["metric_type"] ?? o["metric_type"]) as unknown;
+    const metric_type = (typeof mtRaw === "string" && validMetricTypes.includes(mtRaw)
+        ? mtRaw
+        : "raw_count") as ThresholdQuery["metric"]["metric_type"];
+    const validComparisons = [
+        "greater_than", "greater_than_or_equal", "less_than", "less_than_or_equal", "crosses_above", "crosses_below"
+    ];
+    const cmpRaw = o["comparison"] as unknown;
+    const comparison = (typeof cmpRaw === "string" && validComparisons.includes(cmpRaw)
+        ? cmpRaw
+        : "greater_than_or_equal") as ThresholdQuery["comparison"];
+    const baselineRaw = obj(o["baseline"]);
+    const bType = typeof baselineRaw["type"] === "string" ? (baselineRaw["type"] as string) : "previous_window";
+    const window_days = Math.max(1, Math.round(num(o["window_days"], 30)));
+    let baseline: ThresholdQuery["baseline"];
+    if (bType === "fixed_value") baseline = { type: "fixed_value", value: num(baselineRaw["value"], 0) };
+    else if (bType === "same_period_last_year") baseline = { type: "same_period_last_year" };
+    else if (bType === "all_time_average") baseline = { type: "all_time_average" };
+    else if (bType === "rolling_baseline") baseline = { type: "rolling_baseline", window_days: Math.max(1, Math.round(num(baselineRaw["window_days"], window_days))) };
+    else baseline = { type: "previous_window", window_days: Math.max(1, Math.round(num(baselineRaw["window_days"], window_days))) };
+    const out: ThresholdQuery = {
+        type: "threshold",
+        metric: {
+            source: typeof m["source"] === "string" ? (m["source"] as string) : "",
+            target: typeof m["target"] === "string" ? (m["target"] as string) : typeof o["target"] === "string" ? (o["target"] as string) : "",
+            metric_type
+        },
+        comparison,
+        value: num(o["value"], 0),
+        window_days,
+        baseline
+    };
+    if (o["fire_once"] === true) (out as { fire_once?: boolean }).fire_once = true;
+    return out;
+}
+
+function normSilence(o: Record<string, unknown>): SilenceQuery {
+    const t = obj(o["target"]);
+    const tType = typeof t["type"] === "string" ? (t["type"] as string) : "";
+    let target: SilenceQuery["target"];
+    if (tType === "event_category") {
+        target = { type: "event_category", category: normCategory(t["category"]) };
+    } else if (tType === "topic" || typeof t["topic"] === "string") {
+        const sources = strArray(t["sources"]);
+        target = sources.length > 0
+            ? { type: "topic", topic: String(t["topic"] ?? "").trim(), sources }
+            : { type: "topic", topic: String(t["topic"] ?? "").trim() };
+    } else {
+        const company = typeof t["company"] === "string" ? (t["company"] as string).trim() : undefined;
+        target = company
+            ? { type: "source", source_type: String(t["source_type"] ?? "company_blog"), company }
+            : { type: "source", source_type: String(t["source_type"] ?? "company_blog") };
+    }
+    return {
+        type: "silence",
+        target,
+        silence_days: Math.max(1, Math.round(num(o["silence_days"], 30))),
+        reset_on_activity: o["reset_on_activity"] !== false
+    };
+}
+
+/** Candidate name lists the model commonly puts targets under. */
+function pickNames(o: Record<string, unknown>): unknown {
+    const f = obj(o["filters"]);
+    return (
+        o["resolved_targets"] ??
+        o["targets"] ??
+        o["names"] ??
+        f["resolved_targets"] ??
+        f["targets"] ??
+        f["names"] ??
+        null
+    );
+}
+
+function clamp01(n: number): number {
+    return Math.min(1, Math.max(0, n));
 }
 
 /**
