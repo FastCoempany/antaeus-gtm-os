@@ -1,6 +1,6 @@
 import { render } from "preact";
 import { Briefing } from "./Briefing";
-import { bootPatterns } from "./state";
+import { bootPatterns, bootTriggers } from "./state";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 
 initObservability();
@@ -29,3 +29,8 @@ render(<Briefing />, root);
 // Load the latest run's Patterns after first paint. Defensive inside
 // loadStandardPatterns — failures degrade to the empty state.
 void bootPatterns();
+
+// Load armed Watch List triggers + the fires they produced this week.
+// Defensive inside the client — failures degrade to empty lists, so
+// the Patterns still render.
+void bootTriggers();

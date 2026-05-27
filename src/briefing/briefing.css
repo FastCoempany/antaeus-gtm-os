@@ -359,3 +359,315 @@ body {
     color: var(--bf-blue);
     margin: 0;
 }
+
+/* ── Shared buttons ───────────────────────────────────────────── */
+
+.bf-btn {
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.bf-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.bf-btn--primary {
+    background: var(--bf-orange);
+    color: #fff;
+}
+
+.bf-btn--primary:not(:disabled):hover {
+    background: #cf6016;
+}
+
+.bf-btn--ghost {
+    background: transparent;
+    color: var(--bf-ink-soft);
+    border-color: var(--bf-rule);
+}
+
+.bf-btn--ghost:not(:disabled):hover {
+    color: var(--bf-ink);
+    border-color: var(--bf-ink-soft);
+}
+
+.bf-btn--small {
+    font-size: 12px;
+    padding: 6px 12px;
+}
+
+/* ── Watch list ───────────────────────────────────────────────── */
+
+.bf-watch {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--bf-rule);
+}
+
+.bf-watch__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.bf-watch__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bf-ink-soft);
+    margin: 0;
+}
+
+.bf-watch__block {
+    margin-bottom: 28px;
+}
+
+.bf-watch__block:last-child {
+    margin-bottom: 0;
+}
+
+.bf-watch__sub {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin: 0 0 12px;
+}
+
+.bf-watch__empty {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--bf-ink-soft);
+    margin: 0;
+    max-width: 64ch;
+}
+
+/* Fires this week */
+
+.bf-fires,
+.bf-armed-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bf-fire {
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-left: 3px solid var(--bf-orange);
+    border-radius: 2px;
+    padding: 14px 18px;
+}
+
+.bf-fire__summary {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--bf-ink);
+    margin: 0 0 5px;
+}
+
+.bf-fire__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin: 0;
+}
+
+.bf-fire__trig {
+    font-size: 13px;
+    color: var(--bf-ink-soft);
+}
+
+.bf-fire__when {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--bf-ink-quiet);
+}
+
+/* Armed triggers */
+
+.bf-armed {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+    padding: 14px 18px;
+}
+
+.bf-armed__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.bf-armed__nl {
+    font-size: 14px;
+    color: var(--bf-ink);
+    margin: 0 0 5px;
+}
+
+.bf-armed__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin: 0;
+}
+
+.bf-armed__type {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bf-blue);
+}
+
+.bf-armed__fires {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--bf-ink-soft);
+}
+
+.bf-armed__fires--quiet {
+    color: var(--bf-ink-quiet);
+}
+
+/* Add-trigger flow */
+
+.bf-addtrigger {
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+    padding: 20px 22px;
+    margin-bottom: 24px;
+}
+
+.bf-addtrigger__label {
+    display: block;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin: 0 0 10px;
+}
+
+.bf-addtrigger__input {
+    width: 100%;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--bf-ink);
+    background: var(--bf-bg);
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+    padding: 10px 12px;
+    resize: vertical;
+}
+
+.bf-addtrigger__input:focus {
+    outline: none;
+    border-color: var(--bf-orange);
+}
+
+.bf-addtrigger__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.bf-addtrigger__error {
+    font-size: 13px;
+    color: #c0392b;
+    margin: 14px 0 0;
+}
+
+/* Parse readout */
+
+.bf-parse {
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-radius: 2px;
+    border: 1px solid var(--bf-rule);
+    border-left: 3px solid var(--bf-rule);
+    background: var(--bf-card-tint);
+}
+
+.bf-parse--ready {
+    border-left-color: #22c55e;
+}
+
+.bf-parse--fuzzy {
+    border-left-color: var(--bf-orange);
+}
+
+.bf-parse--blocked {
+    border-left-color: #f59e0b;
+}
+
+.bf-parse__rephrase {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--bf-ink);
+    margin: 0 0 8px;
+}
+
+.bf-parse__meta {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin: 0 0 10px;
+}
+
+.bf-parse__disp {
+    font-size: 14px;
+    color: var(--bf-ink-soft);
+    margin: 0 0 12px;
+}
+
+.bf-parse__ambs {
+    list-style: none;
+    margin: 0 0 14px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bf-parse__amb {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.bf-parse__amb-q {
+    display: block;
+    color: var(--bf-ink);
+}
+
+.bf-parse__amb-fix {
+    display: block;
+    color: var(--bf-ink-soft);
+}

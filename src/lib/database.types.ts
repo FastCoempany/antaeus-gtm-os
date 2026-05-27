@@ -560,6 +560,132 @@ export type Database = {
           },
         ]
       }
+      briefing_trigger_fires: {
+        Row: {
+          created_at: string
+          data: Json
+          evidence_item_ids: string[]
+          fired_at: string
+          id: string
+          run_id: string | null
+          summary: string
+          trigger_id: string
+          user_verdict: string | null
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          evidence_item_ids?: string[]
+          fired_at?: string
+          id?: string
+          run_id?: string | null
+          summary?: string
+          trigger_id: string
+          user_verdict?: string | null
+          workspace_id?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          evidence_item_ids?: string[]
+          fired_at?: string
+          id?: string
+          run_id?: string | null
+          summary?: string
+          trigger_id?: string
+          user_verdict?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_trigger_fires_trigger_id_fkey"
+            columns: ["trigger_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_watchlist_triggers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_trigger_fires_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_trigger_fires_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      briefing_watchlist_triggers: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          data: Json
+          false_fire_count: number
+          fire_count: number
+          id: string
+          last_fired_at: string | null
+          natural_language: string
+          notes: string | null
+          parse_confidence: number
+          parsed_query: Json
+          rephrased_for_confirmation: string | null
+          status: string
+          trigger_type: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          false_fire_count?: number
+          fire_count?: number
+          id?: string
+          last_fired_at?: string | null
+          natural_language: string
+          notes?: string | null
+          parse_confidence?: number
+          parsed_query?: Json
+          rephrased_for_confirmation?: string | null
+          status?: string
+          trigger_type: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          false_fire_count?: number
+          fire_count?: number
+          id?: string
+          last_fired_at?: string | null
+          natural_language?: string
+          notes?: string | null
+          parse_confidence?: number
+          parsed_query?: Json
+          rephrased_for_confirmation?: string | null
+          status?: string
+          trigger_type?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_watchlist_triggers_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deals: {
         Row: {
           account_name: string
