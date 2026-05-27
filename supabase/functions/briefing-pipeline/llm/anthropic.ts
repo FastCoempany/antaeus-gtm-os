@@ -41,7 +41,9 @@ import {
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_API_VERSION = "2023-06-01";
-const ANTHROPIC_TIMEOUT_MS = 45_000;
+const ANTHROPIC_TIMEOUT_MS = 90_000;
+
+export type Effort = "low" | "medium" | "high" | "xhigh" | "max";
 
 export interface CallAnthropicInputs {
     readonly model: ModelKey;
@@ -57,12 +59,15 @@ export interface CallAnthropicInputs {
      */
     readonly prompt_version?: string;
     /**
-     * When set, enables extended thinking with this token budget. The
-     * Messages API requires temperature = 1 with thinking enabled and
-     * max_tokens > budget; both are enforced here. Thinking blocks are
-     * dropped from the returned text (we only keep the text blocks).
+     * When > 0, enables extended thinking. On Opus 4.7 (and Sonnet 4.6)
+     * thinking is adaptive-only — we send `thinking: {type: "adaptive"}`
+     * + `output_config: {effort}`. The legacy `{type: "enabled",
+     * budget_tokens}` shape 400s on Opus 4.7. The numeric value is kept
+     * as an enable flag for backward compatibility with the call sites.
      */
     readonly thinking_budget_tokens?: number;
+    /** Thinking depth for adaptive thinking. Defaults to "medium". */
+    readonly effort?: Effort;
 }
 
 export interface CallAnthropicResult {
@@ -91,10 +96,13 @@ export async function callAnthropic(
     const thinkingEnabled =
         typeof inputs.thinking_budget_tokens === "number" &&
         inputs.thinking_budget_tokens > 0;
-    // Thinking needs room for the reasoning budget plus the answer.
-    const maxTokens = inputs.max_tokens ?? (thinkingEnabled ? 4096 : 1024);
-    // The Messages API requires temperature = 1 when thinking is on.
-    const temperature = thinkingEnabled ? 1 : inputs.temperature ?? 0;
+    const effort: Effort = inputs.effort ?? "medium";
+    // Opus 4.7 removed sampling params (temperature/top_p/top_k → 400) and
+    // uses adaptive thinking only. Other models still accept temperature.
+    const isOpus47 = pricing.api_id === "claude-opus-4-7";
+    // Thinking (adaptive) needs room to reason + answer; give headroom.
+    const maxTokens = inputs.max_tokens ?? (thinkingEnabled ? 8000 : 1024);
+    const temperature = inputs.temperature ?? 0;
     const promptVersion = inputs.prompt_version ?? PROMPT_VERSION;
 
     // Compute model_v_hash up-front so it's available even on failure.
@@ -136,13 +144,15 @@ export async function callAnthropic(
             body: JSON.stringify({
                 model: pricing.api_id,
                 max_tokens: maxTokens,
-                temperature,
+                // Opus 4.7 rejects sampling params; omit temperature there.
+                ...(isOpus47 ? {} : { temperature }),
+                // Adaptive thinking + effort (the only on-mode for Opus 4.7;
+                // also valid on Sonnet 4.6). The legacy enabled/budget_tokens
+                // shape 400s on Opus 4.7.
                 ...(thinkingEnabled
                     ? {
-                          thinking: {
-                              type: "enabled",
-                              budget_tokens: inputs.thinking_budget_tokens
-                          }
+                          thinking: { type: "adaptive" },
+                          output_config: { effort }
                       }
                     : {}),
                 system: inputs.system_prompt,
