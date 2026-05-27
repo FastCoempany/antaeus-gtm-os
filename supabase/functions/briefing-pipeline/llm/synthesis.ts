@@ -41,10 +41,16 @@ import {
     runQualityGate
 } from "./synthesis-shared.ts";
 
-const DRAFT_THINKING_BUDGET = 2000;
-const DRAFT_MAX_TOKENS = 4096;
-const REVISE_MAX_TOKENS = 4096;
+const DRAFT_THINKING_BUDGET = 2000; // enable-flag for adaptive thinking
+const DRAFT_EFFORT = "medium" as const;
+const DRAFT_MAX_TOKENS = 8000; // room for adaptive thinking + the JSON answer
+const REVISE_MAX_TOKENS = 8000;
 const CRITIQUE_MAX_TOKENS = 2048;
+
+// Cap how many clusters we synthesize per run. Bounds cost + the Edge
+// Function wall-clock, and matches the spec's "~1-3 Patterns" target with
+// headroom. Clusters are taken in weighted-evidence order (strongest first).
+const SYNTH_MAX_CLUSTERS = 5;
 
 export interface SynthesisResult {
     readonly clusters: number;
@@ -118,19 +124,19 @@ export async function runSynthesis(
     const commercialProfile = normalizeProfile(ctx.commercial_profile);
     const icp = normalizeIcp(ctx.icp);
 
-    for (const cluster of clusters) {
+    // Strongest clusters first (already ordered by weighted_evidence desc),
+    // capped so cost + wall-clock stay bounded.
+    const selected = clusters.slice(0, SYNTH_MAX_CLUSTERS);
+
+    // Synthesize clusters in parallel — each cluster's Draft → Critique →
+    // Revise chain is independent, so running them concurrently keeps the
+    // stage's wall-clock to roughly one cluster's latency regardless of
+    // count. Persists happen sequentially afterward (fast DB writes).
+    const synthTasks = selected.map(async (cluster) => {
         const evidence = await loadEvidence(sb, workspaceId, cluster.item_ids);
         if (evidence.length === 0) {
-            errored += 1;
-            perCluster.push({
-                cluster_id: cluster.id,
-                anchor: cluster.anchor,
-                outcome: "error",
-                detail: "no evidence items resolved for cluster"
-            });
-            continue;
+            return { cluster, input: null, synth: null };
         }
-
         const input: SynthesisInput = {
             cluster_id: cluster.id,
             cluster_type: cluster.cluster_type,
@@ -143,8 +149,23 @@ export async function runSynthesis(
             commercial_profile: commercialProfile,
             icp
         };
-
         const synth = await synthesizeOne(input);
+        return { cluster, input, synth };
+    });
+
+    const settled = await Promise.all(synthTasks);
+
+    for (const { cluster, input, synth } of settled) {
+        if (!synth || !input) {
+            errored += 1;
+            perCluster.push({
+                cluster_id: cluster.id,
+                anchor: cluster.anchor,
+                outcome: "error",
+                detail: "no evidence items resolved for cluster"
+            });
+            continue;
+        }
         totalCost += synth.cost_usd;
 
         if (!synth.pattern) {
@@ -237,6 +258,7 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
         user_prompt: buildDraftPrompt(input),
         max_tokens: DRAFT_MAX_TOKENS,
         thinking_budget_tokens: DRAFT_THINKING_BUDGET,
+        effort: DRAFT_EFFORT,
         prompt_version: SYNTHESIS_PROMPT_VERSION
     });
     costs.draft = draftCall.cost_usd;
