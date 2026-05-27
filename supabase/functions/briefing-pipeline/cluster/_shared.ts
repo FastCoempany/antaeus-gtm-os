@@ -31,6 +31,9 @@ export interface SourceConfig {
     readonly src_conf: number;
     readonly baseline_volume_per_day: number;
     readonly historical_snr: number;
+    // Recency half-life in days; defaults to 14 (news). Curated intel
+    // uses a longer window. Mirror of core.ts.
+    readonly recency_tau_days?: number;
 }
 
 export const SOURCE_CONFIG: Readonly<Record<string, SourceConfig>> = {
@@ -53,7 +56,8 @@ export const DEFAULT_SOURCE_CONFIG: SourceConfig = {
 export const SIGNAL_CONSOLE_SOURCE_CONFIG: SourceConfig = {
     src_conf: 0.82,
     baseline_volume_per_day: 0.6,
-    historical_snr: 0.75
+    historical_snr: 0.75,
+    recency_tau_days: 60
 };
 
 export const SIGNAL_CONSOLE_SOURCE_PREFIX = "sc:";
@@ -79,22 +83,28 @@ export function inverseVolumeFactor(baselineVolumePerDay: number): number {
 
 export function recencyFactor(
     publishedOrFetched: string | null,
-    nowIso: string
+    nowIso: string,
+    tauDays: number = RECENCY_TAU_DAYS
 ): number {
-    if (!publishedOrFetched) return Math.exp(-7 / RECENCY_TAU_DAYS);
+    const tau = tauDays > 0 ? tauDays : RECENCY_TAU_DAYS;
+    if (!publishedOrFetched) return Math.exp(-7 / tau);
     const itemMs = new Date(publishedOrFetched).getTime();
     const nowMs = new Date(nowIso).getTime();
     if (!Number.isFinite(itemMs) || !Number.isFinite(nowMs)) {
-        return Math.exp(-7 / RECENCY_TAU_DAYS);
+        return Math.exp(-7 / tau);
     }
     const ageDays = Math.max(0, (nowMs - itemMs) / (24 * 60 * 60 * 1000));
-    return Math.exp(-ageDays / RECENCY_TAU_DAYS);
+    return Math.exp(-ageDays / tau);
 }
 
 export function computeItemWeight(item: ClusterableItem, nowIso: string): number {
     const cfg = sourceConfig(item.source_id);
     const vol = inverseVolumeFactor(cfg.baseline_volume_per_day);
-    const rec = recencyFactor(item.published_date ?? item.fetched_at, nowIso);
+    const rec = recencyFactor(
+        item.published_date ?? item.fetched_at,
+        nowIso,
+        cfg.recency_tau_days
+    );
     return cfg.src_conf * vol * cfg.historical_snr * rec;
 }
 

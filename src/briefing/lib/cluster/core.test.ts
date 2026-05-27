@@ -48,6 +48,29 @@ describe("sourceConfig", () => {
         const cfg = sourceConfig("sc:pe-hub");
         expect(cfg.src_conf).toBeGreaterThan(0.7);
     });
+
+    it("gives curated sources a longer recency half-life than news", () => {
+        expect(sourceConfig("sc:reuters").recency_tau_days).toBe(60);
+        expect(sourceConfig("techcrunch_rss").recency_tau_days).toBeUndefined();
+    });
+});
+
+describe("recencyFactor with a custom half-life", () => {
+    it("decays slower with a longer tau", () => {
+        const now = "2026-05-27T00:00:00Z";
+        const tenDaysAgo = "2026-05-17T00:00:00Z";
+        const news = recencyFactor(tenDaysAgo, now); // default 14
+        const curated = recencyFactor(tenDaysAgo, now, 60);
+        expect(curated).toBeGreaterThan(news);
+        // 10 days at tau=60: exp(-10/60) ≈ 0.846
+        expect(curated).toBeCloseTo(Math.exp(-10 / 60), 5);
+    });
+
+    it("falls back to the default tau for non-positive values", () => {
+        const now = "2026-05-27T00:00:00Z";
+        const sameDay = "2026-05-27T00:00:00Z";
+        expect(recencyFactor(sameDay, now, 0)).toBeCloseTo(1, 5);
+    });
 });
 
 describe("inverseVolumeFactor", () => {
