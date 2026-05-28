@@ -1293,3 +1293,101 @@ details[open] .bf-work__call-toggle-hint {
     padding-top: 14px;
     border-top: 1px solid var(--bf-rule-soft);
 }
+
+/* ── Briefing footer (cost telemetry) ─────────────────────────── */
+
+/*
+ * Cost-this-week strip at the bottom of the Briefing room. Always
+ * rendered when the summary has loaded — the bar's presence is the
+ * trust signal. Color graduates ok → warn → throttle → paused as the
+ * weekly cost climbs.
+ */
+
+.bf-cost {
+    margin-top: 56px;
+    padding: 20px 24px;
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+}
+
+.bf-cost__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.bf-cost__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+}
+
+.bf-cost__amount {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--bf-ink);
+}
+
+.bf-cost__pill {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-left: auto;
+}
+
+.bf-cost__pill--ok {
+    color: #1f7a3a;
+    background: rgba(31, 122, 58, 0.08);
+}
+
+.bf-cost__pill--warn {
+    color: var(--bf-orange);
+    background: rgba(230, 112, 30, 0.1);
+}
+
+.bf-cost__pill--throttle {
+    color: #b3791e;
+    background: rgba(179, 121, 30, 0.12);
+}
+
+.bf-cost__pill--paused {
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.1);
+}
+
+.bf-cost__bar {
+    height: 6px;
+    background: var(--bf-bg);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.bf-cost__bar-fill {
+    height: 100%;
+    transition: width 0.4s ease;
+}
+
+.bf-cost__bar-fill--ok {
+    background: var(--bf-blue);
+}
+
+.bf-cost__bar-fill--warn {
+    background: var(--bf-orange);
+}
+
+.bf-cost__bar-fill--throttle {
+    background: #b3791e;
+}
+
+.bf-cost__bar-fill--paused {
+    background: #c0392b;
+}

@@ -3,6 +3,7 @@ import { Briefing } from "./Briefing";
 import {
     bootBriefingLead,
     bootContrarian,
+    bootCostSummary,
     bootPatterns,
     bootPeriphery,
     bootTriggers
@@ -56,3 +57,8 @@ void bootContrarian();
 // Renders nothing when the latest run produced no lead (refused, or
 // pre-B.9a).
 void bootBriefingLead();
+
+// Load the rolling 7-day cost summary for the footer. Always renders
+// once loaded — the cost telemetry is the trust signal that lets the
+// operator lean on the auto-run.
+void bootCostSummary();

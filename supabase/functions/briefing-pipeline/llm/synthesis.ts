@@ -87,11 +87,23 @@ interface ClusterRow {
     data: Record<string, unknown> | null;
 }
 
+export interface SynthesisOptions {
+    /**
+     * B.8 — when true, the workspace's weekly cost is over the
+     * throttle threshold; substitute Sonnet for Opus on the
+     * draft + revise + repair calls (~5x cheaper). Critique was
+     * already Sonnet; quality drops modestly on the draft side
+     * but the synthesis still produces.
+     */
+    readonly throttle?: boolean;
+}
+
 export async function runSynthesis(
     sb: SupabaseClient,
     runId: string,
     workspaceId: string,
-    ctx: HydratedContextLike
+    ctx: HydratedContextLike,
+    options: SynthesisOptions = {}
 ): Promise<SynthesisResult> {
     const clusters = await loadQualifiedClusters(sb, runId, workspaceId);
     const result: SynthesisResult = {
@@ -151,7 +163,7 @@ export async function runSynthesis(
             commercial_profile: commercialProfile,
             icp
         };
-        const synth = await synthesizeOne(input);
+        const synth = await synthesizeOne(input, options.throttle === true);
         return { cluster, input, synth };
     });
 
@@ -279,7 +291,16 @@ interface SynthesizeOne {
 
 const EMPTY_GATE: GateResult = { passes: false, checks: [], failures: ["not evaluated"] };
 
-async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
+async function synthesizeOne(
+    input: SynthesisInput,
+    throttle: boolean = false
+): Promise<SynthesizeOne> {
+    // B.8 — when throttled, swap Opus → Sonnet on draft/revise/repair.
+    // Critique is already Sonnet; no change there.
+    const draftModel = throttle ? "sonnet_4_6" : "opus_4_7";
+    const reviseModel = throttle ? "sonnet_4_6" : "opus_4_7";
+    const repairModel = throttle ? "sonnet_4_6" : "opus_4_7";
+
     const costs = { draft: 0, critique: 0, revise: 0, repair: 0 };
     const modelVHashes: {
         draft: string;
@@ -302,7 +323,7 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
     // ── 5a Draft ──
     const draftPrompt = buildDraftPrompt(input);
     const draftCall = await callAnthropic({
-        model: "opus_4_7",
+        model: draftModel,
         system_prompt: DRAFT_SYSTEM_PROMPT,
         user_prompt: draftPrompt,
         max_tokens: DRAFT_MAX_TOKENS,
@@ -313,7 +334,7 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
     costs.draft = draftCall.cost_usd;
     modelVHashes.draft = draftCall.model_v_hash;
     callRecords.draft = {
-        model: "opus_4_7",
+        model: draftModel,
         prompt_version: SYNTHESIS_PROMPT_VERSION,
         system_prompt: DRAFT_SYSTEM_PROMPT,
         user_prompt: draftPrompt,
@@ -382,7 +403,7 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
     if (critique && critique.revise_required) {
         const revisePrompt = buildRevisePrompt(input, current, critique);
         const reviseCall = await callAnthropic({
-            model: "opus_4_7",
+            model: reviseModel,
             system_prompt: REVISE_SYSTEM_PROMPT,
             user_prompt: revisePrompt,
             max_tokens: REVISE_MAX_TOKENS,
@@ -391,7 +412,7 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
         costs.revise = reviseCall.cost_usd;
         modelVHashes.revise = reviseCall.model_v_hash;
         callRecords.revise = {
-            model: "opus_4_7",
+            model: reviseModel,
             prompt_version: SYNTHESIS_PROMPT_VERSION,
             system_prompt: REVISE_SYSTEM_PROMPT,
             user_prompt: revisePrompt,
@@ -428,7 +449,7 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
     if (repairable) {
         const repairPrompt = buildGateRepairPrompt(current, gate.failures);
         const repairCall = await callAnthropic({
-            model: "opus_4_7",
+            model: repairModel,
             system_prompt: GATE_REPAIR_SYSTEM_PROMPT,
             user_prompt: repairPrompt,
             max_tokens: REVISE_MAX_TOKENS,
@@ -437,7 +458,7 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
         costs.repair = repairCall.cost_usd;
         modelVHashes.repair = repairCall.model_v_hash;
         callRecords.repair = {
-            model: "opus_4_7",
+            model: repairModel,
             prompt_version: SYNTHESIS_PROMPT_VERSION,
             system_prompt: GATE_REPAIR_SYSTEM_PROMPT,
             user_prompt: repairPrompt,

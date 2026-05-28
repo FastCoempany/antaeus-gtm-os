@@ -6,6 +6,7 @@ import { PatternList } from "./components/PatternList";
 import { ContrarianRail } from "./components/ContrarianRail";
 import { PeripheryRail } from "./components/PeripheryRail";
 import { WatchList } from "./components/WatchList";
+import { BriefingFooter } from "./components/BriefingFooter";
 
 /**
  * Briefing — root component for the intelligence-surface room
@@ -40,6 +41,7 @@ export function Briefing(): JSX.Element {
                 <ContrarianRail />
                 <PeripheryRail />
                 <WatchList />
+                <BriefingFooter />
             </main>
         </>
     );

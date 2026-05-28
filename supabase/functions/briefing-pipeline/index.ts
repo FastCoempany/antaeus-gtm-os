@@ -85,6 +85,13 @@ import { runContrarianSynthesis } from "./llm/contrarian-synthesis.ts";
 import { runCompose } from "./llm/compose.ts";
 import { runTriggers } from "./triggers/runner.ts";
 import { runPeriphery } from "./periphery/runner.ts";
+import { loadCostSummary } from "./cost/check.ts";
+import {
+    type CostSummary,
+    shouldPause as costShouldPause,
+    shouldThrottle as costShouldThrottle,
+    stateLabel as costStateLabel
+} from "./cost/_shared.ts";
 import { callAnthropic } from "./llm/anthropic.ts";
 import {
     TRIGGER_PARSE_PROMPT_VERSION,
@@ -128,7 +135,8 @@ interface StageLogEntry {
         | "cluster"
         | "synthesize"
         | "contrarian_synthesize"
-        | "compose";
+        | "compose"
+        | "cost_check";
     readonly started_at: string;
     readonly ended_at: string;
     readonly duration_ms: number;
@@ -789,7 +797,8 @@ async function recordStage(
 
 async function runWorkspacePipeline(
     sb: SupabaseClient,
-    workspaceId: string
+    workspaceId: string,
+    options: { override?: boolean } = {}
 ): Promise<WorkspaceRunReport> {
     const stages: StageLogEntry[] = [];
     const counts = {
@@ -852,6 +861,58 @@ async function runWorkspacePipeline(
     }
 
     const runId = (created.data as { id: string }).id;
+
+    // ── Stage 0 Cost Check (B.8) ──
+    // Read the workspace's rolling 7-day cost + decide which band
+    // we're in. Used to (a) short-circuit when paused (no run), (b)
+    // throttle synthesis to Sonnet when over ceiling, (c) surface
+    // the state in stage_log so the operator can see why we
+    // degraded.
+    const costCheckStart = now();
+    const costCheckT0 = Date.now();
+    const costSummary = await loadCostSummary(sb, workspaceId);
+    const wantPause = costShouldPause(costSummary.state) && options.override !== true;
+    const wantThrottle = costShouldThrottle(costSummary.state);
+    const costNote = wantPause
+        ? `Paused: weekly cost $${costSummary.weekly_cost_usd.toFixed(2)} of $${costSummary.ceiling_usd.toFixed(2)} (${(costSummary.fraction_of_ceiling * 100).toFixed(0)}%). Run skipped.`
+        : options.override === true && costShouldPause(costSummary.state)
+        ? `Override accepted: weekly cost $${costSummary.weekly_cost_usd.toFixed(2)} of $${costSummary.ceiling_usd.toFixed(2)} (${(costSummary.fraction_of_ceiling * 100).toFixed(0)}%) — operator-forced run logged for friction tracking.`
+        : `${costStateLabel(costSummary.state)}. Weekly cost $${costSummary.weekly_cost_usd.toFixed(2)} of $${costSummary.ceiling_usd.toFixed(2)} (${(costSummary.fraction_of_ceiling * 100).toFixed(0)}%).`;
+    const costStageEntry: StageLogEntry = {
+        stage: "cost_check",
+        started_at: costCheckStart,
+        ended_at: now(),
+        duration_ms: Date.now() - costCheckT0,
+        outcome: "ok",
+        notes: costNote,
+        data: {
+            cost_summary: costSummary,
+            throttle_applied: wantThrottle,
+            override_applied: options.override === true && costShouldPause(costSummary.state)
+        }
+    };
+    stages.push(costStageEntry);
+    await recordStage(sb, runId, costStageEntry, wantPause ? "aborted" : "hydrating");
+
+    if (wantPause) {
+        // Skip the run cleanly. The row stays for the operator to
+        // see why; total_cost stays $0 since we did no work.
+        await updateRun(sb, runId, {
+            completed_at: now(),
+            data: {
+                cost_summary: costSummary,
+                aborted_reason: "weekly_cost_ceiling"
+            }
+        });
+        return {
+            workspaceId,
+            runId,
+            status: "aborted",
+            stages,
+            counts,
+            error: null
+        };
+    }
 
     try {
         // ── Stage 3.0 Hydrate ──
@@ -1017,7 +1078,9 @@ async function runWorkspacePipeline(
         // ── Stage 3.5 Synthesize (B.2c — Draft / Critique / Revise / Gate) ──
         const synthStart = now();
         const synthT0 = Date.now();
-        const synthResult = await runSynthesis(sb, runId, workspaceId, ctx);
+        const synthResult = await runSynthesis(sb, runId, workspaceId, ctx, {
+            throttle: wantThrottle
+        });
         counts.patterns_synthesized = synthResult.synthesized;
         counts.patterns_gated_out = synthResult.gated_out;
         counts.synth_cost_usd = synthResult.total_cost_usd;
@@ -1230,6 +1293,14 @@ interface PipelineRequestBody {
     readonly action?: string;
     /** Natural-language trigger text (for action=parse_trigger). */
     readonly natural_language?: string;
+    /**
+     * B.8 — override the cost-ceiling pause for one run. When the
+     * workspace is in 'paused' state, the pipeline normally short-
+     * circuits with status='aborted'. Setting override=true bypasses
+     * that single check (the run is still logged as overridden in
+     * stage_log for friction tracking).
+     */
+    readonly override?: boolean;
 }
 
 /**
@@ -1331,7 +1402,9 @@ async function runPipeline(
     const perWorkspace: WorkspaceRunReport[] = [];
 
     for (const workspace of workspaces) {
-        const report = await runWorkspacePipeline(sb, workspace.id);
+        const report = await runWorkspacePipeline(sb, workspace.id, {
+            override: body.override === true
+        });
         perWorkspace.push(report);
         totals.fetched += report.counts.fetched;
         totals.inserted += report.counts.inserted;
