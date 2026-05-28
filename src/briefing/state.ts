@@ -16,6 +16,10 @@ import {
     loadAuditEnvelope
 } from "./lib/audit-envelope-client";
 import {
+    type BriefingLeadSummary,
+    loadLatestBriefingLead
+} from "./lib/compose-client";
+import {
     type ArmedTrigger,
     type TriggerFire,
     armTrigger,
@@ -44,6 +48,14 @@ export const peripheryLoaded = signal(false);
 
 export const contrarianPatterns = signal<ReadonlyArray<BriefingPattern>>([]);
 export const contrarianLoaded = signal(false);
+
+export const briefingLead = signal<BriefingLeadSummary | null>(null);
+export const briefingLeadLoaded = signal(false);
+
+export async function bootBriefingLead(): Promise<void> {
+    briefingLead.value = await loadLatestBriefingLead();
+    briefingLeadLoaded.value = true;
+}
 
 /**
  * Audit envelopes (B.6b). Lazy: an envelope only loads when the
@@ -190,4 +202,6 @@ export function __resetBriefingStateForTests(): void {
     contrarianLoaded.value = false;
     envelopeCache.value = new Map();
     envelopeOpen.value = new Set();
+    briefingLead.value = null;
+    briefingLeadLoaded.value = false;
 }
