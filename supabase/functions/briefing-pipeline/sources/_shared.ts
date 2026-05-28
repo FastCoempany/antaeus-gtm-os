@@ -334,3 +334,226 @@ export function mapSignalToRawItem(
         }
     };
 }
+
+// ─── Owned-Content RSS helpers (mirror of src/briefing/lib/parsers/owned-content.ts) ─
+
+export const FEED_PROBE_PATHS: ReadonlyArray<string> = [
+    "/blog/feed",
+    "/blog/feed.xml",
+    "/blog/rss",
+    "/blog/rss.xml",
+    "/blog/atom.xml",
+    "/feed",
+    "/feed.xml",
+    "/rss",
+    "/rss.xml",
+    "/atom.xml",
+    "/resources/feed",
+    "/podcast/feed",
+    "/news/feed"
+];
+
+export interface DiscoveredFeedLink {
+    readonly url: string;
+    readonly kind: "rss" | "atom" | "unknown";
+    readonly title: string | null;
+}
+
+const FEED_LINK_TAG_REGEX =
+    /<link\s+[^>]*rel\s*=\s*["']alternate["'][^>]*>/gi;
+
+export function extractFeedLinksFromHtml(
+    html: string,
+    baseUrl: string
+): ReadonlyArray<DiscoveredFeedLink> {
+    const out: DiscoveredFeedLink[] = [];
+    const seen = new Set<string>();
+    const matches = html.match(FEED_LINK_TAG_REGEX) ?? [];
+    for (const tag of matches) {
+        const typeMatch = tag.match(/type\s*=\s*["']([^"']+)["']/i);
+        const hrefMatch = tag.match(/href\s*=\s*["']([^"']+)["']/i);
+        const titleMatch = tag.match(/title\s*=\s*["']([^"']+)["']/i);
+        if (!hrefMatch || !typeMatch) continue;
+        const t = typeMatch[1]?.toLowerCase() ?? "";
+        let kind: "rss" | "atom" | "unknown" = "unknown";
+        if (t.includes("rss")) kind = "rss";
+        else if (t.includes("atom")) kind = "atom";
+        else continue;
+        const resolved = resolveOwnedUrl(hrefMatch[1] ?? "", baseUrl);
+        if (!resolved || seen.has(resolved)) continue;
+        seen.add(resolved);
+        out.push({
+            url: resolved,
+            kind,
+            title: titleMatch ? titleMatch[1] ?? null : null
+        });
+    }
+    return out;
+}
+
+export function resolveOwnedUrl(href: string, baseUrl: string): string | null {
+    const trimmed = href.trim();
+    if (trimmed.length === 0) return null;
+    try {
+        return new URL(trimmed, baseUrl).toString();
+    } catch {
+        return null;
+    }
+}
+
+export function normalizeDomain(domain: string): string | null {
+    const trimmed = domain.trim().toLowerCase();
+    if (trimmed.length === 0) return null;
+    const noProtocol = trimmed.replace(/^https?:\/\//, "");
+    const noTrailing = noProtocol.replace(/\/+$/, "");
+    const noWww = noTrailing.replace(/^www\./, "");
+    if (!/^[a-z0-9][a-z0-9.\-]*\.[a-z]{2,}$/.test(noWww)) return null;
+    return noWww;
+}
+
+export function buildProbeUrls(domain: string): ReadonlyArray<string> {
+    const root = normalizeDomain(domain);
+    if (!root) return [];
+    return FEED_PROBE_PATHS.map((p) => `https://${root}${p}`);
+}
+
+export function buildHomepageUrl(domain: string): string | null {
+    const root = normalizeDomain(domain);
+    if (!root) return null;
+    return `https://${root}/`;
+}
+
+export interface MinimalFeedEntry {
+    readonly published_date: string | null;
+}
+
+export function passesFeedFreshness(
+    entries: ReadonlyArray<MinimalFeedEntry>,
+    opts: { minItems?: number; maxAgeDays?: number; now?: Date } = {}
+): boolean {
+    const minItems = opts.minItems ?? 1;
+    const maxAgeDays = opts.maxAgeDays ?? 365;
+    const now = opts.now ?? new Date();
+    if (entries.length < minItems) return false;
+    const cutoff = now.getTime() - maxAgeDays * 24 * 60 * 60 * 1000;
+    for (const e of entries) {
+        if (!e.published_date) continue;
+        const t = new Date(e.published_date).getTime();
+        if (!Number.isFinite(t)) continue;
+        if (t >= cutoff) return true;
+    }
+    return false;
+}
+
+export const MARKETING_FLUFF_PATTERNS: ReadonlyArray<RegExp> = [
+    /^\s*\d+\s+(tips|ways|reasons|things|steps|hacks|secrets|lessons)/i,
+    /^\s*(the\s+)?ultimate\s+guide\s+to/i,
+    /^\s*(introducing|announcing)\s+our\s+new/i,
+    /^\s*how\s+to\s+(boost|improve|increase|maximize|grow|scale|10x)\s+your/i,
+    /^\s*\d+\s+best\s+(practices|tools|tips)/i,
+    /\bbest\s+practices\b.*\b(checklist|guide|playbook)\b/i,
+    /^\s*(top|best)\s+\d+\s+/i,
+    /^\s*\[(webinar|ebook|whitepaper|guide)\]/i
+];
+
+export const MIN_BODY_LENGTH = 120;
+export const PER_ENTITY_ITEM_CAP = 5;
+
+export interface CleanInputItem {
+    readonly title: string;
+    readonly body: string | null;
+    readonly url: string | null;
+    readonly published_date: string | null;
+}
+
+export type CleanRejection =
+    | "empty_title"
+    | "empty_body"
+    | "body_too_short"
+    | "marketing_fluff"
+    | "no_url";
+
+export type CleanOutcome =
+    | { readonly kind: "keep"; readonly item: CleanInputItem }
+    | { readonly kind: "reject"; readonly reason: CleanRejection };
+
+export function cleanFeedItem(item: CleanInputItem): CleanOutcome {
+    const title = item.title.trim();
+    if (title.length === 0) return { kind: "reject", reason: "empty_title" };
+    if (!item.url || item.url.trim().length === 0) {
+        return { kind: "reject", reason: "no_url" };
+    }
+    if (!item.body || item.body.trim().length === 0) {
+        return { kind: "reject", reason: "empty_body" };
+    }
+    const bodyLen = item.body.trim().length;
+    if (bodyLen < MIN_BODY_LENGTH) {
+        return { kind: "reject", reason: "body_too_short" };
+    }
+    for (const pat of MARKETING_FLUFF_PATTERNS) {
+        if (pat.test(title)) return { kind: "reject", reason: "marketing_fluff" };
+    }
+    return { kind: "keep", item: { ...item, title, body: item.body.trim() } };
+}
+
+export interface BatchCleanResult {
+    readonly kept: ReadonlyArray<CleanInputItem>;
+    readonly rejections: Readonly<Record<CleanRejection, number>>;
+    readonly capped: number;
+}
+
+export function cleanFeedBatch(
+    items: ReadonlyArray<CleanInputItem>,
+    perEntityCap: number = PER_ENTITY_ITEM_CAP
+): BatchCleanResult {
+    const kept: CleanInputItem[] = [];
+    const rejections: Record<CleanRejection, number> = {
+        empty_title: 0,
+        empty_body: 0,
+        body_too_short: 0,
+        marketing_fluff: 0,
+        no_url: 0
+    };
+    let capped = 0;
+    for (const it of items) {
+        if (kept.length >= perEntityCap) {
+            capped += 1;
+            continue;
+        }
+        const outcome = cleanFeedItem(it);
+        if (outcome.kind === "keep") {
+            kept.push(outcome.item);
+        } else {
+            rejections[outcome.reason] += 1;
+        }
+    }
+    return { kept, rejections, capped };
+}
+
+export interface CachedFeed {
+    readonly url: string;
+    readonly kind: "rss" | "atom" | "unknown";
+    readonly last_validated_at: string;
+    readonly last_fetched_at: string | null;
+    readonly fetch_failures: number;
+}
+
+export interface DiscoveredFeedsCache {
+    readonly discovered_feeds?: ReadonlyArray<CachedFeed>;
+    readonly last_discovery_at?: string;
+}
+
+const REVALIDATE_AFTER_DAYS = 7;
+
+export function cacheNeedsRefresh(
+    cache: DiscoveredFeedsCache | null,
+    now: Date = new Date()
+): boolean {
+    if (!cache || !cache.last_discovery_at) return true;
+    const t = new Date(cache.last_discovery_at).getTime();
+    if (!Number.isFinite(t)) return true;
+    const ageDays = (now.getTime() - t) / (24 * 60 * 60 * 1000);
+    return ageDays >= REVALIDATE_AFTER_DAYS;
+}
+
+export const MAX_CACHED_FEEDS_PER_ENTITY = 4;
