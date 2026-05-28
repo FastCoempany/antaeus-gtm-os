@@ -1,6 +1,12 @@
 import { render } from "preact";
 import { Briefing } from "./Briefing";
-import { bootContrarian, bootPatterns, bootPeriphery, bootTriggers } from "./state";
+import {
+    bootBriefingLead,
+    bootContrarian,
+    bootPatterns,
+    bootPeriphery,
+    bootTriggers
+} from "./state";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 
 initObservability();
@@ -45,3 +51,8 @@ void bootPeriphery();
 // backed challenge exists, and the rail renders nothing when the list
 // is empty. So a failed read is also invisible to the operator.
 void bootContrarian();
+
+// Load the "Read This Week" lead from the latest completed run.
+// Renders nothing when the latest run produced no lead (refused, or
+// pre-B.9a).
+void bootBriefingLead();

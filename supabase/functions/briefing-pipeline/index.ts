@@ -82,6 +82,7 @@ import { runEnrich } from "./llm/enrich.ts";
 import { runCluster } from "./cluster/cluster.ts";
 import { runSynthesis } from "./llm/synthesis.ts";
 import { runContrarianSynthesis } from "./llm/contrarian-synthesis.ts";
+import { runCompose } from "./llm/compose.ts";
 import { runTriggers } from "./triggers/runner.ts";
 import { runPeriphery } from "./periphery/runner.ts";
 import { callAnthropic } from "./llm/anthropic.ts";
@@ -126,7 +127,8 @@ interface StageLogEntry {
         | "periphery"
         | "cluster"
         | "synthesize"
-        | "contrarian_synthesize";
+        | "contrarian_synthesize"
+        | "compose";
     readonly started_at: string;
     readonly ended_at: string;
     readonly duration_ms: number;
@@ -729,6 +731,8 @@ interface WorkspaceRunReport {
         readonly synth_cost_usd: number;
         readonly contrarian_outcome: string;
         readonly contrarian_cost_usd: number;
+        readonly compose_outcome: string;
+        readonly compose_cost_usd: number;
         readonly triggers_evaluated: number;
         readonly triggers_fired: number;
         readonly periphery_items_considered: number;
@@ -806,6 +810,8 @@ async function runWorkspacePipeline(
         synth_cost_usd: 0,
         contrarian_outcome: "not_run",
         contrarian_cost_usd: 0,
+        compose_outcome: "not_run",
+        compose_cost_usd: 0,
         triggers_evaluated: 0,
         triggers_fired: 0,
         periphery_items_considered: 0,
@@ -1061,10 +1067,39 @@ async function runWorkspacePipeline(
             }
         };
         stages.push(contrarianEntry);
-        await recordStage(sb, runId, contrarianEntry, "complete");
+        await recordStage(sb, runId, contrarianEntry, "composing");
 
-        // Roll both synthesis costs into the run total (enrich already bumped it).
-        const synthAndContrarianCost = synthResult.total_cost_usd + contrarianResult.cost_usd;
+        // ── Stage 3.8 Briefing Compose (B.9a) ──
+        // One Sonnet call that reads the just-persisted patterns +
+        // trigger fires and writes the one-or-two-sentence lead at
+        // the top of the briefing. Refusal is a valid outcome
+        // (zero patterns + zero fires, or material too thin to lead
+        // with honestly).
+        const composeStart = now();
+        const composeT0 = Date.now();
+        const composeResult = await runCompose(sb, runId, workspaceId);
+        counts.compose_outcome = composeResult.outcome;
+        counts.compose_cost_usd = composeResult.cost_usd;
+        const composeEntry: StageLogEntry = {
+            stage: "compose",
+            started_at: composeStart,
+            ended_at: now(),
+            duration_ms: Date.now() - composeT0,
+            outcome: composeResult.outcome === "error" ? "error" : "ok",
+            notes: `${composeResult.outcome}: ${composeResult.detail} Cost: $${composeResult.cost_usd.toFixed(4)}.`,
+            data: {
+                lead_preview: composeResult.lead
+                    ? composeResult.lead.slice(0, 200)
+                    : null,
+                gate_failures: composeResult.gate?.failures ?? []
+            }
+        };
+        stages.push(composeEntry);
+        await recordStage(sb, runId, composeEntry, "complete");
+
+        // Roll synthesis + contrarian + compose costs into the run total (enrich already bumped it).
+        const synthAndContrarianCost =
+            synthResult.total_cost_usd + contrarianResult.cost_usd + composeResult.cost_usd;
         if (synthAndContrarianCost > 0) {
             const cur = await sb
                 .from("briefing_runs")
@@ -1285,6 +1320,8 @@ async function runPipeline(
         synth_cost_usd: 0,
         contrarian_outcome: "not_run",
         contrarian_cost_usd: 0,
+        compose_outcome: "not_run",
+        compose_cost_usd: 0,
         triggers_evaluated: 0,
         triggers_fired: 0,
         periphery_items_considered: 0,
@@ -1316,6 +1353,10 @@ async function runPipeline(
             // Surface the per-workspace outcome on the top-level totals when
             // only one workspace ran; otherwise leave the default "not_run".
             totals.contrarian_outcome = report.counts.contrarian_outcome;
+        }
+        totals.compose_cost_usd += report.counts.compose_cost_usd;
+        if (report.counts.compose_outcome !== "not_run") {
+            totals.compose_outcome = report.counts.compose_outcome;
         }
         totals.triggers_evaluated += report.counts.triggers_evaluated;
         totals.triggers_fired += report.counts.triggers_fired;
