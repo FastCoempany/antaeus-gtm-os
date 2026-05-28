@@ -67,6 +67,18 @@ const MAX_ITEMS_PER_FEED = 25;
 const HEADERS_FEED = { Accept: "application/rss+xml, application/atom+xml, application/xml;q=0.9, */*;q=0.8" };
 const HEADERS_HTML = { Accept: "text/html,application/xhtml+xml" };
 
+// Aggressive timeouts during discovery — the 10s default is too long
+// when we're probing 1+ paths against an unreachable domain. 5s catches
+// real DNS / TCP failures fast without missing legitimate slow sites.
+const DISCOVERY_TIMEOUT_MS = 5_000;
+
+// Stop discovery once we have at least this many validated feeds. One
+// is typically enough — the operator-facing payoff is whether ANY of
+// the entity's content reaches the pipeline, not whether we exhaustively
+// catalog every feed they publish. Cuts cold-start probing in half on
+// domains that don't advertise feeds in <link rel="alternate">.
+const DISCOVERY_EARLY_EXIT_AT = 1;
+
 // ─── Public source interface ───────────────────────────────────
 
 interface RawItem {
@@ -112,16 +124,31 @@ export const ownedContentRssSource = {
             return { items: [], error: null };
         }
 
+        // Process entities concurrently. Each entity's per-domain probes
+        // remain sequential (polite to the target server), but across
+        // entities we run in parallel — that's the difference between a
+        // 150s Edge-Function idle-timeout and a tractable cold start.
+        // Promise.allSettled isolates failures per entity (a 30s
+        // unreachable-domain doesn't crash the batch).
+        const scoped = entities.slice(0, MAX_ENTITIES_PER_RUN);
+        const settled = await Promise.allSettled(
+            scoped.map(async (ent) => {
+                const feeds = await ensureFeeds(sb, ent, now);
+                if (feeds.length === 0) return [] as RawItem[];
+                return fetchFromFeeds(ent, feeds);
+            })
+        );
+
         const items: RawItem[] = [];
         const errors: string[] = [];
-        for (const ent of entities.slice(0, MAX_ENTITIES_PER_RUN)) {
-            try {
-                const feeds = await ensureFeeds(sb, ent, now);
-                if (feeds.length === 0) continue;
-                const collected = await fetchFromFeeds(ent, feeds);
-                items.push(...collected);
-            } catch (err) {
-                const msg = err instanceof Error ? err.message : String(err);
+        for (let i = 0; i < settled.length; i += 1) {
+            const r = settled[i];
+            const ent = scoped[i];
+            if (!r || !ent) continue;
+            if (r.status === "fulfilled") {
+                items.push(...r.value);
+            } else {
+                const msg = r.reason instanceof Error ? r.reason.message : String(r.reason);
                 errors.push(`${ent.name}: ${msg}`);
             }
         }
@@ -242,8 +269,9 @@ async function discoverFeeds(domain: string): Promise<ReadonlyArray<DiscoveredFe
     const out: DiscoveredFeedLink[] = [];
     const seen = new Set<string>();
 
-    // 1. Advertised feeds via <link rel="alternate">.
-    const home = await httpGet(homepageUrl, HEADERS_HTML);
+    // 1. Advertised feeds via <link rel="alternate">. Short discovery
+    // timeout — a slow homepage means we move on, not block the run.
+    const home = await httpGet(homepageUrl, HEADERS_HTML, DISCOVERY_TIMEOUT_MS);
     if (home.ok) {
         for (const link of extractFeedLinksFromHtml(home.text, homepageUrl)) {
             if (seen.has(link.url)) continue;
@@ -251,26 +279,27 @@ async function discoverFeeds(domain: string): Promise<ReadonlyArray<DiscoveredFe
             if (valid) {
                 seen.add(link.url);
                 out.push({ ...link, kind: valid.kind });
-                if (out.length >= MAX_CACHED_FEEDS_PER_ENTITY) return out;
+                if (out.length >= DISCOVERY_EARLY_EXIT_AT) return out;
             }
         }
     }
 
-    // 2. Probe common paths.
+    // 2. Probe common paths. Stop early on first success — we don't
+    // need to exhaustively catalog every feed a domain publishes.
     for (const url of buildProbeUrls(domain)) {
         if (seen.has(url)) continue;
         const valid = await validateFeed(url);
         if (valid) {
             seen.add(url);
             out.push({ url, kind: valid.kind, title: null });
-            if (out.length >= MAX_CACHED_FEEDS_PER_ENTITY) return out;
+            if (out.length >= DISCOVERY_EARLY_EXIT_AT) return out;
         }
     }
     return out;
 }
 
 async function validateFeed(url: string): Promise<{ kind: "rss" | "atom" } | null> {
-    const r = await httpGet(url, HEADERS_FEED);
+    const r = await httpGet(url, HEADERS_FEED, DISCOVERY_TIMEOUT_MS);
     if (!r.ok || r.text.length === 0) return null;
     let entries: ReadonlyArray<FeedEntry> = [];
     let kind: "rss" | "atom" = "rss";
