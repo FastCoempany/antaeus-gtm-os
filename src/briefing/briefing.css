@@ -671,3 +671,102 @@ body {
     display: block;
     color: var(--bf-ink-soft);
 }
+
+/* ── Periphery rail ───────────────────────────────────────────── */
+
+.bf-peri-rail {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--bf-rule);
+}
+
+.bf-peri-rail__head {
+    margin-bottom: 18px;
+}
+
+.bf-peri-rail__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bf-ink-soft);
+    margin: 0 0 8px;
+}
+
+.bf-peri-rail__sub {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--bf-ink-soft);
+    margin: 0;
+    max-width: 62ch;
+}
+
+.bf-peri-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.bf-peri {
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-left: 3px solid var(--bf-blue);
+    border-radius: 2px;
+    padding: 16px 20px;
+}
+
+.bf-peri__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.bf-peri__name {
+    font-family: "DM Serif Display", "Times New Roman", serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.15;
+    color: var(--bf-ink);
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.bf-peri__score {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--bf-ink-quiet);
+    white-space: nowrap;
+}
+
+.bf-peri__why {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--bf-ink-soft);
+    margin: 0 0 6px;
+}
+
+.bf-peri__aliases {
+    font-size: 12px;
+    color: var(--bf-ink-quiet);
+    font-style: italic;
+    margin: 0 0 12px;
+}
+
+.bf-peri__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bf-peri__error {
+    font-size: 13px;
+    color: #c0392b;
+    margin: 10px 0 0;
+}
