@@ -33,6 +33,7 @@ export { htmlDiffSource } from "./html-diff.ts";
 export { signalConsoleSource } from "./signal-console.ts";
 export { ownedContentRssSource } from "./owned-content-rss.ts";
 export { podcastGuestsSource } from "./podcast-guests.ts";
+export { trustCenterSource } from "./trust-center.ts";
 
 import { hnAlgoliaSource } from "./hn-algolia.ts";
 import { techcrunchRssSource } from "./techcrunch-rss.ts";
@@ -43,6 +44,7 @@ import { htmlDiffSource } from "./html-diff.ts";
 import { signalConsoleSource } from "./signal-console.ts";
 import { ownedContentRssSource } from "./owned-content-rss.ts";
 import { podcastGuestsSource } from "./podcast-guests.ts";
+import { trustCenterSource } from "./trust-center.ts";
 
 export const ALL_SOURCES = [
     hnAlgoliaSource,
@@ -53,5 +55,6 @@ export const ALL_SOURCES = [
     htmlDiffSource,
     signalConsoleSource,
     ownedContentRssSource,
-    podcastGuestsSource
+    podcastGuestsSource,
+    trustCenterSource
 ] as const;

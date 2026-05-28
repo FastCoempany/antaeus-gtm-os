@@ -698,3 +698,268 @@ export function cleanEpisodeBatch(
     }
     return { kept, rejections, capped };
 }
+
+// ─── Trust Center helpers (mirror of src/briefing/lib/parsers/trust-center.ts) ─
+
+export const TRUST_PROBE_PATHS: ReadonlyArray<string> = [
+    "/sub-processors",
+    "/subprocessors",
+    "/legal/sub-processors",
+    "/legal/subprocessors",
+    "/security/sub-processors",
+    "/trust/sub-processors",
+    "/privacy/sub-processors",
+    "/trust-center",
+    "/trust",
+    "/security",
+    "/compliance"
+];
+
+export const TRUST_ANCHOR_KEYWORDS: ReadonlyArray<string> = [
+    "trust-center",
+    "trust center",
+    "sub-processor",
+    "subprocessor",
+    "sub processor",
+    "trust.",
+    ".vanta.com",
+    "safebase.io",
+    "trustpage.io"
+];
+
+export interface DiscoveredTrustLink {
+    readonly url: string;
+    readonly source: "probe" | "anchor";
+    readonly matched_keyword: string | null;
+}
+
+const TRUST_ANCHOR_TAG_REGEX =
+    /<a\s+[^>]*href\s*=\s*["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+
+export function extractTrustLinksFromHtml(
+    html: string,
+    baseUrl: string
+): ReadonlyArray<DiscoveredTrustLink> {
+    const out: DiscoveredTrustLink[] = [];
+    const seen = new Set<string>();
+    let m: RegExpExecArray | null;
+    while ((m = TRUST_ANCHOR_TAG_REGEX.exec(html)) !== null) {
+        const href = m[1] ?? "";
+        const innerHtml = m[2] ?? "";
+        const text = innerHtml.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+        const haystack = `${href} ${text}`.toLowerCase();
+        let matchedKeyword: string | null = null;
+        for (const kw of TRUST_ANCHOR_KEYWORDS) {
+            if (haystack.includes(kw)) {
+                matchedKeyword = kw;
+                break;
+            }
+        }
+        if (!matchedKeyword) continue;
+        const resolved = resolveTrustUrl(href, baseUrl);
+        if (!resolved || seen.has(resolved)) continue;
+        seen.add(resolved);
+        out.push({ url: resolved, source: "anchor", matched_keyword: matchedKeyword });
+    }
+    return out;
+}
+
+export function resolveTrustUrl(href: string, baseUrl: string): string | null {
+    const trimmed = href.trim();
+    if (trimmed.length === 0) return null;
+    try {
+        return new URL(trimmed, baseUrl).toString();
+    } catch {
+        return null;
+    }
+}
+
+export interface SubprocessorVendor {
+    readonly id: string;
+    readonly name: string;
+    readonly aliases: ReadonlyArray<string>;
+    readonly category: string;
+}
+
+export interface TrustPageHints {
+    readonly hasSubprocessorLanguage: boolean;
+    readonly vendorMatchCount: number;
+}
+
+const SUBPROCESSOR_PHRASE_REGEX = /\bsub-?\s*processors?\b/i;
+
+function escapeTrustRegex(s: string): string {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildVendorRegex(name: string): RegExp | null {
+    const trimmed = name.trim();
+    if (trimmed.length < 2) return null;
+    return new RegExp(`(?<!\\w)${escapeTrustRegex(trimmed)}(?!\\w)`, "i");
+}
+
+export function htmlToPlainText(html: string): string {
+    return html
+        .replace(/<script[\s\S]*?<\/script>/gi, " ")
+        .replace(/<style[\s\S]*?<\/style>/gi, " ")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/gi, " ")
+        .replace(/&amp;/gi, "&")
+        .replace(/&lt;/gi, "<")
+        .replace(/&gt;/gi, ">")
+        .replace(/&#39;/gi, "'")
+        .replace(/&quot;/gi, '"')
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+export function evaluateTrustPage(
+    html: string,
+    vendors: ReadonlyArray<SubprocessorVendor>
+): TrustPageHints {
+    const text = htmlToPlainText(html);
+    const hasSubprocessorLanguage = SUBPROCESSOR_PHRASE_REGEX.test(text);
+    let vendorMatchCount = 0;
+    for (const v of vendors) {
+        const re = buildVendorRegex(v.name);
+        if (re && re.test(text)) {
+            vendorMatchCount += 1;
+            continue;
+        }
+        for (const alias of v.aliases) {
+            const aliasRe = buildVendorRegex(alias);
+            if (aliasRe && aliasRe.test(text)) {
+                vendorMatchCount += 1;
+                break;
+            }
+        }
+    }
+    return { hasSubprocessorLanguage, vendorMatchCount };
+}
+
+export const MIN_VENDOR_MATCHES_WITHOUT_LANGUAGE = 4;
+
+export function isLikelyTrustPage(hints: TrustPageHints): boolean {
+    if (hints.hasSubprocessorLanguage) return true;
+    return hints.vendorMatchCount >= MIN_VENDOR_MATCHES_WITHOUT_LANGUAGE;
+}
+
+export interface SubprocessorMatch {
+    readonly vendor_id: string;
+    readonly vendor_name: string;
+    readonly category: string;
+    readonly context: string;
+}
+
+const CONTEXT_RADIUS = 140;
+
+export function matchSubprocessors(
+    text: string,
+    vendors: ReadonlyArray<SubprocessorVendor>
+): ReadonlyArray<SubprocessorMatch> {
+    const out: SubprocessorMatch[] = [];
+    const seenIds = new Set<string>();
+    for (const v of vendors) {
+        if (seenIds.has(v.id)) continue;
+        const candidates = [v.name, ...v.aliases];
+        for (const c of candidates) {
+            const re = buildVendorRegex(c);
+            if (!re) continue;
+            const m = re.exec(text);
+            if (!m) continue;
+            const idx = m.index;
+            const start = Math.max(0, idx - CONTEXT_RADIUS);
+            const end = Math.min(text.length, idx + m[0].length + CONTEXT_RADIUS);
+            const context = text.slice(start, end).trim();
+            out.push({
+                vendor_id: v.id,
+                vendor_name: v.name,
+                category: v.category,
+                context
+            });
+            seenIds.add(v.id);
+            break;
+        }
+    }
+    return out;
+}
+
+export const PER_ENTITY_VENDOR_CAP = 10;
+
+export interface TrustInputItem {
+    readonly entity_name: string;
+    readonly entity_domain: string;
+    readonly trust_page_url: string;
+    readonly vendor: SubprocessorMatch;
+}
+
+export type TrustRejection = "empty_entity" | "empty_url" | "empty_vendor";
+
+export type TrustCleanOutcome =
+    | { readonly kind: "keep"; readonly item: TrustInputItem }
+    | { readonly kind: "reject"; readonly reason: TrustRejection };
+
+export function cleanTrustItem(item: TrustInputItem): TrustCleanOutcome {
+    if (item.entity_name.trim().length === 0) {
+        return { kind: "reject", reason: "empty_entity" };
+    }
+    if (item.trust_page_url.trim().length === 0) {
+        return { kind: "reject", reason: "empty_url" };
+    }
+    if (item.vendor.vendor_name.trim().length === 0) {
+        return { kind: "reject", reason: "empty_vendor" };
+    }
+    return { kind: "keep", item };
+}
+
+export interface TrustBatchResult {
+    readonly kept: ReadonlyArray<TrustInputItem>;
+    readonly rejections: Readonly<Record<TrustRejection, number>>;
+    readonly capped: number;
+}
+
+export function cleanTrustBatch(
+    items: ReadonlyArray<TrustInputItem>,
+    perEntityCap: number = PER_ENTITY_VENDOR_CAP
+): TrustBatchResult {
+    const kept: TrustInputItem[] = [];
+    const rejections: Record<TrustRejection, number> = {
+        empty_entity: 0,
+        empty_url: 0,
+        empty_vendor: 0
+    };
+    let capped = 0;
+    for (const it of items) {
+        if (kept.length >= perEntityCap) {
+            capped += 1;
+            continue;
+        }
+        const outcome = cleanTrustItem(it);
+        if (outcome.kind === "keep") kept.push(outcome.item);
+        else rejections[outcome.reason] += 1;
+    }
+    return { kept, rejections, capped };
+}
+
+export function buildTrustTitle(item: TrustInputItem): string {
+    return `${item.entity_name} lists ${item.vendor.vendor_name} on their Trust Center`;
+}
+
+const TRUST_REVALIDATE_AFTER_DAYS = 7;
+
+export interface TrustCenterCache {
+    readonly trust_center_url?: string;
+    readonly trust_center_last_validated_at?: string;
+    readonly trust_center_last_fetched_at?: string | null;
+}
+
+export function trustCacheNeedsRefresh(
+    cache: TrustCenterCache | null,
+    now: Date = new Date()
+): boolean {
+    if (!cache || !cache.trust_center_last_validated_at) return true;
+    const t = new Date(cache.trust_center_last_validated_at).getTime();
+    if (!Number.isFinite(t)) return true;
+    const ageDays = (now.getTime() - t) / (24 * 60 * 60 * 1000);
+    return ageDays >= TRUST_REVALIDATE_AFTER_DAYS;
+}
