@@ -202,7 +202,9 @@ export async function runSynthesis(
             synth.gate,
             synth.critiqueSummary,
             synth.costs,
-            synth.modelVHashes
+            synth.modelVHashes,
+            synth.callRecords,
+            ctx
         );
         if (persisted) {
             synthesized += 1;
@@ -233,8 +235,29 @@ export async function runSynthesis(
     };
 }
 
+/**
+ * One LLM call captured for the audit envelope (B.6). Preserves enough
+ * state to reconstruct the exchange months later — the operator can
+ * see exactly what was sent, what came back, what it cost, and which
+ * model_v_hash to compare against future runs.
+ */
+interface CallRecord {
+    readonly model: string;
+    readonly prompt_version: string;
+    readonly system_prompt: string;
+    readonly user_prompt: string;
+    readonly response_text: string;
+    readonly cost_usd: number;
+    readonly model_v_hash: string;
+    readonly input_tokens: number;
+    readonly output_tokens: number;
+    readonly ok: boolean;
+    readonly error: string | null;
+}
+
 interface SynthesizeOne {
     pattern: DraftPattern | null;
+    draftBeforeRevise: DraftPattern | null;
     gate: GateResult;
     error: string | null;
     cost_usd: number;
@@ -244,6 +267,12 @@ interface SynthesizeOne {
         critique: string;
         revise: string | null;
         repair: string | null;
+    };
+    callRecords: {
+        draft: CallRecord | null;
+        critique: CallRecord | null;
+        revise: CallRecord | null;
+        repair: CallRecord | null;
     };
     critiqueSummary: string;
 }
@@ -263,12 +292,19 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
         revise: null,
         repair: null
     };
+    const callRecords: {
+        draft: CallRecord | null;
+        critique: CallRecord | null;
+        revise: CallRecord | null;
+        repair: CallRecord | null;
+    } = { draft: null, critique: null, revise: null, repair: null };
 
     // ── 5a Draft ──
+    const draftPrompt = buildDraftPrompt(input);
     const draftCall = await callAnthropic({
         model: "opus_4_7",
         system_prompt: DRAFT_SYSTEM_PROMPT,
-        user_prompt: buildDraftPrompt(input),
+        user_prompt: draftPrompt,
         max_tokens: DRAFT_MAX_TOKENS,
         thinking_budget_tokens: DRAFT_THINKING_BUDGET,
         effort: DRAFT_EFFORT,
@@ -276,33 +312,63 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
     });
     costs.draft = draftCall.cost_usd;
     modelVHashes.draft = draftCall.model_v_hash;
+    callRecords.draft = {
+        model: "opus_4_7",
+        prompt_version: SYNTHESIS_PROMPT_VERSION,
+        system_prompt: DRAFT_SYSTEM_PROMPT,
+        user_prompt: draftPrompt,
+        response_text: draftCall.text,
+        cost_usd: draftCall.cost_usd,
+        model_v_hash: draftCall.model_v_hash,
+        input_tokens: draftCall.usage.input_tokens,
+        output_tokens: draftCall.usage.output_tokens,
+        ok: draftCall.ok,
+        error: draftCall.error
+    };
     if (!draftCall.ok) {
         return {
-            pattern: null, gate: EMPTY_GATE, error: `draft call failed: ${draftCall.error}`,
-            cost_usd: costs.draft, costs, modelVHashes, critiqueSummary: ""
+            pattern: null, draftBeforeRevise: null, gate: EMPTY_GATE,
+            error: `draft call failed: ${draftCall.error}`,
+            cost_usd: costs.draft, costs, modelVHashes, callRecords, critiqueSummary: ""
         };
     }
     const draftParse = parseDraftResponse(draftCall.text);
     if (!draftParse.pattern) {
         return {
-            pattern: null, gate: EMPTY_GATE, error: `draft parse failed: ${draftParse.error}`,
-            cost_usd: costs.draft, costs, modelVHashes, critiqueSummary: ""
+            pattern: null, draftBeforeRevise: null, gate: EMPTY_GATE,
+            error: `draft parse failed: ${draftParse.error}`,
+            cost_usd: costs.draft, costs, modelVHashes, callRecords, critiqueSummary: ""
         };
     }
+    const draftBeforeRevise = draftParse.pattern;
     let current = draftParse.pattern;
 
     // ── 5b Critique ──
     let critique: Critique | null = null;
     let critiqueSummary = "";
+    const critiquePrompt = buildCritiquePrompt(input, current);
     const critiqueCall = await callAnthropic({
         model: "sonnet_4_6",
         system_prompt: CRITIQUE_SYSTEM_PROMPT,
-        user_prompt: buildCritiquePrompt(input, current),
+        user_prompt: critiquePrompt,
         max_tokens: CRITIQUE_MAX_TOKENS,
         prompt_version: SYNTHESIS_PROMPT_VERSION
     });
     costs.critique = critiqueCall.cost_usd;
     modelVHashes.critique = critiqueCall.model_v_hash;
+    callRecords.critique = {
+        model: "sonnet_4_6",
+        prompt_version: SYNTHESIS_PROMPT_VERSION,
+        system_prompt: CRITIQUE_SYSTEM_PROMPT,
+        user_prompt: critiquePrompt,
+        response_text: critiqueCall.text,
+        cost_usd: critiqueCall.cost_usd,
+        model_v_hash: critiqueCall.model_v_hash,
+        input_tokens: critiqueCall.usage.input_tokens,
+        output_tokens: critiqueCall.usage.output_tokens,
+        ok: critiqueCall.ok,
+        error: critiqueCall.error
+    };
     if (critiqueCall.ok) {
         const parsed = parseCritiqueResponse(critiqueCall.text);
         if (parsed.critique) {
@@ -314,15 +380,29 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
 
     // ── 5c Revise (only when critique asks for it) ──
     if (critique && critique.revise_required) {
+        const revisePrompt = buildRevisePrompt(input, current, critique);
         const reviseCall = await callAnthropic({
             model: "opus_4_7",
             system_prompt: REVISE_SYSTEM_PROMPT,
-            user_prompt: buildRevisePrompt(input, current, critique),
+            user_prompt: revisePrompt,
             max_tokens: REVISE_MAX_TOKENS,
             prompt_version: SYNTHESIS_PROMPT_VERSION
         });
         costs.revise = reviseCall.cost_usd;
         modelVHashes.revise = reviseCall.model_v_hash;
+        callRecords.revise = {
+            model: "opus_4_7",
+            prompt_version: SYNTHESIS_PROMPT_VERSION,
+            system_prompt: REVISE_SYSTEM_PROMPT,
+            user_prompt: revisePrompt,
+            response_text: reviseCall.text,
+            cost_usd: reviseCall.cost_usd,
+            model_v_hash: reviseCall.model_v_hash,
+            input_tokens: reviseCall.usage.input_tokens,
+            output_tokens: reviseCall.usage.output_tokens,
+            ok: reviseCall.ok,
+            error: reviseCall.error
+        };
         if (reviseCall.ok) {
             const revisedParse = parseDraftResponse(reviseCall.text);
             if (revisedParse.pattern) current = revisedParse.pattern;
@@ -346,15 +426,29 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
             (c) => !c.pass && c.name !== "evidence_ids_valid"
         );
     if (repairable) {
+        const repairPrompt = buildGateRepairPrompt(current, gate.failures);
         const repairCall = await callAnthropic({
             model: "opus_4_7",
             system_prompt: GATE_REPAIR_SYSTEM_PROMPT,
-            user_prompt: buildGateRepairPrompt(current, gate.failures),
+            user_prompt: repairPrompt,
             max_tokens: REVISE_MAX_TOKENS,
             prompt_version: SYNTHESIS_PROMPT_VERSION
         });
         costs.repair = repairCall.cost_usd;
         modelVHashes.repair = repairCall.model_v_hash;
+        callRecords.repair = {
+            model: "opus_4_7",
+            prompt_version: SYNTHESIS_PROMPT_VERSION,
+            system_prompt: GATE_REPAIR_SYSTEM_PROMPT,
+            user_prompt: repairPrompt,
+            response_text: repairCall.text,
+            cost_usd: repairCall.cost_usd,
+            model_v_hash: repairCall.model_v_hash,
+            input_tokens: repairCall.usage.input_tokens,
+            output_tokens: repairCall.usage.output_tokens,
+            ok: repairCall.ok,
+            error: repairCall.error
+        };
         if (repairCall.ok) {
             const repairedParse = parseDraftResponse(repairCall.text);
             if (repairedParse.pattern) {
@@ -373,11 +467,13 @@ async function synthesizeOne(input: SynthesisInput): Promise<SynthesizeOne> {
 
     return {
         pattern: current,
+        draftBeforeRevise,
         gate,
         error: null,
         cost_usd: totalCost,
         costs,
         modelVHashes,
+        callRecords,
         critiqueSummary
     };
 }
@@ -397,9 +493,20 @@ async function persistPattern(
         critique: string;
         revise: string | null;
         repair: string | null;
-    }
+    },
+    callRecords: {
+        draft: CallRecord | null;
+        critique: CallRecord | null;
+        revise: CallRecord | null;
+        repair: CallRecord | null;
+    },
+    ctx: HydratedContextLike
 ): Promise<boolean> {
     const trajectory = pattern.trajectory ?? input.trajectory;
+    const totalCost =
+        Math.round(
+            (costs.draft + costs.critique + costs.revise + costs.repair) * 10000
+        ) / 10000;
     const insert = await sb.from("briefing_patterns").insert({
         run_id: runId,
         workspace_id: workspaceId,
@@ -437,25 +544,92 @@ async function persistPattern(
                 critique: costs.critique,
                 revise: costs.revise,
                 repair: costs.repair,
-                total:
-                    Math.round(
-                        (costs.draft + costs.critique + costs.revise + costs.repair) * 10000
-                    ) / 10000
+                total: totalCost
             },
             model_v_hashes: modelVHashes,
             critique_summary: critiqueSummary,
             gate_checks: gate.checks,
             prompt_version: SYNTHESIS_PROMPT_VERSION
         }
-    });
+    }).select("id").single();
 
-    if (insert.error) {
+    if (insert.error || !insert.data) {
         console.error("[briefing-synthesis] pattern persist failed:", {
             runId, workspaceId, cluster_id: cluster.id, error: insert.error
         });
         return false;
     }
+    const patternId = String(insert.data.id);
+
+    // B.6 — audit envelope. Captures cluster + hydrated context + the
+    // full LLM call chain + gate decisions so the operator can
+    // reconstruct what the system did months later. Non-fatal if it
+    // fails — the Pattern is still surfaceable, just without the
+    // "show your work" trail.
+    await persistAuditEnvelope(sb, workspaceId, patternId, {
+        cluster_snapshot: {
+            cluster_id: cluster.id,
+            anchor: cluster.anchor,
+            cluster_type: cluster.cluster_type,
+            weighted_evidence: cluster.weighted_evidence,
+            trajectory: cluster.trajectory,
+            input_distinct_sources: input.distinct_sources,
+            input_distinct_accounts: input.distinct_accounts,
+            evidence: input.evidence
+        },
+        hydrated_context_snapshot: {
+            commercial_profile: ctx.commercial_profile,
+            watchlist_companies: ctx.watchlist_companies,
+            icp: ctx.icp
+        },
+        draft_record: callRecords.draft,
+        critique_record: callRecords.critique,
+        revise_record: callRecords.revise ?? callRecords.repair,
+        gate_decisions: {
+            passes: gate.passes,
+            failures: gate.failures,
+            checks: gate.checks,
+            critique_summary: critiqueSummary
+        },
+        total_cost: totalCost
+    });
+
     return true;
+}
+
+interface EnvelopePayload {
+    readonly cluster_snapshot: unknown;
+    readonly hydrated_context_snapshot: unknown;
+    readonly draft_record: unknown;
+    readonly critique_record: unknown;
+    readonly revise_record: unknown;
+    readonly gate_decisions: unknown;
+    readonly total_cost: number;
+}
+
+async function persistAuditEnvelope(
+    sb: SupabaseClient,
+    workspaceId: string,
+    patternId: string,
+    payload: EnvelopePayload
+): Promise<void> {
+    const r = await sb.from("briefing_audit_envelopes").insert({
+        workspace_id: workspaceId,
+        pattern_id: patternId,
+        cluster_snapshot: payload.cluster_snapshot as unknown as never,
+        hydrated_context_snapshot: payload.hydrated_context_snapshot as unknown as never,
+        draft_record: payload.draft_record as unknown as never,
+        critique_record: payload.critique_record as unknown as never,
+        revise_record: payload.revise_record as unknown as never,
+        gate_decisions: payload.gate_decisions as unknown as never,
+        total_cost: payload.total_cost,
+        user_actions: {} as unknown as never
+    });
+    if (r.error) {
+        console.error("[briefing-synthesis] audit envelope persist failed:", {
+            patternId, error: r.error
+        });
+    }
 }
 
 async function loadQualifiedClusters(

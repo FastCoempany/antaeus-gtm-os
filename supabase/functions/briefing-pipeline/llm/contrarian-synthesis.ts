@@ -94,15 +94,29 @@ export async function runContrarianSynthesis(
         evidence
     };
 
+    const userPrompt = buildContrarianPrompt(input);
     const r = await callAnthropic({
         model: "opus_4_7",
         system_prompt: CONTRARIAN_SYSTEM_PROMPT,
-        user_prompt: buildContrarianPrompt(input),
+        user_prompt: userPrompt,
         prompt_version: CONTRARIAN_PROMPT_VERSION,
         max_tokens: DRAFT_MAX_TOKENS,
         thinking_budget_tokens: 2000, // enable-flag for adaptive thinking
         effort: "medium"
     });
+    const draftRecord = {
+        model: "opus_4_7",
+        prompt_version: CONTRARIAN_PROMPT_VERSION,
+        system_prompt: CONTRARIAN_SYSTEM_PROMPT,
+        user_prompt: userPrompt,
+        response_text: r.text,
+        cost_usd: r.cost_usd,
+        model_v_hash: r.model_v_hash,
+        input_tokens: r.usage.input_tokens,
+        output_tokens: r.usage.output_tokens,
+        ok: r.ok,
+        error: r.error
+    };
 
     if (!r.ok) {
         return {
@@ -156,7 +170,9 @@ export async function runContrarianSynthesis(
         input,
         draft,
         r.cost_usd,
-        r.model_v_hash
+        r.model_v_hash,
+        draftRecord,
+        gate
     );
     if (!persisted) {
         return {
@@ -265,7 +281,9 @@ async function persistContrarianPattern(
     input: ContrarianInput,
     draft: ContrarianDraft,
     cost: number,
-    modelVHash: string
+    modelVHash: string,
+    draftRecord: Record<string, unknown>,
+    gate: ContrarianGateResult
 ): Promise<boolean> {
     if (!draft.title || !draft.analysis || !draft.six_questions || draft.confidence === null) {
         // Defensive — should never happen if the gate passed, but guard.
@@ -308,10 +326,51 @@ async function persistContrarianPattern(
             model_v_hashes: { contrarian: modelVHash },
             prompt_version: CONTRARIAN_PROMPT_VERSION
         }
-    });
-    if (insert.error) {
+    }).select("id").single();
+    if (insert.error || !insert.data) {
         console.error("[contrarian] insert failed:", insert.error);
         return false;
+    }
+    const patternId = String(insert.data.id);
+
+    // B.6 — audit envelope. Contrarian is single-pass (no critique /
+    // revise), so cluster_snapshot carries the synthetic input shape
+    // (stated_positions + evidence we challenged with), draft_record
+    // is the one Opus call, and critique_record / revise_record are
+    // null. Non-fatal if it fails.
+    const envelope = await sb.from("briefing_audit_envelopes").insert({
+        workspace_id: workspaceId,
+        pattern_id: patternId,
+        cluster_snapshot: {
+            kind: "contrarian_stated_positions",
+            stated_positions: input.stated_positions,
+            evidence: input.evidence
+        } as unknown as never,
+        hydrated_context_snapshot: {
+            commercial_profile: {
+                product_category: input.stated_positions.product_category,
+                what_we_sell: input.stated_positions.what_we_sell,
+                value_prop: input.stated_positions.value_prop
+            },
+            watchlist_companies: input.stated_positions.watchlist_companies,
+            icp_statement: input.stated_positions.icp_statement
+        } as unknown as never,
+        draft_record: draftRecord as unknown as never,
+        critique_record: null,
+        revise_record: null,
+        gate_decisions: {
+            passes: gate.passes,
+            failures: gate.failures,
+            found_contradiction: draft.found_contradiction,
+            no_contradiction_reason: draft.no_contradiction_reason
+        } as unknown as never,
+        total_cost: cost,
+        user_actions: {} as unknown as never
+    });
+    if (envelope.error) {
+        console.error("[contrarian] audit envelope persist failed:", {
+            patternId, error: envelope.error
+        });
     }
     return true;
 }
