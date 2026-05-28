@@ -10,7 +10,7 @@
  */
 
 import { signal } from "@preact/signals";
-import { type BriefingPattern, loadStandardPatterns } from "./lib/patterns";
+import { type BriefingPattern, loadContrarianPatterns, loadStandardPatterns } from "./lib/patterns";
 import {
     type ArmedTrigger,
     type TriggerFire,
@@ -38,9 +38,17 @@ export const triggersLoaded = signal(false);
 export const peripheryCandidates = signal<ReadonlyArray<PeripheryCandidate>>([]);
 export const peripheryLoaded = signal(false);
 
+export const contrarianPatterns = signal<ReadonlyArray<BriefingPattern>>([]);
+export const contrarianLoaded = signal(false);
+
 export async function bootPatterns(): Promise<void> {
     patterns.value = await loadStandardPatterns();
     patternsLoaded.value = true;
+}
+
+export async function bootContrarian(): Promise<void> {
+    contrarianPatterns.value = await loadContrarianPatterns();
+    contrarianLoaded.value = true;
 }
 
 export async function bootTriggers(): Promise<void> {
@@ -123,4 +131,6 @@ export function __resetBriefingStateForTests(): void {
     triggersLoaded.value = false;
     peripheryCandidates.value = [];
     peripheryLoaded.value = false;
+    contrarianPatterns.value = [];
+    contrarianLoaded.value = false;
 }

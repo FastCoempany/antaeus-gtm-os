@@ -1,6 +1,6 @@
 import { render } from "preact";
 import { Briefing } from "./Briefing";
-import { bootPatterns, bootPeriphery, bootTriggers } from "./state";
+import { bootContrarian, bootPatterns, bootPeriphery, bootTriggers } from "./state";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 
 initObservability();
@@ -39,3 +39,9 @@ void bootTriggers();
 // nothing when there are none, so a failed read is invisible to the
 // operator (the Patterns + Watch List still render).
 void bootPeriphery();
+
+// Load contrarian Patterns (pattern_type='contrarian'). Most runs
+// won't have any — the LLM is instructed to refuse when no evidence-
+// backed challenge exists, and the rail renders nothing when the list
+// is empty. So a failed read is also invisible to the operator.
+void bootContrarian();

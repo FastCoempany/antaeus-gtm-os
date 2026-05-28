@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import { RoomChrome } from "@/lib/room-chrome";
 import { Topbar } from "./components/Topbar";
 import { PatternList } from "./components/PatternList";
+import { ContrarianRail } from "./components/ContrarianRail";
 import { PeripheryRail } from "./components/PeripheryRail";
 import { WatchList } from "./components/WatchList";
 
@@ -34,6 +35,7 @@ export function Briefing(): JSX.Element {
             <main class="bf-room">
                 <Topbar />
                 <PatternList />
+                <ContrarianRail />
                 <PeripheryRail />
                 <WatchList />
             </main>

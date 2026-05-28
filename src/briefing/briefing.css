@@ -770,3 +770,212 @@ body {
     color: #c0392b;
     margin: 10px 0 0;
 }
+
+/* ── Contrarian rail (pushback) ───────────────────────────────── */
+
+/*
+ * Visually distinct from the standard Patterns. Cooler register:
+ * amber left rule (challenge, not urgency), cream/tan tinted surface
+ * to read as "second voice", mono "Challenge" chip, target_position
+ * surfaced as the kicker so the operator sees what's being pushed
+ * back on before reading the title.
+ */
+
+:root {
+    --bf-contra-amber: #b3791e;
+    --bf-contra-amber-soft: rgba(179, 121, 30, 0.08);
+    --bf-contra-tint: rgba(179, 121, 30, 0.03);
+}
+
+.bf-contra-rail {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--bf-rule);
+}
+
+.bf-contra-rail__head {
+    margin-bottom: 22px;
+}
+
+.bf-contra-rail__kicker {
+    font-family: "DM Serif Display", "Times New Roman", serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.2;
+    color: var(--bf-ink);
+    margin: 0 0 8px;
+}
+
+.bf-contra-rail__sub {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--bf-ink-soft);
+    margin: 0;
+    max-width: 64ch;
+}
+
+.bf-contra {
+    background: var(--bf-contra-tint);
+    border: 1px solid var(--bf-rule);
+    border-left: 3px solid var(--bf-contra-amber);
+    border-radius: 2px;
+    padding: 24px 28px 26px;
+    margin-bottom: 18px;
+}
+
+.bf-contra:last-child {
+    margin-bottom: 0;
+}
+
+.bf-contra__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.bf-contra__chip {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bf-contra-amber);
+    background: var(--bf-contra-amber-soft);
+    padding: 3px 8px;
+    border-radius: 2px;
+}
+
+.bf-contra__target {
+    font-size: 13px;
+    color: var(--bf-ink-soft);
+    font-style: italic;
+}
+
+.bf-contra__conf,
+.bf-contra__evidence {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--bf-ink-quiet);
+}
+
+.bf-contra__title {
+    font-family: "DM Serif Display", "Times New Roman", serif;
+    font-weight: 400;
+    font-size: clamp(20px, 2.6vw, 26px);
+    line-height: 1.18;
+    letter-spacing: -0.005em;
+    color: var(--bf-ink);
+    margin: 0 0 14px;
+    max-width: 30ch;
+}
+
+.bf-contra__analysis {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--bf-ink);
+    margin: 0 0 22px;
+    max-width: 70ch;
+}
+
+.bf-contra__questions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 32px;
+    margin: 0 0 22px;
+    padding: 18px 0 0;
+    border-top: 1px solid var(--bf-rule-soft);
+}
+
+@media (max-width: 760px) {
+    .bf-contra__questions {
+        grid-template-columns: 1fr;
+    }
+}
+
+.bf-contra__qrow {
+    margin: 0;
+}
+
+.bf-contra__qlabel {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin: 0 0 4px;
+}
+
+.bf-contra__qval {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--bf-ink-soft);
+    margin: 0;
+}
+
+.bf-contra__moves {
+    padding: 18px 0 0;
+    border-top: 1px solid var(--bf-rule-soft);
+}
+
+.bf-contra__moves-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bf-contra-amber);
+    margin: 0 0 12px;
+}
+
+.bf-contra-moves {
+    list-style: none;
+    counter-reset: bf-cmove;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.bf-contra-move {
+    counter-increment: bf-cmove;
+    position: relative;
+    padding-left: 28px;
+}
+
+.bf-contra-move::before {
+    content: counter(bf-cmove);
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bf-contra-amber);
+}
+
+.bf-contra-move__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bf-ink);
+    margin: 0 0 3px;
+}
+
+.bf-contra-move__why {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--bf-ink-soft);
+    margin: 0 0 4px;
+}
+
+.bf-contra-move__dest {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--bf-blue);
+    margin: 0;
+}
