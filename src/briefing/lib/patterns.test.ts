@@ -79,6 +79,45 @@ describe("parsePatternRow", () => {
         expect(p?.confidence).toBe(0);
         expect(p?.evidence_count).toBe(0);
     });
+
+    it("standard patterns have target_position=null", () => {
+        expect(parsePatternRow(row())?.target_position).toBeNull();
+    });
+
+    it("reads target_position from attribute_grid (contrarian shape)", () => {
+        const p = parsePatternRow(row({
+            attribute_grid: {
+                target_position: {
+                    kind: "watchlist",
+                    source: "watchlist_companies",
+                    quoted_text: "Deel"
+                }
+            }
+        }));
+        expect(p?.target_position).toEqual({
+            kind: "watchlist",
+            source: "watchlist_companies",
+            quoted_text: "Deel"
+        });
+    });
+
+    it("rejects target_position with invalid kind", () => {
+        const p = parsePatternRow(row({
+            attribute_grid: {
+                target_position: { kind: "mystery", source: "x", quoted_text: "y" }
+            }
+        }));
+        expect(p?.target_position).toBeNull();
+    });
+
+    it("rejects target_position with empty quoted_text", () => {
+        const p = parsePatternRow(row({
+            attribute_grid: {
+                target_position: { kind: "watchlist", source: "watchlist_companies", quoted_text: "  " }
+            }
+        }));
+        expect(p?.target_position).toBeNull();
+    });
 });
 
 describe("latestRunPatterns", () => {
