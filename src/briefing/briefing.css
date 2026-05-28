@@ -979,3 +979,279 @@ body {
     color: var(--bf-blue);
     margin: 0;
 }
+
+/* ── Show-your-work (audit envelopes) ─────────────────────────── */
+
+/*
+ * The Defensibility surface. A quiet "Show the work" affordance lives
+ * at the bottom of every Pattern card; clicking it lazy-loads the
+ * envelope and reveals cluster snapshot, evidence, the full LLM call
+ * chain, and gate decisions inline. Low-contrast on purpose — this is
+ * a sub-surface for inspection, not a primary read.
+ */
+
+.bf-pattern__work,
+.bf-contra__work {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--bf-rule);
+}
+
+.bf-work-toggle {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    background: transparent;
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.bf-work-toggle:hover {
+    color: var(--bf-ink-soft);
+    border-color: var(--bf-ink-quiet);
+}
+
+.bf-work {
+    margin-top: 16px;
+    padding: 18px 20px;
+    background: var(--bf-card-tint);
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+    font-size: 13px;
+}
+
+.bf-work__loading {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--bf-ink-quiet);
+    margin: 0;
+}
+
+.bf-work__block {
+    margin-bottom: 20px;
+}
+
+.bf-work__block:last-of-type {
+    margin-bottom: 0;
+}
+
+.bf-work__label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin: 0 0 10px;
+}
+
+.bf-work__label--inner {
+    margin-top: 14px;
+}
+
+.bf-work__kv {
+    margin: 0 0 12px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 4px 14px;
+}
+
+.bf-work__kv dt {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--bf-ink-quiet);
+}
+
+.bf-work__kv dd {
+    margin: 0;
+    color: var(--bf-ink-soft);
+}
+
+.bf-work__items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bf-work__item {
+    font-size: 12px;
+    color: var(--bf-ink-soft);
+    line-height: 1.5;
+}
+
+.bf-work__item-meta {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    color: var(--bf-ink-quiet);
+}
+
+.bf-work__item--more {
+    font-style: italic;
+    color: var(--bf-ink-quiet);
+}
+
+.bf-work__json,
+.bf-work__pre {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--bf-ink-soft);
+    background: var(--bf-bg);
+    border: 1px solid var(--bf-rule-soft);
+    border-radius: 2px;
+    padding: 10px 12px;
+    margin: 0;
+    overflow-x: auto;
+    max-height: 320px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.bf-work__pre {
+    max-height: 400px;
+}
+
+.bf-work__call {
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+}
+
+.bf-work__call:last-child {
+    margin-bottom: 0;
+}
+
+.bf-work__call-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.bf-work__call-head::-webkit-details-marker {
+    display: none;
+}
+
+.bf-work__call-toggle-hint {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin-left: auto;
+}
+
+details[open] .bf-work__call-toggle-hint {
+    color: var(--bf-ink-soft);
+}
+
+.bf-work__call-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bf-ink);
+}
+
+.bf-work__call-model {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--bf-blue);
+}
+
+.bf-work__call-cost {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--bf-ink-quiet);
+}
+
+.bf-work__call-err {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    color: #c0392b;
+}
+
+.bf-work__call-toggle {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    background: transparent;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.bf-work__call-toggle:hover {
+    color: var(--bf-ink-soft);
+}
+
+.bf-work__call-body {
+    margin-top: 10px;
+}
+
+.bf-work__call-sublabel {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin: 12px 0 5px;
+}
+
+.bf-work__call-sublabel:first-child {
+    margin-top: 0;
+}
+
+.bf-work__call-foot {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--bf-ink-quiet);
+    margin: 8px 0 0;
+}
+
+.bf-work__gate-status {
+    font-size: 13px;
+    color: var(--bf-ink-soft);
+    margin: 0 0 8px;
+}
+
+.bf-work__gate-summary {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--bf-ink-soft);
+    margin: 0;
+}
+
+.bf-work__total {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--bf-ink-quiet);
+    margin: 18px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--bf-rule-soft);
+}

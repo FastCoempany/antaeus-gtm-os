@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { contrarianLoaded, contrarianPatterns } from "../state";
 import type { BriefingPattern, TargetPositionKind } from "../lib/patterns";
+import { ShowYourWorkButton, ShowYourWorkPanel } from "./ShowYourWork";
 
 /**
  * ContrarianRail (B.5b) — the "pushback" surface.
@@ -89,6 +90,11 @@ function ContrarianCard({ pattern }: { pattern: BriefingPattern }): JSX.Element 
                     </ol>
                 </div>
             )}
+
+            <div class="bf-contra__work">
+                <ShowYourWorkButton patternId={pattern.id} />
+                <ShowYourWorkPanel patternId={pattern.id} />
+            </div>
         </article>
     );
 }
