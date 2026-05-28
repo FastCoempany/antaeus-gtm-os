@@ -12,6 +12,10 @@
 import { signal } from "@preact/signals";
 import { type BriefingPattern, loadContrarianPatterns, loadStandardPatterns } from "./lib/patterns";
 import {
+    type AuditEnvelope,
+    loadAuditEnvelope
+} from "./lib/audit-envelope-client";
+import {
     type ArmedTrigger,
     type TriggerFire,
     armTrigger,
@@ -40,6 +44,57 @@ export const peripheryLoaded = signal(false);
 
 export const contrarianPatterns = signal<ReadonlyArray<BriefingPattern>>([]);
 export const contrarianLoaded = signal(false);
+
+/**
+ * Audit envelopes (B.6b). Lazy: an envelope only loads when the
+ * operator clicks "Show the work" on a Pattern card. The two
+ * signals together track per-pattern state — open/closed in
+ * envelopeOpen, fetched data (or "loading"/"error") in envelopeCache.
+ */
+export type EnvelopeCacheEntry = AuditEnvelope | "loading" | "error" | "missing";
+
+export const envelopeCache = signal<ReadonlyMap<string, EnvelopeCacheEntry>>(
+    new Map()
+);
+export const envelopeOpen = signal<ReadonlySet<string>>(new Set());
+
+function setCacheEntry(patternId: string, entry: EnvelopeCacheEntry): void {
+    const next = new Map(envelopeCache.value);
+    next.set(patternId, entry);
+    envelopeCache.value = next;
+}
+
+function setOpen(patternId: string, open: boolean): void {
+    const next = new Set(envelopeOpen.value);
+    if (open) next.add(patternId);
+    else next.delete(patternId);
+    envelopeOpen.value = next;
+}
+
+/**
+ * Toggle a Pattern's "show your work" panel. Opens trigger a lazy
+ * load on first open; subsequent opens use the cached entry.
+ */
+export async function toggleEnvelope(patternId: string): Promise<void> {
+    if (!patternId) return;
+    const isOpen = envelopeOpen.value.has(patternId);
+    if (isOpen) {
+        setOpen(patternId, false);
+        return;
+    }
+    setOpen(patternId, true);
+    if (envelopeCache.value.has(patternId)) return; // already fetched (or fetching)
+    setCacheEntry(patternId, "loading");
+    const envelope = await loadAuditEnvelope(patternId);
+    if (envelope === null) {
+        // Distinguish "no envelope row" from "load errored" — we
+        // can't easily tell from the client, so treat both as "missing"
+        // for now. The panel renders an honest line either way.
+        setCacheEntry(patternId, "missing");
+    } else {
+        setCacheEntry(patternId, envelope);
+    }
+}
 
 export async function bootPatterns(): Promise<void> {
     patterns.value = await loadStandardPatterns();
@@ -133,4 +188,6 @@ export function __resetBriefingStateForTests(): void {
     peripheryLoaded.value = false;
     contrarianPatterns.value = [];
     contrarianLoaded.value = false;
+    envelopeCache.value = new Map();
+    envelopeOpen.value = new Set();
 }
