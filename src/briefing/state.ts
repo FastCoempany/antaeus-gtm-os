@@ -19,6 +19,8 @@ import {
     type BriefingLeadSummary,
     loadLatestBriefingLead
 } from "./lib/compose-client";
+import { type CostSummary } from "./lib/cost/tracker";
+import { loadCostSummary } from "./lib/cost-client";
 import {
     type ArmedTrigger,
     type TriggerFire,
@@ -52,9 +54,17 @@ export const contrarianLoaded = signal(false);
 export const briefingLead = signal<BriefingLeadSummary | null>(null);
 export const briefingLeadLoaded = signal(false);
 
+export const costSummary = signal<CostSummary | null>(null);
+export const costSummaryLoaded = signal(false);
+
 export async function bootBriefingLead(): Promise<void> {
     briefingLead.value = await loadLatestBriefingLead();
     briefingLeadLoaded.value = true;
+}
+
+export async function bootCostSummary(): Promise<void> {
+    costSummary.value = await loadCostSummary();
+    costSummaryLoaded.value = true;
 }
 
 /**
@@ -204,4 +214,6 @@ export function __resetBriefingStateForTests(): void {
     envelopeOpen.value = new Set();
     briefingLead.value = null;
     briefingLeadLoaded.value = false;
+    costSummary.value = null;
+    costSummaryLoaded.value = false;
 }
