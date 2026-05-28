@@ -704,6 +704,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           data: Json
+          domain: string | null
           entity_aliases: string[]
           entity_name: string
           id: string
@@ -718,6 +719,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           data?: Json
+          domain?: string | null
           entity_aliases?: string[]
           entity_name: string
           id?: string
@@ -732,6 +734,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           data?: Json
+          domain?: string | null
           entity_aliases?: string[]
           entity_name?: string
           id?: string
