@@ -82,6 +82,7 @@ import { runEnrich } from "./llm/enrich.ts";
 import { runCluster } from "./cluster/cluster.ts";
 import { runSynthesis } from "./llm/synthesis.ts";
 import { runTriggers } from "./triggers/runner.ts";
+import { runPeriphery } from "./periphery/runner.ts";
 import { callAnthropic } from "./llm/anthropic.ts";
 import {
     TRIGGER_PARSE_PROMPT_VERSION,
@@ -121,6 +122,7 @@ interface StageLogEntry {
         | "filter"
         | "enrich"
         | "triggers"
+        | "periphery"
         | "cluster"
         | "synthesize";
     readonly started_at: string;
@@ -725,6 +727,9 @@ interface WorkspaceRunReport {
         readonly synth_cost_usd: number;
         readonly triggers_evaluated: number;
         readonly triggers_fired: number;
+        readonly periphery_items_considered: number;
+        readonly periphery_watched_count: number;
+        readonly periphery_candidates_persisted: number;
     };
     readonly error: string | null;
 }
@@ -796,7 +801,10 @@ async function runWorkspacePipeline(
         patterns_gated_out: 0,
         synth_cost_usd: 0,
         triggers_evaluated: 0,
-        triggers_fired: 0
+        triggers_fired: 0,
+        periphery_items_considered: 0,
+        periphery_watched_count: 0,
+        periphery_candidates_persisted: 0
     };
     const now = (): string => new Date().toISOString();
 
@@ -945,6 +953,33 @@ async function runWorkspacePipeline(
         };
         stages.push(triggerEntry);
         await recordStage(sb, runId, triggerEntry, "clustering");
+
+        // ── Stage 3.3b Periphery Detection (B.4b) ──
+        // Scores off-watchlist entities by co-occurrence + vocab overlap
+        // and writes 0-5 candidates to briefing_periphery_candidates.
+        // Pure compute, no LLM, no external fetches — ~$0 cost.
+        const peripheryStart = now();
+        const peripheryT0 = Date.now();
+        const peripheryResult = await runPeriphery(sb, runId, workspaceId);
+        counts.periphery_items_considered = peripheryResult.items_considered;
+        counts.periphery_watched_count = peripheryResult.watched_count;
+        counts.periphery_candidates_persisted = peripheryResult.candidates_persisted;
+        const peripheryEntry: StageLogEntry = {
+            stage: "periphery",
+            started_at: peripheryStart,
+            ended_at: now(),
+            duration_ms: Date.now() - peripheryT0,
+            outcome: "ok",
+            notes:
+                peripheryResult.watched_count === 0
+                    ? `Skipped — no watched entities for this workspace yet (Signal Console accounts + watchlist entities + armed triggers all empty).`
+                    : `Scored ${peripheryResult.items_considered} items against ${peripheryResult.watched_count} watched entities; ${peripheryResult.candidates_persisted} candidate${peripheryResult.candidates_persisted === 1 ? "" : "s"} persisted.`,
+            data: {
+                perCandidate: peripheryResult.per_candidate
+            }
+        };
+        stages.push(peripheryEntry);
+        await recordStage(sb, runId, peripheryEntry, "clustering");
 
         // ── Stage 3.4 Cluster (B.2b) ──
         const clusterStart = now();
@@ -1211,7 +1246,10 @@ async function runPipeline(
         patterns_gated_out: 0,
         synth_cost_usd: 0,
         triggers_evaluated: 0,
-        triggers_fired: 0
+        triggers_fired: 0,
+        periphery_items_considered: 0,
+        periphery_watched_count: 0,
+        periphery_candidates_persisted: 0
     };
     const perWorkspace: WorkspaceRunReport[] = [];
 
@@ -1235,6 +1273,9 @@ async function runPipeline(
         totals.synth_cost_usd += report.counts.synth_cost_usd;
         totals.triggers_evaluated += report.counts.triggers_evaluated;
         totals.triggers_fired += report.counts.triggers_fired;
+        totals.periphery_items_considered += report.counts.periphery_items_considered;
+        totals.periphery_watched_count += report.counts.periphery_watched_count;
+        totals.periphery_candidates_persisted += report.counts.periphery_candidates_persisted;
     }
 
     return {
