@@ -450,6 +450,84 @@ export type Database = {
           },
         ]
       }
+      briefing_periphery_candidates: {
+        Row: {
+          buyer_overlap_score: number | null
+          co_occurrence_score: number
+          created_at: string
+          data: Json
+          entity_aliases: string[]
+          entity_name: string
+          hiring_overlap_score: number | null
+          id: string
+          investor_map_score: number | null
+          last_action_at: string | null
+          reasoning: string
+          run_id: string
+          status: string
+          supporting_item_ids: string[]
+          total_score: number
+          updated_at: string
+          vocab_overlap_score: number
+          workspace_id: string
+        }
+        Insert: {
+          buyer_overlap_score?: number | null
+          co_occurrence_score?: number
+          created_at?: string
+          data?: Json
+          entity_aliases?: string[]
+          entity_name: string
+          hiring_overlap_score?: number | null
+          id?: string
+          investor_map_score?: number | null
+          last_action_at?: string | null
+          reasoning?: string
+          run_id: string
+          status?: string
+          supporting_item_ids?: string[]
+          total_score?: number
+          updated_at?: string
+          vocab_overlap_score?: number
+          workspace_id?: string
+        }
+        Update: {
+          buyer_overlap_score?: number | null
+          co_occurrence_score?: number
+          created_at?: string
+          data?: Json
+          entity_aliases?: string[]
+          entity_name?: string
+          hiring_overlap_score?: number | null
+          id?: string
+          investor_map_score?: number | null
+          last_action_at?: string | null
+          reasoning?: string
+          run_id?: string
+          status?: string
+          supporting_item_ids?: string[]
+          total_score?: number
+          updated_at?: string
+          vocab_overlap_score?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_periphery_candidates_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_periphery_candidates_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       briefing_raw_items: {
         Row: {
           body: string | null
@@ -614,6 +692,66 @@ export type Database = {
           },
           {
             foreignKeyName: "briefing_trigger_fires_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      briefing_watchlist_entities: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          data: Json
+          entity_aliases: string[]
+          entity_name: string
+          id: string
+          notes: string | null
+          promoted_from_periphery_id: string | null
+          source: string
+          status: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          entity_aliases?: string[]
+          entity_name: string
+          id?: string
+          notes?: string | null
+          promoted_from_periphery_id?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          entity_aliases?: string[]
+          entity_name?: string
+          id?: string
+          notes?: string | null
+          promoted_from_periphery_id?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_watchlist_entities_promoted_from_fkey"
+            columns: ["promoted_from_periphery_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_periphery_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_watchlist_entities_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"

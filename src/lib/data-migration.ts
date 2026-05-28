@@ -676,7 +676,14 @@ function toAccessorName(table: TableName): string {
         // List, not migrated from localStorage. Listed here only to
         // satisfy the exhaustive Record type.
         briefing_watchlist_triggers: "briefingWatchlistTriggers",
-        briefing_trigger_fires: "briefingTriggerFires"
+        briefing_trigger_fires: "briefingTriggerFires",
+        // Briefing Periphery Detection (ADR-006, B.4). Candidates +
+        // watchlist entities — produced by the pipeline and authored
+        // by the operator via the right-rail UI, not migrated from
+        // localStorage. Listed here only to satisfy the exhaustive
+        // Record type.
+        briefing_periphery_candidates: "briefingPeripheryCandidates",
+        briefing_watchlist_entities: "briefingWatchlistEntities"
     };
     return MAP[table];
 }
