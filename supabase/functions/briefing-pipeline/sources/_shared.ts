@@ -36,10 +36,11 @@ export interface FetchResult {
 
 export async function httpGet(
     url: string,
-    extraHeaders: Record<string, string> = {}
+    extraHeaders: Record<string, string> = {},
+    timeoutMs: number = FETCH_TIMEOUT_MS
 ): Promise<FetchResult> {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
         const response = await fetch(url, {
             method: "GET",
@@ -63,7 +64,7 @@ export async function httpGet(
             status: 0,
             text: "",
             error: isAbort
-                ? `timeout after ${FETCH_TIMEOUT_MS}ms`
+                ? `timeout after ${timeoutMs}ms`
                 : err instanceof Error
                 ? err.message
                 : String(err)
