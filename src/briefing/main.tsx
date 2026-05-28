@@ -1,6 +1,6 @@
 import { render } from "preact";
 import { Briefing } from "./Briefing";
-import { bootPatterns, bootTriggers } from "./state";
+import { bootPatterns, bootPeriphery, bootTriggers } from "./state";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 
 initObservability();
@@ -34,3 +34,8 @@ void bootPatterns();
 // Defensive inside the client — failures degrade to empty lists, so
 // the Patterns still render.
 void bootTriggers();
+
+// Load periphery candidates for the latest run. The rail renders
+// nothing when there are none, so a failed read is invisible to the
+// operator (the Patterns + Watch List still render).
+void bootPeriphery();
