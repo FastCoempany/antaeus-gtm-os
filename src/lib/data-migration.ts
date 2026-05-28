@@ -670,7 +670,13 @@ function toAccessorName(table: TableName): string {
         briefing_clusters: "briefingClusters",
         briefing_patterns: "briefingPatterns",
         briefing_audit_envelopes: "briefingAuditEnvelopes",
-        briefing_pattern_feedback: "briefingPatternFeedback"
+        briefing_pattern_feedback: "briefingPatternFeedback",
+        // Briefing Watchlist Triggers (ADR-006, B.3a). Operator-armed
+        // standing orders + their fires — authored in the Briefing Watch
+        // List, not migrated from localStorage. Listed here only to
+        // satisfy the exhaustive Record type.
+        briefing_watchlist_triggers: "briefingWatchlistTriggers",
+        briefing_trigger_fires: "briefingTriggerFires"
     };
     return MAP[table];
 }
