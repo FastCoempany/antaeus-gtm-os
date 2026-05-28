@@ -81,6 +81,7 @@ import { ALL_SOURCES } from "./sources/index.ts";
 import { runEnrich } from "./llm/enrich.ts";
 import { runCluster } from "./cluster/cluster.ts";
 import { runSynthesis } from "./llm/synthesis.ts";
+import { runContrarianSynthesis } from "./llm/contrarian-synthesis.ts";
 import { runTriggers } from "./triggers/runner.ts";
 import { runPeriphery } from "./periphery/runner.ts";
 import { callAnthropic } from "./llm/anthropic.ts";
@@ -124,7 +125,8 @@ interface StageLogEntry {
         | "triggers"
         | "periphery"
         | "cluster"
-        | "synthesize";
+        | "synthesize"
+        | "contrarian_synthesize";
     readonly started_at: string;
     readonly ended_at: string;
     readonly duration_ms: number;
@@ -725,6 +727,8 @@ interface WorkspaceRunReport {
         readonly patterns_synthesized: number;
         readonly patterns_gated_out: number;
         readonly synth_cost_usd: number;
+        readonly contrarian_outcome: string;
+        readonly contrarian_cost_usd: number;
         readonly triggers_evaluated: number;
         readonly triggers_fired: number;
         readonly periphery_items_considered: number;
@@ -800,6 +804,8 @@ async function runWorkspacePipeline(
         patterns_synthesized: 0,
         patterns_gated_out: 0,
         synth_cost_usd: 0,
+        contrarian_outcome: "not_run",
+        contrarian_cost_usd: 0,
         triggers_evaluated: 0,
         triggers_fired: 0,
         periphery_items_considered: 0,
@@ -1024,10 +1030,42 @@ async function runWorkspacePipeline(
             }
         };
         stages.push(synthEntry);
-        await recordStage(sb, runId, synthEntry, "complete");
+        await recordStage(sb, runId, synthEntry, "synthesizing");
 
-        // Roll synthesis cost into the run total (enrich already bumped it).
-        if (synthResult.total_cost_usd > 0) {
+        // ── Stage 3.5b Contrarian Synthesis (B.5) ──
+        // One Opus pass against the operator's stated positions + this
+        // run's evidence. Emits 0 or 1 Pattern with pattern_type='contrarian'.
+        // Refusing to challenge is a valid outcome (no_contradiction).
+        const contrarianStart = now();
+        const contrarianT0 = Date.now();
+        const contrarianResult = await runContrarianSynthesis(sb, runId, workspaceId, ctx);
+        counts.contrarian_outcome = contrarianResult.outcome;
+        counts.contrarian_cost_usd = contrarianResult.cost_usd;
+        const contrarianEntry: StageLogEntry = {
+            stage: "contrarian_synthesize",
+            started_at: contrarianStart,
+            ended_at: now(),
+            duration_ms: Date.now() - contrarianT0,
+            outcome: contrarianResult.outcome === "error" ? "error" : "ok",
+            notes: `${contrarianResult.outcome}: ${contrarianResult.detail} Cost: $${contrarianResult.cost_usd.toFixed(4)}.`,
+            data: {
+                draft_summary: contrarianResult.draft
+                    ? {
+                          found_contradiction: contrarianResult.draft.found_contradiction,
+                          target_kind: contrarianResult.draft.target_position?.kind ?? null,
+                          confidence: contrarianResult.draft.confidence,
+                          evidence_count: contrarianResult.draft.evidence_ids.length
+                      }
+                    : null,
+                gate_failures: contrarianResult.gate?.failures ?? []
+            }
+        };
+        stages.push(contrarianEntry);
+        await recordStage(sb, runId, contrarianEntry, "complete");
+
+        // Roll both synthesis costs into the run total (enrich already bumped it).
+        const synthAndContrarianCost = synthResult.total_cost_usd + contrarianResult.cost_usd;
+        if (synthAndContrarianCost > 0) {
             const cur = await sb
                 .from("briefing_runs")
                 .select("total_cost")
@@ -1036,7 +1074,7 @@ async function runWorkspacePipeline(
             const priorCost =
                 typeof cur.data?.total_cost === "number" ? cur.data.total_cost : 0;
             await updateRun(sb, runId, {
-                total_cost: priorCost + synthResult.total_cost_usd
+                total_cost: priorCost + synthAndContrarianCost
             });
         }
 
@@ -1245,6 +1283,8 @@ async function runPipeline(
         patterns_synthesized: 0,
         patterns_gated_out: 0,
         synth_cost_usd: 0,
+        contrarian_outcome: "not_run",
+        contrarian_cost_usd: 0,
         triggers_evaluated: 0,
         triggers_fired: 0,
         periphery_items_considered: 0,
@@ -1271,6 +1311,12 @@ async function runPipeline(
         totals.patterns_synthesized += report.counts.patterns_synthesized;
         totals.patterns_gated_out += report.counts.patterns_gated_out;
         totals.synth_cost_usd += report.counts.synth_cost_usd;
+        totals.contrarian_cost_usd += report.counts.contrarian_cost_usd;
+        if (report.counts.contrarian_outcome !== "not_run") {
+            // Surface the per-workspace outcome on the top-level totals when
+            // only one workspace ran; otherwise leave the default "not_run".
+            totals.contrarian_outcome = report.counts.contrarian_outcome;
+        }
         totals.triggers_evaluated += report.counts.triggers_evaluated;
         totals.triggers_fired += report.counts.triggers_fired;
         totals.periphery_items_considered += report.counts.periphery_items_considered;
