@@ -557,3 +557,143 @@ export function cacheNeedsRefresh(
 }
 
 export const MAX_CACHED_FEEDS_PER_ENTITY = 4;
+
+// ─── Podcast-Guest helpers (mirror of src/briefing/lib/parsers/podcast-guests.ts) ─
+
+export const PODCAST_MIN_BODY_LENGTH = 60;
+export const PER_PODCAST_ITEM_CAP = 3;
+
+export interface WatchedEntityRef {
+    readonly name: string;
+    readonly aliases: ReadonlyArray<string>;
+}
+
+export interface EpisodeContent {
+    readonly title: string;
+    readonly description: string | null;
+}
+
+export function escapePodcastRegex(s: string): string {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildEntityRegex(name: string): RegExp | null {
+    const trimmed = name.trim();
+    if (trimmed.length < 2) return null;
+    return new RegExp(`(?<!\\w)${escapePodcastRegex(trimmed)}(?!\\w)`, "i");
+}
+
+export function matchEntitiesInEpisode(
+    episode: EpisodeContent,
+    entities: ReadonlyArray<WatchedEntityRef>
+): ReadonlyArray<string> {
+    const haystack = `${episode.title}\n${episode.description ?? ""}`;
+    if (haystack.trim().length === 0) return [];
+    const matches = new Set<string>();
+    for (const ent of entities) {
+        const candidates = [ent.name, ...ent.aliases];
+        for (const c of candidates) {
+            const re = buildEntityRegex(c);
+            if (!re) continue;
+            if (re.test(haystack)) {
+                matches.add(ent.name);
+                break;
+            }
+        }
+    }
+    return Array.from(matches);
+}
+
+export function extractGuestName(title: string): string | null {
+    const t = title.trim();
+    if (t.length === 0) return null;
+    const withMatch = t.match(
+        /\b(?:with|feat\.?|ft\.?|featuring)\s+([A-Z][a-z'-]+(?:\s+[A-Z][a-z'-]+){1,2})\b/
+    );
+    if (withMatch) return withMatch[1] ?? null;
+    const epMatch = t.match(
+        /\bEp(?:isode|\.)?\s*\d+\s*[:\-—]\s+([A-Z][a-z'-]+(?:\s+[A-Z][a-z'-]+){1,2})\b/
+    );
+    if (epMatch) return epMatch[1] ?? null;
+    const leadMatch = t.match(
+        /^([A-Z][a-z'-]+\s+[A-Z][a-z'-]+(?:\s+[A-Z][a-z'-]+)?)\s+(?:on|of|from|\|)(?:\s|$)/
+    );
+    if (leadMatch) return leadMatch[1] ?? null;
+    return null;
+}
+
+export const PODCAST_FLUFF_PATTERNS: ReadonlyArray<RegExp> = [
+    /^\s*\[(sponsor|ad|promoted)\]/i,
+    /^\s*sponsored\s+by\b/i,
+    /^\s*the\s+ultimate\s+guide\s+to/i,
+    /^\s*how\s+to\s+(boost|maximize|10x)\s+your/i
+];
+
+export interface PodcastInputItem {
+    readonly title: string;
+    readonly description: string | null;
+    readonly url: string | null;
+    readonly published_date: string | null;
+    readonly matched_entities: ReadonlyArray<string>;
+}
+
+export type PodcastRejection =
+    | "empty_title"
+    | "empty_url"
+    | "description_too_short"
+    | "no_entity_match"
+    | "fluff";
+
+export type PodcastCleanOutcome =
+    | { readonly kind: "keep"; readonly item: PodcastInputItem }
+    | { readonly kind: "reject"; readonly reason: PodcastRejection };
+
+export function cleanEpisodeItem(item: PodcastInputItem): PodcastCleanOutcome {
+    const title = item.title.trim();
+    if (title.length === 0) return { kind: "reject", reason: "empty_title" };
+    if (!item.url || item.url.trim().length === 0) {
+        return { kind: "reject", reason: "empty_url" };
+    }
+    if (item.matched_entities.length === 0) {
+        return { kind: "reject", reason: "no_entity_match" };
+    }
+    const desc = (item.description ?? "").trim();
+    if (desc.length < PODCAST_MIN_BODY_LENGTH) {
+        return { kind: "reject", reason: "description_too_short" };
+    }
+    for (const pat of PODCAST_FLUFF_PATTERNS) {
+        if (pat.test(title)) return { kind: "reject", reason: "fluff" };
+    }
+    return { kind: "keep", item: { ...item, title, description: desc } };
+}
+
+export interface PodcastBatchResult {
+    readonly kept: ReadonlyArray<PodcastInputItem>;
+    readonly rejections: Readonly<Record<PodcastRejection, number>>;
+    readonly capped: number;
+}
+
+export function cleanEpisodeBatch(
+    items: ReadonlyArray<PodcastInputItem>,
+    perPodcastCap: number = PER_PODCAST_ITEM_CAP
+): PodcastBatchResult {
+    const kept: PodcastInputItem[] = [];
+    const rejections: Record<PodcastRejection, number> = {
+        empty_title: 0,
+        empty_url: 0,
+        description_too_short: 0,
+        no_entity_match: 0,
+        fluff: 0
+    };
+    let capped = 0;
+    for (const it of items) {
+        if (kept.length >= perPodcastCap) {
+            capped += 1;
+            continue;
+        }
+        const outcome = cleanEpisodeItem(it);
+        if (outcome.kind === "keep") kept.push(outcome.item);
+        else rejections[outcome.reason] += 1;
+    }
+    return { kept, rejections, capped };
+}
