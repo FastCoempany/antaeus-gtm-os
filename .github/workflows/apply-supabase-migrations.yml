@@ -1,0 +1,96 @@
+# apply-supabase-migrations.yml — Auto-apply Supabase migrations to main
+#
+# Fires on every push to main that touches supabase/migrations/**. Runs
+# `supabase db push --linked` against the production project. Idempotent —
+# already-applied migrations are skipped; the workflow records which ones
+# were new in the run log.
+#
+# Replaces the manual `supabase db push --linked` step the founder used
+# to run in PowerShell after each migration landed. With this workflow +
+# deploy-supabase-functions.yml, every Briefing PR lands schema + function
+# code end-to-end without human terminal time.
+#
+# Pattern matches deploy-supabase-functions.yml: fail-soft if the secrets
+# aren't set so this workflow can land before they do.
+
+name: Apply Supabase Migrations
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "supabase/migrations/**"
+      - ".github/workflows/apply-supabase-migrations.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: apply-supabase-migrations
+  cancel-in-progress: false
+
+env:
+  PROJECT_REF: wjdqmgxwulqxxxnyuzyl
+
+jobs:
+  gate:
+    name: Should apply migrations?
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+    steps:
+      - id: check
+        run: |
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "::warning::SUPABASE_ACCESS_TOKEN secret not set. Skipping migration apply."
+            echo "run=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          if [ -z "$SUPABASE_DB_PASSWORD" ]; then
+            echo "::warning::SUPABASE_DB_PASSWORD secret not set. Skipping migration apply."
+            echo "run=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "run=true" >> $GITHUB_OUTPUT
+
+  apply:
+    name: supabase db push --linked
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Link project
+        run: |
+          # --password reads from $SUPABASE_DB_PASSWORD env var when not
+          # passed inline. Linking is idempotent; running it on every
+          # workflow invocation is a couple seconds.
+          supabase link --project-ref "$PROJECT_REF"
+
+      - name: Push migrations
+        run: |
+          echo "::group::supabase db push --linked"
+          # --yes auto-confirms the diff prompt that would otherwise hang
+          # in non-TTY runners. --include-all surfaces the full list so
+          # the log records which migrations were applied vs. skipped.
+          supabase db push --linked --yes --include-all
+          echo "::endgroup::"
+
+      - name: List applied migrations
+        run: |
+          echo "Current migration state on main project:"
+          supabase migration list --linked || true
