@@ -50,7 +50,11 @@ test.describe("Phase 2.1 — Foundation: new-account flow", () => {
         await page.locator(".ob-btn--primary").click(); // → Role
         await page.locator(".ob-option").first().click();
         await page.locator(".ob-btn--primary").click(); // → Category
+        // 2026-05-29: CategoryStep now has two fieldsets — pick a product
+        // category, then either pick industries or toggle "industry-agnostic".
+        // We toggle agnostic as the fastest path.
         await page.locator(".ob-option").first().click();
+        await page.locator(".ob-toggle input[type=\"checkbox\"]").check();
         await page.locator(".ob-btn--primary").click(); // → ICP
         await page
             .locator("textarea.ob-input")

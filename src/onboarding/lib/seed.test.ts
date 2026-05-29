@@ -52,6 +52,8 @@ describe("seedFromDraft", () => {
         expect(s.getItem("gtmos_product_category")).toBe('"legal-tech"');
         const ctx = JSON.parse(s.getItem("gtmos_activation_context") ?? "{}");
         expect(ctx.productCategoryLabel).toBe("Legal Tech");
+        // categoryLabel back-compat alias for Welcome's hero chip.
+        expect(ctx.categoryLabel).toBe("Legal Tech");
     });
 
     it("industries multi-select seeds gtmos_industries with keys + labels", () => {

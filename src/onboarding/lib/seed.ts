@@ -105,6 +105,12 @@ export function seedFromDraft(
                 productCategoryLabel: draft.productCategory
                     ? productCategoryLabel(draft.productCategory)
                     : null,
+                // categoryLabel kept as an alias for Welcome's existing
+                // hero-chip reader (src/welcome/lib/loader.ts) — pre-split
+                // consumers still read this key.
+                categoryLabel: draft.productCategory
+                    ? productCategoryLabel(draft.productCategory)
+                    : null,
                 industries: [...draft.industries],
                 industriesLabels: draft.industries.map(industryLabel),
                 industryAgnostic: draft.industryAgnostic,
