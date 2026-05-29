@@ -37,6 +37,12 @@ import {
     loadActivePeripheryCandidates,
     snoozePeripheryCandidate
 } from "./lib/periphery-client";
+import {
+    type PatternMark,
+    clearPatternMark,
+    loadMyPatternMarks,
+    setPatternMark
+} from "./lib/marks-client";
 
 export const patterns = signal<ReadonlyArray<BriefingPattern>>([]);
 export const patternsLoaded = signal(false);
@@ -57,9 +63,59 @@ export const briefingLeadLoaded = signal(false);
 export const costSummary = signal<CostSummary | null>(null);
 export const costSummaryLoaded = signal(false);
 
+/**
+ * Behavioral feedback marks (Used / Met / Noise) keyed by pattern id.
+ * Loaded once on boot; mutated via setMarkForPattern / clearMarkForPattern
+ * which optimistically update + then call the RPC. Missing pattern_id
+ * in the map means unmarked.
+ */
+export const patternMarks = signal<ReadonlyMap<string, PatternMark>>(new Map());
+export const patternMarksLoaded = signal(false);
+
 export async function bootBriefingLead(): Promise<void> {
     briefingLead.value = await loadLatestBriefingLead();
     briefingLeadLoaded.value = true;
+}
+
+export async function bootPatternMarks(): Promise<void> {
+    patternMarks.value = await loadMyPatternMarks();
+    patternMarksLoaded.value = true;
+}
+
+function applyMarkLocal(patternId: string, mark: PatternMark | null): void {
+    const next = new Map(patternMarks.value);
+    if (mark === null) next.delete(patternId);
+    else next.set(patternId, mark);
+    patternMarks.value = next;
+}
+
+/**
+ * Set the operator's mark on a Pattern. Optimistic: applies the new
+ * mark locally first, then calls the RPC. On RPC failure, reverts to
+ * the previous mark (or unmarked).
+ */
+export async function setMarkForPattern(
+    patternId: string,
+    mark: PatternMark
+): Promise<boolean> {
+    const previous = patternMarks.value.get(patternId) ?? null;
+    applyMarkLocal(patternId, mark);
+    const ok = await setPatternMark(patternId, mark);
+    if (!ok) applyMarkLocal(patternId, previous);
+    return ok;
+}
+
+/**
+ * Remove the operator's mark on a Pattern. Same optimistic pattern
+ * as setMarkForPattern.
+ */
+export async function clearMarkForPattern(patternId: string): Promise<boolean> {
+    const previous = patternMarks.value.get(patternId) ?? null;
+    if (previous === null) return true; // nothing to do
+    applyMarkLocal(patternId, null);
+    const ok = await clearPatternMark(patternId);
+    if (!ok) applyMarkLocal(patternId, previous);
+    return ok;
 }
 
 export async function bootCostSummary(): Promise<void> {
@@ -216,4 +272,6 @@ export function __resetBriefingStateForTests(): void {
     briefingLeadLoaded.value = false;
     costSummary.value = null;
     costSummaryLoaded.value = false;
+    patternMarks.value = new Map();
+    patternMarksLoaded.value = false;
 }

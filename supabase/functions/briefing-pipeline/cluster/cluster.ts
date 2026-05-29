@@ -29,6 +29,7 @@ import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
     type ClusterableItem,
     type ClusterEvaluation,
+    type ClusterType,
     clusterItems
 } from "./_shared.ts";
 
@@ -40,6 +41,7 @@ export interface ClusterResult {
         readonly cluster_type: string;
         readonly anchor: string;
         readonly weighted_evidence: number;
+        readonly feedback_multiplier: number;
         readonly qualifies: boolean;
         readonly trajectory: string | null;
         readonly reason: string;
@@ -65,7 +67,12 @@ export async function runCluster(
     }
 
     const workspaceConfigured = isWorkspaceConfigured(ctx);
-    const evaluations = clusterItems(items, { nowIso, workspaceConfigured });
+    const anchorMultiplier = await loadAnchorMultiplier(sb, workspaceId);
+    const evaluations = clusterItems(items, {
+        nowIso,
+        workspaceConfigured,
+        anchorMultiplier
+    });
 
     // Clear this-run's clusters so a re-run is idempotent.
     await sb
@@ -78,6 +85,7 @@ export async function runCluster(
         cluster_type: string;
         anchor: string;
         weighted_evidence: number;
+        feedback_multiplier: number;
         qualifies: boolean;
         trajectory: string | null;
         reason: string;
@@ -101,6 +109,7 @@ export async function runCluster(
             cluster_type: evaluation.cluster_type,
             anchor: evaluation.anchor,
             weighted_evidence: Math.round(evaluation.weighted_evidence * 10000) / 10000,
+            feedback_multiplier: Math.round(evaluation.feedback_multiplier * 100) / 100,
             qualifies: evaluation.qualifies,
             trajectory,
             reason: evaluation.reason
@@ -241,6 +250,50 @@ async function loadClusterableItems(
         });
     }
     return items;
+}
+
+/**
+ * Read the Behavioral Feedback multipliers from
+ * pattern_feedback_anchor_signal. Returns a function the scorer
+ * passes through `opts.anchorMultiplier`. On any failure (view
+ * doesn't exist yet, query error) returns a no-op multiplier — the
+ * pipeline keeps running without feedback weighting rather than
+ * dropping the whole stage.
+ */
+async function loadAnchorMultiplier(
+    sb: SupabaseClient,
+    workspaceId: string
+): Promise<((t: ClusterType, anchor: string) => number) | undefined> {
+    try {
+        const r = await sb
+            .from("pattern_feedback_anchor_signal")
+            .select("cluster_type, anchor, multiplier")
+            .eq("workspace_id", workspaceId);
+        if (r.error) {
+            console.warn(
+                "[briefing-cluster] feedback signal read failed; running without weighting:",
+                r.error
+            );
+            return undefined;
+        }
+        const rows = (r.data ?? []) as Array<{
+            cluster_type: string;
+            anchor: string;
+            multiplier: number;
+        }>;
+        if (rows.length === 0) return undefined;
+        const map = new Map<string, number>();
+        for (const row of rows) {
+            const key = `${row.cluster_type}:${row.anchor}`;
+            if (typeof row.multiplier === "number" && Number.isFinite(row.multiplier)) {
+                map.set(key, row.multiplier);
+            }
+        }
+        return (cluster_type, anchor) => map.get(`${cluster_type}:${anchor}`) ?? 1.0;
+    } catch (err) {
+        console.warn("[briefing-cluster] feedback signal threw; running without weighting:", err);
+        return undefined;
+    }
 }
 
 function isWorkspaceConfigured(ctx: HydratedContextLike): boolean {

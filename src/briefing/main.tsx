@@ -4,6 +4,7 @@ import {
     bootBriefingLead,
     bootContrarian,
     bootCostSummary,
+    bootPatternMarks,
     bootPatterns,
     bootPeriphery,
     bootTriggers
@@ -62,3 +63,9 @@ void bootBriefingLead();
 // once loaded — the cost telemetry is the trust signal that lets the
 // operator lean on the auto-run.
 void bootCostSummary();
+
+// Load the operator's current Used / Met / Noise marks on Patterns.
+// Defensive inside the client — failures degrade to "no marks" (the
+// MarksBar just shows the unmarked state). The marks loop back to
+// the cluster scorer on the next pipeline run.
+void bootPatternMarks();

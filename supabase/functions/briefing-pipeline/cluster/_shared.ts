@@ -171,6 +171,8 @@ export interface ClusterEvaluation {
     readonly anchor: string;
     readonly items: ReadonlyArray<ClusterableItem>;
     readonly weighted_evidence: number;
+    readonly raw_weighted_evidence: number;
+    readonly feedback_multiplier: number;
     readonly distinct_sources: number;
     readonly distinct_accounts: number;
     readonly max_relevance: number;
@@ -186,6 +188,10 @@ const CONFIGURED_RELEVANCE_GATE = 0.7;
 export interface QualifyOptions {
     readonly nowIso: string;
     readonly workspaceConfigured: boolean;
+    readonly anchorMultiplier?: (
+        cluster_type: ClusterType,
+        anchor: string
+    ) => number;
 }
 
 export function evaluateCluster(
@@ -193,10 +199,14 @@ export function evaluateCluster(
     opts: QualifyOptions
 ): ClusterEvaluation {
     const { items } = candidate;
-    const weighted = items.reduce(
+    const rawWeight = items.reduce(
         (sum, item) => sum + computeItemWeight(item, opts.nowIso),
         0
     );
+    const multiplier = opts.anchorMultiplier
+        ? opts.anchorMultiplier(candidate.cluster_type, candidate.anchor)
+        : 1.0;
+    const weighted = rawWeight * multiplier;
     const distinctSources = new Set(items.map((i) => i.source_id)).size;
     const accounts = new Set<string>();
     for (const item of items) {
@@ -248,16 +258,23 @@ export function evaluateCluster(
         }
     }
 
+    const finalReason =
+        multiplier !== 1.0
+            ? `${reason} (feedback ${multiplier.toFixed(2)}x; raw evidence ${rawWeight.toFixed(2)})`
+            : reason;
+
     return {
         cluster_type: candidate.cluster_type,
         anchor: candidate.anchor,
         items,
         weighted_evidence: weighted,
+        raw_weighted_evidence: rawWeight,
+        feedback_multiplier: multiplier,
         distinct_sources: distinctSources,
         distinct_accounts: distinctAccounts,
         max_relevance: maxRelevance,
         qualifies,
-        reason
+        reason: finalReason
     };
 }
 
