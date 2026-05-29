@@ -76,7 +76,7 @@ The dependency order below is the *source-conversation* sequence (ADR-004 §Phas
 | Phase | What | Status |
 |---|---|---|
 | **A — Foundation** | Session model + heartbeat skeleton + observations ledger + ADR-004 | ✅ shipped 2026-05-19 (live in prod 2026-05-20) |
-| **Phase 4.5 — Data parity** | Tier 1 rooms (Signal Console + Deal Workspace + Outbound Studio) write through Supabase so any generator has real data to read | ⏳ in flight (ADR-005). Audits + schemas done 2026-05-29 (PRs #202–#206); Steps 3–5 remain. |
+| **Phase 4.5 — Data parity** | Tier 1 rooms (Signal Console + Deal Workspace + Outbound Studio) write through Supabase so any generator has real data to read | ✅ effectively complete for Tier 1 — see the correction note below. **Signal Console** fully retrofitted Steps 3/4/5 on 2026-05-23 (#142/#147/#149). **Deal Workspace** built cloud-native in Phase 4 (PR #8): `data.deals` reads/writes + realtime + legacy mirror; only Step-5 mirror-drop remains, gated on cross-room consumers. **Outbound Studio** cloud-resident via `bootCloudPersistence`; only Step-5 mirror-drop remains. Tier 2-4 rooms (Checkpoint 3) are the remaining parity work. |
 | **B — First observable signal** | **Superseded by ADR-006.** Original ADR-004 Phase B = standalone signal-decay generator + a "this week's reads" Dashboard card. ADR-006 §"Phase B supersession" retired that: the Briefing absorbs it. Signal-decay became one Trigger type in the Briefing's grammar (silence + threshold triggers against signal recency); the Briefing's Recipe Layer Patterns ARE the world-scope observations, at higher quality with audit envelopes. The Briefing build (ADR-006, canon §4.21) is effectively complete as of the 2026-05-29 session. | ✅ via Briefing |
 | **C — Skills layer** | Markdown recipes composing existing engines (no runtime LLM); skill picker in Ctrl+K; 5 starter skills (pre-call brief, weekly pipeline review, post-loss debrief, outbound batch, weekend deal sweep) | queued — the largest untouched orchestration layer |
 | **D — Birdseye strip + inter-room push** | Quiet strip on every room wired to session + observations + notification queue; inline observation kickers; next-action tags | queued |
@@ -84,6 +84,18 @@ The dependency order below is the *source-conversation* sequence (ADR-004 §Phas
 | **F — Bounded self-modification** | System refines skill defaults from usage; proposes observations from patterns. Operator-config scope only (never architecture). | queued, speculative tail |
 
 A likely reorder noted in the source conversation: **D before C** (ship the empty strip as the surface first, then the skills that fill it). Left to the session that reaches that boundary; either order is dependency-valid.
+
+### Correction note — the redundant 2026-05-29 Tier 1 PRs
+
+The 2026-05-29 session opened against a **stale canon row** (Part V §1 Checkpoint 2 read "⏳ pending") and produced a run of Phase 4.5 Tier 1 PRs as if the retrofit were greenfield:
+
+- **#202** Signal Console Step 1 audit — redundant; SC was fully retrofitted on 2026-05-23 (#149).
+- **#203** Signal Console Step 2 schema (`workspaces.gtm_config` + `signal_console_health_snapshot()` RPC) — net-new, additive, **non-conflicting but unwired**. Nothing reads them yet. Left in place (reverting applied additive migrations is more risk than value); available if a future generator wants a cloud path for the SC health snapshot / enrichment-base-url override.
+- **#204** Deal Workspace Step 1 audit — redundant; DW was cloud-native since Phase 4 (PR #8).
+- **#205** Outbound Studio Step 1 audit — **accurate**; correctly found OS at "end state minus legacy-mirror."
+- **#206** Deal Workspace Step 2 schema (`deals.recovery_rank` + `deal_workspace_health_snapshot()` RPC) — same as #203: net-new, additive, unwired, left in place.
+
+Root cause: the session trusted the stale Checkpoint 2 row instead of checking git history (#142/#147/#149) + the flag registry first. The fix is this correction + the CLAUDE.md Part V §1 update landing in the same PR. The audit docs from #202 + #204 carry a correction banner pointing here. No code was reverted — the additive schema is harmless and the audit docs are now flagged.
 
 ### Two observation scopes — and an open question
 

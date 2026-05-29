@@ -1,3 +1,5 @@
+> ⚠️ **CORRECTION (2026-05-29):** This audit was written against a stale canon row and is **redundant**. Signal Console was already fully retrofitted — Steps 3/4/5 shipped 2026-05-23 (#142 / #147 / #149) — before this audit existed. Treat the "still localStorage-only" claims below with suspicion: the core substrate (accounts + signals + heat) is cloud-canonical; the residual localStorage writes are the deliberate cross-room *mirror*, not an incomplete retrofit. The peripheral keys this audit flagged (health snapshot / enrichment-base-url / heat-bands-dismissed) got net-new cloud surfaces in #203, but those are **unwired** and were not actually needed. Full root-cause + catalog: `deliverables/adr/adr-008-orchestration-doctrine-2026-05-29.md` §"Correction note." Kept for the audit trail; do not act on it as a live plan.
+
 # Data parity audit — Signal Console
 
 **Phase 4.5 Checkpoint 2 / Step 1**
