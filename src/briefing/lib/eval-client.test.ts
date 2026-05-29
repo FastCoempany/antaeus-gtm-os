@@ -100,6 +100,8 @@ describe("parseVoiceSignalRow", () => {
             repair_rate: 0.2,
             mean_confidence: 0.71,
             mean_cost_usd: 0.1492,
+            mean_critic_score: 0.82,
+            scored_count: 4,
             last_captured_at: "2026-05-29T01:00:00Z",
             ...over
         };
@@ -111,15 +113,29 @@ describe("parseVoiceSignalRow", () => {
         expect(r?.anchor).toBe("valuation");
         expect(r?.pattern_count).toBe(5);
         expect(r?.gate_pass_rate).toBeCloseTo(0.8, 4);
+        expect(r?.mean_critic_score).toBeCloseTo(0.82, 4);
+        expect(r?.scored_count).toBe(4);
     });
 
     it("coerces postgres numerics returned as strings", () => {
         const r = parseVoiceSignalRow(
-            vrow({ gate_pass_rate: "0.8", repair_rate: "0.2", mean_confidence: "0.71" })
+            vrow({
+                gate_pass_rate: "0.8",
+                repair_rate: "0.2",
+                mean_confidence: "0.71",
+                mean_critic_score: "0.82"
+            })
         );
         expect(r?.gate_pass_rate).toBe(0.8);
         expect(r?.repair_rate).toBe(0.2);
         expect(r?.mean_confidence).toBe(0.71);
+        expect(r?.mean_critic_score).toBe(0.82);
+    });
+
+    it("preserves null mean_critic_score (no rows scored yet)", () => {
+        const r = parseVoiceSignalRow(vrow({ mean_critic_score: null, scored_count: 0 }));
+        expect(r?.mean_critic_score).toBeNull();
+        expect(r?.scored_count).toBe(0);
     });
 
     it("returns null without cluster_type or anchor", () => {

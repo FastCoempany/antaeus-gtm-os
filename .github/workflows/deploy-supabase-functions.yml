@@ -33,6 +33,7 @@ on:
         options:
           - all
           - briefing-pipeline
+          - briefing-pattern-critic
           - heartbeat
 
 permissions:
@@ -73,6 +74,7 @@ jobs:
       matrix:
         function:
           - briefing-pipeline
+          - briefing-pattern-critic
           - heartbeat
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
