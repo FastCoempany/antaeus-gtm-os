@@ -1,8 +1,10 @@
 import { reportError } from "@/lib/observability";
 import {
-    CATEGORY_OPTIONS,
-    type CategoryKey,
-    type OnboardingDraft
+    INDUSTRY_OPTIONS,
+    PRODUCT_CATEGORY_OPTIONS,
+    type IndustryKey,
+    type OnboardingDraft,
+    type ProductCategoryKey
 } from "./types";
 
 interface StorageLike {
@@ -28,8 +30,13 @@ function uid(prefix: string, now: number): string {
     return `${prefix}_${now}_${Math.random().toString(36).slice(2, 7)}`;
 }
 
-function categoryLabel(key: CategoryKey): string {
-    const opt = CATEGORY_OPTIONS.find((c) => c.key === key);
+function productCategoryLabel(key: ProductCategoryKey): string {
+    const opt = PRODUCT_CATEGORY_OPTIONS.find((c) => c.key === key);
+    return opt ? opt.label : "";
+}
+
+function industryLabel(key: IndustryKey): string {
+    const opt = INDUSTRY_OPTIONS.find((c) => c.key === key);
     return opt ? opt.label : "";
 }
 
@@ -87,15 +94,20 @@ export function seedFromDraft(
     const iso = new Date(now).toISOString();
     const items: string[] = [];
 
-    if (draft.companyName.trim() || draft.role || draft.category) {
+    if (draft.companyName.trim() || draft.role || draft.productCategory) {
         trySet(
             store,
             "gtmos_activation_context",
             JSON.stringify({
                 company: draft.companyName.trim() || null,
                 role: draft.role,
-                category: draft.category,
-                categoryLabel: draft.category ? categoryLabel(draft.category) : null,
+                productCategory: draft.productCategory,
+                productCategoryLabel: draft.productCategory
+                    ? productCategoryLabel(draft.productCategory)
+                    : null,
+                industries: [...draft.industries],
+                industriesLabels: draft.industries.map(industryLabel),
+                industryAgnostic: draft.industryAgnostic,
                 stageLabel: "Activating the workspace",
                 buyerLabel: null,
                 acvBandLabel: null,
@@ -106,7 +118,7 @@ export function seedFromDraft(
         items.push("Activation context");
     }
 
-    if (draft.category) {
+    if (draft.productCategory) {
         // Legacy readers (`app/settings/index.html`, `js/data-manager.js`,
         // `js/discovery-studio-segment-jump-room.js`) all use `JSON.parse`
         // on this key. Writing a bare string causes JSON.parse to throw
@@ -116,9 +128,24 @@ export function seedFromDraft(
         trySet(
             store,
             "gtmos_product_category",
-            JSON.stringify(draft.category)
+            JSON.stringify(draft.productCategory)
         );
         items.push("Product category");
+    }
+
+    if (draft.industries.length > 0 || draft.industryAgnostic) {
+        trySet(
+            store,
+            "gtmos_industries",
+            JSON.stringify({
+                keys: [...draft.industries],
+                labels: draft.industries.map(industryLabel),
+                agnostic: draft.industryAgnostic
+            })
+        );
+        items.push(
+            draft.industryAgnostic ? "Industry-agnostic" : "Industries"
+        );
     }
 
     if (draft.icpStatement.trim()) {
@@ -341,7 +368,9 @@ export function buildOnboardingAnswers(
     return {
         companyName: draft.companyName.trim() || null,
         role: draft.role,
-        productCategory: draft.category,
+        productCategory: draft.productCategory,
+        industries: [...draft.industries],
+        industryAgnostic: draft.industryAgnostic,
         quota: draft.annualQuota || null,
         acv: draft.avgDealSize || null,
         icpStatement: draft.icpStatement.trim() || null,
@@ -392,7 +421,9 @@ export function validate(draft: OnboardingDraft): DraftValidation {
     const canSeedAnything =
         draft.companyName.trim().length > 0 ||
         draft.role !== null ||
-        draft.category !== null ||
+        draft.productCategory !== null ||
+        draft.industries.length > 0 ||
+        draft.industryAgnostic ||
         draft.icpStatement.trim().length > 0 ||
         draft.firstAccountName.trim().length > 0 ||
         draft.annualQuota > 0;
