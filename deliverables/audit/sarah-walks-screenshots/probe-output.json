@@ -1,0 +1,260 @@
+{
+  "walk1": {
+    "walk": "1-first-90s-to-5min",
+    "errors": [],
+    "steps": [
+      {
+        "at": "intro",
+        "url": "/onboarding/",
+        "title": "Antaeus turns the revenue work a founder is doing into a clear picture of what's actually happening.",
+        "primaryButtons": [
+          "⌘KJump",
+          "Begin"
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 685
+      },
+      {
+        "at": "company",
+        "url": "/onboarding/",
+        "title": "Your company name?",
+        "primaryButtons": [
+          "⌘KJump",
+          "Back",
+          "Continue"
+        ],
+        "visibleInputs": 1,
+        "cardLikeElements": 0,
+        "bodyChars": 303
+      },
+      {
+        "at": "role",
+        "url": "/onboarding/",
+        "title": "Which seat are you in?",
+        "primaryButtons": [
+          "⌘KJump",
+          "FounderYou are still the one selling. Antaeus is the system holding everything you can't keep in your head.",
+          "First GTM hireYou are inheriting a founder-built motion. The system makes the hand-off legible.",
+          "VP SalesYou are formalizing the system for the next 3-5 hires.",
+          "OperatorYou run the day-to-day — you need the right object on top, fast.",
+          "AdvisorYou are an outside lens — the system shows you what is real."
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 668
+      },
+      {
+        "at": "category",
+        "url": "/onboarding/",
+        "title": "What category are you selling into?",
+        "primaryButtons": [
+          "⌘KJump",
+          "CX AI / Support Automation",
+          "Customer Data Platform",
+          "Legal AI",
+          "Revenue Intelligence AI",
+          "AI-Native Buyer"
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 459
+      },
+      {
+        "at": "icp",
+        "url": "/onboarding/",
+        "title": "Write one sharp ICP.",
+        "primaryButtons": [
+          "⌘KJump",
+          "Back"
+        ],
+        "visibleInputs": 2,
+        "cardLikeElements": 0,
+        "bodyChars": 366
+      },
+      {
+        "at": "account",
+        "url": "/onboarding/",
+        "title": "Pick one company that fits the ICP.",
+        "primaryButtons": [
+          "⌘KJump",
+          "Back",
+          "Continue"
+        ],
+        "visibleInputs": 2,
+        "cardLikeElements": 0,
+        "bodyChars": 340
+      },
+      {
+        "at": "quota",
+        "url": "/onboarding/",
+        "title": "What revenue does the year owe?",
+        "primaryButtons": [
+          "⌘KJump",
+          "Back",
+          "Finish onboarding"
+        ],
+        "visibleInputs": 2,
+        "cardLikeElements": 0,
+        "bodyChars": 302
+      },
+      {
+        "at": "complete",
+        "url": "/onboarding/",
+        "title": "The workspace is live.",
+        "primaryButtons": [
+          "⌘KJump"
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 328
+      }
+    ]
+  },
+  "walk2": {
+    "walk": "2-tuesday-week-4-risk-loop",
+    "errors": [],
+    "steps": [
+      {
+        "at": "dashboard-monday-morning",
+        "url": "/dashboard/",
+        "title": "What is under the most pressure right now.",
+        "primaryButtons": [
+          "⌘KJump",
+          "Read",
+          "Focus",
+          "Triage"
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 1126
+      },
+      {
+        "at": "after-tile-click",
+        "finalUrl": "http://127.0.0.1:4173/dashboard/?demo=1&qa=1&mode=spotlight",
+        "url": "/dashboard/",
+        "title": "What is under the most pressure right now.",
+        "primaryButtons": [
+          "⌘KJump",
+          "Read",
+          "Focus",
+          "Triage"
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 1126
+      },
+      {
+        "at": "deal-workspace",
+        "url": "/deal-workspace/",
+        "title": "Make the board confess where it is weak.",
+        "primaryButtons": [
+          "⌘KJump",
+          "Find weakest →"
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 388
+      },
+      {
+        "at": "future-autopsy",
+        "url": "/future-autopsy/",
+        "title": "The deal is pinned as evidence.",
+        "primaryButtons": [
+          "⌘KJump"
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 373
+      },
+      {
+        "at": "call-planner",
+        "url": "/call-planner/",
+        "title": "Walk into the call with conviction, not hope.",
+        "primaryButtons": [
+          "⌘KJump",
+          "C-Suite Executive",
+          "VP / Director",
+          "Operations Leader",
+          "IT / Engineering Leader",
+          "Finance Leader"
+        ],
+        "visibleInputs": 3,
+        "cardLikeElements": 0,
+        "bodyChars": 2895
+      },
+      {
+        "at": "poc-framework",
+        "url": "/poc-framework/",
+        "title": "Make the pilot results clear enough that the buyer's boss can act on them.",
+        "primaryButtons": [
+          "⌘KJump",
+          "7d",
+          "14d",
+          "Copy",
+          "Pilot scope",
+          "Kickoff agenda"
+        ],
+        "visibleInputs": 5,
+        "cardLikeElements": 0,
+        "bodyChars": 2013
+      },
+      {
+        "at": "advisor-deploy",
+        "url": "/advisor-deploy/",
+        "title": "Influence is an asset. Spend it precisely.",
+        "primaryButtons": [
+          "⌘KJump"
+        ],
+        "visibleInputs": 6,
+        "cardLikeElements": 0,
+        "bodyChars": 1918
+      }
+    ]
+  },
+  "walk3": {
+    "walk": "3-week-12-handoff",
+    "errors": [],
+    "steps": [
+      {
+        "at": "founding-gtm-landed",
+        "url": "/founding-gtm/",
+        "title": "What your first hire opens on day one.",
+        "primaryButtons": [
+          "⌘KJump"
+        ],
+        "visibleInputs": 0,
+        "cardLikeElements": 0,
+        "bodyChars": 1480
+      },
+      {
+        "at": "founding-gtm-sections",
+        "headings": [
+          "What your first hire opens on day one.",
+          "§1 / WhoEmptyWho hits, who misses, whyNot yet authored. This section fills in once the underlying ro",
+          "§1 / WhoEmpty",
+          "§1 / Who",
+          "Empty",
+          "Who hits, who misses, why",
+          "Not yet authored. This section fills in once the underlying rooms have real evidence to draw from.",
+          "§2 / RailsEmptyThe rails that workedNot yet authored. This section fills in once the underlying room",
+          "§2 / RailsEmpty",
+          "§2 / Rails",
+          "Empty",
+          "The rails that worked",
+          "Not yet authored. This section fills in once the underlying rooms have real evidence to draw from.",
+          "§3 / QuestionsEmptyThe questions that earned the next meetingNot yet authored. This section fills in",
+          "§3 / QuestionsEmpty",
+          "§3 / Questions",
+          "Empty",
+          "The questions that earned the next meeting",
+          "Not yet authored. This section fills in once the underlying rooms have real evidence to draw from.",
+          "§4 / Funnel truthEmptyWhere deals are won + where they leakNot yet authored. This section fills in o"
+        ],
+        "printBtn": false,
+        "exportBtn": false,
+        "shareBtn": false
+      }
+    ]
+  }
+}
