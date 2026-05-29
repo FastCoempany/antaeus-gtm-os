@@ -38,6 +38,47 @@ body {
     padding: 0;
 }
 
+/* Skip-link — hidden until focused, then reveals at the top-left.
+ * Keyboard operators tab once + Enter to jump past the room chrome
+ * straight into the first Pattern. Screen readers see it on the page
+ * order before everything else. */
+.bf-skip-link {
+    position: absolute;
+    top: -1000px;
+    left: 12px;
+    z-index: 100;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--bf-ink);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 2px;
+    text-decoration: none;
+}
+
+.bf-skip-link:focus,
+.bf-skip-link:focus-visible {
+    top: 12px;
+    outline: 2px solid var(--bf-orange);
+    outline-offset: 2px;
+}
+
+/* Visible focus state for every interactive element in the room.
+ * Browsers do this by default but with inconsistent rendering;
+ * making it explicit + uniform helps both keyboard operators and
+ * the visual review. Orange because canon Part II §3 reserves
+ * orange for focus / pressure / the dominant move. */
+.bf-room button:focus-visible,
+.bf-room a:focus-visible,
+.bf-room select:focus-visible,
+.bf-room input:focus-visible,
+.bf-room textarea:focus-visible,
+.bf-room [role="button"]:focus-visible {
+    outline: 2px solid var(--bf-orange);
+    outline-offset: 2px;
+}
+
 body {
     background: var(--bf-bg);
     color: var(--bf-ink);
