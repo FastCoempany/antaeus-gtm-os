@@ -1985,6 +1985,7 @@ export type Database = {
         Row: {
           created_at: string
           data: Json
+          gtm_config: Json
           id: string
           name: string
           owner_id: string
@@ -1994,6 +1995,7 @@ export type Database = {
         Insert: {
           created_at?: string
           data?: Json
+          gtm_config?: Json
           id?: string
           name: string
           owner_id: string
@@ -2003,6 +2005,7 @@ export type Database = {
         Update: {
           created_at?: string
           data?: Json
+          gtm_config?: Json
           id?: string
           name?: string
           owner_id?: string
@@ -2113,6 +2116,10 @@ export type Database = {
         Returns: undefined
       }
       is_workspace_member: { Args: { w: string }; Returns: boolean }
+      signal_console_health_snapshot: {
+        Args: { p_workspace_id?: string }
+        Returns: Json
+      }
       submit_pattern_feedback: {
         Args: { p_pattern_id: string; p_mark: string }
         Returns: undefined
