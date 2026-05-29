@@ -1,3 +1,5 @@
+> ⚠️ **CORRECTION (2026-05-29):** This audit was written against a stale canon row and is **largely redundant**. Deal Workspace was built **cloud-native as Phase 4 Room 1** (PR #8, 2026-04-25): `data.deals` reads/writes + realtime + `mirrorToLegacyStorage`. It never needed a greenfield ADR-005 Step 1/2 retrofit for its core deals data. Only the Step-5 mirror-drop genuinely remains (gated on cross-room consumers migrating). The `deals.recovery_rank` column + `deal_workspace_health_snapshot()` RPC added in #206 are net-new, additive, and **unwired**. Full root-cause + catalog: `deliverables/adr/adr-008-orchestration-doctrine-2026-05-29.md` §"Correction note." Kept for the audit trail; do not act on it as a live plan.
+
 # Data parity audit — Deal Workspace
 
 **Phase 4.5 Checkpoint 2 / Step 1**
