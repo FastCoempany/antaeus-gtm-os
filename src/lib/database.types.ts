@@ -924,6 +924,7 @@ export type Database = {
           poc_start_date: string | null
           poc_status: string | null
           primary_persona: string | null
+          recovery_rank: number
           stage: string | null
           stage_history: Json
           stakeholders: Json | null
@@ -958,6 +959,7 @@ export type Database = {
           poc_start_date?: string | null
           poc_status?: string | null
           primary_persona?: string | null
+          recovery_rank?: number
           stage?: string | null
           stage_history?: Json
           stakeholders?: Json | null
@@ -992,6 +994,7 @@ export type Database = {
           poc_start_date?: string | null
           poc_status?: string | null
           primary_persona?: string | null
+          recovery_rank?: number
           stage?: string | null
           stage_history?: Json
           stakeholders?: Json | null
@@ -2111,6 +2114,10 @@ export type Database = {
         Returns: undefined
       }
       current_user_default_workspace_id: { Args: never; Returns: string }
+      deal_workspace_health_snapshot: {
+        Args: { p_workspace_id?: string }
+        Returns: Json
+      }
       dismiss_observation: {
         Args: { obs_id: string; reason?: string }
         Returns: undefined
