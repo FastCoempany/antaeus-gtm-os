@@ -36,7 +36,7 @@ on:
           - heartbeat
 
 permissions:
-  contents: read
+  contents: write   # verify job commits the verification log back to main
 
 concurrency:
   group: deploy-supabase-functions
@@ -108,3 +108,92 @@ jobs:
             --project-ref "$PROJECT_REF"
           echo "::endgroup::"
           echo "Deployed ${{ matrix.function }} to project $PROJECT_REF."
+
+  verify-briefing-pipeline:
+    name: Verify briefing-pipeline
+    needs: deploy
+    # Only run if at least one deploy succeeded AND briefing-pipeline
+    # specifically was in scope (skip when only heartbeat was deployed
+    # via workflow_dispatch). On push, briefing-pipeline is always in
+    # scope so the conditional simplifies to "deploy succeeded".
+    if: |
+      always() &&
+      needs.deploy.result == 'success' &&
+      (github.event_name != 'workflow_dispatch' || github.event.inputs.function == 'all' || github.event.inputs.function == 'briefing-pipeline')
+    runs-on: ubuntu-latest
+    env:
+      SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Need full history to commit + push verification log back.
+          fetch-depth: 0
+          # Default GITHUB_TOKEN has contents:write per permissions block
+          # above, which is what we need for the push step.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Gate on SERVICE_ROLE_KEY
+        id: gate
+        run: |
+          if [ -z "$SERVICE_ROLE_KEY" ]; then
+            echo "::warning::SUPABASE_SERVICE_ROLE_KEY secret not set. Skipping verification."
+            echo "run=false" >> $GITHUB_OUTPUT
+          else
+            echo "run=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Call briefing-pipeline
+        if: steps.gate.outputs.run == 'true'
+        id: call
+        run: |
+          # No override:true here — the cost gate decides. If the rolling
+          # weekly cost is paused, the run aborts cleanly and the log
+          # captures that, which is still a useful health signal (proves
+          # the new code can execute cost_check). If the gate is open,
+          # the run goes through and spends real Anthropic budget — but
+          # only when the rolling cost is below ceiling.
+          set +e
+          response=$(curl -s --max-time 600 -X POST \
+            "https://wjdqmgxwulqxxxnyuzyl.supabase.co/functions/v1/briefing-pipeline" \
+            -H "Authorization: Bearer $SERVICE_ROLE_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}')
+          curl_status=$?
+          set -e
+          if [ $curl_status -ne 0 ]; then
+            echo "curl exited $curl_status — pipeline call failed at the transport level."
+            echo "$response"
+            # Still write a log row so the failure is recorded.
+            response="{\"ok\":false,\"transport_error\":\"curl exit $curl_status\"}"
+          fi
+          # Write to a file so the format step can read it without
+          # heredoc-escaping the JSON.
+          printf '%s' "$response" > /tmp/verification.json
+          echo "Captured response into /tmp/verification.json ($(wc -c < /tmp/verification.json) bytes)."
+
+      - name: Format verification log entry
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          python3 .github/scripts/format-briefing-verification.py \
+            /tmp/verification.json \
+            "${{ github.sha }}" \
+            "${{ github.event.head_commit.message }}" \
+            >> deliverables/audit/briefing-verification-log.md
+
+      - name: Commit + push log
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git add deliverables/audit/briefing-verification-log.md
+          # Allow-empty exits if no diff (rare; format script always
+          # appends), but be defensive.
+          if git diff --staged --quiet; then
+            echo "No changes to commit (verification log already in sync)."
+            exit 0
+          fi
+          # [skip-screenshots] avoids re-triggering render-screenshots.yml
+          # which has no path filter. Our own workflow filters on
+          # supabase/functions/** so the log commit won't loop.
+          git commit -m "verification log: ${{ github.sha }} [skip-screenshots]"
+          git push origin HEAD:main
