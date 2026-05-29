@@ -43,15 +43,57 @@ describe("seedFromDraft", () => {
         expect(ctx.source).toBe("onboarding-v2");
     });
 
-    it("category writes both context + product_category key", () => {
-        seedFromDraft(makeDraft({ category: "legal" }), {
+    it("product category writes both context + product_category key", () => {
+        seedFromDraft(makeDraft({ productCategory: "legal-tech" }), {
             now: NOW,
             storage: s
         });
         // JSON-encoded per legacy app/settings/index.html convention.
-        expect(s.getItem("gtmos_product_category")).toBe('"legal"');
+        expect(s.getItem("gtmos_product_category")).toBe('"legal-tech"');
         const ctx = JSON.parse(s.getItem("gtmos_activation_context") ?? "{}");
-        expect(ctx.categoryLabel).toBe("Legal AI");
+        expect(ctx.productCategoryLabel).toBe("Legal Tech");
+        // categoryLabel back-compat alias for Welcome's hero chip.
+        expect(ctx.categoryLabel).toBe("Legal Tech");
+    });
+
+    it("industries multi-select seeds gtmos_industries with keys + labels", () => {
+        seedFromDraft(
+            makeDraft({
+                productCategory: "sales-tech",
+                industries: ["b2b-saas-tech", "financial-services"]
+            }),
+            { now: NOW, storage: s }
+        );
+        const raw = s.getItem("gtmos_industries");
+        expect(raw).not.toBeNull();
+        const parsed = JSON.parse(raw ?? "{}");
+        expect(parsed.keys).toEqual(["b2b-saas-tech", "financial-services"]);
+        expect(parsed.labels).toContain("B2B SaaS / Tech");
+        expect(parsed.labels).toContain("Financial Services / FinTech");
+        expect(parsed.agnostic).toBe(false);
+    });
+
+    it("industry-agnostic mode writes agnostic:true with empty keys", () => {
+        seedFromDraft(
+            makeDraft({
+                productCategory: "horizontal-saas",
+                industries: [],
+                industryAgnostic: true
+            }),
+            { now: NOW, storage: s }
+        );
+        const parsed = JSON.parse(s.getItem("gtmos_industries") ?? "{}");
+        expect(parsed.agnostic).toBe(true);
+        expect(parsed.keys).toEqual([]);
+    });
+
+    it("no industries + not agnostic does NOT write gtmos_industries", () => {
+        seedFromDraft(makeDraft({ productCategory: "ai-native" }), {
+            now: NOW,
+            storage: s
+        });
+        // No industries picked + agnostic off = no industries key written.
+        expect(s.getItem("gtmos_industries")).toBeNull();
     });
 
     it("ICP statement seeds gtmos_icp_analytics", () => {
@@ -146,7 +188,8 @@ describe("seedFromDraft", () => {
             makeDraft({
                 companyName: "Antaeus",
                 role: "founder",
-                category: "revenue",
+                productCategory: "sales-tech",
+                industries: ["b2b-saas-tech"],
                 icpStatement: "Mid-market freight forwarders.",
                 annualQuota: 1_200_000,
                 avgDealSize: 50_000
@@ -160,19 +203,21 @@ describe("seedFromDraft", () => {
         expect(typeof ob.completedAt).toBe("string");
         expect(ob.answers.companyName).toBe("Antaeus");
         expect(ob.answers.role).toBe("founder");
-        expect(ob.answers.productCategory).toBe("revenue");
+        expect(ob.answers.productCategory).toBe("sales-tech");
+        expect(ob.answers.industries).toEqual(["b2b-saas-tech"]);
+        expect(ob.answers.industryAgnostic).toBe(false);
     });
 
-    it("category is JSON-encoded so legacy JSON.parse readers can decode", () => {
-        seedFromDraft(makeDraft({ category: "legal" }), {
+    it("product category is JSON-encoded so legacy JSON.parse readers can decode", () => {
+        seedFromDraft(makeDraft({ productCategory: "legal-tech" }), {
             now: NOW,
             storage: s
         });
         const raw = s.getItem("gtmos_product_category");
         // Legacy app/settings/index.html line 514 + js/demo-seed-runtime.js
         // line 823 both use JSON.stringify; readers use JSON.parse.
-        expect(raw).toBe('"legal"');
-        expect(JSON.parse(raw ?? "")).toBe("legal");
+        expect(raw).toBe('"legal-tech"');
+        expect(JSON.parse(raw ?? "")).toBe("legal-tech");
     });
 
     it("merges new ICP into existing collection rather than overwriting", () => {

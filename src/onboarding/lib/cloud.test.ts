@@ -9,7 +9,9 @@ import type { DataClient } from "@/lib/data-client";
 const DRAFT: OnboardingDraft = {
     companyName: "Antaeus",
     role: "founder",
-    category: "cxai",
+    productCategory: "cx-support-automation",
+    industries: [],
+    industryAgnostic: false,
     icpStatement: "Founder-led B2B SaaS",
     icpPain: "handoff confusion",
     firstAccountName: "Acme",
@@ -92,7 +94,9 @@ describe("persistOnboardingToCloud", () => {
         const answers = inserts[0]?.["onboarding_answers"] as Record<string, unknown>;
         expect(answers.companyName).toBe("Antaeus");
         expect(answers.role).toBe("founder");
-        expect(answers.productCategory).toBe("cxai");
+        expect(answers.productCategory).toBe("cx-support-automation");
+        expect(answers.industries).toEqual([]);
+        expect(answers.industryAgnostic).toBe(false);
         expect(answers.firstAccount).toBe("Acme");
     });
 

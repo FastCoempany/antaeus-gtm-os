@@ -300,6 +300,63 @@ textarea.ob-input { resize: vertical; min-height: 60px; line-height: 1.5; }
     font-size: 14px;
 }
 
+/* ─── Fieldsets (multi-question step shells, e.g. category + industries) ─ */
+
+.ob-fieldset {
+    margin-top: 22px;
+}
+
+.ob-fieldset:first-of-type {
+    margin-top: 0;
+}
+
+.ob-field__legend {
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 13px;
+    color: var(--ob-soft);
+    margin: 0 0 12px;
+    line-height: 1.5;
+}
+
+.ob-field__legend em {
+    color: var(--ob-orange);
+    font-style: normal;
+    font-weight: 600;
+}
+
+/* ─── Toggle (industry-agnostic checkbox) ──────────────────────────── */
+
+.ob-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid var(--ob-line);
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: border-color 120ms ease;
+}
+
+.ob-toggle:hover {
+    border-color: var(--ob-orange);
+}
+
+.ob-toggle input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--ob-orange);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.ob-toggle__label {
+    font-size: 14px;
+    color: var(--ob-navy);
+    line-height: 1.4;
+}
+
 /* ─── Buttons ───────────────────────────────────────────────────────── */
 
 .ob-btn {

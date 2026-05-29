@@ -190,7 +190,10 @@ test.describe("Phase 2.10 — Integration walk (Sarah's full day)", () => {
             await page.locator(".ob-btn--primary").click();
             await page.locator(".ob-option").first().click();
             await page.locator(".ob-btn--primary").click();
+            // 2026-05-29: CategoryStep now has two fieldsets — pick a product
+            // category, then either pick industries or toggle agnostic.
             await page.locator(".ob-option").first().click();
+            await page.locator(".ob-toggle input[type=\"checkbox\"]").check();
             await page.locator(".ob-btn--primary").click();
             await page
                 .locator("textarea.ob-input")

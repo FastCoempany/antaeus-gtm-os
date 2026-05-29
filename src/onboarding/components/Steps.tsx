@@ -1,8 +1,10 @@
 import type { JSX } from "preact";
 import {
-    CATEGORY_OPTIONS,
+    INDUSTRY_OPTIONS,
+    PRODUCT_CATEGORY_OPTIONS,
     ROLE_OPTIONS,
-    type CategoryKey,
+    type IndustryKey,
+    type ProductCategoryKey,
     type RoleKey
 } from "../lib/types";
 import {
@@ -124,30 +126,117 @@ export function RoleStep(): JSX.Element {
 
 export function CategoryStep(): JSX.Element {
     const d = draft.value;
+    const canContinue =
+        d.productCategory !== null &&
+        (d.industryAgnostic || d.industries.length > 0);
+
+    function toggleIndustry(key: IndustryKey): void {
+        const exists = d.industries.includes(key);
+        const next = exists
+            ? d.industries.filter((k) => k !== key)
+            : [...d.industries, key];
+        patchDraft({ industries: next });
+    }
+
+    function setAgnostic(on: boolean): void {
+        // Turning on agnostic clears any picked industries (the multi-
+        // select is suppressed) so the seeded payload is unambiguous.
+        patchDraft({
+            industryAgnostic: on,
+            industries: on ? [] : d.industries
+        });
+    }
+
     return (
         <StepShell
-            kicker="STEP 4 OF 7 — CATEGORY"
-            title="What category are you selling into?"
-            subtitle="Category shapes which discovery framework loads when you run a live call."
+            kicker="STEP 4 OF 7 — CATEGORY & INDUSTRIES"
+            title="What do you sell, and who do you sell it to?"
+            subtitle="Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic."
             onNext={() => nextStep()}
             onBack={() => prevStep()}
-            nextDisabled={d.category === null}
+            nextDisabled={!canContinue}
         >
-            <ul class="ob-options ob-options--grid" role="radiogroup" aria-label="Category">
-                {CATEGORY_OPTIONS.map((c) => (
-                    <li key={c.key}>
-                        <button
-                            type="button"
-                            role="radio"
-                            aria-checked={d.category === c.key}
-                            class={`ob-option ob-option--compact${d.category === c.key ? " is-selected" : ""}`}
-                            onClick={() => patchDraft({ category: c.key as CategoryKey })}
-                        >
-                            <strong class="ob-option__label">{c.label}</strong>
-                        </button>
-                    </li>
-                ))}
-            </ul>
+            <div class="ob-fieldset">
+                <p class="ob-field__legend">
+                    The product category you sell <em>from</em>
+                </p>
+                <ul
+                    class="ob-options ob-options--grid"
+                    role="radiogroup"
+                    aria-label="Product category"
+                >
+                    {PRODUCT_CATEGORY_OPTIONS.map((c) => (
+                        <li key={c.key}>
+                            <button
+                                type="button"
+                                role="radio"
+                                aria-checked={d.productCategory === c.key}
+                                class={`ob-option ob-option--compact${d.productCategory === c.key ? " is-selected" : ""}`}
+                                onClick={() =>
+                                    patchDraft({
+                                        productCategory: c.key as ProductCategoryKey
+                                    })
+                                }
+                            >
+                                <strong class="ob-option__label">{c.label}</strong>
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div class="ob-fieldset">
+                <p class="ob-field__legend">
+                    The industries you sell <em>into</em>
+                </p>
+                <label class="ob-toggle">
+                    <input
+                        type="checkbox"
+                        checked={d.industryAgnostic}
+                        onChange={(e) =>
+                            setAgnostic(
+                                (e.currentTarget as HTMLInputElement).checked
+                            )
+                        }
+                    />
+                    <span class="ob-toggle__label">
+                        We're industry-agnostic — we sell to everyone
+                    </span>
+                </label>
+
+                {!d.industryAgnostic && (
+                    <ul
+                        class="ob-options ob-options--grid"
+                        role="group"
+                        aria-label="Industries"
+                    >
+                        {INDUSTRY_OPTIONS.map((i) => {
+                            const selected = d.industries.includes(i.key);
+                            return (
+                                <li key={i.key}>
+                                    <button
+                                        type="button"
+                                        aria-pressed={selected}
+                                        class={`ob-option ob-option--compact${selected ? " is-selected" : ""}`}
+                                        onClick={() => toggleIndustry(i.key)}
+                                    >
+                                        <strong class="ob-option__label">
+                                            {i.label}
+                                        </strong>
+                                    </button>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                )}
+                {!d.industryAgnostic && d.industries.length > 0 && (
+                    <p class="ob-coach">
+                        {d.industries.length} industr
+                        {d.industries.length === 1 ? "y" : "ies"} selected. Add
+                        as many as are relevant.
+                    </p>
+                )}
+            </div>
         </StepShell>
     );
 }
