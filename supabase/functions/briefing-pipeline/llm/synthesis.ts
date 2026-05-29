@@ -582,6 +582,21 @@ async function persistPattern(
     }
     const patternId = String(insert.data.id);
 
+    // B.7 — production-side eval row. Captures the gate's verdict at
+    // synthesis time so a future deploy that starts degrading voice
+    // (more hedging, more banned vocab, more repair_used) is observable
+    // in the pattern_eval table without re-running the LLM. Non-fatal.
+    await persistPatternEval(sb, workspaceId, patternId, {
+        gate_passes: gate.passes,
+        gate_failures: gate.failures.map((f) => f.name),
+        gate_checks: gate.checks,
+        repair_used: callRecords.repair !== null,
+        cluster_type: cluster.cluster_type,
+        anchor: cluster.anchor,
+        confidence: pattern.confidence,
+        synthesis_cost_usd: totalCost
+    });
+
     // B.6 — audit envelope. Captures cluster + hydrated context + the
     // full LLM call chain + gate decisions so the operator can
     // reconstruct what the system did months later. Non-fatal if it
@@ -648,6 +663,49 @@ async function persistAuditEnvelope(
     });
     if (r.error) {
         console.error("[briefing-synthesis] audit envelope persist failed:", {
+            patternId, error: r.error
+        });
+    }
+}
+
+interface PatternEvalPayload {
+    readonly gate_passes: boolean;
+    readonly gate_failures: ReadonlyArray<string>;
+    readonly gate_checks: unknown;
+    readonly repair_used: boolean;
+    readonly cluster_type: string | null;
+    readonly anchor: string | null;
+    readonly confidence: number;
+    readonly synthesis_cost_usd: number;
+}
+
+/**
+ * Write the production-sampling eval row for this Pattern. Non-fatal:
+ * a failure here logs but doesn't break the Pattern persist. The row
+ * is the substrate the pattern_eval_voice_signal view aggregates from
+ * — drops in gate_pass_rate or rises in repair_rate are visible there
+ * without re-running the LLM.
+ */
+async function persistPatternEval(
+    sb: SupabaseClient,
+    workspaceId: string,
+    patternId: string,
+    payload: PatternEvalPayload
+): Promise<void> {
+    const r = await sb.from("briefing_pattern_eval").insert({
+        workspace_id: workspaceId,
+        pattern_id: patternId,
+        gate_passes: payload.gate_passes,
+        gate_failures: payload.gate_failures as unknown as never,
+        gate_checks: payload.gate_checks as unknown as never,
+        repair_used: payload.repair_used,
+        cluster_type: payload.cluster_type,
+        anchor: payload.anchor,
+        confidence: payload.confidence,
+        synthesis_cost_usd: payload.synthesis_cost_usd
+    });
+    if (r.error) {
+        console.error("[briefing-synthesis] pattern_eval persist failed:", {
             patternId, error: r.error
         });
     }
