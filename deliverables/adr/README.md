@@ -57,3 +57,6 @@ Every ADR requires founder approval before moving from `PROPOSED` to `APPROVED`.
 | 003 | [Refacing Completion and Pre-Beta](./adr-003-refacing-completion-and-pre-beta-2026-05-01.md) | APPROVED 2026-05-01 |
 | 004 | [Orchestration Layer Foundation](./adr-004-orchestration-layer-foundation-2026-05-19.md) | APPROVED 2026-05-19 |
 | 005 | [Data Layer Parity (Phase 4.5)](./adr-005-data-layer-parity-2026-05-20.md) | APPROVED 2026-05-20. Depends on ADR-001/002/003/004. |
+| 006 | [Briefing Room](./adr-006-briefing-room-2026-05-23.md) | APPROVED 2026-05-23. |
+| 007 | [Commercial Identity Layer](./adr-007-commercial-identity-layer-2026-05-26.md) | APPROVED 2026-05-26. |
+| 008 | [Orchestration Layer Doctrine + Additive Boundary](./adr-008-orchestration-doctrine-2026-05-29.md) | APPROVED 2026-05-29. Amends ADR-004 (records source + thesis + boundary). Depends on ADR-004/005/006. |
