@@ -34,6 +34,10 @@ export interface VoiceSignalRow {
     readonly repair_rate: number;
     readonly mean_confidence: number;
     readonly mean_cost_usd: number;
+    /** Mean of critic_score across rows that have been scored. null while no scores yet. */
+    readonly mean_critic_score: number | null;
+    /** How many of pattern_count rows have a critic score. */
+    readonly scored_count: number;
     readonly last_captured_at: string;
 }
 
@@ -100,6 +104,8 @@ export function parseVoiceSignalRow(row: unknown): VoiceSignalRow | null {
         repair_rate: asNumber(o["repair_rate"]),
         mean_confidence: asNumber(o["mean_confidence"]),
         mean_cost_usd: asNumber(o["mean_cost_usd"]),
+        mean_critic_score: asNumberOrNull(o["mean_critic_score"]),
+        scored_count: asNumber(o["scored_count"]),
         last_captured_at: asString(o["last_captured_at"])
     };
 }
@@ -146,7 +152,7 @@ export async function loadVoiceSignal(): Promise<VoiceSignalRow[]> {
         const r = await sb
             .from("pattern_eval_voice_signal")
             .select(
-                "cluster_type, anchor, pattern_count, gate_pass_rate, repair_rate, mean_confidence, mean_cost_usd, last_captured_at"
+                "cluster_type, anchor, pattern_count, gate_pass_rate, repair_rate, mean_confidence, mean_cost_usd, mean_critic_score, scored_count, last_captured_at"
             )
             .order("last_captured_at", { ascending: false })
             .limit(100);

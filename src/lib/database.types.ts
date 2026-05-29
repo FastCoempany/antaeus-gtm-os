@@ -2093,8 +2093,10 @@ export type Database = {
           last_captured_at: string | null
           mean_confidence: number | null
           mean_cost_usd: number | null
+          mean_critic_score: number | null
           pattern_count: number | null
           repair_rate: number | null
+          scored_count: number | null
           workspace_id: string | null
         }
         Relationships: []
