@@ -314,6 +314,78 @@ export type Database = {
           },
         ]
       }
+      briefing_pattern_eval: {
+        Row: {
+          anchor: string | null
+          captured_at: string
+          cluster_type: string | null
+          confidence: number | null
+          critic_model: string | null
+          critic_notes: Json | null
+          critic_score: number | null
+          gate_checks: Json
+          gate_failures: string[]
+          gate_passes: boolean
+          id: string
+          pattern_id: string
+          repair_used: boolean
+          scored_at: string | null
+          synthesis_cost_usd: number | null
+          workspace_id: string
+        }
+        Insert: {
+          anchor?: string | null
+          captured_at?: string
+          cluster_type?: string | null
+          confidence?: number | null
+          critic_model?: string | null
+          critic_notes?: Json | null
+          critic_score?: number | null
+          gate_checks?: Json
+          gate_failures?: string[]
+          gate_passes: boolean
+          id?: string
+          pattern_id: string
+          repair_used?: boolean
+          scored_at?: string | null
+          synthesis_cost_usd?: number | null
+          workspace_id?: string
+        }
+        Update: {
+          anchor?: string | null
+          captured_at?: string
+          cluster_type?: string | null
+          confidence?: number | null
+          critic_model?: string | null
+          critic_notes?: Json | null
+          critic_score?: number | null
+          gate_checks?: Json
+          gate_failures?: string[]
+          gate_passes?: boolean
+          id?: string
+          pattern_id?: string
+          repair_used?: boolean
+          scored_at?: string | null
+          synthesis_cost_usd?: number | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_pattern_eval_pattern_id_fkey"
+            columns: ["pattern_id"]
+            isOneToOne: true
+            referencedRelation: "briefing_patterns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_pattern_eval_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       briefing_pattern_feedback: {
         Row: {
           id: string
@@ -2009,6 +2081,20 @@ export type Database = {
           multiplier: number | null
           noise_count: number | null
           used_count: number | null
+          workspace_id: string | null
+        }
+        Relationships: []
+      }
+      pattern_eval_voice_signal: {
+        Row: {
+          anchor: string | null
+          cluster_type: string | null
+          gate_pass_rate: number | null
+          last_captured_at: string | null
+          mean_confidence: number | null
+          mean_cost_usd: number | null
+          pattern_count: number | null
+          repair_rate: number | null
           workspace_id: string | null
         }
         Relationships: []

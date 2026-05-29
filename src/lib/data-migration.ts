@@ -671,6 +671,7 @@ function toAccessorName(table: TableName): string {
         briefing_patterns: "briefingPatterns",
         briefing_audit_envelopes: "briefingAuditEnvelopes",
         briefing_pattern_feedback: "briefingPatternFeedback",
+        briefing_pattern_eval: "briefingPatternEval",
         // Briefing Watchlist Triggers (ADR-006, B.3a). Operator-armed
         // standing orders + their fires — authored in the Briefing Watch
         // List, not migrated from localStorage. Listed here only to
