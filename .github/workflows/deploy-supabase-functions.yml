@@ -202,7 +202,9 @@ jobs:
         # the log file commit is a nice-to-have audit trail.
         continue-on-error: true
         run: |
-          git config user.email "actions@github.com"
+          # Use the standard github-actions[bot] noreply email so the
+          # commit's author renders correctly in the GitHub UI.
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add deliverables/audit/briefing-verification-log.md
           if git diff --staged --quiet; then
@@ -213,8 +215,28 @@ jobs:
           # which has no path filter. Our own workflow filters on
           # supabase/functions/** so the log commit won't loop.
           git commit -m "verification log: ${{ github.sha }} [skip-screenshots]"
-          if git push origin HEAD:main 2>&1; then
+
+          # Diagnostic block: surface the actual git push stderr in the
+          # step log so future failures are debuggable without needing
+          # to expand the step. Previous version swallowed the real
+          # error inside an if-else and only emitted a generic warning.
+          echo "::group::git remote -v"
+          git remote -v
+          echo "::endgroup::"
+          echo "::group::git status (pre-push)"
+          git status --short
+          git log -1 --oneline
+          echo "::endgroup::"
+          echo "::group::git push origin HEAD:main"
+          # Push with set +e so the run continues; verbose so the
+          # stderr is captured. The exit code is checked after.
+          set +e
+          git push origin HEAD:main 2>&1
+          push_exit=$?
+          set -e
+          echo "::endgroup::"
+          if [ $push_exit -eq 0 ]; then
             echo "::notice::Pushed verification log entry to main."
           else
-            echo "::warning::Could not push verification log back to main (likely repo Actions permission is read-only). Log entry is captured in the workflow job summary above; that's the durable surface."
+            echo "::warning::git push failed with exit $push_exit. See the 'git push origin HEAD:main' group above for the actual stderr. Log entry is still captured in the workflow job summary."
           fi
