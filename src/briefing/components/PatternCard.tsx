@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import type { BriefingPattern, Trajectory } from "../lib/patterns";
+import { MarksBar } from "./MarksBar";
 import { ShowYourWorkButton, ShowYourWorkPanel } from "./ShowYourWork";
 
 /**
@@ -88,6 +89,8 @@ export function PatternCard({ pattern }: { pattern: BriefingPattern }): JSX.Elem
                 <ShowYourWorkButton patternId={pattern.id} />
                 <ShowYourWorkPanel patternId={pattern.id} />
             </div>
+
+            <MarksBar patternId={pattern.id} />
         </article>
     );
 }

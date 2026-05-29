@@ -2001,14 +2001,34 @@ export type Database = {
         }
         Relationships: []
       }
+      pattern_feedback_anchor_signal: {
+        Row: {
+          anchor: string | null
+          cluster_type: string | null
+          met_count: number | null
+          multiplier: number | null
+          noise_count: number | null
+          used_count: number | null
+          workspace_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      clear_pattern_feedback: {
+        Args: { p_pattern_id: string }
+        Returns: undefined
+      }
       current_user_default_workspace_id: { Args: never; Returns: string }
       dismiss_observation: {
         Args: { obs_id: string; reason?: string }
         Returns: undefined
       }
       is_workspace_member: { Args: { w: string }; Returns: boolean }
+      submit_pattern_feedback: {
+        Args: { p_pattern_id: string; p_mark: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

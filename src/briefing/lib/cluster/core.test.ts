@@ -337,3 +337,82 @@ describe("clusterItems — end to end", () => {
         expect(clusterItems(items, { nowIso: NOW, workspaceConfigured: false })).toEqual([]);
     });
 });
+
+// Behavioral feedback: anchorMultiplier scales raw evidence so anchors
+// the operator marked Noise get downweighted and anchors marked Used
+// get a boost. The same evidence can qualify or reject depending on
+// the multiplier — that's the loop closing.
+
+describe("evaluateCluster — anchorMultiplier", () => {
+    function evidenceItems(): ReadonlyArray<ClusterableItem> {
+        return [
+            item({ source_id: "techcrunch_rss", pain_tags: ["compliance_burden"], companies: ["A"], published_date: NOW }),
+            item({ source_id: "hn_algolia", pain_tags: ["compliance_burden"], companies: ["B"], published_date: NOW }),
+            item({ source_id: "pr_newswire_personnel", pain_tags: ["compliance_burden"], companies: ["C"], published_date: NOW })
+        ];
+    }
+
+    it("defaults to 1.0 multiplier when no anchorMultiplier passed", () => {
+        const evals = clusterItems(evidenceItems(), { nowIso: NOW, workspaceConfigured: false });
+        const target = evals.find((e) => e.cluster_type === "pain_tag" && e.anchor === "compliance_burden");
+        expect(target).toBeDefined();
+        expect(target?.feedback_multiplier).toBe(1.0);
+        expect(target?.raw_weighted_evidence).toBe(target?.weighted_evidence);
+    });
+
+    it("downweights when the anchor multiplier is below 1.0", () => {
+        const evals = clusterItems(evidenceItems(), {
+            nowIso: NOW,
+            workspaceConfigured: false,
+            anchorMultiplier: (t, a) => (t === "pain_tag" && a === "compliance_burden" ? 0.5 : 1.0)
+        });
+        const target = evals.find((e) => e.cluster_type === "pain_tag" && e.anchor === "compliance_burden");
+        expect(target).toBeDefined();
+        expect(target?.feedback_multiplier).toBe(0.5);
+        expect(target?.weighted_evidence).toBeCloseTo(target!.raw_weighted_evidence * 0.5, 4);
+        // The downweighted evidence is now under the 3.0 threshold so it must reject.
+        expect(target?.qualifies).toBe(false);
+        expect(target?.reason).toContain("feedback 0.50x");
+    });
+
+    it("boosts a borderline cluster into qualification when multiplier is above 1.0", () => {
+        // Two-source narrative with 3 items — borderline on evidence at 1.0x.
+        const items: ClusterableItem[] = [
+            item({ source_id: "techcrunch_rss", topic_tags: ["funding"], companies: ["A"], published_date: NOW }),
+            item({ source_id: "hn_algolia", topic_tags: ["funding"], companies: ["B"], published_date: NOW })
+        ];
+        const noMul = clusterItems(items, { nowIso: NOW, workspaceConfigured: false });
+        const baseline = noMul.find((e) => e.cluster_type === "narrative_shift" && e.anchor === "funding");
+        expect(baseline).toBeDefined();
+        const boosted = clusterItems(items, {
+            nowIso: NOW,
+            workspaceConfigured: false,
+            anchorMultiplier: (t, a) => (t === "narrative_shift" && a === "funding" ? 1.5 : 1.0)
+        });
+        const target = boosted.find((e) => e.cluster_type === "narrative_shift" && e.anchor === "funding");
+        expect(target).toBeDefined();
+        expect(target?.feedback_multiplier).toBe(1.5);
+        expect(target?.weighted_evidence).toBeCloseTo(baseline!.raw_weighted_evidence * 1.5, 4);
+    });
+
+    it("uses 1.0 for anchors not in the multiplier function", () => {
+        // Anchor returns 0.5 only for a different cluster type; this one stays at 1.0.
+        const evals = clusterItems(evidenceItems(), {
+            nowIso: NOW,
+            workspaceConfigured: false,
+            anchorMultiplier: (t, a) => (t === "narrative_shift" && a === "funding" ? 0.5 : 1.0)
+        });
+        const target = evals.find((e) => e.cluster_type === "pain_tag" && e.anchor === "compliance_burden");
+        expect(target?.feedback_multiplier).toBe(1.0);
+    });
+
+    it("omits the feedback annotation from reason when multiplier is exactly 1.0", () => {
+        const evals = clusterItems(evidenceItems(), {
+            nowIso: NOW,
+            workspaceConfigured: false,
+            anchorMultiplier: () => 1.0
+        });
+        const target = evals.find((e) => e.cluster_type === "pain_tag" && e.anchor === "compliance_burden");
+        expect(target?.reason).not.toContain("feedback");
+    });
+});

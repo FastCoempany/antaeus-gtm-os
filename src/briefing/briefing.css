@@ -1391,3 +1391,78 @@ details[open] .bf-work__call-toggle-hint {
 .bf-cost__bar-fill--paused {
     background: #c0392b;
 }
+
+/* Behavioral feedback marks — Used / Met / Noise.
+ *
+ * Three-button row at the bottom of each Pattern card. The active
+ * mark gets a colored fill (green = used, blue = met, red = noise);
+ * inactive marks stay quiet. Click the active button again to clear.
+ *
+ * The colors deliberately echo Part II §3 semantic roles (green for
+ * earned-positive, blue for informational/neutral, red for risk /
+ * intervention) rather than inventing a new palette. The Met state
+ * is neutral on purpose — "I already knew this" is neither praise
+ * nor complaint, so it gets blue.
+ */
+
+.bf-marks {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--bf-rule);
+    flex-wrap: wrap;
+}
+
+.bf-marks__label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bf-ink-quiet);
+    margin-right: 6px;
+}
+
+.bf-mark {
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    color: var(--bf-ink-soft);
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.bf-mark:hover {
+    border-color: var(--bf-ink-quiet);
+    color: var(--bf-ink);
+}
+
+.bf-mark:focus-visible {
+    outline: 2px solid var(--bf-orange);
+    outline-offset: 2px;
+}
+
+/* Active states — each mark gets its semantic color. */
+
+.bf-mark--used.bf-mark--active {
+    background: #d4f4dd;
+    color: #186b3b;
+    border-color: #186b3b;
+}
+
+.bf-mark--met.bf-mark--active {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.bf-mark--noise.bf-mark--active {
+    background: #fde2e2;
+    color: #9a1f1f;
+    border-color: #9a1f1f;
+}
