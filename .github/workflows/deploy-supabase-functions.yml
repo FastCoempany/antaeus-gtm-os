@@ -36,7 +36,7 @@ on:
           - heartbeat
 
 permissions:
-  contents: write   # verify job commits the verification log back to main
+  contents: read
 
 concurrency:
   group: deploy-supabase-functions
@@ -125,12 +125,6 @@ jobs:
       SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          # Need full history to commit + push verification log back.
-          fetch-depth: 0
-          # Default GITHUB_TOKEN has contents:write per permissions block
-          # above, which is what we need for the push step.
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Gate on SERVICE_ROLE_KEY
         id: gate
@@ -147,7 +141,7 @@ jobs:
         id: call
         run: |
           # No override:true here — the cost gate decides. If the rolling
-          # weekly cost is paused, the run aborts cleanly and the log
+          # weekly cost is paused, the run aborts cleanly and the summary
           # captures that, which is still a useful health signal (proves
           # the new code can execute cost_check). If the gate is open,
           # the run goes through and spends real Anthropic budget — but
@@ -163,80 +157,31 @@ jobs:
           if [ $curl_status -ne 0 ]; then
             echo "curl exited $curl_status — pipeline call failed at the transport level."
             echo "$response"
-            # Still write a log row so the failure is recorded.
             response="{\"ok\":false,\"transport_error\":\"curl exit $curl_status\"}"
           fi
-          # Write to a file so the format step can read it without
-          # heredoc-escaping the JSON.
           printf '%s' "$response" > /tmp/verification.json
           echo "Captured response into /tmp/verification.json ($(wc -c < /tmp/verification.json) bytes)."
 
-      - name: Format verification log entry
+      - name: Write verification to workflow job summary
         if: steps.gate.outputs.run == 'true'
         run: |
-          # Two outputs: append to the tracked log file (best-effort,
-          # might fail to push back if repo permissions don't allow),
-          # AND write the same content to the workflow's job summary
-          # (always works, durable in the run UI for 90 days, fetchable
-          # via WebFetch on the job summary URL). The job summary is
-          # the canonical surface for now; the file commit is a nice-
-          # to-have audit trail.
+          # The job summary is the canonical verification surface. It
+          # renders in the workflow run page, is retained for 90 days,
+          # and is fetchable via the GitHub web UI or WebFetch on the
+          # run URL. We previously also appended to a tracked log file
+          # in the repo, but the main-branch ruleset rejects direct
+          # pushes from the workflow (GH013 'Changes must be made
+          # through a pull request') and adding the GitHub Actions app
+          # to the bypass list isn't always available. Accepting the
+          # job summary as the only surface keeps the rule intact for
+          # humans while still giving every verify run a durable,
+          # discoverable record.
           formatted=$(python3 .github/scripts/format-briefing-verification.py \
             /tmp/verification.json \
             "${{ github.sha }}" \
             "${{ github.event.head_commit.message }}")
-          # Append to the tracked log file (will commit + push below).
-          printf '%s' "$formatted" >> deliverables/audit/briefing-verification-log.md
-          # Mirror to the workflow job summary so it's always readable
-          # without depending on push permission.
           {
             echo "## Briefing pipeline verification"
             echo ""
             echo "$formatted"
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Commit + push log (best-effort)
-        if: steps.gate.outputs.run == 'true'
-        # Continue-on-error so a permission failure on push doesn't
-        # red the workflow. The job summary already carries the result;
-        # the log file commit is a nice-to-have audit trail.
-        continue-on-error: true
-        run: |
-          # Use the standard github-actions[bot] noreply email so the
-          # commit's author renders correctly in the GitHub UI.
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git add deliverables/audit/briefing-verification-log.md
-          if git diff --staged --quiet; then
-            echo "::notice::No changes to commit (verification log already in sync)."
-            exit 0
-          fi
-          # [skip-screenshots] avoids re-triggering render-screenshots.yml
-          # which has no path filter. Our own workflow filters on
-          # supabase/functions/** so the log commit won't loop.
-          git commit -m "verification log: ${{ github.sha }} [skip-screenshots]"
-
-          # Diagnostic block: surface the actual git push stderr in the
-          # step log so future failures are debuggable without needing
-          # to expand the step. Previous version swallowed the real
-          # error inside an if-else and only emitted a generic warning.
-          echo "::group::git remote -v"
-          git remote -v
-          echo "::endgroup::"
-          echo "::group::git status (pre-push)"
-          git status --short
-          git log -1 --oneline
-          echo "::endgroup::"
-          echo "::group::git push origin HEAD:main"
-          # Push with set +e so the run continues; verbose so the
-          # stderr is captured. The exit code is checked after.
-          set +e
-          git push origin HEAD:main 2>&1
-          push_exit=$?
-          set -e
-          echo "::endgroup::"
-          if [ $push_exit -eq 0 ]; then
-            echo "::notice::Pushed verification log entry to main."
-          else
-            echo "::warning::git push failed with exit $push_exit. See the 'git push origin HEAD:main' group above for the actual stderr. Log entry is still captured in the workflow job summary."
-          fi
