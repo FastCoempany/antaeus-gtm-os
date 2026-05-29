@@ -174,26 +174,47 @@ jobs:
       - name: Format verification log entry
         if: steps.gate.outputs.run == 'true'
         run: |
-          python3 .github/scripts/format-briefing-verification.py \
+          # Two outputs: append to the tracked log file (best-effort,
+          # might fail to push back if repo permissions don't allow),
+          # AND write the same content to the workflow's job summary
+          # (always works, durable in the run UI for 90 days, fetchable
+          # via WebFetch on the job summary URL). The job summary is
+          # the canonical surface for now; the file commit is a nice-
+          # to-have audit trail.
+          formatted=$(python3 .github/scripts/format-briefing-verification.py \
             /tmp/verification.json \
             "${{ github.sha }}" \
-            "${{ github.event.head_commit.message }}" \
-            >> deliverables/audit/briefing-verification-log.md
+            "${{ github.event.head_commit.message }}")
+          # Append to the tracked log file (will commit + push below).
+          printf '%s' "$formatted" >> deliverables/audit/briefing-verification-log.md
+          # Mirror to the workflow job summary so it's always readable
+          # without depending on push permission.
+          {
+            echo "## Briefing pipeline verification"
+            echo ""
+            echo "$formatted"
+          } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Commit + push log
+      - name: Commit + push log (best-effort)
         if: steps.gate.outputs.run == 'true'
+        # Continue-on-error so a permission failure on push doesn't
+        # red the workflow. The job summary already carries the result;
+        # the log file commit is a nice-to-have audit trail.
+        continue-on-error: true
         run: |
           git config user.email "actions@github.com"
           git config user.name "github-actions[bot]"
           git add deliverables/audit/briefing-verification-log.md
-          # Allow-empty exits if no diff (rare; format script always
-          # appends), but be defensive.
           if git diff --staged --quiet; then
-            echo "No changes to commit (verification log already in sync)."
+            echo "::notice::No changes to commit (verification log already in sync)."
             exit 0
           fi
           # [skip-screenshots] avoids re-triggering render-screenshots.yml
           # which has no path filter. Our own workflow filters on
           # supabase/functions/** so the log commit won't loop.
           git commit -m "verification log: ${{ github.sha }} [skip-screenshots]"
-          git push origin HEAD:main
+          if git push origin HEAD:main 2>&1; then
+            echo "::notice::Pushed verification log entry to main."
+          else
+            echo "::warning::Could not push verification log back to main (likely repo Actions permission is read-only). Log entry is captured in the workflow job summary above; that's the durable surface."
+          fi
