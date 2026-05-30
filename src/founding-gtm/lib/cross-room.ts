@@ -1,10 +1,13 @@
 import type {
     AdvisorDeploymentRecord,
     AutopsyRecord,
+    AutopsySnapshotRecord,
     CallPlanRecord,
     ColdCallRecord,
     CueRecord,
     DealRecord,
+    DiscoveryCallRecord,
+    DiscoveryDisposition,
     DiscoveryStats,
     IcpRecord,
     ProofRecord,
@@ -12,6 +15,14 @@ import type {
     SectionsInput,
     TouchRecord
 } from "./types";
+
+const DISCOVERY_DISPOSITIONS: ReadonlySet<DiscoveryDisposition> = new Set<DiscoveryDisposition>([
+    "advanced",
+    "stalled",
+    "lost",
+    "won",
+    "no-show"
+]);
 
 /**
  * Cross-room readers — turn cloud-mirrored localStorage into a typed
@@ -377,6 +388,66 @@ function readAdvisorDeployments(
         .filter((r): r is AdvisorDeploymentRecord => r !== null);
 }
 
+function readAutopsySnapshots(
+    storage: StorageLike
+): ReadonlyArray<AutopsySnapshotRecord> {
+    const root = asObject(
+        parseJson(storage.getItem("gtmos_autopsy_snapshots"))
+    );
+    return maybeArrayWithKey(root, "snapshots")
+        .map((raw): AutopsySnapshotRecord | null => {
+            const o = asObject(raw);
+            if (!o) return null;
+            const dealId = asString(o.dealId);
+            if (!dealId) return null;
+            const verdict = asString(o.verdictMode);
+            if (verdict !== "left" && verdict !== "corrected") return null;
+            return {
+                dealId,
+                accountName: asString(o.accountName),
+                verdictMode: verdict,
+                killSwitch: asString(o.killSwitch),
+                topCauseLabel:
+                    typeof o.topCauseLabel === "string"
+                        ? o.topCauseLabel
+                        : null
+            };
+        })
+        .filter((r): r is AutopsySnapshotRecord => r !== null);
+}
+
+function readDiscoveryCalls(
+    storage: StorageLike
+): ReadonlyArray<DiscoveryCallRecord> {
+    const root = asObject(
+        parseJson(storage.getItem("gtmos_discovery_call_log"))
+    );
+    return maybeArrayWithKey(root, "calls")
+        .map((raw): DiscoveryCallRecord | null => {
+            const o = asObject(raw);
+            if (!o) return null;
+            const id = asString(o.id);
+            if (!id) return null;
+            const disp = asString(o.disposition);
+            if (!DISCOVERY_DISPOSITIONS.has(disp as DiscoveryDisposition)) {
+                return null;
+            }
+            const fw = asString(o.activeFramework);
+            const segs = asArray(o.segmentKeysWorked).filter(
+                (s): s is string => typeof s === "string"
+            );
+            return {
+                id,
+                createdAtIso: asString(o.createdAtIso) || asString(o.createdAt),
+                accountName: asString(o.accountName),
+                activeFramework: fw ? fw : null,
+                segmentKeysWorked: segs,
+                disposition: disp as DiscoveryDisposition
+            };
+        })
+        .filter((r): r is DiscoveryCallRecord => r !== null);
+}
+
 function readDiscoveryStats(storage: StorageLike): DiscoveryStats | null {
     const o = asObject(parseJson(storage.getItem("gtmos_discovery_stats")));
     if (!o) return null;
@@ -437,9 +508,11 @@ export function loadSectionsInput(
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
             quota: null,
+            discoveryCalls: [],
             discoveryStats: null,
             discoveryWorked: []
         };
@@ -457,9 +530,11 @@ export function loadSectionsInput(
         coldCalls: readColdCalls(storage),
         callPlanner: readCallPlanner(storage),
         autopsies: readAutopsies(storage),
+        autopsySnapshots: readAutopsySnapshots(storage),
         proofs: readProofs(storage),
         advisorDeployments: readAdvisorDeployments(storage),
         quota: readQuota(storage),
+        discoveryCalls: readDiscoveryCalls(storage),
         discoveryStats: readDiscoveryStats(storage),
         discoveryWorked: readDiscoveryWorked(storage)
     };

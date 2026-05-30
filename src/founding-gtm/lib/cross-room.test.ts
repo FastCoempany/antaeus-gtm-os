@@ -421,6 +421,92 @@ describe("loadSectionsInput — Advisor deployments", () => {
     });
 });
 
+describe("loadSectionsInput — Autopsy snapshots (§5 verdict source)", () => {
+    it("reads gtmos_autopsy_snapshots records", () => {
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_autopsy_snapshots: {
+                    snapshots: [
+                        {
+                            dealId: "d_acme",
+                            accountName: "Acme",
+                            verdictMode: "corrected",
+                            killSwitch: "Walk if no EB by Friday",
+                            topCauseLabel: "No champion at EB level"
+                        }
+                    ]
+                }
+            })
+        });
+        expect(r.autopsySnapshots.length).toBe(1);
+        expect(r.autopsySnapshots[0]!.verdictMode).toBe("corrected");
+        expect(r.autopsySnapshots[0]!.topCauseLabel).toBe(
+            "No champion at EB level"
+        );
+    });
+
+    it("drops records with missing dealId or invalid verdictMode", () => {
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_autopsy_snapshots: {
+                    snapshots: [
+                        { dealId: "ok", verdictMode: "corrected" },
+                        { verdictMode: "left" }, // no dealId
+                        { dealId: "bad", verdictMode: "ambiguous" }
+                    ]
+                }
+            })
+        });
+        expect(r.autopsySnapshots.length).toBe(1);
+        expect(r.autopsySnapshots[0]!.dealId).toBe("ok");
+    });
+});
+
+describe("loadSectionsInput — Discovery call log (§3 precise source)", () => {
+    it("reads gtmos_discovery_call_log records", () => {
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_discovery_call_log: {
+                    calls: [
+                        {
+                            id: "dcl_1",
+                            createdAt: "2026-05-20T10:00:00.000Z",
+                            accountName: "Acme",
+                            activeFramework: "customer-support",
+                            segmentKeysWorked: [
+                                "pain-and-consequence",
+                                "trigger-and-urgency"
+                            ],
+                            disposition: "advanced"
+                        }
+                    ]
+                }
+            })
+        });
+        expect(r.discoveryCalls.length).toBe(1);
+        expect(r.discoveryCalls[0]!.disposition).toBe("advanced");
+        expect(r.discoveryCalls[0]!.segmentKeysWorked).toContain(
+            "pain-and-consequence"
+        );
+    });
+
+    it("drops records with missing id or invalid disposition", () => {
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_discovery_call_log: {
+                    calls: [
+                        { id: "ok", disposition: "advanced", createdAt: "x" },
+                        { disposition: "advanced" }, // no id
+                        { id: "bad", disposition: "in-progress" } // not terminal
+                    ]
+                }
+            })
+        });
+        expect(r.discoveryCalls.length).toBe(1);
+        expect(r.discoveryCalls[0]!.id).toBe("ok");
+    });
+});
+
 describe("loadSectionsInput — Discovery stats + worked threads (§3 source)", () => {
     it("reads gtmos_discovery_stats counts", () => {
         const r = loadSectionsInput({

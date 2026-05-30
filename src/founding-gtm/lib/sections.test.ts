@@ -26,9 +26,11 @@ const empty: SectionsInput = {
     coldCalls: [],
     callPlanner: [],
     autopsies: [],
+    autopsySnapshots: [],
     proofs: [],
     advisorDeployments: [],
     quota: null,
+    discoveryCalls: [],
     discoveryStats: null,
     discoveryWorked: []
 };
@@ -271,6 +273,95 @@ describe("authorSection3 — The questions that earned the next meeting", () => 
         // 70% ≥ 60% → affirming.
         expect(s.surprise?.tone).toBe("affirming");
     });
+
+    // ─── per-call (precise) path ─────────────────────────────────────────
+    it("names the top-advancing thread when per-call records exist", () => {
+        const advanced = (id: string, segs: ReadonlyArray<string>) => ({
+            id,
+            createdAtIso: "2026-05-20T10:00:00.000Z",
+            accountName: "Acme",
+            activeFramework: "customer-support",
+            segmentKeysWorked: segs,
+            disposition: "advanced" as const
+        });
+        const s = authorSection3(
+            input({
+                discoveryCalls: [
+                    advanced("c1", ["pain-and-consequence", "trigger-and-urgency"]),
+                    advanced("c2", ["pain-and-consequence", "proof-threshold"]),
+                    advanced("c3", ["pain-and-consequence"])
+                ]
+            })
+        );
+        expect(s.status).toBe("ready");
+        // 3 of 3 advanced → 100%.
+        expect(s.body[0]).toContain("100%");
+        // pain-and-consequence is on 3/3 advancing calls — the top thread.
+        expect(s.body[1]).toContain("pain-and-consequence");
+        expect(
+            s.evidence.some((e) => e.includes("pain-and-consequence · 3"))
+        ).toBe(true);
+    });
+
+    it("surprises (stopped asking) when an advancing thread is absent from recent calls", () => {
+        // One old advancing call pulled "trigger-and-urgency"; five
+        // recent advancing calls pulled only "pain-and-consequence".
+        const s = authorSection3(
+            input({
+                discoveryCalls: [
+                    {
+                        id: "c_old",
+                        createdAtIso: "2026-01-01T10:00:00.000Z",
+                        accountName: "Old",
+                        activeFramework: "customer-support",
+                        segmentKeysWorked: [
+                            "pain-and-consequence",
+                            "trigger-and-urgency"
+                        ],
+                        disposition: "advanced"
+                    },
+                    ...Array.from({ length: 5 }, (_, i) => ({
+                        id: `c_recent_${i}`,
+                        createdAtIso: `2026-05-${10 + i}T10:00:00.000Z`,
+                        accountName: "Recent",
+                        activeFramework: "customer-support",
+                        segmentKeysWorked: ["pain-and-consequence"],
+                        disposition: "advanced" as const
+                    }))
+                ]
+            })
+        );
+        expect(s.surprise?.tone).toBe("corrective");
+        expect(s.surprise?.headline.toLowerCase()).toContain(
+            "stopped asking"
+        );
+        expect(s.surprise?.body).toContain("trigger-and-urgency");
+    });
+
+    it("per-call path beats the aggregate fallback when both are present", () => {
+        // Aggregate stats say 70% advance rate (affirming), but the
+        // per-call records have all losses → corrective. Precise wins.
+        const s = authorSection3(
+            input({
+                discoveryStats: { totalCalls: 10, advancedCalls: 7 },
+                discoveryCalls: [
+                    {
+                        id: "c1",
+                        createdAtIso: "2026-05-20",
+                        accountName: "A",
+                        activeFramework: null,
+                        segmentKeysWorked: ["opening-frame"],
+                        disposition: "lost"
+                    }
+                ]
+            })
+        );
+        // Per-call: 0/1 advanced → corrective ("isn't moving deals").
+        expect(s.surprise?.tone).toBe("corrective");
+        expect(s.surprise?.headline.toLowerCase()).toContain(
+            "isn't moving deals"
+        );
+    });
 });
 
 // ─── §4 ────────────────────────────────────────────────────────────────
@@ -378,6 +469,65 @@ describe("authorSection5 — The losses we paid for", () => {
         expect(s.surprise?.headline.toLowerCase()).toContain(
             "symptoms of past losses"
         );
+    });
+
+    it("surfaces the most common top-cause from autopsy snapshots", () => {
+        // Three examined losses, two of which share the same regenerated
+        // top cause. §5 should name it in the body.
+        const dealRecord = (id: string, account: string) =>
+            deal({
+                id,
+                accountName: account,
+                lossReason: "lost"
+            });
+        const examinedAutopsy = (dealId: string) => ({
+            dealId,
+            accountName: "",
+            verdict: "unknown" as const,
+            killSwitchFired: false,
+            tasks: [{ id: "t1", text: "t1", checked: true }]
+        });
+        const s = authorSection5(
+            input({
+                closedLost: [
+                    dealRecord("d1", "Acme"),
+                    dealRecord("d2", "Globex"),
+                    dealRecord("d3", "Initech")
+                ],
+                autopsies: [
+                    examinedAutopsy("d1"),
+                    examinedAutopsy("d2"),
+                    examinedAutopsy("d3")
+                ],
+                autopsySnapshots: [
+                    {
+                        dealId: "d1",
+                        accountName: "Acme",
+                        verdictMode: "corrected",
+                        killSwitch: "x",
+                        topCauseLabel: "No champion at EB level"
+                    },
+                    {
+                        dealId: "d2",
+                        accountName: "Globex",
+                        verdictMode: "corrected",
+                        killSwitch: "x",
+                        topCauseLabel: "No champion at EB level"
+                    },
+                    {
+                        dealId: "d3",
+                        accountName: "Initech",
+                        verdictMode: "left",
+                        killSwitch: "x",
+                        topCauseLabel: "Next step has no date"
+                    }
+                ]
+            })
+        );
+        expect(s.status).toBe("ready");
+        const fullBody = s.body.join(" ");
+        expect(fullBody).toContain("No champion at EB level");
+        expect(fullBody).toContain("2 of 3");
     });
 
     it("counts a loss as examined from real task-log data (no verdict)", () => {

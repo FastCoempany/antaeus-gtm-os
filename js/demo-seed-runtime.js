@@ -660,6 +660,27 @@ function generateShared(data){
   // DISCOVERY STATS
   var discoveryStats={totalCalls:12,advancedCalls:5};
 
+  // DISCOVERY CALL LOG — per-call records (segments worked + outcome).
+  // Drives Founding GTM §3's read of which threads actually earned the
+  // next meeting; the aggregate above is the count, this is the shape.
+  // 12 calls / 5 advanced — matches discoveryStats. Segments are drawn
+  // from the Customer Support framework (the active framework in this
+  // scenario) so Founding GTM can map them back to the framework.
+  var discoveryCallLog={calls:[
+    {id:'dcl_seed_1',createdAt:d(34),updatedAt:d(34),accountName:'Meridian Logistics',activeFramework:'customer-support',segmentKeysWorked:['pain-and-consequence','trigger-and-urgency','proof-threshold'],nodeIdsWorked:['cx_resolution_1','cx_resolution_2','cx_implementation_1'],disposition:'advanced'},
+    {id:'dcl_seed_2',createdAt:d(30),updatedAt:d(30),accountName:'Cascadia Health Systems',activeFramework:'customer-support',segmentKeysWorked:['pain-and-consequence','trigger-and-urgency','stakeholder-and-ownership'],nodeIdsWorked:['cx_resolution_3','cx_agent_1'],disposition:'advanced'},
+    {id:'dcl_seed_3',createdAt:d(28),updatedAt:d(28),accountName:'Northstar Financial',activeFramework:'customer-support',segmentKeysWorked:['pain-and-consequence','proof-threshold','decision-architecture'],nodeIdsWorked:['cx_resolution_4','cx_implementation_2'],disposition:'advanced'},
+    {id:'dcl_seed_4',createdAt:d(24),updatedAt:d(24),accountName:'Apex Manufacturing',activeFramework:'customer-support',segmentKeysWorked:['opening-frame','current-state-truth'],nodeIdsWorked:['cx_agent_2'],disposition:'stalled'},
+    {id:'dcl_seed_5',createdAt:d(20),updatedAt:d(20),accountName:'Riverview Insurance',activeFramework:'customer-support',segmentKeysWorked:['pain-and-consequence','trigger-and-urgency','proof-threshold','stakeholder-and-ownership'],nodeIdsWorked:['cx_resolution_1','cx_agent_3'],disposition:'advanced'},
+    {id:'dcl_seed_6',createdAt:d(18),updatedAt:d(18),accountName:'Beacon Retail Group',activeFramework:'customer-support',segmentKeysWorked:['opening-frame','current-state-truth','pain-and-consequence'],nodeIdsWorked:['cx_resolution_2'],disposition:'stalled'},
+    {id:'dcl_seed_7',createdAt:d(15),updatedAt:d(15),accountName:'Trident Pharmaceuticals',activeFramework:'customer-support',segmentKeysWorked:['pain-and-consequence','trigger-and-urgency','proof-threshold'],nodeIdsWorked:['cx_resolution_3','cx_implementation_1'],disposition:'advanced'},
+    {id:'dcl_seed_8',createdAt:d(12),updatedAt:d(12),accountName:'Atlas Energy Corp',activeFramework:'customer-support',segmentKeysWorked:['opening-frame','current-state-truth'],nodeIdsWorked:['cx_resolution_4'],disposition:'lost'},
+    {id:'dcl_seed_9',createdAt:d(10),updatedAt:d(10),accountName:'Cascade Manufacturing',activeFramework:'customer-support',segmentKeysWorked:['opening-frame','current-state-truth','pain-and-consequence'],nodeIdsWorked:['cx_agent_1'],disposition:'no-show'},
+    {id:'dcl_seed_10',createdAt:d(7),updatedAt:d(7),accountName:'Meridian Logistics',activeFramework:'customer-support',segmentKeysWorked:['stakeholder-and-ownership','decision-architecture','next-step-lock'],nodeIdsWorked:['cx_implementation_2','cx_agent_3'],disposition:'stalled'},
+    {id:'dcl_seed_11',createdAt:d(4),updatedAt:d(4),accountName:'Cascadia Health Systems',activeFramework:'customer-support',segmentKeysWorked:['decision-architecture','next-step-lock'],nodeIdsWorked:['cx_agent_2'],disposition:'stalled'},
+    {id:'dcl_seed_12',createdAt:d(2),updatedAt:d(2),accountName:'Northstar Financial',activeFramework:'customer-support',segmentKeysWorked:['decision-architecture','next-step-lock'],nodeIdsWorked:['cx_implementation_1'],disposition:'stalled'}
+  ]};
+
   // DISCOVERY WORKED MOVES
   var discoveryWorked={
     'cx_resolution_1':true,'cx_resolution_2':true,'cx_resolution_3':true,'cx_resolution_4':true,
@@ -692,6 +713,44 @@ function generateShared(data){
     autopsyLog[thirdDeal.id]={lastRunAt:d(4),tasks:{'competitive_prep':{done:true,doneAt:d(4)},'eb_strategy':{done:false}}};
   }
 
+  // AUTOPSY SNAPSHOTS (per-deal verdict + cause + kill-switch).
+  // Mirrors what Future Autopsy captures when the operator pins a
+  // deal in the room; drives Founding GTM §5's verdict/cause readout.
+  var autopsySnapshots={snapshots:[]};
+  if(lostDeal){
+    autopsySnapshots.snapshots.push({
+      dealId:lostDeal.id,
+      accountName:lostDeal.accountName,
+      verdictMode:'corrected',
+      killSwitch:"If no EB by Tuesday, walk. Don't pay procurement tax twice.",
+      topCauseId:'champion_weak',
+      topCauseLabel:'No champion at the EB level',
+      generatedAtIso:d(9)
+    });
+  }
+  if(stallingDeal){
+    autopsySnapshots.snapshots.push({
+      dealId:stallingDeal.id,
+      accountName:stallingDeal.accountName,
+      verdictMode:'left',
+      killSwitch:"If next-step doesn't get a date by EOD Friday, downgrade forecast and stop chasing.",
+      topCauseId:'no_nextstep',
+      topCauseLabel:'Next step has no date',
+      generatedAtIso:d(2)
+    });
+  }
+  if(thirdDeal){
+    autopsySnapshots.snapshots.push({
+      dealId:thirdDeal.id,
+      accountName:thirdDeal.accountName,
+      verdictMode:'corrected',
+      killSwitch:"If the competitive eval misses the metric we set, don't extend.",
+      topCauseId:'coverage_gap',
+      topCauseLabel:'Competitive risk without proof',
+      generatedAtIso:d(4)
+    });
+  }
+
   // POC DATA
   var wonDeal=deals.find(function(dd){return dd.stage==='closed-won'});
   var pocData={pocs:[]};
@@ -716,8 +775,10 @@ function generateShared(data){
     angles:angles,
     discoveryStats:discoveryStats,
     discoveryWorked:discoveryWorked,
+    discoveryCallLog:discoveryCallLog,
     discoveryAgenda:discoveryAgenda,
     autopsyLog:autopsyLog,
+    autopsySnapshots:autopsySnapshots,
     pocData:pocData,
     playbookNotes:playbookNotes
   };
@@ -840,8 +901,10 @@ window.seed=function(mode){
   w('gtmos_angles',shared.angles);
   w('gtmos_discovery_stats',shared.discoveryStats);
   w('gtmos_discovery_worked',shared.discoveryWorked);
+  w('gtmos_discovery_call_log',shared.discoveryCallLog);
   w('gtmos_discovery_agenda',shared.discoveryAgenda);
   w('gtmos_autopsy_log_v1',shared.autopsyLog);
+  w('gtmos_autopsy_snapshots',shared.autopsySnapshots);
   w('gtmos_poc_data',shared.pocData);
   w('gtmos_playbook_notes',shared.playbookNotes);
   w('gtmos_qw_inputs',{quota:data.seed.annual_quota,acv:data.seed.avg_deal_size,winRate:data.seed.win_rate,cycle:data.seed.cycle_days});

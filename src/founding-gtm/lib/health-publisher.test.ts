@@ -85,9 +85,11 @@ describe("startHealthPublishing", () => {
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
             quota: null,
+            discoveryCalls: [],
             discoveryStats: null,
             discoveryWorked: []
         });
@@ -137,9 +139,11 @@ describe("startHealthPublishing", () => {
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
             quota: null,
+            discoveryCalls: [],
             discoveryStats: null,
             discoveryWorked: []
         });
@@ -165,9 +169,11 @@ describe("startHealthPublishing", () => {
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
             quota: null,
+            discoveryCalls: [],
             discoveryStats: null,
             discoveryWorked: []
         });
@@ -187,9 +193,11 @@ describe("startHealthPublishing", () => {
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
             quota: null,
+            discoveryCalls: [],
             discoveryStats: null,
             discoveryWorked: []
         });

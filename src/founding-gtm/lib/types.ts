@@ -109,14 +109,22 @@ export interface SectionsInput {
     readonly coldCalls: ReadonlyArray<ColdCallRecord>;
     readonly callPlanner: ReadonlyArray<CallPlanRecord>;
     readonly autopsies: ReadonlyArray<AutopsyRecord>;
+    // §5 reads per-deal snapshots Future Autopsy writes when the
+    // operator pins a deal (verdict + top cause + kill switch). The
+    // autopsies[] above carries only task completion; this carries the
+    // regenerated diagnosis. Joined to closed-lost deals by dealId.
+    readonly autopsySnapshots: ReadonlyArray<AutopsySnapshotRecord>;
     readonly proofs: ReadonlyArray<ProofRecord>;
     readonly advisorDeployments: ReadonlyArray<AdvisorDeploymentRecord>;
     readonly quota: QuotaInputs | null;
-    // §3 reads Discovery Studio's real persisted state: aggregate call
-    // counts (gtmos_discovery_stats) + the set of segment nodes worked
-    // across the room's lifetime (gtmos_discovery_worked). Discovery does
-    // NOT persist a per-call segment↔outcome link, so §3 reads advance
-    // rate + threads-pulled, not "which segment earned which advance."
+    // §3 reads from three Discovery Studio sources, in priority order:
+    //   - discoveryCalls: per-call records (segments + disposition) —
+    //     the precise source that lets §3 name WHICH threads earn the
+    //     next meeting and WHICH recent calls skipped them.
+    //   - discoveryStats: aggregate totalCalls / advancedCalls — coarse
+    //     fallback when no per-call records exist.
+    //   - discoveryWorked: lifetime worked-set — coarsest fallback.
+    readonly discoveryCalls: ReadonlyArray<DiscoveryCallRecord>;
     readonly discoveryStats: DiscoveryStats | null;
     readonly discoveryWorked: ReadonlyArray<string>;
 }
@@ -124,6 +132,22 @@ export interface SectionsInput {
 export interface DiscoveryStats {
     readonly totalCalls: number;
     readonly advancedCalls: number;
+}
+
+export type DiscoveryDisposition =
+    | "advanced"
+    | "stalled"
+    | "lost"
+    | "won"
+    | "no-show";
+
+export interface DiscoveryCallRecord {
+    readonly id: string;
+    readonly createdAtIso: string;
+    readonly accountName: string;
+    readonly activeFramework: string | null;
+    readonly segmentKeysWorked: ReadonlyArray<string>;
+    readonly disposition: DiscoveryDisposition;
 }
 
 /** Lightweight typed shapes — only the fields the sections actually consume. */
@@ -204,6 +228,14 @@ export interface ProofRecord {
     readonly outcome: string;
     readonly score: number;
     readonly band: string;
+}
+
+export interface AutopsySnapshotRecord {
+    readonly dealId: string;
+    readonly accountName: string;
+    readonly verdictMode: "left" | "corrected";
+    readonly killSwitch: string;
+    readonly topCauseLabel: string | null;
 }
 
 export interface AdvisorDeploymentRecord {

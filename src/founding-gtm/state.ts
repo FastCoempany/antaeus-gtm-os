@@ -27,9 +27,11 @@ export const sectionsInput: Signal<SectionsInput> = signal({
     coldCalls: [],
     callPlanner: [],
     autopsies: [],
+    autopsySnapshots: [],
     proofs: [],
     advisorDeployments: [],
     quota: null,
+    discoveryCalls: [],
     discoveryStats: null,
     discoveryWorked: []
 });
@@ -105,9 +107,11 @@ export function __resetForTests(): void {
         coldCalls: [],
         callPlanner: [],
         autopsies: [],
+        autopsySnapshots: [],
         proofs: [],
         advisorDeployments: [],
         quota: null,
+        discoveryCalls: [],
         discoveryStats: null,
         discoveryWorked: []
     };
