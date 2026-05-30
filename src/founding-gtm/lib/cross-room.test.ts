@@ -54,7 +54,7 @@ describe("loadSectionsInput — empty + defensive", () => {
 });
 
 describe("loadSectionsInput — ICPs", () => {
-    it("hydrates id/name/persona/trigger/qualityScore from icps[]", () => {
+    it("hydrates id/name/persona/trigger/qualityScore from legacy icps[]", () => {
         const r = loadSectionsInput({
             storage: storage({
                 gtmos_icp_analytics: {
@@ -77,6 +77,36 @@ describe("loadSectionsInput — ICPs", () => {
         expect(r.icps.length).toBe(1);
         expect(r.icps[0].name).toBe("Mid-market ops leader");
         expect(r.icps[0].qualityScore).toBe(88);
+    });
+
+    it("reads the real SavedIcp shape (statement → name, buyer → persona)", () => {
+        // What ICP Studio actually persists: SavedIcp, with `statement`
+        // (no `name`) and `buyer` (no `persona`). Reading bare `name`/
+        // `persona` left every ICP nameless.
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_icp_analytics: {
+                    totalWorked: 3,
+                    icps: [
+                        {
+                            id: "icp_real",
+                            statement:
+                                "Series A AI-native teams cutting contractor spend",
+                            buyer: "Head of Ops",
+                            trigger: "new funding round",
+                            qualityScore: 74
+                        }
+                    ]
+                }
+            })
+        });
+        expect(r.icps.length).toBe(1);
+        expect(r.icps[0].name).toBe(
+            "Series A AI-native teams cutting contractor spend"
+        );
+        expect(r.icps[0].persona).toBe("Head of Ops");
+        expect(r.icps[0].trigger).toBe("new funding round");
+        expect(r.icps[0].qualityScore).toBe(74);
     });
 });
 
@@ -167,7 +197,7 @@ describe("loadSectionsInput — Cues", () => {
 });
 
 describe("loadSectionsInput — Cold calls + Call planner", () => {
-    it("reads both legacy logs", () => {
+    it("reads both legacy logs (call planner as a bare array)", () => {
         const r = loadSectionsInput({
             storage: storage({
                 gtmos_cold_call_log: {
@@ -191,6 +221,43 @@ describe("loadSectionsInput — Cold calls + Call planner", () => {
         expect(r.callPlanner[0].segmentsWorked).toEqual([
             "pain_and_consequence"
         ]);
+    });
+
+    it("reads the real Call Planner AgendaSnapshot (single object)", () => {
+        // What Call Planner actually persists: one AgendaSnapshot object
+        // (latest plan), with `company` + `nextMove` + `preparedAt`, and
+        // no `outcome`/`segmentsWorked`. Reading it as a bare array
+        // returned zero planned calls.
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_discovery_agenda: {
+                    contact: "Sarah Chen",
+                    company: "Globex",
+                    persona: "vp",
+                    nextMove: "Send pricing + book technical eval",
+                    preparedAt: "2026-05-30T12:00:00.000Z",
+                    score: 78,
+                    band: "workable"
+                }
+            })
+        });
+        expect(r.callPlanner.length).toBe(1);
+        expect(r.callPlanner[0].accountName).toBe("Globex");
+        expect(r.callPlanner[0].nextStep).toBe(
+            "Send pricing + book technical eval"
+        );
+        // A plan carries no completed-call outcome — stays empty by design.
+        expect(r.callPlanner[0].outcome).toBe("");
+        expect(r.callPlanner[0].segmentsWorked).toEqual([]);
+    });
+
+    it("drops an empty autosaved agenda draft (no account)", () => {
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_discovery_agenda: { contact: "", company: "", score: 0 }
+            })
+        });
+        expect(r.callPlanner.length).toBe(0);
     });
 });
 
@@ -224,10 +291,38 @@ describe("loadSectionsInput — Autopsies", () => {
         expect(b?.verdict).toBe("unknown");
         expect(b?.tasks.length).toBe(2);
     });
+
+    it("reads the real Future Autopsy task-log shape (tasks as {id:{done}})", () => {
+        // What Future Autopsy actually persists:
+        //   { dealId: { tasks: { taskId: { done, doneAt } }, lastRunAt } }
+        // The reader previously only handled array-tasks and bare-boolean
+        // maps, so real logs surfaced zero completed tasks.
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_autopsy_log_v1: {
+                    deal_real: {
+                        tasks: {
+                            fix_champion: { done: true, doneAt: "2026-05-29" },
+                            rebuild_agenda: { done: false }
+                        },
+                        lastRunAt: "2026-05-29T10:00:00.000Z"
+                    }
+                }
+            })
+        });
+        expect(r.autopsies.length).toBe(1);
+        const rec = r.autopsies[0];
+        expect(rec.dealId).toBe("deal_real");
+        // Only the done task counts as checked; verdict/account aren't in
+        // the log (the room regenerates them at render time).
+        expect(rec.tasks.length).toBe(1);
+        expect(rec.tasks[0].id).toBe("fix_champion");
+        expect(rec.verdict).toBe("unknown");
+    });
 });
 
 describe("loadSectionsInput — Proofs", () => {
-    it("hydrates score + band from quality{}", () => {
+    it("hydrates score + band from legacy quality{} bare array", () => {
         const r = loadSectionsInput({
             storage: storage({
                 gtmos_poc_data: [
@@ -244,10 +339,37 @@ describe("loadSectionsInput — Proofs", () => {
         expect(r.proofs[0].score).toBe(78);
         expect(r.proofs[0].band).toBe("ready");
     });
+
+    it("reads the real PoC shape ({pocs:[]} envelope, flat quality fields)", () => {
+        // What PoC Framework actually persists: `{ pocs: Proof[] }` with
+        // `account` + flat `qualityScore`/`qualityBand`. Reading the bare
+        // array off this object returned zero proofs in production.
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_poc_data: {
+                    pocs: [
+                        {
+                            id: "proof_real",
+                            account: "Initech",
+                            outcome: "passed",
+                            qualityScore: 82,
+                            qualityBand: "ready",
+                            linkedDealName: "Initech"
+                        }
+                    ]
+                }
+            })
+        });
+        expect(r.proofs.length).toBe(1);
+        expect(r.proofs[0].accountName).toBe("Initech");
+        expect(r.proofs[0].score).toBe(82);
+        expect(r.proofs[0].band).toBe("ready");
+        expect(r.proofs[0].outcome).toBe("passed");
+    });
 });
 
 describe("loadSectionsInput — Advisor deployments", () => {
-    it("hydrates tier + moment + outcome (momentId fallback)", () => {
+    it("hydrates tier + moment + outcome from legacy shape", () => {
         const r = loadSectionsInput({
             storage: storage({
                 gtmos_advisor_deployments: {
@@ -265,6 +387,37 @@ describe("loadSectionsInput — Advisor deployments", () => {
         });
         expect(r.advisorDeployments.length).toBe(1);
         expect(r.advisorDeployments[0].moment).toBe("intro_to_eb");
+        expect(r.advisorDeployments[0].accountName).toBe("Acme");
+    });
+
+    it("reads the real Deployment shape (dealName → accountName)", () => {
+        // What Advisor Deploy actually persists: Deployment carries
+        // `dealName`, not `accountName`. The Section 4 coverage-gap
+        // surprise matches deployments to deal accounts, so a blank
+        // accountName broke the match entirely.
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_advisor_deployments: {
+                    deployments: [
+                        {
+                            id: "dep_real",
+                            dealId: "d_globex",
+                            dealName: "Globex",
+                            dealStage: "negotiation",
+                            advisorId: "adv_1",
+                            advisorName: "Jordan Lee",
+                            momentId: "intro_to_eb",
+                            momentName: "Intro to the economic buyer",
+                            outcome: "deal_advance"
+                        }
+                    ]
+                }
+            })
+        });
+        expect(r.advisorDeployments.length).toBe(1);
+        expect(r.advisorDeployments[0].accountName).toBe("Globex");
+        expect(r.advisorDeployments[0].moment).toBe("intro_to_eb");
+        expect(r.advisorDeployments[0].outcome).toBe("deal_advance");
     });
 });
 

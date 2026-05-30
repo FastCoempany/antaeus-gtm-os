@@ -92,9 +92,16 @@ function readIcps(storage: StorageLike): ReadonlyArray<IcpRecord> {
             if (!id) return null;
             return {
                 id,
-                name: asString(o.name),
-                persona: asString(o.persona),
+                // ICP Studio persists `SavedIcp`, whose identity field is
+                // `statement` (there is no `name`). Older/demo data used
+                // `name`. Accept either so the ICP isn't nameless.
+                name: asString(o.name) || asString(o.statement),
+                // SavedIcp calls the persona `buyer`; legacy used `persona`.
+                persona: asString(o.persona) || asString(o.buyer),
                 trigger: asString(o.trigger),
+                // SavedIcp has no per-ICP "worked" flag (only an aggregate
+                // totalWorked on the analytics root). Unused by the section
+                // authors today; kept best-effort for the bag's shape.
                 worked: asBool(o.worked),
                 qualityScore: asNumber(o.qualityScore)
             };
@@ -193,24 +200,51 @@ function readColdCalls(storage: StorageLike): ReadonlyArray<ColdCallRecord> {
         .filter((r): r is ColdCallRecord => r !== null);
 }
 
+function callPlanRecord(raw: unknown): CallPlanRecord | null {
+    const o = asObject(raw);
+    if (!o) return null;
+    const segs = asArray(o.segmentsWorked).filter(
+        (s): s is string => typeof s === "string"
+    );
+    // Call Planner's AgendaSnapshot names the account `company` and the
+    // advance ask `nextMove`; legacy/demo data used `accountName` +
+    // `nextStep`/`advanceAsk`. Accept either.
+    const accountName = asString(o.accountName) || asString(o.company);
+    if (!accountName) return null;
+    return {
+        accountName,
+        persona: asString(o.persona),
+        // NOTE: the AgendaSnapshot is a *plan*, not a completed-call log —
+        // it carries no `outcome` and no `segmentsWorked`. Section 3's
+        // "calls that earned an advance" detection therefore reads empty
+        // from this source. Completed discovery outcomes live in Discovery
+        // Studio (gtmos_discovery_stats / segment data); routing Section 3
+        // at that source is a follow-up, not done here.
+        outcome: asString(o.outcome),
+        nextStep:
+            asString(o.nextStep) ||
+            asString(o.advanceAsk) ||
+            asString(o.nextMove),
+        createdAtIso:
+            asString(o.createdAtIso) ||
+            asString(o.createdAt) ||
+            asString(o.preparedAt),
+        segmentsWorked: segs
+    };
+}
+
 function readCallPlanner(storage: StorageLike): ReadonlyArray<CallPlanRecord> {
-    const arr = asArray(parseJson(storage.getItem("gtmos_discovery_agenda")));
-    return arr
-        .map((raw): CallPlanRecord | null => {
-            const o = asObject(raw);
-            if (!o) return null;
-            const segs = asArray(o.segmentsWorked).filter(
-                (s): s is string => typeof s === "string"
-            );
-            return {
-                accountName: asString(o.accountName),
-                persona: asString(o.persona),
-                outcome: asString(o.outcome),
-                nextStep: asString(o.nextStep ?? o.advanceAsk ?? ""),
-                createdAtIso: asString(o.createdAtIso ?? o.createdAt),
-                segmentsWorked: segs
-            };
-        })
+    const parsed = parseJson(storage.getItem("gtmos_discovery_agenda"));
+    // Call Planner persists a single AgendaSnapshot object (the latest
+    // plan); legacy/demo data used a bare array of planned calls. Accept
+    // either shape.
+    const rows: ReadonlyArray<unknown> = Array.isArray(parsed)
+        ? parsed
+        : asObject(parsed)
+          ? [parsed]
+          : [];
+    return rows
+        .map(callPlanRecord)
         .filter((r): r is CallPlanRecord => r !== null);
 }
 
@@ -227,6 +261,7 @@ function readAutopsies(storage: StorageLike): ReadonlyArray<AutopsyRecord> {
         const tasksArr = asArray(o.tasks);
         let tasks: AutopsyRecord["tasks"];
         if (tasksArr.length > 0) {
+            // Assumed-rich shape: tasks as [{ id, text, checked }].
             tasks = tasksArr
                 .map((t): AutopsyRecord["tasks"][number] | null => {
                     const tObj = asObject(t);
@@ -241,10 +276,18 @@ function readAutopsies(storage: StorageLike): ReadonlyArray<AutopsyRecord> {
                     (t): t is AutopsyRecord["tasks"][number] => t !== null
                 );
         } else {
-            // Legacy { taskId: true } map → synthetic task list
+            // Future Autopsy actually persists tasks as an object map
+            // { taskId: { done: bool, doneAt? } }; the oldest legacy shape
+            // was a bare { taskId: true } map. Accept either — a task
+            // counts as checked when its value is `true` or `{ done: true }`.
+            // NOTE: the task-log stores no task *text* (only completion
+            // state), so `text` falls back to the id; verdict / kill-switch
+            // / account_name aren't in the log either (the room regenerates
+            // them at render time). Section 5's richer copy needs that
+            // regeneration as a source — a follow-up, not done here.
             const map = tasksObj ?? o;
             tasks = Object.entries(map)
-                .filter(([, v]) => v === true)
+                .filter(([, v]) => v === true || asObject(v)?.done === true)
                 .map(([id]) => ({ id, text: id, checked: true }));
         }
         const verdictRaw = asString(o.verdict);
@@ -264,19 +307,36 @@ function readAutopsies(storage: StorageLike): ReadonlyArray<AutopsyRecord> {
 }
 
 function readProofs(storage: StorageLike): ReadonlyArray<ProofRecord> {
-    const arr = asArray(parseJson(storage.getItem("gtmos_poc_data")));
+    const parsed = parseJson(storage.getItem("gtmos_poc_data"));
+    // PoC Framework persists `{ pocs: Proof[] }`; legacy/demo data used a
+    // bare array. Accept either — reading the bare array off the real
+    // `{ pocs: [...] }` object is what silently returned zero proofs before.
+    const arr: ReadonlyArray<unknown> = Array.isArray(parsed)
+        ? parsed
+        : maybeArrayWithKey(asObject(parsed), "pocs");
     return arr
         .map((raw): ProofRecord | null => {
             const o = asObject(raw);
             if (!o) return null;
             const id = asString(o.id);
             if (!id) return null;
+            const quality = asObject(o.quality);
             return {
                 id,
-                accountName: asString(o.accountName ?? o.account),
-                outcome: asString(o.outcome),
-                score: asNumber(asObject(o.quality)?.score),
-                band: asString(asObject(o.quality)?.band)
+                // Proof uses `account`; legacy used `accountName`.
+                accountName:
+                    asString(o.accountName) ||
+                    asString(o.account) ||
+                    asString(o.linkedDealName),
+                // Proof uses `outcome`; the cloud column is `outcome_state`.
+                outcome: asString(o.outcome) || asString(o.outcomeState),
+                // Proof persists flat `qualityScore` / `qualityBand`; legacy
+                // nested them under `quality{}`. Prefer the flat fields.
+                score:
+                    o.qualityScore !== undefined
+                        ? asNumber(o.qualityScore)
+                        : asNumber(quality?.score),
+                band: asString(o.qualityBand) || asString(quality?.band)
             };
         })
         .filter((r): r is ProofRecord => r !== null);
@@ -296,10 +356,21 @@ function readAdvisorDeployments(
             if (!id) return null;
             return {
                 id,
-                accountName: asString(o.accountName),
+                // Deployment carries `dealName` (the account the deal is
+                // against), not `accountName`. Section 4's advisor
+                // coverage-gap surprise matches this against deal accounts,
+                // so it must resolve — reading bare `accountName` left it
+                // empty and broke the match. Legacy/demo used `accountName`.
+                accountName: asString(o.accountName) || asString(o.dealName),
+                // Per-row tier isn't on the Deployment (tier lives on the
+                // advisor in gtmos_advisor_registry, keyed by advisorId).
+                // Unused by the section authors today; left best-effort.
                 tier: asString(o.tier),
-                moment: asString(o.momentId ?? o.moment),
-                outcome: asString(o.outcome)
+                moment:
+                    asString(o.momentId) ||
+                    asString(o.moment) ||
+                    asString(o.momentName),
+                outcome: asString(o.outcome) || asString(o.outcomeStamp)
             };
         })
         .filter((r): r is AdvisorDeploymentRecord => r !== null);
