@@ -5,6 +5,7 @@ import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
 import { loadFrameworksIntoRegistry } from "./lib/load-frameworks";
 import { bootPersistence } from "./lib/persistence";
+import { startCallLogPersistence } from "./lib/call-log";
 import { focusedAccount } from "./state";
 
 /**
@@ -71,6 +72,11 @@ if (!flagOn) {
 }
 
 render(<DiscoveryStudio />, root);
+
+// Per-call log. Wired synchronously (no cloud round-trip — local
+// localStorage) so a completed call commits even if cloud persistence
+// is offline. The effect is idempotent and disposes-clean for tests.
+startCallLogPersistence();
 
 // Wave 4: kick off persistence after first paint. Don't block render
 // on Supabase round-trip; if it fails, the room still works in-memory.

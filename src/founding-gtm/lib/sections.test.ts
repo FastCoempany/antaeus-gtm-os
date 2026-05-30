@@ -26,9 +26,13 @@ const empty: SectionsInput = {
     coldCalls: [],
     callPlanner: [],
     autopsies: [],
+    autopsySnapshots: [],
     proofs: [],
     advisorDeployments: [],
-    quota: null
+    quota: null,
+    discoveryCalls: [],
+    discoveryStats: null,
+    discoveryWorked: []
 };
 
 function input(over: Partial<SectionsInput> = {}): SectionsInput {
@@ -194,22 +198,24 @@ describe("authorSection2 — The rails that worked", () => {
 // ─── §3 ────────────────────────────────────────────────────────────────
 
 describe("authorSection3 — The questions that earned the next meeting", () => {
-    it("is empty with no plans", () => {
+    it("is empty with no discovery activity", () => {
         const s = authorSection3(empty);
         expect(s.status).toBe("empty");
     });
 
-    it("is partial when plans exist but none advanced", () => {
+    it("is partial when an agenda is planned but no calls are logged", () => {
+        // A plan exists (callPlanner) but Discovery Studio has logged no
+        // completed calls — discoveryStats is null / totalCalls 0.
         const s = authorSection3(
             input({
                 callPlanner: [
                     {
                         accountName: "A",
                         persona: "vp",
-                        outcome: "no_show",
-                        nextStep: "",
+                        outcome: "",
+                        nextStep: "Book technical eval",
                         createdAtIso: "",
-                        segmentsWorked: ["pain_and_consequence"]
+                        segmentsWorked: []
                     }
                 ]
             })
@@ -217,55 +223,144 @@ describe("authorSection3 — The questions that earned the next meeting", () => 
         expect(s.status).toBe("partial");
     });
 
-    it("ranks segments + names the most-pulled thread when ≥1 advanced", () => {
+    it("reports advance rate + threads pulled from discovery aggregates", () => {
         const s = authorSection3(
             input({
-                callPlanner: [
-                    {
-                        accountName: "A",
-                        persona: "vp",
-                        outcome: "advanced",
-                        nextStep: "Send pricing by Tuesday",
-                        createdAtIso: "2026-04-20T10:00:00Z",
-                        segmentsWorked: ["pain_and_consequence", "trigger_and_urgency"]
-                    },
-                    {
-                        accountName: "B",
-                        persona: "vp",
-                        outcome: "advanced",
-                        nextStep: "Demo with EB",
-                        createdAtIso: "2026-04-21T10:00:00Z",
-                        segmentsWorked: ["pain_and_consequence"]
-                    }
+                discoveryStats: { totalCalls: 12, advancedCalls: 5 },
+                discoveryWorked: [
+                    "cx_resolution_1",
+                    "cx_resolution_2",
+                    "cx_agent_1"
                 ]
             })
         );
         expect(s.status).toBe("ready");
-        expect(s.body[1]).toContain("pain_and_consequence");
+        // 5/12 = 42% advance rate.
+        expect(s.body[0]).toContain("42%");
+        expect(s.body[1]).toContain("discovery threads");
+        expect(s.evidence.some((e) => e.includes("cx_resolution_1"))).toBe(
+            true
+        );
     });
 
-    it("surprises on dropped segments", () => {
-        const callPlanner = [
-            {
-                accountName: "A",
-                persona: "vp",
-                outcome: "advanced",
-                nextStep: "x",
-                createdAtIso: "2026-01-01T10:00:00Z",
-                segmentsWorked: ["pain_and_consequence", "decision_architecture"]
-            },
-            ...Array(5).fill({
-                accountName: "B",
-                persona: "vp",
-                outcome: "advanced",
-                nextStep: "y",
-                createdAtIso: "2026-04-25T10:00:00Z",
-                segmentsWorked: ["pain_and_consequence"]
+    it("surprises (corrective) when most calls aren't advancing", () => {
+        const s = authorSection3(
+            input({
+                discoveryStats: { totalCalls: 10, advancedCalls: 2 }
             })
-        ];
-        const s = authorSection3(input({ callPlanner }));
+        );
+        // 20% advance rate < 33% → corrective.
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain("stopped asking");
+        expect(s.surprise?.headline.toLowerCase()).toContain("advancing");
+    });
+
+    it("surprises (corrective) when zero calls advanced", () => {
+        const s = authorSection3(
+            input({ discoveryStats: { totalCalls: 6, advancedCalls: 0 } })
+        );
+        expect(s.surprise?.tone).toBe("corrective");
+        expect(s.surprise?.headline.toLowerCase()).toContain(
+            "isn't moving deals"
+        );
+    });
+
+    it("affirms when calls advance more often than not", () => {
+        const s = authorSection3(
+            input({
+                discoveryStats: { totalCalls: 10, advancedCalls: 7 }
+            })
+        );
+        // 70% ≥ 60% → affirming.
+        expect(s.surprise?.tone).toBe("affirming");
+    });
+
+    // ─── per-call (precise) path ─────────────────────────────────────────
+    it("names the top-advancing thread when per-call records exist", () => {
+        const advanced = (id: string, segs: ReadonlyArray<string>) => ({
+            id,
+            createdAtIso: "2026-05-20T10:00:00.000Z",
+            accountName: "Acme",
+            activeFramework: "customer-support",
+            segmentKeysWorked: segs,
+            disposition: "advanced" as const
+        });
+        const s = authorSection3(
+            input({
+                discoveryCalls: [
+                    advanced("c1", ["pain-and-consequence", "trigger-and-urgency"]),
+                    advanced("c2", ["pain-and-consequence", "proof-threshold"]),
+                    advanced("c3", ["pain-and-consequence"])
+                ]
+            })
+        );
+        expect(s.status).toBe("ready");
+        // 3 of 3 advanced → 100%.
+        expect(s.body[0]).toContain("100%");
+        // pain-and-consequence is on 3/3 advancing calls — the top thread.
+        expect(s.body[1]).toContain("pain-and-consequence");
+        expect(
+            s.evidence.some((e) => e.includes("pain-and-consequence · 3"))
+        ).toBe(true);
+    });
+
+    it("surprises (stopped asking) when an advancing thread is absent from recent calls", () => {
+        // One old advancing call pulled "trigger-and-urgency"; five
+        // recent advancing calls pulled only "pain-and-consequence".
+        const s = authorSection3(
+            input({
+                discoveryCalls: [
+                    {
+                        id: "c_old",
+                        createdAtIso: "2026-01-01T10:00:00.000Z",
+                        accountName: "Old",
+                        activeFramework: "customer-support",
+                        segmentKeysWorked: [
+                            "pain-and-consequence",
+                            "trigger-and-urgency"
+                        ],
+                        disposition: "advanced"
+                    },
+                    ...Array.from({ length: 5 }, (_, i) => ({
+                        id: `c_recent_${i}`,
+                        createdAtIso: `2026-05-${10 + i}T10:00:00.000Z`,
+                        accountName: "Recent",
+                        activeFramework: "customer-support",
+                        segmentKeysWorked: ["pain-and-consequence"],
+                        disposition: "advanced" as const
+                    }))
+                ]
+            })
+        );
+        expect(s.surprise?.tone).toBe("corrective");
+        expect(s.surprise?.headline.toLowerCase()).toContain(
+            "stopped asking"
+        );
+        expect(s.surprise?.body).toContain("trigger-and-urgency");
+    });
+
+    it("per-call path beats the aggregate fallback when both are present", () => {
+        // Aggregate stats say 70% advance rate (affirming), but the
+        // per-call records have all losses → corrective. Precise wins.
+        const s = authorSection3(
+            input({
+                discoveryStats: { totalCalls: 10, advancedCalls: 7 },
+                discoveryCalls: [
+                    {
+                        id: "c1",
+                        createdAtIso: "2026-05-20",
+                        accountName: "A",
+                        activeFramework: null,
+                        segmentKeysWorked: ["opening-frame"],
+                        disposition: "lost"
+                    }
+                ]
+            })
+        );
+        // Per-call: 0/1 advanced → corrective ("isn't moving deals").
+        expect(s.surprise?.tone).toBe("corrective");
+        expect(s.surprise?.headline.toLowerCase()).toContain(
+            "isn't moving deals"
+        );
     });
 });
 
@@ -374,6 +469,102 @@ describe("authorSection5 — The losses we paid for", () => {
         expect(s.surprise?.headline.toLowerCase()).toContain(
             "symptoms of past losses"
         );
+    });
+
+    it("surfaces the most common top-cause from autopsy snapshots", () => {
+        // Three examined losses, two of which share the same regenerated
+        // top cause. §5 should name it in the body.
+        const dealRecord = (id: string, account: string) =>
+            deal({
+                id,
+                accountName: account,
+                lossReason: "lost"
+            });
+        const examinedAutopsy = (dealId: string) => ({
+            dealId,
+            accountName: "",
+            verdict: "unknown" as const,
+            killSwitchFired: false,
+            tasks: [{ id: "t1", text: "t1", checked: true }]
+        });
+        const s = authorSection5(
+            input({
+                closedLost: [
+                    dealRecord("d1", "Acme"),
+                    dealRecord("d2", "Globex"),
+                    dealRecord("d3", "Initech")
+                ],
+                autopsies: [
+                    examinedAutopsy("d1"),
+                    examinedAutopsy("d2"),
+                    examinedAutopsy("d3")
+                ],
+                autopsySnapshots: [
+                    {
+                        dealId: "d1",
+                        accountName: "Acme",
+                        verdictMode: "corrected",
+                        killSwitch: "x",
+                        topCauseLabel: "No champion at EB level"
+                    },
+                    {
+                        dealId: "d2",
+                        accountName: "Globex",
+                        verdictMode: "corrected",
+                        killSwitch: "x",
+                        topCauseLabel: "No champion at EB level"
+                    },
+                    {
+                        dealId: "d3",
+                        accountName: "Initech",
+                        verdictMode: "left",
+                        killSwitch: "x",
+                        topCauseLabel: "Next step has no date"
+                    }
+                ]
+            })
+        );
+        expect(s.status).toBe("ready");
+        const fullBody = s.body.join(" ");
+        expect(fullBody).toContain("No champion at EB level");
+        expect(fullBody).toContain("2 of 3");
+    });
+
+    it("counts a loss as examined from real task-log data (no verdict)", () => {
+        // The real Future Autopsy log carries no verdict — just checked
+        // tasks. Before the fix this fell through to "partial" (folklore)
+        // even though the operator had done the postmortem. The account +
+        // reason are resolved by joining the autopsy's dealId to the
+        // closed-lost deal.
+        const s = authorSection5(
+            input({
+                closedLost: [
+                    deal({
+                        id: "deal_real",
+                        accountName: "Meridian Logistics",
+                        lossReason: "single-threaded, never reached the EB"
+                    })
+                ],
+                autopsies: [
+                    {
+                        dealId: "deal_real",
+                        accountName: "", // real log stores no account_name
+                        verdict: "unknown", // real log stores no verdict
+                        killSwitchFired: false,
+                        tasks: [
+                            { id: "send_eb_request", text: "send_eb_request", checked: true },
+                            { id: "set_deadline", text: "set_deadline", checked: false }
+                        ]
+                    }
+                ]
+            })
+        );
+        expect(s.status).toBe("ready");
+        // Account + reason resolved from the joined closed-lost deal.
+        const row = s.evidence.find((e) => e.includes("Meridian Logistics"));
+        expect(row).toBeTruthy();
+        expect(row).toContain("single-threaded");
+        expect(row).toContain("1 commitment");
     });
 });
 

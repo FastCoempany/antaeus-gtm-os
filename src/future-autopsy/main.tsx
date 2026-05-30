@@ -13,6 +13,7 @@ import { loadDealsFromMirror } from "./lib/deal-loader";
 import { computeVitalsForAll } from "./lib/vitals";
 import { loadTaskLog } from "./lib/task-log";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { startAutopsySnapshotPersistence } from "./lib/autopsy-snapshot";
 
 /**
  * Entry point for the Future Autopsy Preact rebuild
@@ -58,6 +59,13 @@ setAllVitals(vitals);
 // back automatically.
 setTaskLog(loadTaskLog());
 startTaskLogPersistence();
+
+// Per-deal autopsy snapshot. Captures the regenerated verdict + top
+// cause + kill-switch whenever the operator pins a deal in the room,
+// so Founding GTM §5 can read what the autopsy said. Local-only —
+// the in-progress diagnosis is still re-derived from vitals on every
+// open.
+startAutopsySnapshotPersistence();
 
 // Cross-room handoff: if a caller passed `?focusObject=<deal id or
 // account name>`, auto-pin that case. Match deal id first, then

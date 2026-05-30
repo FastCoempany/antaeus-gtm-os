@@ -85,9 +85,13 @@ describe("startHealthPublishing", () => {
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
-            quota: null
+            quota: null,
+            discoveryCalls: [],
+            discoveryStats: null,
+            discoveryWorked: []
         });
 
         expect(publishCount).toBe(1);
@@ -135,9 +139,13 @@ describe("startHealthPublishing", () => {
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
-            quota: null
+            quota: null,
+            discoveryCalls: [],
+            discoveryStats: null,
+            discoveryWorked: []
         });
         expect(publishCount).toBe(1);
 
@@ -161,9 +169,13 @@ describe("startHealthPublishing", () => {
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
-            quota: null
+            quota: null,
+            discoveryCalls: [],
+            discoveryStats: null,
+            discoveryWorked: []
         });
         expect(publishCount).toBe(1);
 
@@ -181,9 +193,13 @@ describe("startHealthPublishing", () => {
             coldCalls: [],
             callPlanner: [],
             autopsies: [],
+            autopsySnapshots: [],
             proofs: [],
             advisorDeployments: [],
-            quota: null
+            quota: null,
+            discoveryCalls: [],
+            discoveryStats: null,
+            discoveryWorked: []
         });
         const snap = buildHealthSnapshot(sections, "2026-05-01T00:00:00Z");
         expect(snap.sections_ready).toBe(0);

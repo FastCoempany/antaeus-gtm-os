@@ -1,5 +1,6 @@
 import type {
     AuthoredSection,
+    AutopsySnapshotRecord,
     DealRecord,
     IcpRecord,
     SectionId,
@@ -276,74 +277,163 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
 
 export function authorSection3(input: SectionsInput): AuthoredSection {
     const id: SectionId = "questions_that_earned";
-    const advanced = input.callPlanner.filter(
-        (c) => c.outcome === "advanced"
-    );
+    const calls = input.discoveryCalls;
+    const stats = input.discoveryStats;
+    const worked = input.discoveryWorked;
 
-    if (input.callPlanner.length === 0) {
+    // No discovery activity anywhere (no logged calls, no worked threads,
+    // no planned agenda, no stats).
+    if (
+        calls.length === 0 &&
+        !stats &&
+        worked.length === 0 &&
+        input.callPlanner.length === 0
+    ) {
         return frame(id, "empty", [], [], null);
     }
 
-    if (advanced.length === 0) {
+    // Precise path: per-call records exist (Discovery Studio's per-call
+    // log). We can name which threads earn advances and which recent
+    // calls skipped them — the full §4.19 intent.
+    if (calls.length > 0) {
+        const advancedCalls = calls.filter((c) => c.disposition === "advanced");
+        const totalLogged = calls.length;
+        const advancedCount = advancedCalls.length;
+        const advanceRate = Math.round((advancedCount / totalLogged) * 100);
+
+        // Count how often each segment shows up on advancing calls.
+        const advancingSegmentCounts = new Map<string, number>();
+        advancedCalls.forEach((c) =>
+            c.segmentKeysWorked.forEach((seg) => {
+                advancingSegmentCounts.set(
+                    seg,
+                    (advancingSegmentCounts.get(seg) ?? 0) + 1
+                );
+            })
+        );
+        const advancingSegments = [...advancingSegmentCounts.entries()].sort(
+            (a, b) => b[1] - a[1]
+        );
+
+        const body: string[] = [];
+        body.push(
+            `${plural(totalLogged, "discovery call", "discovery calls")} logged, ${advancedCount} of which earned the next meeting — a ${advanceRate}% advance rate. The hire's job is to hold or beat that line.`
+        );
+        if (advancingSegments.length > 0) {
+            const top = advancingSegments[0]!;
+            const topShare = Math.round((top[1] / Math.max(1, advancedCount)) * 100);
+            body.push(
+                `The thread that shows up on more advancing calls than any other is "${top[0]}" — pulled on ${topShare}% of the calls that earned a next meeting. That's the one to teach Monday morning.`
+            );
+        }
+
+        const evidence: string[] = [];
+        evidence.push(
+            `${advancedCount} of ${totalLogged} calls advanced · ${advanceRate}%`
+        );
+        advancingSegments.slice(0, 5).forEach(([seg, count]) => {
+            evidence.push(`${seg} · ${count} advancing calls`);
+        });
+
+        // SURPRISE: segments that USED to earn advances but the most-recent
+        // calls SKIPPED — the canon §4.19 "questions the operator stopped
+        // asking" callout.
+        const recentCalls = [...calls]
+            .sort((a, b) => b.createdAtIso.localeCompare(a.createdAtIso))
+            .slice(0, 5);
+        const recentSegments = new Set(
+            recentCalls.flatMap((c) => c.segmentKeysWorked)
+        );
+        const droppedSegments = [...advancingSegmentCounts.keys()].filter(
+            (seg) => !recentSegments.has(seg)
+        );
+
+        let surprise: SurpriseCallout | null = null;
+        if (droppedSegments.length > 0 && advancedCount > 0) {
+            surprise = {
+                tone: "corrective",
+                headline: `You've stopped asking the questions that used to advance deals.`,
+                body: `${plural(droppedSegments.length, "thread", "threads")} earned advances on prior calls but didn't appear in any of your last 5 calls: ${droppedSegments.slice(0, 3).join(", ")}. Worth re-introducing before the hire absorbs the new pattern.`
+            };
+        } else if (advancedCount === 0) {
+            surprise = {
+                tone: "corrective",
+                headline: `Discovery is happening, but it isn't moving deals.`,
+                body: `${plural(totalLogged, "call", "calls")} logged and not one earned a next meeting. Worth figuring out which thread the calls keep missing before the hire arrives.`
+            };
+        } else if (advanceRate < 33) {
+            surprise = {
+                tone: "corrective",
+                headline: `Most discovery calls aren't advancing.`,
+                body: `Only ${advanceRate}% of logged calls earn the next meeting. The threads that move a deal aren't being pulled consistently — worth tightening before the hire learns the loose version.`
+            };
+        } else if (advanceRate >= 60) {
+            surprise = {
+                tone: "affirming",
+                headline: `Your discovery calls advance more often than not.`,
+                body: `A ${advanceRate}% advance rate is a real pattern. Whatever threads you're pulling, the hire should copy them exactly.`
+            };
+        }
+
+        return frame(id, "ready", body, evidence, surprise);
+    }
+
+    // Aggregate fallback path: no per-call records, but the room has
+    // stats / worked-set data. Coarser, but still honest.
+    const totalCalls = stats?.totalCalls ?? 0;
+    const advancedCalls = stats?.advancedCalls ?? 0;
+
+    // An agenda is planned but no completed discovery calls are logged yet.
+    if (totalCalls === 0) {
         return frame(
             id,
             "partial",
             [
-                `${plural(input.callPlanner.length, "call", "calls")} planned but none have produced an advance yet. Discovery is happening — but it isn't moving deals.`
+                `Discovery is being planned but no completed calls are logged yet. The hire would inherit an agenda, not a track record of what actually earns the next meeting.`
             ],
             [],
             null
         );
     }
 
-    const segmentCounts = new Map<string, number>();
-    advanced.forEach((c) =>
-        c.segmentsWorked.forEach((s) =>
-            segmentCounts.set(s, (segmentCounts.get(s) ?? 0) + 1)
-        )
-    );
-    const advancingSegments = [...segmentCounts.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 4);
+    const advanceRate = Math.round((advancedCalls / totalCalls) * 100);
 
     const body: string[] = [];
     body.push(
-        `${plural(advanced.length, "call", "calls")} that advanced the deal share a shape — they pull on a small set of discovery threads. The hire should learn these first.`
+        `${plural(totalCalls, "discovery call", "discovery calls")} logged, ${advancedCalls} of which earned the next meeting — a ${advanceRate}% advance rate. The hire's job is to hold or beat that line.`
     );
-    if (advancingSegments.length > 0) {
-        const top = advancingSegments[0];
+    if (worked.length > 0) {
         body.push(
-            `The single most-pulled thread on advancing calls is "${top[0]}" — it shows up on ${top[1]} of ${advanced.length} advancing calls. That's the one to teach Monday morning.`
+            `Across those calls you keep pulling ${plural(worked.length, "discovery thread", "discovery threads")}. The hire should learn the ones you lean on before improvising new ones.`
         );
     }
 
     const evidence: string[] = [];
-    advancingSegments.forEach(([seg, count]) => {
-        evidence.push(`${seg} · ${count} advancing calls`);
-    });
-    advanced.slice(0, 2).forEach((c) => {
-        if (c.nextStep)
-            evidence.push(
-                `Advance ask that worked: "${trim(c.nextStep, 90)}"`
-            );
+    evidence.push(
+        `${advancedCalls} of ${totalCalls} calls advanced · ${advanceRate}%`
+    );
+    worked.slice(0, 6).forEach((seg) => {
+        evidence.push(`Thread worked · ${seg}`);
     });
 
-    // SURPRISE: questions stopped asking — segments the most-recent calls SKIPPED.
-    const recentCalls = [...input.callPlanner]
-        .sort((a, b) => b.createdAtIso.localeCompare(a.createdAtIso))
-        .slice(0, 5);
-    const recentSegments = new Set(
-        recentCalls.flatMap((c) => c.segmentsWorked)
-    );
-    const droppedSegments = [...segmentCounts.keys()].filter(
-        (seg) => !recentSegments.has(seg)
-    );
     let surprise: SurpriseCallout | null = null;
-    if (droppedSegments.length > 0) {
+    if (advancedCalls === 0) {
         surprise = {
             tone: "corrective",
-            headline: `You've stopped asking the questions that used to advance deals.`,
-            body: `${plural(droppedSegments.length, "thread", "threads")} that earned advances on prior calls don't appear in your last 5 plans: ${droppedSegments.slice(0, 3).join(", ")}. Worth re-introducing before the hire absorbs the new pattern.`
+            headline: `Discovery is happening, but it isn't moving deals.`,
+            body: `${plural(totalCalls, "call", "calls")} logged and not one has earned a next meeting. Worth figuring out which thread the calls keep missing before the hire arrives.`
+        };
+    } else if (advanceRate < 33) {
+        surprise = {
+            tone: "corrective",
+            headline: `Most discovery calls aren't advancing.`,
+            body: `Only ${advanceRate}% of logged calls earn the next meeting. The threads that move a deal aren't being pulled consistently — worth tightening before the hire learns the loose version.`
+        };
+    } else if (advanceRate >= 60) {
+        surprise = {
+            tone: "affirming",
+            headline: `Your discovery calls advance more often than not.`,
+            body: `A ${advanceRate}% advance rate is a real pattern. Whatever threads you're pulling, the hire should copy them exactly.`
         };
     }
 
@@ -461,45 +551,91 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
 
 export function authorSection5(input: SectionsInput): AuthoredSection {
     const id: SectionId = "losses_paid_for";
-    const corrected = input.autopsies.filter(
-        (a) => a.verdict === "corrected"
+    // Future Autopsy persists task completion, not a verdict — the room
+    // regenerates verdict / kill-switch / cause at render time from the
+    // deal, and none of that is durable. So §5 leans on what IS durable:
+    // the loss + its reason (from closed-lost deals) and the commitments
+    // the operator wrote down (checked autopsy tasks). A loss counts as
+    // "examined" when its autopsy carries ≥1 checked task — or, for legacy
+    // data, an explicit "corrected" verdict.
+    const examined = input.autopsies.filter(
+        (a) => a.verdict === "corrected" || a.tasks.some((t) => t.checked)
     );
 
     if (input.closedLost.length === 0 && input.autopsies.length === 0) {
         return frame(id, "empty", [], [], null);
     }
 
-    if (corrected.length === 0) {
+    if (examined.length === 0) {
         return frame(
             id,
             "partial",
             [
-                `${plural(input.closedLost.length, "loss", "losses")} on record but ${plural(input.autopsies.length, "autopsy", "autopsies")} corrected. Losses without a forensic step become folklore. The hire would inherit folklore.`
+                `${plural(input.closedLost.length, "loss", "losses")} on record, but none have been through a forensic step. Losses without a postmortem become folklore — the hire would inherit the folklore, not the lesson.`
             ],
             [],
             null
         );
     }
 
+    // Resolve each examined autopsy to its lost deal (the autopsy log is
+    // keyed by deal id) so we can show the real account + loss reason.
+    const lostById = new Map<string, DealRecord>();
+    input.closedLost.forEach((d) => lostById.set(d.id, d));
+
+    // Per-deal autopsy snapshots (verdict + top cause + kill switch).
+    // Future Autopsy regenerates these at render time when the operator
+    // pins a deal; the snapshot key is the durable record. Joined by
+    // dealId so §5 can show what the autopsy actually said.
+    const snapshotById = new Map<string, AutopsySnapshotRecord>();
+    input.autopsySnapshots.forEach((snap) =>
+        snapshotById.set(snap.dealId, snap)
+    );
+
     const body: string[] = [];
     body.push(
-        `${plural(corrected.length, "deal", "deals")} that died with a verdict change — the workspace did the postmortem. These are the ones where you said out loud "we won't do that again."`
+        `${plural(examined.length, "loss", "losses")} the workspace actually examined — the ones where you ran the postmortem and wrote down what not to repeat. These are the lessons the hire should read first.`
     );
-    const killCount = corrected.filter((a) => a.killSwitchFired).length;
+    const killCount = examined.filter((a) => a.killSwitchFired).length;
     if (killCount > 0) {
         body.push(
             `${plural(killCount, "deal", "deals")} also fired a kill switch — the moment something irrecoverable showed up and the right move was to walk. The hire needs the same instinct.`
         );
     }
 
+    // If snapshots are present, also surface the most common top-cause
+    // across examined deals — that's the lesson the hire should expect
+    // to inherit.
+    const causeCounts = new Map<string, number>();
+    examined.forEach((a) => {
+        const label = snapshotById.get(a.dealId)?.topCauseLabel;
+        if (label && label.trim().length > 0) {
+            causeCounts.set(label, (causeCounts.get(label) ?? 0) + 1);
+        }
+    });
+    const sortedCauses = [...causeCounts.entries()].sort(
+        (a, b) => b[1] - a[1]
+    );
+    if (sortedCauses.length > 0 && sortedCauses[0]![1] >= 2) {
+        const [top, count] = sortedCauses[0]!;
+        body.push(
+            `The cause that comes up most often across examined losses is "${top}" — it shows up on ${count} of ${examined.length}. The hire should expect this one before they ever see it.`
+        );
+    }
+
     const evidence: string[] = [];
-    corrected.slice(0, 5).forEach((a) => {
-        const checkedTask = a.tasks.find((t) => t.checked);
-        const taskText = checkedTask
-            ? trim(checkedTask.text, 70)
-            : "(no tasks checked)";
+    examined.slice(0, 5).forEach((a) => {
+        const deal = lostById.get(a.dealId);
+        const snap = snapshotById.get(a.dealId);
+        const account = deal?.accountName || a.accountName || a.dealId;
+        const reason = deal?.lossReason
+            ? trim(deal.lossReason, 50)
+            : snap?.topCauseLabel
+              ? trim(snap.topCauseLabel, 50)
+              : "no reason logged";
+        const doneCount = a.tasks.filter((t) => t.checked).length;
         evidence.push(
-            `${a.accountName || a.dealId} · ${a.killSwitchFired ? "killed" : "corrected"} · ${taskText}`
+            `${account} · ${reason} · ${plural(doneCount, "commitment", "commitments")}`
         );
     });
 
@@ -530,7 +666,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
             headline: `Open deals are showing the symptoms of past losses.`,
             body: `${plural(openMatches.length, "open deal matches", "open deals match")} a closed-loss reason word-for-word. The same trap is still in front of you. Worth surfacing before the hire walks them straight into it.`
         };
-    } else if (corrected.length >= 3) {
+    } else if (examined.length >= 3) {
         surprise = {
             tone: "affirming",
             headline: "Your losses are documented and disjoint from current pipeline.",
