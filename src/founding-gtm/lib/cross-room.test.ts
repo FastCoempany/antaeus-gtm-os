@@ -421,6 +421,40 @@ describe("loadSectionsInput — Advisor deployments", () => {
     });
 });
 
+describe("loadSectionsInput — Discovery stats + worked threads (§3 source)", () => {
+    it("reads gtmos_discovery_stats counts", () => {
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_discovery_stats: { totalCalls: 12, advancedCalls: 5 }
+            })
+        });
+        expect(r.discoveryStats?.totalCalls).toBe(12);
+        expect(r.discoveryStats?.advancedCalls).toBe(5);
+    });
+
+    it("returns null discoveryStats when totalCalls is 0 or missing", () => {
+        const r = loadSectionsInput({
+            storage: storage({ gtmos_discovery_stats: { advancedCalls: 2 } })
+        });
+        expect(r.discoveryStats).toBeNull();
+    });
+
+    it("reads gtmos_discovery_worked as the set of truthy node ids", () => {
+        const r = loadSectionsInput({
+            storage: storage({
+                gtmos_discovery_worked: {
+                    cx_resolution_1: true,
+                    cx_resolution_2: true,
+                    cx_agent_1: false
+                }
+            })
+        });
+        expect(r.discoveryWorked).toContain("cx_resolution_1");
+        expect(r.discoveryWorked).toContain("cx_resolution_2");
+        expect(r.discoveryWorked).not.toContain("cx_agent_1");
+    });
+});
+
 describe("loadSectionsInput — Quota", () => {
     it("returns null when quota is 0 or missing", () => {
         const r = loadSectionsInput({

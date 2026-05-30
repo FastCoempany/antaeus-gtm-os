@@ -29,7 +29,9 @@ export const sectionsInput: Signal<SectionsInput> = signal({
     autopsies: [],
     proofs: [],
     advisorDeployments: [],
-    quota: null
+    quota: null,
+    discoveryStats: null,
+    discoveryWorked: []
 });
 
 /**
@@ -105,7 +107,9 @@ export function __resetForTests(): void {
         autopsies: [],
         proofs: [],
         advisorDeployments: [],
-        quota: null
+        quota: null,
+        discoveryStats: null,
+        discoveryWorked: []
     };
     shareComposerOpen.value = false;
     ceremonyOpen.value = false;

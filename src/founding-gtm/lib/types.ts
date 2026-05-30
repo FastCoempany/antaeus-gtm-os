@@ -112,6 +112,18 @@ export interface SectionsInput {
     readonly proofs: ReadonlyArray<ProofRecord>;
     readonly advisorDeployments: ReadonlyArray<AdvisorDeploymentRecord>;
     readonly quota: QuotaInputs | null;
+    // §3 reads Discovery Studio's real persisted state: aggregate call
+    // counts (gtmos_discovery_stats) + the set of segment nodes worked
+    // across the room's lifetime (gtmos_discovery_worked). Discovery does
+    // NOT persist a per-call segment↔outcome link, so §3 reads advance
+    // rate + threads-pulled, not "which segment earned which advance."
+    readonly discoveryStats: DiscoveryStats | null;
+    readonly discoveryWorked: ReadonlyArray<string>;
+}
+
+export interface DiscoveryStats {
+    readonly totalCalls: number;
+    readonly advancedCalls: number;
 }
 
 /** Lightweight typed shapes — only the fields the sections actually consume. */

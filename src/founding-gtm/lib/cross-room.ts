@@ -5,6 +5,7 @@ import type {
     ColdCallRecord,
     CueRecord,
     DealRecord,
+    DiscoveryStats,
     IcpRecord,
     ProofRecord,
     QuotaInputs,
@@ -376,6 +377,28 @@ function readAdvisorDeployments(
         .filter((r): r is AdvisorDeploymentRecord => r !== null);
 }
 
+function readDiscoveryStats(storage: StorageLike): DiscoveryStats | null {
+    const o = asObject(parseJson(storage.getItem("gtmos_discovery_stats")));
+    if (!o) return null;
+    const totalCalls = asNumber(o.totalCalls);
+    if (totalCalls <= 0) return null;
+    return {
+        totalCalls,
+        advancedCalls: asNumber(o.advancedCalls)
+    };
+}
+
+function readDiscoveryWorked(storage: StorageLike): ReadonlyArray<string> {
+    // Discovery Studio persists a flat { segmentNodeId: true } map of every
+    // segment node worked across the room's lifetime. We surface the set of
+    // worked node ids; a node counts as worked when its value is truthy.
+    const o = asObject(parseJson(storage.getItem("gtmos_discovery_worked")));
+    if (!o) return [];
+    return Object.entries(o)
+        .filter(([, v]) => v === true || v === 1 || v === "true")
+        .map(([id]) => id);
+}
+
 function readQuota(storage: StorageLike): QuotaInputs | null {
     const o = asObject(parseJson(storage.getItem("gtmos_qw_inputs")));
     if (!o) return null;
@@ -416,7 +439,9 @@ export function loadSectionsInput(
             autopsies: [],
             proofs: [],
             advisorDeployments: [],
-            quota: null
+            quota: null,
+            discoveryStats: null,
+            discoveryWorked: []
         };
     }
 
@@ -434,6 +459,8 @@ export function loadSectionsInput(
         autopsies: readAutopsies(storage),
         proofs: readProofs(storage),
         advisorDeployments: readAdvisorDeployments(storage),
-        quota: readQuota(storage)
+        quota: readQuota(storage),
+        discoveryStats: readDiscoveryStats(storage),
+        discoveryWorked: readDiscoveryWorked(storage)
     };
 }
