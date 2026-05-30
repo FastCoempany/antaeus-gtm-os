@@ -10,6 +10,7 @@ import {
 import { bootSnapshotAggregator } from "./lib/snapshot-aggregator";
 import { aggregateReadinessInput } from "./lib/readiness-aggregator";
 import { bootReadinessHistory } from "./lib/readiness-history";
+import { warmUpMissingSnapshots } from "./lib/snapshot-warmup";
 
 /**
  * Entry point for the Dashboard Preact rebuild
@@ -51,6 +52,11 @@ if (!flagOn) {
 }
 
 render(<Dashboard />, root);
+
+// Self-heal missing snapshot keys before the aggregator's first read.
+// Covers the demo-seed lane (raw nouns landed but sibling rooms
+// never booted to publish their snapshots) and cross-tab cold starts.
+warmUpMissingSnapshots();
 
 // Wave 5 — start the cross-room snapshot aggregator after first
 // paint. It seeds engineInput synchronously (initial read) then

@@ -151,4 +151,26 @@
         isDemoStorageMode: isDemoStorageMode,
         mapKey: mapKey
     };
+
+    // Auto-bootstrap on load. Without this, every consumer (each
+    // room's index.html, the demo-seed lane, etc.) would have to
+    // explicitly call bootstrapEnvironmentMode() — and rooms that
+    // forgot would silently break in demo mode by reading raw
+    // localStorage keys while the demo data sits under the
+    // gtmos_demo__ prefix.
+    //
+    // Behavior:
+    //   - syncs sessionStorage.gtmos_env_mode from any ?demo= URL
+    //     param (idempotent — only overwrites when the param is set)
+    //   - patches the Storage prototype if not already patched (the
+    //     __gtmosDemoStoragePatch flag gates this)
+    //   - exposes window.gtmEnvironment for room code that wants to
+    //     check the mode without re-running anything
+    //
+    // demo-seed-runtime.js still calls bootstrapEnvironmentMode({
+    // forceMode:'demo' }) explicitly — that's a stronger contract
+    // ("regardless of URL params, this tab is now demo"), and it
+    // composes cleanly with the auto-call below (the second invocation
+    // is a no-op for patching, and just overrides the session mode).
+    bootstrapEnvironmentMode();
 })(window);
