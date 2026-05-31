@@ -77,28 +77,8 @@ export interface ObservationCandidate {
     readonly supersedesPrior?: boolean;
 }
 
-/**
- * Lightweight metadata each generator publishes about itself.
- * The Deno runtime reads this to register the generator; the src
- * side reads it for documentation + voice spot-checks.
- */
-export interface GeneratorDescriptor {
-    /**
-     * Stable identifier stored in the `source_generator` column.
-     * MUST follow `phase-b/<name>` convention so future phases keep
-     * the namespace clean and old generators can be retired by ID
-     * without ledger-schema changes.
-     */
-    readonly id: string;
-    /** Human-readable name surfaced in voice-rule violation logs. */
-    readonly label: string;
-    /** The entity class this generator's observations are about. */
-    readonly relatedObjectType: RelatedObjectType;
-    /**
-     * Voice-rule waiver list. Generators that legitimately need a
-     * word the global banned-vocab catches (none today) can declare
-     * an allowlist here. Empty for all four Phase B generators —
-     * canon Part III §11 is the voice for the entire ledger.
-     */
-    readonly voiceWaivers?: ReadonlyArray<string>;
-}
+// NOTE: an earlier draft also exported a GeneratorDescriptor interface
+// for per-generator metadata (id + label + voiceWaivers). It was never
+// imported by any generator and was deleted in the post-PR-216 cleanup
+// pass. Each generator now exports its own `*_GENERATOR_ID` const
+// instead, which is the only metadata the heartbeat needs.

@@ -39,36 +39,76 @@
  * match on whole-word boundaries. "Leverage" as a verb is banned; as
  * a noun ("operational leverage") it's also banned because the line
  * is fuzzy enough that allowing it leaks the corporate register.
+ *
+ * Common inflections are enumerated explicitly ("leverage" + "leveraged"
+ * + "leveraging" + "leverages") because base-form mutation (drop -e
+ * before -ing, swap -y for -ies) doesn't compress into the whole-word
+ * regex. New entries should follow the same pattern.
  */
 export const BANNED_CORPORATE_VOCAB: ReadonlyArray<string> = [
+    // leverage + inflections
     "leverage",
+    "leveraged",
+    "leveraging",
+    "leverages",
+    // unlock + inflections
     "unlock",
+    "unlocked",
+    "unlocking",
+    "unlocks",
     "revolutionize",
+    "revolutionized",
+    "revolutionizing",
+    "revolutionizes",
     "revolutionary",
+    // supercharge + inflections
     "supercharge",
+    "supercharged",
+    "supercharging",
+    "supercharges",
     "magic",
     "magical",
+    // transform + inflections
     "transform",
+    "transformed",
+    "transforming",
+    "transforms",
     "transformative",
     "transformational",
     "game-changing",
     "game-changer",
     "paradigm shift",
+    // synergy + plural
     "synergy",
+    "synergies",
     "synergistic",
+    "synergistically",
     "best-in-class",
     "world-class",
     "cutting-edge",
     "next-generation",
     "next-gen",
     "robust",
+    // seamless + adverb
     "seamless",
+    "seamlessly",
     "holistic",
+    "holistically",
     "innovative",
+    "innovatively",
+    // empower + inflections
     "empower",
+    "empowered",
+    "empowering",
+    "empowers",
     "empowerment",
     "ecosystem",
+    "ecosystems",
+    // streamline + inflections
     "streamline",
+    "streamlined",
+    "streamlining",
+    "streamlines",
     "mission-critical"
 ];
 
@@ -179,15 +219,17 @@ export interface VoiceValidation {
  * Case-insensitive whole-word match. Allows hyphenated phrases like
  * "game-changing" by anchoring on word-character boundaries that
  * include hyphens as part of the word.
+ *
+ * For inflected forms ("leveraged" / "leveraging" / "synergies"),
+ * the banned list itself enumerates the inflections — base-form
+ * mutation rules (drop -e before -ing, swap -y for -ies) don't
+ * compress into a single regex. Adding the explicit forms is more
+ * reliable than a fuzzy stem matcher.
  */
 function containsWord(text: string, word: string): boolean {
     const lower = text.toLowerCase();
     const target = word.toLowerCase();
     if (!lower.includes(target)) return false;
-    // Word-boundary check: require non-alphanumeric (or start/end) on
-    // each side. Hyphens are part of the target itself, so they don't
-    // count as a separator — the boundary is alphanumeric ↔ everything
-    // else.
     const re = new RegExp(
         `(?:^|[^a-z0-9-])${escapeRegex(target)}(?:$|[^a-z0-9-])`,
         "i"

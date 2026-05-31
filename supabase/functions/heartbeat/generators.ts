@@ -23,34 +23,10 @@
 // @ts-ignore - Deno URL import; resolved at deploy time.
 import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { validateObservation, formatViolations } from "./voice-document.ts";
-
-// ─── Shared types ─────────────────────────────────────────────────────
-
-type RelatedObjectType =
-    | "account"
-    | "deal"
-    | "signal"
-    | "call"
-    | "proof"
-    | "advisor"
-    | "focus"
-    | "approach";
-
-type ObservationConfidence = "high" | "medium" | "low" | null;
-
-interface ObservationCandidate {
-    readonly observationText: string;
-    readonly relatedObjectType?: RelatedObjectType | null;
-    readonly relatedObjectId?: string | null;
-    readonly confidence?: ObservationConfidence;
-    readonly supersedesPrior?: boolean;
-}
-
-interface GeneratorContext {
-    readonly workspaceId: string;
-    readonly now: string;
-    readonly session: unknown;
-}
+import type {
+    GeneratorContext,
+    ObservationCandidate
+} from "./types.ts";
 
 type Generator = (
     ctx: GeneratorContext,

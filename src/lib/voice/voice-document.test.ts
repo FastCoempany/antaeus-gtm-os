@@ -38,14 +38,47 @@ describe("validateObservation — banned corporate vocab", () => {
         expect(v.valid).toBe(false);
     });
 
-    it("does not false-positive on substring 'leverages' inside another word", () => {
-        // "leveraged" is a banned form too, but "preleverage" isn't a
-        // real word and shouldn't match. The whole-word rule should hit
-        // "leverage" + "leveraged" but not strings where the letters
-        // appear inside something else.
-        // For this test, just check that 'overage' (substring of
-        // 'leverage') doesn't trip the rule.
+    it("does not false-positive on substring 'overage' inside another word", () => {
+        // 'overage' contains 'verage' from 'leverage' as a substring,
+        // but with no boundary character separation. Should not match.
         const v = validateObservation("There's an overage in usage this week.");
+        expect(v.valid).toBe(true);
+    });
+
+    it("catches inflections of 'leverage' (leveraged, leveraging, leverages)", () => {
+        // Inflections are enumerated as separate entries in the banned
+        // list, so the offender label is the inflected form itself.
+        const cases: ReadonlyArray<[string, string]> = [
+            ["We leveraged the data.", "leveraged"],
+            ["We are leveraging the data.", "leveraging"],
+            ["This leverages the data.", "leverages"]
+        ];
+        for (const [sentence, expected] of cases) {
+            const v = validateObservation(sentence);
+            expect(v.valid, sentence).toBe(false);
+            const offenders = v.violations.map((x) => x.offender);
+            expect(offenders).toContain(expected);
+        }
+    });
+
+    it("catches '-ly' inflection of 'seamless'", () => {
+        const v = validateObservation("It runs seamlessly across systems.");
+        expect(v.valid).toBe(false);
+        const offenders = v.violations.map((x) => x.offender);
+        expect(offenders).toContain("seamlessly");
+    });
+
+    it("catches plural of 'synergy' (synergies)", () => {
+        const v = validateObservation("We found new synergies in Q3.");
+        expect(v.valid).toBe(false);
+        const offenders = v.violations.map((x) => x.offender);
+        expect(offenders).toContain("synergies");
+    });
+
+    it("inflection logic does NOT apply to hyphenated phrases", () => {
+        // "best-in-class" is a phrase; should match literal only.
+        // "best-in-classroom" shouldn't false-positive.
+        const v = validateObservation("Best-in-classroom equipment.");
         expect(v.valid).toBe(true);
     });
 
