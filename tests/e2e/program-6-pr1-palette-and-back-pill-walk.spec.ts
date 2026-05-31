@@ -1,6 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { ALL_ROOMS } from "@/lib/palette/registry";
-import { ALL_SKILLS } from "@/skills/lib/registry";
+
+// Phase C (ADR-010, 2026-05-31): the palette now surfaces skills
+// alongside rooms. Each skill registered in src/skills/lib/registry.ts
+// adds a row + bumps the count. We hardcode the count rather than
+// import it because the registry uses Vite's `?raw` for .md files,
+// which Playwright's plain Node test loader can't resolve. The five
+// starter skills are locked in ADR-010 §"Five starter skills"; if a
+// sixth ships, bump this number + the ADR together.
+const SKILLS_COUNT = 5;
 
 /**
  * Program 6 / PR 1 — palette + back-pill end-to-end walk.
@@ -180,10 +188,9 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
         // count assertion in lockstep with registry.ts so each new room
         // doesn't have to remember to bump this file.
         // ADR-010 (Phase C, 2026-05-31): the palette now surfaces skills
-        // alongside rooms — every skill registered in ALL_SKILLS adds
-        // a row + bumps the count. Total = rooms + skills.
+        // alongside rooms — total = rooms + SKILLS_COUNT (declared above).
         const totalRooms = ALL_ROOMS.length;
-        const totalItems = ALL_ROOMS.length + ALL_SKILLS.length;
+        const totalItems = ALL_ROOMS.length + SKILLS_COUNT;
 
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
