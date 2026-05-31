@@ -107,44 +107,90 @@ const HEARTBEAT_ACTIVE_DAYS = 7;
 /**
  * Enumerate the workspaces the heartbeat should run against. A
  * workspace is "active" if it has any session activity OR any
- * recent observation in the last HEARTBEAT_ACTIVE_DAYS days. This
- * avoids running generators against dormant workspaces and keeps
- * the DB load proportional to actual use.
+ * recent observation in the last HEARTBEAT_ACTIVE_DAYS days, OR has
+ * any data in the noun tables Phase B's generators read (deals,
+ * signal_console_accounts, proofs, discovery_call_logs). The
+ * noun-table check is the bootstrap path: a workspace with data but
+ * no session row (because no room calls bootSession yet) and no prior
+ * observation (chicken-and-egg) still gets generator coverage.
+ *
+ * Service-role auth means the queries below bypass RLS — necessary for
+ * cross-workspace enumeration. The generators themselves run per-
+ * workspace and are scoped via `.eq("workspace_id", ...)`.
  */
 async function listActiveWorkspaces(sb: SupabaseClient): Promise<Array<{ id: string }>> {
-    // Session-touched workspaces.
     const since = new Date(
         Date.now() - HEARTBEAT_ACTIVE_DAYS * 24 * 60 * 60 * 1000
     ).toISOString();
+    const ids = new Set<string>();
 
+    // 1. Session-touched workspaces (the original Phase A filter).
     const sessionRows = await sb
         .from("workspace_sessions")
         .select("workspace_id")
         .gte("updated_at", since);
-
     if (sessionRows.error) {
-        console.error("[heartbeat] failed to list active sessions:", sessionRows.error);
-        return [];
+        console.error(
+            "[heartbeat] failed to list active sessions:",
+            sessionRows.error
+        );
+    } else {
+        for (const row of sessionRows.data ?? []) {
+            ids.add((row as any).workspace_id);
+        }
     }
 
-    const sessionIds = new Set(
-        (sessionRows.data ?? []).map((row: any) => row.workspace_id)
-    );
-
-    // Recently-written observations also count (a generator may have
-    // written something even if no session activity).
+    // 2. Recently-written observations (a generator may have written
+    //    something even if no session activity).
     const obsRows = await sb
         .from("observations")
         .select("workspace_id")
         .gte("written_at", since);
-
-    if (!obsRows.error) {
+    if (obsRows.error) {
+        console.error(
+            "[heartbeat] failed to list active observations:",
+            obsRows.error
+        );
+    } else {
         for (const row of obsRows.data ?? []) {
-            sessionIds.add(row.workspace_id);
+            ids.add((row as any).workspace_id);
         }
     }
 
-    return Array.from(sessionIds).map((id) => ({ id }));
+    // 3. Phase B bootstrap (ADR-009): workspaces with any data in the
+    //    noun tables Phase B's generators consume. No date filter —
+    //    the generators themselves decide what's "stale enough"; the
+    //    heartbeat just needs to know which workspaces have data to
+    //    look at. 10000 row cap per table is generous for current
+    //    scale (1-100 workspaces, ≤100 rows per workspace average).
+    //    Tables explicitly enumerated rather than dynamically
+    //    discovered so the bootstrap surface is auditable.
+    const NOUN_TABLES = [
+        "deals",
+        "signal_console_accounts",
+        "proofs",
+        "discovery_call_logs"
+    ];
+    for (const table of NOUN_TABLES) {
+        const resp = await sb
+            .from(table)
+            .select("workspace_id")
+            .not("workspace_id", "is", null)
+            .limit(10000);
+        if (resp.error) {
+            console.error(
+                `[heartbeat] failed to scan ${table} for active workspaces:`,
+                resp.error
+            );
+            continue;
+        }
+        for (const row of resp.data ?? []) {
+            const wid = (row as any).workspace_id;
+            if (wid) ids.add(wid);
+        }
+    }
+
+    return Array.from(ids).map((id) => ({ id }));
 }
 
 // ─── Session context loader ──────────────────────────────────────
