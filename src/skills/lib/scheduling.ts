@@ -147,7 +147,12 @@ export function nextFireAt(c: Cadence, from: Date): Date {
     // Set to target day of the current month (or last day if short).
     setMonthlyDay(next, targetDom);
     if (next.getTime() <= from.getTime()) {
-        // Roll to next month.
+        // Roll to next month. CRITICAL: reset the date to 1 BEFORE
+        // incrementing the month. If we don't, a current date of 31
+        // combined with setUTCMonth(+1) overflows when the next month
+        // is shorter (Jan 31 + 1 month → Mar 3, skipping February).
+        // Reset-then-increment-then-clamp is the only safe order.
+        next.setUTCDate(1);
         next.setUTCMonth(next.getUTCMonth() + 1);
         setMonthlyDay(next, targetDom);
     }

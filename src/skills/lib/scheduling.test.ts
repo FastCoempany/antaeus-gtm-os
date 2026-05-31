@@ -162,4 +162,35 @@ describe("nextFireAt — monthly", () => {
         const next = nextFireAt(c, feb);
         expect(next.toISOString()).toBe("2026-02-28T09:00:00.000Z");
     });
+
+    it("Jan-31 schedule fired on Jan 31 rolls to Feb 28, NOT Mar 31", () => {
+        // Codex-flagged regression: incrementing the month while date
+        // is 31 overflows when the next month is shorter. The fix
+        // resets the date to 1 before incrementing.
+        const c: Cadence = {
+            kind: "monthly",
+            hour: 9,
+            minute: 0,
+            dayOfMonth: 31
+        };
+        const janFireTime = new Date("2026-01-31T09:00:00.000Z");
+        const next = nextFireAt(c, janFireTime);
+        // Without the fix, this returns Mar 31 (skipping February).
+        // With the fix, it returns Feb 28 (clamped to last day of Feb).
+        expect(next.toISOString()).toBe("2026-02-28T09:00:00.000Z");
+    });
+
+    it("30th-of-month fired on a 30-day month rolls correctly into the next month", () => {
+        // Same family of bugs: schedule 30th, fire on Apr 30 9am
+        // (April has 30 days). May next-fire should be May 30.
+        const c: Cadence = {
+            kind: "monthly",
+            hour: 9,
+            minute: 0,
+            dayOfMonth: 30
+        };
+        const aprFireTime = new Date("2026-04-30T09:00:00.000Z");
+        const next = nextFireAt(c, aprFireTime);
+        expect(next.toISOString()).toBe("2026-05-30T09:00:00.000Z");
+    });
 });

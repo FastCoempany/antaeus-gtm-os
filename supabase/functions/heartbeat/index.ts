@@ -563,6 +563,11 @@ function nextFireAtDeno(c: ParsedCadence, from: Date): Date {
     // monthly
     setMonthlyDayDeno(next, c.dayOfMonth!);
     if (next.getTime() <= from.getTime()) {
+        // Reset date to 1 BEFORE incrementing month so a current
+        // date of 31 doesn't overflow into the month after the next
+        // when that next month is shorter (Jan 31 + 1 → Mar 3,
+        // skipping February). See scheduling.ts for the same fix.
+        next.setUTCDate(1);
         next.setUTCMonth(next.getUTCMonth() + 1);
         setMonthlyDayDeno(next, c.dayOfMonth!);
     }
