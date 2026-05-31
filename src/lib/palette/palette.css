@@ -137,6 +137,20 @@
     color: inherit;
     transition: background 100ms ease;
     align-items: baseline;
+    /* Button-element variant needs to look like the anchor variant
+       (skill rows are <button>; room rows are <a>). */
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+}
+
+/* Distinguish skill kickers visually so the operator knows clicking
+   triggers a navigation+state composition vs. a plain room link. */
+.ant-palette__result[data-palette-kind="skill"] .ant-palette__result-kicker {
+    color: var(--db-accent-orange, #e6701e);
 }
 
 .ant-palette__result:hover,

@@ -166,6 +166,56 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase C — Cmd+K palette surfaces the 5 Phase B skills alongside rooms", async ({
+        page
+    }) => {
+        // ADR-010 (2026-05-31). The Cmd+K palette gained a Skills
+        // section + each skill renders with a `SKILL` kicker that
+        // distinguishes it from room family kickers. Activating Cmd+K
+        // on any room (Dashboard is convenient) should mount the
+        // palette with the skills group present at the bottom.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/dashboard/");
+        await page.waitForLoadState("networkidle");
+
+        // Open the palette via cmd/ctrl+K. Use the Meta key (cmd on
+        // mac, super on linux); the palette trigger listens for both.
+        await page.keyboard.press("Meta+K");
+        await expect(page.locator(".ant-palette")).toBeAttached();
+
+        // Skills section header should be present.
+        const groupKickers = await page
+            .locator(".ant-palette__group-kicker")
+            .allTextContents();
+        expect(groupKickers).toContain("Skills");
+
+        // Each of the 5 starter skills should render with a
+        // data-palette-kind="skill" attribute.
+        const skillRows = page.locator(
+            '[data-palette-kind="skill"]'
+        );
+        await expect(skillRows).toHaveCount(5);
+
+        // Specific starter skill ids.
+        await expect(
+            page.locator('[data-palette-id="triage-week-reads"]')
+        ).toBeAttached();
+        await expect(
+            page.locator('[data-palette-id="prep-next-call"]')
+        ).toBeAttached();
+
+        // Esc closes cleanly.
+        await page.keyboard.press("Escape");
+        await expect(page.locator(".ant-palette")).not.toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 3 Wave 1 — /signal-console/ Preact rebuild boots cleanly", async ({
         page
     }) => {
