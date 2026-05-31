@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
     DEAL_DECAY_GENERATOR_ID,
     STALL_THRESHOLD_DAYS,
+    currentStageStartedAt,
     deriveDealDecayObservations,
     selectStalledDeals,
-    type DealForDecayCheck
+    type DealForDecayCheck,
+    type StageTransition
 } from "./deal-decay";
 import { validateObservation } from "@/lib/voice/voice-document";
 
@@ -14,30 +16,75 @@ function daysAgo(n: number): string {
     return new Date(NOW.getTime() - n * 24 * 60 * 60 * 1000).toISOString();
 }
 
+function history(stages: ReadonlyArray<[string, number]>): StageTransition[] {
+    // Each entry: [stageName, daysAgo]. The function fabricates the
+    // transitions as a continuous chain.
+    return stages.map(([stage, ago], i) => ({
+        from: i === 0 ? "" : stages[i - 1]![0],
+        to: stage,
+        at: daysAgo(ago)
+    }));
+}
+
 function makeDeal(over: Partial<DealForDecayCheck> = {}): DealForDecayCheck {
     // Spread `over` LAST so explicit null/undefined values win over
-    // the defaults. The earlier `??` pattern collapsed `null` back
-    // into the default, which is the opposite of what tests want.
+    // the defaults.
     return {
         id: "d_1",
         account_name: "Acme",
         stage: "negotiation",
-        is_closed: false,
-        stage_changed_at: daysAgo(10),
+        stage_history: history([
+            ["prospect", 30],
+            ["discovery", 25],
+            ["evaluation", 20],
+            ["negotiation", 10]
+        ]),
         next_step_date: null,
         updated_at: daysAgo(10),
         ...over
     };
 }
 
+describe("currentStageStartedAt", () => {
+    it("returns null for null/empty history", () => {
+        expect(currentStageStartedAt(null)).toBeNull();
+        expect(currentStageStartedAt([])).toBeNull();
+    });
+
+    it("returns the last transition's at", () => {
+        const h = history([
+            ["prospect", 30],
+            ["discovery", 20],
+            ["negotiation", 10]
+        ]);
+        expect(currentStageStartedAt(h)).toBe(daysAgo(10));
+    });
+
+    it("walks backward past entries with missing at", () => {
+        const h: StageTransition[] = [
+            { from: "", to: "prospect", at: daysAgo(20) },
+            { from: "prospect", to: "discovery", at: "" }
+        ];
+        expect(currentStageStartedAt(h)).toBe(daysAgo(20));
+    });
+});
+
 describe("selectStalledDeals — threshold semantics", () => {
     it("returns empty for an empty list", () => {
         expect(selectStalledDeals([], NOW)).toEqual([]);
     });
 
-    it("ignores closed deals even if they meet threshold", () => {
+    it("ignores closed-won deals even if they meet threshold", () => {
         const out = selectStalledDeals(
-            [makeDeal({ is_closed: true, stage_changed_at: daysAgo(30) })],
+            [makeDeal({ stage: "closed-won" })],
+            NOW
+        );
+        expect(out).toEqual([]);
+    });
+
+    it("ignores closed-lost deals even if they meet threshold", () => {
+        const out = selectStalledDeals(
+            [makeDeal({ stage: "closed-lost" })],
             NOW
         );
         expect(out).toEqual([]);
@@ -45,7 +92,14 @@ describe("selectStalledDeals — threshold semantics", () => {
 
     it("ignores deals younger than the threshold", () => {
         const out = selectStalledDeals(
-            [makeDeal({ stage_changed_at: daysAgo(STALL_THRESHOLD_DAYS - 1) })],
+            [
+                makeDeal({
+                    stage_history: history([
+                        ["prospect", 30],
+                        ["negotiation", STALL_THRESHOLD_DAYS - 1]
+                    ])
+                })
+            ],
             NOW
         );
         expect(out).toEqual([]);
@@ -53,20 +107,25 @@ describe("selectStalledDeals — threshold semantics", () => {
 
     it("includes a deal exactly at the threshold", () => {
         const out = selectStalledDeals(
-            [makeDeal({ stage_changed_at: daysAgo(STALL_THRESHOLD_DAYS) })],
+            [
+                makeDeal({
+                    stage_history: history([
+                        ["prospect", 30],
+                        ["negotiation", STALL_THRESHOLD_DAYS]
+                    ])
+                })
+            ],
             NOW
         );
         expect(out.length).toBe(1);
-        expect(out[0]!.daysAtStage).toBeGreaterThanOrEqual(
-            STALL_THRESHOLD_DAYS
-        );
+        expect(out[0]!.daysAtStage).toBeGreaterThanOrEqual(STALL_THRESHOLD_DAYS);
     });
 
     it("ignores deals with a future-dated next_step_date even if old", () => {
         const out = selectStalledDeals(
             [
                 makeDeal({
-                    stage_changed_at: daysAgo(30),
+                    stage_history: history([["negotiation", 30]]),
                     next_step_date: new Date(
                         NOW.getTime() + 5 * 24 * 60 * 60 * 1000
                     ).toISOString()
@@ -81,7 +140,7 @@ describe("selectStalledDeals — threshold semantics", () => {
         const out = selectStalledDeals(
             [
                 makeDeal({
-                    stage_changed_at: daysAgo(30),
+                    stage_history: history([["negotiation", 30]]),
                     next_step_date: daysAgo(2)
                 })
             ],
@@ -90,11 +149,11 @@ describe("selectStalledDeals — threshold semantics", () => {
         expect(out.length).toBe(1);
     });
 
-    it("falls back to updated_at when stage_changed_at is missing", () => {
+    it("falls back to updated_at when stage_history is null", () => {
         const out = selectStalledDeals(
             [
                 makeDeal({
-                    stage_changed_at: null,
+                    stage_history: null,
                     updated_at: daysAgo(20)
                 })
             ],
@@ -104,11 +163,19 @@ describe("selectStalledDeals — threshold semantics", () => {
         expect(out[0]!.daysAtStage).toBeGreaterThanOrEqual(20);
     });
 
-    it("skips a deal with neither stage_changed_at nor updated_at", () => {
+    it("skips a deal with no stage", () => {
+        const out = selectStalledDeals(
+            [makeDeal({ stage: null })],
+            NOW
+        );
+        expect(out).toEqual([]);
+    });
+
+    it("skips a deal with neither stage_history nor updated_at", () => {
         const out = selectStalledDeals(
             [
                 makeDeal({
-                    stage_changed_at: null,
+                    stage_history: null,
                     updated_at: null
                 })
             ],
@@ -120,8 +187,14 @@ describe("selectStalledDeals — threshold semantics", () => {
     it("sorts most-decayed first", () => {
         const out = selectStalledDeals(
             [
-                makeDeal({ id: "younger", stage_changed_at: daysAgo(10) }),
-                makeDeal({ id: "older", stage_changed_at: daysAgo(30) })
+                makeDeal({
+                    id: "younger",
+                    stage_history: history([["negotiation", 10]])
+                }),
+                makeDeal({
+                    id: "older",
+                    stage_history: history([["negotiation", 30]])
+                })
             ],
             NOW
         );
@@ -148,7 +221,7 @@ describe("deriveDealDecayObservations — voice + shape", () => {
                     id: "d_a",
                     account_name: "Acme",
                     stage: "negotiation",
-                    stage_changed_at: daysAgo(21)
+                    stage_history: history([["negotiation", 21]])
                 })
             ],
             NOW

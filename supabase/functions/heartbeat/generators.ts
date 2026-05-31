@@ -86,18 +86,42 @@ function gateThroughVoice(
 
 const STALL_THRESHOLD_DAYS = 7;
 const DEAL_DECAY_GENERATOR_ID = "phase-b/deal-decay";
+const CLOSED_STAGES: ReadonlySet<string> = new Set([
+    "closed-won",
+    "closed-lost"
+]);
+
+interface DealStageTransition {
+    readonly from?: unknown;
+    readonly to?: unknown;
+    readonly at?: unknown;
+}
+
+function currentStageStartedAt(history: unknown): string | null {
+    if (!Array.isArray(history) || history.length === 0) return null;
+    for (let i = history.length - 1; i >= 0; i--) {
+        const entry = history[i] as DealStageTransition;
+        if (!entry) continue;
+        if (typeof entry.at === "string" && entry.at.length > 0) {
+            return entry.at;
+        }
+    }
+    return null;
+}
 
 async function dealDecayGenerator(
     ctx: GeneratorContext,
     sb: SupabaseClient
 ): Promise<ReadonlyArray<ObservationCandidate>> {
+    // Real Postgres `deals` schema: stage (text), stage_history (jsonb),
+    // next_step_date (timestamptz), updated_at (timestamptz). No
+    // `is_closed` or `stage_changed_at` columns — closed-ness is derived
+    // from stage, stage-age is derived from stage_history.
     const { data, error } = await sb
         .from("deals")
-        .select(
-            "id, account_name, stage, is_closed, stage_changed_at, next_step_date, updated_at"
-        )
+        .select("id, account_name, stage, stage_history, next_step_date, updated_at")
         .eq("workspace_id", ctx.workspaceId)
-        .eq("is_closed", false);
+        .not("stage", "in", '("closed-won","closed-lost")');
 
     if (error) {
         console.error("[heartbeat] deal_decay select failed:", error);
@@ -110,14 +134,15 @@ async function dealDecayGenerator(
         id: string;
         account_name: string | null;
         stage: string | null;
-        is_closed: boolean | null;
-        stage_changed_at: string | null;
+        stage_history: unknown;
         next_step_date: string | null;
         updated_at: string | null;
     }>) {
-        if (d.is_closed) continue;
         if (!d.stage) continue;
-        const sinceIso = d.stage_changed_at ?? d.updated_at;
+        if (CLOSED_STAGES.has(d.stage)) continue;
+
+        const sinceIso =
+            currentStageStartedAt(d.stage_history) ?? d.updated_at;
         if (!sinceIso) continue;
         const since = new Date(sinceIso);
         if (Number.isNaN(since.getTime())) continue;
