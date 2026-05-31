@@ -122,6 +122,9 @@ export interface DataClient {
     handoffArtifacts: NounAccessor<"handoff_artifacts">;
     // ─── Founding GTM share-link mechanic (canon §4.19) ─────────────
     foundingGtmShares: NounAccessor<"founding_gtm_shares">;
+    // ─── Skill scheduling (Phase E, ADR-012) ────────────────────────
+    scheduledSkills: NounAccessor<"scheduled_skills">;
+    scheduledSkillFires: NounAccessor<"scheduled_skill_fires">;
     // ─── Phase A orchestration layer (ADR-004) ─────────────────────
     workspaceSessions: NounAccessor<"workspace_sessions">;
     observations: NounAccessor<"observations">;
@@ -196,6 +199,8 @@ export function createDataClient(
         readinessSnapshots: makeNounAccessor(sb, "readiness_snapshots"),
         handoffArtifacts: makeNounAccessor(sb, "handoff_artifacts"),
         foundingGtmShares: makeNounAccessor(sb, "founding_gtm_shares"),
+        scheduledSkills: makeNounAccessor(sb, "scheduled_skills"),
+        scheduledSkillFires: makeNounAccessor(sb, "scheduled_skill_fires"),
         // ─── Phase A orchestration layer (ADR-004) ─────────────────
         workspaceProfile: makeNounAccessor(sb, "workspace_profile"),
         workspaceSessions: makeNounAccessor(sb, "workspace_sessions"),
@@ -241,6 +246,8 @@ function makeDemoLocalDataClient(): DataClient {
         readinessSnapshots: makeDemoLocalNounAccessor("readiness_snapshots"),
         handoffArtifacts: makeDemoLocalNounAccessor("handoff_artifacts"),
         foundingGtmShares: makeDemoLocalNounAccessor("founding_gtm_shares"),
+        scheduledSkills: makeDemoLocalNounAccessor("scheduled_skills"),
+        scheduledSkillFires: makeDemoLocalNounAccessor("scheduled_skill_fires"),
         workspaceProfile: makeDemoLocalNounAccessor("workspace_profile"),
         workspaceSessions: makeDemoLocalNounAccessor("workspace_sessions"),
         observations: makeDemoLocalNounAccessor("observations"),

@@ -205,6 +205,31 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase E — Cmd+K palette skill rows expose a ⏰ schedule button", async ({
+        page
+    }) => {
+        // ADR-012 (2026-05-31). Each Phase C skill row in the Cmd+K
+        // palette has a ⏰ button that opens the schedule modal.
+        // Clicking it closes the palette and opens the modal.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/dashboard/", { waitUntil: "domcontentloaded" });
+        await page.waitForTimeout(300);
+        await page.keyboard.press("Meta+k");
+        await page.waitForTimeout(150);
+        await expect(page.locator(".ant-palette")).toBeAttached();
+
+        // Schedule button should render alongside each skill.
+        const scheduleButtons = page.locator(".ant-palette__schedule");
+        await expect(scheduleButtons).toHaveCount(5);
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase D — BirdseyeFloat mounts on every room and expands on click", async ({
         page
     }) => {

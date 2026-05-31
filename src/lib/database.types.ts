@@ -1596,6 +1596,98 @@ export type Database = {
           },
         ]
       }
+      scheduled_skill_fires: {
+        Row: {
+          fired_at: string
+          id: string
+          schedule_id: string
+          skill_id: string
+          viewed_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          fired_at?: string
+          id?: string
+          schedule_id: string
+          skill_id: string
+          viewed_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          fired_at?: string
+          id?: string
+          schedule_id?: string
+          skill_id?: string
+          viewed_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_skill_fires_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "scheduled_skills"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scheduled_skill_fires_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scheduled_skills: {
+        Row: {
+          cadence_data: Json
+          cadence_kind: string
+          created_at: string
+          created_by: string | null
+          id: string
+          last_fired_at: string | null
+          next_fire_at: string
+          skill_id: string
+          timezone: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          cadence_data: Json
+          cadence_kind: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          last_fired_at?: string | null
+          next_fire_at: string
+          skill_id: string
+          timezone?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Update: {
+          cadence_data?: Json
+          cadence_kind?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          last_fired_at?: string | null
+          next_fire_at?: string
+          skill_id?: string
+          timezone?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_skills_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sequences: {
         Row: {
           angle: string | null

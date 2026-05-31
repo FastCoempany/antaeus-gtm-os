@@ -411,6 +411,10 @@ async function runHeartbeat(sb: SupabaseClient): Promise<HeartbeatReport> {
         perWorkspace.push({ workspaceId: workspace.id, runs });
     }
 
+    // Phase E (ADR-012) — fire any due scheduled skills for every
+    // workspace. Independent of the generator loop; cheap SQL.
+    await fireDueScheduledSkills(sb);
+
     const endedAt = new Date().toISOString();
     return {
         ok: true,
@@ -422,6 +426,155 @@ async function runHeartbeat(sb: SupabaseClient): Promise<HeartbeatReport> {
         totals,
         perWorkspace
     };
+}
+
+// ─── Phase E (ADR-012) — scheduled skill firing ──────────────────
+
+/**
+ * Read every `scheduled_skills` row whose next_fire_at is past, write
+ * a `scheduled_skill_fires` ledger entry (idempotent on
+ * (schedule_id, fired_at)), then advance next_fire_at via the cadence.
+ *
+ * Re-implements the cadence math from src/skills/lib/scheduling.ts in
+ * Deno because cross-runtime imports aren't available. Logic stays in
+ * sync; both sides have tests.
+ */
+async function fireDueScheduledSkills(sb: SupabaseClient): Promise<void> {
+    const nowIso = new Date().toISOString();
+    const dueResp = await sb
+        .from("scheduled_skills")
+        .select("id, workspace_id, skill_id, cadence_kind, cadence_data")
+        .lte("next_fire_at", nowIso);
+    if (dueResp.error) {
+        console.error(
+            "[heartbeat] scheduled_skills select failed:",
+            dueResp.error
+        );
+        return;
+    }
+    const due = (dueResp.data ?? []) as Array<{
+        id: string;
+        workspace_id: string;
+        skill_id: string;
+        cadence_kind: string;
+        cadence_data: unknown;
+    }>;
+    if (due.length === 0) return;
+
+    const firedAt = new Date();
+    for (const row of due) {
+        const cadence = parseCadenceDeno(row.cadence_kind, row.cadence_data);
+        if (!cadence) {
+            console.warn(
+                `[heartbeat] scheduled_skill ${row.id} has unparseable cadence; skipping`
+            );
+            continue;
+        }
+        // Write the fire ledger row.
+        const insertResp = await sb.from("scheduled_skill_fires").insert({
+            workspace_id: row.workspace_id,
+            schedule_id: row.id,
+            skill_id: row.skill_id,
+            fired_at: firedAt.toISOString()
+        });
+        if (insertResp.error) {
+            // If it's a unique-constraint collision (already fired this
+            // tick), that's fine — idempotent retry.
+            const code = (insertResp.error as { code?: string }).code;
+            if (code !== "23505") {
+                console.error(
+                    `[heartbeat] fire-insert failed for schedule ${row.id}:`,
+                    insertResp.error
+                );
+                continue;
+            }
+        }
+        // Advance next_fire_at.
+        const nextFire = nextFireAtDeno(cadence, firedAt);
+        const updateResp = await sb
+            .from("scheduled_skills")
+            .update({
+                next_fire_at: nextFire.toISOString(),
+                last_fired_at: firedAt.toISOString()
+            })
+            .eq("id", row.id);
+        if (updateResp.error) {
+            console.error(
+                `[heartbeat] next_fire_at update failed for schedule ${row.id}:`,
+                updateResp.error
+            );
+        }
+    }
+}
+
+// Cadence helpers (Deno duplicate of src/skills/lib/scheduling.ts).
+const DAY_INDEX_DENO: Record<string, number> = {
+    sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6
+};
+
+interface ParsedCadence {
+    kind: "daily" | "weekly" | "monthly";
+    hour: number;
+    minute: number;
+    dayOfWeek?: string;
+    dayOfMonth?: number;
+}
+
+function parseCadenceDeno(kind: string, data: unknown): ParsedCadence | null {
+    if (!data || typeof data !== "object" || Array.isArray(data)) return null;
+    const o = data as Record<string, unknown>;
+    const hour = typeof o.hour === "number" ? o.hour : null;
+    const minute = typeof o.minute === "number" ? o.minute : null;
+    if (hour === null || minute === null) return null;
+    if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+    if (kind === "daily") return { kind: "daily", hour, minute };
+    if (kind === "weekly") {
+        const dow = typeof o.day_of_week === "string" ? o.day_of_week : null;
+        if (!dow || !(dow in DAY_INDEX_DENO)) return null;
+        return { kind: "weekly", hour, minute, dayOfWeek: dow };
+    }
+    if (kind === "monthly") {
+        const dom = typeof o.day_of_month === "number" ? o.day_of_month : null;
+        if (dom === null || dom < 1 || dom > 31) return null;
+        return { kind: "monthly", hour, minute, dayOfMonth: dom };
+    }
+    return null;
+}
+
+function nextFireAtDeno(c: ParsedCadence, from: Date): Date {
+    const next = new Date(from.getTime());
+    next.setUTCHours(c.hour, c.minute, 0, 0);
+    if (c.kind === "daily") {
+        if (next.getTime() <= from.getTime()) {
+            next.setUTCDate(next.getUTCDate() + 1);
+        }
+        return next;
+    }
+    if (c.kind === "weekly") {
+        const targetDow = DAY_INDEX_DENO[c.dayOfWeek!];
+        const currentDow = next.getUTCDay();
+        let daysAhead = (targetDow - currentDow + 7) % 7;
+        if (daysAhead === 0 && next.getTime() <= from.getTime()) {
+            daysAhead = 7;
+        }
+        next.setUTCDate(next.getUTCDate() + daysAhead);
+        return next;
+    }
+    // monthly
+    setMonthlyDayDeno(next, c.dayOfMonth!);
+    if (next.getTime() <= from.getTime()) {
+        next.setUTCMonth(next.getUTCMonth() + 1);
+        setMonthlyDayDeno(next, c.dayOfMonth!);
+    }
+    return next;
+}
+
+function setMonthlyDayDeno(d: Date, targetDom: number): void {
+    d.setUTCDate(1);
+    const lastDay = new Date(
+        Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)
+    ).getUTCDate();
+    d.setUTCDate(Math.min(targetDom, lastDay));
 }
 
 // ─── HTTP serve loop ─────────────────────────────────────────────

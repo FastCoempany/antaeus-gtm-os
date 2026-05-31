@@ -124,6 +124,8 @@ function makeMockDataClient(opts: {
         readinessSnapshots: {} as never,
         handoffArtifacts: {} as never,
         foundingGtmShares: {} as never,
+        scheduledSkills: {} as never,
+        scheduledSkillFires: {} as never,
         workspaceSessions,
         workspaceProfile: {} as never,
         observations: {} as never,
