@@ -314,7 +314,17 @@ function makeNounAccessor<T extends TableName>(
             if (options?.where) {
                 for (const [col, value] of Object.entries(options.where)) {
                     if (value === undefined) continue;
-                    query = query.eq(col, value);
+                    // PostgREST `.eq(col, null)` becomes SQL `col = null`,
+                    // which never matches NULL rows. NULL comparison
+                    // needs `.is(col, null)`. Without this branch, any
+                    // `where: { col: null }` filter silently matched
+                    // zero rows — broke observation dedupe for
+                    // workspace-scoped (null-entity) generators and any
+                    // `viewed_at: null` style pending-row query.
+                    query =
+                        value === null
+                            ? query.is(col, null)
+                            : query.eq(col, value);
                 }
             }
 

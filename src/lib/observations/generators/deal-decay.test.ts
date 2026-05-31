@@ -293,6 +293,27 @@ describe("deriveDealDecayObservations — voice + shape", () => {
     });
 });
 
+describe("selectStalledDeals — placeholder filtering", () => {
+    it("skips the migration-blob passthrough row", () => {
+        const out = selectStalledDeals(
+            [
+                makeDeal({
+                    id: "blob",
+                    account_name: "__gtmos_migration_blob__",
+                    stage_history: history([["discovery", 37]])
+                }),
+                makeDeal({
+                    id: "real",
+                    account_name: "Acme",
+                    stage_history: history([["negotiation", 21]])
+                })
+            ],
+            NOW
+        );
+        expect(out.map((s) => s.deal.id)).toEqual(["real"]);
+    });
+});
+
 describe("DEAL_DECAY_GENERATOR_ID", () => {
     it("follows the phase-b/<name> convention", () => {
         expect(DEAL_DECAY_GENERATOR_ID).toBe("phase-b/deal-decay");

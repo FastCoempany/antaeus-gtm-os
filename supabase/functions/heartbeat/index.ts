@@ -213,16 +213,30 @@ async function writeObservation(
     now: string
 ): Promise<WriteOutcome> {
     try {
-        // Dedupe scan.
-        const existing = await sb
+        // Dedupe scan. CRITICAL: PostgREST `.eq(col, null)` becomes
+        // SQL `col = null`, which never matches NULL rows — you must
+        // use `.is(col, null)` for NULL comparison. Workspace-scoped
+        // observations (discovery_rhythm) carry null related_object_*,
+        // so the old `.eq(..., null)` found zero prior rows every tick,
+        // supersession never fired, and duplicates stacked. Branch on
+        // null to pick the right operator.
+        let query = sb
             .from("observations")
             .select("*")
             .eq("workspace_id", workspaceId)
             .eq("source_generator", sourceGenerator)
-            .eq("status", "active")
-            .eq("related_object_type", candidate.relatedObjectType ?? null)
-            .eq("related_object_id", candidate.relatedObjectId ?? null)
-            .limit(5);
+            .eq("status", "active");
+        query =
+            candidate.relatedObjectType === null ||
+            candidate.relatedObjectType === undefined
+                ? query.is("related_object_type", null)
+                : query.eq("related_object_type", candidate.relatedObjectType);
+        query =
+            candidate.relatedObjectId === null ||
+            candidate.relatedObjectId === undefined
+                ? query.is("related_object_id", null)
+                : query.eq("related_object_id", candidate.relatedObjectId);
+        const existing = await query.limit(5);
 
         if (existing.error) {
             console.error(

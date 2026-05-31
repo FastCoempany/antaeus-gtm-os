@@ -1,4 +1,5 @@
 import type { ObservationCandidate, RelatedObjectType } from "./types";
+import { isPlaceholderName } from "./placeholders";
 
 /**
  * `signal_decay` generator — pure function form.
@@ -78,6 +79,11 @@ export function selectSilentAccounts(
 
     const out: SilentAccount[] = [];
     for (const a of accounts) {
+        // Skip migration-blob placeholders + nameless accounts —
+        // surfacing "An unnamed account is on the watchlist" is noise,
+        // not a useful read. A real watched account always has a name.
+        if (isPlaceholderName(a.account_name)) continue;
+        if (!a.account_name || a.account_name.trim().length === 0) continue;
         const newest = newestByAccount.get(a.id);
         if (newest === undefined) {
             // No signals ever → fire with the "no signals on record"
