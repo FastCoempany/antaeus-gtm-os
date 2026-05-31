@@ -9,7 +9,6 @@ import {
 } from "@/lib/observations/briefing-dedupe";
 import type { ObservationView } from "@/lib/observations/types";
 import {
-    DEFAULT_DECAY_THRESHOLD,
     filterByDecayThreshold,
     loadStoredThreshold,
     saveStoredThreshold,
@@ -61,13 +60,16 @@ async function refresh(): Promise<void> {
 }
 
 export function WeekReadsCard(): JSX.Element {
+    // Lazy init from localStorage so the toggle renders with the
+    // operator's stored choice on first paint (no 14d→7d flicker if
+    // they previously picked 7d). DEFAULT_DECAY_THRESHOLD is the
+    // fallback when storage is empty or unavailable.
     const [threshold, setThreshold] = useState<DecayThresholdDays>(
-        DEFAULT_DECAY_THRESHOLD
+        () => loadStoredThreshold()
     );
     const [busyId, setBusyId] = useState<string | null>(null);
 
     useEffect(() => {
-        setThreshold(loadStoredThreshold());
         void refresh();
     }, []);
 

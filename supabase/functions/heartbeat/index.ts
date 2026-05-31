@@ -51,34 +51,14 @@ import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-
 
 // ─── Generator contract (duplicated from src/lib/observations/types.ts) ─
 
-type FocusedObjectType =
-    | "account"
-    | "deal"
-    | "signal"
-    | "call"
-    | "proof"
-    | "advisor"
-    | "focus"
-    | "approach";
-
-type ObservationConfidence = "high" | "medium" | "low" | null;
-
-interface ObservationCandidate {
-    readonly observationText: string;
-    readonly relatedObjectType?: FocusedObjectType | null;
-    readonly relatedObjectId?: string | null;
-    readonly confidence?: ObservationConfidence;
-    readonly supersedesPrior?: boolean;
-}
-
-interface GeneratorContext {
-    readonly workspaceId: string;
-    readonly now: string;
-    readonly session: {
-        readonly focusedObjectType: FocusedObjectType | null;
-        readonly focusedObjectId: string | null;
-    } | null;
-}
+// Shared types extracted to ./types.ts so generators.ts and index.ts
+// don't re-declare them. Canonical source is
+// src/lib/observations/generators/types.ts (Node side).
+import type {
+    GeneratorContext,
+    ObservationCandidate,
+    RelatedObjectType
+} from "./types.ts";
 
 type Generator = (
     ctx: GeneratorContext,
@@ -212,7 +192,7 @@ async function loadSessionContext(
         focused_object_id: string | null;
     };
     return {
-        focusedObjectType: row.focused_object_type as FocusedObjectType | null,
+        focusedObjectType: row.focused_object_type as RelatedObjectType | null,
         focusedObjectId: row.focused_object_id
     };
 }
