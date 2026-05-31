@@ -9,6 +9,7 @@ import {
 } from "./registry";
 import { ALL_SKILLS, filterSkills } from "@/skills/lib/registry";
 import { dispatchSkill } from "@/skills/lib/dispatcher";
+import { openScheduleModal } from "@/skills/ScheduleModal";
 import type { Skill } from "@/skills/lib/types";
 import "./palette.css";
 
@@ -311,7 +312,7 @@ function ResultRow({
     }
     const skill = item.skill;
     return (
-        <li role="option" aria-selected={focused}>
+        <li role="option" aria-selected={focused} class="ant-palette__skill-row">
             <button
                 type="button"
                 class={`ant-palette__result${focused ? " is-focused" : ""}`}
@@ -325,6 +326,19 @@ function ResultRow({
                 <span class="ant-palette__result-kicker">SKILL</span>
                 <span class="ant-palette__result-label">{skill.label}</span>
                 <span class="ant-palette__result-desc">{skill.description}</span>
+            </button>
+            <button
+                type="button"
+                class="ant-palette__schedule"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    closePalette();
+                    openScheduleModal(skill.id, skill.label);
+                }}
+                aria-label={`Schedule ${skill.label}`}
+                data-schedule-skill-id={skill.id}
+            >
+                ⏰
             </button>
         </li>
     );

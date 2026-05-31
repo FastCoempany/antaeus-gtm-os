@@ -1,0 +1,61 @@
+/* ────────────────────────────────────────────────────────────
+ * ScheduledFireToast — Phase E destination-room toast (ADR-012)
+ *
+ * Renders on the room the operator was auto-navigated to. Bottom-
+ * left so it doesn't collide with the BirdseyeFloat at bottom-right.
+ * ─────────────────────────────────────────────────────────── */
+
+.ant-scheduled-toast {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 997; /* below palette + birdseye */
+    width: 280px;
+    background: #0a1c40;
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: 0 6px 20px rgba(10, 28, 64, 0.25);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    animation: scheduled-toast-in 220ms ease;
+}
+
+@keyframes scheduled-toast-in {
+    from { transform: translateY(8px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+.ant-scheduled-toast__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.ant-scheduled-toast__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e6701e;
+    font-weight: 800;
+}
+
+.ant-scheduled-toast__close {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.ant-scheduled-toast__close:hover { color: #fff; }
+
+.ant-scheduled-toast__body {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+}

@@ -1,0 +1,197 @@
+/* ──────────────────────────────────────────────────────────────
+ * ScheduleModal — Phase E operator-side scheduling UI (ADR-012)
+ * ────────────────────────────────────────────────────────────── */
+
+.ant-schedule__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 28, 64, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.ant-schedule {
+    background: #fff;
+    border: 1px solid rgba(10, 28, 64, 0.15);
+    border-radius: 12px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 12px 40px rgba(10, 28, 64, 0.25);
+    color: #0a1c40;
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+}
+
+.ant-schedule__head { margin-bottom: 18px; }
+
+.ant-schedule__kicker {
+    margin: 0 0 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e6701e;
+    font-weight: 800;
+}
+
+.ant-schedule__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.ant-schedule__error {
+    margin: 0 0 14px;
+    padding: 8px 12px;
+    background: rgba(220, 38, 38, 0.08);
+    border-radius: 6px;
+    color: #b91c1c;
+    font-size: 13px;
+}
+
+.ant-schedule__field {
+    display: block;
+    margin-bottom: 14px;
+}
+
+.ant-schedule__field-tag {
+    display: block;
+    margin-bottom: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.5);
+}
+
+.ant-schedule__cadence-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.ant-schedule__cadence-btn {
+    flex: 1 1 auto;
+    appearance: none;
+    background: #f6f8fc;
+    border: 1px solid rgba(10, 28, 64, 0.15);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #0a1c40;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.ant-schedule__cadence-btn.is-active {
+    background: #0a1c40;
+    color: #fff;
+    border-color: #0a1c40;
+}
+
+.ant-schedule__day-buttons {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.ant-schedule__day-btn {
+    appearance: none;
+    background: #f6f8fc;
+    border: 1px solid rgba(10, 28, 64, 0.15);
+    border-radius: 6px;
+    padding: 8px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.ant-schedule__day-btn.is-active {
+    background: #0a1c40;
+    color: #fff;
+    border-color: #0a1c40;
+}
+
+.ant-schedule__field input[type="number"] {
+    width: 80px;
+    padding: 8px 10px;
+    border: 1px solid rgba(10, 28, 64, 0.15);
+    border-radius: 6px;
+    background: #f6f8fc;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.ant-schedule__time-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ant-schedule__actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+.ant-schedule__btn {
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+}
+
+.ant-schedule__btn--ghost {
+    background: transparent;
+    border-color: rgba(10, 28, 64, 0.2);
+    color: #0a1c40;
+}
+
+.ant-schedule__btn--primary {
+    background: #e6701e;
+    color: #fff;
+    border-color: #e6701e;
+}
+
+.ant-schedule__btn--primary:hover { background: #d65f0f; }
+.ant-schedule__btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Schedule button on each skill row in the Cmd+K palette. */
+.ant-palette__skill-row {
+    position: relative;
+    list-style: none;
+}
+
+.ant-palette__schedule {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    appearance: none;
+    background: transparent;
+    border: 1px solid rgba(10, 28, 64, 0.15);
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: rgba(10, 28, 64, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ant-palette__schedule:hover {
+    color: #0a1c40;
+    border-color: rgba(10, 28, 64, 0.4);
+    background: #f6f8fc;
+}

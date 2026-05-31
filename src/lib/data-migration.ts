@@ -648,6 +648,8 @@ function toAccessorName(table: TableName): string {
         readiness_snapshots: "readinessSnapshots",
         handoff_artifacts: "handoffArtifacts",
         founding_gtm_shares: "foundingGtmShares",
+        scheduled_skills: "scheduledSkills",
+        scheduled_skill_fires: "scheduledSkillFires",
         waitlist_signups: "waitlistSignups",
         // Phase A orchestration layer (ADR-004). These tables are
         // populated server-side (heartbeat Edge Function for

@@ -3,6 +3,8 @@ import { Wordmark } from "./wordmark";
 import { BackButton } from "./back-button";
 import { PaletteTrigger } from "./palette/PaletteTrigger";
 import { BirdseyeFloat } from "@/birdseye/BirdseyeFloat";
+import { ScheduledFireToast } from "@/skills/ScheduledFireToast";
+import { ScheduleModal } from "@/skills/ScheduleModal";
 import "./room-chrome.css";
 
 /**
@@ -62,6 +64,8 @@ export function RoomChrome(props: RoomChromeProps): JSX.Element {
             </div>
             <PaletteTrigger />
             <BirdseyeFloat />
+            <ScheduledFireToast />
+            <ScheduleModal />
         </div>
     );
 }
