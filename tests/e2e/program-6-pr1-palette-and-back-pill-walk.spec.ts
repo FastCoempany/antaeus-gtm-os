@@ -1,6 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { ALL_ROOMS } from "@/lib/palette/registry";
 
+// Phase C (ADR-010, 2026-05-31): the palette now surfaces skills
+// alongside rooms. Each skill registered in src/skills/lib/registry.ts
+// adds a row + bumps the count. We hardcode the count rather than
+// import it because the registry uses Vite's `?raw` for .md files,
+// which Playwright's plain Node test loader can't resolve. The five
+// starter skills are locked in ADR-010 §"Five starter skills"; if a
+// sixth ships, bump this number + the ADR together.
+const SKILLS_COUNT = 5;
+
 /**
  * Program 6 / PR 1 — palette + back-pill end-to-end walk.
  *
@@ -178,7 +187,10 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
         // when a new room lands (e.g. Briefing B.0b: 20 → 21). Keeps the
         // count assertion in lockstep with registry.ts so each new room
         // doesn't have to remember to bump this file.
+        // ADR-010 (Phase C, 2026-05-31): the palette now surfaces skills
+        // alongside rooms — total = rooms + SKILLS_COUNT (declared above).
         const totalRooms = ALL_ROOMS.length;
+        const totalItems = ALL_ROOMS.length + SKILLS_COUNT;
 
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
@@ -195,15 +207,19 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
             await page.waitForTimeout(150);
             await expect(page.locator(".ant-palette")).toBeAttached();
 
-            // Count shows every registered room initially.
+            // Count shows every registered item (rooms + skills) initially.
             const count = await page.locator(".ant-palette__count").textContent();
-            expect(count).toContain(`${totalRooms} / ${totalRooms}`);
+            expect(count).toContain(`${totalItems} / ${totalItems}`);
 
-            // Result rows render — one per registered room.
+            // Result rows render — one per registered room + one per skill.
             const results = page.locator(".ant-palette__result");
-            expect(await results.count()).toBe(totalRooms);
+            expect(await results.count()).toBe(totalItems);
 
-            // Filter to "negotiation" — single result.
+            // Of those, exactly the room count are room-kind.
+            const roomRows = page.locator('[data-palette-kind="room"]');
+            expect(await roomRows.count()).toBe(totalRooms);
+
+            // Filter to "negotiation" — single result (no skill matches it).
             await page.fill(".ant-palette__input", "negotiation");
             await page.waitForTimeout(120);
             const filtered = page.locator(".ant-palette__result");

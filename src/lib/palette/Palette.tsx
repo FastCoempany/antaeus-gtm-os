@@ -7,7 +7,19 @@ import {
     type PaletteEntry,
     type RoomFamily
 } from "./registry";
+import { ALL_SKILLS, filterSkills } from "@/skills/lib/registry";
+import { dispatchSkill } from "@/skills/lib/dispatcher";
+import type { Skill } from "@/skills/lib/types";
 import "./palette.css";
+
+/**
+ * Palette items can be either a room (the original v1 surface) or
+ * a skill (Phase C / ADR-010). The union is what arrow navigation +
+ * Enter dispatch walk over; the renderer branches on kind.
+ */
+export type PaletteItem =
+    | { readonly kind: "room"; readonly room: PaletteEntry }
+    | { readonly kind: "skill"; readonly skill: Skill };
 
 /**
  * Palette — cmd+K room directory overlay.
@@ -34,7 +46,17 @@ export const paletteOpen = signal<boolean>(false);
 export const paletteQuery = signal<string>("");
 export const paletteFocusIndex = signal<number>(0);
 
-const visibleRooms = computed(() => filterRooms(paletteQuery.value));
+const visibleItems = computed<ReadonlyArray<PaletteItem>>(() => {
+    const q = paletteQuery.value;
+    const rooms: ReadonlyArray<PaletteItem> = filterRooms(q).map(
+        (room) => ({ kind: "room", room })
+    );
+    const skills: ReadonlyArray<PaletteItem> = filterSkills(q).map(
+        (skill) => ({ kind: "skill", skill })
+    );
+    // Rooms first (preserves the v1 surface order), skills after.
+    return [...rooms, ...skills];
+});
 
 export function openPalette(): void {
     batch(() => {
@@ -80,11 +102,11 @@ effect(() => {
 export function Palette(): JSX.Element | null {
     if (!paletteOpen.value) return null;
 
-    const rooms = visibleRooms.value;
+    const items = visibleItems.value;
     const focusIdx =
-        rooms.length === 0
+        items.length === 0
             ? 0
-            : Math.min(Math.max(0, paletteFocusIndex.value), rooms.length - 1);
+            : Math.min(Math.max(0, paletteFocusIndex.value), items.length - 1);
 
     function onKeyDown(e: KeyboardEvent): void {
         if (e.key === "Escape") {
@@ -94,23 +116,26 @@ export function Palette(): JSX.Element | null {
         }
         if (e.key === "ArrowDown") {
             e.preventDefault();
-            if (rooms.length === 0) return;
-            paletteFocusIndex.value = (focusIdx + 1) % rooms.length;
+            if (items.length === 0) return;
+            paletteFocusIndex.value = (focusIdx + 1) % items.length;
             return;
         }
         if (e.key === "ArrowUp") {
             e.preventDefault();
-            if (rooms.length === 0) return;
+            if (items.length === 0) return;
             paletteFocusIndex.value =
-                focusIdx === 0 ? rooms.length - 1 : focusIdx - 1;
+                focusIdx === 0 ? items.length - 1 : focusIdx - 1;
             return;
         }
         if (e.key === "Enter") {
             e.preventDefault();
-            const focus = rooms[focusIdx];
-            if (focus) {
-                closePalette();
-                window.location.href = focus.href;
+            const focus = items[focusIdx];
+            if (!focus) return;
+            closePalette();
+            if (focus.kind === "room") {
+                window.location.href = focus.room.href;
+            } else {
+                void dispatchSkill(focus.skill);
             }
             return;
         }
@@ -150,19 +175,19 @@ export function Palette(): JSX.Element | null {
                         aria-label="Filter rooms"
                     />
                     <span class="ant-palette__count">
-                        {rooms.length} / {ALL_ROOMS.length}
+                        {items.length} / {ALL_ROOMS.length + ALL_SKILLS.length}
                     </span>
                 </div>
                 <div class="ant-palette__body" role="listbox">
-                    {rooms.length === 0 ? (
+                    {items.length === 0 ? (
                         <p class="ant-palette__empty">
-                            No room matches "{paletteQuery.value}". Try part of
-                            the room name, family, or what you're trying to do.
+                            Nothing matches "{paletteQuery.value}". Try part of
+                            a room or skill name, or what you're trying to do.
                         </p>
                     ) : showGrouped ? (
-                        <GroupedResults rooms={rooms} focusIdx={focusIdx} />
+                        <GroupedResults items={items} focusIdx={focusIdx} />
                     ) : (
-                        <FlatResults rooms={rooms} focusIdx={focusIdx} />
+                        <FlatResults items={items} focusIdx={focusIdx} />
                     )}
                 </div>
                 <div class="ant-palette__foot">
@@ -179,13 +204,19 @@ export function Palette(): JSX.Element | null {
 // ─── Result renderers ─────────────────────────────────────────────
 
 function GroupedResults({
-    rooms,
+    items,
     focusIdx
 }: {
-    readonly rooms: ReadonlyArray<PaletteEntry>;
+    readonly items: ReadonlyArray<PaletteItem>;
     readonly focusIdx: number;
 }): JSX.Element {
-    const groups = groupByFamily(rooms);
+    const rooms = items.filter(
+        (i): i is { kind: "room"; room: PaletteEntry } => i.kind === "room"
+    );
+    const skills = items.filter(
+        (i): i is { kind: "skill"; skill: Skill } => i.kind === "skill"
+    );
+    const groups = groupByFamily(rooms.map((r) => r.room));
     let runningIdx = 0;
     return (
         <ul class="ant-palette__groups">
@@ -197,35 +228,51 @@ function GroupedResults({
                     <ul class="ant-palette__results">
                         {entries.map((entry) => {
                             const idx = runningIdx++;
-                            const focused = idx === focusIdx;
                             return (
                                 <ResultRow
                                     key={entry.id}
-                                    entry={entry}
-                                    focused={focused}
+                                    item={{ kind: "room", room: entry }}
+                                    focused={idx === focusIdx}
                                 />
                             );
                         })}
                     </ul>
                 </li>
             ))}
+            {skills.length > 0 && (
+                <li class="ant-palette__group">
+                    <p class="ant-palette__group-kicker">Skills</p>
+                    <ul class="ant-palette__results">
+                        {skills.map((item) => {
+                            const idx = runningIdx++;
+                            return (
+                                <ResultRow
+                                    key={item.skill.id}
+                                    item={item}
+                                    focused={idx === focusIdx}
+                                />
+                            );
+                        })}
+                    </ul>
+                </li>
+            )}
         </ul>
     );
 }
 
 function FlatResults({
-    rooms,
+    items,
     focusIdx
 }: {
-    readonly rooms: ReadonlyArray<PaletteEntry>;
+    readonly items: ReadonlyArray<PaletteItem>;
     readonly focusIdx: number;
 }): JSX.Element {
     return (
         <ul class="ant-palette__results">
-            {rooms.map((entry, idx) => (
+            {items.map((item, idx) => (
                 <ResultRow
-                    key={entry.id}
-                    entry={entry}
+                    key={itemKey(item)}
+                    item={item}
                     focused={idx === focusIdx}
                 />
             ))}
@@ -233,25 +280,52 @@ function FlatResults({
     );
 }
 
+function itemKey(item: PaletteItem): string {
+    return item.kind === "room" ? `room:${item.room.id}` : `skill:${item.skill.id}`;
+}
+
 function ResultRow({
-    entry,
+    item,
     focused
 }: {
-    readonly entry: PaletteEntry;
+    readonly item: PaletteItem;
     readonly focused: boolean;
 }): JSX.Element {
+    if (item.kind === "room") {
+        const entry = item.room;
+        return (
+            <li role="option" aria-selected={focused}>
+                <a
+                    class={`ant-palette__result${focused ? " is-focused" : ""}`}
+                    href={entry.href}
+                    onClick={() => closePalette()}
+                    data-palette-id={entry.id}
+                    data-palette-kind="room"
+                >
+                    <span class="ant-palette__result-kicker">{entry.kicker}</span>
+                    <span class="ant-palette__result-label">{entry.label}</span>
+                    <span class="ant-palette__result-desc">{entry.description}</span>
+                </a>
+            </li>
+        );
+    }
+    const skill = item.skill;
     return (
         <li role="option" aria-selected={focused}>
-            <a
+            <button
+                type="button"
                 class={`ant-palette__result${focused ? " is-focused" : ""}`}
-                href={entry.href}
-                onClick={() => closePalette()}
-                data-palette-id={entry.id}
+                onClick={() => {
+                    closePalette();
+                    void dispatchSkill(skill);
+                }}
+                data-palette-id={skill.id}
+                data-palette-kind="skill"
             >
-                <span class="ant-palette__result-kicker">{entry.kicker}</span>
-                <span class="ant-palette__result-label">{entry.label}</span>
-                <span class="ant-palette__result-desc">{entry.description}</span>
-            </a>
+                <span class="ant-palette__result-kicker">SKILL</span>
+                <span class="ant-palette__result-label">{skill.label}</span>
+                <span class="ant-palette__result-desc">{skill.description}</span>
+            </button>
         </li>
     );
 }
