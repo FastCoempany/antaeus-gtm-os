@@ -6,7 +6,7 @@ import type { ObservationCandidate, RelatedObjectType } from "./types";
  * Reads the workspace's deals and emits one observation per stalled
  * deal. A deal is "stalled" when:
  *
- *   - it's not closed (open opportunity), AND
+ *   - its stage is not closed-won / closed-lost (open opportunity), AND
  *   - it's been at the same stage for ≥ STALL_THRESHOLD_DAYS, AND
  *   - either there's no next_step_date, OR the next_step_date has
  *     already passed
@@ -18,9 +18,14 @@ import type { ObservationCandidate, RelatedObjectType } from "./types";
  * each refire (so the row evolves as the deal stalls further), and
  * the operator's toggle just changes which rows are shown.
  *
+ * Stage age comes from parsing the deal's `stage_history` JSONB
+ * column: an append-only array of `{from, to, at}` transitions. The
+ * most-recent transition's `at` is when the current stage started.
+ * Falls back to `updated_at` when no history is recorded yet (a deal
+ * that was created but never transitioned).
+ *
  * Voice contract: each candidate text passes through
- * validateObservation() before the writer commits it. The Deno
- * wrapper calls the validator. Tests below also assert valid voice.
+ * validateObservation() before the writer commits it.
  *
  * Ref: ADR-009 §"Four initial generators" — deal_decay.
  */
@@ -30,16 +35,38 @@ export const DEAL_DECAY_GENERATOR_ID = "phase-b/deal-decay";
 const RELATED_OBJECT_TYPE: RelatedObjectType = "deal";
 
 /**
+ * Stages that count as closed. Derived from the canonical isClosed()
+ * in src/deal-workspace/lib/deal-shape.ts — kept as a Set here to
+ * avoid cross-room imports for what's a stable two-element list.
+ */
+const CLOSED_STAGES: ReadonlySet<string> = new Set(["closed-won", "closed-lost"]);
+
+/**
+ * Shape of one stage_history entry. The legacy demo seed + Phase 4
+ * Deal Workspace both write this exact shape.
+ */
+export interface StageTransition {
+    readonly from: string;
+    readonly to: string;
+    readonly at: string;
+}
+
+/**
  * Minimal subset of the `deals` table that this generator reads.
  * The Deno wrapper selects exactly these columns; the pure function
  * doesn't touch anything else.
+ *
+ * NOTE: the real Postgres schema has `stage_history: jsonb`, not a
+ * scalar `stage_changed_at` — that field doesn't exist. Same for
+ * `is_closed`: the real schema only has `stage` (closed-ness is
+ * derived). Earlier versions of this file modeled non-existent
+ * columns; PR fixing this is in the session log.
  */
 export interface DealForDecayCheck {
     readonly id: string;
     readonly account_name: string | null;
     readonly stage: string | null;
-    readonly is_closed: boolean | null;
-    readonly stage_changed_at: string | null;
+    readonly stage_history: ReadonlyArray<StageTransition> | null;
     readonly next_step_date: string | null;
     readonly updated_at: string | null;
 }
@@ -47,6 +74,26 @@ export interface DealForDecayCheck {
 interface StalledDeal {
     readonly deal: DealForDecayCheck;
     readonly daysAtStage: number;
+}
+
+/**
+ * Extract the ISO timestamp when the deal's current stage started.
+ * Returns null when no history is available; caller falls back to
+ * `updated_at`. Tolerates a malformed history entry by walking
+ * backward until a parseable `at` is found.
+ */
+export function currentStageStartedAt(
+    history: ReadonlyArray<StageTransition> | null
+): string | null {
+    if (!history || history.length === 0) return null;
+    for (let i = history.length - 1; i >= 0; i--) {
+        const entry = history[i];
+        if (!entry) continue;
+        if (typeof entry.at === "string" && entry.at.length > 0) {
+            return entry.at;
+        }
+    }
+    return null;
 }
 
 /**
@@ -60,10 +107,11 @@ export function selectStalledDeals(
 ): ReadonlyArray<StalledDeal> {
     const out: StalledDeal[] = [];
     for (const d of deals) {
-        if (d.is_closed) continue;
         if (!d.stage) continue;
+        if (CLOSED_STAGES.has(d.stage)) continue;
 
-        const sinceIso = d.stage_changed_at ?? d.updated_at;
+        const sinceIso =
+            currentStageStartedAt(d.stage_history) ?? d.updated_at;
         if (!sinceIso) continue;
         const since = new Date(sinceIso);
         if (Number.isNaN(since.getTime())) continue;
