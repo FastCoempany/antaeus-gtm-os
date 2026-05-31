@@ -39,7 +39,7 @@ function makeMockClient(): {
     const then = (onFulfilled: (v: MockQueryResult<unknown>) => unknown): Thenable<unknown> => {
         return Promise.resolve(nextResult).then(onFulfilled);
     };
-    for (const op of ["select", "insert", "update", "delete", "eq", "order", "limit"] as const) {
+    for (const op of ["select", "insert", "update", "delete", "eq", "is", "order", "limit"] as const) {
         builder[op] = (...args: unknown[]) => {
             calls.push({ op, args });
             return builder;
@@ -173,6 +173,34 @@ describe("NounAccessor — list", () => {
 
         const limit = mock.calls.find((c) => c.op === "limit");
         expect(limit?.args).toEqual([50]);
+    });
+
+    it("uses .is(col, null) — NOT .eq — for a null where value", async () => {
+        // Regression: `.eq(col, null)` becomes SQL `col = null` which
+        // never matches NULL rows. A null where value must route to
+        // `.is(col, null)`. This broke observation dedupe for
+        // workspace-scoped (null-entity) generators + any
+        // `viewed_at: null` style pending query.
+        const mock = makeMockClient();
+        mock.setNextResult({ data: [], error: null });
+        const data = createDataClient(mock.client);
+
+        await data.observations.list({
+            where: { related_object_id: null, status: "active" }
+        });
+
+        const isCall = mock.calls.find((c) => c.op === "is");
+        expect(isCall?.args).toEqual(["related_object_id", null]);
+
+        // The non-null filter still uses eq.
+        const eqCall = mock.calls.find((c) => c.op === "eq");
+        expect(eqCall?.args).toEqual(["status", "active"]);
+
+        // And crucially: there is NO eq call with a null value.
+        const badEq = mock.calls.find(
+            (c) => c.op === "eq" && c.args[1] === null
+        );
+        expect(badEq).toBeUndefined();
     });
 
     it("defaults to limit 500 when not specified", async () => {

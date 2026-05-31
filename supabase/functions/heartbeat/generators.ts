@@ -38,6 +38,17 @@ export interface RegisteredGenerator {
     readonly run: Generator;
 }
 
+// ─── Placeholder guard (Deno duplicate of placeholders.ts) ────────────
+
+function isPlaceholderNameDeno(name: string | null | undefined): boolean {
+    if (name === null || name === undefined) return false;
+    const trimmed = name.trim();
+    if (trimmed.length === 0) return false;
+    if (/^__.*__$/.test(trimmed)) return true;
+    if (trimmed.toLowerCase().includes("gtmos_migration_blob")) return true;
+    return false;
+}
+
 // ─── Voice gate ───────────────────────────────────────────────────────
 
 function gateThroughVoice(
@@ -116,6 +127,7 @@ async function dealDecayGenerator(
     }>) {
         if (!d.stage) continue;
         if (CLOSED_STAGES.has(d.stage)) continue;
+        if (isPlaceholderNameDeno(d.account_name)) continue;
 
         const sinceIso =
             currentStageStartedAt(d.stage_history) ?? d.updated_at;
@@ -216,9 +228,10 @@ async function signalDecayGenerator(
 
     const candidates: ObservationCandidate[] = [];
     for (const a of accounts) {
+        if (isPlaceholderNameDeno(a.account_name)) continue;
+        if (!a.account_name || a.account_name.trim().length === 0) continue;
         const newest = newestByAccount.get(a.id);
-        const account =
-            (a.account_name ?? "").trim() || "An unnamed account";
+        const account = a.account_name.trim();
         if (newest === undefined) {
             candidates.push({
                 observationText: `${account} is on the watchlist but no signals are on record.`,

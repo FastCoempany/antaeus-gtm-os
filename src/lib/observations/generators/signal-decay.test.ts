@@ -157,6 +157,39 @@ describe("deriveSignalDecayObservations — voice + shape", () => {
     });
 });
 
+describe("selectSilentAccounts — placeholder + nameless filtering", () => {
+    it("skips the migration-blob placeholder account", () => {
+        const out = selectSilentAccounts(
+            [acct({ id: "blob", account_name: "__gtmos_migration_blob__" })],
+            [],
+            NOW
+        );
+        expect(out).toEqual([]);
+    });
+
+    it("skips accounts with no name (no 'An unnamed account' noise)", () => {
+        const out = selectSilentAccounts(
+            [
+                acct({ id: "blank", account_name: "" }),
+                acct({ id: "nullish", account_name: null })
+            ],
+            [],
+            NOW
+        );
+        expect(out).toEqual([]);
+    });
+
+    it("still surfaces a named account that's gone silent", () => {
+        const out = selectSilentAccounts(
+            [acct({ id: "real", account_name: "Home Depot" })],
+            [],
+            NOW
+        );
+        expect(out.length).toBe(1);
+        expect(out[0]!.account.account_name).toBe("Home Depot");
+    });
+});
+
 describe("SIGNAL_DECAY_GENERATOR_ID", () => {
     it("follows the phase-b/<name> convention", () => {
         expect(SIGNAL_DECAY_GENERATOR_ID).toBe("phase-b/signal-decay");

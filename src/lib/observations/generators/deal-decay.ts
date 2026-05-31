@@ -1,4 +1,5 @@
 import type { ObservationCandidate, RelatedObjectType } from "./types";
+import { isPlaceholderName } from "./placeholders";
 
 /**
  * `deal_decay` generator — pure function form.
@@ -109,6 +110,8 @@ export function selectStalledDeals(
     for (const d of deals) {
         if (!d.stage) continue;
         if (CLOSED_STAGES.has(d.stage)) continue;
+        // Skip Phase 2.3 migration-blob passthrough rows.
+        if (isPlaceholderName(d.account_name)) continue;
 
         const sinceIso =
             currentStageStartedAt(d.stage_history) ?? d.updated_at;
