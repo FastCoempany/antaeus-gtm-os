@@ -1066,3 +1066,145 @@ button {
 .db-slice__rule--hot::after { background: #e6701e; width: 70%; }
 .db-slice__rule--warm::after { background: #2471e7; width: 55%; }
 .db-slice__rule--live::after { background: #2d7a4b; width: 40%; }
+
+/* ──────────────────────────────────────────────────────────────
+ * WeekReadsCard — Phase B workspace-scope observations surface
+ * (ADR-009, 2026-05-31)
+ *
+ * Sits between the Topbar and the main rail (MainColumn + SliceRail).
+ * Visually recessive — it's the system commenting, not the command
+ * surface. Toggle is subtle inline pills in the header.
+ * ────────────────────────────────────────────────────────────── */
+
+.db-week-reads {
+    margin: 0 0 24px;
+    padding: 18px 22px 20px;
+    background: var(--db-field-raised, #fff);
+    border: 1px solid var(--db-ink-15, rgba(10, 28, 64, 0.15));
+    border-radius: 10px;
+}
+
+.db-week-reads__head {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.db-week-reads__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--db-accent-orange, #ff6b1c);
+}
+
+.db-week-reads__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.2;
+    color: var(--db-ink, #0a1c40);
+    flex: 1 1 auto;
+}
+
+.db-week-reads__toggle {
+    display: inline-flex;
+    gap: 2px;
+    background: var(--db-field, #f6f8fc);
+    border: 1px solid var(--db-ink-15, rgba(10, 28, 64, 0.15));
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.db-week-reads__pill {
+    appearance: none;
+    background: transparent;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--db-ink-40, rgba(10, 28, 64, 0.4));
+    cursor: pointer;
+}
+
+.db-week-reads__pill.is-active {
+    background: var(--db-ink, #0a1c40);
+    color: #fff;
+}
+
+.db-week-reads__pill:hover:not(.is-active) {
+    color: var(--db-ink, #0a1c40);
+}
+
+.db-week-reads__error {
+    margin: 0 0 12px;
+    padding: 8px 12px;
+    background: rgba(220, 38, 38, 0.08);
+    border-radius: 6px;
+    color: #b91c1c;
+    font-size: 12px;
+}
+
+.db-week-reads__empty {
+    margin: 0;
+    color: var(--db-ink-40, rgba(10, 28, 64, 0.45));
+    font-size: 13px;
+}
+
+.db-week-reads__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.db-week-reads__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 14px;
+    background: var(--db-field, #f6f8fc);
+    border-left: 3px solid var(--db-accent-orange, #ff6b1c);
+    border-radius: 4px;
+    align-items: flex-start;
+}
+
+.db-week-reads__text {
+    margin: 0;
+    flex: 1 1 auto;
+    color: var(--db-ink, #0a1c40);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.db-week-reads__dismiss {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--db-ink-15, rgba(10, 28, 64, 0.15));
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--db-ink-40, rgba(10, 28, 64, 0.4));
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.db-week-reads__dismiss:hover:not(:disabled) {
+    color: var(--db-ink, #0a1c40);
+    border-color: var(--db-ink, #0a1c40);
+}
+
+.db-week-reads__dismiss:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

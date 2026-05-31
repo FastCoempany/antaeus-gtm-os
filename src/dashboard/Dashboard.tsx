@@ -12,6 +12,7 @@ import { MainColumn } from "./components/MainColumn";
 import { SliceRail } from "./components/SliceRail";
 import { EmptyDashboard } from "./components/EmptyDashboard";
 import { ReadinessDrawer } from "./components/ReadinessDrawer";
+import { WeekReadsCard } from "./components/WeekReadsCard";
 
 /**
  * Dashboard — Program 6 / PR 2 refacing.
@@ -55,6 +56,7 @@ export function Dashboard(): JSX.Element {
         <div class="db-shell">
             <RoomChrome kicker="DASHBOARD" />
             <Topbar />
+            <WeekReadsCard />
             {isEmpty ? (
                 <EmptyDashboard />
             ) : (

@@ -81,7 +81,8 @@ interface GeneratorContext {
 }
 
 type Generator = (
-    ctx: GeneratorContext
+    ctx: GeneratorContext,
+    sb: SupabaseClient
 ) => Promise<ReadonlyArray<ObservationCandidate>>;
 
 interface RegisteredGenerator {
@@ -89,12 +90,15 @@ interface RegisteredGenerator {
     readonly run: Generator;
 }
 
-// ─── Phase A registry — empty. Phase B registers signal-decay. ──
+// ─── Phase B registry (ADR-009, 2026-05-31) ──────────────────────
+// Four SQL-only workspace-scope generators. The runtime implementations
+// live in ./generators.ts; pure-function source of truth + tests live
+// in src/lib/observations/generators/*.
 
-const REGISTERED_GENERATORS: ReadonlyArray<RegisteredGenerator> = [
-    // Phase B will add:
-    //   { id: "phase-b/signal-decay", run: signalDecayGenerator }
-];
+import { PHASE_B_GENERATORS } from "./generators.ts";
+
+const REGISTERED_GENERATORS: ReadonlyArray<RegisteredGenerator> =
+    PHASE_B_GENERATORS;
 
 // ─── Workspace activity filter ──────────────────────────────────
 
@@ -270,7 +274,7 @@ async function runGenerator(
 }> {
     let candidates: ReadonlyArray<ObservationCandidate>;
     try {
-        candidates = await generator.run(ctx);
+        candidates = await generator.run(ctx, sb);
     } catch (err) {
         console.error("[heartbeat] generator threw:", err, {
             generatorId: generator.id,

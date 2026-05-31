@@ -60,3 +60,4 @@ Every ADR requires founder approval before moving from `PROPOSED` to `APPROVED`.
 | 006 | [Briefing Room](./adr-006-briefing-room-2026-05-23.md) | APPROVED 2026-05-23. |
 | 007 | [Commercial Identity Layer](./adr-007-commercial-identity-layer-2026-05-26.md) | APPROVED 2026-05-26. |
 | 008 | [Orchestration Layer Doctrine + Additive Boundary](./adr-008-orchestration-doctrine-2026-05-29.md) | APPROVED 2026-05-29. Amends ADR-004 (records source + thesis + boundary). Depends on ADR-004/005/006. |
+| 009 | [Workspace-scope observations as a distinct stream](./adr-009-workspace-scope-observations-2026-05-31.md) | APPROVED 2026-05-31. Supersedes ADR-006 §"Phasing" Phase-B-absorption clause. Resolves ADR-008's §"Correction note" open question. |

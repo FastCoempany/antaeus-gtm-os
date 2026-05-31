@@ -136,6 +136,36 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase B — Dashboard 'this week's reads' card mounts with 14/7 toggle", async ({
+        page
+    }) => {
+        // ADR-009 (2026-05-31). The WeekReadsCard slots above the main
+        // rail and shows the operator their workspace-scope
+        // observations. Empty workspace = empty-state copy, but the
+        // card scaffolding + toggle must mount.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/dashboard/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".db-week-reads")).toBeAttached();
+        await expect(page.locator(".db-week-reads__kicker")).toContainText(
+            "THIS WEEK'S READS"
+        );
+        const pills = page.locator(".db-week-reads__pill");
+        await expect(pills).toHaveCount(2);
+        await expect(pills.nth(0)).toContainText("14d");
+        await expect(pills.nth(1)).toContainText("7d");
+        // Default is 14d active.
+        await expect(pills.nth(0)).toHaveClass(/is-active/);
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 3 Wave 1 — /signal-console/ Preact rebuild boots cleanly", async ({
         page
     }) => {
