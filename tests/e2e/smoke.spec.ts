@@ -579,6 +579,32 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Founding GTM share-link read-mode — /founding-gtm-share/ boots cleanly", async ({
+        page
+    }) => {
+        // Anonymous read-mode entry point for canon §4.19's share-link
+        // mechanic. Hitting the route without a `?t=` token renders the
+        // "missing-token" error state — proves the entry boots, parses
+        // the URL, and surfaces the no-token UI without a runtime error.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/founding-gtm-share/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".fg-share-mode__kicker")).toContainText(
+            "SHARED KIT"
+        );
+        await expect(page.locator(".fg-share-mode__title")).toContainText(
+            "No share token"
+        );
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 12 Wave 1 — /territory-architect/ Preact rebuild boots cleanly", async ({
         page
     }) => {

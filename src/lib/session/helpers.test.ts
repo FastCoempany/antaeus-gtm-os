@@ -123,6 +123,7 @@ function makeMockDataClient(opts: {
         advisorDeployments: {} as never,
         readinessSnapshots: {} as never,
         handoffArtifacts: {} as never,
+        foundingGtmShares: {} as never,
         workspaceSessions,
         workspaceProfile: {} as never,
         observations: {} as never,

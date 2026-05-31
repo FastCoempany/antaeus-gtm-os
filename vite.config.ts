@@ -271,6 +271,18 @@ export default defineConfig({
                 // `app/founding-gtm/index.html` redirects here when on.
                 "founding-gtm": resolve(__dirname, "src/founding-gtm/index.html"),
 
+                // Founding GTM share-link mechanic (canon §4.19) —
+                // anonymous read-mode entry point served at
+                // /founding-gtm-share/. The route reads the token from
+                // its URL search param, resolves the snapshot via the
+                // SECURITY DEFINER resolve_founding_gtm_share RPC, and
+                // renders the seven sections frozen at link-creation
+                // time. No auth, no writable controls.
+                "founding-gtm-share": resolve(
+                    __dirname,
+                    "src/founding-gtm-share/index.html"
+                ),
+
                 // Phase 3 of ADR-003 — Negotiation rebuild (greenfield
                 // from canon §4.16b placeholder). Served at /negotiation/.
                 // Behind Posthog flag `room_negotiation_v2`. Carries

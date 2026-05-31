@@ -106,6 +106,7 @@ function makeDataClient(opts: {
         advisorDeployments: {} as never,
         readinessSnapshots: {} as never,
         handoffArtifacts: {} as never,
+        foundingGtmShares: {} as never,
         workspaceSessions: {} as never,
         workspaceProfile: {} as never,
         observations,

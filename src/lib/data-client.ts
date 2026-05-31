@@ -120,6 +120,8 @@ export interface DataClient {
     advisorDeployments: NounAccessor<"advisor_deployments">;
     readinessSnapshots: NounAccessor<"readiness_snapshots">;
     handoffArtifacts: NounAccessor<"handoff_artifacts">;
+    // ─── Founding GTM share-link mechanic (canon §4.19) ─────────────
+    foundingGtmShares: NounAccessor<"founding_gtm_shares">;
     // ─── Phase A orchestration layer (ADR-004) ─────────────────────
     workspaceSessions: NounAccessor<"workspace_sessions">;
     observations: NounAccessor<"observations">;
@@ -193,6 +195,7 @@ export function createDataClient(
         advisorDeployments: makeNounAccessor(sb, "advisor_deployments"),
         readinessSnapshots: makeNounAccessor(sb, "readiness_snapshots"),
         handoffArtifacts: makeNounAccessor(sb, "handoff_artifacts"),
+        foundingGtmShares: makeNounAccessor(sb, "founding_gtm_shares"),
         // ─── Phase A orchestration layer (ADR-004) ─────────────────
         workspaceProfile: makeNounAccessor(sb, "workspace_profile"),
         workspaceSessions: makeNounAccessor(sb, "workspace_sessions"),
@@ -237,6 +240,7 @@ function makeDemoLocalDataClient(): DataClient {
         advisorDeployments: makeDemoLocalNounAccessor("advisor_deployments"),
         readinessSnapshots: makeDemoLocalNounAccessor("readiness_snapshots"),
         handoffArtifacts: makeDemoLocalNounAccessor("handoff_artifacts"),
+        foundingGtmShares: makeDemoLocalNounAccessor("founding_gtm_shares"),
         workspaceProfile: makeDemoLocalNounAccessor("workspace_profile"),
         workspaceSessions: makeDemoLocalNounAccessor("workspace_sessions"),
         observations: makeDemoLocalNounAccessor("observations"),
