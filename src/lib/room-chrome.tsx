@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import { Wordmark } from "./wordmark";
 import { BackButton } from "./back-button";
 import { PaletteTrigger } from "./palette/PaletteTrigger";
+import { BirdseyeFloat } from "@/birdseye/BirdseyeFloat";
 import "./room-chrome.css";
 
 /**
@@ -60,6 +61,7 @@ export function RoomChrome(props: RoomChromeProps): JSX.Element {
                 <PaletteHintButton />
             </div>
             <PaletteTrigger />
+            <BirdseyeFloat />
         </div>
     );
 }

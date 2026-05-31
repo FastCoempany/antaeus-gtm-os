@@ -1,0 +1,159 @@
+/* ──────────────────────────────────────────────────────────────
+ * BirdseyeFloat — Phase D surface (ADR-011)
+ *
+ * Mounts via RoomChrome on every room. Floats bottom-right; doesn't
+ * push room content. Default state is a small icon; click expands to
+ * a ~280px drawer.
+ * ────────────────────────────────────────────────────────────── */
+
+.ant-birdseye {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    z-index: 998; /* below palette overlay (999) but above room content */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    /* Don't intercept clicks on the room behind the float when
+       collapsed; the icon itself re-enables pointer-events. */
+    pointer-events: none;
+}
+
+.ant-birdseye__icon,
+.ant-birdseye__drawer {
+    pointer-events: auto;
+}
+
+.ant-birdseye__icon {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: #fff;
+    color: #0a1c40;
+    border: 1px solid rgba(10, 28, 64, 0.15);
+    border-radius: 999px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 100ms ease, border-color 100ms ease, transform 100ms ease;
+    box-shadow: 0 2px 6px rgba(10, 28, 64, 0.08);
+}
+
+.ant-birdseye__icon:hover {
+    background: #f6f8fc;
+    border-color: rgba(10, 28, 64, 0.3);
+}
+
+.ant-birdseye__icon.is-open {
+    background: #0a1c40;
+    color: #fff;
+    border-color: #0a1c40;
+}
+
+.ant-birdseye__eye {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+}
+
+.ant-birdseye__flag {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 10px;
+    height: 10px;
+    background: #e6701e;
+    border: 2px solid #fff;
+    border-radius: 999px;
+}
+
+/* Drawer expands UPWARD from the icon — natural since icon is bottom-right. */
+.ant-birdseye__drawer {
+    width: 280px;
+    background: #fff;
+    border: 1px solid rgba(10, 28, 64, 0.15);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(10, 28, 64, 0.12);
+    padding: 14px 16px 16px;
+    color: #0a1c40;
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+}
+
+.ant-birdseye__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.ant-birdseye__kicker {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e6701e;
+    font-weight: 800;
+}
+
+.ant-birdseye__close {
+    appearance: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(10, 28, 64, 0.5);
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.ant-birdseye__close:hover {
+    color: #0a1c40;
+}
+
+.ant-birdseye__label {
+    margin: 0 0 8px;
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.2;
+    color: #0a1c40;
+}
+
+.ant-birdseye__reason {
+    margin: 0 0 14px;
+    color: rgba(10, 28, 64, 0.7);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.ant-birdseye__cta {
+    display: inline-block;
+    padding: 7px 14px;
+    background: #e6701e;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.ant-birdseye__cta:hover {
+    background: #d65f0f;
+}
+
+.ant-birdseye__empty,
+.ant-birdseye__error {
+    margin: 0;
+    color: rgba(10, 28, 64, 0.4);
+    font-size: 13px;
+}
+
+.ant-birdseye__error {
+    color: #b91c1c;
+    background: rgba(220, 38, 38, 0.08);
+    padding: 8px 10px;
+    border-radius: 6px;
+}

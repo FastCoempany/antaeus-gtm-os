@@ -205,6 +205,49 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Phase D — BirdseyeFloat mounts on every room and expands on click", async ({
+        page
+    }) => {
+        // ADR-011 (2026-05-31). The Birdseye Float mounts via RoomChrome
+        // on every room as a floating icon at bottom-right. Click expands
+        // a small drawer; click again (or close button) collapses.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/dashboard/", { waitUntil: "domcontentloaded" });
+        await page.waitForTimeout(300);
+
+        // Icon is mounted on /dashboard/.
+        const icon = page.locator(".ant-birdseye__icon");
+        await expect(icon).toBeAttached();
+
+        // Drawer is closed initially.
+        await expect(page.locator(".ant-birdseye__drawer")).toHaveCount(0);
+
+        // Click expands.
+        await icon.click();
+        await page.waitForTimeout(150);
+        await expect(page.locator(".ant-birdseye__drawer")).toBeAttached();
+        await expect(
+            page.locator(".ant-birdseye__kicker")
+        ).toContainText("BIRDSEYE");
+
+        // Click the close button collapses.
+        await page.locator(".ant-birdseye__close").click();
+        await page.waitForTimeout(150);
+        await expect(page.locator(".ant-birdseye__drawer")).toHaveCount(0);
+
+        // Navigate to another room — icon should follow (RoomChrome mounts it).
+        await page.goto("/deal-workspace/", { waitUntil: "domcontentloaded" });
+        await page.waitForTimeout(300);
+        await expect(page.locator(".ant-birdseye__icon")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase 4 / Room 3 Wave 1 — /signal-console/ Preact rebuild boots cleanly", async ({
         page
     }) => {
