@@ -482,3 +482,245 @@ button { font-family: inherit; cursor: pointer; }
     background: #d65f0f;
     border-color: #d65f0f;
 }
+
+/* ──────────────────────────────────────────────────────────────
+ * SharePanel — canon §4.19 share-link mechanic (operator side)
+ *
+ * Lives at the bottom of the room, above the HandoffStrip. Visually
+ * recessive (it's tooling, not authored content), but available so
+ * the operator finds it without scrolling away from the kit.
+ * ────────────────────────────────────────────────────────────── */
+
+.fg-share {
+    margin-top: 48px;
+    padding: 24px 28px 28px;
+    background: var(--fg-field-raised, #fff);
+    border: 1px solid var(--fg-ink-15, rgba(10, 28, 64, 0.15));
+    border-radius: 12px;
+}
+
+.fg-share__head {
+    margin-bottom: 16px;
+}
+
+.fg-share__kicker {
+    margin: 0 0 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--fg-accent-orange, #e6701e);
+}
+
+.fg-share__title {
+    margin: 0 0 8px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(20px, 1.8vw, 26px);
+    line-height: 1.2;
+    color: var(--fg-ink, #0a1c40);
+}
+
+.fg-share__lede {
+    margin: 0;
+    color: var(--fg-ink-70, rgba(10, 28, 64, 0.7));
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: 60ch;
+}
+
+.fg-share__demo-body {
+    margin: 0;
+    color: var(--fg-ink-70, rgba(10, 28, 64, 0.7));
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: 56ch;
+}
+
+.fg-share--demo,
+.fg-share--disabled {
+    background: var(--fg-cream, #fdf6e9);
+    border-style: dashed;
+}
+
+.fg-share__error {
+    margin: 12px 0 16px;
+    padding: 10px 14px;
+    background: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.35);
+    border-radius: 8px;
+    color: #b91c1c;
+    font-size: 13px;
+}
+
+.fg-share__create {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    padding: 14px 0 18px;
+    border-bottom: 1px dashed var(--fg-ink-15, rgba(10, 28, 64, 0.15));
+}
+
+.fg-share__label-input {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 1 280px;
+    min-width: 260px;
+}
+
+.fg-share__label-input-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-ink-40, rgba(10, 28, 64, 0.4));
+}
+
+.fg-share__label-input input {
+    padding: 9px 12px;
+    border: 1px solid var(--fg-ink-15, rgba(10, 28, 64, 0.15));
+    border-radius: 6px;
+    background: var(--fg-field, #f6f8fc);
+    color: var(--fg-ink, #0a1c40);
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.fg-share__label-input input:focus {
+    outline: 2px solid var(--fg-accent-orange, #e6701e);
+    outline-offset: -1px;
+    background: #fff;
+}
+
+.fg-share__create-btn {
+    padding: 10px 18px;
+    background: var(--fg-accent-orange, #e6701e);
+    color: #fff;
+    border: 1px solid var(--fg-accent-orange, #e6701e);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.fg-share__create-btn:hover {
+    background: #d65f0f;
+    border-color: #d65f0f;
+}
+
+.fg-share__create-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.fg-share__list-wrap {
+    padding-top: 18px;
+}
+
+.fg-share__empty {
+    margin: 0;
+    color: var(--fg-ink-40, rgba(10, 28, 64, 0.4));
+    font-size: 13px;
+}
+
+.fg-share__list + .fg-share__list {
+    margin-top: 18px;
+}
+
+.fg-share__list-title {
+    margin: 0 0 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--fg-ink-40, rgba(10, 28, 64, 0.4));
+}
+
+.fg-share__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fg-share__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    background: var(--fg-field, #f6f8fc);
+    border: 1px solid var(--fg-ink-08, rgba(10, 28, 64, 0.08));
+    border-radius: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.fg-share__row-meta {
+    flex: 1 1 240px;
+    min-width: 0;
+}
+
+.fg-share__row-label {
+    margin: 0 0 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg-ink, #0a1c40);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fg-share__row-detail {
+    margin: 0;
+    font-size: 12px;
+    color: var(--fg-ink-70, rgba(10, 28, 64, 0.7));
+}
+
+.fg-share__row-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.fg-share__row-btn {
+    padding: 7px 12px;
+    background: #fff;
+    border: 1px solid var(--fg-ink-15, rgba(10, 28, 64, 0.15));
+    border-radius: 6px;
+    color: var(--fg-ink, #0a1c40);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.fg-share__row-btn:hover {
+    background: var(--fg-field, #f6f8fc);
+}
+
+.fg-share__row-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.fg-share__row-btn--primary {
+    background: var(--fg-ink, #0a1c40);
+    color: #fff;
+    border-color: var(--fg-ink, #0a1c40);
+}
+
+.fg-share__row-btn--primary:hover {
+    background: rgba(10, 28, 64, 0.85);
+}
+
+.fg-share__row-btn--danger {
+    color: #b91c1c;
+    border-color: rgba(185, 28, 28, 0.4);
+}
+
+.fg-share__row-btn--danger:hover {
+    background: rgba(185, 28, 28, 0.06);
+}

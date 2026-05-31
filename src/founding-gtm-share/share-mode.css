@@ -1,0 +1,82 @@
+/*
+ * Founding GTM share-mode overrides.
+ *
+ * Inherits founding-gtm.css for the section frames + body composition;
+ * this file adds the read-mode banner, footer, and error states. The
+ * recipient's surface is intentionally quieter than the operator's
+ * — no SharePanel, no HandoffStrip, no ceremony overlay.
+ */
+
+.fg-share-mode {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 36px 28px 80px;
+}
+
+.fg-share-mode__banner {
+    margin-bottom: 32px;
+    padding: 24px 28px 26px;
+    background: var(--fg-cream, #fdf6e9);
+    border: 1px solid var(--fg-ink-15, rgba(10, 28, 64, 0.15));
+    border-left: 4px solid var(--fg-accent-orange, #e6701e);
+    border-radius: 12px;
+}
+
+.fg-share-mode__kicker {
+    margin: 0 0 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--fg-accent-orange, #e6701e);
+}
+
+.fg-share-mode__title {
+    margin: 0 0 12px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(26px, 2.6vw, 36px);
+    line-height: 1.15;
+    color: var(--fg-ink, #0a1c40);
+}
+
+.fg-share-mode__lede {
+    margin: 0 0 12px;
+    color: var(--fg-ink-70, rgba(10, 28, 64, 0.7));
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 64ch;
+}
+
+.fg-share-mode__meta {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--fg-ink-40, rgba(10, 28, 64, 0.5));
+}
+
+.fg-share-mode__footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--fg-ink-08, rgba(10, 28, 64, 0.08));
+    text-align: center;
+    color: var(--fg-ink-40, rgba(10, 28, 64, 0.45));
+    font-size: 12px;
+}
+
+.fg-share-mode__loading {
+    margin: 48px auto;
+    text-align: center;
+    color: var(--fg-ink-40, rgba(10, 28, 64, 0.45));
+    font-size: 14px;
+}
+
+.fg-share-mode__error {
+    margin: 48px auto;
+    padding: 32px;
+    background: var(--fg-cream, #fdf6e9);
+    border: 1px solid var(--fg-ink-15, rgba(10, 28, 64, 0.15));
+    border-radius: 12px;
+    max-width: 560px;
+}

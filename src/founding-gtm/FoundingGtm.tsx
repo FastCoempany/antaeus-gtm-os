@@ -9,6 +9,7 @@ import { Topbar } from "./components/Topbar";
 import { SectionFrame } from "./components/SectionFrame";
 import { CeremonyOverlay } from "./components/CeremonyOverlay";
 import { HandoffStrip } from "./components/HandoffStrip";
+import { SharePanel } from "./components/SharePanel";
 import { SECTION_IDS } from "./lib/types";
 
 import { RoomChrome } from "@/lib/room-chrome";
@@ -55,6 +56,7 @@ export function FoundingGtm(): JSX.Element {
                     return <SectionFrame id={id} section={section} key={id} />;
                 })}
             </main>
+            <SharePanel />
             <HandoffStrip />
             {showCeremony && event && (
                 <CeremonyOverlay

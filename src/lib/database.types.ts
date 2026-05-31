@@ -1134,6 +1134,50 @@ export type Database = {
           },
         ]
       }
+      founding_gtm_shares: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          label: string | null
+          revoked_at: string | null
+          snapshot: Json
+          token: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          label?: string | null
+          revoked_at?: string | null
+          snapshot: Json
+          token: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          label?: string | null
+          revoked_at?: string | null
+          snapshot?: Json
+          token?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "founding_gtm_shares_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       handoff_artifacts: {
         Row: {
           completeness_score: number | null
@@ -2123,6 +2167,10 @@ export type Database = {
         Returns: undefined
       }
       is_workspace_member: { Args: { w: string }; Returns: boolean }
+      resolve_founding_gtm_share: {
+        Args: { p_token: string }
+        Returns: Json
+      }
       signal_console_health_snapshot: {
         Args: { p_workspace_id?: string }
         Returns: Json
