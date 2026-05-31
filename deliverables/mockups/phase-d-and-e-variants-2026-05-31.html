@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase D + E variants — design review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+    --ink: #0a1c40;
+    --ink-70: rgba(10, 28, 64, 0.7);
+    --ink-40: rgba(10, 28, 64, 0.4);
+    --ink-15: rgba(10, 28, 64, 0.15);
+    --ink-08: rgba(10, 28, 64, 0.08);
+    --field: #f6f8fc;
+    --raised: #ffffff;
+    --cream: #fdf6e9;
+    --orange: #e6701e;
+    --blue: #2563eb;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 48px 28px 96px;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.page {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+.page-head {
+    margin-bottom: 36px;
+}
+.page-kicker {
+    margin: 0 0 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--orange);
+}
+.page-title {
+    margin: 0 0 8px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(28px, 3vw, 40px);
+    line-height: 1.1;
+}
+.page-lede {
+    margin: 0;
+    max-width: 70ch;
+    color: var(--ink-70);
+}
+h2.phase {
+    margin: 48px 0 8px;
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    color: var(--ink);
+    border-top: 1px solid var(--ink-15);
+    padding-top: 36px;
+}
+h3.dim {
+    margin: 32px 0 6px;
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    color: var(--ink);
+}
+.dim-lede {
+    margin: 0 0 20px;
+    max-width: 70ch;
+    color: var(--ink-70);
+    font-size: 14px;
+}
+.variants {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 24px;
+    margin-bottom: 20px;
+}
+.variant {
+    background: var(--raised);
+    border: 1px solid var(--ink-15);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.variant-head {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--ink-08);
+}
+.variant-kicker {
+    margin: 0 0 4px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+}
+.variant-title {
+    margin: 0 0 6px;
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.2;
+}
+.variant-blurb {
+    margin: 0;
+    color: var(--ink-70);
+    font-size: 13px;
+}
+.variant-canvas {
+    /* The mock room area. Always 360px tall for visual consistency
+       across all variants. */
+    position: relative;
+    height: 360px;
+    background: var(--field);
+    overflow: hidden;
+}
+.variant-foot {
+    padding: 12px 18px 16px;
+    background: var(--cream);
+    border-top: 1px solid var(--ink-08);
+    font-size: 12px;
+    color: var(--ink-70);
+}
+.variant-foot strong { color: var(--ink); font-weight: 600; }
+
+/* ────── Mock room chrome (shared) ────── */
+.mock-chrome {
+    height: 36px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--ink-08);
+    background: var(--raised);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-40);
+}
+.mock-chrome .wordmark {
+    color: var(--ink);
+    font-weight: 800;
+}
+.mock-chrome .back-pill {
+    padding: 2px 8px;
+    border: 1px solid var(--ink-15);
+    border-radius: 999px;
+    font-size: 9px;
+}
+.mock-room {
+    padding: 16px;
+    position: relative;
+    height: calc(100% - 36px);
+    display: flex;
+    flex-direction: column;
+}
+.mock-topbar {
+    margin-bottom: 14px;
+}
+.mock-topbar h4 {
+    margin: 0 0 4px;
+    font-family: "DM Serif Display", serif;
+    font-size: 19px;
+}
+.mock-topbar p {
+    margin: 0;
+    font-size: 11px;
+    color: var(--ink-40);
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.mock-content {
+    flex: 1 1 auto;
+    border: 1px dashed var(--ink-15);
+    border-radius: 8px;
+    background: rgba(10, 28, 64, 0.02);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-40);
+    font-style: italic;
+    font-size: 11px;
+}
+.mock-handoff {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--ink-08);
+    font-size: 11px;
+    color: var(--ink-40);
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ────── Birdseye strip — placements ────── */
+.bs-strip {
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--cream);
+    border-top: 1px solid var(--ink-15);
+    border-bottom: 1px solid var(--ink-15);
+    font-size: 12px;
+}
+.bs-strip__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.bs-strip__body {
+    flex: 1 1 auto;
+    color: var(--ink);
+}
+.bs-strip__body a { color: var(--ink); border-bottom: 1px dotted var(--ink-40); text-decoration: none; }
+.bs-strip__next {
+    padding: 3px 10px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+/* ────── Right rail drawer ────── */
+.bs-rail {
+    position: absolute;
+    top: 50px;
+    right: 14px;
+    width: 240px;
+    background: var(--raised);
+    border: 1px solid var(--ink-15);
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 4px 16px rgba(10, 28, 64, 0.08);
+}
+.bs-rail__kicker {
+    margin: 0 0 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 800;
+}
+.bs-rail__title {
+    margin: 0 0 10px;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+}
+.bs-rail__row {
+    padding: 6px 0;
+    border-top: 1px solid var(--ink-08);
+    font-size: 12px;
+    color: var(--ink-70);
+}
+.bs-rail__row:first-of-type { border-top: none; }
+
+/* ────── Collapsed badge ────── */
+.bs-badge {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    background: var(--ink);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.bs-badge__count {
+    background: var(--orange);
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+/* ────── Semantics — content variants inside strip ────── */
+.sem-related { color: var(--ink); }
+.sem-related em { font-style: normal; color: var(--orange); font-weight: 600; }
+.sem-trail { color: var(--ink); }
+.sem-trail span {
+    color: var(--ink-40);
+    margin-left: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+}
+.sem-trail a { color: var(--ink); border-bottom: 1px dotted var(--ink-40); text-decoration: none; }
+.sem-ranked { color: var(--ink); }
+.sem-ranked .pill {
+    display: inline-block;
+    padding: 1px 6px;
+    background: var(--orange);
+    color: #fff;
+    border-radius: 3px;
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    margin-right: 6px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+/* ────── Phase E variants ────── */
+.toast {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 280px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: 0 6px 20px rgba(10, 28, 64, 0.25);
+}
+.toast__kicker {
+    margin: 0 0 4px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 800;
+}
+.toast__body {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+.toast__cta {
+    margin-top: 8px;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.observation-row {
+    background: var(--field);
+    border-left: 3px solid var(--orange);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 13px;
+    color: var(--ink);
+}
+.observation-row__source {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-40);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+.dashboard-week-reads {
+    background: var(--raised);
+    border: 1px solid var(--ink-15);
+    border-radius: 10px;
+    padding: 14px;
+}
+.dashboard-week-reads__head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.dashboard-week-reads__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 800;
+}
+.dashboard-week-reads__title {
+    margin: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+<header class="page-head">
+    <p class="page-kicker">PHASES D + E · DESIGN REVIEW</p>
+    <h1 class="page-title">Variants for orchestration-layer Phases D + E</h1>
+    <p class="page-lede">
+        Mockups for the genuine open questions before code. Phase D (birdseye strip + inter-room push) has three dimensions to lock —
+        placement, visibility, semantics. Phase E (operator scheduling) has one — what "auto-run" actually does.
+        Each variant uses canon-style tokens (navy ink, orange accent, DM Serif Display headlines, JetBrains Mono kickers) so the
+        comparison reflects what you'd actually ship.
+    </p>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PHASE D
+     ═══════════════════════════════════════════════════════════════ -->
+
+<h2 class="phase">Phase D — Birdseye strip + inter-room push</h2>
+
+<!-- D1 PLACEMENT -->
+<h3 class="dim">D1 · Placement</h3>
+<p class="dim-lede">
+    Where does the strip mount on every room? Affects every room's first-fold composition per canon Part II.
+    Each variant shows the same Dashboard with the strip in a different position.
+</p>
+<div class="variants">
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT D1-A</p>
+            <h4 class="variant-title">Top of room (under wordmark)</h4>
+            <p class="variant-blurb">Strip mounts between RoomChrome and the room's own Topbar. Always in the operator's eyeline on first paint.</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="bs-strip">
+                <span class="bs-strip__kicker">BIRDSEYE</span>
+                <span class="bs-strip__body sem-related">2 reads on <a href="#">Meridian Logistics</a> · last action: Cold Call → Discovery</span>
+                <button class="bs-strip__next">Next →</button>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DASHBOARD · 4 OF 7 SECTIONS READY</p>
+                    <h4>Your motion, ranked.</h4>
+                </div>
+                <div class="mock-content">[room content]</div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Pro:</strong> always-visible, no scroll needed. <strong>Con:</strong> eats ~40px of every room's first fold every page load.
+        </div>
+    </div>
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT D1-B</p>
+            <h4 class="variant-title">Bottom of room (above HandoffStrip)</h4>
+            <p class="variant-blurb">Strip mounts just above the existing HandoffStrip culmination band. Lives next to the cross-room CTAs.</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DASHBOARD · 4 OF 7 SECTIONS READY</p>
+                    <h4>Your motion, ranked.</h4>
+                </div>
+                <div class="mock-content">[room content]</div>
+                <div class="bs-strip" style="margin-top: 12px; border-radius: 6px;">
+                    <span class="bs-strip__kicker">BIRDSEYE</span>
+                    <span class="bs-strip__body sem-related">2 reads on <a href="#">Meridian Logistics</a></span>
+                    <button class="bs-strip__next">Next →</button>
+                </div>
+                <div class="mock-handoff">HANDOFF STRIP · CARRY FORWARD</div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Pro:</strong> doesn't crowd the first fold; flows with the cross-room narrative. <strong>Con:</strong> operator may miss it if they don't scroll.
+        </div>
+    </div>
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT D1-C</p>
+            <h4 class="variant-title">Right-rail drawer (floating)</h4>
+            <p class="variant-blurb">Strip is a small floating panel anchored to the upper-right. Doesn't push room content; collapsible to a single icon.</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DASHBOARD · 4 OF 7 SECTIONS READY</p>
+                    <h4>Your motion, ranked.</h4>
+                </div>
+                <div class="mock-content">[room content]</div>
+                <div class="bs-rail">
+                    <p class="bs-rail__kicker">BIRDSEYE</p>
+                    <p class="bs-rail__title">Meridian Logistics</p>
+                    <div class="bs-rail__row">Stalled at negotiation, 21 days.</div>
+                    <div class="bs-rail__row">No dated next step.</div>
+                </div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Pro:</strong> zero impact on room composition; live + visible. <strong>Con:</strong> floats over content; risk of collision with room-specific overlays.
+        </div>
+    </div>
+
+</div>
+
+<!-- D2 VISIBILITY -->
+<h3 class="dim">D2 · Visibility</h3>
+<p class="dim-lede">
+    Always-visible strip vs collapsed-by-default badge. Same content; different default state. Variants assume D1-A (top placement)
+    for direct comparison.
+</p>
+<div class="variants">
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT D2-A</p>
+            <h4 class="variant-title">Always-visible thin strip</h4>
+            <p class="variant-blurb">Single line of context, persistent on every room. The operator never has to think about whether the system has something to say.</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="bs-strip">
+                <span class="bs-strip__kicker">BIRDSEYE</span>
+                <span class="bs-strip__body sem-related">2 reads on <a href="#">Meridian Logistics</a> · last action: Cold Call → Discovery</span>
+                <button class="bs-strip__next">Next →</button>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DEAL WORKSPACE</p>
+                    <h4>The deals decaying fastest.</h4>
+                </div>
+                <div class="mock-content">[room content]</div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Pro:</strong> highest legibility — operator can't miss it. <strong>Con:</strong> on a room with nothing to say, it shows nothing-or-redundant content; still occupies space.
+        </div>
+    </div>
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT D2-B</p>
+            <h4 class="variant-title">Collapsed badge by default</h4>
+            <p class="variant-blurb">Small bottom-right badge shows a count of unread reads. Click expands the full strip. Quiet by default; available on demand.</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DEAL WORKSPACE</p>
+                    <h4>The deals decaying fastest.</h4>
+                </div>
+                <div class="mock-content">[room content]</div>
+                <div class="bs-badge">
+                    BIRDSEYE <span class="bs-badge__count">2</span>
+                </div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Pro:</strong> zero first-fold cost; operator opts in. <strong>Con:</strong> "inter-room push" loses urgency — the operator has to remember to click.
+        </div>
+    </div>
+
+</div>
+
+<!-- D3 SEMANTICS -->
+<h3 class="dim">D3 · Inter-room push semantics</h3>
+<p class="dim-lede">
+    What does the strip actually show? All variants assume D1-A (top) + D2-A (always-visible) for direct comparison.
+</p>
+<div class="variants">
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT D3-A</p>
+            <h4 class="variant-title">Observations on focused object</h4>
+            <p class="variant-blurb">Surfaces observations from the ledger whose <code>related_object_id</code> matches the operator's current focus (deal, account, proof).</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="bs-strip">
+                <span class="bs-strip__kicker">BIRDSEYE</span>
+                <span class="bs-strip__body sem-related">
+                    <em>Meridian Logistics</em> · stalled 21 days · "Casted proof Tuesday" · 2 reads pending
+                </span>
+                <button class="bs-strip__next">Open all →</button>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DEAL WORKSPACE · MERIDIAN LOGISTICS</p>
+                    <h4>The deals decaying fastest.</h4>
+                </div>
+                <div class="mock-content">[room content — Meridian Logistics in focus]</div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Read:</strong> "Here's what the system noticed about the thing you're looking at." <strong>Source:</strong> observations ledger + session.focusedObject.
+        </div>
+    </div>
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT D3-B</p>
+            <h4 class="variant-title">Recent actions trail</h4>
+            <p class="variant-blurb">Surfaces the operator's own recent navigation: last 3 rooms/objects they touched. Helps them remember where they were.</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="bs-strip">
+                <span class="bs-strip__kicker">BIRDSEYE</span>
+                <span class="bs-strip__body sem-trail">
+                    <a href="#">Cold Call</a><span>2m ago</span> ·
+                    <a href="#">Discovery Studio</a><span>5m ago</span> ·
+                    <a href="#">Founding GTM §3</a><span>12m ago</span>
+                </span>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DEAL WORKSPACE</p>
+                    <h4>The deals decaying fastest.</h4>
+                </div>
+                <div class="mock-content">[room content]</div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Read:</strong> "Here's where you were just now." <strong>Source:</strong> session.recentActions trail (Phase A).
+        </div>
+    </div>
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT D3-C</p>
+            <h4 class="variant-title">System-ranked "what to look at next"</h4>
+            <p class="variant-blurb">Single ranked line: the highest-pressure object across observations + deal recovery rank + Briefing patterns (when those land).</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="bs-strip">
+                <span class="bs-strip__kicker">BIRDSEYE</span>
+                <span class="bs-strip__body sem-ranked">
+                    <span class="pill">NEXT</span> <strong>Cast a proof for Cascadia Health</strong> — stalled 14 days, hot account, no proof on file yet.
+                </span>
+                <button class="bs-strip__next">Open →</button>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DEAL WORKSPACE</p>
+                    <h4>The deals decaying fastest.</h4>
+                </div>
+                <div class="mock-content">[room content]</div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Read:</strong> "Here's the single most-pressing thing in your workspace right now." <strong>Source:</strong> ranker over observations + Deal Workspace recovery_rank + (later) Briefing patterns.
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PHASE E
+     ═══════════════════════════════════════════════════════════════ -->
+
+<h2 class="phase">Phase E — Operator scheduling</h2>
+
+<h3 class="dim">E1 · What "auto-run" actually does</h3>
+<p class="dim-lede">
+    Operator schedules a skill ("run <code>whats-at-risk</code> every Friday at 9am"). Comes Friday 9am — what happens? Both variants show
+    the same scheduled skill firing; they differ in what the operator experiences.
+</p>
+<div class="variants">
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT E1-A</p>
+            <h4 class="variant-title">Auto-navigate on arrival</h4>
+            <p class="variant-blurb">When the operator next opens the app on Friday, they're auto-routed to the result room. Toast confirms which skill fired.</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DEAL WORKSPACE · TOP 5 STALLED</p>
+                    <h4>Your at-risk deals this week.</h4>
+                </div>
+                <div class="mock-content">[Deal Workspace pre-filtered to the 5 stalled deals]</div>
+                <div class="toast">
+                    <p class="toast__kicker">SCHEDULED SKILL · FIRED 9:00 AM</p>
+                    <p class="toast__body">"What's at risk this week" ran on your Friday schedule. Showing top 5 stalled deals.</p>
+                    <button class="toast__cta">Got it</button>
+                </div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Pro:</strong> the operator can't miss it; the system shows up where its work is most useful. <strong>Con:</strong> interrupts whatever flow the operator was in; can feel pushy if they were mid-task.
+        </div>
+    </div>
+
+    <div class="variant">
+        <div class="variant-head">
+            <p class="variant-kicker">VARIANT E1-B</p>
+            <h4 class="variant-title">Write observation, operator chooses when to act</h4>
+            <p class="variant-blurb">Skill runs server-side, captures result as a workspace observation. Operator sees it in the Dashboard "this week's reads" card on their next visit, clicks when ready.</p>
+        </div>
+        <div class="variant-canvas">
+            <div class="mock-chrome">
+                <span class="back-pill">← Back</span>
+                <span class="wordmark">ANTAEUS</span>
+            </div>
+            <div class="mock-room">
+                <div class="mock-topbar">
+                    <p>DASHBOARD · 3 NEW READS THIS WEEK</p>
+                    <h4>What the system noticed about your work.</h4>
+                </div>
+                <div class="dashboard-week-reads">
+                    <div class="dashboard-week-reads__head">
+                        <span class="dashboard-week-reads__kicker">THIS WEEK'S READS</span>
+                        <h5 class="dashboard-week-reads__title">3 new this morning</h5>
+                    </div>
+                    <div class="observation-row">
+                        <p class="observation-row__source">SCHEDULED · FRIDAY 9:00 AM</p>
+                        Your weekly at-risk digest: 5 deals stalled. <a href="#">Open the list →</a>
+                    </div>
+                    <div class="observation-row">
+                        <p class="observation-row__source">PHASE B · DEAL_DECAY</p>
+                        Cascadia Health stalled 14 days at negotiation, no dated next step.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="variant-foot">
+            <strong>Pro:</strong> non-interrupting; respects whatever the operator was mid-doing; folds into the existing Phase B surface. <strong>Con:</strong> easier to miss; lower urgency.
+        </div>
+    </div>
+
+</div>
+
+<div style="margin-top: 60px; padding-top: 32px; border-top: 1px solid var(--ink-15); color: var(--ink-40); font-size: 12px;">
+    <p style="margin: 0;">
+        Generated 2026-05-31 as a design-review artifact for Phases D + E scoping.
+        Use the variant IDs (D1-A, D1-B, D2-B, etc.) when picking — I'll lock the ADR + start building.
+    </p>
+</div>
+
+</main>
+</body>
+</html>
