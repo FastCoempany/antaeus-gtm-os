@@ -1,0 +1,473 @@
+/* ────────────────────────────────────────────────────────────
+ * ScheduleFloat — ADR-013 persistent schedule-control surface
+ *
+ * Bottom-left, always-on. Two render states: expanded (280px card)
+ * and minimized (pill). Settings panel slides in-line.
+ * ─────────────────────────────────────────────────────────── */
+
+.ant-schedule-float {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 997; /* below palette + birdseye (998) */
+    background: #0a1c40;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(10, 28, 64, 0.25);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    animation: schedule-float-in 220ms ease;
+}
+
+@keyframes schedule-float-in {
+    from {
+        transform: translateY(8px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ─── Expanded card (Variant B) ──────────────────────────── */
+
+.ant-schedule-float--expanded {
+    width: 280px;
+    padding: 12px 14px 14px;
+}
+
+.ant-schedule-float__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.ant-schedule-float__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e6701e;
+    font-weight: 800;
+}
+
+.ant-schedule-float__head-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ant-schedule-float__icon-btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 2px 6px;
+    line-height: 1;
+    font-size: 13px;
+    border-radius: 4px;
+    transition: color 120ms ease, background 120ms ease;
+}
+
+.ant-schedule-float__icon-btn:hover,
+.ant-schedule-float__icon-btn:focus-visible {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+/* ─── Just-fired section ─────────────────────────────────── */
+
+.ant-schedule-float__fired {
+    background: rgba(230, 112, 30, 0.12);
+    border-left: 3px solid #e6701e;
+    padding: 8px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background 120ms ease;
+}
+
+.ant-schedule-float__fired:hover,
+.ant-schedule-float__fired:focus-visible {
+    background: rgba(230, 112, 30, 0.2);
+    outline: none;
+}
+
+.ant-schedule-float__fired-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #e6701e;
+    font-weight: 800;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ant-schedule-float__fired-label {
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.ant-schedule-float__fired-arrow {
+    color: #e6701e;
+    font-weight: 800;
+    float: right;
+}
+
+/* ─── Queued section ─────────────────────────────────────── */
+
+.ant-schedule-float__queue {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ant-schedule-float__queue-head {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.ant-schedule-float__row {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    transition: background 120ms ease;
+    width: 100%;
+}
+
+.ant-schedule-float__row:hover,
+.ant-schedule-float__row:focus-visible {
+    background: rgba(255, 255, 255, 0.06);
+    outline: none;
+}
+
+.ant-schedule-float__row-label {
+    font-size: 13px;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.ant-schedule-float__row-time {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+}
+
+.ant-schedule-float__empty {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.5;
+    padding: 4px 0 2px;
+}
+
+.ant-schedule-float__overflow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.06em;
+    padding: 4px 8px 0;
+}
+
+/* ─── Minimized pill ─────────────────────────────────────── */
+
+.ant-schedule-float--minimized {
+    padding: 0;
+}
+
+.ant-schedule-float__pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px 8px 12px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.ant-schedule-float__pill-btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    line-height: 1;
+}
+
+.ant-schedule-float__pill-btn:focus-visible {
+    outline: 2px solid rgba(230, 112, 30, 0.6);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+.ant-schedule-float__pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e6701e;
+    box-shadow: 0 0 0 4px rgba(230, 112, 30, 0.15);
+    flex-shrink: 0;
+    animation: pill-dot-pulse 1600ms ease-in-out infinite;
+}
+
+@keyframes pill-dot-pulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 4px rgba(230, 112, 30, 0.15);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(230, 112, 30, 0.05);
+    }
+}
+
+.ant-schedule-float__pill-dot-empty {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.ant-schedule-float__pill-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* Settings wheel on hover — minimized state */
+.ant-schedule-float__wheel {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 0 0 0 4px;
+    margin-left: 2px;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 13px;
+    line-height: 1;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 160ms ease, transform 160ms ease, color 120ms ease;
+    pointer-events: none;
+}
+
+.ant-schedule-float--minimized:hover .ant-schedule-float__wheel,
+.ant-schedule-float--minimized:focus-within .ant-schedule-float__wheel {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.ant-schedule-float__wheel:hover,
+.ant-schedule-float__wheel:focus-visible {
+    color: #fff;
+    outline: none;
+}
+
+/* ─── Tooltip (hover hint) ──────────────────────────────── */
+
+.ant-schedule-float__tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: #0a1c40;
+    color: #fff;
+    font-size: 11px;
+    line-height: 1.4;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(10, 28, 64, 0.3);
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity 140ms ease, transform 140ms ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.ant-schedule-float:hover .ant-schedule-float__tooltip[data-visible="true"],
+.ant-schedule-float:focus-within .ant-schedule-float__tooltip[data-visible="true"] {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── Inline settings panel ─────────────────────────────── */
+
+.ant-schedule-float__settings {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ant-schedule-float__settings-head {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.ant-schedule-float__setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.88);
+    cursor: pointer;
+    padding: 2px 0;
+}
+
+.ant-schedule-float__toggle {
+    appearance: none;
+    width: 28px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: background 140ms ease;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ant-schedule-float__toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 140ms ease;
+}
+
+.ant-schedule-float__toggle[aria-checked="true"] {
+    background: #e6701e;
+}
+
+.ant-schedule-float__toggle[aria-checked="true"]::after {
+    transform: translateX(12px);
+}
+
+.ant-schedule-float__toggle:focus-visible {
+    outline: 2px solid rgba(230, 112, 30, 0.6);
+    outline-offset: 2px;
+}
+
+.ant-schedule-float__snooze {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.ant-schedule-float__snooze-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.ant-schedule-float__snooze-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.ant-schedule-float__snooze-btn {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.88);
+    border: none;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 3px 6px;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.ant-schedule-float__snooze-btn:hover,
+.ant-schedule-float__snooze-btn:focus-visible {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    outline: none;
+}
+
+.ant-schedule-float__snooze-btn--active {
+    background: #e6701e;
+    color: #fff;
+}
+
+.ant-schedule-float__snooze-btn--active:hover {
+    background: #e6701e;
+}
+
+.ant-schedule-float__snooze-status {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: rgba(230, 112, 30, 0.9);
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+/* Settings panel — minimized state (replaces pill content) */
+.ant-schedule-float--minimized .ant-schedule-float__settings {
+    margin-top: 0;
+    padding: 12px 14px 14px;
+    border-top: none;
+    min-width: 220px;
+}
+
+.ant-schedule-float--minimized .ant-schedule-float__settings .ant-schedule-float__settings-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+/* ─── Re-summon hint (hidden state has no surface) ───────── */
+
+/*
+ * When mode === "hidden" the component renders nothing. Operators
+ * re-summon via Ctrl+K → "show schedule float". No CSS for the
+ * hidden state — the absence is the surface.
+ */
