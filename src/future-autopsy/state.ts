@@ -10,6 +10,7 @@ import { MAX_LEDGER_CASES } from "./lib/types";
 import type { ComputedVitals } from "./lib/vitals";
 import { generateAutopsy, rankAutopsyUniverse } from "./lib/autopsy";
 import { saveTaskLog, toggleTask as toggleTaskInLog } from "./lib/task-log";
+import { saveTaskLogToCloud } from "./lib/cloud-persistence";
 
 /**
  * Phase 4 / Room 4 — Future Autopsy runtime state.
@@ -147,7 +148,12 @@ export function startTaskLogPersistence(): () => void {
             firstRun = false;
             return;
         }
+        // localStorage stays the eager-write path — instant + survives
+        // network failure. Cloud write is fire-and-forget: when cloud
+        // boot has registered a client it persists; when it hasn't yet
+        // the call is a safe no-op.
         saveTaskLog(log);
+        void saveTaskLogToCloud(log);
     });
     taskLogPublishStop = () => {
         dispose();
