@@ -27,31 +27,39 @@ const toastSignal: Signal<{ id: string; label: string } | null> = signal(null);
 
 let bootstrapped = false;
 
-async function bootstrap(): Promise<void> {
-    if (bootstrapped) return;
-    bootstrapped = true;
-    // Step 1: check for pending fire + navigate if needed.
-    // (If navigation happens, this code path doesn't continue — the
-    // new page bootstrap reads the session-storage marker instead.)
-    const result = await checkAndAutoNavigate();
-    if (result.kind === "navigated") {
-        // Navigation in progress; nothing left to do here.
-        return;
-    }
-
-    // Step 2: read the marker (set by the previous page if we just
-    // arrived from a fired skill).
-    const justFiredId = consumeJustFiredSkillId();
-    if (!justFiredId) return;
-    const skill = findSkillById(justFiredId);
+function showToast(skillId: string): void {
+    const skill = findSkillById(skillId);
     if (!skill) return;
-
-    toastSignal.value = { id: justFiredId, label: skill.label };
-
+    toastSignal.value = { id: skillId, label: skill.label };
     // Auto-dismiss after 6 seconds.
     setTimeout(() => {
         toastSignal.value = null;
     }, 6000);
+}
+
+async function bootstrap(): Promise<void> {
+    if (bootstrapped) return;
+    bootstrapped = true;
+
+    // Step 1 (fast, local, no auth): did we just arrive here from a
+    // navigation triggered by a fired skill? The marker is set by the
+    // PREVIOUS page before it navigated. Reading it first means the
+    // arrival toast doesn't wait on the auth-gated pending-fire check.
+    const arrivedFrom = consumeJustFiredSkillId();
+    if (arrivedFrom) {
+        showToast(arrivedFrom);
+        return;
+    }
+
+    // Step 2 (auth-gated): is there a pending fire to act on this load?
+    // checkAndAutoNavigate either navigates (toast shows on arrival via
+    // the marker) or returns toast-in-place when no navigation happened
+    // (already-on-target, or the skill had no destination). Either way
+    // a consumed fire always surfaces a toast — never silent.
+    const result = await checkAndAutoNavigate();
+    if (result.kind === "toast-in-place") {
+        showToast(result.skillId);
+    }
 }
 
 effect(() => {
