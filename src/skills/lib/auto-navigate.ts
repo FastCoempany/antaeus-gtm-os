@@ -29,9 +29,29 @@ import { markFireViewed, readNextPendingFire } from "./schedule-storage";
 export type AutoNavigateResult =
     | { readonly kind: "no-pending-fire" }
     | { readonly kind: "skill-not-found"; readonly skillId: string }
-    | { readonly kind: "already-on-target"; readonly skillId: string }
+    /**
+     * Fire consumed, skill exists, but no navigation happened — either
+     * the operator is already on the target room, or the skill's
+     * dispatch produced no destination (e.g. a filter-and-route skill
+     * whose source has no rows). The toast MUST still show in-place so
+     * a consumed fire is never silent. The caller (ScheduledFireToast)
+     * renders the toast on the current page.
+     */
+    | { readonly kind: "toast-in-place"; readonly skillId: string }
     | { readonly kind: "navigated"; readonly skillId: string }
     | { readonly kind: "error"; readonly error: string };
+
+const JUST_FIRED_KEY = "gtmos_scheduled_skill_just_fired";
+
+function setJustFiredMarker(skillId: string): void {
+    try {
+        if (typeof sessionStorage !== "undefined") {
+            sessionStorage.setItem(JUST_FIRED_KEY, skillId);
+        }
+    } catch {
+        // sessionStorage disabled — toast won't render on arrival, fine.
+    }
+}
 
 export interface AutoNavigateOptions {
     /** Override window.location.pathname for tests. */
@@ -96,39 +116,34 @@ export async function checkAndAutoNavigate(
                 ? window.location.pathname
                 : "/");
 
-        // If the skill's action targets the path the operator is already
-        // on, mark viewed but don't navigate — avoids a noisy re-route.
+        // Consume the fire exactly once, regardless of outcome below —
+        // this prevents an infinite retry loop AND guarantees we always
+        // pair consumption with a visible toast (no silent consumption).
+        await markFireViewed(pending.id);
+
+        // If the operator is already on the target room, don't re-route;
+        // show the toast in-place instead.
         const targetPath = extractTargetPath(skill.action);
         if (targetPath && currentPath.startsWith(targetPath)) {
-            await markFireViewed(pending.id);
-            return { kind: "already-on-target", skillId: pending.skillId };
+            return { kind: "toast-in-place", skillId: pending.skillId };
         }
 
-        // Mark viewed BEFORE dispatching: navigation will tear down the
-        // page, so the mark needs to complete first.
-        await markFireViewed(pending.id);
+        // Set the arrival marker first so a successful navigation
+        // surfaces the toast on the destination page.
+        setJustFiredMarker(pending.skillId);
         const result = await dispatchSkill(skill, {
             navigate: opts.navigate
         });
         if (result.kind === "navigated") {
-            // Store the just-fired skill id on session storage so the
-            // destination room can render a toast.
-            try {
-                if (typeof sessionStorage !== "undefined") {
-                    sessionStorage.setItem(
-                        "gtmos_scheduled_skill_just_fired",
-                        pending.skillId
-                    );
-                }
-            } catch {
-                // sessionStorage disabled — toast won't render, fine.
-            }
             return { kind: "navigated", skillId: pending.skillId };
         }
-        return {
-            kind: "error",
-            error: `Dispatch failed: ${result.kind}`
-        };
+        // Dispatch produced no destination (e.g. filter-and-route with
+        // an empty source). We're still on the current page — clear the
+        // arrival marker (it was for a navigation that didn't happen)
+        // and show the toast in-place so the fire isn't consumed
+        // silently.
+        consumeJustFiredSkillId();
+        return { kind: "toast-in-place", skillId: pending.skillId };
     } catch (err) {
         return {
             kind: "error",
@@ -154,9 +169,9 @@ function extractTargetPath(action: { kind: string; target?: string }): string | 
 export function consumeJustFiredSkillId(): string | null {
     try {
         if (typeof sessionStorage === "undefined") return null;
-        const id = sessionStorage.getItem("gtmos_scheduled_skill_just_fired");
+        const id = sessionStorage.getItem(JUST_FIRED_KEY);
         if (id) {
-            sessionStorage.removeItem("gtmos_scheduled_skill_just_fired");
+            sessionStorage.removeItem(JUST_FIRED_KEY);
         }
         return id;
     } catch {
