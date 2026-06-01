@@ -97,13 +97,15 @@ The 2026-05-29 session opened against a **stale canon row** (Part V §1 Checkpoi
 
 Root cause: the session trusted the stale Checkpoint 2 row instead of checking git history (#142/#147/#149) + the flag registry first. The fix is this correction + the CLAUDE.md Part V §1 update landing in the same PR. The audit docs from #202 + #204 carry a correction banner pointing here. No code was reverted — the additive schema is harmless and the audit docs are now flagged.
 
-### Two observation scopes — and an open question
+### Two observation scopes — and an open question *(RESOLVED 2026-06-01 — see ADR-009 + ADR-014)*
 
 The Briefing (ADR-006) writes **world-scope** observations — what's happening in the market the operator sells into (competitors, funding, hiring, narrative shifts). It owns the `briefing_patterns` table + the Recipe Layer pipeline.
 
 The Phase A `observations` ledger was scaffolded for **workspace-scope** observations — facts about the operator's *own* deals, signals, and patterns ("5 deals stuck in evaluation, all missing decision-maker confirmation, same as the two Q2 losses"). ADR-006 noted the Briefing's Patterns are "the observations Phase A's `observations` table was scaffolded for" — true for world-scope, but workspace-scope observations are a distinct stream that the Briefing's world-facing pipeline does not directly produce.
 
-**Open question (do NOT resolve unilaterally — founder decision per canon Part IV §4):** is there still a separate workspace-scope observation stream worth building (heartbeat generators writing to the `observations` ledger about the operator's own pipeline), or does the Briefing's Watchlist Trigger grammar — pointed at the operator's own accounts/deals via the substrate — cover enough of it that a separate stream is redundant? This is the first thing to settle before any Phase C+ work that assumes one answer. It is explicitly left open here.
+**Open question (originally framed here):** is there still a separate workspace-scope observation stream worth building (heartbeat generators writing to the `observations` ledger about the operator's own pipeline), or does the Briefing's Watchlist Trigger grammar — pointed at the operator's own accounts/deals via the substrate — cover enough of it that a separate stream is redundant?
+
+**Resolution (2026-06-01):** Two streams stay separate at the data layer (per **ADR-009** 2026-05-31 — workspace stream is SQL-only via heartbeat generators writing to `observations`; world stream is Recipe Layer Patterns writing to `briefing_patterns`). One operator-facing surface carries both views (per **ADR-014** 2026-06-01) — the Briefing room now houses a Workspace / World toggle defaulting to Workspace. The Dashboard "this week's reads" card stays as a secondary reach point for workspace observations. Different cadences (workspace heartbeat-continuous, world weekly) preserved. Both streams share `src/lib/voice/` for voice consistency.
 
 ---
 
