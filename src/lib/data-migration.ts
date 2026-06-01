@@ -650,6 +650,10 @@ function toAccessorName(table: TableName): string {
         founding_gtm_shares: "foundingGtmShares",
         scheduled_skills: "scheduledSkills",
         scheduled_skill_fires: "scheduledSkillFires",
+        // Outdoors Events (ADR-015) is cloud-native with no localStorage
+        // source; the entry exists so the MAP stays exhaustive over the
+        // table union — the migration never reads from it.
+        outdoors_events: "outdoorsEvents",
         waitlist_signups: "waitlistSignups",
         // Phase A orchestration layer (ADR-004). These tables are
         // populated server-side (heartbeat Edge Function for

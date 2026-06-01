@@ -109,6 +109,7 @@ function makeDataClient(opts: {
         foundingGtmShares: {} as never,
         scheduledSkills: {} as never,
         scheduledSkillFires: {} as never,
+        outdoorsEvents: {} as never,
         workspaceSessions: {} as never,
         workspaceProfile: {} as never,
         observations,

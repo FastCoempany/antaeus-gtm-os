@@ -8,11 +8,13 @@ import {
 } from "./registry";
 
 describe("ALL_ROOMS — registry shape", () => {
-    it("contains all 21 canonical rooms", () => {
-        // 20 rooms per canon §4 plus Briefing (canon §4.21 + ADR-006).
-        // Briefing sits under system-ledger as the closest neighbor
-        // until the intelligence-surface family lands formally.
-        expect(ALL_ROOMS).toHaveLength(21);
+    it("contains all 22 canonical rooms", () => {
+        // 20 rooms per canon §4 plus Briefing (canon §4.21 + ADR-006)
+        // plus Outdoors Events (canon §4.22 + ADR-015). Briefing sits
+        // under system-ledger as the closest neighbor until the
+        // intelligence-surface family lands formally; Outdoors Events
+        // is a Live Instrument.
+        expect(ALL_ROOMS).toHaveLength(22);
     });
 
     it("every entry has the required fields", () => {

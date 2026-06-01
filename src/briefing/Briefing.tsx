@@ -11,6 +11,7 @@ import { PatternList } from "./components/PatternList";
 import { ContrarianRail } from "./components/ContrarianRail";
 import { PeripheryRail } from "./components/PeripheryRail";
 import { WatchList } from "./components/WatchList";
+import { OutdoorsEventsChip } from "./components/OutdoorsEventsChip";
 import { BriefingFooter } from "./components/BriefingFooter";
 
 /**
@@ -66,6 +67,7 @@ export function Briefing(): JSX.Element {
                         <ContrarianRail />
                         <PeripheryRail />
                         <WatchList />
+                        <OutdoorsEventsChip />
                     </>
                 )}
                 <BriefingFooter />

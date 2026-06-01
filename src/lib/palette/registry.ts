@@ -271,6 +271,27 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         ],
         description: "Weekly read of what's moving — and where your assumptions stop agreeing with the data."
     },
+    // Outdoors Events — Live Instrument per ADR-015. The operator's
+    // radar for offline gatherings where buyers show up.
+    {
+        id: "outdoors-events",
+        kicker: "OUTDOORS EVENTS",
+        label: "Outdoors Events",
+        href: "/outdoors-events/",
+        family: "live-instrument",
+        keywords: [
+            "outdoors",
+            "events",
+            "conference",
+            "conferences",
+            "mixer",
+            "meetup",
+            "trade show",
+            "gathering",
+            "networking"
+        ],
+        description: "Where buyers gather offline — conferences, mixers, meetups you're watching."
+    },
 
     // ── Trust Annex ──────────────────────────────────────────────
     {
