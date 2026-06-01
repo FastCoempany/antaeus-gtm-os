@@ -11,6 +11,8 @@
  * internal — operators never see it.
  */
 
+import { chicagoWallParts, chicagoWallToUtc } from "@/lib/time/chicago";
+
 export type CadenceKind = "daily" | "weekly" | "monthly";
 
 export type DayOfWeek =
@@ -121,48 +123,67 @@ export function parseCadence(
  * `new Date()`.
  */
 export function nextFireAt(c: Cadence, from: Date): Date {
-    const next = new Date(from.getTime());
-    next.setUTCHours(c.hour, c.minute, 0, 0);
+    // The cadence hour/minute are CHICAGO wall-clock time (app operates
+    // on Central per founder decision 2026-06-01). We do all calendar
+    // arithmetic in a "floating" Date whose UTC fields mirror Chicago
+    // wall fields, then convert to the real UTC instant only when
+    // comparing against `from` or returning. This keeps DST out of the
+    // calendar math — the single tz conversion at the boundary (via
+    // chicagoWallToUtc) handles it.
+    const w = chicagoWallParts(from);
+    const wall = new Date(
+        Date.UTC(w.year, w.month - 1, w.day, c.hour, c.minute, 0)
+    );
 
     if (c.kind === "daily") {
-        if (next.getTime() <= from.getTime()) {
-            next.setUTCDate(next.getUTCDate() + 1);
+        if (toRealUtc(wall).getTime() <= from.getTime()) {
+            wall.setUTCDate(wall.getUTCDate() + 1);
         }
-        return next;
+        return toRealUtc(wall);
     }
 
     if (c.kind === "weekly") {
         const targetDow = DAY_INDEX[c.dayOfWeek];
-        const currentDow = next.getUTCDay();
+        const currentDow = wall.getUTCDay(); // floating-UTC day = Chicago weekday
         let daysAhead = (targetDow - currentDow + 7) % 7;
-        if (daysAhead === 0 && next.getTime() <= from.getTime()) {
+        if (daysAhead === 0 && toRealUtc(wall).getTime() <= from.getTime()) {
             daysAhead = 7;
         }
-        next.setUTCDate(next.getUTCDate() + daysAhead);
-        return next;
+        wall.setUTCDate(wall.getUTCDate() + daysAhead);
+        return toRealUtc(wall);
     }
 
     // monthly
-    const targetDom = c.dayOfMonth;
-    // Set to target day of the current month (or last day if short).
-    setMonthlyDay(next, targetDom);
-    if (next.getTime() <= from.getTime()) {
-        // Roll to next month. CRITICAL: reset the date to 1 BEFORE
-        // incrementing the month. If we don't, a current date of 31
-        // combined with setUTCMonth(+1) overflows when the next month
-        // is shorter (Jan 31 + 1 month → Mar 3, skipping February).
-        // Reset-then-increment-then-clamp is the only safe order.
-        next.setUTCDate(1);
-        next.setUTCMonth(next.getUTCMonth() + 1);
-        setMonthlyDay(next, targetDom);
+    setFloatingMonthlyDay(wall, c.dayOfMonth);
+    if (toRealUtc(wall).getTime() <= from.getTime()) {
+        // Roll to next month. Reset date to 1 BEFORE incrementing the
+        // month so a current date of 31 doesn't overflow into the
+        // month-after-next when the next month is shorter.
+        wall.setUTCDate(1);
+        wall.setUTCMonth(wall.getUTCMonth() + 1);
+        setFloatingMonthlyDay(wall, c.dayOfMonth);
     }
-    return next;
+    return toRealUtc(wall);
 }
 
-function setMonthlyDay(d: Date, targetDom: number): void {
-    // First go to the 1st of the month so setUTCDate doesn't underflow.
+/**
+ * Convert a floating wall-date (whose UTC fields ARE the Chicago
+ * wall-clock fields) to the real UTC instant.
+ */
+function toRealUtc(floatingWall: Date): Date {
+    return chicagoWallToUtc(
+        floatingWall.getUTCFullYear(),
+        floatingWall.getUTCMonth() + 1,
+        floatingWall.getUTCDate(),
+        floatingWall.getUTCHours(),
+        floatingWall.getUTCMinutes()
+    );
+}
+
+function setFloatingMonthlyDay(d: Date, targetDom: number): void {
+    // Go to the 1st so setUTCDate doesn't underflow, then clamp the
+    // target day to the last day of that (Chicago) month.
     d.setUTCDate(1);
-    // Compute the last day of the current month.
     const month = d.getUTCMonth();
     const year = d.getUTCFullYear();
     const lastDay = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();

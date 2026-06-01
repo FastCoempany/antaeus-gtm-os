@@ -178,7 +178,7 @@ export function ScheduleModal(): JSX.Element | null {
                 ) : null}
 
                 <label class="ant-schedule__field ant-schedule__time">
-                    <span class="ant-schedule__field-tag">Time (UTC)</span>
+                    <span class="ant-schedule__field-tag">Time (Central · CT)</span>
                     <div class="ant-schedule__time-row">
                         <input
                             type="number"

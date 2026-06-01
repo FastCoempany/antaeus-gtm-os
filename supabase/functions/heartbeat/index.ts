@@ -555,37 +555,41 @@ function parseCadenceDeno(kind: string, data: unknown): ParsedCadence | null {
     return null;
 }
 
+// Cadence hour/minute are CHICAGO wall-clock (app operates on Central
+// per founder decision 2026-06-01). All calendar math happens in a
+// "floating" Date whose UTC fields mirror Chicago wall fields; convert
+// to the real UTC instant only at the comparison/return boundary via
+// chicagoWallToUtcDeno. Synced with src/skills/lib/scheduling.ts +
+// src/lib/time/chicago.ts.
 function nextFireAtDeno(c: ParsedCadence, from: Date): Date {
-    const next = new Date(from.getTime());
-    next.setUTCHours(c.hour, c.minute, 0, 0);
+    const w = chicagoWallPartsDeno(from);
+    const wall = new Date(
+        Date.UTC(w.year, w.month - 1, w.day, c.hour, c.minute, 0)
+    );
     if (c.kind === "daily") {
-        if (next.getTime() <= from.getTime()) {
-            next.setUTCDate(next.getUTCDate() + 1);
+        if (toRealUtcDeno(wall).getTime() <= from.getTime()) {
+            wall.setUTCDate(wall.getUTCDate() + 1);
         }
-        return next;
+        return toRealUtcDeno(wall);
     }
     if (c.kind === "weekly") {
         const targetDow = DAY_INDEX_DENO[c.dayOfWeek!];
-        const currentDow = next.getUTCDay();
+        const currentDow = wall.getUTCDay();
         let daysAhead = (targetDow - currentDow + 7) % 7;
-        if (daysAhead === 0 && next.getTime() <= from.getTime()) {
+        if (daysAhead === 0 && toRealUtcDeno(wall).getTime() <= from.getTime()) {
             daysAhead = 7;
         }
-        next.setUTCDate(next.getUTCDate() + daysAhead);
-        return next;
+        wall.setUTCDate(wall.getUTCDate() + daysAhead);
+        return toRealUtcDeno(wall);
     }
     // monthly
-    setMonthlyDayDeno(next, c.dayOfMonth!);
-    if (next.getTime() <= from.getTime()) {
-        // Reset date to 1 BEFORE incrementing month so a current
-        // date of 31 doesn't overflow into the month after the next
-        // when that next month is shorter (Jan 31 + 1 → Mar 3,
-        // skipping February). See scheduling.ts for the same fix.
-        next.setUTCDate(1);
-        next.setUTCMonth(next.getUTCMonth() + 1);
-        setMonthlyDayDeno(next, c.dayOfMonth!);
+    setMonthlyDayDeno(wall, c.dayOfMonth!);
+    if (toRealUtcDeno(wall).getTime() <= from.getTime()) {
+        wall.setUTCDate(1);
+        wall.setUTCMonth(wall.getUTCMonth() + 1);
+        setMonthlyDayDeno(wall, c.dayOfMonth!);
     }
-    return next;
+    return toRealUtcDeno(wall);
 }
 
 function setMonthlyDayDeno(d: Date, targetDom: number): void {
@@ -594,6 +598,58 @@ function setMonthlyDayDeno(d: Date, targetDom: number): void {
         Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)
     ).getUTCDate();
     d.setUTCDate(Math.min(targetDom, lastDay));
+}
+
+// ─── Chicago wall-clock helpers (Deno duplicate of src/lib/time/chicago.ts) ─
+
+const APP_TIMEZONE_DENO = "America/Chicago";
+
+function chicagoWallPartsDeno(at: Date): {
+    year: number; month: number; day: number;
+    hour: number; minute: number; second: number;
+} {
+    const dtf = new Intl.DateTimeFormat("en-US", {
+        timeZone: APP_TIMEZONE_DENO,
+        hour12: false,
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", second: "2-digit"
+    });
+    const m: Record<string, string> = {};
+    for (const p of dtf.formatToParts(at)) {
+        if (p.type !== "literal") m[p.type] = p.value;
+    }
+    let hour = Number.parseInt(m.hour ?? "0", 10);
+    if (hour === 24) hour = 0;
+    return {
+        year: Number.parseInt(m.year ?? "1970", 10),
+        month: Number.parseInt(m.month ?? "1", 10),
+        day: Number.parseInt(m.day ?? "1", 10),
+        hour,
+        minute: Number.parseInt(m.minute ?? "0", 10),
+        second: Number.parseInt(m.second ?? "0", 10)
+    };
+}
+
+function chicagoWallToUtcDeno(
+    year: number, month: number, day: number, hour: number, minute: number
+): Date {
+    const guess = Date.UTC(year, month - 1, day, hour, minute, 0);
+    const p = chicagoWallPartsDeno(new Date(guess));
+    const wallAsUtc = Date.UTC(
+        p.year, p.month - 1, p.day, p.hour, p.minute, p.second
+    );
+    const offsetMs = wallAsUtc - guess;
+    return new Date(guess - offsetMs);
+}
+
+function toRealUtcDeno(floatingWall: Date): Date {
+    return chicagoWallToUtcDeno(
+        floatingWall.getUTCFullYear(),
+        floatingWall.getUTCMonth() + 1,
+        floatingWall.getUTCDate(),
+        floatingWall.getUTCHours(),
+        floatingWall.getUTCMinutes()
+    );
 }
 
 // ─── HTTP serve loop ─────────────────────────────────────────────

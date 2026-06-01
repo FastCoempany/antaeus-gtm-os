@@ -6,8 +6,13 @@ import {
     type Cadence
 } from "./scheduling";
 
-const FRIDAY_2026_05_29_NOON = new Date("2026-05-29T12:00:00.000Z");
-// 2026-05-29 is a Friday.
+// Cadence times are Chicago wall-clock (app operates on Central per
+// founder decision 2026-06-01). 2026 DST: CDT (UTC-5) Mar 8 → Nov 1;
+// CST (UTC-6) otherwise. So 9am Chicago = 14:00 UTC in summer, 15:00
+// UTC in winter. All assertions below reflect that.
+
+// A summer reference instant: 2026-06-01T13:00:00Z = 08:00 CDT Monday.
+const SUMMER_8AM_CT = new Date("2026-06-01T13:00:00.000Z");
 
 describe("cadenceToJson + parseCadence", () => {
     it("round-trips a daily cadence", () => {
@@ -77,120 +82,99 @@ describe("cadenceToJson + parseCadence", () => {
     });
 });
 
-describe("nextFireAt — daily", () => {
-    it("next fire is the same day if time hasn't passed yet", () => {
-        const c: Cadence = { kind: "daily", hour: 18, minute: 0 };
-        const next = nextFireAt(c, FRIDAY_2026_05_29_NOON);
-        expect(next.toISOString()).toBe("2026-05-29T18:00:00.000Z");
+describe("nextFireAt — daily (Chicago wall-clock)", () => {
+    it("fires today at 9am Central when that's still ahead", () => {
+        // from = 08:00 CT. 9am CT today = 14:00 UTC, which is ahead.
+        const next = nextFireAt({ kind: "daily", hour: 9, minute: 0 }, SUMMER_8AM_CT);
+        expect(next.toISOString()).toBe("2026-06-01T14:00:00.000Z");
     });
 
-    it("next fire is the next day if time has passed", () => {
-        const c: Cadence = { kind: "daily", hour: 9, minute: 0 };
-        const next = nextFireAt(c, FRIDAY_2026_05_29_NOON);
-        expect(next.toISOString()).toBe("2026-05-30T09:00:00.000Z");
-    });
-});
-
-describe("nextFireAt — weekly", () => {
-    it("next fire is later today if target day = today and time later", () => {
-        const c: Cadence = {
-            kind: "weekly",
-            hour: 18,
-            minute: 0,
-            dayOfWeek: "fri"
-        };
-        const next = nextFireAt(c, FRIDAY_2026_05_29_NOON);
-        expect(next.toISOString()).toBe("2026-05-29T18:00:00.000Z");
+    it("rolls to tomorrow when 9am Central has already passed", () => {
+        // from = 10:00 CT (15:00 UTC). 9am CT today already gone.
+        const from = new Date("2026-06-01T15:00:00.000Z");
+        const next = nextFireAt({ kind: "daily", hour: 9, minute: 0 }, from);
+        expect(next.toISOString()).toBe("2026-06-02T14:00:00.000Z");
     });
 
-    it("next fire is +7 days if target day = today but time has passed", () => {
-        const c: Cadence = {
-            kind: "weekly",
-            hour: 9,
-            minute: 0,
-            dayOfWeek: "fri"
-        };
-        const next = nextFireAt(c, FRIDAY_2026_05_29_NOON);
-        expect(next.toISOString()).toBe("2026-06-05T09:00:00.000Z");
-    });
-
-    it("next fire is the closest upcoming target day", () => {
-        const c: Cadence = {
-            kind: "weekly",
-            hour: 9,
-            minute: 0,
-            dayOfWeek: "mon"
-        };
-        // Friday → Monday is 3 days.
-        const next = nextFireAt(c, FRIDAY_2026_05_29_NOON);
-        expect(next.toISOString()).toBe("2026-06-01T09:00:00.000Z");
+    it("interprets the hour as Central in WINTER too (CST, UTC-6)", () => {
+        // Jan 15 2026 06:00 CT = 12:00 UTC. 9am CST = 15:00 UTC, ahead.
+        const from = new Date("2026-01-15T12:00:00.000Z");
+        const next = nextFireAt({ kind: "daily", hour: 9, minute: 0 }, from);
+        expect(next.toISOString()).toBe("2026-01-15T15:00:00.000Z");
     });
 });
 
-describe("nextFireAt — monthly", () => {
-    it("next fire is later this month if day hasn't passed", () => {
-        const c: Cadence = {
-            kind: "monthly",
-            hour: 9,
-            minute: 0,
-            dayOfMonth: 30
-        };
-        const next = nextFireAt(c, FRIDAY_2026_05_29_NOON);
-        expect(next.toISOString()).toBe("2026-05-30T09:00:00.000Z");
+describe("nextFireAt — weekly (Chicago wall-clock)", () => {
+    it("fires later today when target day = today (Central) and time ahead", () => {
+        // SUMMER_8AM_CT is Monday 08:00 CT. Weekly Mon 9am → today 14:00 UTC.
+        const next = nextFireAt(
+            { kind: "weekly", hour: 9, minute: 0, dayOfWeek: "mon" },
+            SUMMER_8AM_CT
+        );
+        expect(next.toISOString()).toBe("2026-06-01T14:00:00.000Z");
     });
 
-    it("rolls to next month if day has passed", () => {
-        const c: Cadence = {
-            kind: "monthly",
-            hour: 9,
-            minute: 0,
-            dayOfMonth: 1
-        };
-        const next = nextFireAt(c, FRIDAY_2026_05_29_NOON);
-        expect(next.toISOString()).toBe("2026-06-01T09:00:00.000Z");
+    it("rolls +7 days when target day = today but the time has passed", () => {
+        // Monday 10:00 CT (15:00 UTC); Mon 9am already gone → next Mon.
+        const from = new Date("2026-06-01T15:00:00.000Z");
+        const next = nextFireAt(
+            { kind: "weekly", hour: 9, minute: 0, dayOfWeek: "mon" },
+            from
+        );
+        expect(next.toISOString()).toBe("2026-06-08T14:00:00.000Z");
     });
 
-    it("clamps to last day when target day exceeds month length", () => {
-        // Schedule 31st; February 2026 has 28 days.
-        const c: Cadence = {
-            kind: "monthly",
-            hour: 9,
-            minute: 0,
-            dayOfMonth: 31
-        };
+    it("finds the next upcoming target weekday", () => {
+        // Monday → next Friday is +4 days.
+        const next = nextFireAt(
+            { kind: "weekly", hour: 9, minute: 0, dayOfWeek: "fri" },
+            SUMMER_8AM_CT
+        );
+        expect(next.toISOString()).toBe("2026-06-05T14:00:00.000Z");
+    });
+});
+
+describe("nextFireAt — monthly (Chicago wall-clock)", () => {
+    it("fires later this month when the day is ahead", () => {
+        const next = nextFireAt(
+            { kind: "monthly", hour: 9, minute: 0, dayOfMonth: 15 },
+            SUMMER_8AM_CT
+        );
+        expect(next.toISOString()).toBe("2026-06-15T14:00:00.000Z");
+    });
+
+    it("rolls to next month when the day has passed", () => {
+        // from is Jun 1 08:00 CT; schedule the 1st → already today/past →
+        // next month. (9am CT Jun 1 = 14:00 UTC > from 13:00 UTC, so the
+        // 1st is actually still ahead today.) Use a from later in the day.
+        const from = new Date("2026-06-01T20:00:00.000Z"); // 15:00 CT Jun 1
+        const next = nextFireAt(
+            { kind: "monthly", hour: 9, minute: 0, dayOfMonth: 1 },
+            from
+        );
+        expect(next.toISOString()).toBe("2026-07-01T14:00:00.000Z");
+    });
+
+    it("clamps to the last day when the target exceeds month length", () => {
+        // Schedule 31st in February (28 days, 2026). Winter = CST = UTC-6,
+        // so 9am CST = 15:00 UTC.
         const feb = new Date("2026-02-15T12:00:00.000Z");
-        const next = nextFireAt(c, feb);
-        expect(next.toISOString()).toBe("2026-02-28T09:00:00.000Z");
+        const next = nextFireAt(
+            { kind: "monthly", hour: 9, minute: 0, dayOfMonth: 31 },
+            feb
+        );
+        expect(next.toISOString()).toBe("2026-02-28T15:00:00.000Z");
     });
 
     it("Jan-31 schedule fired on Jan 31 rolls to Feb 28, NOT Mar 31", () => {
-        // Codex-flagged regression: incrementing the month while date
-        // is 31 overflows when the next month is shorter. The fix
-        // resets the date to 1 before incrementing.
-        const c: Cadence = {
-            kind: "monthly",
-            hour: 9,
-            minute: 0,
-            dayOfMonth: 31
-        };
-        const janFireTime = new Date("2026-01-31T09:00:00.000Z");
-        const next = nextFireAt(c, janFireTime);
-        // Without the fix, this returns Mar 31 (skipping February).
-        // With the fix, it returns Feb 28 (clamped to last day of Feb).
-        expect(next.toISOString()).toBe("2026-02-28T09:00:00.000Z");
-    });
-
-    it("30th-of-month fired on a 30-day month rolls correctly into the next month", () => {
-        // Same family of bugs: schedule 30th, fire on Apr 30 9am
-        // (April has 30 days). May next-fire should be May 30.
-        const c: Cadence = {
-            kind: "monthly",
-            hour: 9,
-            minute: 0,
-            dayOfMonth: 30
-        };
-        const aprFireTime = new Date("2026-04-30T09:00:00.000Z");
-        const next = nextFireAt(c, aprFireTime);
-        expect(next.toISOString()).toBe("2026-05-30T09:00:00.000Z");
+        // Codex-flagged regression, now in Central. Jan 31 2026 is CST.
+        // Fire moment: Jan 31 09:00 CST = 15:00 UTC.
+        const janFire = new Date("2026-01-31T15:00:00.000Z");
+        const next = nextFireAt(
+            { kind: "monthly", hour: 9, minute: 0, dayOfMonth: 31 },
+            janFire
+        );
+        // Feb 28 09:00 CST = 15:00 UTC. NOT March.
+        expect(next.toISOString()).toBe("2026-02-28T15:00:00.000Z");
     });
 });

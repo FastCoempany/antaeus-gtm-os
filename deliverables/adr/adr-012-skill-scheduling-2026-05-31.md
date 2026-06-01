@@ -20,7 +20,9 @@ Six locked design points:
 
 1. **What can be scheduled**: only Phase C skills. Bundled, deterministic, voice-gated. Arbitrary URLs / room visits are out of scope.
 
-2. **Schedule cadence (v1)**: three options — `daily-at-time`, `weekly-on-day-at-time`, `monthly-on-date-at-time`. Times are stored as ISO-formatted local time (the operator's intent — "9am" — not UTC) plus a timezone offset. Cron expression generation is internal; the operator never sees it.
+2. **Schedule cadence (v1)**: three options — `daily-at-time`, `weekly-on-day-at-time`, `monthly-on-date-at-time`. The operator picks an hour/minute in **Central time (America/Chicago)** — the app's operating timezone per the founder decision 2026-06-01 (amendment below). "9am" means 9am Chicago, DST-aware. The scheduler converts the Chicago wall-clock time to the correct UTC instant for `next_fire_at`; cron generation is internal, the operator never sees it.
+
+   **Amendment 2026-06-01 — app operates on Central time.** The original draft interpreted the picked time as UTC, which fired schedules 5-6 hours off for the operator. Corrected: `src/lib/time/chicago.ts` is the single source of truth for Chicago wall-clock ↔ UTC conversion (Intl-based, DST-aware — CST/UTC-6 winter, CDT/UTC-5 summer). `nextFireAt` does calendar arithmetic in a floating wall-date and converts to the real UTC instant only at the boundary. The heartbeat's Deno duplicate carries the same logic. The `scheduled_skills.timezone` column now stores `America/Chicago`. Known limitation: within the 1-hour DST transition window (2am on the two changeover days), wall→UTC can be off by an hour for a time inside the skipped/repeated hour — an accepted v1 edge for business-hours scheduling.
 
 3. **Storage**: new `scheduled_skills` Supabase table, workspace-scoped via RLS. One row per `(workspace_id, skill_id)` pair — re-scheduling a skill updates the existing row. Schedules persist across sessions and devices.
 
