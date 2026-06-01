@@ -10,6 +10,7 @@ import {
     type BriefingPatternIndex
 } from "@/lib/observations/briefing-dedupe";
 import type { ObservationView } from "@/lib/observations/types";
+import { buildObservationHref } from "../lib/observation-routing";
 
 /**
  * WorkspaceReads — the Briefing room's view of workspace-scope
@@ -180,29 +181,51 @@ export function WorkspaceReads(): JSX.Element {
                         </span>
                     </p>
                     <ul class="bf-workspace__list">
-                        {g.rows.map((row) => (
-                            <li class="bf-workspace__row" key={row.id}>
-                                <p class="bf-workspace__row-text">
-                                    {row.observationText}
-                                </p>
-                                <div class="bf-workspace__row-meta">
-                                    <span class="bf-workspace__row-when">
-                                        {shortDate(row.writtenAt)}
-                                    </span>
-                                    <button
-                                        type="button"
-                                        class="bf-workspace__row-dismiss"
-                                        onClick={() => void onDismiss(row.id)}
-                                        disabled={dismissingSignal.value === row.id}
-                                        aria-label="Dismiss this read"
-                                    >
-                                        {dismissingSignal.value === row.id
-                                            ? "…"
-                                            : "Dismiss"}
-                                    </button>
-                                </div>
-                            </li>
-                        ))}
+                        {g.rows.map((row) => {
+                            const route = buildObservationHref(row);
+                            return (
+                                <li class="bf-workspace__row" key={row.id}>
+                                    {route ? (
+                                        <a
+                                            class="bf-workspace__row-link"
+                                            href={route.href}
+                                        >
+                                            <span class="bf-workspace__row-text">
+                                                {row.observationText}
+                                            </span>
+                                            <span
+                                                class="bf-workspace__row-go"
+                                                aria-hidden="true"
+                                            >
+                                                Open in {route.roomLabel} →
+                                            </span>
+                                        </a>
+                                    ) : (
+                                        <p class="bf-workspace__row-text">
+                                            {row.observationText}
+                                        </p>
+                                    )}
+                                    <div class="bf-workspace__row-meta">
+                                        <span class="bf-workspace__row-when">
+                                            {shortDate(row.writtenAt)}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            class="bf-workspace__row-dismiss"
+                                            onClick={() => void onDismiss(row.id)}
+                                            disabled={
+                                                dismissingSignal.value === row.id
+                                            }
+                                            aria-label="Dismiss this read"
+                                        >
+                                            {dismissingSignal.value === row.id
+                                                ? "…"
+                                                : "Dismiss"}
+                                        </button>
+                                    </div>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
             ))}
