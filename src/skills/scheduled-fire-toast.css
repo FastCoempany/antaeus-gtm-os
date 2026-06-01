@@ -1,8 +1,10 @@
 /* ────────────────────────────────────────────────────────────
- * ScheduledFireToast — Phase E destination-room toast (ADR-012)
+ * ScheduledFireToast — Phase E persistent skill-fire surface
+ * (ADR-012; 2026-06-01 amendment — never auto-dismiss, clickable)
  *
- * Renders on the room the operator was auto-navigated to. Bottom-
- * left so it doesn't collide with the BirdseyeFloat at bottom-right.
+ * Bottom-left so it doesn't collide with the BirdseyeFloat
+ * (bottom-right). Persists until the operator clicks the body
+ * (acts on the skill) or the × close (dismiss).
  * ─────────────────────────────────────────────────────────── */
 
 .ant-scheduled-toast {
@@ -10,11 +12,11 @@
     bottom: 18px;
     left: 18px;
     z-index: 997; /* below palette + birdseye */
-    width: 280px;
+    width: 300px;
     background: #0a1c40;
     color: #fff;
     border-radius: 8px;
-    padding: 12px 14px;
+    padding: 12px 14px 14px;
     box-shadow: 0 6px 20px rgba(10, 28, 64, 0.25);
     font-family: "Public Sans", -apple-system, system-ui, sans-serif;
     animation: scheduled-toast-in 220ms ease;
@@ -29,7 +31,7 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .ant-scheduled-toast__kicker {
@@ -54,8 +56,41 @@
 
 .ant-scheduled-toast__close:hover { color: #fff; }
 
-.ant-scheduled-toast__body {
+/* Clickable body — routes to the skill's destination on click. */
+.ant-scheduled-toast__body-btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    padding: 8px 10px;
     margin: 0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: background 120ms ease;
+}
+
+.ant-scheduled-toast__body-btn:hover,
+.ant-scheduled-toast__body-btn:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+.ant-scheduled-toast__label {
     font-size: 13px;
-    line-height: 1.45;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.ant-scheduled-toast__arrow {
+    color: #e6701e;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
 }
