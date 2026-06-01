@@ -716,6 +716,34 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Cloud-seed page — /cloud-seed/ boots cleanly with counts + actions", async ({
+        page
+    }) => {
+        // Internal tooling page that populates the operator's cloud
+        // workspace. Smoke asserts the page mounts, the count tiles
+        // render, and both action buttons are present.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/cloud-seed/", { waitUntil: "domcontentloaded" });
+        await page.waitForTimeout(300);
+
+        await expect(page.locator(".cs-kicker")).toContainText("CLOUD SEED");
+        await expect(page.locator(".cs-title")).toContainText(
+            "Populate your workspace"
+        );
+        await expect(page.locator(".cs-count")).toHaveCount(4);
+        await expect(page.locator(".cs-btn--ghost")).toContainText("Dry run");
+        await expect(page.locator(".cs-btn--primary")).toContainText(
+            "Populate workspace"
+        );
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Founding GTM share-link read-mode — /founding-gtm-share/ boots cleanly", async ({
         page
     }) => {

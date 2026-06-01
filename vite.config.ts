@@ -100,6 +100,12 @@ export default defineConfig({
                 // → dist/data-migration/ after build).
                 "data-migration": resolve(__dirname, "src/data-migration/index.html"),
 
+                // Cloud-seed page (internal tooling). Served at
+                // /cloud-seed/. Operator-clicked button populates the
+                // workspace with realistic deals/accounts/signals/
+                // proofs so the orchestration surfaces light up.
+                "cloud-seed": resolve(__dirname, "src/cloud-seed/index.html"),
+
                 // Phase 3 Wave 1 — Discovery Studio Preact rebuild. Served at
                 // /discovery-studio/ via the same flattenSrcPages plugin.
                 // Behind Posthog feature flag `room_discovery_v2`; legacy
