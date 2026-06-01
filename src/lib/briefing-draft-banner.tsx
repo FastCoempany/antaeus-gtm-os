@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { signal, effect, type Signal } from "@preact/signals";
 import { readContinuity } from "./continuity";
+import { BRIEFING_DRAFTS_KEY } from "./briefing-drafts";
 import "./briefing-draft-banner.css";
 
 /**
@@ -26,7 +27,7 @@ import "./briefing-draft-banner.css";
  * surface; per-room save mechanics land separately.
  */
 
-const DRAFTS_STORAGE_KEY = "gtmos_briefing_drafts_pending";
+const DRAFTS_STORAGE_KEY = BRIEFING_DRAFTS_KEY;
 
 interface DraftPayload {
     readonly label: string;

@@ -1693,3 +1693,187 @@ details[open] .bf-work__call-toggle-hint {
     margin: 0;
     max-width: 60ch;
 }
+
+/* ── Drafts tray ─────────────────────────────────────────────── */
+
+/*
+ * Surfaces between the stale banner and the lead when the operator
+ * has acknowledged Briefing drafts on destination rooms. Collapsed by
+ * default — clicks expand to show the breadcrumbs. Blue-ruled
+ * (information, not pressure).
+ */
+
+.bf-drafts {
+    margin: 0 0 24px;
+    border: 1px solid var(--bf-rule);
+    border-left: 3px solid var(--bf-blue);
+    border-radius: 2px;
+    background: var(--bf-card);
+}
+
+.bf-drafts__head {
+    appearance: none;
+    background: transparent;
+    border: none;
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 18px;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: var(--bf-ink);
+    border-radius: 2px;
+    transition: background 120ms ease;
+}
+
+.bf-drafts__head:hover,
+.bf-drafts__head:focus-visible {
+    background: rgba(37, 99, 235, 0.04);
+    outline: none;
+}
+
+.bf-drafts__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--bf-blue);
+}
+
+.bf-drafts__count {
+    font-size: 13px;
+    color: var(--bf-ink-soft);
+    flex: 1;
+}
+
+.bf-drafts__chev {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 16px;
+    color: var(--bf-ink-quiet);
+    line-height: 1;
+}
+
+.bf-drafts__body {
+    border-top: 1px solid var(--bf-rule-soft);
+    padding: 12px 18px 16px;
+}
+
+.bf-drafts__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bf-drafts__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--bf-rule-soft);
+}
+
+.bf-drafts__row:last-child {
+    border-bottom: none;
+}
+
+.bf-drafts__row-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.bf-drafts__row-label {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--bf-ink);
+    margin: 0 0 3px;
+}
+
+.bf-drafts__row-why {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--bf-ink-soft);
+    margin: 0 0 4px;
+}
+
+.bf-drafts__row-meta {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--bf-ink-quiet);
+    margin: 0;
+}
+
+.bf-drafts__row-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.bf-drafts__row-link {
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bf-blue);
+    text-decoration: none;
+    padding: 4px 10px;
+    background: rgba(37, 99, 235, 0.08);
+    border-radius: 4px;
+    transition: background 120ms ease;
+}
+
+.bf-drafts__row-link:hover,
+.bf-drafts__row-link:focus-visible {
+    background: rgba(37, 99, 235, 0.16);
+    outline: none;
+}
+
+.bf-drafts__row-clear {
+    appearance: none;
+    background: transparent;
+    border: none;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 11px;
+    color: var(--bf-ink-quiet);
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.bf-drafts__row-clear:hover,
+.bf-drafts__row-clear:focus-visible {
+    color: #9a1f1f;
+    outline: none;
+}
+
+.bf-drafts__foot {
+    margin-top: 12px;
+    text-align: right;
+}
+
+.bf-drafts__clear-all {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--bf-rule);
+    border-radius: 2px;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 11px;
+    color: var(--bf-ink-soft);
+    cursor: pointer;
+    padding: 4px 10px;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.bf-drafts__clear-all:hover,
+.bf-drafts__clear-all:focus-visible {
+    color: #9a1f1f;
+    border-color: #9a1f1f;
+    outline: none;
+}
