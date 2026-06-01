@@ -1,15 +1,12 @@
-/* Briefing room — B.0b scaffold.
+/* Briefing room.
  *
  * Bright field per canon Part II §1 + §4.21. The room is the
  * intelligence surface that reads from every other room's getState()
- * contract via the Recipe Layer pipeline; B.0b ships the structural
- * shell only. Patterns, periphery, contrarian readout, and audit
- * envelopes land in B.2 through B.6.
+ * contract via the Recipe Layer pipeline.
  *
  * Visual posture: severe + composed + authored. Deep navy ink on the
  * cool-bright base; orange reserved for the one dominant move per
- * surface (B.0b has none yet — empty state); serif headline carries
- * the room's argument.
+ * surface; serif headline carries the room's argument.
  *
  * Naming: .bf-* prefix matches the convention every other Phase 4 +
  * Phase 5 room follows.

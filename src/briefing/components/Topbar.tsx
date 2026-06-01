@@ -9,16 +9,14 @@ import type { JSX } from "preact";
  * set) against what the data is actually doing — and say so when they
  * stop agreeing. The headline names that, the subtitle expands it.
  *
- * No interactive controls in B.0b. The cmd+K palette opens via
- * RoomChrome (mounted in Briefing.tsx); the back-pill is part of the
- * same chrome strip. This topbar is presentational only.
+ * The cmd+K palette opens via RoomChrome (mounted in Briefing.tsx); the
+ * back-pill is part of the same chrome strip. This topbar is
+ * presentational only.
  */
 export function Topbar(): JSX.Element {
     return (
         <header class="bf-topbar">
-            <p class="bf-topbar__kicker">
-                Briefing · weekly read · scaffold
-            </p>
+            <p class="bf-topbar__kicker">Briefing · weekly read</p>
             <h1 class="bf-topbar__title">
                 What the system saw this week.
             </h1>
