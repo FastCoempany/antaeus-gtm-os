@@ -1359,6 +1359,65 @@ export type Database = {
           },
         ]
       }
+      outdoors_events: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          end_date: string | null
+          id: string
+          kind: string | null
+          name: string
+          notes: string | null
+          source_url: string | null
+          start_date: string | null
+          status: string
+          tags: string[]
+          updated_at: string
+          where_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          end_date?: string | null
+          id?: string
+          kind?: string | null
+          name: string
+          notes?: string | null
+          source_url?: string | null
+          start_date?: string | null
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          where_at?: string | null
+          workspace_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          end_date?: string | null
+          id?: string
+          kind?: string | null
+          name?: string
+          notes?: string | null
+          source_url?: string | null
+          start_date?: string | null
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          where_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "outdoors_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pipeline_settings: {
         Row: {
           acv: number | null

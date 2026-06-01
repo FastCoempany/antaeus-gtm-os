@@ -2163,3 +2163,52 @@ details[open] .bf-work__call-toggle-hint {
     color: var(--bf-blue);
     font-weight: 500;
 }
+
+/* ── Outdoors Events chip (ADR-015 §5) ───────────────────────── */
+
+/*
+ * Navigation chip on the World view routing to the standalone
+ * Outdoors Events room. Blue-ruled (informational, not pressure);
+ * a quiet cross-reference, not a dominant move.
+ */
+
+.bf-events-chip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0 0;
+    padding: 14px 18px;
+    background: var(--bf-card);
+    border: 1px solid var(--bf-rule);
+    border-left: 3px solid var(--bf-blue);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 120ms ease;
+}
+
+.bf-events-chip:hover,
+.bf-events-chip:focus-visible {
+    background: rgba(37, 99, 235, 0.04);
+    outline: none;
+}
+
+.bf-events-chip__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--bf-blue);
+    flex-shrink: 0;
+}
+
+.bf-events-chip__label {
+    font-size: 14px;
+    color: var(--bf-ink);
+    flex: 1;
+}
+
+.bf-events-chip__arrow {
+    color: var(--bf-blue);
+    font-weight: 700;
+    flex-shrink: 0;
+}

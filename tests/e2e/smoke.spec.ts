@@ -829,4 +829,34 @@ test.describe("room boot smoke tests", () => {
             `page errors during boot:\n${errors.join("\n")}`
         ).toEqual([]);
     });
+
+    test("Outdoors Events — /outdoors-events/ boots cleanly (ADR-015)", async ({
+        page
+    }) => {
+        // ADR-015 (2026-06-01): Live Instrument room for tracking offline
+        // gatherings. First-ship scope = single-table list + edit +
+        // status. Smoke test asserts: page loads without runtime errors,
+        // the RoomChrome kicker reads OUTDOORS EVENTS, the topbar +
+        // composer render, and the list surface attaches (empty state in
+        // CI since no Supabase session = events reader degrades to []).
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/outdoors-events/");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ant-room-chrome")).toBeAttached();
+        await expect(page.locator(".oe-topbar__kicker")).toContainText(
+            "OUTDOORS EVENTS"
+        );
+        // The composer's add-event call-to-action is always present.
+        await expect(page.locator(".oe-composer__open-btn")).toBeVisible();
+        // The list surface attaches (loading or empty in CI).
+        await expect(page.locator(".oe-list")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
 });

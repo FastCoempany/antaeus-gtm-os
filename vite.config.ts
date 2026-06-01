@@ -305,7 +305,16 @@ export default defineConfig({
                 // Briefing reads from it, not the other way around).
                 // B.0b ships the structural shell only; B.1+ wires the
                 // Recipe Layer pipeline that produces Patterns.
-                briefing: resolve(__dirname, "src/briefing/index.html")
+                briefing: resolve(__dirname, "src/briefing/index.html"),
+
+                // Outdoors Events — Live Instrument per ADR-015. Served
+                // at /outdoors-events/. Behind Posthog feature flag
+                // `room_outdoors_events_v1`. First-ship scope: single-
+                // table list + edit + status, no cross-room handoff.
+                "outdoors-events": resolve(
+                    __dirname,
+                    "src/outdoors-events/index.html"
+                )
             }
         }
     },
