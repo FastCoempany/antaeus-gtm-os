@@ -439,6 +439,38 @@ body {
     margin: 0;
 }
 
+.bf-move__dest--link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    margin: 0;
+    background: rgba(37, 99, 235, 0.06);
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.bf-move__dest--link:hover,
+.bf-move__dest--link:focus-visible {
+    background: rgba(230, 112, 30, 0.1);
+    color: var(--bf-orange);
+    outline: none;
+}
+
+.bf-move__dest-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+}
+
+.bf-move__dest-arrow {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
 /* ── Shared buttons ───────────────────────────────────────────── */
 
 .bf-btn {

@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { contrarianLoaded, contrarianPatterns } from "../state";
 import type { BriefingPattern, TargetPositionKind } from "../lib/patterns";
+import { MoveRow } from "./PatternCard";
 import { ShowYourWorkButton, ShowYourWorkPanel } from "./ShowYourWork";
 
 /**
@@ -75,17 +76,14 @@ function ContrarianCard({ pattern }: { pattern: BriefingPattern }): JSX.Element 
             {pattern.recommended_moves.length > 0 && (
                 <div class="bf-contra__moves">
                     <p class="bf-contra__moves-label">If you act on this</p>
-                    <ol class="bf-contra-moves">
+                    <ol class="bf-moves">
                         {pattern.recommended_moves.map((m, i) => (
-                            <li class="bf-contra-move" key={i}>
-                                <p class="bf-contra-move__label">{m.label}</p>
-                                {m.rationale && (
-                                    <p class="bf-contra-move__why">{m.rationale}</p>
-                                )}
-                                {m.destination && (
-                                    <p class="bf-contra-move__dest">{m.destination}</p>
-                                )}
-                            </li>
+                            <MoveRow
+                                move={m}
+                                patternId={pattern.id}
+                                fromSurface="contrarian"
+                                key={i}
+                            />
                         ))}
                     </ol>
                 </div>

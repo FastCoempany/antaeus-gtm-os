@@ -1,5 +1,10 @@
 import type { JSX } from "preact";
-import type { BriefingPattern, Trajectory } from "../lib/patterns";
+import type { BriefingPattern, RecommendedMove, Trajectory } from "../lib/patterns";
+import {
+    briefingDestinationHref,
+    parseDestination,
+    DESTINATION_ROOM_LABEL
+} from "../lib/destinations";
 import { MarksBar } from "./MarksBar";
 import { ShowYourWorkButton, ShowYourWorkPanel } from "./ShowYourWork";
 
@@ -35,6 +40,44 @@ function trajectoryLabel(t: Trajectory): string {
     if (t === "declining") return "Declining";
     if (t === "stable") return "Stable";
     return "New";
+}
+
+/**
+ * MoveRow — one recommended-move row. Renders the move as a clickable
+ * route to the destination room (carrying the draft payload via
+ * continuity params) when the destination is parseable + buildable.
+ * Falls back to plain text when the destination doesn't resolve
+ * (Asset Builder rooms, future tokens, malformed strings).
+ */
+export function MoveRow(props: {
+    readonly move: RecommendedMove;
+    readonly patternId: string;
+    readonly fromSurface: "patterns" | "contrarian" | "periphery";
+}): JSX.Element {
+    const { move, patternId, fromSurface } = props;
+    const token = move.destination ? parseDestination(move.destination) : null;
+    const href = token
+        ? briefingDestinationHref(token, move, { fromSurface, patternId })
+        : null;
+    const destLabel = token
+        ? `${DESTINATION_ROOM_LABEL[token.room]}${
+              token.section ? ` · ${token.section}` : ""
+          }`
+        : move.destination;
+    return (
+        <li class="bf-move">
+            <p class="bf-move__label">{move.label}</p>
+            {move.rationale && <p class="bf-move__why">{move.rationale}</p>}
+            {href ? (
+                <a class="bf-move__dest bf-move__dest--link" href={href}>
+                    <span class="bf-move__dest-label">{destLabel}</span>
+                    <span class="bf-move__dest-arrow" aria-hidden="true">→</span>
+                </a>
+            ) : destLabel ? (
+                <p class="bf-move__dest">{destLabel}</p>
+            ) : null}
+        </li>
+    );
 }
 
 export function PatternCard({ pattern }: { pattern: BriefingPattern }): JSX.Element {
@@ -73,13 +116,12 @@ export function PatternCard({ pattern }: { pattern: BriefingPattern }): JSX.Elem
                     <p class="bf-pattern__moves-label">Recommended moves</p>
                     <ol class="bf-moves">
                         {pattern.recommended_moves.map((m, i) => (
-                            <li class="bf-move" key={i}>
-                                <p class="bf-move__label">{m.label}</p>
-                                {m.rationale && <p class="bf-move__why">{m.rationale}</p>}
-                                {m.destination && (
-                                    <p class="bf-move__dest">{m.destination}</p>
-                                )}
-                            </li>
+                            <MoveRow
+                                move={m}
+                                patternId={pattern.id}
+                                fromSurface="patterns"
+                                key={i}
+                            />
                         ))}
                     </ol>
                 </div>
