@@ -3,6 +3,7 @@ import { RoomChrome } from "@/lib/room-chrome";
 import { Topbar } from "./components/Topbar";
 import { FirstVisitPrimer } from "./components/FirstVisitPrimer";
 import { StaleRunBanner } from "./components/StaleRunBanner";
+import { DraftsTray } from "./components/DraftsTray";
 import { BriefingLead } from "./components/BriefingLead";
 import { PatternList } from "./components/PatternList";
 import { ContrarianRail } from "./components/ContrarianRail";
@@ -48,6 +49,7 @@ export function Briefing(): JSX.Element {
                 <FirstVisitPrimer />
                 <Topbar />
                 <StaleRunBanner />
+                <DraftsTray />
                 <BriefingLead />
                 <PatternList />
                 <ContrarianRail />
