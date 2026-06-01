@@ -1,3 +1,4 @@
+import { createDataClient } from "@/lib/data-client";
 import { dispatchSkill } from "./dispatcher";
 import { findSkillById } from "./registry";
 import { markFireViewed, readNextPendingFire } from "./schedule-storage";
@@ -37,12 +38,48 @@ export interface AutoNavigateOptions {
     readonly currentPath?: string;
     /** Override window.location.assign for tests. */
     readonly navigate?: (url: string) => void;
+    /**
+     * Gate that resolves once the Supabase auth session is restored, so
+     * the RLS-gated pending-fire read doesn't fire unauthenticated.
+     * Test seam — defaults to polling currentUserId(). Without this,
+     * the handler runs at module-import time (top-level effect in
+     * ScheduledFireToast), races session restoration, and the query
+     * silently returns zero rows — the auto-navigate would work only
+     * when auth happened to be ready early.
+     */
+    readonly waitForAuthReady?: () => Promise<void>;
+}
+
+/** Poll currentUserId until a user is present, or give up after a cap. */
+async function defaultWaitForAuthReady(): Promise<void> {
+    const MAX_ATTEMPTS = 6;
+    const DELAY_MS = 700;
+    let data: ReturnType<typeof createDataClient>;
+    try {
+        data = createDataClient();
+    } catch {
+        return; // env not configured — proceed best-effort
+    }
+    for (let i = 0; i < MAX_ATTEMPTS; i++) {
+        try {
+            const uid = await data.currentUserId();
+            if (uid) return;
+        } catch {
+            // keep polling — session may still be restoring
+        }
+        await new Promise((r) => setTimeout(r, DELAY_MS));
+    }
+    // Gave up; proceed best-effort (read may return nothing, which is
+    // the same safe no-op as before).
 }
 
 export async function checkAndAutoNavigate(
     opts: AutoNavigateOptions = {}
 ): Promise<AutoNavigateResult> {
     try {
+        // Wait for auth before the RLS-gated read (see option docstring).
+        await (opts.waitForAuthReady ?? defaultWaitForAuthReady)();
+
         const pending = await readNextPendingFire();
         if (!pending) return { kind: "no-pending-fire" };
 
