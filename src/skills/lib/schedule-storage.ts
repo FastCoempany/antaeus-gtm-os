@@ -1,5 +1,6 @@
 import { createDataClient, type DataClient } from "@/lib/data-client";
 import { reportError } from "@/lib/observability";
+import { APP_TIMEZONE } from "@/lib/time/chicago";
 import {
     cadenceToJson,
     nextFireAt,
@@ -51,6 +52,7 @@ export async function upsertSchedule(
             await data.scheduledSkills.update(existing[0]!.id, {
                 cadence_kind: cadence.kind,
                 cadence_data: cadenceToJson(cadence) as never,
+                timezone: APP_TIMEZONE,
                 next_fire_at: next.toISOString()
             });
         } else {
@@ -58,6 +60,7 @@ export async function upsertSchedule(
                 skill_id: skillId,
                 cadence_kind: cadence.kind,
                 cadence_data: cadenceToJson(cadence) as never,
+                timezone: APP_TIMEZONE,
                 next_fire_at: next.toISOString()
             });
         }
