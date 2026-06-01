@@ -7,8 +7,9 @@ import "./schedule-modal.css";
 /**
  * ScheduleModal — Phase E operator-side scheduling UI (ADR-012).
  *
- * Mounts once per app (via RoomChrome → ScheduledFireToast wrapping)
- * and opens when the Cmd+K palette's ⏰ schedule button is clicked.
+ * Mounts once per app (via RoomChrome alongside ScheduleFloat) and
+ * opens when the Cmd+K palette's ⏰ schedule button is clicked, or
+ * when a row in the ScheduleFloat queue is clicked.
  * Form picks a cadence (daily / weekly / monthly) + time; on submit,
  * upserts the schedule and closes.
  *

@@ -34,8 +34,8 @@ export type AutoNavigateResult =
      * the operator is already on the target room, or the skill's
      * dispatch produced no destination (e.g. a filter-and-route skill
      * whose source has no rows). The toast MUST still show in-place so
-     * a consumed fire is never silent. The caller (ScheduledFireToast)
-     * renders the toast on the current page.
+     * a consumed fire is never silent. The caller (ScheduleFloat)
+     * surfaces the "just fired" row on the current page.
      */
     | { readonly kind: "toast-in-place"; readonly skillId: string }
     | { readonly kind: "navigated"; readonly skillId: string }
@@ -63,7 +63,7 @@ export interface AutoNavigateOptions {
      * the RLS-gated pending-fire read doesn't fire unauthenticated.
      * Test seam — defaults to polling currentUserId(). Without this,
      * the handler runs at module-import time (top-level effect in
-     * ScheduledFireToast), races session restoration, and the query
+     * ScheduleFloat), races session restoration, and the query
      * silently returns zero rows — the auto-navigate would work only
      * when auth happened to be ready early.
      */
