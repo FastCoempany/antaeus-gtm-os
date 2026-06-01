@@ -8,14 +8,19 @@ import {
 import type { ObservationView } from "@/lib/observations/types";
 
 function mkObs(over: Partial<ObservationView> = {}): ObservationView {
+    // Use `in` for nullable fields so an explicit null in `over` wins
+    // over the default. `??` would coerce null → default, breaking the
+    // tests that need to exercise the no-related-object path.
     return {
         id: over.id ?? "obs_x",
         workspaceId: over.workspaceId ?? "ws_x",
         writtenAt: over.writtenAt ?? "2026-06-01T12:00:00Z",
         observationText:
             over.observationText ?? "Acme has been stuck in evaluation for 12 days.",
-        relatedObjectType: over.relatedObjectType ?? "deal",
-        relatedObjectId: over.relatedObjectId ?? "deal_acme",
+        relatedObjectType:
+            "relatedObjectType" in over ? over.relatedObjectType! : "deal",
+        relatedObjectId:
+            "relatedObjectId" in over ? over.relatedObjectId! : "deal_acme",
         sourceGenerator: over.sourceGenerator ?? "deal_decay",
         confidence: over.confidence ?? "high",
         status: over.status ?? "active",
@@ -78,5 +83,45 @@ describe("WorkspaceReads", () => {
         ]);
         const { container } = render(<WorkspaceReads />);
         expect(container.textContent).toContain("some new generator");
+    });
+
+    it("routes deal observations to Deal Workspace via a link", () => {
+        __seedWorkspaceReadsForTests([
+            mkObs({
+                id: "1",
+                relatedObjectType: "deal",
+                relatedObjectId: "deal_acme",
+                sourceGenerator: "deal_decay",
+                observationText: "Acme stuck 12 days at evaluation."
+            })
+        ]);
+        const { container } = render(<WorkspaceReads />);
+        const link = container.querySelector(
+            ".bf-workspace__row-link"
+        ) as HTMLAnchorElement | null;
+        expect(link).not.toBeNull();
+        expect(link!.getAttribute("href")).toContain("/deal-workspace/");
+        expect(link!.getAttribute("href")).toContain("focusObject=deal_acme");
+        expect(link!.getAttribute("href")).toContain("fromMode=workspace-read");
+        expect(container.textContent).toContain("Open in Deal Workspace");
+    });
+
+    it("renders unroutable observations as plain text (no link)", () => {
+        __seedWorkspaceReadsForTests([
+            mkObs({
+                id: "1",
+                relatedObjectType: null,
+                relatedObjectId: null,
+                sourceGenerator: "discovery_rhythm",
+                observationText: "Fewer than one discovery session this week."
+            })
+        ]);
+        const { container } = render(<WorkspaceReads />);
+        expect(
+            container.querySelector(".bf-workspace__row-link")
+        ).toBeNull();
+        expect(container.textContent).toContain(
+            "Fewer than one discovery session this week."
+        );
     });
 });

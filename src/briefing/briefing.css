@@ -2121,3 +2121,45 @@ details[open] .bf-work__call-toggle-hint {
     opacity: 0.6;
     cursor: progress;
 }
+
+/* ── Workspace row link (observation routing) ───────────────── */
+
+/*
+ * When a workspace observation has a related object, the text +
+ * destination chip become a clickable link routing to that object
+ * in its home room. Observations without a related object (e.g.,
+ * discovery_rhythm) render as plain text.
+ */
+
+.bf-workspace__row-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-decoration: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 2px;
+    transition: color 120ms ease;
+}
+
+.bf-workspace__row-link:hover .bf-workspace__row-text,
+.bf-workspace__row-link:focus-visible .bf-workspace__row-text {
+    color: var(--bf-orange);
+}
+
+.bf-workspace__row-link:focus-visible {
+    outline: 2px solid var(--bf-orange);
+    outline-offset: 4px;
+}
+
+.bf-workspace__row-link .bf-workspace__row-text {
+    transition: color 120ms ease;
+}
+
+.bf-workspace__row-go {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--bf-blue);
+    font-weight: 500;
+}
