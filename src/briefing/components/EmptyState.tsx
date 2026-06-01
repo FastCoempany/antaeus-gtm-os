@@ -1,9 +1,11 @@
 import type { JSX } from "preact";
 
 /**
- * EmptyState — what the room shows when the pipeline hasn't run for
- * this workspace yet, or when the most recent run produced no
- * qualifying Patterns.
+ * EmptyState — what the room shows when no Patterns surfaced for the
+ * latest run. Covers two real conditions: the pipeline hasn't run for
+ * this workspace yet, AND the latest run produced nothing that
+ * cleared the quality gate. Voice stays condition-agnostic — the
+ * operator reads the same orienting copy either way.
  *
  * Canon Part II §6 — every surface must treat empty / sparse states
  * explicitly. The empty state should feel useful, directional, and
@@ -13,17 +15,18 @@ import type { JSX } from "preact";
 export function EmptyState(): JSX.Element {
     return (
         <section class="bf-empty" aria-labelledby="bf-empty-headline">
-            <p class="bf-empty__label">Nothing to read yet</p>
+            <p class="bf-empty__label">Nothing to read this week</p>
             <h2 id="bf-empty-headline" class="bf-empty__headline">
-                The pipeline hasn't run for this workspace yet.
+                The pipeline either hasn't fired yet, or it fired and
+                nothing cleared the quality gate.
             </h2>
             <p class="bf-empty__body">
-                It fires once a week, Monday at 10 AM ET. When it does,
-                this page will hold three to five reads of what's
-                happening in your space. What's moving, what's new on
-                the periphery you haven't named yet, and where your
-                stated assumptions are starting to disagree with the
-                data.
+                The cron runs Monday at 6 AM Central. When the run
+                produces something worth reading, this page will hold
+                three to five takes on what's actually moving — what's
+                new on the periphery you haven't named yet, and where
+                your stated assumptions are starting to disagree with
+                the data.
             </p>
             <p class="bf-empty__body">
                 Each read carries the evidence behind it. Open any one
