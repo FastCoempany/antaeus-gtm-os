@@ -1,0 +1,106 @@
+/* ────────────────────────────────────────────────────────────
+ * BriefingDraftBanner — drafted-from-briefing arrival surface
+ *
+ * Mounts via RoomChrome on every destination room. Renders only
+ * when the operator arrives with ?fromMode=briefing-draft. Bright
+ * canon palette per Part II §1.
+ * ─────────────────────────────────────────────────────────── */
+
+.bf-draft-banner {
+    margin: 16px 28px 0;
+    padding: 14px 18px 16px;
+    background: #fff;
+    border: 1px solid rgba(15, 31, 61, 0.12);
+    border-left: 4px solid #e6701e;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(15, 31, 61, 0.04);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    color: #0f1f3d;
+    max-width: 760px;
+}
+
+.bf-draft-banner__head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+}
+
+.bf-draft-banner__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #e6701e;
+    font-weight: 800;
+}
+
+.bf-draft-banner__section {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: rgba(15, 31, 61, 0.55);
+    text-transform: uppercase;
+}
+
+.bf-draft-banner__label {
+    margin: 4px 0 6px;
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: #0f1f3d;
+}
+
+.bf-draft-banner__rationale {
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(15, 31, 61, 0.7);
+}
+
+.bf-draft-banner__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.bf-draft-banner__btn {
+    appearance: none;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease, transform 80ms ease;
+}
+
+.bf-draft-banner__btn:active {
+    transform: translateY(1px);
+}
+
+.bf-draft-banner__btn--primary {
+    background: #e6701e;
+    color: #fff;
+}
+
+.bf-draft-banner__btn--primary:hover,
+.bf-draft-banner__btn--primary:focus-visible {
+    background: #d05e15;
+    outline: none;
+}
+
+.bf-draft-banner__btn--ghost {
+    background: transparent;
+    color: rgba(15, 31, 61, 0.65);
+    border: 1px solid rgba(15, 31, 61, 0.18);
+}
+
+.bf-draft-banner__btn--ghost:hover,
+.bf-draft-banner__btn--ghost:focus-visible {
+    background: rgba(15, 31, 61, 0.04);
+    color: #0f1f3d;
+    outline: none;
+}

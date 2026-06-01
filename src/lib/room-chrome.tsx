@@ -5,6 +5,7 @@ import { PaletteTrigger } from "./palette/PaletteTrigger";
 import { BirdseyeFloat } from "@/birdseye/BirdseyeFloat";
 import { ScheduleFloat } from "@/skills/ScheduleFloat";
 import { ScheduleModal } from "@/skills/ScheduleModal";
+import { BriefingDraftBanner } from "./briefing-draft-banner";
 import "./room-chrome.css";
 
 /**
@@ -66,6 +67,7 @@ export function RoomChrome(props: RoomChromeProps): JSX.Element {
             <BirdseyeFloat />
             <ScheduleFloat />
             <ScheduleModal />
+            <BriefingDraftBanner />
         </div>
     );
 }
