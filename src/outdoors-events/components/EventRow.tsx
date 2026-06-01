@@ -3,6 +3,7 @@ import { busyRowId, changeStatus, removeEvent } from "../state";
 import {
     OUTDOORS_EVENT_STATUSES,
     STATUS_LABEL,
+    TIER_LABEL,
     type OutdoorsEvent,
     type OutdoorsEventStatus
 } from "../lib/types";
@@ -43,7 +44,16 @@ export function EventRow({
             aria-busy={busy}
         >
             <div class="oe-row__main">
-                <p class="oe-row__name">{event.name}</p>
+                <div class="oe-row__title-row">
+                    {event.relevanceTier ? (
+                        <span
+                            class={`oe-row__tier oe-row__tier--${event.relevanceTier}`}
+                        >
+                            {TIER_LABEL[event.relevanceTier]}
+                        </span>
+                    ) : null}
+                    <p class="oe-row__name">{event.name}</p>
+                </div>
                 <p class="oe-row__meta">
                     {event.kind ? (
                         <span class="oe-row__kind">{event.kind}</span>
@@ -55,6 +65,9 @@ export function EventRow({
                         <span class="oe-row__when">{range}</span>
                     ) : null}
                 </p>
+                {event.relevanceReason ? (
+                    <p class="oe-row__reason">{event.relevanceReason}</p>
+                ) : null}
                 {event.notes ? (
                     <p class="oe-row__notes">{event.notes}</p>
                 ) : null}

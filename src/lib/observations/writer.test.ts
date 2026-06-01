@@ -110,6 +110,7 @@ function makeDataClient(opts: {
         scheduledSkills: {} as never,
         scheduledSkillFires: {} as never,
         outdoorsEvents: {} as never,
+        outdoorsEventsRuns: {} as never,
         workspaceSessions: {} as never,
         workspaceProfile: {} as never,
         observations,

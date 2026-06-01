@@ -535,3 +535,83 @@ body {
         justify-content: space-between;
     }
 }
+
+/* ── Reframe banner (ADR-016 transition) ─────────────────────── */
+
+.oe-reframe {
+    margin: 0 0 24px;
+    padding: 14px 18px 16px;
+    background: rgba(37, 99, 235, 0.06);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-left: 3px solid var(--oe-blue);
+    border-radius: 4px;
+}
+
+.oe-reframe__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--oe-blue);
+    margin: 0 0 6px;
+}
+
+.oe-reframe__body {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--oe-ink);
+    margin: 0;
+    max-width: 64ch;
+}
+
+/* ── Row: relevance tier chip + reason ───────────────────────── */
+
+.oe-row__title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.oe-row__tier {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.oe-row__tier--direct {
+    background: rgba(230, 112, 30, 0.12);
+    color: var(--oe-orange);
+}
+
+.oe-row__tier--adjacent {
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--oe-blue);
+}
+
+.oe-row__tier--indirect {
+    background: rgba(15, 31, 61, 0.08);
+    color: var(--oe-ink-soft);
+}
+
+.oe-row__title-row .oe-row__name {
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+}
+
+.oe-row__reason {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--oe-ink-soft);
+    margin: 4px 0 6px;
+    font-style: italic;
+    border-left: 2px solid var(--oe-rule);
+    padding-left: 10px;
+}

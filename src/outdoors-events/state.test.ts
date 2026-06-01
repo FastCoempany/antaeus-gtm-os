@@ -26,7 +26,11 @@ function mkEvent(over: Partial<OutdoorsEvent> = {}): OutdoorsEvent {
         notes: over.notes ?? null,
         sourceUrl: over.sourceUrl ?? null,
         createdAt: "2026-06-01T00:00:00Z",
-        updatedAt: "2026-06-01T00:00:00Z"
+        updatedAt: "2026-06-01T00:00:00Z",
+        relevanceTier: over.relevanceTier ?? null,
+        relevanceReason: over.relevanceReason ?? null,
+        discoveredAt: over.discoveredAt ?? null,
+        sourceKind: over.sourceKind ?? null
     };
 }
 
