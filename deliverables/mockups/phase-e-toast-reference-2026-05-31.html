@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase E toast — what it should look like</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f6f8fc;
+    font-family: "Public Sans", system-ui, sans-serif;
+    position: relative;
+}
+
+/* Fake room content so the toast has context */
+.room {
+    padding: 40px;
+}
+.room__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #0a1c40;
+    font-weight: 800;
+}
+.room__title {
+    font-family: "DM Serif Display", serif;
+    font-size: 40px;
+    color: #0a1c40;
+    margin: 8px 0 0;
+}
+.note {
+    margin-top: 24px;
+    max-width: 60ch;
+    color: rgba(10,28,64,0.6);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ─── The actual ScheduledFireToast (exact CSS from the component) ─── */
+.ant-scheduled-toast {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 997;
+    width: 280px;
+    background: #0a1c40;
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: 0 6px 20px rgba(10, 28, 64, 0.25);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    animation: scheduled-toast-in 220ms ease;
+}
+@keyframes scheduled-toast-in {
+    from { transform: translateY(8px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+.ant-scheduled-toast__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+.ant-scheduled-toast__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e6701e;
+    font-weight: 800;
+}
+.ant-scheduled-toast__close {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+}
+.ant-scheduled-toast__body {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+/* Birdseye icon for spatial reference (bottom-RIGHT) */
+.ant-birdseye__icon {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border: 1px solid rgba(10,28,64,0.15);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(10,28,64,0.08);
+    color: #0a1c40;
+}
+.label-tag {
+    position: fixed;
+    bottom: 64px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(10,28,64,0.5);
+}
+.label-left { left: 18px; }
+.label-right { right: 8px; }
+</style>
+</head>
+<body>
+
+<div class="room">
+    <p class="room__kicker">DEAL WORKSPACE · TOP 5 STALLED</p>
+    <h1 class="room__title">Your at-risk deals this week.</h1>
+    <p class="note">
+        This is the room you'd be auto-navigated to when a scheduled skill fires
+        (e.g. "What's at risk this week" set to weekly). The toast appears
+        bottom-left for ~6 seconds, then auto-dismisses. It confirms which skill
+        just ran — it's not a passive alert, it's an acknowledgement of the
+        auto-navigation that just happened.
+    </p>
+</div>
+
+<!-- The toast, exactly as the component renders it -->
+<div class="ant-scheduled-toast" role="status" aria-live="polite">
+    <div class="ant-scheduled-toast__head">
+        <span class="ant-scheduled-toast__kicker">SCHEDULED SKILL · JUST FIRED</span>
+        <button class="ant-scheduled-toast__close" aria-label="Dismiss">×</button>
+    </div>
+    <p class="ant-scheduled-toast__body">What's at risk this week</p>
+</div>
+
+<p class="label-tag label-left">↑ Phase E toast lives here (bottom-left)</p>
+
+<!-- Birdseye for spatial reference -->
+<div class="ant-birdseye__icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="1.6" fill="none">
+        <path d="M2 12 C 5 6 9 4 12 4 C 15 4 19 6 22 12 C 19 18 15 20 12 20 C 9 20 5 18 2 12 Z" />
+        <circle cx="12" cy="12" r="3" fill="currentColor" />
+    </svg>
+</div>
+<p class="label-tag label-right">Birdseye (Phase D) lives here →<br>(bottom-right, different feature)</p>
+
+</body>
+</html>
