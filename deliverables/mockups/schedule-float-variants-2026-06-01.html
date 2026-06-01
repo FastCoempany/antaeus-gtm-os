@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schedule float — variant mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+    --ink: #0a1c40;
+    --ink-70: rgba(10, 28, 64, 0.7);
+    --ink-40: rgba(10, 28, 64, 0.4);
+    --ink-15: rgba(10, 28, 64, 0.15);
+    --ink-08: rgba(10, 28, 64, 0.08);
+    --field: #f6f8fc;
+    --raised: #ffffff;
+    --cream: #fdf6e9;
+    --orange: #e6701e;
+    --green: #22c55e;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 48px 28px 96px;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.page { max-width: 1320px; margin: 0 auto; }
+.page-head { margin-bottom: 36px; }
+.page-kicker {
+    margin: 0 0 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--orange);
+}
+.page-title {
+    margin: 0 0 8px;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(28px, 3vw, 40px);
+    line-height: 1.1;
+}
+.page-lede {
+    margin: 0;
+    max-width: 80ch;
+    color: var(--ink-70);
+}
+.framing {
+    margin: 28px 0 24px;
+    padding: 18px 22px;
+    background: var(--cream);
+    border-left: 4px solid var(--orange);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--ink);
+}
+.framing strong { font-weight: 600; }
+
+.variants {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+.variant {
+    background: var(--raised);
+    border: 1px solid var(--ink-15);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.variant-head { padding: 18px 20px 12px; border-bottom: 1px solid var(--ink-08); }
+.variant-kicker {
+    margin: 0 0 4px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+}
+.variant-title {
+    margin: 0 0 6px;
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.15;
+}
+.variant-blurb { margin: 0; color: var(--ink-70); font-size: 13px; }
+
+/* mock room canvas */
+.variant-canvas {
+    position: relative;
+    height: 420px;
+    background: var(--field);
+    overflow: hidden;
+}
+.mock-chrome {
+    height: 34px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--ink-08);
+    background: var(--raised);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-40);
+}
+.mock-chrome .wordmark { color: var(--ink); font-weight: 800; }
+.mock-room {
+    padding: 14px;
+    height: calc(100% - 34px);
+    display: flex;
+    flex-direction: column;
+}
+.mock-topbar { margin-bottom: 12px; }
+.mock-topbar p { margin: 0 0 2px; font-size: 10px; color: var(--ink-40); font-family: "JetBrains Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+.mock-topbar h4 { margin: 0; font-family: "DM Serif Display", serif; font-size: 17px; }
+.mock-content {
+    flex: 1 1 auto;
+    border: 1px dashed var(--ink-15);
+    border-radius: 8px;
+    background: rgba(10, 28, 64, 0.02);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-40);
+    font-style: italic;
+    font-size: 11px;
+}
+
+/* birdseye stub for spatial context */
+.bs-icon {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    background: #fff;
+    border: 1px solid var(--ink-15);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    box-shadow: 0 2px 6px rgba(10, 28, 64, 0.08);
+}
+
+.variant-foot {
+    padding: 14px 20px 18px;
+    background: var(--cream);
+    border-top: 1px solid var(--ink-08);
+    font-size: 12px;
+    color: var(--ink-70);
+}
+.variant-foot strong { color: var(--ink); font-weight: 600; }
+.variant-foot ul { margin: 8px 0 0; padding-left: 18px; }
+.variant-foot li { margin-bottom: 4px; }
+
+/* ──────────────────────────────────────────────────────────────
+   VARIANT A — Persistent Pill
+   ────────────────────────────────────────────────────────────── */
+.va-pill {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 999px;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(10, 28, 64, 0.2);
+}
+.va-pill__clock { font-size: 13px; }
+.va-pill__count {
+    background: var(--orange);
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+}
+.va-pill__fire-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--orange);
+    border-radius: 999px;
+    box-shadow: 0 0 0 3px rgba(230, 112, 30, 0.25);
+}
+.va-tooltip {
+    position: absolute;
+    bottom: 60px;
+    left: 16px;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    width: 220px;
+    box-shadow: 0 6px 18px rgba(10, 28, 64, 0.22);
+}
+.va-tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 22px;
+    width: 10px;
+    height: 10px;
+    background: var(--ink);
+    transform: rotate(45deg);
+}
+.va-tooltip p { margin: 0; line-height: 1.4; }
+
+/* ──────────────────────────────────────────────────────────────
+   VARIANT B — Card with Live Feed
+   ────────────────────────────────────────────────────────────── */
+.vb-card {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    width: 280px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 12px;
+    box-shadow: 0 8px 22px rgba(10, 28, 64, 0.22);
+}
+.vb-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.vb-card__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 800;
+}
+.vb-card__gear {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 14px;
+}
+.vb-card__section {
+    margin-bottom: 10px;
+}
+.vb-card__section-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 4px;
+}
+.vb-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 12px;
+}
+.vb-row:first-of-type { border-top: none; }
+.vb-row__cadence {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+}
+.vb-row--fire {
+    color: #fff;
+    border-left: 2px solid var(--orange);
+    padding-left: 8px;
+    margin: 6px -6px;
+    background: rgba(230, 112, 30, 0.08);
+    border-radius: 4px;
+}
+.vb-row--fire strong { color: var(--orange); }
+
+/* ──────────────────────────────────────────────────────────────
+   VARIANT C — Birdseye Twin (clock float)
+   ────────────────────────────────────────────────────────────── */
+.vc-icon {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    width: 40px;
+    height: 40px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(10, 28, 64, 0.2);
+    position: absolute;
+}
+.vc-icon__count {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    background: var(--orange);
+    border-radius: 999px;
+    border: 2px solid var(--ink);
+    font-size: 9px;
+    font-family: "JetBrains Mono", monospace;
+    color: #fff;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.vc-drawer {
+    position: absolute;
+    bottom: 64px;
+    left: 14px;
+    width: 280px;
+    background: var(--raised);
+    border: 1px solid var(--ink-15);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 10px 26px rgba(10, 28, 64, 0.16);
+    font-size: 12px;
+}
+.vc-drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.vc-drawer__kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 800;
+}
+.vc-drawer__gear {
+    background: transparent;
+    border: none;
+    color: var(--ink-40);
+    cursor: pointer;
+    font-size: 14px;
+}
+.vc-section { margin-bottom: 10px; }
+.vc-section-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-40);
+    margin-bottom: 4px;
+}
+.vc-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-top: 1px solid var(--ink-08);
+}
+.vc-row:first-of-type { border-top: none; }
+.vc-row__cadence { color: var(--ink-40); font-size: 10px; font-family: "JetBrains Mono", monospace; }
+.vc-fire {
+    background: var(--cream);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-top: 6px;
+    border-left: 3px solid var(--orange);
+}
+.vc-fire__head {
+    color: var(--orange);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+.vc-fire__body { color: var(--ink); }
+</style>
+</head>
+<body>
+<main class="page">
+
+<header class="page-head">
+    <p class="page-kicker">SCHEDULE FLOAT · VARIANT MOCKUPS</p>
+    <h1 class="page-title">Reverse the model: always-on schedule surface</h1>
+    <p class="page-lede">
+        The transient toast — that fires once and vanishes — gets retired. In its place, an always-visible surface
+        in the bottom-left that's the operator's <strong>schedule control room</strong>: see what's queued, click to
+        adjust, hover for help, settings gear to dial down notifications. A fire becomes a secondary state of that
+        surface, not its purpose. Three variants below exercise different points on the design space — minimal pill,
+        rich card, Birdseye-style float.
+    </p>
+</header>
+
+<div class="framing">
+    <strong>Shared behavior across all three variants:</strong>
+    <ul style="margin: 6px 0 0; padding-left: 18px;">
+        <li>Mounted via <code>RoomChrome</code> like Birdseye — present on every room.</li>
+        <li>Hover surfaces a tooltip explaining what the operator can do.</li>
+        <li>Click routes to the schedule-management UI (extends the existing <code>ScheduleModal</code> into a full list view).</li>
+        <li>Settings gear lets the operator turn off notifications, help tips, or the surface itself.</li>
+        <li>Fires happen <em>through</em> the surface — visible as a state change (badge, row, color), not a separate transient toast.</li>
+    </ul>
+</div>
+
+<div class="variants">
+
+<!-- ───────── VARIANT A ───────── -->
+<div class="variant">
+    <div class="variant-head">
+        <p class="variant-kicker">VARIANT A</p>
+        <h3 class="variant-title">Persistent Pill</h3>
+        <p class="variant-blurb">
+            A small navy pill — quietly always there. Shows the count of scheduled skills + an orange dot when a fire is pending.
+            Hover → tooltip card explains what it is. Click → opens the full schedule-management drawer.
+        </p>
+    </div>
+    <div class="variant-canvas">
+        <div class="mock-chrome"><span class="wordmark">ANTAEUS</span><span>· DASHBOARD</span></div>
+        <div class="mock-room">
+            <div class="mock-topbar">
+                <p>DASHBOARD</p>
+                <h4>What is under the most pressure right now.</h4>
+            </div>
+            <div class="mock-content">[room content]</div>
+        </div>
+        <!-- Tooltip shown to demonstrate hover state -->
+        <div class="va-tooltip">
+            <p>3 scheduled skills · 1 just fired. Click to manage your schedules or jump to the fired skill.</p>
+        </div>
+        <div class="va-pill">
+            <span class="va-pill__clock">⏰</span>
+            <span>3 scheduled</span>
+            <span class="va-pill__count">1</span>
+            <span class="va-pill__fire-dot"></span>
+        </div>
+        <div class="bs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M2 12 C 5 6 9 4 12 4 C 15 4 19 6 22 12 C 19 18 15 20 12 20 C 9 20 5 18 2 12 Z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+        </div>
+    </div>
+    <div class="variant-foot">
+        <strong>Strengths:</strong> minimal real-estate cost, matches the calmness of canon Part II (recessive UI, ranked attention).
+        Spatially symmetric with Birdseye (both small + bottom corners).
+        <br><br>
+        <strong>Tradeoffs:</strong> needs a click to see schedules + recent fires. The orange dot signals "something happened" but doesn't show what
+        until expanded. Lower ambient information density than B.
+        <br><br>
+        <strong>Best fit if:</strong> you want the schedule machinery to <em>feel</em> like a quiet utility — present but never demanding attention.
+    </div>
+</div>
+
+<!-- ───────── VARIANT B ───────── -->
+<div class="variant">
+    <div class="variant-head">
+        <p class="variant-kicker">VARIANT B</p>
+        <h3 class="variant-title">Card with Live Feed</h3>
+        <p class="variant-blurb">
+            A navy card always visible. Top half: your active schedules at a glance. Bottom half: recent fires —
+            clickable to navigate to the skill's destination. Settings gear in the corner.
+        </p>
+    </div>
+    <div class="variant-canvas">
+        <div class="mock-chrome"><span class="wordmark">ANTAEUS</span><span>· DASHBOARD</span></div>
+        <div class="mock-room">
+            <div class="mock-topbar">
+                <p>DASHBOARD</p>
+                <h4>What is under the most pressure right now.</h4>
+            </div>
+            <div class="mock-content">[room content]</div>
+        </div>
+        <div class="vb-card">
+            <div class="vb-card__head">
+                <span class="vb-card__kicker">SCHEDULES</span>
+                <button class="vb-card__gear" aria-label="Settings">⚙</button>
+            </div>
+            <div class="vb-card__section">
+                <p class="vb-card__section-tag">Queued</p>
+                <div class="vb-row">
+                    <span>What's at risk this week</span>
+                    <span class="vb-row__cadence">Fri 9am</span>
+                </div>
+                <div class="vb-row">
+                    <span>Triage the week's reads</span>
+                    <span class="vb-row__cadence">Daily 8am</span>
+                </div>
+                <div class="vb-row">
+                    <span>Compose this week's outbound</span>
+                    <span class="vb-row__cadence">Mon 9am</span>
+                </div>
+            </div>
+            <div class="vb-card__section">
+                <p class="vb-card__section-tag">Just fired</p>
+                <div class="vb-row vb-row--fire">
+                    <span><strong>↗</strong>&nbsp; What's at risk this week</span>
+                    <span class="vb-row__cadence">14m</span>
+                </div>
+            </div>
+        </div>
+        <div class="bs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M2 12 C 5 6 9 4 12 4 C 15 4 19 6 22 12 C 19 18 15 20 12 20 C 9 20 5 18 2 12 Z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+        </div>
+    </div>
+    <div class="variant-foot">
+        <strong>Strengths:</strong> highest ambient information density — operator sees schedules + recent fires without clicking.
+        The "Just fired" section IS the new toast surface; clicking it routes to the skill's destination.
+        <br><br>
+        <strong>Tradeoffs:</strong> bigger real-estate footprint, ~280px tall. Visible on every room means every room loses bottom-left
+        space. Spatial asymmetry with Birdseye (one is a card, one is an icon).
+        <br><br>
+        <strong>Best fit if:</strong> you want scheduling to feel like a <em>live cockpit</em> — schedule state + fire activity always
+        legible at a glance. Closest to "always-show" the founder named.
+    </div>
+</div>
+
+<!-- ───────── VARIANT C ───────── -->
+<div class="variant">
+    <div class="variant-head">
+        <p class="variant-kicker">VARIANT C</p>
+        <h3 class="variant-title">Birdseye Twin</h3>
+        <p class="variant-blurb">
+            A clock icon bottom-left, matching the Birdseye eye bottom-right. Collapsed by default. Click → expands
+            to a drawer showing schedules + recent fires + settings. Same pattern as Birdseye for visual symmetry.
+        </p>
+    </div>
+    <div class="variant-canvas">
+        <div class="mock-chrome"><span class="wordmark">ANTAEUS</span><span>· DASHBOARD</span></div>
+        <div class="mock-room">
+            <div class="mock-topbar">
+                <p>DASHBOARD</p>
+                <h4>What is under the most pressure right now.</h4>
+            </div>
+            <div class="mock-content">[room content]</div>
+        </div>
+        <!-- Drawer rendered to show the expanded state -->
+        <div class="vc-drawer">
+            <div class="vc-drawer__head">
+                <span class="vc-drawer__kicker">SCHEDULES</span>
+                <button class="vc-drawer__gear" aria-label="Settings">⚙</button>
+            </div>
+            <div class="vc-section">
+                <p class="vc-section-tag">Queued</p>
+                <div class="vc-row">
+                    <span>What's at risk</span><span class="vc-row__cadence">Fri 9am</span>
+                </div>
+                <div class="vc-row">
+                    <span>Triage the week's reads</span><span class="vc-row__cadence">Daily 8am</span>
+                </div>
+                <div class="vc-row">
+                    <span>Compose outbound</span><span class="vc-row__cadence">Mon 9am</span>
+                </div>
+            </div>
+            <div class="vc-fire">
+                <p class="vc-fire__head">Just fired · 14m ago</p>
+                <p class="vc-fire__body">What's at risk this week — click to open</p>
+            </div>
+        </div>
+        <div class="vc-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="1.7" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 7 V 12 L 15.5 14"/></svg>
+            <span class="vc-icon__count">1</span>
+        </div>
+        <div class="bs-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M2 12 C 5 6 9 4 12 4 C 15 4 19 6 22 12 C 19 18 15 20 12 20 C 9 20 5 18 2 12 Z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+        </div>
+    </div>
+    <div class="variant-foot">
+        <strong>Strengths:</strong> visually symmetric with Birdseye (clock-icon-bottom-left mirrors eye-icon-bottom-right). Same
+        interaction grammar the operator has already learned. Zero real-estate when collapsed; rich when expanded.
+        <br><br>
+        <strong>Tradeoffs:</strong> needs a click to see anything. The count badge is the only ambient signal.
+        <br><br>
+        <strong>Best fit if:</strong> you want the orchestration layer to feel like a <em>pair of instruments</em> — Birdseye for "what
+        should I do," Schedule for "what's queued + fired." Consistent pattern, low cost.
+    </div>
+</div>
+
+</div>
+
+<div style="margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--ink-15); color: var(--ink-40); font-size: 12px;">
+    <p style="margin: 0;">
+        Generated 2026-06-01 as a design-review artifact. Reply with a variant letter (A/B/C) + any
+        deviations you want — I'll lock the ADR + start building.
+    </p>
+</div>
+
+</main>
+</body>
+</html>
