@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { RoomChrome } from "@/lib/room-chrome";
 import { Topbar } from "./components/Topbar";
+import { ReframeBanner } from "./components/ReframeBanner";
 import { EventComposer } from "./components/EventComposer";
 import { EventList } from "./components/EventList";
 
@@ -21,6 +22,7 @@ export function OutdoorsEvents(): JSX.Element {
             <RoomChrome kicker="OUTDOORS EVENTS" />
             <main id="oe-room-main" class="oe-room">
                 <Topbar />
+                <ReframeBanner />
                 <EventComposer />
                 <EventList />
             </main>

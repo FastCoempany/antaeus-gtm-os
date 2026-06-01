@@ -17,7 +17,11 @@ function mkEvent(over: Partial<OutdoorsEvent> = {}): OutdoorsEvent {
         notes: over.notes ?? null,
         sourceUrl: over.sourceUrl ?? null,
         createdAt: "2026-06-01T00:00:00Z",
-        updatedAt: "2026-06-01T00:00:00Z"
+        updatedAt: "2026-06-01T00:00:00Z",
+        relevanceTier: over.relevanceTier ?? null,
+        relevanceReason: over.relevanceReason ?? null,
+        discoveredAt: over.discoveredAt ?? null,
+        sourceKind: over.sourceKind ?? null
     };
 }
 
@@ -31,14 +35,15 @@ describe("EventList", () => {
         expect(container.querySelector(".oe-list--loading")).not.toBeNull();
     });
 
-    it("renders the directional empty state when nothing is tracked", () => {
+    it("renders the directional empty state when nothing is tracked (ADR-016 reframe)", () => {
         setEvents([]);
         const { container } = render(<EventList />);
         const empty = container.querySelector(".oe-list--empty");
         expect(empty).not.toBeNull();
         expect(empty!.textContent).toContain(
-            "Name the first gathering worth knowing about."
+            "The system will find events worth knowing about."
         );
+        expect(empty!.textContent).toContain("DISCOVERY HASN'T RUN YET");
     });
 
     it("groups events by status with the group label + count", () => {
@@ -53,6 +58,35 @@ describe("EventList", () => {
         expect(container.textContent).toContain("Planning");
         expect(container.textContent).toContain("RSA");
         expect(container.textContent).toContain("Local mixer");
+    });
+
+    it("renders the relevance tier chip + reason when present (ADR-016)", () => {
+        setEvents([
+            mkEvent({
+                id: "a",
+                name: "DEF CON",
+                relevanceTier: "direct",
+                relevanceReason: "Major security industry gathering — your category."
+            })
+        ]);
+        const { container } = render(<EventList />);
+        expect(container.querySelector(".oe-row__tier--direct")).not.toBeNull();
+        expect(container.textContent).toContain("Direct");
+        expect(container.textContent).toContain(
+            "Major security industry gathering"
+        );
+    });
+
+    it("renders no tier chip when relevance_tier is null (legacy/manual)", () => {
+        setEvents([
+            mkEvent({
+                id: "a",
+                name: "Local meetup",
+                relevanceTier: null
+            })
+        ]);
+        const { container } = render(<EventList />);
+        expect(container.querySelector(".oe-row__tier")).toBeNull();
     });
 
     it("renders event detail — kind, where, tags", () => {

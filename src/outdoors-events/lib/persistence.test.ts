@@ -3,8 +3,11 @@ import { joinTags, parseTags } from "./persistence";
 import {
     EMPTY_DRAFT,
     isOutdoorsEventStatus,
+    isOutdoorsEventTier,
     OUTDOORS_EVENT_STATUSES,
+    OUTDOORS_EVENT_TIERS,
     STATUS_LABEL,
+    TIER_LABEL,
     type OutdoorsEventStatus
 } from "./types";
 
@@ -48,5 +51,25 @@ describe("outdoors-events types + helpers", () => {
         expect(joinTags([])).toBe("");
         expect(joinTags(["a", "b"])).toBe("a, b");
         expect(parseTags(joinTags(["x", "y", "z"]))).toEqual(["x", "y", "z"]);
+    });
+
+    // ADR-016 — relevance tier helpers.
+
+    it("OUTDOORS_EVENT_TIERS covers direct/adjacent/indirect", () => {
+        expect(OUTDOORS_EVENT_TIERS).toEqual(["direct", "adjacent", "indirect"]);
+        for (const t of OUTDOORS_EVENT_TIERS) {
+            expect(TIER_LABEL[t]).toBeTruthy();
+        }
+    });
+
+    it("isOutdoorsEventTier accepts valid + rejects invalid", () => {
+        for (const t of OUTDOORS_EVENT_TIERS) {
+            expect(isOutdoorsEventTier(t)).toBe(true);
+        }
+        expect(isOutdoorsEventTier("not-a-tier")).toBe(false);
+        expect(isOutdoorsEventTier("")).toBe(false);
+        expect(isOutdoorsEventTier(null)).toBe(false);
+        expect(isOutdoorsEventTier(undefined)).toBe(false);
+        expect(isOutdoorsEventTier(0)).toBe(false);
     });
 });

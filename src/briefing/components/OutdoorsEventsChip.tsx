@@ -15,7 +15,7 @@ export function OutdoorsEventsChip(): JSX.Element {
         <a class="bf-events-chip" href="/outdoors-events/">
             <span class="bf-events-chip__kicker">ALSO OUT THERE</span>
             <span class="bf-events-chip__label">
-                Outdoors Events — where buyers are gathering
+                Outdoors Events — gatherings the system found for your category
             </span>
             <span class="bf-events-chip__arrow" aria-hidden="true">
                 →

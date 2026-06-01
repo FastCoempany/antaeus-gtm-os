@@ -1363,11 +1363,17 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          dedupe_key: string | null
+          discovered_at: string | null
           end_date: string | null
           id: string
           kind: string | null
           name: string
           notes: string | null
+          relevance_reason: string | null
+          relevance_tier: string | null
+          run_id: string | null
+          source_kind: string | null
           source_url: string | null
           start_date: string | null
           status: string
@@ -1379,11 +1385,17 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
+          dedupe_key?: string | null
+          discovered_at?: string | null
           end_date?: string | null
           id?: string
           kind?: string | null
           name: string
           notes?: string | null
+          relevance_reason?: string | null
+          relevance_tier?: string | null
+          run_id?: string | null
+          source_kind?: string | null
           source_url?: string | null
           start_date?: string | null
           status?: string
@@ -1395,11 +1407,17 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
+          dedupe_key?: string | null
+          discovered_at?: string | null
           end_date?: string | null
           id?: string
           kind?: string | null
           name?: string
           notes?: string | null
+          relevance_reason?: string | null
+          relevance_tier?: string | null
+          run_id?: string | null
+          source_kind?: string | null
           source_url?: string | null
           start_date?: string | null
           status?: string
@@ -1411,6 +1429,63 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "outdoors_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "outdoors_events_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "outdoors_events_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      outdoors_events_runs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_summary: string | null
+          events_written: number
+          id: string
+          inputs: Json | null
+          llm_call_count: number
+          started_at: string
+          status: string
+          total_cost_usd: number
+          workspace_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_summary?: string | null
+          events_written?: number
+          id?: string
+          inputs?: Json | null
+          llm_call_count?: number
+          started_at?: string
+          status?: string
+          total_cost_usd?: number
+          workspace_id?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_summary?: string | null
+          events_written?: number
+          id?: string
+          inputs?: Json | null
+          llm_call_count?: number
+          started_at?: string
+          status?: string
+          total_cost_usd?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "outdoors_events_runs_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"

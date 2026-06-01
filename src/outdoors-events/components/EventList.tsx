@@ -23,15 +23,16 @@ export function EventList(): JSX.Element {
     if (groups.length === 0) {
         return (
             <section class="oe-list oe-list--empty" aria-label="No events yet">
-                <p class="oe-list__empty-kicker">NOTHING TRACKED YET</p>
+                <p class="oe-list__empty-kicker">DISCOVERY HASN'T RUN YET</p>
                 <h2 class="oe-list__empty-headline">
-                    Name the first gathering worth knowing about.
+                    The system will find events worth knowing about.
                 </h2>
                 <p class="oe-list__empty-body">
-                    This is your radar for where buyers gather offline —
-                    conferences, mixers, trade shows, the local meetup
-                    your ICP persona never misses. Add what you're
-                    watching; set a status as plans firm up.
+                    Per ADR-016 the discovery pipeline reads your product
+                    category and surfaces conferences, mixers, and meetups
+                    that are direct, adjacent, or indirect to your space.
+                    Pipeline ships next; until then the composer above is
+                    a fallback if you want to add one by hand.
                 </p>
             </section>
         );

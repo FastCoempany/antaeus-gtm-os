@@ -11,9 +11,11 @@ import { createDataClient, type DataClient } from "@/lib/data-client";
 import { reportError } from "@/lib/observability";
 import {
     isOutdoorsEventStatus,
+    isOutdoorsEventTier,
     type OutdoorsEvent,
     type OutdoorsEventDraft,
-    type OutdoorsEventStatus
+    type OutdoorsEventStatus,
+    type OutdoorsEventTier
 } from "./types";
 
 type Row = {
@@ -29,12 +31,29 @@ type Row = {
     source_url: string | null;
     created_at: string;
     updated_at: string;
+    // ADR-016: nullable on legacy rows.
+    relevance_tier?: string | null;
+    relevance_reason?: string | null;
+    discovered_at?: string | null;
+    source_kind?: string | null;
 };
+
+function parseSourceKind(
+    v: string | null | undefined
+): "discovery_run" | "seed" | "manual" | null {
+    if (v === "discovery_run" || v === "seed" || v === "manual") return v;
+    return null;
+}
 
 function rowToEvent(row: Row): OutdoorsEvent {
     const status: OutdoorsEventStatus = isOutdoorsEventStatus(row.status)
         ? row.status
         : "watching";
+    const relevanceTier: OutdoorsEventTier | null = isOutdoorsEventTier(
+        row.relevance_tier ?? undefined
+    )
+        ? (row.relevance_tier as OutdoorsEventTier)
+        : null;
     return {
         id: row.id,
         name: row.name,
@@ -47,7 +66,11 @@ function rowToEvent(row: Row): OutdoorsEvent {
         notes: row.notes,
         sourceUrl: row.source_url,
         createdAt: row.created_at,
-        updatedAt: row.updated_at
+        updatedAt: row.updated_at,
+        relevanceTier,
+        relevanceReason: row.relevance_reason ?? null,
+        discoveredAt: row.discovered_at ?? null,
+        sourceKind: parseSourceKind(row.source_kind)
     };
 }
 
@@ -63,7 +86,10 @@ function draftToInsert(draft: OutdoorsEventDraft): Record<string, unknown> {
             .map((t) => t.trim())
             .filter((t) => t.length > 0),
         notes: draft.notes.trim() || null,
-        source_url: draft.sourceUrl.trim() || null
+        source_url: draft.sourceUrl.trim() || null,
+        // ADR-016: manual inserts are explicitly tagged so the
+        // discovery-driven UI can render them in their own slot.
+        source_kind: "manual"
     };
 }
 

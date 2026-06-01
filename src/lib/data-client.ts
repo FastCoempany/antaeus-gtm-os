@@ -127,6 +127,7 @@ export interface DataClient {
     scheduledSkillFires: NounAccessor<"scheduled_skill_fires">;
     // ─── Outdoors Events (ADR-015) ─────────────────────────────────
     outdoorsEvents: NounAccessor<"outdoors_events">;
+    outdoorsEventsRuns: NounAccessor<"outdoors_events_runs">;
     // ─── Phase A orchestration layer (ADR-004) ─────────────────────
     workspaceSessions: NounAccessor<"workspace_sessions">;
     observations: NounAccessor<"observations">;
@@ -204,6 +205,7 @@ export function createDataClient(
         scheduledSkills: makeNounAccessor(sb, "scheduled_skills"),
         scheduledSkillFires: makeNounAccessor(sb, "scheduled_skill_fires"),
         outdoorsEvents: makeNounAccessor(sb, "outdoors_events"),
+        outdoorsEventsRuns: makeNounAccessor(sb, "outdoors_events_runs"),
         // ─── Phase A orchestration layer (ADR-004) ─────────────────
         workspaceProfile: makeNounAccessor(sb, "workspace_profile"),
         workspaceSessions: makeNounAccessor(sb, "workspace_sessions"),
@@ -252,6 +254,7 @@ function makeDemoLocalDataClient(): DataClient {
         scheduledSkills: makeDemoLocalNounAccessor("scheduled_skills"),
         scheduledSkillFires: makeDemoLocalNounAccessor("scheduled_skill_fires"),
         outdoorsEvents: makeDemoLocalNounAccessor("outdoors_events"),
+        outdoorsEventsRuns: makeDemoLocalNounAccessor("outdoors_events_runs"),
         workspaceProfile: makeDemoLocalNounAccessor("workspace_profile"),
         workspaceSessions: makeDemoLocalNounAccessor("workspace_sessions"),
         observations: makeDemoLocalNounAccessor("observations"),
