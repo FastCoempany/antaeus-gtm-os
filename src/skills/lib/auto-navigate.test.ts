@@ -30,7 +30,7 @@ afterEach(() => {
 describe("checkAndAutoNavigate", () => {
     it("no-op when no pending fire", async () => {
         (storage.readNextPendingFire as ReturnType<typeof vi.fn>).mockResolvedValue(null);
-        const r = await checkAndAutoNavigate();
+        const r = await checkAndAutoNavigate({ waitForAuthReady: async () => {} });
         expect(r.kind).toBe("no-pending-fire");
     });
 
@@ -42,7 +42,7 @@ describe("checkAndAutoNavigate", () => {
         });
         (registry.findSkillById as ReturnType<typeof vi.fn>).mockReturnValue(null);
 
-        const r = await checkAndAutoNavigate();
+        const r = await checkAndAutoNavigate({ waitForAuthReady: async () => {} });
         expect(r.kind).toBe("skill-not-found");
         expect(storage.markFireViewed).toHaveBeenCalledWith("fire-1");
     });
@@ -64,6 +64,7 @@ describe("checkAndAutoNavigate", () => {
 
         const navigate = vi.fn();
         const r = await checkAndAutoNavigate({
+            waitForAuthReady: async () => {},
             currentPath: "/dashboard/",
             navigate
         });
@@ -90,6 +91,7 @@ describe("checkAndAutoNavigate", () => {
 
         const navigate = vi.fn();
         const r = await checkAndAutoNavigate({
+            waitForAuthReady: async () => {},
             currentPath: "/dashboard/",
             navigate
         });
@@ -104,10 +106,30 @@ describe("checkAndAutoNavigate", () => {
         (storage.readNextPendingFire as ReturnType<typeof vi.fn>).mockRejectedValue(
             new Error("network")
         );
-        const r = await checkAndAutoNavigate();
+        const r = await checkAndAutoNavigate({ waitForAuthReady: async () => {} });
         expect(r.kind).toBe("error");
         if (r.kind !== "error") return;
         expect(r.error).toBe("network");
+    });
+
+    it("awaits the auth-ready gate BEFORE reading pending fires", async () => {
+        // Regression for the Phase E auth-race: the RLS-gated read must
+        // not run until auth is ready. Assert ordering by recording when
+        // each step runs.
+        const order: string[] = [];
+        (storage.readNextPendingFire as ReturnType<typeof vi.fn>).mockImplementation(
+            async () => {
+                order.push("read");
+                return null;
+            }
+        );
+        await checkAndAutoNavigate({
+            waitForAuthReady: async () => {
+                await new Promise((r) => setTimeout(r, 10));
+                order.push("auth-ready");
+            }
+        });
+        expect(order).toEqual(["auth-ready", "read"]);
     });
 });
 
