@@ -4,6 +4,8 @@ import { Topbar } from "./components/Topbar";
 import { FirstVisitPrimer } from "./components/FirstVisitPrimer";
 import { StaleRunBanner } from "./components/StaleRunBanner";
 import { DraftsTray } from "./components/DraftsTray";
+import { ViewToggle, activeBriefingView } from "./components/ViewToggle";
+import { WorkspaceReads } from "./components/WorkspaceReads";
 import { BriefingLead } from "./components/BriefingLead";
 import { PatternList } from "./components/PatternList";
 import { ContrarianRail } from "./components/ContrarianRail";
@@ -13,7 +15,7 @@ import { BriefingFooter } from "./components/BriefingFooter";
 
 /**
  * Briefing — root component for the intelligence-surface room
- * specified in canon §4.21 + ADR-006.
+ * specified in canon §4.21 + ADR-006 + ADR-014.
  *
  * Build phases shipped (per `deliverables/specs/briefing/01-build-phase-plan.md`):
  *
@@ -30,12 +32,13 @@ import { BriefingFooter } from "./components/BriefingFooter";
  *   B.9b — Behavioral Feedback (Used / Met / Noise marks → weight tuning)
  *   B.9c — Polish (skip-link, focus-visible, stale-text cleanup)
  *
- *   Production cron — pg_cron weekly, Monday 14:00 UTC
- *   Auto-deploy chain — apply-supabase-migrations + deploy-supabase-functions
- *                       + verify-briefing-pipeline. Every merge to main with
- *                       function or migration changes lands end-to-end.
+ *   Production cron — pg_cron weekly, Monday 14:00 UTC (World view)
+ *   Workspace view  — reads the heartbeat-driven `observations` ledger
+ *                     (ADR-009 stream), surfaces every 30 minutes
+ *   ADR-014        — daily two-stream surface: Workspace + World toggle
  */
 export function Briefing(): JSX.Element {
+    const view = activeBriefingView();
     return (
         <>
             {/* Skip-link for keyboard + screen-reader operators. Hidden
@@ -50,11 +53,21 @@ export function Briefing(): JSX.Element {
                 <Topbar />
                 <StaleRunBanner />
                 <DraftsTray />
-                <BriefingLead />
-                <PatternList />
-                <ContrarianRail />
-                <PeripheryRail />
-                <WatchList />
+                <ViewToggle />
+                {view === "workspace" ? (
+                    <>
+                        <WorkspaceReads />
+                        <WatchList />
+                    </>
+                ) : (
+                    <>
+                        <BriefingLead />
+                        <PatternList />
+                        <ContrarianRail />
+                        <PeripheryRail />
+                        <WatchList />
+                    </>
+                )}
                 <BriefingFooter />
             </main>
         </>

@@ -21,7 +21,10 @@ import { signal, type Signal } from "@preact/signals";
  * the visible state.
  */
 
-const STORAGE_KEY = "gtmos_briefing_primer_seen_v1";
+// v2 bump: ADR-014 added the Workspace / World framing. Operators who
+// dismissed the v1 primer should see the v2 primer once so they discover
+// the new view toggle.
+const STORAGE_KEY = "gtmos_briefing_primer_seen_v2";
 
 // Module-level signal — null = "not yet checked storage."
 // Renders read storage on first access so test resets work cleanly.
@@ -72,35 +75,43 @@ export function FirstVisitPrimer(): JSX.Element | null {
                 </button>
             </div>
             <h2 class="bf-primer__headline">
-                This room is what the system saw, not what you told it.
+                This room is what the system saw — in your work, and in
+                your market.
             </h2>
             <p class="bf-primer__body">
-                Every Monday at 6 AM Central the pipeline reads the week's
-                signals against the accounts, deals, and watchlist entries
-                you've named. Then it tells you what's actually moving —
-                ranked, with the evidence behind each read and a
-                recommended next move that routes to the room where you'd
-                act on it.
+                Open it daily. The toggle at the top picks between two
+                views: <strong>Workspace</strong> (what's moving in your
+                own deals, signals, proofs — refreshed every 30 minutes)
+                and <strong>World</strong> (what's moving in the market
+                you sell into — refreshed Monday mornings).
             </p>
             <ul class="bf-primer__list">
                 <li>
-                    <strong>Patterns</strong> — the main reads. Click any
-                    destination chip to draft a move in the destination
-                    room. "Show the work" expands the audit trail.
+                    <strong>Workspace</strong> — heartbeat-fresh reads
+                    about your deals going stale, accounts going quiet,
+                    proofs past their readout. Dismiss what doesn't matter;
+                    the rest tells you where to look first.
                 </li>
                 <li>
-                    <strong>Where the data disagrees</strong> — the system
-                    challenging an assumption you've stated. Quiet most
-                    weeks. Loud when the evidence stops matching.
+                    <strong>World · Patterns</strong> — synthesized reads
+                    of what's moving in your market. Click any destination
+                    chip to draft a move in the destination room. "Show
+                    the work" expands the audit trail.
                 </li>
                 <li>
-                    <strong>Consider watching</strong> — companies the data
-                    kept mentioning alongside the ones you've named but
-                    that aren't on your watchlist yet.
+                    <strong>World · Where the data disagrees</strong> —
+                    the system challenging an assumption you've stated.
+                    Quiet most weeks. Loud when the evidence stops matching.
                 </li>
                 <li>
-                    <strong>Watch list</strong> — your standing orders.
-                    Arm a trigger and the system tells you when it fires.
+                    <strong>World · Consider watching</strong> — companies
+                    the data kept mentioning alongside the ones you've
+                    named but that aren't on your watchlist yet.
+                </li>
+                <li>
+                    <strong>Watch list</strong> — your standing orders,
+                    shared across both views. Arm a trigger and the system
+                    tells you when it fires.
                 </li>
             </ul>
             <button

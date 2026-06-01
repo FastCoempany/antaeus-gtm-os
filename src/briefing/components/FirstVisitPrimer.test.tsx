@@ -5,7 +5,7 @@ import {
     __resetFirstVisitPrimerForTests
 } from "./FirstVisitPrimer";
 
-const KEY = "gtmos_briefing_primer_seen_v1";
+const KEY = "gtmos_briefing_primer_seen_v2";
 
 describe("FirstVisitPrimer", () => {
     beforeEach(() => {

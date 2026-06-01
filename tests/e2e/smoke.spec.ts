@@ -791,17 +791,19 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
-    test("Briefing B.0b — /briefing/ scaffold boots cleanly", async ({
+    test("Briefing — /briefing/ boots cleanly with view toggle (ADR-014)", async ({
         page
     }) => {
-        // The new Briefing room (canon §4.21 + ADR-006). B.0b ships
-        // the structural shell only — RoomChrome + topbar with the
-        // thesis headline + empty-state card. Patterns + periphery +
-        // contrarian readout land in B.2 through B.5.
+        // Per ADR-014 (2026-06-01) the Briefing room is a daily two-stream
+        // surface. The ViewToggle below the topbar switches between
+        // Workspace (heartbeat-driven observations, default) and World
+        // (the weekly Recipe-Layer Patterns surface).
         //
         // Smoke test asserts: page loads without runtime errors, the
-        // RoomChrome kicker reads BRIEFING, topbar headline renders,
-        // and the empty-state card attaches.
+        // RoomChrome kicker reads BRIEFING, topbar renders, the view
+        // toggle is attached, and the default Workspace view shows
+        // its empty state (no Supabase session in CI = the observations
+        // reader degrades to [] = empty-state copy).
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
@@ -815,7 +817,12 @@ test.describe("room boot smoke tests", () => {
         await expect(page.locator(".bf-topbar__title")).toContainText(
             "What the system saw this week."
         );
-        await expect(page.locator(".bf-empty")).toBeAttached();
+        // ADR-014 view toggle is mounted on every render.
+        await expect(page.locator(".bf-view-toggle")).toBeAttached();
+        // Default view is Workspace — the workspace surface attaches.
+        // The exact substate (loading / empty / error / list) depends on
+        // whether observations resolve in CI; assert at the root class.
+        await expect(page.locator(".bf-workspace")).toBeAttached();
 
         expect(
             errors,
