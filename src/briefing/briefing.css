@@ -1536,3 +1536,160 @@ details[open] .bf-work__call-toggle-hint {
     color: #9a1f1f;
     border-color: #9a1f1f;
 }
+
+/* ── First-visit primer ──────────────────────────────────────── */
+
+/*
+ * Surfaces above the topbar on first visit only. Dismissable; the
+ * dismissal flag persists in localStorage. Cream-tinted card with a
+ * blue left-rule — distinct from the orange-ruled BriefingLead (which
+ * is the live read) so the operator's eye doesn't read this as the
+ * week's news.
+ */
+
+.bf-primer {
+    margin: 0 0 28px;
+    padding: 22px 28px 24px;
+    background: rgba(37, 99, 235, 0.04);
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-left: 4px solid var(--bf-blue);
+    border-radius: 2px;
+}
+
+.bf-primer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.bf-primer__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--bf-blue);
+    margin: 0;
+}
+
+.bf-primer__close {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--bf-ink-quiet);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: 2px;
+}
+
+.bf-primer__close:hover,
+.bf-primer__close:focus-visible {
+    color: var(--bf-ink);
+    background: rgba(15, 31, 61, 0.06);
+    outline: none;
+}
+
+.bf-primer__headline {
+    font-family: "DM Serif Display", "Times New Roman", serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.25;
+    color: var(--bf-ink);
+    margin: 0 0 12px;
+    max-width: 32ch;
+}
+
+.bf-primer__body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--bf-ink-soft);
+    margin: 0 0 14px;
+    max-width: 62ch;
+}
+
+.bf-primer__list {
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bf-primer__list li {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--bf-ink-soft);
+    padding-left: 14px;
+    position: relative;
+}
+
+.bf-primer__list li::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    color: var(--bf-blue);
+    font-weight: 700;
+}
+
+.bf-primer__list strong {
+    color: var(--bf-ink);
+    font-weight: 600;
+}
+
+.bf-primer__ack {
+    appearance: none;
+    background: var(--bf-ink);
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: background 120ms ease;
+}
+
+.bf-primer__ack:hover,
+.bf-primer__ack:focus-visible {
+    background: var(--bf-orange);
+    outline: none;
+}
+
+/* ── Stale-run banner ────────────────────────────────────────── */
+
+/*
+ * Surfaces between the topbar and the lead when the most recent
+ * pipeline run is older than 8 days. Amber-toned (canon Part II §3
+ * — caution / needs sharpening). Quiet at the read level; loud
+ * enough to signal "the system didn't run this week, not that
+ * nothing happened."
+ */
+
+.bf-stale-banner {
+    margin: 0 0 24px;
+    padding: 12px 18px 14px;
+    background: rgba(245, 158, 11, 0.08);
+    border-left: 3px solid #f59e0b;
+    border-radius: 2px;
+}
+
+.bf-stale-banner__kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #92520c;
+    margin: 0 0 4px;
+}
+
+.bf-stale-banner__body {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--bf-ink);
+    margin: 0;
+    max-width: 60ch;
+}

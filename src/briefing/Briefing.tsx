@@ -1,6 +1,8 @@
 import type { JSX } from "preact";
 import { RoomChrome } from "@/lib/room-chrome";
 import { Topbar } from "./components/Topbar";
+import { FirstVisitPrimer } from "./components/FirstVisitPrimer";
+import { StaleRunBanner } from "./components/StaleRunBanner";
 import { BriefingLead } from "./components/BriefingLead";
 import { PatternList } from "./components/PatternList";
 import { ContrarianRail } from "./components/ContrarianRail";
@@ -43,7 +45,9 @@ export function Briefing(): JSX.Element {
             </a>
             <RoomChrome kicker="BRIEFING" />
             <main id="bf-room-main" class="bf-room">
+                <FirstVisitPrimer />
                 <Topbar />
+                <StaleRunBanner />
                 <BriefingLead />
                 <PatternList />
                 <ContrarianRail />
