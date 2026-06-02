@@ -76,6 +76,8 @@ interface RegisteredGenerator {
 // in src/lib/observations/generators/*.
 
 import { PHASE_B_GENERATORS } from "./generators.ts";
+import { PHASE_F_GENERATORS } from "./phase-f-generators.ts";
+import { writePhaseFCandidates } from "./phase-f-writer.ts";
 
 const REGISTERED_GENERATORS: ReadonlyArray<RegisteredGenerator> =
     PHASE_B_GENERATORS;
@@ -422,6 +424,10 @@ async function runHeartbeat(sb: SupabaseClient): Promise<HeartbeatReport> {
             totals.deduped += result.deduped;
             totals.errored += result.errored;
         }
+
+        // ── Phase F (ADR-017) — proposal-detection lap ─────────────
+        await runPhaseFForWorkspace(sb, workspace.id, ctx.now);
+
         perWorkspace.push({ workspaceId: workspace.id, runs });
     }
 
@@ -440,6 +446,52 @@ async function runHeartbeat(sb: SupabaseClient): Promise<HeartbeatReport> {
         totals,
         perWorkspace
     };
+}
+
+// ─── Phase F (ADR-017) — proposal detection lap ──────────────────
+
+/**
+ * Run every registered Phase F generator for one workspace and write
+ * the surviving candidates to proposed_modifications. Each generator
+ * is sandboxed in its own try/catch — a failing generator does not
+ * abort the lap, which mirrors how the Phase B generators are run.
+ *
+ * Errors are logged + swallowed; the heartbeat returns ok=true for
+ * the overall tick regardless. PR 3 (Briefing Suggestions UI) reads
+ * the resulting rows; PR 4 (apply logic) consumes the operator's
+ * decision when they accept/dismiss.
+ */
+async function runPhaseFForWorkspace(
+    sb: SupabaseClient,
+    workspaceId: string,
+    nowIso: string
+): Promise<void> {
+    for (const generator of PHASE_F_GENERATORS) {
+        try {
+            const candidates = await generator.run(
+                { workspaceId, nowIso },
+                sb
+            );
+            const outcome = await writePhaseFCandidates(
+                sb,
+                workspaceId,
+                generator.id,
+                candidates,
+                nowIso
+            );
+            if (outcome.errors.length > 0) {
+                console.warn(
+                    `[heartbeat] phase-f ${generator.id} (${workspaceId}) errors:`,
+                    outcome.errors
+                );
+            }
+        } catch (err) {
+            console.error(
+                `[heartbeat] phase-f ${generator.id} (${workspaceId}) crashed:`,
+                err
+            );
+        }
+    }
 }
 
 // ─── Phase E (ADR-012) — scheduled skill firing ──────────────────
