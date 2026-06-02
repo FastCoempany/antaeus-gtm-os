@@ -178,6 +178,198 @@ export async function loadCloudRowCounts(
     }
 }
 
+// ─── Cloud-export (Trust Annex: "export all my data") ────────────────
+
+export interface CloudExportTableErr {
+    readonly table: string;
+    readonly reason: string;
+}
+
+export interface CloudExportSnapshot {
+    readonly schemaVersion: 1;
+    readonly source: "antaeus-cloud-export-v1";
+    readonly capturedAt: string;
+    readonly workspaceId: string | null;
+    readonly userEmail: string | null;
+    readonly tables: Readonly<Record<string, ReadonlyArray<unknown>>>;
+    readonly perTableCount: Readonly<Record<string, number>>;
+    readonly errors: ReadonlyArray<CloudExportTableErr>;
+    readonly totalRows: number;
+}
+
+/**
+ * Pull every row from every workspace-scoped table the operator
+ * authored content into, plus the commercial-identity surfaces. The
+ * scope mirrors `deleteCloudWorkspace` (so what you can export is
+ * what you can delete), with two intentional additions:
+ *
+ *   - outdoors_events — added 2026-06-02 per ADR-016. Not yet in the
+ *     delete scope; if it joins later, the export and delete shapes
+ *     stay aligned.
+ *   - workspace_profile — commercial identity (product_category,
+ *     what_we_sell, value_prop). Operator-authored; the operator
+ *     wants it in their portable copy.
+ *
+ * RLS scopes every read to the operator's workspace, so this never
+ * leaks rows from other workspaces.
+ *
+ * Defensive: every table is fetched in its own try/catch. A single
+ * table failing doesn't abort the export — that table just lands in
+ * the errors array with an empty rows entry, and the rest of the
+ * snapshot is preserved.
+ */
+export async function exportCloudWorkspace(
+    factory: () => DataClient
+): Promise<CloudExportSnapshot> {
+    let client: DataClient;
+    try {
+        client = factory();
+    } catch (err) {
+        reportError(err, { op: "settings.exportCloudWorkspace.factory" });
+        return {
+            schemaVersion: 1,
+            source: "antaeus-cloud-export-v1",
+            capturedAt: new Date().toISOString(),
+            workspaceId: null,
+            userEmail: null,
+            tables: {},
+            perTableCount: {},
+            errors: [
+                {
+                    table: "<client>",
+                    reason: err instanceof Error ? err.message : String(err)
+                }
+            ],
+            totalRows: 0
+        };
+    }
+
+    // Workspace + user metadata for the export envelope. Both reads
+    // are defensive — a failure on either leaves the field null but
+    // does not abort the export.
+    let workspaceId: string | null = null;
+    let userEmail: string | null = null;
+    try {
+        const ws = await client.currentWorkspace();
+        workspaceId = ws?.id ?? null;
+    } catch (err) {
+        reportError(err, { op: "settings.exportCloudWorkspace.workspace" });
+    }
+    try {
+        const userId = await client.currentUserId();
+        if (userId) {
+            // The data-client exposes currentUserId, but not email.
+            // Read email defensively off the raw supabase client.
+            const auth = (client.client as { auth?: unknown }).auth;
+            if (
+                auth &&
+                typeof auth === "object" &&
+                "getUser" in auth &&
+                typeof (auth as { getUser: unknown }).getUser === "function"
+            ) {
+                const res = await (
+                    auth as { getUser: () => Promise<{ data: { user: { email?: string | null } | null } }> }
+                ).getUser();
+                userEmail = res.data.user?.email ?? null;
+            }
+        }
+    } catch (err) {
+        reportError(err, { op: "settings.exportCloudWorkspace.user" });
+    }
+
+    const tableReaders: Array<{
+        readonly label: string;
+        readonly fetch: () => Promise<ReadonlyArray<unknown>>;
+    }> = [
+        // ── Mirror of the delete scope ─────────────────────────
+        { label: "icps", fetch: () => client.icps.list({ limit: 5000 }) },
+        { label: "deals", fetch: () => client.deals.list({ limit: 5000 }) },
+        { label: "proofs", fetch: () => client.proofs.list({ limit: 5000 }) },
+        {
+            label: "advisor_deployments",
+            fetch: () => client.advisorDeployments.list({ limit: 5000 })
+        },
+        {
+            label: "signal_console_accounts",
+            fetch: () => client.signalConsoleAccounts.list({ limit: 5000 })
+        },
+        {
+            label: "sequences",
+            fetch: () => client.sequences.list({ limit: 5000 })
+        },
+        {
+            label: "discovery_call_logs",
+            fetch: () => client.discoveryCallLogs.list({ limit: 5000 })
+        },
+        {
+            label: "studio_artifacts",
+            fetch: () => client.studioArtifacts.list({ limit: 5000 })
+        },
+        {
+            label: "pipeline_settings",
+            fetch: () => client.pipelineSettings.list({ limit: 100 })
+        },
+        {
+            label: "discovery_frameworks",
+            fetch: () => client.discoveryFrameworks.list({ limit: 5000 })
+        },
+        {
+            label: "readiness_snapshots",
+            fetch: () => client.readinessSnapshots.list({ limit: 5000 })
+        },
+        {
+            label: "handoff_artifacts",
+            fetch: () => client.handoffArtifacts.list({ limit: 5000 })
+        },
+        // ── Additions beyond the delete scope ──────────────────
+        {
+            label: "outdoors_events",
+            fetch: () => client.outdoorsEvents.list({ limit: 5000 })
+        },
+        {
+            label: "workspace_profile",
+            fetch: () => client.workspaceProfile.list({ limit: 1 })
+        }
+    ];
+
+    const tables: Record<string, ReadonlyArray<unknown>> = {};
+    const perTableCount: Record<string, number> = {};
+    const errors: CloudExportTableErr[] = [];
+    let totalRows = 0;
+
+    for (const t of tableReaders) {
+        try {
+            const rows = await t.fetch();
+            tables[t.label] = rows;
+            perTableCount[t.label] = rows.length;
+            totalRows += rows.length;
+        } catch (err) {
+            errors.push({
+                table: t.label,
+                reason: err instanceof Error ? err.message : String(err)
+            });
+            tables[t.label] = [];
+            perTableCount[t.label] = 0;
+            reportError(err, {
+                op: "settings.exportCloudWorkspace.list",
+                table: t.label
+            });
+        }
+    }
+
+    return {
+        schemaVersion: 1,
+        source: "antaeus-cloud-export-v1",
+        capturedAt: new Date().toISOString(),
+        workspaceId,
+        userEmail,
+        tables,
+        perTableCount,
+        errors,
+        totalRows
+    };
+}
+
 // ─── Cloud-delete (Trust Annex: "delete my data") ─────────────────────
 
 export interface CloudDeleteResult {

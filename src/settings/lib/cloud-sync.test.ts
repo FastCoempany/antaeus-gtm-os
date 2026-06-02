@@ -168,3 +168,183 @@ describe("loadCloudRowCounts", () => {
         expect(counts).toEqual(EMPTY_COUNTS);
     });
 });
+
+// ─── exportCloudWorkspace (ADR-016 pre-beta hygiene) ────────────────
+
+function makeExportClient(opts: {
+    factoryThrows?: boolean;
+    listResults?: Partial<Record<string, unknown[]>>;
+    listShouldFail?: boolean;
+    failOnTable?: string;
+    workspace?: { id: string; name: string; created_at: string | null } | null;
+    user?: { id: string; email: string | null } | null;
+}) {
+    if (opts.factoryThrows) {
+        return () => {
+            throw new Error("VITE_SUPABASE_URL is not set");
+        };
+    }
+    const tables = [
+        "icps",
+        "deals",
+        "proofs",
+        "advisorDeployments",
+        "signalConsoleAccounts",
+        "sequences",
+        "discoveryCallLogs",
+        "studioArtifacts",
+        "pipelineSettings",
+        "discoveryFrameworks",
+        "readinessSnapshots",
+        "handoffArtifacts",
+        "outdoorsEvents",
+        "workspaceProfile"
+    ];
+    const lists: Record<string, { list: ReturnType<typeof vi.fn> }> = {};
+    for (const t of tables) {
+        lists[t] = {
+            list: vi.fn().mockImplementation(() => {
+                if (opts.listShouldFail) {
+                    return Promise.reject(new Error("network"));
+                }
+                if (opts.failOnTable === t) {
+                    return Promise.reject(new Error(`${t} failed`));
+                }
+                return Promise.resolve(opts.listResults?.[t] ?? []);
+            })
+        };
+    }
+    const client = {
+        client: {
+            auth: {
+                getUser: vi.fn().mockResolvedValue({
+                    data: { user: opts.user ?? null },
+                    error: null
+                })
+            }
+        },
+        currentUserId: vi
+            .fn()
+            .mockResolvedValue(opts.user?.id ?? null),
+        currentWorkspace: vi
+            .fn()
+            .mockResolvedValue(opts.workspace ?? null),
+        ...lists
+    };
+    return () => client as never;
+}
+
+describe("exportCloudWorkspace", () => {
+    it("returns a degraded snapshot with a single error when factory throws", async () => {
+        const { exportCloudWorkspace } = await import("./cloud-sync");
+        const factory = makeExportClient({ factoryThrows: true });
+        const snap = await exportCloudWorkspace(factory as never);
+        expect(snap.totalRows).toBe(0);
+        expect(snap.errors.length).toBe(1);
+        expect(snap.errors[0]!.table).toBe("<client>");
+        expect(snap.workspaceId).toBeNull();
+        expect(snap.tables).toEqual({});
+    });
+
+    it("packs every table's rows + per-table count + total", async () => {
+        const { exportCloudWorkspace } = await import("./cloud-sync");
+        const factory = makeExportClient({
+            user: { id: "u1", email: "t@t.com" },
+            workspace: {
+                id: "ws-1",
+                name: "Test Workspace",
+                created_at: "2026-01-01T00:00:00Z"
+            },
+            listResults: {
+                icps: [{ id: "i1" }, { id: "i2" }],
+                deals: [{ id: "d1" }],
+                outdoorsEvents: [
+                    { id: "e1", name: "RSA" },
+                    { id: "e2", name: "DEF CON" }
+                ],
+                workspaceProfile: [{ workspace_id: "ws-1", product_category: "security" }]
+            }
+        });
+        const snap = await exportCloudWorkspace(factory as never);
+        expect(snap.perTableCount["icps"]).toBe(2);
+        expect(snap.perTableCount["deals"]).toBe(1);
+        expect(snap.perTableCount["outdoors_events"]).toBe(2);
+        expect(snap.perTableCount["workspace_profile"]).toBe(1);
+        // Sum across all 14 tables = 2 + 1 + 2 + 1 = 6 (others empty).
+        expect(snap.totalRows).toBe(6);
+        expect(snap.tables["outdoors_events"]).toHaveLength(2);
+        expect(snap.errors).toEqual([]);
+        expect(snap.workspaceId).toBe("ws-1");
+        expect(snap.userEmail).toBe("t@t.com");
+        expect(snap.source).toBe("antaeus-cloud-export-v1");
+        expect(snap.schemaVersion).toBe(1);
+    });
+
+    it("survives a single table failing — empty rows + error noted, others still load", async () => {
+        const { exportCloudWorkspace } = await import("./cloud-sync");
+        const factory = makeExportClient({
+            user: { id: "u1", email: "t@t.com" },
+            workspace: {
+                id: "ws-1",
+                name: "Test",
+                created_at: null
+            },
+            listResults: {
+                icps: [{ id: "i1" }],
+                deals: [{ id: "d1" }, { id: "d2" }]
+            },
+            failOnTable: "outdoorsEvents"
+        });
+        const snap = await exportCloudWorkspace(factory as never);
+        expect(snap.errors.length).toBe(1);
+        expect(snap.errors[0]!.table).toBe("outdoors_events");
+        expect(snap.errors[0]!.reason).toContain("failed");
+        expect(snap.tables["outdoors_events"]).toEqual([]);
+        // The good tables still landed.
+        expect(snap.perTableCount["icps"]).toBe(1);
+        expect(snap.perTableCount["deals"]).toBe(2);
+        expect(snap.totalRows).toBe(3);
+    });
+
+    it("captures workspace + user metadata defensively (null if reads fail)", async () => {
+        const { exportCloudWorkspace } = await import("./cloud-sync");
+        const factory = makeExportClient({
+            workspace: null,
+            user: null
+        });
+        const snap = await exportCloudWorkspace(factory as never);
+        expect(snap.workspaceId).toBeNull();
+        expect(snap.userEmail).toBeNull();
+        // Empty workspaces still produce a valid (empty) snapshot.
+        expect(snap.totalRows).toBe(0);
+        expect(snap.errors).toEqual([]);
+    });
+
+    it("the export scope is the 14 tables we documented", async () => {
+        const { exportCloudWorkspace } = await import("./cloud-sync");
+        const factory = makeExportClient({
+            user: { id: "u1", email: "t@t.com" },
+            workspace: { id: "ws", name: "X", created_at: null }
+        });
+        const snap = await exportCloudWorkspace(factory as never);
+        const keys = Object.keys(snap.tables).sort();
+        expect(keys).toEqual(
+            [
+                "advisor_deployments",
+                "deals",
+                "discovery_call_logs",
+                "discovery_frameworks",
+                "handoff_artifacts",
+                "icps",
+                "outdoors_events",
+                "pipeline_settings",
+                "proofs",
+                "readiness_snapshots",
+                "sequences",
+                "signal_console_accounts",
+                "studio_artifacts",
+                "workspace_profile"
+            ].sort()
+        );
+    });
+});

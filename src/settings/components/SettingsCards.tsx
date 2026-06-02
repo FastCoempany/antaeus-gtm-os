@@ -15,11 +15,14 @@ import {
     demo,
     exitDemo,
     exportBackup,
+    exportCloudData,
     importBackupFromFile,
     isDeletingCloud,
+    isExportingCloud,
     isVerifyingCloud,
     isWorking,
     lastCloudDelete,
+    lastCloudExport,
     refreshCloudStatus,
     setCategory
 } from "../state";
@@ -40,6 +43,7 @@ export function SettingsCards(): JSX.Element {
     return (
         <div class="st-grid">
             <CloudSyncCard />
+            <CloudExportCard />
             <BackupCard />
             <CategoryCard />
             <DemoCard />
@@ -382,6 +386,77 @@ function BackupCard(): JSX.Element {
                 backup over the current local cache (matching keys are
                 replaced; non-<code>gtmos_*</code> keys are skipped). Clear
                 removes every <code>gtmos_*</code> key from this device.
+            </p>
+        </article>
+    );
+}
+
+function CloudExportCard(): JSX.Element {
+    const busy = isExportingCloud.value;
+    const last = lastCloudExport.value;
+    const counts = cloudCounts.value;
+    const totalRows =
+        counts.icps +
+        counts.deals +
+        counts.proofs +
+        counts.advisorDeployments +
+        counts.signalConsoleAccounts +
+        counts.sequences +
+        counts.discoveryCallLogs +
+        counts.studioArtifacts +
+        counts.pipelineSettings;
+
+    async function handleExport(): Promise<void> {
+        await exportCloudData();
+    }
+
+    return (
+        <article class="st-card">
+            <header class="st-card__head">
+                <span class="st-scope st-scope--workspace">Workspace-level</span>
+                <h2 class="st-card__title">Export cloud data</h2>
+            </header>
+            <p class="st-card__desc">
+                Download every row from your workspace as a JSON file —
+                ICPs, deals, proofs, signals, advisor deployments,
+                discovery call logs, the works. This is the portable
+                copy of what's actually durable. The local "Backup and
+                restore" card below only captures the browser cache.
+            </p>
+            <ul class="st-status-list">
+                <li>
+                    <span>Cloud rows in scope</span>
+                    <strong>{totalRows}</strong>
+                </li>
+                {last ? (
+                    <li>
+                        <span>Last export</span>
+                        <strong>
+                            {last.totalRows} rows
+                            {last.errors.length > 0
+                                ? ` · ${last.errors.length} errors`
+                                : ""}
+                            {" · "}
+                            {new Date(last.capturedAt).toLocaleString()}
+                        </strong>
+                    </li>
+                ) : null}
+            </ul>
+            <div class="st-card__actions">
+                <button
+                    type="button"
+                    class="st-btn st-btn--primary"
+                    onClick={handleExport}
+                    disabled={busy}
+                >
+                    {busy ? "Exporting…" : "Export cloud data"}
+                </button>
+            </div>
+            <p class="st-card__help">
+                Reads happen workspace-scoped via RLS — only your rows
+                are included. The file is JSON with a per-table layout
+                so a future import path can be added cleanly. No data
+                leaves the browser except the download itself.
             </p>
         </article>
     );
