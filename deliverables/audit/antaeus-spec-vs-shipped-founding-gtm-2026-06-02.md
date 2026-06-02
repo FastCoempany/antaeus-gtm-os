@@ -14,13 +14,14 @@ Canon §4.19 (rewritten 2026-05-01) preserved end-to-end:
 
 - ✅ **Living onboarding surface, not export.** The room IS the inheritance vehicle; no "Download zip" button anywhere. Cloud sync makes the workspace itself durable. Components: `Topbar` (verdict + section-readiness count), `SectionFrame` (7 authored sections), `SharePanel` (read-mode share-link mechanic), `HandoffStrip` (cross-room routes), `CeremonyOverlay` (the §4.19 ceremony moment).
 - ✅ **Seven authored sections** per §4.19, not bullet aggregation:
-  1. Who hits, who misses, why (`section-1.ts` cross-references ICP × closed-won pattern)
-  2. The rails that worked (`section-2.ts` reads `gtmos_outbound_touches` + cross-refs to converted meetings)
-  3. The questions that earned the next meeting (`section-3.ts` reads Discovery Studio's `advancedCalls` + segment ledger)
-  4. Where deals are won + where they leak (`section-4.ts` stage-by-stage conversion + advisor-deploy moments)
-  5. The losses we paid for (`section-5.ts` Future Autopsy autopsies)
-  6. Why we win (`section-6.ts` closed-won shared-traits read)
-  7. Day-one operating rhythm (`section-7.ts` weekly cadence from quota + cycle length)
+  Authoring functions live in `lib/sections.ts` (`authorSection1` through `authorSection7` + `authorAllSections` + `countReady`); cross-room reads in `lib/cross-room.ts`. The 7 sections:
+  1. Who hits, who misses, why — `authorSection1` cross-references ICP × closed-won pattern
+  2. The rails that worked — `authorSection2` reads `gtmos_outbound_touches` + cross-refs to converted meetings
+  3. The questions that earned the next meeting — `authorSection3` reads Discovery Studio's `advancedCalls` + segment ledger
+  4. Where deals are won + where they leak — `authorSection4` stage-by-stage conversion + advisor-deploy moments
+  5. The losses we paid for — `authorSection5` Future Autopsy autopsies
+  6. Why we win — `authorSection6` closed-won shared-traits read
+  7. Day-one operating rhythm — `authorSection7` weekly cadence from quota + cycle length
 - ✅ **Surprise callouts** per §4.19 — every section has its `surprise` field rendered as a cross-room read no single room could surface alone (e.g. Section 1's "your stated ICP doesn't match your actual close pattern" callout).
 - ✅ **Section-readiness publisher** feeds Readiness's `proof` dimension — see `lib/health-publisher.ts:publishHealth()` writing `gtmos_founding_gtm_health` that the Readiness aggregator reads. This is what makes "Hire-ready, repeatable" achievable (gate requires sections ≥ 5/7 ready).
 - ✅ **Ceremony moment** subscriber fires on Readiness verdict upward transition into Inheritable-with-guardrails. `CeremonyOverlay.tsx` listens for the cross-tab event; animation + serif headline + one-time share-link CTA per §4.19's set-piece directive.
@@ -47,7 +48,7 @@ None caught.
 
 ## Cross-room compounding — PASS
 
-Per canon §4.19, Founding GTM reads from every cloud-mirrored room. Verified via `lib/sources.ts` and the per-section authoring modules:
+Per canon §4.19, Founding GTM reads from every cloud-mirrored room. Verified via `lib/cross-room.ts` (cross-room readers) + `lib/sections.ts` (per-section authoring):
 
 | Section | Cross-room reads (verified) |
 |---|---|

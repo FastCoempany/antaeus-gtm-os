@@ -12,7 +12,7 @@
 
 Canon §4.17 (rewritten 2026-05-01) preserved end-to-end:
 
-- ✅ **Verdict-as-gates engine** — 5 verdicts (You-are-the-system / Building / Inheritable-with-guardrails / Hire-ready / Hire-ready-repeatable) each gated by **present-evidence checks**, not threshold scores. Implementation in `src/lib/readiness/engine.ts:resolveVerdict()` runs the gate ladder in order; first failing gate determines the verdict.
+- ✅ **Verdict-as-gates engine** — 5 verdicts (You-are-the-system / Building / Inheritable-with-guardrails / Hire-ready / Hire-ready-repeatable) each gated by **present-evidence checks**, not threshold scores. Implementation in `src/lib/readiness/verdict.ts:evaluateReadiness()` runs the gate ladder in order; first failing gate determines the verdict. Per-dimension helpers in `src/lib/readiness/dimensions.ts`; aggregation across cloud-mirrored rooms in `src/dashboard/lib/readiness-aggregator.ts`.
 - ✅ **Maturity-not-pressure framing.** The verdict answers "could a real first-hire walk in tomorrow and run the motion?" — different shape of truth from the Dashboard's pressure rail and Future Autopsy's decay rail. The Readiness drawer's hero copy reads this directly.
 - ✅ **Dimension scoring stays internal as the math** but is NOT the first-fold story. The drawer hero is verdict-driven; dimension bars appear lower in the drawer as gating evidence, not as the primary readout.
 - ✅ **Dashboard topbar anchor** — `ReadinessAnchor.tsx` mounts on the Dashboard topbar; verdict label + chevron, single line, click opens drawer. Anchored prominently but never obnoxious per §4.17.
