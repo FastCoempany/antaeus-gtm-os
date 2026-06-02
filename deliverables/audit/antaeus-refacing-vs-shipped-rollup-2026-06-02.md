@@ -66,11 +66,11 @@ Five rooms shipped without ever having a triptych — they were designed against
 
 | Room | Why no triptych | Audit baseline (spec/ADR) | Status |
 |---|---|---|---|
-| **Onboarding** | Greenfield rebuild per Phase 4 / Room 17 (canon Part V §1, 2026-04-28). Behavioral-spine 7-step flow designed inline against Part III §5. | Canon Part III §5 (behavioral spine) + canon §4.3 | ⏳ owed |
-| **Negotiation** | Phase 4 / Room 18 inline rebuild (PR #109, 2026-05-18). Founder directive: "no triptych exploration needed." Designed against canon §4.16b + Phase 2 navigation rubric. | Canon §4.16b + `deliverables/audit/navigation-rubric-2026-05.md` | ⏳ owed |
-| **Founding GTM / Handoff Kit** | Phase 5.B rebuild (PR #49, 2026-05-01) against the new mind locked in §4.19. No triptych — the mind itself was rewritten and the room was built directly against it. | Canon §4.19 (rewritten 2026-05-01) | ⏳ owed |
-| **Readiness Score** | Phase 5.A rebuild (PR #47, 2026-05-01) against the new mind locked in §4.17. Same posture as Founding GTM. | Canon §4.17 (rewritten 2026-05-01) | ⏳ owed |
-| **Briefing** | New room per ADR-006 (2026-05-23). Designed against a 13-spec suite at `deliverables/specs/briefing/`. | ADR-006 + `deliverables/specs/briefing/*` | ⏳ owed |
+| **Onboarding** | Greenfield rebuild per Phase 4 / Room 17 (canon Part V §1, 2026-04-28). Behavioral-spine 7-step flow designed inline against Part III §5. | Canon Part III §5 (behavioral spine) + canon §4.3 | ✅ landed 2026-06-02 — see `antaeus-spec-vs-shipped-onboarding-2026-06-02.md` |
+| **Negotiation** | Phase 4 / Room 18 inline rebuild (PR #109, 2026-05-18). Founder directive: "no triptych exploration needed." Designed against canon §4.16b + Phase 2 navigation rubric. | Canon §4.16b + `deliverables/audit/navigation-rubric-2026-05.md` | ✅ landed 2026-06-02 — see `antaeus-spec-vs-shipped-negotiation-2026-06-02.md` |
+| **Founding GTM / Handoff Kit** | Phase 5.B rebuild (PR #49, 2026-05-01) against the new mind locked in §4.19. No triptych — the mind itself was rewritten and the room was built directly against it. | Canon §4.19 (rewritten 2026-05-01) | ✅ landed 2026-06-02 — see `antaeus-spec-vs-shipped-founding-gtm-2026-06-02.md` |
+| **Readiness Score** | Phase 5.A rebuild (PR #47, 2026-05-01) against the new mind locked in §4.17. Same posture as Founding GTM. | Canon §4.17 (rewritten 2026-05-01) | ✅ landed 2026-06-02 — see `antaeus-spec-vs-shipped-readiness-2026-06-02.md` |
+| **Briefing** | New room per ADR-006 (2026-05-23). Designed against a 13-spec suite at `deliverables/specs/briefing/`. | ADR-006 + `deliverables/specs/briefing/*` | ✅ landed 2026-06-02 — see `antaeus-spec-vs-shipped-briefing-2026-06-02.md` |
 | **Outdoors Events** | New room per ADR-015 + ADR-016 (2026-06-01). Designed against the ADR mind. | ADR-015 + ADR-016 + canon §4.22 | ✅ landed this PR — see `antaeus-spec-vs-shipped-outdoors-events-2026-06-02.md` |
 
 The other 16 rooms (with triptychs) are covered by the 2026-05-18 batch. The 5 spec-vs-shipped audits owed above complete the matrix.
@@ -98,7 +98,7 @@ The pattern that did NOT emerge: **mind drift**. Every room's mind survived. The
 
 **Triptych-vs-shipped: complete.** No further work in that lane.
 
-**Spec-vs-shipped: 5 audits owed.** Onboarding, Negotiation, Founding GTM, Readiness, Briefing. Outdoors Events landed in this PR. Each of the remaining 5 is a discrete audit — `mind preservation against the ADR/spec/canon mind + structural drift + copy-burden + fix scope`. Tractable as one-PR-per-audit, or one batch PR like 2026-05-18.
+**Spec-vs-shipped: complete (2026-06-02).** All five owed audits landed in a single batch PR: Onboarding, Negotiation, Founding GTM, Readiness, Briefing. Outdoors Events landed earlier the same day. Every audited room PASSes mind preservation; no fix scopes needed.
 
 **Canon update:** the 2026-05-01 session-log entry's "open questions" should be marked resolved per the table above. The 2026-05-18 batch's silent completion should land in the session log so future sessions don't re-attempt the work.
 
