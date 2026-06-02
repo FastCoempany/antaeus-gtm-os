@@ -422,6 +422,20 @@ async function activeWorkspaceIds(sb: SupabaseClient): Promise<string[]> {
     }
 }
 
+// ─── CORS ──────────────────────────────────────────────────────────
+
+// This function is called from the browser via supabase.functions.invoke()
+// (unlike the heartbeat + briefing-pipeline which are cron-invoked
+// server-side). Browser calls trigger a CORS preflight OPTIONS request,
+// so the handler must answer OPTIONS with the right headers AND echo
+// them on every response.
+const CORS_HEADERS: Record<string, string> = {
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "POST, OPTIONS",
+    "access-control-allow-headers":
+        "authorization, content-type, apikey, x-client-info"
+};
+
 // ─── HTTP handler ──────────────────────────────────────────────────
 
 interface RequestBody {
@@ -431,6 +445,9 @@ interface RequestBody {
 
 // @ts-ignore - Deno global resolved at deploy time
 Deno.serve(async (req: Request): Promise<Response> => {
+    if (req.method === "OPTIONS") {
+        return new Response("ok", { headers: CORS_HEADERS });
+    }
     if (req.method !== "POST") {
         return json({ ok: false, error: "Method not allowed" }, 405);
     }
@@ -508,6 +525,6 @@ Deno.serve(async (req: Request): Promise<Response> => {
 function json(payload: unknown, status = 200): Response {
     return new Response(JSON.stringify(payload), {
         status,
-        headers: { "content-type": "application/json" }
+        headers: { "content-type": "application/json", ...CORS_HEADERS }
     });
 }
