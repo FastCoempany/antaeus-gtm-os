@@ -28,7 +28,7 @@ On 2026-06-01 the founder picked two locked design points to drive the reframe:
 
 Seven locked design points:
 
-1. **Discovery cadence.** Weekly, mirroring the Briefing's cadence (events don't change hour-to-hour; weekly catches the relevant cycle without the LLM cost of more-frequent runs). On-demand "Run discovery now" button for the operator to force a refresh between cycles. Cron schedule lands in PR 2.
+1. **Discovery cadence — on-demand only.** Founder direction 2026-06-02 (amendment, post-PR 2 ship): no weekly cron. The operator triggers discovery by clicking "Run discovery now" in the room when they want a fresh sweep, and not before. Cost stays bounded to operator-initiated runs; the room never burns budget while the operator is away. The cron migration that landed in PR 2 (`20260601230000_outdoors_events_discovery_schedule.sql`) was deleted in the cron-kill PR that locked this. If a scheduled fire is wanted later, a new migration adds it cleanly. The Edge Function's `run_all` action survives as a manual admin escape-hatch (curl-invokable) but is not wired to any scheduler.
 
 2. **Relevance tiers** — operator-facing grouping axis (replaces ADR-015's status-as-primary grouping). The pipeline scores each event into one of three tiers:
    - **Direct** — gathering specifically about the operator's product category (e.g. RSA Conference for a security product).
@@ -86,8 +86,7 @@ Seven locked design points:
   5. Score relevance tier
   6. Voice-validate
   7. Upsert with `dedupe_key`
-- pg_cron schedule (weekly, Monday morning Chicago)
-- "Run discovery now" button in the room → invokes the function
+- "Run discovery now" button in the room → invokes the function (operator-initiated, only path that actually runs discovery)
 - UI flip: composer retires, primary grouping is relevance tier (Direct / Adjacent / Indirect), secondary is status within each tier
 - Cost telemetry footer
 - Audit envelope viewer (light version)
@@ -99,7 +98,7 @@ Seven locked design points:
 
 ## Open
 
-- **Discovery cadence default** — weekly is the starting point; if operators repeatedly hit "Run discovery now" on weekdays, bump to daily.
+- **Cron, if ever** — locked off post-PR 2. Adding it later means a fresh migration; no doctrine work needed if the founder asks for it.
 - **Cross-room handoffs** — ADR-015 deferred Phase 2 (Sourcing Workbench handoff) + Phase 3 (Signal Console attribution + Deal Workspace sourced-from tag). Those phases survive this reframe — they unblock once the operator has used the discovery-driven room and confirmed the shape.
 
 ---
