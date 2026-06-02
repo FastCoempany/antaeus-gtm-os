@@ -6,6 +6,7 @@ import {
     bootCostSummary,
     bootPatternMarks,
     bootPatterns,
+    bootPendingProposals,
     bootPeriphery,
     bootTriggers
 } from "./state";
@@ -69,3 +70,8 @@ void bootCostSummary();
 // MarksBar just shows the unmarked state). The marks loop back to
 // the cluster scorer on the next pipeline run.
 void bootPatternMarks();
+
+// Phase F (ADR-017): load any pending proposals the heartbeat wrote.
+// Defensive — failures degrade to no surface (SuggestionsSection
+// returns null when nothing is pending).
+void bootPendingProposals();

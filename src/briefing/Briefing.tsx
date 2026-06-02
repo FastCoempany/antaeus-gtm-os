@@ -12,6 +12,7 @@ import { ContrarianRail } from "./components/ContrarianRail";
 import { PeripheryRail } from "./components/PeripheryRail";
 import { WatchList } from "./components/WatchList";
 import { OutdoorsEventsChip } from "./components/OutdoorsEventsChip";
+import { SuggestionsSection } from "./components/SuggestionsSection";
 import { BriefingFooter } from "./components/BriefingFooter";
 
 /**
@@ -55,6 +56,7 @@ export function Briefing(): JSX.Element {
                 <StaleRunBanner />
                 <DraftsTray />
                 <ViewToggle />
+                <SuggestionsSection />
                 {view === "workspace" ? (
                     <>
                         <WorkspaceReads />
