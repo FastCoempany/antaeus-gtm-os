@@ -23,8 +23,13 @@ import {
     isWorking,
     lastCloudDelete,
     lastCloudExport,
+    phaseFEnabled,
+    phaseFError,
+    phaseFLoaded,
+    phaseFSaving,
     refreshCloudStatus,
-    setCategory
+    setCategory,
+    togglePhaseF
 } from "../state";
 
 /**
@@ -46,6 +51,7 @@ export function SettingsCards(): JSX.Element {
             <CloudExportCard />
             <BackupCard />
             <CategoryCard />
+            <PhaseFCard />
             <DemoCard />
             <RoleCard />
             <DeleteCloudDataCard />
@@ -457,6 +463,65 @@ function CloudExportCard(): JSX.Element {
                 are included. The file is JSON with a per-table layout
                 so a future import path can be added cleanly. No data
                 leaves the browser except the download itself.
+            </p>
+        </article>
+    );
+}
+
+function PhaseFCard(): JSX.Element {
+    const enabled = phaseFEnabled.value;
+    const loaded = phaseFLoaded.value;
+    const saving = phaseFSaving.value;
+    const err = phaseFError.value;
+
+    function handleToggle(): void {
+        void togglePhaseF(!enabled);
+    }
+
+    return (
+        <article class="st-card">
+            <header class="st-card__head">
+                <span class="st-scope st-scope--workspace">Workspace-level</span>
+                <h2 class="st-card__title">System suggestions</h2>
+            </header>
+            <p class="st-card__desc">
+                The system will sometimes notice a pattern in how you work —
+                a skill you keep running with the same setup, a room you
+                open before any other most weeks — and suggest a small
+                change. You always accept or dismiss. Nothing changes
+                without you.
+            </p>
+            <ul class="st-status-list">
+                <li>
+                    <span>Status</span>
+                    <strong class={enabled ? "is-good" : "is-warn"}>
+                        {loaded ? (enabled ? "On" : "Off") : "Checking…"}
+                    </strong>
+                </li>
+            </ul>
+            <div class="st-card__actions">
+                <button
+                    type="button"
+                    class={
+                        enabled
+                            ? "st-btn st-btn--ghost"
+                            : "st-btn st-btn--primary"
+                    }
+                    onClick={handleToggle}
+                    disabled={!loaded || saving}
+                >
+                    {saving
+                        ? "Saving…"
+                        : enabled
+                        ? "Turn suggestions off"
+                        : "Turn suggestions on"}
+                </button>
+            </div>
+            {err ? <p class="st-card__error">{err}</p> : null}
+            <p class="st-card__help">
+                When off, the system stops watching for patterns and
+                never proposes a change. Existing suggestions stay
+                where they are — they just won't grow.
             </p>
         </article>
     );

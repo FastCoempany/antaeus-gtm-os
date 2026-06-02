@@ -471,3 +471,14 @@ code {
     line-height: 1.4;
     font-family: "JetBrains Mono", monospace;
 }
+
+/* ── Phase F card (ADR-017 PR 3) ──────────────────────────── */
+
+.st-card__error {
+    margin: 14px 0 8px;
+    font-size: 13px;
+    color: #9a1f1f;
+    background: rgba(154, 31, 31, 0.06);
+    padding: 8px 12px;
+    border-radius: 4px;
+}

@@ -61,6 +61,12 @@ export const lastCloudDelete: Signal<CloudDeleteResult | null> = signal(null);
 export const isExportingCloud: Signal<boolean> = signal(false);
 export const lastCloudExport: Signal<CloudExportSnapshot | null> = signal(null);
 
+// ── Phase F (ADR-017) — proposals toggle ──────────────────────
+export const phaseFEnabled: Signal<boolean> = signal(true);
+export const phaseFLoaded: Signal<boolean> = signal(false);
+export const phaseFSaving: Signal<boolean> = signal(false);
+export const phaseFError: Signal<string | null> = signal(null);
+
 // Phase 2.9 introduced an inboundReturn signal here. Program 6 / PR 1
 // retired it in favor of the canonical RoomChrome + BackButton pair
 // — same continuity-param read, same safeReturnTo guard, applied
@@ -86,6 +92,7 @@ export function refreshAll(): void {
     category.value = loadCategory();
     demo.value = loadDemoState();
     backup.value = readBackup();
+    void refreshPhaseFToggle();
 }
 
 export function setCategory(next: ProductCategory): void {
@@ -318,6 +325,40 @@ export async function deleteCloudData(): Promise<CloudDeleteResult> {
  * info, and per-noun row counts so the operator can confirm the
  * cross-device sync is actually working.
  */
+// ── Phase F toggle actions ────────────────────────────────────
+
+import { loadPhaseFToggle, savePhaseFToggle } from "./lib/phase-f-toggle";
+
+export async function refreshPhaseFToggle(): Promise<void> {
+    const state = await loadPhaseFToggle();
+    phaseFEnabled.value = state.enabled;
+    phaseFLoaded.value = true;
+}
+
+export async function togglePhaseF(next: boolean): Promise<void> {
+    if (phaseFSaving.value) return;
+    phaseFSaving.value = true;
+    phaseFError.value = null;
+    const previous = phaseFEnabled.value;
+    phaseFEnabled.value = next;
+    try {
+        const result = await savePhaseFToggle(next);
+        if (!result.ok) {
+            phaseFEnabled.value = previous;
+            phaseFError.value = result.error ?? "Could not save the toggle.";
+            return;
+        }
+        flashToast(
+            next ? "good" : "info",
+            next
+                ? "Phase F proposals turned on."
+                : "Phase F proposals turned off."
+        );
+    } finally {
+        phaseFSaving.value = false;
+    }
+}
+
 export async function refreshCloudStatus(): Promise<void> {
     isVerifyingCloud.value = true;
     try {
@@ -369,6 +410,10 @@ export function __resetForTests(): void {
     lastCloudDelete.value = null;
     isExportingCloud.value = false;
     lastCloudExport.value = null;
+    phaseFEnabled.value = true;
+    phaseFLoaded.value = false;
+    phaseFSaving.value = false;
+    phaseFError.value = null;
 }
 
 export function __setCloudConnectionForTests(

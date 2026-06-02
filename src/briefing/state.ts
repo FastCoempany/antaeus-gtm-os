@@ -77,6 +77,55 @@ export async function bootBriefingLead(): Promise<void> {
     briefingLeadLoaded.value = true;
 }
 
+// ─── Phase F (ADR-017) — pending proposals ──────────────────────────
+
+import {
+    decideProposal as decideProposalApi,
+    loadPendingProposals,
+    markProposalViewed,
+    type PendingProposal,
+    type ProposalDecision
+} from "./lib/suggestions";
+
+export const pendingProposals = signal<ReadonlyArray<PendingProposal>>([]);
+export const pendingProposalsLoaded = signal(false);
+export const decisionBusyId = signal<string | null>(null);
+export const decisionError = signal<string | null>(null);
+
+export async function bootPendingProposals(): Promise<void> {
+    pendingProposals.value = await loadPendingProposals();
+    pendingProposalsLoaded.value = true;
+}
+
+/** Operator clicked Accept / Dismiss / Snooze on a proposal. Optimistic
+ * removal from the pending list; on failure we re-fetch + surface the
+ * error. */
+export async function decidePendingProposal(
+    id: string,
+    decision: ProposalDecision
+): Promise<void> {
+    if (decisionBusyId.value !== null) return;
+    decisionBusyId.value = id;
+    decisionError.value = null;
+    const previous = pendingProposals.value;
+    pendingProposals.value = previous.filter((p) => p.id !== id);
+    try {
+        const result = await decideProposalApi(id, decision);
+        if (!result.ok) {
+            decisionError.value = result.error ?? "Could not save your choice.";
+            // Re-fetch so the room state matches the server.
+            pendingProposals.value = await loadPendingProposals();
+        }
+    } finally {
+        decisionBusyId.value = null;
+    }
+}
+
+/** Fire-and-forget: mark the proposal viewed on first render. */
+export function markPendingProposalViewed(id: string): void {
+    void markProposalViewed(id);
+}
+
 export async function bootPatternMarks(): Promise<void> {
     patternMarks.value = await loadMyPatternMarks();
     patternMarksLoaded.value = true;
