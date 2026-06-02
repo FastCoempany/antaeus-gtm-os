@@ -1,9 +1,23 @@
-# ADR-017 — Phase F: bounded self-modification (DRAFT for founder review)
+# ADR-017 — Phase F: bounded self-modification
 
-**Status:** DRAFT — awaiting founder approval per canon Part IV §4 (mind-correction protocol)
+**Status:** **APPROVED by founder 2026-06-02.** All six open questions resolved with the recommended picks ("approve recommended").
 **Date drafted:** 2026-06-02
+**Date approved:** 2026-06-02
 **Builds on:** ADR-004 (orchestration layer foundation), ADR-008 (orchestration doctrine + additive boundary), ADR-009 (workspace-scope observations), ADR-010 (skills layer), ADR-011 (birdseye float), ADR-012 (skill scheduling)
 **Doesn't supersede anything.** Phase F is the natural next phase per ADR-004 §Phasing.
+
+## Approved picks (2026-06-02)
+
+| # | Question | Locked answer |
+|---|---|---|
+| 1 | Doctrine approval — bounded = proposals operator must accept | **YES** — the right shape |
+| 2 | Proposal surface | **(a) New "Suggestions" section in the Briefing room** |
+| 3 | Cooldown after dismiss | **30 days** |
+| 4 | Skill default refinement scope | **Per-workspace override** (not recipe-file edit; keeps recipe changes auditable via git) |
+| 5 | Lane 2 v1 scope | **Parameterized variants of existing generators only**; full new-generator authoring deferred to Phase G |
+| 6 | Settings toggle to disable proposals entirely | **YES** — on by default, operator can flip off |
+
+Implementation begins immediately with **PR 1 — Schema** (this PR series).
 
 ---
 
