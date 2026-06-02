@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { setDealFilter, setFolioTab } from "../state";
+import { exportDealsCsv, setDealFilter, setFolioTab } from "../state";
 
 /**
  * Hero — left column of the stage-grid per variant-B.
@@ -31,6 +31,16 @@ export function Hero(): JSX.Element {
                 }}
             >
                 Find weakest →
+            </button>
+            <button
+                type="button"
+                class="dw-hero__export"
+                onClick={() => {
+                    void exportDealsCsv();
+                }}
+                title="Download your pipeline as CSV"
+            >
+                Export pipeline (CSV)
             </button>
         </section>
     );

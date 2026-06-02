@@ -1428,3 +1428,28 @@ button {
     color: rgba(10, 28, 64, 0.55);
     font-weight: 700;
 }
+
+/* ── Pipeline export link (pre-beta hygiene, 2026-06-02) ────── */
+
+.dw-hero__export {
+    appearance: none;
+    display: block;
+    margin-top: 14px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--dw-ink-quiet, rgba(15, 31, 61, 0.55));
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.dw-hero__export:hover,
+.dw-hero__export:focus-visible {
+    color: var(--dw-ink, #0f1f3d);
+    outline: none;
+}
