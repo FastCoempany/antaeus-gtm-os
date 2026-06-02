@@ -146,6 +146,56 @@ If the founder approves the doctrine, implementation lands in roughly this order
 
 Implementation cost estimate: ~3-4 weeks of careful work. The schema + detection are the heaviest pieces; UI is small.
 
+## What actually shipped (2026-06-02)
+
+Implementation arc closed in a single session as PRs #248 → #251. Diverges from the §"Implementation plan" sketch above only in detail. The shape recorded here is the durable one; future sessions should rely on this section rather than the planning sketch.
+
+**Schema (PR #248 + PR #251).** Three tables ship the doctrine:
+
+| Table | Migration | Purpose |
+|---|---|---|
+| `proposed_modifications` | `20260602230000_phase_f_proposed_modifications.sql` | Where detection generators write proposals and where the operator's decision is recorded. RLS: members SELECT + UPDATE; INSERT + DELETE service-role only. |
+| `workspace_skill_overrides` | `20260602240000_phase_f_apply_side_effects.sql` | Lane 1 side effect. UNIQUE on `(workspace_id, skill_id)`, so accepting a second proposal for the same skill replaces the prior override. RLS: members can SELECT + INSERT + UPDATE + DELETE their own workspace's rows (operator-owned). |
+| `active_observation_variants` | `20260602240000_phase_f_apply_side_effects.sql` | Lane 2 side effect. UNIQUE on `(workspace_id, base_generator_id, variant_name)`. Same RLS posture as overrides. |
+
+Both side-effect tables FK back to `proposed_modifications.id` (set null on delete) so the audit chain — "this override exists because the operator accepted proposal X on date Y" — is preserved.
+
+Plus `workspace_profile.phase_f_proposals_enabled` boolean column (default `true`, nullable for backward-compat) per §Approved pick 6.
+
+**Detection generators (PR #249).** Two SQL-only generators wired into the heartbeat:
+- `skill_default_refinement` reads `scheduled_skills` + counts successful fires per skill from `scheduled_skill_fires` over the last 30 days. ≥5 fires threshold → proposal candidate.
+- `recurring_focus` reads `workspace_sessions.recent_actions` focus events over the last 14 days. ≥5 per-room threshold → proposal candidate mapped to a base generator via room (`signal-console → signal_decay`, `poc-framework → proof_staleness`, `discovery-studio → discovery_rhythm`, else `deal_decay`).
+
+Both generators check `phase_f_proposals_enabled` before doing any work; if false they return `[]` immediately.
+
+**Voice gate on every proposal write.** Generators produce a `ProposalCandidate` with `title`, `what_noticed`, `what_changes` — all three pass through `src/lib/voice/voice-document.ts:validateObservation` at write time. Failed candidates are dropped, logged, not re-rolled.
+
+**Cooldown dedupe.** `payload.dedupe_hash` is a stable hash of the proposal shape (computed by `stableHash` which is order-independent across param-key reordering). The writer blocks new writes when a pending OR accepted OR within-cooldown row with the same hash exists. 30-day cooldown per ADR-017 §Approved pick 3 — set at decide time on dismiss/snooze; null on accept.
+
+**Briefing Suggestions UI (PR #250).** `SuggestionsSection.tsx` mounts between `ViewToggle` and view-specific content; visible on both Workspace and World views. One proposal at a time, un-viewed first then most-recent. Three buttons: *Yes, make that change* (accepted) / *Ask me again in a month* (snoozed) / *Not now* (dismissed). First render marks the proposal viewed via fire-and-forget. Optimistic accept/dismiss with re-fetch on failure + inline error.
+
+**Settings toggle (PR #250).** `PhaseFCard` between Category and Demo. Reads/writes `workspace_profile.phase_f_proposals_enabled`. Peer-voice copy: *"The system will sometimes notice a pattern in how you work … and suggest a small change. You always accept or dismiss."*
+
+**Apply logic (PR #251).** `applyAcceptedProposal(id)` in `src/briefing/lib/phase-f-apply.ts` branches on `kind`:
+- `skill_default` → list existing override by skill_id; if present, update with new params + accepted_proposal_id; else insert
+- `observation_generator` → same shape, indexed by `(base_generator_id, variant_name)`
+
+Wired into `decidePendingProposal`: on accept success, fires apply. Failure surfaces an inline error to the operator but does NOT roll back the decision (the row stays `accepted`; retry path is open).
+
+**Skills dispatcher integration (PR #251).** `dispatchSkill` calls `applyWorkspaceOverride(skill, url)` after the recipe-resolved URL is built. Override params from `workspace_skill_overrides` are appended via `URL.searchParams.set` — any matching recipe param is overwritten. Defensive: load/parse failures fall through to the un-overridden URL.
+
+**Heartbeat variant runner (PR #254).** `runPhaseFVariantsForWorkspace` reads `active_observation_variants` for the workspace, invokes the matching base generator from `PHASE_B_GENERATORS`, voice-gates each candidate, writes with `source_generator = ${base_generator_id}:${variant_name}`. Per-variant errors captured in the lap outcome; failing variant doesn't abort the lap. Base generators + voice validator are **injected** rather than imported to keep vitest typecheck clean under `moduleResolution: bundler`.
+
+**Toggle scope (clarification).** The `phase_f_proposals_enabled` toggle disables NEW proposals from being detected. It does NOT disable already-applied side effects:
+- Skill overrides keep being honored by the dispatcher (the dispatcher reads `workspace_skill_overrides` unconditionally).
+- Observation variants keep firing in the heartbeat (the runner reads `active_observation_variants` unconditionally).
+
+This matches the doctrine: *"existing suggestions stay where they are — they just won't grow."* The operator removes an unwanted side effect by deleting the row, not by flipping the toggle.
+
+**Lane 2 deferral.** The variant runner invokes base generators **as-is**, without plumbing the variant's `filter` payload through the base generator's SQL. The variant's value is the distinct attribution track (the operator sees observations tagged `${base}:${variant}` in addition to base observations). Plumbing `filter` through the four Phase B generators' SQL queries is a future Phase G feature; if the operator decides the duplicate observations are noise, they can delete the variant row.
+
+
+
 ## Open questions for founder approval
 
 These are the picks I need from you before implementation starts:
