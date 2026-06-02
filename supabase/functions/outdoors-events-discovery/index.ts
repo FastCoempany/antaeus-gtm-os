@@ -429,12 +429,25 @@ async function activeWorkspaceIds(sb: SupabaseClient): Promise<string[]> {
 // server-side). Browser calls trigger a CORS preflight OPTIONS request,
 // so the handler must answer OPTIONS with the right headers AND echo
 // them on every response.
-const CORS_HEADERS: Record<string, string> = {
-    "access-control-allow-origin": "*",
-    "access-control-allow-methods": "POST, OPTIONS",
-    "access-control-allow-headers":
-        "authorization, content-type, apikey, x-client-info"
-};
+//
+// We echo the browser's Access-Control-Request-Headers value back in
+// Access-Control-Allow-Headers so any custom header the supabase-js
+// client adds (apikey, authorization, x-client-info, x-antaeus-client,
+// or any future addition) is automatically permitted. Authorization
+// is always listed explicitly because the CORS spec requires it —
+// "*" wildcard never matches Authorization.
+const DEFAULT_ALLOWED_HEADERS =
+    "authorization, content-type, apikey, x-client-info, x-antaeus-client";
+
+function corsHeaders(req: Request): Record<string, string> {
+    const requested = req.headers.get("access-control-request-headers");
+    return {
+        "access-control-allow-origin": "*",
+        "access-control-allow-methods": "POST, OPTIONS",
+        "access-control-allow-headers": requested ?? DEFAULT_ALLOWED_HEADERS,
+        "access-control-max-age": "86400"
+    };
+}
 
 // ─── HTTP handler ──────────────────────────────────────────────────
 
@@ -445,11 +458,12 @@ interface RequestBody {
 
 // @ts-ignore - Deno global resolved at deploy time
 Deno.serve(async (req: Request): Promise<Response> => {
+    const cors = corsHeaders(req);
     if (req.method === "OPTIONS") {
-        return new Response("ok", { headers: CORS_HEADERS });
+        return new Response("ok", { headers: cors });
     }
     if (req.method !== "POST") {
-        return json({ ok: false, error: "Method not allowed" }, 405);
+        return json({ ok: false, error: "Method not allowed" }, 405, cors);
     }
 
     // @ts-ignore - Deno.env
@@ -459,7 +473,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
     if (!supabaseUrl || !serviceRoleKey) {
         return json(
             { ok: false, error: "SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY missing" },
-            500
+            500,
+            cors
         );
     }
 
@@ -473,7 +488,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
                 ok: false,
                 error: `Invalid JSON body: ${err instanceof Error ? err.message : String(err)}`
             },
-            400
+            400,
+            cors
         );
     }
 
@@ -489,11 +505,16 @@ Deno.serve(async (req: Request): Promise<Response> => {
             if (ws.length === 0) {
                 return json(
                     { ok: false, error: "run_one requires workspaceId" },
-                    400
+                    400,
+                    cors
                 );
             }
             const result = await runForWorkspace(sb, ws);
-            return json({ ok: result.status !== "failed", result });
+            return json(
+                { ok: result.status !== "failed", result },
+                200,
+                cors
+            );
         }
 
         // run_all (cron).
@@ -502,29 +523,42 @@ Deno.serve(async (req: Request): Promise<Response> => {
         for (const id of ids) {
             results.push(await runForWorkspace(sb, id));
         }
-        return json({
-            ok: true,
-            workspaces: ids.length,
-            totals: {
-                eventsWritten: results.reduce((s, r) => s + r.eventsWritten, 0),
-                cost: Math.round(
-                    results.reduce((s, r) => s + r.cost, 0) * 10_000
-                ) / 10_000,
-                failed: results.filter((r) => r.status === "failed").length
+        return json(
+            {
+                ok: true,
+                workspaces: ids.length,
+                totals: {
+                    eventsWritten: results.reduce(
+                        (s, r) => s + r.eventsWritten,
+                        0
+                    ),
+                    cost:
+                        Math.round(
+                            results.reduce((s, r) => s + r.cost, 0) * 10_000
+                        ) / 10_000,
+                    failed: results.filter((r) => r.status === "failed").length
+                },
+                results
             },
-            results
-        });
+            200,
+            cors
+        );
     } catch (err) {
         return json(
             { ok: false, error: err instanceof Error ? err.message : String(err) },
-            500
+            500,
+            cors
         );
     }
 });
 
-function json(payload: unknown, status = 200): Response {
+function json(
+    payload: unknown,
+    status = 200,
+    cors: Record<string, string> = {}
+): Response {
     return new Response(JSON.stringify(payload), {
         status,
-        headers: { "content-type": "application/json", ...CORS_HEADERS }
+        headers: { "content-type": "application/json", ...cors }
     });
 }
