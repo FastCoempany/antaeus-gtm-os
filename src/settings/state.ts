@@ -21,9 +21,11 @@ import {
     checkCloudConnection,
     deleteCloudWorkspace,
     EMPTY_COUNTS,
+    exportCloudWorkspace,
     loadCloudRowCounts,
     type CloudConnectionState,
     type CloudDeleteResult,
+    type CloudExportSnapshot,
     type CloudRowCounts
 } from "./lib/cloud-sync";
 
@@ -56,6 +58,8 @@ export const isVerifyingCloud: Signal<boolean> = signal(false);
 export const cloudVerifiedAt: Signal<string | null> = signal(null);
 export const isDeletingCloud: Signal<boolean> = signal(false);
 export const lastCloudDelete: Signal<CloudDeleteResult | null> = signal(null);
+export const isExportingCloud: Signal<boolean> = signal(false);
+export const lastCloudExport: Signal<CloudExportSnapshot | null> = signal(null);
 
 // Phase 2.9 introduced an inboundReturn signal here. Program 6 / PR 1
 // retired it in favor of the canonical RoomChrome + BackButton pair
@@ -186,6 +190,70 @@ export function dismissToast(): void {
 }
 
 /**
+ * Pull every row from every workspace-scoped data table and trigger a
+ * JSON file download. The portable copy the operator can keep before
+ * (or independently of) clearing or deleting. Trust Annex action.
+ *
+ * Pairs with `exportBackup()` (which dumps the localStorage cache
+ * only) — this dumps the durable Supabase rows, which are the actual
+ * source of truth post-Phase-4.5 retrofit.
+ *
+ * Defensive throughout: a single failing table doesn't abort the
+ * export; the file lands with that table empty + an error noted.
+ */
+export async function exportCloudData(): Promise<CloudExportSnapshot> {
+    isExportingCloud.value = true;
+    try {
+        const snap = await exportCloudWorkspace(createDataClient);
+        lastCloudExport.value = snap;
+
+        // Trigger the file download. If we're outside a DOM context
+        // (tests, SSR) skip the download but keep the snapshot signal
+        // populated so callers / tests can inspect it.
+        if (typeof document !== "undefined") {
+            try {
+                const blob = new Blob([JSON.stringify(snap, null, 2)], {
+                    type: "application/json"
+                });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `antaeus-cloud-export-${snap.capturedAt.replace(
+                    /[:.]/g,
+                    "-"
+                )}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                console.error("[settings] cloud export download failed", err);
+            }
+        }
+
+        if (snap.errors.length === 0) {
+            flashToast(
+                "good",
+                `Cloud export ready. ${snap.totalRows} row${
+                    snap.totalRows === 1 ? "" : "s"
+                } across ${Object.keys(snap.tables).length} tables.`
+            );
+        } else {
+            flashToast(
+                "warn",
+                `Cloud export completed with ${snap.errors.length} table error${
+                    snap.errors.length === 1 ? "" : "s"
+                }. ${snap.totalRows} rows captured. See console.`
+            );
+            console.warn("[settings] cloud export errors:", snap.errors);
+        }
+        return snap;
+    } finally {
+        isExportingCloud.value = false;
+    }
+}
+
+/**
  * Permanently delete every row in the workspace's data tables. Trust
  * Annex action — the operator opts into a destructive cloud-side wipe.
  *
@@ -297,6 +365,10 @@ export function __resetForTests(): void {
     cloudCounts.value = EMPTY_COUNTS;
     isVerifyingCloud.value = false;
     cloudVerifiedAt.value = null;
+    isDeletingCloud.value = false;
+    lastCloudDelete.value = null;
+    isExportingCloud.value = false;
+    lastCloudExport.value = null;
 }
 
 export function __setCloudConnectionForTests(
