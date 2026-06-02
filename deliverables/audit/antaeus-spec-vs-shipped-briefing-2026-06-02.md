@@ -82,7 +82,7 @@ Per canon §6 + ADR-006, Briefing reads from EVERY other room via `getState()` c
 | Call Planner | `getCallPlannerState()` | shipped |
 | Outbound Studio | `getOutboundState()` | shipped |
 | Asset Builder | `getAssetBuilderState()` | placeholder (room not yet shipped) |
-| Deal Workspace | `getDealWorkspaceState()` | shipped |
+| Deal Workspace (via active deals) | `getActiveDealsState()` (`adapters/active-deals.ts`) | shipped |
 | Watchlist Triggers | `getWatchlistState()` | shipped |
 | Voice Document | `getVoiceState()` | shipped |
 | Behavioral Feedback | `getFeedbackState()` | shipped |
