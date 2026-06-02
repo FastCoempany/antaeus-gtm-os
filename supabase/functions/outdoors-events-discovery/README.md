@@ -26,27 +26,26 @@ in the Edge Function runtime.
 
 ## Invoke
 
-On-demand, single workspace (the room's "Run discovery now" button):
+On-demand from the room ("Run discovery now"):
 
 ```json
 POST { "action": "run_one", "workspaceId": "<uuid>" }
 ```
 
-Cron, all active workspaces (any workspace with a `product_category`):
+Admin escape-hatch — every active workspace in one call (manual only;
+no cron):
 
 ```json
 POST { "action": "run_all" }
 ```
 
-## Schedule
+## Cadence
 
-The pg_cron job lives in
-`supabase/migrations/20260601230000_outdoors_events_discovery_schedule.sql`,
-commented out by default. Uncomment + run in the SQL editor after
-deploy + Vault setup (same pattern as the heartbeat + briefing-pipeline
-cron). Default cadence: weekly, Monday 13:00 UTC (≈ 7am Chicago in
-winter, 8am in summer — early enough that the operator opens Monday to
-a fresh list).
+**On-demand only.** Founder direction 2026-06-02: no weekly cron. The
+operator triggers discovery by clicking "Run discovery now" in the
+room when they want a fresh sweep, and not before. The legacy cron
+migration file was deleted in the same PR that locked this doctrine —
+if a scheduled fire is wanted later, a new migration adds it cleanly.
 
 ## Cost
 
