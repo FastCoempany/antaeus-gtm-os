@@ -78,6 +78,8 @@ interface RegisteredGenerator {
 import { PHASE_B_GENERATORS } from "./generators.ts";
 import { PHASE_F_GENERATORS } from "./phase-f-generators.ts";
 import { writePhaseFCandidates } from "./phase-f-writer.ts";
+import { runPhaseFVariantsForWorkspace } from "./phase-f-variant-runner.ts";
+import { validateObservation, formatViolations } from "./voice-document.ts";
 
 const REGISTERED_GENERATORS: ReadonlyArray<RegisteredGenerator> =
     PHASE_B_GENERATORS;
@@ -427,6 +429,46 @@ async function runHeartbeat(sb: SupabaseClient): Promise<HeartbeatReport> {
 
         // ── Phase F (ADR-017) — proposal-detection lap ─────────────
         await runPhaseFForWorkspace(sb, workspace.id, ctx.now);
+
+        // ── Phase F Lane 2 — active variant runner ────────────────
+        // For each variant the operator accepted, re-invoke the base
+        // generator + write the candidate with the variant attribution
+        // tag. Closes the Lane 2 end-to-end loop noted as deferred in
+        // PR #251. Errors swallowed for the same per-workspace
+        // isolation reason as runPhaseFForWorkspace.
+        try {
+            const variantOutcome = await runPhaseFVariantsForWorkspace(
+                sb,
+                ctx,
+                (sourceGenerator, candidate) =>
+                    writeObservation(
+                        sb,
+                        workspace.id,
+                        sourceGenerator,
+                        candidate,
+                        ctx.now
+                    ),
+                PHASE_B_GENERATORS,
+                (text) => {
+                    const v = validateObservation(text);
+                    return {
+                        valid: v.valid,
+                        reason: v.valid ? undefined : formatViolations(v)
+                    };
+                }
+            );
+            if (variantOutcome.errors.length > 0) {
+                console.warn(
+                    `[heartbeat] phase-f-variant (${workspace.id}) errors:`,
+                    variantOutcome.errors
+                );
+            }
+        } catch (err) {
+            console.error(
+                `[heartbeat] phase-f-variant (${workspace.id}) crashed:`,
+                err
+            );
+        }
 
         perWorkspace.push({ workspaceId: workspace.id, runs });
     }
