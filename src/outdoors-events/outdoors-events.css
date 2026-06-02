@@ -615,3 +615,137 @@ body {
     border-left: 2px solid var(--oe-rule);
     padding-left: 10px;
 }
+
+/* ── Discovery console (ADR-016 PR 2) ────────────────────────── */
+
+.oe-console {
+    margin: 0 0 28px;
+    padding: 20px 22px;
+    background: var(--oe-card);
+    border: 1px solid var(--oe-rule);
+    border-left: 4px solid var(--oe-orange);
+    border-radius: 4px;
+}
+
+.oe-console__main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.oe-console__run-btn {
+    appearance: none;
+    background: var(--oe-orange);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: background 120ms ease;
+    flex-shrink: 0;
+}
+
+.oe-console__run-btn:hover:not(:disabled),
+.oe-console__run-btn:focus-visible {
+    background: #d05e15;
+    outline: none;
+}
+
+.oe-console__run-btn:disabled {
+    opacity: 0.7;
+    cursor: progress;
+}
+
+.oe-console__hint {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--oe-ink-soft);
+    margin: 0;
+    flex: 1;
+    min-width: 240px;
+}
+
+.oe-console__run {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--oe-rule-soft);
+}
+
+.oe-console__run-status {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oe-ink-quiet);
+}
+
+.oe-console__run-meta {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--oe-ink-soft);
+    letter-spacing: 0.04em;
+}
+
+.oe-console__run-error {
+    font-size: 12px;
+    color: #9a1f1f;
+    flex-basis: 100%;
+}
+
+.oe-console__error {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: #9a1f1f;
+    background: rgba(154, 31, 31, 0.06);
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+/* ── Tier group head (hint under the label) ──────────────────── */
+
+.oe-list__group-head {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--oe-rule);
+}
+
+.oe-list__group-head .oe-list__group-label {
+    margin: 0 0 2px;
+    padding: 0;
+    border: none;
+}
+
+.oe-list__group-hint {
+    font-size: 12px;
+    color: var(--oe-ink-quiet);
+    margin: 0;
+}
+
+/* ── Secondary (manual fallback) composer ────────────────────── */
+
+.oe-composer--secondary {
+    margin-top: 32px;
+    border-left-color: var(--oe-rule);
+    background: transparent;
+}
+
+.oe-composer__open-btn--ghost {
+    background: transparent;
+    color: var(--oe-ink-soft);
+    border: 1px solid var(--oe-rule);
+}
+
+.oe-composer__open-btn--ghost:hover,
+.oe-composer__open-btn--ghost:focus-visible {
+    background: var(--oe-rule-soft);
+    color: var(--oe-ink);
+}

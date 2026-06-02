@@ -5,6 +5,7 @@ import {
     composerOpen,
     draft,
     eventsByStatus,
+    eventsByTier,
     openComposer,
     closeComposer,
     patchDraft,
@@ -82,5 +83,43 @@ describe("outdoors-events state", () => {
         expect(draft.value.name).toBe("Mixer");
         expect(draft.value.kind).toBe("mixer");
         expect(draft.value.whereAt).toBe("Austin");
+    });
+
+    // ── ADR-016 PR 2: tier grouping is the primary organizing axis ──
+
+    it("eventsByTier groups in direct/adjacent/indirect order", () => {
+        setEvents([
+            mkEvent({ id: "a", relevanceTier: "adjacent" }),
+            mkEvent({ id: "b", relevanceTier: "direct" }),
+            mkEvent({ id: "c", relevanceTier: "indirect" }),
+            mkEvent({ id: "d", relevanceTier: "direct" })
+        ]);
+        const { tiers } = eventsByTier.value;
+        expect(tiers.map((t) => t.tier)).toEqual([
+            "direct",
+            "adjacent",
+            "indirect"
+        ]);
+        expect(tiers[0]!.events.length).toBe(2);
+        expect(tiers[1]!.events.length).toBe(1);
+        expect(tiers[2]!.events.length).toBe(1);
+    });
+
+    it("eventsByTier routes untiered events to the trailing bucket", () => {
+        setEvents([
+            mkEvent({ id: "a", relevanceTier: "direct" }),
+            mkEvent({ id: "b", relevanceTier: null }),
+            mkEvent({ id: "c", relevanceTier: null })
+        ]);
+        const { tiers, untiered } = eventsByTier.value;
+        expect(tiers[0]!.events.length).toBe(1);
+        expect(untiered.length).toBe(2);
+    });
+
+    it("eventsByTier returns empty buckets when nothing is loaded", () => {
+        setEvents([]);
+        const { tiers, untiered } = eventsByTier.value;
+        expect(tiers.every((t) => t.events.length === 0)).toBe(true);
+        expect(untiered).toEqual([]);
     });
 });

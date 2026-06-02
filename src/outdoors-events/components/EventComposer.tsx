@@ -27,18 +27,18 @@ import { joinTags, parseTags } from "../lib/persistence";
 export function EventComposer(): JSX.Element {
     if (!composerOpen.value) {
         return (
-            <section class="oe-composer oe-composer--closed">
+            <section class="oe-composer oe-composer--closed oe-composer--secondary">
                 <button
                     type="button"
-                    class="oe-composer__open-btn"
+                    class="oe-composer__open-btn oe-composer__open-btn--ghost"
                     onClick={openComposer}
                 >
-                    + Add an event
+                    + Add one by hand
                 </button>
                 <p class="oe-composer__hint">
-                    Author whatever's worth knowing — a conference, a
-                    mixer, a meetup, a local hang where your buyer might
-                    show up.
+                    Discovery does the finding. But if you already know
+                    about a gathering the system hasn't surfaced — a
+                    private invite, a local hang — add it here.
                 </p>
             </section>
         );
