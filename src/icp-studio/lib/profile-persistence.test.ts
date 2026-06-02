@@ -21,6 +21,7 @@ function makeRow(overrides: Partial<WorkspaceProfile> = {}): WorkspaceProfile {
         value_prop: "inheritable motion",
         onboarding_completed: true,
         onboarding_answers: { step: 7 },
+        phase_f_proposals_enabled: null,
         data: {},
         created_at: "2026-05-26T00:00:00Z",
         updated_at: "2026-05-26T00:00:00Z",
