@@ -1,13 +1,14 @@
 import type { JSX } from "preact";
-import { eventsByStatus, loaded } from "../state";
-import { STATUS_LABEL } from "../lib/types";
+import { eventsByTier, loaded } from "../state";
+import { TIER_LABEL, TIER_HINT } from "../lib/types";
 import { EventRow } from "./EventRow";
 
 /**
- * EventList — the operator's tracked events, grouped by status in
- * lifecycle order (Watching → Archived). Empty status buckets are
- * skipped. When nothing's tracked at all, the directional empty state
- * explains the room.
+ * EventList — discovered events grouped by relevance tier (Direct /
+ * Adjacent / Indirect) per ADR-016, with a trailing bucket for
+ * untiered events (legacy + manual additions). Empty tiers are
+ * skipped. When nothing's been discovered or added, the directional
+ * empty state explains the room.
  */
 export function EventList(): JSX.Element {
     if (!loaded.value) {
@@ -18,9 +19,11 @@ export function EventList(): JSX.Element {
         );
     }
 
-    const groups = eventsByStatus.value.filter((g) => g.events.length > 0);
+    const { tiers, untiered } = eventsByTier.value;
+    const tierGroups = tiers.filter((g) => g.events.length > 0);
+    const hasAny = tierGroups.length > 0 || untiered.length > 0;
 
-    if (groups.length === 0) {
+    if (!hasAny) {
         return (
             <section class="oe-list oe-list--empty" aria-label="No events yet">
                 <p class="oe-list__empty-kicker">DISCOVERY HASN'T RUN YET</p>
@@ -28,26 +31,29 @@ export function EventList(): JSX.Element {
                     The system will find events worth knowing about.
                 </h2>
                 <p class="oe-list__empty-body">
-                    Per ADR-016 the discovery pipeline reads your product
-                    category and surfaces conferences, mixers, and meetups
-                    that are direct, adjacent, or indirect to your space.
-                    Pipeline ships next; until then the composer above is
-                    a fallback if you want to add one by hand.
+                    Press "Run discovery now" above. The system reads your
+                    product category and surfaces conferences, mixers, and
+                    meetups that are direct, adjacent, or indirect to your
+                    space — each with a real link and a one-line reason it
+                    matters.
                 </p>
             </section>
         );
     }
 
     return (
-        <section class="oe-list" aria-label="Tracked events">
-            {groups.map((g) => (
-                <div class="oe-list__group" key={g.status}>
-                    <p class="oe-list__group-label">
-                        {STATUS_LABEL[g.status]}
-                        <span class="oe-list__group-count">
-                            {g.events.length}
-                        </span>
-                    </p>
+        <section class="oe-list" aria-label="Discovered events">
+            {tierGroups.map((g) => (
+                <div class="oe-list__group" key={g.tier}>
+                    <div class="oe-list__group-head">
+                        <p class="oe-list__group-label">
+                            {TIER_LABEL[g.tier]}
+                            <span class="oe-list__group-count">
+                                {g.events.length}
+                            </span>
+                        </p>
+                        <p class="oe-list__group-hint">{TIER_HINT[g.tier]}</p>
+                    </div>
                     <ul class="oe-list__rows">
                         {g.events.map((e) => (
                             <EventRow event={e} key={e.id} />
@@ -55,6 +61,27 @@ export function EventList(): JSX.Element {
                     </ul>
                 </div>
             ))}
+            {untiered.length > 0 ? (
+                <div class="oe-list__group" key="untiered">
+                    <div class="oe-list__group-head">
+                        <p class="oe-list__group-label">
+                            Added by hand
+                            <span class="oe-list__group-count">
+                                {untiered.length}
+                            </span>
+                        </p>
+                        <p class="oe-list__group-hint">
+                            Events you added before discovery, or that the
+                            system hasn't classified.
+                        </p>
+                    </div>
+                    <ul class="oe-list__rows">
+                        {untiered.map((e) => (
+                            <EventRow event={e} key={e.id} />
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
         </section>
     );
 }

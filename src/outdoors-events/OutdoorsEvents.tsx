@@ -1,17 +1,17 @@
 import type { JSX } from "preact";
 import { RoomChrome } from "@/lib/room-chrome";
 import { Topbar } from "./components/Topbar";
-import { ReframeBanner } from "./components/ReframeBanner";
+import { DiscoveryConsole } from "./components/DiscoveryConsole";
 import { EventComposer } from "./components/EventComposer";
 import { EventList } from "./components/EventList";
 
 /**
- * Outdoors Events — root component (ADR-015).
+ * Outdoors Events — root component (ADR-015 + ADR-016).
  *
- * Live Instrument family (canon Part II §4.3): top of the room is a
- * working console (the composer), the tracked-events list sits below.
- * Strictly informational — the operator authors offline gatherings
- * where their buyers might be. No cross-room handoff in first-ship.
+ * Live Instrument family: the discovery console drives the room (Run
+ * discovery now + last-run summary), the tier-grouped event list sits
+ * below. The manual composer is demoted to a secondary "add by hand"
+ * fallback — discovery is the primary path per ADR-016.
  */
 export function OutdoorsEvents(): JSX.Element {
     return (
@@ -22,9 +22,9 @@ export function OutdoorsEvents(): JSX.Element {
             <RoomChrome kicker="OUTDOORS EVENTS" />
             <main id="oe-room-main" class="oe-room">
                 <Topbar />
-                <ReframeBanner />
-                <EventComposer />
+                <DiscoveryConsole />
                 <EventList />
+                <EventComposer />
             </main>
         </>
     );

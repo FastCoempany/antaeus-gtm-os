@@ -1,13 +1,14 @@
 import { render } from "preact";
 import { OutdoorsEvents } from "./OutdoorsEvents";
-import { bootEvents } from "./state";
+import { bootEvents, bootLatestRun } from "./state";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 
 /**
- * Entry point for the Outdoors Events room (ADR-015).
+ * Entry point for the Outdoors Events room (ADR-015 + ADR-016).
  *
- * Served at /outdoors-events/. Live Instrument family. First-ship
- * scope: single-table list + edit + status, no cross-room handoff.
+ * Served at /outdoors-events/. Live Instrument family. Discovery
+ * surface: the system finds category-relevant gatherings; the operator
+ * marks + dismisses. Manual add is a secondary fallback.
  */
 
 initObservability();
@@ -31,6 +32,8 @@ if (!flagOn) {
 
 render(<OutdoorsEvents />, root);
 
-// Load the operator's tracked events after first paint. Defensive
-// inside listOutdoorsEvents — failures degrade to the empty state.
+// Load the operator's events + the latest discovery-run summary after
+// first paint. Both defensive — failures degrade to empty state /
+// no-run-yet.
 void bootEvents();
+void bootLatestRun();

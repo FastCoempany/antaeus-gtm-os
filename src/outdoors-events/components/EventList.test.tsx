@@ -46,18 +46,32 @@ describe("EventList", () => {
         expect(empty!.textContent).toContain("DISCOVERY HASN'T RUN YET");
     });
 
-    it("groups events by status with the group label + count", () => {
+    it("groups events by relevance tier (ADR-016)", () => {
         setEvents([
-            mkEvent({ id: "a", name: "RSA", status: "watching" }),
-            mkEvent({ id: "b", name: "Local mixer", status: "planning" })
+            mkEvent({ id: "a", name: "RSA", relevanceTier: "direct" }),
+            mkEvent({ id: "b", name: "CISO Summit", relevanceTier: "adjacent" }),
+            mkEvent({ id: "c", name: "Black Hat", relevanceTier: "direct" })
         ]);
         const { container } = render(<EventList />);
         const groups = container.querySelectorAll(".oe-list__group");
+        // Two tiers present (direct x2, adjacent x1); indirect empty + skipped.
         expect(groups.length).toBe(2);
-        expect(container.textContent).toContain("Watching");
-        expect(container.textContent).toContain("Planning");
+        expect(container.textContent).toContain("Direct");
+        expect(container.textContent).toContain("Adjacent");
         expect(container.textContent).toContain("RSA");
-        expect(container.textContent).toContain("Local mixer");
+        expect(container.textContent).toContain("CISO Summit");
+        expect(container.textContent).toContain("Black Hat");
+    });
+
+    it("collects untiered events in the 'Added by hand' bucket, rendered last", () => {
+        setEvents([
+            mkEvent({ id: "a", name: "RSA", relevanceTier: "direct" }),
+            mkEvent({ id: "b", name: "Private dinner", relevanceTier: null })
+        ]);
+        const { container } = render(<EventList />);
+        expect(container.textContent).toContain("Direct");
+        expect(container.textContent).toContain("Added by hand");
+        expect(container.textContent).toContain("Private dinner");
     });
 
     it("renders the relevance tier chip + reason when present (ADR-016)", () => {
