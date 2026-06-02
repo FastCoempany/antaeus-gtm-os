@@ -1,4 +1,5 @@
 import { resolveSource, type SourceResult } from "./sources";
+import { loadSkillOverride } from "./phase-f-overrides";
 import type { Skill, SkillAction } from "./types";
 
 /**
@@ -56,13 +57,44 @@ export async function dispatchSkill(
     try {
         const url = await buildUrlForAction(skill.action, opts);
         if (url.kind !== "ok") return url;
-        navigate(url.value);
-        return { kind: "navigated", url: url.value };
+
+        // Phase F (ADR-017 PR 4): apply the operator's per-workspace
+        // skill override on top of the recipe-resolved URL. Override
+        // params are appended; any matching recipe-resolved param is
+        // overwritten by the override value. Defensive — failures
+        // load → no override applied, dispatcher still routes.
+        const finalUrl = await applyWorkspaceOverride(skill, url.value);
+
+        navigate(finalUrl);
+        return { kind: "navigated", url: finalUrl };
     } catch (err) {
         return {
             kind: "error",
             error: err instanceof Error ? err.message : String(err)
         };
+    }
+}
+
+async function applyWorkspaceOverride(
+    skill: Skill,
+    baseUrl: string
+): Promise<string> {
+    try {
+        const override = await loadSkillOverride(skill.id);
+        if (!override) return baseUrl;
+        const u = new URL(baseUrl, "https://placeholder.example");
+        for (const [k, v] of Object.entries(override.params)) {
+            if (v === null || v === undefined) continue;
+            u.searchParams.set(k, String(v));
+        }
+        // URL constructor normalizes; strip the placeholder origin.
+        const search = u.search;
+        const pathOnly = baseUrl.split("?")[0]!;
+        return search ? `${pathOnly}${search}` : pathOnly;
+    } catch {
+        // Defensive: override loader/URL parse failures should never
+        // block the dispatch. The operator gets the un-overridden URL.
+        return baseUrl;
     }
 }
 

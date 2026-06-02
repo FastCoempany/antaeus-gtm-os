@@ -656,6 +656,8 @@ function toAccessorName(table: TableName): string {
         outdoors_events: "outdoorsEvents",
         outdoors_events_runs: "outdoorsEventsRuns",
         proposed_modifications: "proposedModifications",
+        workspace_skill_overrides: "workspaceSkillOverrides",
+        active_observation_variants: "activeObservationVariants",
         waitlist_signups: "waitlistSignups",
         // Phase A orchestration layer (ADR-004). These tables are
         // populated server-side (heartbeat Edge Function for

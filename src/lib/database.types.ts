@@ -2270,6 +2270,101 @@ export type Database = {
           },
         ]
       }
+      workspace_skill_overrides: {
+        // ADR-017 Phase F PR 4 Lane 1.
+        Row: {
+          accepted_proposal_id: string | null
+          applied_at: string
+          created_at: string
+          id: string
+          params: Json
+          skill_id: string
+          workspace_id: string
+        }
+        Insert: {
+          accepted_proposal_id?: string | null
+          applied_at?: string
+          created_at?: string
+          id?: string
+          params: Json
+          skill_id: string
+          workspace_id?: string
+        }
+        Update: {
+          accepted_proposal_id?: string | null
+          applied_at?: string
+          created_at?: string
+          id?: string
+          params?: Json
+          skill_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_skill_overrides_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workspace_skill_overrides_accepted_proposal_id_fkey"
+            columns: ["accepted_proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposed_modifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      active_observation_variants: {
+        // ADR-017 Phase F PR 4 Lane 2.
+        Row: {
+          accepted_proposal_id: string | null
+          applied_at: string
+          base_generator_id: string
+          created_at: string
+          filter: Json
+          id: string
+          variant_name: string
+          workspace_id: string
+        }
+        Insert: {
+          accepted_proposal_id?: string | null
+          applied_at?: string
+          base_generator_id: string
+          created_at?: string
+          filter: Json
+          id?: string
+          variant_name: string
+          workspace_id?: string
+        }
+        Update: {
+          accepted_proposal_id?: string | null
+          applied_at?: string
+          base_generator_id?: string
+          created_at?: string
+          filter?: Json
+          id?: string
+          variant_name?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "active_observation_variants_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "active_observation_variants_accepted_proposal_id_fkey"
+            columns: ["accepted_proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposed_modifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspace_sessions: {
         Row: {
           created_at: string
