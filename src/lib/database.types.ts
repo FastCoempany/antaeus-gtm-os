@@ -2172,6 +2172,7 @@ export type Database = {
           data: Json
           onboarding_answers: Json
           onboarding_completed: boolean
+          phase_f_proposals_enabled: boolean | null
           product_category: string | null
           updated_at: string
           value_prop: string | null
@@ -2183,6 +2184,7 @@ export type Database = {
           data?: Json
           onboarding_answers?: Json
           onboarding_completed?: boolean
+          phase_f_proposals_enabled?: boolean | null
           product_category?: string | null
           updated_at?: string
           value_prop?: string | null
@@ -2194,6 +2196,7 @@ export type Database = {
           data?: Json
           onboarding_answers?: Json
           onboarding_completed?: boolean
+          phase_f_proposals_enabled?: boolean | null
           product_category?: string | null
           updated_at?: string
           value_prop?: string | null
@@ -2205,6 +2208,63 @@ export type Database = {
             foreignKeyName: "workspace_profile_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: true
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposed_modifications: {
+        // ADR-017 Phase F. Hand-authored pending regen.
+        Row: {
+          cooldown_until: string | null
+          created_at: string
+          decided_at: string | null
+          decision: string | null
+          id: string
+          kind: string
+          payload: Json
+          proposed_at: string
+          title: string
+          viewed_at: string | null
+          what_changes: string
+          what_noticed: string
+          workspace_id: string
+        }
+        Insert: {
+          cooldown_until?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decision?: string | null
+          id?: string
+          kind: string
+          payload: Json
+          proposed_at?: string
+          title: string
+          viewed_at?: string | null
+          what_changes: string
+          what_noticed: string
+          workspace_id?: string
+        }
+        Update: {
+          cooldown_until?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decision?: string | null
+          id?: string
+          kind?: string
+          payload?: Json
+          proposed_at?: string
+          title?: string
+          viewed_at?: string | null
+          what_changes?: string
+          what_noticed?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposed_modifications_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },

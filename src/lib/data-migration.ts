@@ -655,6 +655,7 @@ function toAccessorName(table: TableName): string {
         // table union — the migration never reads from it.
         outdoors_events: "outdoorsEvents",
         outdoors_events_runs: "outdoorsEventsRuns",
+        proposed_modifications: "proposedModifications",
         waitlist_signups: "waitlistSignups",
         // Phase A orchestration layer (ADR-004). These tables are
         // populated server-side (heartbeat Edge Function for
