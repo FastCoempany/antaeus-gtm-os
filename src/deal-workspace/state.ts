@@ -188,6 +188,52 @@ export function setAllDeals(deals: ReadonlyArray<Deal>): void {
     loaded.value = true;
 }
 
+// ─── CSV export (pre-beta hygiene, 2026-06-02) ─────────────────────
+
+import {
+    downloadBlob,
+    isoForFilename,
+    toCsv,
+    type CsvColumn
+} from "@/lib/export-utils";
+
+const DEAL_CSV_COLUMNS: ReadonlyArray<CsvColumn<Deal>> = [
+    { header: "Account", value: (d) => d.accountName },
+    { header: "Value", value: (d) => d.value },
+    { header: "Stage", value: (d) => d.stage },
+    { header: "Close date", value: (d) => d.closeDate ?? "" },
+    { header: "Next step", value: (d) => d.nextStep ?? "" },
+    { header: "Next step date", value: (d) => d.nextStepDate ?? "" },
+    { header: "Champion", value: (d) => d.champion ?? "" },
+    { header: "Economic buyer", value: (d) => d.economicBuyer ?? "" },
+    { header: "Use case", value: (d) => d.useCase ?? "" },
+    { header: "Pain", value: (d) => d.pain ?? "" },
+    { header: "Competition", value: (d) => d.competition ?? "" },
+    { header: "Decision process", value: (d) => d.decisionProcess ?? "" },
+    { header: "Momentum", value: (d) => d.momentum ?? "" },
+    { header: "Forecast category", value: (d) => d.forecastCategory ?? "" },
+    { header: "Loss reason", value: (d) => d.lossReason ?? "" },
+    { header: "Loss notes", value: (d) => d.lossNotes ?? "" },
+    { header: "Notes", value: (d) => d.notes ?? "" },
+    { header: "Created at", value: (d) => d.created_at ?? "" },
+    { header: "Updated at", value: (d) => d.updated_at ?? "" }
+];
+
+/**
+ * Render the current pipeline as a CSV + trigger a download. Uses the
+ * shared toCsv helper for RFC-4180 quoting and downloadBlob for the
+ * file-trigger. Empty pipeline still produces a header-only file (so
+ * the operator can see the column shape even before they've loaded
+ * a deal).
+ */
+export function exportDealsCsv(): { ok: boolean; rowCount: number } {
+    const deals = allDeals.value;
+    const csv = toCsv(deals, DEAL_CSV_COLUMNS);
+    const filename = `antaeus-deals-${isoForFilename()}.csv`;
+    const ok = downloadBlob(csv, { filename });
+    return { ok, rowCount: deals.length };
+}
+
 /**
  * Insert or update a deal in the local array. Wave 3 calls this after
  * a successful save, Wave 4's realtime subscription calls it on push
