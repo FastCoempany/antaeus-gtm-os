@@ -86,6 +86,7 @@ import {
     type PendingProposal,
     type ProposalDecision
 } from "./lib/suggestions";
+import { applyAcceptedProposal } from "./lib/phase-f-apply";
 
 export const pendingProposals = signal<ReadonlyArray<PendingProposal>>([]);
 export const pendingProposalsLoaded = signal(false);
@@ -115,6 +116,18 @@ export async function decidePendingProposal(
             decisionError.value = result.error ?? "Could not save your choice.";
             // Re-fetch so the room state matches the server.
             pendingProposals.value = await loadPendingProposals();
+            return;
+        }
+        // Phase F PR 4 — apply the side effect when the operator
+        // accepts. Dismiss + snooze land in the ledger only; nothing
+        // to apply downstream.
+        if (decision === "accepted") {
+            const apply = await applyAcceptedProposal(id);
+            if (!apply.ok) {
+                decisionError.value =
+                    apply.error ??
+                    "Saved your choice, but couldn't apply it. Try again later.";
+            }
         }
     } finally {
         decisionBusyId.value = null;

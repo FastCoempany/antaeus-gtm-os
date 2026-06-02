@@ -112,6 +112,8 @@ function makeDataClient(opts: {
         outdoorsEvents: {} as never,
         outdoorsEventsRuns: {} as never,
         proposedModifications: {} as never,
+        workspaceSkillOverrides: {} as never,
+        activeObservationVariants: {} as never,
         workspaceSessions: {} as never,
         workspaceProfile: {} as never,
         observations,

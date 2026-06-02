@@ -129,6 +129,8 @@ function makeMockDataClient(opts: {
         outdoorsEvents: {} as never,
         outdoorsEventsRuns: {} as never,
         proposedModifications: {} as never,
+        workspaceSkillOverrides: {} as never,
+        activeObservationVariants: {} as never,
         workspaceSessions,
         workspaceProfile: {} as never,
         observations: {} as never,

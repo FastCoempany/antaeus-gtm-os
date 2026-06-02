@@ -130,6 +130,9 @@ export interface DataClient {
     outdoorsEventsRuns: NounAccessor<"outdoors_events_runs">;
     // ─── ADR-017 Phase F (PR 1, 2026-06-02) ────────────────────────
     proposedModifications: NounAccessor<"proposed_modifications">;
+    // ─── ADR-017 Phase F PR 4 ─────────────────────────────────────
+    workspaceSkillOverrides: NounAccessor<"workspace_skill_overrides">;
+    activeObservationVariants: NounAccessor<"active_observation_variants">;
     // ─── Phase A orchestration layer (ADR-004) ─────────────────────
     workspaceSessions: NounAccessor<"workspace_sessions">;
     observations: NounAccessor<"observations">;
@@ -209,6 +212,8 @@ export function createDataClient(
         outdoorsEvents: makeNounAccessor(sb, "outdoors_events"),
         outdoorsEventsRuns: makeNounAccessor(sb, "outdoors_events_runs"),
         proposedModifications: makeNounAccessor(sb, "proposed_modifications"),
+        workspaceSkillOverrides: makeNounAccessor(sb, "workspace_skill_overrides"),
+        activeObservationVariants: makeNounAccessor(sb, "active_observation_variants"),
         // ─── Phase A orchestration layer (ADR-004) ─────────────────
         workspaceProfile: makeNounAccessor(sb, "workspace_profile"),
         workspaceSessions: makeNounAccessor(sb, "workspace_sessions"),
@@ -259,6 +264,8 @@ function makeDemoLocalDataClient(): DataClient {
         outdoorsEvents: makeDemoLocalNounAccessor("outdoors_events"),
         outdoorsEventsRuns: makeDemoLocalNounAccessor("outdoors_events_runs"),
         proposedModifications: makeDemoLocalNounAccessor("proposed_modifications"),
+        workspaceSkillOverrides: makeDemoLocalNounAccessor("workspace_skill_overrides"),
+        activeObservationVariants: makeDemoLocalNounAccessor("active_observation_variants"),
         workspaceProfile: makeDemoLocalNounAccessor("workspace_profile"),
         workspaceSessions: makeDemoLocalNounAccessor("workspace_sessions"),
         observations: makeDemoLocalNounAccessor("observations"),
