@@ -64,7 +64,7 @@ The banned-vocabulary list inherits and extends the canon §11 examples, plus th
 
 Bans include single-noun shorthand patterns the product invented to feel important: "wedge," "verdict" (as bare shorthand — the structured Readiness verdicts are fine because they are sentence-shaped), "the move," "decision-grade," "operating truth," "command intelligence," "field read," "loom read," "ingot read," "recovery cue," "output ingot," "required correction," "operator move," "do not use," "main risk," "replacement pressure."
 
-Bans include marketing-deck language the visitor-face arc retired: "AI-powered," "world-class," "supercharge," "trusted by," "best-in-class," "next-generation," "revolutionary," "game-changing," "seamless," "powerful," "robust" (when used as decoration not specification).
+Bans include marketing-deck language the visitor-face arc retired: "AI-powered," "world-class," "supercharge," "trusted by," "best-in-class," "next-generation," "revolutionary," "game-changing," "seamless," "powerful," "robust." These words are banned in operator-facing strings without exception. A legitimate technical-specification use of the same word in dev-facing strings (a code comment about "robust error handling", for example) is out of the validator's scope and unaffected — the validator only examines operator-facing surfaces per §1.2.
 
 Bans include sycophantic copy the truth-loyalty test in charter §1.2 forbids: "Great work!," "You're doing amazing," "Way to go," "Awesome," "Crushing it," "On fire" — any phrase that rewards activity rather than truth.
 
@@ -102,7 +102,7 @@ The validator inherits the Briefing's existing structured-form hedging rules fro
 
 The validator runs in two places. First, in a new build script `npm run voice:check`, which the umbrella `npm run check` invokes alongside `typecheck` and `test`. A failed voice validation produces an error with the file path, the line number, the rejected string, and the specific rule it broke. The author sees this in their editor and in their pre-push hook.
 
-Second, in CI as part of `.github/workflows/ci.yml`. Every pull request runs the voice check against every operator-facing string the diff touches. A failed check blocks the merge. No override, no warning-and-ship, no soft path. The strictest enforcement, per founder lock in this session.
+Second, in CI as part of `.github/workflows/ci.yml`. Every pull request runs the voice check against every operator-facing string the diff touches. A failed check blocks the merge. The spec defines no override path, no warning-and-ship option, and no soft fallback — the strictest enforcement posture available, locked at founder direction during the design-system session that authored this spec.
 
 Exception path: a string that needs to ship despite failing the validator (the rare legitimate case — e.g., a third-party API error message rendered verbatim where wrapping it would lose fidelity) requires an explicit annotation comment that names the rule waived and the reason. The annotation is logged to `deliverables/voice-waivers.log` and reviewed quarterly. A waiver is a canon decision, not a developer decision; adding one requires founder approval the same way banning a word does.
 
@@ -126,6 +126,8 @@ export const voiceFamily: CompositionFamily = "live-instrument";
 ```
 
 Components that do not declare a family fall back to inference from the file path — `src/discovery-studio/` infers `live-instrument` because canon Part II §4.3 names Discovery Studio in that family. The inference is a safety net, not a primary mechanism. Components should declare explicitly; declarations are checked at build time for consistency with the room's canonical family in canon Part II §4.
+
+Shared components break the path-inference safety net. A component in `src/lib/components/`, `src/lib/ui/`, or any other cross-room location does not have a path-inferable family because the component serves multiple rooms. Shared components must declare `voiceFamily` explicitly — either one of the seven families if the component carries a consistent temperature across all the rooms that use it, or `polyglot` if it renders strings in multiple temperature contexts. A shared component with neither declaration fails the build at the first attempt to validate one of its strings.
 
 If a component renders strings across multiple temperature contexts (a shared component used by both a Threshold room and a Diagnosis Table room), the validator accepts a `voiceFamily` of `polyglot` and applies the strictest applicable rules — the intersection of the families' constraints rather than the union. Polyglot components should be rare. The polyglot mechanism is a v1 escape hatch for shared components the spec cannot anticipate, not a default posture. Future iterations may tighten or remove the polyglot path once the migration audit produces data on whether polyglot is actually used in practice. For speakability thresholds, "strictest applicable" means the shortest cap wins — Diagnosis Table's 18-word ceiling beats Threshold's longer allowance when a component lives in both. For pacing-shape calibration, the polyglot validator surfaces a warning rather than enforcing a calibration check, because a single string cannot match two divergent exemplar shapes at once.
 
@@ -171,7 +173,7 @@ The open question — whether the Briefing deserves a named eighth composition f
 
 ### 4.1 What a component declares
 
-A component renders operator-facing strings through one of three paths. The first path is a static literal string declared at the module top. The second path is a string interpolated from props the parent component passes in. The third path is a string returned from a helper that composes runtime values into a template.
+A component renders operator-facing strings through one of three paths. The first path is a static literal string declared in the component's source — at the module top, inside the component body as a JSX text literal, or assigned to a const that the JSX renders. The second path is a string interpolated from props the parent component passes in. The third path is a string returned from a helper that composes runtime values into a template.
 
 Every path passes the validator. Static literals validate at build time. Interpolated strings validate the template at build time — the literal portions between interpolation points are extracted and run through the validator. Helper-returned strings validate at the helper's call site against the template the helper carries.
 
