@@ -16,6 +16,8 @@ This spec generalizes the Briefing's structural posture to every operator-facing
 
 The charter's §3.5 binds the design system to the commitment that every operator-facing string in every component passes the rule. This spec is the operational form of that commitment. After it lands, no future commit can ship a string that drifts from the voice without the build telling the author exactly which rule it broke and on which line.
 
+The validator runs in two execution contexts. At build time, it validates the operator-facing strings every component ships, catching drift before the pull request reaches review. At synthesis time, it validates the strings the system itself writes — the Briefing's patterns, the heartbeat's observations, the Outdoors Events discovery surface's event-relevance reasons, any future LLM output the system synthesizes. Both contexts share the same canon. A string the LLM writes at synthesis time and a string a human writes in a button label answer to the same rules, because the rules are the voice and the voice is one voice regardless of who authored the string.
+
 ---
 
 ## Part I — What voice-as-component is
@@ -74,7 +76,11 @@ The banned list is maintained as `src/lib/voice/banned-vocabulary.ts`, a typed a
 
 Structural requirements apply to all three classes but with different granularity per class.
 
-For labels and chips, the requirement is that the string either contains an imperative verb (where the subject is the implicit "you" of the operator), names a state from the canon §10 state vocabulary, or carries a sentence-shaped chip declared by the component as canon-blessed. Bare nouns without semantic weight ("OK", "Yes", "More") fail unless they are canon-blessed by the validator's allowlist, which lives in `src/lib/voice/blessed-labels.ts` and grows only by founder-approved canon change.
+For labels and chips, the validator checks three things and nothing else. First, the banned-vocabulary check (universal — this catches completion-shaped labels like bare "Done", the sycophantic phrases banned in §2.2, and the single-noun shorthand the canon §11 rule retired). Second, a length cap: labels longer than six words are rejected because labels longer than six words are not labels but body prose the component has mislabeled. Third, a shape check that accepts any of these forms: an imperative verb ("Save", "Add account"), a canon §10 state name ("Ready now", "Compounding"), a noun-phrase field label identifying an input or property ("Account name", "ICP definition", "Email"), a count expression ("3 deals", "No deals yet"), a navigation label that names a canon room, or a token from the blessed-labels allowlist.
+
+The blessed-labels allowlist captures common UI nouns the canon has approved for label use without per-instance re-litigation: "OK", "Yes", "No", "Cancel", "Next", "Previous", "More", "Less", "Back", "Close". The list lives in `src/lib/voice/blessed-labels.ts` and the spec lands with this initial set populated. Adding to the allowlist after the spec lands requires a pull request with founder approval — it is a canon change and routes through the mind-correction protocol per charter §4.4.
+
+Labels do not undergo the subject-and-verb requirement, the subject-continuity check, the speakability heuristic, or the pacing-shape calibration. Those rules apply to body prose and authored prose, where voice carries narrative weight that label-length strings cannot.
 
 For body prose and authored prose, every sentence must have a subject and a verb. Strings that are series of multiple sentences must show subject continuity across the sentences. The example canon §11 bans is "Signals are time-limited. Heat ranks them. Motion comes from the account ledger." — three subjects, no continuity. The validator rejects that shape.
 
@@ -82,7 +88,7 @@ The subject-continuity check ships as a Tier-2 warning rather than a hard error 
 
 The speakability heuristic applies to body prose and authored prose. Labels are too short to fail it. The heuristic measures four dimensions. First, sentence length against the family's threshold (the per-family thresholds live in §3.3). Second, clause depth — strings with more than three levels of subordinate clauses fail, because nobody speaks that way. Third, word commonness, measured against a 5,000-word common-vocabulary corpus; strings where more than fifteen percent of content words fall outside the corpus get flagged. Fourth, connective density — strings with more than two semicolons or em-dashes per sentence are usually written-language rather than spoken-language. A string failing any one dimension surfaces a warning that names the specific dimension and the margin by which the string missed.
 
-Loop-transformation rule applies to all three classes. Strings that announce completion ("Done", "All done", "Complete", "Finished", "All caught up") are rejected unless paired with a forward-loop sentence in the same string. The Ovsiankina principle from canon §5 is what this enforces — tension migrates forward and never closes, which is the behavioral substrate every component implements per charter §2.1.
+Loop-transformation rule applies to all three classes but the validator enforces it at different levels per class. For body prose and authored prose, strings that announce completion ("Done", "All done", "Complete", "Finished", "All caught up") are rejected unless paired with a forward-loop sentence in the same string. For labels, completion-shaped strings are banned outright via the banned-vocabulary list (bare "Done" as a button label is rejected) because a single-string label cannot pair itself with a forward-loop sentence within the string. Loop transformation on label surfaces is enforced at the component-render level rather than the validator level: the component contract requires that any completion-shaped event transforms the surface into the next operating state per canon Part III §3 rule 5 ("every save must visibly matter"). The validator catches the bare "Done" label as banned vocabulary; the component contract carries the loop-transformation at the render level. The Ovsiankina principle from canon §5 is what both layers enforce together — tension migrates forward and never closes, which is the behavioral substrate every component implements per charter §2.1.
 
 ### 2.4 How it hedges (applies primarily to authored prose)
 
@@ -121,7 +127,7 @@ export const voiceFamily: CompositionFamily = "live-instrument";
 
 Components that do not declare a family fall back to inference from the file path — `src/discovery-studio/` infers `live-instrument` because canon Part II §4.3 names Discovery Studio in that family. The inference is a safety net, not a primary mechanism. Components should declare explicitly; declarations are checked at build time for consistency with the room's canonical family in canon Part II §4.
 
-If a component renders strings across multiple temperature contexts (a shared component used by both a Threshold room and a Diagnosis Table room), the validator accepts a `voiceFamily` of `polyglot` and applies the strictest applicable rules — the intersection of the families' constraints rather than the union.
+If a component renders strings across multiple temperature contexts (a shared component used by both a Threshold room and a Diagnosis Table room), the validator accepts a `voiceFamily` of `polyglot` and applies the strictest applicable rules — the intersection of the families' constraints rather than the union. Polyglot components should be rare. The polyglot mechanism is a v1 escape hatch for shared components the spec cannot anticipate, not a default posture. Future iterations may tighten or remove the polyglot path once the migration audit produces data on whether polyglot is actually used in practice. For speakability thresholds, "strictest applicable" means the shortest cap wins — Diagnosis Table's 18-word ceiling beats Threshold's longer allowance when a component lives in both. For pacing-shape calibration, the polyglot validator surfaces a warning rather than enforcing a calibration check, because a single string cannot match two divergent exemplar shapes at once.
 
 ### 3.3 What the family declaration changes
 
@@ -131,11 +137,11 @@ The first modulated dimension is the speakability threshold. The four-dimension 
 
 The second modulated dimension is pacing-shape calibration. The validator compares the candidate string's sentence-length variance, average clause depth, and connective density against the family's exemplar corpus, treating the exemplars as the calibration shape the string should approximate. A string that matches the family's pacing shape passes the calibration check; one that diverges surfaces a warning naming which dimension is off and by how much. Pacing calibration is a Tier-2 warning rather than a hard block — the family's exemplars are themselves authored and iterating, and the calibration check is most useful as a sanity prompt for the author rather than as a merge gate.
 
-What remains constant across all seven families: the banned vocabulary list, the structural requirements (subject and verb, subject continuity in series, loop-transformation), and the hedging discipline. Voice is one voice. Temperature is what modulates.
+What remains constant across all seven families: the banned vocabulary list, the structural requirements (subject and verb, subject continuity in series, loop-transformation), and the hedging discipline. The voice itself is the constant; what the family declaration changes is the temperature it gets spoken at.
 
 ### 3.4 The seven temperatures with exemplars
 
-Each exemplar below is a worked example of the voice in the family's temperature. Each family ships with at least five exemplars in `src/lib/voice/exemplars/<family>.ts`, used by the validator both as positive guidance (the IDE surfaces a contextual hint during string authoring) and as a calibration corpus (the validator compares a candidate string against the family's exemplars for shape rather than content).
+Each exemplar below is a worked example of the voice in the family's temperature. Each family ships with at least five exemplars in `src/lib/voice/exemplars/<family>.ts`, used by the validator both as positive guidance (the IDE surfaces a contextual hint during string authoring) and as a calibration corpus (the validator compares a candidate string against the family's exemplars for shape rather than content). The single exemplar shown for each family below is illustrative — it shows the family's temperature in one example. The remaining four-plus exemplars per family are authored at implementation time and committed to the family file before the validator flips from `warn` to `enforce` for any room in that family. The exemplar corpus grows as new components ship and the family's voice gets sharper over time.
 
 **Threshold (Welcome, Onboarding) — invitational, composed.** "You're about to define who you sell to. Every room downstream uses this definition; sharpen it now and the rest of the system gets sharper too."
 
@@ -150,6 +156,14 @@ Each exemplar below is a worked example of the voice in the family's temperature
 **System Ledger (Readiness Score, Quota Workback, Founding GTM / Handoff Kit) — earned, synthesizing, authoritative.** "You're at Inheritable-with-guardrails. A first hire could probably run this if you stayed close for two weeks. Three sections of the kit are still empty; closing two of them moves the verdict to Hire-ready."
 
 **Trust Annex (Settings) — calm, plainspoken, trustworthy.** "Your data lives in two places — your browser and Antaeus's cloud. You can export everything as JSON whenever you want. Deleting the workspace removes both copies."
+
+### 3.5 The Briefing's family placement — an open question
+
+The Briefing room presents a gap the spec must acknowledge rather than silently paper over. Canon §4.21 names the Briefing as "a new composition family, closest neighbor is System Ledger" — explicitly an eighth family in the canon's room-level doctrine, even though canon Part II §4 still lists only seven families at the composition-family level. The Briefing already has a voice document (five exemplars, banned vocabulary, structural rules, hedging rules) that the heartbeat and the Recipe Layer validate against today.
+
+The voice spec provisionally treats the Briefing's existing voice document as a System Ledger family contribution, because System Ledger is the closest neighbor the canon names. Briefing-authored strings validate against the System Ledger family thresholds and exemplars, and the Briefing's existing five exemplars seed `src/lib/voice/exemplars/system-ledger.ts` as the first members of that family's corpus.
+
+The open question — whether the Briefing deserves a named eighth composition family with its own temperature in this spec, or whether System Ledger absorption is the right long-term answer — routes through the mind-correction protocol per charter §4.4. The spec does not have authority to add an eighth family; the canon does. Until the canon resolves the question, the provisional System Ledger treatment holds.
 
 ---
 
