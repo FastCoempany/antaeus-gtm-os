@@ -22,7 +22,7 @@ The charter's §3.5 binds the design system to the commitment that every operato
 
 ### 1.1 The shift from guideline to component
 
-Voice today depends on three things in sequence. The author has to know the rule. The author has to remember the rule while writing under deadline. The reviewer has to catch the violations the author missed. Three steps, three failure modes, three places where voice drift gets through. The Briefing's voice module proves a fourth path is available: replace human memory with structural validation, and the rule enforces itself.
+Voice today depends on three things in sequence. The author has to know the rule. The author has to remember the rule while writing under deadline. The reviewer has to catch the violations the author missed. That sequence has three steps and three failure modes, and voice drift gets through at every step. The Briefing's voice module proves a fourth path is available: replace human memory with structural validation, and the rule enforces itself.
 
 The shift is from "writers apply a discipline" to "the system rejects strings that violate the discipline." A component that wants to ship a string declares the string. The validator examines it against the canonical rules. If the string passes, the component compiles. If the string fails, the build errors with a specific reason and a specific line. The author fixes the string or escalates. No string reaches production through a path the validator did not approve.
 
@@ -42,11 +42,23 @@ The validator is not a separate document referencing canon §11. The validator i
 
 ## Part II — The validator
 
-The validator carries three layers of rules — what it bans, what it requires structurally, and how it handles hedging — plus a failure mode that integrates with CI.
+The validator carries three layers of rules — what it bans, what it requires structurally, and how it handles hedging — plus a failure mode that integrates with CI. The rules apply at different granularity depending on what kind of string is being validated, which §2.1 specifies first because every rule that follows references the string class it applies to.
 
-### 2.1 What it bans
+### 2.1 The three string classes
 
-The banned-vocabulary list inherits and extends the canon §11 examples, plus the deep-clean sweep from 2026-05-19 (branch `claude/voice-deep-clean`), plus the marketing-language gates added during the Phase 5 static public-face arc.
+Operator-facing strings fall into three classes by how the operator reads them in the running product. The validator's rules apply to each class with different granularity, so the spec specifies the classes once and then references them per rule.
+
+**Labels and chips** are short surface strings the operator reads as a unit: button labels ("Save", "Add account"), status chips ("Ready now", "Compounding"), state indicators (the canon Part III §10 state vocabulary lives here in full), navigation labels, field labels under inputs, link text, and short headings that are nouns or verb phrases rather than full sentences. Labels permit imperative verbs without explicit subjects ("Save the deal") and noun phrases that name a state ("Ready now") because that is how operators read them aloud — the implicit subject is the operator or the object being labeled. Canon §10's state vocabulary ("Ready now", "Workable", "Thin", "Operating", "Compounding", "Still weak", "Handoff-ready", "Partial", "Needs intervention", "At risk") is canonical, and the validator recognizes those strings as pre-blessed labels.
+
+**Body prose** is the operator-facing copy that carries narrative weight inside a component but does not author the system's voice: empty-state explanations, modal copy, tooltip text, error-message bodies, microcopy under inputs, confirmation language, toast notifications, and longer headings that form full sentences. Body prose requires subject and verb in every sentence and subject continuity across sentence series. It carries the full banned-vocabulary list. The speakability heuristic applies.
+
+**Authored prose** is the long-form narrative the system generates or composes: Briefing patterns, Founding GTM section paragraphs, observation ledger entries, Future Autopsy narratives, kit summaries, Discovery Studio segment authoring, and the synthesized prose that carries the system's read of what is happening. Authored prose carries every rule the spec defines — banned vocabulary, structural requirements, hedging discipline, loop-transformation, speakability, and pacing-shape calibration against the family's exemplars.
+
+The three classes are declared at the call site of the validator. A component calling `validateString` passes a class parameter; helpers wrapping common patterns infer the class from the call site, so a button helper declares its strings as labels, an empty-state helper declares its strings as body prose, and the Briefing's synthesizer declares its strings as authored prose.
+
+### 2.2 What it bans (applies to all classes)
+
+The banned-vocabulary list inherits and extends the canon §11 examples, plus the deep-clean sweep from 2026-05-19 (branch `claude/voice-deep-clean`), plus the marketing-language gates added during the Phase 5 static public-face arc. Bans apply universally across labels, body prose, and authored prose — no class is exempt from the banned list.
 
 Bans include single-noun shorthand patterns the product invented to feel important: "wedge," "verdict" (as bare shorthand — the structured Readiness verdicts are fine because they are sentence-shaped), "the move," "decision-grade," "operating truth," "command intelligence," "field read," "loom read," "ingot read," "recovery cue," "output ingot," "required correction," "operator move," "do not use," "main risk," "replacement pressure."
 
@@ -58,21 +70,29 @@ Bans include manifesto-fragment patterns: sentences in series without subject co
 
 The banned list is maintained as `src/lib/voice/banned-vocabulary.ts`, a typed array of patterns. Adding to the list requires a pull request with founder approval — banning a word is a canon change, and canon changes route through the mind-correction protocol per charter §4.4.
 
-### 2.2 What it requires structurally
+### 2.3 What it requires structurally
 
-Structural rules are positive requirements rather than bans. Every string the validator examines must have at least one subject and at least one verb. Strings that are series of multiple sentences must show subject continuity across the sentences. The example canon §11 bans is "Signals are time-limited. Heat ranks them. Motion comes from the account ledger." — three subjects, no continuity. The validator rejects that shape.
+Structural requirements apply to all three classes but with different granularity per class.
 
-Strings longer than 20 words go through a speakability check: the validator flags any sentence the author could not plausibly say out loud to the operator across a table. This check is heuristic rather than algorithmic — it surfaces a warning rather than a hard error, and the author either rewrites or annotates the string as "speakable enough." The annotation is logged so future passes can audit. The heuristic itself evolves as the system learns which patterns fail the speakability test in practice.
+For labels and chips, the requirement is that the string either contains an imperative verb (where the subject is the implicit "you" of the operator), names a state from the canon §10 state vocabulary, or carries a sentence-shaped chip declared by the component as canon-blessed. Bare nouns without semantic weight ("OK", "Yes", "More") fail unless they are canon-blessed by the validator's allowlist, which lives in `src/lib/voice/blessed-labels.ts` and grows only by founder-approved canon change.
 
-Loop-transformation rule: strings that announce completion ("Done," "All done," "Complete," "Finished," "All caught up") are rejected unless paired with a forward-loop sentence in the same string. The Ovsiankina principle from canon §5 is what this enforces — tension migrates forward and never closes, which is the behavioral substrate every component implements per charter §2.1.
+For body prose and authored prose, every sentence must have a subject and a verb. Strings that are series of multiple sentences must show subject continuity across the sentences. The example canon §11 bans is "Signals are time-limited. Heat ranks them. Motion comes from the account ledger." — three subjects, no continuity. The validator rejects that shape.
 
-### 2.3 How it hedges
+The subject-continuity check ships as a Tier-2 warning rather than a hard error in the spec's first version, because reliable detection requires linguistic analysis the validator's first algorithm implements heuristically — it looks for repeated noun-phrase heads or pronoun resolution across adjacent sentences and warns when neither pattern holds. As the algorithm calibrates against real authored prose, the rule promotes to Tier-1 (hard error) once the false-positive rate drops below five percent on the existing corpus.
+
+The speakability heuristic applies to body prose and authored prose. Labels are too short to fail it. The heuristic measures four dimensions. First, sentence length against the family's threshold (the per-family thresholds live in §3.3). Second, clause depth — strings with more than three levels of subordinate clauses fail, because nobody speaks that way. Third, word commonness, measured against a 5,000-word common-vocabulary corpus; strings where more than fifteen percent of content words fall outside the corpus get flagged. Fourth, connective density — strings with more than two semicolons or em-dashes per sentence are usually written-language rather than spoken-language. A string failing any one dimension surfaces a warning that names the specific dimension and the margin by which the string missed.
+
+Loop-transformation rule applies to all three classes. Strings that announce completion ("Done", "All done", "Complete", "Finished", "All caught up") are rejected unless paired with a forward-loop sentence in the same string. The Ovsiankina principle from canon §5 is what this enforces — tension migrates forward and never closes, which is the behavioral substrate every component implements per charter §2.1.
+
+### 2.4 How it hedges (applies primarily to authored prose)
+
+Hedging rules apply primarily to authored prose, where confidence claims actually live, and selectively to body prose when a component renders a confidence-shaped statement. Labels do not carry confidence claims as a class, so the hedging rules pass over them.
 
 Hedging rules govern how the system expresses uncertainty. Confidence claims must be paired with calibration. "The market is shifting toward X" without evidence fails; "the market may be shifting toward X — the last six pattern reads support it weakly" passes. False certainty fails the validator. False softness also fails: "Acme might be at risk" when the evidence shows it is at risk, by every dimension the system tracks, is sycophantic in the truth-loyalty sense even though it appears cautious.
 
 The validator inherits the Briefing's existing structured-form hedging rules from `src/lib/voice/voice-document.ts` and extends them with the four behavioral properties in charter §2.1 — particularly calibrated-uncertainty-as-first-class-output. A component that surfaces a rank with no expressed confidence is rejected by the validator for failing the calibration requirement.
 
-### 2.4 Failure mode — CI block, strictest
+### 2.5 Failure mode — CI block, strictest
 
 The validator runs in two places. First, in a new build script `npm run voice:check`, which the umbrella `npm run check` invokes alongside `typecheck` and `test`. A failed voice validation produces an error with the file path, the line number, the rejected string, and the specific rule it broke. The author sees this in their editor and in their pre-push hook.
 
@@ -103,7 +123,17 @@ Components that do not declare a family fall back to inference from the file pat
 
 If a component renders strings across multiple temperature contexts (a shared component used by both a Threshold room and a Diagnosis Table room), the validator accepts a `voiceFamily` of `polyglot` and applies the strictest applicable rules — the intersection of the families' constraints rather than the union.
 
-### 3.3 The seven temperatures with exemplars
+### 3.3 What the family declaration changes
+
+The family declaration modulates two specific dimensions of the rule set. It does not modulate banned vocabulary, structural requirements, or the loop-transformation rule — those apply universally and the same way in every family. The voice is one voice across the seven; family modulation only operates on the dimensions where temperature actually lives.
+
+The first modulated dimension is the speakability threshold. The four-dimension heuristic introduced in §2.3 (sentence length, clause depth, word commonness, connective density) carries different threshold values per family. A System Ledger room allows authored sentences up to 35 words because the family's exemplars run long and serif-weighted; a Command Chamber room caps sentences at 18 words because the family's exemplars are punchy and ranked; a Trust Annex room caps at 22 words with a higher bar on plain-language word frequency because the family's job is to read as obvious utility rather than as authored prose. The exact threshold values per family live in `src/lib/voice/family-thresholds.ts` and tune over time as the migration audit produces real data on what passes and what fails per family.
+
+The second modulated dimension is pacing-shape calibration. The validator compares the candidate string's sentence-length variance, average clause depth, and connective density against the family's exemplar corpus, treating the exemplars as the calibration shape the string should approximate. A string that matches the family's pacing shape passes the calibration check; one that diverges surfaces a warning naming which dimension is off and by how much. Pacing calibration is a Tier-2 warning rather than a hard block — the family's exemplars are themselves authored and iterating, and the calibration check is most useful as a sanity prompt for the author rather than as a merge gate.
+
+What remains constant across all seven families: the banned vocabulary list, the structural requirements (subject and verb, subject continuity in series, loop-transformation), and the hedging discipline. Voice is one voice. Temperature is what modulates.
+
+### 3.4 The seven temperatures with exemplars
 
 Each exemplar below is a worked example of the voice in the family's temperature. Each family ships with at least five exemplars in `src/lib/voice/exemplars/<family>.ts`, used by the validator both as positive guidance (the IDE surfaces a contextual hint during string authoring) and as a calibration corpus (the validator compares a candidate string against the family's exemplars for shape rather than content).
 
@@ -127,9 +157,9 @@ Each exemplar below is a worked example of the voice in the family's temperature
 
 ### 4.1 What a component declares
 
-A component renders operator-facing strings through one of three paths. First, static literal strings declared at module top. Second, strings interpolated from props. Third, strings returned from helpers that compose runtime values into templates.
+A component renders operator-facing strings through one of three paths. The first path is a static literal string declared at the module top. The second path is a string interpolated from props the parent component passes in. The third path is a string returned from a helper that composes runtime values into a template.
 
-Every path passes the validator. Static literals validate at build time. Interpolated strings validate the template — the literal portions between interpolation points are extracted and run through the validator at build time. Helper-returned strings validate at the helper's call site against the template the helper carries.
+Every path passes the validator. Static literals validate at build time. Interpolated strings validate the template at build time — the literal portions between interpolation points are extracted and run through the validator. Helper-returned strings validate at the helper's call site against the template the helper carries.
 
 The component contract is: declare `voiceFamily`, render strings through the registered string paths, and never construct a string by raw template concatenation that the validator cannot inspect. The validator catches the third pattern at lint time and rejects it before the component can ship.
 
@@ -158,9 +188,11 @@ src/lib/voice/
 
 `validateObservation` remains the Briefing's specific entry point so the heartbeat and the Recipe Layer keep validating against the same module without code change. `validateString` is the new general-purpose entry point that every component uses. Both share the same underlying rules.
 
+The spec's coverage spans both build-time component strings and synthesis-time LLM outputs. Component strings — labels, body prose, authored prose declared at the component's call site — validate through `validateString` at build time. LLM-authored synthesis outputs — the Briefing's patterns, the heartbeat's observations, the Outdoors Events discovery surface's event-relevance reasons, any future synthesis-time string the system writes — validate through `validateObservation` and its synthesis-time siblings. Both code paths share the underlying rules in `voice-document.ts`, so a string authored by the LLM at synthesis time and a string authored by a human in a button label answer to the same canon.
+
 ### 4.3 Voice and the density gradient
 
-Density adjusts quantity. Voice does not change. A Threshold room serving a day-one operator and a Threshold room serving Sarah-day-90 use the same voice — the peer operator's voice, in the Threshold temperature — but the day-one surface uses more sentences to walk the operator through what Sarah would have understood from one sentence. The personality is the same; the pacing decompresses.
+Density adjusts how much of the voice a surface ships at a time, and the voice itself stays constant across the gradient. A Threshold room serving a day-one operator and a Threshold room serving Sarah-day-90 — the fluent-operator baseline pinned in charter §4.7 — use the same voice, in the Threshold temperature, but the day-one surface uses more sentences to walk the operator through what Sarah would have understood from one sentence. The personality is the same; the pacing decompresses.
 
 The validator does not know about the density gradient. The same validator applies to both density levels. The density-gradient spec, when it lands as the next sibling document, decides how many sentences a given surface ships at; the voice spec decides what those sentences sound like. They are orthogonal axes, deliberately, so the validator does not have to re-learn rules whenever the gradient adjusts.
 
@@ -172,11 +204,11 @@ The validator does not know about the density gradient. The same validator appli
 
 Per charter §4.3, existing rooms get a single audit pass before any redesign. Voice-as-component changes the calculus on that pass: a room's strings can be audited mechanically the moment the validator ships. The migration plan is:
 
-1. Land the validator behind a feature flag `voice_validator_enforced` (off by default in main, on for new components only).
-2. Run the validator against every existing room's strings as a non-blocking lint, surfacing a report at `deliverables/voice-audit-<room>-2026-06-XX.md` per room.
-3. Triage the report: hard violations (banned vocabulary, missing subject-verb, manifesto fragments) get queued for fix; soft violations (speakability warnings, hedging gaps) get reviewed family-by-family.
+1. Land the validator with a flag `voice_validator_enforce_mode` carrying two values: `warn` (the default in main — the validator runs against every operator-facing string, surfaces violations in CI logs, and produces per-room audit reports, but does not block any merge) and `enforce` (the eventual state where any violation blocks the merge). The validator runs in both modes; only the failure behavior differs. New components opt into `enforce` from day one via a per-component declaration. Existing rooms stay on `warn` until their audit clears.
+2. Run the validator against every existing room's strings, surfacing a report at `deliverables/voice-audit-<room>-2026-06-XX.md` per room.
+3. Triage the report: hard violations (banned vocabulary, missing subject-verb in body or authored prose, loop-transformation breaches) get queued for fix; soft violations (speakability warnings, hedging gaps, pacing-shape divergences) get reviewed family-by-family.
 4. Fix the hard violations first, room by room, smallest backlog first. Each room's fix is its own pull request with its own commit message citing the audit doc.
-5. Flip the flag to enforced once the queue clears.
+5. Flip the flag to `enforce` for a room once its hard-violation queue clears, and flip globally once every room has cleared.
 
 The flag's existence is intentional. Strict enforcement on day one against the existing 22 rooms would block all current development; the flag lets the new spec ship while the existing surface area is brought up to standard at the design system's pace, per the charter's commitment to not redesign rooms in a forced sprint.
 
@@ -188,7 +220,7 @@ Per charter §3.3, every component spec maps its behavioral mechanism to at leas
 
 **Self-Determination Theory (Tier 3, Deci & Ryan 2000).** The overjustification effect warns that extrinsic rewards — points, badges, leaderboards, generic affirmations like "Great work!" — undermine intrinsic motivation. The validator bans sycophantic copy because the canon's truth-loyalty posture in charter §1.2 Test 2 requires competence-affirming feedback only, never flattery.
 
-**Peak-End Rule (Tier 3, Kahneman 1993; 2022 meta-analysis 174 samples).** Every session has a designed peak and a designed end. The loop-transformation rules in §2.2 enforce that endings are never "all done" — they always transform into the next meaningful loop, which is what makes peak-end pairings work in the Antaeus context.
+**Peak-End Rule (Tier 3, Kahneman 1993; 2022 meta-analysis 174 samples).** Every session has a designed peak and a designed end. The loop-transformation rules in §2.3 enforce that endings are never "all done" — they always transform into the next meaningful loop, which is what makes peak-end pairings work in the Antaeus context.
 
 **Implementation Intentions (Tier 1, Gollwitzer 1999, d = 0.65 across 94 studies and 8,000+ participants).** If-then sentences make next moves specific and contextual. The validator's structural requirement for subject + verb, combined with the exemplars' if-then patterns, enforces implementation-intention shape on every next-action surface.
 
@@ -196,13 +228,15 @@ The spec is graded against charter Test 2 (truth-loyalty) directly — voice is 
 
 ### 5.3 Signals the spec is doing its job
 
-Three signals together tell us voice-as-component is working.
+Four signals together tell us voice-as-component is working.
 
 **The build catches voice drift before it ships.** A pull request that introduces a banned word, a manifesto fragment, or a sycophantic phrase is rejected at CI with a specific reason and a specific line. The author fixes it before merge. The signal is that voice waivers logged to `deliverables/voice-waivers.log` stay rare and well-reasoned, and that no operator-facing string in main has been added without passing the validator since the spec landed.
 
 **The temperature reads through across families.** A new user opening Welcome and a fluent operator opening Future Autopsy both hear the same Antaeus voice — peer-operator, plain English, evidence-anchored — at different temperatures. Family-specific exemplars are added when new components ship, rather than rotting from the original seven. Reviewers cite specific exemplars in PR comments when calibrating a borderline string.
 
-**The migration completes.** The 22-room audit produces a triaged queue; the queue gets worked through at a sustainable cadence; the flag flips to enforced; the system reaches a state where every operator-facing string in production passed the validator at the moment it was written. The signal is the flag being on in production, with the audit report at `deliverables/voice-audit-final-202X-XX-XX.md` showing zero hard violations remaining.
+**The migration completes.** The 22-room audit produces a triaged queue; the queue gets worked through at a sustainable cadence; the flag flips to `enforce` per room and then globally; the system reaches a state where every operator-facing string in production passed the validator at the moment it was written. The signal is the flag being globally on in production, with the audit report at `deliverables/voice-audit-final-202X-XX-XX.md` showing zero hard violations remaining.
+
+**Subsequent specs inherit voice-as-component cleanly.** The density-gradient spec, the component library, the today-surface spec, and every later sibling document declare `voiceFamily` and route their strings through the validator without renegotiating the rules. The signal is that no later spec proposes a parallel voice-validation mechanism, and no component spec asks for an exception from the validator's contract. The voice-as-component spec becomes the floor the rest of the design system inherits from, rather than the floor every spec tries to relitigate.
 
 ---
 
