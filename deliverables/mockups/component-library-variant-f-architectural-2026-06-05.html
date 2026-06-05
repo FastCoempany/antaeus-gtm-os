@@ -1,0 +1,2480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antaeus Component Library — Variant F · Architectural Specification (2026-06-05)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F4F7FC;
+    --paper-white: #FBFCFE;
+    --blueprint: rgba(37, 99, 235, 0.08);
+    --blueprint-strong: rgba(37, 99, 235, 0.16);
+    --ink: #0A1C40;
+    --ink-soft: rgba(10, 28, 64, 0.62);
+    --ink-faint: rgba(10, 28, 64, 0.32);
+    --rule: rgba(10, 28, 64, 0.16);
+    --rule-thin: rgba(10, 28, 64, 0.08);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--blueprint) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--ink);
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .sheet {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 28px 28px 96px;
+    background: var(--paper);
+    position: relative;
+  }
+
+  /* ===== SHEET BORDER (drawing frame) ===== */
+  .sheet-border {
+    border: 2px solid var(--ink);
+    padding: 24px;
+    position: relative;
+  }
+  .sheet-border::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border: 1px solid var(--rule);
+    pointer-events: none;
+  }
+  /* Corner marks */
+  .corner-mark {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .corner-mark.tl { top: -8px; left: -8px; border-right: none; border-bottom: none; }
+  .corner-mark.tr { top: -8px; right: -8px; border-left: none; border-bottom: none; }
+  .corner-mark.bl { bottom: -8px; left: -8px; border-right: none; border-top: none; }
+  .corner-mark.br { bottom: -8px; right: -8px; border-left: none; border-top: none; }
+
+  /* ===== TITLE BLOCK (top of sheet) ===== */
+  .title-block {
+    border: 2px solid var(--ink);
+    background: var(--paper-white);
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: 1fr 240px 180px;
+  }
+  .tb-main {
+    padding: 20px 24px;
+    border-right: 1.5px solid var(--ink);
+  }
+  .tb-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .tb-stamp b { color: var(--ink); }
+  .tb-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 40px;
+    line-height: 1;
+    margin: 0 0 8px;
+  }
+  .tb-subtitle {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+    max-width: 60ch;
+    line-height: 1.55;
+  }
+  .tb-lead {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink);
+    max-width: 64ch;
+  }
+  .tb-meta {
+    padding: 16px 18px;
+    border-right: 1.5px solid var(--ink);
+    background: var(--blueprint);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, auto);
+    gap: 8px;
+    align-content: start;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .tb-meta-cell {
+    border: 1px solid var(--rule);
+    background: var(--paper-white);
+    padding: 4px 6px;
+  }
+  .tb-meta-label {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 1px;
+  }
+  .tb-meta-val {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .tb-meta-span2 { grid-column: 1 / -1; }
+
+  .tb-sheet {
+    padding: 16px 18px;
+    background: var(--paper-white);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .tb-sheet-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .tb-sheet-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--orange);
+  }
+  .tb-sheet-of {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    letter-spacing: 0.08em;
+  }
+  .tb-sheet-rev {
+    margin-top: 12px;
+    border-top: 1px dashed var(--rule);
+    padding-top: 6px;
+    width: 100%;
+  }
+  .tb-sheet-rev-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+  }
+  .tb-sheet-rev-mark {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    padding: 1px 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    margin-top: 2px;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    width: 24px;
+    height: 18px;
+    text-align: center;
+    line-height: 22px;
+  }
+
+  /* ===== SECTION HEAD ===== */
+  .division {
+    margin-top: 48px;
+  }
+  .division-head {
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 8px 0;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .division-num {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--orange);
+  }
+  .division-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1;
+    margin: 0;
+  }
+  .division-tail {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+  .division-tail span { display: block; }
+
+  /* ===== GRID ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .grid-1 { grid-template-columns: 1fr; gap: 20px; }
+
+  /* ===== DETAIL (the entry) ===== */
+  .detail {
+    background: var(--paper-white);
+    border: 1.5px solid var(--ink);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    position: relative;
+  }
+  .detail-key {
+    position: absolute;
+    top: -14px;
+    left: 16px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--ink);
+    z-index: 1;
+  }
+  .detail-key-cut {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background: var(--ink);
+    z-index: 0;
+  }
+  .detail-key-cut::before, .detail-key-cut::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+  }
+  .detail-key-cut::before { left: 0; border-right-color: var(--ink); }
+  .detail-key-cut::after { right: 0; border-left-color: var(--ink); }
+  .detail-stamp {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 16px;
+  }
+  .detail-body {
+    padding: 18px 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+  .detail-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .detail-bearing {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: -6px;
+  }
+  .detail-demo {
+    flex: 1;
+    padding: 16px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    position: relative;
+  }
+  .detail-demo--stretch { padding: 0; background: transparent; border: none; }
+  .detail-demo--top { align-items: flex-start; padding-top: 20px; }
+  .detail-note {
+    border-top: 1px solid var(--rule);
+    padding-top: 10px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    position: relative;
+  }
+  .detail-note::before {
+    content: 'NOTE';
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    margin-right: 8px;
+  }
+
+  /* ===== ROOMCHROME → drawing margin bar ===== */
+  .margin-bar {
+    width: 100%;
+    background: var(--paper-white);
+    border: 1.5px solid var(--ink);
+    padding: 0;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+  }
+  .margin-bar-stamp {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6px 12px;
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .margin-bar-crumb {
+    padding: 6px 14px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-left: 1.5px solid var(--ink);
+  }
+  .margin-bar-crumb::before {
+    content: '◄';
+    color: var(--orange);
+  }
+  .margin-bar-rev {
+    padding: 4px 10px;
+    border-left: 1.5px solid var(--ink);
+    background: var(--blueprint);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .margin-bar-key {
+    padding: 6px 12px;
+    border-left: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.10em;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ===== TOPBAR → drawing sheet header ===== */
+  .sheet-head {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+  }
+  .sheet-head-strip {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .sheet-head-body {
+    padding: 14px 18px;
+  }
+  .sheet-head-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    line-height: 1.05;
+    margin: 0 0 10px;
+  }
+  .sheet-head-dims {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 10px;
+  }
+  .sheet-head-dim {
+    background: var(--paper-white);
+    padding: 6px 10px;
+    text-align: center;
+  }
+  .sheet-head-dim-l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .sheet-head-dim-v {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .sheet-head-dim-v.crit { color: var(--red); }
+  .sheet-head-dim-v.cau { color: var(--amber); }
+
+  /* ===== SECTIONFRAME → section view ===== */
+  .section-view {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    position: relative;
+  }
+  .section-view-marker {
+    position: absolute;
+    top: -16px;
+    left: 16px;
+    background: var(--paper);
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1;
+    flex-direction: column;
+  }
+  .section-view-marker .num { color: var(--orange); }
+  .section-view-marker .div { width: 16px; height: 1px; background: var(--ink); margin: 1px 0; }
+  .section-view-marker .sheet { color: var(--ink-soft); font-size: 8px; }
+  .section-view-head {
+    padding: 6px 14px 6px 56px;
+    border-bottom: 1px solid var(--ink);
+    background: var(--blueprint);
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .section-view-body {
+    padding: 14px 16px;
+  }
+  .section-view-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.15;
+    margin: 0 0 8px;
+  }
+  .section-view-body-p {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  /* ===== PANEL → specification note ===== */
+  .spec-note {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+  }
+  .spec-note-head {
+    background: var(--paper);
+    border-bottom: 1.5px solid var(--ink);
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .spec-note-body {
+    padding: 12px 14px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  /* ===== DISPLAY ===== */
+  .h-serif { font-family: "DM Serif Display", serif; font-size: 28px; line-height: 1; }
+  .h-sans {
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 2px;
+    display: inline-block;
+  }
+  .kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .body-text { font-size: 13px; line-height: 1.65; }
+
+  /* ===== STAT → dimension block ===== */
+  .dim-block {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    padding: 0;
+    min-width: 120px;
+  }
+  .dim-block-label {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 10px;
+    width: 100%;
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .dim-block-val {
+    padding: 8px 12px 6px;
+    font-family: "DM Serif Display", serif;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--orange);
+  }
+  .dim-block-unit {
+    padding: 0 12px 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ===== CARD → detail callout ===== */
+  .callout {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    position: relative;
+    padding: 0;
+  }
+  .callout-key {
+    position: absolute;
+    top: -12px;
+    right: 12px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+  }
+  .callout-body {
+    padding: 14px 14px 12px;
+  }
+  .callout-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .callout-body-text {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .callout-dims {
+    border-top: 1px dashed var(--rule);
+    padding: 4px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ===== STATUSCHIP → revision marker ===== */
+  .rev-marker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px 2px 4px;
+    border: 1px solid currentColor;
+    background: var(--paper-white);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .rev-marker-tri {
+    width: 0; height: 0;
+    border: 7px solid transparent;
+    border-bottom: 12px solid currentColor;
+    margin-top: -2px;
+  }
+  .rev-marker--issued { color: #15803D; }
+  .rev-marker--review { color: #1D4ED8; }
+  .rev-marker--rev { color: var(--orange); }
+  .rev-marker--rfi { color: #B91C1C; }
+  .rev-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+  /* ===== HEATBADGE → dimension reading ===== */
+  .dim-reading {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    min-width: 80px;
+  }
+  .dim-reading-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .dim-reading-val {
+    padding: 6px 10px;
+    text-align: center;
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1;
+    border-bottom: 1px solid var(--rule);
+  }
+  .dim-reading-foot {
+    padding: 3px 10px;
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .dim-reading--over .dim-reading-val { color: var(--red); }
+  .dim-reading--over .dim-reading-foot { color: var(--red); }
+  .dim-reading--at .dim-reading-val { color: var(--orange); }
+  .dim-reading--at .dim-reading-foot { color: var(--orange); }
+  .dim-reading--under .dim-reading-val { color: var(--blue); }
+  .dim-reading--under .dim-reading-foot { color: var(--blue); }
+  .dim-row { display: flex; gap: 10px; justify-content: center; }
+
+  /* ===== ACTION → stamp-style buttons ===== */
+  .stamp-btn {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    background: var(--paper-white);
+    border: 1.5px solid var(--ink);
+    cursor: pointer;
+    border-radius: 0;
+    position: relative;
+  }
+  .stamp-btn--primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .stamp-btn--ghost { color: var(--ink-soft); border: 1px dashed var(--rule); background: transparent; }
+  .stamp-btn-icon {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    color: var(--ink);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+  /* ===== TOGGLE → spec switch ===== */
+  .spec-toggle {
+    display: inline-flex;
+    width: 56px;
+    height: 24px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    padding: 1px;
+    cursor: pointer;
+    position: relative;
+  }
+  .spec-toggle::before {
+    content: 'OFF';
+    font-family: "JetBrains Mono", monospace;
+    font-size: 7px;
+    font-weight: 700;
+    color: var(--ink-faint);
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    letter-spacing: 0.10em;
+  }
+  .spec-toggle::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: var(--ink);
+    transition: transform 0.12s, background 0.12s;
+  }
+  .spec-toggle.on { background: var(--orange); }
+  .spec-toggle.on::before { content: 'ON'; color: var(--paper); right: auto; left: 4px; }
+  .spec-toggle.on::after { background: var(--paper-white); transform: translateX(30px); }
+
+  /* ===== INPUTS → spec entry fields ===== */
+  .spec-input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .spec-input:focus { outline: 2px solid var(--orange); outline-offset: -1px; }
+  .spec-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid var(--ink);
+    background: var(--paper-white);
+  }
+  .spec-field-label {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+  .spec-field-label .req { color: var(--orange); }
+  .spec-field-input {
+    border: none;
+    padding: 8px 10px;
+    background: var(--paper);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+  }
+  .spec-field-input:focus { outline: 2px solid var(--orange); outline-offset: -2px; }
+  .spec-field-spec {
+    background: var(--paper-white);
+    border-top: 1px solid var(--rule);
+    padding: 4px 10px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  /* ===== BANNER → ISSUED stamp ===== */
+  .issue-stamp {
+    width: 100%;
+    border: 2px solid var(--red);
+    background: rgba(239, 68, 68, 0.06);
+    padding: 0;
+    position: relative;
+  }
+  .issue-stamp-label {
+    background: var(--red);
+    color: white;
+    padding: 3px 12px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .issue-stamp-body {
+    padding: 8px 14px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 600;
+  }
+  .issue-stamp-rev {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: var(--paper);
+    border: 1.5px solid var(--red);
+    color: var(--red);
+    width: 28px;
+    height: 28px;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 36px;
+  }
+  .review-stamp {
+    width: 100%;
+    border-left: 4px solid var(--blue);
+    background: rgba(37, 99, 235, 0.06);
+    padding: 8px 14px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    color: var(--blue);
+    display: flex;
+    gap: 12px;
+  }
+  .review-stamp-label {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+  }
+
+  /* ===== TOAST → ISSUED FOR CONSTRUCTION stamp ===== */
+  .construction-toast {
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0;
+    border: 2px solid var(--ink);
+  }
+  .construction-toast-stamp {
+    background: var(--green);
+    color: var(--paper);
+    padding: 3px 12px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+  }
+  .construction-toast-body {
+    padding: 8px 14px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+  }
+  .construction-toast-rev {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: rgba(244, 247, 252, 0.6);
+    letter-spacing: 0.12em;
+    margin-top: 4px;
+  }
+
+  /* ===== MODAL → RFI confirmation ===== */
+  .rfi-modal {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper-white);
+  }
+  .rfi-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .rfi-body { padding: 14px 16px; }
+  .rfi-title { font-family: "DM Serif Display", serif; font-size: 20px; margin-bottom: 6px; }
+  .rfi-text {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    line-height: 1.55;
+  }
+  .rfi-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    border-top: 1.5px solid var(--ink);
+    padding-top: 10px;
+  }
+
+  /* ===== TOOLTIP → leader-line callout ===== */
+  .leader-wrap { position: relative; display: inline-block; margin-top: 64px; }
+  .leader-anchor {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+    border-bottom: 1.5px solid var(--orange);
+  }
+  .leader-anchor::after {
+    content: '';
+    position: absolute;
+    width: 32px;
+    height: 1.5px;
+    background: var(--orange);
+    bottom: 100%;
+    left: 50%;
+    transform: rotate(-30deg);
+    transform-origin: left bottom;
+  }
+  .leader-key {
+    position: absolute;
+    bottom: calc(100% + 20px);
+    left: calc(50% + 26px);
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    color: var(--ink);
+  }
+  .leader-note {
+    position: absolute;
+    bottom: calc(100% + 60px);
+    left: -10px;
+    background: var(--paper-white);
+    border: 1.5px solid var(--ink);
+    padding: 6px 10px;
+    width: 200px;
+  }
+  .leader-note-key {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+  }
+  .leader-note-text {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* ===== NAV → sheet list ===== */
+  .sheet-list {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+  }
+  .sheet-list-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+  .sheet-list-row {
+    display: grid;
+    grid-template-columns: 64px 1fr 60px;
+    padding: 6px 12px;
+    border-bottom: 1px dotted var(--rule);
+    align-items: baseline;
+    cursor: pointer;
+  }
+  .sheet-list-row:last-child { border-bottom: none; }
+  .sheet-list-row.active { background: rgba(230, 112, 30, 0.10); }
+  .sheet-list-num {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.10em;
+  }
+  .sheet-list-row.active .sheet-list-num { color: var(--orange); }
+  .sheet-list-name {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+  }
+  .sheet-list-rev {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    text-align: right;
+    letter-spacing: 0.10em;
+  }
+
+  /* ===== PALETTE → drawing index lookup ===== */
+  .drawing-index {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+  }
+  .drawing-index-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .drawing-index-search {
+    padding: 8px 12px;
+    border-bottom: 1.5px solid var(--ink);
+    background: var(--paper);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+  }
+  .drawing-index-search::before {
+    content: '◆';
+    color: var(--orange);
+    margin-right: 8px;
+    font-size: 9px;
+  }
+  .drawing-index-item {
+    padding: 6px 12px;
+    border-bottom: 1px dotted var(--rule);
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+  }
+  .drawing-index-item:last-child { border-bottom: none; }
+  .drawing-index-item.hl { background: rgba(230, 112, 30, 0.10); }
+  .drawing-index-item-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--orange);
+    border: 1px solid var(--orange);
+    padding: 1px 4px;
+    text-align: center;
+  }
+  .drawing-index-item.hl .drawing-index-item-kind { background: var(--orange); color: var(--paper); }
+  .drawing-index-item-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+
+  /* ===== HANDOFF → cross-reference rack ===== */
+  .xref {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+  }
+  .xref-head {
+    background: var(--paper);
+    border-bottom: 1.5px solid var(--ink);
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .xref-row {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    padding: 10px 12px;
+    border-bottom: 1px dotted var(--rule);
+    gap: 12px;
+    cursor: pointer;
+  }
+  .xref-row:last-child { border-bottom: none; }
+  .xref-row--primary { background: rgba(230, 112, 30, 0.10); }
+  .xref-marker {
+    background: var(--paper-white);
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    line-height: 1;
+    flex-direction: column;
+  }
+  .xref-row--primary .xref-marker { background: var(--orange); color: var(--paper); border-color: var(--orange); }
+  .xref-marker .num { font-size: 10px; }
+  .xref-marker .div { width: 14px; height: 1px; background: currentColor; margin: 1px 0; }
+  .xref-marker .sheet { font-size: 7px; }
+  .xref-label {
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+  }
+  .xref-sheet {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    color: var(--ink-soft);
+  }
+
+  /* ===== BACKPILL → callout-return marker ===== */
+  .callout-return {
+    display: inline-flex;
+    align-items: stretch;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    padding: 0;
+  }
+  .callout-return-marker {
+    background: var(--orange);
+    color: var(--paper);
+    padding: 4px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    display: flex;
+    align-items: center;
+  }
+  .callout-return-label {
+    padding: 4px 10px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-left: 1.5px solid var(--ink);
+  }
+
+  /* ===== PROPOSAL → revision proposal ===== */
+  .rev-proposal {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    position: relative;
+  }
+  .rev-proposal-tri {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+    border-bottom: 22px solid var(--orange);
+  }
+  .rev-proposal-tri-num {
+    position: absolute;
+    top: 22px;
+    right: 18px;
+    color: var(--paper);
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    z-index: 1;
+  }
+  .rev-proposal-head {
+    background: var(--orange);
+    color: var(--paper);
+    padding: 4px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .rev-proposal-body {
+    padding: 14px 16px;
+  }
+  .rev-proposal-text {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.35;
+    margin-bottom: 12px;
+  }
+  .rev-proposal-cite {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-top: 1px dashed var(--rule);
+    padding-top: 6px;
+    margin-bottom: 12px;
+  }
+  .rev-proposal-actions { display: flex; gap: 8px; }
+
+  /* ===== PATTERN → specification finding ===== */
+  .finding {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+  }
+  .finding-head {
+    background: var(--paper);
+    border-bottom: 1.5px solid var(--ink);
+    padding: 6px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .finding-body {
+    padding: 14px 16px;
+  }
+  .finding-claim {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .finding-spec {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .finding-dims {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .finding-dim {
+    background: var(--paper-white);
+    padding: 4px 8px;
+    text-align: center;
+  }
+  .finding-dim-l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .finding-dim-v {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  /* ===== RISK → field condition / RFI ===== */
+  .rfi-card {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-white);
+    border-top: 4px solid var(--red);
+    position: relative;
+  }
+  .rfi-card-tri {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    width: 0;
+    height: 0;
+    border: 11px solid transparent;
+    border-bottom: 20px solid var(--red);
+  }
+  .rfi-card-tri-num {
+    position: absolute;
+    top: 18px;
+    right: 19px;
+    color: var(--paper);
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    z-index: 1;
+  }
+  .rfi-card-head {
+    background: rgba(239, 68, 68, 0.08);
+    border-bottom: 1px solid var(--red);
+    padding: 6px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .rfi-card-body {
+    padding: 12px 14px;
+  }
+  .rfi-card-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .rfi-card-amount {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.10em;
+  }
+  .rfi-card-condition {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 8px 0 10px;
+    border-top: 1px dotted var(--rule);
+    padding-top: 8px;
+  }
+  .rfi-card-dims {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .rfi-card-dim {
+    background: var(--paper);
+    padding: 3px 8px;
+    text-align: center;
+  }
+  .rfi-card-dim-l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .rfi-card-dim-v {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  /* ===== READINESS → project status stamp ===== */
+  .project-status {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper-white);
+    position: relative;
+  }
+  .project-status-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .project-status-body {
+    padding: 18px 16px 22px;
+    text-align: center;
+  }
+  .project-status-state {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.1;
+    margin: 0 0 14px;
+  }
+  .project-status-stamp {
+    display: inline-flex;
+    border: 2px solid var(--green);
+    color: var(--green);
+    padding: 4px 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transform: rotate(-2deg);
+  }
+  .project-status-rev-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ===== DENSITY DEMO ===== */
+  .density-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .density-sheet {
+    background: var(--paper-white);
+    padding: 16px;
+  }
+  .density-sheet-stamp {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 10px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    margin-bottom: 12px;
+  }
+  .density-sheet-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  .density-sheet-body {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .density-sheet-body--terse {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* spec list */
+  .spec-list {
+    margin: 0; padding: 0;
+    list-style: none;
+    border: 1px solid var(--rule);
+  }
+  .spec-list li {
+    padding: 8px 12px 8px 40px;
+    position: relative;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    border-bottom: 1px solid var(--rule);
+    line-height: 1.5;
+    background: var(--paper);
+    counter-increment: spec;
+  }
+  .spec-list li:last-child { border-bottom: none; }
+  .spec-list li::before {
+    content: counter(spec, decimal-leading-zero);
+    position: absolute;
+    left: 10px;
+    top: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    color: var(--orange);
+    letter-spacing: 0.06em;
+  }
+  .spec-list { counter-reset: spec; }
+  .spec-list li.exp { background: var(--paper-white); border-left: 3px solid var(--orange); padding-left: 38px; }
+  .spec-list li b { font-family: "DM Serif Display", serif; font-weight: 400; font-size: 14px; }
+
+  /* ===== FOOTER STAMP ===== */
+  .sheet-footer {
+    margin-top: 80px;
+    border-top: 2px solid var(--ink);
+    padding-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .sheet-footer-stamp {
+    border: 2px solid var(--green);
+    color: var(--green);
+    padding: 4px 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <header class="title-block">
+    <div class="tb-main">
+      <div class="tb-stamp"><span>PROJECT · ANT-WORKSPACE-001</span><span><b>SHEET ISSUE · DRAFT</b></span></div>
+      <h1 class="tb-title">The Antaeus Set</h1>
+      <p class="tb-subtitle">Component library — candidates sheet, drawn for review.</p>
+      <p class="tb-lead">
+        Primitives drafted as specification components — title blocks, section markers, dimension blocks,
+        revision triangles, leader-line callouts. The workspace IS the as-built drawings the inheritor reads to
+        understand what has been constructed and what remains to detail. Documentation as the artifact of handoff;
+        the spec set as the project the next operator inherits.
+      </p>
+    </div>
+    <div class="tb-meta">
+      <div class="tb-meta-cell tb-meta-span2"><div class="tb-meta-label">PROJECT</div><div class="tb-meta-val">ANT-WS-001</div></div>
+      <div class="tb-meta-cell"><div class="tb-meta-label">DRAWN BY</div><div class="tb-meta-val">FOUNDER</div></div>
+      <div class="tb-meta-cell"><div class="tb-meta-label">CHECKED</div><div class="tb-meta-val">—</div></div>
+      <div class="tb-meta-cell"><div class="tb-meta-label">DATE</div><div class="tb-meta-val">2026·06·05</div></div>
+      <div class="tb-meta-cell"><div class="tb-meta-label">SCALE</div><div class="tb-meta-val">NTS</div></div>
+      <div class="tb-meta-cell tb-meta-span2"><div class="tb-meta-label">PHASE</div><div class="tb-meta-val">FOR REVIEW</div></div>
+    </div>
+    <div class="tb-sheet">
+      <div class="tb-sheet-label">SHEET</div>
+      <div class="tb-sheet-num">F.0</div>
+      <div class="tb-sheet-of">OF F.99</div>
+      <div class="tb-sheet-rev">
+        <div class="tb-sheet-rev-label">REV</div>
+        <div class="tb-sheet-rev-mark">3</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============== DIVISION 01 — LAYOUT ============== -->
+  <section class="division">
+    <div class="division-head">
+      <span class="division-num">01</span>
+      <h2 class="division-title">Layout — title blocks &amp; framing</h2>
+      <span class="division-tail"><span>SHEETS F.1 – F.4</span><span>SCALE NTS</span></span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="detail">
+        <div class="detail-key">R1</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>DETAIL · R-001</span><span>SHEET F.1</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Margin Bar</h3>
+          <div class="detail-bearing">RoomChrome · per drawing</div>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="margin-bar">
+              <div class="margin-bar-stamp">Antaeus</div>
+              <div class="margin-bar-crumb">FROM SHEET F.0 · DASHBOARD</div>
+              <div class="margin-bar-rev">REV ▲ 3</div>
+              <div class="margin-bar-key">⌘K · INDEX</div>
+            </div>
+          </div>
+          <p class="detail-note">Serif wordmark stamped against ink. Crumb continues from prior sheet. Revision triangle and palette key at the right.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">R2</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>DETAIL · R-002</span><span>SHEET F.1</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Sheet Header</h3>
+          <div class="detail-bearing">Topbar · per drawing</div>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="sheet-head">
+              <div class="sheet-head-strip"><span>BRIEFING · WEEKLY READ · WORKSPACE</span><span>2026·06·05 · 09:12 CT</span></div>
+              <div class="sheet-head-body">
+                <h3 class="sheet-head-title">Where the motion is today</h3>
+                <div class="sheet-head-dims">
+                  <div class="sheet-head-dim"><div class="sheet-head-dim-l">ACTIVE</div><div class="sheet-head-dim-v">37</div></div>
+                  <div class="sheet-head-dim"><div class="sheet-head-dim-l">CRITICAL</div><div class="sheet-head-dim-v crit">3</div></div>
+                  <div class="sheet-head-dim"><div class="sheet-head-dim-l">STALE</div><div class="sheet-head-dim-v cau">8</div></div>
+                  <div class="sheet-head-dim"><div class="sheet-head-dim-l">WIN-RATE</div><div class="sheet-head-dim-v">22%</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Title strip with timestamp. Sheet metrics ruled in dimension blocks beneath the serif title.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">R3</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>DETAIL · R-003</span><span>SHEET F.2</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Section View</h3>
+          <div class="detail-bearing">SectionFrame · per content block</div>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="section-view">
+              <div class="section-view-marker">
+                <span class="num">A</span>
+                <span class="div"></span>
+                <span class="sheet">F.7</span>
+              </div>
+              <div class="section-view-head"><span>SECTION A — PATTERN</span><span>SCALE 14d · CONF 78%</span></div>
+              <div class="section-view-body">
+                <h4 class="section-view-title">Pricing momentum</h4>
+                <p class="section-view-body-p">Three of the last five closed deals dropped price 12% or more in the final week.</p>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Section marker at upper-left (cut letter over reference sheet). Stamped head names the section.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">R4</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>DETAIL · R-004</span><span>SHEET F.2</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Specification Note</h3>
+          <div class="detail-bearing">Panel · generic content</div>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="spec-note">
+              <div class="spec-note-head"><span>SPEC · RECOVERY QUEUE</span><span>03·001</span></div>
+              <div class="spec-note-body">Six deals weakening. Three require a corrective move this week. Two await proof readout. One pending advisor consult.</div>
+            </div>
+          </div>
+          <p class="detail-note">Stamped head with spec section number. Body in sans.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== DIVISION 02 — DISPLAY ============== -->
+  <section class="division">
+    <div class="division-head">
+      <span class="division-num">02</span>
+      <h2 class="division-title">Display — annotation vocabulary</h2>
+      <span class="division-tail"><span>SHEETS F.5 – F.12</span><span>SCALE NTS</span></span>
+    </div>
+    <div class="grid">
+
+      <div class="detail">
+        <div class="detail-key">D1</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>D-001</span><span>F.5</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Heading · authored</h3>
+          <div class="detail-demo"><span class="h-serif">Acme is stalling.</span></div>
+          <p class="detail-note">Display serif. The dominant statement on the sheet.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">D2</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>D-002</span><span>F.5</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Heading · spec</h3>
+          <div class="detail-demo"><span class="h-sans">RECOVERY OPTIONS</span></div>
+          <p class="detail-note">Sans-caps with ruled underline. Form-head.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">D3</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>D-003</span><span>F.6</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Kicker · cite</h3>
+          <div class="detail-demo"><span class="kicker">SIGNAL CONSOLE · LIVE</span></div>
+          <p class="detail-note">Mono caps. Sheet codes and section references.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">D4</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>D-004</span><span>F.6</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">BodyText</h3>
+          <div class="detail-demo detail-demo--top">
+            <p class="body-text" style="margin:0;">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo on the fourteenth.</p>
+          </div>
+          <p class="detail-note">Sans reading column.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">D5</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>D-005</span><span>F.7</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Stat · Dimension Block</h3>
+          <div class="detail-demo">
+            <div class="dim-block">
+              <div class="dim-block-label">DEALS · UNDER-PRESSURE</div>
+              <div class="dim-block-val">37</div>
+              <div class="dim-block-unit">NO.</div>
+            </div>
+          </div>
+          <p class="detail-note">Boxed dimension. Label band, value, unit.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">D6</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>D-006</span><span>F.7</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Card · Detail Callout</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="callout">
+              <div class="callout-key">A</div>
+              <div class="callout-body">
+                <div class="callout-name">Acme Corp.</div>
+                <div class="callout-body-text">Stalled 18 days at proposal stage.</div>
+              </div>
+              <div class="callout-dims"><span>STAGE · PROPOSAL</span><span>DAY · 18</span></div>
+            </div>
+          </div>
+          <p class="detail-note">Detail callout. Reference circle at upper-right. Dimension band beneath.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">D7</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>D-007</span><span>F.8</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">StatusChip · Revision Marker</h3>
+          <div class="detail-demo">
+            <div class="rev-row">
+              <span class="rev-marker rev-marker--issued"><span class="rev-marker-tri"></span>ISSUED</span>
+              <span class="rev-marker rev-marker--review"><span class="rev-marker-tri"></span>IN REVIEW</span>
+              <span class="rev-marker rev-marker--rev"><span class="rev-marker-tri"></span>REV ▲ 3</span>
+              <span class="rev-marker rev-marker--rfi"><span class="rev-marker-tri"></span>RFI ▲ 12</span>
+            </div>
+          </div>
+          <p class="detail-note">Revision triangle glyph + state label. Standard drawing convention.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">D8</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>D-008</span><span>F.8</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">HeatBadge · Dimension Reading</h3>
+          <div class="detail-demo">
+            <div class="dim-row">
+              <div class="dim-reading dim-reading--over"><div class="dim-reading-head">SCORE</div><div class="dim-reading-val">94</div><div class="dim-reading-foot">▲ OVER</div></div>
+              <div class="dim-reading dim-reading--at"><div class="dim-reading-head">SCORE</div><div class="dim-reading-val">78</div><div class="dim-reading-foot">⊝ AT</div></div>
+              <div class="dim-reading dim-reading--under"><div class="dim-reading-head">SCORE</div><div class="dim-reading-val">52</div><div class="dim-reading-foot">▼ UNDER</div></div>
+            </div>
+          </div>
+          <p class="detail-note">Dimension readings. Over / at / under spec, with directional glyphs.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== DIVISION 03 — ACTION ============== -->
+  <section class="division">
+    <div class="division-head">
+      <span class="division-num">03</span>
+      <h2 class="division-title">Action — stamps &amp; controls</h2>
+      <span class="division-tail"><span>SHEETS F.13 – F.18</span><span>SCALE NTS</span></span>
+    </div>
+    <div class="grid">
+
+      <div class="detail">
+        <div class="detail-key">A1</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>A-001</span><span>F.13</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Button · primary</h3>
+          <div class="detail-demo"><button class="stamp-btn stamp-btn--primary">CAST PROOF</button></div>
+          <p class="detail-note">Filled ink stamp. Mono caps. The dominant action.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">A2</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>A-002</span><span>F.13</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Button · secondary</h3>
+          <div class="detail-demo"><button class="stamp-btn">SAVE DRAFT</button></div>
+          <p class="detail-note">Outlined stamp. Lower weight.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">A3</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>A-003</span><span>F.14</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Button · ghost</h3>
+          <div class="detail-demo"><button class="stamp-btn stamp-btn--ghost">DISMISS</button></div>
+          <p class="detail-note">Dashed outline. Recessive tertiary.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">A4</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>A-004</span><span>F.14</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">IconButton</h3>
+          <div class="detail-demo">
+            <div class="btn-row">
+              <button class="stamp-btn-icon">⌘</button>
+              <button class="stamp-btn-icon">↗</button>
+              <button class="stamp-btn-icon">×</button>
+            </div>
+          </div>
+          <p class="detail-note">Square 36px. Mono glyphs.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">A5</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>A-005</span><span>F.15</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Link · cross-reference</h3>
+          <div class="detail-demo">
+            <a href="#" style="color:var(--blue); font-family:'Public Sans'; font-weight:700; font-size:13px; text-decoration:none; border-bottom:1.5px solid var(--blue); padding-bottom:1px;">SEE DETAIL B · SHEET F.21 →</a>
+          </div>
+          <p class="detail-note">Blue ruled reference. Names detail letter and target sheet.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">A6</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>A-006</span><span>F.15</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Toggle · spec switch</h3>
+          <div class="detail-demo">
+            <div class="btn-row" style="gap:24px;">
+              <span class="spec-toggle"></span>
+              <span class="spec-toggle on"></span>
+            </div>
+          </div>
+          <p class="detail-note">Boxed switch. State labeled ON / OFF.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== DIVISION 04 — INPUT ============== -->
+  <section class="division">
+    <div class="division-head">
+      <span class="division-num">04</span>
+      <h2 class="division-title">Input — spec entry fields</h2>
+      <span class="division-tail"><span>SHEETS F.19 – F.24</span><span>SCALE NTS</span></span>
+    </div>
+    <div class="grid">
+
+      <div class="detail">
+        <div class="detail-key">I1</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>I-001</span><span>F.19</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">TextInput</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <input class="spec-input" value="Acme Corp.">
+          </div>
+          <p class="detail-note">Bordered entry. Mono content.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">I2</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>I-002</span><span>F.19</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Select · enum</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <select class="spec-input">
+              <option>PROPOSAL</option>
+              <option>DISCOVERY</option>
+              <option>NEGOTIATION</option>
+            </select>
+          </div>
+          <p class="detail-note">Drop-down. Same chrome.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">I3</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>I-003</span><span>F.20</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Textarea</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <textarea class="spec-input" rows="3" style="resize:none; font-family:'Public Sans';">Sarah needs the revised proposal by Friday.</textarea>
+          </div>
+          <p class="detail-note">Multi-line. Sans for prose entries.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">I4</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>I-004</span><span>F.20</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">FormField · spec</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="spec-field">
+              <div class="spec-field-label"><span>BUYING-GROUP-MIN</span><span class="req">REQ</span></div>
+              <input class="spec-field-input" type="number" value="5">
+              <div class="spec-field-spec">Spec note: typical 3–7 decision-makers for most B2B teams.</div>
+            </div>
+          </div>
+          <p class="detail-note">Stamped label band, input cell, spec note beneath.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">I5</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>I-005</span><span>F.21</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Spec list · numbered</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <ol class="spec-list">
+              <li class="exp"><b>Champion identified.</b> Sarah Chen, VP Ops.</li>
+              <li>Economic buyer confirmed.</li>
+              <li>Decision architecture mapped.</li>
+            </ol>
+          </div>
+          <p class="detail-note">Bordered list, decimal-zero numbering, expanded items orange-ruled.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== DIVISION 05 — FEEDBACK ============== -->
+  <section class="division">
+    <div class="division-head">
+      <span class="division-num">05</span>
+      <h2 class="division-title">Feedback — issued stamps &amp; revisions</h2>
+      <span class="division-tail"><span>SHEETS F.25 – F.28</span><span>SCALE NTS</span></span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="detail">
+        <div class="detail-key">F1</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>F-001</span><span>F.25</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Toast · ISSUED FOR CONSTRUCTION</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="construction-toast">
+              <span class="construction-toast-stamp">ISSUED · IFC</span>
+              <div class="construction-toast-body">
+                Proof cast. Linked to Acme · Q4 expansion.
+                <div class="construction-toast-rev">REV 3 · 2026·06·05 · 09:14:22 CT</div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Green stamp. Body + revision number + timestamp.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">F2</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>F-002</span><span>F.25</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Banner · ISSUE FOR REVIEW / RFI</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+              <div class="issue-stamp">
+                <span class="issue-stamp-label">RFI ▲ 12</span>
+                <div class="issue-stamp-body">12 days since last brief synthesized. Field condition requires review.</div>
+                <div class="issue-stamp-rev">3</div>
+              </div>
+              <div class="review-stamp">
+                <span class="review-stamp-label">IN REVIEW</span>
+                <span>From Briefing · refresh objection handler for Acme pricing.</span>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">RFI banner with revision triangle. Review banner with blue rule.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">F3</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>F-003</span><span>F.26</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Modal · revision confirmation</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="rfi-modal">
+              <div class="rfi-head"><span>CONFIRM · REVISION ▲ 3</span><span>[ESC]</span></div>
+              <div class="rfi-body">
+                <div class="rfi-title">Discard draft?</div>
+                <div class="rfi-text">Unsaved edits to this proof draft. Discarding clears them. No reversion path.</div>
+              </div>
+              <div class="rfi-actions">
+                <button class="stamp-btn stamp-btn--ghost">CANCEL</button>
+                <button class="stamp-btn stamp-btn--primary">DISCARD</button>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Stamped head with revision triangle. Confirm-or-cancel at the foot.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">F4</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>F-004</span><span>F.26</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Tooltip · leader-line callout</h3>
+          <div class="detail-demo">
+            <div class="leader-wrap">
+              <div class="leader-note">
+                <div class="leader-note-key">KEY · A · ICP QUALITY</div>
+                <div class="leader-note-text">One of eight quality checks the ICP score reads from.</div>
+              </div>
+              <div class="leader-key">A</div>
+              <span class="leader-anchor">Buying group min.</span>
+            </div>
+          </div>
+          <p class="detail-note">Reference circle + leader line drawn to a specification note. Architectural convention.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== DIVISION 06 — NAVIGATION ============== -->
+  <section class="division">
+    <div class="division-head">
+      <span class="division-num">06</span>
+      <h2 class="division-title">Navigation — sheet index &amp; cross-references</h2>
+      <span class="division-tail"><span>SHEETS F.29 – F.32</span><span>SCALE NTS</span></span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="detail">
+        <div class="detail-key">N1</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>N-001</span><span>F.29</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">NavLink · Sheet List</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="sheet-list">
+              <div class="sheet-list-head"><span>SHEET INDEX</span><span>23 SHEETS</span></div>
+              <div class="sheet-list-row active">
+                <span class="sheet-list-num">F.1</span>
+                <span class="sheet-list-name">Dashboard</span>
+                <span class="sheet-list-rev">REV 3</span>
+              </div>
+              <div class="sheet-list-row">
+                <span class="sheet-list-num">F.2</span>
+                <span class="sheet-list-name">Signal Console</span>
+                <span class="sheet-list-rev">REV 2</span>
+              </div>
+              <div class="sheet-list-row">
+                <span class="sheet-list-num">F.3</span>
+                <span class="sheet-list-name">Deal Workspace</span>
+                <span class="sheet-list-rev">REV 5</span>
+              </div>
+              <div class="sheet-list-row">
+                <span class="sheet-list-num">F.4</span>
+                <span class="sheet-list-name">Future Autopsy</span>
+                <span class="sheet-list-rev">REV 1</span>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Sheet index. Number, name, current revision.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">N2</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>N-002</span><span>F.30</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Palette · Drawing Index Lookup</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="drawing-index">
+              <div class="drawing-index-head"><span>DRAWING INDEX · ⌘K</span><span>↑↓ · ↵ · ESC</span></div>
+              <div class="drawing-index-search">whats at risk_</div>
+              <div class="drawing-index-item hl">
+                <span class="drawing-index-item-kind">SKILL</span>
+                <span>What's at risk this week</span>
+                <span class="drawing-index-item-key">↵</span>
+              </div>
+              <div class="drawing-index-item">
+                <span class="drawing-index-item-kind">SHEET</span>
+                <span>Deal Workspace · F.3</span>
+                <span class="drawing-index-item-key">⌘1</span>
+              </div>
+              <div class="drawing-index-item">
+                <span class="drawing-index-item-kind">SHEET</span>
+                <span>Future Autopsy · F.4</span>
+                <span class="drawing-index-item-key">⌘2</span>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Index lookup. Each result tagged with kind and shortcut.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">N3</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>N-003</span><span>F.31</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">HandoffStrip · Cross-Reference Rack</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="xref">
+              <div class="xref-head"><span>CROSS-REFERENCES · DEPARTING</span><span>3 SHEETS</span></div>
+              <div class="xref-row xref-row--primary">
+                <div class="xref-marker"><span class="num">A</span><span class="div"></span><span class="sheet">F.21</span></div>
+                <span class="xref-label">Pre-mortem this deal</span>
+                <span class="xref-sheet">FUTURE AUTOPSY</span>
+              </div>
+              <div class="xref-row">
+                <div class="xref-marker"><span class="num">B</span><span class="div"></span><span class="sheet">F.34</span></div>
+                <span class="xref-label">Carry to an advisor</span>
+                <span class="xref-sheet">ADVISOR DEPLOY</span>
+              </div>
+              <div class="xref-row">
+                <div class="xref-marker"><span class="num">C</span><span class="div"></span><span class="sheet">F.18</span></div>
+                <span class="xref-label">Cast the proof</span>
+                <span class="xref-sheet">POC FRAMEWORK</span>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Section-marker rack. Each xref carries detail letter, sheet number, label, destination.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">N4</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>N-004</span><span>F.32</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">BackPill · Callout Return</h3>
+          <div class="detail-demo">
+            <div class="callout-return">
+              <span class="callout-return-marker">← A · F.7</span>
+              <span class="callout-return-label">FROM BRIEFING · pricing momentum</span>
+            </div>
+          </div>
+          <p class="detail-note">Boxed return marker. Origin detail-letter and sheet.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== DIVISION 07 — SYSTEM ============== -->
+  <section class="division">
+    <div class="division-head">
+      <span class="division-num">07</span>
+      <h2 class="division-title">System primitives — composed assemblies</h2>
+      <span class="division-tail"><span>SHEETS F.33 – F.40</span><span>SCALE NTS</span></span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="detail">
+        <div class="detail-key">S1</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>S-001</span><span>F.33</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">ProposalCard · Revision Proposal</h3>
+          <div class="detail-bearing">Phase F</div>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="rev-proposal">
+              <div class="rev-proposal-tri"></div>
+              <div class="rev-proposal-tri-num">4</div>
+              <div class="rev-proposal-head"><span>PROPOSED REVISION · DENSITY</span><span>REV-2607</span></div>
+              <div class="rev-proposal-body">
+                <div class="rev-proposal-text">You closed your first deal last week. The system has been walking you through every surface — propose step-back as the new default; the current spec remains until accepted.</div>
+                <div class="rev-proposal-cite">DRAWN · 2026·06·05 · BY ANTAEUS · CONF 78%</div>
+                <div class="rev-proposal-actions">
+                  <button class="stamp-btn stamp-btn--primary">ACCEPT REV</button>
+                  <button class="stamp-btn">HOLD 30D</button>
+                  <button class="stamp-btn stamp-btn--ghost">REJECT</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Proposal stamped REV. Triangle at upper-right marks the revision number.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">S2</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>S-002</span><span>F.34</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">PatternCard · Specification Finding</h3>
+          <div class="detail-bearing">Briefing</div>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="finding">
+              <div class="finding-head"><span>FINDING · PATTERN · PRICING-MOMENTUM</span><span>14D · CONF 78%</span></div>
+              <div class="finding-body">
+                <div class="finding-claim">Late-stage price pressure is rising.</div>
+                <div class="finding-spec">Three of the last five closed deals dropped price 12% or more in the final week. Stated discount band is 8%. Pattern present across two ICP segments.</div>
+                <div class="finding-dims">
+                  <div class="finding-dim"><div class="finding-dim-l">SAMPLE</div><div class="finding-dim-v">n=5</div></div>
+                  <div class="finding-dim"><div class="finding-dim-l">WINDOW</div><div class="finding-dim-v">14d</div></div>
+                  <div class="finding-dim"><div class="finding-dim-l">SEGMENT</div><div class="finding-dim-v">2</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Finding block. Claim in serif, evidence in sans, methods ruled in dimension blocks.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">S3</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>S-003</span><span>F.35</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">RiskCard · RFI · Field Condition</h3>
+          <div class="detail-bearing">Deal Workspace</div>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="rfi-card">
+              <div class="rfi-card-tri"></div>
+              <div class="rfi-card-tri-num">12</div>
+              <div class="rfi-card-head"><span>RFI · CRITICAL · FIELD CONDITION</span><span>RISK 78</span></div>
+              <div class="rfi-card-body">
+                <div class="rfi-card-name">Acme Corp.</div>
+                <div class="rfi-card-amount">$84,000 · PROPOSAL · DAY 18</div>
+                <div class="rfi-card-condition">Stalled 18 days at proposal. Single-threaded with champion. Last reply Nov 3 — single-line acknowledgment, not substantive.</div>
+                <div class="rfi-card-dims">
+                  <div class="rfi-card-dim"><div class="rfi-card-dim-l">STAGE</div><div class="rfi-card-dim-v">PROP</div></div>
+                  <div class="rfi-card-dim"><div class="rfi-card-dim-l">STALL</div><div class="rfi-card-dim-v">18d</div></div>
+                  <div class="rfi-card-dim"><div class="rfi-card-dim-l">NEXT</div><div class="rfi-card-dim-v">UNSET</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">RFI flagged. Red top-rule + revision triangle. Field condition documented in spec form.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">S4</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>S-004</span><span>F.36</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">ReadinessReadout · Project Status</h3>
+          <div class="detail-bearing">Synthesized</div>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="project-status">
+              <div class="project-status-head"><span>PROJECT STATUS</span><span>UPDATED 09:12 CT</span></div>
+              <div class="project-status-body">
+                <p class="project-status-state">You're at Inheritable with guardrails.</p>
+                <span class="project-status-stamp">✓ SET ISSUED FOR REVIEW</span>
+                <div class="project-status-rev-row">
+                  <span>NEXT MILESTONE · HIRE-READY</span>
+                  <span>SHEETS PENDING · 4 OF 7</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Stamped head + serif state + rotated approval stamp + next-milestone row.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== DIVISION 08 — DENSITY ============== -->
+  <section class="division">
+    <div class="division-head">
+      <span class="division-num">08</span>
+      <h2 class="division-title">Density gradient — two issued versions</h2>
+      <span class="division-tail"><span>SHEETS F.41 – F.44</span><span>SCALE NTS</span></span>
+    </div>
+    <div class="grid grid-1">
+
+      <div class="detail">
+        <div class="detail-key">DG</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>DG-001</span><span>F.41</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Dashboard command card · sentence count</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="density-grid">
+              <div class="density-sheet">
+                <span class="density-sheet-stamp">REV A · SHOW ME HOW</span>
+                <div class="density-sheet-name">Acme Corp.</div>
+                <div class="density-sheet-body">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo on the fourteenth. This is the first item on the sheet today because it is the deal under the highest specified pressure — a composite of stall duration, deal size, and stage-age expectation. Open the detail for recovery options.</div>
+              </div>
+              <div class="density-sheet">
+                <span class="density-sheet-stamp">REV B · STEP BACK</span>
+                <div class="density-sheet-name">Acme Corp.</div>
+                <div class="density-sheet-body density-sheet-body--terse">ACM · STALL 18d · PROPOSAL · CRIT · OPEN ⌘↵</div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">Same detail, two revisions. REV A walks through the spec; REV B issues the chart-line form.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">DG</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>DG-002</span><span>F.42</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Deal card · action stamps</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="density-grid">
+              <div class="density-sheet">
+                <span class="density-sheet-stamp">REV A · SHOW ME HOW</span>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                  <button class="stamp-btn" style="padding:6px 10px; font-size:9px;">VIEW</button>
+                  <button class="stamp-btn" style="padding:6px 10px; font-size:9px;">EDIT</button>
+                  <button class="stamp-btn" style="padding:6px 10px; font-size:9px;">RISK</button>
+                  <button class="stamp-btn" style="padding:6px 10px; font-size:9px;">NOTE</button>
+                  <button class="stamp-btn" style="padding:6px 10px; font-size:9px;">ADVISOR</button>
+                  <button class="stamp-btn" style="padding:6px 10px; font-size:9px;">MORTEM</button>
+                  <button class="stamp-btn" style="padding:6px 10px; font-size:9px;">NEGOTIATE</button>
+                  <button class="stamp-btn" style="padding:6px 10px; font-size:9px;">CAST</button>
+                </div>
+              </div>
+              <div class="density-sheet">
+                <span class="density-sheet-stamp">REV B · STEP BACK</span>
+                <div style="display:flex; gap:8px;">
+                  <button class="stamp-btn stamp-btn--primary">VIEW</button>
+                  <button class="stamp-btn">EDIT</button>
+                  <button class="stamp-btn stamp-btn--ghost">MORE ⌄</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">All eight stamps visible vs. two visible + a more-menu callout.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-key">DG</div>
+        <div class="detail-key-cut"></div>
+        <div class="detail-stamp"><span>DG-003</span><span>F.43</span></div>
+        <div class="detail-body">
+          <h3 class="detail-title">Autopsy spec list · expanded sections</h3>
+          <div class="detail-demo detail-demo--stretch">
+            <div class="density-grid">
+              <div class="density-sheet">
+                <span class="density-sheet-stamp">REV A · SHOW ME HOW</span>
+                <ol class="spec-list">
+                  <li class="exp"><b>Pattern.</b> Pressure before clarity. The proposal landed before the buyer named their constraint.</li>
+                  <li class="exp"><b>Proof.</b> The pilot never anchored. Readout owner was never assigned.</li>
+                  <li class="exp"><b>Symptom.</b> Three weeks of single-threaded communication with Sarah.</li>
+                  <li class="exp"><b>Decision.</b> The decision architecture was never mapped.</li>
+                </ol>
+              </div>
+              <div class="density-sheet">
+                <span class="density-sheet-stamp">REV B · STEP BACK</span>
+                <ol class="spec-list">
+                  <li>Pattern · pressure-before-clarity · 3 prior</li>
+                  <li>Proof · never-anchored · owner-unset</li>
+                  <li class="exp"><b>Symptom.</b> Three weeks single-threaded with Sarah. Champion replied once in fourteen days.</li>
+                  <li>Decision · architecture-unmapped</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <p class="detail-note">All four spec items expanded vs. only the highest-severity item expanded.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="sheet-footer">
+    <div>
+      VARIANT-F · ARCHITECTURAL SPEC · ANT-LIBRARY · 2026·06·05 · DRAWN BY FOUNDER · CHECKED — · FOR REVIEW
+    </div>
+    <div class="sheet-footer-stamp">✓ ISSUED FOR REVIEW</div>
+  </footer>
+
+</div>
+
+</body>
+</html>

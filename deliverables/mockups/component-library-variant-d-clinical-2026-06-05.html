@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antaeus Component Library — Variant D · Clinical Chart (2026-06-05)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAFCFE;
+    --paper-warm: #FFFDF6;
+    --rule-blue: rgba(37, 99, 235, 0.08);
+    --ink: #0A1C40;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.36);
+    --rule: rgba(10, 28, 64, 0.18);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+    --crit: #B91C1C;
+    --normal-bg: rgba(34, 197, 94, 0.08);
+    --high-bg: rgba(245, 158, 11, 0.14);
+    --crit-bg: rgba(239, 68, 68, 0.10);
+    --low-bg: rgba(37, 99, 235, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--rule-blue) 1px, transparent 1px);
+    background-size: 100% 28px;
+    color: var(--ink);
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .serif { font-family: "DM Serif Display", Georgia, serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .chart {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 40px 32px 96px;
+    background: transparent;
+  }
+
+  /* ===== TOP HEADER ===== */
+  .chart-header {
+    border: 1.5px solid var(--ink);
+    background: var(--paper-warm);
+    padding: 0;
+    margin-bottom: 48px;
+  }
+  .chart-header-band {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 16px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .chart-header-body {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+  }
+  .chart-id {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .chart-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 44px;
+    line-height: 1;
+    margin: 0 0 12px;
+  }
+  .chart-subtitle {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    line-height: 1.6;
+  }
+  .chart-meta {
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    line-height: 1.9;
+    color: var(--ink);
+  }
+  .chart-meta div span { color: var(--ink-soft); }
+
+  /* ===== SECTION HEADS — clinical block ===== */
+  .section {
+    margin-top: 56px;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: end;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+  .section-num {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .section-name {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .section-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ===== GRID ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .grid-1 { grid-template-columns: 1fr; gap: 20px; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  /* ===== ENTRY ===== */
+  .entry {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .entry-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .entry-body {
+    padding: 18px 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+  }
+  .entry-name {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .entry-demo {
+    background: var(--paper-warm);
+    border: 1px dashed var(--rule);
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+  }
+  .entry-demo--stretch { padding: 0; background: transparent; border: none; }
+  .entry-demo--top { align-items: flex-start; padding-top: 20px; }
+  .entry-note {
+    font-family: "Public Sans", sans-serif;
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    border-top: 1px dotted var(--rule);
+    padding-top: 10px;
+  }
+
+  /* ===== PATIENT BANNER (RoomChrome) ===== */
+  .patient-banner {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 8px 1fr auto;
+  }
+  .patient-banner-bar { background: var(--orange); }
+  .patient-banner-body {
+    padding: 8px 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .patient-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .patient-id {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .patient-attending {
+    font-family: "Public Sans", sans-serif;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .patient-attending b { color: var(--ink); font-weight: 600; }
+  .patient-banner-keys {
+    padding: 6px 12px;
+    border-left: 1px solid var(--rule);
+    background: var(--paper-warm);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ===== ADMISSION HEADER (Topbar) ===== */
+  .admission {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+  .admission-head {
+    background: var(--paper-warm);
+    border-bottom: 1px solid var(--ink);
+    padding: 6px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .admission-body {
+    padding: 14px 16px;
+  }
+  .admission-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.1;
+    margin: 0 0 8px;
+  }
+  .admission-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 10px;
+    border-top: 1px dashed var(--rule);
+    padding-top: 10px;
+  }
+  .admission-vital {
+    display: flex;
+    flex-direction: column;
+  }
+  .admission-vital-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .admission-vital-val {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .admission-vital-val.high { color: var(--amber); }
+  .admission-vital-val.crit { color: var(--crit); }
+  .admission-vital-val.low { color: var(--blue); }
+
+  /* ===== SOAP NOTE BLOCK (SectionFrame) ===== */
+  .soap {
+    width: 100%;
+    border-left: 4px solid var(--ink);
+    background: var(--paper);
+    padding-left: 14px;
+  }
+  .soap-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+  .soap-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .soap-time {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+  }
+  .soap-letter {
+    display: inline-block;
+    width: 18px; height: 18px;
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    line-height: 18px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    margin-right: 6px;
+  }
+  .soap-line {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  /* ===== PROGRESS NOTE (Panel) ===== */
+  .progress-note {
+    width: 100%;
+    border: 1px solid var(--ink);
+    border-left: 4px solid var(--ink);
+    background: var(--paper);
+    padding: 12px 14px;
+  }
+  .progress-head {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+  .progress-title {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .progress-author {
+    font-family: "Public Sans", sans-serif;
+    font-size: 10px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .progress-body {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  /* ===== DISPLAY ===== */
+  .serif-head { font-family: "DM Serif Display", serif; font-size: 26px; line-height: 1; }
+  .sans-head { font-weight: 700; font-size: 14px; letter-spacing: 0.04em; }
+  .kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .body-text { font-size: 13px; line-height: 1.65; }
+
+  /* ===== VITALS STRIP (Stat) ===== */
+  .vitals-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    width: 100%;
+  }
+  .vitals-cell {
+    background: var(--paper);
+    padding: 8px 10px;
+    text-align: center;
+  }
+  .vitals-cell-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 2px;
+  }
+  .vitals-cell-val {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .vitals-cell-ref {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+    letter-spacing: 0.06em;
+  }
+  .vitals-cell--high .vitals-cell-val { color: var(--amber); }
+  .vitals-cell--high { background: var(--high-bg); }
+  .vitals-cell--crit .vitals-cell-val { color: var(--crit); }
+  .vitals-cell--crit { background: var(--crit-bg); }
+
+  /* ===== PATIENT CARD (Card) ===== */
+  .pt-card {
+    width: 100%;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    display: flex;
+    align-items: stretch;
+  }
+  .pt-card-bar { width: 6px; background: var(--orange); }
+  .pt-card-body { padding: 8px 12px; flex: 1; }
+  .pt-card-name { font-family: "DM Serif Display", serif; font-size: 16px; line-height: 1; margin-bottom: 4px; }
+  .pt-card-room { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ===== FLAGGED STATUS (StatusChip) ===== */
+  .flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid currentColor;
+    padding: 1px 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .flag--stable { color: #15803D; background: var(--normal-bg); }
+  .flag--compounding { color: #1D4ED8; background: var(--low-bg); }
+  .flag--abn { color: #B45309; background: var(--high-bg); }
+  .flag--crit { color: var(--crit); background: var(--crit-bg); }
+  .flag-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+
+  /* ===== LAB VALUE (HeatBadge) ===== */
+  .lab {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1.5px solid currentColor;
+    padding: 4px 8px;
+    min-width: 70px;
+  }
+  .lab-num {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1;
+  }
+  .lab-flag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    margin-top: 2px;
+    border-top: 1px solid currentColor;
+    padding-top: 2px;
+    width: 100%;
+    text-align: center;
+  }
+  .lab--crit { color: var(--crit); background: var(--crit-bg); }
+  .lab--high { color: #B45309; background: var(--high-bg); }
+  .lab--watch { color: #1D4ED8; background: var(--low-bg); }
+  .lab-row { display: flex; gap: 8px; justify-content: center; }
+
+  /* ===== ORDER ENTRY (Buttons) ===== */
+  .order {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    cursor: pointer;
+    border-radius: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .order::before { content: '►'; color: var(--orange); font-size: 8px; }
+  .order--stat { background: var(--ink); color: var(--paper); }
+  .order--stat::before { color: var(--orange); }
+  .order--routine { color: var(--ink-soft); border-color: var(--rule); background: transparent; }
+  .order--routine::before { display: none; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+  .order-icon {
+    width: 32px; height: 32px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  /* ===== TOGGLE ===== */
+  .toggle {
+    display: inline-flex;
+    width: 44px; height: 20px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    padding: 1px;
+    cursor: pointer;
+  }
+  .toggle::after {
+    content: ''; width: 16px; height: 16px;
+    background: var(--ink);
+    transition: transform 0.12s;
+  }
+  .toggle.on::after { background: var(--orange); transform: translateX(24px); }
+
+  /* ===== CHART INPUT ===== */
+  .chart-input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--ink);
+    background: var(--paper-warm);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .chart-input:focus { outline: 1.5px solid var(--orange); outline-offset: -1px; }
+  .chart-field { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+  .chart-field-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+  }
+  .chart-field-help {
+    font-family: "Public Sans", sans-serif;
+    font-style: italic;
+    font-size: 10px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  /* ===== STAT BANNER ===== */
+  .stat-banner {
+    width: 100%;
+    border: 2px solid var(--crit);
+    background: var(--crit-bg);
+    padding: 0;
+  }
+  .stat-banner-tag {
+    background: var(--crit);
+    color: var(--paper);
+    padding: 2px 10px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .stat-banner-body {
+    padding: 8px 12px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--crit);
+    font-weight: 600;
+  }
+
+  .alert-banner {
+    width: 100%;
+    border-left: 4px solid var(--amber);
+    background: var(--high-bg);
+    padding: 8px 12px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: #92400E;
+    display: flex;
+    gap: 10px;
+  }
+  .alert-banner-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--amber);
+  }
+  .alert-banner--blue {
+    border-color: var(--blue);
+    background: var(--low-bg);
+    color: #1D4ED8;
+  }
+  .alert-banner--blue .alert-banner-tag { color: var(--blue); }
+
+  /* ===== ORDER ENTERED TOAST ===== */
+  .order-toast {
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0;
+  }
+  .order-toast-tag {
+    background: var(--green);
+    color: var(--paper);
+    padding: 3px 8px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .order-toast-body {
+    padding: 6px 12px 8px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+  }
+  .order-toast-time {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: rgba(250, 252, 254, 0.6);
+    margin-top: 4px;
+    letter-spacing: 0.10em;
+  }
+
+  /* ===== CONSULT MODAL ===== */
+  .consult {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .consult-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .consult-body {
+    padding: 12px 14px;
+  }
+  .consult-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .consult-text {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    line-height: 1.55;
+  }
+  .consult-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    border-top: 1px solid var(--ink);
+    padding-top: 8px;
+  }
+
+  /* ===== REFERENCE RANGE TOOLTIP ===== */
+  .ref-wrap { position: relative; display: inline-block; margin-top: 56px; }
+  .ref-anchor {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink);
+    border-bottom: 1.5px solid var(--orange);
+    padding-bottom: 2px;
+  }
+  .ref-anchor sup { color: var(--orange); margin-left: 2px; font-size: 11px; }
+  .ref-note {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: var(--paper-warm);
+    border: 1.5px solid var(--ink);
+    border-left: 4px solid var(--orange);
+    padding: 6px 10px;
+    width: 220px;
+  }
+  .ref-note-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 2px;
+  }
+  .ref-note-text {
+    font-family: "Public Sans", sans-serif;
+    font-size: 11px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* ===== WARD NAV ===== */
+  .ward-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1.5px solid var(--ink);
+    width: 100%;
+  }
+  .ward-tab {
+    padding: 8px 4px;
+    text-align: center;
+    border-right: 1px solid var(--ink);
+    background: var(--paper);
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .ward-tab:last-child { border-right: none; }
+  .ward-tab.active { background: var(--ink); color: var(--paper); }
+  .ward-tab-sub {
+    display: block;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+  .ward-tab.active .ward-tab-sub { color: rgba(250,252,254,0.6); }
+
+  /* ===== ORDER SET PALETTE ===== */
+  .order-palette {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+  .order-palette-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .order-palette-search {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--ink);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    background: var(--paper-warm);
+  }
+  .order-palette-item {
+    padding: 6px 12px;
+    border-bottom: 1px dotted var(--rule);
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+  .order-palette-item:last-child { border-bottom: none; }
+  .order-palette-item.hl { background: rgba(230, 112, 30, 0.10); }
+  .order-palette-item-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--orange);
+    border: 1px solid var(--orange);
+    padding: 1px 4px;
+    text-align: center;
+  }
+  .order-palette-item.hl .order-palette-item-kind { background: var(--orange); color: var(--paper); }
+  .order-palette-item-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+  }
+
+  /* ===== SIGN-OUT (HandoffStrip) ===== */
+  .signout {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+  .signout-head {
+    background: var(--paper-warm);
+    border-bottom: 1px solid var(--ink);
+    padding: 4px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+  }
+  .signout-item {
+    padding: 8px 12px;
+    border-bottom: 1px dotted var(--rule);
+    display: flex;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .signout-item:last-child { border-bottom: none; }
+  .signout-item--primary { background: rgba(230, 112, 30, 0.08); }
+  .signout-pri {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    color: var(--orange);
+    width: 24px;
+    flex-shrink: 0;
+  }
+  .signout-label {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .signout-item--primary .signout-label { font-weight: 700; }
+
+  /* ===== CONSULT CALLBACK (BackPill) ===== */
+  .callback {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    padding: 3px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .callback-tag {
+    background: var(--orange);
+    color: var(--paper);
+    padding: 1px 5px;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
+
+  /* ===== RECOMMENDATION (Proposal) ===== */
+  .recommendation {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+  .recommendation-head {
+    background: var(--orange);
+    color: var(--paper);
+    padding: 3px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .recommendation-body {
+    padding: 14px 16px;
+  }
+  .recommendation-text {
+    font-family: "Public Sans", sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .recommendation-sig {
+    font-family: "Public Sans", sans-serif;
+    font-size: 10px;
+    font-style: italic;
+    color: var(--ink-soft);
+    border-top: 1px dashed var(--rule);
+    padding-top: 6px;
+    margin-bottom: 10px;
+  }
+  .recommendation-actions { display: flex; gap: 6px; }
+
+  /* ===== FINDING (PatternCard) ===== */
+  .finding {
+    width: 100%;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+  }
+  .finding-head {
+    background: var(--paper-warm);
+    border-bottom: 1.5px solid var(--ink);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .finding-body {
+    padding: 14px;
+  }
+  .finding-impression {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .finding-evidence {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .finding-meta {
+    display: flex;
+    gap: 16px;
+    border-top: 1px dashed var(--rule);
+    padding-top: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .finding-meta span span { color: var(--ink); font-weight: 700; }
+
+  /* ===== CRITICAL PATIENT (Risk) ===== */
+  .critical-pt {
+    width: 100%;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    border-top: 4px solid var(--crit);
+  }
+  .critical-pt-head {
+    background: var(--crit-bg);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crit);
+    border-bottom: 1px solid var(--rule);
+  }
+  .critical-pt-body { padding: 12px 14px; }
+  .critical-pt-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .critical-pt-amount {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .critical-pt-pmh {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.5;
+    margin: 8px 0 10px;
+    border-top: 1px dotted var(--rule);
+    padding-top: 8px;
+  }
+  .critical-pt-vitals {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .critical-pt-vital {
+    background: var(--paper-warm);
+    padding: 4px 8px;
+    text-align: center;
+  }
+  .critical-pt-vital-l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .critical-pt-vital-v {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--ink);
+  }
+
+  /* ===== DISCHARGE STATUS (Readiness) ===== */
+  .discharge {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .discharge-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .discharge-body {
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .discharge-state {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .discharge-stamp {
+    display: inline-block;
+    border: 2px solid var(--green);
+    color: var(--green);
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    padding: 4px 12px;
+    transform: rotate(-3deg);
+    margin-top: 12px;
+  }
+
+  /* ===== DENSITY DEMO ===== */
+  .density-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .density-cell {
+    background: var(--paper);
+    padding: 16px;
+  }
+  .density-cell-tag {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 8px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    margin-bottom: 12px;
+  }
+  .density-cell-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  .density-cell-prose {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .density-cell-prose--terse {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* SOAP problem list */
+  .problem-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    counter-reset: prob;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .problem-list li {
+    counter-increment: prob;
+    padding: 6px 8px 6px 32px;
+    position: relative;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    border-bottom: 1px dotted var(--rule);
+    line-height: 1.5;
+  }
+  .problem-list li::before {
+    content: counter(prob);
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    width: 18px; height: 18px;
+    background: var(--paper-warm);
+    border: 1px solid var(--ink);
+    text-align: center;
+    line-height: 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+  }
+  .problem-list li.active::before { background: var(--orange); color: var(--paper); border-color: var(--orange); }
+  .problem-list li b { font-weight: 700; }
+
+  /* footer */
+  .chart-footer {
+    margin-top: 96px;
+    border-top: 2px solid var(--ink);
+    padding: 16px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="chart">
+
+  <header class="chart-header">
+    <div class="chart-header-band">
+      <span>VARIANT-D · CLINICAL CHART · CANDIDATES</span>
+      <span>SHEET 1 OF 1 · 2026·06·05</span>
+    </div>
+    <div class="chart-header-body">
+      <div>
+        <div class="chart-id">PT-ID · ANT-WORKSPACE-0001 · ROUNDING-DOCUMENT</div>
+        <h1 class="chart-title">The Antaeus Service — Component Library</h1>
+        <p class="chart-subtitle">Primitives rendered as a clinical chart. The deal is a patient. Vitals are quantified pressure. SOAP notes are authored progress. Sign-out is what the next attending reads to take over with care. The handoff is literal: the chart IS the inheritance.</p>
+      </div>
+      <div class="chart-meta">
+        <div>ATTENDING <span>· FOUNDER</span></div>
+        <div>SERVICE <span>· COMMERCIAL</span></div>
+        <div>SECTIONS <span>· 08</span></div>
+        <div>STATE <span>· DRAFT</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-name">LAYOUT · CHART STRUCTURE</h2>
+      <span class="section-tag">how the patient is framed</span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="entry">
+        <div class="entry-head"><span>PRIMITIVE</span><span>P-001</span></div>
+        <div class="entry-body">
+          <div class="entry-name">RoomChrome → Patient Banner</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="patient-banner">
+              <div class="patient-banner-bar"></div>
+              <div class="patient-banner-body">
+                <span class="patient-name">Acme Corp.</span>
+                <span class="patient-id">PT · ACM-Q4-2026 · STAGE PROPOSAL · DAY 18</span>
+                <span class="patient-attending">Attending <b>Founder</b></span>
+              </div>
+              <div class="patient-banner-keys">⌘K · ORDERS</div>
+            </div>
+          </div>
+          <p class="entry-note">Severity bar at left (orange = caution). Name in serif. Identifiers in mono. The banner persists at the top of every room — the operator always knows which patient they are reading.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>PRIMITIVE</span><span>P-002</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Topbar → Admission Header</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="admission">
+              <div class="admission-head"><span>SERVICE · BRIEFING</span><span>2026·06·05 · 09:12 CT</span></div>
+              <div class="admission-body">
+                <h3 class="admission-title">Where the motion is today</h3>
+                <div class="admission-strip">
+                  <div class="admission-vital"><span class="admission-vital-label">Active deals</span><span class="admission-vital-val">37</span></div>
+                  <div class="admission-vital"><span class="admission-vital-label">Critical</span><span class="admission-vital-val crit">3</span></div>
+                  <div class="admission-vital"><span class="admission-vital-label">Stale &gt;14d</span><span class="admission-vital-val high">8</span></div>
+                  <div class="admission-vital"><span class="admission-vital-label">Win rate</span><span class="admission-vital-val">22%</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Mono service tag + timestamp band. Serif title. Vitals strip beneath with flagged abnormalities.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>PRIMITIVE</span><span>P-003</span></div>
+        <div class="entry-body">
+          <div class="entry-name">SectionFrame → SOAP Note</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="soap">
+              <div class="soap-head"><span class="soap-stamp">PROGRESS NOTE</span><span class="soap-time">2026·06·04 · 14:22</span></div>
+              <p class="soap-line"><span class="soap-letter">S</span>Champion reports procurement asked for revised terms; says they remain supportive.</p>
+              <p class="soap-line"><span class="soap-letter">O</span>Stage proposal · 18 days · single-threaded · last reply 11/3.</p>
+              <p class="soap-line"><span class="soap-letter">A</span>Stall risk rising. Pattern matches three prior closed-lost deals.</p>
+              <p class="soap-line"><span class="soap-letter">P</span>Cast proof of value before EOW. Engage EB directly. Pre-mortem next Monday if no movement.</p>
+            </div>
+          </div>
+          <p class="entry-note">Left-rule + dated head. Subjective / Objective / Assessment / Plan letter glyphs. The authored progress lives here.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>PRIMITIVE</span><span>P-004</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Panel → Service Note</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="progress-note">
+              <div class="progress-head"><span class="progress-title">RECOVERY QUEUE · ROUNDING</span><span class="progress-author">— Founder, attending</span></div>
+              <div class="progress-body">Six patients weakening. Three need an intervention this week. Two await proof readout. One pending advisor consult.</div>
+            </div>
+          </div>
+          <p class="entry-note">The plain progress note. Italic author signature at the head.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-name">DISPLAY · OBSERVATION VOCABULARY</h2>
+      <span class="section-tag">how information is read</span>
+    </div>
+    <div class="grid">
+
+      <div class="entry">
+        <div class="entry-head"><span>DISP</span><span>D-001</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Heading · authored</div>
+          <div class="entry-demo"><span class="serif-head">Acme is stalling.</span></div>
+          <p class="entry-note">The diagnosis — reserved for the singular dominant read.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DISP</span><span>D-002</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Heading · clinical</div>
+          <div class="entry-demo"><span class="sans-head">RECOVERY OPTIONS</span></div>
+          <p class="entry-note">Form heads — caps, weight 700, short tracking.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DISP</span><span>D-003</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Kicker · order code</div>
+          <div class="entry-demo"><span class="kicker">SIGNAL · CONSOLE · LIVE</span></div>
+          <p class="entry-note">Mono codes — section IDs, service names.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DISP</span><span>D-004</span></div>
+        <div class="entry-body">
+          <div class="entry-name">BodyText · note</div>
+          <div class="entry-demo entry-demo--top">
+            <p class="body-text" style="margin:0;">Patient stable. Last reply Nov 3. Champion reports continued support; procurement remains the open question.</p>
+          </div>
+          <p class="entry-note">Sans note text. Modest line-height for reading.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DISP</span><span>D-005</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Stat → Vitals Strip</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="vitals-strip">
+              <div class="vitals-cell"><span class="vitals-cell-label">BP-Q</span><span class="vitals-cell-val">87</span><span class="vitals-cell-ref">REF 70-100</span></div>
+              <div class="vitals-cell vitals-cell--high"><span class="vitals-cell-label">STALL</span><span class="vitals-cell-val">18d</span><span class="vitals-cell-ref">REF &lt;10d</span></div>
+              <div class="vitals-cell vitals-cell--crit"><span class="vitals-cell-label">NEXT</span><span class="vitals-cell-val">—</span><span class="vitals-cell-ref">REQ +1</span></div>
+              <div class="vitals-cell"><span class="vitals-cell-label">ICP-MATCH</span><span class="vitals-cell-val">9.2</span><span class="vitals-cell-ref">REF 8-10</span></div>
+            </div>
+          </div>
+          <p class="entry-note">Joined cells. Each carries label + value + reference range. Out-of-range cells color-fill.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DISP</span><span>D-006</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Card → Patient Card</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="pt-card">
+              <div class="pt-card-bar"></div>
+              <div class="pt-card-body">
+                <div class="pt-card-name">Acme Corp.</div>
+                <div class="pt-card-room">RM · PROPOSAL · DAY 18</div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Severity stripe + serif name + mono room code. The universal unit.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DISP</span><span>D-007</span></div>
+        <div class="entry-body">
+          <div class="entry-name">StatusChip → Flagged Status</div>
+          <div class="entry-demo">
+            <div class="flag-row">
+              <span class="flag flag--stable">STABLE · READY</span>
+              <span class="flag flag--compounding">COMPOUNDING</span>
+              <span class="flag flag--abn">WEAK · ABN</span>
+              <span class="flag flag--crit">CRIT · AT-RISK</span>
+            </div>
+          </div>
+          <p class="entry-note">Lab-flag posture. Bordered chip with state code.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DISP</span><span>D-008</span></div>
+        <div class="entry-body">
+          <div class="entry-name">HeatBadge → Lab Value</div>
+          <div class="entry-demo">
+            <div class="lab-row">
+              <div class="lab lab--crit"><span class="lab-num">94</span><span class="lab-flag">↑ CRIT</span></div>
+              <div class="lab lab--high"><span class="lab-num">78</span><span class="lab-flag">↑ HIGH</span></div>
+              <div class="lab lab--watch"><span class="lab-num">52</span><span class="lab-flag">~ WATCH</span></div>
+            </div>
+          </div>
+          <p class="entry-note">Value over directional flag. Lab-result posture, not a meter.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-name">ACTION · ORDER ENTRY</h2>
+      <span class="section-tag">how care advances</span>
+    </div>
+    <div class="grid">
+
+      <div class="entry">
+        <div class="entry-head"><span>ACT</span><span>A-001</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Button · STAT order</div>
+          <div class="entry-demo"><button class="order order--stat">CAST PROOF</button></div>
+          <p class="entry-note">Solid ink fill. Mono caps. The dominant order.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>ACT</span><span>A-002</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Button · routine order</div>
+          <div class="entry-demo"><button class="order">SAVE DRAFT</button></div>
+          <p class="entry-note">Bordered, mono caps. Orange play caret leads.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>ACT</span><span>A-003</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Button · discontinue</div>
+          <div class="entry-demo"><button class="order order--routine">DC ORDER</button></div>
+          <p class="entry-note">Hairline border. Recessive tertiary action.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>ACT</span><span>A-004</span></div>
+        <div class="entry-body">
+          <div class="entry-name">IconButton</div>
+          <div class="entry-demo">
+            <div class="btn-row">
+              <button class="order-icon">⌘</button>
+              <button class="order-icon">↗</button>
+              <button class="order-icon">⊘</button>
+            </div>
+          </div>
+          <p class="entry-note">Square 32px, mono glyph.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>ACT</span><span>A-005</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Link · consult callback</div>
+          <div class="entry-demo">
+            <a href="#" style="color:var(--blue); font-family:'JetBrains Mono'; font-weight:700; font-size:11px; text-decoration:none; border-bottom:1.5px solid var(--blue); padding-bottom:1px; letter-spacing:0.06em;">→ TRANSFER · DISCOVERY-STUDIO</a>
+          </div>
+          <p class="entry-note">Blue, hairline-underlined. Transfer-of-care language.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>ACT</span><span>A-006</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Toggle · DNR flag</div>
+          <div class="entry-demo">
+            <div class="btn-row" style="gap:20px;">
+              <span class="toggle"></span>
+              <span class="toggle on"></span>
+            </div>
+          </div>
+          <p class="entry-note">Hard-edge cell. Orange when set.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-name">INPUT · CHART ENTRY</h2>
+      <span class="section-tag">how the attending documents</span>
+    </div>
+    <div class="grid">
+
+      <div class="entry">
+        <div class="entry-head"><span>IN</span><span>I-001</span></div>
+        <div class="entry-body">
+          <div class="entry-name">TextInput · single line</div>
+          <div class="entry-demo entry-demo--stretch">
+            <input class="chart-input" value="Acme Corp.">
+          </div>
+          <p class="entry-note">Cream cell, ruled border, mono content.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>IN</span><span>I-002</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Select · enum</div>
+          <div class="entry-demo entry-demo--stretch">
+            <select class="chart-input">
+              <option>PROPOSAL</option>
+              <option>DISCOVERY</option>
+              <option>NEGOTIATION</option>
+            </select>
+          </div>
+          <p class="entry-note">Same chrome. Mono content.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>IN</span><span>I-003</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Textarea · note body</div>
+          <div class="entry-demo entry-demo--stretch">
+            <textarea class="chart-input" rows="3" style="resize:none; font-family:'Public Sans';">Sarah needs the revised proposal by Friday. Will need procurement sign-off before EOQ.</textarea>
+          </div>
+          <p class="entry-note">Multi-line. Sans content for prose entries.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>IN</span><span>I-004</span></div>
+        <div class="entry-body">
+          <div class="entry-name">FormField · structured</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="chart-field">
+              <label class="chart-field-label">BUYING-GROUP-MIN · REQUIRED</label>
+              <input class="chart-input" type="number" value="5">
+              <div class="chart-field-help">Typical 3–7 decision-makers for most B2B teams.</div>
+            </div>
+          </div>
+          <p class="entry-note">Required-field caps, underline rule, italic help line.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>IN</span><span>I-005</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Problem list · checked</div>
+          <div class="entry-demo entry-demo--stretch">
+            <ol class="problem-list">
+              <li class="active"><b>Champion identified.</b> Sarah Chen, VP Ops.</li>
+              <li>Economic buyer confirmed. <span style="color:var(--ink-faint);">UNCONFIRMED</span></li>
+              <li>Decision architecture mapped. <span style="color:var(--ink-faint);">UNCONFIRMED</span></li>
+            </ol>
+          </div>
+          <p class="entry-note">Numbered problems. Active items orange-numbered. Unchecked items recede.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-name">FEEDBACK · ALERT &amp; ORDER STATUS</h2>
+      <span class="section-tag">how the system speaks back</span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="entry">
+        <div class="entry-head"><span>FB</span><span>F-001</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Toast → Order Acknowledgment</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="order-toast">
+              <span class="order-toast-tag">ORDER ENTERED</span>
+              <div class="order-toast-body">
+                Proof of value cast. Linked to Acme · Q4 expansion.
+                <div class="order-toast-time">2026·06·05 · 09:14:22 CT</div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Green order-entered tag. Body + precise timestamp.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>FB</span><span>F-002</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Banner → STAT Alert / Notice</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+              <div class="stat-banner">
+                <span class="stat-banner-tag">⚠ STAT</span>
+                <div class="stat-banner-body">12 days since last brief synthesized. Patient at risk for stale read.</div>
+              </div>
+              <div class="alert-banner alert-banner--blue">
+                <span class="alert-banner-tag">CONSULT</span>
+                <span>Briefing requests refresh of objection handler · Acme pricing pushback.</span>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">STAT banner with red tag. Consult banner with blue rule.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>FB</span><span>F-003</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Modal → Consult Request</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="consult">
+              <div class="consult-head"><span>CONFIRM · DESTRUCTIVE</span><span>[ESC]</span></div>
+              <div class="consult-body">
+                <div class="consult-title">Discard draft?</div>
+                <div class="consult-text">Unsaved edits to this proof draft. Discarding clears them. No reversion path.</div>
+              </div>
+              <div class="consult-actions">
+                <button class="order order--routine">CANCEL</button>
+                <button class="order order--stat">DISCARD</button>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Tagged head with ESC mark. Destructive action paired with cancel.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>FB</span><span>F-004</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Tooltip → Reference Range Note</div>
+          <div class="entry-demo">
+            <div class="ref-wrap">
+              <div class="ref-note">
+                <div class="ref-note-tag">REF · ICP QUALITY</div>
+                <div class="ref-note-text">One of eight quality checks the ICP score reads from. Typical 3–7 for B2B teams.</div>
+              </div>
+              <span class="ref-anchor">BUYING-GROUP-MIN<sup>†</sup></span>
+            </div>
+          </div>
+          <p class="entry-note">Cream note with orange rule. Dagger mark on the anchor.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-name">NAVIGATION · WARD MAP</h2>
+      <span class="section-tag">how the operator rounds</span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="entry">
+        <div class="entry-head"><span>NAV</span><span>N-001</span></div>
+        <div class="entry-body">
+          <div class="entry-name">NavLink → Ward Tabs</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="ward-nav">
+              <span class="ward-tab active">DASHBOARD<span class="ward-tab-sub">ROUNDING</span></span>
+              <span class="ward-tab">SIGNAL<span class="ward-tab-sub">TELEMETRY</span></span>
+              <span class="ward-tab">DEALS<span class="ward-tab-sub">CENSUS</span></span>
+              <span class="ward-tab">AUTOPSY<span class="ward-tab-sub">PATHOLOGY</span></span>
+            </div>
+          </div>
+          <p class="entry-note">Tabbed wards. Each with sub-label naming the function.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>NAV</span><span>N-002</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Palette → Order Set Search</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="order-palette">
+              <div class="order-palette-head"><span>ORDER SETS · ⌘K</span><span>↑↓ NAV · ↵ ENTER</span></div>
+              <div class="order-palette-search">› whats at risk_</div>
+              <div class="order-palette-item hl">
+                <span class="order-palette-item-kind">SKILL</span>
+                <span>What's at risk this week</span>
+                <span class="order-palette-item-key">↵</span>
+              </div>
+              <div class="order-palette-item">
+                <span class="order-palette-item-kind">WARD</span>
+                <span>Deal Workspace · census</span>
+                <span class="order-palette-item-key">⌘1</span>
+              </div>
+              <div class="order-palette-item">
+                <span class="order-palette-item-kind">WARD</span>
+                <span>Future Autopsy · pathology</span>
+                <span class="order-palette-item-key">⌘2</span>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Order-set palette. Bordered kind tag. Keybind on the right.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>NAV</span><span>N-003</span></div>
+        <div class="entry-body">
+          <div class="entry-name">HandoffStrip → Sign-Out</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="signout">
+              <div class="signout-head"><span>SIGN-OUT · ROUTES</span><span>3 ITEMS</span></div>
+              <div class="signout-item signout-item--primary">
+                <span class="signout-pri">1°</span>
+                <span class="signout-label">Pre-mortem this deal — Future Autopsy</span>
+              </div>
+              <div class="signout-item">
+                <span class="signout-pri">2°</span>
+                <span class="signout-label">Carry to an advisor — Advisor Deploy</span>
+              </div>
+              <div class="signout-item">
+                <span class="signout-pri">3°</span>
+                <span class="signout-label">Cast the proof — PoC Framework</span>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Primary / secondary / tertiary marked 1° / 2° / 3°. The handoff is ranked.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>NAV</span><span>N-004</span></div>
+        <div class="entry-body">
+          <div class="entry-name">BackPill → Consult Callback</div>
+          <div class="entry-demo">
+            <span class="callback"><span class="callback-tag">CONSULT</span> FROM BRIEFING · PRICING-MOMENTUM</span>
+          </div>
+          <p class="entry-note">Bordered callback marker. Origin tag in orange fill.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2 class="section-name">SYSTEM PRIMITIVES · CLINICAL DOCUMENTS</h2>
+      <span class="section-tag">composed components, native to the service</span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="entry">
+        <div class="entry-head"><span>SYS</span><span>S-001</span></div>
+        <div class="entry-body">
+          <div class="entry-name">ProposalCard → Clinical Recommendation</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="recommendation">
+              <div class="recommendation-head"><span>RECOMMENDATION · DENSITY-CHANGE</span><span>REC-2607</span></div>
+              <div class="recommendation-body">
+                <p class="recommendation-text">You closed your first deal last week. The system has been walking you through every surface. Recommend step-back density for routine operating; revert any time.</p>
+                <div class="recommendation-sig">— Antaeus service · post-discharge review · 2026·06·05</div>
+                <div class="recommendation-actions">
+                  <button class="order order--stat">ACCEPT</button>
+                  <button class="order">DEFER · 30D</button>
+                  <button class="order order--routine">DISMISS</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Recommendation block — head, body, signature, ranked actions.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>SYS</span><span>S-002</span></div>
+        <div class="entry-body">
+          <div class="entry-name">PatternCard → Diagnostic Finding</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="finding">
+              <div class="finding-head"><span>FINDING · PATTERN · PRICING-MOMENTUM</span><span>14D · CONF 78%</span></div>
+              <div class="finding-body">
+                <div class="finding-impression">Late-stage price pressure is rising.</div>
+                <div class="finding-evidence">Three of the last five closed deals dropped price 12% or more in the final week. Stated discount band is 8%. Pattern present across two ICP segments.</div>
+                <div class="finding-meta">
+                  <span>SAMPLE · <span>N=5</span></span>
+                  <span>WINDOW · <span>14D</span></span>
+                  <span>SEG · <span>2</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Finding block — impression in serif, evidence in sans, methods row in mono.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>SYS</span><span>S-003</span></div>
+        <div class="entry-body">
+          <div class="entry-name">RiskCard → Critical Patient</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="critical-pt">
+              <div class="critical-pt-head"><span>⚠ CRITICAL · RECOVERY-QUEUE</span><span>RISK 78</span></div>
+              <div class="critical-pt-body">
+                <div class="critical-pt-name">Acme Corp.</div>
+                <div class="critical-pt-amount">$84,000 · PROPOSAL · DAY 18</div>
+                <div class="critical-pt-pmh">Stalled 18 days at proposal. Single-threaded with champion. Last reply Nov 3 — single-line acknowledgment, not substantive.</div>
+                <div class="critical-pt-vitals">
+                  <div class="critical-pt-vital"><div class="critical-pt-vital-l">STAGE</div><div class="critical-pt-vital-v">PROPOSAL</div></div>
+                  <div class="critical-pt-vital"><div class="critical-pt-vital-l">STALL</div><div class="critical-pt-vital-v">18d</div></div>
+                  <div class="critical-pt-vital"><div class="critical-pt-vital-l">NEXT</div><div class="critical-pt-vital-v">UNSET</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Top rule red. Red-flagged head. Vitals strip at the foot.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>SYS</span><span>S-004</span></div>
+        <div class="entry-body">
+          <div class="entry-name">ReadinessReadout → Discharge Status</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="discharge">
+              <div class="discharge-head"><span>DISCHARGE · STATUS</span><span>UPDATED 09:12 CT</span></div>
+              <div class="discharge-body">
+                <div class="discharge-state">You're at Inheritable with guardrails.</div>
+                <div class="discharge-stamp">CHART REVIEWED</div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Black-banded head. State sentence in serif. Stamp rotated three degrees.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">08</span>
+      <h2 class="section-name">DENSITY · CHART VERSIONS A/B</h2>
+      <span class="section-tag">show me how vs. step back, same patient</span>
+    </div>
+    <div class="grid grid-1">
+
+      <div class="entry">
+        <div class="entry-head"><span>DEMO</span><span>DG-001</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Dashboard patient card · sentence count</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="density-grid">
+              <div class="density-cell">
+                <span class="density-cell-tag">SHOW · ME · HOW</span>
+                <div class="density-cell-name">Acme Corp.</div>
+                <div class="density-cell-prose">Patient has not moved in eighteen days. Champion (Sarah Chen) has been quiet since the demo on the fourteenth. This is the first patient on rounds today because the system ranks it under the highest pressure: a composite of stall duration, deal size, and stage-age expectation. Open chart to review recovery options.</div>
+              </div>
+              <div class="density-cell">
+                <span class="density-cell-tag">STEP · BACK</span>
+                <div class="density-cell-name">Acme Corp.</div>
+                <div class="density-cell-prose density-cell-prose--terse">ACM · STALL 18d · PROPOSAL · CRIT · OPEN ⌘↵</div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Same patient, same Command Chamber temperature. Notes verbose vs. terse chart-line.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DEMO</span><span>DG-002</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Deal card · order entry</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="density-grid">
+              <div class="density-cell">
+                <span class="density-cell-tag">SHOW · ME · HOW</span>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                  <button class="order order--routine">VIEW</button>
+                  <button class="order order--routine">EDIT</button>
+                  <button class="order order--routine">RISK</button>
+                  <button class="order order--routine">NOTE</button>
+                  <button class="order order--routine">CONSULT · ADVISOR</button>
+                  <button class="order order--routine">PRE-MORTEM</button>
+                  <button class="order order--routine">REHEARSE</button>
+                  <button class="order order--routine">CAST · PROOF</button>
+                </div>
+              </div>
+              <div class="density-cell">
+                <span class="density-cell-tag">STEP · BACK</span>
+                <div style="display:flex; gap:6px;">
+                  <button class="order order--stat">VIEW</button>
+                  <button class="order">EDIT</button>
+                  <button class="order order--routine">MORE ⌄</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">Eight orders visible vs. two visible plus a collapsed set.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head"><span>DEMO</span><span>DG-003</span></div>
+        <div class="entry-body">
+          <div class="entry-name">Autopsy report · expanded sheets</div>
+          <div class="entry-demo entry-demo--stretch">
+            <div class="density-grid">
+              <div class="density-cell">
+                <span class="density-cell-tag">SHOW · ME · HOW</span>
+                <ol class="problem-list">
+                  <li class="active"><b>Pattern.</b> Pressure before clarity. Proposal landed before buyer named their constraint.</li>
+                  <li class="active"><b>Proof.</b> Pilot never anchored. Readout owner unassigned.</li>
+                  <li class="active"><b>Symptom.</b> Three weeks single-threaded with Sarah.</li>
+                  <li class="active"><b>Decision.</b> Architecture never mapped.</li>
+                </ol>
+              </div>
+              <div class="density-cell">
+                <span class="density-cell-tag">STEP · BACK</span>
+                <ol class="problem-list">
+                  <li>Pattern · pressure-before-clarity · 3 prior</li>
+                  <li>Proof · never-anchored · owner-unset</li>
+                  <li class="active"><b>Symptom.</b> Three weeks single-threaded with Sarah. Champion replied once in fourteen days.</li>
+                  <li>Decision · architecture-unmapped</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <p class="entry-note">All four problems active vs. only Symptom active; others compressed to chart-line.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="chart-footer">
+    <span>VARIANT-D · CLINICAL CHART · ANT-LIBRARY · 2026·06·05</span>
+    <span>SIGNED · FOUNDER · ATTENDING</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antaeus Component Library — Variant E · Cartographic (2026-06-05)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5EFE0;
+    --paper-light: #FAF5E6;
+    --paper-dark: #ECE4D0;
+    --ink: #0A1C40;
+    --ink-soft: rgba(10, 28, 64, 0.62);
+    --ink-faint: rgba(10, 28, 64, 0.32);
+    --rule: rgba(10, 28, 64, 0.18);
+    --rule-grid: rgba(10, 28, 64, 0.06);
+    --rule-handdrawn: rgba(10, 28, 64, 0.42);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --blue-cart: #1D4ED8;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+    --water: rgba(37, 99, 235, 0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--rule-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rule-grid) 1px, transparent 1px),
+      radial-gradient(ellipse at 20% 0%, rgba(230, 112, 30, 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(37, 99, 235, 0.06) 0%, transparent 60%);
+    background-size: 20px 20px, 20px 20px, 100% 100%, 100% 100%;
+    color: var(--ink);
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .serif { font-family: "DM Serif Display", Georgia, serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .leaflet {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 56px 48px 96px;
+  }
+
+  /* ===== CARTOUCHE (page title block) ===== */
+  .cartouche {
+    position: relative;
+    border: 2px solid var(--ink);
+    background: var(--paper-light);
+    padding: 32px 36px;
+    margin-bottom: 64px;
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 40px;
+    box-shadow: 4px 4px 0 rgba(10, 28, 64, 0.10);
+  }
+  .cartouche::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border: 1px solid var(--rule-handdrawn);
+    pointer-events: none;
+  }
+  .cartouche-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--rule-handdrawn);
+    padding-bottom: 8px;
+  }
+  .cartouche-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 52px;
+    line-height: 1.0;
+    margin: 0 0 8px;
+  }
+  .cartouche-subtitle {
+    font-family: "DM Serif Display", serif;
+    font-style: normal;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin: 0 0 20px;
+  }
+  .cartouche-lead {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink);
+    max-width: 56ch;
+  }
+  .cartouche-meta {
+    border-left: 1px solid var(--rule-handdrawn);
+    padding-left: 24px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    line-height: 1.9;
+  }
+  .cartouche-meta-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted var(--rule-handdrawn);
+    padding: 2px 0;
+  }
+  .cartouche-meta-row span:first-child { color: var(--ink-soft); letter-spacing: 0.10em; text-transform: uppercase; font-size: 10px; }
+  .cartouche-meta-row span:last-child { color: var(--ink); font-weight: 700; }
+
+  /* compass rose */
+  .compass {
+    margin-top: 16px;
+    width: 100%;
+    aspect-ratio: 1;
+    position: relative;
+  }
+  .compass-svg { width: 100%; height: 100%; }
+
+  /* ===== SECTION HEADS ===== */
+  .sheet {
+    margin-top: 72px;
+  }
+  .sheet-head {
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 8px 0;
+    margin-bottom: 28px;
+    display: grid;
+    grid-template-columns: 60px 1fr auto auto;
+    gap: 20px;
+    align-items: baseline;
+  }
+  .sheet-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1;
+  }
+  .sheet-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1;
+    margin: 0;
+  }
+  .sheet-bearing {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .sheet-fold {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  /* ===== GRID ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .grid-1 { grid-template-columns: 1fr; gap: 28px; }
+
+  /* ===== ENTRY (field notebook page) ===== */
+  .leaf {
+    background: var(--paper-light);
+    border: 1px solid var(--ink);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    box-shadow: 2px 2px 0 rgba(10, 28, 64, 0.08);
+  }
+  .leaf-corner {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 10px;
+    border-bottom: 1px solid var(--rule-handdrawn);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .leaf-corner b { color: var(--ink); font-weight: 700; }
+  .leaf-body {
+    padding: 18px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+  }
+  .leaf-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .leaf-bearing {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: -10px;
+  }
+  .leaf-demo {
+    flex: 1;
+    padding: 16px;
+    background: var(--paper);
+    border: 1px dashed var(--rule-handdrawn);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    position: relative;
+  }
+  .leaf-demo--stretch { padding: 0; background: transparent; border: none; }
+  .leaf-demo--top { align-items: flex-start; padding-top: 20px; }
+  .leaf-note {
+    border-top: 1px solid var(--rule-handdrawn);
+    padding-top: 10px;
+    font-family: "DM Serif Display", serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  /* ===== PAGE HEADER (RoomChrome) ===== */
+  .page-header {
+    width: 100%;
+    border-bottom: 2px solid var(--ink);
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+  }
+  .page-header-folio {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .page-header-crumb {
+    font-style: normal;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-family: "Public Sans", sans-serif;
+  }
+
+  /* ===== TITLE BLOCK (Topbar) ===== */
+  .title-block {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper-light);
+    position: relative;
+    padding: 16px 20px;
+  }
+  .title-block::before {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    border: 1px solid var(--rule-handdrawn);
+    pointer-events: none;
+  }
+  .title-block-cite {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--rule-handdrawn);
+    padding-bottom: 4px;
+  }
+  .title-block-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    line-height: 1.05;
+    margin: 0;
+  }
+  .title-block-coords {
+    margin-top: 8px;
+    border-top: 1px solid var(--rule-handdrawn);
+    padding-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .title-block-coords b { color: var(--ink); font-weight: 700; }
+
+  /* ===== FIELD ENTRY (SectionFrame) ===== */
+  .field-entry {
+    width: 100%;
+    border-left: 2px solid var(--ink);
+    padding-left: 14px;
+    position: relative;
+  }
+  .field-entry::before {
+    content: '◆';
+    position: absolute;
+    left: -7px;
+    top: -3px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 12px;
+    padding: 0 2px;
+  }
+  .field-entry-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .field-entry-stamp b { color: var(--ink); font-weight: 700; }
+  .field-entry-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.15;
+    margin: 0 0 6px;
+  }
+  .field-entry-body {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  /* ===== FIELD NOTE (Panel) ===== */
+  .field-note {
+    width: 100%;
+    border: 1px solid var(--ink);
+    background: var(--paper-light);
+    padding: 14px 16px;
+  }
+  .field-note-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .field-note-body {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  /* ===== DISPLAY ===== */
+  .display-h-serif { font-family: "DM Serif Display", serif; font-size: 28px; line-height: 1; }
+  .display-h-sans { font-weight: 600; font-size: 16px; }
+  .display-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .display-body { font-size: 13px; line-height: 1.65; }
+
+  /* ===== SPECIMEN CARD ===== */
+  .specimen {
+    width: 100%;
+    border: 1px solid var(--ink);
+    background: var(--paper-light);
+    position: relative;
+    padding: 12px 14px;
+  }
+  .specimen-tag {
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 2px 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .specimen-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+    margin: 4px 0 4px;
+  }
+  .specimen-body {
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  /* ===== FIELD MARKER (StatusChip) ===== */
+  .marker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px 2px 4px;
+    border: 1px solid currentColor;
+    background: var(--paper-light);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .marker-glyph {
+    display: inline-flex;
+    width: 14px; height: 14px;
+    background: currentColor;
+    color: var(--paper-light);
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .marker--safe { color: #15803D; }
+  .marker--course { color: #1D4ED8; }
+  .marker--caution { color: #B45309; }
+  .marker--hazard { color: #B91C1C; }
+  .marker-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+  /* ===== SOUNDING (HeatBadge) — depth marker ===== */
+  .sounding {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--ink);
+    background: var(--paper-light);
+    padding: 4px 10px;
+    min-width: 64px;
+  }
+  .sounding-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1;
+  }
+  .sounding-unit {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    margin-top: 2px;
+    border-top: 1px solid var(--rule-handdrawn);
+    padding-top: 2px;
+    width: 100%;
+    text-align: center;
+  }
+  .sounding--shoal { background: rgba(239, 68, 68, 0.08); border-color: var(--red); color: var(--red); }
+  .sounding--working { background: rgba(230, 112, 30, 0.08); border-color: var(--orange); color: var(--orange); }
+  .sounding--deep { background: rgba(37, 99, 235, 0.06); border-color: var(--blue-cart); color: var(--blue-cart); }
+  .sounding-row { display: flex; gap: 10px; justify-content: center; }
+
+  /* ===== FIELD TOOL (Buttons) ===== */
+  .tool {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 8px 16px;
+    background: var(--paper-light);
+    border: 2px solid var(--ink);
+    cursor: pointer;
+    border-radius: 0;
+    position: relative;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: all 0.1s;
+  }
+  .tool:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+  .tool:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+  .tool--primary { background: var(--orange); color: white; border-color: var(--ink); }
+  .tool--secondary { background: var(--paper-light); color: var(--ink); }
+  .tool--ghost {
+    background: transparent;
+    border: 1px dashed var(--rule-handdrawn);
+    color: var(--ink-soft);
+    box-shadow: none;
+  }
+  .tool--ghost:hover { background: var(--paper-light); transform: none; box-shadow: none; }
+  .tool-icon {
+    width: 36px; height: 36px;
+    border: 2px solid var(--ink);
+    background: var(--paper-light);
+    box-shadow: 2px 2px 0 var(--ink);
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tool-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+  /* ===== TOGGLE ===== */
+  .lantern {
+    display: inline-flex;
+    width: 48px; height: 24px;
+    border: 2px solid var(--ink);
+    background: var(--paper-light);
+    padding: 2px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .lantern::after {
+    content: ''; width: 16px; height: 16px;
+    background: var(--ink);
+    transition: transform 0.15s, background 0.15s;
+  }
+  .lantern.on { background: var(--orange); }
+  .lantern.on::after { background: var(--paper); transform: translateX(24px); }
+
+  /* ===== INPUTS ===== */
+  .ledger-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--ink);
+    background: var(--paper-light);
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .ledger-input:focus { outline: 2px solid var(--orange); outline-offset: -1px; }
+  .ledger-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    border-bottom: 1px solid var(--rule-handdrawn);
+    padding-bottom: 8px;
+  }
+  .ledger-field-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .ledger-field-help {
+    font-family: "DM Serif Display", serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    padding-left: 12px;
+    border-left: 2px solid var(--orange);
+  }
+
+  /* ===== HAZARD NOTICE (Banner) ===== */
+  .hazard {
+    width: 100%;
+    border: 2px solid var(--red);
+    background: rgba(239, 68, 68, 0.06);
+    padding: 0;
+    box-shadow: 3px 3px 0 rgba(239, 68, 68, 0.15);
+  }
+  .hazard-stamp {
+    background: var(--red);
+    color: white;
+    padding: 3px 10px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+  }
+  .hazard-body {
+    padding: 8px 12px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 600;
+  }
+  .alert-bar {
+    width: 100%;
+    border-left: 4px solid var(--blue-cart);
+    background: rgba(37, 99, 235, 0.06);
+    padding: 8px 12px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--blue-cart);
+    display: flex;
+    gap: 12px;
+  }
+  .alert-bar-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+
+  /* ===== POSITION FIX LOGGED (Toast) ===== */
+  .fix-toast {
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 rgba(10, 28, 64, 0.20);
+  }
+  .fix-toast-stamp {
+    background: var(--green);
+    color: white;
+    padding: 3px 10px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+  }
+  .fix-toast-body {
+    padding: 8px 12px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+  }
+  .fix-toast-coords {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: rgba(245, 239, 224, 0.7);
+    margin-top: 4px;
+    letter-spacing: 0.10em;
+  }
+
+  /* ===== COURSE CORRECTION (Modal) ===== */
+  .course-modal {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper-light);
+    box-shadow: 4px 4px 0 rgba(10, 28, 64, 0.15);
+  }
+  .course-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .course-body { padding: 14px 16px; }
+  .course-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .course-text {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    line-height: 1.55;
+  }
+  .course-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    border-top: 1px solid var(--ink);
+    padding-top: 10px;
+  }
+
+  /* ===== MARGIN ANNOTATION (Tooltip) ===== */
+  .margin-wrap { position: relative; display: inline-block; margin-top: 64px; }
+  .margin-anchor {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1.5px solid var(--orange);
+    padding-bottom: 2px;
+  }
+  .margin-anchor sup {
+    color: var(--orange);
+    margin-left: 2px;
+    font-family: "DM Serif Display", serif;
+    font-size: 12px;
+  }
+  .margin-note {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: -20px;
+    background: var(--paper-light);
+    border: 1px solid var(--ink);
+    border-right: 3px solid var(--orange);
+    padding: 8px 12px;
+    width: 220px;
+    transform: rotate(-1deg);
+    box-shadow: 2px 2px 0 rgba(10, 28, 64, 0.10);
+  }
+  .margin-note-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+  .margin-note-text {
+    font-family: "DM Serif Display", serif;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* ===== CHART INDEX (NavLink) ===== */
+  .index {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-light);
+  }
+  .index-item {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: baseline;
+    padding: 8px 12px;
+    border-bottom: 1px dotted var(--rule-handdrawn);
+    cursor: pointer;
+  }
+  .index-item:last-child { border-bottom: none; }
+  .index-item-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    color: var(--ink-soft);
+  }
+  .index-item-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .index-item-folio {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+  }
+  .index-item.active {
+    background: rgba(230, 112, 30, 0.10);
+    border-left: 3px solid var(--orange);
+    padding-left: 9px;
+  }
+  .index-item.active .index-item-num { color: var(--orange); }
+
+  /* ===== SHEET FINDER (Palette) ===== */
+  .finder {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper-light);
+    box-shadow: 3px 3px 0 rgba(10, 28, 64, 0.15);
+  }
+  .finder-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .finder-search {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--ink);
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    background: var(--paper);
+  }
+  .finder-search::before {
+    content: '◆ ';
+    color: var(--orange);
+    font-size: 10px;
+  }
+  .finder-item {
+    padding: 8px 12px;
+    border-bottom: 1px dotted var(--rule-handdrawn);
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+  .finder-item:last-child { border-bottom: none; }
+  .finder-item.hl { background: rgba(230, 112, 30, 0.10); }
+  .finder-item-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--paper-light);
+    border: 1px solid var(--ink);
+    padding: 1px 4px;
+    text-align: center;
+  }
+  .finder-item.hl .finder-item-kind { background: var(--orange); color: white; border-color: var(--orange); }
+  .finder-item-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  /* ===== BEARINGS RACK (HandoffStrip) ===== */
+  .bearings {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-light);
+  }
+  .bearings-head {
+    background: var(--paper);
+    border-bottom: 1px solid var(--ink);
+    padding: 4px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .bearings-item {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    padding: 10px 12px;
+    border-bottom: 1px dotted var(--rule-handdrawn);
+    gap: 12px;
+    cursor: pointer;
+  }
+  .bearings-item:last-child { border-bottom: none; }
+  .bearings-item--primary { background: rgba(230, 112, 30, 0.10); }
+  .bearings-bearing {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    color: var(--orange);
+  }
+  .bearings-label {
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+  }
+  .bearings-dist {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    color: var(--ink-soft);
+  }
+
+  /* ===== BACK FROM CHART (BackPill) ===== */
+  .from-chart {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-light);
+    padding: 4px 8px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    box-shadow: 2px 2px 0 rgba(10, 28, 64, 0.10);
+  }
+  .from-chart-tag {
+    background: var(--orange);
+    color: white;
+    padding: 2px 5px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+  }
+
+  /* ===== SUGGESTED COURSE (Proposal) ===== */
+  .course-card {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper-light);
+    box-shadow: 3px 3px 0 rgba(10, 28, 64, 0.15);
+    position: relative;
+  }
+  .course-card::before {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    border: 1px solid var(--rule-handdrawn);
+    pointer-events: none;
+  }
+  .course-card-stamp {
+    background: var(--orange);
+    color: white;
+    padding: 3px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+  .course-card-body {
+    padding: 16px 18px;
+    position: relative;
+    z-index: 1;
+  }
+  .course-card-text {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .course-card-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--rule-handdrawn);
+    padding-top: 8px;
+    margin-bottom: 14px;
+  }
+  .course-card-actions { display: flex; gap: 8px; }
+
+  /* ===== FIELD OBSERVATION (PatternCard) ===== */
+  .observation {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-light);
+    position: relative;
+  }
+  .observation-stamp {
+    background: var(--paper);
+    border-bottom: 1.5px solid var(--ink);
+    padding: 6px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .observation-body {
+    padding: 14px 16px;
+  }
+  .observation-claim {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .observation-evidence {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .observation-fix {
+    display: flex;
+    gap: 20px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-top: 1px dotted var(--rule-handdrawn);
+    padding-top: 8px;
+  }
+  .observation-fix span span { color: var(--ink); font-weight: 700; }
+
+  /* ===== HAZARD CHART (RiskCard) ===== */
+  .hazard-chart {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-light);
+    border-top: 4px solid var(--red);
+    position: relative;
+  }
+  .hazard-chart::after {
+    content: '⚠';
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    color: var(--red);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .hazard-chart-stamp {
+    background: rgba(239, 68, 68, 0.08);
+    border-bottom: 1px solid var(--red);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .hazard-chart-body {
+    padding: 12px 14px 14px;
+  }
+  .hazard-chart-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .hazard-chart-amount {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.10em;
+  }
+  .hazard-chart-log {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+    margin: 8px 0 10px;
+    border-top: 1px dotted var(--rule-handdrawn);
+    padding-top: 8px;
+  }
+  .hazard-chart-soundings {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* ===== VOYAGE STATUS (Readiness) ===== */
+  .voyage {
+    width: 100%;
+    border: 2px solid var(--ink);
+    background: var(--paper-light);
+    position: relative;
+    text-align: center;
+    box-shadow: 3px 3px 0 rgba(10, 28, 64, 0.15);
+  }
+  .voyage::before {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    border: 1px solid var(--rule-handdrawn);
+    pointer-events: none;
+  }
+  .voyage-stamp {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+  .voyage-body {
+    padding: 18px 16px 22px;
+    position: relative;
+    z-index: 1;
+  }
+  .voyage-state {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .voyage-bearing {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule-handdrawn);
+  }
+
+  /* ===== DENSITY DEMO ===== */
+  .density-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .density-leaf {
+    background: var(--paper-light);
+    border: 1.5px solid var(--ink);
+    padding: 18px;
+    box-shadow: 2px 2px 0 rgba(10, 28, 64, 0.10);
+    position: relative;
+  }
+  .density-leaf-tag {
+    background: var(--orange);
+    color: white;
+    padding: 3px 10px;
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    margin-bottom: 14px;
+  }
+  .density-leaf-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  .density-leaf-body {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .density-leaf-body--terse {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* logbook list */
+  .logbook {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .logbook li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    border-bottom: 1px dotted var(--rule-handdrawn);
+    line-height: 1.5;
+  }
+  .logbook li::before {
+    content: '◇';
+    position: absolute;
+    left: 8px;
+    top: 6px;
+    color: var(--ink-faint);
+    font-size: 11px;
+  }
+  .logbook li.fix::before {
+    content: '◆';
+    color: var(--orange);
+  }
+  .logbook li b { font-family: "DM Serif Display", serif; font-weight: 400; font-size: 14px; }
+
+  /* footer */
+  .colophon {
+    margin-top: 96px;
+    border-top: 2px solid var(--ink);
+    padding-top: 24px;
+    text-align: center;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+    font-style: normal;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+  .colophon-fold {
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* watermark depth nums in some demos */
+  .water-mark {
+    position: absolute;
+    color: var(--blue-cart);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    opacity: 0.6;
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<div class="leaflet">
+
+  <header class="cartouche">
+    <div>
+      <div class="cartouche-eyebrow">CHART No. E · COMPONENT LIBRARY · 2026·06·05</div>
+      <h1 class="cartouche-title">The Antaeus Field Book</h1>
+      <p class="cartouche-subtitle">Primitives surveyed as for a chart left for the next captain.</p>
+      <p class="cartouche-lead">
+        Each primitive recorded as a field entry — observation, fix, depth, bearing — in the discipline of a working
+        notebook. Position. Course. Hazard. Sounding. The workspace as the log left for the next operator to stand
+        watch from, with care and continuity, so they may begin where you left off rather than where you started.
+      </p>
+    </div>
+    <div class="cartouche-meta">
+      <div class="cartouche-meta-row"><span>Surveyor</span><span>Founder</span></div>
+      <div class="cartouche-meta-row"><span>Vessel</span><span>Workspace 001</span></div>
+      <div class="cartouche-meta-row"><span>Sheets</span><span>08</span></div>
+      <div class="cartouche-meta-row"><span>Date</span><span>2026·06·05</span></div>
+      <div class="cartouche-meta-row"><span>State</span><span>Draft</span></div>
+
+      <div class="compass">
+        <svg class="compass-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="#0A1C40" stroke-width="1"/>
+          <circle cx="50" cy="50" r="36" fill="none" stroke="#0A1C40" stroke-width="0.5"/>
+          <!-- cardinal points -->
+          <g fill="none" stroke="#0A1C40" stroke-width="0.6">
+            <line x1="50" y1="6" x2="50" y2="94"/>
+            <line x1="6" y1="50" x2="94" y2="50"/>
+            <line x1="19" y1="19" x2="81" y2="81"/>
+            <line x1="81" y1="19" x2="19" y2="81"/>
+          </g>
+          <!-- N arrow -->
+          <polygon points="50,8 46,40 50,28 54,40" fill="#E6701E" stroke="#E6701E" stroke-width="0.5"/>
+          <polygon points="50,92 46,60 50,72 54,60" fill="#0A1C40"/>
+          <text x="50" y="5" text-anchor="middle" font-family="JetBrains Mono" font-size="6" font-weight="700" fill="#0A1C40">N</text>
+          <text x="50" y="99" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#0A1C40">S</text>
+          <text x="3" y="52" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#0A1C40">W</text>
+          <text x="97" y="52" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#0A1C40">E</text>
+          <circle cx="50" cy="50" r="2" fill="#0A1C40"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <section class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-num">i.</span>
+      <h2 class="sheet-title">Layout — chart structure</h2>
+      <span class="sheet-bearing">Bearing 00°</span>
+      <span class="sheet-fold">Folio 1–4</span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>FOLIO</span><span><b>R-001</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Page Header</h3>
+          <div class="leaf-bearing">RoomChrome · per page</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="page-header">
+              <span>Antaeus<span class="page-header-crumb"> · From the Dashboard</span></span>
+              <span class="page-header-folio">FOLIO XII · ⌘K</span>
+            </div>
+          </div>
+          <p class="leaf-note">Wordmark with continuity crumb at left, folio number at right. The page knows where it sits in the book.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>TITLE BLOCK</span><span><b>R-002</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Title Block</h3>
+          <div class="leaf-bearing">Topbar · per sheet</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="title-block">
+              <div class="title-block-cite">Sheet · Briefing · Weekly read · Workspace</div>
+              <h3 class="title-block-name">Where the motion is today</h3>
+              <div class="title-block-coords">
+                <span>RUN <b>2026·06·05 · 09:12 CT</b></span>
+                <span>WINDOW <b>14d</b></span>
+                <span>COST <b>$0.42</b></span>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Boxed cartouche with inner rule. Citation above the title; coordinate strip below.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>ENTRY BLOCK</span><span><b>R-003</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Field Entry</h3>
+          <div class="leaf-bearing">SectionFrame · per observation</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="field-entry">
+              <div class="field-entry-stamp"><span>OBS · PATTERN · PRICING-MOMENTUM</span><span><b>3d · 78%</b></span></div>
+              <h4 class="field-entry-title">Late-stage price pressure rising</h4>
+              <p class="field-entry-body">Three of the last five closed deals dropped price 12% or more in the final week. The pattern is real, not noise.</p>
+            </div>
+          </div>
+          <p class="leaf-note">Diamond marker at the spine of the entry. Stamp above, observation in serif, evidence in sans.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>NOTE PANEL</span><span><b>R-004</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Field Note</h3>
+          <div class="leaf-bearing">Panel · margin annotation</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="field-note">
+              <div class="field-note-stamp">RECOVERY QUEUE · ROUNDS</div>
+              <div class="field-note-body">Six vessels weakening. Three need a corrective course this week.</div>
+            </div>
+          </div>
+          <p class="leaf-note">The plain note. Stamped header, body beneath.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-num">ii.</span>
+      <h2 class="sheet-title">Display — observation vocabulary</h2>
+      <span class="sheet-bearing">Bearing 045°</span>
+      <span class="sheet-fold">Folio 5–12</span>
+    </div>
+    <div class="grid">
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>DISPLAY</span><span><b>D-001</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Heading · authored</h3>
+          <div class="leaf-bearing">Serif display</div>
+          <div class="leaf-demo"><span class="display-h-serif">Acme is stalling.</span></div>
+          <p class="leaf-note">The observation in the surveyor's own hand.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>DISPLAY</span><span><b>D-002</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Heading · control</h3>
+          <div class="leaf-bearing">Sans head</div>
+          <div class="leaf-demo"><span class="display-h-sans">Recovery options</span></div>
+          <p class="leaf-note">The form-head. Sans, lower-key.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>DISPLAY</span><span><b>D-003</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Kicker · cite</h3>
+          <div class="leaf-bearing">Mono caption</div>
+          <div class="leaf-demo"><span class="display-kicker">Signal Console · Live</span></div>
+          <p class="leaf-note">Margin caption — sheet, plate, or section reference.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>DISPLAY</span><span><b>D-004</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">BodyText</h3>
+          <div class="leaf-bearing">Field prose</div>
+          <div class="leaf-demo leaf-demo--top">
+            <p class="display-body" style="margin:0;">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo.</p>
+          </div>
+          <p class="leaf-note">The notebook's reading hand. Sans, generous line.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>SPECIMEN</span><span><b>D-005</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Card · Specimen</h3>
+          <div class="leaf-bearing">Universal block</div>
+          <div class="leaf-demo">
+            <div class="specimen">
+              <span class="specimen-tag">SPEC · 037</span>
+              <div class="specimen-name">Acme Corp.</div>
+              <div class="specimen-body">Stalled 18 days at proposal stage.</div>
+            </div>
+          </div>
+          <p class="leaf-note">Hand-pinned specimen tag at the upper-left corner.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>STAT</span><span><b>D-006</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Stat · Figure</h3>
+          <div class="leaf-bearing">Serif numeral</div>
+          <div class="leaf-demo">
+            <div style="text-align:center;">
+              <div style="font-family:'DM Serif Display', serif; font-size:56px; color:var(--orange); line-height:1;">37</div>
+              <div style="font-family:'DM Serif Display', serif; font-size:14px; color:var(--ink-soft); margin-top:6px;">vessels under pressure</div>
+            </div>
+          </div>
+          <p class="leaf-note">Display serif numeral with hand-set caption beneath.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>MARKER</span><span><b>D-007</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">StatusChip · Field Marker</h3>
+          <div class="leaf-bearing">Chart symbol</div>
+          <div class="leaf-demo">
+            <div class="marker-row">
+              <span class="marker marker--safe"><span class="marker-glyph">✓</span>SAFE · READY</span>
+              <span class="marker marker--course"><span class="marker-glyph">→</span>ON COURSE</span>
+              <span class="marker marker--caution"><span class="marker-glyph">!</span>SHOAL · WEAK</span>
+              <span class="marker marker--hazard"><span class="marker-glyph">×</span>HAZARD · RISK</span>
+            </div>
+          </div>
+          <p class="leaf-note">Chart-symbol glyph + state label. Each marker reads as a legend item.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>SOUNDING</span><span><b>D-008</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">HeatBadge · Depth Sounding</h3>
+          <div class="leaf-bearing">Bottom reading</div>
+          <div class="leaf-demo">
+            <div class="sounding-row">
+              <div class="sounding sounding--shoal"><span class="sounding-num">94</span><span class="sounding-unit">SHOAL</span></div>
+              <div class="sounding sounding--working"><span class="sounding-num">78</span><span class="sounding-unit">WORK</span></div>
+              <div class="sounding sounding--deep"><span class="sounding-num">52</span><span class="sounding-unit">DEEP</span></div>
+            </div>
+          </div>
+          <p class="leaf-note">Sounding cells. Shoal water (red) hazardous; deep water (blue) safe.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-num">iii.</span>
+      <h2 class="sheet-title">Action — field tools</h2>
+      <span class="sheet-bearing">Bearing 090°</span>
+      <span class="sheet-fold">Folio 13–18</span>
+    </div>
+    <div class="grid">
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>TOOL</span><span><b>A-001</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Button · primary</h3>
+          <div class="leaf-bearing">Set course</div>
+          <div class="leaf-demo"><button class="tool tool--primary">Cast proof</button></div>
+          <p class="leaf-note">Cast tool with shadow. The dominant move.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>TOOL</span><span><b>A-002</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Button · secondary</h3>
+          <div class="leaf-bearing">Hold position</div>
+          <div class="leaf-demo"><button class="tool tool--secondary">Save draft</button></div>
+          <p class="leaf-note">Paper tool. Outlined.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>TOOL</span><span><b>A-003</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Button · ghost</h3>
+          <div class="leaf-bearing">Strike from log</div>
+          <div class="leaf-demo"><button class="tool tool--ghost">Dismiss</button></div>
+          <p class="leaf-note">Dashed border. The recessive tertiary.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>TOOL</span><span><b>A-004</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">IconButton</h3>
+          <div class="leaf-bearing">Margin actions</div>
+          <div class="leaf-demo">
+            <div class="tool-row">
+              <button class="tool-icon">⌘</button>
+              <button class="tool-icon">↗</button>
+              <button class="tool-icon">×</button>
+            </div>
+          </div>
+          <p class="leaf-note">Serif glyph in the cell. Shadowed.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>RUN</span><span><b>A-005</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Link · run to chart</h3>
+          <div class="leaf-bearing">Cross-sheet</div>
+          <div class="leaf-demo">
+            <a href="#" style="color:var(--blue-cart); font-family:'DM Serif Display'; font-size:16px; text-decoration:none; border-bottom:1.5px solid var(--blue-cart);">→ Run to Discovery Studio</a>
+          </div>
+          <p class="leaf-note">Serif blue label. Reads as a sailing direction.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>LANTERN</span><span><b>A-006</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Toggle · lantern</h3>
+          <div class="leaf-bearing">Binary state</div>
+          <div class="leaf-demo">
+            <div class="tool-row" style="gap:20px;">
+              <span class="lantern"></span>
+              <span class="lantern on"></span>
+            </div>
+          </div>
+          <p class="leaf-note">Shadowed cell. Orange when lit.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-num">iv.</span>
+      <h2 class="sheet-title">Input — ledger entry</h2>
+      <span class="sheet-bearing">Bearing 135°</span>
+      <span class="sheet-fold">Folio 19–24</span>
+    </div>
+    <div class="grid">
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>ENTRY</span><span><b>I-001</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">TextInput</h3>
+          <div class="leaf-bearing">Single line</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <input class="ledger-input" value="Acme Corp.">
+          </div>
+          <p class="leaf-note">Ruled cell. Orange focus.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>ENTRY</span><span><b>I-002</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Select</h3>
+          <div class="leaf-bearing">From a known set</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <select class="ledger-input">
+              <option>Proposal</option>
+              <option>Discovery</option>
+              <option>Negotiation</option>
+            </select>
+          </div>
+          <p class="leaf-note">Same chrome as input.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>ENTRY</span><span><b>I-003</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Textarea</h3>
+          <div class="leaf-bearing">Hand-set prose</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <textarea class="ledger-input" rows="3" style="resize:none;">Sarah needs the revised proposal by Friday.</textarea>
+          </div>
+          <p class="leaf-note">Multi-line ledger entry.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>ENTRY</span><span><b>I-004</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">FormField · ruled</h3>
+          <div class="leaf-bearing">Label · cell · margin gloss</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="ledger-field">
+              <label class="ledger-field-tag">Buying group min.</label>
+              <input class="ledger-input" type="number" value="5">
+              <div class="ledger-field-help">Typical three to seven decision-makers for most B2B teams.</div>
+            </div>
+          </div>
+          <p class="leaf-note">Mono tag, sans cell, italic margin gloss.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>LOG</span><span><b>I-005</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Checkbox · logbook</h3>
+          <div class="leaf-bearing">Marked or not</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <ul class="logbook">
+              <li class="fix"><b>Champion identified.</b> Sarah Chen, VP Ops.</li>
+              <li>Economic buyer confirmed.</li>
+              <li>Decision architecture mapped.</li>
+            </ul>
+          </div>
+          <p class="leaf-note">Diamond marker for logged fixes; open diamond for unmarked.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-num">v.</span>
+      <h2 class="sheet-title">Feedback — hazard &amp; fix log</h2>
+      <span class="sheet-bearing">Bearing 180°</span>
+      <span class="sheet-fold">Folio 25–28</span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>LOG</span><span><b>F-001</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Toast · position fix</h3>
+          <div class="leaf-bearing">Logged</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="fix-toast">
+              <span class="fix-toast-stamp">FIX LOGGED</span>
+              <div class="fix-toast-body">
+                Proof cast. Linked to Acme · Q4 expansion.
+                <div class="fix-toast-coords">2026·06·05 · 09:14:22 CT · POS WS-001</div>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Green fix tag. Position coordinates beneath.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>NOTICE</span><span><b>F-002</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Banner · hazard &amp; signal</h3>
+          <div class="leaf-bearing">Persistent</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+              <div class="hazard">
+                <span class="hazard-stamp">⚠ HAZARD</span>
+                <div class="hazard-body">12 days since last brief synthesized. Risk of stale read.</div>
+              </div>
+              <div class="alert-bar">
+                <span class="alert-bar-stamp">SIGNAL</span>
+                <span>From Briefing · refresh objection handler for Acme pricing.</span>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Hazard with red stamp. Signal with blue rule.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>CORRECTION</span><span><b>F-003</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Modal · course correction</h3>
+          <div class="leaf-bearing">Confirmation</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="course-modal">
+              <div class="course-head"><span>COURSE CORRECTION · CONFIRM</span><span>[ESC]</span></div>
+              <div class="course-body">
+                <div class="course-title">Discard draft?</div>
+                <div class="course-text">Unsaved edits to this proof draft. Discarding clears them; no reversion path.</div>
+              </div>
+              <div class="course-actions">
+                <button class="tool tool--ghost">Cancel</button>
+                <button class="tool tool--primary">Discard</button>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Boxed correction. Ranked actions at the foot.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>MARGINALIA</span><span><b>F-004</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Tooltip · margin note</h3>
+          <div class="leaf-bearing">Hover gloss</div>
+          <div class="leaf-demo">
+            <div class="margin-wrap">
+              <div class="margin-note">
+                <div class="margin-note-stamp">Ref · ICP Quality</div>
+                <div class="margin-note-text">One of eight quality checks the score reads from.</div>
+              </div>
+              <span class="margin-anchor">Buying group min.<sup>‡</sup></span>
+            </div>
+          </div>
+          <p class="leaf-note">Paper margin note, rotated one degree. Double-dagger anchor.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-num">vi.</span>
+      <h2 class="sheet-title">Navigation — chart index</h2>
+      <span class="sheet-bearing">Bearing 225°</span>
+      <span class="sheet-fold">Folio 29–32</span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>INDEX</span><span><b>N-001</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">NavLink · chart index</h3>
+          <div class="leaf-bearing">Per workspace</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="index">
+              <div class="index-item active">
+                <span class="index-item-num">i.</span>
+                <span class="index-item-name">Dashboard</span>
+                <span class="index-item-folio">FOL · 01–04</span>
+              </div>
+              <div class="index-item">
+                <span class="index-item-num">ii.</span>
+                <span class="index-item-name">Signal Console</span>
+                <span class="index-item-folio">FOL · 05–10</span>
+              </div>
+              <div class="index-item">
+                <span class="index-item-num">iii.</span>
+                <span class="index-item-name">Deal Workspace</span>
+                <span class="index-item-folio">FOL · 11–16</span>
+              </div>
+              <div class="index-item">
+                <span class="index-item-num">iv.</span>
+                <span class="index-item-name">Future Autopsy</span>
+                <span class="index-item-folio">FOL · 17–22</span>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Book-style index. Roman numerals, serif names, mono folio ranges.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>FINDER</span><span><b>N-002</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Palette · sheet finder</h3>
+          <div class="leaf-bearing">⌘K</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="finder">
+              <div class="finder-head"><span>SHEET FINDER</span><span>↑↓ NAV · ↵ ENTER</span></div>
+              <div class="finder-search">whats at risk_</div>
+              <div class="finder-item hl">
+                <span class="finder-item-kind">SKILL</span>
+                <span>What's at risk this week</span>
+                <span class="finder-item-key">↵</span>
+              </div>
+              <div class="finder-item">
+                <span class="finder-item-kind">CHART</span>
+                <span>Deal Workspace</span>
+                <span class="finder-item-key">⌘1</span>
+              </div>
+              <div class="finder-item">
+                <span class="finder-item-kind">CHART</span>
+                <span>Future Autopsy</span>
+                <span class="finder-item-key">⌘2</span>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Bordered finder with shadow. Hand-set kind tags.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>BEARINGS</span><span><b>N-003</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">HandoffStrip · bearings rack</h3>
+          <div class="leaf-bearing">Sign-out routes</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="bearings">
+              <div class="bearings-head">Set bearing · departing</div>
+              <div class="bearings-item bearings-item--primary">
+                <span class="bearings-bearing">045°</span>
+                <span class="bearings-label">Pre-mortem this deal</span>
+                <span class="bearings-dist">3 nm</span>
+              </div>
+              <div class="bearings-item">
+                <span class="bearings-bearing">090°</span>
+                <span class="bearings-label">Carry to an advisor</span>
+                <span class="bearings-dist">7 nm</span>
+              </div>
+              <div class="bearings-item">
+                <span class="bearings-bearing">135°</span>
+                <span class="bearings-label">Cast the proof</span>
+                <span class="bearings-dist">4 nm</span>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Each route as a bearing + distance. Primary at the top.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>RETURN</span><span><b>N-004</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">BackPill · inbound from chart</h3>
+          <div class="leaf-bearing">Origin marker</div>
+          <div class="leaf-demo">
+            <span class="from-chart"><span class="from-chart-tag">FROM</span> Briefing · pricing-momentum chart</span>
+          </div>
+          <p class="leaf-note">Pinned-to-paper marker. Origin in orange.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-num">vii.</span>
+      <h2 class="sheet-title">System primitives — composed documents</h2>
+      <span class="sheet-bearing">Bearing 270°</span>
+      <span class="sheet-fold">Folio 33–40</span>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>COURSE</span><span><b>S-001</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">ProposalCard · suggested course</h3>
+          <div class="leaf-bearing">Phase F recommendation</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="course-card">
+              <div class="course-card-stamp"><span>⚑ SUGGESTED COURSE · DENSITY</span><span>REC-2607</span></div>
+              <div class="course-card-body">
+                <div class="course-card-text">You closed your first deal last week. The system has been walking you through every surface — set bearing for step-back, or remain on the present heading?</div>
+                <div class="course-card-meta">FIX · 2026·06·05 · POS WS-001 · CONF 78%</div>
+                <div class="course-card-actions">
+                  <button class="tool tool--primary">Set bearing</button>
+                  <button class="tool tool--secondary">Hold 30 d</button>
+                  <button class="tool tool--ghost">Dismiss</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Bordered course card with stamp. Recommendation in serif. Coordinate cite at the foot.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>OBS</span><span><b>S-002</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">PatternCard · observation</h3>
+          <div class="leaf-bearing">Briefing finding</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="observation">
+              <div class="observation-stamp"><span>OBS · PATTERN · PRICING-MOMENTUM</span><span>14d · CONF 78%</span></div>
+              <div class="observation-body">
+                <div class="observation-claim">Late-stage price pressure rising.</div>
+                <div class="observation-evidence">Three of the last five closed deals dropped price 12% or more in the final week. Stated band is 8%. Pattern present across two ICP segments.</div>
+                <div class="observation-fix">
+                  <span>SAMPLE · <span>n=5</span></span>
+                  <span>WINDOW · <span>14d</span></span>
+                  <span>SEG · <span>2</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Observation stamped, claim in serif, evidence in sans, fix-cite below.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>HAZARD</span><span><b>S-003</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">RiskCard · hazard chart</h3>
+          <div class="leaf-bearing">Deal Workspace recovery</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="hazard-chart">
+              <div class="hazard-chart-stamp"><span>HAZARD · CRITICAL</span><span>RISK 78</span></div>
+              <div class="hazard-chart-body">
+                <div class="hazard-chart-name">Acme Corp.</div>
+                <div class="hazard-chart-amount">$84,000 · PROPOSAL · DAY 18</div>
+                <div class="hazard-chart-log">Stalled 18 days at proposal. Single-threaded with champion. Last reply Nov 3 — acknowledgment only.</div>
+                <div class="hazard-chart-soundings">
+                  <div class="sounding sounding--shoal"><span class="sounding-num">18</span><span class="sounding-unit">DAYS</span></div>
+                  <div class="sounding sounding--shoal"><span class="sounding-num">1</span><span class="sounding-unit">THREAD</span></div>
+                  <div class="sounding sounding--working"><span class="sounding-num">78</span><span class="sounding-unit">RISK</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Red top-rule + hazard glyph. Soundings strip at the foot showing the depth of risk.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>VOYAGE</span><span><b>S-004</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">ReadinessReadout · voyage status</h3>
+          <div class="leaf-bearing">Synthesized state</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="voyage">
+              <div class="voyage-stamp"><span>VOYAGE · STATUS</span><span>2026·06·05 · 09:12</span></div>
+              <div class="voyage-body">
+                <div class="voyage-state">You're at Inheritable with guardrails.</div>
+                <div class="voyage-bearing">Course steady · next mile post: hire-ready</div>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Stamped cartouche. State in serif. Bearing note beneath.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-num">viii.</span>
+      <h2 class="sheet-title">Density — two voyage versions</h2>
+      <span class="sheet-bearing">Bearing 315°</span>
+      <span class="sheet-fold">Folio 41–44</span>
+    </div>
+
+    <div class="grid grid-1">
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>DEMO</span><span><b>DG-001</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Dashboard vessel card · sentence count</h3>
+          <div class="leaf-bearing">Same vessel, two voyage logs</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="density-grid">
+              <div class="density-leaf">
+                <span class="density-leaf-tag">Show me how</span>
+                <div class="density-leaf-name">Acme Corp.</div>
+                <div class="density-leaf-body">This vessel has not made way in eighteen days. Sarah, the navigator on board, has been silent since the demo on the fourteenth. We log it first on rounds because it is the vessel under the heaviest weather: a composite of stall duration, prize size, and stage-age expectation. Open the chart for recovery bearings.</div>
+              </div>
+              <div class="density-leaf">
+                <span class="density-leaf-tag">Step back</span>
+                <div class="density-leaf-name">Acme Corp.</div>
+                <div class="density-leaf-body density-leaf-body--terse">ACM · stall 18d · proposal · risk 78 · open ⌘↵</div>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Same vessel, same temperature. Voyage notes verbose vs. a single chart-line.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>DEMO</span><span><b>DG-002</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Deal card · field tools</h3>
+          <div class="leaf-bearing">Eight tools vs. two and a cabin</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="density-grid">
+              <div class="density-leaf">
+                <span class="density-leaf-tag">Show me how</span>
+                <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                  <button class="tool tool--secondary" style="padding:6px 10px; font-size:11px; box-shadow:1px 1px 0 var(--ink);">View</button>
+                  <button class="tool tool--secondary" style="padding:6px 10px; font-size:11px; box-shadow:1px 1px 0 var(--ink);">Edit</button>
+                  <button class="tool tool--secondary" style="padding:6px 10px; font-size:11px; box-shadow:1px 1px 0 var(--ink);">Mark hazard</button>
+                  <button class="tool tool--secondary" style="padding:6px 10px; font-size:11px; box-shadow:1px 1px 0 var(--ink);">Add note</button>
+                  <button class="tool tool--secondary" style="padding:6px 10px; font-size:11px; box-shadow:1px 1px 0 var(--ink);">Carry to advisor</button>
+                  <button class="tool tool--secondary" style="padding:6px 10px; font-size:11px; box-shadow:1px 1px 0 var(--ink);">Pre-mortem</button>
+                  <button class="tool tool--secondary" style="padding:6px 10px; font-size:11px; box-shadow:1px 1px 0 var(--ink);">Rehearse</button>
+                  <button class="tool tool--secondary" style="padding:6px 10px; font-size:11px; box-shadow:1px 1px 0 var(--ink);">Cast proof</button>
+                </div>
+              </div>
+              <div class="density-leaf">
+                <span class="density-leaf-tag">Step back</span>
+                <div style="display:flex; gap:10px;">
+                  <button class="tool tool--primary">View</button>
+                  <button class="tool tool--secondary">Edit</button>
+                  <button class="tool tool--ghost">More ⌄</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">Eight tools across the workbench vs. two on deck and a cabin for the rest.</p>
+        </div>
+      </div>
+
+      <div class="leaf">
+        <div class="leaf-corner"><span>DEMO</span><span><b>DG-003</b></span></div>
+        <div class="leaf-body">
+          <h3 class="leaf-title">Autopsy log · expanded sheets</h3>
+          <div class="leaf-bearing">All four entries vs. one expanded</div>
+          <div class="leaf-demo leaf-demo--stretch">
+            <div class="density-grid">
+              <div class="density-leaf">
+                <span class="density-leaf-tag">Show me how</span>
+                <ul class="logbook">
+                  <li class="fix"><b>Pattern.</b> Pressure before clarity. The proposal landed before the buyer named their constraint.</li>
+                  <li class="fix"><b>Proof.</b> The pilot never anchored. Readout owner was never assigned.</li>
+                  <li class="fix"><b>Symptom.</b> Three weeks of single-threaded communication with Sarah.</li>
+                  <li class="fix"><b>Decision.</b> The decision architecture was never mapped.</li>
+                </ul>
+              </div>
+              <div class="density-leaf">
+                <span class="density-leaf-tag">Step back</span>
+                <ul class="logbook">
+                  <li>Pattern · pressure-before-clarity · 3 prior</li>
+                  <li>Proof · never-anchored · owner-unset</li>
+                  <li class="fix"><b>Symptom.</b> Three weeks of single-threaded communication with Sarah. Champion replied once in fourteen days.</li>
+                  <li>Decision · architecture-unmapped</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <p class="leaf-note">All four entries marked as fixes vs. only Symptom expanded; others compressed to a chart-line.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="colophon">
+    Compiled at Workspace 001, by the founder, surveyor and attending. The next captain may begin where the last left off.
+    <div class="colophon-fold">Chart No. E · Antaeus Field Book · Folio 44</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
