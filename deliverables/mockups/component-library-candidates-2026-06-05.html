@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antaeus Component Library — Candidates Sheet (2026-06-05)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F8FC;
+    --field-grid: rgba(10, 28, 64, 0.04);
+    --surface: #FFFFFF;
+    --ink: #0A1C40;
+    --ink-soft: rgba(10, 28, 64, 0.62);
+    --ink-faint: rgba(10, 28, 64, 0.40);
+    --rule: rgba(10, 28, 64, 0.10);
+    --rule-strong: rgba(10, 28, 64, 0.20);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.10);
+    --gold: #C8A24A;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    background-image:
+      linear-gradient(var(--field-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--field-grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .page {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 64px 48px 96px;
+  }
+
+  .serif { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; }
+  .mono { font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; }
+
+  /* Page header */
+  .page-header {
+    margin-bottom: 64px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .page-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+  .page-title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.05;
+    margin: 0 0 24px;
+    max-width: 18ch;
+  }
+  .page-lead {
+    max-width: 70ch;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* Section structure */
+  .section {
+    margin-top: 80px;
+  }
+  .section-header {
+    margin-bottom: 32px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    border-bottom: 4px solid var(--orange);
+    padding-bottom: 12px;
+  }
+  .section-number {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .section-title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 36px;
+    line-height: 1.05;
+    margin: 0;
+  }
+  .section-tail {
+    margin-left: auto;
+    color: var(--ink-faint);
+    font-size: 13px;
+  }
+
+  /* Grid of primitive cards */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .grid-wide {
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 200px;
+  }
+  .card-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .card-demo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    padding: 16px;
+    background: var(--field);
+    border-radius: 6px;
+  }
+  .card-demo--top { align-items: flex-start; }
+  .card-demo--stretch { padding: 0; background: transparent; }
+  .card-annotation {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ============== PRIMITIVE STYLING ============== */
+
+  /* Buttons */
+  .btn {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    line-height: 1.2;
+  }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--rule-strong); }
+  .btn-ghost { background: transparent; color: var(--ink); padding: 8px 14px; }
+  .btn-icon {
+    width: 36px; height: 36px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--surface); border-color: var(--rule-strong); color: var(--ink);
+  }
+  .btn-row { display: flex; gap: 12px; align-items: center; }
+
+  /* Status chips */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .chip-green { background: var(--green-soft); color: #15803D; }
+  .chip-amber { background: var(--amber-soft); color: #B45309; }
+  .chip-red { background: var(--red-soft); color: #B91C1C; }
+  .chip-blue { background: var(--blue-soft); color: #1D4ED8; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+  /* Inputs */
+  .input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 6px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 14px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .input:focus { outline: 2px solid var(--orange); outline-offset: -1px; }
+  .field { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+  .field-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+  .field-help { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+
+  /* Toggle */
+  .toggle {
+    display: inline-flex;
+    width: 44px; height: 24px;
+    background: var(--rule-strong);
+    border-radius: 99px;
+    padding: 2px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .toggle::after {
+    content: ''; width: 20px; height: 20px;
+    background: white; border-radius: 50%; transition: transform 0.15s;
+  }
+  .toggle.on { background: var(--orange); }
+  .toggle.on::after { transform: translateX(20px); }
+
+  /* Cards inside demos (mini-cards) */
+  .mini-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 12px 14px;
+    width: 100%;
+  }
+
+  /* Stat */
+  .stat-value {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 40px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-value--orange { color: var(--orange); }
+  .stat-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* Heat badge */
+  .heat-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 8px;
+    min-width: 80px;
+  }
+  .heat-score {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1;
+  }
+  .heat-band {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .heat-hot { background: var(--red-soft); color: #B91C1C; }
+  .heat-active { background: var(--orange-soft); color: var(--orange); }
+  .heat-watch { background: var(--blue-soft); color: #1D4ED8; }
+  .heat-low { background: var(--field); color: var(--ink-faint); }
+
+  /* RoomChrome */
+  .room-chrome {
+    width: 100%;
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-radius: 6px;
+  }
+  .wordmark {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+  }
+  .back-pill {
+    display: inline-flex;
+    padding: 4px 10px;
+    background: var(--field);
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .palette-trigger {
+    margin-left: auto;
+    padding: 4px 10px;
+    background: var(--field);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  /* Topbar */
+  .topbar {
+    width: 100%;
+    padding: 20px 24px;
+    background: var(--surface);
+    border-radius: 6px;
+    border: 1px solid var(--rule);
+  }
+  .topbar-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .topbar-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1.1;
+  }
+
+  /* Section frame */
+  .section-frame {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .section-frame-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-frame-title {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .section-frame-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+  }
+
+  /* Toast / Banner */
+  .toast {
+    width: 100%;
+    background: var(--ink);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .banner {
+    width: 100%;
+    background: var(--amber-soft);
+    color: #92400E;
+    padding: 12px 16px;
+    border-left: 3px solid var(--amber);
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .banner-blue {
+    background: var(--blue-soft);
+    color: #1D4ED8;
+    border-left-color: var(--blue);
+  }
+
+  /* Tooltip */
+  .tooltip-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .tooltip-anchor {
+    border-bottom: 1px dotted var(--ink-soft);
+    font-size: 14px;
+  }
+  .tooltip-bubble {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: white;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .tooltip-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--ink);
+  }
+
+  /* Modal preview */
+  .modal-preview {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(10, 28, 64, 0.08);
+  }
+  .modal-preview-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .modal-preview-body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .modal-preview-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  /* HandoffStrip */
+  .handoff-strip {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 12px;
+  }
+  .handoff-item {
+    text-align: center;
+    padding: 8px;
+    border-radius: 4px;
+    background: var(--field);
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .handoff-item--primary {
+    background: var(--orange-soft);
+    color: var(--orange);
+    font-weight: 600;
+  }
+
+  /* Proposal card (Phase F) */
+  .proposal-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--orange);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .proposal-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .proposal-body {
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .proposal-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .proposal-actions button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* Pattern card (Briefing) */
+  .pattern-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .pattern-headline {
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .pattern-body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .pattern-confidence {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+
+  /* Risk card (Deal Workspace) */
+  .risk-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--red);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .risk-headline {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .risk-cause {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .risk-meta {
+    display: flex;
+    gap: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  /* Readiness readout */
+  .readiness-readout {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    text-align: center;
+  }
+  .readiness-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .readiness-state {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.1;
+  }
+
+  /* NavLink */
+  .nav-link {
+    display: inline-flex;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .nav-link.active {
+    color: var(--ink);
+    background: var(--field);
+    font-weight: 600;
+  }
+
+  /* Palette */
+  .palette-mock {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 12px 32px rgba(10, 28, 64, 0.10);
+  }
+  .palette-search {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--rule);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .palette-item {
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 4px;
+  }
+  .palette-item.highlighted {
+    background: var(--orange-soft);
+    color: var(--orange);
+  }
+
+  /* Density gradient demo blocks */
+  .density-demo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+  }
+  .density-demo > div {
+    background: var(--field);
+    padding: 16px;
+    border-radius: 6px;
+    border: 1px solid var(--rule);
+  }
+  .density-demo .density-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .density-card .demo-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .density-card .demo-body {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .density-card .demo-body.terse {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Section dividers in cards */
+  .section-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .section-list-item {
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .section-list-item.expanded {
+    background: var(--orange-soft);
+    border-color: rgba(230, 112, 30, 0.30);
+  }
+
+  /* Page footer */
+  .page-footer {
+    margin-top: 96px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="page-header">
+    <p class="page-kicker">DESIGN SYSTEM · COMPONENT LIBRARY · CANDIDATES SHEET · 2026-06-05 · DRAFT</p>
+    <h1 class="page-title">What might be in the library</h1>
+    <p class="page-lead">
+      A sheet of candidate primitives the design system's component library could consolidate. Each card shows one
+      primitive at the canon's bright-field direction: navy ink on the cool neutral field, orange as the rationed
+      accent, DM Serif Display for authored emphasis, Public Sans for control surfaces, JetBrains Mono for kickers
+      and meters. This is exploratory — the actual library spec will pick the set, lock the contracts, and specify
+      the migration. For now: what the candidates look like, grouped by role.
+    </p>
+  </header>
+
+  <!-- ========== 1. LAYOUT ========== -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Layout primitives</h2>
+      <span class="section-tail">how surfaces are framed</span>
+    </div>
+
+    <div class="grid grid-wide">
+
+      <div class="card">
+        <p class="card-label">RoomChrome</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="room-chrome">
+            <span class="wordmark">Antaeus</span>
+            <span class="back-pill">← Dashboard</span>
+            <span class="palette-trigger">⌘K</span>
+          </div>
+        </div>
+        <p class="card-annotation">Wordmark, back-pill (continuity params), palette trigger. Mounted on every room.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Topbar</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="topbar">
+            <div class="topbar-kicker">BRIEFING · WEEKLY READ · WORKSPACE</div>
+            <div class="topbar-title">Where the motion is today</div>
+          </div>
+        </div>
+        <p class="card-annotation">Per-room topbar carrying mono kicker + authored serif title.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">SectionFrame</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="section-frame">
+            <div class="section-frame-head">
+              <span class="section-frame-title">Pattern · pricing momentum</span>
+              <span class="section-frame-meta">3D AGO · CONF 78%</span>
+            </div>
+            <p style="margin:0; font-size:13px; color:var(--ink-soft);">Three of your last five closed deals dropped price 12% or more in the final week. The pattern is real, not noise.</p>
+          </div>
+        </div>
+        <p class="card-annotation">Bordered section with head row (title + meta) and body slot.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Panel</p>
+        <div class="card-demo card-demo--stretch">
+          <div style="width:100%; background:var(--surface); border:1px solid var(--rule); border-radius:6px; padding:16px;">
+            <p style="margin:0 0 8px; font-weight:600; font-size:14px;">Recovery queue</p>
+            <p style="margin:0; font-size:13px; color:var(--ink-soft);">Six deals are weakening. Three need a move this week.</p>
+          </div>
+        </div>
+        <p class="card-annotation">Generic content container. The plain workhorse the library composes from.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 2. DISPLAY ========== -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Display primitives</h2>
+      <span class="section-tail">how information renders</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <p class="card-label">Heading · serif</p>
+        <div class="card-demo">
+          <span class="serif" style="font-size:32px; line-height:1.05;">Acme is stalling.</span>
+        </div>
+        <p class="card-annotation">DM Serif Display. Carries authored emphasis.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Heading · sans</p>
+        <div class="card-demo">
+          <span style="font-weight:600; font-size:20px;">Recovery options</span>
+        </div>
+        <p class="card-annotation">Public Sans, weight 600. Control-surface headings.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Kicker · mono</p>
+        <div class="card-demo">
+          <span class="mono" style="font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft);">SIGNAL CONSOLE · LIVE</span>
+        </div>
+        <p class="card-annotation">Mono uppercase. Section codes and operational labels.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">BodyText</p>
+        <div class="card-demo card-demo--top">
+          <p style="margin:0; font-size:14px; line-height:1.55;">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo.</p>
+        </div>
+        <p class="card-annotation">Public Sans 14px. The room's reading body.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Stat</p>
+        <div class="card-demo">
+          <div style="text-align:center;">
+            <div class="stat-value stat-value--orange">37</div>
+            <div class="stat-label">DEALS UNDER PRESSURE</div>
+          </div>
+        </div>
+        <p class="card-annotation">Serif numeral + mono label. Used in topbars and panels.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Card</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="mini-card">
+            <p style="margin:0 0 6px; font-weight:600; font-size:14px;">Acme Corp.</p>
+            <p style="margin:0; font-size:12px; color:var(--ink-soft);">Stalled 18d at proposal stage.</p>
+          </div>
+        </div>
+        <p class="card-annotation">Bordered surface. The universal building block.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">StatusChip</p>
+        <div class="card-demo">
+          <div class="chip-row">
+            <span class="chip chip-green">Ready now</span>
+            <span class="chip chip-blue">Compounding</span>
+            <span class="chip chip-amber">Still weak</span>
+            <span class="chip chip-red">At risk</span>
+          </div>
+        </div>
+        <p class="card-annotation">Canon §10 state vocabulary. Pre-blessed labels.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">HeatBadge</p>
+        <div class="card-demo">
+          <div class="chip-row" style="gap:12px;">
+            <div class="heat-badge heat-hot">
+              <span class="heat-score">94</span><span class="heat-band">HOT</span>
+            </div>
+            <div class="heat-badge heat-active">
+              <span class="heat-score">78</span><span class="heat-band">ACTIVE</span>
+            </div>
+            <div class="heat-badge heat-watch">
+              <span class="heat-score">52</span><span class="heat-band">WATCH</span>
+            </div>
+          </div>
+        </div>
+        <p class="card-annotation">Signal Console heat score with band label. 0–99, four bands.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 3. ACTION ========== -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Action primitives</h2>
+      <span class="section-tail">how the operator moves</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <p class="card-label">Button · primary</p>
+        <div class="card-demo">
+          <button class="btn btn-primary">Cast proof</button>
+        </div>
+        <p class="card-annotation">Orange fill, white text. The one dominant move per surface.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Button · secondary</p>
+        <div class="card-demo">
+          <button class="btn btn-secondary">Save draft</button>
+        </div>
+        <p class="card-annotation">Bordered surface. Lower-weight action paired with a primary.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Button · ghost</p>
+        <div class="card-demo">
+          <button class="btn btn-ghost">Dismiss</button>
+        </div>
+        <p class="card-annotation">No fill, no border. The recessive tertiary action.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">IconButton</p>
+        <div class="card-demo">
+          <div class="btn-row">
+            <button class="btn btn-icon">⌘</button>
+            <button class="btn btn-icon">⤴</button>
+            <button class="btn btn-icon">×</button>
+          </div>
+        </div>
+        <p class="card-annotation">Square 36px. Used in topbars and inline.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Link</p>
+        <div class="card-demo">
+          <a href="#" style="color:var(--blue); text-decoration:none; border-bottom:1px solid var(--blue); font-size:14px;">Open in Discovery Studio →</a>
+        </div>
+        <p class="card-annotation">Blue, dotted-bottom on hover. Cross-room handoff anchor.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Toggle</p>
+        <div class="card-demo">
+          <div class="btn-row" style="gap:24px;">
+            <span class="toggle"></span>
+            <span class="toggle on"></span>
+          </div>
+        </div>
+        <p class="card-annotation">Binary state. Persists immediately, no Save button.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 4. INPUT ========== -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2 class="section-title">Input primitives</h2>
+      <span class="section-tail">how the operator authors</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <p class="card-label">TextInput</p>
+        <div class="card-demo card-demo--stretch">
+          <input class="input" type="text" placeholder="Account name" value="Acme Corp.">
+        </div>
+        <p class="card-annotation">Standard text field. Bordered, 6px radius.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Select</p>
+        <div class="card-demo card-demo--stretch">
+          <select class="input">
+            <option>Proposal</option>
+            <option>Discovery</option>
+            <option>Negotiation</option>
+          </select>
+        </div>
+        <p class="card-annotation">Drop-down. Same chrome as TextInput.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Textarea</p>
+        <div class="card-demo card-demo--stretch">
+          <textarea class="input" rows="3" placeholder="Notes" style="resize:none; font-family:inherit;">Sarah needs the revised proposal by Friday.</textarea>
+        </div>
+        <p class="card-annotation">Multi-line input. Body prose lives here.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">FormField (composed)</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="field">
+            <label class="field-label">Buying group minimum</label>
+            <input class="input" type="number" value="5">
+            <p class="field-help">How many decision-makers typically have to agree before a deal closes?</p>
+          </div>
+        </div>
+        <p class="card-annotation">Label + input + microcopy. Microcopy disappears in Step back.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Checkbox</p>
+        <div class="card-demo">
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <label style="display:flex; gap:8px; align-items:center; font-size:14px;">
+              <input type="checkbox" checked> Champion identified
+            </label>
+            <label style="display:flex; gap:8px; align-items:center; font-size:14px;">
+              <input type="checkbox"> Economic buyer confirmed
+            </label>
+          </div>
+        </div>
+        <p class="card-annotation">Discrete on/off. Used in deal-health forms.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 5. FEEDBACK ========== -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <h2 class="section-title">Feedback primitives</h2>
+      <span class="section-tail">how the system speaks</span>
+    </div>
+
+    <div class="grid grid-wide">
+
+      <div class="card">
+        <p class="card-label">Toast</p>
+        <div class="card-demo">
+          <div class="toast">Proof cast. Linked to Acme — Q4 expansion.</div>
+        </div>
+        <p class="card-annotation">Transient confirmation. Bottom-right by default.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Banner</p>
+        <div class="card-demo card-demo--stretch">
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div class="banner">It's been 12 days since the last brief was synthesized.</div>
+            <div class="banner banner-blue">FROM BRIEFING · Refresh objection handler — Acme pricing pushback.</div>
+          </div>
+        </div>
+        <p class="card-annotation">Persistent alert at top-of-room. Amber for caution, blue for context.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Modal</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="modal-preview">
+            <div class="modal-preview-title">Discard draft?</div>
+            <div class="modal-preview-body">You've made unsaved edits to this proof draft. Discarding clears them.</div>
+            <div class="modal-preview-actions">
+              <button class="btn btn-ghost">Cancel</button>
+              <button class="btn btn-primary">Discard</button>
+            </div>
+          </div>
+        </div>
+        <p class="card-annotation">Overlay dialog. Reserved for destructive confirmations and authored composers.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Tooltip</p>
+        <div class="card-demo">
+          <div class="tooltip-wrap">
+            <div class="tooltip-bubble">One of the eight ICP quality checks</div>
+            <span class="tooltip-anchor">Buying group minimum (?)</span>
+          </div>
+        </div>
+        <p class="card-annotation">Hover hint. Disappears in Step back density.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 6. NAVIGATION ========== -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">06</span>
+      <h2 class="section-title">Navigation primitives</h2>
+      <span class="section-tail">how the operator moves between rooms</span>
+    </div>
+
+    <div class="grid grid-wide">
+
+      <div class="card">
+        <p class="card-label">NavLink</p>
+        <div class="card-demo">
+          <div class="btn-row" style="gap:4px;">
+            <span class="nav-link active">Dashboard</span>
+            <span class="nav-link">Signal Console</span>
+            <span class="nav-link">Deal Workspace</span>
+          </div>
+        </div>
+        <p class="card-annotation">Inline room navigation. Active state has soft fill.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Palette · ⌘K</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="palette-mock">
+            <div class="palette-search">› whats at risk_</div>
+            <div class="palette-item highlighted">Skill · What's at risk this week</div>
+            <div class="palette-item">Room · Deal Workspace</div>
+            <div class="palette-item">Room · Future Autopsy</div>
+          </div>
+        </div>
+        <p class="card-annotation">Summoned room + skill access. The birdseye affordance.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">HandoffStrip</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="handoff-strip">
+            <div class="handoff-item handoff-item--primary">Pre-mortem this deal</div>
+            <div class="handoff-item">Carry to advisor</div>
+            <div class="handoff-item">Cast proof</div>
+          </div>
+        </div>
+        <p class="card-annotation">Bottom-of-room cross-room CTAs. Verb-shape, continuity-paramed.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">BackPill</p>
+        <div class="card-demo">
+          <span class="back-pill">← From Briefing · pricing-momentum pattern</span>
+        </div>
+        <p class="card-annotation">Inbound continuity. Reads returnTo + returnLabel from URL.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 7. SYSTEM PRIMITIVES ========== -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">07</span>
+      <h2 class="section-title">System primitives</h2>
+      <span class="section-tail">Antaeus-specific composed components</span>
+    </div>
+
+    <div class="grid grid-wide">
+
+      <div class="card">
+        <p class="card-label">ProposalCard · Phase F</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="proposal-card">
+            <div class="proposal-kicker">A SUGGESTION</div>
+            <div class="proposal-body">You closed your first deal last week. The system has been walking you through every surface — want it to step back? You can switch back any time.</div>
+            <div class="proposal-actions">
+              <button class="btn btn-primary">Yes, step back</button>
+              <button class="btn btn-secondary">Ask me in a month</button>
+              <button class="btn btn-ghost">Not now</button>
+            </div>
+          </div>
+        </div>
+        <p class="card-annotation">Phase F proposal. Three-button accept/dismiss/snooze.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">PatternCard · Briefing</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="pattern-card">
+            <div class="pattern-headline">Late-stage price pressure is rising.</div>
+            <div class="pattern-body">Three of your last five closed deals dropped price 12% or more in the final week. Your stated discount band is 8%. The pattern shows up across two ICP segments.</div>
+            <div class="pattern-confidence">CONFIDENCE 78% · 14D WINDOW</div>
+          </div>
+        </div>
+        <p class="card-annotation">Briefing synthesized read. Authored prose + evidence + confidence.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">RiskCard · Deal Workspace</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="risk-card">
+            <div class="risk-headline">Acme Corp. — $84K</div>
+            <div class="risk-cause">Stalled 18d at proposal. Single-threaded. Champion last replied Nov 3.</div>
+            <div class="risk-meta">
+              <span>STAGE · PROPOSAL</span>
+              <span>RISK · 78</span>
+            </div>
+          </div>
+        </div>
+        <p class="card-annotation">Recovery queue item. Left rule signals severity.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">ReadinessReadout</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="readiness-readout">
+            <div class="readiness-kicker">READINESS</div>
+            <div class="readiness-state">You're at Inheritable with guardrails.</div>
+          </div>
+        </div>
+        <p class="card-annotation">Replaces the banned "verdict" container. Sentence-shape state name carries directly.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 8. DENSITY GRADIENT IN PRACTICE ========== -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">08</span>
+      <h2 class="section-title">Density gradient — same primitive, both states</h2>
+      <span class="section-tail">how Show me how and Step back actually differ</span>
+    </div>
+
+    <div class="grid grid-wide" style="grid-template-columns: 1fr;">
+
+      <div class="card">
+        <p class="card-label">Dashboard command card · sentence count</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="density-demo">
+            <div class="density-card">
+              <div class="density-label">SHOW ME HOW</div>
+              <div class="demo-title">Acme Corp.</div>
+              <div class="demo-body">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo on the fourteenth. This is what the system shows you first today because it is the ranked deal under the most pressure — a mix of how long it's been stalled, how big the deal is, and how late in the stage it should have moved by now. Click in to see the recovery options.</div>
+            </div>
+            <div class="density-card">
+              <div class="density-label">STEP BACK</div>
+              <div class="demo-title">Acme Corp.</div>
+              <div class="demo-body terse">Acme — stalled 18d at proposal. Recovery options inside.</div>
+            </div>
+          </div>
+        </div>
+        <p class="card-annotation">Same primitive, same voice (Command Chamber temperature), different verbosity per state.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Deal card · affordance count</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="density-demo">
+            <div class="density-card">
+              <div class="density-label">SHOW ME HOW</div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">View</button>
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">Edit</button>
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">Mark at risk</button>
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">Add note</button>
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">Carry to advisor</button>
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">Pre-mortem</button>
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">Rehearse negotiation</button>
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">Cast proof</button>
+              </div>
+            </div>
+            <div class="density-card">
+              <div class="density-label">STEP BACK</div>
+              <div style="display:flex; gap:6px;">
+                <button class="btn btn-primary" style="font-size:12px; padding:6px 10px;">View</button>
+                <button class="btn btn-secondary" style="font-size:12px; padding:6px 10px;">Edit</button>
+                <button class="btn btn-ghost" style="font-size:12px; padding:6px 10px;">More ⌄</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="card-annotation">Eight visible actions vs. two visible + More menu.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Autopsy sheets · default-expanded sections</p>
+        <div class="card-demo card-demo--stretch">
+          <div class="density-demo">
+            <div class="density-card">
+              <div class="density-label">SHOW ME HOW</div>
+              <div class="section-list">
+                <div class="section-list-item expanded"><strong>Pattern</strong> — Pressure before clarity. The proposal landed before the buyer had named their actual constraint.</div>
+                <div class="section-list-item expanded"><strong>Proof</strong> — The pilot never anchored. Readout owner was never assigned.</div>
+                <div class="section-list-item expanded"><strong>Symptom</strong> — Three weeks of single-threaded communication with Sarah.</div>
+                <div class="section-list-item expanded"><strong>Decision</strong> — The decision architecture was never mapped.</div>
+              </div>
+            </div>
+            <div class="density-card">
+              <div class="density-label">STEP BACK</div>
+              <div class="section-list">
+                <div class="section-list-item">Pattern — Pressure before clarity · 3 prior cases match</div>
+                <div class="section-list-item">Proof — Never anchored · readout owner unset</div>
+                <div class="section-list-item expanded"><strong>Symptom</strong> — Three weeks of single-threaded communication with Sarah. Champion replied once in fourteen days. Last reply on Nov 3 was a single-line acknowledgment, not a substantive response.</div>
+                <div class="section-list-item">Decision — Architecture unmapped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="card-annotation">All four sheets expanded vs. only highest-severity (Symptom) expanded; others as one-line summaries.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p>
+      This sheet is exploratory. The component library spec — the third sibling document under
+      <code>deliverables/design-system/00-charter-2026-06-02.md</code> — locks the actual set, contracts, and
+      migration. Until that lands, this is a working visual of the bones.
+    </p>
+    <p style="margin-top:12px;">
+      Visual style inherits canon Part II §1 (bright field, dark exception retired) and §2 (DM Serif Display ·
+      Public Sans · JetBrains Mono). Color roles from §3 (orange for the one dominant move, blue for
+      system-intelligence, green for healthy, amber for caution, red for risk).
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
