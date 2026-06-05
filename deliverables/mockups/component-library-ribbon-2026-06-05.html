@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ribbon UI — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F8FA;
+    --surface: #FFFFFF;
+    --surface-sub: #F2F4F8;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.08);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.10);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.06);
+    --shadow-rest: 0 1px 2px rgba(10,28,64,0.04), 0 4px 12px rgba(10,28,64,0.04);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1180px; margin: 0 auto; padding: 72px 48px 144px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .masthead { margin-bottom: 96px; max-width: 720px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 20px 0 16px;
+  }
+  .masthead-sub { font-size: 18px; line-height: 1.5; color: var(--ink-soft); margin: 0 0 24px; }
+  .masthead-body { font-size: 15px; line-height: 1.7; max-width: 60ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  .section { margin-bottom: 80px; }
+
+  /* ============================ */
+  /* SIGNATURE: THREAD HEADER     */
+  /* ============================ */
+  .thread {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 32px 0 18px;
+  }
+  .thread-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .thread-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(to right, var(--ink) 0%, var(--ink) 80%, transparent 100%);
+    opacity: 0.4;
+    border-radius: 1px;
+  }
+  .thread.attn .thread-label { color: var(--amber); }
+  .thread.attn .thread-line { background: linear-gradient(to right, var(--amber) 0%, var(--amber) 80%, transparent 100%); opacity: 0.6; }
+  .thread.risk .thread-label { color: var(--red); }
+  .thread.risk .thread-line { background: linear-gradient(to right, var(--red) 0%, var(--red) 80%, transparent 100%); opacity: 0.6; }
+  .thread.act .thread-label { color: var(--orange); }
+  .thread.act .thread-line { background: linear-gradient(to right, var(--orange) 0%, var(--orange) 80%, transparent 100%); opacity: 0.65; }
+  .thread-suffix {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .thread-cta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--orange);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* The opening masthead thread — bracketed */
+  .thread-bracket {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* ============================ */
+  /* CARDS THAT ATTACH TO RIBBONS */
+  /* ============================ */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+
+  .card {
+    background: var(--surface);
+    border-radius: 0 6px 6px 6px;
+    padding: 18px 22px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+    position: relative;
+  }
+  /* The clamp — small tab that attaches the card to the ribbon above */
+  .card.clamp::before {
+    content: '';
+    position: absolute;
+    top: -8px; left: 14px;
+    width: 32px; height: 8px;
+    background: var(--ink);
+    border-radius: 2px 2px 0 0;
+  }
+  .card.clamp.orange::before { background: var(--orange); }
+  .card.clamp.amber::before { background: var(--amber); }
+  .card.clamp.red::before { background: var(--red); }
+  .card.clamp.green::before { background: var(--green); }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .card-name { font-weight: 600; font-size: 16px; }
+  .card-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .card-body { font-size: 14px; color: var(--ink); line-height: 1.55; margin-bottom: 14px; }
+
+  /* State strip — a small ribbon CROSSING the component */
+  .state-strip {
+    margin: 0 -22px 12px;
+    padding: 4px 22px;
+    background: var(--red-soft);
+    color: var(--red);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+  .state-strip.attn { background: var(--amber-soft); color: var(--amber); }
+  .state-strip.healthy { background: var(--green-soft); color: #15803D; }
+
+  /* Action ribbon — a narrow ribbon at the foot */
+  .action-ribbon {
+    margin: 14px -22px -18px;
+    padding: 10px 22px;
+    background: var(--surface-sub);
+    border-radius: 0 0 6px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--hair);
+  }
+  .action-ribbon-text {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .action-ribbon-text.act { color: var(--orange); }
+
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-accent { background: var(--orange); color: white; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--hair-strong); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 6px 10px; }
+
+  /* ============================ */
+  /* NAV — active is a ribbon     */
+  /* ============================ */
+  .shell {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 14px 18px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+  }
+  .nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .nav-item {
+    padding: 9px 16px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    position: relative;
+  }
+  .nav-item:hover { color: var(--ink); }
+  /* Active nav is a full-width horizontal ribbon */
+  .nav-item.active {
+    background: var(--ink);
+    color: white;
+    font-weight: 600;
+    margin: 4px -18px;
+    padding-left: 24px;
+    padding-right: 24px;
+    border-radius: 0;
+    position: relative;
+  }
+  .nav-item.active::before, .nav-item.active::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; width: 6px;
+  }
+  .nav-item.active::before { left: 0; background: var(--orange); }
+  .nav-item.active::after { right: 0; background: var(--orange); }
+  .nav-item .ct {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .nav-item.active .ct { color: rgba(255,255,255,0.7); }
+  .nav-group {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding: 12px 16px 6px;
+  }
+
+  /* ============================ */
+  /* TABLE — group as ribbon      */
+  /* ============================ */
+  .table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .table th {
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 10px 12px 8px 0;
+  }
+  .table td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--hair); }
+  .table tr:last-child td { border-bottom: none; }
+  .table .name { font-weight: 600; }
+  .table .ctx { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .table .num { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); }
+
+  /* Group divider — a ribbon spanning the table */
+  .table tr.group td {
+    padding: 6px 0;
+    border-bottom: none;
+  }
+  .table tr.group .ribbon-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+  }
+  .table tr.group .ribbon-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .table tr.group .ribbon-row .label.attn { color: var(--amber); }
+  .table tr.group .ribbon-row .label.risk { color: var(--red); }
+  .table tr.group .ribbon-row .line {
+    flex: 1;
+    height: 1.5px;
+    background: var(--ink);
+    opacity: 0.30;
+  }
+  .table tr.group .ribbon-row .label.attn ~ .line { background: var(--amber); opacity: 0.50; }
+
+  /* Drawer with persistent ribbon title */
+  .drawer {
+    background: var(--surface);
+    border-radius: 8px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+    overflow: hidden;
+  }
+  .drawer-ribbon {
+    background: var(--ink);
+    color: white;
+    padding: 10px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    position: relative;
+  }
+  .drawer-ribbon::before, .drawer-ribbon::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; width: 5px;
+    background: var(--orange);
+  }
+  .drawer-ribbon::before { left: 0; }
+  .drawer-ribbon::after { right: 0; }
+  .drawer-body { padding: 22px 24px; }
+
+  .section-head { margin-bottom: 14px; display: grid; grid-template-columns: 60px 1fr; gap: 24px; align-items: baseline; }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 30px;
+    line-height: 1.05;
+    margin: 0 0 6px;
+  }
+  .section-head-text p { font-size: 14px; color: var(--ink-soft); margin: 0; max-width: 56ch; }
+
+  .vstack { display: flex; flex-direction: column; gap: 12px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  .concept {
+    margin-top: 96px;
+    padding: 28px 32px;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    box-shadow: var(--shadow-rest);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">RIBBON UI · DIRECTION 02 · 2026·06·05</p>
+    <h1>Ribbon UI.</h1>
+    <p class="masthead-sub">Workflow, state, and ownership tied across the page with continuous ribbons.</p>
+    <p class="masthead-body">
+      Sections are tied together visually by <strong>thread headers</strong> — thin horizontal bands with an embedded uppercase label trailing off to the right. Cards attach to ribbons through small clamps. State appears as a strip crossing the component. Drawers carry a persistent ribbon title. The active nav is a full-width ribbon, not a pill. The page stops being a pile of cards and starts feeling like connected GTM motion.
+    </p>
+  </header>
+
+  <!-- Opening thread -->
+  <div class="thread">
+    <span class="thread-bracket">PIPELINE REVIEW · TUESDAY MORNING</span>
+    <span class="thread-line"></span>
+    <span class="thread-suffix">09:12 CT · 37 DEALS</span>
+  </div>
+
+  <!-- 01 - cards attached to ribbons -->
+  <section class="section">
+    <div class="thread risk">
+      <span class="thread-label">Slipping deals</span>
+      <span class="thread-line"></span>
+      <span class="thread-suffix">3 accounts · $476K</span>
+    </div>
+
+    <div class="grid-3">
+      <div class="card clamp red">
+        <div class="card-head">
+          <span class="card-name">Acme Corp.</span>
+          <span class="card-meta">D18 · $84K</span>
+        </div>
+        <div class="state-strip">
+          <span>↘ At risk</span>
+          <span>Champion silent 12d</span>
+        </div>
+        <div class="card-body">Procurement re-opened pricing. CFO has not seen the redline. Deal slips if she doesn't see it by Friday.</div>
+        <div class="action-ribbon">
+          <span class="action-ribbon-text act">— Draft note to CFO</span>
+          <button class="btn btn-accent">Open</button>
+        </div>
+      </div>
+
+      <div class="card clamp red">
+        <div class="card-head">
+          <span class="card-name">Cordillera Health</span>
+          <span class="card-meta">D47 · $340K</span>
+        </div>
+        <div class="state-strip">
+          <span>⊘ Exec stalled</span>
+          <span>Legal · residency</span>
+        </div>
+        <div class="card-body">Legal stalled on data residency. No exec sponsor inside the customer org.</div>
+        <div class="action-ribbon">
+          <span class="action-ribbon-text act">— Carry to Tasha</span>
+          <button class="btn btn-primary">Open</button>
+        </div>
+      </div>
+
+      <div class="card clamp red">
+        <div class="card-head">
+          <span class="card-name">Stonebridge Capital</span>
+          <span class="card-meta">D22 · $56K</span>
+        </div>
+        <div class="state-strip">
+          <span>↘ Silent</span>
+          <span>No movement 7d</span>
+        </div>
+        <div class="card-body">Champion meeting on 29 May produced verbal interest; no follow-up since. Champion may have left the role.</div>
+        <div class="action-ribbon">
+          <span class="action-ribbon-text">— Verify champion in seat</span>
+          <button class="btn btn-secondary">Open</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="thread attn">
+      <span class="thread-label">Expansion candidates</span>
+      <span class="thread-line"></span>
+      <span class="thread-suffix">2 accounts · $352K</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card clamp green">
+        <div class="card-head">
+          <span class="card-name">Helix Robotics</span>
+          <span class="card-meta">D4 · $240K</span>
+        </div>
+        <div class="state-strip healthy">
+          <span>↗ On track</span>
+          <span>CFO Thursday</span>
+        </div>
+        <div class="card-body">CFO meeting confirmed for Thursday. Champion threaded the EB last week. Pre-read due Wednesday morning.</div>
+        <div class="action-ribbon">
+          <span class="action-ribbon-text">— Pre-read pending</span>
+          <button class="btn btn-secondary">Open</button>
+        </div>
+      </div>
+
+      <div class="card clamp amber">
+        <div class="card-head">
+          <span class="card-name">Northwind Logistics</span>
+          <span class="card-meta">D9 · $112K</span>
+        </div>
+        <div class="state-strip attn">
+          <span>! Attn</span>
+          <span>Readout owner unset</span>
+        </div>
+        <div class="card-body">Pilot ran clean. Readout owner field still empty after five days. Freshness expires at fourteen.</div>
+        <div class="action-ribbon">
+          <span class="action-ribbon-text act">— Assign readout owner</span>
+          <button class="btn btn-accent">Open</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 - the next moves ribbon -->
+  <section class="section">
+    <div class="thread act">
+      <span class="thread-label">Next moves</span>
+      <span class="thread-line"></span>
+      <span class="thread-suffix">3 actions queued</span>
+      <button class="thread-cta">View all →</button>
+    </div>
+
+    <div class="vstack">
+      <div class="card clamp orange">
+        <div class="card-body" style="margin-bottom:0; display:flex; justify-content:space-between; align-items:center; gap:16px;">
+          <div>
+            <div style="font-weight:600; font-size:15px; margin-bottom:2px;">Acme Corp. — draft CFO alignment email</div>
+            <div style="font-size:13px; color:var(--ink-soft);">Before EOW · uses the pricing-momentum pattern as framing</div>
+          </div>
+          <button class="btn btn-accent">Draft now</button>
+        </div>
+      </div>
+      <div class="card clamp orange">
+        <div class="card-body" style="margin-bottom:0; display:flex; justify-content:space-between; align-items:center; gap:16px;">
+          <div>
+            <div style="font-weight:600; font-size:15px; margin-bottom:2px;">Northwind — assign readout owner</div>
+            <div style="font-size:13px; color:var(--ink-soft);">Before pilot age &gt; 14d · candidate: Sarah</div>
+          </div>
+          <button class="btn btn-primary">Assign</button>
+        </div>
+      </div>
+      <div class="card clamp orange">
+        <div class="card-body" style="margin-bottom:0; display:flex; justify-content:space-between; align-items:center; gap:16px;">
+          <div>
+            <div style="font-weight:600; font-size:15px; margin-bottom:2px;">Cordillera — carry the ask to Tasha</div>
+            <div style="font-size:13px; color:var(--ink-soft);">Cooldown clean · advisor available · backchannel route</div>
+          </div>
+          <button class="btn btn-secondary">Open advisor</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 - nav + drawer with persistent ribbon -->
+  <section class="section">
+    <div class="thread">
+      <span class="thread-label">Anatomy</span>
+      <span class="thread-line"></span>
+      <span class="thread-suffix">nav · drawer · table</span>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="shell">
+        <div class="nav">
+          <div class="nav-group">Today</div>
+          <div class="nav-item active">Dashboard <span class="ct">12</span></div>
+          <div class="nav-item">Briefing <span class="ct">3</span></div>
+          <div class="nav-item">Signal Console <span class="ct">37</span></div>
+          <div class="nav-group">Pipeline</div>
+          <div class="nav-item">Deal Workspace</div>
+          <div class="nav-item">Future Autopsy</div>
+        </div>
+      </div>
+
+      <div class="drawer">
+        <div class="drawer-ribbon">
+          <span>Acme · recovery</span>
+          <span style="font-weight:400; color:rgba(255,255,255,0.6);">DAY 18 · $84K</span>
+        </div>
+        <div class="drawer-body">
+          <p style="margin:0 0 12px; font-size:14px; line-height:1.55;">Procurement re-opened pricing on Nov 3. Champion has not relayed it. CFO has not seen the redline.</p>
+          <div class="thread act" style="margin: 14px 0 12px;">
+            <span class="thread-label">Move</span>
+            <span class="thread-line"></span>
+          </div>
+          <p style="margin:0 0 16px; font-size:14px; line-height:1.5; font-weight:500;">Send revised proposal directly to CFO before EOW. Backchannel via Tasha as air cover.</p>
+          <div class="hstack">
+            <button class="btn btn-accent">Draft note</button>
+            <button class="btn btn-ghost">Mark for later</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="thread attn" style="margin-top:48px;">
+      <span class="thread-label">Stale &gt; 14d</span>
+      <span class="thread-line"></span>
+      <span class="thread-suffix">8 accounts</span>
+    </div>
+
+    <div class="card" style="border-radius:6px; padding:6px 18px;">
+      <table class="table">
+        <thead>
+          <tr><th>Account</th><th>Stage</th><th>Value</th><th>Day</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr class="group"><td colspan="5"><div class="ribbon-row"><span class="label risk">Critical · 3 accounts</span><span class="line"></span></div></td></tr>
+          <tr>
+            <td><div class="name">Acme Corp.</div><div class="ctx">Champion silent · procurement re-opened</div></td>
+            <td>Proposal</td><td class="num">$84,000</td><td class="num">18</td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+          <tr>
+            <td><div class="name">Cordillera Health</div><div class="ctx">Legal stalled · no exec sponsor</div></td>
+            <td>Negotiation</td><td class="num">$340,000</td><td class="num">47</td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+          <tr class="group"><td colspan="5"><div class="ribbon-row"><span class="label attn">Needs attention · 2 accounts</span><span class="line"></span></div></td></tr>
+          <tr>
+            <td><div class="name">Northwind Logistics</div><div class="ctx">Pilot pending readout</div></td>
+            <td>Proof</td><td class="num">$112,000</td><td class="num">9</td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+          <tr>
+            <td><div class="name">Marlin Group</div><div class="ctx">Discovery — verify champion still in seat</div></td>
+            <td>Discovery</td><td class="num">$38,000</td><td class="num">11</td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin:0 0 10px;">
+      <strong>Ribbon UI.</strong> The recognizable shape language is the thread header — a thin horizontal band with an embedded label trailing off to the right. Sections are tied together visually rather than floating as separate cards. Cards clamp to ribbons through small tabs. State appears as a strip crossing the component. Drawers carry persistent ribbon titles. The active nav item is a full-width ribbon with orange end-caps, not a pill.
+    </p>
+    <p style="margin:0;">
+      <strong>The rule.</strong> Ribbons organize movement. Cards contain meaning. Buttons trigger action. Keep them separate. Canon preserved throughout — bright field, DM Serif Display reserved for high-importance moments, Public Sans for body, JetBrains Mono for thread labels and codes. Orange as the rationed accent for the dominant move and the active-nav end-caps.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>
