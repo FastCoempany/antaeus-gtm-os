@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiet Command — pure direction</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F7F8FA;
+    --surface: #FFFFFF;
+    --surface-sunk: #EEF1F6;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.20);
+    --hair: rgba(10, 28, 64, 0.08);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.08);
+    --shadow-rest: 0 1px 2px rgba(10, 28, 64, 0.03), 0 4px 12px rgba(10, 28, 64, 0.04);
+    --shadow-lift: 0 4px 12px rgba(10, 28, 64, 0.06), 0 12px 28px rgba(10, 28, 64, 0.05);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 96px 56px 144px;
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  .masthead { margin-bottom: 128px; max-width: 760px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 72px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 32px 0 24px;
+  }
+  .masthead-sub {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 32px;
+  }
+  .masthead-body { font-size: 16px; line-height: 1.7; max-width: 60ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  .section { margin-bottom: 128px; }
+  .section-head { margin-bottom: 40px; display: grid; grid-template-columns: 80px 1fr; gap: 24px; align-items: baseline; }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 36px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+  .section-head-text p {
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 56ch;
+    line-height: 1.55;
+  }
+
+  /* ============================= */
+  /* SHELL — boardroom OS           */
+  /* ============================= */
+  .shell {
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lift);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 620px;
+    overflow: hidden;
+  }
+  .nav {
+    background: var(--surface);
+    padding: 24px 14px;
+    border-right: 1px solid var(--hair);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .nav-mark {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    padding: 0 10px 28px;
+  }
+  .nav-group {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding: 14px 10px 6px;
+  }
+  .nav-item {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+  }
+  .nav-item:hover { color: var(--ink); background: var(--surface-sunk); }
+  .nav-item .ct { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+  .nav-item.active {
+    background: var(--surface-sunk);
+    color: var(--ink);
+    font-weight: 600;
+    position: relative;
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--orange);
+    border-radius: 0 2px 2px 0;
+  }
+  .nav-item.active .ct { color: var(--orange); }
+
+  .main {
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .topline-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .topline-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1.1;
+    margin: 4px 0 0;
+  }
+  .topline-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+
+  /* Tabs - seated active */
+  .tabs {
+    display: inline-flex;
+    background: var(--surface-sunk);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .tab.active {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(10, 28, 64, 0.06);
+  }
+
+  /* Buttons */
+  .btn {
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-accent { background: var(--orange); color: white; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--hair-strong); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); }
+
+  /* Table */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .table th {
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 12px 16px 12px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .table td {
+    padding: 14px 16px 14px 0;
+    border-bottom: 1px solid var(--hair);
+    vertical-align: middle;
+  }
+  .table tr.selected { background: var(--surface-sunk); }
+  .table .name { font-weight: 600; }
+  .table .ctx { font-size: 12px; color: var(--ink-soft); }
+  .table .num { font-family: "JetBrains Mono", monospace; }
+
+  /* Alerts - thin colored spine */
+  .alert {
+    background: var(--surface);
+    border-left: 3px solid var(--amber);
+    padding: 12px 18px;
+    border-radius: 6px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    box-shadow: var(--shadow-rest);
+  }
+  .alert.blue { border-left-color: var(--blue); }
+  .alert.red { border-left-color: var(--red); }
+  .alert.green { border-left-color: var(--green); }
+  .alert-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--amber);
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .alert.blue .alert-key { color: var(--blue); }
+  .alert.red .alert-key { color: var(--red); }
+  .alert.green .alert-key { color: var(--green); }
+  .alert-body { font-size: 14px; color: var(--ink); line-height: 1.5; flex: 1; }
+  .alert-action { margin-left: auto; }
+
+  /* Summary cells */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .summary-cell .summary-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .summary-cell .summary-val {
+    font-family: "DM Serif Display", serif;
+    font-size: 36px;
+    line-height: 1;
+  }
+  .summary-cell .summary-val.risk { color: var(--red); }
+  .summary-cell .summary-val.attn { color: var(--amber); }
+  .summary-cell .summary-trail { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+
+  /* Inputs */
+  .input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 6px;
+    background: var(--surface);
+    font: inherit;
+    font-size: 14px;
+  }
+  .input:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px var(--orange-soft); }
+  .field-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field-help { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+
+  .toggle {
+    display: inline-flex;
+    width: 36px; height: 20px;
+    border-radius: 99px;
+    background: var(--ink-quiet);
+    padding: 2px;
+    cursor: pointer;
+  }
+  .toggle::after {
+    content: ''; width: 16px; height: 16px;
+    border-radius: 50%; background: white;
+    transition: transform 0.16s;
+  }
+  .toggle.on { background: var(--orange); }
+  .toggle.on::after { transform: translateX(16px); }
+
+  /* Chip — restrained */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--surface-sunk);
+    color: var(--ink-soft);
+  }
+  .chip--healthy { color: #15803D; background: var(--green-soft); }
+  .chip--attn { color: #B45309; background: var(--amber-soft); }
+  .chip--risk { color: #B91C1C; background: var(--red-soft); }
+  .chip--signal { color: #1D4ED8; background: var(--blue-soft); }
+
+  /* Toast */
+  .toast {
+    background: var(--ink);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 14px;
+    max-width: 480px;
+    box-shadow: var(--shadow-lift);
+  }
+  .toast-mark {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .vstack { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Module card - compact header + meta */
+  .module {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow-rest);
+  }
+  .module-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .module-name { font-size: 14px; font-weight: 600; }
+  .module-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .module-body { font-size: 13px; line-height: 1.55; color: var(--ink); }
+  .module-body strong { font-weight: 600; }
+
+  /* Palette */
+  .palette {
+    background: var(--surface);
+    border-radius: 10px;
+    box-shadow: var(--shadow-lift);
+    overflow: hidden;
+    max-width: 440px;
+  }
+  .palette-input {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--hair);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .palette-input::before {
+    content: '⌘K';
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    padding: 1px 6px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 4px;
+  }
+  .palette-row {
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .palette-row.hl { background: var(--orange-soft); color: var(--ink); }
+  .palette-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    min-width: 48px;
+  }
+  .palette-row.hl .palette-kind { color: var(--orange); }
+  .palette-key {
+    margin-left: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  .colophon {
+    margin-top: 128px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hair);
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    line-height: 1.65;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">QUIET COMMAND · PURE DIRECTION · 2026·06·05</p>
+    <h1>Quiet Command.</h1>
+    <p class="masthead-sub">An operating system for GTM operators, without terminal severity.</p>
+    <p class="masthead-body">
+      A clean boardroom operating system after the alarms have been removed. <strong>Controlled</strong>. <strong>Focused</strong>. <strong>Sharp</strong>. Strong vertical rhythm; clear zones; no decorative clutter. Modern sans dominant; mono used only for IDs and timestamps. Motion fast and almost invisible. The premium SaaS most VP-Sales-grade products are trying to be, with the signature note that workflow follows a five-station chain — observe, diagnose, decide, act, verify — and every surface knows where the work sits in it.
+    </p>
+  </header>
+
+  <!-- 01 - the shell -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">ONE</span>
+      <div class="section-head-text">
+        <h2>The operating shell.</h2>
+        <p>Strong vertical rhythm. Quiet active state — seated, not floating. Compact summary row. Table-first density where the operator needs to scan.</p>
+      </div>
+    </div>
+
+    <div class="shell">
+      <aside class="nav">
+        <div class="nav-mark">Antaeus</div>
+        <div class="nav-group">Today</div>
+        <div class="nav-item active">Dashboard <span class="ct">12</span></div>
+        <div class="nav-item">Briefing <span class="ct">3</span></div>
+        <div class="nav-item">Signal Console <span class="ct">37</span></div>
+        <div class="nav-group">Pipeline</div>
+        <div class="nav-item">Deal Workspace</div>
+        <div class="nav-item">Future Autopsy</div>
+        <div class="nav-item">PoC Framework</div>
+        <div class="nav-group">Outbound</div>
+        <div class="nav-item">Outbound Studio</div>
+        <div class="nav-item">Call Planner</div>
+      </aside>
+
+      <main class="main">
+        <div class="topline">
+          <div>
+            <div class="topline-eyebrow">Dashboard · Tuesday morning</div>
+            <h3 class="topline-title">Where the motion is today.</h3>
+          </div>
+          <div class="topline-meta">09:12 CT · ⌘K</div>
+        </div>
+
+        <div class="summary">
+          <div class="summary-cell">
+            <div class="summary-label">Active deals</div>
+            <div class="summary-val">37</div>
+            <div class="summary-trail">+2 since Monday</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Critical</div>
+            <div class="summary-val risk">3</div>
+            <div class="summary-trail">All in proposal</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Stale &gt; 14d</div>
+            <div class="summary-val attn">8</div>
+            <div class="summary-trail">Two with movement Friday</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Win rate</div>
+            <div class="summary-val">22%</div>
+            <div class="summary-trail">Last 90 days</div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="tabs">
+            <div class="tab active">Recovery queue</div>
+            <div class="tab">This week</div>
+            <div class="tab">All open</div>
+          </div>
+          <div class="hstack">
+            <button class="btn btn-ghost">Filter</button>
+            <button class="btn btn-secondary">Export</button>
+            <button class="btn btn-accent">Open Acme</button>
+          </div>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr><th>Account</th><th>Stage</th><th>Value</th><th>Day</th><th>State</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr class="selected">
+              <td><div class="name">Acme Corp.</div><div class="ctx">Champion silent since Nov 3</div></td>
+              <td>Proposal</td>
+              <td class="num">$84,000</td>
+              <td class="num">18</td>
+              <td><span class="chip chip--risk">At risk</span></td>
+              <td><button class="btn btn-ghost">Open ↗</button></td>
+            </tr>
+            <tr>
+              <td><div class="name">Northwind Logistics</div><div class="ctx">Pilot pending readout</div></td>
+              <td>Proof</td>
+              <td class="num">$112,000</td>
+              <td class="num">9</td>
+              <td><span class="chip chip--attn">Attn</span></td>
+              <td><button class="btn btn-ghost">Open ↗</button></td>
+            </tr>
+            <tr>
+              <td><div class="name">Cordillera Health</div><div class="ctx">Legal stalled on residency</div></td>
+              <td>Negotiation</td>
+              <td class="num">$340,000</td>
+              <td class="num">47</td>
+              <td><span class="chip chip--risk">At risk</span></td>
+              <td><button class="btn btn-ghost">Open ↗</button></td>
+            </tr>
+            <tr>
+              <td><div class="name">Helix Robotics</div><div class="ctx">CFO meeting Thursday</div></td>
+              <td>Negotiation</td>
+              <td class="num">$240,000</td>
+              <td class="num">4</td>
+              <td><span class="chip chip--healthy">Track</span></td>
+              <td><button class="btn btn-ghost">Open ↗</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </section>
+
+  <!-- 02 - decision rail as signature -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">TWO</span>
+      <div class="section-head-text">
+        <h2>The signature. The Decision Rail.</h2>
+        <p>A GTM workflow compressed into five stations: Observe → Diagnose → Decide → Act → Verify. Every workflow module shows where it sits.</p>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-head">
+        <span class="module-name">Renewal Risk · Acme Corp.</span>
+        <span class="module-meta">UPDATED · 09:08 CT · DAY 18</span>
+      </div>
+      <div class="vstack" style="gap:14px;">
+        <div style="display:grid; grid-template-columns: 100px 1fr; gap:8px 16px; align-items:baseline;">
+          <span class="eyebrow" style="color:var(--ink);">Observe</span>
+          <span style="font-size:14px;">Usage down 22% in last 30 days. Champion silent since Nov 3.</span>
+          <span class="eyebrow" style="color:var(--ink);">Diagnose</span>
+          <span style="font-size:14px;">Economic buyer has not joined QBR. Procurement re-opened pricing.</span>
+          <span class="eyebrow" style="color:var(--orange);">Decide</span>
+          <span style="font-size:14px; font-weight:500;">Escalate with value recap. Backchannel to CFO via board advisor.</span>
+          <span class="eyebrow" style="color:var(--ink-faint);">Act</span>
+          <span style="font-size:14px; color:var(--ink-faint);">Draft CFO-facing note. Pending.</span>
+          <span class="eyebrow" style="color:var(--ink-faint);">Verify</span>
+          <span style="font-size:14px; color:var(--ink-faint);">Confirm reply within 5 business days. Pending.</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;" class="grid-2">
+      <div class="module">
+        <div class="module-head">
+          <span class="module-name">Expansion · Helix Robotics</span>
+          <span class="module-meta">DAY 4</span>
+        </div>
+        <div class="module-body">
+          <strong>Observe</strong> Buyer added 12 seats this quarter. <br>
+          <strong>Diagnose</strong> Champion threaded EB last week. <br>
+          <strong>Decide</strong> Surface platform upsell pre-CFO meeting.
+        </div>
+      </div>
+      <div class="module">
+        <div class="module-head">
+          <span class="module-name">Proof readout · Northwind</span>
+          <span class="module-meta">DAY 9</span>
+        </div>
+        <div class="module-body">
+          <strong>Observe</strong> Pilot ran clean for 14 days. <br>
+          <strong>Diagnose</strong> Readout owner unassigned. <br>
+          <strong>Decide</strong> Name an owner before age &gt; 14d.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 - alerts and feedback -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">THREE</span>
+      <div class="section-head-text">
+        <h2>Minimal but unmistakable.</h2>
+        <p>Alerts are a thin colored spine and a short label, paired with one direct action. No drama. Toasts confirm. Modals are reserved for destructive moves.</p>
+      </div>
+    </div>
+
+    <div class="vstack">
+      <div class="alert red">
+        <span class="alert-key">Risk</span>
+        <span class="alert-body">Acme has not received the revised proposal. If they don't see it before Friday, this deal slips.</span>
+        <button class="alert-action btn btn-accent">Draft CFO note</button>
+      </div>
+      <div class="alert">
+        <span class="alert-key">Stale</span>
+        <span class="alert-body">It's been twelve days since the last brief was synthesized.</span>
+        <button class="alert-action btn btn-secondary">Run now</button>
+      </div>
+      <div class="alert blue">
+        <span class="alert-key">Signal</span>
+        <span class="alert-body">From Briefing — refresh the objection handler for Acme pricing pushback.</span>
+        <button class="alert-action btn btn-secondary">Open Briefing</button>
+      </div>
+      <div class="alert green">
+        <span class="alert-key">Verified</span>
+        <span class="alert-body">Proof readout owner assigned to Sarah. Northwind pilot enters Decide.</span>
+        <button class="alert-action btn btn-ghost">Open</button>
+      </div>
+
+      <div style="margin-top:8px;">
+        <div class="toast">
+          <span class="toast-mark">✓</span>
+          <span>Proof cast. Linked to Acme — Q4 expansion.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 - lookup grammar -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FOUR</span>
+      <div class="section-head-text">
+        <h2>The lexicon.</h2>
+        <p>Crisp slightly-squared buttons. Compact chips. Spacious inputs with a clear focus state. Tabs that feel seated. The boardroom-grade SaaS surface, calibrated.</p>
+      </div>
+    </div>
+
+    <div class="vstack" style="gap:32px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px;">Actions</div>
+        <div class="hstack">
+          <button class="btn btn-accent">Open recovery</button>
+          <button class="btn btn-primary">Carry to advisor</button>
+          <button class="btn btn-secondary">Save draft</button>
+          <button class="btn btn-ghost">Dismiss</button>
+          <span class="toggle on"></span>
+          <span class="toggle"></span>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px;">Chips</div>
+        <div class="hstack" style="gap:10px;">
+          <span class="chip chip--healthy">On track</span>
+          <span class="chip chip--signal">New signal</span>
+          <span class="chip chip--attn">Needs attention</span>
+          <span class="chip chip--risk">At risk</span>
+          <span class="chip">Awaiting</span>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="eyebrow" style="margin-bottom:14px;">Form field</div>
+          <div class="field-label">Buying group minimum</div>
+          <input class="input" value="5">
+          <div class="field-help">How many decision-makers typically have to agree before a deal closes?</div>
+        </div>
+        <div>
+          <div class="eyebrow" style="margin-bottom:14px;">Search · ⌘K</div>
+          <div class="palette">
+            <div class="palette-input">whats at risk_</div>
+            <div class="palette-row hl">
+              <span class="palette-kind">Skill</span>
+              <span>What's at risk this week</span>
+              <span class="palette-key">↵</span>
+            </div>
+            <div class="palette-row">
+              <span class="palette-kind">Room</span>
+              <span>Deal Workspace</span>
+              <span class="palette-key">⌘1</span>
+            </div>
+            <div class="palette-row">
+              <span class="palette-kind">Room</span>
+              <span>Future Autopsy</span>
+              <span class="palette-key">⌘2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <p>Quiet Command — pure direction. A premium operating shell. Strong vertical rhythm. Modular blocks with compact headers. Decision Rail as the signature workflow pattern. Minimal alerts with one direct action. The boardroom OS Antaeus would feel like if the alarms came off.</p>
+    <div class="eyebrow">DRAFT · 2026·06·05</div>
+  </footer>
+
+</div>
+
+</body>
+</html>

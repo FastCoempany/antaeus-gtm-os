@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Inscription — pure direction</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F4EE;
+    --paper: #FBFAF4;
+    --paper-light: #FFFFFF;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.10);
+    --hair-strong: rgba(10, 28, 64, 0.20);
+    --hair-incised: rgba(10, 28, 64, 0.36);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.08);
+    --shadow-rest: 0 1px 2px rgba(10, 28, 64, 0.03), 0 3px 10px rgba(10, 28, 64, 0.04);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 96px 56px 144px;
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  .masthead { margin-bottom: 144px; max-width: 720px; }
+  .masthead-rule {
+    width: 64px;
+    height: 1px;
+    background: var(--ink);
+    margin-bottom: 32px;
+  }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 72px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 0 0 24px;
+  }
+  .masthead-sub {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 32px;
+  }
+  .masthead-body { font-size: 16px; line-height: 1.75; max-width: 60ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  .section { margin-bottom: 144px; }
+  .section-head {
+    margin-bottom: 56px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 40px;
+    line-height: 1.05;
+    margin: 0 0 12px;
+  }
+  .section-head-text p {
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 56ch;
+    line-height: 1.55;
+  }
+
+  /* ============================= */
+  /* INSCRIPTION HEADER (signature) */
+  /* ============================= */
+  .inscription {
+    padding: 0;
+    max-width: 760px;
+  }
+  .inscription-rule {
+    height: 1px;
+    background: var(--ink);
+    width: 64px;
+    margin-bottom: 28px;
+  }
+  .inscription-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .inscription-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 48px;
+    line-height: 1.0;
+    margin: 0 0 36px;
+    letter-spacing: -0.01em;
+  }
+  .inscription-fields {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 14px 36px;
+    padding: 24px 0 28px;
+    border-top: 1px solid var(--hair-incised);
+    border-bottom: 1px solid var(--hair-incised);
+  }
+  .inscription-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-top: 4px;
+  }
+  .inscription-val { font-size: 15px; color: var(--ink); line-height: 1.55; }
+  .inscription-val.heavy {
+    font-family: "DM Serif Display", serif;
+    font-size: 19px;
+    line-height: 1.35;
+  }
+  .inscription-attribution {
+    margin-top: 24px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    color: var(--ink-faint);
+  }
+
+  /* ============================= */
+  /* JUDGMENT STAMP                 */
+  /* ============================= */
+  .stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: inline-flex;
+    align-items: center;
+  }
+  .stamp::before { content: '['; margin-right: 4px; color: currentColor; opacity: 0.6; }
+  .stamp::after { content: ']'; margin-left: 4px; color: currentColor; opacity: 0.6; }
+  .stamp--risk { color: var(--red); }
+  .stamp--attn { color: var(--amber); }
+  .stamp--exec { color: var(--ink); }
+  .stamp--act { color: var(--orange); }
+
+  /* Capsule label variant */
+  .capsule {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid currentColor;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: transparent;
+  }
+  .capsule--blocked { color: var(--red); }
+  .capsule--expansion { color: #15803D; }
+  .capsule--exec { color: var(--ink); }
+  .capsule--neutral { color: var(--ink-soft); }
+
+  /* ============================= */
+  /* DECISION DOCUMENT (Card)       */
+  /* ============================= */
+  .document {
+    background: var(--paper);
+    padding: 32px 36px;
+    border: 1px solid var(--hair);
+    border-radius: 4px;
+    box-shadow: var(--shadow-rest);
+  }
+  .document-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .document-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .document-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1.1;
+    margin: 8px 0 6px;
+  }
+  .document-context {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+  .document-rule {
+    height: 1px;
+    background: var(--hair-incised);
+    margin: 16px 0 20px;
+  }
+  .document-fields {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 10px 28px;
+    margin-bottom: 24px;
+  }
+  .document-fields .k {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-top: 4px;
+  }
+  .document-fields .v {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .document-fields .v.heavy {
+    font-family: "DM Serif Display", serif;
+    font-size: 17px;
+  }
+  .document-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid var(--hair-incised);
+    padding-top: 16px;
+    margin-top: 8px;
+  }
+
+  /* ============================= */
+  /* JUDGMENT BLOCK                 */
+  /* ============================= */
+  .judgment {
+    border: 1px solid var(--hair-strong);
+    border-radius: 4px;
+    background: var(--paper);
+    padding: 24px 28px;
+    text-align: center;
+  }
+  .judgment-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .judgment-text {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1.2;
+    margin: 0 0 16px;
+  }
+  .judgment-stamp-row {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  /* Buttons */
+  .btn {
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 18px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-accent { background: var(--orange); color: white; }
+  .btn-secondary { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); }
+
+  /* Inputs */
+  .input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 3px;
+    background: var(--paper-light);
+    font: inherit;
+    font-size: 14px;
+  }
+  .input:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px var(--orange-soft); }
+  .field-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .field-help {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* Modal as decision document */
+  .modal {
+    background: var(--paper);
+    border: 1px solid var(--hair-strong);
+    border-radius: 4px;
+    padding: 28px 32px;
+    max-width: 480px;
+    box-shadow: 0 24px 64px rgba(10, 28, 64, 0.12);
+  }
+  .modal-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .modal-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    margin: 0 0 12px;
+  }
+  .modal-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    border-top: 1px solid var(--hair-incised);
+    padding-top: 16px;
+  }
+
+  /* Empty state — guidance, not mascot */
+  .empty {
+    text-align: center;
+    padding: 64px 32px;
+    border: 1px dashed var(--hair-strong);
+    border-radius: 4px;
+    background: transparent;
+    max-width: 600px;
+  }
+  .empty-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .empty-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1.15;
+    margin: 0 0 12px;
+  }
+  .empty-body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 44ch;
+    margin: 0 auto 24px;
+    line-height: 1.65;
+  }
+
+  /* Layout helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .vstack { display: flex; flex-direction: column; gap: 24px; }
+
+  /* Pull quote / pull */
+  .pull {
+    padding: 6px 0 6px 24px;
+    border-left: 1px solid var(--ink);
+    margin: 32px 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.4;
+    max-width: 60ch;
+  }
+
+  .colophon {
+    margin-top: 144px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hair-incised);
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    line-height: 1.65;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead-rule"></div>
+    <p class="eyebrow">Modern Inscription · pure direction · 2026·06·05</p>
+    <h1>Modern Inscription.</h1>
+    <p class="masthead-sub">A clean operating surface with a subtle sense of record, permanence, and judgment.</p>
+    <p class="masthead-body">
+      Not editorial. Not architectural. Not ancient. A modern system where important GTM decisions are <strong>inscribed</strong> into the workspace — held, referenced, inherited. Elegant. Restrained. Slightly ceremonial. Used for surfaces the system has earned: the strategic brief, the autopsy verdict, the handoff memo, the board-ready summary. The system preserves what matters.
+    </p>
+  </header>
+
+  <!-- 01 - inscription headers -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">ONE</span>
+      <div class="section-head-text">
+        <h2>The signature. Inscription headers.</h2>
+        <p>A reusable header pattern for surfaces that earn weight. Fine top rule, restrained eyebrow, serif title, ruled metadata grid. Official without being bureaucratic.</p>
+      </div>
+    </div>
+
+    <div class="inscription">
+      <div class="inscription-rule"></div>
+      <div class="inscription-eyebrow">Strategic Account Brief · v3 · drawn 2026·06·05</div>
+      <h3 class="inscription-title">Applied Systems</h3>
+      <div class="inscription-fields">
+        <div class="inscription-key">Customer</div>
+        <div class="inscription-val heavy">Applied Systems · global insurance technology</div>
+        <div class="inscription-key">Stage</div>
+        <div class="inscription-val">Expansion · post-renewal, pre-platform commit</div>
+        <div class="inscription-key">Primary Constraint</div>
+        <div class="inscription-val">Legal / Security — data residency in EU is the open question</div>
+        <div class="inscription-key">Recommended Posture</div>
+        <div class="inscription-val">Executive Alignment · multi-thread to CISO + CFO before next QBR</div>
+        <div class="inscription-key">Owner</div>
+        <div class="inscription-val">Founder, with handoff to CRO on hire</div>
+      </div>
+      <div class="inscription-attribution">— Drawn by Founder · for the first CRO hire · 2026·06·05</div>
+    </div>
+
+    <p class="pull">
+      GTM work has memory. Deals die because knowledge evaporates. The system preserves what matters.
+    </p>
+  </section>
+
+  <!-- 02 - judgment stamps -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">TWO</span>
+      <div class="section-head-text">
+        <h2>Judgment stamps.</h2>
+        <p>Not literal rubber stamps. Restrained state markers — letter-spaced, bracketed, used sparingly. When they appear, they carry weight.</p>
+      </div>
+    </div>
+
+    <div class="vstack">
+      <div class="judgment">
+        <div class="judgment-eyebrow">Stated judgment · Acme Corp.</div>
+        <p class="judgment-text">Likely to slip without an executive backchannel.</p>
+        <div class="judgment-stamp-row">
+          <span class="stamp stamp--risk">Likely to slip</span>
+          <span class="stamp stamp--exec">No executive access</span>
+          <span class="stamp stamp--attn">Multi-threading required</span>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:20px; flex-wrap:wrap;">
+        <span class="capsule capsule--blocked">Blocked</span>
+        <span class="capsule capsule--expansion">Expansion</span>
+        <span class="capsule capsule--exec">Exec Risk</span>
+        <span class="capsule capsule--neutral">Awaiting Readout</span>
+      </div>
+
+      <p style="font-size:13px; color:var(--ink-soft); max-width:64ch; margin:8px 0 0;">
+        Capsule labels for status; bracketed stamps for judgment. Both restrained, both rare. The discipline is using them sparingly so they keep their weight.
+      </p>
+    </div>
+  </section>
+
+  <!-- 03 - decision documents (cards) -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">THREE</span>
+      <div class="section-head-text">
+        <h2>Decision documents.</h2>
+        <p>The card pattern, reframed as a small document. Eyebrow, serif title, ruled field grid, signature footer. Less object, more record.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="document">
+        <div class="document-eyebrow">Account · expansion brief</div>
+        <h3 class="document-title">Acme Corp.</h3>
+        <p class="document-context">Enterprise · proposal stage · day 18</p>
+        <div class="document-rule"></div>
+        <div class="document-fields">
+          <div class="k">Signal</div><div class="v">Champion silent for 12 days</div>
+          <div class="k">Cause</div><div class="v">Procurement re-opened pricing terms</div>
+          <div class="k">Next</div><div class="v heavy">Send revised proposal to CFO before EOW</div>
+        </div>
+        <div class="document-foot">
+          <span class="stamp stamp--risk">Likely to slip</span>
+          <button class="btn btn-accent">Open recovery</button>
+        </div>
+      </div>
+
+      <div class="document">
+        <div class="document-eyebrow">Account · executive escalation</div>
+        <h3 class="document-title">Cordillera Health</h3>
+        <p class="document-context">Strategic · negotiation · day 47</p>
+        <div class="document-rule"></div>
+        <div class="document-fields">
+          <div class="k">Signal</div><div class="v">Legal stalled on data residency clause</div>
+          <div class="k">Cause</div><div class="v">No exec sponsor inside customer org</div>
+          <div class="k">Next</div><div class="v heavy">Backchannel via board advisor to CTO</div>
+        </div>
+        <div class="document-foot">
+          <span class="stamp stamp--exec">Executive decision required</span>
+          <button class="btn btn-primary">Carry to advisor</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 - modal + form + empty -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FOUR</span>
+      <div class="section-head-text">
+        <h2>The quieter surfaces.</h2>
+        <p>Modals read as decision documents, not popups. Inputs are fine-lined and spacious. Empty states read as guidance, not mascot comedy.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="modal">
+        <div class="modal-eyebrow">Confirm · destructive</div>
+        <h3 class="modal-title">Discard draft?</h3>
+        <p class="modal-body">You've made unsaved edits to this proof draft. Discarding clears them. There is no reversion path.</p>
+        <div class="modal-actions">
+          <button class="btn btn-ghost">Cancel</button>
+          <button class="btn btn-primary">Discard</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="vstack" style="gap:18px;">
+          <div>
+            <div class="field-label">Buying group minimum</div>
+            <input class="input" value="5">
+            <div class="field-help">Typical three to seven decision-makers for most B2B teams.</div>
+          </div>
+          <div>
+            <div class="field-label">Notes</div>
+            <textarea class="input" rows="3" style="resize:vertical; font-family:inherit;">Sarah needs the revised proposal by Friday. Procurement to follow on Monday.</textarea>
+            <div class="field-help">Authored prose. Lives in the brief alongside the structured fields.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:32px;">
+      <div class="empty">
+        <div class="empty-eyebrow">No briefs yet</div>
+        <h3 class="empty-title">The brief is composed when the work has earned one.</h3>
+        <p class="empty-body">Cast a proof, close a deal, run an autopsy. Each adds material to the brief. The system surfaces the brief when there is something worth inscribing.</p>
+        <button class="btn btn-accent">Open the next move</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 - lookup grammar -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FIVE</span>
+      <div class="section-head-text">
+        <h2>The lexicon.</h2>
+        <p>Rectangular buttons with precise spacing. Bracketed capsules. Mono only for codes and dates. Serif reserved for the moments that earn it.</p>
+      </div>
+    </div>
+
+    <div class="vstack" style="gap:36px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px;">Actions</div>
+        <div class="hstack">
+          <button class="btn btn-accent">Open recovery</button>
+          <button class="btn btn-primary">Carry to advisor</button>
+          <button class="btn btn-secondary">Save draft</button>
+          <button class="btn btn-ghost">Dismiss</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px;">Capsule labels</div>
+        <div class="hstack">
+          <span class="capsule capsule--blocked">Blocked</span>
+          <span class="capsule capsule--expansion">Expansion</span>
+          <span class="capsule capsule--exec">Exec Risk</span>
+          <span class="capsule capsule--neutral">Awaiting Readout</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px;">Judgment stamps</div>
+        <div class="hstack" style="gap:24px;">
+          <span class="stamp stamp--risk">Likely to slip</span>
+          <span class="stamp stamp--exec">No executive access</span>
+          <span class="stamp stamp--attn">Multi-threading required</span>
+          <span class="stamp stamp--act">Carry to advisor</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <p>Modern Inscription — pure direction. Inscription headers for the surfaces the system has earned. Judgment stamps used sparingly so they carry weight. Decision documents instead of cards. Modals as records, not popups. The system preserves what matters.</p>
+    <div class="eyebrow">DRAFT · 2026·06·05</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
