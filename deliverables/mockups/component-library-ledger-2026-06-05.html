@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledger UI — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FBFAF6;
+    --field: #F4F3EE;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --rule: rgba(10, 28, 64, 0.18);
+    --rule-soft: rgba(10, 28, 64, 0.08);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 72px 56px 144px;
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  .masthead { margin-bottom: 64px; max-width: 720px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 56px;
+    line-height: 1.0;
+    letter-spacing: -0.015em;
+    margin: 20px 0 14px;
+  }
+  .masthead-sub { font-size: 17px; line-height: 1.5; color: var(--ink-soft); margin: 0 0 20px; }
+  .masthead-body { font-size: 14px; line-height: 1.7; max-width: 60ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  /* ============================ */
+  /* THE LEDGER                    */
+  /* ============================ */
+  .ledger-head {
+    display: grid;
+    grid-template-columns: 220px 200px 1fr 100px;
+    gap: 24px;
+    padding: 10px 0 8px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .ledger-head-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 32px;
+    margin-bottom: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .ledger-head-meta-section {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 220px 200px 1fr 100px;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: baseline;
+  }
+  .entry:last-child { border-bottom: 1px solid var(--rule); }
+
+  .entry-account {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.15;
+  }
+  .entry-account-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 4px;
+  }
+  .entry-signal {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .entry-signal-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+  .entry-move {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .entry-move-action {
+    margin-top: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--orange);
+    border-bottom: 1px solid var(--orange);
+    padding-bottom: 1px;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .entry-state {
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+  }
+  .entry-state.risk { color: var(--red); }
+  .entry-state.attn { color: var(--amber); }
+  .entry-state.exec { color: var(--ink); }
+  .entry-state.healthy { color: #15803D; }
+
+  /* Sub-entries — evidence, owner, due */
+  .sub-row {
+    display: grid;
+    grid-template-columns: 220px 200px 1fr 100px;
+    gap: 24px;
+    padding: 4px 0;
+    align-items: baseline;
+  }
+  .sub-row-key {
+    grid-column: 2 / 3;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-left: 0;
+    text-align: right;
+    padding-right: 4px;
+  }
+  .sub-row-val {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    padding-left: 12px;
+    border-left: 1px solid var(--rule-soft);
+  }
+  .sub-row-val strong { color: var(--ink); font-weight: 500; }
+
+  /* Group header — section break in the ledger */
+  .group-head {
+    margin-top: 56px;
+    padding: 8px 0 6px;
+    border-bottom: 1.5px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .group-head h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .group-head-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .group-head-meta strong { color: var(--ink); font-weight: 700; }
+
+  /* Inline filter bar — running log style */
+  .filter-bar {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 12px 0;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .filter-bar-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .filter-bar-link {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+  }
+  .filter-bar-link.active {
+    color: var(--ink);
+    font-weight: 600;
+    border-bottom-color: var(--orange);
+  }
+  .filter-bar-meta {
+    margin-left: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+
+  /* Inline action — text link, not button */
+  .inline-action {
+    font-family: "Public Sans", sans-serif;
+    font-size: 13px;
+    color: var(--orange);
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid var(--orange);
+    cursor: pointer;
+    padding: 0 0 1px;
+    font-weight: 600;
+  }
+  .inline-action:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* Concept */
+  .concept {
+    margin-top: 96px;
+    padding: 24px 0 0;
+    border-top: 2px solid var(--ink);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">LEDGER UI · DIRECTION 01 · 2026·06·05</p>
+    <h1>The Ledger.</h1>
+    <p class="masthead-sub">A precise commercial logbook for revenue motion. Not a dashboard.</p>
+    <p class="masthead-body">
+      GTM is not a gallery of content cards. It is a sequence of commercial facts and decisions. Antaeus reads as an <strong>operating record</strong>: ruled rows, strong left labels, inline status, indented evidence, calm density. Every account, signal, decision, and move becomes part of an ordered ledger the operator scans top-to-bottom and the inheritor can read like a book.
+    </p>
+  </header>
+
+  <!-- Top bar -->
+  <div class="filter-bar">
+    <span class="filter-bar-label">— Show</span>
+    <span class="filter-bar-link active">All open</span>
+    <span class="filter-bar-link">At risk</span>
+    <span class="filter-bar-link">Stale &gt; 14d</span>
+    <span class="filter-bar-link">Pending readout</span>
+    <span class="filter-bar-link">Closed this quarter</span>
+    <span class="filter-bar-meta">Tuesday · 09:12 CT · 37 entries</span>
+  </div>
+
+  <!-- HEADER ROW -->
+  <div class="ledger-head">
+    <div>Account</div>
+    <div>Signal</div>
+    <div>Move</div>
+    <div style="text-align:right;">State</div>
+  </div>
+
+  <!-- AT RISK GROUP -->
+  <div class="ledger-head-meta" style="margin-top:24px;">
+    <span class="ledger-head-meta-section">At risk · 3 entries · $476K</span>
+    <span>updated 09:08 CT</span>
+  </div>
+
+  <div class="entry">
+    <div>
+      <div class="entry-account">Acme Corp.</div>
+      <div class="entry-account-meta">Proposal · day 18 · $84K</div>
+    </div>
+    <div>
+      <div class="entry-signal-kind">SIGNAL</div>
+      <div class="entry-signal">Champion silent for twelve days. Procurement re-opened pricing.</div>
+    </div>
+    <div>
+      <div class="entry-move">Send revised proposal to CFO before EOW.</div>
+      <button class="inline-action">Draft note ↗</button>
+    </div>
+    <div class="entry-state risk">Likely to slip</div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Evidence</div>
+    <div class="sub-row-val">Procurement reopened pricing in Slack on Nov 3. Champion has not relayed it to the CFO. Pattern matches three prior closed-lost deals where the same shape played out at quarter-end.</div>
+    <div></div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Owner</div>
+    <div class="sub-row-val"><strong>Antaeus</strong> · backchannel available via Tasha</div>
+    <div></div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Due</div>
+    <div class="sub-row-val"><strong>Friday EOW</strong> — beyond this, the deal slips at quarter-end</div>
+    <div></div>
+  </div>
+
+  <div class="entry">
+    <div>
+      <div class="entry-account">Cordillera Health</div>
+      <div class="entry-account-meta">Negotiation · day 47 · $340K</div>
+    </div>
+    <div>
+      <div class="entry-signal-kind">CONSTRAINT</div>
+      <div class="entry-signal">Legal stalled on data residency. No exec sponsor inside the customer org.</div>
+    </div>
+    <div>
+      <div class="entry-move">Backchannel via Tasha to the CTO.</div>
+      <button class="inline-action">Carry to advisor ↗</button>
+    </div>
+    <div class="entry-state exec">Executive required</div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Evidence</div>
+    <div class="sub-row-val">Legal review opened 26 May. CTO uninvolved in last three meetings. Tasha has an opening on her board calendar next week.</div>
+    <div></div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Owner</div>
+    <div class="sub-row-val"><strong>Founder</strong> · paired with advisor</div>
+    <div></div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Due</div>
+    <div class="sub-row-val"><strong>Next Thursday</strong> · ahead of the legal review deadline</div>
+    <div></div>
+  </div>
+
+  <div class="entry">
+    <div>
+      <div class="entry-account">Stonebridge Capital</div>
+      <div class="entry-account-meta">Discovery · day 22 · $56K</div>
+    </div>
+    <div>
+      <div class="entry-signal-kind">DRIFT</div>
+      <div class="entry-signal">No movement for seven days. Champion may have changed roles.</div>
+    </div>
+    <div>
+      <div class="entry-move">Verify champion is still in seat.</div>
+      <button class="inline-action">Check LinkedIn ↗</button>
+    </div>
+    <div class="entry-state risk">Silent</div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Evidence</div>
+    <div class="sub-row-val">Last reply 29 May. No calendar activity since. LinkedIn shows champion's title updated last week.</div>
+    <div></div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Owner</div>
+    <div class="sub-row-val"><strong>RevOps</strong></div>
+    <div></div>
+  </div>
+
+  <!-- PENDING READOUT GROUP -->
+  <div class="group-head">
+    <h2>Pending readout</h2>
+    <span class="group-head-meta"><strong>2 entries</strong> · $352K · readout window closes 14d</span>
+  </div>
+
+  <div class="entry">
+    <div>
+      <div class="entry-account">Northwind Logistics</div>
+      <div class="entry-account-meta">Proof · day 9 · $112K</div>
+    </div>
+    <div>
+      <div class="entry-signal-kind">SIGNAL</div>
+      <div class="entry-signal">Pilot ran clean. No readout scheduled.</div>
+    </div>
+    <div>
+      <div class="entry-move">Name a readout owner this morning.</div>
+      <button class="inline-action">Assign owner ↗</button>
+    </div>
+    <div class="entry-state attn">No owner</div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Evidence</div>
+    <div class="sub-row-val">Pilot completed cleanly 31 May. Champion approved metrics in writing. Readout owner field empty for five days.</div>
+    <div></div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Candidate</div>
+    <div class="sub-row-val"><strong>Sarah · VP Customer Success</strong> · pre-confirmed availability</div>
+    <div></div>
+  </div>
+
+  <div class="entry">
+    <div>
+      <div class="entry-account">Helix Robotics</div>
+      <div class="entry-account-meta">Negotiation · day 4 · $240K</div>
+    </div>
+    <div>
+      <div class="entry-signal-kind">PROGRESS</div>
+      <div class="entry-signal">CFO meeting confirmed for Thursday. Pre-read due Wednesday morning.</div>
+    </div>
+    <div>
+      <div class="entry-move">No action needed today.</div>
+      <button class="inline-action">Open deal ↗</button>
+    </div>
+    <div class="entry-state healthy">On track</div>
+  </div>
+  <div class="sub-row">
+    <div></div>
+    <div class="sub-row-key">— Evidence</div>
+    <div class="sub-row-val">Champion threaded EB on 28 May. Pre-read drafted; review pending. Antaeus will surface a reminder if the pre-read does not move by tomorrow.</div>
+    <div></div>
+  </div>
+
+  <!-- CLOSED THIS WEEK -->
+  <div class="group-head">
+    <h2>Closed this week</h2>
+    <span class="group-head-meta"><strong>2 entries</strong> · $172K · ledger marks for record</span>
+  </div>
+
+  <div class="entry">
+    <div>
+      <div class="entry-account">Marlin Group</div>
+      <div class="entry-account-meta">Closed-won · 30 May · $88K</div>
+    </div>
+    <div>
+      <div class="entry-signal-kind">CLOSED</div>
+      <div class="entry-signal">Discovery → close in 19 days. Champion + EB threaded by week 2.</div>
+    </div>
+    <div>
+      <div class="entry-move">Add to inheritance — pattern worth preserving.</div>
+      <button class="inline-action">Open kit entry ↗</button>
+    </div>
+    <div class="entry-state healthy">Won</div>
+  </div>
+
+  <div class="entry">
+    <div>
+      <div class="entry-account">Castor &amp; Co.</div>
+      <div class="entry-account-meta">Closed-lost · 28 May · $84K</div>
+    </div>
+    <div>
+      <div class="entry-signal-kind">CLOSED</div>
+      <div class="entry-signal">Procurement re-opened pricing late. CFO never saw the redline.</div>
+    </div>
+    <div>
+      <div class="entry-move">Autopsy on record. Pattern flagged for current Acme deal.</div>
+      <button class="inline-action">Open autopsy ↗</button>
+    </div>
+    <div class="entry-state">Lost</div>
+  </div>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin:0 0 12px;">
+      <strong>Ledger UI.</strong> No cards. The workspace is a ruled record of commercial facts and decisions. Each entry has the same shape — Account · Signal · Move · State — and indents into Evidence, Owner, Due, Candidate beneath it. Inline actions are text links underlined in orange, not button blocks. Section breaks render as ruled headings with serif titles and mono counts.
+    </p>
+    <p style="margin:0;">
+      <strong>The native primitives.</strong> Ledger row replaces card. Entry group replaces section. Detail band replaces drawer. Inline action replaces CTA block. Evidence line replaces tooltip. The discipline: calm density. Every entry earns its row; every row reads at a glance.
+    </p>
+    <p style="margin:14px 0 0;">
+      Canon preserved. Slightly warmer paper for the ledger feel. DM Serif Display for account names and group headings. Public Sans for body. JetBrains Mono for column codes, kinds, timestamps. Orange as the rationed accent for action links and active filter.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>

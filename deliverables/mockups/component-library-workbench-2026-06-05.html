@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workbench UI — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F2F4F8;
+    --workbench: #F9FAFB;
+    --tray: rgba(10, 28, 64, 0.04);
+    --tray-warm: rgba(230, 112, 30, 0.04);
+    --tray-act: rgba(230, 112, 30, 0.07);
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --rule: rgba(10, 28, 64, 0.10);
+    --rule-strong: rgba(10, 28, 64, 0.18);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1320px; margin: 0 auto; padding: 64px 40px 144px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  .masthead { margin-bottom: 56px; max-width: 720px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 56px;
+    line-height: 1.0;
+    letter-spacing: -0.015em;
+    margin: 20px 0 14px;
+  }
+  .masthead-sub { font-size: 17px; line-height: 1.5; color: var(--ink-soft); margin: 0 0 20px; }
+  .masthead-body { font-size: 14px; line-height: 1.7; max-width: 64ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  /* ============================ */
+  /* THE WORKBENCH — zoned layout */
+  /* ============================ */
+  .workbench {
+    background: var(--workbench);
+    border-radius: 14px;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  /* Object header — what the operator is working on */
+  .object-head {
+    padding: 20px 28px;
+    border-bottom: 1.5px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .object-head h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .object-head-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+
+  /* The three zones */
+  .zones {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    min-height: 480px;
+  }
+  .zone {
+    padding: 22px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-right: 1px solid var(--rule);
+  }
+  .zone:last-child { border-right: none; }
+  .zone.source { background: transparent; }
+  .zone.diagnosis { background: var(--tray); }
+  .zone.move { background: var(--tray-act); }
+
+  .zone-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule-strong);
+    margin-bottom: 4px;
+  }
+  .zone-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .zone-name.act { color: var(--orange); }
+  .zone-count {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.10em;
+  }
+
+  /* Items inside zones — NOT cards */
+  .item {
+    padding: 8px 0 10px;
+    border-bottom: 1px dotted var(--rule);
+    cursor: pointer;
+  }
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: rgba(10,28,64,0.02); margin: 0 -12px; padding-left: 12px; padding-right: 12px; border-radius: 4px; }
+  .item-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+  .item-tag.risk { color: var(--red); }
+  .item-tag.attn { color: var(--amber); }
+  .item-tag.act { color: var(--orange); font-weight: 600; }
+  .item-title {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .item-meta {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .item.recommended .item-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 17px;
+    line-height: 1.25;
+    font-weight: 400;
+  }
+
+  /* Item with arrow connector — shows movement Source → Diagnosis → Move */
+  .item.echo::before {
+    content: '↳ ';
+    color: var(--ink-faint);
+    font-family: "JetBrains Mono", monospace;
+    margin-right: 4px;
+  }
+
+  /* The proof strip — bottom */
+  .proof-strip {
+    padding: 16px 28px;
+    border-top: 1.5px solid var(--ink);
+    background: var(--workbench);
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .proof-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    padding-top: 2px;
+  }
+  .proof-strip-rows { display: flex; flex-direction: column; gap: 6px; }
+  .proof-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .proof-row-time {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .proof-row-text { color: var(--ink-soft); }
+
+  /* Command slot at the foot */
+  .command-slot {
+    padding: 14px 28px;
+    border-top: 1px solid var(--rule);
+    background: var(--workbench);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .command-input {
+    flex: 1;
+    padding: 9px 14px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 6px;
+    background: white;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .command-input::before { content: '⌘ '; color: var(--ink-faint); }
+
+  /* Account switcher at the top */
+  .account-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--workbench);
+  }
+  .account-tab {
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .account-tab:hover { color: var(--ink); }
+  .account-tab.active {
+    color: var(--ink);
+    font-weight: 600;
+    position: relative;
+    background: white;
+  }
+  .account-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0; height: 2px;
+    background: var(--orange);
+  }
+  .account-tab-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+  .account-tab-dot.attn { background: var(--amber); }
+  .account-tab-dot.healthy { background: var(--green); }
+  .account-tab-dot.quiet { background: var(--ink-quiet); }
+
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 8px 14px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-accent { background: var(--orange); color: white; }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 12px; }
+
+  .concept {
+    margin-top: 80px;
+    padding: 24px 28px;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">WORKBENCH UI · DIRECTION 02 · 2026·06·05</p>
+    <h1>The Workbench.</h1>
+    <p class="masthead-sub">A serious operator's bench for turning messy account reality into next moves.</p>
+    <p class="masthead-body">
+      Not a page. A workbench. Objects live in <strong>zones</strong>: Source on the left (raw signals, CRM facts, notes), Diagnosis in the middle (what the system thinks is happening), Move on the right (the recommended action). The eye learns the spatial logic once and reads every account the same way. Beneath the bench: the Proof Strip — evidence, timestamps, source links. At the foot: the Command Slot.
+    </p>
+  </header>
+
+  <div class="workbench">
+
+    <!-- Account switcher -->
+    <div class="account-tabs">
+      <span class="account-tab active">
+        <span class="account-tab-dot"></span>
+        Acme Corp.
+      </span>
+      <span class="account-tab">
+        <span class="account-tab-dot attn"></span>
+        Northwind Logistics
+      </span>
+      <span class="account-tab">
+        <span class="account-tab-dot"></span>
+        Cordillera Health
+      </span>
+      <span class="account-tab">
+        <span class="account-tab-dot healthy"></span>
+        Helix Robotics
+      </span>
+      <span class="account-tab">
+        <span class="account-tab-dot quiet"></span>
+        Stonebridge Capital
+      </span>
+    </div>
+
+    <!-- Object head -->
+    <div class="object-head">
+      <div>
+        <h2>Acme Corp.</h2>
+        <div class="eyebrow" style="margin-top:4px;">PROPOSAL · DAY 18 · $84,000 · ENTERPRISE</div>
+      </div>
+      <div class="object-head-meta">UPDATED 09:08 CT</div>
+    </div>
+
+    <!-- The three zones -->
+    <div class="zones">
+
+      <!-- SOURCE -->
+      <div class="zone source">
+        <div class="zone-head">
+          <span class="zone-name">— Source</span>
+          <span class="zone-count">6 inputs</span>
+        </div>
+
+        <div class="item">
+          <div class="item-tag">SLACK · NOV 3</div>
+          <div class="item-title">Procurement re-opened pricing</div>
+          <div class="item-meta">Marcus from procurement asked about volume discount tiers.</div>
+        </div>
+
+        <div class="item">
+          <div class="item-tag">EMAIL · NOV 1</div>
+          <div class="item-title">Champion went silent</div>
+          <div class="item-meta">Last reply on the demo follow-up. No response since.</div>
+        </div>
+
+        <div class="item">
+          <div class="item-tag">CRM</div>
+          <div class="item-title">EB unconfirmed</div>
+          <div class="item-meta">CFO Marcus Reed listed as buyer; never threaded directly.</div>
+        </div>
+
+        <div class="item">
+          <div class="item-tag">NOTES · 28 OCT</div>
+          <div class="item-title">Pricing pressure mentioned in demo</div>
+          <div class="item-meta">Champion said "we'll need to talk numbers" — never landed in writing.</div>
+        </div>
+
+        <div class="item">
+          <div class="item-tag">SIGNAL CONSOLE</div>
+          <div class="item-title">Late-stage discount pattern (2 ICP segments)</div>
+          <div class="item-meta">Briefing surfaced this 24 hours ago. Could affect the framing.</div>
+        </div>
+      </div>
+
+      <!-- DIAGNOSIS -->
+      <div class="zone diagnosis">
+        <div class="zone-head">
+          <span class="zone-name">— Diagnosis</span>
+          <span class="zone-count">3 reads</span>
+        </div>
+
+        <div class="item">
+          <div class="item-tag risk">— PRIMARY RISK</div>
+          <div class="item-title">Deal slips if CFO doesn't see the redline by Friday.</div>
+          <div class="item-meta">Champion silence + reopened pricing + EB never threaded = the shape of three prior closed-lost deals.</div>
+        </div>
+
+        <div class="item echo">
+          <div class="item-tag">— CONSTRAINT</div>
+          <div class="item-title">No live thread to the economic buyer.</div>
+          <div class="item-meta">Champion is the only relationship inside the account.</div>
+        </div>
+
+        <div class="item echo">
+          <div class="item-tag">— PATTERN</div>
+          <div class="item-title">Procurement-reopens-pricing shape is repeating.</div>
+          <div class="item-meta">Castor, Ridgeline, Falconer — three autopsies on record show the same shape.</div>
+        </div>
+      </div>
+
+      <!-- MOVE -->
+      <div class="zone move">
+        <div class="zone-head">
+          <span class="zone-name act">— Move</span>
+          <span class="zone-count">2 queued</span>
+        </div>
+
+        <div class="item recommended">
+          <div class="item-tag act">— RECOMMENDED</div>
+          <div class="item-title">Send the revised proposal directly to the CFO. Before EOW.</div>
+          <div class="item-meta">The note frames the pricing reopening against the pricing-momentum pattern. Draft is queued.</div>
+        </div>
+
+        <div class="item">
+          <div class="item-tag act">— PAIRED</div>
+          <div class="item-title">Backchannel via Tasha as air cover.</div>
+          <div class="item-meta">Advisor has an opening with the CFO office through her board work at Cordillera. Cooldown clean.</div>
+        </div>
+
+        <div class="item">
+          <div class="item-tag">— PENDING</div>
+          <div class="item-title">Pre-mortem on the deal next Monday</div>
+          <div class="item-meta">If the CFO reply hasn't landed by Friday EOW.</div>
+        </div>
+
+        <div style="margin-top:auto; display:flex; gap:8px;">
+          <button class="btn btn-accent">Draft CFO note</button>
+          <button class="btn btn-ghost">Carry to Tasha</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Proof strip -->
+    <div class="proof-strip">
+      <div class="proof-key">— Proof &amp; timeline</div>
+      <div class="proof-strip-rows">
+        <div class="proof-row">
+          <span class="proof-row-time">14 NOV 09:08</span>
+          <span class="proof-row-text">System read updated: champion silence crossed 12-day threshold.</span>
+        </div>
+        <div class="proof-row">
+          <span class="proof-row-time">14 NOV 08:14</span>
+          <span class="proof-row-text">Briefing surfaced the late-stage pricing pattern. Linked to Acme automatically.</span>
+        </div>
+        <div class="proof-row">
+          <span class="proof-row-time">03 NOV 11:22</span>
+          <span class="proof-row-text">Procurement reopened pricing in Slack. Logged from CRM.</span>
+        </div>
+        <div class="proof-row">
+          <span class="proof-row-time">01 NOV 16:40</span>
+          <span class="proof-row-text">Champion sent final reply on demo follow-up. No response since.</span>
+        </div>
+        <div class="proof-row">
+          <span class="proof-row-time">28 OCT 13:18</span>
+          <span class="proof-row-text">Demo conducted. Pricing pressure mentioned but never landed in writing.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Command slot -->
+    <div class="command-slot">
+      <span class="eyebrow">⌘ COMMAND</span>
+      <input class="command-input" placeholder="Type a move, a question, or a note — or ⌘K for the palette" />
+      <button class="btn btn-accent">Run</button>
+    </div>
+
+  </div>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin:0 0 10px;">
+      <strong>Workbench UI.</strong> Not a page — a worktop. Three persistent zones: Source on the left for raw inputs (Slack, email, CRM facts, notes), Diagnosis in the middle for what the system thinks is happening (Primary risk · Constraint · Pattern), Move on the right for the recommended action. Beneath: a Proof Strip with evidence, timestamps, and source links. At the foot: a Command Slot. The eye learns the spatial logic once and reads every account the same way.
+    </p>
+    <p style="margin:0;">
+      <strong>The native primitives.</strong> Source tray replaces the card grid of raw facts. Diagnosis lane replaces "AI insights." Move lane replaces the CTA stack. Proof strip replaces the modal "evidence" popout. Command slot replaces the floating action button. The discipline: keep the zones consistent on every page. Otherwise it becomes cockpit mush.
+    </p>
+    <p style="margin:14px 0 0;">
+      Canon preserved. Bright field. DM Serif Display reserved for the working object's name and the recommended-move headline. Public Sans for everything else. JetBrains Mono for zone names, timestamps, source codes. Orange tints the Move zone and the recommended action.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>

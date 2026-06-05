@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing UI — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAFAF6;
+    --field: #F4F4EF;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --rule: rgba(10, 28, 64, 0.14);
+    --rule-soft: rgba(10, 28, 64, 0.07);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .column {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 32px 144px;
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  /* ============================ */
+  /* THE BRIEFING                  */
+  /* ============================ */
+
+  .briefing-head {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 18px;
+    margin-bottom: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .briefing-head-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .briefing-head-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+
+  .briefing-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 48px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 24px;
+  }
+
+  .briefing-opener {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0 0 56px;
+  }
+
+  /* The numbered situations */
+  .situation {
+    margin-bottom: 48px;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  .situation-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--orange);
+    text-align: right;
+  }
+  .situation-body { padding-top: 4px; }
+  .situation-section-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+  .situation-text {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    line-height: 1.3;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+  .situation-implication {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0;
+  }
+  .situation-implication strong { font-weight: 600; }
+
+  /* Recommended move — set apart */
+  .recommendation {
+    margin: 56px 0 48px;
+    padding: 32px 0 28px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  .recommendation-marker {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    color: var(--orange);
+    text-align: right;
+    padding-top: 4px;
+  }
+  .recommendation-section-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .recommendation-text {
+    font-family: "DM Serif Display", serif;
+    font-size: 30px;
+    line-height: 1.25;
+    margin: 0 0 16px;
+  }
+  .recommendation-action {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 14px;
+  }
+  .btn-accent {
+    background: var(--ink);
+    color: var(--paper);
+    font: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 22px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    border: none;
+    font: inherit;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--ink-quiet);
+    padding-bottom: 1px;
+  }
+
+  /* Evidence stack — restrained, structural */
+  .evidence {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 2px solid var(--ink);
+  }
+  .evidence-head {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .evidence-entry {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 32px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: baseline;
+  }
+  .evidence-entry:last-child { border-bottom: none; }
+  .evidence-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+  .evidence-name-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 4px;
+  }
+  .evidence-detail {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Sign-off */
+  .signoff {
+    margin-top: 56px;
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+  }
+  .signoff-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 8px;
+  }
+
+  /* Concept */
+  .concept {
+    margin-top: 120px;
+    padding: 24px 0 0;
+    border-top: 2px solid var(--ink);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* Top wordmark */
+  .wordmark {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .wordmark-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .wordmark-tagline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="column">
+
+  <header class="wordmark">
+    <div class="wordmark-name">Antaeus</div>
+    <div class="wordmark-tagline">Briefing No. 142 · Tuesday, 5 June 2026</div>
+  </header>
+
+  <!-- Briefing head -->
+  <div class="briefing-head">
+    <span class="briefing-head-eyebrow">— Today's GTM read</span>
+    <span class="briefing-head-meta">09:12 CT · 37 deals · 14d window</span>
+  </div>
+
+  <h1 class="briefing-title">Pipeline risk is concentrated. Three deals share the same shape.</h1>
+
+  <p class="briefing-opener">
+    Three deals are slipping for the same underlying reason. Acme, Cordillera, and Stonebridge all share a late-stage shape where the economic buyer has gone silent or absent while a non-EB stakeholder reopens commercial questions. The pattern is not new — it shows up in three of the last six closed-lost deals on record — but it is acute this week. Below: the situation, the implication, the move.
+  </p>
+
+  <!-- Situation 1 -->
+  <div class="situation">
+    <div class="situation-num">1.</div>
+    <div class="situation-body">
+      <div class="situation-section-label">— Situation</div>
+      <h2 class="situation-text">Late-stage legal and pricing pressure has stalled three expansion deals.</h2>
+      <p class="situation-implication">
+        Acme is at day 18 with procurement re-opening pricing. Cordillera is at day 47 with legal stalled on data residency. Stonebridge is at day 22 with the champion potentially out of seat. Each one has a different presenting issue. None of them is the real problem.
+      </p>
+    </div>
+  </div>
+
+  <!-- Situation 2 -->
+  <div class="situation">
+    <div class="situation-num">2.</div>
+    <div class="situation-body">
+      <div class="situation-section-label">— Implication</div>
+      <h2 class="situation-text">The common failure mode is executive absence.</h2>
+      <p class="situation-implication">
+        None of the three accounts has a live economic-buyer thread. The presenting issues — pricing, legal, champion turnover — all look like operational friction, but the underlying cause is that no one inside these companies is carrying the deal up to the office that decides. The pattern is not <em>product interest declining</em>. The pattern is <em>executive access never built</em>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Situation 3 -->
+  <div class="situation">
+    <div class="situation-num">3.</div>
+    <div class="situation-body">
+      <div class="situation-section-label">— Pattern weight</div>
+      <h2 class="situation-text">Three of the last six closed-lost deals show the same shape.</h2>
+      <p class="situation-implication">
+        Castor died at quarter-end last quarter. Ridgeline died Q3. Falconer died Q2. All three followed the same sequence: late-stage operational friction, champion squeezed, EB never threaded, deal slipped at the quarter line. The autopsies are on the record. This is not noise.
+      </p>
+    </div>
+  </div>
+
+  <!-- Recommendation -->
+  <div class="recommendation">
+    <div class="recommendation-marker">⇒</div>
+    <div>
+      <div class="recommendation-section-label">— Recommended move</div>
+      <p class="recommendation-text">Run a CFO-facing reframe across all three accounts before the next forecast review.</p>
+      <p style="font-size:15px; line-height:1.6; color:var(--ink-soft); margin:0;">
+        The reframe is not a sales note. It is a two-paragraph value memo addressed to the economic buyer that names the operational friction and the cost of waiting. Tasha can backchannel on Cordillera; the other two need the direct CFO note. Both can be drafted from the existing template.
+      </p>
+      <div class="recommendation-action">
+        <button class="btn-accent">Draft all three notes</button>
+        <button class="btn-ghost">Open the template</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Evidence -->
+  <section class="evidence">
+    <div class="evidence-head">— Evidence stack</div>
+
+    <div class="evidence-entry">
+      <div>
+        <div class="evidence-name">Applied Systems (Acme)</div>
+        <div class="evidence-name-meta">PROPOSAL · DAY 18 · $84K</div>
+      </div>
+      <div class="evidence-detail">
+        Champion silent twelve days. Procurement re-opened pricing on Nov 3 via Slack. CFO has not received the redline. Pattern matches three prior closed-lost (Castor, Ridgeline, Falconer).
+      </div>
+    </div>
+
+    <div class="evidence-entry">
+      <div>
+        <div class="evidence-name">Cordillera Health</div>
+        <div class="evidence-name-meta">NEGOTIATION · DAY 47 · $340K</div>
+      </div>
+      <div class="evidence-detail">
+        Legal review opened 26 May. CTO uninvolved in last three meetings. Tasha has an opening on her board calendar next week; cooldown clean.
+      </div>
+    </div>
+
+    <div class="evidence-entry">
+      <div>
+        <div class="evidence-name">Stonebridge Capital</div>
+        <div class="evidence-name-meta">DISCOVERY · DAY 22 · $56K</div>
+      </div>
+      <div class="evidence-detail">
+        Champion silent seven days. LinkedIn shows champion's title updated last week — possibly out of seat. Verify before drafting the reframe.
+      </div>
+    </div>
+  </section>
+
+  <!-- Sign-off -->
+  <div class="signoff">— Antaeus</div>
+  <div class="signoff-meta">Briefing No. 142 · sent 09:12 CT · est. 3:40 read</div>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin:0 0 12px;">
+      <strong>Briefing UI.</strong> The surface is an operational briefing, not a dashboard. Distinctiveness comes from <strong>rhetorical structure</strong>: Situation → Implication → Pattern weight → Recommendation → Evidence. Numbered statements, serif-led claims, sans-led implications, an evidence stack at the foot. The system shows judgment, not just objects.
+    </p>
+    <p style="margin:0;">
+      <strong>The native primitives.</strong> Briefing block replaces dashboard card. Situation line replaces section header. Implication line replaces subtext. Recommended move replaces CTA area. Evidence stack replaces table. Decision note replaces modal. The discipline: not everything is prose. Operators still need ledgers and workbenches for the operating work; the briefing is for the moment where the system tells the operator what it sees.
+    </p>
+    <p style="margin:14px 0 0;">
+      Canon preserved. Slightly warmed paper for the reading feel. DM Serif Display dominant — for the headline, the numbered claims, the recommendation. Public Sans for body. JetBrains Mono for the section labels, the timestamps, the deal codes. Orange as the rationed accent — the numbered marks, the recommendation label, the recommendation arrow.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>
