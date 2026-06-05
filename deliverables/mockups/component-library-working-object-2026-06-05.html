@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Working Object — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F4F6FA;
+    --surface: #FFFFFF;
+    --surface-quiet: #F8F9FC;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.06);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+    --shadow-lift: 0 1px 2px rgba(10,28,64,0.04), 0 24px 64px rgba(10,28,64,0.08);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  /* The quiet top bar — almost invisible */
+  .topbar {
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--ink-faint);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .topbar-mark {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink);
+  }
+  .topbar-cmd {
+    border: 1px solid var(--hair-strong);
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: var(--ink-soft);
+    background: var(--surface);
+  }
+
+  /* The grand layout — working object center, queued in margin */
+  .grand {
+    display: grid;
+    grid-template-columns: 1fr 720px 1fr;
+    gap: 56px;
+    padding: 56px 40px 96px;
+    align-items: start;
+    min-height: 80vh;
+  }
+  .grand-left { padding-top: 12px; }
+  .grand-right { padding-top: 12px; }
+  .grand-center { }
+
+  /* Was just here */
+  .recent-mark {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .recent {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .recent-item {
+    font-size: 13px;
+    color: var(--ink-faint);
+    padding: 6px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .recent-item:hover { background: var(--surface); color: var(--ink-soft); }
+  .recent-item .when {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-quiet);
+    width: 40px;
+    flex-shrink: 0;
+  }
+
+  /* Queued — right margin */
+  .queue-mark {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .queue {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .queue-item {
+    padding: 12px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 3px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    transition: background 0.12s;
+  }
+  .queue-item:hover { background: var(--surface); box-shadow: 0 1px 2px rgba(10,28,64,0.04); }
+  .queue-spine {
+    width: 3px;
+    height: 28px;
+    border-radius: 2px;
+    background: var(--ink-quiet);
+  }
+  .queue-spine.risk { background: var(--red); }
+  .queue-spine.attn { background: var(--amber); }
+  .queue-spine.healthy { background: var(--green); }
+  .queue-spine.exec { background: var(--ink); }
+  .queue-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .queue-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+  .queue-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* The working object — the center surface */
+  .working {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 56px 56px 48px;
+    box-shadow: var(--shadow-lift);
+  }
+  .working-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .working-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 52px;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .working-context {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  /* The read — the system's authored take */
+  .read {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    line-height: 1.35;
+    color: var(--ink);
+    margin: 0 0 36px;
+    max-width: 30ch;
+  }
+
+  /* Layered fields — Signal, Cause, Next */
+  .layers {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 16px 36px;
+    padding: 28px 0;
+    border-top: 1px solid var(--hair-strong);
+    border-bottom: 1px solid var(--hair-strong);
+    margin-bottom: 36px;
+  }
+  .layer-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-top: 4px;
+  }
+  .layer-val {
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .layer-val.heavy {
+    font-weight: 500;
+    font-size: 17px;
+  }
+
+  /* The next move — the dominant action */
+  .next-move {
+    padding: 28px 32px;
+    background: var(--surface-quiet);
+    border-radius: 10px;
+    margin-bottom: 28px;
+  }
+  .next-move-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .next-move-text {
+    font-size: 17px;
+    line-height: 1.55;
+    margin: 0 0 18px;
+    font-weight: 500;
+  }
+  .next-move-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn--primary { background: var(--orange); color: white; }
+  .btn--secondary { background: var(--surface); color: var(--ink); border-color: var(--hair-strong); }
+  .btn--ghost { background: transparent; color: var(--ink-soft); padding: 11px 16px; }
+
+  /* Related — recessive context */
+  .related {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 12px 36px;
+    font-size: 14px;
+  }
+  .related-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .related-val { color: var(--ink-soft); line-height: 1.55; }
+  .related-val a { color: var(--ink); border-bottom: 1px solid var(--orange); text-decoration: none; padding-bottom: 1px; }
+  .related-val a:hover { color: var(--orange); }
+
+  /* The transition — quiet hint of what's next */
+  .transition {
+    margin-top: 64px;
+    text-align: center;
+    color: var(--ink-faint);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+  .transition-key {
+    border: 1px solid var(--hair-strong);
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink-soft);
+  }
+
+  /* Concept note */
+  .concept {
+    max-width: 720px;
+    margin: 128px auto 0;
+    padding: 32px;
+    background: var(--surface);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(10,28,64,0.04), 0 6px 18px rgba(10,28,64,0.05);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .concept strong { color: var(--ink); }
+
+  @media (max-width: 1180px) {
+    .grand { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
+    .grand-left, .grand-right { max-width: 720px; margin: 0 auto; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-mark">Antaeus</span>
+  <span>TUESDAY · 09:12 CT</span>
+  <span class="topbar-cmd">⌘K · MOVE</span>
+</div>
+
+<div class="grand">
+
+  <!-- LEFT MARGIN — what was just here -->
+  <aside class="grand-left">
+    <div class="recent-mark">— Was just here</div>
+    <div class="recent">
+      <div class="recent-item"><span class="when">08:48</span><span>Northwind · proof readout</span></div>
+      <div class="recent-item"><span class="when">08:32</span><span>Briefing · pricing pattern</span></div>
+      <div class="recent-item"><span class="when">08:11</span><span>Helix · Thursday pre-read</span></div>
+      <div class="recent-item"><span class="when">Yest.</span><span>Cordillera · advisor note</span></div>
+    </div>
+  </aside>
+
+  <!-- CENTER — the working object -->
+  <main class="grand-center">
+    <section class="working">
+
+      <div class="working-eyebrow">— Working on · Tuesday morning</div>
+      <h1 class="working-name">Acme Corp.</h1>
+      <div class="working-context">PROPOSAL · DAY 18 · $84,000 · ENTERPRISE</div>
+
+      <p class="read">
+        Likely to slip unless the CFO sees the redline before Friday.
+      </p>
+
+      <div class="layers">
+        <div class="layer-key">Signal</div>
+        <div class="layer-val">Champion silent for twelve days. Procurement re-opened pricing on Slack on Nov 3.</div>
+        <div class="layer-key">Cause</div>
+        <div class="layer-val">The champion has not relayed the re-opened pricing to the CFO. The pattern matches three prior closed-lost deals where the same shape played out at quarter-end.</div>
+        <div class="layer-key">Next</div>
+        <div class="layer-val heavy">Send the revised proposal directly to the CFO before EOW. Backchannel via Tasha as air cover.</div>
+      </div>
+
+      <div class="next-move">
+        <div class="next-move-eyebrow">— Recommended next move</div>
+        <p class="next-move-text">Draft the CFO-facing note this morning. The revised proposal is already cast; the note frames it. Tasha is available to backchannel if you want air cover before procurement responds.</p>
+        <div class="next-move-row">
+          <button class="btn btn--primary">Draft CFO note</button>
+          <button class="btn btn--secondary">Carry to Tasha</button>
+          <button class="btn btn--ghost">Mark for later</button>
+        </div>
+      </div>
+
+      <div class="related">
+        <div class="related-key">Related</div>
+        <div class="related-val">The <a>pricing-momentum pattern</a> the Briefing surfaced last week — late-stage discount pressure across two ICP segments. Worth reading before the draft goes out; it affects the framing.</div>
+        <div class="related-key">Inheritance</div>
+        <div class="related-val">Three prior closed-lost deals show the same shape — <a>Castor</a>, <a>Ridgeline</a>, <a>Falconer</a>. The autopsies are on record. The first hire will see this pattern named.</div>
+        <div class="related-key">Advisor</div>
+        <div class="related-val"><a>Tasha Mendel</a> has an opening with the CFO office through her board work at Cordillera. Cooldown clean. Available.</div>
+      </div>
+
+    </section>
+
+    <div class="transition">
+      <span class="transition-key">⌘K</span>
+      <span style="margin-left: 12px;">MOVE TO NEXT</span>
+      <span style="margin-left: 24px; color: var(--ink-quiet);">— or pick from the queue —</span>
+    </div>
+  </main>
+
+  <!-- RIGHT MARGIN — queued -->
+  <aside class="grand-right">
+    <div class="queue-mark">— Queued · 4 to go</div>
+    <div class="queue">
+
+      <div class="queue-item">
+        <div class="queue-spine attn"></div>
+        <div>
+          <div class="queue-name">Northwind Logistics</div>
+          <div class="queue-meta">PROOF · DAY 9 · $112K</div>
+        </div>
+        <div class="queue-stamp">ATTN</div>
+      </div>
+
+      <div class="queue-item">
+        <div class="queue-spine exec"></div>
+        <div>
+          <div class="queue-name">Cordillera Health</div>
+          <div class="queue-meta">NEG · DAY 47 · $340K</div>
+        </div>
+        <div class="queue-stamp">EXEC</div>
+      </div>
+
+      <div class="queue-item">
+        <div class="queue-spine healthy"></div>
+        <div>
+          <div class="queue-name">Helix Robotics</div>
+          <div class="queue-meta">NEG · DAY 4 · $240K</div>
+        </div>
+        <div class="queue-stamp">TRACK</div>
+      </div>
+
+      <div class="queue-item">
+        <div class="queue-spine"></div>
+        <div>
+          <div class="queue-name">Pattern · pricing momentum</div>
+          <div class="queue-meta">BRIEFING · 14D</div>
+        </div>
+        <div class="queue-stamp">READ</div>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 40px; padding: 18px 0; border-top: 1px solid var(--hair-strong);">
+      <div class="queue-mark" style="margin-bottom:8px;">— Silent</div>
+      <div style="font-size:13px; color:var(--ink-faint); line-height:1.6;">
+        <em style="font-style:normal; color:var(--ink-soft);">Stonebridge</em> — silent 7d<br>
+        <em style="font-style:normal; color:var(--ink-soft);">Marlin Group</em> — silent 22d
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- Concept note -->
+<aside class="concept">
+  <div class="concept-eyebrow">The idea</div>
+  <p style="margin-bottom:12px;">
+    <strong>The Working Object.</strong> The workspace surfaces one working object at a time — the deal you're thinking about, the brief you're composing, the proof you're casting — and gives it the visual space and depth to be done well. Around it: ambient context. What you were just looking at, recessive on the left. What's queued next, quiet on the right. The system has chosen what to put in the center based on pressure and your last move.
+  </p>
+  <p style="margin-bottom:12px;">
+    <strong>Motion is lateral.</strong> Each focus is a stop. Cmd-K moves to the next; clicking a queued item moves to it directly; finishing the recommended action moves automatically. The day is a sequence of working sessions, not a scan of a board. Sarah-day-90 cmd-Ks through her morning; the day-one operator clicks through the queue.
+  </p>
+  <p style="margin:0;">
+    <strong>What stays canon.</strong> Bright field. DM Serif Display for the working object's name and the system's read of it. Public Sans for body. JetBrains Mono for codes and timestamps. Orange for the dominant move and the working eyebrow. All canon color roles intact; voice rule honored throughout — the system speaks like a peer operator naming what is real and recommending what to do next.
+  </p>
+</aside>
+
+</body>
+</html>

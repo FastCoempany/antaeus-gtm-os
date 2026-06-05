@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pulse Surface — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F8FC;
+    --surface: #FFFFFF;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.08);
+    --hair-strong: rgba(10, 28, 64, 0.18);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+    --shadow-rest: 0 1px 2px rgba(10, 28, 64, 0.04), 0 4px 12px rgba(10, 28, 64, 0.05);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  /* Top strip */
+  .strip {
+    position: sticky;
+    top: 0;
+    background: var(--field);
+    border-bottom: 1px solid var(--hair);
+    padding: 16px 32px;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .strip-mark {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+  }
+  .strip-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .strip-keys {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  /* Page */
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 48px 32px 144px;
+    position: relative;
+  }
+
+  /* Time zone markers */
+  .zone-mark {
+    margin: 56px 0 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .zone-mark:first-of-type { margin-top: 0; }
+  .zone-mark-rule {
+    height: 1px;
+    background: var(--hair);
+  }
+  .zone-mark-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .zone-mark-label.now { color: var(--orange); font-weight: 600; }
+
+  /* The timeline rail — vertical line down the left */
+  .timeline {
+    position: relative;
+    padding-left: 60px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 8px;
+    bottom: 0;
+    width: 1px;
+    background: var(--hair-strong);
+  }
+
+  /* A pulse — a moment on the timeline */
+  .pulse {
+    position: relative;
+    margin-bottom: 32px;
+  }
+  .pulse-dot {
+    position: absolute;
+    left: -54px;
+    top: 22px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--ink-quiet);
+    z-index: 1;
+  }
+  .pulse-dot.risk { background: var(--red); border-color: var(--red); }
+  .pulse-dot.attn { background: var(--amber); border-color: var(--amber); }
+  .pulse-dot.healthy { background: var(--green); border-color: var(--green); }
+  .pulse-dot.signal { background: var(--blue); border-color: var(--blue); }
+  .pulse-dot.act { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 0 4px rgba(230, 112, 30, 0.15); }
+  .pulse-dot.exec { background: var(--ink); border-color: var(--ink); }
+  .pulse-dot.shimmer {
+    animation: pulsate 2.6s ease-in-out infinite;
+  }
+  @keyframes pulsate {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(230, 112, 30, 0.30); }
+    50% { box-shadow: 0 0 0 8px rgba(230, 112, 30, 0.00); }
+  }
+
+  .pulse-time {
+    position: absolute;
+    left: -160px;
+    top: 22px;
+    width: 96px;
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .pulse-card {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 18px 22px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+  }
+  .pulse-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .pulse-name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .pulse-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .pulse-body {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .pulse-read {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    border-top: 1px solid var(--hair);
+    padding-top: 10px;
+    margin-bottom: 12px;
+  }
+  .pulse-foot {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .stamp.risk { color: var(--red); }
+  .stamp.attn { color: var(--amber); }
+  .stamp.act { color: var(--orange); }
+  .stamp.healthy { color: #15803D; }
+  .stamp.exec { color: var(--ink); }
+  .stamp.signal { color: var(--blue); }
+  .btn {
+    background: var(--ink);
+    color: white;
+    font: inherit;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .btn--accent { background: var(--orange); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--hair-strong);
+  }
+
+  /* Past pulses — visibly compressed */
+  .pulse.recent { opacity: 0.92; }
+  .pulse.recent .pulse-card { padding: 14px 18px; }
+  .pulse.recent .pulse-name { font-size: 14px; }
+  .pulse.recent .pulse-body { font-size: 13px; margin-bottom: 8px; }
+  .pulse.recent .pulse-read { display: none; }
+
+  .pulse.older {
+    opacity: 0.78;
+    margin-bottom: 16px;
+  }
+  .pulse.older .pulse-dot { width: 8px; height: 8px; border-width: 1.5px; }
+  .pulse.older .pulse-card {
+    padding: 10px 16px;
+    background: transparent;
+    box-shadow: none;
+    border: 0;
+    border-left: 2px solid var(--hair);
+  }
+  .pulse.older .pulse-name { font-size: 13px; font-weight: 500; }
+  .pulse.older .pulse-body { font-size: 12px; color: var(--ink-soft); margin-bottom: 0; }
+  .pulse.older .pulse-read, .pulse.older .pulse-foot { display: none; }
+
+  .pulse.ancient {
+    opacity: 0.55;
+    margin-bottom: 8px;
+  }
+  .pulse.ancient .pulse-dot { width: 5px; height: 5px; border-width: 1px; left: -52px; top: 12px; }
+  .pulse.ancient .pulse-card {
+    padding: 4px 12px;
+    background: transparent;
+    box-shadow: none;
+    border: 0;
+  }
+  .pulse.ancient .pulse-card-head { margin-bottom: 0; }
+  .pulse.ancient .pulse-name { font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+  .pulse.ancient .pulse-meta { font-size: 10px; }
+  .pulse.ancient .pulse-body, .pulse.ancient .pulse-read, .pulse.ancient .pulse-foot { display: none; }
+
+  /* Silences — what didn't pulse */
+  .silence {
+    position: relative;
+    margin: 24px 0;
+    padding: 14px 22px;
+    border: 1px dashed var(--hair-strong);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink-faint);
+    font-size: 13px;
+    line-height: 1.55;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .silence::before {
+    content: '';
+    position: absolute;
+    left: -54px;
+    top: 22px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--field);
+    border: 1.5px dashed var(--ink-quiet);
+  }
+  .silence-body {
+    flex: 1;
+  }
+  .silence-body em {
+    font-style: normal;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .silence-time {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+
+  /* Horizon */
+  .horizon {
+    margin-top: 96px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hair-strong);
+    text-align: center;
+  }
+  .horizon-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .horizon-row {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    flex-wrap: wrap;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  .horizon-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  /* Concept note */
+  .concept {
+    margin-top: 144px;
+    padding: 32px;
+    background: var(--surface);
+    border-radius: 10px;
+    box-shadow: var(--shadow-rest);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .concept strong { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="strip">
+  <span class="strip-mark">Antaeus</span>
+  <span class="strip-meta">PULSE · TUESDAY 5 JUN · 09:12 CT</span>
+  <span class="strip-keys">⌘K SEARCH · ⌘1 ZOOM</span>
+</div>
+
+<div class="page">
+
+  <!-- TODAY -->
+  <div class="zone-mark">
+    <div class="zone-mark-rule"></div>
+    <div class="zone-mark-label now">— NOW · TUESDAY MORNING —</div>
+    <div class="zone-mark-rule"></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="pulse">
+      <div class="pulse-dot risk shimmer"></div>
+      <div class="pulse-time">09:08 CT</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Acme Corp.</span>
+          <span class="pulse-meta">PROPOSAL · DAY 18 · $84K</span>
+        </div>
+        <div class="pulse-body">Champion silent twelve days. Procurement re-opened pricing on Nov 3; the CFO has not received the revised proposal yet.</div>
+        <div class="pulse-read">Pattern matches three prior closed-lost deals where procurement re-opened pricing after demo. The deal slips at quarter-end if she doesn't see the redline by Friday.</div>
+        <div class="pulse-foot">
+          <span class="stamp risk">— Likely to slip</span>
+          <button class="btn btn--accent">Draft CFO note</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pulse">
+      <div class="pulse-dot attn"></div>
+      <div class="pulse-time">08:42 CT</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Northwind Logistics</span>
+          <span class="pulse-meta">PROOF · DAY 9 · $112K</span>
+        </div>
+        <div class="pulse-body">Pilot completed cleanly. The readout owner field is still empty after five days.</div>
+        <div class="pulse-read">The pilot freshness expires at fourteen days; once it does, the evidence becomes a piece of paper nobody references.</div>
+        <div class="pulse-foot">
+          <span class="stamp attn">— No readout owner</span>
+          <button class="btn">Assign owner</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pulse">
+      <div class="pulse-dot signal"></div>
+      <div class="pulse-time">08:14 CT</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Pattern · late-stage price pressure</span>
+          <span class="pulse-meta">BRIEFING · 14D WINDOW · CONF 78%</span>
+        </div>
+        <div class="pulse-body">Three of the last five closed deals dropped price 12% or more in the final week. The pattern shows up across two ICP segments.</div>
+        <div class="pulse-read">Worth reading before the Acme draft goes out — the pattern affects what you say to the CFO.</div>
+        <div class="pulse-foot">
+          <span class="stamp signal">— Pattern read</span>
+          <button class="btn btn--ghost">Open brief</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SILENCES IN TODAY -->
+  <div class="zone-mark">
+    <div class="zone-mark-rule"></div>
+    <div class="zone-mark-label">— SILENCES · WHAT HASN'T PULSED —</div>
+    <div class="zone-mark-rule"></div>
+  </div>
+
+  <div class="timeline">
+    <div class="silence">
+      <div class="silence-body"><em>Cordillera Health</em> — no pulse for 11 days. Last activity: legal review note, 25 May.</div>
+      <div class="silence-time">SILENT · 11D</div>
+    </div>
+    <div class="silence">
+      <div class="silence-body"><em>Stonebridge Capital</em> — no pulse for 7 days. Last activity: champion meeting, 29 May.</div>
+      <div class="silence-time">SILENT · 7D</div>
+    </div>
+  </div>
+
+  <!-- YESTERDAY -->
+  <div class="zone-mark">
+    <div class="zone-mark-rule"></div>
+    <div class="zone-mark-label">— YESTERDAY · MONDAY —</div>
+    <div class="zone-mark-rule"></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="pulse recent">
+      <div class="pulse-dot healthy"></div>
+      <div class="pulse-time">17:24 CT</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Helix Robotics</span>
+          <span class="pulse-meta">NEGOTIATION · DAY 4 · $240K</span>
+        </div>
+        <div class="pulse-body">CFO meeting confirmed for Thursday 10:00 CT. Pre-read due Wednesday morning.</div>
+      </div>
+    </div>
+
+    <div class="pulse recent">
+      <div class="pulse-dot act"></div>
+      <div class="pulse-time">14:08 CT</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Acme Corp.</span>
+          <span class="pulse-meta">PROPOSAL · YESTERDAY</span>
+        </div>
+        <div class="pulse-body">Logged: procurement re-opened pricing on Slack. Champion did not relay.</div>
+      </div>
+    </div>
+
+    <div class="pulse recent">
+      <div class="pulse-dot signal"></div>
+      <div class="pulse-time">11:30 CT</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Tasha Mendel · board advisor</span>
+          <span class="pulse-meta">ADVISOR · YESTERDAY</span>
+        </div>
+        <div class="pulse-body">Asked about Cordillera. She has an opening with the CTO next week if you want it.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- THIS WEEK -->
+  <div class="zone-mark">
+    <div class="zone-mark-rule"></div>
+    <div class="zone-mark-label">— THIS WEEK · COMPRESSED —</div>
+    <div class="zone-mark-rule"></div>
+  </div>
+
+  <div class="timeline">
+    <div class="pulse older">
+      <div class="pulse-dot healthy"></div>
+      <div class="pulse-time">FRI · 16:40</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Northwind</span>
+          <span class="pulse-meta">PROOF COMPLETE</span>
+        </div>
+        <div class="pulse-body">Pilot ran clean. Readout owner unset.</div>
+      </div>
+    </div>
+    <div class="pulse older">
+      <div class="pulse-dot act"></div>
+      <div class="pulse-time">FRI · 12:18</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Cordillera</span>
+          <span class="pulse-meta">PROOF CAST</span>
+        </div>
+        <div class="pulse-body">Proof cast. Not yet carried into negotiation rehearsal.</div>
+      </div>
+    </div>
+    <div class="pulse older">
+      <div class="pulse-dot signal"></div>
+      <div class="pulse-time">THU · 09:55</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Pattern · pricing pressure</span>
+          <span class="pulse-meta">BRIEFING NOTE</span>
+        </div>
+        <div class="pulse-body">First sighting of late-stage discount pattern across two segments.</div>
+      </div>
+    </div>
+    <div class="pulse older">
+      <div class="pulse-dot exec"></div>
+      <div class="pulse-time">WED · 14:32</div>
+      <div class="pulse-card">
+        <div class="pulse-card-head">
+          <span class="pulse-name">Readiness · state shift</span>
+          <span class="pulse-meta">SYSTEM</span>
+        </div>
+        <div class="pulse-body">Verdict moved from Building to Inheritable with guardrails.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAST WEEK / OLDER -->
+  <div class="zone-mark">
+    <div class="zone-mark-rule"></div>
+    <div class="zone-mark-label">— LAST WEEK ·  COMPRESSED FURTHER —</div>
+    <div class="zone-mark-rule"></div>
+  </div>
+
+  <div class="timeline">
+    <div class="pulse ancient">
+      <div class="pulse-dot risk"></div>
+      <div class="pulse-time">29 MAY</div>
+      <div class="pulse-card"><div class="pulse-card-head"><span class="pulse-name">Stonebridge · champion meeting</span><span class="pulse-meta">DEAL</span></div></div>
+    </div>
+    <div class="pulse ancient">
+      <div class="pulse-dot signal"></div>
+      <div class="pulse-time">28 MAY</div>
+      <div class="pulse-card"><div class="pulse-card-head"><span class="pulse-name">Briefing · weekly read sent</span><span class="pulse-meta">SYSTEM</span></div></div>
+    </div>
+    <div class="pulse ancient">
+      <div class="pulse-dot healthy"></div>
+      <div class="pulse-time">27 MAY</div>
+      <div class="pulse-card"><div class="pulse-card-head"><span class="pulse-name">Helix · advisor briefed</span><span class="pulse-meta">ADVISOR</span></div></div>
+    </div>
+    <div class="pulse ancient">
+      <div class="pulse-dot attn"></div>
+      <div class="pulse-time">26 MAY</div>
+      <div class="pulse-card"><div class="pulse-card-head"><span class="pulse-name">Cordillera · legal review opened</span><span class="pulse-meta">DEAL</span></div></div>
+    </div>
+    <div class="pulse ancient">
+      <div class="pulse-dot signal"></div>
+      <div class="pulse-time">25 MAY</div>
+      <div class="pulse-card"><div class="pulse-card-head"><span class="pulse-name">Six new signals on Northwind</span><span class="pulse-meta">SIGNAL CONSOLE</span></div></div>
+    </div>
+  </div>
+
+  <!-- HORIZON -->
+  <section class="horizon">
+    <div class="horizon-eyebrow">Beyond — the long arc</div>
+    <div class="horizon-row">
+      <div><div class="horizon-num">142</div><div>letters / pulses past</div></div>
+      <div><div class="horizon-num">47</div><div>active deals through the quarter</div></div>
+      <div><div class="horizon-num">11</div><div>autopsies on the record</div></div>
+      <div><div class="horizon-num">3</div><div>silences worth investigating</div></div>
+    </div>
+  </section>
+
+  <!-- Concept note -->
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin-bottom:12px;">
+      <strong>The Pulse Surface.</strong> The workspace is organized by cadence, not category. The fundamental unit is a pulse — a moment when something happened. Pulses appear on a vertical timeline. Today's are full-sized at the top. Yesterday's are smaller. Last week's are compressed to one-line strips. A month back is a thin horizon of names and dates you can scroll past to find any specific event.
+    </p>
+    <p style="margin-bottom:12px;">
+      <strong>State is conveyed by rhythm.</strong> A deal that pulses regularly is alive. A deal that hasn't pulsed in 18 days shows up as a visible <em>silence</em> in its own row — a dashed marker that names the deal and the length of its quiet. Importance is size; recency is position; state is color; the active pulse shimmers slightly.
+    </p>
+    <p style="margin:0;">
+      <strong>What stays canon.</strong> Bright field. DM Serif Display for headlines, Public Sans for body, JetBrains Mono for timestamps and codes. Orange for the dominant move, the rest of the canon color roles intact. The voice rule honored — every pulse description sounds like a peer operator naming what is real.
+    </p>
+  </aside>
+
+</div>
+
+</body>
+</html>
