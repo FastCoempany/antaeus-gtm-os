@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offset Logic — Antaeus design direction</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F4F6FA;
+    --surface: #FFFFFF;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.06);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.08);
+    --shadow-rest: 0 1px 2px rgba(10,28,64,0.04), 0 6px 18px rgba(10,28,64,0.06);
+    --shadow-offset: 0 2px 4px rgba(10,28,64,0.05), 0 16px 36px rgba(10,28,64,0.08);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1180px; margin: 0 auto; padding: 80px 48px 144px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .masthead { margin-bottom: 112px; max-width: 720px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 24px 0 16px;
+  }
+  .masthead-sub {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+  .masthead-body { font-size: 15px; line-height: 1.7; max-width: 60ch; color: var(--ink); margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  .section { margin-bottom: 112px; }
+  .section-head { margin-bottom: 40px; display: grid; grid-template-columns: 80px 1fr; gap: 24px; align-items: baseline; }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+  .section-head-text p {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  /* ============================= */
+  /* OFFSET ACTION CARD — signature */
+  /* ============================= */
+  .offset-card {
+    position: relative;
+    padding-top: 18px;
+    padding-bottom: 26px;
+  }
+  .offset-card-eyebrow {
+    position: absolute;
+    top: 0;
+    left: 36px;
+    background: var(--surface);
+    padding: 6px 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1px solid var(--hair-strong);
+    border-radius: 6px;
+    z-index: 2;
+    box-shadow: var(--shadow-rest);
+    font-weight: 600;
+  }
+  .offset-card-body {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    padding: 32px 28px 28px;
+    box-shadow: var(--shadow-rest);
+  }
+  .offset-card-text {
+    font-size: 16px;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .offset-card-name { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
+  .offset-card-context { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; }
+  .offset-card-action {
+    position: relative;
+    margin-top: 14px;
+    margin-right: -16px;
+    margin-bottom: -34px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .offset-action-button {
+    background: var(--orange);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-offset);
+  }
+
+  /* ============================= */
+  /* NAV — offset block             */
+  /* ============================= */
+  .nav-frame {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+  }
+  .nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .nav-item {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+  .nav-item:hover { color: var(--ink); }
+  .nav-item .ct { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+  /* The offset active state — a block sits to the left, not a pill */
+  .nav-item.active {
+    color: var(--ink);
+    font-weight: 600;
+    margin-left: 8px;
+    padding-left: 16px;
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    background: var(--orange);
+    border-radius: 2px;
+  }
+  .nav-item.active .ct { color: var(--orange); }
+  .nav-group {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding: 12px 12px 4px;
+  }
+
+  /* ============================= */
+  /* STEPPED DRAWER                */
+  /* ============================= */
+  .stepped {
+    background: var(--surface);
+    border-radius: 10px;
+    box-shadow: var(--shadow-rest);
+    overflow: visible;
+    border: 1px solid var(--hair);
+  }
+  .step {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .step-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .step-body { font-size: 13px; color: var(--ink-soft); }
+  .step-2 { padding-left: 44px; background: rgba(10,28,64,0.015); }
+  .step-3 { padding-left: 68px; background: rgba(10,28,64,0.03); }
+
+  /* ============================= */
+  /* TIMELINE — stepped alignment   */
+  /* ============================= */
+  .timeline {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 28px 32px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+  }
+  .timeline-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .timeline-head-title { font-weight: 600; }
+  .timeline-head-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .stage {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+    cursor: pointer;
+  }
+  .stage:hover { background: var(--field); }
+  .stage-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .stage.done .stage-name { color: var(--ink); }
+  .stage.now { background: var(--orange-soft); margin-left: -12px; padding-left: 28px; font-weight: 500; }
+  .stage.now .stage-name { color: var(--orange); }
+  .stage.elev { margin-left: -12px; padding-left: 28px; font-weight: 500; }
+  .stage-body { color: var(--ink); line-height: 1.5; }
+  .stage.now .stage-body { font-weight: 500; }
+  .stage.pending .stage-body { color: var(--ink-faint); }
+  .stage-time {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  /* ============================= */
+  /* MODAL — offset title block     */
+  /* ============================= */
+  .offset-modal {
+    position: relative;
+    max-width: 480px;
+  }
+  .offset-modal-title-block {
+    position: absolute;
+    top: -28px;
+    left: 24px;
+    right: 24px;
+    background: var(--ink);
+    color: white;
+    padding: 14px 22px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-offset);
+    z-index: 2;
+  }
+  .offset-modal-title-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 4px;
+  }
+  .offset-modal-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.1;
+  }
+  .offset-modal-body {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 64px 28px 24px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+  }
+  .offset-modal-text { font-size: 14px; line-height: 1.55; color: var(--ink); margin-bottom: 18px; }
+  .offset-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ============================= */
+  /* LIST — rows break rank         */
+  /* ============================= */
+  .list {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+  }
+  .list-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 12px;
+    border-bottom: 1px solid var(--hair);
+    border-radius: 6px;
+  }
+  .list-row:last-child { border-bottom: none; }
+  .list-row-name { font-weight: 500; }
+  .list-row-ctx { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .list-row-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .chip {
+    display: inline-flex;
+    padding: 2px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid var(--hair-strong);
+    border-radius: 3px;
+    color: var(--ink-soft);
+  }
+  .chip.risk { color: var(--red); border-color: var(--red); }
+  .chip.attn { color: var(--amber); border-color: var(--amber); }
+  .chip.healthy { color: #15803D; border-color: var(--green); }
+  /* The break-rank row — sits offset to draw attention */
+  .list-row.elev {
+    margin-left: -12px;
+    margin-right: -8px;
+    padding-left: 24px;
+    background: var(--surface);
+    box-shadow: 0 2px 6px rgba(10,28,64,0.05);
+    border-radius: 8px;
+    border-bottom: none;
+    margin-bottom: 6px;
+    border: 1px solid var(--orange-soft);
+    border-left: 3px solid var(--orange);
+  }
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-accent { background: var(--orange); color: white; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--hair-strong); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 12px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .grid-3 { display: grid; grid-template-columns: 220px 1fr; gap: 32px; }
+  .vstack { display: flex; flex-direction: column; gap: 16px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  .concept {
+    margin-top: 96px;
+    padding: 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">OFFSET LOGIC · DIRECTION 03 · 2026·06·05</p>
+    <h1>Offset Logic.</h1>
+    <p class="masthead-sub">The layout has a mind of its own. But still behaves.</p>
+    <p class="masthead-body">
+      A clean SaaS surface whose distinguishing move is controlled asymmetry. Slightly offset headers. Action buttons that sit partially outside the card edge. Nav active state as a small offset block instead of a pill. Stepped indentation in drawers. <strong>Spatial tension that reads as ownership</strong> — not chaos, not playful, not brutalist. The product looks designed without wearing a costume.
+    </p>
+  </header>
+
+  <!-- 01 - the signature -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">ONE</span>
+      <div class="section-head-text">
+        <h2>The Offset Action Card.</h2>
+        <p>The eyebrow label sits offset from the card body. The action button extends partway outside the card edge. Nothing wild. Just enough to feel owned.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="offset-card">
+        <div class="offset-card-eyebrow">— Recommended move</div>
+        <div class="offset-card-body">
+          <div class="offset-card-name">Acme Corp.</div>
+          <div class="offset-card-context">Proposal · day 18 · $84,000</div>
+          <p class="offset-card-text">Legal is the current blocker. Procurement re-opened pricing on Nov 3; the champion has not relayed it to the CFO.</p>
+          <p class="offset-card-text">Send a redline summary to procurement and the CFO before EOW.</p>
+          <div class="offset-card-action">
+            <button class="offset-action-button">Draft email</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="offset-card">
+        <div class="offset-card-eyebrow">— Pending readout</div>
+        <div class="offset-card-body">
+          <div class="offset-card-name">Northwind Logistics</div>
+          <div class="offset-card-context">Proof · day 9 · $112,000</div>
+          <p class="offset-card-text">Pilot ran clean. Readout owner field is empty after five days.</p>
+          <p class="offset-card-text">Name an owner this morning, before pilot age crosses fourteen days.</p>
+          <div class="offset-card-action">
+            <button class="offset-action-button">Assign owner</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 02 - nav offset block -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">TWO</span>
+      <div class="section-head-text">
+        <h2>Navigation as offset block.</h2>
+        <p>The active item shifts right and gets a small block to its left, not a pill. The selection feels deliberate, not bracketed.</p>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="nav-frame">
+        <div class="nav">
+          <div class="nav-group">Today</div>
+          <div class="nav-item active">Dashboard <span class="ct">12</span></div>
+          <div class="nav-item">Briefing <span class="ct">3</span></div>
+          <div class="nav-item">Signal Console <span class="ct">37</span></div>
+          <div class="nav-group">Pipeline</div>
+          <div class="nav-item">Deal Workspace</div>
+          <div class="nav-item">Future Autopsy</div>
+          <div class="nav-item">PoC Framework</div>
+          <div class="nav-group">Outbound</div>
+          <div class="nav-item">Outbound Studio</div>
+          <div class="nav-item">Call Planner</div>
+        </div>
+      </div>
+
+      <div class="list">
+        <div class="list-row">
+          <div><div class="list-row-name">Helix Robotics</div><div class="list-row-ctx">CFO meeting Thursday</div></div>
+          <div class="list-row-num">$240,000</div>
+          <span class="chip healthy">Track</span>
+          <button class="btn btn-secondary">Open</button>
+        </div>
+        <div class="list-row">
+          <div><div class="list-row-name">Northwind Logistics</div><div class="list-row-ctx">Pilot pending readout</div></div>
+          <div class="list-row-num">$112,000</div>
+          <span class="chip attn">Attn</span>
+          <button class="btn btn-secondary">Open</button>
+        </div>
+        <!-- the elevated row breaks rank -->
+        <div class="list-row elev">
+          <div><div class="list-row-name">Acme Corp.</div><div class="list-row-ctx">Champion silent · procurement re-opened pricing</div></div>
+          <div class="list-row-num">$84,000</div>
+          <span class="chip risk">At risk</span>
+          <button class="btn btn-accent">Draft note</button>
+        </div>
+        <div class="list-row">
+          <div><div class="list-row-name">Cordillera Health</div><div class="list-row-ctx">Legal stalled · no exec sponsor</div></div>
+          <div class="list-row-num">$340,000</div>
+          <span class="chip risk">Exec</span>
+          <button class="btn btn-secondary">Open</button>
+        </div>
+        <div class="list-row">
+          <div><div class="list-row-name">Stonebridge Capital</div><div class="list-row-ctx">No movement since 29 May</div></div>
+          <div class="list-row-num">$56,000</div>
+          <span class="chip">—</span>
+          <button class="btn btn-secondary">Open</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 - stepped drawer -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">THREE</span>
+      <div class="section-head-text">
+        <h2>Stepped depth.</h2>
+        <p>Drawers step inward as the operator drills deeper. Each level is visibly offset. The eye knows where it is without breadcrumbs.</p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="align-items:start;">
+
+      <div class="stepped">
+        <div class="step">
+          <div class="step-eyebrow">ACCOUNT</div>
+          <div class="step-title">Acme Corp.</div>
+          <div class="step-body">Proposal · day 18 · $84,000</div>
+        </div>
+        <div class="step step-2">
+          <div class="step-eyebrow">DEAL</div>
+          <div class="step-title">Q4 expansion · 47 seats</div>
+          <div class="step-body">Champion: Sarah Chen, VP Operations. Economic buyer: Marcus Reed, CFO.</div>
+        </div>
+        <div class="step step-3">
+          <div class="step-eyebrow">CURRENT BLOCKER</div>
+          <div class="step-title">Procurement re-opened pricing</div>
+          <div class="step-body">Logged on Slack, Nov 3. Champion has not relayed to the CFO.</div>
+        </div>
+      </div>
+
+      <div class="offset-modal">
+        <div class="offset-modal-title-block">
+          <div class="offset-modal-title-eyebrow">CONFIRM · DESTRUCTIVE</div>
+          <div class="offset-modal-title">Discard draft?</div>
+        </div>
+        <div class="offset-modal-body">
+          <p class="offset-modal-text">You've made unsaved edits to this proof draft. Discarding clears them. There is no reversion path.</p>
+          <div class="offset-modal-actions">
+            <button class="btn btn-ghost">Cancel</button>
+            <button class="btn btn-primary">Discard</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 - timeline with stepped alignment -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FOUR</span>
+      <div class="section-head-text">
+        <h2>Stepped timeline.</h2>
+        <p>The current stage offsets to the left. Completed stages line up; future stages indent right. The eye reads the present moment first.</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-head">
+        <span class="timeline-head-title">Acme Corp. — recovery rail</span>
+        <span class="timeline-head-meta">UPDATED 09:08 CT · DAY 18</span>
+      </div>
+      <div class="stage done">
+        <span class="stage-name">Observe</span>
+        <span class="stage-body">Usage down 22% in last 30 days. Champion silent since Nov 3.</span>
+        <span class="stage-time">— done</span>
+      </div>
+      <div class="stage done">
+        <span class="stage-name">Diagnose</span>
+        <span class="stage-body">EB absent from QBR. Procurement re-opened pricing.</span>
+        <span class="stage-time">— done</span>
+      </div>
+      <div class="stage now">
+        <span class="stage-name">Decide</span>
+        <span class="stage-body">Escalate with value recap. Backchannel to CFO via board advisor.</span>
+        <span class="stage-time">— now</span>
+      </div>
+      <div class="stage pending">
+        <span class="stage-name">Act</span>
+        <span class="stage-body">Draft the CFO-facing note.</span>
+        <span class="stage-time">— pending</span>
+      </div>
+      <div class="stage pending">
+        <span class="stage-name">Verify</span>
+        <span class="stage-body">Confirm reply within 5 business days.</span>
+        <span class="stage-time">— pending</span>
+      </div>
+    </div>
+  </section>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin-bottom:10px;">
+      <strong>Offset Logic.</strong> Controlled asymmetry is the signature. Eyebrows offset from cards. Action buttons partway outside card edges. Nav active state as a small offset block instead of a pill. Drawers step inward as the operator drills deeper. Lists allow a single row to break rank when something is genuinely elevated. Distinctiveness through spatial behavior — never decoration.
+    </p>
+    <p style="margin:0;">
+      <strong>Canon preserved.</strong> Bright field. DM Serif Display for titles and modal headers. Public Sans for body. JetBrains Mono for eyebrows, codes, and timestamps. Orange for the dominant move; all canon color roles intact. The offsets are subtle by design — easy to overdo, so the discipline is restraint.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>

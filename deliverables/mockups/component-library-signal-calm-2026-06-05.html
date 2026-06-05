@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Calm — Antaeus design direction</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F7F8FA;
+    --surface: #FFFFFF;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.06);
+    --hair-strong: rgba(10, 28, 64, 0.12);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.10);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.06);
+    --shadow-rest: 0 1px 2px rgba(10,28,64,0.03), 0 4px 12px rgba(10,28,64,0.04);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1180px; margin: 0 auto; padding: 80px 48px 144px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .masthead { margin-bottom: 96px; max-width: 720px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 24px 0 16px;
+  }
+  .masthead-sub {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+  .masthead-body { font-size: 15px; line-height: 1.7; max-width: 60ch; color: var(--ink); margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  .section { margin-bottom: 96px; }
+  .section-head { margin-bottom: 32px; display: grid; grid-template-columns: 80px 1fr; gap: 24px; align-items: baseline; }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+  .section-head-text p {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  /* ============================= */
+  /* SIGNAL STACK — the signature  */
+  /* ============================= */
+  .stack {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    padding: 28px 32px;
+    box-shadow: var(--shadow-rest);
+  }
+  .stack-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .stack-name { font-size: 17px; font-weight: 600; }
+  .stack-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .stack-row { margin-bottom: 20px; }
+  .stack-row:last-child { margin-bottom: 0; }
+  .stack-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .stack-label.move { color: var(--orange); }
+  .stack-text { font-size: 15px; line-height: 1.6; color: var(--ink); }
+  .stack-text.move { font-weight: 500; }
+
+  .stack-foot {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--hair);
+  }
+
+  /* ============================= */
+  /* SIDE GLOW — alert pattern      */
+  /* ============================= */
+  .side-glow {
+    background: var(--surface);
+    border-left: 2px solid var(--amber);
+    padding: 14px 20px;
+    border-radius: 0 6px 6px 0;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    box-shadow: var(--shadow-rest);
+  }
+  .side-glow.risk { border-left-color: var(--red); }
+  .side-glow.signal { border-left-color: var(--blue); }
+  .side-glow.healthy { border-left-color: var(--green); }
+  .side-glow-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    flex-shrink: 0;
+    padding-top: 3px;
+  }
+  .side-glow.risk .side-glow-key { color: var(--red); }
+  .side-glow.signal .side-glow-key { color: var(--blue); }
+  .side-glow.healthy .side-glow-key { color: var(--green); }
+  .side-glow-body { font-size: 14px; line-height: 1.5; color: var(--ink); flex: 1; }
+
+  /* ============================= */
+  /* PLAIN TABLE — signal column   */
+  /* ============================= */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .table th {
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 12px 16px 10px 0;
+    border-bottom: 1px solid var(--hair-strong);
+  }
+  .table td {
+    padding: 14px 16px 14px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .table tr:last-child td { border-bottom: none; }
+  .table .name { font-weight: 600; }
+  .table .ctx { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .table .num { font-family: "JetBrains Mono", monospace; color: var(--ink-soft); }
+  .table .sig {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .table .sig.risk { color: var(--red); }
+  .table .sig.attn { color: var(--amber); }
+  .table .sig.healthy { color: #15803D; }
+
+  /* ============================= */
+  /* PLAIN CARD                     */
+  /* ============================= */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-rest);
+  }
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .card-name { font-weight: 600; font-size: 16px; }
+  .card-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .card-body { font-size: 14px; color: var(--ink); line-height: 1.55; }
+
+  /* When risk shows, just one quiet mark */
+  .card.has-risk { border-left: 2px solid var(--red); }
+  .card.has-attn { border-left: 2px solid var(--amber); }
+
+  /* ============================= */
+  /* BUTTONS                        */
+  /* ============================= */
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-primary:hover { background: var(--ink-700); }
+  .btn-accent { background: var(--orange); color: white; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--hair-strong); }
+  .btn-secondary:hover { border-color: var(--ink-quiet); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 12px; }
+
+  /* ============================= */
+  /* CHIPS — small, text-first      */
+  /* ============================= */
+  .chip {
+    display: inline-flex;
+    padding: 2px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink-soft);
+    border-radius: 3px;
+    background: transparent;
+    border: 1px solid var(--hair-strong);
+  }
+  .chip.risk { color: var(--red); border-color: var(--red); }
+  .chip.attn { color: var(--amber); border-color: var(--amber); }
+  .chip.healthy { color: #15803D; border-color: var(--green); }
+  .chip.signal { color: var(--blue); border-color: var(--blue); }
+
+  /* ============================= */
+  /* INPUTS                         */
+  /* ============================= */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .field-help { font-size: 12px; color: var(--ink-soft); }
+  .input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 5px;
+    background: var(--surface);
+    font: inherit;
+    font-size: 14px;
+  }
+  .input:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px var(--orange-soft); }
+
+  /* ============================= */
+  /* EMPTY STATE                    */
+  /* ============================= */
+  .empty {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    padding: 56px 32px;
+    text-align: center;
+    box-shadow: var(--shadow-rest);
+  }
+  .empty-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .empty-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    line-height: 1.2;
+    margin: 0 0 10px;
+  }
+  .empty-body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 48ch;
+    margin: 0 auto 20px;
+    line-height: 1.6;
+  }
+
+  /* Tooltip */
+  .tip-wrap { position: relative; display: inline-block; }
+  .tip-anchor { border-bottom: 1px dotted var(--ink-faint); cursor: help; }
+  .tip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    padding: 8px 12px;
+    background: var(--ink);
+    color: white;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 1.45;
+    width: 240px;
+    box-shadow: 0 4px 12px rgba(10,28,64,0.15);
+  }
+
+  /* Helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .vstack { display: flex; flex-direction: column; gap: 12px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  .concept {
+    margin-top: 96px;
+    padding: 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">SIGNAL CALM · DIRECTION 02 · 2026·06·05</p>
+    <h1>Signal Calm.</h1>
+    <p class="masthead-sub">Everything is calm until something truly matters.</p>
+    <p class="masthead-body">
+      A restrained SaaS surface built around quiet signal hierarchy. Most of the product is plain. Cards are unmarked until a risk or action appears. Alerts are a thin side glow, never a giant warning block. The repeated structural unit — <strong>Signal / Reason / Move</strong> — becomes a product-native grammar the operator and the inheritor both learn to read.
+    </p>
+  </header>
+
+  <!-- 01 - the signature -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">ONE</span>
+      <div class="section-head-text">
+        <h2>The Signal Stack.</h2>
+        <p>Three rhythms, every time: Signal / Reason / Move. The same shape repeats across deals, briefs, autopsies, recommendations. The operator learns it once.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="stack">
+        <div class="stack-head">
+          <span class="stack-name">Acme Corp.</span>
+          <span class="stack-meta">PROPOSAL · DAY 18 · $84K</span>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">Signal</div>
+          <div class="stack-text">Champion engagement is down.</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">Reason</div>
+          <div class="stack-text">No reply in twelve days after procurement re-opened pricing on Nov 3.</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label move">Move</div>
+          <div class="stack-text move">Send executive value recap to CFO before next forecast call.</div>
+        </div>
+        <div class="stack-foot">
+          <button class="btn btn-accent">Draft note</button>
+          <button class="btn btn-ghost">Mark for later</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="stack-head">
+          <span class="stack-name">Northwind Logistics</span>
+          <span class="stack-meta">PROOF · DAY 9 · $112K</span>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">Signal</div>
+          <div class="stack-text">Pilot ran clean. No readout scheduled.</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">Reason</div>
+          <div class="stack-text">Readout owner field is empty after five days. Freshness expires at fourteen.</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label move">Move</div>
+          <div class="stack-text move">Name a readout owner before the pilot ages out.</div>
+        </div>
+        <div class="stack-foot">
+          <button class="btn btn-primary">Assign owner</button>
+          <button class="btn btn-ghost">Open proof</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 02 - calm table -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">TWO</span>
+      <div class="section-head-text">
+        <h2>The plain table.</h2>
+        <p>Clean rows. One precise signal column. No colored badges fighting for attention. The mark shows up only when something has shifted.</p>
+      </div>
+    </div>
+
+    <div class="card" style="padding:8px 24px;">
+      <table class="table">
+        <thead>
+          <tr><th>Account</th><th>Stage</th><th>Value</th><th>Day</th><th>Signal</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="name">Acme Corp.</div><div class="ctx">Champion silent since Nov 3</div></td>
+            <td>Proposal</td>
+            <td class="num">$84,000</td>
+            <td class="num">18</td>
+            <td><span class="sig risk">At risk</span></td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+          <tr>
+            <td><div class="name">Northwind Logistics</div><div class="ctx">Pilot pending readout</div></td>
+            <td>Proof</td>
+            <td class="num">$112,000</td>
+            <td class="num">9</td>
+            <td><span class="sig attn">Attn</span></td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+          <tr>
+            <td><div class="name">Cordillera Health</div><div class="ctx">Legal stalled on residency</div></td>
+            <td>Negotiation</td>
+            <td class="num">$340,000</td>
+            <td class="num">47</td>
+            <td><span class="sig risk">Exec</span></td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+          <tr>
+            <td><div class="name">Helix Robotics</div><div class="ctx">CFO meeting Thursday</div></td>
+            <td>Negotiation</td>
+            <td class="num">$240,000</td>
+            <td class="num">4</td>
+            <td><span class="sig healthy">Track</span></td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+          <tr>
+            <td><div class="name">Stonebridge Capital</div><div class="ctx">No movement since 29 May</div></td>
+            <td>Discovery</td>
+            <td class="num">$56,000</td>
+            <td class="num">22</td>
+            <td><span class="sig">—</span></td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+          <tr>
+            <td><div class="name">Marlin Group</div><div class="ctx">Champion confirmed week 2</div></td>
+            <td>Discovery</td>
+            <td class="num">$38,000</td>
+            <td class="num">11</td>
+            <td><span class="sig">—</span></td>
+            <td><button class="btn btn-ghost">Open ↗</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 03 - cards plain until risk -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">THREE</span>
+      <div class="section-head-text">
+        <h2>Cards are plain until they aren't.</h2>
+        <p>Most cards carry no special mark. When risk or attention appears, a thin left rule shows up — just enough to read, never enough to shout.</p>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-name">Helix Robotics</span>
+          <span class="card-meta">$240K · D4</span>
+        </div>
+        <div class="card-body">CFO meeting confirmed for Thursday. Pre-read due Wednesday morning. Champion threaded the EB last week.</div>
+      </div>
+      <div class="card has-attn">
+        <div class="card-head">
+          <span class="card-name">Northwind Logistics</span>
+          <span class="card-meta">$112K · D9</span>
+        </div>
+        <div class="card-body">Pilot ran clean. Readout owner unset for five days.</div>
+      </div>
+      <div class="card has-risk">
+        <div class="card-head">
+          <span class="card-name">Acme Corp.</span>
+          <span class="card-meta">$84K · D18</span>
+        </div>
+        <div class="card-body">Champion silent twelve days. Procurement re-opened pricing. The deal slips if the CFO doesn't see the redline by Friday.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 - side glow alerts -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FOUR</span>
+      <div class="section-head-text">
+        <h2>Side glow, not warning block.</h2>
+        <p>Alerts and notifications carry a thin colored rule on one edge plus a short label. They sit in the layout without disrupting it. No giant icons. No flashing chrome.</p>
+      </div>
+    </div>
+
+    <div class="vstack">
+      <div class="side-glow risk">
+        <span class="side-glow-key">Risk</span>
+        <span class="side-glow-body">Acme has not received the revised proposal. If the CFO doesn't see it before Friday, this deal slips.</span>
+        <button class="btn btn-accent">Draft note</button>
+      </div>
+      <div class="side-glow">
+        <span class="side-glow-key">Attn</span>
+        <span class="side-glow-body">Northwind pilot is at day nine. Readout owner is still unassigned.</span>
+        <button class="btn btn-secondary">Assign owner</button>
+      </div>
+      <div class="side-glow signal">
+        <span class="side-glow-key">Signal</span>
+        <span class="side-glow-body">Late-stage price pressure across two ICP segments. Worth reading before the Acme draft.</span>
+        <button class="btn btn-secondary">Open brief</button>
+      </div>
+      <div class="side-glow healthy">
+        <span class="side-glow-key">Verified</span>
+        <span class="side-glow-body">Proof readout owner assigned to Sarah. Northwind pilot enters Decide.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 - empty state + lexicon -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FIVE</span>
+      <div class="section-head-text">
+        <h2>Calm guidance.</h2>
+        <p>Empty states read as guidance, not mascot comedy. Tooltips explain in plain language. The lexicon stays small.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="empty">
+        <div class="empty-eyebrow">RECOVERY QUEUE · EMPTY</div>
+        <h3 class="empty-title">Nothing requires your attention right now.</h3>
+        <p class="empty-body">Three things may surface tomorrow. The Helix pre-read is due Wednesday and the Acme CFO note can wait until then if the procurement reply lands.</p>
+        <button class="btn btn-secondary">Open tomorrow's letter</button>
+      </div>
+
+      <div class="vstack" style="gap:24px;">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Lexicon</div>
+          <div class="hstack" style="gap:10px;">
+            <span class="chip healthy">On track</span>
+            <span class="chip signal">New signal</span>
+            <span class="chip attn">Attn</span>
+            <span class="chip risk">At risk</span>
+            <span class="chip">Awaiting</span>
+          </div>
+          <div class="hstack" style="margin-top:14px;">
+            <button class="btn btn-accent">Draft note</button>
+            <button class="btn btn-primary">Carry to advisor</button>
+            <button class="btn btn-secondary">Save draft</button>
+            <button class="btn btn-ghost">Dismiss</button>
+          </div>
+        </div>
+
+        <div class="card" style="padding:18px 22px;">
+          <div class="field">
+            <label class="field-label">Buying group minimum</label>
+            <input class="input" value="5">
+            <div class="field-help">
+              <span class="tip-wrap">
+                <span class="tip">One of the eight quality checks the ICP score reads from. Typical 3–7 for B2B teams.</span>
+                <span class="tip-anchor">How is this used?</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin-bottom:10px;">
+      <strong>Signal Calm.</strong> Most of the product is plain. The signature is the repeated <strong>Signal / Reason / Move</strong> grammar — the operator and the inheritor both learn to read it once and recognize it everywhere. Risk and attention show up as restrained side-glow marks, never as cockpit chrome.
+    </p>
+    <p style="margin:0;">
+      <strong>Canon preserved.</strong> Bright field. DM Serif Display reserved for headlines and stats. Public Sans dominant. JetBrains Mono only for codes, IDs, and the small uppercase labels that carry the Signal/Reason/Move structure. Orange for the dominant move; all canon color roles intact.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>

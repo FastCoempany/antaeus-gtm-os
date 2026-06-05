@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Combined System — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F8FA;
+    --surface: #FFFFFF;
+    --surface-sub: #FAFBFD;
+    --surface-tucked: #F1F4F8;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --seam: rgba(10, 28, 64, 0.07);
+    --seam-strong: rgba(10, 28, 64, 0.16);
+    --hair: rgba(10, 28, 64, 0.06);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.10);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.06);
+    --shadow-rest: 0 1px 2px rgba(10,28,64,0.03), 0 4px 12px rgba(10,28,64,0.04);
+    --shadow-offset: 0 2px 4px rgba(10,28,64,0.05), 0 16px 36px rgba(10,28,64,0.07);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1180px; margin: 0 auto; padding: 80px 48px 144px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .masthead { margin-bottom: 112px; max-width: 760px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 24px 0 16px;
+  }
+  .masthead-sub {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+  .masthead-body { font-size: 15px; line-height: 1.7; max-width: 60ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+  .masthead-credits {
+    margin-top: 24px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .credit {
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 5px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+  .credit strong { color: var(--orange); }
+
+  .section { margin-bottom: 112px; }
+  .section-head { margin-bottom: 40px; display: grid; grid-template-columns: 80px 1fr; gap: 24px; align-items: baseline; }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+  .section-head-text p {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  /* ============================= */
+  /* SHELL — calm base, seam detail */
+  /* ============================= */
+  .shell {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 12px;
+    box-shadow: var(--shadow-rest);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 580px;
+    overflow: hidden;
+  }
+  .nav {
+    background: var(--surface-tucked);
+    padding: 24px 14px;
+    border-right: 1px solid var(--seam);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .nav-mark {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    padding: 0 8px 24px;
+    border-bottom: 1px solid var(--seam);
+    margin-bottom: 12px;
+  }
+  .nav-group {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding: 12px 8px 4px;
+  }
+  .nav-item {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-item:hover { color: var(--ink); }
+  .nav-item.active {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    margin-left: 8px;
+    padding-left: 14px;
+    box-shadow: inset 0 1px 0 var(--seam), 0 1px 2px rgba(10,28,64,0.04);
+    position: relative;
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    background: var(--orange);
+    border-radius: 2px;
+  }
+  .nav-item .ct {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .nav-item.active .ct { color: var(--orange); }
+
+  .main { padding: 28px 32px; display: flex; flex-direction: column; gap: 22px; }
+  .main-topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--seam);
+  }
+  .main-topline h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    line-height: 1.1;
+    margin: 4px 0 0;
+  }
+  .main-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+
+  /* Summary - calm */
+  .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .summary-cell .summary-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .summary-cell .summary-val {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1;
+  }
+  .summary-cell .summary-val.risk { color: var(--red); }
+  .summary-cell .summary-val.attn { color: var(--amber); }
+
+  /* Tabs - tucked (Seamline) */
+  .tabs-wrap {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .tabs {
+    display: flex;
+    background: var(--surface-tucked);
+    border-bottom: 1px solid var(--seam);
+    padding: 0 4px;
+  }
+  .tab {
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-weight: 500;
+    border-radius: 6px 6px 0 0;
+  }
+  .tab.active {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: -1px;
+    box-shadow: 1px -1px 0 var(--seam), -1px -1px 0 var(--seam);
+  }
+  .tabs-body { padding: 14px 16px; }
+
+  /* Plain table — Signal Calm */
+  .table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .table th {
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 10px 12px 8px 0;
+    border-bottom: 1px solid var(--seam);
+  }
+  .table td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--seam); }
+  .table tr:last-child td { border-bottom: none; }
+  .table .name { font-weight: 600; }
+  .table .ctx { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .table .num { font-family: "JetBrains Mono", monospace; color: var(--ink-soft); }
+  .table .sig {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .table .sig.risk { color: var(--red); }
+  .table .sig.attn { color: var(--amber); }
+  .table .sig.healthy { color: #15803D; }
+
+  /* The elevated row — Offset Logic, used rarely */
+  .table tr.elev td {
+    background: var(--orange-soft);
+    border-bottom-color: transparent;
+  }
+  .table tr.elev td:first-child {
+    padding-left: 14px;
+    position: relative;
+  }
+  .table tr.elev td:first-child::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 6px; bottom: 6px;
+    width: 3px;
+    background: var(--orange);
+    border-radius: 2px;
+  }
+
+  /* Buttons */
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.20);
+  }
+  .btn-accent {
+    background: var(--orange);
+    color: white;
+    border-color: var(--orange);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(0,0,0,0.14);
+  }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--hair-strong);
+    box-shadow: inset 0 -1px 0 rgba(10,28,64,0.04);
+  }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 12px; }
+
+  /* ============================= */
+  /* SIGNAL STACK — the grammar    */
+  /* ============================= */
+  .stack {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-rest);
+  }
+  .stack-head {
+    padding: 18px 22px;
+    background: var(--surface);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .stack-name { font-size: 16px; font-weight: 600; }
+  .stack-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .seam-rule {
+    position: relative;
+    height: 1px;
+    background: var(--seam);
+  }
+  .seam-rule-label {
+    position: absolute;
+    top: -8px;
+    left: 22px;
+    background: var(--surface);
+    padding: 0 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .seam-rule-label.move { color: var(--orange); }
+  .stack-row {
+    padding: 16px 22px;
+    background: var(--surface);
+  }
+  .stack-row.body { background: var(--surface-sub); }
+  .stack-row.move { background: var(--surface); }
+  .stack-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .stack-label.move { color: var(--orange); }
+  .stack-text { font-size: 14px; line-height: 1.55; color: var(--ink); }
+  .stack-text.move { font-weight: 500; font-size: 15px; }
+  .stack-foot {
+    padding: 14px 22px;
+    background: var(--surface);
+    border-top: 1px solid var(--seam);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  /* Side glow alerts */
+  .side-glow {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-left: 2px solid var(--amber);
+    padding: 12px 18px;
+    border-radius: 0 6px 6px 0;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    box-shadow: var(--shadow-rest);
+  }
+  .side-glow.risk { border-left-color: var(--red); }
+  .side-glow.signal { border-left-color: var(--blue); }
+  .side-glow-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .side-glow.risk .side-glow-key { color: var(--red); }
+  .side-glow.signal .side-glow-key { color: var(--blue); }
+  .side-glow-body { font-size: 14px; line-height: 1.5; color: var(--ink); flex: 1; }
+
+  /* ============================= */
+  /* OFFSET RECOMMENDATION (rare)  */
+  /* ============================= */
+  .offset-rec {
+    position: relative;
+    padding-top: 18px;
+    padding-bottom: 28px;
+  }
+  .offset-rec-eyebrow {
+    position: absolute;
+    top: 0;
+    left: 36px;
+    background: var(--orange);
+    color: white;
+    padding: 6px 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-radius: 6px;
+    box-shadow: var(--shadow-offset);
+    font-weight: 600;
+    z-index: 2;
+  }
+  .offset-rec-body {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 10px;
+    padding: 32px 28px 22px;
+    box-shadow: var(--shadow-rest);
+  }
+  .offset-rec-name { font-family: "DM Serif Display", serif; font-size: 24px; line-height: 1.1; margin: 0 0 4px; }
+  .offset-rec-context {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .offset-rec-action {
+    margin-top: 18px;
+    margin-right: -8px;
+    margin-bottom: -36px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .offset-rec-action button {
+    box-shadow: var(--shadow-offset);
+  }
+
+  /* Inputs */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .field-help { font-size: 12px; color: var(--ink-soft); }
+  .input {
+    width: 100%;
+    padding: 8px 4px;
+    border: none;
+    border-bottom: 1.5px solid var(--seam-strong);
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+  }
+  .input:focus { outline: none; border-bottom-color: var(--orange); }
+
+  /* Chips */
+  .chip {
+    display: inline-flex;
+    padding: 2px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink-soft);
+    border-radius: 3px;
+    background: transparent;
+    border: 1px solid var(--hair-strong);
+  }
+  .chip.risk { color: var(--red); border-color: var(--red); }
+  .chip.attn { color: var(--amber); border-color: var(--amber); }
+  .chip.healthy { color: #15803D; border-color: var(--green); }
+
+  /* Grid helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .vstack { display: flex; flex-direction: column; gap: 18px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  /* Helpers */
+  .layered {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 10px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-rest);
+  }
+  .layered-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .concept {
+    margin-top: 112px;
+    padding: 28px 32px;
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 10px;
+    box-shadow: var(--shadow-rest);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 16px;
+  }
+  .concept-grid > div { padding-right: 16px; border-right: 1px solid var(--seam); }
+  .concept-grid > div:last-child { border-right: none; }
+  .concept-grid h4 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">THE COMBINED SYSTEM · 2026·06·05</p>
+    <h1>Calm, seamed, and slightly off-square.</h1>
+    <p class="masthead-sub">Signal Calm as the base. Seamline as the signature. Offset Logic for the rare emphasis moments.</p>
+    <p class="masthead-body">
+      The product feels serious, premium, and recognizable — without wearing a costume. The base is calm: most surfaces are plain, with the <strong>Signal / Reason / Move</strong> grammar repeating across deals, briefs, and recommendations. The visual signature is the seam — fine joins between header, body, and next-move zone; tucked tabs; bottom-rule inputs. And on the rare moments that earn it, the layout offsets — an eyebrow shifts outside the card edge, a row breaks rank, an action button extends beyond its frame. Used sparingly, the offset reads as <strong>this matters</strong> rather than as decoration.
+    </p>
+    <div class="masthead-credits">
+      <span class="credit">BASE · <strong>SIGNAL CALM</strong></span>
+      <span class="credit">SIGNATURE · <strong>SEAMLINE</strong></span>
+      <span class="credit">EMPHASIS · <strong>OFFSET LOGIC</strong></span>
+    </div>
+  </header>
+
+  <!-- 01 - the shell -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">ONE</span>
+      <div class="section-head-text">
+        <h2>The working shell.</h2>
+        <p>Calm summary, tucked tabs, plain table. The active row in the queue is the one elevated piece — Offset Logic reserved for what matters right now.</p>
+      </div>
+    </div>
+
+    <div class="shell">
+      <aside class="nav">
+        <div class="nav-mark">Antaeus</div>
+        <div class="nav-group">Today</div>
+        <div class="nav-item active">Dashboard <span class="ct">12</span></div>
+        <div class="nav-item">Briefing <span class="ct">3</span></div>
+        <div class="nav-item">Signal Console <span class="ct">37</span></div>
+        <div class="nav-group">Pipeline</div>
+        <div class="nav-item">Deal Workspace</div>
+        <div class="nav-item">Future Autopsy</div>
+        <div class="nav-item">PoC Framework</div>
+      </aside>
+      <main class="main">
+        <div class="main-topline">
+          <div>
+            <div class="eyebrow">DASHBOARD · TUESDAY MORNING</div>
+            <h3>Where the motion is today.</h3>
+          </div>
+          <span class="main-meta">09:12 CT · ⌘K</span>
+        </div>
+
+        <div class="summary">
+          <div class="summary-cell">
+            <div class="summary-label">Active deals</div>
+            <div class="summary-val">37</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Critical</div>
+            <div class="summary-val risk">3</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Stale &gt; 14d</div>
+            <div class="summary-val attn">8</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Win rate</div>
+            <div class="summary-val">22%</div>
+          </div>
+        </div>
+
+        <div class="tabs-wrap">
+          <div class="tabs">
+            <div class="tab active">Recovery queue</div>
+            <div class="tab">This week</div>
+            <div class="tab">All open</div>
+          </div>
+          <div class="tabs-body">
+            <table class="table">
+              <thead>
+                <tr><th>Account</th><th>Stage</th><th>Value</th><th>Day</th><th>Signal</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="name">Helix Robotics</div><div class="ctx">CFO meeting Thursday</div></td>
+                  <td>Negotiation</td><td class="num">$240,000</td><td class="num">4</td>
+                  <td><span class="sig healthy">Track</span></td>
+                  <td><button class="btn btn-ghost">Open ↗</button></td>
+                </tr>
+                <tr>
+                  <td><div class="name">Northwind Logistics</div><div class="ctx">Pilot pending readout</div></td>
+                  <td>Proof</td><td class="num">$112,000</td><td class="num">9</td>
+                  <td><span class="sig attn">Attn</span></td>
+                  <td><button class="btn btn-ghost">Open ↗</button></td>
+                </tr>
+                <tr class="elev">
+                  <td><div class="name">Acme Corp.</div><div class="ctx">Champion silent · procurement re-opened pricing</div></td>
+                  <td>Proposal</td><td class="num">$84,000</td><td class="num">18</td>
+                  <td><span class="sig risk">At risk</span></td>
+                  <td><button class="btn btn-accent">Draft note</button></td>
+                </tr>
+                <tr>
+                  <td><div class="name">Cordillera Health</div><div class="ctx">Legal stalled on residency</div></td>
+                  <td>Negotiation</td><td class="num">$340,000</td><td class="num">47</td>
+                  <td><span class="sig risk">Exec</span></td>
+                  <td><button class="btn btn-ghost">Open ↗</button></td>
+                </tr>
+                <tr>
+                  <td><div class="name">Stonebridge Capital</div><div class="ctx">No movement since 29 May</div></td>
+                  <td>Discovery</td><td class="num">$56,000</td><td class="num">22</td>
+                  <td><span class="sig">—</span></td>
+                  <td><button class="btn btn-ghost">Open ↗</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- 02 - signal stack with seams -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">TWO</span>
+      <div class="section-head-text">
+        <h2>The Signal Stack, seamed.</h2>
+        <p>Signal / Reason / Move as the recurring grammar. Each row a layered panel. The "Move" label tucks into the seam between Reason and Move — Seamline carrying Signal Calm's structural unit.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="stack">
+        <div class="stack-head">
+          <span class="stack-name">Acme Corp.</span>
+          <span class="stack-meta">PROPOSAL · DAY 18 · $84K</span>
+        </div>
+        <div class="seam-rule"><span class="seam-rule-label">— Signal</span></div>
+        <div class="stack-row body">
+          <div class="stack-text">Champion engagement is down.</div>
+        </div>
+        <div class="seam-rule"><span class="seam-rule-label">— Reason</span></div>
+        <div class="stack-row body">
+          <div class="stack-text">No reply in twelve days after procurement re-opened pricing on Nov 3. Pattern matches three prior closed-lost.</div>
+        </div>
+        <div class="seam-rule"><span class="seam-rule-label move">— Move</span></div>
+        <div class="stack-row move">
+          <div class="stack-text move">Send executive value recap to CFO before next forecast call.</div>
+        </div>
+        <div class="stack-foot">
+          <button class="btn btn-ghost">Mark for later</button>
+          <button class="btn btn-accent">Draft note</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="stack-head">
+          <span class="stack-name">Northwind Logistics</span>
+          <span class="stack-meta">PROOF · DAY 9 · $112K</span>
+        </div>
+        <div class="seam-rule"><span class="seam-rule-label">— Signal</span></div>
+        <div class="stack-row body">
+          <div class="stack-text">Pilot ran clean. No readout scheduled.</div>
+        </div>
+        <div class="seam-rule"><span class="seam-rule-label">— Reason</span></div>
+        <div class="stack-row body">
+          <div class="stack-text">Readout owner field is empty after five days. Freshness expires at fourteen.</div>
+        </div>
+        <div class="seam-rule"><span class="seam-rule-label move">— Move</span></div>
+        <div class="stack-row move">
+          <div class="stack-text move">Name a readout owner before the pilot ages out.</div>
+        </div>
+        <div class="stack-foot">
+          <button class="btn btn-ghost">Open proof</button>
+          <button class="btn btn-primary">Assign owner</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 03 - earned offset rec -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">THREE</span>
+      <div class="section-head-text">
+        <h2>The earned offset.</h2>
+        <p>When something is the single most-important read in the workspace, Offset Logic shows up: the eyebrow tag sits outside the card edge in orange fill, the action button extends below the frame. Used once or twice on a page, never more.</p>
+      </div>
+    </div>
+
+    <div style="max-width:680px;">
+
+      <div class="offset-rec">
+        <div class="offset-rec-eyebrow">— Today's most important read</div>
+        <div class="offset-rec-body">
+          <h3 class="offset-rec-name">Acme Corp.</h3>
+          <div class="offset-rec-context">PROPOSAL · DAY 18 · $84,000</div>
+          <p style="font-size:17px; line-height:1.5; margin:0 0 14px;">Likely to slip unless the CFO sees the redline before Friday. The pattern matches three prior closed-lost deals where procurement re-opened pricing after the demo.</p>
+          <p style="font-size:14px; color:var(--ink-soft); line-height:1.55; margin:0;">Backchannel via Tasha is available. The advisor briefing took ninety seconds last quarter and the deal recovered. Worth pairing the CFO note with the call.</p>
+          <div class="offset-rec-action">
+            <button class="btn btn-secondary">Carry to Tasha</button>
+            <button class="btn btn-accent">Draft CFO note</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 - quiet alerts + lexicon -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FOUR</span>
+      <div class="section-head-text">
+        <h2>Quiet alerts. Restrained lexicon.</h2>
+        <p>Side-glow alerts carry one rule and one action. Chips stay text-first, bordered, small. The signature button has an inner-stroke seam that catches the light.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="vstack">
+        <div class="side-glow risk">
+          <span class="side-glow-key">Risk</span>
+          <span class="side-glow-body">Acme has not received the revised proposal. Deal slips if the CFO doesn't see it by Friday.</span>
+          <button class="btn btn-accent">Draft note</button>
+        </div>
+        <div class="side-glow">
+          <span class="side-glow-key">Attn</span>
+          <span class="side-glow-body">Northwind pilot is at day nine. Readout owner still unassigned.</span>
+          <button class="btn btn-secondary">Assign</button>
+        </div>
+        <div class="side-glow signal">
+          <span class="side-glow-key">Signal</span>
+          <span class="side-glow-body">Late-stage price pressure across two ICP segments. Worth reading first.</span>
+          <button class="btn btn-secondary">Open brief</button>
+        </div>
+      </div>
+
+      <div class="layered">
+        <div class="layered-eyebrow">LEXICON</div>
+        <div class="hstack" style="gap:10px; margin-bottom:18px;">
+          <span class="chip healthy">On track</span>
+          <span class="chip">New signal</span>
+          <span class="chip attn">Attn</span>
+          <span class="chip risk">At risk</span>
+          <span class="chip">Awaiting</span>
+        </div>
+        <div class="hstack" style="margin-bottom:24px;">
+          <button class="btn btn-accent">Draft note</button>
+          <button class="btn btn-primary">Carry to advisor</button>
+          <button class="btn btn-secondary">Save draft</button>
+          <button class="btn btn-ghost">Dismiss</button>
+        </div>
+        <div class="field">
+          <label class="field-label">Buying group minimum</label>
+          <input class="input" value="5">
+          <div class="field-help">Typical 3–7 decision-makers for most B2B teams.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Concept summary -->
+  <aside class="concept">
+    <div class="concept-eyebrow">The composition</div>
+    <p style="margin:0 0 12px;">
+      <strong>Three layers, working together.</strong> The base posture is Signal Calm — most surfaces are plain; cards are unmarked until a risk or action appears; the Signal / Reason / Move grammar repeats. The visual signature is Seamline — fine joins between header, body, and next-move zone; tucked tabs; bottom-rule inputs; buttons with an inner-stroke seam. The earned emphasis is Offset Logic — used once or twice per surface for what actually matters today.
+    </p>
+    <div class="concept-grid">
+      <div>
+        <h4>BASE · Signal Calm</h4>
+        <p style="margin:0; font-size:13px;">The default voice of every surface. Plain until something matters. Signal / Reason / Move as the repeated structural unit. Side-glow alerts. Quiet tables.</p>
+      </div>
+      <div>
+        <h4>SIGNATURE · Seamline</h4>
+        <p style="margin:0; font-size:13px;">The construction detail. Cards built in seamed sections. Tabs tuck into the surface. Inputs carry only a bottom rule. Buttons have an inner-stroke seam.</p>
+      </div>
+      <div>
+        <h4>EMPHASIS · Offset Logic</h4>
+        <p style="margin:0; font-size:13px;">Reserved. The one row that breaks rank. The eyebrow tag that sits outside the card. The action button that extends beyond its frame. One per surface at most.</p>
+      </div>
+    </div>
+    <p style="margin:18px 0 0;">
+      <strong>Canon preserved throughout.</strong> Bright field. DM Serif Display for headlines and stats. Public Sans for body and controls. JetBrains Mono for codes, IDs, and the Signal / Reason / Move labels. Orange as the rationed accent for the dominant move; all canon color roles intact. The voice rule honored — every surface sounds like a peer operator naming what is real.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>

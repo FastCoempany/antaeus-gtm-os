@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seamline — Antaeus design direction</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F4F6FA;
+    --surface: #FFFFFF;
+    --surface-sub: #FAFBFD;
+    --surface-tucked: #F1F4F9;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --seam: rgba(10, 28, 64, 0.07);
+    --seam-strong: rgba(10, 28, 64, 0.16);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.08);
+    --shadow-rest: 0 1px 2px rgba(10,28,64,0.04), 0 4px 12px rgba(10,28,64,0.05);
+    --shadow-tucked: inset 0 1px 0 rgba(10,28,64,0.04);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1180px; margin: 0 auto; padding: 80px 48px 144px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .masthead { margin-bottom: 96px; max-width: 720px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 24px 0 16px;
+  }
+  .masthead-sub {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+  .masthead-body { font-size: 15px; line-height: 1.7; max-width: 60ch; color: var(--ink); margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  .section { margin-bottom: 96px; }
+  .section-head { margin-bottom: 32px; display: grid; grid-template-columns: 80px 1fr; gap: 24px; align-items: baseline; }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+  .section-head-text p {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  /* ============================= */
+  /* SEAMED CARD — the signature   */
+  /* ============================= */
+  .card {
+    background: var(--surface);
+    border-radius: 8px;
+    box-shadow: var(--shadow-rest);
+    overflow: hidden;
+    border: 1px solid var(--seam);
+  }
+  .card-head {
+    padding: 18px 22px 14px;
+    background: var(--surface);
+  }
+  .card-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-title { font-size: 17px; font-weight: 600; margin: 0; }
+  .card-context { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+
+  /* The seam — the construction detail */
+  .seam {
+    position: relative;
+    height: 1px;
+    background: var(--seam);
+    margin: 0 0;
+  }
+  .seam-label {
+    position: absolute;
+    top: -8px;
+    left: 22px;
+    background: var(--surface);
+    padding: 0 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .seam-label.act { color: var(--orange); }
+
+  .card-body {
+    padding: 20px 22px;
+    background: var(--surface-sub);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .card-body p { margin: 0 0 12px; }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  .card-action {
+    padding: 18px 22px;
+    background: var(--surface);
+    border-top: 1px solid var(--seam);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+  }
+  .card-action-text { font-size: 14px; font-weight: 500; line-height: 1.45; flex: 1; }
+
+  /* ============================= */
+  /* BUTTONS — subtle inner border */
+  /* ============================= */
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 16px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: box-shadow 0.12s;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.20);
+  }
+  .btn-primary:hover { background: var(--ink-700); }
+  .btn-accent {
+    background: var(--orange);
+    color: white;
+    border-color: var(--orange);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.16);
+  }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--hair-strong);
+    box-shadow: inset 0 -1px 0 rgba(10,28,64,0.04);
+  }
+  .btn-secondary:hover { border-color: var(--ink-quiet); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 12px; }
+
+  /* ============================= */
+  /* INPUT — fine bottom seam       */
+  /* ============================= */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .field-help { font-size: 12px; color: var(--ink-soft); }
+  .input {
+    width: 100%;
+    padding: 9px 4px;
+    border: none;
+    border-bottom: 1.5px solid var(--seam-strong);
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    transition: border-color 0.15s;
+  }
+  .input:focus { outline: none; border-bottom-color: var(--orange); }
+
+  /* ============================= */
+  /* TABS — tucked into surface     */
+  /* ============================= */
+  .tabs-frame {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-rest);
+  }
+  .tabs {
+    display: flex;
+    background: var(--surface-tucked);
+    border-bottom: 1px solid var(--seam);
+    padding: 0 4px;
+    position: relative;
+  }
+  .tab {
+    padding: 12px 18px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    position: relative;
+    font-weight: 500;
+    border-radius: 8px 8px 0 0;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: -1px;
+    z-index: 1;
+    box-shadow: 1px -1px 0 var(--seam), -1px -1px 0 var(--seam);
+  }
+  .tabs-body { padding: 24px; }
+
+  /* ============================= */
+  /* CHIPS — sit on seams           */
+  /* ============================= */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 3px;
+    background: var(--surface-tucked);
+    color: var(--ink-soft);
+    box-shadow: inset 0 -1px 0 var(--seam);
+  }
+  .chip--risk { background: var(--red-soft); color: #B91C1C; }
+  .chip--attn { background: var(--amber-soft); color: #B45309; }
+  .chip--healthy { background: var(--green-soft); color: #15803D; }
+  .chip--signal { background: var(--blue-soft); color: #1D4ED8; }
+
+  /* ============================= */
+  /* DRAWER — nested tray           */
+  /* ============================= */
+  .drawer {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-rest);
+  }
+  .drawer-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--seam);
+    background: var(--surface-sub);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .drawer-title { font-size: 14px; font-weight: 600; }
+  .drawer-body { padding: 20px; }
+  .drawer-tray {
+    margin: 16px 0 0;
+    background: var(--surface-sub);
+    border-top: 1px solid var(--seam);
+    padding: 16px 20px;
+    position: relative;
+  }
+  .drawer-tray::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 16px; right: 16px;
+    height: 1px;
+    background: var(--seam-strong);
+  }
+  .drawer-tray-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+
+  /* ============================= */
+  /* SHELL — layered panels         */
+  /* ============================= */
+  .shell {
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 12px;
+    box-shadow: var(--shadow-rest);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 540px;
+    overflow: hidden;
+  }
+  .shell-nav {
+    background: var(--surface-tucked);
+    padding: 24px 14px;
+    border-right: 1px solid var(--seam);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .shell-mark {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    padding: 0 8px 24px;
+    border-bottom: 1px solid var(--seam);
+    margin-bottom: 12px;
+  }
+  .shell-nav-group {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding: 12px 8px 4px;
+  }
+  .shell-nav-item {
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+  }
+  .shell-nav-item:hover { color: var(--ink); }
+  .shell-nav-item.active {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 var(--seam), 0 1px 2px rgba(10,28,64,0.04);
+  }
+  .shell-nav-item .ct {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .shell-nav-item.active .ct { color: var(--orange); }
+
+  .shell-main {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .shell-topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--seam);
+  }
+  .shell-topline h3 { font-family: "DM Serif Display", serif; font-size: 28px; line-height: 1.1; margin: 4px 0 0; }
+  .shell-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+
+  /* Account list with seam */
+  .account-list { display: flex; flex-direction: column; }
+  .account-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--seam);
+  }
+  .account-row:last-child { border-bottom: none; }
+  .account-name { font-weight: 600; font-size: 14px; }
+  .account-ctx { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .account-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  /* Grid helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .vstack { display: flex; flex-direction: column; gap: 16px; }
+
+  .concept {
+    margin-top: 96px;
+    padding: 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--seam);
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">SEAMLINE · DIRECTION 01 · 2026·06·05</p>
+    <h1>Seamline.</h1>
+    <p class="masthead-sub">Distinctiveness comes from construction detail. The app feels assembled with precision.</p>
+    <p class="masthead-body">
+      A premium SaaS surface where every panel carries a quiet seam — a fine join between header and body, a tucked tab that connects to its content, a bottom-rule input that feels physically attached to the form. Not fashion. Not document. Not dashboard. <strong>The detail is in how the pieces fit together</strong>, and a buyer recognizes Antaeus by the construction without ever having to interpret a metaphor.
+    </p>
+  </header>
+
+  <!-- 01 - the signature -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">ONE</span>
+      <div class="section-head-text">
+        <h2>The Seamed Card.</h2>
+        <p>Header, body, and next-move zone connected by visible joins. The "Next Move" seam is the signature — the label tucks into the rule between body and action.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-eyebrow">ACCOUNT · ENTERPRISE</div>
+          <h3 class="card-title">Acme Corp.</h3>
+          <div class="card-context">Proposal · day 18 · $84,000</div>
+        </div>
+        <div class="card-body">
+          <p>Renewal risk has increased. Champion has been silent for twelve days; procurement re-opened pricing on Nov 3.</p>
+          <p>Pattern matches three prior closed-lost deals where the same shape played out at quarter-end.</p>
+        </div>
+        <div class="seam"><span class="seam-label act">— Next move</span></div>
+        <div class="card-action">
+          <div class="card-action-text">Send revised proposal to CFO before EOW. Backchannel via Tasha as air cover.</div>
+          <button class="btn btn-accent">Draft note</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-eyebrow">ACCOUNT · MID-MARKET</div>
+          <h3 class="card-title">Northwind Logistics</h3>
+          <div class="card-context">Proof · day 9 · $112,000</div>
+        </div>
+        <div class="card-body">
+          <p>Pilot ran clean. The readout owner field is still empty after five days.</p>
+        </div>
+        <div class="seam"><span class="seam-label act">— Next move</span></div>
+        <div class="card-action">
+          <div class="card-action-text">Name a readout owner this morning, before pilot age crosses fourteen days.</div>
+          <button class="btn btn-primary">Assign owner</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 02 - tucked tabs -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">TWO</span>
+      <div class="section-head-text">
+        <h2>Tucked tabs.</h2>
+        <p>The active tab connects to its content with a seam — it reads as one continuous surface, not a button hovering above a panel.</p>
+      </div>
+    </div>
+
+    <div class="tabs-frame">
+      <div class="tabs">
+        <div class="tab active">Recovery queue</div>
+        <div class="tab">This week</div>
+        <div class="tab">All open</div>
+        <div class="tab">Silent &gt; 14d</div>
+      </div>
+      <div class="tabs-body">
+        <div class="account-list">
+          <div class="account-row">
+            <div><div class="account-name">Acme Corp.</div><div class="account-ctx">Champion silent · procurement re-opened pricing</div></div>
+            <div class="account-num">$84,000</div>
+            <span class="chip chip--risk">At risk</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+          <div class="account-row">
+            <div><div class="account-name">Northwind Logistics</div><div class="account-ctx">Proof pending readout owner</div></div>
+            <div class="account-num">$112,000</div>
+            <span class="chip chip--attn">Attn</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+          <div class="account-row">
+            <div><div class="account-name">Cordillera Health</div><div class="account-ctx">Legal stalled · no exec sponsor</div></div>
+            <div class="account-num">$340,000</div>
+            <span class="chip chip--risk">Exec</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+          <div class="account-row">
+            <div><div class="account-name">Helix Robotics</div><div class="account-ctx">CFO meeting Thursday</div></div>
+            <div class="account-num">$240,000</div>
+            <span class="chip chip--healthy">Track</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 - shell -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">THREE</span>
+      <div class="section-head-text">
+        <h2>The shell.</h2>
+        <p>Layered panels with visible seams. The nav tucks into the chrome; the active item sits on the surface, not above it.</p>
+      </div>
+    </div>
+
+    <div class="shell">
+      <aside class="shell-nav">
+        <div class="shell-mark">Antaeus</div>
+        <div class="shell-nav-group">Today</div>
+        <div class="shell-nav-item active">Dashboard <span class="ct">12</span></div>
+        <div class="shell-nav-item">Briefing <span class="ct">3</span></div>
+        <div class="shell-nav-item">Signal Console <span class="ct">37</span></div>
+        <div class="shell-nav-group">Pipeline</div>
+        <div class="shell-nav-item">Deal Workspace</div>
+        <div class="shell-nav-item">Future Autopsy</div>
+        <div class="shell-nav-item">PoC Framework</div>
+      </aside>
+      <main class="shell-main">
+        <div class="shell-topline">
+          <div>
+            <div class="eyebrow">DASHBOARD · TUESDAY MORNING</div>
+            <h3>Where the motion is today.</h3>
+          </div>
+          <span class="shell-meta">09:12 CT · ⌘K</span>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-eyebrow">ACTIVE DEALS</div>
+              <div style="font-family:'DM Serif Display',serif; font-size:36px; line-height:1; margin-top:4px;">37</div>
+              <div class="card-context">+2 since Monday</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-eyebrow">CRITICAL</div>
+              <div style="font-family:'DM Serif Display',serif; font-size:36px; line-height:1; margin-top:4px; color:var(--red);">3</div>
+              <div class="card-context">All in proposal</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-eyebrow">STALE &gt; 14d</div>
+              <div style="font-family:'DM Serif Display',serif; font-size:36px; line-height:1; margin-top:4px; color:var(--amber);">8</div>
+              <div class="card-context">Two with movement Friday</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- 04 - drawer with nested tray -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FOUR</span>
+      <div class="section-head-text">
+        <h2>Drawers and trays.</h2>
+        <p>Slide-out drawers contain nested trays — each layer steps inward with a visible seam at the join, not a floating panel.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="drawer">
+        <div class="drawer-head">
+          <div class="drawer-title">Acme Corp. — details</div>
+          <span class="eyebrow">DAY 18</span>
+        </div>
+        <div class="drawer-body">
+          <div class="vstack">
+            <div class="field">
+              <label class="field-label">Champion</label>
+              <input class="input" value="Sarah Chen · VP Operations">
+            </div>
+            <div class="field">
+              <label class="field-label">Economic buyer</label>
+              <input class="input" value="Marcus Reed · CFO">
+            </div>
+            <div class="field">
+              <label class="field-label">Last contact</label>
+              <input class="input" value="Nov 3 · pricing reopened on Slack">
+              <div class="field-help">Twelve days ago. Pattern matches three prior closed-lost.</div>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-tray">
+          <div class="drawer-tray-eyebrow">RECOMMENDED NEXT MOVE</div>
+          <div style="font-size:14px; line-height:1.55; margin-bottom:12px;">Send revised proposal to CFO before EOW. Backchannel via Tasha as air cover.</div>
+          <div class="hstack">
+            <button class="btn btn-accent">Draft note</button>
+            <button class="btn btn-ghost">Mark for later</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vstack" style="gap:20px;">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-eyebrow">CONFIRM · DESTRUCTIVE</div>
+            <h3 class="card-title">Discard draft?</h3>
+          </div>
+          <div class="card-body">
+            <p>You've made unsaved edits to this proof draft. Discarding clears them. No reversion path.</p>
+          </div>
+          <div class="seam"></div>
+          <div class="card-action">
+            <button class="btn btn-ghost">Cancel</button>
+            <button class="btn btn-primary">Discard</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">LEXICON</div>
+          <div class="hstack" style="gap:10px;">
+            <span class="chip chip--healthy">On track</span>
+            <span class="chip chip--signal">New signal</span>
+            <span class="chip chip--attn">Attn</span>
+            <span class="chip chip--risk">At risk</span>
+          </div>
+          <div class="hstack" style="margin-top:14px;">
+            <button class="btn btn-accent">Open recovery</button>
+            <button class="btn btn-primary">Carry to advisor</button>
+            <button class="btn btn-secondary">Save draft</button>
+            <button class="btn btn-ghost">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin-bottom:10px;">
+      <strong>Seamline.</strong> A modern SaaS surface whose distinctive mark is the seam — fine joins between sections, tucked tabs, layered panels, bottom-rule inputs, internal dividers that read as construction details rather than borders. The buyer recognizes Antaeus by how things are put together, not by what they're decorated with.
+    </p>
+    <p style="margin:0;">
+      <strong>Canon preserved.</strong> Bright field. DM Serif Display for titles and stats; Public Sans for body and controls; JetBrains Mono for codes and timestamps. Orange for the dominant move; all canon color roles intact. The seams are the signature.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>
