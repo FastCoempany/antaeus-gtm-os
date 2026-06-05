@@ -28,7 +28,7 @@ The gradient ships with two discrete states.
 
 **Step back** is the fluent state. The system trusts the operator to know their way around: explanations recede, tooltips disappear, and sections default to collapsed with one-line headers carrying their state. One sentence does the work three would have done in Show me how. Sarah-day-90 opens the product and the surfaces are dense, ranked, and immediate. The system stays out of her way.
 
-Both states render the same primitives. Both states carry the same voice. The Antaeus voice does not change between Show me how and Step back; the peer operator with B2B sales scars speaks the same way in both states. What changes is how much of the voice each surface ships at a time, which is the quantity-not-personality framing the voice spec already pinned.
+Both states render the same primitives and carry the same voice. The Antaeus voice does not change between Show me how and Step back; the peer operator with B2B sales scars speaks the same way in both states. What changes is how much of the voice each surface ships at a time, which is the quantity-not-personality framing the voice spec already pinned.
 
 Two states rather than three or a continuous gradient — the spec commits to two because two gives component authors concrete render targets to design against and gives operators stable surfaces that change at observable moments rather than imperceptibly drifting as fluency creeps up. A future v2 can add a third state if the migration audit produces real data showing two is too coarse for specific rooms or specific operator paths.
 
@@ -78,7 +78,7 @@ A density proposal renders in the same Phase F proposal surface as other Phase F
 
 > "You closed your first deal last week. The system has been walking you through every surface — want it to step back? You can switch back any time."
 
-The operator accepts (state flips), dismisses (state holds, ask again in a month), or snoozes (state holds, ask again in a week). Standard Phase F cooldown semantics apply.
+The operator accepts (state flips), dismisses (state holds, ask again in a month — 30-day cooldown), or snoozes (state holds, ask again in a week — 7-day cooldown). Standard Phase F cooldown semantics apply per canon Part II.5 §7.
 
 At the schema level, density proposals are a new kind alongside the existing Phase F kinds. The `proposed_modifications.kind` enum (canon Part II.5 §7, established by ADR-017) gains `'density_change'` as a third value, alongside the existing `'skill_default'` and `'observation_generator'`. The density proposal payload carries `from_state`, `to_state`, and `milestone` fields:
 
@@ -91,7 +91,7 @@ type DensityChangePayload = {
 };
 ```
 
-The apply path extends the existing Phase F apply logic from ADR-017. On accept, the handler writes `to_state` to `workspace_profile.density_state` (with realtime sync per §2.5). On dismiss, the handler records the dismissal and sets a month-long cooldown on the same milestone. On snooze, a week-long cooldown. The dispatch through Phase F means density proposals appear in the same operator-facing surface as other Phase F proposals (the Briefing Suggestions section per canon §4.21) and respect the same workspace-level Phase F toggle (`workspace_profile.phase_f_proposals_enabled`) — an operator who has disabled Phase F sees no density proposals and changes density only through Settings.
+The apply path extends the existing Phase F apply logic from ADR-017. On accept, the handler writes `to_state` to `workspace_profile.density_state` (with realtime sync per §2.5). On dismiss, the handler records the dismissal and sets a 30-day cooldown on the same milestone. On snooze, a 7-day cooldown. The dispatch through Phase F means density proposals appear in the same operator-facing surface as other Phase F proposals (the Briefing Suggestions section per canon §4.21) and respect the same workspace-level Phase F toggle (`workspace_profile.phase_f_proposals_enabled`) — an operator who has disabled Phase F sees no density proposals and changes density only through Settings.
 
 ### 2.4 Named milestones
 
@@ -107,7 +107,7 @@ Five milestones trigger density proposals. Four fire on operator events in new a
 
 **Gradient available (existing workspaces only).** Fires once per existing workspace on first login after the gradient ships. The migration backfill sets those workspaces to `step_back` (the closest approximation of the current single-state product); this proposal asks the operator to confirm the backfill or switch to Show me how. The fifth milestone bridges the gap between existing operators — whose fluency milestones likely already passed before the gradient shipped, so the first four milestones would never fire for them — and the Phase F proposal layer, ensuring every operator gets at least one explicit density choice through Phase F rather than implicit acceptance of a backfill default. The proposal copy reads: "Antaeus just added a setting for how much the system walks you through. Right now it's set to step back — that's how the product worked yesterday. Want to leave it that way, or try walked-through? You can switch any time."
 
-The five milestones are independent. Each fires at most once per workspace. Each respects standard Phase F cooldown (dismiss = month, snooze = week). The milestone selection is intentionally conservative — these are observable signals of real fluency growth, not vanity events. A future v2 may add more (first autopsy run, first advisor deployment, first kit section ready) once the v1 data shows whether five milestones are enough or whether the operator wants more chances to switch.
+The five milestones are independent. Each fires at most once per workspace. Each respects standard Phase F cooldown (dismiss = 30 days, snooze = 7 days). The milestone selection is intentionally conservative — these are observable signals of real fluency growth, not vanity events. A future v2 may add more (first autopsy run, first advisor deployment, first kit section ready) once the v1 data shows whether five milestones are enough or whether the operator wants more chances to switch.
 
 ### 2.5 Storage and persistence
 
@@ -115,7 +115,7 @@ The state lives in Supabase on `workspace_profile.density_state`. Migration `202
 
 Realtime sync (per the existing Supabase Realtime pattern in `src/lib/data-client.ts`) keeps the state consistent across tabs and devices for the same workspace. Changing density state in tab A updates the rendering in tab B within the realtime channel's latency window.
 
-A subtle implementation note that matters for visual stability: components subscribe to `density_state` via a signal layer rather than re-rendering reactively on every read. The state changes infrequently (operator action or accepted proposal), and density-responsive components recompose their four-dimension rendering on state change. No imperceptible animation between states — the surface re-renders in its target state on next paint after a state change.
+A subtle implementation note that matters for visual stability: components read `density_state` through a @preact/signals signal, which triggers a single re-render of affected components when the state changes rather than thrashing on every paint. The state changes infrequently (operator action or accepted proposal), and density-responsive components recompose their four-dimension rendering once per state change. No imperceptible animation between states — the surface re-renders in its target state on next paint after the state changes.
 
 ---
 
@@ -264,19 +264,21 @@ Per charter §3.3, every component spec maps its behavioral mechanism to at leas
 
 **Self-Determination Theory (Tier 3, Deci & Ryan 2000).** The competence-affirming framing of the proposal — "You closed your first deal last week. Want me to step back?" — surfaces real progress without flattery. The accept-or-dismiss agency boundary preserves autonomy. The operator is in charge of their density state at every moment.
 
-**Implementation Intentions (Tier 1, Gollwitzer 1999, d = 0.65 across 94 studies and 8,000+ participants).** The four milestone triggers are if-then specific moments rather than generic "do you want to change settings" prompts. The proposal lands at a contextually grounded point — right after the operator demonstrated the behavior the proposal is acknowledging — which is the implementation-intention shape the canon Tier-1 evidence supports as the highest-effect framing.
+**Implementation Intentions (Tier 1, Gollwitzer 1999, d = 0.65 across 94 studies and 8,000+ participants).** The five milestone triggers are if-then specific moments rather than generic "do you want to change settings" prompts. The proposal lands at a contextually grounded point — right after the operator demonstrated the behavior the proposal is acknowledging, or in the gradient-available case at the moment the option first becomes available — which is the implementation-intention shape the canon Tier-1 evidence supports as the highest-effect framing.
 
 The spec is graded against charter Test 1 (selectivity-defensible) — the gradient makes selectivity work for operators at different fluency levels without either over-explaining to Sarah or under-explaining to the day-one operator. The same selectivity, defended in plain language, lands legibly for both. It supports Test 2 (truth-loyalty) by the discipline that Show me how does not soften truths to make them more digestible; the four-dimension structure does not adjust which truths land, only how much surface the truths get rendered against.
 
 ### 5.3 Signals the spec is doing its job
 
-Three signals together tell us the density gradient is working.
+Four signals together tell us the density gradient is working.
 
 **The day-one operator stays.** A new user opens Antaeus, sees Show me how surfaces walking them through what each primitive is and what to do next, and reaches their first meaningful operating action without bouncing. The signal is that day-one operator activation rates measured in Posthog do not show a "first wall hit" where the operator opens a non-onboarding room and immediately leaves; instead the walked-through surfaces carry the operator forward through their first Dashboard glance, their first Signal Console review, their first deal entry.
 
 **The fluent operator stays fast.** A workspace running in Step back stays in Step back — operators who switch do not switch back. The signal is that the Phase F dismiss-then-revert rate is low (operators who pick Step back keep Step back), and the Settings toggle does not show frequent state oscillation. Fluent operators are getting what they need from the dense surfaces; the system is staying out of their way.
 
-**The migration completes and stays complete.** The 22-room migration queue clears at a sustainable cadence. Every operator-facing surface in production respects the density state at the moment it renders. No component spec proposes a parallel density mechanism. No room asks for an exception from the four-dimension contract. The gradient becomes the floor every later surface inherits from, rather than the question every surface tries to re-litigate.
+**The migration completes and stays complete.** The 22-room migration queue clears at a sustainable cadence, and every operator-facing surface in production respects the density state at the moment it renders. The signal is that every density-responsive component declares its four dimensions correctly and renders both states cleanly, with the founder and the design team agreeing the migration queue has cleared.
+
+**Subsequent specs inherit the density gradient cleanly.** The component library spec, the today-surface spec, and every later sibling document declare `voiceFamily` and `densityResponsive` and route their strings through `pickByDensity` without renegotiating the rules. The signal is that no later spec proposes a parallel density mechanism, no room asks for an exception from the four-dimension contract, and the gradient becomes the floor every later surface inherits from rather than the question every surface tries to re-litigate.
 
 ---
 
