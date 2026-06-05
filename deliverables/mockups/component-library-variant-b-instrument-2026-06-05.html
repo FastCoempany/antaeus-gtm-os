@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antaeus Component Library — Variant B · Instrument (2026-06-05)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F8FC;
+    --field-line: rgba(10, 28, 64, 0.06);
+    --surface: #FFFFFF;
+    --surface-dim: #ECEEF4;
+    --ink: #0A1C40;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.40);
+    --rule: rgba(10, 28, 64, 0.22);
+    --rule-strong: rgba(10, 28, 64, 0.55);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.10);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.12);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.16);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.12);
+    --gold: #C8A24A;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    background-image:
+      linear-gradient(var(--field-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--field-line) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .sans { font-family: "Public Sans", system-ui, sans-serif; }
+  .serif { font-family: "DM Serif Display", Georgia, serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .deck {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 48px 32px 96px;
+  }
+
+  /* Deck header */
+  .deck-header {
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+    padding: 24px 28px;
+    margin-bottom: 56px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+  }
+  .deck-header-id {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .deck-header-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 36px;
+    line-height: 1.0;
+    margin: 0 0 16px;
+  }
+  .deck-header-lead {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 64ch;
+  }
+  .deck-header-meta {
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .deck-header-meta span { display: block; }
+
+  /* Section blocks */
+  .block {
+    margin-bottom: 56px;
+  }
+  .block-head {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: baseline;
+    gap: 24px;
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 12px 0;
+    margin-bottom: 16px;
+  }
+  .block-id {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    color: var(--orange);
+  }
+  .block-title {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .block-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .grid-wide { grid-template-columns: repeat(3, 1fr); }
+  .grid-wider { grid-template-columns: repeat(2, 1fr); }
+  .grid-one { grid-template-columns: 1fr; }
+
+  /* Cell (a primitive entry) */
+  .cell {
+    background: var(--surface);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 200px;
+  }
+  .cell-meta {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+  }
+  .cell-id {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .cell-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .cell-demo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background: var(--surface-dim);
+    min-height: 64px;
+  }
+  .cell-demo--stretch { padding: 0; background: transparent; }
+  .cell-demo--top { align-items: flex-start; }
+  .cell-note {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    border-top: 1px dashed var(--rule);
+    padding-top: 8px;
+  }
+
+  /* ===== PRIMITIVES ===== */
+  /* Buttons — sharp rectangles, small */
+  .btn {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--ink); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 12px; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* IconButton */
+  .btn-icon {
+    width: 32px; height: 32px;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    border-radius: 0;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+
+  /* Chips */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    background: transparent;
+  }
+  .chip--green { color: #15803D; background: var(--green-soft); }
+  .chip--blue { color: #1D4ED8; background: var(--blue-soft); }
+  .chip--amber { color: #B45309; background: var(--amber-soft); }
+  .chip--red { color: #B91C1C; background: var(--red-soft); }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+
+  /* Heat — square cell with two-line data */
+  .heat-row { display: flex; gap: 1px; background: var(--rule); }
+  .heat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 10px;
+    background: var(--surface);
+    min-width: 64px;
+  }
+  .heat-num {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1;
+  }
+  .heat-band {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    margin-top: 4px;
+  }
+  .heat--hot { background: var(--red-soft); }
+  .heat--hot .heat-num, .heat--hot .heat-band { color: #B91C1C; }
+  .heat--active { background: var(--orange-soft); }
+  .heat--active .heat-num, .heat--active .heat-band { color: var(--orange); }
+  .heat--watch { background: var(--blue-soft); }
+  .heat--watch .heat-num, .heat--watch .heat-band { color: #1D4ED8; }
+
+  /* Inputs */
+  .input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .input:focus { outline: 1px solid var(--orange); outline-offset: -1px; }
+  .field { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+  .field-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .field-help {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+
+  /* Toggle */
+  .toggle {
+    display: inline-flex;
+    width: 36px; height: 18px;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    padding: 1px;
+    cursor: pointer;
+  }
+  .toggle::after {
+    content: ''; width: 14px; height: 14px;
+    background: var(--ink);
+    transition: transform 0.12s;
+  }
+  .toggle.on { background: var(--orange); border-color: var(--orange); }
+  .toggle.on::after { background: white; transform: translateX(18px); }
+
+  /* RoomChrome — terminal bar */
+  .room-chrome {
+    width: 100%;
+    background: var(--ink);
+    color: white;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+  }
+  .wordmark {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--orange);
+  }
+  .crumb {
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .palette-trigger {
+    margin-left: auto;
+    background: rgba(255,255,255,0.10);
+    padding: 3px 8px;
+    letter-spacing: 0.12em;
+  }
+
+  /* Topbar */
+  .topbar {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    padding: 12px 16px;
+  }
+  .topbar-id {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .topbar-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .topbar-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* SectionFrame — instrumented panel */
+  .section-frame {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+  }
+  .section-frame-head {
+    background: var(--surface-dim);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-frame-title {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .section-frame-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+  }
+  .section-frame-body {
+    padding: 10px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+
+  /* Panel */
+  .panel-mock {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    padding: 12px;
+  }
+  .panel-title {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    margin-bottom: 6px;
+  }
+  .panel-body {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* Card mini */
+  .mini-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    padding: 10px 12px;
+    border-left: 3px solid var(--ink);
+  }
+  .mini-card-title {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .mini-card-body {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* Stat */
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--orange);
+  }
+  .stat-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  /* Banner */
+  .banner {
+    width: 100%;
+    background: var(--amber-soft);
+    border: 1px solid var(--amber);
+    border-left-width: 4px;
+    padding: 8px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: #92400E;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .banner-icon {
+    font-weight: 700;
+    color: var(--amber);
+    flex-shrink: 0;
+  }
+  .banner--blue {
+    background: var(--blue-soft);
+    border-color: var(--blue);
+    color: #1D4ED8;
+  }
+  .banner--blue .banner-icon { color: var(--blue); }
+
+  /* Toast */
+  .toast {
+    width: 100%;
+    background: var(--ink);
+    color: white;
+    padding: 10px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .toast-tag {
+    font-size: 9px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Modal */
+  .modal {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--ink);
+    padding: 0;
+  }
+  .modal-head {
+    background: var(--ink);
+    color: white;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-id {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .modal-close {
+    color: rgba(255,255,255,0.6);
+    font-family: "JetBrains Mono", monospace;
+    cursor: pointer;
+  }
+  .modal-body-wrap { padding: 12px; }
+  .modal-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .modal-body {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    line-height: 1.55;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    border-top: 1px solid var(--rule);
+    padding: 10px 12px 0;
+  }
+
+  /* Tooltip */
+  .tooltip-wrap { position: relative; display: inline-block; margin-top: 56px; }
+  .tooltip-anchor {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    border-bottom: 1px dashed var(--ink-soft);
+  }
+  .tooltip-bubble {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: var(--ink);
+    color: white;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    padding: 6px 10px;
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+  }
+  .tooltip-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%; left: 20px;
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+  }
+
+  /* Nav */
+  .nav-row {
+    display: flex;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    width: 100%;
+  }
+  .nav-link {
+    flex: 1;
+    padding: 8px 10px;
+    background: var(--surface);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    cursor: pointer;
+  }
+  .nav-link.active {
+    background: var(--ink);
+    color: white;
+  }
+
+  /* Palette */
+  .palette-mock {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--ink);
+    font-family: "JetBrains Mono", monospace;
+  }
+  .palette-head {
+    background: var(--ink);
+    color: white;
+    padding: 6px 10px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+  .palette-search {
+    padding: 8px 10px;
+    background: var(--surface-dim);
+    font-size: 11px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .palette-search::before { content: '› '; color: var(--orange); font-weight: 700; }
+  .palette-item {
+    padding: 6px 10px;
+    font-size: 11px;
+    border-bottom: 1px dashed var(--rule);
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+  .palette-item:last-child { border-bottom: none; }
+  .palette-item.hl { background: var(--orange-soft); color: var(--orange); }
+  .palette-item-kind {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .palette-item-key {
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+  .palette-item.hl .palette-item-kind,
+  .palette-item.hl .palette-item-key { color: rgba(230, 112, 30, 0.7); }
+
+  /* HandoffStrip */
+  .handoff {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border: 1px solid var(--rule-strong);
+  }
+  .handoff-item {
+    padding: 10px 8px;
+    border-right: 1px solid var(--rule);
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .handoff-item:last-child { border-right: none; }
+  .handoff-item--primary {
+    background: var(--orange);
+    color: white;
+    font-weight: 700;
+  }
+  .handoff-arrow { color: var(--orange); margin-right: 6px; }
+  .handoff-item--primary .handoff-arrow { color: white; }
+
+  /* BackPill */
+  .back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    padding: 4px 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .back-pill::before { content: '←'; color: var(--orange); }
+
+  /* Proposal — tagged instrument card */
+  .proposal {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+  }
+  .proposal-head {
+    background: var(--orange-soft);
+    border-bottom: 1px solid var(--orange);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 700;
+  }
+  .proposal-body-wrap { padding: 12px; }
+  .proposal-body {
+    font-family: "Public Sans", sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .proposal-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .proposal-actions button {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  /* Pattern */
+  .pattern {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    padding: 12px;
+  }
+  .pattern-head {
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 10px;
+  }
+  .pattern-headline {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .pattern-body {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .pattern-conf-row {
+    display: flex;
+    gap: 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .pattern-conf-row span span { color: var(--ink); font-weight: 700; }
+
+  /* Risk */
+  .risk {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    border-left: 3px solid var(--red);
+    padding: 0;
+  }
+  .risk-head {
+    padding: 8px 12px;
+    background: var(--red-soft);
+    border-bottom: 1px solid var(--red);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: #B91C1C;
+    font-weight: 700;
+  }
+  .risk-body-wrap { padding: 10px 12px; }
+  .risk-name {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .risk-cause {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .risk-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-top: 1px dashed var(--rule);
+    padding-top: 8px;
+  }
+  .risk-meta span span { color: var(--ink); font-weight: 700; }
+
+  /* Readiness */
+  .readiness {
+    width: 100%;
+    background: var(--ink);
+    color: white;
+    padding: 16px;
+    border: 1px solid var(--ink);
+  }
+  .readiness-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+  .readiness-state {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.1;
+    color: white;
+  }
+
+  /* Density demos */
+  .density-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .density-cell {
+    background: var(--surface);
+    padding: 16px;
+  }
+  .density-cell-id {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 6px;
+  }
+  .density-cell-title {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .density-cell-body {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .density-cell-body--terse {
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  /* Section list */
+  .section-list { display: flex; flex-direction: column; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .section-list-item {
+    background: var(--surface);
+    padding: 8px 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .section-list-item--expanded {
+    background: var(--orange-soft);
+    border-left: 3px solid var(--orange);
+    padding-left: 10px;
+  }
+  .section-list-item--expanded strong { color: var(--orange); }
+
+  .deck-footer {
+    margin-top: 64px;
+    border-top: 2px solid var(--ink);
+    padding-top: 24px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <header class="deck-header">
+    <div>
+      <div class="deck-header-id">VARIANT-B · INSTRUMENT-DECK · CANDIDATE-SET-01</div>
+      <h1 class="deck-header-title">Antaeus / Component Library</h1>
+      <p class="deck-header-lead">
+        The instrument cut treats every primitive as a panel on a working deck. Mono dominates, sharp rectangles
+        carry information, grid lines tighten the field. Status chips read as instrument labels. Every panel
+        carries its own id and meta — what the system knows about its own state, surfaced.
+      </p>
+    </div>
+    <div class="deck-header-meta">
+      <span>BUILD · 2026.06.05</span>
+      <span>SECTIONS · 08</span>
+      <span>PRIMITIVES · 27</span>
+      <span>STATE · DRAFT</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-id">[01]</span>
+      <h2 class="block-title">LAYOUT</h2>
+      <span class="block-meta">how surfaces are framed</span>
+    </div>
+    <div class="grid grid-wider">
+
+      <div class="cell">
+        <div class="cell-meta">
+          <span class="cell-id">RoomChrome</span>
+          <span class="cell-tag">CHROME · TOP</span>
+        </div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="room-chrome">
+            <span class="wordmark">ANTAEUS</span>
+            <span class="crumb">/ FROM · DASHBOARD</span>
+            <span class="palette-trigger">⌘K · PALETTE</span>
+          </div>
+        </div>
+        <p class="cell-note">Dark navy bar. Orange wordmark, mono crumb. The deck's masthead.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta">
+          <span class="cell-id">Topbar</span>
+          <span class="cell-tag">PER-ROOM HEAD</span>
+        </div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="topbar">
+            <div class="topbar-id">BRIEFING · WEEKLY-READ · WORKSPACE-VIEW</div>
+            <div class="topbar-title">Where the motion is today</div>
+            <div class="topbar-meta">
+              <span>RUN · 2026.06.04 09:12 CT</span>
+              <span>COST · $0.42</span>
+              <span>14D · WINDOW</span>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">Mono id top, serif title, mono meta row. Every panel knows its own state.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta">
+          <span class="cell-id">SectionFrame</span>
+          <span class="cell-tag">CONTENT BLOCK</span>
+        </div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="section-frame">
+            <div class="section-frame-head">
+              <span class="section-frame-title">PATTERN · PRICING-MOMENTUM</span>
+              <span class="section-frame-meta">3D · CONF 78%</span>
+            </div>
+            <div class="section-frame-body">Three of your last five closed deals dropped price 12% or more in the final week.</div>
+          </div>
+        </div>
+        <p class="cell-note">Dim-bar head with mono title + meta. Body in mono reading set.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta">
+          <span class="cell-id">Panel</span>
+          <span class="cell-tag">GENERIC</span>
+        </div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="panel-mock">
+            <div class="panel-title">RECOVERY-QUEUE</div>
+            <div class="panel-body">Six deals are weakening. Three need a move this week.</div>
+          </div>
+        </div>
+        <p class="cell-note">Plain hairline-bordered container. Mono throughout.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-id">[02]</span>
+      <h2 class="block-title">DISPLAY</h2>
+      <span class="block-meta">how information renders</span>
+    </div>
+    <div class="grid">
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Heading · serif</span><span class="cell-tag">DISPLAY</span></div>
+        <div class="cell-demo"><span class="serif" style="font-size:24px; line-height:1.0;">Acme is stalling.</span></div>
+        <p class="cell-note">DM Serif Display. Reserved for the room's dominant statement.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Heading · sans</span><span class="cell-tag">CONTROL</span></div>
+        <div class="cell-demo"><span class="sans" style="font-weight:600; font-size:16px;">Recovery options</span></div>
+        <p class="cell-note">Public Sans, weight 600.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Kicker · mono</span><span class="cell-tag">CODE</span></div>
+        <div class="cell-demo"><span class="mono" style="font-size:10px; letter-spacing:0.20em; text-transform:uppercase;">SIGNAL-CONSOLE · LIVE</span></div>
+        <p class="cell-note">Mono uppercase. Section codes everywhere.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">BodyText</span><span class="cell-tag">READING</span></div>
+        <div class="cell-demo cell-demo--top">
+          <p class="mono" style="margin:0; font-size:11px; line-height:1.55;">Acme stalled 18d. Sarah quiet since demo 11/14.</p>
+        </div>
+        <p class="cell-note">Mono reading body. Compact, instrumented.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Stat</span><span class="cell-tag">FIGURE</span></div>
+        <div class="cell-demo">
+          <div class="stat">
+            <div class="stat-num">37</div>
+            <div class="stat-tag">DEALS · UNDER-PRESSURE</div>
+          </div>
+        </div>
+        <p class="cell-note">Mono numeral, mono caps tag. Sharp.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Card</span><span class="cell-tag">UNIT</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="mini-card">
+            <div class="mini-card-title">ACME-CORP</div>
+            <div class="mini-card-body">STALL · 18D · STAGE · PROPOSAL</div>
+          </div>
+        </div>
+        <p class="cell-note">Hairline border, navy left rule. Mono throughout.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">StatusChip</span><span class="cell-tag">STATE</span></div>
+        <div class="cell-demo">
+          <div class="chip-row">
+            <span class="chip chip--green">READY-NOW</span>
+            <span class="chip chip--blue">COMPOUNDING</span>
+            <span class="chip chip--amber">STILL-WEAK</span>
+            <span class="chip chip--red">AT-RISK</span>
+          </div>
+        </div>
+        <p class="cell-note">Square chips, mono caps. Instrument-label posture.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">HeatBadge</span><span class="cell-tag">METER</span></div>
+        <div class="cell-demo">
+          <div class="heat-row">
+            <div class="heat heat--hot"><span class="heat-num">94</span><span class="heat-band">HOT</span></div>
+            <div class="heat heat--active"><span class="heat-num">78</span><span class="heat-band">ACTIVE</span></div>
+            <div class="heat heat--watch"><span class="heat-num">52</span><span class="heat-band">WATCH</span></div>
+          </div>
+        </div>
+        <p class="cell-note">Joined cells. Mono digits. Reads as one meter.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-id">[03]</span>
+      <h2 class="block-title">ACTION</h2>
+      <span class="block-meta">how the operator moves</span>
+    </div>
+    <div class="grid">
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Button · primary</span><span class="cell-tag">P</span></div>
+        <div class="cell-demo"><button class="btn btn-primary">CAST-PROOF</button></div>
+        <p class="cell-note">Orange fill. Sharp corners. Mono caps.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Button · secondary</span><span class="cell-tag">S</span></div>
+        <div class="cell-demo"><button class="btn btn-secondary">SAVE-DRAFT</button></div>
+        <p class="cell-note">Outline, transparent fill.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Button · ghost</span><span class="cell-tag">T</span></div>
+        <div class="cell-demo"><button class="btn btn-ghost">DISMISS</button></div>
+        <p class="cell-note">No frame. Recessive tertiary.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">IconButton</span><span class="cell-tag">UNIT</span></div>
+        <div class="cell-demo">
+          <div class="btn-row">
+            <button class="btn-icon">⌘</button>
+            <button class="btn-icon">↗</button>
+            <button class="btn-icon">×</button>
+          </div>
+        </div>
+        <p class="cell-note">32px squares. Sharp.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Link</span><span class="cell-tag">JUMP</span></div>
+        <div class="cell-demo">
+          <a class="mono" href="#" style="color:var(--blue); text-decoration:none; border-bottom:1px solid var(--blue); font-size:11px; letter-spacing:0.06em;">→ OPEN · DISCOVERY-STUDIO</a>
+        </div>
+        <p class="cell-note">Blue mono, hairline-underlined.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Toggle</span><span class="cell-tag">BIT</span></div>
+        <div class="cell-demo">
+          <div class="btn-row" style="gap:16px;">
+            <span class="toggle"></span>
+            <span class="toggle on"></span>
+          </div>
+        </div>
+        <p class="cell-note">Square cells. Orange on, navy fill off.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-id">[04]</span>
+      <h2 class="block-title">INPUT</h2>
+      <span class="block-meta">how the operator authors</span>
+    </div>
+    <div class="grid">
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">TextInput</span><span class="cell-tag">CHAR</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <input class="input" value="Acme Corp.">
+        </div>
+        <p class="cell-note">Bordered cell. Mono content.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Select</span><span class="cell-tag">ENUM</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <select class="input">
+            <option>Proposal</option>
+            <option>Discovery</option>
+            <option>Negotiation</option>
+          </select>
+        </div>
+        <p class="cell-note">Same cell. Drop-down inherits.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Textarea</span><span class="cell-tag">TEXT</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <textarea class="input" rows="3" style="resize:none;">Sarah needs the revised proposal by Friday.</textarea>
+        </div>
+        <p class="cell-note">Multi-line, mono.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">FormField</span><span class="cell-tag">COMP</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="field">
+            <label class="field-label">BUYING-GROUP-MIN</label>
+            <input class="input" type="number" value="5">
+            <div class="field-help">3–7 for most B2B teams.</div>
+          </div>
+        </div>
+        <p class="cell-note">Label, input, help. All mono.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Checkbox</span><span class="cell-tag">BIT</span></div>
+        <div class="cell-demo">
+          <div style="display:flex; flex-direction:column; gap:6px; width:100%;">
+            <label style="display:flex; gap:8px; align-items:center; font-family:'JetBrains Mono'; font-size:11px;">
+              <input type="checkbox" checked style="accent-color:var(--orange);"> CHAMPION-ID
+            </label>
+            <label style="display:flex; gap:8px; align-items:center; font-family:'JetBrains Mono'; font-size:11px; color:var(--ink-soft);">
+              <input type="checkbox"> EB-CONFIRM
+            </label>
+          </div>
+        </div>
+        <p class="cell-note">Mono labels. Unchecked recedes.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-id">[05]</span>
+      <h2 class="block-title">FEEDBACK</h2>
+      <span class="block-meta">how the system speaks</span>
+    </div>
+    <div class="grid grid-wider">
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Toast</span><span class="cell-tag">TRANSIENT</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="toast">
+            <span>PROOF · CAST · LINKED-ACME-Q4</span>
+            <span class="toast-tag">3S AGO</span>
+          </div>
+        </div>
+        <p class="cell-note">Navy bar. Mono. Includes age stamp.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Banner</span><span class="cell-tag">PERSISTENT</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div class="banner"><span class="banner-icon">⚠</span><span>STALE · 12D since last brief.</span></div>
+            <div class="banner banner--blue"><span class="banner-icon">↗</span><span>FROM BRIEFING · refresh objection handler (Acme).</span></div>
+          </div>
+        </div>
+        <p class="cell-note">Solid bordered. Icon + label.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Modal</span><span class="cell-tag">OVERLAY</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="modal">
+            <div class="modal-head">
+              <span class="modal-id">CONFIRM · DESTRUCTIVE</span>
+              <span class="modal-close">[ESC]</span>
+            </div>
+            <div class="modal-body-wrap">
+              <div class="modal-title">Discard draft?</div>
+              <div class="modal-body">UNSAVED · You've made edits to this proof draft. Discarding clears them.</div>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-ghost">CANCEL</button>
+              <button class="btn btn-primary">DISCARD</button>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">Navy head with op id + ESC mark.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Tooltip</span><span class="cell-tag">HINT</span></div>
+        <div class="cell-demo">
+          <div class="tooltip-wrap">
+            <div class="tooltip-bubble">ICP-QUALITY-CHECK · 1 of 8</div>
+            <span class="tooltip-anchor">BUYING-GROUP-MIN</span>
+          </div>
+        </div>
+        <p class="cell-note">Navy bubble, mono content. Caret aligned left.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-id">[06]</span>
+      <h2 class="block-title">NAVIGATION</h2>
+      <span class="block-meta">how the operator moves between rooms</span>
+    </div>
+    <div class="grid grid-wider">
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">NavLink</span><span class="cell-tag">TABS</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="nav-row">
+            <span class="nav-link active">DASHBOARD</span>
+            <span class="nav-link">SIGNAL</span>
+            <span class="nav-link">DEAL-WS</span>
+            <span class="nav-link">AUTOPSY</span>
+          </div>
+        </div>
+        <p class="cell-note">Joined cells, mono caps. Active = navy fill.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Palette · ⌘K</span><span class="cell-tag">INDEX</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="palette-mock">
+            <div class="palette-head">
+              <span>PALETTE</span>
+              <span>↑↓ NAV · RET SEL · ESC</span>
+            </div>
+            <div class="palette-search">whats at risk_</div>
+            <div class="palette-item hl">
+              <span class="palette-item-kind">SKILL</span>
+              <span>What's at risk this week</span>
+              <span class="palette-item-key">↵</span>
+            </div>
+            <div class="palette-item">
+              <span class="palette-item-kind">ROOM</span>
+              <span>Deal Workspace</span>
+              <span class="palette-item-key">⌘1</span>
+            </div>
+            <div class="palette-item">
+              <span class="palette-item-kind">ROOM</span>
+              <span>Future Autopsy</span>
+              <span class="palette-item-key">⌘2</span>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">Navy head + bordered rows. Keybind hints on the right.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">HandoffStrip</span><span class="cell-tag">ROUTES</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="handoff">
+            <div class="handoff-item handoff-item--primary"><span class="handoff-arrow">→</span>PRE-MORTEM</div>
+            <div class="handoff-item"><span class="handoff-arrow">→</span>CARRY · ADVISOR</div>
+            <div class="handoff-item"><span class="handoff-arrow">→</span>CAST · PROOF</div>
+          </div>
+        </div>
+        <p class="cell-note">Three joined cells. Primary in orange fill.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">BackPill</span><span class="cell-tag">INBOUND</span></div>
+        <div class="cell-demo">
+          <span class="back-pill">FROM · BRIEFING / PRICING-MOMENTUM</span>
+        </div>
+        <p class="cell-note">Hairline pill. Orange arrow, mono caps.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-id">[07]</span>
+      <h2 class="block-title">SYSTEM PRIMITIVES</h2>
+      <span class="block-meta">Antaeus-specific composed components</span>
+    </div>
+    <div class="grid grid-wider">
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">ProposalCard · Phase F</span><span class="cell-tag">PROPOSAL</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="proposal">
+            <div class="proposal-head">
+              <span>⚑ SUGGESTION · DENSITY-CHANGE</span>
+              <span>ID-2607</span>
+            </div>
+            <div class="proposal-body-wrap">
+              <div class="proposal-body">You closed your first deal last week. The system has been walking you through every surface — want it to step back?</div>
+              <div class="proposal-actions">
+                <button class="btn btn-primary">YES, STEP BACK</button>
+                <button class="btn btn-secondary">ASK · 30D</button>
+                <button class="btn btn-ghost">DISMISS</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">Tagged head + body. Mono action labels with cadence stamps.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">PatternCard · Briefing</span><span class="cell-tag">PATTERN</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="pattern">
+            <div class="pattern-head">
+              <span>PATTERN · PRICING-MOMENTUM</span>
+              <span>14D · CONF 78%</span>
+            </div>
+            <div class="pattern-headline">Late-stage price pressure is rising.</div>
+            <div class="pattern-body">Three of last five closed deals dropped price 12%+ in final week. Stated discount band: 8%. Across 2 ICP segments.</div>
+            <div class="pattern-conf-row">
+              <span>SAMPLE · <span>N=5</span></span>
+              <span>WINDOW · <span>14D</span></span>
+              <span>SEGMENT · <span>2</span></span>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">Mono header strip, serif headline, mono evidence row.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">RiskCard · Deal WS</span><span class="cell-tag">RISK</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="risk">
+            <div class="risk-head">
+              <span>⚠ RISK · CRITICAL</span>
+              <span>78</span>
+            </div>
+            <div class="risk-body-wrap">
+              <div class="risk-name">ACME-CORP · $84K</div>
+              <div class="risk-cause">Stalled 18d at proposal. Single-threaded. Champion last reply 11/3.</div>
+              <div class="risk-meta">
+                <span>STAGE · <span>PROPOSAL</span></span>
+                <span>STALL · <span>18D</span></span>
+                <span>NEXT · <span>UNSET</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">Red head with severity score. Mono throughout.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">ReadinessReadout</span><span class="cell-tag">SYNTHESIS</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="readiness">
+            <div class="readiness-head">
+              <span>READINESS · STATE</span>
+              <span>UPDATED · 09:12 CT</span>
+            </div>
+            <div class="readiness-state">You're at Inheritable with guardrails.</div>
+          </div>
+        </div>
+        <p class="cell-note">Navy panel. Mono telemetry head, serif state below.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-id">[08]</span>
+      <h2 class="block-title">DENSITY GRADIENT · A/B</h2>
+      <span class="block-meta">Show me how vs. Step back, same primitive</span>
+    </div>
+
+    <div class="grid grid-one">
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Dashboard command card · sentence count</span><span class="cell-tag">DEMO-1</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <div class="density-cell-id">SHOW-ME-HOW</div>
+              <div class="density-cell-title">ACME-CORP</div>
+              <div class="density-cell-body">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo on the fourteenth. This is what the system shows you first today because it is the ranked deal under the most pressure — a mix of how long it's been stalled, how big the deal is, and how late in the stage it should have moved by now. Click in to see the recovery options.</div>
+            </div>
+            <div class="density-cell">
+              <div class="density-cell-id">STEP-BACK</div>
+              <div class="density-cell-title">ACME-CORP</div>
+              <div class="density-cell-body density-cell-body--terse">ACME · STALL 18D · PROPOSAL · RECOVERY ⌘↵</div>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">Same Command Chamber temperature. Verbosity is what differs.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Deal card · affordance count</span><span class="cell-tag">DEMO-2</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <div class="density-cell-id">SHOW-ME-HOW</div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <button class="btn btn-secondary" style="padding:6px 10px;">VIEW</button>
+                <button class="btn btn-secondary" style="padding:6px 10px;">EDIT</button>
+                <button class="btn btn-secondary" style="padding:6px 10px;">RISK</button>
+                <button class="btn btn-secondary" style="padding:6px 10px;">NOTE</button>
+                <button class="btn btn-secondary" style="padding:6px 10px;">ADVISOR</button>
+                <button class="btn btn-secondary" style="padding:6px 10px;">MORTEM</button>
+                <button class="btn btn-secondary" style="padding:6px 10px;">NEGOTIATE</button>
+                <button class="btn btn-secondary" style="padding:6px 10px;">PROOF</button>
+              </div>
+            </div>
+            <div class="density-cell">
+              <div class="density-cell-id">STEP-BACK</div>
+              <div style="display:flex; gap:6px;">
+                <button class="btn btn-primary">VIEW</button>
+                <button class="btn btn-secondary">EDIT</button>
+                <button class="btn btn-ghost">MORE ⌄</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">8 visible vs. 2 + collapsed menu.</p>
+      </div>
+
+      <div class="cell">
+        <div class="cell-meta"><span class="cell-id">Autopsy sheets · default-expanded</span><span class="cell-tag">DEMO-3</span></div>
+        <div class="cell-demo cell-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <div class="density-cell-id">SHOW-ME-HOW</div>
+              <div class="section-list">
+                <div class="section-list-item section-list-item--expanded"><strong>PATTERN</strong> · Pressure before clarity. The proposal landed before the buyer had named their actual constraint.</div>
+                <div class="section-list-item section-list-item--expanded"><strong>PROOF</strong> · The pilot never anchored. Readout owner was never assigned.</div>
+                <div class="section-list-item section-list-item--expanded"><strong>SYMPTOM</strong> · Three weeks of single-threaded communication with Sarah.</div>
+                <div class="section-list-item section-list-item--expanded"><strong>DECISION</strong> · The decision architecture was never mapped.</div>
+              </div>
+            </div>
+            <div class="density-cell">
+              <div class="density-cell-id">STEP-BACK</div>
+              <div class="section-list">
+                <div class="section-list-item">PATTERN · pressure-before-clarity · 3 prior</div>
+                <div class="section-list-item">PROOF · never-anchored · owner-unset</div>
+                <div class="section-list-item section-list-item--expanded"><strong>SYMPTOM</strong> · Three weeks of single-threaded communication with Sarah. Champion replied once in fourteen days.</div>
+                <div class="section-list-item">DECISION · architecture-unmapped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cell-note">All four expanded vs. only SYMPTOM expanded; others compressed.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="deck-footer">
+    <div>VARIANT-B · INSTRUMENT-DECK · DRAFT 2026.06.05</div>
+    <div style="margin-top:8px;">The instrument cut. Mono dominant, sharp rectangles, status everywhere. Same color palette as the canon (orange dominant move, blue intelligence, green healthy, amber caution, red risk). The other variants take the same primitives in distinctly different voices.</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
