@@ -26,7 +26,7 @@ The gradient ships with two discrete states.
 
 **Show me how** is the decompressed state. The system walks the operator through every surface — explanations under primitives, tooltips on hover, sections default-expanded, three-to-five sentences where one would do for a fluent operator. The day-one operator who has never used Antaeus opens the product and finds the system actively helping them understand what they are looking at and what to do next.
 
-**Step back** is the fluent state. The system trusts the operator to know their way around. Explanations recede. Tooltips disappear. Sections default-collapse with one-line headers carrying the substance. One sentence does the work three would have done in Show me how. Sarah-day-90 opens the product and the surfaces are dense, ranked, and immediate. The system stays out of her way.
+**Step back** is the fluent state. The system trusts the operator to know their way around: explanations recede, tooltips disappear, and sections default to collapsed with one-line headers carrying their state. One sentence does the work three would have done in Show me how. Sarah-day-90 opens the product and the surfaces are dense, ranked, and immediate. The system stays out of her way.
 
 Both states render the same primitives. Both states carry the same voice. The Antaeus voice does not change between Show me how and Step back; the peer operator with B2B sales scars speaks the same way in both states. What changes is how much of the voice each surface ships at a time, which is the quantity-not-personality framing the voice spec already pinned.
 
@@ -62,13 +62,13 @@ A workspace ships in exactly one of the two states at any moment. The state is s
 
 ### 2.2 Operator-declared baseline
 
-The operator picks. The system honors. The operator can change the state at any time from Settings, and the change takes effect on the next render of any density-responsive component.
+The operator picks the density state and the system honors that pick. The operator can change the state at any time from Settings, and the change takes effect on the next render of any density-responsive component.
 
 The Settings affordance reads in peer voice rather than technical language: "How do you want the system to show up? Show me how — the system walks me through every surface. Step back — the system trusts me to know my way around. You can switch any time." The toggle persists immediately; no Save button, no confirmation modal — changing the state is the operator stating their preference.
 
 The brand-new-workspace default before the operator picks is `show_me_how`, since the operator who just landed has not yet had the chance to choose and the onboarding flow itself is the most walked-through surface in the system. After onboarding completes, the first Phase F proposal fires (described in §2.3) and asks the operator to confirm or switch.
 
-Existing-workspace default on the day the gradient ships is `step_back`, since existing operators have acclimated to the current single-state product and the surfaces approximate Step back today. A one-time in-app notice on next login surfaces the new setting and the toggle without changing the state, so existing operators are not suddenly walked through surfaces they already know.
+Existing-workspace default on the day the gradient ships is `step_back`, since existing operators have acclimated to the current single-state product and the surfaces approximate Step back today. The backfill does not change what existing operators see — surfaces continue rendering as they did before the gradient existed. The gradient-available milestone (§2.4) fires on first login post-migration and surfaces the option through Phase F so existing operators get an explicit choice rather than an implicit backfill default.
 
 ### 2.3 Phase F-style proposals at named milestones
 
@@ -80,11 +80,24 @@ A density proposal renders in the same Phase F proposal surface as other Phase F
 
 The operator accepts (state flips), dismisses (state holds, ask again in a month), or snoozes (state holds, ask again in a week). Standard Phase F cooldown semantics apply.
 
+At the schema level, density proposals are a new kind alongside the existing Phase F kinds. The `proposed_modifications.kind` enum (canon Part II.5 §7, established by ADR-017) gains `'density_change'` as a third value, alongside the existing `'skill_default'` and `'observation_generator'`. The density proposal payload carries `from_state`, `to_state`, and `milestone` fields:
+
+```typescript
+type DensityChangePayload = {
+  kind: 'density_change';
+  from_state: 'show_me_how' | 'step_back';
+  to_state: 'show_me_how' | 'step_back';
+  milestone: 'onboarding_complete' | 'first_deal_closed' | 'first_proof_cast' | 'first_discovery_completed' | 'gradient_available';
+};
+```
+
+The apply path extends the existing Phase F apply logic from ADR-017. On accept, the handler writes `to_state` to `workspace_profile.density_state` (with realtime sync per §2.5). On dismiss, the handler records the dismissal and sets a month-long cooldown on the same milestone. On snooze, a week-long cooldown. The dispatch through Phase F means density proposals appear in the same operator-facing surface as other Phase F proposals (the Briefing Suggestions section per canon §4.21) and respect the same workspace-level Phase F toggle (`workspace_profile.phase_f_proposals_enabled`) — an operator who has disabled Phase F sees no density proposals and changes density only through Settings.
+
 ### 2.4 Named milestones
 
-Four milestones trigger density proposals.
+Five milestones trigger density proposals. Four fire on operator events in new and existing workspaces alike; the fifth fires once per existing workspace on first login post-migration to bridge the gap for operators whose fluency milestones already passed.
 
-**Onboarding complete.** Fires the first proposal. The operator just finished the walked-through onboarding flow; the proposal asks whether to keep being walked through or to switch to Step back. This is the initial-state-choice moment, framed as a real decision rather than a setting buried in a menu.
+**Onboarding complete.** Fires the first proposal in new workspaces. The operator just finished the walked-through onboarding flow; the proposal asks whether to keep being walked through or to switch to Step back. This is the initial-state-choice moment, framed as a real decision rather than a setting buried in a menu.
 
 **First deal closed.** Fires when a deal in Deal Workspace transitions to `closed_won` or `closed_lost` for the first time in the workspace. The operator has run a deal end-to-end; if they are still in Show me how, the proposal offers Step back. If they are already in Step back, no proposal fires (the milestone is informational, not actionable).
 
@@ -92,7 +105,9 @@ Four milestones trigger density proposals.
 
 **First Discovery call completed.** Fires when a Discovery Studio session reaches the post-call routing segment (canon §4.12, segment 10) for the first time. The operator has run discovery on a live conversation; same conditional proposal.
 
-The four milestones are independent. Each fires at most once per workspace. Each respects standard Phase F cooldown (dismiss = month, snooze = week). The milestone selection is intentionally conservative — these are observable signals of real fluency growth, not vanity events. A future v2 may add more (first autopsy run, first advisor deployment, first kit section ready) once the v1 data shows whether four milestones are enough or whether the operator wants more chances to switch.
+**Gradient available (existing workspaces only).** Fires once per existing workspace on first login after the gradient ships. The migration backfill sets those workspaces to `step_back` (the closest approximation of the current single-state product); this proposal asks the operator to confirm the backfill or switch to Show me how. The fifth milestone bridges the gap between existing operators — whose fluency milestones likely already passed before the gradient shipped, so the first four milestones would never fire for them — and the Phase F proposal layer, ensuring every operator gets at least one explicit density choice through Phase F rather than implicit acceptance of a backfill default. The proposal copy reads: "Antaeus just added a setting for how much the system walks you through. Right now it's set to step back — that's how the product worked yesterday. Want to leave it that way, or try walked-through? You can switch any time."
+
+The five milestones are independent. Each fires at most once per workspace. Each respects standard Phase F cooldown (dismiss = month, snooze = week). The milestone selection is intentionally conservative — these are observable signals of real fluency growth, not vanity events. A future v2 may add more (first autopsy run, first advisor deployment, first kit section ready) once the v1 data shows whether five milestones are enough or whether the operator wants more chances to switch.
 
 ### 2.5 Storage and persistence
 
@@ -118,7 +133,16 @@ A Dashboard command card surfaces the top-of-list ranked deal. The substance —
 **Step back:**
 > "Acme — stalled 18d at proposal. Recovery options inside."
 
-Both pass the voice validator under the Command Chamber temperature. Both pair the rank with reasoning. Show me how spells out the reasoning across multiple sentences; Step back compresses the reasoning into a deal-state phrase the fluent operator reads at a glance. The component author writes both, identified by the `voiceVerbose` and `voiceTerse` string identifiers the validator recognizes for paired-content components.
+Both pass the voice validator under the Command Chamber temperature. Both pair the rank with reasoning. Show me how spells out the reasoning across multiple sentences; Step back compresses the reasoning into a deal-state phrase the fluent operator reads at a glance. The component author writes both, declared via the `pickByDensity` helper as an object literal with `verbose` and `terse` properties:
+
+```typescript
+const cardCopy = pickByDensity({
+  verbose: "The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo on the fourteenth. This is what the system shows you first today because it is the ranked deal under the most pressure right now — pressure being a mix of how long the deal has been stalled, how big the deal is, and how late in the stage it should have moved by now. Click in to see the recovery options.",
+  terse: "Acme — stalled 18d at proposal. Recovery options inside.",
+});
+```
+
+The validator walks the object literal at build time, extracts both strings, and runs each through `validateString` independently. The renderer reads the workspace's density state at render time and returns the matching string.
 
 ### 3.2 Affordance count
 
@@ -176,7 +200,7 @@ A responsive component also declares which of the four dimensions it addresses. 
 
 The four-dimension structure resolves the rendering approach for each dimension explicitly.
 
-**Sentence count.** Components paired with verbose / terse content declare both string variants identified by the `voiceVerbose` and `voiceTerse` identifiers. The validator extracts both, validates each, and the renderer picks based on `density_state`. Components that only have one string (no verbose / terse split) render that one string in both states.
+**Sentence count.** Components paired with verbose / terse content declare both string variants via the `pickByDensity({ verbose, terse })` helper introduced in §3.1. The validator walks the object literal at build time, extracts both strings, and runs each through `validateString` independently. The renderer reads the workspace's density state at runtime and returns the matching string. Components that only have one string (no verbose / terse split) render that one string in both states; calling `pickByDensity` is only required when paired content exists.
 
 **Affordance count.** Components declaring an `affordances` array with priority ordering. The renderer slices at the configured index (default two) for Step back, surfaces the remainder behind a More menu, and renders the full list inline for Show me how.
 
@@ -184,7 +208,7 @@ The four-dimension structure resolves the rendering approach for each dimension 
 
 **Annotation density.** Components attaching microcopy via `tooltipText` and `microcopy` props on input and primitive elements. The renderer renders both in Show me how and hides them in Step back. No component-level branching required — the renderer handles the conditional rendering.
 
-The shared rendering helpers live at `src/lib/density/` as a new module under the existing component infrastructure. The helpers compose with the voice-as-component module — a string passed to `pickByDensity(verbose, terse)` returns the appropriate string and the surrounding render code passes it through `validateString` per the voice spec.
+The shared rendering helpers live at `src/lib/density/` as a new module under the existing component infrastructure. The helpers compose with the voice-as-component module — `pickByDensity({ verbose, terse })` returns the string for the current density state, with both strings having already passed `validateString` at build time per the voice spec.
 
 ### 4.3 Inheritance and interaction with voice-as-component
 
@@ -198,6 +222,20 @@ The Onboarding room (canon §4.3, Threshold family) is the most-walked-through s
 
 The onboarding-complete milestone fires the first Phase F proposal that asks the operator to declare their initial state for everything after Onboarding. Until that proposal lands, the workspace defaults to `show_me_how` and every density-responsive room renders walked-through. The proposal at the end of Onboarding is the operator's first chance to switch.
 
+### 4.5 What this spec does not decide
+
+Five things the spec deliberately defers rather than absorbs into the density mechanism.
+
+**The visual surface where density proposals render outside the Briefing Suggestions section.** Density proposals fire through Phase F per §2.3. The Briefing Suggestions section per canon §4.21 is the existing Phase F render surface. Whether density proposals also render in the today-surface, the Dashboard, or other surfaces is a today-surface-spec decision rather than a density-spec decision.
+
+**The per-room severity computation that determines which section is default-expanded in Step back.** §3.3 says components declare sections with severity tagging and the renderer expands the highest-severity one in Step back. The computation that produces the severity score is per-room logic — a Future Autopsy pinned case computes severity from autopsy data; a Deal Workspace card computes severity from deal pressure; an Outbound Studio surface computes severity from signal heat. The density spec specifies the contract; the rooms specify the computation.
+
+**The slice index override mechanism for affordance count.** §3.2 names the default slice point as two and calls it configurable per component. The exact override syntax — whether it lives as an `affordanceSliceIndex` prop on the component declaration, a constructor argument, or a context-aware default — is implementation discretion the component library spec will resolve rather than the density spec.
+
+**The visual transition between states when an operator switches.** §2.5 commits to no imperceptible animation — the surface re-renders in its target state on next paint. Whether the re-render itself uses any visual signal (a brief loading state, a fade, nothing at all) is a motion-language-spec decision the design system will resolve later.
+
+**Multi-operator workspace semantics.** The spec is single-operator throughout — the workspace has one density state for one operator, stored at the workspace level. Multi-operator workspaces are not a current canon thing (canon Part II §1 names the founder-to-first-operator scope). If multi-operator support lands later, the spec will need to decide whether density is per-workspace or per-operator-per-workspace. The deferred answer is per-operator-per-workspace (each operator picks their own density inside a shared workspace), but the spec does not lock that today.
+
 ---
 
 ## Part V — Migration, citations, signals
@@ -210,7 +248,7 @@ The migration steps are:
 
 1. Land the density infrastructure: the Supabase migration adding `workspace_profile.density_state`, the `src/lib/density/` module with the four-dimension helpers, the Settings toggle, and the Phase F proposal handler.
 2. Run the existing-workspace backfill setting `density_state = 'step_back'` for every workspace that exists at the migration date.
-3. Ship the one-time in-app notice surfacing the new setting to existing operators on next login.
+3. Ship the gradient-available Phase F proposal to existing operators on next login (per §2.4's fifth milestone). This replaces the older draft of a one-time in-app notice — the Phase F mechanism does the same job through the established proposal surface, ensures existing operators get an explicit choice rather than an implicit backfill, and keeps the density decision routed through the same accept/dismiss/snooze path as every other Phase F proposal.
 4. Migrate rooms one at a time, smallest first, adding the four-dimension responses per component. Each migration is its own pull request with the room's component contract documenting which dimensions it addresses and why.
 5. After all rooms migrate, the migration is structurally complete — the gradient is fully active across the product and every operator-facing surface respects the state.
 
