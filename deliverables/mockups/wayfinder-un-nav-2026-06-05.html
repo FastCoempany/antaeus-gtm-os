@@ -1,0 +1,1123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wayfinder — the un-nav · Antaeus GTM OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --bg: #f6f8fc;
+    --ink: #0a1c40;
+    --ink-2: #1c2f54;
+    --ink-3: #4a5a78;
+    --ink-4: #8895ad;
+    --rule: rgba(10, 28, 64, 0.12);
+    --rule-2: rgba(10, 28, 64, 0.06);
+    --paper: #ffffff;
+    --cream: #fbf6ef;
+    --orange: #e6701e;
+    --orange-dim: rgba(230, 112, 30, 0.12);
+    --blue: #2563eb;
+    --blue-dim: rgba(37, 99, 235, 0.08);
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --gold: #b08a3e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: "Public Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body {
+    background:
+      radial-gradient(1400px 800px at 80% -200px, rgba(37, 99, 235, 0.05), transparent 70%),
+      radial-gradient(1100px 700px at -200px 600px, rgba(230, 112, 30, 0.04), transparent 70%),
+      var(--bg);
+    padding: 0 0 200px;
+  }
+
+  /* page chrome */
+  .page-header {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 56px 48px 24px;
+  }
+  .page-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin: 0 0 16px;
+  }
+  .page-title {
+    font-family: "DM Serif Display", serif;
+    font-weight: 400;
+    font-size: clamp(48px, 6vw, 84px);
+    line-height: 0.96;
+    letter-spacing: -0.015em;
+    margin: 0 0 20px;
+    color: var(--ink);
+  }
+  .page-title em { font-style: italic; color: var(--orange); }
+  .page-subtitle {
+    font-size: 19px;
+    line-height: 1.55;
+    max-width: 760px;
+    color: var(--ink-2);
+    margin: 0 0 16px;
+  }
+  .page-note {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-3);
+    max-width: 760px;
+    margin: 0;
+  }
+
+  /* state section */
+  .state {
+    max-width: 1280px;
+    margin: 64px auto 0;
+    padding: 0 48px;
+  }
+  .state-head {
+    display: flex;
+    align-items: baseline;
+    gap: 28px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .state-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    color: var(--orange);
+    font-weight: 600;
+  }
+  .state-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1;
+    margin: 0;
+    color: var(--ink);
+  }
+  .state-note {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--ink-3);
+    font-family: "JetBrains Mono", monospace;
+  }
+  .state-caption {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-3);
+    max-width: 720px;
+    margin: 0 0 24px;
+  }
+
+  /* workspace frame — the stage every state plays on */
+  .frame {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    box-shadow: 0 24px 60px -32px rgba(10, 28, 64, 0.18), 0 1px 0 rgba(10, 28, 64, 0.04);
+    overflow: hidden;
+  }
+
+  /* ============================================================
+     WAYFINDER — the persistent horizontal element at the top
+     ============================================================ */
+  .wayfinder {
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .wayfinder-bar {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) auto minmax(360px, 1.6fr);
+    align-items: stretch;
+    gap: 0;
+  }
+  .wf-cell {
+    padding: 18px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    cursor: default;
+  }
+  .wf-cell--trail { border-right: 1px solid var(--rule-2); }
+  .wf-cell--here { border-right: 1px solid var(--rule-2); background: rgba(10, 28, 64, 0.015); }
+  .wf-cell--pulling {
+    background: linear-gradient(90deg, rgba(230, 112, 30, 0.04), rgba(230, 112, 30, 0.08));
+    cursor: pointer;
+    position: relative;
+  }
+  .wf-cell--pulling::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 3px;
+    background: var(--orange);
+  }
+  .wf-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    font-weight: 500;
+  }
+  .wf-line {
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  .wf-line--soft { color: var(--ink-3); font-weight: 400; }
+  .wf-pulling-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .wf-pulling-line .verb {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    color: var(--orange);
+    line-height: 1;
+    font-weight: 400;
+  }
+  .wf-pulling-line .obj { font-size: 15px; color: var(--ink); font-weight: 500; }
+  .wf-expand {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .wf-expand .chev { width: 10px; height: 10px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin-top: -2px; transition: transform 0.2s; }
+  .wf-expand.open .chev { transform: rotate(225deg); margin-top: 2px; }
+
+  /* trail breadcrumb segments */
+  .wf-trail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .wf-crumb {
+    color: var(--ink-3);
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+    cursor: pointer;
+  }
+  .wf-crumb:hover { border-bottom-color: var(--ink-3); }
+  .wf-crumb--last { color: var(--ink-4); font-style: italic; }
+  .wf-trail-sep { color: var(--ink-4); font-family: "JetBrains Mono", monospace; font-size: 11px; }
+
+  /* expanded inline disclosure */
+  .wf-expanded {
+    border-top: 1px solid var(--rule-2);
+    background: linear-gradient(180deg, rgba(230, 112, 30, 0.02), transparent 80%);
+    padding: 28px 40px 32px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+  }
+  .wf-reasoning-block { display: flex; flex-direction: column; gap: 16px; }
+  .wf-block-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    font-weight: 500;
+    margin: 0;
+  }
+  .wf-reasoning-line {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.35;
+    color: var(--ink);
+    margin: 0;
+  }
+  .wf-reasoning-line em { font-style: italic; color: var(--orange); }
+  .wf-evidence {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 16px;
+    border-left: 2px solid var(--rule);
+    margin-top: 8px;
+  }
+  .wf-evidence-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 14px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .wf-evidence-row dt {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin: 0;
+    padding-top: 2px;
+  }
+  .wf-evidence-row dd { color: var(--ink-2); margin: 0; }
+  .wf-commit-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    align-items: center;
+  }
+  .wf-btn {
+    font-family: "Public Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 4px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: white;
+    cursor: pointer;
+  }
+  .wf-btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule);
+    font-weight: 500;
+  }
+  .wf-btn--orange { background: var(--orange); border-color: var(--orange); }
+  .wf-override-hint {
+    font-size: 12px;
+    color: var(--ink-4);
+    font-style: italic;
+  }
+
+  .wf-alternatives-block {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-left: 1px solid var(--rule);
+    padding-left: 36px;
+  }
+  .wf-alt {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-2);
+  }
+  .wf-alt:last-child { border-bottom: none; padding-bottom: 0; }
+  .wf-alt-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .wf-alt-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 600;
+  }
+  .wf-alt-kind--prereq { color: var(--amber); }
+  .wf-alt-kind--pulse { color: var(--orange); }
+  .wf-alt-line {
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: var(--ink-2);
+    margin: 0;
+    cursor: pointer;
+  }
+  .wf-alt-line:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+  .wf-alt-reason {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .wf-no-alts {
+    font-size: 13px;
+    color: var(--ink-4);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ============================================================
+     WORKSPACE BODY — the quiet field beneath the Wayfinder
+     ============================================================ */
+  .workspace {
+    min-height: 520px;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--bg) 100%);
+    padding: 56px 60px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .ws-hello {
+    font-family: "DM Serif Display", serif;
+    font-size: 40px;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .ws-hello-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin: 0 0 14px;
+  }
+  .ws-quiet-line {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-3);
+    max-width: 620px;
+    margin: 0;
+  }
+
+  /* the system's read sits as a quiet column on the side, never an auto-open */
+  .ws-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 64px;
+    margin-top: 28px;
+  }
+  .ws-now {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .ws-now-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin: 0;
+  }
+  .ws-now-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-left: 18px;
+    border-left: 2px solid var(--rule);
+  }
+  .ws-now-row {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 18px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .ws-now-row dt {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin: 0;
+    padding-top: 2px;
+  }
+  .ws-now-row dd { color: var(--ink-2); margin: 0; }
+  .ws-now-row dd em { color: var(--orange); font-style: normal; font-weight: 600; }
+
+  .ws-side {
+    background: var(--cream);
+    border-left: 3px solid var(--orange);
+    padding: 22px 24px;
+    border-radius: 0 4px 4px 0;
+  }
+  .ws-side-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+  .ws-side-line {
+    font-family: "DM Serif Display", serif;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .ws-side-note {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    margin: 0 0 18px;
+  }
+  .ws-side-cta {
+    font-family: "Public Sans";
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--ink);
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
+  }
+
+  /* the Ctrl+K hint, sitting calmly at the bottom-right */
+  .ws-cmdk-hint {
+    position: absolute;
+    bottom: 24px;
+    right: 32px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+  }
+  .ws-cmdk-hint kbd {
+    display: inline-block;
+    padding: 3px 7px;
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    background: var(--paper);
+    color: var(--ink-2);
+  }
+  .frame-wrap { position: relative; }
+
+  /* ============================================================
+     SMART CTRL+K PALETTE — overlay
+     ============================================================ */
+  .palette-overlay-mock {
+    position: relative;
+    background: rgba(10, 28, 64, 0.32);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    padding: 72px 48px;
+    min-height: 620px;
+  }
+  .palette {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid rgba(10, 28, 64, 0.18);
+    border-radius: 8px;
+    box-shadow: 0 40px 80px -20px rgba(10, 28, 64, 0.4), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+    overflow: hidden;
+  }
+  .palette-input-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .palette-prompt {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .palette-input {
+    flex: 1;
+    font-family: "Public Sans", sans-serif;
+    font-size: 18px;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    outline: none;
+    font-weight: 400;
+  }
+  .palette-input::placeholder { color: var(--ink-4); font-style: italic; }
+  .palette-input-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .palette-section {
+    padding: 10px 0;
+  }
+  .palette-section + .palette-section {
+    border-top: 1px solid var(--rule-2);
+  }
+  .palette-section-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    font-weight: 500;
+    padding: 6px 22px 6px;
+    margin: 0;
+  }
+
+  .palette-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 14px;
+    padding: 11px 22px;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: background 0.08s;
+  }
+  .palette-row:hover { background: rgba(10, 28, 64, 0.025); }
+  .palette-row.is-active {
+    background: rgba(230, 112, 30, 0.06);
+    border-left-color: var(--orange);
+  }
+  .palette-verb {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    color: var(--orange);
+    line-height: 1;
+    min-width: 96px;
+  }
+  .palette-verb--neutral { color: var(--ink); }
+  .palette-line {
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .palette-line .ref {
+    color: var(--ink-3);
+    font-style: italic;
+  }
+  .palette-reason {
+    grid-column: 2;
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 4px;
+    line-height: 1.45;
+  }
+  .palette-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.1em;
+  }
+  .palette-key kbd {
+    display: inline-block;
+    padding: 2px 6px;
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    background: var(--paper);
+    color: var(--ink-2);
+  }
+
+  .palette-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 22px;
+    border-top: 1px solid var(--rule);
+    background: rgba(10, 28, 64, 0.02);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+  }
+  .palette-footer span + span { padding-left: 16px; border-left: 1px solid var(--rule); }
+  .palette-footer kbd {
+    display: inline-block;
+    padding: 1px 5px;
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    background: var(--paper);
+    color: var(--ink-2);
+    margin: 0 3px;
+  }
+
+  /* ============================================================
+     DOCTRINE NOTE — the rules this mockup is testing
+     ============================================================ */
+  .doctrine {
+    max-width: 1280px;
+    margin: 96px auto 0;
+    padding: 48px;
+    border-top: 1px solid var(--rule);
+  }
+  .doctrine-head {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin: 0 0 24px;
+  }
+  .doctrine-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+  .doctrine-col h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.2;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+  .doctrine-col p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0 0 12px;
+  }
+  .doctrine-col p:last-child { margin-bottom: 0; }
+  .doctrine-col em { color: var(--orange); font-style: normal; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <p class="page-kicker">Antaeus GTM OS · design exploration · the un-nav</p>
+  <h1 class="page-title">The <em>Wayfinder</em>.</h1>
+  <p class="page-subtitle">
+    One persistent horizontal element at the top of the workspace. Where you were, where you are, where the
+    work is carrying you. Click to see the system's reasoning. Override or commit. No left rail, no
+    auto-landing, no hallway.
+  </p>
+  <p class="page-note">
+    Three states below — resting, expanded (inline disclosure), and Smart Ctrl+K open. Same workspace,
+    same surface, three moments. The Wayfinder is always visible but never opens a room without you.
+  </p>
+</header>
+
+<!-- ============================================================
+     STATE 1 — RESTING / COLLAPSED
+     ============================================================ -->
+<section class="state">
+  <div class="state-head">
+    <span class="state-num">STATE 01</span>
+    <h2 class="state-name">Resting.</h2>
+    <span class="state-note">collapsed · operator just opened the app</span>
+  </div>
+  <p class="state-caption">
+    The Wayfinder is visible but quiet. It shows the trail behind, the current surface, and what the system
+    sees pulling next — without opening anything. The workspace below is a neutral field. The system has a
+    read; the operator decides whether to follow it.
+  </p>
+
+  <div class="frame-wrap">
+    <div class="frame">
+      <!-- the wayfinder bar -->
+      <div class="wayfinder">
+        <div class="wayfinder-bar">
+          <div class="wf-cell wf-cell--trail">
+            <p class="wf-label">Trail</p>
+            <div class="wf-trail">
+              <a class="wf-crumb">Discovery · Northwind</a>
+              <span class="wf-trail-sep">›</span>
+              <a class="wf-crumb">Deal Workspace</a>
+              <span class="wf-trail-sep">›</span>
+              <span class="wf-crumb wf-crumb--last">Open canvas</span>
+            </div>
+          </div>
+          <div class="wf-cell wf-cell--here">
+            <p class="wf-label">Here</p>
+            <p class="wf-line wf-line--soft">No room open. Resting at the workspace.</p>
+          </div>
+          <div class="wf-cell wf-cell--pulling">
+            <p class="wf-label">What's pulling</p>
+            <div class="wf-pulling-line">
+              <span class="verb">Carry</span>
+              <span class="obj">the Northwind proof to Sarah Chen before Friday</span>
+              <button class="wf-expand" aria-expanded="false">
+                <span>Why</span>
+                <span class="chev"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- the quiet workspace beneath -->
+      <div class="workspace">
+        <div>
+          <p class="ws-hello-meta">Tuesday · 8:47 AM · Central</p>
+          <h2 class="ws-hello">Good morning.</h2>
+          <p class="ws-quiet-line">
+            Nothing's been opened yet. The work is where you left it — or somewhere new, if that's what
+            you came here for.
+          </p>
+        </div>
+
+        <div class="ws-grid">
+          <div class="ws-now">
+            <p class="ws-now-label">What's open right now</p>
+            <dl class="ws-now-rows">
+              <div class="ws-now-row"><dt>Deals · open</dt><dd>11 — <em>three at risk this week</em></dd></div>
+              <div class="ws-now-row"><dt>Signals · 7d</dt><dd>23 new — 4 on accounts you're working</dd></div>
+              <div class="ws-now-row"><dt>Proofs · live</dt><dd>2 — Northwind readout Friday, Lumana Monday</dd></div>
+              <div class="ws-now-row"><dt>Calls · this week</dt><dd>3 scheduled, 1 needs prep</dd></div>
+            </dl>
+          </div>
+
+          <aside class="ws-side">
+            <p class="ws-side-label">A system read · not a directive</p>
+            <p class="ws-side-line">
+              Northwind's been sitting on the proof three days. Sarah's calendar opens Thursday afternoon.
+            </p>
+            <p class="ws-side-note">
+              The system noticed. It's not opening the room for you. If you want to act on it, the
+              Wayfinder above is the shortest path.
+            </p>
+            <button class="ws-side-cta">Open the Northwind proof</button>
+          </aside>
+        </div>
+      </div>
+
+      <span class="ws-cmdk-hint"><kbd>Ctrl</kbd><kbd>K</kbd> to go anywhere · or ask the system what's next</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STATE 2 — EXPANDED / INLINE DISCLOSURE
+     ============================================================ -->
+<section class="state">
+  <div class="state-head">
+    <span class="state-num">STATE 02</span>
+    <h2 class="state-name">Expanded.</h2>
+    <span class="state-note">operator clicked "Why" on the pulling cell</span>
+  </div>
+  <p class="state-caption">
+    Inline disclosure with explicit gesture — the Wayfinder grows downward in place. Reasoning behind the
+    pick on the left, alternatives the system also considered on the right. The operator can commit,
+    sharpen, or take a prerequisite. Nothing is hidden; nothing is decided for them.
+  </p>
+
+  <div class="frame-wrap">
+    <div class="frame">
+      <div class="wayfinder">
+        <div class="wayfinder-bar">
+          <div class="wf-cell wf-cell--trail">
+            <p class="wf-label">Trail</p>
+            <div class="wf-trail">
+              <a class="wf-crumb">Discovery · Northwind</a>
+              <span class="wf-trail-sep">›</span>
+              <a class="wf-crumb">Deal Workspace</a>
+              <span class="wf-trail-sep">›</span>
+              <span class="wf-crumb wf-crumb--last">Open canvas</span>
+            </div>
+          </div>
+          <div class="wf-cell wf-cell--here">
+            <p class="wf-label">Here</p>
+            <p class="wf-line wf-line--soft">No room open. Resting at the workspace.</p>
+          </div>
+          <div class="wf-cell wf-cell--pulling">
+            <p class="wf-label">What's pulling</p>
+            <div class="wf-pulling-line">
+              <span class="verb">Carry</span>
+              <span class="obj">the Northwind proof to Sarah Chen before Friday</span>
+              <button class="wf-expand open" aria-expanded="true">
+                <span>Close</span>
+                <span class="chev"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- inline disclosure pane -->
+        <div class="wf-expanded">
+          <div class="wf-reasoning-block">
+            <p class="wf-block-label">Why the system surfaced this</p>
+            <p class="wf-reasoning-line">
+              Northwind has a <em>cast proof</em> waiting on Sarah Chen's read, and her calendar opens
+              Thursday afternoon. Three days of silence on a live proof is the leak pattern this stage
+              loses to.
+            </p>
+            <dl class="wf-evidence">
+              <div class="wf-evidence-row"><dt>Proof state</dt><dd>Cast Monday · readout owner Sarah Chen · no acknowledgment</dd></div>
+              <div class="wf-evidence-row"><dt>Deal pressure</dt><dd>$184k · stage <em>proof</em> · 11 days since last forward motion</dd></div>
+              <div class="wf-evidence-row"><dt>Pattern read</dt><dd>5 of the last 6 deals you lost at this stage went silent ≥ 3 days on the proof</dd></div>
+              <div class="wf-evidence-row"><dt>Window</dt><dd>Sarah's calendar shows 1.5 open hours Thursday 2–4 Central</dd></div>
+            </dl>
+            <div class="wf-commit-row">
+              <button class="wf-btn wf-btn--orange">Carry it now</button>
+              <button class="wf-btn wf-btn--ghost">Override · take the next thing instead</button>
+              <span class="wf-override-hint">Override sends nothing. You stay on the canvas.</span>
+            </div>
+          </div>
+
+          <aside class="wf-alternatives-block">
+            <p class="wf-block-label">What else the system saw</p>
+
+            <div class="wf-alt">
+              <div class="wf-alt-head">
+                <span class="wf-alt-kind">Sharpen</span>
+              </div>
+              <p class="wf-alt-line">Carry the proof to Sarah <em>and</em> Marcus Patel — he's the EB the proof was actually built for.</p>
+              <p class="wf-alt-reason">Sarah signs off, Marcus decides. The original kill rule names Marcus by role. Going to Sarah alone risks one more handoff.</p>
+            </div>
+
+            <div class="wf-alt">
+              <div class="wf-alt-head">
+                <span class="wf-alt-kind wf-alt-kind--prereq">Prereq</span>
+              </div>
+              <p class="wf-alt-line">Tighten the claim before carrying. The current claim is one notch softer than the buyer's stated bar.</p>
+              <p class="wf-alt-reason">"Cuts onboarding by ~40%" vs. their stated threshold of 50% — the gap will be the first thing Sarah pushes back on.</p>
+            </div>
+
+            <div class="wf-alt">
+              <div class="wf-alt-head">
+                <span class="wf-alt-kind wf-alt-kind--pulse">Also pulsing</span>
+              </div>
+              <p class="wf-alt-line">Lumana's CFO just posted about pricing pressure. Different account, different stage — the system noticed because you flagged Lumana hot last week.</p>
+              <p class="wf-alt-reason">Not on the trail. Not on the proof timeline. Surfaced because you might want to know.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- workspace stays exactly where it was -->
+      <div class="workspace">
+        <div>
+          <p class="ws-hello-meta">Tuesday · 8:47 AM · Central</p>
+          <h2 class="ws-hello">Good morning.</h2>
+          <p class="ws-quiet-line">
+            The Wayfinder is open above. Pick, sharpen, defer, or close it and stay here.
+          </p>
+        </div>
+        <div class="ws-grid">
+          <div class="ws-now">
+            <p class="ws-now-label">What's open right now</p>
+            <dl class="ws-now-rows">
+              <div class="ws-now-row"><dt>Deals · open</dt><dd>11 — <em>three at risk this week</em></dd></div>
+              <div class="ws-now-row"><dt>Signals · 7d</dt><dd>23 new — 4 on accounts you're working</dd></div>
+              <div class="ws-now-row"><dt>Proofs · live</dt><dd>2 — Northwind readout Friday, Lumana Monday</dd></div>
+            </dl>
+          </div>
+          <aside class="ws-side" style="opacity: 0.55;">
+            <p class="ws-side-label">A system read · not a directive</p>
+            <p class="ws-side-line">Already open above.</p>
+            <p class="ws-side-note">The Wayfinder is doing the work this card usually does — it stays out of the way while expanded.</p>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STATE 3 — SMART CTRL+K
+     ============================================================ -->
+<section class="state">
+  <div class="state-head">
+    <span class="state-num">STATE 03</span>
+    <h2 class="state-name">Smart Ctrl+K.</h2>
+    <span class="state-note">operator pressed Ctrl+K — verbs-first interrogator</span>
+  </div>
+  <p class="state-caption">
+    Not a nav search. Not a list of 22 rooms. The top three rows are contextual reads — what the system
+    sees as the most useful verbs given where you are and what's pulling. Search falls back below.
+    Type a verb to act, type a noun to find, hit Enter to commit.
+  </p>
+
+  <div class="frame-wrap">
+    <div class="frame">
+      <div class="wayfinder">
+        <div class="wayfinder-bar">
+          <div class="wf-cell wf-cell--trail">
+            <p class="wf-label">Trail</p>
+            <div class="wf-trail">
+              <a class="wf-crumb">Discovery · Northwind</a>
+              <span class="wf-trail-sep">›</span>
+              <a class="wf-crumb">Deal Workspace</a>
+              <span class="wf-trail-sep">›</span>
+              <span class="wf-crumb wf-crumb--last">Open canvas</span>
+            </div>
+          </div>
+          <div class="wf-cell wf-cell--here">
+            <p class="wf-label">Here</p>
+            <p class="wf-line wf-line--soft">No room open. Resting at the workspace.</p>
+          </div>
+          <div class="wf-cell wf-cell--pulling">
+            <p class="wf-label">What's pulling</p>
+            <div class="wf-pulling-line">
+              <span class="verb">Carry</span>
+              <span class="obj">the Northwind proof to Sarah Chen before Friday</span>
+              <button class="wf-expand">
+                <span>Why</span>
+                <span class="chev"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="palette-overlay-mock">
+        <div class="palette">
+          <div class="palette-input-row">
+            <span class="palette-prompt">›</span>
+            <input class="palette-input" placeholder="What next? Try a verb — carry, draft, cast, prep — or a name." value="" />
+            <span class="palette-input-meta">verbs first · search falls back</span>
+          </div>
+
+          <div class="palette-section">
+            <p class="palette-section-label">What the system reads as next · 3 contextual</p>
+            <div class="palette-row is-active">
+              <span class="palette-verb">Carry</span>
+              <div>
+                <p class="palette-line">the Northwind proof to <span class="ref">Sarah Chen</span> · proof has been silent 3 days</p>
+                <p class="palette-reason">Same pick the Wayfinder is showing. Pulls you to Deal Workspace with the proof tray open.</p>
+              </div>
+              <span class="palette-key"><kbd>↵</kbd></span>
+            </div>
+            <div class="palette-row">
+              <span class="palette-verb">Prep</span>
+              <div>
+                <p class="palette-line">Thursday's discovery with <span class="ref">Lumana · Marcus Patel</span> · agenda's still empty</p>
+                <p class="palette-reason">Call's 48 hours out. No notes, no questions, no advance ask logged.</p>
+              </div>
+              <span class="palette-key"><kbd>↵</kbd></span>
+            </div>
+            <div class="palette-row">
+              <span class="palette-verb">Sharpen</span>
+              <div>
+                <p class="palette-line">the claim on the Northwind proof · one notch under buyer's stated bar</p>
+                <p class="palette-reason">Prerequisite to the carry above — fix this first or expect pushback.</p>
+              </div>
+              <span class="palette-key"><kbd>↵</kbd></span>
+            </div>
+          </div>
+
+          <div class="palette-section">
+            <p class="palette-section-label">Verbs you can type · always available</p>
+            <div class="palette-row">
+              <span class="palette-verb palette-verb--neutral">draft</span>
+              <div><p class="palette-line">a new motion · outbound, LinkedIn, or cold call</p></div>
+              <span class="palette-key">type to filter</span>
+            </div>
+            <div class="palette-row">
+              <span class="palette-verb palette-verb--neutral">cast</span>
+              <div><p class="palette-line">a proof against an open deal · forge the claim, owner, metric, kill rule</p></div>
+              <span class="palette-key">type to filter</span>
+            </div>
+            <div class="palette-row">
+              <span class="palette-verb palette-verb--neutral">deploy</span>
+              <div><p class="palette-line">an advisor on a deal that needs backchannel air cover</p></div>
+              <span class="palette-key">type to filter</span>
+            </div>
+          </div>
+
+          <div class="palette-section">
+            <p class="palette-section-label">Rooms · 22 destinations · summoned, not nav'd</p>
+            <div class="palette-row">
+              <span class="palette-verb palette-verb--neutral">go to</span>
+              <div><p class="palette-line">Signal Console · 23 new signals this week</p></div>
+              <span class="palette-key">↵</span>
+            </div>
+            <div class="palette-row">
+              <span class="palette-verb palette-verb--neutral">go to</span>
+              <div><p class="palette-line">Future Autopsy · 6 deals pinned · last run 4 days ago</p></div>
+              <span class="palette-key">↵</span>
+            </div>
+            <div class="palette-row">
+              <span class="palette-verb palette-verb--neutral">go to</span>
+              <div><p class="palette-line">Founding GTM · 4 of 7 sections ready</p></div>
+              <span class="palette-key">↵</span>
+            </div>
+          </div>
+
+          <div class="palette-footer">
+            <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
+            <span><kbd>↵</kbd> commit</span>
+            <span><kbd>Tab</kbd> sharpen the verb</span>
+            <span><kbd>Esc</kbd> close · stay where you are</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DOCTRINE NOTE
+     ============================================================ -->
+<section class="doctrine">
+  <p class="doctrine-head">Doctrine this mockup is testing</p>
+  <div class="doctrine-grid">
+    <div class="doctrine-col">
+      <h3>The hallway is gone.</h3>
+      <p>
+        Canon Part III §6 names the hallway problem — too many equal-weight doors, the operator
+        deciding "where do I go now." A left rail is a hallway with the doors drawn on it. The Wayfinder
+        replaces both nav and triage with <em>one ranked read of where the work is</em>, always visible,
+        never insistent.
+      </p>
+      <p>
+        No room is a destination by default. The 22 rooms are canonical, but they're <em>summoned</em>
+        through Ctrl+K, not browsed.
+      </p>
+    </div>
+    <div class="doctrine-col">
+      <h3>Agency stays with the operator.</h3>
+      <p>
+        Charter §2.1 says the system has agency over itself; the operator has agency over their work.
+        The Wayfinder shows a read, never opens a room without an explicit commit. The resting state
+        is genuinely neutral — the workspace does not auto-land on a ranked queue.
+      </p>
+      <p>
+        Click-deeper is an <em>explicit gesture</em>, not hover, not auto-open. The system has to be
+        asked to defend its pick. When asked, it shows everything — reasoning, sharpenings,
+        prerequisites, and what else is pulsing.
+      </p>
+    </div>
+    <div class="doctrine-col">
+      <h3>Verbs first. Search fallback.</h3>
+      <p>
+        Smart Ctrl+K is a <em>"what next?" interrogator</em>, not a nav menu. The top three rows are
+        contextual reads expressed as verbs the operator can commit to. Search-for-rooms-and-objects
+        sits below as the fallback for when the operator already knows where they're going.
+      </p>
+      <p>
+        Verbs are the carrier of intent. Rooms are the place the verb lands. Object-first, command-first
+        — canon Part I §3 — read backwards through the keyboard.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // expand/collapse toggle — minimal because this is a mockup
+  document.querySelectorAll('.wf-expand').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      btn.classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>
