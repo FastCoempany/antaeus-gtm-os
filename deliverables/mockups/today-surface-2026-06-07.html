@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Today Surface — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F5F7FB;
+    --surface: #FFFFFF;
+    --surface-sub: #FAFBFD;
+    --surface-sunk: #EFF2F7;
+    --cream: #FBFAF5;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.07);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --orange-tint: rgba(230, 112, 30, 0.05);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.07);
+    --shadow-rest: 0 1px 2px rgba(10,28,64,0.04), 0 4px 14px rgba(10,28,64,0.05);
+    --shadow-lift: 0 2px 4px rgba(10,28,64,0.05), 0 14px 36px rgba(10,28,64,0.08);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--field); color: var(--ink); font-family: "Public Sans", system-ui, sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  body { padding: 0 0 120px; }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1080px; margin: 0 auto; padding: 56px 40px 0; }
+
+  /* masthead */
+  .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.18em; color: var(--ink-faint); text-transform: uppercase; margin: 0; }
+  .mast-h1 { font-family: "DM Serif Display", serif; font-size: 52px; line-height: 1.0; letter-spacing: -0.015em; margin: 16px 0 14px; }
+  .mast-sub { font-size: 17px; line-height: 1.5; color: var(--ink-soft); margin: 0; max-width: 64ch; }
+  .mast-sub b { color: var(--ink); font-weight: 600; }
+
+  /* state framing */
+  .state { max-width: 1080px; margin: 64px auto 0; padding: 0 40px; }
+  .state-tag { display: flex; align-items: baseline; gap: 14px; padding-bottom: 11px; border-bottom: 2px solid var(--ink); margin-bottom: 8px; }
+  .state-num { font-family: "DM Serif Display", serif; font-size: 26px; color: var(--orange); line-height: 1; }
+  .state-name { font-family: "DM Serif Display", serif; font-size: 24px; line-height: 1; }
+  .state-kicker { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); }
+  .state-desc { font-size: 14px; color: var(--ink-soft); margin: 0 0 22px; max-width: 74ch; line-height: 1.6; }
+  .state-desc b { color: var(--ink); font-weight: 600; }
+
+  /* app frame */
+  .app { background: var(--field); border: 1px solid var(--hair-strong); border-radius: 12px; box-shadow: var(--shadow-lift); overflow: hidden; }
+  .app-chrome { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--hair); }
+  .app-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--hair-strong); }
+  .app-chrome .url { margin-left: 14px; font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+
+  /* wayfinder bar */
+  .wbar { display: grid; grid-template-columns: 1fr auto 1.6fr auto; align-items: stretch; background: var(--surface); border-bottom: 1px solid var(--hair-strong); }
+  .wbar-cell { padding: 11px 20px; display: flex; flex-direction: column; gap: 3px; justify-content: center; }
+  .wbar-cell + .wbar-cell { border-left: 1px solid var(--hair); }
+  .wbar-key { font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); }
+  .wbar-trail { font-size: 12.5px; color: var(--ink-quiet); font-style: italic; }
+  .wbar-here { font-size: 14px; font-weight: 600; }
+  .wbar-here-sub { font-family: "JetBrains Mono", monospace; font-size: 9.5px; color: var(--ink-faint); }
+  .wbar-cell.pull { background: linear-gradient(90deg, var(--orange-tint), var(--orange-soft)); position: relative; }
+  .wbar-cell.pull::before { content:''; position:absolute; left:0; top:9px; bottom:9px; width:3px; background:var(--orange); border-radius:0 2px 2px 0; }
+  .wbar-pull { display: flex; align-items: baseline; gap: 9px; }
+  .wbar-verb { font-family: "DM Serif Display", serif; font-size: 16px; color: var(--orange); line-height: 1; }
+  .wbar-obj { font-size: 13px; color: var(--ink); line-height: 1.35; }
+  .wbar-cmdk { display: flex; align-items: center; justify-content: center; }
+  .wbar-cmdk kbd { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--ink-soft); border: 1px solid var(--hair-strong); border-bottom-width: 2px; border-radius: 4px; padding: 4px 8px; background: var(--surface); }
+
+  /* the surface body */
+  .surface { padding: 30px 36px 36px; background: linear-gradient(180deg, var(--surface) 0%, var(--field) 60%); }
+
+  /* read switch (segmented) */
+  .reads { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+  .segmented { display: inline-flex; background: var(--surface-sunk); border-radius: 8px; padding: 3px; gap: 2px; }
+  .segmented button { font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 16px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-soft); cursor: pointer; }
+  .segmented button.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(10,28,64,0.08); }
+  .reads-note { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+
+  /* THE BRIEF */
+  .brief { max-width: 660px; }
+  .brief-kicker { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 14px; }
+  .brief-lead { font-family: "DM Serif Display", serif; font-size: 30px; line-height: 1.18; letter-spacing: -0.01em; margin: 0 0 16px; color: var(--ink); }
+  .brief-lead em { font-style: italic; color: var(--orange); }
+  .brief-body { font-size: 15.5px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 14px; }
+  .brief-body b { color: var(--ink); font-weight: 600; }
+  .brief-move { background: var(--cream); border-left: 3px solid var(--orange); border-radius: 0 8px 8px 0; padding: 16px 18px; margin: 22px 0 18px; }
+  .brief-move-key { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); font-weight: 600; margin: 0 0 7px; }
+  .brief-move-line { font-size: 16px; font-weight: 600; line-height: 1.4; margin: 0 0 12px; }
+  .brief-move-actions { display: flex; gap: 10px; align-items: center; }
+  .brief-insight { display: flex; gap: 11px; align-items: flex-start; font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); padding: 11px 14px; background: var(--blue-soft); border-radius: 8px; }
+  .brief-insight .ikey { font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); font-weight: 600; padding-top: 3px; white-space: nowrap; }
+  .brief-insight b { color: var(--ink); font-weight: 600; }
+
+  .btn { font: inherit; font-weight: 600; font-size: 13px; padding: 9px 16px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; }
+  .btn-accent { background: var(--orange); color: white; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--hair-strong); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 9px 10px; }
+
+  /* the lower bands */
+  .band { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--hair); max-width: 760px; }
+  .band-head { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 14px; display: flex; align-items: baseline; gap: 10px; }
+  .band-head .pill { font-size: 9px; letter-spacing: 0.1em; color: var(--ink-quiet); border: 1px solid var(--hair); border-radius: 99px; padding: 2px 7px; }
+  .read-row { display: flex; align-items: baseline; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--hair); }
+  .read-row:last-child { border-bottom: none; }
+  .read-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+  .read-dot.decay { background: var(--amber); }
+  .read-dot.quiet { background: var(--ink-quiet); }
+  .read-dot.proof { background: var(--blue); }
+  .read-text { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; flex: 1; }
+  .read-text b { color: var(--ink); font-weight: 600; }
+  .read-dismiss { font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-quiet); cursor: pointer; }
+
+  .proposal-band { margin-top: 26px; max-width: 560px; }
+  .proposal { background: linear-gradient(180deg, var(--orange-tint), var(--surface)); border: 1px solid var(--hair); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow-rest); }
+  .proposal-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); background: var(--surface); padding: 4px 11px; border-radius: 99px; margin-bottom: 12px; }
+  .proposal-eyebrow::before { content:''; width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+  .proposal-body { font-family: "DM Serif Display", serif; font-size: 17px; line-height: 1.4; margin-bottom: 14px; }
+  .proposal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* GROUNDED card (Spotlight) */
+  .ground { background: var(--surface); border-radius: 10px; padding: 20px 22px; box-shadow: var(--shadow-rest); border: 1px solid var(--hair); border-bottom: 3px solid var(--ink-quiet); position: relative; max-width: 680px; }
+  .ground.b-risk { border-bottom-color: var(--red); }
+  .ground.spine.s-risk::before { content:''; position:absolute; top:16px; bottom:16px; left:0; width:3px; border-radius:0 2px 2px 0; background: var(--red); }
+  .ground-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .ground-name { font-weight: 600; font-size: 17px; }
+  .ground-meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint); letter-spacing: 0.06em; }
+  .ground-context { font-size: 13px; color: var(--ink-soft); margin-bottom: 16px; }
+  .ground-layers { display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; padding: 14px 0; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); margin-bottom: 14px; }
+  .layer-key { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); padding-top: 2px; }
+  .layer-key.move { color: var(--orange); }
+  .layer-val { font-size: 14px; color: var(--ink); line-height: 1.5; }
+  .layer-val.heavy { font-weight: 600; }
+  .ground-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .ground-stamp { font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); }
+  .spotlight-rail { margin-top: 18px; max-width: 680px; }
+  .rail-head { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 10px; }
+  .rail-row { display: flex; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--hair); font-size: 13px; }
+  .rail-row:last-child { border-bottom: none; }
+  .rail-rank { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-quiet); }
+  .rail-name { font-weight: 600; }
+  .rail-why { color: var(--ink-soft); }
+
+  /* QUEUE — pulse timeline */
+  .zone-mark { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin: 8px 0 20px; }
+  .zone-rule { height: 1px; background: var(--hair); }
+  .zone-label { font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); }
+  .zone-label.now { color: var(--orange); font-weight: 600; }
+  .timeline { position: relative; padding-left: 54px; max-width: 760px; }
+  .timeline::before { content:''; position: absolute; left: 11px; top: 6px; bottom: 0; width: 1px; background: var(--hair-strong); }
+  .pulse { position: relative; margin-bottom: 14px; }
+  .pulse-dot { position: absolute; left: -48px; top: 18px; width: 11px; height: 11px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink-quiet); z-index: 1; }
+  .pulse-dot.risk { background: var(--red); border-color: var(--red); }
+  .pulse-dot.attn { background: var(--amber); border-color: var(--amber); }
+  .pulse-dot.healthy { background: var(--green); border-color: var(--green); }
+  .pulse-dot.shimmer { animation: pulsate 2.6s ease-in-out infinite; }
+  @keyframes pulsate { 0%,100% { box-shadow: 0 0 0 0 rgba(230,112,30,0.30);} 50% { box-shadow: 0 0 0 7px rgba(230,112,30,0);} }
+  @media (prefers-reduced-motion: reduce) { .pulse-dot.shimmer { animation: none; } }
+  .pulse-time { position: absolute; left: -142px; top: 18px; width: 82px; text-align: right; font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink-faint); }
+  .q-row { background: var(--surface); border: 1px solid var(--hair); border-bottom: 3px solid var(--ink-quiet); border-radius: 8px; padding: 12px 16px; display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+  .q-row.b-risk { border-bottom-color: var(--red); }
+  .q-row.b-attn { border-bottom-color: var(--amber); }
+  .q-row.b-healthy { border-bottom-color: var(--green); }
+  .q-row .qn { font-weight: 600; font-size: 14.5px; }
+  .q-row .qmeta { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--ink-faint); }
+  .q-row .qwhy { font-size: 12.5px; color: var(--ink-soft); flex: 1; }
+  .q-offset-tag { display: inline-block; background: var(--orange); color: #fff; font-family: "JetBrains Mono", monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 10px; border-radius: 5px; margin-bottom: 8px; margin-left: 2px; }
+
+  /* small panels (session + edge cases) */
+  .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .panel { background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow-rest); overflow: hidden; }
+  .panel-bar { display: grid; grid-template-columns: 1fr auto; background: var(--surface); border-bottom: 1px solid var(--hair); }
+  .panel-bar .c { padding: 9px 14px; }
+  .panel-bar .c + .c { border-left: 1px solid var(--hair); }
+  .panel-bar .k { font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+  .panel-bar .v { font-size: 12px; font-weight: 600; margin-top: 1px; }
+  .panel-bar .pull .v { color: var(--orange); }
+  .panel-bar .pull { background: var(--orange-tint); }
+  .panel-body { padding: 18px 20px; }
+  .panel-kicker { font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 9px; }
+  .panel-lead { font-family: "DM Serif Display", serif; font-size: 21px; line-height: 1.2; margin: 0 0 10px; }
+  .panel-lead em { font-style: italic; color: var(--orange); }
+  .panel-p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 10px; }
+  .panel-p b { color: var(--ink); font-weight: 600; }
+  .panel-move { font-size: 13.5px; font-weight: 600; color: var(--ink); border-left: 2px solid var(--orange); padding-left: 11px; margin: 12px 0 0; }
+  .panel-empty-cta { margin-top: 14px; }
+  .panel-tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); border: 1px dashed var(--hair-strong); border-radius: 5px; padding: 3px 8px; margin-bottom: 12px; }
+  .blind { background: var(--red-soft); border-left: 3px solid var(--red); border-radius: 0 8px 8px 0; padding: 11px 14px; font-size: 13px; color: #B91C1C; line-height: 1.5; }
+
+  /* annotation strip */
+  .annot { margin-top: 11px; font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.04em; color: var(--ink-soft); line-height: 1.7; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .annot b { color: var(--ink); font-weight: 600; }
+  .annot span { white-space: nowrap; }
+
+  .rule-note { max-width: 1080px; margin: 88px auto 0; padding: 26px 40px; border-top: 1px solid var(--hair-strong); }
+  .rule-note h3 { font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 14px; }
+  .rule-note ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); max-width: 80ch; }
+  .rule-note li { padding-left: 18px; position: relative; }
+  .rule-note li::before { content: '—'; position: absolute; left: 0; color: var(--ink-quiet); }
+  .rule-note li b { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <p class="eyebrow">ANTAEUS · THE TODAY SURFACE · MOCKUP FOR SPEC 04 · 2026·06·07</p>
+  <h1 class="mast-h1">What you land on.</h1>
+  <p class="mast-sub">The home the engine meets you on each morning. It <b>ranks but never imposes</b>: you land on a calm brief, the system's read offered as a peer's summary — never your whole pipeline spread out and waiting. The ranked list is one switch away when you want it. Nothing opens until you open it.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 01 — THE RESTING LANDING                                      -->
+<!-- ============================================================ -->
+<section class="state">
+  <div class="state-tag"><span class="state-num">01</span><span class="state-name">The resting landing</span><span class="state-kicker">spec §1.1 · §3.1 · §3.4 · §3.6 · the default, calm Brief</span></div>
+  <p class="state-desc">You open the product Tuesday morning. The Wayfinder bar carries the one move; below it, the <b>Brief</b> — a peer's summary, not a grid. Top to bottom (§3.6): the Brief, then this week's reads, then a single proposal waiting in its slot. Nothing else.</p>
+
+  <div class="app">
+    <div class="app-chrome"><span class="app-dot"></span><span class="app-dot"></span><span class="app-dot"></span><span class="url">antaeus.app / today</span></div>
+
+    <div class="wbar">
+      <div class="wbar-cell"><span class="wbar-key">Trail · where you were</span><span class="wbar-trail">— the home is the root</span></div>
+      <div class="wbar-cell"><span class="wbar-key">Here</span><span class="wbar-here">Pipeline</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
+      <div class="wbar-cell pull"><span class="wbar-key">Pulling · the one move</span><div class="wbar-pull"><span class="wbar-verb">Send</span><span class="wbar-obj">Acme's revised proposal to the CFO before Friday.</span></div></div>
+      <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
+    </div>
+
+    <div class="surface">
+      <div class="reads">
+        <div class="segmented"><button class="on">Brief</button><button>Spotlight</button><button>Queue</button></div>
+        <span class="reads-note">the calm read · switch when you want more</span>
+      </div>
+
+      <div class="brief">
+        <p class="brief-kicker">Brief · Tuesday morning</p>
+        <h2 class="brief-lead">Of everything open, <em>Acme is the one most likely to slip this week.</em></h2>
+        <p class="brief-body">Your champion's gone quiet for twelve days, and procurement quietly re-opened pricing on the 3rd — the CFO still hasn't seen the new numbers. The last three deals you lost at this stage went the same way: silence, then a price surprise no one walked upstairs.</p>
+        <p class="brief-body"><b>Since yesterday:</b> Helix locked their CFO meeting for Thursday, and Cordillera went another day quiet.</p>
+
+        <div class="brief-move">
+          <p class="brief-move-key">The one move</p>
+          <p class="brief-move-line">Send the revised proposal straight to the CFO before Friday.</p>
+          <div class="brief-move-actions">
+            <button class="btn btn-accent">Send it now</button>
+            <button class="btn btn-secondary">Why this</button>
+            <button class="btn btn-ghost">Something else</button>
+          </div>
+        </div>
+
+        <div class="brief-insight">
+          <span class="ikey">Worth knowing</span>
+          <span>Deals where you reached the economic buyer <b>before</b> the proposal landed closed 2.7× more often. Acme hasn't had that yet — Tasha could make the introduction.</span>
+        </div>
+      </div>
+
+      <div class="band">
+        <p class="band-head">This week's reads <span class="pill">a glance · the full check-in lives in Briefing</span></p>
+        <div class="read-row"><span class="read-dot decay"></span><span class="read-text"><b>Cordillera</b> has gone quiet 11 days — last thing was a legal-review note on the 25th.</span><span class="read-dismiss">dismiss</span></div>
+        <div class="read-row"><span class="read-dot proof"></span><span class="read-text">The Northwind pilot finished clean Friday, but no one owns the write-up yet.</span><span class="read-dismiss">dismiss</span></div>
+        <div class="read-row"><span class="read-dot quiet"></span><span class="read-text">You've logged no discovery calls in 7 days — the rhythm's slower than your usual week.</span><span class="read-dismiss">dismiss</span></div>
+      </div>
+
+      <div class="proposal-band">
+        <div class="proposal">
+          <span class="proposal-eyebrow">A suggestion</span>
+          <p class="proposal-body">You closed your first deal last week. Want the system to step back and show less?</p>
+          <div class="proposal-actions"><button class="btn btn-accent">Yes, step back</button><button class="btn btn-secondary">Ask in a month</button><button class="btn btn-ghost">Not now</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>the Brief is the body</b> — pressure read · what changed · the one move · one insight</span>
+    <span><b>the move is actionable here</b> — orange primary, not read-only</span>
+    <span><b>week's reads</b> is the glance; the sit-down is the Briefing room</span>
+    <span><b>one proposal</b>, waiting — never stacked, never interrupting</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 02 — SWITCHED TO QUEUE                                        -->
+<!-- ============================================================ -->
+<section class="state">
+  <div class="state-tag"><span class="state-num">02</span><span class="state-name">Switched to Queue</span><span class="state-kicker">spec §3.2 · the ranked list, when you reach for it</span></div>
+  <p class="state-desc">You click <b>Queue</b>. The read swaps in place — now you're looking at the whole pipeline ranked by pressure, the Pulse timeline. One item breaks rank (the Offset). The week's-reads band and the proposal stay put below; switching never moves them.</p>
+
+  <div class="app">
+    <div class="app-chrome"><span class="app-dot"></span><span class="app-dot"></span><span class="app-dot"></span><span class="url">antaeus.app / today</span></div>
+    <div class="wbar">
+      <div class="wbar-cell"><span class="wbar-key">Trail</span><span class="wbar-trail">— the home is the root</span></div>
+      <div class="wbar-cell"><span class="wbar-key">Here</span><span class="wbar-here">Pipeline</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
+      <div class="wbar-cell pull"><span class="wbar-key">Pulling</span><div class="wbar-pull"><span class="wbar-verb">Send</span><span class="wbar-obj">Acme's revised proposal to the CFO before Friday.</span></div></div>
+      <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
+    </div>
+    <div class="surface">
+      <div class="reads">
+        <div class="segmented"><button>Brief</button><button>Spotlight</button><button class="on">Queue</button></div>
+        <span class="reads-note">the full ranked list · opt-in, never the arrival</span>
+      </div>
+
+      <div class="zone-mark"><div class="zone-rule"></div><div class="zone-label now">— now · most pressured —</div><div class="zone-rule"></div></div>
+      <div class="timeline">
+        <div class="pulse">
+          <div class="pulse-dot risk shimmer"></div><div class="pulse-time">09:08</div>
+          <div class="q-offset-tag">— most likely to slip</div>
+          <div class="q-row b-risk"><div><div class="qn">Acme Corp.</div><div class="qmeta">PROPOSAL · D18 · $84K</div></div><div class="qwhy">Champion quiet 12d · CFO hasn't seen new pricing</div></div>
+        </div>
+        <div class="pulse">
+          <div class="pulse-dot attn"></div><div class="pulse-time">08:42</div>
+          <div class="q-row b-attn"><div><div class="qn">Northwind</div><div class="qmeta">PILOT · D9 · $112K</div></div><div class="qwhy">Pilot clean, no one owns the write-up</div></div>
+        </div>
+        <div class="pulse">
+          <div class="pulse-dot attn"></div><div class="pulse-time">08:30</div>
+          <div class="q-row b-attn"><div><div class="qn">Cordillera</div><div class="qmeta">LEGAL · D47 · $340K</div></div><div class="qwhy">Quiet 11 days · no exec sponsor</div></div>
+        </div>
+        <div class="pulse">
+          <div class="pulse-dot healthy"></div><div class="pulse-time">yest</div>
+          <div class="q-row b-healthy"><div><div class="qn">Helix Robotics</div><div class="qmeta">NEGOTIATION · $240K</div></div><div class="qwhy">CFO meeting locked Thursday</div></div>
+        </div>
+      </div>
+
+      <div class="band">
+        <p class="band-head">This week's reads <span class="pill">unchanged — surface furniture, not the read</span></p>
+        <div class="read-row"><span class="read-dot decay"></span><span class="read-text"><b>Cordillera</b> has gone quiet 11 days.</span><span class="read-dismiss">dismiss</span></div>
+        <div class="read-row"><span class="read-dot proof"></span><span class="read-text">The Northwind pilot finished clean, but no one owns the write-up.</span><span class="read-dismiss">dismiss</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>switching swaps the read</b> in place — the Brief's slot becomes the Queue</span>
+    <span><b>one Offset</b> breaks rank — Acme, today's most pressured</span>
+    <span><b>lower bands persist</b> — they're furniture, not the read</span>
+    <span><b>a fluent operator may set Queue as their default</b> — density they elect, never imposed</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 03 — SWITCHED TO SPOTLIGHT                                    -->
+<!-- ============================================================ -->
+<section class="state">
+  <div class="state-tag"><span class="state-num">03</span><span class="state-name">Switched to Spotlight</span><span class="state-kicker">spec §3.2 · one thing, deep</span></div>
+  <p class="state-desc">You click <b>Spotlight</b> to work one thing fully — the most-pressured object as a Grounded card at full depth (Signal · Reason · Move, the evidence), the rest as a quiet rail.</p>
+
+  <div class="app">
+    <div class="app-chrome"><span class="app-dot"></span><span class="app-dot"></span><span class="app-dot"></span><span class="url">antaeus.app / today</span></div>
+    <div class="wbar">
+      <div class="wbar-cell"><span class="wbar-key">Trail</span><span class="wbar-trail">— the home is the root</span></div>
+      <div class="wbar-cell"><span class="wbar-here">Pipeline</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
+      <div class="wbar-cell pull"><span class="wbar-key">Pulling</span><div class="wbar-pull"><span class="wbar-verb">Send</span><span class="wbar-obj">Acme's revised proposal to the CFO before Friday.</span></div></div>
+      <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
+    </div>
+    <div class="surface">
+      <div class="reads">
+        <div class="segmented"><button>Brief</button><button class="on">Spotlight</button><button>Queue</button></div>
+        <span class="reads-note">one object · full depth</span>
+      </div>
+
+      <div class="ground spine s-risk b-risk">
+        <div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">PROPOSAL · DAY 18 · $84K</span></div>
+        <div class="ground-context">Enterprise · the CFO still hasn't seen the new pricing</div>
+        <div class="ground-layers">
+          <span class="layer-key">Signal</span><span class="layer-val">Champion quiet for twelve days.</span>
+          <span class="layer-key">Reason</span><span class="layer-val">Procurement re-opened pricing on the 3rd; the champion never walked it up to the CFO. Same shape as three deals you lost here.</span>
+          <span class="layer-key move">Move</span><span class="layer-val heavy">Send the revised proposal straight to the CFO before Friday.</span>
+        </div>
+        <div class="ground-foot"><span class="ground-stamp">— Likely to slip</span><button class="btn btn-accent">Draft the CFO note</button></div>
+      </div>
+
+      <div class="spotlight-rail">
+        <p class="rail-head">— the rest of the rank</p>
+        <div class="rail-row"><span class="rail-rank">02</span><span class="rail-name">Northwind</span><span class="rail-why">pilot clean, no write-up owner</span></div>
+        <div class="rail-row"><span class="rail-rank">03</span><span class="rail-name">Cordillera</span><span class="rail-why">quiet 11 days, no exec sponsor</span></div>
+        <div class="rail-row"><span class="rail-rank">04</span><span class="rail-name">Helix Robotics</span><span class="rail-why">CFO meeting locked Thursday</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>one Grounded card</b>, full depth — Signal · Reason · Move</span>
+    <span><b>the rest is a quiet rail</b> — present, not competing</span>
+    <span>same ranking, same reasoning — only the <b>quantity</b> changes across the three reads</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 04 — THE QUIET DAY                                            -->
+<!-- ============================================================ -->
+<section class="state">
+  <div class="state-tag"><span class="state-num">04</span><span class="state-name">The quiet day</span><span class="state-kicker">spec §3.4 · nothing pressured · never "all done"</span></div>
+  <p class="state-desc">A calm week. Nothing's at risk. The Brief does <b>not</b> say "all done" or go blank — that's the highest-churn moment. It names what's compounding and turns the loop forward toward an inheritable workspace.</p>
+
+  <div class="app">
+    <div class="app-chrome"><span class="app-dot"></span><span class="app-dot"></span><span class="app-dot"></span><span class="url">antaeus.app / today</span></div>
+    <div class="wbar">
+      <div class="wbar-cell"><span class="wbar-key">Trail</span><span class="wbar-trail">— the home is the root</span></div>
+      <div class="wbar-cell"><span class="wbar-here">Pipeline</span><span class="wbar-here-sub">Thu · 08:40 CT</span></div>
+      <div class="wbar-cell pull"><span class="wbar-key">Pulling · the building move</span><div class="wbar-pull"><span class="wbar-verb">Fill</span><span class="wbar-obj">the discovery section of your handoff kit.</span></div></div>
+      <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
+    </div>
+    <div class="surface">
+      <div class="reads"><div class="segmented"><button class="on">Brief</button><button>Spotlight</button><button>Queue</button></div><span class="reads-note">a good day still has a next move</span></div>
+      <div class="brief">
+        <p class="brief-kicker">Brief · Thursday morning</p>
+        <h2 class="brief-lead">Nothing's on fire this morning.</h2>
+        <p class="brief-body">Three pilots are running clean, and no deal you're working has gone quiet past your line. The pipeline's in good shape — this is the kind of morning to build, not fight.</p>
+        <p class="brief-body">The next thing worth doing isn't a fire. <b>Your handoff kit is at four of seven sections.</b> The discovery section is the thinnest — and the one a first hire would lean on hardest.</p>
+        <div class="brief-move">
+          <p class="brief-move-key">The building move</p>
+          <p class="brief-move-line">Fill the discovery section of your handoff kit.</p>
+          <div class="brief-move-actions"><button class="btn btn-accent">Open the kit</button><button class="btn btn-ghost">Not today</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>never "all done"</b> — the banned closure (canon §7)</span>
+    <span><b>names what's compounding</b>, then the next building loop</span>
+    <span>the move turns toward an <b>inheritable workspace</b>, not busywork</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 05 — THE SESSION ARC                                          -->
+<!-- ============================================================ -->
+<section class="state">
+  <div class="state-tag"><span class="state-num">05</span><span class="state-name">The session arc</span><span class="state-kicker">spec §3.5 · returning daily · the designed close</span></div>
+  <p class="state-desc">The home is engineered across sessions. It opens as <b>what changed since you were last here</b>, and it closes with a designed read of today and tomorrow — never a fade-out, never "nothing to show."</p>
+
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-bar"><div class="c"><div class="k">Here</div><div class="v">Pipeline</div></div><div class="c pull"><div class="k">Pulling</div><div class="v">Prep Thursday's call</div></div></div>
+      <div class="panel-body">
+        <p class="panel-kicker">Returning · Monday after a weekend</p>
+        <p class="panel-lead">Since Friday, <em>three things moved.</em></p>
+        <p class="panel-p">Helix advanced to negotiation and locked a CFO meeting. The Northwind pilot finished clean. And two new signals landed on accounts you're working.</p>
+        <p class="panel-move">The one that needs you first: Thursday's Lumana call has no agenda yet.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-bar"><div class="c"><div class="k">Here</div><div class="v">Pipeline</div></div><div class="c"><div class="k">Time</div><div class="v">5:40 PM</div></div></div>
+      <div class="panel-body">
+        <p class="panel-kicker">The designed close · winding down</p>
+        <p class="panel-lead">Today you moved <em>real ground.</em></p>
+        <p class="panel-p"><b>Today:</b> two deals advanced, one pilot written up, pipeline +$28K.</p>
+        <p class="panel-p"><b>Tomorrow:</b> the Acme CFO call needs prep, and two accounts have gone quiet enough to chase.</p>
+        <p class="panel-move">Picks up here in the morning.</p>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>opens as what-changed</b> — oriented in seconds, no re-reading</span>
+    <span><b>closes with a designed read</b> — today + tomorrow, loads the next trigger</span>
+    <span>peak-end discipline (canon §8) — never ends on a blank</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 06 — THE EDGE CASES                                           -->
+<!-- ============================================================ -->
+<section class="state">
+  <div class="state-tag"><span class="state-num">06</span><span class="state-name">The honest edges</span><span class="state-kicker">spec §3.1 · §4.1 · §2.1 · new · sparse · can't-see</span></div>
+  <p class="state-desc">Three states most surfaces fake. A brand-new workspace, a sparse one, and the moment the system genuinely can't read a source — each handled honestly, never as a broken dashboard.</p>
+
+  <div class="panels" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="panel">
+      <div class="panel-body">
+        <span class="panel-tag">Brand-new workspace</span>
+        <p class="panel-lead">No pipeline yet.</p>
+        <p class="panel-p">When you add an account, the system starts watching it for you — and the first read shows up right here.</p>
+        <div class="panel-empty-cta"><button class="btn btn-accent">Add your first account</button></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-body">
+        <span class="panel-tag">Sparse · two deals</span>
+        <p class="panel-lead">Two deals so far — <em>Northwind's the one to watch.</em></p>
+        <p class="panel-p">Its pilot's running and the readout's close. The other's early. A real start, not a half-empty grid.</p>
+        <p class="panel-move">Name a readout owner for Northwind before Friday.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-body">
+        <span class="panel-tag">Can't see a source</span>
+        <p class="panel-lead">Reading what I can.</p>
+        <div class="blind">I can't read your deals right now — the workspace is still syncing. The signals below are current; the deal view will fill in a moment.</div>
+        <p class="panel-p" style="margin-top:12px;">An honest gap over a confident wrong answer.</p>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>new</b> — why it matters + the one move that fills it</span>
+    <span><b>sparse</b> — a real start, honestly small</span>
+    <span><b>can't-see</b> — names the gap, never ranks on partial data as if whole</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="rule-note">
+  <h3>What this is testing</h3>
+  <ul>
+    <li><b>Ranks but never imposes.</b> You land on a calm brief, not your whole pipeline ranked and waiting. The ranked list (Queue) is one switch away, opt-in, never the arrival.</li>
+    <li><b>The Brief is the body, and it's actionable.</b> Pressure read → what changed → the one move (takeable here) → at most one real insight. Not read-only, not a wall of text.</li>
+    <li><b>Never "all done."</b> The quiet day names what's compounding and turns the loop forward. The home never goes blank on a good day.</li>
+    <li><b>It stays in its lane.</b> The week's reads is a glance; the full check-in is the Briefing room. The home routes to rooms; it isn't where the work is done; it isn't a feed.</li>
+    <li><b>Honest at the edges.</b> New, sparse, and can't-see states are real and directional — never a broken or empty dashboard, never a confident wrong ranking.</li>
+    <li><b>Canon held.</b> Bright field; DM Serif Display for the read, Public Sans for the work, JetBrains Mono for codes; orange on the one move only; every sentence a plain peer's voice.</li>
+  </ul>
+</section>
+
+<script>
+  // segmented demo — visual only
+  document.querySelectorAll('.segmented').forEach(function(seg){
+    seg.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        seg.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+      });
+    });
+  });
+</script>
+</body>
+</html>
