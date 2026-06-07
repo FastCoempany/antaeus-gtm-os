@@ -458,6 +458,42 @@
   .icon.acc { color: var(--orange); }
   .icon.sig { color: var(--blue); }
 
+  /* ---- interaction states ---- */
+  .btn:focus-visible, .input:focus-visible, .segmented button:focus-visible, .toggle:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--orange-soft); }
+  .btn.is-hover.btn-accent { background: #cf6118; }
+  .btn.is-hover.btn-primary { background: var(--ink-700); }
+  .btn.is-hover.btn-secondary { border-color: var(--ink-quiet); }
+  .btn.is-focus { box-shadow: 0 0 0 3px var(--orange-soft); }
+  .btn.is-active { transform: translateY(1px); }
+  .btn.is-disabled, .btn:disabled { opacity: 0.42; cursor: not-allowed; box-shadow: none; }
+  .istate-row { display: grid; grid-template-columns: repeat(5, auto); gap: 10px 14px; align-items: center; justify-content: start; }
+  .istate-row .lbl { font-family: "JetBrains Mono", monospace; font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); text-align: center; }
+  .disabled-why { font-size: 11.5px; color: var(--ink-faint); font-style: italic; margin-top: 8px; }
+
+  /* ---- foundations: tokens made visible ---- */
+  .found-block { margin-bottom: 22px; }
+  .found-h { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); margin: 0 0 12px; }
+  .swatch-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .swatch { display: flex; flex-direction: column; gap: 6px; width: 104px; }
+  .swatch .chip { height: 40px; border-radius: 6px; border: 1px solid var(--hair); }
+  .swatch .role { font-size: 11px; font-weight: 600; }
+  .swatch .hex { font-family: "JetBrains Mono", monospace; font-size: 9.5px; color: var(--ink-faint); letter-spacing: 0.04em; }
+  .ramp { display: flex; flex-direction: column; gap: 12px; }
+  .ramp-row { display: grid; grid-template-columns: 88px 1fr; gap: 18px; align-items: baseline; border-bottom: 1px solid var(--hair); padding-bottom: 10px; }
+  .ramp-row .tag { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); }
+  .space-scale { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+  .space-unit { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .space-bar { background: var(--orange-soft); border-left: 2px solid var(--orange); }
+  .space-unit .n { font-family: "JetBrains Mono", monospace; font-size: 9px; color: var(--ink-faint); }
+  .radius-row, .elev-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .radius-chip { width: 76px; height: 56px; background: var(--surface); border: 1px solid var(--hair-strong); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; font-family: "JetBrains Mono", monospace; font-size: 9px; color: var(--ink-faint); }
+  .elev-chip { width: 96px; height: 56px; background: var(--surface); border-radius: 8px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; font-family: "JetBrains Mono", monospace; font-size: 9px; color: var(--ink-faint); }
+  .a11y-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .a11y-card { border: 1px solid var(--hair); border-radius: 8px; padding: 14px 16px; background: var(--surface); }
+  .a11y-card h5 { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); margin: 0 0 8px; }
+  .a11y-card p { font-size: 12px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+  .focus-ring-demo { display: inline-block; box-shadow: 0 0 0 3px var(--orange-soft); border-radius: 6px; }
+
   /* closing */
   .closing { margin-top: 128px; padding: 32px; background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow-rest); }
   .closing-eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.20em; color: var(--orange); text-transform: uppercase; margin-bottom: 14px; }
@@ -506,6 +542,7 @@
     <a href="#icons"><span class="n">09</span> Iconography</a>
     <a href="#system"><span class="n">10</span> System primitives</a>
     <a href="#density"><span class="n">11</span> Density gradient</a>
+    <a href="#foundations"><span class="n">12</span> Foundations &amp; tokens</a>
   </nav>
 
   <!-- ============================================================ -->
@@ -716,6 +753,23 @@
       <div class="specimen"><div class="specimen-label">Offset action</div><div class="specimen-demo stretch"><div class="offset" style="padding-top:14px; width:100%;"><span class="offset-tag" style="position:static; display:inline-block; margin:0 0 8px 8px; box-shadow:none;">— Recommended</span><div style="background:var(--surface); border:1px solid var(--orange-soft); border-bottom:3px solid var(--orange); border-radius:8px; padding:14px; box-shadow:var(--shadow-rest); position:relative;"><div style="font-size:13px; line-height:1.45;">Send the CFO note before Friday.</div><div style="display:flex; justify-content:flex-end; margin-top:10px; margin-bottom:-22px;"><button class="btn btn-accent" style="box-shadow:var(--shadow-offset);">Draft</button></div></div></div></div><div class="specimen-note">The button extends below the card. Once per zone.</div></div>
       <div class="specimen"><div class="specimen-label">Link · cross-room</div><div class="specimen-demo"><a href="#" style="color:var(--blue); text-decoration:none; border-bottom:1px solid var(--blue); font-size:14px;">Open in Discovery →</a></div><div class="specimen-note">Blue, hand-off anchor.</div></div>
       <div class="specimen"><div class="specimen-label">Inline action</div><div class="specimen-demo"><span style="font-family:'Public Sans'; font-size:13px; color:var(--orange); border-bottom:1px solid var(--orange); font-weight:600; cursor:pointer;">Assign owner ↗</span></div><div class="specimen-note">Text link for timeline-style rows.</div></div>
+      <div class="specimen" style="grid-column:1 / -1;">
+        <div class="specimen-label">Interaction states · every control renders six</div>
+        <div class="specimen-demo stretch top">
+          <div style="width:100%;">
+            <div class="istate-row">
+              <span class="lbl">Rest</span><span class="lbl">Hover</span><span class="lbl">Focus</span><span class="lbl">Active</span><span class="lbl">Disabled</span>
+              <button class="btn btn-accent">Send</button>
+              <button class="btn btn-accent is-hover">Send</button>
+              <button class="btn btn-accent is-focus">Send</button>
+              <button class="btn btn-accent is-active">Send</button>
+              <button class="btn btn-accent is-disabled">Send</button>
+            </div>
+            <div class="disabled-why">— Disabled carries its reason when it isn't obvious: <b>"Add a buyer before this can send."</b></div>
+          </div>
+        </div>
+        <div class="specimen-note">Rest · hover · focus (keyboard ring, always) · active · disabled · selected. The focus ring is non-negotiable — the keyboard operator is never lost.</div>
+      </div>
     </div>
   </section>
 
@@ -1049,6 +1103,93 @@
           </div>
           <div class="ground-foot"><span class="ground-stamp risk">— Likely to slip</span><button class="btn btn-accent">Draft</button></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 12 · FOUNDATIONS                                             -->
+  <!-- ============================================================ -->
+  <section id="foundations">
+    <div class="ribbon"><span class="ribbon-label">12 · Foundations</span><span class="ribbon-line"></span><span class="ribbon-suffix">the tokens every component is built from</span></div>
+    <div class="cat-head">
+      <span class="cat-num">12</span>
+      <div>
+        <h2 class="cat-title">Five token families, one theme, no improvisation.</h2>
+        <p class="cat-desc">Color by role (never by hue), a five-step type ramp, an 8px spacing rhythm, three radius steps, and a fixed elevation order. A room that reaches outside this set is either naming a new meaning — a founder decision — or drifting. There is one bright theme and no theming layer.</p>
+      </div>
+    </div>
+
+    <div class="found-block">
+      <p class="found-h">Color · by role</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="chip" style="background:var(--ink);"></div><span class="role">Ink</span><span class="hex">authority / text</span></div>
+        <div class="swatch"><div class="chip" style="background:var(--orange);"></div><span class="role">Orange</span><span class="hex">the one move</span></div>
+        <div class="swatch"><div class="chip" style="background:var(--blue);"></div><span class="role">Blue</span><span class="hex">intelligence</span></div>
+        <div class="swatch"><div class="chip" style="background:var(--green);"></div><span class="role">Green</span><span class="hex">earned health</span></div>
+        <div class="swatch"><div class="chip" style="background:var(--amber);"></div><span class="role">Amber</span><span class="hex">caution</span></div>
+        <div class="swatch"><div class="chip" style="background:var(--red);"></div><span class="role">Red</span><span class="hex">real risk</span></div>
+        <div class="swatch"><div class="chip" style="background:var(--field); border-color:var(--hair-strong);"></div><span class="role">Field</span><span class="hex">the bright base</span></div>
+      </div>
+    </div>
+
+    <div class="found-block">
+      <p class="found-h">Type · five steps</p>
+      <div class="ramp">
+        <div class="ramp-row"><span class="tag">Display · serif</span><span class="serif" style="font-size:34px; line-height:1;">Acme is stalling.</span></div>
+        <div class="ramp-row"><span class="tag">Title · serif</span><span class="serif" style="font-size:20px;">Recovery options</span></div>
+        <div class="ramp-row"><span class="tag">Body · sans</span><span style="font-size:15px;">The CFO still hasn't seen the new pricing — send it before Friday.</span></div>
+        <div class="ramp-row"><span class="tag">Label · sans</span><span style="font-size:13px; font-weight:600;">How many have to say yes</span></div>
+        <div class="ramp-row"><span class="tag">Kicker · mono</span><span class="mono" style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-soft);">SIGNAL · LIVE · 09:08 CT</span></div>
+      </div>
+    </div>
+
+    <div class="found-block">
+      <p class="found-h">Spacing · an 8px rhythm</p>
+      <div class="space-scale">
+        <div class="space-unit"><div class="space-bar" style="width:4px; height:24px;"></div><span class="n">4</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:8px; height:24px;"></div><span class="n">8</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:12px; height:24px;"></div><span class="n">12</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:16px; height:24px;"></div><span class="n">16</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:20px; height:24px;"></div><span class="n">20</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:24px; height:24px;"></div><span class="n">24</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:32px; height:24px;"></div><span class="n">32</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:40px; height:24px;"></div><span class="n">40</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:48px; height:24px;"></div><span class="n">48</span></div>
+        <div class="space-unit"><div class="space-bar" style="width:56px; height:24px;"></div><span class="n">56</span></div>
+      </div>
+    </div>
+
+    <div class="found-block" style="display:grid; grid-template-columns:1fr 1fr; gap:28px;">
+      <div>
+        <p class="found-h">Radius · three steps</p>
+        <div class="radius-row">
+          <div class="radius-chip" style="border-radius:4px;">4 · control</div>
+          <div class="radius-chip" style="border-radius:8px;">8 · card</div>
+          <div class="radius-chip" style="border-radius:12px;">12 · frame</div>
+          <div class="radius-chip" style="border-radius:99px; width:56px;">99 · pill</div>
+        </div>
+      </div>
+      <div>
+        <p class="found-h">Elevation · three + a fixed stack</p>
+        <div class="elev-row">
+          <div class="elev-chip" style="box-shadow:var(--shadow-rest);">rest</div>
+          <div class="elev-chip" style="box-shadow:var(--shadow-lift);">lift</div>
+          <div class="elev-chip" style="box-shadow:var(--shadow-offset);">offset</div>
+        </div>
+        <p class="disabled-why" style="margin-top:10px;">— Layer order: content → Wayfinder → Drawer → Modal → Toast / Ctrl+K. Never an ad-hoc z-index.</p>
+      </div>
+    </div>
+
+    <div class="found-block">
+      <p class="found-h">Accessibility · the floor every component meets</p>
+      <div class="a11y-grid">
+        <div class="a11y-card"><h5>Focus, always</h5><p>A keyboard ring on every interactive <span class="focus-ring-demo"><button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;">like this</button></span> — never reachable by mouse alone.</p></div>
+        <div class="a11y-card"><h5>Never color alone</h5><p>State rides on the spine <i>and</i> the stamp word — "Likely to slip" — so meaning survives without the red.</p></div>
+        <div class="a11y-card"><h5>Reduced motion</h5><p>The pulse, the shimmer, the bar's growth all stop when the operator asks for less motion. Motion never carries meaning.</p></div>
+        <div class="a11y-card"><h5>Contrast holds</h5><p>Operating text meets AA. The faint ink tokens are for meta and rules, never an operating sentence.</p></div>
+        <div class="a11y-card"><h5>Real targets</h5><p>Every hit area clears 32px even when the glyph is 20 — an icon button is a 34px square.</p></div>
+        <div class="a11y-card"><h5>Honest semantics</h5><p>Real buttons and inputs, headings in order, a save announced, the ornament marked decorative so the screen reader hears the sentence.</p></div>
       </div>
     </div>
   </section>

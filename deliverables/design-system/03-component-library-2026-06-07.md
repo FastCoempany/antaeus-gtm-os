@@ -129,7 +129,7 @@ A note on what was set aside: this session built two un-nav approaches — the W
 
 ---
 
-## Part IV — The catalog and the component contract
+## Part IV — The catalog, the contract, and how components behave
 
 ### 4.1 The catalog
 
@@ -155,9 +155,19 @@ Every component declares three things, one per sibling spec:
 
 A component that declares all three is buildable against the catalog. A component that cannot name its Family does not belong in the library — it is decoration, and the "does this earn its place" test removes it.
 
-### 4.3 Tokens
+### 4.3 The token system
 
-The library is built on a fixed token set, named in the mockup's `:root` and inherited unchanged from the charter's face direction: the bright field (`#F5F7FB`) and surfaces, navy ink at four opacities, the semantic accents (orange `#E6701E`, blue `#2563EB`, green `#22C55E`, amber `#F59E0B`, red `#EF4444`), three shadow elevations (rest / lift / offset), and the three-font stack. The tokens are not re-decided per room. A room that introduces a new color is introducing a new meaning, and new meanings are a founder decision, not a component decision.
+The library is built on a fixed token set, named in the mockup's `:root` and inherited from the charter's face direction. Tokens are not re-decided per room; a room that reaches for a value outside the set is either introducing a new meaning (a founder decision) or drifting (a bug). Five families:
+
+**Color — by role, never by hue.** The field (`#F5F7FB`) and three surface elevations (sub / sunk / warm); navy ink at four opacities (`--ink` solid, `--ink-soft` .66, `--ink-faint` .42, `--ink-quiet` .22) plus three hairline weights; and the semantic accents, each carrying exactly one meaning per the charter's color roles — orange `#E6701E` (the one dominant move), blue `#2563EB` (system intelligence), green `#22C55E` (earned health), amber `#F59E0B` (caution), red `#EF4444` (real risk). A token is referenced by its role (`--orange` = the move), never picked for how it looks. There is one theme — bright — and no theming layer; the dark exception is retired (charter Part II §1).
+
+**Type — a five-step ramp.** Display (DM Serif Display, `clamp(30–64px)`, the authored headline and the system's read), Title (serif, 18–24px, card and section heads), Body (Public Sans 15px/1.6, reading and controls), Label (Public Sans 13px/600, field labels and control heads), and Kicker (JetBrains Mono 9.5–11px, letter-spaced uppercase, codes / timestamps / ribbon labels). Each step has a fixed size, weight, and line-height. The compression rule from the charter holds: one serif step carries the argument per surface, sans carries the work, mono recedes — three sizes maximum in any first zone.
+
+**Spacing — an 8px rhythm with a 4px half-step.** The scale is `4 · 8 · 12 · 14 · 16 · 18 · 20 · 22 · 24 · 28 · 32 · 40 · 48 · 56`, an 8-based rhythm with 4px and 14px as the permitted half-steps for tight control surfaces. Component padding, gaps, and section margins all draw from it. Off-scale spacing is the most common quiet source of an un-composed feel and is treated as drift.
+
+**Radius — three steps.** 4px (controls, inputs, buttons), 6–8px (cards, specimens, chips), 10–12px (containers, drawers, the app frame). 99px for fully-round (pills, toggles, avatars). Sharper than the SaaS-default rounded-everything; the modest radius is part of the severe, authored feel.
+
+**Elevation & z-index — a fixed stacking order.** Three shadow tokens (rest / lift / offset) map to three resting elevations: at-rest cards (rest), the offset item and active surfaces (lift), the offset action and lifted overlays (offset). Above the page, layering is a fixed order so overlays never fight: base content `0` → the Wayfinder bar (sticky, always above content) → Drawer scrim + panel → Modal → Toast / Ctrl+K palette (always on top). A component never sets an ad-hoc z-index; it declares its layer and inherits the order.
 
 ### 4.4 The state matrix — every component renders five conditions
 
@@ -187,11 +197,55 @@ The discipline: every icon is a **thin line glyph** — a consistent stroke weig
 
 The density spec §4.5 deferred one mechanism to this spec: where the "show the primary action plus one or two, collapse the rest" cutoff is configured for affordance count in Step back. This spec resolves it. The slice point is a property on the **component contract** (§4.2), declared alongside the component's density behavior: a component sets `affordanceSliceIndex` (default 2) to say how many actions stay visible in Step back before the rest collapse into a "More" affordance or onto hover. It lives on the component because the right cutoff is a property of the component's action set, not a global constant — a Grounded card's two-action foot slices at 2, the Wayfinder bar's commit row slices at 2, a bulk-action toolbar might slice higher. The density state decides *whether* to slice; the component decides *where*. This closes the only cross-spec handoff `02` left open to `03`.
 
-### 4.8 What this spec does not decide
+### 4.8 Interaction states — every interactive renders six
+
+The data-state matrix (§4.4) covers what a component shows about its *data*. This covers what an interactive control shows about *itself* as the operator works it. Every button, link, input, toggle, palette row, segmented control, and table row renders six interaction states, and a component is not catalog-complete until all six are specified:
+
+- **Rest** — the default, quiet.
+- **Hover** — a low-cost affordance cue (a border darkening, a faint surface fill); never motion theater.
+- **Focus** — a visible focus ring, always. This is non-negotiable and is the most common omission: a 3px orange-soft ring (`--orange` at low alpha) on every focusable control, driven by `:focus-visible` so it appears for keyboard users without cluttering mouse clicks. The mouse-first operator must succeed (canon Part II §5), and the keyboard-first operator must never be lost.
+- **Active / pressed** — a 1px depress on buttons; immediate, physical.
+- **Disabled** — visibly inert (reduced contrast, no pointer), and — the part most libraries skip — it carries *why* when the reason isn't obvious ("Add a buyer before this can send"), because a dead control with no explanation is a dead end.
+- **Selected** — the persistent on-state for toggles, segmented lenses, and the active row, carried by the orange accent or fill, distinct from transient hover.
+
+These compose with the data states: a button can be disabled *because* the surface is loading; a row can be selected *and* in error. The component declares both axes.
+
+### 4.9 Accessibility — the floor, not a feature
+
+An excellent library makes accessibility a property of every component, not a later audit. The floor every component meets:
+
+- **Focus-visible everywhere.** Per §4.8 — every interactive shows a keyboard focus ring. No control is reachable by mouse but invisible to the keyboard.
+- **Keyboard-operable.** Ctrl+K opens and closes from anywhere; arrow keys move the selection, Enter commits, Esc closes and returns focus to where it was. Modals and Drawers trap focus while open and restore it on close. The Wayfinder bar, the HandoffStrip, and every palette row are reachable and actuated without a mouse. This is also a product commitment, not only an a11y one — the command-first operator lives on the keyboard.
+- **Contrast holds.** Body and label text meet WCAG AA (4.5:1) on their surfaces; the low-opacity ink tokens (`--ink-faint`, `--ink-quiet`) are reserved for large text, decorative rules, and non-essential meta — never for an operating sentence. A meaning never rides on color alone: state is carried by the spine *and* the stamp word ("Likely to slip"), so a red spine is never the only signal.
+- **Motion respects the operator.** Every animation — the pulsing offset dot, the loading shimmer, the Wayfinder expansion — is gated behind `prefers-reduced-motion`; when reduced motion is set, state changes resolve instantly with no shimmer and no pulse. Motion is never load-bearing for meaning (charter / canon Part II §6).
+- **Targets are real.** Interactive hit areas clear a 32px minimum even when the visible glyph is smaller; an icon button is a 34px square around a 20px glyph.
+- **Semantics are honest.** Headings nest in order, controls are real `<button>`/`<input>` elements with labels (an icon-only control carries an accessible name), live regions announce a save or an error, and the reading order matches the visual order. The Stamp, the Kicker, and decorative rules are marked decorative so a screen reader hears the sentence, not the ornament.
+
+### 4.10 Content resilience — the component survives real data
+
+Components are specified against real, messy data, not the tidy demo string. Each handles:
+
+- **Overflow.** Long account names truncate with an ellipsis and keep their full value on hover/title; a list that exceeds its room collapses to a "+N more" affordance (the Signal Console pattern) rather than growing unbounded.
+- **Boundaries.** Zero is distinct from empty is distinct from null — "0 deals" is a real count with its own copy, not the empty state, which is "no pipeline yet." A meter at 0% and a meter with no data read differently.
+- **Formatting.** Money, large numbers, dates, and durations render through shared formatters (`$84K` not `$84000`; "11 days" not "11.0d"; relative time in the operator's timezone, which is Central per canon). Formatting is a token-like shared concern, not per-component improvisation.
+- **Pluralization and tone.** "1 signal" / "2 signals"; counts never read "1 signals," and an empty count never reads as a failure. Every generated string — including the pluralized and the zero case — passes the voice validator.
+
+### 4.11 Composition and layering
+
+The four systems compose by scale (Part II); components compose by a few nesting rules that keep the page from collapsing into boxes-in-boxes:
+
+- A **Grounded card** is the deepest container an operator authors into. Cards do not nest inside cards — a card that needs sub-cards is two cards in a list, or a Table. This is the single most important rule against card-soup.
+- **Overlays do not stack arbitrarily.** A Drawer or Modal may contain Grounded cards, Tables, and forms, but not another Drawer; depth opens once. The z-index order in §4.3 is the only layering.
+- **Offset is a property of a zone, not a card** — exactly one per zone (Part II §2.4), and an offset card cannot itself contain an offset.
+- **Ribbons thread; they never wrap.** A ribbon marks the seam between groups; it is not a container with contents.
+
+These rules are what let a room stay legible as it fills — structure stays in the composition, never in an accumulation of nested borders.
+
+### 4.12 What this spec does not decide
 
 This spec governs the rendering vocabulary. It does not decide what the operator lands on when they open the product — the home surface, its ranking, its resting-state behavior, and how the agency boundary holds when the system has a read but the operator has not asked for it. That is the today-surface spec, the next sibling owed (Part V and the §5.3 signals point at it). The component library gives that spec its building material — the Wayfinder bar, the Pulse timeline, the Grounded cards, the full state matrix — but does not pre-empt its decisions about ranking and landing.
 
-It also does not decide motion in any depth beyond the charter's "sparse, consequential, state-based" rule, nor the full iconography system (§4.6). Both are owed sibling specs per charter §4.7. If the four-system language needs a motion grammar of its own (how a pulse arrives, how the Wayfinder bar grows, how a zone compresses, the cross-fade between density states `02` §4.5 deferred to motion), that is the motion spec, written when the build surfaces the need.
+It also does not decide motion in any depth beyond the charter's "sparse, consequential, state-based" rule and the `prefers-reduced-motion` floor in §4.9. The *grammar* of motion — how a pulse arrives, how the Wayfinder bar grows, how a zone compresses, the cross-fade between density states `02` §4.5 deferred — is the owed motion spec (charter §4.7). Likewise §4.6 states the icon discipline but defers the full icon system to its own owed sibling. What this spec *does* now decide, and did not before this pass: the complete token system (§4.3), the interaction-state matrix (§4.8), the accessibility floor (§4.9), content resilience (§4.10), and composition/layering rules (§4.11) — the difference between a hero-surface catalog and a library a room can actually be built on without improvising.
 
 ---
 
@@ -228,6 +282,8 @@ The component library is working if:
 4. **The Wayfinder carries context without restating.** The operator moves between rooms and the bar's trail, here, and pulling stay coherent — the continuity params never drop, and the operator never re-enters known context.
 5. **The catalog is the only source.** New rooms compose from the catalog rather than inventing components; a new component is a deliberate addition with a declared Family, not an ad-hoc box.
 6. **No surface is ever blank, cryptic, or ambiguous.** Every component renders its empty, sparse, loading, error, and saved states; an audit can open any surface mid-load or with no data and find it directional rather than broken, and the operator never wonders whether their edit saved.
+7. **The whole product is keyboard-operable, and nothing is reachable by mouse alone.** Every interactive shows a focus ring; Ctrl+K, the Wayfinder, the HandoffStrip, every row and control actuate without a mouse; overlays trap and restore focus; no meaning rides on color alone; reduced motion is honored.
+8. **Components survive real data.** Long names truncate, lists collapse to "+N more," zero reads differently from empty, money and dates format through shared helpers, and counts pluralize — the demo string and the messy production row render equally well.
 
 ---
 
