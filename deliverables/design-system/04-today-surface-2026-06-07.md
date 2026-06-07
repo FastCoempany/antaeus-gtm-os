@@ -28,11 +28,11 @@ This reconciles what looked like a tension. The charter's command-first doctrine
 
 ### 1.2 The agency boundary at landing
 
-The charter's §2.1 agency property is the spine of this spec: the system has agency over itself, the operator has agency over their work. At the moment of landing, that means:
+The charter's §2.1 agency property is the principle this whole spec rests on: the system has agency over itself, the operator has agency over their work. At the moment of landing, that means:
 
 - **The system may rank, read, and surface.** It orders the pipeline, names the one move it would make, accumulates observations while the operator is away, and shows all of it.
 - **The system may not open, act, or insist.** It does not auto-navigate into a room, auto-send anything, auto-dismiss the operator's own focus, or escalate a surface to demand attention. The Wayfinder's *pulling* cell is an offer with a "skip" that sends nothing (`03` Part III).
-- **Escalation is reserved for real, destructive risk** (`canon Part III §3` rule 7) — a deal about to close-lost, an unsaved edit about to be discarded — never for ordinary ranking. The today surface is calm by default; intensity is earned by consequence, not manufactured to drive engagement.
+- **Escalation is reserved for real, destructive risk** (`canon Part III §3` rule 7) — a deal about to close-lost, an unsaved edit about to be discarded — never for ordinary ranking. The today surface is calm by default; intensity comes from consequence, not manufactured to drive engagement.
 
 The line is testable: if a future change makes the surface *do* something on the operator's behalf at landing — open the top deal, start a triage flow, mark observations read — it has crossed the boundary and is out of bounds without founder sign-off through the mind-correction protocol.
 
@@ -64,7 +64,7 @@ Every ranked item can show *why it is here* and *why it is in this order* — th
 
 The order does not churn. A live data refresh that nudges the math must not reshuffle the surface under the operator's eyes; the previous focal item stays pinned unless something genuinely more pressured displaces it (the stability rule the Dashboard rebuild already carries, `canon Part V` Phase 4 / Room 2). Stability is an agency property too: a surface that reorders while you read it is making decisions you did not ask for.
 
-This holds for mid-session arrivals as well. When something genuinely more pressured lands while the operator is reading — a deal slips, a hot signal arrives — the surface does not jump or re-rank under them. It surfaces a quiet "new" marker the operator can pull in when they choose, and the next time the surface is opened fresh the new item takes its earned place. Realtime keeps the data current; it never moves the floor under the operator's feet. The one exception is the same one as everywhere (`§1.2`): real, destructive risk may escalate, because a deal about to close-lost is worth interrupting for.
+This holds for mid-session arrivals as well. When something genuinely more pressured lands while the operator is reading — a deal slips, a hot signal arrives — the surface does not jump or re-rank under them. It surfaces a quiet "new" marker the operator can pull in when they choose, and the next time the surface is opened fresh the new item takes its rightful place. Realtime keeps the data current; it never moves the floor under the operator's feet. The one exception is the same one as everywhere (`§1.2`): real, destructive risk may escalate, because a deal about to close-lost is worth interrupting for.
 
 ### 2.4 One thing breaks rank
 
@@ -130,7 +130,7 @@ For the builder, the resting surface has a fixed vertical order, and naming it k
 
 Switching reads acts on the Brief's position only. The Segmented control swaps **the read** in place — Spotlight or Queue takes the Brief's slot — while the week's-reads band and the proposal slot persist below, because they are surface furniture, not part of the read. Switching never reorders the surface or moves the lower bands.
 
-The Wayfinder bar has a special case at the home. Its *here* cell reads the today surface itself ("Pipeline — Tuesday morning"), and its *trail* is empty, because the home is the root the trail builds out from rather than a place the operator arrived at from somewhere else. Its *pulling* cell carries the same one move the Brief leads with — the move named once for the persistent thread and once, with its context, in the Brief.
+The Wayfinder bar has a special case at the home. Its *here* cell reads the today surface itself ("Today — Tuesday morning"), and its *trail* is empty, because the home is the root the trail builds out from rather than a place the operator arrived at from somewhere else. Its *pulling* cell carries the same one move the Brief leads with — the move named once for the persistent thread and once, with its context, in the Brief.
 
 ---
 

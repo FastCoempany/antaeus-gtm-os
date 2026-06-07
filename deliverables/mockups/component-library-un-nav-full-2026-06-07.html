@@ -98,13 +98,13 @@
   .ground.b-exec { border-bottom-color: var(--ink); }
   .ground.b-healthy { border-bottom-color: var(--green); }
   .ground.b-sig { border-bottom-color: var(--blue); }
-  .ground.spine::before { content: ''; position: absolute; top: 16px; bottom: 16px; left: 0; width: 3px; border-radius: 0 2px 2px 0; }
-  .ground.spine.s-risk::before { background: var(--red); }
-  .ground.spine.s-attn::before { background: var(--amber); }
-  .ground.spine.s-healthy::before { background: var(--green); }
-  .ground.spine.s-exec::before { background: var(--ink); }
-  .ground.spine.s-act::before { background: var(--orange); }
-  .ground.spine.s-sig::before { background: var(--blue); }
+  .ground.gauge::before { content: ''; position: absolute; top: 16px; bottom: 16px; left: 0; width: 3px; border-radius: 0 2px 2px 0; }
+  .ground.gauge.s-risk::before { background: var(--red); }
+  .ground.gauge.s-attn::before { background: var(--amber); }
+  .ground.gauge.s-healthy::before { background: var(--green); }
+  .ground.gauge.s-exec::before { background: var(--ink); }
+  .ground.gauge.s-act::before { background: var(--orange); }
+  .ground.gauge.s-sig::before { background: var(--blue); }
   .ground-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
   .ground-name { font-weight: 600; font-size: 16px; }
   .ground-meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint); letter-spacing: 0.06em; }
@@ -522,7 +522,7 @@
     <div class="legend">
       <div class="legend-cell pulse"><div class="legend-scale">PAGE SCALE</div><div class="legend-name">Pulse Surface</div><div class="legend-role">Vertical time. Today at the top, the past compressing beneath, quiet deals visible.</div></div>
       <div class="legend-cell ribbon"><div class="legend-scale">SECTION SCALE</div><div class="legend-name">Ribbon UI</div><div class="legend-role">Thread headers tie time-zones and groups together across the page.</div></div>
-      <div class="legend-cell ground"><div class="legend-scale">CARD SCALE</div><div class="legend-name">Grounded Signal</div><div class="legend-role">Anchored edges + signal spines + the Signal / Reason / Move grammar.</div></div>
+      <div class="legend-cell ground"><div class="legend-scale">CARD SCALE</div><div class="legend-name">Grounded Signal</div><div class="legend-role">Anchored edges + gauges + the Signal / Reason / Move grammar.</div></div>
       <div class="legend-cell offset"><div class="legend-scale">ITEM SCALE</div><div class="legend-name">Offset Logic</div><div class="legend-role">One item per zone breaks rank — tag outside the card, action below it.</div></div>
     </div>
   </header>
@@ -586,7 +586,7 @@
         <div class="pulse-time">09:08 CT</div>
         <div class="offset">
           <div class="offset-tag">— Most likely to slip</div>
-          <div class="ground spine s-risk b-risk">
+          <div class="ground gauge s-risk b-risk">
             <div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">PROPOSAL · DAY 18 · $84K</span></div>
             <div class="ground-context">Enterprise · the CFO still hasn't seen the new pricing</div>
             <div class="ground-layers">
@@ -606,7 +606,7 @@
       <div class="pulse">
         <div class="pulse-dot attn"></div>
         <div class="pulse-time">08:42 CT</div>
-        <div class="ground spine s-attn b-attn">
+        <div class="ground gauge s-attn b-attn">
           <div class="ground-head"><span class="ground-name">Northwind Logistics</span><span class="ground-meta">PILOT · DAY 9 · $112K</span></div>
           <div class="ground-context">Mid-market · pilot ran clean, but no one owns the write-up</div>
           <div class="ground-layers">
@@ -621,7 +621,7 @@
       <div class="pulse">
         <div class="pulse-dot sig"></div>
         <div class="pulse-time">08:14 CT</div>
-        <div class="ground spine s-sig b-sig">
+        <div class="ground gauge s-sig b-sig">
           <div class="ground-head"><span class="ground-name">A pattern worth a look</span><span class="ground-meta">BRIEFING · 14D · 78% SURE</span></div>
           <div class="ground-context">Three of your last five closed deals dropped price 12%+ in the final week, across two different kinds of buyer.</div>
           <div class="ground-foot"><span class="ground-stamp sig">— Worth reading</span><button class="btn btn-secondary">Open the read</button></div>
@@ -647,11 +647,11 @@
     <div class="timeline">
       <div class="pulse recent">
         <div class="pulse-dot healthy"></div><div class="pulse-time">17:24</div>
-        <div class="ground spine s-healthy b-healthy"><div class="ground-head"><span class="ground-name">Helix Robotics</span><span class="ground-meta">NEGOTIATION · $240K</span></div><div class="ground-foot"><span class="ground-stamp healthy">— CFO meeting locked for Thursday</span><button class="btn btn-secondary">Open</button></div></div>
+        <div class="ground gauge s-healthy b-healthy"><div class="ground-head"><span class="ground-name">Helix Robotics</span><span class="ground-meta">NEGOTIATION · $240K</span></div><div class="ground-foot"><span class="ground-stamp healthy">— CFO meeting locked for Thursday</span><button class="btn btn-secondary">Open</button></div></div>
       </div>
       <div class="pulse recent">
         <div class="pulse-dot act"></div><div class="pulse-time">14:08</div>
-        <div class="ground spine s-act b-act"><div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">LOGGED</span></div><div class="ground-foot"><span class="ground-stamp act">— Procurement re-opened pricing on Slack</span><button class="btn btn-ghost">View</button></div></div>
+        <div class="ground gauge s-act b-act"><div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">LOGGED</span></div><div class="ground-foot"><span class="ground-stamp act">— Procurement re-opened pricing on Slack</span><button class="btn btn-ghost">View</button></div></div>
       </div>
     </div>
 
@@ -712,9 +712,9 @@
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:18px;">
-      <div class="ground spine s-risk b-risk" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">D18 · $84K</span></div><div class="ground-context" style="margin-bottom:0;">Most likely to slip this week</div></div>
-      <div class="ground spine s-attn b-attn" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Northwind</span><span class="ground-meta">D9 · $112K</span></div><div class="ground-context" style="margin-bottom:0;">No one owns the write-up yet</div></div>
-      <div class="ground spine s-sig b-sig" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">A pattern</span><span class="ground-meta">14D · 78%</span></div><div class="ground-context" style="margin-bottom:0;">You're losing price in the final week</div></div>
+      <div class="ground gauge s-risk b-risk" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">D18 · $84K</span></div><div class="ground-context" style="margin-bottom:0;">Most likely to slip this week</div></div>
+      <div class="ground gauge s-attn b-attn" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Northwind</span><span class="ground-meta">D9 · $112K</span></div><div class="ground-context" style="margin-bottom:0;">No one owns the write-up yet</div></div>
+      <div class="ground gauge s-sig b-sig" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">A pattern</span><span class="ground-meta">14D · 78%</span></div><div class="ground-context" style="margin-bottom:0;">You're losing price in the final week</div></div>
     </div>
 
     <div class="alert blue" style="margin-top:18px;">
@@ -735,7 +735,7 @@
       <div class="specimen"><div class="specimen-label">Stat</div><div class="specimen-demo"><div style="text-align:center;"><div class="serif" style="font-size:40px; line-height:1; color:var(--orange);">37</div><div class="mono" style="font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-faint); margin-top:4px;">UNDER PRESSURE</div></div></div><div class="specimen-note">Serif numeral + mono label.</div></div>
       <div class="specimen"><div class="specimen-label">StatusChip</div><div class="specimen-demo"><div class="chip-row"><span class="chip healthy">Ready now</span><span class="chip risk">At risk</span></div></div><div class="specimen-note">Canon §10 state vocabulary.</div></div>
       <div class="specimen"><div class="specimen-label">Stamp · judgment</div><div class="specimen-demo"><span class="stamp risk">Likely to slip</span></div><div class="specimen-note">Letter-spaced, hairline-bracketed.</div></div>
-      <div class="specimen"><div class="specimen-label">Signal spine</div><div class="specimen-demo stretch"><div style="display:flex; gap:14px; align-items:center; width:100%;"><div style="display:flex; flex-direction:column; gap:6px;"><span style="width:3px; height:20px; background:var(--green); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--amber); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--red); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--ink); border-radius:2px;"></span></div><div style="font-size:11px; color:var(--ink-soft); line-height:1.7;">Healthy<br>Attention<br>Risk<br>Exec decision</div></div></div><div class="specimen-note">State as a quiet vertical rule.</div></div>
+      <div class="specimen"><div class="specimen-label">Gauge</div><div class="specimen-demo stretch"><div style="display:flex; gap:14px; align-items:center; width:100%;"><div style="display:flex; flex-direction:column; gap:6px;"><span style="width:3px; height:20px; background:var(--green); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--amber); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--red); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--ink); border-radius:2px;"></span></div><div style="font-size:11px; color:var(--ink-soft); line-height:1.7;">Healthy<br>Attention<br>Risk<br>Exec decision</div></div></div><div class="specimen-note">State as a quiet vertical rule.</div></div>
       <div class="specimen"><div class="specimen-label">Anchored edge</div><div class="specimen-demo stretch"><div style="background:var(--surface-sub); border-radius:6px; border-bottom:3px solid var(--orange); padding:12px 14px; width:100%;"><div style="font-weight:600; font-size:14px;">Acme Corp.</div><div style="font-size:12px; color:var(--ink-soft);">Weighted edge = this matters</div></div></div><div class="specimen-note">Bottom rule in the color of the work.</div></div>
       <div class="specimen"><div class="specimen-label">Avatar · identity</div><div class="specimen-demo stretch"><div style="display:flex; flex-direction:column; gap:10px; width:100%;"><div class="person-row"><span class="avatar">SC</span><span class="who"><b>Sarah Chen</b> · <span class="role">signs off</span></span></div><div class="person-row"><span class="avatar eb">MP</span><span class="who"><b>Marcus Patel</b> · <span class="role">decides</span></span></div><div class="avatar-stack"><span class="avatar">SC</span><span class="avatar eb">MP</span><span class="avatar adv">TA</span></div></div></div><div class="specimen-note">Initials, never photos. Orange = decides, blue = advisor.</div></div>
     </div>
@@ -970,7 +970,7 @@
         <div class="specimen-label">Sparse</div>
         <div class="specimen-demo stretch top">
           <div style="width:100%;">
-            <div class="ground spine s-attn b-attn" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Northwind</span><span class="ground-meta">PILOT · D9</span></div><div class="ground-context" style="margin-bottom:0;">One account, one signal — and that's real, not missing.</div></div>
+            <div class="ground gauge s-attn b-attn" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Northwind</span><span class="ground-meta">PILOT · D9</span></div><div class="ground-context" style="margin-bottom:0;">One account, one signal — and that's real, not missing.</div></div>
             <div class="sparse-note">— 1 of a watchlist you're still building</div>
           </div>
         </div>
@@ -1017,7 +1017,7 @@
       <span class="cat-num">09</span>
       <div>
         <h2 class="cat-title">Icons name the nouns. They never decorate.</h2>
-        <p class="cat-desc">The full icon system is its own owed sibling spec (charter §4.7); this is the discipline it ships under, plus a starter set. Every icon is a thin line glyph — 1.6px stroke, currentColor, on a 20px box — and it earns its place only by standing for a sacred noun or a verb the operator acts with. Default navy; an icon takes an accent color only when the thing it names is itself the accent (the send-move is orange, a signal is blue). No filled icons, no spot illustrations, no icon used purely to fill space.</p>
+        <p class="cat-desc">The full icon system is its own owed sibling spec (charter §4.7); this is the discipline it ships under, plus a starter set. Every icon is a thin line glyph — 1.6px stroke, currentColor, on a 20px box — and it holds its place only by standing for a sacred noun or a verb the operator acts with. Default navy; an icon takes an accent color only when the thing it names is itself the accent (the send-move is orange, a signal is blue). No filled icons, no spot illustrations, no icon used purely to fill space.</p>
       </div>
     </div>
     <div class="specimen-grid g2">
@@ -1060,7 +1060,7 @@
     <div class="specimen-grid g2">
       <div class="specimen"><div class="specimen-label">ProposalCard · the system suggests</div><div class="specimen-demo stretch"><div class="proposal" style="width:100%;"><div class="proposal-eyebrow"><span style="width:6px;height:6px;background:var(--orange);border-radius:50%;"></span>A suggestion</div><div class="proposal-body">You closed your first deal last week. Want the system to step back and show less?</div><div class="proposal-actions"><button class="btn btn-accent">Yes, step back</button><button class="btn btn-secondary">Ask in a month</button><button class="btn btn-ghost">Not now</button></div></div></div><div class="specimen-note">Accept / dismiss / snooze. Orange-tinted.</div></div>
       <div class="specimen"><div class="specimen-label">PatternCard · Briefing</div><div class="specimen-demo stretch"><div class="pattern" style="width:100%;"><div class="pattern-headline">You're losing price in the final week.</div><div class="pattern-body">Three of your last five closed deals dropped price 12%+ in the last week before signing — across two different kinds of buyer.</div><div class="pattern-conf">78% sure · last 14 days</div></div></div><div class="specimen-note">Authored read + evidence + how-sure.</div></div>
-      <div class="specimen"><div class="specimen-label">RiskCard · grounded</div><div class="specimen-demo stretch"><div class="ground spine s-risk b-risk" style="width:100%; box-shadow:none;"><div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">$84K · RISK 78</span></div><div class="ground-context" style="margin-bottom:0;">Stalled 18d · only one person talking to us · champion last replied Nov 3</div></div></div><div class="specimen-note">Recovery item with spine + anchored edge.</div></div>
+      <div class="specimen"><div class="specimen-label">RiskCard · grounded</div><div class="specimen-demo stretch"><div class="ground gauge s-risk b-risk" style="width:100%; box-shadow:none;"><div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">$84K · RISK 78</span></div><div class="ground-context" style="margin-bottom:0;">Stalled 18d · only one person talking to us · champion last replied Nov 3</div></div></div><div class="specimen-note">Recovery item with gauge + anchored edge.</div></div>
       <div class="specimen"><div class="specimen-label">ReadinessReadout</div><div class="specimen-demo stretch"><div class="readiness" style="width:100%;"><div class="readiness-eyebrow">Readiness</div><div class="readiness-state">A first hire could run this — with you nearby for sanity checks.</div></div></div><div class="specimen-note">Sentence-shape state. No score-bar, no "verdict" container.</div></div>
     </div>
   </section>
@@ -1074,14 +1074,14 @@
       <span class="cat-num">11</span>
       <div>
         <h2 class="cat-title">The grounded card decompresses.</h2>
-        <p class="cat-desc">The same anchored card, same signal spine, same Signal / Reason / Move grammar — walked through for the day-one operator, trimmed for someone three months in. The voice stays constant; only how much you see changes.</p>
+        <p class="cat-desc">The same anchored card, same gauge, same Signal / Reason / Move grammar — walked through for the day-one operator, trimmed for someone three months in. The voice stays constant; only how much you see changes.</p>
       </div>
     </div>
 
     <div class="density-grid">
       <div class="density-cell">
         <div class="density-cell-tag">Show me how</div>
-        <div class="ground spine s-risk b-risk" style="box-shadow:none;">
+        <div class="ground gauge s-risk b-risk" style="box-shadow:none;">
           <div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">DAY 18 · $84K</span></div>
           <div class="ground-context">This sits first today because the system reads it as the most likely to slip — a mix of how long it's stalled, how big it is, and how long it's been at this stage.</div>
           <div class="ground-layers">
@@ -1094,7 +1094,7 @@
       </div>
       <div class="density-cell">
         <div class="density-cell-tag">Step back</div>
-        <div class="ground spine s-risk b-risk" style="box-shadow:none;">
+        <div class="ground gauge s-risk b-risk" style="box-shadow:none;">
           <div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">DAY 18 · $84K</span></div>
           <div class="ground-layers">
             <span class="layer-key">Signal</span><span class="layer-val">Champion quiet 12d.</span>
@@ -1126,7 +1126,7 @@
         <div class="swatch"><div class="chip" style="background:var(--ink);"></div><span class="role">Ink</span><span class="hex">authority / text</span></div>
         <div class="swatch"><div class="chip" style="background:var(--orange);"></div><span class="role">Orange</span><span class="hex">the one move</span></div>
         <div class="swatch"><div class="chip" style="background:var(--blue);"></div><span class="role">Blue</span><span class="hex">intelligence</span></div>
-        <div class="swatch"><div class="chip" style="background:var(--green);"></div><span class="role">Green</span><span class="hex">earned health</span></div>
+        <div class="swatch"><div class="chip" style="background:var(--green);"></div><span class="role">Green</span><span class="hex">real health</span></div>
         <div class="swatch"><div class="chip" style="background:var(--amber);"></div><span class="role">Amber</span><span class="hex">caution</span></div>
         <div class="swatch"><div class="chip" style="background:var(--red);"></div><span class="role">Red</span><span class="hex">real risk</span></div>
         <div class="swatch"><div class="chip" style="background:var(--field); border-color:var(--hair-strong);"></div><span class="role">Field</span><span class="hex">the bright base</span></div>
@@ -1185,7 +1185,7 @@
       <p class="found-h">Accessibility · the floor every component meets</p>
       <div class="a11y-grid">
         <div class="a11y-card"><h5>Focus, always</h5><p>A keyboard ring on every interactive <span class="focus-ring-demo"><button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;">like this</button></span> — never reachable by mouse alone.</p></div>
-        <div class="a11y-card"><h5>Never color alone</h5><p>State rides on the spine <i>and</i> the stamp word — "Likely to slip" — so meaning survives without the red.</p></div>
+        <div class="a11y-card"><h5>Never color alone</h5><p>State rides on the gauge <i>and</i> the stamp word — "Likely to slip" — so meaning survives without the red.</p></div>
         <div class="a11y-card"><h5>Reduced motion</h5><p>The pulse, the shimmer, the bar's growth all stop when the operator asks for less motion. Motion never carries meaning.</p></div>
         <div class="a11y-card"><h5>Contrast holds</h5><p>Operating text meets AA. The faint ink tokens are for meta and rules, never an operating sentence.</p></div>
         <div class="a11y-card"><h5>Real targets</h5><p>Every hit area clears 32px even when the glyph is 20 — an icon button is a 34px square.</p></div>
@@ -1201,7 +1201,7 @@
     <div class="discipline">
       <div><h4>PULSE · page</h4><p>Moves are authored, not logged. Quiet deals are surfaced deliberately. The past compresses; it never piles up.</p></div>
       <div><h4>RIBBON · section</h4><p>Threads mark time-zones and groups only. Never a ribbon on a single card. Movement, not decoration.</p></div>
-      <div><h4>GROUNDED · card</h4><p>Anchored edges and spines are reserved for cards whose state warrants weight. Grounding everything erases the meaning.</p></div>
+      <div><h4>GROUNDED · card</h4><p>Anchored edges and gauges are reserved for cards whose state warrants weight. Grounding everything erases the meaning.</p></div>
       <div><h4>OFFSET · item</h4><p>Exactly one offset per zone. The single most-pressured item breaks rank; the rest hold the line.</p></div>
     </div>
     <p style="margin-top:20px;"><strong>The un-nav, in discipline.</strong> No room-list down the left, ever. The Wayfinder bar — one strip, three cells — is the only persistent chrome in the product; it carries where-you-were, where-you-are, and what's-pulling, and it travels with you across rooms. Never a second strip, never a rail beneath it. Rooms are summoned through Ctrl+K, not browsed. The bar's reasoning opens inline, on an explicit click, never on hover.</p>

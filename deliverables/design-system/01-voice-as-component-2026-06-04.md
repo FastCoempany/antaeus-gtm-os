@@ -64,6 +64,8 @@ The banned-vocabulary list inherits and extends the canon §11 examples, plus th
 
 Bans include single-noun shorthand patterns the product invented to feel important: "wedge," "verdict," "the move," "decision-grade," "operating truth," "command intelligence," "field read," "loom read," "ingot read," "recovery cue," "output ingot," "required correction," "operator move," "do not use," "main risk," "replacement pressure." The "verdict" ban supersedes the earlier carve-out for structured Readiness verdicts — founder direction 2026-06-04: the word is banned everywhere, no exceptions, with operator-facing strings rephrased to use the sentence-shaped state name directly ("You're at Inheritable with guardrails") rather than a container noun. Canon §4.17, §4.19, and §6 use "verdict" extensively today and are queued for the post-density-gradient sweep alongside the production code rename (the `gtmos_readiness_last_verdict` localStorage key, `verdict_label` and `verdict_history` cloud columns, the `evaluateReadiness()` return shape, the `ReadinessAnchor` and `ReadinessDrawer` strings).
 
+Bans include two tired business-metaphor words the founder retired on 2026-06-07. **"Spine"** — the assumed-appropriate deck word ("the backbone of the strategy") that stands in for a real description; it is banned both as an abstract metaphor (write the description: "the principle the spec rests on," "the fixed sequence of segments") and as a component name (the card's left state-rule is now **the gauge**, `03` §2.3). **"Earned"** (and "earns," "earn its place") — a precious self-congratulatory word that slips into copy ("green must be earned," "earns its place"); replace with the plain claim ("green only where health is real," "holds its place," "belongs"). Both apply universally; neither word appears in operator-facing copy, and both are being scrubbed from the specs and canon prose.
+
 Bans include marketing-deck language the visitor-face arc retired: "AI-powered," "world-class," "supercharge," "trusted by," "best-in-class," "next-generation," "revolutionary," "game-changing," "seamless," "powerful," "robust." These words are banned in operator-facing strings without exception. A legitimate technical-specification use of the same word in dev-facing strings (a code comment about "robust error handling", for example) is out of the validator's scope and unaffected — the validator only examines operator-facing surfaces per §1.2.
 
 Bans include sycophantic copy the truth-loyalty test in charter §1.2 forbids: "Great work!," "You're doing amazing," "Way to go," "Awesome," "Crushing it," "On fire" — any phrase that rewards activity rather than truth.
@@ -105,6 +107,20 @@ The validator runs in two places. First, in a new build script `npm run voice:ch
 Second, in CI as part of `.github/workflows/ci.yml`. Every pull request runs the voice check against every operator-facing string the diff touches. A failed check blocks the merge. The spec defines no override path, no warning-and-ship option, and no soft fallback — the strictest enforcement posture available, locked at founder direction during the design-system session that authored this spec.
 
 Exception path: a string that needs to ship despite failing the validator (the rare legitimate case — e.g., a third-party API error message rendered verbatim where wrapping it would lose fidelity) requires an explicit annotation comment that names the rule waived and the reason. The annotation is logged to `deliverables/voice-waivers.log` and reviewed quarterly. A waiver is a canon decision, not a developer decision; adding one requires founder approval the same way banning a word does.
+
+### 2.6 The product claim, and the words that carry or betray it
+
+Voice is not only how the product talks; it is what the product *claims*. One sentence anchors every operator-facing surface — every empty state, every onboarding line, every Brief is downstream of it. Locked by the founder on 2026-06-07:
+
+> **Name the accounts and deals you're working, and the system reads them — it finds what's moving, tells you which are heating up and which are quietly slipping, and hands you the next move. The product is the truth and the decision, not the storage.**
+
+The claim is the line between Antaeus and a CRM. A CRM says *give us your deals and we'll hold them and draw you a funnel* — the work is yours, the system stores and reports. Antaeus says the inverse: the system reads your accounts and deals and tells you the truth about them — what's real, what's slipping, what to do next — and does that work while you're away. The storage is incidental; the product is the truth and the decision. Three vocabulary rules protect the claim from drifting back toward the category it left:
+
+**"Pipeline" never sits in a promising position.** "Pipeline" is foundational vocabulary in this business and is not retired — but it is the most CRM-coded word in the language, so it may never be the subject of a sentence claiming what the product *does for* the operator. "You land on your pipeline," "the system watches your pipeline," "no pipeline yet" all use it to promise, and all read CRM. It stays where it is plainly factual or quantitative — "pipeline coverage" in the Quota math, a neutral reference to the operator's actual set of deals. The test: if "pipeline" is the subject of a claim about what we offer, rewrite the sentence around the accounts and deals and what the system reads on them.
+
+**The operator watches; the system reads.** Watching belongs to the operator — the watchlist of accounts is their hypothesis about who matters. The system does not "watch for you," which is both vague and faintly surveillant; it *reads* — it pulls signals on the accounts the operator named and surfaces the one worth acting on. Never "the system starts watching it for you." Always what the system actually does: reads, finds, surfaces, hands you the move.
+
+**Name the claim, not a metaphor for it.** This is the §11 rule applied to positioning. The empty state does not say "the first read shows up here" (a read of what?) — it names the thing: "the moment a signal's worth acting on, it shows up here." Every claim resolves to the sacred nouns (account, signal, deal, proof) and the active verb (reads, finds, surfaces), never to a vague abstraction or a borrowed CRM frame.
 
 ---
 
@@ -155,7 +171,7 @@ Each exemplar below is a worked example of the voice in the family's temperature
 
 **Diagnosis Table (Deal Workspace, Future Autopsy) — severe, investigative, corrective.** "This deal is dying. The decision-maker hasn't been in a meeting in three weeks. The last forecasted close date passed nine days ago. The forensic read says it died at the proof stage; the proof never anchored."
 
-**System Ledger (Readiness Score, Quota Workback, Founding GTM / Handoff Kit) — earned, synthesizing, authoritative.** "You're at Inheritable-with-guardrails. A first hire could probably run this if you stayed close for two weeks. Three sections of the kit are still empty; closing two of them moves the verdict to Hire-ready."
+**System Ledger (Readiness Score, Quota Workback, Founding GTM / Handoff Kit) — settled, synthesizing, authoritative.** "You're at Inheritable-with-guardrails. A first hire could probably run this if you stayed close for two weeks. Three sections of the kit are still empty; closing two of them moves the verdict to Hire-ready."
 
 **Trust Annex (Settings) — calm, plainspoken, trustworthy.** "Your data lives in two places — your browser and Antaeus's cloud. You can export everything as JSON whenever you want. Deleting the workspace removes both copies."
 

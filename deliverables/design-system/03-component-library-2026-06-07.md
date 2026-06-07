@@ -14,7 +14,7 @@ The charter set the philosophical floor and the face direction (bright field, th
 
 This spec resolves that. It commits to a four-scale composition language (Pulse, Ribbon, Grounded, Offset), to five native primitives that are the object model the components render (Signal, Reason, Move, State, Evidence), to a single un-nav primitive (the Wayfinder bar) that replaces the rail, and to a catalog of base and system components every room composes from. The composition came out of a long exploration that kept collapsing into card-variants because earlier directions all fought over a single scale; the four-system answer works because each system owns a different magnification and they never compete. The un-nav came out of a founder gut-check — the rail "screams CRM" — and resolved through two built approaches (a persistent Wayfinder bar, and a bare timeline that is itself the nav) with the founder selecting the bar.
 
-The component library is where the other three specs land on pixels. Every component in this catalog passes the voice validator on its strings (`01` Part II), declares its density behavior along the four dimensions (`02` Part IV), and maps to a sacred noun or a behavioral lever per the charter's "does this earn its place" test. A component that cannot name the primitive it renders does not belong in the catalog.
+The component library is where the other three specs land on pixels. Every component in this catalog passes the voice validator on its strings (`01` Part II), declares its density behavior along the four dimensions (`02` Part IV), and maps to a sacred noun or a behavioral lever per the charter's "does this hold its place" test. A component that cannot name the primitive it renders does not belong in the catalog.
 
 ---
 
@@ -28,7 +28,7 @@ The four systems are layered by magnification:
 
 - **Pulse Surface** owns the **page**. The whole workspace is a vertical time axis — now at the top, the past compressing beneath, silences surfaced deliberately.
 - **Ribbon UI** owns the **section**. Mono-labelled thread headers tie time-zones and groups together across the page.
-- **Grounded Signal** owns the **card**. Anchored bottom edges and left signal-spines give a card its weight; the Signal / Reason / Move grammar gives it its content.
+- **Grounded Signal** owns the **card**. Anchored bottom edges and left gauges give a card its weight; the Signal / Reason / Move grammar gives it its content.
 - **Offset Logic** owns the **item**. Exactly one item per zone breaks rank — its tag sits outside the card, its action extends below it — so the eye always has a single place to land.
 
 They compose because they never fight over the same scale. A page is Pulse; the sections inside it are Ribbon; the cards inside those are Grounded; one card per zone is Offset. Overrun any one layer — grounding every card, ribboning a single item, two offsets in a zone — and the page returns to noise. The discipline is the design (Part II).
@@ -43,7 +43,7 @@ Underneath the visual systems sit five **native primitives**. These are not comp
 - **State** — the condition of the object (healthy / attention / risk / exec-decision), carried as color, never as a paragraph.
 - **Evidence** — the support a claim stands on (the deal facts, the pattern, the window).
 
-The Grounded card's `Signal · Reason · Move` rows are these primitives rendered directly. The signal-spine is State. The Wayfinder bar's "Why" expansion is Reason plus Evidence. This is the charter's "does this earn its place" test made structural: if a visible object on screen cannot map to one of these five primitives (or to a sacred noun, or a behavioral lever), it should not exist in the room. The primitives are the object model; cards, ribbons, pulses, and the Wayfinder bar are how they render.
+The Grounded card's `Signal · Reason · Move` rows are these primitives rendered directly. The gauge is State. The Wayfinder bar's "Why" expansion is Reason plus Evidence. This is the charter's "does this hold its place" test made structural: if a visible object on screen cannot map to one of these five primitives (or to a sacred noun, or a behavioral lever), it should not exist in the room. The primitives are the object model; cards, ribbons, pulses, and the Wayfinder bar are how they render.
 
 ### 1.3 The relationship to the other three specs
 
@@ -75,9 +75,9 @@ Sections are joined by a thread: a mono uppercase label, a gradient rule fading 
 
 ### 2.3 Grounded — the card has gravity
 
-A card earns weight through two devices: an **anchored edge** (a 3px bottom rule in the color of the work's state) and a **signal-spine** (a 3px left rule in the same color). Between them sits the `Signal · Reason · Move` grammar — the native primitives rendered as a tight two-column layout. The card's foot carries a judgment stamp (mono, letter-spaced, hairline-bracketed) and, when warranted, its one action.
+A card carries weight through two devices: an **anchored edge** (a 3px bottom rule in the color of the work's state) and a **gauge** (a 3px left rule in the same color). Between them sits the `Signal · Reason · Move` grammar — the native primitives rendered as a tight two-column layout. The card's foot carries a judgment stamp (mono, letter-spaced, hairline-bracketed) and, when warranted, its one action.
 
-**Discipline:** anchored edges and spines are reserved for cards whose state warrants weight. Grounding everything erases the meaning — if every card has a colored edge, the color stops being a signal. A card at rest with no pressure carries a quiet neutral edge; color is spent only where state is real, exactly as the charter rations orange and earns green.
+**Discipline:** anchored edges and gauges are reserved for cards whose state warrants weight. Grounding everything erases the meaning — if every card has a colored edge, the color stops being a signal. A card at rest with no pressure carries a quiet neutral edge; color is spent only where state is real, exactly as the charter rations orange and spends green only where health is real.
 
 ### 2.4 Offset — one item breaks rank
 
@@ -101,7 +101,7 @@ The rail's replacement is the **Wayfinder bar**: one thin strip across the top o
 
 - **Trail — where you were.** A mono breadcrumb of the path that led here. Reads the same continuity params the HandoffStrips write (`returnTo`, `focusObject`, etc. — canon §2), so it is the visible face of the continuity plumbing that already exists.
 - **Here — where you are.** The current surface and its one-line state.
-- **Pulling — what the system sees next.** One move, rendered as a serif verb plus a plain-sentence object, on an orange-spined cell. This is the only place on the bar orange appears. A `Why ▾` affordance opens the bar's reasoning inline.
+- **Pulling — what the system sees next.** One move, rendered as a serif verb plus a plain-sentence object, in a cell with an orange gauge down its left edge. This is the only place on the bar orange appears. A `Why ▾` affordance opens the bar's reasoning inline.
 
 The bar **travels with the operator across rooms**. When the operator commits and lands inside a room, the trail extends, "Here" updates to the room, and the Pulling cell adapts to the next micro-move inside the act just begun. This is the ADR-011 Birdseye Float promoted from a corner widget to the primary wayfinding element — there is no corner icon; the bar at the top does that job, more legibly.
 
@@ -135,7 +135,7 @@ A note on what was set aside: this session built two un-nav approaches — the W
 
 The full catalog is rendered in the mockup; this is its index, organized by the role each group plays.
 
-- **Display** — Heading (serif, for authored emphasis), Heading (sans, for control heads), Kicker (mono caps), Stat (serif numeral + mono label), StatusChip (the canon §10 state vocabulary), Stamp (judgment, hairline-bracketed), Signal-spine, Anchored-edge, Avatar (initials, never photos; orange marks the decider, blue the advisor).
+- **Display** — Heading (serif, for authored emphasis), Heading (sans, for control heads), Kicker (mono caps), Stat (serif numeral + mono label), StatusChip (the canon §10 state vocabulary), Stamp (judgment, hairline-bracketed), Gauge, Anchored-edge, Avatar (initials, never photos; orange marks the decider, blue the advisor).
 - **Action** — Buttons (accent / primary / secondary / ghost, where accent-orange is the one dominant move), IconButton, Toggle (persists immediately, no Save), Offset-action (the button that extends below an offset card, once per zone), cross-room Link (blue), inline Action.
 - **Input** — TextInput (orange focus ring), Select (same chrome as text), composed FormField (label + input + microcopy, where the microcopy is the first thing the density gradient drops in Step back).
 - **Feedback & overlays** — Toast (navy, confirms a save), Alert (side-glow, one read + one move, in amber / blue / red per state), Modal (destructive confirmations only), Tooltip (hover, present in Show me how and gone in Step back), Drawer (depth slides in over the page — the Readiness drawer, the Discovery dossier — never a route change; Esc / scrim / button all close it).
@@ -153,13 +153,13 @@ Every component declares three things, one per sibling spec:
 - **Voice family + string classes** (`01` §4.1) — which of the seven family-temperatures its strings carry, and which strings are authored-prose vs. control-labels vs. data, so the validator checks them at the right strictness.
 - **Density behavior** (`02` §4.1) — whether it is density-responsive, and if so how it renders along the four dimensions in Show me how vs. Step back.
 
-A component that declares all three is buildable against the catalog. A component that cannot name its Family does not belong in the library — it is decoration, and the "does this earn its place" test removes it.
+A component that declares all three is buildable against the catalog. A component that cannot name its Family does not belong in the library — it is decoration, and the "does this hold its place" test removes it.
 
 ### 4.3 The token system
 
 The library is built on a fixed token set, named in the mockup's `:root` and inherited from the charter's face direction. Tokens are not re-decided per room; a room that reaches for a value outside the set is either introducing a new meaning (a founder decision) or drifting (a bug). Five families:
 
-**Color — by role, never by hue.** The field (`#F5F7FB`) and three surface elevations (sub / sunk / warm); navy ink at four opacities (`--ink` solid, `--ink-soft` .66, `--ink-faint` .42, `--ink-quiet` .22) plus three hairline weights; and the semantic accents, each carrying exactly one meaning per the charter's color roles — orange `#E6701E` (the one dominant move), blue `#2563EB` (system intelligence), green `#22C55E` (earned health), amber `#F59E0B` (caution), red `#EF4444` (real risk). A token is referenced by its role (`--orange` = the move), never picked for how it looks. There is one theme — bright — and no theming layer; the dark exception is retired (charter Part II §1).
+**Color — by role, never by hue.** The field (`#F5F7FB`) and three surface elevations (sub / sunk / warm); navy ink at four opacities (`--ink` solid, `--ink-soft` .66, `--ink-faint` .42, `--ink-quiet` .22) plus three hairline weights; and the semantic accents, each carrying exactly one meaning per the charter's color roles — orange `#E6701E` (the one dominant move), blue `#2563EB` (system intelligence), green `#22C55E` (real health), amber `#F59E0B` (caution), red `#EF4444` (real risk). A token is referenced by its role (`--orange` = the move), never picked for how it looks. There is one theme — bright — and no theming layer; the dark exception is retired (charter Part II §1).
 
 **Type — a five-step ramp.** Display (DM Serif Display, `clamp(30–64px)`, the authored headline and the system's read), Title (serif, 18–24px, card and section heads), Body (Public Sans 15px/1.6, reading and controls), Label (Public Sans 13px/600, field labels and control heads), and Kicker (JetBrains Mono 9.5–11px, letter-spaced uppercase, codes / timestamps / ribbon labels). Each step has a fixed size, weight, and line-height. The compression rule from the charter holds: one serif step carries the argument per surface, sans carries the work, mono recedes — three sizes maximum in any first zone.
 
@@ -183,7 +183,7 @@ A density-responsive component renders these five states in both Show me how and
 
 ### 4.5 Quantity, and the one chart the language admits
 
-The four-system language renders quantity as **prose first** — the Signal/Reason/Move sentence carries the meaning, the stat is a serif numeral with a mono label, and the signal-spine carries state as color. This is deliberate and it is canon: §4.17 pins "bars are decoration, the verdict is the value," and the product is explicitly *not* a dashboard bundle (canon Part I §1).
+The four-system language renders quantity as **prose first** — the Signal/Reason/Move sentence carries the meaning, the stat is a serif numeral with a mono label, and the gauge carries state as color. This is deliberate and it is canon: §4.17 pins "bars are decoration, the verdict is the value," and the product is explicitly *not* a dashboard bundle (canon Part I §1).
 
 The library therefore admits **exactly one data-viz primitive: the Meter** — a single horizontal bar for one bounded ratio (pipeline coverage, account heat, a single readiness dimension), always paired with the sentence that carries the read ("2.4× — enough to hit the number if your win rate holds"). The bar shows the magnitude; the sentence is the value. Everything else is refused: no multi-series charts, no pie or donut, no trend sparklines, no decorative gauges. A surface that needs to compare many series is almost always trying to be a BI dashboard, which is the hard-reject the charter and canon both name. If a future room produces a genuine case the Meter cannot serve, it routes to the founder as a new-meaning decision, not a component author's call.
 
@@ -191,7 +191,7 @@ The library therefore admits **exactly one data-viz primitive: the Meter** — a
 
 The full icon system is its own owed sibling spec (charter §4.7), so the complete set, naming, and file pipeline are out of scope here. But the *discipline* belongs in the library now, because icons are the easiest place to smuggle decoration past the anti-ornament rule, and rooms migrating before the icon spec lands need a rule to build against.
 
-The discipline: every icon is a **thin line glyph** — a consistent stroke weight (1.6px at a 20px box), `currentColor`, no fill, no spot illustration. An icon earns its place only by standing for a **sacred noun** (account, signal, deal, proof, advisor, call) or a **verb the operator acts with** (send, carry, add, find, read). Default navy; an icon takes an accent color *only when the thing it names is itself the accent* — the send-move is orange because it is the dominant move, a signal glyph is blue because blue is the system-intelligence role. No icon is used purely to fill space, label a section for decoration, or soften a surface. The starter set in the mockup (six nouns, six verbs) is illustrative of the style, not the final inventory.
+The discipline: every icon is a **thin line glyph** — a consistent stroke weight (1.6px at a 20px box), `currentColor`, no fill, no spot illustration. An icon holds its place only by standing for a **sacred noun** (account, signal, deal, proof, advisor, call) or a **verb the operator acts with** (send, carry, add, find, read). Default navy; an icon takes an accent color *only when the thing it names is itself the accent* — the send-move is orange because it is the dominant move, a signal glyph is blue because blue is the system-intelligence role. No icon is used purely to fill space, label a section for decoration, or soften a surface. The starter set in the mockup (six nouns, six verbs) is illustrative of the style, not the final inventory.
 
 ### 4.7 The affordance slice index — closing the density handoff
 
@@ -216,7 +216,7 @@ An excellent library makes accessibility a property of every component, not a la
 
 - **Focus-visible everywhere.** Per §4.8 — every interactive shows a keyboard focus ring. No control is reachable by mouse but invisible to the keyboard.
 - **Keyboard-operable.** Ctrl+K opens and closes from anywhere; arrow keys move the selection, Enter commits, Esc closes and returns focus to where it was. Modals and Drawers trap focus while open and restore it on close. The Wayfinder bar, the HandoffStrip, and every palette row are reachable and actuated without a mouse. This is also a product commitment, not only an a11y one — the command-first operator lives on the keyboard.
-- **Contrast holds.** Body and label text meet WCAG AA (4.5:1) on their surfaces; the low-opacity ink tokens (`--ink-faint`, `--ink-quiet`) are reserved for large text, decorative rules, and non-essential meta — never for an operating sentence. A meaning never rides on color alone: state is carried by the spine *and* the stamp word ("Likely to slip"), so a red spine is never the only signal.
+- **Contrast holds.** Body and label text meet WCAG AA (4.5:1) on their surfaces; the low-opacity ink tokens (`--ink-faint`, `--ink-quiet`) are reserved for large text, decorative rules, and non-essential meta — never for an operating sentence. A meaning never rides on color alone: state is carried by the gauge *and* the stamp word ("Likely to slip"), so a red gauge is never the only signal.
 - **Motion respects the operator.** Every animation — the pulsing offset dot, the loading shimmer, the Wayfinder expansion — is gated behind `prefers-reduced-motion`; when reduced motion is set, state changes resolve instantly with no shimmer and no pulse. Motion is never load-bearing for meaning (charter / canon Part II §6).
 - **Targets are real.** Interactive hit areas clear a 32px minimum even when the visible glyph is smaller; an icon button is a 34px square around a 20px glyph.
 - **Semantics are honest.** Headings nest in order, controls are real `<button>`/`<input>` elements with labels (an icon-only control carries an accessible name), live regions announce a save or an error, and the reading order matches the visual order. The Stamp, the Kicker, and decorative rules are marked decorative so a screen reader hears the sentence, not the ornament.
@@ -256,7 +256,7 @@ It also does not decide motion in any depth beyond the charter's "sparse, conseq
 The 22 rooms shipped on the legacy face and, in most cases, with a room rail or its equivalents. Migration to the component library is **per-room and additive**, not a big-bang reskin:
 
 1. **The rail comes out first.** Each room drops its standing navigation and mounts the Wayfinder bar (the existing `RoomChrome` + birdseye work from canon §6 / ADR-011 is the seam this lands on). This is the highest-value, lowest-risk first step, and it is uniform across every room.
-2. **Cards migrate to Grounded.** A room's primary objects re-render as Grounded cards with the `Signal · Reason · Move` grammar and signal-spines. This is where the room's mind (canon §4) gets verified against the primitive model — anything that cannot map to Signal / Reason / Move / State / Evidence is flagged.
+2. **Cards migrate to Grounded.** A room's primary objects re-render as Grounded cards with the `Signal · Reason · Move` grammar and gauges. This is where the room's mind (canon §4) gets verified against the primitive model — anything that cannot map to Signal / Reason / Move / State / Evidence is flagged.
 3. **The page adopts Pulse where it has a time axis.** Rooms that rank under pressure or carry a timeline (Dashboard, Signal Console, Deal Workspace, Future Autopsy) adopt the Pulse surface. Rooms that shape an object (the Decision Benches) keep a composed-bench layout but draw from the same catalog.
 4. **Voice and density land last**, once the structure is in place — every migrated string through the validator, every density-responsive component declaring its four-dimension behavior.
 
@@ -267,7 +267,7 @@ The migration order is a separate decision (the today-surface spec and the found
 The library is engineered against the same evidence base as the rest of the system (canon Part III):
 
 - **One dominant move per surface** (canon Part III §3 rule 1) — rendered by Offset Logic (one item breaks rank per zone) and by the orange ration (one accent move per surface).
-- **Object before controls; state before explanation** (rules 2–3) — rendered by the Grounded card showing name + state + signal before the control set, and by the signal-spine carrying state as color before any prose.
+- **Object before controls; state before explanation** (rules 2–3) — rendered by the Grounded card showing name + state + signal before the control set, and by the gauge carrying state as color before any prose.
 - **Implementation intentions** (Gollwitzer 1999, d = 0.65) — rendered by the Move primitive, which is always a specific contextual next action, never "follow up."
 - **The hallway problem** (canon Part III §6) — answered by the un-nav: no equal-weight doors, one ranked read of where the work is, rooms summoned not browsed.
 - **Loop transformation, never closure** (Part III §7) — rendered by the HandoffStrip, which ends a room by routing onward rather than showing "all done."

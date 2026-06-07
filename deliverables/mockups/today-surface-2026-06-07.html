@@ -131,7 +131,7 @@
   /* GROUNDED card (Spotlight) */
   .ground { background: var(--surface); border-radius: 10px; padding: 20px 22px; box-shadow: var(--shadow-rest); border: 1px solid var(--hair); border-bottom: 3px solid var(--ink-quiet); position: relative; max-width: 680px; }
   .ground.b-risk { border-bottom-color: var(--red); }
-  .ground.spine.s-risk::before { content:''; position:absolute; top:16px; bottom:16px; left:0; width:3px; border-radius:0 2px 2px 0; background: var(--red); }
+  .ground.gauge.s-risk::before { content:''; position:absolute; top:16px; bottom:16px; left:0; width:3px; border-radius:0 2px 2px 0; background: var(--red); }
   .ground-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
   .ground-name { font-weight: 600; font-size: 17px; }
   .ground-meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint); letter-spacing: 0.06em; }
@@ -230,7 +230,7 @@
 
     <div class="wbar">
       <div class="wbar-cell"><span class="wbar-key">Trail · where you were</span><span class="wbar-trail">— the home is the root</span></div>
-      <div class="wbar-cell"><span class="wbar-key">Here</span><span class="wbar-here">Pipeline</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
+      <div class="wbar-cell"><span class="wbar-key">Here</span><span class="wbar-here">Today</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
       <div class="wbar-cell pull"><span class="wbar-key">Pulling · the one move</span><div class="wbar-pull"><span class="wbar-verb">Send</span><span class="wbar-obj">Acme's revised proposal to the CFO before Friday.</span></div></div>
       <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
     </div>
@@ -292,13 +292,13 @@
 <!-- ============================================================ -->
 <section class="state">
   <div class="state-tag"><span class="state-num">02</span><span class="state-name">Switched to Queue</span><span class="state-kicker">spec §3.2 · the ranked list, when you reach for it</span></div>
-  <p class="state-desc">You click <b>Queue</b>. The read swaps in place — now you're looking at the whole pipeline ranked by pressure, the Pulse timeline. One item breaks rank (the Offset). The week's-reads band and the proposal stay put below; switching never moves them.</p>
+  <p class="state-desc">You click <b>Queue</b>. The read swaps in place — now you're looking at all your deals ranked by pressure, the Pulse timeline. One item breaks rank (the Offset). The week's-reads band and the proposal stay put below; switching never moves them.</p>
 
   <div class="app">
     <div class="app-chrome"><span class="app-dot"></span><span class="app-dot"></span><span class="app-dot"></span><span class="url">antaeus.app / today</span></div>
     <div class="wbar">
       <div class="wbar-cell"><span class="wbar-key">Trail</span><span class="wbar-trail">— the home is the root</span></div>
-      <div class="wbar-cell"><span class="wbar-key">Here</span><span class="wbar-here">Pipeline</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
+      <div class="wbar-cell"><span class="wbar-key">Here</span><span class="wbar-here">Today</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
       <div class="wbar-cell pull"><span class="wbar-key">Pulling</span><div class="wbar-pull"><span class="wbar-verb">Send</span><span class="wbar-obj">Acme's revised proposal to the CFO before Friday.</span></div></div>
       <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
     </div>
@@ -355,7 +355,7 @@
     <div class="app-chrome"><span class="app-dot"></span><span class="app-dot"></span><span class="app-dot"></span><span class="url">antaeus.app / today</span></div>
     <div class="wbar">
       <div class="wbar-cell"><span class="wbar-key">Trail</span><span class="wbar-trail">— the home is the root</span></div>
-      <div class="wbar-cell"><span class="wbar-here">Pipeline</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
+      <div class="wbar-cell"><span class="wbar-here">Today</span><span class="wbar-here-sub">Tue · 09:12 CT</span></div>
       <div class="wbar-cell pull"><span class="wbar-key">Pulling</span><div class="wbar-pull"><span class="wbar-verb">Send</span><span class="wbar-obj">Acme's revised proposal to the CFO before Friday.</span></div></div>
       <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
     </div>
@@ -365,7 +365,7 @@
         <span class="reads-note">one object · full depth</span>
       </div>
 
-      <div class="ground spine s-risk b-risk">
+      <div class="ground gauge s-risk b-risk">
         <div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">PROPOSAL · DAY 18 · $84K</span></div>
         <div class="ground-context">Enterprise · the CFO still hasn't seen the new pricing</div>
         <div class="ground-layers">
@@ -402,7 +402,7 @@
     <div class="app-chrome"><span class="app-dot"></span><span class="app-dot"></span><span class="app-dot"></span><span class="url">antaeus.app / today</span></div>
     <div class="wbar">
       <div class="wbar-cell"><span class="wbar-key">Trail</span><span class="wbar-trail">— the home is the root</span></div>
-      <div class="wbar-cell"><span class="wbar-here">Pipeline</span><span class="wbar-here-sub">Thu · 08:40 CT</span></div>
+      <div class="wbar-cell"><span class="wbar-here">Today</span><span class="wbar-here-sub">Thu · 08:40 CT</span></div>
       <div class="wbar-cell pull"><span class="wbar-key">Pulling · the building move</span><div class="wbar-pull"><span class="wbar-verb">Fill</span><span class="wbar-obj">the discovery section of your handoff kit.</span></div></div>
       <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
     </div>
@@ -437,7 +437,7 @@
 
   <div class="panels">
     <div class="panel">
-      <div class="panel-bar"><div class="c"><div class="k">Here</div><div class="v">Pipeline</div></div><div class="c pull"><div class="k">Pulling</div><div class="v">Prep Thursday's call</div></div></div>
+      <div class="panel-bar"><div class="c"><div class="k">Here</div><div class="v">Today</div></div><div class="c pull"><div class="k">Pulling</div><div class="v">Prep Thursday's call</div></div></div>
       <div class="panel-body">
         <p class="panel-kicker">Returning · Monday after a weekend</p>
         <p class="panel-lead">Since Friday, <em>three things moved.</em></p>
@@ -446,7 +446,7 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-bar"><div class="c"><div class="k">Here</div><div class="v">Pipeline</div></div><div class="c"><div class="k">Time</div><div class="v">5:40 PM</div></div></div>
+      <div class="panel-bar"><div class="c"><div class="k">Here</div><div class="v">Today</div></div><div class="c"><div class="k">Time</div><div class="v">5:40 PM</div></div></div>
       <div class="panel-body">
         <p class="panel-kicker">The designed close · winding down</p>
         <p class="panel-lead">Today you moved <em>real ground.</em></p>
@@ -474,8 +474,8 @@
     <div class="panel">
       <div class="panel-body">
         <span class="panel-tag">Brand-new workspace</span>
-        <p class="panel-lead">No pipeline yet.</p>
-        <p class="panel-p">When you add an account, the system starts watching it for you — and the first read shows up right here.</p>
+        <p class="panel-lead">Nothing here yet.</p>
+        <p class="panel-p">Name the first account you're chasing, and the system starts reading it — the moment a signal's worth acting on, it shows up right here.</p>
         <div class="panel-empty-cta"><button class="btn btn-accent">Add your first account</button></div>
       </div>
     </div>
