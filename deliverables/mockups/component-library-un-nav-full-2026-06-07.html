@@ -381,7 +381,7 @@
     <h1>Four systems. No rail.</h1>
     <p class="masthead-sub">The page is time. The sections are ribbons. The cards have gravity. One item per zone breaks rank. And the left nav rail is gone — finding your way is the work itself, not a menu of rooms.</p>
     <p class="masthead-body">
-      This is the four-system library, updated. Two things changed. First, <strong>the rail is dead.</strong> A persistent room-list down the left was the one thing that made the workspace read like every other CRM; the navigation section below replaces it with two un-nav layouts — a <strong>Wayfinder bar</strong> that carries where-you-are and what's-pulling, and a <strong>timeline that is itself the nav.</strong> Second, the <strong>voice is cleaned</strong> — every invented compound noun ("readout owner", "cast proof") is now a plain sentence a peer would say. Everything else holds: Pulse organizes the page along time, Ribbon threads the sections, Grounded gives cards their weight and their Signal / Reason / Move grammar, Offset lifts one item per zone.
+      This is the four-system library, updated. Two things changed. First, <strong>the rail is dead.</strong> A persistent room-list down the left was the one thing that made the workspace read like every other CRM; in its place sits the <strong>Wayfinder bar</strong> — a thin top strip carrying where-you-were, where-you-are, and the one thing pulling next, with its reasoning one click away. Second, the <strong>voice is cleaned</strong> — every invented compound noun ("readout owner", "cast proof") is now a plain sentence a peer would say. Everything else holds: Pulse organizes the page along time, Ribbon threads the sections, Grounded gives cards their weight and their Signal / Reason / Move grammar, Offset lifts one item per zone.
     </p>
 
     <div class="legend">
@@ -543,47 +543,44 @@
     <div class="ribbon">
       <span class="ribbon-label">01 · Layout — the un-nav</span>
       <span class="ribbon-line"></span>
-      <span class="ribbon-suffix">the rail is dead · two ways to find your way</span>
+      <span class="ribbon-suffix">the rail is dead · the Wayfinder bar carries the way</span>
     </div>
     <div class="cat-head">
       <span class="cat-num">01</span>
       <div>
-        <h2 class="cat-title">No room-list down the left.</h2>
-        <p class="cat-desc">The persistent rail was the one thing that made Antaeus read like a CRM. Both replacements keep the four-system body identical — they differ only in how you orient. A keeps a thin Wayfinder bar on top; B drops even that, and the timeline of your own work becomes the only structure. Rooms still exist in both — summoned through Ctrl+K, never browsed.</p>
+        <h2 class="cat-title">The Wayfinder bar replaces the rail.</h2>
+        <p class="cat-desc">The persistent room-list was the one thing that made Antaeus read like a CRM. In its place: a thin strip across the top in three cells — <b>where you were</b>, <b>where you are</b>, and <b>what's pulling next</b>. It stays visible even mid-task inside a room, and it travels with you when you move, so context never drops. Rooms still exist; they're summoned through Ctrl+K, never browsed. Click <b>Why</b> and the bar opens its reasoning inline, in the same Signal / Reason / Move grammar the cards use.</p>
       </div>
     </div>
 
-    <div class="shells">
-      <!-- Shell A -->
-      <div class="shell-demo">
-        <div class="shell-cap"><span class="l">A</span><span class="n">Wayfinder bar</span><span class="k">thin strip · no rail</span></div>
-        <div class="shell-note">A persistent strip carries trail · here · pulling. The system's read stays visible even mid-task inside a room, and the bar travels with you when you move.</div>
-        <div class="shell-stage">
-          <div class="mini-bar">
-            <div><div class="k">Here</div><div class="v">Pipeline review</div></div>
-            <div class="pull"><div class="k">Pulling</div><div class="v">Send to the CFO</div></div>
-          </div>
-          <div class="mini-tl">
-            <div class="mini-row r-risk"><b>Acme</b> · most likely to slip</div>
-            <div class="mini-row r-attn"><b>Northwind</b> · name a write-up owner</div>
-            <div class="mini-row r-sig"><b>Pricing pattern</b> · worth a look</div>
-          </div>
-        </div>
+    <!-- the canonical shell: Wayfinder bar over the four-system body -->
+    <div class="wbar">
+      <div class="wbar-cell">
+        <span class="wbar-key">Trail · where you were</span>
+        <div class="wbar-trail"><span class="wbar-crumb">Northwind call</span><span class="wbar-sep">›</span><span class="wbar-crumb">Acme deal</span><span class="wbar-sep">›</span><span class="wbar-crumb last">pipeline</span></div>
       </div>
-      <!-- Shell B -->
-      <div class="shell-demo">
-        <div class="shell-cap"><span class="l">B</span><span class="n">Timeline is the nav</span><span class="k">no bar · no rail</span></div>
-        <div class="shell-note">Nothing persistent at all. You land in your pipeline over time; finding is scrolling. A floating Ctrl+K is the one door to a specific room.</div>
-        <div class="shell-stage">
-          <div style="font-family:'DM Serif Display',serif; font-size:15px; margin-bottom:8px;">Tuesday morning.</div>
-          <div class="mini-tl">
-            <div class="mini-row r-risk"><b>Acme</b> · most likely to slip</div>
-            <div class="mini-row r-attn"><b>Northwind</b> · name a write-up owner</div>
-            <div class="mini-row r-sig"><b>Pricing pattern</b> · worth a look</div>
-          </div>
-          <div class="mini-puck">Ctrl K <span class="v">go anywhere</span></div>
-        </div>
+      <div class="wbar-cell">
+        <span class="wbar-key">Here</span>
+        <span class="wbar-here">Pipeline review</span>
+        <span class="wbar-here-sub">Tue · 09:12 CT · 37 deals</span>
       </div>
+      <div class="wbar-cell pull">
+        <span class="wbar-key">Pulling · what the system sees next</span>
+        <div class="wbar-pull-line"><span class="wbar-verb">Send</span><span class="wbar-obj">Acme's revised proposal straight to the CFO before Friday.</span></div>
+        <button class="wbar-why">Why ▾</button>
+      </div>
+      <div class="wbar-cmdk"><kbd>Ctrl K</kbd></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:18px;">
+      <div class="ground spine s-risk b-risk" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Acme Corp.</span><span class="ground-meta">D18 · $84K</span></div><div class="ground-context" style="margin-bottom:0;">Most likely to slip this week</div></div>
+      <div class="ground spine s-attn b-attn" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Northwind</span><span class="ground-meta">D9 · $112K</span></div><div class="ground-context" style="margin-bottom:0;">No one owns the write-up yet</div></div>
+      <div class="ground spine s-sig b-sig" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">A pattern</span><span class="ground-meta">14D · 78%</span></div><div class="ground-context" style="margin-bottom:0;">You're losing price in the final week</div></div>
+    </div>
+
+    <div class="alert blue" style="margin-top:18px;">
+      <span class="alert-key">Discipline</span>
+      <span class="alert-body">One bar, three cells, on every surface — never a second strip, never a rail underneath it. The bar is the only persistent chrome in the product. Everything else is the work.</span>
     </div>
   </section>
 
@@ -786,7 +783,7 @@
       <div><h4>GROUNDED · card</h4><p>Anchored edges and spines are reserved for cards whose state warrants weight. Grounding everything erases the meaning.</p></div>
       <div><h4>OFFSET · item</h4><p>Exactly one offset per zone. The single most-pressured item breaks rank; the rest hold the line.</p></div>
     </div>
-    <p style="margin-top:20px;"><strong>The un-nav, in discipline.</strong> No room-list down the left, ever. Either the Wayfinder bar carries where-you-are and what's-pulling, or the timeline carries it on its own — never both, never a third rail. Rooms are summoned through Ctrl+K, not browsed. The bar's reasoning opens inline, on an explicit click, never on hover.</p>
+    <p style="margin-top:20px;"><strong>The un-nav, in discipline.</strong> No room-list down the left, ever. The Wayfinder bar — one strip, three cells — is the only persistent chrome in the product; it carries where-you-were, where-you-are, and what's-pulling, and it travels with you across rooms. Never a second strip, never a rail beneath it. Rooms are summoned through Ctrl+K, not browsed. The bar's reasoning opens inline, on an explicit click, never on hover.</p>
     <p><strong>Canon preserved throughout.</strong> Bright field. DM Serif Display for headlines, stats, account names, and the system's read. Public Sans for body and controls. JetBrains Mono for ribbon labels, codes, and timestamps. Orange stays the rationed accent — the one dominant move per surface, the offset emphasis, the pulling cell. Every operator-facing string is a plain sentence a peer would say: no "readout owner," no "cast proof," no "verdict." The native primitives — Signal · Reason · Move · State · Evidence — are the object model; cards, ribbons, pulses, and the Wayfinder are how they render.</p>
   </aside>
 
