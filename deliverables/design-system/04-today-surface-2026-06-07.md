@@ -40,13 +40,21 @@ The line is testable: if a future change makes the surface *do* something on the
 
 The today surface is not a new room. It is the mind of the existing Dashboard (`canon §4.2`), specified as a design-system surface so the rebuild has a contract. Everything canon already locks about the Dashboard holds: it ranks everything under pressure, explains why a specific object came up first, offers one compressed act-or-inspect move, and never reduces its reasoning to a decorative score. The three modes canon already names — Brief, Spotlight, Queue — are the today surface's three reads (Part III), and canon's own framing helps here: the Brief is the calm default landing, and the ranked Pulse-timeline view is the Queue. What this spec adds to canon §4.2 is the un-nav rendering (the Wayfinder bar as the orientation, the Brief as the resting body, the ranked Pulse timeline available as the Queue read) and the explicit resolution of the resting-state agency question canon left implicit — that the landing is the brief, not the full ranked surface.
 
+### 1.4 What the today surface is not
+
+The surface is sharp about its own edges, because the easiest way to ruin a home is to let it absorb jobs that belong elsewhere:
+
+- **It is not the Briefing room.** The Briefing (`canon §4.21`) is the operator's daily sit-down — what the system saw across their workspace *and* the market, at length, with the audit trail behind each read. The today surface carries only a quick-glance band of the *workspace* reads (§3.3) as a secondary reach point. A glance on the way past here; the full read in the Briefing. The duplication is deliberate (ADR-014), and the two are cross-deduped so the same observation never shouts twice.
+- **It is not where the work is done.** It ranks, summarizes, and routes; the actual work — sharpening an ICP, running a call, casting a proof — happens in the rooms it routes to. A today surface that tries to become the place you do everything is a dashboard-bundle, the charter's hard reject.
+- **It is not a feed or a notification center.** It does not stream every event, badge unread counts, or compete for attention. It is a calm read that waits, not an inbox that accumulates.
+
 ---
 
 ## Part II — How it ranks
 
 ### 2.1 What ranks
 
-The order is computed from the ranking inputs canon §4.2 already names, carried forward unchanged as the model: how hot the signals are on an account, how much pressure a deal is under, how long it has been stale, its dollar value, and what changes downstream if the operator acts. These are read from the state each room *publishes* — the health snapshots Signal Console, Deal Workspace, PoC, and Quota Workback already write, plus the orchestration layer's observations ledger (`canon Part II.5 §7`) — not recomputed on the surface and not reached for by querying each room live. The today surface is a reader and a ranker; it is not the owner of any noun (`canon Part I §3` truth 3), and it reads published state so a slow or unmigrated room degrades the surface gracefully rather than blocking it.
+The order is computed from the ranking inputs canon §4.2 already names, carried forward unchanged as the model: how hot the signals are on an account, how much pressure a deal is under, how long it has been stale, its dollar value, and what changes downstream if the operator acts. These are read from the state each room *publishes* — the health snapshots Signal Console, Deal Workspace, PoC, and Quota Workback already write, plus the orchestration layer's observations ledger (`canon Part II.5 §7`) — not recomputed on the surface and not reached for by querying each room live. The today surface is a reader and a ranker; it is not the owner of any noun (`canon Part I §3` truth 3), and it reads published state so a slow or unmigrated room degrades the surface gracefully rather than blocking it. Graceful means honest: when a source is stale or unavailable, the Brief says what it cannot see ("I can't read your deals right now — coverage below is from this morning") rather than ranking on partial data and presenting it as the whole picture. The charter's loyalty to the operator's interests, expressed through truth, holds even when the data is thin — a confidently wrong ranking is worse than an honest gap.
 
 ### 2.2 The ranking is explainable, never a bare score
 
@@ -84,6 +92,8 @@ All three keep the ranking and its reasoning; they differ only in how much of th
 
 The orchestration layer's workspace observations (`canon Part II.5 §7`, ADR-009 — the heartbeat's deal-decay, signal-decay, proof-staleness, discovery-rhythm reads) surface on the today surface as a distinct, quiet band — the "this week's reads" the Phase B work already ships. They are observations, not commands: a peer's notes on what moved and what went quiet, dismissable, never a task list. They sit on the surface below the Brief, a quiet band rather than the headline, because they are a different altitude — what the system noticed over the week, versus what is most pressured right now that the Brief leads with.
 
+The band is the *glance*, not the *read*. The full daily check-in — workspace and world, at length, with the audit trail — lives in the Briefing room (`canon §4.21`, §1.4 above). This band carries only the workspace-scope observations, surfaced where the operator already is so they catch a decaying deal without a detour, and a row that wants the deeper context routes to the Briefing rather than expanding here. Per ADR-014 the two surfaces are cross-deduped, so an observation the Briefing is already carrying does not also shout from this band.
+
 ### 3.4 The Brief's content contract
 
 The Brief is not free narrative; it has a fixed shape, so it stays a peer's summary and never drifts into a wall of text or a vanity readout. It composes, in order:
@@ -99,6 +109,12 @@ The Brief is not free narrative; it has a fixed shape, so it stays a peer's summ
 
 **The quiet day.** When nothing is genuinely pressured — a calm week, a pipeline the operator has cleared — the Brief does not say "all done" or "nothing to do" (`canon Part III §7`'s banned closure). It transforms the loop: it names what is quietly compounding ("nothing's on fire — three pilots are running clean") and surfaces the next building move toward an inheritable workspace ("your handoff kit is at four of seven; the discovery section is the next to fill"). The today surface never shows an empty victory screen. It always reveals the next open loop, because the moment after completion is the highest-churn moment (`canon Part III §5`, the Ovsiankina nuance), and a home that goes blank on a good day teaches the operator there is nothing here when there is nothing wrong.
 
+**The crowded day.** The mirror case — a morning where several deals are all at real risk — does not make the Brief longer or louder. It still leads with the single most-pressured item and the one move; the rest is exactly what the Queue read is for. A Brief that tried to name every fire would be the wall the landing exists to avoid. One move, even on the worst day; the count of what's at risk can sit in a single clause ("three deals need attention — Acme first"), but the Brief still resolves to one.
+
+**When the top item has no clean move.** Sometimes the most-pressured object is genuinely *wait* — a proposal is out and the next move is the buyer's. When the top of the rank has no action the operator can take right now, the Brief says so plainly ("Acme's gone quiet, but the move is theirs — nothing to push today") and the *one move* becomes the next item the operator actually can act on. The Brief never invents a move to look busy, and never leaves the operator holding a pressure with no handle.
+
+**Acting transforms the Brief.** When the operator takes the one move, the Brief does not flip to "done." It transforms (`canon Part III §7`), recomposing to the next-most-pressured read and its move. The home stays one open loop ahead of the operator rather than emptying like a checklist — the same loop-transformation discipline the rest of the product follows, applied to the surface the operator returns to most.
+
 ### 3.5 The session arc
 
 The today surface is the home the operator returns to, so it is engineered across sessions, not only within one (`canon Part III §8`).
@@ -107,6 +123,14 @@ The today surface is the home the operator returns to, so it is engineered acros
 - **Returning, daily.** The Brief opens as *what changed since last session* — new signals, state-changed deals, items now due — so the returning operator is oriented in seconds without re-reading what they already knew. "Since last session" is bounded by the operator's own last active session, not a fixed calendar window.
 - **Same-day re-entry.** When the operator comes back hours later, the Brief does not re-narrate the morning; it updates to what changed since they stepped away, and the surface opens on the read they left, per the continuity and memory property.
 - **The designed close.** A session has a designed end, not a fade-out (`canon Part III §8`, the Peak-End rule). When the operator winds down, the surface offers a closing read — what they moved today and what is queued for tomorrow ("today: two deals advanced, one pilot written up; tomorrow: the Acme CFO call needs prep") — which loads the next session's internal trigger. The surface never ends on an error, a blank, or "nothing to show."
+
+### 3.6 The resting surface, top to bottom
+
+For the builder, the resting surface has a fixed vertical order, and naming it keeps every room that mounts it consistent. Beneath the Wayfinder bar: the **Brief** first (the headline read and the one move), then the **week's-reads band** (§3.3) when there are observations, then the **Phase F proposal slot** (§4.2) when a proposal is waiting — and nothing else. Empty bands collapse rather than render as placeholders; the surface is never padded with frames for things that are not there, because a row that says "no proposals" is noise, and the charter's low box-count rule holds here as everywhere.
+
+Switching reads acts on the Brief's position only. The Segmented control swaps **the read** in place — Spotlight or Queue takes the Brief's slot — while the week's-reads band and the proposal slot persist below, because they are surface furniture, not part of the read. Switching never reorders the surface or moves the lower bands.
+
+The Wayfinder bar has a special case at the home. Its *here* cell reads the today surface itself ("Pipeline — Tuesday morning"), and its *trail* is empty, because the home is the root the trail builds out from rather than a place the operator arrived at from somewhere else. Its *pulling* cell carries the same one move the Brief leads with — the move named once for the persistent thread and once, with its context, in the Brief.
 
 ---
 
@@ -155,6 +179,8 @@ The today surface is working if:
 5. **The sparse and new-workspace cases feel real.** A two-deal pipeline and a brand-new workspace both land as honest starts with a clear first move, not as broken or empty dashboards.
 6. **The deferred questions stay resolved.** The hybrid case, the Phase F slot, and the migration order behave as Part IV specifies; no downstream spec has to re-open them.
 7. **It is never "all done."** A cleared pipeline or a quiet week transforms into the next building loop rather than an empty victory screen; every session opens as what-changed and closes with a designed read; a good day with nothing pressing still gives the operator something true and forward, never a blank.
+8. **It stays in its lane.** The surface ranks, summarizes, and routes — it does not become the Briefing (it carries a glance, not the sit-down), does not become the place work is done (it routes to the rooms), and does not become a feed (it waits, it does not stream). A scope-creep change that pulls another room's job onto the home is visible and nameable.
+9. **It is honest when it can't see.** When a source is stale or down, the Brief names the gap rather than ranking confidently on partial data — an honest "I can't read your deals right now" over a wrong order presented as complete.
 
 ---
 
