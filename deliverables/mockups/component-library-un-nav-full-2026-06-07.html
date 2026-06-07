@@ -359,6 +359,105 @@
   .density-cell { background: var(--surface); border: 1px solid var(--hair); border-radius: 10px; padding: 20px 22px; box-shadow: var(--shadow-rest); }
   .density-cell-tag { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.16em; color: var(--orange); text-transform: uppercase; margin-bottom: 12px; }
 
+  /* ---- avatar / identity ---- */
+  .avatar { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; background: var(--ink); letter-spacing: 0.02em; flex-shrink: 0; }
+  .avatar.eb { background: var(--orange); }
+  .avatar.adv { background: var(--blue); }
+  .avatar-stack { display: flex; align-items: center; }
+  .avatar-stack .avatar { border: 2px solid var(--surface); margin-left: -8px; }
+  .avatar-stack .avatar:first-child { margin-left: 0; }
+  .person-row { display: flex; align-items: center; gap: 10px; }
+  .person-row .who { font-size: 13px; }
+  .person-row .who b { font-weight: 600; }
+  .person-row .who .role { color: var(--ink-faint); font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ---- drawer / side-overlay ---- */
+  .drawer-demo { position: relative; height: 178px; background: var(--surface-sunk); border-radius: 8px; overflow: hidden; border: 1px solid var(--hair); }
+  .drawer-scrim { position: absolute; inset: 0; background: rgba(10,28,64,0.18); }
+  .drawer-panel { position: absolute; top: 0; right: 0; bottom: 0; width: 64%; background: var(--surface); box-shadow: -14px 0 36px rgba(10,28,64,0.16); border-left: 1px solid var(--hair-strong); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .drawer-panel .dh { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--hair); padding-bottom: 8px; }
+  .drawer-panel .dh .t { font-family: "DM Serif Display", serif; font-size: 16px; }
+  .drawer-panel .dh .x { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+  .drawer-panel .dl { font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
+
+  /* ---- segmented control / in-room tabs ---- */
+  .segmented { display: inline-flex; background: var(--surface-sunk); border-radius: 8px; padding: 3px; gap: 2px; }
+  .segmented button { font: inherit; font-size: 12px; font-weight: 600; padding: 6px 14px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-soft); cursor: pointer; }
+  .segmented button.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(10,28,64,0.08); }
+  .undertabs { display: flex; gap: 18px; border-bottom: 1px solid var(--hair); }
+  .undertabs button { font: inherit; font-size: 13px; font-weight: 500; padding: 8px 2px; border: 0; background: transparent; color: var(--ink-soft); cursor: pointer; position: relative; }
+  .undertabs button.on { color: var(--ink); font-weight: 600; }
+  .undertabs button.on::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--orange); border-radius: 2px; }
+
+  /* ---- table / data-grid (intervention board) ---- */
+  .table-frame { background: var(--surface); border: 1px solid var(--hair); border-radius: 10px; box-shadow: var(--shadow-rest); padding: 4px 18px; }
+  .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .table th { text-align: left; font-family: "JetBrains Mono", monospace; font-weight: 500; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); padding: 11px 14px 9px 0; border-bottom: 1px solid var(--hair-strong); }
+  .table td { padding: 11px 14px 11px 0; border-bottom: 1px solid var(--hair); }
+  .table tr:last-child td { border-bottom: none; }
+  .table .name { font-weight: 600; }
+  .table .num { font-family: "JetBrains Mono", monospace; color: var(--ink-soft); }
+  .table .sig { font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.10em; text-transform: uppercase; }
+  .table .sig.risk { color: var(--red); }
+  .table .sig.attn { color: var(--amber); }
+  .table .sig.healthy { color: #15803D; }
+  .table tr.elev td { background: var(--orange-tint); border-bottom-color: transparent; }
+  .table tr.elev td:first-child { position: relative; padding-left: 12px; }
+  .table tr.elev td:first-child::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px; background: var(--orange); border-radius: 2px; }
+
+  /* ---- progress / milestone ladder ---- */
+  .ladder { display: flex; flex-direction: column; gap: 0; }
+  .rung { display: flex; align-items: center; gap: 12px; padding: 8px 0; position: relative; }
+  .rung-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ink-quiet); background: var(--surface); flex-shrink: 0; z-index: 1; }
+  .rung.done .rung-dot { background: var(--green); border-color: var(--green); }
+  .rung.now .rung-dot { background: var(--orange); border-color: var(--orange); }
+  .rung:not(:last-child)::before { content: ''; position: absolute; left: 6px; top: 18px; bottom: -4px; width: 2px; background: var(--hair-strong); }
+  .rung.done:not(:last-child)::before { background: var(--green); }
+  .rung-label { font-size: 13px; }
+  .rung.done .rung-label { color: var(--ink-soft); }
+  .rung.now .rung-label { font-weight: 600; }
+  .rung-label .sub { font-size: 11px; color: var(--ink-faint); }
+  .progress-count { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: 0.08em; }
+
+  /* ---- meter (the one admitted data-viz: a single bounded ratio) ---- */
+  .meter { width: 100%; }
+  .meter-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .meter-top .lbl { font-size: 13px; }
+  .meter-top .val { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); }
+  .meter-track { height: 7px; border-radius: 4px; background: var(--surface-sunk); overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 4px; background: var(--orange); }
+  .meter-fill.healthy { background: var(--green); }
+  .meter-fill.attn { background: var(--amber); }
+  .meter-sentence { font-size: 12px; color: var(--ink-soft); margin-top: 7px; line-height: 1.5; }
+
+  /* ---- states: empty / sparse / loading / error / saved ---- */
+  .empty-state { text-align: center; padding: 22px 18px; border: 1px dashed var(--hair-strong); border-radius: 10px; background: var(--surface-sub); }
+  .empty-state .es-mark { width: 34px; height: 34px; border-radius: 8px; background: var(--surface-sunk); display: inline-flex; align-items: center; justify-content: center; color: var(--ink-faint); margin-bottom: 10px; }
+  .empty-state .es-title { font-family: "DM Serif Display", serif; font-size: 18px; margin-bottom: 5px; }
+  .empty-state .es-why { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; max-width: 34ch; margin: 0 auto 12px; }
+  .sparse-note { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-top: 10px; }
+  .skeleton { display: flex; flex-direction: column; gap: 9px; width: 100%; }
+  .sk { height: 11px; border-radius: 5px; background: linear-gradient(90deg, var(--surface-sunk) 25%, var(--hair) 37%, var(--surface-sunk) 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
+  .sk.w70 { width: 70%; } .sk.w40 { width: 40%; } .sk.w90 { width: 90%; }
+  @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+  .state-line { display: flex; align-items: center; gap: 10px; font-size: 13px; padding: 9px 12px; border-radius: 7px; }
+  .state-line.error { background: var(--red-soft); color: #B91C1C; }
+  .state-line.saved { background: var(--green-soft); color: #15803D; }
+  .state-line .sk-key { font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .field-error .input { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
+  .field-error .msg { font-size: 11.5px; color: #B91C1C; margin-top: 5px; }
+  .unsaved-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); }
+  .unsaved-dot::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); }
+
+  /* ---- iconography ---- */
+  .icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; color: var(--ink); }
+  .icon svg { width: 100%; height: 100%; display: block; }
+  .icon-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px 8px; width: 100%; }
+  .icon-cell { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .icon-cell .nm { font-family: "JetBrains Mono", monospace; font-size: 8.5px; letter-spacing: 0.06em; color: var(--ink-faint); text-transform: uppercase; }
+  .icon.acc { color: var(--orange); }
+  .icon.sig { color: var(--blue); }
+
   /* closing */
   .closing { margin-top: 128px; padding: 32px; background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow-rest); }
   .closing-eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.20em; color: var(--orange); text-transform: uppercase; margin-bottom: 14px; }
@@ -400,10 +499,13 @@
     <a href="#display"><span class="n">02</span> Display primitives</a>
     <a href="#action"><span class="n">03</span> Action primitives</a>
     <a href="#input"><span class="n">04</span> Input primitives</a>
-    <a href="#feedback"><span class="n">05</span> Feedback primitives</a>
+    <a href="#feedback"><span class="n">05</span> Feedback &amp; overlays</a>
     <a href="#navigation"><span class="n">06</span> Navigation — Wayfinder &amp; Ctrl+K</a>
-    <a href="#system"><span class="n">07</span> System primitives</a>
-    <a href="#density"><span class="n">08</span> Density gradient</a>
+    <a href="#data"><span class="n">07</span> Data &amp; structure</a>
+    <a href="#states"><span class="n">08</span> States — empty to error</a>
+    <a href="#icons"><span class="n">09</span> Iconography</a>
+    <a href="#system"><span class="n">10</span> System primitives</a>
+    <a href="#density"><span class="n">11</span> Density gradient</a>
   </nav>
 
   <!-- ============================================================ -->
@@ -598,6 +700,7 @@
       <div class="specimen"><div class="specimen-label">Stamp · judgment</div><div class="specimen-demo"><span class="stamp risk">Likely to slip</span></div><div class="specimen-note">Letter-spaced, hairline-bracketed.</div></div>
       <div class="specimen"><div class="specimen-label">Signal spine</div><div class="specimen-demo stretch"><div style="display:flex; gap:14px; align-items:center; width:100%;"><div style="display:flex; flex-direction:column; gap:6px;"><span style="width:3px; height:20px; background:var(--green); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--amber); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--red); border-radius:2px;"></span><span style="width:3px; height:20px; background:var(--ink); border-radius:2px;"></span></div><div style="font-size:11px; color:var(--ink-soft); line-height:1.7;">Healthy<br>Attention<br>Risk<br>Exec decision</div></div></div><div class="specimen-note">State as a quiet vertical rule.</div></div>
       <div class="specimen"><div class="specimen-label">Anchored edge</div><div class="specimen-demo stretch"><div style="background:var(--surface-sub); border-radius:6px; border-bottom:3px solid var(--orange); padding:12px 14px; width:100%;"><div style="font-weight:600; font-size:14px;">Acme Corp.</div><div style="font-size:12px; color:var(--ink-soft);">Weighted edge = this matters</div></div></div><div class="specimen-note">Bottom rule in the color of the work.</div></div>
+      <div class="specimen"><div class="specimen-label">Avatar · identity</div><div class="specimen-demo stretch"><div style="display:flex; flex-direction:column; gap:10px; width:100%;"><div class="person-row"><span class="avatar">SC</span><span class="who"><b>Sarah Chen</b> · <span class="role">signs off</span></span></div><div class="person-row"><span class="avatar eb">MP</span><span class="who"><b>Marcus Patel</b> · <span class="role">decides</span></span></div><div class="avatar-stack"><span class="avatar">SC</span><span class="avatar eb">MP</span><span class="avatar adv">TA</span></div></div></div><div class="specimen-note">Initials, never photos. Orange = decides, blue = advisor.</div></div>
     </div>
   </section>
 
@@ -632,7 +735,7 @@
   <!-- 05 · FEEDBACK                                                -->
   <!-- ============================================================ -->
   <section id="feedback">
-    <div class="ribbon"><span class="ribbon-label">05 · Feedback primitives</span><span class="ribbon-line"></span><span class="ribbon-suffix">how the system speaks</span></div>
+    <div class="ribbon"><span class="ribbon-label">05 · Feedback &amp; overlays</span><span class="ribbon-line"></span><span class="ribbon-suffix">how the system speaks · how depth opens</span></div>
     <div class="specimen-grid g2">
       <div class="specimen"><div class="specimen-label">Toast · Alerts</div><div class="specimen-demo stretch"><div class="vstack" style="width:100%;">
         <div class="toast"><span class="toast-mark">✓</span><span>Pilot results saved. Linked to Acme — Q4 expansion.</span></div>
@@ -643,6 +746,8 @@
         <div class="modal"><div class="modal-title">Discard this draft?</div><div class="modal-body">You've got unsaved edits to the Acme note. Discarding clears them for good.</div><div class="modal-actions"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary">Discard</button></div></div>
         <div style="text-align:center;"><div class="tip-wrap"><div class="tip">One of eight checks on how sharp your ICP is.</div><span class="tip-anchor" style="font-size:13px;">How many have to say yes</span></div></div>
       </div></div><div class="specimen-note">Modal for destructive confirmations. Tooltip on hover.</div></div>
+      <div class="specimen"><div class="specimen-label">Drawer · side-overlay</div><div class="specimen-demo stretch"><div class="drawer-demo"><div class="drawer-scrim"></div><div class="drawer-panel"><div class="dh"><span class="t">Readiness</span><span class="x">esc</span></div><div class="dl">A first hire could run this with you nearby for sanity checks. What moves it next: close one more deal, log a discovery call.</div><div class="dl" style="color:var(--ink-faint);">Opens over the surface — never a route change.</div></div></div></div><div class="specimen-note">Depth slides in over the page. The Readiness drawer and the Discovery dossier. Esc / scrim / button all close it.</div></div>
+      <div class="specimen"><div class="specimen-label">Unsaved guard</div><div class="specimen-demo stretch"><div class="vstack" style="width:100%;"><span class="unsaved-dot">Unsaved edits to this note</span><div class="state-line saved"><span class="sk-key">Saved</span><span>Linked to Acme · just now</span></div></div></div><div class="specimen-note">The operator never wonders whether it saved. Unsaved is amber; saved confirms with the link it made.</div></div>
     </div>
   </section>
 
@@ -715,14 +820,189 @@
         </div>
         <div class="specimen-note">Bottom-of-room routes onward. Verb-shape, context travels with you.</div>
       </div>
+      <div class="specimen">
+        <div class="specimen-label">Segmented · in-room lens</div>
+        <div class="specimen-demo stretch">
+          <div class="vstack" style="width:100%; gap:14px;">
+            <div class="segmented"><button class="on">Brief</button><button>Spotlight</button><button>Queue</button></div>
+            <div class="undertabs"><button class="on">Pattern</button><button>Proof</button><button>Symptom</button></div>
+          </div>
+        </div>
+        <div class="specimen-note">Lenses onto one object, never doors between rooms. Brief / Spotlight / Queue; forensic sheets. Pill for modes, underline for in-card tabs.</div>
+      </div>
     </div>
   </section>
 
   <!-- ============================================================ -->
-  <!-- 07 · SYSTEM PRIMITIVES                                       -->
+  <!-- 07 · DATA & STRUCTURE                                         -->
+  <!-- ============================================================ -->
+  <section id="data">
+    <div class="ribbon"><span class="ribbon-label">07 · Data &amp; structure</span><span class="ribbon-line"></span><span class="ribbon-suffix">tables, progress, and the one chart we allow</span></div>
+    <div class="cat-head">
+      <span class="cat-num">07</span>
+      <div>
+        <h2 class="cat-title">Quantity is prose first, a bar only when bounded.</h2>
+        <p class="cat-desc">The intervention board renders many deals at once without becoming a spreadsheet — one row breaks rank, the rest hold the line. Progress is a ladder of real milestones, never a percentage for its own sake. And the four-system language admits exactly one data-viz primitive: a single horizontal meter for one bounded ratio (coverage, heat, a readiness dimension), always paired with the sentence that carries the meaning. No multi-series charts, no pies, no decorative sparklines — the number is never the value; the read is.</p>
+      </div>
+    </div>
+
+    <div class="table-frame" style="margin-bottom:18px;">
+      <table class="table">
+        <thead><tr><th>Deal</th><th>Stage</th><th>Value</th><th>Age</th><th>What's true</th></tr></thead>
+        <tbody>
+          <tr class="elev"><td class="name">Acme Corp.</td><td>Proposal</td><td class="num">$84K</td><td class="num">18d</td><td class="sig risk">Likely to slip</td></tr>
+          <tr><td class="name">Northwind</td><td>Pilot</td><td class="num">$112K</td><td class="num">9d</td><td class="sig attn">No write-up owner</td></tr>
+          <tr><td class="name">Helix Robotics</td><td>Negotiation</td><td class="num">$240K</td><td class="num">22d</td><td class="sig healthy">CFO locked Thursday</td></tr>
+          <tr><td class="name">Stonebridge</td><td>Discovery</td><td class="num">$60K</td><td class="num">7d</td><td class="sig attn">Champion may be out</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="specimen-grid g2">
+      <div class="specimen">
+        <div class="specimen-label">Progress · milestone ladder</div>
+        <div class="specimen-demo stretch top">
+          <div style="width:100%;">
+            <div class="ladder">
+              <div class="rung done"><span class="rung-dot"></span><span class="rung-label">Sharpened the ICP <span class="sub">— done</span></span></div>
+              <div class="rung done"><span class="rung-dot"></span><span class="rung-label">First account in play <span class="sub">— done</span></span></div>
+              <div class="rung now"><span class="rung-dot"></span><span class="rung-label">First deal in the pipeline</span></div>
+              <div class="rung"><span class="rung-dot"></span><span class="rung-label">First motion logged</span></div>
+            </div>
+            <div class="progress-count" style="margin-top:10px;">Handoff kit · 4 of 7 sections ready</div>
+          </div>
+        </div>
+        <div class="specimen-note">Real milestones, not a vanity percent. The next open loop is always the lit one.</div>
+      </div>
+      <div class="specimen">
+        <div class="specimen-label">Meter · the one allowed chart</div>
+        <div class="specimen-demo stretch top">
+          <div class="vstack" style="width:100%; gap:16px;">
+            <div class="meter"><div class="meter-top"><span class="lbl">Pipeline coverage</span><span class="val">2.4×</span></div><div class="meter-track"><div class="meter-fill healthy" style="width:80%;"></div></div><div class="meter-sentence">Enough to hit the number if your win rate holds.</div></div>
+            <div class="meter"><div class="meter-top"><span class="lbl">Acme heat</span><span class="val">78</span></div><div class="meter-track"><div class="meter-fill attn" style="width:78%;"></div></div></div>
+          </div>
+        </div>
+        <div class="specimen-note">One bounded ratio, one bar, the sentence carries the meaning. Never a chart for its own sake.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 08 · STATES                                                  -->
+  <!-- ============================================================ -->
+  <section id="states">
+    <div class="ribbon"><span class="ribbon-label">08 · States — empty to error</span><span class="ribbon-line"></span><span class="ribbon-suffix">every component renders five conditions, not one</span></div>
+    <div class="cat-head">
+      <span class="cat-num">08</span>
+      <div>
+        <h2 class="cat-title">A component at rest is one of five states.</h2>
+        <p class="cat-desc">Canon Part II §6 requires every surface to treat empty, sparse, loading, error, and saved explicitly. A card has to know how to render with no data, while data loads, and when it fails — never blank, never cryptic, never leaving the operator wondering whether it saved. Empty is not a dead end; it names why the surface matters and the one move that fills it.</p>
+      </div>
+    </div>
+    <div class="specimen-grid">
+      <div class="specimen">
+        <div class="specimen-label">Empty</div>
+        <div class="specimen-demo stretch">
+          <div class="empty-state" style="width:100%;">
+            <div class="es-mark"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M7.5 12a4.5 4.5 0 0 1 9 0"/><circle cx="12" cy="12" r="1.2"/></svg></span></div>
+            <div class="es-title">No signals yet.</div>
+            <div class="es-why">When an account you're watching moves, it shows up here. Add your first account to start the watch.</div>
+            <button class="btn btn-accent">Add an account</button>
+          </div>
+        </div>
+        <div class="specimen-note">Why it matters + what unlocks it + one move. Never a blank panel.</div>
+      </div>
+      <div class="specimen">
+        <div class="specimen-label">Sparse</div>
+        <div class="specimen-demo stretch top">
+          <div style="width:100%;">
+            <div class="ground spine s-attn b-attn" style="box-shadow:none;"><div class="ground-head"><span class="ground-name">Northwind</span><span class="ground-meta">PILOT · D9</span></div><div class="ground-context" style="margin-bottom:0;">One account, one signal — and that's real, not missing.</div></div>
+            <div class="sparse-note">— 1 of a watchlist you're still building</div>
+          </div>
+        </div>
+        <div class="specimen-note">Early use is sparse. It should feel like a real start, not an error.</div>
+      </div>
+      <div class="specimen">
+        <div class="specimen-label">Loading · skeleton</div>
+        <div class="specimen-demo stretch">
+          <div class="ground" style="box-shadow:none; width:100%; border-bottom-color:var(--hair-strong);">
+            <div class="skeleton"><div class="sk w40"></div><div class="sk w90"></div><div class="sk w70"></div></div>
+          </div>
+        </div>
+        <div class="specimen-note">The card's shape holds while it loads. Never a blank flash.</div>
+      </div>
+      <div class="specimen">
+        <div class="specimen-label">Error · inline + recover</div>
+        <div class="specimen-demo stretch">
+          <div class="vstack" style="width:100%; gap:12px;">
+            <div class="field-error"><input class="input" value="—"><div class="msg">We need a name before this can save.</div></div>
+            <div class="state-line error"><span class="sk-key">Didn't save</span><span>Lost connection. Your edits are kept — retry?</span></div>
+          </div>
+        </div>
+        <div class="specimen-note">Honest, calm, specific, recoverable. Edits are never silently lost.</div>
+      </div>
+      <div class="specimen">
+        <div class="specimen-label">Saved / unsaved</div>
+        <div class="specimen-demo stretch">
+          <div class="vstack" style="width:100%; gap:12px;">
+            <span class="unsaved-dot">Unsaved edits</span>
+            <div class="state-line saved"><span class="sk-key">Saved</span><span>Linked to Acme · pilot updated</span></div>
+          </div>
+        </div>
+        <div class="specimen-note">The save visibly mattered — it names what changed downstream.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 09 · ICONOGRAPHY                                             -->
+  <!-- ============================================================ -->
+  <section id="icons">
+    <div class="ribbon"><span class="ribbon-label">09 · Iconography</span><span class="ribbon-line"></span><span class="ribbon-suffix">semantic only · the full set is its own spec</span></div>
+    <div class="cat-head">
+      <span class="cat-num">09</span>
+      <div>
+        <h2 class="cat-title">Icons name the nouns. They never decorate.</h2>
+        <p class="cat-desc">The full icon system is its own owed sibling spec (charter §4.7); this is the discipline it ships under, plus a starter set. Every icon is a thin line glyph — 1.6px stroke, currentColor, on a 20px box — and it earns its place only by standing for a sacred noun or a verb the operator acts with. Default navy; an icon takes an accent color only when the thing it names is itself the accent (the send-move is orange, a signal is blue). No filled icons, no spot illustrations, no icon used purely to fill space.</p>
+      </div>
+    </div>
+    <div class="specimen-grid g2">
+      <div class="specimen">
+        <div class="specimen-label">The nouns</div>
+        <div class="specimen-demo stretch">
+          <div class="icon-grid">
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v17"/><path d="M3 21h18"/><path d="M9 8h2M13 8h2M9 12h2M13 12h2M9 16h2M13 16h2"/></svg></span><span class="nm">account</span></div>
+            <div class="icon-cell"><span class="icon sig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M7.5 12a4.5 4.5 0 0 1 9 0"/><circle cx="12" cy="12" r="1.3"/></svg></span><span class="nm">signal</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><span class="nm">deal</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12l2.2 2.2L15.5 9.5"/></svg></span><span class="nm">proof</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></span><span class="nm">advisor</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h3l1.5 5-2 1.3a10 10 0 0 0 5 5l1.3-2 5 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg></span><span class="nm">call</span></div>
+          </div>
+        </div>
+        <div class="specimen-note">One glyph per sacred noun. Blue only on signal, where the color is the meaning.</div>
+      </div>
+      <div class="specimen">
+        <div class="specimen-label">The verbs</div>
+        <div class="specimen-demo stretch">
+          <div class="icon-grid">
+            <div class="icon-cell"><span class="icon acc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3L3 10.5l6.5 2.5L12 19.5 21 3z"/><path d="M9.5 13l3-3"/></svg></span><span class="nm">send</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></span><span class="nm">carry</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="nm">add</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4.2-4.2"/></svg></span><span class="nm">find</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="nm">read</span></div>
+            <div class="icon-cell"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg></span><span class="nm">quiet</span></div>
+          </div>
+        </div>
+        <div class="specimen-note">One glyph per move the operator makes. Orange only on send, the dominant move.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 10 · SYSTEM PRIMITIVES                                       -->
   <!-- ============================================================ -->
   <section id="system">
-    <div class="ribbon"><span class="ribbon-label">07 · System primitives</span><span class="ribbon-line"></span><span class="ribbon-suffix">Antaeus-specific composed components</span></div>
+    <div class="ribbon"><span class="ribbon-label">10 · System primitives</span><span class="ribbon-line"></span><span class="ribbon-suffix">Antaeus-specific composed components</span></div>
     <div class="specimen-grid g2">
       <div class="specimen"><div class="specimen-label">ProposalCard · the system suggests</div><div class="specimen-demo stretch"><div class="proposal" style="width:100%;"><div class="proposal-eyebrow"><span style="width:6px;height:6px;background:var(--orange);border-radius:50%;"></span>A suggestion</div><div class="proposal-body">You closed your first deal last week. Want the system to step back and show less?</div><div class="proposal-actions"><button class="btn btn-accent">Yes, step back</button><button class="btn btn-secondary">Ask in a month</button><button class="btn btn-ghost">Not now</button></div></div></div><div class="specimen-note">Accept / dismiss / snooze. Orange-tinted.</div></div>
       <div class="specimen"><div class="specimen-label">PatternCard · Briefing</div><div class="specimen-demo stretch"><div class="pattern" style="width:100%;"><div class="pattern-headline">You're losing price in the final week.</div><div class="pattern-body">Three of your last five closed deals dropped price 12%+ in the last week before signing — across two different kinds of buyer.</div><div class="pattern-conf">78% sure · last 14 days</div></div></div><div class="specimen-note">Authored read + evidence + how-sure.</div></div>
@@ -735,9 +1015,9 @@
   <!-- 08 · DENSITY                                                 -->
   <!-- ============================================================ -->
   <section id="density">
-    <div class="ribbon"><span class="ribbon-label">08 · Density gradient</span><span class="ribbon-line"></span><span class="ribbon-suffix">Show me how / Step back — same primitive</span></div>
+    <div class="ribbon"><span class="ribbon-label">11 · Density gradient</span><span class="ribbon-line"></span><span class="ribbon-suffix">Show me how / Step back — same primitive</span></div>
     <div class="cat-head">
-      <span class="cat-num">08</span>
+      <span class="cat-num">11</span>
       <div>
         <h2 class="cat-title">The grounded card decompresses.</h2>
         <p class="cat-desc">The same anchored card, same signal spine, same Signal / Reason / Move grammar — walked through for the day-one operator, trimmed for someone three months in. The voice stays constant; only how much you see changes.</p>
@@ -784,6 +1064,7 @@
       <div><h4>OFFSET · item</h4><p>Exactly one offset per zone. The single most-pressured item breaks rank; the rest hold the line.</p></div>
     </div>
     <p style="margin-top:20px;"><strong>The un-nav, in discipline.</strong> No room-list down the left, ever. The Wayfinder bar — one strip, three cells — is the only persistent chrome in the product; it carries where-you-were, where-you-are, and what's-pulling, and it travels with you across rooms. Never a second strip, never a rail beneath it. Rooms are summoned through Ctrl+K, not browsed. The bar's reasoning opens inline, on an explicit click, never on hover.</p>
+    <p style="margin-top:20px;"><strong>End to end, not just the hero.</strong> Every component renders five conditions, not one — empty (why it matters + the one move that fills it), sparse (a real start, not a fault), loading (the shape holds), error (honest and recoverable), saved (it visibly mattered), per canon Part II §6. Quantity is prose first: the intervention board shows many without becoming a spreadsheet, progress is a ladder of real milestones, and the only chart the language admits is a single bounded-ratio meter with the sentence carrying the meaning — no multi-series charts, no pies, no decorative sparklines. Icons name the sacred nouns and the operator's verbs and nothing else; the full set is its own owed spec, but the discipline — thin line glyphs, semantic only, accent color only where the thing is the accent — holds now.</p>
     <p><strong>Canon preserved throughout.</strong> Bright field. DM Serif Display for headlines, stats, account names, and the system's read. Public Sans for body and controls. JetBrains Mono for ribbon labels, codes, and timestamps. Orange stays the rationed accent — the one dominant move per surface, the offset emphasis, the pulling cell. Every operator-facing string is a plain sentence a peer would say: no "readout owner," no "cast proof," no "verdict." The native primitives — Signal · Reason · Move · State · Evidence — are the object model; cards, ribbons, pulses, and the Wayfinder are how they render.</p>
   </aside>
 

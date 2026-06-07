@@ -135,11 +135,14 @@ A note on what was set aside: this session built two un-nav approaches — the W
 
 The full catalog is rendered in the mockup; this is its index, organized by the role each group plays.
 
-- **Display** — Heading (serif, for authored emphasis), Heading (sans, for control heads), Kicker (mono caps), Stat (serif numeral + mono label), StatusChip (the canon §10 state vocabulary), Stamp (judgment, hairline-bracketed), Signal-spine, Anchored-edge.
+- **Display** — Heading (serif, for authored emphasis), Heading (sans, for control heads), Kicker (mono caps), Stat (serif numeral + mono label), StatusChip (the canon §10 state vocabulary), Stamp (judgment, hairline-bracketed), Signal-spine, Anchored-edge, Avatar (initials, never photos; orange marks the decider, blue the advisor).
 - **Action** — Buttons (accent / primary / secondary / ghost, where accent-orange is the one dominant move), IconButton, Toggle (persists immediately, no Save), Offset-action (the button that extends below an offset card, once per zone), cross-room Link (blue), inline Action.
 - **Input** — TextInput (orange focus ring), Select (same chrome as text), composed FormField (label + input + microcopy, where the microcopy is the first thing the density gradient drops in Step back).
-- **Feedback** — Toast (navy, confirms a save), Alert (side-glow, one read + one move, in amber / blue / red per state), Modal (destructive confirmations only), Tooltip (hover, present in Show me how and gone in Step back).
-- **Navigation** — the Wayfinder bar, the verbs-first Ctrl+K palette, the HandoffStrip (all Part III).
+- **Feedback & overlays** — Toast (navy, confirms a save), Alert (side-glow, one read + one move, in amber / blue / red per state), Modal (destructive confirmations only), Tooltip (hover, present in Show me how and gone in Step back), Drawer (depth slides in over the page — the Readiness drawer, the Discovery dossier — never a route change; Esc / scrim / button all close it).
+- **Navigation** — the Wayfinder bar, the verbs-first Ctrl+K palette, the HandoffStrip (all Part III), Segmented control (in-room lenses onto one object — Brief / Spotlight / Queue, forensic sheets — a pill for modes, an underline for in-card tabs; never a door between rooms).
+- **Data & structure** — Table (the intervention board: many rows without becoming a spreadsheet, one row breaking rank per the Offset rule), Progress (a ladder of real milestones plus the section-readiness count, never a vanity percent), Meter (the one admitted data-viz — see §4.5).
+- **States** — every component's empty / sparse / loading / error / saved renderings (see §4.4).
+- **Iconography** — the semantic line-glyph set, under the discipline in §4.6.
 - **System** — ProposalCard (the Phase F accept / dismiss / snooze surface), PatternCard (the Briefing's authored read + evidence + how-sure), RiskCard (a Grounded card at recovery scale), ReadinessReadout (a plain-sentence state, never a score-bar, never a "verdict" container).
 
 ### 4.2 The component contract
@@ -156,11 +159,39 @@ A component that declares all three is buildable against the catalog. A componen
 
 The library is built on a fixed token set, named in the mockup's `:root` and inherited unchanged from the charter's face direction: the bright field (`#F5F7FB`) and surfaces, navy ink at four opacities, the semantic accents (orange `#E6701E`, blue `#2563EB`, green `#22C55E`, amber `#F59E0B`, red `#EF4444`), three shadow elevations (rest / lift / offset), and the three-font stack. The tokens are not re-decided per room. A room that introduces a new color is introducing a new meaning, and new meanings are a founder decision, not a component decision.
 
-### 4.4 What this spec does not decide
+### 4.4 The state matrix — every component renders five conditions
 
-This spec governs the rendering vocabulary. It does not decide what the operator lands on when they open the product — the home surface, its ranking, its resting-state behavior, and how the agency boundary holds when the system has a read but the operator has not asked for it. That is the today-surface spec, the next sibling owed (Part V and the §5.3 signals point at it). The component library gives that spec its building material — the Wayfinder bar, the Pulse timeline, the Grounded cards — but does not pre-empt its decisions about ranking and landing.
+Canon Part II §6 requires every surface to treat five states explicitly, not just the at-rest one. A component is not catalog-complete until it renders all five. This is the most common place a library fails: it ships the happy path and leaves empty, loading, and error to each room to improvise, which produces blank panels, cryptic failures, and operators wondering whether their edit saved. The library forbids that by making the five states part of the component, not the room.
 
-It also does not decide motion in any depth beyond the charter's "sparse, consequential, state-based" rule. If the four-system language turns out to need a motion grammar of its own (how a pulse arrives, how the Wayfinder bar grows, how a zone compresses), that is a future addendum, written only if the build surfaces the need.
+- **Empty** is not a dead end. It names *why the surface matters*, *what unlocks it*, and *one move* that fills it — "No signals yet. When an account you're watching moves, it shows up here. Add your first account." Empty is directional and intelligent, never a shrug.
+- **Sparse** is the common early state, and it must feel like a real start, not a fault. One account with one signal is a beginning, marked as such ("1 of a watchlist you're still building"), not a half-broken grid.
+- **Loading** holds the component's shape — a skeleton in the card's silhouette — so the surface never flashes blank and never reflows when data lands.
+- **Error** is honest, calm, specific, and recoverable (canon §10's error-language lock). Inline field errors say what's needed in plain words; a failed save keeps the operator's edits and offers a retry. Edits are never silently lost.
+- **Saved / unsaved** is never ambiguous. Unsaved work carries a quiet amber marker; a completed save confirms and *names what changed downstream* ("Saved. Linked to Acme · pilot updated"), because canon's rule 5 is that every save must visibly matter.
+
+A density-responsive component renders these five states in both Show me how and Step back — the states are orthogonal to the density dimension, the same way voice is. The validator applies to every state's strings; an error message is authored prose and passes the same voice gate as any other sentence.
+
+### 4.5 Quantity, and the one chart the language admits
+
+The four-system language renders quantity as **prose first** — the Signal/Reason/Move sentence carries the meaning, the stat is a serif numeral with a mono label, and the signal-spine carries state as color. This is deliberate and it is canon: §4.17 pins "bars are decoration, the verdict is the value," and the product is explicitly *not* a dashboard bundle (canon Part I §1).
+
+The library therefore admits **exactly one data-viz primitive: the Meter** — a single horizontal bar for one bounded ratio (pipeline coverage, account heat, a single readiness dimension), always paired with the sentence that carries the read ("2.4× — enough to hit the number if your win rate holds"). The bar shows the magnitude; the sentence is the value. Everything else is refused: no multi-series charts, no pie or donut, no trend sparklines, no decorative gauges. A surface that needs to compare many series is almost always trying to be a BI dashboard, which is the hard-reject the charter and canon both name. If a future room produces a genuine case the Meter cannot serve, it routes to the founder as a new-meaning decision, not a component author's call.
+
+### 4.6 Iconography — the discipline now, the set later
+
+The full icon system is its own owed sibling spec (charter §4.7), so the complete set, naming, and file pipeline are out of scope here. But the *discipline* belongs in the library now, because icons are the easiest place to smuggle decoration past the anti-ornament rule, and rooms migrating before the icon spec lands need a rule to build against.
+
+The discipline: every icon is a **thin line glyph** — a consistent stroke weight (1.6px at a 20px box), `currentColor`, no fill, no spot illustration. An icon earns its place only by standing for a **sacred noun** (account, signal, deal, proof, advisor, call) or a **verb the operator acts with** (send, carry, add, find, read). Default navy; an icon takes an accent color *only when the thing it names is itself the accent* — the send-move is orange because it is the dominant move, a signal glyph is blue because blue is the system-intelligence role. No icon is used purely to fill space, label a section for decoration, or soften a surface. The starter set in the mockup (six nouns, six verbs) is illustrative of the style, not the final inventory.
+
+### 4.7 The affordance slice index — closing the density handoff
+
+The density spec §4.5 deferred one mechanism to this spec: where the "show the primary action plus one or two, collapse the rest" cutoff is configured for affordance count in Step back. This spec resolves it. The slice point is a property on the **component contract** (§4.2), declared alongside the component's density behavior: a component sets `affordanceSliceIndex` (default 2) to say how many actions stay visible in Step back before the rest collapse into a "More" affordance or onto hover. It lives on the component because the right cutoff is a property of the component's action set, not a global constant — a Grounded card's two-action foot slices at 2, the Wayfinder bar's commit row slices at 2, a bulk-action toolbar might slice higher. The density state decides *whether* to slice; the component decides *where*. This closes the only cross-spec handoff `02` left open to `03`.
+
+### 4.8 What this spec does not decide
+
+This spec governs the rendering vocabulary. It does not decide what the operator lands on when they open the product — the home surface, its ranking, its resting-state behavior, and how the agency boundary holds when the system has a read but the operator has not asked for it. That is the today-surface spec, the next sibling owed (Part V and the §5.3 signals point at it). The component library gives that spec its building material — the Wayfinder bar, the Pulse timeline, the Grounded cards, the full state matrix — but does not pre-empt its decisions about ranking and landing.
+
+It also does not decide motion in any depth beyond the charter's "sparse, consequential, state-based" rule, nor the full iconography system (§4.6). Both are owed sibling specs per charter §4.7. If the four-system language needs a motion grammar of its own (how a pulse arrives, how the Wayfinder bar grows, how a zone compresses, the cross-fade between density states `02` §4.5 deferred to motion), that is the motion spec, written when the build surfaces the need.
 
 ---
 
@@ -196,6 +227,7 @@ The component library is working if:
 3. **Every visible object maps to a primitive.** A room audit can point at any element and name its Signal / Reason / Move / State / Evidence (or its sacred noun, or its behavioral lever). Nothing on screen is unaccounted for.
 4. **The Wayfinder carries context without restating.** The operator moves between rooms and the bar's trail, here, and pulling stay coherent — the continuity params never drop, and the operator never re-enters known context.
 5. **The catalog is the only source.** New rooms compose from the catalog rather than inventing components; a new component is a deliberate addition with a declared Family, not an ad-hoc box.
+6. **No surface is ever blank, cryptic, or ambiguous.** Every component renders its empty, sparse, loading, error, and saved states; an audit can open any surface mid-load or with no data and find it directional rather than broken, and the operator never wonders whether their edit saved.
 
 ---
 
