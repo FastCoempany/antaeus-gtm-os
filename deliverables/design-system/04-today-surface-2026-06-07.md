@@ -46,7 +46,7 @@ The today surface is not a new room. It is the mind of the existing Dashboard (`
 
 ### 2.1 What ranks
 
-The order is computed from the ranking inputs canon §4.2 already names, carried forward unchanged as the model: how hot the signals are on an account, how much pressure a deal is under, how long it has been stale, its dollar value, and what changes downstream if the operator acts. These are read from the rooms that own them — signal heat from Signal Console, deal pressure from Deal Workspace, proof state from PoC, coverage from Quota Workback — through the orchestration layer's accumulated state, not recomputed on the surface. The today surface is a reader and a ranker; it is not the owner of any noun (`canon Part I §3` truth 3).
+The order is computed from the ranking inputs canon §4.2 already names, carried forward unchanged as the model: how hot the signals are on an account, how much pressure a deal is under, how long it has been stale, its dollar value, and what changes downstream if the operator acts. These are read from the state each room *publishes* — the health snapshots Signal Console, Deal Workspace, PoC, and Quota Workback already write, plus the orchestration layer's observations ledger (`canon Part II.5 §7`) — not recomputed on the surface and not reached for by querying each room live. The today surface is a reader and a ranker; it is not the owner of any noun (`canon Part I §3` truth 3), and it reads published state so a slow or unmigrated room degrades the surface gracefully rather than blocking it.
 
 ### 2.2 The ranking is explainable, never a bare score
 
@@ -56,13 +56,15 @@ Every ranked item can show *why it is here* and *why it is in this order* — th
 
 The order does not churn. A live data refresh that nudges the math must not reshuffle the surface under the operator's eyes; the previous focal item stays pinned unless something genuinely more pressured displaces it (the stability rule the Dashboard rebuild already carries, `canon Part V` Phase 4 / Room 2). Stability is an agency property too: a surface that reorders while you read it is making decisions you did not ask for.
 
+This holds for mid-session arrivals as well. When something genuinely more pressured lands while the operator is reading — a deal slips, a hot signal arrives — the surface does not jump or re-rank under them. It surfaces a quiet "new" marker the operator can pull in when they choose, and the next time the surface is opened fresh the new item takes its earned place. Realtime keeps the data current; it never moves the floor under the operator's feet. The one exception is the same one as everywhere (`§1.2`): real, destructive risk may escalate, because a deal about to close-lost is worth interrupting for.
+
 ### 2.4 One thing breaks rank
 
 Within the ranked reads (Spotlight and Queue), exactly one item — the single most-pressured — is the Offset (`03` §2.4): its tag outside the card, its action below it, the eye's guaranteed landing place inside the list. And at rest, before the operator has opened any ranked read at all, that same one move is what the Brief names and what sits in the Wayfinder *pulling* cell. This is how the surface renders canon's "one dominant move" without imposing it — the one move is *visible and singular* at every level of density, and still optional at all of them.
 
 ---
 
-## Part III — The resting state and the three reads
+## Part III — The resting state, the reads, and the session
 
 ### 3.1 The resting state is the calm Brief
 
@@ -80,7 +82,31 @@ All three keep the ranking and its reasoning; they differ only in how much of th
 
 ### 3.3 Where the week's reads land
 
-The orchestration layer's workspace observations (`canon Part II.5 §7`, ADR-009 — the heartbeat's deal-decay, signal-decay, proof-staleness, discovery-rhythm reads) surface on the today surface as a distinct, quiet band — the "this week's reads" the Phase B work already ships. They are observations, not commands: a peer's notes on what moved and what went quiet, dismissable, never a task list. They sit alongside the ranked pipeline, not above it, because they are a different altitude — what the system noticed over the week, versus what is most pressured right now.
+The orchestration layer's workspace observations (`canon Part II.5 §7`, ADR-009 — the heartbeat's deal-decay, signal-decay, proof-staleness, discovery-rhythm reads) surface on the today surface as a distinct, quiet band — the "this week's reads" the Phase B work already ships. They are observations, not commands: a peer's notes on what moved and what went quiet, dismissable, never a task list. They sit on the surface below the Brief, a quiet band rather than the headline, because they are a different altitude — what the system noticed over the week, versus what is most pressured right now that the Brief leads with.
+
+### 3.4 The Brief's content contract
+
+The Brief is not free narrative; it has a fixed shape, so it stays a peer's summary and never drifts into a wall of text or a vanity readout. It composes, in order:
+
+- **The pressure read** — one or two sentences naming what is most pressured right now and *why*, the top of the rank rendered as prose rather than a row.
+- **What changed** — one sentence on what moved since the operator was last here: a new signal, a deal that advanced or slipped, a proof gone stale.
+- **The one move** — the single dominant next action, specific and contextual in implementation-intention shape ("Send the revised proposal to the CFO before Friday"), the same move the Wayfinder *pulling* cell carries.
+- **Optionally, one variable-insight line** — a genuine pattern the system detected ("deals where you booked the demo within 48 hours close 2.7× faster — you have two open to test it on"), per the variable-*insights*-not-variable-*rewards* rule (`canon Part III §5`). At most one, only when there is a real pattern, never manufactured to fill the surface.
+
+**Voice.** The Brief speaks in the Command Chamber family temperature (`01` Part III) — calm, ranked, precise, a sharp operator telling you what they see. Every sentence, including the pluralized and the zero case, passes the validator.
+
+**Acting from the Brief.** The Brief is not read-only. The one move is actionable from the brief itself — an orange primary that takes the move or jumps to its object, the same affordance the Wayfinder *pulling* cell offers — so the operator acts without first navigating. The Brief and the *pulling* cell carry the same move at two altitudes: the cell is the always-persistent thread that travels across rooms; the Brief is the resting-surface narrative that gives that move its context and its alternatives. They are not redundant; they are the move named once for continuity and once for understanding.
+
+**The quiet day.** When nothing is genuinely pressured — a calm week, a pipeline the operator has cleared — the Brief does not say "all done" or "nothing to do" (`canon Part III §7`'s banned closure). It transforms the loop: it names what is quietly compounding ("nothing's on fire — three pilots are running clean") and surfaces the next building move toward an inheritable workspace ("your handoff kit is at four of seven; the discovery section is the next to fill"). The today surface never shows an empty victory screen. It always reveals the next open loop, because the moment after completion is the highest-churn moment (`canon Part III §5`, the Ovsiankina nuance), and a home that goes blank on a good day teaches the operator there is nothing here when there is nothing wrong.
+
+### 3.5 The session arc
+
+The today surface is the home the operator returns to, so it is engineered across sessions, not only within one (`canon Part III §8`).
+
+- **The first session ever.** After onboarding, the operator's own data appears in the Brief — onboarding output *becomes* the Brief (`canon §4.3`), not a separate completion screen. The peak of that first session is the operator watching their ICP, their first account, and their first signal show up as a real read rather than a form they filled. The first Brief is necessarily sparse and says so plainly, leading with the one move that grows it.
+- **Returning, daily.** The Brief opens as *what changed since last session* — new signals, state-changed deals, items now due — so the returning operator is oriented in seconds without re-reading what they already knew. "Since last session" is bounded by the operator's own last active session, not a fixed calendar window.
+- **Same-day re-entry.** When the operator comes back hours later, the Brief does not re-narrate the morning; it updates to what changed since they stepped away, and the surface opens on the read they left, per the continuity and memory property.
+- **The designed close.** A session has a designed end, not a fade-out (`canon Part III §8`, the Peak-End rule). When the operator winds down, the surface offers a closing read — what they moved today and what is queued for tomorrow ("today: two deals advanced, one pilot written up; tomorrow: the Acme CFO call needs prep") — which loads the next session's internal trigger. The surface never ends on an error, a blank, or "nothing to show."
 
 ---
 
@@ -94,7 +120,7 @@ The density spec (`02` §0) routed charter signal #3 here: the operator who is f
 
 ### 4.2 The second Phase F proposal surface
 
-The density spec (`02` §2.3) said Phase F proposals render "in the Briefing Suggestions section per canon §4.21, plus the surface the today-surface spec will eventually decide." This is that decision: the second surface is a **quiet proposal slot on the today surface**, beneath the ranked pipeline, rendered with the ProposalCard (`03` §4.1, the accept / dismiss / snooze surface). It is where a milestone-triggered proposal — density change, skill-default refinement, recurring-focus observation — meets the operator on the home surface rather than only inside the Briefing. It obeys every Phase F constraint already locked (`canon Part II.5 §7`): one proposal at a time, the operator always accepts or dismisses, the workspace-level Phase F toggle silences it, and the cooldowns hold. It never escalates, never stacks, never interrupts — it waits in its slot like everything else the system offers at rest.
+The density spec (`02` §2.3) said Phase F proposals render "in the Briefing Suggestions section per canon §4.21, plus the surface the today-surface spec will eventually decide." This is that decision: the second surface is a **quiet proposal slot on the today surface**, in its own band below the Brief and the week's reads, rendered with the ProposalCard (`03` §4.1, the accept / dismiss / snooze surface). It is where a milestone-triggered proposal — density change, skill-default refinement, recurring-focus observation — meets the operator on the home surface rather than only inside the Briefing. It obeys every Phase F constraint already locked (`canon Part II.5 §7`): one proposal at a time, the operator always accepts or dismisses, the workspace-level Phase F toggle silences it, and the cooldowns hold. It never escalates, never stacks, never interrupts — it waits in its slot like everything else the system offers at rest.
 
 ### 4.3 The 22-room migration order
 
@@ -122,12 +148,13 @@ The today surface is engineered against the strongest levers in the canon (`cano
 
 The today surface is working if:
 
-1. **The operator lands in their work, not an interface.** Within seconds they are looking at their ranked pipeline and the one read, not a menu, a void, or a wall of equal-weight modules.
+1. **The operator lands in their work, not an interface.** Within seconds they are reading the calm Brief and the one move, not a menu, a void, a wall of equal-weight modules, or their entire ranked pipeline spread out and waiting.
 2. **Nothing was decided for them.** An audit of the landing finds no auto-opened room, no forced triage, no surface that escalated without real risk. The operator could have ignored every system read and operated entirely on their own focus.
 3. **The rank is legible and stable.** Any item can answer "why here / why this order," and the surface does not reshuffle while the operator reads it.
 4. **The three reads are one surface.** Brief, Spotlight, and Queue carry the same ranking and reasoning; switching changes quantity, never substance, and the choice persists.
 5. **The sparse and new-workspace cases feel real.** A two-deal pipeline and a brand-new workspace both land as honest starts with a clear first move, not as broken or empty dashboards.
 6. **The deferred questions stay resolved.** The hybrid case, the Phase F slot, and the migration order behave as Part IV specifies; no downstream spec has to re-open them.
+7. **It is never "all done."** A cleared pipeline or a quiet week transforms into the next building loop rather than an empty victory screen; every session opens as what-changed and closes with a designed read; a good day with nothing pressing still gives the operator something true and forward, never a blank.
 
 ---
 
@@ -137,4 +164,4 @@ The today surface is where the engine meets the operator each morning. It ranks,
 
 It is the Dashboard's mind, rendered in the un-nav language: the Wayfinder bar as the orientation, the calm Brief as the resting body, the ranked Pulse timeline waiting as the Queue read for when the operator wants it, the Grounded cards as the work, one item breaking rank, the week's quiet observations alongside, a single proposal waiting in its slot. Nothing opens until the operator opens it, and the operator is never met by their whole pipeline at once. The deferred questions the other specs sent here are answered, and the next move is to build it — Dashboard first, mockups before code, against this spec and the component library it stands on.
 
-Visual building material: `deliverables/mockups/component-library-un-nav-full-2026-06-07.html` (the Wayfinder bar, Pulse timeline, and resting canvas it composes from). A dedicated today-surface mockup — the three reads, the resting state, the sparse and new-workspace cases — is the next artifact owed, before any Dashboard code.
+Visual building material: `deliverables/mockups/component-library-un-nav-full-2026-06-07.html` (the Wayfinder bar, the Brief, the Grounded cards, and the Pulse timeline it composes from). A dedicated today-surface mockup is the next artifact owed before any Dashboard code: the calm Brief as the resting landing, the switch to Spotlight and Queue, the quiet-day Brief that never says "all done," the first-session and returning-daily Briefs, the designed session close, and the sparse and brand-new-workspace cases. Mockups before code.
