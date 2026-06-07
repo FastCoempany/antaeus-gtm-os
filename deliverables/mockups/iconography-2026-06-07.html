@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antaeus Iconography — the proprietary set</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field:#F5F7FB; --surface:#FFFFFF; --surface-sub:#FAFBFD; --surface-sunk:#EFF2F7;
+    --ink:#0A1C40; --ink-soft:rgba(10,28,64,0.66); --ink-faint:rgba(10,28,64,0.42); --ink-quiet:rgba(10,28,64,0.22);
+    --hair:rgba(10,28,64,0.07); --hair-strong:rgba(10,28,64,0.14);
+    --orange:#E6701E; --blue:#2563EB; --green:#22C55E; --amber:#F59E0B; --red:#EF4444;
+    --shadow-rest:0 1px 2px rgba(10,28,64,0.04), 0 4px 14px rgba(10,28,64,0.05);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--field);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  body{padding:0 0 120px;}
+  .page{max-width:1080px;margin:0 auto;padding:56px 40px 0;}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.18em;color:var(--ink-faint);text-transform:uppercase;margin:0;}
+  .h1{font-family:"DM Serif Display",serif;font-size:52px;line-height:1.0;letter-spacing:-0.015em;margin:16px 0 14px;}
+  .sub{font-size:17px;line-height:1.5;color:var(--ink-soft);margin:0;max-width:66ch;}
+  .sub b{color:var(--ink);font-weight:600;}
+
+  .section{max-width:1080px;margin:64px auto 0;padding:0 40px;}
+  .sec-tag{display:flex;align-items:baseline;gap:14px;padding-bottom:11px;border-bottom:2px solid var(--ink);margin-bottom:6px;}
+  .sec-num{font-family:"DM Serif Display",serif;font-size:24px;color:var(--orange);line-height:1;}
+  .sec-name{font-family:"DM Serif Display",serif;font-size:22px;line-height:1;}
+  .sec-kicker{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);}
+  .sec-desc{font-size:14px;color:var(--ink-soft);margin:0 0 24px;max-width:74ch;line-height:1.6;}
+  .sec-desc b{color:var(--ink);font-weight:600;}
+
+  /* icon base — the proprietary construction: 2px, flat (butt) terminals, miter joins, navy */
+  .ic{display:inline-flex;color:var(--ink);}
+  .ic svg{display:block;}
+  .ic svg *{stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;fill:none;}
+  .tk-o{stroke:var(--orange)!important;} .tk-b{stroke:var(--blue)!important;}
+  .tk-g{stroke:var(--green)!important;} .tk-a{stroke:var(--amber)!important;} .tk-r{stroke:var(--red)!important;}
+  .fl-b{fill:var(--blue)!important;stroke:none!important;}
+
+  /* construction demo */
+  .build{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:22px;}
+  .build-cell{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:18px;box-shadow:var(--shadow-rest);}
+  .build-cell h4{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 12px;}
+  .build-cell p{font-size:12px;color:var(--ink-soft);line-height:1.5;margin:10px 0 0;}
+  .grid-demo{position:relative;width:96px;height:96px;margin:0 auto;background:
+    repeating-linear-gradient(0deg,transparent,transparent 11px,var(--hair) 11px,var(--hair) 12px),
+    repeating-linear-gradient(90deg,transparent,transparent 11px,var(--hair) 11px,var(--hair) 12px);
+    border:1px solid var(--hair-strong);border-radius:4px;}
+  .grid-demo .ic{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+  .grid-demo .ic svg{width:80px;height:80px;}
+  .cap-row{display:flex;gap:26px;justify-content:center;align-items:flex-end;}
+  .cap-item{text-align:center;}
+  .cap-item .lab{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);margin-top:8px;}
+  .cap-item.bad{opacity:0.62;}
+  .size-row{display:flex;gap:22px;align-items:flex-end;justify-content:center;}
+  .size-item{text-align:center;}
+  .size-item .lab{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ink-faint);margin-top:8px;}
+
+  /* inventory grid */
+  .inv{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;background:var(--hair);border:1px solid var(--hair);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-rest);}
+  .cell{background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:9px;padding:20px 8px 14px;}
+  .cell .ic svg{width:26px;height:26px;}
+  .cell .nm{font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-faint);text-align:center;}
+  .cat-h{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);font-weight:600;margin:26px 0 12px;display:flex;align-items:center;gap:12px;}
+  .cat-h::after{content:'';flex:1;height:1px;background:var(--hair-strong);}
+  .cat-h .meta{font-weight:400;color:var(--ink-faint);letter-spacing:0.08em;}
+
+  .rule-note{max-width:1080px;margin:80px auto 0;padding:26px 40px;border-top:1px solid var(--hair-strong);}
+  .rule-note h3{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px;}
+  .rule-note ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:13.5px;line-height:1.6;color:var(--ink-soft);max-width:80ch;}
+  .rule-note li{padding-left:18px;position:relative;}
+  .rule-note li::before{content:'—';position:absolute;left:0;color:var(--ink-quiet);}
+  .rule-note li b{color:var(--ink);font-weight:600;}
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="eyebrow">ANTAEUS · ICONOGRAPHY · MOCKUP FOR SPEC 09 · 2026·06·07</p>
+  <h1 class="h1">The set is ours.</h1>
+  <p class="sub">A borrowed icon library tells the operator this is the same kind of tool as everything else — before they read a word. So the set is drawn, not borrowed: <b>a heavier 2px keyline, flat terminals and sharp joins</b> that read as technical drawing rather than friendly UI, resting on the same edge-rule the cards use, accented once and only where the meaning is. Navy nearly everywhere; color is rationed, not a palette.</p>
+</div>
+
+<!-- ============ CONSTRUCTION ============ -->
+<section class="section">
+  <div class="sec-tag"><span class="sec-num">01</span><span class="sec-name">Construction & signature</span><span class="sec-kicker">spec §1 · what makes it proprietary</span></div>
+  <p class="sec-desc">Every glyph is drawn on a 24px grid with a 2px keyline. The one choice that stops it looking generic: <b>flat (butt) terminals and mitered joins</b>, never the round caps of the default libraries. Two signature elements tie the set to the four-system language — the <b>edge-rule</b> (a baseline the glyph rests on, echoing the anchored edge and the gauge) and the <b>rationed tick</b> (a single accent stroke at the icon's active point, in the role color, rationed the way orange is).</p>
+
+  <div class="build">
+    <div class="build-cell">
+      <h4>24px grid · 2px keyline</h4>
+      <div class="grid-demo"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 20V6l7-3 7 3v14"/><path d="M3 20h18"/><path d="M9 11h2M13 11h2M9 15h2M13 15h2"/></svg></span></div>
+      <p>Strokes snap to the grid. Heavier than the usual 1.5px — deliberate, instrument-like.</p>
+    </div>
+    <div class="build-cell">
+      <h4>Terminals — the tell</h4>
+      <div class="cap-row">
+        <div class="cap-item"><span class="ic"><svg viewBox="0 0 24 24" width="56" height="56" style="width:56px;height:56px;"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><div class="lab">ours · flat</div></div>
+        <div class="cap-item bad"><span class="ic"><svg viewBox="0 0 24 24" width="56" height="56" style="width:56px;height:56px;"><path style="stroke-linecap:round!important;" d="M5 12h14"/><path style="stroke-linecap:round!important;" d="M12 5v14"/></svg></span><div class="lab">generic · round</div></div>
+      </div>
+      <p>Flat ends and sharp corners read as drafted. Round reads as friendly — the register we avoid.</p>
+    </div>
+    <div class="build-cell">
+      <h4>The signatures</h4>
+      <div class="cap-row">
+        <div class="cap-item"><span class="ic"><svg viewBox="0 0 24 24" width="50" height="50" style="width:50px;height:50px;"><path d="M6 6v12"/><path d="M3 20h18" /></svg></span><div class="lab">edge-rule</div></div>
+        <div class="cap-item"><span class="ic"><svg viewBox="0 0 24 24" width="50" height="50" style="width:50px;height:50px;"><path d="M3 11l18-7-7 18-3.5-7.5z"/><path class="tk-o" d="M10.5 13.5L14 10"/></svg></span><div class="lab">rationed tick</div></div>
+      </div>
+      <p>A baseline the glyph rests on; one accent stroke at the active point, in the role color.</p>
+    </div>
+    <div class="build-cell">
+      <h4>Three sizes</h4>
+      <div class="size-row">
+        <div class="size-item"><span class="ic"><svg viewBox="0 0 24 24" width="16" height="16" style="width:16px;height:16px;"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><div class="lab">16</div></div>
+        <div class="size-item"><span class="ic"><svg viewBox="0 0 24 24" width="20" height="20" style="width:20px;height:20px;"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><div class="lab">20</div></div>
+        <div class="size-item"><span class="ic"><svg viewBox="0 0 24 24" width="24" height="24" style="width:24px;height:24px;"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><div class="lab">24</div></div>
+      </div>
+      <p>Inline 16 · default 20 · master 24. Never below 16, never an arbitrary size.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE INVENTORY ============ -->
+<section class="section">
+  <div class="sec-tag"><span class="sec-num">02</span><span class="sec-name">The complete set</span><span class="sec-kicker">spec §3 · noun · verb · system · status</span></div>
+  <p class="sec-desc">Every glyph stands for a <b>sacred noun</b>, a <b>verb the operator acts with</b>, or a <b>system or status meaning</b> — nothing decorates, nothing fills space. Signal carries the blue intelligence tick; the dominant-move verbs carry the orange tick; status glyphs carry their state color. Everything else is navy.</p>
+
+  <div class="cat-h">The sacred nouns <span class="meta">· what the system is built around</span></div>
+  <div class="inv">
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/><circle cx="12" cy="10" r="2.4"/><path d="M7.5 17a4.5 4.5 0 0 1 9 0"/></svg></span><span class="nm">ICP</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 9l7-4 7 4"/><path d="M8 12v7M12 12v7M16 12v7"/></svg></span><span class="nm">Focus</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 20V6l7-3 7 3v14"/><path d="M3 20h18"/><path d="M9 11h2M13 11h2M9 15h2M13 15h2"/></svg></span><span class="nm">Account</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12a4 4 0 0 1 8 0"/><circle class="fl-b" cx="12" cy="12" r="1.6"/></svg></span><span class="nm">Signal</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/><path d="M10 5h9v9"/></svg></span><span class="nm">Motion</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2 1.2a10 10 0 0 0 4.8 4.8L15 13l5 2v4a1 1 0 0 1-1 1A15 15 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg></span><span class="nm">Call</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="13" height="18"/><path d="M10 8h6M10 12h6M10 16h3"/></svg></span><span class="nm">Deal</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.8-3.4 8-7 10-3.6-2-7-5.2-7-10V6z"/><path d="M9 11.5l2 2 4-4.5"/></svg></span><span class="nm">Proof</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="8" r="3"/><path d="M5 19a6 6 0 0 1 12 0"/><path d="M18 6a3 3 0 0 1 0 5"/></svg></span><span class="nm">Advisor</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M7 16v-3M12 16V8M17 16v-6"/></svg></span><span class="nm">Readiness</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9h11"/><path d="M10 5l5 4-5 4"/><path d="M21 15H10"/><path d="M14 11l-5 4 5 4"/></svg></span><span class="nm">Handoff</span></div>
+  </div>
+
+  <div class="cat-h">The operator's verbs <span class="meta">· the moves you make · orange = the dominant move</span></div>
+  <div class="inv">
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-3.5-7.5z"/><path class="tk-o" d="M10.5 13.5L14 10"/></svg></span><span class="nm">send</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20l3-1 11-11-2-2L5 17z"/><path d="M15 6l2 2"/></svg></span><span class="nm">draft</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h13"/><path class="tk-o" d="M12 7l6 5-6 5"/></svg></span><span class="nm">carry</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17"/><path d="M9 4V3h6v1"/><path d="M9 12l1.6 1.6L14 10"/></svg></span><span class="nm">write up</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="10" cy="9" r="3"/><path d="M5 20a5 5 0 0 1 10 0"/><path d="M16 6a2.4 2.4 0 0 1 2 4l-1 1"/></svg></span><span class="nm">ask</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><span class="nm">prep</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4l5 5M9 4v5H4"/><path d="M20 20l-5-5M15 20v-5h5"/></svg></span><span class="nm">tighten</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nm">add</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="nm">dismiss</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 5l9 7-9 7z"/><path d="M18 5v14"/></svg></span><span class="nm">skip</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="nm">find</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M17 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h5"/></svg></span><span class="nm">open</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20l3-1 9-9-2-2-9 9z"/><path d="M14 6l2 2"/><path d="M13 20h7"/></svg></span><span class="nm">edit</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg></span><span class="nm">save</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 15V4"/><path d="M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></span><span class="nm">export</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></span><span class="nm">import</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M9 7V4h6v3"/><path d="M7 7l1 14h8l1-14"/><path d="M11 11v6M14 11v6"/></svg></span><span class="nm">delete</span></div>
+  </div>
+
+  <div class="cat-h">System & wayfinding <span class="meta">· the product's own surfaces</span></div>
+  <div class="inv">
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M9 15l2.5-6M14.5 9l-2 3 2 3M8.5 12H11"/></svg></span><span class="nm">Ctrl+K</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><path d="M7 12h4"/><circle cx="12.6" cy="12" r="1.6"/><path d="M14.4 12h2.6"/><path class="tk-o" d="M19 8v8"/></svg></span><span class="nm">Wayfinder</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 12s3.4-7 9-7 9 7 9 7-3.4 7-9 7-9-7-9-7z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="nm">Briefing</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><rect x="11" y="4" width="9" height="16"/><path style="stroke-width:3;" d="M7 4v16"/></svg></span><span class="nm">the gauge</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span><span class="nm">settings</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 12H6"/><path d="M12 6l-6 6 6 6"/></svg></span><span class="nm">back</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="nm">close</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span><span class="nm">expand</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></span><span class="nm">more</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path class="tk-o" d="M12 4v6M12 14v6M4 12h6M14 12h6"/></svg></span><span class="nm">proposal</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="6" cy="9" r="1.5"/><path d="M10 9h10"/><circle cx="6" cy="15" r="1.5"/><path d="M10 15h7"/></svg></span><span class="nm">observation</span></div>
+  </div>
+
+  <div class="cat-h">Status <span class="meta">· each in its state color · always paired with the word</span></div>
+  <div class="inv">
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path class="tk-g" d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="nm">ready</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path class="tk-a" d="M12 4v10"/><path class="tk-a" d="M12 18v0.5"/></svg></span><span class="nm">attention</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path class="tk-r" d="M12 3L2 20h20z"/><path class="tk-r" d="M12 10v5"/><path class="tk-r" d="M12 17.5v0.5"/></svg></span><span class="nm">at risk</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z"/></svg></span><span class="nm">exec</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span><span class="nm">quiet</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path class="tk-g" d="M4 18l5-5 4 4 7-9"/><path class="tk-g" d="M20 12V8h-4"/></svg></span><span class="nm">compounding</span></div>
+    <div class="cell"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 17h16"/><path d="M7 17v-2M11 17v-3M15 17v-1"/></svg></span><span class="nm">still weak</span></div>
+  </div>
+</section>
+
+<!-- ============ in use ============ -->
+<section class="section">
+  <div class="sec-tag"><span class="sec-num">03</span><span class="sec-name">In use</span><span class="sec-kicker">spec §2 · icon beside word, never instead of</span></div>
+  <p class="sec-desc">The product is text-forward: the icon is a recognition aid beside the word, not a replacement for it. Icon-alone is the rare exception (Ctrl+K, close, settings), and where it stands alone it carries an accessible name.</p>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;">
+    <span style="display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#fff;padding:10px 16px;border-radius:6px;font-weight:600;font-size:14px;"><span class="ic" style="color:#fff;"><svg viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M3 11l18-7-7 18-3.5-7.5z"/><path style="stroke:#fff!important;" d="M10.5 13.5L14 10"/></svg></span>Send it now</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--hair-strong);padding:10px 16px;border-radius:6px;font-weight:600;font-size:14px;"><span class="ic"><svg viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M3 12h13"/><path d="M12 7l6 5-6 5"/></svg></span>Carry to an advisor</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--hair-strong);padding:10px 16px;border-radius:6px;font-weight:600;font-size:14px;"><span class="ic"><svg viewBox="0 0 24 24" style="width:18px;height:18px;"><rect x="5" y="4" width="14" height="17"/><path d="M9 4V3h6v1"/><path d="M9 12l1.6 1.6L14 10"/></svg></span>Write up the pilot</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);"><span class="ic"><svg viewBox="0 0 24 24" style="width:16px;height:16px;"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>Quiet 11 days</span>
+  </div>
+</section>
+
+<section class="rule-note">
+  <h3>What this is testing</h3>
+  <ul>
+    <li><b>It doesn't look like anything else.</b> Flat terminals, sharp joins, a heavier keyline — a stranger can't place it as Feather or Heroicons.</li>
+    <li><b>Every glyph means something.</b> A sacred noun, a verb, or a real system/status meaning — nothing decorates, nothing fills a slot.</li>
+    <li><b>Color is rationed.</b> Navy nearly everywhere; the blue tick only on Signal, the orange tick only on the dominant-move verbs, state colors only on status.</li>
+    <li><b>The family holds.</b> Nouns and verbs read as one set — same grid, same weight, same terminals, the same edge-rule the cards use.</li>
+    <li><b>Icons support words.</b> Beside the label, not instead of it; icon-alone is the rare exception and always named for a screen reader.</li>
+  </ul>
+</section>
+
+</body>
+</html>
