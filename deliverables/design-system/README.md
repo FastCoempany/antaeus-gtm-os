@@ -1,5 +1,7 @@
 # Antaeus Design System — Index & Governance
 
+**Version:** 1.0.0 (see VERSION + CHANGELOG.md; model in Part IV).
+
 **Status:** DRAFT for founder review.
 **Date:** 2026-06-07.
 **Author:** Claude, working session with the founder (mrcoe7@gmail.com).
