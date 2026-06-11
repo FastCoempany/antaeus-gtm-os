@@ -3,10 +3,18 @@
 
 Reads deliverables/mockups/iconography-2026-06-07.html (spec 09's
 visual source of truth), extracts each inventory cell's SVG, and emits
-one .tsx per glyph under src/icons/glyphs/ plus manifest.ts. Glyphs
-are pure SVG; accent paths reference var(--ds-icon-accent), which the
-Icon wrapper sets. Re-runnable; production redraws replace files
-glyph-by-glyph without touching the API.
+one .tsx per glyph under src/icons/glyphs/ plus manifest.ts.
+
+THE MOCKUP IS THE MASTER. A production redraw lands in the mockup
+first, then this script regenerates the components — never the other
+way around. Hand-edits to generated files are lost on the next run by
+design; one source of truth, propagated.
+
+Glyphs are pure SVG; accent paths reference
+var(--ds-icon-accent, currentColor) — the Icon wrapper sets the
+variable from the manifest default; the currentColor fallback means a
+glyph imported directly (without the wrapper) degrades to all-navy
+instead of black-filled or invisible ticks.
 """
 import re, pathlib, html
 
@@ -30,10 +38,11 @@ ACCENT = {"tk-o": "orange", "tk-b": "blue", "tk-g": "green",
           "tk-a": "amber", "tk-r": "red", "fl-b": "blue"}
 
 TEMPLATE = '''/**
- * @PASCAL@ — "@NAME@" glyph, generated from the iconography mockup
- * (spec 09: 24px grid, 2px keyline, flat terminals, miter joins).
- * Placeholder quality until the production redraw; replacing this
- * file's SVG paths does not touch the API.
+ * @PASCAL@ — "@NAME@" glyph. GENERATED — do not hand-edit; the
+ * iconography mockup is the master and the generator propagates it
+ * (tools/design-system/generate-icons.py). Spec 09 construction:
+ * 24px grid, 2px keyline, flat terminals, miter joins. Placeholder
+ * quality until the production redraw lands in the mockup.
  */
 import type { GlyphProps } from "../glyph";
 
@@ -75,9 +84,9 @@ for inner, raw_name in cells:
             c = cls.group(1)
             found_accent.append(ACCENT[c])
             if c == "fl-b":
-                out += ' fill="var(--ds-icon-accent)" stroke="none"'
+                out += ' fill="var(--ds-icon-accent, currentColor)" stroke="none"'
             else:
-                out += ' stroke="var(--ds-icon-accent)"'
+                out += ' stroke="var(--ds-icon-accent, currentColor)"'
         return f"<{tag}{out}/>"
     body = re.sub(r"<(path|circle|rect)([^/]*?)/>", sub_el, inner.strip())
     body = "\n            ".join(l.strip() for l in body.splitlines() if l.strip())
@@ -98,6 +107,11 @@ accents = "\n".join(f'    "{k}": "{a}",' for k, _p, a in entries if a)
  * DEFAULT_ACCENTS carries each glyph's rationed tick (09 §1.2);
  * glyphs absent from it are all-navy. Regenerate after a glyph
  * redraw; do not hand-edit.
+ *
+ * Bundling note: this registry imports all 46 glyphs, so <Icon>
+ * carries the full set (~trivial at 46 small components on a desktop
+ * product). Direct per-glyph imports stay tree-shakeable for the rare
+ * consumer that wants one glyph without the registry.
  */
 import type {{ FunctionComponent }} from "preact";
 import type {{ GlyphProps }} from "./glyph";

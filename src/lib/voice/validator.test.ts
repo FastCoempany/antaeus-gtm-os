@@ -112,19 +112,16 @@ describe("body prose", () => {
             .toBe(false);
     });
 
-    it("enforces the family sentence-length threshold", () => {
+    it("flags the family sentence-length threshold as a warning (01 §2.3)", () => {
         const long =
             "This is a deliberately overlong sentence that keeps adding clauses and qualifications and asides until it has clearly sailed past the live instrument register threshold for spoken language.";
         const live = validateString(long, {
             class: "body",
             family: "live-instrument",
         });
-        expect(live.ok).toBe(false);
-        expect(live.violations.some((v) => v.rule === "sentence-length")).toBe(
-            true,
-        );
-        // The same sentence passes nowhere it exceeds the cap; the
-        // system-ledger threshold (30) is the loosest.
+        const hit = live.violations.find((v) => v.rule === "sentence-length");
+        expect(hit?.severity).toBe("warning");
+        expect(live.ok).toBe(true); // speakability warns; it does not block
         expect(
             FAMILY_TEMPERATURES["live-instrument"].maxSentenceWords,
         ).toBeLessThan(FAMILY_TEMPERATURES["system-ledger"].maxSentenceWords);

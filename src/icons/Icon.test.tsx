@@ -71,4 +71,13 @@ describe("<Icon> rendering", () => {
             expect(container.querySelector("svg")).not.toBeNull();
         }
     });
+
+    it("accent paths carry the currentColor fallback (direct glyph use degrades to navy, never black/invisible)", () => {
+        const Signal = GLYPHS["signal"];
+        const { container } = render(<Signal size={20} />);
+        const accentEl = container.querySelector(
+            "[fill*='--ds-icon-accent']",
+        );
+        expect(accentEl?.getAttribute("fill")).toContain("currentColor");
+    });
 });

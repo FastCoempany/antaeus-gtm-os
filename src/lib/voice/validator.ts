@@ -156,11 +156,13 @@ export function validateString(
     }
 
     // Speakability: sentence length against the family threshold.
+    // Warning severity per 01 §2.3 — "a string failing any one
+    // dimension surfaces a warning that names the specific dimension."
     for (const s of sentences) {
         const words = wordCount(s);
         if (words > family.maxSentenceWords) {
             violations.push({
-                severity: "error",
+                severity: "warning",
                 rule: "sentence-length",
                 detail: `A ${words}-word sentence exceeds the ${family.family} threshold of ${family.maxSentenceWords}. Read it out loud; split it.`,
             });

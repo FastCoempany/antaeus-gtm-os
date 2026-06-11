@@ -5,6 +5,11 @@
  * DEFAULT_ACCENTS carries each glyph's rationed tick (09 §1.2);
  * glyphs absent from it are all-navy. Regenerate after a glyph
  * redraw; do not hand-edit.
+ *
+ * Bundling note: this registry imports all 46 glyphs, so <Icon>
+ * carries the full set (~trivial at 46 small components on a desktop
+ * product). Direct per-glyph imports stay tree-shakeable for the rare
+ * consumer that wants one glyph without the registry.
  */
 import type { FunctionComponent } from "preact";
 import type { GlyphProps } from "./glyph";

@@ -1,8 +1,9 @@
 /**
- * Gauge — "the gauge" glyph, generated from the iconography mockup
- * (spec 09: 24px grid, 2px keyline, flat terminals, miter joins).
- * Placeholder quality until the production redraw; replacing this
- * file's SVG paths does not touch the API.
+ * Gauge — "the gauge" glyph. GENERATED — do not hand-edit; the
+ * iconography mockup is the master and the generator propagates it
+ * (tools/design-system/generate-icons.py). Spec 09 construction:
+ * 24px grid, 2px keyline, flat terminals, miter joins. Placeholder
+ * quality until the production redraw lands in the mockup.
  */
 import type { GlyphProps } from "../glyph";
 

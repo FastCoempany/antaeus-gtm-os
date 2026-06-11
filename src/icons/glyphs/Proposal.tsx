@@ -1,8 +1,9 @@
 /**
- * Proposal — "proposal" glyph, generated from the iconography mockup
- * (spec 09: 24px grid, 2px keyline, flat terminals, miter joins).
- * Placeholder quality until the production redraw; replacing this
- * file's SVG paths does not touch the API.
+ * Proposal — "proposal" glyph. GENERATED — do not hand-edit; the
+ * iconography mockup is the master and the generator propagates it
+ * (tools/design-system/generate-icons.py). Spec 09 construction:
+ * 24px grid, 2px keyline, flat terminals, miter joins. Placeholder
+ * quality until the production redraw lands in the mockup.
  */
 import type { GlyphProps } from "../glyph";
 
@@ -19,7 +20,7 @@ export function ProposalGlyph({ size }: GlyphProps) {
             stroke-linecap="butt"
             stroke-linejoin="miter"
         >
-            <path d="M12 4v6M12 14v6M4 12h6M14 12h6" stroke="var(--ds-icon-accent)"/>
+            <path d="M12 4v6M12 14v6M4 12h6M14 12h6" stroke="var(--ds-icon-accent, currentColor)"/>
         </svg>
     );
 }
