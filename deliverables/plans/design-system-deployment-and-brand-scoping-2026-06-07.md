@@ -1,6 +1,6 @@
 # Antaeus — Deployment & Brand Identity Scoping
 
-**Status:** DRAFT for founder review.
+**Status:** DECIDED — all seven Part IX decisions answered by the founder 2026-06-08. This document is now the decision record and execution plan.
 **Date:** 2026-06-07.
 **Author:** Claude, working session with the founder (mrcoe7@gmail.com).
 **Branch:** `claude/antaeus-gtmos-design-system`.
@@ -431,19 +431,27 @@ If brand identity is internal: ~6–8 weeks before Dashboard build starts. If br
 
 ---
 
-## Part IX — Founder decisions needed before building starts
+## Part IX — Founder decisions: ANSWERED 2026-06-08
 
-In order of impact. Each points at the section that scopes it fully — paths, costs, risks, and my recommendation are all in the section, so each question is answerable from its reference alone.
+All seven decided by the founder on 2026-06-08. This Part is now the decision record; the building is cleared to start.
 
-1. **Brand identity path: internal, external, or hybrid?** → §2.4 scopes all three paths tactically (what each looks like in practice, cost bands, calendar, vetting, risks); §2.5 lists the deliverables any path must produce; §2.6 summarizes. *My recommendation: hybrid — a solo identity designer does the mark ($5–15K, 4–6 weeks); everything else internal, in parallel.* Highest-impact decision; determines the calendar.
-2. **Confirm icon delivery method.** → Part IV §4.1–4.3. *Recommendation: typed Preact component library, `<Icon name="..." />`.* Confirm or push back.
-3. **Confirm the rollout pattern.** → Part VII walks all three options. *Recommendation: Option A — per-room, Dashboard first, flag-gated.* Confirm or pick B/C.
-4. **Allow waivers on the validator, or no?** → §3.6 scopes both postures: the four concrete waiver cases from the existing codebase, the real cost of no-waivers (category exemptions or 2am global rule-weakening), and the leak mitigation. *Recommendation: waivers allowed, founder-approved, 10-waiver product-wide ceiling.*
-5. **The marker-function migration for the validator: green light?** → §3.5 compares the three options. *Recommendation: the `t()` marker function; mechanical, room-by-room, ~1–2 weeks.* This is the one real chunk of migration labor.
-6. **Who draws the 46 production glyphs?** → §4.4 scopes the three options with costs (internal $0 / specialist contractor $2–5K / brand designer +$3–8K on the engagement) and how each composes with the brand path. *Recommendation: ask the brand designer to confirm the style and quote the set; take their quote if strong, the specialist contractor if not.*
-7. **Brand voice as a distinct register the validator learns?** → §2.7 scopes the actual work (an eighth `visitor` register: spec + 5 exemplars + a `family-temperatures.ts` entry + surface tagging, 2–4 days inside the brand pass) and the risk of skipping it. *Recommendation: yes.*
+1. **Brand identity path → ALL INTERNAL for now.** No external designer at this stage. The full brand layer — logo/wordmark explorations, brand color confirmation, brand voice register, marketing visual system, usage guidelines — is founder + Claude work, run the same way the design-system siblings were (rounds of artifacts, founder reacts, iterate). The §2.4 Path 1 honest-risk note stands on the record: the mark may land fine-but-not-distinctive; if it does, a future external engagement on the mark alone remains open without disturbing anything else, because the deliverables (§2.5) keep the mark separable.
+2. **Icon delivery method → CONFIRMED.** Typed Preact component library; `<Icon name="..." />` wrapper over per-glyph `.tsx` files in `src/icons/`, three sizes, manifest-driven accents (§4.1–4.3).
+3. **Rollout pattern → OPTION A.** Per-room migration, Dashboard first, flag-gated, radiating outward along the canon §6 compounding matrix (§7.1, §7.4).
+4. **Validator waivers → POSTURE B.** Waivers allowed; adding one is a founder-approved PR; logged to `deliverables/voice-waivers.log`; quarterly review; CI fails above a 10-active-waiver product-wide ceiling (§3.6).
+5. **Marker-function migration → GREEN LIGHT.** The `t()` identity-marker wraps every operator-facing string; migration runs room-by-room (§3.5, §3.7).
+6. **Production glyphs → INTERNAL.** Claude draws the 46 per spec `09` construction (§4.4 Option 1), with the recorded caveat that individual glyphs can be re-commissioned later without touching the API, since the component layer isolates consumers from the SVG internals.
+7. **Brand voice register → YES.** The eighth `visitor` register ships as validator configuration inside the internal brand pass (§2.7).
 
-Once these seven are answered, the building starts.
+**Calendar consequence of #1 + #6 (all-internal):** the external-designer critical path disappears. The brand identity pass compresses to ~1–2 weeks of internal rounds; the glyph set is ~1 week of internal drawing gated only on the brand pass confirming the icon style. The pre-Dashboard window drops from the 6–12 week estimate to roughly **3–5 weeks**, dominated by the lexicon enforcement build + migration (§3.9) running in parallel with the brand pass.
+
+**The execution order, per the Part VIII dependency map, now concrete:**
+
+1. **Deployment infrastructure first** (~1 week): `tokens.css` + versioning (VERSION / CHANGELOG / 1.0.0 baseline) + the pipeline conventions — small, unblocks everything, no open questions.
+2. **Lexicon enforcement build** (validator + banned-vocabulary + blessed-labels + family-temperatures + CI gate), then the `t()` migration room-by-room — the long pole, starts immediately, independent of brand.
+3. **Brand identity pass, internal, in parallel** — logo/wordmark rounds, color confirmation, the visitor register, the marketing visual system; lands as sibling `10`.
+4. **Icon production** — component infrastructure against placeholders immediately; the 46 real glyphs drawn once the brand pass confirms the style.
+5. **Dashboard build** — gated on 1–4, per Option A.
 
 ---
 
@@ -451,4 +459,4 @@ Once these seven are answered, the building starts.
 
 The design system is fully spec'd; the work between *spec written* and *Dashboard shipped* is what this document scopes. Six pieces: brand identity (the longest, on the critical path), lexicon enforcement (parallel, independent), iconography production (gated on brand), the deployment system (gated on token decisions), versioning (small, immediate), and the rollout pattern (founder pick from three options). The dependencies give a 6–12 week window before the Dashboard build legitimately starts, with most of the variance in the brand-identity duration.
 
-This is the plan. The founder reads, picks the seven decisions, and then the building starts — with the validator and the deployment infrastructure as the safe first concrete steps, brand identity engaged in parallel, and the Dashboard build properly gated behind all of it.
+This was the plan; as of 2026-06-08 it is the decision record. All seven founder decisions are answered in Part IX (all-internal brand, Preact icon library, Option A rollout, waivers with a ceiling, the `t()` migration, internal glyphs, the visitor register). The building starts in the Part IX execution order: deployment infrastructure, then the validator as the long pole, the internal brand pass in parallel, icons behind the brand style confirmation, and the Dashboard build gated behind all of it — now a ~3–5 week window instead of 6–12, because the external-designer critical path is gone.
