@@ -60,13 +60,62 @@ The current brand identity pass covers:
 - **The marketing visual system** is part of brand identity itself.
 - **Brand voice** is a register the validator (Part III) needs to know about to enforce on marketing strings.
 
-### 2.4 Who does the work
+### 2.4 Who does the work — the three paths, in tactical detail
 
-Two paths. Internal (founder + me): faster, cheaper, less likely to produce a distinctive logo and brand voice. External (a brand agency or contractor): slower, more expensive, more likely to produce a real proprietary visual identity. My honest read: the logo and the marketing visual system benefit from an external brand pass; the brand color confirmation and the brand voice register can be internal. The hybrid is probably right. **Founder decision.**
+This is decision #1 in Part IX and the calendar driver for everything else, so here is each path at the level you can actually choose from.
 
-### 2.5 Effort
+**Path 1 — Internal (founder + me, no outside hands).**
 
-Internal-only path: ~1–2 weeks for color, voice register, marketing visual system; logo and wordmark would be the slowest piece and the most likely to be weak. External brand engagement: typically 4–8 weeks elapsed, depending on the firm. Either way, this is the longest piece on the list.
+What it looks like on a Tuesday: I generate logo/wordmark explorations as SVG (I can produce composition, letterform selection from existing typefaces, and lockup geometry — I cannot produce hand-drawn custom letterforms), you react, we iterate in rounds the way we did the component library. Brand color confirmation, the brand voice register, and the marketing visual system run as spec + mockup work, identical in shape to the design-system sessions we have already done.
+
+- **Cost:** $0 beyond the time.
+- **Calendar:** ~1–2 weeks for color + voice register + marketing visual system. The logo is the wildcard — an SVG-composition logo can land in days *if* a type-based wordmark with a simple geometric mark satisfies you; it can also burn weeks of rounds and still feel generic, because the thing a strong identity designer brings (drawn letterforms, optical correction, decades of taste about what reads as cheap) is exactly what I lack.
+- **Honest risk:** the logo and wordmark come out *fine* but not *distinctive* — competent type-lockup territory, the same way every AI-built product's brand looks. For a product whose whole positioning is "not the same kind of tool," a fine-but-generic mark quietly undercuts the claim at the front door.
+- **Choose this if:** you see the brand mark as a placeholder you'll invest in post-revenue, and you want zero calendar drag now.
+
+**Path 2 — External (a brand designer or small studio owns identity end to end).**
+
+What it looks like: you brief them with the charter + the lexicon + the component-library mockup (these are unusually strong brand-brief inputs — most clients show up with a mood board; you'd show up with a locked design system), they come back with mark directions, you pick, they deliver a brand package.
+
+- **Cost bands (2026, US/EU market):** solo identity designer of real quality: **$5–15K** for mark + wordmark + basic guidelines. Small studio: **$15–40K** for the full package (mark, wordmark, color, type, usage guidelines, marketing templates). Name-brand studio: $50K+ — not worth it pre-revenue.
+- **Calendar:** 4–8 weeks elapsed for a solo designer; 6–10 for a studio. Your involvement: the brief (a day, mostly assembled from existing docs), 2–3 review rounds (a few hours each), final approval.
+- **How to find/vet:** look at portfolios for B2B tools with severe/editorial registers (not consumer-playful work); ask specifically for identity systems where the *product UI* and the brand had to share a visual language; a designer who asks to see the product before quoting is a good sign, one who sends a questionnaire about "brand personality adjectives" is not. I can draft the brief and a shortlist of vetting questions when you're ready.
+- **Honest risk:** the wrong hire produces something beautiful that ignores the locked face direction, and you spend the engagement defending the bright field and the three-font stack. Mitigated by the brief making the locked decisions explicitly non-negotiable.
+- **Choose this if:** you believe the mark is a durable asset worth real money now, and the 6–10 week calendar is acceptable.
+
+**Path 3 — Hybrid (recommended). External does the mark; internal does everything else.**
+
+The tactical split: a solo identity designer is engaged for **the logomark + wordmark + lockup rules only** ($5–15K band, ~4–6 weeks) while in parallel I build the rest of the brand layer internally — brand color confirmation (§2.1), the brand voice register (§2.7 below), the marketing visual system, and the icon glyph production (§4.4: the icons follow the *design system's* construction spec, which the designer reviews for compatibility with the mark but does not draw).
+
+- **Why this split:** the mark is the one deliverable where external craft genuinely outperforms what we can do internally, and it is also the most *separable* — everything else in the brand layer is spec-and-mockup work in a system we already run well. Paying a studio $30K to also "do" color and voice would buy us re-derivation of decisions the charter already locked.
+- **Calendar:** the internal work fills the same 4–6 weeks the designer needs, so the elapsed time is the designer's timeline, not the sum.
+- **The one coordination point:** the designer sees the icon construction spec (`09 §1`) early and confirms the mark and the icon style will sit together; if the mark direction pushes on the icon style, that surfaces in week 2, not at delivery.
+
+### 2.5 Deliverables, per path
+
+So "done" is concrete, the brand identity pass — whichever path — must produce:
+
+1. **The mark + wordmark + lockup** (SVG masters, mono + reverse variants, minimum sizes, clearspace rules).
+2. **The brand color decision** — confirmation that the semantic palette IS the brand palette, plus any marketing-only secondary colors, written into the charter as an amendment.
+3. **The brand voice register** — the spec + exemplars + validator config (§2.7).
+4. **The marketing visual system** — a spec + one mockup (the landing page re-skinned) proving the system, same shape as the design-system siblings.
+5. **Brand usage guidelines** — one document, lives at `deliverables/design-system/10-brand-2026-*.md` as the tenth sibling once approved.
+
+### 2.6 Effort summary
+
+Internal-only: ~1–2 weeks, weak-mark risk. External-full: $15–40K, 6–10 weeks. **Hybrid: $5–15K, 4–6 weeks elapsed, internal work runs in parallel — recommended.**
+
+### 2.7 The brand voice register, scoped (decision #7)
+
+What it actually means to make brand voice "a register the validator learns," so decision #7 is answerable:
+
+**The work.** The voice system today has seven family temperatures (`01 §3`) — all *operator-facing*, all the peer-operator register. Brand voice adds an eighth configuration: the **visitor register** — how Antaeus speaks to a prospect who has not bought, on the landing page, `/why-antaeus/`, auth pages, and any future marketing surface. Concretely, building it means: (a) writing the register spec — what changes vs. the operator voice (more positioning-aware, can name the category and the enemy, still zero marketing-deck words) and what is invariant (the banned list applies in full; the claim from `01 §2.6` is the anchor); (b) authoring 5 exemplars, same as each family temperature has; (c) adding a `visitor` entry to `family-temperatures.ts` with its own sentence-length and hedging thresholds; (d) tagging the marketing surfaces so the validator applies the visitor register there and the operator registers in-product.
+
+**Effort:** 2–4 days inside the brand identity pass. It is small *because* the validator infrastructure (Part III) carries it — the register is configuration, not a new system.
+
+**The risk of not doing it:** marketing copy gets written with no enforced register, drifts toward the deck-speak the product banned, and the front door ends up sounding like every other AI-built GTM tool while the product inside sounds like Antaeus. The existing landing copy already passed a human Sarah-CRO audit (canon Phase 5), so the floor is decent — but it is human-memory enforcement, which is exactly what the validator exists to replace.
+
+**My recommendation, restated with the scope visible:** yes — build it inside the brand pass, as configuration on the Part III validator.
 
 ---
 
@@ -112,9 +161,24 @@ The hardest engineering decision in the build. Three options:
 
 **My recommendation: marker function (option 1).** The wrapping cost is one-time and produces a real grep-able audit trail for every operator-facing string. The migration is mechanical and can be done room by room.
 
-### 3.6 The waiver path
+### 3.6 The waiver path (decision #4, scoped)
 
-Per `01 §2.5`, a string that fails validation but needs to ship can carry an explicit `// voice-waiver: <rule> — <reason>` comment. Logged to `deliverables/voice-waivers.log`, reviewed quarterly. The reviewer's job: confirm each waiver is still necessary, or clear it. **Founder decision: do we allow waivers at all?** The voice spec says yes for the rare legitimate case (third-party error text). My recommendation: allow, but make adding one a founder-approved PR, not a developer decision.
+Per `01 §2.5`, a string that fails validation but needs to ship can carry an explicit `// voice-waiver: <rule> — <reason>` comment. Logged to `deliverables/voice-waivers.log`, reviewed quarterly. The decision is whether that escape hatch exists at all, so here are both postures with their real costs.
+
+**The cases a waiver would actually cover.** These are concrete, from the existing codebase, not hypothetical:
+
+- **Third-party text rendered verbatim.** Supabase auth errors ("Invalid login credentials"), Stripe/payment failures, Posthog or Sentry diagnostic strings surfaced in Settings. We *wrap* most of these today (`normalizeAuthError` covers 10 branches), but a wrapper can miss a new upstream error, and the raw string fails the validator's structural rules through no fault of ours.
+- **Legally fixed language.** Privacy/terms text, cookie or data-processing notices — sentences whose wording is constrained by what they legally assert, not by voice.
+- **Platform vocabulary.** Strings naming external products on their own terms — "Connect your LinkedIn account," OAuth consent copy mandated by a provider's brand guidelines.
+- **Verbatim operator quotes.** The Founding GTM kit and Briefing render things the operator or a buyer actually said. Quoted speech should not be voice-corrected.
+
+**Posture A — no waivers, ever.** Every string passes or the build fails, no exceptions. *Cost:* the cases above must each be engineered around — exhaustive wrappers for third-party errors (and a hard failure when an unmapped one appears), a validator-exempt string class for legal text and quotes (which is itself a waiver, just structural instead of per-string). In practice "no waivers" becomes "waivers by category instead of by instance," with less audit visibility, or it becomes 2am pressure to weaken a validator rule globally because one string blocked a deploy — which is the worst outcome, since a global rule change to ship one string trades the whole discipline for a single edge case.
+
+**Posture B — waivers allowed, founder-approved, logged, quarterly-reviewed (recommended).** The escape hatch exists, but adding one is a canon decision: the PR carries the waiver comment, the founder approves it like any banned-word change, the log accrues, and the quarterly review clears stale ones. *Cost:* a slow leak is possible if review discipline lapses — every waived string is voice debt. *Mitigation:* the validator counts waivers and fails CI if the count exceeds a ceiling (proposed: **10 active waivers product-wide**); hitting the ceiling forces the review rather than waiting for the quarter.
+
+**Why B over A:** A doesn't eliminate exceptions, it just hides them in category exemptions or pressures the global rules. B keeps every exception visible, named, owned by you, and capped. The ceiling turns the slow-leak risk into a hard stop.
+
+**My recommendation, restated with the scope visible:** Posture B with the 10-waiver ceiling.
 
 ### 3.7 Migration of existing strings
 
@@ -163,9 +227,19 @@ The `name` prop is narrowed to the literal union of icon names (TypeScript catch
 
 Each icon component knows its own default accent (signal → blue, send → orange, status icons → their state color, the rest → none). The accent path inside the SVG uses `stroke="var(--icon-accent, currentColor)"`; the wrapper sets `--icon-accent` based on the manifest. This is the cleanest way to keep the rationed-tick discipline (`09 §1.2`) while letting the consumer override when context requires.
 
-### 4.4 Drawing the 46 glyphs as proper SVGs
+### 4.4 Drawing the 46 production glyphs (decision #6, scoped)
 
-The mockup glyphs are sketches, not production. Each one needs to be redrawn as a clean SVG with proper construction: 24px viewBox, 2px keyline snapped to the grid, flat terminals, miter joins, accent paths tagged for the CSS custom property hookup. This is design work, not engineering work. **Founder decision: in-house, contractor, or part of the brand-identity engagement?** My recommendation: bundle with the brand identity work, because the icon style IS part of the brand identity.
+The mockup glyphs are sketches, not production. Each needs redrawing as a clean SVG: 24px viewBox, 2px keyline snapped to the grid, flat terminals, miter joins, accent paths tagged for the CSS custom-property hookup, optically corrected (a circle and a square at the same nominal size don't *look* the same size; production icon work is mostly this kind of correction). The decision is who draws them, and "bundle with brand" means different things depending on which brand path (§2.4) you pick — so here are the real options:
+
+**Option 1 — I draw them (internal).** I can produce grid-true SVGs with correct construction mechanics and consistent geometry. What I'm weaker at is the optical-correction layer — the half-pixel judgment calls that separate a crisp set from a slightly-off one, the kind a human icon designer does by eye at 400% zoom. *Cost: $0. Time: ~1 week for all 46. Risk: the set is consistent but a notch less refined than a specialist's; fixable later glyph-by-glyph without breaking the API, since the component layer (§4.2) isolates consumers from the SVG internals.*
+
+**Option 2 — A specialist icon contractor draws them from spec `09`.** Icon design is its own craft niche with its own freelancers; the spec + the mockup are an unusually complete brief. *Cost: $40–100 per glyph at quality, so **$2–5K for the set**. Time: 2–3 weeks. Risk: low — this is well-bounded commission work.*
+
+**Option 3 — The brand designer draws them inside the brand engagement.** Only coherent under brand Path 2 or 3 (§2.4). Under the hybrid, this means the mark engagement grows from "mark + wordmark" to "mark + wordmark + 46-glyph set" — roughly +$3–8K and +2 weeks on the engagement. *Benefit: one hand draws the mark and the icons, so the family resemblance between the logomark and the glyph set is real rather than coordinated. Risk: identity designers are not always icon-system designers; vet for both.*
+
+**How this composes with the brand paths:** under **brand Path 1 (internal)**, this decision collapses to Option 1 or 2. Under **Path 3 (hybrid, recommended)**, the clean play is: the designer is briefed with spec `09` and asked two things — confirm the icon construction style is compatible with the mark direction (week 2 checkpoint, per §2.4), and quote the 46-glyph set as an optional add-on. If their quote and icon portfolio are strong, Option 3; if not, Option 2 with the style already brand-confirmed. Either way the component infrastructure (§4.1–4.3) is built now against my placeholder glyphs, so the real set slots in without touching any room code.
+
+**My recommendation, restated with the scope visible:** hybrid-dependent — ask the brand designer to confirm the style and quote the set; take Option 3 if the quote is good, Option 2 otherwise. Don't take Option 1 unless calendar pressure demands it; the icons are the most-repeated brand surface in the product.
 
 ### 4.5 The brand identity gate
 
@@ -359,15 +433,15 @@ If brand identity is internal: ~6–8 weeks before Dashboard build starts. If br
 
 ## Part IX — Founder decisions needed before building starts
 
-In order of impact:
+In order of impact. Each points at the section that scopes it fully — paths, costs, risks, and my recommendation are all in the section, so each question is answerable from its reference alone.
 
-1. **Brand identity path: internal, external, or hybrid?** (§2.4). Highest-impact decision; determines the calendar.
-2. **Confirm icon delivery method.** I've recommended typed Preact component library with `<Icon name="..." />`. Confirm or push back. (Part IV §4.1)
-3. **Confirm the rollout pattern.** I've recommended Option A — per-room, Dashboard first, flag-gated. Confirm or pick B/C with reasoning. (Part VII §7.4)
-4. **Allow waivers on the validator, or no?** (§3.6). I've recommended yes-but-founder-approved.
-5. **The marker-function migration for the validator: green light?** (§3.5). This is a real chunk of grep-and-replace work across 22 rooms. The other options have real downsides.
-6. **Bundle iconography glyph drawing with the brand engagement?** (§4.4). My recommendation: yes — the icons are part of the brand identity.
-7. **Brand voice as a distinct register the validator learns?** (§2.1). My recommendation: yes.
+1. **Brand identity path: internal, external, or hybrid?** → §2.4 scopes all three paths tactically (what each looks like in practice, cost bands, calendar, vetting, risks); §2.5 lists the deliverables any path must produce; §2.6 summarizes. *My recommendation: hybrid — a solo identity designer does the mark ($5–15K, 4–6 weeks); everything else internal, in parallel.* Highest-impact decision; determines the calendar.
+2. **Confirm icon delivery method.** → Part IV §4.1–4.3. *Recommendation: typed Preact component library, `<Icon name="..." />`.* Confirm or push back.
+3. **Confirm the rollout pattern.** → Part VII walks all three options. *Recommendation: Option A — per-room, Dashboard first, flag-gated.* Confirm or pick B/C.
+4. **Allow waivers on the validator, or no?** → §3.6 scopes both postures: the four concrete waiver cases from the existing codebase, the real cost of no-waivers (category exemptions or 2am global rule-weakening), and the leak mitigation. *Recommendation: waivers allowed, founder-approved, 10-waiver product-wide ceiling.*
+5. **The marker-function migration for the validator: green light?** → §3.5 compares the three options. *Recommendation: the `t()` marker function; mechanical, room-by-room, ~1–2 weeks.* This is the one real chunk of migration labor.
+6. **Who draws the 46 production glyphs?** → §4.4 scopes the three options with costs (internal $0 / specialist contractor $2–5K / brand designer +$3–8K on the engagement) and how each composes with the brand path. *Recommendation: ask the brand designer to confirm the style and quote the set; take their quote if strong, the specialist contractor if not.*
+7. **Brand voice as a distinct register the validator learns?** → §2.7 scopes the actual work (an eighth `visitor` register: spec + 5 exemplars + a `family-temperatures.ts` entry + surface tagging, 2–4 days inside the brand pass) and the risk of skipping it. *Recommendation: yes.*
 
 Once these seven are answered, the building starts.
 
